@@ -157,7 +157,7 @@ Create a read-write application role `app_user` with restricted permissions on d
 > 1. `CREATE ROLE ... LOGIN` creates an authenticating database user account.
 > 2. `GRANT` explicitly assigns object privileges (Principle of Least Privilege).
 > 3. Restricts `app_user` from dropping tables or executing administrative DDL commands.
-
+> 
 ---
 
 ### Exercise 2: Managing Role Inheritance with Group Roles
@@ -177,17 +177,17 @@ Create a group role `read_only_group` and grant membership to user role `analyst
 > GRANT CONNECT ON DATABASE store_db TO read_only_group;
 > GRANT USAGE ON SCHEMA public TO read_only_group;
 > GRANT SELECT ON ALL TABLES IN SCHEMA public TO read_only_group;
-
-CREATE ROLE analyst_bob WITH LOGIN PASSWORD 'AnalystPass123!';
-GRANT read_only_group TO analyst_bob;
-```
-
+> 
+> CREATE ROLE analyst_bob WITH LOGIN PASSWORD 'AnalystPass123!';
+> GRANT read_only_group TO analyst_bob;
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Group roles (`NOLOGIN`) simplify privilege management by grouping permissions.
 > 2. User roles inherit group privileges via membership assignments (`GRANT group TO user`).
 > 3. Scalable role security architecture.
-
+> 
 ---
 
 ### Exercise 3: Altering Default Privileges for Future Tables
@@ -212,7 +212,7 @@ Configure `ALTER DEFAULT PRIVILEGES` so future tables created by `admin_user` au
 > 1. By default, `GRANT` statements apply ONLY to existing tables in the schema.
 > 2. `ALTER DEFAULT PRIVILEGES` automatically applies specified permissions to tables created in the future.
 > 3. Eliminates manual permission grant steps during schema migrations.
-
+> 
 ---
 
 

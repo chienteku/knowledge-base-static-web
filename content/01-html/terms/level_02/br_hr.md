@@ -205,7 +205,7 @@ An `<hr>` is like drawing a solid black line across your notebook paper to indic
 > Because they are "void" elements. They cannot contain any text or child elements inside of them, so there is no need to define an "end" boundary.
 > ```
 > - Think about the "sandwich" metaphor from the Element vs Tag document.
-
+> 
 ---
 
 ### Exercise 2: Proper Address Formatting with br
@@ -223,7 +223,7 @@ An `<hr>` is like drawing a solid black line across your notebook paper to indic
 > ```
 >
 > **Explanation:** `<br>` creates semantic line breaks within postal addresses and poems.
-
+> 
 ---
 
 ### Exercise 3: Thematic Break Accessibility
@@ -237,7 +237,7 @@ An `<hr>` is like drawing a solid black line across your notebook paper to indic
 > ```
 >
 > **Explanation:** `<hr>` conveys a structural transition between distinct topics.
-
+> 
 ## 7. Related Terms
 - [`<p>` (Paragraph)](p.md) — The tag that creates natural block spacing.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — The general concept that `<br>` and `<hr>` fall under.

@@ -171,7 +171,7 @@ Model a 1-to-Many relationship between `customers` and `invoices` using primary 
 > 1. Relational database modeling links entities via explicit primary key to foreign key relationships.
 > 2. `invoices.customer_id` establishes referential association to parent `customers.id`.
 > 3. Foreign key constraints reject orphan invoice inserts with invalid `customer_id` values.
-
+> 
 ---
 
 ### Exercise 2: Enforcing Referential Integrity on Deletes
@@ -201,7 +201,7 @@ Configure foreign key constraint behavior to prevent deleting a `customer` row i
 > 1. `ON DELETE RESTRICT` raises a SQL error if an application attempts to delete a parent customer row that has child invoices.
 > 2. Protects historical accounting data from accidental orphan deletion.
 > 3. Enforces business domain integrity.
-
+> 
 ---
 
 ### Exercise 3: Eliminating Data Redundancy through Normalization
@@ -234,7 +234,7 @@ Demonstrate normalized relational design by separating duplicated customer addre
 > 1. Normalization eliminates duplicate data entries across rows.
 > 2. Shared address records update in a single location, maintaining database consistency.
 > 3. Core principle of relational database architecture.
-
+> 
 ---
 
 

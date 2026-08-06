@@ -142,7 +142,7 @@ async function processData() {
 > 110
 > ```
 > - `function calculateTax(price, taxRate = 0.05) { ... }`
-
+> 
 ---
 
 ### Exercise 2: Default Parameter Evaluation Scope
@@ -162,7 +162,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Default parameters evaluate left-to-right in an intermediate parameter scope frame.
-
+> 
 ---
 
 ### Exercise 3: Destructured Parameter Defaults
@@ -184,8 +184,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Destructured default parameters accept defaulted object configurations safely.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

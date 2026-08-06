@@ -200,7 +200,7 @@ What are the corresponding JavaScript keys to read these values from the element
 > ```
 > - The prefix `data-` is stripped.
 > - Hyphenated keys (`profile-status`) must be converted to camelCase (`profileStatus`).
-
+> 
 ---
 
 
@@ -219,7 +219,7 @@ What are the corresponding JavaScript keys to read these values from the element
 > ```
 >
 > **Explanation:** `dataset` maps hyphenated `data-product-id` to camelCase `dataset.productId`.
-
+> 
 ---
 
 ### Exercise 3: Styling with CSS Attribute Selectors
@@ -238,7 +238,7 @@ What are the corresponding JavaScript keys to read these values from the element
 > ```
 >
 > **Explanation:** CSS attribute selectors target custom `data-*` state attributes.
-
+> 
 ## 7. Related Terms
 - [`class` Attribute](class.md) — The global attribute for styling categories.
 - [`id` Attribute](id.md) — The unique identifier.

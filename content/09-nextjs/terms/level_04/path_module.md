@@ -142,31 +142,31 @@ Use Node.js `path.join()` inside a Server Component to read a local JSON data fi
 > ```tsx
 > import path from "node:path";
 > import fs from "node:fs/promises";
-
-export default async function DataPage() {
-  const filePath = path.join(process.cwd(), "data", "users.json");
-  const fileContent = await fs.readFile(filePath, "utf-8");
-  const users = JSON.parse(fileContent);
-
-  return (
-    <main className="p-6">
-      <h1>Local Users</h1>
-      <ul>
-        {users.map((u: any) => (
-          <li key={u.id}>{u.name}</li>
-        ))}
-      </ul>
-    </main>
-  );
-}
-```
-
+> 
+> export default async function DataPage() {
+>   const filePath = path.join(process.cwd(), "data", "users.json");
+>   const fileContent = await fs.readFile(filePath, "utf-8");
+>   const users = JSON.parse(fileContent);
+> 
+>   return (
+>     <main className="p-6">
+>       <h1>Local Users</h1>
+>       <ul>
+>         {users.map((u: any) => (
+>           <li key={u.id}>{u.name}</li>
+>         ))}
+>       </ul>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `path.join()` concatenates path segments using platform-specific delimiters (`/` on Linux/macOS, `\` on Windows).
 > 2. `process.cwd()` returns the root directory of the Next.js project.
 > 3. Prevents path traversal security vulnerabilities and cross-platform path errors.
-
+> 
 ---
 
 ### Exercise 2: Extracting File Extensions with `path.extname()`
@@ -184,25 +184,25 @@ Validate file extensions of uploaded files inside a Route Handler using `path.ex
 > ```typescript
 > // app/api/upload/route.ts
 > import path from "node:path";
-
-export async function POST(req: Request) {
-  const { fileName } = await req.json();
-  const ext = path.extname(fileName).toLowerCase();
-
-  if (![".png", ".jpg", ".webp"].includes(ext)) {
-    return Response.json({ error: "Invalid image format" }, { status: 400 });
-  }
-
-  return Response.json({ success: true, extension: ext });
-}
-```
-
+> 
+> export async function POST(req: Request) {
+>   const { fileName } = await req.json();
+>   const ext = path.extname(fileName).toLowerCase();
+> 
+>   if (![".png", ".jpg", ".webp"].includes(ext)) {
+>     return Response.json({ error: "Invalid image format" }, { status: 400 });
+>   }
+> 
+>   return Response.json({ success: true, extension: ext });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `path.extname()` extracts file extensions from file path strings.
 > 2. Server-side file format validation prevents unsafe file upload processing.
 > 3. Utility pattern for server-side API handlers.
-
+> 
 ---
 
 ### Exercise 3: Preventing Directory Traversal Security Vulnerabilities
@@ -219,31 +219,27 @@ Sanitize user-supplied file path inputs using `path.resolve()` and `path.normali
 >
 > ```typescript
 > import path from "node:path";
-
-export function getSafeFilePath(userInputPath: string) {
-  const baseDir = path.resolve(process.cwd(), "public/uploads");
-  const safePath = path.resolve(baseDir, path.normalize(userInputPath));
-
-  if (!safePath.startsWith(baseDir)) {
-    throw new Error("Security Violation: Directory Traversal Attempt Blocked");
-  }
-
-  return safePath;
-}
-```
-
+> 
+> export function getSafeFilePath(userInputPath: string) {
+>   const baseDir = path.resolve(process.cwd(), "public/uploads");
+>   const safePath = path.resolve(baseDir, path.normalize(userInputPath));
+> 
+>   if (!safePath.startsWith(baseDir)) {
+>     throw new Error("Security Violation: Directory Traversal Attempt Blocked");
+>   }
+> 
+>   return safePath;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Malicious user inputs (`../../etc/passwd`) attempt to break out of public directories.
 > 2. `path.resolve()` resolves relative path segments into absolute paths.
 > 3. Checking `safePath.startsWith(baseDir)` guarantees files stay within authorized folders.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The parent execution runtime.

@@ -136,13 +136,13 @@ Create `app/dashboard/loading.tsx` to render a skeleton UI while dashboard data 
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `loading.tsx` automatically wraps `page.tsx` in a React `<Suspense>` boundary.
 > 2. Renders instant loading skeleton UI on the client while Server Component data resolves.
 > 3. Improves perceived performance and First Contentful Paint (FCP).
-
+> 
 ---
 
 ### Exercise 2: Implementing Granular Component Suspense Fallbacks
@@ -160,25 +160,25 @@ Use inline `<Suspense fallback={<Skeleton />}>` inside `page.tsx` for fine-grain
 > ```tsx
 > import { Suspense } from "react";
 > import AnalyticsCard from "./AnalyticsCard";
-
-export default function DashboardPage() {
-  return (
-    <main className="p-6">
-      <h1>Dashboard Overview</h1>
-      <Suspense fallback={<div className="h-24 bg-gray-100 animate-pulse" />}>
-        <AnalyticsCard />
-      </Suspense>
-    </main>
-  );
-}
-```
-
+> 
+> export default function DashboardPage() {
+>   return (
+>     <main className="p-6">
+>       <h1>Dashboard Overview</h1>
+>       <Suspense fallback={<div className="h-24 bg-gray-100 animate-pulse" />}>
+>         <AnalyticsCard />
+>       </Suspense>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Inline `<Suspense>` allows static page content (heading, layout) to render instantly while slow widgets load.
 > 2. `loading.tsx` streams the whole page segment; inline `<Suspense>` streams individual widgets.
 > 3. Granular streaming UI design.
-
+> 
 ---
 
 ### Exercise 3: Preventing Layout Shift with Animated Skeleton Placeholders
@@ -204,19 +204,15 @@ Design skeleton loading shapes that exactly match the dimensions of the final lo
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Skeletons with matching height/width prevent Cumulative Layout Shift (CLS) when final data arrives.
 > 2. Keeps browser layout stable during HTML stream insertion.
 > 3. Essential Core Web Vitals optimization technique.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`error.tsx` & `global-error.tsx`](error.md) — The sister file that handles when the `await` fails instead of succeeds.

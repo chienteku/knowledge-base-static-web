@@ -165,7 +165,7 @@ async function processData() {
 > 30
 > ```
 > - `for (const num of array) { sum += num; }`
-
+> 
 ---
 
 ### Exercise 2: Iterating Strings with `for...of`
@@ -185,7 +185,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Strings implement `Symbol.iterator`, enabling `for...of` grapheme character iteration.
-
+> 
 ---
 
 ### Exercise 3: Iterating Object Entries with Destructuring
@@ -206,8 +206,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Object.entries()` produces `[key, value]` entry arrays compatible with `for...of` destructuring.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

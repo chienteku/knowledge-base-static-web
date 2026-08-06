@@ -160,7 +160,7 @@ let val = parse().ok().and_then(|p| p.get());
 > #### Technical Explanation
 >
 > 1. Chains `.ok_or()`, `.filter()`, `.map()`, and `.and_then()` to perform multi-stage validation fluently without nested `match` statements.
-
+> 
 ---
 
 ### Exercise 2: Fallback Config Reader with Lazy `.unwrap_or_else`
@@ -198,7 +198,7 @@ let val = parse().ok().and_then(|p| p.get());
 > #### Technical Explanation
 >
 > 1. `.unwrap_or_else` provides lazy fallback evaluation.
-
+> 
 ---
 
 ### Exercise 3: Option to Result Conversion via `.ok_or_else`
@@ -234,7 +234,7 @@ let val = parse().ok().and_then(|p| p.get());
 > #### Technical Explanation
 >
 > 1. Converts `Option` to `Result` with lazy error message generation.
-
+> 
 ---
 
 ## 5. Related Terms

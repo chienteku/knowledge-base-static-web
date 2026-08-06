@@ -349,7 +349,7 @@ Your task is to design a unified `MetricExtractor` trait that allows different t
 > 2. **Monomorphization of Generic Functions**: `collect_and_format<T: MetricExtractor>` uses static dispatch (monomorphization). During compilation, Rust generates specialized code paths for `collect_and_format::<HttpRequestMetrics>` and `collect_and_format::<DbPoolMetrics>`, entirely eliminating runtime vtable lookup overhead.
 > 3. **Ownership and Lifetime Guarantees**: `metric_name()` returns `&'static str` because metric keys are fixed compile-time constants stored in the program's read-only binary section (`.rodata`). `tags()` constructs owned `String` representations to accommodate dynamically formatted numbers and routes without risking dangling reference errors.
 > 4. **Edge Case Safety**: `DbPoolMetrics::extract_value` explicitly checks for zero `max_connections` before dividing, guarding against `NaN` floating-point anomalies or unexpected telemetry formatting panics.
-
+> 
 ---
 
 ### Exercise 2: Extensible Storage Engine Trait with Batching & Default Fallback Logic
@@ -519,7 +519,7 @@ You need to build a trait interface with default fallback lookup, membership che
 > 2. **Error Propagation with `?` Operator**: In `batch_set`, the `?` operator evaluates `self.set(k, v)`. If an error occurs on item $N$, batch execution halts immediately and returns `Err(StorageError)`, ensuring transactional fail-fast behavior across default operations.
 > 3. **Ownership and Mutability Boundaries**: Abstract method `get(&self)` requires only shared reference borrowing, permitting concurrent reads. Conversely, `set(&mut self)` requires exclusive write access, enforcing Rust's single-writer-or-multiple-readers borrow checker rule.
 > 4. **Quota Guard Mechanics**: `InMemoryStorage` validates key presence (`!self.data.contains_key(&key)`) before applying quota bounds, allowing updates to existing keys even when capacity limits are met.
-
+> 
 ---
 
 ### Exercise 3: Supertrait Dependency Hierarchy for Cryptographic Payload Serialization & Verification
@@ -676,7 +676,7 @@ To enforce this structural constraint at compile time, design a supertrait relat
 > 2. **Sized Bound on Associated Constructors**: `deserialize` includes a `where Self: Sized` bound. Because constructor-style methods return `Self` by value, the compiler must know the precise stack size of the implementing type at compile time. This bound also permits `Serializable` to remain compatible with trait object dynamic dispatch if needed for methods excluding `Self: Sized`.
 > 3. **Default Supertrait Method Chaining**: Default method `signing_bytes()` on `Signable` directly calls `self.serialize()` provided by the supertrait `Serializable`. This guarantees that signature calculation operates on identical byte representations to wire network serialization.
 > 4. **Tamper Resilience**: Modifying any field (such as `amount`) alters the serialized byte sequence, producing a different checksum digest during `verify()`, catching data corruption or unauthorized payload tampering.
-
+> 
 ---
 
 ## 6. Related Terms

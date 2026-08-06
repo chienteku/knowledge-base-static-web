@@ -132,13 +132,13 @@ Configure a production-ready `tsconfig.json` file enforcing strict mode, ESNext 
 >   "include": ["src/**/*"]
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `"strict": true` enables a suite of strict type-checking behavior (including `noImplicitAny` and `strictNullChecks`).
 > 2. `"paths"` configures import aliases (`@/components/Button`) relative to `"baseUrl"`.
 > 3. `"outDir"` specifies where transpiled `.js` and `.d.ts` output files are placed.
-
+> 
 ---
 
 ### Exercise 2: Preventing Null and Undefined Runtime Crashes with `strictNullChecks`
@@ -165,13 +165,13 @@ Demonstrate how enabling `"strictNullChecks": true` in `tsconfig.json` prevents 
 >   return "GUEST";
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. When `strictNullChecks` is `false`, `null` and `undefined` are assignable to all types, masking potential `TypeError` crashes.
 > 2. When `strictNullChecks` is `true`, `null` and `undefined` must be explicitly handled or narrowed.
 > 3. Single most important security option in `tsconfig.json`.
-
+> 
 ---
 
 ### Exercise 3: Extending Common Configurations with `extends`
@@ -195,13 +195,13 @@ Extend a base `tsconfig.json` configuration file inside a monorepo package using
 >   "include": ["src/**/*"]
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `"extends"` inherits compiler options from shared base configuration packages.
 > 2. Overrides specific properties (`outDir`) for package-specific needs.
 > 3. Standard monorepo configuration management pattern.
-
+> 
 ---
 
 

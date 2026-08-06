@@ -166,7 +166,7 @@ async function processData() {
 > None of them. The engine instantly skips all `.then()` blocks and drops straight down to the nearest `.catch()` block.
 > ```
 > - This is why vertical chaining is so much cleaner than nested callbacks! One error handler to rule them all.
-
+> 
 ---
 
 ### Exercise 2: Chaining `.then()` and `.catch()`
@@ -185,7 +185,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `.catch(fn)` is syntactic shorthand for `.then(null, fn)`.
-
+> 
 ---
 
 ### Exercise 3: Recovering from Rejections with `.catch()`
@@ -204,8 +204,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Returning values from `.catch()` fulfills downstream promises, enabling recovery.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

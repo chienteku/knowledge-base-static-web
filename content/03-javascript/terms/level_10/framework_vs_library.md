@@ -174,8 +174,8 @@ async function processData() {
 > - 2. **Framework** (The framework dictates the folder structure and handles routing automatically).
 > - 3. **Library** (You control where the chart is drawn and handle container creation).
 > - 4. **Framework** (The framework intercepts the network event and invokes your class method).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Inversion of Control Classification
@@ -192,7 +192,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Inversion of Control determines whether your code calls the utility or the framework calls your code.
-
+> 
 ---
 
 ### Exercise 3: Routing Architecture Differences
@@ -209,8 +209,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Frameworks enforce opinionated directory structures and application lifecycles.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

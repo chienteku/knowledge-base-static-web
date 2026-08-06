@@ -121,7 +121,7 @@ const data = await pool.query(`SELECT * FROM cars WHERE color = '${color}'`);
 > const data = await pool.query(`SELECT * FROM cars WHERE color = $1`, [color]);
 > ```
 > - Separate the code from the data. Use `$1` for the query, and an array for the data.
-
+> 
 ---
 
 
@@ -140,7 +140,7 @@ const data = await pool.query(`SELECT * FROM cars WHERE color = '${color}'`);
 > ```
 >
 > **Explanation:** `' OR '1'='1` manipulates boolean logic to force the WHERE clause to evaluate to true.
-
+> 
 ---
 
 ### Exercise 3: Preventing SQLi in Dynamic ORDER BY Clauses
@@ -159,7 +159,7 @@ const data = await pool.query(`SELECT * FROM cars WHERE color = '${color}'`);
 > ```
 >
 > **Explanation:** Column/table identifiers require strict whitelist validation since they cannot be parameterized.
-
+> 
 ## 7. Related Terms
 - [ORMs & ODMs](orms_odms.md) — The best way to never worry about SQL Injection again.
 - [Parameterized Queries / Prepared Statements](parameterized_queries.md) — Related concept: Parameterized Queries / Prepared Statements.

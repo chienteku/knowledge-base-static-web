@@ -130,13 +130,13 @@ Organize authentication routes `login` and `register` inside a `(auth)` route gr
 >     - register/
 >       - page.tsx (URL: /register)
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Parenthesized folders `(groupName)` create Route Groups that are omitted from URL path resolution.
 > 2. `app/(auth)/login/page.tsx` maps directly to URL `/login`, NOT `/auth/login`.
 > 3. Allows grouping related code logically without mutating public URL structures.
-
+> 
 ---
 
 ### Exercise 2: Applying Multiple Root Layouts using Route Groups
@@ -162,13 +162,13 @@ Apply a dark theme layout to `(marketing)` routes and a sidebar layout to `(dash
 >     - dashboard/
 >       - page.tsx (URL: /dashboard)
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Route Groups allow creating completely different root layouts for different sections of an application.
 > 2. Omitting top-level `app/layout.tsx` and adding `layout.tsx` to route groups creates distinct root document shells.
 > 3. Essential for multi-tenant or marketing vs application UI design.
-
+> 
 ---
 
 ### Exercise 3: Resolving Route Group Naming Conflicts
@@ -189,19 +189,15 @@ Explain why creating `app/(groupA)/about/page.tsx` and `app/(groupB)/about/page.
 > - app/(company)/about/page.tsx    -> Resolves to URL: /about
 > Result: Next.js build fails due to conflicting URL routes targeting the same path!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Because route group folder names are omitted from URL paths, both files resolve to `/about`.
 > 2. Next.js enforces strict unique URL path mapping across all route groups.
 > 3. Always ensure page paths remain unique across all route groups.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`layout.tsx`](../level_02/layout.md) — The file that leverages Route Groups the most.

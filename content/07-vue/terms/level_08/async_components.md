@@ -136,7 +136,7 @@ const AsyncComp = defineAsyncComponent({
 > This guarantees that standard users never download the Admin code!
 > ```
 > - Think about navigating between entire pages.
-
+> 
 ---
 
 ### Exercise 2: defineAsyncComponent Options Syntax
@@ -157,7 +157,7 @@ const AsyncComp = defineAsyncComponent({
 >   delay: 200
 > });
 > ```
-
+> 
 ---
 
 ### Exercise 3: Vite Code Splitting Benefit
@@ -174,8 +174,8 @@ const AsyncComp = defineAsyncComponent({
 > ```text
 > Splits code into lazy-loaded JS chunk bundles.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

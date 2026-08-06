@@ -150,8 +150,8 @@ res.json({ id: "123" }); // ❌ Breaks clients expecting integer id: 123!
 
 > [!check]- Answer
 > - **B** (By agreeing on the contract first, frontend developers use mock servers to build views while the backend implements the actual endpoint logic simultaneously).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Consumer-Driven Contract Testing (Pact)

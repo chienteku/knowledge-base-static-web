@@ -192,7 +192,7 @@ Design a MongoDB collection schema for an online news platform based on its top 
 > 1. MongoDB schema design starts with identifying application query access patterns rather than abstract normalization.
 > 2. Extended references (`author.name`) and subset arrays (`recentComments`) satisfy primary queries in a single $O(1)$ read.
 > 3. Maximizes application rendering speed.
-
+> 
 ---
 
 ### Exercise 2: Balancing Read Velocity vs Write Amplification
@@ -218,7 +218,7 @@ Compare denormalized user name embedding across 10,000 post documents vs referen
 > 1. Denormalization trades write amplification for read velocity.
 > 2. Data that rarely changes should be denormalized to accelerate high-frequency reads.
 > 3. High-frequency volatile data should be referenced to minimize write amplification.
-
+> 
 ---
 
 ### Exercise 3: Schema Design Audit & Refactoring Checklist
@@ -245,7 +245,7 @@ Audit an existing MongoDB collection for common schema design flaws (unbounded a
 > 1. Regular schema audits identify performance bottlenecks before production scaling issues occur.
 > 2. Re-aligns document structures with evolving application query patterns.
 > 3. Maintains high query throughput.
-
+> 
 ---
 
 

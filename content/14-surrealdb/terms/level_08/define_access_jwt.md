@@ -150,7 +150,7 @@ Configure an external JWT access method `auth0_access` on database `app` to vali
 > 1. `DEFINE ACCESS ... TYPE JWT` configures SurrealDB to authenticate external JSON Web Tokens.
 > 2. `ALGORITHM` specifies the cryptographic signature algorithm (`HS256`, `RS256`).
 > 3. `KEY` stores the shared secret or public key used to verify token signatures.
-
+> 
 ---
 
 ### Exercise 2: Public Key RS256 JWT Verification
@@ -169,8 +169,8 @@ Configure JWT access method `clerk_access` using an RSA public key (`RS256`) for
 > DEFINE ACCESS clerk_access ON DATABASE TYPE JWT
 >     ALGORITHM RS256
 >     KEY "-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...
------END PUBLIC KEY-----";
+> MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...
+> -----END PUBLIC KEY-----";
 > ```
 >
 > #### Technical Explanation
@@ -178,7 +178,7 @@ MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...
 > 1. Asymmetric `RS256` verification uses a public key to verify tokens signed by an external auth service's private key.
 > 2. Allows third-party identity providers (Clerk, Auth0, Firebase) to issue client tokens safely.
 > 3. Prevents storing private signing keys inside database configurations.
-
+> 
 ---
 
 ### Exercise 3: Accessing JWT Claims in `$token`
@@ -202,7 +202,7 @@ Inspect external claims (such as `$token.sub` and `$token.role`) contained withi
 > 1. `$token` contains decoded JSON Web Token payload claims (e.g. `sub`, `exp`, `iss`, custom claims).
 > 2. Can be used inside `PERMISSIONS` clauses (`PERMISSIONS FOR select WHERE id = type::thing("user", $token.sub)`).
 > 3. Integrates external identity claims directly with SurrealDB authorization rules.
-
+> 
 ---
 
 

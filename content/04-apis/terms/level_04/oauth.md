@@ -117,7 +117,7 @@ app.get('/oauth/callback', (req, res) => {
 > When Google/GitHub issues the token, they embed the "Scope" (permissions) directly into the token's signature. The token literally says `scope: read_only`. When the malicious app sends a `DELETE` request, GitHub reads the token's scope and blocks the action.
 > ```
 > - What kind of "Valet Key" did you give them?
-
+> 
 ---
 
 ### Exercise 2: OAuth 2.0 Actor Roles Mapping

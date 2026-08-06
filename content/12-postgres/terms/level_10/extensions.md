@@ -165,7 +165,7 @@ Enable `pg_trgm` and `uuid-ossp` extensions in database `store_db`.
 > 1. `CREATE EXTENSION` loads modular C/SQL extensions into the active database catalog.
 > 2. `pg_trgm` adds trigram string matching algorithms; `uuid-ossp` adds legacy UUID generation functions.
 > 3. Extends PostgreSQL core features cleanly.
-
+> 
 ---
 
 ### Exercise 2: Monitoring Query Performance with `pg_stat_statements`
@@ -197,7 +197,7 @@ Enable `pg_stat_statements` to track slow queries, execution counts, and buffer 
 > 1. `pg_stat_statements` records execution statistics for all SQL statements executed on the server.
 > 2. Identifies top query bottlenecks, high execution counts, and cache miss rates.
 > 3. Essential DBA performance monitoring extension.
-
+> 
 ---
 
 ### Exercise 3: Vector Similarity Search with `pgvector`
@@ -232,7 +232,7 @@ Enable `vector` extension (`pgvector`) to store 1536-dimensional AI embeddings a
 > 1. `pgvector` adds native vector data types and L2/Cosine distance search operators to PostgreSQL.
 > 2. `<->` calculates Euclidean distance between high-dimensional vector embeddings.
 > 3. Powers RAG (Retrieval-Augmented Generation) AI search applications.
-
+> 
 ---
 
 

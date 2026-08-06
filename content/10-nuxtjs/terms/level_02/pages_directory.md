@@ -132,7 +132,7 @@ Create `pages/index.vue` and `pages/about.vue` with navigation using `<NuxtLink>
 >   </div>
 > </template>
 > ```
-
+> 
 > ```vue
 > <!-- pages/about.vue -->
 > <template>
@@ -142,13 +142,13 @@ Create `pages/index.vue` and `pages/about.vue` with navigation using `<NuxtLink>
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Vue files placed in `pages/` automatically become accessible top-level routes.
 > 2. `<NuxtLink>` performs optimized client-side navigation without triggering full page reloads.
 > 3. Prefetches JavaScript chunks for linked pages when links enter the browser viewport.
-
+> 
 ---
 
 ### Exercise 2: Implementing Nested Sub-Directory Routes
@@ -168,13 +168,13 @@ Structure `pages/settings/profile.vue` and `pages/settings/security.vue` under a
 > - pages/settings/profile.vue  -> URL: /settings/profile
 > - pages/settings/security.vue -> URL: /settings/security
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Sub-directories in `pages/` map directly to URL sub-path prefixes.
 > 2. Keeps route organization clean and modular across complex applications.
 > 3. Automatically registered in Vue Router.
-
+> 
 ---
 
 ### Exercise 3: Customizing Route Keys for Re-render Optimization
@@ -195,26 +195,22 @@ Force page re-mounting when query parameters change using `key` property in `def
 >   key: (route) => route.fullPath
 > });
 > </script>
-
-<template>
-  <div>
-    <p>Search Query: {{ $route.query.q }}</p>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <p>Search Query: {{ $route.query.q }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. By default, Vue Router reuses component instances when navigating between routes sharing the same component template.
 > 2. Setting `key: route => route.fullPath` forces component destruction and re-creation whenever query parameters change.
 > 3. Guarantees lifecycle hooks (`onMounted`) re-run on query navigation.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`components/` Directory](../level_03/components_directory.md) — Where non-routable Vue components belong.

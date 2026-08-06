@@ -158,8 +158,8 @@ console.log("JSON Size:", Buffer.byteLength(jsonString), "bytes"); // Output: 47
 > - 1. **Text/JSON** (Human readability is critical for developers using public APIs).
 > - 2. **Binary/Protobuf** (The drone has limited storage, weak network transmission, and CPU constraints. Minimizing file size and parsing cycles is essential).
 > - 3. **Text/JSON** (Web applications work natively with JSON, making integration simple).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Text vs Binary Format Comparison

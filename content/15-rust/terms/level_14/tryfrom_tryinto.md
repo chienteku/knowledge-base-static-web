@@ -173,7 +173,7 @@ let SmallVal = u8::try_from(big_int)?; // Checked bounds conversion!
 >
 > 1. `TryFrom<f64>` returns `Result<Percentage, &'static str>`.
 > 2. Safely enforces domain invariants during conversion.
-
+> 
 ---
 
 ### Exercise 2: Network Packet Header Size Conversion
@@ -218,7 +218,7 @@ let SmallVal = u8::try_from(big_int)?; // Checked bounds conversion!
 > #### Technical Explanation
 >
 > 1. Delegates to integer `u16::try_from` to prevent silent overflow.
-
+> 
 ---
 
 ### Exercise 3: Enum Variant String Parser via `TryFrom`
@@ -266,7 +266,7 @@ let SmallVal = u8::try_from(big_int)?; // Checked bounds conversion!
 > #### Technical Explanation
 >
 > 1. Idiomatic fallible string parsing into enum variants using `TryFrom`.
-
+> 
 ---
 
 ## 5. Related Terms

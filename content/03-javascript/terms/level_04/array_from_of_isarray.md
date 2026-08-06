@@ -182,7 +182,7 @@ console.log(sortedNames);
 > ```
 > - Pass `uniqueNames` into `Array.from()`.
 > - Call `.sort()` on the resulting array to order the names alphabetically.
-
+> 
 ---
 
 ### Exercise 2: Creating Number Ranges with `Array.from`
@@ -200,7 +200,7 @@ console.log(sortedNames);
 > ```
 >
 > **Explanation:** `Array.from` accepts length objects and mapping callbacks to generate collections dynamically.
-
+> 
 ---
 
 ### Exercise 3: Converting NodeList to Array
@@ -219,7 +219,7 @@ console.log(sortedNames);
 > ```
 >
 > **Explanation:** `Array.from` converts any array-like or iterable object into a true `Array` instance.
-
+> 
 ---
 
 ## 7. Related Terms

@@ -125,7 +125,7 @@ app.use(express.json({ limit: '100kb' }));
 > If you put it in the URL, it will be saved in the browser history, server access logs, and will be visible to anyone standing behind the user looking at their screen.
 > ```
 > - Which part of the HTTP request is hidden "inside the envelope"?
-
+> 
 ---
 
 ### Exercise 2: Request Body Parsing Error Status

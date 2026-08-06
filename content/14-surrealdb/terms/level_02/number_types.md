@@ -177,7 +177,7 @@ An e-commerce payment service requires exact monetary calculations for product p
 > 1. The `dec` suffix creates an exact fixed-point `decimal` literal (`19.99dec`).
 > 2. `decimal` avoids binary floating-point inaccuracies (e.g. `0.1 + 0.2 = 0.30000000000000004`).
 > 3. Mandatory for financial ledger and e-commerce billing calculations.
-
+> 
 ---
 
 ### Exercise 2: Integer Bounds & Overflow Checks
@@ -208,7 +208,7 @@ A analytics counter tracks page views using signed 64-bit integers (`int`).
 > 1. `int` stores signed 64-bit integer values in SurrealDB.
 > 2. Atomic increment operator `+=` adds to integer fields safely.
 > 3. Integer operations provide high-performance counter tracking.
-
+> 
 ---
 
 ### Exercise 3: Floating-Point Scientific Computations
@@ -236,7 +236,7 @@ A weather monitoring service stores temperature readings and wind velocities usi
 > 1. `float` stores 64-bit floating-point numbers suitable for scientific measurements.
 > 2. Built-in math functions (`math::mean()`, `math::sum()`) process numeric collections natively.
 > 3. Floats trade exact decimal precision for high-performance scientific calculations.
-
+> 
 ---
 
 

@@ -112,7 +112,7 @@ If you are currently on the `/about` URL, the `<NavLink to="/about">` will autom
 > It automatically provides an `isActive` boolean or an `active` class so you can easily apply bold styling to the current page.
 > ```
 > - `Link` is standard. There is a special version specifically for navigation menus.
-
+> 
 ---
 
 
@@ -136,7 +136,7 @@ If you are currently on the `/about` URL, the `<NavLink to="/about">` will autom
 > ```
 >
 > **Explanation:** `<NavLink>` provides `isActive` state callback for styling active navigation routes.
-
+> 
 ---
 
 ### Exercise 3: Relative Link Navigation
@@ -153,7 +153,7 @@ If you are currently on the `/about` URL, the `<NavLink to="/about">` will autom
 > ```
 >
 > **Explanation:** Relative link targets (`to=".."`) resolve relative to the current route segment location.
-
+> 
 ## 7. Related Terms
 - [`useNavigate` Hook](use_navigate.md) — The imperative alternative to `<Link>`. (Used for buttons and redirects).
 - [Client-Side Routing](client_side_routing.md) — The core concept powering this.

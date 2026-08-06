@@ -166,7 +166,7 @@ btn.addEventListener('click', () => {
 > Snippet B is Declarative (describing what the button should look like based on the `isLoading` variable).
 > ```
 > - Which one gives orders to the DOM, and which one uses variables to define the shape?
-
+> 
 ---
 
 ### Exercise 2: Declarative Toggle Switch
@@ -187,7 +187,7 @@ btn.addEventListener('click', () => {
 > ```
 >
 > **Explanation:** Declarative components declare UI output based on current state values.
-
+> 
 ---
 
 ### Exercise 3: Imperative vs Declarative Comparison
@@ -201,7 +201,7 @@ btn.addEventListener('click', () => {
 > ```
 >
 > **Explanation:** Declarative programming abstracts DOM updates behind state transitions.
-
+> 
 ## 7. Related Terms
 - [State](../level_02/state.md) — The data that powers Declarative UIs.
 - [Virtual DOM](virtual_dom.md) — The technology React uses to turn your declarative orders into imperative DOM commands.

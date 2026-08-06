@@ -177,7 +177,7 @@ Your friend gets a CORS error. You do not. Why?
 > Mobile apps (React Native) are not web browsers, so they completely ignore CORS rules! Only the React JS website will be blocked.
 > ```
 > - Where does the Same-Origin Policy actually live? (Hint: The user's device).
-
+> 
 ---
 
 
@@ -199,7 +199,7 @@ Your friend gets a CORS error. You do not. Why?
 > ```
 >
 > **Explanation:** Passing an array of domain strings restricts CORS access to authorized client domains.
-
+> 
 ---
 
 ### Exercise 3: CORS Preflight Triggering Headers
@@ -216,7 +216,7 @@ Your friend gets a CORS error. You do not. Why?
 > ```
 >
 > **Explanation:** Non-simple content types or custom headers trigger browser `OPTIONS` preflight checks.
-
+> 
 ## 7. Related Terms
 - [Middleware](../level_07/middleware.md) — `cors()` is just a standard Express middleware.
 - [REST API Design](rest_api.md) — What the browser is trying to protect.

@@ -211,7 +211,7 @@ if !map.contains_key(&key) {
 >
 > 1. `self.quotas.entry(ip.to_string()).or_insert(...)` uses the `Entry` API to perform an atomic single lookup.
 > 2. Avoids double hash table probing by returning a direct mutable reference `&mut RequestQuota` to update counters in place.
-
+> 
 ---
 
 ### Exercise 2: Distributed Log Event Deduplicator (`HashSet`)
@@ -268,7 +268,7 @@ if !map.contains_key(&key) {
 >
 > 1. `HashSet::insert(val)` returns `true` if the item was newly inserted and `false` if it already existed in the set.
 > 2. Provides $O(1)$ average time complexity membership checking without allocation overhead per lookup.
-
+> 
 ---
 
 ### Exercise 3: Custom Key IoT Device Router
@@ -331,7 +331,7 @@ if !map.contains_key(&key) {
 >
 > 1. `#[derive(Hash, PartialEq, Eq)]` satisfies key requirements for `HashMap`.
 > 2. Compound struct keys can be looked up using shared references `&DeviceId`.
-
+> 
 ---
 
 ## 5. Related Terms

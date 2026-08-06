@@ -163,7 +163,7 @@ Create an automated event trigger `audit_balance` on table `account` that logs b
 > 1. `DEFINE EVENT` creates reactive triggers that execute automatically during table mutations.
 > 2. `$before` and `$after` provide access to pre-mutation and post-mutation record states.
 > 3. Executes atomically within the mutation's database transaction.
-
+> 
 ---
 
 ### Exercise 2: Cascading Deletion Trigger Events
@@ -190,7 +190,7 @@ Define an event trigger `cascade_user_deletion` on table `user` that automatical
 > 1. `$event = "DELETE"` targets record deletion queries.
 > 2. `$before.id` provides the primary key of the record being deleted.
 > 3. Automates relational cleanup without backend API clean-up routines.
-
+> 
 ---
 
 ### Exercise 3: Dropping Table Event Triggers with `REMOVE EVENT`
@@ -214,7 +214,7 @@ Drop obsolete trigger event `audit_balance` from table `account`.
 > 1. `REMOVE EVENT` drops event trigger definitions from table metadata.
 > 2. Stops future trigger execution on table mutations.
 > 3. Account table data records remain unaffected.
-
+> 
 ---
 
 

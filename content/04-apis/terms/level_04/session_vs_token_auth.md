@@ -140,8 +140,8 @@ if (await redis.sismember('blacklisted_tokens', jti)) return res.status(401).sen
 > - 1. **Session-Based** (Stateless tokens cannot be revoked instantly without adding database checks).
 > - 2. **Token-Based** (Saves massive database query overhead across independent service nodes).
 > - 3. **Session-Based** (Simple, cookie-based, standard security).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Session vs Token Architectural Trade-Off Matrix

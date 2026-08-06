@@ -158,7 +158,7 @@ Create an `accounts` table using PostgreSQL native `UUID` data type as primary k
 > 1. `UUID` stores 128-bit universally unique identifiers as a compact 16-byte binary value.
 > 2. `gen_random_uuid()` generates cryptographically strong random v4 UUIDs natively in PostgreSQL 13+.
 > 3. Eliminates auto-increment sequence enumeration vulnerabilities.
-
+> 
 ---
 
 ### Exercise 2: Offloading ID Generation to Frontend/Mobile Clients
@@ -176,22 +176,22 @@ Demonstrate client-side UUID generation in Node.js using `crypto.randomUUID()` b
 > ```typescript
 > import crypto from "crypto";
 > import { pool } from "./db";
-
-export async function createAccount(name: string) {
-  const customId = crypto.randomUUID(); // Client-generated UUID v4
-  
-  const text = "INSERT INTO accounts (id, account_name) VALUES ($1, $2) RETURNING id";
-  const res = await pool.query(text, [customId, name]);
-  return res.rows[0];
-}
-```
-
+> 
+> export async function createAccount(name: string) {
+>   const customId = crypto.randomUUID(); // Client-generated UUID v4
+>   
+>   const text = "INSERT INTO accounts (id, account_name) VALUES ($1, $2) RETURNING id";
+>   const res = await pool.query(text, [customId, name]);
+>   return res.rows[0];
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. UUIDs allow client applications to generate unique primary keys offline before sending network requests to the database.
 > 2. Enables parallel insertion across distributed microservices without sequence locking overhead.
 > 3. Distributed architecture pattern.
-
+> 
 ---
 
 ### Exercise 3: Trade-Off Analysis: Sequential Integer vs UUID v4 B-Tree Index Fragmentation
@@ -218,7 +218,7 @@ Explain why random UUID v4 values cause B-tree index page fragmentation compared
 > 1. Random UUID v4 causes high B-tree page splitting during bulk writes on massive tables.
 > 2. Time-ordered UUID v7 combines timestamp ordering with random uniqueness, restoring sequential B-tree append performance.
 > 3. High-performance database indexing guideline.
-
+> 
 ---
 
 

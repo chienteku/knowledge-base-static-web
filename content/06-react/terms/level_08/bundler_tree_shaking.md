@@ -151,7 +151,7 @@ import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Configuring sideEffects False in package.json
@@ -170,7 +170,7 @@ import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 > ```
 >
 > **Explanation:** `sideEffects: false` permits bundlers to safely drop unused ES module exports.
-
+> 
 ---
 
 ### Exercise 3: Tree-Shaking ESM Prerequisite
@@ -187,7 +187,7 @@ import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 > ```
 >
 > **Explanation:** Static `import`/`export` syntax enables compile-time dead code analysis.
-
+> 
 ## 7. Related Terms
 - [Code Splitting & Lazy Loading](code_splitting.md) — Dividing the main bundle into lazy-loaded files.
 - [Next.js](../level_10/nextjs.md) — The meta-framework that automates bundling and route-based code splitting.

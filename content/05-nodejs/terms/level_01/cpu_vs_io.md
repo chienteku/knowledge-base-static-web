@@ -151,7 +151,7 @@ const users = await db.query('SELECT * FROM users');
 > 2.  **I/O-bound** (Waiting for database disk search and network protocol transmission).
 > 3.  **CPU-bound** (Compression algorithms like Gzip perform mathematical patterns reduction).
 > 4.  **I/O-bound** (Waiting for the remote SMTP server to accept the email transmission).
-
+> 
 ---
 
 
@@ -180,7 +180,7 @@ const users = await db.query('SELECT * FROM users');
 > ```
 >
 > **Explanation:** CPU-bound tasks require math/logic computation on processor core; I/O-bound tasks involve waiting for disk or network data transfer.
-
+> 
 ---
 
 ### Exercise 3: Optimal Scaling Architecture Selection
@@ -199,7 +199,7 @@ const users = await db.query('SELECT * FROM users');
 > ```
 >
 > **Explanation:** Async I/O handles tens of thousands of concurrent network connections easily, while Worker Threads parallelize CPU processing.
-
+> 
 ## 7. Related Terms
 - [Blocking the Event Loop](blocking_event_loop.md) — The consequence of running CPU-bound code on the main thread.
 - [Single-Threaded Architecture](single_threaded.md) — The core design constraint behind Node's CPU limits.

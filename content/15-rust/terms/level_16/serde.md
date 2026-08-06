@@ -316,7 +316,7 @@ Implement custom Serde helper modules `mac_format` and `status_format` using Ser
 > 1. **`#[serde(with = "module")]` Attribute:** Tells Serde to look inside `mac_format` and `status_format` for `serialize` and `deserialize` functions matching standard signatures (`fn serialize<S>(&T, S) -> Result<S::Ok, S::Error>` and `fn deserialize<'de, D>(D) -> Result<T, D::Error>`).
 > 2. **Visitor Pattern (`de::Visitor`):** Serde uses stack-allocated visitor structs to consume token streams from the deserializer without heap allocation overhead. The `visit_str` callback inspects string values and parses them into domain types (`[u8; 6]` or `DeviceStatus`).
 > 3. **Custom Error Generation (`de::Error::custom`):** Maps domain conversion errors (such as invalid hexadecimal string length or digits) into format-agnostic Serde errors during deserialization.
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy Deserialization with `&'a str` & `Cow<'a, str>`
@@ -396,7 +396,7 @@ Implement a `PacketHeader<'a>` struct borrowing `source_ip: &'a str` and `endpoi
 > 1. **Lifetime Binding (`'a`):** Tying `PacketHeader<'a>` to the input string lifetime allows Serde to deserialize `&'a str` by returning a slice (`&json_data[start..end]`) directly from the input buffer.
 > 2. **`#[serde(borrow)]` Attribute:** Explicitly signals to Serde that `Cow<'a, str>` should attempt borrowing from the deserializer's input string buffer (`Deserializer<'de>`) whenever possible.
 > 3. **`Cow<'a, str>` Allocation Fallback:** When JSON strings contain escape sequences (e.g. `\n`, `\"`, `\uXXXX`), Serde cannot borrow a contiguous slice from the raw input and automatically switches from `Cow::Borrowed` to `Cow::Owned(String)`.
-
+> 
 ---
 
 ### Exercise 3: Polymorphic API Payload Parsing via Tagged Enums & Defaults
@@ -537,10 +537,9 @@ Implement a `PacketHeader<'a>` struct borrowing `source_ip: &'a str` and `endpoi
 > 1. **Adjacent Enum Tagging (`#[serde(tag = "...", content = "...")]`):** Encodes enum variants into structured JSON objects with a discriminator tag field (e.g. `"event_type": "telemetry"`) and a separate content key (`"data": { ... }`).
 > 2. **`#[serde(flatten)]`:** Inlines fields of nested structs or enums into the outer JSON object, allowing `event_type` and `data` to reside at the top-level of `EventEnvelope`.
 > 3. **`#[serde(default)]` Fallback:** When deserializing a struct with missing fields, Serde invokes the struct's `Default::default()` implementation to fill missing values without aborting deserialization with missing key errors.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

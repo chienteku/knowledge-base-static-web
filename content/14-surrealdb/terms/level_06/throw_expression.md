@@ -159,7 +159,7 @@ Validate user input inside a transaction script. If `$age < 18`, abort transacti
 > 1. `THROW "message"` aborts transaction execution immediately and returns a custom error exception to the client.
 > 2. Rolls back all uncommitted mutations inside the active transaction block.
 > 3. Enables custom business logic validation at the database tier.
-
+> 
 ---
 
 ### Exercise 2: Throwing Exceptions in Field Assertion Rules
@@ -185,7 +185,7 @@ Use `THROW` inside a table field `ASSERT` expression to return a specific valida
 > 1. Combining `ASSERT` with `OR THROW` customize write rejection error messages.
 > 2. Returns descriptive domain error messages to SDK client callers.
 > 3. Improves API error handling clarity.
-
+> 
 ---
 
 ### Exercise 3: Transaction Abort Behavior on `THROW`
@@ -214,7 +214,7 @@ Demonstrate that throwing an exception rolls back preceding `CREATE` mutations w
 > 1. Throwing an exception inside a transaction block triggers an immediate transaction rollback.
 > 2. `temp_log:1` is never committed to persistent storage.
 > 3. Guarantees ACID transactional atomicity during error conditions.
-
+> 
 ---
 
 

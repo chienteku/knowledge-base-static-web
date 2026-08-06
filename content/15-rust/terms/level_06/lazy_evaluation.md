@@ -155,7 +155,7 @@ items.iter().for_each(|x| println!("{x}")); // Correct!
 >
 > 1. `.find(...)` acts as a short-circuiting consumer.
 > 2. As soon as the second line matches, iteration halts, avoiding computation on the third line.
-
+> 
 ---
 
 ### Exercise 2: Infinite Stream Fibonacci Sequence Generator (`take` + `collect`)
@@ -211,7 +211,7 @@ items.iter().for_each(|x| println!("{x}")); // Correct!
 >
 > 1. `Fibonacci` is an infinite stream producing numbers on demand.
 > 2. `.take(7)` lazily limits iteration to 7 calls without allocating infinite memory.
-
+> 
 ---
 
 ### Exercise 3: Custom Lazy Filter-Map Pipeline Verifier
@@ -262,7 +262,7 @@ items.iter().for_each(|x| println!("{x}")); // Correct!
 >
 > 1. `.take(3)` stops pulling items from `.map()` after 3 elements.
 > 2. Demonstrates lazy evaluation driving item-by-item execution.
-
+> 
 ---
 
 ## 6. Related Terms

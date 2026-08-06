@@ -253,7 +253,7 @@ for x in slice.iter_mut() {
 > 2. **`from_slice` & `copy_to_slice`**: Efficiently loads 8 contiguous `f32` floats from slice memory into CPU SIMD registers, performs element-wise vector multiplication `simd_chunk * gain_vec` in a single CPU instruction cycle, and stores the results back to the buffer.
 > 3. **Tail Handling Strategy**: Because slice lengths are arbitrarily dynamic, SIMD loops only iterate up to `simd_end` (a multiple of the lane width 8). A secondary scalar loop processes any remaining elements (`&mut samples[simd_end..]`) to prevent out-of-bounds access or silent truncation.
 > 4. **Portable Abstraction**: Under the hood, `std::simd` lowers `f32x8` to x86_64 AVX2 (`vmulps`) or ARM NEON (`vmul.f32`) vector instructions depending on the compile target without requiring vendor-specific assembly.
-
+> 
 ---
 
 ### Exercise 2: Accelerated Image RGB-to-Grayscale Luminance Conversion
@@ -338,7 +338,7 @@ for x in slice.iter_mut() {
 > 1. **Data Parallelism in Graphics**: Standard RGB frame buffers store component values across contiguous memory arrays. By partitioning computation into `f32x4` SIMD vectors, 4 full pixels are converted per CPU loop iteration.
 > 2. **Fused Vector Operations**: Vectorized expressions like `(r_vec * w_r) + (g_vec * w_g) + (b_vec * w_b)` compile into hardware-accelerated multiply-add instructions (e.g. FMA3 on x86 or ARM NEON `vmla`), calculating results in fewer total instruction issue cycles.
 > 3. **Mathematical Equivalence & Float Assertions**: Unit test uses epsilon floating-point comparisons (`(output[i] - expected).abs() < 1e-4`) to ensure accuracy while allowing for minimal SIMD vs scalar floating-point rounding variations.
-
+> 
 ---
 
 ### Exercise 3: Runtime Target Feature Detection vs Architecture Intrinsics
@@ -443,9 +443,9 @@ for x in slice.iter_mut() {
 > 1. **Runtime Target Feature Detection (`is_x86_feature_detected!`)**: Checks CPUID bits dynamically at application startup. This allows distributing a single binary that uses 256-bit AVX2 on modern hardware without crashing older machines lacking AVX2 instructions.
 > 2. **Target Feature Function Attribute (`#[target_feature(enable = "avx2")]`)**: Informs LLVM that inside `apply_xor_mask_avx2`, it can freely emit AVX2 assembly (`_mm256_xor_si256`) regardless of global `-C target-cpu` flags. Calling this function without runtime CPU checks is `unsafe` because executing AVX2 instructions on non-supporting hardware raises hardware processor exceptions.
 > 3. **Architecture Intrinsics vs Portable SIMD**: While `std::simd` targets cross-platform portability, `core::arch::x86_64` intrinsics provide direct, 1:1 access to specific CPU instructions (`_mm256_loadu_si256`, `_mm256_xor_si256`) for low-level protocol drivers or cryptographic primitives.
-
-
-
+> 
+> 
+> 
 ---
 
 ## 6. Related Terms

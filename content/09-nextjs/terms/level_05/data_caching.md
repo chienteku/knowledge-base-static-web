@@ -130,27 +130,27 @@ Configure `fetch()` caching options for static content (`force-cache`) vs dynami
 >   const staticData = await fetch("https://api.example.com/static-info", {
 >     cache: "force-cache"
 >   }).then((r) => r.json());
-
+> 
 >   // 2. Never cached (Bypasses Data Cache on every request):
 >   const dynamicData = await fetch("https://api.example.com/live-stocks", {
 >     cache: "no-store"
 >   }).then((r) => r.json());
-
-  return (
-    <main>
-      <p>Static Info: {staticData.title}</p>
-      <p>Live Price: ${dynamicData.price}</p>
-    </main>
-  );
-}
-```
-
+> 
+>   return (
+>     <main>
+>       <p>Static Info: {staticData.title}</p>
+>       <p>Live Price: ${dynamicData.price}</p>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `cache: 'force-cache'` stores HTTP responses in Next.js's persistent Data Cache across requests and deployments.
 > 2. `cache: 'no-store'` bypasses the Data Cache, executing a fresh origin network request on every page hit.
 > 3. Core caching control mechanism in Next.js App Router.
-
+> 
 ---
 
 ### Exercise 2: Setting Time-Based Cache Revalidation (`next.revalidate`)
@@ -170,26 +170,26 @@ Revalidate cached data automatically every 60 seconds using `next: { revalidate:
 >   const news = await fetch("https://api.example.com/news", {
 >     next: { revalidate: 60 } // Revalidate every 60 seconds
 >   }).then((r) => r.json());
-
-  return (
-    <div>
-      <h1>Latest News (Cached 60s)</h1>
-      <ul>
-        {news.map((item: any) => (
-          <li key={item.id}>{item.title}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-```
-
+> 
+>   return (
+>     <div>
+>       <h1>Latest News (Cached 60s)</h1>
+>       <ul>
+>         {news.map((item: any) => (
+>           <li key={item.id}>{item.title}</li>
+>         ))}
+>       </ul>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `next: { revalidate: seconds }` enables Stale-While-Revalidate (SWR) caching behavior for the data request.
 > 2. Serves cached data instantly for 60 seconds; subsequent requests trigger background revalidation.
 > 3. Balances CDN speed with content freshness.
-
+> 
 ---
 
 ### Exercise 3: Tag-Based On-Demand Cache Invalidation (`next: { tags }`)
@@ -210,35 +210,31 @@ Tag a data fetch request with `['posts']` and purge it on demand using `revalida
 >   const posts = await fetch("https://api.example.com/posts", {
 >     next: { tags: ["posts"] }
 >   }).then((r) => r.json());
-
-  return <div>Total Posts: {posts.length}</div>;
-}
-```
-
+> 
+>   return <div>Total Posts: {posts.length}</div>;
+> }
+> ```
+> 
 > ```typescript
 > // app/actions/post.ts
 > "use server";
-
-import { revalidateTag } from "next/cache";
-
-export async function addPostAction() {
-  // Save post...
-  revalidateTag("posts"); // Purges all Data Cache entries tagged with 'posts'!
-}
-```
-
+> 
+> import { revalidateTag } from "next/cache";
+> 
+> export async function addPostAction() {
+>   // Save post...
+>   revalidateTag("posts"); // Purges all Data Cache entries tagged with 'posts'!
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `next: { tags: ['tag-name'] }` attaches cache labels to fetched data entries.
 > 2. `revalidateTag('tag-name')` invalidates matching Data Cache entries instantly across all pages.
 > 3. Highly efficient on-demand cache invalidation pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Time-based Revalidation (`next.revalidate`)](revalidation.md) — A middle ground between `force-cache` and `no-store`.

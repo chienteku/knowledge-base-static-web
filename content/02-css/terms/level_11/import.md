@@ -117,7 +117,7 @@ body { color: red; }
 > At the absolute top of your CSS file, on line 1! If you put it anywhere else, the browser will ignore it and your custom font will not load.
 > ```
 > - Where do imports go?
-
+> 
 ---
 
 
@@ -136,7 +136,7 @@ body { color: red; }
 > ```
 >
 > **Explanation:** `@import` accepts optional trailing media query constraints.
-
+> 
 ---
 
 ### Exercise 3: @import Layer Syntax
@@ -153,7 +153,7 @@ body { color: red; }
 > ```
 >
 > **Explanation:** `layer(layerName)` imports external stylesheets into explicit Cascade Layers.
-
+> 
 ## 7. Related Terms
 - [The Cascade](../level_01/the_cascade.md) — Because `@import` files are loaded first, any CSS you write *below* the imports in your master file will override the imported CSS (due to the cascade!).
 - [CSS Preprocessors (Sass & SCSS)](preprocessors.md) — Modern preprocessors compile imports before browser loading loops.

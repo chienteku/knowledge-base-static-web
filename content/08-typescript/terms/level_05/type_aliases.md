@@ -116,24 +116,24 @@ Create type aliases for user IDs (`type UserId = string | number`) and user reco
 >
 > ```typescript
 > type UserId = string | number;
-
-type UserRole = "admin" | "editor" | "viewer";
-
-type User = {
-  id: UserId;
-  username: string;
-  role: UserRole;
-};
-
-const user: User = { id: 101, username: "dev_alex", role: "admin" };
-```
-
+> 
+> type UserRole = "admin" | "editor" | "viewer";
+> 
+> type User = {
+>   id: UserId;
+>   username: string;
+>   role: UserRole;
+> };
+> 
+> const user: User = { id: 101, username: "dev_alex", role: "admin" };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Type aliases (`type Name = ...`) assign reusable names to any valid TypeScript type expression.
 > 2. Capable of representing primitive unions (`string | number`), literal unions (`"admin" | "editor"`), and object shapes.
 > 3. Promotes readable, self-documenting code.
-
+> 
 ---
 
 ### Exercise 2: Defining Generic Type Aliases
@@ -154,22 +154,22 @@ Create a generic API response wrapper type alias `ApiResponse<T>`.
 >   status: number;
 >   message: string;
 > };
-
-type UserData = { id: number; name: string };
-
-const response: ApiResponse<UserData> = {
-  data: { id: 1, name: "Alice" },
-  status: 200,
-  message: "Success"
-};
-```
-
+> 
+> type UserData = { id: number; name: string };
+> 
+> const response: ApiResponse<UserData> = {
+>   data: { id: 1, name: "Alice" },
+>   status: 200,
+>   message: "Success"
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Type aliases accept generic type parameters (`<T>`) to create reusable parametric type templates.
 > 2. `ApiResponse<UserData>` substitutes `T` with `UserData` during type resolution.
 > 3. Essential pattern for wrapping asynchronous API responses.
-
+> 
 ---
 
 ### Exercise 3: Recursive Type Aliases for JSON Structures
@@ -190,20 +190,20 @@ Define a recursive `JSONValue` type alias representing arbitrary valid JSON data
 > type JSONArray = JSONValue[];
 > 
 > type JSONValue = JSONPrimitive | JSONObject | JSONArray;
-
-const data: JSONValue = {
-  title: "Settings",
-  tags: ["json", "typescript"],
-  nested: { count: 42 }
-};
-```
-
+> 
+> const data: JSONValue = {
+>   title: "Settings",
+>   tags: ["json", "typescript"],
+>   nested: { count: 42 }
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Type aliases can reference themselves recursively inside object shapes or array definitions.
 > 2. Perfect for modeling recursive data structures like JSON trees or AST nodes.
 > 3. Advanced type modeling capability.
-
+> 
 ---
 
 

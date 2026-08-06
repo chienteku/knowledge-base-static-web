@@ -253,7 +253,7 @@ Write unit tests verifying frame decoding success, partial data rejection, and b
 > 1. **Zeroing Avoidance**: `[MaybeUninit::uninit(); N]` allocates `N` bytes of memory without emitting CPU store instructions to write zeroes.
 > 2. **Writing via `.write()`**: Calling `.write(val)` initializes the slot and returns a mutable reference `&mut T`. It does not attempt to drop any previous contents (which would cause UB if garbage memory was dropped).
 > 3. **Unsafe Boundary**: `slice::from_raw_parts(buffer.as_ptr() as *const u8, N)` converts the `MaybeUninit<u8>` array pointer into a standard byte slice pointer. The `unsafe` block is sound because we guaranteed all `N` elements were explicitly populated prior to casting.
-
+> 
 ---
 
 ### Exercise 2: Safe Array Construction with Partial Initialization Cleanup
@@ -387,7 +387,7 @@ Write unit tests with a resource tracking struct `ResourceToken` to verify that 
 > 1. **Partial Initialization Risk**: `MaybeUninit<T>` disables Rust's automatic destructor tracking (`Drop`). If code panics or returns early after writing 3 out of 5 non-`Copy` items into an array, Rust will NOT automatically drop those 3 items, causing a resource or memory leak.
 > 2. **Explicit Cleanup**: `buf[j].assume_init_drop()` runs `T`'s destructor on the initialized memory slot `j`. We execute this in reverse order `(0..initialized_count).rev()` when an error occurs.
 > 3. **Final Extraction**: `std::ptr::read(buf.as_ptr() as *const [T; N])` copies out ownership of the fully populated `[T; N]` array without running drop logic on `buf`.
-
+> 
 ---
 
 ### Exercise 3: Safe FFI Out-Pointer Pattern with C Foreign Structs
@@ -502,7 +502,7 @@ pub struct HardwareStats {
 > 1. **`#[repr(C)]` Alignment**: C foreign functions expect memory aligned according to C ABI layout rules. `MaybeUninit<HardwareStats>` preserves the exact memory layout and alignment required by `HardwareStats`.
 > 2. **Out-Pointer Safety**: `uninit_stats.as_mut_ptr()` yields a raw `*mut HardwareStats` pointer. Passing this pointer to C does not violate aliasing rules because no reference `&mut HardwareStats` exists yet.
 > 3. **Error Path Immunity**: If the C function fails (`status_code != 0`), `uninit_stats` is dropped naturally at function exit without executing destructors or reading raw garbage, avoiding UB.
-
+> 
 ---
 
 ## 6. Related Terms

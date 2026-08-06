@@ -120,8 +120,8 @@ Imagine entering a large corporate headquarters building.
 
 > [!check]- Answer
 > - **B** (Calculating cart discounts is business logic. This belongs inside the Billing/Checkout microservice, not the API Gateway routing layer).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: API Gateway Responsibilities Matrix

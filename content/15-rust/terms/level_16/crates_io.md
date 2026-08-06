@@ -240,7 +240,7 @@ Implement:
 > 2. **File Exclusion & Inclusion (`include_files`)**: Setting explicit `include` patterns prevents accidental publishing of `.env` secret files, large benchmarks, or private test fixtures in published `.crate` tarballs.
 > 3. **`#![no_std]` Compatibility**: The core algorithm relies solely on `core` bitwise operations (`wrapping_neg`, shift `>>`, `^`), ensuring the published crate functions on bare-metal embedded microcontrollers without dynamic memory allocation (`alloc`).
 > 4. **Deterministic Testing**: `assert_eq!` assertions validate algorithm correctness against standard IEEE 802.3 test vectors (`"123456789"` -> `0xCBF43926`).
-
+> 
 ---
 
 ### Exercise 2: Feature-Gated Serde Integration & Optional Dependency Architecture for `crates.io` Libraries
@@ -380,7 +380,7 @@ Design a published crate module `TelemetryPacket` that:
 > 2. **Feature Gate Attribute (`#[cfg_attr(feature = "serde", derive(...))]`)**: Conditional derivation attached to data structures ensures `serde::Serialize` and `serde::Deserialize` traits compile seamlessly when `"serde"` feature is toggled without introducing mandatory dependencies for `#![no_std]` users.
 > 3. **Zero-Allocation Binary Wire Protocol**: Providing standard fixed-buffer `encode_fixed` / `decode_fixed` primitives guarantees base functionality across bare-metal environments.
 > 4. **Unit Verification**: Tests verify header validation, big-endian byte reconstruction, and boundary checks using `assert_eq!`.
-
+> 
 ---
 
 ### Exercise 3: Automated Crate Pre-Publish Validation and Secret Leak Prevention Engine
@@ -580,10 +580,9 @@ Design a Rust pre-publish verification engine `CratePublishValidator` that:
 > 2. **SemVer Compliance**: Semantic Versioning 2.0.0 standard (`MAJOR.MINOR.PATCH`) is parsed to ensure dependency resolution in Cargo remains strictly predictable.
 > 3. **Leak Protection**: File pattern matching safeguards project secrets (`.env`, SSH private keys, API credentials) from being inadvertently included in published archives.
 > 4. **Assertion-based Verification**: Host unit tests exercise validation routines across edge cases to enforce compliance before publishing.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

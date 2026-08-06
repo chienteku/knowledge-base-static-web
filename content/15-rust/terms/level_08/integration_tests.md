@@ -359,7 +359,7 @@ In production microservices built with Rust, integration testing requires valida
 > 1. **Public API Contract**: In integration testing, components communicate through `pub` traits (`EventListener`) and methods (`create_user`, `delete_user`, `get_user`). Private internals are omitted to test real caller behavior.
 > 2. **Shared Fixture Setup**: `MockAuditLogger::new()` provides a fixture that retains shared state via `Arc<Mutex<Vec<Event>>>`. This allows integration test assertions to query side effects without reaching into private service state.
 > 3. **Thread Safety & Mutability**: Rust requires `Send + Sync` bounds on `Box<dyn EventListener>` to allow `EventBus` to share listeners safely across threads. `Arc<RwLock<...>>` inside `UserService` guarantees concurrent read access while isolating exclusive write access during updates.
-
+> 
 ---
 
 ### Exercise 2: Black-Box Integration Testing of HTTP API Middleware & Rate Limiting
@@ -560,7 +560,7 @@ Web services require black-box integration testing to ensure that middleware lay
 > 1. **Short-Circuit Middleware Execution**: `ApiPipeline::dispatch` loops over trait objects `Box<dyn Middleware>`. If any middleware returns `Err(Response)`, the pipeline immediately short-circuits and returns the error HTTP response without processing downstream handlers.
 > 2. **Stateful Rate Limiting**: `RateLimiterMiddleware` protects interior state with `Mutex<HashMap<String, usize>>`. The test verifies client IP tracking across sequential request calls without needing internal struct inspection.
 > 3. **Black-Box API Assertions**: The tests instantiate the pipeline via its public builder methods and submit `Request` values, verifying system behavior through `Response` status codes and payload strings (`assert_eq!(response.status_code, 401)`).
-
+> 
 ---
 
 ### Exercise 3: Asynchronous Workflow Pipeline Integration & Fault Injection Testing
@@ -756,7 +756,7 @@ Integration tests often need to verify transaction boundaries and fault toleranc
 > 1. **Fault Injection Strategy**: The mock structs store a `should_fail` boolean flag. In integration testing, this enables simulating network timeouts, gateway outages, or database errors without depending on unreliable external services.
 > 2. **Transaction Isolation & Invariant Verification**: `test_payment_failure_prevents_notification` asserts that when `charge()` returns `PaymentResult::Failed`, the processor aborts immediately, keeping `notifications` empty (`assert!(notifications.is_empty())`).
 > 3. **Trait Abstraction for Dependency Injection**: The `PaymentProcessor` relies on `Arc<dyn PaymentGateway>` and `Arc<dyn NotificationService>` trait objects. In production, real HTTP/gRPC client implementations are injected; in integration tests, mock structs are injected seamlessly.
-
+> 
 ---
 
 ## 6. Related Terms

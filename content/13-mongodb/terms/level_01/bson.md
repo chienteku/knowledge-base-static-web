@@ -160,7 +160,7 @@ A data platform engineer inspects the byte storage efficiency of BSON data types
 > 1. `Object.bsonsize(doc)` calculates exact binary byte footprints including type headers and field length prefixes.
 > 2. BSON stores dates as 64-bit integers and decimals as 128-bit IEEE 754-2008 structures.
 > 3. Fast binary parsing enables direct field index traversal without parsing entire text buffers.
-
+> 
 ---
 
 ### Exercise 2: Native BSON Date Queries
@@ -188,7 +188,7 @@ Query order documents created within the last 24 hours using native BSON Date ob
 > 1. BSON represents dates as 64-bit UTC integers since epoch milliseconds.
 > 2. Enables direct numeric comparisons (`$gte`) without string parsing overhead.
 > 3. Preserves microsecond precision across client drivers.
-
+> 
 ---
 
 ### Exercise 3: Precise Financial Math with BSON Decimal128
@@ -218,7 +218,7 @@ Store product prices using `NumberDecimal` to avoid floating-point rounding erro
 > 1. `NumberDecimal` stores 34 decimal digits of precision using BSON 128-bit IEEE format.
 > 2. Eliminates binary floating-point representation errors inherent in double precision floats.
 > 3. Standard choice for monetary and financial data fields.
-
+> 
 ---
 
 

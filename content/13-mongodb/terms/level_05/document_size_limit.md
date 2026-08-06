@@ -149,7 +149,7 @@ Inspect the current BSON byte size of a document in collection `users` to ensure
 > 1. `Object.bsonsize(doc)` calculates exact binary byte footprints of BSON documents.
 > 2. Documents approaching 16MB indicate schema anti-patterns (unbounded array growth).
 > 3. Helps monitor collection schema health.
-
+> 
 ---
 
 ### Exercise 2: Refactoring Oversized Array Documents into References
@@ -180,7 +180,7 @@ Refactor a `company` document containing an embedded array of 100,000 `employees
 > 1. Moving 1-to-many child entities to a separate collection resolves 16MB document size limits.
 > 2. Allows child entities to scale to billions of documents independently.
 > 3. Preserves fast indexing on foreign key `companyId`.
-
+> 
 ---
 
 ### Exercise 3: Handling Large Files with GridFS
@@ -206,7 +206,7 @@ Store 50MB PDF documents in MongoDB without breaching the 16MB BSON document lim
 > 1. GridFS splits files larger than 16MB into small 255KB chunk documents stored in `fs.chunks`.
 > 2. `fs.files` maintains parent metadata documents.
 > 3. Streams large binary files seamlessly without exceeding BSON size boundaries.
-
+> 
 ---
 
 

@@ -121,13 +121,13 @@ Configure `output: 'standalone'` in `next.config.js` to generate a self-containe
 >   output: "standalone"
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `output: 'standalone'` automatically traces dependencies and copies ONLY required node_modules into `.next/standalone/`.
 > 2. Dramatically reduces production Docker container image sizes from 1GB+ down to ~100MB.
 > 3. Standard build configuration for Docker and Kubernetes deployments.
-
+> 
 ---
 
 ### Exercise 2: Writing a Production Dockerfile for Standalone Builds
@@ -156,13 +156,13 @@ Write a minimal multi-stage `Dockerfile` leveraging `.next/standalone` output.
 > EXPOSE 3000
 > CMD ["node", "server.js"]
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Standalone server runs directly via `node server.js` without requiring `npm install` on the target container.
 > 2. Static assets (`.next/static` and `public/`) must be explicitly copied into the container folder.
 > 3. Optimized Docker deployment pattern.
-
+> 
 ---
 
 ### Exercise 3: Setting Environment Variables in Standalone Containers
@@ -181,19 +181,15 @@ Pass runtime environment variables (`PORT=8080`, `DATABASE_URL`) to a standalone
 > # Run standalone container with environment variables
 > docker run -p 8080:8080 -e PORT=8080 -e DATABASE_URL="postgresql://..." my-next-app
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Standalone Next.js server reads process environment variables at container startup.
 > 2. `PORT=8080` configures the HTTP listening port.
 > 3. Decouples build-time compilation from runtime environment configuration.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Deployment (Vercel)](vercel_deployment.md) — The zero-config alternative to self-hosting.

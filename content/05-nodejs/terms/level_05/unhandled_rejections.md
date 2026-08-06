@@ -132,7 +132,7 @@ fetchWeather();
 > });
 > ```
 > - How do you handle errors on a standard Promise chain?
-
+> 
 ---
 
 
@@ -153,7 +153,7 @@ fetchWeather();
 > ```
 >
 > **Explanation:** `process.on('unhandledRejection')` catches promises rejected without `.catch()` handlers.
-
+> 
 ---
 
 ### Exercise 3: Node.js Unhandled Rejection CLI Mode Flag
@@ -170,7 +170,7 @@ fetchWeather();
 > ```
 >
 > **Explanation:** `--unhandled-rejections` mode flag sets rejection behavior (`strict`, `throw`, `warn`, `none`).
-
+> 
 ## 7. Related Terms
 - [Microtasks vs Macrotasks](microtasks_macrotasks.md) — Promise rejections happen in the VIP Microtask queue.
 - [The process Object](../level_02/process_object.md) — The object that emits the `unhandledRejection` event.

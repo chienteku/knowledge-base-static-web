@@ -171,7 +171,7 @@ Create a unique index on `users(email)` to enforce email uniqueness and accelera
 > 1. `CREATE UNIQUE INDEX` creates a B-tree index that rejects duplicate non-null entries.
 > 2. Provides both unique data constraint enforcement and $O(\log N)$ index lookup acceleration.
 > 3. Equivalent to `ALTER TABLE ... ADD CONSTRAINT ... UNIQUE`.
-
+> 
 ---
 
 ### Exercise 2: Multi-Column Composite Unique Indexes
@@ -196,7 +196,7 @@ Create a composite unique index on `user_roles(user_id, role_name)` to prevent a
 > 1. Composite unique indexes enforce uniqueness across the COMBINATION of multiple columns.
 > 2. Allows a user to have multiple roles, but prevents assigning the same `role_name` twice to the same `user_id`.
 > 3. Relationship uniqueness pattern.
-
+> 
 ---
 
 ### Exercise 3: Handling Null Values in Unique Indexes
@@ -223,7 +223,7 @@ Demonstrate how unique indexes handle multiple `NULL` values by default vs using
 > 1. By default (`NULLS DISTINCT`), SQL standards permit multiple `NULL` values in a unique index because `NULL <> NULL`.
 > 2. PostgreSQL 15 introduced `NULLS NOT DISTINCT`, treating `NULL` values as duplicate matches (permitting at most ONE `NULL` entry).
 > 3. Modern PostgreSQL constraint feature.
-
+> 
 ---
 
 

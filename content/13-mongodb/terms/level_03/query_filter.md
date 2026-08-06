@@ -175,7 +175,7 @@ Construct a query filter matching active customers in `"Austin"` with orders exc
 > 1. Query filter documents specify declarative match criteria in BSON format.
 > 2. Combines equality, dot-notation subfield paths, and comparison operators.
 > 3. Passed directly to `find()`, `updateOne()`, `deleteMany()`, etc.
-
+> 
 ---
 
 ### Exercise 2: Reuse Query Filters Across Operations
@@ -204,7 +204,7 @@ Define a single query filter object `$filter` and reuse it for both `countDocume
 > 1. BSON query filters are standard JavaScript objects that can be assigned to variables.
 > 2. Reusing filter variables guarantees consistent match criteria across count and data fetch operations.
 > 3. Promotes clean code modularity.
-
+> 
 ---
 
 ### Exercise 3: Evaluating Empty Query Filters `{}`
@@ -232,7 +232,7 @@ Explain the execution behavior of passing an empty query filter object `{}` to `
 > 1. An empty filter object `{}` places zero constraints on matching documents.
 > 2. Evaluates to true for EVERY document in the collection.
 > 3. Exercise extreme caution when passing empty filters to destructive operations like `deleteMany({})`.
-
+> 
 ---
 
 

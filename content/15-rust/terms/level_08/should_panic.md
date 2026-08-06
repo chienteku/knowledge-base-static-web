@@ -286,7 +286,7 @@ Implement:
 > 1. **Defensive API Contract Enforcement:** In safety-critical domain logic such as financial trading, attempting to operate on corrupt state (e.g. negative balance or 0x leverage) must fail immediately to preserve data integrity. Rust's `panic!` mechanism acts as a hard runtime boundary.
 > 2. **Targeted Substring Matching with `#[should_panic(expected = "...")]`:** Standard `#[should_panic]` validates *that* a panic occurred, but fails to verify *why*. By supplying `expected = "InvalidEquity: total equity must be positive"`, Rust's test harness checks if the panic payload string contains that exact substring.
 > 3. **Preventing False Positive Test Passes:** If `test_exceeded_margin_panic` panicked due to an unexpected `IndexOutOfBounds` or division-by-zero bug instead of the margin check, `#[should_panic(expected = "...")]` would fail the test, exposing the underlying regression.
-
+> 
 ---
 
 ### Exercise 2: Multithreaded Shared State Lock Guard Invariant & Lock Poisoning Panic Test
@@ -428,7 +428,7 @@ Implement:
 > 1. **Testing Lock Poisoning Dynamics:** When a thread holding a `std::sync::MutexGuard` panics, Rust marks the `Mutex` as poisoned to protect shared state from invariant corruption. Subsequent attempts to call `.lock()` return `Err(PoisonError)`.
 > 2. **Testing Panic Propagation across Thread Boundaries:** By using `.expect("LockPoisoned: mutex lock poisoned")`, the main thread converts the `PoisonError` into a structured panic.
 > 3. **Concurrency Test Isolation:** `#[should_panic]` isolates panics occurring within the test thread scope. Spawning a background worker thread and calling `.join()` allows the background panic to poison the mutex while allowing the main thread's subsequent lock acquisition attempt to trigger the monitored panic.
-
+> 
 ---
 
 ### Exercise 3: Zero-Copy Binary Telemetry Packet Parser & Boundary Validation
@@ -570,7 +570,7 @@ Implement:
 > 1. **Binary Slice Bounds & Endianness Parsing:** High-performance parsers convert big-endian byte sequences (`u16::from_be_bytes`, `u32::from_be_bytes`) directly into primitive numeric types.
 > 2. **Fast Invariant Failure via Panics:** Zero-copy networking libraries often crash framing routines when protocol headers are malformed or checksums fail, as corrupted buffers violate standard system preconditions.
 > 3. **Comprehensive Panic Coverage:** Each edge condition (truncated header, invalid magic header, framing byte mismatch, bit flips in payload) produces a distinct panic string. Annotating unit tests with `#[should_panic(expected = "...")]` ensures that every individual validation barrier is regression-tested and panics with the exact expected error string.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -218,13 +218,13 @@ fn process<C: IntoIterator<Item = i32>>(container: C) { ... } // Accepts Vec<i32
 >         for item in &inv {
 >             assert_eq!(item.count, 10);
 >         }
-
+> 
 > 
 >         // Mutable reference loop
 >         for item in &mut inv {
 >             item.count += 5;
 >         }
-
+> 
 > 
 >         // Owned loop
 >         let items: Vec<Item> = inv.into_iter().collect();
@@ -238,7 +238,7 @@ fn process<C: IntoIterator<Item = i32>>(container: C) { ... } // Accepts Vec<i32
 > 1. Implementing `IntoIterator` for `WarehouseInventory` enables `for x in inv` (owned).
 > 2. Implementing `IntoIterator` for `&'a WarehouseInventory` enables `for x in &inv` (immutable borrow).
 > 3. Implementing `IntoIterator` for `&'a mut WarehouseInventory` enables `for x in &mut inv` (mutable borrow).
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy Network Packet Slice Iterator
@@ -290,7 +290,7 @@ fn process<C: IntoIterator<Item = i32>>(container: C) { ... } // Accepts Vec<i32
 >
 > 1. `&'a PacketBuffer<'a>` forwards `into_iter` to `slice.iter()`.
 > 2. Zero-copy iteration over internal byte slice buffers.
-
+> 
 ---
 
 ### Exercise 3: Batch Processor Function with `C: IntoIterator` Bound
@@ -333,7 +333,7 @@ fn process<C: IntoIterator<Item = i32>>(container: C) { ... } // Accepts Vec<i32
 >
 > 1. `C: IntoIterator<Item = i32>` enables calling `sum_positive` with `Vec`, array ranges, or custom collections.
 > 2. Converts inputs into iterators lazily via `.into_iter()`.
-
+> 
 ---
 
 ## 6. Related Terms

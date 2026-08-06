@@ -173,7 +173,7 @@ Implement Optimistic Concurrency Control on table `products` using a `version` i
 > 1. Optimistic locking assumes concurrent conflicts are rare and avoids acquiring database locks during read phase.
 > 2. If another transaction modified the row concurrently (`version` became 4), `UPDATE` matches 0 rows.
 > 3. Application detects 0 updated rows and throws a concurrency conflict error.
-
+> 
 ---
 
 ### Exercise 2: Implementing Pessimistic Locking with `SELECT FOR UPDATE`
@@ -209,7 +209,7 @@ Implement Pessimistic Concurrency Control using `SELECT FOR UPDATE` to lock a ro
 > 1. Pessimistic locking assumes concurrent conflicts are likely and acquires an exclusive row lock at read time.
 > 2. Other transactions attempting `SELECT FOR UPDATE` on the same row block until `COMMIT`.
 > 3. Prevents lost update anomalies completely.
-
+> 
 ---
 
 ### Exercise 3: Trade-Off Analysis: Optimistic vs Pessimistic Locking
@@ -236,7 +236,7 @@ Formulate a technical selection matrix comparing Optimistic vs Pessimistic concu
 > 1. Optimistic control is ideal for stateless web servers where database transactions cannot remain open across HTTP requests.
 > 2. Pessimistic control is ideal for short, high-contention backend transaction blocks (e.g. flash sales).
 > 3. Align locking strategy with application architecture.
-
+> 
 ---
 
 

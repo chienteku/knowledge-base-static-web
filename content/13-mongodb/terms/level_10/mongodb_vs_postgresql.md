@@ -160,7 +160,7 @@ Compare data representation for a user with multiple addresses in MongoDB (Embed
 > 1. MongoDB embeds bounded hierarchical data inside a single BSON document, optimizing read velocity.
 > 2. PostgreSQL normalizes data across separate tables, requiring foreign key constraints and `JOIN` operations.
 > 3. Fundamental architectural difference between Document NoSQL and RDBMS.
-
+> 
 ---
 
 ### Exercise 2: Schema Flexibility vs Strict Table Schemas
@@ -186,7 +186,7 @@ Evaluate schema migration requirements when adding a new optional field `twitter
 > 1. MongoDB offers flexible schema design, allowing documents in the same collection to have different fields.
 > 2. Relational databases require strict column definitions enforced across all rows.
 > 3. Accelerates agile product iteration.
-
+> 
 ---
 
 ### Exercise 3: Architecture Selection Matrix: MongoDB vs PostgreSQL
@@ -212,7 +212,7 @@ Formulate a technology selection decision matrix choosing between MongoDB and Po
 > 1. MongoDB excels at application-driven document workloads and scale-out architectures.
 > 2. PostgreSQL excels at deeply normalized relational data modeling and complex SQL analytics.
 > 3. Align database selection with domain data structures.
-
+> 
 ---
 
 

@@ -149,11 +149,11 @@ await new Promise(r => setTimeout(r, delay));
 > [!check]- Answer
 > - The formula for exponential delay is $\text{Delay} = \text{base} \times 2^{\text{attempt}}$.
 > - For attempt #1 (2nd retry), the delay is $500 \times 2^1 = 1000\text{ms}$.
-
+> 
 > [!check]- Answer
 > - **`2000ms`** (Calculation: $500 \times 2^2 = 500 \times 4 = 2000\text{ms}$).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Exponential Backoff Math Calculation

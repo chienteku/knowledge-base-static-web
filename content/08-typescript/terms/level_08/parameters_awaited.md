@@ -163,19 +163,19 @@ Extract the parameter tuple type of a third-party function `fetchUser(id: string
 > function fetchUser(id: string, options?: { verbose: boolean }) {
 >   return { id, name: "Alice" };
 > }
-
-type FetchUserParams = Parameters<typeof fetchUser>;
-// Inferred as: [id: string, options?: { verbose: boolean } | undefined]
-
-const args: FetchUserParams = ["usr_100", { verbose: true }];
-```
-
+> 
+> type FetchUserParams = Parameters<typeof fetchUser>;
+> // Inferred as: [id: string, options?: { verbose: boolean } | undefined]
+> 
+> const args: FetchUserParams = ["usr_100", { verbose: true }];
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Parameters<T>` extracts the parameter tuple type of a function type `T`.
 > 2. Obtains exact argument signatures without manually re-declaring parameter types.
 > 3. Ideal for wrapping external library functions.
-
+> 
 ---
 
 ### Exercise 2: Recursively Unwrapping Promises with `Awaited<T>`
@@ -194,19 +194,19 @@ Unwrap nested `Promise<Promise<string[]>>` return types using `Awaited<T>`.
 > async function getItems(): Promise<string[]> {
 >   return ["item1", "item2"];
 > }
-
-type ItemsResult = Awaited<ReturnType<typeof getItems>>;
-// Inferred as: string[]
-
-const items: ItemsResult = ["a", "b"];
-```
-
+> 
+> type ItemsResult = Awaited<ReturnType<typeof getItems>>;
+> // Inferred as: string[]
+> 
+> const items: ItemsResult = ["a", "b"];
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Awaited<T>` recursively unwraps Promises, resolving nested `Promise<Promise<T>>` types to concrete `T`.
 > 2. Models the exact runtime behavior of `await` expressions in async functions.
 > 3. Introduced in TypeScript 4.5 for accurate async return typing.
-
+> 
 ---
 
 ### Exercise 3: Combining `Parameters<T>` and `ReturnType<T>` in Wrappers
@@ -229,13 +229,13 @@ Create a higher-order logger function wrapper preserving exact parameter and ret
 >   };
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `Parameters<T>` captures arguments while `ReturnType<T>` captures function output.
 > 2. Wraps arbitrary functions while preserving exact type safety for callers.
 > 3. Standard higher-order decorator and proxy pattern.
-
+> 
 ---
 
 

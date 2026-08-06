@@ -263,7 +263,7 @@ Implement `with_scratch_buffer<F, R>(f: F) -> R` and `encode_hex_with_scratch(by
 > 1. **Zero-Locking Per-Thread Buffer**: `SCRATCH_BUFFER` uses `thread_local!` combined with `RefCell<Vec<u8>>`. Because each thread accesses its own distinct `Vec<u8>`, borrowing via `.borrow_mut()` incurs zero synchronization locks or atomic overhead.
 > 2. **Capacity Retention**: Calling `.clear()` empties the buffer length to 0 while keeping the underlying heap capacity allocated. Subsequent calls reuse the allocated memory without performing new heap allocations.
 > 3. **Thread Memory Isolation**: Spawning 4 worker threads causes each thread to initialize its own separate `SCRATCH_BUFFER` instance on first access. Mutating or clearing the buffer in one thread has zero side effects on other threads.
-
+> 
 ---
 
 ### Exercise 2: Per-Thread Lock-Free Metrics Aggregator & Batch Harvest Pipeline
@@ -395,7 +395,7 @@ Implement `MetricsCollector` with lock-free local recording and batched flushing
 > 1. **Atomic Free Hot Path**: `record_request` operates exclusively on thread-local storage (`RefCell<ThreadMetrics>`), eliminating lock acquisitions and atomic cache invalidations during request handling.
 > 2. **Batch Aggregation**: Mutex acquisition only occurs during `flush()`. Instead of 50 mutex locks across 5 worker threads, only 5 batch lock acquisitions occur.
 > 3. **State Isolation & Clean Reset**: `*local = ThreadMetrics::default()` clears thread-local state back to zero after flushing, ensuring subsequent requests on recycled threads begin with clean accumulators.
-
+> 
 ---
 
 ### Exercise 3: Per-Thread Fast PRNG & Automatic Thread-Local `Drop` Destructor Cleanup
@@ -522,7 +522,7 @@ Implement a thread-isolated Fast Xorshift PRNG and thread-exit cleanup guard:
 > 1. **Lock-Free PRNG**: Using `thread_local!` for pseudo-random number generation provides each worker thread with its own state register, avoiding atomic lock contention or global seed serialization.
 > 2. **Deterministic Reseeding**: Reseeding `PER_THREAD_RNG` mutates only the caller thread's RNG instance, enabling deterministic replay in per-thread simulations or property-based tests.
 > 3. **Thread Lifecycle Destructors**: Rust automatically calls `Drop::drop` on `thread_local!` instances when an OS thread completes execution. In `ThreadCleanupGuard::drop`, `active_count.fetch_sub(1)` runs automatically as each spawned thread exits, cleanly tracking thread lifecycles without explicit teardown hooks.
-
+> 
 ---
 
 ## 6. Related Terms

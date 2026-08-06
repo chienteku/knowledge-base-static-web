@@ -168,7 +168,7 @@ Inspect the current size, max size, and time window (hours of retained logs) of 
 > 1. `db.printReplicationInfo()` displays oplog collection size (MB) and retained log time window.
 > 2. Oplog window indicates how long a secondary node can be offline before requiring a full initial sync.
 > 3. Vital metric for disaster recovery planning.
-
+> 
 ---
 
 ### Exercise 2: Querying Idempotent Operations in `local.oplog.rs`
@@ -195,7 +195,7 @@ Query `local.oplog.rs` for the 3 most recent update write operations recorded on
 > 1. `local.oplog.rs` is a capped collection storing idempotent write opcodes (`i`=insert, `u`=update, `d`=delete).
 > 2. Updates are translated into explicit `$set` ops so re-applying the oplog entry yields identical data state.
 > 3. Enables secondary nodes to replicate writes asynchronously.
-
+> 
 ---
 
 ### Exercise 3: Resizing the Oplog Dynamically
@@ -222,7 +222,7 @@ Increase the oplog size on a primary node to 50,000MB (50GB) using `db.adminComm
 > 1. `replSetResizeOplog` resizes the oplog collection dynamically without restarting `mongod`.
 > 2. Expanding oplog size increases the replication safety window during high-write maintenance.
 > 3. Prevents secondary nodes from falling out of sync.
-
+> 
 ---
 
 

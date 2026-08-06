@@ -198,7 +198,7 @@ button { color: red; } /* Valid CSS comment */
 > ```
 > - Replace `//` with `/* ... */`.
 > - Remove the nested `/*` inside the padding comment.
-
+> 
 ---
 
 
@@ -221,7 +221,7 @@ button { color: red; } /* Valid CSS comment */
 > ```
 >
 > **Explanation:** CSS comments begin with `/*` and end with `*/`.
-
+> 
 ---
 
 ### Exercise 3: Commenting Out CSS Rules
@@ -241,7 +241,7 @@ button { color: red; } /* Valid CSS comment */
 > ```
 >
 > **Explanation:** Wrapping CSS properties in `/* */` disables them without deleting code.
-
+> 
 ## 7. Related Terms
 - [CSS (Cascading Style Sheets)](css.md) — The parent language.
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The container syntax holding comments.

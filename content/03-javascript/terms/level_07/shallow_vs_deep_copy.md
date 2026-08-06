@@ -184,7 +184,7 @@ console.log("Copy Port:", configCopy.settings.port);
 > Copy Port: 8080
 > ```
 > - Call `structuredClone(databaseConfig)` to duplicate the config.
-
+> 
 ---
 
 ### Exercise 2: Deep Copying with `structuredClone`
@@ -204,7 +204,7 @@ console.log("Copy Port:", configCopy.settings.port);
 > ```
 >
 > **Explanation:** `structuredClone` recursively clones nested objects and arrays into fresh memory allocations.
-
+> 
 ---
 
 ### Exercise 3: JSON Serialization Deep Copy Limitations
@@ -221,7 +221,7 @@ console.log("Copy Port:", configCopy.settings.port);
 > ```
 >
 > **Explanation:** JSON format does not support non-serializable JavaScript types like functions or symbols.
-
+> 
 ---
 
 ## 7. Related Terms

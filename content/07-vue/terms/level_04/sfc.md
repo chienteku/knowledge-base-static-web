@@ -130,7 +130,7 @@ SFCs are a "Developer Experience" (DX) feature. They require a build tool (like 
 > 3. `<style scoped>`
 > ```
 > - Technically no, culturally yes.
-
+> 
 ---
 
 ### Exercise 2: SFC Structure Breakdown
@@ -153,7 +153,7 @@ SFCs are a "Developer Experience" (DX) feature. They require a build tool (like 
 > <template></template>
 > <style scoped></style>
 > ```
-
+> 
 ---
 
 ### Exercise 3: CSS v-bind in SFC Style Blocks
@@ -178,8 +178,8 @@ SFCs are a "Developer Experience" (DX) feature. They require a build tool (like 
 > }
 > </style>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

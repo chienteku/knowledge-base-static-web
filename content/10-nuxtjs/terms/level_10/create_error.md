@@ -156,29 +156,29 @@ Throw a 404 Not Found error when dynamic article ID parameters do not exist in t
 > <script setup lang="ts">
 > const route = useRoute();
 > const { data: article, error } = await useFetch(`/api/articles/${route.params.id}`);
-
-if (error.value || !article.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: `Article ${route.params.id} does not exist.`,
-    fatal: true
-  });
-}
-</script>
-
-<template>
-  <article v-if="article">
-    <h1>{{ article.title }}</h1>
-  </article>
-</template>
-```
-
+> 
+> if (error.value || !article.value) {
+>   throw createError({
+>     statusCode: 404,
+>     statusMessage: `Article ${route.params.id} does not exist.`,
+>     fatal: true
+>   });
+> }
+> </script>
+> 
+> <template>
+>   <article v-if="article">
+>     <h1>{{ article.title }}</h1>
+>   </article>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `createError()` constructs a standardized Nuxt HTTP error object.
 > 2. `fatal: true` forces Nuxt to clear the current component tree and render the root `error.vue` error page.
 > 3. Guarantees consistent 404 error rendering across server SSR and client navigation.
-
+> 
 ---
 
 ### Exercise 2: Returning Formatted API Error Responses in Nitro Handlers
@@ -208,13 +208,13 @@ Validate authorization tokens in a Nitro endpoint and return HTTP 401 Unauthoriz
 >   return { data: "Protected sensitive server response" };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. In Nitro server handlers, throwing `createError()` halts request processing and returns a formatted JSON error payload.
 > 2. `statusCode` sets the HTTP response status code header.
 > 3. Standard REST API server error pattern.
-
+> 
 ---
 
 ### Exercise 3: Clearing Errors with `clearError()`
@@ -235,33 +235,29 @@ Clear an active error state and navigate back to the home page using `clearError
 > const props = defineProps({
 >   error: Object
 > });
-
-function handleReset() {
-  clearError({ redirect: "/" });
-}
-</script>
-
-<template>
-  <div>
-    <h1>Error: {{ props.error?.statusCode }}</h1>
-    <p>{{ props.error?.message }}</p>
-    <button @click="handleReset">Return to Homepage</button>
-  </div>
-</template>
-```
-
+> 
+> function handleReset() {
+>   clearError({ redirect: "/" });
+> }
+> </script>
+> 
+> <template>
+>   <div>
+>     <h1>Error: {{ props.error?.statusCode }}</h1>
+>     <p>{{ props.error?.message }}</p>
+>     <button @click="handleReset">Return to Homepage</button>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `clearError()` resets Nuxt's internal global error state ref.
 > 2. `{ redirect: '/' }` option redirects the user to the target path after clearing error state.
 > 3. Standard error recovery mechanism.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`error.vue` & `useError`](error_vue.md) — What the user sees when these functions are executed.

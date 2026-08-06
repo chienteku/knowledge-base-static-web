@@ -152,7 +152,7 @@ Switch active shell context from default `test` database to production `store_db
 > 1. `use <dbname>` switches the shell's active `db` parameter context.
 > 2. Databases are created lazily upon inserting the first document into a collection.
 > 3. Isolates collection namespaces on disk.
-
+> 
 ---
 
 ### Exercise 2: Listing Database Contexts and Sizes
@@ -176,7 +176,7 @@ List all database contexts present on a MongoDB instance along with their disk s
 > 1. `show dbs` returns database names and on-disk storage sizes.
 > 2. Databases with zero collections/documents are omitted until initial writes occur.
 > 3. Requires administrative cluster privileges to inspect all database contexts.
-
+> 
 ---
 
 ### Exercise 3: Dropping Database Contexts
@@ -201,7 +201,7 @@ Drop a test database context `staging_db` completely.
 > 1. `db.dropDatabase()` deletes all collections, documents, and index files in the current database context.
 > 2. Reclaims allocated storage pages.
 > 3. Operates within the active target database context.
-
+> 
 ---
 
 

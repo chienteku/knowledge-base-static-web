@@ -174,7 +174,7 @@ Create an `order_items` table with a composite primary key over `(order_id, line
 > 1. Composite primary keys enforce uniqueness across the COMBINATION of multiple columns.
 > 2. Prevents duplicate `line_item_id` values within the same `order_id`.
 > 3. Creates an underlying multi-column B-tree unique index.
-
+> 
 ---
 
 ### Exercise 2: Referencing Composite Primary Keys with Composite Foreign Keys
@@ -206,7 +206,7 @@ Create a `line_item_audits` table referencing composite key `(order_id, line_ite
 > 1. Composite foreign keys must match the exact number and order of columns in the target composite primary key.
 > 2. Enforces multi-column referential integrity.
 > 3. Ensures child audit records link to valid parent line items.
-
+> 
 ---
 
 ### Exercise 3: Column Order Strategy for Composite Index Scans
@@ -233,7 +233,7 @@ Explain why column order in composite key `(order_id, line_item_id)` matters for
 > 1. Composite indexes sort entries by the leading column first.
 > 2. Place the most frequently queried filtering column as the leading key.
 > 3. Fundamental indexing rule.
-
+> 
 ---
 
 

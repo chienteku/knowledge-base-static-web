@@ -202,7 +202,7 @@ impl IndexMut<usize> for Grid { fn index_mut(&mut self, idx: usize) -> &mut i32 
 >
 > 1. `Index<(usize, usize)>` enables clean 2D tuple subscripting `mat[(r, c)]`.
 > 2. `IndexMut` enables direct assignment `mat[(r, c)] = val`.
-
+> 
 ---
 
 ### Exercise 2: Custom Key-Value Dictionary Indexer
@@ -256,7 +256,7 @@ impl IndexMut<usize> for Grid { fn index_mut(&mut self, idx: usize) -> &mut i32 
 > #### Technical Explanation
 >
 > 1. Implements `Index<&str>` to support string key subscript lookups `cfg["host"]`.
-
+> 
 ---
 
 ### Exercise 3: Circular Buffer Subscript Indexer
@@ -305,7 +305,7 @@ impl IndexMut<usize> for Grid { fn index_mut(&mut self, idx: usize) -> &mut i32 
 > #### Technical Explanation
 >
 > 1. Subscript indexing automatically applies modulo arithmetic for circular buffer lookups.
-
+> 
 ---
 
 ## 5. Related Terms

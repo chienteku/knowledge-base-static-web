@@ -248,17 +248,17 @@ Implement a custom `TelemetryTicker` struct manually implementing `Stream`.
 > ---
 > 
 > ### Exercise 2: Async Log Stream Aggregation & Batching Pipeline with Cancellation Safety
-
-**Scenario**: Real-time log monitoring pipelines parse continuous streams of log lines. The stream pipeline must filter entries by severity level (e.g. `ERROR` or `WARN`), group them into fixed-size batches using `StreamExt::chunks`, and handle shutdown signals cancellation-safely.
-
-Build an async stream pipeline for log parsing and chunking.
-
-**Requirements**:
-1. Define `LogEntry` with `level: String` and `message: String`.
-2. Write `async fn process_log_stream<S>(stream: S, batch_size: usize) -> Vec<Vec<LogEntry>>` where `S: Stream<Item = LogEntry> + Unpin`.
-3. Filter entries retaining only `"ERROR"` or `"WARN"`, then chunk into batches of `batch_size`.
-4. Add unit tests asserting filtering and chunking accuracy.
-
+> 
+> **Scenario**: Real-time log monitoring pipelines parse continuous streams of log lines. The stream pipeline must filter entries by severity level (e.g. `ERROR` or `WARN`), group them into fixed-size batches using `StreamExt::chunks`, and handle shutdown signals cancellation-safely.
+> 
+> Build an async stream pipeline for log parsing and chunking.
+> 
+> **Requirements**:
+> 1. Define `LogEntry` with `level: String` and `message: String`.
+> 2. Write `async fn process_log_stream<S>(stream: S, batch_size: usize) -> Vec<Vec<LogEntry>>` where `S: Stream<Item = LogEntry> + Unpin`.
+> 3. Filter entries retaining only `"ERROR"` or `"WARN"`, then chunk into batches of `batch_size`.
+> 4. Add unit tests asserting filtering and chunking accuracy.
+> 
 > [!check]- Answer
 > ```rust
 > use futures_util::stream::{Stream, StreamExt};
@@ -300,7 +300,7 @@ Build an async stream pipeline for log parsing and chunking.
 >             LogEntry { level: "DEBUG".into(), message: "trace".into() },
 >             LogEntry { level: "ERROR".into(), message: "oom".into() },
 >         ];
-
+> 
 > 
 >         let stream = stream::iter(logs);
 >         let batches = process_log_stream(stream, 2).await;
@@ -323,17 +323,17 @@ Build an async stream pipeline for log parsing and chunking.
 > ---
 > 
 > ### Exercise 3: Custom Stream Adapter — Async Deduplicating Stream Combinator
-
-**Scenario**: High-frequency financial ticker streams produce rapid repeated price entries. A custom stream adapter `DeduplicateStream<St>` wraps an underlying stream and drops consecutive duplicate items before yielding to callers.
-
-Construct a custom stream combinator adapter implementing `Stream`.
-
-**Requirements**:
-1. Define `DeduplicateStream<St, T>` holding `stream: St` and `last_item: Option<T>`.
-2. Implement `Stream` for `DeduplicateStream<St, T>` where `St: Stream<Item = T> + Unpin`, `T: PartialEq + Clone`.
-3. In `poll_next`, loop polling `stream.poll_next()`. Skip items equal to `last_item`.
-4. Add unit tests asserting deduplication of consecutive duplicate values.
-
+> 
+> **Scenario**: High-frequency financial ticker streams produce rapid repeated price entries. A custom stream adapter `DeduplicateStream<St>` wraps an underlying stream and drops consecutive duplicate items before yielding to callers.
+> 
+> Construct a custom stream combinator adapter implementing `Stream`.
+> 
+> **Requirements**:
+> 1. Define `DeduplicateStream<St, T>` holding `stream: St` and `last_item: Option<T>`.
+> 2. Implement `Stream` for `DeduplicateStream<St, T>` where `St: Stream<Item = T> + Unpin`, `T: PartialEq + Clone`.
+> 3. In `poll_next`, loop polling `stream.poll_next()`. Skip items equal to `last_item`.
+> 4. Add unit tests asserting deduplication of consecutive duplicate values.
+> 
 > [!check]- Answer
 > ```rust
 > use futures_core::stream::Stream;

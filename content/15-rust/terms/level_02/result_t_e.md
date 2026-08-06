@@ -308,7 +308,7 @@ thread::spawn(move || {
 > 2. **Error Translation with `map_err`**: The `str::parse::<u64>()` method returns a `Result<u64, ParseIntError>`. We map standard library errors into domain errors using `.map_err(|_| PaymentError::InvalidAmount(...))`.
 > 3. **Ownership and Lifetime Boundaries**: `parse_payment` accepts a borrowed slice `&str` (`raw`). When creating the owned `PaymentTransaction`, string fields are converted into owned `String` objects via `.to_string()`, ensuring the output struct outlives the input string slice.
 > 4. **Batch Processing Pattern**: `process_batch` demonstrates how `Result` instances can be collected or split without aborting execution on the first error encountered, a standard requirement for robust stream parsing pipelines.
-
+> 
 ---
 
 ### Exercise 2: Binary Frame Packet Decoder with Checksum Validation & Chained Combinators
@@ -475,7 +475,7 @@ thread::spawn(move || {
 > 2. **Chaining Operations with `.and_then()`**: The `and_then` combinator takes a closure returning `Result<U, E>` and applies it only if the preceding `Result` is `Ok`. This flattens what would otherwise be nested `match` statements into a single monadic sequence.
 > 3. **Conversion of Foreign Errors**: `String::from_utf8` returns `FromUtf8Error`. By calling `.map_err(|err| PacketError::InvalidPayloadUtf8(err.to_string()))`, foreign error types are unified into the module's target error enum.
 > 4. **Endianness Safety**: Converting raw multi-byte arrays to numerical fields via `u16::from_be_bytes` ensures architecture-independent binary protocol parsing across big-endian and little-endian systems.
-
+> 
 ---
 
 ### Exercise 3: Multi-Tier Service Configuration Evaluator with Fallback Recovery
@@ -650,7 +650,7 @@ thread::spawn(move || {
 > 2. **Option-to-Result Conversion via `.ok_or_else()`**: When retrieving fields from `HashMap::get`, an `Option<&str>` is returned. Converting `Option` to `Result` using `.ok_or_else(|| ConfigError::MissingField(...))` creates a lazy error payload if the value is `None`.
 > 3. **The `?` Operator Mechanics**: The `?` operator unwraps `Ok(T)` values or early-returns `Err(E)` values from the current function. This allows sequential validation logic to remain clean while propagating errors instantly.
 > 4. **Boundary Validation**: Numerical parsing is complemented by semantic range assertions. Even if string conversion to `u32` succeeds, invalid operational ranges (e.g. timeout < 100ms) yield structured domain errors (`OutOfBounds`).
-
+> 
 ---
 
 ## 6. Related Terms

@@ -214,7 +214,7 @@ div {
 > ```
 > - The direction is `to bottom`.
 > - Use the same percentage stop (`50%`) for the end of the first color and start of the second color to prevent blending!
-
+> 
 ---
 
 
@@ -235,7 +235,7 @@ div {
 > ```
 >
 > **Explanation:** `to right` directs linear gradient color stops from left edge to right edge.
-
+> 
 ---
 
 ### Exercise 3: Radial Gradient Center Syntax
@@ -254,7 +254,7 @@ div {
 > ```
 >
 > **Explanation:** `radial-gradient` radiates outward from a center focal point.
-
+> 
 ## 7. Related Terms
 - [`background-size` (cover / contain)](background_size.md) — Scaling backgrounds.
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — Base background declarations.

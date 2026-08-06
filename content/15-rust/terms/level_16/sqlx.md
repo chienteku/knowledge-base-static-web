@@ -331,7 +331,7 @@ Implement an async Rust module using `sqlx` and SQLite (`SqlitePool`) that:
 > 2. **Transaction Scoping (`pool.begin()`):** `pool.begin().await` starts an isolated SQL transaction. By passing `&mut *tx` as an executor to `fetch_optional` or `execute`, queries execute strictly within that transaction boundary.
 > 3. **Automatic RAII Rollback:** If an error occurs (such as insufficient balance) and `tx.commit()` is never called, Rust's `Drop` implementation on `Transaction` automatically issues an SQL `ROLLBACK` when `tx` goes out of scope.
 > 4. **Row Mapping (`sqlx::FromRow`):** Automatically maps SQL column names to struct field names, eliminating boilerplate deserialization logic.
-
+> 
 ---
 
 ### Exercise 2: Custom Domain Enums and Serde JSON Payload Columns
@@ -489,7 +489,7 @@ Implement an order management repository in Rust using `sqlx` and SQLite that:
 > 1. **Custom Enum Type Mapping (`#[derive(sqlx::Type)]`):** Automatically maps the Rust `OrderStatus` enum to string representations in the database (`"pending"`, `"processing"`, etc.), allowing direct binding in SQL queries without manual `.to_string()` or `match` blocks.
 > 2. **JSON Column Wrapper (`sqlx::types::Json<T>`):** Wraps any Serde-serializable type (`Vec<OrderItem>`) to serialize it directly to JSON text when writing to the database, and automatically parse JSON text back into Rust structs when reading query results.
 > 3. **Type Safety:** Ensures that invalid enum values or corrupted JSON strings trigger type decoding errors during database fetch operations instead of silently corrupting domain data.
-
+> 
 ---
 
 ### Exercise 3: Dynamic SQL Query Construction using `sqlx::QueryBuilder`
@@ -636,10 +636,9 @@ Implement an async user search service using `sqlx::QueryBuilder` in Rust for SQ
 > 1. **Safe Dynamic SQL (`QueryBuilder`):** Allows appending dynamic SQL clauses while preserving binding parameter placeholders (`push_bind`). This ensures that user inputs are safely escaped and separated from the SQL execution plan, preventing SQL injection vulnerabilities.
 > 2. **Type-Safe Dynamic Mapping (`build_query_as::<User>()`):** Automatically maps dynamically generated SQL result columns into the target `User` struct using `sqlx::FromRow`.
 > 3. **Dynamic Pagination & Filtering:** Demonstrates how production APIs handle optional URL parameters seamlessly without requiring complex ORM query DSLs.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

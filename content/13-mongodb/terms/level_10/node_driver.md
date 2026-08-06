@@ -171,29 +171,29 @@ Write native Node.js MongoDB driver code to establish a database connection and 
 >
 > ```typescript
 > import { MongoClient } from "mongodb";
-
-const uri = "mongodb://localhost:27017";
-const client = new MongoClient(uri);
-
-async function run() {
-  try {
-    await client.connect();
-    const db = client.db("store");
-    const products = await db.collection("products").find({ price: { $lt: 50 } }).toArray();
-    console.log("Products Found:", products.length);
-  } finally {
-    await client.close();
-  }
-}
-run();
-```
-
+> 
+> const uri = "mongodb://localhost:27017";
+> const client = new MongoClient(uri);
+> 
+> async function run() {
+>   try {
+>     await client.connect();
+>     const db = client.db("store");
+>     const products = await db.collection("products").find({ price: { $lt: 50 } }).toArray();
+>     console.log("Products Found:", products.length);
+>   } finally {
+>     await client.close();
+>   }
+> }
+> run();
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. The official `@mongodb` Node.js driver provides direct, high-performance BSON API access.
 > 2. `client.connect()` initializes connection pooling and seed node discovery.
 > 3. `toArray()` streams cursor batches into a JavaScript array.
-
+> 
 ---
 
 ### Exercise 2: Native Driver Bulk Operations with `bulkWrite`
@@ -223,7 +223,7 @@ Execute high-throughput batch writes using the native Node.js driver `bulkWrite(
 > 1. Native driver `bulkWrite()` sends multiple write operations in a single binary socket payload.
 > 2. Eliminates Node.js async event loop network roundtrip latency.
 > 3. Ideal for high-speed ETL ingestion pipelines.
-
+> 
 ---
 
 ### Exercise 3: Native BSON Type Construction (`ObjectId`, `Decimal128`)
@@ -240,23 +240,23 @@ Construct explicit BSON `ObjectId` and `Decimal128` types using the native drive
 >
 > ```typescript
 > import { ObjectId, Decimal128 } from "mongodb";
-
-const id = new ObjectId("60c72b2f9b1d8b2c88888880");
-const price = Decimal128.fromString("199.99");
-
-await db.collection("orders").insertOne({
-  _id: id,
-  total: price,
-  createdAt: new Date()
-});
-```
-
+> 
+> const id = new ObjectId("60c72b2f9b1d8b2c88888880");
+> const price = Decimal128.fromString("199.99");
+> 
+> await db.collection("orders").insertOne({
+>   _id: id,
+>   total: price,
+>   createdAt: new Date()
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Native driver exports explicit BSON type constructors (`ObjectId`, `Decimal128`, `Long`, `Binary`).
 > 2. Prevents JavaScript numbers from defaulting to 64-bit IEEE floating-point values.
 > 3. Guarantees binary schema compatibility.
-
+> 
 ---
 
 

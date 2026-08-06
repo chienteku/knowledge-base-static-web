@@ -130,35 +130,35 @@ Create `app/dashboard/error.tsx` to handle failures inside the `/dashboard` rout
 > ```tsx
 > // app/dashboard/error.tsx
 > "use client";
-
-export default function DashboardError({
-  error,
-  reset
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
-  return (
-    <div className="p-6 bg-amber-50 text-amber-900 rounded-lg">
-      <h2 className="text-xl font-bold">Failed to load Dashboard data</h2>
-      <p className="mt-2 text-sm">{error.message}</p>
-      <button
-        onClick={() => reset()}
-        className="mt-4 px-4 py-2 bg-amber-700 text-white rounded"
+> 
+> export default function DashboardError({
+>   error,
+>   reset
+> }: {
+>   error: Error & { digest?: string };
+>   reset: () => void;
+> }) {
+>   return (
+>     <div className="p-6 bg-amber-50 text-amber-900 rounded-lg">
+>       <h2 className="text-xl font-bold">Failed to load Dashboard data</h2>
+>       <p className="mt-2 text-sm">{error.message}</p>
+>       <button
+>         onClick={() => reset()}
+>         className="mt-4 px-4 py-2 bg-amber-700 text-white rounded"
       >
-        Reload Dashboard Segment
-      </button>
-    </div>
-  );
-}
-```
-
+>         Reload Dashboard Segment
+>       </button>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `error.tsx` automatically wraps sibling `page.tsx` and child segments in a React Error Boundary.
 > 2. `error.tsx` MUST be declared as a Client Component using `"use client"`.
 > 3. Prevents dashboard errors from crashing the outer root layout.
-
+> 
 ---
 
 ### Exercise 2: Recovering Route State with `reset()` and `router.refresh()`
@@ -175,41 +175,41 @@ Combine `reset()` with `router.refresh()` to fetch fresh server data when retryi
 >
 > ```tsx
 > "use client";
-
-import { useRouter } from "next/navigation";
-import { startTransition } from "react";
-
-export default function RouteError({
-  error,
-  reset
-}: {
-  error: Error;
-  reset: () => void;
-}) {
-  const router = useRouter();
-
-  function handleRetry() {
-    startTransition(() => {
-      router.refresh();
-      reset();
-    });
-  }
-
-  return (
-    <div>
-      <p>Error: {error.message}</p>
-      <button onClick={handleRetry}>Refresh Data & Retry</button>
-    </div>
-  );
-}
-```
-
+> 
+> import { useRouter } from "next/navigation";
+> import { startTransition } from "react";
+> 
+> export default function RouteError({
+>   error,
+>   reset
+> }: {
+>   error: Error;
+>   reset: () => void;
+> }) {
+>   const router = useRouter();
+> 
+>   function handleRetry() {
+>     startTransition(() => {
+>       router.refresh();
+>       reset();
+>     });
+>   }
+> 
+>   return (
+>     <div>
+>       <p>Error: {error.message}</p>
+>       <button onClick={handleRetry}>Refresh Data & Retry</button>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `reset()` re-renders the failed client component tree but does NOT re-execute Server Component data fetches alone.
 > 2. `router.refresh()` re-fetches Server Components from the server.
 > 3. Wrapping both in `startTransition` performs a complete, synchronized retry.
-
+> 
 ---
 
 ### Exercise 3: Handling Global Root Layout Errors with `global-error.tsx`
@@ -227,40 +227,36 @@ Create `app/global-error.tsx` to handle errors originating inside `app/layout.ts
 > ```tsx
 > // app/global-error.tsx
 > "use client";
-
-export default function GlobalError({
-  error,
-  reset
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
-  return (
-    <html lang="en">
-      <body className="p-8 bg-slate-900 text-white">
-        <h1 className="text-2xl font-bold">Critical Application Error</h1>
-        <p className="mt-2">{error.message}</p>
-        <button onClick={() => reset()} className="mt-4 px-4 py-2 bg-blue-600 rounded">
-          Hard Reset
-        </button>
-      </body>
-    </html>
-  );
-}
-```
-
+> 
+> export default function GlobalError({
+>   error,
+>   reset
+> }: {
+>   error: Error & { digest?: string };
+>   reset: () => void;
+> }) {
+>   return (
+>     <html lang="en">
+>       <body className="p-8 bg-slate-900 text-white">
+>         <h1 className="text-2xl font-bold">Critical Application Error</h1>
+>         <p className="mt-2">{error.message}</p>
+>         <button onClick={() => reset()} className="mt-4 px-4 py-2 bg-blue-600 rounded">
+>           Hard Reset
+>         </button>
+>       </body>
+>     </html>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `error.tsx` does NOT catch errors thrown inside the same folder's `layout.tsx`.
 > 2. `global-error.tsx` handles errors occurring in the root `app/layout.tsx` file.
 > 3. Must include its own `<html>` and `<body>` tags because the root layout was unmounted.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [React Error Boundaries](error_boundaries.md) — The native React feature that Next.js wraps to create this file.

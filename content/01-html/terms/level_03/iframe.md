@@ -133,7 +133,7 @@ The `<iframe>` is the glass porthole. It allows you to look safely outside at th
 > No! An iframe is a completely isolated environment (like looking through a glass porthole). Your website's CSS cannot cross the boundary to style the contents of the iframe, and the iframe's CSS cannot leak out to style your website.
 > ```
 > - Remember the submarine metaphor. The water cannot leak in!
-
+> 
 ---
 
 
@@ -157,7 +157,7 @@ The `<iframe>` is the glass porthole. It allows you to look safely outside at th
 > ```
 >
 > **Explanation:** `title` provides accessibility; `loading="lazy"` defers frame loading until scrolled into view.
-
+> 
 ---
 
 ### Exercise 3: Sandbox Restrictions
@@ -174,7 +174,7 @@ The `<iframe>` is the glass porthole. It allows you to look safely outside at th
 > ```
 >
 > **Explanation:** Bare `sandbox` locks down embedded iframe capabilities completely.
-
+> 
 ## 7. Related Terms
 - [`src` Attribute](src.md) — The attribute defining the iframe source URL.
 - [`<img>`](img.md) — Another tag that embeds external content (images) by fetching a source URL.

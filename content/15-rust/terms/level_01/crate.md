@@ -460,7 +460,7 @@ You must design a multi-module library crate structure that encapsulates interna
 >    - Partial fills: Quantities are updated in place, and fully filled orders are removed from book heads (`bids[0]` / `asks[0]`).
 >    - Unmatched orders: Order remains cleanly sorted in bid/ask depth for future incoming takers.
 >
-
+> 
 ---
 
 ### Exercise 2: Embedded Telemetry Protocol Crate with Zero-Allocation Binary Framing & Feature-Gated Conditional Compilation
@@ -618,7 +618,7 @@ You must architect the binary framing logic and feature gates to maintain compil
 >    - Reserved `sensor_id == 0` is guarded against invalid telemetry source initialization.
 >    - Corrupted payload bytes fail CRC verification and trigger `ChecksumMismatch`.
 >
-
+> 
 ---
 
 ### Exercise 3: Plugin-Driven Async Task Pipeline Engine with Shared Library Crate Facade & Dynamic Dispatch
@@ -856,7 +856,7 @@ Architect a clean separation between the library crate facade and binary task di
 >    - Multi-attempt recovery correctly updates total executions on `TaskContext` while incrementing `successful_tasks`.
 >    - Context key overwrite replaces prior context values cleanly.
 >
-
+> 
 ---
 
 ## 6. Related Terms

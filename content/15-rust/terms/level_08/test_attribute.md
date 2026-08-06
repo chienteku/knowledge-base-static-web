@@ -363,7 +363,7 @@ Requirements:
 > 1. **Result-Returning Unit Tests (`#[test] fn ... -> Result<(), E>`)**: Returning a `Result` type from a `#[test]` annotated function allows using the standard `?` operator inside tests. If any step returns `Err`, the test runner catches it as a test failure and prints the inner error debug output.
 > 2. **`matches!` Macro**: Provides clean pattern matching assertions against complex enum variants (such as struct-like enum variants with fields) without verbose `if let` blocks.
 > 3. **Isolation with `#[cfg(test)]`**: Hides all test cases and `main()` integration helpers from production builds, keeping production binaries lean.
-
+> 
 ---
 
 ### Exercise 2: Bounded LRU Cache Storage Engine & Invariant Testing
@@ -520,7 +520,7 @@ Requirements:
 > 1. **Testing Mutability & State Transmutation**: `get(&mut self, ...)` modifies internal recency metadata. Unit tests demonstrate how mutable borrows interact with assertion checks.
 > 2. **Negative Assertions (`assert_ne!`)**: Used alongside positive equality checks (`assert_eq!`) to explicitly verify that evicted items are no longer reachable while non-evicted items retain correct values.
 > 3. **Determinism**: Unit tests verify exact algorithmic invariant properties (LRU order) deterministically without external timing or randomized dependencies.
-
+> 
 ---
 
 ### Exercise 3: Webhook Dispatcher with Mock Transport Trait & Retry Verification
@@ -673,7 +673,7 @@ Requirements:
 > 1. **Dependency Injection via Traits**: By defining `HttpTransport` as a trait generic `T: HttpTransport`, product code remains agnostic to real HTTP networking versus mock testing drivers.
 > 2. **Mocking with Interior Mutability (`RefCell`)**: Standard unit tests require shared `&self` references across trait invocations. `RefCell` provides safe interior mutability to mutate mock call counts and response queues inside immutable trait methods without unsafe code.
 > 3. **Testing Retry Edge Cases**: Unit tests systematically inject status sequences (`[503, 500, 200]`) to prove retry loops complete successfully before retry thresholds expire.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -109,10 +109,6 @@ export default defineNuxtConfig({ ssr: true }); // Universal SSR for public page
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Disabling SSR Globally for Single Page Applications
@@ -133,13 +129,13 @@ Configure `nuxt.config.ts` to run the entire Nuxt 3 application as a pure SPA (`
 >   ssr: false // Disables Server-Side Rendering globally
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `ssr: false` disables server HTML rendering completely across all routes.
 > 2. Server sends a minimal HTML wrapper file (`<div id="__nuxt"></div>`) containing script tags.
 > 3. Vue application initializes, fetches data, and builds the DOM entirely in the user's browser client.
-
+> 
 ---
 
 ### Exercise 2: Managing Client-Side Loading Skeletons in SPA Mode
@@ -161,13 +157,13 @@ Configure a custom SPA loading indicator in `nuxt.config.ts` displayed while Jav
 >   spaLoadingTemplate: "spa-loading-template.html"
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. In SPA mode, users see a blank screen while initial JavaScript bundles download and execute.
 > 2. `spaLoadingTemplate` renders an HTML/CSS loading spinner directly inside the initial HTML file.
 > 3. Improves perceived loading speed for SPA mode applications.
-
+> 
 ---
 
 ### Exercise 3: Trade-Off Analysis: SPA vs Universal SSR
@@ -188,19 +184,15 @@ Formulate an architectural decision matrix comparing SPA mode against Universal 
 > - Universal SSR (ssr: true): Excellent SEO, fast initial content paint, higher server Node.js CPU & RAM costs.
 > Recommendation: Use SPA mode for internal enterprise back-office tools; use SSR for public web applications.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. SPA mode eliminates Node.js server rendering costs, allowing static CDN hosting.
 > 2. Universal SSR is required for search engines and social media crawler indexing.
 > 3. Core architectural selection choice.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Route Rules Configuration](../level_08/route_rules.md) — How to enable SPA mode for only *specific* URLs instead of the whole app.

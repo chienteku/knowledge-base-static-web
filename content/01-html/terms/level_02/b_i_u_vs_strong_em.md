@@ -250,7 +250,7 @@ Semantic vs presentational markup comparison:
 > ```
 > - The warning "must" is an emphasis of vocal tone (`<em>`).
 > - The warning "all your progress" is critically important data loss information (`<strong>`).
-
+> 
 ---
 
 ### Exercise 2: Semantic Tag Selection Matrix
@@ -271,7 +271,7 @@ Semantic vs presentational markup comparison:
 > ```
 >
 > **Explanation:** HTML semantic text tags convey explicit acoustic emphasis for screen readers.
-
+> 
 ---
 
 ### Exercise 3: Screen Reader Acoustic Difference
@@ -285,7 +285,7 @@ Semantic vs presentational markup comparison:
 > ```
 >
 > **Explanation:** `<strong>` provides semantic emphasis; `<b>` provides visual offset.
-
+> 
 ## 7. Related Terms
 - [`<strong>` & `<em>`](strong_em.md) — The baseline semantic text tags.
 - [`<span>` (Inline container)](span.md) — The non-semantic inline container used for visual formatting with CSS.

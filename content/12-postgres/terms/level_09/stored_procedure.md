@@ -180,7 +180,7 @@ Create a Stored Procedure `process_batch_payouts()` that executes explicit `COMM
 > 1. Stored Procedures (`CREATE PROCEDURE`, introduced in PG 11) support explicit `COMMIT` and `ROLLBACK` commands inside the procedure body.
 > 2. Stored Functions (`CREATE FUNCTION`) CANNOT execute `COMMIT` or `ROLLBACK`.
 > 3. Invoked using `CALL procedure_name()`.
-
+> 
 ---
 
 ### Exercise 2: Stored Procedures with INOUT Parameters
@@ -212,7 +212,7 @@ Create a procedure `increment_counter` accepting an `INOUT` integer parameter.
 > 1. `INOUT` parameters pass values into the procedure and return modified values back to the caller.
 > 2. Procedural parameter manipulation.
 > 3. Clean parameter pass-through.
-
+> 
 ---
 
 ### Exercise 3: Trade-Off Analysis: Stored Functions vs Stored Procedures
@@ -238,7 +238,7 @@ Formulate a technical decision matrix comparing PostgreSQL Stored Functions vs S
 > 1. Functions integrate seamlessly into SQL query expressions.
 > 2. Procedures handle autonomous batch operations requiring transactional commits between loop iterations.
 > 3. Match tool selection to operational requirements.
-
+> 
 ---
 
 

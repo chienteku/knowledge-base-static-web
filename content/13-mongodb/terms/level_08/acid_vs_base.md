@@ -187,7 +187,7 @@ Execute a multi-document ACID transaction transferring `$100.00` from account A 
 > 1. `startTransaction()` initiates an ACID transaction boundary over a client session.
 > 2. Guarantees that both account balance updates succeed together or abort with zero side effects.
 > 3. Enforces strict ACID compliance in document databases.
-
+> 
 ---
 
 ### Exercise 2: Single-Document Atomic Updates vs BASE Patterns
@@ -217,7 +217,7 @@ Refactor a multi-document payment status update into a single atomic document up
 > 1. Single-document updates are inherently atomic in MongoDB without initiating multi-document transactions.
 > 2. Embedding related status history inside the parent document avoids transaction overhead.
 > 3. Preferred design pattern when ACID scope fits inside 1 document.
-
+> 
 ---
 
 ### Exercise 3: Balancing ACID Rigor vs BASE Scalability
@@ -244,7 +244,7 @@ Evaluate when to use strict ACID transactions vs BASE eventual consistency.
 > 1. Single-document atomic writes provide high-speed ACID guarantees by default.
 > 2. Reserve multi-document transactions for critical cross-collection financial operations.
 > 3. Maximizes system throughput and cluster scalability.
-
+> 
 ---
 
 

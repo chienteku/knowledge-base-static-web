@@ -114,7 +114,7 @@ document.body.appendChild(fragment); // Single DOM reflow!
 > The DOM acts as a translator or a bridge. It takes the static structure of HTML and translates it into interactive JavaScript Objects, allowing the programming language to manipulate the visual markup.
 > ```
 > - Think about the "O" in DOM. What does "Object" mean in programming?
-
+> 
 ---
 
 
@@ -140,7 +140,7 @@ document.body.appendChild(fragment); // Single DOM reflow!
 > ```
 >
 > **Explanation:** DOM trees consist of Element, Text, Comment, and Attribute nodes.
-
+> 
 ---
 
 ### Exercise 3: Efficient DOM Querying
@@ -157,7 +157,7 @@ document.body.appendChild(fragment); // Single DOM reflow!
 > ```
 >
 > **Explanation:** `getElementById` performs optimized direct ID hash lookups.
-
+> 
 ## 7. Related Terms
 - [The Tree Structure](tree_structure.md) — How the DOM organizes all of these objects in memory.
 - [Critical Rendering Path](critical_rendering_path.md) — The browser pipeline that compiles DOM into pixels.

@@ -300,7 +300,7 @@ dialogElement.showModal(); // Opens true modal with backdrop and focus trap
 > ```
 > - Nest the click events within script triggers.
 > - Call `showModal()` to open, and `close()` to exit.
-
+> 
 ---
 
 
@@ -325,7 +325,7 @@ dialogElement.showModal(); // Opens true modal with backdrop and focus trap
 > ```
 >
 > **Explanation:** `.showModal()` opens modal dialogs; `.close()` closes them natively.
-
+> 
 ---
 
 ### Exercise 3: Dialog Backdrop Styling
@@ -344,7 +344,7 @@ dialogElement.showModal(); // Opens true modal with backdrop and focus trap
 > ```
 >
 > **Explanation:** `::backdrop` pseudo-element styles background screen overlays behind open modals.
-
+> 
 ## 7. Related Terms
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent interface hierarchy.
 - [`<details>` & `<summary>`](../level_06/details_summary.md) — The native toggle layout widget.

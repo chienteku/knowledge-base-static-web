@@ -128,7 +128,7 @@ emitter.on('data', (data) => {
 > room.sendMessage("Bob", "Hello!");
 > ```
 > - How do you give a class the superpowers of a parent class in JavaScript?
-
+> 
 ---
 
 
@@ -150,7 +150,7 @@ emitter.on('data', (data) => {
 > ```
 >
 > **Explanation:** `on(event, listener)` registers subscriber callbacks triggered by `emit(event, data)`.
-
+> 
 ---
 
 ### Exercise 3: Increasing Max Listeners Limit
@@ -167,7 +167,7 @@ emitter.on('data', (data) => {
 > ```
 >
 > **Explanation:** `setMaxListeners()` adjusts the threshold for `MaxListenersExceededWarning` alerts.
-
+> 
 ## 7. Related Terms
 - [Streams (General Concept)](../level_06/streams.md) — The most famous use-case of Event Emitters in Node.js.
 - [The http Module](../level_02/http_module.md) — Servers are Event Emitters under the hood.

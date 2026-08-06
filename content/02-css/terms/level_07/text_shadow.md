@@ -119,7 +119,7 @@ h1 { text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); } /* Casts shadow behind text 
 > `text-shadow: 0px 0px 10px limegreen;`
 > ```
 > - What happens if the flashlight is pointing straight down from perfectly above the letter?
-
+> 
 ---
 
 
@@ -140,7 +140,7 @@ h1 { text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); } /* Casts shadow behind text 
 > ```
 >
 > **Explanation:** `text-shadow` parameters are `offset-x offset-y blur-radius color`.
-
+> 
 ---
 
 ### Exercise 3: Multiple Text Shadows
@@ -159,7 +159,7 @@ h1 { text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); } /* Casts shadow behind text 
 > ```
 >
 > **Explanation:** Comma-separated `text-shadow` layers multiple glow shadows.
-
+> 
 ## 7. Related Terms
 - [`box-shadow` (Card Shadows)](../level_09/box_shadow.md) — The exact same concept, but applied to the entire Box Model container instead of just the text inside it!
 

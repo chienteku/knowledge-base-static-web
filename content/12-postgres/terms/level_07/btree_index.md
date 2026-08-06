@@ -162,7 +162,7 @@ Create a B-tree index on `orders(created_at)` to accelerate date range queries.
 > 1. B-tree (Balanced Tree) is PostgreSQL's default index type.
 > 2. Maintains keys in sorted order, providing $O(\log N)$ equality and range searches (`<`, `<=`, `>`, `>=`, `BETWEEN`).
 > 3. Accelerates `created_at` range scans.
-
+> 
 ---
 
 ### Exercise 2: Indexing Foreign Key Columns
@@ -187,7 +187,7 @@ Create a B-tree index on `orders(user_id)` to optimize join performance.
 > 1. PostgreSQL foreign key constraints do NOT create secondary indexes automatically.
 > 2. Indexing foreign keys converts sequential scans into fast B-tree index lookups during `JOIN` queries.
 > 3. Mandatory schema optimization rule.
-
+> 
 ---
 
 ### Exercise 3: Inspecting B-Tree Index Execution with `EXPLAIN`
@@ -212,7 +212,7 @@ Verify that a query filtering `id = 42` uses `Index Scan` on the B-tree index.
 > 1. Displays `Index Scan using orders_pkey on orders`.
 > 2. `Execution Time` drops from 50ms (Seq Scan) to 0.05ms (Index Scan).
 > 3. Confirms B-tree index usage.
-
+> 
 ---
 
 

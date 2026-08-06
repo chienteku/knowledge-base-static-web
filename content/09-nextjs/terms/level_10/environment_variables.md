@@ -143,7 +143,7 @@ Define server-only secrets and client-exposed variables in `.env.local` and acce
 > DATABASE_URL="postgresql://user:pass@localhost:5432/mydb"
 > NEXT_PUBLIC_STRIPE_KEY="pk_test_123456789"
 > ```
-
+> 
 > ```tsx
 > // Server Component (app/page.tsx)
 > export default async function Page() {
@@ -152,13 +152,13 @@ Define server-only secrets and client-exposed variables in `.env.local` and acce
 >   return <div>Public Key: {process.env.NEXT_PUBLIC_STRIPE_KEY}</div>;
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Environment variables without `NEXT_PUBLIC_` prefix are available ONLY in Node.js server execution contexts.
 > 2. Variables prefixed with `NEXT_PUBLIC_` are inlined into client JavaScript bundles at build time.
 > 3. Critical security boundary for API secret keys.
-
+> 
 ---
 
 ### Exercise 2: Overriding Environment Variables across Environments
@@ -181,13 +181,13 @@ Explain the precedence hierarchy of `.env` files in Next.js (`.env.production.lo
 > - Step: .env.${NODE_ENV} (e.g. .env.production)
 > - Step: .env (Global Fallback)
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. System environment variables explicitly set on deployment platforms override `.env` files.
 > 2. `.env.local` is ignored in git to store local development secrets securely.
 > 3. Standard environment variable resolution order.
-
+> 
 ---
 
 ### Exercise 3: Validating Environment Variables with Zod at Build Time
@@ -205,30 +205,26 @@ Validate required environment variables at application startup using a Zod schem
 > ```typescript
 > // env.mjs
 > import { z } from "zod";
-
-const envSchema = z.object({
-  DATABASE_URL: z.string().url(),
-  NEXT_PUBLIC_SITE_URL: z.string().url()
-});
-
-export const env = envSchema.parse({
-  DATABASE_URL: process.env.DATABASE_URL,
-  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL
-});
-```
-
+> 
+> const envSchema = z.object({
+>   DATABASE_URL: z.string().url(),
+>   NEXT_PUBLIC_SITE_URL: z.string().url()
+> });
+> 
+> export const env = envSchema.parse({
+>   DATABASE_URL: process.env.DATABASE_URL,
+>   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Validating environment variables at startup prevents silent runtime 500 crashes during production deployments.
 > 2. `envSchema.parse()` throws an immediate build error if required environment variables are missing or malformed.
 > 3. Production deployment sanity check.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Deployment (Vercel)](vercel_deployment.md) — Where you configure production variables.

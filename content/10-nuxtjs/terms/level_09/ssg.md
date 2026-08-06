@@ -108,10 +108,6 @@ const headers = useRequestHeaders(); // ❌ Undefined during nuxi generate stati
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Generating Static Web Applications with `nuxi generate`
@@ -130,13 +126,13 @@ Configure static site generation (SSG) and execute `nuxi generate` build command
 > # Prerenders all static HTML files into .output/public/ directory
 > npx nuxi generate
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `nuxi generate` triggers Static Site Generation (SSG).
 > 2. Nitro crawls all application routes, fetching data and saving rendered HTML files directly to disk.
 > 3. Output directory `.output/public/` can be deployed directly to static hosts (GitHub Pages, Netlify, S3).
-
+> 
 ---
 
 ### Exercise 2: Pre-Crawling Dynamic Routes for SSG Prerendering
@@ -162,13 +158,13 @@ Configure `nuxt.config.ts` `nitro.prerender.routes` to prerender dynamic blog po
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Static site generators must know dynamic route paths during build time to generate corresponding HTML files.
 > 2. `crawlLinks: true` automatically follows all `<NuxtLink>` elements discovered during prerendering.
 > 3. `routes` array explicitly specifies dynamic route paths for SSG generation.
-
+> 
 ---
 
 ### Exercise 3: Handling Fallback Routes for Static Hosting
@@ -193,19 +189,15 @@ Configure a 404 fallback page for static web servers when users access un-preren
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Static file hosting services (Nginx, Netlify) route un-matched file requests to `200.html` or `404.html`.
 > 2. Un-prerendered dynamic paths fall back to client-side SPA rendering in the browser.
 > 3. Robust static site hosting pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Single Page Application (SPA) Mode](spa.md) — The other rendering mode that doesn't require a Node server, but sacrifices SEO.

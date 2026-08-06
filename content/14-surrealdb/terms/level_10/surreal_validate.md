@@ -145,7 +145,7 @@ A CI/CD pipeline validates SurrealQL schema script files (such as `schema.surql`
 > 1. `surreal validate <file>` parses SurrealQL script files locally to verify syntax correctness.
 > 2. Returns exit code `0` on valid syntax; non-zero exit code on parser syntax errors.
 > 3. Catches syntax errors in pull requests before deploying schema changes.
-
+> 
 ---
 
 ### Exercise 2: Validating Multiple Schema Script Files
@@ -169,7 +169,7 @@ Validate all SurrealQL script files in directory `migrations/*.surql` in a singl
 > 1. Validates multiple script files in batch mode.
 > 2. Ensures all versioned migration files pass syntax checks.
 > 3. Integrates with pre-commit git hooks and GitHub Actions.
-
+> 
 ---
 
 ### Exercise 3: Offline Local Syntax Checking
@@ -194,7 +194,7 @@ Explain why `surreal validate` can run locally in CI/CD without connecting to a 
 > 1. Parses SurrealQL AST syntax trees offline locally in the CLI binary.
 > 2. Requires zero network connections, database credentials, or active server instances.
 > 3. Fast syntax validation for CI build pipelines.
-
+> 
 ---
 
 

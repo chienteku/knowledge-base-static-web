@@ -152,7 +152,7 @@ Write a SQL `SELECT` query retrieving active users registered in 2026, ordered b
 > 1. SQL is a declarative language: you specify *what* data you need, and the PostgreSQL query engine plans *how* to fetch it.
 > 2. `WHERE` filters candidate rows based on boolean conditions.
 > 3. `ORDER BY created_at DESC` sorts output records descending.
-
+> 
 ---
 
 ### Exercise 2: Atomic Data Mutation with `INSERT`, `UPDATE`, `DELETE`
@@ -183,7 +183,7 @@ Demonstrate standard SQL DML operations: insert a user, update their email, and 
 > 1. `INSERT`, `UPDATE`, and `DELETE` comprise the Data Manipulation Language (DML) subset of SQL.
 > 2. Executes atomic record modifications adhering to table integrity constraints.
 > 3. Underpins backend application CRUD APIs.
-
+> 
 ---
 
 ### Exercise 3: Parameterized SQL Execution in Node.js
@@ -200,21 +200,21 @@ Execute a parameterized SQL query in Node.js using `pg` to prevent SQL Injection
 >
 > ```typescript
 > import { pool } from "./db";
-
-export async function findUserByEmail(email: string) {
-  const text = "SELECT id, username, email FROM users WHERE email = $1";
-  const values = [email];
-  const res = await pool.query(text, values);
-  return res.rows[0];
-}
-```
-
+> 
+> export async function findUserByEmail(email: string) {
+>   const text = "SELECT id, username, email FROM users WHERE email = $1";
+>   const values = [email];
+>   const res = await pool.query(text, values);
+>   return res.rows[0];
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Parameterized queries (`$1`, `$2`) send SQL code and user parameter values separately to the database server.
 > 2. Prevents malicious SQL input strings from altering query syntax trees (SQL Injection prevention).
 > 3. Essential security pattern in database programming.
-
+> 
 ---
 
 

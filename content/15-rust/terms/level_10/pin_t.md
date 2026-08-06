@@ -223,7 +223,7 @@ Build a self-referential struct `SelfReferentialBuffer` using `PhantomPinned` an
 > #[cfg(test)]
 > mod tests {
 >     use super::*;
-
+> 
 > 
 >     #[test]
 >     fn test_self_referential_buffer() {
@@ -333,7 +333,7 @@ Build a self-referential struct `SelfReferentialBuffer` using `PhantomPinned` an
 > >             tokio::time::sleep(Duration::from_millis(5)).await;
 > >             42
 > >         };
-
+> 
 > 
 >         let timeout_fut = TimeoutFuture::new(fast_task, Duration::from_millis(100));
 >         let res = timeout_fut.await;

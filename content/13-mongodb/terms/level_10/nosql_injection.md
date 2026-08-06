@@ -188,7 +188,7 @@ Demonstrate how un-sanitized Express `req.body` input allows an attacker to bypa
 > 1. Express `express.json()` parses nested JSON objects, allowing attackers to pass query operators (`$ne`, `$gt`) in place of strings.
 > 2. Explicit type casting (`String(input)`) strips operator objects, neutralizing NoSQL injection attacks.
 > 3. Critical web application security rule.
-
+> 
 ---
 
 ### Exercise 2: Sanitizing Request Inputs with `mongo-express-sanitize`
@@ -206,18 +206,18 @@ Integrate `mongo-express-sanitize` middleware into an Express app to strip `$` a
 > ```javascript
 > import express from "express";
 > import mongoSanitize from "express-mongo-sanitize";
-
-const app = express();
-app.use(express.json());
-app.use(mongoSanitize()); // Strips any keys starting with '$' or containing '.'
-```
-
+> 
+> const app = express();
+> app.use(express.json());
+> app.use(mongoSanitize()); // Strips any keys starting with '$' or containing '.'
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `express-mongo-sanitize` recursively inspects `req.body`, `req.query`, and `req.params`, removing keys starting with `$`.
 > 2. Neutralizes operator injection attacks across all Express routes globally.
 > 3. Standard security middleware component.
-
+> 
 ---
 
 ### Exercise 3: Preventing Security Flaws from `$where` JavaScript Evaluation
@@ -244,7 +244,7 @@ Explain why raw JavaScript string execution via `$where` or `$accumulator` shoul
 > 1. `$where` bypasses B-tree indexes and executes JavaScript code on every collection document.
 > 2. Setting `javascriptEnabled: false` hardens database servers against RCE attacks.
 > 3. Security hardening standard.
-
+> 
 ---
 
 

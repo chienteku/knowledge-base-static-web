@@ -320,7 +320,7 @@ If this alert box sits between a heading (`<h1>`) and a paragraph (`<p>`), what 
 > The spacing remains exactly the same! Because `visibility: hidden` does not collapse the box, the empty space occupied by the alert banner is preserved. Sighted users will see a large blank gap between the heading and the paragraph.
 > ```
 > - Does visibility hidden remove elements from the layout flow?
-
+> 
 ---
 
 
@@ -343,7 +343,7 @@ If this alert box sits between a heading (`<h1>`) and a paragraph (`<p>`), what 
 > ```
 >
 > **Explanation:** `display: none` alters render tree layout; `visibility: hidden` toggles visual rendering only.
-
+> 
 ---
 
 ### Exercise 3: CSS Transitioning Visibility
@@ -368,7 +368,7 @@ If this alert box sits between a heading (`<h1>`) and a paragraph (`<p>`), what 
 > ```
 >
 > **Explanation:** Combining `opacity` and `visibility` allows smooth fade transitions.
-
+> 
 ## 7. Related Terms
 - [`display: block` vs `inline` vs `inline-block`](display.md) — The parent display rules.
 - [`opacity`](../level_09/opacity.md) — The styling property that adjusts visibility percentage from 0 to 100.

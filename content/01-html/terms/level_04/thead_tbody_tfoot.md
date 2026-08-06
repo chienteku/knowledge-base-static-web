@@ -155,7 +155,7 @@ However, in HTML5, this rule was changed to make the code more readable. Today, 
 > `tbody { background-color: white; }`
 > ```
 > - Think about how applying a style to a parent container affects all its children.
-
+> 
 ---
 
 
@@ -184,7 +184,7 @@ However, in HTML5, this rule was changed to make the code more readable. Today, 
 > ```
 >
 > **Explanation:** Standard table sections partition header (`thead`), data body (`tbody`), and summary (`tfoot`).
-
+> 
 ---
 
 ### Exercise 3: Printing Table Behavior
@@ -201,7 +201,7 @@ However, in HTML5, this rule was changed to make the code more readable. Today, 
 > ```
 >
 > **Explanation:** Semantic table headers and footers persist across printed page breaks.
-
+> 
 ## 7. Related Terms
 - [`<table>`](table.md) — The master container that holds these semantic groups.
 - [`<tr>` (Table Row)](tr.md) — The horizontal row elements nested inside these group containers.

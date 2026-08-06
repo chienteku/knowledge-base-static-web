@@ -240,7 +240,7 @@ function App() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Compound Select Component Pattern
@@ -277,7 +277,7 @@ function App() {
 > ```
 >
 > **Explanation:** Compound components share implicit state via Context while exposing expressive declarative markup.
-
+> 
 ---
 
 ### Exercise 3: Benefits of Compound Component Pattern
@@ -294,7 +294,7 @@ function App() {
 > ```
 >
 > **Explanation:** Compound components allow consumers to arrange child elements flexibly.
-
+> 
 ## 7. Related Terms
 - [The Context API](../level_06/context_api.md) — The state transport vehicle used by compound parent-child pairings.
 - [Children Prop](children_prop.md) — The JSX container that allows subcomponent markup structures.

@@ -188,23 +188,23 @@ Manage an SDK connection lifecycle: connect over WebSockets, target namespace/da
 >
 > ```typescript
 > import Surreal from "@surrealdb/surrealdb";
-
-const db = new Surreal();
-
-await db.connect("ws://localhost:8000/rpc");
-await db.use({ ns: "prod", db: "main" });
-
-// Perform operations...
-
-await db.close();
-```
-
+> 
+> const db = new Surreal();
+> 
+> await db.connect("ws://localhost:8000/rpc");
+> await db.use({ ns: "prod", db: "main" });
+> 
+> // Perform operations...
+> 
+> await db.close();
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `db.connect()` initializes binary WebSocket protocol connections.
 > 2. `db.use({ ns, db })` updates active session namespace and database targets.
 > 3. `db.close()` terminates the connection cleanly.
-
+> 
 ---
 
 ### Exercise 2: Managing Connection State Status
@@ -232,7 +232,7 @@ Inspect connection status flags (`db.status`) to verify whether the SDK is activ
 > 1. `db.status` exposes connection state (`"disconnected"`, `"connecting"`, `"connected"`).
 > 2. Prevents executing queries on uninitialized WebSocket connections.
 > 3. Simplifies connection state handling in UI frameworks (React/Vue).
-
+> 
 ---
 
 ### Exercise 3: Automatic Connection Reconnection
@@ -257,7 +257,7 @@ Configure SDK connection options to enable automatic reconnection if the network
 > 1. The SurrealDB JavaScript SDK includes built-in exponential backoff auto-reconnection logic.
 > 2. Re-establishes WebSocket channels automatically when network connectivity recovers.
 > 3. Re-authenticates active session tokens on successful reconnection.
-
+> 
 ---
 
 

@@ -132,10 +132,6 @@ const { data, pending } = useLazyFetch('/api/slow-data');
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Managing Async Component Boundaries with `<Suspense>`
@@ -164,13 +160,13 @@ Wrap an async data-fetching component inside Vue `<Suspense>` with a `#fallback`
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Vue `<Suspense>` is a built-in feature orchestrating async component dependencies in component trees.
 > 2. Renders `#fallback` content until top-level `await` calls in child components resolve.
 > 3. Nuxt 3 integrates `<Suspense>` internally inside `<NuxtPage>` and `<NuxtLayout>`.
-
+> 
 ---
 
 ### Exercise 2: Top-Level `await` in `<script setup>`
@@ -191,20 +187,20 @@ Use top-level `await` inside `<script setup>` of a child component managed by `<
 > // Top-level await implicitly turns component setup into an async Promise!
 > const user = await $fetch("/api/user/profile");
 > </script>
-
-<template>
-  <div v-if="user">
-    <h2>User Profile: {{ user.name }}</h2>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div v-if="user">
+>     <h2>User Profile: {{ user.name }}</h2>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Top-level `await` converts the component's `setup()` function into an asynchronous Promise.
 > 2. Parent `<Suspense>` boundaries intercept the pending Promise and display loading fallbacks automatically.
 > 3. Standard async component architecture in Vue 3 and Nuxt 3.
-
+> 
 ---
 
 ### Exercise 3: Handling Errors in Suspended Async Component Trees
@@ -222,36 +218,32 @@ Intercept async setup errors inside suspended component trees using `onErrorCapt
 > ```vue
 > <script setup lang="ts">
 > const hasError = ref(false);
-
-onErrorCaptured((error) => {
-  console.error("Async Component Tree Error Captured:", error);
-  hasError.value = true;
-  return false; // Prevents error from propagating higher
-});
-</script>
-
-<template>
-  <div>
-    <div v-if="hasError" class="error-msg">Failed to load async components.</div>
-    <Suspense v-else>
-      <AsyncUserProfileWidget />
-    </Suspense>
-  </div>
-</template>
-```
-
+> 
+> onErrorCaptured((error) => {
+>   console.error("Async Component Tree Error Captured:", error);
+>   hasError.value = true;
+>   return false; // Prevents error from propagating higher
+> });
+> </script>
+> 
+> <template>
+>   <div>
+>     <div v-if="hasError" class="error-msg">Failed to load async components.</div>
+>     <Suspense v-else>
+>       <AsyncUserProfileWidget />
+>     </Suspense>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `onErrorCaptured()` intercepts unhandled exceptions thrown during async setup execution.
 > 2. Returning `false` prevents the error from bubbling up to global error handlers.
 > 3. Provides robust error boundary protection for suspended component trees.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useFetch`](../level_05/use_fetch.md) — The tool used to interact with the Suspense boundary.

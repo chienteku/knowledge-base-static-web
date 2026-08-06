@@ -135,22 +135,22 @@ Create `app/docs/[...slug]/page.tsx` parsing multi-segment documentation paths (
 >   params: Promise<{ slug: string[] }>;
 > }) {
 >   const { slug } = await params;
-
-  return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold">Documentation Path</h1>
-      <p>Segments: {slug.join(" / ")}</p>
-    </main>
-  );
-}
-```
-
+> 
+>   return (
+>     <main className="p-6">
+>       <h1 className="text-2xl font-bold">Documentation Path</h1>
+>       <p>Segments: {slug.join(" / ")}</p>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Catch-all folder syntax `[...slug]` matches all subsequent nested path segments into an array of strings.
 > 2. Accessing `/docs/a/b/c` resolves `params.slug` as `['a', 'b', 'c']`.
 > 3. Standard directory structure for CMS documentation systems.
-
+> 
 ---
 
 ### Exercise 2: Generating Static Parameters for Catch-All Routes
@@ -174,13 +174,13 @@ Prerender nested documentation paths at build time using `generateStaticParams()
 >   ];
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. For catch-all routes, `generateStaticParams()` returns arrays of string segments for each `slug`.
 > 2. Next.js prerenders static HTML for each nested route path during build compilation.
 > 3. Enables static site generation (SSG) performance for multi-tiered docs.
-
+> 
 ---
 
 ### Exercise 3: Fallback Breadcrumb Generation
@@ -197,43 +197,39 @@ Generate breadcrumb navigation links dynamically from `params.slug` segments.
 >
 > ```tsx
 > import Link from "next/link";
-
-export default async function BreadcrumbDocs({
-  params
-}: {
-  params: Promise<{ slug: string[] }>;
-}) {
-  const { slug } = await params;
-  let currentPath = "/docs";
-
-  return (
-    <nav className="flex gap-2 text-sm text-gray-600">
-      <Link href="/docs">Docs</Link>
-      {slug.map((segment) => {
-        currentPath += `/${segment}`;
-        return (
-          <span key={currentPath}>
-            / <Link href={currentPath}>{segment}</Link>
-          </span>
-        );
-      })}
-    </nav>
-  );
-}
-```
-
+> 
+> export default async function BreadcrumbDocs({
+>   params
+> }: {
+>   params: Promise<{ slug: string[] }>;
+> }) {
+>   const { slug } = await params;
+>   let currentPath = "/docs";
+> 
+>   return (
+>     <nav className="flex gap-2 text-sm text-gray-600">
+>       <Link href="/docs">Docs</Link>
+>       {slug.map((segment) => {
+>         currentPath += `/${segment}`;
+>         return (
+>           <span key={currentPath}>
+>             / <Link href={currentPath}>{segment}</Link>
+>           </span>
+>         );
+>       })}
+>     </nav>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Iterating over `params.slug` allows programmatically reconstructing nested URL paths.
 > 2. Generates server-rendered breadcrumb links without client-side DOM parsing.
 > 3. Idiomatic catch-all route component implementation.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Route Groups (`(group)`)](route_groups.md) — Another special folder naming convention that modifies routing behavior.

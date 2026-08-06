@@ -178,7 +178,7 @@ Create a `user_preferences` table with static default `theme = 'light'` and dyna
 > 1. Static defaults (`DEFAULT 'light'`) assign hardcoded fallback values when `INSERT` omits the column.
 > 2. Dynamic defaults (`DEFAULT CURRENT_TIMESTAMP`) evaluate runtime SQL functions during row creation.
 > 3. Ensures mandatory non-null fields are populated automatically.
-
+> 
 ---
 
 ### Exercise 2: Altering Default Column Values
@@ -203,7 +203,7 @@ Change the default theme preference from `'light'` to `'dark'` for future row in
 > 1. `ALTER COLUMN ... SET DEFAULT` changes the default expression for future row inserts.
 > 2. Does NOT retroactively modify values in existing rows.
 > 3. Executes instantly without requiring table rewrites.
-
+> 
 ---
 
 ### Exercise 3: Overriding Column Defaults with Explicit Values
@@ -232,7 +232,7 @@ Demonstrate inserting a row relying on defaults vs providing explicit column val
 > 1. Omitting a column in `INSERT INTO` causes PostgreSQL to apply its `DEFAULT` expression.
 > 2. Explicitly supplying values overrides default assignments.
 > 3. Provides clean fallback semantics for client API requests.
-
+> 
 ---
 
 

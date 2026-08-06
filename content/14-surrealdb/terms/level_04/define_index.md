@@ -166,7 +166,7 @@ Create a unique secondary index on table `user` to guarantee that no two users c
 > 1. `DEFINE INDEX` creates secondary index structures for fast field lookups.
 > 2. `UNIQUE` enforces uniqueness constraints, aborting writes on duplicate values.
 > 3. Accelerates `SELECT * FROM user WHERE email = ...` lookups.
-
+> 
 ---
 
 ### Exercise 2: Multi-Column Composite Index Creation
@@ -190,7 +190,7 @@ An e-commerce query frequently filters products by `category` and `status` simul
 > 1. Composite indexes (`COLUMNS col1, col2`) index multi-field combinations together.
 > 2. Accelerates queries containing multi-field `WHERE` filter clauses.
 > 3. Optimizes B-tree index page traversals for complex queries.
-
+> 
 ---
 
 ### Exercise 3: Removing Secondary Indexes with `REMOVE INDEX`
@@ -214,7 +214,7 @@ Drop an obsolete index `temp_idx` from table `product`.
 > 1. `REMOVE INDEX` drops secondary index structures from storage metadata.
 > 2. Frees index storage space on disk and reduces write amplification.
 > 3. Table data records remain unaffected.
-
+> 
 ---
 
 

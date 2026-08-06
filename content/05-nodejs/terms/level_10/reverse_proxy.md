@@ -154,7 +154,7 @@ Public Internet ──(Port 443 HTTPS)──> [ Nginx Proxy ]
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Configuring Nginx Reverse Proxy Location Block
@@ -175,7 +175,7 @@ Public Internet ──(Port 443 HTTPS)──> [ Nginx Proxy ]
 > ```
 >
 > **Explanation:** `proxy_pass` forwards HTTP requests from Nginx to Node.js backend ports.
-
+> 
 ---
 
 ### Exercise 3: Benefits of Reverse Proxy
@@ -196,7 +196,7 @@ Public Internet ──(Port 443 HTTPS)──> [ Nginx Proxy ]
 > ```
 >
 > **Explanation:** Reverse proxies offload non-application tasks from Node.js event loops.
-
+> 
 ## 7. Related Terms
 - [Load Balancing](load_balancing.md) — The routing system often combined with reverse proxies.
 - [Docker](docker.md) — The container architecture used to isolate proxies from application servers.

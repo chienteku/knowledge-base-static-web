@@ -302,7 +302,7 @@ pub fn format_log_entry(event: &LogEvent) -> String {
 >    - Target strings exceeding 16 bytes are safely truncated without panic due to `.16` string precision specifier.
 >    - Maximum `u32` request ID (`0xFFFFFFFF`) and zero timestamps (`000000000000`) fill exact column bounds.
 >
-
+> 
 ---
 
 ### Exercise 2: Network Packet Frame Hex & ASCII Inspection Dump
@@ -412,7 +412,7 @@ pub fn format_hex_dump(data: &[u8], bytes_per_line: usize) -> String {
 > 3. **Edge Cases**:
 >    - `bytes_per_line == 0` or empty slice `data.is_empty()` returns an empty string without panic or divide-by-zero errors.
 >
-
+> 
 ---
 
 ### Exercise 3: High-Frequency Trading Order Book Console Renderer
@@ -574,7 +574,7 @@ pub fn render_order_book(snapshot: &OrderBookSnapshot) -> String {
 > 3. **Concurrency & Thread Safety**:
 >    - Function accepts immutable reference snapshot `&OrderBookSnapshot`. String allocation takes place purely on the stack/heap of the caller thread without shared state synchronization locks.
 >
-
+> 
 ---
 
 ## 6. Related Terms

@@ -120,7 +120,7 @@ while (true) {
 > The console.log will NEVER print. 
 > The Event Loop is completely broken. The `while (true)` loop hogs the single Main Thread forever. The background timer finishes after 1 second, and the Event Loop tries to push the callback to the Main Thread, but the Main Thread is busy running the `while` loop. The server is dead.
 > ```
-
+> 
 ---
 
 
@@ -146,7 +146,7 @@ while (true) {
 > ```
 >
 > **Explanation:** Node.js event loop cycles through Timers -> Pending Callbacks -> Idle/Prepare -> Poll -> Check -> Close Callbacks.
-
+> 
 ---
 
 ### Exercise 3: Predicting Async Console Output
@@ -173,7 +173,7 @@ Promise.resolve().then(() => console.log('D'));
 > ```
 >
 > **Explanation:** `nextTick` (C) executes first, followed by microtask Promise (D), then macrotasks Timers/Check (A / B).
-
+> 
 ## 7. Related Terms
 - [Non-Blocking I/O](non_blocking_io.md) — The tasks that get sent to the background.
 - [Callbacks & Callback Hell](../level_05/callbacks.md) — The actual functions that the Event Loop pushes onto the main thread.

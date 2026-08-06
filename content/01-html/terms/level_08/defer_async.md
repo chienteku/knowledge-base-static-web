@@ -192,7 +192,7 @@ Comparing script tags in `<head>`:
 > - If order matters, choose `defer`.
 > - If DOM interaction is required, choose `defer`.
 > - If the script is standalone and independent, choose `async`.
-
+> 
 ---
 
 
@@ -218,7 +218,7 @@ Comparing script tags in `<head>`:
 > ```
 >
 > **Explanation:** `defer` preserves script execution order and waits for DOM readiness.
-
+> 
 ---
 
 ### Exercise 3: Analytics Script Best Attribute
@@ -235,7 +235,7 @@ Comparing script tags in `<head>`:
 > ```
 >
 > **Explanation:** `async` is ideal for standalone analytics scripts with zero dependencies.
-
+> 
 ## 7. Related Terms
 - [`<script>`](script.md) — The parent script container element.
 - [`<link>`](link.md) — The element used to connect stylesheets (which are also render-blocking).

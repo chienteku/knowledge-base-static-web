@@ -149,7 +149,7 @@ let items = stream.collect::<Vec<_>>(); // Clean and concise!
 >
 > 1. `port_str.parse::<u16>()` uses Turbofish to specify integer target type.
 > 2. `collect::<HashSet<_>>()` specifies `HashSet` container while using `_` for element type inference.
-
+> 
 ---
 
 ### Exercise 2: Generic Resource Allocator using `Default::default::<T>()` & `Vec::<T>::with_capacity()`
@@ -191,7 +191,7 @@ let items = stream.collect::<Vec<_>>(); // Clean and concise!
 >
 > 1. `Vec::<T>::with_capacity` passes type argument `T` to generic vector constructor.
 > 2. Avoids re-allocations by pre-allocating exact element capacity.
-
+> 
 ---
 
 ### Exercise 3: Collecting Result Streams via `Result<Vec<_>, _>` Turbofish
@@ -234,7 +234,7 @@ let items = stream.collect::<Vec<_>>(); // Clean and concise!
 >
 > 1. `.collect::<Result<Vec<_>, _>>()` transposes an iterator of `Result` items into a single `Result` containing a collected `Vec`.
 > 2. Short-circuits on the first `Err` encountered.
-
+> 
 ---
 
 ## 6. Related Terms

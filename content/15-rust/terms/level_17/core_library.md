@@ -70,7 +70,7 @@ In an embedded motor speed controller (`#![no_std]`), floating-point hardware is
 > 1. **Zero-Dependency Math**: `core::num` provides saturating arithmetic (`saturating_add`, `saturating_mul`) without requiring OS or standard library support.
 > 2. **Fixed-Point Scaling**: Shift arithmetic (`>> 16`) maintains fixed-point precision within 32-bit registers.
 > 3. **No-Std Safety**: Pure `core` math executes safely across any microcontroller CPU target.
-
+> 
 ---
 
 ## 1. Prerequisites
@@ -229,7 +229,7 @@ pub fn safe_divide(numerator: u32, denominator: u32) -> Option<u32> {
 > 1. Uses `core::slice::windows` and `Iterator::position` to search for subslice patterns without standard library string or vector helpers.
 > 2. `u16::from_be_bytes` converts fixed 2-byte slices directly into numeric lengths in `#![no_std]`.
 > 3. Zero-copy lifetime propagation (`'a`) ensures extracted payload slices borrow directly from the input buffer without allocation.
-
+> 
 ---
 
 ### Exercise 2: Custom `core::fmt::Display` & Zero-Heap Telemetry Formatter
@@ -309,10 +309,9 @@ pub fn safe_divide(numerator: u32, denominator: u32) -> Option<u32> {
 > 
 > 1. Custom domain data structures implement `core::fmt::Display` using `write!` macro provided entirely by `core`.
 > 2. Implement `core::fmt::Write` on a stack-allocated byte array buffer (`ArrayString<N>`), enabling string formatting in embedded software without depending on `std::string::String` or heap allocation.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

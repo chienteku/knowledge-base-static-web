@@ -157,7 +157,7 @@ async function processData() {
 > console.log(isAnyoneOnline); // true
 > ```
 > - Extract the values into an array, then immediately chain `.includes()`.
-
+> 
 ---
 
 ### Exercise 2: Summing Object Numerical Values
@@ -176,7 +176,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Object.values()` extracts an array of own property values for reduction.
-
+> 
 ---
 
 ### Exercise 3: Checking Value Inclusion with `.includes()`
@@ -194,8 +194,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Object.values()` enables array search methods over object value fields.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

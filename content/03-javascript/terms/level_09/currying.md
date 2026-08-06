@@ -161,7 +161,7 @@ async function processData() {
 > Even though the outer function finished executing, the inner function maintains a "backpack" of memory containing the variables (like `a`) from its parent's scope.
 > ```
 > - Currying relies 100% on this memory mechanic.
-
+> 
 ---
 
 ### Exercise 2: Writing a 3-Level Curried Add Function
@@ -179,7 +179,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Currying transforms multi-argument functions into unary function chains.
-
+> 
 ---
 
 ### Exercise 3: Auto-Currying Utility Function
@@ -204,8 +204,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Auto-currying checks argument length against `fn.length` arity.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

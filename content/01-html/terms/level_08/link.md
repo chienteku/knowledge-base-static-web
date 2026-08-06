@@ -140,7 +140,7 @@ Without the link, you have all the pieces but no idea how to arrange them or wha
 > It uses a `<link>` tag! Specifically: `<link rel="icon" href="logo.png">`. By changing the `rel` attribute to "icon" instead of "stylesheet", the browser knows to put that image in the browser tab.
 > ```
 > - Look closely at the "Fuller Example" snippet above.
-
+> 
 ---
 
 
@@ -163,7 +163,7 @@ Without the link, you have all the pieces but no idea how to arrange them or wha
 > ```
 >
 > **Explanation:** `preconnect` warms up DNS/TLS connections; `preload` fetches critical assets early.
-
+> 
 ---
 
 ### Exercise 3: Canonical Link Tag Purpose
@@ -180,7 +180,7 @@ Without the link, you have all the pieces but no idea how to arrange them or wha
 > ```
 >
 > **Explanation:** `rel="canonical"` informs search engine crawlers of the primary authoritative URL.
-
+> 
 ## 7. Related Terms
 - [`<a>` (Anchor / Link)](../level_02/a.md) — The clickable user navigation link (do not confuse with `<link>`).
 - [`<head>`](../level_01/head.md) — The parent container where the `<link>` tag lives.

@@ -119,31 +119,31 @@ Report client-side Web Core Vitals performance metrics (`LCP`, `INP`, `CLS`) to 
 >
 > ```tsx
 > "use client";
-
-import { useReportWebVitals } from "next/navigation";
-
-export default function WebVitalsReporter() {
-  useReportWebVitals((metric) => {
-    console.log(`[Web Vital] ${metric.name}:`, metric.value);
-    
-    // Send telemetry to analytics server:
-    fetch("/api/telemetry", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(metric)
-    });
-  });
-
-  return null;
-}
-```
-
+> 
+> import { useReportWebVitals } from "next/navigation";
+> 
+> export default function WebVitalsReporter() {
+>   useReportWebVitals((metric) => {
+>     console.log(`[Web Vital] ${metric.name}:`, metric.value);
+>     
+>     // Send telemetry to analytics server:
+>     fetch("/api/telemetry", {
+>       method: "POST",
+>       headers: { "Content-Type": "application/json" },
+>       body: JSON.stringify(metric)
+>     });
+>   });
+> 
+>   return null;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useReportWebVitals()` measures real-user performance metrics (RUM) in client browsers.
 > 2. `metric.name` identifies the Web Vital metric (`LCP`, `INP`, `CLS`, `FCP`, `TTFB`).
 > 3. Allows tracking real user performance metrics across production deployments.
-
+> 
 ---
 
 ### Exercise 2: Optimizing Largest Contentful Paint (LCP)
@@ -160,28 +160,28 @@ Optimize a slow LCP score caused by a hero banner image.
 >
 > ```tsx
 > import Image from "next/image";
-
-export default function Hero() {
-  return (
-    <section>
-      <Image
-        src="/hero-banner.jpg"
-        alt="Hero Banner"
-        width={1200}
-        height={600}
-        priority // Instructs browser to preload LCP image immediately!
-      />
-    </section>
-  );
-}
-```
-
+> 
+> export default function Hero() {
+>   return (
+>     <section>
+>       <Image
+>         src="/hero-banner.jpg"
+>         alt="Hero Banner"
+>         width={1200}
+>         height={600}
+>         priority // Instructs browser to preload LCP image immediately!
+>       />
+>     </section>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Largest Contentful Paint (LCP) measures the time taken to render the largest visible UI element.
 > 2. `priority` prop injects `<link rel="preload">` tag into HTML head for hero images.
 > 3. Directly improves LCP speed score.
-
+> 
 ---
 
 ### Exercise 3: Optimizing Interaction to Next Paint (INP)
@@ -198,33 +198,29 @@ Improve a poor INP (Interaction to Next Paint) score caused by synchronous CPU b
 >
 > ```tsx
 > "use client";
-
-import { startTransition } from "react";
-
-export default function NonBlockingButton() {
-  function handleClick() {
-    // Yield main thread to allow browser UI paint before heavy task:
-    startTransition(() => {
-      // Heavy CPU task...
-    });
-  }
-
-  return <button onClick={handleClick}>Process Data</button>;
-}
-```
-
+> 
+> import { startTransition } from "react";
+> 
+> export default function NonBlockingButton() {
+>   function handleClick() {
+>     // Yield main thread to allow browser UI paint before heavy task:
+>     startTransition(() => {
+>       // Heavy CPU task...
+>     });
+>   }
+> 
+>   return <button onClick={handleClick}>Process Data</button>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Interaction to Next Paint (INP) measures page responsiveness to user clicks and keypresses.
 > 2. Synchronous JavaScript blocking main thread prevents browser UI repaints.
 > 3. `startTransition` yields main thread control, maintaining low INP response times.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`<Image>` Component](next_image.md) — The optimization tool for LCP and CLS.

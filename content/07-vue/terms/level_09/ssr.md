@@ -116,7 +116,7 @@ onMounted(() => {
 > An internal dashboard should be a standard SPA. SSR would just add unnecessary complexity and server costs.
 > ```
 > - Does Google need to index an internal company dashboard?
-
+> 
 ---
 
 ### Exercise 2: Vue SSR Render Method
@@ -134,7 +134,7 @@ onMounted(() => {
 > import { renderToString } from 'vue/server-renderer';
 > const html = await renderToString(app);
 > ```
-
+> 
 ---
 
 ### Exercise 3: SSR Performance Metric (TTFB)
@@ -151,8 +151,8 @@ onMounted(() => {
 > ```text
 > Fast FCP because browser renders server HTML before JS bundle executes.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

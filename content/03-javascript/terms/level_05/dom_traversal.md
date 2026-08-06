@@ -193,7 +193,7 @@ if (typeof document !== "undefined") {
 > [!check]- Answer
 > - Use `target.nextElementSibling` to target the next element.
 > - Call `.classList.add("highlight")` on it.
-
+> 
 ---
 
 ### Exercise 2: Finding Ancestor Elements with `closest()`
@@ -210,7 +210,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `Element.closest(selector)` traverses upward through parent nodes until a matching selector is found.
-
+> 
 ---
 
 ### Exercise 3: Sibling Traversal with `nextElementSibling`
@@ -227,8 +227,8 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `nextElementSibling` skips whitespace text nodes to return adjacent HTML elements.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

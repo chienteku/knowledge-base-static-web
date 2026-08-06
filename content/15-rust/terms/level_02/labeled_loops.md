@@ -168,7 +168,7 @@ Use iterator combinators (.any(), .find()) or break logic into smaller functions
 > #### Technical Explanation
 >
 > 1. `break 'grid_search` directly exits the outer row loop when a collision pixel is detected.
-
+> 
 ---
 
 ### Exercise 2: Labeled Loop Value-Returning Search
@@ -208,7 +208,7 @@ Use iterator combinators (.any(), .find()) or break logic into smaller functions
 > #### Technical Explanation
 >
 > 1. Demonstrates `loop` expression returning values via labeled `break 'label value;`.
-
+> 
 ---
 
 ### Exercise 3: Row Skip Matrix Processing using `continue 'outer`
@@ -259,7 +259,7 @@ Use iterator combinators (.any(), .find()) or break logic into smaller functions
 > #### Technical Explanation
 >
 > 1. `continue 'rows` skips remaining inner loop execution and advances outer loop iterator.
-
+> 
 ---
 
 ## 5. Related Terms

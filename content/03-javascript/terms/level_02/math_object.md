@@ -166,7 +166,7 @@ console.log(getRandomRange(1, 10));
 > - The size of the range is `(max - min + 1)`.
 > - Multiply `Math.random()` by the range size.
 > - Apply `Math.floor()` to round down, then add `min` to offset the starting number.
-
+> 
 ---
 
 ### Exercise 2: Random Integer Generator in Range
@@ -187,7 +187,7 @@ console.log(getRandomRange(1, 10));
 > ```
 >
 > **Explanation:** `Math.random()` yields floats in $[0, 1)$. Multiplying by `(max - min + 1)` and flooring scales values into target integer ranges.
-
+> 
 ---
 
 ### Exercise 3: Spreading Array Elements into `Math.max`
@@ -205,7 +205,7 @@ console.log(getRandomRange(1, 10));
 > ```
 >
 > **Explanation:** `Math.max` accepts variable arguments, requiring the spread operator `...` when passing array elements.
-
+> 
 ---
 
 ## 7. Related Terms

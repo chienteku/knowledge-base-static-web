@@ -128,7 +128,7 @@ Imagine the `<audio>` tag as a built-in record player that comes pre-installed i
 > Absolutely nothing! Without the `controls` attribute, the audio element is completely invisible. The user will have no way to play the song. (This is sometimes used intentionally by game developers who want to trigger sounds using JavaScript instead of a UI).
 > ```
 > - Think about what the word `controls` actually renders on the screen.
-
+> 
 ---
 
 
@@ -151,7 +151,7 @@ Imagine the `<audio>` tag as a built-in record player that comes pre-installed i
 > ```
 >
 > **Explanation:** `<source>` tags provide fallback audio formats for browser compatibility.
-
+> 
 ---
 
 ### Exercise 3: Loop and Mute Attributes
@@ -168,7 +168,7 @@ Imagine the `<audio>` tag as a built-in record player that comes pre-installed i
 > ```
 >
 > **Explanation:** `loop` repeats audio; `muted` sets initial volume to zero.
-
+> 
 ## 7. Related Terms
 - [`src` Attribute](src.md) — The attribute defining the audio source.
 - [`<source>` Element](source.md) — The child element used for multi-format audio sources.

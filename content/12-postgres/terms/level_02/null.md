@@ -184,7 +184,7 @@ Query table `users` for accounts where `deleted_at IS NULL` (active) vs `deleted
 > 1. `NULL` represents the absence of a value; standard equality (`deleted_at = NULL`) returns `UNKNOWN` (fails to match).
 > 2. You MUST use `IS NULL` or `IS NOT NULL` to test for null state presence.
 > 3. Core SQL 3-valued logic rule.
-
+> 
 ---
 
 ### Exercise 2: Providing Fallback Values with `COALESCE`
@@ -211,7 +211,7 @@ Return a user's `display_name` if present; if `NULL`, fall back to `username`; i
 > 1. `COALESCE(val1, val2, ...)` returns the FIRST non-null argument in its list.
 > 2. Evaluates arguments in order until a valid value is encountered.
 > 3. Prevents returning raw `NULL` values to UI rendering templates.
-
+> 
 ---
 
 ### Exercise 3: Converting Zero Values to NULL with `NULLIF`
@@ -238,7 +238,7 @@ Prevent division-by-zero SQL errors when calculating average price per unit (`to
 > 1. `NULLIF(a, b)` returns `NULL` if `a = b`; otherwise returns `a`.
 > 2. If `units = 0`, `NULLIF(units, 0)` returns `NULL`, causing division by `NULL` (which yields `NULL` instead of crashing with division by zero).
 > 3. Essential pattern for safe mathematical SQL calculations.
-
+> 
 ---
 
 

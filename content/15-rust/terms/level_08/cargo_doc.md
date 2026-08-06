@@ -655,7 +655,7 @@ Requirements:
 > 1. **`#[doc(inline)]` Taxonomy Management:** When re-exporting types from private or nested modules using `pub use internal::Item`, rustdoc normally creates a simple hyperlinked entry. Adding `#[doc(inline)]` forces `cargo doc` to render the full item documentation directly on the top-level page, reducing click depth for downstream users.
 > 2. **Cross-Module Intra-Doc Links:** `[`EventBus`](super::EventBus)` illustrates how intra-doc links can navigate up and down module hierarchies using standard path references.
 > 3. **Thread Safety Verification:** The unit test demonstrates thread-safe dispatch across atomic metrics and shared handler traits (`Send + Sync`).
-
+> 
 ---
 
 ## 6. Related Terms

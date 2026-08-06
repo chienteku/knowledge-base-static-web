@@ -162,7 +162,7 @@ An e-commerce order table `order` stores record links `customer` (`record<user>`
 > 1. Secondary indexes can be created directly on `record<table>` link pointer fields.
 > 2. Accelerates `SELECT * FROM order WHERE customer = user:alice` queries.
 > 3. Converts foreign pointer scans into $O(\log N)$ index lookups.
-
+> 
 ---
 
 ### Exercise 2: Unique Index Constraints on Record Links
@@ -186,7 +186,7 @@ Enforce that a user `user:alice` can only have ONE active `cart` record link by 
 > 1. `UNIQUE` on record link fields enforces one-to-one or unique relational constraints.
 > 2. Aborts insertion attempts if a user already owns an existing cart record.
 > 3. Protects relational integrity at the database layer.
-
+> 
 ---
 
 ### Exercise 3: Querying Indexed Record Link Pointers
@@ -210,7 +210,7 @@ Query all orders placed by `user:alice` leveraging `idx_order_customer`.
 > 1. Comparing typed record links (`WHERE customer = user:alice`) hits `idx_order_customer`.
 > 2. Retrieves foreign record references in $O(\log N)$ B-tree index lookup time.
 > 3. Provides relational query speeds matching native graph traversals.
-
+> 
 ---
 
 

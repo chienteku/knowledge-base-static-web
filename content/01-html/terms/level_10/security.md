@@ -250,7 +250,7 @@ div.textContent = userInput; // Safe text-only assignment
 > ```
 > - Use the `integrity` attribute containing the type prefix `sha384-`.
 > - Include the `crossorigin="anonymous"` attribute (SRI checks require cross-origin attributes to prevent CORS blockage).
-
+> 
 ---
 
 
@@ -269,7 +269,7 @@ div.textContent = userInput; // Safe text-only assignment
 > ```
 >
 > **Explanation:** `textContent` escapes HTML entity tags automatically, preventing XSS script execution.
-
+> 
 ---
 
 ### Exercise 3: Clickjacking Protection Header
@@ -286,7 +286,7 @@ div.textContent = userInput; // Safe text-only assignment
 > ```
 >
 > **Explanation:** `X-Frame-Options` blocks Clickjacking iframe embedding attacks.
-
+> 
 ## 7. Related Terms
 - [`<noscript>`](../level_08/noscript.md) — Fallbacks displayed when scripting is turned off.
 - [Web Storage (Local/Session Storage)](web_storage.md) — Storage blocks vulnerable to XSS data theft.

@@ -215,7 +215,7 @@ app.get('/api/v1/user', (req, res) => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Express URL Path Versioning Router
@@ -233,7 +233,7 @@ app.get('/api/v1/user', (req, res) => {
 > ```
 >
 > **Explanation:** URL path versioning mounts versioned Express routers on distinct sub-path prefixes.
-
+> 
 ---
 
 ### Exercise 3: 3 Common API Versioning Strategies
@@ -254,7 +254,7 @@ app.get('/api/v1/user', (req, res) => {
 > ```
 >
 > **Explanation:** URI path is most explicit; headers keep URLs clean; query params are easy to test.
-
+> 
 ## 7. Related Terms
 - [REST API Design](rest_api.md) — The structuring rules governing endpoints.
 

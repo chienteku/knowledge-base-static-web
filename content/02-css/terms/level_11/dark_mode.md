@@ -226,7 +226,7 @@ By structuring your styles this way, the browser swaps every single element's ba
 > ```
 > - Define base parameters globally.
 > - Open the media query and override the exact same variable names.
-
+> 
 ---
 
 
@@ -256,7 +256,7 @@ By structuring your styles this way, the browser swaps every single element's ba
 > ```
 >
 > **Explanation:** Toggling `data-theme="dark"` on `<html>` swaps CSS variable values cleanly.
-
+> 
 ---
 
 ### Exercise 3: System Color Scheme Media Query
@@ -277,7 +277,7 @@ By structuring your styles this way, the browser swaps every single element's ba
 > ```
 >
 > **Explanation:** `prefers-color-scheme: dark` syncs app themes with operating system preferences.
-
+> 
 ## 7. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Baseline responsive queries.
 - [`var()` (CSS Custom Properties)](var.md) — Dynamic color variables.

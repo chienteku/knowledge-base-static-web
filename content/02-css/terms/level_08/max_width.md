@@ -285,7 +285,7 @@ Fluid image scaling constraint:
 > - Define a percentage width for mobile screens.
 > - Apply `max-width` to cap the desktop sizing width.
 > - Center the container using margins.
-
+> 
 ---
 
 
@@ -310,7 +310,7 @@ Fluid image scaling constraint:
 > ```
 >
 > **Explanation:** Combining `width: 100%`, `max-width`, and `margin: auto` creates clean responsive container wrappers.
-
+> 
 ---
 
 ### Exercise 3: Optimal Reading Line Length
@@ -329,7 +329,7 @@ Fluid image scaling constraint:
 > ```
 >
 > **Explanation:** `max-width: 65ch` clamps line length for optimal reading ergonomics.
-
+> 
 ## 7. Related Terms
 - [Width / Height](../level_02/width_height.md) — The baseline box sizes.
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The property that handles clips if fixed sizing bounds are breached.

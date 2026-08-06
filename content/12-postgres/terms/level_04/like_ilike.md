@@ -161,7 +161,7 @@ Search for users whose `username` starts with `'alex'` (case-insensitive) using 
 > 1. `ILIKE` is PostgreSQL's case-insensitive pattern matching operator.
 > 2. `'alex%'` matches `"Alex"`, `"alexander"`, `"ALEXIS"`.
 > 3. Prefix patterns (`'text%'`) can hit B-tree indexes using `varchar_pattern_ops`.
-
+> 
 ---
 
 ### Exercise 2: Single Character Wildcards with `_`
@@ -187,7 +187,7 @@ Find product codes matching pattern `'SKU-___-2026'` (exactly 3 variable charact
 > 1. `_` matches exactly one character; `%` matches zero or more characters.
 > 2. Enforces exact character string length boundaries in pattern matching.
 > 3. Precise string pattern filtering.
-
+> 
 ---
 
 ### Exercise 3: Accelerating Wildcard Searches with Trigram Indexes (`pg_trgm`)
@@ -219,7 +219,7 @@ Enable `pg_trgm` extension and create a GIN trigram index to accelerate substrin
 > 1. Standard B-tree indexes cannot accelerate leading wildcard patterns (`'%text%'`).
 > 2. `pg_trgm` breaks text into 3-character trigrams and indexes them in a GIN index.
 > 3. Enables sub-millisecond wildcard searching across millions of text rows.
-
+> 
 ---
 
 

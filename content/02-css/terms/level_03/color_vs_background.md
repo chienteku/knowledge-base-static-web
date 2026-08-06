@@ -124,7 +124,7 @@ div { background-color: #222; color: #fff; } /* High contrast ratio */
 > The colors are swapped! This will create a white button with black text. It should be `background-color: black;` and `color: white;`.
 > ```
 > - Which property represents the Sharpie marker, and which represents the cardboard?
-
+> 
 ---
 
 
@@ -147,7 +147,7 @@ div { background-color: #222; color: #fff; } /* High contrast ratio */
 > ```
 >
 > **Explanation:** Card containers combine background color, text color, and border styling.
-
+> 
 ---
 
 ### Exercise 3: Transparent Background Reset
@@ -166,7 +166,7 @@ div { background-color: #222; color: #fff; } /* High contrast ratio */
 > ```
 >
 > **Explanation:** `transparent` removes solid background fills.
-
+> 
 ## 7. Related Terms
 - [Color Values (hex, rgb, rgba, hsl, named)](color_values.md) — Color notation formats.
 - [`background` Shorthand & `background-image`](background_shorthand.md) — Advanced background styling.

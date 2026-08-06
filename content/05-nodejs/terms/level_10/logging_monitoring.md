@@ -169,7 +169,7 @@ app.get('/health/ready', (req, res) => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Configuring Pino JSON Logger
@@ -188,7 +188,7 @@ app.get('/health/ready', (req, res) => {
 > ```
 >
 > **Explanation:** Pino outputs high-performance structured JSON logs compatible with Datadog/ELK.
-
+> 
 ---
 
 ### Exercise 3: Application Performance Metrics (APM)
@@ -209,7 +209,7 @@ app.get('/health/ready', (req, res) => {
 > ```
 >
 > **Explanation:** RED metrics provide visibility into server throughput, error rates, and response latency.
-
+> 
 ## 7. Related Terms
 - [PM2 (Process Manager)](pm2.md) — Captures stdout/stderr outputs and manages application logs.
 - [Graceful Shutdown & Process Signals](graceful_shutdown.md) — Works with health probes to drain traffic before container termination.

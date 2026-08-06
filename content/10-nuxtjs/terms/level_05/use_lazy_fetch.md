@@ -165,26 +165,26 @@ Fetch product recommendations using `useLazyFetch()` to avoid blocking client pa
 > <script setup lang="ts">
 > const { data: recommendations, pending } = useLazyFetch("/api/recommendations");
 > </script>
-
-<template>
-  <div>
-    <h2>Product Recommendations</h2>
-    <div v-if="pending" class="skeleton-loader">
-      <p>Loading personalized recommendations...</p>
-    </div>
-    <ul v-else-if="recommendations">
-      <li v-for="item in recommendations" :key="item.id">{{ item.name }}</li>
-    </ul>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <h2>Product Recommendations</h2>
+>     <div v-if="pending" class="skeleton-loader">
+>       <p>Loading personalized recommendations...</p>
+>     </div>
+>     <ul v-else-if="recommendations">
+>       <li v-for="item in recommendations" :key="item.id">{{ item.name }}</li>
+>     </ul>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useLazyFetch()` is shorthand for `useFetch(url, { lazy: true })`.
 > 2. Route navigation transitions complete immediately without waiting for server network requests to resolve.
 > 3. `pending` state indicates when background data processing completes.
-
+> 
 ---
 
 ### Exercise 2: Combining `useLazyFetch()` with Client-Side Skeletons
@@ -203,27 +203,27 @@ Display a UI card skeleton while `useLazyFetch()` loads secondary dashboard widg
 > <script setup lang="ts">
 > const { data: stats, pending } = useLazyFetch("/api/analytics/summary");
 > </script>
-
-<template>
-  <div class="widget-card">
-    <h3>Analytics Summary</h3>
-    <template v-if="pending">
-      <div class="placeholder-shimmer">---</div>
-    </template>
-    <template v-else-if="stats">
-      <p>Total Views: {{ stats.views }}</p>
-      <p>Conversions: {{ stats.conversions }}</p>
-    </template>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div class="widget-card">
+>     <h3>Analytics Summary</h3>
+>     <template v-if="pending">
+>       <div class="placeholder-shimmer">---</div>
+>     </template>
+>     <template v-else-if="stats">
+>       <p>Total Views: {{ stats.views }}</p>
+>       <p>Conversions: {{ stats.conversions }}</p>
+>     </template>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Non-blocking lazy fetching allows primary page elements to display instantly while secondary data loads asynchronously.
 > 2. Prevents slow secondary microservice endpoints from delaying page load transitions.
 > 3. Improves Web Vitals and perceived user interaction speed.
-
+> 
 ---
 
 ### Exercise 3: Controlling Server-Side Execution of Lazy Fetches
@@ -244,29 +244,25 @@ Configure `useLazyFetch()` to execute ONLY on the client browser (`server: false
 >   server: false
 > });
 > </script>
-
-<template>
-  <div>
-    <p v-if="pending">Fetching live user activity...</p>
-    <div v-else-if="userActivity">
-      <p>Last Login: {{ userActivity.lastLogin }}</p>
-    </div>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <p v-if="pending">Fetching live user activity...</p>
+>     <div v-else-if="userActivity">
+>       <p>Last Login: {{ userActivity.lastLogin }}</p>
+>     </div>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `server: false` instructs Nuxt to skip data fetching completely during server SSR rendering.
 > 2. Data fetching begins in the browser immediately after client hydration completes.
 > 3. Ideal for non-critical user activity logs or browser-only widgets.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useFetch`](use_fetch.md) — The blocking sibling composable.

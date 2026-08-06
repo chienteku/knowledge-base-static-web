@@ -179,8 +179,8 @@ app.get('/status', (req, res) => {
 > [!check]- Answer
 > - The leak occurs because `systemEvents.on('update')` registers a new listener to the global `systemEvents` emitter on every request. This keeps a reference to the `res` object in memory. Since `systemEvents` is never cleaned up, the listeners list grows with every request, creating a memory leak.
 > - *Fix:* Use `systemEvents.once('update')` to automatically clean up the listener after it fires, or use `removeListener` inside the handler.
-
-
+> 
+> 
 ---
 
 
@@ -200,7 +200,7 @@ app.get('/status', (req, res) => {
 > ```
 >
 > **Explanation:** Heap snapshots write V8 memory object allocations to file for inspection in Chrome DevTools.
-
+> 
 ---
 
 ### Exercise 3: Identifying Garbage Collection Root References
@@ -217,7 +217,7 @@ app.get('/status', (req, res) => {
 > ```
 >
 > **Explanation:** Objects reachable from GC Roots cannot be garbage-collected by V8.
-
+> 
 ## 7. Related Terms
 - [Blocking the Event Loop](../level_01/blocking_event_loop.md) — Freezing the main execution thread.
 - [Buffers](../level_06/buffers.md) — High-memory byte allocations that require garbage collection.

@@ -166,7 +166,7 @@ Acquire an exclusive advisory lock using a custom 64-bit integer ID (`12345`) to
 > 1. Advisory locks allow applications to define custom locks using 64-bit integers managed by PostgreSQL's in-memory lock manager.
 > 2. Does NOT lock database rows or tables.
 > 3. Provides lightweight distributed locking across microservice nodes without requiring Redis.
-
+> 
 ---
 
 ### Exercise 2: Non-Blocking Lock Attempts with `pg_try_advisory_lock`
@@ -190,7 +190,7 @@ Attempt to acquire an advisory lock non-blockingly using `pg_try_advisory_lock()
 > 1. `pg_try_advisory_lock()` returns `TRUE` if the lock was acquired immediately; returns `FALSE` if another session holds the lock.
 > 2. Prevents application threads from blocking or hanging while waiting for long-running cron tasks.
 > 3. Non-blocking distributed lock acquisition.
-
+> 
 ---
 
 ### Exercise 3: Transaction-Scoped Advisory Locks with `pg_advisory_xact_lock`
@@ -219,7 +219,7 @@ Acquire an advisory lock automatically released at transaction `COMMIT` or `ROLL
 > 1. `pg_advisory_xact_lock()` binds the advisory lock to the current transaction lifecycle.
 > 2. Automatically releases the lock when the transaction ends (`COMMIT` or `ROLLBACK`).
 > 3. Eliminates lock leak bugs caused by missing `pg_advisory_unlock()` calls.
-
+> 
 ---
 
 

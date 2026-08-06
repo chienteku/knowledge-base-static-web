@@ -161,20 +161,20 @@ Exclude `"admin"` and `"superadmin"` roles from a `UserRole` union using `Exclud
 >
 > ```typescript
 > type UserRole = "admin" | "superadmin" | "editor" | "viewer";
-
-type StandardRole = Exclude<UserRole, "admin" | "superadmin">;
-// Inferred as: "editor" | "viewer"
-
-const role: StandardRole = "editor";
-// const invalid: StandardRole = "admin"; // ❌ Compile Error!
-```
-
+> 
+> type StandardRole = Exclude<UserRole, "admin" | "superadmin">;
+> // Inferred as: "editor" | "viewer"
+> 
+> const role: StandardRole = "editor";
+> // const invalid: StandardRole = "admin"; // ❌ Compile Error!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Exclude<T, U>` constructs a type by excluding from `T` all union members that are assignable to `U`.
 > 2. Operates distributively over union types.
 > 3. Standard utility for stripping unwanted values from union types.
-
+> 
 ---
 
 ### Exercise 2: Extracting Specific Union Members with `Extract<T, U>`
@@ -191,19 +191,19 @@ Extract matching string literal variants from an event name union using `Extract
 >
 > ```typescript
 > type EventName = "click" | "hover" | "submit" | "focus" | "scroll";
-
-type MouseEventName = Extract<EventName, "click" | "hover">;
-// Inferred as: "click" | "hover"
-
-const event: MouseEventName = "click";
-```
-
+> 
+> type MouseEventName = Extract<EventName, "click" | "hover">;
+> // Inferred as: "click" | "hover"
+> 
+> const event: MouseEventName = "click";
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Extract<T, U>` constructs a type by extracting from `T` all union members assignable to `U`.
 > 2. Acts as the set intersection counterpart to `Exclude`.
 > 3. Filters complex union types cleanly.
-
+> 
 ---
 
 ### Exercise 3: Stripping Null and Undefined with `NonNullable<T>`
@@ -220,20 +220,20 @@ Strip `null` and `undefined` types from a API payload response union using `NonN
 >
 > ```typescript
 > type NullableString = string | null | undefined;
-
-type CleanString = NonNullable<NullableString>;
-// Inferred as: string
-
-const text: CleanString = "Valid String";
-// const invalid: CleanString = null; // ❌ Compile Error!
-```
-
+> 
+> type CleanString = NonNullable<NullableString>;
+> // Inferred as: string
+> 
+> const text: CleanString = "Valid String";
+> // const invalid: CleanString = null; // ❌ Compile Error!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `NonNullable<T>` excludes `null` and `undefined` from type `T`.
 > 2. Defined internally as `type NonNullable<T> = T & {}` or using conditional type checks.
 > 3. Useful for sanitizing nullable union types.
-
+> 
 ---
 
 

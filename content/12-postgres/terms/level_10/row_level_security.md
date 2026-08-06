@@ -187,7 +187,7 @@ Enable Row-Level Security on `tenant_data` table and define a security policy re
 > 1. `ENABLE ROW LEVEL SECURITY` activates row-level security filtering on target tables.
 > 2. `CREATE POLICY` defines row access expressions evaluated automatically on every query.
 > 3. Guarantees multi-tenant data isolation at the storage engine tier.
-
+> 
 ---
 
 ### Exercise 2: Setting Session Context Variables for RLS Policies
@@ -217,7 +217,7 @@ Set session configuration variable `app.current_tenant_id = 'tenant_100'` in app
 > 1. `SET LOCAL var_name = value` sets a session variable scoped exclusively to the current transaction.
 > 2. RLS policy evaluates `current_setting('app.current_tenant_id')` to filter query rows dynamically.
 > 3. Secure multi-tenant architecture pattern (used heavily by Supabase and multi-tenant SaaS backends).
-
+> 
 ---
 
 ### Exercise 3: Testing RLS Bypassing for Superusers
@@ -241,7 +241,7 @@ Explain why table owners and superusers bypass RLS policies by default, and enfo
 > 1. Table owners and superusers bypass RLS policies by default.
 > 2. `FORCE ROW LEVEL SECURITY` forces table owners to obey RLS policies during testing and production operations.
 > 3. Security hardening standard.
-
+> 
 ---
 
 

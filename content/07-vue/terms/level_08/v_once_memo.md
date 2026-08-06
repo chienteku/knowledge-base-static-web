@@ -116,7 +116,7 @@ Introduced in Vue 3.2, `v-memo` is the ultimate loop optimization tool. You pass
 > Remove `v-once` if the data can ever change during the user's session.
 > ```
 > - Read the literal translation of the directive's name.
-
+> 
 ---
 
 ### Exercise 2: v-memo List Optimization Pattern
@@ -135,7 +135,7 @@ Introduced in Vue 3.2, `v-memo` is the ultimate loop optimization tool. You pass
 >   {{ item.name }}
 > </li>
 > ```
-
+> 
 ---
 
 ### Exercise 3: v-once vs v-memo Distinction
@@ -153,8 +153,8 @@ Introduced in Vue 3.2, `v-memo` is the ultimate loop optimization tool. You pass
 > ```text
 > v-once is static; v-memo is conditionally memoized.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

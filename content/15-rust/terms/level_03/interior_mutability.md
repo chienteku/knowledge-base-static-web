@@ -335,7 +335,7 @@ Implement `CachedQueryEngine` wrapping a `Box<dyn QueryEngine>` with the followi
 >    In `query()`, `.borrow()` is invoked to check for a cache hit. The resulting `Ref<'_, HashMap<...>>` guard drops at the end of the `if let` block before `.borrow_mut()` is called for insertion. Dropping the shared reader guard prevents triggering a runtime borrow panic (`AlreadyBorrowed`).
 > 4. **Edge Cases:**
 >    If `.backend.query(key)` returned `None`, the cache miss counter is incremented but no entry is saved, preserving memory layout efficiency.
-
+> 
 ---
 
 ### Exercise 2: Multi-Threaded Reactive Event Bus with Listener Metrics using `Arc`, `RwLock`, and `Mutex`
@@ -470,7 +470,7 @@ Construct a thread-safe event routing pipeline with thread-safe interior mutabil
 >    `Arc<dyn EventHandler>` provides thread-safe reference-counted shared ownership across threads. Wrapping handlers in `Arc` ensures handlers outlive individual thread dispatches.
 > 4. **Edge Cases & Deadlock Prevention:**
 >    Holding a read lock on `listeners` while invoking `handle_event()` is safe as long as `handle_event()` does not attempt to invoke `bus.register()` (which would attempt to acquire a write lock, causing a deadlock).
-
+> 
 ---
 
 ### Exercise 3: Hierarchical Graph Component Tree with Parent/Child Links using `Rc<RefCell<Node>>` & `Weak<RefCell<Node>>`
@@ -616,7 +616,7 @@ Build a doubly-linked tree node hierarchy utilizing interior mutability:
 >    When `mark_dirty()` is called on a child, it upgrades `Weak<RefCell<GraphNode>>` to an `Option<Rc<RefCell<GraphNode>>>`. If the parent is still alive, `.upgrade()` returns `Some(Rc)`, allowing recursive traversal up the tree to invalidate parent caches without risking dangling pointer access.
 > 4. **Memory Layout and Heap Deallocation:**
 >    The memory layout consists of heap-allocated `RcBox` headers containing `strong: Cell<usize>`, `weak: Cell<usize>`, and the `GraphNode` instance. When all `Rc` strong references drop, `GraphNode` and its `children` vector are dropped immediately. The heap allocation itself is freed once all `Weak` references drop.
-
+> 
 ---
 
 ## 6. Related Terms

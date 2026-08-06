@@ -168,7 +168,7 @@ let opt_ref: Option<&str> = opt.as_deref();
 >
 > 1. Parameter `path: impl AsRef<Path>` enables accepting `&str`, `String`, `&Path`, and `PathBuf`.
 > 2. Converts reference cheaply via `path.as_ref()`.
-
+> 
 ---
 
 ### Exercise 2: Flexible Byte Slice Checksum Calculator
@@ -211,7 +211,7 @@ let opt_ref: Option<&str> = opt.as_deref();
 >
 > 1. `AsRef<[u8]>` provides reference views across binary vectors and UTF-8 string buffers.
 > 2. Zero memory allocation.
-
+> 
 ---
 
 ### Exercise 3: Custom Domain Struct `AsRef` Implementation
@@ -256,7 +256,7 @@ let opt_ref: Option<&str> = opt.as_deref();
 > #### Technical Explanation
 >
 > 1. Implementing `AsRef<str>` on custom domain wrappers integrates them into standard library string utilities.
-
+> 
 ---
 
 ## 5. Related Terms

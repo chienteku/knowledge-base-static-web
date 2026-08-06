@@ -173,7 +173,7 @@ You are defining schema rules for an e-commerce system: a standard entity table 
 > 1. Standard tables (`product`) store entity records containing scalar values, nested documents, and arrays.
 > 2. Relation tables (`purchased`) defined with `TYPE RELATION` store graph edges with mandatory `in` and `out` record links.
 > 3. Specifying `IN user OUT product` constrains the relation edge endpoints strictly to valid user and product records.
-
+> 
 ---
 
 ### Exercise 2: Table Inspection with `INFO FOR TABLE`
@@ -197,7 +197,7 @@ A database administrator wants to inspect all field definitions, indexes, and ev
 > 1. `INFO FOR TABLE <table>` returns an object containing defined fields, indexes, events, and permissions for the target table.
 > 2. Facilitates schema verification and automated DDL migration checking.
 > 3. Provides complete visibility into active table-level constraint rules.
-
+> 
 ---
 
 ### Exercise 3: Dropping a Table Definition with `REMOVE TABLE`
@@ -222,7 +222,7 @@ A database cleanup migration needs to drop an obsolete table `legacy_logs` and a
 > 1. `REMOVE TABLE` is a DDL statement that drops the table schema metadata, fields, indexes, and stored records completely.
 > 2. `DELETE legacy_logs` is a DML statement that deletes stored data records while preserving the table schema definition.
 > 3. `REMOVE TABLE` corresponds to SQL `DROP TABLE`.
-
+> 
 ---
 
 

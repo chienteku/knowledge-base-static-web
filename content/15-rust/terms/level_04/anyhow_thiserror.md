@@ -330,7 +330,7 @@ Design and implement `StorageError` featuring:
 >
 > 4. **Memory Layout and Monomorphization**:
 >    - Enum-based error taxonomy provides zero-cost static dispatch. Disk space and memory alignment equal the largest variant's payload plus discriminant tag byte(s), avoiding unnecessary heap allocation unless an underlying variant (e.g. `io::Error`) explicitly allocates internally.
-
+> 
 ---
 
 ### Exercise 2: Application Context Propagation Pipeline (`anyhow` Pattern)
@@ -541,7 +541,7 @@ Implement an application context pipeline featuring:
 > 4. **Dynamic Downcasting via Vtable Reflection**:
 >    - Calling `.downcast_ref::<ParseIntError>()` delegates to `std::any::TypeId` metadata embedded in the trait object vtable.
 >    - This allows application code to print type-erased errors in main logging handlers while still allowing telemetry filters to inspect specific underlying error types dynamically.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Dispatch vs Static Dispatch Architecture (Library-to-Application Boundary Bridge)
@@ -801,7 +801,7 @@ Implement a library-to-application error handling boundary:
 > 
 > 4. **Edge Cases and Defensive Error Handling**:
 >    - If an error is wrapped multiple times or erased into a raw `String`, downcasting directly to `DatabaseError` returns `None`. Designing structured error boundary objects preserves the inner `source()` chain so diagnostic tools and severity auditors can recursively inspect parent causes.
-
+> 
 ---
 
 ## 6. Related Terms

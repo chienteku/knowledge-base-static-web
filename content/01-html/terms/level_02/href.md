@@ -203,7 +203,7 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 > ```
 > - Does it have `https://`?
 > - Does it have `mailto:`?
-
+> 
 ---
 
 ### Exercise 2: Valid href Value Formats
@@ -224,7 +224,7 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 > ```
 >
 > **Explanation:** `href` accepts web URLs, element IDs, and URI protocol schemes.
-
+> 
 ---
 
 ### Exercise 3: Downloading Files via href
@@ -238,7 +238,7 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 > ```
 >
 > **Explanation:** `download` attribute instructs browsers to save linked resources to disk.
-
+> 
 ## 7. Related Terms
 - [`<a>` (Anchor / Link)](a.md) — The tag that utilizes the `href` attribute.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — The web address standard links utilize.

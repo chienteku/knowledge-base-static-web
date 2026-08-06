@@ -143,28 +143,28 @@ Configure Inter Google Font using `next/font/google` and apply its CSS variable 
 > // app/layout.tsx
 > import { Inter } from "next/font/google";
 > import "@/app/globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap"
-});
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" className={`${inter.variable} font-sans`}>
-      <body>{children}</body>
-    </html>
-  );
-}
-```
-
+> 
+> const inter = Inter({
+>   subsets: ["latin"],
+>   variable: "--font-inter",
+>   display: "swap"
+> });
+> 
+> export default function RootLayout({ children }: { children: React.ReactNode }) {
+>   return (
+>     <html lang="en" className={`${inter.variable} font-sans`}>
+>       <body>{children}</body>
+>     </html>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `next/font/google` automatically downloads and self-hosts font files at build time.
 > 2. Inlines font CSS declarations to eliminate external HTTP network roundtrips to Google Fonts.
 > 3. `display: 'swap'` ensures text remains visible while fonts load, preventing Cumulative Layout Shift (CLS).
-
+> 
 ---
 
 ### Exercise 2: Loading Local Custom Fonts with `next/font/local`
@@ -181,24 +181,24 @@ Load a custom local font file (`/fonts/CustomFont.woff2`) using `next/font/local
 >
 > ```tsx
 > import localFont from "next/font/local";
-
-const myCustomFont = localFont({
-  src: "../public/fonts/CustomFont.woff2",
-  display: "swap",
-  variable: "--font-custom"
-});
-
-export default function CustomText({ children }: { children: React.ReactNode }) {
-  return <div className={myCustomFont.className}>{children}</div>;
-}
-```
-
+> 
+> const myCustomFont = localFont({
+>   src: "../public/fonts/CustomFont.woff2",
+>   display: "swap",
+>   variable: "--font-custom"
+> });
+> 
+> export default function CustomText({ children }: { children: React.ReactNode }) {
+>   return <div className={myCustomFont.className}>{children}</div>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `next/font/local` optimizes and self-hosts proprietary or custom woff2 font files.
 > 2. `myCustomFont.className` applies a unique hashed font class name directly to components.
 > 3. Zero network requests to third-party font servers.
-
+> 
 ---
 
 ### Exercise 3: Eliminating Cumulative Layout Shift (CLS) with Size Adjust
@@ -226,13 +226,9 @@ Explain how `next/font` calculates fallback font size adjustments to prevent lay
 > 1. Traditional web fonts cause visual text jumps (layout shifts) when loading finishes.
 > 2. `next/font` calculates metric fallback overrides automatically.
 > 3. Eliminates CLS web vital penalties for web typography.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`<Image>` Component](next_image.md) — Another built-in performance optimization tool.

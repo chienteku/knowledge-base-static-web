@@ -196,7 +196,7 @@ Query all `users` alongside their `orders`, preserving users who have 0 orders.
 > 1. `LEFT JOIN` returns ALL rows from the left table (`users`).
 > 2. If a user has no matching orders, `o.id` and `o.total_cents` populate as `NULL`.
 > 3. Prevents dropping users without purchase history.
-
+> 
 ---
 
 ### Exercise 2: Finding Orphan/Un-Associated Rows with IS NULL Filtering
@@ -226,7 +226,7 @@ Find all users who have NEVER placed an order using `LEFT JOIN ... WHERE o.id IS
 > 1. `LEFT JOIN` populates right table columns as `NULL` when no match exists.
 > 2. `WHERE o.id IS NULL` filters for ONLY un-matched left rows.
 > 3. Idiomatic anti-join pattern.
-
+> 
 ---
 
 ### Exercise 3: Aggregating Over LEFT JOIN Result Sets
@@ -256,7 +256,7 @@ Calculate order count per user including users with 0 orders using `COUNT(o.id)`
 > 1. `COUNT(o.id)` counts non-null order IDs (returns `0` for users with no orders).
 > 2. Using `COUNT(*)` would incorrectly return `1` for un-matched users because a row with `NULL` right columns was returned.
 > 3. Crucial distinction when aggregating outer joins.
-
+> 
 ---
 
 

@@ -114,19 +114,19 @@ Create a tuple type representing an HTTP response status code and message pair `
 >
 > ```typescript
 > type HttpResponse = [statusCode: number, message: string];
-
-const successResponse: HttpResponse = [200, "OK"];
-const notFoundResponse: HttpResponse = [404, "Not Found"];
-
-// const invalid: HttpResponse = ["OK", 200]; // ❌ Compile Error: Type positions swapped!
-```
-
+> 
+> const successResponse: HttpResponse = [200, "OK"];
+> const notFoundResponse: HttpResponse = [404, "Not Found"];
+> 
+> // const invalid: HttpResponse = ["OK", 200]; // ❌ Compile Error: Type positions swapped!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Tuples enforce exact array length and element types at specific index positions.
 > 2. Labeled tuple elements (`statusCode: number`) improve code readability and IDE tooltips.
 > 3. Standard structure for returning fixed pairs or triples from functions.
-
+> 
 ---
 
 ### Exercise 2: Creating Readonly Tuples with `as const`
@@ -143,17 +143,17 @@ Define a immutable coordinate tuple `[x, y]` using `readonly` tuples or `as cons
 >
 > ```typescript
 > const origin = [0, 0] as const; // Inferred as readonly [0, 0]
-
-// origin.push(1); // ❌ Compile Error: Property 'push' does not exist on type 'readonly [0, 0]'.
-// origin[0] = 5;  // ❌ Compile Error: Cannot assign to read-only property!
-```
-
+> 
+> // origin.push(1); // ❌ Compile Error: Property 'push' does not exist on type 'readonly [0, 0]'.
+> // origin[0] = 5;  // ❌ Compile Error: Cannot assign to read-only property!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Standard arrays allow mutation operations (`push`, `pop`) even on fixed types.
 > 2. `readonly` tuples or `as const` freeze tuple length and element immutability at compile time.
 > 3. Protects constant tuple configurations from accidental mutation.
-
+> 
 ---
 
 ### Exercise 3: Array Union Types vs Tuple Types
@@ -173,13 +173,13 @@ Formulate an architectural comparison matrix contrasting Array Types (`(string |
 > - Array ((string | number)[]): Variable length, elements can appear in any order at any index.
 > - Tuple ([string, number]): Fixed length (2 elements), index 0 MUST be string, index 1 MUST be number.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Arrays represent unbounded homogeneous or union collections.
 > 2. Tuples represent fixed-structure heterogeneous records.
 > 3. Core distinction for data structure representation in TypeScript.
-
+> 
 ---
 
 

@@ -160,7 +160,7 @@ The `<script>` tag is the computer chip you plug into the robot's head that actu
 > Because the browser executes the script immediately when it reads the `<head>`. At that exact millisecond, the browser hasn't reached the `<body>` yet, so the button doesn't exist! You must move the script to the bottom of the body, below the button.
 > ```
 > - Browsers read top-to-bottom, line-by-line.
-
+> 
 ---
 
 
@@ -179,7 +179,7 @@ The `<script>` tag is the computer chip you plug into the robot's head that actu
 > ```
 >
 > **Explanation:** `type="module"` enables ES Module import/export syntax and defers execution automatically.
-
+> 
 ---
 
 ### Exercise 3: Script Type Attribute Default
@@ -196,7 +196,7 @@ The `<script>` tag is the computer chip you plug into the robot's head that actu
 > ```
 >
 > **Explanation:** `type="text/javascript"` is redundant in modern HTML5.
-
+> 
 ## 7. Related Terms
 - [`<link>`](link.md) — Used to import CSS, whereas `<script>` is used to import JavaScript.
 - [`defer` & `async` (Script Loading Strategies)](defer_async.md) — Tag parameters optimized for asynchronous asset parsing.

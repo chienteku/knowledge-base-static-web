@@ -172,7 +172,7 @@ Configure hashed sharding on `userId` field for collection `orders` to ensure ev
 > 1. Hashed sharding calculates an MD5 hash of the shard key field (`userId`) to partition data.
 > 2. Distributes monotonically increasing values (e.g. auto-increment IDs or timestamps) evenly across all shards.
 > 3. Prevents hot-spotting on a single shard node.
-
+> 
 ---
 
 ### Exercise 2: Configuring Ranged Sharding for Range-Query Optimization
@@ -197,7 +197,7 @@ Configure ranged sharding on compound key `{ country: 1, zipCode: 1 }` to optimi
 > 1. Ranged sharding partitions data into contiguous ranges based on raw shard key values.
 > 2. Allows queries matching ranges (e.g. `country: "US"`) to target specific shard nodes directly.
 > 3. Ideal for location and regional data partitioning.
-
+> 
 ---
 
 ### Exercise 3: Trade-Off Analysis: Hashed vs Ranged Sharding
@@ -223,7 +223,7 @@ Formulate a technical trade-off matrix comparing Hashed vs Ranged Sharding for w
 > 1. Hashed sharding trades range query targeting for uniform write load balancing.
 > 2. Ranged sharding trades write load balancing for targeted range query execution.
 > 3. Base choice on primary query access patterns.
-
+> 
 ---
 
 

@@ -206,7 +206,7 @@ Which box is visible on top?
 > The Red Box! Because its `z-index` (5) is higher than the Blue Box (3), it wins, regardless of the HTML order.
 > ```
 > - Higher number wins.
-
+> 
 ---
 
 
@@ -225,7 +225,7 @@ Which box is visible on top?
 > ```
 >
 > **Explanation:** Higher numerical `z-index` values stack above lower values within the same stacking context.
-
+> 
 ---
 
 ### Exercise 3: Flexbox and Grid z-index Exception
@@ -242,7 +242,7 @@ Which box is visible on top?
 > ```
 >
 > **Explanation:** Flex and Grid specifications allow `z-index` directly on child items.
-
+> 
 ## 7. Related Terms
 - [`position: static` vs `relative`](position_static_relative.md) — Required positioning properties.
 - [Stacking Context](stacking_context.md) — The parent layer grouping logic that shapes z-index behaviors.

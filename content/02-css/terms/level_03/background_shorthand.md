@@ -206,7 +206,7 @@ div { background: url('img1.png'), url('img2.png') red; } /* Color on last layer
 > ```
 > - Follow the standard shorthand sequence.
 > - Remember to separate the position (`center`) and the size (`contain`) with a `/`.
-
+> 
 ---
 
 
@@ -227,7 +227,7 @@ div { background: url('img1.png'), url('img2.png') red; } /* Color on last layer
 > ```
 >
 > **Explanation:** Shorthand combines fallback color, image URL, repeat behavior, position, and size.
-
+> 
 ---
 
 ### Exercise 3: Multiple Background Image Layers
@@ -246,7 +246,7 @@ div { background: url('img1.png'), url('img2.png') red; } /* Color on last layer
 > ```
 >
 > **Explanation:** First listed background image renders on top of subsequent layers.
-
+> 
 ## 7. Related Terms
 - [`color` vs `background-color`](color_vs_background.md) — The color properties.
 - [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — The syntax concept.

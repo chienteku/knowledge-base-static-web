@@ -181,7 +181,7 @@ Combine active users from `current_users` and archived users from `archived_user
 > 1. `UNION ALL` concatenates result sets directly without sorting or deduplicating.
 > 2. `UNION` performs a sort/hash pass to eliminate duplicate rows across sets (higher CPU overhead).
 > 3. Golden rule: Always use `UNION ALL` unless deduplication is explicitly required.
-
+> 
 ---
 
 ### Exercise 2: Finding Set Intersections with INTERSECT
@@ -207,7 +207,7 @@ Find user IDs that exist in BOTH `premium_subscribers` AND `beta_testers` tables
 > 1. `INTERSECT` returns only distinct rows that exist in BOTH query result sets.
 > 2. Operates on relational set intersection logic.
 > 3. Selects overlapping entities across categories.
-
+> 
 ---
 
 ### Exercise 3: Set Difference Exclusion with EXCEPT
@@ -233,7 +233,7 @@ Find customers who exist in `customers` table but have NEVER placed an order in 
 > 1. `EXCEPT` (relational set difference) returns distinct rows from the first query that do NOT exist in the second query.
 > 2. Both query SELECT lists MUST match in column count and compatible data types.
 > 3. Elegant alternative to `NOT IN` / `NOT EXISTS`.
-
+> 
 ---
 
 

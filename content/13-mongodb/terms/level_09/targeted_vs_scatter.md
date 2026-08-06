@@ -154,7 +154,7 @@ Verify that a query including the shard key `{ customerId: "CUST-100" }` execute
 > 1. Including the shard key in the query filter allows `mongos` to consult Config Server metadata and route the query to a SINGLE target shard.
 > 2. `shards` object in `explain()` contains exactly 1 entry.
 > 3. Maximum query throughput and lowest network latency.
-
+> 
 ---
 
 ### Exercise 2: Identifying Scatter-Gather Query Overhead
@@ -179,7 +179,7 @@ Run `explain()` on a query omitting the shard key (`find({ unindexedField: "valu
 > 1. Queries omitting the shard key MUST be broadcast by `mongos` to EVERY shard in the cluster (Scatter-Gather).
 > 2. `mongos` waits for all shards to respond and merges results in memory.
 > 3. Degrades cluster scalability as shard node counts grow.
-
+> 
 ---
 
 ### Exercise 3: Architectural Rules to Eliminate Scatter-Gather Queries
@@ -206,7 +206,7 @@ Formulate a 3-point design rulebook ensuring top application API endpoints run a
 > 1. Targeted queries scale linearly with cluster growth ($O(1)$ routing).
 > 2. Scatter-gather queries suffer from long-tail shard latency ($O(S)$ where $S$ is shard count).
 > 3. Core design goal for sharded cluster architectures.
-
+> 
 ---
 
 

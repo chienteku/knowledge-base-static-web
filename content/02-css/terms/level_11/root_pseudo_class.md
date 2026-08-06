@@ -208,7 +208,7 @@ html { --color: red; } /* (0-0-1) LOSES to :root (0-1-0) */
 > ```
 > - Define the default global color inside the `:root` scope.
 > - Override the custom property variable locally inside the `.dark-theme` selector.
-
+> 
 ---
 
 
@@ -231,7 +231,7 @@ html { --color: red; } /* (0-0-1) LOSES to :root (0-1-0) */
 > ```
 >
 > **Explanation:** `:root` is the designated container for global CSS design tokens.
-
+> 
 ---
 
 ### Exercise 3: :root Specificity Value
@@ -248,7 +248,7 @@ html { --color: red; } /* (0-0-1) LOSES to :root (0-1-0) */
 > ```
 >
 > **Explanation:** `:root` is a pseudo-class selector with (0,0,1,0) specificity rank.
-
+> 
 ## 7. Related Terms
 - [`var()` (CSS Custom Properties)](var.md) — The variables stored inside `:root`.
 - [Dark Mode (`prefers-color-scheme`)](dark_mode.md) — Overwriting `:root` values.

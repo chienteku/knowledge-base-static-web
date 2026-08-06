@@ -150,7 +150,7 @@ Define a custom SurrealQL function `fn::discount_price($price, $discount)` that 
 > 1. `DEFINE FUNCTION fn::name($param: type)` defines custom reusable SurrealQL functions.
 > 2. Enforces type validation on parameter inputs (`decimal`).
 > 3. Encapsulates business logic directly inside the database tier.
-
+> 
 ---
 
 ### Exercise 2: Multi-Statement Custom Logic Functions
@@ -183,7 +183,7 @@ Define a custom function `fn::get_user_summary($user_id)` that fetches a user's 
 > 1. Custom functions support multi-statement script blocks enclosed in `{ ... }`.
 > 2. Subqueries and parameter variables can be used inside function bodies.
 > 3. Replaces SQL stored procedures with clean SurrealQL function syntax.
-
+> 
 ---
 
 ### Exercise 3: Dropping Custom Functions with `REMOVE FUNCTION`
@@ -207,7 +207,7 @@ Drop custom function `fn::discount_price` from the database.
 > 1. `REMOVE FUNCTION` drops custom user-defined functions from database metadata registers.
 > 2. Blocks subsequent invocations of the function.
 > 3. Maintains database function clean-up hygiene.
-
+> 
 ---
 
 

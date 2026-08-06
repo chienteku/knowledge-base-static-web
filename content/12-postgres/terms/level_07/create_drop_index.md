@@ -167,7 +167,7 @@ Create an index on a 20,000,000 row production table `users` without locking con
 > 1. Standard `CREATE INDEX` acquires a `ShareLock` that blocks concurrent `INSERT`, `UPDATE`, and `DELETE` writes during index builds.
 > 2. `CONCURRENTLY` builds the index in two passes without blocking write operations.
 > 3. Essential zero-downtime production database administration command.
-
+> 
 ---
 
 ### Exercise 2: Safely Dropping Obsolete Indexes
@@ -191,7 +191,7 @@ Safely drop an unused legacy index `idx_users_old_phone` without blocking concur
 > 1. `DROP INDEX` removes index access structures and reclaims disk storage.
 > 2. `CONCURRENTLY` drops the index without holding exclusive locks that block active queries.
 > 3. Safe production maintenance pattern.
-
+> 
 ---
 
 ### Exercise 3: Handling Invalid Concurrent Indexes
@@ -221,7 +221,7 @@ Identify and resolve an `INVALID` index status caused by a failed `CREATE INDEX 
 > 1. If a `CREATE INDEX CONCURRENTLY` build encounters a transaction error or deadlock, PostgreSQL leaves behind an `INVALID` index entry.
 > 2. Invalid indexes consume disk space but are ignored by the query planner.
 > 3. Rebuilding with `REINDEX INDEX CONCURRENTLY` restores valid index state.
-
+> 
 ---
 
 

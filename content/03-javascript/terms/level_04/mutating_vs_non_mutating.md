@@ -191,7 +191,7 @@ items.reverse();
 > ```
 > - Methods that add, remove, or reorder elements of the calling array in-place are mutating.
 > - Methods that extract sections or map values into new instances are non-mutating.
-
+> 
 ---
 
 ### Exercise 2: Categorizing Mutating vs Non-Mutating Methods
@@ -213,7 +213,7 @@ items.reverse();
 > ```
 >
 > **Explanation:** Mutating methods alter target array memory directly; non-mutating methods return new collection references.
-
+> 
 ---
 
 ### Exercise 3: Non-Mutating Array Sorting with `toSorted()`
@@ -233,8 +233,8 @@ items.reverse();
 > ```
 >
 > **Explanation:** Copying arrays before sorting prevents collateral mutation side effects.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

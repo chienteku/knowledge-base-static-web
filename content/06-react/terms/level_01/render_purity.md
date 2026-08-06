@@ -245,7 +245,7 @@ function SortedList({ numbers }) {
 **Expected output:**
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Refactoring Impure Component to Pure Component
@@ -261,7 +261,7 @@ function SortedList({ numbers }) {
 > ```
 >
 > **Explanation:** Pure components derive UI strictly from input props without reading dynamic external state.
-
+> 
 ---
 
 ### Exercise 3: Strict Mode Double Rendering
@@ -275,7 +275,7 @@ function SortedList({ numbers }) {
 > ```
 >
 > **Explanation:** Double rendering in development exposes mutations and side-effects executed during render.
-
+> 
 ## 7. Related Terms
 - [Side Effects](../level_03/side_effects.md) — The operations that must be isolated from render execution.
 - [Strict Mode](../level_08/strict_mode.md) — A React utility that runs components twice in development to catch purity bugs.

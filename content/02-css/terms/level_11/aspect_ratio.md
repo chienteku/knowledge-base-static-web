@@ -217,7 +217,7 @@ Alternative layouts:
 > ```
 > - The card needs a fluid width (`100%`).
 > - Force the height to compute dynamically relative to the aspect ratio equation.
-
+> 
 ---
 
 
@@ -240,7 +240,7 @@ Alternative layouts:
 > ```
 >
 > **Explanation:** `aspect-ratio: width / height` enforces box proportions dynamically.
-
+> 
 ---
 
 ### Exercise 3: Preventing Image Distortion with aspect-ratio
@@ -261,7 +261,7 @@ Alternative layouts:
 > ```
 >
 > **Explanation:** `object-fit: cover` pairs with `aspect-ratio` to prevent image distortion.
-
+> 
 ## 7. Related Terms
 - [`object-fit` & `object-position`](../level_09/object_fit.md) — Standard scaling for cropped media contents inside locked boxes.
 

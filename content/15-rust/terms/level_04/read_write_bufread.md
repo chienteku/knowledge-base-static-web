@@ -337,7 +337,7 @@ Implement a generic stream processor `ChunkedLogAnalyzer<R>` where `R: BufRead`.
 > 
 > 4. **Generic Monomorphization (`impl<R: BufRead>`)**:
 >    - The implementation uses static dispatch generic `R: BufRead`. Inlining by LLVM eliminates virtual call overhead for `fill_buf()` and `consume()`, achieving native binary performance matching manual C buffer pointers.
-
+> 
 ---
 
 ### Exercise 2: Production Multi-Writer Tee & Inline Hashing Engine (`std::io::Write`)
@@ -476,7 +476,7 @@ Implement a generic dual-writer struct `HashingTeeWriter<W1, W2>` where `W1: Wri
 > 
 > 3. **Error Propagation & Partial Writes**:
 >    - If `primary.write_all(buf)` fails with `io::Error`, the `?` operator immediately returns early before modifying `secondary` or mutating `checksum`. This preserves structural invariants and avoids computing checksums for incomplete or corrupted payloads.
-
+> 
 ---
 
 ### Exercise 3: Stream Transformation Copy Pipeline over Trait Objects (`Box<dyn BufRead>` & `Box<dyn Write>`)
@@ -624,7 +624,7 @@ Implement `StreamTransformPipeline` handling dynamic trait object streams.
 > 
 > 3. **Higher-Order Stream Transformation (`FnMut`)**:
 >    - The `process` method takes a generic `FnMut(&[u8]) -> Vec<u8>` closure. Using `FnMut` permits stateful transformations (e.g. keeping count of bytes, sliding window ciphers, or running compression state) across sequential chunk invocations.
-
+> 
 ---
 
 ## 6. Related Terms

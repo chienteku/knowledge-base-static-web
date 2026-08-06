@@ -105,7 +105,7 @@ import cloneDeep from 'lodash-es/cloneDeep'; // Tree-shakable ES module import
 > However, without a build step, you cannot use `.vue` Single-File Components, you cannot use `<style scoped>`, and your templates are compiled in the browser (which is slower). It is only recommended for tiny enhancements to legacy pages, never for full Single-Page Apps.
 > ```
 > - Think about the "Global Build" vs the "ES Module Build".
-
+> 
 ---
 
 ### Exercise 2: Vite Production Build Command
@@ -122,7 +122,7 @@ import cloneDeep from 'lodash-es/cloneDeep'; // Tree-shakable ES module import
 > ```bash
 > npm run build
 > ```
-
+> 
 ---
 
 ### Exercise 3: Tree Shaking Requirement
@@ -139,8 +139,8 @@ import cloneDeep from 'lodash-es/cloneDeep'; // Tree-shakable ES module import
 > ```text
 > ES Modules (ESM).
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

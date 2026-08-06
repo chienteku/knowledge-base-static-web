@@ -219,7 +219,7 @@ fn run_once<F: FnOnce()>(f: F) {
 >
 > 1. `FnMut(&Event)` allows closures to mutate internal captured state (like counter variables) across calls.
 > 2. `Box<dyn FnMut(&Event) + 'static>` enables heterogeneous listener storage in a single collection.
-
+> 
 ---
 
 ### Exercise 2: Single-Use Transaction Commit Engine (`FnOnce`)
@@ -262,7 +262,7 @@ fn run_once<F: FnOnce()>(f: F) {
 >
 > 1. `FnOnce(T)` takes full ownership of `context` on call.
 > 2. The closure cannot be called more than once, preserving single-use atomic transaction guarantees.
-
+> 
 ---
 
 ### Exercise 3: High-Throughput Request Middleware Pipeline (`Fn`)
@@ -303,7 +303,7 @@ fn run_once<F: FnOnce()>(f: F) {
 >
 > 1. `Fn(&str) -> bool` allows invoking filters immutably across iteration.
 > 2. `filters.iter().all(...)` processes closures in a short-circuiting read-only pass.
-
+> 
 ---
 
 ## 6. Related Terms

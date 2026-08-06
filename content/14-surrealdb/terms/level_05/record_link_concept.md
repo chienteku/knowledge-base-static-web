@@ -171,7 +171,7 @@ Create a user record `user:alice` and a post record `post:p1` containing a direc
 > 1. `user:alice` is a typed `record` ID value in SurrealDB, not a raw string literal `"user:alice"`.
 > 2. Stores a direct pointer reference to the target user record.
 > 3. Enables $O(1)$ pointer resolution and dot-notation traversal (`author.name`).
-
+> 
 ---
 
 ### Exercise 2: Resolving Record Link Properties via Dot-Notation
@@ -196,7 +196,7 @@ Query `post:p1` and project the author's name directly using dot-notation (`auth
 > 1. Dot-notation (`author.name`) automatically traverses the record link pointer to extract remote fields.
 > 2. Bypasses explicit SQL `JOIN` clauses.
 > 3. Executes pointer resolution in $O(1)$ constant time complexity.
-
+> 
 ---
 
 ### Exercise 3: Eager Pointer Expansion with `FETCH`
@@ -220,7 +220,7 @@ Eagerly expand the `author` record link pointer on `post:p1` into the full `user
 > 1. `FETCH author` replaces the pointer `user:alice` with the full `user` document inline in the query payload.
 > 2. Resolves record link pointers in a single database roundtrip.
 > 3. Eliminates client-side N+1 query loops.
-
+> 
 ---
 
 

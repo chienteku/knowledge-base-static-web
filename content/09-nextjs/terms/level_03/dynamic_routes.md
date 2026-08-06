@@ -145,21 +145,21 @@ Create `app/users/[id]/page.tsx` rendering dynamic user profile details.
 >   params: Promise<{ id: string }>;
 > }) {
 >   const { id } = await params;
-
-  return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold">User Profile: {id}</h1>
-    </main>
-  );
-}
-```
-
+> 
+>   return (
+>     <main className="p-6">
+>       <h1 className="text-2xl font-bold">User Profile: {id}</h1>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Folder naming `[id]` defines a dynamic route parameter segment matching any single URL string.
 > 2. `params` prop contains dynamic segment values parsed directly on the server.
 > 3. In Next.js 15 App Router, `params` is resolved asynchronously via `await params`.
-
+> 
 ---
 
 ### Exercise 2: Constraining Dynamic Parameter Types
@@ -176,28 +176,28 @@ Validate dynamic parameter `id` and throw a 404 error using `notFound()` if `id`
 >
 > ```tsx
 > import { notFound } from "next/navigation";
-
-export default async function NumericUserPage({
-  params
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  
-  if (isNaN(Number(id))) {
-    notFound(); // Triggers app/not-found.tsx UI
-  }
-
-  return <div>Numeric User ID: {id}</div>;
-}
-```
-
+> 
+> export default async function NumericUserPage({
+>   params
+> }: {
+>   params: Promise<{ id: string }>;
+> }) {
+>   const { id } = await params;
+>   
+>   if (isNaN(Number(id))) {
+>     notFound(); // Triggers app/not-found.tsx UI
+>   }
+> 
+>   return <div>Numeric User ID: {id}</div>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Calling `notFound()` immediately halts component rendering and triggers the nearest `not-found.tsx` view.
 > 2. Prevents processing invalid or non-numeric dynamic parameter values.
 > 3. Standard parameter validation guard pattern.
-
+> 
 ---
 
 ### Exercise 3: Prerendering Dynamic Parameter Routes
@@ -217,29 +217,25 @@ Prerender popular product IDs (`1`, `2`, `3`) at build time using `generateStati
 > export async function generateStaticParams() {
 >   return [{ id: "1" }, { id: "2" }, { id: "3" }];
 > }
-
-export default async function Product({
-  params
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  return <h1>Product #{id}</h1>;
-}
-```
-
+> 
+> export default async function Product({
+>   params
+> }: {
+>   params: Promise<{ id: string }>;
+> }) {
+>   const { id } = await params;
+>   return <h1>Product #{id}</h1>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `generateStaticParams()` compiles specified dynamic route parameter values into static HTML at build time.
 > 2. Speeds up page response times by serving pre-built HTML from CDN edge nodes.
 > 3. Unrendered dynamic IDs fall back to dynamic SSR on demand.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`page.tsx`](../level_02/page.md) — The file that receives the `params`.

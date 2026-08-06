@@ -236,7 +236,7 @@ Construct a resilient retry function using `.await` and deadline timeouts.
 >     for attempt in 1..=max_retries {
 >         // Wrap async function execution inside a deadline timeout and .await the result
 >         let result = timeout(per_attempt_timeout, mock_remote_fetch(attempt, Duration::from_millis(5))).await;
-
+> 
 > 
 >         match result {
 >             Ok(Ok(resp)) => return Ok(resp),
@@ -405,7 +405,7 @@ Construct a resilient retry function using `.await` and deadline timeouts.
 > >     loop {
 > >         tokio::select! {
 > >             biased;
-
+> 
 > 
 >             _ = &mut cancel_rx => {
 >                 break;
@@ -438,7 +438,7 @@ Construct a resilient retry function using `.await` and deadline timeouts.
 > 
 >         tokio::time::sleep(std::time::Duration::from_millis(10)).await;
 >         let _ = cancel_tx.send(());
-
+> 
 > 
 >         let res = handle.await.unwrap();
 >         assert_eq!(res.len(), 2);

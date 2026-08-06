@@ -120,7 +120,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 > (Though in modern CSS, developers often use the `::before` pseudo-element for better alignment control).
 > ```
 > - Is there a property specifically for images?
-
+> 
 ---
 
 
@@ -143,7 +143,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 > ```
 >
 > **Explanation:** Complete list resets remove default browser bullet marks and indentation padding.
-
+> 
 ---
 
 ### Exercise 3: Custom Bullet Marker Styling
@@ -163,7 +163,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 > ```
 >
 > **Explanation:** `::marker` pseudo-element styles list bullet points directly.
-
+> 
 ## 7. Related Terms
 - None!
 

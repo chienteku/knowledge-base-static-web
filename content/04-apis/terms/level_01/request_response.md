@@ -116,7 +116,7 @@ if (!res.ok) {
 > The server logs show nothing because the Request never physically reached the server. The Client failed to resolve the URL into an IP address (a DNS error), meaning the request died before leaving the user's computer/ISP.
 > ```
 > - If the server has no logs, did the request ever make it there?
-
+> 
 ---
 
 ### Exercise 2: HTTP Request Anatomy Identification

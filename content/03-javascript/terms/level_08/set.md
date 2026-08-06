@@ -166,7 +166,7 @@ console.log(mySet.size);
 > Just like Maps, Sets use strict equality (`===`) to check for duplicates. Because Objects are compared by memory reference, those are two completely different, unique Objects in memory, even though they look identical to a human. The Set accepts both!
 > ```
 > - Sets are extremely strict about what counts as a "duplicate".
-
+> 
 ---
 
 ### Exercise 2: Array Deduplication with `Set` and Spread
@@ -185,7 +185,7 @@ console.log(mySet.size);
 > ```
 >
 > **Explanation:** Passing arrays into `Set` constructors and spreading back into arrays removes duplicate items.
-
+> 
 ---
 
 ### Exercise 3: Set Operations (`has`, `add`, `delete`)
@@ -207,8 +207,8 @@ console.log(mySet.size);
 > ```
 >
 > **Explanation:** `Set` methods manage collections of unique values efficiently.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

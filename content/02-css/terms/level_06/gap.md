@@ -202,7 +202,7 @@ Why is Option B better?
 > Option B (`gap`) is better because it is scalable and maintainable. If you later add a third image to the container, `gap` will automatically put 30px between Image 2 and Image 3. If you used `margin`, you would have to go back and manually update the CSS for Image 2!
 > ```
 > - What happens if the layout changes in the future?
-
+> 
 ---
 
 
@@ -223,7 +223,7 @@ Why is Option B better?
 > ```
 >
 > **Explanation:** 2-value `gap` shorthand sets `row-gap` (10px) and `column-gap` (20px).
-
+> 
 ---
 
 ### Exercise 3: Flexbox Gap Support
@@ -240,7 +240,7 @@ Why is Option B better?
 > ```
 >
 > **Explanation:** `gap` adds space between flex items without requiring margin resets.
-
+> 
 ## 7. Related Terms
 - [CSS Grid (Concept) & `display: grid`](grid_concept.md) — The parent Grid layout container.
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — Defining track layout structures.

@@ -156,7 +156,7 @@ Demonstrate the difference between exact `NUMERIC` math vs approximate `DOUBLE P
 > 1. `NUMERIC` performs exact base-10 arithmetic, making it mandatory for accounting and prices.
 > 2. `FLOAT` (`REAL`, `DOUBLE PRECISION`) uses IEEE 754 binary floating-point representation, causing rounding artifacts.
 > 3. Use `FLOAT` only for scientific or sensor data where performance overrides exact decimal precision.
-
+> 
 ---
 
 ### Exercise 2: Aggregating Exact Monetary Sums with `SUM()`
@@ -182,7 +182,7 @@ Calculate the exact sum of all invoice amounts in table `invoices`.
 > 1. `SUM()` over `NUMERIC` or `INTEGER` columns returns an exact total sum.
 > 2. Accumulates exact balances across millions of rows without floating-point drift.
 > 3. Returns `NUMERIC` type output.
-
+> 
 ---
 
 ### Exercise 3: Currency Storage Strategy: Cents Integer Pattern
@@ -210,7 +210,7 @@ Compare storing prices as `NUMERIC(10, 2)` vs storing price as integer cents (`I
 > 1. Storing monetary amounts as integer cents (`INTEGER` or `BIGINT`) avoids decimal overhead completely.
 > 2. Integer arithmetic operates faster in CPU hardware than `NUMERIC` software decimal math.
 > 3. Popular pattern in modern payment systems (e.g. Stripe API).
-
+> 
 ---
 
 

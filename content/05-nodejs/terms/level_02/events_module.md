@@ -171,7 +171,7 @@ emitter.emit('error', new Error('Timeout error'));            // Ignored
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Creating Custom EventEmitter Class
@@ -192,7 +192,7 @@ emitter.emit('error', new Error('Timeout error'));            // Ignored
 > ```
 >
 > **Explanation:** Extending `EventEmitter` grants custom domain objects event publish/subscribe features.
-
+> 
 ---
 
 ### Exercise 3: Once vs On Listeners
@@ -209,7 +209,7 @@ emitter.emit('error', new Error('Timeout error'));            // Ignored
 > ```
 >
 > **Explanation:** `once()` executes the event listener function at most one time, automatically unsubscribing.
-
+> 
 ## 7. Related Terms
 - [Event Emitter](../level_05/event_emitter.md) — The conceptual implementation of this architecture.
 - [Streams (General Concept)](../level_06/streams.md) — Data-flow streams that inherit directly from `EventEmitter`.

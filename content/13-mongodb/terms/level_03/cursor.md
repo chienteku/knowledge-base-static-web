@@ -185,7 +185,7 @@ Iterate over query results for collection `users` using cursor `hasNext()` and `
 > 1. `find()` returns a stateful cursor pointer rather than loading all matching documents into client RAM.
 > 2. `cursor.hasNext()` and `cursor.next()` stream document batches from the server on demand.
 > 3. Prevents client memory exhaustion on multi-gigabyte query result sets.
-
+> 
 ---
 
 ### Exercise 2: Converting Cursors to In-Memory Arrays
@@ -210,7 +210,7 @@ Convert a small query result set into an in-memory JavaScript array using `toArr
 > 1. `toArray()` consumes all remaining cursor batches and loads documents into a JavaScript array.
 > 2. Use carefully only on small bounded query result sets (e.g. combined with `limit()`).
 > 3. Closes the cursor automatically when iteration completes.
-
+> 
 ---
 
 ### Exercise 3: Setting Cursor Batch Sizes
@@ -234,7 +234,7 @@ Configure cursor batch size to 100 documents per network roundtrip using `batchS
 > 1. `batchSize(n)` configures how many BSON documents `mongod` returns in each network response batch.
 > 2. Balances memory usage against network roundtrip frequency.
 > 3. Optimizes streaming performance for large ETL exports.
-
+> 
 ---
 
 

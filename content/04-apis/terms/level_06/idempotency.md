@@ -110,7 +110,7 @@ DELETE /api/notifications/45 HTTP/1.1 ; Idempotent target deletion
 > 2. Idempotent. (No matter how many times you tell it to turn ON, the end result is simply that the light is ON).
 > ```
 > - If you run the command 1 time vs 100 times, is the final state of the house exactly the same?
-
+> 
 ---
 
 ### Exercise 2: Idempotency Evaluation Matrix

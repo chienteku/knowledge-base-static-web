@@ -209,7 +209,7 @@ console.log("Result:", processedInput);
 > ```
 > - Inside the `catch` block, assign `processedInput = "Unknown"`.
 > - Inside the `finally` block, write `console.log("Done")`.
-
+> 
 ---
 
 ### Exercise 2: Custom Error Classes
@@ -234,7 +234,7 @@ console.log("Result:", processedInput);
 > ```
 >
 > **Explanation:** Extending `Error` creates custom domain error types for targeted exception catching.
-
+> 
 ---
 
 ### Exercise 3: Finally Block Cleanup Guarantee
@@ -257,8 +257,8 @@ console.log("Result:", processedInput);
 > ```
 >
 > **Explanation:** `finally` blocks execute unconditionally after `try/catch` completion.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

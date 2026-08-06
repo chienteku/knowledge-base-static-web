@@ -158,7 +158,7 @@ Proc macros transform AST TokenStream; MIR is generated internally by rustc!
 >
 > 1. Simulates MIR Control Flow Graph (CFG) basic block execution.
 > 2. Enables borrow checker lifetime analysis.
-
+> 
 ---
 
 ### Exercise 2: Borrow Checker Liveness Tracker Simulator
@@ -206,7 +206,7 @@ Proc macros transform AST TokenStream; MIR is generated internally by rustc!
 >
 > 1. Represents MIR variable liveness analysis used for lifetime checking.
 > 2. Determines exact scope drop points.
-
+> 
 ---
 
 ### Exercise 3: MIR Statement Simplifier
@@ -245,7 +245,7 @@ Proc macros transform AST TokenStream; MIR is generated internally by rustc!
 >
 > 1. Demonstrates MIR breaking complex expressions into explicit 3-address statements.
 > 2. Simplifies optimization passes.
-
+> 
 ---
 
 ## 6. Related Terms

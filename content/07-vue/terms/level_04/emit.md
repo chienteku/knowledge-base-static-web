@@ -137,7 +137,7 @@ emit('user-updated', user);
 > The child receives the `modelValue` prop, and emits `update:modelValue` when it changes!
 > ```
 > - Remember the deconstruction of `v-model` from Level 3?
-
+> 
 ---
 
 ### Exercise 2: defineEmits Validation Setup
@@ -158,7 +158,7 @@ emit('user-updated', user);
 >   }
 > });
 > ```
-
+> 
 ---
 
 ### Exercise 3: Parent Event Listening Syntax
@@ -175,8 +175,8 @@ emit('user-updated', user);
 > ```html
 > <ChildForm @submit-form="handleParentSubmit" />
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

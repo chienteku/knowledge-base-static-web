@@ -113,7 +113,7 @@ fetch('https://api.example.com/data');
 > The password is mathematically encrypted before it ever leaves your laptop's Wi-Fi antenna. The hacker captures the packet, but they only see scrambled nonsense.
 > ```
 > - What does the 'S' stand for?
-
+> 
 ---
 
 ### Exercise 2: HTTPS Upgrade Enforcement Header

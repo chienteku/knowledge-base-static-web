@@ -188,7 +188,7 @@ An `<svg>` is like a geometry textbook. It doesn't contain tiles; it contains in
 > }
 > ```
 > - Think about how you would change the background color of a `<div>` on hover. SVG is just as easy!
-
+> 
 ---
 
 
@@ -209,7 +209,7 @@ An `<svg>` is like a geometry textbook. It doesn't contain tiles; it contains in
 > ```
 >
 > **Explanation:** `<circle>` element draws vector circles using center `cx`/`cy` and radius `r`.
-
+> 
 ---
 
 ### Exercise 3: SVG Reusability with use Tag
@@ -226,7 +226,7 @@ An `<svg>` is like a geometry textbook. It doesn't contain tiles; it contains in
 > ```
 >
 > **Explanation:** `<use>` clones pre-defined SVG symbol definitions for efficient vector reusability.
-
+> 
 ## 7. Related Terms
 - [`<canvas>`](canvas.md) — The pixel-based alternative for graphics.
 - [`<map>` & `<area>` (Image Maps)](map_area.md) — Traditional pixel coordinate click targets.

@@ -290,7 +290,7 @@ Requirements:
 > 2. **Memory Ordering Invariants**: `Ordering::Relaxed` guarantees atomic operations on single memory variables without imposing cross-variable synchronization barriers, minimizing CPU bus lock overhead in telemetry pipelines.
 > 3. **Lifetime Invariants**: Returning `&'static TelemetryRegistry` guarantees that the telemetry collector remains valid for the entire executable duration, enabling worker threads to log metrics safely without lifetime parameter annotations.
 >
-
+> 
 ---
 
 ### Exercise 2: High-Frequency Trading Symbol & Routing Table with `LazyLock` & `'static` Slices
@@ -424,7 +424,7 @@ Requirements:
 > 2. **Ref-Counting & Lifetime Bounds**: Using `&'static str` as hash map keys ensures keys reside in the binary's read-only string table or leak-free global memory, satisfying `'static` lifetime requirements for global static collections.
 > 3. **Concurrency & Memory Address Stability**: `RwLock` enables multiple concurrent readers without contention while granting exclusive access for symbol registration. The memory location of `GLOBAL_REGISTRY` remains unchanged across all invocations, guaranteeing memory address invariance.
 >
-
+> 
 ---
 
 ### Exercise 3: Lock-Free Embedded SPSC Ring Buffer with Fixed Global `static` Storage
@@ -566,7 +566,7 @@ Requirements:
 > 2. **Safety of `UnsafeCell` in Static Items**: `UnsafeCell` disables Rust's default immutability alias rule for `static` storage. Implementing `Sync` is safe strictly under Single-Producer Single-Consumer constraints because producer and consumer threads access non-overlapping buffer indices at any given moment.
 > 3. **Fixed Address Guarantee**: Instantiating `pub static HARDWARE_QUEUE` places the queue buffer in the static BSS/Data section of memory, preventing heap fragmentation and guaranteeing pointer address immutability for low-level peripheral DMA access.
 >
-
+> 
 ---
 
 ## 6. Related Terms

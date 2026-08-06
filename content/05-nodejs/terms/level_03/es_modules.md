@@ -112,7 +112,7 @@ const { dynamicFn } = cjsPkg;
 > This single line tells Node.js: "Stop using legacy CommonJS. Treat all my .js files as modern ES Modules."
 > ```
 > - Which central configuration file controls the settings for your entire Node project?
-
+> 
 ---
 
 
@@ -133,7 +133,7 @@ const { dynamicFn } = cjsPkg;
 > ```
 >
 > **Explanation:** `"type": "module"` configures Node.js to interpret `.js` files as ES Modules.
-
+> 
 ---
 
 ### Exercise 3: Top-Level Await in ES Modules
@@ -151,7 +151,7 @@ const { dynamicFn } = cjsPkg;
 > ```
 >
 > **Explanation:** ES Modules support Top-Level Await natively without wrapping code in `(async () => {})()`.
-
+> 
 ## 7. Related Terms
 - [CommonJS (require, module.exports)](commonjs.md) — The legacy system that ESM is slowly replacing.
 - [package.json](../level_04/package_json.md) — Where you configure Node to use `"type": "module"`.

@@ -118,23 +118,23 @@ Refactor a blocking native `<script src="https://cdn.example.com/analytics.js"><
 >
 > ```tsx
 > import Script from "next/script";
-
-export default function Analytics() {
-  return (
-    <Script
-      src="https://cdn.example.com/analytics.js"
-      strategy="afterInteractive"
-    />
-  );
-}
-```
-
+> 
+> export default function Analytics() {
+>   return (
+>     <Script
+>       src="https://cdn.example.com/analytics.js"
+>       strategy="afterInteractive"
+>     />
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Native `<script>` tags block HTML parser execution, delaying page rendering and worsening FCP/LCP metrics.
 > 2. `strategy="afterInteractive"` loads the script in the background after the page becomes interactive.
 > 3. Prevents third-party scripts from blocking core page hydration.
-
+> 
 ---
 
 ### Exercise 2: Inlining Third-Party Initialization Scripts
@@ -151,27 +151,27 @@ Inline a third-party analytics configuration script using `<Script id="analytics
 >
 > ```tsx
 > import Script from "next/script";
-
-export default function InlineAnalytics() {
-  return (
-    <Script id="gtm-init" strategy="afterInteractive">
-      {`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-12345678-1');
-      `}
-    </Script>
-  );
-}
-```
-
+> 
+> export default function InlineAnalytics() {
+>   return (
+>     <Script id="gtm-init" strategy="afterInteractive">
+>       {`
+>         window.dataLayer = window.dataLayer || [];
+>         function gtag(){dataLayer.push(arguments);}
+>         gtag('js', new Date());
+>         gtag('config', 'UA-12345678-1');
+>       `}
+>     </Script>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Inline `<Script>` components require a unique `id` prop to prevent duplicate script execution across route navigations.
 > 2. Executes inline JavaScript safely without breaking React hydration.
 > 3. Standard method for Google Tag Manager or tracking pixel initialization.
-
+> 
 ---
 
 ### Exercise 3: Offloading Heavy Scripts to Web Workers (`strategy="worker"`)
@@ -188,29 +188,25 @@ Offload a heavy third-party tracking library to a background Web Worker using Pa
 >
 > ```tsx
 > import Script from "next/script";
-
-export default function WorkerScript() {
-  return (
-    <Script
-      src="https://cdn.example.com/heavy-tracker.js"
-      strategy="worker"
-    />
-  );
-}
-```
-
+> 
+> export default function WorkerScript() {
+>   return (
+>     <Script
+>       src="https://cdn.example.com/heavy-tracker.js"
+>       strategy="worker"
+>     />
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `strategy="worker"` offloads script execution to a background Web Worker via Partytown.
 > 2. Frees up the main browser UI thread for smooth 60fps rendering and input responsiveness.
 > 3. Dramatically improves Interaction to Next Paint (INP) web vital scores.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — The performance metrics impacted by script execution.

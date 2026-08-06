@@ -258,7 +258,7 @@ Simplify this layout blueprint line using the `repeat()` function.
 > ```
 > - Identify the repeating pattern. Here, the pattern consists of two track sizes: `100px 1fr`.
 > - Count how many times this two-column pattern is repeated.
-
+> 
 ---
 
 
@@ -280,7 +280,7 @@ Simplify this layout blueprint line using the `repeat()` function.
 > ```
 >
 > **Explanation:** `repeat(12, 1fr)` defines 12 equal-width column tracks.
-
+> 
 ---
 
 ### Exercise 3: Mixed Track Pattern Repeat
@@ -299,7 +299,7 @@ Simplify this layout blueprint line using the `repeat()` function.
 > ```
 >
 > **Explanation:** `repeat(3, 100px 1fr)` repeats multi-track patterns 3 times (6 columns total).
-
+> 
 ## 7. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent coordinate blueprint.
 - [`auto-fill` / `auto-fit`](grid_auto_fill_fit.md) — Keywords used inside `repeat()` to automate responsive grid counts.

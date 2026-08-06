@@ -161,7 +161,7 @@ Create an `accounts` table storing account balances up to $99,999,999.99 with ex
 > 1. `NUMERIC(10, 2)` defines 10 total significant digits (precision) with 2 digits after the decimal point (scale).
 > 2. Max positive value is `99,999,999.99`.
 > 3. Stores exact base-10 decimal representations, eliminating binary floating-point rounding errors.
-
+> 
 ---
 
 ### Exercise 2: Handling Scale Truncation and Rounding
@@ -189,7 +189,7 @@ Demonstrate PostgreSQL automatic rounding when inserting values exceeding declar
 > 1. PostgreSQL automatically rounds inserted values to match the column's defined scale (`12.3456` rounds to `12.35`).
 > 2. If the integer portion exceeds `precision - scale` (e.g. inserting `100,000,000.00` into `NUMERIC(10, 2)`), PostgreSQL throws a `numeric field overflow` error.
 > 3. Ensures predictable financial storage.
-
+> 
 ---
 
 ### Exercise 3: High-Precision Crypto Token Storage
@@ -217,7 +217,7 @@ Store cryptocurrency balances requiring 18 decimal places of fractional precisio
 > 1. `NUMERIC` supports arbitrary precision up to 1,000 digits before and after the decimal point.
 > 2. `NUMERIC(36, 18)` accommodates 18 whole digits and 18 fractional wei/satoshi digits.
 > 3. Standard choice for blockchain and high-precision financial ledgers.
-
+> 
 ---
 
 

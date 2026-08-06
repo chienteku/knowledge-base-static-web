@@ -146,7 +146,7 @@ async function processData() {
 > ```
 > - `var` declarations are "hoisted" to the top of their scope, but their assignments are not. The engine knows the variable exists, but its value is `undefined`.
 > - `let` is also hoisted, but resides in a "Temporal Dead Zone" until execution reaches the declaration.
-
+> 
 ---
 
 ### Exercise 2: Var Hoisting Behavior
@@ -166,7 +166,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `var` declarations hoist to top of function/global scope initialized as `undefined`.
-
+> 
 ---
 
 ### Exercise 3: Function Scope of Var
@@ -189,7 +189,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `var` is scoped strictly to containing functions.
-
+> 
 ---
 
 ## 7. Related Terms

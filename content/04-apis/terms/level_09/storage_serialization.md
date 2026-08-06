@@ -185,7 +185,7 @@ function getCart() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Safe LocalStorage Wrapper Helper

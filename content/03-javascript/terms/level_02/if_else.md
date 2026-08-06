@@ -161,7 +161,7 @@ async function processData() {
 > ```
 > - Use the modulo operator `%` to find the remainder of division.
 > - If `num % 2 === 0`, the number is even.
-
+> 
 ---
 
 ### Exercise 2: Chained Conditional Guarding
@@ -184,7 +184,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `else if` chains evaluate conditions top-to-bottom, executing the first matching condition block.
-
+> 
 ---
 
 ### Exercise 3: Early Return Pattern Refactoring
@@ -206,7 +206,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Early returns eliminate deeply nested `if...else` blocks, improving code readability.
-
+> 
 ---
 
 ## 7. Related Terms

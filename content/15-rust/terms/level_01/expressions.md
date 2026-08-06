@@ -375,7 +375,7 @@ pub fn compute_transaction_fee(
 >    Using `checked_mul` and `checked_add` inside `match` expressions ensures arithmetic overflow produces structured `FeeError::FeeOverflow` results rather than panicking in debug mode or wrapping silently in release mode.
 > 
 >
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy Binary Network Packet Decoder
@@ -602,7 +602,7 @@ pub fn parse_header(packet: &[u8; 8]) -> Result<PacketHeader, ParseError> {
 >    Passing `packet: &[u8; 8]` borrows an 8-byte array by shared immutable reference. Because all decoding is expression-driven and produces stack-allocated scalar primitives (`u8`, `u16`, `bool`), no references are held, no lifetime annotations are required, and zero heap allocations occur.
 > 
 >
-
+> 
 ---
 
 ### Exercise 3: Recursive AST Expression Evaluator with Contextual Symbol Lookup
@@ -831,7 +831,7 @@ Requirements:
 >    `eval_expr` receives `expr: &Expr` and `ctx: &Context` by shared immutable reference. Recursive calls pass references down the tree without taking ownership (`Box<Expr>` dereferences to `Expr` behind references). This permits evaluating the same AST multiple times across different threads or contexts without cloning the AST node allocations.
 > 
 >
-
+> 
 ---
 
 ## 6. Related Terms

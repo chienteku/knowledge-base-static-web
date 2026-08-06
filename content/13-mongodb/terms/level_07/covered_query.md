@@ -183,7 +183,7 @@ Construct a covered query on collection `users` using compound index `{ email: 1
 > 1. A query is covered when ALL requested fields in filter and projection exist inside the B-tree index.
 > 2. `_id: 0` is required unless `_id` is explicitly part of the index pattern.
 > 3. Server reads zero document pages from disk (`totalDocsExamined: 0`).
-
+> 
 ---
 
 ### Exercise 2: Inspecting Covered Query Diagnostics in `explain()`
@@ -213,7 +213,7 @@ Verify covered query status by inspecting `totalDocsExamined` in `explain("execu
 > 1. Covered queries report `totalDocsExamined: 0`.
 > 2. `totalKeysExamined` > 0 indicates B-tree index keys were read.
 > 3. Maximum possible read performance optimization.
-
+> 
 ---
 
 ### Exercise 3: Identifying Non-Covered Query Invalidation Reasons
@@ -239,7 +239,7 @@ Explain why including `profilePic` in projection invalidates covered query statu
 > 1. If any requested field is missing from index keys, MongoDB must fetch the full document payload from disk storage.
 > 2. Multikey indexes on arrays store separate index keys, preventing covered query execution.
 > 3. Design covered indexes for high-frequency lightweight lookups.
-
+> 
 ---
 
 

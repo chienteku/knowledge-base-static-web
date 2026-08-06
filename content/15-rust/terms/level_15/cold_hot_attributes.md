@@ -351,7 +351,7 @@ Implement a `#![no_std]`-compatible `TelemetryRingBuffer<T, const CAP: usize>` f
 > 2. **`#[cold]` LLVM Metadata**: Annotating `handle_overflow_cold` with `#[cold]` tells LLVM to attach low execution branch weights (`!prof !0`) to the `else` branch. LLVM arranges assembly code so the hot path (`self.count < CAP`) executes sequentially in-line, while the branch jump target points far away.
 > 3. **Register Pressure Elimination**: Calling a complex error handler inline forces the compiler to emit function prologues/epilogues in `push` to push callee-saved registers onto the stack. Marking the handler `#[inline(never)]` hides register allocation overhead inside `handle_overflow_cold`.
 > 4. **No-Std Target Compatibility**: The implementation uses fixed-size array buffers and primitive atomic-like counters without requesting heap allocation, making it fully usable in embedded bare-metal software architectures.
-
+> 
 ---
 
 ### Exercise 2: High-Throughput Packet Inspector with Out-of-Line Verification Diagnostics
@@ -485,7 +485,7 @@ Implement a `NetworkPacketParser` with:
 > 1. **Branch Predictor Fall-Through**: By organizing conditional checks (`if magic != Self::MAGIC_BYTES`) to delegate immediately to `#[cold]` helper functions, LLVM arranges the compiled machine code so that valid packets follow a contiguous linear path without branching jumps (`fall-through` execution).
 > 2. **Assembly Block Separation**: The three `_cold` functions are moved by the linker into a separate memory block (e.g. `.text.unlikely` section in ELF binaries). This minimizes the active working set in the CPU's Instruction Translation Lookaside Buffer (ITLB).
 > 3. **Pairing `#[cold]` with `#[inline(never)]`**: Standard Rust `#[cold]` discourages inlining, but LLVM heuristics can occasionally inline small cold functions anyway. Combining `#[cold]` with `#[inline(never)]` strictly guarantees out-of-line separation across all optimization levels.
-
+> 
 ---
 
 ### Exercise 3: Zero-Allocation Bump Allocator with Out-of-Line Arena Growth
@@ -631,7 +631,7 @@ Implement a `BumpAllocator` featuring:
 > 1. **Standard Library Vector Analogy**: This pattern matches Rust standard library's `Vec::push` and `RawVec::reserve_for_push` optimization, where vector reallocation logic is segregated into `#[cold] #[inline(never)]` helper methods.
 > 2. **Caller Inlining Optimization**: Because `alloc_fast` contains only pointer arithmetic and a single comparison, its machine code footprint is tiny. Linkers and LLVM can aggressively inline `alloc_fast` into caller loops without increasing caller binary size.
 > 3. **Memory Safety & Alignment**: The code preserves structural alignment rules using bitwise alignment masks (`(offset + align - 1) & !(align - 1)`), ensuring that returned raw pointers meet alignment contracts required by high-performance data structures.
-
+> 
 ---
 
 ## 6. Related Terms

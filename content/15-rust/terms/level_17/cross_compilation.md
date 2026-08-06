@@ -236,7 +236,7 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 > 1. **Target Triple Format (`arch-vendor-sys-abi`)**: Target triples encode hardware architecture, vendor, operating system, and ABI conventions. When cross-compiling for bare-metal ARM microcontrollers (`thumbv7em-none-eabihf`), `sys` is `"none"` (indicating no OS), and `eabihf` designates Hard-Float ABI.
 > 2. **Zero-Allocation Parsing (`#![no_std]`)**: By leveraging slice iteration (`triple.split('-')`) and `&'a str` borrowing, string analysis executes efficiently without requiring `std` or heap memory allocation (`alloc`).
 > 3. **Cargo Integration**: Custom build scripts (`build.rs`) inspect target components to pass architecture-specific flags (e.g. `-C link-arg=-Tlink.x`) to `rustc` during cross-compilation.
-
+> 
 ---
 
 ### Exercise 2: Endianness-Aware Serializer for Cross-Architecture Data Transfer
@@ -337,7 +337,7 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 > 1. **Cross-Architecture Endian Safety**: Native byte layout (`to_ne_bytes`) varies across targets. Using explicit `to_be_bytes()` and `from_be_bytes()` guarantees identical byte representation on Little-Endian (`x86_64`, ARM Cortex-M) and Big-Endian targets.
 > 2. **Bit Reinterpretation for Floating Point**: `f32::to_bits()` converts single-precision floating point numbers into bit patterns (`u32`), preventing platform floating-point representation differences or soft-float compiler discrepancies from corrupting binary payloads.
 > 3. **Fixed-Buffer Allocation**: Stack-allocated arrays `[u8; 16]` allow cross-compiled embedded binaries to execute without heap requirements.
-
+> 
 ---
 
 ### Exercise 3: Dual-Target Driver Abstraction via Conditional Compilation (`#[cfg]`)
@@ -439,10 +439,9 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 > 1. **Conditional Compilation (`#[cfg(...)]`)**: Rust allows conditional compilation based on target properties such as `target_os = "none"` (bare metal), `target_arch = "x86_64"`, or `target_env = "gnu"`.
 > 2. **Hardware MMIO vs Host Mocking**: On real microcontrollers (`target_os = "none"`), registers are controlled via `core::ptr::write_volatile` and `core::ptr::read_volatile`. On host developer workstations, `#[cfg(not(target_os = "none"))]` stubs out MMIO using host memory, enabling `cargo test` execution without physical hardware.
 > 3. **Portable Drivers**: This pattern enables developing peripheral drivers that compile cleanly both when cross-compiled for ARM/RISC-V targets and when tested on x86_64 host machines.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

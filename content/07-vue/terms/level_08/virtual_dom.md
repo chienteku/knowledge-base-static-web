@@ -103,7 +103,7 @@ const vnode = h('div', 'New Text');
 > It tags static HTML nodes with special flags. During the Virtual DOM diffing process, Vue looks at these flags and completely skips diffing the static parts! This makes Vue's Virtual DOM significantly faster than a purely runtime Virtual DOM.
 > ```
 > - Vue templates are compiled at build-time.
-
+> 
 ---
 
 ### Exercise 2: Vue h() Render Function Syntax
@@ -121,7 +121,7 @@ const vnode = h('div', 'New Text');
 > import { h } from 'vue';
 > const vnode = h('button', { class: 'btn', onClick: handleClick }, 'Click');
 > ```
-
+> 
 ---
 
 ### Exercise 3: Vue 3 Compiler Block Tree Optimization
@@ -138,8 +138,8 @@ const vnode = h('div', 'New Text');
 > ```text
 > PatchFlags enable compiler-informed fast-path VNode diffing.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

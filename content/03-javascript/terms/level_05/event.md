@@ -155,7 +155,7 @@ window.addEventListener("scroll", () => {
 > "scroll"
 > ```
 > - The event name is always a string, passed as the first argument.
-
+> 
 ---
 
 ### Exercise 2: Dispatching Custom Events
@@ -173,7 +173,7 @@ window.addEventListener("scroll", () => {
 > ```
 >
 > **Explanation:** `CustomEvent` transmits arbitrary data payloads via event listeners.
-
+> 
 ---
 
 ### Exercise 3: Event Once Parameter Flag
@@ -190,8 +190,8 @@ window.addEventListener("scroll", () => {
 > ```
 >
 > **Explanation:** `{ once: true }` automatically removes event listeners after initial execution.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -194,7 +194,7 @@ Append a new log entry to a user's `recentActivity` array while capping the maxi
 > 1. `$push` appends elements to array fields atomically.
 > 2. `$slice: -5` caps the array length, keeping only the 5 newest elements.
 > 3. Maintains array size bounds directly at the storage engine tier.
-
+> 
 ---
 
 ### Exercise 2: Removing Specific Array Items with `$pull`
@@ -221,7 +221,7 @@ Remove tag `"deprecated"` from all product `tags` arrays across the entire colle
 > 1. `$pull` removes all instances of a matching value from array fields.
 > 2. Operates across single values or complex object filter criteria.
 > 3. Eliminates client-side array manipulation.
-
+> 
 ---
 
 ### Exercise 3: Deduplicated Insertion with `$addToSet`
@@ -248,7 +248,7 @@ Add category `"electronics"` to a product's `categories` array without creating 
 > 1. `$addToSet` treats arrays as sets, ignoring duplicates.
 > 2. Guarantees unique array elements without client-side checking.
 > 3. Fast atomic array updates.
-
+> 
 ---
 
 

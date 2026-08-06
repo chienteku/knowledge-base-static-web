@@ -164,7 +164,7 @@ child.on('message', (result) => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Spawning Long-Running Child Process
@@ -185,7 +185,7 @@ child.on('message', (result) => {
 > ```
 >
 > **Explanation:** `spawn()` returns child process object with readable stdout/stderr streams.
-
+> 
 ---
 
 ### Exercise 3: Forking Node.js Child Scripts
@@ -202,7 +202,7 @@ child.on('message', (result) => {
 > ```
 >
 > **Explanation:** `fork()` is a specialized `spawn()` variant that opens an IPC channel between parent and child Node processes.
-
+> 
 ## 7. Related Terms
 - [Worker Threads](worker_threads.md) — Multi-threading inside a single OS process.
 - [The cluster Module](cluster_module.md) — Forking duplicate server instances across CPU cores.

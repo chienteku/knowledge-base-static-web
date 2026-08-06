@@ -181,7 +181,7 @@ A web client subscribes to a live query on table `order`, receives a subscriptio
 > 1. `LIVE SELECT` returns a unique UUID identifying the active real-time subscription channel.
 > 2. `KILL "<uuid>"` terminates the background live query stream on the server.
 > 3. Frees WebSocket connection memory and server listener resources.
-
+> 
 ---
 
 ### Exercise 2: Terminating Live Queries from JavaScript SDK
@@ -200,18 +200,18 @@ Write the JavaScript SDK code to unsubscribe from an active live query using `db
 > const queryUuid = await db.live("order", (action, result) => {
 >   console.log("Order update:", action, result);
 > });
-
-// Later, unsubscribe and release resources
-await db.kill(queryUuid);
-console.log("Unsubscribed live query subscription.");
-```
-
+> 
+> // Later, unsubscribe and release resources
+> await db.kill(queryUuid);
+> console.log("Unsubscribed live query subscription.");
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. SDK client `db.kill(uuid)` sends a `KILL` statement over the WebSocket channel.
 > 2. Removes the live query listener on the SurrealDB server process.
 > 3. Prevents memory leaks in single-page web apps when UI components unmount.
-
+> 
 ---
 
 ### Exercise 3: Automatic Server-Side Live Query Cleanup
@@ -236,7 +236,7 @@ Explain what happens to active live queries when a client WebSocket connection d
 > 1. SurrealDB binds live query subscriptions to active client connection session IDs.
 > 2. Automatically cleans up orphan live queries when client sockets disconnect.
 > 3. Protects database server memory against leaked subscriptions.
-
+> 
 ---
 
 

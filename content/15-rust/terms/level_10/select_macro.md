@@ -277,16 +277,16 @@ Build an event multiplexer loop using `tokio::select!`.
 > ---
 > 
 > ### Exercise 2: Biased Priority Request Dispatcher
-
-**Scenario**: In high-priority microservice routers, high-priority emergency alerts must take precedence over standard background tasks when both are available simultaneously in incoming channels. Tokio's `biased;` directive inside `tokio::select!` forces top-to-bottom branch evaluation order.
-
-Construct a priority dispatcher using `tokio::select!` with `biased;`.
-
-**Requirements**:
-1. Write `async fn run_dispatcher(high_rx: &mut mpsc::Receiver<String>, low_rx: &mut mpsc::Receiver<String>, max_iterations: usize) -> Vec<String>`.
-2. Use `biased;` inside `tokio::select!` to prioritize `high_rx` before `low_rx`.
-3. Add unit tests verifying priority handling order.
-
+> 
+> **Scenario**: In high-priority microservice routers, high-priority emergency alerts must take precedence over standard background tasks when both are available simultaneously in incoming channels. Tokio's `biased;` directive inside `tokio::select!` forces top-to-bottom branch evaluation order.
+> 
+> Construct a priority dispatcher using `tokio::select!` with `biased;`.
+> 
+> **Requirements**:
+> 1. Write `async fn run_dispatcher(high_rx: &mut mpsc::Receiver<String>, low_rx: &mut mpsc::Receiver<String>, max_iterations: usize) -> Vec<String>`.
+> 2. Use `biased;` inside `tokio::select!` to prioritize `high_rx` before `low_rx`.
+> 3. Add unit tests verifying priority handling order.
+> 
 > [!check]- Answer
 > ```rust
 > use tokio::sync::mpsc;
@@ -344,16 +344,16 @@ Construct a priority dispatcher using `tokio::select!` with `biased;`.
 > ---
 > 
 > ### Exercise 3: Hedged RPC Request Race with Dynamic Workers & Fallback
-
-**Scenario**: High-availability systems issue "hedged" parallel requests to multiple redundant RPC nodes. Whichever node responds first provides the result, while slower or hanging requests are cancelled.
-
-Build a hedged RPC dispatcher using `futures::future::select_all` combined with `tokio::select!`.
-
-**Requirements**:
-1. Write `async fn mock_rpc(node_id: u32, delay_ms: u64) -> String`.
-2. Write `async fn execute_hedged_rpc(node_delays: Vec<(u32, u64)>, timeout_ms: u64) -> Result<String, &'static str>`.
-3. Add unit tests asserting fastest node response win and timeout handling.
-
+> 
+> **Scenario**: High-availability systems issue "hedged" parallel requests to multiple redundant RPC nodes. Whichever node responds first provides the result, while slower or hanging requests are cancelled.
+> 
+> Build a hedged RPC dispatcher using `futures::future::select_all` combined with `tokio::select!`.
+> 
+> **Requirements**:
+> 1. Write `async fn mock_rpc(node_id: u32, delay_ms: u64) -> String`.
+> 2. Write `async fn execute_hedged_rpc(node_delays: Vec<(u32, u64)>, timeout_ms: u64) -> Result<String, &'static str>`.
+> 3. Add unit tests asserting fastest node response win and timeout handling.
+> 
 > [!check]- Answer
 > ```rust
 > use std::time::Duration;

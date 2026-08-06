@@ -422,7 +422,7 @@ Design a hierarchical error handling architecture:
 > 3. **Implicit Conversion via `From` & `?`**: Implementing `From<SubError> for GatewayError` allows the `?` operator to perform zero-cost implicit conversions. When `process_packet` returns `Err(StorageError::...)`, `?` invokes `From::from` to wrap it seamlessly into `GatewayError::Storage`.
 > 4. **Dynamic Dispatch & Lifetime Bound `'static`**: Trait objects returned by `source()` carry a lifetime bound of `'static`. This enables safe downcasting at runtime via `.downcast_ref::<TargetType>()` without running into lifetime ambiguity or dangling references.
 > 5. **Memory Layout & Zero-Cost Abstractions**: Enum discriminant tags and payload fields are compiled into tight memory structures. Matching on enum errors incurs zero runtime overhead compared to string allocation or dynamic exception throwing.
-
+> 
 ---
 
 ### Exercise 2: Contextual Rich Error Struct with Source Chaining & Thread Safety
@@ -624,7 +624,7 @@ Construct a production-ready struct-based error type:
 > 2. **Thread Safety with `Send + Sync + 'static`**: Trait objects stored in asynchronous or multi-threaded pipelines (e.g., Tokio or `std::thread`) must satisfy `Box<dyn Error + Send + Sync + 'static>`. `Send` permits transferring ownership across thread boundaries, `Sync` allows shared access across threads, and `'static` guarantees the error owns all its data without dangling references.
 > 3. **Trait Object Downcasting**: The trait method `source(&self)` returns `Option<&(dyn Error + 'static)>`. Consumers can inspect lower-level causes at runtime using `.downcast_ref::<T>()`, allowing callers to extract specific operational errors (like `std::io::Error`) from opaque trait object wrappers.
 > 4. **Builder Pattern Ergonomics**: Method chaining via `with_source(...)` allows callers to incrementally attach low-level root causes without polluting primary constructor signatures.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Config Loader with Parsing & Validation Error Diagnostics
@@ -839,7 +839,7 @@ Build a complete configuration parsing error domain:
 > 2. **Delegating Causal Sources**: By returning `Some(source)` from `Error::source()` for `ParseInt`, tools like error loggers can extract the inner `ParseIntError` (e.g., "invalid digit found in string") alongside the application-level context string ("Invalid integer configuration for key 'port'").
 > 3. **Non-Fatal Error Recovery Logic**: Exposing inspection helper methods like `is_fatal()` or `key()` allows upstream callers to make granular control flow decisions—such as applying default fallback values for non-fatal errors while aborting on fatal configuration errors.
 > 4. **Zero Allocation Matching**: Pattern matching on `ConfigError` variants uses static type checking and zero runtime memory allocations, contrasting with string-parsing error systems.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -115,16 +115,16 @@ Configure strict React mode, custom redirects, and experimental options in `next
 >     ];
 >   }
 > };
-
-module.exports = nextConfig;
-```
-
+> 
+> module.exports = nextConfig;
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `next.config.js` is the master configuration file for Next.js build and runtime behavior.
 > 2. `redirects()` executes server-side 301/302 redirects before routing logic.
 > 3. Central entry point for framework customization.
-
+> 
 ---
 
 ### Exercise 2: Building Production Output with `next build`
@@ -147,13 +147,13 @@ Execute the Next.js production build process and analyze output compilation logs
 > # ○  (Static)   prerendered as static content
 > # ƒ  (Dynamic)  server-rendered on demand using Node.js
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `next build` compiles TypeScript, bundles Server/Client components, and pre-renders static routes.
 > 2. Generates optimized build output inside `.next/` directory.
 > 3. Distinguishes static routes (`○`) from dynamic SSR routes (`ƒ`).
-
+> 
 ---
 
 ### Exercise 3: Inspecting `.next` Build Artifacts
@@ -173,19 +173,15 @@ Explain the purpose of `.next/server` and `.next/static` build directories.
 > - .next/server/: Compiled React Server Components and server API routes.
 > - .next/static/: Client JavaScript bundles, CSS stylesheets, and pre-rendered HTML.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `.next/server/` contains Node.js server code executed at runtime.
 > 2. `.next/static/` contains public assets uploaded to CDN edge nodes.
 > 3. Standard Next.js compilation artifact structure.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Dynamic Rendering (SSR)](../level_08/ssr.md) — The core performance feature of Next.js.

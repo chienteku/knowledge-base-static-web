@@ -161,7 +161,7 @@ An analytics counter tracks page view counts in table `page_metric`. When insert
 > 1. `ON DUPLICATE KEY UPDATE` converts key collision failures into atomic record updates.
 > 2. `views += 1` increments the existing counter field when a primary key collision occurs.
 > 3. Equivalent to PostgreSQL `ON CONFLICT (id) DO UPDATE`.
-
+> 
 ---
 
 ### Exercise 2: Overwriting Specific Fields on Key Collision
@@ -189,7 +189,7 @@ A user synchronization job receives user profile updates. If a user record `user
 > 1. Updates specified fields (`last_login`) on conflict without overwriting unmentioned fields (`created_at`).
 > 2. Eliminates the need for separate read-then-update application logic.
 > 3. Operates within an atomic write transaction.
-
+> 
 ---
 
 ### Exercise 3: Bulk Upserting Key Array Batches
@@ -218,7 +218,7 @@ A sync job processes a batch of product records where some products exist and ot
 > 1. `$input.price` references the incoming value from the insertion payload.
 > 2. Bulk upserts process mixed batches of new insertions and existing updates in a single roundtrip.
 > 3. Maximizes data ingestion throughput for synchronization jobs.
-
+> 
 ---
 
 

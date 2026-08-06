@@ -138,7 +138,7 @@ function fetchUser(callback) {
 > callback(new Error("API Failed"), null);
 > ```
 > - Remember the "Error-First" rule! What is argument 1? What is argument 2?
-
+> 
 ---
 
 
@@ -159,7 +159,7 @@ function fetchUser(callback) {
 > ```
 >
 > **Explanation:** `async/await` flattens nested callback pyramids into clean sequential code.
-
+> 
 ---
 
 ### Exercise 3: Error-First Callback Check
@@ -179,7 +179,7 @@ function fetchUser(callback) {
 > ```
 >
 > **Explanation:** Checking `if (err)` first enforces Node.js error-first safety checks.
-
+> 
 ## 7. Related Terms
 - [Promisification (util.promisify)](promisification.md) — How you convert old callback code into modern Promise code.
 - [The Event Loop & Libuv](../level_01/event_loop.md) — Related concept: The Event Loop & Libuv.

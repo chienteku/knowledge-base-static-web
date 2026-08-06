@@ -182,7 +182,7 @@ Model a single `payment_methods` collection storing Credit Card, PayPal, and Cry
 > 1. The Polymorphic Pattern uses a discriminator field (`type`) to distinguish different document structures in a single collection.
 > 2. Replaces separate `credit_cards` and `paypals` SQL tables with a unified polymorphic collection.
 > 3. Simplifies payment processing queries.
-
+> 
 ---
 
 ### Exercise 2: Querying Specific Polymorphic Discriminator Subtypes
@@ -209,7 +209,7 @@ Query `payment_methods` for all `paypal` accounts belonging to a specific user.
 > 1. Filtering by discriminator field `type` isolates specific subtype schemas.
 > 2. Compound index `{ userId: 1, type: 1 }` speeds up type-filtered queries.
 > 3. Guarantees fast, typed document lookups.
-
+> 
 ---
 
 ### Exercise 3: Single-Collection Indexing for Polymorphic Models
@@ -236,7 +236,7 @@ Create a partial secondary index on `paypalEmail` applying ONLY to documents whe
 > 1. Partial indexes (`partialFilterExpression`) index ONLY documents matching the discriminator subtype.
 > 2. Reduces index storage size by omitting non-matching polymorphic document types.
 > 3. Essential pattern for optimizing polymorphic collection indexes.
-
+> 
 ---
 
 

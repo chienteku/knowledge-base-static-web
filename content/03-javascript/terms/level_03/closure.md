@@ -170,7 +170,7 @@ Create two greeters: `sayHello = createGreeter("Hello")` and `sayHowdy = createG
 > ```
 > - `function createGreeter(greeting) { return function(name) { console.log(...) } }`
 > - Each time you call `createGreeter`, it creates a *new*, independent closure backpack.
-
+> 
 ---
 
 ### Exercise 2: Private Variable Counter Closure
@@ -200,7 +200,7 @@ Create two greeters: `sayHello = createGreeter("Hello")` and `sayHowdy = createG
 > ```
 >
 > **Explanation:** Closures retain access to outer function scope variables even after parent functions return.
-
+> 
 ---
 
 ### Exercise 3: Function Factory with Closures
@@ -221,7 +221,7 @@ Create two greeters: `sayHello = createGreeter("Hello")` and `sayHowdy = createG
 > ```
 >
 > **Explanation:** Closures capture configuration arguments (`factor`) across multiple subsequent invocations.
-
+> 
 ---
 
 ## 7. Related Terms

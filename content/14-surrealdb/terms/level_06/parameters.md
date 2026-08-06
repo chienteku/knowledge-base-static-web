@@ -155,7 +155,7 @@ Inspect active session context parameters (`$session`, `$auth`, `$scope`) inside
 > 1. `$session` holds active connection session metadata (namespace, database, connection ID).
 > 2. `$auth` holds authenticated user record document context.
 > 3. Used inside table `PERMISSIONS` clauses to enforce row-level security.
-
+> 
 ---
 
 ### Exercise 2: Defining Custom Script Parameters with `LET`
@@ -185,7 +185,7 @@ Define custom parameters `$min_price` and `$max_price` to filter products dynami
 > 1. Custom parameters (`$name`) store pre-evaluated expressions or literals.
 > 2. Prevents SQL injection risks by parameterizing query filters.
 > 3. Scoped to the current session or script execution context.
-
+> 
 ---
 
 ### Exercise 3: Modifying Session Scope with `USE` Parameters
@@ -209,7 +209,7 @@ Switch active session namespace and database context using `USE NS` and `USE DB`
 > 1. `USE NS ... DB ...` updates active `$session.ns` and `$session.db` parameters.
 > 2. Targets subsequent queries to specified tenant scopes.
 > 3. Manages multi-tenant session contexts dynamically.
-
+> 
 ---
 
 

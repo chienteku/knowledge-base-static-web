@@ -184,7 +184,7 @@ Create an `orders` table referencing `users(id)` with explicit foreign key const
 > 1. `FOREIGN KEY (user_id) REFERENCES users(id)` links child order rows to parent user rows.
 > 2. Rejects `INSERT` or `UPDATE` attempts with invalid `user_id` values that do not exist in `users`.
 > 3. Enforces referential integrity at the database engine tier.
-
+> 
 ---
 
 ### Exercise 2: Adding Foreign Keys to Existing Tables
@@ -210,7 +210,7 @@ Add a foreign key constraint to an existing `posts` table linking `author_id` to
 > 1. `ALTER TABLE ... ADD CONSTRAINT` verifies that all existing `author_id` values in `posts` exist in `users`.
 > 2. Automatically fails if orphan `author_id` values exist.
 > 3. Schema hardening migration step.
-
+> 
 ---
 
 ### Exercise 3: Handling Foreign Key Violation Errors (23503)
@@ -240,7 +240,7 @@ Catch PostgreSQL Error Code `23503` (`foreign_key_violation`) when an applicatio
 > 1. PostgreSQL throws Error Code `23503` (`foreign_key_violation`) when a foreign key link fails to resolve.
 > 2. Driver exposes `err.detail` specifying the failing key pair.
 > 3. Maps to HTTP 400 Bad Request responses in application APIs.
-
+> 
 ---
 
 

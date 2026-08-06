@@ -147,8 +147,8 @@ Content-Type: text/html; charset=utf-8
 
 > [!check]- Answer
 > - **5 bytes** (Calculation: `C` = 1 byte, `a` = 1 byte, `f` = 1 byte, `é` = 2 bytes. Total = 5 bytes. Note: calling `"Café".length` in JS returns `4`, showing the byte mismatch).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: UTF-8 Byte Length Variation

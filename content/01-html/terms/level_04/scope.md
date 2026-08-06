@@ -191,7 +191,7 @@ Using row and column header scopes in the same table:
 > ```
 > - The top row labels columns vertically downwards (`col`).
 > - The cell "Write report" labels its horizontal row of details (`row`).
-
+> 
 ---
 
 
@@ -214,7 +214,7 @@ Using row and column header scopes in the same table:
 > ```
 >
 > **Explanation:** `scope="col"` sets column scope; `scope="row"` sets row scope for screen readers.
-
+> 
 ---
 
 ### Exercise 3: Colgroup Scope Usage
@@ -231,7 +231,7 @@ Using row and column header scopes in the same table:
 > ```
 >
 > **Explanation:** `scope="colgroup"` associates a header spanning multiple columns with the entire group.
-
+> 
 ## 7. Related Terms
 - [`<th>` (Table Header)](th.md) — The tag that hosts the `scope` attribute.
 - [`<caption>`](caption.md) — The table title helper.

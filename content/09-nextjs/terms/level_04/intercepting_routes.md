@@ -132,23 +132,23 @@ Create an intercepting modal route `app/feed/(..)photo/[id]/page.tsx` displaying
 >   params: Promise<{ id: string }>;
 > }) {
 >   const { id } = await params;
-
-  return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg max-w-lg">
-        <h2>Photo Modal #{id}</h2>
-      </div>
-    </div>
-  );
-}
-```
-
+> 
+>   return (
+>     <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
+>       <div className="bg-white p-6 rounded-lg max-w-lg">
+>         <h2>Photo Modal #{id}</h2>
+>       </div>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `(..)` matches 1 level up in the segment hierarchy, intercepting `/photo/[id]` when navigated to from `/feed`.
 > 2. Renders photo content as a modal overlay on top of the active feed layout.
 > 3. Reloading or deep linking directly to `/photo/123` bypasses the modal and loads full page view.
-
+> 
 ---
 
 ### Exercise 2: Combining Intercepting Routes with Parallel Routes
@@ -180,13 +180,13 @@ Combine parallel slot `@modal` with intercepting route `(..)photo/[id]` to rende
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Parallel route slot `@modal` acts as a target container for intercepted routes.
 > 2. Allows opening modal overlays without breaking layout components.
 > 3. Standard pattern for Instagram-style or Pinterest-style modal feeds.
-
+> 
 ---
 
 ### Exercise 3: Handling Hard Page Refresh Fallbacks
@@ -207,19 +207,15 @@ Provide `default.tsx` fallback UI for parallel modal slots when users perform a 
 >   return null;
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Next.js uses `default.tsx` to render fallback UI when a parallel slot cannot be matched during hard refreshes.
 > 2. Returning `null` hides the empty modal slot container during initial page loads.
 > 3. Essential guard for parallel intercepting routes.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Parallel Routes (`@folder`)](parallel_routes.md) — The mechanism used to display the intercepted content without losing the background page.

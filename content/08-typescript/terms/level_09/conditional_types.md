@@ -90,18 +90,18 @@ Create a conditional type `IsString<T>` that evaluates to `true` if `T` extends 
 >
 > ```typescript
 > type IsString<T> = T extends string ? true : false;
-
-type T1 = IsString<string>;  // true
-type T2 = IsString<number>;  // false
-type T3 = IsString<"hello">; // true (literal string extends string)
-```
-
+> 
+> type T1 = IsString<string>;  // true
+> type T2 = IsString<number>;  // false
+> type T3 = IsString<"hello">; // true (literal string extends string)
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Conditional types (`T extends U ? X : Y`) evaluate type relationships at compile time using ternary branching logic.
 > 2. Tests whether type `T` is assignable to candidate type `U`.
 > 3. Fundamental building block for type-level computation.
-
+> 
 ---
 
 ### Exercise 2: Distributive Conditional Types over Unions
@@ -118,18 +118,18 @@ Demonstrate how conditional types distribute automatically over union inputs (`T
 >
 > ```typescript
 > type ToArray<T> = T extends any ? T[] : never;
-
-type UnionResult = ToArray<string | number>;
-// Distributes as: ToArray<string> | ToArray<number>
-// Evaluates to: string[] | number[]
-```
-
+> 
+> type UnionResult = ToArray<string | number>;
+> // Distributes as: ToArray<string> | ToArray<number>
+> // Evaluates to: string[] | number[]
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. When checked type parameter `T` is a naked type variable, conditional types distribute automatically across union members.
 > 2. `ToArray<string | number>` is evaluated as `ToArray<string> | ToArray<number>`.
 > 3. Enables powerful union type filtering and transformation.
-
+> 
 ---
 
 ### Exercise 3: Preventing Distributive Behavior with Tuple Wrapping
@@ -146,17 +146,17 @@ Prevent distributive union behavior in conditional types by wrapping generic par
 >
 > ```typescript
 > type NonDistributiveToArray<T> = [T] extends [any] ? T[] : never;
-
-type SingleResult = NonDistributiveToArray<string | number>;
-// Evaluates to: (string | number)[]
-```
-
+> 
+> type SingleResult = NonDistributiveToArray<string | number>;
+> // Evaluates to: (string | number)[]
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Wrapping `[T]` in a tuple prevents automatic union distribution over conditional type branches.
 > 2. `NonDistributiveToArray<string | number>` treats `string | number` as a single unified type, outputting `(string | number)[]`.
 > 3. Crucial technique when union distribution is undesirable.
-
+> 
 ---
 
 

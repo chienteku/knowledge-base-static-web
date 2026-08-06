@@ -109,20 +109,20 @@ Demonstrate compile-time type erasure by inspecting TypeScript source code vs tr
 >   return `Hello, ${user.name}`;
 > }
 > ```
-
+> 
 > ```javascript
 > // Transpiled Output (main.js):
 > function greet(user) {
 >   return `Hello, ${user.name}`;
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript interface declarations and type annotations exist strictly at compile time.
 > 2. `tsc` performs "type erasure", stripping all type syntax to output clean JavaScript.
 > 3. Zero runtime performance penalty or bundle weight from type annotations.
-
+> 
 ---
 
 ### Exercise 2: Strict Mode Configuration in Project Root
@@ -144,13 +144,13 @@ Enable strict type checking in `tsconfig.json` to enforce strict null checks and
 >   }
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `"strict": true` enables all strict type-checking flags in the TypeScript compiler.
 > 2. Prevents implicit `any` parameter types and forces explicit null handling.
 > 3. Baseline requirement for professional TypeScript development.
-
+> 
 ---
 
 ### Exercise 3: Platform Ecosystem Architecture (TS vs JS)
@@ -171,13 +171,13 @@ Formulate an architectural overview matrix explaining TypeScript's role as a com
 > - Compilation Target: Transpiles down to any ECMAScript target version (ES5, ES6, ES2022).
 > - Tooling Layer: Powers rich IDE IntelliSense, refactoring, and auto-imports across modern code editors.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Every valid JavaScript program is syntactically valid TypeScript code.
 > 2. TypeScript adds optional static type annotations on top of ECMAScript standards.
 > 3. Enhances developer experience and codebase maintainability at scale.
-
+> 
 ---
 
 

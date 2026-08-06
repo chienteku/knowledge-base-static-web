@@ -161,7 +161,7 @@ let d = Duration::from_millis(5); // Clean explicit constructor!
 >
 > 1. Uses `Instant::now()` monotonic clock to measure execution time accurately.
 > 2. Returns result payload alongside high-precision `Duration`.
-
+> 
 ---
 
 ### Exercise 2: Deadline Expiration Checker
@@ -213,7 +213,7 @@ let d = Duration::from_millis(5); // Clean explicit constructor!
 > #### Technical Explanation
 >
 > 1. Adds `Duration` to `Instant` to compute future deadline target monotonic points.
-
+> 
 ---
 
 ### Exercise 3: Duration Unit Formatter
@@ -255,7 +255,7 @@ let d = Duration::from_millis(5); // Clean explicit constructor!
 > #### Technical Explanation
 >
 > 1. Uses `Duration` unit accessors (`as_millis()`, `as_secs_f64()`).
-
+> 
 ---
 
 ## 5. Related Terms

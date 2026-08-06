@@ -199,7 +199,7 @@ Traverse an org chart hierarchy in table `employees` starting from CEO `id = 1` 
 > 1. `WITH RECURSIVE` combines an Anchor query with a Recursive query via `UNION ALL`.
 > 2. The recursive member joins the source table to the CTE result set from the previous iteration step.
 > 3. Continues execution until the recursive member returns 0 new rows (base case).
-
+> 
 ---
 
 ### Exercise 2: Generating Number Sequences with Recursive CTEs
@@ -228,7 +228,7 @@ Generate a sequence of numbers from 1 to 10 using a Recursive CTE.
 > 1. Anchor member initializes counter `n = 1`.
 > 2. Recursive member increments `n + 1` while predicate condition `n < 10` remains `TRUE`.
 > 3. Generates sequential series.
-
+> 
 ---
 
 ### Exercise 3: Preventing Infinite Recursion Loops with CYCLE Clauses
@@ -263,7 +263,7 @@ Prevent infinite recursion loops caused by cyclic data references (`A -> B -> A`
 > 1. Cyclic parent links (e.g. employee A manages B, B manages A) cause infinite recursion loops without cycle detection.
 > 2. `CYCLE id SET is_cycle USING path` tracks visited key paths and halts execution if a duplicate ID is encountered.
 > 3. Safe graph traversal feature in PostgreSQL 14+.
-
+> 
 ---
 
 

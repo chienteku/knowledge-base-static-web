@@ -410,7 +410,7 @@ Implement a production-grade `CommentLexer` engine that scans a Rust source stre
 > 3. **Memory & Performance Tradeoffs:**
 >    - Using slice pointers or character iteration allows single-pass scanning in $\mathcal{O}(N)$ time complexity, allocating strings only when emitting tokens.
 >
-
+> 
 ---
 
 ### Exercise 2: Microservice API Route Schema & Metadata Doc-Parser
@@ -626,7 +626,7 @@ Implement an `ApiDocParser` that accepts a sequence of doc comment strings attac
 > 3. **Error Handling & Failure Modes:**
 >    - Handlers missing a valid `@route` tag return `Err(ParseError::MissingRouteTag)`. Malformed HTTP methods (e.g. `INVALID /path`) return `ParseError::InvalidHttpMethod`.
 >
-
+> 
 ---
 
 ### Exercise 3: Automated Doc-Test Extraction & Synthetic Harness Compiler Engine
@@ -829,7 +829,7 @@ Build a `DocTestExtractor` tool for an IDE documentation plugin or CI linter tha
 > 3. **Fence Attribute Invariants:**
 >    - Code block attributes control CI execution: `should_panic` expects a runtime panic, `no_run` compiles without executing, and `compile_fail` expects a compilation error.
 >
-
+> 
 ---
 
 ## 6. Related Terms

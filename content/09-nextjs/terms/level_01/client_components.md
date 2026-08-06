@@ -123,29 +123,29 @@ Create an interactive counter component using `"use client"` directive and `useS
 >
 > ```tsx
 > "use client";
-
-import { useState } from "react";
-
-export default function Counter() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <button
-      onClick={() => setCount(count + 1)}
-      className="px-4 py-2 bg-blue-600 text-white rounded"
+> 
+> import { useState } from "react";
+> 
+> export default function Counter() {
+>   const [count, setCount] = useState(0);
+> 
+>   return (
+>     <button
+>       onClick={() => setCount(count + 1)}
+>       className="px-4 py-2 bg-blue-600 text-white rounded"
     >
-      Count: {count}
-    </button>
-  );
-}
-```
-
+>       Count: {count}
+>     </button>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `"use client"` marks the boundary where server execution transitions to client JavaScript hydration.
 > 2. Client Components can consume React hooks (`useState`, `useEffect`, `useContext`) and DOM event handlers (`onClick`).
 > 3. Still pre-renders initial static HTML on the server during initial page request.
-
+> 
 ---
 
 ### Exercise 2: Passing Server Components as Children into Client Components
@@ -163,27 +163,27 @@ Pass a Server Component containing direct database access as a `children` prop i
 > ```tsx
 > // app/components/Drawer.tsx
 > "use client";
-
-import { useState } from "react";
-
-export default function Drawer({ children }: { children: React.ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div>
-      <button onClick={() => setIsOpen(!isOpen)}>Toggle Drawer</button>
-      {isOpen && <aside className="drawer-content">{children}</aside>}
-    </div>
-  );
-}
-```
-
+> 
+> import { useState } from "react";
+> 
+> export default function Drawer({ children }: { children: React.ReactNode }) {
+>   const [isOpen, setIsOpen] = useState(false);
+> 
+>   return (
+>     <div>
+>       <button onClick={() => setIsOpen(!isOpen)}>Toggle Drawer</button>
+>       {isOpen && <aside className="drawer-content">{children}</aside>}
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Client Components cannot directly `import` Server Components into their files.
 > 2. Passing Server Components via the `children` prop allows Server Components to execute on the server while living inside Client Component UI wrappers.
 > 3. Preserves server-side execution for data fetching components.
-
+> 
 ---
 
 ### Exercise 3: Minimizing Client Component Boundaries
@@ -201,28 +201,24 @@ Refactor a large product detail page so that ONLY the "Add to Cart" button is ma
 > ```tsx
 > // app/components/AddToCartButton.tsx
 > "use client";
-
-export default function AddToCartButton({ productId }: { productId: string }) {
-  return (
-    <button onClick={() => alert(`Added ${productId} to cart!`)}>
-      Add to Cart
-    </button>
-  );
-}
-```
-
+> 
+> export default function AddToCartButton({ productId }: { productId: string }) {
+>   return (
+>     <button onClick={() => alert(`Added ${productId} to cart!`)}>
+>       Add to Cart
+>     </button>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Moving `"use client"` down to atomic leaves minimizes client JavaScript bundle sizes.
 > 2. Main product details page remains a zero-bundle-size Server Component.
 > 3. Core Next.js performance optimization pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [React Server Components (RSC)](rsc.md) — The default component type.

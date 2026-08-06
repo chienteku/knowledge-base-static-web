@@ -347,7 +347,7 @@ Include comprehensive unit tests covering:
 > 2. **Ownership and FnMut Trait Bounds**: The closure parameter `op` is bound with `FnMut(usize) -> Result<String, RetryError>`. Using `FnMut` permits the closure to mutate internal state across repeated invocations inside the `while` loop (e.g., tracking `call_count` in tests), while passed by mutable reference `mut op`.
 > 3. **Early Exit vs Loop Exhaustion**: Returning `Ok(...)` or `Err(RetryError::Fatal)` directly from within the `match` block exits the function (and loop) immediately without performing unnecessary backoff calculations. When transient errors persist, the loop terminates naturally when `attempts` reaches `max_attempts`.
 > 4. **Edge Cases**: When `max_attempts` is set to 0, the `while` predicate `0 < 0` evaluates to `false` immediately, safely returning a retry exhaustion error without invoking `op`. Backoff capping using `.min(max_backoff_ms)` prevents numerical overflow during repeated doubling.
-
+> 
 ---
 
 ### Exercise 2: Length-Prefixed Binary Stream Parser & Frame Decoder
@@ -506,7 +506,7 @@ Write unit tests verifying:
 > 2. **Stream Resynchronization via Loop Increments**: When encountering non-magic bytes, `cursor += 1` combined with `continue` skips corrupted noise byte-by-byte until the start of a valid frame marker is aligned with `cursor`.
 > 3. **Non-destructive Buffer Mutation via `drain`**: Modifying `buffer` in-place using `buffer.drain(0..cursor)` after loop completion avoids expensive reallocations while ensuring processed frame bytes are removed and incomplete frame fragments remain aligned at byte index 0 for future parsing.
 > 4. **Memory & Slicing Safety**: Using `.to_vec()` creates owned copies of payload data for the returned `Frame` instances, breaking reference ties with `buffer` so that `buffer.drain(...)` can safely execute without violating Rust's alias XOR mutability rules.
-
+> 
 ---
 
 ### Exercise 3: Financial Order Book Batch Processor with Compound Conditions
@@ -686,7 +686,7 @@ Write unit tests verifying:
 > 2. **Lookahead Guarding with `queue.front()`**: Inspecting elements via `queue.front()` without removing them enables predictive condition evaluation before state mutation. If the prospective volume would breach `max_batch_volume`, breaking early leaves the order safely intact at the head of the queue.
 > 3. **Queue Ownership and Lifetime**: `queue` is passed as a mutable reference `&mut VecDeque<Order>`. Borrow checker rules guarantee exclusive access during the batch execution cycle, preventing concurrent modification panics or iterator invalidation.
 > 4. **Division Safety in Financial Metrics**: Calculating VWAP requires guarding against division-by-zero (`0.0 / 0.0` yielding `NaN`). Checking `if total_volume > 0` ensures mathematical stability even when processing an empty batch.
-
+> 
 ---
 
 ## 6. Related Terms

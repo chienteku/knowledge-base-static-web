@@ -210,7 +210,7 @@ fetch("https://jsonplaceholder.typicode.com/posts", {
 > ```
 > - In fetch options, write `signal: controller.signal`.
 > - Use `setTimeout(() => controller.abort(), 100);` to trigger the cancellation.
-
+> 
 ---
 
 ### Exercise 2: Cancelling Fetch Requests with `AbortController`
@@ -229,7 +229,7 @@ fetch("https://jsonplaceholder.typicode.com/posts", {
 > ```
 >
 > **Explanation:** `AbortController.signal` allows cancelling in-flight HTTP requests and async operations.
-
+> 
 ---
 
 ### Exercise 3: Setting Request Timeouts with `AbortSignal.timeout()`
@@ -246,8 +246,8 @@ fetch("https://jsonplaceholder.typicode.com/posts", {
 > ```
 >
 > **Explanation:** `AbortSignal.timeout(ms)` returns a pre-configured signal that aborts automatically after specified milliseconds.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

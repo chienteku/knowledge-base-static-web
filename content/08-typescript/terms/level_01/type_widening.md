@@ -172,13 +172,13 @@ Demonstrate literal type widening when assigning string literals to `let` vs `co
 > methodLet = "POST"; // Valid! Re-assignable to any string.
 > // methodConst = "POST"; // ❌ Compile Error: Cannot assign to 'methodConst' because it is a constant.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Variables declared with `let` undergo type widening from literal types (`"GET"`) to primitive types (`string`).
 > 2. Widening occurs because `let` variables can be re-assigned to different string values later.
 > 3. Variables declared with `const` preserve narrow literal types because their values cannot mutate.
-
+> 
 ---
 
 ### Exercise 2: Preventing Type Widening with `as const` Assertions
@@ -208,13 +208,13 @@ Prevent object property type widening using `as const` (const assertions).
 > 
 > // configReadonly.method is typed strictly as '"GET"' (readonly)!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `as const` locks object properties into deeply `readonly` literal types.
 > 2. Prevents TypeScript from widening property types (`"GET"` -> `string`).
 > 3. Essential technique for passing configuration objects into functions expecting strict literal union types.
-
+> 
 ---
 
 ### Exercise 3: Controlling Explicit Union Type Narrowing
@@ -231,20 +231,20 @@ Prevent widening of a mutable variable by providing an explicit union type annot
 >
 > ```typescript
 > type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE";
-
-// Explicit type annotation prevents widening to general 'string':
-let activeMethod: HTTPMethod = "GET";
-
-activeMethod = "POST"; // Valid!
-// activeMethod = "INVALID"; // ❌ Compile Error: Type '"INVALID"' is not assignable to type 'HTTPMethod'.
-```
-
+> 
+> // Explicit type annotation prevents widening to general 'string':
+> let activeMethod: HTTPMethod = "GET";
+> 
+> activeMethod = "POST"; // Valid!
+> // activeMethod = "INVALID"; // ❌ Compile Error: Type '"INVALID"' is not assignable to type 'HTTPMethod'.
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Providing an explicit type annotation (`: HTTPMethod`) overrides default variable type widening.
 > 2. Constrains variable re-assignment to valid union members only.
 > 3. Idiomatic method for maintaining strict state flags.
-
+> 
 ---
 
 

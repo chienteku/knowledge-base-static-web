@@ -173,7 +173,7 @@ An infrastructure architect is selecting storage engine backends for three disti
 > 1. `mem://` runs in RAM with zero disk I/O, providing instantaneous startup and teardown for test suites.
 > 2. `SurrealKV` / `RocksDB` provide ACID persistent key-value storage on local disk for single-instance deployments.
 > 3. `TiKV` is a CNCF distributed transactional key-value store that allows SurrealDB to scale horizontally across server clusters.
-
+> 
 ---
 
 ### Exercise 2: CLI Startup for Distributed TiKV Backend
@@ -198,7 +198,7 @@ A DevOps engineer needs to start a production SurrealDB instance connecting to a
 > 1. The `tikv://` URI prefix instructs SurrealDB to delegate key-value storage operations to a TiKV cluster.
 > 2. Decouples SurrealDB compute nodes from underlying storage, enabling stateless auto-scaling of database compute instances.
 > 3. `--bind 0.0.0.0:8000` exposes the SurrealDB WebSocket/HTTP interface to external application traffic.
-
+> 
 ---
 
 ### Exercise 3: Storage Backend Abstraction Invariants
@@ -228,7 +228,7 @@ A developer asks if SurrealQL queries (`SELECT`, `RELATE`, `DEFINE TABLE`) need 
 > 1. SurrealDB uses a pluggable Key-Value (KV) storage abstraction layer separating query parsing from physical storage engines.
 > 2. All tables, documents, indexes, and graph edges are serialized into standardized key-value ranges regardless of storage engine.
 > 3. Applications can move from local prototyping (`mem://`) to single-node disk (`file://`) to cloud clusters (`tikv://`) without modifying SurrealQL query scripts.
-
+> 
 ---
 
 

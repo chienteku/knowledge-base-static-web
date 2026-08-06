@@ -131,7 +131,7 @@ Write a custom hook called `useTheme` that returns the `ThemeContext`.
 > // Now other files can just write: const theme = useTheme();
 > ```
 > - Wrap `useContext` inside a function that starts with `use`.
-
+> 
 ---
 
 
@@ -156,7 +156,7 @@ Write a custom hook called `useTheme` that returns the `ThemeContext`.
 > ```
 >
 > **Explanation:** Custom context hooks validate Provider wrapper presence early with clear error messages.
-
+> 
 ---
 
 ### Exercise 3: Consuming Multiple Contexts
@@ -177,7 +177,7 @@ Write a custom hook called `useTheme` that returns the `ThemeContext`.
 > ```
 >
 > **Explanation:** `useContext` can be called multiple times inside a component to consume independent contexts.
-
+> 
 ## 7. Related Terms
 - [The Context API](context_api.md) — The system that powers this hook.
 - [Custom Hooks](../level_04/custom_hooks.md) — Often used to wrap `useContext` for cleaner code.

@@ -272,7 +272,7 @@ app.post('/submit', (req, res) => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Parsing URL-Encoded Form Submissions
@@ -289,7 +289,7 @@ app.post('/submit', (req, res) => {
 > ```
 >
 > **Explanation:** `express.urlencoded()` parses URL-encoded body payloads from standard HTML `<form>` submissions.
-
+> 
 ---
 
 ### Exercise 3: Multipart Form Upload Parsing
@@ -306,7 +306,7 @@ app.post('/submit', (req, res) => {
 > ```
 >
 > **Explanation:** `multer` processes multipart form requests containing file attachments.
-
+> 
 ## 7. Related Terms
 - [The req & res Objects](req_res.md) — The HTTP request and response structures.
 - [Middleware](middleware.md) — The pipeline routing pattern.

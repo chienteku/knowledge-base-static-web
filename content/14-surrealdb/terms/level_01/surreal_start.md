@@ -155,7 +155,7 @@ You are writing a systemd service startup script for a production SurrealDB sing
 > 1. `surreal start` launches the SurrealDB database engine server process.
 > 2. `--bind 0.0.0.0:8000` allows the server to accept connections across all network interfaces on port 8000.
 > 3. `file://` enables local disk persistence using single-node Key-Value storage engines.
-
+> 
 ---
 
 ### Exercise 2: Local Ephemeral Server Startup with Debug Logs
@@ -181,7 +181,7 @@ A developer needs to launch an ephemeral in-memory SurrealDB instance for local 
 > 1. `memory` (or `mem://`) launches a zero-disk-I/O in-memory database instance in RAM.
 > 2. `--log debug` prints detailed query parsing, transaction locks, and client connection events to stdout.
 > 3. Ephemeral instances tear down completely when the process terminates, leaving no residual files.
-
+> 
 ---
 
 ### Exercise 3: Hardened Production Server Flags Configuration
@@ -206,7 +206,7 @@ A security administrator is hardening a production `surreal start` command flags
 > 1. `--deny-scripting` disables execution of embedded JavaScript functions (`function() { ... }`), mitigating remote code execution risks.
 > 2. Requiring root or access credentials on all connection requests prevents unauthenticated database access.
 > 3. Hardened startup configurations protect production clusters against unauthorized network exploitation.
-
+> 
 ---
 
 

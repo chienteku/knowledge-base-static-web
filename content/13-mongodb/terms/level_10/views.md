@@ -187,7 +187,7 @@ Create a read-only View `active_users_view` on collection `users` filtering `sta
 > 1. `db.createView()` creates a non-materialized read-only virtual collection defined by an aggregation pipeline.
 > 2. Queries against the view execute the underlying pipeline on the fly.
 > 3. Restricts sensitive fields and enforces security access boundaries.
-
+> 
 ---
 
 ### Exercise 2: Querying Views with Secondary Query Filters
@@ -211,7 +211,7 @@ Query `active_users_view` with additional query filters (`find({ role: "admin" }
 > 1. Queries against views append client filter conditions to the view's underlying aggregation pipeline.
 > 2. Evaluates secondary query filters using indexes on the underlying source collection.
 > 3. Behaves like a standard MongoDB collection for read operations.
-
+> 
 ---
 
 ### Exercise 3: On-Demand Materialized Views with `$merge`
@@ -251,7 +251,7 @@ Create an On-Demand Materialized View `daily_sales_summary` using an aggregation
 > 1. Non-materialized views compute results on the fly for every query.
 > 2. Materialized views using `$merge` persist pre-computed results into a real physical collection.
 > 3. Delivers sub-millisecond query response times for heavy analytical dashboards.
-
+> 
 ---
 
 

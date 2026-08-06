@@ -338,7 +338,7 @@ Implement the following:
 > 4. **Edge Cases**:
 >    - Empty books safely return `None` via the `?` operator on `self.bids.first()?`.
 >    - Orders with non-matching prices (`best_bid < best_ask`) return `None` without modifying internal book queues.
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy Network Frame Buffer & Packet Decoder
@@ -487,7 +487,7 @@ Design a binary packet parsing engine:
 > 4. **Edge Cases**:
 >    - Incomplete frames (fewer bytes than header or total packet size) return `Ok(None)` to signal the stream engine to await additional network read events.
 >    - Invalid header magic codes fail immediately with `Err(FrameError::InvalidMagic)`.
-
+> 
 ---
 
 ### Exercise 3: Token Bucket Rate Limiter & Telemetry Analytics
@@ -651,7 +651,7 @@ Requirements:
 > 4. **Edge Cases**:
 >    - Out-of-order timestamps (`current_time_secs <= last_refill_timestamp`) are safely ignored by the guard clause in `refill`.
 >    - Zero capacity bounds prevention ensures floating point calculations in `utilization_ratio` avoid division by zero.
-
+> 
 ---
 
 ## 6. Related Terms

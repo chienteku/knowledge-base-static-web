@@ -160,13 +160,13 @@ Configure `app.vue` to include a global notification banner alongside `<NuxtLayo
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `app.vue` is the root Single File Component instantiated on initial application load.
 > 2. Elements rendered outside `<NuxtPage />` remain persistent across page navigation without re-mounting.
 > 3. Master entrypoint shell for global providers and persistent UI elements.
-
+> 
 ---
 
 ### Exercise 2: Defining Global Page Transitions in Root Shell
@@ -190,7 +190,7 @@ Apply global page transition animations across all routes via `app.vue` and Nuxt
 >   }
 > });
 > ```
-
+> 
 > ```vue
 > <!-- app.vue -->
 > <template>
@@ -198,25 +198,25 @@ Apply global page transition animations across all routes via `app.vue` and Nuxt
 >     <NuxtPage />
 >   </NuxtLayout>
 > </template>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.25s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
-```
-
+> 
+> <style>
+> .fade-enter-active,
+> .fade-leave-active {
+>   transition: opacity 0.25s ease;
+> }
+> .fade-enter-from,
+> .fade-leave-to {
+>   opacity: 0;
+> }
+> </style>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `app.pageTransition` automatically wraps `<NuxtPage />` with Vue `<Transition>` components.
 > 2. `mode: "out-in"` waits for current page element unmounting before transitioning in new route elements.
 > 3. Standard method for smooth page transitions.
-
+> 
 ---
 
 ### Exercise 3: Eliminating `app.vue` when using Custom Pages
@@ -236,19 +236,15 @@ Explain why `app.vue` can be omitted in pure file-based routing applications whe
 > Option A (Minimal SPA): app.vue contains raw templates without pages/ directory.
 > Option B (Full Routing): Remove app.vue completely, or keep app.vue containing ONLY <NuxtLayout><NuxtPage /></NuxtLayout>.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. If `app.vue` is removed from the project root, Nuxt 3 automatically injects a default `<NuxtPage />` wrapper.
 > 2. Keeping `app.vue` provides explicit control over global master head tags and error boundaries.
 > 3. Essential Nuxt 3 layout rule.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`pages/` Directory](pages_directory.md) — The folder whose contents are injected into `<NuxtPage />`.

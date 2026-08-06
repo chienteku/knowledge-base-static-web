@@ -176,7 +176,7 @@ Configure driver connection pool limits with `maxPoolSize=50`, `minPoolSize=10`,
 > 1. `maxPoolSize=50` limits total open socket connections per driver instance to 50.
 > 2. `minPoolSize=10` maintains 10 warm idle connections ready for immediate queries.
 > 3. `maxIdleTimeMS=30000` closes idle sockets unused for over 30 seconds.
-
+> 
 ---
 
 ### Exercise 2: Reusing Singleton `MongoClient` Instances
@@ -193,24 +193,24 @@ Refactor a Node.js API server to reuse a single global `MongoClient` instance in
 >
 > ```typescript
 > import { MongoClient } from "mongodb";
-
-let clientInstance: MongoClient | null = null;
-
-export async function getDbClient(): Promise<MongoClient> {
-  if (!clientInstance) {
-    clientInstance = new MongoClient(process.env.MONGODB_URI!);
-    await clientInstance.connect();
-  }
-  return clientInstance;
-}
-```
-
+> 
+> let clientInstance: MongoClient | null = null;
+> 
+> export async function getDbClient(): Promise<MongoClient> {
+>   if (!clientInstance) {
+>     clientInstance = new MongoClient(process.env.MONGODB_URI!);
+>     await clientInstance.connect();
+>   }
+>   return clientInstance;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Creating a new `MongoClient` per HTTP request destroys connection pooling benefits, opening thousands of TCP sockets.
 > 2. Singleton client instances share a managed connection pool across all incoming HTTP handler threads.
 > 3. Prevents database server socket exhaustion (`Too many open files`).
-
+> 
 ---
 
 ### Exercise 3: Monitoring Active Pool Socket Metrics
@@ -238,7 +238,7 @@ Subscribe to driver connection pool events (`connectionCreated`, `connectionClos
 > 1. Connection pool telemetry identifies connection pool exhaustion bottlenecks under heavy load.
 > 2. Helps tune `maxPoolSize` based on peak concurrency metrics.
 > 3. Essential driver monitoring practice.
-
+> 
 ---
 
 

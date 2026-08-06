@@ -143,33 +143,33 @@ Define `app/layout.tsx` with global metadata, fonts, and HTML document tags.
 > // app/layout.tsx
 > import "@/app/globals.css";
 > import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "My Next.js Application",
-  description: "Built with Next.js App Router"
-};
-
-export default function RootLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body className="antialiased bg-gray-50 text-gray-900">
-        {children}
-      </body>
-    </html>
-  );
-}
-```
-
+> 
+> export const metadata: Metadata = {
+>   title: "My Next.js Application",
+>   description: "Built with Next.js App Router"
+> };
+> 
+> export default function RootLayout({
+>   children
+> }: {
+>   children: React.ReactNode;
+> }) {
+>   return (
+>     <html lang="en">
+>       <body className="antialiased bg-gray-50 text-gray-900">
+>         {children}
+>       </body>
+>     </html>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `app/layout.tsx` is required at the root of `app/` and wraps all application routes.
 > 2. Must render `<html>` and `<body>` tags.
 > 3. Preserves global CSS imports and document metadata.
-
+> 
 ---
 
 ### Exercise 2: Implementing Nested Segment Layouts
@@ -187,32 +187,32 @@ Create a nested layout `app/settings/layout.tsx` providing a tabbed navigation h
 > ```tsx
 > // app/settings/layout.tsx
 > import Link from "next/link";
-
-export default function SettingsLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Account Settings</h1>
-      <nav className="flex gap-4 border-b pb-2 mb-6">
-        <Link href="/settings/profile">Profile</Link>
-        <Link href="/settings/billing">Billing</Link>
-        <Link href="/settings/security">Security</Link>
-      </nav>
-      <div>{children}</div>
-    </div>
-  );
-}
-```
-
+> 
+> export default function SettingsLayout({
+>   children
+> }: {
+>   children: React.ReactNode;
+> }) {
+>   return (
+>     <div className="p-6">
+>       <h1 className="text-2xl font-bold mb-4">Account Settings</h1>
+>       <nav className="flex gap-4 border-b pb-2 mb-6">
+>         <Link href="/settings/profile">Profile</Link>
+>         <Link href="/settings/billing">Billing</Link>
+>         <Link href="/settings/security">Security</Link>
+>       </nav>
+>       <div>{children}</div>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Nested layouts wrap sub-routes (`/settings/profile`, `/settings/billing`) automatically.
 > 2. Tab navigation header remains mounted while user switches between settings tabs.
 > 3. Avoids re-fetching or re-rendering common header components.
-
+> 
 ---
 
 ### Exercise 3: Fetching Data inside Async Server Layouts
@@ -230,37 +230,33 @@ Fetch user profile data directly inside an async `layout.tsx` Server Component.
 > ```tsx
 > // app/dashboard/layout.tsx
 > import { getUser } from "@/lib/auth";
-
-export default async function AsyncDashboardLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
-  const user = await getUser();
-
-  return (
-    <div>
-      <header className="p-4 bg-slate-800 text-white">
-        Logged in as: {user.email}
-      </header>
-      <main>{children}</main>
-    </div>
-  );
-}
-```
-
+> 
+> export default async function AsyncDashboardLayout({
+>   children
+> }: {
+>   children: React.ReactNode;
+> }) {
+>   const user = await getUser();
+> 
+>   return (
+>     <div>
+>       <header className="p-4 bg-slate-800 text-white">
+>         Logged in as: {user.email}
+>       </header>
+>       <main>{children}</main>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Layouts can be declared as `async` React Server Components.
 > 2. Fetches user auth data once when entering the dashboard route segment.
 > 3. Data fetched in layouts is shared across sub-routes without duplicate API calls.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`page.tsx`](page.md) — The file injected into the layout's `children`.

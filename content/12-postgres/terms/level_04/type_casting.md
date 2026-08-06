@@ -165,7 +165,7 @@ Cast a string numeric value `'1299'` to `INTEGER` and `'99.95'` to `NUMERIC(10, 
 > 1. `::type` is PostgreSQL shorthand cast syntax; `CAST(val AS type)` is ANSI SQL standard.
 > 2. Converts binary representations into target data types.
 > 3. Throws error 22P02 (`invalid_text_representation`) if string contains unparseable values.
-
+> 
 ---
 
 ### Exercise 2: Casting JSON Strings to JSONB Objects
@@ -190,7 +190,7 @@ Cast a text JSON string into a binary `JSONB` data type to execute JSON key extr
 > 1. Casting string text to `JSONB` parses and validates JSON syntax.
 > 2. Enables PostgreSQL `JSONB` operators (`->`, `->>`).
 > 3. Crucial for handling un-parsed JSON payloads.
-
+> 
 ---
 
 ### Exercise 3: Integer to Text Array Casting for Dynamic Queries
@@ -216,7 +216,7 @@ Cast integer `id` to `TEXT` for string concatenation in report formatting.
 > 1. String concatenation (`||`) requires compatible text types.
 > 2. `id::TEXT` converts integer keys into text strings for `LPAD()` formatting.
 > 3. Produces zero-padded codes (`"USR-000042"`).
-
+> 
 ---
 
 

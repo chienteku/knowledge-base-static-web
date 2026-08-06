@@ -134,7 +134,7 @@ navigate(-1) // Navigates 1 step back in browser history
 > }
 > ```
 > - The `navigate` function accepts numbers as well as strings!
-
+> 
 ---
 
 
@@ -165,7 +165,7 @@ navigate(-1) // Navigates 1 step back in browser history
 > ```
 >
 > **Explanation:** `useNavigate()` executes programmatic client-side routing inside event handlers.
-
+> 
 ---
 
 ### Exercise 3: Replacing History Entry with `{ replace: true }`
@@ -182,7 +182,7 @@ navigate(-1) // Navigates 1 step back in browser history
 > ```
 >
 > **Explanation:** `replace: true` prevents users from back-navigating into completed authentication forms.
-
+> 
 ## 7. Related Terms
 - [`<Link>` Component](link_component.md) — The declarative sibling.
 - [Side Effects](../level_03/side_effects.md) — You often use `useNavigate` inside a `useEffect` (e.g., "If user is not logged in, navigate to /login").

@@ -197,7 +197,7 @@ console.log("Log method exists?", typeof result.log === "function");
 > Log method exists? true
 > ```
 > - Inside `try`, return `structuredClone(config)`.
-
+> 
 ---
 
 ### Exercise 2: Deep Cloning Complex Objects with `structuredClone`
@@ -216,7 +216,7 @@ console.log("Log method exists?", typeof result.log === "function");
 > ```
 >
 > **Explanation:** `structuredClone` natively handles complex built-in types like `Date`, `Set`, `Map`, `RegExp`, `ArrayBuffer`.
-
+> 
 ---
 
 ### Exercise 3: Transferring ArrayBuffer Ownership with `structuredClone`
@@ -233,7 +233,7 @@ console.log("Log method exists?", typeof result.log === "function");
 > ```
 >
 > **Explanation:** The `{ transfer: [...] }` option transfers memory ownership without copying bytes.
-
+> 
 ---
 
 ## 7. Related Terms

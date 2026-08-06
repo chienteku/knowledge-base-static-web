@@ -213,7 +213,7 @@ To center elements inside a single row vertically, you must use **`align-items: 
 > }
 > ```
 > - Check which property handles rows distribution, and which value pins elements to the outer edges.
-
+> 
 ---
 
 
@@ -236,7 +236,7 @@ To center elements inside a single row vertically, you must use **`align-items: 
 > ```
 >
 > **Explanation:** `align-content: space-between` distributes extra vertical space between wrapped flex lines.
-
+> 
 ---
 
 ### Exercise 3: align-content Default Value
@@ -253,7 +253,7 @@ To center elements inside a single row vertically, you must use **`align-items: 
 > ```
 >
 > **Explanation:** Default `normal`/`stretch` expands flex lines to fill container height.
-
+> 
 ## 7. Related Terms
 - [`flex-wrap`](flex_wrap.md) — The required prerequisite.
 - [`align-items`](align_items.md) — Single-line vertical alignment.

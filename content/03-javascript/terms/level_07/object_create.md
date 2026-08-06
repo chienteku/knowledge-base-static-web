@@ -183,7 +183,7 @@ console.log("Full Name:", child.firstName, child.familyName);
 > Full Name: John Smith
 > ```
 > - Call `Object.create(parent)` to create the child.
-
+> 
 ---
 
 ### Exercise 2: Creating Prototype-less Dictionary Objects
@@ -201,7 +201,7 @@ console.log("Full Name:", child.firstName, child.familyName);
 > ```
 >
 > **Explanation:** `Object.create(null)` instantiates pure dictionary objects with zero inherited properties.
-
+> 
 ---
 
 ### Exercise 3: Explicit Prototype Inheritance Setup
@@ -220,8 +220,8 @@ console.log("Full Name:", child.firstName, child.familyName);
 > ```
 >
 > **Explanation:** `Object.create(proto)` assigns `proto` directly as the new object's `[[Prototype]]`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

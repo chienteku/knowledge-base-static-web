@@ -139,7 +139,7 @@ if (buf1.length === buf2.length && crypto.timingSafeEqual(buf1, buf2)) {}
 > ```
 >
 > **Explanation:** `crypto.randomBytes` generates cryptographically strong pseudo-random data.
-
+> 
 ---
 
 ### Exercise 2: Creating HMAC Signatures
@@ -156,7 +156,7 @@ if (buf1.length === buf2.length && crypto.timingSafeEqual(buf1, buf2)) {}
 > ```
 >
 > **Explanation:** `crypto.createHmac` creates cryptographic HMAC authentication digests.
-
+> 
 ---
 
 ### Exercise 3: Timing-Safe Buffer Comparison
@@ -173,7 +173,7 @@ if (buf1.length === buf2.length && crypto.timingSafeEqual(buf1, buf2)) {}
 > ```
 >
 > **Explanation:** `crypto.timingSafeEqual` executes in constant time regardless of byte match positions.
-
+> 
 ## 7. Related Terms
 - [Bcrypt (Password Hashing)](../level_10/bcrypt.md) — A specialized third-party library designed specifically for securely hashing passwords, often preferred over native `crypto` methods for that specific use case.
 - [Buffers](../level_06/buffers.md) — Many `crypto` functions return or expect data in the form of Buffers.

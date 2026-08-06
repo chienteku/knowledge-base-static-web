@@ -153,7 +153,7 @@ Query collection `users` for active user accounts where `isActive: true` and `is
 > 1. Boolean BSON values consume a single byte of storage per document.
 > 2. Fast binary equality evaluation in query filters.
 > 3. Indexing boolean fields produces low cardinality indexes; combine in compound indexes.
-
+> 
 ---
 
 ### Exercise 2: Toggling Boolean Flags Atomically
@@ -180,7 +180,7 @@ Toggle a user's `isMuted` boolean setting to `true` using `$set`.
 > 1. `$set` modifies boolean field values atomically.
 > 2. Replaces whole-document updates with targeted field mutation.
 > 3. Fires changefeed events with updated boolean state.
-
+> 
 ---
 
 ### Exercise 3: Querying Missing vs False Boolean Fields
@@ -209,7 +209,7 @@ Query documents where `isArchived` is either `false` OR the field does not exist
 > 1. In MongoDB's flexible schema, a missing field is conceptually distinct from `false`.
 > 2. `$exists: false` checks for field absence.
 > 3. Ensures legacy documents without the flag are included in query results.
-
+> 
 ---
 
 

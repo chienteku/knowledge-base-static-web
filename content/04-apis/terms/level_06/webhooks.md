@@ -122,7 +122,7 @@ B) Register a Webhook URL in the GitHub repository settings.
 > If you poll every 60 seconds, your deployment might be delayed by up to 59 seconds. Furthermore, GitHub heavily Rate Limits their API, so polling constantly will likely get you temporarily banned. A Webhook is instant and costs zero CPU cycles while waiting.
 > ```
 > - Which one is instant? Which one wastes network bandwidth?
-
+> 
 ---
 
 ### Exercise 2: Webhook Delivery Retry Policy Pattern

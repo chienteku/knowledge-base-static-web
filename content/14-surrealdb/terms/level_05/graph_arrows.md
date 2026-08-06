@@ -188,7 +188,7 @@ Query all blog posts written by `user:alice` using outgoing graph arrow syntax (
 > 1. `->wrote->post` specifies outgoing edge direction from `user` to `post`.
 > 2. `->wrote` selects the edge table; `->post` selects the target vertex table.
 > 3. Replaces relational foreign key JOINs with direct arrow navigation.
-
+> 
 ---
 
 ### Exercise 2: Incoming Graph Arrow Syntax (`<-`)
@@ -213,7 +213,7 @@ Query all authors who wrote post `post:p1` using incoming graph arrow syntax (`<
 > 1. `<-wrote<-user` specifies incoming edge direction from `post` back to `user`.
 > 2. `<-wrote` targets incoming relation edge records where `out = post:p1`.
 > 3. Enables reverse graph navigation without secondary indexes.
-
+> 
 ---
 
 ### Exercise 3: Undirected Graph Arrow Syntax (`<->`)
@@ -237,7 +237,7 @@ Query all friends connected to `user:alice` regardless of whether the `knows` ed
 > 1. `<->knows<->user` traverses both incoming and outgoing `knows` edges.
 > 2. Merges bidirectional graph neighbors into a single unified result list.
 > 3. Ideal for symmetric friendship and network connectivity queries.
-
+> 
 ---
 
 

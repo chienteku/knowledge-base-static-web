@@ -168,7 +168,7 @@ Query collection `products` for items in category `"electronics"` with stock gre
 > 1. `find(query, projection)` searches collection records matching query conditions.
 > 2. Returns a cursor object streaming matching documents lazily.
 > 3. Multiple query fields combine with implicit `$and` logic.
-
+> 
 ---
 
 ### Exercise 2: Applying Projection Filters to `find()`
@@ -195,7 +195,7 @@ Query `products` returning ONLY fields `name` and `price` (excluding `_id`).
 > 1. Projection specification controls which document fields are included in returned payloads.
 > 2. `_id: 0` explicitly suppresses the automatic `_id` primary key.
 > 3. Reduces network payload and client memory overhead.
-
+> 
 ---
 
 ### Exercise 3: Chaining Cursor Modifiers on `find()`
@@ -221,7 +221,7 @@ Query `products` sorted by `price` descending, limiting results to the top 5 mos
 > 1. `.sort({ price: -1 })` orders returned documents descending.
 > 2. `.limit(5)` caps maximum returned document count.
 > 3. Evaluates sorting and limits server-side before streaming results.
-
+> 
 ---
 
 

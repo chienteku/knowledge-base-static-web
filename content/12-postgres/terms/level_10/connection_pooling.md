@@ -177,25 +177,25 @@ Configure a backend Node.js application using `pg.Pool` with `max: 20`, `idleTim
 >
 > ```typescript
 > import { Pool } from "pg";
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 20, // Max open sockets in pool
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000
-});
-
-export async function query(text: string, params?: any[]) {
-  return pool.query(text, params);
-}
-```
-
+> 
+> const pool = new Pool({
+>   connectionString: process.env.DATABASE_URL,
+>   max: 20, // Max open sockets in pool
+>   idleTimeoutMillis: 30000,
+>   connectionTimeoutMillis: 5000
+> });
+> 
+> export async function query(text: string, params?: any[]) {
+>   return pool.query(text, params);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `max: 20` limits total concurrent TCP socket connections opened by the backend server instance.
 > 2. Connection pooling reuses established sockets across incoming HTTP requests, eliminating TCP handshake overhead.
 > 3. Prevents exhausting server process limits (`max_connections`).
-
+> 
 ---
 
 ### Exercise 2: Integrating PgBouncer for High-Concurrency Serverless Environments
@@ -226,7 +226,7 @@ Configure PgBouncer in `transaction` pooling mode to support 5,000 serverless la
 > 1. In `transaction` pool mode, PgBouncer assigns a server connection to a client ONLY for the duration of a transaction block.
 > 2. Releases the server connection back to the pool immediately upon `COMMIT` or `ROLLBACK`.
 > 3. Allows 5,000 serverless clients to share 50 backend PostgreSQL connections seamlessly.
-
+> 
 ---
 
 ### Exercise 3: Monitoring Connection Pool Socket Telemetry
@@ -252,7 +252,7 @@ Monitor active vs idle pool connections in `pg.Pool` during load testing.
 > 1. `totalCount` tracks total open socket connections.
 > 2. `waitingCount` > 0 indicates connection pool exhaustion under heavy traffic load.
 > 3. Critical driver telemetry for pool sizing.
-
+> 
 ---
 
 

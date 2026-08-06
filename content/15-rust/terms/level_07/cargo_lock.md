@@ -134,7 +134,7 @@ What two pieces of feedback should you give them?
 > [!check]- Answer
 > 1. **Never edit `Cargo.lock` manually!** If they want to change a dependency, they should edit `Cargo.toml` or run `cargo update`.
 > 2. **Remove it from `.gitignore`!** Because they are building a binary application, the lockfile MUST be committed to version control to guarantee reproducible builds for the rest of the team.
-
+> 
 ---
 
 ### Exercise 2: Surgical Dependency Updates
@@ -164,7 +164,7 @@ Your team runs `cargo audit` and finds a security advisory for version `0.8.3` o
 > #### Technical Explanation
 >
 > `cargo update` is a safe, surgical tool: it only updates what you ask for and only within the constraints you already declared. The distinction between "edit `Cargo.toml`" (change intent) and "run `cargo update`" (re-resolve within intent) is the fundamental mental model for managing Rust dependencies.
-
+> 
 ---
 
 ### Exercise 3: `Cargo.lock` Commit Policy — Four Scenarios
@@ -193,7 +193,7 @@ The rule "commit for binaries, don't commit for libraries" has important nuance.
 > #### Technical Explanation
 >
 > The core principle: commit `Cargo.lock` wherever you want **reproducible, deterministic** builds; omit it wherever you need **flexibility** for downstream consumers or CI coverage of the full version range.
-
+> 
 ---
 
 ## 6. Related Terms

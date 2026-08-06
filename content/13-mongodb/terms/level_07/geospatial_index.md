@@ -180,7 +180,7 @@ Create a `2dsphere` index on field `location` in collection `stores` to support 
 > 1. `2dsphere` indexes compute spatial coordinates over Earth's spherical surface (WGS84 ellipsoid).
 > 2. Required for `$near`, `$geoWithin`, and `$geoIntersects` operators over GeoJSON geometries.
 > 3. High performance spatial indexing.
-
+> 
 ---
 
 ### Exercise 2: Proximity Searching with `$near` and `2dsphere`
@@ -214,7 +214,7 @@ Find all stores within 5,000 meters of coordinates `[longitude: -97.7431, latitu
 > 1. `$near` calculates spherical distances over `2dsphere` index keys.
 > 2. `$maxDistance` specifies maximum proximity radius in meters.
 > 3. Returns matching documents pre-sorted by distance.
-
+> 
 ---
 
 ### Exercise 3: Compound Geospatial Indexes
@@ -238,7 +238,7 @@ Create a compound geospatial index combining category equality (`category: 1`) w
 > 1. Compound geospatial indexes filter by scalar fields (e.g. `category`) before evaluating spatial bounds.
 > 2. Narrows spatial candidate search bounds drastically.
 > 3. Standard pattern for store locator applications.
-
+> 
 ---
 
 

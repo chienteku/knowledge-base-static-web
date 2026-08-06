@@ -185,7 +185,7 @@ Analyze table `employees(id, name, dept_id, dept_name)` where `id -> dept_id` an
 > 1. 3NF requires that no non-key attribute depends transitively on the primary key through another non-key attribute.
 > 2. `dept_name` depends on `dept_id`, causing redundant duplication of department names across all employees in that department.
 > 3. Violates 3NF.
-
+> 
 ---
 
 ### Exercise 2: Decomposing Transitive Schemas into 3NF
@@ -218,7 +218,7 @@ Decompose `employees` to eliminate transitive dependency `dept_id -> dept_name`.
 > 1. Moving `departments` into a dedicated table eliminates transitive dependency.
 > 2. `dept_name` updates occur in a single location (`departments.name`), maintaining consistency.
 > 3. Achieves 3NF compliance.
-
+> 
 ---
 
 ### Exercise 3: The 3NF Canonical Rule
@@ -247,7 +247,7 @@ Recite Bill Kent's classic canonical rule summarizing 3NF schema requirements.
 > 1. Summarizes all three relational normalization forms concisely.
 > 2. Guarantees relational tables are free of data redundancy anomalies.
 > 3. Standard database engineering mantra.
-
+> 
 ---
 
 

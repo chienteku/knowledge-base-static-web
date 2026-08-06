@@ -167,7 +167,7 @@ async function processData() {
 > - Start with `let num = 100;`
 > - The condition should be `while (num / 2 >= 1)` or similar.
 > - Inside the loop, do `num = num / 2;` and then `console.log(num);`.
-
+> 
 ---
 
 ### Exercise 2: Standard While Loop Accumulator
@@ -190,7 +190,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `while` loops execute code blocks repeatedly as long as conditional expressions evaluate to truthy.
-
+> 
 ---
 
 ### Exercise 3: Sentinel Value Loop Termination
@@ -212,8 +212,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Mutating collection boundaries in loop conditions provides clean sentinel termination.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -191,7 +191,7 @@ Decouple shared state into a third shared repository or event channel!
 >
 > 1. `OrderService` accepts any generic type `G` bounded by `PaymentGateway`.
 > 2. `MockGateway` tests success and failure paths deterministically without network calls.
-
+> 
 ---
 
 ### Exercise 2: Injectable Configuration Provider
@@ -248,7 +248,7 @@ Decouple shared state into a third shared repository or event channel!
 >
 > 1. Decouples environment variable lookup from application logic.
 > 2. Supports memory test fixtures.
-
+> 
 ---
 
 ### Exercise 3: Generic Email Notification Service
@@ -298,7 +298,7 @@ Decouple shared state into a third shared repository or event channel!
 >
 > 1. Achieves zero-cost compile-time dependency injection.
 > 2. Enables seamless unit testing.
-
+> 
 ---
 
 ## 6. Related Terms

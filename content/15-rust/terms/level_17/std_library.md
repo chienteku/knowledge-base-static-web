@@ -191,7 +191,7 @@ Use tokio::sync::Mutex or limit std::sync::Mutex lock scope to a short synchrono
 > 1. Uses `std::env::var` to inspect OS environment variables at runtime.
 > 2. Uses `std::fs::read_to_string` to read files from the host filesystem upon fallback.
 > 3. Combines `std` OS primitives cleanly with error handling.
-
+> 
 ---
 
 ### Exercise 2: Multi-Threaded Worker Pool Task Processor Using `std::thread` and `std::sync` channels
@@ -247,7 +247,7 @@ Use tokio::sync::Mutex or limit std::sync::Mutex lock scope to a short synchrono
 >
 > 1. Uses `std::thread::spawn` to launch lightweight operating system OS threads.
 > 2. Uses `std::sync::mpsc` channels for safe inter-thread message passing without data races.
-
+> 
 ---
 
 ### Exercise 3: Host Network Socket Listener Stub via `std::net`
@@ -286,7 +286,7 @@ Use tokio::sync::Mutex or limit std::sync::Mutex lock scope to a short synchrono
 >
 > 1. Uses `std::net::SocketAddr` to leverage OS networking stack abstractions.
 > 2. Supports both IPv4 and IPv6 network endpoint parsing.
-
+> 
 ---
 
 ## 5. Related Terms

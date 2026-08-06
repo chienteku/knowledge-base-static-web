@@ -149,7 +149,7 @@ async function processData() {
 > `npx` focuses on **executing** packages. It temporarily downloads a tool, runs it once to do a job (like setting up a new project folder), and then immediately deletes the tool so it doesn't clutter your hard drive.
 > ```
 > - `x` stands for eXecute!
-
+> 
 ---
 
 ### Exercise 2: Package Installation Commands (`dependencies` vs `devDependencies`)
@@ -166,7 +166,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `-D` marks dependencies required only for building/testing binaries.
-
+> 
 ---
 
 ### Exercise 3: Executing Package Scripts with `npm run`
@@ -183,8 +183,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `npm run <script>` executes custom commands configured in `package.json`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

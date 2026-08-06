@@ -179,7 +179,7 @@ console.log("Result:", Calculator.add(5, 10));
 > Result: 15
 > ```
 > - Prefix the method with the `static` keyword: `static add(a, b) { ... }`.
-
+> 
 ---
 
 ### Exercise 2: Static Class Factory Methods
@@ -200,7 +200,7 @@ console.log("Result:", Calculator.add(5, 10));
 > ```
 >
 > **Explanation:** Static factory methods construct pre-configured class instances.
-
+> 
 ---
 
 ### Exercise 3: Static Class Fields
@@ -222,8 +222,8 @@ console.log("Result:", Calculator.add(5, 10));
 > ```
 >
 > **Explanation:** Static fields store shared global state attached directly to class constructors.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

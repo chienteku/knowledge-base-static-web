@@ -169,7 +169,7 @@ console.log(isValidScore("95"));
 > ```
 > - First check if `typeof score === "number"`.
 > - Then check if it is not `NaN` using `!Number.isNaN(score)`.
-
+> 
 ---
 
 ### Exercise 2: Number.isNaN Validation
@@ -187,7 +187,7 @@ console.log(isValidScore("95"));
 > ```
 >
 > **Explanation:** `Number.isNaN()` accurately detects `NaN` values without implicit type coercion.
-
+> 
 ---
 
 ### Exercise 3: Parsing Non-Numeric Strings to NaN
@@ -205,7 +205,7 @@ console.log(isValidScore("95"));
 > ```
 >
 > **Explanation:** `parseInt` returns `NaN` when parsing invalid numeric strings.
-
+> 
 ---
 
 ## 7. Related Terms

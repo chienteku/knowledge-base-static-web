@@ -155,7 +155,7 @@ Tables are strictly for data. If you use a table for layout, screen readers will
 > Only #2 (The comparison chart). It is actual tabular data. The photo gallery and newspaper layout should be built using CSS Grid or Flexbox, because they are layout problems, not data relationships.
 > ```
 > - Does the data lose its meaning if it's not strictly aligned in specific rows and columns?
-
+> 
 ---
 
 
@@ -182,7 +182,7 @@ Tables are strictly for data. If you use a table for layout, screen readers will
 > ```
 >
 > **Explanation:** Semantic table structure organizes data into `caption`, `thead`, and `tbody` sections.
-
+> 
 ---
 
 ### Exercise 3: Table Border-Collapse CSS Property
@@ -201,7 +201,7 @@ Tables are strictly for data. If you use a table for layout, screen readers will
 > ```
 >
 > **Explanation:** `border-collapse: collapse` eliminates double cell border spacing.
-
+> 
 ## 7. Related Terms
 - [`<tr>` (Table Row)](tr.md) — The tag that defines a horizontal row inside the table.
 - [`<td>` (Table Data)](td.md) — The tag that holds the actual data inside the row.

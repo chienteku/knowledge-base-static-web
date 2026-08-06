@@ -194,7 +194,7 @@ You are designing a user management table where core fields (`email`, `status`) 
 > 1. `SCHEMAFULL` mode rejects any field not explicitly defined with `DEFINE FIELD`.
 > 2. Marking a nested `object` field as `FLEXIBLE` permits arbitrary nested JSON properties while maintaining strict outer table schema rules.
 > 3. Hybrid modeling provides relational schema safety alongside document store flexibility.
-
+> 
 ---
 
 ### Exercise 2: Transitioning SCHEMALESS to SCHEMAFULL
@@ -223,7 +223,7 @@ A startup began prototyping a `product` table in `SCHEMALESS` mode. As the produ
 > 1. `DEFINE TABLE OVERWRITE` updates existing table schema modes idempotently.
 > 2. Switching to `SCHEMAFULL` enforces write-time rejection of undefined fields for all subsequent `CREATE` and `UPDATE` queries.
 > 3. Existing records violating the new schema will fail subsequent write mutations.
-
+> 
 ---
 
 ### Exercise 3: Validating SCHEMAFULL Rejection Rules
@@ -254,7 +254,7 @@ Write a test query demonstrating that a `SCHEMAFULL` table rejects writes contai
 > 1. `SCHEMAFULL` tables act like strict relational SQL tables, guarding against typo fields and accidental data pollution.
 > 2. `SCHEMALESS` tables (default if omitted) accept any JSON property dynamically like MongoDB documents.
 > 3. Choosing between modes depends on whether the application domain requires prototyping flexibility or strict data contract enforcement.
-
+> 
 ---
 
 

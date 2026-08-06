@@ -190,7 +190,7 @@ res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
 > "Boss, a 500-level error explicitly means the SERVER crashed. It is a Backend bug, not a Frontend bug! If I had sent bad data from the frontend, the server would have returned a 400-level error."
 > ```
 > - 4xx = Client's fault. 5xx = Server's fault.
-
+> 
 ---
 
 
@@ -219,7 +219,7 @@ res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
 > ```
 >
 > **Explanation:** Standard status codes communicate exact request processing outcomes.
-
+> 
 ---
 
 ### Exercise 3: 204 No Content Usage
@@ -239,7 +239,7 @@ res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
 > ```
 >
 > **Explanation:** Status 204 indicates successful processing without sending response body bytes.
-
+> 
 ## 7. Related Terms
 - [REST API Design](rest_api.md) — The architecture that relies on these codes.
 - [Unhandled Promise Rejections](../level_05/unhandled_rejections.md) — When this happens, the server usually fails to even send a 500 error!

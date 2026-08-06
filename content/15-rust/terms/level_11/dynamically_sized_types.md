@@ -236,7 +236,7 @@ In low-level networking, binary packet formats often consist of a fixed-size hea
 > 1. **Custom Struct DST Rule**: In Rust, a struct is unsized (a DST) if and only if its **last field** is unsized (such as `[T]`, `str`, or `dyn Trait`). All preceding fields must be `Sized`.
 > 2. **Unsize Coercion**: The compiler automatically permits converting a smart pointer to a fixed-size struct instance (like `Box<PacketHeader<[u8; 4]>>`) into a smart pointer to the unsized struct (`Box<PacketHeader<[u8]>>`).
 > 3. **Fat Pointer Composition**: On the stack, `Box<PacketHeader<[u8]>>` occupies 16 bytes on 64-bit systems — 8 bytes for the heap address pointer and 8 bytes for the length metadata of the slice `[u8]`.
-
+> 
 ---
 
 ### Exercise 2: Trait Objects as DSTs & Heterogeneous Middleware Pipelines
@@ -394,7 +394,7 @@ In HTTP web frameworks and RPC gateways, request processing pipelines invoke dyn
 > 1. **`dyn Trait` as a DST**: Trait objects (`dyn Middleware`) are dynamically sized because the concrete struct behind the trait object could be 0 bytes (`MetricsLogger`) or 24 bytes (`ApiKeyValidator`).
 > 2. **VTable Fat Pointer**: Because `dyn Middleware` is unsized, `Box<dyn Middleware>` stores a 16-byte fat pointer: 8 bytes pointing to the struct instance data on the heap and 8 bytes pointing to the virtual method table (vtable) containing function pointers (`name`, `handle`, `drop`).
 > 3. **Polymorphic Containers**: Using `Box<dyn Middleware>` allows heterogeneous concrete types to be stored inside a uniform `Vec<Box<dyn Middleware>>` container.
-
+> 
 ---
 
 ### Exercise 3: Generic Binary Encoder with `?Sized` Trait Bounds
@@ -531,7 +531,7 @@ By default, generic functions in Rust implicitly bound type parameters with `T: 
 > 1. **Opting Out of `Sized`**: Generic parameter `<T>` implicitly injects `T: Sized`. Without appending `?Sized` (`T: ToBytes + ?Sized`), passing `&str` or `&[u8]` raises compiler error `E0277` because unsized types do not implement `Sized`.
 > 2. **Trait Implementation on DSTs**: Implementing `ToBytes` directly for `str` or `[u8]` (rather than `&str` or `&[u8]`) makes the trait applicable to any reference type pointing to that DST (`&str`, `Box<str>`, `Arc<str>`).
 > 3. **Fat Pointer Borrowing**: The method signature `append(&mut self, item: &T)` takes a reference `&T`. Even when `T` is unsized (`str`), `&T` is a fixed-size fat pointer (16 bytes), enabling safe stack pass-by-reference.
-
+> 
 ---
 
 ## 6. Related Terms

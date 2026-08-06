@@ -175,7 +175,7 @@ Query `orders` joined with `users` returning order `id`, `created_at`, `username
 > 1. `INNER JOIN` matches rows where `o.user_id = u.id` evaluates to `TRUE`.
 > 2. Excludes orders with no matching user and users with no matching orders.
 > 3. Standard relational join statement.
-
+> 
 ---
 
 ### Exercise 2: Multi-Table INNER JOIN Across 3 Tables
@@ -207,7 +207,7 @@ Query order line items joining `orders`, `order_items`, and `products`.
 > 1. Chains multiple `INNER JOIN` clauses sequentially.
 > 2. Resolves relationships across 3 normalized tables.
 > 3. Relational data assembly.
-
+> 
 ---
 
 ### Exercise 3: Join Execution Plan Inspection with `EXPLAIN`
@@ -234,7 +234,7 @@ Inspect whether PostgreSQL executes a `Hash Join`, `Nested Loop`, or `Merge Join
 > 1. PostgreSQL query planner chooses between `Hash Join` (large un-sorted sets), `Nested Loop` (small indexed lookups), or `Merge Join` (pre-sorted sets).
 > 2. Utilizes indexes on foreign keys (`orders.user_id`).
 > 3. Diagnostic tool for join performance tuning.
-
+> 
 ---
 
 

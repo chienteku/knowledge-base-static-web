@@ -174,7 +174,7 @@ Configure an immutable `created_at` field on table `order` that defaults to `tim
 > 1. `READONLY` locks field values against subsequent updates.
 > 2. `DEFAULT time::now()` populates creation timestamps automatically.
 > 3. Guarantees audit trail immutability.
-
+> 
 ---
 
 ### Exercise 2: Calculated Fields with `VALUE` Attributes
@@ -205,7 +205,7 @@ Define a dynamically calculated field `full_name` on table `user` that automatic
 > 1. `VALUE <expr>` evaluates calculated field expressions automatically during writes.
 > 2. `$parent` accesses sibling fields on the current record object.
 > 3. Replaces SQL generated columns and computed properties.
-
+> 
 ---
 
 ### Exercise 3: Field-Level Row Security with `PERMISSIONS`
@@ -230,7 +230,7 @@ Restrict access to a user's `ssn` (Social Security Number) field so that only th
 > 1. `PERMISSIONS` clauses enforce row and field-level security directly in database queries.
 > 2. `$auth.id` checks active client session authentication tokens.
 > 3. Redacts unauthorized fields automatically from query result payloads.
-
+> 
 ---
 
 

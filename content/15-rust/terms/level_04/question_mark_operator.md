@@ -343,7 +343,7 @@ thread::spawn(move || {
 > 2. **Option to Result Bridge**: In `env_vars.get("BIND_ADDR").ok_or_else(...)`, the `Option<&String>` is converted into `Result<&String, ConfigError>` before `?` is evaluated. This permits `?` to unify error control flows originating from optional HashMap lookups and fallible parsing functions.
 > 3. **Ownership and Lifetime Invariants**: The function `parse_app_config` accepts `&HashMap` and `&str` references. Borrowed values (`&String`) are unwrapped, parsed into stack-allocated or owned types (`SocketAddr`, `u32`, `u64`), and returned as an owned `AppConfig` struct. Borrowed slices do not leak beyond function scope.
 > 4. **Zero-Allocation Stack Errors**: The `ConfigError` enum variants wrap standard library error structs directly. Error propagation via `?` involves zero heap allocations unless converting strings, preserving optimal real-time execution performance.
-
+> 
 ---
 
 ### Exercise 2: Heterogeneous Trait Object Pipeline & Dynamic Early-Exit Error Propagation
@@ -525,7 +525,7 @@ thread::spawn(move || {
 > 2. **Trait Object Error Coercion via `?`**: The inner stage execution returns `Result<PipelineData, Box<dyn Error + Send + Sync>>`. The `?` operator unpacks `Ok(data)` or early-returns `Err(boxed_err)`. Because the error types match the outer signature `Result<PipelineData, Box<dyn Error + Send + Sync>>`, `?` unwraps the success payload with zero additional conversion overhead.
 > 3. **Thread Safety Trait Bounds (`Send + Sync`)**: Specifying `Box<dyn Error + Send + Sync>` ensures that errors returned from pipeline stages can safely cross OS thread boundaries and be dispatched in concurrent worker pools.
 > 4. **Dynamic Downcasting**: The unit test demonstrates `err.downcast_ref::<PipelineError>()`. Because `PipelineError` implements `std::error::Error + 'static`, Rust's type system permits runtime type introspection and downcasting of trait objects via `Any::type_id`.
-
+> 
 ---
 
 ### Exercise 3: Generic Stream Buffer Decoding with Zero-Copy Constraints & Checksum Validation
@@ -736,7 +736,7 @@ thread::spawn(move || {
 > 2. **Composed Error Propagation Chain**: Helper functions `read_u16_be` and `read_u32_be` propagate low-level `std::io::Error` via `?`. In `decode_frame`, evaluating `read_u16_be(reader)?` unwraps `u16` on success or invokes `From<io::Error>::from` to convert `io::Error` into `FrameError::Io`.
 > 3. **Short-Circuiting Performance Advantage**: If magic validation (`magic != MAGIC_BYTES`) or payload bounds checks fail, `decode_frame` returns early immediately. This prevents allocated reads or CPU-intensive CRC32 computations on invalid network packets.
 > 4. **Buffer Truncation and Partial Reads**: The call `reader.read_exact(&mut payload)?` guarantees that if fewer than `payload_len` bytes are available, an `UnexpectedEof` `io::Error` is raised and converted via `?`, ensuring caller functions never receive uninitialized or partial payload vectors.
-
+> 
 ---
 
 ## 6. Related Terms

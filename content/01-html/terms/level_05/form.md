@@ -143,7 +143,7 @@ When you hand it to the clerk (clicking submit), the whole envelope goes togethe
 > No! A form acts as a strict boundary. When a submit button is clicked, the browser ONLY collects the data from the input fields that exist inside that specific `<form>` container.
 > ```
 > - Think back to the manila envelope metaphor.
-
+> 
 ---
 
 
@@ -172,7 +172,7 @@ When you hand it to the clerk (clicking submit), the whole envelope goes togethe
 > ```
 >
 > **Explanation:** Complete form encapsulates input controls, labels, methods, actions, and submit buttons.
-
+> 
 ---
 
 ### Exercise 3: Disabling Native HTML5 Form Validation
@@ -189,7 +189,7 @@ When you hand it to the clerk (clicking submit), the whole envelope goes togethe
 > ```
 >
 > **Explanation:** `novalidate` bypasses native browser input validation popups.
-
+> 
 ## 7. Related Terms
 - [`action` & `method` Attributes](action_method.md) — The destination and request details for form data.
 - [`<input>`](input.md) — The text boxes and checkboxes that go *inside* the form.

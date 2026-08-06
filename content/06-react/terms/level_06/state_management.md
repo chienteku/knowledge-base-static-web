@@ -118,7 +118,7 @@ Which global tool should you use for each?
 > 2. GPS Coordinates: Use Zustand/Redux. It updates rapidly, and you only want the map component to re-render, not the entire application.
 > ```
 > - Which one is high-frequency? High-frequency breaks the Context API.
-
+> 
 ---
 
 
@@ -137,7 +137,7 @@ Which global tool should you use for each?
 > ```
 >
 > **Explanation:** Distinguishing state categories determines optimal state management tools.
-
+> 
 ---
 
 ### Exercise 3: State Architecture Decision Matrix
@@ -154,7 +154,7 @@ Which global tool should you use for each?
 > ```
 >
 > **Explanation:** Right-sizing state management tools prevents architectural bloat.
-
+> 
 ## 7. Related Terms
 - [`useReducer` Hook](use_reducer.md) — React's built-in hook that mimics the Action/Reducer pattern of Redux on a local component level.
 - [The Context API](context_api.md) — The built-in alternative.

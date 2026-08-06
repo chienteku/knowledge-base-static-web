@@ -161,7 +161,7 @@ async function processData() {
 > ```
 > - `do { console.log(...); isValid = true; } while (!isValid);`
 > - Because it's set to true inside the first pass, the condition evaluates to false at the end, and the loop stops.
-
+> 
 ---
 
 ### Exercise 2: Guaranteed First Execution Trace
@@ -181,7 +181,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `do...while` loops execute the body first before checking the termination condition.
-
+> 
 ---
 
 ### Exercise 3: Interactive User Retry Simulation
@@ -207,7 +207,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `do...while` ensures operations execute at least once before testing stopping criteria.
-
+> 
 ---
 
 ## 7. Related Terms

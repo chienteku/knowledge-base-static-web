@@ -150,7 +150,7 @@ p { color: black; }
 > Rule B wins! The text will be red. Rule B uses a Class selector (10 points), while Rule A only uses an Element selector (1 point).
 > ```
 > - Review the poker metaphor. Is a class or an element worth more?
-
+> 
 ---
 
 
@@ -179,7 +179,7 @@ p { color: black; }
 > ```
 >
 > **Explanation:** Specificity tuple values compare Inline > ID > Class > Type.
-
+> 
 ---
 
 ### Exercise 3: :is() vs :where() Specificity Difference
@@ -196,7 +196,7 @@ p { color: black; }
 > ```
 >
 > **Explanation:** `:where()` provides zero-specificity utility style grouping.
-
+> 
 ## 7. Related Terms
 - [The Cascade](the_cascade.md) — The system that uses Specificity to resolve conflicts.
 - [Selectors (Element, Class, ID)](selectors.md) — The tools that generate the specificity score.

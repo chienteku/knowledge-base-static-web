@@ -227,7 +227,7 @@ const tagType = ref('p') // can be 'p', 'h1', or 'h2'
 > ```
 > - The built-in `<component>` element accepts native HTML string tags (like `'h1'`) inside `:is`.
 > - Bind the `tagType` variable directly to the `:is` attribute.
-
+> 
 ---
 
 ### Exercise 2: Dynamic Tab Switching Pattern
@@ -257,7 +257,7 @@ const tagType = ref('p') // can be 'p', 'h1', or 'h2'
 >   <component :is="activeTab" />
 > </template>
 > ```
-
+> 
 ---
 
 ### Exercise 3: KeepAlive Caching with Dynamic Components
@@ -276,8 +276,8 @@ const tagType = ref('p') // can be 'p', 'h1', or 'h2'
 >   <component :is="activeTab" />
 > </KeepAlive>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

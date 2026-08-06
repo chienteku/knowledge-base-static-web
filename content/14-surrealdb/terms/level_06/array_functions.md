@@ -172,7 +172,7 @@ A social media service collects tag arrays from user posts `[["rust", "db"], ["d
 > 1. `array::flatten()` unwraps multi-dimensional nested arrays into a single-dimensional list.
 > 2. `array::distinct()` removes duplicate values from the flattened array.
 > 3. Processes collection transformations natively within the database query engine.
-
+> 
 ---
 
 ### Exercise 2: Array Element Search with `array::find()`
@@ -198,7 +198,7 @@ An e-commerce order service searches a product's tag array to find the first tag
 > 1. `array::find(array, closure)` evaluates closure predicate expressions against array elements.
 > 2. Returns the first element matching the predicate or `NONE` if no match exists.
 > 3. Enables functional array searching inside SurrealQL queries.
-
+> 
 ---
 
 ### Exercise 3: Array Reversal and Slicing
@@ -225,7 +225,7 @@ An activity stream retrieves the 3 most recent notifications from a user's notif
 > 1. `array::reverse()` reverses array element order in-place.
 > 2. `[0..3]` applies range slicing to retrieve targeted element windows.
 > 3. Facilitates array manipulation without client-side processing loops.
-
+> 
 ---
 
 

@@ -129,13 +129,13 @@ Demonstrate automatic type inference for primitive variable declarations without
 > // Inferred as boolean:
 > const isActive = true;
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript automatically infers variable types from initial assigned values.
 > 2. `let` declarations infer broader primitive types (`number`, `string`) because their values can mutate.
 > 3. `const` declarations infer narrow literal types (`"production"`) because their values cannot mutate.
-
+> 
 ---
 
 ### Exercise 2: Function Return Type Inference
@@ -158,13 +158,13 @@ Rely on function return type inference for mathematical operations while keeping
 > 
 > const result = add(5, 15); // result is inferred as number
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript inspects `return` statements to infer function return types automatically.
 > 2. Parameter types (`a: number`) must still be explicitly annotated when `noImplicitAny` is enabled.
 > 3. Reduces visual noise while maintaining complete type safety.
-
+> 
 ---
 
 ### Exercise 3: Array Type Inference with Mixed Elements
@@ -187,13 +187,13 @@ Inspect array element type inference when initializing arrays with multiple prim
 > items.push("test");  // Valid!
 > // items.push(true); // ❌ Compile Error: Argument of type 'boolean' is not assignable to 'string | number'.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Array literals calculate the best common type across all initial elements (`(string | number)[]`).
 > 2. Prevents pushing elements of un-inferred types (`boolean`) into the array later.
 > 3. Automatic union array type inference.
-
+> 
 ---
 
 

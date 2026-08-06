@@ -178,7 +178,7 @@ pub(crate) fn get_data() -> InternalData { InternalData } // Match visibility sc
 > - `pub` and `pub(crate)` would both allow `main.rs` to call it.
 > - No keyword would prevent `engine` from calling it.
 > - `pub(super)` makes it visible ONLY to `engine` (the immediate parent)!
-
+> 
 ---
 
 ### Exercise 2: Restricting Visibility with `pub(crate)`
@@ -202,7 +202,7 @@ pub(crate) fn get_data() -> InternalData { InternalData } // Match visibility sc
 >
 > #### Technical Explanation
 > `pub(crate)` restricts item visibility strictly to modules within the containing crate.
-
+> 
 ---
 
 ### Exercise 3: Accessing Parent Scope with `super`
@@ -227,7 +227,7 @@ pub(crate) fn get_data() -> InternalData { InternalData } // Match visibility sc
 >
 > #### Technical Explanation
 > `super` refers to the immediate parent module in relative path lookups.
-
+> 
 ---
 
 ## 6. Related Terms

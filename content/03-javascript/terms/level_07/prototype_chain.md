@@ -167,7 +167,7 @@ async function processData() {
 > It is the ultimate master object. Its own prototype is strictly `null`, which tells the JavaScript engine to stop searching.
 > ```
 > - `Object.getPrototypeOf(Object.prototype)`
-
+> 
 ---
 
 ### Exercise 2: Traversing Prototype Chain to Null Root
@@ -184,7 +184,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** All standard JS prototype chains terminate at `Object.prototype -> null`.
-
+> 
 ---
 
 ### Exercise 3: Property Lookup Along Prototype Chain
@@ -204,8 +204,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Engine looks up missing properties recursively along `[[Prototype]]` chains until found or reaching `null`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

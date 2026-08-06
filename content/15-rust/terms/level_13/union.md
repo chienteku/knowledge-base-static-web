@@ -292,7 +292,7 @@ Design a 32-bit hardware register overlay using a `#[repr(C)]` union:
 > 1. **Zero-Cost Overlay:** Placing `raw`, `halves`, and `bytes` in a `#[repr(C)] union` maps all three fields to offset 0 in memory. Modifying a byte in `bytes` immediately updates the corresponding bits in `raw` and `halves` without extra CPU instructions.
 > 2. **Memory Alignment:** `#[repr(C)]` ensures the union is aligned to 4 bytes (the maximum alignment requirement among `u32`, `RegisterHalves`, and `[u8; 4]`), matching hardware MMIO bus requirements.
 > 3. **Encapsulating `unsafe`:** The helper methods encapsulate `unsafe` union field reads inside safe Rust functions, asserting bounds checks on byte indices before performing raw writes.
-
+> 
 ---
 
 ### Exercise 2: Interfacing with C FFI Untagged Unions (`CNetworkPacket`)
@@ -456,7 +456,7 @@ Requirements:
 > 1. **C Foreign Interoperability:** `#[repr(C)]` guarantees that Rust uses the exact same field offsets, memory padding, and alignment rules as C compilers (GCC/Clang).
 > 2. **Untagged Union Safety Contract:** The C protocol uses `payload_type` as a discriminant tag. In Rust, we inspect `payload_type` inside a safe `match` statement before entering `unsafe` blocks to read the active variant.
 > 3. **Idiomatic Rust Conversion:** Converting C-style raw structures into an idiomatic Rust `enum` isolates unsafe FFI boundaries at the edge of your application.
-
+> 
 ---
 
 ### Exercise 3: Safe Polymorphic Node Storage using `ManuallyDrop<T>`
@@ -564,9 +564,9 @@ Design a memory-optimized node storage structure:
 > 1. **Why `ManuallyDrop<T>` is Required:** Non-`Copy` types (like `String`) manage heap memory. Rust forbids raw non-`Copy` fields in unions because the compiler does not know which field to drop when the union is destroyed. `ManuallyDrop<T>` disables automatic drop checking.
 > 2. **Custom Destructor Implementation:** We implement `Drop for ValueNode` to inspect the runtime `tag`. When `tag == 1`, we invoke `unsafe { ManuallyDrop::drop(&mut self.value.str_val) }` to free heap string memory without leaking.
 > 3. **Safety Isolation:** Encapsulating `NodeValue` inside `ValueNode` ensures that external callers interact with safe APIs (`as_int()`, `as_str()`) while maintaining 0-cost memory optimization under the hood.
-
-
-
+> 
+> 
+> 
 ---
 
 ## 6. Related Terms

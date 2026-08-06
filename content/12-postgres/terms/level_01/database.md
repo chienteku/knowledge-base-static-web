@@ -139,7 +139,7 @@ List all databases available on the current PostgreSQL cluster instance in `psql
 > 1. `pg_database` is the system catalog table tracking all databases in the cluster instance.
 > 2. Each database represents a distinct logical storage boundary.
 > 3. Displays encoding (`UTF8`) and collation settings per database.
-
+> 
 ---
 
 ### Exercise 2: Switching Active Databases in psql
@@ -163,7 +163,7 @@ Switch current terminal connection from default database `postgres` to target da
 > 1. `\c dbname` closes the active database socket and opens a new connection to `dbname`.
 > 2. SQL queries cannot join tables across separate databases; cross-database queries require Foreign Data Wrappers (`postgres_fdw`).
 > 3. Enforces logical database isolation boundaries.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Database Disk Footprints
@@ -187,7 +187,7 @@ Query total byte size of database `store_db` using `pg_database_size()`.
 > 1. `pg_database_size('dbname')` calculates total disk space consumed by tables, indexes, and Toast files in the database.
 > 2. `pg_size_pretty()` formats raw byte counts into human-readable units (e.g. `150 MB`).
 > 3. Essential metric for capacity monitoring.
-
+> 
 ---
 
 

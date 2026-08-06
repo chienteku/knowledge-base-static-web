@@ -209,7 +209,7 @@ console.log("Celsius:", thermometer._celsius); // should be 0
 > [!check]- Answer
 > - Inside the getter, return `this._celsius * 1.8 + 32`.
 > - Inside the setter, write `this._celsius = (f - 32) / 1.8`.
-
+> 
 ---
 
 ### Exercise 2: Backing Property Accessor Pattern
@@ -231,7 +231,7 @@ console.log("Celsius:", thermometer._celsius); // should be 0
 > ```
 >
 > **Explanation:** Getters execute function logic seamlessly upon standard property reads (`user.fullName`).
-
+> 
 ---
 
 ### Exercise 3: Validating Input with Setters
@@ -257,8 +257,8 @@ console.log("Celsius:", thermometer._celsius); // should be 0
 > ```
 >
 > **Explanation:** Setters intercept property writes to validate data before updating backing state.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

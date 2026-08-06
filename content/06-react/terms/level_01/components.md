@@ -178,7 +178,7 @@ function Cup({ guest }) {
 > ```
 > - Remember to return a single parent element (the `div`).
 > - Use PascalCase for the component tags.
-
+> 
 ---
 
 ### Exercise 2: Extracting Reusable Button Component
@@ -194,7 +194,7 @@ function Cup({ guest }) {
 > ```
 >
 > **Explanation:** Components encapsulate UI structure and behavior via props.
-
+> 
 ---
 
 ### Exercise 3: Component Naming Capitalization
@@ -208,7 +208,7 @@ function Cup({ guest }) {
 > ```
 >
 > **Explanation:** Lowercase tags (`<button>`) evaluate to HTML string tags; uppercase tags (`<Button>`) evaluate to component functions.
-
+> 
 ## 7. Related Terms
 - [Render Purity](render_purity.md) — The rule that components must be pure functions.
 - [Fragments](fragments.md) — Grouping sibling elements without adding wrapper nodes.

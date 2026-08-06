@@ -198,7 +198,7 @@ Which option will look perfectly smooth on a cheap 5-year-old smartphone?
 > Animating properties like `top`, `margin`, or `width` forces the CPU to recalculate the page layout 60 times a second, causing lag. Animating `transform` is handled by the GPU and is incredibly smooth.
 > ```
 > - Which one uses the Graphics Card instead of the CPU?
-
+> 
 ---
 
 
@@ -222,7 +222,7 @@ Which option will look perfectly smooth on a cheap 5-year-old smartphone?
 > ```
 >
 > **Explanation:** `translate(-50%, -50%)` offsets element by half its own width and height for exact centering.
-
+> 
 ---
 
 ### Exercise 3: Hardware Accelerated GPU Layer Trigger
@@ -241,7 +241,7 @@ Which option will look perfectly smooth on a cheap 5-year-old smartphone?
 > ```
 >
 > **Explanation:** 3D transforms promote elements to dedicated GPU compositor layers for 60fps animations.
-
+> 
 ## 7. Related Terms
 - [`transition`](transition.md) — Without a transition, a transform just instantly snaps to its new shape/position.
 - [`@keyframes` & `animation`](animation.md) — Complex animations that often chain multiple transforms together.

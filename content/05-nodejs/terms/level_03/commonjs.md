@@ -129,7 +129,7 @@ How does the `require` statement look different for Developer A vs Developer B?
 > const { User } = require('./user.js');
 > ```
 > - Is `require()` returning the class itself, or an object *holding* the class?
-
+> 
 ---
 
 
@@ -151,7 +151,7 @@ How does the `require` statement look different for Developer A vs Developer B?
 > ```
 >
 > **Explanation:** `module.exports` defines the public API object returned when requiring the module.
-
+> 
 ---
 
 ### Exercise 3: CommonJS Caching Behavior
@@ -168,7 +168,7 @@ How does the `require` statement look different for Developer A vs Developer B?
 > ```
 >
 > **Explanation:** `require()` caches loaded module exports in `require.cache`; subsequent imports return the cached object.
-
+> 
 ## 7. Related Terms
 - [ES Modules (import, export)](es_modules.md) — The modern replacement for CommonJS.
 - [NPM (Node Package Manager)](../level_04/npm.md) — NPM packages are historically distributed as CommonJS modules.

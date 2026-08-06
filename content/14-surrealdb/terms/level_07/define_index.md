@@ -149,7 +149,7 @@ Create a secondary index `idx_user_email` on table `user` to speed up email look
 > 1. `DEFINE INDEX` creates secondary B-tree index structures for fast field lookups.
 > 2. Converts $O(N)$ table scans into $O(\log N)$ B-tree index searches.
 > 3. Indexes update automatically during record insertions and modifications.
-
+> 
 ---
 
 ### Exercise 2: Unique Index DDL Creation
@@ -173,7 +173,7 @@ Create a unique index `idx_unique_username` on table `user` ensuring no duplicat
 > 1. `UNIQUE` enforces unique constraints at write time, aborting duplicate insertions.
 > 2. Protects database integrity against race conditions.
 > 3. Combines lookup acceleration with constraint enforcement.
-
+> 
 ---
 
 ### Exercise 3: Dropping Secondary Indexes with `REMOVE INDEX`
@@ -197,7 +197,7 @@ Drop index `idx_user_email` from table `user`.
 > 1. `REMOVE INDEX` drops secondary index structures from storage metadata registers.
 > 2. Frees index disk storage and reduces write amplification.
 > 3. Table data records remain unaffected.
-
+> 
 ---
 
 

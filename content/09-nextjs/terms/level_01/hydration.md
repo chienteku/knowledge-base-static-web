@@ -144,30 +144,30 @@ Fix a hydration error caused by rendering `new Date().toLocaleTimeString()` dire
 >
 > ```tsx
 > "use client";
-
-import { useState, useEffect } from "react";
-
-export default function Clock() {
-  const [time, setTime] = useState<string | null>(null);
-
-  useEffect(() => {
-    setTime(new Date().toLocaleTimeString());
-  }, []);
-
-  return (
-    <div>
-      <p>Current Time: {time ?? "Loading..."}</p>
-    </div>
-  );
-}
-```
-
+> 
+> import { useState, useEffect } from "react";
+> 
+> export default function Clock() {
+>   const [time, setTime] = useState<string | null>(null);
+> 
+>   useEffect(() => {
+>     setTime(new Date().toLocaleTimeString());
+>   }, []);
+> 
+>   return (
+>     <div>
+>       <p>Current Time: {time ?? "Loading..."}</p>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Hydration errors occur when server-rendered initial HTML DOM differs from client initial render output.
 > 2. `new Date()` outputs different values between server build/render and client hydration execution.
 > 3. Deferring client-specific state updates to `useEffect()` ensures identical initial server and client DOM trees.
-
+> 
 ---
 
 ### Exercise 2: Suppressing Hydration Warnings for Intentionally Divergent Content
@@ -191,13 +191,13 @@ Suppress hydration warnings on a element rendering localized timestamps using `s
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `suppressHydrationWarning` suppresses React hydration mismatch warnings for 1-level deep text content.
 > 2. Useful for timestamps or client-only attributes that intentionally differ from server HTML.
 > 3. Use sparingly to avoid masking real structural layout bugs.
-
+> 
 ---
 
 ### Exercise 3: Debugging Invalid HTML Structure Hydration Failures
@@ -215,29 +215,25 @@ Fix a hydration crash caused by invalid HTML tag nesting (`<p><div>...</div></p>
 > ```tsx
 > // ❌ INCORRECT (Triggers browser auto-repair hydration error):
 > // <p><div>Block Text</div></p>
-
-// ✅ CORRECT:
-export default function ValidLayout() {
-  return (
-    <div>
-      <div>Block Text</div>
-    </div>
-  );
-}
-```
-
+> 
+> // ✅ CORRECT:
+> export default function ValidLayout() {
+>   return (
+>     <div>
+>       <div>Block Text</div>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Browsers auto-correct invalid W3C HTML nesting (e.g. closing `<p>` tags before block `<div>` elements) before React hydrates.
 > 2. This browser auto-correction mutates the physical DOM tree, causing React's hydrator to throw hydration errors.
 > 3. Always maintain valid HTML element hierarchy.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Dynamic Rendering (SSR)](../level_08/ssr.md) — The process that generates the static HTML to hydrate.

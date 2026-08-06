@@ -146,7 +146,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** The JS call stack manages active execution contexts in LIFO order.
-
+> 
 ---
 
 ### Exercise 2: Execution Context Creation vs Execution Phase
@@ -163,10 +163,9 @@ async function processData() {
 > ```
 >
 > **Explanation:** JS engines allocate variable memory during creation phase before executing code lines.
-
+> 
 ---
 
----
 
 ### Exercise 3: Lexical Environment Component
 
@@ -182,8 +181,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Lexical Environment holds local variable bindings and pointer references to parent scopes.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

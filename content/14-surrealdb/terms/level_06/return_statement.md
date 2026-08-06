@@ -183,7 +183,7 @@ A database script performs multiple updates and uses `RETURN` to output a custom
 > 1. `RETURN expression;` specifies the final output payload returned by a script block.
 > 2. Overrides default statement return payloads.
 > 3. Constructs custom response objects directly inside database transactions.
-
+> 
 ---
 
 ### Exercise 2: Early Return from Conditional Blocks
@@ -213,7 +213,7 @@ If a requested account `account:a1` is frozen, return an early error summary obj
 > 1. `RETURN` terminates script execution early when encountered inside conditional blocks.
 > 2. Prevents subsequent update statements from executing.
 > 3. Enables procedural guard clauses in SurrealQL scripts.
-
+> 
 ---
 
 ### Exercise 3: Returning Evaluated Calculation Values
@@ -238,7 +238,7 @@ Calculate and return the result of a mathematical expression `math::sqrt(144)` d
 > 1. `RETURN` can evaluate and return scalar expressions directly without a `SELECT` statement.
 > 2. Simplifies stored procedure function return statements.
 > 3. Returns unboxed calculation results directly to the caller.
-
+> 
 ---
 
 

@@ -188,31 +188,31 @@ Create a method decorator `@log` that logs execution timing and parameters when 
 > ```typescript
 > function log(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
 >   const originalMethod = descriptor.value;
-
-  descriptor.value = function (...args: any[]) {
-    console.log(`[LOG] Calling ${propertyKey} with args:`, args);
-    const result = originalMethod.apply(this, args);
-    console.log(`[LOG] Result:`, result);
-    return result;
-  };
-
-  return descriptor;
-}
-
-class Calculator {
-  @log
-  add(a: number, b: number): number {
-    return a + b;
-  }
-}
-```
-
+> 
+>   descriptor.value = function (...args: any[]) {
+>     console.log(`[LOG] Calling ${propertyKey} with args:`, args);
+>     const result = originalMethod.apply(this, args);
+>     console.log(`[LOG] Result:`, result);
+>     return result;
+>   };
+> 
+>   return descriptor;
+> }
+> 
+> class Calculator {
+>   @log
+>   add(a: number, b: number): number {
+>     return a + b;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Decorators (`@decorator`) wrap class methods, modifying or replacing their `PropertyDescriptor`.
 > 2. Intercepts method execution dynamically for logging, caching, or security validation.
 > 3. Core meta-programming feature in Angular, NestJS, and TypeORM.
-
+> 
 ---
 
 ### Exercise 2: Class Decorators for Meta-Data Injection
@@ -232,19 +232,19 @@ Create a class decorator `@sealed` that seals the class constructor and prototyp
 >   Object.seal(constructor);
 >   Object.seal(constructor.prototype);
 > }
-
-@sealed
-class BankVault {
-  open() { console.log("Vault opened"); }
-}
-```
-
+> 
+> @sealed
+> class BankVault {
+>   open() { console.log("Vault opened"); }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Class decorators execute at class declaration time, receiving the constructor function as their argument.
 > 2. `Object.seal()` prevents adding new properties to the class prototype.
 > 3. Used for meta-data injection, aspect-oriented programming, and dependency injection registration.
-
+> 
 ---
 
 ### Exercise 3: Auditing `experimentalDecorators` vs Stage 3 Decorators
@@ -264,13 +264,13 @@ Explain the configuration difference between legacy `"experimentalDecorators": t
 > - Legacy Decorators ("experimentalDecorators": true): Experimental 2014 proposal. Uses metadata reflection (reflect-metadata). Required for NestJS / Angular.
 > - Stage 3 Decorators (TS 5.0+): Official TC39 ECMAScript standard. Built-in natively without experimental flags. Distinct signature parameter types.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript 5.0 introduced native support for TC39 Stage 3 Decorators.
 > 2. Legacy frameworks (NestJS, TypeORM) still require `"experimentalDecorators": true` in `tsconfig.json`.
 > 3. Critical compiler configuration awareness.
-
+> 
 ---
 
 

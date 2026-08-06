@@ -177,7 +177,7 @@ Include a test function `pub fn test_telemetry_summarizer()` with assertions ver
 > 1. **Crate Enabling (`extern crate alloc;`)**: In `#![no_std]` targets, the compiler provides access to heap allocation primitives (`Vec`, `String`, `format!`) via `alloc`, without depending on standard library operating system wrappers (`std`).
 > 2. **Heap Collection (`alloc::vec::Vec`)**: The `filter` and `collect` iterator pipeline allocates memory dynamically via the registered `#[global_allocator]` to store an arbitrary number of valid sensor pairs.
 > 3. **Dynamic Text Generation (`alloc::format!`)**: Generates owned dynamic strings in heap memory on bare-metal systems where standard console output or OS file descriptors are unavailable.
-
+> 
 ---
 
 ### Exercise 2: Polymorphic Dynamic Command Dispatcher (`alloc::boxed::Box`)
@@ -302,7 +302,7 @@ Implement a `#![no_std]` command processing system using dynamic trait objects b
 > 1. **Polymorphic Heap Allocation (`Box<dyn Trait>`)**: Unsized trait objects (`dyn Command`) cannot be stored directly inside contiguous arrays. Placing them inside `alloc::boxed::Box` creates a heap pointer paired with a vtable (fat pointer), enabling heterogeneous collections in `#![no_std]`.
 > 2. **Decoupled Architecture**: Heterogeneous command payloads can be queued and processed uniformly through `Vec<Box<dyn Command>>` without requiring large enums or monolithic switch statements.
 > 3. **Resource Cleanup (`drain(..)`)**: Using `Vec::drain(..)` transfers ownership of boxed objects out of the queue during iteration. As each `Box` goes out of scope after execution, its allocated memory is automatically reclaimed by the global allocator.
-
+> 
 ---
 
 ### Exercise 3: Bare-Metal Device Registry & Map Lookup (`alloc::collections::BTreeMap`)
@@ -386,10 +386,9 @@ Implement a bare-metal peripheral device manager `struct DeviceRegistry` that ro
 > 1. **No-OS Key-Value Map (`BTreeMap`)**: While `HashMap` requires OS entropy for hash seeds, `BTreeMap` relies only on key comparison (`Ord`), making it the standard dynamic dictionary structure in `alloc` for `#![no_std]` targets.
 > 2. **Deterministic Ordering**: `BTreeMap` automatically sorts keys in memory ($O(\log N)$ operations). Iterating over `BTreeMap` yields keys in natural ascending order, guaranteeing deterministic serial output for embedded hardware inspection.
 > 3. **Heap Storage Management**: Dynamically resizes internally as devices are added or removed, utilizing allocator pages without fixed array size limits.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

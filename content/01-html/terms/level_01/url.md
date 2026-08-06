@@ -175,7 +175,7 @@ Absolute vs relative path attributes inside HTML:
 > 5. Absolute URL
 > ```
 > - Does the string start with a protocol prefix like `http://` or `https://`?
-
+> 
 ---
 
 
@@ -210,7 +210,7 @@ Absolute vs relative path attributes inside HTML:
 > ```
 >
 > **Explanation:** URLs consist of protocol, host, port, path, query string, and fragment identifier.
-
+> 
 ---
 
 ### Exercise 3: Absolute vs Relative URL Comparison
@@ -232,7 +232,7 @@ Absolute vs relative path attributes inside HTML:
 > ```
 >
 > **Explanation:** Absolute URLs specify full protocol/domain; relative URLs resolve relative to current host/path.
-
+> 
 ## 7. Related Terms
 - [Attribute](attribute.md) — The HTML tag parameters that receive URLs as values.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — The standard HTML link element utilizing `href`.

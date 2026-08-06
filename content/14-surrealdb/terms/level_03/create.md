@@ -161,7 +161,7 @@ A user registration service creates user records using deterministic primary key
 > 1. `CREATE table:id` creates a record with an explicit primary key identifier (`user:john`).
 > 2. `SET key = val` specifies field assignments cleanly.
 > 3. If `user:john` already exists, `CREATE` fails with a record conflict error (unlike `UPSERT`).
-
+> 
 ---
 
 ### Exercise 2: Bulk Document Creation with `CONTENT` Payloads
@@ -193,7 +193,7 @@ A product inventory service creates a new product document using a single JSON `
 > 1. `CREATE ... CONTENT { ... }` inserts a complete JSON document object in a single statement.
 > 2. Supports nested objects (`specs`) and arrays natively within the payload.
 > 3. Matches document database (MongoDB) insertion semantics while retaining SQL table structure.
-
+> 
 ---
 
 ### Exercise 3: Automatic Random ID Generation
@@ -219,7 +219,7 @@ An event logger inserts audit events into table `audit_log` allowing SurrealDB t
 > 1. Omitting the record ID in `CREATE <table>` generates a random unique string ID automatically (e.g. `audit_log:a7x9q2m...`).
 > 2. Prevents primary key collisions in high-concurrency event ingestion pipelines.
 > 3. Returns the newly generated record object containing its assigned `id`.
-
+> 
 ---
 
 

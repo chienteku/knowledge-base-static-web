@@ -142,7 +142,7 @@ async function processData() {
 > You must wrap them in a single parent element, like a `<div>`, or use a special React Fragment `<>`:
 > ```
 > - Think about how many values a normal JavaScript function can `return`.
-
+> 
 ---
 
 ### Exercise 2: Desugaring JSX to `React.createElement`
@@ -159,7 +159,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Transpilers convert JSX tags into `React.createElement` or `jsx()` factory function calls.
-
+> 
 ---
 
 ### Exercise 3: JSX Expression Interpolation Rules
@@ -176,8 +176,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** JSX ignores nullish and boolean values to facilitate conditional rendering (`cond && <Tag />`).
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

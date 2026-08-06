@@ -181,7 +181,7 @@ console.log(point.printCoords()); // "Coordinates: 10, 20"
 
 > [!check]- Answer
 > - Inside the object return, write `x, y,` and then declare the method: `printCoords() { return ... }`.
-
+> 
 ---
 
 ### Exercise 2: ES6 Property Shorthand
@@ -201,7 +201,7 @@ console.log(point.printCoords()); // "Coordinates: 10, 20"
 > ```
 >
 > **Explanation:** ES6 property shorthand `{ name }` maps variable names directly as object keys.
-
+> 
 ---
 
 ### Exercise 3: ES6 Method Shorthand
@@ -219,8 +219,8 @@ console.log(point.printCoords()); // "Coordinates: 10, 20"
 > ```
 >
 > **Explanation:** ES6 method shorthand eliminates colon and `function` keywords in object definitions.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

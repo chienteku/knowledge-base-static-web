@@ -211,7 +211,7 @@ Comparing `filter` vs `backdrop-filter`:
 > ```
 > - Position the bar statically at the top.
 > - Blend transparency and backdrop filters.
-
+> 
 ---
 
 
@@ -235,7 +235,7 @@ Comparing `filter` vs `backdrop-filter`:
 > ```
 >
 > **Explanation:** Glassmorphism combines semi-transparent background color, backdrop blur, and subtle border highlights.
-
+> 
 ---
 
 ### Exercise 3: filter vs backdrop-filter Difference
@@ -252,7 +252,7 @@ Comparing `filter` vs `backdrop-filter`:
 > ```
 >
 > **Explanation:** `backdrop-filter` targets backdrop layers behind semi-transparent containers.
-
+> 
 ## 7. Related Terms
 - [`filter`](filter.md) — Applying filters to the element itself.
 - [`opacity`](opacity.md) — Sizing transparency values.

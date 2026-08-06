@@ -156,7 +156,7 @@ Execute a multi-statement bank transfer where the second `UPDATE` fails, trigger
 > 1. Atomicity guarantees "all or nothing" execution across statements in a transaction block.
 > 2. `ROLLBACK` restores row state to the exact snapshot recorded at `BEGIN`.
 > 3. Prevents partial financial updates.
-
+> 
 ---
 
 ### Exercise 2: Verifying Transactional Durability via WAL Flushes
@@ -180,7 +180,7 @@ Verify that `synchronous_commit = on` is enabled to guarantee WAL disk flush dur
 > 1. Durability guarantees that committed transaction writes survive operating system crashes or power failure.
 > 2. `synchronous_commit = on` forces PostgreSQL to wait for the Write-Ahead Log (WAL) to flush to disk before returning success to clients.
 > 3. Essential for financial database durability.
-
+> 
 ---
 
 ### Exercise 3: Managing ACID Transactions in Node.js Applications
@@ -197,31 +197,31 @@ Wrap a database write sequence in a Node.js `pg` client transaction using `try/c
 >
 > ```typescript
 > import { pool } from "./db";
-
-export async function transferFunds(fromId: number, toId: number, amountCents: number) {
-  const client = await pool.connect();
-  try {
-    await client.query("BEGIN");
-    
-    await client.query("UPDATE accounts SET balance_cents = balance_cents - $1 WHERE id = $2", [amountCents, fromId]);
-    await client.query("UPDATE accounts SET balance_cents = balance_cents + $1 WHERE id = $2", [amountCents, toId]);
-    
-    await client.query("COMMIT");
-  } catch (err) {
-    await client.query("ROLLBACK");
-    throw err;
-  } finally {
-    client.release();
-  }
-}
-```
-
+> 
+> export async function transferFunds(fromId: number, toId: number, amountCents: number) {
+>   const client = await pool.connect();
+>   try {
+>     await client.query("BEGIN");
+>     
+>     await client.query("UPDATE accounts SET balance_cents = balance_cents - $1 WHERE id = $2", [amountCents, fromId]);
+>     await client.query("UPDATE accounts SET balance_cents = balance_cents + $1 WHERE id = $2", [amountCents, toId]);
+>     
+>     await client.query("COMMIT");
+>   } catch (err) {
+>     await client.query("ROLLBACK");
+>     throw err;
+>   } finally {
+>     client.release();
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Node.js connection pools require acquiring a single dedicated `client` connection for transaction blocks.
 > 2. `catch` block issues `ROLLBACK` if any query inside `BEGIN` throws an error.
 > 3. `finally` releases the client back to the pool cleanly.
-
+> 
 ---
 
 

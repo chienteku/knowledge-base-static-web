@@ -151,7 +151,7 @@ function Wrapper({ children }) {
 > ```
 >
 > **Explanation:** The `children` prop projects nested JSX elements passed inside component tags.
-
+> 
 ---
 
 ### Exercise 2: Safely Counting Children
@@ -170,7 +170,7 @@ function Wrapper({ children }) {
 > ```
 >
 > **Explanation:** `React.Children.count()` safely counts children regardless of single, array, or null types.
-
+> 
 ---
 
 ### Exercise 3: Cloning Children with Added Props
@@ -197,7 +197,7 @@ function Wrapper({ children }) {
 > ```
 >
 > **Explanation:** `React.cloneElement` injects props into child elements while preserving original props.
-
+> 
 ## 7. Related Terms
 - [Render Props](render_props.md) — An advanced pattern where the `children` prop is explicitly a function instead of JSX.
 

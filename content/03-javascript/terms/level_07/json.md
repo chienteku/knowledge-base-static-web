@@ -197,7 +197,7 @@ console.log(result);
 > {"theme":"dark","volume":75}
 > ```
 > - Call `JSON.stringify(localSettings)`.
-
+> 
 ---
 
 ### Exercise 2: Custom Replacer Filtering in `JSON.stringify`
@@ -215,7 +215,7 @@ console.log(result);
 > ```
 >
 > **Explanation:** The second parameter array argument in `JSON.stringify` acts as an allowed property whitelist.
-
+> 
 ---
 
 ### Exercise 3: Parsing JSON with Reviver Functions
@@ -237,7 +237,7 @@ console.log(result);
 > ```
 >
 > **Explanation:** Reviver functions transform parsed JSON keys and values during deserialization.
-
+> 
 ---
 
 ## 7. Related Terms

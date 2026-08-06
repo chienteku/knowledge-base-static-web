@@ -285,7 +285,7 @@ tx.send(Arc::new(42)); // Correct: Arc implements Send!
 > 1. `mpsc::sync_channel(bound)` allocates fixed ring-buffer capacity to enforce backpressure.
 > 2. `try_send` returns immediately with `TrySendError::Full` if capacity is reached without blocking caller threads.
 > 3. `drop(tx)` closes the channel so the consumer loop (`for entry in rx`) terminates cleanly.
-
+> 
 ---
 
 ### Exercise 2: Multi-Stage Fan-Out / Fan-In Parallel ETL Pipeline Topology
@@ -432,7 +432,7 @@ tx.send(Arc::new(42)); // Correct: Arc implements Send!
 > 1. `Arc<Mutex<Receiver<RawRecord>>>` shares a single `Receiver` across multiple parallel stage 2 worker threads.
 > 2. Cascading channel shutdown propagates automatically as upstream senders complete and drop.
 > 3. Stage 3 aggregates output records concurrently without shared state mutations.
-
+> 
 ---
 
 ### Exercise 3: Bidirectional Request-Response Protocol via Channel-in-Message Pattern
@@ -596,7 +596,7 @@ tx.send(Arc::new(42)); // Correct: Arc implements Send!
 > 1. Channel-in-message pattern encapsulates response `Sender` instances inside command payloads for bi-directional RPC messaging.
 > 2. Each request creates an isolated oneshot reply channel `(reply_tx, reply_rx)`.
 > 3. `WorkerPool::shutdown` terminates worker threads cleanly by sending shutdown commands and joining handles.
-
+> 
 ---
 
 ## 6. Related Terms

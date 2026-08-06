@@ -176,7 +176,7 @@ Find all customers who have placed MORE than 5 total orders.
 > 1. `HAVING` filters aggregated group rows AFTER `GROUP BY` reduction occurs.
 > 2. `WHERE` cannot filter on aggregate results (`WHERE COUNT(*) > 5` throws a syntax error).
 > 3. Filters output groups based on metric thresholds.
-
+> 
 ---
 
 ### Exercise 2: Combining WHERE Row Filters with HAVING Group Filters
@@ -206,7 +206,7 @@ Find categories with average price over $50, considering ONLY active products (`
 > 1. `WHERE` filters individual rows BEFORE `GROUP BY` aggregation.
 > 2. `GROUP BY` collapses surviving rows into category groups.
 > 3. `HAVING` filters category groups based on the calculated `AVG()` metric.
-
+> 
 ---
 
 ### Exercise 3: Filtering Groups on Multiple Aggregate Thresholds
@@ -237,7 +237,7 @@ Find high-value customer groups where `COUNT(*) >= 3` AND `SUM(total_cents) >= 5
 > 1. `HAVING` evaluates complex boolean expressions combining multiple aggregate functions.
 > 2. Identifies VIP customer segments meeting multiple threshold criteria.
 > 3. Analytics pipeline pattern.
-
+> 
 ---
 
 

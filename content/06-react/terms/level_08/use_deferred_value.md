@@ -173,7 +173,7 @@ const HeavyList = React.memo(function HeavyList({ query }) { ... });
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Deferring Search Query for Heavy List
@@ -199,7 +199,7 @@ const HeavyList = React.memo(function HeavyList({ query }) { ... });
 > ```
 >
 > **Explanation:** `useDeferredValue` keeps input typing responsive while deferring heavy child list renders.
-
+> 
 ---
 
 ### Exercise 3: useDeferredValue vs Debounce Comparison
@@ -216,7 +216,7 @@ const HeavyList = React.memo(function HeavyList({ query }) { ... });
 > ```
 >
 > **Explanation:** `useDeferredValue` adapts dynamically to user device processing capabilities.
-
+> 
 ## 7. Related Terms
 - [`useTransition` Hook](use_transition.md) — Deferring updates when you control the state setter.
 - [Concurrent Rendering](concurrent_rendering.md) — The engine architecture that enables deferred rendering.

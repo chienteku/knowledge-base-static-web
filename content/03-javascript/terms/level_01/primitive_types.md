@@ -156,7 +156,7 @@ async function processData() {
 > ```
 > - `undefined` is the default value for an uninitialized variable.
 > - To use `typeof`, simply type `typeof variableName`.
-
+> 
 ---
 
 ### Exercise 2: Identifying All 7 JavaScript Primitives
@@ -179,7 +179,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** JavaScript contains 7 primitive types: string, number, boolean, undefined, null, symbol, and bigint.
-
+> 
 ---
 
 ### Exercise 3: Primitive Copy-by-Value Behavior
@@ -199,8 +199,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Primitive values are passed and assigned by value, creating independent copies.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

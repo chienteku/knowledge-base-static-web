@@ -138,33 +138,33 @@ Create a counter state using `useState('counter', () => 0)` shared across multip
 > <script setup lang="ts">
 > const counter = useState<number>("counter", () => 0);
 > </script>
-
-<template>
-  <div>
-    <button @click="counter++">Component A Increment: {{ counter }}</button>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <button @click="counter++">Component A Increment: {{ counter }}</button>
+>   </div>
+> </template>
+> ```
+> 
 > ```vue
 > <!-- components/CounterB.vue -->
 > <script setup lang="ts">
 > const counter = useState<number>("counter");
 > </script>
-
-<template>
-  <div>
-    <p>Component B Counter Value: {{ counter }}</p>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <p>Component B Counter Value: {{ counter }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useState(key, init)` creates a key-based reactive reference shared across the entire Vue application tree.
 > 2. On the server, state is serialized into `NuxtPayload` and hydrated on the client without state resetting.
 > 3. Lightweight alternative to Pinia for simple global state.
-
+> 
 ---
 
 ### Exercise 2: Preventing Cross-Request State Pollution in SSR
@@ -182,19 +182,19 @@ Explain why using `const globalCount = ref(0)` at top-level module scope causes 
 > ```typescript
 > // ❌ DANGEROUS: Leaks state across requests in Node.js server!
 > // const sharedUser = ref(null);
-
-// ✅ SAFE SSR STATE: Scoped per request and hydrated per client!
-export const useSharedUser = () => {
-  return useState("user-state", () => null);
-};
-```
-
+> 
+> // ✅ SAFE SSR STATE: Scoped per request and hydrated per client!
+> export const useSharedUser = () => {
+>   return useState("user-state", () => null);
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Module-scoped variables (`const state = ref()`) persist in Node.js server memory across multiple incoming HTTP requests, leaking User A's data to User B.
 > 2. `useState()` creates state instances bound exclusively to the current request lifecycle.
 > 3. Essential SSR security rule.
-
+> 
 ---
 
 ### Exercise 3: Initializing State from Async Functions
@@ -215,26 +215,22 @@ Initialize `useState("user-data")` asynchronously inside an async setup function
 >   return await $fetch("/api/me");
 > });
 > </script>
-
-<template>
-  <div v-if="user">
-    <p>User Profile: {{ user.name }}</p>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div v-if="user">
+>     <p>User Profile: {{ user.name }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. The factory function passed to `useState(key, init)` can return a Promise.
 > 2. Executes ONLY if the key is not already present in the active state payload.
 > 3. Seamless async state initialization.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Pinia State Management](pinia.md) — The heavy-duty alternative to `useState` for complex global state.

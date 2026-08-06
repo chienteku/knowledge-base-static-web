@@ -173,7 +173,7 @@ async function processData() {
 > It means the most recently called function (the Last one In) is placed on top of the stack, and it must finish executing completely (First one Out) before the engine can go back to the older functions below it.
 > ```
 > - Think of the dinner plates!
-
+> 
 ---
 
 ### Exercise 2: Call Stack Trace Unwinding
@@ -195,7 +195,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Functions push frames onto the LIFO call stack upon invocation and pop frames upon returning.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Error Stack Traces
@@ -217,8 +217,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Error.prototype.stack` captures a snapshot of call stack frames at error instantiation time.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

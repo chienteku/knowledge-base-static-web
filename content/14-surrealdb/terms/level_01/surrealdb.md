@@ -155,7 +155,7 @@ You are explaining SurrealDB's multi-model architecture to a development team fa
 > 1. SurrealDB combines SQL table structure, NoSQL document nesting, and graph arrow traversals into one engine.
 > 2. Eliminates relational junction tables and expensive SQL `JOIN` operations using direct record pointer links.
 > 3. Built-in WebSocket real-time live queries and row-level security allow web clients to query the database safely without custom backend middleware.
-
+> 
 ---
 
 ### Exercise 2: Unified Paradigm Query Mapping
@@ -188,7 +188,7 @@ Write SurrealQL query snippets demonstrating how SurrealDB handles relational st
 > 1. Tabular `SELECT` statements provide familiar SQL semantics for structured reporting.
 > 2. Dot-notation (`settings.theme`) and array indexing (`tags[0]`) extract nested document fields without unnesting.
 > 3. Arrow operators (`->wrote->post`) navigate graph edge relationships in $O(1)$ time complexity without `JOIN` syntax.
-
+> 
 ---
 
 ### Exercise 3: Embedded Rust and WASM Execution
@@ -221,7 +221,7 @@ A desktop application developer is evaluating SurrealDB's embedded execution mod
 > 1. SurrealDB is written in Rust and can be compiled directly into application binaries as a lightweight embedded library.
 > 2. Running embedded in WebAssembly (WASM) allows in-browser local database execution for offline-first web apps.
 > 3. Eliminates network latency and external database server dependency for desktop, mobile, and edge computing.
-
+> 
 ---
 
 

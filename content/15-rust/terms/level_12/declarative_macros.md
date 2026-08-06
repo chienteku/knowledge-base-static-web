@@ -189,7 +189,7 @@ macro_rules! list {
 >
 > #### Technical Explanation
 > The macro matches the pattern `$( $val:expr ),*`, meaning "zero or more expressions separated by commas". `$(,)?` matches an optional trailing comma. Inside the expansion `{}`, the `$( ... )*` block repeats its internal code for every matched expression. By wrapping the expansion in a block `{ let mut temp_vec ... temp_vec }`, the macro evaluates to an expression containing the populated vector.
-
+> 
 ### Exercise 2: Implementing a Trait for Multiple Types
 
 **Scenario:** You have a trait `IsEven` that needs to be implemented for `u8`, `u16`, `u32`, and `u64`. Doing this manually is boilerplate.
@@ -230,7 +230,7 @@ macro_rules! list {
 >
 > #### Technical Explanation
 > Using `$t:ty` captures a Rust type. We then repeat the entire `impl IsEven for $t { ... }` block for each matched type. This is one of the most powerful and common uses of `macro_rules!` in the standard library (e.g., implementing `Clone` or `Add` for primitive numeric types).
-
+> 
 ### Exercise 3: Recursive Macros for HTML Generation
 
 **Scenario:** Macros can call themselves recursively. You want to generate a simple nested HTML string.
@@ -259,7 +259,7 @@ macro_rules! list {
 >
 > #### Technical Explanation
 > `$tag:ident` matches the HTML tag names without needing them to be quoted strings. We use the built-in `stringify!` macro to convert those raw identifiers (like `div`) into string literals (`"div"`) at compile time. This allows for a DSL (Domain Specific Language) that looks very much like HTML directly inside Rust code.
-
+> 
 ---
 
 

@@ -193,7 +193,7 @@ If you use a `<div>` with `role="button"`, the browser only maps mouse clicks na
 > ```
 > - The dynamic accordion state is managed by the `aria-expanded` attribute.
 > - A collapsed state translates to `false`.
-
+> 
 ---
 
 
@@ -212,7 +212,7 @@ If you use a `<div>` with `role="button"`, the browser only maps mouse clicks na
 > ```
 >
 > **Explanation:** `aria-expanded` announces accordion/menu toggle state to screen readers.
-
+> 
 ---
 
 ### Exercise 3: Hiding Decorative Icons with ARIA
@@ -229,7 +229,7 @@ If you use a `<div>` with `role="button"`, the browser only maps mouse clicks na
 > ```
 >
 > **Explanation:** `aria-hidden="true"` removes decorative elements from the accessibility tree.
-
+> 
 ## 7. Related Terms
 - [Accessibility (a11y) Fundamentals](accessibility_fundamentals.md) — The parent accessibility theory.
 - [Semantic HTML](../level_06/semantic_html.md) — The native layout element list.

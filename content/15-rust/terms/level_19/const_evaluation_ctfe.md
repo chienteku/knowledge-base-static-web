@@ -182,7 +182,7 @@ Ensure all loops in const fn have provable termination bounds!
 >
 > 1. `build_crc_table()` is evaluated at compile time via CTFE.
 > 2. The resulting `CRC_TABLE` array is embedded into the read-only data segment (`.rodata`) of the final binary.
-
+> 
 ---
 
 ### Exercise 2: Compile-Time Perfect Hash Table Key Validation
@@ -229,7 +229,7 @@ Ensure all loops in const fn have provable termination bounds!
 >
 > 1. `hash_header` processes byte slices using FNV-1a hashing during compilation.
 > 2. Key hashes are pre-computed as constants, eliminating runtime string parsing overhead.
-
+> 
 ---
 
 ### Exercise 3: Compile-Time Fixed Geometry Bounds Matrix
@@ -273,7 +273,7 @@ Ensure all loops in const fn have provable termination bounds!
 >
 > 1. Matrix scaling calculations are executed entirely within Miri CTFE.
 > 2. Binary code directly accesses precomputed floating point arrays.
-
+> 
 ---
 
 ## 6. Related Terms

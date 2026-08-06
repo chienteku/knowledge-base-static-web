@@ -104,7 +104,7 @@ export default function Page() {
 > In Next.js, folders define the URL path, and the special filename `page.js` defines the actual UI for that path.
 > ```
 > - No `react-router-dom` needed!
-
+> 
 ---
 
 
@@ -123,7 +123,7 @@ export default function Page() {
 > ```
 >
 > **Explanation:** Next.js App Router uses file system conventions to define routes and UI boundaries.
-
+> 
 ---
 
 ### Exercise 3: Data Caching Options in Next.js fetch
@@ -144,7 +144,7 @@ export default function Page() {
 > ```
 >
 > **Explanation:** Extended `fetch()` options configure static vs dynamic data caching in Next.js.
-
+> 
 ## 7. Related Terms
 - [Server-Side Rendering (SSR)](ssr.md) — The flagship feature of Next.js.
 - [React Server Components (RSC)](rsc.md) — The cutting-edge React architecture that Next.js 13+ is built around.

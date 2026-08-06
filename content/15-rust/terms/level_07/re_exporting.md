@@ -143,7 +143,7 @@ pub mod storage {
 > // We grab it from the deep module and present it to the public here!
 > pub use crate::storage::postgres::Database;
 > ```
-
+> 
 ---
 
 ### Exercise 2: Flattening Module Structures with `pub use`
@@ -172,7 +172,7 @@ pub mod storage {
 >
 > #### Technical Explanation
 > `pub use` exposes nested items under convenient top-level module paths.
-
+> 
 ---
 
 ### Exercise 3: Re-Exporting External Types \u2014 The Diamond Problem
@@ -239,7 +239,7 @@ Write:
 >
 > **Answer to the "why re-export prevents errors" question:**
 > When `my_lib` declares `pub use serde::Serialize`, it exposes the *exact instance* of the `Serialize` trait that it compiled against. Any user who imports `my_lib::Serialize` gets that exact same instance \u2014 they cannot accidentally import a different version. If they had imported `serde::Serialize` directly with their own `Cargo.toml` entry, Cargo might resolve a different semver-incompatible version, giving them a *different type* with the same name. Rust's type system would then correctly reject their type as "not implementing `my_lib`'s `Serialize`" \u2014 a confusing but technically correct error. Re-exporting closes this gap by making the library the single source of truth for its own dependencies' types.
-
+> 
 ---
 
 ## 6. Related Terms

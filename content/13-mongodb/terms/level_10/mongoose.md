@@ -153,30 +153,30 @@ Define a Mongoose `User` schema and model in TypeScript with required fields (`n
 >
 > ```typescript
 > import mongoose, { Schema, Document } from "mongoose";
-
-interface IUser extends Document {
-  name: string;
-  email: string;
-  role: string;
-  createdAt: Date;
-}
-
-const UserSchema = new Schema<IUser>({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true, lowercase: true },
-  role: { type: String, enum: ["user", "admin"], default: "user" },
-  createdAt: { type: Date, default: Date.now }
-});
-
-export const User = mongoose.model<IUser>("User", UserSchema);
-```
-
+> 
+> interface IUser extends Document {
+>   name: string;
+>   email: string;
+>   role: string;
+>   createdAt: Date;
+> }
+> 
+> const UserSchema = new Schema<IUser>({
+>   name: { type: String, required: true },
+>   email: { type: String, required: true, unique: true, lowercase: true },
+>   role: { type: String, enum: ["user", "admin"], default: "user" },
+>   createdAt: { type: Date, default: Date.now }
+> });
+> 
+> export const User = mongoose.model<IUser>("User", UserSchema);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Mongoose `Schema` defines document structure, type constraints, validation, and defaults in Node.js.
 > 2. `mongoose.model("User", UserSchema)` creates the compiled Model interface wrapping MongoDB CRUD commands.
 > 3. Automatically maps model `"User"` to lowercased plural collection `"users"`.
-
+> 
 ---
 
 ### Exercise 2: Population of Referenced Documents with `populate()`
@@ -195,16 +195,16 @@ Query orders and populate referenced `customerId` foreign ObjectId links into fu
 > const orders = await Order.find({ status: "pending" })
 >   .populate("customerId", "name email") // Select only name and email
 >   .exec();
-
-console.log("Populated Customer Name:", orders[0].customerId.name);
-```
-
+> 
+> console.log("Populated Customer Name:", orders[0].customerId.name);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `populate("field", "select")` automatically executes a secondary query to fetch referenced documents by ObjectId.
 > 2. Simplifies relationship navigation in Node.js code.
 > 3. Note: Executing `populate()` across large arrays issues multiple queries under the hood; consider aggregate `$lookup` for massive batches.
-
+> 
 ---
 
 ### Exercise 3: Validating Schema Rules in Express API Handlers
@@ -239,7 +239,7 @@ Handle Mongoose `ValidationError` exceptions in Express error-handling middlewar
 > 1. Mongoose validates document properties client-side before sending write commands to MongoDB.
 > 2. Catches missing required fields or type mismatches early.
 > 3. Returns structured HTTP 400 validation error payloads.
-
+> 
 ---
 
 

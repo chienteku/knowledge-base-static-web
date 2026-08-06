@@ -110,7 +110,7 @@ SELECT * FROM posts WHERE id < 100000 ORDER BY id DESC LIMIT 20; -- Uses index l
 > Cursor pagination does not support specific page numbers (you can't jump directly to Page 4 using a cursor without knowing the ID of the last item on Page 3). Because the dataset is small (500 items) and doesn't update every millisecond, Offset is perfect here.
 > ```
 > - Does the user want infinite scroll, or explicit page numbers?
-
+> 
 ---
 
 ### Exercise 2: Cursor vs Offset Pagination Comparison

@@ -191,7 +191,7 @@ Create a `customers` table with a surrogate primary key `id` using `GENERATED AL
 > 1. `PRIMARY KEY` enforces both `NOT NULL` and `UNIQUE` constraints on the `id` column automatically.
 > 2. Automatically creates an underlying B-tree unique index (`customers_pkey`).
 > 3. `GENERATED ALWAYS AS IDENTITY` is the modern SQL-standard replacement for legacy `SERIAL`.
-
+> 
 ---
 
 ### Exercise 2: Defining Composite Primary Keys for Junction Tables
@@ -221,7 +221,7 @@ Create a `order_items` junction table with a composite primary key consisting of
 > 1. Composite primary keys enforce uniqueness across the COMBINATION of specified columns.
 > 2. Prevents duplicate entries for the same product within a single order.
 > 3. Standard pattern for N-to-N junction tables.
-
+> 
 ---
 
 ### Exercise 3: Primary Key Lookups via `EXPLAIN`
@@ -246,7 +246,7 @@ Verify that querying a row by `PRIMARY KEY` executes a single-row $O(\log N)$ B-
 > 1. Primary key queries execute via `Index Scan` on `customers_pkey`.
 > 2. `totalDocsExamined` or `rows` equals 1.
 > 3. Executes in under 1 millisecond.
-
+> 
 ---
 
 

@@ -112,22 +112,22 @@ Create a `MathUtils` class with a static constant `PI` and a static factory meth
 > ```typescript
 > class MathUtils {
 >   public static readonly PI = 3.14159;
-
-  public static calculateArea(radius: number): number {
-    return this.PI * radius ** 2;
-  }
-}
-
-console.log(MathUtils.PI);
-console.log(MathUtils.calculateArea(5));
-```
-
+> 
+>   public static calculateArea(radius: number): number {
+>     return this.PI * radius ** 2;
+>   }
+> }
+> 
+> console.log(MathUtils.PI);
+> console.log(MathUtils.calculateArea(5));
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `static` members belong to the class constructor function (`MathUtils`) rather than instance objects (`new MathUtils()`).
 > 2. Invoked directly on the class identifier (`MathUtils.calculateArea(5)`).
 > 3. Ideal for global utility functions, constants, and singleton factory patterns.
-
+> 
 ---
 
 ### Exercise 2: Static Initialization Blocks (`static {}`)
@@ -145,24 +145,24 @@ Initialize complex static state inside a `static {}` block at class declaration 
 > ```typescript
 > class DatabaseConfig {
 >   public static connectionString: string;
-
-  static {
-    const env = process.env.NODE_ENV || "development";
-    DatabaseConfig.connectionString = env === "production" 
-      ? "postgres://prod-db:5432" 
-      : "postgres://localhost:5432";
-  }
-}
-
-console.log(DatabaseConfig.connectionString);
-```
-
+> 
+>   static {
+>     const env = process.env.NODE_ENV || "development";
+>     DatabaseConfig.connectionString = env === "production" 
+>       ? "postgres://prod-db:5432" 
+>       : "postgres://localhost:5432";
+>   }
+> }
+> 
+> console.log(DatabaseConfig.connectionString);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `static {}` blocks execute logic once when the class is loaded by the JavaScript engine.
 > 2. Allows executing complex conditional statements and exception handling during static field initialization.
 > 3. Feature aligned with modern ECMAScript standards.
-
+> 
 ---
 
 ### Exercise 3: Auditing Static Member Accessibility from Instance Methods
@@ -180,23 +180,23 @@ Explain why instance methods cannot access static members via `this.staticMember
 > ```typescript
 > class Application {
 >   public static appName = "SaaS App";
-
-  public getTitle(): string {
-    // ❌ Compile Error: Property 'appName' does not exist on type 'Application' (instance)!
-    // return this.appName;
-
-    // ✅ CORRECT (Reference ClassName directly or this.constructor):
-    return Application.appName;
-  }
-}
-```
-
+> 
+>   public getTitle(): string {
+>     // ❌ Compile Error: Property 'appName' does not exist on type 'Application' (instance)!
+>     // return this.appName;
+> 
+>     // ✅ CORRECT (Reference ClassName directly or this.constructor):
+>     return Application.appName;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `this` inside instance methods points to the instance object, NOT the static constructor function.
 > 2. Static members exist on `Application`, not on `Application.prototype`.
 > 3. Reference static members using the class name (`Application.appName`).
-
+> 
 ---
 
 
@@ -206,7 +206,6 @@ Explain why instance methods cannot access static members via `this.staticMember
 
 ---
 
----
 
 ## 7. Key Takeaways
 

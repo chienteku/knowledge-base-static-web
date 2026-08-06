@@ -160,7 +160,7 @@ sayHi();
 > "Hi!"
 > ```
 > - Variables update sequentially. Function calls execute exactly when they are invoked.
-
+> 
 ---
 
 ### Exercise 2: Synchronous Execution Order
@@ -181,7 +181,7 @@ sayHi();
 > ```
 >
 > **Explanation:** Synchronous JavaScript code executes line-by-line in sequential order.
-
+> 
 ---
 
 ### Exercise 3: Blocking Call Stack Execution
@@ -202,8 +202,8 @@ sayHi();
 > ```
 >
 > **Explanation:** Synchronous calls occupy the call stack, pausing outer code execution.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

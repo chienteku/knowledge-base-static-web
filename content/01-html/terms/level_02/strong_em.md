@@ -193,7 +193,7 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 > The screen reader will change its vocal inflection/tone to announce the `<strong>` text with importance. It will read the `<span>` text exactly like normal, plain text, ignoring the visual CSS bolding entirely.
 > ```
 > - HTML is for meaning. CSS is for eyeballs. Screen readers don't have eyeballs!
-
+> 
 ---
 
 ### Exercise 2: Contextual Semantic Selection
@@ -212,7 +212,7 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 > ```
 >
 > **Explanation:** `<strong>` denotes mandatory/urgent importance; `<em>` denotes stress emphasis.
-
+> 
 ---
 
 ### Exercise 3: CSS Styling Override
@@ -228,7 +228,7 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 > ```
 >
 > **Explanation:** CSS controls visual appearance while HTML tags dictate semantic meaning.
-
+> 
 ## 7. Related Terms
 - [`<span>` (Inline container)](span.md) — The non-semantic alternative for purely visual styling.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing text wrappers.

@@ -129,7 +129,7 @@ Use persistent unique item data IDs: key={item.id}
 > `<div key={post.id}>`
 > ```
 > - React needs to track the entire "block" returned by the map.
-
+> 
 ---
 
 
@@ -156,7 +156,7 @@ Use persistent unique item data IDs: key={item.id}
 > ```
 >
 > **Explanation:** Stable item keys allow React reconciliation to track item insertions and re-orders.
-
+> 
 ---
 
 ### Exercise 3: Where Key Props Must Be Placed
@@ -174,7 +174,7 @@ Use persistent unique item data IDs: key={item.id}
 > ```
 >
 > **Explanation:** Keys belong on the immediate outer element returned inside the array map callback.
-
+> 
 ## 7. Related Terms
 - [Virtual DOM](../level_01/virtual_dom.md) — The system that requires the Keys to perform efficient diffing.
 - [Fragments](../level_01/fragments.md) — Related concept: Fragments.

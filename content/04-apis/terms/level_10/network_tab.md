@@ -125,8 +125,8 @@ Click on the `search?q=query` request to open the inspector panel:
 
 > [!check]- Answer
 > - Open the Network Tab, locate the throttling dropdown (usually set to **No Throttling**), select **Offline**, and refresh the page. The browser will block all outbound network traffic from that tab, allowing you to test offline features safely.
-
-
+> 
+> 
 ---
 
 ### Exercise 2: DevTools Network Timing Waterfall Analysis

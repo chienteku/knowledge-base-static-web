@@ -236,7 +236,7 @@ Write unit tests using `#[test]` and `matches!` to verify both the zero-allocati
 > 1. **Zero-Allocation Fast Path**: By checking `!input.contains('\'') && !input.contains("--")` upfront, clean strings bypass heap allocation entirely and return `Cow::Borrowed`.
 > 2. **Lazy Heap Upgrade (`.to_mut()`)**: When sanitization is necessary, `.to_mut()` allocates a new heap `String` containing a copy of the input, morphing the `Cow` enum from `Borrowed` to `Owned`.
 > 3. **Pointer Verification**: In unit tests, `assert_eq!(result.as_ptr(), clean_input.as_ptr())` proves that `Cow::Borrowed` points to the original slice in memory without duplicating bytes.
-
+> 
 ---
 
 ### Exercise 2: Lazily Expanded Environment Variable Template Processor
@@ -328,7 +328,7 @@ Write comprehensive unit tests asserting zero allocation on static strings and c
 > 1. **Idempotent `.to_mut()`**: The first call to `.to_mut()` converts `Cow::Borrowed` to `Cow::Owned(String)` by cloning the string to the heap. Subsequent calls to `.to_mut()` on an already owned `Cow` return a mutable reference `&mut String` to the existing heap buffer without reallocating.
 > 2. **Delimiter Search**: Scans slice indices safely with `find("${")` and `find('}')`. Unmatched or static templates immediately return borrowed references.
 > 3. **Assertion Strategy**: Tests verify both memory slice identity (`as_ptr()`) and structural contents across missing and present environment values.
-
+> 
 ---
 
 ### Exercise 3: Network Packet Unescaping for Binary Slices (`Cow<'a, [u8]>`)
@@ -433,7 +433,7 @@ Write unit tests verifying both clean packet borrowing and escaped packet in-pla
 > 1. **Slice `Cow` Handling**: `Cow<'a, [u8]>` works seamlessly with byte slices `[u8]`. Its owned counterpart is `Vec<u8>`.
 > 2. **In-Place Modification**: Calling `.to_mut()` on `Cow<'a, [u8]>` creates a `Vec<u8>` containing the copied bytes. We perform two-pointer unescaping (`read_idx` and `write_idx`) directly on the vector buffer and `truncate` to the unescaped size, minimizing allocations.
 > 3. **Binary Data Assertions**: Unit tests compare byte slices using `&result[..]` and verify pointer identity (`as_ptr()`) for unescaped borrowed frames.
-
+> 
 ---
 
 ## 6. Related Terms

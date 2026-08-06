@@ -151,8 +151,8 @@ res.cookie('session', id, { sameSite: 'strict', httpOnly: true });
 > - 2. **High Risk** (State-mutating POST request. Browser attaches the cookie automatically, executing the settings change).
 > - 3. **No Risk** (The hacker's cross-site script cannot read the token from your DOM, so the server rejects the request).
 > - 4. **No Risk** (The browser does not attach localStorage contents automatically; they must be attached manually by the app code).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: SameSite Cookie Attribute Defense

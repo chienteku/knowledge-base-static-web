@@ -164,7 +164,7 @@ Execute `EXPLAIN (ANALYZE, BUFFERS)` to inspect query planning time, execution t
 > 1. `EXPLAIN` shows the estimated query plan; `ANALYZE` actually *executes* the query and records exact execution statistics.
 > 2. `BUFFERS` reports RAM cache hits (`shared hit`) vs disk page reads (`shared read`).
 > 3. Displays node types (`Index Scan`, `Seq Scan`, `Hash Join`) and exact millisecond timings.
-
+> 
 ---
 
 ### Exercise 2: Diagnosing Table Scans (`Seq Scan`)
@@ -195,7 +195,7 @@ Identify a slow `Seq Scan` on table `orders` and verify that creating an index c
 > 1. `Seq Scan` reads every 8KB table page sequentially from disk, resulting in $O(N)$ high execution times on large tables.
 > 2. `Bitmap Index Scan` uses the index to construct a tuple bitmap, jumping directly to target table pages.
 > 3. Empirical verification of index performance optimizations.
-
+> 
 ---
 
 ### Exercise 3: Identifying Estimation Skew (Row Count Discrepancy)
@@ -220,7 +220,7 @@ Spot an estimation discrepancy between `rows=1` (planner estimate) vs `actual ro
 > 1. Severe discrepancies between estimated `rows` and `actual rows` indicate stale catalog statistics in `pg_statistic`.
 > 2. Estimation skew causes the planner to choose sub-optimal join types (e.g. choosing Nested Loop instead of Hash Join).
 > 3. Running `ANALYZE` updates catalog statistics and restores accurate query planning.
-
+> 
 ---
 
 

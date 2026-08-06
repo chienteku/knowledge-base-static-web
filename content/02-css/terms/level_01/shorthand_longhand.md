@@ -230,7 +230,7 @@ padding: 10px 20px 30px 40px;
 > ```
 > - The left and right values are identical (`5px`).
 > - This maps to the 3-value shorthand syntax: `top` `left-and-right` `bottom`.
-
+> 
 ---
 
 ### Exercise 2: Shorthand Expansion Value Count Matrix
@@ -249,7 +249,7 @@ padding: 10px 20px 30px 40px;
 > ```
 >
 > **Explanation:** CSS shorthand value expansion rules infer symmetric side dimensions.
-
+> 
 ---
 
 ### Exercise 3: Border Shorthand Order
@@ -263,7 +263,7 @@ padding: 10px 20px 30px 40px;
 > ```
 >
 > **Explanation:** `border` shorthand combines width, style, and color.
-
+> 
 ## 7. Related Terms
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The wrapper syntax.
 - [Margin](../level_02/margin.md) — The outer spacing box utilizing shorthand properties.

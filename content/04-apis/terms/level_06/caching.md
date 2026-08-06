@@ -110,7 +110,7 @@ A major breaking news event happens at noon. Your journalists publish the story 
 > Caching is a trade-off between Speed and "Staleness" (how outdated the data is).
 > ```
 > - What does `max-age` tell the browser to do for the next 24 hours?
-
+> 
 ---
 
 ### Exercise 2: ETag Validation Request Headers

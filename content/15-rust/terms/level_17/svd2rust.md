@@ -213,7 +213,7 @@ Call Peripherals::take() once at startup in main() and pass peripherals to tasks
 >
 > 1. `svd2rust` PAC register pattern exposes closure-based `.write()` and `.modify()` methods.
 > 2. Guarantees zero-cost type-safe register manipulation without raw pointer pointer math.
-
+> 
 ---
 
 ### Exercise 2: Hardware Peripheral Singleton `Peripherals::take()` Enforcer
@@ -268,7 +268,7 @@ Call Peripherals::take() once at startup in main() and pass peripherals to tasks
 >
 > 1. `Peripherals::take()` uses atomic flags to guarantee only one peripheral owner exists in memory.
 > 2. Prevents data race conditions on hardware registers.
-
+> 
 ---
 
 ### Exercise 3: UART Baud Rate Clock Divider Calculator Register Simulator
@@ -311,7 +311,7 @@ Call Peripherals::take() once at startup in main() and pass peripherals to tasks
 >
 > 1. Demonstrates peripheral access crate parameter calculation.
 > 2. Wraps bare-metal clock registers safely.
-
+> 
 ---
 
 ## 5. Related Terms

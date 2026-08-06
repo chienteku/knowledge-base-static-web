@@ -231,7 +231,7 @@ sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 > ```
 > - Only the numbers "2" and "4" need to be shifted downwards.
 > - Wrap those specific numbers in `<sub>` and `</sub>` tags.
-
+> 
 ---
 
 ### Exercise 2: Mathematical and Chemical Notation
@@ -248,7 +248,7 @@ sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 > ```
 >
 > **Explanation:** `<sup>` renders exponent superscript; `<sub>` renders chemical subscript.
-
+> 
 ---
 
 ### Exercise 3: Footnote Anchor Reference
@@ -262,7 +262,7 @@ sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 > ```
 >
 > **Explanation:** `<sup>` wraps footnote numbers above the baseline.
-
+> 
 ## 7. Related Terms
 - [`<strong>` & `<em>`](strong_em.md) — Standard inline formatting tags.
 - [`<span>` (Inline container)](span.md) — The non-semantic inline container.

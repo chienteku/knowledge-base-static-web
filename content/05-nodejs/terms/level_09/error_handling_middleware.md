@@ -264,7 +264,7 @@ app.use((err, req, res, next) => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Writing Central Express Error Handler
@@ -286,7 +286,7 @@ app.use((err, req, res, next) => {
 > ```
 >
 > **Explanation:** 4-parameter error middleware catches errors passed via `next(err)`.
-
+> 
 ---
 
 ### Exercise 3: Custom AppError Class Pattern
@@ -308,7 +308,7 @@ app.use((err, req, res, next) => {
 > ```
 >
 > **Explanation:** Custom `AppError` classes attach HTTP status codes to thrown errors.
-
+> 
 ## 7. Related Terms
 - [The Middleware Chain & next()](../level_07/middleware_chain.md) — The middleware queue structure.
 - [Async Error Handling (try/catch + .catch)](../level_05/async_error_handling.md) — Catching async errors to pass them to `next(err)`.

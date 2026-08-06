@@ -165,7 +165,7 @@ A database developer needs to connect to a local running SurrealDB server using 
 > 1. `surreal sql` starts an interactive Read-Eval-Print Loop (REPL) shell for executing SurrealQL queries.
 > 2. Passing `--ns` and `--db` sets default session scoping flags automatically upon shell startup.
 > 3. Enables fast query prototyping and schema debugging from terminal environments.
-
+> 
 ---
 
 ### Exercise 2: Automated Database Backup Export
@@ -190,7 +190,7 @@ A DevOps engineer needs to export a nightly SurrealQL schema and data dump file 
 > 1. `surreal export` streams valid SurrealQL DDL (`DEFINE`) and DML (`CREATE`) statements to a plain-text file.
 > 2. Generated script files can be inspected with version control tools or imported into alternative clusters.
 > 3. Provides clean backup and environment seeding capabilities for CI/CD pipelines.
-
+> 
 ---
 
 ### Exercise 3: Database Schema Import and Migration Execution
@@ -215,7 +215,7 @@ A developer needs to seed a fresh staging environment by importing the SurrealQL
 > 1. `surreal import` reads and executes SurrealQL script files sequentially against the target cluster.
 > 2. Handles multi-statement transactions and schema definitions defined in the imported file.
 > 3. Used in deployment pipelines to apply versioned database schema migrations automatically.
-
+> 
 ---
 
 

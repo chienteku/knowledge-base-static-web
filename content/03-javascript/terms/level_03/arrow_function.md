@@ -162,7 +162,7 @@ A valid ES6 arrow function.
 > [!check]- Answer
 > - `const double = (num) => num * 2;`
 > - If there is only exactly one parameter, you can even drop the parentheses: `const double = num => num * 2;`
-
+> 
 ---
 
 ### Exercise 2: Implicit vs Explicit Return in Arrow Functions
@@ -180,7 +180,7 @@ A valid ES6 arrow function.
 > ```
 >
 > **Explanation:** Wrapping returned object literals in parentheses `({ ... })` distinguishes object brackets from function body blocks.
-
+> 
 ---
 
 ### Exercise 3: Lexical `this` in Timer Callbacks
@@ -206,7 +206,7 @@ A valid ES6 arrow function.
 > ```
 >
 > **Explanation:** Arrow functions capture `this` from outer lexical contexts automatically.
-
+> 
 ---
 
 ## 7. Related Terms

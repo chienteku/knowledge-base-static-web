@@ -200,13 +200,13 @@ Create `layouts/default.vue` containing a persistent header, footer, and `<slot 
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Layout components in `layouts/` must render a default `<slot />` where page components are inserted.
 > 2. `layouts/default.vue` is automatically applied to all pages unless overridden.
 > 3. Persistent layout wrapper pattern.
-
+> 
 ---
 
 ### Exercise 2: Creating and Applying Custom Layouts
@@ -232,7 +232,7 @@ Create a custom layout `layouts/auth.vue` for login and registration screens wit
 >   </div>
 > </template>
 > ```
-
+> 
 > ```vue
 > <!-- pages/login.vue -->
 > <script setup lang="ts">
@@ -240,22 +240,22 @@ Create a custom layout `layouts/auth.vue` for login and registration screens wit
 >   layout: "auth"
 > });
 > </script>
-
-<template>
-  <form>
-    <h2>Login</h2>
-    <input type="email" placeholder="Email" />
-    <button type="submit">Submit</button>
-  </form>
-</template>
-```
-
+> 
+> <template>
+>   <form>
+>     <h2>Login</h2>
+>     <input type="email" placeholder="Email" />
+>     <button type="submit">Submit</button>
+>   </form>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Custom layout files in `layouts/name.vue` are referenced by string key (`"auth"`).
 > 2. Pages set `definePageMeta({ layout: "auth" })` to switch layout template wrappers.
 > 3. Separates application structural layouts from view components.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Layout Switching at Runtime with `setPageLayout()`
@@ -273,31 +273,27 @@ Dynamically switch from `default` layout to `admin` layout based on user session
 > ```vue
 > <script setup lang="ts">
 > const { user } = useAuth();
-
-if (user.value?.role === "admin") {
-  setPageLayout("admin");
-}
-</script>
-
-<template>
-  <div>
-    <h1>Dynamic Role Dashboard</h1>
-  </div>
-</template>
-```
-
+> 
+> if (user.value?.role === "admin") {
+>   setPageLayout("admin");
+> }
+> </script>
+> 
+> <template>
+>   <div>
+>     <h1>Dynamic Role Dashboard</h1>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `setPageLayout()` is a Nuxt 3 composable that dynamically changes the active layout wrapper at runtime.
 > 2. Updates the active `<NuxtLayout>` template without forcing a full page browser reload.
 > 3. Powerful runtime UI adjustment mechanism.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`app.vue`](app_vue.md) — Where `<NuxtLayout>` is placed to activate the system.

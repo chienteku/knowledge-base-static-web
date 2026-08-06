@@ -188,7 +188,7 @@ async function processData() {
 > [!check]- Answer
 > - Add an event listener to the `document` object.
 > - Listen for the event `"DOMContentLoaded"`.
-
+> 
 ---
 
 ### Exercise 2: Attaching DOMContentLoaded Listeners
@@ -205,7 +205,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `DOMContentLoaded` signals that DOM elements are safe for script query access.
-
+> 
 ---
 
 ### Exercise 3: Comparing Window Load vs DOMContentLoaded
@@ -222,8 +222,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `DOMContentLoaded` executes upon HTML parse completion; `load` waits for external assets.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -111,7 +111,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 > In Node.js, `console.log` is actually `global.console.log`, and `setTimeout` is actually `global.setTimeout`. Node just hides the `global.` part to make it easier to write, exactly like the browser hides the `window.` part.
 > ```
 > - What is the Node.js equivalent of the `window` object?
-
+> 
 ---
 
 
@@ -134,7 +134,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 > ```
 >
 > **Explanation:** `process`, `Buffer`, and `global` are available everywhere in Node.js without requiring `require()`.
-
+> 
 ---
 
 ### Exercise 3: ES Module __dirname Equivalent
@@ -153,7 +153,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 > ```
 >
 > **Explanation:** `import.meta.url` provides the file URL in ES Modules, convertible to local paths via `fileURLToPath`.
-
+> 
 ## 7. Related Terms
 - [The process Object](process_object.md) — The most powerful global object in Node.js.
 - [The path Module](path_module.md) — The module you use in conjunction with `__dirname` to build file paths safely.

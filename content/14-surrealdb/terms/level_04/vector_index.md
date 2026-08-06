@@ -166,7 +166,7 @@ Configure an HNSW vector index `doc_embedding_idx` on table `document` for 4-dim
 > 1. `HNSW` (Hierarchical Navigable Small World) builds fast graph vector indexes for K-nearest neighbor searches.
 > 2. `DIMENSION <n>` specifies vector embedding dimensionality.
 > 3. `DIST COSINE` configures Cosine similarity distance calculation.
-
+> 
 ---
 
 ### Exercise 2: K-Nearest Neighbor Vector Similarity Queries
@@ -197,7 +197,7 @@ Query the top 2 documents most similar to target query vector `[0.1, 0.2, 0.3, 0
 > 1. `<|k,DIST|>` performs fast K-Nearest Neighbor vector searches using HNSW indexes.
 > 2. Returns top `k` semantically similar vector records.
 > 3. Underpins AI Retrieval-Augmented Generation (RAG) applications directly inside SurrealDB.
-
+> 
 ---
 
 ### Exercise 3: Distance Metric Selection (Euclidean vs Cosine)
@@ -222,7 +222,7 @@ Compare `EUCLIDEAN` vs `COSINE` distance metrics for vector index configuration.
 > 1. Cosine distance measures vector direction, ignoring vector magnitude.
 > 2. Euclidean distance measures straight-line distance in vector space.
 > 3. Selecting the correct distance metric aligns database vector search with AI embedding model training.
-
+> 
 ---
 
 

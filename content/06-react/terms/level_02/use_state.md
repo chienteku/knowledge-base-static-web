@@ -138,7 +138,7 @@ const [data, setData] = useState(() => parseHeavyData()); // Lazy initial state
 > }
 > ```
 > - `!prevIsOn` flips `true` to `false` and vice versa.
-
+> 
 ---
 
 
@@ -160,7 +160,7 @@ const [data, setData] = useState(() => parseHeavyData()); // Lazy initial state
 > ```
 >
 > **Explanation:** Passing a function `() => initialValue` to `useState` executes initialization code ONLY on initial mount.
-
+> 
 ---
 
 ### Exercise 3: Updating Object State with Functional Updaters
@@ -177,7 +177,7 @@ const [data, setData] = useState(() => parseHeavyData()); // Lazy initial state
 > ```
 >
 > **Explanation:** Functional updaters receive the latest state snapshot (`prev`), guaranteeing safe concurrent state mutations.
-
+> 
 ## 7. Related Terms
 - [State](state.md) — The concept that `useState` implements.
 - [Rules of Hooks](../level_04/rules_of_hooks.md) — Strict rules on where you are allowed to type `useState()`.

@@ -190,7 +190,7 @@ A user profile activity feed queries both posts `wrote` by `user:alice` AND post
 > 1. `->(edge1, edge2)->table` traverses multiple edge tables in parallel within a single query pass.
 > 2. Merges records from both `wrote` and `liked` relation edges into a unified result set.
 > 3. Eliminates duplicate queries or manual application-side array merging.
-
+> 
 ---
 
 ### Exercise 2: Parallel Edge Filtering
@@ -215,7 +215,7 @@ Query posts connected to `user:alice` via `wrote` or `bookmarked` edges where th
 > 1. Applies filter conditions `[WHERE created_at > ...]` to all parallel edge types simultaneously.
 > 2. Filters out stale relation edges across both edge tables.
 > 3. Optimizes activity feed generation queries.
-
+> 
 ---
 
 ### Exercise 3: Flattening Parallel Traversal Collections
@@ -240,7 +240,7 @@ Flatten parallel traversal results from `->(wrote, liked)->post.title` into a si
 > 1. `array::flatten()` unwraps multi-edge result arrays.
 > 2. `array::distinct()` removes duplicate post titles if a post was both written AND liked.
 > 3. Returns a clean deduplicated list of activity titles.
-
+> 
 ---
 
 

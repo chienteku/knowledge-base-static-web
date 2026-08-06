@@ -157,7 +157,7 @@ Configure a `SIGNUP` query block inside `DEFINE ACCESS user_access` that hashes 
 > 1. `SIGNUP` executes registration logic when a client calls `db.signup()`.
 > 2. Hashes plaintext passwords securely using `crypto::argon2::generate()`.
 > 3. Returns the newly created user record and issues an authenticated session token.
-
+> 
 ---
 
 ### Exercise 2: User Authentication with `SIGNIN`
@@ -185,7 +185,7 @@ Configure a `SIGNIN` query block inside `DEFINE ACCESS user_access` that validat
 > 1. `SIGNIN` executes authentication checks when a client calls `db.signin()`.
 > 2. `crypto::argon2::compare()` verifies plaintext password inputs against stored hashes.
 > 3. Issues an authenticated session token if a matching record is returned.
-
+> 
 ---
 
 ### Exercise 3: Testing SDK `db.signup()` Integration
@@ -218,7 +218,7 @@ Write the JavaScript SDK client call for registering a new user against the `use
 > 1. `db.signup()` passes parameter payload variables (`$username`, `$email`, `$pass`) to the server `SIGNUP` block.
 > 2. Receives a signed JWT authentication token on success.
 > 3. Automatically authenticates the active SDK connection context.
-
+> 
 ---
 
 

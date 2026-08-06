@@ -160,7 +160,7 @@ Configure a TTL index on collection `user_sessions` so that session documents au
 > 1. TTL indexes automatically delete expired documents in the background.
 > 2. A background thread runs every 60 seconds to purge documents where `createdAt + expireAfterSeconds < current_time`.
 > 3. Eliminates manual cleanup cron jobs.
-
+> 
 ---
 
 ### Exercise 2: Dynamic Per-Document Expiration Times
@@ -193,7 +193,7 @@ Configure a TTL index with `expireAfterSeconds: 0` so that documents expire at a
 > 1. Setting `expireAfterSeconds: 0` expires documents at the exact BSON Date value stored in the indexed field.
 > 2. Allows individual documents to specify custom, dynamic expiration timestamps.
 > 3. Ideal for promotional codes, temporary tokens, and custom leases.
-
+> 
 ---
 
 ### Exercise 3: Archiving Historical Data to Cold Storage
@@ -226,7 +226,7 @@ Move orders older than 1 year from active collection `orders` to archive collect
 > 1. Archiving old data maintains small working sets in active operational collections.
 > 2. Keeps active index sizes small enough to fit within RAM.
 > 3. Reduces disk IOPS and speeds up daily queries.
-
+> 
 ---
 
 

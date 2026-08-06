@@ -197,7 +197,7 @@ Categorize orders by total amount: `'High'` (>= $100), `'Medium'` (>= $50), `'Lo
 > 1. `CASE` expressions evaluate conditions sequentially until a `WHEN` condition matches `TRUE`.
 > 2. If no condition matches, returns the `ELSE` fallback value.
 > 3. Performs server-side conditional logic.
-
+> 
 ---
 
 ### Exercise 2: Conditional Aggregations using CASE inside SUM/COUNT
@@ -225,7 +225,7 @@ Count total pending vs completed orders in a single aggregation pass using `SUM(
 > 1. `COUNT()` ignores `NULL` results returned by `CASE` when conditions evaluate to false.
 > 2. Computes pivot metrics in a single table scan pass.
 > 3. High performance reporting pattern.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Updates with CASE Expressions
@@ -254,7 +254,7 @@ Update employee salaries giving a 10% raise to role `'Engineer'` and 5% raise to
 > 1. Uses `CASE` inside `UPDATE` statements to apply different modification logic per row.
 > 2. Executes conditional bulk updates in a single atomic SQL statement.
 > 3. Efficient data manipulation.
-
+> 
 ---
 
 

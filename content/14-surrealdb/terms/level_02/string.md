@@ -165,7 +165,7 @@ A user registration service converts email input to lowercase and validates stri
 > 1. `string::lowercase()` normalizes string casing at write time.
 > 2. `string::is::email($value)` validates RFC email syntax inside `ASSERT` clauses.
 > 3. Ensures consistent normalized string data across user records.
-
+> 
 ---
 
 ### Exercise 2: String Pattern Searching with Regex
@@ -194,7 +194,7 @@ An admin dashboard searches for user accounts where the `username` starts with `
 > 1. `string::starts_with(str, prefix)` performs prefix matching on string fields.
 > 2. `string::*` namespace provides rich string functions (`concat`, `replace`, `trim`, `split`).
 > 3. Enables clean text filtering without complex regular expressions.
-
+> 
 ---
 
 ### Exercise 3: String Length & Trimming Constraints
@@ -223,7 +223,7 @@ Enforce string length constraints on a blog post `title` field (between 5 and 10
 > 1. `string::trim()` strips leading and trailing whitespace.
 > 2. `string::len()` counts character length accurately for UTF-8 strings.
 > 3. Prevents empty or whitespace-only strings from bypassing validation rules.
-
+> 
 ---
 
 

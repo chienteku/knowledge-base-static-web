@@ -161,7 +161,7 @@ async function processData() {
 > 3. `"Default"` (Undefined triggers the fallback!)
 > ```
 > - `??` only cares about two specific values. Nothing else matters.
-
+> 
 ---
 
 ### Exercise 2: Nullish Coalescing with Falsy Values
@@ -184,7 +184,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `??` returns right-hand operand ONLY if left-hand operand is `null` or `undefined`.
-
+> 
 ---
 
 ### Exercise 3: Chaining Nullish Coalescing Operators
@@ -201,8 +201,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Chained `??` operators evaluate left-to-right until encountering the first non-nullish value.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

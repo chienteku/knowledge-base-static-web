@@ -179,7 +179,7 @@ Return owned data (String) or pass references to caller-owned buffers!
 >
 > 1. The closure bound `for<'a> F: FnMut(&'a str) -> bool` guarantees that `inspector` can accept temporary string slice views `&'a str` created on the fly inside the iteration loop from temporary stack chunks.
 > 2. Enables zero-copy packet processing without requiring caller-provided lifetime annotations.
-
+> 
 ---
 
 ### Exercise 2: Middleware Pipeline Validator with Higher-Ranked Trait Bounds
@@ -220,7 +220,7 @@ Return owned data (String) or pass references to caller-owned buffers!
 > #### Technical Explanation
 >
 > 1. `for<'a> M: Fn(&'a str, &'a str) -> bool` ensures the middleware closure operates on short-lived temporary stack variables `key` and `val`.
-
+> 
 ---
 
 ### Exercise 3: HRTB Function Pointer Event Dispatcher
@@ -260,7 +260,7 @@ Return owned data (String) or pass references to caller-owned buffers!
 > #### Technical Explanation
 >
 > 1. Demonstrates `for<'a>` syntax applied directly to raw function pointers (`for<'a> fn(&'a [u8]) -> usize`).
-
+> 
 ---
 
 ## 6. Related Terms

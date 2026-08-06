@@ -169,7 +169,7 @@ Perform an atomic fund transfer of `$50.00dec` from `account:alice` to `account:
 > 1. Encloses multiple DML statements in an atomic transaction block.
 > 2. `COMMIT TRANSACTION` writes all changes to persistent storage atomically.
 > 3. Protects multi-account transfers against system crashes.
-
+> 
 ---
 
 ### Exercise 2: Explicit Transaction Cancellation with `CANCEL TRANSACTION`
@@ -196,7 +196,7 @@ Cancel a transaction block explicitly using `CANCEL TRANSACTION` when a validati
 > 1. `CANCEL TRANSACTION` (or `ABORT TRANSACTION`) discards all uncommitted mutations in the active block.
 > 2. Restores database state to pre-transaction values.
 > 3. Allows programmatic transaction aborts.
-
+> 
 ---
 
 ### Exercise 3: Nesting DDL and DML in Single Transactions
@@ -231,7 +231,7 @@ Demonstrate defining a table schema and creating initial records inside a single
 > 1. SurrealDB permits mixing DDL statements (`DEFINE TABLE`, `DEFINE FIELD`) and DML statements (`CREATE`) inside single transaction blocks.
 > 2. Applies schema definitions and initial records atomically.
 > 3. Essential for transactional database migration scripts.
-
+> 
 ---
 
 

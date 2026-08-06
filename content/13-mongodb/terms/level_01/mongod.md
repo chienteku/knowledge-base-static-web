@@ -162,7 +162,7 @@ A systems administrator connects to a `mongod` server process to inspect active 
 > 1. `db.serverStatus()` returns operational metrics from the active `mongod` process.
 > 2. Monitors connection pool limits, memory utilization, and WiredTiger cache metrics.
 > 3. Essential diagnostic command for server health monitoring.
-
+> 
 ---
 
 ### Exercise 2: Formulating Startup Parameters for `mongod`
@@ -186,7 +186,7 @@ Formulate a `mongod` startup command configuring port `27017`, dbpath `/data/db`
 > 1. `--dbpath` specifies the physical directory storing WiredTiger data and index files.
 > 2. `--logpath` routes process output logs to a persistent log file.
 > 3. `--fork` runs the `mongod` process as a background daemon on Linux servers.
-
+> 
 ---
 
 ### Exercise 3: Shutting Down `mongod` Cleanly
@@ -211,7 +211,7 @@ Shut down a `mongod` process cleanly to flush WiredTiger journal buffers to disk
 > 1. `db.shutdownServer()` flushes pending writes and journal entries to physical storage before terminating.
 > 2. Prevents data corruption and lengthy crash recovery steps on reboot.
 > 3. Requires administrative privileges on the `admin` database context.
-
+> 
 ---
 
 

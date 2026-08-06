@@ -156,7 +156,7 @@ async function processData() {
 > Yes! You can put `"use strict";` as the very first line INSIDE a function block.
 > ```
 > - The string just needs to be the very first statement in the scope.
-
+> 
 ---
 
 ### Exercise 2: Undeclared Variable Assignment Protection in Strict Mode
@@ -178,7 +178,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Strict mode prevents implicit creation of undeclared global variables.
-
+> 
 ---
 
 ### Exercise 3: Duplicate Parameter Name Rejection
@@ -195,8 +195,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Strict mode throws early syntax errors on duplicate parameter names.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

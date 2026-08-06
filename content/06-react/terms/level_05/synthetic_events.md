@@ -114,7 +114,7 @@ const handleSubmit = async (e) => {
 > `<button onClick={() => deleteUser(user.id)}>`
 > ```
 > - Create a new function that waits to be clicked, and *then* calls `deleteUser`.
-
+> 
 ---
 
 
@@ -143,7 +143,7 @@ const handleSubmit = async (e) => {
 > ```
 >
 > **Explanation:** `e.preventDefault()` prevents native browser navigation reloads on form submission.
-
+> 
 ---
 
 ### Exercise 3: Event Target vs CurrentTarget
@@ -160,7 +160,7 @@ const handleSubmit = async (e) => {
 > ```
 >
 > **Explanation:** Event delegation routes synthetic events up to listener attachments.
-
+> 
 ## 7. Related Terms
 - [JSX (JavaScript XML)](../level_01/jsx.md) — Where you attach these event handlers using camelCase.
 - [Testing: React Testing Library + Jest](../level_11/react_testing_library.md) — Related concept: Testing: React Testing Library + Jest.

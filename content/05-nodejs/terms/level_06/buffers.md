@@ -109,7 +109,7 @@ res.send(buf);
 > // Output: <Buffer 4e 6f 64 65>
 > ```
 > - Use the `Buffer.from()` method.
-
+> 
 ---
 
 
@@ -129,7 +129,7 @@ res.send(buf);
 > ```
 >
 > **Explanation:** `Buffer.alloc(size)` creates zero-initialized binary memory space.
-
+> 
 ---
 
 ### Exercise 3: Buffer Concatenation
@@ -146,7 +146,7 @@ res.send(buf);
 > ```
 >
 > **Explanation:** `Buffer.concat()` combines multiple buffer segments into a single contiguous buffer.
-
+> 
 ## 7. Related Terms
 - [Streams (General Concept)](streams.md) — Streams are literally just continuous flows of Buffers!
 - [The crypto Module](../level_02/crypto_module.md) — Related concept: The crypto Module.

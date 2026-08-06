@@ -164,7 +164,7 @@ You are building an article categorization module for a developer blog. Each art
 > 1. `array<string>` defines a typed container array for string elements.
 > 2. The `CONTAINS` operator checks set membership within array fields directly at query execution time.
 > 3. Eliminates the need for separate tag junction tables or manual array regex matching.
-
+> 
 ---
 
 ### Exercise 2: Array Slice and Element Mutation
@@ -196,7 +196,7 @@ A shopping cart application stores item record links in an array `items`. You ne
 > 1. The `+=` operator appends new elements to array fields atomically without overwriting the entire array.
 > 2. Array elements are accessed using zero-indexed bracket syntax (`items[0]`).
 > 3. Arrays preserve insertion order across reads and mutations.
-
+> 
 ---
 
 ### Exercise 3: Array Subset Validation with `CONTAINSALL`
@@ -225,7 +225,7 @@ A security system verifies user permissions by checking whether a user's assigne
 > 1. `CONTAINSALL` evaluates whether an array field contains every element in a target array set.
 > 2. Avoids chaining multiple `CONTAINS` AND clauses together.
 > 3. Evaluates set logic natively inside SurrealDB's query processor.
-
+> 
 ---
 
 

@@ -336,7 +336,7 @@ syn = { version = "2.0", features = ["derive"] }
 > 2. **AST Parsing (`syn`)**: `parse_macro_input!(input as DeriveInput)` parses raw compiler tokens into a structured syntax tree. `input.data` allows matching on `Data::Struct` and accessing `Fields::Named`.
 > 3. **Code Generation (`quote!`)**: The `quote!` macro constructs Rust token streams. Interpolations like `#struct_name` substitute identifiers, while `#(#field_name_strs),*` performs repetition matching over field arrays.
 > 4. **Zero Runtime Reflection Overhead**: The generated `field_count()` and `telemetry_keys()` static functions evaluate at compile time, eliminating runtime inspection penalties.
-
+> 
 ---
 
 ### Exercise 2: Attribute Procedural Macro — `#[retry(max_attempts = N)]` for Fault-Tolerant I/O Operations
@@ -466,7 +466,7 @@ syn = { version = "2.0", features = ["derive"] }
 > 2. **Parsing Attribute Literals**: `parse_macro_input!(attr as LitInt)` parses integer literals passed to the attribute macro, providing customizable retry thresholds per function.
 > 3. **AST Reconstruction**: The macro captures visibility (`#vis`), signature (`#sig`), and body (`#block`) of the original function and reconstructs a new function body wrapping `#block` in an escalating attempt loop.
 > 4. **Empirical Verification**: Unit tests verify retry logic using `AtomicUsize` counters to prove that transient errors trigger retries and max attempt boundaries are respected.
-
+> 
 ---
 
 ### Exercise 3: Function-Like Procedural Macro — `register_mask!` for Compile-Time Bitfield Struct Generation
@@ -627,7 +627,7 @@ syn = { version = "2.0", features = ["derive"] }
 > 2. **Custom Syntax Parsing**: Implementing `syn::parse::Parse` for custom data structures allows parsing non-standard Rust DSLs (such as matching custom tokens like `Token![=>]` and comma-separated identifier lists using `Punctuated`).
 > 3. **Compile-Time Bit Calculations**: The macro computes bit shifts (`1 << index`) during compilation, embedding zero-cost `const` field values into the emitted struct definition.
 > 4. **Verification via Assertions**: Unit tests prove bitwise operations (`set`, `unset`, `contains`, `from_bits`) match expected binary bitmask representations.
-
+> 
 ---
 
 ## 6. Related Terms

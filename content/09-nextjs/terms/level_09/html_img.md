@@ -134,30 +134,30 @@ Refactor an unoptimized native `<img src="/banner.jpg" />` element into Next.js 
 > ```tsx
 > // ❌ UNOPTIMIZED NATIVE HTML:
 > // <img src="/banner.jpg" alt="Banner" width="1200" height="400" />
-
-// ✅ OPTIMIZED NEXT.JS IMAGE:
-import Image from "next/image";
-
-export default function Banner() {
-  return (
-    <Image
-      src="/banner.jpg"
-      alt="Hero Banner"
-      width={1200}
-      height={400}
-      priority
-      className="w-full h-auto"
-    />
-  );
-}
-```
-
+> 
+> // ✅ OPTIMIZED NEXT.JS IMAGE:
+> import Image from "next/image";
+> 
+> export default function Banner() {
+>   return (
+>     <Image
+>       src="/banner.jpg"
+>       alt="Hero Banner"
+>       width={1200}
+>       height={400}
+>       priority
+>       className="w-full h-auto"
+>     />
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Native `<img>` tags load original uncompressed image files, increasing bandwidth and page load times.
 > 2. Next.js `<Image>` converts images to modern WebP/AVIF formats on-the-fly and generates responsive srcsets.
 > 3. Prevents Cumulative Layout Shift (CLS) web vital penalties.
-
+> 
 ---
 
 ### Exercise 2: Comparative Performance Audit (Native vs `<Image>`)
@@ -177,13 +177,13 @@ Formulate a comparative performance matrix contrasting native `<img>` against `<
 > - Native <img>: No auto-format conversion (raw PNG/JPEG), manual srcset, causes CLS if dimensions are missing, no automatic blur placeholders.
 > - Next.js <Image>: Automatic WebP/AVIF conversion, automatic viewport srcset, zero CLS via aspect ratio reservation, automatic blur placeholders.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Native images impact Web Core Vitals scores (LCP, CLS).
 > 2. `<Image>` optimizes image delivery automatically at the server/CDN edge.
 > 3. Mandatory performance optimization standard.
-
+> 
 ---
 
 ### Exercise 3: Auditing Exceptions for Native `<img>` Usage
@@ -204,19 +204,15 @@ Identify valid edge-case scenarios where native `<img>` elements are preferred o
 >   return <img src="/icon.svg" alt="Vector Icon" width="24" height="24" />;
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. SVG images are XML vector graphics that cannot be compressed into WebP/AVIF raster formats.
 > 2. Passing SVGs to image optimization endpoints adds unnecessary server CPU processing.
 > 3. Native `<img>` is acceptable for small SVG vectors or micro-data URI images.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — The performance metrics that image loading directly impacts.

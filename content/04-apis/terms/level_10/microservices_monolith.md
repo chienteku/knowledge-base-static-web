@@ -129,8 +129,8 @@ Imagine tools used for repair.
 
 > [!check]- Answer
 > - **B (Microservices).** You can scale up the Billing microservice by running more containers of that specific service, leaving the User service running at its normal scale.
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Monolith vs Microservices Trade-Off Matrix

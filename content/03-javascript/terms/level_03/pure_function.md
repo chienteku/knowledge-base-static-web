@@ -208,7 +208,7 @@ function getMidnightTime() {
 > ```
 > - Any write operation (to console, disk, screen, network) is a side effect.
 > - Any reliance on non-arguments (like time, random numbers) breaks determinism.
-
+> 
 ---
 
 ### Exercise 2: Refactoring Impure Array Mutator to Pure Function
@@ -230,7 +230,7 @@ function getMidnightTime() {
 > ```
 >
 > **Explanation:** Pure functions return new data structures without mutating original input references.
-
+> 
 ---
 
 ### Exercise 3: Testing Function Determinism
@@ -252,8 +252,8 @@ function getMidnightTime() {
 > ```
 >
 > **Explanation:** Pure functions are deterministic: identical inputs produce identical outputs unconditionally.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

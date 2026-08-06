@@ -171,30 +171,30 @@ Initialize the official `@surrealdb/surrealdb` JavaScript SDK, connect over WebS
 >
 > ```typescript
 > import Surreal from "@surrealdb/surrealdb";
-
-const db = new Surreal();
-
-async function main() {
-  await db.connect("wss://db.example.com/rpc");
-
-  await db.signin({
-    access: "user_access",
-    ns: "main",
-    db: "app",
-    username: "alice",
-    pass: "UserPass123!"
-  });
-
-  console.log("SDK connected and authenticated!");
-}
-```
-
+> 
+> const db = new Surreal();
+> 
+> async function main() {
+>   await db.connect("wss://db.example.com/rpc");
+> 
+>   await db.signin({
+>     access: "user_access",
+>     ns: "main",
+>     db: "app",
+>     username: "alice",
+>     pass: "UserPass123!"
+>   });
+> 
+>   console.log("SDK connected and authenticated!");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `@surrealdb/surrealdb` provides official TypeScript type-safe client APIs.
 > 2. `db.connect()` opens persistent WebSocket binary channels to SurrealDB nodes.
 > 3. `db.signin()` authenticates client sessions and stores session tokens automatically.
-
+> 
 ---
 
 ### Exercise 2: Type-Safe SDK Record Selection
@@ -216,17 +216,17 @@ Execute a type-safe `db.select<User>()` call to fetch user records into typed Ty
 >   name: string;
 >   email: string;
 > }
-
-const users = await db.select<User>("user");
-users.forEach(u => console.log(u.name, u.email));
-```
-
+> 
+> const users = await db.select<User>("user");
+> users.forEach(u => console.log(u.name, u.email));
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Generic type parameters (`db.select<User>()`) enforce TypeScript interface typing on returned query payloads.
 > 2. Prevents runtime `any` type casting errors in frontend applications.
 > 3. Provides IDE auto-completion for record fields.
-
+> 
 ---
 
 ### Exercise 3: Closing SDK Connections Cleanly
@@ -253,7 +253,7 @@ Close an active SDK database connection cleanly during application shutdown usin
 > 1. `db.close()` closes the underlying WebSocket connection and releases socket listeners.
 > 2. Prevents memory leaks and hung process handles during process exit.
 > 3. Good practice in serverless or desktop application teardown routines.
-
+> 
 ---
 
 

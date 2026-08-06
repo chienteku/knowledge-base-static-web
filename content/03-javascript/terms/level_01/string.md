@@ -156,7 +156,7 @@ async function processData() {
 > - Check out the `.slice()` or `.substring()` methods.
 > - You can find the starting position by looking at the index after `"www."`.
 > - `.slice(12)` will extract everything from the 12th character to the end.
-
+> 
 ---
 
 ### Exercise 2: String Immutability & Method Returns
@@ -175,7 +175,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** String methods do not mutate strings in-place; they return brand new primitive string values.
-
+> 
 ---
 
 ### Exercise 3: String UTF-16 Code Points vs Length
@@ -194,8 +194,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** String `.length` measures 16-bit code units, not Unicode grapheme clusters. Emoji outside BMP take 2 surrogate code units.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

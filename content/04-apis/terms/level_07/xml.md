@@ -125,7 +125,7 @@ parser.setFeature("http://xml.org/sax/features/external-general-entities", false
 > In XML, the word "product" is written twice, "id" is written twice, and "name" is written twice. In JSON, the keys are only written once (`"name": "Laptop"`), which drastically reduces the total number of characters transferred over the network.
 > ```
 > - Count how many times the word "name" appears.
-
+> 
 ---
 
 ### Exercise 2: Well-Formed XML Validation Rules

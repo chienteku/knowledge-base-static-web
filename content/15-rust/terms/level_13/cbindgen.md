@@ -400,7 +400,7 @@ Write the complete Rust code that:
 > 2. **Heap Transfer via `Box::into_raw` & `Box::from_raw`**: `Box::into_raw(filter)` releases heap memory ownership from Rust's automatic memory management, returning a raw pointer for C. Calling `Box::from_raw(handle)` inside `ema_filter_free` re-establishes ownership so Rust's `Drop` implementation safely frees the heap allocation when the variable goes out of scope.
 > 3. **Discriminant-Explicit Enums (`#[repr(C)]`)**: Explicit integer discriminants (`Ok = 0`, `NullPointer = -1`) combined with `#[repr(C)]` ensure `cbindgen` emits C `enum` definitions with identical underlying integer sizes and numerical values across toolchains.
 > 4. **Safety Contract & Pointer Checks**: All exported `extern "C"` functions check for `.is_null()` before dereferencing raw pointers (`*handle`), guaranteeing that invalid or null pointers passed by C return error status codes instead of triggering Undefined Behavior (UB).
-
+> 
 ---
 
 ### Exercise 2: Telemetry Batch Processing & `#[repr(C)]` Fixed Array Layouts
@@ -600,7 +600,7 @@ Write the complete Rust code that:
 > 1. **Fixed-Size Array Mapping (`[f32; 4]`)**: `cbindgen` parses fixed Rust arrays and converts `pub payload: [f32; 4]` directly to C member array syntax `float payload[4];`. This guarantees identical structure size and offset layout between Rust and C compilers.
 > 2. **`slice::from_raw_parts` Safety**: C represents buffers as a pointer (`*const TelemetryPacket`) and integer length (`usize`). In Rust, `slice::from_raw_parts(packets, count)` wraps raw memory into a safe slice `&[TelemetryPacket]`, enabling standard iterator operations (`for pkt in packet_slice`) with array boundary checks.
 > 3. **Type Conversions (`usize` $\rightarrow$ `uintptr_t`)**: `cbindgen` translates Rust's pointer-sized architecture type `usize` to C's standard `uintptr_t` (defined in `<stdint.h>`), ensuring portability across 32-bit and 64-bit hardware targets.
-
+> 
 ---
 
 ### Exercise 3: Cross-Language Heap Allocation & C-String Ownership Transfer
@@ -744,7 +744,7 @@ Write the complete Rust code that:
 > 2. **Ownership Transfer (`CString::into_raw`)**: Calling `c_string.into_raw()` returns a `*mut c_char` pointer and prevents Rust from running the `CString` destructor. C code receives ownership of the raw heap buffer.
 > 3. **Memory Deallocation (`CString::from_raw`)**: C code cannot use standard `free()` on memory allocated by Rust's allocator without risking allocator corruption. `rust_string_free` passes the pointer back to `CString::from_raw(s)`, restoring Rust ownership so Rust's memory allocator cleanly reclaims the buffer.
 > 4. **`cbindgen` Pointer Type Mapping**: `cbindgen` automatically maps `*const u8` to `const uint8_t *` and `*mut *mut c_char` to `char **`, generating standard C string parameter prototypes.
-
+> 
 ---
 
 ## 6. Related Terms

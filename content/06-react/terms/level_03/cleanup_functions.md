@@ -129,7 +129,7 @@ Ensure cleanup logic safely handles frequent re-executions when dependencies upd
 > }, []);
 > ```
 > - Store the ID of the interval, and use `clearInterval()`.
-
+> 
 ---
 
 
@@ -153,7 +153,7 @@ Ensure cleanup logic safely handles frequent re-executions when dependencies upd
 > ```
 >
 > **Explanation:** Returning a cleanup function `() => clearInterval(id)` prevents interval timer memory leaks.
-
+> 
 ---
 
 ### Exercise 3: AbortController Cleanup for Fetch
@@ -179,7 +179,7 @@ Ensure cleanup logic safely handles frequent re-executions when dependencies upd
 > ```
 >
 > **Explanation:** Calling `controller.abort()` in cleanup cancels pending network requests if dependencies change.
-
+> 
 ## 7. Related Terms
 - [`useEffect` Hook](use_effect.md) — The parent of the cleanup function.
 - [Component Lifecycle](component_lifecycle.md) — The Unmounting phase.

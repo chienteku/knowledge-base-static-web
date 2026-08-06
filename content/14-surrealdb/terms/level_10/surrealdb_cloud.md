@@ -122,28 +122,28 @@ Configure a Node.js microservice to connect securely to a managed SurrealDB Clou
 >
 > ```typescript
 > import Surreal from "@surrealdb/surrealdb";
-
-const db = new Surreal();
-
-await db.connect("wss://my-cluster.surrealdb.cloud/rpc");
-
-await db.signin({
-  access: "user_access",
-  ns: "production",
-  db: "main",
-  username: "app_user",
-  pass: process.env.CLOUD_DB_PASS!
-});
-
-console.log("Connected to SurrealDB Cloud!");
-```
-
+> 
+> const db = new Surreal();
+> 
+> await db.connect("wss://my-cluster.surrealdb.cloud/rpc");
+> 
+> await db.signin({
+>   access: "user_access",
+>   ns: "production",
+>   db: "main",
+>   username: "app_user",
+>   pass: process.env.CLOUD_DB_PASS!
+> });
+> 
+> console.log("Connected to SurrealDB Cloud!");
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. SurrealDB Cloud provides fully managed, auto-scaling database clusters.
 > 2. `wss://` enforces encrypted TLS WebSocket communication for remote cloud connections.
 > 3. Managed cluster endpoints handle high availability, automated backups, and global scaling.
-
+> 
 ---
 
 ### Exercise 2: Using Surrealist IDE with SurrealDB Cloud
@@ -172,7 +172,7 @@ Connect Surrealist (the official visual IDE) to your SurrealDB Cloud cluster ins
 > 1. Surrealist connects directly to SurrealDB Cloud clusters over secure WebSocket RPC channels.
 > 2. Provides visual schema design, query debugging, and graph network exploration.
 > 3. Simplifies cloud database management.
-
+> 
 ---
 
 ### Exercise 3: Provisioning Managed Cloud Resources
@@ -199,7 +199,7 @@ Summarize the operational benefits of managed SurrealDB Cloud over self-hosted s
 > 1. Managed cloud infrastructure offloads database maintenance overhead.
 > 2. Auto-scales compute nodes and TiKV storage nodes independently.
 > 3. Provides enterprise SLA availability for production workloads.
-
+> 
 ---
 
 

@@ -268,7 +268,7 @@ thread::spawn(move || {
 > 1. **Dropck & Raw Pointer Opaque Semantics**: Raw pointers (`*mut T`) are primitive types that do not implement `Drop` and carry no ownership semantics. When compiler dropck analyzes a struct containing `*mut T`, it conservatively assumes the struct does NOT own `T` and will NOT run `T`'s destructor. If `ArenaNodeGuard` held a borrowed reference inside `T` (e.g. `T = &'b Str`), dropck would permit `'b` to terminate *before* `ArenaNodeGuard` is dropped, causing potential dangling reference access inside `Drop::drop`.
 > 2. **`PhantomData<T>` Soundness Guard**: Adding `PhantomData<T>` explicitly informs dropck that `ArenaNodeGuard<'a, T>` owns an instance of `T` and will invoke `T`'s destructor during `Drop::drop`. This forces dropck to enforce the invariant: any lifetime parameter inside `T` must strictly outlive the `ArenaNodeGuard` instance.
 > 3. **Destructor Execution Order**: Inside `Drop::drop`, calling `std::ptr::drop_in_place(self.ptr)` ensures `T`'s destructor executes while `self.ptr` still points to valid allocated memory. Subsequently, `Box::from_raw(self.ptr)` deallocates the underlying heap buffer without calling `T`'s destructor a second time (preventing double-free bugs).
-
+> 
 ---
 
 ### Exercise 2: FFI Transaction Guards & Struct Field Drop Order Invariants
@@ -420,7 +420,7 @@ thread::spawn(move || {
 >    - **Local variables** in a block are dropped in strict LIFO (Last-In, First-Out) reverse declaration order. `let conn` declared before `let tx` ensures `tx` is dropped first.
 >    - **Struct fields** are dropped in top-to-bottom declaration order. In `CompoundService`, declaring `guard: TransactionGuard<'a>` before `conn: &'a DbConnection` guarantees that `guard`'s destructor runs while the `conn` reference field is still intact.
 > 3. **Interior Mutability in Destructors**: Because `Drop::drop` receives `&mut self`, accessing shared state on `DbConnection` requires interior mutability (`RefCell` or `Mutex`). Dropck permits calling `borrow_mut()` inside `drop()` because lifetime `'a` guarantees `DbConnection` is still allocated and aliasing rules prevent concurrent mutable borrows across threads.
-
+> 
 ---
 
 ### Exercise 3: Scoped Deferred Cleanup Pool with Generic Lifetime Bounds
@@ -541,7 +541,7 @@ thread::spawn(move || {
 > 1. **Dropck Generic Parameters Conservative Analysis**: Dropck conservatively assumes that any generic parameter `T` on a type implementing `Drop` might be accessed during destructor execution. Even though `ResourceHandle<'a, T>` stores `Option<T>` and moves it via `self.payload.take()`, dropck requires that `T`'s lifetime (and all references inside `T`) must strictly outlive `'a` and the duration of `drop()`.
 > 2. **Option Take Pattern in Destructors**: Rust prohibits moving values directly out of a type that implements `Drop` (`E0509: cannot move out of type which implements the Drop trait`). Wrapping generic payloads in `Option<T>` allows `self.payload.take()` to replace the field with `None` while transferring ownership of `T` into the pool's deferred cleanup log without violating move constraints.
 > 3. **Lifetime Bound `'a` Verification**: The lifetime parameter `'a` ties `ResourceHandle<'a, T>` to the borrowing scope of `&'a ScopedResourcePool<T>`. Dropck ensures `ScopedResourcePool<T>` cannot be moved or dropped while any `ResourceHandle<'a, T>` is live, guaranteeing `self.pool.cleanup_log.borrow_mut()` will never dereference a dangling pointer.
-
+> 
 ---
 
 ## 6. Related Terms

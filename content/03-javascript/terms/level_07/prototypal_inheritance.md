@@ -165,7 +165,7 @@ async function processData() {
 > Yes! A `for...in` loop iterates over both an object's own properties AND its inherited enumerable properties. (If you only want the object's own properties, you must use `Object.keys()` or `hasOwnProperty()`).
 > ```
 > - Prototypal inheritance makes properties feel like they belong to the child.
-
+> 
 ---
 
 ### Exercise 2: Linking Prototypes with `Object.create`
@@ -186,7 +186,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Object.create(Parent.prototype)` establishes prototypal inheritance chains.
-
+> 
 ---
 
 ### Exercise 3: Property Shadowing on Prototype Chains
@@ -206,8 +206,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Writing properties to instances shadows prototype properties without mutating prototype defaults.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

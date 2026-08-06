@@ -167,7 +167,7 @@ parentPort.on('message', (text) => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Basic Worker Thread Implementation
@@ -190,7 +190,7 @@ parentPort.on('message', (text) => {
 > ```
 >
 > **Explanation:** `Worker` constructor spawns background V8 isolate threads passing initial `workerData`.
-
+> 
 ---
 
 ### Exercise 3: SharedArrayBuffer and Worker Threads
@@ -207,7 +207,7 @@ parentPort.on('message', (text) => {
 > ```
 >
 > **Explanation:** `SharedArrayBuffer` enables zero-copy parallel memory access across worker threads.
-
+> 
 ## 7. Related Terms
 - [Child Processes (child_process)](child_processes.md) — Multi-process concurrency with isolated memories.
 - [The cluster Module](cluster_module.md) — Spawning multiple instances of a Node server process.

@@ -120,19 +120,19 @@ Configure an API Route Handler to execute on the Edge Runtime using `export cons
 > ```typescript
 > // app/api/geo/route.ts
 > export const runtime = "edge";
-
-export async function GET(req: Request) {
-  const country = req.headers.get("x-vercel-ip-country") || "Unknown";
-  return Response.json({ country, engine: "V8 Edge Isolate" });
-}
-```
-
+> 
+> export async function GET(req: Request) {
+>   const country = req.headers.get("x-vercel-ip-country") || "Unknown";
+>   return Response.json({ country, engine: "V8 Edge Isolate" });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `export const runtime = 'edge'` compiles the route handler for execution on lightweight V8 edge isolates.
 > 2. Deploys handlers globally near end users, reducing latency and cold starts.
 > 3. Restricted to Web-standard APIs (`fetch`, `Request`, `Response`, `Crypto`).
-
+> 
 ---
 
 ### Exercise 2: Auditing Edge Runtime Node.js Module Restrictions
@@ -152,13 +152,13 @@ Explain why importing Node.js built-in modules (`fs`, `child_process`, `net`) in
 > ❌ import fs from 'node:fs'; // FAILS: Native C++ Node.js modules do not exist on Edge V8 isolates.
 > ✅ Use Web-standard APIs: fetch(), TransformStream, crypto.subtle, TextEncoder.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Edge runtimes run on stripped-down V8 JavaScript engines without Node.js C++ bindings.
 > 2. Standard Web APIs guarantee cross-platform compatibility across Cloudflare Workers, Vercel Edge, and browsers.
 > 3. Core rule for edge-native Next.js development.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: Node.js Runtime vs Edge Runtime
@@ -178,19 +178,15 @@ Formulate an architectural selection decision matrix comparing Node.js Runtime v
 > - Node.js Runtime (Default): Full Node.js API & npm compatibility (Prisma, fs, native C packages), slightly higher cold starts. Use for DB operations & heavy server logic.
 > - Edge Runtime (runtime = 'edge'): Ultra-low latency, zero cold starts, Web-standard APIs ONLY (no fs/native C ORMs). Use for geo-routing, A/B testing, lightweight proxying.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Node.js runtime is preferred for database access and heavy server computations.
 > 2. Edge runtime is preferred for ultra-fast global request routing and light API proxies.
 > 3. Fundamental platform runtime choice.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Middleware (`middleware.ts`)](middleware.md) — The primary consumer of the Edge Runtime.

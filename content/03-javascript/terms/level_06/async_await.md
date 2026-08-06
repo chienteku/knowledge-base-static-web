@@ -172,7 +172,7 @@ function getJoke() {
 > ```
 > - Don't forget to add `async` to the function declaration!
 > - Assign the result of `await fetch(...)` to a variable.
-
+> 
 ---
 
 ### Exercise 2: Async Await Error Handling with Try/Catch
@@ -196,7 +196,7 @@ function getJoke() {
 > ```
 >
 > **Explanation:** `try...catch` blocks catch rejected promise errors thrown inside `async` functions.
-
+> 
 ---
 
 ### Exercise 3: Parallel Execution with `Promise.all` inside Async Functions
@@ -219,7 +219,7 @@ function getJoke() {
 > ```
 >
 > **Explanation:** Combining `await` with `Promise.all` executes independent promises concurrently.
-
+> 
 ---
 
 ## 7. Related Terms

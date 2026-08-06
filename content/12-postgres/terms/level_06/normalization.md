@@ -167,7 +167,7 @@ Normalize a flat spreadsheet-style `orders_flat` table storing customer and prod
 > 1. Normalization eliminates data redundancy across entities.
 > 2. Prevents insertion, update, and deletion anomalies.
 > 3. Foundation of enterprise relational database architecture.
-
+> 
 ---
 
 ### Exercise 2: Identifying Modification Anomalies in Un-Normalized Schemas
@@ -194,7 +194,7 @@ Demonstrate insertion, update, and deletion anomalies on an un-normalized table 
 > 1. Anomalies occur when distinct business entities inhabit a single un-normalized table.
 > 2. 3NF normalization isolates entities into dedicated tables, preventing all three anomaly types.
 > 3. Ensures data integrity.
-
+> 
 ---
 
 ### Exercise 3: Auditing Schemas for Third Normal Form Compliance
@@ -226,7 +226,7 @@ Audit table `invoices(id, customer_id, customer_email, total)` and refactor to s
 > 1. In 3NF, all non-key attributes MUST depend "on the key, the whole key, and nothing but the key".
 > 2. `customer_email` depends on `customer_id`, violating 3NF when placed in `invoices`.
 > 3. Fetching attributes via `JOIN` maintains 3NF compliance.
-
+> 
 ---
 
 

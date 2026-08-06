@@ -236,11 +236,11 @@ Sec-WebSocket-Version: 13
 > [!check]- Answer
 > - Look closely at the `Connection` header value.
 > - The server needs instructions on how to handle the connection lifecycle.
-
+> 
 > [!check]- Answer
 > - **The `Connection` header value is incorrect.** It is set to `Keep-Alive` instead of `Upgrade`. If `Connection` is not explicitly set to `Upgrade`, proxy servers and routers will treat the request as standard HTTP and refuse to transition the socket protocol.
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Sec-WebSocket-Accept Calculation

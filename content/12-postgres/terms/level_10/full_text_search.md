@@ -174,7 +174,7 @@ Perform a full-text search over `articles(body)` for terms `'postgresql & index'
 > 1. `to_tsvector()` parses text into lexemes, removing stop words (`the`, `a`) and applying linguistic stemming (`indexing` -> `index`).
 > 2. `@@` is the full-text search match operator.
 > 3. `to_tsquery()` evaluates Boolean search expressions (`&` AND, `|` OR, `!` NOT).
-
+> 
 ---
 
 ### Exercise 2: Accelerating Full-Text Search with Generated `tsvector` Columns and GIN Indexes
@@ -208,7 +208,7 @@ Add a stored generated column `search_vector` to `articles` and index it with a 
 > 1. Stored generated `tsvector` columns pre-calculate lexemes during inserts/updates.
 > 2. GIN index over `search_vector` enables sub-millisecond full-text search across millions of documents.
 > 3. Eliminates managing external Elasticsearch sync infrastructure for basic text search.
-
+> 
 ---
 
 ### Exercise 3: Relevance Ranking with `ts_rank()`
@@ -238,7 +238,7 @@ Order full-text search results by relevance score using `ts_rank()`.
 > 1. `ts_rank()` calculates a relevance score based on term frequency and document density.
 > 2. Orders output results by search relevance descending.
 > 3. Production search feature.
-
+> 
 ---
 
 

@@ -160,7 +160,7 @@ async function processData() {
 > ["HELLO", "WORLD"]
 > ```
 > - `const upper = strings.map(str => str.toUpperCase());`
-
+> 
 ---
 
 ### Exercise 2: Transforming Array Objects
@@ -179,7 +179,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `.map()` returns a new array with transformed element values.
-
+> 
 ---
 
 ### Exercise 3: Parsing Integers in `map` Trap
@@ -198,8 +198,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `["1","2","3"].map(parseInt)` fails because `.map` passes `(element, index)` into `parseInt(string, radix)`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

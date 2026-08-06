@@ -126,7 +126,7 @@ useMutation({
 > Because React Query caches data globally by the `queryKey`, the `<Footer>` will instantly read the data from the cache without triggering a second network request. It acts as a global state manager for your API data!
 > ```
 > - Think about what the `queryKey` does.
-
+> 
 ---
 
 
@@ -148,7 +148,7 @@ useMutation({
 > ```
 >
 > **Explanation:** `useQuery` manages server state, caching, loading statuses, and refetching automatically.
-
+> 
 ---
 
 ### Exercise 3: Stale Time vs GC Time (Cache Time)
@@ -165,7 +165,7 @@ useMutation({
 > ```
 >
 > **Explanation:** `staleTime` controls background refetching frequency; `gcTime` manages memory garbage collection.
-
+> 
 ## 7. Related Terms
 - [`useEffect` Hook](../level_03/use_effect.md) — The manual tool that React Query makes obsolete for data fetching.
 - [State Management (Redux / Zustand)](../level_06/state_management.md) — React Query acts as the global state manager specifically for API data.

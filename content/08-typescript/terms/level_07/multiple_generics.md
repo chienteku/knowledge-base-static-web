@@ -128,17 +128,17 @@ Create a `Pair<K, V>` interface representing key-value tuple pairs with distinct
 >   key: K;
 >   value: V;
 > }
-
-const entry: Pair<string, number> = { key: "age", value: 30 };
-const flag: Pair<number, boolean> = { key: 1, value: true };
-```
-
+> 
+> const entry: Pair<string, number> = { key: "age", value: 30 };
+> const flag: Pair<number, boolean> = { key: 1, value: true };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Multiple generic parameters (`<K, V>`) allow functions or interfaces to handle multiple independent types.
 > 2. `key` is bound to `K` while `value` is bound to `V` independently.
 > 3. Standard structure for dictionary entries and key-value mapping tuples.
-
+> 
 ---
 
 ### Exercise 2: Mapping Tuple Transformation Functions
@@ -160,17 +160,17 @@ Create a generic `mapPair<T, U, R>` function that takes a pair `[T, U]` and a ma
 > ): R {
 >   return mapper(pair[0], pair[1]);
 > }
-
-const formatted = mapPair([10, "apples"], (qty, item) => `${qty} ${item}`);
-console.log(formatted); // "10 apples" (inferred as string)
-```
-
+> 
+> const formatted = mapPair([10, "apples"], (qty, item) => `${qty} ${item}`);
+> console.log(formatted); // "10 apples" (inferred as string)
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `T` and `U` represent input tuple element types, while `R` represents the mapped return type.
 > 2. TypeScript automatically infers `T=number`, `U=string`, and `R=string` from function arguments.
 > 3. Advanced functional composition utility.
-
+> 
 ---
 
 ### Exercise 3: Naming Conventions for Multiple Generics Audit
@@ -194,13 +194,13 @@ Explain standard naming conventions for multiple generic type parameters (`T`, `
 > - P: Property / Props (used in React / Component frameworks)
 > - R: Return type (used in function wrappers)
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Single uppercase letters are traditional conventions for short generic type variables.
 > 2. For complex domain logic, descriptive multi-letter generic names (e.g. `<TEntity, TResponse>`) can be used for clarity.
 > 3. Promotes readable codebase conventions.
-
+> 
 ---
 
 

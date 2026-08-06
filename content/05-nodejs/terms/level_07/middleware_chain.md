@@ -254,7 +254,7 @@ app.get('/status', (req, res) => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Tracing Middleware Execution Order
@@ -276,7 +276,7 @@ app.use(m3);
 > ```
 >
 > **Explanation:** Execution flows through m1 to m2 to route handler; m3 is skipped because response is sent.
-
+> 
 ---
 
 ### Exercise 3: Short-Circuiting Middleware Chain
@@ -296,7 +296,7 @@ app.use(m3);
 > ```
 >
 > **Explanation:** Returning early without calling `next()` halts further chain execution.
-
+> 
 ## 7. Related Terms
 - [Middleware](middleware.md) — The core design pattern.
 - [The req & res Objects](req_res.md) — The shared state containers passed down the chain.

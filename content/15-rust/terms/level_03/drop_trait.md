@@ -344,7 +344,7 @@ Design a thread-safe connection pool system where `PooledConnection` implements 
 > 4. **Edge Cases & Invariants:**
 >    - **Panic Safety:** Even if a panic occurs during worker execution, stack unwinding runs destructors for all in-scope variables, ensuring connections are never leaked or left stuck in the active state.
 >    - **Health Filtering:** Marking a connection unhealthy before drop guarantees broken sockets are pruned from the pool, maintaining pool health integrity without requiring expensive background validation threads.
-
+> 
 ---
 
 ### Exercise 2: Transactional Storage Engine with Drop-Based Automatic Rollback Safety
@@ -515,7 +515,7 @@ Implement a `Transaction` wrapper over a `StorageEngine` that uses the `Drop` tr
 > 4. **Edge Cases & Rollback Invariants:**
 >    - **First-Write Wins Snapshot:** `put` checks `if !self.original_snapshots.contains_key(&key)` to record snapshot state only on the first mutation of a key during a transaction. Subsequent mutations in the same transaction do not overwrite the true initial value.
 >    - **Key Deletion on Rollback:** Keys that did not exist prior to the transaction store `None` in `original_snapshots`. During rollback, `None` causes `self.engine.data.remove(&key)`, completely purging uncommitted additions.
-
+> 
 ---
 
 ### Exercise 3: Zero-Copy Custom Arena Slot Lease Guard with Atomic Ref-Counted Drop Reclamation
@@ -744,7 +744,7 @@ Design an `ArenaSlotPool<T>` and a reference-counted handle guard `SlotLease<T>`
 > 4. **Edge Cases & Concurrency Considerations:**
 >    - **Manual Invalidation:** Calling `invalidate(&mut self)` sets `is_valid = false`. Upon `Drop::drop`, the branch detects invalidation, resets `ref_count` directly to 0, clears payload, bumps generation, and recycles the index immediately.
 >    - **Sequential Consistency:** Using `Ordering::SeqCst` ensures atomic mutations on `ref_count` are globally visible across thread boundaries before slot index updates occur in the free list.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -149,8 +149,8 @@ app.post('/items', verifyToken, requireScope('write:items'), (req, res) => {
 > - 1. **Authorize (`200 OK`)** - Token contains the matching scope.
 > - 2. **Block (`403 Forbidden`)** - Token lacks `write:orders`.
 > - 3. **Authorize (`200 OK`)** - Token contains the matching scope.
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Least Privilege Scope Design

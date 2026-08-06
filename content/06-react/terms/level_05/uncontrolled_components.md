@@ -116,7 +116,7 @@ Use useRef for uncontrolled forms or useState for controlled forms
 > For security reasons, browsers do not allow JavaScript to programmatically set the `value` of a file input. Therefore, React State cannot control it. You must use a `ref` (or an `onChange` that just reads the `e.target.files` without forcing a `value` back into the input).
 > ```
 > - Think about browser security with user hard drives.
-
+> 
 ---
 
 
@@ -147,7 +147,7 @@ Use useRef for uncontrolled forms or useState for controlled forms
 > ```
 >
 > **Explanation:** Uncontrolled components read DOM input values on demand using React refs.
-
+> 
 ---
 
 ### Exercise 3: File Input Type Requirement
@@ -164,7 +164,7 @@ Use useRef for uncontrolled forms or useState for controlled forms
 > ```
 >
 > **Explanation:** File inputs delegate file selection management directly to native OS file dialogs.
-
+> 
 ## 7. Related Terms
 - [Controlled Components](controlled_components.md) — The standard, React-centric way to handle forms.
 - [`useRef` Hook](../level_04/use_ref.md) — The mechanism used to interact with uncontrolled inputs.

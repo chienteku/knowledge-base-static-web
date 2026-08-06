@@ -225,7 +225,7 @@ input[type="radio"] { accent-color: #005fcc; } /* High contrast accessibility ti
 > ```
 > - Combine selectors with a comma to apply the rules in a clean block.
 > - Assign the branding property value.
-
+> 
 ---
 
 
@@ -248,7 +248,7 @@ input[type="radio"] { accent-color: #005fcc; } /* High contrast accessibility ti
 > ```
 >
 > **Explanation:** `accent-color` styles native form input accents across browsers with single-line CSS.
-
+> 
 ---
 
 ### Exercise 3: Elements Supporting accent-color
@@ -271,7 +271,7 @@ input[type="radio"] { accent-color: #005fcc; } /* High contrast accessibility ti
 > ```
 >
 > **Explanation:** `accent-color` applies brand tinting to native interactive form controls.
-
+> 
 ## 7. Related Terms
 - [Advanced Pseudo-classes](../level_09/pseudo_classes_advanced.md) — `:checked` and `:disabled` form selectors.
 

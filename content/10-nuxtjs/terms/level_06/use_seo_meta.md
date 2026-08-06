@@ -147,20 +147,20 @@ Set OpenGraph and Twitter card share preview metadata for a blog post.
 >   twitterSite: "@nuxt_js"
 > });
 > </script>
-
-<template>
-  <article>
-    <h1>Nuxt 3 Hybrid Rendering Architecture</h1>
-  </article>
-</template>
-```
-
+> 
+> <template>
+>   <article>
+>     <h1>Nuxt 3 Hybrid Rendering Architecture</h1>
+>   </article>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useSeoMeta()` provides a flat, strongly-typed interface for setting 100+ standard SEO and social meta tags.
 > 2. Prevents property name typos (`ogTitle` vs `og:title`).
 > 3. Renders static HTML meta tags during server SSR for social media web crawlers.
-
+> 
 ---
 
 ### Exercise 2: Dynamic Reactive Metadata from Async Fetch
@@ -179,27 +179,27 @@ Set SEO metadata dynamically using getters resolved from async `useFetch()`.
 > <script setup lang="ts">
 > const route = useRoute();
 > const { data: product } = await useFetch(`/api/products/${route.params.id}`);
-
-useSeoMeta({
-  title: () => product.value?.name ?? "Product",
-  description: () => product.value?.description ?? "Default description",
-  ogImage: () => product.value?.imageUrl
-});
-</script>
-
-<template>
-  <div v-if="product">
-    <h1>{{ product.name }}</h1>
-  </div>
-</template>
-```
-
+> 
+> useSeoMeta({
+>   title: () => product.value?.name ?? "Product",
+>   description: () => product.value?.description ?? "Default description",
+>   ogImage: () => product.value?.imageUrl
+> });
+> </script>
+> 
+> <template>
+>   <div v-if="product">
+>     <h1>{{ product.name }}</h1>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Passing getter functions ensures metadata updates reactively once async fetch promises resolve.
 > 2. Server-renders exact dynamic product meta tags into initial HTML responses.
 > 3. Essential dynamic SEO pattern for e-commerce and CMS pages.
-
+> 
 ---
 
 ### Exercise 3: Canonical URLs and Robots Meta Directives
@@ -221,26 +221,22 @@ Configure page canonical URL and `noindex` directives for staging environments.
 >   robots: "noindex, nofollow"
 > });
 > </script>
-
-<template>
-  <div>
-    <h1>Staging Panel</h1>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <h1>Staging Panel</h1>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `robots: 'noindex, nofollow'` instructs search engine crawlers not to index the page.
 > 2. Protects staging or private admin environments from appearing in public search results.
 > 3. Production search security directive.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useHead`](use_head.md) — The tool used for scripts and stylesheets.

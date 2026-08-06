@@ -157,7 +157,7 @@ Compare index selectivity for high-cardinality `email` vs low-cardinality `gende
 > 1. Index Selectivity measures the proportion of collection documents eliminated by an index filter.
 > 2. High-cardinality unique fields isolate tiny candidate sets instantly.
 > 3. Low-cardinality fields should NOT be indexed alone; combine in compound indexes.
-
+> 
 ---
 
 ### Exercise 2: Building Compound Indexes for Low-Cardinality Fields
@@ -181,7 +181,7 @@ Optimize queries filtering by low-cardinality `status` and high-cardinality `cre
 > 1. Combining a low-cardinality field (`status`) with a high-cardinality field (`createdAt`) produces a highly selective compound index.
 > 2. Narrows candidate set to active status, then immediately isolates date ranges.
 > 3. Standard compound indexing strategy.
-
+> 
 ---
 
 ### Exercise 3: Measuring Selectivity Ratios with `explain()`
@@ -209,7 +209,7 @@ Calculate the Selectivity Ratio (`nReturned / totalDocsExamined`) in `explain()`
 > 1. A Selectivity Ratio close to 1.0 indicates perfect index filtering (zero unneeded document reads).
 > 2. Low ratios (< 0.1) indicate poor selectivity, scanning 10x more documents than returned.
 > 3. Key metric for evaluating index health.
-
+> 
 ---
 
 

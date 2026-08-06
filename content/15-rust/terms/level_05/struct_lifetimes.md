@@ -241,7 +241,7 @@ struct Pair<'a, 'b> { // Independent lifetimes allow flexible borrowing!
 >
 > 1. `PacketFrame<'a>` stores slices borrowed from `raw_bytes` with zero copy overhead.
 > 2. Lifetime `'a` guarantees `PacketFrame` cannot outlive the underlying `raw_bytes` vector.
-
+> 
 ---
 
 ### Exercise 2: Document Search Match Engine with Dual Lifetimes
@@ -294,7 +294,7 @@ struct Pair<'a, 'b> { // Independent lifetimes allow flexible borrowing!
 >
 > 1. Using two distinct lifetimes (`'doc` and `'query`) prevents forcing `doc_text` and `search_term` to share an identical lifetime scope.
 > 2. `SearchMatch` can be retained safely as long as both borrowed targets remain alive.
-
+> 
 ---
 
 ### Exercise 3: Zero-Copy Streaming Log Reader with Method Implementation
@@ -347,7 +347,7 @@ struct Pair<'a, 'b> { // Independent lifetimes allow flexible borrowing!
 >
 > 1. `impl<'a> LogReader<'a>` declares lifetime `'a` for all method implementations.
 > 2. `read_errors(&mut self) -> Vec<&'a str>` explicitly returns slices tied to `'a` (the log data), allowing caller to hold returned error slices after `reader` drops.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -159,7 +159,7 @@ Choose explicit, non-overlapping extension method names (e.g. `fn word_count(&se
 >
 > 1. `StrEllipsisExt` is a local extension trait implemented for standard `str`.
 > 2. Bringing `StrEllipsisExt` into scope enables fluent `.truncate_ellipsis()` calls on all string slices.
-
+> 
 ---
 
 ### Exercise 2: Slice Chunking Extension Trait
@@ -203,7 +203,7 @@ Choose explicit, non-overlapping extension method names (e.g. `fn word_count(&se
 >
 > 1. Extends standard slice `[T]` with convenient pattern splitting.
 > 2. Idiomatic Rust API extension.
-
+> 
 ---
 
 ### Exercise 3: Option Fallible Boolean Helper Extension
@@ -246,7 +246,7 @@ Choose explicit, non-overlapping extension method names (e.g. `fn word_count(&se
 >
 > 1. Extends standard `Option<bool>` with concise predicate checking.
 > 2. Eliminates verbose `match` blocks.
-
+> 
 ---
 
 ## 6. Related Terms

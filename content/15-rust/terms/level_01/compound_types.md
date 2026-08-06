@@ -268,7 +268,7 @@ Implement a function `parse_sensor_packet(raw_frame: [u8; 10]) -> Result<((u16, 
 > - **Compound Tuple Return Types:** Bundling metadata into a nested tuple `((u16, u16, u16), u16)` allows returning heterogeneous data groupings without allocating dynamic structs or heap containers.
 > - **Pattern Matching & Error Invariants:** Custom `enum PacketError` paired with `Result` guarantees panic-free binary frame validation.
 >
-
+> 
 ---
 
 ### Exercise 2: Zero-Allocation Quantitative Trading Rolling Metrics Window
@@ -389,7 +389,7 @@ Implement a stack-based rolling price statistics buffer `RollingMetrics<const N:
 > - **Ring Buffer Indexing & Mutability:** `self.head = (self.head + 1) % N` provides zero-allocation circular buffer bounds wrapping. Array elements are updated in-place via `self.data[self.head] = price`.
 > - **Array Slice Indexing (`&self.data[..active_len]`):** Slicing a fixed array allows safely iterating over only the populated active slots when `self.count < N`.
 >
-
+> 
 ---
 
 ### Exercise 3: Autonomous Mobile Robot Spatial Occupancy Grid Analyzer
@@ -517,7 +517,7 @@ Implement position translation and regional safety risk evaluation:
 > - **Bounds Checking & Overflow Safety:** Converting `usize` coordinates to signed `i32` before adding relative displacement `(i32, i32)` prevents integer underflow when moving negative distances.
 > - **Compound Metric Return Types:** Returning `(usize, u8, bool)` bundles count, maximum density, and risk alert into a lightweight tuple without requiring heap structures.
 >
-
+> 
 ---
 
 ## 6. Related Terms

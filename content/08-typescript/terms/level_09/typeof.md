@@ -107,23 +107,23 @@ Extract the type signature of a default configuration object `defaultConfig` usi
 >   port: 8080,
 >   debug: true
 > };
-
-type Config = typeof defaultConfig;
-// Inferred as: { host: string; port: number; debug: boolean; }
-
-const customConfig: Config = {
-  host: "127.0.0.1",
-  port: 3000,
-  debug: false
-};
-```
-
+> 
+> type Config = typeof defaultConfig;
+> // Inferred as: { host: string; port: number; debug: boolean; }
+> 
+> const customConfig: Config = {
+>   host: "127.0.0.1",
+>   port: 3000,
+>   debug: false
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Type-level `typeof` queries the static TypeScript type of a value-space variable or constant.
 > 2. Erases the need to manually maintain separate interface declarations for default config objects.
 > 3. Ensures single source of truth between runtime values and compile-time types.
-
+> 
 ---
 
 ### Exercise 2: Extracting Function Signature Types
@@ -142,19 +142,19 @@ Extract the function signature of a utility function using `typeof`.
 > function calculateTotal(price: number, tax: number): number {
 >   return price * (1 + tax);
 > }
-
-type CalculatorFn = typeof calculateTotal;
-// Inferred as: (price: number, tax: number) => number
-
-const myCalc: CalculatorFn = (p, t) => p + t;
-```
-
+> 
+> type CalculatorFn = typeof calculateTotal;
+> // Inferred as: (price: number, tax: number) => number
+> 
+> const myCalc: CalculatorFn = (p, t) => p + t;
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `typeof functionName` obtains the function signature type `(params) => returnType`.
 > 2. Allows typing function variables or higher-order callbacks based on existing implementation functions.
 > 3. Clean type extraction pattern.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: Value-Space `typeof` vs Type-Space `typeof`
@@ -174,13 +174,13 @@ Formulate an architectural comparison matrix contrasting JavaScript's runtime `t
 > - Value-Space typeof (if (typeof x === "string")): Executes at RUNTIME. Evaluates value to a JS primitive string ("string", "number", "object").
 > - Type-Space typeof (type T = typeof x): Executes at COMPILE-TIME. Queries the static TypeScript type signature of identifier x. Erased completely in JS output.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Value-space `typeof` appears in executable JavaScript code (inside `if` statements).
 > 2. Type-space `typeof` appears in type annotations (`type T = typeof val`).
 > 3. Fundamental distinction between runtime evaluation and type-system queries.
-
+> 
 ---
 
 
@@ -190,7 +190,6 @@ Formulate an architectural comparison matrix contrasting JavaScript's runtime `t
 
 ---
 
----
 
 ## 7. Key Takeaways
 

@@ -166,7 +166,7 @@ try {
 > Database error caught
 > ```
 > - Check using `error instanceof DatabaseError`.
-
+> 
 ---
 
 ### Exercise 2: Prototype Chain Class Check
@@ -186,7 +186,7 @@ try {
 > ```
 >
 > **Explanation:** `instanceof` tests whether constructor `.prototype` properties appear anywhere along object prototype chains.
-
+> 
 ---
 
 ### Exercise 3: Custom `Symbol.hasInstance` Overriding
@@ -208,7 +208,7 @@ try {
 > ```
 >
 > **Explanation:** `Symbol.hasInstance` customizes `instanceof` evaluation semantics.
-
+> 
 ---
 
 ## 7. Related Terms

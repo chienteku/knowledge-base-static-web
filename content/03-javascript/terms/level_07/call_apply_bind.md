@@ -187,7 +187,7 @@ console.log("Book Title:", getTitle());
 > Book Title: JavaScript Guide
 > ```
 > - Assign `printTitle.bind(book)` to `getTitle`.
-
+> 
 ---
 
 ### Exercise 2: Explicit `this` Binding with `.call()`
@@ -205,7 +205,7 @@ console.log("Book Title:", getTitle());
 > ```
 >
 > **Explanation:** `.call(ctx, ...args)` invokes target functions with explicitly assigned `this` contexts.
-
+> 
 ---
 
 ### Exercise 3: Partial Function Application with `.bind()`
@@ -224,7 +224,7 @@ console.log("Book Title:", getTitle());
 > ```
 >
 > **Explanation:** `.bind()` pre-binds leading argument parameters for partial application.
-
+> 
 ---
 
 ## 7. Related Terms

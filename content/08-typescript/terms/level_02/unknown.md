@@ -126,25 +126,25 @@ Receive an untyped JSON API response payload as `unknown` and safely validate it
 > function processApiResponse(data: unknown) {
 >   // ❌ FAILS: Cannot access data.name directly on unknown!
 >   // console.log(data.name);
-
-  // ✅ CORRECT (Perform runtime shape check):
-  if (
-    typeof data === "object" &&
-    data !== null &&
-    "name" in data &&
-    typeof (data as any).name === "string"
-  ) {
-    console.log("User Name:", (data as any).name.toUpperCase());
-  }
-}
-```
-
+> 
+>   // ✅ CORRECT (Perform runtime shape check):
+>   if (
+>     typeof data === "object" &&
+>     data !== null &&
+>     "name" in data &&
+>     typeof (data as any).name === "string"
+>   ) {
+>     console.log("User Name:", (data as any).name.toUpperCase());
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `unknown` forces developers to prove a value's type at runtime before accessing properties.
 > 2. Prevents unexpected runtime crashes from malformed external JSON payloads.
 > 3. Modern replacement for unsafe `any` in API boundaries.
-
+> 
 ---
 
 ### Exercise 2: Narrowing `unknown` with Custom Type Guards
@@ -164,32 +164,32 @@ Write a user-defined type guard function `isUser(obj: unknown): obj is User` to 
 >   id: number;
 >   username: string;
 > }
-
-function isUser(obj: unknown): obj is User {
-  return (
-    typeof obj === "object" &&
-    obj !== null &&
-    "id" in obj &&
-    "username" in obj &&
-    typeof (obj as Record<string, unknown>).id === "number" &&
-    typeof (obj as Record<string, unknown>).username === "string"
-  );
-}
-
-function handleData(input: unknown) {
-  if (isUser(input)) {
-    // TypeScript knows input is User here!
-    console.log(`User ID: ${input.id}, Name: ${input.username}`);
-  }
-}
-```
-
+> 
+> function isUser(obj: unknown): obj is User {
+>   return (
+>     typeof obj === "object" &&
+>     obj !== null &&
+>     "id" in obj &&
+>     "username" in obj &&
+>     typeof (obj as Record<string, unknown>).id === "number" &&
+>     typeof (obj as Record<string, unknown>).username === "string"
+>   );
+> }
+> 
+> function handleData(input: unknown) {
+>   if (isUser(input)) {
+>     // TypeScript knows input is User here!
+>     console.log(`User ID: ${input.id}, Name: ${input.username}`);
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Type predicate return types (`obj is User`) instruct the compiler to narrow `unknown` parameters upon returning `true`.
 > 2. Provides clean, type-safe narrowing for complex data structures.
 > 3. Standard pattern for validating untyped dynamic inputs.
-
+> 
 ---
 
 ### Exercise 3: Type Assignability Matrix for `unknown`
@@ -209,13 +209,13 @@ Formulate an assignability rules matrix for the `unknown` top type.
 > - Assignability TO unknown: ANYTHING can be assigned to unknown (number, string, object, any).
 > - Assignability FROM unknown: unknown can ONLY be assigned to unknown or any (CANNOT be assigned to string, number, or custom types without narrowing/casting).
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `unknown` represents the top type in TypeScript's type hierarchy.
 > 2. Enforces type checking at consuming call sites rather than producer declaration sites.
 > 3. Complete type-safe abstraction for untyped data.
-
+> 
 ---
 
 

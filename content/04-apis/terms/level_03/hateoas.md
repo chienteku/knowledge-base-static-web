@@ -246,12 +246,12 @@ const depositUrl = account._links.deposit.href;
 > [!check]- Answer
 > - You cannot pay for or cancel a package that has already been shipped.
 > - You cannot return an item that hasn't been delivered yet.
-
+> 
 > [!check]- Answer
 > - **Remove:** `payment` and `cancel` (These actions are no longer valid for a shipped order).
 > - **Add:** `track-shipment` (Allows the client to query tracking info).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: HATEOAS HAL JSON Response Design

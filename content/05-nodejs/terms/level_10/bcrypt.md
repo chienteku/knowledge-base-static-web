@@ -119,7 +119,7 @@ Will their Bcrypt hashes in the database look identical?
 > Bcrypt automatically adds a random "Salt" (random letters) to every password before hashing it. This ensures that even if two people have the same password, hackers cannot figure that out by looking at the database.
 > ```
 > - Remember the concept of "Salting" a password.
-
+> 
 ---
 
 
@@ -140,7 +140,7 @@ Will their Bcrypt hashes in the database look identical?
 > ```
 >
 > **Explanation:** `bcrypt.compare` asynchronously hashes input password with embedded salt to verify matches.
-
+> 
 ---
 
 ### Exercise 3: Salt Purpose in Bcrypt
@@ -157,7 +157,7 @@ Will their Bcrypt hashes in the database look identical?
 > ```
 >
 > **Explanation:** Salting guarantees unique hashes for identical user password strings.
-
+> 
 ## 7. Related Terms
 - [JWT (JSON Web Tokens)](jwt.md) — You use Bcrypt to verify the password, and if it matches, you generate a JWT!
 - [The crypto Module](../level_02/crypto_module.md) — Related concept: The crypto Module.

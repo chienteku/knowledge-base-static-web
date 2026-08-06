@@ -129,7 +129,7 @@ fetch('/api/search?' + params.toString()); // Resolves to ?q=C%2B%2B+%26+Java
 > 2. Query Parameters: `brand=apple` and `sort=price` (they filter and sort the list of laptops).
 > ```
 > - Where does the question mark start?
-
+> 
 ---
 
 ### Exercise 2: URLSearchParams Usage Pattern

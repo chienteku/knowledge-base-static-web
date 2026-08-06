@@ -194,7 +194,7 @@ h2 ~ p { color: blue; } /* Targets ALL subsequent sibling paragraphs */
 > ```
 > - The `h3` must be a direct child of `.post` (`.post > h3`).
 > - The paragraph must immediately follow the heading (`+ p`).
-
+> 
 ---
 
 
@@ -223,7 +223,7 @@ h2 ~ p { color: blue; } /* Targets ALL subsequent sibling paragraphs */
 > ```
 >
 > **Explanation:** Combinators define structural relationships between CSS selectors.
-
+> 
 ---
 
 ### Exercise 3: Lobed Form Element Sibling Pattern
@@ -242,7 +242,7 @@ h2 ~ p { color: blue; } /* Targets ALL subsequent sibling paragraphs */
 > ```
 >
 > **Explanation:** `+` targets immediately adjacent sibling elements.
-
+> 
 ## 7. Related Terms
 - [Attribute Selectors](attribute_selectors.md) — Selective attribute matching.
 - [Advanced Pseudo-classes](../level_09/pseudo_classes_advanced.md) — Positional structural styling hooks.

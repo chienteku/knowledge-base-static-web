@@ -161,7 +161,7 @@ async function processData() {
 > 50
 > ```
 > - The function will map `5` to `a`, `10` to `b`, and completely ignore the `15`.
-
+> 
 ---
 
 ### Exercise 2: Converting `arguments` to Array
@@ -182,7 +182,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Array.from()` creates a true `Array` instance from array-like objects.
-
+> 
 ---
 
 ### Exercise 3: Rest Parameters vs `arguments`
@@ -202,7 +202,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Rest parameters (`...args`) gather excess arguments into genuine `Array` instances.
-
+> 
 ---
 
 ## 7. Related Terms

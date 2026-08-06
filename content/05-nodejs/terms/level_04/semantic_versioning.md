@@ -103,7 +103,7 @@ Use exact version string '1.2.3' (no prefix) or package-lock.json for absolute l
 > 3. Dangerous (Major): Code you rely on was deleted or changed! You must rewrite your code.
 > ```
 > - Which number represents "Breaking Changes"?
-
+> 
 ---
 
 
@@ -129,7 +129,7 @@ Use exact version string '1.2.3' (no prefix) or package-lock.json for absolute l
 > ```
 >
 > **Explanation:** SemVer format is `MAJOR.MINOR.PATCH` (Breaking.Feature.Fix).
-
+> 
 ---
 
 ### Exercise 3: Matching SemVer Range Specs
@@ -150,7 +150,7 @@ Use exact version string '1.2.3' (no prefix) or package-lock.json for absolute l
 > ```
 >
 > **Explanation:** Tilde `~` locks MINOR version; Caret `^` locks MAJOR version.
-
+> 
 ## 7. Related Terms
 - [package.json](package_json.md) — Where the SemVer ranges (using `^` and `~`) are stored.
 

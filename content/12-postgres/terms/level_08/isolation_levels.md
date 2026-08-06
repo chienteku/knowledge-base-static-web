@@ -169,7 +169,7 @@ Set transaction isolation level to `REPEATABLE READ` for a multi-statement finan
 > 1. `REPEATABLE READ` freezes the transaction snapshot at the first query statement inside `BEGIN`.
 > 2. Subsequent queries in the same transaction read from the exact same snapshot, ignoring modifications committed by concurrent transactions.
 > 3. Guarantees repeatable reads across all reporting queries.
-
+> 
 ---
 
 ### Exercise 2: Handling Serialization Failures (Error 40001)
@@ -215,7 +215,7 @@ Catch PostgreSQL Error Code `40001` (`serialization_failure`) in Node.js retry l
 > 1. High isolation levels (`Repeatable Read`, `Serializable`) abort concurrent conflicting transactions with Error `40001`.
 > 2. Applications using these isolation levels MUST implement automatic retry loops.
 > 3. Guarantees transactional correctness under heavy concurrency.
-
+> 
 ---
 
 ### Exercise 3: Comparing Isolation Level Trade-Offs
@@ -242,7 +242,7 @@ Formulate a technical selection matrix comparing `Read Committed`, `Repeatable R
 > 1. Higher isolation levels trade concurrency throughput for strict snapshot consistency.
 > 2. Default `Read Committed` minimizes transaction aborts.
 > 3. Select isolation levels based on transactional domain requirements.
-
+> 
 ---
 
 

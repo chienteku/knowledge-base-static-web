@@ -163,7 +163,7 @@ Execute an atomic order processing transaction creating an order record, inserti
 > 1. A transaction groups multiple SQL operations into a single logical unit of work.
 > 2. If any statement fails, calling `ROLLBACK` reverts all three statements.
 > 3. Preserves multi-table referential consistency.
-
+> 
 ---
 
 ### Exercise 2: Checking Current Transaction Status and ID
@@ -193,7 +193,7 @@ Query current transaction ID and transaction status using system functions.
 > 1. `pg_current_xact_id()` returns the active 64-bit transaction identifier allocated by PostgreSQL.
 > 2. Assigns transaction IDs to write transactions for MVCC visibility tracking.
 > 3. Diagnostic transaction inspection.
-
+> 
 ---
 
 ### Exercise 3: Read-Only Transaction Optimizations
@@ -222,7 +222,7 @@ Mark a reporting transaction as `READ ONLY` to optimize performance and prevent 
 > 1. `BEGIN READ ONLY` marks the transaction block as strictly read-only.
 > 2. Any attempt to execute `INSERT`, `UPDATE`, or `DELETE` throws Error `25006` (`read_only_sql_transaction`).
 > 3. Allows PostgreSQL to optimize lock management and route queries to read-replicas safely.
-
+> 
 ---
 
 

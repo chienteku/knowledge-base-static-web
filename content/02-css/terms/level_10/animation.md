@@ -294,7 +294,7 @@ Single slide-in loading overlay:
 > ```
 > - Alternate playback direction is required to make the pulse fade out and fade back in smoothly without snapping.
 > - Run the loop infinitely.
-
+> 
 ---
 
 
@@ -318,7 +318,7 @@ Single slide-in loading overlay:
 > ```
 >
 > **Explanation:** `infinite linear` creates smooth continuous 360-degree rotation animation.
-
+> 
 ---
 
 ### Exercise 3: Animation Shorthand Property Order
@@ -341,7 +341,7 @@ Single slide-in loading overlay:
 > ```
 >
 > **Explanation:** `animation` shorthand combines name, duration, easing, and iteration count.
-
+> 
 ## 7. Related Terms
 - [`transition`](transition.md) — Two-state animated shifts.
 - [`transform` (Scale, Translate, Rotate)](transform.md) — The positioning multipliers.

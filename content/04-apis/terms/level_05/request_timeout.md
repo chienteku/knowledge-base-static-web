@@ -156,7 +156,7 @@ function timeoutRace(networkPromise, timeoutMs = 2000) {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Promise.race Timeout Pattern

@@ -187,7 +187,7 @@ const cart = ["Apple", "Bread", "Soda", "Cheese"];
 > - Check existence using `cart.includes("Soda")`.
 > - Find index using `const index = cart.indexOf("Soda")`.
 > - Replace using `cart.splice(index, 1, "Water")`.
-
+> 
 ---
 
 ### Exercise 2: Searching Objects with `findIndex`
@@ -205,7 +205,7 @@ const cart = ["Apple", "Bread", "Soda", "Cheese"];
 > ```
 >
 > **Explanation:** `findIndex` uses predicate callbacks, enabling object property search.
-
+> 
 ---
 
 ### Exercise 3: Checking Element Inclusion with `includes`
@@ -223,7 +223,7 @@ const cart = ["Apple", "Bread", "Soda", "Cheese"];
 > ```
 >
 > **Explanation:** `Array.prototype.includes` uses SameValueZero equality, correctly detecting `NaN`.
-
+> 
 ---
 
 ## 7. Related Terms

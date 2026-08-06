@@ -170,7 +170,7 @@ console.log(score);
 > (Because the function declared its own local 'score' and didn't touch the global one)
 > ```
 > - `let` inside the function creates a brand new variable that dies when the function finishes.
-
+> 
 ---
 
 ### Exercise 2: Scope Chain Lookup Order
@@ -187,7 +187,7 @@ console.log(score);
 > ```
 >
 > **Explanation:** Identifiers resolve by searching from inner scopes upward through parent lexical scope frames.
-
+> 
 ---
 
 ### Exercise 3: Scope Isolation Verification
@@ -207,8 +207,8 @@ console.log(score);
 > ```
 >
 > **Explanation:** Sibling function scopes do not share identifier environments.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

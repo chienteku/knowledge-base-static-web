@@ -167,7 +167,7 @@ async function processData() {
 > // 'done' becomes true when the generator has finished running.
 > ```
 > - We accessed `.value` in the examples above!
-
+> 
 ---
 
 ### Exercise 2: Infinite ID Generator
@@ -191,7 +191,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Generators pause execution at `yield` statements, resuming upon `.next()` calls.
-
+> 
 ---
 
 ### Exercise 3: Delegating Generators with `yield*`
@@ -210,8 +210,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `yield*` delegates generator iteration to another iterable or generator function.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

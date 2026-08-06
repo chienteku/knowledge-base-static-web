@@ -133,7 +133,7 @@ onMounted(() => {
 > The `document.title` line is perfectly fine because it is safely tucked inside `onMounted`, which the server ignores.
 > ```
 > - Where is it safe to use Browser APIs in a Vue component?
-
+> 
 ---
 
 ### Exercise 2: Checking Server vs Client Environment in Nuxt
@@ -152,7 +152,7 @@ onMounted(() => {
 >   // Safe browser-only code
 > }
 > ```
-
+> 
 ---
 
 ### Exercise 3: Universal Code Definition
@@ -169,8 +169,8 @@ onMounted(() => {
 > ```text
 > Single codebase executing on both Server (Node) and Client (Browser).
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

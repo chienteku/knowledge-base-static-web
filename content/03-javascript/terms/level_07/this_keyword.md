@@ -181,7 +181,7 @@ dog.bark();
 > Arrow functions do not bind their own `this`. Since the arrow function is at the top level of the object, it inherits `this` from the global scope (where `sound` does not exist). Never use arrow functions for object methods if you need `this`!
 > ```
 > - Arrow functions are great for callbacks inside methods, but terrible for the methods themselves!
-
+> 
 ---
 
 ### Exercise 2: Determining `this` Binding Rules
@@ -198,7 +198,7 @@ dog.bark();
 > ```
 >
 > **Explanation:** `this` resolution follows strict precedent rules based on call-site invocation.
-
+> 
 ---
 
 ### Exercise 3: Arrow Function Lexical `this` Capture
@@ -221,8 +221,8 @@ dog.bark();
 > ```
 >
 > **Explanation:** Arrow functions do not bind `this`; they inherit `this` lexically from outer scope environments.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

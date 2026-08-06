@@ -120,10 +120,6 @@ routeRules: { '/live-chat': { ssr: false } } // Dynamic client execution for liv
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Multi-Mode Route Configuration with `routeRules`
@@ -149,13 +145,13 @@ Configure `nuxt.config.ts` to assign SSR, SWR, SSG, and SPA modes to different U
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Hybrid Rendering assigns the optimal rendering strategy per route path.
 > 2. `prerender` generates static HTML during build time; `swr` caches responses dynamically at runtime.
 > 3. `ssr: false` disables server rendering for private interactive dashboards.
-
+> 
 ---
 
 ### Exercise 2: Configuring Invalidation Windows for Incremental Static Regeneration (ISR)
@@ -178,13 +174,13 @@ Configure ISR (Incremental Static Regeneration) for `/news/**` with a 5-minute b
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `isr` caches static HTML responses at the edge/server and updates them in the background after the expiration window.
 > 2. Delivers static file performance with dynamic content updates.
 > 3. Popular strategy for high-traffic content sites.
-
+> 
 ---
 
 ### Exercise 3: Testing Hybrid Route Execution Modes
@@ -205,19 +201,15 @@ Verify route rendering modes by inspecting `X-Nitro-Cache` and HTML document str
 > - SWR Route (/blog/1): Returns 'X-Nitro-Cache: HIT' on repeated requests.
 > - SPA Route (/admin): Renders minimal <div id="__nuxt"></div> wrapper without initial content.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. SWR routes emit Nitro cache headers indicating cache hit/miss status.
 > 2. SPA routes contain empty HTML bodies relying on client JavaScript initialization.
 > 3. Empirical verification of hybrid rendering setup.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Route Rules Configuration](../level_08/route_rules.md) — The syntax used to configure Hybrid Rendering.

@@ -278,7 +278,7 @@ Construct a local newtype wrapper `TelemetryReading(pub (u64, f64))`. Implement 
 > 2. **Newtype Wrapper Strategy**: `TelemetryReading` is a local tuple struct declared in your crate. Wrapping foreign data inside a local type satisfies the Orphan Rule constraint (`Foreign Trait + Local Type -> ALLOWED`).
 > 3. **Deref Ergonomics**: By implementing `std::ops::Deref<Target = (u64, f64)>`, callers can access `.0` and `.1` directly on `TelemetryReading` as if it were the inner tuple, preserving convenience without violating compiler guarantees.
 > 4. **Unit Verification**: The unit tests use `assert_eq!` to validate string output formatting precision (`23.5 °C`) and transparent tuple dereferencing.
-
+> 
 ---
 
 ### Exercise 2: Embedded `#![no_std]` Hardware Status Register Wrapper & Custom Trait
@@ -467,7 +467,7 @@ They write `impl std::fmt::Display for Vec<MetricValue>`, but `rustc` rejects it
 > 3. **Conversion & Ergonomics**: Implementing `From<Vec<T>>` allows effortless wrapping of existing vectors, while `Deref` delegates vector operations (`len()`, indexing) directly to the wrapped `Vec`.
 > 4. **Unit Verification**: `test_metric_series_display` asserts that floating-point formatting is correctly applied to each element during string formatting.
 > 
-
+> 
 ---
 
 ## 6. Related Terms

@@ -191,7 +191,7 @@ An e-commerce order dashboard retrieves order `orders:o1` and eagerly resolves b
 > 1. `FETCH field1, field2` expands multiple comma-separated record link pointers in a single query.
 > 2. Replaces SQL `JOIN` syntax and MongoDB `$lookup` aggregation blocks.
 > 3. Returns a clean nested JSON payload containing resolved document objects.
-
+> 
 ---
 
 ### Exercise 2: Deep Nested Path Pointer Resolution
@@ -221,7 +221,7 @@ A blog post query retrieves post `post:p1`, fetches the `author` record link (`u
 > 1. Dot-notation paths in `FETCH` (`author.company`) unwrap multi-level nested foreign record link pointers.
 > 2. Resolves deep relational trees without writing recursive CTE queries.
 > 3. Operates in a single database query execution pass.
-
+> 
 ---
 
 ### Exercise 3: Resolving Arrays of Record Links with `FETCH`
@@ -253,7 +253,7 @@ An article listing contains an array of tag record links `tags = [tag:rust, tag:
 > 1. `FETCH` seamlessly resolves single record links AND arrays of record links (`array<record>`).
 > 2. Replaces array pointer IDs with expanded tag document objects inline.
 > 3. Eliminates application-side N+1 query loops.
-
+> 
 ---
 
 

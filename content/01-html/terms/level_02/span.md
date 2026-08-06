@@ -205,7 +205,7 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 > and bananas.
 > ```
 > - `<div>` is a block element. `<span>` is an inline element.
-
+> 
 ---
 
 ### Exercise 2: Span vs Div Comparison
@@ -222,7 +222,7 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 > ```
 >
 > **Explanation:** `<span>` is generic inline wrapper; `<div>` is generic block wrapper.
-
+> 
 ---
 
 ### Exercise 3: Styling Text Substring
@@ -236,7 +236,7 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 > ```
 >
 > **Explanation:** `<span>` allows targeting specific inline text substrings for CSS styling.
-
+> 
 ## 7. Related Terms
 - [`<div>` (Block container)](div.md) — The block-level equivalent of `<span>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing generic inline tags.

@@ -282,7 +282,7 @@ fn main() {
 > 2. **`Rc<str>` for Shared String Identifiers**: Rather than using heap-allocated `String` instances or lifetime-bounded `&'a str` slices inside AST nodes, `Rc<str>` provides an immutable, reference-counted unsized slice. This decoupling allows string identifiers to outlive parsing stack frames without lifetime constraints (`'a`).
 > 3. **Memory Layout (`RcBox<T>`)**: On the heap, `Rc<T>` allocates a heap block containing a header and payload: `[strong_count: usize, weak_count: usize, value: T]`. When `shared_subexpr` is cloned for the left and right branches of `Mul`, the strong counter increases from 1 to 3 while pointing to the exact same `RcBox` address in memory.
 > 4. **Single-Thread Safety Invariant**: `Rc<T>` does not implement `Send` or `Sync`. Integer counter operations use unsanitized non-atomic increment (`+1`) and decrement (`-1`) instructions. This makes `Rc<T>` optimal for single-threaded DSL engines by eliminating atomic memory barrier instructions (`LOCK XADD` / `FARBAR`).
-
+> 
 ---
 
 ### Exercise 2: Directed Acyclic Graph (DAG) Route Navigation with `Weak<T>` Cycle Prevention
@@ -455,7 +455,7 @@ fn main() {
 > 4. **Deallocation Lifecycle**: Memory deallocation occurs in two distinct phases for `RcBox`:
 >    - When `strong_count` drops to 0, `T::drop()` is immediately called and the inner payload `T` is invalidated.
 >    - The underlying memory block (`RcBox`) itself is only freed by the allocator once `weak_count` drops to 0.
-
+> 
 ---
 
 ### Exercise 3: Single-Threaded Desktop GUI Component Tree & Shared Theme Engine
@@ -627,7 +627,7 @@ fn main() {
 > 2. **Performance Advantages Over `Arc<Mutex<T>>`**: Multi-threaded smart pointers (`Arc<Mutex<T>>`) incur synchronization overhead via hardware atomic instructions (`LOCK` prefix on x86) and thread kernel synchronization primitives. In single-threaded contexts (such as browser WASM apps or desktop event loops), `Rc<RefCell<T>>` replaces atomic operations with plain integer field manipulation, yielding significantly lower latency.
 > 3. **Cascading Event Propagation & Reentrancy Guards**: During `Widget::click()`, calling `self.children.borrow()` holds a shared borrow (`Ref`) on the `children` vector while iterating. If a child widget handler attempted to call `add_child()` on `self` during event dispatch, `borrow_mut()` would detect simultaneous mutable and immutable borrows and panic with `AlreadyBorrowed`.
 > 4. **Drop Cascades in Tree Hierarchies**: When the root `window` is dropped, its `children` vector is dropped, decrementing the strong count of `panel` from 1 to 0. This triggers `panel`'s `Drop` implementation, which drops its `children` vector, decrementing `button`'s strong count to 0 and reclaiming all allocated widgets in a clean, non-recursive cascade.
-
+> 
 ---
 
 ## 6. Related Terms

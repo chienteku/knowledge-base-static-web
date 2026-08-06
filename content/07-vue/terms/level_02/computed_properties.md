@@ -138,7 +138,7 @@ const double = computed({
 > The `computed` property will execute exactly ONCE, cache the result, and only execute again if `text.value` actually changes.
 > ```
 > - Think about caching.
-
+> 
 ---
 
 ### Exercise 2: Computed Filtered List Pattern
@@ -157,7 +157,7 @@ const double = computed({
 >   return users.value.filter(user => user.isActive);
 > });
 > ```
-
+> 
 ---
 
 ### Exercise 3: Computed vs Method Caching
@@ -175,8 +175,8 @@ const double = computed({
 > ```text
 > Computed properties cache evaluation results until dependencies change.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

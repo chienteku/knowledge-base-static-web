@@ -149,23 +149,23 @@ Export `GET`, `POST`, and `DELETE` handlers inside `app/api/products/route.ts`.
 > export async function GET() {
 >   return Response.json([{ id: "1", title: "Product 1" }]);
 > }
-
-export async function POST(req: Request) {
-  const body = await req.json();
-  return Response.json({ created: body }, { status: 201 });
-}
-
-export async function DELETE(req: Request) {
-  return Response.json({ message: "Product deleted" });
-}
-```
-
+> 
+> export async function POST(req: Request) {
+>   const body = await req.json();
+>   return Response.json({ created: body }, { status: 201 });
+> }
+> 
+> export async function DELETE(req: Request) {
+>   return Response.json({ message: "Product deleted" });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Route Handlers export named functions matching HTTP verbs (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`).
 > 2. Next.js automatically routes incoming requests to the matching exported function based on HTTP method.
 > 3. Requests to unexported methods (e.g. `PUT`) automatically return HTTP `405 Method Not Allowed`.
-
+> 
 ---
 
 ### Exercise 2: Handling Preflight OPTIONS Requests
@@ -192,13 +192,13 @@ Export an `OPTIONS` handler to configure CORS (Cross-Origin Resource Sharing) he
 >   });
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `OPTIONS` handlers respond to browser CORS preflight requests before cross-origin POST/PUT requests execute.
 > 2. `status: 204` returns a No Content response with attached CORS header options.
 > 3. Essential for public cross-origin API endpoints.
-
+> 
 ---
 
 ### Exercise 3: Validating HTTP Method Signatures with TypeScript
@@ -215,25 +215,21 @@ Type Route Handler HTTP methods using standard `NextRequest` and `Response` type
 >
 > ```typescript
 > import { NextRequest, NextResponse } from "next/server";
-
-export async function PATCH(req: NextRequest): Promise<NextResponse> {
-  const body = await req.json();
-  return NextResponse.json({ updated: body });
-}
-```
-
+> 
+> export async function PATCH(req: NextRequest): Promise<NextResponse> {
+>   const body = await req.json();
+>   return NextResponse.json({ updated: body });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `NextRequest` extends standard Web `Request` with Next.js specific helper properties (`nextUrl`, `cookies`).
 > 2. `NextResponse.json()` is the Next.js helper wrapper for constructing JSON responses.
 > 3. Type-safe Route Handler declaration pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Route Handlers (`route.ts`)](route_handlers.md) — The Next.js API endpoints that export these methods.

@@ -169,7 +169,7 @@ process.stdin.pipe(upperCaseTransform).pipe(process.stdout);
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Creating Uppercase Transform Stream
@@ -191,7 +191,7 @@ process.stdin.pipe(upperCaseTransform).pipe(process.stdout);
 > ```
 >
 > **Explanation:** `Transform` stream transforms written input chunks into read output chunks via callback.
-
+> 
 ---
 
 ### Exercise 3: Common Built-in Transform Streams
@@ -210,7 +210,7 @@ process.stdin.pipe(upperCaseTransform).pipe(process.stdout);
 > ```
 >
 > **Explanation:** Compression and encryption modules rely on Transform streams to process data in transit.
-
+> 
 ## 7. Related Terms
 - [Piping (.pipe())](piping.md) — The method used to link readable, transform, and writable streams together.
 - [Readable & Writable Streams](readable_writable.md) — The base classes for unidirectional data streams.

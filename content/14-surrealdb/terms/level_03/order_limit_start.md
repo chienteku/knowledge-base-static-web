@@ -173,7 +173,7 @@ A product listing page sorts products primarily by `category` ascending, and sec
 > 1. `ORDER BY` sorts query result records by one or more field criteria.
 > 2. `ASC` sorts low-to-high; `DESC` sorts high-to-low.
 > 3. Multi-column ordering evaluates secondary sort fields when primary sort values match.
-
+> 
 ---
 
 ### Exercise 2: Pagination with `LIMIT` and `START`
@@ -202,7 +202,7 @@ An API endpoint implements page-based pagination returning 10 items per page. Qu
 > 1. `LIMIT n` restricts the maximum number of records returned in the result set payload.
 > 2. `START n` (SurrealDB's equivalent of SQL `OFFSET`) skips the first `n` matching records.
 > 3. Always pair pagination queries with explicit `ORDER BY` clauses to guarantee stable page sorting.
-
+> 
 ---
 
 ### Exercise 3: Top-N Leaderboard Retrieval
@@ -235,7 +235,7 @@ A gaming leaderboard query retrieves the top 3 highest-scoring players from tabl
 > 1. Combining `ORDER BY score DESC` with `LIMIT 3` constructs efficient Top-N leaderboard queries.
 > 2. Stops query evaluation early once the top `N` records are collected.
 > 3. Optimizes memory usage by avoiding full result set buffers.
-
+> 
 ---
 
 

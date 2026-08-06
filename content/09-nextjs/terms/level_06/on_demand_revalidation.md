@@ -151,23 +151,23 @@ Purge cached data for `/products` after updating a product record inside a Serve
 > ```typescript
 > // app/actions/product.ts
 > "use server";
-
-import { revalidatePath } from "next/cache";
-
-export async function updateProductAction(id: string, name: string) {
-  // Update database...
-
-  // Purge static route cache for /products
-  revalidatePath("/products");
-}
-```
-
+> 
+> import { revalidatePath } from "next/cache";
+> 
+> export async function updateProductAction(id: string, name: string) {
+>   // Update database...
+> 
+>   // Purge static route cache for /products
+>   revalidatePath("/products");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `revalidatePath('/products')` purges cached route HTML and Data Cache entries for the specified route.
 > 2. Subsequent HTTP requests fetch fresh data from the server.
 > 3. Instant UI updates for dynamic route mutations.
-
+> 
 ---
 
 ### Exercise 2: Revalidating Tagged Data Requests with `revalidateTag`
@@ -184,23 +184,23 @@ Purge all fetch requests tagged with `'user-profile'` across all application rou
 >
 > ```typescript
 > "use server";
-
-import { revalidateTag } from "next/cache";
-
-export async function updateUserProfile(userId: string) {
-  // Update user in database...
-
-  // Purges all Data Cache entries tagged with 'user-profile'
-  revalidateTag("user-profile");
-}
-```
-
+> 
+> import { revalidateTag } from "next/cache";
+> 
+> export async function updateUserProfile(userId: string) {
+>   // Update user in database...
+> 
+>   // Purges all Data Cache entries tagged with 'user-profile'
+>   revalidateTag("user-profile");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `revalidateTag('tag-name')` invalidates matching Data Cache entries globally, regardless of which page requested them.
 > 2. Superior to `revalidatePath` when the same data entity is rendered across multiple distinct URL routes.
 > 3. Targeted cache invalidation pattern.
-
+> 
 ---
 
 ### Exercise 3: Revalidating Layout vs Page Segments
@@ -217,27 +217,23 @@ Revalidate an entire layout segment (`/dashboard`) including all sub-pages using
 >
 > ```typescript
 > "use server";
-
-import { revalidatePath } from "next/cache";
-
-export async function globalDashboardReset() {
-  // Revalidates dashboard layout AND all nested sub-routes (/dashboard/analytics, /dashboard/users)
-  revalidatePath("/dashboard", "layout");
-}
-```
-
+> 
+> import { revalidatePath } from "next/cache";
+> 
+> export async function globalDashboardReset() {
+>   // Revalidates dashboard layout AND all nested sub-routes (/dashboard/analytics, /dashboard/users)
+>   revalidatePath("/dashboard", "layout");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `revalidatePath(path, 'layout')` recursively purges the layout and all child route pages under the path.
 > 2. `revalidatePath(path, 'page')` purges ONLY the specific page segment.
 > 3. Granular route cache invalidation control.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Data Caching (`force-cache`, `no-store`)](../level_05/data_caching.md) — The system being manipulated.

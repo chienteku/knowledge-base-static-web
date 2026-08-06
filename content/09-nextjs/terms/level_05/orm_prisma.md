@@ -154,24 +154,24 @@ Create a global Prisma client singleton instance `lib/prisma.ts` to prevent conn
 > ```typescript
 > // lib/prisma.ts
 > import { PrismaClient } from "@prisma/client";
-
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
-
-export const prisma = globalForPrisma.prisma ?? new PrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
-```
-
+> 
+> const globalForPrisma = globalThis as unknown as {
+>   prisma: PrismaClient | undefined;
+> };
+> 
+> export const prisma = globalForPrisma.prisma ?? new PrismaClient();
+> 
+> if (process.env.NODE_ENV !== "production") {
+>   globalForPrisma.prisma = prisma;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Next.js development HMR re-evaluates server files frequently, which would spawn hundreds of duplicate Prisma DB connections.
 > 2. Attaching the client instance to `globalThis` reuses a single connection pool across hot reloads.
 > 3. Mandatory setup pattern for Prisma ORM with Next.js.
-
+> 
 ---
 
 ### Exercise 2: Querying Database Records in Server Components
@@ -189,32 +189,32 @@ Query a list of users directly inside a Server Component using `prisma.user.find
 > ```tsx
 > // app/users/page.tsx
 > import { prisma } from "@/lib/prisma";
-
-export default async function UsersPage() {
-  const users = await prisma.user.findMany({
-    where: { active: true },
-    select: { id: true, name: true, email: true }
-  });
-
-  return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold">Active Users</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.name} ({user.email})</li>
-        ))}
-      </ul>
-    </main>
-  );
-}
-```
-
+> 
+> export default async function UsersPage() {
+>   const users = await prisma.user.findMany({
+>     where: { active: true },
+>     select: { id: true, name: true, email: true }
+>   });
+> 
+>   return (
+>     <main className="p-6">
+>       <h1 className="text-2xl font-bold">Active Users</h1>
+>       <ul>
+>         {users.map((user) => (
+>           <li key={user.id}>{user.name} ({user.email})</li>
+>         ))}
+>       </ul>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Server Components execute on the Node.js server, allowing direct, type-safe Prisma database queries.
 > 2. Database connection strings and SQL queries never leak to client JavaScript bundles.
 > 3. Replaces intermediate REST API endpoints.
-
+> 
 ---
 
 ### Exercise 3: Mutating Database Records inside Server Actions
@@ -232,34 +232,30 @@ Create a new user record inside a Server Action using `prisma.user.create()` and
 > ```typescript
 > // app/actions/user.ts
 > "use server";
-
-import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
-
-export async function createUser(formData: FormData) {
-  const name = formData.get("name") as string;
-  const email = formData.get("email") as string;
-
-  await prisma.user.create({
-    data: { name, email }
-  });
-
-  revalidatePath("/users");
-}
-```
-
+> 
+> import { prisma } from "@/lib/prisma";
+> import { revalidatePath } from "next/cache";
+> 
+> export async function createUser(formData: FormData) {
+>   const name = formData.get("name") as string;
+>   const email = formData.get("email") as string;
+> 
+>   await prisma.user.create({
+>     data: { name, email }
+>   });
+> 
+>   revalidatePath("/users");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Server Actions execute asynchronously on the server, making them ideal for Prisma database mutations.
 > 2. `revalidatePath('/users')` invalidates static route cache data, automatically updating the UI.
 > 3. End-to-end type-safe full-stack mutation pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [React Server Components (RSC)](../level_01/rsc.md) — The secure server execution context.

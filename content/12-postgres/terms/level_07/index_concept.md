@@ -145,7 +145,7 @@ Map common database query workloads to appropriate PostgreSQL index types (`B-Tr
 > 1. B-Tree is the default index type for 90% of relational columns.
 > 2. Specialized index access methods handle non-scalar data types.
 > 3. Select index types based on query operator requirements.
-
+> 
 ---
 
 ### Exercise 2: Evaluating Index Overhead Trade-Offs
@@ -173,7 +173,7 @@ Explain why creating 15 indexes on a single high-frequency `orders` table degrad
 > 1. Secondary indexes trade write velocity for read speed.
 > 2. Unused indexes waste disk space and slow down DML write commands.
 > 3. Database performance tuning rule.
-
+> 
 ---
 
 ### Exercise 3: Auditing Unused Indexes in System Catalogs
@@ -206,7 +206,7 @@ Query `pg_stat_user_indexes` to identify unused indexes that can be safely dropp
 > 1. `pg_stat_user_indexes` tracks cumulative index scan counts since database startup.
 > 2. `idx_scan = 0` identifies indexes that have never been used by the query planner.
 > 3. Safely locate candidates for removal.
-
+> 
 ---
 
 

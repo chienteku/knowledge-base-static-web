@@ -172,7 +172,7 @@ Demonstrate function namespace routing in SurrealQL using `string::*`, `math::*`
 > 1. SurrealQL organizes built-in functions into double-colon namespaces (`namespace::function()`).
 > 2. Functions operate over rich native types (`decimal`, `datetime`, `string`).
 > 3. Executes scalar transformations directly inside database execution blocks.
-
+> 
 ---
 
 ### Exercise 2: Chaining Built-in Functions
@@ -196,7 +196,7 @@ Sanitize user input string `"   ALICE@EXAMPLE.COM   "` by trimming whitespace an
 > 1. Built-in functions can be nested dynamically (`fn2(fn1(val))`).
 > 2. Normalizes text inputs before database write commits.
 > 3. Reduces backend API data sanitization boilerplate.
-
+> 
 ---
 
 ### Exercise 3: Type Checking with `type::is::*` Functions
@@ -220,7 +220,7 @@ Validate whether an incoming value is a valid record link pointer before executi
 > 1. `type::is::record(val)` evaluates whether a value is a valid typed record ID pointer.
 > 2. Returns boolean `true` or `false`.
 > 3. Guards dynamic queries against invalid type inputs.
-
+> 
 ---
 
 

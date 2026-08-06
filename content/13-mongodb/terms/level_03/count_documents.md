@@ -160,7 +160,7 @@ Count the exact number of active user documents in collection `users` where `sta
 > 1. `countDocuments()` executes an aggregation pipeline to return exact document counts.
 > 2. Guarantees accurate results even during concurrent writes and uncommitted transactions.
 > 3. Replaces legacy deprecated `count()` methods.
-
+> 
 ---
 
 ### Exercise 2: Fast Collection Estimates with `estimatedDocumentCount`
@@ -185,7 +185,7 @@ Get a fast estimated count of total documents in collection `logs` without execu
 > 1. `estimatedDocumentCount()` reads metadata statistics from WiredTiger storage in $O(1)$ constant time.
 > 2. Does not accept query filters or scan collection pages.
 > 3. Ideal for UI dashboard indicators where instant estimates are sufficient.
-
+> 
 ---
 
 ### Exercise 3: Counting Filtered Sub-Arrays with Aggregations
@@ -212,7 +212,7 @@ Count how many orders placed by `customerId` exceed `$50.00`.
 > 1. `countDocuments()` evaluates multi-field filters accurately.
 > 2. Utilizes compound index `{ customerId: 1, total: 1 }` for index-only counting scans.
 > 3. Returns exact integer counts.
-
+> 
 ---
 
 

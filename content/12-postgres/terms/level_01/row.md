@@ -145,7 +145,7 @@ Insert 2 new user tuple rows into `users` table and return their auto-generated 
 > 1. `INSERT INTO` adds new record rows to a relational table.
 > 2. Each inserted row must supply valid values matching target column data types.
 > 3. `RETURNING` clause returns newly generated column values instantly without requiring a second `SELECT` query.
-
+> 
 ---
 
 ### Exercise 2: Updating Specific Row Field Values
@@ -171,7 +171,7 @@ Update the `email` column value for a single target row identified by `id = 1`.
 > 1. `UPDATE` modifies existing column values across rows matching the `WHERE` clause.
 > 2. `WHERE id = 1` restricts modification to a single target row instance.
 > 3. Always include `WHERE` clauses to prevent accidental multi-row mass updates.
-
+> 
 ---
 
 ### Exercise 3: Deleting Targeted Tuple Rows
@@ -196,7 +196,7 @@ Delete a specific user record row from table `users` where `id = 2`.
 > 1. `DELETE FROM` removes matching tuple rows permanently from the table.
 > 2. Under MVCC, deleted row versions are marked dead and reclaimed by `VACUUM`.
 > 3. Returns total deleted row count.
-
+> 
 ---
 
 

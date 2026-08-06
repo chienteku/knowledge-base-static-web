@@ -150,7 +150,7 @@ Open the pgAdmin Query Tool to create a test table `demo_items` and insert sampl
 > 1. pgAdmin Query Tool executes ad-hoc SQL statements against connected PostgreSQL databases.
 > 2. Renders query output grids, execution statistics, and message logs.
 > 3. Graphical interface for database development.
-
+> 
 ---
 
 ### Exercise 2: Viewing Visual Query Execution Plans
@@ -175,7 +175,7 @@ Generate a graphical Query Plan for a `SELECT` query in pgAdmin to visually insp
 > 1. pgAdmin visual explain renders query execution node trees graphically.
 > 2. Highlights expensive operators, high row estimates, and collection scans in red.
 > 3. Visual diagnostic tool for SQL query optimization.
-
+> 
 ---
 
 ### Exercise 3: Managing Server Connections in pgAdmin
@@ -205,7 +205,7 @@ Register a new remote PostgreSQL server connection in pgAdmin specify host, port
 > 1. pgAdmin stores encrypted connection profiles for multiple PostgreSQL servers.
 > 2. Supports SSH tunneling for secure remote database administration.
 > 3. Centralized database GUI workspace.
-
+> 
 ---
 
 

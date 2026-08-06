@@ -204,20 +204,20 @@ Create an assertion function `assertDefined<T>(val: T | null | undefined)` that 
 >     throw new Error(`Assertion Error: ${name} must be defined!`);
 >   }
 > }
-
-function processUser(user: { name: string } | null) {
-  assertDefined(user, "user");
-  // user is automatically narrowed to { name: string } (non-null) below this line!
-  console.log(user.name.toUpperCase());
-}
-```
-
+> 
+> function processUser(user: { name: string } | null) {
+>   assertDefined(user, "user");
+>   // user is automatically narrowed to { name: string } (non-null) below this line!
+>   console.log(user.name.toUpperCase());
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `asserts val is T` signature informs TypeScript that the function throws an exception if `val` is `null` or `undefined`.
 > 2. Automatically narrows `val` for all subsequent statements in the enclosing block.
 > 3. Combines runtime safety enforcement with static type narrowing.
-
+> 
 ---
 
 ### Exercise 2: Asserting Condition Expressions with `asserts condition`
@@ -238,20 +238,20 @@ Create a boolean assertion function `assertTrue(condition: boolean)` that assert
 >     throw new Error(`Assertion Failed: ${msg}`);
 >   }
 > }
-
-function calculate(val: number | string) {
-  assertTrue(typeof val === "number", "val must be a number");
-  // val is automatically narrowed to number!
-  return val.toFixed(2);
-}
-```
-
+> 
+> function calculate(val: number | string) {
+>   assertTrue(typeof val === "number", "val must be a number");
+>   // val is automatically narrowed to number!
+>   return val.toFixed(2);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `asserts condition` validates a boolean condition expression.
 > 2. If the condition evaluates to `false`, the function throws an error, narrowing types in the surrounding control-flow.
 > 3. Standard testing and runtime contract enforcement pattern.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: Type Guard (`val is T`) vs Assertion Function (`asserts val is T`)
@@ -271,13 +271,13 @@ Formulate an architectural comparison matrix contrasting Type Guard Predicates a
 > - Type Guard (isUser(x)): Returns boolean (true/false). Used inside if conditions to narrow types within the conditional block.
 > - Assertion Function (assertUser(x)): Returns void or throws exception. Placed directly in execution flow; narrows types for ALL subsequent statements after the call.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Type guards return boolean flags for use in conditional branching (`if`).
 > 2. Assertion functions throw exceptions on failure, mutating surrounding control-flow analysis statically.
 > 3. Complementary type narrowing tools.
-
+> 
 ---
 
 

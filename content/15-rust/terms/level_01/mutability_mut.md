@@ -336,7 +336,7 @@ Your implementation must support:
 >    - `calculate_vwap` guards against division by zero by returning `None` when `total_volume == 0`.
 > 
 >
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy Network Frame Protocol Parser & In-Place Payload Sanitizer
@@ -474,7 +474,7 @@ Your implementation must:
 >    - Checking `ttl == 0` prevents `u8` underflow when executing `frame[2] -= 1`.
 > 
 >
-
+> 
 ---
 
 ### Exercise 3: Telemetry Sliding Window Ring Buffer with In-Place Compaction
@@ -651,7 +651,7 @@ Implement `TelemetryRingBuffer` managing telemetry sample streams:
 > 
 > 
 >
-
+> 
 ---
 
 ## 6. Related Terms

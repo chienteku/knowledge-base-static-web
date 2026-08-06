@@ -180,7 +180,7 @@ async function processData() {
 > ```
 > - The syntax for setTimeout is `setTimeout(callbackFunction, delayMs)`.
 > - Write an anonymous arrow function `() => { ... }` as the first argument.
-
+> 
 ---
 
 ### Exercise 2: Named Function Expression Recursion
@@ -200,7 +200,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Named function expressions bind function names (`fact`) inside their own local scope for recursive self-invocations.
-
+> 
 ---
 
 ### Exercise 3: Anonymous Callback Event Listener Removal
@@ -217,7 +217,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `removeEventListener` requires the exact same function memory reference passed to `addEventListener`.
-
+> 
 ---
 
 ## 7. Related Terms

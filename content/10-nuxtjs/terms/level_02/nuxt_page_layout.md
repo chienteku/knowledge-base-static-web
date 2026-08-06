@@ -167,13 +167,13 @@ Implement `<NuxtPage>` inside `app.vue` with custom loading fallback slots.
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `<NuxtPage />` is Nuxt's wrapper built on top of Vue Router's `<RouterView />`.
 > 2. Handles page component resolution, transitions, keep-alive state, and route key bindings.
 > 3. Required for displaying views defined in the `pages/` directory.
-
+> 
 ---
 
 ### Exercise 2: Overriding Layout Bindings with `<NuxtLayout>` Props
@@ -192,25 +192,25 @@ Explicitly bind a custom layout name to `<NuxtLayout :name="layoutName">` dynami
 > <script setup lang="ts">
 > const currentLayout = ref("default");
 > </script>
-
-<template>
-  <div>
-    <button @click="currentLayout = currentLayout === 'default' ? 'auth' : 'default'">
-      Toggle Layout
-    </button>
-    <NuxtLayout :name="currentLayout">
-      <NuxtPage />
-    </NuxtLayout>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <button @click="currentLayout = currentLayout === 'default' ? 'auth' : 'default'">
+>       Toggle Layout
+>     </button>
+>     <NuxtLayout :name="currentLayout">
+>       <NuxtPage />
+>     </NuxtLayout>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Binding `:name` on `<NuxtLayout>` explicitly overrides page-defined metadata layouts.
 > 2. Enables global layout switching controlled by root application state.
 > 3. High-level layout orchestration pattern.
-
+> 
 ---
 
 ### Exercise 3: Passing Props to Layouts using Named Slots
@@ -240,19 +240,15 @@ Pass custom header titles from pages into `<NuxtLayout>` named slots.
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `<NuxtLayout>` supports named Vue slots (`#header`, `#footer`).
 > 2. Pages can project custom headers into parent layout templates directly.
 > 3. Flexible slot-based template composition.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`app.vue`](app_vue.md) — The root node of the Vue app tree.

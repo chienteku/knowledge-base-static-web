@@ -132,7 +132,7 @@ In the parent, you use `v-slot` (or `#`) to receive the exposed data object. You
 > Renderless components have been entirely superseded by Composables (`useMouse()`, `useFetch()`). Composables extract logic without the heavy performance overhead of creating invisible Vue components.
 > ```
 > - Think about the new features introduced in Vue 3's Composition API!
-
+> 
 ---
 
 ### Exercise 2: Child Component Scoped Slot Binding
@@ -151,7 +151,7 @@ In the parent, you use `v-slot` (or `#`) to receive the exposed data object. You
 >   <slot name="item" :row="row"></slot>
 > </div>
 > ```
-
+> 
 ---
 
 ### Exercise 3: Parent Scoped Slot Destructuring
@@ -170,8 +170,8 @@ In the parent, you use `v-slot` (or `#`) to receive the exposed data object. You
 >   <p>{{ index }}: {{ row.title }}</p>
 > </MyList>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

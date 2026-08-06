@@ -179,7 +179,7 @@ const d = 4;
 > (`b` is function scope, `c` is block scope).
 > ```
 > - Look for variables that are not surrounded by any curly braces `{}`.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Global Scope Objects across Environments
@@ -196,7 +196,7 @@ const d = 4;
 > ```
 >
 > **Explanation:** `globalThis` provides a unified standard identifier for global scope objects across browsers (`window`), Node (`global`), and Workers (`self`).
-
+> 
 ---
 
 ### Exercise 3: Var Global Window Property Creation
@@ -214,8 +214,8 @@ const d = 4;
 > ```
 >
 > **Explanation:** Top-level `var` declarations create configurable properties on global environment objects.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

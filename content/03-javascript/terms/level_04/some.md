@@ -151,7 +151,7 @@ async function processData() {
 > false
 > ```
 > - `commentWords.some(word => bannedWords.includes(word))`
-
+> 
 ---
 
 ### Exercise 2: Testing Negative Numbers Existence
@@ -169,7 +169,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `.some()` returns `true` if at least one element passes the predicate test.
-
+> 
 ---
 
 ### Exercise 3: Short-Circuiting Behavior of `.some()`
@@ -192,8 +192,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `.some()` short-circuits execution as soon as any truthy condition is encountered.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

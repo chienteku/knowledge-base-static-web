@@ -152,7 +152,7 @@ export default {
 > - Create a `ref`.
 > - Create a standard JS function.
 > - Remember `.value`!
-
+> 
 ---
 
 ### Exercise 2: Composition API Ref Converter
@@ -179,7 +179,7 @@ export default {
 > }
 > </script>
 > ```
-
+> 
 ---
 
 ### Exercise 3: Template Ref Unwrapping Rule
@@ -197,8 +197,8 @@ export default {
 > <!-- Template automatically unwraps refs -->
 > <p>{{ count }}</p>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

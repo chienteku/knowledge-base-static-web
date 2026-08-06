@@ -160,7 +160,7 @@ Insert a customer document demonstrating explicit BSON types: `ObjectId`, `Date`
 > 1. `NumberInt()` forces BSON 32-bit integer encoding instead of default 64-bit double float.
 > 2. `NumberDecimal()` forces exact 128-bit IEEE decimal encoding.
 > 3. Prevents JavaScript driver type coercion implicit errors.
-
+> 
 ---
 
 ### Exercise 2: Querying Fields by BSON Type with `$type`
@@ -186,7 +186,7 @@ Find all documents in `orders` where field `total` was incorrectly stored as a `
 > 1. `$type` inspects the BSON binary type of document fields.
 > 2. Accepts type names (`"string"`, `"decimal"`, `"date"`) or numeric BSON type codes (2, 19, 9).
 > 3. Essential tool for auditing schema inconsistencies.
-
+> 
 ---
 
 ### Exercise 3: Aggregation BSON Type Conversions with `$convert`
@@ -224,7 +224,7 @@ Convert string price fields to BSON `Decimal128` inside an aggregation pipeline.
 > 1. `$convert` performs explicit type conversions inside aggregation pipeline stages.
 > 2. `onError` handles unparseable string values gracefully without aborting the pipeline.
 > 3. `onNull` handles missing or null fields.
-
+> 
 ---
 
 

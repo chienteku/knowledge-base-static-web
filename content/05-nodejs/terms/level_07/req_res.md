@@ -198,7 +198,7 @@ Inside your route `app.post('/api/users/:id/update')`, how do you extract the `9
 > - `params` = Path variables
 > - `query` = Question mark variables
 > - `body` = JSON payload
-
+> 
 ---
 
 
@@ -217,7 +217,7 @@ Inside your route `app.post('/api/users/:id/update')`, how do you extract the `9
 > ```
 >
 > **Explanation:** `res.status().json()` chains HTTP status and JSON response body formatting.
-
+> 
 ---
 
 ### Exercise 3: Extracting Request IP and User-Agent
@@ -235,7 +235,7 @@ Inside your route `app.post('/api/users/:id/update')`, how do you extract the `9
 > ```
 >
 > **Explanation:** `req.ip` returns client IP; `req.get(headerName)` gets request header values.
-
+> 
 ## 7. Related Terms
 - [Routing](routing.md) — The system that passes these objects to your function.
 - [HTTP Status Codes](../level_09/status_codes.md) — What you inject into `res.status()`.

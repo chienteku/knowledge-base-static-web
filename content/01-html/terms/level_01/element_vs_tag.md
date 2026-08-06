@@ -158,7 +158,7 @@ Identify the opening tag, the closing tag, the content, and the element.
 > ```
 > - Tags have angle brackets.
 > - The element is the whole sandwich!
-
+> 
 ---
 
 
@@ -181,7 +181,7 @@ Identify the opening tag, the closing tag, the content, and the element.
 > ```
 >
 > **Explanation:** An element consists of start tag (with optional attributes), inner content, and end tag.
-
+> 
 ---
 
 ### Exercise 3: Self-Closing vs Void Terminology
@@ -199,7 +199,7 @@ Identify the opening tag, the closing tag, the content, and the element.
 > ```
 >
 > **Explanation:** Void elements cannot enclose child content and do not have closing tags.
-
+> 
 ## 7. Related Terms
 - [Attribute](attribute.md) — Extra information that is placed *inside* the opening tag.
 - [Block-level vs Inline Elements](block_inline.md) — The display behaviors of HTML elements.

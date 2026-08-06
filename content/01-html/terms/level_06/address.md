@@ -178,7 +178,7 @@ Basic contact block in a footer:
 > ```
 > - Nest the `<address>` tag inside the `<footer>`.
 > - Use standard line breaks (`<br>`) and hyperlinks (`<a>`) inside `<address>`.
-
+> 
 ---
 
 
@@ -201,7 +201,7 @@ Basic contact block in a footer:
 > ```
 >
 > **Explanation:** `<address>` inside `<footer>` provides semantic author contact metadata.
-
+> 
 ---
 
 ### Exercise 3: Address Default Typography
@@ -218,7 +218,7 @@ Basic contact block in a footer:
 > ```
 >
 > **Explanation:** User-agent stylesheets render `<address>` text in italics.
-
+> 
 ## 7. Related Terms
 - [`<footer>`](footer.md) — The parent container for site contact blocks.
 - [`<article>` and `<section>`](article_section.md) — Containers that house author-specific contact blocks.

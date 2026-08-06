@@ -166,7 +166,7 @@ Query collection `products` for documents where `tags` equals the exact array `[
 > 1. Passing a raw array (`tags: [...]`) matches exact array equality (same elements, same order).
 > 2. Does not match documents where `tags` contains additional items or different order.
 > 3. Use `$all` or `$in` when order-independent element matching is desired.
-
+> 
 ---
 
 ### Exercise 2: Matching Single Array Element Values
@@ -192,7 +192,7 @@ Query `products` where `tags` array contains element `"electronics"`.
 > 1. Target field equality (`tags: "electronics"`) automatically matches if any element in the array equals the scalar value.
 > 2. Transparently handles both scalar fields and array fields.
 > 3. Uses multikey indexes on `tags`.
-
+> 
 ---
 
 ### Exercise 3: Querying Arrays of Embedded Documents with `$elemMatch`
@@ -223,7 +223,7 @@ Query `orders` for documents where at least one item in `items` array has `qty >
 > 1. `$elemMatch` ensures both `qty` and `price` conditions match on the SAME embedded subdocument.
 > 2. Prevents false positive matches across different array items.
 > 3. Essential for subdocument array querying.
-
+> 
 ---
 
 

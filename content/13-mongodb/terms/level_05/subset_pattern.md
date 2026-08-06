@@ -191,7 +191,7 @@ Model a product catalog where a `product` document embeds ONLY the 5 most recent
 > 1. The Subset Pattern splits large document arrays into a small embedded subset and a full secondary collection.
 > 2. Product detail pages load instantly with recent reviews in a single $O(1)$ read.
 > 3. Full review history is loaded via pagination from `reviews` collection only when requested.
-
+> 
 ---
 
 ### Exercise 2: Updating Embedded Subsets during New Writes
@@ -234,7 +234,7 @@ Add a new review for a product, updating both the `reviews` collection and pushi
 > 1. `$push` with `$slice: 5` maintains the embedded subset array at exactly 5 items automatically.
 > 2. Keeps product documents small and predictable in RAM memory.
 > 3. Eliminates document growth overhead.
-
+> 
 ---
 
 ### Exercise 3: Working Set Memory Optimization
@@ -260,7 +260,7 @@ Explain how the Subset Pattern improves WiredTiger RAM cache hit ratios for e-co
 > 1. Keeping document sizes small ensures high-frequency product data fits in WiredTiger RAM cache.
 > 2. Reduces disk reads and increases server query throughput.
 > 3. Standard architecture pattern for high-traffic applications.
-
+> 
 ---
 
 

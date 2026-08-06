@@ -158,18 +158,18 @@ Configure a route segment to execute on Node.js runtime vs Edge runtime.
 > ```tsx
 > // app/api/compute/route.ts
 > export const runtime = "nodejs"; // Default Node.js runtime
-
-export async function GET() {
-  return Response.json({ runtime: "Node.js Server" });
-}
-```
-
+> 
+> export async function GET() {
+>   return Response.json({ runtime: "Node.js Server" });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `export const runtime = 'nodejs'` forces execution inside a full Node.js environment.
 > 2. Node.js runtime grants access to native C++ modules, filesystem (`fs`), and full npm packages.
 > 3. Default execution engine for Next.js App Router.
-
+> 
 ---
 
 ### Exercise 2: Reading Environment Variables in Node.js Runtime
@@ -195,13 +195,13 @@ Read server-only environment variables securely inside a Server Component.
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Environment variables without `NEXT_PUBLIC_` prefix are available ONLY in Node.js server execution contexts.
 > 2. Stripped from client bundles automatically to prevent credential leaks.
 > 3. Core security guarantee of Node.js Server Component runtimes.
-
+> 
 ---
 
 ### Exercise 3: Handling Node.js Streams in Server Routes
@@ -219,27 +219,23 @@ Stream file contents asynchronously using Node.js `fs.createReadStream()`.
 > ```typescript
 > // app/api/file/route.ts
 > import fs from "node:fs";
-
-export async function GET() {
-  const fileStream = fs.createReadStream("./public/large-dataset.csv");
-  return new Response(fileStream as any, {
-    headers: { "Content-Type": "text/csv" }
-  });
-}
-```
-
+> 
+> export async function GET() {
+>   const fileStream = fs.createReadStream("./public/large-dataset.csv");
+>   return new Response(fileStream as any, {
+>     headers: { "Content-Type": "text/csv" }
+>   });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Node.js runtime supports streaming data buffers via native `fs` streams and Web Streams.
 > 2. Avoids reading entire multi-gigabyte files into server RAM memory.
 > 3. Standard backend Node.js performance optimization pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Next.js Overview](nextjs.md) — The framework running on top of Node.js.

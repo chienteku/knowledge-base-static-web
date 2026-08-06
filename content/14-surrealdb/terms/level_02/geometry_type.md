@@ -183,7 +183,7 @@ A food delivery platform stores restaurant location coordinates using GeoJSON `P
 > 1. `geometry<point>` enforces valid GeoJSON Point structure (`{ type: "Point", coordinates: [lng, lat] }`).
 > 2. Coordinates must follow `[longitude, latitude]` order according to the GeoJSON spec.
 > 3. Spatial types enable spatial indexing and geographic boundary queries.
-
+> 
 ---
 
 ### Exercise 2: Spatial Proximity Distance Querying
@@ -213,7 +213,7 @@ A mobile app finds restaurants located within 5 kilometers of a user's current G
 > 1. `geo::distance(point1, point2)` calculates Great Circle spherical distance in meters between two geometries.
 > 2. Works natively with GeoJSON Point fields stored in SurrealDB.
 > 3. Can be combined with spatial R-tree indexes (`DEFINE INDEX ... MTREE`) for fast spatial lookups.
-
+> 
 ---
 
 ### Exercise 3: GeoJSON Polygon Boundary Containment
@@ -249,7 +249,7 @@ A delivery zone system checks whether a customer's address point lies inside a d
 > 1. GeoJSON Polygons represent enclosed geographic areas defined by coordinate ring arrays.
 > 2. The `INSIDE` operator evaluates point-in-polygon containment natively in SurrealQL.
 > 3. Enables automated delivery coverage checks directly inside database queries.
-
+> 
 ---
 
 

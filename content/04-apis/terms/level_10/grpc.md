@@ -118,7 +118,7 @@ Where do you use REST, and where do you use gRPC?
 > The Browser uses standard REST to talk to the public-facing Gateway. But behind the scenes, all the heavy lifting and data passing between the 50 internal servers is done using ultra-fast gRPC binary streams!
 > ```
 > - Which protocol is best for internal, computer-to-computer chatter?
-
+> 
 ---
 
 ### Exercise 2: gRPC 4 RPC Communication Styles

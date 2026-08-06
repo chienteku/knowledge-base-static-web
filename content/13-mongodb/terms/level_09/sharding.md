@@ -148,7 +148,7 @@ Enable sharding on database `store_db` and shard collection `orders` on key `{ c
 > 1. `sh.enableSharding()` registers the target database for horizontal partitioning.
 > 2. `sh.shardCollection()` partitions collection data across shard nodes based on the chosen shard key.
 > 3. Enables horizontal scale-out write and storage capacity.
-
+> 
 ---
 
 ### Exercise 2: Adding Shard Nodes to a Cluster with `sh.addShard()`
@@ -172,7 +172,7 @@ Add a new replica set shard `shard2/shard2-node1:27017` to an existing sharded c
 > 1. `sh.addShard()` registers a new shard node (replica set) with the Config Server.
 > 2. The balancer automatically begins migrating chunks to the new shard to balance storage.
 > 3. Expands cluster throughput seamlessly.
-
+> 
 ---
 
 ### Exercise 3: Sharded Cluster Architecture Component Analysis
@@ -199,7 +199,7 @@ Outline the core operational roles of `mongos`, Config Servers, and Shard Nodes 
 > 1. `mongos` abstracts cluster topology away from client applications.
 > 2. Config Servers maintain cluster-wide transactional consistency for chunk locations.
 > 3. Shards execute targeted query operations over partitioned data slices.
-
+> 
 ---
 
 

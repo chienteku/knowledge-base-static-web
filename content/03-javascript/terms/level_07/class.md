@@ -174,7 +174,7 @@ async function processData() {
 > Because under the hood, a class is literally just a Constructor Function!
 > ```
 > - Classes are just syntactic sugar. They didn't add a new data type to JS.
-
+> 
 ---
 
 ### Exercise 2: Defining ES6 Classes with Constructors
@@ -200,7 +200,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** ES6 class syntax provides clean object-oriented constructor and prototype method structures.
-
+> 
 ---
 
 ### Exercise 3: Class Field Initializers
@@ -220,7 +220,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Class field initializers assign properties directly on new instance object creations.
-
+> 
 ---
 
 ## 7. Related Terms

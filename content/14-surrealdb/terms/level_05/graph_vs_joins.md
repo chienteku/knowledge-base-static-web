@@ -163,7 +163,7 @@ Compare the algorithmic time complexity of SurrealDB graph arrow traversals agai
 > 1. SurrealDB graph edges store physical record ID pointers (`table:id`), allowing direct memory/disk address jumps in $O(1)$ time.
 > 2. SQL `JOIN` queries must perform $O(\log N)$ B-Tree index searches to match foreign keys against primary keys.
 > 3. SurrealDB graph traversal performance scales with the number of connected edges, independent of total table record count.
-
+> 
 ---
 
 ### Exercise 2: Syntax Boilerplate Comparison (SurrealQL vs SQL JOIN vs MongoDB `$lookup`)
@@ -195,7 +195,7 @@ Compare the query code required to fetch user `user:alice` and their authored po
 > 1. SurrealQL graph arrow syntax reduces multi-line SQL `JOIN`s and MongoDB `$lookup` aggregations to concise single-line expressions.
 > 2. Improves code readability and developer velocity.
 > 3. Eliminates complex join condition debugging.
-
+> 
 ---
 
 ### Exercise 3: Benchmarking Multi-Hop Performance at Scale
@@ -221,7 +221,7 @@ Evaluate why 4-hop graph queries (`->a->b->c->d`) degrade in traditional SQL dat
 > 1. SQL multi-hop JOINs suffer from compounding $O(\log N)$ index search latency.
 > 2. SurrealDB pointer links resolve directly to target record addresses without index lookups.
 > 3. Enables deep multi-hop graph queries on production databases at scale.
-
+> 
 ---
 
 

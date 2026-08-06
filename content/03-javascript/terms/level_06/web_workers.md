@@ -185,7 +185,7 @@ self.onmessage = function(event) {
 
 > [!check]- Answer
 > - Inside the if statement, call `self.postMessage("pong")`.
-
+> 
 ---
 
 ### Exercise 2: Web Worker Message Passing with `postMessage`
@@ -203,7 +203,7 @@ self.onmessage = function(event) {
 > ```
 >
 > **Explanation:** `postMessage()` transfers serialized structured clone data across thread boundaries.
-
+> 
 ---
 
 ### Exercise 3: Offloading Heavy CPU Tasks to Workers
@@ -220,8 +220,8 @@ self.onmessage = function(event) {
 > ```
 >
 > **Explanation:** Web Workers run on separate OS background threads, keeping main UI event loops responsive.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

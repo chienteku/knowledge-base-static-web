@@ -280,7 +280,7 @@ Implement a task dispatching stage that:
 > 2. **Struct Invalidation vs Field Validity**: Once `batch.payload` is moved out, the `batch` binding is in a *partially moved* state. Passing `batch` as a single argument or taking a reference `&batch` is prohibited by the compiler (`E0382`), but accessing remaining initialized fields (`batch.header`) is permitted as long as `TaskBatch` does not implement `Drop`.
 > 3. **Disjoint Field Borrowing (NLL & Field Split)**: In `process_disjoint`, passing `&batch.header` (immutable borrow of `header`) and `&mut self.telemetry` (exclusive borrow of `stage.telemetry`) succeeds because the compiler verifies that `self` and `batch` are distinct objects, and within `self`, `telemetry` is a distinct memory location from other fields. If a helper method were defined as `fn update(&mut self, header: &BatchHeader)`, calling `self.update(&self.header)` would fail with `E0502` because `&mut self` borrows the *entire* struct, overlapping with `&self.header`. Splitting function signatures into explicit field references decouples borrow scopes.
 > 4. **Edge Cases & Memory Layout**: If `TaskBatch` implemented `std::ops::Drop`, partial moves of any field (`let payload = batch.payload;`) would trigger error `E0509` ("cannot move out of type `TaskBatch`, which implements the `Drop` trait"). Rust requires values with custom drops to remain structurally complete so `drop(&mut self)` can safely access all fields.
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy Protocol Frame Decoder & Handling `Drop` Constraints
@@ -421,7 +421,7 @@ Implement a zero-copy protocol frame decoder that:
 > 3. **Workaround 2: `std::mem::replace` / `std::mem::take`**: For non-`Option` fields implementing `Default`, `std::mem::take(&mut field)` steals ownership of the vector/buffer by swapping it with an empty `Default` instance. This performs zero memory allocations or deep clones while maintaining struct initialization invariants.
 > 4. **Disjoint Borrow Mechanics with `Option`**: In `process_frame_disjoint`, `if let Some(ref mut payload) = frame.payload` creates a mutable reference `&mut PayloadBuffer` anchored specifically to the heap content inside `frame.payload`. Simultaneously passing `&frame.header` succeeds because `frame.header` and `frame.payload` occupy disjoint byte offsets in memory.
 > 5. **Performance & Memory Overhead**: `Option<Vec<u8>>` benefits from null-pointer optimization (NPO) on pointer types or niche optimization, rendering `Option<Vec<u8>>` identical in size to a raw `Vec<u8>` (24 bytes on 64-bit platforms). `Option::take()` evaluates to a single pointer swap instruction, yielding true zero-copy ergonomics.
-
+> 
 ---
 
 ### Exercise 3: Arena Memory Recycler & Graph Node Splitting (Disjoint Field Borrows & Partial Deallocation)
@@ -570,7 +570,7 @@ Implement an Arena Node Recycler system that:
 > 2. **Struct Disassembly Mechanics**: Rust tracks ownership at the field level. `node.data` and `node.edges` are disjoint memory offsets inside `ArenaNode`. Moving `data` out leaves `node.data` uninitialized, while `node.edges` remains fully valid. Because `ArenaNode` does not implement `Drop`, fields can be moved independently without runtime drops interfering.
 > 3. **Refactoring Struct Methods for Disjoint Borrows**: A common design trap in Rust is defining `fn relink(&mut self, target_id: u64, weight: f32)`. If `relink` internal logic needs to read `self.data.id` while pushing into `self.edges.neighbors`, calling internal methods on `self` can conflict with concurrent borrows. By defining standalone functions or static helper functions (`relink_edges(data: &NodeData, edges: &mut EdgeList)`), caller code can borrow `&node.data` (shared) and `&mut node.edges` (exclusive) simultaneously. The borrow checker statically verifies that `node.data` and `node.edges` refer to non-overlapping fields.
 > 4. **Memory Layout and Field Splitting Alignment**: At compile time, `ArenaNode` is laid out sequentially in memory. When borrowing `&node.data` and `&mut node.edges`, the compiler calculates pointer offsets: `&node.data` resolves to `(node_ptr + offset_data)` and `&mut node.edges` resolves to `(node_ptr + offset_edges)`. Because offset regions do not overlap, Rust guarantees memory safety without needing mutexes or runtime ref-cell counters.
-
+> 
 ---
 
 ## 6. Related Terms

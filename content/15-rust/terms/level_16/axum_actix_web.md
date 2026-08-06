@@ -317,7 +317,7 @@ async fn main() -> std::io::Result<()> {
 > 1. **Thread-Safe State (`Arc<RwLock<...>>`)**: Wraps application state so it can be safely shared across Tokio threads handling concurrent HTTP requests.
 > 2. **State Extractor Order**: The `State(state)` extractor is listed before `Json(payload)` because `Json` consumes the HTTP request body stream.
 > 3. **Socket-less Testing**: `app.oneshot(request)` tests web services directly in memory without binding to actual network sockets or ports.
-
+> 
 ---
 
 ### Exercise 2: `actix-web` Query Parameters, App State, and Integration Testing
@@ -419,7 +419,7 @@ async fn main() -> std::io::Result<()> {
 > 1. **`web::Query<T>` Extractor**: Automatically parses URL query parameters (`?max_price=3000`) into typed Rust structs via Serde.
 > 2. **`web::Data<T>` State Injection**: Actix-web manages shared thread state using `web::Data` wrappers around application data structures.
 > 3. **Actix Test Suite**: `actix_web::test::init_service` constructs a test instance of the application pipeline for in-memory integration testing.
-
+> 
 ---
 
 ### Exercise 3: Custom Header Extractor and Custom Response Error Mapping in `axum`
@@ -523,10 +523,9 @@ async fn main() -> std::io::Result<()> {
 > 1. **`FromRequestParts` Trait**: Allows implementing custom header/metadata extractors without consuming the request body stream.
 > 2. **Declarative Route Security**: Simply adding `claims: AuthClaims` to a route handler's parameters enforces authentication automatically. If validation fails, `axum` returns the rejection response before executing the handler.
 > 3. **Error Mapping**: Standard HTTP status code tuples `(StatusCode, &'static str)` implement `IntoResponse`, converting extractor failures cleanly into HTTP responses.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

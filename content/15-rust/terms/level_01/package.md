@@ -453,7 +453,7 @@ Your goal is to build a production-grade `PackageRegistry` that models package t
 > 4. **Edge Cases Handled**: Empty/whitespace package names, packages with no targets, packages with no dependencies, missing dependency lookups, and multi-node cyclic chains.
 > 
 >
-
+> 
 ---
 
 ### Exercise 2: Thread-Safe Package Target Execution Engine with Interior Mutability
@@ -707,7 +707,7 @@ You must implement a thread-safe `PackageExecutionEngine` that manages shared bi
 > 4. **Edge Cases Handled**: Concurrent target registrations, illegal state transitions (e.g. completing before starting), empty target sets in `all_completed_successfully()`, and worker thread panics during concurrent execution.
 > 
 >
-
+> 
 ---
 
 ### Exercise 3: Package Feature Matrix Resolver and Conflict Validation Engine
@@ -912,7 +912,7 @@ You are tasked with implementing a `FeatureGraph` engine that registers feature 
 > 4. **Edge Cases Handled**: Deeply nested transitive features, cyclic feature aliases (A enables B, B enables A), unknown requested features, unknown sub-features in `enables`, and mutual exclusion conflicts triggered transitively.
 > 
 >
-
+> 
 ---
 
 ## 6. Related Terms

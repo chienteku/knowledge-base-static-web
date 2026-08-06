@@ -135,7 +135,7 @@ fetch('https://api.example.com/me', {
 > ```
 > - You need to pass the options object to change the method.
 > - Do DELETE requests usually have bodies? (No).
-
+> 
 ---
 
 ### Exercise 2: Standard Fetch Wrapper Template

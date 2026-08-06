@@ -175,8 +175,8 @@ app.get('/download-good', (req, res) => {
 
 > [!check]- Answer
 > - **Route A** causes the crash. It reads the movie file at disk speed and writes it to the response object without checking for backpressure. If the user has a slow connection, the unwritten movie data will accumulate in Node's RAM. **Route B** is correct because `.pipe(res)` automatically manages backpressure, pausing the file reader when the network connection slows down.
-
-
+> 
+> 
 ---
 
 
@@ -195,7 +195,7 @@ app.get('/download-good', (req, res) => {
 > ```
 >
 > **Explanation:** The `'drain'` event signals that a Writable stream is ready to receive more data.
-
+> 
 ---
 
 ### Exercise 3: pipeline Utility Benefit
@@ -214,7 +214,7 @@ app.get('/download-good', (req, res) => {
 > ```
 >
 > **Explanation:** `pipeline` manages stream lifecycle and closes open streams when errors occur.
-
+> 
 ## 7. Related Terms
 - [Piping (.pipe())](piping.md) — The abstraction layer that automates backpressure handling.
 - [Readable & Writable Streams](readable_writable.md) — The components that exchange flow-control signals.

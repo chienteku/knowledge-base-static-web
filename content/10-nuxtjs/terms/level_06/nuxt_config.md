@@ -149,13 +149,13 @@ Configure `@pinia/nuxt` and `@nuxtjs/tailwindcss` modules inside `nuxt.config.ts
 >   devtools: { enabled: true }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `modules` array registers official and third-party Nuxt modules.
 > 2. Modules extend Nuxt's build process, auto-import composables, and register plugins automatically.
 > 3. Central extension point in Nuxt 3.
-
+> 
 ---
 
 ### Exercise 2: Setting Route-Level Rendering Rules with `routeRules`
@@ -180,13 +180,13 @@ Configure SWR (Stale-While-Revalidate) caching for `/blog/**` and static prerend
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `routeRules` powers Nuxt 3's Hybrid Rendering architecture.
 > 2. `prerender: true` generates static HTML files during `nuxt build`.
 > 3. `swr: 3600` caches Nitro responses at the edge/server for 3600 seconds.
-
+> 
 ---
 
 ### Exercise 3: Configuring Custom Vite and Server Options
@@ -215,19 +215,15 @@ Pass custom Vite plugin configurations and server port options inside `nuxt.conf
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `vite` property exposes underlying Vite bundler configuration options.
 > 2. `devServer` configures local development HTTP host and port settings.
 > 3. Low-level bundler and server customization interface.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`app.config.ts`](app_config.md) — The configuration file meant for reactive, client-side UI state.

@@ -137,7 +137,7 @@ function App({ isVisible }) {
 > </motion.button>
 > ```
 > - Think about declarative naming: "while..."
-
+> 
 ---
 
 
@@ -162,7 +162,7 @@ function App({ isVisible }) {
 > ```
 >
 > **Explanation:** `initial`, `animate`, and `transition` props control Framer Motion component keyframe animations.
-
+> 
 ---
 
 ### Exercise 3: AnimatePresence Key Requirement
@@ -179,7 +179,7 @@ function App({ isVisible }) {
 > ```
 >
 > **Explanation:** Unique keys enable `<AnimatePresence>` to defer unmounting for specific exiting elements.
-
+> 
 ## 7. Related Terms
 - [Conditional Rendering](../level_05/conditional_rendering.md) — What `<AnimatePresence>` supercharges.
 - [Declarative Programming](../level_01/declarative_programming.md) — You declare *what* the animation should look like, Framer Motion figures out *how* to do the math.

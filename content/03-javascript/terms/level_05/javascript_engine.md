@@ -141,7 +141,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Passing consistent object hidden classes (shapes) allows JIT compilers to inline property offsets.
-
+> 
 ---
 
 ### Exercise 2: Call Stack & Memory Heap Roles
@@ -158,10 +158,9 @@ async function processData() {
 > ```
 >
 > **Explanation:** Call stacks store execution frames and primitive variables; memory heap stores dynamic object allocations.
-
+> 
 ---
 
----
 
 ### Exercise 3: V8 Hidden Classes (Shapes)
 
@@ -177,8 +176,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** V8 creates inline caches based on predictable object shapes.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

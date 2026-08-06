@@ -290,7 +290,7 @@ function TableBody({ rows }) {
 **Expected output:**
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Mapping List Items with Explicit Fragment
@@ -315,7 +315,7 @@ function TableBody({ rows }) {
 > ```
 >
 > **Explanation:** `React.Fragment` accepts `key` props when mapping multi-element list items.
-
+> 
 ---
 
 ### Exercise 3: Short Fragment Syntax
@@ -336,7 +336,7 @@ function TableBody({ rows }) {
 > ```
 >
 > **Explanation:** `<> ... </>` groups sibling elements without adding extra wrapper nodes to the DOM tree.
-
+> 
 ## 7. Related Terms
 - [Lists & Keys](../level_05/lists_and_keys.md) — Managing render loops using key tags.
 - [Children Prop](../level_07/children_prop.md) — Passing elements down component nesting lines.

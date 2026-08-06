@@ -260,7 +260,7 @@ Implement an `OrderBookPipeline` to filter, combine, and process order quotes:
 > 2. **Option Zipping with `Option::zip`**: Combining two independent `Option` values (`valid_bid` and `valid_ask`) into a single `Option<(T, U)>` guarantees that downstream logic only executes when both bid and ask sides are present (`Some`). If either side is `None`, the zipped result immediately becomes `None`.
 > 3. **Ownership Transfer with `Option::take()`**: The `bid.take()` method moves the inner `LimitOrder` out of the `&mut Option<LimitOrder>`, leaving `None` in its place. This avoids unnecessary copies or requiring `Clone` on `LimitOrder`, while respecting Rust's borrow checker rules for mutable references.
 > 4. **Edge Cases**: Crossed market conditions (`ask.price <= bid.price`) yield `None` via `and_then`, preventing negative spread calculations. Arithmetic overflow during discount calculation is guarded using `u64::saturating_sub`.
-
+> 
 ---
 
 ### Exercise 2: Network Protocol Header Negotiation — TCP Option Parameter Parsing & Fallback Engine
@@ -397,7 +397,7 @@ Implement a `TcpNegotiator` pipeline:
 > 2. **Boolean Combination via Monadic `.map()`**: `sack_permitted` relies on `.zip()` to verify both options are `Some`, mapping the tuple `(c, s)` to logical `c && s`. The trailing `.unwrap_or(false)` safely defaults missing flags to `false`.
 > 3. **In-place State Reset via `Option::take()`**: The `inspect_and_reset_option` function extracts the inner `u16` using `take()`, leaving `None` in the source location. It then chains `.filter(|&val| val > 0)` to ensure zero-valued options are treated as invalid/absent (`None`).
 > 4. **Safety & Zero-Cost Abstractions**: Option operations like `zip`, `map`, and `or_else` compile down to straightforward conditional jumps in assembly, matching C-style null checks in performance while providing 100% compile-time safety.
-
+> 
 ---
 
 ### Exercise 3: AST Expression Evaluator & Lexical Scope Environment Lookup
@@ -550,7 +550,7 @@ Implement an AST evaluator with hierarchical environment resolution:
 > 2. **Lexical Scope Traversal with `Iterator::find_map`**: `scopes.iter().rev()` iterates backward from local to outer scopes. Calling `scope.get(name).copied()` converts `Option<&i64>` to `Option<i64>`, and `find_map` returns the first `Some(val)` encountered, correctly enforcing variable shadowing rules.
 > 3. **Safe Division Invariants**: Mathematical undefined operations (division by zero) are captured within `and_then(|(n, d)| if d != 0 { Some(n / d) } else { None })`, turning dynamic runtime arithmetic exceptions into safe, handled missing values.
 > 4. **Recursive AST Traversal**: Passing references `&Expr` down the AST tree ensures zero dynamic memory allocations during evaluation. The compiler verifies lifetimes, ensuring references to `EnvironmentChain` remain valid across the call hierarchy.
-
+> 
 ---
 
 ## 6. Related Terms

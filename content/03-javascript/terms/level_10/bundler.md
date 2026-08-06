@@ -155,7 +155,7 @@ async function processData() {
 > By stripping out all spaces, comments, and renaming long variables (`const calculateTotalPrice` becomes `const a`), the Bundler shrinks the file size of your code by up to 80%. A smaller file means it downloads faster on the user's phone!
 > ```
 > - Think about network speed and file sizes.
-
+> 
 ---
 
 ### Exercise 2: Understanding Bundler Entry & Output Configurations
@@ -172,7 +172,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Bundlers trace import dependency graphs starting from entry points to produce optimized production assets.
-
+> 
 ---
 
 ### Exercise 3: Asset Loader Modules Concept
@@ -189,8 +189,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Loaders transform stylesheets and media assets into module exports for bundle inclusion.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -166,13 +166,13 @@ Define a server-only private API secret and a public API base URL in `nuxt.confi
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Properties at the top level of `runtimeConfig` (`apiSecret`) are strictly isolated to the server and stripped from client bundles.
 > 2. Properties inside `public` (`public.apiBase`) are exposed to both browser client and server runtime environments.
 > 3. Critical security isolation mechanism.
-
+> 
 ---
 
 ### Exercise 2: Overriding Runtime Config with Environment Variables
@@ -192,13 +192,13 @@ Override `apiSecret` and `public.apiBase` in production using system environment
 > NUXT_API_SECRET="prod_sec_999888777666"
 > NUXT_PUBLIC_API_BASE="https://prod-api.example.com"
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Nuxt 3 automatically maps environment variables prefixed with `NUXT_` to matching `runtimeConfig` keys.
 > 2. `NUXT_API_SECRET` overrides `runtimeConfig.apiSecret`.
 > 3. `NUXT_PUBLIC_API_BASE` overrides `runtimeConfig.public.apiBase`.
-
+> 
 ---
 
 ### Exercise 3: Consuming Runtime Config via `useRuntimeConfig()`
@@ -221,7 +221,7 @@ Access public API base URL in a component and private secret in a Nitro server r
 > console.log("API Base URL:", config.public.apiBase);
 > </script>
 > ```
-
+> 
 > ```typescript
 > // server/api/private.ts
 > export default defineEventHandler((event) => {
@@ -230,19 +230,15 @@ Access public API base URL in a component and private secret in a Nitro server r
 >   return { secret: config.apiSecret };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `useRuntimeConfig()` returns the active runtime configuration object.
 > 2. Attempting to access `config.apiSecret` on the client returns `undefined`.
 > 3. Guarantees environment variable safety across SSR boundaries.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`app.config.ts`](app_config.md) — The alternative config meant for non-secret, UI-related theme variables.

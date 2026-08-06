@@ -189,7 +189,7 @@ app.post('/import-data', (req, res) => {
 
 > [!check]- Answer
 > `JSON.parse(rawData)` blocks the event loop because parsing a 100MB string is synchronous and computationally heavy. To fix this, offload the parsing to a separate worker thread or process the payload as a stream of smaller chunks (using JSON streaming parsers) to avoid blocking the main thread.
-
+> 
 ---
 
 
@@ -208,7 +208,7 @@ app.post('/import-data', (req, res) => {
 > ```
 >
 > **Explanation:** Heavy synchronous JSON parsing or CPU math blocks main loop execution; async disk I/O delegates work to libuv worker threads.
-
+> 
 ---
 
 ### Exercise 3: Refactoring Synchronous File Reading
@@ -225,7 +225,7 @@ app.post('/import-data', (req, res) => {
 > ```
 >
 > **Explanation:** `fs.promises.readFile` returns a Promise, allowing the event loop to handle other requests while reading from disk.
-
+> 
 ## 7. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The loop system frozen by blocking code.
 - [Single-Threaded Architecture](single_threaded.md) — The execution structure vulnerable to blocking.

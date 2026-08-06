@@ -169,7 +169,7 @@ Nesting alternative sources inside a video container:
 > ```
 > - The outer container must be `<audio>` with the `controls` attribute.
 > - Nest two `<source>` tags inside the container.
-
+> 
 ---
 
 
@@ -191,7 +191,7 @@ Nesting alternative sources inside a video container:
 > ```
 >
 > **Explanation:** Browsers evaluate `<source>` choices sequentially and play the first supported format.
-
+> 
 ---
 
 ### Exercise 3: srcset Descriptor Types
@@ -208,7 +208,7 @@ Nesting alternative sources inside a video container:
 > ```
 >
 > **Explanation:** `2x` handles high-DPI retina screens; `800w` specifies source image pixel width.
-
+> 
 ## 7. Related Terms
 - [`<audio>`](audio.md) — The audio container element.
 - [`<video>`](video.md) — The video container element.

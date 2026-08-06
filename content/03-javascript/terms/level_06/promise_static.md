@@ -190,7 +190,7 @@ getMockProduct().then(product => console.log("Product:", product.name));
 > ```
 > - Use the static method `Promise.resolve(value)`.
 > - Pass the object as the value argument.
-
+> 
 ---
 
 ### Exercise 2: Resolving Promises with `Promise.any`
@@ -209,7 +209,7 @@ getMockProduct().then(product => console.log("Product:", product.name));
 > ```
 >
 > **Explanation:** `Promise.any` fulfills with the value of the first promise that fulfills, ignoring rejections unless all reject.
-
+> 
 ---
 
 ### Exercise 3: `AggregateError` in `Promise.any`
@@ -227,8 +227,8 @@ getMockProduct().then(product => console.log("Product:", product.name));
 > ```
 >
 > **Explanation:** `Promise.any` throws `AggregateError` when every input promise rejects.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

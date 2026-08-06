@@ -268,7 +268,7 @@ Write a production-grade `BatchBufferProcessor` that implements:
 > 1. **`std::mem::take` Invariants**: Rust prohibits moving a value out of a mutable borrow `&mut self.active_buffer` because leaving an uninitialized memory hole violates type safety guarantees. `std::mem::take(&mut place)` solves this by swapping `place` with `Default::default()` (for `Vec<T>`, `Vec::new()`, which is a 0-allocation pointer constant `NonNull::dangling()`). This operates in $O(1)$ time without inspecting element data or allocating heap memory.
 > 2. **`std::mem::swap` Invariants**: Swapping pointers between `self.active_buffer` and `standby` executes a low-level bitwise copy (`ptr::copy_nonoverlapping`) of the 24-byte `Vec` header (`ptr`, `capacity`, `len`). The memory heap buffer allocated for `standby` is transferred directly into `self.active_buffer` without triggering any reallocations or `memcpy` of inner `LogEntry` elements.
 > 3. **Ownership and Lifetime Safety**: After `recycle_and_swap`, `standby` temporarily holds the filled batch, which is then moved out with `std::mem::take(standby)`. This ensures that callers receive full ownership of the flushed `Vec<LogEntry>` while the `BatchBufferProcessor` retains a warm, pre-allocated buffer ready for immediate ingestion.
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy Finite State Machine (FSM) Transitions using `std::mem::replace`
@@ -397,7 +397,7 @@ Implement a `SessionState` state machine that performs zero-allocation state tra
 > 1. **Borrow Checker Bypass via Ownership Swap**: When pattern matching on `&mut self`, Rust prevents moving non-`Copy` fields (`token`, `cipher_key`) out of the enum. Calling `std::mem::replace(self, SessionState::Disconnected)` moves the current state out of `*self` into `old_state` by value, while immediately leaving `SessionState::Disconnected` inside `*self`. This guarantees that `*self` remains fully initialized at every micro-step.
 > 2. **Memory Layout and Efficiency**: `SessionState::Disconnected` is a unit variant requiring no dynamic allocation. `std::mem::replace` moves the discriminant and pointer payload of `SessionState` via register or stack copies without heap reallocations or cloning heap-allocated strings/vectors.
 > 3. **Panic Safety**: If pattern matching or formatting panics during transition calculation, `*self` is left in the valid sentinel state `SessionState::Disconnected` rather than an uninitialized memory region, preventing undefined behavior during unwinding.
-
+> 
 ---
 
 ### Exercise 3: In-Place Binary Tree Rotation & Deterministic Memory Reclamation using `std::mem::swap` & `std::mem::drop`
@@ -546,7 +546,7 @@ Implement a module containing:
 > 1. **Zero-Allocation Tree Manipulation**: Calling `root_ref.take()` (which invokes `std::mem::take` on `Option<Box<TreeNode>>`) replaces the parent reference with `None` while transferring ownership of the `Box` heap pointer. Subtree re-linking (`right_child.left = Some(root)`) swaps owned smart pointers directly. The operation completes in $O(1)$ time with zero heap reallocations.
 > 2. **Deterministic Destruction with `std::mem::drop`**: In Rust, variable drop order is lexically deferred until the enclosing scope terminates. In sensitive cryptographic contexts, keeping raw key bytes on the heap until scope drop increases vulnerability windows. Calling `std::mem::take(&mut self.key_data)` extracts the heap vector so it can be mutated to zeros, and `std::mem::drop(key_bytes)` invokes `Drop::drop(&mut key_bytes)` immediately, freeing the underlying allocation without waiting for scope exit.
 > 3. **Safety and Memory Layout**: Because `std::mem::take` leaves `Vec::new()` in `self.key_data`, the `SecureKeyBuffer` instance remains in a valid state. Subsequent access or drop of `SecureKeyBuffer` will perform a no-op drop on the empty vector, preventing double-free vulnerabilities.
-
+> 
 ---
 
 ## 6. Related Terms

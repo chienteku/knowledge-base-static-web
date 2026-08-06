@@ -177,7 +177,7 @@ const productsWithReviews = await Product.findAll({
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Prisma CRUD Query Syntax
@@ -199,7 +199,7 @@ const productsWithReviews = await Product.findAll({
 > ```
 >
 > **Explanation:** `prisma.model.create({ data: { ... } })` performs type-safe database insertions.
-
+> 
 ---
 
 ### Exercise 3: Prisma vs Sequelize Architecture
@@ -216,7 +216,7 @@ const productsWithReviews = await Product.findAll({
 > ```
 >
 > **Explanation:** Prisma generates client code from `.prisma` schemas; Sequelize uses object models.
-
+> 
 ## 7. Related Terms
 - [ORMs & ODMs](orms_odms.md) — The design categories for SQL and NoSQL databases.
 - [Migrations](migrations.md) — Schema updates managed through SQL ORMs.

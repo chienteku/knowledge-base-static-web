@@ -104,7 +104,7 @@ module.exports = {
 > Seeing `vue.config.js` is the immediate giveaway that you are working in an older codebase.
 > ```
 > - Which config file belongs to which tool?
-
+> 
 ---
 
 ### Exercise 2: Official Vue Project Scaffolding Command
@@ -121,7 +121,7 @@ module.exports = {
 > ```bash
 > npm create vue@latest
 > ```
-
+> 
 ---
 
 ### Exercise 3: Vue CLI vs Vite Tooling Transition
@@ -140,8 +140,8 @@ module.exports = {
 > ```text
 > Vue CLI used Webpack; Vite uses Esbuild and Rollup.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

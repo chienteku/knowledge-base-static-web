@@ -166,7 +166,7 @@ Alternatively, in an Excel spreadsheet, a `<td>` is a single rectangular cell (l
 > "Bird"
 > ```
 > - The first `<tr>` is row 1. The second `<tr>` is row 2. The first `<td>` inside that row is column 1.
-
+> 
 ---
 
 
@@ -187,7 +187,7 @@ Alternatively, in an Excel spreadsheet, a `<td>` is a single rectangular cell (l
 > ```
 >
 > **Explanation:** Numerical table data cells should be right-aligned for column readability.
-
+> 
 ---
 
 ### Exercise 3: Empty Cell Display
@@ -206,7 +206,7 @@ Alternatively, in an Excel spreadsheet, a `<td>` is a single rectangular cell (l
 > ```
 >
 > **Explanation:** `empty-cells` controls rendering behavior for table cells with no content.
-
+> 
 ## 7. Related Terms
 - [`<th>` (Table Header)](th.md) — The bold header equivalent of the data cell.
 - [`colspan` & `rowspan` Attributes](colspan_rowspan.md) — Attributes used to merge table cells.

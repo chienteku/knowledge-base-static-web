@@ -114,7 +114,7 @@ nullable: true
 > While Postman can generate docs, Swagger is an open-source standard. You can use a Swagger file to automatically generate SDKs (code libraries), generate strict validation rules for your backend, and create interactive web portals for third-party developers.
 > ```
 > - Which one is an application? Which one is a standardized blueprint?
-
+> 
 ---
 
 ### Exercise 2: OpenAPI 3.0 YAML Path Definition Structure

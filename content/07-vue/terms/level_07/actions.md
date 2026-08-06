@@ -147,7 +147,7 @@ async function load() {
 > However, for complex updates involving multiple variables or side effects, you should always use an Action to keep the logic centralized and readable.
 > ```
 > - Pinia removed the strict "Mutations" requirement.
-
+> 
 ---
 
 ### Exercise 2: Pinia Action Error Handling Pattern
@@ -177,7 +177,7 @@ async function load() {
 >   }
 > }
 > ```
-
+> 
 ---
 
 ### Exercise 3: Pinia $onAction Subscriptions
@@ -197,8 +197,8 @@ async function load() {
 >   after((result) => console.log(`Action ${name} finished`));
 > });
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

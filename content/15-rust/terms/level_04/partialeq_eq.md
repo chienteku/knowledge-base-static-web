@@ -277,7 +277,7 @@ Implement a `CacheKey` struct containing a normalized routing string and a numer
 > 1. **Heterogeneous `PartialEq<Rhs>` Implementation**: Rust's `PartialEq` trait is generic over the right-hand-side type `Rhs` with a default of `Self` (`trait PartialEq<Rhs: ?Sized = Self>`). By implementing `PartialEq<str>`, `PartialEq<&str>`, and `PartialEq<String>`, we grant `CacheKey` the ability to participate in `==` comparisons directly against string types without converting string slices into owned heap allocations.
 > 2. **Total Equality vs. Partial Equality (`Eq`)**: `Eq` has no trait methods; it acts as a marker trait notifying the Rust compiler that equality on `CacheKey` is an equivalence relation satisfying reflexivity (`a == a`), symmetry (`a == b` implies `b == a`), and transitivity (`a == b` and `b == c` implies `a == c`). This allows `CacheKey` to be safely used in hash maps (`HashMap`) and sets (`HashSet`).
 > 3. **Memory and Monomorphization**: When calling `cache_key == "path"`, the compiler monomorphizes the specific `PartialEq::<&str>::eq` routine directly into an inline slice comparison. No string cloning or dynamic vtable dispatch occurs.
-
+> 
 ---
 
 ### Exercise 2: Invariant-Guaranteed Total Equality (`Eq`) for Financial Ledger Amounts
@@ -405,7 +405,7 @@ Create a financial domain type `LedgerAmount` that wraps an `f64`, ensuring inva
 > 1. **Why `f64` Lacks `Eq`**: IEEE-754 floating-point standard mandates that `NaN == NaN` evaluates to `false`. This violates the reflexivity property (`x == x`) required by mathematical equivalence relations. Consequently, standard Rust `f64` only implements `PartialEq`, preventing floats from being direct keys in `HashSet` or `HashMap`.
 > 2. **Invariant Encapsulation**: By encapsulating `val: f64` as a private field in `LedgerAmount` and restricting construction to `LedgerAmount::new`, we guarantee at compile-time and runtime that no `LedgerAmount` instance can ever hold `NaN` or `Infinity`.
 > 3. **Safety of Marker `Eq`**: Because the non-`NaN` invariant is preserved continuously (the struct is immutable and constructor validated), `self.val == self.val` is unconditionally true for all valid instances. Therefore, manually implementing `Eq` is sound and safe.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Trait Object Downcasting & Equality (`Box<dyn FilterNode>`)
@@ -528,7 +528,7 @@ To enable dynamic equality checking across trait objects:
 >    - Inside `dyn_eq`, `other.as_any().downcast_ref::<T>()` checks the runtime type ID in the vtable. If `other` matches concrete type `T`, it downcasts `other` to `&T` and delegates comparison to `T`'s underlying `PartialEq` implementation (`self == other_concrete`).
 >    - If `other` is a different type (e.g. comparing a `LiteralFilter` to a `RangeFilter`), `dyn_eq` returns `false`.
 > 3. **Forwarding Deref Impls**: Implementing `PartialEq` for `Box<dyn FilterNode>` forwards equality to `dyn FilterNode` dereferenced trait object comparison (`self.as_ref().eq(other.as_ref())`), providing seamless `==` syntax across boxed AST nodes.
-
+> 
 ---
 
 ## 6. Related Terms

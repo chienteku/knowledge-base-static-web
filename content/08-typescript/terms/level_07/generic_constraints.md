@@ -123,20 +123,20 @@ Create a generic `logLength<T extends { length: number }>(arg: T)` function enfo
 >   console.log(`Length: ${arg.length}`);
 >   return arg;
 > }
-
-logLength("Hello World");   // Valid! (strings have length)
-logLength([1, 2, 3, 4]);     // Valid! (arrays have length)
-logLength({ length: 10 });  // Valid! (objects with length property)
-
-// logLength(12345);        // ❌ Compile Error: Argument of type 'number' is not assignable to '{ length: number }'.
-```
-
+> 
+> logLength("Hello World");   // Valid! (strings have length)
+> logLength([1, 2, 3, 4]);     // Valid! (arrays have length)
+> logLength({ length: 10 });  // Valid! (objects with length property)
+> 
+> // logLength(12345);        // ❌ Compile Error: Argument of type 'number' is not assignable to '{ length: number }'.
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `<T extends Structure>` restricts generic parameter `T` to types satisfying the structural contract.
 > 2. Permits accessing `.length` safely inside the function body without runtime errors.
 > 3. Retains the specific return type `T` (e.g. returns `string` or `number[]`).
-
+> 
 ---
 
 ### Exercise 2: Using `keyof` Constraints in Property Lookups
@@ -155,21 +155,21 @@ Create a type-safe `getProperty<T, K extends keyof T>(obj: T, key: K)` utility.
 > function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
 >   return obj[key];
 > }
-
-const user = { id: 1, name: "Alice", isMember: true };
-
-const name = getProperty(user, "name"); // Inferred as string
-const id = getProperty(user, "id");     // Inferred as number
-
-// getProperty(user, "invalidKey");    // ❌ Compile Error: Argument of type '"invalidKey"' is not assignable to keyof User.
-```
-
+> 
+> const user = { id: 1, name: "Alice", isMember: true };
+> 
+> const name = getProperty(user, "name"); // Inferred as string
+> const id = getProperty(user, "id");     // Inferred as number
+> 
+> // getProperty(user, "invalidKey");    // ❌ Compile Error: Argument of type '"invalidKey"' is not assignable to keyof User.
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `K extends keyof T` constrains parameter `K` to valid key strings existing on object type `T`.
 > 2. `T[K]` returns the exact indexed access property type corresponding to key `K`.
 > 3. Standard type-safe property extraction utility.
-
+> 
 ---
 
 ### Exercise 3: Multiple Intersected Generic Constraints
@@ -187,20 +187,20 @@ Constrain a generic type parameter to implement both `Nameable` and `Identifiabl
 > ```typescript
 > interface Identifiable { id: string; }
 > interface Nameable { name: string; }
-
-function printEntity<T extends Identifiable & Nameable>(entity: T) {
-  console.log(`[${entity.id}] ${entity.name}`);
-}
-
-printEntity({ id: "e100", name: "Widget", price: 19.99 });
-```
-
+> 
+> function printEntity<T extends Identifiable & Nameable>(entity: T) {
+>   console.log(`[${entity.id}] ${entity.name}`);
+> }
+> 
+> printEntity({ id: "e100", name: "Widget", price: 19.99 });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Using `&` inside generic constraints (`T extends A & B`) requires `T` to satisfy both interfaces simultaneously.
 > 2. Structural typing allows extra properties (`price`) while guaranteeing required contract keys (`id`, `name`).
 > 3. Flexible multi-interface constraint pattern.
-
+> 
 ---
 
 

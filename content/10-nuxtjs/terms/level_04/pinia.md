@@ -168,33 +168,33 @@ Create a Pinia setup store `stores/useAuthStore.ts` using composition syntax and
 > ```typescript
 > // stores/useAuthStore.ts
 > import { defineStore } from "pinia";
-
-export const useAuthStore = defineStore("auth", () => {
-  const token = ref<string | null>(null);
-  const user = ref<{ id: number; name: string } | null>(null);
-  
-  const isAuthenticated = computed(() => !!token.value);
-  
-  function setAuth(newToken: string, userData: { id: number; name: string }) {
-    token.value = newToken;
-    user.value = userData;
-  }
-  
-  function logout() {
-    token.value = null;
-    user.value = null;
-  }
-  
-  return { token, user, isAuthenticated, setAuth, logout };
-});
-```
-
+> 
+> export const useAuthStore = defineStore("auth", () => {
+>   const token = ref<string | null>(null);
+>   const user = ref<{ id: number; name: string } | null>(null);
+>   
+>   const isAuthenticated = computed(() => !!token.value);
+>   
+>   function setAuth(newToken: string, userData: { id: number; name: string }) {
+>     token.value = newToken;
+>     user.value = userData;
+>   }
+>   
+>   function logout() {
+>     token.value = null;
+>     user.value = null;
+>   }
+>   
+>   return { token, user, isAuthenticated, setAuth, logout };
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `@pinia/nuxt` enables auto-importing for `defineStore` and custom store composables inside Nuxt 3.
 > 2. Setup stores use Vue 3 Composition API syntax (`ref`, `computed`, functions).
 > 3. State is automatically hydrated from server to client seamlessly.
-
+> 
 ---
 
 ### Exercise 2: Consuming Pinia Stores in Vue Components
@@ -213,28 +213,28 @@ Consume `useAuthStore()` inside a login header component.
 > <script setup lang="ts">
 > const authStore = useAuthStore();
 > </script>
-
-<template>
-  <div>
-    <div v-if="authStore.isAuthenticated">
-      <span>Welcome, {{ authStore.user?.name }}</span>
-      <button @click="authStore.logout">Log Out</button>
-    </div>
-    <div v-else>
-      <button @click="authStore.setAuth('token123', { id: 1, name: 'Alice' })">
-        Log In
-      </button>
-    </div>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <div v-if="authStore.isAuthenticated">
+>       <span>Welcome, {{ authStore.user?.name }}</span>
+>       <button @click="authStore.logout">Log Out</button>
+>     </div>
+>     <div v-else>
+>       <button @click="authStore.setAuth('token123', { id: 1, name: 'Alice' })">
+>         Log In
+>       </button>
+>     </div>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Stores are instantiated reactively across components.
 > 2. `authStore.isAuthenticated` computes state updates across components automatically.
 > 3. Centralized global state architecture.
-
+> 
 ---
 
 ### Exercise 3: Preserving Store Reactivity with `storeToRefs()`
@@ -252,33 +252,29 @@ Destructure store state properties safely using `storeToRefs()` without breaking
 > ```vue
 > <script setup lang="ts">
 > import { storeToRefs } from "pinia";
-
-const authStore = useAuthStore();
-// Preserves reactive bindings when destructuring!
-const { user, isAuthenticated } = storeToRefs(authStore);
-const { logout } = authStore; // Methods can be destructured directly
-</script>
-
-<template>
-  <div v-if="isAuthenticated">
-    <p>User: {{ user?.name }}</p>
-    <button @click="logout">Log Out</button>
-  </div>
-</template>
-```
-
+> 
+> const authStore = useAuthStore();
+> // Preserves reactive bindings when destructuring!
+> const { user, isAuthenticated } = storeToRefs(authStore);
+> const { logout } = authStore; // Methods can be destructured directly
+> </script>
+> 
+> <template>
+>   <div v-if="isAuthenticated">
+>     <p>User: {{ user?.name }}</p>
+>     <button @click="logout">Log Out</button>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Direct ES6 object destructuring (`const { user } = authStore`) breaks Vue reactivity tracking.
 > 2. `storeToRefs()` wraps state and computed properties in reactive `ref` objects.
 > 3. Actions and methods do not need `storeToRefs()` and can be destructured directly.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`composables/` Directory](composables_directory.md) — Pinia stores are essentially super-powered composables.

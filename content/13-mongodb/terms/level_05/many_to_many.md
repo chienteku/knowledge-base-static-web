@@ -183,7 +183,7 @@ Model a Many-to-Many relationship between `students` and `courses` by embedding 
 > 1. N-to-N relationships can be modeled by storing arrays of target ObjectIds on one side of the relationship.
 > 2. Multikey index `{ courseIds: 1 }` allows querying all students enrolled in a specific course in $O(\log N)$ time.
 > 3. Eliminates relational join tables (`student_courses`).
-
+> 
 ---
 
 ### Exercise 2: Bi-Directional N-to-N Array Referencing
@@ -211,7 +211,7 @@ Model bi-directional references between `authors` (`bookIds: [...]`) and `books`
 > 1. Bi-directional references allow fast lookups starting from either side of the relationship.
 > 2. Requires application code to maintain reference synchronization when links are added or removed.
 > 3. Ideal when both read directions occur with high frequency.
-
+> 
 ---
 
 ### Exercise 3: Resolving N-to-N Links with `$lookup`
@@ -244,7 +244,7 @@ Execute an aggregation pipeline joining `students` with `courses` using `$lookup
 > 1. `$lookup` automatically resolves arrays of foreign ObjectIds (`courseIds`) against target `_id` fields.
 > 2. Returns an array of matching course documents for each student.
 > 3. Efficiently evaluates multi-document joins.
-
+> 
 ---
 
 

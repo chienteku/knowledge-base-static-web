@@ -141,7 +141,7 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 > 4. <head> (It's behind-the-scenes styling instructions)
 > ```
 > - Ask yourself: "Does the user need to look directly at this on the page?"
-
+> 
 ---
 
 
@@ -164,7 +164,7 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 > ```
 >
 > **Explanation:** Standard `<head>` metadata includes character set, responsive viewport scaling, and page title.
-
+> 
 ---
 
 ### Exercise 3: Head vs Body Display Rule
@@ -181,7 +181,7 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 > ```
 >
 > **Explanation:** `<head>` contents are non-rendered document metadata.
-
+> 
 ## 7. Related Terms
 - [`<body>`](body.md) — The sibling to `<head>` that handles all visible content.
 - [`title` Attribute](../level_07/title.md) — The most important tag that lives inside the `<head>`.

@@ -153,38 +153,38 @@ Use React `useActionState` to track form return messages and validation errors i
 >
 > ```tsx
 > "use client";
-
-import { useActionState } from "react";
-import { submitFormAction } from "@/app/actions/form";
-
-const initialState = { success: false, message: "" };
-
-export default function StateForm() {
-  const [state, formAction, isPending] = useActionState(submitFormAction, initialState);
-
-  return (
-    <form action={formAction} className="p-4 space-y-4">
-      <input name="username" required />
-      <button type="submit" disabled={isPending}>
-        {isPending ? "Submitting..." : "Register"}
-      </button>
-
-      {state.message && (
-        <p className={state.success ? "text-green-600" : "text-red-600"}>
-          {state.message}
-        </p>
-      )}
-    </form>
-  );
-}
-```
-
+> 
+> import { useActionState } from "react";
+> import { submitFormAction } from "@/app/actions/form";
+> 
+> const initialState = { success: false, message: "" };
+> 
+> export default function StateForm() {
+>   const [state, formAction, isPending] = useActionState(submitFormAction, initialState);
+> 
+>   return (
+>     <form action={formAction} className="p-4 space-y-4">
+>       <input name="username" required />
+>       <button type="submit" disabled={isPending}>
+>         {isPending ? "Submitting..." : "Register"}
+>       </button>
+> 
+>       {state.message && (
+>         <p className={state.success ? "text-green-600" : "text-red-600"}>
+>           {state.message}
+>         </p>
+>       )}
+>     </form>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useActionState(action, initialState)` manages state returned by Server Actions across form submissions.
 > 2. `formAction` is passed directly to `<form action={formAction}>`.
 > 3. `isPending` indicates whether the async Server Action is currently executing on the server.
-
+> 
 ---
 
 ### Exercise 2: Signature Requirements for Server Actions used in `useActionState`
@@ -202,26 +202,26 @@ Format a Server Action function signature to match `useActionState` expectations
 > ```typescript
 > // app/actions/form.ts
 > "use server";
-
-export async function submitFormAction(
-  prevState: { success: boolean; message: string },
-  formData: FormData
-) {
-  const username = formData.get("username") as string;
-  if (username.length < 3) {
-    return { success: false, message: "Username must be at least 3 characters." };
-  }
-
-  return { success: true, message: `User ${username} registered successfully!` };
-}
-```
-
+> 
+> export async function submitFormAction(
+>   prevState: { success: boolean; message: string },
+>   formData: FormData
+> ) {
+>   const username = formData.get("username") as string;
+>   if (username.length < 3) {
+>     return { success: false, message: "Username must be at least 3 characters." };
+>   }
+> 
+>   return { success: true, message: `User ${username} registered successfully!` };
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Server Actions consumed via `useActionState` MUST accept `prevState` as their first parameter.
 > 2. `formData` is passed as the second parameter.
 > 3. Mandatory function signature alignment.
-
+> 
 ---
 
 ### Exercise 3: Preserving Previous Form Input Values on Validation Failure
@@ -238,34 +238,30 @@ Return entered form field values in `state` to repopulate input fields when vali
 >
 > ```typescript
 > "use server";
-
-export async function validateForm(prevState: any, formData: FormData) {
-  const email = formData.get("email") as string;
-  const bio = formData.get("bio") as string;
-
-  if (!email.includes("@")) {
-    return {
-      error: "Invalid email address",
-      fields: { email, bio }
-    };
-  }
-
-  return { success: true };
-}
-```
-
+> 
+> export async function validateForm(prevState: any, formData: FormData) {
+>   const email = formData.get("email") as string;
+>   const bio = formData.get("bio") as string;
+> 
+>   if (!email.includes("@")) {
+>     return {
+>       error: "Invalid email address",
+>       fields: { email, bio }
+>     };
+>   }
+> 
+>   return { success: true };
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Returning submitted field values (`fields: { email, bio }`) inside error states prevents clearing user input.
 > 2. Client Component populates `defaultValue={state.fields?.email}` from returned state.
 > 3. Essential user experience pattern for form validation.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Server Actions Overview (`"use server"`)](server_actions.md) — The function providing the state.

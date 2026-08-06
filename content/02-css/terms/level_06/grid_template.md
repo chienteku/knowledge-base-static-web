@@ -278,7 +278,7 @@ A standard 3-column card grid:
 > ```
 > - Define three space-separated track widths.
 > - Use pixels for fixed columns, and fractional units for fluid columns.
-
+> 
 ---
 
 
@@ -301,7 +301,7 @@ A standard 3-column card grid:
 > ```
 >
 > **Explanation:** `grid-template-rows` and `grid-template-columns` define explicit grid structures.
-
+> 
 ---
 
 ### Exercise 3: grid-template Shorthand Syntax
@@ -321,7 +321,7 @@ A standard 3-column card grid:
 > ```
 >
 > **Explanation:** `grid-template` shorthand combines `rows / columns`.
-
+> 
 ## 7. Related Terms
 - [CSS Grid (Concept) & `display: grid`](grid_concept.md) — The parent trigger.
 - [`fr` Unit (Fractional Unit)](fr_unit.md) — The flexible track sizing unit.

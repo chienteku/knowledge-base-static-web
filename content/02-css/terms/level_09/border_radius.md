@@ -129,7 +129,7 @@ img.avatar { width: 100px; height: 100px; border-radius: 50%; /* Perfect circle 
 > border-radius: 20px 20px 20px 0;
 > ```
 > - Like margin and padding, `border-radius` is a shorthand property that can take 4 values!
-
+> 
 ---
 
 
@@ -150,7 +150,7 @@ img.avatar { width: 100px; height: 100px; border-radius: 50%; /* Perfect circle 
 > ```
 >
 > **Explanation:** Large pixel values (`9999px`) render perfect pill-shaped rounded ends.
-
+> 
 ---
 
 ### Exercise 3: Asymmetric Corner Radius Syntax
@@ -169,7 +169,7 @@ img.avatar { width: 100px; height: 100px; border-radius: 50%; /* Perfect circle 
 > ```
 >
 > **Explanation:** 4-value `border-radius` sets Top-Left, Top-Right, Bottom-Right, Bottom-Left corners in clockwise order.
-
+> 
 ## 7. Related Terms
 - [Border](../level_02/border.md) — The physical border boundaries.
 - [`box-shadow` (Card Shadows)](box_shadow.md) — Shadow rings which follow the border radius boundaries.

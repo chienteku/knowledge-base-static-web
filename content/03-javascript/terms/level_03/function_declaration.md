@@ -144,7 +144,7 @@ async function processData() {
 > See ya!
 > ```
 > - Just write the call at the top, and `function sayGoodbye() { ... }` at the bottom.
-
+> 
 ---
 
 ### Exercise 2: Hoisting Invocation Before Declaration Line
@@ -164,7 +164,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Function declarations hoist both identifier names and function bodies to scope top.
-
+> 
 ---
 
 ### Exercise 3: Function Declaration Scope Isolation
@@ -188,8 +188,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Function declarations create local lexical scope boundaries.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -302,7 +302,7 @@ A common bug occurs when an engineer accidentally appends a semicolon (`;`) to t
 > 3. **Ownership and Lifetime Invariants**:
 >    - The `process_frame` function takes ownership of `frame: Frame`. Local stack variables inside `process_frame` borrow from `frame.payload` during loop computation. When `process_frame` completes, `frame` is moved or dropped, leaving no dangling references.
 >
-
+> 
 ---
 
 ### Exercise 2: Financial Order Execution Audit Engine with Scoped Statement Blocks
@@ -506,7 +506,7 @@ Additionally, semicolon placement inside control flow blocks determines whether 
 > 3. **Concurrency and Mutability Invariants**:
 >    - `execute_order` takes `&mut self`, granting exclusive access to modify `self.trade_counter` and `self.total_volume_cents` sequentially without data races.
 >
-
+> 
 ---
 
 ### Exercise 3: Low-Level Embedded Sensor Driver & Register Statement Pipeline
@@ -716,7 +716,7 @@ By contrast, reading hardware values into driver state relies on **expressions**
 > 3. **Type Conversion Expressions**:
 >    - The conversion `{ let temp_c = -40.0 + ...; SensorReadout { ... } }` is a block expression producing a `SensorReadout` struct. The calculation avoids intermediate mutation by using direct mathematical mapping expressions.
 >
-
+> 
 ---
 
 ## 6. Related Terms

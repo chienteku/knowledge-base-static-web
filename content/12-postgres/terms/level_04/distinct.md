@@ -164,7 +164,7 @@ Select all unique customer countries from `addresses` table.
 > 1. `DISTINCT` eliminates duplicate result rows from query output.
 > 2. Sorts or hashes candidate rows in memory to find unique values.
 > 3. Ignores null values when combined with `IS NOT NULL`.
-
+> 
 ---
 
 ### Exercise 2: Selecting Distinct Multi-Column Combinations
@@ -190,7 +190,7 @@ Select unique combinations of `city` and `state` from `addresses`.
 > 1. Multi-column `DISTINCT` deduplicates rows based on the COMBINATION of specified column values.
 > 2. Returns distinct city/state pairs.
 > 3. Useful for populating dropdown filter menus.
-
+> 
 ---
 
 ### Exercise 3: Deduplicating Rows using `DISTINCT ON`
@@ -220,7 +220,7 @@ Select the LATEST order (`ORDER BY created_at DESC`) for each customer using Pos
 > 1. `DISTINCT ON (expression)` keeps ONLY the first row returned for each distinct value group.
 > 2. `ORDER BY customer_id, created_at DESC` ensures the first row per customer is their most recent order.
 > 3. Powerful PostgreSQL extension for top-1 per group queries.
-
+> 
 ---
 
 

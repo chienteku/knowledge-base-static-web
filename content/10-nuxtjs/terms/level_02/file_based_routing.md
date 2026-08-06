@@ -122,7 +122,7 @@ Map a list of file paths in `pages/` to their corresponding generated Vue Router
 > 1. Nuxt 3 automatically scans the `pages/` directory to generate the Vue Router table.
 > 2. Files named `index.vue` serve as index routes for their parent directory folder.
 > 3. Eliminates manual router table configuration (`router.js`).
-
+> 
 ---
 
 ### Exercise 2: Implementing Nested Child Routes with `<NuxtPage>`
@@ -147,7 +147,7 @@ Create a nested route parent `pages/parent.vue` rendering child route `pages/par
 >   </div>
 > </template>
 > ```
-
+> 
 > ```vue
 > <!-- pages/parent/child.vue -->
 > <template>
@@ -156,13 +156,13 @@ Create a nested route parent `pages/parent.vue` rendering child route `pages/par
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. When a component file `pages/parent.vue` shares a name with a directory `pages/parent/`, Nuxt creates a nested child route.
 > 2. `<NuxtPage />` inside `pages/parent.vue` acts as the router-view viewport for child routes.
 > 3. Enables nested view structures and persistent parent UI components.
-
+> 
 ---
 
 ### Exercise 3: Defining Custom Route Options via Component Names
@@ -189,13 +189,9 @@ Explain how file naming conventions enforce index route priorities and static vs
 > 1. Vue Router matches specific static route paths before evaluating dynamic parameterized routes.
 > 2. `/posts/featured` matches `pages/posts/featured.vue` even if `pages/posts/[id].vue` exists.
 > 3. Deterministic file-based route resolution rules.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`pages/` Directory](pages_directory.md) — The physical directory where this feature lives.

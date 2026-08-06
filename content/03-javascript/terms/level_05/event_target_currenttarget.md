@@ -205,7 +205,7 @@ async function processData() {
 > ```
 > - `target` points to the exact element clicked (innermost).
 > - `currentTarget` points to the element that was bound to `addEventListener`.
-
+> 
 ---
 
 ### Exercise 2: Comparing `target` and `currentTarget`
@@ -223,7 +223,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `currentTarget` tracks the active listening element during event propagation.
-
+> 
 ---
 
 ### Exercise 3: `this` Binding Equivalence in Traditional Listeners
@@ -240,8 +240,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** In standard function event handlers, `this` is bound to `event.currentTarget`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

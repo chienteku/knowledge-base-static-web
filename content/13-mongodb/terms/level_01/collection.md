@@ -157,7 +157,7 @@ An application logging service creates a capped collection `system_logs` to main
 > 1. Capped collections maintain fixed allocation sizes on disk.
 > 2. Automatically overwrites oldest documents when max size or document count limits are reached.
 > 3. Guarantees natural insertion order without index maintenance overhead.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Collection Storage Statistics
@@ -184,7 +184,7 @@ Analyze storage metrics for collection `orders` to evaluate disk space utilizati
 > 1. `db.collection.stats()` extracts storage engine statistics (WiredTiger page sizes, index footprints).
 > 2. Identifies bloated indexes and uncompressed collection storage.
 > 3. Guides index pruning and disk capacity planning.
-
+> 
 ---
 
 ### Exercise 3: Dropping Collections Cleanly
@@ -208,7 +208,7 @@ Drop temporary collection `temp_imports` to free database storage space.
 > 1. `drop()` removes collection metadata and frees allocated storage pages.
 > 2. Automatically drops all associated secondary indexes.
 > 3. Reclaims WiredTiger disk space allocation.
-
+> 
 ---
 
 

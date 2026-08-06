@@ -185,42 +185,42 @@ Implement a custom React Error Boundary component capturing child rendering cras
 >
 > ```tsx
 > "use client";
-
-import React from "react";
-
-export class CustomErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  { hasError: boolean; error: Error | null }
+> 
+> import React from "react";
+> 
+> export class CustomErrorBoundary extends React.Component<
+>   { children: React.ReactNode },
+>   { hasError: boolean; error: Error | null }
 > {
-  constructor(props: { children: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
-
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="p-4 bg-red-50 text-red-700 rounded">
-          <h2>Component Error Captured!</h2>
-          <p>{this.state.error?.message}</p>
-        </div>
-      );
-    }
-    return this.props.children;
-  }
-}
-```
-
+>   constructor(props: { children: React.ReactNode }) {
+>     super(props);
+>     this.state = { hasError: false, error: null };
+>   }
+> 
+>   static getDerivedStateFromError(error: Error) {
+>     return { hasError: true, error };
+>   }
+> 
+>   render() {
+>     if (this.state.hasError) {
+>       return (
+>         <div className="p-4 bg-red-50 text-red-700 rounded">
+>           <h2>Component Error Captured!</h2>
+>           <p>{this.state.error?.message}</p>
+>         </div>
+>       );
+>     }
+>     return this.props.children;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. React Error Boundaries intercept uncaught exceptions in child component render methods and lifecycle hooks.
 > 2. Renders fallback UI instead of unmounting the entire application view tree.
 > 3. Must be written as class components or generated via Next.js `error.tsx`.
-
+> 
 ---
 
 ### Exercise 2: Recovering from Errors with Reset Handlers
@@ -237,35 +237,35 @@ Provide a reset button inside an error boundary allowing users to retry componen
 >
 > ```tsx
 > "use client";
-
-export default function ErrorFallback({
-  error,
-  reset
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
-  return (
-    <div className="p-6 border border-red-200 bg-red-50 rounded">
-      <h3 className="text-lg font-semibold text-red-800">Something went wrong!</h3>
-      <p className="text-sm text-red-600 mt-1">{error.message}</p>
-      <button
-        onClick={() => reset()}
-        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+> 
+> export default function ErrorFallback({
+>   error,
+>   reset
+> }: {
+>   error: Error & { digest?: string };
+>   reset: () => void;
+> }) {
+>   return (
+>     <div className="p-6 border border-red-200 bg-red-50 rounded">
+>       <h3 className="text-lg font-semibold text-red-800">Something went wrong!</h3>
+>       <p className="text-sm text-red-600 mt-1">{error.message}</p>
+>       <button
+>         onClick={() => reset()}
+>         className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
       >
-        Try Again
-      </button>
-    </div>
-  );
-}
-```
-
+>         Try Again
+>       </button>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Next.js passes a `reset()` callback function to error fallback components.
 > 2. Executing `reset()` re-attempts to render the failed route segment component tree.
 > 3. Standard user error recovery workflow.
-
+> 
 ---
 
 ### Exercise 3: Auditing Error Digest Hashing for Production Security
@@ -282,33 +282,29 @@ Inspect `error.digest` hash in production error logs to prevent exposing databas
 >
 > ```tsx
 > "use client";
-
-export default function SecureErrorPage({
-  error
-}: {
-  error: Error & { digest?: string };
-}) {
-  return (
-    <div>
-      <h2>Application Error</h2>
-      <p>Reference Code: {error.digest ?? "N/A"}</p>
-    </div>
-  );
-}
-```
-
+> 
+> export default function SecureErrorPage({
+>   error
+> }: {
+>   error: Error & { digest?: string };
+> }) {
+>   return (
+>     <div>
+>       <h2>Application Error</h2>
+>       <p>Reference Code: {error.digest ?? "N/A"}</p>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. In production builds, Next.js strips sensitive exception stack traces before sending errors to the client.
 > 2. Attaches a unique `error.digest` hash value for server log tracking.
 > 3. Protects internal database connection strings and secrets from leaking.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`error.tsx` & `global-error.tsx`](error.md) — Next.js's wrapper that creates Error Boundaries automatically.

@@ -145,13 +145,13 @@ Enable full route segment streaming for `/dashboard` by creating `app/dashboard/
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Next.js automatically wraps `page.tsx` in a React `<Suspense>` boundary when `loading.tsx` exists.
 > 2. Streams the initial HTML layout and loading skeleton instantly over HTTP.
 > 3. Once Server Component data resolves, Next.js streams inline script tags to swap the skeleton with final content.
-
+> 
 ---
 
 ### Exercise 2: Selective Component Streaming with `<Suspense>`
@@ -168,32 +168,32 @@ Stream a slow comments widget (`<Comments />`) without blocking the primary arti
 >
 > ```tsx
 > import { Suspense } from "react";
-
-async function Comments() {
-  const comments = await fetch("https://api.example.com/comments", { cache: "no-store" }).then(r => r.json());
-  return <ul>{comments.map((c: any) => <li key={c.id}>{c.text}</li>)}</ul>;
-}
-
-export default function ArticlePage() {
-  return (
-    <article className="p-6">
-      <h1>Main Article Title</h1>
-      <p>Fast server-rendered article content body...</p>
-      
-      <Suspense fallback={<div>Loading Comments...</div>}>
-        <Comments />
-      </Suspense>
-    </article>
-  );
-}
-```
-
+> 
+> async function Comments() {
+>   const comments = await fetch("https://api.example.com/comments", { cache: "no-store" }).then(r => r.json());
+>   return <ul>{comments.map((c: any) => <li key={c.id}>{c.text}</li>)}</ul>;
+> }
+> 
+> export default function ArticlePage() {
+>   return (
+>     <article className="p-6">
+>       <h1>Main Article Title</h1>
+>       <p>Fast server-rendered article content body...</p>
+>       
+>       <Suspense fallback={<div>Loading Comments...</div>}>
+>         <Comments />
+>       </Suspense>
+>     </article>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Fast content (article title & body) renders and streams immediately to the browser.
 > 2. Slow content (`<Comments />`) streams progressively as it resolves on the server.
 > 3. Dramatically improves First Contentful Paint (FCP) and Time To First Byte (TTFB).
-
+> 
 ---
 
 ### Exercise 3: Auditing HTTP Response Headers for Streaming
@@ -213,19 +213,15 @@ Verify that HTTP streaming is active by checking `Transfer-Encoding: chunked` he
 > - Response Header: Transfer-Encoding: chunked
 > - Response Header: Content-Type: text/html; charset=utf-8
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `Transfer-Encoding: chunked` indicates the HTTP server is streaming data in progressive chunks without specifying `Content-Length`.
 > 2. Enables browsers to parse and render HTML chunks as they arrive over the wire.
 > 3. Empirical verification of server HTML streaming architecture.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`loading.tsx`](../level_02/loading.md) — The automatic page-level implementation of Streaming.

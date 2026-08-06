@@ -191,7 +191,7 @@ Define a Mongoose virtual property `fullName` that concatenates `firstName` and 
 > 1. Virtual properties are dynamic getter/setter attributes computed on the fly in Node.js.
 > 2. Do not consume BSON disk storage in MongoDB collections.
 > 3. Included in `toJSON()` API responses when `virtuals: true` is configured.
-
+> 
 ---
 
 ### Exercise 2: Defining Custom Instance and Static Model Methods
@@ -223,7 +223,7 @@ Add a custom instance method `verifyPassword()` and static model method `findByE
 > 1. `methods` attach custom helper functions to document instances (`user.verifyPassword()`).
 > 2. `statics` attach custom query helpers directly to the compiled Model (`User.findByEmail()`).
 > 3. Promotes Active Record business logic encapsulation.
-
+> 
 ---
 
 ### Exercise 3: Defining Custom Schema Field Validators
@@ -255,7 +255,7 @@ Add a custom regex validator ensuring `phone` strings conform to valid US phone 
 > 1. Custom `validate` functions evaluate field inputs before saving documents to MongoDB.
 > 2. Returns custom error messages on validation failure.
 > 3. Enforces domain data validation in Mongoose.
-
+> 
 ---
 
 

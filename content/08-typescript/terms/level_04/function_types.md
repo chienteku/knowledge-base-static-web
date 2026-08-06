@@ -121,26 +121,26 @@ Type a `filterArray` utility function taking an array `T[]` and a predicate call
 >
 > ```typescript
 > type Predicate<T> = (item: T) => boolean;
-
-function filterArray<T>(items: T[], predicate: Predicate<T>): T[] {
-  const result: T[] = [];
-  for (const item of items) {
-    if (predicate(item)) {
-      result.push(item);
-    }
-  }
-  return result;
-}
-
-const evens = filterArray([1, 2, 3, 4], (num) => num % 2 === 0);
-```
-
+> 
+> function filterArray<T>(items: T[], predicate: Predicate<T>): T[] {
+>   const result: T[] = [];
+>   for (const item of items) {
+>     if (predicate(item)) {
+>       result.push(item);
+>     }
+>   }
+>   return result;
+> }
+> 
+> const evens = filterArray([1, 2, 3, 4], (num) => num % 2 === 0);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Function types `(item: T) => boolean` describe input parameters and return types as first-class values.
 > 2. `filterArray` infers `num` as `number` inside the inline callback without manual annotations.
 > 3. Standard higher-order function typing pattern.
-
+> 
 ---
 
 ### Exercise 2: Defining Callable Object Interfaces (Call Signatures)
@@ -160,22 +160,22 @@ Create an interface for a callable function object that also has a static `versi
 >   (input: string): string; // Call signature
 >   version: string;        // Property signature
 > }
-
-const format: Formatter = Object.assign(
-  (input: string) => input.trim().toLowerCase(),
-  { version: "1.0.0" }
-);
-
-console.log(format("  Hello  ")); // "hello"
-console.log(format.version);      // "1.0.0"
-```
-
+> 
+> const format: Formatter = Object.assign(
+>   (input: string) => input.trim().toLowerCase(),
+>   { version: "1.0.0" }
+> );
+> 
+> console.log(format("  Hello  ")); // "hello"
+> console.log(format.version);      // "1.0.0"
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Interfaces with call signatures `(param: T): R` model callable JavaScript functions with attached static properties.
 > 2. Essential for modeling legacy JavaScript libraries like jQuery (`$`) or Axios.
 > 3. Advanced function object modeling pattern.
-
+> 
 ---
 
 ### Exercise 3: Construct Signatures (`new () => T`)
@@ -194,25 +194,25 @@ Type a factory function that instantiates new class instances using a construct 
 > interface Constructor<T> {
 >   new (...args: any[]): T;
 > }
-
-class Service {
-  execute() { return "Service Executed"; }
-}
-
-function createInstance<T>(ctor: Constructor<T>): T {
-  return new ctor();
-}
-
-const instance = createInstance(Service);
-console.log(instance.execute());
-```
-
+> 
+> class Service {
+>   execute() { return "Service Executed"; }
+> }
+> 
+> function createInstance<T>(ctor: Constructor<T>): T {
+>   return new ctor();
+> }
+> 
+> const instance = createInstance(Service);
+> console.log(instance.execute());
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Construct signatures `new (...args: any[]) => T` describe class constructors that produce instances of type `T`.
 > 2. `new` keyword indicates that the function MUST be invoked with `new`.
 > 3. Standard pattern for dependency injection containers and factory functions.
-
+> 
 ---
 
 

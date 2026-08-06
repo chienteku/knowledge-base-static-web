@@ -139,32 +139,32 @@ Create a `BankAccount` class using `private` for balance and `protected` for acc
 > class BankAccount {
 >   private balance: number;
 >   protected accountNumber: string;
-
-  constructor(accountNumber: string, initialBalance: number) {
-    this.accountNumber = accountNumber;
-    this.balance = initialBalance;
-  }
-
-  public getBalance(): number {
-    return this.balance;
-  }
-}
-
-class SavingsAccount extends BankAccount {
-  public getAccountInfo(): string {
-    // Accessible! accountNumber is protected:
-    return `Account: ${this.accountNumber}`;
-    // ❌ Error: this.balance is private to BankAccount!
-  }
-}
-```
-
+> 
+>   constructor(accountNumber: string, initialBalance: number) {
+>     this.accountNumber = accountNumber;
+>     this.balance = initialBalance;
+>   }
+> 
+>   public getBalance(): number {
+>     return this.balance;
+>   }
+> }
+> 
+> class SavingsAccount extends BankAccount {
+>   public getAccountInfo(): string {
+>     // Accessible! accountNumber is protected:
+>     return `Account: ${this.accountNumber}`;
+>     // ❌ Error: this.balance is private to BankAccount!
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `private` members are accessible ONLY within the declaring class body.
 > 2. `protected` members are accessible within the declaring class AND derived subclasses.
 > 3. `public` (default) members are accessible anywhere.
-
+> 
 ---
 
 ### Exercise 2: TypeScript `private` vs JavaScript `#private` Fields
@@ -183,20 +183,20 @@ Contrast TypeScript `private name` (compile-time) against native ES `#name` priv
 > class SecureVault {
 >   #secretKey: string; // Native JS Private Field (Hard Runtime Isolation)
 >   private apiKey: string; // TS Access Modifier (Compile-time Check Only)
-
-  constructor(secret: string, api: string) {
-    this.#secretKey = secret;
-    this.apiKey = api;
-  }
-}
-```
-
+> 
+>   constructor(secret: string, api: string) {
+>     this.#secretKey = secret;
+>     this.apiKey = api;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript `private` is enforced ONLY at compile time; erased in JavaScript output and accessible via bracket inspection `(obj as any)["apiKey"]`.
 > 2. Native ES `#private` fields provide true runtime encapsulation enforced by the V8 JavaScript engine.
 > 3. Use `#private` for security-critical runtime secrets.
-
+> 
 ---
 
 ### Exercise 3: Access Modifier Inheritance Matrix
@@ -218,13 +218,13 @@ Formulate an encapsulation visibility matrix for `public`, `protected`, `private
 > - private (TS): Class (YES), Subclass (NO), External (NO - Compile Time Only).
 > - #private (ES): Class (YES), Subclass (NO), External (NO - True Hard Runtime Isolation).
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Access modifiers enforce encapsulation boundaries in class architectures.
 > 2. TypeScript access modifiers add type safety without runtime performance overhead.
 > 3. Core object-oriented design principle.
-
+> 
 ---
 
 

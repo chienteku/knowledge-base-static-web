@@ -217,7 +217,7 @@ machine.run.call(customMachine);
 > - Call 1 uses **Implicit Binding** (prints `"Model X"`).
 > - Call 2 uses **Default Binding**, which resolves to `undefined` in strict mode, crashing when trying to read `.brand`.
 > - Call 3 uses **Explicit Binding**, overriding context to `customMachine` (prints `"Model Y"`).
-
+> 
 ---
 
 ### Exercise 2: Strict Mode Default `this` Verification
@@ -238,7 +238,7 @@ machine.run.call(customMachine);
 > ```
 >
 > **Explanation:** Strict mode prevents default fallback binding of `this` to global window objects.
-
+> 
 ---
 
 ### Exercise 3: Detached Method Default Binding
@@ -256,8 +256,8 @@ machine.run.call(customMachine);
 > ```
 >
 > **Explanation:** Calling detached methods directly loses object context, reverting `this` to default binding.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

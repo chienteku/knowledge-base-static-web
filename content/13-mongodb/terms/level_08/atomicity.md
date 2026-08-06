@@ -170,7 +170,7 @@ Atomically decrement inventory stock count ONLY IF available stock is >= request
 > 1. Single-document write operations are completely atomic at the storage engine level.
 > 2. Including condition `stock: { $gte: 2 }` in the query filter acts as an atomic optimistic lock.
 > 3. Prevents race conditions without heavy transaction locks.
-
+> 
 ---
 
 ### Exercise 2: Atomic Array Element Manipulation
@@ -200,7 +200,7 @@ Push a new item to an order's `items` array and update `totalAmount` in a single
 > 1. Multiple update operators (`$push`, `$inc`) inside a single `updateOne()` execute atomically as a single unit of work.
 > 2. Either both array push and total increment succeed, or neither succeeds.
 > 3. Guarantees single-document internal consistency.
-
+> 
 ---
 
 ### Exercise 3: Evaluating Multi-Document Transaction Abort Behavior
@@ -237,7 +237,7 @@ Demonstrate transaction abort rollback when an error occurs during a 2-step tran
 > 1. `session.abortTransaction()` discards all pending uncommitted writes in the transaction buffer.
 > 2. Reverts database state to pre-transaction snapshot.
 > 3. Enforces strict multi-document atomicity.
-
+> 
 ---
 
 

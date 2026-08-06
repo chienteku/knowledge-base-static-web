@@ -127,13 +127,13 @@ Write a function `doubleValue` taking `input: number | string | boolean` and pro
 >   return input ? "TRUE_TRUE" : "FALSE_FALSE";
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `typeof` expressions return standard JS type strings (`"number"`, `"string"`, `"boolean"`, `"symbol"`, `"bigint"`, `"function"`, `"object"`).
 > 2. TypeScript uses `typeof` conditions to narrow primitive union parameters inside `if` branches.
 > 3. Standard primitive type guard mechanism.
-
+> 
 ---
 
 ### Exercise 2: Class Prototype Instance Narrowing with `instanceof`
@@ -156,13 +156,13 @@ Differentiate between `Date` and `RegExp` objects passed as `input: Date | RegEx
 >   return input.source; // input narrowed to RegExp
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `instanceof` checks if a constructor's `prototype` property appears in an object's prototype chain.
 > 2. Narrows union parameters to specific class constructor types (`Date`, `RegExp`, custom classes).
 > 3. Reliable mechanism for object prototype instance narrowing.
-
+> 
 ---
 
 ### Exercise 3: Auditing `typeof null === "object"` Edge Case
@@ -183,19 +183,19 @@ Explain why `typeof val === "object"` is insufficient for checking non-null obje
 >   // if (typeof val === "object") {
 >   //   console.log(val.toString()); // Crashes if val is null!
 >   // }
-
-// ✅ SAFE (Include explicit null check):
-if (typeof val === "object" && val !== null) {
-  console.log(val.toString());
-}
-```
-
+> 
+> // ✅ SAFE (Include explicit null check):
+> if (typeof val === "object" && val !== null) {
+>   console.log(val.toString());
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. In JavaScript, `typeof null` evaluates to `"object"` due to a legacy 1995 implementation quirk.
 > 2. `typeof val === "object"` alone does NOT exclude `null`.
 > 3. Always pair `typeof val === "object"` with `val !== null` checks.
-
+> 
 ---
 
 

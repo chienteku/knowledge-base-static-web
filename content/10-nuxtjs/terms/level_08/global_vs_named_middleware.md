@@ -153,13 +153,13 @@ Create a global middleware `middleware/01.analytics.global.ts` that tracks route
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Filenames ending in `.global.ts` are automatically registered as global route middleware.
 > 2. Executes on every route transition without requiring `definePageMeta()` configuration on individual pages.
 > 3. Numeric prefix `01.` controls middleware execution order.
-
+> 
 ---
 
 ### Exercise 2: Authoring Named Page Middleware
@@ -185,7 +185,7 @@ Create a named middleware `middleware/auth.ts` and attach it to `pages/dashboard
 >   }
 > });
 > ```
-
+> 
 > ```vue
 > <!-- pages/dashboard.vue -->
 > <script setup lang="ts">
@@ -194,13 +194,13 @@ Create a named middleware `middleware/auth.ts` and attach it to `pages/dashboard
 > });
 > </script>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Named middleware files (without `.global.ts`) are executed ONLY when explicitly referenced in `definePageMeta()`.
 > 2. `middleware: ['auth']` executes named guard logic before component rendering.
 > 3. Modular route protection pattern.
-
+> 
 ---
 
 ### Exercise 3: Middleware Execution Precedence Rules
@@ -227,13 +227,9 @@ Formulate an execution order matrix for inline middleware, global middleware, an
 > 1. Global middleware runs first for all application routes.
 > 2. Named and inline page middleware execute sequentially afterwards.
 > 3. Deterministic middleware precedence model.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`pages/` Directory](../level_02/pages_directory.md) — The macro used to attach Named Middleware to a specific page.

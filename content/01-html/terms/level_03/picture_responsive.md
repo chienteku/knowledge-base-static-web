@@ -162,7 +162,7 @@ Serving a desktop image versus a mobile image:
 > ```
 > - Nest a `<source>` tag with the `media` filter first.
 > - The fallback `<img>` must carry the `src` and `alt` attributes.
-
+> 
 ---
 
 
@@ -185,7 +185,7 @@ Serving a desktop image versus a mobile image:
 > ```
 >
 > **Explanation:** `<picture>` matches `type` formats top-to-bottom, delivering optimal image codec files.
-
+> 
 ---
 
 ### Exercise 3: Art Direction vs Resolution Switching
@@ -202,7 +202,7 @@ Serving a desktop image versus a mobile image:
 > ```
 >
 > **Explanation:** `<picture>` supports structural art direction changes via media queries.
-
+> 
 ## 7. Related Terms
 - [`<img>`](img.md) — The rendering image element.
 - [`<source>` Element](source.md) — The sibling element specifying source lists.

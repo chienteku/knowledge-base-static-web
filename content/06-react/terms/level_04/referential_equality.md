@@ -195,7 +195,7 @@ function ThemeDisplay() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Object.is Equality Comparison in React
@@ -212,7 +212,7 @@ function ThemeDisplay() {
 > ```
 >
 > **Explanation:** React uses `Object.is` for state change and dependency array comparisons.
-
+> 
 ---
 
 ### Exercise 3: Preserving Reference with useMemo
@@ -229,7 +229,7 @@ function ThemeDisplay() {
 > ```
 >
 > **Explanation:** `useMemo` preserves object memory references across re-renders.
-
+> 
 ## 7. Related Terms
 - [`useCallback` Hook](use_callback.md) — The hook designed to preserve function reference identities.
 - [React.memo](../level_08/react_memo.md) — The component rendering cache that relies on shallow reference equality.

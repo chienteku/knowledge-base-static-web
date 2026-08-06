@@ -124,7 +124,7 @@ Vue provides **Modifiers** to handle this in the template, keeping your JavaScri
 > <input @keyup.escape="search" />
 > ```
 > - Use `v-on` (the `@` shorthand), listen to `keyup`, and apply a modifier for the specific key!
-
+> 
 ---
 
 ### Exercise 2: Inline Parameter and Event Passing
@@ -141,7 +141,7 @@ Vue provides **Modifiers** to handle this in the template, keeping your JavaScri
 > ```html
 > <button @click="removeUser(42, $event)">Delete User</button>
 > ```
-
+> 
 ---
 
 ### Exercise 3: Keyboard Event Modifier Chaining
@@ -158,8 +158,8 @@ Vue provides **Modifiers** to handle this in the template, keeping your JavaScri
 > ```html
 > <div @keydown.ctrl.s.prevent="saveDoc">Save Document</div>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

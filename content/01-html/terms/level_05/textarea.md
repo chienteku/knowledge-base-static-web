@@ -146,7 +146,7 @@ textarea {
 > `textarea { resize: vertical; }`
 > ```
 > - Search for "CSS textarea resize".
-
+> 
 ---
 
 
@@ -165,7 +165,7 @@ textarea {
 > ```
 >
 > **Explanation:** `rows`/`cols` specify initial box dimensions; `maxlength` enforces character limits.
-
+> 
 ---
 
 ### Exercise 3: Preserving Textarea Line Breaks
@@ -184,7 +184,7 @@ textarea {
 > ```
 >
 > **Explanation:** `white-space: pre-wrap` preserves newlines and wraps text output.
-
+> 
 ## 7. Related Terms
 - [`<input>`](input.md) — The single-line equivalent for short data.
 - [`placeholder` Attribute](placeholder.md) — The visual cue comparison.

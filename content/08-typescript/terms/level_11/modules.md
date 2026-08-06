@@ -93,21 +93,21 @@ Export named and default functions from `mathUtils.ts` and import them in `app.t
 > export function add(a: number, b: number): number { return a + b; }
 > export default function multiply(a: number, b: number): number { return a * b; }
 > ```
-
+> 
 > ```typescript
 > // app.ts
 > import multiply, { PI, add } from "./mathUtils.js";
-
-console.log(add(5, 10));
-console.log(multiply(2, 4));
-```
-
+> 
+> console.log(add(5, 10));
+> console.log(multiply(2, 4));
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Named exports (`export const PI`) require exact curly brace matching during import (`import { PI }`).
 > 2. Default exports (`export default`) are imported without curly braces and can be renamed freely at import sites.
 > 3. Standard ES module syntax.
-
+> 
 ---
 
 ### Exercise 2: Re-Exporting Modules from Index Barrel Files
@@ -128,13 +128,13 @@ Create an `index.ts` barrel file that re-exports all components from sub-modules
 > export * from "./Card.js";
 > export { default as Modal } from "./Modal.js";
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Barrel export files (`index.ts`) consolidate exports from multiple internal sub-modules into a single public import entry point.
 > 2. Simplifies import paths for external consumers (`import { Button, Card } from "./components"`).
 > 3. Standard module architecture pattern.
-
+> 
 ---
 
 ### Exercise 3: Auditing Global Script vs Module Scope
@@ -156,29 +156,20 @@ Explain why a TypeScript file containing NO `import` or `export` statements is t
 > // Fix: Add empty export to force ES module scoping:
 > export {};
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Files without top-level `import` or `export` statements are evaluated as global scripts by TypeScript.
 > 2. Top-level variables in global scripts collide across files sharing the same project context.
 > 3. Adding `export {}` forces TypeScript to treat the file as a scoped ES module.
-
+> 
 ---
-
-
-
-
-
----
-
-
 
 ## 6. Related Terms
 - [Namespaces](namespaces.md) — TypeScript's outdated, legacy module system that was used before ES Modules became the standard.
 
 ---
 
----
 
 ## 7. Key Takeaways
 

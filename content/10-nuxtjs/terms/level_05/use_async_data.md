@@ -139,21 +139,21 @@ Fetch user data and user permissions in parallel using `Promise.all` inside `use
 >   return { user, permissions };
 > });
 > </script>
-
-<template>
-  <div v-if="data">
-    <h1>Welcome, {{ data.user.name }}</h1>
-    <p>Role: {{ data.permissions.role }}</p>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div v-if="data">
+>     <h1>Welcome, {{ data.user.name }}</h1>
+>     <p>Role: {{ data.permissions.role }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useAsyncData()` wraps custom async functions, allowing multiple API requests to execute in parallel during SSR.
 > 2. Bundles combined data results into a single payload cache entry under `"user-profile-bundle"`.
 > 3. Reduces waterfall network request delays.
-
+> 
 ---
 
 ### Exercise 2: Using the `transform` Option to Filter Response Attributes
@@ -180,20 +180,20 @@ Transform an API user list to extract ONLY user names and IDs before payload ser
 >   }
 > );
 > </script>
-
-<template>
-  <ul>
-    <li v-for="u in userList" :key="u.id">{{ u.name }}</li>
-  </ul>
-</template>
-```
-
+> 
+> <template>
+>   <ul>
+>     <li v-for="u in userList" :key="u.id">{{ u.name }}</li>
+>   </ul>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `transform` modifies the return data before it is written to the reactive `data` ref and `NuxtPayload`.
 > 2. Filters out heavy, unnecessary API response attributes.
 > 3. Reduces memory usage and SSR payload size.
-
+> 
 ---
 
 ### Exercise 3: Deferred Data Fetching with `lazy: true`
@@ -216,29 +216,25 @@ Execute `useAsyncData()` without blocking client-side route navigation transitio
 >   { lazy: true }
 > );
 > </script>
-
-<template>
-  <div>
-    <div v-if="pending">Loading Reports...</div>
-    <div v-else-if="reports">
-      <p>Total Reports: {{ reports.length }}</p>
-    </div>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <div v-if="pending">Loading Reports...</div>
+>     <div v-else-if="reports">
+>       <p>Total Reports: {{ reports.length }}</p>
+>     </div>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `lazy: true` instructs Nuxt to navigate to the target page immediately while data fetching resolves in the background.
 > 2. `pending` indicates whether background data resolution is currently in progress.
 > 3. Improves perceived routing speed for heavy analytical pages.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Caching Data](caching_data.md) — How the unique string key is used to cache data across navigations.

@@ -111,10 +111,6 @@ import fs from 'fs'; // ❌ Build Error: Node module 'fs' not supported in Edge 
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Configuring Edge Deployment Presets in Nitro
@@ -137,13 +133,13 @@ Configure `nuxt.config.ts` to target Cloudflare Pages edge deployment using Nitr
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Edge-Side Rendering (ESR) executes Nitro server handlers on global CDN edge nodes.
 > 2. `preset: "cloudflare-pages"` compiles server code into lightweight WebAssembly/V8 isolates.
 > 3. Reduces TTFB (Time-To-First-Byte) latency by rendering HTML geographically close to users.
-
+> 
 ---
 
 ### Exercise 2: Accessing Edge Request Context Objects
@@ -167,13 +163,13 @@ Access request geo-location data provided by edge runtime headers (`cf-ipcountry
 >   return { country };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Edge networks attach client geo-location metadata to incoming HTTP request headers.
 > 2. `getHeader()` reads custom edge headers inside Nitro event handlers.
 > 3. Enables instant localized edge HTML rendering.
-
+> 
 ---
 
 ### Exercise 3: Optimizing Edge Bundle Sizes
@@ -193,19 +189,15 @@ Explain why heavy Node.js built-in modules (`fs`, `child_process`) must be avoid
 > - Edge isolates (V8 isolates) lack full Node.js C++ bindings (no fs, child_process, or native C modules).
 > - Solution: Use web-standard APIs (fetch, Request, Response, TransformStream, Web Crypto API) inside Nitro handlers.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Edge runtimes execute on lightweight JS engine workers rather than full Node.js servers.
 > 2. Standard Web APIs (`fetch`, `crypto`) guarantee cross-platform edge compatibility.
 > 3. Essential rule for building edge-ready Nuxt applications.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Nitro Engine](../level_01/nitro_engine.md) — The engine that compiles the edge-compatible output.

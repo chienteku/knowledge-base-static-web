@@ -193,7 +193,7 @@ console.log("baseUser keys count:", Object.keys(baseUser).length);
 > baseUser keys count: 2
 > ```
 > - Write `Object.assign({}, baseUser, roleDetails)`.
-
+> 
 ---
 
 ### Exercise 2: Merging Multiple Source Objects
@@ -211,7 +211,7 @@ console.log("baseUser keys count:", Object.keys(baseUser).length);
 > ```
 >
 > **Explanation:** `Object.assign(target, ...sources)` copies own enumerable properties from sources into target.
-
+> 
 ---
 
 ### Exercise 3: Mutating Target Objects in `Object.assign`
@@ -230,8 +230,8 @@ console.log("baseUser keys count:", Object.keys(baseUser).length);
 > ```
 >
 > **Explanation:** `Object.assign` mutates and returns the first argument `target` reference.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

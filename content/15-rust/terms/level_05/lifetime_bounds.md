@@ -228,7 +228,7 @@ trait Processor<'a, T: 'a> { // Explicitly guarantees T lives at least as long a
 > 1. `Box<dyn EventHandler + 'a>` explicitly overrides the default `'static` trait object bound to allow storing trait implementations that borrow data valid for `'a`.
 > 2. `PrefixHandler<'a>` implements `EventHandler` while holding `&'a str`.
 > 3. `EventDispatcher<'a>` ensures all contained trait objects remain valid until lifetime `'a` ends.
-
+> 
 ---
 
 ### Exercise 2: Cascading Configuration Parser with Outlives Bounds (`'b: 'a`)
@@ -296,7 +296,7 @@ trait Processor<'a, T: 'a> { // Explicitly guarantees T lives at least as long a
 > 1. `'b: 'a` specifies that lifetime `'b` (the raw text buffer) outlives lifetime `'a` (the parser reference).
 > 2. `parse_key` returns `Option<&'b str>`, tying the returned slice to the buffer's longer lifetime `'b` rather than the parser's lifetime `'a`.
 > 3. The test confirms `extracted_val` remains valid after `parser` is dropped.
-
+> 
 ---
 
 ### Exercise 3: Generic Async Task Payload Context (`T: 'a`)
@@ -339,7 +339,7 @@ trait Processor<'a, T: 'a> { // Explicitly guarantees T lives at least as long a
 > #[cfg(test)]
 > mod tests {
 >     use super::*;
-
+> 
 > 
 >     #[test]
 >     fn test_generic_task_wrapper_bound() {
@@ -358,7 +358,7 @@ trait Processor<'a, T: 'a> { // Explicitly guarantees T lives at least as long a
 >
 > 1. `T: 'a` ensures generic payload `T` (like `DatabaseContext<'ctx>`) does not contain references that expire before `'a`.
 > 2. `execute` passes `&'a T` into the closure safely, guaranteeing lifetime consistency across generic abstractions.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -165,7 +165,7 @@ Generate all possible combinations of product sizes (`'S'`, `'M'`, `'L'`) and co
 > 1. `CROSS JOIN` produces the Cartesian product ($M 	imes N$) of two relations.
 > 2. Pairs 3 sizes with 3 colors to output 9 total variant rows.
 > 3. Useful for generating matrix grids and calendar date scaffolds.
-
+> 
 ---
 
 ### Exercise 2: Building Calendar Date Grid Scaffolds
@@ -197,7 +197,7 @@ Cross-join a `generate_series` date range with a list of store locations to buil
 > 1. Generates 7 daily dates for each store location.
 > 2. Guarantees every store has a date row slot in analytical reporting queries.
 > 3. Grid generation pattern.
-
+> 
 ---
 
 ### Exercise 3: Performance Warning for Large Cartesian Products
@@ -224,7 +224,7 @@ Explain why `CROSS JOIN` over two 100,000-row tables crashes server RAM if execu
 > 1. Un-intentional `CROSS JOIN` occurs when developers omit `ON` clauses in comma-separated `FROM tableA, tableB` syntax.
 > 2. Consumes gigabytes of server RAM and temporary disk space.
 > 3. Critical SQL query optimization warning.
-
+> 
 ---
 
 

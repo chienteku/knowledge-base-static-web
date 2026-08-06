@@ -109,7 +109,7 @@ export const globalState = reactive({ user: null }); // ❌ Shared state leak ac
 > Vue tracks dependencies at an extremely granular level. It knows that the first 49 paragraphs do not depend on `counter`. It will only touch the 50th paragraph.
 > ```
 > - Vue is surgical. It isn't React.
-
+> 
 ---
 
 ### Exercise 2: Deep Reactivity Tracking
@@ -127,7 +127,7 @@ export const globalState = reactive({ user: null }); // ❌ Shared state leak ac
 > const state = reactive({ nested: { count: 0 } });
 > state.nested.count++; // Triggers template re-render!
 > ```
-
+> 
 ---
 
 ### Exercise 3: State Immutability Best Practice
@@ -144,8 +144,8 @@ export const globalState = reactive({ user: null }); // ❌ Shared state leak ac
 > ```javascript
 > function increment() { count.value++; }
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

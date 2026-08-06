@@ -111,7 +111,7 @@ X-RateLimit-Reset: 1700000060
 > If the API Key belongs to a Free Tier user, the backend sets their limit to 100 requests per day. If the API Key belongs to a Pro Tier user, the backend sets their limit to 10,000 requests per day. Rate limiting isn't just for security; it's the core engine of API monetization.
 > ```
 > - Rate limiting doesn't have to be a global setting. It can be per-user.
-
+> 
 ---
 
 ### Exercise 2: Token Bucket vs Leaky Bucket Algorithms

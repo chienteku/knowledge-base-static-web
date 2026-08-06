@@ -325,7 +325,7 @@ Implement an `EnvSanitizer` module that processes raw `(OsString, OsString)` key
 >    - `audit_entry` takes ownership of `key` and `value` (`OsString`), moving them into `EnvAuditEntry` to avoid defensive cloning of potentially large OS environment blocks.
 >    - `filter_valid_paths` borrows `&[EnvAuditEntry]` and `&OsStr`, returning newly owned `OsString` clones of the matching entries.
 >
-
+> 
 ---
 
 ### Exercise 2: High-Performance Non-UTF-8 Filesystem Indexer & Path Rule Engine
@@ -474,7 +474,7 @@ Implement an `OsPathIndexer` utility:
 > 4. **Partitioning and Non-UTF-8 Preservation:**
 >    - `.to_str()` acts as the boundary inspector. Valid UTF-8 filenames are safely stored in `Vec<String>`, while non-UTF-8 filenames remain wrapped as `OsString` to prevent data corruption.
 >
-
+> 
 ---
 
 ### Exercise 3: Cross-Platform Subprocess CLI Command Argument Pipeline & Guardrail Validator
@@ -671,7 +671,7 @@ Implement a subprocess argument pipeline `OsCommandPipeline`:
 > 4. **Lossy Log Formatting (`.to_string_lossy()`):**
 >    - Subprocess execution itself operates on exact `OsString` parameters. Log display relies on `.to_string_lossy()` to render human-readable diagnostic strings without panicking on non-UTF-8 arguments.
 >
-
+> 
 ---
 
 ## 6. Related Terms

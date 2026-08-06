@@ -181,7 +181,7 @@ Comparing focus properties:
 > Set `tabindex="-1"` on the links when the menu is collapsed.
 > ```
 > - Which tabindex value completely removes an element from the keyboard tab sequence?
-
+> 
 ---
 
 
@@ -207,7 +207,7 @@ Comparing focus properties:
 > ```
 >
 > **Explanation:** `tabindex="0"` inserts into tab flow; `-1` enables JS focus only.
-
+> 
 ---
 
 ### Exercise 3: Focusing Modal Containers
@@ -224,7 +224,7 @@ Comparing focus properties:
 > ```
 >
 > **Explanation:** `tabindex="-1"` allows programmatic JS `.focus()` without inserting element into tab flow.
-
+> 
 ## 7. Related Terms
 - [`<button>`](../level_05/button.md) — The standard focusable trigger.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — Focusable navigation elements.

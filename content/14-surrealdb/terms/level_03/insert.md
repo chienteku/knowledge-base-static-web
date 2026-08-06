@@ -168,7 +168,7 @@ An inventory seeding script inserts multiple product documents into table `produ
 > 1. `INSERT INTO table [ {...}, {...} ]` bulk-inserts an array of document objects in a single database roundtrip.
 > 2. Operates similarly to SQL `INSERT INTO ... VALUES` and MongoDB `insertMany()`.
 > 3. Automatically generates unique random IDs for inserted records if IDs are omitted.
-
+> 
 ---
 
 ### Exercise 2: Bulk Insertion with Explicit Record IDs
@@ -195,7 +195,7 @@ A user migration script bulk-inserts user records with explicit string primary k
 > 1. Specifying `id: table:explicit_id` inside bulk insertion objects assigns primary keys explicitly.
 > 2. If an ID already exists, the `INSERT` operation fails with a primary key collision error.
 > 3. Ensures deterministic primary key seeding during migrations.
-
+> 
 ---
 
 ### Exercise 3: Inserting Single Record Objects
@@ -222,7 +222,7 @@ Insert a single customer record into table `customer` using `INSERT INTO` instea
 > 1. `INSERT INTO table { ... }` inserts a single document object without wrapping in an array.
 > 2. Returns the created record document payload.
 > 3. Provides familiar SQL DML insertion syntax.
-
+> 
 ---
 
 

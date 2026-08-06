@@ -117,7 +117,7 @@ stream.pipe(res); // Pipe before ending response
 > fs.createReadStream('video.mp4').pipe(res);
 > ```
 > - Source `.pipe(` Destination `)`
-
+> 
 ---
 
 
@@ -137,7 +137,7 @@ stream.pipe(res); // Pipe before ending response
 > ```
 >
 > **Explanation:** `.pipe()` streams file chunks directly to the network socket with minimal RAM usage.
-
+> 
 ---
 
 ### Exercise 3: Chaining Gzip Compression Pipe
@@ -157,7 +157,7 @@ stream.pipe(res); // Pipe before ending response
 > ```
 >
 > **Explanation:** Stream piping chains multiple transformation steps efficiently.
-
+> 
 ## 7. Related Terms
 - [Readable & Writable Streams](readable_writable.md) — The two ends of the pipe.
 - [Backpressure](backpressure.md) — Related concept: Backpressure.

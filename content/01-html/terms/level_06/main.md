@@ -162,7 +162,7 @@ The `<main>` is chapters 1 through 10. It is the reason you actually opened the 
 > ONLY the Blog Post. The Top Menu, Left Sidebar, and Footer are repeated across the whole site, so they belong outside the `<main>` tag.
 > ```
 > - What is unique to *this exact URL*?
-
+> 
 ---
 
 
@@ -184,7 +184,7 @@ The `<main>` is chapters 1 through 10. It is the reason you actually opened the 
 > ```
 >
 > **Explanation:** Skip links allow keyboard users to bypass global navigation directly to `<main>`.
-
+> 
 ---
 
 ### Exercise 3: Main Landmark Role
@@ -201,7 +201,7 @@ The `<main>` is chapters 1 through 10. It is the reason you actually opened the 
 > ```
 >
 > **Explanation:** `<main>` acts as the primary content accessibility landmark.
-
+> 
 ## 7. Related Terms
 - [`<article>` and `<section>`](article_section.md) — The tags that usually live *inside* the `<main>` tag to break up the content.
 - [`<aside>`](aside.md) — The tangential layout block placed outside main content boundaries.

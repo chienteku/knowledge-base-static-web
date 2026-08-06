@@ -169,7 +169,7 @@ let f = move || println!("{name}"); // If name is not needed in outer scope
 >
 > 1. `thread::spawn(move || ...)` transfers ownership of `task_id` and `payload` into the thread closure struct.
 > 2. Guarantees memory safety across thread lifetimes without dangling references.
-
+> 
 ---
 
 ### Exercise 2: State Factory returning Custom Multiplier (`impl Fn(i32) -> i32`)
@@ -210,7 +210,7 @@ let f = move || println!("{name}"); // If name is not needed in outer scope
 >
 > 1. `move |x| x * factor` captures `factor` by value into the closure struct stored on heap.
 > 2. Implements `Fn` because `factor` is only read, allowing repeated invocations.
-
+> 
 ---
 
 ### Exercise 3: Demonstrating `Copy` vs Non-`Copy` `move` Behavior
@@ -258,7 +258,7 @@ let f = move || println!("{name}"); // If name is not needed in outer scope
 >
 > 1. Moving `Copy` types copies values onto the closure struct, keeping outer variables intact.
 > 2. Moving non-`Copy` types invalidates outer variable bindings.
-
+> 
 ---
 
 ## 6. Related Terms

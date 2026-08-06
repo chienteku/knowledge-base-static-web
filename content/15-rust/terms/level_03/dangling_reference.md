@@ -260,7 +260,7 @@ thread::spawn(move || {
 > 1. **Lifetime Annotation Invariants (`'a`):** The lifetime parameter `'a` in `LogEntry<'a>` ties the borrowed string slices (`&'a str`) directly to the memory buffer passed to `parse(&'a str)`. The Rust borrow checker enforces that no `LogEntry<'a>` instance can outlive the lifetime `'a` of the source `String` or buffer. Attempting to return a `LogEntry<'a>` derived from a local function-scoped `String` causes compile error `E0515` ("returns a value referencing data owned by the current function").
 > 2. **Zero-Copy Memory Layout:** `LogEntry<'a>` consists of three fat pointers (each containing an 8-byte pointer to the underlying buffer and an 8-byte length, totaling 48 bytes on 64-bit architectures). It borrows slices directly from the input buffer without allocating memory on the heap.
 > 3. **Preventing Dangling References via `to_owned()`:** When log data must outlive the transient input buffer (e.g. sent across thread channels or archived), `to_owned()` copies the byte sequences into independent heap allocations (`String`), breaking the lifetime dependency on `'a` and producing an `OwnedLogEntry` that safely outlives the original buffer scope.
-
+> 
 ---
 
 ### Exercise 2: Generational Arena Allocator & Safe Node Handles
@@ -420,7 +420,7 @@ thread::spawn(move || {
 > 1. **Decoupling References to Avoid Dangling Pointers:** Storing standard Rust references `&T` across nodes in dynamic collections fails because `Vec` reallocations move heap memory, instantly invalidating raw address pointers. Generational arena indexing replaces direct address pointers with `Handle { index, generation }`, completely bypassing borrow checker ownership cycles while preventing dangling references.
 > 2. **Generational Invalidation:** When slot `index` is freed and re-allocated for a new element, its internal `generation` is incremented. Any old handle `h1` holding the previous generation will fail the `*generation == handle.generation` guard, turning what would be a fatal C/C++ dangling pointer bug into a safe runtime `None`.
 > 3. **Lifetime Safety Guarantees:** When calling `arena.get(handle)`, the returned reference `&'a T` borrows directly from `&'a self` (the `Arena`). Rust enforces that the returned reference `'a` cannot outlive the `Arena` instance itself, ensuring underlying memory is never accessed post-drop.
-
+> 
 ---
 
 ### Exercise 3: Safe Foreign Memory Wrapper with RAII Lifetimes
@@ -555,7 +555,7 @@ thread::spawn(move || {
 > 1. **Raw Pointer Lifetimes & Safety Boundaries:** Raw pointers (`*mut u8`) in Rust lack compiler-enforced lifetimes. Converting a raw pointer into a slice via `slice::from_raw_parts` requires an explicit unsafe block. By signature `as_slice<'a>(&'a self) -> &'a [u8]`, we project the lifetime `'a` of `&self` onto the returned slice, bridging raw pointer operations to Rust's safe lifetime check system.
 > 2. **Preventing Foreign Memory Use-After-Free:** Attempting to store or return `&'a [u8]` beyond the scope of `ForeignBuffer` triggers Rust compile error `E0597` ("borrowed value does not live long enough"). This ensures that safe code can never read foreign memory post-`Drop`.
 > 3. **RAII Deallocation & Heap Safety:** Implementing `Drop` ensures that when `ForeignBuffer` goes out of scope, raw allocated memory is freed deterministically. `to_vec()` provides a safe transition path to clone memory into an owned heap `Vec<u8>`, enabling data persistence across scope boundaries without dangling references.
-
+> 
 ---
 
 ## 6. Related Terms

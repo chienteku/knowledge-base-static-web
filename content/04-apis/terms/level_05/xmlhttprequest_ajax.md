@@ -170,8 +170,8 @@ function sendData(data) {
 > - }
 > - }
 > - ```
-
-
+> 
+> 
 ---
 
 ### Exercise 2: AJAX Acronym Breakdown

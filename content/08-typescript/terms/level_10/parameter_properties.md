@@ -167,26 +167,26 @@ Refactor a verbose class constructor into clean parameter properties shorthand s
 > //     this.age = age;
 > //   }
 > // }
-
-// ✅ CLEAN PARAMETER PROPERTIES SHORTHAND:
-class User {
-  constructor(
-    public name: string,
-    private age: number,
-    public readonly id: string
-  ) {}
-}
-
-const u = new User("Alice", 30, "usr_1");
-console.log(u.name); // "Alice"
-```
-
+> 
+> // ✅ CLEAN PARAMETER PROPERTIES SHORTHAND:
+> class User {
+>   constructor(
+>     public name: string,
+>     private age: number,
+>     public readonly id: string
+>   ) {}
+> }
+> 
+> const u = new User("Alice", 30, "usr_1");
+> console.log(u.name); // "Alice"
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Prefixing constructor parameters with access modifiers (`public`, `private`, `protected`, `readonly`) automatically declares and initializes member fields.
 > 2. Eliminates redundant field declarations and `this.field = field` assignment boilerplate.
 > 3. Significantly reduces visual noise in class definitions.
-
+> 
 ---
 
 ### Exercise 2: Transpiled JavaScript Output Analysis
@@ -207,7 +207,7 @@ Inspect transpiled JavaScript code generated from parameter properties shorthand
 >   constructor(public title: string, private price: number) {}
 > }
 > ```
-
+> 
 > ```javascript
 > // Transpiled Output (JS):
 > class Item {
@@ -217,13 +217,13 @@ Inspect transpiled JavaScript code generated from parameter properties shorthand
 >   }
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `tsc` automatically expands parameter properties into field initializations inside the generated JS constructor.
 > 2. Access modifiers are stripped completely during compilation.
 > 3. Zero runtime performance penalty.
-
+> 
 ---
 
 ### Exercise 3: Auditing Parameter Property Modifier Omission Bugs
@@ -243,17 +243,17 @@ Explain why omitting access modifiers in constructor parameters converts them ba
 >   // ❌ Does NOT create a class field 'title'! It is just a local constructor argument!
 >   constructor(title: string) {}
 > }
-
-const w = new Widget("My Widget");
-// console.log(w.title); // ❌ Compile Error: Property 'title' does not exist on type 'Widget'.
-```
-
+> 
+> const w = new Widget("My Widget");
+> // console.log(w.title); // ❌ Compile Error: Property 'title' does not exist on type 'Widget'.
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Parameter property shorthand requires an EXPLICIT modifier (`public`, `private`, `protected`, or `readonly`).
 > 2. Parameters without modifiers are treated as temporary local variables scoped strictly to the constructor body.
 > 3. Common beginner oversight when using constructor shorthand.
-
+> 
 ---
 
 

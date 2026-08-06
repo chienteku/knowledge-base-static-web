@@ -281,7 +281,7 @@ A navigation bar that sticks to the top of the browser:
 > ```
 > - Target table headers `<th>`, not parent table elements.
 > - Give them a solid background color so overlapping rows don't show through.
-
+> 
 ---
 
 
@@ -304,7 +304,7 @@ A navigation bar that sticks to the top of the browser:
 > ```
 >
 > **Explanation:** `position: sticky; top: 0` sticks the navbar to the top viewport edge during page scroll.
-
+> 
 ---
 
 ### Exercise 3: Sticky Positioning Container Boundary
@@ -321,7 +321,7 @@ A navigation bar that sticks to the top of the browser:
 > ```
 >
 > **Explanation:** Sticky elements stop scrolling when reaching the bottom boundary of their parent container.
-
+> 
 ## 7. Related Terms
 - [`position: static` vs `relative`](position_static_relative.md) — The parent relative settings.
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Viewport locked layouts.

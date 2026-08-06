@@ -163,7 +163,7 @@ Acquire an `EXCLUSIVE` table lock on table `inventory` during bulk data maintena
 > 1. `LOCK TABLE` acquires explicit table-level lock modes.
 > 2. `EXCLUSIVE` mode blocks concurrent `UPDATE`, `DELETE`, and `INSERT` statements, while permitting concurrent `SELECT` reads.
 > 3. Lock is released automatically at `COMMIT` or `ROLLBACK`.
-
+> 
 ---
 
 ### Exercise 2: Non-Blocking Lock Attempts with `NOWAIT`
@@ -191,7 +191,7 @@ Attempt to lock table `accounts` using `NOWAIT`, raising an error immediately if
 > 1. `NOWAIT` instructs PostgreSQL not to wait for conflicting locks to be released.
 > 2. Raises Error `55P03` (`lock_not_available`) immediately if locked.
 > 3. Prevents application threads from blocking during high contention.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Active Locks in System Views
@@ -231,7 +231,7 @@ Query `pg_locks` joined with `pg_stat_activity` to locate active lock contention
 > 1. `pg_locks` exposes real-time lock allocation tables across all PostgreSQL processes.
 > 2. `NOT granted` identifies sessions currently blocked waiting for locks.
 > 3. Essential DBA diagnostic query for resolving lock contention.
-
+> 
 ---
 
 

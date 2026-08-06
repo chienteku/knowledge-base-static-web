@@ -343,7 +343,7 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 > 1. **Cross-Crate Inlining without `#[inline]`**: Without LTO, calling `external_crypto_crate::compute_checksum` requires generating dynamic cross-crate function call instructions. With `lto = "thin"`, LLVM emits module summaries and performs cross-crate function inlining directly into `process_frame`.
 > 2. **SIMD & Loop Unrolling**: The `apply_mask` function operates on fixed 8-byte payload arrays. When inlined across crate boundaries via Thin LTO, LLVM detects the fixed iteration bounds and unrolls/vectorizes the operation into fast SIMD or 64-bit register operations.
 > 3. **Thin LTO vs Fat LTO Balance**: Thin LTO compiles codegen units in parallel, maintaining fast compile and link times while delivering 80-90% of the optimization benefits of Fat LTO.
-
+> 
 ---
 
 ### Exercise 2: Embedded Telemetry Packer with Fat LTO Dead-Code Elimination
@@ -509,7 +509,7 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 > 1. **Whole-Program Bitcode Analysis**: When `lto = true` and `codegen-units = 1` are configured, LLVM merges bitcode from all dependency crates into a single translation unit during linking.
 > 2. **Global Dead-Code Elimination (DCE)**: Unreferenced functions, such as `format_verbose_json_debug`, along with associated static string literals and metadata, are purged completely from the final binary, preventing Flash memory bloat.
 > 3. **`#![no_std]` and Panic Abort**: Combining Fat LTO with `panic = "abort"` strips complex Rust stack unwinding tables (`.eh_frame`), generating ultra-compact firmware binaries ideal for microcontrollers and WebAssembly modules.
-
+> 
 ---
 
 ### Exercise 3: Cross-Crate Trait Monomorphization & Devirtualization
@@ -663,7 +663,7 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 > 1. **Monomorphization & Trait Devirtualization**: Monomorphization creates specialized instances of generic structs and methods (`MatchingEngine<TieredFeeStrategy>`). When combined with LTO across crates, LLVM devirtualizes and inlines `calculate_fee` directly into `execute_order`.
 > 2. **Branch Analysis & Constant Propagation**: Inlining allows LLVM to evaluate branching logic (`total_cost_cents >= vip_threshold_cents`) in conjunction with caller context, optimizing conditional branches and register allocations across crate boundaries.
 > 3. **Thin LTO Benefits for Large Systems**: Thin LTO allows large, highly modular Rust projects to achieve direct-call execution speed without incurring the extreme compilation time penalties of Fat LTO.
-
+> 
 ---
 
 ## 6. Related Terms

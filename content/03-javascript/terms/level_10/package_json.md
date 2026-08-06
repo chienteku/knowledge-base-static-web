@@ -155,7 +155,7 @@ async function processData() {
 > The `package-lock.json` writes down the EXACT, down-to-the-millisecond version that was actually downloaded (e.g., "Exactly 4.18.2"). This guarantees that everyone on your team gets the exact same bytes of code, preventing "It works on my machine" bugs.
 > ```
 > - One is a blueprint, the other is a strict contract.
-
+> 
 ---
 
 ### Exercise 2: Configuring Package Entry Points
@@ -172,7 +172,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Package manifests configure entry points for module resolvers.
-
+> 
 ---
 
 ### Exercise 3: Enabling Native ES Modules in Node.js
@@ -189,8 +189,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `"type": "module"` instructs Node.js to parse all `.js` files as native ES modules.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

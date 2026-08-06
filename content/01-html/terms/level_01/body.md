@@ -128,7 +128,7 @@ The `<body>` is the physical stage itself. If an actor (a paragraph) or a prop (
 > The entire visible background of the webpage (the browser viewport) will turn blue, because the `<body>` element represents the entire canvas that the user looks at.
 > ```
 > - Think about what the `<body>` represents in our theatrical stage metaphor.
-
+> 
 ---
 
 
@@ -163,7 +163,7 @@ The `<body>` is the physical stage itself. If an actor (a paragraph) or a prop (
 > ```
 >
 > **Explanation:** Document structure strictly orders `<head>` followed by `<body>` containing all visible content.
-
+> 
 ---
 
 ### Exercise 3: Body Event Handlers
@@ -180,7 +180,7 @@ The `<body>` is the physical stage itself. If an actor (a paragraph) or a prop (
 > ```
 >
 > **Explanation:** `<body>` accepts global window lifecycle event handlers like `onload` and `onresize`.
-
+> 
 ## 7. Related Terms
 - [`<html>`](html_tag.md) — The tag that contains the `<body>`.
 - [`<head>`](head.md) — The invisible metadata sibling to the `<body>`.

@@ -195,8 +195,8 @@ const breaker = new CircuitBreaker(fn, {
 
 > [!check]- Answer
 > - **`HALF-OPEN`** (The circuit tripped at 10:00:02. The 30-second cool-down window expired at 10:00:32. At 10:00:45, the next request transitions the breaker to the Half-Open state to test the downstream server).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Circuit Breaker 3-State Life Cycle Matrix

@@ -167,14 +167,14 @@ async function processData() {
 > [!check]- Answer
 > - Deno focuses heavily on sandboxed security.
 > - Bun swaps Chrome's engine for Safari's.
-
+> 
 > [!check]- Answer
 > - 1. **Bun**
 > - 2. **Deno**
 > - 3. **Deno & Bun**
 > - 4. **Node.js & Bun**
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Runtimes Overview (Node vs Deno vs Bun)
@@ -191,7 +191,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Deno emphasizes security sandboxing; Bun optimizes performance with Zig/JavaScriptCore.
-
+> 
 ---
 
 ### Exercise 3: Standardized Web API Support in Modern Runtimes
@@ -208,8 +208,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Modern JavaScript runtimes standardize Web API implementations across browser and server contexts.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

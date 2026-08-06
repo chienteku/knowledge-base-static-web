@@ -111,7 +111,7 @@ fn main() {
 > **Yes, absolutely!**
 >
 > This is the magic of Rust Editions. The compiler will read the library using the 2018 dictionary, and it will read your code using the 2021 dictionary. They will perfectly link together without any errors!
-
+> 
 ---
 
 ### Exercise 2: Edition Keyword Changes in Practice
@@ -155,7 +155,7 @@ Answer the following:
 > #### Technical Explanation
 >
 > This is the fundamental promise of Rust editions: they never break cross-crate compatibility. New keywords in one edition don't make previously-published libraries unusable — raw identifiers bridge the gap.
-
+> 
 ---
 
 ### Exercise 3: Migrating Editions with `cargo fix --edition`
@@ -191,7 +191,7 @@ You have a large 2018-edition crate and want to upgrade to 2021. Answer the foll
 > #### Technical Explanation
 >
 > Edition migrations are designed to be low-risk and incremental. The Rust team writes automated fixes for the vast majority of required changes. The recommended approach is always: run `cargo fix --edition`, then manually bump the edition key, then review with `cargo test`.
-
+> 
 ---
 
 ## 6. Related Terms

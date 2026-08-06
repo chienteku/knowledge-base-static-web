@@ -176,7 +176,7 @@ Store product documents with distinct field attributes (`laptop` vs `book`) in a
 > 1. Flexible schema allows collections to store polymorphic documents with varying attributes.
 > 2. Eliminates sparse NULL columns typical in relational single-table inheritance models.
 > 3. Simplifies modeling product catalogs with diverse properties.
-
+> 
 ---
 
 ### Exercise 2: Schema Evolution without DDL Migrations
@@ -209,7 +209,7 @@ Update application code to start writing a new `taxId` field on `customer` docum
 > 1. New application features can write new fields immediately without database migration downtime.
 > 2. Queries use `$exists` to handle missing fields gracefully across legacy documents.
 > 3. Accelerates agile continuous deployment pipelines.
-
+> 
 ---
 
 ### Exercise 3: Enforcing Boundaries with Schema Validation (`$jsonSchema`)
@@ -244,7 +244,7 @@ Add a `$jsonSchema` validation rule to collection `users` to require field `emai
 > 1. Schema Validation (`$jsonSchema`) combines document flexibility with structural guardrails.
 > 2. Rejects write attempts violating mandatory field rules.
 > 3. Prevents low-quality corrupt data from entering flexible collections.
-
+> 
 ---
 
 

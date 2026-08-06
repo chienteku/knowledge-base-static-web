@@ -117,7 +117,7 @@ If you write `<Dashboard v-show="isLoggedIn" />`, what terrible thing happens?
 > You MUST use `v-if` here to prevent the component from existing and executing its code before the user logs in!
 > ```
 > - Does `v-show` prevent a component from mounting?
-
+> 
 ---
 
 ### Exercise 2: v-if / v-else-if / v-else Chain Pattern
@@ -138,7 +138,7 @@ If you write `<Dashboard v-show="isLoggedIn" />`, what terrible thing happens?
 > <div v-else-if="role === 'member'">Member Area</div>
 > <div v-else>Guest Welcome</div>
 > ```
-
+> 
 ---
 
 ### Exercise 3: v-if vs v-show Trade-Off Matrix
@@ -161,8 +161,8 @@ If you write `<Dashboard v-show="isLoggedIn" />`, what terrible thing happens?
 > ```text
 > Use v-if for rare toggles / null guards; Use v-show for frequent toggles.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

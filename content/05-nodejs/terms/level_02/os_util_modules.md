@@ -169,7 +169,7 @@ execute();
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Checking Server Memory with OS Module
@@ -188,7 +188,7 @@ execute();
 > ```
 >
 > **Explanation:** `os.freemem()` and `os.totalmem()` return system memory stats in bytes.
-
+> 
 ---
 
 ### Exercise 3: Promisifying Legacy setTimeout
@@ -207,7 +207,7 @@ execute();
 > ```
 >
 > **Explanation:** `util.promisify` converts callback functions into Promise-based functions.
-
+> 
 ## 7. Related Terms
 - [Promisification (util.promisify)](../level_05/promisification.md) — The concept behind async callback conversion.
 - [PM2 (Process Manager)](../level_10/pm2.md) — Multiple processes that scale dynamically based on CPU core counts.

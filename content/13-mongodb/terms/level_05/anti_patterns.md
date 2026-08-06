@@ -176,7 +176,7 @@ Refactor a blog post document containing an unbounded `comments` array that thre
 > 1. Unbounded embedded arrays risk exceeding MongoDB's 16MB max BSON document size limit.
 > 2. Moving items to a separate collection allows infinite scaling per parent entity.
 > 3. Secondary index on `postId` ensures fast $O(\log N)$ comment lookups.
-
+> 
 ---
 
 ### Exercise 2: Resolving Excessive `$lookup` Over-Normalization
@@ -207,7 +207,7 @@ Refactor an over-normalized schema split across 5 collections (`users`, `address
 > 1. Over-normalization in MongoDB forces expensive multi-stage `$lookup` aggregation joins.
 > 2. Embedding tightly-coupled 1-to-1 data fetches the entire entity in a single $O(1)$ read.
 > 3. Maximizes document database performance benefits.
-
+> 
 ---
 
 ### Exercise 3: Fixing Case-Insensitive Regex Collection Scans
@@ -237,7 +237,7 @@ Replace a slow un-indexed case-insensitive `$regex` query with a case-insensitiv
 > 1. Unanchored `$regex` queries bypass standard indexes, forcing full collection scans (`COLLSCAN`).
 > 2. Collation `strength: 2` provides case-insensitive matching backed by B-tree indexes.
 > 3. Accelerates search queries by orders of magnitude.
-
+> 
 ---
 
 

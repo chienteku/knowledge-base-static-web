@@ -174,22 +174,22 @@ Implement a Mongoose `pre("save")` hook that automatically hashes user passwords
 >
 > ```typescript
 > import bcrypt from "bcrypt";
-
-UserSchema.pre("save", async function(next) {
-  if (!this.isModified("password")) return next();
-  
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
-```
-
+> 
+> UserSchema.pre("save", async function(next) {
+>   if (!this.isModified("password")) return next();
+>   
+>   const salt = await bcrypt.genSalt(10);
+>   this.password = await bcrypt.hash(this.password, salt);
+>   next();
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `pre("save")` hooks intercept `doc.save()` calls before write commands execute.
 > 2. `this.isModified("password")` checks if the password field was altered, preventing redundant re-hashing on profile updates.
 > 3. Encapsulates security logic inside schema definitions.
-
+> 
 ---
 
 ### Exercise 2: Post-Remove Cascading Cleanup Hooks
@@ -216,7 +216,7 @@ Implement a Mongoose `post("deleteOne")` middleware hook to automatically delete
 > 1. `post()` hooks execute after target operations complete successfully.
 > 2. Automates cascading deletes across related collections.
 > 3. Maintains referential integrity at the application tier.
-
+> 
 ---
 
 ### Exercise 3: Query Middleware vs Document Middleware Contexts
@@ -245,7 +245,7 @@ Explain why `this` in `pre("updateOne")` refers to the Query object rather than 
 > 1. Query middleware (`updateOne`, `find`) operates on the query filter without loading documents into Node.js memory (`this` = Query).
 > 2. Document middleware (`save`, `validate`) operates on instantiated document instances (`this` = Document).
 > 3. Critical distinction when authoring Mongoose hooks.
-
+> 
 ---
 
 

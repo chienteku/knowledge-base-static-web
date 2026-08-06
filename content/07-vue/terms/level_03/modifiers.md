@@ -221,7 +221,7 @@ function handleSubmit() {
 > ```
 > - Vue allows modifiers to be chained. E.g., `@click.stop.prevent`.
 > - Check system modifier keys (`.shift`, `.alt`, etc.) and mouse button modifiers (`.left`, `.right`).
-
+> 
 ---
 
 ### Exercise 2: Common Event Modifiers Matrix
@@ -248,7 +248,7 @@ function handleSubmit() {
 > ```html
 > <button @click.stop.prevent="clickHander">Click</button>
 > ```
-
+> 
 ---
 
 ### Exercise 3: Key Modifiers and Mouse Modifiers
@@ -268,8 +268,8 @@ function handleSubmit() {
 > <input @keyup.enter="submit" />
 > <button @click.right.prevent="openMenu">Menu</button>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

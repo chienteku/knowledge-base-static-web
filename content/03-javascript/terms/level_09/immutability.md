@@ -190,7 +190,7 @@ console.log("Removed scores:", scoresMinusOne);
 > ```
 > - Inside `addScore`, return `[...scoresArray, newScore]`.
 > - Inside `removeScore`, return `scoresArray.filter(s => s !== scoreToRemove)`.
-
+> 
 ---
 
 ### Exercise 2: Updating Objects Immutably with Spread
@@ -209,7 +209,7 @@ console.log("Removed scores:", scoresMinusOne);
 > ```
 >
 > **Explanation:** Object spread `{ ...obj }` constructs updated object copies immutably.
-
+> 
 ---
 
 ### Exercise 3: Updating Arrays Immutably
@@ -228,8 +228,8 @@ console.log("Removed scores:", scoresMinusOne);
 > ```
 >
 > **Explanation:** Immutable array operations return new array instances without mutating original collections.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

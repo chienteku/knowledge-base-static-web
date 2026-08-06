@@ -185,7 +185,7 @@ Perform a `FULL OUTER JOIN` between `employees` and `departments` to list all em
 > 1. `FULL OUTER JOIN` combines `LEFT JOIN` and `RIGHT JOIN` semantics.
 > 2. Returns matched rows + un-matched employees (with `NULL` department) + un-matched departments (with `NULL` employee).
 > 3. Complete outer join coverage.
-
+> 
 ---
 
 ### Exercise 2: Converting RIGHT JOIN to Idiomatic LEFT JOIN
@@ -217,7 +217,7 @@ Refactor a `RIGHT JOIN` query into an equivalent idiomatic `LEFT JOIN` query for
 > 1. `RIGHT JOIN` preserves all rows from the right table.
 > 2. Reversing table order in `FROM` allows rewriting any `RIGHT JOIN` as a clearer `LEFT JOIN`.
 > 3. SQL style guideline: Standardize on `LEFT JOIN`.
-
+> 
 ---
 
 ### Exercise 3: Isolating Symmetric Disjoint Sets with FULL JOIN
@@ -246,7 +246,7 @@ Find rows that exist in `Table A` OR `Table B`, but NOT in both (Symmetric Diffe
 > 1. `WHERE a.id IS NULL OR b.id IS NULL` filters out matching intersection rows.
 > 2. Returns only rows unique to `Table A` or unique to `Table B`.
 > 3. Data reconciliation pattern.
-
+> 
 ---
 
 

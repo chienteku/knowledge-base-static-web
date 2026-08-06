@@ -203,7 +203,7 @@ console.log("First even number:", firstEven);
 > ```
 > - A number is even if `(num % 2) === 0`.
 > - Use `break` to exit the loop once the condition evaluates to true.
-
+> 
 ---
 
 ### Exercise 2: Labeled Break Statements in Nested Loops
@@ -228,7 +228,7 @@ console.log("First even number:", firstEven);
 > ```
 >
 > **Explanation:** Labeled `break labelName;` terminates multi-level nested loops specified by the target label.
-
+> 
 ---
 
 ### Exercise 3: Skipping Odd Numbers with `continue`
@@ -250,7 +250,7 @@ console.log("First even number:", firstEven);
 > ```
 >
 > **Explanation:** `continue` skips the remainder of the current iteration body and jumps to loop step updates.
-
+> 
 ---
 
 ## 7. Related Terms

@@ -175,7 +175,7 @@ A basic image wrapped in a figure with a caption:
 > - The parent container must be `<figure>`.
 > - The child image tag must have an `alt` attribute.
 > - The caption must use `<figcaption>`.
-
+> 
 ---
 
 
@@ -197,7 +197,7 @@ A basic image wrapped in a figure with a caption:
 > ```
 >
 > **Explanation:** `<figure>` can encapsulate code snippets, diagrams, quotes, and images.
-
+> 
 ---
 
 ### Exercise 3: Figcaption Placement Order
@@ -214,7 +214,7 @@ A basic image wrapped in a figure with a caption:
 > ```
 >
 > **Explanation:** `<figcaption>` must be placed at the top or bottom boundary of `<figure>`.
-
+> 
 ## 7. Related Terms
 - [`<img>`](img.md) — The image element wrapped inside the figure.
 - [`alt` Attribute](alt.md) — The visual description metadata.

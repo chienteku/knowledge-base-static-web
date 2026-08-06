@@ -207,7 +207,7 @@ Basic selector templates:
 > ```
 > - Create two separate checkbox `<input>` elements.
 > - Assign unique `id` values and connect them to `<label>` tags.
-
+> 
 ---
 
 
@@ -231,7 +231,7 @@ Basic selector templates:
 > ```
 >
 > **Explanation:** Shared `name="plan"` creates a radio group; `checked` sets default selection.
-
+> 
 ---
 
 ### Exercise 3: Checkbox Checked State In JavaScript
@@ -248,7 +248,7 @@ Basic selector templates:
 > ```
 >
 > **Explanation:** Checkboxes use boolean `.checked` property, not string `.value`.
-
+> 
 ## 7. Related Terms
 - [`<input>`](input.md) — The parent element.
 - [`<label>`](label.md) — The text label companion.

@@ -107,30 +107,30 @@ Create nominal brand types for `UserId` and `OrderId` to prevent passing a `User
 >
 > ```typescript
 > type Brand<K, T> = K & { readonly __brand: T };
-
-type UserId = Brand<string, "UserId">;
-type OrderId = Brand<string, "OrderId">;
-
-function makeUserId(id: string): UserId { return id as UserId; }
-function makeOrderId(id: string): OrderId { return id as OrderId; }
-
-function processOrder(orderId: OrderId) {
-  console.log(`Processing Order ${orderId}`);
-}
-
-const userId = makeUserId("usr_100");
-const orderId = makeOrderId("ord_500");
-
-processOrder(orderId); // Valid!
-// processOrder(userId); // ❌ Compile Error: Type '"UserId"' is not assignable to type '"OrderId"'.
-```
-
+> 
+> type UserId = Brand<string, "UserId">;
+> type OrderId = Brand<string, "OrderId">;
+> 
+> function makeUserId(id: string): UserId { return id as UserId; }
+> function makeOrderId(id: string): OrderId { return id as OrderId; }
+> 
+> function processOrder(orderId: OrderId) {
+>   console.log(`Processing Order ${orderId}`);
+> }
+> 
+> const userId = makeUserId("usr_100");
+> const orderId = makeOrderId("ord_500");
+> 
+> processOrder(orderId); // Valid!
+> // processOrder(userId); // ❌ Compile Error: Type '"UserId"' is not assignable to type '"OrderId"'.
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Branded types attach a phantom property tag (`__brand`) using type intersection (`&`).
 > 2. Prevents structural type compatibility between identical underlying primitives (`string`).
 > 3. Enforces domain type safety for domain IDs, currencies, and sanitized strings.
-
+> 
 ---
 
 ### Exercise 2: Creating Un-Brand Helper Functions
@@ -147,27 +147,27 @@ Create a type-safe constructor helper that validates a raw un-sanitized string a
 >
 > ```typescript
 > type SanitizedHTML = string & { readonly __brand: "SanitizedHTML" };
-
-function sanitizeInput(rawHtml: string): SanitizedHTML {
-  const clean = rawHtml.replace(/<script.*?>.*?<\/script>/gi, "");
-  return clean as SanitizedHTML;
-}
-
-function renderHTML(html: SanitizedHTML) {
-  document.body.innerHTML = html;
-}
-
-const clean = sanitizeInput("<p>Hello</p>");
-renderHTML(clean);
-// renderHTML("<script>alert(1)</script>"); // ❌ Compile Error: Raw string is not SanitizedHTML!
-```
-
+> 
+> function sanitizeInput(rawHtml: string): SanitizedHTML {
+>   const clean = rawHtml.replace(/<script.*?>.*?<\/script>/gi, "");
+>   return clean as SanitizedHTML;
+> }
+> 
+> function renderHTML(html: SanitizedHTML) {
+>   document.body.innerHTML = html;
+> }
+> 
+> const clean = sanitizeInput("<p>Hello</p>");
+> renderHTML(clean);
+> // renderHTML("<script>alert(1)</script>"); // ❌ Compile Error: Raw string is not SanitizedHTML!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Un-branded raw strings cannot be passed directly into functions expecting `SanitizedHTML`.
 > 2. Guarantees that only strings processed by `sanitizeInput()` can reach dangerous DOM execution sinks.
 > 3. Security architecture pattern for type-level XSS prevention.
-
+> 
 ---
 
 ### Exercise 3: Zero-Runtime Overhead of Nominal Branding Audit
@@ -189,13 +189,13 @@ Explain why branded nominal types add zero bytes to transpiled JavaScript bundle
 > - Step 3: Transpiled JS output: const userId = "usr_100"; // Plain JavaScript string!
 > Result: 100% compile-time type safety with ZERO runtime memory or performance overhead!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Phantom properties are never instantiated on runtime objects.
 > 2. Type assertions (`as UserId`) inform `tsc` statically without invoking runtime functions.
 > 3. Maximum type safety with zero performance impact.
-
+> 
 ---
 
 

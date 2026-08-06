@@ -251,7 +251,7 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 > 2. **PhantomData Integration:** `PhantomData<State>` informs the compiler that `Transaction<State>` depends on generic parameter `State` without allocating memory for it.
 > 3. **Compile-Time State Safety:** Methods like `execute()` are only implemented in `impl Transaction<Active>`, making it impossible to run queries on uninitialized or committed transactions at compile time.
 > 4. **Zero Runtime Overhead:** `size_of::<Transaction<State>>()` remains identical to the underlying data fields (`base_size`), proving state safety incurs 0 runtime memory penalty.
-
+> 
 ---
 
 ## 5. Practice Exercises
@@ -384,7 +384,7 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 > 2. **Zero-Size Pipeline:** `size_of::<Pipeline<AuditFilter, MetricCounter>>()` is 0 bytes because `PhantomData<(P1, P2)>` is a ZST containing ZSTs.
 > 3. **Pattern Matching with `matches!`:** The test demonstrates using `matches!(res1, Some(ref s) if ...)` to clean check option payload conditions.
 > 4. **`Vec<ZST>` Mechanics:** `Vec<ZST>` never allocates heap memory because elements occupy 0 bytes. Instead, Rust sets capacity to `usize::MAX` and uses `NonNull::dangling()` as the internal pointer, allowing push/pop operations to update length in zero time.
-
+> 
 ---
 
 ### Exercise 3: Alignment Overrides, Struct Padding, and Raw ZST Pointers
@@ -470,7 +470,7 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 > 2. **Struct Padding Side Effect:** When embedded into `TaggedBuffer<Align64Marker>`, the struct's alignment requirement rises to `max(align_of::<u32>(), 64) = 64`. Rust pads the trailing struct space so array indexing maintains alignment, bumping total struct `size_of` from 4 bytes to 64 bytes.
 > 3. **`NonNull::dangling()` Guarantee:** `NonNull::dangling()` returns a sentinel pointer value equal to `align_of::<T>()`. For `Align64Marker`, this yields address `64`, ensuring it is non-null and perfectly aligned.
 > 4. **ZST Pointer Arithmetic:** In Rust, `ptr.add(count)` computes `ptr + count * size_of::<T>()`. Because `size_of::<Align64Marker>() == 0`, `100 * 0 = 0`, making raw pointer offsets a complete no-op.
-
+> 
 ---
 
 ## 6. Related Terms

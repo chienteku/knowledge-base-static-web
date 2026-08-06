@@ -187,7 +187,7 @@ Create an admin user `dbAdminUser` with `userAdminAnyDatabase` and `readWriteAny
 > 1. `db.createUser()` registers database authentication credentials.
 > 2. `userAdminAnyDatabase` grants permission to manage users and roles across all databases.
 > 3. Credentials are hashed using SCRAM-SHA-256.
-
+> 
 ---
 
 ### Exercise 2: Creating Application-Scoped ReadWrite Roles
@@ -218,7 +218,7 @@ Create an application service account `appService` restricted to `readWrite` acc
 > 1. Restricting roles to specific database targets enforces the Principle of Least Privilege.
 > 2. `appService` cannot read or write to other databases or execute cluster administration commands.
 > 3. Security best practice.
-
+> 
 ---
 
 ### Exercise 3: Enabling Authentication in `mongod.conf`
@@ -244,7 +244,7 @@ Configure `mongod.conf` to enforce mandatory client authentication across all da
 > 1. Setting `security.authorization: enabled` enforces RBAC checks for all client connections.
 > 2. Rejects unauthenticated connections immediately.
 > 3. Essential production database hardening setting.
-
+> 
 ---
 
 

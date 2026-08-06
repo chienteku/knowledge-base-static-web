@@ -119,7 +119,7 @@ const sorted = useMemo(() => [...items].sort(), [items]); // Pure sorted copy
 > You must put `[price, quantity]` in the array so it recalculates when they change.
 > ```
 > - `useMemo` uses the exact same array rules as `useEffect`.
-
+> 
 ---
 
 
@@ -142,7 +142,7 @@ const sorted = useMemo(() => [...items].sort(), [items]); // Pure sorted copy
 > ```
 >
 > **Explanation:** `useMemo` caches computed calculation outputs until dependencies change.
-
+> 
 ---
 
 ### Exercise 3: Semantic Guarantee of useMemo
@@ -159,7 +159,7 @@ const sorted = useMemo(() => [...items].sort(), [items]); // Pure sorted copy
 > ```
 >
 > **Explanation:** Code must remain correct even if `useMemo` recalculates cached values.
-
+> 
 ## 7. Related Terms
 - [`useCallback` Hook](use_callback.md) — The exact same concept, but specifically for memorizing Functions instead of Values.
 - [React.memo](../level_08/react_memo.md) — A tool that memorizes an entire Component, which heavily relies on `useMemo` to work properly.

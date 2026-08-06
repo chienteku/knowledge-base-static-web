@@ -124,13 +124,13 @@ Run `nuxi build` and inspect generated files in `.output/server` and `.output/pu
 > # .output/server/  -> Compiled Nitro Node server & dependencies
 > # .output/public/  -> Static assets, images, and client JS bundles
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `nuxi build` outputs all production artifacts into `.output/`.
 > 2. `.output/server/` contains the compiled, bundled Nitro server engine.
 > 3. `.output/public/` contains client-side static assets served directly by web servers or CDNs.
-
+> 
 ---
 
 ### Exercise 2: Running Standalone Nitro Server from `.output/server/index.mjs`
@@ -149,13 +149,13 @@ Execute the compiled production server directly using Node.js without requiring 
 > # Start production Node server
 > PORT=3000 NODE_ENV=production node .output/server/index.mjs
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Nitro bundles all backend server dependencies directly into `.output/server/`.
 > 2. Does NOT require running `npm install` or maintaining root `node_modules/` on production servers.
 > 3. Dramatically reduces deployment container image sizes (Docker).
-
+> 
 ---
 
 ### Exercise 3: Configuring Custom Output Paths in Nitro
@@ -182,19 +182,15 @@ Customize output directory path in `nuxt.config.ts` (`nitro.output.dir`).
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `nitro.output` overrides default `.output/` target paths.
 > 2. Useful when integrating with specific CI/CD deployment pipeline folder standards.
 > 3. Flexible build artifact customization.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process that requires `.output/server/index.mjs` to run.

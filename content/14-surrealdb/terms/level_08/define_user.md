@@ -145,7 +145,7 @@ Create a global cluster administrator user `sysadmin` on ROOT with full `OWNER` 
 > 1. `DEFINE USER ... ON ROOT` creates global cluster administrative accounts.
 > 2. `ROLES OWNER` grants unrestricted access across all namespaces and databases.
 > 3. Managed securely in database system metadata.
-
+> 
 ---
 
 ### Exercise 2: Namespace Tenant User Creation
@@ -174,7 +174,7 @@ Create a tenant administrator user `acme_admin` restricted strictly to namespace
 > 1. `ON NAMESPACE` restricts user administrative privileges strictly to the active namespace.
 > 2. Cannot access or modify other tenant namespaces.
 > 3. Enables multi-tenant administration.
-
+> 
 ---
 
 ### Exercise 3: Dropping Administrative System Users
@@ -198,7 +198,7 @@ Drop administrative user `old_admin` from the current database scope using `REMO
 > 1. `REMOVE USER` revokes system user accounts.
 > 2. Blocks subsequent administrative login attempts using those credentials.
 > 3. Maintains administrative access hygiene.
-
+> 
 ---
 
 

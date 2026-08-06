@@ -197,7 +197,7 @@ function ThemeToggleButton() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Creating Zustand Store
@@ -219,7 +219,7 @@ function ThemeToggleButton() {
 > ```
 >
 > **Explanation:** `create()` returns a custom React hook to consume and update state across components.
-
+> 
 ---
 
 ### Exercise 3: Zustand Outside-React Usage
@@ -237,7 +237,7 @@ function ThemeToggleButton() {
 > ```
 >
 > **Explanation:** Zustand stores expose utility methods (`getState`, `setState`) for usage outside React component trees.
-
+> 
 ## 7. Related Terms
 - [State Management (Redux / Zustand)](../level_06/state_management.md) — The architectural patterns for application data.
 - [Redux](redux.md) — The traditional, action-reducer global state manager.

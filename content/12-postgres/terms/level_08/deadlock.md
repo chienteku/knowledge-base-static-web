@@ -180,7 +180,7 @@ Reproduce a Deadlock by having Session 1 lock Row A then Row B, while Session 2 
 > 1. A Deadlock occurs when two transactions wait for locks held by each other.
 > 2. PostgreSQL background daemon detects cyclic wait dependency graphs and aborts one transaction with Error `40P01` (`deadlock_detected`).
 > 3. The aborted transaction must roll back and retry.
-
+> 
 ---
 
 ### Exercise 2: Preventing Deadlocks via Consistent Lock Ordering
@@ -198,17 +198,17 @@ Eliminate deadlocks by enforcing consistent primary key lock ordering (`id ASC`)
 > ```typescript
 > // Sort target account IDs ascending before acquiring row locks!
 > const [firstId, secondId] = [fromId, toId].sort((a, b) => a - b);
-
-await client.query("UPDATE accounts SET balance_cents = balance_cents - $1 WHERE id = $2", [amount, firstId]);
-await client.query("UPDATE accounts SET balance_cents = balance_cents + $1 WHERE id = $2", [amount, secondId]);
-```
-
+> 
+> await client.query("UPDATE accounts SET balance_cents = balance_cents - $1 WHERE id = $2", [amount, firstId]);
+> await client.query("UPDATE accounts SET balance_cents = balance_cents + $1 WHERE id = $2", [amount, secondId]);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Enforcing consistent lock acquisition order (e.g. always updating smaller `id` before larger `id`) eliminates cyclic wait graph dependencies.
 > 2. Eliminates deadlock errors mathematically.
 > 3. Essential pattern for high-concurrency financial transactions.
-
+> 
 ---
 
 ### Exercise 3: Tuning Deadlock Detection Timeout (`deadlock_timeout`)
@@ -232,7 +232,7 @@ Inspect `deadlock_timeout` parameter controlling how long PostgreSQL waits befor
 > 1. `deadlock_timeout` (default `1s`) sets the wait time before the deadlock detector checks the lock dependency graph.
 > 2. Checking for deadlocks requires acquiring expensive global lock manager locks.
 > 3. Keep at default `1s` for balanced performance and deadlock resolution speed.
-
+> 
 ---
 
 

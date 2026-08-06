@@ -158,7 +158,7 @@ Basic inline highlight:
 > <p>For this recipe, cream the <mark>butter</mark> and sugar together.</p>
 > ```
 > - Wrap ONLY the word "butter" in the `<mark>` and `</mark>` tags.
-
+> 
 ---
 
 
@@ -177,7 +177,7 @@ Basic inline highlight:
 > ```
 >
 > **Explanation:** `<mark>` semantically highlights search term matches in search result snippets.
-
+> 
 ---
 
 ### Exercise 3: Mark Default Background Styling
@@ -194,7 +194,7 @@ Basic inline highlight:
 > ```
 >
 > **Explanation:** Browsers simulate a yellow highlighter pen background by default.
-
+> 
 ## 7. Related Terms
 - [`<strong>` & `<em>`](../level_02/strong_em.md) — Standard inline text tags.
 - [`<span>` (Inline container)](../level_02/span.md) — The non-semantic styling container.

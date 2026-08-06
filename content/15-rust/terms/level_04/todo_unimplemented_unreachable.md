@@ -295,7 +295,7 @@ Implement the types, trait, and `TelemetryCodec` struct. Write unit tests using 
 > 2. **Semantic Intent & Linting**: Using `unimplemented!()` explicitly signals to static analysis tools and code reviewers that feature v1 was deliberately omitted due to deprecation. In contrast, `todo!()` signals incomplete work-in-progress, enabling linter checks (like `clippy::todo`) to prevent unfinished code from reaching release binaries.
 > 3. **Generic Monomorphization & Lifetime Safety**: `ProtocolCodec<T>` uses generic parameter `T`. When monomorphized with `TelemetryPayload`, references `&TelemetryPayload` are shared immutably (`&self`, `&payload`), adhering to Rust's borrow checker rules without incurring allocation or dynamic vtable overhead.
 > 4. **Panic Isolation in Testing**: `std::panic::catch_unwind` wraps the execution boundary in a `Result<R, Box<dyn Any + Send>>`. This catches thread unwinding triggered by `unimplemented!` and `todo!`, allowing unit tests to assert panic occurrence and inspect message contents via downcasting without terminating test execution.
-
+> 
 ---
 
 ### Exercise 2: Financial Matching Engine & Invariant Enforcement (`unreachable!`)
@@ -427,7 +427,7 @@ Implement `OrderProcessor` and unit tests in `#[cfg(test)] mod tests` verifying 
 > 2. **Compiler Optimization & LLVM Hints**: When LLVM compiles code containing `unreachable!`, it introduces control flow hints assuming that branch is dead code. In optimized release builds, this enables compiler optimizations such as branch pruning and register layout optimizations.
 > 3. **Ownership and Pattern Matching**: `OrderCommand` is passed by value (transferred into `process_active_order`). Struct pattern matching `OrderCommand::NewOrder { order_id, amount }` destructures the enum fields directly without heap allocation or copying ref-cell guards.
 > 4. **Diagnostic Integrity**: Formatting diagnostic variables (`session`) into `unreachable!("... {:?}", session)` provides full execution context upon panic, accelerating root cause analysis during post-mortem stack trace inspection.
-
+> 
 ---
 
 ### Exercise 3: Storage Engine Pipeline with Dynamic Driver Fallbacks (`unimplemented!`, `todo!`, `unreachable!`)
@@ -632,7 +632,7 @@ Write unit tests in `#[cfg(test)] mod tests` verifying all three backends and th
 > 2. **Interior Mutability & Borrow Checker Rules**: `write` and `sync` accept `&mut self` to enforce exclusive mutable access. `read` accepts `&self` for shared immutable access. `ReadOnlyBackend` safely implements `StorageBackend` because Rust allows trait methods to take `&mut self` even if the underlying implementation panics or refrains from mutating state.
 > 3. **Defensive Invariant Guards with `unreachable!`**: In `tag_from_u8`, checking `byte > 2` before `match byte` creates an explicit invariant boundary. Rust's match exhaustiveness check requires handling all 256 possible `u8` values. Writing `_ => unreachable!(...)` satisfies exhaustiveness while guaranteeing that any hypothetical corruption of the guard condition immediately panics with exact context.
 > 4. **Zero-Cost Abstractions**: Structs implementing `StorageBackend` statically satisfy the trait bound. When invoked directly or via generic monomorphization, Rust generates direct non-virtual calls, preserving zero-cost abstraction guarantees.
-
+> 
 ---
 
 ## 6. Related Terms

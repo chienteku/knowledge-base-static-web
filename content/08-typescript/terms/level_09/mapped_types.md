@@ -92,22 +92,22 @@ Re-implement the built-in `Readonly<T>` utility type using a mapped type syntax 
 > type MyReadonly<T> = {
 >   readonly [K in keyof T]: T[K];
 > };
-
-interface User {
-  name: string;
-  age: number;
-}
-
-type ReadonlyUser = MyReadonly<User>;
-// Inferred as: { readonly name: string; readonly age: number; }
-```
-
+> 
+> interface User {
+>   name: string;
+>   age: number;
+> }
+> 
+> type ReadonlyUser = MyReadonly<User>;
+> // Inferred as: { readonly name: string; readonly age: number; }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Mapped types `{[K in keyof T]: ...}` iterate over every key in type `T`.
 > 2. Adding `readonly` before the brackets applies the `readonly` modifier to all mapped properties.
 > 3. Fundamental syntax for building custom object transformation utilities.
-
+> 
 ---
 
 ### Exercise 2: Stripping Readonly and Optional Modifiers
@@ -126,22 +126,22 @@ Create a utility type `Mutable<T>` that strips `readonly` modifiers using `-read
 > type Mutable<T> = {
 >   -readonly [K in keyof T]: T[K];
 > };
-
-interface FrozenState {
-  readonly id: string;
-  readonly active: boolean;
-}
-
-type WritableState = Mutable<FrozenState>;
-// Inferred as: { id: string; active: boolean; }
-```
-
+> 
+> interface FrozenState {
+>   readonly id: string;
+>   readonly active: boolean;
+> }
+> 
+> type WritableState = Mutable<FrozenState>;
+> // Inferred as: { id: string; active: boolean; }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Prefixing modifiers with `-` (e.g. `-readonly` or `-?`) removes those modifiers from mapped properties.
 > 2. `Mutable<T>` strips immutability constraints from all fields.
 > 3. Essential technique for type transformation pipelines.
-
+> 
 ---
 
 ### Exercise 3: Mapping Properties to Nullable Unions
@@ -160,22 +160,22 @@ Create a mapped type `NullableProperties<T>` that wraps every property value in 
 > type NullableProperties<T> = {
 >   [K in keyof T]: T[K] | null;
 > };
-
-interface Profile {
-  username: string;
-  age: number;
-}
-
-type NullableProfile = NullableProperties<Profile>;
-// Inferred as: { username: string | null; age: number | null; }
-```
-
+> 
+> interface Profile {
+>   username: string;
+>   age: number;
+> }
+> 
+> type NullableProfile = NullableProperties<Profile>;
+> // Inferred as: { username: string | null; age: number | null; }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Mapped types can transform the value type `T[K]` associated with each key `K`.
 > 2. `T[K] | null` converts all fields into nullable options.
 > 3. Standard pattern for draft form state management.
-
+> 
 ---
 
 

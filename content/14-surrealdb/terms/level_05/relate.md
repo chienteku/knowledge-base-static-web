@@ -180,7 +180,7 @@ Create a directed relation edge `wrote` connecting author `user:alice` to blog p
 > 1. `RELATE in->edge->out` establishes a directed graph connection between source (`in`) and target (`out`) record IDs.
 > 2. Creates a relation edge record in table `wrote`.
 > 3. Enables native graph arrow traversals (`->wrote->post`).
-
+> 
 ---
 
 ### Exercise 2: Attaching Properties to Edge Records in `RELATE`
@@ -211,7 +211,7 @@ Create a relation edge `reviewed` connecting `user:bob` to `product:p1`, setting
 > 1. `SET key = val` attaches custom metadata properties to the created relation edge document.
 > 2. Relation edges act as full record documents with primary key IDs, `in`, `out`, and custom fields.
 > 3. Replaces SQL junction tables containing metadata columns.
-
+> 
 ---
 
 ### Exercise 3: Bulk Relation Edge Creation via Subqueries
@@ -240,7 +240,7 @@ Relate user `user:admin` to ALL products in table `product` using relation edge 
 > 1. `RELATE` accepts subqueries `(SELECT VALUE id FROM ...)` to bulk-create relation edges across record arrays.
 > 2. Creates individual relation edge records for every target ID returned by the subquery.
 > 3. Enables high-performance bulk graph edge construction.
-
+> 
 ---
 
 

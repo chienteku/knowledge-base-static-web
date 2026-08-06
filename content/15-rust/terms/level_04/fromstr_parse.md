@@ -346,7 +346,7 @@ Design and implement a zero-allocation-focused custom string parsing pipeline by
 > 1. **Trait Composition & Method Chaining**: Implementing `FromStr` for `Protocol` allows `proto_str.parse()?` inside `NetworkEndpoint::from_str` to automatically invoke `Protocol::from_str`. The compiler uses monomorphization to generate direct function calls to `Protocol::from_str` without dynamic dispatch (`dyn`).
 > 2. **Zero-Copy Subslice Splitting**: `split_once` and `rsplit_once` operate directly on string slices (`&str`), returning borrowing tuples (`(&str, &str)`). No heap allocations occur until string slices are explicitly converted to owned `String` instances (`host_str.to_string()`) upon constructing `NetworkEndpoint`.
 > 3. **Error Wrappers & Ownership**: The `std::error::Error` implementation for `EndpointParseError` optionally returns an underlying cause via `source()`. By wrapping `std::num::ParseIntError` inside `EndpointParseError::InvalidPort`, lower-level parsing errors retain their full diagnostic stack traces while adhering to domain-specific error protocols.
-
+> 
 ---
 
 ### Exercise 2: Generic Configuration Extraction with Rich Error Context
@@ -514,7 +514,7 @@ Implement a generic parsing pipeline function `parse_config_entry<T: FromStr>` t
 > 1. **Generic Monomorphization**: `parse_config_entry<T>` uses Rust's static generics (`T: FromStr`). At compile time, the Rust compiler monomorphizes distinct specialized instantiations for `T = String`, `T = u16`, `T = u32`, and `T = LogLevel`. This eliminates runtime trait object dispatch overhead while preserving complete type safety.
 > 2. **Contextual Error Enrichment**: Low-level parse errors (`ParseIntError` or `String`) often lack context regarding *which* configuration key caused the failure. By capturing `key` and `raw_value` inside `ConfigError::InvalidValue`, the function converts anonymous errors into actionable diagnostic signals for operators.
 > 3. **Trait Bound `T::Err: Display`**: Constraining `T::Err` with `std::fmt::Display` guarantees that any error produced by `T::from_str` can be serialized into a user-readable `String` via `err.to_string()`, permitting arbitrary domain types to plug seamlessly into `parse_config_entry`.
-
+> 
 ---
 
 ### Exercise 3: High-Precision Fixed-Point Financial Monetary Parser
@@ -775,7 +775,7 @@ Implement `FromStr` for a `Money` type that parses strings like `"$1,234.56 USD"
 > 1. **Fixed-Point Decimal Parsing**: To prevent IEEE 754 floating-point inaccuracies, string components (`units_str` and `frac_str`) are split on decimal boundaries (`.split_once('.')`) and converted directly into integer sub-units. Arithmetic operations utilize `checked_mul` and `checked_add` to protect against `i64` integer overflow vulnerabilities.
 > 2. **Multi-Stage Token & Symbol Resolution**: `FromStr::from_str` parses both currency symbols (`$`, `€`, `£`, `¥`) and ISO 4217 alphabetic codes (`USD`, `EUR`) by leveraging sub-parsing via `token.parse::<Currency>()`. UTF-8 multibyte boundary awareness (`symbol.chars().next().unwrap().len_utf8()`) ensures slice bounds remain valid when stripping unicode symbols like `€` (3 bytes) or `¥` (2 bytes).
 > 3. **Currency Domain Invariants**: The parser dynamically queries `currency.decimal_places()` to enforce scale precision. Currencies without subunits (e.g. `JPY`) reject fractional strings, whereas sub-cent decimals (e.g. `$10.999`) trigger `MoneyParseError::InvalidAmount` to maintain accounting invariants.
-
+> 
 ---
 
 ## 6. Related Terms

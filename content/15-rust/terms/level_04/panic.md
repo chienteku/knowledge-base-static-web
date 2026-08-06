@@ -305,7 +305,7 @@ Design a `TaskRunner` system that:
 >    - `panic!("formatted {}", arg)` allocates a `Box<String>`.
 >    Using `downcast_ref` on `dyn Any + Send` queries the vtable type ID at runtime, safely converting the trait object back into concrete references (`&'static str` or `String`) without undefined behavior.
 > 3. **Concurrency & Thread-Safe Telemetry**: Shared metrics are guarded by `Arc<Mutex<WorkerMetrics>>`. Even if the task closure panics mid-execution, stack unwinding pops stack frames back to `catch_unwind`. The caller thread retains ownership of the `Mutex` handle, guaranteeing telemetry is accurately updated without thread poisoning or data leaks.
-
+> 
 ---
 
 ### Exercise 2: Structured Telemetry Panic Hook with Custom Panic Payload Logging & Contextual Stack Capture
@@ -420,7 +420,7 @@ Implement a telemetry recorder `TelemetryLogger` that:
 > 1. **Panic Hooks vs `catch_unwind` Lifecycle**: `std::panic::set_hook` installs a handler that executes at the exact instant a panic is raised, **before** the stack unwinds. This guarantees that stack frames, local thread storage, and location metadata (`file!`, `line!`, `column!`) remain completely intact when `PanicHookInfo` is inspected.
 > 2. **Hook Chaining Pattern**: Invoking `panic::take_hook()` fetches the existing registered hook before setting a new one via `panic::set_hook`. Calling `previous_hook(info)` at the end of the custom closure ensures hook composition—preventing telemetry extensions from suppressing standard error printing or diagnostic logging configured by upstream frameworks.
 > 3. **Thread Safety & Payload Bounds**: The panic hook receives `&PanicHookInfo`, where `.payload()` returns `&(dyn Any + Send)`. Shared storage is guarded by `Arc<Mutex<Vec<PanicRecord>>>`, allowing panics originating from any OS thread to safely push records into the central telemetry buffer under mutex synchronization.
-
+> 
 ---
 
 ### Exercise 3: FFI Exception Boundary Guard & Abort Safety Wrapper
@@ -535,7 +535,7 @@ Design an FFI-safe exception boundary function `ffi_exception_guard` that:
 > 1. **FFI ABI Panic Boundary Guarantees**: Under Rust's C ABI spec (`extern "C"`), allowing a panic to unwind past the function boundary violates target calling conventions, triggering instant aborts or frame corruption in host dynamic callers (e.g. C/C++ binaries). `catch_unwind` creates an explicit boundary, turning panics into integer error codes.
 > 2. **Uninitialized Memory & Raw Pointer Safety**: Writing output results using standard assignment (`*output_ptr = val`) is invalid for uninitialized memory targets like `MaybeUninit` because standard assignment attempts to drop existing target memory first. `ptr::write(output_ptr, value)` performs a raw bitwise copy of `value` into the pointer destination without invoking `Drop` on uninitialized bytes.
 > 3. **Error Serialization & Exclusivity**: Operational `Result::Err` errors and runtime unwinding panics represent distinct failure modes. The status codes isolate logical program errors (`-2`) from fatal runtime assertion panics (`-3`) and pointer validation failures (`-1`), presenting a deterministic interface to foreign callers.
-
+> 
 ---
 
 ## 6. Related Terms

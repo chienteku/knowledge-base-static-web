@@ -129,13 +129,13 @@ Create a Nitro server endpoint `server/api/health.ts` returning JSON metadata in
 >   };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Nitro maps files in `server/api/` directly to HTTP API endpoints.
 > 2. `defineEventHandler` wraps H3 event context processing for incoming requests.
 > 3. Objects returned from event handlers are automatically serialized as JSON responses.
-
+> 
 ---
 
 ### Exercise 2: Processing POST Requests and Request Bodies in Nitro
@@ -161,20 +161,20 @@ Create a Nitro endpoint `server/api/users.post.ts` handling HTTP POST requests a
 >       statusMessage: "Email is required"
 >     });
 >   }
-
-  return {
-    success: true,
-    user: { id: 101, email: body.email }
-  };
-});
-```
-
+> 
+>   return {
+>     success: true,
+>     user: { id: 101, email: body.email }
+>   };
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. File suffix `.post.ts` restricts endpoint execution exclusively to HTTP POST requests.
 > 2. `readBody(event)` parses JSON payload streams asynchronously.
 > 3. `createError()` throws structured HTTP error responses handled automatically by Nitro.
-
+> 
 ---
 
 ### Exercise 3: Cross-Platform Deployment Target Selection
@@ -197,19 +197,15 @@ Configure `nuxt.config.ts` to build Nitro output targeting Vercel, Node.js serve
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Nitro abstracts runtime differences across Node.js, Deno, Bun, and serverless edge providers.
 > 2. Compiles server code into zero-dependency bundles optimized for the target deployment environment.
 > 3. Enables vendor lock-in-free full-stack deployment.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`server/api/` Routes](../level_07/server_api_routes.md) — How you define endpoints in your project.

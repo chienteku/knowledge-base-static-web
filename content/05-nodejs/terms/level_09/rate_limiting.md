@@ -180,7 +180,7 @@ app.set('trust proxy', 1); // Trust first reverse proxy hop for true client IP
 > A 429 status code means "Too Many Requests". Your React app should immediately stop sending requests, show a message to the user ("Please wait a moment"), and wait a few minutes before trying again. If you keep sending requests immediately, the API might ban your IP address permanently.
 > ```
 > - Does a 429 mean the server is broken, or does it mean YOU need to slow down?
-
+> 
 ---
 
 
@@ -204,7 +204,7 @@ app.set('trust proxy', 1); // Trust first reverse proxy hop for true client IP
 > ```
 >
 > **Explanation:** `windowMs` sets time window duration; `max` specifies maximum allowed requests per window.
-
+> 
 ---
 
 ### Exercise 3: Rate Limit Exceeded Status Code
@@ -221,7 +221,7 @@ app.set('trust proxy', 1); // Trust first reverse proxy hop for true client IP
 > ```
 >
 > **Explanation:** Status 429 informs clients to wait before sending further requests.
-
+> 
 ## 7. Related Terms
 - [Middleware](../level_07/middleware.md) — Rate limiters are just bouncer middlewares.
 - [HTTP Status Codes](status_codes.md) — The `429` code is the hallmark of rate limiting.

@@ -185,7 +185,7 @@ Provide default empty method implementations: `fn visit_a(&mut self) {}`!
 >
 > 1. `Expr::accept` performs double dispatch to forward evaluation to `EvaluatorVisitor`.
 > 2. Recursively evaluates left and right subtree expressions.
-
+> 
 ---
 
 ### Exercise 2: AST Node Counter Visitor Pass
@@ -238,7 +238,7 @@ Provide default empty method implementations: `fn visit_a(&mut self) {}`!
 >
 > 1. Demonstrates adding new AST analysis passes without modifying `Expr` struct definitions.
 > 2. Clean separation of concerns.
-
+> 
 ---
 
 ### Exercise 3: AST Pretty Printer Visitor
@@ -281,7 +281,7 @@ Provide default empty method implementations: `fn visit_a(&mut self) {}`!
 >
 > 1. Converts recursive AST structures into formatted string expressions.
 > 2. Idiomatic compiler visitor pattern.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -126,7 +126,7 @@ Imagine three people sitting on a long bench.
 > `flex-end`! This pushes all the empty space to the left, packing the items against the end (the right side).
 > ```
 > - The start is the left. The end is the...
-
+> 
 ---
 
 
@@ -149,7 +149,7 @@ Imagine three people sitting on a long bench.
 > ```
 >
 > **Explanation:** `justify-content: space-between` pushes first and last flex items flush to container boundaries.
-
+> 
 ---
 
 ### Exercise 3: Justify Content Values Matrix
@@ -176,7 +176,7 @@ Imagine three people sitting on a long bench.
 > ```
 >
 > **Explanation:** `justify-content` controls main axis flex item distribution.
-
+> 
 ## 7. Related Terms
 - [`align-items`](align_items.md) — The sister property that aligns things on the *opposite* (Cross) axis.
 - [`align-content`](align_content.md) — Distribution of rows in multi-line flex containers.

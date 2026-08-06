@@ -146,32 +146,32 @@ Create a reusable `<SubmitButton />` component that disables itself and renders 
 >
 > ```tsx
 > "use client";
-
-import { useFormStatus } from "react-dom";
-
-export default function SubmitButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className={`px-4 py-2 text-white rounded ${
-        pending ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-      }`}
+> 
+> import { useFormStatus } from "react-dom";
+> 
+> export default function SubmitButton() {
+>   const { pending } = useFormStatus();
+> 
+>   return (
+>     <button
+>       type="submit"
+>       disabled={pending}
+>       className={`px-4 py-2 text-white rounded ${
+>         pending ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+>       }`}
     >
-      {pending ? "Saving Changes..." : "Save Changes"}
-    </button>
-  );
-}
-```
-
+>       {pending ? "Saving Changes..." : "Save Changes"}
+>     </button>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useFormStatus()` hook reads the pending submission status of the parent `<form>`.
 > 2. Must be called inside a component rendered AS A CHILD of the `<form>` element.
 > 3. Eliminates passing `isPending` state down via props.
-
+> 
 ---
 
 ### Exercise 2: Accessing Form Submission Data via `useFormStatus()`
@@ -188,30 +188,30 @@ Read `data` (FormData instance) from `useFormStatus()` to display optimism previ
 >
 > ```tsx
 > "use client";
-
-import { useFormStatus } from "react-dom";
-
-export default function FormStatusIndicator() {
-  const { pending, data } = useFormStatus();
-
-  if (!pending) return null;
-
-  const title = data?.get("title") as string;
-
-  return (
-    <div className="p-2 bg-blue-50 text-blue-800 rounded text-sm">
-      Submitting post: "{title}"...
-    </div>
-  );
-}
-```
-
+> 
+> import { useFormStatus } from "react-dom";
+> 
+> export default function FormStatusIndicator() {
+>   const { pending, data } = useFormStatus();
+> 
+>   if (!pending) return null;
+> 
+>   const title = data?.get("title") as string;
+> 
+>   return (
+>     <div className="p-2 bg-blue-50 text-blue-800 rounded text-sm">
+>       Submitting post: "{title}"...
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useFormStatus().data` contains the `FormData` object currently being transmitted to the server.
 > 2. Allows child components to inspect field values during submission.
 > 3. Enables clean submission progress feedback UI.
-
+> 
 ---
 
 ### Exercise 3: Auditing `useFormStatus()` Context Bounds
@@ -232,25 +232,21 @@ Explain why calling `useFormStatus()` in the SAME component that renders the `<f
 > //   const { pending } = useFormStatus(); // Returns false always!
 > //   return <form><button disabled={pending}>Submit</button></form>;
 > // }
-
-// ✅ CORRECT (Hook is inside a CHILD component):
-// export default function Form() {
+> 
+> // ✅ CORRECT (Hook is inside a CHILD component):
+> // export default function Form() {
 > //   return <form><SubmitButton /></form>;
 > // }
-```
-
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useFormStatus()` acts as a React Context consumer expecting `<form>` to act as its Context Provider.
 > 2. A component cannot consume Context provided by an element rendered in its own return statement.
 > 3. Must extract submit buttons or indicators into separate child components.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useFormState` Hook](use_form_state.md) — The hook for tracking the *result* of the form, while this tracks the *status* of the form.

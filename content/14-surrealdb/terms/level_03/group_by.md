@@ -190,7 +190,7 @@ An analytics query calculates total items purchased by each customer from table 
 > 1. `GROUP BY customer` buckets order records sharing identical `customer` record links.
 > 2. `math::sum(quantity)` aggregates item counts within each customer group bucket.
 > 3. Returns a structured JSON result array containing customer pointers and total quantities.
-
+> 
 ---
 
 ### Exercise 2: Global Aggregation with `GROUP ALL`
@@ -223,7 +223,7 @@ Compute overall platform metrics (total revenue, average price, total products) 
 > 1. `GROUP ALL` collapses all matching table records into a single global aggregate result object.
 > 2. Evaluates aggregate functions over the entire record set.
 > 3. Equivalent to SQL `SELECT SUM(...), AVG(...) FROM table` without a `GROUP BY` clause.
-
+> 
 ---
 
 ### Exercise 3: Grouping by Array Elements
@@ -254,7 +254,7 @@ An analytics service counts how many articles belong to each topic tag where `ta
 > 1. Grouping by an array field (`GROUP BY tags`) expands array elements and groups by individual items.
 > 2. Counts occurrences of each distinct tag across all articles.
 > 3. Replaces complex SQL `UNNEST()` / `LATERAL JOIN` queries with concise grouping syntax.
-
+> 
 ---
 
 

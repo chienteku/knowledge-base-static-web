@@ -147,7 +147,7 @@ db.query(query, [username, password], callback); // PostgreSQL syntax
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Writing Safe Parameterized Query
@@ -164,7 +164,7 @@ db.query(query, [username, password], callback); // PostgreSQL syntax
 > ```
 >
 > **Explanation:** Parameterized queries pass user inputs separately from SQL code structure.
-
+> 
 ---
 
 ### Exercise 3: How Parameterization Prevents Injection
@@ -181,7 +181,7 @@ db.query(query, [username, password], callback); // PostgreSQL syntax
 > ```
 >
 > **Explanation:** Parameterized inputs cannot alter compiled SQL query structure.
-
+> 
 ## 7. Related Terms
 - [SQL Injection](sql_injection.md) — The database vulnerability resolved by parameterization.
 - [ORMs & ODMs](orms_odms.md) — Object mappers that automatically implement query parameterization.

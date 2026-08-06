@@ -167,7 +167,7 @@ A robust configuration supporting legacy browsers, modern high-res screens, and 
 > - The link relationship is `icon`.
 > - Set the MIME `type` to `image/png`.
 > - Include the `sizes` attribute.
-
+> 
 ---
 
 
@@ -186,7 +186,7 @@ A robust configuration supporting legacy browsers, modern high-res screens, and 
 > ```
 >
 > **Explanation:** `image/svg+xml` declares sharp, scalable vector favicons for all resolutions.
-
+> 
 ---
 
 ### Exercise 3: Apple Touch Icon Syntax
@@ -203,7 +203,7 @@ A robust configuration supporting legacy browsers, modern high-res screens, and 
 > ```
 >
 > **Explanation:** `rel="apple-touch-icon"` specifies home screen bookmark icon for iOS Safari.
-
+> 
 ## 7. Related Terms
 - [`<link>`](link.md) — The resource connection element.
 - [`<head>`](../level_01/head.md) — The parent container.

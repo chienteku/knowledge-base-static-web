@@ -174,7 +174,7 @@ Replace an entire document in collection `users` with a sanitized new document s
 > 1. `replaceOne()` completely replaces document content with the new replacement document object.
 > 2. The original `_id` primary key is automatically preserved.
 > 3. Any unmentioned fields in the original document are removed.
-
+> 
 ---
 
 ### Exercise 2: Upserting Replacement Documents
@@ -206,7 +206,7 @@ Replace a user setting document if it exists, or insert a default settings docum
 > 1. `upsert: true` inserts the replacement document if no document matches the query filter.
 > 2. Ideal for state synchronization endpoints receiving full entity payloads.
 > 3. Atomic replace-or-insert operation.
-
+> 
 ---
 
 ### Exercise 3: Validating Replacement Document Constraints
@@ -234,7 +234,7 @@ Explain why replacement documents passed to `replaceOne()` CANNOT contain update
 > 1. `replaceOne()` expects a plain BSON document representation without `$set` or `$inc` operators.
 > 2. Use `updateOne()` when applying targeted atomic update operators.
 > 3. Prevents ambiguous operation intent.
-
+> 
 ---
 
 

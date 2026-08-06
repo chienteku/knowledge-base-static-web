@@ -165,7 +165,7 @@ Configure secondary node `node3.example.com` as hidden (`hidden: true`, `priorit
 > 1. `hidden: true` hides the node from driver routing tables so applications never query it directly.
 > 2. `priority: 0` prevents the node from ever seeking election as primary.
 > 3. Ideal for dedicated reporting, ETL, and backup tasks.
-
+> 
 ---
 
 ### Exercise 2: Deploying an Arbiter Node for Tie-Breaking Votes
@@ -189,7 +189,7 @@ Add an Arbiter node (`arbiterOnly: true`) to a 2-data-node cluster to achieve an
 > 1. Arbiters hold election voting rights (`votes: 1`) but store NO database data (`arbiterOnly: true`).
 > 2. Provides tie-breaking votes for primary elections in 2-node clusters without requiring full data storage hardware.
 > 3. Note: Arbiters do not contribute to data redundancy or read scaling.
-
+> 
 ---
 
 ### Exercise 3: Node Architecture Comparison
@@ -216,7 +216,7 @@ Compare hardware and functional differences between Primary, Secondary, and Arbi
 > 1. Primary nodes handle cluster write authority.
 > 2. Secondary nodes provide data redundancy and read scaling.
 > 3. Arbiters provide low-cost election quorum voting.
-
+> 
 ---
 
 

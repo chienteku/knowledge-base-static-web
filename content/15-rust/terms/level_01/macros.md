@@ -258,7 +258,7 @@ Implement a macro `audit_event!` that constructs an `AuditEvent` instance taking
 >    - Zero key-value metadata tags (`audit_event!(Warn, "rate_limiter")`) correctly evaluates `@count` to `0` and allocates an empty vector.
 >    - Trailing commas are gracefully matched by the `$(,)?` specifier.
 >
-
+> 
 ---
 
 ### Exercise 2: Declarative HTTP Route Dispatcher DSL Macro (`dispatch_route!`)
@@ -434,7 +434,7 @@ The macro must:
 >    - Matching path with incorrect method or failing header validation yields `RouteResult::MethodNotAllowed`.
 >    - Completely unmatched path yields `RouteResult::NotFound`.
 >
-
+> 
 ---
 
 ### Exercise 3: Zero-Cost Type-Safe Bitfield Generator Macro (`define_bitflags!`)
@@ -628,7 +628,7 @@ The macro must:
 >    - Checking invalid bits via `from_bits` correctly returns `None`.
 >    - In-place bit mutations (`insert`, `remove`, `toggle`) correctly alter internal primitive bit representation.
 >
-
+> 
 ---
 
 ## 6. Related Terms

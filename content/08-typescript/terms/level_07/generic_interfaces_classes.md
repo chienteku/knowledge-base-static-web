@@ -137,24 +137,24 @@ Define a generic `Repository<T>` interface for database CRUD operations.
 >   save(entity: T): Promise<void>;
 >   findAll(): Promise<T[]>;
 > }
-
-interface Product { id: string; title: string; price: number; }
-
-class ProductRepository implements Repository<Product> {
-  async findById(id: string): Promise<Product | null> {
-    return { id, title: "Laptop", price: 999 };
-  }
-  async save(entity: Product): Promise<void> {}
-  async findAll(): Promise<Product[]> { return []; }
-}
-```
-
+> 
+> interface Product { id: string; title: string; price: number; }
+> 
+> class ProductRepository implements Repository<Product> {
+>   async findById(id: string): Promise<Product | null> {
+>     return { id, title: "Laptop", price: 999 };
+>   }
+>   async save(entity: Product): Promise<void> {}
+>   async findAll(): Promise<Product[]> { return []; }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `interface Repository<T>` parameterizes CRUD method signatures over arbitrary domain entities.
 > 2. Implementing `Repository<Product>` locks `T` to `Product` across all class methods.
 > 3. Standard enterprise data access layer architecture.
-
+> 
 ---
 
 ### Exercise 2: Implementing Generic Stack Data Structures
@@ -172,32 +172,32 @@ Create a generic `Stack<T>` class supporting `push`, `pop`, and `peek` operation
 > ```typescript
 > class Stack<T> {
 >   private items: T[] = [];
-
-  push(item: T): void {
-    this.items.push(item);
-  }
-
-  pop(): T | undefined {
-    return this.items.pop();
-  }
-
-  peek(): T | undefined {
-    return this.items[this.items.length - 1];
-  }
-}
-
-const numberStack = new Stack<number>();
-numberStack.push(10);
-numberStack.push(20);
-console.log(numberStack.pop()); // 20
-```
-
+> 
+>   push(item: T): void {
+>     this.items.push(item);
+>   }
+> 
+>   pop(): T | undefined {
+>     return this.items.pop();
+>   }
+> 
+>   peek(): T | undefined {
+>     return this.items[this.items.length - 1];
+>   }
+> }
+> 
+> const numberStack = new Stack<number>();
+> numberStack.push(10);
+> numberStack.push(20);
+> console.log(numberStack.pop()); // 20
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `class Stack<T>` manages internal state (`items: T[]`) of type `T`.
 > 2. Instantiating `new Stack<number>()` enforces number element types across all stack operations.
 > 3. High performance, type-safe data structure implementation.
-
+> 
 ---
 
 ### Exercise 3: Generic Interface Method Inheritance
@@ -217,26 +217,26 @@ Extend a generic parent interface into a generic child interface (`interface Pag
 >   data: T;
 >   status: number;
 > }
-
-interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  page: number;
-  totalPages: number;
-}
-
-const response: PaginatedResponse<string> = {
-  data: ["item1", "item2"],
-  status: 200,
-  page: 1,
-  totalPages: 5
-};
-```
-
+> 
+> interface PaginatedResponse<T> extends ApiResponse<T[]> {
+>   page: number;
+>   totalPages: number;
+> }
+> 
+> const response: PaginatedResponse<string> = {
+>   data: ["item1", "item2"],
+>   status: 200,
+>   page: 1,
+>   totalPages: 5
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Generic interfaces can extend other generic interfaces (`extends ApiResponse<T[]>`).
 > 2. Substitutes type parameter `T[]` into parent interface definitions cleanly.
 > 3. Reusable API response design.
-
+> 
 ---
 
 

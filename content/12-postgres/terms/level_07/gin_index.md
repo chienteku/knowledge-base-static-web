@@ -180,7 +180,7 @@ Create a GIN index on `posts(tags)` to accelerate array containment queries (`ta
 > 1. GIN (Generalized Inverted Index) stores inverted key components mapping to matching table row pointers.
 > 2. Handles multi-element items like arrays and JSONB documents.
 > 3. Accelerates array containment (`@>`), overlap (`&&`), and array membership queries.
-
+> 
 ---
 
 ### Exercise 2: Creating GIN Indexes for JSONB Payload Containment
@@ -210,7 +210,7 @@ Create a GIN index on `events(metadata)` for fast JSONB document containment mat
 > 1. GIN indexes extract every key/value pair inside `metadata` JSONB documents.
 > 2. `@>` (contains operator) hits the GIN index efficiently.
 > 3. Enables sub-millisecond search velocity across unstructured JSON logs.
-
+> 
 ---
 
 ### Exercise 3: Trade-Off Analysis: GIN Indexes vs B-Tree Indexes
@@ -237,7 +237,7 @@ Formulate a technical trade-off matrix comparing GIN indexes against B-Tree inde
 > 1. GIN indexes split a single document into dozens of inverted key entries, increasing write amplification.
 > 2. Use GIN for semi-structured arrays/JSONB/full-text; use B-Tree for standard scalar columns.
 > 3. Production indexing decision guideline.
-
+> 
 ---
 
 

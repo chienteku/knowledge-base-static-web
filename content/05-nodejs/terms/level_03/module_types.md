@@ -117,7 +117,7 @@ import data from './data.json' with { type: 'json' }; // Import attribute for JS
 > 3. External Module. (`react` is not built into Node.js; it must be downloaded via NPM).
 > ```
 > - Does it have a slash? Was it built by the Node.js core team?
-
+> 
 ---
 
 
@@ -143,7 +143,7 @@ import data from './data.json' with { type: 'json' }; // Import attribute for JS
 > ```
 >
 > **Explanation:** `.cjs` is explicitly CommonJS; `.mjs` is explicitly ESM; `.js` defaults to CJS unless package `type` specifies `module`.
-
+> 
 ---
 
 ### Exercise 3: Conditional Package Exports
@@ -167,7 +167,7 @@ import data from './data.json' with { type: 'json' }; // Import attribute for JS
 > ```
 >
 > **Explanation:** Conditional exports direct CJS `require()` and ESM `import` statements to appropriate build formats.
-
+> 
 ## 7. Related Terms
 - [NPM (Node Package Manager)](../level_04/npm.md) — The registry where you download all External Modules.
 - [node_modules](../level_04/node_modules.md) — The folder where External Modules physically live on your hard drive once downloaded.

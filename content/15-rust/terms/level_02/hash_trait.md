@@ -279,7 +279,7 @@ Implement `PartialEq`, `Eq`, and `Hash` manually for `FlowKey` to achieve canoni
 > 2. **Trait Contract Enforcement**: The core requirement of the `Hash` and `Eq` contract in Rust is that `a == b => hash(a) == hash(b)`. Both `PartialEq::eq` and `Hash::hash` delegate directly to `protocol` and `canonical_endpoints()`. Because identical data inputs are fed to `Hasher`, hash collisions for symmetric flows are mathematically zero at the key representation layer.
 > 3. **Selective Field Exclusion**: The `vlan_tag` field is deliberately omitted from both `eq` and `hash`. If `vlan_tag` were hashed but omitted from `eq` (or vice versa), two flows arriving on different VLANs would produce different bucket indexes in `HashMap`, breaking lookup mechanics.
 > 4. **Edge Cases**: Differing `protocol` values (e.g., TCP `6` vs UDP `17`) between identical IP/port endpoints evaluate as distinct keys and produce different hash values due to feeding `self.protocol` into the `Hasher` first.
-
+> 
 ---
 
 ### Exercise 2: Quantized Financial Order Book Price Key
@@ -383,7 +383,7 @@ Implement a wrapper struct `CanonicalPrice` that quantizes prices into integer t
 > 2. **Integer Scaling Transformation**: By dividing `raw_price` by `tick_size` and rounding to the nearest whole integer, continuous floating-point space is mapped into discrete integer ticks (`i64`). Integer types implement total equivalence (`Eq`) and predictable hashing (`Hash`).
 > 3. **Signed Zero Normalization**: IEEE 754 floating-point numbers distinguish between `+0.0` and `-0.0`. In Rust, `+0.0 == -0.0` evaluates to `true`, but converting `-0.0` directly to bits without normalization could risk different internal representations. Normalizing `ticks == -0.0` directly to integer `0` ensures exact equivalence and hash parity.
 > 4. **HashMap Aggregation Guarantee**: Because `p1` (`100.004`) and `p2` (`100.001`) both round to tick integer `10000`, `p1 == p2` is `true` and `hash(p1) == hash(p2)` holds, allowing `HashMap::get` using `p2` to seamlessly retrieve entries inserted using `p1`.
-
+> 
 ---
 
 ### Exercise 3: Zero-Allocation Case-Insensitive AST Symbol Key
@@ -478,7 +478,7 @@ Implement `SymbolKey` with custom `PartialEq`, `Eq`, and `Hash` to perform case-
 > 2. **ASCII Case Invariance**: `PartialEq` uses `name.eq_ignore_ascii_case(&other.name)`, which checks ASCII byte equality ignoring case differences without heap allocation. Because both `eq` and `hash` operate byte-by-byte on ASCII-lowercased equivalents, `"UserCounter"` and `"usercounter"` produce identical hash values and compare equal.
 > 3. **Scope Scoping and Metadata Filtering**: The `scope_id` field is explicitly hashed and compared, ensuring that variables with the same identifier in different lexical scopes (e.g. `scope_id: 1` vs `scope_id: 2`) generate distinct hashes and evaluate as unequal. The `span_start` byte offset is omitted entirely from both `eq` and `hash`, preventing AST refactoring or line movement from breaking symbol resolution.
 > 4. **Safety and Soundness**: The type implements `Eq` because ASCII case-insensitive equality is reflexive (`a == a`), symmetric (`a == b => b == a`), and transitive (`a == b && b == c => a == c`). Combined with streaming lowercase byte hashing, the strict invariant `a == b => hash(a) == hash(b)` is fully satisfied.
-
+> 
 ---
 
 ## 6. Related Terms

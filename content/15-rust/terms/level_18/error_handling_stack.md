@@ -182,7 +182,7 @@ impl From<std::io::Error> for MyError { ... }
 >
 > 1. `DbError` uses `thiserror` for strongly-typed domain errors in library modules.
 > 2. `handle_request` formats and attaches context for application presentation.
-
+> 
 ---
 
 ### Exercise 2: File Parser Layered Error Stack
@@ -228,7 +228,7 @@ impl From<std::io::Error> for MyError { ... }
 >
 > 1. Demonstrates automatic `From` trait implementation via `#[from]` attribute.
 > 2. Formats human-readable diagnostic messages.
-
+> 
 ---
 
 ### Exercise 3: Network Protocol Gateway Error Stack
@@ -272,7 +272,7 @@ impl From<std::io::Error> for MyError { ... }
 >
 > 1. Captures structured error fields for programmatic error handling.
 > 2. Idiomatic library error design.
-
+> 
 ---
 
 ## 6. Related Terms

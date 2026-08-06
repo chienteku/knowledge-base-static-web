@@ -156,7 +156,7 @@ You are building a user registration table where user passwords must be hashed s
 > 1. `crypto::argon2::generate(secret)` hashes plaintext passwords using the password-hashing algorithm Argon2id.
 > 2. Automatically generates random cryptographic salts to prevent rainbow table attacks.
 > 3. Hashes passwords at the database engine tier during record creation.
-
+> 
 ---
 
 ### Exercise 2: Validating Passwords with Argon2 Compare
@@ -184,7 +184,7 @@ Write a `SIGNIN` query for a `RECORD` access method that compares an incoming lo
 > 1. `crypto::argon2::compare(hash, secret)` verifies plaintext password inputs against stored Argon2 hashes.
 > 2. Returns boolean `true` if credentials match, issuing a valid authentication token.
 > 3. Protects authentication checks against timing side-channel attacks.
-
+> 
 ---
 
 ### Exercise 3: Protecting Password Fields with PERMISSIONS
@@ -209,7 +209,7 @@ Restrict access to field `password` on table `user` so that no client (even the 
 > 1. `PERMISSIONS FOR select NONE` redacts field values from all `SELECT` query results.
 > 2. Prevents password hashes from leaking in client-side API response payloads.
 > 3. Enforces field-level security independently from table read permissions.
-
+> 
 ---
 
 

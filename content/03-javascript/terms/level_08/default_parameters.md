@@ -161,7 +161,7 @@ makeGreeting("Bob");
 > Default parameters are evaluated sequentially from left to right, so later parameters have full access to earlier ones.
 > ```
 > - The parameters exist in their own little mini-scope.
-
+> 
 ---
 
 ### Exercise 2: Default Parameters Evaluation Timing
@@ -179,7 +179,7 @@ makeGreeting("Bob");
 > ```
 >
 > **Explanation:** Default parameter expressions evaluate in parameter scope at runtime when invoked.
-
+> 
 ---
 
 ### Exercise 3: Destructured Parameter Defaults
@@ -197,8 +197,8 @@ makeGreeting("Bob");
 > ```
 >
 > **Explanation:** Combining parameter destructuring with default initializers safely handles omitted arguments.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -168,7 +168,7 @@ Update the `status` to `"confirmed"` for the first item in an order's `items` ar
 > 1. `$` acts as a positional placeholder representing the index of the FIRST array element matching the query filter.
 > 2. `"items.$.status"` updates that specific matched array index.
 > 3. Requires the target array field to be present in the query filter.
-
+> 
 ---
 
 ### Exercise 2: Updating All Array Elements with `$[]`
@@ -195,7 +195,7 @@ Reset `loginAttempts` to 0 for ALL elements in a user's `deviceTokens` array.
 > 1. `$[]` applies the update modification to EVERY element in the array unconditionally.
 > 2. Eliminates procedural loops when resetting array subfields.
 > 3. Fast atomic bulk array update.
-
+> 
 ---
 
 ### Exercise 3: Filtered Positional Updating with `$[identifier]`
@@ -223,7 +223,7 @@ Increment `qty` by 10 ONLY for items in `inventory` array where `price < 15`.
 > 1. `$[identifier]` dynamically matches array elements satisfying `arrayFilters` conditions.
 > 2. Updates multiple specific array items selectively.
 > 3. Powerful pattern for nested document array manipulation.
-
+> 
 ---
 
 

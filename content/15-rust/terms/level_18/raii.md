@@ -165,7 +165,7 @@ let _guard = lock.lock().unwrap(); // Held until end of block scope!
 >
 > 1. `TempFileGuard` creates the disk file in `.new()`.
 > 2. When `_guard` leaves block scope, `Drop::drop` automatically deletes the file, preventing orphaned temporary files.
-
+> 
 ---
 
 ### Exercise 2: RAII Active Connection Metric Counter
@@ -222,7 +222,7 @@ let _guard = lock.lock().unwrap(); // Held until end of block scope!
 >
 > 1. Guarantees live connection counts are updated atomically on creation and destruction.
 > 2. Thread-safe RAII resource tracking.
-
+> 
 ---
 
 ### Exercise 3: RAII Execution Timer Scope Profiler
@@ -274,7 +274,7 @@ let _guard = lock.lock().unwrap(); // Held until end of block scope!
 >
 > 1. Automatically profiles function scope execution time.
 > 2. Infallible drop execution.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -178,7 +178,7 @@ Correct usage pairing a label with an example placeholder:
 > - Create a `<label>` element with a `for` attribute.
 > - Connect the label to the input using a unique `id`.
 > - Change the placeholder value from a label name to a format example.
-
+> 
 ---
 
 
@@ -198,7 +198,7 @@ Correct usage pairing a label with an example placeholder:
 > ```
 >
 > **Explanation:** Placeholders should provide short sample format hints, not act as field labels.
-
+> 
 ---
 
 ### Exercise 3: CSS Placeholder Pseudo-Element Selector
@@ -217,7 +217,7 @@ Correct usage pairing a label with an example placeholder:
 > ```
 >
 > **Explanation:** `::placeholder` pseudo-element targets input hint text styles.
-
+> 
 ## 7. Related Terms
 - [`<input>`](input.md) — The tag hosting the placeholder.
 - [`<label>`](label.md) — The mandatory companion tag for accessibility.

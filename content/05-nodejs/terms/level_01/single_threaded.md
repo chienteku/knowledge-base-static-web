@@ -106,7 +106,7 @@ Which product should use Node.js, and which should use a multi-threaded language
 > 2. Video App = Go/Java/C++. Video conversion requires massive CPU math. If you use Node.js, the single thread will block and the server will freeze.
 > ```
 > - Which app requires heavy math? Which app requires fast I/O?
-
+> 
 ---
 
 
@@ -125,7 +125,7 @@ Which product should use Node.js, and which should use a multi-threaded language
 > ```
 >
 > **Explanation:** `libuv` manages a background pool of C++ worker threads for filesystem, DNS, and crypto tasks.
-
+> 
 ---
 
 ### Exercise 3: Process Manager Protection
@@ -142,7 +142,7 @@ Which product should use Node.js, and which should use a multi-threaded language
 > ```
 >
 > **Explanation:** PM2 monitors Node.js processes and instantly restarts them if uncaught errors occur.
-
+> 
 ## 7. Related Terms
 - [Non-Blocking I/O](non_blocking_io.md) — How the single thread manages to avoid waiting for the kitchen.
 - [The Event Loop & Libuv](event_loop.md) — The mechanism that tells the single thread when the kitchen is done cooking.

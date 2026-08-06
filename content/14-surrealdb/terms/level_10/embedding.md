@@ -154,24 +154,24 @@ A Rust desktop application initializes SurrealDB directly as an embedded in-memo
 > ```rust
 > use surrealdb::engine::local::Mem;
 > use surrealdb::Surreal;
-
-#[tokio::main]
-async fn main() -> surrealdb::Result<()> {
-    // Initialize embedded in-memory engine
-    let db = Surreal::new::<Mem>(()).await?;
-    db.use_ns("test").use_db("test").await?;
-    
-    println!("Embedded Rust database engine initialized!");
-    Ok(())
-}
-```
-
+> 
+> #[tokio::main]
+> async fn main() -> surrealdb::Result<()> {
+>     // Initialize embedded in-memory engine
+>     let db = Surreal::new::<Mem>(()).await?;
+>     db.use_ns("test").use_db("test").await?;
+>     
+>     println!("Embedded Rust database engine initialized!");
+>     Ok(())
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Surreal::new::<Mem>(())` compiles the SurrealDB engine directly inside the Rust application binary.
 > 2. Zero-network latency for local database queries.
 > 3. Eliminates external database server installation requirements.
-
+> 
 ---
 
 ### Exercise 2: Embedded WebAssembly (WASM) in Browser Apps
@@ -189,20 +189,20 @@ An offline-first web application runs SurrealDB embedded inside the browser usin
 > ```typescript
 > import { Surreal } from "@surrealdb/surrealdb";
 > import { indb } from "@surrealdb/surrealdb/wasm";
-
-const db = new Surreal();
-
-// Initialize embedded WASM engine with browser IndexedDB storage
-await db.connect("indxdb://my_app_db");
-await db.use({ ns: "app", db: "main" });
-```
-
+> 
+> const db = new Surreal();
+> 
+> // Initialize embedded WASM engine with browser IndexedDB storage
+> await db.connect("indxdb://my_app_db");
+> await db.use({ ns: "app", db: "main" });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Compiles SurrealDB into WebAssembly (WASM) running inside browser client threads.
 > 2. `indxdb://` connects to browser IndexedDB for local offline persistence.
 > 3. Enables local-first desktop and web app architectures.
-
+> 
 ---
 
 ### Exercise 3: Comparing Embedded vs Client-Server Deployments
@@ -234,7 +234,7 @@ Compare embedded mode vs client-server WebSocket mode across latency, deployment
 > 1. Embedded mode excels in desktop apps, CLI tools, and offline-first browser apps.
 > 2. Client-server mode excels in multi-tenant cloud applications with central databases.
 > 3. Provides identical SurrealQL syntax across both deployment models.
-
+> 
 ---
 
 

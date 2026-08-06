@@ -161,7 +161,7 @@ async function processData() {
 > Goodbye, Alice
 > ```
 > - `const farewell = function(name) { ... };`
-
+> 
 ---
 
 ### Exercise 2: Anonymous vs Named Function Expressions
@@ -181,7 +181,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Named function expressions bind function names internally for diagnostic tracing and recursion.
-
+> 
 ---
 
 ### Exercise 3: Conditional Function Expression Assignment
@@ -200,8 +200,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Function expressions permit conditional, dynamic assignment at runtime.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

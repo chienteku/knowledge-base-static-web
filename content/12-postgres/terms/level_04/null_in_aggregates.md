@@ -170,7 +170,7 @@ Demonstrate how `AVG()` and `SUM()` ignore `NULL` values when computing averages
 > 1. Aggregate functions (`AVG`, `SUM`, `MIN`, `MAX`) automatically ignore `NULL` values during calculation.
 > 2. `AVG()` divides total sum (300) by non-null row count (2), yielding `150` (NOT 100).
 > 3. `COUNT(col)` counts non-null rows; `COUNT(*)` counts all rows regardless of nulls.
-
+> 
 ---
 
 ### Exercise 2: Forcing Null Substitution in Aggregations with `COALESCE`
@@ -196,7 +196,7 @@ Calculate average discount treating `NULL` values as `0` discount (`AVG(COALESCE
 > 1. Wrapping columns in `COALESCE(col, 0)` converts `NULL` to `0` before aggregation occurs.
 > 2. Forces `AVG()` to divide by total row count (3), yielding `100` (300 / 3).
 > 3. Business logic choice based on domain requirements.
-
+> 
 ---
 
 ### Exercise 3: Handling Empty Aggregation Results
@@ -223,7 +223,7 @@ Handle empty `SUM()` query results when 0 matching rows exist using `COALESCE(SU
 > 1. `SUM()` over an empty result set (0 rows) returns `NULL` (NOT 0).
 > 2. `COALESCE(SUM(...), 0)` converts empty aggregation `NULL` output into `0`.
 > 3. Prevents returning `null` to financial calculations.
-
+> 
 ---
 
 

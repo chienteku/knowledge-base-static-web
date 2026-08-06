@@ -169,7 +169,7 @@ Insert a new product row into `products` and retrieve its auto-generated `id`.
 > 1. `INSERT INTO` adds a new row to the table.
 > 2. Omitting `id` triggers the identity sequence generator.
 > 3. `RETURNING id` returns the newly generated primary key in a single database roundtrip.
-
+> 
 ---
 
 ### Exercise 2: Inserting Rows with Default Column Expressions
@@ -194,7 +194,7 @@ Insert a user row omitting `is_active` and `created_at` to rely on column defaul
 > 1. Columns omitted from the `INSERT` column list automatically receive their `DEFAULT` expressions.
 > 2. Populates `is_active` as `TRUE` and `created_at` as `CURRENT_TIMESTAMP`.
 > 3. Simplifies client insertion payloads.
-
+> 
 ---
 
 ### Exercise 3: Inserting Parameterized Data in Node.js
@@ -211,24 +211,24 @@ Execute a parameterized `INSERT` query from a Node.js Express route.
 >
 > ```typescript
 > import { pool } from "./db";
-
-export async function createProduct(name: string, priceCents: number) {
-  const text = `
-    INSERT INTO products (name, price_cents) 
-    VALUES ($1, $2) 
-    RETURNING id, name, price_cents
-  `;
-  const res = await pool.query(text, [name, priceCents]);
-  return res.rows[0];
-}
-```
-
+> 
+> export async function createProduct(name: string, priceCents: number) {
+>   const text = `
+>     INSERT INTO products (name, price_cents) 
+>     VALUES ($1, $2) 
+>     RETURNING id, name, price_cents
+>   `;
+>   const res = await pool.query(text, [name, priceCents]);
+>   return res.rows[0];
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Parameterized queries (`$1`, `$2`) protect applications against SQL Injection.
 > 2. Returns inserted row object cleanly.
 > 3. Node.js backend integration.
-
+> 
 ---
 
 

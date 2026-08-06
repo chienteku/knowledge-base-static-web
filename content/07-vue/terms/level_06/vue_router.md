@@ -133,7 +133,7 @@ const router = createRouter({
 > However, Hash URLs are terrible for SEO. Today, `createWebHistory()` is the strict standard.
 > ```
 > - Think about how servers interpret the `#` symbol in URLs.
-
+> 
 ---
 
 ### Exercise 2: Vue Router Instance Setup Pattern
@@ -163,7 +163,7 @@ const router = createRouter({
 > 
 > export default router;
 > ```
-
+> 
 ---
 
 ### Exercise 3: Lazy-Loading Route Components
@@ -180,8 +180,8 @@ const router = createRouter({
 > ```javascript
 > { path: '/dashboard', component: () => import('./Dashboard.vue') }
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

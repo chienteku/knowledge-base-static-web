@@ -179,7 +179,7 @@ export default function LandingPage() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Streaming SSR Architecture Pattern
@@ -205,7 +205,7 @@ export default function LandingPage() {
 > ```
 >
 > **Explanation:** Streaming SSR delivers initial page HTML immediately, streaming suspended async chunks over HTTP.
-
+> 
 ---
 
 ### Exercise 3: React 18 Server Stream APIs
@@ -222,7 +222,7 @@ export default function LandingPage() {
 > ```
 >
 > **Explanation:** Server stream APIs stream HTML progressive chunks directly to client HTTP response streams.
-
+> 
 ## 7. Related Terms
 - [Server-Side Rendering (SSR)](ssr.md) — The baseline server rendering pattern.
 - [Hydration](hydration.md) — The process that links event handlers to static HTML.

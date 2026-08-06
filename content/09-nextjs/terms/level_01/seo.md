@@ -155,28 +155,28 @@ Configure page title, meta description, and canonical link tags using static `me
 >
 > ```tsx
 > import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Next.js SEO Masterclass",
-  description: "Learn how to optimize Next.js App Router applications for search engines.",
-  openGraph: {
-    title: "Next.js SEO Masterclass",
-    description: "Learn how to optimize Next.js App Router applications for search engines.",
-    images: ["/og-image.jpg"]
-  }
-};
-
-export default function Page() {
-  return <h1>SEO Optimized Page</h1>;
-}
-```
-
+> 
+> export const metadata: Metadata = {
+>   title: "Next.js SEO Masterclass",
+>   description: "Learn how to optimize Next.js App Router applications for search engines.",
+>   openGraph: {
+>     title: "Next.js SEO Masterclass",
+>     description: "Learn how to optimize Next.js App Router applications for search engines.",
+>     images: ["/og-image.jpg"]
+>   }
+> };
+> 
+> export default function Page() {
+>   return <h1>SEO Optimized Page</h1>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Exporting `const metadata: Metadata` in App Router components injects static meta tags into server-rendered HTML.
 > 2. `openGraph` properties configure social share card previews (Facebook, Twitter, LinkedIn).
 > 3. Executed on the server for maximum search crawler visibility.
-
+> 
 ---
 
 ### Exercise 2: Generating Dynamic Meta Data with `generateMetadata()`
@@ -193,29 +193,29 @@ Generate dynamic SEO meta tags based on fetched product database parameters.
 >
 > ```tsx
 > import type { Metadata } from "next";
-
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ id: string }>;
-}): Promise<Metadata> {
-  const { id } = await params;
-  const res = await fetch(`https://api.example.com/products/${id}`);
-  const product = await res.json();
-
-  return {
-    title: `${product.title} | Store`,
-    description: product.description
-  };
-}
-```
-
+> 
+> export async function generateMetadata({
+>   params
+> }: {
+>   params: Promise<{ id: string }>;
+> }): Promise<Metadata> {
+>   const { id } = await params;
+>   const res = await fetch(`https://api.example.com/products/${id}`);
+>   const product = await res.json();
+> 
+>   return {
+>     title: `${product.title} | Store`,
+>     description: product.description
+>   };
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `generateMetadata()` resolves dynamic route parameters and fetches remote API data to construct page metadata.
 > 2. Automatically deduplicates data requests shared with the page component via fetch request memoization.
 > 3. Crucial for e-commerce and CMS dynamic SEO pages.
-
+> 
 ---
 
 ### Exercise 3: Generating Dynamic `sitemap.ts` and `robots.ts`
@@ -233,37 +233,33 @@ Create dynamic `app/sitemap.ts` and `app/robots.ts` files for search crawler ind
 > ```typescript
 > // app/sitemap.ts
 > import type { MetadataRoute } from "next";
-
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  return [
-    {
-      url: "https://example.com",
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 1
-    },
-    {
-      url: "https://example.com/about",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8
-    }
-  ];
-}
-```
-
+> 
+> export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+>   return [
+>     {
+>       url: "https://example.com",
+>       lastModified: new Date(),
+>       changeFrequency: "yearly",
+>       priority: 1
+>     },
+>     {
+>       url: "https://example.com/about",
+>       lastModified: new Date(),
+>       changeFrequency: "monthly",
+>       priority: 0.8
+>     }
+>   ];
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `app/sitemap.ts` automatically generates a valid `/sitemap.xml` HTTP endpoint.
 > 2. Dynamic sitemaps inform search crawlers of newly added database items.
 > 3. Standard technical SEO infrastructure feature.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Next.js Overview](nextjs.md) — The parent framework.

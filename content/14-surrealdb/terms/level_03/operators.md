@@ -176,7 +176,7 @@ A search query filters user accounts where `email` matches a domain pattern (`@e
 > 1. `=~` performs case-insensitive regex pattern matching on string fields (`!~` performs negated regex match).
 > 2. `CONTAINS` checks substring or array element containment.
 > 3. Enables advanced text filtering without full-text search index overhead.
-
+> 
 ---
 
 ### Exercise 2: Array Containment Operators (`INSIDE` vs `CONTAINS`)
@@ -205,7 +205,7 @@ A permission system checks whether user role `"admin"` is contained `INSIDE` an 
 > 1. `val INSIDE array` evaluates whether a single scalar value exists within a target collection.
 > 2. `array CONTAINS val` evaluates whether an array collection contains a target scalar value.
 > 3. Both expressions evaluate to boolean `true` or `false`.
-
+> 
 ---
 
 ### Exercise 3: Record Link Equality Operators
@@ -234,7 +234,7 @@ Filter blog posts where the `author` record link pointer equals `user:alice`.
 > 1. `=` performs typed equality comparison between record link pointers.
 > 2. `user:alice` represents a typed record ID pointer, not a raw string literal `"user:alice"`.
 > 3. Executes direct $O(1)$ pointer comparison in SurrealDB's query engine.
-
+> 
 ---
 
 

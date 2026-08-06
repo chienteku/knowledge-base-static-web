@@ -201,7 +201,7 @@ app.delete('/orders/:id', async (req, res) => {
 > 4. Delete (DELETE)
 > ```
 > - Think about what is happening to the permanent data in the Twitter database.
-
+> 
 ---
 
 ### Exercise 2: CRUD to HTTP Method Mapping Table

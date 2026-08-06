@@ -99,7 +99,7 @@ const STRIPE_SECRET_KEY = 'sk_live_51Nx...'; // ❌ Leaked in public browser bun
 > This instantly invalidates the old string of characters, meaning any API requests using the stolen key will now receive a `401 Unauthorized` error. You will then be issued a brand new key to put in your backend code.
 > ```
 > - Just like a stolen credit card, what do you ask the bank to do?
-
+> 
 ---
 
 ### Exercise 2: API Key Storage Location Matrix

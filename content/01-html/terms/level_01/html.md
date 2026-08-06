@@ -136,7 +136,7 @@ HTML is the blueprint and the raw wooden frame. It defines where the walls are, 
 > ```
 > - Think about what makes the web different from a printed book.
 > - Think about what you do with a highlighter on a textbook.
-
+> 
 ---
 
 
@@ -155,7 +155,7 @@ HTML is the blueprint and the raw wooden frame. It defines where the walls are, 
 > ```
 >
 > **Explanation:** Markup languages annotate text structure; programming languages execute algorithmic logic.
-
+> 
 ---
 
 ### Exercise 3: Building Barebones Valid HTML5 Page
@@ -180,7 +180,7 @@ HTML is the blueprint and the raw wooden frame. It defines where the walls are, 
 > ```
 >
 > **Explanation:** Minimal valid HTML5 document structure requires DOCTYPE, html, head with title, and body.
-
+> 
 ## 7. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — The fundamental building blocks used to write HTML.
 - [Block-level vs Inline Elements](block_inline.md) — The two display behaviors of elements.

@@ -179,7 +179,7 @@ async function processData() {
 > It will NOT crash. If you leave the constructor out entirely, the JavaScript engine automatically creates a hidden constructor that simply calls `super(...args)` for you! You only need to manually write `super()` if you are explicitly writing a `constructor` block.
 > ```
 > - JavaScript is helpful when you leave the constructor blank.
-
+> 
 ---
 
 ### Exercise 2: Overriding and Calling Parent Methods with `super.method()`
@@ -200,7 +200,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `super.method()` invokes parent prototype implementations within overridden subclass methods.
-
+> 
 ---
 
 ### Exercise 3: Mandatory `super()` Constructor Invocation
@@ -228,8 +228,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Derived class constructors must call `super()` before accessing instance `this` bindings.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

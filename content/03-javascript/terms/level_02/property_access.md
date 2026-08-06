@@ -191,7 +191,7 @@ console.log(currentValue);
 > ```
 > - The key name is stored in a variable, so you must use bracket notation.
 > - Pass the variable `userSelection` into the brackets without quotes.
-
+> 
 ---
 
 ### Exercise 2: Optional Chaining Property Access (`?.`)
@@ -209,7 +209,7 @@ console.log(currentValue);
 > ```
 >
 > **Explanation:** `?.` short-circuits and evaluates to `undefined` if target reference operands are nullish (`null` or `undefined`).
-
+> 
 ---
 
 ### Exercise 3: Dynamic Bracket Property Lookup
@@ -228,7 +228,7 @@ console.log(currentValue);
 > ```
 >
 > **Explanation:** Bracket notation `obj[expr]` evaluates `expr` as a string identifier key lookup.
-
+> 
 ---
 
 ## 7. Related Terms

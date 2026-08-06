@@ -175,7 +175,7 @@ Execute an anonymous `DO` block to seed 100 test user rows in a loop for local d
 > 1. `DO $$ ... $$` executes anonymous inline PL/pgSQL procedural code blocks.
 > 2. Supports `FOR` loops, `IF` conditionals, and local variable declarations.
 > 3. Does NOT create permanent schema objects or return query result sets.
-
+> 
 ---
 
 ### Exercise 2: Conditional Schema Migrations inside `DO` Blocks
@@ -208,7 +208,7 @@ Check if column `is_verified` exists on table `users`; if missing, execute `ALTE
 > 1. Executes dynamic DDL statements based on runtime schema conditions.
 > 2. Prevents script errors during automated migration pipelines.
 > 3. Idempotent schema migration pattern.
-
+> 
 ---
 
 ### Exercise 3: Exception Handling in Anonymous Procedural Blocks
@@ -238,7 +238,7 @@ Catch unique violation exceptions inside a `DO` block loop using `EXCEPTION WHEN
 > 1. `EXCEPTION WHEN ... THEN` intercepts PL/pgSQL runtime errors gracefully.
 > 2. `RAISE NOTICE` outputs informative log messages to the client console without aborting the block.
 > 3. Robust procedural scripting.
-
+> 
 ---
 
 

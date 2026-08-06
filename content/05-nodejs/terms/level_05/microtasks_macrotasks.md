@@ -131,7 +131,7 @@ console.log("4. Sync Code End");
 > - Finally, it checks the normal Macrotask line (Timeout) and runs it (2).
 > ```
 > - Sync first. VIPs second. Regulars last.
-
+> 
 ---
 
 
@@ -160,7 +160,7 @@ console.log("4. Sync Code End");
 > ```
 >
 > **Explanation:** Promises and `queueMicrotask` are Microtasks; timers and `setImmediate` are Macrotasks.
-
+> 
 ---
 
 ### Exercise 3: Tracing Mixed Task Execution Order
@@ -189,7 +189,7 @@ console.log('4');
 > ```
 >
 > **Explanation:** Sync logs (1, 4) execute first on Call Stack, followed by Microtask Promise (3), then Macrotask timer (2).
-
+> 
 ## 7. Related Terms
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The manager of these two queues.
 - [process.nextTick() vs setImmediate()](nexttick_setimmediate.md) — Related concept: process.nextTick() vs setImmediate().

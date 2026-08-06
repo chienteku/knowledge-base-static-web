@@ -123,17 +123,17 @@ Create a `sumNumbers` utility function accepting a variable number of numeric ar
 > function sumNumbers(...numbers: number[]): number {
 >   return numbers.reduce((acc, curr) => acc + curr, 0);
 > }
-
-const total1 = sumNumbers(10, 20, 30);       // 60
-const total2 = sumNumbers(5, 15, 25, 35, 45); // 125
-```
-
+> 
+> const total1 = sumNumbers(10, 20, 30);       // 60
+> const total2 = sumNumbers(5, 15, 25, 35, 45); // 125
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Rest parameters (`...numbers: number[]`) gather all remaining call arguments into a type-safe array.
 > 2. Must be the last parameter in the function declaration.
 > 3. Enforces element type consistency across variable argument lists.
-
+> 
 ---
 
 ### Exercise 2: Tuple Rest Parameters for Leading Parameter Typing
@@ -150,20 +150,20 @@ Use tuple rest parameters to require a string action name followed by a variable
 >
 > ```typescript
 > type ActionTuple = [action: string, ...payload: number[]];
-
-function dispatchAction(...[action, ...data]: ActionTuple) {
-  console.log(`Action: ${action}, Data Count: ${data.length}`);
-}
-
-dispatchAction("ADD", 10, 20, 30);
-```
-
+> 
+> function dispatchAction(...[action, ...data]: ActionTuple) {
+>   console.log(`Action: ${action}, Data Count: ${data.length}`);
+> }
+> 
+> dispatchAction("ADD", 10, 20, 30);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Rest elements in tuples (`[string, ...number[]]`) allow defining exact leading argument types followed by dynamic trailing arguments.
 > 2. Enables type-safe tuple destructuring in variadic function signatures.
 > 3. Advanced parameter typing pattern.
-
+> 
 ---
 
 ### Exercise 3: Spreading Readonly Tuples into Rest Parameters
@@ -182,19 +182,19 @@ Spread a `const` tuple into a function expecting rest parameters using `as const
 > function multiply(a: number, b: number): number {
 >   return a * b;
 > }
-
-const tuple = [5, 4] as const; // Inferred as readonly [5, 4] tuple
-
-// Valid spread invocation:
-const result = multiply(...tuple);
-```
-
+> 
+> const tuple = [5, 4] as const; // Inferred as readonly [5, 4] tuple
+> 
+> // Valid spread invocation:
+> const result = multiply(...tuple);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Spreading a mutable array (`number[]`) into positional arguments fails because array length is unbounded.
 > 2. Marking the tuple `as const` informs TypeScript of its exact fixed length (2 elements).
 > 3. Allows type-safe parameter spreading into positional arguments.
-
+> 
 ---
 
 

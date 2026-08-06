@@ -177,7 +177,7 @@ Query collection `products` for items with price between `$20.00` and `$100.00`.
 > 1. Comparison operators evaluate field values against numeric, string, or date thresholds.
 > 2. Range queries hit single-field B-tree indexes efficiently.
 > 3. Combines multiple comparison bounds within a single field filter.
-
+> 
 ---
 
 ### Exercise 2: Matching Discrete Values with `$in`
@@ -203,7 +203,7 @@ Query collection `orders` for documents where `status` is either `"pending"`, `"
 > 1. `$in` checks whether a field value equals any element in the specified array.
 > 2. Replaces multiple `$or` equality clauses with clean syntax.
 > 3. Utilizes secondary indexes on `status`.
-
+> 
 ---
 
 ### Exercise 3: Inequality Filtering with `$ne`
@@ -229,7 +229,7 @@ Query user documents where `role` is NOT equal to `"admin"`.
 > 1. `$ne` matches documents where the field is not equal to the specified value (including missing fields).
 > 2. Note: `$ne` queries cannot isolate small index bounds and usually require scanning index pages.
 > 3. Combine with high-cardinality filters to optimize query execution.
-
+> 
 ---
 
 

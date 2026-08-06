@@ -183,7 +183,7 @@ Lock an inventory row exclusively during a checkout transaction to prevent concu
 > 1. `FOR UPDATE` acquires an exclusive row-level lock on all matching rows.
 > 2. Prevents concurrent transactions from modifying, deleting, or locking the same rows until `COMMIT`.
 > 3. Guarantees serializable access to specific row entities.
-
+> 
 ---
 
 ### Exercise 2: Skipping Locked Rows with `SKIP LOCKED`
@@ -220,7 +220,7 @@ Implement a high-throughput job queue worker using `FOR UPDATE SKIP LOCKED` to p
 > 1. `SKIP LOCKED` instructs PostgreSQL to skip any rows currently locked by another concurrent transaction worker.
 > 2. Allows 100 concurrent queue workers to pull different pending job rows simultaneously with zero lock waiting.
 > 3. Industry standard pattern for high-performance SQL job queues.
-
+> 
 ---
 
 ### Exercise 3: Non-Blocking Lock Attempts with `NOWAIT`
@@ -251,7 +251,7 @@ Attempt to lock a seat reservation row using `FOR UPDATE NOWAIT`, failing immedi
 > 1. `NOWAIT` raises Error `55P03` (`lock_not_available`) immediately if target rows are locked by another session.
 > 2. Prevents ticket booking transactions from blocking endlessly.
 > 3. Returns immediate conflict feedback to application users.
-
+> 
 ---
 
 

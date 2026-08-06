@@ -170,7 +170,7 @@ Find all customers who have placed at least one order in table `orders`.
 > 1. `EXISTS` evaluates to `TRUE` as soon as the inner subquery returns a single matching row.
 > 2. Stops subquery execution immediately upon finding the first match ($O(1)$ short-circuiting).
 > 3. Outperforms `IN (SELECT customer_id FROM orders)` when subqueries return large result sets.
-
+> 
 ---
 
 ### Exercise 2: Finding Inactive Entities with `NOT EXISTS`
@@ -200,7 +200,7 @@ Find all customers who have NEVER placed an order.
 > 1. `NOT EXISTS` checks if the inner subquery returns zero rows.
 > 2. Safely handles `NULL` values in foreign keys without unexpected 3-valued logic pitfalls.
 > 3. Standard anti-join pattern.
-
+> 
 ---
 
 ### Exercise 3: Performance Comparison: EXISTS vs IN vs LEFT JOIN
@@ -227,7 +227,7 @@ Evaluate why `EXISTS` is preferred over `IN` for subqueries containing potential
 > 1. `NOT IN` fails when subquery results contain `NULL` because `val NOT IN (1, 2, NULL)` evaluates to `UNKNOWN`.
 > 2. `NOT EXISTS` relies on boolean row counts, bypassing `NULL` value bugs.
 > 3. Production SQL safety rule.
-
+> 
 ---
 
 

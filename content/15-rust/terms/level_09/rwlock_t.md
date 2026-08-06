@@ -333,7 +333,7 @@ Implement a thread-safe `TtlCache<K, V>` struct using `RwLock` and `HashMap`.
 > 1. **Read Lock for non-blocking lookup (`.read()`):** Multiple threads calling `get()` acquire shared read guards. They do not block each other, allowing true parallel reads.
 > 2. **Write Lock for modification (`.write()`):** `insert()` and `prune_expired()` obtain exclusive access. All reader threads wait briefly while the map is modified.
 > 3. **Deadlock Prevention:** `get()` releases its read lock as soon as it returns the cloned value, ensuring no read guard is held across write lock calls.
-
+> 
 ---
 
 ### Exercise 2: Hot-Reloadable Application Configuration with Versioning
@@ -591,7 +591,7 @@ Implement a `ResilientMetrics` aggregator:
 > 1. **Understanding Lock Poisoning:** In Rust, if a thread panics while holding an `RwLockWriteGuard` (or `MutexGuard`), Rust marks the lock as *poisoned* to warn other threads that shared data might be in an inconsistent state.
 > 2. **Poison Recovery with `into_inner()`:** Calling `poison_err.into_inner()` extracts the underlying lock guard despite the poison status. This allows application logic to inspect, clean up, or continue using the data safely without aborting the entire process.
 > 3. **Robust Telemetry Systems:** Microservices and telemetry agents rely on poison recovery so isolated worker panics do not cause cascading failures across unrelated API endpoints.
-
+> 
 ---
 
 ## 6. Related Terms

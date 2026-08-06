@@ -172,8 +172,8 @@ Should this batch endpoint be configured as **Transactional** (all or nothing) o
 
 > [!check]- Answer
 > - **Transactional.** If the credit card charge succeeds but generating the shipping label fails, you must roll back the transaction so the user is not charged for an item that cannot be shipped.
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Batch API Status Code

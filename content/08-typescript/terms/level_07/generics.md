@@ -128,18 +128,18 @@ Create a generic identity function `identity<T>(arg: T): T` that preserves input
 > function identity<T>(arg: T): T {
 >   return arg;
 > }
-
-const num = identity(42);       // Inferred as number
-const str = identity("hello");  // Inferred as string
-const bool = identity(true);    // Inferred as boolean
-```
-
+> 
+> const num = identity(42);       // Inferred as number
+> const str = identity("hello");  // Inferred as string
+> const bool = identity(true);    // Inferred as boolean
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `<T>` declares a generic type parameter captured during function invocation.
 > 2. Passing `42` binds `T` to `number`, ensuring the function return type is also `number`.
 > 3. Preserves type identity without resorting to unsafe `any`.
-
+> 
 ---
 
 ### Exercise 2: Generic Array Utility Functions
@@ -158,17 +158,17 @@ Create a generic `getFirstElement<T>(arr: T[]): T | undefined` utility function.
 > function getFirstElement<T>(arr: T[]): T | undefined {
 >   return arr[0];
 > }
-
-const firstNum = getFirstElement([10, 20, 30]);      // Inferred as number | undefined
-const firstStr = getFirstElement(["a", "b", "c"]);  // Inferred as string | undefined
-```
-
+> 
+> const firstNum = getFirstElement([10, 20, 30]);      // Inferred as number | undefined
+> const firstStr = getFirstElement(["a", "b", "c"]);  // Inferred as string | undefined
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `arr: T[]` operates on arrays of any element type `T`.
 > 2. The return type `T | undefined` reflects that the array may be empty at runtime.
 > 3. Type-safe array access utility.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: Generics (`<T>`) vs `any` vs `unknown`
@@ -189,13 +189,13 @@ Formulate an architectural comparison matrix contrasting Generics (`<T>`) agains
 > - any: Disables type checking completely. Destroys type relationship between input and output.
 > - unknown: Type-safe top type. Accepts any input, but destroys exact output type relationships, requiring explicit narrowing.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Generics preserve relationships between input parameters and return types statically.
 > 2. `any` disables static checking completely.
 > 3. `unknown` forces downstream type narrowing without output type binding.
-
+> 
 ---
 
 

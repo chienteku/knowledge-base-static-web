@@ -143,7 +143,7 @@ async function processData() {
 > ```
 > - You cannot use `=` on a `const` variable after it's initialized.
 > - Array methods like `.push()` mutate the existing array in memory, which is allowed.
-
+> 
 ---
 
 ### Exercise 2: Deep Freezing Const Objects
@@ -162,7 +162,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Object.freeze()` prevents adding, removing, or modifying properties on target objects.
-
+> 
 ---
 
 ### Exercise 3: Const Block Scope Temporal Dead Zone
@@ -184,7 +184,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `const` bindings reside in Temporal Dead Zone (TDZ) from block entry until their declaration line executes.
-
+> 
 ---
 
 ## 7. Related Terms

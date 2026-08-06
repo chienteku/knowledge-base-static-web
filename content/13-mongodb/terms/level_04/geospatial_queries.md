@@ -195,7 +195,7 @@ Find all restaurant locations in collection `places` within 2,000 meters of long
 > 1. `$near` calculates spherical distances over GeoJSON Point geometries.
 > 2. `$maxDistance` specifies maximum proximity radius in meters.
 > 3. Requires a `2dsphere` spatial index on field `location`.
-
+> 
 ---
 
 ### Exercise 2: Boundary Polygon Containment with `$geoWithin`
@@ -234,7 +234,7 @@ Query delivery drivers located inside a delivery zone GeoJSON Polygon boundary.
 > 1. `$geoWithin` filters geometries contained entirely inside a target GeoJSON boundary.
 > 2. Does not require sorted distance output.
 > 3. Underpins geofencing applications.
-
+> 
 ---
 
 ### Exercise 3: Creating `2dsphere` Spatial Indexes
@@ -258,7 +258,7 @@ Create a 2D sphere index on field `location` in collection `places` to enable ge
 > 1. `"2dsphere"` indexes calculate distances over spherical Earth geodesics (WGS84 datum).
 > 2. Required for `$near` and `$geoIntersects` queries over GeoJSON points and polygons.
 > 3. Converts spatial scans into fast spatial index lookups.
-
+> 
 ---
 
 

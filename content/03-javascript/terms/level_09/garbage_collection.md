@@ -168,7 +168,7 @@ family = null;
 > Even though John points to Ann, and Ann points to John, neither of them are connected to the "Root" (the global scope) anymore. They form an "Island of Isolation". The Garbage Collector sweeps away the entire island.
 > ```
 > - The algorithm only cares if an object can be reached from the ROOT.
-
+> 
 ---
 
 ### Exercise 2: Identifying Common Memory Leak Sources
@@ -185,7 +185,7 @@ family = null;
 > ```
 >
 > **Explanation:** Retaining unneeded object references in active scope trees prevents GC cleanup.
-
+> 
 ---
 
 ### Exercise 3: Weak References with `WeakMap`
@@ -202,8 +202,8 @@ family = null;
 > ```
 >
 > **Explanation:** `WeakMap` stores weak key pointers that do not count as reachability roots.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

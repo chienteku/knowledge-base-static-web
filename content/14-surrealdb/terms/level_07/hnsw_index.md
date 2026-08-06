@@ -166,7 +166,7 @@ An AI knowledge base configures an HNSW vector index `idx_doc_vector` for 4-dime
 > 1. `HNSW` (Hierarchical Navigable Small World) builds multi-layer graph structures for fast vector similarity searches.
 > 2. `DIMENSION <n>` specifies vector embedding dimensionality.
 > 3. `DIST COSINE` configures Cosine distance for text embedding comparisons.
-
+> 
 ---
 
 ### Exercise 2: Tuning HNSW Graph Search Parameters
@@ -191,7 +191,7 @@ Configure HNSW graph parameters `M` (max connections per node) and `EFC` (constr
 > 1. `M` controls the maximum number of bi-directional link connections per HNSW graph node.
 > 2. `EFC` (efConstruction) controls candidate queue depth during index construction.
 > 3. Higher `M` and `EFC` values increase search recall accuracy at the cost of higher index build time.
-
+> 
 ---
 
 ### Exercise 3: K-Nearest Neighbor Vector Queries
@@ -217,7 +217,7 @@ Query the top 3 documents most semantically similar to query vector `[0.1, 0.2, 
 > 1. `<|k,DIST|>` executes fast K-Nearest Neighbor vector searches using HNSW graph indexes.
 > 2. `vector::distance::knn()` projects calculated similarity distance values.
 > 3. Enables RAG AI search applications directly inside SurrealDB.
-
+> 
 ---
 
 

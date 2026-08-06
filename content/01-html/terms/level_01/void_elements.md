@@ -181,7 +181,7 @@ Void elements in action alongside standard container elements:
 > ```
 > - Does the element wrap around text or other tags?
 > - Standard links and paragraphs hold content, while line breaks, inputs, and images are single-tag directives.
-
+> 
 ---
 
 
@@ -206,7 +206,7 @@ Void elements in action alongside standard container elements:
 > ```
 >
 > **Explanation:** `img`, `br`, `input`, `meta`, `hr`, `link`, `source` are HTML void elements.
-
+> 
 ---
 
 ### Exercise 3: XHTML Trailing Slash Syntax in HTML5
@@ -223,7 +223,7 @@ Void elements in action alongside standard container elements:
 > ```
 >
 > **Explanation:** Modern HTML5 parsers ignore optional trailing `/` slashes on void tags.
-
+> 
 ## 7. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — The fundamental components of markup.
 - [Block-level vs Inline Elements](block_inline.md) — How display properties apply to void elements (e.g. `<img>` is inline, while `<hr>` behaves like a block).

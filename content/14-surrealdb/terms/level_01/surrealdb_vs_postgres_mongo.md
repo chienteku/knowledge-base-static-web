@@ -169,7 +169,7 @@ You are preparing a technical decision record comparing PostgreSQL, MongoDB, and
 > 1. Record links eliminate foreign key indexes and join table maintenance overhead.
 > 2. Built-in `LIVE SELECT` turns SurrealDB into a real-time reactive database engine out of the box.
 > 3. Row-level security permissions allow direct web-to-database connections, reducing backend boilerplate code.
-
+> 
 ---
 
 ### Exercise 2: Selecting the Right Database for the Job
@@ -197,7 +197,7 @@ Evaluate 3 different software project scenarios and recommend whether to use Pos
 > 1. Single-model legacy workloads benefit from PostgreSQL's 30+ years of ecosystem stability.
 > 2. Simple document workloads are well-supported by established document databases like MongoDB.
 > 3. Complex multi-model real-time web applications gain massive architectural velocity from SurrealDB's unified model.
-
+> 
 ---
 
 ### Exercise 3: Performance & Scalability Trade-offs
@@ -226,7 +226,7 @@ Compare the scalability mechanisms of PostgreSQL, MongoDB, and SurrealDB for hig
 > 1. Decoupling compute and storage allows SurrealDB to scale query execution nodes independently from physical storage nodes.
 > 2. Pluggable storage engines enable SurrealDB to run embedded in RAM or scale horizontally over TiKV.
 > 3. Provides modern cloud-native scalability without sacrificing multi-model query features.
-
+> 
 ---
 
 

@@ -185,7 +185,7 @@ A billing service calculates customer discount tiers based on total purchase vol
 > 1. `IF ... THEN ... ELSE IF ... ELSE ... END` evaluates multi-branch conditional expressions.
 > 2. Returns the evaluated expression value of the first matching truthy branch.
 > 3. Enables declarative stored procedure rules directly inside SurrealQL.
-
+> 
 ---
 
 ### Exercise 2: Conditional Field Value Projection in `SELECT`
@@ -212,7 +212,7 @@ A user directory query projects an `account_status` string ("Active" or "Inactiv
 > 1. `IF` expressions can be embedded directly inside `SELECT` projection lists.
 > 2. Replaces SQL `CASE WHEN ... THEN ... END` syntax.
 > 3. Formats API response fields server-side.
-
+> 
 ---
 
 ### Exercise 3: Conditional Database Mutation
@@ -244,7 +244,7 @@ Update a user's credit balance only if the requested withdrawal amount does not 
 > 1. `IF` blocks can enclose multi-statement transaction operations.
 > 2. Protects against invalid state mutations atomically.
 > 3. Replaces complex database stored procedures.
-
+> 
 ---
 
 

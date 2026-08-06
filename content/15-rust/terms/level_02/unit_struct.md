@@ -282,7 +282,7 @@ Requirements:
 > 2. **Typestate Pattern Mechanics**: By parameterizing `Connection<State>` over unit structs, method availability is controlled at compile time via `impl Connection<State>` blocks. Attempting to call `send_payload` on a `Connection<Disconnected>` causes a compile error (`E0599`), moving invalid state transitions from runtime crashes to compile-time check failures.
 > 3. **Ownership and Move Semantics**: State transition methods consume `self` by value (e.g., `fn connect(self)`). Once transferred, the old instance in the prior state is moved and destroyed, preventing reuse or concurrent access in an invalid state (preventing use-after-move).
 > 4. **`PhantomData` Role**: Because `State` is only used as a type-level marker and not stored in data fields, `PhantomData<State>` informs the Rust compiler's type checker and variance engine that `Connection` owns logical state `State` without allocating memory for it.
-
+> 
 ---
 
 ### Exercise 2: Zero-Cost Strategy Pattern for Telemetry Encoding
@@ -402,7 +402,7 @@ Requirements:
 > 2. **Zero-Overhead Strategy Pattern**: Unlike object-oriented strategy patterns that require storing pointer handles to heap objects or trait vtables (which cost 16 bytes for fat pointers), unit struct strategies cost exactly `0` bytes. The compiler replaces calls with direct static code execution.
 > 3. **Lifetimes and Pass-by-Value**: Because Unit Structs carry no internal state or pointers, passing them by value (`JsonFormat`) consumes zero register space. Unit structs easily derive `Copy` and `Clone` at no performance penalty.
 > 4. **Edge Cases**: Because unit structs contain no fields, instantiating `TelemetryLogger` requires passing the unit struct instance `JsonFormat`. The compiler completely optimizes out storage for `formatter: F` field inside `TelemetryLogger<F>`.
-
+> 
 ---
 
 ### Exercise 3: Type-Safe Hardware Register Access Control via Capability Tokens
@@ -516,7 +516,7 @@ Requirements:
 > 1. **Capability Traits and Zero-Cost Access Control**: By creating empty marker traits (`Readable`, `Writable`) and implementing them on capability unit structs (`ReadOnly`, `WriteOnly`, `ReadWrite`), method availability on `Register` is strictly governed by trait bounds (`AccessMode: Readable`). Attempting to call `.write()` on a `Register<u32, ReadOnly>` causes a compile error, eliminating invalid hardware bus operations before code reaches hardware.
 > 2. **Struct Layout and Memory Alignment**: Rust's ABI rules specify that zero-sized fields (`PhantomData<AccessMode>`) do not alter the struct layout, size, or alignment requirements of `Register<T, AccessMode>`. Thus, `Register<u32, ReadOnly>` is byte-identical in memory representation to a plain `u32`.
 > 3. **Safety and Low-Level Driver Invariants**: In embedded systems where registers map directly to memory hardware addresses (`volatile` MMIO pointers), Unit Struct markers allow developers to enforce safety constraints at compile time without paying any runtime penalty in code size, memory footprint, or execution cycles.
-
+> 
 ---
 
 ## 6. Related Terms

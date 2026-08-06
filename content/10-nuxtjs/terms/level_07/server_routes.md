@@ -147,13 +147,13 @@ Create a server route `server/routes/feed.xml.ts` generating a dynamic RSS XML f
 >   return xmlFeed;
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Files in `server/routes/` are served at root path URLs un-prefixed by `/api/`.
 > 2. `server/routes/feed.xml.ts` generates endpoint `/feed.xml`.
 > 3. Ideal for custom non-JSON endpoints (sitemaps, RSS feeds, `robots.txt`).
-
+> 
 ---
 
 ### Exercise 2: Implementing Webhook Receivers in `server/routes/webhooks/`
@@ -180,13 +180,13 @@ Create a Stripe webhook listener endpoint `server/routes/webhooks/stripe.post.ts
 >   return { received: true };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `readRawBody(event)` reads the raw string payload buffer required for HMAC signature verification.
 > 2. Un-prefixed server routes provide clean URL paths (`/webhooks/stripe`) for third-party service callbacks.
 > 3. Standard webhook receiver pattern.
-
+> 
 ---
 
 ### Exercise 3: Serving Dynamic Raw File Downloads
@@ -212,19 +212,15 @@ Create a server route `server/routes/download/[file].ts` setting `Content-Dispos
 >   return `Dummy binary buffer content for ${fileName}`;
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `Content-Disposition: attachment` forces the user's browser to prompt a file download dialog.
 > 2. Dynamic path parameters allow serving custom generated files.
 > 3. Raw server route application.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`server/api/` Routes](server_api_routes.md) — The standard directory for JSON APIs.

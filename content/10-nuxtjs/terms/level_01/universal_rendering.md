@@ -150,25 +150,25 @@ Add conditional logging to verify code execution on the server during initial lo
 > if (import.meta.server) {
 >   console.log("Executing on Nitro Node.js Server!");
 > }
-
-if (import.meta.client) {
-  console.log("Executing on Browser Client!");
-}
-</script>
-
-<template>
-  <div>
-    <p>Universal Rendering Execution Audit</p>
-  </div>
-</template>
-```
-
+> 
+> if (import.meta.client) {
+>   console.log("Executing on Browser Client!");
+> }
+> </script>
+> 
+> <template>
+>   <div>
+>     <p>Universal Rendering Execution Audit</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. In Universal Rendering, `<script setup>` executes ONCE on the server during HTML generation and ONCE on the client during hydration.
 > 2. `import.meta.server` (or `process.server`) isolates server-side operations (database queries, secret keys).
 > 3. `import.meta.client` (or `process.client`) isolates browser-only operations (`localStorage`, DOM events).
-
+> 
 ---
 
 ### Exercise 2: Preventing Server Execution of Browser APIs
@@ -186,26 +186,26 @@ Fix a server rendering crash caused by calling `window.localStorage.getItem()` d
 > ```vue
 > <script setup lang="ts">
 > const token = ref<string | null>(null);
-
-onMounted(() => {
-  // Executed strictly in browser after hydration!
-  token.value = localStorage.getItem("auth_token");
-});
-</script>
-
-<template>
-  <div>
-    <p>Auth Token: {{ token ?? "None" }}</p>
-  </div>
-</template>
-```
-
+> 
+> onMounted(() => {
+>   // Executed strictly in browser after hydration!
+>   token.value = localStorage.getItem("auth_token");
+> });
+> </script>
+> 
+> <template>
+>   <div>
+>     <p>Auth Token: {{ token ?? "None" }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Node.js server environment lacks browser globals like `window`, `document`, and `localStorage`.
 > 2. Calling browser globals directly in `<script setup>` causes SSR 500 compilation errors.
 > 3. Lifecycle hook `onMounted()` executes strictly in the client browser environment.
-
+> 
 ---
 
 ### Exercise 3: Switching Route Rendering Modes via Route Rules
@@ -229,19 +229,15 @@ Configure `nuxt.config.ts` `routeRules` to enforce SPA rendering for admin pages
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `routeRules` enables Hybrid Rendering, applying different rendering strategies per route path.
 > 2. `ssr: false` disables server HTML rendering for `/admin/**`, sending a minimal SPA wrapper to the browser.
 > 3. Optimizes server CPU load while preserving SSR benefits for public SEO pages.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [ClientOnly Component](../level_03/client_only_component.md) — A utility to force a component to completely skip server rendering.

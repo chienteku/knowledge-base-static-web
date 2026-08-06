@@ -174,7 +174,7 @@ async function processData() {
 > })();
 > ```
 > - Just replace `function()` with `() =>`.
-
+> 
 ---
 
 ### Exercise 2: Private Scope Isolation with IIFE
@@ -198,7 +198,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** IIFEs (Immediately Invoked Function Expressions) create private scope closures immediately.
-
+> 
 ---
 
 ### Exercise 3: IIFE Module Pattern
@@ -219,8 +219,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** IIFEs form the foundation of classic JavaScript module patterns.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

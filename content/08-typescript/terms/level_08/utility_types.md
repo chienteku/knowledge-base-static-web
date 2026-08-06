@@ -124,21 +124,21 @@ Create a type that makes all properties optional EXCEPT `id` using a combination
 >   email: string;
 >   age: number;
 > }
-
-type UpdateUserPayload = Pick<User, "id"> & Partial<Omit<User, "id">>;
-
-const update: UpdateUserPayload = {
-  id: "usr_100", // Required!
-  email: "newemail@example.com" // Optional!
-};
-```
-
+> 
+> type UpdateUserPayload = Pick<User, "id"> & Partial<Omit<User, "id">>;
+> 
+> const update: UpdateUserPayload = {
+>   id: "usr_100", // Required!
+>   email: "newemail@example.com" // Optional!
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Combining utility types with intersections (`&`) allows building custom type transformations.
 > 2. `Pick<User, "id">` keeps `id` required.
 > 3. `Partial<Omit<User, "id">>` makes all remaining fields optional.
-
+> 
 ---
 
 ### Exercise 2: Making Specific Properties Readonly with `Readonly<T>`
@@ -158,21 +158,21 @@ Freeze an entire state object using `Readonly<T>`.
 >   theme: string;
 >   sidebarOpen: boolean;
 > }
-
-const state: Readonly<AppState> = {
-  theme: "dark",
-  sidebarOpen: true
-};
-
-// state.theme = "light"; // ❌ Compile Error: Cannot assign to 'theme' because it is a read-only property.
-```
-
+> 
+> const state: Readonly<AppState> = {
+>   theme: "dark",
+>   sidebarOpen: true
+> };
+> 
+> // state.theme = "light"; // ❌ Compile Error: Cannot assign to 'theme' because it is a read-only property.
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Readonly<T>` constructs a type with all properties set to `readonly`.
 > 2. Prevents property mutation at compile time.
 > 3. Ideal for freezing state objects in Redux or Zustand stores.
-
+> 
 ---
 
 ### Exercise 3: Built-In String Manipulation Utilities
@@ -189,17 +189,17 @@ Demonstrate built-in string manipulation utility types (`Uppercase<T>`, `Lowerca
 >
 > ```typescript
 > type Event = "click" | "hover";
-
-type UpperEvent = Uppercase<Event>; // "CLICK" | "HOVER"
-type CapEvent = Capitalize<Event>;   // "Click" | "Hover"
-```
-
+> 
+> type UpperEvent = Uppercase<Event>; // "CLICK" | "HOVER"
+> type CapEvent = Capitalize<Event>;   // "Click" | "Hover"
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Compiler intrinsic utility types (`Uppercase`, `Lowercase`, `Capitalize`, `Uncapitalize`) manipulate template literal string types.
 > 2. Executed directly within the TypeScript compiler engine.
 > 3. Essential for building string-based event names and action types.
-
+> 
 ---
 
 

@@ -198,7 +198,7 @@ Execute an ACID transaction transferring funds between `checking` and `savings` 
 > 1. `withTransaction()` manages starting, committing, aborting, and retrying transactions automatically.
 > 2. `readConcern: "snapshot"` provides consistent point-in-time isolation across both collections.
 > 3. `writeConcern: "majority"` guarantees durable multi-node replication before transaction commit returns.
-
+> 
 ---
 
 ### Exercise 2: Transient Transaction Error Retry Handling
@@ -238,7 +238,7 @@ Handle `TransientTransactionError` labels automatically when network glitches di
 > 1. `TransientTransactionError` indicates a temporary network failure or primary election where retrying the transaction will succeed.
 > 2. Drivers automatically retry transient errors when using `withTransaction()`.
 > 3. Resilient transaction architecture.
-
+> 
 ---
 
 ### Exercise 3: Transaction Execution Time and Lock Bounding
@@ -265,7 +265,7 @@ Explain why multi-document transactions in MongoDB should execute in under 60 se
 > 1. Long-running transactions hold WiredTiger MVCC snapshot locks, increasing RAM cache pressure.
 > 2. Exceeding 60 seconds causes `mongod` to abort the transaction automatically.
 > 3. Keep transactional logic lightweight.
-
+> 
 ---
 
 

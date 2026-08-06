@@ -186,7 +186,7 @@ Create a composite index on `users(email, username)` and verify that selecting `
 > 1. `Index-Only Scan` occurs when all projected columns in `SELECT` and filtered columns in `WHERE` exist within the index.
 > 2. PostgreSQL retrieves data directly from the B-tree index without reading table heap pages.
 > 3. Achieves maximum query execution speed and zero disk heap I/O.
-
+> 
 ---
 
 ### Exercise 2: Covering Queries with the INCLUDE Clause
@@ -217,7 +217,7 @@ Create a covering index on `orders(customer_id) INCLUDE (total_cents, status)` t
 > 1. `INCLUDE` appends non-key payload attributes to the leaf nodes of the B-tree index.
 > 2. Enables Index-Only Scans without indexing payload columns for sorting or search boundaries.
 > 3. Modern covering index pattern.
-
+> 
 ---
 
 ### Exercise 3: Visibility Map Impact on Heap Fetches
@@ -245,7 +245,7 @@ Explain why `Index-Only Scan` output shows `Heap Fetches: 0` after running `VACU
 > 1. Visibility Map tracks whether all tuples on a table page are visible to all current and future transactions.
 > 2. Regular `VACUUM` maintenance keeps the Visibility Map updated, guaranteeing 0 heap fetches for Index-Only Scans.
 > 3. Core PostgreSQL architecture concept.
-
+> 
 ---
 
 

@@ -170,7 +170,7 @@ async function processData() {
 > The `extends` keyword secretly wires the child's prototype to point directly to the parent's prototype, establishing the Prototype Chain!
 > ```
 > - `extends` is just syntactic sugar for `Object.setPrototypeOf()`.
-
+> 
 ---
 
 ### Exercise 2: Class Inheritance with `extends`
@@ -193,7 +193,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `extends` sets up prototype inheritance between parent and child classes.
-
+> 
 ---
 
 ### Exercise 3: Super Constructor Delegation
@@ -217,8 +217,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `super(args)` forwards arguments to parent class constructors.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

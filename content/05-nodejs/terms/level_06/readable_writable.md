@@ -126,7 +126,7 @@ writable.on('finish', () => console.log('Write complete'));
 > - `res` is a Writable Stream. (Data is going FROM your server TO the user).
 > ```
 > - Where is the data originating, and where is it landing?
-
+> 
 ---
 
 
@@ -155,7 +155,7 @@ writable.on('finish', () => console.log('Write complete'));
 > ```
 >
 > **Explanation:** Requests and stdin are readable inputs; responses and stdout are writable outputs.
-
+> 
 ---
 
 ### Exercise 3: Writing Data to Writable Stream
@@ -174,7 +174,7 @@ writable.on('finish', () => console.log('Write complete'));
 > ```
 >
 > **Explanation:** `.write()` pushes data to the writable buffer; `.end()` flushes and closes the stream.
-
+> 
 ## 7. Related Terms
 - [Piping (.pipe())](piping.md) — The magical method used to connect a Readable Stream directly to a Writable Stream.
 - [Backpressure](backpressure.md) — Related concept: Backpressure.

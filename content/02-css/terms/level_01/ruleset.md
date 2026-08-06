@@ -154,7 +154,7 @@ div {
 > `margin` is the Property. (`20px` is the Value. Together they form a Declaration).
 > ```
 > - The left side of the colon is the "what", the right side is the "how much".
-
+> 
 ---
 
 
@@ -177,7 +177,7 @@ div {
 > ```
 >
 > **Explanation:** A ruleset consists of a selector and a declaration block `{ property: value; }`.
-
+> 
 ---
 
 ### Exercise 3: Grouping Multiple Selectors
@@ -196,7 +196,7 @@ div {
 > ```
 >
 > **Explanation:** Comma-separated selectors apply a single declaration block to multiple targets.
-
+> 
 ## 7. Related Terms
 - [Selectors (Element, Class, ID)](selectors.md) — The first part of the ruleset.
 - [The Cascade](the_cascade.md) — How the browser decides which ruleset wins if two rulesets conflict.

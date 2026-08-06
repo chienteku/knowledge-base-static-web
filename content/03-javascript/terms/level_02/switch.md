@@ -185,7 +185,7 @@ Caution
 > - Use `case "red":`
 > - Don't forget your `break` statements!
 > - Use `default:` for the "Broken light" scenario.
-
+> 
 ---
 
 ### Exercise 2: Strict Type Matching in Switch Statements
@@ -209,7 +209,7 @@ Caution
 > ```
 >
 > **Explanation:** `switch` statements evaluate case clauses using strict equality `===` (no type coercion).
-
+> 
 ---
 
 ### Exercise 3: Grouping Multiple Cases
@@ -233,8 +233,8 @@ Caution
 > ```
 >
 > **Explanation:** Stacking consecutive `case` statements executes shared code blocks for multiple matching cases.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

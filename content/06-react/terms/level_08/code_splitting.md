@@ -129,7 +129,7 @@ function App() { return <Suspense fallback={<Spinner />}><LazyComp /></Suspense>
 > The homepage will load instantly. When they click the button, the 1MB chunk will download.
 > ```
 > - Code Splitting isn't just for Routes; it can be used for any heavy component that isn't immediately visible!
-
+> 
 ---
 
 
@@ -156,7 +156,7 @@ function App() { return <Suspense fallback={<Spinner />}><LazyComp /></Suspense>
 > ```
 >
 > **Explanation:** Route-based code splitting splits application bundles into on-demand dynamic JavaScript chunks.
-
+> 
 ---
 
 ### Exercise 3: Dynamic `import()` Statement Return Type
@@ -173,7 +173,7 @@ function App() { return <Suspense fallback={<Spinner />}><LazyComp /></Suspense>
 > ```
 >
 > **Explanation:** Dynamic `import()` enables programmatic asynchronous module loading.
-
+> 
 ## 7. Related Terms
 - [Suspense](suspense.md) — The UI boundary that catches the loading state of the code split.
 - [React Router](../level_09/react_router.md) — The primary place where Code Splitting is implemented.

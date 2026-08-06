@@ -160,7 +160,7 @@ Create a single-field secondary B-tree index on field `username` in collection `
 > 1. `createIndex()` builds an auxiliary B-tree data structure mapping indexed key values to record IDs (`RecordId`).
 > 2. Converts $O(N)$ full collection scans into $O(\log N)$ B-tree index lookups.
 > 3. Stores key values in sorted ascending (`1`) or descending (`-1`) order.
-
+> 
 ---
 
 ### Exercise 2: Evaluating Write Amplification Overhead of Indexes
@@ -187,7 +187,7 @@ Measure the write latency and disk overhead of creating 10 secondary indexes on 
 > 1. Secondary indexes accelerate read queries but incur write amplification on every insert/update/delete.
 > 2. Consumes WiredTiger RAM cache memory to hold index B-trees.
 > 3. Balance read query requirements against write throughput needs.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Total Index RAM Footprint
@@ -212,7 +212,7 @@ Inspect collection statistics to verify total secondary index memory usage on a 
 > 1. `totalIndexSize` reports aggregate RAM/disk byte allocations across all collection indexes.
 > 2. Ideal database health requires keeping `totalIndexSize` smaller than available RAM cache.
 > 3. Prevents disk thrashing during query execution.
-
+> 
 ---
 
 

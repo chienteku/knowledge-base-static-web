@@ -183,7 +183,7 @@ An FAQ section for a service:
 > - The parent container is `<details>`.
 > - The title text must be wrapped in `<summary>`.
 > - The hidden content is a standard `<p>`.
-
+> 
 ---
 
 
@@ -205,7 +205,7 @@ An FAQ section for a service:
 > ```
 >
 > **Explanation:** `open` attribute sets initial expanded visibility state.
-
+> 
 ---
 
 ### Exercise 3: Styling Summary Disclosure Triangle
@@ -224,7 +224,7 @@ An FAQ section for a service:
 > ```
 >
 > **Explanation:** `::marker` targets default disclosure triangle icons.
-
+> 
 ## 7. Related Terms
 - [Semantic HTML](semantic_html.md) — The parent layout context.
 - [`<div>` (Block container)](../level_02/div.md) — The non-interactive equivalent.

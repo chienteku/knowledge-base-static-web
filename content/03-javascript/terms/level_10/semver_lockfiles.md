@@ -170,12 +170,12 @@ async function processData() {
 > [!check]- Answer
 > - Tilde (`~`) limits updates to the patch level (third digit changes).
 > - Caret (`^`) permits minor updates (second digit changes, but stops before major `2.0.0`).
-
+> 
 > [!check]- Answer
 > - 1. `1.2.2` (Latest patch in `1.2.x` range).
 > - 2. `1.3.0` (Latest minor/patch release in `1.x.y` range).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: SemVer Version Range Specifiers
@@ -192,7 +192,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** SemVer carets `^` and tildes `~` control automatic dependency upgrade boundaries.
-
+> 
 ---
 
 ### Exercise 3: Deterministic Installs with `npm ci`
@@ -209,7 +209,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `npm ci` installs exact lockfile dependency trees without mutating `package-lock.json`.
-
+> 
 ---
 
 ## 7. Related Terms

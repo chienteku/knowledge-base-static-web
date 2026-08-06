@@ -226,7 +226,7 @@ assert_eq!(apply(f, 5), 15);
 > 1. `FnMut(&TelemetryEvent)` allows listener closures to mutate captured environment state (like modifying atomic counters or internal collections).
 > 2. `Box<dyn FnMut(...) + 'static>` permits storing heterogeneous closure types inside a uniform `Vec`.
 > 3. `move` captures `counter_clone` by value into the closure struct.
-
+> 
 ---
 
 ### Exercise 2: Atomic Transaction Rollback via `FnOnce`
@@ -271,7 +271,7 @@ assert_eq!(apply(f, 5), 15);
 >
 > 1. `FnOnce(T) -> Result<T, String>` takes full ownership of `payload` and consumes closure state on invocation.
 > 2. Guarantees that the atomic transformation executes strictly once without re-invocation risks.
-
+> 
 ---
 
 ### Exercise 3: Configurable Multiplier Factory Returning `impl Fn(f64) -> f64`
@@ -310,7 +310,7 @@ assert_eq!(apply(f, 5), 15);
 >
 > 1. `move` forces moving `factor` into the generated closure struct.
 > 2. `impl Fn(f64) -> f64` enables unboxed, zero-cost monomorphized function return types.
-
+> 
 ---
 
 ## 5. Related Terms

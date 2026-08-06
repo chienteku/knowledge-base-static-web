@@ -127,28 +127,28 @@ Combine a base `Timestamps` object type with a `User` type using an intersection
 >   createdAt: Date;
 >   updatedAt: Date;
 > };
-
-type User = {
-  id: string;
-  name: string;
-};
-
-type UserRecord = User & Timestamps;
-
-const record: UserRecord = {
-  id: "usr_100",
-  name: "Alice",
-  createdAt: new Date(),
-  updatedAt: new Date()
-};
-```
-
+> 
+> type User = {
+>   id: string;
+>   name: string;
+> };
+> 
+> type UserRecord = User & Timestamps;
+> 
+> const record: UserRecord = {
+>   id: "usr_100",
+>   name: "Alice",
+>   createdAt: new Date(),
+>   updatedAt: new Date()
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Intersection types (`T & U`) construct a type containing ALL properties from both constituent types.
 > 2. `UserRecord` requires all properties from `User` AND `Timestamps`.
 > 3. Idiomatic method for composing object shapes without interface inheritance.
-
+> 
 ---
 
 ### Exercise 2: Auditing Impossible Primitive Intersections
@@ -165,17 +165,17 @@ Demonstrate what happens when intersecting incompatible primitive types like `st
 >
 > ```typescript
 > type Impossible = string & number; // Evaluates to 'never'
-
-// ❌ Compile Error: Type 'string' is not assignable to type 'never'.
-// const val: Impossible = "test";
-```
-
+> 
+> // ❌ Compile Error: Type 'string' is not assignable to type 'never'.
+> // const val: Impossible = "test";
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Primitive types are disjoint sets; no single value can be simultaneously a `string` AND a `number`.
 > 2. Intersecting disjoint primitive types evaluates automatically to `never`.
 > 3. Signals an impossible type contract to the compiler.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: Intersections (`&`) vs Unions (`|`)
@@ -195,13 +195,13 @@ Formulate an architectural comparison matrix contrasting Type Intersections (`&`
 > - Intersection (T & U): Logical AND. Object must possess ALL properties of T AND U. Accessing any property from T or U is allowed.
 > - Union (T | U): Logical OR. Object can be of type T OR U. Only properties COMMON to both T and U can be accessed without type narrowing.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Intersections combine properties, broadening property accessibility.
 > 2. Unions combine candidate types, restricting direct property access to common members.
 > 3. Core set theory operations in TypeScript's type system.
-
+> 
 ---
 
 

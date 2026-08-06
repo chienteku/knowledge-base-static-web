@@ -174,7 +174,7 @@ Query `employees` table joined to itself to display each employee's name alongsi
 > 1. Self-joins join a table to itself using distinct table aliases (`e` for employee, `m` for manager).
 > 2. `LEFT JOIN` preserves top-level managers whose `manager_id` is `NULL`.
 > 3. Resolves self-referential parent-child relationships.
-
+> 
 ---
 
 ### Exercise 2: Self-Joining Sequential Category Hierarchies
@@ -202,7 +202,7 @@ Query category table `categories` joined to itself to display subcategories alon
 > 1. Self-joins map 1-level parent-child tree hierarchies.
 > 2. Matches `sub.parent_id = parent.id`.
 > 3. Clean taxonomy modeling pattern.
-
+> 
 ---
 
 ### Exercise 3: Finding Consecutive Duplicate Row Events
@@ -234,7 +234,7 @@ Self-join `user_logins` on `user_id` to detect duplicate login events occurring 
 > 1. Self-joins compare different rows within the same collection.
 > 2. `l1.id <> l2.id` prevents matching a row against itself.
 > 3. Detects rapid duplicate event sequences.
-
+> 
 ---
 
 

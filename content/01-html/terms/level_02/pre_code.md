@@ -239,7 +239,7 @@ fruits.forEach((fruit) => {
 > - Replace `<` at the start with `&lt;`.
 > - Replace `>` at the end with `&gt;`.
 > - Wrap the entire line in `<pre><code>` to ensure monospacing.
-
+> 
 ---
 
 ### Exercise 2: Escaping Code Snippet
@@ -253,7 +253,7 @@ fruits.forEach((fruit) => {
 > ```
 >
 > **Explanation:** `&lt;` and `&gt;` escape angle brackets so code displays as text.
-
+> 
 ---
 
 ### Exercise 3: pre Font Family Default
@@ -267,7 +267,7 @@ fruits.forEach((fruit) => {
 > ```
 >
 > **Explanation:** Monospace fonts ensure uniform character width for code readability.
-
+> 
 ## 7. Related Terms
 - [Whitespace Collapse](../level_01/whitespace_collapse.md) — The default browser behavior that `<pre>` overrides.
 - [`<span>` (Inline container)](span.md) — A generic inline container that does not enforce monospacing.

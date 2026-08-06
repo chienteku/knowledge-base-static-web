@@ -198,7 +198,7 @@ io.adapter(createAdapter(pubClient, subClient)); // Redis adapter syncs rooms ac
 > If we use the native WebSocket object, the second the user loses cell service, the connection drops permanently. I would have to write hundreds of lines of complex logic to detect the drop, set a timer, try to reconnect, and sync missing data. Socket.io handles all of this automatically out-of-the-box.
 > ```
 > - Does the native WebSocket API automatically try to reconnect if it fails?
-
+> 
 ---
 
 ### Exercise 2: Socket.IO Feature Additions over Native WebSockets

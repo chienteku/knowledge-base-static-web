@@ -182,7 +182,7 @@ Query products purchased by `user:alice` via relation edge `purchased` where the
 > 1. `[WHERE price_paid > 500dec]` attaches filter conditions directly to the `purchased` edge table step.
 > 2. Filters out relation edges failing the condition before resolving target vertex nodes.
 > 3. Optimizes graph traversal performance by pruning invalid paths early.
-
+> 
 ---
 
 ### Exercise 2: Target Vertex Property Filtering
@@ -213,7 +213,7 @@ Query users followed by `user:alice` via edge `follows` where the target user's 
 > 1. `->user[WHERE verified = true]` applies filter conditions to the target `user` vertex nodes.
 > 2. Excludes unverified user records from the final projection array.
 > 3. Enables target node filtering during graph navigation.
-
+> 
 ---
 
 ### Exercise 3: Combined Edge and Vertex Dual Filtering
@@ -238,7 +238,7 @@ Query posts written by `user:alice` where the relation edge `wrote` has `role = 
 > 1. Combines inline edge filtering and vertex filtering in a single graph path expression.
 > 2. Both edge conditions AND target vertex conditions must evaluate to `true` to include the path.
 > 3. Expresses complex graph queries declaratively without multi-stage subqueries.
-
+> 
 ---
 
 

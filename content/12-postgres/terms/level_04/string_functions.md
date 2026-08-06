@@ -166,7 +166,7 @@ Concatenate `first_name` and `last_name` into `full_name` using `CONCAT_WS()`.
 > 1. `CONCAT_WS(separator, str1, str2, ...)` concatenates strings with a specified separator.
 > 2. Automatically skips `NULL` arguments without returning `NULL`.
 > 3. Superior to raw `||` operator when fields may contain `NULL`.
-
+> 
 ---
 
 ### Exercise 2: Substring Extraction and Trimming
@@ -193,7 +193,7 @@ Extract the domain name from an email address (`"alice@example.com"` -> `"exampl
 > 1. `POSITION('@' IN email)` finds the 1-based character index of `'@'`.
 > 2. `SUBSTRING(string FROM start)` extracts remaining text.
 > 3. Server-side text parsing.
-
+> 
 ---
 
 ### Exercise 3: Text Replacement and Case Normalization
@@ -220,7 +220,7 @@ Sanitize user bio text by converting to lowercase (`LOWER()`) and replacing forb
 > 1. `LOWER()` normalizes character casing.
 > 2. `REPLACE(text, target, replacement)` substitutes matching text patterns.
 > 3. Executes text transformation in SQL.
-
+> 
 ---
 
 

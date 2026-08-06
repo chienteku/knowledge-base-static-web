@@ -169,7 +169,7 @@ Define a custom text analyzer `snowball_en` using lowercase tokenization, Englis
 > 1. `DEFINE ANALYZER` configures text processing pipelines for full-text search indexes.
 > 2. `TOKENIZERS` breaks raw text into individual term tokens (e.g. `blank` splits on whitespace).
 > 3. `FILTERS` normalizes tokens (e.g. `lowercase`, `snowball(english)` stemming).
-
+> 
 ---
 
 ### Exercise 2: Attaching Custom Analyzers to Search Indexes
@@ -195,7 +195,7 @@ Create a full-text search index `idx_article_content` on table `article` using c
 > 1. `SEARCH ANALYZER <name>` binds custom text analyzers to search index definitions.
 > 2. Processes document text through configured tokenizers and filters before storing search tokens.
 > 3. Enables stemmed search matching (e.g. searching "running" matches "run").
-
+> 
 ---
 
 ### Exercise 3: Testing Analyzer Tokenization Output
@@ -220,7 +220,7 @@ Test how custom analyzer `snowball_en` tokenizes raw string `"Running Databases 
 > 1. `parse::analyzer(analyzer_name, text)` tests analyzer tokenization rules directly.
 > 2. Displays generated search tokens after applying stemming and lowercase filters.
 > 3. Helps developers debug full-text search tokenization pipelines.
-
+> 
 ---
 
 

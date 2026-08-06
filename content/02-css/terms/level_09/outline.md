@@ -111,7 +111,7 @@ You remove the border, and add a `10px solid black` Outline instead. How wide is
 > With Outline: The box is still exactly 100px wide! The outline does not take up physical layout space.
 > ```
 > - Does a laser pointer take up physical space?
-
+> 
 ---
 
 
@@ -133,7 +133,7 @@ You remove the border, and add a `10px solid black` Outline instead. How wide is
 > ```
 >
 > **Explanation:** `outline-offset` pushes the outline ring outward away from element borders.
-
+> 
 ---
 
 ### Exercise 3: Outline vs Border Comparison
@@ -152,7 +152,7 @@ You remove the border, and add a `10px solid black` Outline instead. How wide is
 > ```
 >
 > **Explanation:** Outlines are non-layout-shifting visual overlays.
-
+> 
 ## 7. Related Terms
 - [Border](../level_02/border.md) — The physical layout equivalent.
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — The state where outlines are most commonly applied.

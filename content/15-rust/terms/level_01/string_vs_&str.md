@@ -286,7 +286,7 @@ A distributed telemetry service ingests log payloads in the raw format `"LEVEL|T
 > - **Slice Borrowing (`&str`) vs Heap Ownership (`String`):** Calling `raw.split('|')` and `.trim()` yields sub-slices (`&'a str`) pointing directly to existing memory offsets. No heap memory is allocated during parsing.
 > - **Deferred Allocation:** Allocation occurs only when `to_canonical_string()` is called, which creates a new growable `String` on the heap to construct the canonical log representation.
 >
-
+> 
 ---
 
 ### Exercise 2: HTTP Header Extraction and Case Normalization Engine
@@ -368,7 +368,7 @@ An API Gateway routes HTTP requests based on header keys. Per RFC 9110, HTTP hea
 > - **Deref Coercion (`&String` to `&str`):** `normalize_header` accepts `&str` as parameters. This idiomatic pattern allows callers to pass string literals (`"Content-Type"`), slices (`&line[..]`), or references to heap strings (`&String`) seamlessly.
 > - **Heap Allocation for String Transformation:** Casing changes (`to_ascii_lowercase()`) alter byte values and may alter length in general UTF-8 cases. Thus, mutating ASCII casing requires allocating a fresh, owned `String` on the heap.
 >
-
+> 
 ---
 
 ### Exercise 3: Financial Query Sanitization and Pre-Allocated Template Binding
@@ -460,7 +460,7 @@ A financial compliance audit engine generates SQL query strings dynamically from
 > - **Memory Capacity Management (`String::with_capacity`):** When building growable `String` objects, allocating insufficient capacity causes reallocations as the buffer grows. Pre-allocating capacity via `String::with_capacity(template.len() + 64)` allocates the heap buffer once.
 > - **Mutation (`push_str`) vs Substitution (`replace`):** Method `.push_str()` appends string slice contents directly to an existing `String` buffer without allocating a new container. Method `.replace()` constructs a new `String` containing the substituted content.
 >
-
+> 
 ---
 
 ## 6. Related Terms

@@ -144,13 +144,13 @@ Define UI theme colors and navigation links in `app.config.ts`.
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `app.config.ts` manages non-sensitive, public UI theme tokens and component configurations.
 > 2. Values are bundled directly into the application JavaScript build.
 > 3. Accessible reactively via `useAppConfig()`.
-
+> 
 ---
 
 ### Exercise 2: Mutating App Config Reactively via `updateAppConfig()`
@@ -168,30 +168,30 @@ Dynamically update primary theme color at runtime using `updateAppConfig()`.
 > ```vue
 > <script setup lang="ts">
 > const appConfig = useAppConfig();
-
-function setRedTheme() {
-  updateAppConfig({
-    theme: {
-      primaryColor: "#ef4444"
-    }
-  });
-}
-</script>
-
-<template>
-  <div>
-    <p>Current Color: {{ appConfig.theme.primaryColor }}</p>
-    <button @click="setRedTheme">Apply Red Theme</button>
-  </div>
-</template>
-```
-
+> 
+> function setRedTheme() {
+>   updateAppConfig({
+>     theme: {
+>       primaryColor: "#ef4444"
+>     }
+>   });
+> }
+> </script>
+> 
+> <template>
+>   <div>
+>     <p>Current Color: {{ appConfig.theme.primaryColor }}</p>
+>     <button @click="setRedTheme">Apply Red Theme</button>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useAppConfig()` exposes a reactive object populated from `app.config.ts`.
 > 2. `updateAppConfig()` mutates properties reactively at runtime across components.
 > 3. Ideal for runtime design system theme toggling.
-
+> 
 ---
 
 ### Exercise 3: Architectural Trade-Off: `appConfig` vs `runtimeConfig`
@@ -211,19 +211,15 @@ Formulate an architectural selection matrix explaining when to use `appConfig` v
 > - appConfig: Public build-time UI tokens (theme colors, icons). HMR enabled, NOT overridable by environment variables.
 > - runtimeConfig: Server API secrets, database credentials, public API base URLs. Overridable via process.env!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `appConfig` is bundled at compile time and cannot be overridden by environment variables after building.
 > 2. `runtimeConfig` is evaluated dynamically at runtime, allowing environment variables (`NUXT_API_SECRET`) to override values.
 > 3. Standard configuration separation rule.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Runtime Config (`useRuntimeConfig`)](runtime_config.md) — The secure alternative used for private API keys and `.env` variables.

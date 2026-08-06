@@ -282,7 +282,7 @@ Design a production-grade `AccountLedger` system in Rust that handles:
 > 4. **Edge Cases Handled:** Depositing onto `u64::MAX` returns `Err(LedgerError::BalanceOverflow)`; withdrawing more than `balance_cents` returns `Err(LedgerError::InsufficientBalance)`; exact zero withdrawals/deposits succeed cleanly; saturated multiplication does not panic or wrap.
 >
 >
-
+> 
 ---
 
 ### Exercise 2: Network Protocol Sequence Framer & Internet Checksum Engine
@@ -425,7 +425,7 @@ Design a production-grade network stream component featuring:
 > 4. **Lifetime & Concurrency Safety:** The checksum calculator accepts borrowed payload slices `&[u8]`. Since no heap allocation or shared mutable state is used, the implementation is thread-safe (`Sync` + `Send`) and allocation-free.
 >
 >
-
+> 
 ---
 
 ### Exercise 3: Embedded IoT Telemetry Rate Limiter & Token Bucket Pipeline
@@ -571,7 +571,7 @@ Design a production-grade embedded rate limiter and telemetry tracking pipeline 
 > 4. **No-std / Concurrency Readiness:** The algorithm avoids dynamic allocations (`Vec`, `String`) and floating-point math, relying entirely on deterministic fixed-width integer operations suitable for bare-metal or `no_std` embedded microcontrollers.
 >
 >
-
+> 
 ---
 
 ## 6. Related Terms

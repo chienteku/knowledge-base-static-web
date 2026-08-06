@@ -215,7 +215,7 @@ div { color: #ff0000; } /* Valid 6-digit hex color */
 > ```
 > - Translate the number 255 into hexadecimal base-16 (it becomes `ff`).
 > - Translate 0 into hexadecimal (it becomes `00`).
-
+> 
 ---
 
 
@@ -238,7 +238,7 @@ div { color: #ff0000; } /* Valid 6-digit hex color */
 > ```
 >
 > **Explanation:** Modern CSS supports 8-digit hex (#RRGGBBAA) and space-separated `/ alpha` notation.
-
+> 
 ---
 
 ### Exercise 3: currentColor Keyword Function
@@ -258,7 +258,7 @@ div { color: #ff0000; } /* Valid 6-digit hex color */
 > ```
 >
 > **Explanation:** `currentColor` inherits computed text color for borders and SVG fills.
-
+> 
 ## 7. Related Terms
 - [`color` vs `background-color`](color_vs_background.md) — The parent properties using these colors.
 - [`opacity`](../level_09/opacity.md) — The alternative way to manage element transparency.

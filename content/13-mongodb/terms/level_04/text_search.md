@@ -157,7 +157,7 @@ Create a full-text search index `idx_text_search` on fields `title` and `descrip
 > 1. `"text"` creates an inverted text search index tokenizing text words.
 > 2. A collection can have at most ONE text index (which can cover multiple string fields).
 > 3. Applies language stemming and stop-word filtering automatically.
-
+> 
 ---
 
 ### Exercise 2: Text Search Queries with `$text` and `$search`
@@ -183,7 +183,7 @@ Execute a full-text search query finding articles containing keywords `"mongodb 
 > 1. `$text: { $search: "words" }` searches for tokenized keywords across text-indexed fields.
 > 2. Performs logical OR matching across search terms by default.
 > 3. Enclose phrases in escaped quotes (`""exact phrase""`) for exact match.
-
+> 
 ---
 
 ### Exercise 3: Relevance Score Sorting with `$meta: "textScore"`
@@ -211,7 +211,7 @@ Order text search results by BM25 text relevance score descending.
 > 1. `$meta: "textScore"` projects the calculated text relevance score for each matching document.
 > 2. Sorting by `{ score: { $meta: "textScore" } }` places most relevant matches at top.
 > 3. Provides native search engine ranking capabilities.
-
+> 
 ---
 
 

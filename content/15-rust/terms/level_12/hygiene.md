@@ -268,7 +268,7 @@ Write a declarative macro `profile_block!` that:
 > 1. **Syntax Context (`Span`) Tagging:** When `rustc` expands `profile_block!`, it assigns a unique `SyntaxContext` ID to every token generated inside the macro body. Even though the macro declares `let start_time = ...`, the compiler treats this token as `start_time#1` (macro scope), whereas the caller's variable is `start_time#0` (caller scope).
 > 2. **Preventing Shadowing and Interference:** Because of distinct `SyntaxContext` tags, `start_time` inside the macro block does not collide with or shadow `let start_time = "Caller string start_time";` in `test_profile_block_hygiene()`.
 > 3. **Block Expression Isolation:** Wrapping macro logic in double braces `{{ ... }}` creates an expression block, ensuring that temporary intermediate calculations return values cleanly without leaking macro tokens into surrounding code.
-
+> 
 ---
 
 ### Exercise 2: Crate Path Hygiene with Fully Qualified Absolute Imports (`$crate::...` / `::core::...`)
@@ -345,7 +345,7 @@ Write a crate-safe macro `build_telemetry_packet!` that:
 > 1. **Mixed Hygiene Model:** In Rust `macro_rules!`, local variable bindings are hygienic, but item names (types, traits, modules, functions) resolve in the *caller's* lexical scope.
 > 2. **Preventing Item Hijacking:** If the macro used plain `Option::Some`, calling it in a module containing `struct Option;` would cause a type mismatch compilation error. Using `::core::option::Option` forces path resolution from the root crate namespace (`::`), bypassing local module shadowing completely.
 > 3. **Library Macro Best Practice:** Crate macros exported for external use should always prepend `$crate::` for internal crate items and `::core::` or `::std::` for standard library types.
-
+> 
 ---
 
 ### Exercise 3: Controlled Scope Mutation vs. Internal Isolation in DSL Macro Generators
@@ -438,7 +438,7 @@ Write a macro `execute_transaction!` that:
 > 1. **Identifier Matcher (`$ident:ident`) Hygiene Bypass:** Passing an explicit identifier token `$target_state:ident` allows the macro to operate on a variable defined in the caller's syntax context. The compiler preserves the token's origin span, making `$target_state` refer directly to `state` in `test_controlled_hygiene_and_mutation()`.
 > 2. **Internal Scope Hygiene:** Local declarations inside the macro (`let mut retries = 0;`, `let mut success = false;`) receive the macro's internal syntax context. They are isolated from the caller's variables (`let retries = ...`, `let success = ...`).
 > 3. **Controlled Scope Mutation Pattern:** This demonstrates the standard Rust macro design pattern: maintain clean isolation for internal implementation details while accepting explicit identifier arguments when mutating caller state is required.
-
+> 
 ---
 
 ## 6. Related Terms

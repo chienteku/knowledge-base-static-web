@@ -416,7 +416,7 @@ Implement the full `telemetry` pipeline with validation rules and unit tests.
 > 4. **Ownership & Lifetimes:** Log messages use owned `String` allocations, allowing entries to be safely passed from the `ingestor` into the `storage` buffer without lifetime annotations.
 > 5. **Edge Cases:** Validation errors occur if messages contain only whitespace. Filtering ensures logs below `min_level` are dropped before storage memory is allocated.
 >
-
+> 
 ---
 
 ### Exercise 2: High-Frequency Trading (HFT) Order Gateway & Encapsulated Risk Engine
@@ -687,7 +687,7 @@ Implement the complete `trading` architecture and unit tests.
 > 3. **Ownership & Borrowing Invariants:** Orders passed into `MatchingEngine::submit_order(mut order: Order)` take ownership of the order. Matching uses mutable references (`iter_mut()`) over active resting orders in `Vec<Order>` to execute partial or full fills atomically.
 > 4. **Edge Cases:** Attempts to fill an order with 0 quantity or an amount exceeding remaining unfilled shares return explicit error strings. Orders with quantity or price of 0 are rejected during construction.
 >
-
+> 
 ---
 
 ### Exercise 3: Compiler AST Transpiler & Constant-Folding Pipeline with Nested Module Privacy (`pub(super)`)
@@ -944,7 +944,7 @@ Implement the complete `compiler` module hierarchy with unit tests.
 > 3. **Algebraic Data Types & Pattern Matching:** Enum pattern matching is used in `optimizer::fold_constants` to recursively collapse binary operations of constant operands (`Expr::Number(a)` and `Expr::Number(b)`) into a single `Expr::Number`.
 > 4. **Edge Cases:** Division by zero during constant folding triggers `CompileError::DivisionByZero`. Invalid syntax or unexpected end-of-file produce descriptive compilation errors.
 >
-
+> 
 ---
 
 ## 6. Related Terms

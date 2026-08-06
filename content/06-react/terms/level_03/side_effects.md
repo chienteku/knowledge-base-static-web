@@ -109,7 +109,7 @@ const handleSubmit = async () => { await postFormData(); }; // Trigger in event 
 > 1 and 3 are Pure operations. They only rely on local data and math.
 > ```
 > - If it touches the network, the DOM, or the Browser APIs, it's a side effect.
-
+> 
 ---
 
 
@@ -128,7 +128,7 @@ const handleSubmit = async () => { await postFormData(); }; // Trigger in event 
 > ```
 >
 > **Explanation:** Side-effects touch systems outside React (DOM, storage, network).
-
+> 
 ---
 
 ### Exercise 3: Event Handler vs Effect Placement Rule
@@ -145,7 +145,7 @@ const handleSubmit = async () => { await postFormData(); }; // Trigger in event 
 > ```
 >
 > **Explanation:** User event intentions should trigger imperative side-effects directly inside event handlers.
-
+> 
 ## 7. Related Terms
 - [`useEffect` Hook](use_effect.md) — The official tool React gives you to safely execute Side Effects.
 - [Cleanup Functions](cleanup_functions.md) — How you manage Side Effects that need to be turned off.

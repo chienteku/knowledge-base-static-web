@@ -170,7 +170,7 @@ Query audit logs recorded between `2026-08-01` and `2026-08-05` using BSON Date 
 > 1. BSON Date objects compare 64-bit UTC epoch timestamps directly.
 > 2. Range queries (`$gte` / `$lte`) execute efficiently over date indexes.
 > 3. Automatically handles client time-zone conversions to UTC.
-
+> 
 ---
 
 ### Exercise 2: Aggregation Date Aggregation Operators
@@ -202,7 +202,7 @@ Extract the year, month, and day components from `createdAt` fields in an aggreg
 > 1. Date aggregation operators extract calendar components natively in UTC.
 > 2. Enables grouping sales reports by year/month/day.
 > 3. Avoids formatting dates on client application servers.
-
+> 
 ---
 
 ### Exercise 3: Date Arithmetic with `$dateAdd`
@@ -240,7 +240,7 @@ Calculate subscription expiration dates set to exactly 30 days after signup date
 > 1. `$dateAdd` performs native date math across time units (`"day"`, `"month"`, `"hour"`).
 > 2. Correctly handles leap years and variable month lengths.
 > 3. Computes dynamic expiration dates server-side.
-
+> 
 ---
 
 

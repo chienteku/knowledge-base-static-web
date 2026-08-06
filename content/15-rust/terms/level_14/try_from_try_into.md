@@ -271,7 +271,7 @@ Implement `TryFrom<u8>` for `SensorOpMode` returning a custom `InvalidRegisterMo
 > 1. **Match Exhaustiveness**: The `match` block handles exact sensor register bit-patterns and captures out-of-range byte codes in the fallback arm `unknown`.
 > 2. **Custom Error Context**: `InvalidRegisterMode(u8)` preserves the invalid byte for diagnostic logging.
 > 3. **Blanket Reciprocity**: `TryInto` works seamlessly without custom code because of the std blanket implementation.
-
+> 
 ---
 
 ### Exercise 2: Validated Domain Type — Motor PWM Duty Cycle (`TryFrom<u16>` & `TryFrom<f32>`)
@@ -361,7 +361,7 @@ Implement `TryFrom<u16>` and `TryFrom<f32>` for `PwmDutyCycle(u8)`. Write compre
 > 1. **Multiple Conversion Sources**: A single domain type can implement `TryFrom` for multiple distinct input types (`u16` and `f32`).
 > 2. **NaN Guarding**: `f32::is_nan()` must be checked before range comparison because NaN comparisons always evaluate to `false`.
 > 3. **Domain Invariants**: By restricting constructor access and validating via `TryFrom`, `PwmDutyCycle` guarantees its internal value never exceeds 100%.
-
+> 
 ---
 
 ### Exercise 3: Network Packet Header Parsing — Byte Slice `&[u8]` to Fixed IPv4 Header Struct
@@ -475,7 +475,7 @@ Implement `TryFrom<&[u8]>` for `Ipv4Header`. Use `<[u8; 4]>::try_from(...)` slic
 > 1. **Slice-to-Array Conversion**: `bytes[12..16].try_into()` converts dynamically sized sub-slices `&[u8]` into fixed-size arrays `[u8; 4]`.
 > 2. **Nibble Extraction**: `(bytes[0] >> 4) & 0x0F` isolates the top 4 bits representing the IP version.
 > 3. **Panic Safety**: Checking slice bounds up-front prevents out-of-bounds panics at runtime.
-
+> 
 ---
 
 ## 6. Related Terms

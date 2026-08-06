@@ -308,7 +308,7 @@ thread::spawn(move || {
 > 1. **Zero-Allocation Reduction**: Method `calculate_vwap` uses `.fold()` with a `(u64, u128)` seed to aggregate total volume and total value (notional) in a single pass without allocating a dynamic array. `u128` is utilized for notional accumulation to prevent overflow during intermediate price-quantity multiplications.
 > 2. **Short-Circuiting Predicate Evaluation**: `.any()` and `.all()` short-circuit immediately upon encountering a boolean condition that determines the final answer. `.any()` returns `true` on the first element matching `quantity > max_qty` without iterating through the remainder of the collection. Similarly, `.all()` returns `false` as soon as a `trader_id == 0` is observed.
 > 3. **Index Tracking with State Mutability in `.position()`**: `.position()` consumes items until the closure returns `true`. By closing over a mutable scalar (`running_vol`), `.position()` accumulates volume state step-by-step and returns `Some(index)` for the exact item index that breaks the threshold, stopping further iteration.
-
+> 
 ---
 
 ### Exercise 2: Distributed Log Telemetry Parser & Security Audit Analyzer
@@ -474,7 +474,7 @@ Implement a stream analyzer that:
 > 1. **Short-circuit Search with `.find()`**: `.find()` takes a predicate receiving `&Item` and returns `Option<Item>`. When searching long telemetry feeds for security alerts, `.find()` halts processing immediately after finding the first matching substring `"SECURITY_VIOLATION"`, preventing redundant processing of subsequent log streams.
 > 2. **Stateful Reductions with `.fold()`**: Accumulating dynamic metrics (`LogMetrics`) via `.fold()` takes an initial seed value (`LogMetrics::default()`) and sequentially mutates the accumulator variable inside a closure. This avoids reallocating memory or storing intermediate log collections.
 > 3. **In-place Reduction without Initial Seed using `.reduce()`**: Unlike `.fold()`, `.reduce()` uses the first iterator element as the initial accumulator. If the iterator is empty, `.reduce()` returns `None`. For finding extreme values (e.g. maximum timestamp), `.reduce()` eliminates the need to specify arbitrary sentinel values (such as `u64::MIN`).
-
+> 
 ---
 
 ### Exercise 3: Embedded Network Frame De-framing & CRC Polynomial Checksum Pipeline
@@ -635,7 +635,7 @@ Implement a stream analyzer that:
 > 1. **Bitwise Bit-level Accumulation with `.fold()`**: Standard checksum calculations (such as CRC or XOR accumulators) operate on byte sequences. Using `.fold(0x00u8, |acc, &b| acc ^ b)` allows computing the total packet checksum in continuous streaming memory without intermediate vector allocation.
 > 2. **Reverse Iterator Consumption with `.rfold()`**: Double-ended iterators (`DoubleEndedIterator`) support backward traversal. `.rfold()` processes elements from the right end of the sequence toward the left, enabling backwards scanning algorithms (such as finding the last occurrence of a delimiter frame) with optimal linear complexity.
 > 3. **Safety & Zero-Copy Slicing**: Borrowing slices (`&[u8]`) as iterator sources guarantees memory safety. The iterator consumers (`.any()`, `.all()`, `.position()`, `.fold()`) operate directly over references without copying payload data, producing efficient machine code equivalent to hand-written `C` `for` loops.
-
+> 
 ---
 
 ## 6. Related Terms

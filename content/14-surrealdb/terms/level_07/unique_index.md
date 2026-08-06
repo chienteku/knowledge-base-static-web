@@ -156,7 +156,7 @@ Enforce that no two users can share the same `email` address in table `user`.
 > 1. `UNIQUE` index constraints enforce uniqueness at write time.
 > 2. Aborts write transactions attempting to insert duplicate indexed values.
 > 3. Accelerates single-record lookups.
-
+> 
 ---
 
 ### Exercise 2: Multi-Column Unique Index Constraints
@@ -180,7 +180,7 @@ Enforce that a product SKU is unique within each `vendor` in table `product`.
 > 1. Multi-column unique indexes enforce uniqueness across field combinations.
 > 2. Permits duplicate SKUs across different vendors, but blocks duplicates for the same vendor.
 > 3. Implements complex uniqueness invariants declaratively.
-
+> 
 ---
 
 ### Exercise 3: Unique Index Conflict Exception Handling
@@ -208,7 +208,7 @@ Attempt to insert a duplicate email address and capture the unique index violati
 > 1. Rejects duplicate insertion attempts with an index conflict exception.
 > 2. Guarantees data integrity under high-concurrency writes.
 > 3. Eliminates race conditions in registration endpoints.
-
+> 
 ---
 
 

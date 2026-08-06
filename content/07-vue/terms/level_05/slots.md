@@ -140,7 +140,7 @@ The parent targets them using the `<template v-slot:header>` syntax (or the shor
 > // Notice the `#` shorthand for `v-slot:`
 > ```
 > - Wrap the content in a `<template>` tag and use the `#` shorthand!
-
+> 
 ---
 
 ### Exercise 2: Checking Slot Presence with useSlots()
@@ -159,7 +159,7 @@ The parent targets them using the `<template v-slot:header>` syntax (or the shor
 > const slots = useSlots();
 > const hasHeader = !!slots.header;
 > ```
-
+> 
 ---
 
 ### Exercise 3: Dynamic Slot Names
@@ -178,8 +178,8 @@ The parent targets them using the `<template v-slot:header>` syntax (or the shor
 >   Dynamic Content
 > </template>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -362,7 +362,7 @@ Implement `Ord`, `PartialOrd`, `Eq`, and `PartialEq` for `LimitOrder` such that 
 > 
 > 3. **Performance & Monomorphization:**
 >    `BinaryHeap` monomorphizes directly over `LimitOrder`. The `cmp` function is inlined by LLVM during compilation into efficient inline comparison CPU instructions without heap allocations or virtual method table (`vtable`) dynamic dispatch overhead.
-
+> 
 ---
 
 ### Exercise 2: Multiversion Microservice Semantic Versioning & Cluster Router
@@ -542,7 +542,7 @@ Implement custom `Ord`, `PartialOrd`, `Eq`, and `PartialEq` for a custom `SemVer
 > 
 > 3. **Generic Iterator Higher-Order Functions (`max_by`):**
 >    `ServiceClusterRouter<T>` uses standard library iterator methods (`.filter()` and `.max_by()`). Because `T` is generic, Rust's compiler monomorphizes `select_highest_compatible` for each payload type without dynamic dispatch allocations.
-
+> 
 ---
 
 ### Exercise 3: Real-Time IoT Telemetry Stream Processing & Quantile Sliding Window (`PartialOrd` Fallback vs `total_cmp` Ord Wrappers)
@@ -717,7 +717,7 @@ Design a wrapper type `OrderedMetric` around `f64` that provides strict `Ord` an
 > 
 > 3. **Error Handling & Trait Abstractions:**
 >    The `StreamProcessor` trait decouples telemetry ingestion from windowing storage. By returning `Result<(), MetricError>`, invalid inputs like `NaN` are caught at the boundary before violating domain logic, preventing panic conditions in downstream sliding window statistics.
-
+> 
 ---
 
 ## 6. Related Terms

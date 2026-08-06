@@ -155,7 +155,7 @@ Ensure no two users can register with the same `username` in table `user`.
 > 1. `UNIQUE` index constraints enforce uniqueness at write time.
 > 2. Aborts write transactions attempting to insert duplicate indexed values.
 > 3. Accelerates single-record lookups.
-
+> 
 ---
 
 ### Exercise 2: Defining Multi-Column Unique Indexes
@@ -179,7 +179,7 @@ Enforce that a product SKU is unique within each `vendor` in table `product`.
 > 1. Multi-column unique indexes enforce uniqueness across field combinations.
 > 2. Permits duplicate SKUs across different vendors, but blocks duplicates for the same vendor.
 > 3. Implements complex uniqueness invariants declaratively.
-
+> 
 ---
 
 ### Exercise 3: Handling Unique Constraint Violations
@@ -207,7 +207,7 @@ Attempt to insert a duplicate username and capture the unique index violation er
 > 1. Rejects duplicate insertion attempts with an index conflict exception.
 > 2. Guarantees data integrity under high-concurrency writes.
 > 3. Eliminates race conditions in registration endpoints.
-
+> 
 ---
 
 

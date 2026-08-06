@@ -240,7 +240,7 @@ Vertical snap layout:
 > ```
 > - Set parent overflow-y and scroll-snap directions.
 > - Configure child alignments to match structural boundaries.
-
+> 
 ---
 
 
@@ -267,7 +267,7 @@ Vertical snap layout:
 > ```
 >
 > **Explanation:** Combining parent `scroll-snap-type` and child `scroll-snap-align` builds zero-JS touch carousels.
-
+> 
 ---
 
 ### Exercise 3: mandatory vs proximity Snap Strictness
@@ -284,7 +284,7 @@ Vertical snap layout:
 > ```
 >
 > **Explanation:** `mandatory` enforces strict snap points; `proximity` allows free scrolling until near points.
-
+> 
 ## 7. Related Terms
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The parent scrolling trigger.
 

@@ -123,7 +123,7 @@ mod internal {
 
 > [!check]- Answer
 > **It fails to compile.** `#![forbid(dead_code)]` at the crate root doesn't just deny the lint — it specifically **prevents any nested `#[allow(dead_code)]` from taking effect anywhere in the crate**, including inside `mod internal`. The compiler will report an error on the local `#[allow]` itself, something like "forbid(dead_code) overrides the previous allow". This is precisely the distinguishing feature of `forbid` versus `deny`: `deny` can still be locally carved around by a nested `allow`; `forbid` cannot.
-
+> 
 ---
 
 ### Exercise 2: Allowing Specific Unused Variable Warnings
@@ -148,7 +148,7 @@ mod internal {
 >
 > #### Technical Explanation
 > `#[allow(lint_name)]` localizes lint suppression to single items or statements.
-
+> 
 ---
 
 ### Exercise 3: Crate-Level Lint Enforcement for CI
@@ -205,7 +205,7 @@ Then answer: **why do many projects prefer `RUSTFLAGS="-D warnings"` (or `RUSTDO
 >
 > **Answer to the `RUSTFLAGS="-D warnings"` question:**
 > Putting `#![deny(warnings)]` in source code means the crate **never compiles** with any warning, even on a developer's local machine. This creates friction: every new Rust release that adds a new lint, or every clippy upgrade, causes compile failures locally before the developer can even run the code. Using `RUSTFLAGS="-D warnings"` (or an equivalent CI config) means the strictness is only enforced in CI \u2014 locally, warnings are still just warnings. This is the standard practice: catch warning debt in CI without blocking local development.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -171,7 +171,7 @@ Inspect the native SurrealDB data type of various literals (`"text"`, `100.00dec
 > 1. `type::of(value)` returns a string identifying the native SurrealDB data type.
 > 2. Returns `"string"`, `"decimal"`, `"datetime"`, `"record"`, `"array"`, `"object"`, etc.
 > 3. Used for type introspection in dynamic query scripts.
-
+> 
 ---
 
 ### Exercise 2: Type Validation Checks with `type::is::*`
@@ -199,7 +199,7 @@ Validate whether an incoming parameter `$val` is a valid `decimal` type using `t
 > 1. `type::is::<type>(val)` evaluates whether a value matches a target data type.
 > 2. Returns boolean `true` or `false`.
 > 3. Validates inputs before applying numeric calculations.
-
+> 
 ---
 
 ### Exercise 3: Coercing Values with Type Conversion Functions
@@ -225,7 +225,7 @@ Convert string `"150"` to integer using `type::int()` and string `"true"` to boo
 > 1. `type::int()`, `type::bool()`, `type::string()`, `type::datetime()` explicitly coerce values to target types.
 > 2. Provides function-style alternative to casting syntax (`<int> "150"`).
 > 3. Ensures payload type alignment prior to write commits.
-
+> 
 ---
 
 

@@ -189,7 +189,7 @@ Insert 3 new category rows into `categories` table in a single atomic SQL statem
 > 1. Multi-row `INSERT` bundles multiple row value tuples into a single statement.
 > 2. Reduces network roundtrip latency significantly compared to multiple single-row inserts.
 > 3. Executes atomically as a single transaction block.
-
+> 
 ---
 
 ### Exercise 2: Batch Inserting Rows in Node.js Applications
@@ -206,22 +206,22 @@ Construct a batch `INSERT` statement in Node.js using `pg-format` or unrolled pa
 >
 > ```typescript
 > import { pool } from "./db";
-
-export async function insertBatchLogs(logs: { event: string; userId: number }[]) {
-  const valueClauses = logs.map((_, i) => `($${i * 2 + 1}, $${i * 2 + 2})`).join(", ");
-  const values = logs.flatMap(l => [l.event, l.userId]);
-  
-  const queryText = `INSERT INTO audit_logs (event, user_id) VALUES ${valueClauses} RETURNING id`;
-  return pool.query(queryText, values);
-}
-```
-
+> 
+> export async function insertBatchLogs(logs: { event: string; userId: number }[]) {
+>   const valueClauses = logs.map((_, i) => `($${i * 2 + 1}, $${i * 2 + 2})`).join(", ");
+>   const values = logs.flatMap(l => [l.event, l.userId]);
+>   
+>   const queryText = `INSERT INTO audit_logs (event, user_id) VALUES ${valueClauses} RETURNING id`;
+>   return pool.query(queryText, values);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Dynamically constructs `$1`, `$2` parameter placeholders for batch values.
 > 2. Prevents SQL Injection while maintaining single-statement batch performance.
 > 3. High throughput ingestion pattern.
-
+> 
 ---
 
 ### Exercise 3: Inserting Results from SELECT Queries
@@ -248,7 +248,7 @@ Copy all high-value customers from `customers` into `vip_customers` using `INSER
 > 1. `INSERT INTO ... SELECT` bulk-inserts query output rows into a target table entirely on the database server.
 > 2. Eliminates client-side data streaming overhead.
 > 3. Fast server-side data migration.
-
+> 
 ---
 
 

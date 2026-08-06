@@ -142,7 +142,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Array`, `Promise`, and `Map` are defined in the ECMAScript standard, whereas `document` and `window` are host environment DOM APIs.
-
+> 
 ---
 
 ### Exercise 2: ES6+ Feature Detection with `globalThis`
@@ -161,7 +161,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Feature detection checks global scope properties defined by specific ECMAScript edition specifications.
-
+> 
 ---
 
 ### Exercise 3: ES Specifications
@@ -178,8 +178,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Technical Committee 39 (TC39) standardizes ECMAScript.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

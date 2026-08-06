@@ -106,10 +106,6 @@ export const revalidate = 300; // 5-minute timer + revalidateTag() for instant u
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Configuring Time-Based ISR in Route Segments
@@ -127,29 +123,29 @@ Configure a news index route segment to revalidate cached static HTML every 60 s
 > ```tsx
 > // app/news/page.tsx
 > export const revalidate = 60; // Revalidate every 60 seconds
-
-export default async function NewsPage() {
-  const news = await fetch("https://api.example.com/latest-news").then((r) => r.json());
-
-  return (
-    <main className="p-6">
-      <h1>Latest News (ISR 60s)</h1>
-      <ul>
-        {news.map((item: any) => (
-          <li key={item.id}>{item.title}</li>
-        ))}
-      </ul>
-    </main>
-  );
-}
-```
-
+> 
+> export default async function NewsPage() {
+>   const news = await fetch("https://api.example.com/latest-news").then((r) => r.json());
+> 
+>   return (
+>     <main className="p-6">
+>       <h1>Latest News (ISR 60s)</h1>
+>       <ul>
+>         {news.map((item: any) => (
+>           <li key={item.id}>{item.title}</li>
+>         ))}
+>       </ul>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Incremental Static Regeneration (ISR) serves cached static HTML for 60 seconds before triggering background revalidation.
 > 2. Subsequent visitors receive instant cached HTML while Next.js fetches fresh data behind the scenes.
 > 3. Delivers static CDN speeds with dynamic data freshness.
-
+> 
 ---
 
 ### Exercise 2: On-Demand ISR Revalidation via Server Actions
@@ -167,23 +163,23 @@ Purge cached ISR pages instantly after a content editor updates a blog post usin
 > ```typescript
 > // app/actions/cms.ts
 > "use server";
-
-import { revalidatePath } from "next/cache";
-
-export async function publishPost(slug: string) {
-  // Update post in CMS database...
-
-  // Instantly purge static ISR cache for target post
-  revalidatePath(`/blog/${slug}`);
-}
-```
-
+> 
+> import { revalidatePath } from "next/cache";
+> 
+> export async function publishPost(slug: string) {
+>   // Update post in CMS database...
+> 
+>   // Instantly purge static ISR cache for target post
+>   revalidatePath(`/blog/${slug}`);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `revalidatePath()` purges the static ISR page cache on demand without waiting for time-based revalidation timers.
 > 2. Updates static CDN pages instantly after content mutations.
 > 3. Standard headless CMS integration pattern.
-
+> 
 ---
 
 ### Exercise 3: Auditing ISR Cache Hit/Miss Headers
@@ -204,19 +200,15 @@ Inspect `x-nextjs-cache` headers in HTTP responses to verify ISR cache status (`
 > - x-nextjs-cache: STALE      -> Served stale cache; background revalidation triggered.
 > - x-nextjs-cache: REVALIDATED-> Fresh page generated after revalidation completed.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Next.js attaches `x-nextjs-cache` headers to HTTP responses to indicate static cache status.
 > 2. Helps developers debug ISR revalidation behavior in production environments.
 > 3. Empirical verification of ISR caching.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Time-based Revalidation (`next.revalidate`)](../level_05/revalidation.md) — The exact same concept, applied to data fetching. ISR is what happens when that concept is applied to the page rendering level.

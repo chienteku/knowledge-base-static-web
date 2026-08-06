@@ -299,7 +299,7 @@ Requirements:
 >    - `fmt::Formatter<'_>` carries an anonymous lifetime tied to the lifetime of the output buffer/stream. `&self` is borrowed immutably, ensuring formatting operations never mutate the audited record state or take ownership of its fields.
 > 4. **Compositional Display Trait Usage**:
 >    - `AuditRecord` formats its `status` field using `{}` specifier, which invokes `AuditStatus`'s own `Display::fmt` implementation. This modular composition guarantees separation of concerns across complex data models.
-
+> 
 ---
 
 ### Exercise 2: Hierarchical Diagnostic Error Chain with Recursive Display & Trait Objects
@@ -423,7 +423,7 @@ Requirements:
 >    - The formatting loop streams line breaks and indentation depth directly into `f` via `write!`. The `?` operator propagates `fmt::Error` back up if the destination buffer runs out of space or encounters write failures.
 > 4. **Downcasting and Error Trait Integration**:
 >    - By implementing `Error::source()`, `ChainableError` integrates seamlessly with standard Rust error-handling ecosystems (`anyhow`, `eyre`, standard library diagnostics). The test demonstrates runtime type reflection via `.downcast_ref::<ChainableError>()`, validating trait object safety and pointer dereferencing.
-
+> 
 ---
 
 ### Exercise 3: Monomorphized Generic Table Formatter with Dynamic Width Calculation
@@ -592,7 +592,7 @@ Requirements:
 >    - In `write!(f, " {:<1$} |", item, col_widths[i])`, the specifier `{:<1$}` instructs the formatter to left-align (`<`) the item and pad it with trailing spaces to match the width argument specified by index `1$` (`col_widths[i]`).
 > 4. **Defensive Edge Case Handling**:
 >    - Dynamic bounds checking via `row.get(i)` prevents out-of-bounds panics when rendering sparse or uneven matrix rows, safely padding missing column values with empty spaces.
-
+> 
 ---
 
 ## 6. Related Terms

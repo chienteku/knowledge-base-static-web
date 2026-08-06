@@ -265,7 +265,7 @@ Implement a `#![no_std]` sensor processing module with:
 > 1. **Cross-Crate IR Export**: In Rust's compilation model, library functions are compiled independently into `.rlib` binary artifacts. Without `#[inline]`, the LLVM IR for non-generic public functions is discarded after compilation. Decorating functions with `#[inline]` instructs `rustc` to emit the function's MIR/LLVM IR into crate metadata, permitting consumer crates to expand `normalize_adc_12bit` directly into caller code during compilation.
 > 2. **ISR Call Overhead Elimination**: In embedded microcontrollers (such as ARM Cortex-M), executing a function call requires pushing registers onto the MSP/PSP stack frame and calling `BL` (Branch with Link). Inlining substitutes these instructions with direct multiplication and bitwise AND (`AND`, `MUL`, `SDIV`), preserving precious clock cycles inside real-time Interrupt Service Routines.
 > 3. **Bit-Masking (`0x0FFF`)**: The masking operation `raw & 0x0FFF` limits the input to 12 bits. Because the function is inlined, if a caller passes a constant like `scale_to_millivolts(4095, 3300)`, LLVM performs constant folding at compile time, reducing the entire operation to the static constant integer `3300`.
-
+> 
 ---
 
 ### Exercise 2: Real-Time CAN Bus Header Parsing (`#[inline(always)]`)
@@ -344,7 +344,7 @@ To guarantee zero latency budget and force LLVM to eliminate function call bound
 >    - `(self.0 >> 3) & 0x07FF`: Shifts right by 3 bits to align the message ID to bit 0, then masks 11 bits (`0x07FF` = `2047`).
 >    - `((self.0 >> 14) & 1) != 0`: Shifts right by 14 bits to isolate bit 14, converting non-zero to boolean.
 > 3. **Constant Folding Opportunity**: Because these accessor methods are forced inline, if a `CanHeader` instance is constructed from a compile-time constant (e.g. `CanHeader(0x492D)`), LLVM completely evaluates `header.message_id()` during compilation and replaces the entire call with the literal constant `0x123` in assembly.
-
+> 
 ---
 
 ### Exercise 3: Hot/Cold Path Splitting for I-Cache Efficiency (`#[inline(never)]`)
@@ -440,7 +440,7 @@ Design a packet parsing driver that:
 > 1. **I-Cache Optimization via Hot/Cold Splitting**: High-performance CPUs rely on L1 Instruction Caches (I-Cache) to execute instructions at full clock speed. If a function contains large string formatting or complex error handling branches, inlining the entire body fills the I-Cache lines with assembly code that is rarely executed. Using `#[inline(never)]` forces the compiler to keep error handling code in a remote memory section.
 > 2. **Assembly Compactness**: With the cold path offloaded, the assembly for `process_packet_header` reduces to a few comparison and conditional branch instructions (`CMP`, `JNE`). This allows LLVM to comfortably inline `process_packet_header` into the main processing loop while keeping the loop tight enough to fit inside a single 64-byte I-Cache line.
 > 3. **Preventing Code Bloat**: If `log_and_build_magic_error` were inlined into every caller of `process_packet_header`, the error reporting logic would be duplicated dozens of times across the compiled binary. `#[inline(never)]` ensures a single shared instance of the error function exists in the binary.
-
+> 
 ---
 
 ## 6. Related Terms

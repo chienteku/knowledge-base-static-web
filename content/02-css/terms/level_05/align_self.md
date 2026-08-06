@@ -197,7 +197,7 @@ If you want to push a single child item to the far-right, use the margin trick: 
 > ```
 > - The parent forces stretching using `stretch`.
 > - Override this behavior on the child ruleset.
-
+> 
 ---
 
 
@@ -222,7 +222,7 @@ If you want to push a single child item to the far-right, use the margin trick: 
 > ```
 >
 > **Explanation:** `align-self` overrides parent container `align-items` rules for specific items.
-
+> 
 ---
 
 ### Exercise 3: align-self Default Value
@@ -239,7 +239,7 @@ If you want to push a single child item to the far-right, use the margin trick: 
 > ```
 >
 > **Explanation:** `auto` inherits the parent container's `align-items` rule.
-
+> 
 ## 7. Related Terms
 - [`align-items`](align_items.md) — The parent alignment controller.
 - [`justify-content`](justify_content.md) — The main axis spacing controller.

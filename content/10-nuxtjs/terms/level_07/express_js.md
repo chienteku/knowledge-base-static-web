@@ -145,21 +145,21 @@ Integrate legacy Connect/Express CORS or body parser middleware into a Nitro ser
 > // server/middleware/cors.ts
 > import cors from "cors";
 > import { fromNodeMiddleware } from "h3";
-
-const corsMiddleware = cors({
-  origin: ["https://example.com"],
-  methods: ["GET", "POST"]
-});
-
-export default fromNodeMiddleware(corsMiddleware);
-```
-
+> 
+> const corsMiddleware = cors({
+>   origin: ["https://example.com"],
+>   methods: ["GET", "POST"]
+> });
+> 
+> export default fromNodeMiddleware(corsMiddleware);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `fromNodeMiddleware()` translates standard Node.js `(req, res, next)` Express middleware signatures into H3 event handlers.
 > 2. Enables seamless integration of existing Express ecosystem packages inside Nitro.
 > 3. Bridges Node.js HTTP ecosystem with modern H3 event architecture.
-
+> 
 ---
 
 ### Exercise 2: Migrating Express Route Handlers to H3 Event Handlers
@@ -187,13 +187,13 @@ Refactor an Express route handler `app.post('/api/user', (req, res) => ...)` to 
 >   };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. H3 event handlers use `readBody()` and `getQuery()` helpers instead of reading mutating properties on `req`.
 > 2. Returning objects directly serializes JSON without requiring explicit `res.json()` calls.
 > 3. Idiomatic Nitro server development pattern.
-
+> 
 ---
 
 ### Exercise 3: Handling Node.js Streams in Nitro Handlers
@@ -210,28 +210,24 @@ Pipe a Node.js file read stream to the HTTP response using `sendStream()`.
 >
 > ```typescript
 > import fs from "node:fs";
-
-export default defineEventHandler((event) => {
-  const filePath = "./public/large-dataset.csv";
-  const stream = fs.createReadStream(filePath);
-  
-  setResponseHeader(event, "Content-Type", "text/csv");
-  return sendStream(event, stream);
-});
-```
-
+> 
+> export default defineEventHandler((event) => {
+>   const filePath = "./public/large-dataset.csv";
+>   const stream = fs.createReadStream(filePath);
+>   
+>   setResponseHeader(event, "Content-Type", "text/csv");
+>   return sendStream(event, stream);
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `sendStream()` streams large file payloads without loading the entire buffer into RAM.
 > 2. Works with Node.js `Readable` streams and web Streams API.
 > 3. Prevents memory spikes during large file downloads.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Nitro Engine](../level_01/nitro_engine.md) — The modern server compiler powering Nuxt.

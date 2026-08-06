@@ -130,7 +130,7 @@ function render() { useTheme(theme); requestAnimationFrame(render); }
 > Open DevTools (F12) -> Click the "Application" tab -> Look under the "Storage" sidebar. You will see a beautiful table displaying all the keys and values currently saved in localStorage for that specific website. You can even manually edit or delete them there!
 > ```
 > - Is there a specific tab in Chrome DevTools designed for this?
-
+> 
 ---
 
 ### Exercise 2: LocalStorage vs SessionStorage Lifespan Matrix

@@ -133,7 +133,7 @@ const count = ref(0); // Use ref() for primitive values
 > For primitives, you MUST use `ref()`.
 > ```
 > - Can a number `0` be wrapped in a JavaScript Proxy? No.
-
+> 
 ---
 
 ### Exercise 2: Reactive State Object Pattern
@@ -159,7 +159,7 @@ const count = ref(0); // Use ref() for primitive values
 >   state.user.age++;
 > }
 > ```
-
+> 
 ---
 
 ### Exercise 3: ref vs reactive Selection Rule
@@ -176,8 +176,8 @@ const count = ref(0); // Use ref() for primitive values
 > ```text
 > Use ref() for primitives and reassignable arrays/objects.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

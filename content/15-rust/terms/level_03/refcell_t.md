@@ -296,7 +296,7 @@ thread::spawn(move || {
 > 1. **Interior Mutability Pattern**: Traits defining shared interfaces (like `Telemetry`) frequently specify `&self` receiver signatures so trait objects can be invoked concurrently or through shared pointers (`Rc<dyn Trait>`). Because `Rc<T>` only grants shared (`&T`) access to its payload, mutating standard fields inside a trait method would trigger compiler error `E0594`. `RefCell<Vec<LogEntry>>` moves borrowing checks to runtime, enabling safe mutation through `&self`.
 > 2. **Memory Layout**: A `RefCell<T>` occupies memory equal to `sizeof(T)` plus an internal borrow flag (`isize`, 8 bytes on 64-bit systems). When wrapped in `Rc<MockTelemetryCollector>`, the heap allocation contains strong/weak reference counters followed by the `MockTelemetryCollector` struct (which holds `RefCell` containers for `entries` and `clock_ms`).
 > 3. **Borrow Mechanics & Scoping**: Calling `.borrow()` or `.borrow_mut()` creates temporary guard structures (`Ref` and `RefMut`) that RAII-increment and decrement the internal borrow counter. In `log()`, `self.entries.borrow_mut()` creates a `RefMut` guard that is held only for the duration of `.push(entry)` before dropping at the end of the statement, keeping borrow durations minimal and avoiding overlapping borrow conflicts.
-
+> 
 ---
 
 ### Exercise 2: Safe Hierarchical Scene Graph Traversal & Cycle-Free Node Mutation
@@ -409,7 +409,7 @@ thread::spawn(move || {
 > 1. **Reference Cycle Avoidance**: Strong references (`Rc`) in both directions (parent to child AND child to parent) create reference cycles where reference counts never drop to zero, causing permanent memory leaks. By wrapping the parent link in `Weak<RefCell<SceneNode>>`, child nodes hold non-owning weak pointers that must be upgraded (`Weak::upgrade() -> Option<Rc<T>>`) before use.
 > 2. **Preventing Recursive Borrow Panics**: If `world_position` held `let node_ref = node_rc.borrow();` across the `Self::world_position(&parent_rc)` recursive call, and the parent node simultaneously attempted to inspect or mutate the child node, a `BorrowError` or `BorrowMutError` panic would occur. Scoping the borrow inside `{ ... }` ensures the RAII `Ref` guard is destroyed before making the recursive call up the DAG hierarchy.
 > 3. **Aliasing Rules**: `RefCell` enforces Rust's core aliasing invariant dynamically: either any number of `Ref` guards exist (`BorrowFlag > 0`), or exactly one `RefMut` guard exists (`BorrowFlag == -1`). Releasing intermediate guards guarantees the borrow flag returns to `0` prior to parent node evaluation.
-
+> 
 ---
 
 ### Exercise 3: Non-Panicking Re-entrant Transactional Cache using `try_borrow_mut`
@@ -562,7 +562,7 @@ thread::spawn(move || {
 >    - `> 0`: Active immutable borrows (`Ref` count).
 >    - `< 0` (`-1`): Active exclusive mutable borrow (`RefMut`).
 >    `try_borrow_mut()` inspects `BorrowFlag == 0`. If true, it atomically sets the flag to `-1` and returns `Ok(RefMut)`; otherwise, it returns `Err(BorrowMutError)`.
-
+> 
 ---
 
 ## 6. Related Terms

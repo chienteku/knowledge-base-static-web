@@ -353,7 +353,7 @@ Implement a dynamic telemetry processing pipeline using trait objects (`Box<dyn 
 >    - None of its methods return `Self` by value.
 >    - None of its methods feature generic type parameters (e.g., `fn transform<T>(&self, data: T)`).
 >    - It does not require `Self: Sized` on method signatures, allowing dynamic invocation via fat pointers.
-
+> 
 ---
 
 ### Exercise 2: Dynamic Multi-Threaded Event Router & Task Dispatcher
@@ -535,7 +535,7 @@ Implement a multi-threaded `EventDispatcher`:
 > 2. **`Arc` Thread-Safe Shared Ownership**: Storing `Arc<dyn TaskHandler>` enables multiple threads to hold atomic reference-counted pointers to the same dynamic vtable instance. Cloning `Arc<dyn TaskHandler>` increments the strong count atomically (8 bytes pointer to heap allocation containing payload data and ref count + 8 bytes vtable pointer).
 > 3. **Interior Mutability in Dynamic Handlers**: Because `&self` is passed into `handle(&self, event: &DomainEvent)` across multiple threads, methods cannot mutate struct fields directly. Handlers use thread-safe interior mutability primitives (`AtomicUsize` for lock-free atomic integers, `Mutex<T>` for exclusive mutual exclusion) to mutate state safely behind shared references.
 > 4. **Fat Pointers across Threads**: Spawning threads with `Arc<dyn TaskHandler>` passes a 16-byte fat pointer into the thread closure. The worker thread dereferences the data pointer to access the struct state and dereferences the vtable pointer to invoke `handle()`.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Storage Abstraction & Type Inspection via Downcasting
@@ -720,7 +720,7 @@ Design an object-safe storage backend system with dynamic type reflection downca
 > 2. **Dynamic Downcasting via `std::any::Any`**: Because Rust does not have traditional C++ / Java style inheritance runtime type information (RTTI), downcasting from `&dyn StorageBackend` to a concrete type (`&InMemoryBackend`) requires embedding type reflection. By inheriting from `Any` (`trait StorageBackend: Any`) and providing `fn as_any(&self) -> &dyn Any`, implementations return a trait object for `Any`. The compiler generates a unique `TypeId` (a 128-bit hash) for every `'static` type. `Any::downcast_ref::<T>()` compares the target type's `TypeId` with the underlying type's `TypeId` at runtime; if they match, it safely casts the pointer.
 > 3. **Supertrait Bounds (`StorageBackend: Any`)**: The `'static` lifetime bound on `Any` ensures that downcasted types contain no non-static references that could dangle after runtime type casting.
 > 4. **Fat Pointer Memory Layout**: `Box<dyn StorageBackend>` consists of 2 words (16 bytes on 64-bit platforms): pointer `0` points to the heap buffer holding `InMemoryBackend` or `EncryptedBackend` struct data, while pointer `1` points to the vtable containing function pointers for `set`, `get`, `backend_type`, `as_any`, and drop glue.
-
+> 
 ---
 
 ## 6. Related Terms

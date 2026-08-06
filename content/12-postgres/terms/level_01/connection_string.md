@@ -168,7 +168,7 @@ Formulate a PostgreSQL connection URI string incorporating user, password, host,
 > 1. Connection strings encapsulate host, port (`5432`), user credentials, and database target in a unified URI.
 > 2. `sslmode=require` enforces TLS/SSL encrypted TCP socket transport.
 > 3. Standard configuration string across cloud providers (Supabase, Neon, AWS RDS).
-
+> 
 ---
 
 ### Exercise 2: Percent-Encoding Special Characters in Passwords
@@ -195,7 +195,7 @@ Safely encode a database password containing special characters (`P@ss#w0rd!`) i
 > 1. Characters `@`, `:`, `/`, and `#` have special structural meaning in URI syntax.
 > 2. `encodeURIComponent()` converts reserved characters into percent-encoded hex equivalents.
 > 3. Prevents URI parser errors during connection establishment.
-
+> 
 ---
 
 ### Exercise 3: Environment Variable Connection String Ingestion
@@ -230,7 +230,7 @@ Read `DATABASE_URL` safely from environment variables using `dotenv` in a Node.j
 > 1. Hardcoding connection strings in source code exposes production credentials to git repositories.
 > 2. `process.env.DATABASE_URL` ingests credentials dynamically from secure runtime environments.
 > 3. Fundamental security hygiene rule.
-
+> 
 ---
 
 

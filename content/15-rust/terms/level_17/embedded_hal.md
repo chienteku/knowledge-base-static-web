@@ -283,7 +283,7 @@ To verify driver logic without embedded hardware, implement a `MockPin` type con
 > 1. **Generic Trait Bounds (`P: OutputPin`)**: The `StatusLed<P>` struct accepts any GPIO pin implementation without depending on a specific microcontroller crate (such as `stm32f4xx-hal` or `esp-hal`).
 > 2. **Associated Error Types (`P::Error`)**: `embedded-hal` 1.0 traits use the `ErrorType` trait to associate a hardware error type with each peripheral. The `?` operator allows hardware failures to bubble up cleanly.
 > 3. **Off-Target Mocking**: By implementing `OutputPin` on a synthetic `MockPin`, peripheral interaction logic can be thoroughly unit-tested on host platforms using standard `cargo test` without attaching physical microcontrollers.
-
+> 
 ---
 
 ### Exercise 2: Implementing a Platform-Agnostic I2C Temperature Sensor Driver
@@ -466,7 +466,7 @@ Implement a `MockI2c` peripheral simulator implementing `embedded_hal::i2c::I2c`
 > 1. **Portable Bus Abstraction (`I2C: embedded_hal::i2c::I2c`)**: The driver depends exclusively on the portable `I2c::write_read` trait method, meaning the driver crate compiles identically for any MCU.
 > 2. **Bitwise Arithmetic in `#![no_std]`**: Conversion operations like `u16::from_be_bytes`, bit shifts (`>> 4`), and sign extension (`| !0x0FFF`) run purely in `core` without requiring allocation or operating system assistance.
 > 3. **Simulating Hardware Transactions**: `MockI2c` verifies both register address transmission and raw byte parsing while allowing simulation of hardware NACK errors.
-
+> 
 ---
 
 ### Exercise 3: Software Pulse Generator Combining GPIO (`OutputPin`) and Delay (`DelayNs`)
@@ -641,10 +641,9 @@ Implement `MockPin` and `MockDelay` test helpers, and write unit tests (`#[test]
 > 1. **Trait Composition**: `PulseGenerator` demonstrates composing multiple `embedded-hal` peripheral interfaces (`OutputPin` for GPIO control and `DelayNs` for precise timing).
 > 2. **Provided Trait Methods**: `DelayNs::delay_us` automatically delegates to `delay_ns`, illustrating how trait default implementations reduce boilerplate for peripheral implementers.
 > 3. **Integrated Hardware Mock Testing**: Combining `MockPin` and `MockDelay` ensures signal patterns and duration accumulation are validated simultaneously before flashing code onto real target hardware.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

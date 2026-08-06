@@ -171,7 +171,7 @@ Apply a 10% price increase (multiply by `1.10`) to all products in category `"el
 > 1. `$mul` multiplies numeric field values by a specified factor atomically.
 > 2. If the field does not exist, `$mul` sets the field to 0.
 > 3. Operates over integer, float, and decimal types.
-
+> 
 ---
 
 ### Exercise 2: Atomic Min/Max Bound Enforcement with `$min` and `$max`
@@ -198,7 +198,7 @@ Update a user's `highScore` to `250` ONLY IF `250` is greater than the current s
 > 1. `$max` updates the field value ONLY IF the specified value is greater than the current stored value.
 > 2. `$min` updates the field value ONLY IF the specified value is less than the current stored value.
 > 3. Eliminates client-side value comparison reads.
-
+> 
 ---
 
 ### Exercise 3: Field Deletion with `$unset`
@@ -225,7 +225,7 @@ Remove obsolete field `legacyId` from all documents in collection `customers`.
 > 1. `$unset` completely removes specified field keys from matching BSON documents.
 > 2. Reclaims storage space occupied by obsolete fields.
 > 3. Standard operator for schema cleanup migrations.
-
+> 
 ---
 
 

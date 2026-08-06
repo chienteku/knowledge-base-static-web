@@ -179,7 +179,7 @@ function Header({ title, onUpdate }) {
 > ```
 > - Destructure `{ color, text }` in the arguments.
 > - Inline styles in React require double curly braces `style={{ property: value }}`.
-
+> 
 ---
 
 ### Exercise 2: Destructuring Props with Default Values
@@ -195,7 +195,7 @@ function Header({ title, onUpdate }) {
 > ```
 >
 > **Explanation:** Destructuring parameters allows assigning clean fallback default prop values.
-
+> 
 ---
 
 ### Exercise 3: Unidirectional Data Flow Prop Direction
@@ -209,8 +209,8 @@ function Header({ title, onUpdate }) {
 > ```
 >
 > **Explanation:** Props flow top-down through component trees.
-
-
+> 
+> 
 ## 7. Related Terms
 - [Render Purity](render_purity.md) — Why props must remain read-only snapshots during render.
 - [State](../level_02/state.md) — Unlike Props (which are read-only and passed down), State is data that the component owns and can mutate.

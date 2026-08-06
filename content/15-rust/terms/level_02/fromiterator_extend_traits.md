@@ -293,7 +293,7 @@ In distributed microservice log ingestion pipelines, streaming metadata tags (e.
 > 2. **Capacity Reservation Optimization**: By calling `size_hint()` on the iterator before consuming items, `extend` extracts the lower bound of incoming elements and calls `counts.reserve(lower_bound)`. This eliminates multiple expensive hash map reallocations during batch processing.
 > 3. **Lifetime & Flexibility (`String` vs `&str`)**: Providing `Extend` for both `(String, String)` and `(&'a str, &'a str)` allows caller ergonomics — accepting zero-copy borrowed slices or moving owned strings into the method seamlessly.
 > 4. **Invariants & Ownership**: The `extend` method requires `&mut self` exclusive access to update `counts` in-place, consuming the iterator by value (`IntoIterator`) and taking ownership of its elements.
-
+> 
 ---
 
 ### Exercise 2: Financial Order Book & Price-Level Depth Aggregator (`OrderBookDepth`)
@@ -421,7 +421,7 @@ High-frequency trading engines require order book data structures that consolida
 > 1. **Overloaded `Extend` Implementations**: Rust permits multiple `impl<A> Extend<A> for Collection` blocks as long as the generic item type `A` differs. Here, `OrderBookDepth` implements `Extend<(u64, u64)>` for raw price updates and `Extend<OrderBookDepth>` for container merging.
 > 2. **Ordered Aggregation with `BTreeMap`**: Unlike `HashMap`, `BTreeMap` maintains keys in strict ascending numerical order. Using `next_back()` on `self.levels.iter()` returns the highest price level (`best_bid`) in $O(\log N)$ time.
 > 3. **Ownership Transfer in Merging**: Implementing `Extend<OrderBookDepth>` consumes the incoming order book instances by value (`for other in iter`), transferring ownership of their internal `BTreeMap` entries directly into the target instance without requiring reference cloning.
-
+> 
 ---
 
 ### Exercise 3: Fallible Route Collector & Network Subnet Router (`RoutingTable`)
@@ -579,7 +579,7 @@ Network daemons parse routing configurations from file or wire formats where ind
 > 1. **Blanket Trait Implementation for `Result`**: Rust's standard library provides a blanket implementation `impl<A, E, V> FromIterator<Result<A, E>> for Result<V, E> where V: FromIterator<A>`. Because `RoutingTable` implements `FromIterator<RouteRule>`, type inference allows `.collect()` to automatically target `Result<RoutingTable, RoutingError>`.
 > 2. **Short-Circuiting Mechanics**: When collecting an iterator yielding `Result<T, E>`, `FromIterator` iterates until it encounters the first `Err(e)` value, immediately returning `Err(e)` and aborting iterator consumption. If all items are `Ok(v)`, `from_iter` accumulates all unwrapped `v` items into `V` and returns `Ok(V)`.
 > 3. **Error Representation**: Using explicit enum error variants (`RoutingError`) combined with pattern matching (`matches!`) allows robust runtime diagnostics for malformed configuration entries without panicking.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -344,7 +344,7 @@ Implement `BinaryPacketParser::parse_frame<'a>(input: &'a [u8]) -> Result<(Parse
 > 
 > 4. **Boundary Checks & Out-of-Bounds Protection**:
 >    Index ranges `input[0..2]` and `input[2..6]` perform runtime bounds checks, preventing buffer overrun attacks or wild pointer dereferences. Attempting to slice past `input.len()` triggers a deterministic panic in debug and release builds, whereas early slice length checks (`input.len() < 8`) yield structured `ParseError` variants gracefully.
-
+> 
 ---
 
 ### Exercise 2: Parallel Audio Signal In-Place Processing with Disjoint Mutable Slices
@@ -439,7 +439,7 @@ Design a chunked parallel DSP gain scaling function `apply_gain_parallel(buffer:
 > 
 > 4. **Edge Case Safety**:
 >    Passing `chunk_size == 0` would cause iterator panics in `chunks_mut`. Guarding against zero length or zero chunk size explicitly prevents runtime panics and returns early.
-
+> 
 ---
 
 ### Exercise 3: Zero-Copy Web Server Structured Log Tokenizer
@@ -607,7 +607,7 @@ Implement `LogEntryScanner::parse<'a>(line: &'a str) -> Result<LogRecord<'a>, Lo
 > 
 > 3. **Lifetime Elision & Propagation (`'a`)**:
 >    `LogRecord<'a>` explicitly propagates lifetime `'a` from the raw line string slice input parameter `line: &'a str`. Consequently, all borrowed string sub-fields (`ip`, `timestamp`, `method`, `path`) are tied to the scope of the raw log string buffer, ensuring zero lifetime leakage or dangling reference risks.
-
+> 
 ---
 
 ## 6. Related Terms

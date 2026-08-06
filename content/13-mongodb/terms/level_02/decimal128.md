@@ -176,7 +176,7 @@ Calculate total price including tax for a product costing `NumberDecimal("19.99"
 > 1. `Decimal128` arithmetic maintains 34 decimal digits of IEEE 754-2008 precision.
 > 2. Prevents binary floating-point errors (e.g. `0.1 + 0.2 = 0.30000000000000004`).
 > 3. Standard choice for accounting and monetary database fields.
-
+> 
 ---
 
 ### Exercise 2: Aggregating Decimal Sums with `$sum`
@@ -207,7 +207,7 @@ Compute the sum total of all account balances in collection `accounts`.
 > 1. `$sum` preserves `Decimal128` types during aggregation math.
 > 2. Accumulates exact balances across millions of documents without rounding drift.
 > 3. Outputs a single `Decimal128` result payload.
-
+> 
 ---
 
 ### Exercise 3: Constructing Decimal128 Objects in Node.js
@@ -224,22 +224,22 @@ Write Node.js MongoDB driver code to insert a `Decimal128` value using `Decimal1
 >
 > ```typescript
 > import { MongoClient, Decimal128 } from "mongodb";
-
-const client = new MongoClient("mongodb://localhost:27017");
-const db = client.db("store");
-
-await db.collection("orders").insertOne({
-  orderId: "ORD-9912",
-  amount: Decimal128.fromString("299.95")
-});
-```
-
+> 
+> const client = new MongoClient("mongodb://localhost:27017");
+> const db = client.db("store");
+> 
+> await db.collection("orders").insertOne({
+>   orderId: "ORD-9912",
+>   amount: Decimal128.fromString("299.95")
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Decimal128.fromString(str)` parses exact decimal strings into BSON binary structures.
 > 2. Avoids passing JavaScript numbers (`299.95`) which would cast to 64-bit IEEE double floats.
 > 3. Guarantees client-to-database precision integrity.
-
+> 
 ---
 
 

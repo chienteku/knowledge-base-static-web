@@ -164,29 +164,29 @@ Pass a serializable data object from a Server Component across the network bound
 > ```tsx
 > // app/components/ClientUserProfile.tsx
 > "use client";
-
-interface UserProps {
-  id: string;
-  name: string;
-  roles: string[];
-}
-
-export default function ClientUserProfile({ user }: { user: UserProps }) {
-  return (
-    <div className="p-4 border rounded">
-      <h2>{user.name}</h2>
-      <p>Roles: {user.roles.join(", ")}</p>
-    </div>
-  );
-}
-```
-
+> 
+> interface UserProps {
+>   id: string;
+>   name: string;
+>   roles: string[];
+> }
+> 
+> export default function ClientUserProfile({ user }: { user: UserProps }) {
+>   return (
+>     <div className="p-4 border rounded">
+>       <h2>{user.name}</h2>
+>       <p>Roles: {user.roles.join(", ")}</p>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. The Network Boundary separates components executing on the server from components executing in the browser.
 > 2. Props passed across the boundary are serialized into React Server Component flight data.
 > 3. Passing plain JavaScript objects, strings, numbers, and arrays ensures valid boundary serialization.
-
+> 
 ---
 
 ### Exercise 2: Resolving Non-Serializable Function Prop Errors
@@ -204,33 +204,33 @@ Fix a serialization build error caused by passing a server callback function as 
 > ```tsx
 > // app/actions/user.ts
 > "use server";
-
-export async function handleUserUpdate(userId: string) {
-  console.log(`Updated user ${userId} on server`);
-}
-```
-
+> 
+> export async function handleUserUpdate(userId: string) {
+>   console.log(`Updated user ${userId} on server`);
+> }
+> ```
+> 
 > ```tsx
 > // app/components/ClientButton.tsx
 > "use client";
-
-import { handleUserUpdate } from "@/app/actions/user";
-
-export default function ClientButton({ userId }: { userId: string }) {
-  return (
-    <button onClick={() => handleUserUpdate(userId)}>
-      Update User
-    </button>
-  );
-}
-```
-
+> 
+> import { handleUserUpdate } from "@/app/actions/user";
+> 
+> export default function ClientButton({ userId }: { userId: string }) {
+>   return (
+>     <button onClick={() => handleUserUpdate(userId)}>
+>       Update User
+>     </button>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Plain JavaScript functions cannot be serialized over the flight stream across the Network Boundary.
 > 2. Server Actions marked with `"use server"` create RPC references that CAN be passed to Client Components.
 > 3. Standard method for handling server callbacks from client UI boundaries.
-
+> 
 ---
 
 ### Exercise 3: Passing Server Component Slots Across the Network Boundary
@@ -248,33 +248,29 @@ Pass a Server Component through a Client Component layout wrapper using `childre
 > ```tsx
 > // app/components/ClientModal.tsx
 > "use client";
-
-import { useState } from "react";
-
-export default function ClientModal({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div>
-      <button onClick={() => setOpen(true)}>Open Modal</button>
-      {open && <div className="modal">{children}</div>}
-    </div>
-  );
-}
-```
-
+> 
+> import { useState } from "react";
+> 
+> export default function ClientModal({ children }: { children: React.ReactNode }) {
+>   const [open, setOpen] = useState(false);
+> 
+>   return (
+>     <div>
+>       <button onClick={() => setOpen(true)}>Open Modal</button>
+>       {open && <div className="modal">{children}</div>}
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Server Components passed as `children` to Client Components execute ON THE SERVER.
 > 2. The server serializes the Server Component's output into the flight stream payload.
 > 3. Client Component renders the pre-computed Server Component slot without taking on client JS bundle weight.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [React Server Components (RSC)](rsc.md) — The server side of the boundary.

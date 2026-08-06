@@ -124,17 +124,17 @@ Create a `createLogger` function with a required `prefix` and optional `timestam
 >   const timeStr = timestamp ? `[${timestamp.toISOString()}] ` : "";
 >   console.log(`${timeStr}${prefix}: ${message}`);
 > }
-
-logMessage("INFO", "System initialized");
-logMessage("ERROR", "Database connection lost", new Date());
-```
-
+> 
+> logMessage("INFO", "System initialized");
+> logMessage("ERROR", "Database connection lost", new Date());
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Optional parameters (`timestamp?: Date`) must be declared AFTER all required parameters.
 > 2. Inside the function body, `timestamp` has type `Date | undefined`.
 > 3. Allows callers to omit optional arguments at call sites.
-
+> 
 ---
 
 ### Exercise 2: Utilizing Default Parameters for Automatic Type Inference
@@ -153,17 +153,17 @@ Create a `connect` function with default `timeout` (5000) and `retry` (true) par
 > function connect(host: string, timeout = 5000, retry = true) {
 >   console.log(`Connecting to ${host} (timeout=${timeout}ms, retry=${retry})`);
 > }
-
-connect("api.example.com");             // Uses defaults (5000, true)
-connect("api.example.com", 10000, false); // Overrides defaults
-```
-
+> 
+> connect("api.example.com");             // Uses defaults (5000, true)
+> connect("api.example.com", 10000, false); // Overrides defaults
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Default parameters (`timeout = 5000`) automatically infer parameter types (`number`).
 > 2. Unlike optional parameters, default parameters preserve non-nullable types (`number` instead of `number | undefined`) inside the function body.
 > 3. If callers explicitly pass `undefined`, the default parameter value is evaluated.
-
+> 
 ---
 
 ### Exercise 3: Auditing Parameter Ordering Rule Violations
@@ -181,17 +181,17 @@ Explain why placing an optional or default parameter BEFORE a required parameter
 > ```typescript
 > // ❌ Compile Error: Required parameter cannot follow an optional parameter!
 > // function invalid(optional?: string, required: number) {}
-
-// ✅ CORRECT (Re-order parameters or pass undefined):
-function valid(required: number, optional?: string) {}
-```
-
+> 
+> // ✅ CORRECT (Re-order parameters or pass undefined):
+> function valid(required: number, optional?: string) {}
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. JavaScript positional arguments require arguments to be supplied from left to right.
 > 2. Placing optional parameters first would require callers to pass `undefined` explicitly to reach required positional parameters.
 > 3. Enforces left-to-right positional clarity.
-
+> 
 ---
 
 

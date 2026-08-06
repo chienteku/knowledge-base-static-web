@@ -326,7 +326,7 @@ Alternative layouts:
 > ```
 > - The mobile layout is simple (`width: 100%`). Make this the default ruleset.
 > - Introduce the float complexity inside a `min-width` media query threshold.
-
+> 
 ---
 
 
@@ -356,7 +356,7 @@ Alternative layouts:
 > ```
 >
 > **Explanation:** Mobile-first architecture writes clean mobile base styles enhanced via `min-width` queries.
-
+> 
 ---
 
 ### Exercise 3: Mobile-First Architecture Advantage
@@ -375,7 +375,7 @@ Alternative layouts:
 > ```
 >
 > **Explanation:** Mobile-first prioritizes mobile performance and progressive enhancement.
-
+> 
 ## 7. Related Terms
 - [`@media` (Media Queries Basics)](media_queries.md) — The query container.
 - [Responsive Design (Concept)](responsive_design.md) — The core philosophy.

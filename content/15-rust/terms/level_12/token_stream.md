@@ -296,7 +296,7 @@ Write a recursive analyzer function `fn analyze_dsl_tokens(stream: TokenStream, 
 > 1. **Group Recursion:** A `TokenStream` preserves code hierarchy by wrapping enclosed blocks (`{...}`, `[...]`, `(...)`) inside `TokenTree::Group`. Flat iteration only visits the `Group` node itself; calling `group.stream()` extracts the inner `TokenStream` for recursive inspection.
 > 2. **Variant Destructuring:** Using `match tt`, we discriminate between `TokenTree::Ident` (names), `TokenTree::Literal` (values), `TokenTree::Punct` (operators/delimiters), and `TokenTree::Group` (nested sub-streams).
 > 3. **Verification Assertions:** The unit test constructs a `TokenStream` using `quote!`, runs `analyze_dsl_tokens`, and validates exact item collections using `assert_eq!` and membership checks using `assert!`.
-
+> 
 ---
 
 ### Exercise 2: Real-Time Telemetry Identifier Prefixing & Span-Preserving Token Rewriter
@@ -395,7 +395,7 @@ Write a function `fn prefix_telemetry_idents(stream: TokenStream, prefix: &str) 
 > 1. **Span Preservation:** Creating new identifiers using `Ident::new(&new_name, original_ident.span())` transfers source location metadata to the new token. If compiler errors occur on the generated code, `rustc` correctly highlights the original source line.
 > 2. **Group Reconstruction:** Groups cannot be mutated in-place; we build a new `proc_macro2::Group` containing the recursively transformed inner stream and copy the original span via `.set_span(group.span())`.
 > 3. **Token Accumulation:** Transformed `TokenTree` instances are appended into a new `TokenStream` via `output.extend(std::iter::once(transformed_tt))`.
-
+> 
 ---
 
 ### Exercise 3: Low-Level Peripheral Register Bitmask Token Sequence Validator
@@ -489,7 +489,7 @@ Write unit tests verifying both success cases (correct operator count) and failu
 > 1. **Punctuation Inspection:** `TokenTree::Punct` provides `.as_char()` to inspect the single character of the punctuation token and `.spacing()` (`Spacing::Joint` vs `Spacing::Alone`) to detect multi-character tokens like `<<`.
 > 2. **Early Error Propagation:** Using the `?` operator on recursive `validate_register_expression(group.stream())?` calls ensures any invalid token inside nested parentheses immediately short-circuits execution and bubbles up the `Err(String)`.
 > 3. **Validation Assertions:** Unit tests check `result.is_ok()`, assert exact operator counts with `assert_eq!`, and verify error handling using `result.is_err()` and substring assertions.
-
+> 
 ---
 
 ## 6. Related Terms

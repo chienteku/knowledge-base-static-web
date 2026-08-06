@@ -160,7 +160,7 @@ async function processData() {
 > ```
 > - `undefined === null` is `false` because they are different types.
 > - `undefined == null` is `true` due to type coercion; they both represent "emptiness".
-
+> 
 ---
 
 ### Exercise 2: Safe Null Equality Checking
@@ -184,7 +184,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `x == null` matches both `null` and `undefined` while returning `false` for all other falsy values (`0`, `false`, `""`).
-
+> 
 ---
 
 ### Exercise 3: Null Coalescing Defaulting
@@ -207,8 +207,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `a ?? b` returns `b` only if `a` is `null` or `undefined`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

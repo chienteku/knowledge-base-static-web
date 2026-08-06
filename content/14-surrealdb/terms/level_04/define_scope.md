@@ -168,7 +168,7 @@ Define a scoped user access method `user_access` for web clients authenticating 
 > 1. `DEFINE ACCESS ... TYPE RECORD` establishes client authentication scopes in SurrealDB 2.x (replacing legacy 1.x `DEFINE SCOPE`).
 > 2. `SIGNIN` executes a query validating user credentials and issuing a scoped JWT session token.
 > 3. Enables direct browser-to-database authentication without custom API backend middleware.
-
+> 
 ---
 
 ### Exercise 2: JWT Access Scope Definition
@@ -195,7 +195,7 @@ Configure external JWT authentication `jwt_access` allowing third-party auth pro
 > 1. `TYPE JWT` allows SurrealDB to validate externally signed JSON Web Tokens.
 > 2. `KEY` specifies the cryptographic secret or public key used to verify token signatures.
 > 3. Integrates external OAuth/OIDC identity providers with SurrealDB row-level security.
-
+> 
 ---
 
 ### Exercise 3: Testing Access Token Session Variables
@@ -219,7 +219,7 @@ Inspect the `$auth` context variable available to scoped client sessions after s
 > 1. `$auth` holds the authenticated user record document context during active client sessions.
 > 2. Used inside table `PERMISSIONS` clauses (`PERMISSIONS FOR select WHERE id = $auth.id`).
 > 3. Enforces user-level security boundaries dynamically across queries.
-
+> 
 ---
 
 

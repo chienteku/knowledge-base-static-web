@@ -150,7 +150,7 @@ logMessage('ERROR', 'Failed to connect to database');
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Reading User Input from process.stdin
@@ -175,7 +175,7 @@ logMessage('ERROR', 'Failed to connect to database');
 > ```
 >
 > **Explanation:** `readline` wraps `process.stdin` and `process.stdout` streams for interactive CLI prompts.
-
+> 
 ---
 
 ### Exercise 3: Standard Streams File Descriptors
@@ -199,7 +199,7 @@ logMessage('ERROR', 'Failed to connect to database');
 > ```
 >
 > **Explanation:** POSIX standards designate 0 for standard input, 1 for standard output, and 2 for standard error.
-
+> 
 ## 7. Related Terms
 - [Streams (General Concept)](../level_06/streams.md) — The core concepts behind readable and writable data channels.
 - [The process Object](process_object.md) — The parent process object managing these streams.

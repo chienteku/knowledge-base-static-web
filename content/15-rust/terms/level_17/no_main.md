@@ -225,7 +225,7 @@ Construct a `#![no_std]` and `#![no_main]` embedded initialization module. Defin
 > 2. **Hardware Startup Memory Setup**: On microcontrollers, persistent Flash memory stores global read-only data and static initializers, but RAM starts in an uninitialized garbage state. `copy_data_section` moves initialized static variables into SRAM, while `zero_bss_section` clears uninitialized zero-allocated memory before application logic runs.
 > 3. **Hardware Vector Table (`#[repr(C)]` & `#[link_section]`)**: The `VectorTable` structure uses `#[repr(C)]` to guarantee sequential layout in memory matching CPU hardware specifications. The `#[link_section = ".vector_table"]` attribute directs the linker script to place `VECTORS` at memory address `0x0000_0000` in Flash ROM.
 > 4. **Unit Verification**: The test suite validates that `copy_data_section` accurately mirrors source byte patterns into destination RAM, `zero_bss_section` wipes dirty memory blocks to zero, and `VectorTable` preserves target pointer size alignment.
-
+> 
 ---
 
 ### Exercise 2: Embedded Watchdog Feed & Diverging Application Loop in `#![no_main]`
@@ -377,7 +377,7 @@ Design a `#![no_std]` `#![no_main]` software watchdog subsystem. Implement a `Wa
 > 2. **Hardware Watchdog Pattern**: Mission-critical firmware uses watchdog timers to recover from unhandled runtime faults or infinite spinlocks. Calling `watchdog.feed()` inside `sys.step()` continuously reloads the hardware counter during normal operation.
 > 3. **Volatile Peripheral Control**: When a watchdog failure or system error occurs, bare-metal hardware resets are triggered by writing control flags to memory-mapped registers via `core::ptr::write_volatile`.
 > 4. **Unit Verification**: Unit tests verify that tick decrements remaining capacity, `feed()` restores maximum timeout allowances, step operations safely increment task counters, and exhausted timers trigger failure return states.
-
+> 
 ---
 
 ### Exercise 3: Bootloader Stage-2 Handshake and Boot Information Validation in `#![no_main]`
@@ -534,10 +534,9 @@ Implement a C-ABI compliant `BootInformation` header structure with magic header
 > 2. **`#[repr(C)]` Memory Layout**: The `BootInformation` struct uses `#[repr(C)]` so that field offsets match memory packed by external assembly or C bootloaders without Rust struct layout reordering.
 > 3. **Defensive Firmware Validation**: Bare-metal kernels must validate boot parameters passed via raw pointers prior to initializing subsystems. Magic headers (`BOOT_MAGIC`) and XOR checksums prevent corrupted bootloader data from causing silent memory corruption.
 > 4. **Unit Verification**: The unit tests verify that valid boot parameter payloads pass header verification, modified magic codes return `InvalidMagic`, flipped checksum bits trigger `ChecksumMismatch`, and under-sized RAM parameters report `InsufficientMemory`.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

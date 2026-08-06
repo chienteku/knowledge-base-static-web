@@ -158,7 +158,7 @@ Define a RECORD access method `user_access` on table `user` configuring `SIGNUP`
 > 1. `DEFINE ACCESS ... TYPE RECORD` manages user authentication against database records.
 > 2. `SIGNUP` executes registration logic, returning a new user record and issuing a session token.
 > 3. `SIGNIN` executes authentication checks, returning a matching user record and issuing a session token.
-
+> 
 ---
 
 ### Exercise 2: Setting Access Token Duration Lifetimes
@@ -186,7 +186,7 @@ Configure access method `user_access` setting session token expiration duration 
 > 1. `DURATION FOR TOKEN` specifies session token expiration lifetimes (e.g. `15m`, `1h`, `7d`).
 > 2. Forces clients to re-authenticate or refresh tokens after expiration.
 > 3. Hardens session security against stolen token reuse.
-
+> 
 ---
 
 ### Exercise 3: Revoking RECORD Access Methods
@@ -210,7 +210,7 @@ Drop access method `user_access` using `REMOVE ACCESS`.
 > 1. `REMOVE ACCESS` drops access method definitions from database metadata registers.
 > 2. Invalidates future client signin attempts against the target access method.
 > 3. User table records remain unaffected.
-
+> 
 ---
 
 

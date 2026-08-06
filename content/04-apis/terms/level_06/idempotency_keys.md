@@ -163,8 +163,8 @@ await redis.set(`idempotency:${key}`, JSON.stringify(response), 'EX', 86400);
 > - 1. **Processed** (First time seeing key `abc`).
 > - 2. **Processed** (New key `xyz` is registered).
 > - 3. **Cached Response Returned** (Matches cached key `abc`; server skips processing to prevent double-charging).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Idempotency Key Header Lifecycle

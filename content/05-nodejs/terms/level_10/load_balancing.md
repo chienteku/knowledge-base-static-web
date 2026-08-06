@@ -141,7 +141,7 @@ Client ──> [ Load Balancer ] ──> [ Server A or B ] ──> [ Shared Redi
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Load Balancing Algorithms
@@ -165,7 +165,7 @@ Client ──> [ Load Balancer ] ──> [ Server A or B ] ──> [ Shared Redi
 > ```
 >
 > **Explanation:** Load balancing algorithms optimize request distribution based on traffic patterns.
-
+> 
 ---
 
 ### Exercise 3: Layer 4 vs Layer 7 Load Balancing
@@ -182,7 +182,7 @@ Client ──> [ Load Balancer ] ──> [ Server A or B ] ──> [ Shared Redi
 > ```
 >
 > **Explanation:** Layer 7 load balancing supports smart HTTP path routing and header inspection.
-
+> 
 ## 7. Related Terms
 - [Reverse Proxy (Nginx)](reverse_proxy.md) — The gateway server that frequently performs load balancing.
 - [PM2 (Process Manager)](pm2.md) — Manages local process clusters under server-wide load balancers.

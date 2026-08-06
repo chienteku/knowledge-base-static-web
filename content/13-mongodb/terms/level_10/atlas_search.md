@@ -176,7 +176,7 @@ Execute a full-text search pipeline stage (`$search`) with fuzzy term matching o
 > 1. `$search` executes Apache Lucene full-text search directly inside MongoDB Atlas aggregation pipelines.
 > 2. `fuzzy: { maxEdits: 1 }` handles user typos and minor spelling variations.
 > 3. Eliminates managing separate Elasticsearch sync pipelines.
-
+> 
 ---
 
 ### Exercise 2: Atlas Search Autocomplete Pipeline
@@ -212,7 +212,7 @@ Implement real-time search autocomplete for movie titles using `$search` with `a
 > 1. `autocomplete` operator evaluates edge n-gram token indexes for instant search-as-you-type UI widgets.
 > 2. Matches partial word prefixes (`"matr"` matches `"Matrix"`).
 > 3. Sub-millisecond search response latency.
-
+> 
 ---
 
 ### Exercise 3: Sorting Atlas Search Results by Compound Relevance Score
@@ -246,7 +246,7 @@ Combine full-text search with metadata filtering (`category: "electronics"`) ins
 > 1. `compound` combines multiple search clauses using Boolean logic (`must`, `should`, `filter`, `mustNot`).
 > 2. `filter` clause restricts search space without altering relevance scoring.
 > 3. Production search pipeline architecture.
-
+> 
 ---
 
 

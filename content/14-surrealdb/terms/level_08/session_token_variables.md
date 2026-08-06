@@ -165,7 +165,7 @@ Inspect all active session variables (`$session`, `$token`, `$auth`) inside an a
 > 1. `$session` holds connection metadata (namespace, database, client IP, connection ID).
 > 2. `$token` holds decoded JWT claims from the client's auth header.
 > 3. `$auth` holds the authenticated user record document.
-
+> 
 ---
 
 ### Exercise 2: Client IP Auditing with `$session.origin`
@@ -193,7 +193,7 @@ Record the client's IP address (`$session.origin`) inside an audit log record wh
 > 1. `$session.origin` captures incoming client IP addresses or origin domains automatically.
 > 2. Provides security auditing metrics without requiring backend API header parsing.
 > 3. Records connection context at mutation execution time.
-
+> 
 ---
 
 ### Exercise 3: Distinguishing `$auth` vs `$token`
@@ -218,7 +218,7 @@ Explain the architectural difference between `$auth` (database user record) and 
 > 1. `$auth` fetches live record data from storage during query execution.
 > 2. `$token` reads pre-decoded JWT claim values directly from the request context.
 > 3. Use `$auth` for live record checks; use `$token` for fast claim inspections.
-
+> 
 ---
 
 

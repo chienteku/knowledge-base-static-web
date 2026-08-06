@@ -177,7 +177,7 @@ Model a 1-to-1 association between `users` and `user_profiles` using a `UNIQUE` 
 > 1. One-to-One relationships require a `UNIQUE` constraint on the foreign key column (`user_id`).
 > 2. Prevents inserting multiple profile rows for the same `user_id`.
 > 3. Enforces strict 1-to-1 cardinal associations.
-
+> 
 ---
 
 ### Exercise 2: Splitting Infrequently Queried Columns into 1-to-1 Tables
@@ -203,7 +203,7 @@ Explain why large `BYTEA` avatar images or long `bio` text should be isolated in
 > 1. Table heap page sizes are fixed at 8KB.
 > 2. Excluding large, infrequently accessed columns from main tables maximizes CPU buffer cache efficiency.
 > 3. Advanced schema design optimization.
-
+> 
 ---
 
 ### Exercise 3: Querying 1-to-1 Tables with INNER JOIN
@@ -234,7 +234,7 @@ Fetch a user alongside their profile details in a single query.
 > 1. `JOIN` resolves 1-to-1 table relations seamlessly.
 > 2. Unique index on `user_id` guarantees $O(1)$ single-row lookup performance.
 > 3. Clean API payload assembly.
-
+> 
 ---
 
 

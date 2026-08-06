@@ -170,7 +170,7 @@ Create a unique index on `email` in collection `users` to prevent duplicate acco
 > 1. Unique indexes reject write operations attempting to insert duplicate key values.
 > 2. Enforces data integrity at the database storage engine tier.
 > 3. Throws `MongoServerError: E11000 duplicate key error` on violation.
-
+> 
 ---
 
 ### Exercise 2: Compound Unique Indexes
@@ -197,7 +197,7 @@ Enforce unique product SKUs per store location by creating a compound unique ind
 > 1. Compound unique indexes enforce uniqueness across the COMBINATION of specified field values.
 > 2. Allows duplicate `sku` values across different `storeId` values, but rejects duplicate combinations.
 > 3. Multi-column primary key equivalent.
-
+> 
 ---
 
 ### Exercise 3: Handling Duplicate Key Errors in Driver Code
@@ -227,7 +227,7 @@ Catch and handle `E11000` duplicate key write exception in application driver co
 > 1. Unique index violations throw Error Code 11000 (`E11000 duplicate key error`).
 > 2. Application code catches 11000 exceptions to return clean HTTP 409 Conflict user messages.
 > 3. Protects application consistency.
-
+> 
 ---
 
 

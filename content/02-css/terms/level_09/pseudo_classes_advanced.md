@@ -237,7 +237,7 @@ p:nth-of-type(2) { color: red; } /* Matches <p>Para 2</p> (2nd paragraph element
 > ```
 > - Target the last sibling matching the navigation category class.
 > - Reset the margin parameter value.
-
+> 
 ---
 
 
@@ -258,7 +258,7 @@ p:nth-of-type(2) { color: red; } /* Matches <p>Para 2</p> (2nd paragraph element
 > ```
 >
 > **Explanation:** `:nth-child(even)` targets alternating even table rows.
-
+> 
 ---
 
 ### Exercise 3: :is() vs :where() Pseudo-Class Specificity
@@ -277,7 +277,7 @@ p:nth-of-type(2) { color: red; } /* Matches <p>Para 2</p> (2nd paragraph element
 > ```
 >
 > **Explanation:** `:where()` simplifies CSS resets by applying 0 specificity.
-
+> 
 ## 7. Related Terms
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Base active selector states.
 - [`::before` & `::after` (Pseudo-elements)](pseudo_elements.md) — Virtual node generators.

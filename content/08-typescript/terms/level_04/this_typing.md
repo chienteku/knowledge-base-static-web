@@ -130,20 +130,20 @@ Annotate explicit `this` parameter in an event listener function to enforce prop
 > function handleClick(this: HTMLButtonElement, event: MouseEvent) {
 >   console.log(`Button clicked: ${this.id}`);
 > }
-
-const button = document.createElement("button");
-button.id = "submit-btn";
-
-// Valid event listener assignment:
-button.addEventListener("click", handleClick);
-```
-
+> 
+> const button = document.createElement("button");
+> button.id = "submit-btn";
+> 
+> // Valid event listener assignment:
+> button.addEventListener("click", handleClick);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Declaring `this: HTMLButtonElement` as the first function parameter specifies the expected `this` execution context.
 > 2. The `this` parameter is erased completely during `tsc` compilation; it emits zero JavaScript code.
 > 3. Prevents calling the function with an invalid or un-anchored `this` context.
-
+> 
 ---
 
 ### Exercise 2: Typing `this` Context in Object Method Libraries
@@ -162,29 +162,29 @@ Create a builder pattern class where methods return `this` for fluent chaining.
 > class RequestBuilder {
 >   private url = "";
 >   private method = "GET";
-
-  setUrl(url: string): this {
-    this.url = url;
-    return this;
-  }
-
-  setMethod(method: string): this {
-    this.method = method;
-    return this;
-  }
-}
-
-const req = new RequestBuilder()
-  .setUrl("https://api.example.com")
-  .setMethod("POST");
-```
-
+> 
+>   setUrl(url: string): this {
+>     this.url = url;
+>     return this;
+>   }
+> 
+>   setMethod(method: string): this {
+>     this.method = method;
+>     return this;
+>   }
+> }
+> 
+> const req = new RequestBuilder()
+>   .setUrl("https://api.example.com")
+>   .setMethod("POST");
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Returning `this` in class methods enables fluent method chaining.
 > 2. Polymorphic `this` type automatically represents subclass instances in derived classes.
 > 3. Standard object-oriented builder pattern in TypeScript.
-
+> 
 ---
 
 ### Exercise 3: Preventing Un-Anchored Method Detachment Bugs
@@ -202,25 +202,25 @@ Demonstrate how `noImplicitThis` flags detached method calls that lose their obj
 > ```typescript
 > class Counter {
 >   count = 0;
-
-  // Arrow functions automatically capture lexical 'this':
-  increment = () => {
-    this.count++;
-  };
-}
-
-const counter = new Counter();
-const detachedIncrement = counter.increment;
-
-detachedIncrement(); // Safely updates counter.count!
-```
-
+> 
+>   // Arrow functions automatically capture lexical 'this':
+>   increment = () => {
+>     this.count++;
+>   };
+> }
+> 
+> const counter = new Counter();
+> const detachedIncrement = counter.increment;
+> 
+> detachedIncrement(); // Safely updates counter.count!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Standard JavaScript class methods lose `this` binding when assigned to standalone variables (`const fn = obj.method`).
 > 2. `"noImplicitThis": true` in `tsconfig.json` flags un-annotated `this` references.
 > 3. Using arrow function class properties captures lexical `this` safely.
-
+> 
 ---
 
 

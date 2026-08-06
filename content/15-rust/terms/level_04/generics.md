@@ -288,7 +288,7 @@ Design and implement a generic metric buffer structure `MetricBuffer<K, V, P>` p
 > 2. **Trait Bounds with `where` Clauses**: By placing trait bounds (`K: Hash + Eq + Clone`, `V: AddAssign + Default + Copy + PartialOrd`) in a `where` block on the `impl` declaration, we ensure that arithmetic addition (`+=`), lookup, cloning, and ordering operate purely on abstract trait interfaces.
 > 3. **Zero-Allocation Lookups and `Copy` Semantics**: Deriving `V: Copy` allows `get` to return `V` directly by value via `.copied().unwrap_or_default()`, avoiding unnecessary heap allocations or borrow lifecycle complications for primitive numeric types.
 > 4. **Monomorphization and Performance**: During compilation, Rust monomorphizes `MetricBuffer<&str, f64, &str>` into specialized machine code with direct struct field offsets and zero dynamic dispatch or virtual function call overhead.
-
+> 
 ---
 
 ### Exercise 2: Type-Safe Compile-Time State Machine for Transaction Pipelines (`PhantomData`)
@@ -440,7 +440,7 @@ Implement a compile-time enforced state machine using generics, state marker str
 > 2. **Compile-Time State Safety via Ownership Semantics**: Methods like `validate(self)` and `execute(self)` consume ownership of `self`. Once an order is validated, the original `Transaction<Draft, T>` instance is dropped/moved, preventing double validation or out-of-order execution bugs. Attempting to call `.execute()` on a `Draft` transaction causes a compile-time type error (`E0599`).
 > 3. **Method Specialization via `impl` Blocks**: Defining separate `impl<T> Transaction<Draft, T>` and `impl<T> Transaction<Validated, T>` blocks attaches methods exclusively to transactions in that specific lifecycle state.
 > 4. **Higher-Order Closures (`FnOnce`)**: Accepting `F: FnOnce(&T) -> R` allows callers to execute arbitrary validation logic or execution side-effects, inspecting the immutable payload reference `&T` without modifying internal payload state.
-
+> 
 ---
 
 ### Exercise 3: Composable Generic Stream Event Processor Pipeline
@@ -610,7 +610,7 @@ Implement a zero-cost generic stream processing framework using generic traits, 
 > 2. **Associated Type vs Generic Output Parameter**: Using an associated type `type Output;` on `EventProcessor<Input>` guarantees that for a given `Input` type, the processor produces exactly one output type. This prevents type inference ambiguities that occur when overloading output types as generic parameters (`EventProcessor<Input, Output>`).
 > 3. **Extension Trait Blanket Implementation**: `EventProcessorExt<Input>` extends any type `P` implementing `EventProcessor<Input>`. Requiring `Sized` on the extension trait ensures combinators can take ownership of `self` by value when wrapping processors inside `MapProcessor` or `FilterProcessor`.
 > 4. **Closure Mutability (`FnMut`)**: Specifying `F: FnMut(...)` for mappers and filters permits stateful closures (e.g., counter increments, internal cache updates) to be safely called within `&mut self` processor pipelines.
-
+> 
 ---
 
 ## 6. Related Terms

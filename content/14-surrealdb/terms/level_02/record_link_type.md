@@ -178,7 +178,7 @@ You are defining a blog post table `post` where each post stores a direct record
 > 1. `TYPE record<user>` restricts the field strictly to valid record ID pointers from table `user`.
 > 2. Stores a direct pointer (`user:alice`) rather than a raw foreign key string.
 > 3. Enforces pointer integrity at write time in `SCHEMAFULL` mode.
-
+> 
 ---
 
 ### Exercise 2: Eager Pointer Resolution with `FETCH`
@@ -203,7 +203,7 @@ Select post `post:p1` and eagerly expand the `author` record link pointer into a
 > 1. `FETCH author` replaces the pointer `user:alice` with the full `user` document inline in the result payload.
 > 2. Bypasses SQL `JOIN` syntax and MongoDB `$lookup` aggregation pipelines.
 > 3. Resolves pointers in a single database roundtrip.
-
+> 
 ---
 
 ### Exercise 3: Traversing Linked Fields via Dot-Notation
@@ -227,7 +227,7 @@ Query the author's name (`author.name`) directly from `post:p1` without expandin
 > 1. Dot-notation (`author.name`) automatically traverses the record link pointer to extract targeted remote fields.
 > 2. Executes pointer traversal in $O(1)$ constant time complexity.
 > 3. Simplifies query construction by eliminating explicit join clauses.
-
+> 
 ---
 
 

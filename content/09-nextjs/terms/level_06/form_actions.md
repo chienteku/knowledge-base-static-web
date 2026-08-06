@@ -135,24 +135,24 @@ Create an HTML `<form action={handleSubmit}>` invoking an inline Server Action f
 >     const email = formData.get("email");
 >     console.log(`Subscribed: ${email}`);
 >   }
-
-  return (
-    <form action={handleSubmit} className="p-4 space-y-4">
-      <input name="email" type="email" placeholder="Enter email" required />
-      <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
-        Subscribe
-      </button>
-    </form>
-  );
-}
-```
-
+> 
+>   return (
+>     <form action={handleSubmit} className="p-4 space-y-4">
+>       <input name="email" type="email" placeholder="Enter email" required />
+>       <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
+>         Subscribe
+>       </button>
+>     </form>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `<form action={handleSubmit}>` binds form submissions directly to server-side execution.
 > 2. Works natively without client JavaScript enabled (progressive enhancement).
 > 3. Automatically serializes form input data into a `FormData` object.
-
+> 
 ---
 
 ### Exercise 2: Programmatically Resetting Form Inputs Post-Submission
@@ -169,36 +169,36 @@ Reset form input fields after successful Server Action execution using `useRef()
 >
 > ```tsx
 > "use client";
-
-import { useRef } from "react";
-
-export default function ClientForm({
-  action
-}: {
-  action: (formData: FormData) => Promise<void>;
-}) {
-  const formRef = useRef<HTMLFormElement>(null);
-
-  async function handleAction(formData: FormData) {
-    await action(formData);
-    formRef.current?.reset(); // Resets form fields after action resolves
-  }
-
-  return (
-    <form ref={formRef} action={handleAction}>
-      <input name="title" required />
-      <button type="submit">Add Item</button>
-    </form>
-  );
-}
-```
-
+> 
+> import { useRef } from "react";
+> 
+> export default function ClientForm({
+>   action
+> }: {
+>   action: (formData: FormData) => Promise<void>;
+> }) {
+>   const formRef = useRef<HTMLFormElement>(null);
+> 
+>   async function handleAction(formData: FormData) {
+>     await action(formData);
+>     formRef.current?.reset(); // Resets form fields after action resolves
+>   }
+> 
+>   return (
+>     <form ref={formRef} action={handleAction}>
+>       <input name="title" required />
+>       <button type="submit">Add Item</button>
+>     </form>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `formRef.current.reset()` clears input values after the async action completes.
 > 2. Wrapping the action call in a client handler allows orchestrating client-side UI resets.
 > 3. Standard interactive form submission pattern.
-
+> 
 ---
 
 ### Exercise 3: Binding Extra Arguments to Form Actions with `.bind()`
@@ -216,31 +216,27 @@ Pass additional static parameters (e.g. `itemId`) to a Server Action using `acti
 > ```tsx
 > // app/items/page.tsx
 > import { updateItemAction } from "@/app/actions/items";
-
-export default function ItemCard({ itemId }: { itemId: string }) {
-  const updateWithId = updateItemAction.bind(null, itemId);
-
-  return (
-    <form action={updateWithId}>
-      <input name="name" defaultValue="Updated Item" />
-      <button type="submit">Update #{itemId}</button>
-    </form>
-  );
-}
-```
-
+> 
+> export default function ItemCard({ itemId }: { itemId: string }) {
+>   const updateWithId = updateItemAction.bind(null, itemId);
+> 
+>   return (
+>     <form action={updateWithId}>
+>       <input name="name" defaultValue="Updated Item" />
+>       <button type="submit">Update #{itemId}</button>
+>     </form>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Function.prototype.bind()` prepends arguments to Server Actions without using hidden form input fields.
 > 2. The server receives `itemId` as the first function argument and `formData` as the second.
 > 3. Secure method for passing contextual IDs to form mutations.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Server Actions Overview (`"use server"`)](server_actions.md) — The target of the Form Action.

@@ -154,7 +154,7 @@ pub struct User { pub name: String } // Correct!
 >
 > 1. Encapsulates `internal_validate` function privately within `payments` module.
 > 2. `pub(crate)` allows internal field verification across crate modules while hiding details from external API callers.
-
+> 
 ---
 
 ### Exercise 2: Parent Module Visibility Restriction (`pub(super)`)
@@ -197,7 +197,7 @@ pub struct User { pub name: String } // Correct!
 > #### Technical Explanation
 >
 > 1. `pub(super)` restricts `inner_helper` access strictly to `parent` module scope.
-
+> 
 ---
 
 ### Exercise 3: Crate-Wide Logger Visibility (`pub(crate)`)
@@ -232,7 +232,7 @@ pub struct User { pub name: String } // Correct!
 > #### Technical Explanation
 >
 > 1. `pub(crate)` exposes helpers internally within the crate without polluting public API docs or breaking semver compatibility.
-
+> 
 ---
 
 ## 5. Related Terms

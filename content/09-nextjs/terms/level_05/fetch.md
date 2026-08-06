@@ -138,17 +138,17 @@ Fetch data using Next.js's extended `fetch()` API with custom headers and cachin
 >     next: { revalidate: 3600 }
 >   });
 >   const data = await res.json();
-
-  return <div>Data: {data.value}</div>;
-}
-```
-
+> 
+>   return <div>Data: {data.value}</div>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Next.js patches the native Web `fetch()` API on the server to automatically integrate with the Next.js Data Cache.
 > 2. Supports `next.revalidate` and `next.tags` extension options.
 > 3. Performs automatic request memoization when multiple identical `fetch()` calls occur in a single render pass.
-
+> 
 ---
 
 ### Exercise 2: Bypassing Request Memoization for Unique Fetch Options
@@ -169,13 +169,13 @@ Explain why passing different headers or `AbortController` signals to identical 
 > - Fetch 2: fetch('/api/data', { headers: { 'X-ID': '2' } })
 > Result: Next.js treats these as TWO DISTINCT requests because headers differ! Duplicate network calls WILL execute.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Next.js memoizes `fetch()` calls by hashing the URL string AND options object (headers, method, credentials).
 > 2. Divergent option objects generate different cache keys.
 > 3. Keep fetch options identical across components to benefit from request memoization.
-
+> 
 ---
 
 ### Exercise 3: Handling HTTP Errors in Extended `fetch()`
@@ -198,25 +198,21 @@ Check `res.ok` status when using `fetch()` and throw custom errors if requests f
 >   }
 >   return res.json();
 > }
-
-export default async function Page() {
-  const data = await getSecureData();
-  return <div>Data Loaded: {data.id}</div>;
-}
-```
-
+> 
+> export default async function Page() {
+>   const data = await getSecureData();
+>   return <div>Data Loaded: {data.id}</div>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `fetch()` Promises do NOT reject on HTTP 404 or 500 status codes (only on network failures).
 > 2. Checking `res.ok` ensures invalid HTTP responses trigger error boundary handlers.
 > 3. Standard API error checking requirement.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Data Caching (`force-cache`, `no-store`)](data_caching.md) — How to control how long the `fetch` result is stored.

@@ -182,7 +182,7 @@ Create a partial unique index on `email` in collection `users` applying ONLY to 
 > 1. Partial indexes index ONLY documents satisfying the `partialFilterExpression`.
 > 2. Ignores inactive or archived users, keeping index RAM footprint small.
 > 3. Enforces unique email constraints exclusively for active users.
-
+> 
 ---
 
 ### Exercise 2: Verifying Query Eligibility for Partial Indexes
@@ -210,7 +210,7 @@ Verify whether a query utilizes a partial index by inspecting `explain()` output
 > 1. MongoDB query optimizer uses a partial index ONLY IF the query filter explicitly includes or implies the `partialFilterExpression`.
 > 2. Querying without `status: "active"` forces a collection scan because the index does not contain inactive users.
 > 3. Always include partial filter clauses in application queries.
-
+> 
 ---
 
 ### Exercise 3: Reducing Write Amplification with Partial Indexes
@@ -236,7 +236,7 @@ Calculate the index size savings of partial indexing on a 10,000,000 document co
 > 1. Partial indexes drastically reduce B-tree memory footprint by filtering out inactive records.
 > 2. Eliminates index update write amplification for deleted/archived records.
 > 3. Essential pattern for high-scale databases.
-
+> 
 ---
 
 

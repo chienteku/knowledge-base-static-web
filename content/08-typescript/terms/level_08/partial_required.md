@@ -138,23 +138,23 @@ Create an update DTO interface where all properties of `UserProfile` are optiona
 >   email: string;
 >   age: number;
 > }
-
-type UpdateProfileDTO = Partial<UserProfile>;
-// Equivalent to: { name?: string; email?: string; age?: number; }
-
-function updateUser(id: string, updates: UpdateProfileDTO) {
-  console.log(`Updating user ${id}:`, updates);
-}
-
-updateUser("usr_1", { email: "new@example.com" }); // Valid!
-```
-
+> 
+> type UpdateProfileDTO = Partial<UserProfile>;
+> // Equivalent to: { name?: string; email?: string; age?: number; }
+> 
+> function updateUser(id: string, updates: UpdateProfileDTO) {
+>   console.log(`Updating user ${id}:`, updates);
+> }
+> 
+> updateUser("usr_1", { email: "new@example.com" }); // Valid!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Partial<T>` constructs a type with all properties of `T` set to optional (`?`).
 > 2. Perfect for modeling PATCH request payloads or form update state.
 > 3. Avoids duplicate optional interface declarations.
-
+> 
 ---
 
 ### Exercise 2: Enforcing Complete Configurations with `Required<T>`
@@ -174,23 +174,23 @@ Enforce that an optional options object is fully populated after applying defaul
 >   host?: string;
 >   port?: number;
 > }
-
-function initializeServer(opts: Options) {
-  const fullConfig: Required<Options> = {
-    host: opts.host ?? "localhost",
-    port: opts.port ?? 8080
-  };
-
-  console.log(`Server running at ${fullConfig.host}:${fullConfig.port}`);
-}
-```
-
+> 
+> function initializeServer(opts: Options) {
+>   const fullConfig: Required<Options> = {
+>     host: opts.host ?? "localhost",
+>     port: opts.port ?? 8080
+>   };
+> 
+>   console.log(`Server running at ${fullConfig.host}:${fullConfig.port}`);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Required<T>` constructs a type with all properties of `T` set to required (removes `?`).
 > 2. Guarantees that no properties remain `undefined` after applying default values.
 > 3. Inverse utility of `Partial<T>`.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: `Partial<T>` vs `Required<T>`
@@ -210,13 +210,13 @@ Formulate an architectural comparison matrix contrasting `Partial<T>` against `R
 > - Partial<T>: Mapped type {[P in keyof T]?: T[P]}. Adds optional modifier (?) to all properties. Used for PATCH updates & draft state.
 > - Required<T>: Mapped type {[P in keyof T]-?: T[P]}. Removes optional modifier (-?) from all properties. Used for fully initialized state.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `Partial` uses mapped type optional modifier (`?`).
 > 2. `Required` uses mapped type removal modifier (`-?`).
 > 3. Standard built-in mapped type transformations.
-
+> 
 ---
 
 

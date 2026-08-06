@@ -152,8 +152,8 @@ const clean = DOMPurify.sanitize(input); // Robust HTML sanitization
 > - 1. **B** (Standard cookies are readable by JS and attached automatically).
 > - 2. **C** (HttpOnly blocks JS reading/XSS, but automatic transport remains open to CSRF).
 > - 3. **A** (JS readable/XSS vulnerable, but no automatic attachment/CSRF immune).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Stored vs Reflected XSS Comparison

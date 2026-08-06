@@ -181,7 +181,7 @@ Wrap SDK query calls in a try-catch block to catch and handle write assertion fa
 > 1. SDK query methods throw exceptions when database errors occur (assertion failures, primary key conflicts, syntax errors).
 > 2. `err.message` contains descriptive error strings returned by SurrealDB.
 > 3. Prevents unhandled promise rejections in Node.js apps.
-
+> 
 ---
 
 ### Exercise 2: Handling Specific Record Conflict Errors
@@ -212,7 +212,7 @@ Detect primary key conflict errors when creating duplicate records.
 > 1. Inspecting error messages allows application code to execute fallback strategies.
 > 2. Differentiates primary key collisions from connection failures.
 > 3. Improves application error resilience.
-
+> 
 ---
 
 ### Exercise 3: Handling Authentication Failures
@@ -246,7 +246,7 @@ Catch authentication error exceptions thrown during `db.signin()` when invalid c
 > 1. Failed signin attempts throw authentication exceptions.
 > 2. Protects application endpoints by preventing token issuance on invalid credentials.
 > 3. Provides clean error feedback to login UI components.
-
+> 
 ---
 
 

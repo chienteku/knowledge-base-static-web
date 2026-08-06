@@ -152,26 +152,26 @@ Display an error banner when `useFetch()` receives an HTTP 500 or 404 response.
 > <script setup lang="ts">
 > const { data: user, error } = await useFetch("/api/user/9999");
 > </script>
-
-<template>
-  <div>
-    <div v-if="error" class="error-banner">
-      <p>Failed to load user profile: {{ error.statusMessage || error.message }}</p>
-      <p>HTTP Code: {{ error.statusCode }}</p>
-    </div>
-    <div v-else-if="user">
-      <h1>User: {{ user.name }}</h1>
-    </div>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <div v-if="error" class="error-banner">
+>       <p>Failed to load user profile: {{ error.statusMessage || error.message }}</p>
+>       <p>HTTP Code: {{ error.statusCode }}</p>
+>     </div>
+>     <div v-else-if="user">
+>       <h1>User: {{ user.name }}</h1>
+>     </div>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useFetch()` returns an `error` reactive ref containing a Nuxt `FetchError` object when request execution fails.
 > 2. `error.statusCode` exposes HTTP status codes (e.g. 404, 500).
 > 3. Prevents application crashes by capturing data fetching errors gracefully.
-
+> 
 ---
 
 ### Exercise 2: Triggering Full Nuxt Error Pages with `fatal: true`
@@ -190,30 +190,30 @@ Configure `useFetch()` to trigger Nuxt's full-screen `error.vue` page when fetch
 > <script setup lang="ts">
 > const route = useRoute();
 > const { data: post, error } = await useFetch(`/api/posts/${route.params.id}`);
-
-if (error.value) {
-  // Triggers full Nuxt error boundary page (error.vue)
-  throw createError({
-    statusCode: error.value.statusCode || 404,
-    statusMessage: "Post Not Found",
-    fatal: true
-  });
-}
-</script>
-
-<template>
-  <article v-if="post">
-    <h1>{{ post.title }}</h1>
-  </article>
-</template>
-```
-
+> 
+> if (error.value) {
+>   // Triggers full Nuxt error boundary page (error.vue)
+>   throw createError({
+>     statusCode: error.value.statusCode || 404,
+>     statusMessage: "Post Not Found",
+>     fatal: true
+>   });
+> }
+> </script>
+> 
+> <template>
+>   <article v-if="post">
+>     <h1>{{ post.title }}</h1>
+>   </article>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Throwing `createError({ fatal: true })` forces Nuxt to render the root `error.vue` error boundary template.
 > 2. Works consistently on both server SSR and client browser environments.
 > 3. Standard method for handling non-recoverable 404/500 route errors.
-
+> 
 ---
 
 ### Exercise 3: Retrying Failed Fetch Operations with `refresh()`
@@ -232,36 +232,32 @@ Provide a retry button for users to clear fetch errors and retry network data fe
 > <script setup lang="ts">
 > const { data: feed, error, refresh, pending } = await useFetch("/api/live-feed");
 > </script>
-
-<template>
-  <div>
-    <div v-if="error">
-      <p>Error loading feed.</p>
-      <button @click="() => refresh()" :disabled="pending">
-        {{ pending ? "Retrying..." : "Retry Fetch" }}
-      </button>
-    </div>
-    <div v-else-if="feed">
-      <ul>
-        <li v-for="item in feed" :key="item.id">{{ item.text }}</li>
-      </ul>
-    </div>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <div v-if="error">
+>       <p>Error loading feed.</p>
+>       <button @click="() => refresh()" :disabled="pending">
+>         {{ pending ? "Retrying..." : "Retry Fetch" }}
+>       </button>
+>     </div>
+>     <div v-else-if="feed">
+>       <ul>
+>         <li v-for="item in feed" :key="item.id">{{ item.text }}</li>
+>       </ul>
+>     </div>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `refresh()` re-executes the data fetching function associated with `useFetch()`.
 > 2. Clears previous error states and updates `pending` indicators automatically during retry execution.
 > 3. Standard user error recovery pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`error.vue` & `useError`](../level_10/error_vue.md) — How to trigger a full-page error instead of an inline component error.

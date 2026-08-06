@@ -180,7 +180,7 @@ You are logging audit events in a security table `audit_log` with automatic time
 > 1. `datetime` stores ISO-8601 timestamps with microsecond precision (`d"2026-08-06T00:00:00Z"`).
 > 2. `time::now()` outputs the current UTC timestamp during query execution.
 > 3. Subtracting duration `1d` from `time::now()` performs instant temporal arithmetic.
-
+> 
 ---
 
 ### Exercise 2: Duration Arithmetic for Subscription Expiration
@@ -211,7 +211,7 @@ A SaaS billing engine calculates subscription expiration dates by adding duratio
 > 1. Durations represent time intervals (`30d`, `2w`, `12h`, `45m`, `30s`).
 > 2. Adding a duration (`+ 30d`) to a `datetime` produces a valid future `datetime`.
 > 3. Enables native subscription expiration logic without external date utility libraries.
-
+> 
 ---
 
 ### Exercise 3: Formatting Datetimes with `time::format()`
@@ -239,7 +239,7 @@ A reporting API needs to output human-readable formatted date strings (e.g. `"20
 > 1. `time::format(datetime, format_string)` formats timestamps using standard strftime specifiers.
 > 2. Formats dates on the database server, reducing client-side formatting code.
 > 3. Returns a clean formatted `string` representation while preserving stored `datetime` precision.
-
+> 
 ---
 
 

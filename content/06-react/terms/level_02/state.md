@@ -111,7 +111,7 @@ Use React Query (useQuery) for server cache state management
 > 3. Props (Passed down from the parent, read-only).
 > ```
 > - Does the user interacting with the component change the value? If yes, it's State.
-
+> 
 ---
 
 
@@ -130,7 +130,7 @@ Use React Query (useQuery) for server cache state management
 > ```
 >
 > **Explanation:** Data that must persist across renders and trigger UI updates MUST be stored in React State.
-
+> 
 ---
 
 ### Exercise 3: State Snapshot Behavior
@@ -147,7 +147,7 @@ Use React Query (useQuery) for server cache state management
 > ```
 >
 > **Explanation:** State values act as snapshots within event handlers; use updater functions `setCount(c => c + 1)` for sequential updates.
-
+> 
 ## 7. Related Terms
 - [`useState` Hook](use_state.md) — How you actually create State in modern React.
 - [Re-rendering](re_rendering.md) — What happens immediately after State changes.

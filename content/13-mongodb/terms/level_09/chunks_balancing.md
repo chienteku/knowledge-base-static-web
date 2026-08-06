@@ -169,7 +169,7 @@ Inspect chunk distribution and balancer status across a sharded MongoDB cluster 
 > 1. `sh.status()` displays sharded cluster metadata, active shard nodes, collection chunk counts, and balancer status.
 > 2. Identifies chunk imbalances across shard nodes.
 > 3. Core command for sharded cluster administration.
-
+> 
 ---
 
 ### Exercise 2: Managing Balancer Window Schedules
@@ -202,7 +202,7 @@ Configure the MongoDB balancer to run ONLY during off-peak maintenance hours (2:
 > 1. `activeWindow` restricts background chunk balancing migrations to off-peak hours.
 > 2. Prevents chunk migration IOPS from competing with peak daytime application traffic.
 > 3. Essential production maintenance setting.
-
+> 
 ---
 
 ### Exercise 3: Manual Chunk Splitting with `sh.splitAt()`
@@ -226,7 +226,7 @@ Split an oversized 128MB chunk at a specific shard key split point using `sh.spl
 > 1. `sh.splitAt()` manually splits a chunk into two smaller chunks at a specified boundary value.
 > 2. Helps resolve jumbo chunks that exceed the default 64MB chunk size.
 > 3. Restores chunk migration capability.
-
+> 
 ---
 
 

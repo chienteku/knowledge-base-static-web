@@ -172,7 +172,7 @@ console.log(b);
 > ```
 > - `var` is function-scoped, not block-scoped.
 > - Standalone `{}` still create a block scope for `let` and `const`.
-
+> 
 ---
 
 ### Exercise 2: Block Scoped Loop Iteration
@@ -194,7 +194,7 @@ console.log(b);
 > ```
 >
 > **Explanation:** `let` variables bound to loop blocks are destroyed upon loop exit.
-
+> 
 ---
 
 ### Exercise 3: Standalone Block Scoping (`{ ... }`)
@@ -214,8 +214,8 @@ console.log(b);
 > ```
 >
 > **Explanation:** Standalone curly braces `{}` create isolated block scopes for variable encapsulation.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

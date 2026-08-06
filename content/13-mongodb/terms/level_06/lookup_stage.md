@@ -201,7 +201,7 @@ Join collection `orders` with collection `users` on `customerId` = `users._id` t
 > 1. `$lookup` performs left outer equality joins against target collections.
 > 2. `as` specifies the output array field where matched target documents are stored.
 > 3. Requires an index on `foreignField` (`users._id`) for fast $O(\log N)$ join execution.
-
+> 
 ---
 
 ### Exercise 2: Correlated Subqueries with Pipelines in `$lookup`
@@ -246,7 +246,7 @@ Join `customers` with `orders`, filtering joined orders to include ONLY those wi
 > 1. `let` binds local pipeline fields to variables (`$$custId`).
 > 2. `pipeline` executes custom aggregation stages on target collection documents before joining.
 > 3. Reduces joined payload size server-side.
-
+> 
 ---
 
 ### Exercise 3: Unwrapping Joined Array Results with `$unwind`
@@ -280,7 +280,7 @@ Flatten the 1-element `customerDetails` array returned by `$lookup` into a singl
 > 1. `$lookup` always outputs matching documents inside an array field.
 > 2. `$unwind` transforms 1-element arrays into direct embedded subdocument objects.
 > 3. Simplifies downstream field access.
-
+> 
 ---
 
 

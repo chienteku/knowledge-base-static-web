@@ -174,7 +174,7 @@ console.log("Updated fruits:", fruits);
 > ```
 > - The last element is at index `fruits.length - 1`.
 > - The second item is at index `1` due to zero-based indexing.
-
+> 
 ---
 
 ### Exercise 2: Array Length Shrinking Element Deletion
@@ -193,7 +193,7 @@ console.log("Updated fruits:", fruits);
 > ```
 >
 > **Explanation:** Manually setting `length` to a smaller integer truncates the array, permanently deleting extra trailing elements.
-
+> 
 ---
 
 ### Exercise 3: Negative Array Indices Traps
@@ -213,7 +213,7 @@ console.log("Updated fruits:", fruits);
 > ```
 >
 > **Explanation:** Bracket indexing treats negative numbers as object string keys; `Array.prototype.at(-1)` accesses relative end offsets.
-
+> 
 ---
 
 ## 7. Related Terms

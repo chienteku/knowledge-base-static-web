@@ -158,7 +158,7 @@ An analytics query takes records containing an array of tags `tags = ["rust", "d
 > 1. `SPLIT ON field` expands array elements, outputting a separate result document for each array item.
 > 2. Replaces SQL `UNNEST()` and MongoDB `$unwind` aggregation pipeline stages.
 > 3. Facilitates per-item aggregation and reporting queries.
-
+> 
 ---
 
 ### Exercise 2: Grouping After Array Unnesting
@@ -189,7 +189,7 @@ Unnest `tags` arrays across all articles using `SPLIT ON`, then group by individ
 > 1. Combining `SPLIT ON` with `GROUP BY` aggregates individual array items across records.
 > 2. Counts how many documents contain each distinct array tag item.
 > 3. Simplifies tag cloud and category count reporting queries.
-
+> 
 ---
 
 ### Exercise 3: Multi-Array Unnesting Considerations
@@ -216,7 +216,7 @@ Explain the behavior of applying `SPLIT ON` across multiple array fields simulta
 > 1. Splitting on multiple array fields generates a cartesian product expansion of all array combinations.
 > 2. Outputs $M 	imes N$ result records for array lengths $M$ and $N$.
 > 3. Use carefully on large arrays to prevent result set explosion.
-
+> 
 ---
 
 

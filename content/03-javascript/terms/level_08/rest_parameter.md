@@ -158,7 +158,7 @@ const [primary, ...others] = colors;
 > The Rest operator gathered the remaining un-destructured items into a new array!
 > ```
 > - Rest is a vacuum cleaner. It sucks up whatever is left over!
-
+> 
 ---
 
 ### Exercise 2: Gathering Remaining Arguments with Rest Parameters
@@ -178,7 +178,7 @@ const [primary, ...others] = colors;
 > ```
 >
 > **Explanation:** Rest parameters collect remaining positional arguments into a true `Array` instance.
-
+> 
 ---
 
 ### Exercise 3: Rest Parameters in Array Destructuring
@@ -196,8 +196,8 @@ const [primary, ...others] = colors;
 > ```
 >
 > **Explanation:** Rest element syntax in array destructuring gathers trailing array elements.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -216,7 +216,7 @@ app.use('/users', userRouter);
 > ```
 > - Create `express.Router()`. 
 > - Use `app.use()` to mount it to a specific base path.
-
+> 
 ---
 
 
@@ -238,7 +238,7 @@ app.use('/users', userRouter);
 > ```
 >
 > **Explanation:** `express.Router()` creates isolated modular route handler modules.
-
+> 
 ---
 
 ### Exercise 3: Chaining HTTP Route Methods
@@ -258,7 +258,7 @@ app.use('/users', userRouter);
 > ```
 >
 > **Explanation:** `app.route()` avoids duplicate path definitions for multi-method endpoints.
-
+> 
 ## 7. Related Terms
 - [Middleware](middleware.md) — Middleware executes right before the Router triggers your code.
 - [REST API Design](../level_09/rest_api.md) — The strict rules for naming your routes properly.

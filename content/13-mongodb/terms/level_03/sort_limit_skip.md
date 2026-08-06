@@ -183,7 +183,7 @@ Implement page 2 of a product listing API returning 10 items per page sorted by 
 > 1. `.sort({ price: 1 })` orders items ascending (1 for ascending, -1 for descending).
 > 2. `.skip(n)` skips the first `n` matching documents.
 > 3. `.limit(m)` caps returned results to `m` items.
-
+> 
 ---
 
 ### Exercise 2: Optimizing Pagination with Range-Based Seeking
@@ -214,7 +214,7 @@ Replace slow deep `skip(10000)` pagination with efficient range-based cursor see
 > 1. High `skip()` offsets force the server to scan and discard thousands of index entries ($O(N)$).
 > 2. Range seeking (`$gt: lastSeenId`) jumps directly to the next page using index bounds in $O(\log N)$ time.
 > 3. Industry standard pattern for infinite scroll pagination.
-
+> 
 ---
 
 ### Exercise 3: Index-Backed In-Memory Sort Rules
@@ -240,7 +240,7 @@ Explain why large sort operations fail with `SortExceededMemoryLimit` error if n
 > 1. MongoDB limits in-memory sort operations to 100MB of RAM buffer.
 > 2. Indexes store data in sorted B-tree order, allowing zero-RAM sorted query streams.
 > 3. Always index sort fields for large collections.
-
+> 
 ---
 
 

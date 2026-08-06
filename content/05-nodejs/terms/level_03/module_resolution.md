@@ -116,7 +116,7 @@ List the exact directory paths Node.js will check in order, looking for `lodash`
 > If it fails at the root `/`, it throws an Error.
 > ```
 > - Remember the rule: if it's not a core module and not a relative path, it hunts for a `node_modules` folder, climbing up the tree.
-
+> 
 ---
 
 
@@ -139,7 +139,7 @@ List the exact directory paths Node.js will check in order, looking for `lodash`
 > ```
 >
 > **Explanation:** Node traverses parent directories recursively looking for `node_modules` until reaching filesystem root.
-
+> 
 ---
 
 ### Exercise 3: Index File Resolution Order
@@ -159,7 +159,7 @@ List the exact directory paths Node.js will check in order, looking for `lodash`
 > ```
 >
 > **Explanation:** Folder module resolution checks `package.json` main field before falling back to `index` files.
-
+> 
 ## 7. Related Terms
 - [node_modules](../level_04/node_modules.md) — The folder the algorithm is desperately searching for.
 - [ES Modules (import, export)](es_modules.md) — ESM resolution is slightly stricter (e.g., forcing you to include the `.js` extension).

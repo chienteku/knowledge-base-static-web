@@ -177,7 +177,7 @@ Create a `posts` table storing string tags as an array (`TEXT[]`) and query post
 > 1. `TEXT[]` stores ordered arrays of text strings in a single column.
 > 2. `@>` (contains operator) checks if the array column contains all elements of the target array.
 > 3. Can be indexed using GIN indexes for fast array membership searching.
-
+> 
 ---
 
 ### Exercise 2: Appending Elements to Arrays
@@ -204,7 +204,7 @@ Append a new tag `'docker'` to the `tags` array for post `id = 1`.
 > 1. `array_append(array, element)` appends a new element to the end of an array.
 > 2. `array_remove(array, element)` removes matching elements.
 > 3. Modifies array contents in SQL.
-
+> 
 ---
 
 ### Exercise 3: Unnesting Arrays into Separate Output Rows
@@ -233,7 +233,7 @@ Expand array tags into individual rows using `UNNEST(tags)` for tag frequency re
 > 1. `UNNEST(array)` expands an array into a set of distinct table rows.
 > 2. Grouping by unnested tags produces tag frequency summary metrics.
 > 3. Dynamic array expansion.
-
+> 
 ---
 
 

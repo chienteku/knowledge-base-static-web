@@ -141,7 +141,7 @@ The `<nav>` element is the giant directory sign sitting near the entrance or the
 > Yes! It is perfectly acceptable and encouraged to have multiple `<nav>` elements if they both represent major blocks of navigation. (Best practice is to give them unique `aria-label` attributes, like `aria-label="Main menu"` and `aria-label="Table of contents"`).
 > ```
 > - Does a Table of Contents act as a major steering wheel for an article? Yes!
-
+> 
 ---
 
 
@@ -165,7 +165,7 @@ The `<nav>` element is the giant directory sign sitting near the entrance or the
 > ```
 >
 > **Explanation:** `<ul>` inside `<nav>` provides accessible list count context for screen readers.
-
+> 
 ---
 
 ### Exercise 3: Nav Landmark Role
@@ -182,7 +182,7 @@ The `<nav>` element is the giant directory sign sitting near the entrance or the
 > ```
 >
 > **Explanation:** `<nav>` acts as the `navigation` accessibility landmark.
-
+> 
 ## 7. Related Terms
 - [`<header>`](header.md) — The parent container that usually holds the primary `<nav>`.
 - [`<ul>`, `<ol>`, and `<li>` (Lists)](../level_02/lists.md) — The element almost always used *inside* a `<nav>` to structure the links.

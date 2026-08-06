@@ -293,7 +293,7 @@ Your task is to:
 > 4. **Edge Cases & Failure Modes**:
 >    - If `#[derive(Clone)]` were used blindly on a struct containing raw references or un-isolated mutable inner pointers, mutation leakage could occur across transactions.
 >    - Performing a deep copy on extremely large vector payloads introduces latency spikes. In production engines, copy-on-write dynamic arrays (`Cow<'a, [u8]>`) or chunked page buffers are combined with `Clone` to mitigate large allocations.
-
+> 
 ---
 
 ### Exercise 2: Buffer Allocation Reuse via Overridden `Clone::clone_from`
@@ -409,7 +409,7 @@ Write unit tests in `#[cfg(test)] mod tests` using `assert_eq!`, `assert!`, `ass
 > 4. **Edge Cases**:
 >    - **Buffer Under-capacity**: If `source.payload.len()` exceeds `dest.payload.capacity()`, `extend_from_slice` automatically triggers a heap reallocation, growing `dest.payload`'s capacity. While a reallocation occurs in that scenario, subsequent frame copies of equal or smaller size will reuse the expanded buffer.
 >    - **Self-Cloning**: Calling `frame.clone_from(&frame)` could clear the vector before copying if not handled carefully. `Vec::extend_from_slice` handles slice references safely, but aliasing guards are good practice in general `clone_from` implementations.
-
+> 
 ---
 
 ### Exercise 3: Deep Cloning Dynamic Directed Acyclic Graphs (DAG) with Isolated Task Execution States
@@ -542,7 +542,7 @@ Write unit tests in `#[cfg(test)] mod tests` using `assert_eq!`, `assert!`, `ass
 > 
 > 4. **Edge Cases & Operational Considerations**:
 >    - **Graph Cyclic References**: If DAG nodes referenced each other via shared mutable references (`Rc<RefCell<TaskNode>>`), a standard recursive `.clone()` call could enter infinite recursion or duplicate shared nodes unexpectedly. Dag structures requiring cyclic references use node index IDs (`u32` keys into a flat `Vec<TaskNode>`) to maintain safe value-level cloning semantics without pointer cycles.
-
+> 
 ---
 
 ## 6. Related Terms

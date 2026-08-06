@@ -180,7 +180,7 @@ Refactor a nested query using a CTE (`WITH high_value_users AS (...)`) to isolat
 > 1. `WITH cte_name AS (...)` defines a temporary named query result set.
 > 2. Improves SQL readability by breaking complex subqueries into modular named blocks.
 > 3. Modern PostgreSQL (PG 12+) automatically inlines non-recursive CTEs for query optimization.
-
+> 
 ---
 
 ### Exercise 2: Multi-Stage Data Pipelines using Chained CTEs
@@ -217,7 +217,7 @@ Chain two CTEs (`WITH monthly_sales AS (...), top_stores AS (...)`) to compute r
 > 1. Chained CTEs pass intermediate query result sets to subsequent CTE blocks sequentially.
 > 2. Simplifies multi-stage analytical queries.
 > 3. Clean pipeline architecture.
-
+> 
 ---
 
 ### Exercise 3: Data Mutation CTEs with `RETURNING`
@@ -248,7 +248,7 @@ Archive soft-deleted users in a single atomic SQL statement using `WITH deleted_
 > 1. Data-modifying CTEs (`INSERT`, `UPDATE`, `DELETE` with `RETURNING`) perform writes inside CTE blocks.
 > 2. Moves deleted rows directly into archive tables in a single atomic SQL statement.
 > 3. Advanced PostgreSQL feature.
-
+> 
 ---
 
 

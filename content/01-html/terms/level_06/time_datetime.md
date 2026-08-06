@@ -165,7 +165,7 @@ Basic date wrapping:
 > - The date prefix is `2026-12-25`.
 > - Use a capital `T` to separate the date from the time.
 > - The time suffix is `20:00` (8 PM in 24-hour time).
-
+> 
 ---
 
 
@@ -184,7 +184,7 @@ Basic date wrapping:
 > ```
 >
 > **Explanation:** `datetime="15:00"` provides machine-readable 24-hour time format.
-
+> 
 ---
 
 ### Exercise 3: ISO 8601 Timestamp Formats
@@ -201,7 +201,7 @@ Basic date wrapping:
 > ```
 >
 > **Explanation:** ISO 8601 standard combines YYYY-MM-DD and T hh:mm.
-
+> 
 ## 7. Related Terms
 - [Semantic HTML](semantic_html.md) — The parent layout context.
 - [Attribute](../level_01/attribute.md) — The parameter concept.

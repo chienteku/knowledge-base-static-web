@@ -143,33 +143,33 @@ Create an active navigation link component that highlights when its `href` match
 >
 > ```tsx
 > "use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-export default function NavLink({ href, label }: { href: string; label: string }) {
-  const pathname = usePathname();
-  const isActive = pathname === href;
-
-  return (
-    <Link
-      href={href}
-      className={`px-3 py-2 rounded ${
-        isActive ? "bg-blue-600 text-white font-bold" : "text-gray-700 hover:bg-gray-100"
-      }`}
+> 
+> import Link from "next/link";
+> import { usePathname } from "next/navigation";
+> 
+> export default function NavLink({ href, label }: { href: string; label: string }) {
+>   const pathname = usePathname();
+>   const isActive = pathname === href;
+> 
+>   return (
+>     <Link
+>       href={href}
+>       className={`px-3 py-2 rounded ${
+>         isActive ? "bg-blue-600 text-white font-bold" : "text-gray-700 hover:bg-gray-100"
+>       }`}
     >
-      {label}
-    </Link>
-  );
-}
-```
-
+>       {label}
+>     </Link>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `usePathname()` returns the current URL pathname string (e.g. `/dashboard`).
 > 2. Automatically re-evaluates when client-side route transitions occur.
 > 3. Must be used inside Client Components marked with `"use client"`.
-
+> 
 ---
 
 ### Exercise 2: Sub-Route Prefix Active State Detection
@@ -186,27 +186,27 @@ Check if the current pathname starts with a parent route prefix (`pathname.start
 >
 > ```tsx
 > "use client";
-
-import { usePathname } from "next/navigation";
-
-export default function DocsSidebarSection() {
-  const pathname = usePathname();
-  const isDocsActive = pathname.startsWith("/docs");
-
-  return (
-    <div className={isDocsActive ? "border-l-4 border-blue-500 pl-4" : "pl-4"}>
-      <h3>Docs Section</h3>
-    </div>
-  );
-}
-```
-
+> 
+> import { usePathname } from "next/navigation";
+> 
+> export default function DocsSidebarSection() {
+>   const pathname = usePathname();
+>   const isDocsActive = pathname.startsWith("/docs");
+> 
+>   return (
+>     <div className={isDocsActive ? "border-l-4 border-blue-500 pl-4" : "pl-4"}>
+>       <h3>Docs Section</h3>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `pathname.startsWith()` allows highlighting parent navigation items when viewing child sub-routes (`/docs/v2/installation`).
 > 2. Maintains hierarchical visual indicators in sidebar navigation menus.
 > 3. Standard navigation UI pattern.
-
+> 
 ---
 
 ### Exercise 3: Auditing Client Re-Render Bounds with `usePathname()`
@@ -225,23 +225,19 @@ Isolate `usePathname()` to atomic link items to prevent re-rendering full layout
 > // ❌ INCORRECT (Marks whole header layout as Client Component):
 > // "use client";
 > // export default function Header() { const pathname = usePathname(); ... }
-
-// ✅ CORRECT (Isolate hook to child NavItem component):
-// Header.tsx remains a Server Component; NavItem.tsx consumes usePathname().
-```
-
+> 
+> // ✅ CORRECT (Isolate hook to child NavItem component):
+> // Header.tsx remains a Server Component; NavItem.tsx consumes usePathname().
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Consuming `usePathname()` forces the component to be marked as `"use client"`.
 > 2. Moving the hook down to atomic leaf components leaves header containers as zero-bundle-size Server Components.
 > 3. Optimizes client bundle size and rendering performance.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useRouter` Hook](../level_03/use_router.md) — Used in conjunction with these hooks to update the URL.

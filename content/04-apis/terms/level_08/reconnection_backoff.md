@@ -275,11 +275,11 @@ Calculate the backoff delay (excluding jitter) for **Attempt 4** (the 5th retry 
 > [!check]- Answer
 > - The formula for exponential delay is $\text{Delay} = \text{base} \times 2^{\text{attempt}}$.
 > - The delay is capped by a maximum delay threshold parameter.
-
+> 
 > [!check]- Answer
 > - **`10,000ms`** (Calculation: $1000 \times 2^4 = 1000 \times 16 = 16,000\text{ms}$. Since this exceeds the `10,000ms` cap, the delay is capped at `10,000ms`).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Reconnection Jitter Formula

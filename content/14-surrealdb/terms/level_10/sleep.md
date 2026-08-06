@@ -138,7 +138,7 @@ Introduce a temporary execution delay of 500 milliseconds inside a test transact
 > 1. `SLEEP <duration>` pauses query execution for the specified duration (`500ms`, `2s`).
 > 2. Non-blocking delay in SurrealDB's async Rust runtime.
 > 3. Useful in test scripts simulating long-running operations or polling delays.
-
+> 
 ---
 
 ### Exercise 2: Simulating Latency in Test Scripts
@@ -163,7 +163,7 @@ Simulate a slow background task delay of 1 second before returning a stored proc
 > 1. Suspends script execution for 1 second.
 > 2. Helps developers test client SDK timeout handling.
 > 3. Simulates asynchronous processing steps.
-
+> 
 ---
 
 ### Exercise 3: Non-Blocking Execution Model
@@ -188,7 +188,7 @@ Explain why executing `SLEEP` in one query session does not block other concurre
 > 1. `SLEEP` yields async task execution back to the Tokio runtime.
 > 2. Other connection sessions continue processing queries without delay.
 > 3. Ensures high concurrency under load.
-
+> 
 ---
 
 

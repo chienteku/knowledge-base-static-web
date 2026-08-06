@@ -174,7 +174,7 @@ Add a `CHECK` constraint to table `products` ensuring `price_cents >= 0`.
 > 1. `CHECK` constraints validate column expressions on every `INSERT` and `UPDATE`.
 > 2. Prevents writing invalid negative prices to the database.
 > 3. Enforces domain invariants directly at the storage engine tier.
-
+> 
 ---
 
 ### Exercise 2: Enforcing Multi-Column Date Range Consistency
@@ -204,7 +204,7 @@ Enforce that an event's `end_time` MUST be strictly greater than its `start_time
 > 1. Multi-column `CHECK` constraints compare values across multiple fields within the same row.
 > 2. Rejects rows where `end_time <= start_time` with a SQL check violation error.
 > 3. Eliminates application-layer date range bugs.
-
+> 
 ---
 
 ### Exercise 3: Adding CHECK Constraints to Existing Tables
@@ -233,7 +233,7 @@ Add a `CHECK` constraint to an existing `users` table verifying `length(username
 > 1. `NOT VALID` adds the constraint for new writes without holding an exclusive lock to scan existing rows.
 > 2. `VALIDATE CONSTRAINT` scans existing rows concurrently without blocking concurrent table writes.
 > 3. Safe zero-downtime migration strategy for large tables.
-
+> 
 ---
 
 

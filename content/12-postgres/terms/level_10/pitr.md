@@ -162,7 +162,7 @@ Configure `postgresql.conf` parameters `wal_level = replica`, `archive_mode = on
 > 1. `wal_level = replica` writes full transaction log information to WAL files.
 > 2. `archive_mode = on` activates automatic continuous WAL archiving.
 > 3. `archive_command` copies completed 16MB WAL segment files to secure backup storage.
-
+> 
 ---
 
 ### Exercise 2: Restoring Databases to an Exact Past Timestamp
@@ -189,7 +189,7 @@ Configure `recovery.signal` and `restore_command` to perform Point-In-Time Recov
 > 1. Touch file `recovery.signal` puts PostgreSQL into recovery mode upon startup.
 > 2. `restore_command` fetches archived WAL files sequentially.
 > 3. `recovery_target_time` stops WAL replay at the exact target timestamp, restoring database state right before a disaster occurred.
-
+> 
 ---
 
 ### Exercise 3: Validating Disaster Recovery Timelines
@@ -216,7 +216,7 @@ Explain how PostgreSQL recovery timelines prevent overwriting archived WAL files
 > 1. Timelines branch WAL history whenever a database is promoted out of recovery mode.
 > 2. Guarantees historical WAL archives remain immutable.
 > 3. Advanced disaster recovery architecture.
-
+> 
 ---
 
 

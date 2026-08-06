@@ -183,7 +183,7 @@ Create a virtual view `v_active_users` projecting non-sensitive fields for activ
 > 1. `CREATE VIEW` saves a named SQL query definition in the system catalog.
 > 2. Queries against views execute the underlying query dynamically on the fly.
 > 3. Encapsulates row filtering and hides sensitive columns (`password_hash`).
-
+> 
 ---
 
 ### Exercise 2: Creating Multi-Table Abstraction Views
@@ -214,7 +214,7 @@ Create a view `v_order_summaries` joining `orders`, `customers`, and `order_item
 > 1. Simplifies complex multi-table join syntax for application developers.
 > 2. Provides a clean relational interface layer for backend APIs.
 > 3. Virtual projection encapsulation.
-
+> 
 ---
 
 ### Exercise 3: Updatable Views with `WITH CHECK OPTION`
@@ -242,7 +242,7 @@ Create an updatable view `v_pending_orders` with `WITH CHECK OPTION` to ensure u
 > 1. Simple 1-to-1 views without aggregations support direct `UPDATE` and `INSERT` commands.
 > 2. `WITH CHECK OPTION` rejects inserts or updates through the view that would cause the row to disappear from the view's filter condition.
 > 3. Hardens updatable view integrity.
-
+> 
 ---
 
 

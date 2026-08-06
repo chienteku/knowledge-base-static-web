@@ -187,7 +187,7 @@ if (typeof document !== "undefined") {
 > - Check presence using `cardElement.classList.contains("collapsed")`.
 > - Remove class using `cardElement.classList.remove("collapsed")`.
 > - Set attribute using `cardElement.setAttribute("aria-expanded", "true")`.
-
+> 
 ---
 
 ### Exercise 2: Toggling Element Classes with `classList.toggle`
@@ -216,7 +216,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `classList.toggle(cls)` adds class if missing, and removes class if present.
-
+> 
 ---
 
 ### Exercise 3: Managing Data Attributes via `dataset`
@@ -234,7 +234,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** The DOM `dataset` property automatically converts kebab-case `data-*` attributes to camelCase properties.
-
+> 
 ---
 
 ## 7. Related Terms

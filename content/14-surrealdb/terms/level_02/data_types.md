@@ -193,7 +193,7 @@ You are building an e-commerce inventory product schema requiring strong data ty
 > 1. SurrealDB features a rich native type system (`string`, `decimal`, `int`, `datetime`, `record`, `geometry`).
 > 2. `decimal` avoids binary floating-point rounding errors inherent to currency calculations.
 > 3. Strict field types prevent schema corruption during application write operations.
-
+> 
 ---
 
 ### Exercise 2: Type Coercion Error Handling
@@ -223,7 +223,7 @@ Test SurrealDB's type enforcement by attempting to write a string `"one hundred"
 > 1. In `SCHEMAFULL` mode, SurrealDB validates field data types at write time before committing transactions.
 > 2. Unconvertible data types are rejected immediately, protecting database integrity.
 > 3. Valid numeric strings (e.g. `"100"`) may be auto-coerced depending on strictness settings.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Field Types via `INFO FOR TABLE`
@@ -248,7 +248,7 @@ A database developer needs to introspect the schema of an existing table to audi
 > 1. `INFO FOR TABLE` outputs an object listing all defined fields, types, assertions, and default values.
 > 2. Facilitates automated schema inspection and type auditing in CI/CD pipelines.
 > 3. Helps developers verify type definitions before running data migration scripts.
-
+> 
 ---
 
 

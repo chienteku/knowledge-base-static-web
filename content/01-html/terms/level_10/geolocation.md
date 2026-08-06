@@ -268,7 +268,7 @@ navigator.geolocation.getCurrentPosition(
 > ```
 > - Use the `navigator.geolocation` check.
 > - Call `watchPosition()` instead of `getCurrentPosition()`.
-
+> 
 ---
 
 
@@ -290,7 +290,7 @@ navigator.geolocation.getCurrentPosition(
 > ```
 >
 > **Explanation:** `position.coords` provides current device latitude and longitude.
-
+> 
 ---
 
 ### Exercise 3: Continuous Location Tracking API
@@ -309,7 +309,7 @@ navigator.geolocation.getCurrentPosition(
 > ```
 >
 > **Explanation:** `watchPosition` streams real-time GPS coordinate updates.
-
+> 
 ## 7. Related Terms
 - [`<script>`](../level_08/script.md) — The script environment executing API commands.
 - [Web Storage (Local/Session Storage)](web_storage.md) — Used to save coordinate preferences locally.

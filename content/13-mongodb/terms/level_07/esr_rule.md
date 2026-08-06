@@ -185,7 +185,7 @@ Design an optimal compound index for a query with equality filter `status: "acti
 > 1. Equality fields first: Narrows candidate document set to matching `status` values.
 > 2. Sort fields second: Eliminates in-memory sorting by returning B-tree keys in requested `createdAt` order.
 > 3. Range fields last: Filters numeric range bounds (`age >= 21`) without invalidating sort order.
-
+> 
 ---
 
 ### Exercise 2: Demonstrating In-Memory Sort Failures from Broken ESR Order
@@ -213,7 +213,7 @@ Demonstrate why placing Range fields BEFORE Sort fields in a compound index forc
 > 1. Range query bounds on a field cause subsequent index fields to lose their pre-sorted ordering.
 > 2. Placing Sort fields BEFORE Range fields guarantees zero-RAM sorted streams.
 > 3. Fundamental rule of high-performance index architecture.
-
+> 
 ---
 
 ### Exercise 3: Validating ESR Index Plans with `explain()`
@@ -244,7 +244,7 @@ Run `explain()` on a query using an ESR-compliant compound index to verify `winn
 > 1. ESR-compliant indexes show `stage: "FETCH"` directly over `stage: "IXSCAN"`.
 > 2. Confirms absence of expensive `stage: "SORT"` memory allocations.
 > 3. Validates optimal index design.
-
+> 
 ---
 
 

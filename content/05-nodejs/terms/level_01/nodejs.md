@@ -110,7 +110,7 @@ app.get('/data', async (req, res, next) => {
 > 1. Node.js only. The Browser cannot read text files directly from the hard drive (huge security risk).
 > 2. Browser only. Node.js doesn't have a screen to show popup alerts.
 > ```
-
+> 
 ---
 
 
@@ -139,7 +139,7 @@ app.get('/data', async (req, res, next) => {
 > ```
 >
 > **Explanation:** `process.env` and `Buffer` are Node.js core globals; `document` is browser DOM; `fetch` is standardized web spec available in modern Node.
-
+> 
 ---
 
 ### Exercise 3: Reading Environment Variables in Node.js
@@ -156,7 +156,7 @@ app.get('/data', async (req, res, next) => {
 > ```
 >
 > **Explanation:** `process.env` stores runtime environment configuration keys.
-
+> 
 ## 7. Related Terms
 - [V8 JavaScript Engine](v8_engine.md) — The actual engine beating inside the heart of Node.js.
 - [NPM (Node Package Manager)](../level_04/npm.md) — The package manager that made the Node.js ecosystem the largest in the world.

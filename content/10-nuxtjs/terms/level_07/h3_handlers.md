@@ -146,13 +146,13 @@ Create an H3 handler `server/api/users/[id].ts` parsing path parameters, query p
 >   };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `getRouterParam(event, name)` extracts dynamic path parameters (`[id]`).
 > 2. `getQuery(event)` parses incoming URL query parameters into a typed object.
 > 3. `getHeader(event, name)` reads HTTP request headers case-insensitively.
-
+> 
 ---
 
 ### Exercise 2: Setting HTTP Status Codes and Headers
@@ -179,13 +179,13 @@ Set a custom response header `X-Cache-Status: HIT` and return HTTP status `201 C
 >   return { success: true, item: body };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `setResponseStatus(event, code)` explicitly sets the HTTP response status code.
 > 2. `setResponseHeader(event, key, val)` attaches custom HTTP response headers.
 > 3. Standard REST API handler pattern in H3.
-
+> 
 ---
 
 ### Exercise 3: Reading and Writing HTTP Cookies in H3
@@ -215,19 +215,15 @@ Read a session cookie `session_id` and set a new secure cookie in an H3 event ha
 >   return { previousSession: currentSession, active: true };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `getCookie(event, name)` parses request cookie headers on the server.
 > 2. `setCookie(event, name, value, options)` appends `Set-Cookie` headers to HTTP responses.
 > 3. `httpOnly: true` prevents browser client-side JavaScript access to sensitive cookies.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Server Middleware](server_middleware.md) — Middleware files use the exact same H3 `defineEventHandler` syntax.

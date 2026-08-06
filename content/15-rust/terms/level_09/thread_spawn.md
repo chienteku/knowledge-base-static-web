@@ -178,7 +178,7 @@ for _ in 0..10_000 {
 > 1. Splits computation workloads across OS CPU cores for parallel execution.
 > 2. Uses `move` closures to transfer vector ownership safely to spawned threads.
 > 3. `.join()` collects worker thread results and handles potential panics safely.
-
+> 
 ---
 
 ### Exercise 2: Scoped Thread Local Borrowing with `std::thread::scope`
@@ -225,7 +225,7 @@ for _ in 0..10_000 {
 > 1. `std::thread::scope` guarantees all spawned threads complete before the scope block exits.
 > 2. Enables zero-copy slice borrowing (`&[i32]`) without requiring `Arc` or heap allocations.
 > 3. Simplifies multithreaded data processing with zero-cost lifetime guarantees.
-
+> 
 ---
 
 ### Exercise 3: Thread Panic Recovery Guard
@@ -272,7 +272,7 @@ for _ in 0..10_000 {
 > 1. `.join()` catches panics occurring inside worker threads.
 > 2. Converts thread panics into `Result::Err` values for robust error recovery.
 > 3. Prevents worker failures from crashing the host process.
-
+> 
 ---
 
 ## 5. Related Terms

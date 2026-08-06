@@ -124,7 +124,7 @@ This is one of the most powerful features. Instead of typing complex terminal co
 > npm install
 > ```
 > - How do you tell NPM to "read the blueprint and build the house"?
-
+> 
 ---
 
 
@@ -148,7 +148,7 @@ This is one of the most powerful features. Instead of typing complex terminal co
 > ```
 >
 > **Explanation:** `scripts` configures command shortcuts for development and production execution.
-
+> 
 ---
 
 ### Exercise 3: Specifying Engines Requirement
@@ -169,7 +169,7 @@ This is one of the most powerful features. Instead of typing complex terminal co
 > ```
 >
 > **Explanation:** `engines` restricts runtime Node.js environment version requirements.
-
+> 
 ## 7. Related Terms
 - [package-lock.json & Deterministic Installs](package_lock.md) — The sister file to `package.json` that guarantees exact versions.
 - [node_modules](node_modules.md) — The physical folder where the downloaded code is placed.

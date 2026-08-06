@@ -175,7 +175,7 @@ Update the `zip` code inside a user's embedded `address` subdocument (`address: 
 > 1. Dot-notation (`"address.zip"`) targets subdocument properties directly.
 > 2. Updates only the specified subfield without replacing the entire `address` object.
 > 3. Atomic single-document write operation.
-
+> 
 ---
 
 ### Exercise 2: Projecting Specific Embedded Subfields
@@ -202,7 +202,7 @@ Query user documents but return ONLY the embedded `address.city` and `name` fiel
 > 1. Subfield projection (`"address.city": 1`) extracts targeted subdocument keys.
 > 2. Reduces network payload size by omitting unneeded subdocument properties.
 > 3. BSON binary reader skips unprojected subfields during scan.
-
+> 
 ---
 
 ### Exercise 3: Indexing Embedded Document Subfields
@@ -226,7 +226,7 @@ Create a single-field secondary index on embedded field `address.state` to speed
 > 1. Secondary indexes can be created on subdocument dot-notation paths (`"address.state"`).
 > 2. B-tree index indexes nested string values directly.
 > 3. Converts $O(N)$ collection scans into fast $O(\log N)$ index lookups.
-
+> 
 ---
 
 

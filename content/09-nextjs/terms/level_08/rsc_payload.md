@@ -107,10 +107,6 @@ return <ClientCard data={dto} />; // Lightweight RSC payload
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Inspecting RSC Flight Data Payloads in Network Tab
@@ -138,7 +134,7 @@ Inspect RSC Payload flight data transmitted during client-side navigation in bro
 > 1. The RSC Payload is a compact stream representation of rendered Server Component trees.
 > 2. Contains serialized prop data, HTML element trees, and client component bundle references (`M1`).
 > 3. Allows client-side React to update the DOM without downloading raw HTML pages.
-
+> 
 ---
 
 ### Exercise 2: Auditing Serialization Rules for RSC Payload Props
@@ -159,13 +155,13 @@ Verify which JavaScript data types are valid vs invalid when passed across the R
 > - Invalid: Functions (event handlers), Class Instances, Symbols, DOM elements.
 > Exception: Server Actions ("use server") CAN be serialized as specialized RPC references!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Props passed from Server Components to Client Components are encoded into the RSC Payload stream.
 > 2. Non-serializable types cause build-time compilation errors.
 > 3. Essential serialization constraint for React Server Components.
-
+> 
 ---
 
 ### Exercise 3: Preserving Client Component State During RSC Payload Streaming
@@ -182,33 +178,29 @@ Demonstrate that receiving updated RSC Payload streams during `router.refresh()`
 >
 > ```tsx
 > "use client";
-
-import { useState } from "react";
-
-export default function StatefulWidget({ serverData }: { serverData: string }) {
-  const [text, setText] = useState("");
-
-  return (
-    <div>
-      <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Keep typing..." />
-      <p>Server Data: {serverData}</p>
-    </div>
-  );
-}
-```
-
+> 
+> import { useState } from "react";
+> 
+> export default function StatefulWidget({ serverData }: { serverData: string }) {
+>   const [text, setText] = useState("");
+> 
+>   return (
+>     <div>
+>       <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Keep typing..." />
+>       <p>Server Data: {serverData}</p>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. When `router.refresh()` fetches an updated RSC Payload, React reconciles the new server tree with existing client components.
 > 2. Preserves active client state (`text`) while updating server-driven props (`serverData`).
 > 3. Superior user experience compared to full page reloads.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [The Next.js Cache (The Four Caches)](next_cache.md) — The system that caches the RSC Payload.

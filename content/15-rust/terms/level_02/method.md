@@ -406,7 +406,7 @@ Write unit tests verifying `&self` queries, `&mut self` state mutations, cancell
 >    - `LimitOrderBook::new` is an associated function because it lacks a `self` parameter. It initializes structural invariants before returning the owned type `Self`.
 > 3. **Borrow Scope Scoping for Clean Mutability**:
 >    - In `cancel_order` and `execute_market_order`, temporary scopes are used to query and modify vector contents (`get_mut`) before dropping the borrow. This ensures `book.remove(&price)` can safely take an exclusive mutable borrow of `book` without triggering borrow checker conflict `E0499`.
-
+> 
 ---
 
 ### Exercise 2: Protocol Handshake State Machine (Consuming `self` Methods)
@@ -580,7 +580,7 @@ Write unit tests verifying fluent initialization, protocol state transitions, in
 >    - `ConnectionBuilder::timeout` takes `mut self` by value and returns `Self`. This enables fluent dot-notation method chaining (`builder.timeout(3000).connect()`) without requiring heap allocation or pointer dereferencing.
 > 3. **Post-Closure Inspection (`&self`)**:
 >    - `ClosedConnection::stats` takes `&self`, allowing safe, read-only post-mortem inspection of session telemetry while guaranteeing no further network operations can be invoked.
-
+> 
 ---
 
 ### Exercise 3: Dynamic AST Evaluator & Pipeline Transformer (`&mut Self` Chaining vs `self` Consumption)
@@ -745,7 +745,7 @@ Write unit tests verifying variable environment setup using mutable reference ch
 >    - `Expr::eval` accepts `&self` and `&ExecutionContext`. Because no state is modified, multiple threads can concurrently evaluate the exact same AST instance across shared execution contexts without dynamic lock overhead.
 > 3. **Recursive In-Place Rebuilding taking `self`**:
 >    - `Expr::substitute` takes `self` by value. Transferring ownership of the recursive `Box<Expr>` nodes allows pattern matching and replacing specific AST branches without cloning or allocating extra memory for unchanged nodes.
-
+> 
 ---
 
 ## 6. Related Terms

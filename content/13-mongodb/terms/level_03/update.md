@@ -176,7 +176,7 @@ Update user `user:alice`'s account status to `"verified"` and set `verifiedAt` t
 > 1. `updateOne()` modifies at most one matching document.
 > 2. `$set` updates specified field values atomically.
 > 3. Returns `matchedCount` and `modifiedCount`.
-
+> 
 ---
 
 ### Exercise 2: Multi-Document Mass Update with `updateMany`
@@ -206,7 +206,7 @@ Mark all pending orders created over 7 days ago as `"expired"`.
 > 1. `updateMany()` modifies all documents matching the query filter.
 > 2. Executes atomic write operations document by document.
 > 3. Leverages compound index `{ status: 1, createdAt: 1 }`.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Update Acknowledgment Metrics
@@ -234,7 +234,7 @@ Distinguish between `matchedCount` and `modifiedCount` in write result responses
 > 1. `matchedCount` counts documents satisfying the query filter.
 > 2. `modifiedCount` counts documents whose field values actually changed.
 > 3. If target field already equaled the `$set` value, `modifiedCount` is 0 to avoid redundant disk writes.
-
+> 
 ---
 
 

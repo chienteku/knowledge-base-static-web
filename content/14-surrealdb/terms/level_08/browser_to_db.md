@@ -143,33 +143,33 @@ Configure a full-stack React frontend connecting directly to SurrealDB over WebS
 >
 > ```typescript
 > import Surreal from "surrealdb";
-
-const db = new Surreal();
-
-async function initDB() {
-  await db.connect("wss://db.example.com/rpc");
-
-  // Sign in as scoped user
-  await db.signin({
-    access: "user_access",
-    ns: "main",
-    db: "app",
-    username: "alice",
-    pass: "UserPass123!"
-  });
-
-  // Query records directly safely governed by RLS PERMISSIONS!
-  const posts = await db.select("post");
-  console.log("User posts:", posts);
-}
-```
-
+> 
+> const db = new Surreal();
+> 
+> async function initDB() {
+>   await db.connect("wss://db.example.com/rpc");
+> 
+>   // Sign in as scoped user
+>   await db.signin({
+>     access: "user_access",
+>     ns: "main",
+>     db: "app",
+>     username: "alice",
+>     pass: "UserPass123!"
+>   });
+> 
+>   // Query records directly safely governed by RLS PERMISSIONS!
+>   const posts = await db.select("post");
+>   console.log("User posts:", posts);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Direct browser-to-database connections bypass intermediate REST API web servers.
 > 2. WebSockets maintain a bi-directional binary connection channel for queries and live subscriptions.
 > 3. Row-level security (`PERMISSIONS`) inside SurrealDB prevents unauthorized client data access.
-
+> 
 ---
 
 ### Exercise 2: Real-Time Live Queries from Web Browsers
@@ -195,7 +195,7 @@ Subscribe to real-time `post` creation events directly from a browser web applic
 > 1. `db.live()` opens a real-time `LIVE SELECT` subscription over the active WebSocket channel.
 > 2. Server pushes mutation events (`CREATE`, `UPDATE`, `DELETE`) to the browser instantly.
 > 3. Eliminates polling loops and external message queue infrastructure (Socket.io, Redis).
-
+> 
 ---
 
 ### Exercise 3: Comparing Direct Browser-to-DB vs Traditional Backend API
@@ -224,7 +224,7 @@ Summarize the architecture and latency benefits of direct browser-to-SurrealDB c
 > 1. Cuts network roundtrip latency by half by connecting clients directly to the database.
 > 2. Eliminates duplicate data models and authentication code between backend APIs and databases.
 > 3. Enforces security centrally at the database tier.
-
+> 
 ---
 
 

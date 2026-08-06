@@ -163,7 +163,7 @@ Configure `pg_hba.conf` to allow local IPv4 connections to database `store_db` f
 > 1. `pg_hba.conf` (Host-Based Authentication) defines network access security policies for the PostgreSQL server.
 > 2. `host`: TCP/IP network connection.
 > 3. `scram-sha-256`: Cryptographically strong salted password authentication method.
-
+> 
 ---
 
 ### Exercise 2: Restricting Remote Admin Access to Localhost Only
@@ -189,7 +189,7 @@ Configure `pg_hba.conf` to restrict superuser `postgres` access exclusively to l
 > 1. `local` uses Unix domain sockets local to the database server machine.
 > 2. Restricting superuser `postgres` remote TCP access prevents remote brute-force administrative attacks.
 > 3. Security hardening standard.
-
+> 
 ---
 
 ### Exercise 3: Reloading Authentication Configuration without Server Restart
@@ -213,7 +213,7 @@ Reload modified `pg_hba.conf` rules without restarting the PostgreSQL server dae
 > 1. `pg_reload_conf()` sends a `SIGHUP` signal to the main `postgres` process to re-parse configuration files.
 > 2. Applies new `pg_hba.conf` authentication rules online without interrupting active client connections.
 > 3. Zero-downtime security administration.
-
+> 
 ---
 
 

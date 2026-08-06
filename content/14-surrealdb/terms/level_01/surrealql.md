@@ -178,7 +178,7 @@ You are writing a SurrealQL database initialization script that defines a table,
 > 1. SurrealQL scripts execute multiple statements separated by semicolons sequentially.
 > 2. DDL statements (`DEFINE`) and DML statements (`CREATE`, `SELECT`) can be combined inside single script executions.
 > 3. Returns an array containing the results of each executed statement.
-
+> 
 ---
 
 ### Exercise 2: Advanced SurrealQL Expression Power
@@ -207,7 +207,7 @@ A developer wants to demonstrate SurrealQL's expression capabilities by performi
 > 1. SurrealQL features rich builtin function namespaces (`string::*`, `time::*`, `math::*`, `array::*`).
 > 2. Inline array filter expressions `[WHERE item > 2]` process collection elements directly in query syntax.
 > 3. SurrealQL is an expression-based language where expressions evaluate directly to rich typed values.
-
+> 
 ---
 
 ### Exercise 3: Statement Return Control with `RETURN`
@@ -243,7 +243,7 @@ You are writing a complex SurrealQL block transaction and want to return a custo
 > 1. `LET $variable = ...` defines session parameter variables inside transaction blocks.
 > 2. `RETURN` explicitly specifies the final output payload returned from a transaction block.
 > 3. Enables building sophisticated server-side stored procedure logic directly in SurrealQL.
-
+> 
 ---
 
 

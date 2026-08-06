@@ -192,7 +192,7 @@ console.log("Unlock correct:", lock.unlock("secret123")); // true
 > - Declare `#passcode;` at the top of the class.
 > - Inside the constructor, set `this.#passcode = pass;`.
 > - Inside the `unlock` method, return `testPass === this.#passcode`.
-
+> 
 ---
 
 ### Exercise 2: Encapsulating Class State with `#private` Fields
@@ -216,7 +216,7 @@ console.log("Unlock correct:", lock.unlock("secret123")); // true
 > ```
 >
 > **Explanation:** Private class fields `#field` prevent unauthorized external access and mutation.
-
+> 
 ---
 
 ### Exercise 3: Private Methods and Getters
@@ -237,7 +237,7 @@ console.log("Unlock correct:", lock.unlock("secret123")); // true
 > ```
 >
 > **Explanation:** Private methods `#method()` encapsulate internal helper algorithms.
-
+> 
 ---
 
 ## 7. Related Terms

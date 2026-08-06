@@ -116,7 +116,7 @@ They write: `<VideoPlayer speed="2" />`
 > // When it is false, Vue automatically removes the disabled attribute!
 > ```
 > - Bind the HTML `disabled` attribute to the reactive variable.
-
+> 
 ---
 
 ### Exercise 2: Dynamic Class and Style Binding
@@ -138,7 +138,7 @@ They write: `<VideoPlayer speed="2" />`
 > <div :class="{ active: isActive, 'text-danger': hasError }">Class</div>
 > <div :style="{ color: activeColor, fontSize: fontSize + 'px' }">Style</div>
 > ```
-
+> 
 ---
 
 ### Exercise 3: Same-Name Attribute Binding Shorthand (Vue 3.4+)
@@ -157,8 +157,8 @@ They write: `<VideoPlayer speed="2" />`
 > <img :src /> <!-- Equivalent to :src="src" -->
 > <div :id />  <!-- Equivalent to :id="id" -->
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

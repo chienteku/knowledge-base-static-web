@@ -131,40 +131,40 @@ Configure a Client Component performing client-side data fetching using `useEffe
 >
 > ```tsx
 > "use client";
-
-import { useState, useEffect } from "react";
-
-export default function ClientFeed() {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/feed")
-      .then((res) => res.json())
-      .then((json) => {
-        setData(json);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return <div>Loading Feed...</div>;
-
-  return (
-    <ul>
-      {data.map((item) => (
-        <li key={item.id}>{item.title}</li>
-      ))}
-    </ul>
-  );
-}
-```
-
+> 
+> import { useState, useEffect } from "react";
+> 
+> export default function ClientFeed() {
+>   const [data, setData] = useState<any[]>([]);
+>   const [loading, setLoading] = useState(true);
+> 
+>   useEffect(() => {
+>     fetch("/api/feed")
+>       .then((res) => res.json())
+>       .then((json) => {
+>         setData(json);
+>         setLoading(false);
+>       });
+>   }, []);
+> 
+>   if (loading) return <div>Loading Feed...</div>;
+> 
+>   return (
+>     <ul>
+>       {data.map((item) => (
+>         <li key={item.id}>{item.title}</li>
+>       ))}
+>     </ul>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Client-Side Rendering executes rendering and data fetching inside the browser DOM after hydration.
 > 2. Minimal initial HTML is delivered to the browser; `useEffect` triggers post-mount network calls.
 > 3. Useful for private client dashboards requiring client-side interactivity.
-
+> 
 ---
 
 ### Exercise 2: Opting Out of Server Component SSR Rendering
@@ -181,28 +181,28 @@ Use dynamic imports with `{ ssr: false }` to execute a heavy charting component 
 >
 > ```tsx
 > import dynamic from "next/dynamic";
-
-const DynamicChart = dynamic(() => import("@/app/components/HeavyChart"), {
-  ssr: false,
-  loading: () => <p>Loading Interactive Chart...</p>
-});
-
-export default function Dashboard() {
-  return (
-    <div>
-      <h1>Analytics</h1>
-      <DynamicChart />
-    </div>
-  );
-}
-```
-
+> 
+> const DynamicChart = dynamic(() => import("@/app/components/HeavyChart"), {
+>   ssr: false,
+>   loading: () => <p>Loading Interactive Chart...</p>
+> });
+> 
+> export default function Dashboard() {
+>   return (
+>     <div>
+>       <h1>Analytics</h1>
+>       <DynamicChart />
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `dynamic(..., { ssr: false })` opts out of server-side HTML pre-rendering for the specified component.
 > 2. Prevents server evaluation of browser-dependent window or canvas libraries.
 > 3. Renders the fallback component until the client bundle hydrates in the browser.
-
+> 
 ---
 
 ### Exercise 3: Trade-Off Analysis: CSR vs SSR
@@ -223,19 +223,15 @@ Formulate an architectural selection matrix comparing Client-Side Rendering (CSR
 > - SSR (Server-Side Rendering): Excellent SEO, instant initial HTML display, higher Node.js server RAM/CPU costs.
 > Recommendation: Use SSR for public marketing/e-commerce; use CSR for internal admin tools behind login walls.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. CSR relies on client CPU power to build DOM elements.
 > 2. SSR pre-computes HTML on Node.js servers for web crawlers and instant initial page paints.
 > 3. Core architectural selection model.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Next.js Overview](nextjs.md) — The full-stack solution to CSR limitations.

@@ -168,7 +168,7 @@ Draw a conceptual ERD modeling `Customer` (1) to `Order` (N) and `Order` (N) to 
 > 1. ERDs model real-world business entities and their relational connections visually.
 > 2. Identifies Primary Key (PK) and Foreign Key (FK) cardinalities (`1:1`, `1:N`, `N:M`).
 > 3. Essential blueprint before writing DDL `CREATE TABLE` scripts.
-
+> 
 ---
 
 ### Exercise 2: Translating ERD Diagrams to PostgreSQL DDL Scripts
@@ -201,7 +201,7 @@ Translate the `Customer` -> `Order` 1-to-Many ERD blueprint into executable SQL 
 > 1. Entities become relational tables.
 > 2. Entity attributes become columns with target data types.
 > 3. `1:N` relationships become foreign key constraints on the child table.
-
+> 
 ---
 
 ### Exercise 3: Reverse-Engineering System Catalogs into ERDs
@@ -235,7 +235,7 @@ Query `information_schema.table_constraints` to extract foreign key links for au
 > 1. System catalog joins extract existing foreign key topology directly from running databases.
 > 2. Used by ERD visualization tools (e.g. pgAdmin, DBeaver, Prisma Studio) to render schema diagrams.
 > 3. Automated database documentation.
-
+> 
 ---
 
 

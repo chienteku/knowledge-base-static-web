@@ -126,13 +126,13 @@ Configure Cache-Control headers (`public, max-age=31536000, immutable`) for stat
 >   }
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Edge CDNs cache immutable static assets across worldwide edge POPs (Points of Presence).
 > 2. `max-age=31536000, immutable` instructs CDN edge servers and browsers to cache files permanently.
 > 3. Reduces origin server bandwidth and TTFB latency.
-
+> 
 ---
 
 ### Exercise 2: Purging Global CDN Edge Cache Entries
@@ -153,13 +153,13 @@ Explain how `revalidatePath` and `revalidateTag` invalidate edge CDN cache layer
 > - Step: Next.js server sends invalidation signal to global CDN Edge network.
 > - Step: Edge CDN purges matching cached HTML files across all global edge nodes instantly!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Next.js integrates Data Cache invalidation directly with deployment CDN edge networks.
 > 2. On-demand revalidation purges global CDN edge caches without site rebuilds.
 > 3. Global cache synchronization mechanism.
-
+> 
 ---
 
 ### Exercise 3: Auditing Edge CDN Response Headers
@@ -180,19 +180,15 @@ Inspect `x-vercel-cache` or `cf-cache-status` headers to verify global CDN edge 
 > - x-vercel-cache: MISS       -> Edge node fetched fresh response from origin server.
 > - x-vercel-cache: BYPASS     -> Response bypassed CDN cache due to dynamic headers/cookies.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Edge CDN response headers confirm whether requests are served from edge cache or origin servers.
 > 2. `HIT` responses achieve ultra-low TTFB (< 20ms).
 > 3. Empirical CDN performance audit step.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Incremental Static Regeneration (ISR)](../level_08/isr.md) — The hybrid cache strategy managed by CDNs.

@@ -186,7 +186,7 @@ Create a SQL stored function `calculate_tax(amount_cents NUMERIC)` returning 8% 
 > 1. `CREATE FUNCTION` encapsulates SQL calculations into a reusable schema function.
 > 2. `IMMUTABLE` informs the query planner that the function always returns the exact same result for given input arguments.
 > 3. Allows inline query optimization.
-
+> 
 ---
 
 ### Exercise 2: Creating Table-Valued Functions (`RETURNS TABLE`)
@@ -224,7 +224,7 @@ Create a stored function `get_active_orders_by_customer(cust_id INT)` returning 
 > 1. `RETURNS TABLE (...)` defines a table-valued function returning multiple rows and columns.
 > 2. Invoked in SQL `FROM` clauses like a standard table relation.
 > 3. Encapsulates parameterized data retrieval.
-
+> 
 ---
 
 ### Exercise 3: Function Volatility Categories (`IMMUTABLE`, `STABLE`, `VOLATILE`)
@@ -251,7 +251,7 @@ Formulate a selection matrix explaining when to mark stored functions as `IMMUTA
 > 1. Correct volatility markings allow PostgreSQL to cache function evaluations within queries.
 > 2. `IMMUTABLE` functions can be used inside Expression Indexes.
 > 3. Crucial for function optimization.
-
+> 
 ---
 
 

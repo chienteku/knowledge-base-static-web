@@ -163,7 +163,7 @@ async function processData() {
 > The browser assumes scripts are old-school, globally-scoped scripts by default. To unlock the `import` and `export` keywords, you MUST tell the browser it is a module: `<script type="module" src="main.js"></script>`.
 > ```
 > - Browsers are backwards compatible to the 1990s. You have to opt-in to modern features!
-
+> 
 ---
 
 ### Exercise 2: Static Import and Export Syntax
@@ -180,7 +180,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** ES modules export explicit public API surfaces using `export` syntax.
-
+> 
 ---
 
 ### Exercise 3: Module Top-Level Scope Isolation
@@ -197,8 +197,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** ES modules enforce module-level scope isolation for top-level variables.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

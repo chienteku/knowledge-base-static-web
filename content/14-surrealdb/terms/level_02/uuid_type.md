@@ -161,7 +161,7 @@ A microservice architecture requires globally unique UUID identifiers for distri
 > 1. `TYPE uuid` restricts field values strictly to valid 128-bit UUID bytes/strings.
 > 2. `rand::uuid()` generates cryptographically random UUID v4 values automatically.
 > 3. Guarantees global identifier uniqueness across distributed database clusters.
-
+> 
 ---
 
 ### Exercise 2: UUID Record Primary Key Creation
@@ -186,7 +186,7 @@ Create a record in table `session` where the primary key itself is a generated U
 > 1. `session:uuid()` uses SurrealDB's built-in UUID primary key generator function.
 > 2. Generates record IDs in the format `session:u'018c4e6a-7b3f-7123-89ab-cdef01234567'`.
 > 3. Provides unique, unguessable primary keys for sensitive authentication sessions.
-
+> 
 ---
 
 ### Exercise 3: Parsing and Validating UUID Strings
@@ -211,7 +211,7 @@ Verify whether a given string is a valid UUID before storing it in a `uuid` fiel
 > 1. `string::is::uuid(str)` validates whether a string matches standard 36-character UUID formatting.
 > 2. Used inside field `ASSERT` clauses to sanitize incoming string parameters.
 > 3. Prevents invalid UUID strings from reaching application logic.
-
+> 
 ---
 
 

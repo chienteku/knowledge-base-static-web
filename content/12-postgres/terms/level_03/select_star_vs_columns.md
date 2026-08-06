@@ -166,7 +166,7 @@ Refactor a bloated `SELECT *` query returning 30 columns on a 1,000,000 row tabl
 > 1. `SELECT *` fetches every column, including large `TEXT`, `JSONB`, or `BYTEA` blobs, consuming excess RAM and network I/O.
 > 2. Explicit column selection reduces network payload sizes significantly.
 > 3. Allows PostgreSQL to execute Index-Only Scans (`Covered Queries`).
-
+> 
 ---
 
 ### Exercise 2: Enabling Index-Only Scans via Projection
@@ -193,7 +193,7 @@ Demonstrate how explicit column projection enables an `Index-Only Scan` using in
 > 1. If query projects ONLY fields stored in the B-tree index, PostgreSQL reads keys directly from the index (`Index-Only Scan`).
 > 2. `SELECT *` forces PostgreSQL to fetch raw table heap pages from disk (`Heap Fetches`).
 > 3. Critical performance rule.
-
+> 
 ---
 
 ### Exercise 3: API Schema Safety Trade-Offs
@@ -219,7 +219,7 @@ Explain why using `SELECT *` in production API handlers causes breaking changes 
 > 1. Explicit projections prevent accidental data exposure when new columns are added to tables.
 > 2. Hardens backend API contract security.
 > 3. Production database practice.
-
+> 
 ---
 
 

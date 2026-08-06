@@ -159,8 +159,8 @@ app.post('/api/settings', (req, res) => {
 
 > [!check]- Answer
 > - If the client submits a request where `req.body.rawSettingsString` is empty, undefined, or contains invalid JSON formatting (like missing closing brackets), `JSON.parse` will throw an unhandled exception, terminating the Express server process.
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Serialization vs Deserialization Definition

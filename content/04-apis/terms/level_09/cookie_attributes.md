@@ -131,8 +131,8 @@ Set-Cookie: token=xyz; SameSite=None; Secure
 
 > [!check]- Answer
 > - **B** (The header is missing the `HttpOnly` and `Secure` attributes, leaving it vulnerable to XSS theft and packet sniffing).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Cookie Security Attribute Matrix

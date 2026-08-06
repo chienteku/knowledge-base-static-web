@@ -158,7 +158,7 @@ Create isolated schemas `app_v1` and `analytics` within database `store_db`.
 > 1. `CREATE SCHEMA` allocates a named namespace within the active database.
 > 2. Groups related tables, views, and functions logically.
 > 3. Allows separate schemas to contain tables with duplicate names (e.g. `app_v1.users` vs `analytics.users`).
-
+> 
 ---
 
 ### Exercise 2: Configuring Search Path Resolution with `search_path`
@@ -185,7 +185,7 @@ Set the session `search_path` to check `app_v1`, `public` in order.
 > 1. `search_path` determines the order in which PostgreSQL resolves un-qualified table names.
 > 2. `SET search_path TO app_v1, public` checks `app_v1` first; if not found, checks `public`.
 > 3. Simplifies SQL queries across multi-schema databases.
-
+> 
 ---
 
 ### Exercise 3: Qualified Schema Table Operations
@@ -210,7 +210,7 @@ Query a table in `analytics` schema explicitly using schema-qualified name `anal
 > 1. Schema-qualified names (`schema_name.table_name`) bypass `search_path` ambiguity.
 > 2. Guarantees queries target the exact intended table.
 > 3. Recommended best practice for cross-schema triggers and functions.
-
+> 
 ---
 
 

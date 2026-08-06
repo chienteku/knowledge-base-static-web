@@ -262,7 +262,7 @@ Requirements:
 >         pub fn record_event(&self) {
 >             self.total_events.fetch_add(1, Ordering::SeqCst);
 >         }
-
+> 
 >         pub fn get_total(&self) -> u64 {
 >             self.total_events.load(Ordering::SeqCst)
 >         }
@@ -299,7 +299,7 @@ Requirements:
 > 1. **Inner Doc Scope (`//!`)**: Placed at the file header of `src/lib.rs` and inside `pub mod telemetry`, `//!` documents the enclosing crate or module as a unified landing page on `cargo doc`.
 > 2. **Crate Root vs. Module Level**: Outer doc comments (`///`) attach to individual structs (`TransactionPipeline`), whereas inner doc comments (`//!`) form crate-level documentation banners.
 > 3. **Thread Safety Guarantees**: Using atomic counters (`AtomicU64`) verifies concurrent safety inside microservice pipeline execution.
-
+> 
 ---
 
 ### Exercise 2: Embedded Hardware HAL Driver Module Documentation
@@ -425,7 +425,7 @@ Requirements:
 > **Technical Explanation:**
 > 1. **Embedded Module Guidelines (`//!`)**: Embedded crates use `//!` comments to document MMIO register maps at the top of driver files so hardware engineers can verify register addresses.
 > 2. **Buffer Bounds Checking**: Methods validate capacity constraints before performing vector insertions, simulating hardware register status flags.
-
+> 
 ---
 
 ### Exercise 3: Plug-in Architecture & Dynamic Extension Registry
@@ -516,7 +516,7 @@ Requirements:
 >         registry.register(Box::new(PrefixPlugin {
 >             prefix: "LOG".to_string(),
 >         }));
-
+> 
 >         assert_eq!(registry.count(), 2);
 >         assert_ne!(registry.count(), 0);
 > 
@@ -531,7 +531,7 @@ Requirements:
 > **Technical Explanation:**
 > 1. **Extensible Architecture (`//!`)**: Inner doc comments at the top of plugin modules outline registration contracts for external contributors.
 > 2. **Trait Objects (`Box<dyn Plugin>`)**: Demonstrates dynamic dispatch while preserving strict compiler lifetime and thread-safety bounds (`Send + Sync`).
-
+> 
 ---
 
 ## 6. Related Terms

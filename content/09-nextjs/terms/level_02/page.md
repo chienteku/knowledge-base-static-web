@@ -155,13 +155,13 @@ Create `app/dashboard/page.tsx` rendering a user dashboard overview.
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `page.tsx` makes a folder segment in `app/` publicly accessible as a URL route (`/dashboard`).
 > 2. Must export a default React component.
 > 3. Executed as a React Server Component by default.
-
+> 
 ---
 
 ### Exercise 2: Async Data Fetching inside `page.tsx`
@@ -182,29 +182,29 @@ Fetch data directly inside an async `page.tsx` Server Component.
 >   const res = await fetch("https://api.example.com/users");
 >   return res.json();
 > }
-
-export default async function UsersPage() {
-  const users = await getUsers();
-
-  return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold">Users List</h1>
-      <ul>
-        {users.map((u: any) => (
-          <li key={u.id}>{u.name}</li>
-        ))}
-      </ul>
-    </main>
-  );
-}
-```
-
+> 
+> export default async function UsersPage() {
+>   const users = await getUsers();
+> 
+>   return (
+>     <main className="p-6">
+>       <h1 className="text-2xl font-bold">Users List</h1>
+>       <ul>
+>         {users.map((u: any) => (
+>           <li key={u.id}>{u.name}</li>
+>         ))}
+>       </ul>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Server Component pages can be declared as `async` functions.
 > 2. Allows using `await` directly in component body to fetch data before rendering.
 > 3. Zero client JavaScript bundle overhead.
-
+> 
 ---
 
 ### Exercise 3: Accessing URL Query Parameters in `page.tsx`
@@ -227,27 +227,23 @@ Read search query parameter `?q=searchterm` in `app/search/page.tsx`.
 >   searchParams: Promise<{ q?: string }>;
 > }) {
 >   const { q } = await searchParams;
-
-  return (
-    <main className="p-6">
-      <h1>Search Results for: {q ?? "All"}</h1>
-    </main>
-  );
-}
-```
-
+> 
+>   return (
+>     <main className="p-6">
+>       <h1>Search Results for: {q ?? "All"}</h1>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Next.js passes `searchParams` as a Promise prop to `page.tsx` components.
 > 2. Accesses query string parameters directly on the server.
 > 3. Enables server-rendered search and pagination workflows.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`layout.tsx`](layout.md) — The UI wrapper that wraps around `page.tsx`.

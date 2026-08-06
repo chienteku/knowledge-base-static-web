@@ -159,7 +159,7 @@ Validate inputs inside const fn using conditional guards or Option/Result!
 >
 > 1. `calculate_packet_len` runs during compilation to set `MAX_PACKET`.
 > 2. The exact same `const fn` can be invoked at runtime for incoming network packets.
-
+> 
 ---
 
 ### Exercise 2: Compile-Time Bitmask Builder
@@ -205,7 +205,7 @@ Validate inputs inside const fn using conditional guards or Option/Result!
 >
 > 1. Bitwise operations inside `const fn` execute in Miri.
 > 2. Precomputed bitmasks eliminate bit-shifting overhead in bare-metal drivers.
-
+> 
 ---
 
 ### Exercise 3: Compile-Time Fixed String Truncator
@@ -252,7 +252,7 @@ Validate inputs inside const fn using conditional guards or Option/Result!
 >
 > 1. `truncate_str` evaluates string slicing during compilation.
 > 2. Eliminates string parsing runtime overhead.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -148,7 +148,7 @@ Formulate a feature evaluation matrix comparing self-hosted PostgreSQL vs Cloud 
 > 1. Cloud managed services offload OS patching, storage auto-scaling, and WAL disaster recovery to cloud providers.
 > 2. Serverless providers (Neon) separate storage from compute, enabling scale-to-zero and instant branching.
 > 3. Architectural platform selection rule.
-
+> 
 ---
 
 ### Exercise 2: Configuring Connection Pooling Strings in Cloud Environments
@@ -176,7 +176,7 @@ Configure transaction-pooled URI vs direct connection URI when connecting server
 > 1. Serverless functions (AWS Lambda, Vercel Functions) generate thousands of short-lived connections, requiring transaction-pooled connections (Port 6543).
 > 2. DDL migrations (`migrate-mongo`, Prisma Migrate) require direct connections (Port 5432) to acquire DDL table locks.
 > 3. Cloud database configuration standard.
-
+> 
 ---
 
 ### Exercise 3: Automated Point-in-Time Recovery (PITR) SLA Verification
@@ -203,7 +203,7 @@ Explain how managed database WAL archiving enables restoring cloud databases to 
 > 1. Managed services automate physical base backups and continuous WAL log archiving.
 > 2. Protects applications against accidental data deletion or ransomware attacks.
 > 3. Core enterprise disaster recovery capability.
-
+> 
 ---
 
 

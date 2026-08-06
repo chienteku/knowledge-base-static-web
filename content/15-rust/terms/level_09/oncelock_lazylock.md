@@ -266,7 +266,7 @@ You are tasked with building a thread-safe global connection manager:
 > 1. **Lazy Static Initialization (`LazyLock`)**: `GLOBAL_CONFIG` encapsulates configuration parsing logic. By wrapping it in `LazyLock`, Rust guarantees that no work is done at program startup; the closure evaluates automatically on the first dereference (`&*GLOBAL_CONFIG`).
 > 2. **Explicit Thread-Safe Initialization (`OnceLock`)**: `DB_POOL.get_or_init()` guarantees that even when 20 worker threads concurrently call `get_or_init_pool()`, exactly one thread executes the initialization closure while the remaining threads block until the initialized `&'static DbConnectionPool` reference is available.
 > 3. **Atomic State & Concurrency Safety**: The test verifies atomic initialization counts (`POOL_INIT_COUNT == 1`) and thread connection bounds without requiring `unsafe` code or manual Mutex locking during reads.
-
+> 
 ---
 
 ### Exercise 2: High-Performance Concurrent Log Masking Pipeline (`LazyLock` & Atomic Metrics)
@@ -377,7 +377,7 @@ You are tasked with implementing a zero-overhead, multi-threaded log scrubbing s
 > 1. **Lazy Pre-compilation**: Initializing `REDACTOR` via `LazyLock` defers setup until runtime while ensuring the redactor rules are compiled only once across all worker threads.
 > 2. **Shared Read-Only Access (`Sync`)**: `LazyLock<PatternRedactor>` implements `Sync` because `PatternRedactor` only exposes immutable reference borrows (`&self`), allowing all 8 worker threads to query the exact same memory location without contention or lock acquisitions.
 > 3. **Atomic Operations**: Thread-safe atomic counters (`AtomicUsize`) track metric totals across concurrent worker threads without requiring explicit synchronization primitives like `Mutex`.
-
+> 
 ---
 
 ### Exercise 3: Fallible Thread-Safe Authentication Service (`OnceLock<Result<T, E>>`)
@@ -484,7 +484,7 @@ You are tasked with implementing a fallible thread-safe authentication manager:
 > 1. **Fallible Lazy Initialization**: Wrapping `Result<T, E>` inside `OnceLock` allows safe lazy initialization of fallible resources without panicking worker threads.
 > 2. **Single-Execution Guarantee**: `OnceLock::get_or_init` guarantees that the closure runs at most once across all threads. Once computed, the inner `Result` (whether `Ok` or `Err`) is cached for the lifetime of the `OnceLock`.
 > 3. **Thread-Safe Borrowing**: Returning references `Result<&str, AuthError>` directly borrows from the static/heap storage managed inside `OnceLock`, preventing unnecessary allocations on reads.
-
+> 
 ---
 
 ## 6. Related Terms

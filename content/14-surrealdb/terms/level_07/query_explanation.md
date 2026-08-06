@@ -156,7 +156,7 @@ A database administrator inspects a slow `SELECT` query execution plan using `EX
 > 1. `EXPLAIN` returns query planner execution details without running full document fetches.
 > 2. Details whether the query executed a table scan (`FullScan`) or an index lookup (`IndexScan`).
 > 3. Essential tool for identifying missing secondary indexes.
-
+> 
 ---
 
 ### Exercise 2: Detailed Execution Metrics with `EXPLAIN FULL`
@@ -180,7 +180,7 @@ Inspect actual execution timings, records scanned, and index fetch counts by run
 > 1. `EXPLAIN FULL` executes the query and returns empirical execution metrics (time taken, memory, rows evaluated).
 > 2. Highlights query bottlenecks in multi-join or graph-heavy operations.
 > 3. Guides query performance tuning and index optimization.
-
+> 
 ---
 
 ### Exercise 3: Comparing Table Scans vs Index Lookups
@@ -205,7 +205,7 @@ Compare `EXPLAIN` outputs before and after defining an index on `user(email)`.
 > 1. `FullScan` indicates the engine scanned every record in the table sequentially ($O(N)$).
 > 2. `IndexScan` indicates the engine used a B-tree index to jump directly to target records ($O(\log N)$).
 > 3. Verifies index utilization before deploying production queries.
-
+> 
 ---
 
 

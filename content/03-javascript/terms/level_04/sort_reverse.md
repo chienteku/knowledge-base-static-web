@@ -186,7 +186,7 @@ console.log("Sorted Descending:", sortedDesc);
 > ```
 > - Clone the array using `[...scores]`.
 > - Call `.sort()` on the clone with a comparator callback `(a, b) => b - a`.
-
+> 
 ---
 
 ### Exercise 2: Numeric Array Sorting
@@ -205,7 +205,7 @@ console.log("Sorted Descending:", sortedDesc);
 > ```
 >
 > **Explanation:** Comparator `(a, b) => a - b` sorts numbers in ascending order (negative yields `a < b`).
-
+> 
 ---
 
 ### Exercise 3: Reversing Array Order in-place
@@ -224,7 +224,7 @@ console.log("Sorted Descending:", sortedDesc);
 > ```
 >
 > **Explanation:** `.reverse()` mutates the array in-place, reversing element order.
-
+> 
 ---
 
 ## 7. Related Terms

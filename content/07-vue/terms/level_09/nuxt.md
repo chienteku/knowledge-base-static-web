@@ -112,7 +112,7 @@ const count = ref(0);
 > Nuxt provides SSR out of the box, meaning the server sends fully populated HTML files with shoe names, prices, and images baked in. Google easily indexes this, driving traffic to the store.
 > ```
 > - Review the benefits of SSR vs CSR.
-
+> 
 ---
 
 ### Exercise 2: Nuxt File-Based Routing Structure
@@ -136,7 +136,7 @@ const count = ref(0);
 > ```text
 > Nuxt converts directory structure into Vue Router configuration.
 > ```
-
+> 
 ---
 
 ### Exercise 3: useSeoMeta Composable
@@ -156,8 +156,8 @@ const count = ref(0);
 >   description: 'User analytics'
 > });
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

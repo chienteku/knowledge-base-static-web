@@ -114,7 +114,7 @@ import Child from './Child.vue'; // Automatically registered and ready to use in
 > Once imported, Vue automatically makes the `<Button>` tag available in the template.
 > ```
 > - Vue doesn't magically know where your files are.
-
+> 
 ---
 
 ### Exercise 2: SFC Component Import and Usage
@@ -137,7 +137,7 @@ import Child from './Child.vue'; // Automatically registered and ready to use in
 >   <BaseCard title="News" />
 > </template>
 > ```
-
+> 
 ---
 
 ### Exercise 3: PascalCase vs kebab-case Component Naming
@@ -154,8 +154,8 @@ import Child from './Child.vue'; // Automatically registered and ready to use in
 > ```html
 > <AppHeader />
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

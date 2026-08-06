@@ -168,7 +168,7 @@ Rust requires explicit default impl annotations for specialization!
 >
 > 1. Demonstrates the performance motivation for specialization in standard library collections.
 > 2. Replaces element iteration with `memcpy` for byte primitives.
-
+> 
 ---
 
 ### Exercise 2: Specialized Formatting Fast Path Simulator
@@ -210,7 +210,7 @@ Rust requires explicit default impl annotations for specialization!
 >
 > 1. Illustrates blanket trait implementations.
 > 2. Specialization enables overriding these defaults for specific primitive types.
-
+> 
 ---
 
 ### Exercise 3: Default Method Override Guard
@@ -251,7 +251,7 @@ Rust requires explicit default impl annotations for specialization!
 >
 > 1. Shows method overriding semantics in Rust traits.
 > 2. Foundation for trait specialization.
-
+> 
 ---
 
 ## 6. Related Terms

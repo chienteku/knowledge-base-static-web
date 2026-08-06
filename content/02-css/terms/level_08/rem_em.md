@@ -198,7 +198,7 @@ html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 > 24 pixels! (1.5 * 16 = 24).
 > ```
 > - Break out a calculator! What is one-and-a-half times sixteen?
-
+> 
 ---
 
 
@@ -221,7 +221,7 @@ html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 > ```
 >
 > **Explanation:** `rem` calculates against root `<html>` font size; `em` calculates against parent/element font size.
-
+> 
 ---
 
 ### Exercise 3: Best Practice Unit Selection Rule
@@ -238,7 +238,7 @@ html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 > ```
 >
 > **Explanation:** `rem` maintains consistent global scaling; `em` enables component-relative scaling.
-
+> 
 ## 7. Related Terms
 - [`font-size` & `font-weight`](../level_03/font_size_weight.md) — The property that controls the baseline font scale.
 - [`%` (Percentages)](percentages.md) — Sizing relative to parent containers.

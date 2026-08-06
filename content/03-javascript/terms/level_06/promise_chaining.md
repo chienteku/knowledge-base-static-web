@@ -198,7 +198,7 @@ Promise.resolve(10)
 > ```
 > - The first `.then()` should return `val * 3`.
 > - The second `.then()` should return `val - 5`.
-
+> 
 ---
 
 ### Exercise 2: Sequential Value Transformation in Promise Chains
@@ -218,7 +218,7 @@ Promise.resolve(10)
 > ```
 >
 > **Explanation:** Each `.then()` returns a new promise resolving to the return value of its handler.
-
+> 
 ---
 
 ### Exercise 3: Propagating Errors in Promise Chains
@@ -238,7 +238,7 @@ Promise.resolve(10)
 > ```
 >
 > **Explanation:** Unhandled rejections propagate down promise chains until reaching `.catch()` handlers.
-
+> 
 ---
 
 ## 7. Related Terms

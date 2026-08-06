@@ -175,7 +175,7 @@ class ErrorBoundary extends React.Component { componentDidCatch(error) { ... } }
 > ```
 >
 > **Explanation:** `static getDerivedStateFromError` updates fallback UI state when child render errors occur.
-
+> 
 ---
 
 ### Exercise 2: Where Error Boundaries Should Be Placed
@@ -192,7 +192,7 @@ class ErrorBoundary extends React.Component { componentDidCatch(error) { ... } }
 > ```
 >
 > **Explanation:** Isolating feature widgets inside Error Boundaries prevents single component crashes from unmounting the whole app UI.
-
+> 
 ---
 
 ### Exercise 3: Error Boundary Reset Functionality
@@ -211,7 +211,7 @@ class ErrorBoundary extends React.Component { componentDidCatch(error) { ... } }
 > ```
 >
 > **Explanation:** Resetting Error Boundary state allows users to recover from transient component errors.
-
+> 
 ## 7. Related Terms
 - [`error.tsx` & `global-error.tsx`](../../../09-nextjs/terms/level_02/error.md) — The Next.js framework has built-in Error Boundaries disguised as simple files.
 

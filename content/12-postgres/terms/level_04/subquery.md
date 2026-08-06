@@ -193,7 +193,7 @@ Query products with price greater than the AVERAGE price of all products.
 > 1. Scalar subqueries return a single row and single column value.
 > 2. Evaluates average price first, passing the calculated value to the outer query filter.
 > 3. Dynamic metric threshold filtering.
-
+> 
 ---
 
 ### Exercise 2: Correlated Subqueries in SELECT Projections
@@ -225,7 +225,7 @@ Select customers alongside their latest order date using a correlated scalar sub
 > 1. Correlated subqueries reference columns from the outer query (`c.id`).
 > 2. Evaluated for each row processed by the outer query.
 > 3. Useful for single scalar projections per parent row.
-
+> 
 ---
 
 ### Exercise 3: Derived Table Subqueries in FROM Clauses
@@ -257,7 +257,7 @@ Calculate average order count per customer by querying a derived table subquery 
 > 1. Subqueries in `FROM` clauses generate transient virtual tables.
 > 2. MUST include a table alias (`AS customer_orders`).
 > 3. Enables multi-stage aggregate calculations.
-
+> 
 ---
 
 

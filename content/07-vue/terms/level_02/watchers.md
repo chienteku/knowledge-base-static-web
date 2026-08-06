@@ -140,7 +140,7 @@ watch(() => state.count, (newVal, oldVal) => {
 > `watch(user, () => console.log("Changed!"), { deep: true })`
 > ```
 > - How far down does the watcher look?
-
+> 
 ---
 
 ### Exercise 2: Explicit Watcher Setup
@@ -162,7 +162,7 @@ watch(() => state.count, (newVal, oldVal) => {
 >   { immediate: true }
 > );
 > ```
-
+> 
 ---
 
 ### Exercise 3: Deep Watcher Option
@@ -179,8 +179,8 @@ watch(() => state.count, (newVal, oldVal) => {
 > ```javascript
 > watch(userRef, callback, { deep: true });
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

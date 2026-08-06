@@ -105,7 +105,7 @@ App B: A web scraper that collects arbitrary, constantly changing JSON metadata 
 > App B: NoSQL. The data is unstructured (every website's JSON looks different), and we need to just dump it into storage quickly.
 > ```
 > - Which app has strict rules, and which app needs flexibility?
-
+> 
 ---
 
 
@@ -134,7 +134,7 @@ App B: A web scraper that collects arbitrary, constantly changing JSON metadata 
 > ```
 >
 > **Explanation:** SQL databases prioritize relational integrity; NoSQL databases prioritize horizontal scalability and flexible schemas.
-
+> 
 ---
 
 ### Exercise 3: Selecting Database for E-Commerce Catalog
@@ -151,7 +151,7 @@ App B: A web scraper that collects arbitrary, constantly changing JSON metadata 
 > ```
 >
 > **Explanation:** Document schemas naturally accommodate varied product attribute structures per item.
-
+> 
 ## 7. Related Terms
 - [ORMs & ODMs](orms_odms.md) — The tools Node.js uses to talk to these databases.
 - [Migrations](migrations.md) — A concept that exists in SQL, but rarely in NoSQL.

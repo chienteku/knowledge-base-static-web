@@ -131,7 +131,7 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 > 100px (Content) + 10px (Left Border) + 10px (Right Border) = 120px.
 > ```
 > - Remember, a box has two sides (left and right).
-
+> 
 ---
 
 
@@ -152,7 +152,7 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 > ```
 >
 > **Explanation:** Longhand side properties (`border-bottom`, `border-top`) target individual edges.
-
+> 
 ---
 
 ### Exercise 3: Transparent Border Placeholder Technique
@@ -174,7 +174,7 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 > ```
 >
 > **Explanation:** Pre-allocating transparent borders prevents dynamic layout shifts.
-
+> 
 ## 7. Related Terms
 - [Padding](padding.md) — The space directly inside the border.
 - [Margin](margin.md) — The space directly outside the border.

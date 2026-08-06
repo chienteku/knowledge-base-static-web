@@ -170,7 +170,7 @@ let cartTotal = 0;
 > - Add 50 using `+=`.
 > - To apply a 10% discount, multiply the total by 0.9 using `*=`.
 > - Add 5 using `+=`.
-
+> 
 ---
 
 ### Exercise 2: Logical Assignment Operators (`&&=`, `||=`, `??=`)
@@ -194,7 +194,7 @@ let cartTotal = 0;
 > ```
 >
 > **Explanation:** `x ??= y` assigns `y` to `x` only if `x` is nullish (`null` or `undefined`).
-
+> 
 ---
 
 ### Exercise 3: Compound Addition Assignment Coercion
@@ -214,7 +214,7 @@ let cartTotal = 0;
 > ```
 >
 > **Explanation:** `+=` on strings coerces right-hand operands to strings and appends them.
-
+> 
 ---
 
 ## 7. Related Terms

@@ -138,7 +138,7 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 > "og" stands for Open Graph. This is a specific type of meta tag invented by Facebook. It tells social media platforms exactly which image to display as the large thumbnail when a user shares the link on Facebook, Twitter, or LinkedIn!
 > ```
 > - Have you ever wondered how iMessage knows which picture to show when you text a link?
-
+> 
 ---
 
 
@@ -161,7 +161,7 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 > ```
 >
 > **Explanation:** Essential meta tags configure character encoding, mobile viewport scaling, and SEO search snippets.
-
+> 
 ---
 
 ### Exercise 3: Robots Noindex Meta Tag
@@ -178,7 +178,7 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 > ```
 >
 > **Explanation:** `noindex, nofollow` prevents search engine crawlers from indexing private pages.
-
+> 
 ## 7. Related Terms
 - [`<head>`](../level_01/head.md) — The parent container for all `<meta>` tags.
 - [`title` Attribute](../level_07/title.md) — Another form of metadata (the name of the browser tab).

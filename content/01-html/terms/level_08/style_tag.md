@@ -196,7 +196,7 @@ A simple internal CSS block:
 > - Write class selectors in CSS starting with a dot (`.card-desc`).
 > - Wrap the rules in curly braces (`{ ... }`).
 > - Remove the `style="..."` attribute from the `<p>` tag.
-
+> 
 ---
 
 
@@ -217,7 +217,7 @@ A simple internal CSS block:
 > ```
 >
 > **Explanation:** `media` attribute restricts internal CSS rules to specific output media (e.g. print).
-
+> 
 ---
 
 ### Exercise 3: CSS Type Attribute Redundancy
@@ -234,7 +234,7 @@ A simple internal CSS block:
 > ```
 >
 > **Explanation:** `type="text/css"` is redundant in modern HTML5.
-
+> 
 ## 7. Related Terms
 - [`style` Attribute](../level_07/style.md) — The inline styling attribute.
 - [`<link>`](link.md) — The element used to connect external CSS.

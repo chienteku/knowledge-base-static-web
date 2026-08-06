@@ -161,7 +161,7 @@ Create a `products` table specifying strict column data types, default values, a
 > 1. Each column definition combines a name, data type (`INTEGER`, `TEXT`, `TIMESTAMPTZ`), and column constraints.
 > 2. `NOT NULL` prevents unassigned NULL values in mandatory fields.
 > 3. `CHECK (price_cents >= 0)` enforces domain business rules directly at the database tier.
-
+> 
 ---
 
 ### Exercise 2: Adding New Columns with Default Values
@@ -186,7 +186,7 @@ Add a new column `is_published` (`BOOLEAN`) to an existing `posts` table default
 > 1. `ALTER TABLE ... ADD COLUMN` modifies existing table structural definitions.
 > 2. `DEFAULT FALSE` populates existing rows with `FALSE` during column creation.
 > 3. Avoids table locks on modern PostgreSQL (PG 11+ handles non-volatile defaults instantly).
-
+> 
 ---
 
 ### Exercise 3: Dropping Obsolete Columns Safely
@@ -211,7 +211,7 @@ Remove an obsolete legacy column `temp_token` from table `users`.
 > 1. `DROP COLUMN` removes column definitions from table metadata.
 > 2. Data in dropped columns is marked invalid and reclaimed during future `VACUUM` runs.
 > 3. Verify application code no longer queries dropped columns prior to execution.
-
+> 
 ---
 
 

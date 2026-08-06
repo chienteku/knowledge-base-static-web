@@ -199,7 +199,7 @@ Ensure a user immediately sees their updated profile data after writing to a sec
 > 1. Causally consistent sessions attach logical Operation Time (`operationTime`) and cluster time tokens to driver requests.
 > 2. Secondary read nodes wait for replication oplog to advance past the session's operation time before responding.
 > 3. Guarantees "Read Your Own Writes" and "Monotonic Reads" semantics.
-
+> 
 ---
 
 ### Exercise 2: Monotonic Writes in Distributed Sessions
@@ -228,7 +228,7 @@ Ensure sequential write commands executed in a session preserve exact causal seq
 > 1. Monotonic Writes guarantee that write operations inside a session are applied in exact causal order on target cluster nodes.
 > 2. Prevents child comments from appearing before parent post creation during async replication.
 > 3. Essential for multi-node distributed data integrity.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Operation Time Cluster Tokens
@@ -246,17 +246,17 @@ Inspect `operationTime` tokens returned in causally consistent session command r
 > ```javascript
 > const session = client.startSession({ causalConsistency: true });
 > await db.collection("logs").insertOne({ event: "login" }, { session });
-
-console.log("Causal Operation Time:", session.operationTime);
-session.endSession();
-```
-
+> 
+> console.log("Causal Operation Time:", session.operationTime);
+> session.endSession();
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `operationTime` is a 64-bit BSON Timestamp identifying the exact cluster time of the write.
 > 2. Passed automatically in subsequent session read commands to enforce causal sequence bounds.
 > 3. Underpins MongoDB's distributed consistency model.
-
+> 
 ---
 
 

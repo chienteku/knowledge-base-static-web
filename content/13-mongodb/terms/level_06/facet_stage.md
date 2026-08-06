@@ -162,7 +162,7 @@ In a single database request, return matching product documents AND compute summ
 > 1. `$facet` processes multiple sub-pipelines concurrently over the input document stream.
 > 2. Returns a single document containing array fields for each facet sub-pipeline result.
 > 3. Powers search engine result pages (SERPs) and dashboard widgets efficiently.
-
+> 
 ---
 
 ### Exercise 2: Multi-Metrics Analytics Dashboards with `$facet`
@@ -204,7 +204,7 @@ Compute overall platform metrics (`totalRevenue`, `totalOrders`, `avgOrderValue`
 > 1. Combines different grouping dimensions into a single database roundtrip.
 > 2. Eliminates sending multiple separate `aggregate()` calls from the application server.
 > 3. Reduces network overhead significantly.
-
+> 
 ---
 
 ### Exercise 3: Handling `$facet` Memory Bounds
@@ -231,7 +231,7 @@ Explain why sub-pipelines inside `$facet` cannot contain another `$facet` stage 
 > 1. `$facet` buffers sub-pipeline output streams into a single result document.
 > 2. Ensure facet results are bounded using `$limit` or bucket aggregations.
 > 3. Guarantees server stability.
-
+> 
 ---
 
 

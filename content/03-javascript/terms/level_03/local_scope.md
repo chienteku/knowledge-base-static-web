@@ -167,7 +167,7 @@ function processData(price) {
 > - Parameters are always local.
 > - Anything declared inside the `{}` of the function is local.
 > - `tax` is declared outside, so it is global.
-
+> 
 ---
 
 ### Exercise 2: Function Parameter Local Scoping
@@ -189,7 +189,7 @@ function processData(price) {
 > ```
 >
 > **Explanation:** Function parameters are initialized as local scope variables inside function execution contexts.
-
+> 
 ---
 
 ### Exercise 3: Local Scope Shadowing Outer Variables
@@ -213,8 +213,8 @@ function processData(price) {
 > ```
 >
 > **Explanation:** Declaring identical variable names in local scopes shadows outer scope variables without mutating them.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

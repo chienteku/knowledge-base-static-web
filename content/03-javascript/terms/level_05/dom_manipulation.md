@@ -188,7 +188,7 @@ if (typeof document !== "undefined") {
 > - Use `document.createElement("p")` to create the paragraph.
 > - Assign the string `"Loading data..."` to `paragraph.textContent`.
 > - Call `container.appendChild(paragraph)`.
-
+> 
 ---
 
 ### Exercise 2: Safe Node Replacement
@@ -205,7 +205,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `replaceChild(new, old)` swaps DOM nodes atomically.
-
+> 
 ---
 
 ### Exercise 3: Removing Nodes with `.remove()`
@@ -222,7 +222,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `ChildNode.remove()` removes elements directly from their parent DOM containers.
-
+> 
 ---
 
 ## 7. Related Terms

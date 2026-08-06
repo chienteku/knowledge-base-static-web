@@ -165,7 +165,7 @@ console.log("Encoded Path:", target);
 > Encoded Path: /search?q=Node.js%20%26%20Express
 > ```
 > - Inside the function, return `baseURL + "?q=" + encodeURIComponent(searchTerm)`.
-
+> 
 ---
 
 ### Exercise 2: Percent-Encoding Character Map

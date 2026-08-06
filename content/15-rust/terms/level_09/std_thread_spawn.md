@@ -299,7 +299,7 @@ Build a resilient parallel compute engine `parallel_map_reduce` that splits a da
 > 1. **Data Partitioning**: The input vector is dynamically grouped into fixed-size chunks using memory replacement without requiring elements `T` to implement `Clone`.
 > 2. **Thread Spawning with `Arc`**: `Arc::clone` safely shares immutable references to `map_fn` across threads while satisfying `'static` lifetime requirements.
 > 3. **Panic Extraction**: When `handle.join()` returns `Err(Box<dyn Any + Send>)`, `downcast_ref` attempts to downcast the payload first to `&str` and then to `String` to construct a descriptive error message.
-
+> 
 ---
 
 ### Exercise 2: Multi-Stage Pipeline with Thread Builder & MPSC Streaming
@@ -424,7 +424,7 @@ Design a multi-stage streaming pipeline using `std::thread::Builder` and `std::s
 > 1. **Thread Customization**: `std::thread::Builder` configures thread OS names and allocates 2 MB custom stack size per worker thread.
 > 2. **Streaming Synchronization**: `tx_producer` sends tuple items `(seq, log)` across the channel. When the producer thread finishes and drops `tx_producer`, the `rx_worker` iterator terminates cleanly.
 > 3. **Validation**: Thread metadata is queried inside worker closures via `thread::current().name()` and verified in unit tests.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Task Batch Dispatcher with Atomic Metrics and Panic Interception
@@ -537,7 +537,7 @@ Implement a resilient task dispatch manager `execute_task_batch` that accepts a 
 > 1. **Dynamic Task Trait Objects**: Tasks are boxed closures satisfying `FnOnce() -> String + Send + 'static`, permitting execution of heterogeneous dynamic closures across thread boundaries.
 > 2. **Atomic Synchronization**: `AtomicUsize::fetch_add` with `Ordering::SeqCst` provides thread-safe execution tracking without lock contention overhead.
 > 3. **Fault Isolation**: The caller thread joins worker handles sequentially. If a worker panics, `handle.join()` captures the panic `Err`, incrementing the `failed_counter` while successful outputs are preserved.
-
+> 
 ---
 
 ## 6. Related Terms

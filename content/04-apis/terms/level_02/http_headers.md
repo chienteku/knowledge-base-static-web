@@ -125,7 +125,7 @@ res.setHeader('User-Token', sanitizedInput);
 > The server uses this header to tell Chrome, "Hey, this is HTML, please render it visually on the screen instead of just downloading a text file!"
 > ```
 > - The Network tab is the most important tool for debugging APIs!
-
+> 
 ---
 
 ### Exercise 2: Header Category Classification

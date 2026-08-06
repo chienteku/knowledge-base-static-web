@@ -172,7 +172,7 @@ fn process() {
 >
 > 1. Simulates `rustdoc` extracting doc comment code blocks for automated compilation and test execution.
 > 2. Prevents documentation drift.
-
+> 
 ---
 
 ### Exercise 2: Doc Comment Section Header Validator
@@ -207,7 +207,7 @@ fn process() {
 > #### Technical Explanation
 >
 > 1. Ensures documentation adheres to Rust community API guideline standards (`# Examples`, `# Errors`, `# Panics`).
-
+> 
 ---
 
 ### Exercise 3: Module Root Inner Doc Comment Generator
@@ -242,7 +242,7 @@ fn process() {
 > #### Technical Explanation
 >
 > 1. Inner doc comments `//!` document the enclosing crate or file module scope.
-
+> 
 ---
 
 ## 6. Related Terms

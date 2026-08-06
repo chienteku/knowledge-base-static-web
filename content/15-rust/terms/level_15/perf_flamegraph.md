@@ -287,7 +287,7 @@ Write a zero-copy, zero-allocation alternative `parse_log_line_zero_copy` return
 > 1. **Flamegraph Signature Before Optimization:** In the original binary profiled with `cargo flamegraph`, the flamegraph shows a wide top bar representing `alloc::alloc::alloc` and `__rdl_alloc` sitting on top of `parse_log_line_alloc`. This indicates that the CPU spends most of its clock cycles managing heap metadata and memory allocation pointers rather than performing string parsing.
 > 2. **Flamegraph Signature After Optimization:** In `parse_log_line_zero_copy`, iterator traversal operates entirely over pointer offsets within the existing `&'a str` slice. `alloc::alloc` disappears entirely from the flamegraph, and the box width for `parse_log_line_zero_copy` shrinks dramatically (often by 10x–20x), allowing overall throughput to scale linearly with CPU memory bandwidth.
 > 3. **Symbol Resolution Requirement:** For `cargo flamegraph` to pinpoint `parse_log_line_alloc` versus standard library allocation routines, `Cargo.toml` must include `[profile.release] debug = true`. Without debug symbols, `perf` can only display raw memory addresses (`0x55a8f...`), rendering bottleneck identification impossible.
-
+> 
 ---
 
 ### Exercise 2: Identifying Algorithmic Hotspots in Telemetry Data Aggregation
@@ -410,7 +410,7 @@ Refactor this data structure into an optimized stack-allocated array implementat
 >
 > 1. **Flamegraph Signature Shift:** In the unoptimized profile, `cargo flamegraph` depicts a tall stack hierarchy: `main` $\rightarrow$ `record` $\rightarrow$ `HashMap::insert` $\rightarrow$ `RandomState::build_hasher` $\rightarrow$ `SipHash::write_u8`. In the optimized version, array indexing compiles down to a single CPU instruction (`mov [rax + rbx*8], xmm0`). The stack depth collapses to 1, and the function box becomes virtually invisible in `flamegraph.svg`.
 > 2. **Cache Locality:** Array storage `[Option<f64>; 8]` occupies contiguous stack memory (64 bytes, exactly 1 CPU L1 cache line). `HashMap`, in contrast, allocates table buckets dynamically across separate heap memory addresses, causing potential CPU L1/L2 cache misses during high-frequency lookups.
-
+> 
 ---
 
 ### Exercise 3: Analyzing Flamegraph Call Stack Depth (Flame Towers) in Dynamic Programming
@@ -500,7 +500,7 @@ Implement an optimized iterative dynamic programming version `fibonacci_iterativ
 >
 > 1. **Flamegraph Y-Axis Transformation:** In `fibonacci_recursive`, every invocation adds a frame to the call stack. For $N=40$, the flamegraph visualizes a 40-level-high vertical stack of `fibonacci_recursive` frames. In `fibonacci_iterative`, the stack depth is constant ($Y=1$ above `main`), completely flattening the flame tower.
 > 2. **Flamegraph X-Axis Transformation:** Because `fibonacci_recursive` has exponential time complexity $O(2^N)$, it monopolizes the CPU during sampling, appearing as a massive wide block occupying >90% of the horizontal chart width. `fibonacci_iterative` executes in sub-microsecond time ($O(N)$), so its horizontal width in `flamegraph.svg` collapses to effectively 0% of the total workload profile.
-
+> 
 ---
 
 ## 6. Related Terms

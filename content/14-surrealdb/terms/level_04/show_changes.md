@@ -171,7 +171,7 @@ Enable a table changefeed stream on table `order` with a 7-day change retention 
 > 1. `CHANGEFEED <duration>` enables change tracking for table mutations.
 > 2. Retains change history for the specified duration (e.g. `7d`).
 > 3. Underpins real-time streaming and sync architectures.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Historical Changes with `SHOW CHANGES`
@@ -195,7 +195,7 @@ Inspect changefeed entries for table `order` starting from a specific timestamp.
 > 1. `SHOW CHANGES FOR TABLE` streams historical mutation deltas.
 > 2. `SINCE` filters changes recorded after a target timestamp or version sequence.
 > 3. Enables event sourcing and external CDC integration.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Changefeed Version Sequences
@@ -219,7 +219,7 @@ Query changes using a numeric changefeed version sequence number.
 > 1. Sequence numbers allow client sync engines to resume streaming from precise change offsets.
 > 2. Guarantees exactly-once delta processing.
 > 3. Powers real-time offline sync protocols.
-
+> 
 ---
 
 

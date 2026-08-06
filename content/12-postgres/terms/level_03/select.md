@@ -164,7 +164,7 @@ Query `users` table returning `username` and `email` for active users.
 > 1. `SELECT` specifies output column projections.
 > 2. `FROM` identifies source table.
 > 3. `WHERE` filters row results.
-
+> 
 ---
 
 ### Exercise 2: Aliasing Column Names in Select Projections
@@ -191,7 +191,7 @@ Select `price_cents` divided by 100.0, aliasing output column as `price_dollars`
 > 1. `AS alias_name` renames output columns in returned query result sets.
 > 2. Formats calculated expressions cleanly.
 > 3. Developer ergonomics.
-
+> 
 ---
 
 ### Exercise 3: Deduplicating Result Rows with `DISTINCT`
@@ -218,7 +218,7 @@ Select all unique customer states from `addresses` table using `DISTINCT`.
 > 1. `DISTINCT` eliminates duplicate rows from the query output.
 > 2. Sorts or hashes rows in memory to find unique values.
 > 3. Returns unique state lists.
-
+> 
 ---
 
 

@@ -151,7 +151,7 @@ async function doMath() {
 > It logs 1. The fetch fails, so it instantly skips line 2 and jumps directly into the catch block, logging 3. After the catch block finishes, the function continues normally, logging 4.
 > ```
 > - As soon as an error happens, execution immediately jumps to the catch block!
-
+> 
 ---
 
 ### Exercise 2: Standard RFC 7807 Problem Details Object Design

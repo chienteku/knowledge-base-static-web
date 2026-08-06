@@ -163,7 +163,7 @@ Query products with price between 1000 and 5000 cents (`price_cents BETWEEN 1000
 > 1. `BETWEEN a AND b` is inclusive (`price >= a AND price <= b`).
 > 2. Hits B-tree indexes efficiently.
 > 3. Clean range filtering syntax.
-
+> 
 ---
 
 ### Exercise 2: Discrete Value Set Matching with `IN`
@@ -189,7 +189,7 @@ Query orders where `status` is in set `('pending', 'processing', 'shipped')`.
 > 1. `IN (...)` checks if a column value matches any element in a list.
 > 2. Replaces multiple `OR` conditions.
 > 3. Utilizes indexes on `status`.
-
+> 
 ---
 
 ### Exercise 3: Pattern Matching with LIKE and ILIKE
@@ -215,7 +215,7 @@ Find all users whose email ends with `@example.com` (case-insensitive).
 > 1. `%` matches zero or more characters; `_` matches a single character.
 > 2. `ILIKE` performs case-insensitive pattern matching (PostgreSQL extension).
 > 3. Note: Leading wildcards (`'%text'`) force sequential table scans unless trigram indexes exist.
-
+> 
 ---
 
 

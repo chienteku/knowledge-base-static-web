@@ -162,7 +162,7 @@ An employee directory API selects employee names, calculates annual salaries fro
 > 1. `SELECT field1, field2 FROM <table>` projects targeted fields from record collections.
 > 2. `AS alias_name` renames projected fields or calculated expressions in the output JSON.
 > 3. Evaluates arithmetic calculations on the database server during query execution.
-
+> 
 ---
 
 ### Exercise 2: Selecting Nested Object Properties
@@ -192,7 +192,7 @@ A profile service selects a user's display name and nested notification preferen
 > 1. Dot-notation (`settings.email_notifications`) extracts nested object properties directly in projection lists.
 > 2. Avoids fetching unneeded sibling properties (`settings.theme`), saving payload bandwidth.
 > 3. Blends SQL column selection with NoSQL document traversal.
-
+> 
 ---
 
 ### Exercise 3: Selecting All Fields with Wildcard (`*`)
@@ -219,7 +219,7 @@ Retrieve complete record documents from table `product` for debugging purposes u
 > 1. `SELECT *` projects all field properties for every matching record in the target table.
 > 2. Returns an array of full JSON record objects.
 > 3. Equivalent to standard SQL `SELECT *` and MongoDB `db.collection.find({})`.
-
+> 
 ---
 
 

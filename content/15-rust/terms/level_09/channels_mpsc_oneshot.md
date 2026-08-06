@@ -187,7 +187,7 @@ if let Err(e) = tx.send(data) { println!("Receiver disconnected: {e}"); }
 > 1. Multiple threads produce metrics into cloned `tx` senders.
 > 2. Single receiver `rx` collects all metrics safely without mutex locks.
 > 3. Dropping master `tx` ensures channel iteration closes when worker threads complete.
-
+> 
 ---
 
 ### Exercise 2: Single-Shot Oneshot Task Completion Signal Simulator
@@ -231,7 +231,7 @@ if let Err(e) = tx.send(data) { println!("Receiver disconnected: {e}"); }
 > 1. Bounded sync channels act as light oneshot notification triggers.
 > 2. `rx.recv()` blocks execution until background thread finishes work and sends a response.
 > 3. Ensures thread-safe single-value synchronization.
-
+> 
 ---
 
 ### Exercise 3: Bounded Queue Producer Backpressure Test
@@ -275,7 +275,7 @@ if let Err(e) = tx.send(data) { println!("Receiver disconnected: {e}"); }
 > 1. Bounded channels block senders when full, providing memory backpressure.
 > 2. `try_send` returns an error immediately when buffer capacity is reached.
 > 3. Prevents producer memory consumption from overwhelming system resources.
-
+> 
 ---
 
 ## 5. Related Terms

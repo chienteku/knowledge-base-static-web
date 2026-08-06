@@ -186,7 +186,7 @@ fetch_remote_data().await;
 > 1. Async functions return lazy futures evaluated sequentially via `.await`.
 > 2. `.await` yields control back to the executor without blocking OS threads.
 > 3. Pipelines combine multiple async data fetches cleanly.
-
+> 
 ---
 
 ### Exercise 2: Async Retry Wrapper Mechanism
@@ -249,7 +249,7 @@ fetch_remote_data().await;
 > 1. Higher-order async functions accept closure factories returning `Future` instances.
 > 2. `.await` evaluates each attempt asynchronously inside a retry loop.
 > 3. Errors are returned after exhausting `max_retries`.
-
+> 
 ---
 
 ### Exercise 3: Async Task Identity and Polling Verification
@@ -295,7 +295,7 @@ fetch_remote_data().await;
 >
 > 1. Tests fundamental `Future` polling mechanics using standard `Waker::noop`.
 > 2. Demonstrates zero-cost `Future` state machine generation.
-
+> 
 ---
 
 ## 5. Related Terms

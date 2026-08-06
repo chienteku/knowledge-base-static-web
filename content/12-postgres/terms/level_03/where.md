@@ -178,7 +178,7 @@ Query `users` for active users who registered in 2026 OR possess role `'admin'`.
 > 1. `WHERE` filters candidate table rows using boolean predicates.
 > 2. Parentheses enforce explicit operator evaluation precedence (`AND` evaluated before `OR`).
 > 3. Selects rows matching combined logic.
-
+> 
 ---
 
 ### Exercise 2: Filtering Range Bounds with Operators
@@ -205,7 +205,7 @@ Query products with price between 1000 and 5000 cents using `WHERE`.
 > 1. Comparison operators (`>=`, `<=`) specify lower and upper range bounds.
 > 2. Evaluates index scan bounds on `price_cents`.
 > 3. Standard range query syntax.
-
+> 
 ---
 
 ### Exercise 3: Parameterized WHERE Filtering in Application Drivers
@@ -222,21 +222,21 @@ Execute a safe parameterized `WHERE` query in Node.js to prevent SQL Injection.
 >
 > ```typescript
 > import { pool } from "./db";
-
-export async function filterUsers(status: string, role: string) {
-  const text = "SELECT id, username, email FROM users WHERE status = $1 AND role = $2";
-  const values = [status, role];
-  const res = await pool.query(text, values);
-  return res.rows;
-}
-```
-
+> 
+> export async function filterUsers(status: string, role: string) {
+>   const text = "SELECT id, username, email FROM users WHERE status = $1 AND role = $2";
+>   const values = [status, role];
+>   const res = await pool.query(text, values);
+>   return res.rows;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `$1` and `$2` pass user input values safely without string concatenation.
 > 2. Prevents malicious input strings from breaking `WHERE` clause syntax.
 > 3. Secure database programming standard.
-
+> 
 ---
 
 

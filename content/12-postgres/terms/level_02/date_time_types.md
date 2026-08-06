@@ -174,7 +174,7 @@ Create an `audit_logs` table storing user event timestamps using `TIMESTAMPTZ`.
 > 1. `TIMESTAMPTZ` converts input datetimes from the client's timezone into UTC for storage.
 > 2. Re-converts UTC timestamps back into the requesting client's timezone on retrieval.
 > 3. Golden rule: Always use `TIMESTAMPTZ` instead of plain `TIMESTAMP` for application timestamps.
-
+> 
 ---
 
 ### Exercise 2: Date Arithmetic with `INTERVAL`
@@ -202,7 +202,7 @@ Calculate subscription expiration dates set to 30 days after signup date using `
 > 1. `INTERVAL` represents time spans (e.g., `'30 days'`, `'2 hours'`, `'1 month'`).
 > 2. Adding `INTERVAL` to `TIMESTAMPTZ` handles leap years and variable month lengths automatically.
 > 3. Dynamic server-side date arithmetic.
-
+> 
 ---
 
 ### Exercise 3: Extracting Calendar Fields with `EXTRACT`
@@ -232,7 +232,7 @@ Extract year, month, and day components from `created_at` in an order summary re
 > 1. `EXTRACT(field FROM timestamp)` isolates specific date/time parts (`YEAR`, `MONTH`, `DAY`, `DOW`).
 > 2. Grouping by extracted year and month produces monthly sales totals.
 > 3. Executes natively inside PostgreSQL query engine.
-
+> 
 ---
 
 

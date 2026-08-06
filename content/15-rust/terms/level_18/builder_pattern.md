@@ -240,7 +240,7 @@ struct Client { a: i32 } struct ClientBuilder { a: i32 }
 > 1. `DbPoolBuilder::new()` sets default values for `max_connections` and `timeout_sec`.
 > 2. `.connection_string()` accepts `impl Into<String>` for string slice flexibility.
 > 3. `.build()` returns `Result<DbPool, &'static str>` to safely validate mandatory parameters.
-
+> 
 ---
 
 ### Exercise 2: Compile-Time Verified State Machine Builder (Type-State Pattern)
@@ -305,7 +305,7 @@ struct Client { a: i32 } struct ClientBuilder { a: i32 }
 >
 > 1. Using zero-sized marker types `NoCert` and `HasCert`, the builder transforms type signature upon calling `.set_certificate()`.
 > 2. Compiling `.connect()` on an uncertified builder produces a compile-time type error.
-
+> 
 ---
 
 ### Exercise 3: High-Performance Logger Configuration Builder
@@ -371,7 +371,7 @@ struct Client { a: i32 } struct ClientBuilder { a: i32 }
 >
 > 1. Standard infallible builder pattern for component configuration.
 > 2. Provides clean defaults for optional logging features.
-
+> 
 ---
 
 ## 6. Related Terms

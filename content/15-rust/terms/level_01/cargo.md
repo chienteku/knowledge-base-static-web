@@ -476,7 +476,7 @@ Implement a robust `WorkspaceGraphResolver` system that:
 >    - `BTreeSet` is used for feature sets to guarantee deduplicated, sorted, and deterministic output.
 >
 >
-
+> 
 ---
 
 ### Exercise 2: `build.rs` Directive Generator & C-Header Macro CodeGen Parser
@@ -718,7 +718,7 @@ Construct a `BuildScriptGenerator` engine that:
 >    - String formatting utilizes `std::fmt::Write` to append generated bindings directly into dynamic allocation buffers without redundant intermediary String cloning.
 >
 >
-
+> 
 ---
 
 ### Exercise 3: Cargo Profile Hardening & Dependency Compliance Auditor
@@ -1004,7 +1004,7 @@ Implement a `CargoProfileAuditor` compliance engine that:
 >    - `AuditReport` aggregates diagnostic results into owned vectors, allowing seamless serializability or diagnostic rendering in CI/CD pipeline outputs.
 >
 >
-
+> 
 ---
 
 ## 6. Related Terms

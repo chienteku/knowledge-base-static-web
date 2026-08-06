@@ -162,7 +162,7 @@ async function processData() {
 > ```
 > - `users.find(u => u.role === "admin")`
 > - Notice that even though Charlie is also an admin, `find()` stops as soon as it hits Bob!
-
+> 
 ---
 
 ### Exercise 2: Finding Object by Property
@@ -181,7 +181,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `find()` returns the first matching element value or `undefined`.
-
+> 
 ---
 
 ### Exercise 3: Handling Unmatched `find()` Defaults
@@ -200,8 +200,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Optional chaining prevents `TypeError` when `.find()` evaluates to `undefined`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

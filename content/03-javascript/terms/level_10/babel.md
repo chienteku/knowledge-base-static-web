@@ -145,7 +145,7 @@ async function processData() {
 > No! Babel only translates **Syntax**. To add missing **Features** (like Promises, Maps, or Sets) to old browsers, you need a different tool called a **Polyfill**. (Babel is often paired with a polyfill library like `core-js` to solve both problems at once).
 > ```
 > - Syntax is grammar. Features are vocabulary.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Babel AST Transformation Concept
@@ -162,7 +162,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Babel parses JavaScript source into Abstract Syntax Trees (AST), applies AST plugin transforms, and generates target JS output.
-
+> 
 ---
 
 ### Exercise 3: Configuring Target Environment Presets
@@ -179,8 +179,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `@babel/preset-env` automatically determines syntax transforms based on target browser versions.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

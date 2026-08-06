@@ -146,24 +146,24 @@ Redirect unauthenticated users to `/login` from a protected Server Component usi
 > // app/dashboard/page.tsx
 > import { redirect } from "next/navigation";
 > import { getSession } from "@/lib/auth";
-
-export default async function DashboardPage() {
-  const session = await getSession();
-
-  if (!session) {
-    redirect("/login?reason=unauthorized");
-  }
-
-  return <h1>Welcome to Dashboard</h1>;
-}
-```
-
+> 
+> export default async function DashboardPage() {
+>   const session = await getSession();
+> 
+>   if (!session) {
+>     redirect("/login?reason=unauthorized");
+>   }
+> 
+>   return <h1>Welcome to Dashboard</h1>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `redirect()` throws a specialized internal Next.js exception that immediately halts component rendering.
 > 2. Issues an HTTP 307 temporary redirect response header to the browser.
 > 3. Works seamlessly inside async Server Components, Server Actions, and Route Handlers.
-
+> 
 ---
 
 ### Exercise 2: Server Action Redirects After Mutation
@@ -181,25 +181,25 @@ Redirect users to `/posts` after creating a new post inside a Server Action.
 > ```typescript
 > // app/actions/post.ts
 > "use server";
-
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-
-export async function createPost(formData: FormData) {
-  const title = formData.get("title");
-  // Save post to database...
-
-  revalidatePath("/posts");
-  redirect("/posts");
-}
-```
-
+> 
+> import { redirect } from "next/navigation";
+> import { revalidatePath } from "next/cache";
+> 
+> export async function createPost(formData: FormData) {
+>   const title = formData.get("title");
+>   // Save post to database...
+> 
+>   revalidatePath("/posts");
+>   redirect("/posts");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. In Server Actions, `redirect()` MUST be called OUTSIDE `try/catch` blocks (or re-thrown if caught).
 > 2. Tells the client router to navigate to the new path after revalidating cache data.
 > 3. Standard post-mutation workflow.
-
+> 
 ---
 
 ### Exercise 3: Permanent vs Temporary Redirects in `next.config.js`
@@ -228,19 +228,15 @@ Configure permanent 301 redirects for legacy URLs in `next.config.js`.
 >   }
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `permanent: true` emits HTTP 301 status headers, instructing search crawlers and browsers to cache the redirect permanently.
 > 2. `permanent: false` emits HTTP 307 status headers for temporary redirects.
 > 3. Preserves SEO page rank equity for migrated page URLs.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useRouter` Hook](../level_03/use_router.md) — Used for redirecting in Client Components.

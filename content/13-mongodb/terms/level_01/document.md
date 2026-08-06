@@ -163,7 +163,7 @@ Create a user document in collection `users` containing an embedded `address` ob
 > 1. Documents store complex nested structures natively without relational JOIN tables.
 > 2. Embedded objects (`address`) and arrays (`roles`) are retrieved in a single read operation.
 > 3. Aligns database representation with application object models.
-
+> 
 ---
 
 ### Exercise 2: Querying Nested Document Fields with Dot-Notation
@@ -189,7 +189,7 @@ Query user documents where embedded field `address.city` is `"Austin"`.
 > 1. Dot-notation (`"parent.child"`) traverses nested document properties cleanly.
 > 2. Dot-notation keys must be enclosed in quotation marks.
 > 3. Secondary indexes can be defined directly on nested dot-notation fields.
-
+> 
 ---
 
 ### Exercise 3: Document Size Enforcement
@@ -214,7 +214,7 @@ Demonstrate what happens when attempting to insert a document exceeding MongoDB'
 > 1. MongoDB enforces a strict 16MB maximum BSON size limit per document.
 > 2. Prevents unbounded document growth from degrading RAM and network performance.
 > 3. Use GridFS or reference collections when storing large binary files or unbounded arrays.
-
+> 
 ---
 
 

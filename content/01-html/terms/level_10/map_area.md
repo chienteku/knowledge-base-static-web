@@ -258,7 +258,7 @@ Image map coordinates are declared in absolute pixels (e.g. `coords="100,100,50"
 > ```
 > - The left rectangle starts at (0,0) and ends at middle-right (50,100).
 > - The right rectangle starts at middle-left (50,0) and ends at bottom-right (100,100).
-
+> 
 ---
 
 
@@ -277,7 +277,7 @@ Image map coordinates are declared in absolute pixels (e.g. `coords="100,100,50"
 > ```
 >
 > **Explanation:** `shape="rect"` expects `coords="x1,y1,x2,y2"` pixel coordinates.
-
+> 
 ---
 
 ### Exercise 3: Supported Area Shapes
@@ -300,7 +300,7 @@ Image map coordinates are declared in absolute pixels (e.g. `coords="100,100,50"
 > ```
 >
 > **Explanation:** `shape` defines geometric bounds for interactive image maps.
-
+> 
 ## 7. Related Terms
 - [`<img>`](../level_03/img.md) — The host image element.
 - [`href` Attribute](../level_02/href.md) — The destination hyperlink path.

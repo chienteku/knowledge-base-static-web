@@ -147,13 +147,13 @@ Create a server middleware `server/middleware/logger.ts` logging request URL and
 >   console.log(`[Nitro Server Log] ${method} ${url} at ${new Date().toISOString()}`);
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Files in `server/middleware/` run automatically on EVERY incoming server HTTP request (both page requests and API requests).
 > 2. Server middleware does NOT return responses unless halting execution.
 > 3. Ideal for global request logging and telemetry.
-
+> 
 ---
 
 ### Exercise 2: Authenticating Bearer Tokens in Server Middleware
@@ -180,13 +180,13 @@ Validate authorization header tokens in server middleware, attaching user contex
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `event.context` is a shared context object passed through the H3 handler lifecycle.
 > 2. Server middleware can populate `event.context.user` for downstream API routes to consume.
 > 3. Centralized request authentication pattern.
-
+> 
 ---
 
 ### Exercise 3: Selectively Bypassing Middleware on Specific Paths
@@ -214,19 +214,15 @@ Skip token validation in server middleware when request path starts with `/publi
 >   // Perform protected path validation...
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Server middleware runs on all static asset and page requests unless explicitly conditionally bypassed.
 > 2. Returning early without throwing errors allows execution to continue to target handlers.
 > 3. Essential performance guard conditional.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Route Middleware](../level_08/route_middleware.md) — The frontend equivalent that runs during Vue router navigation (do not confuse the two!).

@@ -197,29 +197,29 @@ Enforce compile-time exhaustiveness checking on a `PaymentMethod` union (`"credi
 >
 > ```typescript
 > type PaymentMethod = "credit_card" | "paypal" | "crypto";
-
-function processPayment(method: PaymentMethod) {
-  switch (method) {
-    case "credit_card":
-      return "Processing Card...";
-    case "paypal":
-      return "Redirecting to PayPal...";
-    case "crypto":
-      return "Awaiting Blockchain Confirmations...";
-    default:
-      // Exhaustiveness check: fails compilation if any payment method is unhandled!
-      const _exhaustiveCheck: never = method;
-      return _exhaustiveCheck;
-  }
-}
-```
-
+> 
+> function processPayment(method: PaymentMethod) {
+>   switch (method) {
+>     case "credit_card":
+>       return "Processing Card...";
+>     case "paypal":
+>       return "Redirecting to PayPal...";
+>     case "crypto":
+>       return "Awaiting Blockchain Confirmations...";
+>     default:
+>       // Exhaustiveness check: fails compilation if any payment method is unhandled!
+>       const _exhaustiveCheck: never = method;
+>       return _exhaustiveCheck;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Assigning `method` to a `never` variable in `default:` causes a compile error if any union member is omitted.
 > 2. If a new payment method (e.g. `"apple_pay"`) is added to `PaymentMethod` later, `tsc` highlights all unhandled `switch` statements instantly.
 > 3. Crucial technique for refactoring large discriminated union codebases safely.
-
+> 
 ---
 
 ### Exercise 2: Helper Functions for Unreachable Code
@@ -238,27 +238,27 @@ Create a reusable `assertNever(x: never): never` utility function for exhaustive
 > export function assertNever(x: never): never {
 >   throw new Error(`Unexpected object in exhaustive check: ${JSON.stringify(x)}`);
 > }
-
-type Role = "admin" | "user";
-
-function getPermissions(role: Role) {
-  switch (role) {
-    case "admin":
-      return ["read", "write", "delete"];
-    case "user":
-      return ["read"];
-    default:
-      return assertNever(role);
-  }
-}
-```
-
+> 
+> type Role = "admin" | "user";
+> 
+> function getPermissions(role: Role) {
+>   switch (role) {
+>     case "admin":
+>       return ["read", "write", "delete"];
+>     case "user":
+>       return ["read"];
+>     default:
+>       return assertNever(role);
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `assertNever` combines static compile-time checking (`x: never`) with runtime exception safety (`throw Error`).
 > 2. Reusable helper across the entire application for union exhaustiveness.
 > 3. Standard functional utility pattern.
-
+> 
 ---
 
 ### Exercise 3: Auditing Missing Switch Case Warnings
@@ -275,25 +275,25 @@ Demonstrate the compile error triggered when adding a new variant to a union wit
 >
 > ```typescript
 > type Transport = "bus" | "train" | "plane"; // Added 'plane'!
-
-function getTicketPrice(t: Transport): number {
-  switch (t) {
-    case "bus": return 2.5;
-    case "train": return 15.0;
-    default:
-      // ❌ Compile Error: Type 'string' (plane) is not assignable to type 'never'.
-      const _check: never = t;
-      return _check;
-  }
-}
-```
-
+> 
+> function getTicketPrice(t: Transport): number {
+>   switch (t) {
+>     case "bus": return 2.5;
+>     case "train": return 15.0;
+>     default:
+>       // ❌ Compile Error: Type 'string' (plane) is not assignable to type 'never'.
+>       const _check: never = t;
+>       return _check;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. When `"plane"` is added to `Transport`, `t` in `default:` has type `"plane"` instead of `never`.
 > 2. The assignment `const _check: never = t` fails immediately at compile time.
 > 3. Guarantees 100% code branch coverage across union additions.
-
+> 
 ---
 
 

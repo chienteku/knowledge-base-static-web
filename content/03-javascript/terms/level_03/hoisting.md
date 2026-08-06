@@ -162,7 +162,7 @@ function greet() {
 > ```
 > - The function declaration is hoisted completely, so `greet()` works perfectly.
 > - Only the `var` *declaration* is hoisted, not the assignment (`= 30`). So `age` exists, but it is `undefined`.
-
+> 
 ---
 
 ### Exercise 2: Function vs Variable Hoisting Priority
@@ -181,7 +181,7 @@ function greet() {
 > ```
 >
 > **Explanation:** Function declarations hoist before variable declarations (`var`), giving functions precedence during initial allocation.
-
+> 
 ---
 
 ### Exercise 3: Temporal Dead Zone Block Hoisting
@@ -206,8 +206,8 @@ function greet() {
 > ```
 >
 > **Explanation:** Inner block `let` declarations hoist to top of block scope, masking outer scope variables in TDZ.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

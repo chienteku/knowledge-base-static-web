@@ -136,13 +136,13 @@ Configure `nuxt.config.ts` for Vercel Edge functions deployment.
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `preset: "vercel-edge"` instructs Nitro to compile server handlers into V8 edge isolate code.
 > 2. Deploys server logic to global CDN edge nodes near end users.
 > 3. Lowers latency and eliminates traditional cold start delays.
-
+> 
 ---
 
 ### Exercise 2: Auditing Edge-Compatible Node Dependencies
@@ -170,13 +170,13 @@ Audit third-party npm packages to ensure they do not depend on Node.js native C+
 >   return { hashHex: Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("") };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Edge runtimes lack full Node.js standard libraries (`node:fs`, `node:child_process`).
 > 2. Web-standard APIs (`crypto.subtle`, `TextEncoder`) run seamlessly on Edge isolates, Cloudflare Workers, and Node.js.
 > 3. Edge-ready API development standard.
-
+> 
 ---
 
 ### Exercise 3: Setting Edge Cache Headers in Nitro Handlers
@@ -200,19 +200,15 @@ Configure Edge CDN cache headers (`Cache-Control: s-maxage=3600`) inside a serve
 >   return { data: "Cached Edge Payload" };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `s-maxage=3600` instructs Edge CDN nodes to cache the response payload for 3600 seconds.
 > 2. `stale-while-revalidate=60` allows CDN to serve stale content while fetching fresh updates in the background.
 > 3. High performance Edge caching pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Edge-Side Rendering (ESR)](../level_09/esr.md) — The architecture used to execute edge code.

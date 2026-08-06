@@ -172,7 +172,7 @@ Execute a multi-statement raw SurrealQL script containing parameter bindings usi
 > 1. `db.query(surrealql, params)` executes raw multi-statement SurrealQL scripts.
 > 2. Parameter map (`{ active: true }`) binds parameter variables safely, preventing SQL injection.
 > 3. Returns a tuple array containing results of each statement in order.
-
+> 
 ---
 
 ### Exercise 2: Type-Safe Tuple Result Destructuring
@@ -199,7 +199,7 @@ Destructure multi-statement query results into strongly-typed TypeScript array v
 > 1. Generic tuple types (`<[User[], Product[]]>`) enforce strict typing on multi-statement returns.
 > 2. Unpacks array results cleanly.
 > 3. Combines raw query flexibility with TypeScript type safety.
-
+> 
 ---
 
 ### Exercise 3: Passing Dynamic Parameters to `db.query()`
@@ -229,7 +229,7 @@ Pass complex parameters (like record links and datetimes) safely to `db.query()`
 > 1. Parameter maps accept strings, numbers, booleans, arrays, and ISO date strings.
 > 2. Encodes parameter types safely before transmission over WebSockets.
 > 3. Provides secure parameter binding for dynamic queries.
-
+> 
 ---
 
 

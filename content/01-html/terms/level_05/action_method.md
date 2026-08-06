@@ -193,7 +193,7 @@ Comparing GET and POST form definitions:
 > ```
 > - If bookmarking the resulting page is useful, choose GET.
 > - If data changes a database state or contains private details, choose POST.
-
+> 
 ---
 
 
@@ -222,7 +222,7 @@ Comparing GET and POST form definitions:
 > ```
 >
 > **Explanation:** Use `GET` for safe, bookmarkable read queries; use `POST` for state mutations and sensitive data.
-
+> 
 ---
 
 ### Exercise 3: Default Form Action and Method
@@ -239,7 +239,7 @@ Comparing GET and POST form definitions:
 > ```
 >
 > **Explanation:** Omitted form attributes target current page with GET requests by default.
-
+> 
 ## 7. Related Terms
 - [`<form>`](form.md) — The parent container wrapper.
 - [`<button>`](button.md) — The button element which acts as the submission trigger.

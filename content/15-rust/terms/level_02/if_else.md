@@ -307,7 +307,7 @@ You are building an execution gateway for a low-latency financial exchange. The 
 > 2. **Type Invariance Across Branch Arms**: Every arm in an `if` expression tree must evaluate to the identical type. In the `priority` calculation, every branch evaluates to `&'static str`. If one branch attempted to yield an owned `String` while another yielded `&str`, the compiler would reject the program with type mismatch error `E0308`.
 > 3. **Ownership and Lifetime Invariants**: Returning static string literals (`"HIGH"`, `"NORMAL"`, `"LOW"`) ensures zero heap allocation overhead. The returned `&'static str` lives for the entire program execution duration, eliminating reference lifetime tracking or ownership transfers for the fee quote caller.
 > 4. **Edge Case Safety**: Early returns via guard clauses (`if matches!(status, AccountStatus::Suspended)`) prevent unnecessary calculations and cleanly decouple exception handling from value computation expressions.
-
+> 
 ---
 
 ### Exercise 2: Network Telemetry Packet Ingestion & Routing Policy Evaluator
@@ -491,7 +491,7 @@ A network packet processing daemon receives telemetry frames over dynamic routin
 > 2. **Immutable Control Flow**: By avoiding temporary mutable flags (`let mut timeout = 0;`), the code guarantees thread safety and eliminates partial initialization bugs. The compiler proves that every conceivable branch initializes `max_buffer_size`, `timeout_ms`, and `target` exactly once.
 > 3. **Reference Borrowing Efficiency**: `evaluate_packet_routing` accepts `&PacketHeader` as a read-only shared reference. The conditional expressions read primitive fields (`bool`, `usize`, `enum`) without consuming or moving the underlying header struct, permitting reuse of the original packet buffer in downstream network processing code.
 > 4. **Edge Cases**: Short-circuit logic prevents downstream buffer limit calculations when payload checksums fail, minimizing telemetry pipeline latency under hostile network conditions or corrupt packet floods.
-
+> 
 ---
 
 ### Exercise 3: Memory Cache Allocation & Eviction Tier Controller
@@ -641,7 +641,7 @@ High-throughput caching systems need to optimize buffer placement based on syste
 > 2. **Combinatorial Logical Operators in Conditions**: Complex conditional expressions (such as `!matches!(pressure, CachePressure::High | CachePressure::Critical)`) allow clean multi-condition evaluation without requiring nested boolean flags or repetitive match expressions.
 > 3. **Determinism and Zero Dead Paths**: The compiler guarantees exhaustiveness across all branches. Because every `if` expression has a mandatory trailing `else` block, Rust guarantees that `strategy`, `eviction`, and `ttl_seconds` are fully initialized regardless of execution path.
 > 4. **Edge Cases**: Non-power-of-two payload sizes are automatically aligned upward via `.next_power_of_two()` inside the `HeapPool` expression arm, preventing fragmentation issues in memory allocation pools under high throughput.
-
+> 
 ---
 
 ## 6. Related Terms

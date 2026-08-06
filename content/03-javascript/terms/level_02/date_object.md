@@ -172,7 +172,7 @@ console.log(getFormattedDate(testDate));
 > - Add `1` to `dateObj.getMonth()`.
 > - Use `.getDate()` to get the day of the month.
 > - Concatenate the values separated by hyphens.
-
+> 
 ---
 
 ### Exercise 2: Parsing ISO Date Strings safely
@@ -192,7 +192,7 @@ console.log(getFormattedDate(testDate));
 > ```
 >
 > **Explanation:** UTC methods on `Date` return standardized UTC values independent of local machine timezones.
-
+> 
 ---
 
 ### Exercise 3: Calculating Date Differences in Days
@@ -212,7 +212,7 @@ console.log(getFormattedDate(testDate));
 > ```
 >
 > **Explanation:** Subtracting two Date objects yields their difference in milliseconds.
-
+> 
 ---
 
 ## 7. Related Terms

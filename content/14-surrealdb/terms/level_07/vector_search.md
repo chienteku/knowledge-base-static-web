@@ -166,7 +166,7 @@ An AI application configures an HNSW vector index `idx_embedding` on table `docu
 > 1. `HNSW` (Hierarchical Navigable Small World) builds multi-layer graph structures for fast vector similarity searches.
 > 2. `DIMENSION <n>` specifies vector embedding dimensionality.
 > 3. `DIST COSINE` configures Cosine distance for text embedding comparisons.
-
+> 
 ---
 
 ### Exercise 2: Executing KNN Vector Similarity Queries
@@ -196,7 +196,7 @@ Query the top 2 documents most semantically similar to query vector `[0.1, 0.2, 
 > 1. `<|k,DIST|>` executes fast K-Nearest Neighbor vector searches using HNSW graph indexes.
 > 2. `vector::distance::knn()` projects calculated similarity distance values.
 > 3. Enables RAG AI search applications directly inside SurrealDB.
-
+> 
 ---
 
 ### Exercise 3: Filtering Vector Searches with Metadata Conditions
@@ -222,7 +222,7 @@ Combine vector similarity search with metadata filter `WHERE category = "tech"`.
 > 1. Combines HNSW vector graph searches with standard metadata column filters.
 > 2. Prunes vector search candidates failing metadata conditions.
 > 3. Provides hybrid AI search capabilities inside a single database query.
-
+> 
 ---
 
 

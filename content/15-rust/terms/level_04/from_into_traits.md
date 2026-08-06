@@ -340,7 +340,7 @@ thread::spawn(move || {
 > 2. **Symmetry of `From` and `Into`**: Rust's standard library includes the blanket implementation `impl<T, U> Into<U> for T where U: From<T>`. Defining `From<HttpError> for ServiceError` automatically allows `HttpError::into()`.
 > 3. **Ownership and Zero-Allocation Wrappers**: `From::from` takes ownership of the source error `e` by value. Converting variants shifts ownership of string data (`String` buffers) into the target enum variant without unnecessary intermediate heap allocations or cloning.
 > 4. **Static Dispatch & Inlining**: Because trait implementations for `From` are concrete, the Rust compiler monomorphizes and inline-expands the conversion function during optimization. No dynamic dispatch (`dyn Error` vtable lookups) is required.
-
+> 
 ---
 
 ### Exercise 2: Zero-Cost Ergonomic HTTP Builder with Generic `impl Into<T>` Constraints
@@ -467,7 +467,7 @@ thread::spawn(move || {
 > 2. **Monomorphization and Inlining Efficiency**: Rust monomorphizes generic functions at compile time. Instantiations with `&str` compile down directly to `.to_string()`, while instantiations with owned `String` become no-ops during optimization because `From<String> for String` is identity.
 > 3. **Transitive Conversions via Intermediate Types**: Implementing `From<JsonPayload> for Vec<u8>` along with `From<&str> for JsonPayload` allows `JsonPayload` instances to act as zero-cost byte conversion intermediaries.
 > 4. **Ownership and Buffer Re-use**: The `into_bytes()` method on `String` consumes the inner `String` and re-uses its underlying allocated heap capacity buffer directly for `Vec<u8>`, ensuring zero re-allocation cost during conversion.
-
+> 
 ---
 
 ### Exercise 3: Canonical Data Telemetry Pipeline with Reflexive `From` / `Into`
@@ -618,7 +618,7 @@ thread::spawn(move || {
 > 2. **Canonical Transformation Pipeline**: Implementing `From` for individual domain types centralizes mapping logic. The generic functions `normalize_metric` and `normalize_batch` remain cleanly decoupled from concrete input types.
 > 3. **Stream Iterator Optimization**: `raw_batch.into_iter().map(Into::into).collect()` executes element-by-element mapping within an iterator pipeline, allowing LLVM compiler optimizations to vector-allocate the target `Vec<TelemetryRecord>`.
 > 4. **Memory & Life-cycle Properties**: Values are moved into `From::from`, transferring heap allocations (such as owned `String` fields) directly into the fields of `TelemetryRecord`, maintaining high efficiency.
-
+> 
 ---
 
 ## 6. Related Terms

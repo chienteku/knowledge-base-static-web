@@ -282,7 +282,7 @@ thread::spawn(move || {
 >
 > 5. **Edge Cases**:
 >    - If a worker thread panics during filtering, `handle.join()` returns an `Err(Box<dyn Any>)`. The `expect` unwraps this and propagates the failure cleanly while dropping the thread's `Arc` handle to avoid memory leaks.
-
+> 
 ---
 
 ### Exercise 2: Lock-Free Observer Registry with `Arc<T>` and `Weak<T>` Weak Reference Upgrades
@@ -432,7 +432,7 @@ thread::spawn(move || {
 > 
 > 5. **Edge Cases**:
 >    - Concurrent drop during `upgrade()`: Atomic CPU instructions ensure that `upgrade()` either successfully increments `strong_count` before drop completes or observes `0` and returns `None`, guaranteeing zero data races.
-
+> 
 ---
 
 ### Exercise 3: Multithreaded Metric Aggregation Engine with `Arc<Mutex<T>>` Interior Mutability
@@ -571,7 +571,7 @@ thread::spawn(move || {
 > 
 > 5. **Edge Cases & Poisoning**:
 >    - If a worker thread panics while holding the `MutexGuard`, the `Mutex` enters a poisoned state. Subsequent `.lock()` calls return `Err(PoisonError)`. Calling `.expect(...)` or `.unwrap()` explicitly surfaces the panic and prevents corrupt state processing.
-
+> 
 ---
 
 ## 6. Related Terms

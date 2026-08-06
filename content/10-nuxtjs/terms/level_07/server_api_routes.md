@@ -149,7 +149,7 @@ Create explicit GET and DELETE endpoints for `/api/products` using file suffixes
 >   ];
 > });
 > ```
-
+> 
 > ```typescript
 > // server/api/products.delete.ts
 > export default defineEventHandler(async (event) => {
@@ -157,13 +157,13 @@ Create explicit GET and DELETE endpoints for `/api/products` using file suffixes
 >   return { deletedId: query.id, success: true };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. File suffixes `.get.ts`, `.post.ts`, `.put.ts`, `.delete.ts` automatically bind route handlers to specific HTTP methods.
 > 2. Returning non-matching HTTP methods throws an automatic 450/405 Method Not Allowed error.
 > 3. Idiomatic REST API structure in Nuxt 3.
-
+> 
 ---
 
 ### Exercise 2: Implementing Server-Side Error Handling with `createError()`
@@ -193,13 +193,13 @@ Validate API payload input and throw an HTTP 400 Bad Request error if required f
 >   return { sent: true };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `createError()` constructs an H3 error object containing `statusCode` and `statusMessage`.
 > 2. Nitro formats errors into standardized JSON response payloads for API clients.
 > 3. Standard API error handling pattern.
-
+> 
 ---
 
 ### Exercise 3: Proxying External Third-Party APIs
@@ -223,19 +223,15 @@ Proxy a request to an external third-party API service while hiding private API 
 >   return proxyRequest(event, targetUrl);
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `proxyRequest()` streams incoming request parameters directly to a target external URL.
 > 2. Keeps private API keys (`weatherApiKey`) isolated on the backend server.
 > 3. Prevents exposing third-party API credentials to client browser bundles.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`server/routes/`](server_routes.md) — Similar to `api/`, but does not prefix the URL with `/api`.

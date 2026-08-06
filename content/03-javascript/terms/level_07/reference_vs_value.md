@@ -197,7 +197,7 @@ console.log("num1 value:", num1);
 > ```
 > - Arrays copy by reference; pushing to `arr2` updates the shared array.
 > - Numbers copy by value; changing `num2` leaves `num1` untouched.
-
+> 
 ---
 
 ### Exercise 2: Primitive Copy by Value Trace
@@ -217,7 +217,7 @@ console.log("num1 value:", num1);
 > ```
 >
 > **Explanation:** Primitives are assigned by value, creating independent value copies.
-
+> 
 ---
 
 ### Exercise 3: Object Mutation via Reference
@@ -237,8 +237,8 @@ console.log("num1 value:", num1);
 > ```
 >
 > **Explanation:** Object assignments copy reference pointers, allowing mutations to reflect across all references.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

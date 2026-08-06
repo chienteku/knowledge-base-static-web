@@ -202,7 +202,7 @@ unsafe impl<T: Send> Send for RawBuffer<T> {}
 > 1. Raw pointers (`*mut T`) do not implement `Send` or `Sync`, causing the compiler to automatically revoke `Send`/`Sync` from `ThreadSafeRawBuffer`.
 > 2. `unsafe impl<T: Send> Send` and `unsafe impl<T: Sync> Sync` manually restore auto traits while preserving generic bounds on `T`.
 > 3. Atomic `fetch_add` ensures lock-free unique slot reservation across concurrent threads.
-
+> 
 ---
 
 ### Exercise 2: Thread-Bound Resource Confinement via `PhantomData` Auto-Trait Opt-Out (`!Send` / `!Sync`)
@@ -289,7 +289,7 @@ unsafe impl<T: Send> Send for RawBuffer<T> {}
 > 1. `PhantomData<*const ()>` adds zero runtime memory overhead while stripping `Send` and `Sync` auto traits at compile time.
 > 2. Eliminates accidental moves or shared access across thread boundaries.
 > 3. Enforces thread-local execution safety for non-thread-safe interior mutability types (`RefCell`).
-
+> 
 ---
 
 ### Exercise 3: Multi-Threaded Task Pipeline with Auto Trait (`Send`, `Sync`, `UnwindSafe`) Panic Resilience
@@ -372,7 +372,7 @@ unsafe impl<T: Send> Send for RawBuffer<T> {}
 > 1. `ConcurrentPipeline` derives `Send` and `Sync` automatically because all inner fields satisfy auto traits.
 > 2. `AssertUnwindSafe` explicitly satisfies `UnwindSafe` bounds for `catch_unwind`.
 > 3. Task panics are safely caught and tracked atomically without crashing worker threads.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -150,7 +150,7 @@ fn main() {
 >
 > 1. `#[cfg(target_os = "...")]` directs `rustc` to compile only the matching function body for the active target platform.
 > 2. Avoids runtime `if/else` checks and reduces binary size.
-
+> 
 ---
 
 ### Exercise 2: Expected Panic Unit Test Verification (`#[should_panic]`)
@@ -193,7 +193,7 @@ fn main() {
 >
 > 1. `#[test]` registers functions with Cargo's test runner.
 > 2. `#[should_panic(expected = "...")]` asserts that a function panics with the exact expected error message.
-
+> 
 ---
 
 ### Exercise 3: Derived Struct Trait Attributes
@@ -235,7 +235,7 @@ fn main() {
 >
 > 1. `#[derive(...)]` instructs macro expanders to auto-generate implementation blocks for `Debug`, `Clone`, and `PartialEq`.
 > 2. Eliminates repetitive manual boilerplate code.
-
+> 
 ---
 
 ## 5. Related Terms

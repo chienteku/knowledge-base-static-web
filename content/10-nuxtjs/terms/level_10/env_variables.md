@@ -138,7 +138,7 @@ Define environment variables in `.env` and map them into `nuxt.config.ts`.
 > DATABASE_URL="postgresql://user:pass@localhost:5432/mydb"
 > NUXT_PUBLIC_SITE_URL="https://example.com"
 > ```
-
+> 
 > ```typescript
 > // nuxt.config.ts
 > export default defineNuxtConfig({
@@ -150,13 +150,13 @@ Define environment variables in `.env` and map them into `nuxt.config.ts`.
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Nuxt 3 automatically loads `.env` key-value pairs during development and build runtime.
 > 2. `NUXT_PUBLIC_SITE_URL` automatically populates `runtimeConfig.public.siteUrl`.
 > 3. Standard environment variable loading workflow.
-
+> 
 ---
 
 ### Exercise 2: Accessing Environment Variables Safely on Server vs Client
@@ -179,7 +179,7 @@ Demonstrate accessing public variables on client and private variables on server
 > const siteUrl = config.public.siteUrl;
 > </script>
 > ```
-
+> 
 > ```typescript
 > // Server Endpoint (server/api/db.ts)
 > export default defineEventHandler((event) => {
@@ -188,13 +188,13 @@ Demonstrate accessing public variables on client and private variables on server
 >   return { dbUrl: config.databaseUrl };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `config.public` properties are embedded into client JavaScript bundles.
 > 2. Top-level `runtimeConfig` properties are stripped from client bundles, preventing credential leaks.
 > 3. Secure environment variable access model.
-
+> 
 ---
 
 ### Exercise 3: Validating Required Environment Variables at Startup
@@ -214,26 +214,22 @@ Throw an immediate build error if critical environment variables are missing dur
 > if (process.env.NODE_ENV === "production" && !process.env.DATABASE_URL) {
 >   throw new Error("FATAL: DATABASE_URL environment variable is missing!");
 > }
-
-export default defineNuxtConfig({
-  runtimeConfig: {
-    databaseUrl: process.env.DATABASE_URL
-  }
-});
-```
-
+> 
+> export default defineNuxtConfig({
+>   runtimeConfig: {
+>     databaseUrl: process.env.DATABASE_URL
+>   }
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Validating environment variables at application startup prevents runtime 500 errors later.
 > 2. Halts deployment pipelines immediately if required secrets are absent.
 > 3. Production deployment sanity check.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Runtime Config (`useRuntimeConfig`)](../level_06/runtime_config.md) — The feature that consumes the `.env` file.

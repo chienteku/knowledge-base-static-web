@@ -122,7 +122,7 @@ const posts = await Post.findAll({ include: 'author' }); // Eager load in single
 > Mongoose is an ODM built exclusively for MongoDB (NoSQL). Prisma is an ORM built for Relational SQL databases like PostgreSQL.
 > ```
 > - Which database does Mongoose talk to?
-
+> 
 ---
 
 
@@ -143,7 +143,7 @@ const posts = await Post.findAll({ include: 'author' }); // Eager load in single
 > ```
 >
 > **Explanation:** ORMs map SQL tables/rows to objects; ODMs map NoSQL collections/documents to objects.
-
+> 
 ---
 
 ### Exercise 3: Preventing N+1 Queries in Prisma
@@ -162,7 +162,7 @@ const posts = await Post.findAll({ include: 'author' }); // Eager load in single
 > ```
 >
 > **Explanation:** `include` performs eager relation loading in a single optimized query.
-
+> 
 ## 7. Related Terms
 - [SQL Injection](sql_injection.md) — ORMs automatically protect you against this devastating attack!
 - [Migrations](migrations.md) — ORMs also manage the history of your database schema.

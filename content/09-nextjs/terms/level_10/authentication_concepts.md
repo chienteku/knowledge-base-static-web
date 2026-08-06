@@ -124,24 +124,24 @@ Create `middleware.ts` to redirect unauthenticated requests to `/login` when acc
 > // middleware.ts
 > import { NextResponse } from "next/server";
 > import type { NextRequest } from "next/server";
-
-export function middleware(req: NextRequest) {
-  const token = req.cookies.get("session_token")?.value;
-
-  if (!token && req.nextUrl.pathname.startsWith("/dashboard")) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
-
-  return NextResponse.next();
-}
-```
-
+> 
+> export function middleware(req: NextRequest) {
+>   const token = req.cookies.get("session_token")?.value;
+> 
+>   if (!token && req.nextUrl.pathname.startsWith("/dashboard")) {
+>     return NextResponse.redirect(new URL("/login", req.url));
+>   }
+> 
+>   return NextResponse.next();
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `middleware.ts` executes on every request before routing logic or page rendering begins.
 > 2. Inspecting session cookies in middleware prevents unauthorized users from downloading dynamic route code chunks.
 > 3. Centralized authentication guard pattern.
-
+> 
 ---
 
 ### Exercise 2: Validating Auth State in Server Components
@@ -160,26 +160,26 @@ Verify user session state inside a Server Component and redirect if session toke
 > import { cookies } from "next/headers";
 > import { redirect } from "next/navigation";
 > import { verifySession } from "@/lib/auth";
-
-export default async function ProtectedPage() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("session_token")?.value;
-  const user = token ? await verifySession(token) : null;
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  return <h1>Welcome back, {user.name}</h1>;
-}
-```
-
+> 
+> export default async function ProtectedPage() {
+>   const cookieStore = await cookies();
+>   const token = cookieStore.get("session_token")?.value;
+>   const user = token ? await verifySession(token) : null;
+> 
+>   if (!user) {
+>     redirect("/login");
+>   }
+> 
+>   return <h1>Welcome back, {user.name}</h1>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Server Components inspect session cookies and database user roles on the Node.js server.
 > 2. `redirect()` halts execution immediately if session validation fails.
 > 3. Double-layer defense in depth security strategy.
-
+> 
 ---
 
 ### Exercise 3: Handling Auth Tokens in Server Actions
@@ -196,35 +196,31 @@ Verify user authentication and authorization roles before executing a database m
 >
 > ```typescript
 > "use server";
-
-import { cookies } from "next/headers";
-import { verifySession } from "@/lib/auth";
-
-export async function deletePostAction(postId: string) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("session_token")?.value;
-  const user = token ? await verifySession(token) : null;
-
-  if (!user || user.role !== "ADMIN") {
-    throw new Error("Unauthorized: Admin privileges required.");
-  }
-
-  // Delete post from database...
-}
-```
-
+> 
+> import { cookies } from "next/headers";
+> import { verifySession } from "@/lib/auth";
+> 
+> export async function deletePostAction(postId: string) {
+>   const cookieStore = await cookies();
+>   const token = cookieStore.get("session_token")?.value;
+>   const user = token ? await verifySession(token) : null;
+> 
+>   if (!user || user.role !== "ADMIN") {
+>     throw new Error("Unauthorized: Admin privileges required.");
+>   }
+> 
+>   // Delete post from database...
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Server Actions are public HTTP endpoints; ALWAYS validate authentication and authorization roles inside action bodies.
 > 2. Never trust client-sent parameters without server-side validation.
 > 3. Essential secure action mutation pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`cookies()` and `headers()` from `next/headers`](../level_05/cookies_headers.md) — The server-side cookies reader API.

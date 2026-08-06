@@ -170,7 +170,7 @@ Use #[derive(Debug)] for structural metadata!
 >
 > 1. `Display` implementation formats `Currency` cleanly as `$49.99` for end users.
 > 2. Derived `Debug` shows internal struct layout `Currency { cents: 4999 }` for developers.
-
+> 
 ---
 
 ### Exercise 2: Pretty-Printed Hex Byte Array Debug Formatter
@@ -215,7 +215,7 @@ Use #[derive(Debug)] for structural metadata!
 > #### Technical Explanation
 >
 > 1. Custom `Display` formats MAC address bytes into upper-case colon-separated hex representation.
-
+> 
 ---
 
 ### Exercise 3: Custom Struct Pretty Debug Formatter `f.debug_struct()`
@@ -263,7 +263,7 @@ Use #[derive(Debug)] for structural metadata!
 > #### Technical Explanation
 >
 > 1. `f.debug_struct()` allows building custom developer debug outputs that redact sensitive fields.
-
+> 
 ---
 
 ## 5. Related Terms

@@ -185,7 +185,7 @@ p { font-size: clamp(1rem, 2vw, 1.5rem); } /* Clamped viewport typography */
 > This ensures both colored boxes stretch perfectly from the top to the bottom of the browser window.
 > ```
 > - You need 100% of the physical screen height.
-
+> 
 ---
 
 
@@ -214,7 +214,7 @@ p { font-size: clamp(1rem, 2vw, 1.5rem); } /* Clamped viewport typography */
 > ```
 >
 > **Explanation:** Modern CSS viewport units handle mobile browser URL bar transitions.
-
+> 
 ---
 
 ### Exercise 3: Full Screen Hero Section Pattern
@@ -233,7 +233,7 @@ p { font-size: clamp(1rem, 2vw, 1.5rem); } /* Clamped viewport typography */
 > ```
 >
 > **Explanation:** `100dvh` adapts dynamically to visible viewport space on mobile browsers.
-
+> 
 ## 7. Related Terms
 - [`%` (Percentages)](percentages.md) — The parent-relative sizing alternative.
 - [`rem` vs `em`](rem_em.md) — Sizing relative to fonts rather than the viewport.

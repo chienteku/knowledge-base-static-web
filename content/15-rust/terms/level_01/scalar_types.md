@@ -278,7 +278,7 @@ You are building an embedded telemetry ingestion node that receives 8-byte frame
 > - **Ownership & Copy Semantics**: Scalar types (`u8`, `u16`, `i16`, `f64`, `bool`) implement `Copy`. Extracting values from array references creates direct bit-copy copies with zero allocation overhead.
 > - **Concurrency & Thread Safety**: Primitive scalar fields implement both `Send` and `Sync`, ensuring that parsed `TelemetryFrame` structures can be transferred across worker thread channels (`std::sync::mpsc`) without synchronization locks.
 >
-
+> 
 ---
 
 ### Exercise 2: Fixed-Point Currency Calculation Engine
@@ -396,7 +396,7 @@ Standard floating-point numbers (`f32`/`f64`) introduce inexact binary represent
 > - **Memory Footprint & Value Semantics**: `FixedMoney` wraps a single 64-bit integer, deriving `Copy` and `Clone`. Function parameters are passed directly in CPU registers without memory allocation or heap pointers.
 > - **Edge Case Handling**: Formats zero, micro-unit fractional padding (e.g. `500_000` micro-units $\to$ `"$0.500000"`), negative dollar balances (`"-$0.500000"`), and boundary conditions up to `i64::MAX`.
 >
-
+> 
 ---
 
 ### Exercise 3: Low-Level UTF-8 Byte Stream Reader & `char` Validation
@@ -543,7 +543,7 @@ Rust's `char` scalar type is a 4-byte (32-bit) Unicode Scalar Value. When text i
 > - **Security & Overlong Encoding Rejection**: Non-minimal UTF-8 encodings (overlong sequences) present serious security vulnerabilities (e.g. escaping directory paths via `0xC0 0xAF` instead of `0x2F`). Validating minimum code point thresholds per sequence length guarantees canonical encoding.
 > - **Zero-Allocation Lifetime & References**: Operating over `&[u8]` with a mutable offset pointer `&mut usize` allows continuous stream decoding across borrowed buffer slices without allocating heap memory or copying strings.
 >
-
+> 
 ---
 
 ## 6. Related Terms

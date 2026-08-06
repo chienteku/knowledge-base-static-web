@@ -176,7 +176,7 @@ Query collection `orders` for documents where `amountPaid` is greater than `tota
 > 1. `$expr` enables aggregation expressions and field-to-field comparisons within standard `find()` query filters.
 > 2. Field names prefixed with `$` (e.g. `"$amountPaid"`) reference document values dynamically.
 > 3. Solves queries that compare two fields on the same document.
-
+> 
 ---
 
 ### Exercise 2: Modulo Arithmetic Matching with `$mod`
@@ -202,7 +202,7 @@ Query collection `inventory` for documents where `quantity` is an even number (`
 > 1. `$mod: [divisor, remainder]` performs modulo arithmetic on numeric fields.
 > 2. Matches documents where `field % divisor == remainder`.
 > 3. Useful for partition key checks and odd/even filtering.
-
+> 
 ---
 
 ### Exercise 3: Pattern Matching with `$regex`
@@ -228,7 +228,7 @@ Find all users whose `email` ends with `"@example.com"`.
 > 1. `$regex` evaluates regular expression pattern matching on string fields.
 > 2. Anchored patterns (e.g. `^prefix`) can utilize standard indexes.
 > 3. Provides flexible text matching capabilities.
-
+> 
 ---
 
 

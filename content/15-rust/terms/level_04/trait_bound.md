@@ -293,7 +293,7 @@ You are designing an enterprise telemetry collection system for cloud infrastruc
 > 2. **Monomorphization and Static Dispatch**: At compile time, Rust generates specialized code for `TelemetryProcessor<CpuMetric>`. Function calls such as `item.value()` and `item.fmt()` are resolved statically with zero virtual table (vtable) pointer indirection overhead, achieving C-level execution speed.
 > 3. **Float Partial Ordering Invariants**: Floating-point numbers (`f64`) do not implement total ordering (`Ord`) because `f64::NAN != f64::NAN`. Therefore, `PartialOrd` is mandated for comparisons.
 > 4. **Ownership and Lifetime Boundaries**: The method `filter_exceeding(&self)` borrows `self` immutably. To return a new `Vec<T>`, elements are duplicated using `.cloned()`, which relies directly on the `Clone` trait bound.
-
+> 
 ---
 
 ### Exercise 2: Key-Value In-Memory Cache Buffer with Sync Reconciliation
@@ -422,7 +422,7 @@ You are building an in-memory cache system for low-latency web services. The cac
 >    - `Hash + Eq`: Required by `std::collections::HashMap` to perform key hashing and collision resolution.
 >    - `PartialEq` on `V`: Permits value equality checks (`*existing != v`) during sync operations to skip unnecessary overwrites when incoming data matches current cache state.
 > 3. **Interior State Mutability and Borrow Checker**: The `get(&mut self, ...)` method requires exclusive mutable borrow of `self` because it updates internal metrics counters (`hit_count` / `miss_count`) while returning an immutable reference `Option<&V>` tied to the life of `self`.
-
+> 
 ---
 
 ### Exercise 3: Trait-Bound Plugin Transformation Pipeline
@@ -568,7 +568,7 @@ You are implementing an enterprise payload validation and transformation engine.
 > 1. **Generic Trait Bound Coupling (`P: Plugin<T> + Display`)**: The pipeline function requires homogeneous plugin arrays `[P]` where each element satisfies both `Plugin<T>` (behavioral processing contract) and `Display` (logging capability).
 > 2. **Short-Circuit Error Propagation (`?` Operator)**: In `execute_pipeline`, the `?` operator unwraps `Ok(())` or immediately returns early with `Err(String)` if a plugin processing step fails, preventing unverified or corrupt payloads from proceeding to downstream execution stages.
 > 3. **Static Dispatch and Slices**: Passing `&mut [P]` enables monomorphized processing over slices of identical plugin types without allocating trait objects on the heap (`Box<dyn Plugin<T>>`).
-
+> 
 ---
 
 ## 6. Related Terms

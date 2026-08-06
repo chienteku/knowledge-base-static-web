@@ -166,7 +166,7 @@ Will they both fire, or will the second one overwrite the first?
 > "Second!"
 > ```
 > - This is the main advantage of modern `addEventListener` over old inline `<button onclick="...">` attributes!
-
+> 
 ---
 
 ### Exercise 2: Passive Event Listeners for Touch Performance
@@ -183,7 +183,7 @@ Will they both fire, or will the second one overwrite the first?
 > ```
 >
 > **Explanation:** `{ passive: true }` informs browser engines that listeners will not call `preventDefault()`, enabling instant smooth scrolling.
-
+> 
 ---
 
 ### Exercise 3: Removing Named Event Listeners
@@ -201,8 +201,8 @@ Will they both fire, or will the second one overwrite the first?
 > ```
 >
 > **Explanation:** `removeEventListener` requires passing exact named function references.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

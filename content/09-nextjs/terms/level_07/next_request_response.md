@@ -141,20 +141,20 @@ Rewrite request URL `/old-path` to `/new-path` without changing the visible brow
 > // middleware.ts
 > import { NextResponse } from "next/server";
 > import type { NextRequest } from "next/server";
-
-export function middleware(req: NextRequest) {
-  if (req.nextUrl.pathname === "/old-docs") {
-    return NextResponse.rewrite(new URL("/docs/v2", req.url));
-  }
-}
-```
-
+> 
+> export function middleware(req: NextRequest) {
+>   if (req.nextUrl.pathname === "/old-docs") {
+>     return NextResponse.rewrite(new URL("/docs/v2", req.url));
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `NextResponse.rewrite()` changes the destination target page while preserving the original URL in the browser bar.
 > 2. Distinct from `NextResponse.redirect()` which changes the visible browser URL.
 > 3. Useful for A/B testing, feature flags, and multi-tenant domain routing.
-
+> 
 ---
 
 ### Exercise 2: Reading and Writing Cookies with `NextRequest` & `NextResponse`
@@ -172,26 +172,26 @@ Read request cookie `token` and set response cookie `visited=true` in Middleware
 > ```typescript
 > import { NextResponse } from "next/server";
 > import type { NextRequest } from "next/server";
-
-export function middleware(req: NextRequest) {
-  const token = req.cookies.get("session_token")?.value;
-  const res = NextResponse.next();
-
-  res.cookies.set("visited", "true", {
-    path: "/",
-    httpOnly: true
-  });
-
-  return res;
-}
-```
-
+> 
+> export function middleware(req: NextRequest) {
+>   const token = req.cookies.get("session_token")?.value;
+>   const res = NextResponse.next();
+> 
+>   res.cookies.set("visited", "true", {
+>     path: "/",
+>     httpOnly: true
+>   });
+> 
+>   return res;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `NextRequest.cookies` reads incoming request cookie headers.
 > 2. `NextResponse.cookies.set()` appends `Set-Cookie` headers to outgoing responses.
 > 3. Simplifies HTTP cookie management in server interceptors.
-
+> 
 ---
 
 ### Exercise 3: Accessing Parsed URL Properties with `req.nextUrl`
@@ -208,30 +208,26 @@ Inspect query parameters `req.nextUrl.searchParams` and hostname `req.nextUrl.ho
 >
 > ```typescript
 > import { NextRequest, NextResponse } from "next/server";
-
-export function middleware(req: NextRequest) {
-  const pathname = req.nextUrl.pathname;
-  const searchParam = req.nextUrl.searchParams.get("ref");
-  const host = req.nextUrl.hostname;
-
-  console.log(`[Middleware Log] ${host}${pathname}?ref=${searchParam}`);
-
-  return NextResponse.next();
-}
-```
-
+> 
+> export function middleware(req: NextRequest) {
+>   const pathname = req.nextUrl.pathname;
+>   const searchParam = req.nextUrl.searchParams.get("ref");
+>   const host = req.nextUrl.hostname;
+> 
+>   console.log(`[Middleware Log] ${host}${pathname}?ref=${searchParam}`);
+> 
+>   return NextResponse.next();
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `NextRequest.nextUrl` is an extended `URL` object with pre-parsed query string parameters and path segments.
 > 2. Avoids manual string splitting or regex parsing of `req.url`.
 > 3. Idiomatic Next.js URL inspection object.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Route Handlers (`route.ts`)](route_handlers.md) — Where these objects are used.

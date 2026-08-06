@@ -144,26 +144,26 @@ Create `app/not-found.tsx` to display a custom styled 404 page for missing URL r
 > ```tsx
 > // app/not-found.tsx
 > import Link from "next/link";
-
-export default function NotFound() {
-  return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-6 text-center">
-      <h1 className="text-4xl font-bold text-red-600">404 - Page Not Found</h1>
-      <p className="mt-2 text-gray-600">The requested resource could not be found.</p>
-      <Link href="/" className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">
-        Return Home
-      </Link>
-    </main>
-  );
-}
-```
-
+> 
+> export default function NotFound() {
+>   return (
+>     <main className="flex flex-col items-center justify-center min-h-screen p-6 text-center">
+>       <h1 className="text-4xl font-bold text-red-600">404 - Page Not Found</h1>
+>       <p className="mt-2 text-gray-600">The requested resource could not be found.</p>
+>       <Link href="/" className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">
+>         Return Home
+>       </Link>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `not-found.tsx` automatically renders when an un-matched URL path is requested or `notFound()` is invoked.
 > 2. Replaces browser default 404 text pages with styled React UI components.
 > 3. Server-rendered for optimal search engine indexing.
-
+> 
 ---
 
 ### Exercise 2: Programmatically Triggering 404 with `notFound()`
@@ -181,35 +181,35 @@ Invoke `notFound()` inside a dynamic product page when database lookup fails.
 > ```tsx
 > // app/products/[id]/page.tsx
 > import { notFound } from "next/navigation";
-
-async function getProduct(id: string) {
-  const res = await fetch(`https://api.example.com/products/${id}`);
-  if (!res.ok) return null;
-  return res.json();
-}
-
-export default async function ProductPage({
-  params
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const product = await getProduct(id);
-
-  if (!product) {
-    notFound(); // Immediately halts execution and renders not-found.tsx
-  }
-
-  return <h1>Product: {product.title}</h1>;
-}
-```
-
+> 
+> async function getProduct(id: string) {
+>   const res = await fetch(`https://api.example.com/products/${id}`);
+>   if (!res.ok) return null;
+>   return res.json();
+> }
+> 
+> export default async function ProductPage({
+>   params
+> }: {
+>   params: Promise<{ id: string }>;
+> }) {
+>   const { id } = await params;
+>   const product = await getProduct(id);
+> 
+>   if (!product) {
+>     notFound(); // Immediately halts execution and renders not-found.tsx
+>   }
+> 
+>   return <h1>Product: {product.title}</h1>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `notFound()` throws a specialized error that Next.js catches to render `not-found.tsx`.
 > 2. Returns an HTTP 404 status code header to the browser and web crawlers.
 > 3. Standard data fetching guard pattern.
-
+> 
 ---
 
 ### Exercise 3: Scoping Segment-Specific `not-found.tsx`
@@ -235,19 +235,15 @@ Create a segment-specific `app/docs/not-found.tsx` for documentation 404 errors.
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `not-found.tsx` can be nested inside sub-folders (`app/docs/`) to render context-aware 404 UI.
 > 2. Preserves the outer `app/docs/layout.tsx` shell while displaying the 404 notice.
 > 3. Contextual error handling design.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`error.tsx` & `global-error.tsx`](../level_02/error.md) — Used for unexpected runtime crashes, not missing data.

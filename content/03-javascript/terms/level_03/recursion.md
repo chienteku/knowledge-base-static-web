@@ -219,7 +219,7 @@ console.log(factorial(5));
 > ```
 > - The base case check is `if (n === 1) { return 1; }`.
 > - The recursive step returns `n * factorial(n - 1)`.
-
+> 
 ---
 
 ### Exercise 2: Recursive Countdown with Base Case
@@ -243,7 +243,7 @@ console.log(factorial(5));
 > ```
 >
 > **Explanation:** Base cases (`n <= 0`) terminate call stack unwinding.
-
+> 
 ---
 
 ### Exercise 3: Recursive Tree Traversal
@@ -265,8 +265,8 @@ console.log(factorial(5));
 > ```
 >
 > **Explanation:** Recursion traverses nested tree/array hierarchies naturally.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

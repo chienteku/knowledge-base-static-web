@@ -151,20 +151,20 @@ Create a dynamic route `pages/posts/[slug].vue` and render parameter `slug` usin
 > const route = useRoute();
 > const slug = computed(() => route.params.slug as string);
 > </script>
-
-<template>
-  <article>
-    <h1>Article Slug: {{ slug }}</h1>
-  </article>
-</template>
-```
-
+> 
+> <template>
+>   <article>
+>     <h1>Article Slug: {{ slug }}</h1>
+>   </article>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Bracket filename notation `[slug].vue` generates a named dynamic URL route parameter `slug`.
 > 2. Matches paths like `/posts/hello-world` or `/posts/nuxt-3-guide`.
 > 3. `useRoute().params.slug` accesses current path parameter values reactively.
-
+> 
 ---
 
 ### Exercise 2: Implementing Catch-All Routes for CMS Pages
@@ -190,20 +190,20 @@ Create a catch-all route `pages/[...slug].vue` to render dynamic multi-segment C
 >   return Array.isArray(segments) ? segments.join("/") : segments;
 > });
 > </script>
-
-<template>
-  <main>
-    <h1>CMS Page Path: /{{ fullPath }}</h1>
-  </main>
-</template>
-```
-
+> 
+> <template>
+>   <main>
+>     <h1>CMS Page Path: /{{ fullPath }}</h1>
+>   </main>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Ellipsis syntax `[...slug].vue` generates a catch-all route matching single or multi-segment URL paths.
 > 2. `route.params.slug` parses path segments as a string array (`['docs', 'guide']`).
 > 3. Ideal for dynamic documentation portals and CMS content hierarchies.
-
+> 
 ---
 
 ### Exercise 3: Optional Catch-All Routes for Default Fallbacks
@@ -224,27 +224,23 @@ Create an optional catch-all route `pages/[[...slug]].vue` matching `/` as well 
 > const route = useRoute();
 > const isHome = computed(() => !route.params.slug || route.params.slug.length === 0);
 > </script>
-
-<template>
-  <div>
-    <h1 v-if="isHome">Root Homepage Content</h1>
-    <h1 v-else>Nested Path: {{ route.params.slug }}</h1>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <h1 v-if="isHome">Root Homepage Content</h1>
+>     <h1 v-else>Nested Path: {{ route.params.slug }}</h1>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Double bracket ellipsis `[[...slug]].vue` makes the catch-all parameter optional.
 > 2. Matches `/` (where `slug` is undefined) and `/any/nested/path`.
 > 3. Flexible route structure for single-file CMS routing.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useFetch`](../level_05/use_fetch.md) — The standard way to fetch data based on the dynamic route parameter.

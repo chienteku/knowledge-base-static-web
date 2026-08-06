@@ -145,13 +145,13 @@ Create `app/dashboard/template.tsx` to force component re-instantiation and stat
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Unlike `layout.tsx`, `template.tsx` creates a NEW component instance on every route transition.
 > 2. Resets local component state and triggers enter/exit CSS animations on navigation.
 > 3. Useful when route changes require clean state resets or analytics page view tracking.
-
+> 
 ---
 
 ### Exercise 2: Triggering Route Transition Animations in Templates
@@ -168,28 +168,28 @@ Use Framer Motion or CSS animation libraries inside `template.tsx` to animate pa
 >
 > ```tsx
 > "use client";
-
-import { motion } from "framer-motion";
-
-export default function AnimatedTemplate({ children }: { children: React.ReactNode }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+> 
+> import { motion } from "framer-motion";
+> 
+> export default function AnimatedTemplate({ children }: { children: React.ReactNode }) {
+>   return (
+>     <motion.div
+>       initial={{ opacity: 0, y: 10 }}
+>       animate={{ opacity: 1, y: 0 }}
+>       transition={{ duration: 0.3 }}
     >
-      {children}
-    </motion.div>
-  );
-}
-```
-
+>       {children}
+>     </motion.div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Because `layout.tsx` stays mounted, Framer Motion exit/enter animations will NOT fire on sub-route changes inside layouts.
 > 2. `template.tsx` re-mounts on every navigation, allowing page transition animations to execute reliably.
 > 3. Idiomatic pattern for route transition animations in App Router.
-
+> 
 ---
 
 ### Exercise 3: Choosing Between `layout.tsx` vs `template.tsx`
@@ -209,19 +209,15 @@ Formulate an architectural selection decision matrix explaining when to use `lay
 > - layout.tsx: Persistent shell. Preserves state, skips re-rendering common UI, does NOT re-trigger useEffect on sub-navigation. Use for sidebars, navbars, persistent forms.
 > - template.tsx: Re-mounting shell. Resets state, re-executes useEffect hooks, re-triggers CSS/Framer animations. Use for page view analytics, enter animations, modal resets.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `layout.tsx` is the default choice for performance and state persistence.
 > 2. `template.tsx` is explicitly chosen when state reset or re-animation is required.
 > 3. Core App Router layout architecture choice.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`layout.tsx`](layout.md) — The state-preserving default wrapper.

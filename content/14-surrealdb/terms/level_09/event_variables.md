@@ -171,7 +171,7 @@ In an event trigger on table `product`, check if field `price` has changed by co
 > 1. `$before` holds the record document state prior to mutation; `$after` holds the post-mutation state.
 > 2. Comparing `$before` and `$after` identifies specific field changes during update operations.
 > 3. Enables granular state change auditing.
-
+> 
 ---
 
 ### Exercise 2: Branching Trigger Logic by `$event` Type
@@ -197,7 +197,7 @@ In a user event trigger, perform different actions depending on whether `$event`
 > 1. `$event` contains a string indicating the mutation action type (`"CREATE"`, `"UPDATE"`, `"DELETE"`).
 > 2. Allows trigger conditions to target specific mutation types.
 > 3. Provides precise trigger execution control.
-
+> 
 ---
 
 ### Exercise 3: Accessing `$value` inside Field Assertions
@@ -223,7 +223,7 @@ Inspect `$value` inside a field `ASSERT` expression to enforce that an account `
 > 1. `$value` represents the candidate value being written to the target field.
 > 2. Evaluates field assertion expressions before committing transactions.
 > 3. Aborts write operations violating assertion rules.
-
+> 
 ---
 
 

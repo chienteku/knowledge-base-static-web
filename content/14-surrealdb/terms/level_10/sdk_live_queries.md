@@ -179,7 +179,7 @@ Subscribe to real-time creation and update events on table `order` using `db.liv
 > 1. `db.live(table, callback)` registers a real-time WebSocket live query subscription.
 > 2. `action` indicates event type (`"CREATE"`, `"UPDATE"`, `"DELETE"`).
 > 3. `result` holds the mutated record document payload.
-
+> 
 ---
 
 ### Exercise 2: Unsubscribing Live Queries with `db.kill()`
@@ -206,7 +206,7 @@ Unsubscribe from a live query subscription when a UI component unmounts using `d
 > 1. `db.kill(uuid)` sends a `KILL` statement to terminate the server-side live query listener.
 > 2. Frees WebSocket bandwidth and server memory.
 > 3. Prevents memory leaks in React/Vue component lifecycle unmount steps.
-
+> 
 ---
 
 ### Exercise 3: Filtered Live Query Subscriptions via SDK
@@ -234,7 +234,7 @@ Subscribe ONLY to high-priority order events using a filtered live query subquer
 > 1. Filters live query events on the database server before streaming.
 > 2. Reduces client event processing overhead.
 > 3. Powers targeted real-time UI notifications.
-
+> 
 ---
 
 

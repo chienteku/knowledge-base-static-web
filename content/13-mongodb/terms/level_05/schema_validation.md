@@ -177,7 +177,7 @@ Add a `$jsonSchema` validation rule to collection `users` requiring fields `user
 > 1. `$jsonSchema` enforces document structural invariants directly at the database engine tier.
 > 2. `required` array specifies mandatory field keys.
 > 3. `bsonType` and `minimum` enforce data types and numeric range boundaries on all write operations.
-
+> 
 ---
 
 ### Exercise 2: Updating Validation Rules with `collMod`
@@ -214,7 +214,7 @@ Modify existing collection `users` validation rules to require a new field `stat
 > 1. `collMod` updates collection Schema Validation rules dynamically without dropping data.
 > 2. `enum` restricts field values to a specified list of allowed string values.
 > 3. `validationAction: "error"` rejects invalid write attempts immediately.
-
+> 
 ---
 
 ### Exercise 3: Handling Validation Failures in Write Commands
@@ -246,7 +246,7 @@ Demonstrate write rejection error output when inserting a document violating `$j
 > 1. Writes violating `$jsonSchema` rules throw `DocumentValidationFailure` (Error Code 121).
 > 2. Prevents malformed or low-quality data from entering the database.
 > 3. Complements application-tier Mongoose/Zod validation models.
-
+> 
 ---
 
 

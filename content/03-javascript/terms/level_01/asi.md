@@ -175,7 +175,7 @@ let y = x
 > ```
 > - The parser will see `let x = 5` and insert a semicolon because the next line `let` starts a new declaration statement.
 > - The parser will look at `let y = x` and the next line starting with `(`. Since parentheses denote function invocation, it attempts to execute `x(...)` rather than inserting a semicolon.
-
+> 
 ---
 
 ### Exercise 2: Fixing Broken Return ASI Bug
@@ -197,7 +197,7 @@ let y = x
 > ```
 >
 > **Explanation:** Placing the opening brace `{` on the same line as `return` prevents ASI from inserting a semicolon after `return`.
-
+> 
 ---
 
 ### Exercise 3: IIFE Paren Syntax ASI Pitfall
@@ -218,7 +218,7 @@ let y = x
 > ```
 >
 > **Explanation:** Statements beginning with parentheses `(` try to call the preceding expression as a function unless separated by semicolons.
-
+> 
 ---
 
 ## 7. Related Terms

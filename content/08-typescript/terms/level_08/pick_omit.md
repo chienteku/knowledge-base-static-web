@@ -140,18 +140,18 @@ Create a `UserPreview` type containing only `id` and `name` from a full `User` e
 >   hashedPassword: string;
 >   createdAt: Date;
 > }
-
-type UserPreview = Pick<User, "id" | "name">;
-
-const preview: UserPreview = { id: "u1", name: "Alice" };
-```
-
+> 
+> type UserPreview = Pick<User, "id" | "name">;
+> 
+> const preview: UserPreview = { id: "u1", name: "Alice" };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Pick<T, K>` constructs a type by selecting specific keys `K` from `T`.
 > 2. Keeps `UserPreview` synchronized with `User` if `name` or `id` types change in the future.
 > 3. Ideal for modeling lightweight UI projection types.
-
+> 
 ---
 
 ### Exercise 2: Omitting Sensitive Fields with `Omit<T, K>`
@@ -173,18 +173,18 @@ Create a public user profile type by stripping sensitive fields (`hashedPassword
 >   hashedPassword: string;
 >   ssn: string;
 > }
-
-type PublicUser = Omit<UserAccount, "hashedPassword" | "ssn">;
-
-const publicInfo: PublicUser = { id: "u100", email: "user@example.com" };
-```
-
+> 
+> type PublicUser = Omit<UserAccount, "hashedPassword" | "ssn">;
+> 
+> const publicInfo: PublicUser = { id: "u100", email: "user@example.com" };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Omit<T, K>` constructs a type by picking all properties from `T` and then removing keys matching `K`.
 > 2. Implemented internally as `Pick<T, Exclude<keyof T, K>>`.
 > 3. Prevents exposing sensitive data fields in API response types.
-
+> 
 ---
 
 ### Exercise 3: Comparative Decision Matrix: `Pick` vs `Omit`
@@ -205,13 +205,13 @@ Formulate an architectural selection matrix comparing `Pick<T, K>` against `Omit
 > - Omit<T, K>: Explicit blacklist. Excluding a small subset of unwanted keys. DANGER: New properties added to T later are AUTOMATICALLY INCLUDED in Omit!
 > Rule: Prefer Pick for API DTOs and public boundaries to avoid accidentally leaking newly added internal fields.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `Pick` acts as a whitelist, requiring explicit opting-in for new fields.
 > 2. `Omit` acts as a blacklist, automatically inheriting un-listed future fields.
 > 3. Critical security and maintainability distinction.
-
+> 
 ---
 
 

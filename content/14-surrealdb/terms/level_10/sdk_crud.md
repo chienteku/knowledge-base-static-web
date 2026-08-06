@@ -169,21 +169,21 @@ Use the JavaScript SDK to create a new user record with `db.create()` and fetch 
 >   id: string;
 >   name: string;
 > }
-
-// Create record
-const alice = await db.create<User>("user:alice", { name: "Alice Smith" });
-
-// Select record by primary key
-const record = await db.select<User>("user:alice");
-console.log("Fetched user:", record?.name);
-```
-
+> 
+> // Create record
+> const alice = await db.create<User>("user:alice", { name: "Alice Smith" });
+> 
+> // Select record by primary key
+> const record = await db.select<User>("user:alice");
+> console.log("Fetched user:", record?.name);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `db.create(id, content)` inserts a new record and returns the created document object.
 > 2. `db.select(id)` fetches a single record by ID in $O(1)$ constant time.
 > 3. Returns typed TypeScript objects.
-
+> 
 ---
 
 ### Exercise 2: Partial Document Merging with `db.merge()`
@@ -209,7 +209,7 @@ Update user `user:alice`'s email address using `db.merge()` without erasing exis
 > 1. `db.merge(id, patch)` performs a non-destructive shallow merge on target records.
 > 2. Updates specified keys while preserving unmentioned record properties.
 > 3. Prevents full-document overwrites.
-
+> 
 ---
 
 ### Exercise 3: Deleting Records with `db.delete()`
@@ -234,7 +234,7 @@ Delete record `user:alice` using `db.delete()`.
 > 1. `db.delete(id)` deletes the specified record by primary key.
 > 2. Returns the deleted record document state.
 > 3. Removes the record permanently from persistent storage.
-
+> 
 ---
 
 

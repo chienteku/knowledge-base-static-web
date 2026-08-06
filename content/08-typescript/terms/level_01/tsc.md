@@ -107,13 +107,13 @@ Execute `tsc` command-line options to transpile `main.ts` to ES2022 JavaScript w
 > # Transpile main.ts with strict error checking
 > npx tsc main.ts --target ES2022 --noEmitOnError --strict
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `tsc` parses, type-checks, and transpiles TypeScript source code to JavaScript.
 > 2. `--noEmitOnError` prevents generating `.js` output files if type errors occur.
 > 3. `--target ES2022` sets the target JavaScript syntax version.
-
+> 
 ---
 
 ### Exercise 2: Generating Declaration Files (`.d.ts`) with `tsc`
@@ -132,13 +132,13 @@ Configure `tsc` CLI options to emit TypeScript declaration files (`.d.ts`) along
 > # Emit JS and .d.ts type declaration files into dist/ folder
 > npx tsc --declaration --outDir dist
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `--declaration` instructs `tsc` to generate matching `.d.ts` type definition files.
 > 2. Enables published npm packages to provide type IntelliSense to external TypeScript consumers.
 > 3. Standard library build step.
-
+> 
 ---
 
 ### Exercise 3: Running Type Checking in Watch Mode (`tsc --watch`)
@@ -157,13 +157,13 @@ Run `tsc` in background watch mode during local development.
 > # Start incremental background compilation watch mode
 > npx tsc --watch
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `tsc --watch` monitors source files for changes and performs fast incremental re-compilation.
 > 2. Provides immediate feedback in terminal consoles when type errors are introduced.
 > 3. Essential local developer CLI workflow.
-
+> 
 ---
 
 

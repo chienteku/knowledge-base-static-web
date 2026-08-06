@@ -173,7 +173,7 @@ impl From<&str> for Person
 >
 > 1. Implementing `From` for multiple source types provides clean constructor overloading.
 > 2. Enables using `.into()` in generic contexts.
-
+> 
 ---
 
 ### Exercise 2: Flexible Money Currency Constructor
@@ -219,7 +219,7 @@ impl From<&str> for Person
 >
 > 1. Standardizes numerical conversions for monetary amounts.
 > 2. Infallible constructor interface.
-
+> 
 ---
 
 ### Exercise 3: Flexible Port Assignment Constructor
@@ -256,7 +256,7 @@ impl From<&str> for Person
 > #### Technical Explanation
 >
 > 1. `8080u16.into()` works automatically because `From<u16>` provides `Into<NetworkPort>` blanket implementation.
-
+> 
 ---
 
 ## 6. Related Terms

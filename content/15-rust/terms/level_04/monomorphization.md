@@ -359,7 +359,7 @@ Refactor a generic packet encoder using the **outline pattern** (inner non-gener
 > 4. **Edge Cases**:
 >    - Overflow of sequence numbers is safely handled via `wrapping_add(1)`.
 >    - Buffer length validation prevents panic indexing errors by returning strongly-typed `PacketError::BufferTooSmall`.
-
+> 
 ---
 
 ### Exercise 2: Type-Level Monomorphized Metric Aggregator vs Dynamic Dispatch
@@ -545,7 +545,7 @@ Implement a generic metric aggregator `MetricAggregator<M: MetricValue>` that mo
 > 
 > 4. **Edge Cases**:
 >    - Division by zero in `HistogramMetric` with `count == 0` is safely checked, returning `0.0` instead of `NaN` or triggering a runtime panic.
-
+> 
 ---
 
 ### Exercise 3: Const Generic & Monomorphized Zero-Copy Hardware Buffer Serializer
@@ -732,7 +732,7 @@ Design a zero-copy stack hardware serializer `FixedBufferSerializer<T: ZeroCopyE
 > 
 > 4. **Edge Cases**:
 >    - Exhausting array capacity returns `SerializationError::CapacityExceeded` without causing slice out-of-bounds panics. `clear()` resets `bytes_written` to zero for buffer reuse without reallocating stack memory.
-
+> 
 ---
 
 ## 6. Related Terms

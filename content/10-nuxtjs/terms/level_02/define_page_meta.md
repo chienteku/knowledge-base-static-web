@@ -169,20 +169,20 @@ Assign a custom layout `layouts/admin.vue` to page `pages/admin/index.vue` using
 >   layout: "admin"
 > });
 > </script>
-
-<template>
-  <div>
-    <h1>Admin Control Panel</h1>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <h1>Admin Control Panel</h1>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `definePageMeta()` is a compiler macro that sets route configuration metadata at component compile time.
 > 2. `layout: "admin"` overrides the default layout (`layouts/default.vue`), rendering `layouts/admin.vue` instead.
 > 3. Enables page-level layout customization.
-
+> 
 ---
 
 ### Exercise 2: Attaching Route Middleware and Custom Roles
@@ -206,20 +206,20 @@ Attach authentication middleware and custom role metadata (`auth`, `roles: ["adm
 >   keepalive: true
 > });
 > </script>
-
-<template>
-  <div>
-    <h1>Protected Dashboard</h1>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <h1>Protected Dashboard</h1>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `middleware: ['auth']` executes named route middleware located in `middleware/auth.ts` before entering the route.
 > 2. Custom metadata attributes (`roles`) are accessible via `useRoute().meta.roles`.
 > 3. `keepalive: true` caches component DOM state across client navigation.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Route Validation with `validate`
@@ -244,26 +244,22 @@ Validate that dynamic parameter `id` in `pages/users/[id].vue` is strictly a num
 >   }
 > });
 > </script>
-
-<template>
-  <div>
-    <h1>User Profile ID: {{ $route.params.id }}</h1>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <h1>User Profile ID: {{ $route.params.id }}</h1>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `validate` function receives the target `route` object before route entry.
 > 2. Returning `false` or throwing an HTTP error triggers Nuxt's 404 Not Found error page automatically.
 > 3. Prevents execution of invalid database queries for malformed URL parameters.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`pages/` Directory](pages_directory.md) — The folder where pages containing this macro reside.

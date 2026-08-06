@@ -158,16 +158,16 @@ Use the non-null assertion operator (`!`) when fetching a known existing DOM ele
 > // Under strictNullChecks, getElementById returns HTMLElement | null.
 > // Appending ! asserts to the compiler that appRoot is NOT null:
 > const appRoot = document.getElementById("app")!;
-
-appRoot.innerHTML = "<h1>App Initialized</h1>";
-```
-
+> 
+> appRoot.innerHTML = "<h1>App Initialized</h1>";
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Postfix `!` strips `null` and `undefined` from the expression's inferred type.
 > 2. Informs the compiler that the developer guarantees non-null presence.
 > 3. Completely erased at compile time; does NOT perform runtime null checks.
-
+> 
 ---
 
 ### Exercise 2: Auditing Runtime Exceptions Caused by `!` Suppressions
@@ -187,22 +187,22 @@ Demonstrate how abusing non-null assertions leads to un-caught runtime `TypeErro
 >   name: string;
 >   bio?: string;
 > }
-
-const user: User = { name: "Alice" }; // bio is undefined
-
-// ⚠️ DANGEROUS: Suppresses TS error, but crashes at runtime!
-// console.log(user.bio!.toUpperCase()); // Uncaught TypeError: Cannot read properties of undefined!
-
-// ✅ SAFE (Use optional chaining or explicit checks):
-console.log(user.bio?.toUpperCase() ?? "NO BIO");
-```
-
+> 
+> const user: User = { name: "Alice" }; // bio is undefined
+> 
+> // ⚠️ DANGEROUS: Suppresses TS error, but crashes at runtime!
+> // console.log(user.bio!.toUpperCase()); // Uncaught TypeError: Cannot read properties of undefined!
+> 
+> // ✅ SAFE (Use optional chaining or explicit checks):
+> console.log(user.bio?.toUpperCase() ?? "NO BIO");
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Non-null assertions bypass static compiler safety without adding runtime validation.
 > 2. If the value is actually `null` or `undefined` at runtime, property access throws a `TypeError`.
 > 3. Avoid `!` whenever optional chaining (`?.`) or runtime guards can be used instead.
-
+> 
 ---
 
 ### Exercise 3: Refactoring `!` to Safe Runtime Guards
@@ -219,21 +219,21 @@ Refactor code using non-null assertions to use explicit runtime guard checks ins
 >
 > ```typescript
 > const container = document.getElementById("container");
-
-if (!container) {
-  throw new Error("Fatal: #container element missing from DOM HTML!");
-}
-
-// container is automatically narrowed to HTMLElement (non-null) here safely!
-container.style.display = "block";
-```
-
+> 
+> if (!container) {
+>   throw new Error("Fatal: #container element missing from DOM HTML!");
+> }
+> 
+> // container is automatically narrowed to HTMLElement (non-null) here safely!
+> container.style.display = "block";
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Explicit runtime throw guards validate value presence at runtime AND narrow types statically.
 > 2. Prevents silent downstream `TypeError` bugs by crashing early with clear error messages.
 > 3. Production-grade error handling practice.
-
+> 
 ---
 
 

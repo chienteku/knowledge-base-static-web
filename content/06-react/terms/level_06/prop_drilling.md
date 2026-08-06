@@ -117,7 +117,7 @@ Which components are the "middlemen" suffering from prop drilling?
 > They probably don't use the Theme themselves; they are just passing it down so the `<CardButton />` can change its color.
 > ```
 > - Which components accept the prop but never actually use it in their own JSX?
-
+> 
 ---
 
 
@@ -145,7 +145,7 @@ Which components are the "middlemen" suffering from prop drilling?
 > ```
 >
 > **Explanation:** Component Composition solves prop drilling without adding global state overhead.
-
+> 
 ---
 
 ### Exercise 3: Identifying Prop Drilling Threshold
@@ -162,7 +162,7 @@ Which components are the "middlemen" suffering from prop drilling?
 > ```
 >
 > **Explanation:** Deep prop chains complicate refactoring and pollute intermediate component APIs.
-
+> 
 ## 7. Related Terms
 - [The Context API](context_api.md) — The official React feature designed to bypass Prop Drilling.
 - [State Management (Redux / Zustand)](state_management.md) — Third-party libraries (Zustand/Redux) designed to solve this exact problem at scale.

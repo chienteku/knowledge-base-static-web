@@ -161,7 +161,7 @@ Implement page 2 of a product catalog API (10 items per page) sorted by `id` asc
 > 1. `LIMIT 10` caps returned rows to 10.
 > 2. `OFFSET 10` skips the first 10 rows ((Page 2 - 1) * 10).
 > 3. `ORDER BY id ASC` guarantees deterministic row ordering across pages.
-
+> 
 ---
 
 ### Exercise 2: High-Performance Keyset (Cursor-Based) Seeking
@@ -189,7 +189,7 @@ Replace slow deep `OFFSET 10000` pagination with fast keyset seeking using `WHER
 > 1. Large `OFFSET` values force PostgreSQL to scan and discard thousands of index entries ($O(N)$).
 > 2. Keyset seeking (`WHERE id > last_seen_id`) jumps directly to the next page using index bounds in $O(\log N)$ time.
 > 3. Industry standard infinite scroll pagination pattern.
-
+> 
 ---
 
 ### Exercise 3: Top-N Query Rankings
@@ -217,7 +217,7 @@ Query the top 5 highest spending customers using `ORDER BY total_spent DESC LIMI
 > 1. `ORDER BY total_spent DESC LIMIT 5` calculates top-N rankings.
 > 2. PostgreSQL uses a top-N sort buffer in RAM to optimize memory usage.
 > 3. Efficient top-N report generation.
-
+> 
 ---
 
 

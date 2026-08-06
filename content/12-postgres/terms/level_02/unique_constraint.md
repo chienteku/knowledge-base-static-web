@@ -165,7 +165,7 @@ Add a `UNIQUE` constraint to column `email` on table `users`.
 > 1. `UNIQUE` constraints reject write attempts that introduce duplicate non-null values.
 > 2. Automatically creates an underlying unique B-tree index (`uq_users_email`).
 > 3. Enforces business uniqueness rules at the database engine level.
-
+> 
 ---
 
 ### Exercise 2: Multi-Column Composite Unique Constraints
@@ -195,7 +195,7 @@ Enforce that a user can only submit ONE review per product by creating a composi
 > 1. Composite `UNIQUE` constraints enforce uniqueness across the COMBINATION of multiple columns.
 > 2. Allows a user to review multiple different products, but rejects duplicate reviews for the same product.
 > 3. Core pattern for relationship constraints.
-
+> 
 ---
 
 ### Exercise 3: Handling Duplicate Key Violations in Application Code
@@ -225,7 +225,7 @@ Catch PostgreSQL `unique_violation` (Error Code 23505) in Node.js backend contro
 > 1. Unique constraint violations throw PostgreSQL Error Code `23505` (`unique_violation`).
 > 2. `err.detail` exposes the conflicting key value pair.
 > 3. Catching `23505` allows application servers to return HTTP 409 Conflict status codes cleanly.
-
+> 
 ---
 
 

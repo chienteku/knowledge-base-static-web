@@ -149,7 +149,7 @@ Export a compressed custom-format backup of database `store_db` to `/backups/sto
 > 1. `pg_dump` extracts a logical schema and data backup from a running PostgreSQL database.
 > 2. `-Fc` selects PostgreSQL custom binary archive format (supports compression and parallel restoration).
 > 3. Logical backup utility standard.
-
+> 
 ---
 
 ### Exercise 2: Restoring Databases with `pg_restore`
@@ -175,7 +175,7 @@ Restore compressed backup file `/backups/store_db.dump` into target database `st
 > 1. `pg_restore` restores database schemas, tables, indexes, and data from custom `-Fc` dump archives.
 > 2. `-j 4` runs restoration tasks across 4 parallel worker threads, speeding up index builds and data loading.
 > 3. Standard disaster recovery restoration utility.
-
+> 
 ---
 
 ### Exercise 3: Dumping Single Tables with Data-Only Flags
@@ -199,7 +199,7 @@ Export ONLY data rows from table `users` as plain text SQL `INSERT` statements u
 > 1. `--table=tablename` restricts logical export to a specific target table.
 > 2. `--data-only` omits DDL `CREATE TABLE` statements.
 > 3. `--inserts` formats data rows as standard `INSERT INTO` statements.
-
+> 
 ---
 
 

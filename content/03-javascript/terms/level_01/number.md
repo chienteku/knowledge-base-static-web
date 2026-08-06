@@ -158,7 +158,7 @@ async function processData() {
 > ```
 > - Area = Pi * radius^2
 > - To round a number to a specific number of decimal places, you can use `Number.prototype.toFixed(2)`, but remember that `.toFixed()` returns a *string*, so you may need to convert it back or just log it.
-
+> 
 ---
 
 ### Exercise 2: Safe Integer Boundaries
@@ -177,7 +177,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Double precision floats lose 1-unit integer precision beyond $2^{53} - 1$ (`9007199254740991`).
-
+> 
 ---
 
 ### Exercise 3: Parsing Numbers with `parseInt` and `parseFloat`
@@ -198,8 +198,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `parseInt` and `parseFloat` read leading numeric characters until encountering non-numeric characters.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -130,7 +130,7 @@ function App() {
 > The component function runs, the JSX evaluates, the screen is painted, and ONLY THEN does the `useEffect` run!
 > ```
 > - `useEffect` is designed specifically to not block the UI from painting.
-
+> 
 ---
 
 
@@ -151,7 +151,7 @@ function App() {
 > ```
 >
 > **Explanation:** `useEffect` synchronizes component state with external browser APIs like `document.title`.
-
+> 
 ---
 
 ### Exercise 3: When NOT to Use useEffect
@@ -168,7 +168,7 @@ function App() {
 > ```
 >
 > **Explanation:** Calculate data during render and handle user actions in event handlers.
-
+> 
 ## 7. Related Terms
 - [Dependency Array](dependency_array.md) — The second argument of `useEffect` that controls its timing.
 - [Cleanup Functions](cleanup_functions.md) — What you return from `useEffect` to handle the Unmounting phase.

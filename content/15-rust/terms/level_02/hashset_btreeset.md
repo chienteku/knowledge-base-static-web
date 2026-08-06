@@ -280,7 +280,7 @@ thread::spawn(move || {
 > 2. **O(1) Membership Lookup**: `processed_requests.contains(&payload)` computes the hash of `payload.request_id` in expected O(1) time and checks the internal `HashMap<ApiPayload, ()>` bucket.
 > 3. **Ownership and Borrows**: `process_request` takes full ownership of `payload: ApiPayload`. If the request is new, ownership is moved directly into `self.processed_requests.insert(payload)`. `active_clients` clones the `client_ip` `String` so that tracking client IP membership remains independent of payload drop lifecycles.
 > 4. **Edge Cases & Invariants**: Blank string payloads are guarded upfront via `.trim().is_empty()` checks to prevent corrupted entries from poisoning the hash bucket.
-
+> 
 ---
 
 ### Exercise 2: Kernel Memory Slab & Page Range Allocator (`BTreeSet`)
@@ -416,7 +416,7 @@ thread::spawn(move || {
 > 1. **`Ord` Invariant on `BTreeSet`**: Unlike `HashSet` which requires `Hash + Eq`, `BTreeSet` relies on `Ord` to maintain a balanced B-Tree structure. By ordering `MemoryBlock` solely by `base_addr`, elements are kept continuously sorted in logarithmic runtime ($O(\log N)$ per operation).
 > 2. **Efficient Range Scanning via `Bound`**: `BTreeSet::range` accepts `(Bound<&T>, Bound<&T>)`, allowing sub-slice range queries over tree nodes in $O(\log N + K)$ time where $K$ is the number of elements in the range. Dummy bounds `dummy_start` and `dummy_end` serve as search keys.
 > 3. **Memory Safety & Borrowing**: `.range()` yields borrowed references `&MemoryBlock`. Calling `.cloned()` creates stack copies of matched blocks without invalidating or mutating the internal tree pointers.
-
+> 
 ---
 
 ### Exercise 3: Role-Based Access Control (RBAC) & Compliance Scope Audit Engine (`HashSet` & `BTreeSet`)
@@ -538,7 +538,7 @@ thread::spawn(move || {
 > 1. **Set Algebra Operations**: `.intersection()` returns an iterator yielding items present in both sets ($A \cap B$). `.difference()` yields elements in the first set but absent from the second ($A \setminus B$). `.union()` yields all unique elements present across either set ($A \cup B$).
 > 2. **Complementary Data Structure Choice**: `HashSet` is chosen for fast permission math due to $O(1)$ lookup and set operations. `BTreeSet` is chosen for audit log generation because security auditing requires strict, deterministic lexicographical order. Inserting $N$ items into `BTreeSet` automatically yields a sorted list upon iteration.
 > 3. **Subset Verification**: `required.is_subset(&allowed)` evaluates if every required permission scope is satisfied in $O(M)$ time where $M$ is the size of the required set.
-
+> 
 ---
 
 ## 6. Related Terms

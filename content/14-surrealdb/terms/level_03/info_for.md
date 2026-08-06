@@ -179,7 +179,7 @@ A developer needs to audit all defined tables, custom functions, and access meth
 > 1. `INFO FOR DB` returns a structured JSON object containing all defined tables, functions, analyzers, parameters, and access scopes.
 > 2. Provides complete schema visibility for automated migration audits.
 > 3. Executes instantly by querying database metadata storage registers.
-
+> 
 ---
 
 ### Exercise 2: Introspecting Specific Table Definitions
@@ -203,7 +203,7 @@ Inspect all field types, assertions, indexes, events, and PERMISSIONS clauses de
 > 1. `INFO FOR TABLE <table>` inspects specific table schema definitions.
 > 2. Outputs JSON objects detailing defined fields, field types, assertions, indexes, and event triggers.
 > 3. Used by visual IDE tools (like Surrealist) to render schema designer views.
-
+> 
 ---
 
 ### Exercise 3: Introspecting Namespace Scope Definitions
@@ -231,7 +231,7 @@ A system administrator audits multi-tenant databases and administrative user rol
 > 1. `INFO FOR NS` returns all databases and administrative user accounts defined under the active namespace.
 > 2. Verifies multi-tenant isolation boundaries during security audits.
 > 3. Helps administrators monitor tenant resource allocation.
-
+> 
 ---
 
 

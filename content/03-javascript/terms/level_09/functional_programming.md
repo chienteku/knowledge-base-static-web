@@ -186,7 +186,7 @@ console.log(typeof mathPipeline(12)); // "string"
 
 > [!check]- Answer
 > - Call `pipe(subtract2, multiply10, toString)`.
-
+> 
 ---
 
 ### Exercise 2: Immutability and Pure Functions in FP
@@ -208,7 +208,7 @@ console.log(typeof mathPipeline(12)); // "string"
 > ```
 >
 > **Explanation:** FP emphasizes pure functions and immutable data structures.
-
+> 
 ---
 
 ### Exercise 3: Function Composition Pipeline
@@ -228,8 +228,8 @@ console.log(typeof mathPipeline(12)); // "string"
 > ```
 >
 > **Explanation:** Pipelines pass data outputs into subsequent transformation functions.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

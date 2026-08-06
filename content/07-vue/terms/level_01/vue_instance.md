@@ -119,7 +119,7 @@ app2.mount('#app-two'); // Mount to distinct DOM containers
 > They will operate completely independently of each other.
 > ```
 > - Vue is a "Progressive Framework", meaning it can control as much or as little of the page as you want.
-
+> 
 ---
 
 ### Exercise 2: Vue 3 Root Application Creation Pattern
@@ -144,7 +144,7 @@ app2.mount('#app-two'); // Mount to distinct DOM containers
 > app.use(createPinia());
 > app.mount('#app');
 > ```
-
+> 
 ---
 
 ### Exercise 3: Global Component Registration
@@ -161,8 +161,8 @@ app2.mount('#app-two'); // Mount to distinct DOM containers
 > ```javascript
 > app.component('BaseButton', BaseButton);
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

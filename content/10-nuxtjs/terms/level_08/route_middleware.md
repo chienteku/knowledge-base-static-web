@@ -167,13 +167,13 @@ Write route middleware redirecting unauthenticated users to `/login?redirect=...
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `defineNuxtRouteMiddleware((to, from))` receives target route (`to`) and origin route (`from`).
 > 2. Returning `navigateTo()` performs HTTP 302 redirects on the server during SSR and SPA transitions on the client.
 > 3. Preserves original target route path in URL query parameters for post-login redirection.
-
+> 
 ---
 
 ### Exercise 2: Implementing Anonymous Inline Route Middleware
@@ -202,20 +202,20 @@ Define an anonymous inline middleware function directly inside `definePageMeta()
 >   ]
 > });
 > </script>
-
-<template>
-  <div>
-    <h1>Secret Special Page</h1>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <h1>Secret Special Page</h1>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Inline middleware functions are scoped strictly to the page component where they are defined.
 > 2. Useful for single-use page guard logic without creating standalone files in `middleware/`.
 > 3. Compact page guard pattern.
-
+> 
 ---
 
 ### Exercise 3: Asynchronous Route Middleware Execution
@@ -248,19 +248,15 @@ Execute async token validation inside route middleware before granting access to
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Route middleware supports returning Promises or using `async/await`.
 > 2. Route navigation pauses until the async middleware Promise resolves.
 > 3. Prevents page rendering until session verification completes.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Global vs Named Middleware](global_vs_named_middleware.md) — The two ways to apply these functions.

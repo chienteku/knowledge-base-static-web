@@ -581,7 +581,7 @@ Include unit tests covering:
 > 2. **Panic Boundary Isolation (`catch_unwind`)**: Unwinding across `extern "C"` function boundaries is Undefined Behavior in Rust. `catch_unwind` catches unwinding panics at the boundary and returns an integer status code (`-2`) cleanly.
 > 3. **`*mut c_void` Opaque Context**: C callbacks use `void* user_data` to pass application context state. Casting `*mut c_void` back to `*mut CustomState` allows inspecting and mutating caller environment state.
 > 
-
+> 
 ---
 
 ## 6. Related Terms

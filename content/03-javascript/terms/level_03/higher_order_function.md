@@ -169,7 +169,7 @@ async function processData() {
 > loggedSayHi(); // Logs: "Executing..." then "Hi!"
 > ```
 > - `function withLogging(fn) { return function() { console.log("Executing..."); fn(); } }`
-
+> 
 ---
 
 ### Exercise 2: Custom Array Filter Higher-Order Function
@@ -193,7 +193,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Higher-order functions accept functions as arguments to customize execution behavior.
-
+> 
 ---
 
 ### Exercise 3: Function Composition HOF
@@ -214,8 +214,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Higher-order functions combine smaller functions into composite data pipelines.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

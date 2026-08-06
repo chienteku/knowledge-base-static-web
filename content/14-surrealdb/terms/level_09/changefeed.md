@@ -141,7 +141,7 @@ An event-driven microservice architecture requires real-time delta tracking for 
 > 1. `CHANGEFEED <duration>` enables transaction log change tracking for table mutations.
 > 2. `7d` retains mutation history deltas for 7 days before garbage collection.
 > 3. Underpins real-time live query subscriptions and Change Data Capture (CDC) pipelines.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Historical Table Mutations with `SHOW CHANGES`
@@ -165,7 +165,7 @@ An audit service streams all mutation changes for table `order` recorded since a
 > 1. `SHOW CHANGES FOR TABLE` outputs an array of historical mutation events (`CREATE`, `UPDATE`, `DELETE`).
 > 2. `SINCE` filters changes recorded after a specific timestamp or version sequence number.
 > 3. Replaces external CDC tools (Debezium/Kafka) with native database change inspection.
-
+> 
 ---
 
 ### Exercise 3: Changefeed Version Sequence Syncing
@@ -189,7 +189,7 @@ An offline sync client resumes streaming table changes starting from version seq
 > 1. Sequence numbers provide deterministic offsets for changefeed event consumption.
 > 2. Guarantees exactly-once delta processing for disconnected clients.
 > 3. Enables reliable offline-first database synchronization protocols.
-
+> 
 ---
 
 

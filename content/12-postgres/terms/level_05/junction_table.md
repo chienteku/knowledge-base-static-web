@@ -199,7 +199,7 @@ Design a `student_courses` junction table resolving a Many-to-Many relationship 
 > 1. Junction tables translate Many-to-Many relationships into two 1-to-Many relationships.
 > 2. `PRIMARY KEY (student_id, course_id)` prevents duplicate enrollments for the same student/course pair.
 > 3. Stores association payload attributes (`enrolled_at`, `grade`).
-
+> 
 ---
 
 ### Exercise 2: Querying N-to-N Relationships via Junction Tables
@@ -230,7 +230,7 @@ Query all courses enrolled by student `id = 10` by joining `students` -> `studen
 > 1. Traverses junction table foreign keys to resolve Many-to-Many relations.
 > 2. Returns course details enrolled by the target student.
 > 3. Standard relational N-to-N query pattern.
-
+> 
 ---
 
 ### Exercise 3: Indexing Junction Table Reversal Foreign Keys
@@ -255,7 +255,7 @@ Create a secondary index on `(course_id, student_id)` to optimize reverse lookup
 > 1. Primary key `(student_id, course_id)` optimizes queries filtering by `student_id` first.
 > 2. Queries filtering by `course_id` first require a secondary index on `course_id`.
 > 3. Guarantees $O(\log N)$ performance in both lookup directions.
-
+> 
 ---
 
 

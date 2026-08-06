@@ -165,7 +165,7 @@ A user requests account deletion. Delete user record `user:john` directly by pri
 > 1. `DELETE table:id` deletes the target record directly in $O(1)$ constant time complexity.
 > 2. Bypasses table scanning by jumping directly to the primary key storage location.
 > 3. Returns an empty payload or deleted record context depending on `RETURN` clause flags.
-
+> 
 ---
 
 ### Exercise 2: Filtered Bulk Record Deletion
@@ -194,7 +194,7 @@ A temporary session cleanup job deletes all expired user sessions where `expires
 > 1. `DELETE table WHERE condition` evaluates filters across table records and deletes matching records.
 > 2. Executes in an atomic transaction block.
 > 3. Non-matching records (`session:s2`) remain untouched in the table.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Deleted Payloads with `RETURN BEFORE`
@@ -222,7 +222,7 @@ An audit logger needs to capture the state of a deleted record before it is perm
 > 1. `RETURN BEFORE` returns the record document state as it existed immediately prior to deletion.
 > 2. Enables application audit logs to capture deleted record payloads without issuing a prior `SELECT` query.
 > 3. `RETURN NONE` suppresses deletion result output completely for maximum performance.
-
+> 
 ---
 
 

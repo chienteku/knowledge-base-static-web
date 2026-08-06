@@ -178,7 +178,7 @@ Insert a new user document into collection `users` and retrieve its auto-generat
 > 1. `insertOne()` adds a single BSON document to the target collection.
 > 2. Automatically generates an `_id` ObjectId if omitted from the document.
 > 3. Returns `insertedId` in the write result payload.
-
+> 
 ---
 
 ### Exercise 2: Batch Document Insertion with `insertMany`
@@ -207,7 +207,7 @@ Insert 3 product documents into collection `products` in a single batch write ca
 > 1. `insertMany()` inserts an array of documents in a single network batch payload.
 > 2. Reduces network roundtrip latency significantly compared to multiple `insertOne()` calls.
 > 3. Returns a map of array indexes to inserted ObjectIds.
-
+> 
 ---
 
 ### Exercise 3: Ordered vs Unordered Inserts
@@ -239,7 +239,7 @@ Configure `insertMany()` with `{ ordered: false }` so that if one document fails
 > 1. Default `ordered: true` stops processing remaining documents upon encountering a write error.
 > 2. `ordered: false` attempts to insert all documents regardless of individual write errors.
 > 3. Maximizes write throughput for bulk data imports.
-
+> 
 ---
 
 

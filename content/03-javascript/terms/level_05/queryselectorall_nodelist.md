@@ -178,7 +178,7 @@ if (typeof document !== "undefined") {
 > [!check]- Answer
 > - The selector for anchor tags is `"a"`.
 > - Use `element.classList.add("highlight")` inside `.forEach()`.
-
+> 
 ---
 
 ### Exercise 2: Iterating NodeLists with `.forEach()`
@@ -195,7 +195,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** Modern DOM NodeLists support `forEach` directly.
-
+> 
 ---
 
 ### Exercise 3: Converting NodeList to Array
@@ -212,7 +212,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** Spread operator `[...]` converts NodeLists into true Array instances for array method chaining.
-
+> 
 ---
 
 ## 7. Related Terms

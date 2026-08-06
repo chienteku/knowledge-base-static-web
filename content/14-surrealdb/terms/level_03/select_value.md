@@ -176,7 +176,7 @@ A user notification service queries the raw string email address of user `user:a
 > 1. `SELECT VALUE field` unwraps the target property key, returning raw scalar values directly inside the result array.
 > 2. Eliminates object key wrappers (`{ email: "..." }`), simplifying SDK client value consumption.
 > 3. Useful for extracting list arrays of strings, numbers, or record IDs.
-
+> 
 ---
 
 ### Exercise 2: Extracting Single Field Arrays of Record IDs
@@ -205,7 +205,7 @@ An authorization check retrieves a flat array of group record links (`group:g1`,
 > 1. `SELECT VALUE` on an array field extracts the underlying array payload without key nesting.
 > 2. Returns typed record link pointers directly to the caller.
 > 3. Ideal for passing array parameters directly into downstream subqueries.
-
+> 
 ---
 
 ### Exercise 3: Combining `SELECT VALUE` with `ONLY` Unwrapping
@@ -230,7 +230,7 @@ An API route fetches a single user's email address as a plain unboxed string `"a
 > 1. Combining `SELECT VALUE` with `ONLY` strips both the object key wrapper AND the outer result array wrapper.
 > 2. Returns a raw unboxed scalar value (`"alice@example.com"`) directly.
 > 3. Simplifies single-value API response generation in SDK applications.
-
+> 
 ---
 
 

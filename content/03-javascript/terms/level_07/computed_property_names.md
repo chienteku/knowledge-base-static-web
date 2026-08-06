@@ -194,7 +194,7 @@ console.log("Active count:", stats.active_users);
 > Active count: 450
 > ```
 > - The key expression is `[`${prefix}_${countKey}`]`.
-
+> 
 ---
 
 ### Exercise 2: Dynamic Key Object Construction
@@ -213,7 +213,7 @@ console.log("Active count:", stats.active_users);
 > ```
 >
 > **Explanation:** Computed property names `[expr]` evaluate dynamic expressions during object literal creation.
-
+> 
 ---
 
 ### Exercise 3: Symbol Computed Property Keys
@@ -232,8 +232,8 @@ console.log("Active count:", stats.active_users);
 > ```
 >
 > **Explanation:** Bracketed computed properties permit primitive Symbols as non-string object keys.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

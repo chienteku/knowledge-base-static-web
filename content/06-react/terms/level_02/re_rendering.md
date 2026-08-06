@@ -115,7 +115,7 @@ const options = useMemo(() => ({ theme: 'dark' }), []);
 > Yes! Even though the value didn't visually change, if the Parent component re-rendered to send that prop, the Child is forced to re-render. (Unless you wrap the child in `React.memo`!).
 > ```
 > - Remember the third trigger of a re-render.
-
+> 
 ---
 
 
@@ -134,7 +134,7 @@ const options = useMemo(() => ({ theme: 'dark' }), []);
 > ```
 >
 > **Explanation:** Component re-renders execute when local state mutates or parent trees re-render.
-
+> 
 ---
 
 ### Exercise 3: Preventing Un-Necessary Re-Renders via Component Composition
@@ -154,7 +154,7 @@ const options = useMemo(() => ({ theme: 'dark' }), []);
 > ```
 >
 > **Explanation:** Moving state down or lifting static UI content to `children` props isolates re-render boundaries.
-
+> 
 ## 7. Related Terms
 - [React.memo](../level_08/react_memo.md) — How you stop the waterfall effect and prevent unnecessary re-renders.
 - [Virtual DOM](../level_01/virtual_dom.md) — What React actually generates during a re-render.

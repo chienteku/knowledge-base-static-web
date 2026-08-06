@@ -131,7 +131,7 @@ function Checkout() {
 > 2. `Checkout` uses `useEffect` inside a `for` loop. Hooks must be at the top level, never nested in loops.
 > ```
 > - Check the two main rules: Top Level only, and React Functions only.
-
+> 
 ---
 
 
@@ -150,7 +150,7 @@ function Checkout() {
 > ```
 >
 > **Explanation:** Rules of Hooks guarantee consistent hook execution order across renders.
-
+> 
 ---
 
 ### Exercise 3: Refactoring Conditional Hook Call
@@ -170,7 +170,7 @@ function Checkout() {
 > ```
 >
 > **Explanation:** Hooks must be invoked unconditionally at the component top level.
-
+> 
 ## 7. Related Terms
 - [Custom Hooks](custom_hooks.md) — The only other place (besides components) where you are allowed to call a hook.
 - [Components](../level_01/components.md) — Where hooks belong.

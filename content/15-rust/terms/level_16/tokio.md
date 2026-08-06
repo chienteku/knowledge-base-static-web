@@ -269,7 +269,7 @@ Your implementation must:
 > 1. **`tokio::sync::mpsc` Channel:** Multi-producer single-consumer channel transfers tasks asynchronously from callers to workers.
 > 2. **`tokio::sync::Semaphore` Permits:** Enforces hard upper bounds on active concurrent processing tasks, preventing resource exhaustion under peak loads.
 > 3. **Channel Termination Protocol:** Dropping `job_tx` causes `recv().await` to return `None`, naturally terminating worker tasks without polling flags or manual cancellation tokens.
-
+> 
 ---
 
 ### Exercise 2: Resilient RPC Fetcher with Timeout and Fallback via `tokio::time::timeout`
@@ -373,7 +373,7 @@ Your implementation must:
 > 1. **`tokio::time::timeout` Deadline Safety:** Wraps any `Future` with a time constraint. If the timer fires before the underlying `Future` resolves, Tokio drops the `Future`, immediately aborting pending operations.
 > 2. **Async Future Cancellation:** Tokio futures are lazy and state-machine-driven. Dropping an uncompleted future cleanly drops all internal task resources without leaks.
 > 3. **Higher-Order Async Closures:** Accepting `FnOnce() -> Future` avoids premature execution of fallback logic until primary failure occurs.
-
+> 
 ---
 
 ### Exercise 3: Offloading CPU Work & Broadcasting State via `spawn_blocking` and `watch` Channels
@@ -472,10 +472,9 @@ Implement a service where:
 > 1. **`tokio::task::spawn_blocking`:** Delegates CPU-bound or synchronous blocking tasks to a separate OS thread pool managed by Tokio, preserving reactor threads for non-blocking I/O.
 > 2. **`tokio::sync::watch` Channel:** Efficient single-producer, multi-consumer state broadcast channel where receivers observe state change notifications without queuing historical values.
 > 3. **`rx.changed().await` & `rx.borrow()`:** `changed()` yields asynchronously when a new value is sent, while `borrow()` provides zero-copy read access to the current shared state.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

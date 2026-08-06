@@ -171,7 +171,7 @@ An infrastructure architect configures database access levels across Root, Names
 > 1. Root users hold engine-wide cluster management privileges across all namespaces and databases.
 > 2. Namespace users hold administrative authority restricted to databases within their designated tenant namespace.
 > 3. Record access scopes authenticate end-user web applications, enforcing row-level security PERMISSIONS.
-
+> 
 ---
 
 ### Exercise 2: Evaluating Direct Web Client Access
@@ -190,28 +190,28 @@ A web development team evaluates replacing an intermediate Express.js authentica
 > ```typescript
 > // Direct SDK client authentication over WebSockets
 > import Surreal from "surrealdb";
-
-const db = new Surreal();
-await db.connect("wss://db.example.com/rpc");
-
-// Authenticate directly using RECORD access method
-const token = await db.signin({
-  access: "user_access",
-  ns: "acme",
-  db: "app",
-  username: "alice",
-  pass: "Secret123!"
-});
-
-console.log("Authenticated directly over WebSockets:", token);
-```
-
+> 
+> const db = new Surreal();
+> await db.connect("wss://db.example.com/rpc");
+> 
+> // Authenticate directly using RECORD access method
+> const token = await db.signin({
+>   access: "user_access",
+>   ns: "acme",
+>   db: "app",
+>   username: "alice",
+>   pass: "Secret123!"
+> });
+> 
+> console.log("Authenticated directly over WebSockets:", token);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Direct WebSocket client connections authenticate against `DEFINE ACCESS` methods defined inside SurrealDB.
 > 2. Issues a cryptographically signed JWT token stored by the client SDK.
 > 3. Eliminates custom Express/FastAPI authentication middleware boilerplate.
-
+> 
 ---
 
 ### Exercise 3: Restricting Admin Privileges with Roles
@@ -235,7 +235,7 @@ Define a database-level administrative user `auditor` with read-only viewer role
 > 1. `ROLES VIEWER` grants read-only schema and record inspection privileges.
 > 2. Prevents administrative accounts from executing unintended data mutations.
 > 3. Implements the principle of least privilege.
-
+> 
 ---
 
 

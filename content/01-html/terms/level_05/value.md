@@ -193,7 +193,7 @@ If the user clicks "Submit" immediately without changing the dropdown, what key-
 > ```
 > - The key is defined by the `name` attribute of the container.
 > - The value is the selected option's `value` attribute.
-
+> 
 ---
 
 
@@ -212,7 +212,7 @@ If the user clicks "Submit" immediately without changing the dropdown, what key-
 > ```
 >
 > **Explanation:** `value` sets initial field input content.
-
+> 
 ---
 
 ### Exercise 3: Reading Value Property in JavaScript
@@ -229,7 +229,7 @@ If the user clicks "Submit" immediately without changing the dropdown, what key-
 > ```
 >
 > **Explanation:** `.value` property retrieves live user input text.
-
+> 
 ## 7. Related Terms
 - [`<input>`](input.md) — The input elements hosting values.
 - [`<select>` and `<option>`](select_option.md) — Predefined value listings.

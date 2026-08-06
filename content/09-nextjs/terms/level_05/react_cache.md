@@ -164,19 +164,19 @@ Wrap a database query helper in React `cache()` to prevent duplicate SQL queries
 > // lib/data.ts
 > import { cache } from "react";
 > import { db } from "@/lib/db";
-
-export const getUser = cache(async (id: string) => {
-  console.log(`[DB Query Executed] Fetching user ${id}`);
-  return db.user.findUnique({ where: { id } });
-});
-```
-
+> 
+> export const getUser = cache(async (id: string) => {
+>   console.log(`[DB Query Executed] Fetching user ${id}`);
+>   return db.user.findUnique({ where: { id } });
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. React `cache()` memoizes function call return values for the duration of a single HTTP server request cycle.
 > 2. If `getUser('123')` is called in `layout.tsx`, `page.tsx`, and `generateMetadata()`, the database query executes ONLY ONCE.
 > 3. Eliminates prop drilling for fetched data across Server Component trees.
-
+> 
 ---
 
 ### Exercise 2: Comparing React `cache()` vs Next.js Data Cache
@@ -196,13 +196,13 @@ Formulate a comparative analysis contrasting React `cache()` (Request Memoizatio
 > - React cache() (Request Memoization): In-memory per-request cache. Lifetime: Single HTTP request cycle. Purged automatically after request finishes.
 > - Next.js Data Cache: Persistent server-side storage (filesystem/Redis). Lifetime: Across multiple requests and users until explicitly revalidated.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. React `cache()` prevents duplicate function calls within ONE incoming request pass.
 > 2. Next.js Data Cache persists HTTP fetch responses across ALL incoming requests.
 > 3. Complementary multi-layer caching architecture.
-
+> 
 ---
 
 ### Exercise 3: Memoizing Custom Computation Functions
@@ -220,24 +220,20 @@ Use React `cache()` to memoize an expensive CPU-bound Markdown parsing calculati
 > ```typescript
 > import { cache } from "react";
 > import { marked } from "marked";
-
-export const parseMarkdownMemoized = cache((content: string) => {
-  return marked(content);
-});
-```
-
+> 
+> export const parseMarkdownMemoized = cache((content: string) => {
+>   return marked(content);
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. React `cache()` works with ANY function (database queries, external calculations, ORM queries), not just `fetch()`.
 > 2. Caches return values based on argument reference equality.
 > 3. Optimizes CPU calculation overhead during server rendering.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Server-side Fetching (Extended `fetch`)](fetch.md) — The automatic request deduplication model.

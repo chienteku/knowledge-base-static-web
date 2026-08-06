@@ -155,14 +155,14 @@ async function processData() {
 > [!check]- Answer
 > - If the output is a binary file or bytecode read by a CPU/VM, it is a compilation.
 > - If the output is a text file read by a developer or browser parser, it is transpilation.
-
+> 
 > [!check]- Answer
 > - 1. **Compilation** (WebAssembly is a binary bytecode format).
 > - 2. **Transpilation** (TS to JS are both high-level text formats).
 > - 3. **Compilation** (Java bytecode is a lower-level VM format).
 > - 4. **Transpilation** (CSS to CSS are both high-level stylesheets).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Classifying Babel vs GCC/Clang
@@ -179,7 +179,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Transpilers convert source code to another high-level source language; compilers generate low-level machine code.
-
+> 
 ---
 
 ### Exercise 3: TypeScript Compiler (`tsc`) Source Generation
@@ -196,8 +196,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `tsc` performs type checking before generating clean target JavaScript output.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

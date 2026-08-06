@@ -185,7 +185,7 @@ A social recommendation engine queries the cities where friends of `user:alice` 
 > 1. Arrow operators (`->edge->vertex->edge->vertex`) chain multi-hop graph paths in a single query expression.
 > 2. Traverses graph pointers in $O(1)$ constant time per edge step without SQL `JOIN` tables.
 > 3. Returns nested array results containing target city names.
-
+> 
 ---
 
 ### Exercise 2: Multi-Hop Filtered Graph Paths
@@ -210,7 +210,7 @@ Traverse from `user:alice` through `knows` edges to find friends who are active 
 > 1. Inline filter brackets `[WHERE active = true]` filter intermediate vertex nodes during path traversal.
 > 2. Filters out inactive users before advancing to subsequent `wrote->post` edge hops.
 > 3. Reduces unnecessary pointer traversals during graph execution.
-
+> 
 ---
 
 ### Exercise 3: Deep Traversal Projection and Flattening
@@ -234,7 +234,7 @@ Flatten deep multi-hop traversal results into a clean 1D array of post titles.
 > 1. Deep traversals return nested arrays (`[[ "Post 1", "Post 2" ]]`).
 > 2. `array::flatten()` flattens multi-level nested arrays into a clean single-dimensional list.
 > 3. Simplifies payload consumption in application UI components.
-
+> 
 ---
 
 

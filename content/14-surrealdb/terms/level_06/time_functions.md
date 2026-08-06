@@ -166,7 +166,7 @@ Query the current UTC timestamp using `time::now()`, calculate tomorrow (`time::
 > 1. `time::now()` returns the current UTC timestamp with microsecond precision (`datetime`).
 > 2. Duration arithmetic (`+ 1d`) adds time intervals natively.
 > 3. Computes relative timestamps server-side.
-
+> 
 ---
 
 ### Exercise 2: Time Grouping with `time::floor()`
@@ -195,7 +195,7 @@ An analytics query groups audit logs into 1-hour time buckets using `time::floor
 > 1. `time::floor(datetime, duration)` truncates timestamps down to specified interval boundaries (`1h`, `1d`, `15m`).
 > 2. Groups temporal events into uniform time series buckets.
 > 3. Underpins time-series analytics and metrics dashboards.
-
+> 
 ---
 
 ### Exercise 3: Extracting Date Components
@@ -223,7 +223,7 @@ Extract the year, month, and day components from a stored `datetime` field using
 > 1. `time::year()`, `time::month()`, `time::day()` extract integer date components.
 > 2. Facilitates calendar reporting and date partitioning.
 > 3. Operates natively over `datetime` fields.
-
+> 
 ---
 
 

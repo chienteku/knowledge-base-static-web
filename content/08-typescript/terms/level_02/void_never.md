@@ -146,13 +146,13 @@ Define event handler callbacks using `void` return types.
 >   return 42; // Allowed! void in callback signatures means "ignore return value".
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `void` in function return signatures indicates that callers should ignore any returned value.
 > 2. In callback function types, `() => void` permits implementation callbacks to return values without compilation errors.
 > 3. Ensures callback flexibility while preventing callers from consuming return values.
-
+> 
 ---
 
 ### Exercise 2: Exhaustiveness Checking with the `never` Type
@@ -169,27 +169,27 @@ Use the `never` type to enforce compile-time exhaustiveness checking in a `switc
 >
 > ```typescript
 > type Shape = { kind: "circle"; radius: number } | { kind: "square"; size: number };
-
-function getArea(shape: Shape): number {
-  switch (shape.kind) {
-    case "circle":
-      return Math.PI * shape.radius ** 2;
-    case "square":
-      return shape.size ** 2;
-    default:
-      // If a new shape is added to Shape union, this line fails at compile time!
-      const _exhaustiveCheck: never = shape;
-      return _exhaustiveCheck;
-  }
-}
-```
-
+> 
+> function getArea(shape: Shape): number {
+>   switch (shape.kind) {
+>     case "circle":
+>       return Math.PI * shape.radius ** 2;
+>     case "square":
+>       return shape.size ** 2;
+>     default:
+>       // If a new shape is added to Shape union, this line fails at compile time!
+>       const _exhaustiveCheck: never = shape;
+>       return _exhaustiveCheck;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `never` is the bottom type in TypeScript, containing no possible values.
 > 2. Assigning `shape` to a `never` variable in `default` ensures all union members have been handled.
 > 3. If a new member is added to the union later, `tsc` throws a compile error at the exhaustiveness check.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: `void` vs `never` vs `undefined`
@@ -210,13 +210,13 @@ Formulate an architectural comparison matrix contrasting `void`, `never`, and `u
 > - void: Represents absent return value. Function completes execution normally, but callers should ignore any returned result.
 > - never: Bottom type. Function NEVER finishes execution (throws exception or runs infinite loop). No value can exist for never.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `undefined` is a concrete runtime value.
 > 2. `void` is a type-level indicator of omitted/ignored return values.
 > 3. `never` represents impossible states or non-terminating code execution paths.
-
+> 
 ---
 
 

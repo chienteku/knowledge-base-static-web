@@ -149,7 +149,7 @@ Design an e-commerce `orders` table selecting exact data types for IDs (`BIGINT`
 > 1. `BIGINT` (8-byte integer) prevents ID sequence exhaustion on high-volume tables.
 > 2. `NUMERIC(10, 2)` guarantees exact decimal financial calculations without binary float rounding errors.
 > 3. `TIMESTAMPTZ` stores microsecond UTC timestamps.
-
+> 
 ---
 
 ### Exercise 2: Auditing Column Data Types in System Catalogs
@@ -179,7 +179,7 @@ Query PostgreSQL system catalog `information_schema.columns` to inspect data typ
 > 1. `information_schema.columns` provides ANSI SQL compliant metadata telemetry on table structures.
 > 2. Inspects target data types, nullability rules, and default expressions.
 > 3. Useful for building automated schema generators and documentation tools.
-
+> 
 ---
 
 ### Exercise 3: Explicit Column Type Conversion with CAST
@@ -206,7 +206,7 @@ Cast a string numeric column `price_str` to `NUMERIC(10, 2)` in a data cleanup `
 > 1. `::` is the PostgreSQL shorthand cast operator (equivalent to ANSI `CAST(x AS type)`).
 > 2. Converts string representations into binary numeric data types.
 > 3. Throws a SQL cast error if string contains unparseable non-numeric characters.
-
+> 
 ---
 
 

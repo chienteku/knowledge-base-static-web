@@ -381,7 +381,7 @@ Implement a complete, `#![no_std]`-compatible Rust bitfield specifier parser and
 > 1. **Compile-Time Bitfield Calculation**: Procedural function-like macros analyze input DSL tokens during compilation to calculate bitwise masks (`mask = max_value << shift`) ahead of time, avoiding dynamic calculations during hardware runtime.
 > 2. **Const Generics & Array Layouts**: Using const generics (`RegisterLayout<N>`) and `const fn` guarantees that register layouts are computed during `rustc` compilation, meeting strict `#![no_std]` embedded requirements without dynamic heap memory allocation.
 > 3. **Static Boundary Validation**: Checking total register bit widths (e.g. `<= 32` bits) inside the compilation step allows procedural macros to reject invalid hardware register configurations with clear compile-time error diagnostics before microcontrollers flash corrupted register settings.
-
+> 
 ---
 
 ### Exercise 2: Static DSL Tokenizer, AST Query Parser & Compile-Time Error Diagnostic Generator
@@ -643,7 +643,7 @@ Implement a complete compile-time DSL query tokenizer, AST parser, and compiler 
 > 1. **Custom Tokenization**: Function-like procedural macros accept arbitrary input token streams within `(...)`, `[...]`, or `{...}`. By tokenizing text characters into domain tokens (`TokenKind`), proc macros break free from Rust's native expression constraints.
 > 2. **AST Transformation**: The engine maps flat token streams into structured Abstract Syntax Trees (`QueryAst`). At compile time, this AST enables procedural macros to generate strongly typed Rust structs or functions tailored to the query's schema.
 > 3. **Error Reporting via `compile_error!`**: Panicking inside procedural macros produces unhelpful `proc macro panicked` errors. By capturing position context (`column`) and formatting errors into `compile_error!("...")` macro output tokens, errors are passed directly to `rustc` to highlight the exact line and position of invalid input code.
-
+> 
 ---
 
 ### Exercise 3: Embedded Telemetry Packet Frame DSL Generator (`no_std`)
@@ -818,7 +818,7 @@ Implement a complete, `#![no_std]` Rust binary telemetry packet framing generato
 > 1. **Zero-Copy Binary Protocol Generation**: Function-like procedural macros parse custom binary packet layout specifications at compile time, outputting strongly-typed structs with fixed byte offset serialization (`copy_from_slice`) for real-time `#![no_std]` embedded networks.
 > 2. **Embedded Integrity Guarantees**: Generated `deserialize` functions check fixed frame signatures (`TELEMETRY_MAGIC`) and compute CCITT-FALSE CRC16 checksums over byte slices before instantiating target Rust structs.
 > 3. **Testing Zero-Allocation Drivers**: Unit assertions (`assert_eq!`, `matches!`) verify frame packing round-trips, checksum validation failures on corrupted network noise bytes, and header safety checks.
-
+> 
 ---
 
 ## 6. Related Terms

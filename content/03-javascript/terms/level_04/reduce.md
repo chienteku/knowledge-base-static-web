@@ -158,7 +158,7 @@ async function processData() {
 > "Hello World!"
 > ```
 > - `words.reduce((acc, word) => acc + word, "")`
-
+> 
 ---
 
 ### Exercise 2: Array Sum Accumulation
@@ -177,7 +177,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `reduce` accumulates array items into a single consolidated value.
-
+> 
 ---
 
 ### Exercise 3: Grouping Items into Frequency Map Object
@@ -199,8 +199,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `reduce` with object initial values `{}` builds lookup frequency maps dynamically.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

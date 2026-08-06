@@ -164,7 +164,7 @@ div > span -- Block container wrapping inline child
 > ```
 > - Ask yourself: does this tag force a line break in normal text flow?
 > - Heading tags and wrappers take full width, while anchors and emphasis tags flow with words.
-
+> 
 ---
 
 
@@ -193,7 +193,7 @@ div > span -- Block container wrapping inline child
 > ```
 >
 > **Explanation:** Block elements start on a new line and stretch full width; inline elements take up only as much width as content needs.
-
+> 
 ---
 
 ### Exercise 3: Converting Inline to Block-Block Display
@@ -212,7 +212,7 @@ div > span -- Block container wrapping inline child
 > ```
 >
 > **Explanation:** `display: inline-block` combines inline flow with block-level box-model dimensions.
-
+> 
 ## 7. Related Terms
 - [`<div>` (Block container)](../level_02/div.md) — The most common block-level generic container.
 - [`<span>` (Inline container)](../level_02/span.md) — The most common inline generic container.

@@ -133,7 +133,7 @@ rand = 0.8
 > [dependencies]
 > rand = "0.8"
 > ```
-
+> 
 ---
 
 ### Exercise 2: Optional Dependencies — The Full Pattern
@@ -189,7 +189,7 @@ Then answer: **if a downstream user writes `my_lib = "1.0"` with no features, do
 >
 > **Answer to the "no features" question:**
 > **No** — `serde` is not compiled at all. `optional = true` means the dependency only enters the build graph when a feature that references it is activated. A plain `my_lib = "1.0"` has zero serde overhead: no download, no compile time, no binary size increase. This is how large libraries like `chrono` and `reqwest` keep their default build lean while offering rich opt-in functionality.
-
+> 
 ---
 
 ### Exercise 3: Git Dependencies — When, How, and the Risks
@@ -230,7 +230,7 @@ You need to use a bug-fix commit in `rand` that was merged to `master` but hasn'
 > #### Technical Explanation
 >
 > Git dependencies are a short-term escape hatch, not a long-term solution. Use `rev` (not `branch`) if you must use one, commit your `Cargo.lock`, and migrate to a published version as soon as possible.
-
+> 
 ---
 
 ## 6. Related Terms

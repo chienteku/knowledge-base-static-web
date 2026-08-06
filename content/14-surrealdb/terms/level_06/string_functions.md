@@ -166,7 +166,7 @@ Sanitize user profile input `"   JANE DOE   "` by trimming whitespace and conver
 > 1. `string::trim()` removes leading and trailing whitespace.
 > 2. `string::slug()` converts string text into URL-friendly slug strings ("jane-doe").
 > 3. Automates URL slug generation directly inside database queries.
-
+> 
 ---
 
 ### Exercise 2: String Substring and Length Inspections
@@ -193,7 +193,7 @@ Inspect string length using `string::len()` and extract the first 5 characters u
 > 1. `string::len()` returns UTF-8 character counts accurately.
 > 2. `string::slice(str, start, end)` extracts character range substrings.
 > 3. Enables string parsing and truncation server-side.
-
+> 
 ---
 
 ### Exercise 3: String Replacement & Pattern Matching
@@ -218,7 +218,7 @@ Replace all occurrences of `"PostgreSQL"` with `"SurrealDB"` in a description te
 > 1. `string::replace(str, pattern, replacement)` replaces all matching string occurrences.
 > 2. Performs global text replacement natively inside the database.
 > 3. Useful for content migration and text transformations.
-
+> 
 ---
 
 

@@ -297,7 +297,7 @@ Implement a generic packet header validation and 16-bit checksum function `valid
 > 2. **Explicit Reference Conversion (`packet.as_ref()`)**: Unlike `Deref` which performs implicit coercion, `AsRef` requires calling `.as_ref()` explicitly inside the function body to acquire `&[u8]`.
 > 3. **Zero-Copy Performance**: No vector cloning or buffer reallocation occurs. `String`, `Vec<u8>`, array slices, and `CustomFrame` all yield a borrowed reference to their pre-existing contiguous byte memory in $O(1)$ time.
 > 4. **Custom Implementation**: Implementing `AsRef<[u8]> for CustomFrame` connects domain-specific structs to standard library generic algorithms seamlessly.
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy In-Place Audio DSP Gain Filter using `AsMut<[i16]>`
@@ -384,7 +384,7 @@ Implement `AsMut<[i16]>` and `AsRef<[i16]>` for a generic fixed-size struct `Aud
 > 2. **In-Place Mutation**: `apply_gain` operates directly on `&mut [i16]` obtained from `buffer.as_mut()`. This avoids heap allocations, making it suitable for high-throughput or real-time embedded environments.
 > 3. **Const Generics & Arrays**: `AudioFrame<const N: usize>` demonstrates combining const generics with `AsMut`, enabling fixed stack-allocated buffers to integrate cleanly with generic slice algorithms.
 > 4. **Standard Implementations**: The Rust standard library automatically implements `AsMut<[T]>` for `Vec<T>`, `[T; N]`, and mutable slice references `&mut [T]`.
-
+> 
 ---
 
 ### Exercise 3: Multi-Format System Log Target with Combined `AsRef` Bounds
@@ -469,7 +469,7 @@ Design a struct `LogTarget<P, M>` with generic bounds `P: AsRef<Path>` and `M: A
 > 1. **Multiple Generic Trait Bounds**: A single struct or function can impose multiple `AsRef` bounds (`P: AsRef<Path>` and `M: AsRef<str>`) on separate type parameters.
 > 2. **API Flexibility & Ergonomics**: Callers can pass owned types (`PathBuf`, `String`) or borrowed references (`&Path`, `&str`) without writing `Path::new(...)` or `.as_str()` at every call site.
 > 3. **Coherence & Multiple Target Implementations**: Standard `String` implements `AsRef<str>`, `AsRef<Path>`, and `AsRef<[u8]>` simultaneously. `AsRef` allows multiple implementations for different target types `T` on the same source type, unlike `Deref<Target = T>` which is restricted to a single target type per source.
-
+> 
 ---
 
 ## 6. Related Terms

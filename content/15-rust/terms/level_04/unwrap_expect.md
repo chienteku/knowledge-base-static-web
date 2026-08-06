@@ -301,7 +301,7 @@ Implement a generic `ConfigLoader` trait and a `ServerConfig` bootstrap builder 
 > 2. **Fallback Strategy Allocation**: `.unwrap_or_else(|_| Ok(8080))` evaluates the closure lazily only when the `Result` or `Option` is empty. In contrast, `.unwrap_or()` eagerly evaluates its default parameter, which could incur unnecessary allocation or compute costs for complex types.
 > 3. **Error Propagation Boundaries**: Required keys (like `SERVICE_NAME`) use the `?` operator to return a `ConfigError::MissingKey` variant to the caller rather than crashing the process with `.unwrap()`. This cleanly separates fatal bootstrap defects from recoverable initialization errors.
 > 4. **Memory & Lifetimes**: String values extracted from environment maps transfer full ownership (`String`) into the `ServerConfig` struct, avoiding borrowed reference lifetimes (`&str`) across async task spawning boundaries.
-
+> 
 ---
 
 ### Exercise 2: High-Throughput Fixed-Capacity Invariant Buffer with Safe Unwrapping
@@ -462,7 +462,7 @@ Implement a generic bounded ring buffer `BoundedRingBuffer<T, const CAP: usize>`
 > 2. **Monomorphization & Const Generics**: The buffer uses const generics `const CAP: usize` and generic type `T`. During compilation, Rust monomorphizes separate machine code for each unique `(T, CAP)` combination (e.g., `BoundedRingBuffer<i32, 3>` vs `BoundedRingBuffer<i32, 4>`). This eliminates dynamic memory allocations and enables zero-cost static dispatch in `process_buffer_stream`.
 > 3. **Option State Extraction (`.take()`)**: `.take()` replaces `slots[head]` with `None` while extracting `Some(T)` without copying or cloning `T`. This preserves strict move semantics for non-`Copy` types.
 > 4. **Edge Cases**: Index wrap-around `(self.head + 1) % CAP` prevents index-out-of-bounds runtime panics while keeping array bounds checking efficient.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Microservice Plugin Registry with Dynamic Dispatch & Contract Enforcement
@@ -643,7 +643,7 @@ Implement:
 > 2. **Enforcing Bootstrapping Invariants with `.expect()`**: Mandatory middleware components must be present for security compliance. Using `.expect()` when retrieving `"auth_guard"` ensures that misconfigured server deployments fail instantly at startup with clear actionable error messages rather than silently bypassing authentication or failing late with obscure `NullPointer` equivalents.
 > 3. **Thread-Safety Traits (`Send + Sync`)**: Constraining `RequestFilter: Send + Sync` guarantees that `GatewayPipeline` can be safely shared across worker threads (`Arc<GatewayPipeline>`) without data races.
 > 4. **Testing Invariant Violations**: Using `#[should_panic(expected = "...")]` in unit tests verifies that missing mandatory dependencies panic as intended with the exact anticipated diagnostic message.
-
+> 
 ---
 
 ## 6. Related Terms

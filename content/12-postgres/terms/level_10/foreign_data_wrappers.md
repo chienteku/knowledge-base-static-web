@@ -177,7 +177,7 @@ Configure `postgres_fdw` to connect local database `analytics` to remote databas
 > 1. Foreign Data Wrappers (FDW) implement ANSI SQL/MED (Management of External Data) specifications.
 > 2. `postgres_fdw` allows local queries to read and join tables residing on remote PostgreSQL servers transparently.
 > 3. Enables federated multi-database querying.
-
+> 
 ---
 
 ### Exercise 2: Querying Remote Foreign Tables in SQL
@@ -206,7 +206,7 @@ Execute a local `SELECT` query joining local table `reports` with remote foreign
 > 1. Foreign tables behave like standard local tables in SQL queries.
 > 2. `postgres_fdw` pushes filtering predicates (`WHERE`) and projections down to the remote server automatically (`Predicate Pushdown`).
 > 3. Reduces network data transfer overhead.
-
+> 
 ---
 
 ### Exercise 3: Cross-Database Querying Limits and Performance
@@ -233,7 +233,7 @@ Explain why heavy multi-table joins across foreign tables can suffer from networ
 > 1. FDW queries depend on remote server CPU and network link throughput.
 > 2. Materializing FDW query results into a local Materialized View eliminates network latency for reporting dashboards.
 > 3. Federated database architecture pattern.
-
+> 
 ---
 
 

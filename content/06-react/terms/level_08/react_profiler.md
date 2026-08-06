@@ -174,8 +174,8 @@ Why is `<ItemList>` re-rendering, and how would you resolve the issue?
 > - );
 > - }
 > - ```
-
-
+> 
+> 
 ---
 
 
@@ -204,7 +204,7 @@ Why is `<ItemList>` re-rendering, and how would you resolve the issue?
 > ```
 >
 > **Explanation:** `<Profiler>` tracks component render duration metrics programmatically.
-
+> 
 ---
 
 ### Exercise 3: Profiler Callback Key Arguments
@@ -221,7 +221,7 @@ Why is `<ItemList>` re-rendering, and how would you resolve the issue?
 > ```
 >
 > **Explanation:** `actualDuration` reports exact millisecond execution time spent rendering the profiled subtree.
-
+> 
 ## 7. Related Terms
 - [React DevTools](react_devtools.md) — The parent browser utility containing the Profiler interface.
 - [React.memo](react_memo.md) — The caching HOC verified using the Profiler.

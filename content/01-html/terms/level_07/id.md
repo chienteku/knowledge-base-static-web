@@ -132,7 +132,7 @@ The `id` attribute is the **License Plate Number**. No two cars in the garage ca
 > The `id` attribute is duplicated! You cannot have an `id="main-header"` on the `<header>` and also on the `<h1>`. One of them must be changed.
 > ```
 > - Think about the license plate metaphor.
-
+> 
 ---
 
 
@@ -155,7 +155,7 @@ The `id` attribute is the **License Plate Number**. No two cars in the garage ca
 > ```
 >
 > **Explanation:** `id` provides unique target hooks for links, labels, and scripts.
-
+> 
 ---
 
 ### Exercise 3: ID vs Class Specificity
@@ -172,7 +172,7 @@ The `id` attribute is the **License Plate Number**. No two cars in the garage ca
 > ```
 >
 > **Explanation:** ID selectors have higher CSS specificity rank than class selectors.
-
+> 
 ## 7. Related Terms
 - [`class` Attribute](class.md) — The attribute used for grouping *multiple* elements together (the opposite of `id`).
 - [`style` Attribute](style.md) — The inline styling attribute.

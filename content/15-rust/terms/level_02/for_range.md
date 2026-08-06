@@ -277,7 +277,7 @@ thread::spawn(move || {
 > 2. **Inclusive vs. Exclusive Bounds**: The range `start..(end - 1)` is used to iterate over all header and payload bytes excluding the trailing checksum byte. Range expressions in Rust are exclusive of the upper bound (`end - 1`), preventing off-by-one errors when computing checksums.
 > 3. **Ownership and Borrowing**: The function takes `buffer: &[u8]`, borrowing the slice immutably. Slices allow safe indexing within bound checks (`&buffer[start..end]`). Vector payloads are created using `.to_vec()`, copying only the relevant payload bytes into owned heap structures (`Frame`).
 > 4. **Edge Cases & Memory Safety**: If the total slice length is not an exact multiple of `frame_size`, `(start + frame_size).min(total_len)` prevents out-of-bounds slicing, allowing the code to explicitly detect truncated frames and return `FrameError::IncompleteFrame`.
-
+> 
 ---
 
 ### Exercise 2: Quantitative Market Volume Profiler & Sliding Window Aggregator
@@ -416,7 +416,7 @@ thread::spawn(move || {
 > 2. **Numeric Safety and Type Widening**: Accumulating financial volume products (`price * volume`) can quickly overflow standard 64-bit unsigned integers. Casting factors to `u128` during inner range summation (`(p as u128) * (v as u128)`) guarantees overflow-safe accumulation before converting to `f64` floating point for VWAP calculation.
 > 3. **Boundary Invariants**: Defining `num_windows = prices.len() - window_size + 1` establishes the exact upper bound for valid window start indices. The slice length checks prevent underflow during `prices.len() - window_size`.
 > 4. **Float Precision & Equivalence**: Unit tests test floating-point outcomes like `vwap` using delta tolerance (`(a - b).abs() < 1e-6`) rather than strict equality, adhering to IEEE-754 precision norms.
-
+> 
 ---
 
 ### Exercise 3: Low-Level Hardware MMIO Bitmask Event Logger
@@ -533,7 +533,7 @@ thread::spawn(move || {
 > 2. **Bitwise Masking & Early Continuation**: Fast register pre-filtering (`let active_bits = val & trigger_mask; if active_bits == 0 { continue; }`) skips 32-iteration bit-scan passes on register words containing no active event triggers, minimizing CPU cycles in hot loops.
 > 3. **Global ID Arithmetic**: Global identifier calculation `(reg_idx as u32) * 32 + (bit_pos as u32)` maps two-dimensional register-bit coordinates into a single linear domain safely, avoiding bit-overflow through unsigned type promotion (`u32`).
 > 4. **Edge Cases**: Non-responsive register sets (`empty`) or zero-masks are guarded before starting range loops, preventing runtime panic or redundant loop initialization.
-
+> 
 ---
 
 ## 6. Related Terms

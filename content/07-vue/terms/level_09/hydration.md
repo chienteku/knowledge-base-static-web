@@ -115,7 +115,7 @@ Why will this cause a Hydration Mismatch in an SSR app?
 > (To fix this, you must only check the `window` width *after* the component has hydrated, inside `onMounted`).
 > ```
 > - Does the server know the width of the user's screen when it renders the HTML?
-
+> 
 ---
 
 ### Exercise 2: ClientOnly Wrapper Component
@@ -134,7 +134,7 @@ Why will this cause a Hydration Mismatch in an SSR app?
 >   <BrowserOnlyComponent />
 > </ClientOnly>
 > ```
-
+> 
 ---
 
 ### Exercise 3: Hydration Definition
@@ -151,8 +151,8 @@ Why will this cause a Hydration Mismatch in an SSR app?
 > ```text
 > Server HTML + Client JS event listeners = Hydrated interactive SPA.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -187,7 +187,7 @@ function Timer() {
 **Expected output:**
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Fiber Work Phases
@@ -201,7 +201,7 @@ function Timer() {
 > ```
 >
 > **Explanation:** Fiber splits work into an interruptible calculation phase and a synchronous DOM commit phase.
-
+> 
 ---
 
 ### Exercise 3: Fiber Tree Double-Buffering
@@ -215,7 +215,7 @@ function Timer() {
 > ```
 >
 > **Explanation:** Double-buffering prevents incomplete or flickering UI frames from being displayed to users.
-
+> 
 ## 7. Related Terms
 - [Reconciliation](reconciliation.md) — The diffing process executed by Fiber nodes.
 - [Concurrent Rendering](../level_08/concurrent_rendering.md) — The feature set made possible by Fiber's interruptible pipeline.

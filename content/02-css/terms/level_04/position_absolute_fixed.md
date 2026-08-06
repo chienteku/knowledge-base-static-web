@@ -243,7 +243,7 @@ To place an absolute element exactly where you want it inside a container, you M
 > Fixed locks the element to the viewport glass so it survives scrolling. Absolute would scroll away with the article.
 > ```
 > - Does the element need to survive scrolling?
-
+> 
 ---
 
 
@@ -269,7 +269,7 @@ To place an absolute element exactly where you want it inside a container, you M
 > ```
 >
 > **Explanation:** Parent `position: relative` creates positioning boundary for absolute child.
-
+> 
 ---
 
 ### Exercise 3: Absolute vs Fixed Containing Block Boundary
@@ -286,7 +286,7 @@ To place an absolute element exactly where you want it inside a container, you M
 > ```
 >
 > **Explanation:** Fixed elements remain pinned to the screen viewport during page scrolling.
-
+> 
 ## 7. Related Terms
 - [`position: static` vs `relative`](position_static_relative.md) — The required partner for `absolute`.
 - [`position: sticky`](position_sticky.md) — The hybrid offset scrolling behavior.

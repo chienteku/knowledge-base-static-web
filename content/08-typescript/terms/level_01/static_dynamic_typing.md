@@ -121,13 +121,13 @@ Identify a runtime type crash caused by calling a non-existent method on a strin
 > 
 > formatUsername("  Alice  ");
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Static typing checks type compatibility and valid method signatures during compilation (`tsc`).
 > 2. Dynamic typing defers type checking to runtime, leading to uncaught `TypeError: name.toFixed is not a function` crashes.
 > 3. Eliminates entire classes of runtime type errors before code deployment.
-
+> 
 ---
 
 ### Exercise 2: Defining Strict Function Return Contracts
@@ -149,13 +149,13 @@ Define a function calculating total order prices with explicit return type contr
 > 
 > const total: number = calculateTotal(29.99, 3);
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Explicit parameter types (`number`) enforce valid caller input data.
 > 2. Return type annotations (`: number`) verify that function return expressions conform to expected interface contracts.
 > 3. Makes code self-documenting for IDE autocomplete and developer tooling.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: Static vs Dynamic Typing
@@ -175,13 +175,13 @@ Formulate an architectural comparison matrix contrasting Static Typing (TypeScri
 > - Static Typing (TypeScript): Type checking occurs at compile-time. Catches typos and shape errors early, enables IDE autocomplete, compiles down to plain JS.
 > - Dynamic Typing (JavaScript): Type checking occurs at runtime. Flexible, but errors manifest as runtime exceptions during execution.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Static typing adds a compilation step (`tsc`) to validate type soundness.
 > 2. TypeScript types are erased completely during compilation, producing plain JavaScript output.
 > 3. Zero runtime performance overhead from type annotations.
-
+> 
 ---
 
 

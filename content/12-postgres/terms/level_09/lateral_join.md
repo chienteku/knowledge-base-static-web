@@ -193,7 +193,7 @@ Query each customer alongside their top 2 highest value orders using `JOIN LATER
 > 1. Standard subqueries in `FROM` clauses cannot reference outer table columns.
 > 2. `LATERAL` allows subqueries to reference columns exposed by preceding tables (`c.id`).
 > 3. Fetches top-N child items per parent row efficiently.
-
+> 
 ---
 
 ### Exercise 2: Unnesting Arrays alongside Table Attributes
@@ -222,7 +222,7 @@ Unnest a `tags` array column on `posts` using `JOIN LATERAL unnest(tags)`.
 > 1. `LATERAL` allows set-returning functions like `UNNEST()` to reference array columns from the current row.
 > 2. Expands array elements into paired output rows.
 > 3. Idiomatic array expansion pattern.
-
+> 
 ---
 
 ### Exercise 3: Preserving Parents with Zero Matching Lateral Rows using `LEFT JOIN LATERAL`
@@ -257,7 +257,7 @@ Use `LEFT JOIN LATERAL ... ON TRUE` to preserve customers who have 0 orders.
 > 1. `CROSS JOIN LATERAL` drops parent rows if the lateral subquery returns zero rows.
 > 2. `LEFT JOIN LATERAL ... ON TRUE` preserves parent rows, populating subquery columns as `NULL` if 0 rows match.
 > 3. Complete outer lateral join coverage.
-
+> 
 ---
 
 

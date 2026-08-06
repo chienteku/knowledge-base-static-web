@@ -328,7 +328,7 @@ Total packet size is exactly 13 bytes.
 > 1. **Why `#[repr(C, packed)]` is required:** Default Rust memory layout (`#[repr(Rust)]` or standard `#[repr(C)]`) inserts padding bytes to align fields to their natural scalar alignment (`u16` aligned to 2 bytes, `u32`/`i32` aligned to 4 bytes). With default layout, 1 padding byte is inserted after `magic`, inflating struct size from 13 to 16 bytes. `#[repr(C, packed)]` strips all padding bytes so the struct matches the exact 13-byte wire protocol.
 > 2. **Preventing Undefined Behavior (UB) from unaligned references:** In Rust, standard references (`&T` or `&mut T`) MUST be aligned to `align_of::<T>()`. Creating an unaligned reference like `let r = &packet.timestamp;` causes immediate Undefined Behavior.
 > 3. **Safe Unaligned Pointer Operations:** `core::ptr::addr_of!(self.timestamp)` computes raw pointer `*const u32` directly without creating an intermediate reference `&u32`. `core::ptr::read_unaligned` then safely performs a byte-by-byte copy from unaligned memory into a local stack variable.
-
+> 
 ---
 
 ### Exercise 2: High-Performance Cache-Line Alignment (`#[repr(C, align(64))]`) to Eliminate False Sharing
@@ -416,7 +416,7 @@ In multi-threaded lock-free data structures (such as SPSC queues or concurrent m
 > 1. **False Sharing Mechanics:** CPU L1 caches manage memory in fixed-size blocks (typically 64 bytes, called cache lines). When CPU Core 1 writes to a memory location, the MESI cache coherency protocol invalidates that entire 64-byte cache line across all other CPU cores. If `head` and `tail` share a cache line, Core 1 and Core 2 continuously force each other to reload L1 cache lines from L2/L3 cache, slowing execution down by up to 50x.
 > 2. **How `#[repr(align(64))]` Works:** By marking `CachePaddedAtomicU64` with `align(64)`, the compiler forces its starting address to be a multiple of 64 and pads its total memory size to a multiple of 64 bytes (8 bytes data + 56 bytes trailing padding).
 > 3. **Memory Isolation:** Storing two `CachePaddedAtomicU64` fields inside `ConcurrentQueueIndices` guarantees `head` occupies Cache Line $N$ (bytes 0..64) and `tail` occupies Cache Line $N+1$ (bytes 64..128), completely eliminating false sharing.
-
+> 
 ---
 
 ### Exercise 3: SIMD Hardware Vector Buffer Alignment (`#[repr(C, align(32))]`)

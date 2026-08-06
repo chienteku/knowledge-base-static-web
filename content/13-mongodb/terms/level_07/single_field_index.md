@@ -166,7 +166,7 @@ Create a single field ascending index on `username` in collection `users`.
 > 1. Single field indexes build a B-tree over a single top-level or embedded field.
 > 2. Ascending (`1`) vs descending (`-1`) direction does not matter for single field sorts, as MongoDB can traverse single field B-trees in either direction.
 > 3. Converts equality lookups from $O(N)$ scans to $O(\log N)$ lookups.
-
+> 
 ---
 
 ### Exercise 2: Indexing Embedded Subdocument Paths
@@ -190,7 +190,7 @@ Create a single field index on embedded path `address.zip` in collection `custom
 > 1. Single field indexes can target dot-notation subdocument paths (`"address.zip"`).
 > 2. Indexes nested subfield values directly.
 > 3. Speeds up location filtering queries.
-
+> 
 ---
 
 ### Exercise 3: Single Field Sort Traversal
@@ -214,7 +214,7 @@ Execute query `find().sort({ username: -1 })` using single field index `{ userna
 > 1. Single field indexes support sorting in BOTH ascending (`1`) and descending (`-1`) directions.
 > 2. WiredTiger traverses the B-tree in reverse for descending sorts.
 > 3. Note: This reverse traversal flexibility applies ONLY to single field indexes, not compound indexes.
-
+> 
 ---
 
 

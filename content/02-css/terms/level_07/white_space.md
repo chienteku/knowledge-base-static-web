@@ -119,7 +119,7 @@ The W3C created the **`white-space`** property to allow developers to override t
 > The text refuses to wrap to a second line. It will blast straight through the right wall of the 300px box and keep going horizontally, forcing the user to scroll sideways to read it.
 > ```
 > - Does `nowrap` respect the width of the container?
-
+> 
 ---
 
 
@@ -140,7 +140,7 @@ The W3C created the **`white-space`** property to allow developers to override t
 > ```
 >
 > **Explanation:** `white-space: pre-wrap` preserves source newlines while allowing normal line wrapping.
-
+> 
 ---
 
 ### Exercise 3: White Space Property Matrix
@@ -167,7 +167,7 @@ The W3C created the **`white-space`** property to allow developers to override t
 > ```
 >
 > **Explanation:** `white-space` dictates whitespace collapsing and line wrapping rules.
-
+> 
 ## 7. Related Terms
 - [`text-overflow` & `overflow-wrap`](text_overflow.md) — When you use `nowrap` and the text blows out of the box, `text-overflow` allows you to cut it off with a "..." (ellipsis).
 

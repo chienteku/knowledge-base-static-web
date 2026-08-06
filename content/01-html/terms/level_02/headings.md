@@ -241,7 +241,7 @@ If you suddenly jumped from the title directly to a sub-sub-sub-topic (`<h5>`) w
 > - The title is the most important.
 > - Ingredients and Instructions are equal siblings.
 > - Baking Time belongs *inside* Instructions.
-
+> 
 ---
 
 ### Exercise 2: Structuring Sequential Heading Hierarchy
@@ -263,7 +263,7 @@ If you suddenly jumped from the title directly to a sub-sub-sub-topic (`<h5>`) w
 > ```
 >
 > **Explanation:** Heading tags construct a nested outline tree for accessibility and search engines.
-
+> 
 ---
 
 ### Exercise 3: Styling Headings vs Heading Semantics
@@ -277,7 +277,7 @@ If you suddenly jumped from the title directly to a sub-sub-sub-topic (`<h5>`) w
 > ```
 >
 > **Explanation:** Heading tags dictate structural hierarchy; CSS dictates visual font size.
-
+> 
 ## 7. Related Terms
 - [`<p>` (Paragraph)](p.md) — The text that usually follows a heading.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing headings.

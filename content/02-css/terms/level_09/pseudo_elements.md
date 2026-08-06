@@ -205,7 +205,7 @@ img::after { content: "Caption"; } /* ❌ Void elements cannot have pseudo-eleme
 > ```
 > - Target the content inserted *before* paragraph text.
 > - Declare the character inside the mandatory property.
-
+> 
 ---
 
 
@@ -230,7 +230,7 @@ img::after { content: "Caption"; } /* ❌ Void elements cannot have pseudo-eleme
 > ```
 >
 > **Explanation:** `content: attr(data-attribute)` dynamically displays HTML data attribute values.
-
+> 
 ---
 
 ### Exercise 3: Single vs Double Colon Pseudo-Element Syntax
@@ -247,7 +247,7 @@ img::after { content: "Caption"; } /* ❌ Void elements cannot have pseudo-eleme
 > ```
 >
 > **Explanation:** Double colons (`::`) specify generated DOM sub-elements.
-
+> 
 ## 7. Related Terms
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Interactive state selectors.
 - [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — Overriding default inline display constraints.

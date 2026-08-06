@@ -217,7 +217,7 @@ Implement a PAC-style register wrapper `Register` with `.read()`, `.write()`, an
 > 1. **Closure-based API**: In `svd2rust` generated PACs, `.modify()` receives a closure `|_r, w| ...`. `r` is a read snapshot (`R`), while `w` is a write proxy pre-populated with the current register value `r.0`.
 > 2. **Read-Modify-Write Safety**: Modifying bitfields through `modify` performs bit manipulation over the existing bit pattern, preserving adjacent control fields. Calling `write` starts from `W(0)`, effectively zeroing unconfigured fields.
 > 3. **Fluent Interface Pattern**: Writer methods return `&mut Self`, allowing chained method calls like `w.gpioaen(true).gpioben(false)`.
-
+> 
 ---
 
 ### Exercise 2: Type-Safe Enum Bitfield Encoding in PAC Registers
@@ -304,7 +304,7 @@ Design a PAC timer register structure `TimerCr1` with an enum `CounterMode` repr
 > 1. **Strong Type Enums in PACs**: Using `#[repr(u8)]` enums maps domain states directly to raw bit vectors, eliminating invalid bit combinations at compile time.
 > 2. **Bit-masking & Shifting**: Setting bits 4..=5 requires clearing existing bits using bitwise AND with mask `!(0b11 << 4)` before applying bitwise OR with shifted value `(mode as u32) << 4`.
 > 3. **Zero-Cost Abstraction**: Rust optimizes these enum conversions into simple bitwise instructions (`AND`/`OR`/`LSL`), producing machine code identical to hand-written C macros while providing compile-time type safety.
-
+> 
 ---
 
 ### Exercise 3: Peripherals Singleton Pattern (`Peripherals::take()`)
@@ -377,10 +377,9 @@ Implement a thread-safe `Peripherals` singleton using `AtomicBool` to manage own
 > 1. **Single-Ownership Guarantee**: Physical hardware registers are unique resources. By exposing `Peripherals::take() -> Option<Self>`, PAC crates guarantee single ownership at runtime.
 > 2. **Atomic Swap Synchronization**: Using `AtomicBool::swap(true, Ordering::SeqCst)` guarantees lock-free, atomic check-and-set operations even in multi-threaded host tests or interrupt-driven embedded environments.
 > 3. **HAL Consumption**: A high-level Hardware Abstraction Layer (HAL) crate calls `Peripherals::take()` during system startup to split raw peripherals into individual driver instances (e.g., `dp.GPIOA.split()`), moving ownership tracking to compile-time types.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

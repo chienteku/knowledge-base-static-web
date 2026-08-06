@@ -178,7 +178,7 @@ Insert a new customer and return generated `id` and `created_at` values instantl
 > 1. `RETURNING` projects modified or generated row attributes directly from the write statement.
 > 2. Eliminates issuing a secondary `SELECT` query to fetch sequence values.
 > 3. Single network roundtrip optimization.
-
+> 
 ---
 
 ### Exercise 2: Capturing Pre-Update State in UPDATE Statements
@@ -205,7 +205,7 @@ Deactivate a user and return their previous `email` address in the response payl
 > 1. `RETURNING` on `UPDATE` returns the newly updated column values.
 > 2. Confirms row mutation succeeded.
 > 3. Useful for returning updated entity objects to client APIs.
-
+> 
 ---
 
 ### Exercise 3: Returning Deleted Rows for Audit Logging
@@ -231,7 +231,7 @@ Delete expired sessions and return the deleted session tokens for audit archivin
 > 1. `RETURNING` on `DELETE` projects the data content of deleted rows before they are purged.
 > 2. Allows application code to log or archive deleted row payloads.
 > 3. Powerful PostgreSQL extension.
-
+> 
 ---
 
 

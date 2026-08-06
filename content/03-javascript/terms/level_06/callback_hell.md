@@ -164,7 +164,7 @@ async function processData() {
 > A sideways pyramid (often called the "Pyramid of Doom").
 > ```
 > - Look at the indentation of the code examples. `> > >`
-
+> 
 ---
 
 ### Exercise 2: Refactoring Callbacks to Promises
@@ -184,7 +184,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Promises flatten deeply nested callback hierarchies into sequential `.then()` chains.
-
+> 
 ---
 
 ### Exercise 3: Async Await Flattening
@@ -208,8 +208,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `async/await` eliminates callback nesting by formatting async operations as clean linear code.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

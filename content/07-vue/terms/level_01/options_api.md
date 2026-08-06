@@ -147,7 +147,7 @@ export default {
 > You primarily need to know the Options API to maintain older Vue 2 codebases.
 > ```
 > - Read the documentation guidelines for this knowledge base!
-
+> 
 ---
 
 ### Exercise 2: Options API Component Conversion
@@ -175,7 +175,7 @@ export default {
 >   }
 > };
 > ```
-
+> 
 ---
 
 ### Exercise 3: Options API Method Access
@@ -196,8 +196,8 @@ export default {
 >   }
 > }
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

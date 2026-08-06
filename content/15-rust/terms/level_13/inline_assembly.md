@@ -170,7 +170,7 @@ unsafe { asm!("add {0}, 1", inout(reg) val, options(nomem, nostack)); }
 >
 > 1. `inout(reg) val => result` assigns `val` to a general-purpose register and stores output in `result`.
 > 2. `options(nomem, nostack, pure)` signals to LLVM that the operation has no memory side-effects.
-
+> 
 ---
 
 ### Exercise 2: CPUID Processor Vendor Identification Assembly Wrapper
@@ -220,7 +220,7 @@ unsafe { asm!("add {0}, 1", inout(reg) val, options(nomem, nostack)); }
 > #### Technical Explanation
 >
 > 1. Direct register constraints `inout("eax")` and `out("ebx")` map variables to physical CPU hardware registers.
-
+> 
 ---
 
 ### Exercise 3: Hardware NOP Delay Loop Assembly Generator
@@ -265,7 +265,7 @@ unsafe { asm!("add {0}, 1", inout(reg) val, options(nomem, nostack)); }
 > #### Technical Explanation
 >
 > 1. Implements raw assembly jump loops using local labels (`1:`, `1b`).
-
+> 
 ---
 
 ## 5. Related Terms

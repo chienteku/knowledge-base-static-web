@@ -169,7 +169,7 @@ async function processData() {
 > `const data = await res.json();`
 > ```
 > - `fetch` resolves with a `Response` object, not the actual JSON data.
-
+> 
 ---
 
 ### Exercise 2: Checking HTTP Response `response.ok` Status
@@ -191,7 +191,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Checking `response.ok` ensures non-2xx HTTP status codes are handled as errors.
-
+> 
 ---
 
 ### Exercise 3: Parsing JSON Body with `response.json()`
@@ -210,8 +210,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `response.json()` returns a Promise resolving to the parsed JSON body payload.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

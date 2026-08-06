@@ -216,7 +216,7 @@ export default function ProductItem({ product }) {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Form Handling with Server Action and revalidatePath
@@ -238,7 +238,7 @@ export default function ProductItem({ product }) {
 > ```
 >
 > **Explanation:** Server Actions execute server mutations directly from forms, calling `revalidatePath` to purge stale caches.
-
+> 
 ---
 
 ### Exercise 3: Client Hook for Server Action Pending State
@@ -255,7 +255,7 @@ export default function ProductItem({ product }) {
 > ```
 >
 > **Explanation:** `useFormStatus` tracks parent form Server Action submission pending states.
-
+> 
 ## 7. Related Terms
 - [Client vs Server Components & `"use client"`](client_server_components.md) — The environment boundaries separating code.
 - [`useActionState` Hook](use_action_state.md) — The hook used to read the return status of a Server Action.

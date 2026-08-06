@@ -152,7 +152,7 @@ Compare execution plan behavior between a `Seq Scan` (filtering un-indexed colum
 > 1. `Seq Scan` reads every table heap page sequentially from disk ($O(N)$). Fast for small tables (< 1,000 rows); slow for large tables.
 > 2. `Index Scan` traverses a B-tree index to find matching tuple pointers ($O(\log N)$) and fetches corresponding heap pages.
 > 3. Query planner selects access method based on expected selectivity and page costs.
-
+> 
 ---
 
 ### Exercise 2: Understanding Bitmap Index Scans for Multi-Row Result Sets
@@ -178,7 +178,7 @@ Analyze why PostgreSQL uses a `Bitmap Index Scan` + `Bitmap Heap Scan` when a qu
 > 1. `Bitmap Index Scan` scans the index to build a memory bitmap of target table page locations.
 > 2. `Bitmap Heap Scan` sorts page locations in physical disk order and fetches heap pages sequentially.
 > 3. Prevents random I/O thrashing when retrieving thousands of rows.
-
+> 
 ---
 
 ### Exercise 3: Why Small Tables Prefer Sequential Scans
@@ -206,7 +206,7 @@ Explain why PostgreSQL deliberately chooses a `Seq Scan` over an `Index Scan` on
 > 1. Index lookups add pointer traversal overhead.
 > 2. For tiny tables, reading the entire table heap in a single I/O operation is faster than traversing an index.
 > 3. Demonstrates cost-based query optimizer intelligence.
-
+> 
 ---
 
 

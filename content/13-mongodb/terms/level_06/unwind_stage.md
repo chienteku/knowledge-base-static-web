@@ -193,7 +193,7 @@ Deconstruct the `items` array in `orders` collection to compute total quantities
 > 1. `$unwind` outputs a separate document for each element in the specified array field.
 > 2. Multiplies document count by array length.
 > 3. Enables grouping and accumulating across array item properties.
-
+> 
 ---
 
 ### Exercise 2: Preserving Null and Empty Arrays with `preserveNullAndEmptyArrays`
@@ -224,7 +224,7 @@ Unwind `tags` array on products, keeping products that have empty or missing `ta
 > 1. By default, `$unwind` drops documents where the array is empty `[]`, `null`, or missing.
 > 2. `preserveNullAndEmptyArrays: true` preserves those documents, outputting them with `null` array values.
 > 3. Behaves like an outer join during array expansion.
-
+> 
 ---
 
 ### Exercise 3: Tracking Original Array Element Indexes with `includeArrayIndex`
@@ -255,7 +255,7 @@ Include the original zero-indexed array position when unwinding a user's `priori
 > 1. `includeArrayIndex` injects a new field containing the original zero-based element index into each output document.
 > 2. Retains original array ordering metadata after array deconstruction.
 > 3. Useful for order-sensitive array analytics.
-
+> 
 ---
 
 

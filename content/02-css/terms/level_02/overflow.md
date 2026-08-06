@@ -199,7 +199,7 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 > - Split the overflow rules using `overflow-x` and `overflow-y`.
 > - Disable horizontal scrolling using `hidden`.
 > - Enable dynamic vertical scrolling using `auto`.
-
+> 
 ---
 
 
@@ -228,7 +228,7 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 > ```
 >
 > **Explanation:** `overflow` controls container clipping and scrollbar rendering.
-
+> 
 ---
 
 ### Exercise 3: Single-Line Text Ellipsis Truncation
@@ -249,7 +249,7 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 > ```
 >
 > **Explanation:** Text ellipsis truncation requires disabling line wrap, hiding overflow, and setting `text-overflow: ellipsis`.
-
+> 
 ## 7. Related Terms
 - [Width / Height](width_height.md) — The size triggers.
 - [`text-overflow` & `overflow-wrap`](../level_07/text_overflow.md) — Adding ellipses (`...`) to clipped text.

@@ -149,7 +149,7 @@ Query active Write-Ahead Log (WAL) location coordinates (`LSN`) using system fun
 > 1. `pg_current_wal_lsn()` returns the Log Sequence Number (LSN) byte offset coordinate in the WAL stream.
 > 2. `pg_walfile_name()` resolves the 24-character hex WAL filename (e.g. `000000010000000000000042`).
 > 3. Core WAL telemetry inspection.
-
+> 
 ---
 
 ### Exercise 2: Verifying WAL Durability Sequence
@@ -176,7 +176,7 @@ Explain the exact sequential order in which write transactions write to WAL buff
 > 1. WAL protocol rules: A dirty data page in RAM can NEVER be written to main table heap files until the corresponding WAL record has been flushed to disk.
 > 2. Guarantees that if the server crashes or loses power, PostgreSQL can replay WAL files during startup crash recovery.
 > 3. Foundation of ACID Durability in PostgreSQL.
-
+> 
 ---
 
 ### Exercise 3: WAL Archiving and Retention Monitoring
@@ -206,7 +206,7 @@ Query `pg_stat_archiver` to monitor continuous WAL archiving status and archive 
 > 1. `pg_stat_archiver` monitors the background WAL archiver process.
 > 2. `failed_count > 0` alerts administrators that WAL archive commands (e.g. copying to S3) are failing.
 > 3. Critical backup health monitoring query.
-
+> 
 ---
 
 

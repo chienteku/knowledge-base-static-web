@@ -203,7 +203,7 @@ sumStream();
 > ```
 > - Write `for await (const num of numberStream())`.
 > - Inside the loop, increment total: `total += num;`.
-
+> 
 ---
 
 ### Exercise 2: Iterating Async Generators with `for await...of`
@@ -230,7 +230,7 @@ sumStream();
 > ```
 >
 > **Explanation:** `for await...of` awaits promised values yielded by async generator streams.
-
+> 
 ---
 
 ### Exercise 3: Iterating Arrays of Promises with `for await...of`
@@ -254,8 +254,8 @@ sumStream();
 > ```
 >
 > **Explanation:** `for await...of` automatically awaits items when iterating collections containing promises.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

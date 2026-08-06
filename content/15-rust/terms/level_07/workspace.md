@@ -151,7 +151,7 @@ Write the exact TOML code that must go in the root `Cargo.toml` to link these tw
 >     "game_server",
 > ]
 > ```
-
+> 
 ---
 
 ### Exercise 2: Sharing Dependencies Across Workspace Members
@@ -198,7 +198,7 @@ Write the **root** `Cargo.toml` for a workspace called `my_platform` with member
 > #### Technical Explanation
 >
 > `[workspace.dependencies]` is a DRY principle applied to dependency management. It acts as a single source of truth for versions across all crates in the workspace. When you upgrade `serde`, you change one line in the root `Cargo.toml` and every member crate picks up the change automatically on the next `cargo build`.
-
+> 
 ---
 
 ### Exercise 3: Virtual Workspaces and Shared `target/`
@@ -243,7 +243,7 @@ You are building a monorepo for a platform with three crates: `core_lib`, `api_s
 > #### Technical Explanation
 >
 > The virtual workspace pattern is the standard for monorepos: all crates benefit from shared compilation without any crate being forced to also be the "root" package. The root is a pure manifest — an organizational container with no code of its own.
-
+> 
 ---
 
 ## 6. Related Terms

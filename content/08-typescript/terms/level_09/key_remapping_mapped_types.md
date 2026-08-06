@@ -107,21 +107,21 @@ Remap all keys of a `State` object to add a `get` prefix (`getTheme`, `getSideba
 >   theme: string;
 >   sidebarOpen: boolean;
 > }
-
-type Getters<T> = {
-  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
-};
-
-type StateGetters = Getters<State>;
-// Inferred as: { getTheme: () => string; getSidebarOpen: () => boolean; }
-```
-
+> 
+> type Getters<T> = {
+>   [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
+> };
+> 
+> type StateGetters = Getters<State>;
+> // Inferred as: { getTheme: () => string; getSidebarOpen: () => boolean; }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `[K in keyof T as NewKey]` remaps property key names dynamically during mapped type iteration.
 > 2. Combined with template literal types (`get${Capitalize<string & K>}`), it generates getter method names automatically.
 > 3. Standard pattern for building reactive state getters or store abstractions.
-
+> 
 ---
 
 ### Exercise 2: Filtering Keys by Value Type with `never`
@@ -140,24 +140,24 @@ Create a utility `MethodsOnly<T>` that filters an object interface to keep ONLY 
 > type MethodsOnly<T> = {
 >   [K in keyof T as T[K] extends Function ? K : never]: T[K];
 > };
-
-interface Service {
-  id: string;
-  name: string;
-  connect(): void;
-  disconnect(): void;
-}
-
-type ServiceMethods = MethodsOnly<Service>;
-// Inferred as: { connect: () => void; disconnect: () => void; }
-```
-
+> 
+> interface Service {
+>   id: string;
+>   name: string;
+>   connect(): void;
+>   disconnect(): void;
+> }
+> 
+> type ServiceMethods = MethodsOnly<Service>;
+> // Inferred as: { connect: () => void; disconnect: () => void; }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Remapping a key to `never` (`as T[K] extends Function ? K : never`) excludes that key from the resulting mapped object type.
 > 2. Enables filtering object interfaces based on value types.
 > 3. Advanced mapped type key filtering technique.
-
+> 
 ---
 
 ### Exercise 3: Stripping Specific Key Prefixes
@@ -176,23 +176,23 @@ Strip the `_` prefix from private key names (`_id`, `_name`) using key remapping
 > type UnprefixPrivate<T> = {
 >   [K in keyof T as K extends `_${infer Rest}` ? Rest : K]: T[K];
 > };
-
-interface PrivateData {
-  _id: string;
-  _secret: number;
-  publicName: string;
-}
-
-type PublicData = UnprefixPrivate<PrivateData>;
-// Inferred as: { id: string; secret: number; publicName: string; }
-```
-
+> 
+> interface PrivateData {
+>   _id: string;
+>   _secret: number;
+>   publicName: string;
+> }
+> 
+> type PublicData = UnprefixPrivate<PrivateData>;
+> // Inferred as: { id: string; secret: number; publicName: string; }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Key remapping combines template literal pattern matching (`K extends \`_${infer Rest}\``) with `as` clauses.
 > 2. Strips leading underscore prefixes dynamically.
 > 3. Powerful structural refactoring tool.
-
+> 
 ---
 
 

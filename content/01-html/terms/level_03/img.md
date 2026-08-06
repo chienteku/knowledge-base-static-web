@@ -144,7 +144,7 @@ The `src` (source) attribute is the set of instructions you give to an assistant
 > A small "broken image" icon will appear, followed immediately by the plain text: "Company Logo".
 > ```
 > - What is the backup plan when the `src` fails?
-
+> 
 ---
 
 
@@ -163,7 +163,7 @@ The `src` (source) attribute is the set of instructions you give to an assistant
 > ```
 >
 > **Explanation:** `loading="lazy"` defers image fetching until element approaches the viewport.
-
+> 
 ---
 
 ### Exercise 3: Modern Image Format Support
@@ -180,7 +180,7 @@ The `src` (source) attribute is the set of instructions you give to an assistant
 > ```
 >
 > **Explanation:** WebP and AVIF formats reduce file size by 30-50% while preserving image quality.
-
+> 
 ## 7. Related Terms
 - [`alt` Attribute](alt.md) — The required accessibility attribute for images.
 - [`src` Attribute](src.md) — The attribute used to define the image source URL.

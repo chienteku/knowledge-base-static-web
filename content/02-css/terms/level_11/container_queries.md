@@ -273,7 +273,7 @@ Container-relative unit values:
 > ```
 > - Remember to set the container context wrapper first.
 > - Target the child element inside the `@container` conditional query block.
-
+> 
 ---
 
 
@@ -299,7 +299,7 @@ Container-relative unit values:
 > ```
 >
 > **Explanation:** Container queries allow components to adapt based on parent container width rather than viewport width.
-
+> 
 ---
 
 ### Exercise 3: Container Queries vs Media Queries Difference
@@ -316,7 +316,7 @@ Container-relative unit values:
 > ```
 >
 > **Explanation:** Container queries enable true modular component responsiveness.
-
+> 
 ## 7. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Viewport-based responsive queries.
 - [`@supports` (Feature Queries)](supports.md) — Browser feature detection at-rules.

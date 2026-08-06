@@ -193,7 +193,7 @@ fn for_each_num<F: Fn(i32)>(nums: &[i32], callback: F) { ... } // Accepts functi
 >
 > 1. `extern "C" fn(...)` defines the C ABI calling convention for thin function pointers.
 > 2. `LogCallback` stores a bare code memory address with zero environment overhead.
-
+> 
 ---
 
 ### Exercise 2: High-Performance Command Dispatch Table
@@ -256,7 +256,7 @@ fn for_each_num<F: Fn(i32)>(nums: &[i32], callback: F) { ... } // Accepts functi
 >
 > 1. `fn(&str) -> Result<String, String>` is a concrete `Copy` type stored directly in the `HashMap`.
 > 2. Avoids dynamic trait object allocations (`Box<dyn Fn(...)>`).
-
+> 
 ---
 
 ### Exercise 3: Pluggable Sorting Comparator Engine
@@ -303,7 +303,7 @@ fn for_each_num<F: Fn(i32)>(nums: &[i32], callback: F) { ... } // Accepts functi
 >
 > 1. `comparator: fn(&T, &T) -> Ordering` accepts both top-level functions (`reverse_cmp`) and non-capturing closures.
 > 2. Function pointers carry zero environment overhead.
-
+> 
 ---
 
 ## 6. Related Terms

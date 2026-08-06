@@ -127,7 +127,7 @@ The `class` is the category. A shirt might have the class "mens-wear", "summer-c
 > A `class`! Because you want to apply the exact same style to 5 different elements. IDs must be unique and can only be used once.
 > ```
 > - Are there multiple elements that need to share this behavior?
-
+> 
 ---
 
 
@@ -146,7 +146,7 @@ The `class` is the category. A shirt might have the class "mens-wear", "summer-c
 > ```
 >
 > **Explanation:** Multiple CSS classes are declared in a space-delimited list.
-
+> 
 ---
 
 ### Exercise 3: JavaScript classList API
@@ -163,7 +163,7 @@ The `class` is the category. A shirt might have the class "mens-wear", "summer-c
 > ```
 >
 > **Explanation:** `.classList.add()` safely appends classes to the element class token list.
-
+> 
 ## 7. Related Terms
 - [`id` Attribute](id.md) — The strictly unique identifier.
 - [`style` Attribute](style.md) — Another global attribute used to apply CSS directly to an element.

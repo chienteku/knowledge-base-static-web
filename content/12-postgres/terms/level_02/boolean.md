@@ -160,7 +160,7 @@ Query table `users` for active verified user accounts where `is_active = TRUE` a
 > 1. `BOOLEAN` columns consume 1 byte of storage per row.
 > 2. `WHERE is_active IS TRUE` evaluates 3-valued logic, correctly handling `NULL` boolean states.
 > 3. Can be indexed with partial indexes for filtering active flags.
-
+> 
 ---
 
 ### Exercise 2: Toggling Boolean State Flags
@@ -187,7 +187,7 @@ Toggle a user's `is_active` status flag to `FALSE` upon account suspension.
 > 1. `UPDATE` sets the boolean column value to `FALSE` atomically.
 > 2. `RETURNING` confirms the updated row state.
 > 3. Triggers audit events or downstream notification cascades.
-
+> 
 ---
 
 ### Exercise 3: Handling 3-Valued Logic in Boolean Expressions
@@ -213,7 +213,7 @@ Query documents where `is_archived` is `FALSE` OR `NULL` using `IS NOT TRUE`.
 > 1. In SQL 3-valued logic, `NULL = FALSE` evaluates to `UNKNOWN` (not `TRUE`).
 > 2. `IS NOT TRUE` evaluates to true for both `FALSE` and `NULL` values.
 > 3. Prevents accidental row exclusion when boolean columns permit `NULL`.
-
+> 
 ---
 
 

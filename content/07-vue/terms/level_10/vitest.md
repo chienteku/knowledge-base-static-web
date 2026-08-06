@@ -225,7 +225,7 @@ describe('TitleCard', () => {
 > ```
 > - The component mount options object accepts a `props` object: `{ props: { key: value } }`.
 > - Use `.find('h1')` to query the heading tag, and `.text()` to read its content.
-
+> 
 ---
 
 ### Exercise 2: Vitest Basic Component Test Pattern
@@ -249,7 +249,7 @@ describe('TitleCard', () => {
 >   expect(wrapper.text()).toContain('Welcome');
 > });
 > ```
-
+> 
 ---
 
 ### Exercise 3: Vitest Watch Mode Efficiency
@@ -266,8 +266,8 @@ describe('TitleCard', () => {
 > ```text
 > Re-executes only tests affected by changed files.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -161,7 +161,7 @@ A rideshare service indexes vehicle locations (`location` GeoJSON Point) using a
 > 1. `MTREE` builds bounding-box spatial R-tree index structures for GeoJSON geometries.
 > 2. Accelerates spatial proximity (`geo::distance`) and bounding box containment queries.
 > 3. Converts spatial $O(N)$ scans into fast spatial index lookups.
-
+> 
 ---
 
 ### Exercise 2: Spatial Proximity Queries with MTREE
@@ -186,7 +186,7 @@ Find all vehicles located within 5000 meters of coordinates `[-73.9851, 40.7589]
 > 1. `geo::distance()` evaluates spherical distance in meters.
 > 2. SurrealDB's query planner leverages `MTREE` indexes to prune distant spatial regions.
 > 3. Powers real-time geospatial location features.
-
+> 
 ---
 
 ### Exercise 3: Polygon Boundary Spatial Search
@@ -221,7 +221,7 @@ Query vehicles located inside a delivery zone GeoJSON Polygon.
 > 1. `INSIDE` evaluates point-in-polygon containment using MTREE spatial indexes.
 > 2. Prunes spatial search areas outside polygon bounding boxes.
 > 3. Enables automated geofencing coverage checks.
-
+> 
 ---
 
 

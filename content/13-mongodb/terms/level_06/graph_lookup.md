@@ -201,7 +201,7 @@ Traverse an employee reporting hierarchy in collection `employees` to retrieve a
 > 1. `$graphLookup` performs recursive graph traversal across document references.
 > 2. `connectFromField` specifies the field value to search for in target `connectToField`.
 > 3. Recursively collects all management hierarchy descendants into an array.
-
+> 
 ---
 
 ### Exercise 2: Capping Traversal Depth with `maxDepth`
@@ -238,7 +238,7 @@ Traverse social connections up to 2 degrees of separation (`maxDepth: 1`) using 
 > 1. `maxDepth` limits the recursive search depth (0 = direct links, 1 = 2 degrees of separation).
 > 2. `depthField` injects the traversal step count into returned graph subdocuments.
 > 3. Prevents runaway infinite loops on cyclic graph structures.
-
+> 
 ---
 
 ### Exercise 3: Circular Graph Prevention with `$graphLookup`
@@ -264,7 +264,7 @@ Explain how MongoDB automatically prevents infinite recursion when traversing cy
 > 1. Built-in cycle detection prevents infinite loops during graph traversal.
 > 2. Safe execution over complex, cyclic social networks and graph topologies.
 > 3. High performance graph querying.
-
+> 
 ---
 
 

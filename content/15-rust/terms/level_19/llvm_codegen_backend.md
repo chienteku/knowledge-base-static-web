@@ -139,7 +139,7 @@ Rustc guarantees safety before LLVM lowering; invalid LLVM IR causes undefined b
 >
 > 1. Demonstrates `rustc` codegen backend translating internal MIR statements to LLVM IR instructions.
 > 2. Inputs to LLVM optimization passes.
-
+> 
 ---
 
 ### Exercise 2: Target Triple Machine Code Selector
@@ -185,7 +185,7 @@ Rustc guarantees safety before LLVM lowering; invalid LLVM IR causes undefined b
 >
 > 1. Represents target triple configurations passed to LLVM backend during compilation.
 > 2. Enables cross-compilation.
-
+> 
 ---
 
 ### Exercise 3: SIMD Vectorization Flag Checker
@@ -221,7 +221,7 @@ Rustc guarantees safety before LLVM lowering; invalid LLVM IR causes undefined b
 >
 > 1. Demonstrates target feature detection passed to LLVM code generator.
 > 2. Drives instruction selection.
-
+> 
 ---
 
 ## 6. Related Terms

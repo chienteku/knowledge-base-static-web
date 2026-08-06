@@ -148,7 +148,7 @@ Export a compressed BSON backup of database `store_db` to directory `/backups/20
 > 1. `mongodump` exports collection data as raw binary BSON files alongside JSON metadata definitions.
 > 2. `--gzip` compresses output files to minimize backup disk storage.
 > 3. Standard CLI utility for logical database backups.
-
+> 
 ---
 
 ### Exercise 2: Restoring Database Backups with `mongorestore`
@@ -172,7 +172,7 @@ Restore compressed database backup `/backups/2026-08-05/store_db` into target da
 > 1. `mongorestore` parses BSON backup files and inserts documents and secondary indexes into target collections.
 > 2. `--nsInclude` or `--db` allows restoring backups under new database namespace names.
 > 3. Core command for disaster recovery and staging environment populating.
-
+> 
 ---
 
 ### Exercise 3: Point-in-Time Oplog Backup Restoration
@@ -200,7 +200,7 @@ Perform a point-in-time backup restoration using `mongodump --oplog` and `mongor
 > 1. `--oplog` captures oplog entries generated while `mongodump` was running.
 > 2. `--oplogReplay` replays those oplog entries after restoring BSON files, ensuring point-in-time transactional consistency.
 > 3. Prevents dirty backup state in high-write production databases.
-
+> 
 ---
 
 

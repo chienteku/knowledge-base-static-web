@@ -101,7 +101,7 @@ VITE_API_URL=https://api.com # Prefixed variables are exposed to import.meta.env
 > `npm create vue@latest` scaffolds a modern Vue project powered by Vite.
 > ```
 > - Which tool is officially deprecated?
-
+> 
 ---
 
 ### Exercise 2: vite.config.js Vue Plugin Configuration
@@ -123,7 +123,7 @@ VITE_API_URL=https://api.com # Prefixed variables are exposed to import.meta.env
 >   plugins: [vue()]
 > });
 > ```
-
+> 
 ---
 
 ### Exercise 3: Vite Native ESM Dev Server Speed
@@ -140,8 +140,8 @@ VITE_API_URL=https://api.com # Prefixed variables are exposed to import.meta.env
 > ```text
 > Instant dev server startup leveraging native ES Modules.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

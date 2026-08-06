@@ -186,7 +186,7 @@ Create a full-text search index on `title` (weight: 10) and `body` (weight: 1) i
 > 1. `"text"` creates an inverted text search index tokenizing text words.
 > 2. `weights` assigns relative relevance importance to field matches (title matches score 10x higher than body matches).
 > 3. Applies language stemming (e.g. "running" matches "run").
-
+> 
 ---
 
 ### Exercise 2: Text Search Queries with Phrase Matching and Negation
@@ -214,7 +214,7 @@ Search `articles` for exact phrase `"database design"` while excluding articles 
 > 1. Escaped quotes (`"phrase"`) enforce exact phrase matching.
 > 2. Hyphen prefix (`-word`) excludes documents containing specified keywords.
 > 3. Advanced text query syntax.
-
+> 
 ---
 
 ### Exercise 3: Relevance Score Projection and Sorting
@@ -242,7 +242,7 @@ Project and sort text search results by BM25 text score relevance.
 > 1. `$meta: "textScore"` calculates keyword frequency relevance scores.
 > 2. Sorting by text score ranks best matching documents at the top of results.
 > 3. Native search engine capabilities.
-
+> 
 ---
 
 

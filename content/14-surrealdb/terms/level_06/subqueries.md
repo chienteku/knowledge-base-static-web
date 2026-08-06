@@ -160,7 +160,7 @@ An order summary query projects each order's `total` alongside the average order
 > 1. Subqueries enclosed in parentheses `(...)` evaluate nested queries inline.
 > 2. `SELECT VALUE` unwraps the subquery result into a scalar value.
 > 3. Computes comparative metrics against global averages in a single query pass.
-
+> 
 ---
 
 ### Exercise 2: Subqueries in `WHERE` Filter Clauses
@@ -185,7 +185,7 @@ Query users whose `id` is `INSIDE` a subquery selecting active customer IDs `(SE
 > 1. Subqueries in `WHERE` clauses generate dynamic array filter criteria.
 > 2. `INSIDE (...)` checks if the record ID exists within the array returned by the subquery.
 > 3. Equivalent to SQL `WHERE id IN (SELECT ...)`.
-
+> 
 ---
 
 ### Exercise 3: Subqueries in `RELATE` Graph Edge Construction
@@ -209,7 +209,7 @@ Relate user `user:admin` to all active product IDs returned by a subquery in a s
 > 1. `RELATE` accepts subqueries to bulk-create graph relation edges dynamically.
 > 2. Evaluates the subquery and connects edges to every returned target record ID.
 > 3. Enables batch graph edge generation without procedural loops.
-
+> 
 ---
 
 

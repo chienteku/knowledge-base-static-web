@@ -180,7 +180,7 @@ Assign a sequential row number (`1, 2, 3...`) to orders for each customer sorted
 > 1. `ROW_NUMBER()` assigns unique sequential integers starting at 1 for each row within a partition.
 > 2. `PARTITION BY customer_id` resets the sequence counter to 1 for each distinct customer.
 > 3. `ORDER BY created_at DESC` orders sequence values descending by order date.
-
+> 
 ---
 
 ### Exercise 2: Selecting Top-1 Item Per Group using `ROW_NUMBER()` Subqueries
@@ -212,7 +212,7 @@ Select ONLY the most recent order for every customer using `ROW_NUMBER()` in a C
 > 1. Window function outputs cannot be filtered directly in `WHERE` clauses of the same query level.
 > 2. Wrapping `ROW_NUMBER()` inside a CTE or subquery enables outer `WHERE rn = 1` filtering.
 > 3. Industry standard pattern for Top-N per group selection.
-
+> 
 ---
 
 ### Exercise 3: Ranking Ties: `RANK()` vs `DENSE_RANK()` vs `ROW_NUMBER()`
@@ -239,7 +239,7 @@ Compare rank outputs when 2 employees tie for 2nd place ($100, $90, $90, $80).
 > 1. `ROW_NUMBER()` forces distinct sequential numbers regardless of ties.
 > 2. `RANK()` leaves gaps in rank sequences following ties.
 > 3. `DENSE_RANK()` leaves zero gaps in rank sequences following ties.
-
+> 
 ---
 
 

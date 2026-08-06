@@ -143,13 +143,13 @@ Narrow a parameter `str: string | null | undefined` using truthiness checks and 
 >   }
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript control-flow analysis tracks runtime conditional branches to refine types.
 > 2. Loose inequality `str != null` narrows out both `null` and `undefined`.
 > 3. Ensures safe method invocation on primitive union types.
-
+> 
 ---
 
 ### Exercise 2: Narrowing via Assignment and Control Flow Re-assignment
@@ -166,20 +166,20 @@ Demonstrate variable type narrowing across sequential assignment statements.
 >
 > ```typescript
 > let data: string | number;
-
-data = "Hello";
-console.log(data.toUpperCase()); // Inferred as string!
-
-data = 42;
-console.log(data.toFixed(2));    // Inferred as number!
-```
-
+> 
+> data = "Hello";
+> console.log(data.toUpperCase()); // Inferred as string!
+> 
+> data = 42;
+> console.log(data.toFixed(2));    // Inferred as number!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Control-flow analysis tracks variable assignments in real time.
 > 2. Assigning `"Hello"` narrows `data` to `string`; re-assigning `42` narrows `data` to `number`.
 > 3. Dynamic type refinement based on local code execution order.
-
+> 
 ---
 
 ### Exercise 3: Narrowing Failure Auditing in Asynchronous Callbacks
@@ -208,13 +208,13 @@ Explain why type narrowing performed BEFORE an asynchronous callback does NOT pe
 >   }
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Mutable variables captured in closures can be modified asynchronously before the callback executes.
 > 2. TypeScript invalidates narrowing on mutable variables inside async callbacks.
 > 3. Assigning the narrowed value to a local `const` variable preserves type narrowing safely inside closures.
-
+> 
 ---
 
 

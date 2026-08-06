@@ -189,7 +189,7 @@ Sanitize user email input in an aggregation stage by converting to lowercase and
 > 1. `$trim` strips leading/trailing spaces.
 > 2. `$toLower` normalizes string characters to lowercase UTF-8.
 > 3. Standard string sanitization operator combination.
-
+> 
 ---
 
 ### Exercise 2: Conditional Logic Branching with `$switch`
@@ -228,7 +228,7 @@ Assign customer tier labels (`"VIP"`, `"Gold"`, `"Standard"`) based on `totalSpe
 > 1. `$switch` evaluates a series of case expressions sequentially.
 > 2. Returns the `then` value of the first matching case.
 > 3. Replaces nested `$cond` expressions for clean multi-branch logic.
-
+> 
 ---
 
 ### Exercise 3: Array Mapping and Filtering with `$map` and `$filter`
@@ -273,7 +273,7 @@ Filter an order's `items` array to include ONLY items costing > `$20`, and doubl
 > 1. `$filter` selects elements from an input array satisfying a condition.
 > 2. `$map` applies an expression to each item in an array to output a transformed array.
 > 3. Functional array processing directly inside aggregation pipelines.
-
+> 
 ---
 
 

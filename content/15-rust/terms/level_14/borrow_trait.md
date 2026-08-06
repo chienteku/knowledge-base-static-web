@@ -197,7 +197,7 @@ use std::borrow::BorrowMut; let b: &mut str = item.borrow_mut();
 >
 > 1. `String: Borrow<Q>` allows `symbols.get(name)` to accept `&str` without allocating a `String` key.
 > 2. Hash and equality invariants are preserved.
-
+> 
 ---
 
 ### Exercise 2: Generic Set Membership Checker Bounded by `Borrow`
@@ -242,7 +242,7 @@ use std::borrow::BorrowMut; let b: &mut str = item.borrow_mut();
 > #### Technical Explanation
 >
 > 1. `PathBuf: Borrow<Path>` enables checking set membership using borrowed `&Path` slices.
-
+> 
 ---
 
 ### Exercise 3: Custom Struct `Borrow` Implementation
@@ -287,7 +287,7 @@ use std::borrow::BorrowMut; let b: &mut str = item.borrow_mut();
 > #### Technical Explanation
 >
 > 1. Implementing `Borrow<str>` for `NormalizedString` allows querying `HashSet<NormalizedString>` directly with `&str`.
-
+> 
 ---
 
 ## 5. Related Terms

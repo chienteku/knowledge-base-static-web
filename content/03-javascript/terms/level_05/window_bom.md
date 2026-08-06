@@ -169,7 +169,7 @@ if (typeof window !== "undefined") {
 
 > [!check]- Answer
 > - You can trigger a redirect by assigning a string URL to `window.location.href`.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Location API
@@ -186,7 +186,7 @@ if (typeof window !== "undefined") {
 > ```
 >
 > **Explanation:** `window.location` supplies URL metadata and navigation methods.
-
+> 
 ---
 
 ### Exercise 3: Detecting Window Inner Dimensions
@@ -203,8 +203,8 @@ if (typeof window !== "undefined") {
 > ```
 >
 > **Explanation:** `window.innerWidth` and `innerHeight` measure active browser viewport sizes.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

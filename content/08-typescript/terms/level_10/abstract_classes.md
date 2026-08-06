@@ -155,23 +155,23 @@ Define an `abstract class Logger` with a concrete `log(msg)` method and an `abst
 > 
 >   abstract write(formattedMsg: string): void;
 > }
-
-class ConsoleLogger extends Logger {
-  write(formattedMsg: string): void {
-    console.log(formattedMsg);
-  }
-}
-
-const logger = new ConsoleLogger();
-logger.log("System initialized");
-```
-
+> 
+> class ConsoleLogger extends Logger {
+>   write(formattedMsg: string): void {
+>     console.log(formattedMsg);
+>   }
+> }
+> 
+> const logger = new ConsoleLogger();
+> logger.log("System initialized");
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `abstract class` cannot be instantiated directly with `new Logger()`.
 > 2. `abstract write()` forces derived subclasses (`ConsoleLogger`) to supply concrete implementations.
 > 3. Shared method logic (`log`) is reused across all subclass implementations.
-
+> 
 ---
 
 ### Exercise 2: Auditing Direct Abstract Instantiation Errors
@@ -190,23 +190,23 @@ Demonstrate compile error when attempting to instantiate an abstract class with 
 > abstract class Animal {
 >   abstract makeSound(): void;
 > }
-
-// ❌ Compile Error: Cannot create an instance of an abstract class!
-// const a = new Animal();
-
-class Dog extends Animal {
-  makeSound(): void { console.log("Woof!"); }
-}
-
-const d = new Dog(); // Valid!
-```
-
+> 
+> // ❌ Compile Error: Cannot create an instance of an abstract class!
+> // const a = new Animal();
+> 
+> class Dog extends Animal {
+>   makeSound(): void { console.log("Woof!"); }
+> }
+> 
+> const d = new Dog(); // Valid!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Abstract classes serve strictly as architectural base blueprints.
 > 2. TypeScript prevents direct instantiation of un-implemented abstract classes at compile time.
 > 3. Enforces object inheritance hierarchy design.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: `abstract class` vs `interface`
@@ -226,13 +226,13 @@ Formulate an architectural selection matrix comparing `abstract class` against `
 > - abstract class: Preserved in transpiled JS output as a class. Supports shared concrete code execution and constructor state. Class can extend ONLY ONE abstract class (single inheritance).
 > - interface: Erased completely in transpiled JS output (0 bytes). Pure type contract (zero executable code). Class can implement MULTIPLE interfaces (multiple inheritance).
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Abstract classes are suitable when sharing reusable code logic across related subclasses.
 > 2. Interfaces are suitable for pure type contracts and multi-interface class capability composition.
 > 3. Fundamental OOP architectural choice.
-
+> 
 ---
 
 

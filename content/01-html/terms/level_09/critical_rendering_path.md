@@ -174,7 +174,7 @@ for (let i = 0; i < 100; i++) {
 > `visibility: hidden;` keeps the element inside the Render Tree (it still takes up blank space on the screen, like an invisible box), so the browser must calculate its size and position during the Layout step.
 > ```
 > - Does an invisible box with `visibility: hidden` push other paragraphs down the page? Yes!
-
+> 
 ---
 
 
@@ -202,7 +202,7 @@ Layout, DOM Construction, Paint, CSSOM Construction, Render Tree Construction
 > ```
 >
 > **Explanation:** Browsers construct DOM and CSSOM trees before combining them into Render Tree for Layout and Paint.
-
+> 
 ---
 
 ### Exercise 3: Reflow vs Repaint
@@ -221,7 +221,7 @@ Layout, DOM Construction, Paint, CSSOM Construction, Render Tree Construction
 > ```
 >
 > **Explanation:** Geometry changes trigger Reflow + Repaint; visual-only changes trigger Repaint.
-
+> 
 ## 7. Related Terms
 - [DOM (Document Object Model)](dom.md) — The foundational node representation.
 - [The Tree Structure](tree_structure.md) — The parent-child layout hierarchy.

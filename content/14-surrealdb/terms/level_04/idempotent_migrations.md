@@ -166,7 +166,7 @@ Write a deployment migration script defining table `product` that can be re-run 
 > 1. `DEFINE ... OVERWRITE` replaces existing definitions or creates them if absent.
 > 2. Prevents "item already exists" errors when re-executing deployment scripts in CI/CD.
 > 3. Enables repeatable schema migration pipelines.
-
+> 
 ---
 
 ### Exercise 2: Conditional Schema Definitions with `IF NOT EXISTS`
@@ -191,7 +191,7 @@ Write a migration script adding table `config` only if it does not already exist
 > 1. `IF NOT EXISTS` skips execution if the target definition is already present.
 > 2. Preserves existing schema rules without overwriting them.
 > 3. Ideal for environment seeding scripts.
-
+> 
 ---
 
 ### Exercise 3: Safe Idempotent Drop Operations with `IF EXISTS`
@@ -215,7 +215,7 @@ Write a teardown migration dropping an obsolete table `temp_import` safely using
 > 1. `REMOVE TABLE IF EXISTS` drops table schema and records if present.
 > 2. If absent, execution completes silently without throwing error exceptions.
 > 3. Ensures clean teardown execution across variable deployment environments.
-
+> 
 ---
 
 

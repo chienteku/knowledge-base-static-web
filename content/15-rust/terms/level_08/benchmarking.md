@@ -285,7 +285,7 @@ Requirements:
 > **Technical Explanation:**
 > 1. **Compiler Optimization Barriers (`black_box`)**: Wrapping inputs (`black_box(input)`) and outputs in benchmark iteration loops prevents LLVM constant folding from eliminating parsing instructions during benchmark execution.
 > 2. **Zero-Copy Performance**: `parse_zero_copy` avoids heap allocation by borrowing slice lifetimes (`&'a str`, `&'a [u8]`) from the input slice, eliminating memory manager latency.
-
+> 
 ---
 
 ### Exercise 2: SIMD Parallel Search vs. Linear Scan Benchmarking Simulation
@@ -331,7 +331,7 @@ Requirements:
 >             return Some(base_idx + idx);
 >         }
 >     }
-
+> 
 >     None
 > }
 > 
@@ -377,7 +377,7 @@ Requirements:
 > **Technical Explanation:**
 > 1. **Loop Unrolling & Cache Alignment**: `chunked_search` unrolls loop iterations, allowing instruction pipelining and SIMD vectorization.
 > 2. **Benchmark Integrity**: Using `black_box` ensures the compiler does not optimize search loops away when testing populated slices.
-
+> 
 ---
 
 ### Exercise 3: In-Memory Mutex vs. Atomic Counter Throughput Benchmark
@@ -466,7 +466,7 @@ Requirements:
 > **Technical Explanation:**
 > 1. **Lock Contention Overhead**: Mutex locking involves OS context switches under high contention, whereas `AtomicU64` uses hardware atomic instructions (`LOCK XADD`).
 > 2. **Verification**: Tests confirm both primitives yield identical, mathematically correct results without race conditions.
-
+> 
 ---
 
 ## 6. Related Terms

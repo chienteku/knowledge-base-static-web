@@ -192,7 +192,7 @@ How would you improve the `<title>` tag to target local keywords like "dog groom
 > ```
 > - Place the primary target keywords near the beginning of the title.
 > - Include the brand name at the end separated by a dash or pipe.
-
+> 
 ---
 
 
@@ -217,7 +217,7 @@ How would you improve the `<title>` tag to target local keywords like "dog groom
 > ```
 >
 > **Explanation:** Technical SEO requires clear, machine-readable page metadata and semantic structure.
-
+> 
 ---
 
 ### Exercise 3: Meta Description Character Limit
@@ -234,7 +234,7 @@ How would you improve the `<title>` tag to target local keywords like "dog groom
 > ```
 >
 > **Explanation:** Keeping meta descriptions under 160 characters prevents search snippet clipping.
-
+> 
 ## 7. Related Terms
 - [`<meta>`](../level_08/meta.md) — The container for search descriptions.
 - [`title` Attribute](../level_07/title.md) — The primary SEO page title.

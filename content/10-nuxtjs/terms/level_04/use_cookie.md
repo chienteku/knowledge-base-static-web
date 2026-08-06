@@ -132,26 +132,26 @@ Create a theme toggle switcher persisting user preference (`light` or `dark`) in
 >   default: () => "light",
 >   maxAge: 60 * 60 * 24 * 365 // 1 year expiry
 > });
-
-function toggleTheme() {
-  theme.value = theme.value === "light" ? "dark" : "light";
-}
-</script>
-
-<template>
-  <div>
-    <p>Current Theme: {{ theme }}</p>
-    <button @click="toggleTheme">Toggle Theme</button>
-  </div>
-</template>
-```
-
+> 
+> function toggleTheme() {
+>   theme.value = theme.value === "light" ? "dark" : "light";
+> }
+> </script>
+> 
+> <template>
+>   <div>
+>     <p>Current Theme: {{ theme }}</p>
+>     <button @click="toggleTheme">Toggle Theme</button>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useCookie()` creates an SSR-friendly reactive wrapper around HTTP cookies.
 > 2. On the server during SSR, it reads incoming request `Cookie` headers and appends `Set-Cookie` response headers.
 > 3. On the client, mutating `theme.value` updates `document.cookie` reactively.
-
+> 
 ---
 
 ### Exercise 2: Configuring Secure Cookie Options
@@ -174,13 +174,13 @@ Configure an authentication session cookie with `httpOnly: false`, `sameSite: "l
 >   path: "/"
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `sameSite: "lax"` protects cookies against Cross-Site Request Forgery (CSRF) attacks.
 > 2. `secure: true` guarantees cookies are transmitted exclusively over encrypted HTTPS connections.
 > 3. `path: "/"` ensures cookie availability across all application route paths.
-
+> 
 ---
 
 ### Exercise 3: Clearing Cookies on Logout
@@ -198,30 +198,26 @@ Clear an existing session cookie by setting its value to `null` or `undefined`.
 > ```vue
 > <script setup lang="ts">
 > const userSession = useCookie("user_session");
-
-function handleLogout() {
-  userSession.value = null; // Emits Set-Cookie with past expiration date!
-  navigateTo("/login");
-}
-</script>
-
-<template>
-  <button @click="handleLogout">Clear Session & Logout</button>
-</template>
-```
-
+> 
+> function handleLogout() {
+>   userSession.value = null; // Emits Set-Cookie with past expiration date!
+>   navigateTo("/login");
+> }
+> </script>
+> 
+> <template>
+>   <button @click="handleLogout">Clear Session & Logout</button>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Setting `useCookie()` value to `null` or `undefined` instructs Nuxt to send a `Set-Cookie` deletion header (`Expires=Thu, 01 Jan 1970 00:00:00 GMT`).
 > 2. Clears cookie state in both browser and server memory contexts.
 > 3. Standard session destruction method.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useState` Hook](use_state.md) — The non-persistent alternative to `useCookie`.

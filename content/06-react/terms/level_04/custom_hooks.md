@@ -131,7 +131,7 @@ Use Context API or state management store if shared state across components is r
 > Every time you call a custom hook, a completely independent instance of `useState` is created for that specific component. The Navbar and Footer have completely separate state variables.
 > ```
 > - Calling a hook is just like calling `useState` normally in two different components.
-
+> 
 ---
 
 
@@ -163,7 +163,7 @@ Use Context API or state management store if shared state across components is r
 > ```
 >
 > **Explanation:** Custom hooks encapsulate stateful event listener logic into reusable functions.
-
+> 
 ---
 
 ### Exercise 3: Custom Hook Return Types
@@ -180,7 +180,7 @@ Use Context API or state management store if shared state across components is r
 > ```
 >
 > **Explanation:** Custom hooks return formatted data structures tailored for consuming components.
-
+> 
 ## 7. Related Terms
 - [Rules of Hooks](rules_of_hooks.md) — Why the "use" prefix is strictly enforced.
 - [Components](../level_01/components.md) — The ultimate consumers of your Custom Hooks.

@@ -157,22 +157,22 @@ Write a parameterized user login query in Node.js using `pg` to prevent SQL Inje
 >
 > ```typescript
 > import { pool } from "./db";
-
-export async function authenticateUser(email: string, passwordHash: string) {
-  const text = "SELECT id, username, email FROM users WHERE email = $1 AND password_hash = $2";
-  const values = [email, passwordHash];
-  
-  const res = await pool.query(text, values);
-  return res.rows[0] || null;
-}
-```
-
+> 
+> export async function authenticateUser(email: string, passwordHash: string) {
+>   const text = "SELECT id, username, email FROM users WHERE email = $1 AND password_hash = $2";
+>   const values = [email, passwordHash];
+>   
+>   const res = await pool.query(text, values);
+>   return res.rows[0] || null;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `$1` and `$2` pass parameter values separately from the SQL statement string.
 > 2. PostgreSQL prepares the query execution plan for the SQL text first, ensuring user input values are treated strictly as data literals (NOT executable SQL syntax).
 > 3. Fundamental SQL Injection defense rule.
-
+> 
 ---
 
 ### Exercise 2: Server-Side Prepared Statements with `PREPARE` and `EXECUTE`
@@ -203,7 +203,7 @@ Create a server-side prepared statement `get_user_by_id` and execute it with par
 > 1. `PREPARE statement_name (types) AS query` parses and plans the query once on the PostgreSQL server.
 > 2. `EXECUTE statement_name(values)` reuses the pre-planned query execution plan with new parameter values.
 > 3. Saves query parsing and planning CPU cycles on repeated high-frequency queries.
-
+> 
 ---
 
 ### Exercise 3: Auditing String Concatenation Vulnerabilities
@@ -232,7 +232,7 @@ Audit a vulnerable database query using string template literals (`${email}`) an
 > 1. String concatenation inserts raw user input text directly into the SQL parser pipeline.
 > 2. Parameterized queries send SQL code and data values over separate binary protocol frames.
 > 3. Eliminates SQL injection vulnerabilities entirely.
-
+> 
 ---
 
 

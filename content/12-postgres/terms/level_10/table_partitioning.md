@@ -184,7 +184,7 @@ Create a master `audit_logs` table range-partitioned by `created_at` (`PARTITION
 > 1. Declarative Range Partitioning splits a massive logical table into distinct physical partition tables.
 > 2. `PARTITION BY RANGE` routes inserts and queries automatically based on range boundaries.
 > 3. Essential architecture for multi-terabyte log tables.
-
+> 
 ---
 
 ### Exercise 2: Verifying Partition Pruning via EXPLAIN
@@ -210,7 +210,7 @@ Verify that querying `audit_logs` for January 2026 queries ONLY `audit_logs_2026
 > 1. Partition Pruning allows the query planner to bypass scanning partition tables whose range bounds do not match the `WHERE` filter.
 > 2. `EXPLAIN` shows query execution occurring ONLY on `audit_logs_2026_01`.
 > 3. Dramatically reduces disk I/O scan costs on multi-billion row tables.
-
+> 
 ---
 
 ### Exercise 3: Dropping Historical Partitions Instantly
@@ -234,7 +234,7 @@ Drop all audit logs for January 2026 instantly without executing individual row 
 > 1. `DROP TABLE partition_name` de-allocates millions of historical log rows instantly by dropping the physical partition file from disk.
 > 2. Avoids issuing expensive `DELETE FROM` statements that generate heavy MVCC WAL bloat.
 > 3. Instant data retention lifecycle management.
-
+> 
 ---
 
 

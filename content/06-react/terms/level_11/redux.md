@@ -114,7 +114,7 @@ const userName = useSelector(state => state.user.name); // Granular selector
 > By forcing all changes through Actions, the Redux DevTools extension can record a literal history log of every single event that happened in your app. You can even "Time Travel" backwards through the actions to see exactly how your app reached a broken state!
 > ```
 > - Think about audit logs in a bank.
-
+> 
 ---
 
 
@@ -145,7 +145,7 @@ const userName = useSelector(state => state.user.name); // Granular selector
 > ```
 >
 > **Explanation:** Redux Toolkit `createSlice` automatically generates action creators and reducers using Immer.
-
+> 
 ---
 
 ### Exercise 3: Dispatching Actions in React Components
@@ -163,7 +163,7 @@ const userName = useSelector(state => state.user.name); // Granular selector
 > ```
 >
 > **Explanation:** `useDispatch()` returns store dispatch function to trigger Redux state updates.
-
+> 
 ## 7. Related Terms
 - [`useReducer` Hook](../level_06/use_reducer.md) — The localized React version of this pattern.
 - [The Context API](../level_06/context_api.md) — The built-in alternative for simpler global state.

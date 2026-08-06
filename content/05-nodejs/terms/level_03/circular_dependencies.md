@@ -117,7 +117,7 @@ If `Child` imports `Parent` to get `formatName()`, you will cause a Circular Dep
 > The circle is broken, and data flows strictly in one direction!
 > ```
 > - Remember the "Third File" trick.
-
+> 
 ---
 
 
@@ -136,7 +136,7 @@ If `Child` imports `Parent` to get `formatName()`, you will cause a Circular Dep
 > ```
 >
 > **Explanation:** Introducing a shared helper module removes direct mutual dependencies between A and B.
-
+> 
 ---
 
 ### Exercise 3: CommonJS vs ESM Circular Handling
@@ -153,7 +153,7 @@ If `Child` imports `Parent` to get `formatName()`, you will cause a Circular Dep
 > ```
 >
 > **Explanation:** CommonJS exposes partial export objects; ESM enforces strict static TDZ live bindings.
-
+> 
 ## 7. Related Terms
 - [Module Resolution](module_resolution.md) — The process that gets trapped in the infinite loop.
 

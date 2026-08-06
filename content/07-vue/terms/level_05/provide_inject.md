@@ -132,7 +132,7 @@ provide(themeKey, state);
 > Provide/Inject is hard to debug at scale because there are no DevTools to track exactly who is providing and injecting what.
 > ```
 > - Is Provide/Inject meant to replace Redux/Pinia?
-
+> 
 ---
 
 ### Exercise 2: Provide Inject Default Fallback Value
@@ -149,7 +149,7 @@ provide(themeKey, state);
 > ```javascript
 > const theme = inject('theme', 'light');
 > ```
-
+> 
 ---
 
 ### Exercise 3: Symbol Injection Keys with TypeScript
@@ -168,8 +168,8 @@ provide(themeKey, state);
 > interface User { name: string; }
 > export const userKey = Symbol() as InjectionKey<User>;
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

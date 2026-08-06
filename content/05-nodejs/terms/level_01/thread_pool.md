@@ -143,8 +143,8 @@ Explain why this happens, and how to configure the system to resolve the bottlen
 
 > [!check]- Answer
 > - By default, Libuv allocates exactly 4 background threads. When 6 concurrent file writes occur, 2 write operations are blocked in a queue waiting for the first 4 threads to finish. To solve this, set the environment variable `UV_THREADPOOL_SIZE=8` (or higher) in your server launch script before starting the Node process.
-
-
+> 
+> 
 ---
 
 
@@ -167,7 +167,7 @@ Explain why this happens, and how to configure the system to resolve the bottlen
 > ```
 >
 > **Explanation:** `crypto` CPU algorithms, `fs` disk operations, and `zlib` compression use thread pool; network sockets and timers use OS event notifications.
-
+> 
 ---
 
 ### Exercise 3: Configuring UV_THREADPOOL_SIZE
@@ -184,7 +184,7 @@ Explain why this happens, and how to configure the system to resolve the bottlen
 > ```
 >
 > **Explanation:** `UV_THREADPOOL_SIZE` must be set in the shell environment before libuv initializes.
-
+> 
 ## 7. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The loop that collects tasks finished by the Thread Pool.
 - [Single-Threaded Architecture](single_threaded.md) — The architecture protected from blocking by the Thread Pool.

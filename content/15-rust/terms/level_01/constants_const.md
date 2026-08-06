@@ -293,7 +293,7 @@ You are tasked with building a zero-allocation binary network protocol packet he
 >    - Payloads exceeding `MAX_PAYLOAD_BYTES` (1024 bytes) are rejected early by `new()` and `deserialize()`.
 >    - High and low payload length bytes are parsed using big-endian byte order (`to_be_bytes()` and `from_be_bytes()`) to guarantee network transport compatibility across target CPU architectures.
 >
-
+> 
 ---
 
 ### Exercise 2: Financial High-Frequency Trading Risk Management Subsystem
@@ -454,7 +454,7 @@ In high-frequency financial trading (HFT), trade parameters (e.g., scale factor 
 >    - Orders placed below `MIN_TICK_PRICE` (e.g. fractional sub-ticks) fail early.
 >    - Calculations that trigger integer overflow return `RiskViolation::OverflowDetected` without panicking.
 >
-
+> 
 ---
 
 ### Exercise 3: Embedded Microcontroller Hardware Register & Bitmask Controller
@@ -652,7 +652,7 @@ In bare-metal microcontrollers, peripherals interact with CPU core clock domains
 >    - Transmitting while `STATUS_TX_EMPTY` is cleared returns an error, preventing transmit buffer overrun.
 >    - Receiving multiple bytes before reading the data register triggers `STATUS_ERR_OVERRUN`.
 >
-
+> 
 ---
 
 ## 6. Related Terms

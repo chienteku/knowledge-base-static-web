@@ -192,7 +192,7 @@ Refactor a query using multiple window functions over the exact same window spec
 > 1. The `WINDOW` clause defines a reusable named window specification at the end of the query.
 > 2. Eliminates repeating identical `OVER (PARTITION BY ... ORDER BY ...)` clauses across multiple window functions.
 > 3. Improves query readability and maintainability.
-
+> 
 ---
 
 ### Exercise 2: Extending Named Windows with Additional Ordering
@@ -222,7 +222,7 @@ Extend a base named window specification inside individual `OVER` clauses.
 > 1. Named windows defined in `WINDOW` can specify base partitioning (`PARTITION BY customer_id`).
 > 2. Individual `OVER (w ORDER BY ...)` clauses extend the base window by adding specific sort ordering rules.
 > 3. Reusable SQL window architecture.
-
+> 
 ---
 
 ### Exercise 3: Performance Optimization of Named Windows
@@ -249,7 +249,7 @@ Explain why using a single `WINDOW` specification reduces sorting passes compare
 > 1. The query planner sorts partition data for each unique window ordering rule.
 > 2. Consolidating window definitions into a single `WINDOW` clause minimizes sort buffer operations.
 > 3. High performance window query pattern.
-
+> 
 ---
 
 

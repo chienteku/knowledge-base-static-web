@@ -153,7 +153,7 @@ console.log("C");
 > JavaScript logs A. It fires the fetch and gets a pending Promise. It does NOT wait. It moves to the next line and logs C. Finally, milliseconds later, the network returns and it logs B.
 > ```
 > - JavaScript never waits for the network unless you explicitly tell it to with `await`!
-
+> 
 ---
 
 ### Exercise 2: Promise 3-State Life Cycle Matrix

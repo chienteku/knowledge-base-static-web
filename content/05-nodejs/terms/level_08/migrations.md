@@ -103,7 +103,7 @@ node -e 'runMigrations()'
 > If "Up" adds the column, "Down" must drop the column.
 > ```
 > - The "Down" migration must perfectly reverse whatever the "Up" migration did.
-
+> 
 ---
 
 
@@ -122,7 +122,7 @@ node -e 'runMigrations()'
 > ```
 >
 > **Explanation:** `up` migrates forward; `down` provides rollback capability.
-
+> 
 ---
 
 ### Exercise 3: Prisma Migration Commands
@@ -143,7 +143,7 @@ node -e 'runMigrations()'
 > ```
 >
 > **Explanation:** `migrate dev` creates new migration files; `migrate deploy` applies pending migrations deterministically.
-
+> 
 ## 7. Related Terms
 - [ORMs & ODMs](orms_odms.md) — ORMs like Prisma automatically generate these migration files for you based on your JavaScript code!
 - [Database Transactions](db_transactions.md) — Related concept: Database Transactions.

@@ -158,7 +158,7 @@ A high-throughput telemetry ingestion batch inserts thousands of records per sec
 > 1. `RETURN NONE` suppresses mutation result payloads, returning an empty result array `[]`.
 > 2. Saves serialization CPU cycles and network bandwidth in high-volume write pipelines.
 > 3. Ideal for background ingestion tasks where confirmation of execution suffices.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Mutations with `RETURN DIFF`
@@ -189,7 +189,7 @@ An audit service updates user permissions and requests a JSON Patch delta (`RETU
 > 1. `RETURN DIFF` outputs standard RFC 6902 JSON Patch operations detailing exact document modifications.
 > 2. Allows client applications to react to precise field changes without diffing full objects.
 > 3. Used in collaborative editing and version-tracking applications.
-
+> 
 ---
 
 ### Exercise 3: Single Field Projection with `RETURN <field>`
@@ -216,7 +216,7 @@ An authentication endpoint registers a new user `user:carol` and requests only t
 > 1. `RETURN <field_name>` projects specific fields from the mutated record payload.
 > 2. `RETURN AFTER` (default for `CREATE`/`UPDATE`) returns the complete updated record object.
 > 3. `RETURN BEFORE` returns the original record document state prior to mutation.
-
+> 
 ---
 
 

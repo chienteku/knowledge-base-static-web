@@ -193,7 +193,7 @@ console.log(formattedPrices);
 > ```
 > - In step 1: `.filter(p => p > 50)`
 > - In step 2: `.map(p => "$" + (p * 1.1).toFixed(2))`
-
+> 
 ---
 
 ### Exercise 2: Fluent Processing Pipeline
@@ -214,7 +214,7 @@ console.log(formattedPrices);
 > ```
 >
 > **Explanation:** Method chaining passes intermediate transformed collections down functional pipelines.
-
+> 
 ---
 
 ### Exercise 3: Chaining Custom Object Builders
@@ -237,7 +237,7 @@ console.log(formattedPrices);
 > ```
 >
 > **Explanation:** Returning `this` from object methods enables fluent chaining.
-
+> 
 ---
 
 ## 7. Related Terms

@@ -163,25 +163,25 @@ Read session token cookies inside an async Server Component using `cookies()`.
 > ```tsx
 > // app/dashboard/page.tsx
 > import { cookies } from "next/headers";
-
-export default async function Dashboard() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("session_id");
-
-  return (
-    <main className="p-6">
-      <p>Session Cookie: {token?.value ?? "Not Logged In"}</p>
-    </main>
-  );
-}
-```
-
+> 
+> export default async function Dashboard() {
+>   const cookieStore = await cookies();
+>   const token = cookieStore.get("session_id");
+> 
+>   return (
+>     <main className="p-6">
+>       <p>Session Cookie: {token?.value ?? "Not Logged In"}</p>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `cookies()` reads incoming request HTTP cookie headers on the Node.js server.
 > 2. In Next.js 15, `cookies()` returns a Promise that is resolved via `await cookies()`.
 > 3. Invoking `cookies()` opts the route segment into dynamic SSR rendering.
-
+> 
 ---
 
 ### Exercise 2: Setting Cookies inside Server Actions
@@ -199,29 +199,29 @@ Set a secure HTTP-only session cookie inside a login Server Action using `cookie
 > ```typescript
 > // app/actions/auth.ts
 > "use server";
-
-import { cookies } from "next/headers";
-
-export async function loginAction(formData: FormData) {
-  const email = formData.get("email");
-  // Validate credentials...
-
-  const cookieStore = await cookies();
-  cookieStore.set("session_token", "sec_token_999", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax",
-    path: "/"
-  });
-}
-```
-
+> 
+> import { cookies } from "next/headers";
+> 
+> export async function loginAction(formData: FormData) {
+>   const email = formData.get("email");
+>   // Validate credentials...
+> 
+>   const cookieStore = await cookies();
+>   cookieStore.set("session_token", "sec_token_999", {
+>     httpOnly: true,
+>     secure: true,
+>     sameSite: "lax",
+>     path: "/"
+>   });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `cookies().set()` appends `Set-Cookie` response headers to HTTP responses.
 > 2. `httpOnly: true` prevents browser client-side JavaScript access to sensitive cookies.
 > 3. Can ONLY be called inside Server Actions or Route Handlers (read-only inside Server Components).
-
+> 
 ---
 
 ### Exercise 3: Inspecting Request Headers in Route Handlers
@@ -239,32 +239,28 @@ Inspect `Authorization` and `User-Agent` headers inside an API Route Handler usi
 > ```typescript
 > // app/api/secure-data/route.ts
 > import { headers } from "next/headers";
-
-export async function GET() {
-  const headersList = await headers();
-  const authHeader = headersList.get("authorization");
-  const userAgent = headersList.get("user-agent");
-
-  if (!authHeader?.startsWith("Bearer ")) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  return Response.json({ userAgent, status: "Authorized" });
-}
-```
-
+> 
+> export async function GET() {
+>   const headersList = await headers();
+>   const authHeader = headersList.get("authorization");
+>   const userAgent = headersList.get("user-agent");
+> 
+>   if (!authHeader?.startsWith("Bearer ")) {
+>     return Response.json({ error: "Unauthorized" }, { status: 401 });
+>   }
+> 
+>   return Response.json({ userAgent, status: "Authorized" });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `headers()` from `next/headers` exposes read-only incoming HTTP request headers.
 > 2. `headersList.get('header-name')` performs case-insensitive header lookup.
 > 3. Standard method for validating authorization tokens in Route Handlers.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Dynamic Rendering (SSR)](../level_08/ssr.md) — The dynamic rendering strategy triggered by these APIs.

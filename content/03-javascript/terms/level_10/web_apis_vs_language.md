@@ -187,8 +187,8 @@ async function processData() {
 > - 3. **Node.js Host APIs** (Server filesystem module).
 > - 4. **ECMAScript Core** (Standard mathematical namespace helper).
 > - 5. **Web APIs** (W3C standard event handler for web pages).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Distinguishing Core ECMAScript from Host Web APIs
@@ -205,7 +205,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Host environments supply platform-specific APIs extending core ECMAScript specifications.
-
+> 
 ---
 
 ### Exercise 3: Standardization Bodies Overview
@@ -222,8 +222,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** TC39 standardizes language syntax; WHATWG standardizes web platform host APIs.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

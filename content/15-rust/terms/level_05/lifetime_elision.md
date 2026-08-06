@@ -202,7 +202,7 @@ impl Inspector {
 > 1. Function parameter `header: &str` has a single input reference.
 > 2. By Rule 2, `rustc` assigns the input lifetime `'a` to the output `Option<&'a str>`.
 > 3. The returned string slice is a zero-copy view of `auth_header`.
-
+> 
 ---
 
 ### Exercise 2: Multi-Source Config Selector with Explicit Annotations
@@ -250,7 +250,7 @@ impl Inspector {
 > 1. Rule 1 assigns distinct lifetimes to `primary` and `fallback`.
 > 2. Rule 2 does not apply because there are 2 input reference parameters (plus a boolean).
 > 3. Explicit `'a` lifetime parameter binds both inputs and the output to a common intersecting lifetime.
-
+> 
 ---
 
 ### Exercise 3: Method Lifetime Elision in Zero-Copy Tokenizer
@@ -311,7 +311,7 @@ impl Inspector {
 >
 > 1. By default, Method Rule 3 would tie the output slice to `&mut self`.
 > 2. Returning `Option<&'a str>` explicitly disconnects the returned slice lifetime from `&mut self` and connects it to the underlying string buffer `'a`, allowing multiple tokens to be collected while mutating the lexer state.
-
+> 
 ---
 
 ## 6. Related Terms

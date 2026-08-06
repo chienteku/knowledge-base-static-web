@@ -130,7 +130,7 @@ Why is GraphQL a better choice here?
 > In GraphQL, you simply query `query { posts { title } }`. The server only sends the titles, turning a 5MB payload into a 5KB payload, making the app 1000x faster!
 > ```
 > - Who decides what data is sent in REST? Who decides in GraphQL?
-
+> 
 ---
 
 ### Exercise 2: GraphQL 3 Operation Types

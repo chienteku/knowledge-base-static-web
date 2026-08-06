@@ -284,7 +284,7 @@ thread::spawn(move || {
 > 4. **Lifetime and Memory Safety**: Slicing `transactions: &[Transaction]` grants immutable references tied to the caller's slice lifetime. Borrowing `tx.account_id` via `.clone()` inside `filter_map` allocates new string instances only for valid summary records, while intermediate `dbg!` taps introduce zero heap allocations.
 >
 >
-
+> 
 ---
 
 ### Exercise 2: AST Expression Evaluator & Control Flow Debugging
@@ -405,7 +405,7 @@ thread::spawn(move || {
 > 4. **Edge Cases**: Handles undefined variables by mapping `Option::ok_or_else` to `EvalError::UndefinedVariable`, and checks for division by zero before performing integer division.
 >
 >
-
+> 
 ---
 
 ### Exercise 3: Binary Protocol Packet Decoding & Checksum Validation
@@ -530,7 +530,7 @@ thread::spawn(move || {
 > 5. **Assertion Safety**: The unit test module rigorously checks both success and failure paths using `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
 >
 >
-
+> 
 ---
 
 ## 6. Related Terms

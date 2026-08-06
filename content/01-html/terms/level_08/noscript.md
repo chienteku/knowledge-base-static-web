@@ -191,7 +191,7 @@ A simple warning banner in the body:
 > ```
 > - The heading should be outside the `<noscript>` block (it is plain HTML that should always display).
 > - Wrap the warning paragraph in `<noscript>` tags.
-
+> 
 ---
 
 
@@ -214,7 +214,7 @@ A simple warning banner in the body:
 > ```
 >
 > **Explanation:** `<noscript>` renders fallback markup only when browser JavaScript is disabled.
-
+> 
 ---
 
 ### Exercise 3: Noscript CSS Fallback Loading
@@ -235,7 +235,7 @@ A simple warning banner in the body:
 > ```
 >
 > **Explanation:** `<noscript>` inside `<head>` can load fallback CSS stylesheets.
-
+> 
 ## 7. Related Terms
 - [`<script>`](script.md) — The parent scripting element.
 - [`<body>`](../level_01/body.md) — The visual wrapper hosting the warning tags.

@@ -290,7 +290,7 @@ Design a nested error architecture where:
 > 2. **Recursive Causal Chains**: `summarize_error_chain` uses an iterative traversal over `err.source()`. Each call to `source()` yields an `Option<&(dyn Error + 'static)>`. Following this reference pointer allows traversal down the causality tree until `None` is encountered.
 > 3. **Downcasting Mechanics**: `downcast_ref::<T>()` relies on Rust's `Any` trait mechanics integrated into `dyn Error + 'static`. At compile time, Rust generates a `TypeId` for concrete types. At runtime, `downcast_ref` compares the `TypeId` of the dynamic object inside the vtable against `TypeId::of::<ParseIntError>()`. If they match, the fat pointer is safely cast into a concrete slice/reference `&ParseIntError`.
 > 4. **Lifetime Bounds (`'static`)**: Downcasting requires the dynamic error trait object to carry a `'static` lifetime bound (`dyn Error + 'static`). This guarantees that the target type contains no non-static references, ensuring memory safety during dynamic type reflection.
-
+> 
 ---
 
 ### Exercise 2: Multi-Threaded Middleware Task Execution with `Box<dyn Error + Send + Sync + 'static>`
@@ -424,7 +424,7 @@ Implement a `TaskScheduler` system where:
 > 1. **`Send + Sync` Bounds for Concurrency**: By default, `Box<dyn Error>` is neither `Send` nor `Sync`. Transferring boxed trait objects across OS thread boundaries via `mpsc::channel` or `thread::spawn` requires explicit thread-safety marker traits: `Box<dyn Error + Send + Sync + 'static>`. Without `Send + Sync`, compiler error `E0277` is triggered.
 > 2. **Vtable Fat Pointers across Threads**: A `Box<dyn Error + Send + Sync + 'static>` consists of a heap pointer to the concrete error data and a pointer to the vtable containing function pointers (`Display::fmt`, `Debug::fmt`, `Error::source`, `drop`, `TypeId`). `Send` guarantees that the underlying struct data can safely transfer thread ownership; `Sync` allows shared access across threads.
 > 3. **Downcasting Trait Objects (`downcast_ref`)**: `err.downcast_ref::<RateLimitError>()` checks if the dynamic error trait object wraps a concrete `RateLimitError` instance. If valid, it dereferences the trait object and returns `Some(&RateLimitError)`, enabling conditional retry logic without coupling the scheduler to concrete error implementations at compile time.
-
+> 
 ---
 
 ### Exercise 3: Telemetry Context Decorator and Extension Trait for Boxed Error Enrichment
@@ -552,7 +552,7 @@ Build a telemetry error decorator system featuring:
 > 2. **Extension Traits & Blanket Implementations**: `ResultContextExt<T>` is implemented for any `Result<T, E>` where `E: Into<Box<dyn Error + Send + Sync + 'static>>`. Standard library error types (e.g. `std::io::Error`, `std::num::ParseIntError`) automatically implement `Into<Box<dyn Error + Send + Sync + 'static>>` via blanket `From<E>` impls in standard library (`impl<E: Error + 'static> From<E> for Box<dyn Error>`).
 > 3. **Unwrapping Dynamic Trait Object Dereferencing**: `Some(&*self.source_err as &(dyn Error + 'static))` dereferences the `Box` smart pointer to obtain `dyn Error + Send + Sync + 'static`, which coerces to `dyn Error + 'static` for the return type of `source()`.
 > 4. **Diagnostic Formatting Invariants**: `format_full_diagnostics` systematically visits each node in the error chain, providing complete visibility into deeply nested runtime errors for logging and telemetry frameworks.
-
+> 
 ---
 
 ## 6. Related Terms

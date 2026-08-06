@@ -123,7 +123,7 @@ Consolidate state update logic into a single parent handler or reducer
 > You pass `setVolume` down to `<VolumeControl />` as a prop.
 > ```
 > - Waterfalls only go down. Where is the top of the waterfall for these two siblings?
-
+> 
 ---
 
 
@@ -142,7 +142,7 @@ Consolidate state update logic into a single parent handler or reducer
 > ```
 >
 > **Explanation:** Unidirectional flow guarantees deterministic, traceable state debugging.
-
+> 
 ---
 
 ### Exercise 3: Controlled Input One-Way Flow
@@ -161,7 +161,7 @@ Consolidate state update logic into a single parent handler or reducer
 > ```
 >
 > **Explanation:** Parent passes data down (`value`), child sends events up (`onChange`).
-
+> 
 ## 7. Related Terms
 - [Props (Properties)](../level_01/props.md) — The water flowing down the waterfall.
 - [Prop Drilling](../level_06/prop_drilling.md) — The dark side of Unidirectional flow (when the waterfall is 20 components deep).

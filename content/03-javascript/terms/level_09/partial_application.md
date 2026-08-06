@@ -173,7 +173,7 @@ fetchUsers({ method: "GET" });
 > Calling https://api.example.com/users with options: { method: 'GET' }
 > ```
 > - Bind the first two arguments by writing `fetchApi.bind(null, "https://api.example.com", "/users")`.
-
+> 
 ---
 
 ### Exercise 2: Partial Application with `bind()`
@@ -192,7 +192,7 @@ fetchUsers({ method: "GET" });
 > ```
 >
 > **Explanation:** `.bind(thisArg, ...preboundArgs)` partially applies leading function arguments.
-
+> 
 ---
 
 ### Exercise 3: Custom `partial(fn, ...preset)` Helper
@@ -214,8 +214,8 @@ fetchUsers({ method: "GET" });
 > ```
 >
 > **Explanation:** Partial application pre-binds specific parameter values ahead of time.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

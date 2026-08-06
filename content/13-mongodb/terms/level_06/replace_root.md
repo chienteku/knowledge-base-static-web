@@ -166,7 +166,7 @@ Promote embedded `address` subdocument (`{ user: "Alice", address: { city: "Aust
 > 1. `$replaceRoot` replaces the existing root document structure with a target embedded subdocument object.
 > 2. All original top-level fields outside `address` are discarded.
 > 3. Re-shapes document outputs cleanly.
-
+> 
 ---
 
 ### Exercise 2: Merging Root Documents with Subdocuments using `$mergeObjects`
@@ -201,7 +201,7 @@ Merge document default settings with user-customized settings to produce a unifi
 > 1. `$mergeObjects` combines key-value pairs from multiple objects, with rightmost objects overwriting duplicates.
 > 2. Replaces the document root with the merged object.
 > 3. Ideal for default-override settings inheritance patterns.
-
+> 
 ---
 
 ### Exercise 3: Simplifying Promotion with `$replaceWith`
@@ -227,7 +227,7 @@ Demonstrate using `$replaceWith` as a clean alias for `$replaceRoot`.
 > 1. `$replaceWith` is a convenient syntactic alias for `$replaceRoot: { newRoot: ... }`.
 > 2. Promotes target subdocuments directly.
 > 3. Concise pipeline syntax.
-
+> 
 ---
 
 

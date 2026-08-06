@@ -107,7 +107,7 @@ Update table `product` schema to `SCHEMAFULL` using `DEFINE TABLE OVERWRITE`.
 > 1. `OVERWRITE` replaces existing table schema definitions idempotently.
 > 2. Prevents migration failure errors when re-executing schema scripts.
 > 3. Standardizes deployment script execution.
-
+> 
 ---
 
 ### Exercise 2: Idempotent Field Overwrites
@@ -132,7 +132,7 @@ Update field `price` definition on table `product` using `DEFINE FIELD OVERWRITE
 > 1. `OVERWRITE` modifies field types and assertion rules in-place.
 > 2. Avoids preliminary `REMOVE FIELD` calls.
 > 3. Ensures clean field schema updates.
-
+> 
 ---
 
 ### Exercise 3: Idempotent Index Overwrites
@@ -156,7 +156,7 @@ Re-define an index `user_email` on table `user` using `DEFINE INDEX OVERWRITE`.
 > 1. `DEFINE INDEX OVERWRITE` updates secondary index configurations.
 > 2. Rebuilds index structures idempotently.
 > 3. Facilitates index optimization migrations.
-
+> 
 ---
 
 

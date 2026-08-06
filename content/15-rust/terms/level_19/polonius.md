@@ -155,7 +155,7 @@ Polonius is a compile-time static analysis engine!
 >
 > 1. Uses Entry API to safely work around NLL limitations on current stable Rust.
 > 2. Polonius will accept the direct `if let` pattern natively.
-
+> 
 ---
 
 ### Exercise 2: Origin Fact Tuple Representation
@@ -197,7 +197,7 @@ Polonius is a compile-time static analysis engine!
 >
 > 1. Demonstrates Datalog relational facts computed by Polonius.
 > 2. Replaces AST region inference with precise point-based origins.
-
+> 
 ---
 
 ### Exercise 3: Conditional Reference Return Guard
@@ -235,7 +235,7 @@ Polonius is a compile-time static analysis engine!
 >
 > 1. Validates conditional reference origin paths.
 > 2. Modeled natively by Polonius origin tracking.
-
+> 
 ---
 
 ## 6. Related Terms

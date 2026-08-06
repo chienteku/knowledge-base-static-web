@@ -253,7 +253,7 @@ Implement a type-safe financial engine leveraging single-element tuple structs (
 > 2. **Operator Overloading via `std::ops::Add`**: Implementing `Add` for `Usd` establishes domain logic for summing values within the same currency domain, returning a new `Usd` instance via move semantics (`Copy` primitives).
 > 3. **Pattern Matching & Field Access**: Unnamed positional fields in tuple structs can be accessed either via dot-index notation (`payment.0`) or pattern destructured using `let Usd(cents) = payment;`.
 > 4. **Safety & Precision Bounds**: Operating on integer micro-units (`u64` cents) eliminates binary floating-point rounding errors during accumulation, converting to `f64` only during multi-currency rate transformations.
-
+> 
 ---
 
 ### Exercise 2: Network Telemetry & Packet Routing Engine (Nested Tuple Structs & Custom Parsing)
@@ -353,7 +353,7 @@ Construct a zero-overhead network socket domain model utilizing nested tuple str
 > 2. **Deep Pattern Destructuring**: Rust's pattern matching algorithm cleanly handles deeply nested tuple structs. Syntaxes such as `let SocketAddrV4(Ipv4Addr(a, b, c, d), Port(p)) = socket;` extract primitive values recursively in a single binding statement.
 > 3. **Memory Alignment & Layout**: Because `Ipv4Addr(u8, u8, u8, u8)` contains four byte-aligned primitives and `Port(u16)` contains a 2-byte integer, Rust packs `SocketAddrV4` into a compact 6-byte structure in memory (subject to standard alignment padding), keeping network packet processing cache-friendly.
 > 4. **Invariants & Type Boundaries**: Using specialized tuple structs for `Port` and `Ipv4Addr` guarantees that high-level functions accepting network sockets cannot accidentally swap raw port integers with IPv4 octet values.
-
+> 
 ---
 
 ### Exercise 3: Type-Safe In-Memory Relational Entity Store (Opaque Keys & Ref Bounds)
@@ -480,7 +480,7 @@ Design an in-memory entity lookup system using strong tuple struct key wrappers 
 > 2. **Lifetimes in Tuple Structs**: The tuple struct `UserRecord<'a>(pub UserId, pub &'a str)` combines owned data (`UserId`) with borrowed string slices (`&'a str`). The generic lifetime parameter `'a` binds the reference held inside field `.1` to the memory buffer where the string literal or slice resides.
 > 3. **Ownership and Copy Semantics**: `UserId` derives `Copy` and `Clone` because it wraps a primitive `u64`. Searching the store borrows `UserId` by value without requiring heap allocation or moving the key out of caller context.
 > 4. **Pattern Matching Flexibility**: Positional pattern matching allows concise extraction of both the key and slice contents via `let UserRecord(UserId(id_val), name) = record;` without accessing indices directly.
-
+> 
 ---
 
 ## 6. Related Terms

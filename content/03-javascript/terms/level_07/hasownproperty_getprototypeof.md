@@ -179,7 +179,7 @@ console.log("Own keys count:", countOwnProperties(child));
 > Own keys count: 1
 > ```
 > - Check each key using `Object.hasOwn(config, key)`.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Prototypes with `Object.getPrototypeOf`
@@ -196,7 +196,7 @@ console.log("Own keys count:", countOwnProperties(child));
 > ```
 >
 > **Explanation:** `Object.getPrototypeOf(obj)` returns the internal `[[Prototype]]` reference of target objects.
-
+> 
 ---
 
 ### Exercise 3: Safe Property Checks with `Object.hasOwn`
@@ -215,7 +215,7 @@ console.log("Own keys count:", countOwnProperties(child));
 > ```
 >
 > **Explanation:** `Object.hasOwn` is a robust modern replacement for `Object.prototype.hasOwnProperty`.
-
+> 
 ---
 
 ## 7. Related Terms

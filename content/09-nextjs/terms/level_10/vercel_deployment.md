@@ -108,13 +108,13 @@ Deploy a Next.js App Router application to Vercel production using Vercel CLI.
 > # Deploy to Vercel Production
 > npx vercel --prod
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Vercel automatically detects Next.js build output and configures CDN edge caching, serverless functions, and image optimization.
 > 2. `vercel --prod` compiles the build locally or remotely and deploys to the production domain.
 > 3. Zero-config deployment platform for Next.js.
-
+> 
 ---
 
 ### Exercise 2: Configuring Git Preview Deployments
@@ -136,13 +136,13 @@ Explain how Vercel Git integration creates automatic preview deployment URLs for
 > - Step: Generates unique preview URL (e.g. my-app-git-feature-team.vercel.app).
 > - Step: Comments preview link directly on the PR for staging testing!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Vercel generates isolated preview deployment URLs for every git branch and pull request.
 > 2. Allows testing changes in production-identical staging environments before merging to main.
 > 3. Core collaborative CI/CD workflow feature.
-
+> 
 ---
 
 ### Exercise 3: Configuring Vercel Speed Insights and Analytics
@@ -160,31 +160,27 @@ Enable Vercel Speed Insights package `@vercel/speed-insights/next` in `app/layou
 > ```tsx
 > // app/layout.tsx
 > import { SpeedInsights } from "@vercel/speed-insights/next";
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>
-        {children}
-        <SpeedInsights />
-      </body>
-    </html>
-  );
-}
-```
-
+> 
+> export default function RootLayout({ children }: { children: React.ReactNode }) {
+>   return (
+>     <html lang="en">
+>       <body>
+>         {children}
+>         <SpeedInsights />
+>       </body>
+>     </html>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `<SpeedInsights />` captures real-user performance data (RUM) in client browsers.
 > 2. Reports Core Web Vitals metrics directly to the Vercel project analytics dashboard.
 > 3. Seamless performance monitoring integration.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Docker & Standalone Build](standalone_build.md) — The alternative to Vercel for self-hosting.

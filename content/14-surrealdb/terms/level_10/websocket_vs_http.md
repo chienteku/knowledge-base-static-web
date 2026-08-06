@@ -157,7 +157,7 @@ Compare WebSocket (`wss://`) vs HTTP (`https://`) connection endpoints in Surrea
 > 1. WebSockets maintain persistent bi-directional binary channels required for `LIVE SELECT` real-time subscriptions.
 > 2. HTTP endpoints process stateless REST requests, ideal for serverless functions (AWS Lambda, Cloudflare Workers).
 > 3. WebSocket connections eliminate HTTP connection handshake overhead per query.
-
+> 
 ---
 
 ### Exercise 2: Executing HTTP REST API Queries
@@ -181,7 +181,7 @@ Execute a SurrealQL query via HTTP POST request targeting SurrealDB's `/sql` RES
 > 1. `/sql` REST endpoint accepts raw SurrealQL query scripts via HTTP POST.
 > 2. Headers (`NS`, `DB`) specify active target namespace and database scopes.
 > 3. Enables HTTP client integrations without requiring SDK libraries.
-
+> 
 ---
 
 ### Exercise 3: Selecting Protocols for Application Use Cases
@@ -207,7 +207,7 @@ Select WebSockets vs HTTP REST for a real-time chat application vs a stateless w
 > 1. Real-time collaborative web apps require WebSockets for server push notifications.
 > 2. Stateless serverless lambdas require HTTP REST to avoid holding open socket handles.
 > 3. SurrealDB supports both protocols concurrently over the same server port.
-
+> 
 ---
 
 

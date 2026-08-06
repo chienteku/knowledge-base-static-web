@@ -296,7 +296,7 @@ In high-throughput event streaming engines, raw telemetry data frames must be de
 > 3. **Ownership and Mutability**: `process_frame` requires `&mut self` because inserting into `dedup_set` mutates internal map buckets. The string parameter `request_id` is borrowed as `&str` to avoid unnecessary heap allocations on error checks before ownership conversion (`to_string()`).
 > 4. **Edge Cases**: Empty or whitespace-only payloads are caught before dedup insertion to avoid polluting the cache with invalid request entries. Reaching capacity triggers early exit without mutating the pipeline counter.
 >
-
+> 
 ---
 
 ### Exercise 2: Generic Event Dispatcher & Signal Handler Framework with Unit Type Payloads (`P = ()`)
@@ -450,7 +450,7 @@ In asynchronous event-driven system architecture, message brokers handle both da
 > 3. **Conformity with Trait Boundaries**: The unit type `()` satisfies standard marker traits including `Copy`, `Clone`, `Send`, `Sync`, `Sized`, `Eq`, and `Ord`. This enables seamless integration into generic containers and concurrency constructs.
 > 4. **Edge Cases**: Offline handlers reject both unit signal pulses and byte payloads immediately. Pulse counters prevent overflow attacks by bounding allowed signals via `RateLimited`.
 >
-
+> 
 ---
 
 ### Exercise 3: Transactional Storage Engine Write-Ahead Log (WAL) Checkpoint Coordinator (`Result<(), StorageError>`)
@@ -635,7 +635,7 @@ In database engines (such as PostgreSQL or SQLite WAL modules), disk flushing op
 > 3. **Idempotence of `Ok(())`**: Both `flush_wal` and `checkpoint` exhibit idempotent behavior. If `flushed_lsn == current_lsn`, `flush_wal()` returns `Ok(())` without executing redundant I/O syscalls. If no new LSNs were logged since the last checkpoint, `checkpoint()` safely rejects the request with `Err(StorageError::AlreadyCheckpointed)`.
 > 4. **Edge Cases**: Read-only nodes (e.g. secondary read-replicas) reject append, flush, and checkpoint operations immediately with `StorageError::ReadOnlyMode`.
 >
-
+> 
 ---
 
 ## 6. Related Terms

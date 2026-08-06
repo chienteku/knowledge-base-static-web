@@ -156,8 +156,8 @@ DELETE /api/queue/items/item-123 HTTP/1.1 ; Targeted item deletion is idempotent
 > - 2. **Neither** (POST checkouts create orders; repeating it charges the user twice).
 > - 3. **Idempotent** (Replaces the avatar URL. Repeated calls result in the same avatar state).
 > - 4. **Idempotent** (Repeated deletions leave the message gone).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Safe and Idempotent Property Matrix

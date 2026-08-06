@@ -136,8 +136,8 @@ Imagine mailing a document.
 
 > [!check]- Answer
 > - **B (SOAP over XML).** WSDL files are the standard XML contract format used to describe SOAP web services.
-
-
+> 
+> 
 ---
 
 ### Exercise 2: SOAP Message Envelope Structure

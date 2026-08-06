@@ -139,7 +139,7 @@ async function processData() {
 > ```
 > - Use `let` to declare the variable so it can be updated.
 > - Use `=` to assign and reassign values.
-
+> 
 ---
 
 ### Exercise 2: Variable Scope Differences (`var` vs `let`)
@@ -166,7 +166,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `var` is function/globally scoped; `let` and `const` enforce strict block scoping (`{}`).
-
+> 
 ---
 
 ### Exercise 3: Variable Hoisting Comparison
@@ -191,8 +191,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `var` hoists with `undefined` initialization; `let` hoists uninitialized in the Temporal Dead Zone.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

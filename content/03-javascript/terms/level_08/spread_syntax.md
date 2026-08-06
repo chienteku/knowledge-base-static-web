@@ -156,7 +156,7 @@ async function processData() {
 > Because Strings are "Iterables" in JavaScript, the spread operator will unpack the string into individual character elements inside the array!
 > ```
 > - Try running it in your console! It's a great trick.
-
+> 
 ---
 
 ### Exercise 2: Shallow Copying Objects with Spread
@@ -175,7 +175,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Object spread `{ ...obj }` copies own enumerable properties into new object literals.
-
+> 
 ---
 
 ### Exercise 3: Merging Arrays with Spread Syntax
@@ -194,8 +194,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Array spread expands iterable elements inside fresh array literals.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

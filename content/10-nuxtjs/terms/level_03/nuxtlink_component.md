@@ -126,13 +126,13 @@ Create internal navigation links (`/about`) and external links (`https://nuxt.co
 >   </nav>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `<NuxtLink>` automatically detects whether a URL is internal or external.
 > 2. Internal links execute fast SPA route transitions without full page refreshes.
 > 3. External links automatically render standard `<a>` tags with `rel="noopener noreferrer"`.
-
+> 
 ---
 
 ### Exercise 2: Controlling Viewport Route Prefetching
@@ -157,13 +157,13 @@ Disable automatic route prefetching for a specific heavy dashboard link using `:
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. By default, `<NuxtLink>` prefetches code chunks for linked routes when they enter the browser viewport.
 > 2. `:prefetch="false"` disables prefetching, preventing background bandwidth consumption on heavy routes.
 > 3. Essential performance tuning prop.
-
+> 
 ---
 
 ### Exercise 3: Styling Active and Exact-Active Route Links
@@ -190,27 +190,23 @@ Style active navigation items using `active-class` and `exact-active-class` prop
 >     </NuxtLink>
 >   </nav>
 > </template>
-
-<style scoped>
-.active-nav-item {
-  color: #3b82f6;
-  font-weight: bold;
-}
-</style>
-```
-
+> 
+> <style scoped>
+> .active-nav-item {
+>   color: #3b82f6;
+>   font-weight: bold;
+> }
+> </style>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `active-class` applies when the current route path starts with the link target path.
 > 2. `exact-active-class` applies ONLY when the current route path matches the target path exactly.
 > 3. Standard pattern for active navigation indicators.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`pages/` Directory](../level_02/pages_directory.md) — The destination of internal NuxtLinks.

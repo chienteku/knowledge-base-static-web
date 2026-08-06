@@ -128,7 +128,7 @@ defineOptions({ name: 'UserTab' });
 > `onActivated` fires every time the component is restored from the KeepAlive cache.
 > ```
 > - Review the new lifecycle hooks introduced by `KeepAlive`.
-
+> 
 ---
 
 ### Exercise 2: KeepAlive max Cache Limit
@@ -147,7 +147,7 @@ defineOptions({ name: 'UserTab' });
 >   <component :is="currentView" />
 > </KeepAlive>
 > ```
-
+> 
 ---
 
 ### Exercise 3: onActivated & onDeactivated Hook Roles
@@ -166,8 +166,8 @@ defineOptions({ name: 'UserTab' });
 > ```javascript
 > import { onActivated, onDeactivated } from 'vue';
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

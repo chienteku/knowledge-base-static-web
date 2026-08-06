@@ -120,7 +120,7 @@ function updateTitle(newTitle) {
 > Declarative (Vue): "Create an `isLoading` boolean. I declare that the loading paragraph only exists if `isLoading` is true. I declare the data paragraph exists if `isLoading` is false. I fetch the data. When it arrives, I set `isLoading = false`. Vue does the rest."
 > ```
 > - Imperative = Step-by-step commands. Declarative = Defining rules based on state.
-
+> 
 ---
 
 ### Exercise 2: Declarative State to Template Binding
@@ -144,7 +144,7 @@ function updateTitle(newTitle) {
 >   <button @click="isLoggedIn = !isLoggedIn">Toggle</button>
 > </template>
 > ```
-
+> 
 ---
 
 ### Exercise 3: Imperative vs Declarative Paradigm
@@ -163,8 +163,8 @@ function updateTitle(newTitle) {
 > Imperative -> Step-by-step DOM manipulation commands (HOW).
 > Declarative -> State-driven UI declaration (WHAT).
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

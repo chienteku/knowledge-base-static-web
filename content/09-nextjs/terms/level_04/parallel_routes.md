@@ -158,13 +158,13 @@ Create parallel slots `@team` and `@analytics` inside `app/dashboard/` and rende
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Folders named `@slotName` define parallel route slots that do NOT affect URL paths.
 > 2. Next.js passes slots directly as props to the parent `layout.tsx`.
 > 3. Renders independent page components side-by-side in a unified view.
-
+> 
 ---
 
 ### Exercise 2: Conditional Slot Rendering Based on User Role
@@ -181,31 +181,31 @@ Render `@admin` slot conditionally inside layout based on active user authentica
 >
 > ```tsx
 > import { getUser } from "@/lib/auth";
-
-export default async function ConditionalDashboardLayout({
-  children,
-  admin
-}: {
-  children: React.ReactNode;
-  admin: React.ReactNode;
-}) {
-  const user = await getUser();
-
-  return (
-    <div>
-      {children}
-      {user.role === "ADMIN" ? admin : null}
-    </div>
-  );
-}
-```
-
+> 
+> export default async function ConditionalDashboardLayout({
+>   children,
+>   admin
+> }: {
+>   children: React.ReactNode;
+>   admin: React.ReactNode;
+> }) {
+>   const user = await getUser();
+> 
+>   return (
+>     <div>
+>       {children}
+>       {user.role === "ADMIN" ? admin : null}
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Parallel slots are standard React Node props, allowing conditional rendering based on server state.
 > 2. Admin analytics pages are fetched and rendered ONLY when authorized.
 > 3. Secure dashboard composition pattern.
-
+> 
 ---
 
 ### Exercise 3: Handling Fallback Un-Matched Routes with `default.tsx`
@@ -226,19 +226,15 @@ Create `app/dashboard/@analytics/default.tsx` to handle slot rendering when sub-
 >   return <div>Analytics Overview (Default Fallback)</div>;
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. When navigating between sub-routes, Next.js renders `default.tsx` for parallel slots if their active state cannot be determined.
 > 2. Prevents empty or blank slot panels during client transitions or page refreshes.
 > 3. Essential component for parallel routing systems.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`layout.tsx`](../level_02/layout.md) — The file that orchestrates the slots.

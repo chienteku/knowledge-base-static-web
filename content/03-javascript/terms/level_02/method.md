@@ -164,7 +164,7 @@ async function processData() {
 > ```
 > - `const robot = { name: "R2D2", greet() { console.log(`Beep boop, I am ${this.name}`); } }`
 > - Don't forget to call it: `robot.greet();`
-
+> 
 ---
 
 ### Exercise 2: Method Shorthand Syntax in Objects
@@ -186,7 +186,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** ES6 method shorthand syntax `methodName() {}` defines clean object methods.
-
+> 
 ---
 
 ### Exercise 3: Binding Method `this` Context
@@ -209,8 +209,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Function.prototype.bind()` locks the explicit `this` target of functions regardless of how they are invoked.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

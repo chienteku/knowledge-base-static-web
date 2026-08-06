@@ -99,16 +99,16 @@ Group utility validation functions inside a `Validation` namespace.
 >     return /^\d{5}$/.test(val);
 >   }
 > }
-
-console.log(Validation.isEmail("test@example.com"));
-```
-
+> 
+> console.log(Validation.isEmail("test@example.com"));
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `namespace Name { ... }` creates a named JavaScript IIFE object grouping exported functions and types.
 > 2. Legacy mechanism used before ES modules (`import`/`export`) were standardized.
 > 3. Exposes members explicitly marked with `export`.
-
+> 
 ---
 
 ### Exercise 2: Multi-File Namespace Merging
@@ -128,19 +128,19 @@ Merge a `Validation` namespace split across two separate source files.
 > namespace Validation {
 >   export const isString = (val: any): boolean => typeof val === "string";
 > }
-
-// NumberValidation.ts
-namespace Validation {
-  export const isNumber = (val: any): boolean => typeof val === "number";
-}
-```
-
+> 
+> // NumberValidation.ts
+> namespace Validation {
+>   export const isNumber = (val: any): boolean => typeof val === "number";
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Namespaces automatically merge declarations sharing the same identifier across files.
 > 2. Requires compiling with `--outFile` or script concatenation.
 > 3. Obsolete in modern TypeScript; replaced by ES modules.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: ES Modules vs Legacy Namespaces
@@ -160,18 +160,15 @@ Formulate an architectural selection decision matrix comparing ES Modules (`impo
 > - ES Modules (import / export): Official ECMAScript standard. Supported natively by browsers & Node.js, supports tree-shaking, bundlers, and static analysis. PREFERRED.
 > - Namespaces (namespace N): Legacy TypeScript-only feature. Generates IIFE objects, poor tree-shaking, non-standard. AVOID for new code.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. ES modules are the standardized, industry-wide module system for JavaScript and TypeScript.
 > 2. Namespaces are considered legacy and should be avoided in modern codebases.
 > 3. Important architectural migration directive.
-
+> 
 ---
 
-
-
----
 
 
 
@@ -180,7 +177,6 @@ Formulate an architectural selection decision matrix comparing ES Modules (`impo
 
 ---
 
----
 
 ## 7. Key Takeaways
 

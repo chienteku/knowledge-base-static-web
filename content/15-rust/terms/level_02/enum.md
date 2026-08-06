@@ -287,7 +287,7 @@ Implement the `DisconnectReason` and `Packet` enums along with the following met
 > 2. **Explicit Discriminants (`#[repr(u8)]`)**: Adding `#[repr(u8)]` to `DisconnectReason` guarantees that each variant compiles down to a single byte discriminant (0, 1, 2). This allows clean numeric casting (`*reason as u8`) during low-level wire header serialization.
 > 3. **Non-destructive Borrowing & Pattern Matching**: Methods take `&self` to compute dynamic packet properties without taking ownership or triggering heap reallocations. Wildcards (`..`) allow destructuring without binding unused fields (`message_id`, `payload`).
 > 4. **`matches!` Macro**: `matches!(self, Packet::Ping(_) | Packet::Disconnect(_))` expands into a boolean pattern-matching expression without requiring explicit `match` blocks or `return true/false` boilerplate.
-
+> 
 ---
 
 ### Exercise 2: Algorithmic Trading Order Lifecycle State Machine
@@ -582,7 +582,7 @@ Implement state machine methods on `OrderState`:
 > 1. **Ownership Semantics (`self`) for State Transitions**: By taking `self` by value in `apply_event`, the method consumes the previous enum variant instance. This prevents stale state reuse (e.g. holding onto a `Pending` state handle after it has transitioned to `Active`), guaranteeing strict lifecycle invariants at compile time.
 > 2. **Structural Tuple Pattern Matching**: Matching on `(self, event)` pairs allows the compiler to enforce exhaustive checking across every combination of current state and incoming execution event. If a developer adds a new variant to `ExecutionEvent`, Rust will reject compilation until all matrix branches are handled.
 > 3. **Domain Error Types**: Returning `Result<OrderState, OrderError>` using explicit custom enums instead of raw strings ensures caller code can programmatically handle overfills differently from illegal state transitions using `matches!` or pattern matching.
-
+> 
 ---
 
 ### Exercise 3: Recursive Abstract Syntax Tree (AST) Expression Evaluator
@@ -765,7 +765,7 @@ Evaluation rules:
 > 1. **Indirection via `Box<T>` for Recursive Enums**: Rust requires that all types have a statically known size at compile time. Directly nesting `Expr` inside `Expr` would create an infinitely sized type (`E0072`). Wrapping child nodes in `Box<Expr>` puts a fixed-size (pointer size, 8 bytes on 64-bit platforms) heap allocation reference inside the variant.
 > 2. **Short-Circuit Evaluation in AST Nodes**: In `Expr::Conditional`, the AST engine only evaluates the active branch (`then_branch` or `else_branch`) after checking `condition.eval(env)`. The inactive branch is never executed, preventing unnecessary computations or unreferenced variable lookups.
 > 3. **Reference-Based AST Traversals**: The `eval` method takes `&self` and `&HashMap`, enabling repeated execution of the same immutable AST across multiple environments without cloning or consuming the tree nodes.
-
+> 
 ---
 
 ## 6. Related Terms

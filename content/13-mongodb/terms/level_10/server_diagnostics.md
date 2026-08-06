@@ -168,7 +168,7 @@ Query `db.serverStatus()` to inspect current WiredTiger cache memory consumption
 > 1. `serverStatus()` returns comprehensive server telemetry metrics.
 > 2. `wiredTiger.cache` tracks RAM memory utilization and dirty page eviction queues.
 > 3. Helps prevent WiredTiger cache eviction stalls.
-
+> 
 ---
 
 ### Exercise 2: Monitoring Database Lock Latencies with `top`
@@ -193,7 +193,7 @@ Execute `db.adminCommand({ top: 1 })` to inspect read/write lock time latencies 
 > 1. `top` command measures cumulative time (microseconds) spent executing reads and writes on each collection.
 > 2. Identifies specific collections causing lock contention.
 > 3. Useful for pinpointing hot-spot collections.
-
+> 
 ---
 
 ### Exercise 3: Checking Collection Data and Index Sizes with `dbStats`
@@ -220,7 +220,7 @@ Inspect total document counts, data size, and index sizes for database `store_db
 > 1. `db.stats()` aggregates collection and index storage sizes across the active database.
 > 2. Monitors database growth trends and disk capacity planning.
 > 3. Standard diagnostic command.
-
+> 
 ---
 
 

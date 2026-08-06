@@ -116,13 +116,13 @@ Explain why Next.js replaced Babel with SWC (Speedy Web Compiler) for JavaScript
 > - Babel (JavaScript): Single-threaded, slower compilation, high RAM consumption.
 > - SWC (Rust): Multi-threaded, written in Rust, 17x faster compilation than Babel, 3x faster fast-refresh builds!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. SWC is a Rust-based JavaScript/TypeScript compiler integrated natively into Next.js.
 > 2. Multi-threaded architecture leverages all available CPU cores for build compilation.
 > 3. Accelerates local development HMR and production `next build` compilation.
-
+> 
 ---
 
 ### Exercise 2: Configuring Custom SWC Transforms in `next.config.js`
@@ -146,13 +146,13 @@ Configure SWC styled-components or Emotion transforms inside `next.config.js`.
 >   }
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `compiler` options configure built-in Rust SWC transform plugins.
 > 2. `removeConsole` automatically strips `console.log()` statements from production JavaScript bundles.
 > 3. Replaces custom Babel plugins with high-speed Rust transforms.
-
+> 
 ---
 
 ### Exercise 3: Auditing Custom `.babelrc` Opt-Out Warnings
@@ -173,19 +173,15 @@ Explain why adding a custom `.babelrc` file disables SWC and falls back to slowe
 > - Result: Next.js automatically disabled high-speed SWC and fell back to Babel compilation!
 > - Fix: Delete .babelrc and migrate Babel plugins to next.config.js compiler options!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Next.js disables SWC if a custom `.babelrc` or `babel.config.js` file is detected to maintain backward compatibility.
 > 2. Falling back to Babel increases build times significantly.
 > 3. Always migrate custom Babel plugins to SWC transforms.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Turbopack](turbopack.md) — The Rust-based development bundler.

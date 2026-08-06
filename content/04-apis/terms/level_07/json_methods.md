@@ -126,7 +126,7 @@ console.log(stringified);
 > `JSON.stringify` intentionally ignores and deletes functions. A function is code, not data. JSON only supports data.
 > ```
 > - Remember the rules of Serialization. Can you send a function over a network?
-
+> 
 ---
 
 ### Exercise 2: JSON.stringify Formatting Indentation

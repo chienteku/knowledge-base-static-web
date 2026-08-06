@@ -140,7 +140,7 @@ onUnmounted(() => {
 > })
 > ```
 > - Which lifecycle phase deals with a component's death?
-
+> 
 ---
 
 ### Exercise 2: Lifecycle Hook Execution Order
@@ -167,7 +167,7 @@ onUnmounted(() => {
 > 3. onBeforeUnmount
 > 4. onUnmounted
 > ```
-
+> 
 ---
 
 ### Exercise 3: Options API to Composition API Lifecycle Mapping
@@ -185,8 +185,8 @@ onUnmounted(() => {
 > ```javascript
 > import { onMounted, onBeforeUnmount } from 'vue';
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

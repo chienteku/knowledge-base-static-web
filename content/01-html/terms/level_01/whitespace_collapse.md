@@ -161,7 +161,7 @@ Whitespace collapse demonstration showing different source formatting yielding t
 > All consecutive carriage returns (new lines) and blank spaces are collapsed by the browser into a single space character.
 > ```
 > - Remember that whitespace collapse treats line breaks (Enters) and spaces as the exact same block of collapse.
-
+> 
 ---
 
 
@@ -183,7 +183,7 @@ Whitespace collapse demonstration showing different source formatting yielding t
 > ```
 >
 > **Explanation:** `<pre>` tag displays text in monospace font, preserving all whitespace verbatim.
-
+> 
 ---
 
 ### Exercise 3: CSS white-space Property
@@ -202,7 +202,7 @@ Whitespace collapse demonstration showing different source formatting yielding t
 > ```
 >
 > **Explanation:** `white-space: pre-wrap` preserves source spaces and newlines while wrapping lines.
-
+> 
 ## 7. Related Terms
 - [Nesting](nesting.md) — Proper tag structure which relies on source code indentation.
 - [`<pre>` & `<code>`](../level_02/pre_code.md) — Related concept: `<pre>` & `<code>`.

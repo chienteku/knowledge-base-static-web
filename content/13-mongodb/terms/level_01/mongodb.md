@@ -139,7 +139,7 @@ Connect to a MongoDB instance, switch to database `inventory`, and perform an `i
 > 1. `use inventory` targets the specified database namespace.
 > 2. `insertOne()` generates an `_id` ObjectId automatically if omitted.
 > 3. Persists document directly into WiredTiger collection pages.
-
+> 
 ---
 
 ### Exercise 2: Querying Documents with Equality and Comparison Operators
@@ -166,7 +166,7 @@ Query collection `items` for documents where `qty` is greater than 20 and `statu
 > 1. Query filter object specifies match conditions declarative in JSON/BSON format.
 > 2. `$gt` specifies greater-than comparison operations.
 > 3. Leverages collection indexes when available.
-
+> 
 ---
 
 ### Exercise 3: Summarizing MongoDB Architecture Pillars
@@ -193,7 +193,7 @@ Summarize MongoDB's three core architectural pillars: Document Model, High Avail
 > 1. Document model maximizes developer velocity and read efficiency.
 > 2. Replica sets guarantee zero data loss and automated failovers.
 > 3. Sharding enables transparent horizontal cluster expansion.
-
+> 
 ---
 
 

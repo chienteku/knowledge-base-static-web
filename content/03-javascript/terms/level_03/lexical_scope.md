@@ -189,7 +189,7 @@ stepTwo();
 > ```
 > - Remember that scope in JavaScript is determined by where the function is written in the code.
 > - `stepOne` is defined in the global scope, not inside `stepTwo`.
-
+> 
 ---
 
 ### Exercise 2: Lexical Scope Chain Trace
@@ -219,7 +219,7 @@ stepTwo();
 > ```
 >
 > **Explanation:** Scope resolution walks outward from local scope to parent scopes along the static lexical structure.
-
+> 
 ---
 
 ### Exercise 3: Lexical Scope Closure Preservation
@@ -241,8 +241,8 @@ stepTwo();
 > ```
 >
 > **Explanation:** Functions retain lifetime references to their parent lexical environment.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

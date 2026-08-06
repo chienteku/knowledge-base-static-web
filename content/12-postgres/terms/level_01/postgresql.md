@@ -132,7 +132,7 @@ Query the running PostgreSQL server version and build configuration using `SELEC
 > 1. `version()` returns the full PostgreSQL version string, OS compilation target, and compiler details.
 > 2. Verifies whether server features (e.g. PG 15+ `MERGE` or PG 16+ `json_table`) are supported.
 > 3. Initial diagnostic step during environment setup.
-
+> 
 ---
 
 ### Exercise 2: Checking Transactional ACID Compliance Settings
@@ -156,7 +156,7 @@ Verify that `synchronous_commit` is enabled on the server to guarantee ACID writ
 > 1. `synchronous_commit = on` guarantees that write transactions wait for WAL disk flush before returning success to clients.
 > 2. Enforces strict ACID Durability guarantees.
 > 3. Prevents data loss during unexpected power loss.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Server Uptime Telemetry
@@ -182,7 +182,7 @@ Query server start time and uptime duration using system statistics.
 > 1. `pg_postmaster_start_time()` returns the timestamp when the main server daemon (`postgres`) was started.
 > 2. Subtracting from `CURRENT_TIMESTAMP` calculates total server uptime.
 > 3. Monitors server stability and restart cycles.
-
+> 
 ---
 
 

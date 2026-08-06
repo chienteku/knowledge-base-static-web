@@ -183,7 +183,7 @@ app.get('/user/:id', async (req, res, next) => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Handling Promise.allSettled Results
@@ -204,7 +204,7 @@ app.get('/user/:id', async (req, res, next) => {
 > ```
 >
 > **Explanation:** `Promise.allSettled` waits for all promises to settle without short-circuiting on single rejections.
-
+> 
 ---
 
 ### Exercise 3: Express Async Error Propagation
@@ -223,7 +223,7 @@ app.get('/user/:id', async (req, res, next) => {
 > ```
 >
 > **Explanation:** Calling `next(err)` hands error handling over to Express error middleware.
-
+> 
 ## 7. Related Terms
 - [Unhandled Promise Rejections](unhandled_rejections.md) — The process crashes caused by missing catch blocks.
 - [Callbacks & Callback Hell](callbacks.md) — The error-first callback style of handling errors.

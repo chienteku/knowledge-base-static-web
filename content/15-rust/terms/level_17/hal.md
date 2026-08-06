@@ -220,7 +220,7 @@ pub fn init_hardware() {
 > 1. **Zero-Cost Type-State Encoding**: By using zero-sized marker structs (`Input`, `PushPull`, `OpenDrain`) and `PhantomData<MODE>`, the pin mode state is tracked entirely at compile time without incurring runtime RAM or code size penalties.
 > 2. **Ownership and Move Semantics**: State transition methods consume `self` by value (e.g., `into_push_pull_output(self)`). Moving ownership invalidates the previous `Pin<ID, Input>` binding, preventing pin aliasing or illegal concurrent configurations.
 > 3. **Compile-Time Safety Enforcement**: Output functions (`set_high()`, `toggle()`) are implemented exclusively on `Pin<ID, Output<M>>`. Invoking `.set_high()` on a `Pin<ID, Input>` produces a compile-time type mismatch error before code can be flashed to hardware.
-
+> 
 ---
 
 ### Exercise 2: Implementing a HAL Timer Peripheral & Frequency Prescaling Driver
@@ -329,7 +329,7 @@ pub fn init_hardware() {
 > 1. **Peripheral Register Encapsulation**: The `TimerDriver` wraps memory-mapped registers (`PSC`, `ARR`, `CNT`, `CR1`), providing safe, ergonomic hardware abstractions over raw bit manipulations.
 > 2. **Frequency Prescaling Calculations**: The driver derives auto-reload values using clock math (`ARR = (sysclk / target_freq) - 1`), allowing high-level applications to request human-readable frequencies (e.g., 1 kHz).
 > 3. **Robust Error Handling**: Instead of risking silent integer overflow or division-by-zero during clock configuration, invalid parameters are safely trapped using `Result<T, TimerError>`.
-
+> 
 ---
 
 ### Exercise 3: HAL Serial UART Driver with Status Flag Trapping & Error Handling
@@ -461,10 +461,9 @@ pub fn init_hardware() {
 > 1. **Hardware Bitmask Trapping**: The HAL inspects hardware status registers (`SR`) before performing data register operations, preventing unbuffered data overwrites or reading invalid register values.
 > 2. **Error Recovery & Bit Clearing**: Hardware timing anomalies (such as bit alignment or missed bytes) are converted into structured Rust `UartError` variants while clearing status bits to restore serial line functionality.
 > 3. **High-Level Trait Bridging**: High-level abstractions like `send_str` map Rust slice primitives (`&str`) to low-level register writes using error propagation (`?`), illustrating the essential role of HAL crates in embedded software systems.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

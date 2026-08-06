@@ -179,7 +179,7 @@ Select `price_cents` converted to dollars and alias output column as `price_usd`
 > 1. Column aliases (`AS alias_name`) rename projected query output columns.
 > 2. Provides clean property keys in Node.js API query result objects.
 > 3. Standard SQL projection formatting.
-
+> 
 ---
 
 ### Exercise 2: Table Aliasing in Multi-Table Joins
@@ -208,7 +208,7 @@ Alias `customers` as `c` and `invoices` as `i` in a multi-table `JOIN` query.
 > 1. Table aliases (`customers AS c`) assign short identifiers to table references.
 > 2. Resolves column name ambiguity when joined tables share duplicate column names (e.g. `c.id` vs `i.id`).
 > 3. Improves query readability.
-
+> 
 ---
 
 ### Exercise 3: Derived Subquery Table Aliases
@@ -242,7 +242,7 @@ Query a derived subquery in `FROM`, aliasing the subquery table as `monthly_sale
 > 1. PostgreSQL requires all subqueries in `FROM` clauses to have an explicit table alias (`AS monthly_sales`).
 > 2. Treats the subquery result set as a virtual in-memory relation.
 > 3. Enables outer query filtering.
-
+> 
 ---
 
 

@@ -103,7 +103,7 @@ node_modules
 > Containers are incredibly lightweight. Instead of installing a full 20GB OS, a container shares the host computer's operating system kernel. A Node.js Docker image might only be 100 Megabytes, and it boots up in 1 second instead of 1 minute!
 > ```
 > - Think about size and speed.
-
+> 
 ---
 
 
@@ -134,7 +134,7 @@ node_modules
 > ```
 >
 > **Explanation:** Multi-stage builds produce tiny production images containing zero dev dependencies.
-
+> 
 ---
 
 ### Exercise 3: Docker Process Signal Passing (PID 1 Problem)
@@ -151,7 +151,7 @@ node_modules
 > ```
 >
 > **Explanation:** Node.js as PID 1 does not handle default kernel signals properly without an init wrapper.
-
+> 
 ## 7. Related Terms
 - [PM2 (Process Manager)](pm2.md) — While you can use PM2 inside Docker, Docker itself usually handles the "restarting if crashed" logic natively.
 - [Node.js (Runtime Environment)](../level_01/nodejs.md) — The language you are containerizing!

@@ -197,7 +197,7 @@ Demonstrate that a `SCHEMAFULL` table rejects writes containing undeclared field
 > 1. `SCHEMAFULL` tables reject undeclared fields at write time.
 > 2. Guards against typo fields and schema corruption.
 > 3. Enforces strict contract boundaries.
-
+> 
 ---
 
 ### Exercise 2: Type Coercion Write Rejections
@@ -226,7 +226,7 @@ Attempt to write a string `"hello"` into integer field `age` on a `SCHEMAFULL` t
 > 1. Validates field data types prior to committing transactions.
 > 2. Aborts invalid type writes automatically.
 > 3. Maintains database type safety.
-
+> 
 ---
 
 ### Exercise 3: Allowing Flexible Nested Objects in SCHEMAFULL Tables
@@ -253,7 +253,7 @@ Define a `SCHEMAFULL` table `profile` with a `FLEXIBLE` nested `metadata` object
 > 1. `FLEXIBLE` allows arbitrary nested JSON keys inside specific object fields.
 > 2. Combines strict outer schema rules with flexible nested documents.
 > 3. Ideal for user metadata and settings storage.
-
+> 
 ---
 
 

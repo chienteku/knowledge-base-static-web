@@ -175,7 +175,7 @@ Compare a standard direct seed connection string (`mongodb://`) against an Atlas
 > 1. `mongodb+srv://` queries DNS SRV records to discover replica set seed nodes automatically.
 > 2. `mongodb+srv://` automatically enables `tls=true` and allows updating replica nodes without changing client code.
 > 3. Modern connection string standard.
-
+> 
 ---
 
 ### Exercise 2: Configuring Write Concern and Replica Set Options in Connection URI
@@ -199,7 +199,7 @@ Pass `w=majority`, `wtimeoutMS=5000`, and `readPreference=secondaryPreferred` in
 > 1. Connection URI parameters configure default driver write concern and read preference behavior globally.
 > 2. `wtimeoutMS=5000` prevents majority writes from hanging indefinitely.
 > 3. Standardizes client driver configuration.
-
+> 
 ---
 
 ### Exercise 3: Escaping Special Characters in URI Password Passwords
@@ -226,7 +226,7 @@ Percent-encode special characters in database passwords (`P@ss#w0rd!`) for valid
 > 1. Special characters (`@`, `:`, `/`, `#`, `%`) break URI parser regex if unescaped.
 > 2. `encodeURIComponent()` converts special characters into percent-encoded hex sequences.
 > 3. Prevents connection string authentication parse errors.
-
+> 
 ---
 
 

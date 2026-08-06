@@ -171,7 +171,7 @@ let s = unsafe { CStr::from_ptr(raw_c_ptr) }.to_string_lossy(); // Safe lossy co
 > 1. `CString::new(var_name)` appends the trailing `\0` byte required by C `getenv`.
 > 2. Binds `c_name` to a local variable to prevent early deallocation before the unsafe `getenv` call.
 > 3. Converts raw pointer response to `&CStr` and safely converts UTF-8 bytes into `String`.
-
+> 
 ---
 
 ### Exercise 2: Zero-Allocation Constant C String Passing via `c""` Literals
@@ -210,7 +210,7 @@ let s = unsafe { CStr::from_ptr(raw_c_ptr) }.to_string_lossy(); // Safe lossy co
 >
 > 1. The `c"..."` literal embeds a nul-terminated `&CStr` directly in the binary read-only `.rodata` segment.
 > 2. Eliminates dynamic heap allocation overhead for constant FFI strings.
-
+> 
 ---
 
 ### Exercise 3: Custom FFI String Buffer Converter
@@ -253,7 +253,7 @@ let s = unsafe { CStr::from_ptr(raw_c_ptr) }.to_string_lossy(); // Safe lossy co
 > #### Technical Explanation
 >
 > 1. Manually constructs a nul-terminated byte array for zero-allocation C buffer outputs.
-
+> 
 ---
 
 ## 5. Related Terms

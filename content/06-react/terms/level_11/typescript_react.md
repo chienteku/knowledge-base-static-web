@@ -204,7 +204,7 @@ export default function InputForm({ onSubmitLabel }: InputFormProps) {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Typing Component Props Interface
@@ -230,7 +230,7 @@ export default function InputForm({ onSubmitLabel }: InputFormProps) {
 > ```
 >
 > **Explanation:** TypeScript interfaces enforce compile-time prop type safety across components.
-
+> 
 ---
 
 ### Exercise 3: Typing Children Props with ReactNode
@@ -249,7 +249,7 @@ export default function InputForm({ onSubmitLabel }: InputFormProps) {
 > ```
 >
 > **Explanation:** `React.ReactNode` represents any renderable React child element (JSX, strings, numbers, fragments).
-
+> 
 ## 7. Related Terms
 - [Props (Properties)](../level_01/props.md) — The data structure typed by interfaces.
 - [`useState` Hook](../level_02/use_state.md) — The state manager utilizing generics.

@@ -178,37 +178,37 @@ Create a Zod schema validating user email and age parameters inside a Server Act
 >
 > ```typescript
 > import { z } from "zod";
-
-const UserSchema = z.object({
-  email: z.string().email("Invalid email format"),
-  age: z.coerce.number().min(18, "Must be at least 18 years old")
-});
-
-export async function registerUserAction(formData: FormData) {
-  const rawData = {
-    email: formData.get("email"),
-    age: formData.get("age")
-  };
-
-  const result = UserSchema.safeParse(rawData);
-
-  if (!result.success) {
-    return {
-      errors: result.error.flatten().fieldErrors
-    };
-  }
-
-  // Proceed with type-safe result.data...
-  console.log("Validated User Data:", result.data);
-}
-```
-
+> 
+> const UserSchema = z.object({
+>   email: z.string().email("Invalid email format"),
+>   age: z.coerce.number().min(18, "Must be at least 18 years old")
+> });
+> 
+> export async function registerUserAction(formData: FormData) {
+>   const rawData = {
+>     email: formData.get("email"),
+>     age: formData.get("age")
+>   };
+> 
+>   const result = UserSchema.safeParse(rawData);
+> 
+>   if (!result.success) {
+>     return {
+>       errors: result.error.flatten().fieldErrors
+>     };
+>   }
+> 
+>   // Proceed with type-safe result.data...
+>   console.log("Validated User Data:", result.data);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `z.object({...})` defines type-safe validation rules for incoming string payloads.
 > 2. `z.coerce.number()` converts string values from `FormData` into numbers before parsing.
 > 3. `safeParse()` returns a result object (`result.success`) without throwing runtime exceptions.
-
+> 
 ---
 
 ### Exercise 2: Formulating Flattened Field Validation Errors for React UI
@@ -227,21 +227,21 @@ Format Zod validation error objects using `result.error.flatten().fieldErrors` f
 > const schema = z.object({
 >   password: z.string().min(8, "Password must be at least 8 chars")
 > });
-
-const result = schema.safeParse({ password: "123" });
-
-if (!result.success) {
-  const formattedErrors = result.error.flatten().fieldErrors;
-  // Output: { password: ["Password must be at least 8 chars"] }
-}
-```
-
+> 
+> const result = schema.safeParse({ password: "123" });
+> 
+> if (!result.success) {
+>   const formattedErrors = result.error.flatten().fieldErrors;
+>   // Output: { password: ["Password must be at least 8 chars"] }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `error.flatten().fieldErrors` converts complex Zod error trees into plain key-value objects mapping field names to error arrays.
 > 2. Cleanly serializes across the Server-to-Client boundary.
 > 3. Standard error formatting pattern for Next.js forms.
-
+> 
 ---
 
 ### Exercise 3: Validating Route Handler JSON Payloads with Zod
@@ -259,36 +259,32 @@ Validate incoming HTTP POST JSON payloads inside a Next.js API Route Handler usi
 > ```typescript
 > // app/api/users/route.ts
 > import { z } from "zod";
-
-const CreateUserSchema = z.object({
-  username: z.string().min(3),
-  role: z.enum(["USER", "ADMIN"])
-});
-
-export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-    const validatedData = await CreateUserSchema.parseAsync(body);
-
-    return Response.json({ success: true, data: validatedData });
-  } catch (err: any) {
-    return Response.json({ error: err.errors }, { status: 400 });
-  }
-}
-```
-
+> 
+> const CreateUserSchema = z.object({
+>   username: z.string().min(3),
+>   role: z.enum(["USER", "ADMIN"])
+> });
+> 
+> export async function POST(req: Request) {
+>   try {
+>     const body = await req.json();
+>     const validatedData = await CreateUserSchema.parseAsync(body);
+> 
+>     return Response.json({ success: true, data: validatedData });
+>   } catch (err: any) {
+>     return Response.json({ error: err.errors }, { status: 400 });
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `parseAsync()` validates data asynchronously and throws a `ZodError` if validation fails.
 > 2. Protects backend services from malformed or malicious JSON request payloads.
 > 3. Ensures complete type safety inside backend Route Handlers.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Server Actions Overview (`"use server"`)](server_actions.md) — The backend functions validated by Zod schemas.

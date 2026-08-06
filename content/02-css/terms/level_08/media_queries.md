@@ -194,7 +194,7 @@ A user views the site on an iPad that is `800px` wide. What size is the button t
 > The iPad is 800px wide, which is NOT "at least 1024px wide". Therefore, the media query is completely ignored, and the default Mobile CSS is used.
 > ```
 > - Is 800 greater than or equal to 1024?
-
+> 
 ---
 
 
@@ -215,7 +215,7 @@ A user views the site on an iPad that is `800px` wide. What size is the button t
 > ```
 >
 > **Explanation:** Modern CSS Media Queries Level 4 syntax simplifies range queries.
-
+> 
 ---
 
 ### Exercise 3: Dark Mode Media Query
@@ -237,7 +237,7 @@ A user views the site on an iPad that is `800px` wide. What size is the button t
 > ```
 >
 > **Explanation:** `prefers-color-scheme` detects OS user dark mode preferences.
-
+> 
 ## 7. Related Terms
 - [`flex-direction`](../level_05/flex_direction.md) — Commonly toggled inside media queries for responsive layouts.
 - [Mobile-First Design](mobile_first.md) — Progressive enhancement coding methodology.

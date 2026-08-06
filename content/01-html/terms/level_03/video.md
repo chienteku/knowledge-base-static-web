@@ -126,7 +126,7 @@ If you want to use a video as a silent, looping background (like a cool hero hea
 > It acts like a YouTube thumbnail. It displays a static image in the video player area while the video is downloading, or before the user has clicked the "Play" button.
 > ```
 > - Think about what you see on Netflix before you actually hit play.
-
+> 
 ---
 
 
@@ -148,7 +148,7 @@ If you want to use a video as a silent, looping background (like a cool hero hea
 > ```
 >
 > **Explanation:** `<track>` element provides WebVTT closed captions and subtitles for accessibility.
-
+> 
 ---
 
 ### Exercise 3: Poster Attribute Function
@@ -165,7 +165,7 @@ If you want to use a video as a silent, looping background (like a cool hero hea
 > ```
 >
 > **Explanation:** `poster` specifies image preview displayed before video playback begins.
-
+> 
 ## 7. Related Terms
 - [`src` Attribute](src.md) — The attribute defining the video source.
 - [`<source>` Element](source.md) — The child element used for multi-format video sources.

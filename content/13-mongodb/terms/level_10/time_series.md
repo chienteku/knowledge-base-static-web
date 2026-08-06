@@ -191,7 +191,7 @@ Create a native MongoDB 5.0+ Time-Series collection `weather_metrics` configured
 > 1. Native Time-Series collections automatically optimize storage for time-ordered measurements.
 > 2. `timeField` specifies the mandatory BSON Date timestamp field.
 > 3. `metaField` groups related sensor metadata into optimized columnar storage blocks.
-
+> 
 ---
 
 ### Exercise 2: Ingesting Datapoints into Time-Series Collections
@@ -220,7 +220,7 @@ Insert temperature and humidity datapoints into time-series collection `weather_
 > 1. Datapoints are inserted as standard flat documents.
 > 2. WiredTiger compresses time-series measurements into columnar buckets behind the scenes.
 > 3. Reduces disk storage footprint by up to 90% compared to standard collections.
-
+> 
 ---
 
 ### Exercise 3: Aggregating Time-Series Data with `$dateTrunc`
@@ -254,7 +254,7 @@ Group sensor measurements into 1-hour time buckets and compute average temperatu
 > 1. `$dateTrunc` truncates BSON Dates to specified time intervals (`"hour"`, `"day"`).
 > 2. Native Time-Series collections accelerate date aggregation queries using columnar index scans.
 > 3. High performance telemetry processing.
-
+> 
 ---
 
 

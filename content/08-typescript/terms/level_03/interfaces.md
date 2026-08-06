@@ -132,26 +132,26 @@ Define a base `Entity` interface and extend it into a `UserEntity` interface.
 >   id: string;
 >   createdAt: Date;
 > }
-
-interface UserEntity extends Entity {
-  email: string;
-  role: "admin" | "user";
-}
-
-const user: UserEntity = {
-  id: "usr_100",
-  createdAt: new Date(),
-  email: "admin@example.com",
-  role: "admin"
-};
-```
-
+> 
+> interface UserEntity extends Entity {
+>   email: string;
+>   role: "admin" | "user";
+> }
+> 
+> const user: UserEntity = {
+>   id: "usr_100",
+>   createdAt: new Date(),
+>   email: "admin@example.com",
+>   role: "admin"
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `interface Child extends Parent` inherits all properties from the parent interface.
 > 2. Enables clean OOP composition and interface inheritance hierarchies.
 > 3. Improves compilation performance compared to complex type intersections (`&`).
-
+> 
 ---
 
 ### Exercise 2: Implementing Interfaces in Classes
@@ -171,22 +171,22 @@ Create a class implementing a `Printable` interface contract.
 > interface Printable {
 >   print(): void;
 > }
-
-class Invoice implements Printable {
-  constructor(public id: number, public amount: number) {}
-
-  print(): void {
-    console.log(`Invoice #${this.id}: $${this.amount}`);
-  }
-}
-```
-
+> 
+> class Invoice implements Printable {
+>   constructor(public id: number, public amount: number) {}
+> 
+>   print(): void {
+>     console.log(`Invoice #${this.id}: $${this.amount}`);
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `class ClassName implements InterfaceName` verifies that the class satisfies the interface contract.
 > 2. Ensures that required methods (`print()`) and properties are present on class instances.
 > 3. Standard object-oriented architecture pattern.
-
+> 
 ---
 
 ### Exercise 3: Comparative Decision Matrix: `interface` vs `type`
@@ -207,13 +207,13 @@ Formulate an architectural selection matrix comparing `interface` against Type A
 > - type: Declaration merging UNSUPPORTED, intersection (&) syntax, supports primitive aliases, unions ('A' | 'B'), tuples, and mapped types.
 > Rule of Thumb: Prefer interface for public APIs & object shapes; use type for unions, primitives & utility computations.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Interfaces are open and extensible via declaration merging and `extends`.
 > 2. Type aliases are closed and versatile for complex type mathematics and unions.
 > 3. Foundational architectural choice in TypeScript.
-
+> 
 ---
 
 

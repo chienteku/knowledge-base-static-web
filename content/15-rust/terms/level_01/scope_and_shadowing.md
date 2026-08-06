@@ -148,7 +148,7 @@ let mut total = 0; for x in vec { total += x; }
 > #### Technical Explanation
 >
 > 1. Uses variable shadowing (`let input = ...`) to perform sequential type and format transformations cleanly using a single variable name.
-
+> 
 ---
 
 ### Exercise 2: Scoped Resource Lock Guard
@@ -191,7 +191,7 @@ let mut total = 0; for x in vec { total += x; }
 > #### Technical Explanation
 >
 > 1. Lexical scope `{}` forces RAII drop execution upon block exit.
-
+> 
 ---
 
 ### Exercise 3: Type Re-Binding Shadowing Utility
@@ -229,7 +229,7 @@ let mut total = 0; for x in vec { total += x; }
 > #### Technical Explanation
 >
 > 1. Shadowing allows re-using variable names across type transformations.
-
+> 
 ---
 
 ## 5. Related Terms

@@ -294,7 +294,7 @@ Implement `RateLimiter::consume` using `HashMap::entry`, chaining `.and_modify()
 > 3. **`or_insert_with_key` Laziness**: If the `Entry` is `Vacant`, `.and_modify()` is bypassed, and `.or_insert_with_key()` constructs the default `TokenBucket` lazily. Using `or_insert_with_key` avoids upfront allocation of default values when entries are occupied.
 > 4. **Borrowing & Lifetimes**: The method returns a `&mut TokenBucket` referencing the bucket inside `HashMap`. The mutable borrow of `self.buckets` lasts for the duration of `.entry(...)`, after which the reference to the internal `TokenBucket` is obtained safely without violating Rust's aliasing XOR mutability rules.
 > 5. **Edge Cases**: Uses `saturating_sub`, `saturating_mul`, and `saturating_add` to protect against timestamp clock skew or arithmetic overflow. Limits token replenishment to `max_capacity` using `.min()`.
-
+> 
 ---
 
 ### Exercise 2: Real-Time Financial Order Book Depth & Price Level Pruning Engine
@@ -434,7 +434,7 @@ Implement `OrderBook` using `BTreeMap::entry` and pattern match on `Entry::Occup
 > 2. **In-Place Node Pruning with `OccupiedEntry::remove`**: Naively deleting a key requires finding the node (`get_mut`), checking condition, dropping borrow, and calling `tree.remove(&key)` (a second $O(\log N)$ tree traversal). By pattern-matching on `Entry::Occupied(mut occupied)`, we call `occupied.remove()`, which deletes the node directly from the tree structure using the internal cursor already pointing to that node.
 > 3. **Ownership and Value Recovery**: `OccupiedEntry::remove(self)` consumes the occupied entry handle and returns ownership of the stored `V` (`PriceLevel`). This guarantees memory safety while avoiding any redundant tree navigations.
 > 4. **Edge Cases**: Complete cancellation where `quantity >= level.total_quantity` cleanly prevents zero-volume price levels from bloating memory and search trees.
-
+> 
 ---
 
 ### Exercise 3: Lexical Symbol Table with Lazy Type Inference & Re-binding
@@ -555,7 +555,7 @@ Implement `SymbolTable` using the Entry API. Write unit tests with assertions (`
 > 2. **Key Access in Initialization (`or_insert_with_key`)**: The closure passed to `or_insert_with_key(|k| ...)` receives a reference `&K` (`&String`) to the key passed to `.entry()`. This allows copying or cloning key data directly into the newly constructed `SymbolRecord` without needing external variable captures.
 > 3. **Occupied vs Vacant Entry Branching**: `export_symbol` demonstrates explicit pattern matching on `Entry`. `Entry::Occupied(mut entry)` yields a handle to the found bucket, from which `entry.get_mut()` extracts `&mut SymbolRecord` to mutate `is_exported`. If `Entry::Vacant`, we avoid panicking or inserting garbage state, cleanly returning an error string.
 > 4. **Lifetime Guarantees**: `resolve_or_define` returns `&mut SymbolRecord` tied to the lifetime of `&mut self`. Rust's borrow checker ensures that the returned mutable reference maintains exclusive access to the underlying table slot until it goes out of scope.
-
+> 
 ---
 
 ## 6. Related Terms

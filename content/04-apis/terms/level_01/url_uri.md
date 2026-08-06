@@ -105,7 +105,7 @@ fetch('https://api.example.com/data'); // Absolute URL with scheme
 > ```
 > - The protocol comes before the `://`.
 > - The domain is everything up to the first single slash `/`.
-
+> 
 ---
 
 ### Exercise 2: URL Structure Breakdown

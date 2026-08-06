@@ -163,7 +163,7 @@ Enable Database Profiler Level 2 (`profile: 2`, `slowms: 50`) to log all queries
 > 1. Profiler Level 1 logs slow operations exceeding `slowms`; Level 2 logs ALL database operations.
 > 2. Profiler entries are recorded in capped collection `system.profile`.
 > 3. Diagnostic tool for identifying performance bottlenecks.
-
+> 
 ---
 
 ### Exercise 2: Querying `system.profile` for Slow Collection Scans
@@ -191,7 +191,7 @@ Query `system.profile` for the top 5 slowest queries that executed collection sc
 > 1. `system.profile` stores detailed query execution stats (`millis`, `keysExamined`, `docsExamined`, `command`).
 > 2. Filtering for `execStats.stage: "COLLSCAN"` isolates queries missing secondary indexes.
 > 3. Directs index creation efforts to queries causing real performance impact.
-
+> 
 ---
 
 ### Exercise 3: Managing Profiler Overhead in Production
@@ -218,7 +218,7 @@ Explain why Profiler Level 2 should NOT be left enabled permanently in high-thro
 > 1. Level 2 profiler logging degrades database write throughput under heavy query load.
 > 2. Level 1 with `slowms: 100` captures problematic queries with minimal overhead.
 > 3. Operational profiling guidelines.
-
+> 
 ---
 
 

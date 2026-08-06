@@ -268,7 +268,7 @@ How do you modify it to make the images responsive?
 > ```
 > - The image has a hard constraint (`500px`).
 > - Force it to scale dynamically relative to the container width.
-
+> 
 ---
 
 
@@ -291,7 +291,7 @@ How do you modify it to make the images responsive?
 > ```
 >
 > **Explanation:** These 3 pillars enable web pages to adapt fluidly across all screen sizes.
-
+> 
 ---
 
 ### Exercise 3: Global Responsive Image CSS Reset
@@ -312,7 +312,7 @@ How do you modify it to make the images responsive?
 > ```
 >
 > **Explanation:** `max-width: 100%; height: auto` prevents media elements from overflowing container boundaries.
-
+> 
 ## 7. Related Terms
 - [`@media` (Media Queries Basics)](media_queries.md) — The conditional layout tool.
 - [Mobile-First Design](mobile_first.md) — The styling workflow.

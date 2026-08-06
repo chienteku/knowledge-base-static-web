@@ -136,7 +136,7 @@ An e-commerce system requires that discount percentages applied to products must
 > 1. The `ASSERT` clause evaluates a boolean expression whenever the field is created or updated.
 > 2. `$value` represents the value being written to the target field during mutation.
 > 3. If the expression evaluates to `false`, SurrealDB aborts the transaction with an assertion error.
-
+> 
 ---
 
 ### Exercise 2: String Format Validation Assertions
@@ -165,7 +165,7 @@ A user registration service validates that user email addresses conform to valid
 > 1. `string::is::email($value)` performs RFC-compliant email validation on incoming string values.
 > 2. Invalid email strings fail write validation automatically at the database level.
 > 3. Eliminates duplicate validation logic in client-side application code.
-
+> 
 ---
 
 ### Exercise 3: Cross-Field Logic Assertions
@@ -196,7 +196,7 @@ An event management system ensures an event's `end_date` is strictly after its `
 > 1. `$parent` accesses sibling fields on the current record object inside assertion expressions.
 > 2. Ensures temporal coherence between related datetime fields.
 > 3. Replaces complex SQL trigger functions with concise declarative assertions.
-
+> 
 ---
 
 

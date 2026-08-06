@@ -186,7 +186,7 @@ Demonstrate that PostgreSQL blocks inserting an order with an invalid `customer_
 > 1. PostgreSQL checks foreign key indexes on every write operation.
 > 2. Rejects un-matched foreign key inserts with Error Code `23503`.
 > 3. Guarantees 100% database referential integrity regardless of application bugs.
-
+> 
 ---
 
 ### Exercise 2: Deferred Foreign Key Constraint Validation
@@ -213,7 +213,7 @@ Configure a foreign key constraint as `DEFERRABLE INITIALLY DEFERRED` to allow t
 > 1. `DEFERRABLE INITIALLY DEFERRED` postpones foreign key constraint validation until the transaction `COMMIT` step.
 > 2. Allows inserting interdependent circular references within a single transaction block.
 > 3. Validates transactional integrity before final commit.
-
+> 
 ---
 
 ### Exercise 3: Auditing Orphaned Foreign Key References
@@ -242,7 +242,7 @@ Find all orphaned records in legacy table `order_items` where `product_id` does 
 > 1. Orphaned rows occur in un-constrained legacy databases when parent rows are deleted without cascading logic.
 > 2. `LEFT JOIN ... WHERE parent.id IS NULL` isolates broken orphan records.
 > 3. Initial diagnostic query before adding foreign key constraints.
-
+> 
 ---
 
 

@@ -197,7 +197,7 @@ async function getAssetsParallel(urls) {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Parallelizing Independent Async Requests
@@ -214,7 +214,7 @@ async function getAssetsParallel(urls) {
 > ```
 >
 > **Explanation:** `Promise.all` executes independent promises concurrently in parallel.
-
+> 
 ---
 
 ### Exercise 3: Async Function Return Value
@@ -231,7 +231,7 @@ async function getAssetsParallel(urls) {
 > ```
 >
 > **Explanation:** Marking a function `async` automatically wraps the returned value in a resolving Promise.
-
+> 
 ## 7. Related Terms
 - [Unhandled Promise Rejections](unhandled_rejections.md) — The errors triggered if you fail to handle async await exceptions.
 - [Async Error Handling (try/catch + .catch)](async_error_handling.md) — The mechanisms used to capture errors during await.

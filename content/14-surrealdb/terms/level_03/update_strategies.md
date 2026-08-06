@@ -192,7 +192,7 @@ Demonstrate the fundamental behavioral differences between `SET`, `MERGE`, and `
 > 1. `SET` mutates specific target fields explicitly without affecting sibling properties.
 > 2. `MERGE` merges JSON key-value pairs into existing documents safely.
 > 3. `CONTENT` completely replaces the record object payload, removing any omitted fields.
-
+> 
 ---
 
 ### Exercise 2: Atomic Array Element Appending with `+=`
@@ -220,7 +220,7 @@ Append a new tag `"rust"` to an article's `tags` array using the `+=` array modi
 > 1. `SET array_field += item` appends elements to array fields atomically at the database engine level.
 > 2. Avoids race conditions inherent to fetch-modify-replace application logic.
 > 3. Preserves array element ordering.
-
+> 
 ---
 
 ### Exercise 3: Incremental Numeric Counter Mutations
@@ -248,7 +248,7 @@ Increment a product's `views` counter by 1 using the `+=` arithmetic operator in
 > 1. `SET numeric_field += value` performs atomic numeric addition.
 > 2. Ensures thread-safe counter increments across concurrent application traffic.
 > 3. Eliminates lost update anomalies in multi-client environments.
-
+> 
 ---
 
 

@@ -186,7 +186,7 @@ Model a 1-to-Many association between `authors` and `books`.
 > 1. One-to-Many relationships place the foreign key column on the "Many" side table (`books.author_id`).
 > 2. Each book references exactly 1 author; an author can have multiple books.
 > 3. Fundamental relational modeling pattern.
-
+> 
 ---
 
 ### Exercise 2: Querying 1-to-Many Data with INNER JOIN
@@ -217,7 +217,7 @@ Query all books written by author `'J.K. Rowling'`.
 > 1. `JOIN` resolves 1-to-Many relationship keys.
 > 2. Filters books by parent author attribute.
 > 3. Fast relational query.
-
+> 
 ---
 
 ### Exercise 3: Aggregating 1-to-Many Child Counts
@@ -247,7 +247,7 @@ Calculate total book count per author using `COUNT(b.id)`.
 > 1. `LEFT JOIN` preserves authors who have 0 published books.
 > 2. `COUNT(b.id)` aggregates child book rows.
 > 3. Standard 1-to-Many summary report.
-
+> 
 ---
 
 

@@ -171,7 +171,7 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 > 1. **Formatting Preservation via Attribute**: The `#[rustfmt::skip]` attribute tells `rustfmt` to bypass formatting for the immediately following item (struct declaration, constant, function, or array literal). Without it, `rustfmt` compresses `[2.0, 0.0, 10.0, 0.0, 3.0, 20.0, 0.0, 0.0, 1.0]` onto one line, obscuring matrix structure.
 > 2. **`#![no_std]` Compatibility**: Utilizing `#![cfg_attr(not(test), no_std)]` ensures the code can compile on bare-metal embedded targets while retaining standard library test harnesses (`#[cfg(test)]`) during verification.
 > 3. **Mathematical Verification**: The test suite validates spatial matrix calculations against expected coordinate offsets using `assert_eq!`.
-
+> 
 ---
 
 ### Exercise 2: `rustfmt.toml` Project Configuration and Hardware Register Bitmask Formatting
@@ -266,7 +266,7 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 > 1. **Workspace Configuration (`rustfmt.toml`)**: `max_width = 100` prevents overly tight line wrapping on modern displays; `group_imports = "StdExternalCrate"` organizes `use` directives logically (`std` first, third-party crates second, local modules third).
 > 2. **Inline Columnar Formatting**: Placing `#[rustfmt::skip]` before constant definitions prevents `rustfmt` from collapsing comments or collapsing unequal spacing between variable names and `=` operators, preserving aligned code columns.
 > 3. **Hardware Bit Manipulation Testing**: The test suite validates bitwise logical operations (`|`, `&`) using `assert_eq!` and `assert!`, guaranteeing register flags are bit-exact for target hardware controllers.
-
+> 
 ---
 
 ### Exercise 3: CI Formatting Enforcement and Code Generation Exclusion Patterns
@@ -356,10 +356,9 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 > 1. **The `ignore` Configuration Key**: Specifying glob patterns under `ignore` in `rustfmt.toml` stops `cargo fmt` from modifying auto-generated code, preventing unwanted diff noise or syntax error alerts on synthesized files.
 > 2. **CI Non-Destructive Enforcement**: `cargo fmt --check --all` inspects all workspace crates without touching files on disk. If any file violates formatting rules, `cargo fmt` returns a non-zero exit code (exit status 1), causing the CI job to fail cleanly.
 > 3. **Robust Unit Verification**: The Rust module demonstrates clean idiomatic layout formatted by `rustfmt`, validated with `assert_eq!` tests handling both success (`Ok(...)`) and error (`Err(...)`) pathways.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

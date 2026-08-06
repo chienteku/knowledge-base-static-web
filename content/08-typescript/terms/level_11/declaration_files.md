@@ -116,13 +116,13 @@ Create an ambient declaration file `global.d.ts` declaring types for an un-typed
 >   export function track(eventName: string, payload?: object): void;
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `.d.ts` declaration files contain type definitions without any executable JavaScript code output.
 > 2. `declare module "name"` provides ambient type intelligence for external untyped JavaScript libraries.
 > 3. Allows TypeScript developers to import un-typed npm packages safely with IDE autocomplete.
-
+> 
 ---
 
 ### Exercise 2: Declaring Ambient Global Variables and Window Extensions
@@ -147,16 +147,16 @@ Extend the global `Window` object interface in `env.d.ts` to include a custom `E
 >     };
 >   }
 > }
-
-export {};
-```
-
+> 
+> export {};
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `declare global` grants access to the global scope within module files containing imports/exports.
 > 2. Interface declaration merging appends `ENV_CONFIG` to the global `Window` interface.
 > 3. Enables type-safe access to `window.ENV_CONFIG` across the codebase.
-
+> 
 ---
 
 ### Exercise 3: Auditing Executable Code Restrictions in `.d.ts` Files
@@ -174,26 +174,18 @@ Explain why including executable code (`const x = 10;` or function bodies) insid
 > ```typescript
 > // ❌ INCORRECT (Executable function body in .d.ts):
 > // export function add(a: number, b: number) { return a + b; }
-
-// ✅ CORRECT (Ambient declaration only):
-export function add(a: number, b: number): number;
-```
-
+> 
+> // ✅ CORRECT (Ambient declaration only):
+> export function add(a: number, b: number): number;
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `.d.ts` files are stripped during build output and are NEVER transpiled to `.js` files.
 > 2. Executable code in `.d.ts` files would result in missing runtime JavaScript functions.
 > 3. `.d.ts` files must contain ambient declarations (`declare`) and type signatures only.
-
+> 
 ---
-
-
-
-
-
----
-
-
 
 ## 6. Related Terms
 - [`tsconfig.json`](../level_01/tsconfig.md) — Where you configure TS to emit declaration files.

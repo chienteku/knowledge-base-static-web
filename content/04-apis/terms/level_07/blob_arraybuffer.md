@@ -172,8 +172,8 @@ const reader = res.body.getReader(); // Stream chunked binary reader
 
 > [!check]- Answer
 > - **A GIF image.** (ASCII codes: 71 = G, 73 = I, 70 = F. Together, they represent the `'GIF'` file header).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Blob vs ArrayBuffer Distinction

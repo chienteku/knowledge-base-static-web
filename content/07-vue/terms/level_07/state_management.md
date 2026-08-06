@@ -109,7 +109,7 @@ In modern Vue 3, the official tool is **[Pinia](../level_07/pinia.md)**.
 > 3. Global State: Any component (API failure, successful save, new message) needs the ability to trigger a notification.
 > ```
 > - Who else cares about this data?
-
+> 
 ---
 
 ### Exercise 2: Pinia $patch Grouped State Mutation
@@ -129,7 +129,7 @@ In modern Vue 3, the official tool is **[Pinia](../level_07/pinia.md)**.
 >   age: 30
 > });
 > ```
-
+> 
 ---
 
 ### Exercise 3: Pinia $reset Method Availability
@@ -147,8 +147,8 @@ In modern Vue 3, the official tool is **[Pinia](../level_07/pinia.md)**.
 > ```javascript
 > store.$reset();
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

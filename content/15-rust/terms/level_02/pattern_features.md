@@ -164,7 +164,7 @@ Use exactly one `..` rest pattern per slice match: [first, .., last]
 >
 > 1. Uses OR-pattern `200 | 201 | 202`.
 > 2. Uses `@` range binding `err @ 400..=499` with match guard `if path.starts_with(...)`.
-
+> 
 ---
 
 ### Exercise 2: Slice Rest Pattern Destructuring Utility
@@ -204,7 +204,7 @@ Use exactly one `..` rest pattern per slice match: [first, .., last]
 > #### Technical Explanation
 >
 > 1. Slice pattern `[first, middle @ .., last]` extracts head, tail, and middle subslice zero-copy.
-
+> 
 ---
 
 ### Exercise 3: Struct Partial Destructuring with `..` Rest Operator
@@ -242,7 +242,7 @@ Use exactly one `..` rest pattern per slice match: [first, .., last]
 > #### Technical Explanation
 >
 > 1. Struct rest pattern `..` ignores unreferenced fields cleanly.
-
+> 
 ---
 
 ## 5. Related Terms

@@ -168,7 +168,7 @@ Compare how graph connections are created and queried in SurrealDB versus tradit
 > 1. `RELATE` creates direct $O(1)$ record link pointers between source and target records.
 > 2. Arrow operators (`->`) follow direct pointer addresses without table scanning or index join lookups.
 > 3. Unifies relational schema safety with graph database traversal speeds.
-
+> 
 ---
 
 ### Exercise 2: Basic Relation Edge Creation with `RELATE`
@@ -196,7 +196,7 @@ Create a graph relation edge `liked` connecting `user:alice` to `post:p1` with a
 > 1. `RELATE in->edge->out` establishes a directed graph connection between two record IDs.
 > 2. Stores `in` (source ID), `out` (target ID), and custom edge properties (`liked_at`).
 > 3. Edge tables (`liked`) can be queried directly or traversed via arrow paths.
-
+> 
 ---
 
 ### Exercise 3: Graph Arrow Traversal Execution
@@ -220,7 +220,7 @@ Query all posts liked by `user:alice` using `->liked->post`.
 > 1. `->liked->post` navigates from `user:alice` across `liked` edges to `post` vertices.
 > 2. Resolves graph connections in a single database execution step.
 > 3. Returns an array of target post titles.
-
+> 
 ---
 
 

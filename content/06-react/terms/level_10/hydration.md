@@ -116,7 +116,7 @@ function Clock() {
 > }
 > ```
 > - `useEffect` never runs on the server. It only runs in the browser, after hydration!
-
+> 
 ---
 
 
@@ -135,7 +135,7 @@ function Clock() {
 > ```
 >
 > **Explanation:** Hydration transforms static server HTML markup into interactive React application components.
-
+> 
 ---
 
 ### Exercise 3: Suppressing Hydration Warnings Intentionally
@@ -152,7 +152,7 @@ function Clock() {
 > ```
 >
 > **Explanation:** `suppressHydrationWarning={true}` bypasses React dev warnings for intentional 1-level text mismatches.
-
+> 
 ## 7. Related Terms
 - [Server-Side Rendering (SSR)](ssr.md) — The process that creates the "dry" HTML.
 - [Virtual DOM](../level_01/virtual_dom.md) — The data structure built during hydration.

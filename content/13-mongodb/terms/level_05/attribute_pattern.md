@@ -195,7 +195,7 @@ Refactor a product catalog storing hundreds of sparse, unpredictable attributes 
 > 1. The Attribute Pattern standardizes polymorphic key-value properties into `{ k, v }` subdocuments.
 > 2. Replaces sparse collections containing hundreds of unique field names.
 > 3. Enables indexing across all dynamic properties with a single compound index.
-
+> 
 ---
 
 ### Exercise 2: Indexing Attribute Pattern Arrays
@@ -219,7 +219,7 @@ Create a compound multikey index on `attributes.k` and `attributes.v` to acceler
 > 1. Compound index `{ "attributes.k": 1, "attributes.v": 1 }` indexes key-value attribute pairs.
 > 2. Allows queries to filter on any dynamic property using a single index.
 > 3. Eliminates the need to create new indexes when new product attributes are added.
-
+> 
 ---
 
 ### Exercise 3: Querying Attribute Pattern Arrays with `$elemMatch`
@@ -250,7 +250,7 @@ Query products matching `color: "Yellow"` and `voltage: "20V"`.
 > 1. `$elemMatch` ensures `k` and `v` match within the same attribute subdocument.
 > 2. `$all` combines multiple attribute requirements cleanly.
 > 3. Uses compound multikey index for fast query execution.
-
+> 
 ---
 
 

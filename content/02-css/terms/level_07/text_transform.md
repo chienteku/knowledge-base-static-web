@@ -113,7 +113,7 @@ Imagine handing a normal, handwritten letter to an actor and telling them to scr
 > `text-transform: capitalize;`
 > ```
 > - You only want the first letter of each word.
-
+> 
 ---
 
 
@@ -139,7 +139,7 @@ Imagine handing a normal, handwritten letter to an actor and telling them to scr
 > ```
 >
 > **Explanation:** `text-transform` alters visual character casing dynamically.
-
+> 
 ---
 
 ### Exercise 3: Full-Width Character Casing
@@ -158,7 +158,7 @@ Imagine handing a normal, handwritten letter to an actor and telling them to scr
 > ```
 >
 > **Explanation:** `full-width` forces characters into full-width square grid alignment.
-
+> 
 ## 7. Related Terms
 - [`font-size` & `font-weight`](../level_03/font_size_weight.md) — Often combined with `uppercase` to create strong, bold headings.
 - [`font-style` & `font-variant`](../level_03/font_style_variant.md) — Related concept: `font-style` & `font-variant`.

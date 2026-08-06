@@ -131,7 +131,7 @@ const type = res.headers.get('content-type'); // Correct Headers.get() method
 > What if the server returned a `404 Not Found`? If `fetch` just gave you the body, you wouldn't know it was an error. The `Response` object allows you to check `response.status` to see if the request actually succeeded before you try to parse the data.
 > ```
 > - Does the Server only send a body, or does it also send Status Codes and Headers?
-
+> 
 ---
 
 ### Exercise 2: Response Property Inspection Matrix

@@ -144,7 +144,7 @@ const handleFetch = async () => {
 > Only use `useReducer` when you have complex state objects where changing one value depends on or affects other values.
 > ```
 > - Simple state = `useState`. Complex state objects = `useReducer`.
-
+> 
 ---
 
 ### Exercise 2: Counter Reducer Implementation
@@ -169,7 +169,7 @@ const handleFetch = async () => {
 > ```
 >
 > **Explanation:** Reducer functions compute next state based on current state and dispatched action object.
-
+> 
 ---
 
 ### Exercise 3: useReducer Signature
@@ -183,7 +183,7 @@ const handleFetch = async () => {
 > ```
 >
 > **Explanation:** `useReducer` returns current state and `dispatch(action)` function to trigger state updates.
-
+> 
 ## 7. Related Terms
 - [State Management (Redux / Zustand)](state_management.md) — Redux uses this exact same pattern, but on a global scale.
 - [`useState` Hook](../level_02/use_state.md) — Under the hood, React actually uses `useReducer` to build `useState`!

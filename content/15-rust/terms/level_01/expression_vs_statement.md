@@ -155,7 +155,7 @@ Omit final block semicolon to yield value: 1 => { println!("1"); 10 }
 >
 > 1. The `match` block is an expression that evaluates directly to the string slice value.
 > 2. Demonstrates idiomatic semicolon-free expression returns.
-
+> 
 ---
 
 ### Exercise 2: Block Expression Scoped Calculation
@@ -198,7 +198,7 @@ Omit final block semicolon to yield value: 1 => { println!("1"); 10 }
 > #### Technical Explanation
 >
 > 1. Assigns `let rate` directly from the result of an `if` block expression.
-
+> 
 ---
 
 ### Exercise 3: Loop Expression Value Return
@@ -241,7 +241,7 @@ Omit final block semicolon to yield value: 1 => { println!("1"); 10 }
 > #### Technical Explanation
 >
 > 1. `loop` is an expression that yields a value via `break value;`.
-
+> 
 ---
 
 ## 5. Related Terms

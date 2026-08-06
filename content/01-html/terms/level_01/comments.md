@@ -175,7 +175,7 @@ Leaving documentation notes and hiding code:
 > </div>
 > ```
 > - Wrap the entire `<button>` block in `<!--` and `-->` markers.
-
+> 
 ---
 
 
@@ -198,7 +198,7 @@ Leaving documentation notes and hiding code:
 > ```
 >
 > **Explanation:** HTML comments begin with `<!--` and end with `-->`.
-
+> 
 ---
 
 ### Exercise 3: Commenting Out Code Blocks
@@ -217,7 +217,7 @@ Leaving documentation notes and hiding code:
 > ```
 >
 > **Explanation:** Wrapping HTML tags in `<!-- -->` disables rendering while preserving code in source.
-
+> 
 ## 7. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — Standard nodes that comments can wrap.
 - [Nesting](nesting.md) — Comments must be nested correctly and not overlap with other active tags.

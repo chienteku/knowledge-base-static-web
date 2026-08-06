@@ -170,7 +170,7 @@ Use Box<dyn Trait> for heterogeneous runtime collections!
 >
 > 1. Demonstrates using associated types to name unnameable return types on stable Rust.
 > 2. Precursor to full TAIT feature.
-
+> 
 ---
 
 ### Exercise 2: Opaque Closure Return Wrapper
@@ -209,7 +209,7 @@ Use Box<dyn Trait> for heterogeneous runtime collections!
 >
 > 1. Demonstrates static monomorphization of closure types.
 > 2. TAIT permits giving explicit type alias names to these closure types.
-
+> 
 ---
 
 ### Exercise 3: Static Opaque Future Box Alternative Simulator
@@ -251,7 +251,7 @@ Use Box<dyn Trait> for heterogeneous runtime collections!
 >
 > 1. Illustrates zero-cost static dispatch for function return types.
 > 2. Core design goal of Type Alias Impl Trait.
-
+> 
 ---
 
 ## 6. Related Terms

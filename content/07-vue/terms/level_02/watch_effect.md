@@ -209,7 +209,7 @@ const settings = reactive({
 > ```
 > - Remember that `watchEffect` automatically tracks what you read inside. You just need to run `localStorage.setItem('user-settings', JSON.stringify(settings))` inside the effect.
 > - Since `settings` is reactive, touching its properties or converting it to string inside the effect will trigger Vue's tracking.
-
+> 
 ---
 
 ### Exercise 2: watchEffect Immediate Execution Rule
@@ -229,7 +229,7 @@ const settings = reactive({
 >   console.log('Runs immediately on setup');
 > });
 > ```
-
+> 
 ---
 
 ### Exercise 3: watchEffect Cleanup Callback
@@ -250,8 +250,8 @@ const settings = reactive({
 >   onCleanup(() => controller.abort());
 > });
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

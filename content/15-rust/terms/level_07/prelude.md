@@ -119,7 +119,7 @@ fn main() {
 >     let s: HashSet<i32> = HashSet::new();
 > }
 > ```
-
+> 
 ---
 
 ### Exercise 2: Building a Custom Library Prelude
@@ -147,7 +147,7 @@ fn main() {
 >
 > #### Technical Explanation
 > Library preludes group common types and traits into single wildcard import modules.
-
+> 
 ---
 
 ### Exercise 3: What Needs `use` and What Doesn't?
@@ -216,7 +216,7 @@ Then write a program that uses all of the following **without any `use` statemen
 > #### Technical Explanation
 >
 > The prelude contains only the most universally needed items — the ones that would be tedious and noisy to import in virtually every Rust file. `HashMap` is very common but not *universal* (many programs don't need it), so it's in `std::collections` and requires explicit import. The design choice is deliberate: items in the prelude must justify their namespace pollution across every single Rust file that ever gets written.
-
+> 
 ---
 
 ## 6. Related Terms

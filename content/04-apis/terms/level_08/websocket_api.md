@@ -217,7 +217,7 @@ ws.onopen = () => {
 > A WebSocket has no concept of a "JavaScript Object." If you try to run `socket.send({ text: "Hi" })`, the browser will forcefully convert it to `"[object Object]"` and the server won't be able to read it.
 > ```
 > - Think back to the rules of Serialization.
-
+> 
 ---
 
 ### Exercise 2: WebSocket readyState Constants

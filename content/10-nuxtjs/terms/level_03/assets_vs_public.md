@@ -157,13 +157,13 @@ Reference a Vite-processed asset image from `assets/images/logo.png` and a raw s
 >   </header>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `~/assets/` files are processed by Vite, enabling image optimization, hash caching, and CSS preprocessor compilation.
 > 2. `public/` files are copied directly to the build root without modification and served at `/filename`.
 > 3. Use `assets/` for application stylesheets and graphics; use `public/` for `robots.txt`, `favicon.ico`, and raw static downloads.
-
+> 
 ---
 
 ### Exercise 2: Importing SCSS Stylesheets from `assets/`
@@ -184,13 +184,13 @@ Import a global SCSS variable file `assets/scss/variables.scss` across the entir
 >   css: ["~/assets/scss/main.scss"]
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `css` configuration registers stylesheets in `assets/` as global application styles.
 > 2. Vite processes and bundles SCSS/CSS into optimized production stylesheet assets.
 > 3. Standard method for registering design systems and custom Tailwind/SCSS stylesheets.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Image Asset Path Binding
@@ -212,24 +212,20 @@ Dynamically import image assets from `assets/images/` using Vite `import.meta.gl
 >   return new URL(`../assets/images/${name}.png`, import.meta.url).href;
 > };
 > </script>
-
-<template>
-  <img :src="getImageUrl('hero')" alt="Hero Banner" />
-</template>
-```
-
+> 
+> <template>
+>   <img :src="getImageUrl('hero')" alt="Hero Banner" />
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Dynamic string interpolation in template `:src` attributes cannot be static-analyzed by Vite compilers.
 > 2. Using `new URL(path, import.meta.url)` allows Vite to resolve dynamic asset URLs during production compilation.
 > 3. Standard pattern for dynamic asset resolution in Vite/Nuxt.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — Where you can configure global SCSS stylesheets from the `assets/` directory.

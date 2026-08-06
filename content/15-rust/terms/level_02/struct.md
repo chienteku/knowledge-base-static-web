@@ -296,7 +296,7 @@ thread::spawn(move || {
 > 2. **Struct Update Syntax (`..`) Semantics**: In `derive_ack_packet`, `..original.header` initializes unmentioned fields (`magic`, `version`) by copying them from `original.header`. Since all fields of `Header` derive `Copy` (arrays of primitives and integers), struct update syntax operates via cheap memory copies without moving heap data.
 > 3. **Ownership and Value Lifetimes**: `derive_ack_packet` takes `original` by value (consuming ownership). The original `payload` (a heap-allocated `Vec<u8>`) is dropped when `original` goes out of scope at the end of `derive_ack_packet`, ensuring zero memory leaks while constructing a minimal ACK frame.
 > 4. **Edge Cases**: Payload bound checking enforces protocol specifications by verifying length against `u16::MAX`. Passing values exceeding 65,535 bytes yields an `Err` result before any memory allocation or struct field assignment takes place.
-
+> 
 ---
 
 ### Exercise 2: Financial Market Data Engine Order State Auditor
@@ -434,7 +434,7 @@ thread::spawn(move || {
 > 2. **Partial Move vs. Cloning in Struct Update Syntax**: When using struct update syntax (`..*order`) on a struct containing `String` fields, Rust cannot automatically copy non-`Copy` fields. Because `clone_as_audit_snapshot` operates on a shared reference `&Order`, fields that do not implement `Copy` (`trader_id` and `symbol`) must be explicitly `.clone()`ed. The remaining numeric and boolean fields implement `Copy` and are implicitly copied from `*order`.
 > 3. **Ownership Transfer in Pipelines**: `execute_fill` consumes the `Order` struct by value and returns a modified `Order`. This move semantics pattern guarantees that stale, pre-fill versions of the order cannot be accidentally accessed or modified elsewhere in the application without explicit compiler error.
 > 4. **Edge Cases & Invariants**: The state machine strictly prevents execution fills exceeding `total_quantity`. If an invalid fill is attempted, the error branch preserves safety by returning early without corrupting order state.
-
+> 
 ---
 
 ### Exercise 3: Embedded IoT Sensor Suite Component Aggregator & Destructuring Pipeline
@@ -602,7 +602,7 @@ thread::spawn(move || {
 > 2. **Struct Destructuring & Partial Move**: `decompose_report` uses pattern matching on `DeviceReport` (`let DeviceReport { device_uuid, metrics, status, timestamp_epoch_secs: _ } = report;`). This moves `device_uuid`, `metrics`, and `status` out of `report`. The parent `report` struct is partially moved and cannot be used after destructuring. The `_` wild card ignores `timestamp_epoch_secs` without binding it.
 > 3. **Exclusive Borrowing for Mutation**: `record_sensor_error` accepts `&mut DeviceReport`. Rust's borrow checker ensures that while `record_sensor_error` holds an exclusive reference to `report`, no other part of the program can read or mutate any field inside `DeviceReport` or its nested `SystemStatus` struct.
 > 4. **Memory Layout**: Nested structs in Rust are laid out contiguously in memory by default unless wrapped in pointers like `Box` or `Arc`. The total size of `DeviceReport` on the stack is the sum of its aligned field sizes plus padding, keeping data localized for CPU cache efficiency.
-
+> 
 ---
 
 ## 6. Related Terms

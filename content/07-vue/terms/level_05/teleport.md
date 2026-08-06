@@ -118,7 +118,7 @@ Even though the Modal HTML is physically rendered inside the `<body>` tag, Vue s
 > The Vue Compiler applies the `data-v-xxxx` scoping attributes to the elements *before* they are Teleported. So even though the button is physically in the `<body>` tag, it retains its scoped component styling!
 > ```
 > - Does Teleport break logical Vue behavior, or just physical DOM placement?
-
+> 
 ---
 
 ### Exercise 2: Conditional Teleport Disabling Pattern
@@ -137,7 +137,7 @@ Even though the Modal HTML is physically rendered inside the `<body>` tag, Vue s
 >   <ModalContent />
 > </Teleport>
 > ```
-
+> 
 ---
 
 ### Exercise 3: Teleport Target Selectors
@@ -155,8 +155,8 @@ Even though the Modal HTML is physically rendered inside the `<body>` tag, Vue s
 > <Teleport to="body">
 > <Teleport to="#modals">
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

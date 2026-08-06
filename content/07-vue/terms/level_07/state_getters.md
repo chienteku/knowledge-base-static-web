@@ -143,7 +143,7 @@ getters: {
 > When Component A asks, it does the math and caches it. When Component B asks a millisecond later, Pinia instantly returns the cached value without doing the math again.
 > ```
 > - Think about how Computed Properties work.
-
+> 
 ---
 
 ### Exercise 2: Parameterized Getter Pattern
@@ -164,7 +164,7 @@ getters: {
 >   }
 > }
 > ```
-
+> 
 ---
 
 ### Exercise 3: Cross-Store Getter Usage
@@ -186,8 +186,8 @@ getters: {
 >   }
 > }
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

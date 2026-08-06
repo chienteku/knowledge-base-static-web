@@ -137,7 +137,7 @@ The `<tr>` is a single horizontal wooden shelf. You can't put a book directly on
 > 3 Rows. (There are three `<tr>` elements).
 > ```
 > - Just count the `<tr>` tags!
-
+> 
 ---
 
 
@@ -158,7 +158,7 @@ The `<tr>` is a single horizontal wooden shelf. You can't put a book directly on
 > ```
 >
 > **Explanation:** `:nth-child(even)` targets alternating table rows for zebra-striping.
-
+> 
 ---
 
 ### Exercise 3: Table Row Hover Effect
@@ -177,7 +177,7 @@ The `<tr>` is a single horizontal wooden shelf. You can't put a book directly on
 > ```
 >
 > **Explanation:** `tr:hover` highlights the active data row for visual tracking.
-
+> 
 ## 7. Related Terms
 - [`<table>`](table.md) — The parent that holds the `<tr>`.
 - [`<td>` (Table Data)](td.md) — The data cells that go *inside* the `<tr>`.

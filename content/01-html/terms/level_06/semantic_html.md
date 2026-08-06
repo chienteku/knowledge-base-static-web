@@ -123,7 +123,7 @@ Semantic HTML is like building the kitchen with actual tile floors, an oven, and
 > The `<nav>` tag.
 > ```
 > - "nav" is short for "navigation"!
-
+> 
 ---
 
 
@@ -146,7 +146,7 @@ Semantic HTML is like building the kitchen with actual tile floors, an oven, and
 > ```
 >
 > **Explanation:** Semantic HTML provides machine-readable structure for devices and search crawlers.
-
+> 
 ---
 
 ### Exercise 3: Semantic Refactoring Challenge
@@ -165,7 +165,7 @@ Semantic HTML is like building the kitchen with actual tile floors, an oven, and
 > ```
 >
 > **Explanation:** Eliminate redundant wrapper divs by using native semantic containers.
-
+> 
 ## 7. Related Terms
 - [`<main>`](main.md) — The most important semantic tag, denoting the primary content.
 - [`<article>` and `<section>`](article_section.md) — Semantic tags used to break up large blocks of text.

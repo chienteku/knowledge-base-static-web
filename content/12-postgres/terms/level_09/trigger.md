@@ -186,7 +186,7 @@ Create a trigger function that automatically updates the `updated_at` column to 
 > 1. `BEFORE UPDATE` triggers intercept row update commands before bytes are written to disk heap.
 > 2. `NEW.updated_at` modifies the pending row tuple payload.
 > 3. Automates system audit timestamps seamlessly.
-
+> 
 ---
 
 ### Exercise 2: Statement-Level Audit Logging Triggers
@@ -221,7 +221,7 @@ Create a statement-level `AFTER DELETE` trigger logging table deletion events to
 > 1. `FOR EACH STATEMENT` triggers execute ONCE per SQL statement regardless of how many rows were affected.
 > 2. Reduces logging overhead for bulk DML operations.
 > 3. Statement-level event logging pattern.
-
+> 
 ---
 
 ### Exercise 3: Preventing Updates via Triggers
@@ -258,7 +258,7 @@ Create a `BEFORE UPDATE` trigger on `invoices` that raises an exception if an ap
 > 1. `OLD` pseudo-table accesses pre-update row state attributes.
 > 2. `RAISE EXCEPTION` aborts the transaction immediately.
 > 3. Enforces business immutability constraints at the database tier.
-
+> 
 ---
 
 

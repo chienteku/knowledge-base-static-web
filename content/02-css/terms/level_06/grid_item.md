@@ -288,7 +288,7 @@ Full-width header placement:
 > }
 > ```
 > - Remember the negative index shortcut that targets the final grid boundary line.
-
+> 
 ---
 
 
@@ -309,7 +309,7 @@ Full-width header placement:
 > ```
 >
 > **Explanation:** `1 / -1` spans from line 1 to the final grid line (-1).
-
+> 
 ---
 
 ### Exercise 3: Span Keyword Syntax
@@ -328,7 +328,7 @@ Full-width header placement:
 > ```
 >
 > **Explanation:** `span N` specifies relative track span count.
-
+> 
 ## 7. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent coordinate blueprint.
 - [`grid-template-areas`](grid_template_areas.md) — The visual name placement alternative.

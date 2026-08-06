@@ -161,7 +161,7 @@ async function processData() {
 > 3. Rejected: The operation failed (usually throwing an error).
 > ```
 > - Think about the restaurant pager! Quiet, Buzzing, or Cashier apologizing.
-
+> 
 ---
 
 ### Exercise 2: Creating Resolved and Rejected Promises
@@ -180,7 +180,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Promise.resolve()` and `Promise.reject()` return pre-settled promise instances.
-
+> 
 ---
 
 ### Exercise 3: Promise State Transition Permanence
@@ -201,8 +201,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Promises can settle only once; subsequent `resolve` or `reject` calls are ignored.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

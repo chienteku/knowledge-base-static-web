@@ -68,7 +68,7 @@ To ensure high-quality documentation on `docs.rs`:
 > 1. **Multi-Target Documentation (`targets`)**: Adding target triples to `Cargo.toml` under `[package.metadata.docs.rs]` instructs `docs.rs` to run `cargo doc` builds for all listed platforms, creating a target selector dropdown in the hosted documentation header.
 > 2. **Platform Badging (`#[doc(cfg(...))]`)**: Annotating platform-specific functions with `#[doc(cfg(target_os = "..."))]` displays OS requirement badges on `docs.rs`.
 > 3. **Compilation Verification**: Combining doc tests with `cargo test --doc` prevents documentation example rot.
-
+> 
 ---
 
 ### Exercise 3: Intra-Doc Linking and Workspace Crate Documentation Architecture
@@ -127,7 +127,7 @@ In a large multi-crate Rust workspace (containing `my-engine-core` and `my-engin
 > 1. **Intra-Doc Links**: Intra-doc Markdown links `[`TypeName`](path::TypeName)` are validated at compile time by `rustdoc`, ensuring broken links trigger compiler warnings/errors.
 > 2. **Cross-Crate Linking**: `docs.rs` automatically links types across different published crates on `crates.io` and within workspace crates.
 > 3. **Inline Re-exports**: `#[doc(inline)]` renders re-exported items directly on the module page for enhanced developer ergonomics.
-
+> 
 ---
 
 ## 1. Prerequisites
@@ -418,10 +418,9 @@ Implement the `TelemetryBuffer` struct with `#![no_std]` support, add conditiona
 > 3. **`Cargo.toml` `docs.rs` Metadata**:
 >    - `all-features = true`: Instructs `docs.rs` builders to pass `--all-features` during documentation builds so all feature-gated items and their badges are generated.
 >    - `rustdoc-args = ["--cfg", "docsrs"]`: Sets the `docsrs` cfg flag during the `docs.rs` build pipeline, activating the `#![cfg_attr(docsrs, ...)]` attribute.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

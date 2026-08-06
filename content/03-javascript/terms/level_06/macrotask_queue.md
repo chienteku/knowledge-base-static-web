@@ -164,7 +164,7 @@ async function processData() {
 > The Event Loop takes exactly ONE callback from the Macrotask Queue per cycle, allowing the browser to render the screen in between tasks. (Unlike the Microtask Queue, which is emptied completely).
 > ```
 > - Remember the Economy passenger metaphor. One at a time!
-
+> 
 ---
 
 ### Exercise 2: Identifying Macrotask APIs
@@ -181,7 +181,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Timers, I/O callbacks, and `setImmediate` schedule jobs onto the macrotask queue.
-
+> 
 ---
 
 ### Exercise 3: Macrotask Execution Lifecycle
@@ -198,8 +198,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Each event loop iteration pops 1 macrotask, completely drains microtasks, and performs browser layout rendering.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

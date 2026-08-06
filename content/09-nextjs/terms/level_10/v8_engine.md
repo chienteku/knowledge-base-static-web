@@ -131,13 +131,13 @@ Explain the V8 JavaScript execution pipeline (Ignition Interpreter -> TurboFan J
 > - Step: Ignition: Interprets AST into bytecode for fast initial execution.
 > - Step: TurboFan: Compiles hot bytecode functions into highly optimized machine code JIT assembly!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. V8 is Google's open-source C++ JavaScript engine powering Node.js and Chromium browsers.
 > 2. Ignition generates bytecode quickly for fast cold starts; TurboFan optimizes hot functions.
 > 3. Core execution engine underlying Next.js server and client runtimes.
-
+> 
 ---
 
 ### Exercise 2: Optimizing Hidden Classes and Inline Caches
@@ -156,24 +156,24 @@ Write JavaScript object initialization patterns that preserve V8 hidden class sh
 > // ❌ UNOPTIMIZED (Creates multiple hidden class shapes):
 > // const obj1 = {}; obj1.x = 1; obj1.y = 2;
 > // const obj2 = {}; obj2.y = 2; obj2.x = 1;
-
-// ✅ OPTIMIZED (Identical property order preserves hidden class shape):
-class UserPoint {
-  x: number;
-  y: number;
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-}
-```
-
+> 
+> // ✅ OPTIMIZED (Identical property order preserves hidden class shape):
+> class UserPoint {
+>   x: number;
+>   y: number;
+>   constructor(x: number, y: number) {
+>     this.x = x;
+>     this.y = y;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. V8 creates internal "hidden classes" (shapes) to track object property offsets in memory.
 > 2. Initializing object properties in identical order allows V8 to share hidden class shapes.
 > 3. Enables V8 Inline Caches (IC) to execute property access in 1 machine instruction.
-
+> 
 ---
 
 ### Exercise 3: Auditing V8 Garbage Collection Memory Leaks
@@ -198,19 +198,15 @@ Identify global event listener references causing V8 heap memory leaks in Server
 >   return () => process.off("uncaughtException", handler);
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. V8 Garbage Collector (Mark-and-Sweep) cannot free objects that remain reachable from root references (e.g. `process` or `globalThis`).
 > 2. Retained references cause V8 heap memory leaks over time in Node.js server processes.
 > 3. Essential Node.js memory optimization rule.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Edge Runtime vs Node.js Runtime](edge_runtime.md) — The Next.js runtimes powered by V8.

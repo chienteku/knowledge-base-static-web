@@ -156,13 +156,13 @@ Create a custom composable `composables/useCart.ts` managing items in a shopping
 >   return { items, addItem, itemCount };
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Top-level exports from files in `composables/` are auto-imported across the application.
 > 2. `useState()` guarantees cart state is initialized safely on the server and hydrated on the client.
 > 3. Encapsulates reusable business logic cleanly.
-
+> 
 ---
 
 ### Exercise 2: Defining Nested Composable Utilities
@@ -186,13 +186,13 @@ Structure `composables/api/useProducts.ts` and verify how Nuxt resolves named ex
 >   return { fetchProducts };
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Composables in nested directories are auto-imported based on export function names (`useProducts`).
 > 2. If index files or default exports are used, parent folder names may be prepended.
 > 3. Standard API abstraction structure.
-
+> 
 ---
 
 ### Exercise 3: Passing Parameters into Parametric Composables
@@ -216,19 +216,15 @@ Create a parametric composable `composables/useCounter.ts` accepting an initial 
 >   return { count, increment, decrement };
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Composables can accept runtime configuration parameters.
 > 2. Returns reactive references (`count`) and mutator methods.
 > 3. Flexible factory composable pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useState` Hook](use_state.md) — A Nuxt-specific composable often used *inside* your custom composables to create global state.

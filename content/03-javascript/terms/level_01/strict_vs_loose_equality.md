@@ -173,7 +173,7 @@ console.log([] === false);
 > - The boolean `true` coerces to the number `1` during loose comparison.
 > - An empty array `[]` is coerced to an empty string `""` which then coerces to the number `0`, matching the number representation of `false`.
 > - Strict equality (`===`) checks the types first, evaluating immediately to `false` if types differ.
-
+> 
 ---
 
 ### Exercise 2: Comparing Coercion Matrix for `==` vs `===`
@@ -196,7 +196,7 @@ console.log([] === false);
 > ```
 >
 > **Explanation:** `==` performs implicit type coercion if types differ; `===` checks both value and type without coercion.
-
+> 
 ---
 
 ### Exercise 3: Object Reference Comparison Trap
@@ -215,8 +215,8 @@ console.log([] === false);
 > ```
 >
 > **Explanation:** Objects and arrays are compared by memory reference. Two distinct object literals occupy different memory locations.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

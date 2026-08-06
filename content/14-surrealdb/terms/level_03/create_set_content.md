@@ -172,7 +172,7 @@ Compare `CREATE ... SET` vs `CREATE ... CONTENT` syntax when creating user profi
 > 1. `SET` explicitly assigns individual key-value expressions (`SET name = "Alice"`).
 > 2. `CONTENT` accepts a full JSON document object (`CONTENT { ... }`).
 > 3. Both strategies enforce `SCHEMAFULL` validation rules when configured on the target table.
-
+> 
 ---
 
 ### Exercise 2: Shallow Merge Modifications with `MERGE`
@@ -200,7 +200,7 @@ Update an existing customer profile `customer:c1` using `MERGE` to add a new `ph
 > 1. `MERGE` performs a non-destructive shallow merge, updating specified keys while preserving unmentioned fields.
 > 2. `CONTENT` replaces the entire record document payload, accidentally erasing unmentioned fields.
 > 3. `MERGE` provides safe document field addition without full-document replacements.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Parameter Expressions in `SET` Statements
@@ -226,7 +226,7 @@ Demonstrate that `SET` clauses accept dynamic expressions (like `time::now()` an
 > 1. `SET` clauses evaluate SurrealQL functions (`time::now()`) and arithmetic expressions (`5 + 10`) at write time.
 > 2. `CONTENT` treats raw unquoted expressions as static literals or requires pre-bound variables.
 > 3. Use `SET` when creating records containing dynamic calculated fields.
-
+> 
 ---
 
 

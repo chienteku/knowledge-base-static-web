@@ -128,7 +128,7 @@ D) `message.length`
 > They cannot contain JavaScript STATEMENTS (like `let`, `if`, `for`, or `return`).
 > ```
 > - If you can't put it on the right side of an equals sign (`const result = ...`), you can't put it in a mustache.
-
+> 
 ---
 
 ### Exercise 2: Directive Shorthand Conversion
@@ -154,7 +154,7 @@ D) `message.length`
 > <button @click="submitForm">Submit</button>
 > <template #header>Header Content</template>
 > ```
-
+> 
 ---
 
 ### Exercise 3: JavaScript Expressions in Mustaches
@@ -172,8 +172,8 @@ D) `message.length`
 > <!-- Valid Expression -->
 > {{ message.split('').reverse().join('') }}
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

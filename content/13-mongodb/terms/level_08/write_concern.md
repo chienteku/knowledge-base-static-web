@@ -170,7 +170,7 @@ Execute an `insertOne()` write operation with `writeConcern: { w: "majority", wt
 > 1. `w: "majority"` requires the write operation to be acknowledged by a majority of replica set nodes before returning success.
 > 2. `wtimeout: 5000` prevents client driver from blocking indefinitely if secondary replication lags.
 > 3. Guarantees write durability against primary node crash failovers.
-
+> 
 ---
 
 ### Exercise 2: Journal Flushing Control with `j: true`
@@ -197,7 +197,7 @@ Configure a high-security financial transaction write requiring disk journal flu
 > 1. `j: true` requires `mongod` to flush the write operation to the on-disk WiredTiger journal file before acknowledging success.
 > 2. Protects write durability even if all replica set nodes suffer simultaneous power loss.
 > 3. Maximum single-node write durability option.
-
+> 
 ---
 
 ### Exercise 3: Unacknowledged Writes (`w: 0`) for High-Volume Telemetry
@@ -224,7 +224,7 @@ Configure an unacknowledged write (`w: 0`) for non-critical high-frequency IoT l
 > 1. `w: 0` sends the write command over network socket without waiting for server acknowledgment.
 > 2. Provides maximum write throughput at the cost of zero error detection (network drops or duplicate key errors are ignored).
 > 3. Use only for non-critical logging where losing occasional data points is acceptable.
-
+> 
 ---
 
 

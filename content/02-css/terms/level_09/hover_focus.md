@@ -132,7 +132,7 @@ button:focus-visible {
 > When they click away (losing focus), it will revert to white.
 > ```
 > - Is the user just moving their mouse over it, or are they actively interacting with it?
-
+> 
 ---
 
 
@@ -154,7 +154,7 @@ button:focus-visible {
 > ```
 >
 > **Explanation:** `:focus-visible` triggers focus outlines for keyboard navigation while suppressing them on mouse clicks.
-
+> 
 ---
 
 ### Exercise 3: Hover Touch Screen Caveat
@@ -173,7 +173,7 @@ button:focus-visible {
 > ```
 >
 > **Explanation:** `@media (hover: hover)` prevents sticky hover states on mobile touchscreens.
-
+> 
 ## 7. Related Terms
 - [`transition`](../level_10/transition.md) — Making state adjustments smooth and animated.
 - [`cursor`](cursor.md) — Changing pointer graphics on hover states.

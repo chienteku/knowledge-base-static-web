@@ -160,7 +160,7 @@ Store user sessions where the session token is formatted as a 16-byte binary UUI
 > 1. `UUID()` converts 36-character string UUIDs into 16-byte BSON BinData subtype 4.
 > 2. Reduces index storage space by 55% compared to storing raw UUID strings.
 > 3. Accelerates index comparisons and memory caching.
-
+> 
 ---
 
 ### Exercise 2: Querying Binary Data Fields
@@ -186,7 +186,7 @@ Query session collection by exact binary UUID match.
 > 1. Binary comparisons evaluate raw byte arrays directly in $O(1)$ time.
 > 2. Ensures driver-level UUID subtype alignment (Subtype 4 standard).
 > 3. Leverages primary key index lookups.
-
+> 
 ---
 
 ### Exercise 3: Storing Small File Binary Blobs
@@ -213,7 +213,7 @@ Store a user profile thumbnail image (under 1MB) as a raw binary buffer using BS
 > 1. `BinData(0, base64)` stores raw unformatted binary byte buffers.
 > 2. Suitable for small files under 1MB; use GridFS for files exceeding 16MB.
 > 3. Keeps binary payloads embedded alongside document metadata.
-
+> 
 ---
 
 

@@ -292,7 +292,7 @@ thread::spawn(move || {
 > 3. **Early-Return Pipeline Mechanics**: The `run_pipeline` function uses the `?` operator on the result of `stage(packet)`. On any error, execution aborts early, returning the exact `PacketError` variant immediately.
 > 4. **Edge Cases Handled**: Empty payload slices, single-byte boundary conditions, checksum wrapping via `wrapping_add`, and payload length limits at 1024 bytes.
 >
-
+> 
 ---
 
 ### Exercise 2: Low-Latency Financial Matching Engine Order Dispatcher
@@ -502,7 +502,7 @@ Implement an event dispatcher system:
 > 3. **Pattern Matching in Function Handlers**: The handlers leverage exhaustive Rust `match` expressions to destructure specific variants (`OrderEvent::NewOrder` vs `OrderEvent::CancelOrder`), ensuring type-safe extraction of fields (`order_id`, `trader_id`, `quantity`).
 > 4. **Invariants & Safety**: Zero dynamic closure allocation guarantees consistent sub-microsecond execution timing without triggering garbage collection or heap fragmentation.
 >
-
+> 
 ---
 
 ### Exercise 3: AST Arithmetic Expression Evaluator with Operator Function Mapping
@@ -673,7 +673,7 @@ Implement an event dispatcher system:
 > 3. **Arithmetic Bounds & Overflow Protection**: Standard arithmetic ops (`+`, `*`) panic in debug mode or wrap in release mode on overflow. Utilizing standard library checked arithmetic methods (`checked_add`, `checked_mul`, `checked_div`) guarantees safe error propagation via `EvalError`.
 > 4. **Variable Lookup Scope**: Symbol resolution queries `HashMap<String, i64>`. Missing keys trigger `EvalError::VariableNotFound` early exit without attempting further sub-expression evaluation.
 >
-
+> 
 ---
 
 ## 6. Related Terms

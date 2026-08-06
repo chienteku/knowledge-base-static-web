@@ -165,7 +165,7 @@ An e-commerce reporting service calculates the total revenue generated from comp
 > 1. `math::sum(field)` calculates the sum of numeric field values across selected record sets.
 > 2. Works natively over `decimal` types, maintaining exact financial precision without rounding errors.
 > 3. Eliminates manual application-side loops by aggregating calculations directly on the database engine.
-
+> 
 ---
 
 ### Exercise 2: Grouped Minimum and Maximum Price Analysis
@@ -200,7 +200,7 @@ A product catalog analytics service computes the minimum and maximum product pri
 > 1. Combining aggregate functions (`math::min`, `math::max`) with `GROUP BY` aggregates values within each group bucket.
 > 2. Returns structured JSON result objects containing category keys and calculated bounds.
 > 3. Executes in parallel across table record storage blocks.
-
+> 
 ---
 
 ### Exercise 3: Record Set Counting with `count()`
@@ -229,7 +229,7 @@ A user metrics dashboard counts the total number of active user accounts stored 
 > 1. `count()` counts the number of matching records in the evaluated query group.
 > 2. `GROUP ALL` collapses all matching records into a single global aggregate result object.
 > 3. Returns `0` if no matching records satisfy the filter conditions.
-
+> 
 ---
 
 

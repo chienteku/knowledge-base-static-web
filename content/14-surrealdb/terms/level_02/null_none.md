@@ -185,7 +185,7 @@ You are updating a customer profile. Setting `phone = NULL` explicitly indicates
 > 1. `NONE` represents a missing or undefined field state (similar to JavaScript `undefined`).
 > 2. `NULL` represents an explicitly set null value (similar to SQL `NULL` or JavaScript `null`).
 > 3. `WHERE field IS NONE` checks for missing fields; `WHERE field IS NULL` checks for explicit null values.
-
+> 
 ---
 
 ### Exercise 2: `NONE` Field Omission in SCHEMALESS Mode
@@ -217,7 +217,7 @@ Demonstrate that setting a field to `NONE` on a `SCHEMALESS` table removes the f
 > 1. Assigning `NONE` to a field in a `SCHEMALESS` table deletes the field property key from the stored JSON object.
 > 2. Setting `bio = NULL` preserves key `bio` with a null value `{ id: profile:p1, bio: null }`.
 > 3. Understanding `NONE` vs `NULL` prevents subtle bugs in dynamic document schemas.
-
+> 
 ---
 
 ### Exercise 3: Safe Null Coalescing with `IF NOT` or Default Values
@@ -246,7 +246,7 @@ A reporting query needs to return a fallback default string `"N/A"` whenever a u
 > 1. Checking `!= NONE AND != NULL` guards against both missing and explicit null fields.
 > 2. Conditional expressions (`IF ... THEN ... ELSE ... END`) process missing values during query execution.
 > 3. Guarantees consistent string payloads for API responses.
-
+> 
 ---
 
 

@@ -104,7 +104,7 @@ Which scenario uses Streams?
 > Scenario A uses the "Bucket" method (loading the entire file into memory before it can be used).
 > ```
 > - Which one processes data piece-by-piece?
-
+> 
 ---
 
 
@@ -129,7 +129,7 @@ Which scenario uses Streams?
 > ```
 >
 > **Explanation:** Node.js stream architecture is built on these 4 stream primitives.
-
+> 
 ---
 
 ### Exercise 3: Async Iteration over Streams
@@ -148,7 +148,7 @@ Which scenario uses Streams?
 > ```
 >
 > **Explanation:** Readable streams are Async Iterables, consumable with `for await...of` loops.
-
+> 
 ## 7. Related Terms
 - [Readable & Writable Streams](readable_writable.md) — The specific implementations of Streams in Node.js.
 - [Piping (.pipe())](piping.md) — How you connect two streams together.

@@ -167,7 +167,7 @@ Query collection `customers` for documents where `address.geo.lat` is less than 
 > 1. Dot-notation (`"parent.child.subchild"`) navigates multi-level subdocument hierarchies.
 > 2. Must be enclosed in double quotes in query filters.
 > 3. Can be indexed with secondary B-tree indexes.
-
+> 
 ---
 
 ### Exercise 2: Targeting Array Elements by Index
@@ -193,7 +193,7 @@ Query user documents where the first item in the `phoneNumbers` array (`phoneNum
 > 1. Numeric indexes in dot-notation (`"array.0.field"`) target specific array positions.
 > 2. Zero-indexed (`0` matches first element).
 > 3. Evaluates positional array properties.
-
+> 
 ---
 
 ### Exercise 3: Updating Subdocument Properties via Dot-Notation
@@ -220,7 +220,7 @@ Update the `city` field inside a user's `address` subdocument to `"Austin"` with
 > 1. Dot-notation in `$set` targets subfields selectively.
 > 2. Preserves unmentioned sibling keys (`street`, `zip`).
 > 3. Atomic in-place subfield modification.
-
+> 
 ---
 
 

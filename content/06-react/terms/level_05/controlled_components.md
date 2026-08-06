@@ -118,7 +118,7 @@ const [val, setVal] = useState(data.name || ''); // Default empty string
 > }
 > ```
 > - You can use an `if` statement to conditionally call the `set` function based on what `e.target.value` is.
-
+> 
 ---
 
 
@@ -148,7 +148,7 @@ const [val, setVal] = useState(data.name || ''); // Default empty string
 > ```
 >
 > **Explanation:** Computed property names (`[e.target.name]`) manage multi-input form object state.
-
+> 
 ---
 
 ### Exercise 3: Controlled Checkbox Input Property
@@ -165,7 +165,7 @@ const [val, setVal] = useState(data.name || ''); // Default empty string
 > ```
 >
 > **Explanation:** Checkboxes use boolean `checked` props instead of string `value` props.
-
+> 
 ## 7. Related Terms
 - [Uncontrolled Components](uncontrolled_components.md) — The alternative way to handle forms without tying every keystroke to state.
 - [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — Controlled components perfectly demonstrate this concept.

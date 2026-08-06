@@ -267,7 +267,7 @@ Your task is to build a low-level packet buffer viewer `PacketBuffer`:
 > 1. **Slice Memory Layout:** In Rust, a slice reference `&[T]` does not point to a struct containing data; it is a two-word fat pointer stored directly on the stack containing `(*const T, usize)`.
 > 2. **Transmutation:** `std::mem::transmute::<&[u8], SliceRawParts>` safely converts the fat pointer reference into a C-compatible raw struct representation, proving that the second word is literally the length of the slice.
 > 3. **Sub-slicing Mechanics:** When you take a slice subset `&buffer[4..12]`, Rust does not copy data or allocate memory. It simply constructs a new fat pointer on the stack whose `data_ptr` is offset by 4 bytes (`ptr + 4`) and whose `length` metadata is updated to `8`.
-
+> 
 ---
 
 ### Exercise 2: Trait Object Vtable Inspection & Dynamic Plugin Dispatch

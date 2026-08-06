@@ -185,7 +185,7 @@ process(&[0; 5]); // Coerces array to slice!
 >
 > 1. `RingBuffer<T, N>` uses `const N: usize` to allocate fixed storage `[Option<T>; N]` on the stack.
 > 2. Provides zero-allocation bounded buffering.
-
+> 
 ---
 
 ### Exercise 2: Type-Safe Matrix Multiplication Guard
@@ -244,7 +244,7 @@ process(&[0; 5]); // Coerces array to slice!
 >
 > 1. Const generics guarantee compile-time verification that `m1` columns match `m2` rows.
 > 2. Prevents runtime matrix dimension mismatch bugs.
-
+> 
 ---
 
 ### Exercise 3: Compile-Time Static String Packet Encoder
@@ -295,7 +295,7 @@ process(&[0; 5]); // Coerces array to slice!
 >
 > 1. `Packet<SIZE>` ensures stack-allocated binary packet payloads.
 > 2. Sizing errors are caught during initialization.
-
+> 
 ---
 
 ## 6. Related Terms

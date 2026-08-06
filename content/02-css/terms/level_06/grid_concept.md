@@ -211,7 +211,7 @@ nav { display: flex; gap: 20px; }
 > grid-template-columns: 250px 1fr;
 > ```
 > - You can mix hard pixels with fractional (`fr`) units!
-
+> 
 ---
 
 
@@ -230,7 +230,7 @@ nav { display: flex; gap: 20px; }
 > ```
 >
 > **Explanation:** Grid controls 2D layout tracks; Flexbox controls 1D flow alignment.
-
+> 
 ---
 
 ### Exercise 3: Implicit Row Track Sizing
@@ -249,7 +249,7 @@ nav { display: flex; gap: 20px; }
 > ```
 >
 > **Explanation:** `grid-auto-rows` sets dimensions for implicit rows generated beyond explicit templates.
-
+> 
 ## 7. Related Terms
 - [Flexbox (Concept) & `display: flex`](../level_05/flex_parent.md) — The 1D alternative.
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — Track columns and rows template definitions.

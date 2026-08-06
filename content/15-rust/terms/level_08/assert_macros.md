@@ -589,7 +589,7 @@ You are developing a high-throughput telemetry ingestion service. Packet frames 
 > 1. **FIFO Invariants:** `assert_eq!(popped1, p1)` and `assert_ne!(popped1, p2)` verify structural data integrity and exact FIFO ordering across buffer mutations.
 > 2. **Boundary Testing:** Pushing to a full ring buffer tests capacity assertions (`assert!(rb.is_full())`) and error returns (`assert_eq!(overflow_err.unwrap_err(), ...)`).
 > 3. **Wraparound Invariants:** `pop()` followed by `push()` forces `head` pointer modulo wrapping (`(head + 1) % CAP`), verified via `assert_eq!(rb.len, 2)` and `assert_ne!(rb.len, 2)`.
-
+> 
 ---
 
 ## 6. Related Terms

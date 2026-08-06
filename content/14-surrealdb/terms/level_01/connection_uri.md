@@ -175,7 +175,7 @@ You are configuring environment-specific connection URIs for a full-stack applic
 > 2. `file://` opens a single-node persistent database engine directly from disk using local storage engines.
 > 3. `ws://` connects over unencrypted WebSockets for local CLI or development server connections.
 > 4. `wss://` establishes encrypted TLS WebSocket streams necessary for production web client real-time subscriptions.
-
+> 
 ---
 
 ### Exercise 2: Protocol Selection for Real-Time Subscriptions
@@ -201,7 +201,7 @@ A frontend engineer is evaluating whether to connect a web application using HTT
 > 1. WebSocket URIs (`ws://`, `wss://`) establish persistent bi-directional binary channels required for SurrealDB live queries.
 > 2. HTTP URIs (`http://`, `https://`) are request-response stateless protocols suitable for serverless REST requests, but cannot receive real-time server push events.
 > 3. WebSocket connections maintain connection state, allowing client SDKs to maintain active authentication tokens across query executions.
-
+> 
 ---
 
 ### Exercise 3: Embedded Rust Driver URI Configuration
@@ -236,7 +236,7 @@ A Rust backend developer is initializing SurrealDB embedded directly inside a mi
 > 1. Embedded storage URIs allow SurrealDB to run inside application binaries without running a separate server process.
 > 2. Embedded mode provides zero-network latency for high-throughput local applications.
 > 3. Eliminates database client-server deployment overhead for desktop or microservice workloads.
-
+> 
 ---
 
 

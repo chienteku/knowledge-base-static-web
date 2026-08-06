@@ -169,7 +169,7 @@ Find all customer documents where optional field `taxId` exists and is present.
 > 1. `$exists: true` matches documents containing the specified field key (even if value is `null`).
 > 2. `$exists: false` matches documents where the key is missing.
 > 3. Enables filtering flexible schema documents.
-
+> 
 ---
 
 ### Exercise 2: Auditing Field Data Types with `$type`
@@ -195,7 +195,7 @@ Find all documents in `orders` where field `phone` was stored as BSON `Int32` in
 > 1. `$type` matches documents where field values conform to specified BSON data types.
 > 2. Accepts string type names (`"int"`, `"string"`, `"decimal"`) or BSON type numbers.
 > 3. Identifies data type corruption across collection records.
-
+> 
 ---
 
 ### Exercise 3: Combining `$exists` and `$ne` Null Checks
@@ -221,7 +221,7 @@ Query documents where `middleName` exists AND is not equal to `null`.
 > 1. Combining `$exists: true` with `$ne: null` filters out both missing fields and explicit null values.
 > 2. Ensures only valid, populated string values are matched.
 > 3. Standard pattern for mandatory value checks in flexible schemas.
-
+> 
 ---
 
 

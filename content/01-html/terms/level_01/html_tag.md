@@ -133,7 +133,7 @@ The `<html>` element is the physical cardboard box itself. Everything you are sh
 > The `<head>` and `<body>` elements.
 > ```
 > - Look at the "Fuller Example" above. What is nested immediately one level deep inside `<html>`?
-
+> 
 ---
 
 
@@ -152,7 +152,7 @@ The `<html>` element is the physical cardboard box itself. Everything you are sh
 > ```
 >
 > **Explanation:** `<html>` is the top-level root container encapsulating `<head>` and `<body>`.
-
+> 
 ---
 
 ### Exercise 3: Declaring Multiple Sub-Languages
@@ -169,7 +169,7 @@ The `<html>` element is the physical cardboard box itself. Everything you are sh
 > ```
 >
 > **Explanation:** The `lang` attribute can be applied to inline elements to override document language for screen readers.
-
+> 
 ## 7. Related Terms
 - [`<head>`](head.md) — The first child of the `<html>` element.
 - [`<body>`](body.md) — The second child of the `<html>` element.

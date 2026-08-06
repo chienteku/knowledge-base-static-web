@@ -199,7 +199,7 @@ localStorage.setItem('user', JSON.stringify({ id: 1 }));
 > `sessionStorage`. It is designed perfectly for this. It survives page reloads, but is instantly wiped clean the second the specific browser tab is closed.
 > ```
 > - Which one lives forever, and which one dies with the tab?
-
+> 
 ---
 
 
@@ -218,7 +218,7 @@ localStorage.setItem('user', JSON.stringify({ id: 1 }));
 > ```
 >
 > **Explanation:** `sessionStorage` scope is limited to active tab sessions.
-
+> 
 ---
 
 ### Exercise 3: JSON Parsing Web Storage Objects
@@ -235,7 +235,7 @@ localStorage.setItem('user', JSON.stringify({ id: 1 }));
 > ```
 >
 > **Explanation:** `JSON.parse()` deserializes string data back into JavaScript objects.
-
+> 
 ## 7. Related Terms
 - [`<script>`](../level_08/script.md) — Web Storage is an API accessed entirely through JavaScript.
 - [Content Security Policy (CSP) & HTML Security](security.md) — Securing local database structures against injection exploits.

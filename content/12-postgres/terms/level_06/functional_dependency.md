@@ -158,7 +158,7 @@ Analyze functional dependencies ($X ightarrow Y$) in a `course_registrations` t
 > 1. A Functional Dependency $X ightarrow Y$ means given value $X$, value $Y$ is uniquely determined.
 > 2. Partial dependencies (where non-key columns depend on part of a composite primary key) violate 2NF.
 > 3. Theoretical foundation for database normalization algorithms.
-
+> 
 ---
 
 ### Exercise 2: Resolving Partial Dependencies to Achieve 2NF
@@ -197,7 +197,7 @@ Decompose `course_registrations` to eliminate partial dependencies and achieve S
 > 1. Decomposing tables separates independent functional dependencies into dedicated tables.
 > 2. Guarantees all non-key attributes in `enrollments` (`grade`) depend on the FULL composite primary key.
 > 3. Achieves 2NF compliance.
-
+> 
 ---
 
 ### Exercise 3: Identifying Transitive Dependencies for 3NF
@@ -226,7 +226,7 @@ Identify transitive dependency `zip_code -> city` in table `addresses(id, street
 > 1. Transitive dependencies occur when a non-key column depends on another non-key column.
 > 2. Violates 3NF and causes update anomalies if a city name changes.
 > 3. Core concept of 3NF schema decomposition.
-
+> 
 ---
 
 

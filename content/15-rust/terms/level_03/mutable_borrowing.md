@@ -259,7 +259,7 @@ thread::spawn(move || {
 > 3. **In-Place Memory Layout & Dereferencing**: The iterator `payload.iter_mut()` yields mutable reference elements (`&mut u8`). Using the dereference operator `*byte ^= key` mutates the underlying heap buffer memory directly, executing with zero temporary memory allocations (`O(1)` space complexity).
 > 
 > 4. **Edge Cases**: If `self.buffer.len() < header_len`, `split_header_and_payload` fails gracefully returning `Err(PacketError::BufferTooSmall)` before any slice split or unchecked indexing occurs.
-
+> 
 ---
 
 ### Exercise 2: Disjoint Memory Grid Mutation & Simultaneous Index Swapping
@@ -382,7 +382,7 @@ thread::spawn(move || {
 > 3. **Non-Lexical Lifetimes (NLL) & Retaining Original Ordering**: The boolean flag `is_swapped` ensures that returned mutable reference tuples `(ref_a, ref_b)` correctly correspond to requested parameter order `(idx_a, idx_b)`.
 > 
 > 4. **Edge Cases**: When `idx_a == idx_b`, returning two mutable references to the exact same memory element would violate Rust's core safety guarantee (aliasing mutability). Returning `Err(GridError::IdenticalIndices)` prevents undefined behavior and dynamic aliasing bugs.
-
+> 
 ---
 
 ### Exercise 3: Circular Ring Buffer Batch Reborrowing & Partitioned Sub-slice Mutations
@@ -497,7 +497,7 @@ thread::spawn(move || {
 > 3. **In-Place Sample Overwrite & Ring Modulo Arithmetic**: `push` overwrites `self.data[self.head]` in-place without allocation. Ring wrap-around is achieved via `(self.head + 1) % len`.
 > 
 > 4. **Edge Cases**: Passing an empty slice `&mut []` causes `TelemetryRingBuffer::new` to fail immediately with `Err(RingBufferError::EmptyBuffer)`, ensuring all subsequent slice operations like `% self.data.len()` are protected from divide-by-zero panics.
-
+> 
 ---
 
 ## 6. Related Terms

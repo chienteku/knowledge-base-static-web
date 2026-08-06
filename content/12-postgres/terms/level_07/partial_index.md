@@ -178,7 +178,7 @@ Create a partial index on `orders(customer_id)` indexing ONLY active pending ord
 > 1. Partial indexes specify a `WHERE` predicate filter during index creation.
 > 2. Indexes ONLY rows that satisfy the predicate (`status = 'pending'`).
 > 3. Consumes up to 95% less RAM and disk space than indexing millions of historical completed orders.
-
+> 
 ---
 
 ### Exercise 2: Enforcing Conditional Uniqueness with Partial Indexes
@@ -204,7 +204,7 @@ Enforce that a user can have at most ONE active primary email address (`WHERE is
 > 1. Partial unique indexes enforce uniqueness ONLY over matching rows.
 > 2. Prevents a user from setting `is_primary = TRUE` on multiple rows, while allowing unlimited `is_primary = FALSE` rows.
 > 3. Powerful conditional business rule enforcement pattern.
-
+> 
 ---
 
 ### Exercise 3: Matching Partial Index Predicates in Queries
@@ -231,7 +231,7 @@ Explain why query `WHERE customer_id = 100` MISSES index `idx_orders_pending` un
 > 1. The query planner will ONLY select a partial index if the query's `WHERE` clause implies the partial index predicate.
 > 2. Always include the partial index predicate in application queries.
 > 3. Critical rule for partial index optimization.
-
+> 
 ---
 
 

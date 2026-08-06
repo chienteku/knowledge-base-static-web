@@ -168,7 +168,7 @@ Create a TTL index on `createdAt` in collection `sessions` expiring documents 3,
 > 1. TTL indexes automatically purge expired documents from collections.
 > 2. Background thread runs every 60 seconds deleting documents where `createdAt + expireAfterSeconds < current_time`.
 > 3. Automates session and temporary token lifecycle management.
-
+> 
 ---
 
 ### Exercise 2: Explicit Dynamic Expiration Datetime
@@ -200,7 +200,7 @@ Create a TTL index with `expireAfterSeconds: 0` expiring documents at an explici
 > 1. Setting `expireAfterSeconds: 0` expires documents at the exact BSON Date stored in field `expireAt`.
 > 2. Allows individual documents to define custom expiration timestamps.
 > 3. Ideal for custom promotional leases and dynamic access tokens.
-
+> 
 ---
 
 ### Exercise 3: TTL Index Constraints and Limitations
@@ -227,7 +227,7 @@ Explain why TTL indexes CANNOT be created on compound indexes or primary key `_i
 > 1. TTL background cleanup thread expects single-field date B-trees.
 > 2. Non-date field values (strings, numbers) are skipped by the TTL monitor.
 > 3. Essential operational constraints.
-
+> 
 ---
 
 

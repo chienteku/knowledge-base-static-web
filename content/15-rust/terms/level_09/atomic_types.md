@@ -269,7 +269,7 @@ ready_flag.store(true, Ordering::Release); // Guarantees prior writes are publis
 > 1. `compare_exchange_weak` performs lock-free atomic Compare-And-Swap (CAS) state updates without OS context switches.
 > 2. `AcquiredGuard` implements RAII drop semantics to decrement active counts automatically upon completion.
 > 3. Counters (`total_requests`, `rejected_requests`) use atomic `fetch_add` for thread-safe lock-free metric collection.
-
+> 
 ---
 
 ### Exercise 2: Lock-Free State Machine and Peak Memory Aggregator
@@ -405,7 +405,7 @@ ready_flag.store(true, Ordering::Release); // Guarantees prior writes are publis
 > 1. `AtomicU8::compare_exchange` validates state transition correctness atomically across threads.
 > 2. `update_peak_memory` uses an optimistic CAS loop (`compare_exchange_weak`) to track maximum memory without software locks.
 > 3. State machine metrics execute in nanoseconds directly on CPU registers.
-
+> 
 ---
 
 ### Exercise 3: Multithreaded Worker Pool Shutdown Coordinator
@@ -514,7 +514,7 @@ ready_flag.store(true, Ordering::Release); // Guarantees prior writes are publis
 > 1. `AtomicBool` provides zero-latency cross-thread shutdown signal propagation.
 > 2. `active_workers` tracks worker lifetime boundaries via atomic increment and decrement operations.
 > 3. Task metrics aggregate concurrently across threads without lock contention.
-
+> 
 ---
 
 ## 6. Related Terms

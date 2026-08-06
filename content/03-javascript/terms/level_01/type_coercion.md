@@ -153,7 +153,7 @@ async function processData() {
 > - The `+` operator prefers String concatenation if any operand is a string.
 > - Math operators (`-`, `*`, `/`) force Strings to become Numbers.
 > - Booleans coerce to `1` (true) and `0` (false) in math operations.
-
+> 
 ---
 
 ### Exercise 2: ToPrimitive Object Conversion Tracing
@@ -176,7 +176,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Object coercion invokes `Symbol.toPrimitive`, falling back to `valueOf()` for numeric hints and `toString()` for string hints.
-
+> 
 ---
 
 ### Exercise 3: Falsy Value Coercion Table
@@ -194,8 +194,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** There are exactly 8 falsy values in JavaScript that coerce to `false` in boolean contexts.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

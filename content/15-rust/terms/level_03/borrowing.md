@@ -268,7 +268,7 @@ Implement a zero-copy HTTP header inspector struct `HeaderInspector<'a>` that bo
 > 2. **Memory Layout of String Slices (`&str`)**: Each `&str` is represented internally as a 16-byte fat pointer (an 8-byte pointer to UTF-8 bytes and an 8-byte length). Passing and returning string slice references copies only 16 bytes on the stack, completely avoiding heap allocations (`malloc`/`free`) and `.clone()` operations.
 > 3. **Shared Read Aliasing**: Rust allows an arbitrary number of immutable references (`&T`) to point to `raw_headers` simultaneously. Multiple inspection routines (security checkers, routing modules, analytics engines) can examine the exact same memory region concurrently without risk of data races.
 > 4. **Edge Cases & Invariants**: If `raw_headers` is dropped, the compiler's borrow checker rejects any attempt to read returned header references with `E0597` ("borrowed value does not live long enough").
-
+> 
 ---
 
 ### Exercise 2: Shared Multi-View In-Memory Log Snapshot Query Engine
@@ -395,7 +395,7 @@ Implement a snapshot query analyzer `SnapshotQuery<'a>` operating over borrowed 
 > 2. **Aliasing XOR Mutability Invariant**: Because all query methods receive `&self` (shared immutable reference), Rust guarantees that no other code path can mutate the underlying `logs` vector while any `SnapshotQuery` or returned `&'a LogRecord<'a>` references exist.
 > 3. **Iterator Borrow Chains**: `self.records.iter()` produces an iterator yielding `&'a LogRecord<'a>`. Collecting these into `Vec<&'a LogRecord<'a>>` allocates a vector of 64-bit raw pointers, pointing directly back to the original memory inside `logs` without duplicating string buffers or struct fields.
 > 4. **Drop Semantics**: When `query`, `errors`, or `range_logs` go out of scope, they drop only their slice wrappers and pointer vectors. The actual underlying `LogRecord` instances remain owned by `logs` and are safely deallocated when `logs` goes out of scope at the end of the outer block.
-
+> 
 ---
 
 ### Exercise 3: Multi-Observer Telemetry Dispatcher & Observer Routing
@@ -566,7 +566,7 @@ Implement a telemetry dispatcher `TelemetryDispatcher<'a>` that broadcasts borro
 > 2. **Mutable Trait Object References (`&'a mut dyn Observer`)**: The dispatcher stores mutable references to trait objects `&'a mut dyn Observer`. Each trait object reference is a 16-byte fat pointer containing a data pointer to the concrete observer struct and a vtable pointer for dynamic dispatch. Mutably borrowing observers allows them to update internal metrics (`anomaly_count`, `failing_devices`) while preventing concurrent, un-synchronized access to the observers elsewhere.
 > 3. **Non-Lexical Lifetimes (NLL) & Block Scoping**: In `test_telemetry_dispatcher_borrows`, `dispatcher` is declared within an inner block `{ ... }`. During this block, `cpu_detector` and `error_counter` are mutably borrowed by `dispatcher`. Once the block finishes, `dispatcher` is dropped, releasing the mutable borrows. This allows `test_telemetry_dispatcher_borrows` to safely read `cpu_detector.anomaly_count` and `error_counter.error_count` afterwards without triggering borrow checker conflict error `E0502`.
 > 4. **Safety & Read Invariance**: Because `observe` takes `event: &TelemetryEvent` (an immutable reference), concrete observers can inspect metrics but are strictly forbidden by the compiler from mutating or invalidating event payload fields during observation.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -143,7 +143,7 @@ The `<option>` tags are the bubbles (A, B, C, D) that you are allowed to fill in
 > It creates unclickable, bolded categorical headers inside the dropdown menu, allowing you to organize a massive list of options into smaller, readable sections!
 > ```
 > - Think about navigating a massive dropdown with 100 items. How do you group them visually?
-
+> 
 ---
 
 
@@ -166,7 +166,7 @@ The `<option>` tags are the bubbles (A, B, C, D) that you are allowed to fill in
 > ```
 >
 > **Explanation:** `disabled selected` option acts as a prompt without allowing re-selection.
-
+> 
 ---
 
 ### Exercise 3: Grouping Options with optgroup
@@ -187,7 +187,7 @@ The `<option>` tags are the bubbles (A, B, C, D) that you are allowed to fill in
 > ```
 >
 > **Explanation:** `<optgroup>` organizes select dropdown choices into categorized sections.
-
+> 
 ## 7. Related Terms
 - [`<input>`](input.md) — The alternative way to collect data (free-form typing).
 - [`placeholder` Attribute](placeholder.md) — The visual cue comparison.

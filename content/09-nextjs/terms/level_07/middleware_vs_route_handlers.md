@@ -111,13 +111,13 @@ Formulate an architectural comparison matrix contrasting Next.js Middleware agai
 > - Middleware (middleware.ts): Executes ON EVERY REQUEST before routing. Runs on Edge runtime. Purpose: Authentication redirect, geo-blocking, header mutation.
 > - Route Handlers (app/api/.../route.ts): Executes ONLY when specific URL endpoint is hit. Runs on Node.js/Edge. Purpose: REST API endpoints, Webhooks, JSON endpoints.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Middleware acts as a global request interceptor pipeline before page/route resolution.
 > 2. Route Handlers act as specific destination endpoints serving raw data or files.
 > 3. Core architectural separation of concerns.
-
+> 
 ---
 
 ### Exercise 2: Chaining Request Pipeline (Middleware to Route Handler)
@@ -136,34 +136,34 @@ Pass custom authenticated user headers from `middleware.ts` down to a Route Hand
 > // middleware.ts
 > import { NextResponse } from "next/server";
 > import type { NextRequest } from "next/server";
-
-export function middleware(req: NextRequest) {
-  const requestHeaders = new Headers(req.headers);
-  requestHeaders.set("x-user-id", "user_123");
-
-  return NextResponse.next({
-    request: { headers: requestHeaders }
-  });
-}
-```
-
+> 
+> export function middleware(req: NextRequest) {
+>   const requestHeaders = new Headers(req.headers);
+>   requestHeaders.set("x-user-id", "user_123");
+> 
+>   return NextResponse.next({
+>     request: { headers: requestHeaders }
+>   });
+> }
+> ```
+> 
 > ```typescript
 > // app/api/profile/route.ts
 > import { headers } from "next/headers";
-
-export async function GET() {
-  const headersList = await headers();
-  const userId = headersList.get("x-user-id");
-  return Response.json({ userId });
-}
-```
-
+> 
+> export async function GET() {
+>   const headersList = await headers();
+>   const userId = headersList.get("x-user-id");
+>   return Response.json({ userId });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Middleware can mutate request headers using `NextResponse.next({ request: { headers } })`.
 > 2. Downstream Route Handlers read modified request headers via `headers()`.
 > 3. Standard pipeline pattern for user authentication propagation.
-
+> 
 ---
 
 ### Exercise 3: Auditing Edge Runtime Constraints in Middleware
@@ -184,19 +184,15 @@ Explain why heavy Node.js libraries (`fs`, `pg`, `child_process`) must be exclud
 > - C++ bindings (fs, net, native Node ORMs like pg/prisma) are NOT supported in middleware.ts!
 > - Solution: Perform heavy ORM operations inside Route Handlers or Server Actions (Node.js runtime).
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Next.js Middleware runs on edge isolates for fast global request interception.
 > 2. Heavy Node.js modules are unsupported in edge runtime isolates.
 > 3. Keep middleware light and delegate data storage logic to Route Handlers.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Middleware (`middleware.ts`)](../level_10/middleware.md) — A deep dive into the syntax of `middleware.ts` (Level 10).

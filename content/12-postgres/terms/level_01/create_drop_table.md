@@ -151,7 +151,7 @@ Create a `users` table with identity primary key `id`, unique `email`, and `crea
 > 1. `GENERATED ALWAYS AS IDENTITY` creates an auto-incrementing integer primary key compliant with SQL standards.
 > 2. `CONSTRAINT uq_users_email UNIQUE` enforces unique email addresses across all rows.
 > 3. `TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP` records row creation times in UTC.
-
+> 
 ---
 
 ### Exercise 2: Creating Tables with Foreign Key Constraints
@@ -181,7 +181,7 @@ Create an `orders` table referencing `users(id)` with explicit foreign key const
 > 1. Foreign key constraints enforce referential integrity between tables.
 > 2. `ON DELETE CASCADE` automatically removes child order records if the parent user row is deleted.
 > 3. Explicit constraint names simplify debugging and schema migration management.
-
+> 
 ---
 
 ### Exercise 3: Dropping Tables with Cascade Dependencies
@@ -205,7 +205,7 @@ Drop table `users` and all dependent tables (such as `orders`) using `CASCADE`.
 > 1. `DROP TABLE` removes table structures and all contained data rows.
 > 2. `CASCADE` automatically drops foreign key constraints and dependent objects in child tables.
 > 3. Use caution when dropping tables in production.
-
+> 
 ---
 
 

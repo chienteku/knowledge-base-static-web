@@ -284,7 +284,7 @@ Implement a `#![no_std]` target triple parser `RustupTargetTriple` that parses s
 > 1. **Target Triple Specification Structure**: Rust platform targets managed by `rustup target add` follow the standardized convention `architecture-vendor-operating_system-abi`. Parsing this string enables automated build scripts to detect whether a compilation target needs cross-compilers or specialized standard library builds.
 > 2. **Zero-Allocation Slicing (`#![no_std]`)**: By leveraging string splitting (`triple.split('-')`) and lifetime-borrowed slices (`&'a str`), the triple evaluator operates without requiring dynamic memory allocation (`alloc`) or the Rust standard library (`std`).
 > 3. **Component Mapping for Target Architecture**: Embedded targets (`sys = "none"`) require source libraries (`rust-src`) and LLVM binutils (`llvm-tools`) for linkers, while WebAssembly targets (`wasm32-unknown-unknown`) pair with `wasm-bindgen` tools.
-
+> 
 ---
 
 ### Exercise 2: `rust-toolchain.toml` Config Parser & Validation Engine

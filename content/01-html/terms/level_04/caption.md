@@ -198,7 +198,7 @@ A simple table with a caption:
 > </table>
 > ```
 > - The `<caption>` tag must be nested right after the opening `<table>` tag.
-
+> 
 ---
 
 
@@ -223,7 +223,7 @@ A simple table with a caption:
 > ```
 >
 > **Explanation:** `<caption>` acts as accessible header title for tabular data for screen readers.
-
+> 
 ---
 
 ### Exercise 3: Caption CSS Positioning
@@ -242,7 +242,7 @@ A simple table with a caption:
 > ```
 >
 > **Explanation:** `caption-side: bottom` positions table caption below table data while preserving HTML structure.
-
+> 
 ## 7. Related Terms
 - [`<table>`](table.md) — The parent container that holds the caption.
 - [`<th>` (Table Header)](th.md) — The header cell tag inside rows.

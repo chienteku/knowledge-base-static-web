@@ -174,7 +174,7 @@ Refactor an un-atomic legacy table `users` storing comma-separated phones (`'555
 > 1. 1NF requires each column to store atomic (indivisible) scalar values.
 > 2. Comma-separated strings violate 1NF because multiple data elements inhabit a single cell.
 > 3. Moving multi-value attributes into a child table enables fast SQL filtering and indexing.
-
+> 
 ---
 
 ### Exercise 2: Eliminating Repeating Field Columns
@@ -201,7 +201,7 @@ Refactor a table storing repeating columns (`phone1`, `phone2`, `phone3`) into 1
 > 1. Repeating group columns create fixed limits and require complex multi-column `OR` queries.
 > 2. Normalizing to 1NF allows users to have 0 to N phone numbers flexibly.
 > 3. Fundamental rule of relational schema design.
-
+> 
 ---
 
 ### Exercise 3: Validating Unique Row Identification
@@ -226,7 +226,7 @@ Ensure a table has a primary key or unique constraint to guarantee distinct row 
 > 1. 1NF requires that every table row can be uniquely identified.
 > 2. Adding a surrogate primary key guarantees row uniqueness.
 > 3. Enforces 1NF compliance.
-
+> 
 ---
 
 

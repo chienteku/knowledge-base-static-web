@@ -392,7 +392,7 @@ Write a complete, compilable-style Rust module containing the trait definition, 
 > 2. **Helper Attribute Inspection (`attributes(telemetry)`)**: Iterating over `field.attrs` checks for `#[telemetry(skip)]` attributes, allowing field-level filtering at compile time.
 > 3. **Quasi-Quoting Repetition (`quote!`)**: The `#(#field_writers)*` macro repetition syntax appends field formatting logic into a single companion `impl EmbeddedTelemetry for Struct` block.
 > 4. **Append-Only Safety Guarantee**: Derive macros leave the target struct syntax completely untouched and append external static dispatch trait methods alongside it.
-
+> 
 ---
 
 ### Exercise 2: Auto-Deriving Hardware Register Bit Pattern Conversion Traits
@@ -591,7 +591,7 @@ Write a complete, compilable-style Rust module containing the derive AST builder
 > 2. **Discriminant Extraction**: Checking `variant.discriminant` allows parsing explicit values (such as `= 0x10`) using `Lit::Int::base10_parse::<u8>()` or falling back to auto-incrementing counters.
 > 3. **Generating Standard Library Trait Implementations**: Deriving `TryFrom<u8>` and `From<Enum> for u8` provides type-safe, zero-cost conversion between hardware byte registers and Rust domain enums.
 > 4. **Spanned Error Reporting**: Returning `syn::Error::new_spanned(input_ast, ...)` directs the Rust compiler to highlight the exact invalid line if attached to non-enum types.
-
+> 
 ---
 
 ## 6. Related Terms
@@ -605,9 +605,6 @@ Write a complete, compilable-style Rust module containing the derive AST builder
 
 ---
 
-
-
----
 
 ### Exercise 3: Auto-Deriving SQL Table Builder Traits (`#[derive(TableBuilder)]`)
 
@@ -663,11 +660,11 @@ The macro must:
 >         .iter()
 >         .map(|f| f.ident.as_ref().unwrap().to_string())
 >         .collect();
-
+> 
 >     let placeholders: Vec<String> = (1..=col_names.len())
 >         .map(|idx| format!("${idx}"))
 >         .collect();
-
+> 
 >     let cols_joined = col_names.join(", ");
 >     let placeholders_joined = placeholders.join(", ");
 > 
@@ -728,8 +725,8 @@ The macro must:
 > 1. **AST Struct Introspection**: The derive generator extracts `struct_name` and named fields from `syn::DeriveInput` at compile time.
 > 2. **Parameterized Query Generation**: Positional placeholder strings (`$1, $2, $3`) are constructed during macro expansion, eliminating runtime query formatting overhead.
 > 3. **Static Metadata**: Column names are generated as a static string array (`&'static [&'static str]`), allowing zero-allocation schema inspection.
-
-
+> 
+> 
 ---
 
 ## 7. Key Takeaways

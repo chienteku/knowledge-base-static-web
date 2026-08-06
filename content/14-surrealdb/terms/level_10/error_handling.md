@@ -177,7 +177,7 @@ Check an account balance inside a transaction script. If balance is less than wi
 > 1. `THROW` aborts transaction execution immediately and returns a custom error exception payload.
 > 2. Automatically rolls back all uncommitted mutations inside the active transaction block.
 > 3. Enforces domain validation rules at the database tier.
-
+> 
 ---
 
 ### Exercise 2: Catching Errors in Field Assertions
@@ -207,7 +207,7 @@ Catch assertion write errors when inserting an invalid email address into table 
 > 1. Combining `ASSERT` with `OR THROW` customizes field validation error messages.
 > 2. Returns clear error descriptions to SDK callers.
 > 3. Prevents invalid data insertion.
-
+> 
 ---
 
 ### Exercise 3: Handling Primary Key Collision Errors
@@ -235,7 +235,7 @@ Handle primary key collision errors when creating a record `user:alice` that alr
 > 1. `CREATE` throws a primary key collision exception if the record ID already exists.
 > 2. Use `UPSERT` or `INSERT ON DUPLICATE KEY UPDATE` if collision updates are desired.
 > 3. Guarantees primary key uniqueness.
-
+> 
 ---
 
 

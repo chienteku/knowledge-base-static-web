@@ -167,7 +167,7 @@ Demonstrate the operational difference between updating a single field with `$se
 > 1. `$set` modifies only specified key-value pairs, preserving all existing document fields.
 > 2. `replaceOne()` completely overwrites the document body, deleting unmentioned fields.
 > 3. Use `$set` for partial updates; use `replaceOne()` for full document overwrites.
-
+> 
 ---
 
 ### Exercise 2: Preventing Accidental Data Destruction
@@ -193,7 +193,7 @@ Audit a buggy update call that accidentally omitted `$set` in `updateOne()`.
 > 1. Modern MongoDB drivers enforce explicit `updateOne()` with update operators (`$set`) to prevent accidental document wipes.
 > 2. `replaceOne()` must be called explicitly when full replacement is intended.
 > 3. Hardens application code against data loss.
-
+> 
 ---
 
 ### Exercise 3: Performance Impact on Indexes
@@ -218,7 +218,7 @@ Compare the index maintenance overhead of updating an un-indexed field via `$set
 > 1. `$set` on un-indexed fields avoids secondary index modification overhead.
 > 2. `replaceOne()` forces WiredTiger to update secondary B-tree indexes for changed fields.
 > 3. `$set` is more efficient for high-frequency field updates.
-
+> 
 ---
 
 

@@ -153,7 +153,7 @@ async function processData() {
 > { theme: 'dark' }
 > ```
 > - `delete settings.notifications;`
-
+> 
 ---
 
 ### Exercise 2: Checking Own Properties with `Object.hasOwn`
@@ -171,7 +171,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Object.hasOwn(obj, prop)` checks if `prop` exists as a direct non-inherited property on `obj`.
-
+> 
 ---
 
 ### Exercise 3: Configuring Property Descriptors
@@ -193,8 +193,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Property descriptors configure `writable`, `enumerable`, and `configurable` object property flags.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

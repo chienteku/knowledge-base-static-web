@@ -276,7 +276,7 @@ Requirements:
 > 2. **Subcommand Dispatch**: Routing CLI subcommands is accomplished by decorating a Rust enum with `#[derive(Subcommand)]` and embedding it inside the top-level struct with `#[command(subcommand)]`.
 > 3. **Custom Range Validation (`value_parser!`)**: Using `value_parser!(u8).range(1..=9)` forces `clap` to parse and validate integers at runtime before populating the struct, automatically emitting structured `ErrorKind::ValueValidation` errors on failure.
 > 4. **In-Memory Testing with `try_parse_from`**: Unlike `parse()`, which terminates the host process on validation errors or `--help`, `try_parse_from` returns a `Result<T, clap::Error>` allowing unit tests to assert parsing outcomes safely.
-
+> 
 ---
 
 ## 5. Practice Exercises
@@ -392,7 +392,7 @@ Requirements:
 > 1. **Builder Pattern Architecture**: `Command::new` and `Arg::new` provide runtime flag construction without relying on procedural macro codegen.
 > 2. **`ArgAction::Append`**: Configures an option to accept repeated flags on the command line (e.g. `-f err1 -f err2`), collecting them into a sequence accessible via `.get_many::<T>()`.
 > 3. **Type-Safe Value Retrieval**: Calling `.get_one::<usize>("workers")` automatically converts the parsed flag into `usize` according to the validator registered via `.value_parser(...)`.
-
+> 
 ---
 
 ### Exercise 3: Advanced Constraints, Environment Fallbacks, and Mutual Exclusivity
@@ -495,10 +495,9 @@ Build an API deployment CLI tool `deploy-cli` enforcing advanced operational con
 > 1. **Environment Variable Fallback (`env = "..."`)**: `clap` automatically inspects `std::env` if the flag is absent on the command line, enabling secure credential passing without hardcoding defaults.
 > 2. **Mutual Exclusivity (`conflicts_with`)**: Declaring argument conflicts forces `clap` to emit `ErrorKind::ArgumentConflict` whenever incompatible options are combined.
 > 3. **Conditional Requirements (`required_if_eq`)**: Dynamic validation constraints can enforce conditional inputs based on sibling flag values (e.g. requiring target deployment regions only in production runs).
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

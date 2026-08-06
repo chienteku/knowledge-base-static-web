@@ -185,7 +185,7 @@ const p3 = Promise.resolve(30);
 > ```
 > - Pass `[p1, p2, p3]` to `Promise.all()`.
 > - In `.then(results => ...)` use `results.reduce((a, b) => a + b)` to sum them.
-
+> 
 ---
 
 ### Exercise 2: Handling Promise Failures with `Promise.allSettled`
@@ -207,7 +207,7 @@ const p3 = Promise.resolve(30);
 > ```
 >
 > **Explanation:** `Promise.allSettled` yields an array of status objects without short-circuiting on rejections.
-
+> 
 ---
 
 ### Exercise 3: Racing Promises with `Promise.race`
@@ -226,8 +226,8 @@ const p3 = Promise.resolve(30);
 > ```
 >
 > **Explanation:** `Promise.race` settles with the value or error of the first promise that settles.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -347,7 +347,7 @@ Implement `StreamCursor<'a>`, `PacketHeader`, and `ParsedPacket<'a>`. Write `par
 > 
 > 4. **Memory Layout & Edge Cases**:
 >    `StreamCursor<'a>` is laid out in memory identically to a slice pointer (`&[u8]`), occupying two 64-bit words (pointer address + length). Mutating `self.slice = &self.slice[N..]` simply advances the pointer address and decrements the slice length in place. Edge cases like slice truncation or invalid magic bytes return `ParseError` without corrupting memory or causing panics.
-
+> 
 ---
 
 ### Exercise 2: Multi-Pass State Machine Pipeline & Two-Phase Method Calls
@@ -511,7 +511,7 @@ Implement a `GraphNode` structure and a `GraphStore` allocator. Demonstrate two-
 > 
 > 3. **Pointer-Advancing Loop Reborrowing (`node = &mut **next`)**:
 >    In `traverse_and_update_chain`, `node` is originally `&'a mut GraphNode`. Inside the `while let Some(ref mut next) = node.child` loop, `next` is `&'b mut Box<GraphNode>`. Dereferencing `**next` yields `GraphNode`, and taking `&mut **next` creates a new reborrow with a narrower lifetime `'c`. Assigning `node = &mut **next` overwrites the loop pointer variable with the child reborrow without invalidating the parent chain, allowing arbitrary depth traversal.
-
+> 
 ---
 
 ### Exercise 3: Zero-Allocation Ring Buffer with Computed Pushes & Reborrowed Slice Views
@@ -701,7 +701,7 @@ Implement a const-generic `RingBuffer<T, const N: usize>` struct supporting `pus
 > 
 > 4. **Memory & Layout Efficiency**:
 >    `RingBuffer<T, N>` is allocated on the stack (or inline in host structs) without heap allocations (`Vec`). Const generics `N` establish array bounds at compile time, eliminating slice boundary runtime overhead and allowing SIMD optimization of loop transformations during `mutate_queued_items`.
-
+> 
 ---
 
 ## 6. Related Terms

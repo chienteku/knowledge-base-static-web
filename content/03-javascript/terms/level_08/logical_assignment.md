@@ -188,7 +188,7 @@ console.log("scale:", settings.scale); // should remain 0
 
 > [!check]- Answer
 > - Use the nullish assignment operator `??=` on both properties.
-
+> 
 ---
 
 ### Exercise 2: Logical AND Assignment (`&&=`)
@@ -211,7 +211,7 @@ console.log("scale:", settings.scale); // should remain 0
 > ```
 >
 > **Explanation:** `x &&= y` evaluates and assigns `y` to `x` only if `x` is currently truthy.
-
+> 
 ---
 
 ### Exercise 3: Nullish Coalescing Assignment (`??=`)
@@ -230,8 +230,8 @@ console.log("scale:", settings.scale); // should remain 0
 > ```
 >
 > **Explanation:** `??=` retains falsy non-nullish values like `0` without overriding them with defaults.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

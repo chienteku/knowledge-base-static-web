@@ -183,7 +183,7 @@ Run `explain("executionStats")` on a query to inspect total docs examined, execu
 > 1. `explain("executionStats")` runs the query and returns real runtime performance statistics.
 > 2. `executionTimeMillis` measures server-side query processing time.
 > 3. `totalKeysExamined` vs `totalDocsExamined` indicates index efficiency.
-
+> 
 ---
 
 ### Exercise 2: Analyzing Query Planner Stage Trees
@@ -208,7 +208,7 @@ Inspect `winningPlan` execution stages to identify whether a query utilized `IXS
 > 1. `queryPlanner` mode returns the selected query execution tree without running the query.
 > 2. Identifies selected index key patterns.
 > 3. Fast diagnostic for query optimization without executing heavy queries.
-
+> 
 ---
 
 ### Exercise 3: Comparing Query Candidate Plans with `allPlansExecution`
@@ -233,7 +233,7 @@ Run `explain("allPlansExecution")` to inspect candidate plans evaluated by the M
 > 1. `allPlansExecution` mode runs candidate query plans in parallel during trial periods to select the fastest plan.
 > 2. Displays statistics for rejected candidate plans.
 > 3. Helps debug query optimizer plan selection logic.
-
+> 
 ---
 
 

@@ -192,7 +192,7 @@ How many items should the database `skip` (OFFSET)?
 > (Explanation: They want page 4. That means they already saw Page 1, 2, and 3. Since each page has 10 items, 3 pages * 10 items = 30 skipped items).
 > ```
 > - The formula is `(page - 1) * limit`.
-
+> 
 ---
 
 
@@ -211,7 +211,7 @@ How many items should the database `skip` (OFFSET)?
 > ```
 >
 > **Explanation:** Standard offset formula skips `(page - 1) * limit` rows.
-
+> 
 ---
 
 ### Exercise 3: Cursor-Based vs Offset Pagination Tradeoff
@@ -229,7 +229,7 @@ How many items should the database `skip` (OFFSET)?
 > ```
 >
 > **Explanation:** Offset allows arbitrary page skipping; Cursor guarantees stable pagination across real-time list inserts.
-
+> 
 ## 7. Related Terms
 - [ORMs & ODMs](../level_08/orms_odms.md) — The tools that execute the `take` and `skip` commands.
 - [The req & res Objects](../level_07/req_res.md) — You extract the page numbers from `req.query`.

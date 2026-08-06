@@ -157,7 +157,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `||` evaluates to the first truthy operand; `&&` evaluates to the first falsy operand (or last operand); `??` evaluates to the first non-nullish operand.
-
+> 
 ---
 
 ### Exercise 2: Guarding Function Execution with Short-Circuit `&&`
@@ -177,7 +177,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `A && B()` evaluates `B()` only if `A` is truthy.
-
+> 
 ---
 
 ### Exercise 3: Nullish Coalescing vs Logical OR Defaults
@@ -196,7 +196,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `||` evaluates `0` as falsy; `??` treats `0` as a valid non-nullish value.
-
+> 
 ---
 
 ## 7. Related Terms

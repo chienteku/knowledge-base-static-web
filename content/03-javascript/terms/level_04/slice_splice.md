@@ -182,7 +182,7 @@ console.log(metals);
 > - The start index is `2`.
 > - The delete count is `1`.
 > - The replacement item is `"Copper"`.
-
+> 
 ---
 
 ### Exercise 2: Removing Array Items with `splice`
@@ -201,7 +201,7 @@ console.log(metals);
 > ```
 >
 > **Explanation:** `splice(start, deleteCount)` mutates original array in-place and returns removed items.
-
+> 
 ---
 
 ### Exercise 3: Shallow Copying Arrays with `slice()`
@@ -220,7 +220,7 @@ console.log(metals);
 > ```
 >
 > **Explanation:** `slice()` called without arguments returns a shallow copy of the source array.
-
+> 
 ---
 
 ## 7. Related Terms

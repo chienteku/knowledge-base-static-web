@@ -273,7 +273,7 @@ Write unit tests confirming that ownership transfers through all stages, payload
 > 2. **Affine Type System & Invalidation**: By defining methods that accept `self` by value (e.g. `process(self, ...)` and `finalize(self)`), Rust's move semantics consume the caller's binding. Once `stage1.process(...)` completes, `stage1` becomes an uninitialized binding; attempting to reuse `stage1` or `stage2` results in compile error `E0382` ("use of moved value").
 > 3. **Memory Layout & Performance**: Moving a `PacketBuffer` between `TransformStage` and `DispatchStage` involves a simple bitwise copy (shallow copy) of the stack metadata (32 bytes total: 4-byte `stream_id`, 1-byte `checksum`, padding, and 24-byte `Vec` header). Rust automatically optimizes out stack copies via scalar replacement of aggregates (SRoA) and inline register passing.
 > 4. **Resource Management**: When `DispatchStage::finalize(self)` unpacks `self.packet`, ownership of `Header` and `Vec<u8>` is returned directly to the caller, preventing the `DispatchStage` destructor from dropping the underlying heap payload.
-
+> 
 ---
 
 ### Exercise 2: Compile-Time Safe Type-State Machine for Database Transactions (Affine Types)
@@ -419,7 +419,7 @@ Write unit tests verifying state transitions, log recording, and pattern matchin
 > 2. **Zero-Cost Phantom Data**: `PhantomData<State>` carries zero runtime memory overhead (0 bytes) and zero CPU performance cost. It informs the compiler's type checker about the logical ownership of the generic marker type `State` without affecting memory layout.
 > 3. **Ownership Reuse & Memory Efficiency**: In `commit(mut self)` and `rollback(mut self)`, fields like `log: Vec<String>` and `db_name: String` are moved directly from the old `Transaction<Active>` struct into the new `Transaction<Committed>` struct. No dynamic memory allocations or string duplications take place during state transitions.
 > 4. **Drop Semantics & Clean Destruction**: When `committed` or `rolled_back` eventually leaves scope, Rust runs the destructor for `Transaction<State>`, safely deallocating `db_name` and all log entries in `Vec<String>`.
-
+> 
 ---
 
 ### Exercise 3: Zero-Cost Buffer Recycling & Selective Partial Moves (`std::mem::replace` & `Option::take`)
@@ -537,7 +537,7 @@ Write unit tests verifying pointer preservation (`as_ptr()`), partial moves with
 > 2. **`Option::take()` & `std::mem::replace` Mechanics**: `self.payload.take()` executes `std::mem::replace(&mut self.payload, None)`. In assembly, this atomically writes `None` into `self.payload` while returning the original `Some(Vec<u8>)` by value. This satisfies Rust's memory safety invariant without needing expensive heap cloning or buffer duplication.
 > 3. **Null Pointer Optimization (NPO)**: Because `Vec<u8>` contains a non-null pointer descriptor, Rust optimizes `Option<Vec<u8>>` memory representation using Null Pointer Optimization. `None` is represented internally as a zero (null pointer) descriptor, making `Option<Vec<u8>>` occupy the exact same 24 bytes on the stack as `Vec<u8>` alone.
 > 4. **Edge Cases & Invariants**: Calling `extract_payload()` on a slot whose payload has already been extracted returns `Vec::new()` (an empty vector that performs 0 heap allocations). In `recycle_slot`, partial move via `take()` extracts the payload for recycling without destroying the parent `BufferSlot`'s metadata.
-
+> 
 ---
 
 ## 6. Related Terms

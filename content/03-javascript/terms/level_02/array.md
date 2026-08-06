@@ -152,7 +152,7 @@ async function processData() {
 > ["Wake up", "Eat breakfast", "Go to work"]
 > ```
 > - Use `todos.push("Go to work");` to add an item to the end of the array.
-
+> 
 ---
 
 ### Exercise 2: Filling Sparse Arrays safely
@@ -170,7 +170,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Array(n).fill(val)` populates empty sparse array slots with default initial values.
-
+> 
 ---
 
 ### Exercise 3: Array Reference Comparison
@@ -187,7 +187,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Arrays are reference types in JavaScript; two separate literals reside at distinct memory addresses.
-
+> 
 ---
 
 ## 7. Related Terms

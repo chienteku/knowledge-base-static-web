@@ -165,7 +165,7 @@ If you use a `<header>` inside a specific article, it's like the bold headline a
 > Yes! While you typically have one main `<header>` for the whole page (the top nav bar), you can also have a `<header>` inside every single `<article>` or `<section>` to contain their specific titles and introductory text.
 > ```
 > - Look closely at the "Fuller Example" code snippet above.
-
+> 
 ---
 
 
@@ -190,7 +190,7 @@ If you use a `<header>` inside a specific article, it's like the bold headline a
 > ```
 >
 > **Explanation:** `<header>` groups introductory branding, headings, and site navigation.
-
+> 
 ---
 
 ### Exercise 3: Header Landmark Role
@@ -207,7 +207,7 @@ If you use a `<header>` inside a specific article, it's like the bold headline a
 > ```
 >
 > **Explanation:** Root-level `<header>` elements act as `banner` accessibility landmarks.
-
+> 
 ## 7. Related Terms
 - [`<head>`](../level_01/head.md) — The metadata container (do not confuse with `<header>`).
 - [`<footer>`](footer.md) — The semantic opposite of the `<header>`.

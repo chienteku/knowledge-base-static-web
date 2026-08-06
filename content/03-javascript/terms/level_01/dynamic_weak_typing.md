@@ -172,7 +172,7 @@ console.log(true + 1);
 > - The subtraction operator `-` is purely mathematical, coercing `"5"` to a number.
 > - The addition operator `+` favors string concatenation if one operand is a string.
 > - The boolean `true` coerces to `1` in mathematical operations.
-
+> 
 ---
 
 ### Exercise 2: Variable Type Mutation across Execution
@@ -196,7 +196,7 @@ console.log(true + 1);
 > ```
 >
 > **Explanation:** JavaScript is dynamically typed: variable bindings hold values of any type and can change types at runtime.
-
+> 
 ---
 
 ### Exercise 3: Safeguarding Dynamic Inputs
@@ -219,7 +219,7 @@ console.log(true + 1);
 > ```
 >
 > **Explanation:** Type guards (`typeof a === "number"`) protect dynamic functions against unexpected runtime coercion.
-
+> 
 ---
 
 ## 7. Related Terms

@@ -163,7 +163,7 @@ Create a new isolated PostgreSQL database `ecommerce_prod` owned by database rol
 > 1. `CREATE DATABASE` allocates a new isolated database namespace inside the PostgreSQL cluster.
 > 2. `OWNER = app_admin` sets primary administrative ownership.
 > 3. `ENCODING = 'UTF8'` ensures full multi-byte character encoding support.
-
+> 
 ---
 
 ### Exercise 2: Safely Destroying Development Databases
@@ -187,7 +187,7 @@ Safely drop test database `ecommerce_test` using `IF EXISTS` to prevent script e
 > 1. `DROP DATABASE` completely deletes target database files from disk storage.
 > 2. `IF EXISTS` prevents SQL errors if the database does not exist.
 > 3. Cannot be executed while active client connections are connected to the target database.
-
+> 
 ---
 
 ### Exercise 3: Force Disconnecting Active Sessions Before Drop
@@ -216,7 +216,7 @@ Terminate all active client sessions connected to `ecommerce_staging` prior to d
 > 1. PostgreSQL blocks `DROP DATABASE` if any active client session is connected.
 > 2. `pg_terminate_backend(pid)` forcefully closes connected client sockets.
 > 3. `pid <> pg_backend_pid()` avoids terminating the current admin session.
-
+> 
 ---
 
 

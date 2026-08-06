@@ -120,7 +120,7 @@ res.end();
 > If your server's IP address (the street address) receives network traffic, the computer needs to know *which program* should handle it. Because Node.js is listening on Port 3000, any traffic directed to `123.45.67.89:3000` is routed directly to your Node.js application.
 > ```
 > - Does a computer run more than one program at a time? How does it differentiate traffic meant for an email server vs a web server?
-
+> 
 ---
 
 
@@ -144,7 +144,7 @@ res.end();
 > ```
 >
 > **Explanation:** `http.createServer` instantiates a basic native HTTP web server listening on specified port.
-
+> 
 ---
 
 ### Exercise 3: Reading HTTP Request Method & URL
@@ -164,7 +164,7 @@ res.end();
 > ```
 >
 > **Explanation:** `req.method` and `req.url` inspect incoming HTTP request route properties.
-
+> 
 ## 7. Related Terms
 - [Express.js](../level_07/express_js.md) — The famous third-party framework that abstracts the native `http` module to make web development significantly easier.
 - [Event Emitter](../level_05/event_emitter.md) — Related concept: Event Emitter.

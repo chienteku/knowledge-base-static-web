@@ -225,7 +225,7 @@ app.use((req, res, next) => {
 > ```
 > - Remember the three arguments: `req, res, next`.
 > - Use `if/else` to decide between `next()` and `res.status().send()`.
-
+> 
 ---
 
 
@@ -247,7 +247,7 @@ app.use((req, res, next) => {
 > ```
 >
 > **Explanation:** Express middleware functions receive `(req, res, next)` signature.
-
+> 
 ---
 
 ### Exercise 3: Express Middleware Parameter Count Distinction
@@ -264,7 +264,7 @@ app.use((req, res, next) => {
 > ```
 >
 > **Explanation:** Express inspects function `length` property to identify 4-parameter error handlers.
-
+> 
 ## 7. Related Terms
 - [Routing](routing.md) — Where the request goes after it survives the Middleware.
 - [Body Parsing (express.json())](body_parsing.md) — Related concept: Body Parsing (express.json()).

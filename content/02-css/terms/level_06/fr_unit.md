@@ -262,7 +262,7 @@ What is the final width in pixels of the second column (the `1fr` column)?
 > ```
 > - Remember to subtract both gap spacings (three columns have two gaps!).
 > - Divide the remaining space by the sum of the `fr` units.
-
+> 
 ---
 
 
@@ -286,7 +286,7 @@ What is the final width in pixels of the second column (the `1fr` column)?
 > ```
 >
 > **Explanation:** `fr` units distribute available free space proportionally.
-
+> 
 ---
 
 ### Exercise 3: fr vs Percentage Difference
@@ -303,7 +303,7 @@ What is the final width in pixels of the second column (the `1fr` column)?
 > ```
 >
 > **Explanation:** `fr` units handle layout gap math automatically.
-
+> 
 ## 7. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint.
 - [`minmax()` Function](grid_minmax.md) — A function commonly used with `fr` units to set sizing caps.

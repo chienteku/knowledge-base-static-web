@@ -117,7 +117,7 @@ Furthermore, you cannot "fix" the child by giving it `opacity: 1`. The child is 
 > No! `opacity: 0` just makes the element perfectly clear (like a clean window). The physical box still exists, and it still pushes the text out of the way. If you want the element to actually disappear and give its space back, you must use `display: none;`.
 > ```
 > - A perfectly clean glass door is invisible, but can you walk through it?
-
+> 
 ---
 
 
@@ -142,7 +142,7 @@ Furthermore, you cannot "fix" the child by giving it `opacity: 1`. The child is 
 > ```
 >
 > **Explanation:** `opacity` transitions execute smoothly on GPU compositor layers.
-
+> 
 ---
 
 ### Exercise 3: Opacity vs Alpha Channel Color Difference
@@ -159,7 +159,7 @@ Furthermore, you cannot "fix" the child by giving it `opacity: 1`. The child is 
 > ```
 >
 > **Explanation:** Alpha channel colors isolate transparency to a specific property.
-
+> 
 ## 7. Related Terms
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — The much safer alternative if you only want to fade the background color, not the children.
 - [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — Used when you want an element to be completely removed from the layout.

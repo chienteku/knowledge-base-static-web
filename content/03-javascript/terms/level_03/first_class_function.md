@@ -152,7 +152,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** First-class functions can be passed as values into function arguments.
-
+> 
 ---
 
 ### Exercise 2: Storing Functions in Data Structures
@@ -173,10 +173,9 @@ async function processData() {
 > ```
 >
 > **Explanation:** First-class functions can be stored inside objects and arrays like any primitive value.
-
+> 
 ---
 
----
 
 ### Exercise 3: Returning Functions from Functions
 
@@ -196,8 +195,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** First-class functions can be returned as output values from function calls.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

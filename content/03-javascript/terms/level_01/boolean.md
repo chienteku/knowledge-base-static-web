@@ -153,7 +153,7 @@ async function processData() {
 > - The logical NOT operator is `!`.
 > - The logical OR operator is `||`.
 > - Combine them: `(!isRaining || hasUmbrella)`
-
+> 
 ---
 
 ### Exercise 2: Double NOT `!!` Boolean Coercion
@@ -178,7 +178,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `!!value` coerces truthy values to `true` and falsy values (`0`, `null`, `undefined`, `NaN`, `""`, `false`) to `false`.
-
+> 
 ---
 
 ### Exercise 3: Boolean Constructor vs Boolean Function
@@ -196,8 +196,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Calling `Boolean(val)` casts to primitive boolean, whereas `new Boolean(val)` constructs an object wrapper.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

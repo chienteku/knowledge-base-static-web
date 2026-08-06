@@ -148,7 +148,7 @@ An engineering team deploys a web app to MongoDB Atlas and needs to configure da
 > 1. `mongodb+srv://` queries DNS SRV records to discover active cluster nodes dynamically.
 > 2. Eliminates hardcoded replica set IP addresses from application connection strings.
 > 3. Automatically handles node failovers and cluster topology updates.
-
+> 
 ---
 
 ### Exercise 2: Atlas Network IP Whitelisting Audit
@@ -174,7 +174,7 @@ A DevOps engineer configures network access for an Atlas production cluster host
 > 1. `0.0.0.0/0` exposes database ports to automated brute-force attacks across the public internet.
 > 2. Restricting IP access ensures only trusted application servers can initiate TLS handshakes.
 > 3. AWS/GCP VPC Peering routes database traffic over private cloud backbones.
-
+> 
 ---
 
 ### Exercise 3: Evaluating Managed Atlas Search vs External Search Engines
@@ -209,7 +209,7 @@ An e-commerce product catalog requires full-text search with fuzzy matching and 
 > 1. Atlas Search embeds Apache Lucene directly alongside MongoDB data nodes.
 > 2. Eliminates double-writing and custom ETL sync pipelines between MongoDB and Elasticsearch.
 > 3. Evaluates full-text search queries within standard aggregation pipelines.
-
+> 
 ---
 
 

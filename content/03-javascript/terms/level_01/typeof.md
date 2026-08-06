@@ -160,7 +160,7 @@ async function processData() {
 > ```
 > - Yes, `NaN` (Not a Number) is ironically of type `"number"`.
 > - Functions are a special type of object, and `typeof` uniquely identifies them as `"function"`.
-
+> 
 ---
 
 ### Exercise 2: Typeof Return Values
@@ -185,7 +185,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `typeof` returns standard primitive or object type string names.
-
+> 
 ---
 
 ### Exercise 3: Safely Checking Undeclared Functions
@@ -202,7 +202,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `typeof` safely evaluates undeclared variables to `"undefined"` without crashing.
-
+> 
 ---
 
 ## 7. Related Terms

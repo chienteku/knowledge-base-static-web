@@ -203,7 +203,7 @@ A calendar schedule using both column and row spans:
 > 2 cells. (Column 1 is occupied by the rowspan from Row 1, so Row 2 only needs tags for Column 2 and Column 3).
 > ```
 > - Sketch a 3x3 grid on paper and shade in the merged block starting from cell 1,1.
-
+> 
 ---
 
 
@@ -222,7 +222,7 @@ A calendar schedule using both column and row spans:
 > ```
 >
 > **Explanation:** `colspan="N"` merges N horizontal column cells together.
-
+> 
 ---
 
 ### Exercise 3: Combining Colspan and Rowspan
@@ -239,7 +239,7 @@ A calendar schedule using both column and row spans:
 > ```
 >
 > **Explanation:** `rowspan` and `colspan` can be combined on a single cell to create multi-cell grid blocks.
-
+> 
 ## 7. Related Terms
 - [`<td>` (Table Data)](td.md) — The tag that receives span attributes.
 - [`<th>` (Table Header)](th.md) — Header cells which frequently span across categories.

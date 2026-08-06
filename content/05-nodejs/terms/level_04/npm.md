@@ -103,7 +103,7 @@ What is the difference in how you install them?
 > npm install --save-dev eslint
 > ```
 > - Which package is required for the server to literally turn on and accept traffic?
-
+> 
 ---
 
 
@@ -122,7 +122,7 @@ What is the difference in how you install them?
 > ```
 >
 > **Explanation:** `npm run <script-name>` executes script commands defined in `package.json` `scripts` object.
-
+> 
 ---
 
 ### Exercise 3: Auditing Vulnerable Dependencies
@@ -139,7 +139,7 @@ What is the difference in how you install them?
 > ```
 >
 > **Explanation:** `npm audit` checks dependency versions against known CVE vulnerability databases.
-
+> 
 ## 7. Related Terms
 - [package.json](package_json.md) — The configuration file that NPM reads and writes to.
 - [node_modules](node_modules.md) — Where NPM physically places the downloaded code.

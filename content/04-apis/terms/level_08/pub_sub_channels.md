@@ -231,8 +231,8 @@ publisher.publish('events', JSON.stringify({ event: 'file_ready', url: s3Url }))
 
 > [!check]- Answer
 > - **B** (This is a classic Pub/Sub Channel setup. Sockets subscribe to specific topics, and brokers route matching events to them).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Pub/Sub Architecture Decoupling

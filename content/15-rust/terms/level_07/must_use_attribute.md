@@ -124,7 +124,7 @@ fn main() {
 
 > [!check]- Answer
 > **No warning.** Even though `Option<T>` is `#[must_use]`, calling `.is_some()` on the returned `Option` counts as *using* it — the value was consumed by that method call, not silently dropped. The warning only fires when a `#[must_use]` value is produced and then discarded with **no** use at all, such as a bare `get_value();` statement with the return value completely unreferenced.
-
+> 
 ---
 
 ### Exercise 2: Annotating Custom Functions with `#[must_use]`
@@ -150,7 +150,7 @@ fn main() {
 >
 > #### Technical Explanation
 > `#[must_use]` triggers compiler warnings if returned values are unused.
-
+> 
 ---
 
 ### Exercise 3: Annotating Custom Struct Types with `#[must_use]`
@@ -176,7 +176,7 @@ fn main() {
 >
 > #### Technical Explanation
 > Annotating types with `#[must_use]` applies warnings to all functions returning instances of that type.
-
+> 
 ---
 
 ## 6. Related Terms

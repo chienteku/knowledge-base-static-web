@@ -334,7 +334,7 @@ Implement this hierarchy for `ThermalSensor` with fields `id: &'static str`, `ca
 > 1. **Transitive Supertrait Hierarchy**: The declaration `pub trait TelemetrySensor: Calibratable` combined with `pub trait Calibratable: Identifiable` creates a multi-tier dependency chain. Any struct implementing `TelemetrySensor` must fulfill all prerequisite traits in the hierarchy.
 > 2. **Cross-Trait Default Invocation**: Subtrait default method `generate_report` invokes `self.is_calibrated()` (from supertrait `Calibratable`) and `self.device_id()` (from supertrait `Identifiable`). Rust allows this because supertrait bounds guarantee these methods exist for any implementor.
 > 3. **Explicit Trait Implementations**: Each trait in the hierarchy requires its own distinct `impl Trait for Struct` block, enforcing modularity and separation of concerns.
-
+> 
 ---
 
 ### Exercise 2: Secure Cryptographic Key Operations & Trait Prerequisite Chains
@@ -471,7 +471,7 @@ Implement this hierarchy for `HsmToken` with fields `handle: u64`, `secret_pin: 
 > 1. **Security Supertrait Invariants**: By enforcing `CryptoSigner: AuthenticatedKey`, Rust's type system guarantees at compile-time that any signing type cannot bypass authentication mechanisms.
 > 2. **Marker Trait Integration**: `HardwareKey` serves as an empty marker trait bound. Marker supertraits allow architectural constraints (e.g. enclave storage guarantees) to be encoded directly into trait boundaries.
 > 3. **Encapsulated Workflow in Default Methods**: Default subtrait methods like `safe_sign` act as stateful guards, calling supertrait authentication methods before permitting access to lower-level operations (`raw_sign`).
-
+> 
 ---
 
 ### Exercise 3: Standard Library Trait Chain (`Ord: Eq + PartialOrd`, `Copy: Clone`)
@@ -616,7 +616,7 @@ Write unit tests with assertions (`assert!`, `assert_eq!`) testing manual trait 
 >    - `Ord: Eq + PartialOrd`: Total ordering requires both total equality and partial ordering comparisons.
 > 2. **Manual Trait Hierarchy Resolution**: Implementing `Ord` manually forces implementing all supertraits in sequence. `PartialOrd::partial_cmp` delegates directly to `Ord::cmp`.
 > 3. **Operator Overloading via Supertraits**: `PrioritizedTask` defines `Ord` as a supertrait bound, enabling the `>` binary comparison operator inside `executes_before` because `Ord` mandates `PartialOrd`.
-
+> 
 ---
 
 ## 6. Related Terms

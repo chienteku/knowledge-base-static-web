@@ -217,8 +217,8 @@ Accept: application/json ; Content negotiation header
 > - 1. **`POST /orders`** (Returns the created order).
 > - 2. **`GET /posts/99/comments`** (Hierarchy nesting).
 > - 3. **`DELETE /groups/5/users/12`** (Deletes user 12 from group 5's list).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: URI Naming Best Practices Checklist

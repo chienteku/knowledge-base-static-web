@@ -173,7 +173,7 @@ items.iter().for_each(|x| println!("{x}")); // Use for_each consumer!
 > 1. `filter_map(|s| s.parse().ok())` drops invalid float strings without panicking.
 > 2. `filter` removes values outside `[0.0, 100.0]` range.
 > 3. `map` converts Celsius to Fahrenheit in a single unrolled pass.
-
+> 
 ---
 
 ### Exercise 2: E-Commerce Order Tax & Discount Calculator (`zip` + `fold`)
@@ -220,7 +220,7 @@ items.iter().for_each(|x| println!("{x}")); // Use for_each consumer!
 >
 > 1. `.zip()` combines parallel price and quantity slices into item tuples.
 > 2. `.map(...).sum()` aggregates totals in a single SIMD-vectorizable loop.
-
+> 
 ---
 
 ### Exercise 3: Log File Tokenizer using `flat_map`
@@ -264,7 +264,7 @@ items.iter().for_each(|x| println!("{x}")); // Use for_each consumer!
 >
 > 1. `flat_map` flattens sub-iterators returned by `split_whitespace()` into a single contiguous stream.
 > 2. Avoids intermediate vector creation per document line.
-
+> 
 ---
 
 ## 6. Related Terms

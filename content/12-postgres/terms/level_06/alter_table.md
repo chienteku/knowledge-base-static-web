@@ -173,7 +173,7 @@ Add a new column `status` (`TEXT NOT NULL DEFAULT 'active'`) to a 10,000,000 row
 > 1. In PostgreSQL 11+, adding columns with non-volatile default expressions (`DEFAULT 'active'`) executes instantly without rewriting the table heap pages.
 > 2. Updates catalog metadata only.
 > 3. Zero-downtime schema evolution.
-
+> 
 ---
 
 ### Exercise 2: Altering Column Data Types with Explicit Conversion
@@ -199,7 +199,7 @@ Alter column `zip_code` from `INTEGER` to `TEXT` on table `addresses`.
 > 1. `ALTER COLUMN ... TYPE` converts stored column values to target data types.
 > 2. `USING` clause specifies explicit conversion logic when automatic cast rules do not exist.
 > 3. Re-writes table rows under an AccessExclusive lock.
-
+> 
 ---
 
 ### Exercise 3: Adding Constraints Non-Destructively with NOT VALID
@@ -228,7 +228,7 @@ Add a `CHECK` constraint to table `orders` non-destructively using `NOT VALID` a
 > 1. `NOT VALID` enforces the constraint for new writes immediately without holding a table-lock to scan existing rows.
 > 2. `VALIDATE CONSTRAINT` scans existing rows concurrently without blocking concurrent table writes.
 > 3. Safe zero-downtime migration strategy for large tables.
-
+> 
 ---
 
 

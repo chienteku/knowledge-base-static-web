@@ -158,7 +158,7 @@ let len = boxed_str.len(); // Automatic method deref!
 >
 > 1. Compiler automatically chains `Box<T>::deref` and `String::deref` to convert `&Box<String>` into `&str`.
 > 2. Zero boilerplate syntax required.
-
+> 
 ---
 
 ### Exercise 2: Custom Smart Pointer `Deref` Coercion for Buffer View
@@ -213,7 +213,7 @@ let len = boxed_str.len(); // Automatic method deref!
 >
 > 1. `BufferWrapper<T>` implements `Deref<Target = [T]>`.
 > 2. Passing `&buf` to `sum_slice` triggers automatic compiler Deref coercion.
-
+> 
 ---
 
 ### Exercise 3: Atomic RefCell Guard Deref Coercion
@@ -253,7 +253,7 @@ let len = boxed_str.len(); // Automatic method deref!
 >
 > 1. `RefCell` borrow guards implement `Deref`.
 > 2. Allows passing borrow guards directly to standard slice functions.
-
+> 
 ---
 
 ## 5. Related Terms

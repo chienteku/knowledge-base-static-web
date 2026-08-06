@@ -183,7 +183,7 @@ if (typeof document !== "undefined") {
 > [!check]- Answer
 > - The element that triggered the event is at `e.target`.
 > - Get the ID attribute using `e.target.id` or `e.target.getAttribute("id")`.
-
+> 
 ---
 
 ### Exercise 2: Preventing Default Action in Form Submissions
@@ -200,7 +200,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `preventDefault()` cancels default browser actions like form submissions or link navigation.
-
+> 
 ---
 
 ### Exercise 3: Reading Mouse Coordinates
@@ -218,8 +218,8 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** Mouse event objects contain viewport-relative mouse coordinate metadata.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

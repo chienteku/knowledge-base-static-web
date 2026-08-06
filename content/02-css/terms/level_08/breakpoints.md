@@ -261,7 +261,7 @@ body { background-color: white; }
 > Add a breakpoint at that width: `@media (min-width: 710px)`.
 > ```
 > - A content-first breakpoint is determined by testing the layout directly in a browser resize check.
-
+> 
 ---
 
 
@@ -292,7 +292,7 @@ body { background-color: white; }
 > ```
 >
 > **Explanation:** Mobile-first architecture layers progressive enhancements using `min-width` queries.
-
+> 
 ---
 
 ### Exercise 3: Em Units in Breakpoints
@@ -311,7 +311,7 @@ body { background-color: white; }
 > ```
 >
 > **Explanation:** `em` breakpoints adapt seamlessly to user font scaling settings.
-
+> 
 ## 7. Related Terms
 - [`@media` (Media Queries Basics)](media_queries.md) — The code container.
 - [Mobile-First Design](mobile_first.md) — The styling logic direction.

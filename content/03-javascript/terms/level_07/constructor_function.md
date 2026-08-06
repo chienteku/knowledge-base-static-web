@@ -162,7 +162,7 @@ async function processData() {
 > However, it is a strict community convention to capitalize them so that human developers instantly know they MUST use the `new` keyword when calling it.
 > ```
 > - Capitalization is for humans, not for the compiler!
-
+> 
 ---
 
 ### Exercise 2: Constructor Function Prototype Methods
@@ -186,7 +186,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Attaching methods to constructor `.prototype` shares 1 function instance across all created instances.
-
+> 
 ---
 
 ### Exercise 3: Guarding Constructors Against Omitted `new`
@@ -208,8 +208,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `new.target` evaluates to the constructor function if called with `new`, and `undefined` if called normally.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

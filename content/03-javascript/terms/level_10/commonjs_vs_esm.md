@@ -185,7 +185,7 @@ module.exports = logger;
 
 > [!check]- Answer
 > - Replace `module.exports = logger` with `export default logger`.
-
+> 
 ---
 
 ### Exercise 2: Converting CommonJS `module.exports` to ESM `export default`
@@ -202,7 +202,7 @@ module.exports = logger;
 > ```
 >
 > **Explanation:** CommonJS uses `module.exports` and `require()`; ESM uses `export` and `import`.
-
+> 
 ---
 
 ### Exercise 3: Emulating `__dirname` in ES Modules
@@ -219,8 +219,8 @@ module.exports = logger;
 > ```
 >
 > **Explanation:** `import.meta.url` supplies module URL metadata in ES module contexts.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

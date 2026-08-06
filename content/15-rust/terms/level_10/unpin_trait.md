@@ -232,7 +232,7 @@ Implement a custom `AsyncRingBufferStream` using `Pin::get_mut()`.
 >         while let Some(val) = stream.next().await {
 >             items.push(val);
 >         }
-
+> 
 > 
 >         assert_eq!(items, vec![10, 20, 30]);
 >     }
@@ -247,17 +247,17 @@ Implement a custom `AsyncRingBufferStream` using `Pin::get_mut()`.
 > ---
 > 
 > ### Exercise 2: Multiplexed Protocol Decoder with Hybrid Structural Pinning and `Unpin` Field Access
-
-**Scenario**: Complex network protocol controllers hold both an inner `!Unpin` state machine (e.g. an active request future) and `Unpin` metadata fields (e.g. byte counters or frame headers). When polling the controller, structural pin projection requires `unsafe` for `!Unpin` fields, but allows safe direct access via `Pin::get_mut` for `Unpin` fields.
-
-Implement a protocol controller demonstrating hybrid field projection.
-
-**Requirements**:
-1. Define `ProtocolController<F>` containing `future: F` (`!Unpin`) and `bytes_read: usize` (`Unpin`).
-2. Implement `poll_controller(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<usize>`.
-3. Access `bytes_read` safely while projecting `future` with `unsafe`.
-4. Add unit tests asserting counter increment and future completion.
-
+> 
+> **Scenario**: Complex network protocol controllers hold both an inner `!Unpin` state machine (e.g. an active request future) and `Unpin` metadata fields (e.g. byte counters or frame headers). When polling the controller, structural pin projection requires `unsafe` for `!Unpin` fields, but allows safe direct access via `Pin::get_mut` for `Unpin` fields.
+> 
+> Implement a protocol controller demonstrating hybrid field projection.
+> 
+> **Requirements**:
+> 1. Define `ProtocolController<F>` containing `future: F` (`!Unpin`) and `bytes_read: usize` (`Unpin`).
+> 2. Implement `poll_controller(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<usize>`.
+> 3. Access `bytes_read` safely while projecting `future` with `unsafe`.
+> 4. Add unit tests asserting counter increment and future completion.
+> 
 > [!check]- Answer
 > ```rust
 > use std::future::Future;
@@ -323,16 +323,16 @@ Implement a protocol controller demonstrating hybrid field projection.
 > ---
 > 
 > ### Exercise 3: Async Task Lifecycle Manager with `Pin::into_inner` Extraction for `Unpin` Futures
-
-**Scenario**: Task schedulers store completed `Unpin` future results. When a future implements `Unpin`, calling `Pin::into_inner(pinned_box)` safely un-wraps the pinned wrapper and returns the underlying value without `unsafe`.
-
-Demonstrate `Pin::into_inner` extraction for `Unpin` types.
-
-**Requirements**:
-1. Create a `TaskBox<T>` wrapping `Pin<Box<T>>`.
-2. Implement `extract_inner(task: TaskBox<T>) -> T` where `T: Unpin`.
-3. Add unit tests asserting ownership recovery via `Pin::into_inner`.
-
+> 
+> **Scenario**: Task schedulers store completed `Unpin` future results. When a future implements `Unpin`, calling `Pin::into_inner(pinned_box)` safely un-wraps the pinned wrapper and returns the underlying value without `unsafe`.
+> 
+> Demonstrate `Pin::into_inner` extraction for `Unpin` types.
+> 
+> **Requirements**:
+> 1. Create a `TaskBox<T>` wrapping `Pin<Box<T>>`.
+> 2. Implement `extract_inner(task: TaskBox<T>) -> T` where `T: Unpin`.
+> 3. Add unit tests asserting ownership recovery via `Pin::into_inner`.
+> 
 > [!check]- Answer
 > ```rust
 > use std::pin::Pin;

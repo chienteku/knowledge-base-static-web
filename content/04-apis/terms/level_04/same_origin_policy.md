@@ -131,8 +131,8 @@ Imagine a high-security hotel.
 > - 2. **Blocked** (Protocol differs: `http` vs `https`).
 > - 3. **Blocked** (Host string differs: `localhost` vs numerical loopback `127.0.0.1`).
 > - 4. **Blocked** (Port differs: `3000` vs `4000`).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Same-Origin Evaluation Matrix

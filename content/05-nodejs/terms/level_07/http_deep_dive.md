@@ -180,7 +180,7 @@ server.keepAliveTimeout = 65000; // Exceed proxy 60s timeout
 > server.listen(3000);
 > ```
 > - You need an `if` statement checking `req.url`.
-
+> 
 ---
 
 
@@ -209,7 +209,7 @@ server.keepAliveTimeout = 65000; // Exceed proxy 60s timeout
 > ```
 >
 > **Explanation:** Standard HTTP status categories designate response outcome states.
-
+> 
 ---
 
 ### Exercise 3: Setting HTTP Response Status & Headers
@@ -226,7 +226,7 @@ server.keepAliveTimeout = 65000; // Exceed proxy 60s timeout
 > ```
 >
 > **Explanation:** `writeHead()` sets HTTP status code and response header key-values in a single call.
-
+> 
 ## 7. Related Terms
 - [Express.js](express_js.md) — The framework that hides the ugly parts of the `http` module.
 - [The req & res Objects](req_res.md) — What the `http` module passes into your callback.

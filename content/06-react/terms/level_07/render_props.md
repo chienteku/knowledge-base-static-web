@@ -148,7 +148,7 @@ Use custom hooks to unwrap state values sequentially without nesting
 > ```
 >
 > **Explanation:** The Render Props pattern delegates UI rendering to a callback function passed as a prop.
-
+> 
 ---
 
 ### Exercise 2: Render Props vs Custom Hooks Transition
@@ -165,7 +165,7 @@ Use custom hooks to unwrap state values sequentially without nesting
 > ```
 >
 > **Explanation:** Custom Hooks simplify component trees by returning values directly.
-
+> 
 ---
 
 ### Exercise 3: Toggle Component with Render Prop
@@ -186,7 +186,7 @@ Use custom hooks to unwrap state values sequentially without nesting
 > ```
 >
 > **Explanation:** Passing state and control functions to `children` functions implements the Render Prop pattern.
-
+> 
 ## 7. Related Terms
 - [Custom Hooks](../level_04/custom_hooks.md) — Just like HOCs, the Render Props pattern was largely replaced by Custom Hooks, which achieve the same logic-sharing much cleaner.
 

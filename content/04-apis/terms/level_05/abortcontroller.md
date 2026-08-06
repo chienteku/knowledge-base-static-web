@@ -179,7 +179,7 @@ function loadProfileComponent(userId) {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Timeout Fetch with AbortSignal.timeout()

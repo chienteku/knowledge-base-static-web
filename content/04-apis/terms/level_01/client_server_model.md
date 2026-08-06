@@ -110,7 +110,7 @@ fetch('https://api.example.com/users/45/data');
 > 2. The Client. It is responsible for the UI (User Interface) and drawing the sun based on the data the Server provided.
 > ```
 > - Who stores data vs who displays data?
-
+> 
 ---
 
 ### Exercise 2: Client-Server Responsibility Separation

@@ -136,7 +136,7 @@ function Button() {
 > - `<div>` -> `<View>` (or Touchable)
 > - `<span>` -> `<Text>`
 > - `onClick` -> `onPress`
-
+> 
 ---
 
 
@@ -167,7 +167,7 @@ function Button() {
 > ```
 >
 > **Explanation:** React Native maps core component primitives (`View`, `Text`) directly to native mobile UI controls.
-
+> 
 ---
 
 ### Exercise 3: React Native Flexbox Layout Default
@@ -184,7 +184,7 @@ function Button() {
 > ```
 >
 > **Explanation:** React Native defaults Flexbox layout direction to vertical columns.
-
+> 
 ## 7. Related Terms
 - [Declarative Programming](../level_01/declarative_programming.md) — The parent library.
 - [Virtual DOM](../level_01/virtual_dom.md) — The abstract layer that makes React Native possible.

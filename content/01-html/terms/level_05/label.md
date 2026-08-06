@@ -141,7 +141,7 @@ The `for` attribute is a piece of string that ties the sticky note directly to t
 > </label>
 > ```
 > - Think about nesting. How do you group things together in HTML?
-
+> 
 ---
 
 
@@ -169,7 +169,7 @@ The `for` attribute is a piece of string that ties the sticky note directly to t
 > ```
 >
 > **Explanation:** Explicit binding uses `for`/`id`; implicit binding wraps `<input>` inside `<label>`.
-
+> 
 ---
 
 ### Exercise 3: Click Target Enlargement Benefit
@@ -186,7 +186,7 @@ The `for` attribute is a piece of string that ties the sticky note directly to t
 > ```
 >
 > **Explanation:** Bound labels enlarge small touch target areas for mobile users.
-
+> 
 ## 7. Related Terms
 - [`<input>`](input.md) — The element that requires a label.
 - [`<input type="radio">` & `<input type="checkbox">`](radio_checkbox.md) — Selection toggles that heavily depend on labels for target clicking.

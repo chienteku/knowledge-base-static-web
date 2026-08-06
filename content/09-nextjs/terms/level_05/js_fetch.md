@@ -173,45 +173,45 @@ Execute an imperative POST request using native Web `fetch()` inside a Client Co
 >
 > ```tsx
 > "use client";
-
-import { useState } from "react";
-
-export default function PostForm() {
-  const [loading, setLoading] = useState(false);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: "Hello World" })
-      });
-      const json = await res.json();
-      alert(`Response: ${json.status}`);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <button disabled={loading} type="submit">
-        {loading ? "Sending..." : "Submit Message"}
-      </button>
-    </form>
-  );
-}
-```
-
+> 
+> import { useState } from "react";
+> 
+> export default function PostForm() {
+>   const [loading, setLoading] = useState(false);
+> 
+>   async function handleSubmit(e: React.FormEvent) {
+>     e.preventDefault();
+>     setLoading(true);
+> 
+>     try {
+>       const res = await fetch("/api/contact", {
+>         method: "POST",
+>         headers: { "Content-Type": "application/json" },
+>         body: JSON.stringify({ message: "Hello World" })
+>       });
+>       const json = await res.json();
+>       alert(`Response: ${json.status}`);
+>     } finally {
+>       setLoading(false);
+>     }
+>   }
+> 
+>   return (
+>     <form onSubmit={handleSubmit}>
+>       <button disabled={loading} type="submit">
+>         {loading ? "Sending..." : "Submit Message"}
+>       </button>
+>     </form>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Native Web `fetch()` provides standard HTTP client capabilities inside browser Client Components.
 > 2. Requires setting `Content-Type: application/json` headers when sending JSON body payloads.
 > 3. Does NOT hook into Next.js server Data Cache when executed in the browser.
-
+> 
 ---
 
 ### Exercise 2: Parsing Response Types (JSON vs Blob vs Text)
@@ -233,13 +233,13 @@ Handle non-JSON responses (e.g. image Blob or CSV text) using native `fetch()` r
 >   console.log("CSV Content:", csvText);
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Web `fetch()` body streaming methods (`json()`, `text()`, `blob()`, `arrayBuffer()`) consume response stream buffers.
 > 2. A response stream can ONLY be consumed once; calling `json()` then `text()` throws a TypeError.
 > 3. Flexible data parsing interface for diverse HTTP payload formats.
-
+> 
 ---
 
 ### Exercise 3: Canceling In-Flight Fetch Requests with `AbortController`
@@ -256,31 +256,27 @@ Cancel an ongoing `fetch()` request if the user navigates away before completion
 >
 > ```typescript
 > const controller = new AbortController();
-
-fetch("/api/long-running", { signal: controller.signal })
-  .then((res) => res.json())
-  .catch((err) => {
-    if (err.name === "AbortError") {
-      console.log("Request successfully cancelled!");
-    }
-  });
-
-// Cancel request when needed:
-controller.abort();
-```
-
+> 
+> fetch("/api/long-running", { signal: controller.signal })
+>   .then((res) => res.json())
+>   .catch((err) => {
+>     if (err.name === "AbortError") {
+>       console.log("Request successfully cancelled!");
+>     }
+>   });
+> 
+> // Cancel request when needed:
+> controller.abort();
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `AbortController` provides a standard Web API mechanism to cancel HTTP network requests in-flight.
 > 2. Prevents memory leaks and unnecessary network socket usage on unmounted components.
 > 3. Standard Web network control pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Server-side Fetching (Extended `fetch`)](fetch.md) — How Next.js builds on this native API.

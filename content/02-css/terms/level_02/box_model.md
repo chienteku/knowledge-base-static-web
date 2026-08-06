@@ -125,7 +125,7 @@ div { background-color: yellow; padding: 20px; }
 > Padding adds space *inside* the border, making the button itself larger. If you increased the Margin, the button would stay the same size, but it would push the paragraph further away.
 > ```
 > - Think of the shipping box. Do you need more bubble wrap inside, or more space in the truck outside?
-
+> 
 ---
 
 
@@ -151,7 +151,7 @@ Margin, Content, Border, Padding
 > ```
 >
 > **Explanation:** The box model wraps content in padding, border, and margin layers.
-
+> 
 ---
 
 ### Exercise 3: Calculating Total Rendered Box Height
@@ -168,7 +168,7 @@ Margin, Content, Border, Padding
 > ```
 >
 > **Explanation:** Total element box height includes content height plus vertical padding and border.
-
+> 
 ## 7. Related Terms
 - [Padding](padding.md) — The inner space.
 - [Border](border.md) — The visible edge.

@@ -129,28 +129,28 @@ Force a route to execute dynamic Server-Side Rendering (SSR) on every request us
 > ```tsx
 > // app/dashboard/page.tsx
 > export const dynamic = "force-dynamic";
-
-export default async function RealtimeDashboard() {
-  const res = await fetch("https://api.example.com/live", {
-    cache: "no-store"
-  });
-  const data = await res.json();
-
-  return (
-    <main className="p-6">
-      <h1>Realtime Metrics</h1>
-      <p>Live Users: {data.activeUsers}</p>
-    </main>
-  );
-}
-```
-
+> 
+> export default async function RealtimeDashboard() {
+>   const res = await fetch("https://api.example.com/live", {
+>     cache: "no-store"
+>   });
+>   const data = await res.json();
+> 
+>   return (
+>     <main className="p-6">
+>       <h1>Realtime Metrics</h1>
+>       <p>Live Users: {data.activeUsers}</p>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Server-Side Rendering (SSR) generates fresh HTML on Node.js servers for every incoming HTTP request.
 > 2. `export const dynamic = 'force-dynamic'` opts out of static build caching for the route segment.
 > 3. Essential for user-specific or real-time data dashboards.
-
+> 
 ---
 
 ### Exercise 2: Accessing Server Cookies and Headers during SSR
@@ -167,29 +167,29 @@ Read incoming request HTTP headers and session cookies on the server during SSR 
 >
 > ```tsx
 > import { cookies, headers } from "next/headers";
-
-export default async function ProfilePage() {
-  const cookieStore = await cookies();
-  const headersList = await headers();
-  
-  const token = cookieStore.get("session_token");
-  const userAgent = headersList.get("user-agent");
-
-  return (
-    <main className="p-6">
-      <p>Session Active: {token ? "Yes" : "No"}</p>
-      <p>Browser User Agent: {userAgent}</p>
-    </main>
-  );
-}
-```
-
+> 
+> export default async function ProfilePage() {
+>   const cookieStore = await cookies();
+>   const headersList = await headers();
+>   
+>   const token = cookieStore.get("session_token");
+>   const userAgent = headersList.get("user-agent");
+> 
+>   return (
+>     <main className="p-6">
+>       <p>Session Active: {token ? "Yes" : "No"}</p>
+>       <p>Browser User Agent: {userAgent}</p>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `cookies()` and `headers()` from `next/headers` provide access to incoming HTTP request metadata during SSR.
 > 2. Invoking `cookies()` or `headers()` automatically switches the page segment from static to dynamic SSR rendering.
 > 3. Secure server-side request inspection.
-
+> 
 ---
 
 ### Exercise 3: Streamlining SSR Content with React `<Suspense>`
@@ -206,36 +206,32 @@ Stream heavy server-rendered components using React `<Suspense>` boundaries to i
 >
 > ```tsx
 > import { Suspense } from "react";
-
-async function SlowFeed() {
-  const data = await fetch("https://api.example.com/slow", { cache: "no-store" }).then(r => r.json());
-  return <div>Feed Loaded: {data.items.length} items</div>;
-}
-
-export default function FeedPage() {
-  return (
-    <main className="p-6">
-      <h1>Live User Feed</h1>
-      <Suspense fallback={<div>Loading Feed...</div>}>
-        <SlowFeed />
-      </Suspense>
-    </main>
-  );
-}
-```
-
+> 
+> async function SlowFeed() {
+>   const data = await fetch("https://api.example.com/slow", { cache: "no-store" }).then(r => r.json());
+>   return <div>Feed Loaded: {data.items.length} items</div>;
+> }
+> 
+> export default function FeedPage() {
+>   return (
+>     <main className="p-6">
+>       <h1>Live User Feed</h1>
+>       <Suspense fallback={<div>Loading Feed...</div>}>
+>         <SlowFeed />
+>       </Suspense>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Next.js App Router uses HTML Streaming to deliver fast initial shell HTML while slow server components render in background streams.
 > 2. `<Suspense>` streams fallback HTML first, then streams final component HTML over the open HTTP connection when data resolves.
 > 3. Reduces TTFB (Time-To-First-Byte) latency significantly.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [React Server Components (RSC)](../level_01/rsc.md) — RSCs generate the payload that fuels the SSR process.

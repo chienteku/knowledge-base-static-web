@@ -189,7 +189,7 @@ Subscribe to real-time `insert` and `update` events on collection `orders` using
 > 1. Change Streams tail the replica set oplog to emit real-time event notifications.
 > 2. Supports aggregation pipeline filtering (`$match`) server-side.
 > 3. Powers real-time notification feeds and webhooks.
-
+> 
 ---
 
 ### Exercise 2: Including Full Document Snapshots in Update Events
@@ -219,7 +219,7 @@ Configure change stream options with `fullDocument: "updateLookup"` to receive t
 > 1. Standard update change events contain only modified delta fields (`updateDescription`).
 > 2. `fullDocument: "updateLookup"` performs a instant lookup to return the complete document payload.
 > 3. Simplifies client-side event processing.
-
+> 
 ---
 
 ### Exercise 3: Resuming Interrupted Change Streams with Resume Tokens
@@ -253,7 +253,7 @@ Resume a disconnected change stream from its exact point of failure using `resum
 > 1. Change stream events include a unique BSON `_id` resume token representing oplog position.
 > 2. `resumeAfter` resumes event processing seamlessly without dropping or duplicating events.
 > 3. Guarantees fault-tolerant event processing.
-
+> 
 ---
 
 

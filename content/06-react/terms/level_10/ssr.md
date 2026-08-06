@@ -113,7 +113,7 @@ Which one is Server-Side Rendered?
 > The server did the hard work of generating the actual HTML content before sending it over the network. App A is Client-Side Rendered (CSR); it relies on the browser to execute JS to build the UI.
 > ```
 > - "View Page Source" shows exactly what the server sent over the network.
-
+> 
 ---
 
 
@@ -132,7 +132,7 @@ Which one is Server-Side Rendered?
 > ```
 >
 > **Explanation:** SSR provides dynamic real-time data rendering with initial HTML SEO benefits.
-
+> 
 ---
 
 ### Exercise 3: SSR Hydration Error Prevention
@@ -149,7 +149,7 @@ Which one is Server-Side Rendered?
 > ```
 >
 > **Explanation:** Matching HTML markup ensures seamless client hydration without layout shifts.
-
+> 
 ## 7. Related Terms
 - [Hydration](hydration.md) — The process of attaching interactivity to the SSR HTML once it reaches the browser.
 - [Static Site Generation (SSG)](ssg.md) — SSR's faster, pre-rendered cousin.

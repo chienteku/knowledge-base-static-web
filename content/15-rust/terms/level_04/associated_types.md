@@ -340,7 +340,7 @@ thread::spawn(move || {
 > 2. **1:1 Uniqueness Guarantee**: In production pipeline design, a concrete struct like `AuditStreamProcessor` should only have one way to process logs into audit entries. Associated types enforce at compile time that `AuditStreamProcessor` cannot implement `StreamProcessor` multiple times for different input/output combinations, avoiding ambiguous trait solver dispatch errors.
 > 3. **Ownership and Early Termination**: The `process_batch` default method takes ownership of `Vec<Self::Input>` items sequentially and uses the `?` operator. If an error occurs on item $N$, processing halts immediately and propagates `Result::Err`, protecting downstream state from partial or corrupted transformations.
 > 4. **Monomorphization Details**: Calls to `execute_pipeline` undergo static monomorphization. The compiler generates specialized, zero-overhead machine code specifically for `AuditStreamProcessor`, eliminating dynamic virtual dispatch overhead while preserving complete architectural abstraction.
-
+> 
 ---
 
 ### Exercise 2: Key-Value Database Storage Engine Transaction API
@@ -542,7 +542,7 @@ thread::spawn(move || {
 > 2. **Associated Type Projection in Generic Functions**: The helper function `atomic_transfer` takes generic parameters `from: E::Key` and `val_from: E::Value`. The syntax `E::Key` projects the associated `Key` type of whichever concrete engine `E` is passed to the function. This prevents callers from accidentally passing keys or values of mismatched types.
 > 3. **Isolation and State Management**: In `MemoryEngine`, uncommitted modifications reside in `active_transactions` indexed by `u64`. Read requests within transaction `tx` query `active_transactions` first (uncommitted read isolation), falling back to `committed_store`. Calling `commit` moves scratch entries into `committed_store`, while `rollback` simply drops the scratch map from memory.
 > 4. **Monomorphization and Direct Inlining**: Because `atomic_transfer` relies on static generics and associated types, Rust monomorphizes the function for `MemoryEngine`. Operations like hash map lookups and state transitions are inlined without vtable indirection or heap-allocated dynamic dispatch.
-
+> 
 ---
 
 ### Exercise 3: Strongly Typed Event Codec & Reactive Message Dispatcher
@@ -726,7 +726,7 @@ thread::spawn(move || {
 > 2. **Elimination of Trait Overlap Ambiguity**: If `EventCodec` were generic over `<RawPayload, Event, DecodeError>`, a developer could accidentally implement `EventCodec<Vec<u8>, TelemetryEvent, CodecError>` AND `EventCodec<Vec<u8>, String, CodecError>` for the same `TelemetryBinaryCodec`. Using associated types enforces functional dependency—given a specific codec implementation, the payload, event, and error types are strictly uniquely determined.
 > 3. **Memory Safety and Slice Operations**: Decoding network byte streams requires converting slice buffers into fixed-size integer arrays using `try_into().unwrap()`. By checking `raw.len() < 9` upfront, the decoder avoids panics and cleanly returns `Err(CodecError::PayloadTooShort)`.
 > 4. **Zero-Cost Abstraction**: Monomorphization compiles `EventDispatcher<TelemetryBinaryCodec>` directly against the binary encoding logic. The compiler can inline endian conversion calls (`u32::from_be_bytes`) directly into machine code without dynamic virtual function dispatch.
-
+> 
 ---
 
 ## 6. Related Terms

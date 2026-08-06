@@ -184,7 +184,7 @@ app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 > ```
 > - Match the HTTP Method (GET, POST, PATCH, DELETE) to the action.
 > - Remove all verbs from the URL.
-
+> 
 ---
 
 
@@ -213,7 +213,7 @@ app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 > ```
 >
 > **Explanation:** REST APIs map standard HTTP CRUD methods to noun resource paths.
-
+> 
 ---
 
 ### Exercise 3: Idempotent HTTP Methods
@@ -231,7 +231,7 @@ app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 > ```
 >
 > **Explanation:** Idempotent methods produce identical system state results regardless of how many times they are repeated.
-
+> 
 ## 7. Related Terms
 - [Routing](../level_07/routing.md) — How you physically implement REST in Express.
 - [HTTP Status Codes](status_codes.md) — REST APIs must return standard status codes to indicate success or failure.

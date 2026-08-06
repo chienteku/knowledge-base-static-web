@@ -175,7 +175,7 @@ if (typeof document !== "undefined") {
 > [!check]- Answer
 > - Check if `document.title === ""` or `!document.title`.
 > - Assign a new string to `document.title`.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Document Metadata
@@ -192,7 +192,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `document` represents the root web page loaded inside browser windows.
-
+> 
 ---
 
 ### Exercise 3: Creating Elements with `document.createElement`
@@ -210,8 +210,8 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `document.createElement(tagName)` instantiates new unattached DOM element nodes.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

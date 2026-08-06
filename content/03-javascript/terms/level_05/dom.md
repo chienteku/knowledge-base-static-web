@@ -152,7 +152,7 @@ async function processData() {
 > ```
 > - Right click -> Inspect -> Console tab.
 > - This is a fun way to realize how much power JavaScript has over the browser!
-
+> 
 ---
 
 ### Exercise 2: DOM Node Hierarchy Traversal
@@ -169,7 +169,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `nodeType` integer constants identify DOM element nodes (1) vs text content nodes (3).
-
+> 
 ---
 
 ### Exercise 3: Document Fragment Batching
@@ -186,8 +186,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Appending child nodes into off-screen `DocumentFragment` instances batches DOM inserts into 1 reflow.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -165,7 +165,7 @@ Sort orders by `totalAmount` descending and return top 5 highest-value orders.
 > 1. `$sort` orders documents in the stream (1 for ascending, -1 for descending).
 > 2. `$limit` caps the stream at a maximum document count.
 > 3. When `$sort` precedes `$limit`, MongoDB optimizes execution by maintaining a top-N sort buffer in RAM.
-
+> 
 ---
 
 ### Exercise 2: Aggregation Pipeline Pagination with `$skip` and `$limit`
@@ -193,7 +193,7 @@ Implement Page 3 pagination (10 items per page) for an aggregation pipeline.
 > 1. `$skip` skips the specified number of incoming pipeline documents.
 > 2. `$limit` restricts the output stream size.
 > 3. Combines to provide standard page-based aggregation output pagination.
-
+> 
 ---
 
 ### Exercise 3: Leveraging Indexes for Pipeline `$sort`
@@ -221,7 +221,7 @@ Ensure `$sort` stage in aggregation uses an index scan (`IXSCAN`) rather than an
 > 1. When `$sort` immediately follows `$match` and aligns with a compound index, WiredTiger reads documents in pre-sorted B-tree order.
 > 2. Eliminates in-memory sort buffer allocation.
 > 3. Prevents `SortExceededMemoryLimit` exceptions.
-
+> 
 ---
 
 

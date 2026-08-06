@@ -209,7 +209,7 @@ useEffect(() => {
 > Because the request sat "Pending" for 45 seconds, the server was intentionally holding the connection open until it had new location data to report.
 > ```
 > - Did the app make 15 fast requests, or 1 very slow request?
-
+> 
 ---
 
 ### Exercise 2: Short Polling vs Long Polling Comparison

@@ -282,7 +282,7 @@ Implement `RequestRouter::resolve_or_diverge` and `RequestRouter::resolve_with_m
 > 1. **Diverging Function Declaration (`-> !`)**: `log_and_terminate` explicitly declares `-> !` as its return type. Because the function body ends in `panic!`, control flow will never exit this function normally.
 > 2. **Type Coercion in Closure & Match Arms**: `Result::unwrap_or_else` expects an error closure returning `AuthContext`. Because `log_and_terminate` returns `!`, the compiler automatically coerces `!` to `AuthContext`.
 > 3. **Mathematical Guarantee**: The Rust type checker enforces that because `!` can never produce an actual runtime value, treating it as `AuthContext` is sound—execution stops before any value inspection takes place.
-
+> 
 ---
 
 ### Exercise 2: Infallible Generic Pipeline Stages & Exhaustive Pattern Matching (`std::convert::Infallible`)
@@ -377,7 +377,7 @@ Write a generic `PipelineStage` trait and implement an infallible `UppercaseStag
 > 1. **Uninhabited Types**: `std::convert::Infallible` is defined as `enum Infallible {}` with 0 variants. Because it has no valid constructible instances, it represents the concept of `!`.
 > 2. **Exhaustive Matching (`match never {}`)**: When pattern matching on an uninhabited enum value `never`, Rust recognizes that no branches exist. `match never {}` compiles cleanly and acts as an unreachable control flow statement of type `!`.
 > 3. **Zero-Cost Unwrapping**: Unlike `.unwrap()` or `.expect()`, `unwrap_infallible` guarantees at compile time that panic code generation is entirely omitted, optimizing the compiled machine code.
-
+> 
 ---
 
 ### Exercise 3: Worker State Machine with Diverging Flow Control (`break`, `continue`, `panic!`)
@@ -507,7 +507,7 @@ Implement `WorkerLoop::run_queue` showcasing how `break`, `continue`, and diverg
 > 1. **Diverging Control Keywords**: In Rust syntax, `continue`, `break`, and `return` are expressions, and their static type is `!`.
 > 2. **Match Arm Unification**: A `match` expression requires every branch to return the same type (here, `u32`). Because `!` coercively unifies with any type, branches returning `continue`, `break`, or calling `handle_fatal(...)` satisfy the `u32` requirement seamlessly.
 > 3. **Unreachable Code Elimination**: Code located after a `!` expression (such as processing statistics after `continue` or `break`) is skipped at runtime, ensuring strict control flow safety.
-
+> 
 ---
 
 ## 6. Related Terms

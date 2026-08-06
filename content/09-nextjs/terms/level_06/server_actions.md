@@ -149,25 +149,25 @@ Create `app/actions/comments.ts` with exported `"use server"` action functions.
 > ```typescript
 > // app/actions/comments.ts
 > "use server";
-
-import { revalidatePath } from "next/cache";
-
-export async function addCommentAction(formData: FormData) {
-  const text = formData.get("text") as string;
-  if (!text) throw new Error("Comment text is required");
-
-  // Save comment to database...
-
-  revalidatePath("/blog/[slug]", "page");
-}
-```
-
+> 
+> import { revalidatePath } from "next/cache";
+> 
+> export async function addCommentAction(formData: FormData) {
+>   const text = formData.get("text") as string;
+>   if (!text) throw new Error("Comment text is required");
+> 
+>   // Save comment to database...
+> 
+>   revalidatePath("/blog/[slug]", "page");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Adding `"use server"` at the top of a file exports all functions as callable Server Actions.
 > 2. Allows importing actions into Client Components (`"use client"`).
 > 3. Standard organization pattern for application mutations.
-
+> 
 ---
 
 ### Exercise 2: Invoking Server Actions inside Client Component Buttons
@@ -184,35 +184,35 @@ Invoke a Server Action imperatively inside a Client Component button click handl
 >
 > ```tsx
 > "use client";
-
-import { useTransition } from "react";
-import { addCommentAction } from "@/app/actions/comments";
-
-export default function QuickAddButton() {
-  const [isPending, startTransition] = useTransition();
-
-  function handleClick() {
-    startTransition(async () => {
-      const formData = new FormData();
-      formData.append("text", "Quick Comment!");
-      await addCommentAction(formData);
-    });
-  }
-
-  return (
-    <button onClick={handleClick} disabled={isPending}>
-      {isPending ? "Adding..." : "Quick Add Comment"}
-    </button>
-  );
-}
-```
-
+> 
+> import { useTransition } from "react";
+> import { addCommentAction } from "@/app/actions/comments";
+> 
+> export default function QuickAddButton() {
+>   const [isPending, startTransition] = useTransition();
+> 
+>   function handleClick() {
+>     startTransition(async () => {
+>       const formData = new FormData();
+>       formData.append("text", "Quick Comment!");
+>       await addCommentAction(formData);
+>     });
+>   }
+> 
+>   return (
+>     <button onClick={handleClick} disabled={isPending}>
+>       {isPending ? "Adding..." : "Quick Add Comment"}
+>     </button>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Server Actions can be invoked imperatively inside client event handlers (not just HTML forms).
 > 2. `useTransition` tracks action execution pending state without blocking UI responsiveness.
 > 3. Flexible client interaction pattern.
-
+> 
 ---
 
 ### Exercise 3: Handling Server Action Return Values and Errors
@@ -229,31 +229,27 @@ Return typed response objects `{ success: boolean, message: string }` from a Ser
 >
 > ```typescript
 > "use server";
-
-export async function safeMutation(formData: FormData) {
-  const title = formData.get("title");
-  if (!title) {
-    return { success: false, message: "Title field is mandatory" };
-  }
-
-  // Perform database mutation...
-
-  return { success: true, message: "Mutation completed successfully!" };
-}
-```
-
+> 
+> export async function safeMutation(formData: FormData) {
+>   const title = formData.get("title");
+>   if (!title) {
+>     return { success: false, message: "Title field is mandatory" };
+>   }
+> 
+>   // Perform database mutation...
+> 
+>   return { success: true, message: "Mutation completed successfully!" };
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Server Actions can return JSON-serializable primitive objects or values.
 > 2. Returning status objects avoids throwing raw unhandled exceptions across the network boundary.
 > 3. Idiomatic error handling pattern for user forms.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Form Actions](form_actions.md) — How Server Actions are actually invoked.

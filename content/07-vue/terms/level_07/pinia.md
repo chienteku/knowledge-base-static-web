@@ -122,7 +122,7 @@ router.beforeEach(() => {
 > 3. Hot Module Replacement (HMR).
 > ```
 > - Think about debugging and DevTools!
-
+> 
 ---
 
 ### Exercise 2: Pinia Setup Store Pattern
@@ -151,7 +151,7 @@ router.beforeEach(() => {
 >   return { items, count, addItem };
 > });
 > ```
-
+> 
 ---
 
 ### Exercise 3: Vuex vs Pinia Comparison
@@ -170,8 +170,8 @@ router.beforeEach(() => {
 > ```text
 > Pinia eliminates Vuex mutations and provides native TypeScript support.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

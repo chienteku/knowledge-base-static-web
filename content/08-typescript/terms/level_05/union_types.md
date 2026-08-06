@@ -134,17 +134,17 @@ Write a `padLeft` function taking `value: string` and `padding: string | number`
 >   }
 >   return padding + value; // padding is string
 > }
-
-console.log(padLeft("Hello", 4));      // "    Hello"
-console.log(padLeft("Hello", ">> ")); // ">> Hello"
-```
-
+> 
+> console.log(padLeft("Hello", 4));      // "    Hello"
+> console.log(padLeft("Hello", ">> ")); // ">> Hello"
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Union types (`T | U`) declare that a parameter can accept any of the specified constituent types.
 > 2. `typeof` checks inside `if` branches narrow union types to specific primitive branches.
 > 3. Guarantees type-safe execution for all possible union members.
-
+> 
 ---
 
 ### Exercise 2: Accessing Common Properties on Object Unions
@@ -164,24 +164,24 @@ Access common properties on an un-narrowed union of `Cat | Dog` objects.
 >   name: string;
 >   meow(): void;
 > }
-
-interface Dog {
-  name: string;
-  bark(): void;
-}
-
-function getPetName(pet: Cat | Dog): string {
-  // Allowed without narrowing because 'name' exists on BOTH Cat and Dog:
-  return pet.name;
-}
-```
-
+> 
+> interface Dog {
+>   name: string;
+>   bark(): void;
+> }
+> 
+> function getPetName(pet: Cat | Dog): string {
+>   // Allowed without narrowing because 'name' exists on BOTH Cat and Dog:
+>   return pet.name;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Properties present on ALL members of a union can be accessed directly without type narrowing.
 > 2. Properties unique to specific union members (`meow()`, `bark()`) require type narrowing before invocation.
 > 3. Core rule for union property access.
-
+> 
 ---
 
 ### Exercise 3: Discriminated Union Pattern with Literal Tags
@@ -200,27 +200,27 @@ Create a discriminated union representing network request states (`LoadingState`
 > type LoadingState = { state: "loading" };
 > type SuccessState = { state: "success"; data: string[] };
 > type ErrorState = { state: "error"; error: string };
-
-type NetworkState = LoadingState | SuccessState | ErrorState;
-
-function renderUI(status: NetworkState) {
-  switch (status.state) {
-    case "loading":
-      return "Loading...";
-    case "success":
-      return `Data: ${status.data.join(", ")}`;
-    case "error":
-      return `Error: ${status.error}`;
-  }
-}
-```
-
+> 
+> type NetworkState = LoadingState | SuccessState | ErrorState;
+> 
+> function renderUI(status: NetworkState) {
+>   switch (status.state) {
+>     case "loading":
+>       return "Loading...";
+>     case "success":
+>       return `Data: ${status.data.join(", ")}`;
+>     case "error":
+>       return `Error: ${status.error}`;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Discriminated unions share a common literal property (`state`) across all members.
 > 2. `switch` or `if` statements on the discriminant property narrow the union to single concrete branches.
 > 3. Standard pattern for modeling state machines and API request lifecycles.
-
+> 
 ---
 
 

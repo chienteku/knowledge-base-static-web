@@ -110,18 +110,18 @@ Cast a general `HTMLElement` returned by `document.getElementById` to `HTMLInput
 >
 > ```typescript
 > const inputElem = document.getElementById("email-input") as HTMLInputElement;
-
-// Access input-specific properties safely:
-inputElem.value = "user@example.com";
-inputElem.focus();
-```
-
+> 
+> // Access input-specific properties safely:
+> inputElem.value = "user@example.com";
+> inputElem.focus();
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Type assertions (`x as T`) instruct the compiler to treat a value as a more specific subtype (`HTMLInputElement`).
 > 2. Does NOT perform any runtime type conversions; completely erased during compilation.
 > 3. Used when the developer possesses domain knowledge that the compiler cannot infer statically.
-
+> 
 ---
 
 ### Exercise 2: Auditing Impossible Type Casts and Double Assertions
@@ -138,20 +138,20 @@ Explain why directly asserting `string as number` fails and demonstrate how doub
 >
 > ```typescript
 > const str = "hello";
-
-// ❌ Compile Error: Conversion of type 'string' to type 'number' may be a mistake...
-// const num = str as number;
-
-// ⚠️ DOUBLE ASSERTION (Bypasses safety check, but dangerous!):
-const num = (str as unknown) as number;
-```
-
+> 
+> // ❌ Compile Error: Conversion of type 'string' to type 'number' may be a mistake...
+> // const num = str as number;
+> 
+> // ⚠️ DOUBLE ASSERTION (Bypasses safety check, but dangerous!):
+> const num = (str as unknown) as number;
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript forbids direct assertions between non-overlapping types (`string` to `number`).
 > 2. Double assertions (`as unknown as T`) bypass compiler restrictions by routing through `unknown`.
 > 3. Dangerous anti-pattern that masks structural bugs; use with extreme caution.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: Type Assertion (`as T`) vs Type Casting (Runtime)
@@ -171,13 +171,13 @@ Formulate an architectural comparison matrix contrasting TypeScript Type Asserti
 > - Type Assertion (x as T): Pure compile-time instruction. Zero runtime JS output, does NOT convert values (e.g. "123" as number stays string "123" at runtime!).
 > - Runtime Conversion (Number(x)): Executes actual JavaScript code at runtime to transform value types (e.g. Number("123") becomes 123).
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Type assertions alter only the compiler's static perception of a value's type.
 > 2. Asserting `"123" as number` does NOT make it a number at runtime!
 > 3. Use actual JS functions (`Number()`, `String()`, `Boolean()`) for runtime data transformations.
-
+> 
 ---
 
 

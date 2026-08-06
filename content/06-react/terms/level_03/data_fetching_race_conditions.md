@@ -219,7 +219,7 @@ function SearchAutoComplete() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Ignore Flag Race Condition Cleanup Pattern
@@ -244,7 +244,7 @@ function SearchAutoComplete() {
 > ```
 >
 > **Explanation:** The `ignore` boolean flag invalidates stale async callbacks if `id` changes before fetch resolves.
-
+> 
 ---
 
 ### Exercise 3: Why Manual Data Fetching is Discouraged
@@ -261,7 +261,7 @@ function SearchAutoComplete() {
 > ```
 >
 > **Explanation:** Data fetching libraries automate race condition handling, caching, and state management.
-
+> 
 ## 7. Related Terms
 - [Cleanup Functions](cleanup_functions.md) — The lifecycle hooks used to execute fetch cancelations.
 - [`useState` Hook](../level_02/use_state.md) — The state variables updated by fetch results.

@@ -165,16 +165,16 @@ Configure custom build environment variables and redirects in `next.config.js`.
 >     ];
 >   }
 > };
-
-module.exports = nextConfig;
-```
-
+> 
+> module.exports = nextConfig;
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `next.config.js` configures compilation, bundling, and server routing behavior.
 > 2. `redirects()` executes HTTP redirects on the server before hitting React routing logic.
 > 3. Central configuration file for Next.js applications.
-
+> 
 ---
 
 ### Exercise 2: Configuring Webpack and Vite Bundler Overrides
@@ -200,13 +200,13 @@ Add custom SVG loader rules using `webpack` property inside `next.config.js`.
 >   }
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `webpack` hook allows customizing underlying build bundler rules.
 > 2. `isServer` flag identifies whether the current build pass is targeting Node.js server or client bundles.
 > 3. Extensible bundler configuration interface.
-
+> 
 ---
 
 ### Exercise 3: Setting Custom HTTP Response Headers
@@ -236,19 +236,15 @@ Attach security headers (`X-Frame-Options`, `Content-Security-Policy`) to all in
 >   }
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `headers()` appends custom HTTP response headers to matching route paths automatically.
 > 2. Enforces security policies at the Node.js / edge server level.
 > 3. Standard production security header setup.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Next.js Overview](../level_01/nextjs.md) — The framework itself.

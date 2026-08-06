@@ -129,29 +129,29 @@ Differentiate between an `AdminUser` (has `permissions: string[]`) and a `Standa
 >   id: string;
 >   permissions: string[];
 > }
-
-interface StandardUser {
-  id: string;
-  email: string;
-}
-
-type User = AdminUser | StandardUser;
-
-function processUser(user: User) {
-  if ("permissions" in user) {
-    console.log("Admin permissions:", user.permissions.join(", "));
-  } else {
-    console.log("Standard user email:", user.email);
-  }
-}
-```
-
+> 
+> interface StandardUser {
+>   id: string;
+>   email: string;
+> }
+> 
+> type User = AdminUser | StandardUser;
+> 
+> function processUser(user: User) {
+>   if ("permissions" in user) {
+>     console.log("Admin permissions:", user.permissions.join(", "));
+>   } else {
+>     console.log("Standard user email:", user.email);
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `"property" in object` checks if a property exists on an object or its prototype chain.
 > 2. TypeScript automatically narrows `user` to `AdminUser` inside the `if` block.
 > 3. Effective for narrowing object unions that do not share a explicit discriminant tag.
-
+> 
 ---
 
 ### Exercise 2: Checking Optional Property Existence with `in`
@@ -171,20 +171,20 @@ Check for the presence of optional property `metadata` on a configuration object
 >   title: string;
 >   metadata?: { author: string };
 > }
-
-function logAuthor(config: Config) {
-  if ("metadata" in config && config.metadata) {
-    console.log("Author:", config.metadata.author);
-  }
-}
-```
-
+> 
+> function logAuthor(config: Config) {
+>   if ("metadata" in config && config.metadata) {
+>     console.log("Author:", config.metadata.author);
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `"metadata" in config` verifies that the property key exists on the target object.
 > 2. Combined with truthiness checks, it safely narrows optional properties.
 > 3. Prevents property access errors on un-initialized optional keys.
-
+> 
 ---
 
 ### Exercise 3: Auditing Prototype Property Checks with `in`
@@ -201,19 +201,19 @@ Explain why `"toString" in obj` evaluates to `true` for all JavaScript objects d
 >
 > ```typescript
 > const obj = {};
-
-// Evaluates to true because toString exists on Object.prototype!
-if ("toString" in obj) {
-  console.log("toString exists!");
-}
-```
-
+> 
+> // Evaluates to true because toString exists on Object.prototype!
+> if ("toString" in obj) {
+>   console.log("toString exists!");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. The `in` operator checks both instance properties AND inherited prototype properties.
 > 2. Checking for common prototype methods (`toString`, `valueOf`) does not narrow custom domain object types effectively.
 > 3. Use `in` strictly with custom property names unique to target interface variants.
-
+> 
 ---
 
 

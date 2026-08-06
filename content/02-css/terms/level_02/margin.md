@@ -141,7 +141,7 @@ span { display: block; margin: 0 auto; width: 200px; }
 > Padding! Margin is *outside* the border, meaning it is completely transparent. The background color never bleeds into the margin. If you increase the margin, the button will just push other things away.
 > ```
 > - Think about the property line vs the inside of the house.
-
+> 
 ---
 
 
@@ -164,7 +164,7 @@ span { display: block; margin: 0 auto; width: 200px; }
 > ```
 >
 > **Explanation:** `margin: 0 auto` splits remaining horizontal space equally to center block elements.
-
+> 
 ---
 
 ### Exercise 3: Margin Auto in Flexbox Containers
@@ -183,7 +183,7 @@ span { display: block; margin: 0 auto; width: 200px; }
 > ```
 >
 > **Explanation:** `margin: auto` inside Flexbox absorbs available free space along main/cross axes.
-
+> 
 ## 7. Related Terms
 - [Padding](padding.md) — The inner spacing (inside the border).
 - [Border](border.md) — The wall separating margin from padding.

@@ -264,7 +264,7 @@ In both cases, each individual line on the paper is a List Item (`<li>`).
 > </ul>
 > ```
 > - The nested `<ul>` must go *inside* the `<li>` of the parent item, not outside of it!
-
+> 
 ---
 
 ### Exercise 2: Structuring Nested Lists
@@ -285,7 +285,7 @@ In both cases, each individual line on the paper is a List Item (`<li>`).
 > ```
 >
 > **Explanation:** Nested lists must be placed inside an `<li>` element of the parent list.
-
+> 
 ---
 
 ### Exercise 3: Reversing Ordered List Numbers
@@ -303,7 +303,7 @@ In both cases, each individual line on the paper is a List Item (`<li>`).
 > ```
 >
 > **Explanation:** `reversed` attribute counts ordered lists backwards.
-
+> 
 ## 7. Related Terms
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing lists.
 - [`<nav>`](../level_06/nav.md) — Unordered lists are very commonly used inside `<nav>` elements to build website navigation menus.

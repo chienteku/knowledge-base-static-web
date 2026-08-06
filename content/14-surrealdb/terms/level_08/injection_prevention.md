@@ -161,7 +161,7 @@ Demonstrate rewriting a vulnerable string-concatenated query into a safe paramet
 > 1. Parameterized queries (`$username`) send query structure and parameter values separately to the database engine.
 > 2. Prevents malicious user input from altering SurrealQL syntax trees.
 > 3. Eliminates SurrealQL injection vulnerabilities completely.
-
+> 
 ---
 
 ### Exercise 2: Disabling Arbitrary Script Execution CLI Flags
@@ -185,7 +185,7 @@ Harden a production SurrealDB instance by passing startup flags to disable embed
 > 1. `--deny-scripting` disables execution of embedded JavaScript functions (`function() { ... }`).
 > 2. Mitigates remote code execution risks from arbitrary guest queries.
 > 3. Hardens server instance security profiles.
-
+> 
 ---
 
 ### Exercise 3: Input Type Coercion Sanitization
@@ -209,7 +209,7 @@ Sanitize user input parameters by enforcing type coercion using `<record>` or `<
 > 1. Explicit type coercion (`<record<user>>`) rejects inputs failing target data type rules.
 > 2. Prevents type confusion attacks.
 > 3. Sanitizes dynamic parameters before query execution.
-
+> 
 ---
 
 

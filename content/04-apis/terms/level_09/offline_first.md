@@ -173,8 +173,8 @@ catch (err) { setItems(prevItems); } // Rollback to previous state on sync error
 > - 1.  **Cache-First** (The file name changes when updated, so we can cache it indefinitely without risk of serving stale styles).
 > - 2.  **Network-First** (Users expect to see new emails immediately if they have an active connection, with a fallback to cached emails when offline).
 > - 3.  **Stale-While-Revalidate** (Provides an instant load state using cached weather data, then updates the temperature in the background once the network response resolves).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Service Worker Background Sync API

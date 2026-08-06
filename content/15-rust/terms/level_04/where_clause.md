@@ -304,7 +304,7 @@ Without a `where` clause, expressing constraints across generic iterators, assoc
 > 3. **Closure Bounds (`V: Fn(&I::Item) -> Result<(), String>`)**: Using the `Fn` trait bound allows `validator` to be called repeatedly across iterator items without mutating or consuming closure environment state.
 > 4. **Monomorphization & Code Generation**: The compiler generates optimized machine code monomorphized specifically for the exact concrete types passed at each call site (e.g., `std::vec::IntoIter<String>`, closure type, `MemorySink<String>`), eliminating virtual table lookup costs.
 > 5. **Fail-Fast Error Handling**: The `?` operator coupled with `.map_err()` converts domain-specific errors into unified `PipelineError` variants while immediately breaking iterator evaluation upon encountering the first failure.
-
+> 
 ---
 
 ### Exercise 2: Middleware Plugin Event Dispatcher with Conditional `impl` Bounds
@@ -515,7 +515,7 @@ When defining generic structs like `EventDispatcher<E, P>`, placing complex boun
 > 2. **Trait Bound Decoupling**: Constraining `P: Middleware<Context = String>` ties the plugin's operational context type to a concrete type (`String`) inside the dispatcher's methods, while allowing the core struct `EventDispatcher<E, P>` to remain fully polymorphic.
 > 3. **Error Type Erasure & Boundaries**: Bound `type Error: Error + Send + Sync + 'static` enforces thread safety (`Send + Sync`) and owned dynamic lifetime (`'static`), allowing middleware error outputs to safely cross asynchronous task or OS thread boundaries when needed.
 > 4. **Method-Level `where` Clause Constraints**: In `Middleware::process<E>`, the method itself has a nested `where E: Event` constraint. This enables generic methods inside traits to accept any type satisfying `Event` without requiring `Middleware` to specify `E` as a type parameter on the trait itself.
-
+> 
 ---
 
 ### Exercise 3: Generic Tiered In-Memory Cache & Storage Synchronization Layer
@@ -732,7 +732,7 @@ Implementing generic methods for tiered caches involves multiple intersecting tr
 > 2. **`HashMap` Key Requirements (`K: Hash + Eq`)**: Standard library collections like `HashMap` require keys to implement `Hash` and `Eq`. Placing these bounds in the `where` clause of `impl<K, V, S>` ensures that `l1_cache` operational methods (e.g. `.get()`, `.insert()`, `.remove()`) compile cleanly.
 > 3. **Method-Level Generic Predicate (`invalidate_and_sync<F>`)**: The closure bound `F: Fn(&V) -> bool` is declared directly on the method rather than the struct level. The `where` clause allows keeping `F` scoped strictly to `invalidate_and_sync`, preventing type bloat on `TieredCache<K, V, S>` struct instances.
 > 4. **Ownership and Cache Backfilling**: When L1 cache encounters a miss, `fetch` queries `backing_store`. Upon receiving `Ok(Some(val))`, the value is cloned (`val.clone()`) and written into `l1_cache` before returning. The `V: Clone` bound inside the `where` clause guarantees that value cloning is valid for any generic type `V`.
-
+> 
 ---
 
 ## 6. Related Terms

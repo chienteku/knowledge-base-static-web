@@ -177,7 +177,7 @@ if (typeof document !== "undefined") {
 > - Create a `strong` node with `document.createElement("strong")`.
 > - Set its `textContent` to `usernameInput` (renders as plain text).
 > - Append the node to `banner` using `.appendChild()`.
-
+> 
 ---
 
 ### Exercise 2: Safely Rendering Text with `textContent`
@@ -194,7 +194,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `textContent` escapes HTML entities, treating inputs purely as text strings.
-
+> 
 ---
 
 ### Exercise 3: Parsing Performance: `textContent` vs `innerText`
@@ -211,8 +211,8 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `innerText` is aware of CSS styling and layout visibility, triggering reflow overhead.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

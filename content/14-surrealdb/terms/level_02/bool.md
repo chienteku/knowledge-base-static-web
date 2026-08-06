@@ -167,7 +167,7 @@ You are defining a user account table where accounts must be inactive (`active =
 > 1. `TYPE bool` restricts field values strictly to boolean `true` or `false`.
 > 2. `DEFAULT false` automatically populates boolean flags when omitted from creation payloads.
 > 3. Boolean conditions in `WHERE` clauses allow compact truthiness evaluation (`WHERE active`).
-
+> 
 ---
 
 ### Exercise 2: Logical Operators and Truth Tables
@@ -195,7 +195,7 @@ A feature flag service determines feature visibility using boolean fields `is_be
 > 1. SurrealQL supports standard logical boolean operators (`AND`, `OR`, `NOT`).
 > 2. Short-circuit evaluation short-circuits boolean expressions for optimized query execution.
 > 3. Boolean flags simplify entitlement and feature gating query logic.
-
+> 
 ---
 
 ### Exercise 3: Boolean Negation and Inverse Selection
@@ -223,7 +223,7 @@ An e-commerce cleanup task needs to find all unpublished or inactive product lis
 > 1. `NOT` negates boolean truth values, evaluating `NOT false` to `true`.
 > 2. `WHERE NOT published` is cleaner and equivalent to `WHERE published = false`.
 > 3. Ensures unindexed boolean flags evaluate correctly without NULL coercions.
-
+> 
 ---
 
 

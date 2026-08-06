@@ -162,7 +162,7 @@ Delete a single user record from `users` where `id = 42`.
 > 1. `DELETE FROM` removes matching rows from the target table.
 > 2. `WHERE id = 42` targets a single primary key row in $O(\log N)$ time using the primary key index.
 > 3. `RETURNING` confirms deleted row attributes.
-
+> 
 ---
 
 ### Exercise 2: Cascading Deletions Across Related Tables
@@ -187,7 +187,7 @@ Delete an order record from `orders` ensuring child line items in `order_items` 
 > 1. If foreign key constraint is configured with `ON DELETE CASCADE`, child rows in `order_items` delete automatically.
 > 2. Prevents orphan child records in relational tables.
 > 3. Enforces referential integrity.
-
+> 
 ---
 
 ### Exercise 3: Batch Deleting Expired Logs
@@ -212,7 +212,7 @@ Delete all audit log records created over 30 days ago.
 > 1. Deletes all rows satisfying the date threshold filter.
 > 2. Utilizes `created_at` index to find target rows quickly.
 > 3. Reclaims table storage space during subsequent `VACUUM` runs.
-
+> 
 ---
 
 

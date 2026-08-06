@@ -114,7 +114,7 @@ JSON.stringify({ socketId: activeSocket.id }); // Serialize primitive identifier
 > The server sent you a flat string of text over the network. The `.json()` method takes that flat string and "rebuilds the LEGO castle," turning it back into a usable JavaScript object in your browser's RAM.
 > ```
 > - Are you flattening a castle into a box, or taking it out of the box and building it?
-
+> 
 ---
 
 ### Exercise 2: DTO (Data Transfer Object) Pattern

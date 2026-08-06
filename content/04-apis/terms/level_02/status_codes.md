@@ -123,7 +123,7 @@ Should you spend the next hour debugging your React code, or call the backend en
 > Any code starting with `5` means the Server failed. Your React code is completely fine; the backend infrastructure is broken.
 > ```
 > - Remember the 4xx vs 5xx rule! 4 is your fault, 5 is their fault.
-
+> 
 ---
 
 ### Exercise 2: HTTP Status Code Categorization

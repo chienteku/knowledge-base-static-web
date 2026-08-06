@@ -160,7 +160,7 @@ Ensure pointer arithmetic remains strictly within valid array bounds!
 >
 > 1. Uses raw pointers to split a single mutable slice into two disjoint non-overlapping mutable slices.
 > 2. Pass Miri Stacked Borrows pointer provenance verification because pointer regions do not overlap.
-
+> 
 ---
 
 ### Exercise 2: Miri Stacked Borrows Aliasing Test Suite
@@ -200,7 +200,7 @@ Ensure pointer arithmetic remains strictly within valid array bounds!
 > #### Technical Explanation
 >
 > 1. Raw pointer access stays within valid vector allocation bounds, passing Miri pointer provenance checks.
-
+> 
 ---
 
 ### Exercise 3: Miri Uninitialized Memory Initialization Pattern
@@ -241,7 +241,7 @@ Ensure pointer arithmetic remains strictly within valid array bounds!
 > #### Technical Explanation
 >
 > 1. Initializes all memory bytes before transmute, preventing uninitialized memory reads in Miri.
-
+> 
 ---
 
 ## 5. Related Terms

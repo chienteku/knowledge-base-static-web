@@ -170,7 +170,7 @@ Create an expression index on `users(LOWER(email))` to optimize case-insensitive
 > 1. Queries using `WHERE LOWER(email) = ...` cannot hit a standard B-tree index on `email`.
 > 2. `CREATE INDEX ON users (LOWER(email))` evaluates and stores the result of `LOWER(email)` in the index.
 > 3. Accelerates case-insensitive queries from sequential scans to fast $O(\log N)$ index lookups.
-
+> 
 ---
 
 ### Exercise 2: Indexing Calculated Date Expressions
@@ -199,7 +199,7 @@ Create an expression index on `orders(EXTRACT(YEAR FROM created_at))` to optimiz
 > 1. Double parentheses `((expression))` are required in DDL syntax when indexing complex SQL functions.
 > 2. Pre-calculates and indexes yearly values.
 > 3. Accelerates date function filtering.
-
+> 
 ---
 
 ### Exercise 3: Indexing JSONB Fields via Expressions
@@ -228,7 +228,7 @@ Create an expression index targeting a specific nested JSONB key path (`(metadat
 > 1. Expression indexes allow indexing specific high-frequency JSONB key paths without indexing the entire JSON document.
 > 2. Consumes significantly less RAM than full GIN indexes.
 > 3. Targeted JSON indexing pattern.
-
+> 
 ---
 
 

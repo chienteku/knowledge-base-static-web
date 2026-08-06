@@ -311,7 +311,7 @@ Implement `split_at_mut_raw<T>(slice: &mut [T], mid: usize) -> Result<(&mut [T],
 > 2. **Raw Pointer Dereferencing Bypass:** Calling `.as_mut_ptr()` yields a raw mutable pointer `*mut T` to the first element, stripping borrow checker tracking.
 > 3. **Pointer Arithmetic (`add`):** `ptr.add(mid)` computes `ptr + mid * size_of::<T>()`. Rust ensures that `mid` is scaled by element byte size automatically.
 > 4. **Rebuilding Safe Slices (`from_raw_parts_mut`):** `std::slice::from_raw_parts_mut(ptr, len)` converts a raw pointer and length back into a safe slice `&mut [T]`. Because `left_ptr` spans `[0, mid)` and `right_ptr` spans `[mid, len)`, the two constructed mutable slices point to disjoint (non-overlapping) memory ranges, maintaining absolute memory safety.
-
+> 
 ---
 
 ### Exercise 2: Embedded Hardware DMA Buffer Ingestion & Alignment Verification
@@ -447,7 +447,7 @@ Implement `unsafe fn safe_ingest_dma_buffer<T: Copy>(raw_ptr: *const T, count: u
 > 2. **Null Checks (`is_null`):** Raw pointers lack compiler non-null guarantees. Checking `ptr.is_null()` protects against null dereference crashes.
 > 3. **High-Speed Copying (`copy_nonoverlapping`):** Equivalent to C's `memcpy`, `std::ptr::copy_nonoverlapping` performs bulk memory transfers without per-element looping overhead.
 > 4. **Safe Vector Initialization Sequence:** Calling `Vec::with_capacity` allocates memory without initializing elements. `set_len` must only be called *after* `copy_nonoverlapping` populates the buffer to avoid exposing uninitialized memory.
-
+> 
 ---
 
 ### Exercise 3: Intrusive Doubly-Linked Node Pointer Linking & Swapping
@@ -564,7 +564,7 @@ Write unit tests verifying pointer linkage, payload swapping, and structural int
 > 1. **Cyclic Structures via `*mut T`:** Standard Rust references `&mut T` cannot model doubly-linked lists because `node1` borrowing `node2` mutably while `node2` borrows `node1` mutably breaks ownership rules. Raw pointers `*mut Node<T>` allow arbitrary pointer graphs without borrow checking constraints.
 > 2. **Avoiding Aliasing Violations with `addr_of_mut!`:** `ptr::addr_of_mut!((*node_a).val)` creates a raw pointer directly to a struct field without taking an intermediate `&mut (*node_a).val` reference, which could trigger undefined behavior if other raw pointers alias the memory.
 > 3. **In-Place Bitwise Swap (`ptr::swap`):** `ptr::swap(ptr_a, ptr_b)` exchanges the contents of two memory addresses byte-by-byte. This works safely even for non-`Copy` types like `String`, preserving ownership and avoiding double-free memory bugs.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -158,7 +158,7 @@ async function processData() {
 > ```
 > - Pass the event object `e` or `event` into your arrow function.
 > - Call `.preventDefault()` on that object.
-
+> 
 ---
 
 ### Exercise 2: Cancelling Link Navigation
@@ -175,7 +175,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `preventDefault()` halts default link redirection.
-
+> 
 ---
 
 ### Exercise 3: Checking `defaultPrevented` Property
@@ -194,8 +194,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `defaultPrevented` indicates whether downstream listeners or handlers invoked `preventDefault()`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

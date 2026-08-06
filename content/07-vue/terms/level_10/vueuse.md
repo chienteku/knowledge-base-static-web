@@ -227,7 +227,7 @@ const toggleDark = useToggle(isDark)
 > ```
 > - `useDark()` automatically reads system preferences and manages DOM attributes.
 > - `useToggle` accepts a boolean ref and returns a toggling function.
-
+> 
 ---
 
 ### Exercise 2: useLocalStorage Composable Pattern
@@ -246,7 +246,7 @@ const toggleDark = useToggle(isDark)
 > const username = useLocalStorage('user-key', 'Guest');
 > // Mutating username.value automatically updates localStorage!
 > ```
-
+> 
 ---
 
 ### Exercise 3: useDark & useToggle Pattern
@@ -266,8 +266,8 @@ const toggleDark = useToggle(isDark)
 > const isDark = useDark();
 > const toggleDark = useToggle(isDark);
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

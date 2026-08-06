@@ -199,7 +199,7 @@ export default async function Page() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Server vs Client Component Placement Rule
@@ -216,7 +216,7 @@ export default async function Page() {
 > ```
 >
 > **Explanation:** Default to Server Components; use Client Components (`'use client'`) for interactive state/hooks.
-
+> 
 ---
 
 ### Exercise 3: Passing Server Component as Children to Client Component
@@ -237,7 +237,7 @@ export default async function Page() {
 > ```
 >
 > **Explanation:** Children composition props allow nesting Server Components inside Client Component boundaries.
-
+> 
 ## 7. Related Terms
 - [React Server Components (RSC)](rsc.md) — The default server-side rendering architecture.
 - [Server Actions & `"use server"`](server_actions.md) — Calling server-side database handlers from client-side buttons.

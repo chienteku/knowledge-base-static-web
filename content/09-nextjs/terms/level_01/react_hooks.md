@@ -159,33 +159,33 @@ Create an interactive input field component tracking search state using `useStat
 >
 > ```tsx
 > "use client";
-
-import { useState } from "react";
-
-export default function SearchBar() {
-  const [query, setQuery] = useState("");
-
-  return (
-    <div className="p-4">
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Type to search..."
-        className="p-2 border rounded w-full"
-      />
-      <p className="mt-2 text-sm text-gray-600">Active Query: {query}</p>
-    </div>
-  );
-}
-```
-
+> 
+> import { useState } from "react";
+> 
+> export default function SearchBar() {
+>   const [query, setQuery] = useState("");
+> 
+>   return (
+>     <div className="p-4">
+>       <input
+>         type="text"
+>         value={query}
+>         onChange={(e) => setQuery(e.target.value)}
+>         placeholder="Type to search..."
+>         className="p-2 border rounded w-full"
+>       />
+>       <p className="mt-2 text-sm text-gray-600">Active Query: {query}</p>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useState(initialValue)` returns a stateful value and a setter function to update it.
 > 2. Mutating state via setter function triggers component re-rendering.
 > 3. React hooks require marking the component file with `"use client"`.
-
+> 
 ---
 
 ### Exercise 2: Managing Side Effects with `useEffect()`
@@ -202,33 +202,33 @@ Subscribe to browser window resize events using `useEffect()` and clean up the l
 >
 > ```tsx
 > "use client";
-
-import { useState, useEffect } from "react";
-
-export default function WindowSize() {
-  const [width, setWidth] = useState<number>(0);
-
-  useEffect(() => {
-    // Client-side window access
-    setWidth(window.innerWidth);
-    
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup listener on component unmount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  return <p>Window Width: {width}px</p>;
-}
-```
-
+> 
+> import { useState, useEffect } from "react";
+> 
+> export default function WindowSize() {
+>   const [width, setWidth] = useState<number>(0);
+> 
+>   useEffect(() => {
+>     // Client-side window access
+>     setWidth(window.innerWidth);
+>     
+>     const handleResize = () => setWidth(window.innerWidth);
+>     window.addEventListener("resize", handleResize);
+> 
+>     // Cleanup listener on component unmount
+>     return () => window.removeEventListener("resize", handleResize);
+>   }, []);
+> 
+>   return <p>Window Width: {width}px</p>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useEffect(callback, dependencies)` executes side effects after component rendering.
 > 2. Returning a function from the callback performs cleanup when the component unmounts or dependencies update.
 > 3. Empty dependency array `[]` runs the effect once on mount.
-
+> 
 ---
 
 ### Exercise 3: Optimizing Derived Values with `useMemo()`
@@ -245,41 +245,37 @@ Memoize an expensive array filter operation using `useMemo()` to prevent unneces
 >
 > ```tsx
 > "use client";
-
-import { useState, useMemo } from "react";
-
-export default function FilteredList({ items }: { items: string[] }) {
-  const [filter, setFilter] = useState("");
-
-  const filteredItems = useMemo(() => {
-    return items.filter((item) => item.toLowerCase().includes(filter.toLowerCase()));
-  }, [items, filter]);
-
-  return (
-    <div>
-      <input value={filter} onChange={(e) => setFilter(e.target.value)} />
-      <ul>
-        {filteredItems.map((item, idx) => (
-          <li key={idx}>{item}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-```
-
+> 
+> import { useState, useMemo } from "react";
+> 
+> export default function FilteredList({ items }: { items: string[] }) {
+>   const [filter, setFilter] = useState("");
+> 
+>   const filteredItems = useMemo(() => {
+>     return items.filter((item) => item.toLowerCase().includes(filter.toLowerCase()));
+>   }, [items, filter]);
+> 
+>   return (
+>     <div>
+>       <input value={filter} onChange={(e) => setFilter(e.target.value)} />
+>       <ul>
+>         {filteredItems.map((item, idx) => (
+>           <li key={idx}>{item}</li>
+>         ))}
+>       </ul>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useMemo(() => value, [deps])` caches the result of an expensive calculation between renders.
 > 2. Re-evaluates ONLY when dependency array values change.
 > 3. Prevents CPU performance bottlenecks during component re-renders.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Client Components (`"use client"`)](client_components.md) — Next.js files marked with `'use client'` that enable hooks.

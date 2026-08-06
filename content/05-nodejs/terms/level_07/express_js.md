@@ -221,7 +221,7 @@ app.get('/data', async (req, res, next) => {
 > ```
 > - Use `app.get()` for the route.
 > - Use `app.listen()` to start the server.
-
+> 
 ---
 
 
@@ -243,7 +243,7 @@ app.get('/data', async (req, res, next) => {
 > ```
 >
 > **Explanation:** `express()` creates an Express application instance listening on specified port.
-
+> 
 ---
 
 ### Exercise 3: Express 5 Async Route Support
@@ -260,7 +260,7 @@ app.get('/data', async (req, res, next) => {
 > ```
 >
 > **Explanation:** Express 5 natively catches rejected async promises automatically.
-
+> 
 ## 7. Related Terms
 - [Routing](routing.md) — The feature Express uses `app.get` and `app.post` for.
 - [Middleware](middleware.md) — The most powerful feature of the Express framework.

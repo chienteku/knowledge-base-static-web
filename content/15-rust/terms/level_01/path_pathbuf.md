@@ -284,7 +284,7 @@ Write a production-grade function `sanitize_and_resolve_path` that safely joins 
 > 3. **Extension Safety (`.extension()`)**: Using `Path::extension()` yields an `Option<&OsStr>`, avoiding manual string splitting errors with multiple dots (e.g. `archive.tar.gz`).
 > 4. **Containment Verification (`.starts_with()`)**: Performing `.starts_with(base_dir)` provides a final invariant check ensuring the resulting `PathBuf` is hierarchically nested within the intended root directory.
 >
-
+> 
 ---
 
 ### Exercise 2: High-Performance Log Cleanup & Archive Relocation Pipeline
@@ -399,7 +399,7 @@ The function must:
 > 2. **Component Decomposition (`file_stem` & `extension`)**: `Path::file_stem()` extracts everything prior to the final dot extension. Combining this with `Path::extension()` ensures multi-dot filenames (e.g. `service.auth.log`) correctly separate `service.auth` (stem) and `log` (extension).
 > 3. **Path Composition (`.parent()` & `.join()`)**: To preserve relative folder hierarchies (e.g. `log_root/services/auth/app.log` -> `archive_root/services/auth/app.2026-07-31.log.gz`), we slice the relative path's parent using `.parent()` and chain `.join()`.
 >
-
+> 
 ---
 
 ### Exercise 3: Cross-Platform Compiler Build System Output Artifact Mapper
@@ -508,7 +508,7 @@ The function must:
 > 2. **Zero Allocation Slicing (`AsRef<Path>`)**: By declaring generic parameters `impl AsRef<Path>`, callers can pass string literals (`&str`), owned `String`, `Path`, or `PathBuf` without upfront allocations.
 > 3. **Ownership and Copy Semantics**: `strip_prefix` produces a borrowed `&Path` slice without copying strings. Calling `.with_extension()` on `Path` allocates a new `PathBuf` holding the modified extension.
 >
-
+> 
 ---
 
 ## 6. Related Terms

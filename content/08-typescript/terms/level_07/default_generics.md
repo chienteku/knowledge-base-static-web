@@ -123,20 +123,20 @@ Create a generic `ApiResponse<T = string>` interface where `T` defaults to `stri
 >   data: T;
 >   status: number;
 > }
-
-// T defaults to string:
-const res1: ApiResponse = { data: "Operation Successful", status: 200 };
-
-// T explicitly specified as number[]:
-const res2: ApiResponse<number[]> = { data: [10, 20, 30], status: 200 };
-```
-
+> 
+> // T defaults to string:
+> const res1: ApiResponse = { data: "Operation Successful", status: 200 };
+> 
+> // T explicitly specified as number[]:
+> const res2: ApiResponse<number[]> = { data: [10, 20, 30], status: 200 };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Default generic type parameters (`<T = DefaultType>`) supply a default type argument when callers omit explicit generic types.
 > 2. Reduces boilerplate when a specific type parameter is used in the vast majority of cases.
 > 3. Standard library design pattern for generic interfaces.
-
+> 
 ---
 
 ### Exercise 2: Combining Default Generics with Generic Constraints
@@ -156,26 +156,26 @@ Combine a generic constraint with a default type parameter `<T extends HTMLEleme
 >   element: T;
 >   render: () => void;
 > };
-
-// Defaults to HTMLDivElement:
-const divWrapper: ElementWrapper = {
-  element: document.createElement("div"),
-  render: () => console.log("Rendering div")
-};
-
-// Explicitly specified as HTMLButtonElement:
-const btnWrapper: ElementWrapper<HTMLButtonElement> = {
-  element: document.createElement("button"),
-  render: () => console.log("Rendering button")
-};
-```
-
+> 
+> // Defaults to HTMLDivElement:
+> const divWrapper: ElementWrapper = {
+>   element: document.createElement("div"),
+>   render: () => console.log("Rendering div")
+> };
+> 
+> // Explicitly specified as HTMLButtonElement:
+> const btnWrapper: ElementWrapper<HTMLButtonElement> = {
+>   element: document.createElement("button"),
+>   render: () => console.log("Rendering button")
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `T extends Constraint = DefaultType` ensures that `T` MUST satisfy `Constraint` while providing a default fallback.
 > 2. The default type (`HTMLDivElement`) must be assignable to the constraint (`HTMLElement`).
 > 3. High-level generic component design pattern.
-
+> 
 ---
 
 ### Exercise 3: Default Parameter Ordering Rules Audit
@@ -193,17 +193,17 @@ Explain why generic type parameters with defaults must follow required generic p
 > ```typescript
 > // ❌ Compile Error: Required type parameter cannot follow an optional type parameter!
 > // type Invalid<T = string, U> = { t: T; u: U };
-
-// ✅ CORRECT (Required parameters come FIRST):
-type Valid<U, T = string> = { u: U; t: T };
-```
-
+> 
+> // ✅ CORRECT (Required parameters come FIRST):
+> type Valid<U, T = string> = { u: U; t: T };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Generic type parameters evaluate positionally from left to right.
 > 2. Optional generic parameters with defaults (`T = string`) must follow all required generic parameters without defaults (`U`).
 > 3. Enforces consistent positional generic resolution.
-
+> 
 ---
 
 

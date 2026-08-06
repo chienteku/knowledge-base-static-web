@@ -144,8 +144,8 @@ DB_PASSWORD=secret123 # Omit framework public prefix for server-only secrets
 
 > [!check]- Answer
 > - **B** (Providing a template like `.env.example` in Git is standard practice. It shows team members which keys they need to define locally, without leaking the actual values).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Git Leak Clean-Up Procedure

@@ -114,7 +114,7 @@ width: calc(10px * 2); /* Unitless multiplier */
 > Take the total width (100%), subtract the total gap space (60px), and divide the remaining space by 3 boxes!
 > ```
 > - Remember standard order of operations (PEMDAS). You can use parenthesis inside `calc()`!
-
+> 
 ---
 
 
@@ -135,7 +135,7 @@ width: calc(10px * 2); /* Unitless multiplier */
 > ```
 >
 > **Explanation:** `calc()` combines mixed unit calculations (percentages and pixels).
-
+> 
 ---
 
 ### Exercise 3: Nested calc() Functions
@@ -154,7 +154,7 @@ width: calc(10px * 2); /* Unitless multiplier */
 > ```
 >
 > **Explanation:** Parentheses inside `calc()` handle math operation grouping.
-
+> 
 ## 7. Related Terms
 - [`gap` (Grid Gap)](../level_06/gap.md) — Calculating space widths between grid tracks.
 - [`var()` (CSS Custom Properties)](var.md) — Evaluating custom variables inside math equations.

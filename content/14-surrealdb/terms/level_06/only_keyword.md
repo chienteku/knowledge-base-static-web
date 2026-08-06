@@ -172,7 +172,7 @@ An API route fetches a single user record `user:alice` and unboxes the document 
 > 1. `FROM ONLY` unwraps single-record queries, returning a single JSON object instead of a 1-element array `[{...}]`.
 > 2. If the query returns zero or multiple records, `ONLY` throws a runtime error.
 > 3. Eliminates client-side array index unboxing (`result[0]`).
-
+> 
 ---
 
 ### Exercise 2: Unboxing Scalar Subquery Values
@@ -197,7 +197,7 @@ Extract a user's email as a plain unboxed scalar string using `SELECT VALUE emai
 > 1. Combining `SELECT VALUE` with `ONLY` unwraps both the property key AND the outer result array.
 > 2. Returns a raw unboxed scalar value (`"alice@example.com"`).
 > 3. Ideal for binding subquery scalar values to parameters in scripts.
-
+> 
 ---
 
 ### Exercise 3: Enforcing Single-Record Invariants
@@ -226,7 +226,7 @@ Demonstrate that `FROM ONLY` throws an error when a query returns multiple recor
 > 1. `FROM ONLY` enforces single-record result invariants at query runtime.
 > 2. Guards against unexpected multi-record query returns.
 > 3. Ensures strict single-document API responses.
-
+> 
 ---
 
 

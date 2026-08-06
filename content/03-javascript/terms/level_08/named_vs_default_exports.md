@@ -183,7 +183,7 @@ logInfo("Logger initialized.");
 
 > [!check]- Answer
 > - The import statement should look like: `import Logger, { logInfo } from "./logger.js";`.
-
+> 
 ---
 
 ### Exercise 2: Combining Named and Default Imports
@@ -200,7 +200,7 @@ logInfo("Logger initialized.");
 > ```
 >
 > **Explanation:** `import DefaultItem, { NamedItem } from 'path'` combines default and named imports.
-
+> 
 ---
 
 ### Exercise 3: Renaming Named Exports on Import
@@ -217,8 +217,8 @@ logInfo("Logger initialized.");
 > ```
 >
 > **Explanation:** `import { item as alias }` renames imported named exports locally.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -149,7 +149,7 @@ A DevOps engineer launches a production SurrealDB node connected to an external 
 > 1. `tikv://` configures SurrealDB to use TiKV (CNCF distributed key-value store) as its storage engine backend.
 > 2. Decouples SurrealDB stateless compute nodes from physical key-value storage nodes.
 > 3. Scales horizontally to handle petabytes of data across distributed server clusters.
-
+> 
 ---
 
 ### Exercise 2: Stateless Compute Auto-Scaling over TiKV
@@ -175,7 +175,7 @@ Deploy multiple stateless SurrealDB compute instances connecting to the same und
 > 1. Stateless SurrealDB nodes execute query parsing, permissions, and graph logic.
 > 2. Multiple compute nodes read and write to the shared TiKV key-value cluster concurrently.
 > 3. Compute nodes can auto-scale up or down dynamically based on query traffic.
-
+> 
 ---
 
 ### Exercise 3: Distributed ACID Transaction Guarantees in TiKV
@@ -202,7 +202,7 @@ Explain how TiKV maintains ACID transaction guarantees across distributed nodes 
 > 1. TiKV provides distributed multi-master ACID transactions across cluster nodes.
 > 2. Replicates data ranges via Raft consensus groups.
 > 3. Guarantees zero data loss during node failures.
-
+> 
 ---
 
 

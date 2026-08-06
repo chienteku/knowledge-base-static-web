@@ -150,22 +150,22 @@ Create an `Authenticatable` interface and implement it inside a `UserSession` cl
 >   token: string;
 >   authenticate(): boolean;
 > }
-
-class UserSession implements Authenticatable {
-  constructor(public token: string) {}
-
-  authenticate(): boolean {
-    return this.token.length > 0;
-  }
-}
-```
-
+> 
+> class UserSession implements Authenticatable {
+>   constructor(public token: string) {}
+> 
+>   authenticate(): boolean {
+>     return this.token.length > 0;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `implements Interface` verifies that the class satisfies the structural interface contract.
 > 2. `implements` is checked strictly at compile time; completely erased in output JavaScript code.
 > 3. Ensures that class instances can be safely passed to functions expecting `Authenticatable`.
-
+> 
 ---
 
 ### Exercise 2: Implementing Multiple Interfaces
@@ -183,24 +183,24 @@ Create a class `DocumentProcessor` implementing both `Printable` and `Serializab
 > ```typescript
 > interface Printable { print(): void; }
 > interface Serializable { serialize(): string; }
-
-class DocumentProcessor implements Printable, Serializable {
-  print(): void {
-    console.log("Printing document...");
-  }
-
-  serialize(): string {
-    return JSON.stringify({ status: "printed" });
-  }
-}
-```
-
+> 
+> class DocumentProcessor implements Printable, Serializable {
+>   print(): void {
+>     console.log("Printing document...");
+>   }
+> 
+>   serialize(): string {
+>     return JSON.stringify({ status: "printed" });
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Classes can implement multiple comma-separated interfaces (`implements A, B`).
 > 2. Bypasses single class inheritance limitations by composing multiple interface capabilities.
 > 3. Standard object-oriented contract composition pattern.
-
+> 
 ---
 
 ### Exercise 3: Auditing `implements` Type Inference Limitations
@@ -219,24 +219,24 @@ Explain why `implements Interface` does NOT automatically infer parameter types 
 > interface Calculator {
 >   add(a: number, b: number): number;
 > }
-
-class FastCalc implements Calculator {
-  // ❌ FAILS with noImplicitAny if parameters are un-typed:
-  // add(a, b) { return a + b; }
-
-  // ✅ CORRECT (Must explicitly annotate method parameters):
-  add(a: number, b: number): number {
-    return a + b;
-  }
-}
-```
-
+> 
+> class FastCalc implements Calculator {
+>   // ❌ FAILS with noImplicitAny if parameters are un-typed:
+>   // add(a, b) { return a + b; }
+> 
+>   // ✅ CORRECT (Must explicitly annotate method parameters):
+>   add(a: number, b: number): number {
+>     return a + b;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `implements` checks that method implementations match the interface; it does NOT automatically infer method parameter types.
 > 2. Method parameters must still be annotated explicitly when `noImplicitAny` is enabled.
 > 3. Common misconception when working with `implements`.
-
+> 
 ---
 
 

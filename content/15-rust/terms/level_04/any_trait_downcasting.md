@@ -316,7 +316,7 @@ Your implementation must support:
 > 3. **Trait Object Downcasting**: The trait object `Box<dyn Any + Send + Sync>` is represented as a double-word fat pointer: a data pointer to heap memory and a vtable pointer. `downcast_ref::<T>()` queries the vtable's `type_id()` method. If `stored_type_id == TypeId::of::<T>()`, it casts the internal raw pointer `*const dyn Any` directly to `*const T` and wraps it in `Some(&T)`. If the `TypeId`s do not match, it returns `None` without attempting an invalid memory reinterpretation.
 > 4. **Unboxing Owned Values**: `Box<dyn Any + Send + Sync>::downcast::<T>(self)` attempts to downcast the owned heap pointer. If the type matches, it returns `Ok(Box<T>)`. Dereferencing `*b` moves the value `T` out of the heap allocation and safely deallocates the box header.
 > 5. **Concurrency Guards**: The trait bounds `Send + Sync` on `Box<dyn Any + Send + Sync>` ensure the `TypeMap` can be wrapped in `Arc<RwLock<TypeMap>>` or `Arc<Mutex<TypeMap>>` and safely shared across async tasks or multithreaded runtime pools.
-
+> 
 ---
 
 ### Exercise 2: Telemetry & Event Pipeline — Trait Object Downcasting with `AsAny` Pattern
@@ -522,7 +522,7 @@ Implement the production `AsAny` trait pattern to enable safe dynamic downcastin
 > 3. **Virtual Dispatch to `&dyn Any`**: Calling `event.as_any()` performs a virtual call through `Event`'s vtable. The underlying concrete implementation returns `self as &dyn Any`, constructing a valid `&dyn Any` fat pointer containing `Any`'s vtable and `TypeId`. From there, standard `.downcast_ref::<T>()` or `.downcast_mut::<T>()` compares `TypeId`s and succeeds safely.
 > 4. **Owned Trait Object Downcasting via `Box<Self>`**: The method `fn into_any(self: Box<Self>) -> Box<dyn Any>` uses the receiver type `Box<Self>`. This allows moving an owned trait object `Box<dyn Event>` through virtual dispatch into a `Box<dyn Any>`, enabling unboxing via `.downcast::<T>()`.
 > 5. **Soundness & Monomorphization**: Because `as_any()` is monomorphized per concrete type `T`, no unsafe pointer casts or transmutations occur. The Rust compiler guarantees that `self as &dyn Any` inside the blanket `impl<T: Any>` always references the exact original type bytes.
-
+> 
 ---
 
 ### Exercise 3: Runtime Diagnostics Framework — Panic Payload Interception & Dynamic Metadata Parsing
@@ -698,7 +698,7 @@ Design a panic payload inspector and dynamic diagnostic context system:
 > 2. **Ref-Downcasting Panic Payloads**: `parse_panic_payload` receives `&(dyn Any + Send)`. It sequentially calls `.downcast_ref::<T>()` for target types. This dereferences the fat pointer, reads the `TypeId` stored in the vtable, and returns `Some(&T)` only when `TypeId::of::<T>()` matches the payload's type.
 > 3. **Dynamic Diagnostics Context**: `DiagnosticContext` demonstrates combining type erasure (`Box<dyn Any + Send + Sync>`) with generic static dispatch traits (`T: Display`). `format_diagnostic::<T>()` first recovers the concrete type reference `&T` via `get::<T>()`, and then monomorphizes `Display::fmt` for `T` at compile time.
 > 4. **Safety & Soundness**: No unsafe memory transmutations or manual pointer arithmetic are required. If a panic payload or context value does not match the target downcast type, Rust safely returns `None`, preventing memory corruption or invalid reference reads.
-
+> 
 ---
 
 ## 6. Related Terms

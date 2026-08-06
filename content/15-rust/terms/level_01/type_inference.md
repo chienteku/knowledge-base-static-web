@@ -244,7 +244,7 @@ Demonstrate how Rust's **bidirectional type inference** allows `str::parse()` ca
 > 3. **Ownership and Lifetime Implications**:
 >    The raw string slices `&str` are borrowed references. Calling `.to_string()` on the symbol slice converts it into an owned `String` allocated on the heap, ensuring that the returned `Trade` struct owns its data and does not depend on the input buffer lifetime.
 >
-
+> 
 ---
 
 ### Exercise 2: High-Throughput Network Metric Aggregator
@@ -363,7 +363,7 @@ Demonstrate how to leverage **partial type inference** using the wildcard `_` pl
 > 3. **Trait-Bound Type Inference in Iterator Reductions**:
 >    The `Iterator::sum()` method relies on the `std::iter::Sum` trait. Calling `.iter().sum()` on a slice of numbers requires the compiler to know the accumulator type. Providing a clear binding type (`let total_latency_us: u64 = ...`) guides trait resolution without needing explicit generic method qualification on `.sum()`.
 >
-
+> 
 ---
 
 ### Exercise 3: Postfix AST Evaluator & Inference Signature Boundaries
@@ -497,7 +497,7 @@ Demonstrate how initializing an empty local evaluation stack (`let mut stack = V
 > 3. **Pattern Matching Unification**:
 >    In the `match` expression processing tokens, all execution branches pop elements from the stack and compute `f64` results. The compiler unifies types across all pattern match arms to ensure deterministic stack mutations and control flow.
 >
-
+> 
 ---
 
 ## 6. Related Terms

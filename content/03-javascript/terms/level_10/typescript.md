@@ -156,7 +156,7 @@ async function processData() {
 > TypeScript is incredibly smart. Even if you don't explicitly write the type, it uses **Type Inference** to guess what you meant. It saw you assign `100`, so it permanently locked the `score` variable to be a `number`.
 > ```
 > - TypeScript assumes you meant to be strict from the very first assignment.
-
+> 
 ---
 
 ### Exercise 2: Defining Interfaces and Types
@@ -173,7 +173,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Interfaces define structured compile-time shape contracts for objects.
-
+> 
 ---
 
 ### Exercise 3: Type Narrowing with Type Guards
@@ -195,8 +195,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Control flow type guards narrow generic types into specific types safely.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

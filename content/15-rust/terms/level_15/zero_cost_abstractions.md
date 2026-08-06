@@ -273,7 +273,7 @@ Write a zero-cost functional pipeline function `process_telemetry_functional(dat
 > 1. **Iterator Fusion & Inlining:** In Release mode (`cargo build --release`), `rustc` inlines closure definitions directly into the loop body. The high-level pipeline (`.filter().map().fold()`) is fused into a single machine loop without heap allocation, intermediate vectors, or closure object overhead (`Box<dyn Fn>`).
 > 2. **Bounds-Check Elimination (BCE):** Safe slice iteration (`data.iter()`) guarantees memory safety internally. LLVM proves slice indices remain strictly within bounds, completely eliminating per-iteration array boundary check instructions (`cmp`/`jae`) from compiled assembly.
 > 3. **Auto-Vectorization (SIMD):** The LLVM backend vectorizes the combined iterator operations into native SIMD instructions (such as AVX2 or ARM NEON), executing calculations across multiple elements in parallel per clock cycle.
-
+> 
 ---
 
 ### Exercise 2: Compile-Time Type-State Hardware Peripheral Controller (ZST Erasure)
@@ -391,7 +391,7 @@ Write complete Rust code and unit tests with assertions (`assert_eq!`, `assert`)
 > 1. **Zero-Sized Type Erasure:** Struct markers (`Unconfigured`, `Configured`, `ActiveTx`) and `PhantomData<State>` are Zero-Sized Types (ZSTs). Compiler layout algorithms assign them 0 bytes. `SpiDriver<State>` compiles down to a single raw memory address value (`usize`) in physical binary instructions.
 > 2. **Compile-Time Type Safety:** Attempting to call `.transmit()` on `SpiDriver<Unconfigured>` triggers a compile-time type mismatch error. Invalid hardware operations are caught at build time without requiring runtime state flags (`if self.is_configured`).
 > 3. **Linear Move Semantics:** Transition methods consume `self` by value. This prevents double-initialization or concurrent multi-state alias bugs without requiring dynamic locks, mutexes, or atomic flags.
-
+> 
 ---
 
 ### Exercise 3: Monomorphized Static Dispatch vs Dynamic Trait Object Serialization (Zero-Cost Generics)
@@ -538,7 +538,7 @@ Implement the `PacketSerializer` trait alongside two serializer implementations 
 > 1. **Static Monomorphization:** Calling `serialize_batch_static` triggers generic instantiation. `rustc` duplicates and specializes `serialize_batch_static` for `FixBinarySerializer` and `CompactJsonSerializer` at compile time, eliminating dynamic function call dispatch.
 > 2. **Function Inlining:** Static dispatch enables LLVM to inline `serialize_u32` directly into the batch processing loop. The generated machine assembly contains direct byte write operations without function call stack frame overhead or parameter passing registers.
 > 3. **Fat Pointer & Vtable Cost:** Dynamic dispatch (`&dyn PacketSerializer`) passes a 2-word fat pointer (data pointer + vtable pointer). Calling `.serialize_u32()` requires dereferencing the vtable at runtime (indirect call `call rax`), which prevents function inlining and risks CPU branch prediction stalls.
-
+> 
 ---
 
 ## 6. Related Terms

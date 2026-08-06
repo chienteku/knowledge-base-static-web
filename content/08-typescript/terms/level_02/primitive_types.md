@@ -118,13 +118,13 @@ Annotate primitive data types (`string`, `number`, `boolean`, `symbol`, `bigint`
 > const uniqueId: symbol = Symbol("id");
 > const accountBalance: bigint = 9007199254740991n;
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript primitive types correspond directly to JavaScript `typeof` primitive return values.
 > 2. `bigint` handles arbitrary precision integers beyond `Number.MAX_SAFE_INTEGER`.
 > 3. Lowercase primitive type annotations (`string`, `number`) must be used instead of boxed wrapper objects (`String`, `Number`).
-
+> 
 ---
 
 ### Exercise 2: Auditing Boxed Wrapper Object Anti-Patterns
@@ -143,17 +143,17 @@ Explain why using boxed wrapper types (`String`, `Number`, `Boolean`) instead of
 > // ❌ INCORRECT (Using boxed Object wrappers):
 > // let title: String = "Hello";
 > // let rawString: string = title; // FAILS under strict checks!
-
-// ✅ CORRECT (Use lowercase primitive types):
-let title: string = "Hello";
-```
-
+> 
+> // ✅ CORRECT (Use lowercase primitive types):
+> let title: string = "Hello";
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `String`, `Number`, and `Boolean` refer to JavaScript boxed wrapper object instances (`new String()`), NOT primitives.
 > 2. Primitive values (`"hello"`) are not assignable to object wrapper types in strict mode.
 > 3. Always use lowercase primitive type keywords in TypeScript annotations.
-
+> 
 ---
 
 ### Exercise 3: Type Checking Primitives with `typeof`
@@ -176,13 +176,13 @@ Narrow a primitive union parameter `string | number` using `typeof` type guards.
 >   return val.toFixed(2); // val narrowed to number
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `typeof` expressions act as TypeScript control-flow type guards.
 > 2. Automatically narrows union types to specific primitive branches inside `if` blocks.
 > 3. Safe pattern for handling primitive union arguments.
-
+> 
 ---
 
 

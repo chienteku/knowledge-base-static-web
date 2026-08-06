@@ -113,7 +113,7 @@ path.resolve('/a', '/b'); // Returns '/b' -- resolve treats /b as absolute root!
 > }
 > ```
 > - Which `path` method specifically targets the file extension?
-
+> 
 ---
 
 
@@ -134,7 +134,7 @@ path.resolve('/a', '/b'); // Returns '/b' -- resolve treats /b as absolute root!
 > ```
 >
 > **Explanation:** `path.extname()` returns file extensions including leading dot; `path.basename()` returns final path segment.
-
+> 
 ---
 
 ### Exercise 3: Safe Path Joining
@@ -151,7 +151,7 @@ path.resolve('/a', '/b'); // Returns '/b' -- resolve treats /b as absolute root!
 > ```
 >
 > **Explanation:** `path.join` normalizes slashes automatically for Windows and Unix operating systems.
-
+> 
 ## 7. Related Terms
 - [The fs Module (File System)](fs_module.md) — The module that consumes the paths you build.
 - [Global Objects (global, __dirname, __filename)](global_objects.md) — Related concept: Global Objects (global, __dirname, __filename).

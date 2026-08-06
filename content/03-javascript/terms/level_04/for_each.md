@@ -157,7 +157,7 @@ async function processData() {
 > Item 3: Cherry
 > ```
 > - `fruits.forEach((fruit, index) => { console.log(`Item ${index + 1}: ${fruit}`); });`
-
+> 
 ---
 
 ### Exercise 2: Side Effect Logging with `forEach`
@@ -177,7 +177,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `forEach` passes `(element, index, array)` parameters to callback iterators.
-
+> 
 ---
 
 ### Exercise 3: Array Index Mutation in `forEach`
@@ -196,8 +196,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** The 3rd parameter `arr` allows targeted in-place index mutation during iteration.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

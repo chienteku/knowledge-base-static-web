@@ -169,7 +169,7 @@ Run `VACUUM ANALYZE` on table `orders` to reclaim dead MVCC tuples and update ca
 > 1. `VACUUM` scans table pages to mark dead MVCC tuples (from `UPDATE`/`DELETE`) as reusable space for future inserts.
 > 2. `ANALYZE` samples table rows to update statistical distributions in `pg_statistic`.
 > 3. Essential database maintenance command.
-
+> 
 ---
 
 ### Exercise 2: Monitoring Autovacuum Background Daemon Activity
@@ -200,7 +200,7 @@ Query `pg_stat_user_tables` to inspect the last time autovacuum ran on table `or
 > 1. Autovacuum is a background daemon process automatically triggering `VACUUM` and `ANALYZE` when dead tuple thresholds are reached.
 > 2. `n_dead_tup` measures accumulated dead MVCC tuples.
 > 3. Monitors autovacuum operational health.
-
+> 
 ---
 
 ### Exercise 3: Full Table Compaction with VACUUM FULL
@@ -225,7 +225,7 @@ Reclaim disk space from a severely bloated table using `VACUUM FULL`.
 > 1. Standard `VACUUM` marks dead space reusable for future inserts but does NOT shrink file sizes on disk.
 > 2. `VACUUM FULL` rewrites the entire table into a new disk file, returning un-used disk space to the operating system.
 > 3. Warning: Requires an `AccessExclusiveLock` blocking all concurrent read and write queries; prefer `pg_repack` for online compaction.
-
+> 
 ---
 
 

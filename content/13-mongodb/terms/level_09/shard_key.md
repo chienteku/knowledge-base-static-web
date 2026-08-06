@@ -165,7 +165,7 @@ Evaluate shard key selection for a 1,000,000,000 document collection `events` co
 > 1. Shard keys MUST possess high cardinality to enable splitting data into thousands of distinct chunks.
 > 2. Low-cardinality keys lock data into indivisible jumbo chunks.
 > 3. Primary criteria for shard key selection.
-
+> 
 ---
 
 ### Exercise 2: Designing Compound Shard Keys for Query Targeting
@@ -190,7 +190,7 @@ Design a compound shard key `{ tenantId: 1, createdAt: 1 }` for a multi-tenant S
 > 1. Compound shard keys (`tenantId` + `createdAt`) isolate queries for a specific tenant to a single shard (`tenantId`).
 > 2. `createdAt` provides high cardinality to split large tenants into multiple chunks.
 > 3. Eliminates scatter-gather queries for multi-tenant applications.
-
+> 
 ---
 
 ### Exercise 3: Refactoring Shard Keys with `refineCollectionShardKey`
@@ -215,7 +215,7 @@ Refine an existing single-field shard key `{ tenantId: 1 }` by appending a secon
 > 1. MongoDB 4.4+ allows refining shard keys by appending suffix fields to existing shard key patterns.
 > 2. Increases shard key cardinality for growing collections without re-sharded data migrations.
 > 3. Powerful online schema refactoring capability.
-
+> 
 ---
 
 

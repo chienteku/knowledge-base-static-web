@@ -175,24 +175,24 @@ Validate a theme configuration object against a `Record<string, string | RGB>` i
 > ```typescript
 > type RGB = [r: number, g: number, b: number];
 > type Palette = Record<string, string | RGB>;
-
-const palette = {
-  red: "#ff0000",
-  green: [0, 255, 0],
-  blue: "#0000ff"
-} satisfies Palette;
-
-// Property types are PRESERVED (not widened to string | RGB)!
-palette.red.toUpperCase(); // Valid! Compiler knows red is string!
-palette.green.map((x) => x); // Valid! Compiler knows green is RGB array!
-```
-
+> 
+> const palette = {
+>   red: "#ff0000",
+>   green: [0, 255, 0],
+>   blue: "#0000ff"
+> } satisfies Palette;
+> 
+> // Property types are PRESERVED (not widened to string | RGB)!
+> palette.red.toUpperCase(); // Valid! Compiler knows red is string!
+> palette.green.map((x) => x); // Valid! Compiler knows green is RGB array!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `satisfies` validates that an object matches a target type contract WITHOUT altering or widening its inferred literal type.
 > 2. Traditional type annotations (`const palette: Palette = ...`) widen all values to `string | RGB`, losing specific member methods.
 > 3. Preserves exact string/array type inference for autocomplete and method access.
-
+> 
 ---
 
 ### Exercise 2: Catching Property Typos with `satisfies`
@@ -209,21 +209,21 @@ Catch property name typos in a route config object using `satisfies`.
 >
 > ```typescript
 > type Routes = "home" | "about" | "contact";
-
-// ❌ Compile Error: 'profile' is not assignable to type Routes!
-// const config = {
-//   home: "/",
-//   about: "/about",
-//   profile: "/user"
-// } satisfies Record<Routes, string>;
-```
-
+> 
+> // ❌ Compile Error: 'profile' is not assignable to type Routes!
+> // const config = {
+> //   home: "/",
+> //   about: "/about",
+> //   profile: "/user"
+> // } satisfies Record<Routes, string>;
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `satisfies` verifies that all required properties of the target contract are present and correctly typed.
 > 2. Flags invalid keys or missing properties immediately during compilation.
 > 3. Ensures strict object schema compliance while keeping narrow key inferences.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: Type Annotation (`: T`) vs `satisfies T`
@@ -244,13 +244,13 @@ Formulate an architectural comparison matrix contrasting Type Annotations (`: T`
 > - satisfies T: Validates expression against T. Preserves the exact inferred narrow types of individual properties for autocomplete.
 > Rule: Use : T for variable boundaries; use satisfies T for configuration objects where narrow property access is needed.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Type annotations enforce contract boundaries at the cost of type widening.
 > 2. `satisfies` enforces contract boundaries while retaining precise expression types.
 > 3. Significant feature introduced in TypeScript 4.9.
-
+> 
 ---
 
 

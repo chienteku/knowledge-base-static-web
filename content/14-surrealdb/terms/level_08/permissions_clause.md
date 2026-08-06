@@ -155,7 +155,7 @@ Configure table `post` with CRUD permissions: anyone can `select` published post
 > 1. `PERMISSIONS` clauses define granular row-level security rules per operation (`select`, `create`, `update`, `delete`).
 > 2. Evaluates boolean filter expressions for every candidate record.
 > 3. Automatically filters out unauthorized records from query result arrays.
-
+> 
 ---
 
 ### Exercise 2: Field-Level Read Permissions
@@ -180,7 +180,7 @@ Restrict field `salary` on table `employee` so that only managers (`$auth.role =
 > 1. Field-level `PERMISSIONS` restrict visibility for specific record properties.
 > 2. Redacts unauthorized fields (`salary: NONE`) while allowing access to non-sensitive fields.
 > 3. Enforces field privacy at the database tier.
-
+> 
 ---
 
 ### Exercise 3: Complete Access Blockage with `NONE`
@@ -205,7 +205,7 @@ Block all client `delete` operations on table `audit_log` by specifying `PERMISS
 > 1. `PERMISSIONS FOR delete NONE` blocks deletion attempts across all scoped client sessions.
 > 2. Guarantees append-only audit trail immutability.
 > 3. Root/admin connections bypass RLS permissions.
-
+> 
 ---
 
 

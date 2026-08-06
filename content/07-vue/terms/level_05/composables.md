@@ -143,7 +143,7 @@ function useCounter() {
 > (If you want to share global state, you need Pinia, or you must define the `ref` OUTSIDE the composable function).
 > ```
 > - What happens every time you invoke a JavaScript function?
-
+> 
 ---
 
 ### Exercise 2: Composable Naming Convention
@@ -164,7 +164,7 @@ function useCounter() {
 >   return { data };
 > }
 > ```
-
+> 
 ---
 
 ### Exercise 3: useMouse Composable Implementation
@@ -196,8 +196,8 @@ function useCounter() {
 >   return { x, y };
 > }
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

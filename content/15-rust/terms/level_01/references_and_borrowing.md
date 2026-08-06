@@ -146,7 +146,7 @@ Collect indices or mutate after iteration finishes!
 > #### Technical Explanation
 >
 > 1. Takes an exclusive mutable reference `&mut String` to modify the caller's data in-place without returning a new value.
-
+> 
 ---
 
 ### Exercise 2: Shared Reference Read-Only Search Function
@@ -181,7 +181,7 @@ Collect indices or mutate after iteration finishes!
 > #### Technical Explanation
 >
 > 1. Uses `&str` shared references allowing multiple callers to read the document concurrently.
-
+> 
 ---
 
 ### Exercise 3: Slice Ref Splitter
@@ -216,7 +216,7 @@ Collect indices or mutate after iteration finishes!
 > #### Technical Explanation
 >
 > 1. Lifetime elision ties return reference lifetime directly to input reference lifetime.
-
+> 
 ---
 
 ## 5. Related Terms

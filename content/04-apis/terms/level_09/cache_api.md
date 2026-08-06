@@ -104,7 +104,7 @@ const CACHE_NAME = 'app-cache-v2'; // Versioned cache name for invalidation
 > 2. Cache API. It is perfectly optimized for storing large, raw HTTP File responses (like MP3s, Images, and CSS).
 > ```
 > - Which one stores Data? Which one stores Files?
-
+> 
 ---
 
 ### Exercise 2: Cache API Match & Add Pattern

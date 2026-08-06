@@ -148,7 +148,7 @@ Configure a `PERMISSIONS` clause on table `document` ensuring users can only sel
 > 1. `$auth` represents the authenticated user's record document during active scoped client sessions.
 > 2. `$auth.id` extracts the primary key ID pointer (`user:alice`) of the active user.
 > 3. Enforces row-level security automatically across client queries.
-
+> 
 ---
 
 ### Exercise 2: Role-Based Access Control with `$auth.role`
@@ -174,7 +174,7 @@ Allow document deletion if the active user owns the document (`owner = $auth.id`
 > 1. `$auth.role` inspects custom properties stored on the authenticated user record object.
 > 2. Combines record ownership checks with role-based access control (RBAC).
 > 3. Evaluates security rules dynamically per record mutation.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Active `$auth` Context
@@ -198,7 +198,7 @@ Execute a test query returning current `$auth.id` and `$auth.email` details duri
 > 1. Selecting `$auth` projects the authenticated session's record context.
 > 2. Evaluates to `NONE` if the query is executed by an unauthenticated guest connection.
 > 3. Enables frontend SDK apps to retrieve current user session state directly.
-
+> 
 ---
 
 

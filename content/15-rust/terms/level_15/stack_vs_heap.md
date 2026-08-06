@@ -276,7 +276,7 @@ Implement a recursive expression evaluator `Expr` that uses `Box<Expr>` to break
 > 2. **Stack Footprint**: The `Expr` enum header lives on the stack frame and occupies only 24 bytes (1 byte enum discriminant + padding + 2 $\times$ 8-byte `Box` pointers). The actual tree nodes live on the heap.
 > 3. **Recursive Traversal & Evaluation**: Calling `left.eval()` dereferences the `Box<Expr>` pointer to read heap memory and evaluate sub-expressions recursively.
 > 4. **Deterministic Deallocation**: When `expr` goes out of scope, Rust's `Drop` implementation for `Box` recursively frees all child nodes allocated on the heap without requiring a garbage collector.
-
+> 
 ---
 
 ### Exercise 2: Small Vector Optimization (Stack-First Allocation with Heap Fallback)
@@ -419,7 +419,7 @@ Implement a stack-first small vector `SmallHeaderBuffer<const N: usize>` that st
 > 2. **In-place State Transition**: When `len == N` and `push` is called, the buffer transfers existing elements from inline stack memory into a newly allocated heap `Vec`, replacing `*self` with `Self::Heap(vec)`.
 > 3. **Cache Locality**: Storing elements on the stack keeps data contiguous in CPU L1/L2 cache lines, significantly improving iteration speed over heap-allocated vectors for short-lived HTTP requests.
 > 4. **Safety & Take Semantics**: `item.take()` safely extracts values out of `Option<Header>` stack slots without duplicating or dropping uninitialized memory.
-
+> 
 ---
 
 ### Exercise 3: Zero-Allocation Stack Ring Buffer for Embedded Microcontrollers (`#![no_std]`)
@@ -525,8 +525,8 @@ Implement a `#![no_std]` compatible `StackRingBuffer<const CAP: usize>` that all
 > 3. **Fixed Memory Footprint**: `size_of::<StackRingBuffer<4>>()` equals $4 \times 4$ bytes (`f32` array) $+ 2 \times 8$ bytes (`head` and `len` indices), occupying exactly 32 bytes on the stack with zero risk of heap fragmentation.
 > 4. **Circular Modulo Arithmetic**: `(self.head + 1) % CAP` efficiently recycles array indices in constant $O(1)$ time without re-allocating or shifting memory elements.
 > 
-
-
+> 
+> 
 ---
 
 ## 6. Related Terms

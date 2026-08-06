@@ -191,7 +191,7 @@ Filter collection `orders` at the beginning of an aggregation pipeline to includ
 > 1. `$match` uses standard MongoDB query filter syntax.
 > 2. Placing `$match` at the start of the pipeline enables index scans (`IXSCAN`).
 > 3. Filters out irrelevant documents early, minimizing RAM usage in subsequent stages.
-
+> 
 ---
 
 ### Exercise 2: Combining `$match` with Text Index Search
@@ -218,7 +218,7 @@ Execute a full-text search query inside `$match` as the first stage of an aggreg
 > 1. `$text` search queries MUST appear in the first `$match` stage of a pipeline.
 > 2. Utilizes inverted text index to select matching documents.
 > 3. Combines full-text search with pipeline analytics.
-
+> 
 ---
 
 ### Exercise 3: Mid-Pipeline Filtering
@@ -245,7 +245,7 @@ Filter grouped results after a `$group` stage to return ONLY categories with tot
 > 1. `$match` can appear multiple times in a pipeline.
 > 2. When placed after `$group`, `$match` acts like a SQL `HAVING` clause filtering aggregated results.
 > 3. Trims summary outputs before returning payload to client.
-
+> 
 ---
 
 

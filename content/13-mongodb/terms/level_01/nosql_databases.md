@@ -143,7 +143,7 @@ Categorize the four primary NoSQL database architecture types and provide a repr
 > 1. NoSQL databases trade off rigid SQL schemas for domain-specific performance optimizations.
 > 2. Document databases excel at complex object modeling and content applications.
 > 3. Polyglot persistence architectures combine multiple database types per service requirements.
-
+> 
 ---
 
 ### Exercise 2: BASE Consistency vs ACID Guarantees
@@ -169,7 +169,7 @@ Explain the BASE (Basically Available, Soft-state, Eventual consistency) model u
 > 1. BASE prioritizes horizontal availability and partition tolerance (CAP theorem).
 > 2. Modern MongoDB supports single-document ACID by default and multi-document ACID transactions when needed.
 > 3. Balances developer flexibility with transactional safety.
-
+> 
 ---
 
 ### Exercise 3: Evaluating Polyglot Persistence Architecture
@@ -196,7 +196,7 @@ Design a polyglot storage architecture for an e-commerce platform using MongoDB 
 > 1. Combines the strengths of document databases (rich querying) and in-memory caches (sub-millisecond reads).
 > 2. Optimizes infrastructure cost and response latency.
 > 3. Standard architecture pattern for modern web applications.
-
+> 
 ---
 
 

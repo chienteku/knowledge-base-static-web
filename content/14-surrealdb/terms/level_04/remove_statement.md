@@ -163,7 +163,7 @@ Drop obsolete table `temp_logs` and all stored records.
 > 1. `REMOVE TABLE` drops table schema metadata and stored records completely.
 > 2. Frees disk space allocation.
 > 3. Equivalent to SQL `DROP TABLE`.
-
+> 
 ---
 
 ### Exercise 2: Dropping Field Definitions with `REMOVE FIELD`
@@ -187,7 +187,7 @@ Remove an obsolete field `legacy_sk` from table `user`.
 > 1. `REMOVE FIELD` drops field schema rules from table definitions.
 > 2. Existing stored record data remains until mutated.
 > 3. Updates table schema metadata registers.
-
+> 
 ---
 
 ### Exercise 3: Dropping Secondary Indexes with `REMOVE INDEX`
@@ -211,7 +211,7 @@ Remove secondary index `old_idx` from table `product`.
 > 1. `REMOVE INDEX` drops secondary index structures from disk.
 > 2. Reduces write amplification overhead.
 > 3. Preserves stored table record data.
-
+> 
 ---
 
 

@@ -164,7 +164,7 @@ async function processData() {
 > ```
 > - `if (age < 18) { return "Too young"; }`
 > - Since `return` exits the function immediately, any code written *after* the `if` block will only run if they are 18 or older. No `else` needed!
-
+> 
 ---
 
 ### Exercise 2: Multiple Conditional Return Guard Exits
@@ -187,7 +187,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `return` immediately halts function execution and passes values back to callers.
-
+> 
 ---
 
 ### Exercise 3: Bare Return Defaulting to `undefined`
@@ -205,8 +205,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Functions exiting via bare `return;` return primitive `undefined`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

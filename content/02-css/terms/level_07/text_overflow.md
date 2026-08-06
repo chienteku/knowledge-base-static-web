@@ -127,7 +127,7 @@ This requires an exact combo of 3 specific properties to work!
 > This will aggressively snap the URL into multiple lines, keeping it safely inside the mobile screen so the user can read the whole thing. If you used `ellipsis`, they wouldn't be able to read the end of the URL.
 > ```
 > - Do you want to cut the stick, or snap it in half?
-
+> 
 ---
 
 
@@ -150,7 +150,7 @@ This requires an exact combo of 3 specific properties to work!
 > ```
 >
 > **Explanation:** Single-line ellipsis requires `nowrap`, `hidden` overflow, and `text-overflow: ellipsis`.
-
+> 
 ---
 
 ### Exercise 3: Multi-Line Truncation Property
@@ -172,7 +172,7 @@ This requires an exact combo of 3 specific properties to work!
 > ```
 >
 > **Explanation:** `-webkit-line-clamp` truncates multi-line text blocks after N lines.
-
+> 
 ## 7. Related Terms
 - [`white-space`](white_space.md) — The property that forces the single line required for `ellipsis` to work.
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Related concept: `overflow` (hidden, scroll, auto, visible).

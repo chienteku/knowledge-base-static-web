@@ -179,7 +179,7 @@ process.on('SIGINT', async () => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Writing Complete Graceful Shutdown Handler
@@ -202,7 +202,7 @@ process.on('SIGINT', async () => {
 > ```
 >
 > **Explanation:** Graceful shutdown closes web listeners, drains DB connection pools, and exits.
-
+> 
 ---
 
 ### Exercise 3: Kubernetes SIGTERM PreStop Sequence
@@ -219,7 +219,7 @@ process.on('SIGINT', async () => {
 > ```
 >
 > **Explanation:** Kubernetes sends `SIGTERM` to initiate graceful shutdown, giving processes time to finish active requests.
-
+> 
 ## 7. Related Terms
 - [PM2 (Process Manager)](pm2.md) — Automatically sends SIGINT and awaits graceful shutdowns during updates.
 - [Docker](docker.md) — Relies on SIGTERM handling to shut down containers cleanly.

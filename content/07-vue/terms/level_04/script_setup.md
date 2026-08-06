@@ -257,7 +257,7 @@ export default {
 > - Replace `props` declaration with `const props = defineProps(...)`.
 > - Replace `emit` extraction with `const emit = defineEmits(...)`.
 > - Remove the `setup()` function structure and the `return` statement entirely.
-
+> 
 ---
 
 ### Exercise 2: defineExpose Pattern
@@ -281,7 +281,7 @@ export default {
 > defineExpose({ resetForm });
 > </script>
 > ```
-
+> 
 ---
 
 ### Exercise 3: defineOptions Macro Purpose

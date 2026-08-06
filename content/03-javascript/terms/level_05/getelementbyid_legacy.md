@@ -175,7 +175,7 @@ if (typeof document !== "undefined") {
 > [!check]- Answer
 > - Select elements using `document.getElementsByClassName("alert-box")`.
 > - Use a standard `for` loop, or convert to an Array using `Array.from()` to call `.forEach()`.
-
+> 
 ---
 
 ### Exercise 2: Fast ID Selection
@@ -192,7 +192,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `getElementById` is the fastest optimized DOM selection method.
-
+> 
 ---
 
 ### Exercise 3: Handling Missing ID Queries
@@ -210,7 +210,7 @@ if (typeof document !== "undefined") {
 > ```
 >
 > **Explanation:** `getElementById` returns `null` if no element with matching ID exists.
-
+> 
 ---
 
 ## 7. Related Terms

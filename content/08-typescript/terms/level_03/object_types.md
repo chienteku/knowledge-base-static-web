@@ -117,16 +117,16 @@ Annotate a function receiving an inline object type parameter representing a use
 > function authenticate(session: { user: string; token: string }): boolean {
 >   return session.token.length > 0;
 > }
-
-authenticate({ user: "alice", token: "tok_abc123" });
-```
-
+> 
+> authenticate({ user: "alice", token: "tok_abc123" });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Inline object types `{ key: Type }` define property requirements directly in function parameter lists.
 > 2. Useful for quick one-off function parameters.
 > 3. Structural typing rules apply identically to inline object types and named interfaces.
-
+> 
 ---
 
 ### Exercise 2: Reusing Object Shapes with Type Aliases
@@ -147,18 +147,18 @@ Extract an inline object shape into a reusable `type` alias `Product`.
 >   name: string;
 >   price: number;
 > };
-
-function formatProduct(product: Product): string {
-  return `${product.name} - $${product.price.toFixed(2)}`;
-}
-```
-
+> 
+> function formatProduct(product: Product): string {
+>   return `${product.name} - $${product.price.toFixed(2)}`;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `type Product = { ... }` names an object shape for reuse across multiple function signatures.
 > 2. Promotes DRY (Don't Repeat Yourself) type declarations across a codebase.
 > 3. Clean object shape abstraction.
-
+> 
 ---
 
 ### Exercise 3: Nested Object Shape Annotations
@@ -187,13 +187,13 @@ Annotate a complex nested object shape containing address data.
 >   };
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Object types can nest child object definitions arbitrarily deep.
 > 2. All nested fields are strictly verified during property access.
 > 3. Provides precise shape guarantees for complex JSON API payloads.
-
+> 
 ---
 
 

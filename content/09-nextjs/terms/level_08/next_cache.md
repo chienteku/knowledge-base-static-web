@@ -110,10 +110,6 @@ export const dynamic = 'force-dynamic'; // ❌ Disables caching globally for ent
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Caching Custom Database Queries with `unstable_cache`
@@ -131,25 +127,25 @@ Wrap an expensive database ORM query in `unstable_cache()` with custom cache tag
 > ```typescript
 > import { unstable_cache } from "next/cache";
 > import { db } from "@/lib/db";
-
-export const getCachedUsers = unstable_cache(
-  async (role: string) => {
-    return db.user.findMany({ where: { role } });
-  },
-  ["users-by-role"], // Key parts
-  {
-    revalidate: 3600, // Cache for 1 hour
-    tags: ["users"]   # Tag for on-demand invalidation
-  }
-);
-```
-
+> 
+> export const getCachedUsers = unstable_cache(
+>   async (role: string) => {
+>     return db.user.findMany({ where: { role } });
+>   },
+>   ["users-by-role"], // Key parts
+>   {
+>     revalidate: 3600, // Cache for 1 hour
+>     tags: ["users"]   # Tag for on-demand invalidation
+>   }
+> );
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `unstable_cache()` extends Data Cache functionality to arbitrary async functions (database queries, ORM calls, computations).
 > 2. `tags` allow purging cached database query results on demand via `revalidateTag('users')`.
 > 3. Crucial for caching database calls that do NOT use the `fetch()` API.
-
+> 
 ---
 
 ### Exercise 2: Purging Data Cache Entries with `revalidateTag`
@@ -166,21 +162,21 @@ Purge all cached data associated with tag `'inventory'` inside a Server Action.
 >
 > ```typescript
 > "use server";
-
-import { revalidateTag } from "next/cache";
-
-export async function updateStockLevel(productId: string) {
-  // Update DB...
-  revalidateTag("inventory");
-}
-```
-
+> 
+> import { revalidateTag } from "next/cache";
+> 
+> export async function updateStockLevel(productId: string) {
+>   // Update DB...
+>   revalidateTag("inventory");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `revalidateTag('tag-name')` invalidates matching Data Cache entries globally across all pages.
 > 2. Affects both `fetch()` requests and `unstable_cache()` queries tagged with the same string.
 > 3. Targeted cache invalidation pattern.
-
+> 
 ---
 
 ### Exercise 3: Purging Route Segment Cache with `revalidatePath`
@@ -197,26 +193,22 @@ Purge all cached route pages under `/shop` using `revalidatePath('/shop', 'page'
 >
 > ```typescript
 > "use server";
-
-import { revalidatePath } from "next/cache";
-
-export async function updateCatalog() {
-  revalidatePath("/shop", "page");
-}
-```
-
+> 
+> import { revalidatePath } from "next/cache";
+> 
+> export async function updateCatalog() {
+>   revalidatePath("/shop", "page");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `revalidatePath()` purges static Full Route Cache HTML and associated Data Cache entries for specified URL paths.
 > 2. Passing `'page'` limits invalidation to the specific page component.
 > 3. Core cache management API usage.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [On-Demand Revalidation (`revalidatePath`, `revalidateTag`)](../level_06/on_demand_revalidation.md) — The primary tool for clearing Layers 2, 3, and 4.

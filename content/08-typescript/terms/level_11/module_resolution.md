@@ -189,13 +189,13 @@ Configure `tsconfig.json` for modern Node.js ES Modules using `"moduleResolution
 >   }
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `"NodeNext"` module resolution mirrors modern Node.js ECMAScript module resolution mechanics.
 > 2. Enforces explicit `.js` file extensions in relative import paths (`import { foo } from "./foo.js"`).
 > 3. Respects `package.json` `"type": "module"` configuration flags.
-
+> 
 ---
 
 ### Exercise 2: Configuring Path Aliases with `baseUrl` and `paths`
@@ -221,13 +221,13 @@ Configure import aliases (`@/components/*`) in `tsconfig.json`.
 >   }
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `"baseUrl"` establishes the root directory for resolving non-relative module names.
 > 2. `"paths"` configures path mapping aliases relative to `baseUrl`.
 > 3. Replaces deep relative import paths (`../../../../components/Button`) with clean aliases (`@/components/Button`).
-
+> 
 ---
 
 ### Exercise 3: Auditing Bundler Resolution Mode (`"moduleResolution": "bundler"`)
@@ -252,19 +252,13 @@ Configure `tsconfig.json` for modern web bundlers (Vite, Webpack, Next.js) using
 >   }
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `"bundler"` module resolution mode mimics resolution rules of modern web bundlers (Vite, Next.js, ESBuild).
 > 2. Permits importing modules without explicit `.js` file extensions.
 > 3. Designed specifically for front-end bundler workflows.
-
----
-
-
-
-
-
+> 
 ---
 
 

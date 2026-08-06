@@ -169,22 +169,22 @@ Create an optional catch-all route `app/shop/[[...slug]]/page.tsx` matching both
 >   params: Promise<{ slug?: string[] }>;
 > }) {
 >   const { slug } = await params;
-
-  return (
-    <main className="p-6">
-      <h1>Shop Catalog</h1>
-      <p>Active Category: {slug ? slug.join(" > ") : "All Products"}</p>
-    </main>
-  );
-}
-```
-
+> 
+>   return (
+>     <main className="p-6">
+>       <h1>Shop Catalog</h1>
+>       <p>Active Category: {slug ? slug.join(" > ") : "All Products"}</p>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Double bracket syntax `[[...slug]]` makes the catch-all parameter optional.
 > 2. Matches base URL path `/shop` (`params.slug` is undefined) AND nested paths `/shop/a/b` (`params.slug` is `['a', 'b']`).
 > 3. Consolidates catalog index pages and sub-category pages into a single `page.tsx` component.
-
+> 
 ---
 
 ### Exercise 2: Optional Catch-All Params Guard
@@ -208,22 +208,22 @@ Handle undefined `slug` parameters gracefully when accessing base route paths.
 >   const { slug } = await params;
 >   const category = slug?.[0] ?? "featured";
 >   const subCategory = slug?.[1] ?? "all";
-
-  return (
-    <div>
-      <p>Category: {category}</p>
-      <p>Sub-Category: {subCategory}</p>
-    </div>
-  );
-}
-```
-
+> 
+>   return (
+>     <div>
+>       <p>Category: {category}</p>
+>       <p>Sub-Category: {subCategory}</p>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Optional chaining `slug?.[0]` guards against `TypeError` exceptions when accessing base `/shop` route paths.
 > 2. Nullish coalescing operator `??` sets sensible default values for base paths.
 > 3. Defensive programming pattern for optional catch-all routes.
-
+> 
 ---
 
 ### Exercise 3: Architectural Trade-Off: `[...slug]` vs `[[...slug]]`
@@ -243,19 +243,15 @@ Formulate an architectural selection decision matrix comparing `[...slug]` vs `[
 > - Required Catch-All ([...slug]): Requires at least 1 path segment (/docs/a). Visiting base path (/docs) targets a separate app/docs/page.tsx file.
 > - Optional Catch-All ([[...slug]]): Matches 0 or more path segments. Visiting base path (/shop) AND nested path (/shop/a) BOTH target app/shop/[[...slug]]/page.tsx.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `[...slug]` is chosen when the root path has a distinct layout/page from child paths.
 > 2. `[[...slug]]` is chosen when root and child paths share identical layout and rendering logic.
 > 3. Key routing directory design decision.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - None!

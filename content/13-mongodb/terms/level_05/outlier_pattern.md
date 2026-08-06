@@ -191,7 +191,7 @@ Model a social network where standard users have ~100 followers (embedded in doc
 > 1. The Outlier Pattern optimizes schema design for 99.9% of normal documents while handling 0.1% extreme outliers gracefully.
 > 2. Flags outlier documents with `hasOutlier: true` to divert overflow relationships to a secondary collection.
 > 3. Prevents 16MB document size limit crashes while preserving embedded read speed for normal users.
-
+> 
 ---
 
 ### Exercise 2: Querying Outlier Relationships
@@ -222,7 +222,7 @@ Write an application query fetching followers for a user, checking `hasOutlier` 
 > 1. Application checks `hasOutlier` boolean flag to handle outlier data fetching dynamically.
 > 2. Standard users enjoy $O(1)$ single-document embedded read performance.
 > 3. Outlier users execute secondary collection queries smoothly.
-
+> 
 ---
 
 ### Exercise 3: Identifying Outliers with Aggregation Thresholds
@@ -248,7 +248,7 @@ Identify documents in `users` whose `followers` array length exceeds 1,000 items
 > 1. `$expr` with `$size` detects documents approaching embedded array capacity thresholds.
 > 2. Automates outlier identification during background schema maintenance jobs.
 > 3. Flags documents for outlier migration before 16MB limits are breached.
-
+> 
 ---
 
 

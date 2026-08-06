@@ -143,13 +143,13 @@ Enable Nuxt DevTools integration in `nuxt.config.ts` for local development.
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `devtools: { enabled: true }` activates the embedded Nuxt DevTools toolbar in local development mode.
 > 2. Provides in-browser UI for inspecting components, pages, composables, modules, and performance metrics.
 > 3. Boosts developer velocity and debugging efficiency.
-
+> 
 ---
 
 ### Exercise 2: Inspecting SSR Hydration Payloads in DevTools
@@ -176,7 +176,7 @@ Use DevTools payload inspector tab to analyze state key sizes and fetched data o
 > 1. DevTools visualizes data stored inside `useState()` and `useFetch()` payload caches.
 > 2. Helps identify large payload objects causing slow initial HTML downloads.
 > 3. Core performance debugging workflow.
-
+> 
 ---
 
 ### Exercise 3: Disabling DevTools in Production Builds
@@ -196,19 +196,15 @@ Verify that Nuxt DevTools code is automatically tree-shaken and excluded from pr
 > - Nuxt DevTools runs ONLY when process.env.NODE_ENV === 'development'.
 > - 'nuxi build' automatically strips and tree-shakes all DevTools client scripts and WebSocket servers from production bundles.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. DevTools overhead is strictly isolated to development mode (`nuxi dev`).
 > 2. Zero impact on production JavaScript bundle sizes or server memory footprint.
 > 3. Built-in production optimization rule.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — The central configuration hub.

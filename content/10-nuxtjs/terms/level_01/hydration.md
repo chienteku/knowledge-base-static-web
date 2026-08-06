@@ -153,26 +153,26 @@ Fix a hydration mismatch error caused by rendering `new Date().toLocaleTimeStrin
 > ```vue
 > <script setup lang="ts">
 > const currentTime = ref<string>("");
-
-onMounted(() => {
-  currentTime.value = new Date().toLocaleTimeString();
-});
-</script>
-
-<template>
-  <div>
-    <p>Server Static Time: Rendered on server</p>
-    <p>Client Time: {{ currentTime }}</p>
-  </div>
-</template>
-```
-
+> 
+> onMounted(() => {
+>   currentTime.value = new Date().toLocaleTimeString();
+> });
+> </script>
+> 
+> <template>
+>   <div>
+>     <p>Server Static Time: Rendered on server</p>
+>     <p>Client Time: {{ currentTime }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Hydration mismatches occur when the initial server-rendered HTML DOM structure differs from the client's initial Virtual DOM tree.
 > 2. Executing dynamic values (dates, `Math.random()`, `window` dimensions) during server setup causes DOM mismatches.
 > 3. Deferring client-specific state updates to `onMounted()` guarantees identical initial server and client DOM trees.
-
+> 
 ---
 
 ### Exercise 2: Using the `<ClientOnly>` Component for Browser-Only UI
@@ -200,13 +200,13 @@ Wrap a third-party browser charting widget inside `<ClientOnly>` with a fallback
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `<ClientOnly>` renders its fallback slot on the server and replaces it with default children after client hydration completes.
 > 2. Prevents server-side execution of components relying on browser APIs (`window`, `document`, `canvas`).
 > 3. Eliminates hydration crashes for non-SSR-compatible libraries.
-
+> 
 ---
 
 ### Exercise 3: Debugging Hydration Failures with Nuxt DevTools
@@ -229,27 +229,23 @@ Identify invalid HTML nested tags (e.g. `<p><div>...</div></p>`) that trigger au
 >   </p>
 > </template>
 > -->
-
-<!-- ✅ CORRECT HTML STRUCTURE: -->
-<template>
-  <div>
-    <div>Block Content</div>
-  </div>
-</template>
-```
-
+> 
+> <!-- ✅ CORRECT HTML STRUCTURE: -->
+> <template>
+>   <div>
+>     <div>Block Content</div>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Browsers automatically repair invalid HTML spec tag nesting (e.g., unwrapping `<div>` tags inside `<p>` elements) before JavaScript executes.
 > 2. This browser auto-repair alters the DOM tree, causing Vue's hydrator to misalign with the expected VDOM structure.
 > 3. Always maintain valid W3C HTML element hierarchy.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Universal Rendering (SSR)](universal_rendering.md) — The process that produces the HTML target.

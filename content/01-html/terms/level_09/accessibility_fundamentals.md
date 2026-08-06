@@ -188,7 +188,7 @@ button:focus-visible {
 > 3. The text field uses a generic `<span>` instead of a semantic `<label>` tag, meaning screen readers will not link "Enter Age" to the input.
 > ```
 > - Think about semantic landmarks, form label bindings, and image fallback descriptions.
-
+> 
 ---
 
 
@@ -213,7 +213,7 @@ button:focus-visible {
 > ```
 >
 > **Explanation:** POUR principles guide accessible web content design.
-
+> 
 ---
 
 ### Exercise 3: WCAG Minimum Color Contrast Ratio
@@ -230,7 +230,7 @@ button:focus-visible {
 > ```
 >
 > **Explanation:** 4.5:1 contrast guarantees text readability for low-vision users.
-
+> 
 ## 7. Related Terms
 - [Semantic HTML](../level_06/semantic_html.md) — The foundation of structured layouts.
 - [`alt` Attribute](../level_03/alt.md) — Media text descriptors.

@@ -173,7 +173,7 @@ Group documents in collection `users` by `role` and calculate total user count p
 > 1. `$group` collapses documents sharing the same `_id` group expression.
 > 2. `{ $sum: 1 }` increments the accumulator counter by 1 for each document in the group.
 > 3. Foundation stage for analytical summary reports.
-
+> 
 ---
 
 ### Exercise 2: Multi-Field Compound Group Keys
@@ -207,7 +207,7 @@ Group sales orders by BOTH `year` and `status` to analyze regional sales breakdo
 > 1. Compound group keys (`_id: { k1: v1, k2: v2 }`) group document streams across multiple dimensions.
 > 2. Evaluates date extraction expressions directly inside the group key.
 > 3. Enables multi-dimensional pivot reporting.
-
+> 
 ---
 
 ### Exercise 3: Global Single-Document Aggregation
@@ -239,7 +239,7 @@ Calculate the total revenue (`$sum`) and average discount (`$avg`) across ALL or
 > 1. Setting `_id: null` collapses the ENTIRE document stream into a single global summary output document.
 > 2. Computes collection-wide KPI totals.
 > 3. Returns a single document response payload.
-
+> 
 ---
 
 

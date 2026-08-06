@@ -171,7 +171,7 @@ fn process_buffer<'a>(buf: &'a mut [u8]) { ... }
 >
 > 1. `target` has type `&mut &'a [u8]`. Because `&mut T` is invariant over `T`, both `current_slice` and `new_slice` must share the exact lifetime `'a`.
 > 2. The compiler allows the mutation because both references derive from the lifetime of `payload`.
-
+> 
 ---
 
 ### Exercise 2: Contravariant Event Listener Registry
@@ -219,7 +219,7 @@ fn process_buffer<'a>(buf: &'a mut [u8]) { ... }
 >
 > 1. Function argument types `fn(T)` are **contravariant** over `T`.
 > 2. `generic_logger` can accept contexts with shorter or broader lifetimes, so it satisfies the parameter constraint safely.
-
+> 
 ---
 
 ### Exercise 3: Invariance Safeguard Demonstration
@@ -257,7 +257,7 @@ fn process_buffer<'a>(buf: &'a mut [u8]) { ... }
 >
 > 1. Immutable reference `&'a T` is **covariant** over `'a`, permitting `'static` (longer lifetime) to substitute for `'a` (shorter lifetime).
 > 2. Mutable reference `&mut T` is **invariant** over `T`, preventing short-lived reference assignment to long-lived memory slots.
-
+> 
 ---
 
 ## 6. Related Terms

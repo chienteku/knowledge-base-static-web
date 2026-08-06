@@ -175,7 +175,7 @@ async function processData() {
 > No! If you don't provide a specific Trap (like `get` or `set`), the Proxy acts as a perfectly transparent window. It just forwards the request directly to the target object without doing anything.
 > ```
 > - The Proxy only intercepts what you explicitly tell it to intercept.
-
+> 
 ---
 
 ### Exercise 2: Property Access Validation Proxy Trap
@@ -198,7 +198,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Proxy `get(target, prop)` intercepts property access calls.
-
+> 
 ---
 
 ### Exercise 3: Property Mutation Validation with `set` Trap
@@ -223,8 +223,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Proxy `set` traps validate property assignment values before mutating targets.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -181,13 +181,13 @@ async function processData() {
 
 > [!check]- Answer
 > - Think about the difference between applications, libraries, and legacy flexibility.
-
+> 
 > [!check]- Answer
 > - 1. **Vite** (Ideal for standard application development and lightning-fast developer experience).
 > - 2. **Rollup** (Generates clean, tree-shakeable library modules).
 > - 3. **Webpack** (The industrial loader system handles complex legacy asset pipelines best).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Comparing Webpack, Vite, and Esbuild
@@ -204,7 +204,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Modern bundlers leverage native ESM and compiled languages for instant dev feedback.
-
+> 
 ---
 
 ### Exercise 3: Hot Module Replacement (HMR)
@@ -221,8 +221,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** HMR injects updated module bundles over WebSocket connections.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

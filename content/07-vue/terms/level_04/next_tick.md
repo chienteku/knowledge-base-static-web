@@ -243,7 +243,7 @@ function startEdit() {
 > ```
 > - The component fails because when `inputRef.value.focus()` is called, the input has not been rendered into the DOM yet (`inputRef.value` is still null).
 > - Make `startEdit` an `async` function and call `await nextTick()` between changing `isEditing.value` and calling `.focus()`.
-
+> 
 ---
 
 ### Exercise 2: Focus Newly Created Input with nextTick
@@ -264,7 +264,7 @@ function startEdit() {
 >   inputRef.value.focus();
 > }
 > ```
-
+> 
 ---
 
 ### Exercise 3: nextTick Promise vs Callback Syntax
@@ -285,8 +285,8 @@ function startEdit() {
 > // Callback syntax:
 > nextTick(() => { /* DOM updated */ });
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -158,7 +158,7 @@ async function processData() {
 > - Condition: `i > 0`
 > - Update: `i--`
 > - Put the `console.log("Liftoff!")` *outside* and *after* the loop body.
-
+> 
 ---
 
 ### Exercise 2: Comparing `for...in` vs `for...of`
@@ -184,7 +184,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `for...in` inspects object keys as strings; `for...of` iterates values of iterable collections.
-
+> 
 ---
 
 ### Exercise 3: Reverse Array Iteration
@@ -206,7 +206,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Setting initial index `i = length - 1` and decrementing `i--` traverses arrays backwards.
-
+> 
 ---
 
 ## 7. Related Terms

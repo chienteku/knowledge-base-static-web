@@ -161,7 +161,7 @@ Define a global database parameter `$tax_rate` set to `0.0825dec` so that all fi
 > 1. `DEFINE PARAM $name VALUE expr` creates global database parameters accessible across all client sessions.
 > 2. Standardizes global constants (tax rates, feature flags, API limits) in database metadata.
 > 3. Updates to `$tax_rate` immediately affect all subsequent query calculations.
-
+> 
 ---
 
 ### Exercise 2: Idempotent Parameter Overwrites with `OVERWRITE`
@@ -185,7 +185,7 @@ Update global parameter `$tax_rate` to `0.0850dec` using `DEFINE PARAM OVERWRITE
 > 1. `OVERWRITE` updates existing parameter values idempotently without throwing "item exists" errors.
 > 2. Simplifies deployment migration scripts.
 > 3. Takes effect across new transactions instantly.
-
+> 
 ---
 
 ### Exercise 3: Dropping Global Parameters with `REMOVE PARAM`
@@ -209,7 +209,7 @@ Drop global parameter `$tax_rate` using `REMOVE PARAM`.
 > 1. `REMOVE PARAM` drops global parameters from database metadata.
 > 2. Prevents queries from referencing obsolete parameter names.
 > 3. Cleans up unused global constants.
-
+> 
 ---
 
 

@@ -162,7 +162,7 @@ Add a calculated `discountedPrice` field (`price * 0.9`) to pipeline documents u
 > 1. `$set` (alias for `$addFields`) appends or updates fields while retaining all unmentioned document keys.
 > 2. Replaces verbose `$project` stages when whole-document field retention is needed.
 > 3. Improves pipeline readability.
-
+> 
 ---
 
 ### Exercise 2: Removing Unwanted Fields with `$unset`
@@ -188,7 +188,7 @@ Remove internal fields `passwordHash` and `tempTokens` from output documents usi
 > 1. `$unset` (alias for `$project: { field: 0 }`) removes specified field names from pipeline documents.
 > 2. Accepts a single field string or an array of field string names.
 > 3. Cleans sensitive attributes before sending payloads to clients.
-
+> 
 ---
 
 ### Exercise 3: Combining `$set` and `$unset` for Schema Normalization
@@ -216,7 +216,7 @@ Rename field `oldTitle` to `title` by combining `$set` and `$unset`.
 > 1. Combining `$set` and `$unset` renames fields without losing other document keys.
 > 2. Normalizes legacy schema properties on the fly.
 > 3. Clean 2-stage field renaming pattern.
-
+> 
 ---
 
 

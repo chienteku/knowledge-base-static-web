@@ -170,22 +170,22 @@ Upload a 50MB video file to MongoDB GridFS using Node.js `GridFSBucket`.
 > ```typescript
 > import { MongoClient, GridFSBucket } from "mongodb";
 > import fs from "fs";
-
-const client = new MongoClient("mongodb://localhost:27017");
-const db = client.db("media_db");
-const bucket = new GridFSBucket(db, { bucketName: "videos" });
-
-fs.createReadStream("movie.mp4")
-  .pipe(bucket.openUploadStream("movie.mp4"))
-  .on("finish", () => console.log("File uploaded successfully to GridFS!"));
-```
-
+> 
+> const client = new MongoClient("mongodb://localhost:27017");
+> const db = client.db("media_db");
+> const bucket = new GridFSBucket(db, { bucketName: "videos" });
+> 
+> fs.createReadStream("movie.mp4")
+>   .pipe(bucket.openUploadStream("movie.mp4"))
+>   .on("finish", () => console.log("File uploaded successfully to GridFS!"));
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `GridFSBucket` automatically splits files larger than 16MB into 255KB chunk documents stored in `videos.chunks`.
 > 2. `videos.files` stores parent metadata documents (`filename`, `length`, `chunkSize`, `uploadDate`).
 > 3. Streams large files seamlessly without memory overflow.
-
+> 
 ---
 
 ### Exercise 2: Streaming GridFS Files to HTTP Client Responses
@@ -215,7 +215,7 @@ Download and stream a GridFS file directly to an Express.js HTTP response stream
 > 1. `openDownloadStreamByName()` fetches and reassembles binary chunks from `fs.chunks` sequentially.
 > 2. Piping directly to HTTP `res` streams audio/video data to clients without buffering 50MB into RAM.
 > 3. Efficient binary media streaming.
-
+> 
 ---
 
 ### Exercise 3: Deleting GridFS Files and Chunks
@@ -240,7 +240,7 @@ Delete a GridFS file and its corresponding binary chunk documents by file `_id`.
 > 1. `bucket.delete(fileId)` removes the parent file document from `fs.files` AND deletes all associated 255KB chunks from `fs.chunks`.
 > 2. Prevents orphaned binary chunks in the database.
 > 3. Clean binary asset management.
-
+> 
 ---
 
 

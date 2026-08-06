@@ -109,13 +109,13 @@ Formulate an architectural comparison matrix contrasting Pages Router against Ap
 > - Pages Router (pages/): Client-heavy by default, getServerSideProps/getStaticProps for data fetching, custom _app.js for global layouts.
 > - App Router (app/): React Server Components by default, async/await data fetching inside components, nested layout.tsx files.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Pages Router relies on top-level data fetching methods (`getServerSideProps`).
 > 2. App Router brings data fetching directly into individual Server Components.
 > 3. App Router provides superior component-level streaming and smaller client JS bundles.
-
+> 
 ---
 
 ### Exercise 2: Migrating Pages Router `_app.js` to App Router Root Layout
@@ -133,26 +133,26 @@ Migrate global providers and CSS imports from `pages/_app.js` to `app/layout.tsx
 > ```tsx
 > // app/layout.tsx
 > import "@/app/globals.css";
-
-export default function RootLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
-}
-```
-
+> 
+> export default function RootLayout({
+>   children
+> }: {
+>   children: React.ReactNode;
+> }) {
+>   return (
+>     <html lang="en">
+>       <body>{children}</body>
+>     </html>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `app/layout.tsx` replaces `pages/_app.js` and `pages/_document.js`.
 > 2. Must include `<html>` and `<body>` tags.
 > 3. Enforces standard root document shell for all pages.
-
+> 
 ---
 
 ### Exercise 3: Incremental Adoption Strategy (Co-existing Routers)
@@ -172,19 +172,15 @@ Explain how Next.js supports co-existing `pages/` and `app/` directories during 
 > - Next.js allows pages/ and app/ to exist in the same codebase for incremental migration.
 > - CRITICAL: An App Router route (app/about/page.tsx) takes precedence over a Pages Router route (pages/about.tsx) if paths conflict!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. App Router routes automatically override Pages Router routes sharing the same URL path.
 > 2. Allows migrating application routes incrementally one page at a time.
 > 3. Zero-downtime migration strategy.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [React Server Components (RSC)](rsc.md) — The technology that powers the App Router.

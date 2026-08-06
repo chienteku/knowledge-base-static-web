@@ -172,8 +172,8 @@ async function processData() {
 > - 2. **Elements Panel**
 > - 3. **Sources Panel** (using a breakpoint)
 > - 4. **Performance / Memory Panel**
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Triggering Programmatic Breakpoints with `debugger`
@@ -194,7 +194,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** The `debugger;` statement invokes active browser developer tools breakpoints.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Performance Profiles
@@ -211,8 +211,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** DevTools Performance and Memory tabs profile CPU flamecharts and memory allocations.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

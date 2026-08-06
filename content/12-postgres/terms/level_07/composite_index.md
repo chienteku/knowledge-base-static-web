@@ -169,7 +169,7 @@ Create a composite index on `orders(customer_id, status)` to optimize queries fi
 > 1. Composite indexes store multi-column key pairs in a single B-tree index.
 > 2. Optimizes queries filtering both `customer_id` and `status` simultaneously.
 > 3. Superior to creating 2 separate single-column indexes.
-
+> 
 ---
 
 ### Exercise 2: Applying the Left-Prefix Rule
@@ -197,7 +197,7 @@ Demonstrate why `idx_orders_customer_status` accelerates `WHERE customer_id = 10
 > 1. Composite B-trees sort data by the first column first, then by the second column.
 > 2. Queries MUST include the leading column to hit the index.
 > 3. Always place the most frequently queried column as the leading key.
-
+> 
 ---
 
 ### Exercise 3: Include Columns in Indexes for Index-Only Scans
@@ -227,7 +227,7 @@ Create a composite index incorporating `INCLUDE (total_cents)` to enable Index-O
 > 1. `INCLUDE (col)` appends non-key payload attributes to the leaf pages of a B-tree index.
 > 2. Enables Index-Only Scans for `SELECT total_cents` without increasing key comparison overhead.
 > 3. Modern PostgreSQL (PG 11+) covering index feature.
-
+> 
 ---
 
 

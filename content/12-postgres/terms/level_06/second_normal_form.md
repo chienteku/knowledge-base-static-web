@@ -181,7 +181,7 @@ Analyze a table `student_courses(student_id, course_id, student_name, grade)` wi
 > 1. 2NF applies to tables with composite primary keys.
 > 2. Requires every non-key column to depend on the ENTIRE primary key, not just a subset of key columns.
 > 3. `student_name` depends solely on `student_id`, causing partial dependency redundancy.
-
+> 
 ---
 
 ### Exercise 2: Decomposing Composite Schemas into 2NF
@@ -215,7 +215,7 @@ Decompose `student_courses` into 2NF compliant tables (`students` and `enrollmen
 > 1. Moving `student_name` into `students` table eliminates partial dependency.
 > 2. `enrollments` retains only attributes dependent on both `student_id` and `course_id` (`grade`).
 > 3. Achieves 2NF compliance.
-
+> 
 ---
 
 ### Exercise 3: 2NF Verification Checklist
@@ -241,7 +241,7 @@ Formulate a 2-point checklist for verifying whether a table satisfies 2NF.
 > 1. Single-column primary key tables automatically satisfy 2NF because partial key subsets cannot exist.
 > 2. 2NF testing is only required for composite primary key tables.
 > 3. Schema design rule.
-
+> 
 ---
 
 

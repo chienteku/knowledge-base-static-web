@@ -168,7 +168,7 @@ console.log("C");
 > B
 > ```
 > - `console.log("A")` and `"C"` run synchronously. Even though `setTimeout` has a delay of `0`ms, its callback is placed in the macrotask queue. It must wait until the main stack is empty.
-
+> 
 ---
 
 
@@ -196,7 +196,7 @@ first();
 > ```
 >
 > **Explanation:** `first()` logs 'A', calls `second()` which logs 'C' and pops off stack, then `first()` resumes and logs 'B'.
-
+> 
 ---
 
 ### Exercise 3: Preventing Stack Overflow with Asynchronous Deferral
@@ -217,7 +217,7 @@ first();
 > ```
 >
 > **Explanation:** `setImmediate` queues callback on event loop, unwinding the V8 stack on each recursion step.
-
+> 
 ## 7. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The coordinator that pushes callbacks onto the Call Stack once it is empty.
 - [V8 JavaScript Engine](v8_engine.md) — The engine that allocates and runs the Call Stack.

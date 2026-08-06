@@ -191,7 +191,7 @@ Query `pg_stat_activity` to inspect active client queries running longer than 5 
 > 1. `pg_stat_activity` is the primary system catalog view tracking active server connection processes.
 > 2. `NOW() - query_start` identifies long-running queries causing backend bottlenecks.
 > 3. Essential DBA diagnostic query.
-
+> 
 ---
 
 ### Exercise 2: Calculating Database Cache Hit Ratios
@@ -221,7 +221,7 @@ Calculate the Shared Buffer RAM Cache Hit Ratio using `pg_stat_database`.
 > 1. `blks_hit`: Number of 8KB disk pages found directly in RAM (`shared_buffers`).
 > 2. `blks_read`: Number of 8KB disk pages fetched from operating system disk I/O.
 > 3. Production databases should maintain a Cache Hit Ratio > 99%.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Table Dead Tuple Bloat Metrics
@@ -252,7 +252,7 @@ Query `pg_stat_user_tables` to monitor dead tuple accumulation (`n_dead_tup`) ac
 > 1. `n_dead_tup` tracks dead MVCC row versions requiring `VACUUM` cleanup.
 > 2. High `bloat_pct` (> 20%) indicates autovacuum is falling behind write throughput.
 > 3. Core database health metric.
-
+> 
 ---
 
 

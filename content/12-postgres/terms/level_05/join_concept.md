@@ -173,7 +173,7 @@ Formulate a decision matrix explaining when to use `INNER JOIN`, `LEFT JOIN`, `F
 > 1. `INNER JOIN` filters un-matched rows from both sides.
 > 2. `LEFT JOIN` preserves primary entity rows even if child associations do not exist.
 > 3. Select join types based on desired result set completeness.
-
+> 
 ---
 
 ### Exercise 2: Joining Tables on Multiple Join Conditions
@@ -203,7 +203,7 @@ Join `employee_schedules` with `shifts` matching both `branch_id` AND `shift_dat
 > 1. `ON` predicates support multi-column `AND` conditions.
 > 2. Matches composite key relationships.
 > 3. Precise multi-column relational linking.
-
+> 
 ---
 
 ### Exercise 3: Indexing Foreign Keys for Join Acceleration
@@ -228,7 +228,7 @@ Create a B-tree index on foreign key column `orders(user_id)` to accelerate `JOI
 > 1. Foreign key constraints do NOT create secondary indexes automatically in PostgreSQL.
 > 2. Creating a B-tree index on foreign key columns converts sequential join scans into fast `Index Scan` lookups.
 > 3. Mandatory performance optimization for relational schemas.
-
+> 
 ---
 
 

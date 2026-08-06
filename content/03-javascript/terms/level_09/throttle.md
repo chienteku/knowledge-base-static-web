@@ -173,7 +173,7 @@ async function processData() {
 > If you allow it to fire faster than 16ms, you are doing math that the monitor cannot physically display fast enough. It's wasted CPU power. Throttling to 16ms guarantees buttery smooth 60 FPS without wasting resources.
 > ```
 > - `1000ms / 60 frames = 16.6ms`
-
+> 
 ---
 
 ### Exercise 2: Implementing Basic Throttle Helper
@@ -201,7 +201,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Throttling enforces a maximum execution frequency rate limit for high-frequency events.
-
+> 
 ---
 
 ### Exercise 3: Scroll Event Throttling
@@ -218,8 +218,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Throttling maintains smooth periodic UI updates during continuous user scrolling.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

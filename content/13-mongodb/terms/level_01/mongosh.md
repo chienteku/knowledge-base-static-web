@@ -168,7 +168,7 @@ A developer uses `mongosh` to inspect existing databases, switch context, and li
 > 1. `mongosh` provides interactive terminal shell helper commands (`show dbs`, `show collections`).
 > 2. Built on top of modern Node.js REPL environment.
 > 3. Executes JavaScript statements natively.
-
+> 
 ---
 
 ### Exercise 2: Writing Scriptable JavaScript Iteration Loops in mongosh
@@ -197,7 +197,7 @@ Write a JavaScript `for` loop in `mongosh` to insert 10 test documents into coll
 > 1. `mongosh` supports full modern ECMAScript / JavaScript syntax.
 > 2. Loops and procedural control flow can be executed directly inside the shell.
 > 3. Enables fast database seeding and administrative scripting.
-
+> 
 ---
 
 ### Exercise 3: Formulating Non-Interactive Shell CLI Scripts
@@ -221,7 +221,7 @@ Execute a `mongosh` query script non-interactively from a Linux bash terminal us
 > 1. `--eval` executes JavaScript query strings non-interactively and exits.
 > 2. Useful in Linux bash scripts and CI/CD deployment pipelines.
 > 3. Returns query output directly to stdout.
-
+> 
 ---
 
 

@@ -161,7 +161,7 @@ async function processData() {
 > ```
 > - The callback just needs to return truthy or falsy. 
 > - You can simply write: `array.filter(item => item);` ! If the item itself is truthy, it passes. If it is falsy, it fails.
-
+> 
 ---
 
 ### Exercise 2: Filtering Even Numbers
@@ -180,7 +180,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `.filter()` returns a new array containing elements that pass predicate tests.
-
+> 
 ---
 
 ### Exercise 3: Removing Nullish Values with `.filter(Boolean)`
@@ -199,8 +199,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Passing `Boolean` filters out all falsy values (`null`, `undefined`, `0`, ``).
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

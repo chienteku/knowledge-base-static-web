@@ -176,7 +176,7 @@ async function processData() {
 > - setInterval()
 > ```
 > - Promises and DOM mutations are VIPs. Timers are economy.
-
+> 
 ---
 
 ### Exercise 2: Identifying Microtask APIs
@@ -193,7 +193,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Promises and `queueMicrotask` enqueue tasks onto the high-priority microtask queue.
-
+> 
 ---
 
 ### Exercise 3: Microtask Queue Draining
@@ -213,8 +213,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** The event loop drains the entire microtask queue before executing the next macrotask.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

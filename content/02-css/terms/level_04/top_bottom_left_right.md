@@ -183,7 +183,7 @@ button { margin-left: 15px; }
 > The box will stretch to completely cover the entire parent container! Because you pinned all four edges to the walls of the parent, the blue background will fill the entire space.
 > ```
 > - What happens when you pin a rubber sheet to all four corners of a frame?
-
+> 
 ---
 
 
@@ -208,7 +208,7 @@ button { margin-left: 15px; }
 > ```
 >
 > **Explanation:** Setting `top: 0; bottom: 0; left: 0; right: 0` stretches absolute elements across parent boundaries.
-
+> 
 ---
 
 ### Exercise 3: Logical Inset Property
@@ -228,7 +228,7 @@ button { margin-left: 15px; }
 > ```
 >
 > **Explanation:** `inset: 0` is shorthand for top, right, bottom, and left zero offsets.
-
+> 
 ## 7. Related Terms
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — The primary positioning properties.
 - [`position: sticky`](position_sticky.md) — The hybrid boundary scrolling property.

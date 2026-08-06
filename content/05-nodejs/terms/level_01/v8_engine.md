@@ -103,7 +103,7 @@ node --max-old-space-size=8192 app.js // Increase heap limit to 8GB or use Strea
 > You write human-readable JavaScript. V8 reads it and compiles it down into low-level machine instructions. The C++ code of Node.js then takes those instructions and interacts with the computer's operating system (like opening a file).
 > ```
 > - Think about the translator metaphor.
-
+> 
 ---
 
 
@@ -122,7 +122,7 @@ node --max-old-space-size=8192 app.js // Increase heap limit to 8GB or use Strea
 > ```
 >
 > **Explanation:** `--max-old-space-size` configures max V8 old space heap limit in megabytes.
-
+> 
 ---
 
 ### Exercise 3: V8 JIT Compilation Pipeline
@@ -141,7 +141,7 @@ node --max-old-space-size=8192 app.js // Increase heap limit to 8GB or use Strea
 > ```
 >
 > **Explanation:** Ignition interprets bytecode initially; TurboFan compiles hot code functions into optimized machine code.
-
+> 
 ## 7. Related Terms
 - [Node.js (Runtime Environment)](nodejs.md) — The runtime that hosts V8.
 - [The Event Loop & Libuv](event_loop.md) — While V8 executes the JS code, it relies on the Event Loop to handle asynchronous timing.

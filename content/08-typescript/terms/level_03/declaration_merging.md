@@ -173,16 +173,16 @@ Use interface declaration merging to attach a custom `user` property to Express 
 >     }
 >   }
 > }
-
-export {};
-```
-
+> 
+> export {};
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Interface declaration merging automatically merges multiple declarations with identical names in the same scope.
 > 2. Allows third-party library interfaces (`Express.Request`) to be augmented with custom domain properties (`currentUser`).
 > 3. Standard pattern for attaching session or auth data to HTTP request objects.
-
+> 
 ---
 
 ### Exercise 2: Merging Multi-File Interface Declarations
@@ -201,22 +201,22 @@ Demonstrate how two separate `Window` interface definitions merge into a unified
 > interface Window {
 >   analytics: { track: (event: string) => void };
 > }
-
-interface Window {
-  appVersion: string;
-}
-
-// Window now contains BOTH analytics and appVersion:
-window.analytics.track("page_view");
-console.log(window.appVersion);
-```
-
+> 
+> interface Window {
+>   appVersion: string;
+> }
+> 
+> // Window now contains BOTH analytics and appVersion:
+> window.analytics.track("page_view");
+> console.log(window.appVersion);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript merges interface fields across multiple declarations seamlessly.
 > 2. Does NOT apply to type aliases (`type`) which throw duplicate identifier errors.
 > 3. Key design motivation for why `interface` is preferred for public SDK contracts.
-
+> 
 ---
 
 ### Exercise 3: Declaration Merging Limitations Audit
@@ -235,19 +235,19 @@ Explain why property types cannot conflict across merged interface declarations.
 > interface User {
 >   id: number;
 > }
-
-// ❌ Compile Error: Subsequent property declarations must have the same type!
-// interface User {
-//   id: string; 
-// }
-```
-
+> 
+> // ❌ Compile Error: Subsequent property declarations must have the same type!
+> // interface User {
+> //   id: string; 
+> // }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Merged interface fields must have identical types across all declaration sites.
 > 2. Conflicting field types trigger an immediate compilation error.
 > 3. Prevents ambiguous type resolution during interface merging.
-
+> 
 ---
 
 

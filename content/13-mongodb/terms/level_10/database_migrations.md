@@ -170,7 +170,7 @@ Rename legacy field `user_name` to `username` across collection `users` using `$
 > 1. `$rename` renames field keys across documents atomically without re-writing entire documents.
 > 2. `$exists: true` filter ensures only documents requiring migration are updated.
 > 3. Simple single-stage schema migration.
-
+> 
 ---
 
 ### Exercise 2: Dual-Write Schema Migration Strategy
@@ -198,7 +198,7 @@ Implement a 4-phase dual-write schema migration strategy for changing data forma
 > 1. Dual-write patterns guarantee zero downtime during major schema structure overhauls.
 > 2. Backward and forward compatibility is maintained across deployment steps.
 > 3. Industry standard enterprise migration workflow.
-
+> 
 ---
 
 ### Exercise 3: Automated Migration Scripts with `migrate-mongo`
@@ -237,7 +237,7 @@ Write a Node.js up/down migration script using `migrate-mongo` to transform stri
 > 1. `migrate-mongo` tracks executed migration scripts in a `changelog` collection.
 > 2. `up()` executes schema transformations; `down()` provides automated rollback capabilities.
 > 3. Standardizes database version control.
-
+> 
 ---
 
 

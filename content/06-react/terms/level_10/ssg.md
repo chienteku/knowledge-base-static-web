@@ -101,7 +101,7 @@ Which rendering strategy (SSR or SSG) should you use for each?
 > 2. TermsOfService: Must use SSG. The text is the same for every human on Earth, so build it into a static HTML file once to save server costs!
 > ```
 > - If it's the same for everyone, pre-build it.
-
+> 
 ---
 
 
@@ -120,7 +120,7 @@ Which rendering strategy (SSR or SSG) should you use for each?
 > ```
 >
 > **Explanation:** SSG delivers maximum page load performance by serving pre-built HTML from CDN edges.
-
+> 
 ---
 
 ### Exercise 3: ISR Revalidation Option
@@ -137,7 +137,7 @@ Which rendering strategy (SSR or SSG) should you use for each?
 > ```
 >
 > **Explanation:** ISR updates static CDN pages in the background at specified time intervals.
-
+> 
 ## 7. Related Terms
 - [Server-Side Rendering (SSR)](ssr.md) — Rendering on-demand per request.
 - [Next.js](nextjs.md) — Next.js allows you to mix SSG and SSR in the exact same application on a per-page basis!

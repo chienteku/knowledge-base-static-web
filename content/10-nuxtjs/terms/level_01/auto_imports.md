@@ -146,21 +146,21 @@ Refactor a Vue 3 component to rely on Nuxt 3's auto-import system without manual
 > const doubleCount = computed(() => count.value * 2);
 > const userId = computed(() => route.params.id);
 > </script>
-
-<template>
-  <div>
-    <p>User ID: {{ userId }}</p>
-    <button @click="count++">Count: {{ count }} (Double: {{ doubleCount }})</button>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <p>User ID: {{ userId }}</p>
+>     <button @click="count++">Count: {{ count }} (Double: {{ doubleCount }})</button>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Nuxt 3 automatically scans component, composable, and Vue core APIs during development and build compilation.
 > 2. Automatically generates TypeScript declaration files (`.nuxt/imports.d.ts`) to provide full IDE auto-completion.
 > 3. Reduces boilerplate while maintaining strict type safety.
-
+> 
 ---
 
 ### Exercise 2: Auto-Importing Custom Composables
@@ -191,20 +191,20 @@ Create a custom composable `composables/useUser.ts` and use it inside `app.vue` 
 > // Automatically imported from composables/useUser.ts!
 > const { user, isLoggedIn } = useUser();
 > </script>
-
-<template>
-  <div>
-    <p v-if="isLoggedIn">Welcome, {{ user.name }} ({{ user.role }})</p>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <p v-if="isLoggedIn">Welcome, {{ user.name }} ({{ user.role }})</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Files exported from the `composables/` directory are auto-imported at compile time.
 > 2. Nuxt registers named and default exports globally across the Vue application layer.
 > 3. Eliminates deep relative path import statements (`../../composables/useUser`).
-
+> 
 ---
 
 ### Exercise 3: Disabling or Explicitly Importing Explicit Dependencies
@@ -222,24 +222,20 @@ Explain how to explicitly import functions from `#imports` when required by stri
 > ```vue
 > <script setup lang="ts">
 > import { ref, useFetch } from "#imports";
-
-const { data } = await useFetch("/api/status");
-const isReady = ref(true);
-</script>
-```
-
+> 
+> const { data } = await useFetch("/api/status");
+> const isReady = ref(true);
+> </script>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `#imports` is Nuxt's virtual alias pointing to the generated auto-import repository.
 > 2. Useful when linter or external testing suites require explicit module resolution.
 > 3. Ensures interoperability with third-party toolchains.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`components/` Directory](../level_03/components_directory.md) — Where auto-imported components live.

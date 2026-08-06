@@ -112,7 +112,7 @@ React.memo(Comp, (prev, next) => prev.id === next.id); // Return true when equal
 > For a simple button, running the comparison math actually takes LONGER than just letting the button re-render!
 > ```
 > - Does a simple `<button>` take a long time to render? Does the optimization cost more than the render?
-
+> 
 ---
 
 
@@ -137,7 +137,7 @@ React.memo(Comp, (prev, next) => prev.id === next.id); // Return true when equal
 > ```
 >
 > **Explanation:** `React.memo` skips component re-renders if incoming props match previous props via shallow equality.
-
+> 
 ---
 
 ### Exercise 3: Custom Prop Comparison Function
@@ -154,7 +154,7 @@ React.memo(Comp, (prev, next) => prev.id === next.id); // Return true when equal
 > ```
 >
 > **Explanation:** Returning `true` from custom `arePropsEqual` functions tells React to skip re-rendering.
-
+> 
 ## 7. Related Terms
 - [`useCallback` Hook](../level_04/use_callback.md) — Used by the Parent to pass stable functions to a `memo` child.
 - [`useMemo` Hook](../level_04/use_memo.md) — Used by the Parent to pass stable objects/arrays to a `memo` child.

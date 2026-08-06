@@ -101,18 +101,18 @@ Create a custom `UnwrapPromise<T>` conditional type using `infer` to extract the
 >
 > ```typescript
 > type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
-
-type R1 = UnwrapPromise<Promise<string>>; // string
-type R2 = UnwrapPromise<Promise<number>>; // number
-type R3 = UnwrapPromise<boolean>;         // boolean
-```
-
+> 
+> type R1 = UnwrapPromise<Promise<string>>; // string
+> type R2 = UnwrapPromise<Promise<number>>; // number
+> type R3 = UnwrapPromise<boolean>;         // boolean
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `infer U` introduces a type variable `U` within the `extends` clause of a conditional type.
 > 2. If `T` matches `Promise<U>`, the compiler infers `U` and makes it available in the `true` branch.
 > 3. Pattern matching mechanism for extracting generic inner types.
-
+> 
 ---
 
 ### Exercise 2: Extracting Array Element Types with `infer`
@@ -129,18 +129,18 @@ Extract the element type of an array using `ArrayElement<T>`.
 >
 > ```typescript
 > type ArrayElement<T> = T extends (infer E)[] ? E : T;
-
-type E1 = ArrayElement<string[]>; // string
-type E2 = ArrayElement<number[]>; // number
-type E3 = ArrayElement<boolean>;  // boolean
-```
-
+> 
+> type E1 = ArrayElement<string[]>; // string
+> type E2 = ArrayElement<number[]>; // number
+> type E3 = ArrayElement<boolean>;  // boolean
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `T extends (infer E)[]` pattern matches array types and binds element type `E`.
 > 2. Returns the unwrapped element type `E` for arrays, or the original type `T` for non-arrays.
 > 3. Reusable structural pattern matching utility.
-
+> 
 ---
 
 ### Exercise 3: Extracting Function First Argument Types with `infer`
@@ -157,18 +157,18 @@ Extract the type of the first argument of any function using `FirstArgument<T>`.
 >
 > ```typescript
 > type FirstArgument<T> = T extends (first: infer F, ...args: any[]) => any ? F : never;
-
-function handler(id: number, message: string) {}
-
-type TargetType = FirstArgument<typeof handler>; // number
-```
-
+> 
+> function handler(id: number, message: string) {}
+> 
+> type TargetType = FirstArgument<typeof handler>; // number
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `infer F` pattern matches function parameter tuples, capturing the first parameter's type.
 > 2. Returns `never` if `T` is not a function.
 > 3. Advanced type meta-programming with `infer`.
-
+> 
 ---
 
 

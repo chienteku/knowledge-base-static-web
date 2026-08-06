@@ -142,7 +142,7 @@ const routes = [
 > // route.params.itemId (evaluates to 'nike-air')
 > ```
 > - You can have as many colons as you want in a single path.
-
+> 
 ---
 
 ### Exercise 2: Dynamic Route Parameter Definition
@@ -161,7 +161,7 @@ const routes = [
 >   { path: '/users/:id', name: 'user-profile', component: UserProfile }
 > ];
 > ```
-
+> 
 ---
 
 ### Exercise 3: Optional Route Parameters
@@ -178,8 +178,8 @@ const routes = [
 > ```javascript
 > { path: '/users/:id?', component: UserList }
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

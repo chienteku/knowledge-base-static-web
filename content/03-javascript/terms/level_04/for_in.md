@@ -166,7 +166,7 @@ async function processData() {
 > ```
 > - Create `let total = 0;` before the loop.
 > - Inside the loop: `total += scores[key];`
-
+> 
 ---
 
 ### Exercise 2: Iterating Enumerable Object Keys
@@ -187,7 +187,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `for...in` iterates over all enumerable string property keys of objects.
-
+> 
 ---
 
 ### Exercise 3: Filtering Prototype Properties in `for...in`
@@ -211,8 +211,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Object.hasOwn` guards `for...in` loops against processing inherited prototype properties.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

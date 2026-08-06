@@ -131,7 +131,7 @@ const Btn = styled.button`color: ${props => props.$isActive ? 'red' : 'blue'};`;
 > Because the CSS was inside the JavaScript file, deleting the JS file guarantees that 100% of the associated CSS is also removed from your application's final build. Zero dead CSS code!
 > ```
 > - Think about where the CSS lives physically.
-
+> 
 ---
 
 
@@ -156,7 +156,7 @@ const Btn = styled.button`color: ${props => props.$isActive ? 'red' : 'blue'};`;
 > ```
 >
 > **Explanation:** CSS-in-JS styled components evaluate dynamic JavaScript props to generate CSS styles.
-
+> 
 ---
 
 ### Exercise 3: Transient Props Prefix
@@ -173,7 +173,7 @@ const Btn = styled.button`color: ${props => props.$isActive ? 'red' : 'blue'};`;
 > ```
 >
 > **Explanation:** Transient props (`$prop`) are consumed strictly by styled-components and omitted from HTML DOM nodes.
-
+> 
 ## 7. Related Terms
 - [Components](../level_01/components.md) — Styled Components are just React Components that render a specific HTML tag with injected CSS.
 

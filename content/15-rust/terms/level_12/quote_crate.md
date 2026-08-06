@@ -309,7 +309,7 @@ Write a function `generate_register_accessors` that accepts a struct identifier 
 > 2. **Identifier Synthesis with `format_ident!`:** The `format_ident!` macro from the `quote` crate enables dynamic identifier construction (e.g., prefixing `"set_"` to `"baud_rate"` to produce `set_baud_rate`) while retaining proper `Span` context.
 > 3. **Numeric Literal Interpolation:** Primitive integers like `u32` automatically implement `quote::ToTokens`, allowing numeric expressions (`#shifts`, `#masks`) to be seamlessly quasi-quoted into generated expressions.
 > 4. **Syntactic Verification via `syn::parse2`:** Passing the resulting `TokenStream` to `syn::parse2::<syn::ItemImpl>()` programmatically verifies that the synthesized output represents syntactically valid Rust code without needing a full proc-macro compiler invocation.
-
+> 
 ---
 
 ### Exercise 2: Implementing `ToTokens` for Microservice Telemetry Endpoint Config
@@ -398,7 +398,7 @@ Implement `ToTokens` for `TelemetryEndpoint` so that interpolating `#endpoint` p
 > 1. **The `ToTokens` Trait Contract:** `quote!` relies on `ToTokens::to_tokens(&self, tokens: &mut TokenStream)` to convert any interpolated `#variable` into tokens. Standard types (`String`, `u32`, `bool`, `syn::Ident`) implement `ToTokens`, but user-defined AST structs require explicit implementation.
 > 2. **Token Stream Extension (`tokens.extend(...)`):** Inside `to_tokens`, quasi-quoted tokens created via `quote! { EndpointConfig { ... } }` are appended to the caller's target `&mut TokenStream` using `tokens.extend()`.
 > 3. **Compositional Quasi-Quoting:** By implementing `ToTokens` on `TelemetryEndpoint`, higher-level code generators can cleanly write `#endpoint` without manually decomposing fields every time an endpoint is generated.
-
+> 
 ---
 
 ### Exercise 3: Precise Diagnostic Squiggles using `quote_spanned!` in Deterministic Safety Macros
@@ -509,7 +509,7 @@ Implement `generate_deterministic_state_impl` using `syn::spanned::Spanned` and 
 > 1. **Diagnostic Precision with `quote_spanned!`:** Standard `quote!` assigns `Span::call_site()` to synthesized tokens. If a macro returns `compile_error!`, IDEs and `rustc` will highlight the macro invocation site (e.g. `#[derive(...)]`). By passing `field.span()` to `quote_spanned! { field_span => ... }`, compiler errors directly underline the specific problematic field definition line (`raw_voltage: f32`).
 > 2. **`syn::spanned::Spanned` Trait:** Bringing `syn::spanned::Spanned` into scope grants the `.span()` method on all `syn` AST nodes (`Field`, `Ident`, `Type`, `DeriveInput`), allowing macro authors to extract precise source coordinate metadata.
 > 3. **Early Exit Error Patterns:** In procedural macros, returning early with `quote_spanned!` containing `compile_error!(...)` is the standard, safe way to report compile-time domain validation failures without panicking the compiler driver process.
-
+> 
 ---
 
 ## 6. Related Terms

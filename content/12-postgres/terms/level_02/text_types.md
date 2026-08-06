@@ -157,7 +157,7 @@ Create a `posts` table choosing between `TEXT` and `VARCHAR(255)`.
 > 1. In PostgreSQL, `TEXT` and `VARCHAR(n)` use the exact same underlying storage layout (`varlena`) and have zero performance difference.
 > 2. `VARCHAR(n)` enforces an arbitrary character length check on every insert/update; `TEXT` allows unbounded text.
 > 3. PostgreSQL best practice: Use `TEXT` by default, adding `CHECK (length(col) <= N)` if length validation is required.
-
+> 
 ---
 
 ### Exercise 2: Case-Insensitive String Filtering with `LOWER()`
@@ -183,7 +183,7 @@ Query table `users` for email address `"ALICE@EXAMPLE.COM"` using case-insensiti
 > 1. `LOWER(string)` normalizes text characters to lowercase for case-insensitive comparison.
 > 2. `ILIKE` is PostgreSQL's case-insensitive pattern matching operator (`email ILIKE 'alice@%'`).
 > 3. Can be accelerated using functional expression indexes (`CREATE INDEX ON users (LOWER(email))`).
-
+> 
 ---
 
 ### Exercise 3: String Trimming and Substring Extraction
@@ -211,7 +211,7 @@ Sanitize text input by removing whitespace (`TRIM()`) and extracting the first 5
 > 1. `TRIM(text)` removes leading and trailing space characters.
 > 2. `LEFT(text, n)` extracts the first `n` characters from a string.
 > 3. `||` is the standard SQL string concatenation operator.
-
+> 
 ---
 
 

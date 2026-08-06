@@ -167,7 +167,7 @@ Find all users whose `name` begins with `"alice"` (case-insensitive).
 > 1. `$regex: "^prefix"` matches strings beginning with target characters.
 > 2. `$options: "i"` enables case-insensitive matching.
 > 3. Prefix regex queries (`^pattern`) can utilize standard indexes if collation matches.
-
+> 
 ---
 
 ### Exercise 2: Suffix Matching with `$regex`
@@ -193,7 +193,7 @@ Query documents where `email` ends with `@company.org`.
 > 1. `$regex: "pattern$"` matches string endings.
 > 2. Escapes special characters (`\.`) to match literal dots.
 > 3. Note: Unanchored or suffix regex queries require collection scans; consider text indexes for full-text search.
-
+> 
 ---
 
 ### Exercise 3: Validating Regex Index Execution with `explain()`
@@ -218,7 +218,7 @@ Inspect whether a regex query utilizes an index or forces a full collection scan
 > 1. Anchored regex (`/^alice/`) allows the B-tree index to isolate matching prefix ranges (`IXSCAN`).
 > 2. Unanchored regex (`/alice/`) forces an `COLLSCAN` across all collection documents.
 > 3. Always test regex query performance with `explain()`.
-
+> 
 ---
 
 

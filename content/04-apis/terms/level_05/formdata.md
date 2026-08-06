@@ -178,11 +178,11 @@ fetch('/api/doc', { method: 'POST', body: form });
 > [!check]- Answer
 > - `.value` on a file input element only returns a dummy text path string (like `C:\fakepath\file.txt`).
 > - To grab the actual file object, access the element's `.files` array.
-
+> 
 > [!check]- Answer
 > - **The `.value` bug.** On line 3, calling `.value` appends a plain text string representing the filename. To upload the actual binary file, replace it with `document.querySelector('#doc-input').files[0]`.
-
-
+> 
+> 
 ---
 
 ### Exercise 2: FormData Construction and Append Pattern

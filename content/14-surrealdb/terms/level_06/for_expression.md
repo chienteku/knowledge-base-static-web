@@ -165,7 +165,7 @@ An administrative script iterates over an array of user record IDs and creates a
 > 1. `FOR $item IN $array { ... }` iterates over array elements sequentially.
 > 2. Binds the loop variable (`$user`) for use inside the loop block.
 > 3. Executes procedural database mutations in a single transaction.
-
+> 
 ---
 
 ### Exercise 2: Calculating Iterative Sums in `FOR` Loops
@@ -197,7 +197,7 @@ Iterate over a list of order amounts, accumulate a running total in a parameter 
 > 1. Parameter variables (`LET $total`) can be updated inside `FOR` loop bodies.
 > 2. Retains accumulator state across iterations.
 > 3. Enables stored procedure logic inside SurrealQL scripts.
-
+> 
 ---
 
 ### Exercise 3: Array Mapping with `FOR` Expressions
@@ -223,7 +223,7 @@ Transform an array of product prices `[100, 200, 300]` by applying a 10% discoun
 > 1. `FOR` expressions evaluate to an array containing results of each iteration step.
 > 2. Provides functional array mapping capabilities.
 > 3. Transforms collection data without external application code.
-
+> 
 ---
 
 

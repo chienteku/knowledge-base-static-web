@@ -162,7 +162,7 @@ Create a strict `SCHEMAFULL` user table and a flexible `SCHEMALESS` log table in
 > 1. `SCHEMAFULL` mode rejects writes containing fields not explicitly defined with `DEFINE FIELD`.
 > 2. `SCHEMALESS` mode (default) accepts any arbitrary JSON fields dynamically.
 > 3. Allows developers to mix strict relational entities and dynamic document stores in the same database.
-
+> 
 ---
 
 ### Exercise 2: Defining Graph Relation Tables with `TYPE RELATION`
@@ -186,7 +186,7 @@ Define a graph relation table `purchased` connecting `user` records to `product`
 > 1. `TYPE RELATION` designates the table as a graph edge table.
 > 2. `IN user OUT product` constrains relation endpoints strictly to valid `user` and `product` record IDs.
 > 3. Enables native graph arrow traversals (`user:1->purchased->product`).
-
+> 
 ---
 
 ### Exercise 3: Dropping Table Definitions with `REMOVE TABLE`
@@ -210,7 +210,7 @@ Drop an obsolete table `legacy_data` and all its stored records from the databas
 > 1. `REMOVE TABLE` drops the table schema definition, fields, indexes, and stored records.
 > 2. Frees storage allocation on disk completely.
 > 3. Equivalent to SQL `DROP TABLE`.
-
+> 
 ---
 
 

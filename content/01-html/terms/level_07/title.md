@@ -167,7 +167,7 @@ Hover tooltips on different elements:
 > <a href="index.html" title="Goes to homepage">Home</a>
 > ```
 > - Add the `title` attribute directly inside the opening `<a>` tag.
-
+> 
 ---
 
 
@@ -186,7 +186,7 @@ Hover tooltips on different elements:
 > ```
 >
 > **Explanation:** The global `title` attribute displays hover tooltips on desktop browsers.
-
+> 
 ---
 
 ### Exercise 3: Touchscreen Tooltip Problem
@@ -203,7 +203,7 @@ Hover tooltips on different elements:
 > ```
 >
 > **Explanation:** Hover tooltips require desktop mouse hover interactions.
-
+> 
 ## 7. Related Terms
 - [Attribute](../level_01/attribute.md) — The general tag parameter concept.
 - [`alt` Attribute](../level_03/alt.md) — The required visual description attribute for images.

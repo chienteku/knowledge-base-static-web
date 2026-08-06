@@ -612,8 +612,8 @@ Design a sealed typestate state machine for a SPI/I2C peripheral bus controller:
 > 2. **Preventing State Invariant Bypass via Sealing:** If `BusState` were an open trait, external code could implement `impl BusState for BypassState` and instantiate `BusController<BypassState>` with arbitrary struct fields, breaking driver invariants. Sealing `BusState` guarantees that the compiler checks an exhaustive, closed set of state types (`Uninitialized`, `Idle`, `Active`).
 > 3. **Zero Runtime Cost (`PhantomData`):** The `PhantomData<S>` marker type uses 0 bytes of memory at runtime, meaning state machine static type checks compile down to zero machine instruction overhead.
 > 
-
-
+> 
+> 
 ---
 
 ## 6. Related Terms

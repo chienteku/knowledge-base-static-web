@@ -194,7 +194,7 @@ An e-commerce system relates a `user` to a `product` via a `purchased` relation 
 > 1. SurrealDB relation edges are first-class record documents capable of storing arbitrary properties.
 > 2. Stores `in` (source pointer), `out` (target pointer), and custom metadata fields (`price_paid`).
 > 3. Eliminates separate SQL junction tables with extra payload columns.
-
+> 
 ---
 
 ### Exercise 2: Filtering Queries by Edge Properties
@@ -220,7 +220,7 @@ Query all products purchased by `user:alice` where the edge metadata property `r
 > 1. `[WHERE rating >= 4]` filters the relation edge records (`purchased`) during arrow traversal.
 > 2. Only follows edge paths that satisfy edge property constraints.
 > 3. Combines graph topology navigation with rich metadata filtering.
-
+> 
 ---
 
 ### Exercise 3: Updating Properties on Existing Relation Edges
@@ -245,7 +245,7 @@ Update the `rating` property on an existing `purchased` relation edge between `u
 > 1. Relation edges can be updated like standard database tables using `UPDATE`.
 > 2. Matching on `in` and `out` targets specific edge instances directly.
 > 3. Mutates edge properties without breaking graph vertex connections.
-
+> 
 ---
 
 

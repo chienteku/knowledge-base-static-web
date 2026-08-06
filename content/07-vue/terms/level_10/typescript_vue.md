@@ -264,7 +264,7 @@ function addSearch() {
 > ```
 > - Add `<string[]>` to the history ref call.
 > - Add `<HTMLInputElement | null>` to the DOM template ref call.
-
+> 
 ---
 
 ### Exercise 2: TypeScript Component Event Typing Pattern
@@ -286,7 +286,7 @@ function addSearch() {
 > }>();
 > </script>
 > ```
-
+> 
 ---
 
 ### Exercise 3: vue-tsc Type Checking Command
@@ -303,8 +303,8 @@ function addSearch() {
 > ```bash
 > npx vue-tsc --noEmit
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

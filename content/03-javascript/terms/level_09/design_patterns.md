@@ -235,7 +235,7 @@ console.log(toy2.speak()); // "Hello!"
 
 > [!check]- Answer
 > - Use an `if/else` or `switch` check on `type` to return the appropriate object literal structure.
-
+> 
 ---
 
 ### Exercise 2: Singleton Pattern with Static Instance
@@ -259,7 +259,7 @@ console.log(toy2.speak()); // "Hello!"
 > ```
 >
 > **Explanation:** Singletons guarantee that only one instance of a class exists across applications.
-
+> 
 ---
 
 ### Exercise 3: Observer Pub/Sub Pattern
@@ -283,8 +283,8 @@ console.log(toy2.speak()); // "Hello!"
 > ```
 >
 > **Explanation:** Observer/PubSub patterns decouple event producers from event consumers.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -222,7 +222,7 @@ const vFocus = { mounted(el) { el.focus(); } }; // Correct vFocus camelCase nami
 > ```
 > - The binding argument can be read from `binding.arg`.
 > - Apply the background color inside the `mounted` hook using `el.style.backgroundColor = binding.arg || 'lightblue'`.
-
+> 
 ---
 
 ### Exercise 2: Custom Directive Autofocus Pattern
@@ -248,7 +248,7 @@ const vFocus = { mounted(el) { el.focus(); } }; // Correct vFocus camelCase nami
 >   <input v-focus placeholder="Auto-focused" />
 > </template>
 > ```
-
+> 
 ---
 
 ### Exercise 3: Custom Directive Lifecycle Hooks
@@ -270,8 +270,8 @@ const vFocus = { mounted(el) { el.focus(); } }; // Correct vFocus camelCase nami
 > updated -> After component VNode and child VNodes have updated.
 > unmounted -> When parent component unmounts.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -286,7 +286,7 @@ Implement a `WidgetTracker` system managing a `DisplayMetrics` state structure u
 > 2. **Interior Mutability via `UnsafeCell`**: Internally, `Cell<T>` wraps `UnsafeCell<T>`. Rust's compiler treats `UnsafeCell` as a language primitive that disables the immutability optimization pass for values behind shared `&` references. Because `.set()` overwrites the memory location directly without returning a reference to `T`, aliasing invariants are preserved—no outstanding references to the interior data ever exist.
 > 3. **Atomic State Swapping (`Cell::swap`)**: The `swap_metrics` method utilizes `Cell::swap(&a, &b)`, which performs an inline raw memory swap (`std::ptr::swap`) between the two `UnsafeCell` pointers. Because no references to the contents are held, swapping is entirely panic-safe and fast.
 > 4. **Memory Layout and Safety**: The memory layout of `Cell<DisplayMetrics>` is identical to `DisplayMetrics` (zero size/alignment overhead). `Cell` explicitly implements `!Sync`, preventing shared references `&Cell<T>` from crossing thread boundaries. This guarantees single-threaded thread safety without any dynamic borrowing guards or locking mechanisms.
-
+> 
 ---
 
 ### Exercise 2: Graph Cycle Detection with Reentrant State Traversal Markers
@@ -412,7 +412,7 @@ Implement a graph cycle detection engine using `Cell<NodeState>` for state track
 > 2. **Reentrancy Safety in Graph Traversal**: If `state` were tracked via `RefCell<NodeState>`, re-entering a node during cycle detection while a `borrow_mut()` was active on its state would trigger a runtime panic `AlreadyBorrowed`. Because `Cell<NodeState>` immediately sets the byte value by value copy without returning references or guards, re-entrant checks (`state.get() == Visiting`) execute safely without panicking.
 > 3. **Lifetime & Snapshot Borrowing**: `self.neighbors.borrow().clone()` clones the vector of shared `Rc` pointers to instantly drop the `RefCell` borrow guard before invoking the recursive `neighbor.has_cycle()` call. This ensures no dynamic borrows persist across stack frames during recursion.
 > 4. **Memory Layout Efficiency**: `Cell<NodeState>` occupies exactly 1 byte (plus alignment padding matching `NodeState`), achieving zero overhead compared to `RefCell<T>` which adds a 64-bit `isize` borrow counter.
-
+> 
 ---
 
 ### Exercise 3: Arena Memory Allocator Metrics & High-Watermark Tracker
@@ -576,7 +576,7 @@ Implement an `ArenaMetrics` telemetry system using `Cell<usize>` and `Cell<Alloc
 > 2. **Performance Mechanics vs `RefCell`**: A `RefCell<AllocatorTelemetry>` would perform atomic or integer borrow-counter modifications and conditional branching on every read/write operation. `Cell<T>` compiles down to simple move/store instructions without any branch instructions, making it ideal for hot memory allocation paths.
 > 3. **Thread-Safety Guarantees (`!Sync`)**: `Cell<T>` does not use atomic instructions (`std::sync::atomic`). Therefore, Rust marks `Cell<T>` as `!Sync`, ensuring that `&ArenaMetrics` cannot be shared across multiple threads simultaneously. Attempting to pass `&ArenaMetrics` to `std::thread::spawn` yields a compile-time error (`E0277`), preventing data races.
 > 4. **Memory Layout and Invariants**: `Cell<AllocatorTelemetry>` has the exact same memory layout, alignment, and size as `AllocatorTelemetry` (32 bytes on 64-bit systems). The underlying `UnsafeCell` informs LLVM that memory behind `&Cell` can mutate, preventing incorrect compiler optimizations such as constant propagation across calls.
-
+> 
 ---
 
 ## 6. Related Terms

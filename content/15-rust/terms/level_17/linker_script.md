@@ -194,7 +194,7 @@ Write a `#![no_std]` Rust initialization function `rtt_init_ram()` that uses lin
 > 1. **Linker Script Symbol Syntax**: In Rust, `extern "C" { static _sdata: u8; }` declares a symbol whose **address** (not value) is provided by the linker script (`link.ld` / `memory.x`).
 > 2. **Address vs Value**: Accessing `&_sdata as *const u8 as usize` yields the memory location where `.data` begins in RAM. Dereferencing `_sdata` directly would read the byte stored at that address, which is a classic bug when calculating section boundaries.
 > 3. **`copy_nonoverlapping` & `write_bytes`**: Core intrinsic functions `core::ptr::copy_nonoverlapping` (equivalent to C `memcpy`) and `core::ptr::write_bytes` (equivalent to C `memset`) provide high-speed memory block operations required during microsecond boot sequences.
-
+> 
 ---
 
 ### Exercise 2: Custom Linker Sections for DMA Buffers and Flash Configuration Header
@@ -302,7 +302,7 @@ Certain hardware peripherals (such as Ethernet controllers or SPI DMA) require m
 > 1. **`#[link_section = "..."]`**: Directs `rustc` and `LLVM` to place static symbols under custom ELF section names. The linker script matches these names (`*(.dma_buffer)`) and routes them to specific physical memory regions like `RAM_DMA`.
 > 2. **`KEEP(*(.config_flash))`**: In linker scripts, `KEEP()` prevents `rust-lld` link-time garbage collection (`--gc-sections`) from stripping static structs that are not explicitly called by application functions.
 > 3. **`#[repr(C, align(64))]`**: Ensures memory alignment complies with hardware DMA controller requirements, eliminating cache invalidation errors on high-performance microcontrollers.
-
+> 
 ---
 
 ### Exercise 3: Stack Guard and Memory Boundary Overflow Inspector
@@ -422,10 +422,9 @@ Using linker script symbols `_stack_start` (top of stack) and `_stack_end` (bott
 > 1. **Stack Growth Direction**: On ARM Cortex-M and x86 architectures, stack memory grows downward from high addresses (`_stack_start`) to lower addresses (`_stack_end`).
 > 2. **Headroom Calculation**: Remaining headroom is `current_sp - _stack_end`. If `current_sp < _stack_end`, the stack pointer has overflowed past the allowed region.
 > 3. **Decoupled Testing Architecture**: By isolating pointer bounds into `StackGuard::new(start_addr, end_addr)` alongside `StackGuard::from_linker()`, unit tests can run cleanly on host architectures while maintaining exact bare-metal compatibility.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

@@ -190,7 +190,7 @@ async function processData() {
 > - Calculate `2 ** 3` first (8).
 > - Multiply the result by `5` (40).
 > - Add `10` (50).
-
+> 
 ---
 
 ### Exercise 2: Operator Precedence Trace
@@ -211,7 +211,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Multiplication `*` and logical AND `&&` have higher operator precedence than addition `+` and logical OR `||`.
-
+> 
 ---
 
 ### Exercise 3: Exponentiation Operator Precedence
@@ -228,8 +228,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Exponentiation `**` is right-associative, evaluating `3 ** 2` first to get `9`, then `2 ** 9 = 512`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -155,7 +155,7 @@ Query collection `users` for email addresses matching `"ALICE@EXAMPLE.COM"` rega
 > 1. `$regex` evaluates regular expression pattern matching on string fields.
 > 2. `$options: "i"` enables case-insensitive matching.
 > 3. Note: Case-insensitive regex without prefix indexes forces collection scans; consider collation indexes for production.
-
+> 
 ---
 
 ### Exercise 2: Case-Insensitive Indexing with Collation
@@ -185,7 +185,7 @@ Create a case-insensitive unique index on `email` in collection `users` using a 
 > 1. Collation `strength: 2` performs case-insensitive character comparison.
 > 2. Enforces unique constraints ignoring uppercase vs lowercase differences (`Alice@` vs `alice@`).
 > 3. Allows index-accelerated case-insensitive queries without un-indexed `$regex`.
-
+> 
 ---
 
 ### Exercise 3: String Trimming and Lowercasing in Aggregation
@@ -219,7 +219,7 @@ Sanitize string inputs in an aggregation pipeline by trimming whitespace and con
 > 1. `$trim` removes leading and trailing whitespace characters.
 > 2. `$toLower` normalizes string characters to lowercase UTF-8.
 > 3. Standardizes string data during ETL aggregation pipelines.
-
+> 
 ---
 
 

@@ -147,7 +147,7 @@ async function processData() {
 > ```
 > - Variables declared with `let` inside `{ }` cannot be seen outside.
 > - Use a `try...catch` block if you want to cleanly catch the error, or just let it crash the script to see the `ReferenceError`.
-
+> 
 ---
 
 ### Exercise 2: Let Block Scoping in Loops
@@ -170,7 +170,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `for (let ...)` creates a new lexical scope binding for `i` in each loop iteration.
-
+> 
 ---
 
 ### Exercise 3: Temporal Dead Zone with `let`
@@ -192,8 +192,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `let` variables are hoisted but uninitialized, remaining inaccessible in the Temporal Dead Zone (TDZ) prior to declaration.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

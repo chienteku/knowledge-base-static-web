@@ -166,7 +166,7 @@ A user updates their display name. Mutate user record `user:john` setting `name 
 > 1. `UPDATE table:id` mutates a single targeted record directly in $O(1)$ constant time complexity.
 > 2. `SET key = val` updates specified fields while leaving unmentioned fields untouched.
 > 3. Returns the updated record document payload (`RETURN AFTER` by default).
-
+> 
 ---
 
 ### Exercise 2: Filtered Bulk Record Mutation
@@ -195,7 +195,7 @@ A batch job deactivates all user accounts that have been inactive for more than 
 > 1. `UPDATE table SET ... WHERE condition` evaluates filters across table records and mutates matching records.
 > 2. Executes atomically within a database transaction block.
 > 3. Unmatched records (`user:u2`) remain unmodified.
-
+> 
 ---
 
 ### Exercise 3: Shallow Document Modification with `MERGE`
@@ -220,7 +220,7 @@ Update user `user:john`'s preferences using `MERGE` to add a new property `theme
 > 1. `MERGE` performs a shallow merge, updating specified JSON keys while preserving unmentioned fields.
 > 2. Prevents accidental document truncation caused by `CONTENT` replacements.
 > 3. Provides safe partial document updates for JSON payloads.
-
+> 
 ---
 
 

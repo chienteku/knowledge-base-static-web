@@ -345,7 +345,7 @@ Write unit tests with `assert_eq!` and `assert!` verifying buffer creation, part
 > 1. **Avoiding UB from Uninitialized Bit Patterns**: In Rust, creating a raw byte buffer via `std::mem::uninitialized()` or transmute of uninitialized bytes triggers instant UB because compiler optimizations rely on byte initialization invariants. Using `MaybeUninit<T>` explicitly signals to LLVM that the underlying byte range is uninitialized and must not be assumed valid until `.assume_init()` or raw slice conversion.
 > 2. **Layout Equivalence (`MaybeUninit<T>` & `T`)**: `MaybeUninit<T>` is guaranteed by the compiler layout specification to have identical size, alignment, and ABI as `T`. This permits sound raw pointer casting between `*const MaybeUninit<u8>` and `*const u8`.
 > 3. **Safety Contracts (`core::slice::from_raw_parts`)**: Converting raw pointers to safe slice references (`&[u8]`) requires strictly enforcing three preconditions: non-null aligned pointer, lifetime validity, and actual byte initialization across `0..len`. Bound checks (`len > CAP`) prevent dangling pointer UB.
-
+> 
 ---
 
 ### Exercise 2: Sound Non-Overlapping In-Place Slice Mutation (Eliminating Aliasing UB)
@@ -457,7 +457,7 @@ Write comprehensive unit tests with `assert_eq!` verifying decryption round-trip
 > 1. **Rust's Aliasing Rule (Aliasing XOR Mutability)**: LLVM optimizes Rust code under the assumption that `&mut T` is exclusive—no other pointer (`&T` or `&mut T`) accesses the exact same memory location concurrently. Creating two overlapping `&mut` slices referencing the same byte causes instantaneous Aliasing UB.
 > 2. **Disjoint Memory Regions**: `safe_split_mut` proves how `unsafe` code can build sound safe abstractions. Because `mid <= len`, slice 1 (`0..mid`) and slice 2 (`mid..len`) never overlap in memory. Passing these disjoint regions to `from_raw_parts_mut` guarantees `&mut` uniqueness invariants.
 > 3. **Pointer Arithmetic via `.add(n)`**: `ptr.add(n)` performs pointer offset arithmetic scaled by `core::mem::size_of::<T>()`. Ensuring `mid <= len` guarantees the offset pointer does not exceed allocation boundaries.
-
+> 
 ---
 
 ### Exercise 3: Preventing Volatile Memory & Interrupt Data Race UB (`UnsafeCell` & Volatile I/O)
@@ -588,7 +588,7 @@ Include unit tests with `assert_eq!` verifying interior mutability, volatile rea
 > 1. **Preventing LLVM Volatile Optimization Deletions**: In Rust, ordinary dereferences (`*ptr`) allow LLVM to assume memory does not change unless written by the current thread. For memory-mapped hardware registers or ISR status flags, the CPU hardware or interrupt handler alters memory asynchronously. `core::ptr::read_volatile` and `write_volatile` force compiler backends to generate exact hardware memory read/write instructions on every access without eliding or reordering them.
 > 2. **`UnsafeCell<T>` for Sound Interior Mutability**: Mutating data behind a shared reference `&T` without `UnsafeCell` is instant UB in Rust. `UnsafeCell<T>` is the core primitive in Rust that tells LLVM "data within this memory location can mutate even through shared references."
 > 3. **Data Races vs Synchronization**: Data races occur when two threads/interrupts access the same memory concurrently where at least one is a non-atomic write. Wrapping hardware MMIO cells with `UnsafeCell` and volatile access guarantees memory safety for single-core microcontrollers or synchronized MMIO memory.
-
+> 
 ---
 
 ## 6. Related Terms

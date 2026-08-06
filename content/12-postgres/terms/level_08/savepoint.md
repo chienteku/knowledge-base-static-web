@@ -178,7 +178,7 @@ Execute a batch transaction that sets a `SAVEPOINT`, attempts an update, and rol
 > 1. `SAVEPOINT name` establishes a named sub-transaction checkpoint within a transaction block.
 > 2. `ROLLBACK TO SAVEPOINT name` reverts queries executed AFTER the savepoint, clearing aborted transaction state.
 > 3. Preserves work performed prior to the savepoint.
-
+> 
 ---
 
 ### Exercise 2: Releasing Savepoints with `RELEASE SAVEPOINT`
@@ -208,7 +208,7 @@ Release a savepoint after a sub-operation succeeds using `RELEASE SAVEPOINT`.
 > 1. `RELEASE SAVEPOINT name` removes the specified savepoint marker from the transaction stack.
 > 2. Reclaims server memory used to track sub-transaction savepoints.
 > 3. Sub-transaction operations remain part of the parent transaction block.
-
+> 
 ---
 
 ### Exercise 3: Nesting Multiple Savepoints
@@ -240,7 +240,7 @@ Demonstrate nested savepoints (`savepoint_a`, `savepoint_b`) inside a multi-stag
 > 1. Savepoints form a hierarchical sub-transaction stack.
 > 2. Rolling back to an earlier savepoint (`sp_a`) automatically destroys all later savepoints (`sp_b`).
 > 3. Enables complex nested transaction error recovery.
-
+> 
 ---
 
 

@@ -120,7 +120,7 @@ useEffect(() => { ... }, [options]);
 > When `theme` changes, React will see `searchQuery` hasn't changed, and will skip the fetch effect!
 > ```
 > - Only put the variables the effect *actually cares about* in the array.
-
+> 
 ---
 
 
@@ -139,7 +139,7 @@ useEffect(() => { ... }, [options]);
 > ```
 >
 > **Explanation:** The dependency array controls effect execution frequency.
-
+> 
 ---
 
 ### Exercise 3: Primitive vs Object Dependencies
@@ -156,7 +156,7 @@ useEffect(() => { ... }, [options]);
 > ```
 >
 > **Explanation:** Primitive dependencies avoid false positive effect triggers caused by new object references.
-
+> 
 ## 7. Related Terms
 - [`useCallback` Hook](../level_04/use_callback.md) — Another hook that relies heavily on the Dependency Array.
 - [Immutability](../level_02/immutability.md) — Why React uses memory addresses to compare items in the dependency array.

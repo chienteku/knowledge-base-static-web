@@ -120,7 +120,7 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 > 500px! Percentages are always calculated relative to the *parent* container, not necessarily the whole screen.
 > ```
 > - What is 50% of 1000?
-
+> 
 ---
 
 
@@ -144,7 +144,7 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 > ```
 >
 > **Explanation:** `width: 100%` + `max-width` + `margin: auto` creates responsive fluid page containers.
-
+> 
 ---
 
 ### Exercise 3: Percentage Height Requirement
@@ -161,7 +161,7 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 > ```
 >
 > **Explanation:** Percentage height resolves against explicitly defined parent height dimensions.
-
+> 
 ## 7. Related Terms
 - [`box-sizing: border-box`](box_sizing.md) — Changes how Width and Height calculate padding and borders.
 - [Margin](margin.md) — Surrounds the calculated width and height.

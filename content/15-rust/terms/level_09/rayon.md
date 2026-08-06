@@ -286,7 +286,7 @@ Write the complete code with comprehensive unit tests in `mod tests` asserting t
 > 1. **Custom `ThreadPoolBuilder` Isolation:** In production applications, running CPU-heavy batch processing on the default global Rayon thread pool can starve critical system tasks. Constructing a custom `ThreadPool` via `ThreadPoolBuilder::new().num_threads(...).build()` ensures resource isolation. The `pool.install(...)` method sets the context so `.par_iter()` executes within that custom pool.
 > 2. **Lock-Free Local Accumulation (`fold`):** Using shared mutable state protected by `Mutex` inside parallel iterators creates severe lock contention. `fold()` initializes thread-local identity accumulators (`LogMetrics::default`), allowing each worker thread to mutate its own isolated metrics struct without acquiring locks.
 > 3. **Hierarchical Reduction (`reduce`):** Once worker threads complete their chunks, `.reduce(...)` hierarchically combines the thread-local `LogMetrics` structs using `LogMetrics::merge`. This pattern reduces lock/atomic overhead from $O(N)$ down to $O(\text{num\_threads})$.
-
+> 
 ---
 
 ### Exercise 2: Recursive Divide-and-Conquer AST Evaluation with `rayon::join` and Non-Static Stack Borrowing via `rayon::scope`
@@ -427,7 +427,7 @@ Implement a parallel recursive AST evaluator using `rayon::join` and `rayon::sco
 > 1. **Work-Stealing Task Splitting via `rayon::join`:** `rayon::join(closure1, closure2)` branches execution into two tasks. If idle worker threads exist in Rayon's pool, one closure is stolen while the current thread runs the other. This divide-and-conquer strategy evaluates binary expression subtrees concurrently without manual thread management.
 > 2. **Sequential Cutoff Threshold:** Spawning tasks for tiny computations (like leaf `Expr::Literal` nodes) creates scheduling overhead that outweighs parallel execution gains. Bounding `join` with a `depth < 4` condition switches execution to sequential evaluation at deeper tree levels.
 > 3. **Non-Static Stack Borrowing with `rayon::scope`:** Standard OS thread spawning (`std::thread::spawn`) requires closures to own data or hold `'static` references. `rayon::scope` guarantees that all spawned tasks complete before the scope block finishes, enabling tasks to safely borrow stack references (like `node_counter` and `result`) without requiring `Arc` or heap allocations.
-
+> 
 ---
 
 ### Exercise 3: In-Place Parallel Chunk Mutation & Sorting with Atomic Progress Tracking & Custom Ordering
@@ -555,7 +555,7 @@ Implement a parallel processing pipeline using Rayon's slice extensions:
 > 1. **In-Place Parallel Chunk Mutation (`par_chunks_mut`):** `par_chunks_mut(size)` splits a slice into non-overlapping mutable slices processed concurrently by Rayon threads. Because the slice segments are non-overlapping, Rust's borrow checker guarantees data-race freedom without locks.
 > 2. **Parallel Sorting with Custom Comparators (`par_sort_unstable_by`):** `par_sort_unstable_by` uses a parallel sample-sort algorithm, distributing array partitioning across available cores. Using `unstable` sorting avoids allocating extra memory buffers for stability when element identity stability is unneeded.
 > 3. **Atomic Progress Synchronization (`Release` / `Acquire`):** `fetch_add` with `Ordering::Release` ensures all chunk updates are visible to observers reading the atomic variable with `Ordering::Acquire` after completion, preventing instruction reordering across thread synchronization barriers.
-
+> 
 ---
 
 ## 6. Related Terms

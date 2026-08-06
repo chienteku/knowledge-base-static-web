@@ -98,7 +98,7 @@ git checkout --ours package-lock.json && npm install # Regenerates clean lockfil
 > npm install express@4.18.2
 > ```
 > - Should you open the lock file and edit the numbers by hand? (Never!)
-
+> 
 ---
 
 
@@ -117,7 +117,7 @@ git checkout --ours package-lock.json && npm install # Regenerates clean lockfil
 > ```
 >
 > **Explanation:** `integrity` stores sub-resource integrity hashes to prevent supply chain code tampering.
-
+> 
 ---
 
 ### Exercise 3: package-lock.json Source Control Rule
@@ -134,7 +134,7 @@ git checkout --ours package-lock.json && npm install # Regenerates clean lockfil
 > ```
 >
 > **Explanation:** Locking exact package versions ensures production matches development builds.
-
+> 
 ## 7. Related Terms
 - [package.json](package_json.md) — The human-readable blueprint. (The lock file is the machine-readable exact receipt).
 - [NPM (Node Package Manager)](npm.md) — Related concept: NPM (Node Package Manager).

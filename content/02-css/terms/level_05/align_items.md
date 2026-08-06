@@ -114,7 +114,7 @@ Before Flexbox, perfectly centering a `<div>` both horizontally and vertically w
 > You fix it by setting `align-items: flex-start;` or `align-items: center;` to stop the stretching behavior.
 > ```
 > - What is the default value of `align-items`?
-
+> 
 ---
 
 
@@ -137,7 +137,7 @@ Before Flexbox, perfectly centering a `<div>` both horizontally and vertically w
 > ```
 >
 > **Explanation:** Combining `justify-content: center` and `align-items: center` achieves perfect 2D centering.
-
+> 
 ---
 
 ### Exercise 3: align-items Baseline Alignment
@@ -157,7 +157,7 @@ Before Flexbox, perfectly centering a `<div>` both horizontally and vertically w
 > ```
 >
 > **Explanation:** `align-items: baseline` aligns text baselines regardless of differing font sizes.
-
+> 
 ## 7. Related Terms
 - [`justify-content`](justify_content.md) — The Main Axis sibling.
 - [`flex-direction`](flex_direction.md) — Rotating the main layout axis.

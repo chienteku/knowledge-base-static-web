@@ -120,7 +120,7 @@ a {
 > The `<p>` container is probably only exactly as wide as the word "Hello" (maybe due to Flexbox or inline display). If the box is exactly the size of the word, there is no empty space for the word to slide into! `text-align: center` only works if the container is wider than the text.
 > ```
 > - If you stand inside a closet that is exactly as wide as your shoulders, can you step to the "center" of the room?
-
+> 
 ---
 
 
@@ -141,7 +141,7 @@ a {
 > ```
 >
 > **Explanation:** Modern `text-decoration` combines line type, style, color, and thickness.
-
+> 
 ---
 
 ### Exercise 3: Removing Default Anchor Underlines
@@ -160,7 +160,7 @@ a {
 > ```
 >
 > **Explanation:** `text-decoration: none` removes default hyperlink underlines.
-
+> 
 ## 7. Related Terms
 - [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — The display type that `text-align` affects.
 - [Margin](../level_02/margin.md) — The spacing property used to center boxes rather than inline text.

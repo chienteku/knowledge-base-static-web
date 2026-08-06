@@ -169,7 +169,7 @@ Create a full-text search index `article_search` on table `article` covering fie
 > 1. `SEARCH ANALYZER` configures text tokenization and stemming for full-text search.
 > 2. `BM25` applies Okapi BM25 relevance scoring algorithms to query results.
 > 3. Enables fast text searching across large document collections.
-
+> 
 ---
 
 ### Exercise 2: Executing Full-Text Search Queries
@@ -196,7 +196,7 @@ Search for articles containing term `"SurrealDB"` using the `@@` search operator
 > 1. `@@` executes full-text search matching using configured search indexes.
 > 2. Ranks results by BM25 relevance scores.
 > 3. Replaces external Elasticsearch clusters for text search workloads.
-
+> 
 ---
 
 ### Exercise 3: Highlights and Search Score Retrieval
@@ -223,7 +223,7 @@ Retrieve search relevance scores (`search::score()`) for matching articles.
 > 1. `search::score(n)` returns numerical BM25 relevance scores.
 > 2. Sorts search results by term relevance.
 > 3. Provides native search engine capabilities.
-
+> 
 ---
 
 

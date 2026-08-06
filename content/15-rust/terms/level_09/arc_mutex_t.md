@@ -241,7 +241,7 @@ do_expensive_network_io(); // Non-blocking!
 > 1. `Arc` provides multi-thread shared ownership of the underlying `Mutex<HashMap<K, CacheEntry<V>>>`.
 > 2. `Mutex` grants safe interior mutability so concurrent threads can insert and mutate map entries safely.
 > 3. Lock guards are held for minimal scope during `get` and `set` operations to minimize thread lock contention.
-
+> 
 ---
 
 ### Exercise 2: Multi-Producer Multi-Consumer Thread-Safe Job Queue
@@ -367,7 +367,7 @@ do_expensive_network_io(); // Non-blocking!
 > 1. `Arc` shares the tuple containing the `Mutex` queue and `Condvar` condition variable across worker threads.
 > 2. `Condvar::wait` automatically unlocks the `Mutex` guard while sleeping to avoid CPU spinning.
 > 3. `shutdown` sets `is_shutdown` and broadcasts `notify_all` to cleanly exit worker threads.
-
+> 
 ---
 
 ### Exercise 3: Thread-Safe Token Bucket Rate Limiter
@@ -486,7 +486,7 @@ do_expensive_network_io(); // Non-blocking!
 > 1. Serializes token refill calculations and deductions inside `MutexGuard` to prevent race conditions.
 > 2. `Arc` enables sharing the rate limiter instance across multiple concurrent request handling threads.
 > 3. Token refills are computed lazily based on elapsed time inside the lock.
-
+> 
 ---
 
 ## 6. Related Terms

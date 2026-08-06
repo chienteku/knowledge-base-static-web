@@ -168,7 +168,7 @@ Group sales orders by `category` and compute total revenue (`$sum`) and average 
 > 1. `$group` collapses documents sharing the same `_id` group key into a single summary document.
 > 2. `$sum: "$total"` calculates cumulative revenue across all orders in each category.
 > 3. `$avg: "$total"` calculates mean order amounts dynamically.
-
+> 
 ---
 
 ### Exercise 2: Building Unique Value Lists with `$addToSet`
@@ -199,7 +199,7 @@ Group customer orders by `customerId` and collect a deduplicated array of all di
 > 1. `$addToSet` collects field values into an array, ignoring duplicate entries.
 > 2. Contrast with `$push` which preserves all array items including duplicates.
 > 3. Constructs deduplicated user preference lists server-side.
-
+> 
 ---
 
 ### Exercise 3: Retrieving Boundary Documents with `$first` and `$last`
@@ -231,7 +231,7 @@ Find the most recent order date (`$max`) and the first order date (`$min`) for e
 > 1. `$min` and `$max` compute lower and upper bounds for numeric, string, or date fields.
 > 2. Analyzes customer lifecycle dates directly inside the aggregation engine.
 > 3. Highly efficient stream accumulator processing.
-
+> 
 ---
 
 

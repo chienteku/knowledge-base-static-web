@@ -154,7 +154,7 @@ async function processData() {
 > 10 20
 > ```
 > - `console.log()` can take multiple arguments separated by commas (e.g., `console.log(var1, var2)`).
-
+> 
 ---
 
 ### Exercise 2: Console Formatting Specifiers
@@ -171,7 +171,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `console.log` supports ANSI/C-style format specifiers: `%s` (string), `%d` (integer), `%o` (object).
-
+> 
 ---
 
 ### Exercise 3: Console Timing and Table Operations
@@ -190,8 +190,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `console.time` and `console.timeEnd` benchmark execution duration between matching label strings.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

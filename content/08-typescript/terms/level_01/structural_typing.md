@@ -192,23 +192,23 @@ Demonstrate structural duck typing by passing an object with extra properties in
 >   x: number;
 >   y: number;
 > }
-
-function logPoint(point: Point2D) {
-  console.log(`Point: (${point.x}, ${point.y})`);
-}
-
-const point3D = { x: 10, y: 20, z: 30 };
-
-// Valid! point3D satisfies the structural shape of Point2D (contains x and y).
-logPoint(point3D);
-```
-
+> 
+> function logPoint(point: Point2D) {
+>   console.log(`Point: (${point.x}, ${point.y})`);
+> }
+> 
+> const point3D = { x: 10, y: 20, z: 30 };
+> 
+> // Valid! point3D satisfies the structural shape of Point2D (contains x and y).
+> logPoint(point3D);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript uses structural typing (duck typing), comparing objects by their member shape rather than explicit class names.
 > 2. `point3D` is structurally compatible with `Point2D` because it possesses required `x` and `y` properties.
 > 3. Extra properties (`z`) are allowed when passing variable references.
-
+> 
 ---
 
 ### Exercise 2: Strict Object Literal Excess Property Checks
@@ -228,21 +228,21 @@ Fix a compile error caused by direct inline object literal excess property check
 >   id: number;
 >   name: string;
 > }
-
-// ❌ FAILS due to Excess Property Checks on direct object literals:
-// const user: User = { id: 1, name: "Alice", role: "admin" };
-
-// ✅ CORRECT (Assign to intermediate variable or extend interface):
-const userData = { id: 1, name: "Alice", role: "admin" };
-const user: User = userData; // Allowed structurally!
-```
-
+> 
+> // ❌ FAILS due to Excess Property Checks on direct object literals:
+> // const user: User = { id: 1, name: "Alice", role: "admin" };
+> 
+> // ✅ CORRECT (Assign to intermediate variable or extend interface):
+> const userData = { id: 1, name: "Alice", role: "admin" };
+> const user: User = userData; // Allowed structurally!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Fresh inline object literals undergo strict "Excess Property Checks" to catch typos (`role` in `User`).
 > 2. Assigning the object literal to an intermediate variable (`userData`) bypasses fresh excess property checks.
 > 3. Keeps structural typing rules consistent while preventing inline typo mistakes.
-
+> 
 ---
 
 ### Exercise 3: Structural vs Nominal Type Systems
@@ -262,13 +262,13 @@ Formulate an architectural comparison matrix contrasting Structural Typing (Type
 > - Structural Typing (TypeScript): Compatibility is based on object shape (members & types). Two distinct types with identical shapes are assignable to each other.
 > - Nominal Typing (Java / C#): Compatibility is based on explicit class name declarations and class hierarchy (implements / extends).
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Nominal type systems require explicit inheritance relationships (`class Car implements Vehicle`).
 > 2. Structural type systems allow any object matching required properties to satisfy interface contracts.
 > 3. Aligns perfectly with idiomatic JavaScript object manipulation patterns.
-
+> 
 ---
 
 

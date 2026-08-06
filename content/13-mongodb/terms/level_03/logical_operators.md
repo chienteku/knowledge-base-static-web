@@ -190,7 +190,7 @@ Query collection `orders` for documents where `status: "urgent"` OR `totalAmount
 > 1. `$or` matches documents satisfying at least one condition in the specified array.
 > 2. Evaluates indexes on individual `$or` branches independently.
 > 3. Combines index scans across different collection fields.
-
+> 
 ---
 
 ### Exercise 2: Inverting Match Criteria with `$not`
@@ -216,7 +216,7 @@ Query collection `products` for items where `price` is NOT greater than `$50.00`
 > 1. `$not` inverts the result of a specified operator expression.
 > 2. Matches documents where the field value is <= 50.00 OR where the field is missing.
 > 3. Operates at the field-level context.
-
+> 
 ---
 
 ### Exercise 3: Excluding Multiple Conditions with `$nor`
@@ -245,7 +245,7 @@ Query collection `users` for documents where `status` is NOT `"suspended"` AND `
 > 1. `$nor` matches documents that fail ALL clauses in the specified array.
 > 2. Combines negative filtering across multiple document fields.
 > 3. Equivalent to `NOT (clause1 OR clause2)`.
-
+> 
 ---
 
 

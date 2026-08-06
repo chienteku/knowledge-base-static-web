@@ -163,7 +163,7 @@ A seed script creates initial system configuration records (like `config:theme`)
 > 1. `CREATE IF NOT EXISTS table:id` checks primary key existence before inserting.
 > 2. If `config:theme` exists, SurrealDB skips record creation silently without raising a primary key conflict error.
 > 3. Essential for idempotent environment seeding scripts in deployment pipelines.
-
+> 
 ---
 
 ### Exercise 2: Conditional Field Definition in Schema Migrations
@@ -190,7 +190,7 @@ A migration script adds a new field `discount_code` to table `coupon` only if th
 > 1. `IF NOT EXISTS` on DDL statements (`DEFINE TABLE`, `DEFINE FIELD`) prevents "item already exists" errors during migration script execution.
 > 2. Ensures schema migration scripts can be re-run safely in CI/CD pipelines.
 > 3. Complements `DEFINE ... OVERWRITE` for idempotent schema management.
-
+> 
 ---
 
 ### Exercise 3: Conditional Table Removal with `IF EXISTS`
@@ -215,7 +215,7 @@ A cleanup script drops temporary table `temp_import` only if the table currently
 > 1. `REMOVE TABLE IF EXISTS` drops table schema metadata and records if present.
 > 2. If `temp_import` does not exist, SurrealDB skips removal without throwing a "table not found" error.
 > 3. Simplifies teardown scripts across variable deployment environments.
-
+> 
 ---
 
 

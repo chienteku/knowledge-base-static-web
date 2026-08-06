@@ -168,7 +168,7 @@ async function processData() {
 > }
 > ```
 > - `element.matches('css-selector')` is the cleanest way to check if `event.target` is the element you want!
-
+> 
 ---
 
 ### Exercise 2: Event Delegation Pattern with `closest()`
@@ -187,7 +187,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Event delegation routes clicks on child elements to a single shared parent listener.
-
+> 
 ---
 
 ### Exercise 3: Performance Benefits of Event Delegation
@@ -204,8 +204,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Delegating events to parent elements conserves memory and handles dynamically inserted elements automatically.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

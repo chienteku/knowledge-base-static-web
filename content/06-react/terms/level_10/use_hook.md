@@ -199,7 +199,7 @@ function ProfileCard({ dataPromise, isExpanded }) {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Consuming Promise with React 19 use() Hook
@@ -221,7 +221,7 @@ function ProfileCard({ dataPromise, isExpanded }) {
 > ```
 >
 > **Explanation:** React 19 `use(promise)` unwraps promises directly inside component render, integrating with `<Suspense>`.
-
+> 
 ---
 
 ### Exercise 3: Consuming Context with React 19 use() Hook
@@ -240,7 +240,7 @@ function ProfileCard({ dataPromise, isExpanded }) {
 > ```
 >
 > **Explanation:** Unlike `useContext`, React 19 `use(Context)` can be called conditionally inside `if` statements.
-
+> 
 ## 7. Related Terms
 - [The Context API](../level_06/context_api.md) — The data sharing mechanism read by `use()`.
 - [Suspense](../level_08/suspense.md) — The UI fallback catcher for pending promises.

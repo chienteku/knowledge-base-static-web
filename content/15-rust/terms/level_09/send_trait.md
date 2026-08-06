@@ -295,7 +295,7 @@ Implement a `WorkerPool` struct that:
 > 1. **Closure Trait Bounds (`F: Send + 'static`)**: `thread::spawn` requires closures to capture only thread-safe ownership (`Send`) and live for the `'static` lifetime. Standard functions or closures capturing non-`Send` types like `Rc` or `RefCell` fail compilation.
 > 2. **Result Synchronization**: Enqueueing a wrapper closure that calls `f()` and sends output over a separate `mpsc::channel` allows asynchronous task dispatch and synchronous response collection.
 > 3. **Teardown Mechanics**: When `WorkerPool` drops, clearing the `sender` closes the channel. Worker loops receiving `Err(_)` exit cleanly, enabling `handle.join()` to clean up background OS threads.
-
+> 
 ---
 
 ### Exercise 2: Off-Heap Raw Pointer Memory Buffer with Sound `unsafe impl Send`
@@ -411,7 +411,7 @@ Implement an `OffHeapBuffer` container that:
 > 1. **Why `*mut T` is `!Send`**: Raw pointers do not encode ownership or aliasing semantics. Rust conservatively marks them `!Send` to prevent unchecked concurrent access across threads.
 > 2. **Soundness of `unsafe impl Send`**: By wrapping the pointer inside `OffHeapBuffer` and exposing safe move-only semantics without shared references (`&self` mutates nothing without interior mutability), transferring ownership to another thread is 100% data-race free.
 > 3. **RAII Deallocation**: The `Drop` implementation safely reclaims raw memory via `std::alloc::dealloc`, preventing heap leaks regardless of which thread owns the buffer when it falls out of scope.
-
+> 
 ---
 
 ### Exercise 3: Auto-Trait Propagation & Conditional `Send` Bounds on Generic Pipeline State
@@ -503,7 +503,7 @@ Construct a generic state wrapper and worker dispatcher that:
 > 1. **Auto-Trait Mechanics**: Rust auto-traits recursively inspect struct definitions. `StateContainer<T>` inherits `Send` automatically as long as `T: Send`. If `T` is replaced with `Rc<u32>` or `*mut u8`, `StateContainer<T>` automatically becomes `!Send`.
 > 2. **Generic Bounds (`T: Send + 'static`)**: Explicitly placing `T: Send` on `dispatch_to_thread` prevents user code from attempting to transfer thread-unsafe generic payloads into worker threads.
 > 3. **Static Trait Verification**: `assert_send::<T>()` is a zero-cost compile-time check ensuring types fulfill thread boundary constraints before runtime instantiation.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -143,7 +143,7 @@ HIR is lowered to MIR before borrow checking and lifetime validation!
 >
 > 1. Demonstrates how HIR lowers surface syntax like `for` loops into fundamental `loop` and `match` primitives.
 > 2. Simplifies downstream type checking.
-
+> 
 ---
 
 ### Exercise 2: HIR Type Inference Map Representation
@@ -196,7 +196,7 @@ HIR is lowered to MIR before borrow checking and lifetime validation!
 >
 > 1. Represents `rustc` type tables linking HIR nodes to inferred types.
 > 2. Enables static type checking.
-
+> 
 ---
 
 ### Exercise 3: HIR DefId Path Resolver
@@ -241,7 +241,7 @@ HIR is lowered to MIR before borrow checking and lifetime validation!
 >
 > 1. Illustrates compiler `DefId` resolution across module boundaries.
 > 2. Used extensively in rustc compiler query engine.
-
+> 
 ---
 
 ## 6. Related Terms

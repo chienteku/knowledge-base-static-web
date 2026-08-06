@@ -148,7 +148,7 @@ Create an `inventory_items` table selecting `SMALLINT` for status codes, `INTEGE
 > 1. `SMALLINT` (2 bytes) handles values -32,768 to 32,767 (ideal for status codes).
 > 2. `INTEGER` (4 bytes) handles values up to 2.1 billion.
 > 3. `BIGINT` (8 bytes) handles values up to 9 quintillion (essential for high-volume primary keys and serial numbers).
-
+> 
 ---
 
 ### Exercise 2: Preventing Integer Overflow Exceptions
@@ -173,7 +173,7 @@ Audit a table storing transaction counters to upgrade `INTEGER` to `BIGINT` befo
 > 1. Exceeding 2,147,483,647 on an `INTEGER` column throws `integer out of range` error (Code 22003).
 > 2. Altering type to `BIGINT` expands capacity to 9.22 × 10^18.
 > 3. Protects production databases from counter exhaustion.
-
+> 
 ---
 
 ### Exercise 3: Atomic Integer Incrementing
@@ -202,7 +202,7 @@ Atomically increment a page view counter by 1 and decrement stock quantity by 1.
 > 1. Arithmetic operators (`+`, `-`) operate over integer data types atomically.
 > 2. `WHERE stock > 0` prevents stock count from dropping below zero during concurrent writes.
 > 3. Safe thread-safe integer updating.
-
+> 
 ---
 
 

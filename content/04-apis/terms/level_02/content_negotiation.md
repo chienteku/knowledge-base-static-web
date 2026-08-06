@@ -146,11 +146,11 @@ Content-Type: application/json
 > [!check]- Answer
 > - The client accepts XML, JSON, and Plain Text.
 > - Match what the client accepts against what the server can actually generate.
-
+> 
 > [!check]- Answer
 > - **`application/json`** (The client accepts XML first, but the server cannot produce it. The next highest preference accepted by the client that the server can generate is JSON).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Quality Value (q-factor) Weighting Calculation

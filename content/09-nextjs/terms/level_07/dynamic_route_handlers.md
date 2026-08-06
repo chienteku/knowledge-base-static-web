@@ -145,13 +145,13 @@ Extract dynamic path parameter `id` inside `app/api/users/[id]/route.ts`.
 >   return Response.json({ userId: id, status: "Active" });
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Dynamic Route Handlers receive `params` as a Promise in the second argument context.
 > 2. Accessing `params` automatically turns the Route Handler into a dynamic execution endpoint.
 > 3. Standard REST API dynamic parameter handling pattern.
-
+> 
 ---
 
 ### Exercise 2: Reading Request Cookies and Headers in Dynamic Handlers
@@ -169,25 +169,25 @@ Read `NextRequest` cookies and URL search parameters dynamically inside a `GET` 
 > ```typescript
 > // app/api/search/route.ts
 > import { NextRequest } from "next/server";
-
-export async function GET(req: NextRequest) {
-  const query = req.nextUrl.searchParams.get("q");
-  const token = req.cookies.get("auth_token")?.value;
-
-  if (!token) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  return Response.json({ query, tokenPresent: true });
-}
-```
-
+> 
+> export async function GET(req: NextRequest) {
+>   const query = req.nextUrl.searchParams.get("q");
+>   const token = req.cookies.get("auth_token")?.value;
+> 
+>   if (!token) {
+>     return Response.json({ error: "Unauthorized" }, { status: 401 });
+>   }
+> 
+>   return Response.json({ query, tokenPresent: true });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Accessing `req.nextUrl.searchParams` or `req.cookies` opts the Route Handler into dynamic execution.
 > 2. Runs on Node.js/edge servers for every incoming request.
 > 3. Enables authenticated API endpoint workflows.
-
+> 
 ---
 
 ### Exercise 3: Setting Custom Response Headers and Status Codes
@@ -205,32 +205,28 @@ Return custom HTTP status `201 Created` and `Location` header upon successful re
 > ```typescript
 > export async function POST(req: Request) {
 >   const body = await req.json();
-
-  return Response.json(
-    { success: true, item: body },
-    {
-      status: 201,
-      headers: {
-        "Location": `/api/items/${body.id}`,
-        "X-Custom-Header": "Processed"
-      }
-    }
-  );
-}
-```
-
+> 
+>   return Response.json(
+>     { success: true, item: body },
+>     {
+>       status: 201,
+>       headers: {
+>         "Location": `/api/items/${body.id}`,
+>         "X-Custom-Header": "Processed"
+>       }
+>     }
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Response.json()` accepts a standard ResponseInit configuration object as its second argument.
 > 2. `status: 201` sets the HTTP response status code.
 > 3. Standard REST API response construction.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Route Handlers (`route.ts`)](route_handlers.md) — The file utilizing the parameters.

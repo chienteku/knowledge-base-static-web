@@ -105,7 +105,7 @@ console.log(cookie.value);
 > If you put it in `localStorage`, any malicious JavaScript code (perhaps from a compromised NPM package or a browser extension) can easily read `localStorage.getItem('token')` and steal the user's bank access. An `HttpOnly` Cookie is physically hidden from JavaScript, making it immune to XSS (Cross-Site Scripting) theft.
 > ```
 > - Which storage mechanism can be hidden from Frontend JavaScript entirely?
-
+> 
 ---
 
 ### Exercise 2: Set-Cookie Response Header Syntax

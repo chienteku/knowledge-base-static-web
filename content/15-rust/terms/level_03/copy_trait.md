@@ -322,7 +322,7 @@ Implement a `PacketHeader` struct representing IPv4 network telemetry:
 > 1. **Copy Mechanics & Stack Layout**: `PacketHeader` consists entirely of fixed-size scalar fields (`u8`, `u16`, `u32`) and a fixed-size byte array (`[u8; 4]`). In Rust, array types `[T; N]` automatically derive `Copy` if `T` implements `Copy`. Because all underlying fields reside on the stack and have fixed, known sizes, `PacketHeader` can be duplicated via a bitwise memory copy (`memcpy`).
 > 2. **Bypassing Move Semantics**: When a struct does not implement `Copy`, passing it by value into functions like `PipelineProcessor::validate(original)` transfers ownership, rendering `original` uninitialized in the caller's stack frame. Implementing `Copy` changes assignment and pass-by-value semantics: instead of moving ownership, the compiler copies the bytes into the target stack frame while leaving `original` valid.
 > 3. **Immutability & Pure Functions**: Methods like `with_seq_num(self, ...)` take `self` by value and create modified copies without requiring `&mut self`. This functional pattern is exceptionally performant for small value types, enabling lock-free and side-effect-free pipeline processing.
-
+> 
 ---
 
 ### Exercise 2: Lock-Free Shared Ring Buffer Descriptor & `Drop` Incompatibility
@@ -505,7 +505,7 @@ Implement a lock-free ring buffer descriptor system:
 > 1. **Why `Copy` and `Drop` Are Mutually Exclusive**: If a type implements `Copy`, the compiler replicates its stack memory via bitwise copies whenever assigned or passed by value. If Rust allowed a `Copy` type to implement `std::ops::Drop`, the compiler would have no safe way to determine how many copies exist or which instance responsible for running the destructor. Executing `drop` on duplicated copies would cause double-free vulnerabilities or premature resource cleanup. Rust enforces compile error `E0184` if both are defined.
 > 2. **Plain Old Data (POD) Layout**: `RingDescriptor` is a classic POD structure containing scalar primitive types (`u32`, `u64`, `u16`). Because none of its fields own dynamic heap memory, custom pointers, or OS handles, dropping a `RingDescriptor` is a trivial no-op (its stack frame is simply reclaimed when popping the call stack).
 > 3. **Explicit Resource Management**: Because automatic `Drop` cannot be implemented on `Copy` types, any resource tracking (such as returning ring buffer slots to a pool) must be performed explicitly through manager types like `DescriptorPool::release(desc)`.
-
+> 
 ---
 
 ### Exercise 3: Real-Time Audio Quadraphonic Frame & Fixed-Point DSP Matrix
@@ -643,7 +643,7 @@ Implement a quadraphonic fixed-point audio frame system:
 > 1. **Manual `Copy` Implementation & Supertrait Bound**: In Rust, `Copy` is defined as `pub trait Copy: Clone {}`. This means `Clone` is a supertrait of `Copy`. When manually implementing `Copy`, you must also implement `Clone`. Because types implementing `Copy` can be duplicated by dereferencing `*self`, the manual `clone()` implementation can simply be `*self`.
 > 2. **Marker Trait Mechanics**: `Copy` is a marker trait: it defines no methods or associated constants. Its sole purpose is to instruct the compiler that the type uses copy semantics rather than move semantics. The compiler will enforce that every field of a `Copy` struct also implements `Copy`.
 > 3. **Zero-Cost Abstraction in Real-Time Systems**: For real-time DSP audio processing, passing `AudioFrame` values across DSP graph nodes generates zero heap allocation overhead and zero lock contention. Memory is allocated on the stack and cleaned up automatically when call frames unwind, guaranteeing deterministic execution time.
-
+> 
 ---
 
 ## 6. Related Terms

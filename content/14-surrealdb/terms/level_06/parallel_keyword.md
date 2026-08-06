@@ -156,7 +156,7 @@ A reporting query executes multiple heavy analytical subqueries concurrently usi
 > 1. `PARALLEL { ... }` executes statements within the block concurrently across available CPU threads.
 > 2. Reduces overall query response latency for independent subqueries.
 > 3. Leverages SurrealDB's async Rust Tokio runtime threads.
-
+> 
 ---
 
 ### Exercise 2: Parallel Batch Record Creation
@@ -184,7 +184,7 @@ Create multiple independent audit records concurrently using `PARALLEL`.
 > 1. Dispatches write statements to parallel execution channels.
 > 2. Improves write throughput for un-correlated database insertions.
 > 3. All statements commit together upon block completion.
-
+> 
 ---
 
 ### Exercise 3: Parallel vs Sequential Execution Performance
@@ -209,7 +209,7 @@ Compare sequential query execution against `PARALLEL` execution for independent 
 > 1. `PARALLEL` optimizes latency for non-dependent read/write operations.
 > 2. Sequential execution remains mandatory for dependent data pipelines.
 > 3. Maximizes multi-core CPU utilization during complex query scripts.
-
+> 
 ---
 
 

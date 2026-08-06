@@ -162,7 +162,7 @@ async function processData() {
 > [!check]- Answer
 > - Create it like `const book = { title: "Dune", author: "Frank Herbert", pages: 412 };`
 > - Use template literals `` `The book ${book.title}...` `` for easy logging.
-
+> 
 ---
 
 ### Exercise 2: Object Keys, Values, and Entries
@@ -184,7 +184,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Object.keys`, `Object.values`, and `Object.entries` extract iterable arrays of object metadata.
-
+> 
 ---
 
 ### Exercise 3: Deep Copying with `structuredClone`
@@ -204,8 +204,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `structuredClone` creates complete, independent deep memory copies of objects and nested collections.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -152,27 +152,27 @@ Optimize a local image asset using `<Image>` component imports to prevent Cumula
 > ```tsx
 > import Image from "next/image";
 > import profilePic from "@/public/profile.jpg";
-
-export default function Profile() {
-  return (
-    <div className="avatar-container">
-      <Image
-        src={profilePic}
-        alt="User Profile Picture"
-        placeholder="blur"
-        className="rounded-full"
-      />
-    </div>
-  );
-}
-```
-
+> 
+> export default function Profile() {
+>   return (
+>     <div className="avatar-container">
+>       <Image
+>         src={profilePic}
+>         alt="User Profile Picture"
+>         placeholder="blur"
+>         className="rounded-full"
+>       />
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `next/image` automatically measures width, height, and generates blur placeholders for static imported images.
 > 2. Serves images in modern WebP/AVIF formats scaled to the user's viewport device resolution.
 > 3. Eliminates Cumulative Layout Shift (CLS) web vital penalties.
-
+> 
 ---
 
 ### Exercise 2: Configuring Remote Domain Image Hosts
@@ -202,13 +202,13 @@ Configure `next.config.js` to allow rendering remote images from `images.unsplas
 >   }
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Next.js restricts remote image optimization to explicitly allowed domains in `remotePatterns` for security.
 > 2. Prevents malicious actors from abusing your server's image optimization endpoint.
 > 3. Required setup for remote image hosting services.
-
+> 
 ---
 
 ### Exercise 3: Using `fill` for Responsive Card Banners
@@ -225,35 +225,31 @@ Render a responsive hero image that fills its parent container using `fill` prop
 >
 > ```tsx
 > import Image from "next/image";
-
-export default function HeroBanner({ src }: { src: string }) {
-  return (
-    <div className="relative w-full h-64 overflow-hidden">
-      <Image
-        src={src}
-        alt="Hero Banner"
-        fill
-        priority
-        sizes="(max-width: 768px) 100vw, 50vw"
-        className="object-cover"
-      />
-    </div>
-  );
-}
-```
-
+> 
+> export default function HeroBanner({ src }: { src: string }) {
+>   return (
+>     <div className="relative w-full h-64 overflow-hidden">
+>       <Image
+>         src={src}
+>         alt="Hero Banner"
+>         fill
+>         priority
+>         sizes="(max-width: 768px) 100vw, 50vw"
+>         className="object-cover"
+>       />
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `fill` instructs the image to stretch and fit its nearest `position: relative` parent container.
 > 2. `priority` preloads LCP (Largest Contentful Paint) hero images immediately.
 > 3. `sizes` assists the browser in selecting the optimal srcset image width.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — Metrics improved by this component (CLS, LCP).

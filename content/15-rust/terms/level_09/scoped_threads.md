@@ -279,7 +279,7 @@ Each scoped thread must iterate over its assigned chunk, apply the brightness of
 > 2. **Aliasing XOR Mutability:** Rust's borrow checker prohibits multiple threads from borrowing the same `&mut [u8]`. By partitioning the slice into disjoint sub-slices via `chunks_mut`, each worker receives exclusive ownership of a distinct memory region, satisfying Rust's safety rules without locks or atomics.
 > 3. **Thread Return Values:** Thread join handles in `std::thread::scope` return values directly from worker closures (`s.spawn(move || ...)`). Calling `handle.join().unwrap()` collects per-thread `ChunkStats` deterministically without atomic synchronization.
 >
-
+> 
 ---
 
 ### Exercise 2: Concurrent Log Audit Pipeline with Scoped Panic & Error Propagation
@@ -414,7 +414,7 @@ The function must split the log slice among worker threads. Workers parse log li
 > 2. **Panic and Error Safety:** `std::thread::scope` automatically joins all unjoined threads when the scope block exits (even during panics). Handling `Result` returns inside join handles allows graceful error propagation back to the caller function.
 > 3. **Deterministic Aggregation:** Thread join handle results are processed sequentially by the parent thread, producing deterministic aggregate metrics without mutex contention.
 >
-
+> 
 ---
 
 ### Exercise 3: Scoped Multi-Stage Streaming ETL Pipeline with Zero-Copy Stack Borrowing
@@ -555,7 +555,7 @@ Implement `run_scoped_pipeline(data: &[DataPoint], lookup: &HashMap<String, u64>
 > 1. **Zero-Copy Multi-Thread Sharing:** Scoped threads allow Stage 1 and Stage 2 to concurrently borrow `config` and `lookup` from the caller's stack frame. No `Arc`, `RwLock`, or deep cloning of lookup tables is required.
 > 2. **Automatic Channel Shutdown:** Senders (`tx1`, `tx2`) are moved into stage closures inside `std::thread::scope`. When Stage 1 finishes iterating over `data`, `tx1` is dropped, causing `rx1` iteration in Stage 2 to terminate cleanly. Likewise, `tx2` drops when Stage 2 finishes, terminating Stage 3 naturally.
 > 3. **Compiler Lifetime Guarantees:** Because `thread::scope` blocks until Stage 1, Stage 2, and Stage 3 complete, the Rust compiler guarantees that `data`, `lookup`, and `config` outlive all three threads.
-
+> 
 ---
 
 ## 6. Related Terms

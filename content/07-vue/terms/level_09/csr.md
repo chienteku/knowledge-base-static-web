@@ -113,7 +113,7 @@ Instead of asking the server for new HTML pages, the server just sends one empty
 > You will NOT see any of your actual content (no headings, no paragraphs, no buttons) because that content hasn't been rendered by the Javascript yet!
 > ```
 > - Think about what the server actually sends in a CSR architecture.
-
+> 
 ---
 
 ### Exercise 2: CSR Execution Sequence
@@ -137,7 +137,7 @@ Instead of asking the server for new HTML pages, the server just sends one empty
 > 3. Execute JS Bundle
 > 4. Fetch API Data & Render DOM
 > ```
-
+> 
 ---
 
 ### Exercise 3: CSR vs SSR Trade-Off
@@ -154,8 +154,8 @@ Instead of asking the server for new HTML pages, the server just sends one empty
 > ```text
 > Low server cost; static CDN hosting.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

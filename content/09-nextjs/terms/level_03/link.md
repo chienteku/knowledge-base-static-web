@@ -121,27 +121,27 @@ Implement client-side SPA navigation between `/` and `/about` using `<Link>`.
 >
 > ```tsx
 > import Link from "next/link";
-
-export default function Navigation() {
-  return (
-    <nav className="flex gap-4 p-4 bg-slate-100">
-      <Link href="/" className="hover:underline">
-        Home
-      </Link>
-      <Link href="/about" className="hover:underline">
-        About Us
-      </Link>
-    </nav>
-  );
-}
-```
-
+> 
+> export default function Navigation() {
+>   return (
+>     <nav className="flex gap-4 p-4 bg-slate-100">
+>       <Link href="/" className="hover:underline">
+>         Home
+>       </Link>
+>       <Link href="/about" className="hover:underline">
+>         About Us
+>       </Link>
+>     </nav>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `<Link>` intercepts navigation clicks to perform fast client-side SPA route transitions.
 > 2. Avoids triggering full browser page reloads.
 > 3. Automatically prefetches route JavaScript chunks when links enter the browser viewport.
-
+> 
 ---
 
 ### Exercise 2: Disabling Automatic Route Prefetching
@@ -158,24 +158,24 @@ Disable automatic viewport prefetching for a heavy admin dashboard link using `p
 >
 > ```tsx
 > import Link from "next/link";
-
-export default function Footer() {
-  return (
-    <footer>
-      <Link href="/admin/analytics" prefetch={false}>
-        Admin Analytics (No Prefetch)
-      </Link>
-    </footer>
-  );
-}
-```
-
+> 
+> export default function Footer() {
+>   return (
+>     <footer>
+>       <Link href="/admin/analytics" prefetch={false}>
+>         Admin Analytics (No Prefetch)
+>       </Link>
+>     </footer>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. By default, Next.js prefetches code chunks for all `<Link>` elements visible in the viewport.
 > 2. `prefetch={false}` disables prefetching until the user hovers or clicks the link.
 > 3. Reduces network data usage on mobile networks and heavy pages.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Route Passing to `<Link>`
@@ -192,30 +192,26 @@ Construct dynamic href paths dynamically for product cards.
 >
 > ```tsx
 > import Link from "next/link";
-
-export default function ProductCard({ id, slug }: { id: string; slug: string }) {
-  return (
-    <div className="card">
-      <Link href={`/products/${id}?ref=${slug}`}>
-        View Product
-      </Link>
-    </div>
-  );
-}
-```
-
+> 
+> export default function ProductCard({ id, slug }: { id: string; slug: string }) {
+>   return (
+>     <div className="card">
+>       <Link href={`/products/${id}?ref=${slug}`}>
+>         View Product
+>       </Link>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Href prop accepts string paths or URL location objects (`{ pathname, query }`).
 > 2. Preserves search parameters and dynamic segments during navigation.
 > 3. Idiomatic navigation pattern in Next.js.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useRouter` Hook](use_router.md) — How to navigate programmatically without a clickable link.

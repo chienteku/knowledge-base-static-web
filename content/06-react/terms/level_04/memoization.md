@@ -160,7 +160,7 @@ const handleClick = useCallback(() => alert('hi'), []);
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: 3 Core Memoization APIs in React
@@ -177,7 +177,7 @@ const handleClick = useCallback(() => alert('hi'), []);
 > ```
 >
 > **Explanation:** React memoization APIs cache components, computed values, and callback references.
-
+> 
 ---
 
 ### Exercise 3: React Compiler (React 19) Auto-Memoization
@@ -194,7 +194,7 @@ const handleClick = useCallback(() => alert('hi'), []);
 > ```
 >
 > **Explanation:** React Compiler eliminates manual memoization boilerplate.
-
+> 
 ## 7. Related Terms
 - [`useMemo` Hook](use_memo.md) — The hook implementation of value memoization.
 - [`useCallback` Hook](use_callback.md) — The hook implementation of function reference memoization.

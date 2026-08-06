@@ -182,33 +182,33 @@ Subscribe to browser window resize events using `useEffect()` and clean up the l
 >
 > ```tsx
 > "use client";
-
-import { useState, useEffect } from "react";
-
-export default function WindowSize() {
-  const [width, setWidth] = useState<number>(0);
-
-  useEffect(() => {
-    // Client-side window access
-    setWidth(window.innerWidth);
-    
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup listener on component unmount
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  return <p>Window Width: {width}px</p>;
-}
-```
-
+> 
+> import { useState, useEffect } from "react";
+> 
+> export default function WindowSize() {
+>   const [width, setWidth] = useState<number>(0);
+> 
+>   useEffect(() => {
+>     // Client-side window access
+>     setWidth(window.innerWidth);
+>     
+>     const handleResize = () => setWidth(window.innerWidth);
+>     window.addEventListener("resize", handleResize);
+> 
+>     // Cleanup listener on component unmount
+>     return () => window.removeEventListener("resize", handleResize);
+>   }, []);
+> 
+>   return <p>Window Width: {width}px</p>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useEffect(callback, dependencies)` executes side effects after component rendering.
 > 2. Returning a function from the callback performs cleanup when the component unmounts or dependencies update.
 > 3. Empty dependency array `[]` runs the effect once on mount.
-
+> 
 ---
 
 ### Exercise 2: Fetching Data in Client Components with AbortController
@@ -225,35 +225,35 @@ Implement client-side data fetching in `useEffect()` with `AbortController` clea
 >
 > ```tsx
 > "use client";
-
-import { useState, useEffect } from "react";
-
-export default function ClientSearch({ query }: { query: string }) {
-  const [results, setResults] = useState<any[]>([]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetch(`/api/search?q=${query}`, { signal: controller.signal })
-      .then((res) => res.json())
-      .then((data) => setResults(data))
-      .catch((err) => {
-        if (err.name !== "AbortError") console.error(err);
-      });
-
-    return () => controller.abort();
-  }, [query]);
-
-  return <ul>{results.map((r, i) => <li key={i}>{r.name}</li>)}</ul>;
-}
-```
-
+> 
+> import { useState, useEffect } from "react";
+> 
+> export default function ClientSearch({ query }: { query: string }) {
+>   const [results, setResults] = useState<any[]>([]);
+> 
+>   useEffect(() => {
+>     const controller = new AbortController();
+> 
+>     fetch(`/api/search?q=${query}`, { signal: controller.signal })
+>       .then((res) => res.json())
+>       .then((data) => setResults(data))
+>       .catch((err) => {
+>         if (err.name !== "AbortError") console.error(err);
+>       });
+> 
+>     return () => controller.abort();
+>   }, [query]);
+> 
+>   return <ul>{results.map((r, i) => <li key={i}>{r.name}</li>)}</ul>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `controller.abort()` cancels ongoing HTTP fetch requests when `query` prop updates rapidly.
 > 2. Prevents race conditions where old responses overwrite newer search results.
 > 3. Robust client-side side effect pattern.
-
+> 
 ---
 
 ### Exercise 3: Avoiding `useEffect()` for Server Component Migration
@@ -271,28 +271,24 @@ Refactor a Client Component using `useEffect()` for initial data fetching into a
 > ```tsx
 > // ❌ OLD CLIENT APPROACH:
 > // useEffect(() => { fetch('/api/user').then(...) }, []);
-
-// ✅ NEW RSC APPROACH (app/user/page.tsx):
-export default async function UserPage() {
-  const res = await fetch("https://api.example.com/user");
-  const user = await res.json();
-
-  return <div>User: {user.name}</div>;
-}
-```
-
+> 
+> // ✅ NEW RSC APPROACH (app/user/page.tsx):
+> export default async function UserPage() {
+>   const res = await fetch("https://api.example.com/user");
+>   const user = await res.json();
+> 
+>   return <div>User: {user.name}</div>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. In Next.js App Router, prefer Server Components over `useEffect()` for initial data fetching.
 > 2. Eliminates client-side loading spinners and waterfall network roundtrips.
 > 3. Reduces client JavaScript bundle size to zero bytes for data fetching.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [React Hooks](../level_01/react_hooks.md) — The parent hook mechanism.

@@ -172,8 +172,8 @@ GET /api/users/5?embed=posts,comments ; Single request fetching nested sub-resou
 
 > [!check]- Answer
 > - **B (Over-fetching).** The mobile app only displays names and prices, but downloads descriptions and edit logs, wasting device bandwidth and memory.
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Overfetching vs Underfetching Definitions

@@ -161,7 +161,7 @@ A dashboard application subscribes to real-time order creation events on table `
 > 1. `LIVE SELECT * FROM <table>` opens a persistent real-time streaming subscription over WebSockets.
 > 2. Pushes mutation events (`CREATE`, `UPDATE`, `DELETE`) to the client instantly.
 > 3. Eliminates client polling loops and external message brokers (Socket.io, Redis).
-
+> 
 ---
 
 ### Exercise 2: Filtered Live Query Subscriptions
@@ -186,7 +186,7 @@ Subscribe ONLY to high-priority order creation events where `total > 500dec`.
 > 1. `WHERE` clauses filter live query events on the database server before streaming to clients.
 > 2. Only mutations satisfying the filter condition generate server push notifications.
 > 3. Saves network bandwidth by filtering unwanted event traffic server-side.
-
+> 
 ---
 
 ### Exercise 3: JavaScript SDK Live Query Event Handling
@@ -216,7 +216,7 @@ Write the JavaScript SDK code to listen for `CREATE` and `UPDATE` events on tabl
 > 1. `db.live()` registers a callback receiving `action` (`"CREATE"`, `"UPDATE"`, `"DELETE"`) and `result` record payloads.
 > 2. Automatically decodes binary WebSocket frames into JavaScript objects.
 > 3. Enables reactive UI rendering in frontend web applications.
-
+> 
 ---
 
 

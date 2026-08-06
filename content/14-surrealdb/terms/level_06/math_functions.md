@@ -173,7 +173,7 @@ An e-commerce billing query rounds calculated tax amounts to 2 decimal places us
 > 1. `math::round(val)` rounds numeric values to nearest integers or specified decimal places.
 > 2. `math::ceil(val)` rounds floating-point values UP to the nearest integer.
 > 3. Maintains calculation precision for monetary transactions.
-
+> 
 ---
 
 ### Exercise 2: Statistical Aggregate Metrics
@@ -207,7 +207,7 @@ An analytics query computes the minimum, maximum, sum, and mean of product price
 > 1. `math::*` aggregate functions compute statistical metrics over record collections.
 > 2. `GROUP ALL` aggregates across all matching table records.
 > 3. Executes statistical calculations natively inside the database engine.
-
+> 
 ---
 
 ### Exercise 3: Absolute Difference Calculations
@@ -232,7 +232,7 @@ Calculate the absolute numeric difference between two target values using `math:
 > 1. `math::abs(val)` returns the non-negative absolute magnitude of numeric expressions.
 > 2. Eliminates manual sign checking in distance queries.
 > 3. Works over integer, float, and decimal inputs.
-
+> 
 ---
 
 

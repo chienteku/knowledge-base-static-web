@@ -136,7 +136,7 @@ console.log(JSON.stringify(data)); // '{"name":"Bob","score":null}'
 > 3. There is a trailing comma after `30`.
 > ```
 > - JSON is incredibly strict compared to standard JavaScript. Check the quotes!
-
+> 
 ---
 
 ### Exercise 2: Valid JSON Validator

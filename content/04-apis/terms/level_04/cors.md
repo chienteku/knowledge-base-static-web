@@ -114,7 +114,7 @@ app.use(cors({ origin: 'https://app.example.com' }));
 > Postman is a desktop application; it doesn't care about the Same-Origin Policy. It just sends raw HTTP text over the network. Only web browsers (Chrome, Safari, Firefox) actively enforce CORS rules to protect users from malicious websites.
 > ```
 > - Who enforces CORS? The server, the network, or the browser?
-
+> 
 ---
 
 ### Exercise 2: CORS Preflight Trigger Identification

@@ -150,7 +150,7 @@ You are building an automated database migration runner that applies versioned s
 > 1. `DEFINE ... OVERWRITE` makes migration scripts idempotent and safe to re-run.
 > 2. Prevents "definition already exists" migration errors in CI/CD pipelines.
 > 3. Enforces schema version control at the database DDL level.
-
+> 
 ---
 
 ### Exercise 2: Migration Tracking Table Implementation
@@ -180,7 +180,7 @@ Design a schema migration tracking table `schema_migration` to record applied mi
 > 1. Migration tracking tables track which migration scripts have been applied to a cluster.
 > 2. Prevents duplicate migration execution during automated deployments.
 > 3. Records historical schema deployment timestamps.
-
+> 
 ---
 
 ### Exercise 3: CLI Migration Execution with `surreal import`
@@ -204,7 +204,7 @@ Run the `surreal import` CLI command to execute migration file `V1__init_schema.
 > 1. `surreal import` executes SurrealQL script files sequentially against the target database.
 > 2. Handles multi-statement schema definitions in transaction blocks.
 > 3. Integrates database migrations with automated CI/CD deployment jobs.
-
+> 
 ---
 
 

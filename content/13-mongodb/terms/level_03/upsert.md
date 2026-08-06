@@ -175,7 +175,7 @@ Update user settings for `userId: ObjectId(...)`. If settings document exists, u
 > 1. `upsert: true` inserts a new document if no documents match the query filter.
 > 2. `$setOnInsert` sets specified fields ONLY when an insert operation occurs.
 > 3. Prevents overwriting `createdAt` timestamps during subsequent updates.
-
+> 
 ---
 
 ### Exercise 2: Unique Index Protection against Upsert Race Conditions
@@ -199,7 +199,7 @@ Create a unique index on `sku` in collection `products` to prevent duplicate ins
 > 1. Unique index on filter fields (`sku`) prevents duplicate document creation under high-concurrency write surges.
 > 2. If two concurrent requests execute upserts simultaneously, unique index rejects the second insert with duplicate key error.
 > 3. Application retries write as a standard update.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Upsert Response Payloads
@@ -233,7 +233,7 @@ Inspect `upsertedCount` and `upsertedId` in the return object of an upsert write
 > 1. `upsertedCount: 1` indicates a new document was created.
 > 2. `upsertedId` contains the `_id` of the newly created document.
 > 3. If an existing document was updated, `upsertedCount` is 0.
-
+> 
 ---
 
 

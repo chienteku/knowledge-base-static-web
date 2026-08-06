@@ -125,7 +125,7 @@ Now, if the URL path changes in the router config, every single link in your ent
 > `.router-link-active { color: red; }`
 > ```
 > - Inspect a Vue Router link in the browser DevTools when you click it.
-
+> 
 ---
 
 ### Exercise 2: RouterLink Custom Slot Rendering
@@ -146,7 +146,7 @@ Now, if the URL path changes in the router config, every single link in your ent
 >   </button>
 > </RouterLink>
 > ```
-
+> 
 ---
 
 ### Exercise 3: RouterView Slot with KeepAlive & Transition
@@ -169,8 +169,8 @@ Now, if the URL path changes in the router config, every single link in your ent
 >   </Transition>
 > </RouterView>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

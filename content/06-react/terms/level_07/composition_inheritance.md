@@ -197,7 +197,7 @@ function ProductCard({ product }) {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Slot Composition Pattern
@@ -221,7 +221,7 @@ function ProductCard({ product }) {
 > ```
 >
 > **Explanation:** Slot props pass custom JSX elements as named properties for flexible layout composition.
-
+> 
 ---
 
 ### Exercise 3: Composition over Inheritance Principle
@@ -238,7 +238,7 @@ function ProductCard({ product }) {
 > ```
 >
 > **Explanation:** Composition provides flexible, decoupled code reuse across component UIs.
-
+> 
 ## 7. Related Terms
 - [Children Prop](children_prop.md) — The property that enables nesting components.
 - [Higher-Order Components (HOC)](hoc.md) — An alternative pattern for component wrapper logic.

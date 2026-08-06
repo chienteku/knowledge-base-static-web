@@ -205,8 +205,8 @@ DELETE /users/5 HTTP/1.1 -> 204 No Content ; Level 2 REST compliance
 > - 2. **Level 0** (Tunnels all operations through a single endpoint).
 > - 3. **Level 2** (Uses resource URIs, HTTP verbs, and status codes).
 > - 4. **Level 3** (Integrates hypermedia controls/HATEOAS).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Richardson Maturity Model Levels Breakdown

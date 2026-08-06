@@ -121,7 +121,7 @@ const model = defineModel(); // Mutate model.value directly
 > // v-model automatically combines `v-bind:value` and `v-on:input` into one easy attribute!
 > ```
 > - Which directive pushes data down? Which directive listens for events coming up?
-
+> 
 ---
 
 ### Exercise 2: v-model Modifiers Matrix
@@ -165,8 +165,8 @@ const model = defineModel(); // Mutate model.value directly
 >   <input v-model="model" />
 > </template>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -208,7 +208,7 @@ res.json({ user_name: user.name }); // ❌ Breaks clients expecting { name: '...
 > The remote control provides a strictly defined "Interface" (buttons) for interacting with a complex underlying system (the TV hardware). It abstracts away the complexity and prevents you from breaking the TV, only allowing you to perform the specific actions the manufacturer designed.
 > ```
 > - Does the remote let you do *anything*, or only what the buttons allow?
-
+> 
 ---
 
 ### Exercise 2: API Abstraction Boundary Identification

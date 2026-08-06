@@ -177,7 +177,7 @@ console.log("Is infinite:", isInfinite);
 > ```
 > - You can check if a value is strictly equal to `Infinity`.
 > - Alternatively, you can use the global `isFinite(value)` function (which returns false for infinity).
-
+> 
 ---
 
 ### Exercise 2: Division by Zero & Infinity Sign
@@ -198,7 +198,7 @@ console.log("Is infinite:", isInfinite);
 > ```
 >
 > **Explanation:** Division by zero in JS yields positive or negative `Infinity` for non-zero numerators, and `NaN` for zero numerators.
-
+> 
 ---
 
 ### Exercise 3: Checking Falsy vs Finite Numbers
@@ -221,8 +221,8 @@ console.log("Is infinite:", isInfinite);
 > ```
 >
 > **Explanation:** `Number.isFinite()` checks if a value is of type `number` and is neither `Infinity`, `-Infinity`, nor `NaN`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

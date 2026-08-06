@@ -178,7 +178,7 @@ fn always_transform(s: &str) -> String { s.to_uppercase() }
 > 1. `normalize_header` checks string length after trimming.
 > 2. If no whitespace exists, it returns zero-allocation `Cow::Borrowed(val)`.
 > 3. Allocates `String` heap memory only when trimming occurs.
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy SQL Identifier Escaper
@@ -222,7 +222,7 @@ fn always_transform(s: &str) -> String { s.to_uppercase() }
 >
 > 1. Avoids allocating heap memory for standard valid database identifier column names.
 > 2. Allocates only when escaping spaces/hyphens.
-
+> 
 ---
 
 ### Exercise 3: Opportunistic In-Place Array Mutation
@@ -272,7 +272,7 @@ fn always_transform(s: &str) -> String { s.to_uppercase() }
 >
 > 1. Operates on slice `&[i32]` zero-copy if all signals are non-negative.
 > 2. Clones into `Vec<i32>` only when a negative sample is encountered.
-
+> 
 ---
 
 ## 6. Related Terms

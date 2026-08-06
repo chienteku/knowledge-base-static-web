@@ -180,7 +180,7 @@ Update the `score` to `100` ONLY for grades >= 90 inside a student's `grades` ar
 > 1. `$[elem]` acts as an array element placeholder in the update path (`"grades.$[elem].score"`).
 > 2. `arrayFilters` specifies condition matching rules for the `elem` placeholder.
 > 3. Modifies matching array items selectively in a single atomic update.
-
+> 
 ---
 
 ### Exercise 2: Updating Multiple Filtered Array Subdocuments
@@ -208,7 +208,7 @@ Set `status: "processed"` for all items in an order's `items` array where `qty >
 > 1. Target positional identifier (`$[item]`) correlates directly with array filter conditions.
 > 2. Updates multiple array elements matching criteria simultaneously.
 > 3. Eliminates whole-array replacement operations.
-
+> 
 ---
 
 ### Exercise 3: Updating All Array Elements with `$[]`
@@ -235,7 +235,7 @@ Increment all items' `retryCount` by 1 across all array elements in `tasks` arra
 > 1. `$[]` applies the update operator unconditionally to EVERY element in the array.
 > 2. Increments subfields across all array items in a single pass.
 > 3. Fast atomic array transformation.
-
+> 
 ---
 
 

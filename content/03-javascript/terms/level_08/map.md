@@ -174,7 +174,7 @@ console.log(map.get([1, 2, 3]));
 > Why? Because `[1, 2, 3]` is an Array (which is an Object). When you write `[1, 2, 3]` the second time inside `.get()`, it creates a completely *new* array in a different location in memory. Maps use strict equality (`===`) to match keys. The new array does not match the old array's memory address! You must save the array to a variable first to use it as a key.
 > ```
 > - Remember how Objects are compared by reference, not by value!
-
+> 
 ---
 
 ### Exercise 2: Map Key-Value Store Operations
@@ -193,7 +193,7 @@ console.log(map.get([1, 2, 3]));
 > ```
 >
 > **Explanation:** ES6 `Map` provides fast key-value storage supporting arbitrary key types.
-
+> 
 ---
 
 ### Exercise 3: Iterating Maps with `for...of`
@@ -214,8 +214,8 @@ console.log(map.get([1, 2, 3]));
 > ```
 >
 > **Explanation:** `Map` objects preserve key insertion order during iteration.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

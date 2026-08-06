@@ -141,7 +141,7 @@ An audit application streams all changefeed records for table `order` recorded s
 > 1. `SHOW CHANGES FOR TABLE` inspects changefeed transaction logs for table mutations.
 > 2. `SINCE` specifies the starting timestamp or sequence offset for change retrieval.
 > 3. Underpins event sourcing and Change Data Capture (CDC) architectures.
-
+> 
 ---
 
 ### Exercise 2: Sequence Number Offset Resumption
@@ -165,7 +165,7 @@ An offline sync client resumes streaming table changes starting from version seq
 > 1. Sequence offsets allow clients to resume streaming without missing or duplicating mutation events.
 > 2. Guarantees deterministic, sequential event replay.
 > 3. Enables reliable offline database sync.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Changefeed Record Payload Structures
@@ -193,7 +193,7 @@ Inspect the returned payload structure of a `SHOW CHANGES` query result item.
 > 1. Changefeed payloads include operation action types, record primary keys, timestamps, and deltas.
 > 2. Provides full audit visibility into historical data modifications.
 > 3. Simplifies integration with external search indexes and data warehouses.
-
+> 
 ---
 
 

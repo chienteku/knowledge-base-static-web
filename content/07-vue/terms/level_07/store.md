@@ -147,7 +147,7 @@ defineStore('counter', () => {
 > The string ID (e.g., 'auth') is how Pinia registers the store internally and connects it to the Vue DevTools. Every single store in your application MUST have a globally unique string ID.
 > ```
 > - Think about database Primary Keys.
-
+> 
 ---
 
 ### Exercise 2: Store State Subscription with $subscribe
@@ -166,7 +166,7 @@ defineStore('counter', () => {
 >   localStorage.setItem('cart', JSON.stringify(state));
 > });
 > ```
-
+> 
 ---
 
 ### Exercise 3: Pinia Plugin Extension Pattern
@@ -185,8 +185,8 @@ defineStore('counter', () => {
 >   store.$router = markRaw(router);
 > });
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

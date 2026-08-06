@@ -134,30 +134,30 @@ Query a PostgreSQL database directly inside a React Server Component using `pg` 
 > ```tsx
 > // app/posts/page.tsx
 > import { db } from "@/lib/db";
-
-export default async function PostsPage() {
-  // Direct database query on Node.js server!
-  const posts = await db.query("SELECT id, title FROM posts LIMIT 10");
-
-  return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold">Latest Posts</h1>
-      <ul>
-        {posts.rows.map((post: any) => (
-          <li key={post.id}>{post.title}</li>
-        ))}
-      </ul>
-    </main>
-  );
-}
-```
-
+> 
+> export default async function PostsPage() {
+>   // Direct database query on Node.js server!
+>   const posts = await db.query("SELECT id, title FROM posts LIMIT 10");
+> 
+>   return (
+>     <main className="p-6">
+>       <h1 className="text-2xl font-bold">Latest Posts</h1>
+>       <ul>
+>         {posts.rows.map((post: any) => (
+>           <li key={post.id}>{post.title}</li>
+>         ))}
+>       </ul>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. React Server Components execute exclusively on the server, allowing direct database or file system access.
 > 2. Database access credentials and query logic never leak to the client browser.
 > 3. Eliminates building intermediate API routes solely for component data fetching.
-
+> 
 ---
 
 ### Exercise 2: Verifying Zero Client Bundle Footprint for RSC Dependencies
@@ -175,22 +175,22 @@ Import a heavy 500KB Markdown parsing library inside a Server Component and veri
 > ```tsx
 > // app/article/page.tsx
 > import { marked } from "marked";
-
-export default async function ArticlePage({ content }: { content: string }) {
-  const html = marked(content);
-
-  return (
-    <article className="prose" dangerouslySetInnerHTML={{ __html: html }} />
-  );
-}
-```
-
+> 
+> export default async function ArticlePage({ content }: { content: string }) {
+>   const html = marked(content);
+> 
+>   return (
+>     <article className="prose" dangerouslySetInnerHTML={{ __html: html }} />
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Server Component dependencies (`marked`) are executed on the server and stripped from client JavaScript bundles.
 > 2. Client receives only the rendered static HTML output.
 > 3. Significantly reduces total client bundle download size.
-
+> 
 ---
 
 ### Exercise 3: Auditing RSC Serialization Boundaries
@@ -208,23 +208,19 @@ Explain why passing non-serializable objects (functions, Symbol, class instances
 > ```tsx
 > // ❌ INCORRECT (Functions cannot be passed across RSC boundary):
 > // <ClientButton onClick={() => console.log('click')} />
-
-// ✅ CORRECT (Pass serializable primitive data props):
-// <ClientButton productId="123" />
-```
-
+> 
+> // ✅ CORRECT (Pass serializable primitive data props):
+> // <ClientButton productId="123" />
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Props passed across the Server-to-Client boundary are serialized as JSON-like flight data streams.
 > 2. Functions and non-serializable class instances cannot be serialized over flight streams.
 > 3. Always pass serializable data primitives across RSC boundaries.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Client Components (`"use client"`)](client_components.md) — The interactive counterpart to RSCs.

@@ -290,7 +290,7 @@ thread::spawn(move || {
 > 2. **Generic Context Evaluation**: In the default method `build_packet(&self)`, `Self::MAX_PAYLOAD_BYTES` and `Self::MAGIC_BYTES` are evaluated relative to the concrete implementor `Self`. During compilation of `build_packet` for `ControlFrame`, `Self::MAX_PAYLOAD_BYTES` evaluates to `256`. For `TelemetryFrame`, it evaluates to `1024`.
 > 3. **Object Safety Restrictions**: Traits containing associated constants that lack default values or depend on `Self` cannot be made into trait objects (`dyn NetworkFrame`). Trait objects rely on virtual tables (vtables) which only store pointers to functions (methods). Associated constants are compile-time static values tied to specific types, making them inherently incompatible with dynamic dispatch.
 > 4. **Memory Allocation & Bounds Validation**: Pre-allocating buffer capacity via `Vec::with_capacity(Self::HEADER_SIZE + payload.len())` avoids re-allocations during serialization, demonstrating zero-overhead API design.
-
+> 
 ---
 
 ### Exercise 2: Cryptographic Cipher Engine Specification & Static Key Validation
@@ -432,7 +432,7 @@ thread::spawn(move || {
 > 2. **Generic Function Access**: `format_cipher_spec<C: CipherEngine>()` accesses associated constants via `C::KEY_LEN` and associated functions via `C::total_overhead()`. Monomorphization produces distinct code instances for `format_cipher_spec::<Aes256Gcm>()` and `format_cipher_spec::<ChaCha20Poly1305>()` without any dynamic dispatch or function pointer dereferencing.
 > 3. **Static Key Bounds Checking**: `validate_key` uses `Self::KEY_LEN` to enforce strict cryptographic buffer invariant checks. In release builds, compile-time constant propagation enables LLVM to inline `validate_key` into caller functions completely.
 > 4. **Dynamic Dispatch Trade-Off**: Because `CipherEngine` exposes associated constants, attempting to pass dynamic trait objects like `Box<dyn CipherEngine>` is rejected by the Rust compiler. Trait objects require dynamic dispatch via vtables, but associated constants are inherently static per-type values.
-
+> 
 ---
 
 ### Exercise 3: Database Storage Page Allocator & Generic Buffer Policy Manager
@@ -565,7 +565,7 @@ thread::spawn(move || {
 > 2. **Derived Computations from Associated Constants**: Methods like `usable_capacity()` use `Self::PAGE_SIZE_BYTES.saturating_sub(Self::HEADER_SIZE_BYTES)` to calculate effective capacity. Because both `PAGE_SIZE_BYTES` and `HEADER_SIZE_BYTES` are constant expressions, LLVM evaluates arithmetic operations at compile time during monomorphization.
 > 3. **Validation & Runtime Invariants**: `P::PAGE_SIZE_BYTES.is_power_of_two()` validates alignment constraints. When `allocate_page` is monomorphized for `DataPage`, `P::PAGE_SIZE_BYTES` is replaced with `4096`, enabling constant folding and branch prediction optimizations.
 > 4. **Memory Layout and Monomorphization**: `PageAllocator<DataPage>` and `PageAllocator<IndexPage>` are treated by the compiler as distinct, statically typed concrete types. No vtables or runtime dispatch pointers are involved in calculating page parameters or header offsets.
-
+> 
 ---
 
 ## 6. Related Terms

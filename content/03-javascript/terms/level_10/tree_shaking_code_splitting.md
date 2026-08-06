@@ -172,13 +172,13 @@ async function processData() {
 > [!check]- Answer
 > - If code is deleted from the bundle, it is tree shaking.
 > - If code is divided into separate files for on-demand downloading, it is code splitting.
-
+> 
 > [!check]- Answer
 > - 1. **Code Splitting** (On-demand downloading).
 > - 2. **Tree Shaking** (Removing unused code).
 > - 3. **Code Splitting** (Lazy-loading chunks).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Dynamic Code Splitting with `import()`
@@ -195,7 +195,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Dynamic `import()` splits bundle outputs into separate lazy-loaded HTTP chunks.
-
+> 
 ---
 
 ### Exercise 3: Configuring `sideEffects: false` in `package.json`
@@ -212,8 +212,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Marking packages side-effect free allows bundlers to safely drop unused module exports.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

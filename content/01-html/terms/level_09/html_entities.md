@@ -176,7 +176,7 @@ Displaying code examples safely:
 > ```
 > - Replace `<` with `&lt;`.
 > - Replace `>` with `&gt;`.
-
+> 
 ---
 
 
@@ -208,7 +208,7 @@ Displaying code examples safely:
 > ```
 >
 > **Explanation:** HTML entities escape reserved character symbols.
-
+> 
 ---
 
 ### Exercise 3: Non-Breaking Space Entity
@@ -225,7 +225,7 @@ Displaying code examples safely:
 > ```
 >
 > **Explanation:** `&nbsp;` prevents automatic line wrapping between adjacent words.
-
+> 
 ## 7. Related Terms
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The tags that require less-than/greater-than signs.
 - [Character Encoding (`charset`)](../level_08/character_encoding.md) — The underlying byte mapping.

@@ -120,7 +120,7 @@ body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 > Arial! The browser reads from left to right. It looks for Comic Sans, fails to find it, moves to Arial, finds it, and stops.
 > ```
 > - The browser reads the list from left to right.
-
+> 
 ---
 
 
@@ -141,7 +141,7 @@ body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 > ```
 >
 > **Explanation:** Font stacks list preferred fonts first, falling back to system and generic font families.
-
+> 
 ---
 
 ### Exercise 3: 5 Generic Font Families
@@ -166,7 +166,7 @@ body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 > ```
 >
 > **Explanation:** Generic font keywords direct browser font engines to default system font categories.
-
+> 
 ## 7. Related Terms
 - [`font-size` & `font-weight`](font_size_weight.md) — Properties used to adjust the size and thickness of the chosen font family.
 - [`@font-face` & Web Fonts (Google Fonts)](web_fonts.md) — Loading custom external typefaces.

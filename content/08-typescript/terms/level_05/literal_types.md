@@ -122,21 +122,21 @@ Create a `ButtonTheme` union type restricting valid themes to `"primary"`, `"sec
 >
 > ```typescript
 > type ButtonTheme = "primary" | "secondary" | "danger";
-
-function renderButton(theme: ButtonTheme) {
-  console.log(`Rendering ${theme} button`);
-}
-
-renderButton("primary");
-// renderButton("warning"); // ❌ Compile Error: Argument of type '"warning"' is not assignable to parameter of type 'ButtonTheme'.
-```
-
+> 
+> function renderButton(theme: ButtonTheme) {
+>   console.log(`Rendering ${theme} button`);
+> }
+> 
+> renderButton("primary");
+> // renderButton("warning"); // ❌ Compile Error: Argument of type '"warning"' is not assignable to parameter of type 'ButtonTheme'.
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. String literal types constrain string parameters to precise allowed string values.
 > 2. Provides IDE autocomplete suggestions for literal options.
 > 3. Replaces magic string constants with compile-time checked type definitions.
-
+> 
 ---
 
 ### Exercise 2: Defining Numeric Literal Unions
@@ -153,23 +153,23 @@ Constrain HTTP status code parameters to exact numeric literal values (`200 | 40
 >
 > ```typescript
 > type HttpStatus = 200 | 404 | 500;
-
-function handleStatus(status: HttpStatus) {
-  if (status === 200) console.log("OK");
-  else if (status === 404) console.log("Not Found");
-  else console.log("Server Error");
-}
-
-handleStatus(200);
-// handleStatus(201); // ❌ Compile Error: Type '201' is not assignable to type 'HttpStatus'.
-```
-
+> 
+> function handleStatus(status: HttpStatus) {
+>   if (status === 200) console.log("OK");
+>   else if (status === 404) console.log("Not Found");
+>   else console.log("Server Error");
+> }
+> 
+> handleStatus(200);
+> // handleStatus(201); // ❌ Compile Error: Type '201' is not assignable to type 'HttpStatus'.
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Numeric literal types restrict numbers to explicit allowed values.
 > 2. Prevents passing arbitrary invalid integer values to functions.
 > 3. Ideal pattern for status flags and configuration codes.
-
+> 
 ---
 
 ### Exercise 3: Combining Boolean Literals and Discriminants
@@ -188,22 +188,22 @@ Define a `Result<T>` discriminated union using boolean literal discriminants `su
 > type SuccessResult<T> = { success: true; data: T };
 > type ErrorResult = { success: false; error: string };
 > type Result<T> = SuccessResult<T> | ErrorResult;
-
-function handleResult(res: Result<number>) {
-  if (res.success) {
-    console.log("Data:", res.data); // res.data is accessible!
-  } else {
-    console.log("Error:", res.error); // res.error is accessible!
-  }
-}
-```
-
+> 
+> function handleResult(res: Result<number>) {
+>   if (res.success) {
+>     console.log("Data:", res.data); // res.data is accessible!
+>   } else {
+>     console.log("Error:", res.error); // res.error is accessible!
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Boolean literal types (`success: true`) act as precise type discriminants.
 > 2. TypeScript automatically narrows union branches inside `if (res.success)` blocks.
 > 3. Standard pattern for return type error handling.
-
+> 
 ---
 
 

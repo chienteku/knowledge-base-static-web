@@ -170,7 +170,7 @@ You are comparing SurrealDB's multi-model architecture against traditional singl
 > 1. SurrealDB merges relational tables, document JSON, and graph pointer edges into a single unified query engine.
 > 2. Eliminates the need to deploy and synchronize separate relational, document, and graph database clusters.
 > 3. Built-in WebSocket real-time subscriptions and row-level security reduce backend API middleware complexity.
-
+> 
 ---
 
 ### Exercise 2: Paradigm Synthesis Mapping
@@ -196,7 +196,7 @@ A developer transitioning from SQL and MongoDB needs a clear mapping of how core
 > 1. Record links store direct table-scoped pointers (`table:id`), avoiding foreign key constraints and manual ID strings.
 > 2. Graph edge relations (`RELATE`) replace junction tables, allowing pointer traversal in $O(1)$ time complexity.
 > 3. Unifies relational data integrity with document schema flexibility.
-
+> 
 ---
 
 ### Exercise 3: Evaluating Multi-Model vs Single-Model Architecture Trade-offs
@@ -226,7 +226,7 @@ An architecture team is deciding whether to adopt SurrealDB or stick with Postgr
 > 1. SurrealDB eliminates complex multi-database sync pipelines by consolidating relational, document, and graph models.
 > 2. Honest architectural evaluation acknowledges that mature legacy ecosystems (like PostgreSQL) may still suit specialized legacy tools.
 > 3. Understanding multi-model trade-offs prevents cargo-cult technology selection.
-
+> 
 ---
 
 

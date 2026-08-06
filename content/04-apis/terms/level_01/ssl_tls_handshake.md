@@ -125,8 +125,8 @@ const agent = new https.Agent({ keepAlive: true });
 > - 1. **Certificate Authority (CA) validation** (Identity verification using signed public-key certificates).
 > - 2. **Symmetric Encryption** (Fast throughput encryption for large payloads).
 > - 3. **Asymmetric Encryption** (Secure key negotiation using public/private key pairs).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Asymmetric vs Symmetric Encryption in TLS

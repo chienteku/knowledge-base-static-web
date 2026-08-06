@@ -136,13 +136,13 @@ Configure Stale-While-Revalidate caching for all product pages (`/products/**`) 
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `swr: 600` caches rendered HTML responses at the CDN/server edge for 600 seconds (10 minutes).
 > 2. Subsequent requests receive instant cached responses while revalidating fresh HTML in the background.
 > 3. Core Hybrid Rendering optimization feature.
-
+> 
 ---
 
 ### Exercise 2: Setting Custom Response Headers and Redirect Rules
@@ -168,13 +168,13 @@ Configure permanent 301 redirects from `/old-about` to `/about` and attach CORS 
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `redirect` rule delegates HTTP redirects directly to the Nitro engine layer without booting Vue application logic.
 > 2. `headers` attaches default HTTP headers to all matching route responses.
 > 3. High performance server configuration rule.
-
+> 
 ---
 
 ### Exercise 3: Configuring SPA Fallback Rendering for Protected Apps
@@ -197,19 +197,15 @@ Disable server SSR rendering for all dashboard routes (`/app/**`) to run as a pu
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `ssr: false` disables server-side rendering for matched paths, sending a lightweight HTML wrapper to the browser.
 > 2. Client browser executes full rendering as a Single Page Application (SPA).
 > 3. Reduces server Node.js CPU rendering overhead for authenticated user dashboards.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Hybrid Rendering](../level_09/hybrid_rendering.md) — The architectural pattern that Route Rules enables.

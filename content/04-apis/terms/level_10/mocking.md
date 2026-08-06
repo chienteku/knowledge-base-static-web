@@ -102,7 +102,7 @@ if (process.env.NODE_ENV === 'development') return MOCK_DATA; // ❌ Risky produ
 > 5. Next Friday, swap the base URL to the real backend.
 > ```
 > - What must both teams agree upon *before* you can write the dummy data?
-
+> 
 ---
 
 ### Exercise 2: Mock Service Worker (MSW) Request Handler Pattern

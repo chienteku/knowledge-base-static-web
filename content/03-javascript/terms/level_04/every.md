@@ -153,7 +153,7 @@ async function processData() {
 > false
 > ```
 > - `array.every(item => typeof item === "string")`
-
+> 
 ---
 
 ### Exercise 2: Validating Array Positive Numbers
@@ -171,7 +171,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `.every()` returns `true` if every element satisfies the testing predicate.
-
+> 
 ---
 
 ### Exercise 3: Short-Circuiting in `.every()`
@@ -194,8 +194,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `.every()` short-circuits immediately when a falsy result is returned.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -228,7 +228,7 @@ router.beforeEach((to, from, next) => {
 > ```
 > - You can check metadata on the destination route using the `to` object parameter.
 > - Access the metadata object via `to.meta`.
-
+> 
 ---
 
 ### Exercise 2: Reading Route State in Script Setup
@@ -251,7 +251,7 @@ router.beforeEach((to, from, next) => {
 > const sortOrder = route.query.sort;
 > </script>
 > ```
-
+> 
 ---
 
 ### Exercise 3: Route Meta Fields Access
@@ -268,8 +268,8 @@ router.beforeEach((to, from, next) => {
 > ```javascript
 > { path: '/admin', component: Admin, meta: { requiresAuth: true } }
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

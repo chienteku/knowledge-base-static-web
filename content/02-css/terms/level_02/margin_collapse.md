@@ -199,7 +199,7 @@ p.second { margin-top: 30px; } /* Collapses to 30px gap! */
 > - For positive margins, pick the largest number.
 > - Add negative numbers to positive numbers.
 > - Empty block margins merge with both siblings.
-
+> 
 ---
 
 
@@ -218,7 +218,7 @@ p.second { margin-top: 30px; } /* Collapses to 30px gap! */
 > ```
 >
 > **Explanation:** Vertical margin collapse resolves to `Math.max(marginA, marginB)`.
-
+> 
 ---
 
 ### Exercise 3: 3 Ways to Prevent Parent-Child Margin Collapse
@@ -239,7 +239,7 @@ p.second { margin-top: 30px; } /* Collapses to 30px gap! */
 > ```
 >
 > **Explanation:** Creating a Block Formatting Context (BFC) prevents internal margins from collapsing outside parent.
-
+> 
 ## 7. Related Terms
 - [Margin](margin.md) — The parent spacing property.
 - [Padding](padding.md) — The inner spacing used to block margin leakage.

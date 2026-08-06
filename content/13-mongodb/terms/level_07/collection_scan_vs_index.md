@@ -163,7 +163,7 @@ Run `explain("executionStats")` on an un-indexed query filtering collection `use
 > 1. Un-indexed queries produce `COLLSCAN` (Collection Scan) execution stages.
 > 2. `totalDocsExamined` equals total collection document count ($O(N)$ complexity).
 > 3. Consumes excessive disk IOPS and RAM cache on large collections.
-
+> 
 ---
 
 ### Exercise 2: Optimizing Queries with Index Scans
@@ -192,7 +192,7 @@ Create a secondary index on `email` and verify `explain()` changes to `IXSCAN`.
 > 1. Creating `{ email: 1 }` transforms execution stage from `COLLSCAN` to `IXSCAN` (Index Scan).
 > 2. `totalDocsExamined` drops from $N$ to 1 document ($O(\log N)$ B-tree lookup).
 > 3. Dramatically reduces query latency.
-
+> 
 ---
 
 ### Exercise 3: Performance Impact Comparison
@@ -218,7 +218,7 @@ Compare query latency and disk reads between COLLSCAN and IXSCAN over a 1,000,00
 > 1. COLLSCAN reads every collection page into RAM, evicting active cache entries.
 > 2. IXSCAN targets exact B-tree key pages, minimizing memory footprint.
 > 3. Core rule of MongoDB performance tuning.
-
+> 
 ---
 
 

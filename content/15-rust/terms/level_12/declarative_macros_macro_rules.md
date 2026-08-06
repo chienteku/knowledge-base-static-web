@@ -349,7 +349,7 @@ Include complete unit tests using `#[test]` and assertions (`assert!`, `assert_e
 >    - `$( pub const $flag: $ty = 1 << $bit; )*` expands into multiple `pub const` definitions inside `impl $name`, computing masks at compile time without runtime overhead.
 > 4. **`no_std` Compatibility:**
 >    - The generated code uses only core integer bitwise operations (`&`, `|`, `!`), avoiding dynamic memory allocation (`alloc`) or the standard library (`std`), making it ideal for bare-metal microcontroller drivers.
-
+> 
 ---
 
 ### Exercise 2: Declarative Telemetry Metrics Registry
@@ -499,7 +499,7 @@ Write comprehensive unit tests with `#[test]`, `std::thread`, `std::sync::Arc`, 
 >    - By generating wrapping fields containing `AtomicU64`, the macro guarantees zero-cost, lock-free concurrent updates via atomic operations (`Ordering::Relaxed`).
 > 4. **Composition & Reusability:**
 >    - Pairing domain structs (`Counter`, `Gauge`) with `macro_rules!` keeps the macro syntax clean and readable while delegating specialized logic to Rust's type system.
-
+> 
 ---
 
 ### Exercise 3: Declarative Micro-Router for Command Execution
@@ -644,7 +644,7 @@ Write comprehensive unit tests with `#[test]` and `assert_eq!` verifying success
 >    - The pattern `$( $variant:ident = $opcode:expr => $handler:path ),*` is expanded twice: once inside `enum $name` to define variants, once inside `from_u8` to construct opcode-to-enum arms, and once inside `dispatch` to map opcodes to `$handler(payload)`.
 > 4. **Safety & Zero Overhead:**
 >    - The generated match statement avoids dynamic memory allocations and trait object vtables (`dyn Fn`), allowing the Rust compiler to inline handler calls directly for maximum performance.
-
+> 
 ---
 
 ## 6. Related Terms

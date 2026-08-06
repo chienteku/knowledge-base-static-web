@@ -177,7 +177,7 @@ Execute a batch insertion and update operation across collection `inventory` in 
 > 1. `bulkWrite()` bundles multiple CRUD commands into a single binary payload sent to `mongod`.
 > 2. Reduces network roundtrip latency significantly compared to sequential writes.
 > 3. Returns a unified `BulkWriteResult` object summarizing operations.
-
+> 
 ---
 
 ### Exercise 2: Unordered Bulk Writes for High Write Availability
@@ -205,7 +205,7 @@ Execute an unordered bulk write batch so that if one write operation fails, rema
 > 1. `{ ordered: false }` allows MongoDB to execute operations in parallel and continue processing upon errors.
 > 2. Duplicate key errors on individual items do not abort remaining writes in the batch.
 > 3. Maximizes write throughput in multi-node clusters.
-
+> 
 ---
 
 ### Exercise 3: Bulk Upsert Operations
@@ -237,7 +237,7 @@ Perform batch upserts updating existing records or inserting missing records bas
 > 1. `upsert: true` creates missing records when filters fail to match existing documents.
 > 2. Standard pattern for synchronization and ETL data ingestion scripts.
 > 3. Executes batch upserts atomically.
-
+> 
 ---
 
 

@@ -166,7 +166,7 @@ Inspect the internal 64-bit BSON `Timestamp` stored in a replica set oplog entry
 > 1. BSON `Timestamp` (Type 17) is a 64-bit value: 32-bit epoch seconds + 32-bit incrementing ordinal counter.
 > 2. Used internally by MongoDB replication and change streams to order oplog events deterministically.
 > 3. Distinct from application BSON `Date` (Type 9).
-
+> 
 ---
 
 ### Exercise 2: Application Date Field Selection
@@ -193,7 +193,7 @@ Store user registration time using application-facing BSON `Date` instead of int
 > 1. BSON `Date` (Type 9) is the standard type for application datetime attributes.
 > 2. Supported natively across all language drivers (Node.js `Date`, Python `datetime`).
 > 3. `Timestamp` should only be used when dealing with internal replication or change stream resume tokens.
-
+> 
 ---
 
 ### Exercise 3: Comparing BSON Type Codes for Timestamp vs Date
@@ -219,7 +219,7 @@ Query collection `events` using `$type` to confirm field `time` is BSON `Date` (
 > 1. BSON Type Code 9 = `Date` (64-bit UTC timestamp).
 > 2. BSON Type Code 17 = `Timestamp` (internal replication opcode counter).
 > 3. Ensures schema type correctness across document properties.
-
+> 
 ---
 
 

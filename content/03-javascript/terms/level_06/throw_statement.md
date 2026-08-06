@@ -203,7 +203,7 @@ try {
 > ```
 > - The condition is `if (pass.length < 8)`.
 > - Raise the error using `throw new RangeError("Password is too short!");`.
-
+> 
 ---
 
 ### Exercise 2: Throwing Errors on Invalid Arguments
@@ -227,7 +227,7 @@ try {
 > ```
 >
 > **Explanation:** `throw` interrupts execution flow and passes control to the nearest `catch` block.
-
+> 
 ---
 
 ### Exercise 3: Re-Throwing Caught Exceptions
@@ -251,8 +251,8 @@ try {
 > ```
 >
 > **Explanation:** Re-throwing caught errors allows logging at local boundaries while delegating failure handling to callers.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

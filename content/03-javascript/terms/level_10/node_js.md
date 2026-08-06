@@ -169,7 +169,7 @@ async function processData() {
 > *(Note: Modern JS introduced `globalThis` to provide a single name that works in both environments!)*
 > ```
 > - Think universally!
-
+> 
 ---
 
 ### Exercise 2: Node.js Core Modules (`fs`, `path`, `http`)
@@ -186,7 +186,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `node:` prefixes explicitly identify built-in Node.js runtime core modules.
-
+> 
 ---
 
 ### Exercise 3: Reading Environment Variables via `process.env`
@@ -204,8 +204,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `process.env` exposes system environment key-value pairs to Node.js applications.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -131,7 +131,7 @@ Write the `setPerson` code to change her city to 'LA' without mutating the origi
 > - Create a new object `{}`. 
 > - Spread the old properties `...person`.
 > - Overwrite the specific property.
-
+> 
 ---
 
 
@@ -156,7 +156,7 @@ Write the `setPerson` code to change her city to 'LA' without mutating the origi
 > ```
 >
 > **Explanation:** Immutably updating nested objects requires spreading every object level in the path.
-
+> 
 ---
 
 ### Exercise 3: Immutable Array Item Removal
@@ -173,7 +173,7 @@ Write the `setPerson` code to change her city to 'LA' without mutating the origi
 > ```
 >
 > **Explanation:** Array methods like `.filter()`, `.map()`, and `slice()` return new array instances immutably.
-
+> 
 ## 7. Related Terms
 - [`useState` Hook](use_state.md) — The function that requires you to follow this rule.
 - [Re-rendering](re_rendering.md) — What fails to happen if you break the rule of Immutability.

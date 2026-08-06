@@ -174,7 +174,7 @@ Add a calculated `totalPrice` field (`price + shipping`) to product documents wh
 > 1. `$addFields` appends new calculated fields or modifies existing fields without removing unmentioned document keys.
 > 2. Replaces verbose `$project` stages when existing fields must be preserved.
 > 3. Simplifies pipeline syntax.
-
+> 
 ---
 
 ### Exercise 2: Shaping Output Documents with `$project`
@@ -206,7 +206,7 @@ Project user documents returning ONLY `fullName` (concatenated `firstName` and `
 > 1. `$project` explicitly specifies which fields to include, exclude, or compute in output streams.
 > 2. Unmentioned fields are omitted from output documents.
 > 3. Optimizes client response payload structures.
-
+> 
 ---
 
 ### Exercise 3: Overwriting Existing Fields with `$set`
@@ -236,7 +236,7 @@ Overwrite existing string field `status` with its uppercase equivalent using pip
 > 1. `$set` is an alias for `$addFields`.
 > 2. Overwrites matching field names with computed expression values.
 > 3. Standard stage for field normalization.
-
+> 
 ---
 
 

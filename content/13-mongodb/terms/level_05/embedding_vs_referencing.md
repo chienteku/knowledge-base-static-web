@@ -182,7 +182,7 @@ Formulate a schema design decision matrix evaluating when to embed vs when to re
 > 1. Embedding provides maximum read performance by fetching related data in a single $O(1)$ read.
 > 2. Referencing prevents 16MB document size limit breaches and avoids document movement on disk.
 > 3. Schema design should be driven primarily by application query access patterns.
-
+> 
 ---
 
 ### Exercise 2: Modeling Bounded 1-to-Many Relationships with Embedding
@@ -215,7 +215,7 @@ Model a customer `order` document embedding an array of up to 10 `orderItems`.
 > 1. Bounded 1-to-many items (e.g. items in a single shopping cart) are ideal for embedding.
 > 2. Order details and items are written and read together atomically.
 > 3. Eliminates multi-table joins.
-
+> 
 ---
 
 ### Exercise 3: Modeling Unbounded 1-to-Many Relationships with Referencing
@@ -246,7 +246,7 @@ Model a `sensor` entity generating millions of telemetry `readings` over time us
 > 1. Unbounded relationships (millions of child items) MUST use referencing.
 > 2. Prevents child arrays from bloating parent documents past 16MB.
 > 3. Index on `{ sensorId: 1, timestamp: -1 }` ensures fast query pagination.
-
+> 
 ---
 
 

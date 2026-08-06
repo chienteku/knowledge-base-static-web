@@ -174,7 +174,7 @@ Correct placement of the charset tag:
 > 2. The developer's text editor saved the HTML file using a legacy encoding (like Windows-1252 or ASCII) instead of UTF-8.
 > ```
 > - The replacement character  is the browser's way of saying: "A byte was sent that does not match a valid symbol in my current lookup table."
-
+> 
 ---
 
 
@@ -193,7 +193,7 @@ Correct placement of the charset tag:
 > ```
 >
 > **Explanation:** Standard UTF-8 declaration covers all international character sets and emojis.
-
+> 
 ---
 
 ### Exercise 3: HTTP Header vs Meta Encoding
@@ -210,7 +210,7 @@ Correct placement of the charset tag:
 > ```
 >
 > **Explanation:** Server HTTP `Content-Type` headers override HTML `<meta>` tags.
-
+> 
 ## 7. Related Terms
 - [`<meta>`](meta.md) — The parent tag containing the charset key.
 - [`<head>`](../level_01/head.md) — The container housing the charset definition.

@@ -194,7 +194,7 @@ atomic.store(1, Ordering::Release); // Correct!
 > 1. `Ordering::Release` on `ready.store` guarantees payload writes become visible before flag is set.
 > 2. `Ordering::Acquire` on `ready.load` synchronizes payload memory reads across CPU cores.
 > 3. Establishes a happens-before relationship without expensive full CPU memory fences.
-
+> 
 ---
 
 ### Exercise 2: High-Performance Atomic Event Counter with `Relaxed` Ordering
@@ -241,7 +241,7 @@ atomic.store(1, Ordering::Release); // Correct!
 >
 > 1. Simple event counters do not synchronize external memory, making `Ordering::Relaxed` the optimal zero-cost atomic operation.
 > 2. Atomic hardware operations guarantee thread-safe incrementing without data races.
-
+> 
 ---
 
 ### Exercise 3: Lock-Free Spinlock Flag Guard
@@ -293,7 +293,7 @@ atomic.store(1, Ordering::Release); // Correct!
 > 1. `swap(true, Ordering::Acquire)` acquires memory synchronization for entering the critical section.
 > 2. `store(false, Ordering::Release)` releases memory synchronization upon exiting the critical section.
 > 3. `std::hint::spin_loop()` informs CPU pipeline of busy-waiting loops.
-
+> 
 ---
 
 ## 5. Related Terms

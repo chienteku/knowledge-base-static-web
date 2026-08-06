@@ -157,7 +157,7 @@ Inspect decoded JWT session claims stored in `$token` during an authenticated cl
 > 1. `$token` contains decoded JSON Web Token claims parsed from client authorization headers.
 > 2. Includes standard JWT fields (`sub`, `exp`, `iss`, `nbf`).
 > 3. Available across all queries executed during active sessions.
-
+> 
 ---
 
 ### Exercise 2: Using Custom JWT Claims in Row Security
@@ -182,7 +182,7 @@ Restrict access to table `project` so that users can only select projects matchi
 > 1. Custom JWT claims (e.g. `tenant_id`) are accessible via `$token.tenant_id`.
 > 2. Enforces multi-tenant row security dynamically using external JWT claims.
 > 3. Eliminates manual tenant filtering in client queries.
-
+> 
 ---
 
 ### Exercise 3: Validating JWT Expiration Lifetimes
@@ -209,7 +209,7 @@ Explain how SurrealDB automatically rejects expired JSON Web Tokens.
 > 1. SurrealDB validates JWT expiration (`exp`) automatically during token parsing.
 > 2. Rejects expired tokens before executing database queries.
 > 3. Protects against stale authentication session reuse.
-
+> 
 ---
 
 

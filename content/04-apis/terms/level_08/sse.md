@@ -197,7 +197,7 @@ B) Server-Sent Events
 > You ask the question once (via a standard POST request). After that, the AI is simply dripping the answer down to you, one way, over an extended period of time. SSE is the absolute perfect tool for LLM text generation streaming!
 > ```
 > - Is the client actively sending data *while* the AI is typing? No.
-
+> 
 ---
 
 ### Exercise 2: SSE Wire Format Message Structure

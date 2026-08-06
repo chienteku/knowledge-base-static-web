@@ -206,7 +206,7 @@ try {
 
 > [!check]- Answer
 > - Call `Object.freeze(config)` inside the function body.
-
+> 
 ---
 
 ### Exercise 2: Comparing `Object.freeze` vs `Object.seal`
@@ -223,7 +223,7 @@ try {
 > ```
 >
 > **Explanation:** `seal()` prevents structure modifications while allowing property value updates; `freeze()` makes objects immutable.
-
+> 
 ---
 
 ### Exercise 3: Strict Mode Immutability Errors
@@ -246,8 +246,8 @@ try {
 > ```
 >
 > **Explanation:** In strict mode, modifying frozen object properties throws `TypeError`.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

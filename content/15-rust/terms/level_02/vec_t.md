@@ -277,7 +277,7 @@ Requirements:
 > 2. **Controlled Buffer Reservation**: Using `self.orders.reserve(needed)` guarantees that Rust requests a contiguous heap block large enough to fit `needed` additional items in a single reallocation pass, preventing repeated reallocation cascades.
 > 3. **In-Place Purging via `retain`**: `Vec::retain` traverses the vector in $O(N)$ linear time, dropping non-matching elements and shifting retained items leftwards in memory. Crucially, `retain` does not change vector capacity or allocate temporary vectors, making it ideal for memory-constrained loops.
 > 4. **Zero-Copy Batch Extraction via `drain`**: `Vec::drain(0..range)` creates a temporary iterator over a specified subslice, moving elements out of the vector while maintaining the underlying allocated memory block for future use.
-
+> 
 ---
 
 ### Exercise 2: Binary Protocol Streaming Frame Decoder (`Vec<u8>` Byte Manipulation)
@@ -410,7 +410,7 @@ Requirements:
 > 2. **Contiguous Byte Extension**: `extend_from_slice` copies bytes from borrowed slices (`&[u8]`) into the contiguous heap buffer of `Vec<u8>` in optimized batch memory copies (`memcpy`), growing buffer capacity automatically.
 > 3. **Shift & Resynchronization**: Calling `Vec::remove(0)` shifts all remaining bytes left by one index. While $O(N)$ cost, for small stream framing headers it efficiently discards noisy or corrupted protocol bytes until magic byte alignment is restored.
 > 4. **Header Splitting via Range Draining**: `self.buffer.drain(0..total_frame_len)` removes the exact window of bytes representing one frame while leaving remaining partial packet stream bytes intact in the buffer.
-
+> 
 ---
 
 ### Exercise 3: Time-Series Sensor Aggregator & Sliding Window (`Vec<T>` Partitioning & Slicing)
@@ -554,7 +554,7 @@ Requirements:
 > 2. **Vector Draining & Partitioning**: Combining `self.points.drain(..)` with `.partition(...)` moves owned elements out of the original vector and redistributes them into two separate heap-allocated vectors in a single linear pass ($O(N)$ complexity).
 > 3. **Memory Pruning Efficiency**: `prune_older_than` enforces sliding-window constraints via `Vec::retain`, preventing unbound memory growth on long-running edge devices.
 > 4. **Safe Floating Point Initialization**: Initializing `min` to `f64::MAX` and `max` to `f64::MIN` ensures correct accumulation during iteration, while checking `is_empty()` prevents division-by-zero panics when calculating average values.
-
+> 
 ---
 
 ## 6. Related Terms

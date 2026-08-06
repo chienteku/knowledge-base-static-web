@@ -183,7 +183,7 @@ Query collection `users` returning ONLY `name` and `email` fields to minimize AP
 > 1. Inclusion projections (`field: 1`) specify exact keys to include in output documents.
 > 2. `_id: 0` explicitly suppresses the default primary key.
 > 3. BSON parser skips unprojected document fields during network encoding.
-
+> 
 ---
 
 ### Exercise 2: Exclusion Projections for Sensitive Fields
@@ -210,7 +210,7 @@ Query user profile documents excluding sensitive internal fields `passwordHash` 
 > 1. Exclusion projections (`field: 0`) omit specific sensitive keys while returning all other document fields.
 > 2. Note: You cannot mix inclusion (1) and exclusion (0) in the same projection object (except for `_id`).
 > 3. Prevents sensitive data leakage in API responses.
-
+> 
 ---
 
 ### Exercise 3: Array Element Slicing Projections with `$slice`
@@ -237,7 +237,7 @@ Query blog post documents returning ONLY the 3 most recent comments in the `comm
 > 1. `$slice: -3` projects the last 3 elements of an embedded array.
 > 2. Prevents returning massive arrays when displaying preview snippets.
 > 3. Trims array payload size server-side.
-
+> 
 ---
 
 

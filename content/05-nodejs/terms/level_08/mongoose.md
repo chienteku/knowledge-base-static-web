@@ -175,7 +175,7 @@ const Product = mongoose.model('Product', ProductSchema);
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Defining Mongoose Schema and Model
@@ -196,7 +196,7 @@ const Product = mongoose.model('Product', ProductSchema);
 > ```
 >
 > **Explanation:** Mongoose schemas define MongoDB document structures, validations, and default values.
-
+> 
 ---
 
 ### Exercise 3: Populating Mongoose References
@@ -213,7 +213,7 @@ const Product = mongoose.model('Product', ProductSchema);
 > ```
 >
 > **Explanation:** `.populate()` replaces ObjectId references with actual referenced document data.
-
+> 
 ## 7. Related Terms
 - [ORMs & ODMs](orms_odms.md) — The general concept of bridging databases to object logic.
 - [SQL vs NoSQL](sql_vs_nosql.md) — The database engines mapped by Mongoose.

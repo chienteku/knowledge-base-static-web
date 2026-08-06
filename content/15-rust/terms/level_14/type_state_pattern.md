@@ -360,7 +360,7 @@ Build a `#![no_std]` compatible GPIO pin type-state machine:
 > 1. **Zero Memory Overhead:** `PhantomData<State>` costs 0 bytes at runtime. The GPIO pin struct contains only primitive fields (`pin_id`, `output_high`).
 > 2. **State Transition Safety:** Methods like `into_input(self)` take ownership of `self` by value, consuming the `GpioPin<Disabled>` instance so it can no longer be referenced.
 > 3. **Unrepresentable Invalid States:** `GpioPin<Input>` does not define `set_high()`, and `GpioPin<Disabled>` defines neither `read_digital()` nor `set_high()`. Calling inappropriate methods causes a compile-time error (`E0599`).
-
+> 
 ---
 
 ### Exercise 2: Secure TLS Connection Handshake Protocol State Machine
@@ -464,7 +464,7 @@ Build a TLS session typestate machine:
 >
 > 1. **Fallible Typestate Transitions:** `authenticate(self, secret: &str)` returns a `Result<TlsSession<Authenticated>, HandshakeError>`. If authentication fails, ownership of `TlsSession<Handshaking>` is dropped and no `TlsSession<Authenticated>` instance is produced.
 > 2. **Compile-Time Data Protection:** `send_data` is declared exclusively on `TlsSession<Authenticated>`. It is impossible to send unencrypted payload bytes while in the `Disconnected` or `Handshaking` states.
-
+> 
 ---
 
 ### Exercise 3: Financial Transaction Pipeline with State-Specific Payload Carrying
@@ -601,7 +601,7 @@ Build a data-carrying typestate transaction engine:
 > 1. **Data-Carrying Typestates:** Unlike zero-sized marker types, state structs (`ApprovedData`, `ExecutedData`) carry operational data specific to that stage of the lifecycle.
 > 2. **Progressive Accumulation:** Transitioning from `ApprovedData` to `ExecutedData` preserves the `manager_signature` field while introducing the `receipt_id` field.
 > 3. **Compile-Time Receipt Generation:** Calling `.receipt()` is valid ONLY on `Transaction<ExecutedData>`, guaranteeing that unapproved or unexecuted transactions can never generate a receipt string.
-
+> 
 ---
 
 ## 6. Related Terms

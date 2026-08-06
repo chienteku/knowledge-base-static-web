@@ -116,24 +116,24 @@ Refactor an unsafe function receiving `any` to use explicit property typing and 
 > // function formatUser(user: any) {
 > //   return user.name.toUpperCase() + user.age.toFixed(2); // May crash at runtime!
 > // }
-
-// ✅ SAFE (Explicit interface boundary):
-interface UserProfile {
-  name: string;
-  age: number;
-}
-
-function formatUser(user: UserProfile): string {
-  return `${user.name.toUpperCase()} (${user.age.toFixed(0)})`;
-}
-```
-
+> 
+> // ✅ SAFE (Explicit interface boundary):
+> interface UserProfile {
+>   name: string;
+>   age: number;
+> }
+> 
+> function formatUser(user: UserProfile): string {
+>   return `${user.name.toUpperCase()} (${user.age.toFixed(0)})`;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `any` turns off all TypeScript compiler checks for the variable and all downstream expressions derived from it.
 > 2. Replacing `any` with explicit interfaces restores static error checking and IDE autocomplete.
 > 3. Eliminates subtle runtime `TypeError` exceptions.
-
+> 
 ---
 
 ### Exercise 2: Auditing Implicit `any` Compiler Errors
@@ -151,19 +151,19 @@ Fix a `noImplicitAny` compiler error in a function parameter list.
 > ```typescript
 > // ❌ FAILS when noImplicitAny is enabled:
 > // function calculateDiscount(price, discount) { return price * discount; }
-
-// ✅ CORRECT:
-function calculateDiscount(price: number, discount: number): number {
-  return price * discount;
-}
-```
-
+> 
+> // ✅ CORRECT:
+> function calculateDiscount(price: number, discount: number): number {
+>   return price * discount;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `noImplicitAny` flags any variable or parameter whose type cannot be inferred and defaults to `any`.
 > 2. Forces developers to explicitly declare intent when type inference is unavailable.
 > 3. Crucial setting for codebases migrating from plain JavaScript to TypeScript.
-
+> 
 ---
 
 ### Exercise 3: Comparative Analysis: `any` vs `unknown`
@@ -183,13 +183,13 @@ Formulate an architectural selection decision matrix comparing `any` against `un
 > - any: Disables type checking completely. Can be assigned to anything; anything can be accessed on it without checks. Danger level: HIGH.
 > - unknown: Type-safe top type. Can hold any value, but CANNOT be assigned or dereferenced without explicit type narrowing. Danger level: SAFE.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Both `any` and `unknown` accept any value during initial assignment.
 > 2. `unknown` requires type checking (`typeof`, `instanceof`, or custom type guards) before use.
 > 3. Prefer `unknown` over `any` for unknown API payloads.
-
+> 
 ---
 
 

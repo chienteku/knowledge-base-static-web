@@ -124,7 +124,7 @@ button:disabled {
 > It's called `text`. You can apply `cursor: text;` to inputs or custom elements to signal to the user that they can click and start typing!
 > ```
 > - What do you call letters and words?
-
+> 
 ---
 
 
@@ -153,7 +153,7 @@ button:disabled {
 > ```
 >
 > **Explanation:** `cursor` values provide affordance cues for mouse interactions.
-
+> 
 ---
 
 ### Exercise 3: Custom Image Cursor Syntax
@@ -172,7 +172,7 @@ button:disabled {
 > ```
 >
 > **Explanation:** Custom cursor images require fallback generic keywords (e.g. `auto`).
-
+> 
 ## 7. Related Terms
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Changing the cursor is almost always paired with changing the styling properties on `:hover`.
 - [`outline`](outline.md) — Visual ring for keyboard selection focuses.

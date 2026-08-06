@@ -146,7 +146,7 @@ Create an `inventory` table storing product stock, unit price, and reorder thres
 > 1. Tables are 2-dimensional grid relations where columns define schema types and rows store data records.
 > 2. `CHECK (quantity_in_stock >= 0)` guarantees negative stock values can never be written.
 > 3. `DEFAULT 0` populates omitted fields during new row inserts.
-
+> 
 ---
 
 ### Exercise 2: Truncating Table Records with `TRUNCATE`
@@ -170,7 +170,7 @@ Fast-delete all rows from a temporary staging table `staging_logs` using `TRUNCA
 > 1. `TRUNCATE` removes all rows from a table by deallocating underlying data pages instantly.
 > 2. Orders of magnitude faster than `DELETE FROM` on large tables because it avoids individual row MVCC processing.
 > 3. `RESTART IDENTITY` resets auto-increment sequence counters to 1.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Table Disk Footprint Statistics
@@ -196,7 +196,7 @@ Query total disk space used by table `orders` including its indexes and toast ta
 > 1. `pg_relation_size('orders')` calculates raw table heap data file sizes.
 > 2. `pg_total_relation_size('orders')` includes associated B-tree indexes and TOAST storage.
 > 3. Essential command for monitoring table storage growth.
-
+> 
 ---
 
 

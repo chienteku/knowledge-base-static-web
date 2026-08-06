@@ -182,7 +182,7 @@ You are setting up a multi-tenant SaaS application architecture in SurrealDB whe
 > 1. SurrealDB structures data hierarchically: `Instance -> Namespace -> Database -> Table -> Record`.
 > 2. Namespaces provide hard tenant isolation; tables in different namespaces cannot leak data across boundaries.
 > 3. Identical table names (`customer`) and record IDs (`customer:c1`) can safely exist independently across namespaces.
-
+> 
 ---
 
 ### Exercise 2: Context Introspection with `INFO` Commands
@@ -212,7 +212,7 @@ A database administrator needs to inspect all databases present within namespace
 > 1. `INFO FOR NS` returns metadata about all databases, users, and access methods defined under the active namespace.
 > 2. `INFO FOR DB` returns metadata about all tables, functions, analyzers, and parameters defined under the active database.
 > 3. Introspection commands verify multi-tenant schema isolation during administrative audits.
-
+> 
 ---
 
 ### Exercise 3: Cross-Namespace Data Isolation Rules
@@ -243,7 +243,7 @@ A developer asks if a single `SELECT` query in SurrealDB can join or fetch recor
 > 1. Namespaces form hard multi-tenant security boundaries in SurrealDB's storage engine.
 > 2. Blocking cross-namespace queries prevents accidental data leakage between SaaS tenants at the database engine level.
 > 3. Applications needing shared global lookup data should place shared tables in a dedicated common namespace.
-
+> 
 ---
 
 

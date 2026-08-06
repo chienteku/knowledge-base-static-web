@@ -200,7 +200,7 @@ Create, use, and explicitly close a MongoDB driver `ClientSession` using try-fin
 > 1. `startSession()` creates a stateful client session tracking cluster time and transaction context.
 > 2. Passing `{ session }` in options associates the write command with the session lifecycle.
 > 3. `session.endSession()` in `finally` frees server-side session resources.
-
+> 
 ---
 
 ### Exercise 2: Session-Scoped Transaction Commitment
@@ -232,7 +232,7 @@ Execute `withTransaction()` on a session to execute 2 updates atomically.
 > 1. `withTransaction()` binds transactional operations to the active `ClientSession`.
 > 2. Handles commit, abort, and transient error retries automatically.
 > 3. Prevents orphaned transactions.
-
+> 
 ---
 
 ### Exercise 3: Handling Session Timeout Expirations
@@ -258,7 +258,7 @@ Explain what happens when an idle session exceeds the server `localLogicalSessio
 > 1. MongoDB background thread purges inactive sessions after 30 minutes.
 > 2. Aborts uncommitted transactions to free server memory.
 > 3. Do not leave sessions idle for prolonged periods in application code.
-
+> 
 ---
 
 

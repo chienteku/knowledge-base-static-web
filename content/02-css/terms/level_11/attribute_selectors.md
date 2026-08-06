@@ -195,7 +195,7 @@ a[href$=".pdf" i] { ... } /* Case-insensitive attribute matching */
 > }
 > ```
 > - You can chain attribute selectors together without spaces to target elements matching both criteria simultaneously!
-
+> 
 ---
 
 
@@ -221,7 +221,7 @@ a[href$=".pdf" i] { ... } /* Case-insensitive attribute matching */
 > ```
 >
 > **Explanation:** Attribute selectors target elements by presence, prefix (`^=`), or suffix (`$=`).
-
+> 
 ---
 
 ### Exercise 3: Space-Separated List Matcher
@@ -240,7 +240,7 @@ a[href$=".pdf" i] { ... } /* Case-insensitive attribute matching */
 > ```
 >
 > **Explanation:** `~=` matches whole words within space-separated attribute lists.
-
+> 
 ## 7. Related Terms
 - [Combinator Selectors](combinators.md) — Target elements relative to parent-child tree layouts.
 - [Selectors (Element, Class, ID)](../level_01/selectors.md) — Related concept: Selectors (Element, Class, ID).

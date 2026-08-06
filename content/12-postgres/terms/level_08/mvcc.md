@@ -164,7 +164,7 @@ Inspect PostgreSQL MVCC hidden row header fields (`xmin`, `xmax`, `ctid`) on tab
 > 1. `xmin`: The transaction ID (txid) that inserted this row version.
 > 2. `xmax`: The transaction ID that deleted or updated (replaced) this row version (`0` if active).
 > 3. `ctid`: The physical disk page slot location `(page_number, tuple_index)` of the row version.
-
+> 
 ---
 
 ### Exercise 2: Observing MVCC Row Copy Behavior During UPDATE
@@ -195,7 +195,7 @@ Demonstrate that `UPDATE` creates a NEW row version with a new `ctid` and sets `
 > 1. PostgreSQL never modifies existing row tuple bytes in-place during an `UPDATE`.
 > 2. Instead, `UPDATE` writes a brand new row tuple to disk with a new `ctid` and updates `xmax` on the old tuple.
 > 3. Concurrent readers continue reading the old committed tuple snapshot without blocking.
-
+> 
 ---
 
 ### Exercise 3: Dead Tuple Accumulation and VACUUM Cleanup
@@ -222,7 +222,7 @@ Explain how dead row versions accumulate after updates/deletes and why `VACUUM` 
 > 1. MVCC enables non-blocking concurrent reads and writes ("readers never block writers, writers never block readers").
 > 2. Un-cleaned dead tuples cause table bloat, slowing down sequential scans.
 > 3. Requires background `autovacuum` maintenance.
-
+> 
 ---
 
 

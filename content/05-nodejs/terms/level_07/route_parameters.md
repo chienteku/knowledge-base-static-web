@@ -257,7 +257,7 @@ app.get('/api/products/:category', (req, res) => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Defining Multi-Param Route Path
@@ -277,7 +277,7 @@ app.get('/api/products/:category', (req, res) => {
 > ```
 >
 > **Explanation:** Colons (`:name`) define named path parameter placeholders in Express route definitions.
-
+> 
 ---
 
 ### Exercise 3: Optional Route Parameters
@@ -296,7 +296,7 @@ app.get('/api/products/:category', (req, res) => {
 > ```
 >
 > **Explanation:** Question mark (`:id?`) designates optional route parameters.
-
+> 
 ## 7. Related Terms
 - [Routing](routing.md) — The routing system matching URL structures.
 - [The req & res Objects](req_res.md) — The HTTP wrapper structures holding incoming parameters.

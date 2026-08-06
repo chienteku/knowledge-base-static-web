@@ -213,7 +213,7 @@ Which of these four styling values will apply to a `<p>` tag nested inside the c
 > `color: green;` and `font-weight: bold;` will apply because typography properties are inherited. The `border` and `padding` are layout properties and will not inherit.
 > ```
 > - Differentiate between text formatting and box layout boundaries.
-
+> 
 ---
 
 
@@ -242,7 +242,7 @@ Which of these four styling values will apply to a `<p>` tag nested inside the c
 > ```
 >
 > **Explanation:** Text formatting inherits down the DOM tree; box-model dimensions do not.
-
+> 
 ---
 
 ### Exercise 3: CSS Keyword Property Reset
@@ -263,7 +263,7 @@ Which of these four styling values will apply to a `<p>` tag nested inside the c
 > ```
 >
 > **Explanation:** Keyword values override natural property inheritance behavior.
-
+> 
 ## 7. Related Terms
 - [The Cascade](the_cascade.md) — The parent priority engine.
 - [Specificity](specificity.md) — Selector point weights.

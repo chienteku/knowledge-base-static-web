@@ -163,8 +163,8 @@ async function processData() {
 > [!check]- Answer
 > - 1. **No** (The console only knows the minified filename and column `1:3405` with a mangled function name `a`).
 > - 2. **Yes** (The browser used the source map in the background to reconstruct the original TypeScript file structure).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Minification Transformations
@@ -181,7 +181,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Minifiers compress bundle byte sizes by stripping unnecessary syntax characters.
-
+> 
 ---
 
 ### Exercise 3: Debugging Minified Production Code with Source Maps
@@ -198,8 +198,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Source maps bridge production minified code execution back to original un-compiled developer files.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

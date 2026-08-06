@@ -175,7 +175,7 @@ Export aggregated quarterly sales summary results to a new target collection `qu
 > 1. `$out` writes pipeline output documents into a target collection, replacing any existing collection data completely.
 > 2. Atomic collection swap on completion.
 > 3. Cannot output to sharded collections; use `$merge` for sharded output targets.
-
+> 
 ---
 
 ### Exercise 2: Incremental Materialized Views with `$merge`
@@ -210,7 +210,7 @@ Upsert aggregated daily user activity totals into an existing materialized colle
 > 1. `$merge` incrementally updates or inserts pipeline output documents into target collections.
 > 2. `whenMatched: "replace"` updates matching records; `whenNotMatched: "insert"` adds new entries.
 > 3. Supports output to sharded target collections across clusters.
-
+> 
 ---
 
 ### Exercise 3: Comparing `$out` vs `$merge` Output Strategies
@@ -236,7 +236,7 @@ Formulate a technical decision guide choosing between `$out` and `$merge`.
 > 1. `$out` provides simple atomic collection overwrites.
 > 2. `$merge` provides flexible, non-destructive incremental updates.
 > 3. Foundation for building background data warehouse pipelines.
-
+> 
 ---
 
 

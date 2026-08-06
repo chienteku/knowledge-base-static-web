@@ -126,7 +126,7 @@ What will `useParams()` return inside the `<BlogPost />` component?
 > }
 > ```
 > - Every segment with a `:` becomes a key in the object.
-
+> 
 ---
 
 
@@ -150,7 +150,7 @@ What will `useParams()` return inside the `<BlogPost />` component?
 > ```
 >
 > **Explanation:** `useParams()` extracts key-value string parameters matched by dynamic route path segments.
-
+> 
 ---
 
 ### Exercise 3: Multiple Dynamic Route Segments
@@ -167,7 +167,7 @@ What will `useParams()` return inside the `<BlogPost />` component?
 > ```
 >
 > **Explanation:** Colons (`:param`) denote dynamic placeholder parameters in route path definitions.
-
+> 
 ## 7. Related Terms
 - [React Router](react_router.md) — The library that powers this.
 - [`useEffect` Hook](../level_03/use_effect.md) — You usually take the URL parameter and immediately use it inside `useEffect` to fetch data.

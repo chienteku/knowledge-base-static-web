@@ -126,14 +126,14 @@ While HTTP, HTTPS, and WebSockets run on top of TCP because they require 100% da
 > [!check]- Answer
 > - If losing a single packet corrupts the file or breaks the program, you must use TCP.
 > - If speed is critical and dropping a few frames/pixels is acceptable, use UDP.
-
+> 
 > [!check]- Answer
 > - 1. **UDP** (If a movement packet is dropped, the next packet immediately overrides it. Waiting for retries causes game lag).
 > - 2. **TCP** (A single missing byte corrupts the PDF file).
 > - 3. **TCP** (API payloads must be fully intact to parse JSON successfully).
 > - 4. **UDP** (If a packet drops, a brief pixel glitch is preferred over pausing the live video stream to wait for retries).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: TCP 3-Way Handshake Step Ordering

@@ -236,7 +236,7 @@ app.use('/static', express.static(assetsPath));
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Mounting Static Assets on Virtual Prefix Path
@@ -253,7 +253,7 @@ app.use('/static', express.static(assetsPath));
 > ```
 >
 > **Explanation:** Providing path prefix string mounts static middleware under a virtual URL path.
-
+> 
 ---
 
 ### Exercise 3: Configuring Cache Control Headers for Static Files
@@ -270,7 +270,7 @@ app.use('/static', express.static(assetsPath));
 > ```
 >
 > **Explanation:** Options object configures HTTP `Cache-Control` maxAge headers for served assets.
-
+> 
 ## 7. Related Terms
 - [Routing](routing.md) — The system matching URL structures.
 - [The http Module](../level_02/http_module.md) — The underlying HTTP server layer.

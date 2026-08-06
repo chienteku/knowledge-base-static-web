@@ -303,7 +303,7 @@ Implement an `UnclonableResource` struct (which intentionally does NOT implement
 >
 > 4. **Monomorphization Details**:
 >    During monomorphization, `TelemetryBatch<UnclonableResource>` is compiled as a concrete type layout containing `u64` (8 bytes) and `Arc<UnclonableResource>` (8 bytes pointer). Static dispatch calls the manual `Clone::clone` implementation directly without virtual lookup tables (vtables).
-
+> 
 ---
 
 ### Exercise 2: Multi-Field Derive Precedence & Priority Inversion for Event Queues
@@ -419,7 +419,7 @@ Construct an `AuditEvent` system where `Severity` uses standard derives, and `Au
 >
 > 4. **Monomorphization & Inlining**:
 >    `cmp` and `then_with` calls compile into branchless CPU instructions (such as `CMP` and `CMOV` on x86_64) due to monomorphization and compiler optimization, resulting in zero abstraction overhead compared to handwritten C comparisons.
-
+> 
 ---
 
 ### Exercise 3: Simulated Procedural Derive Macro Mechanics & Structural Schema Generator
@@ -574,7 +574,7 @@ Simulate the architectural output of a procedural derive macro for hierarchical 
 >
 > 4. **Derived `Default` Mechanics**:
 >    The derived `Default` implementation calls `Default::default()` on each field (`String::default()` -> `""`, `u16::default()` -> `0`, `Option::default()` -> `None`). Derived macros ensure type-safe default construction without manual initialization.
-
+> 
 ---
 
 ## 6. Related Terms

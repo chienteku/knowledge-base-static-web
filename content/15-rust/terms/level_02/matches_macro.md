@@ -276,7 +276,7 @@ Include a complete unit test module `#[cfg(test)] mod tests` using `assert!`, `a
 > 2. **OR-Pattern Aggregation (`|`)**: The `is_terminal` method condenses three distinct terminal state variants (`FullyFilled`, `Cancelled`, `Rejected`) into a single boolean expression. The wildcard `..` ignores all payload fields, avoiding unnecessary variable bindings or memory moves.
 > 3. **Pattern Guards with Reference Dereferencing**: In `is_significant_fill`, the pattern `OrderEvent::PartialFill { filled_qty, .. } if *filled_qty >= min_qty` borrows the `filled_qty` scalar field as `&u32` when matching against `&OrderEvent`. The guard expression dereferences `*filled_qty` to evaluate the boolean condition without taking ownership of the event.
 > 4. **Zero-Cost Inlining inside Iterator Adapters**: In `filter_active_events`, passing `|e| matches!(e, ...)` into `.filter()` allows the Rust compiler to collapse the match arm checking into a simple conditional branch instruction in assembly, outperforming manual loops while maintaining code readability.
-
+> 
 ---
 
 ### Exercise 2: Protocol Security Gateway — HTTP/2 Binary Frame Inspector
@@ -396,7 +396,7 @@ Include a complete unit test module `#[cfg(test)] mod tests` using `assert!`, `a
 > 2. **Bitwise Operations inside Match Guards**: In `is_stream_termination`, `matches!(frame, Http2Frame::Data { flags, .. } | Http2Frame::Headers { flags, .. } if (flags & Self::END_STREAM_FLAG) != 0)` demonstrates combining structural pattern destructuring across distinct variants sharing a field name (`flags`) with bitwise operation evaluation inside a unified guard expression.
 > 3. **Non-Borrowing Structural Inspection**: By passing shared references (`&Http2Frame`) to `matches!`, the compiler creates immutable reference bindings to nested fields. The lifetime of all frame payloads (`Vec<(u16, u32)>`) remains unaffected, ensuring high-throughput packet processing without stack allocation overhead or ownership transfer.
 > 4. **Handling Unused Variants**: Wildcard destructuring patterns (`..`) inform the compiler that remaining fields (such as `payload_len` or `priority`) are intentionally ignored, preventing unused variable warnings while maintaining pattern match accuracy.
-
+> 
 ---
 
 ### Exercise 3: SQL AST Security Analyzer & Query Audit Firewall
@@ -542,7 +542,7 @@ Include a complete unit test module `#[cfg(test)] mod tests` using `assert!`, `a
 > 2. **Handling Nested Enums without Deep Unwrapping**: Using `matches!` prevents nested `if let` pyramid structures. Instead of unwrapping `Option<Box<SqlAstNode>>` manually at every step, pattern guard checks evaluate top-level node conditions cleanly.
 > 3. **Lifetime & Move Invariants**: Because `node` is borrowed immutably (`&SqlAstNode`), recursive calls `self.contains_dangerous_func(child)` pass shared references deeper down the stack without taking ownership or cloning heap strings (`table`, `columns`, `name`).
 > 4. **Safety & Zero Overhead**: Structural inspection via `matches!` expands at macro expansion time into native pattern matching compiler directives, ensuring zero runtime macro allocation overhead while providing comprehensive query safety guarantees.
-
+> 
 ---
 
 ## 6. Related Terms

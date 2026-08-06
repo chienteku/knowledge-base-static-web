@@ -146,7 +146,7 @@ let r#type = "admin"; // Raw identifier token syntax!
 > #### Technical Explanation
 >
 > 1. Simulates lexical token classification executed by `rustc_lexer`.
-
+> 
 ---
 
 ### Exercise 2: Raw Identifier Token Handler
@@ -180,7 +180,7 @@ let r#type = "admin"; // Raw identifier token syntax!
 > #### Technical Explanation
 >
 > 1. Raw identifiers `r#keyword` allow using reserved keyword tokens as field or variable names.
-
+> 
 ---
 
 ### Exercise 3: Token Stream Counter
@@ -213,7 +213,7 @@ let r#type = "admin"; // Raw identifier token syntax!
 > #### Technical Explanation
 >
 > 1. Token streams form the basic unit of macro evaluation.
-
+> 
 ---
 
 ## 5. Related Terms

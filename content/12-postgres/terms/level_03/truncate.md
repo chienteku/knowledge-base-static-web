@@ -158,7 +158,7 @@ Clear all data rows from a 10,000,000 row log table `temp_logs` instantly.
 > 1. `TRUNCATE` de-allocates underlying table data files instantly without scanning individual rows under MVCC.
 > 2. Orders of magnitude faster than `DELETE FROM` on large tables.
 > 3. Requires `TRUNCATE` table privileges.
-
+> 
 ---
 
 ### Exercise 2: Resetting Identity Sequences During Truncation
@@ -182,7 +182,7 @@ Truncate a staging table `test_items` and reset its auto-incrementing identity s
 > 1. `RESTART IDENTITY` resets identity sequence generators back to their initial starting value (1).
 > 2. `CONTINUE IDENTITY` (default) preserves sequence counters.
 > 3. Essential for resetting test databases between test runs.
-
+> 
 ---
 
 ### Exercise 3: Truncating Cascading Dependent Tables
@@ -206,7 +206,7 @@ Truncate parent table `categories` and all child tables referencing it using `CA
 > 1. `CASCADE` automatically truncates all tables holding foreign key references to the target table.
 > 2. Operates quickly across whole table structures.
 > 3. Use with caution.
-
+> 
 ---
 
 

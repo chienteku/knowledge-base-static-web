@@ -179,7 +179,7 @@ console.log(finalOutput);
 > - Use `parseFloat(rawInput)` to extract the decimal value.
 > - Multiply the result by `0.8`.
 > - Call `.toFixed(2)` to format the output.
-
+> 
 ---
 
 ### Exercise 2: Formatting Currency Numbers with `toFixed`
@@ -197,7 +197,7 @@ console.log(finalOutput);
 > ```
 >
 > **Explanation:** `toFixed(digits)` rounds numbers to fixed decimal places and returns a formatted string.
-
+> 
 ---
 
 ### Exercise 3: Checking Integer Status with `Number.isInteger`
@@ -218,8 +218,8 @@ console.log(finalOutput);
 > ```
 >
 > **Explanation:** `Number.isInteger` returns `true` strictly if input is of type `number` without fractional components.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

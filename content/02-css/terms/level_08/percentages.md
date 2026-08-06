@@ -193,7 +193,7 @@ How many pixels wide is the Child on the screen?
 > The Child calculates 50% of its Parent (400px) = 200px.
 > ```
 > - Do the math one layer at a time.
-
+> 
 ---
 
 
@@ -212,7 +212,7 @@ How many pixels wide is the Child on the screen?
 > ```
 >
 > **Explanation:** All padding percentages (vertical and horizontal) calculate against parent width.
-
+> 
 ---
 
 ### Exercise 3: Percentage Width in Flexbox
@@ -231,7 +231,7 @@ How many pixels wide is the Child on the screen?
 > ```
 >
 > **Explanation:** `flex-basis` defines initial main-axis item dimensions within Flexbox layout engines.
-
+> 
 ## 7. Related Terms
 - [`vw` / `vh` (Viewport Units)](viewport_units.md) — Sizing relative to the viewport instead of the parent container.
 - [`rem` vs `em`](rem_em.md) — Relative typography units.

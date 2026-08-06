@@ -312,7 +312,7 @@ In high-security enterprise systems (payment processing, OAuth authentication se
 > 
 > 4. **Edge Cases**:
 >    - Structs deriving `Debug` (like `DatabaseConfig`) automatically delegate field printing to `Sensitive<T>`'s `fmt` method, ensuring nested structures never accidentally leak sensitive fields into log aggregation systems.
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy Binary Buffer & Canonical HexDump Formatter (`HexDump<'a>`)
@@ -452,7 +452,7 @@ In high-performance networking stack development, binary deserializers, and hard
 > 4. **Edge Cases**:
 >    - Slices of length 0 return immediately with `HexDump[]`.
 >    - Slices whose length is not a multiple of 16 cleanly pad remaining hex columns so the ASCII column stays aligned across lines.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Dispatch Diagnostics for Trait Object Pipelines (`Box<dyn Plugin>`)
@@ -607,7 +607,7 @@ An extensible microservices backend processes telemetry events through dynamical
 > 
 > 4. **Edge Cases**:
 >    - An empty `plugins` vector produces `plugins: []` without allocating memory or raising formatting errors.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -149,13 +149,13 @@ Store and retrieve JSON cache items using Nitro's built-in `useStorage()` key-va
 >   return { cachedUser };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `useStorage()` provides access to Unstorage, Nitro's universal key-value storage abstraction.
 > 2. Storage keys use colon-delimited namespaces (`db:user:101`).
 > 3. Objects stored via `setItem()` are automatically JSON-serialized.
-
+> 
 ---
 
 ### Exercise 2: Configuring Persistent Storage Mounts in `nuxt.config.ts`
@@ -184,13 +184,13 @@ Configure a Redis storage driver mount `redis` in `nuxt.config.ts` using `nitro.
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Unstorage supports swap-able storage drivers (memory, filesystem, Redis, Vercel KV, Cloudflare KV).
 > 2. Mounting `cache` to Redis routes `useStorage('cache')` calls to Redis without changing application handler code.
 > 3. Decouples storage implementation details from business logic.
-
+> 
 ---
 
 ### Exercise 3: Listing and Removing Storage Keys
@@ -219,19 +219,15 @@ List all keys under a storage namespace and delete specific expired cache keys.
 >   return { clearedKey: "cache:user-list", totalRemaining: keys.length - 1 };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `getKeys()` returns an array of active keys matching the storage namespace.
 > 2. `removeItem(key)` deletes the specified key-value pair from storage.
 > 3. Essential storage maintenance and cache invalidation operations.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`server/api/` Routes](server_api_routes.md) — Where `useStorage` is typically executed.

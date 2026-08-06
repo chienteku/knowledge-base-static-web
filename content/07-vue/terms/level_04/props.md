@@ -141,7 +141,7 @@ defineProps({
 > })
 > ```
 > - `defineProps` accepts a configuration object.
-
+> 
 ---
 
 ### Exercise 2: TypeScript Type-Only defineProps Macro
@@ -165,7 +165,7 @@ defineProps({
 > const props = defineProps<Props>();
 > </script>
 > ```
-
+> 
 ---
 
 ### Exercise 3: withDefaults Macro for TS Props
@@ -184,8 +184,8 @@ defineProps({
 >   title: 'Default Title'
 > });
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -233,7 +233,7 @@ Implement a production function `process_telemetry_stream(mut stream: Vec<Option
 > 2. **Concise Nesting with `if let`**: The double destructuring (`if let Some(frame) = slot` followed by `if let Frame::Metric { .. } = frame`) enables targeted extraction of nested enum variants. This avoids writing exhaustive `match` expressions with redundant `_ => ()` wildcard arms for discarded variants like `Frame::Heartbeat`.
 > 3. **Ownership and Value Destructuring**: Popping items from `stream` grants exclusive ownership of each `Frame` to the local scope. Struct field bindings (`device_id`, `metric`, `val`) move owned values directly into the output vector without unnecessary heap reallocations.
 > 4. **Edge Cases and Invariants**: `None` slots inside the vector are safely ignored by the outer `if let`. Reversing `metrics` at the end restores original FIFO order because `pop()` processes vector elements in LIFO order.
-
+> 
 ---
 
 ### Exercise 2: Financial Order Book Execution Pipeline & Cancellation Queue
@@ -328,7 +328,7 @@ Implement a trading engine processor `process_order_batch(mut queue: Vec<OrderCo
 > 2. **Sentinel Pattern Control Flow**: Matching unit-like variants such as `OrderCommand::Flush` with `if let OrderCommand::Flush = cmd` provides a readable exit condition. Executing `break` upon match immediately halts further queue consumption.
 > 3. **Field Ignoring with Wildcards (`..`)**: The pattern `OrderCommand::LimitOrder { id, price, .. }` extracts only `id` and `price`, ignoring `symbol` and `qty`. This avoids binding unused variables and eliminates compiler warnings.
 > 4. **Invariants & Edge Cases**: Limit orders below the price threshold (`price < 100`) fail the inner condition and are silently ignored. Commands occurring after `OrderCommand::Flush` remain safely unmutated inside the queue.
-
+> 
 ---
 
 ### Exercise 3: Compiler AST Symbol Harvester & Non-Recursive Work-List Resolver
@@ -441,7 +441,7 @@ Implement an iterative AST symbol harvester `collect_declared_variables(root: As
 > 2. **Nested Option and Box Matching**: The expression `if let Some(init_node) = initializer` unwraps the `Option`, and `if let AstNode::Literal(val) = *init_node` dereferences the heap `Box<AstNode>` to extract primitive value types.
 > 3. **Selective Branch Discarding**: AST nodes that do not match `VarDecl` or `Function` variants (such as standalone `AstNode::NoOp` or `AstNode::Literal`) fail the pattern match conditions in `if let` / `else if let` branches and are discarded automatically.
 > 4. **Ownership Transfers**: Dereferencing `*init_node` moves ownership of the boxed node out of the `Box` smart pointer into the work-list, ensuring zero copy overhead during symbol collection.
-
+> 
 ---
 
 ## 6. Related Terms

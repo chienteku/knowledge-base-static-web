@@ -202,7 +202,7 @@ export default function CounterComponent() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Subscribing to Window Online Status Store
@@ -232,7 +232,7 @@ export default function CounterComponent() {
 > ```
 >
 > **Explanation:** `useSyncExternalStore` subscribes to external non-React stores without tearing bugs under Concurrent React.
-
+> 
 ---
 
 ### Exercise 3: Why useSyncExternalStore Exists
@@ -249,7 +249,7 @@ export default function CounterComponent() {
 > ```
 >
 > **Explanation:** `useSyncExternalStore` guarantees consistent synchronous store snapshots under Concurrent React.
-
+> 
 ## 7. Related Terms
 - [State Management (Redux / Zustand)](../level_06/state_management.md) — The global state container architectures.
 - [Zustand](zustand.md) — The state library that uses this hook under the hood.

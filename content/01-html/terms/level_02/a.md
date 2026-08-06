@@ -208,7 +208,7 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 > </a>
 > ```
 > - The `<a>` element is a container. It can wrap text, but it can also wrap other elements!
-
+> 
 ---
 
 ### Exercise 2: Email and Telephone Anchor Links
@@ -225,7 +225,7 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 > ```
 >
 > **Explanation:** `mailto:` opens email client; `tel:` initiates phone call on mobile devices.
-
+> 
 ---
 
 ### Exercise 3: In-Page Smooth Anchor Jumping
@@ -239,7 +239,7 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 > ```
 >
 > **Explanation:** Hash link `#id` targets matching element ID on the current page.
-
+> 
 ## 7. Related Terms
 - [`href` Attribute](href.md) — The required attribute that makes the anchor tag function.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — The web address standard links utilize.

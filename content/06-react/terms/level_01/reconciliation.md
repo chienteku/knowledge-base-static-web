@@ -192,7 +192,7 @@ function FormApp() {
 > [!check]- Answer
 > - Because `InputField` is defined *inside* `FormApp`, a new `InputField` function reference is created on every render. When the state changes, React compares the old `<InputField />` to the new `<InputField />`. Because the function references differ, React treats them as different types, unmounting the old input (destroying focus) and mounting a new one from scratch.
 > - *Fix:* Move the `InputField` component definition outside the `FormApp` parent component, passing `value` and `setValue` as props.
-
+> 
 ---
 
 ### Exercise 2: Reconciliation Diffing Rules
@@ -206,7 +206,7 @@ function FormApp() {
 > ```
 >
 > **Explanation:** The diffing algorithm optimizes DOM mutations by comparing node types and keys.
-
+> 
 ---
 
 ### Exercise 3: Resetting State via Key Prop Mutation
@@ -220,7 +220,7 @@ function FormApp() {
 > ```
 >
 > **Explanation:** Changing a component's `key` forces React reconciliation to discard the old instance and mount a fresh component state.
-
+> 
 ## 7. Related Terms
 - [The Fiber Architecture](fiber_architecture.md) — The engine executing the reconciliation queue.
 - [Re-rendering](../level_02/re_rendering.md) — The process that generates the Virtual DOM tree for diffing.

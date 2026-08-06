@@ -200,7 +200,7 @@ fn get_dangling<'a>() -> &'a str {
 > 1. In `get_or_create`, checking `contains_key` or `get_mut` creates a temporary borrow.
 > 2. Under NLL, when `if` condition evaluation finishes or returns, the initial borrow ends immediately.
 > 3. Subsequent `insert` operations proceed safely without borrow checker conflict.
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy String Buffer Replacer & In-Place Sanitizer
@@ -247,7 +247,7 @@ fn get_dangling<'a>() -> &'a str {
 > 1. `buffer.chars()` creates an immutable borrow of `buffer`.
 > 2. Under NLL, the borrow ends immediately after `.any(...)` returns its boolean result.
 > 3. `buffer.clear()` and `buffer.push_str()` acquire exclusive mutable access to `buffer` without compiler error.
-
+> 
 ---
 
 ### Exercise 3: Zero-Copy Token Stream Scanner with Fallback Mutation
@@ -299,7 +299,7 @@ fn get_dangling<'a>() -> &'a str {
 > 1. `input.find(...)` borrows from `input`.
 > 2. NLL ends the inspection borrow before `*input = &input[end..]` executes.
 > 3. Tightly updates slice cursor while returning borrowed tokens tied to `'a`.
-
+> 
 ---
 
 ## 6. Related Terms

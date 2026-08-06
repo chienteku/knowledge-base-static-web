@@ -175,7 +175,7 @@ console.log("Token value:", data[securityKey]); // "secured_token"
 
 > [!check]- Answer
 > - Declare `const securityKey = Symbol("token")` and assign `data[securityKey] = "secured_token"`.
-
+> 
 ---
 
 ### Exercise 2: Creating Unique Object Hidden Keys with Symbols
@@ -197,7 +197,7 @@ console.log("Token value:", data[securityKey]); // "secured_token"
 > ```
 >
 > **Explanation:** Every `Symbol()` call creates a unique, guaranteed non-colliding primitive value.
-
+> 
 ---
 
 ### Exercise 3: Global Symbol Registry with `Symbol.for()`
@@ -216,7 +216,7 @@ console.log("Token value:", data[securityKey]); // "secured_token"
 > ```
 >
 > **Explanation:** `Symbol.for(key)` looks up or creates shared symbols in the cross-realm runtime global symbol registry.
-
+> 
 ---
 
 ### Exercise 4: Well-Known Symbol Customization (`Symbol.toPrimitive`)
@@ -236,7 +236,7 @@ console.log("Token value:", data[securityKey]); // "secured_token"
 > ```
 >
 > **Explanation:** Well-known Symbols like `Symbol.toPrimitive` hook into core JavaScript engine conversion routines.
-
+> 
 ---
 
 ### Exercise 5: Global Symbol Registry Lookup
@@ -254,7 +254,7 @@ console.log("Token value:", data[securityKey]); // "secured_token"
 > ```
 >
 > **Explanation:** `Symbol.keyFor(sym)` returns the registered key string for symbols in the global registry.
-
+> 
 ---
 
 ## 7. Related Terms

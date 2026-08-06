@@ -135,24 +135,24 @@ Create a numeric enum `Direction` and a string enum `LogLevel`.
 >   Left,  // 2
 >   Right  // 3
 > }
-
-// String Enum:
-enum LogLevel {
-  Info = "INFO",
-  Warn = "WARN",
-  Error = "ERROR"
-}
-
-console.log(Direction.Up);   // 0
-console.log(LogLevel.Info);  // "INFO"
-```
-
+> 
+> // String Enum:
+> enum LogLevel {
+>   Info = "INFO",
+>   Warn = "WARN",
+>   Error = "ERROR"
+> }
+> 
+> console.log(Direction.Up);   // 0
+> console.log(LogLevel.Info);  // "INFO"
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Numeric enums automatically assign auto-incrementing integer values starting from 0.
 > 2. String enums require explicit string value initializers for each member.
 > 3. String enums produce readable values in debugging output and log files.
-
+> 
 ---
 
 ### Exercise 2: Inlining Enums with `const enum`
@@ -173,21 +173,21 @@ Optimize transpiled JavaScript bundle size using `const enum`.
 >   Active = 1,
 >   Inactive = 0
 > }
-
-const currentStatus = Status.Active;
-```
-
+> 
+> const currentStatus = Status.Active;
+> ```
+> 
 > ```javascript
 > // Transpiled Output (JS):
 > const currentStatus = 1; // Inlined completely! No enum object generated!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `const enum` instructs `tsc` to inline enum member values directly at call sites during compilation.
 > 2. Does NOT generate a runtime JavaScript object, saving memory and bundle size.
 > 3. Cannot be used when reverse mapping or dynamic enum iteration is required.
-
+> 
 ---
 
 ### Exercise 3: Auditing Numeric Enum Reverse Mapping Security
@@ -211,22 +211,14 @@ Explain why numeric enums generate bi-directional reverse mappings in JavaScript
 > 
 > Direction[0]; // Returns "Up" (Reverse Mapping)
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Numeric enums create bi-directional mappings (`Enum[0]` returns `"Up"` and `Enum["Up"]` returns `0`).
 > 2. Reverse mapping allows converting numeric status codes back into human-readable member names at runtime.
 > 3. String enums do NOT generate reverse mappings.
-
+> 
 ---
-
-
-
-
-
----
-
-
 
 ## 6. Related Terms
 - [Literal Types](../level_05/literal_types.md) — The modern replacement for Enums.

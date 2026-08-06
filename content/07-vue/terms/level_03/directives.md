@@ -115,7 +115,7 @@ const attributeName = ref('href'); // Dynamic attribute name
 > (Vue will evaluate the directives using JavaScript, and pass the standard HTML attributes straight to the browser untouched).
 > ```
 > - Look for the `v-` prefix!
-
+> 
 ---
 
 ### Exercise 2: Built-in Directive Mapping
@@ -143,7 +143,7 @@ const attributeName = ref('href'); // Dynamic attribute name
 > <span v-text="msg"></span>
 > <div v-cloak>{{ msg }}</div>
 > ```
-
+> 
 ---
 
 ### Exercise 3: v-once Directive Benefit
@@ -160,8 +160,8 @@ const attributeName = ref('href'); // Dynamic attribute name
 > ```html
 > <div v-once>Static Header: {{ title }}</div>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

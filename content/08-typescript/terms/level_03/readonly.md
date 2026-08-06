@@ -125,23 +125,23 @@ Define a `Configuration` interface where `apiKey` and `environment` properties c
 >   readonly environment: string;
 >   port: number;
 > }
-
-const config: Configuration = {
-  apiKey: "secret_123",
-  environment: "production",
-  port: 8080
-};
-
-config.port = 9090; // Valid!
-// config.apiKey = "new_key"; // ❌ Compile Error: Cannot assign to 'apiKey' because it is a read-only property.
-```
-
+> 
+> const config: Configuration = {
+>   apiKey: "secret_123",
+>   environment: "production",
+>   port: 8080
+> };
+> 
+> config.port = 9090; // Valid!
+> // config.apiKey = "new_key"; // ❌ Compile Error: Cannot assign to 'apiKey' because it is a read-only property.
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `readonly` prevents property re-assignment after initial object creation.
 > 2. Enforces immutability at compile time.
 > 3. Protects sensitive settings from unintended mutation.
-
+> 
 ---
 
 ### Exercise 2: Creating Immutable Arrays with `ReadonlyArray<T>`
@@ -164,13 +164,13 @@ Pass an array into a function guaranteeing that the function will not mutate the
 >   return numbers.reduce((acc, curr) => acc + curr, 0);
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `readonly T[]` strips array mutation methods (`push`, `pop`, `splice`, `sort`).
 > 2. Guarantees pure, side-effect-free function execution.
 > 3. Standard functional programming pattern in TypeScript.
-
+> 
 ---
 
 ### Exercise 3: Auditing `readonly` Compile-Time Shallow Protection
@@ -191,19 +191,19 @@ Explain why `readonly` provides SHALLOW immutability rather than deep immutabili
 >     name: string;
 >   };
 > }
-
-const state: State = { user: { name: "Alice" } };
-
-// state.user = { name: "Bob" }; // ❌ Compile Error: 'user' is readonly!
-state.user.name = "Bob";        // ⚠️ SUCCEEDS! Readonly is SHALLOW!
-```
-
+> 
+> const state: State = { user: { name: "Alice" } };
+> 
+> // state.user = { name: "Bob" }; // ❌ Compile Error: 'user' is readonly!
+> state.user.name = "Bob";        // ⚠️ SUCCEEDS! Readonly is SHALLOW!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `readonly` modifier applies ONLY to the immediate property reference.
 > 2. Nested objects (`state.user.name`) remain mutable unless nested properties are also marked `readonly`.
 > 3. Use `Readonly<T>` utility type or `as const` for deep immutability needs.
-
+> 
 ---
 
 

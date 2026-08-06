@@ -117,7 +117,7 @@ The `<title>` is the title printed on the spine of the book. When the book is si
 > Because search engines (like Google) use the text inside the `<title>` element as the primary clickable headline in their search results. If your title is missing or poorly written, users are unlikely to click on your website.
 > ```
 > - Think about what you click on when you search for something on Google.
-
+> 
 ---
 
 
@@ -138,7 +138,7 @@ The `<title>` is the title printed on the spine of the book. When the book is si
 > ```
 >
 > **Explanation:** `<title>` provides primary identity context for search crawlers and browser tabs.
-
+> 
 ---
 
 ### Exercise 3: Optimal Title Length
@@ -155,7 +155,7 @@ The `<title>` is the title printed on the spine of the book. When the book is si
 > ```
 >
 > **Explanation:** Keeping titles under 60 characters prevents text clipping on search engine result pages.
-
+> 
 ## 7. Related Terms
 - [`<head>`](../level_01/head.md) — The container that holds the `<title>` tag.
 - [`<meta>`](../level_08/meta.md) — The tag used for other types of invisible head data.

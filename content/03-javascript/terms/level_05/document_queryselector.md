@@ -158,7 +158,7 @@ async function processData() {
 > document.querySelector(".highlight");
 > ```
 > - Pass the exact CSS selector as a string inside the parentheses.
-
+> 
 ---
 
 ### Exercise 2: Selecting Elements by Attribute CSS Selectors
@@ -175,7 +175,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `querySelector` accepts full CSS3 selector queries.
-
+> 
 ---
 
 ### Exercise 3: Handling Null Query Selector Matches
@@ -193,8 +193,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `querySelector` returns `null` if no matching element exists in DOM trees.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

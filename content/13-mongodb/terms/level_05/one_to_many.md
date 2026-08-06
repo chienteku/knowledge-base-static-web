@@ -178,7 +178,7 @@ Model a customer document containing an array of up to 3 `shippingAddresses`.
 > 1. Low-cardinality 1-to-many relationships (<10 items) should be embedded directly as subdocument arrays.
 > 2. Fetches customer and all addresses in a single atomic $O(1)$ read.
 > 3. Eliminates foreign key join tables.
-
+> 
 ---
 
 ### Exercise 2: Referenced 1-to-Many for High-Cardinality Relationships
@@ -209,7 +209,7 @@ Model a user account that generates thousands of `activity_logs` using foreign k
 > 1. High-cardinality 1-to-many relationships (thousands of child items) MUST be stored in a separate collection.
 > 2. Prevents breaching the 16MB BSON document size limit.
 > 3. Compound index `{ userId: 1, timestamp: -1 }` enables fast paginated history queries.
-
+> 
 ---
 
 ### Exercise 3: Parent-Referenced 1-to-Many Arrays
@@ -239,7 +239,7 @@ Model a product catalog where a `category` document stores an array of child `pr
 > 1. Storing an array of references on the parent document is suitable for bounded 1-to-many counts (10 to 500 items).
 > 2. Allows quick retrieval of child product IDs without scanning the products collection.
 > 3. Simple relationship navigation.
-
+> 
 ---
 
 

@@ -204,7 +204,7 @@ try {
 > Type Mistake
 > ```
 > - Use the `instanceof` operator: `if (error instanceof TypeError)`.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Built-in Error Types
@@ -225,7 +225,7 @@ try {
 > ```
 >
 > **Explanation:** `TypeError` is thrown when an operation is performed on an incompatible value type.
-
+> 
 ---
 
 ### Exercise 3: Custom Error Cause Chaining
@@ -250,8 +250,8 @@ try {
 > ```
 >
 > **Explanation:** `{ cause: err }` chains low-level errors into high-level context errors.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

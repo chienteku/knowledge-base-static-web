@@ -334,7 +334,7 @@ Implement a `#![no_std]` fixed-capacity Bump Arena Allocator (`BumpArena<const N
 > 1. **Alignment Calculation (`(addr + align - 1) & !(align - 1)`):** Memory allocations must start at an address divisible by `layout.align()`. Bitwise ANDing with the bit-inverted mask `!(align - 1)` rounds up the address to the next aligned multiple.
 > 2. **Atomic Bump Pointer (`compare_exchange_weak`):** By updating `self.offset` atomically, multiple tasks can allocate from the arena without coarse OS mutex locks.
 > 3. **$O(1)$ Deallocation via `reset()`:** Individual allocations do not have destructor calls in bump arenas; setting `offset = 0` reclaims all memory instantaneously.
-
+> 
 ---
 
 ### Exercise 2: High-Performance Fixed-Size Block Pool Allocator (Free-List)
@@ -467,7 +467,7 @@ Implement a fixed-size block pool allocator (`FixedBlockPool<const BLOCK_SIZE: u
 > 1. **Zero Heap Fragmentation:** All allocations take place inside a pre-allocated array (`storage`). No operating system `malloc` calls occur during steady-state processing.
 > 2. **Deterministic $O(1)$ Performance:** Pushing/popping from `free_stack` takes fixed CPU instruction cycles, eliminating unpredictable latency spikes.
 > 3. **Intrusive/Stack Index Management:** Storing block indices in `free_stack` avoids allocating dynamic tracking overhead while guaranteeing memory safety checks during deallocation.
-
+> 
 ---
 
 ### Exercise 3: Hard-Limited Global Tracking Allocator with Metrics Auditing
@@ -601,7 +601,7 @@ Implement a custom `GlobalAlloc` wrapper struct (`BudgetedAllocator`) that:
 > 1. **`GlobalAlloc` Trait Contracts:** `alloc()` and `dealloc()` receive the exact `Layout` (size and alignment) requested. Returning `null_mut()` cleanly notifies heap consumers of allocation failure without panicking.
 > 2. **Avoiding Heap Recursion:** Custom allocators must NEVER invoke heap allocation primitives (such as `println!`, `Vec`, or `format!`) inside `alloc()` or `dealloc()`, as this triggers recursive infinite loops resulting in stack overflow crashes.
 > 3. **Atomic CAS Loop (`compare_exchange_weak`):** Updating `PEAK_BYTES` using Compare-And-Swap ensures accurate high-water mark metrics across multiple concurrent threads without raw lock contention.
-
+> 
 ---
 
 ## 6. Related Terms

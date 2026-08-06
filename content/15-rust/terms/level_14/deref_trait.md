@@ -190,7 +190,7 @@ Return reference to underlying field: fn deref(&self) -> &Inner { &self.inner }
 >
 > 1. Implementing `Deref` and `DerefMut` exposes all `Vec<T>` methods transparently on `TrackedBox<T>`.
 > 2. Overloads `*boxed` operator.
-
+> 
 ---
 
 ### Exercise 2: Lazy Initialization Singleton Guard with `Deref`
@@ -251,7 +251,7 @@ Return reference to underlying field: fn deref(&self) -> &Inner { &self.inner }
 > #### Technical Explanation
 >
 > 1. `ConfigGuard` transparently forwards field accesses to inner `LazyConfig`.
-
+> 
 ---
 
 ### Exercise 3: String Alias Wrapper Smart Pointer
@@ -303,7 +303,7 @@ Return reference to underlying field: fn deref(&self) -> &Inner { &self.inner }
 > #### Technical Explanation
 >
 > 1. Newtype smart pointer validating invariants on construction while exposing `str` methods via `Deref`.
-
+> 
 ---
 
 ## 5. Related Terms

@@ -252,7 +252,7 @@ How many spaces will actually appear between Word1 and Word2 when viewed in the 
 > Exactly ONE space. HTML automatically collapses multiple spaces (and line breaks) into a single space.
 > ```
 > - Think about how HTML handles raw formatting vs tagged formatting.
-
+> 
 ---
 
 ### Exercise 2: Paragraph Element Rules
@@ -270,7 +270,7 @@ How many spaces will actually appear between Word1 and Word2 when viewed in the 
 > ```
 >
 > **Explanation:** Paragraphs can contain inline phrasing content (`<span>`, `<strong>`, `<a>`), but cannot contain block containers (`<div>`, `<h2>`).
-
+> 
 ---
 
 ### Exercise 3: Default Paragraph CSS Margins
@@ -284,7 +284,7 @@ How many spaces will actually appear between Word1 and Word2 when viewed in the 
 > ```
 >
 > **Explanation:** User-agent stylesheets apply `1em` top and bottom block margins to paragraphs.
-
+> 
 ## 7. Related Terms
 - [Headings (`<h1>` to `<h6>`)](headings.md) — The titles that usually precede a `<p>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing paragraphs.

@@ -163,7 +163,7 @@ Initialize a new 3-node replica set named `rs0` connecting `node1`, `node2`, and
 > 1. `rs.initiate()` bootstraps replica set configuration across target node addresses.
 > 2. Nodes conduct an initial election to establish the primary node.
 > 3. Establishes high availability database infrastructure.
-
+> 
 ---
 
 ### Exercise 2: Checking Replication Health with `rs.printReplicationInfo()`
@@ -187,7 +187,7 @@ Check replication lag and oplog status across all secondary members using `rs.pr
 > 1. `rs.printSlaveReplicationInfo()` calculates replication lag in seconds for each secondary node.
 > 2. Identifies slow or lagging secondary members.
 > 3. Essential command for monitoring cluster health.
-
+> 
 ---
 
 ### Exercise 3: Adding New Secondary Nodes with `rs.add()`
@@ -211,7 +211,7 @@ Add a 4th secondary node `node4.example.com` to an existing replica set cluster.
 > 1. `rs.add()` dynamically adds a new node member to the running replica set.
 > 2. The new node performs an Initial Sync to copy all collection data and catch up on the oplog.
 > 3. Expands read scaling and data redundancy capacity.
-
+> 
 ---
 
 

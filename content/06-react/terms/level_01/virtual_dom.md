@@ -134,7 +134,7 @@ If React compares these two trees, how many changes will it make to the real Bro
 > Exactly one change. It will target the `<p>` tag and update its internal text node from "Loading" to "Done". It will not touch the `<div>` or the `<h1>`.
 > ```
 > - What is the only piece of text that actually changed?
-
+> 
 ---
 
 ### Exercise 2: Virtual DOM Representation of JSX
@@ -154,7 +154,7 @@ If React compares these two trees, how many changes will it make to the real Bro
 > ```
 >
 > **Explanation:** Virtual DOM nodes are lightweight JavaScript objects representing DOM element trees.
-
+> 
 ---
 
 ### Exercise 3: Virtual DOM Render Pipeline Sequence
@@ -168,7 +168,7 @@ If React compares these two trees, how many changes will it make to the real Bro
 > ```
 >
 > **Explanation:** Diffing Virtual DOM trees minimizes expensive real browser DOM write operations.
-
+> 
 ## 7. Related Terms
 - [Reconciliation](reconciliation.md) — The diffing process comparing Virtual DOM states.
 - [The Fiber Architecture](fiber_architecture.md) — The engine driving the rendering cycles.

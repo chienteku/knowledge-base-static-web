@@ -147,34 +147,34 @@ Execute an imperative POST request using `$fetch()` inside an event handler meth
 > ```vue
 > <script setup lang="ts">
 > const isSubmitting = ref(false);
-
-async function submitOrder() {
-  isSubmitting.value = true;
-  try {
-    const response = await $fetch("/api/orders", {
-      method: "POST",
-      body: { productId: 42, quantity: 2 }
-    });
-    alert(`Order created! ID: ${response.id}`);
-  } catch (err: any) {
-    alert(`Order failed: ${err.message}`);
-  } finally {
-    isSubmitting.value = false;
-  }
-}
-</script>
-
-<template>
-  <button @click="submitOrder" :disabled="isSubmitting">Submit Order</button>
-</template>
-```
-
+> 
+> async function submitOrder() {
+>   isSubmitting.value = true;
+>   try {
+>     const response = await $fetch("/api/orders", {
+>       method: "POST",
+>       body: { productId: 42, quantity: 2 }
+>     });
+>     alert(`Order created! ID: ${response.id}`);
+>   } catch (err: any) {
+>     alert(`Order failed: ${err.message}`);
+>   } finally {
+>     isSubmitting.value = false;
+>   }
+> }
+> </script>
+> 
+> <template>
+>   <button @click="submitOrder" :disabled="isSubmitting">Submit Order</button>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `$fetch` is a low-level HTTP client designed for user-driven event handlers (button clicks, form submits).
 > 2. Automatically parses JSON response bodies and handles HTTP status codes.
 > 3. Does NOT generate SSR payload cache entries like `useFetch()`.
-
+> 
 ---
 
 ### Exercise 2: Understanding SSR Internal Direct Calls with `$fetch`
@@ -194,20 +194,20 @@ Explain why calling `$fetch("/api/status")` during SSR on the server executes a 
 > // Executed on server: Nitro invokes /api/status handler directly in Node.js memory!
 > const status = await $fetch("/api/status");
 > </script>
-
-<template>
-  <div>
-    <p>Internal Server Status: {{ status }}</p>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <p>Internal Server Status: {{ status }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. On the server during SSR, `$fetch` intercepts calls to local `/api/` endpoints and invokes Nitro H3 event handlers directly in RAM.
 > 2. Eliminates loopback TCP network latency and socket overhead.
 > 3. Fast internal server execution architecture.
-
+> 
 ---
 
 ### Exercise 3: Handling Custom HTTP Headers and Interceptors
@@ -224,29 +224,25 @@ Add a Bearer token Authorization header to a `$fetch` request using `onRequest` 
 >
 > ```typescript
 > const token = useCookie("auth_token");
-
-const response = await $fetch("/api/user/profile", {
-  headers: {
-    Authorization: `Bearer ${token.value}`
-  },
-  onRequestError({ error }) {
-    console.error("Network request failed:", error);
-  }
-});
-```
-
+> 
+> const response = await $fetch("/api/user/profile", {
+>   headers: {
+>     Authorization: `Bearer ${token.value}`
+>   },
+>   onRequestError({ error }) {
+>     console.error("Network request failed:", error);
+>   }
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `$fetch` accepts standard Fetch API options (`headers`, `query`, `method`, `body`).
 > 2. `onRequestError` and `onResponseError` lifecycle interceptors handle custom network error processing.
 > 3. Extensible HTTP request client.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useFetch`](use_fetch.md) — The SSR-safe wrapper around `$fetch`.

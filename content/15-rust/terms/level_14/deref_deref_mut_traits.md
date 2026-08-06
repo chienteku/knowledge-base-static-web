@@ -280,7 +280,7 @@ impl<T> MySmartVec<T> {
 > 1. **Multi-Tier Deref Coercion**: When passing `&frame` (`&TelemetryFrame`) to `verify_packet_prefix(&[u8])`, Rust dereferences `TelemetryFrame` to `Vec<u8>`, and then recursively applies `Vec<u8>`'s `Deref` implementation to yield `&[u8]`. This zero-cost conversion occurs at compile time without heap allocations or runtime overhead.
 > 2. **Transparent Method Delegation**: Method calls like `frame.len()` and `frame.split_at(2)` trigger Rust's method resolution logic: if the outer type (`TelemetryFrame`) does not define the method, Rust dereferences to `Vec<u8>` and subsequently to `[u8]` slice methods.
 > 3. **In-Place Mutation with `DerefMut`**: Implementing `DerefMut` enables mutable indexing (`frame[0] = 0xFF`) and calling mutating collection methods (`frame.push(0x33)`). Note that `DerefMut` requires `Deref` as a supertrait (`pub trait DerefMut: Deref`).
-
+> 
 ---
 
 ### Exercise 2: Implementing an Audited Access RAII Guard
@@ -399,7 +399,7 @@ impl<T> MySmartVec<T> {
 > 2. **Interior Mutability in `Deref`**: The `deref(&self)` signature takes an immutable shared reference `&self`. To increment `tracker.reads` without requiring `&mut self`, `AuditTracker` utilizes `std::cell::Cell<usize>`, allowing interior mutability through shared references.
 > 3. **Implicit Operator Hooking**: Field accesses (`guard.baud_rate`) and method calls automatically invoke `deref()` or `deref_mut()` under the hood, seamlessly instrumenting field reads and writes without altering user-facing access syntax.
 > 4. **Lifetime Safety**: Tying the lifetime `'a` of `data` and `tracker` inside `AuditedGuard<'a, T>` ensures statically that the guard cannot outlive the underlying resource or tracker.
-
+> 
 ---
 
 ### Exercise 3: Protecting Domain Invariants with Read-Only Deref Coercion
@@ -482,7 +482,7 @@ impl<T> MySmartVec<T> {
 > 1. **Newtype Pattern with Read-Only Deref**: Wrapping `String` in `ValidatedHostname(String)` encapsulates the inner field. Implementing `Deref<Target = str>` allows callers to read data using standard slice functions without needing redundant getters like `pub fn as_str(&self) -> &str`.
 > 2. **Invariant Safety via Omission**: If `DerefMut` were implemented targeting `String` or `str`, caller code could execute `host.push_str(" invalid space!")` or `host.clear()`, violating the structural validation invariants established during `parse()`. Omitting `DerefMut` statically guarantees immutability through dereferencing.
 > 3. **Coercion Target Selection**: `ValidatedHostname` targets `str` (`type Target = str;`) rather than `String`. Dereferencing to `str` is idiomatic in Rust because `&str` provides all read-only string algorithms (`.len()`, `.find()`, `.to_uppercase()`, slicing) without exposing allocation methods (`.reserve()`, `.shrink_to_fit()`).
-
+> 
 ---
 
 ## 6. Related Terms

@@ -120,7 +120,7 @@ try {
 > If you use `writeFile`, it will instantly erase all previous logs in the file and replace it with just the newest login event. `appendFile` preserves the existing file and safely adds the new data to the bottom.
 > ```
 > - Which one overwrites? Which one adds?
-
+> 
 ---
 
 
@@ -139,7 +139,7 @@ try {
 > ```
 >
 > **Explanation:** `appendFile` appends data to a file, creating the file if it does not exist.
-
+> 
 ---
 
 ### Exercise 3: Checking File Stats
@@ -157,7 +157,7 @@ try {
 > ```
 >
 > **Explanation:** `fs.promises.stat` returns metadata objects containing `size`, `mtime`, `isFile()`, etc.
-
+> 
 ## 7. Related Terms
 - [Buffers](../level_06/buffers.md) — What the `fs` module returns if you forget to specify `utf8`.
 - [Streams (General Concept)](../level_06/streams.md) — If a file is 10 Gigabytes, `fs.readFile` will crash your RAM. You must use `fs.createReadStream` instead.

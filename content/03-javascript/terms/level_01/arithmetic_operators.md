@@ -175,7 +175,7 @@ if (isEven) {
 > ```
 > - The remainder (modulus) operator is `%`.
 > - If a number is perfectly divisible by 2, its remainder is `0`.
-
+> 
 ---
 
 ### Exercise 2: Predicting Arithmetic Coercion Results
@@ -198,7 +198,7 @@ if (isEven) {
 > ```
 >
 > **Explanation:** The `+` operator prefers string concatenation if any operand is a string, whereas `-`, `*`, and `/` always coerce operands to numbers.
-
+> 
 ---
 
 ### Exercise 3: Remainder Operator Sign Behavior
@@ -217,7 +217,7 @@ if (isEven) {
 > ```
 >
 > **Explanation:** In JavaScript, the sign of the `%` remainder result always matches the sign of the left-hand dividend operand.
-
+> 
 ---
 
 ## 7. Related Terms

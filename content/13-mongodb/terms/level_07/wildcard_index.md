@@ -174,7 +174,7 @@ Create a wildcard index on embedded subdocument `userAttributes.$**` in collecti
 > 1. Wildcard indexes (`$**`) automatically index all dynamic scalar fields inside embedded subdocuments.
 > 2. Eliminates creating hundreds of individual secondary indexes for arbitrary key-value properties.
 > 3. Accelerates queries on unpredictable user-defined attributes.
-
+> 
 ---
 
 ### Exercise 2: Querying Wildcard Indexed Subfields
@@ -200,7 +200,7 @@ Query collection `users` filtering by dynamic path `userAttributes.customColor: 
 > 1. Queries targeting any subfield inside `userAttributes` utilize the `$**` wildcard index (`IXSCAN`).
 > 2. Evaluates equality and range queries on dynamic keys.
 > 3. Flexible schema indexing solution.
-
+> 
 ---
 
 ### Exercise 3: Restricting Wildcard Index Scope with `wildcardProjection`
@@ -232,7 +232,7 @@ Create a collection-wide wildcard index excluding sensitive fields `internalNote
 > 1. `wildcardProjection` specifies field inclusion or exclusion rules for collection-wide wildcard indexes.
 > 2. Prevents indexing unneeded or large fields, conserving RAM cache.
 > 3. Bounds wildcard index memory growth.
-
+> 
 ---
 
 

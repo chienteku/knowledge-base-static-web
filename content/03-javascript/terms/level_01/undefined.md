@@ -143,7 +143,7 @@ async function processData() {
 > The variable is undefined.
 > ```
 > - Use strict equality `===` to check against the keyword `undefined`.
-
+> 
 ---
 
 ### Exercise 2: Void Operator for Safe Undefined
@@ -160,7 +160,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `void expression` evaluates the expression and returns pure `undefined` under all runtime environments.
-
+> 
 ---
 
 ### Exercise 3: Default Parameter Activation
@@ -182,8 +182,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Default function parameters trigger only when arguments are omitted or passed as `undefined` (not `null`).
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

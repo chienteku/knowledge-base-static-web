@@ -158,7 +158,7 @@ async function processData() {
 > ```
 > - An operand is the target of the operator's action.
 > - The result of `a * b` becomes a single value, which then acts as an operand for `+`.
-
+> 
 ---
 
 ### Exercise 2: Ternary Operator Expression Evaluation
@@ -182,7 +182,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** The ternary operator `cond ? expr1 : expr2` evaluates and yields values as an inline expression.
-
+> 
 ---
 
 ### Exercise 3: In Operator Property Existence
@@ -200,8 +200,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Property checks using `"prop" in obj` return `true` if property keys exist on objects or prototype chains regardless of value.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

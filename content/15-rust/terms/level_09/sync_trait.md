@@ -270,7 +270,7 @@ Implement a thread-safe telemetry collector `MetricsCollector` that uses atomic 
 > 1. **Auto-Trait Mechanics:** `MetricsCollector` contains `AtomicU64` and `AtomicBool`. Since all composite fields implement `Sync`, the compiler automatically derives `Sync` for `MetricsCollector`.
 > 2. **Shared Mutation (`&self`):** Atomic types provide lock-free interior mutability using CPU hardware atomic instructions (`fetch_add`, `store`, `load`). Because mutation occurs through immutable references `&self`, sharing `&MetricsCollector` across worker threads is completely thread-safe.
 > 3. **Validation:** `assert_sync::<MetricsCollector>()` statically verifies the trait bound `T: Sync`.
-
+> 
 ---
 
 ### Exercise 2: Concurrent Sharded In-Memory Cache with `RwLock` and `Sync` Bounds
@@ -371,7 +371,7 @@ Implement a generic `ShardedCache<K, V, SHARDS>` struct that allows multiple con
 > 1. **Trait Derivation Requirements:** `RwLock<T>` is `Sync` if and only if `T: Send + Sync`. Because `HashMap<K, V>` stores `K` and `V`, `ShardedCache<K, V>` automatically inherits `Sync` whenever `K: Send + Sync` and `V: Send + Sync`.
 > 2. **Concurrent Reading:** Multiple threads hold immutable references `&ShardedCache` simultaneously. Inside `get()`, acquire `RwLock::read()` allows parallel concurrent read access across threads without exclusive locking.
 > 3. **Reduced Contention:** Partitioning data into `SHARDS` minimizes thread locking bottlenecks under high reader/writer concurrency.
-
+> 
 ---
 
 ### Exercise 3: Manual `Sync` Implementation for an UnsafeCell Sequence Buffer

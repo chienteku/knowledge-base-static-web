@@ -169,7 +169,7 @@ Scope borrows tightly or use .try_borrow() / .try_borrow_mut()!
 >
 > 1. `Arc` provides thread-safe atomic reference counting.
 > 2. `Arc::clone` increments reference counter zero-copy.
-
+> 
 ---
 
 ### Exercise 2: Recursive Data Structure Using `Box<T>`
@@ -217,7 +217,7 @@ Scope borrows tightly or use .try_borrow() / .try_borrow_mut()!
 > #### Technical Explanation
 >
 > 1. `Box<T>` allocates recursive struct fields on the heap to break infinite size compilation recursion.
-
+> 
 ---
 
 ### Exercise 3: Interior Mutability Logger Using `RefCell`
@@ -271,7 +271,7 @@ Scope borrows tightly or use .try_borrow() / .try_borrow_mut()!
 > #### Technical Explanation
 >
 > 1. `RefCell` enables interior mutability (mutating inner data through shared `&self` reference).
-
+> 
 ---
 
 ## 5. Related Terms

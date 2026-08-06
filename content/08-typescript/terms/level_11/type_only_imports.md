@@ -156,22 +156,22 @@ Import interface `User` and class `UserService` using explicit type-only import 
 > ```typescript
 > // Importing type interface only (Erased completely in JS output):
 > import type { User } from "./types.js";
-
-// Importing runtime value class:
-import { UserService } from "./services.js";
-
-function handleUser(user: User) {
-  const service = new UserService();
-  return service.process(user);
-}
-```
-
+> 
+> // Importing runtime value class:
+> import { UserService } from "./services.js";
+> 
+> function handleUser(user: User) {
+>   const service = new UserService();
+>   return service.process(user);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `import type { T }` guarantees that the import statement is used ONLY for type checking.
 > 2. Stripped 100% from transpiled JavaScript output files.
 > 3. Prevents importing unused JavaScript module files at runtime.
-
+> 
 ---
 
 ### Exercise 2: Inline Type-Only Imports
@@ -188,16 +188,16 @@ Combine value imports and type imports in a single import statement using inline
 >
 > ```typescript
 > import { createUser, type User, type Role } from "./userModule.js";
-
-const newUser: User = createUser("Alice", "admin");
-```
-
+> 
+> const newUser: User = createUser("Alice", "admin");
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Inline type-only imports (`import { value, type Type }`) allow mixing runtime value imports and compile-time type imports in a single statement.
 > 2. `tsc` and bundlers strip only the specifiers marked with `type`.
 > 3. Clean syntax introduced in TypeScript 4.5.
-
+> 
 ---
 
 ### Exercise 3: Enforcing Type-Only Imports with `verbatimModuleSyntax`
@@ -219,18 +219,15 @@ Configure `"verbatimModuleSyntax": true` in `tsconfig.json` to enforce strict ex
 >   }
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `"verbatimModuleSyntax": true` forces developers to explicitly prefix all non-value type imports with `type`.
 > 2. Eliminates bundler ambiguity regarding whether an import is a runtime dependency or a compile-time type.
 > 3. Mandatory compiler flag when using modern isolated transpilers (Vite, SWC, Babel, ESBuild).
-
+> 
 ---
 
-
-
----
 
 
 

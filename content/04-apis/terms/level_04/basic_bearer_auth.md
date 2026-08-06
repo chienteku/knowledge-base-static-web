@@ -111,7 +111,7 @@ Authorization: Bearer eyJhbGciOi... ; Standard OAuth2 Bearer token header
 > You are sending the raw username and password. Once the server verifies it, it will return a Token, which you will then use for *Bearer* Authentication on all future requests!
 > ```
 > - Are you sending a raw password, or a generated token?
-
+> 
 ---
 
 ### Exercise 2: Basic Auth String Encoding

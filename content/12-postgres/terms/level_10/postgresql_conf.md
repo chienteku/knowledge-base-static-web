@@ -172,7 +172,7 @@ Configure `shared_buffers = 4GB` and `work_mem = 64MB` in `postgresql.conf` for 
 > 1. `shared_buffers` allocates dedicated RAM for caching 8KB table and index pages inside PostgreSQL.
 > 2. `work_mem` allocates RAM per sort/hash operation within a query; setting it too high causes out-of-memory (OOM) crashes under high concurrency.
 > 3. Core PostgreSQL memory tuning standard.
-
+> 
 ---
 
 ### Exercise 2: Tuning Checkpoints for High Write Performance
@@ -199,7 +199,7 @@ Tune `max_wal_size = 16GB` and `checkpoint_completion_target = 0.9` to eliminate
 > 1. `max_wal_size` expands WAL capacity before forcing a dirty page checkpoint flush.
 > 2. `checkpoint_completion_target = 0.9` spreads dirty page disk writes evenly over 90% of the checkpoint interval.
 > 3. Prevents severe disk I/O latency spikes during heavy write workloads.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Active Configuration Parameters with `SHOW`
@@ -227,7 +227,7 @@ Query active server configuration parameters using `SHOW` and `pg_settings`.
 > 1. `SHOW param_name` displays the active runtime value of a configuration setting.
 > 2. `pg_settings` exposes parameter metadata, units, and reload contexts (`sighup`, `postmaster`).
 > 3. Runtime configuration inspection.
-
+> 
 ---
 
 

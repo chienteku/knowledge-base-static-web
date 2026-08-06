@@ -153,7 +153,7 @@ console.log("C");
 > ```
 > - Synchronous always wins.
 > - Promises (Microtasks) have VIP priority over `setTimeout` (Macrotasks).
-
+> 
 ---
 
 ### Exercise 2: Event Loop Microtask vs Macrotask Execution Order
@@ -176,7 +176,7 @@ console.log("C");
 > ```
 >
 > **Explanation:** Microtasks (`Promise.then`) execute immediately after current synchronous script execution before macrotasks (`setTimeout`).
-
+> 
 ---
 
 ### Exercise 3: QueueMicrotask API
@@ -193,8 +193,8 @@ console.log("C");
 > ```
 >
 > **Explanation:** `queueMicrotask()` schedules callbacks on the microtask queue explicitly.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -174,7 +174,7 @@ Group orders by `status` and calculate total order count and revenue per status.
 > 1. `GROUP BY status` collapses all rows sharing the same status value into a single summary row.
 > 2. Aggregate functions (`COUNT`, `SUM`) calculate metrics for each distinct group.
 > 3. Un-aggregated columns in `SELECT` MUST appear in the `GROUP BY` clause.
-
+> 
 ---
 
 ### Exercise 2: Multi-Column Hierarchical Grouping
@@ -206,7 +206,7 @@ Group sales by `year` and `category` to calculate yearly sales metrics per produ
 > 1. Multi-column `GROUP BY` creates aggregate groups for each unique COMBINATION of column values.
 > 2. Produces multi-dimensional analytics reports.
 > 3. Sorts groups using `ORDER BY`.
-
+> 
 ---
 
 ### Exercise 3: Resolving SQL `must appear in the GROUP BY clause` Errors
@@ -237,7 +237,7 @@ Fix a invalid SQL query attempting to select `username` without including it in 
 > 1. SQL standards require all non-aggregated `SELECT` columns to be specified in `GROUP BY`.
 > 2. Prevents ambiguous row values when multiple rows in a group contain different column values.
 > 3. Core SQL grouping rule.
-
+> 
 ---
 
 

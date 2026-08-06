@@ -131,8 +131,8 @@ Deprecation: @1700000000
 
 > [!check]- Answer
 > - **September 1st, 2026.** (The `Sunset` header defines the deactivation date. After this timestamp, the route is retired and will return a `410 Gone` status).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: IETF Sunset and Deprecation Header Syntax

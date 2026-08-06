@@ -180,7 +180,7 @@ console.log("Zip Codes:", extractZipCodes(input));
 > Zip Codes: [ '90210', '02138', '10001' ]
 > ```
 > - Match digit sequences of length 5: `/\b\d{5}\b/g`.
-
+> 
 ---
 
 ### Exercise 2: Matching Digits with Regular Expressions
@@ -198,7 +198,7 @@ console.log("Zip Codes:", extractZipCodes(input));
 > ```
 >
 > **Explanation:** RegExp `.test(str)` tests whether regex patterns match target strings.
-
+> 
 ---
 
 ### Exercise 3: Extracting Named Capture Groups
@@ -216,7 +216,7 @@ console.log("Zip Codes:", extractZipCodes(input));
 > ```
 >
 > **Explanation:** `(?<name>pattern)` captures regex match subgroups into `match.groups` objects.
-
+> 
 ---
 
 ## 7. Related Terms

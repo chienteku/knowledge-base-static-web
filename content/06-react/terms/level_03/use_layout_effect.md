@@ -182,7 +182,7 @@ Use useEffect for SSR components or fallback to useEffect on server
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Measuring DOM Dimensions with useLayoutEffect
@@ -202,7 +202,7 @@ Use useEffect for SSR components or fallback to useEffect on server
 > ```
 >
 > **Explanation:** `useLayoutEffect` reads and mutates DOM geometry synchronously before the screen is painted, preventing visual flicker.
-
+> 
 ---
 
 ### Exercise 3: useEffect vs useLayoutEffect Timing Comparison
@@ -219,7 +219,7 @@ Use useEffect for SSR components or fallback to useEffect on server
 > ```
 >
 > **Explanation:** Use `useLayoutEffect` only when reading/mutating DOM layout measurements to prevent UI flickering.
-
+> 
 ## 7. Related Terms
 - [`useEffect` Hook](use_effect.md) — The standard asynchronous hook for side effects.
 - [`useRef` Hook](../level_04/use_ref.md) — The hook used to reference DOM nodes for layout measurement.

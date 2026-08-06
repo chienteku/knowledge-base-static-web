@@ -174,7 +174,7 @@ An e-commerce query frequently filters product listings by `category` and `statu
 > 1. Composite indexes (`COLUMNS col1, col2`) index multi-field combinations together in a single B-tree index structure.
 > 2. Accelerates queries containing multi-field `WHERE` clause filters.
 > 3. Column order in index definition (`category, status`) determines index prefix matching rules.
-
+> 
 ---
 
 ### Exercise 2: Left-Prefix Matching Evaluation
@@ -199,7 +199,7 @@ Evaluate whether `idx_cat_status` (covering `category, status`) can optimize a q
 > 1. Composite B-tree indexes support left-prefix matching, optimizing queries on the leading column (`category`).
 > 2. Queries filtering ONLY on the secondary column (`status`) cannot utilize the composite index effectively.
 > 3. Reduces the need for separate single-column indexes on leading fields.
-
+> 
 ---
 
 ### Exercise 3: Composite Index Overwrites with `OVERWRITE`
@@ -224,7 +224,7 @@ Update `idx_cat_status` to include a third column `price` using `DEFINE INDEX OV
 > 1. `OVERWRITE` updates existing index definitions idempotently without prior `REMOVE INDEX` calls.
 > 2. Rebuilds index pages in the background.
 > 3. Facilitates schema index tuning in CI/CD migration scripts.
-
+> 
 ---
 
 

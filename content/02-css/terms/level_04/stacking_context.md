@@ -264,7 +264,7 @@ Even though the sheet in Folder A has a score of `9999`, it is trapped inside Fo
 > ```
 > - Identify which elements create stacking contexts.
 > - Compare parent index priorities before comparing child values.
-
+> 
 ---
 
 
@@ -289,7 +289,7 @@ Even though the sheet in Folder A has a score of `9999`, it is trapped inside Fo
 > ```
 >
 > **Explanation:** These properties create isolated stacking contexts for child layers.
-
+> 
 ---
 
 ### Exercise 3: Explicit Stacking Context Isolation
@@ -308,7 +308,7 @@ Even though the sheet in Folder A has a score of `9999`, it is trapped inside Fo
 > ```
 >
 > **Explanation:** `isolation: isolate` creates a clean stacking context boundary.
-
+> 
 ## 7. Related Terms
 - [`z-index`](z_index.md) — The numbering sequence sorted within the context.
 - [`opacity`](../level_09/opacity.md) — One of the visual triggers that creates a context.

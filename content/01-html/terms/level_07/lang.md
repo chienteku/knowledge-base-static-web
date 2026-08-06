@@ -164,7 +164,7 @@ Root declaration on the HTML tag:
 > - The parent paragraph tag does not need a language override (it inherits English from the root).
 > - Wrap the Spanish phrase in a `<span>` element.
 > - Set `lang="es"` on that span.
-
+> 
 ---
 
 
@@ -183,7 +183,7 @@ Root declaration on the HTML tag:
 > ```
 >
 > **Explanation:** The `lang` attribute can be applied to inline elements to override language pronunciation for screen readers.
-
+> 
 ---
 
 ### Exercise 3: CSS :lang Pseudo-Class Selector
@@ -202,7 +202,7 @@ Root declaration on the HTML tag:
 > ```
 >
 > **Explanation:** `:lang()` pseudo-class matches elements based on declared document language.
-
+> 
 ## 7. Related Terms
 - [`<html>`](../level_01/html_tag.md) — The parent container where `lang` is declared.
 - [`<meta>`](../level_08/meta.md) — Metadata tags used for other page settings.

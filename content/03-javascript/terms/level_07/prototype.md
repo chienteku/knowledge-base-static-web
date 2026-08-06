@@ -161,7 +161,7 @@ async function processData() {
 > It comes from `Object.prototype`, which is the ultimate master object at the very top of the JavaScript hierarchy. Every object you create inherently links to it.
 > ```
 > - `Object.create()` without arguments defaults to this ultimate master object.
-
+> 
 ---
 
 ### Exercise 2: Adding Methods to Constructor Prototype
@@ -180,7 +180,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Prototype methods are shared across all instances, saving memory allocations.
-
+> 
 ---
 
 ### Exercise 3: Modifying Built-in Prototypes Anti-Pattern
@@ -197,8 +197,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Modifying native prototypes introduces library conflicts and breaks future specification compatibility.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

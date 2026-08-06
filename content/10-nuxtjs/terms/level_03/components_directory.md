@@ -132,7 +132,7 @@ Create component `components/base/button/Primary.vue` and consume it in `app.vue
 >   </button>
 > </template>
 > ```
-
+> 
 > ```vue
 > <!-- app.vue -->
 > <template>
@@ -142,13 +142,13 @@ Create component `components/base/button/Primary.vue` and consume it in `app.vue
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Nested sub-directories inside `components/` prepend directory names as prefixes to component names.
 > 2. `components/base/button/Primary.vue` becomes `<BaseButtonPrimary />`.
 > 3. Maintains unique component naming without namespace collisions.
-
+> 
 ---
 
 ### Exercise 2: Disabling Directory Prefixing in Nuxt Configuration
@@ -174,13 +174,13 @@ Configure `nuxt.config.ts` to scan `components/` sub-directories without adding 
 >   ]
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `pathPrefix: false` allows nested component files to register using their basename directly.
 > 2. Simplifies component tag names in large projects.
 > 3. Customizable component scanner rule.
-
+> 
 ---
 
 ### Exercise 3: Server vs Client Component Variations
@@ -201,26 +201,22 @@ Create `components/Banner.server.vue` and `components/Banner.client.vue` to rend
 >   <div class="server-banner">Server Static Ad Banner</div>
 > </template>
 > ```
-
+> 
 > ```vue
 > <!-- components/Banner.client.vue -->
 > <template>
 >   <div class="client-banner">Interactive Client Ad Banner</div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Nuxt renders `Banner.server.vue` during server SSR and `Banner.client.vue` during client hydration.
 > 2. Enables Context-aware component substitution.
 > 3. Advanced performance optimization technique.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Lazy Components](lazy_components.md) — How to asynchronously load components from this directory.

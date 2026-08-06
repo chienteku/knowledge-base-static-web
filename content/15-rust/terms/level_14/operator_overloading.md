@@ -364,7 +364,7 @@ p += Point2D { x: 2, y: 2 }; // Works!
 > 2. **Reference Operator Overloading (`impl Add<&B> for &A`)**: By implementing `Add<&Q16_16> for &Q16_16`, evaluating `&a + &b` borrows `a` and `b` rather than moving them. This is vital when custom types are heavy or non-`Copy`.
 > 3. **Saturating Bounds Safety**: Using `.saturating_add()` and `.saturating_sub()` inside arithmetic trait methods prevents integer overflow panics in low-level embedded hardware loops.
 > 4. **`Add` vs `AddAssign` Separation**: Implementing `Add` overloads `+` but does NOT automatically overload `+=`. `AddAssign::add_assign(&mut self, rhs)` must be explicitly implemented to mutate the variable in place.
-
+> 
 ---
 
 ### Exercise 2: Physical Unit Safety with Heterogeneous Binary Operators (`Mul`, `Div`, `AddAssign`)
@@ -493,7 +493,7 @@ p += Point2D { x: 2, y: 2 }; // Works!
 > 2. **Associated Type Output Flexibility**: The associated type `type Output` specifies the exact return type resulting from the operation. `MetersPerSecond * Seconds` specifies `type Output = Meters`, maintaining dimensional correctness.
 > 3. **Commutativity Requirements**: In Rust, `a * b` calls `Mul::mul(a, b)` where `a` is `Self` and `b` is `RHS`. Therefore, `speed * time` and `time * speed` require separate trait implementations (`Mul<Seconds> for MetersPerSecond` vs `Mul<MetersPerSecond> for Seconds`).
 > 4. **Zero-Cost Compile-Time Safety**: Newtype wrappers combined with heterogeneously overloaded operators catch physical unit dimension mismatch bugs at compile-time with zero runtime abstraction overhead.
-
+> 
 ---
 
 ### Exercise 3: Dynamic 2D Matrix Indexing & Mutable Slice Views (`Index`, `IndexMut`)
@@ -634,8 +634,8 @@ p += Point2D { x: 2, y: 2 }; // Works!
 > 3. **Custom Index Types**: The generic parameter `Idx` in `Index<Idx>` can be any type—such as tuples `(usize, usize)`, ranges `Range<usize>`, or standard `usize`. Here, implementing `Index<(usize, usize)>` provides multi-dimensional subscripting syntax `grid[(r, c)]`.
 > 4. **Returning Dynamically Sized Types (DSTs)**: By implementing `Index<usize>` with `type Output = [T]`, indexing a matrix by row number (`&matrix[1]`) yields a borrowed slice view (`&[T]`) directly into the flat buffer without allocating memory.
 > 
-
-
+> 
+> 
 ---
 
 ## 6. Related Terms

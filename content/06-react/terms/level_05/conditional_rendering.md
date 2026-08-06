@@ -131,7 +131,7 @@ if (loading) return <Spinner />; // Or return null;
 > }
 > ```
 > - You don't always have to use inline operators inside the JSX. You can use standard `if` statements before the `return` keyword!
-
+> 
 ---
 
 
@@ -152,7 +152,7 @@ if (loading) return <Spinner />; // Or return null;
 > ```
 >
 > **Explanation:** Ternary operators provide clean dual-branch conditional rendering.
-
+> 
 ---
 
 ### Exercise 3: Falsy Values in JSX
@@ -169,7 +169,7 @@ if (loading) return <Spinner />; // Or return null;
 > ```
 >
 > **Explanation:** React ignores boolean `false`, `null`, `undefined`, and `` while rendering numeric `0`.
-
+> 
 ## 7. Related Terms
 - [JSX (JavaScript XML)](../level_01/jsx.md) — The syntax that allows us to inject JS operators.
 - [Virtual DOM](../level_01/virtual_dom.md) — When a condition turns false, React removes that node from the Virtual DOM, destroying the component.

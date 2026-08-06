@@ -166,25 +166,25 @@ Wrap an async data-fetching component inside React `<Suspense>` with a fallback 
 > ```tsx
 > import { Suspense } from "react";
 > import SlowProfileWidget from "./SlowProfileWidget";
-
-export default function ProfilePage() {
-  return (
-    <main className="p-6">
-      <h1>User Profile</h1>
-      <Suspense fallback={<div>Loading Profile Widget...</div>}>
-        <SlowProfileWidget />
-      </Suspense>
-    </main>
-  );
-}
-```
-
+> 
+> export default function ProfilePage() {
+>   return (
+>     <main className="p-6">
+>       <h1>User Profile</h1>
+>       <Suspense fallback={<div>Loading Profile Widget...</div>}>
+>         <SlowProfileWidget />
+>       </Suspense>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. React `<Suspense>` intercepts asynchronous Promises thrown during component rendering.
 > 2. Displays fallback UI until child async components resolve.
 > 3. Enables HTML streaming over HTTP connections in Next.js App Router.
-
+> 
 ---
 
 ### Exercise 2: Nesting Parallel Suspense Boundaries
@@ -201,27 +201,27 @@ Render two slow widgets (`<WeatherWidget />` and `<NewsWidget />`) inside parall
 >
 > ```tsx
 > import { Suspense } from "react";
-
-export default function Portal() {
-  return (
-    <div className="grid grid-cols-2 gap-4 p-6">
-      <Suspense fallback={<p>Loading Weather...</p>}>
-        <WeatherWidget />
-      </Suspense>
-      <Suspense fallback={<p>Loading News...</p>}>
-        <NewsWidget />
-      </Suspense>
-    </div>
-  );
-}
-```
-
+> 
+> export default function Portal() {
+>   return (
+>     <div className="grid grid-cols-2 gap-4 p-6">
+>       <Suspense fallback={<p>Loading Weather...</p>}>
+>         <WeatherWidget />
+>       </Suspense>
+>       <Suspense fallback={<p>Loading News...</p>}>
+>         <NewsWidget />
+>       </Suspense>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Parallel `<Suspense>` boundaries resolve independently as data becomes available.
 > 2. Fast widgets render immediately without waiting for slower sibling widgets to finish.
 > 3. Maximizes UI responsiveness and visual streaming.
-
+> 
 ---
 
 ### Exercise 3: Handling Errors inside Suspended Async Trees
@@ -239,30 +239,26 @@ Combine `<Suspense>` with `error.tsx` or `<ErrorBoundary>` to catch async compon
 > ```tsx
 > import { Suspense } from "react";
 > import { CustomErrorBoundary } from "./CustomErrorBoundary";
-
-export default function SafeView() {
-  return (
-    <CustomErrorBoundary>
-      <Suspense fallback={<div>Loading Async Feed...</div>}>
-        <AsyncFeed />
-      </Suspense>
-    </CustomErrorBoundary>
-  );
-}
-```
-
+> 
+> export default function SafeView() {
+>   return (
+>     <CustomErrorBoundary>
+>       <Suspense fallback={<div>Loading Async Feed...</div>}>
+>         <AsyncFeed />
+>       </Suspense>
+>     </CustomErrorBoundary>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. If an async component inside `<Suspense>` throws an unhandled rejection, it bubbles to the nearest Error Boundary.
 > 2. Combining Error Boundaries and `<Suspense>` handles both loading states and error states cleanly.
 > 3. Standard pattern for resilient async UI components.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`loading.tsx`](loading.md) — The special Next.js file that wraps routes in Suspense boundaries automatically.

@@ -193,8 +193,8 @@ function RenderCounter() {
 
 > [!check]- Answer
 > - Exactly **1 time** (excluding the initial render). Because of Automatic Batching in React 18, all three state updates inside the `setTimeout` callback are grouped and executed in a single re-render.
-
-
+> 
+> 
 ---
 
 
@@ -219,7 +219,7 @@ function RenderCounter() {
 > ```
 >
 > **Explanation:** `flushSync()` forces React to flush state updates synchronously to the DOM immediately.
-
+> 
 ---
 
 ### Exercise 3: Automatic Batching Render Counts
@@ -236,7 +236,7 @@ function RenderCounter() {
 > ```
 >
 > **Explanation:** Automatic batching groups all state updates within a microtask into a single re-render.
-
+> 
 ## 7. Related Terms
 - [Re-rendering](re_rendering.md) — The UI update cycle triggered by state changes.
 - [`useState` Hook](use_state.md) — The hook used to define and trigger state updates.

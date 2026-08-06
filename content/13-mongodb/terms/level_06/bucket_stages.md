@@ -176,7 +176,7 @@ Categorize products into 3 explicit price buckets: `"Budget"` (`0-50`), `"Mid-Ra
 > 1. `$bucket` groups documents into explicit user-defined numeric boundaries.
 > 2. `boundaries` array defines bucket cut-offs (`[min, max)`).
 > 3. Computes histograms for pricing and analytics.
-
+> 
 ---
 
 ### Exercise 2: Automated Equi-Populated Bucketing with `$bucketAuto`
@@ -207,7 +207,7 @@ Automatically divide customer documents into 4 evenly-distributed quantile bucke
 > 1. `$bucketAuto` automatically calculates bucket boundaries to distribute documents evenly across `n` buckets.
 > 2. Eliminates manual boundary guesswork.
 > 3. Ideal for statistical quartile and percentile segmentations.
-
+> 
 ---
 
 ### Exercise 3: Bucket Summary Accumulators
@@ -242,7 +242,7 @@ Compute average order processing time (`$avg`) for each price bucket in collecti
 > 1. The `output` field defines custom accumulators computed for each bucket.
 > 2. Calculates metrics across bucket partitions in parallel.
 > 3. Streamlines business analytics reporting.
-
+> 
 ---
 
 

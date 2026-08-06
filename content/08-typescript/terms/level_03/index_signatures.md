@@ -140,22 +140,22 @@ Create a type-safe dynamic dictionary storing user scores keyed by string userna
 > interface UserScores {
 >   [username: string]: number;
 > }
-
-const scores: UserScores = {
-  alice: 95,
-  bob: 88,
-  charlie: 92
-};
-
-scores["david"] = 100;
-```
-
+> 
+> const scores: UserScores = {
+>   alice: 95,
+>   bob: 88,
+>   charlie: 92
+> };
+> 
+> scores["david"] = 100;
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Index signatures (`[key: string]: number`) declare that any string property key maps to a `number` value.
 > 2. Ideal for modeling dynamic hash maps or dictionary data structures.
 > 3. Enforces value type consistency across dynamic object keys.
-
+> 
 ---
 
 ### Exercise 2: Combining Explicit Properties with Index Signatures
@@ -175,20 +175,20 @@ Combine explicit fixed properties (`id: string`) with a dynamic string index sig
 >   name: string; // Explicit property
 >   [key: string]: string; // All additional properties MUST also be string!
 > }
-
-const dict: Dictionary = {
-  name: "English Terms",
-  description: "Standard terminology",
-  category: "Language"
-};
-```
-
+> 
+> const dict: Dictionary = {
+>   name: "English Terms",
+>   description: "Standard terminology",
+>   category: "Language"
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Explicit properties (`name: string`) must have types compatible with the index signature value type (`string`).
 > 2. Setting `[key: string]: string | number` allows explicit properties of type `number` or `string`.
 > 3. Ensures strict key-value type guarantees across the entire object.
-
+> 
 ---
 
 ### Exercise 3: Safely Handling Missing Keys with `undefined`
@@ -207,22 +207,22 @@ Configure index signatures to return `T | undefined` when accessing arbitrary ke
 > interface Cache {
 >   [key: string]: string;
 > }
-
-function getCachedValue(cache: Cache, key: string): string {
-  const val = cache[key]; // Under noUncheckedIndexedAccess, val is string | undefined!
-  if (val !== undefined) {
-    return val.toUpperCase();
-  }
-  return "MISSING";
-}
-```
-
+> 
+> function getCachedValue(cache: Cache, key: string): string {
+>   const val = cache[key]; // Under noUncheckedIndexedAccess, val is string | undefined!
+>   if (val !== undefined) {
+>     return val.toUpperCase();
+>   }
+>   return "MISSING";
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. By default, index signature lookups return `T` without checking if the key actually exists at runtime.
 > 2. `"noUncheckedIndexedAccess": true` automatically unions index signature return types with `undefined`.
 > 3. Prevents runtime `TypeError` crashes on missing dictionary keys.
-
+> 
 ---
 
 

@@ -169,7 +169,7 @@ console.log(domainOnly);
 > ```
 > - The `"https://"` substring is 8 characters long (indices 0 through 7).
 > - Use `.slice(startIndex)` to extract text from a starting index to the end of the string.
-
+> 
 ---
 
 ### Exercise 2: Replacing All Occurrences with `replaceAll`
@@ -187,7 +187,7 @@ console.log(domainOnly);
 > ```
 >
 > **Explanation:** `replaceAll(target, replacement)` replaces all non-overlapping substring occurrences.
-
+> 
 ---
 
 ### Exercise 3: Extracting Substrings with `slice`
@@ -205,8 +205,8 @@ console.log(domainOnly);
 > ```
 >
 > **Explanation:** Passing negative start offsets to `.slice()` extracts characters relative to string end.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

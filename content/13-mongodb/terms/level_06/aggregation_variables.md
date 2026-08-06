@@ -174,7 +174,7 @@ Inside a `$group` stage, collect the entire original input document into an arra
 > 1. `$$ROOT` references the top-level document currently being processed in the pipeline stage.
 > 2. Preserves all original document fields inside group arrays.
 > 3. Useful for document grouping and hierarchical restructuring.
-
+> 
 ---
 
 ### Exercise 2: Conditionally Omitting Fields with `$$REMOVE`
@@ -211,7 +211,7 @@ Project customer documents, dynamically omitting field `middleName` if it is nul
 > 1. Returning `$$REMOVE` in an expression causes MongoDB to omit the field key completely from output documents.
 > 2. Avoids outputting `middleName: null` fields in clean API responses.
 > 3. Dynamic schema cleanup.
-
+> 
 ---
 
 ### Exercise 3: Accessing Pipeline Execution Time with `$$NOW`
@@ -248,7 +248,7 @@ Calculate document age in days by comparing `createdAt` against system variable 
 > 1. `$$NOW` returns the exact datetime timestamp at which the pipeline execution started.
 > 2. Guarantees consistent time comparisons across all documents in a multi-second aggregation run.
 > 3. Built-in system variable.
-
+> 
 ---
 
 

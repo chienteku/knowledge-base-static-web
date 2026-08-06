@@ -192,7 +192,7 @@ let mut buf = String::new(); while reader.read_line(&mut buf)? > 0 { process(&bu
 >
 > 1. `BufReader` batches disk reads into an 8 KB RAM buffer, enabling fast line-by-line iteration via `.lines()`.
 > 2. `BufWriter` batches disk writes, flushed explicitly with `writer.flush()?`.
-
+> 
 ---
 
 ### Exercise 2: Zero-Allocation Reusable String Buffer Reader
@@ -240,7 +240,7 @@ let mut buf = String::new(); while reader.read_line(&mut buf)? > 0 { process(&bu
 > #### Technical Explanation
 >
 > 1. Reuses a single `String` buffer via `buf.clear()`, avoiding heap allocations per line.
-
+> 
 ---
 
 ### Exercise 3: Buffered Binary Chunk Reader
@@ -288,7 +288,7 @@ let mut buf = String::new(); while reader.read_line(&mut buf)? > 0 { process(&bu
 > #### Technical Explanation
 >
 > 1. Reads binary files efficiently in buffered chunks.
-
+> 
 ---
 
 ## 5. Related Terms

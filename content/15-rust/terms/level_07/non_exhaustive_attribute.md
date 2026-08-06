@@ -126,7 +126,7 @@ let config = external_crate::Config::new("127.0.0.1", 8080); // Use public const
 > **Without `#[non_exhaustive]`**: Yes, this **is** a breaking change. Every downstream crate that exhaustively matched on `Status` (without a `_` arm, since none was needed before) will fail to compile the moment they upgrade, because their `match` is no longer exhaustive against the new three-variant enum.
 >
 > **With `#[non_exhaustive]` applied from the start**: No breaking change. Every downstream crate would have been *forced*, all along, to include a `_` wildcard arm (since the compiler wouldn't have let them omit it). Adding `Pending` simply means that wildcard arm now also (correctly) catches the new variant, with zero code changes required downstream.
-
+> 
 ---
 
 ### Exercise 2: Exhaustive Match Handling for Non-Exhaustive Enums
@@ -155,7 +155,7 @@ let config = external_crate::Config::new("127.0.0.1", 8080); // Use public const
 >
 > #### Technical Explanation
 > `#[non_exhaustive]` enforces wildcard `_` fallback arms outside the defining crate.
-
+> 
 ---
 
 ### Exercise 3: `#[non_exhaustive]` Structs — Construction Outside the Crate
@@ -226,7 +226,7 @@ Then answer: **can the `my_server` library's own `src/lib.rs` use struct literal
 >
 > **Answer to the "can the library use struct literals" question:**
 > **Yes.** `#[non_exhaustive]` only restricts *external* crates. The defining crate has full knowledge of all fields (there are no hidden fields from its own perspective), so struct literal syntax compiles normally inside `src/lib.rs`. The attribute is purely a contract about what downstream consumers may assume about the struct's completeness.
-
+> 
 ---
 
 ## 6. Related Terms

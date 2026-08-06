@@ -466,7 +466,7 @@ Implement `Borrow<[u8]>` and `BorrowMut<[u8]>` for `SensorFrame`. Write generic 
 > 2. **Bounds Precision:** Both `borrow()` and `borrow_mut()` bound the slice to `&buffer[..len]`, ensuring unused buffer bytes beyond `len` are never exposed to calculations or mutations.
 > 3. **`no_std` Suitability:** This pattern is extensively used in embedded microcontrollers where dynamic allocations (`Vec`) are forbidden, but generic byte processing routines are needed for hardware buffers.
 > 
-
+> 
 ---
 
 ## 6. Related Terms

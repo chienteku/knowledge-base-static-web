@@ -118,7 +118,7 @@ div { display: flex; align-items: center; min-height: 100px; }
 > 40px * 3 lines = 120px total height.
 > ```
 > - Calculate the height of a single line first.
-
+> 
 ---
 
 
@@ -139,7 +139,7 @@ div { display: flex; align-items: center; min-height: 100px; }
 > ```
 >
 > **Explanation:** Unitless numbers (e.g. `1.6`) multiply font size dynamically across all child elements.
-
+> 
 ---
 
 ### Exercise 3: Single-Line Button Vertical Centering
@@ -159,7 +159,7 @@ div { display: flex; align-items: center; min-height: 100px; }
 > ```
 >
 > **Explanation:** Matching line-height to explicit element height vertically centers single-line text.
-
+> 
 ## 7. Related Terms
 - [`font-size` & `font-weight`](font_size_weight.md) — The property that `line-height` multiplies against.
 - [`font-style` & `font-variant`](font_style_variant.md) — Text formatting variants.

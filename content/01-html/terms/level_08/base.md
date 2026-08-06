@@ -186,7 +186,7 @@ What is the absolute URL the browser will navigate to when the user clicks the "
 > https://secure.myshop.com/store/checkout/pay.html
 > ```
 > - Combine the `base` URL and the link's `href` string.
-
+> 
 ---
 
 
@@ -205,7 +205,7 @@ What is the absolute URL the browser will navigate to when the user clicks the "
 > ```
 >
 > **Explanation:** Relative URL paths prepend the `<base href>` prefix.
-
+> 
 ---
 
 ### Exercise 3: Base Target Attribute
@@ -222,7 +222,7 @@ What is the absolute URL the browser will navigate to when the user clicks the "
 > ```
 >
 > **Explanation:** `target="_blank"` on `<base>` sets global default link opening behavior.
-
+> 
 ## 7. Related Terms
 - [`<head>`](../level_01/head.md) — The parent metadata container.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — Elements impacted by base target modifications.

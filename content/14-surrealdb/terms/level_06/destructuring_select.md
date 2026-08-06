@@ -159,7 +159,7 @@ An API endpoint selects user `user:alice` and unpacks nested object `profile` di
 > 1. `SELECT object.*` unpacks nested object properties into top-level result JSON keys.
 > 2. Eliminates manual field aliasing (`profile.first_name AS first_name`).
 > 3. Simplifies REST API response payload structuring.
-
+> 
 ---
 
 ### Exercise 2: Selective Destructuring with Aliases
@@ -186,7 +186,7 @@ Destructure specific nested fields from `address` while renaming `street` to `st
 > 1. Dot-notation projection extracts specific nested properties cleanly.
 > 2. Aliasing (`AS street_address`) renames output properties.
 > 3. Prevents fetching unneeded object properties.
-
+> 
 ---
 
 ### Exercise 3: Destructuring Fetched Record Link Documents
@@ -213,7 +213,7 @@ Fetch linked `company` record on `user:alice` and destructure the company's fiel
 > 1. Combines `FETCH` pointer resolution with property destructuring.
 > 2. Unpacks foreign record fields inline.
 > 3. Avoids multi-stage join queries.
-
+> 
 ---
 
 

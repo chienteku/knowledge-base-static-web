@@ -124,19 +124,19 @@ Extract the return type of a factory function `createUser()` using `ReturnType`.
 >     settings: { theme: "dark" }
 >   };
 > }
-
-type UserObject = ReturnType<typeof createUser>;
-// Inferred as: { id: number; username: string; settings: { theme: string; } }
-
-const user: UserObject = createUser();
-```
-
+> 
+> type UserObject = ReturnType<typeof createUser>;
+> // Inferred as: { id: number; username: string; settings: { theme: string; } }
+> 
+> const user: UserObject = createUser();
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `ReturnType<T>` extracts the return type of function type `T`.
 > 2. Uses `typeof functionName` to query the function type first.
 > 3. Obtains exact return types without manually duplicating interface definitions.
-
+> 
 ---
 
 ### Exercise 2: Inferring Return Types of Generic Functions
@@ -155,17 +155,17 @@ Extract the return type of a generic function using `ReturnType` and explicit ty
 > function makeArray<T>(item: T): T[] {
 >   return [item];
 > }
-
-type StringArray = ReturnType<typeof makeArray<string>>;
-// Inferred as: string[]
-```
-
+> 
+> type StringArray = ReturnType<typeof makeArray<string>>;
+> // Inferred as: string[]
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `typeof makeArray<string>` instantiates generic parameter `T` to `string` before passing to `ReturnType`.
 > 2. Extracts concrete generic return types cleanly.
 > 3. Supported in modern TypeScript syntax.
-
+> 
 ---
 
 ### Exercise 3: Auditing `ReturnType` Conditional Implementation Mechanics
@@ -185,13 +185,13 @@ Explain the internal conditional type definition of `ReturnType<T>`.
 > type CustomReturnType<T extends (...args: any) => any> = 
 >   T extends (...args: any) => infer R ? R : any;
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `ReturnType` uses conditional types (`T extends ...`) and the `infer` keyword.
 > 2. `infer R` instructs the compiler to introduce a new type variable `R` capturing the function's return type.
 > 3. Fundamental demonstration of conditional type inference in TypeScript.
-
+> 
 ---
 
 

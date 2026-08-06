@@ -120,7 +120,7 @@ Applying `display: flex;` turns that cardboard box into a high-tech robotic orga
 > The `<section>`! You must target the Parent container to control the Children.
 > ```
 > - Flexbox is a robotic organizer. Do you put the robot inside the toys, or do you make the toybox the robot?
-
+> 
 ---
 
 
@@ -149,7 +149,7 @@ Applying `display: flex;` turns that cardboard box into a high-tech robotic orga
 > ```
 >
 > **Explanation:** Parent properties control container layout; item properties control individual item sizing.
-
+> 
 ---
 
 ### Exercise 3: Inline Flex Parent Syntax
@@ -168,7 +168,7 @@ Applying `display: flex;` turns that cardboard box into a high-tech robotic orga
 > ```
 >
 > **Explanation:** `display: inline-flex` combines inline outer layout flow with inner flex formatting.
-
+> 
 ## 7. Related Terms
 - [`flex-direction`](flex_direction.md) — Rotating the main layout axis.
 - [`justify-content`](justify_content.md) — Aligns children along the main axis.

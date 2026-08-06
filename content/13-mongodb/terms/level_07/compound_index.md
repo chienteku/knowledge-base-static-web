@@ -185,7 +185,7 @@ Create a compound index on `status` (ascending) and `createdAt` (descending) in 
 > 1. Compound indexes evaluate multi-field query filters in a single B-tree structure.
 > 2. `{ status: 1, createdAt: -1 }` orders entries by status ascending, then by date descending.
 > 3. Accelerates queries matching both `status` and `createdAt`.
-
+> 
 ---
 
 ### Exercise 2: Prefix Matching Rule Verification
@@ -212,7 +212,7 @@ Verify which query filters can utilize compound index `{ status: 1, category: 1,
 > 1. Compound indexes can satisfy queries on any left-hand prefix of the index key pattern.
 > 2. Queries omitting the leading key (`status`) cannot use the index.
 > 3. Design compound index key orders to match primary query prefixes.
-
+> 
 ---
 
 ### Exercise 3: Sorting with Compound Indexes
@@ -236,7 +236,7 @@ Query orders where `status: "completed"` sorted by `createdAt` descending, verif
 > 1. Compound index `{ status: 1, createdAt: -1 }` matches equality on `status` and reads sorted `createdAt` B-tree keys directly.
 > 2. Eliminates in-memory sort stage (`SORT`) in `explain()` output.
 > 3. Prevents 100MB sort buffer memory exceptions.
-
+> 
 ---
 
 

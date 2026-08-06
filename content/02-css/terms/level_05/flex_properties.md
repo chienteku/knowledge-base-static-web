@@ -220,7 +220,7 @@ How many pixels wide will Box A be on the screen?
 > ```
 > - Subtract the sum of baseline sizes from the parent container width.
 > - Divide the remaining space among growing items based on their weights.
-
+> 
 ---
 
 
@@ -241,7 +241,7 @@ How many pixels wide will Box A be on the screen?
 > ```
 >
 > **Explanation:** `flex: 1` expands to `1 1 0%`, allocating equal container space.
-
+> 
 ---
 
 ### Exercise 3: Preventing Item Shrinking
@@ -260,7 +260,7 @@ How many pixels wide will Box A be on the screen?
 > ```
 >
 > **Explanation:** `flex-shrink: 0` locks flex item dimensions from shrinking.
-
+> 
 ## 7. Related Terms
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — The parent container.
 - [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — The combined syntax layout.

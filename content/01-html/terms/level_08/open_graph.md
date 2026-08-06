@@ -175,7 +175,7 @@ The Open Graph standard explicitly dictates the use of the `property` attribute:
 > ```
 > - Match each parameter to its correct Open Graph `property`.
 > - Check that the image path is absolute.
-
+> 
 ---
 
 
@@ -197,7 +197,7 @@ The Open Graph standard explicitly dictates the use of the `property` attribute:
 > ```
 >
 > **Explanation:** Open Graph tags configure rich social card previews on Facebook, Twitter, and Slack.
-
+> 
 ---
 
 ### Exercise 3: Twitter Card Type Tag
@@ -214,7 +214,7 @@ The Open Graph standard explicitly dictates the use of the `property` attribute:
 > ```
 >
 > **Explanation:** `twitter:card` configures Twitter summary card presentation layout.
-
+> 
 ## 7. Related Terms
 - [`<meta>`](meta.md) — The tag that packages these properties.
 - [`<head>`](../level_01/head.md) — The folder container holding the tags.

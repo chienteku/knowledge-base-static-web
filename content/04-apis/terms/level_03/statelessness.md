@@ -192,7 +192,7 @@ POST /api/checkout/step2 HTTP/1.1
 > ```
 > - Does the server know who the user is without a token? No.
 > - Is it okay for databases to store data? Yes!
-
+> 
 ---
 
 ### Exercise 2: Statelessness Definition & Benefits

@@ -253,7 +253,7 @@ let result: Vec<_> = data.iter().filter(|&&x| x > 0).map(|&x| x * 2).collect(); 
 > 1. `split_whitespace()` creates a zero-copy string slice iterator for tokenizing log fields without heap allocations.
 > 2. `filter_map()` combines parsing and filtering: non-numeric inputs or status codes below 400 return `None` and are discarded gracefully.
 > 3. `.fold((0, 0.0), ...)` aggregates running error count and cumulative latency in a single pipeline pass.
-
+> 
 ---
 
 ### Exercise 2: Streaming Financial Ticker Sliding Window Iterator
@@ -332,7 +332,7 @@ let result: Vec<_> = data.iter().filter(|&&x| x > 0).map(|&x| x * 2).collect(); 
 > 1. Custom struct stores lifetime `'a` borrowed from input slice, avoiding deep copy of ticker data.
 > 2. `Iterator::next` advances internal cursor by 1 on each step, returning sub-slices `&'a [T]`.
 > 3. Standard iterator methods like `.reduce()` compute min and max values zero-cost over window slices.
-
+> 
 ---
 
 ### Exercise 3: Zero-Copy CSV Record Parser via Chained Iterator Combinators
@@ -391,7 +391,7 @@ let result: Vec<_> = data.iter().filter(|&&x| x > 0).map(|&x| x * 2).collect(); 
 > 1. `csv_data.lines()` generates an iterator yielding line slices referencing the original string input buffer.
 > 2. `.skip(1)` bypasses the header row lazily.
 > 3. `.split(',')` extracts fields as borrowed `&'a str` slices without allocating heap strings.
-
+> 
 ---
 
 ## 5. Related Terms

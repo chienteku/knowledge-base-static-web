@@ -133,24 +133,24 @@ Load an external tracking script using `strategy="afterInteractive"`.
 >
 > ```tsx
 > import Script from "next/script";
-
-export default function AnalyticsScript() {
-  return (
-    <Script
-      src="https://cdn.example.com/analytics.js"
-      strategy="afterInteractive"
-      onLoad={() => console.log("Analytics script loaded!")}
-    />
-  );
-}
-```
-
+> 
+> export default function AnalyticsScript() {
+>   return (
+>     <Script
+>       src="https://cdn.example.com/analytics.js"
+>       strategy="afterInteractive"
+>       onLoad={() => console.log("Analytics script loaded!")}
+>     />
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `strategy="afterInteractive"` loads the script immediately after the page finishes initial hydration.
 > 2. Default loading strategy for third-party scripts.
 > 3. `onLoad` fires a callback function when script execution finishes.
-
+> 
 ---
 
 ### Exercise 2: Preloading Critical Scripts with `beforeInteractive`
@@ -168,28 +168,28 @@ Load a critical security or polyfill script before page hydration occurs using `
 > ```tsx
 > // app/layout.tsx
 > import Script from "next/script";
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>
-        <Script
-          src="https://cdn.example.com/polyfill.js"
-          strategy="beforeInteractive"
-        />
-        {children}
-      </body>
-    </html>
-  );
-}
-```
-
+> 
+> export default function RootLayout({ children }: { children: React.ReactNode }) {
+>   return (
+>     <html lang="en">
+>       <body>
+>         <Script
+>           src="https://cdn.example.com/polyfill.js"
+>           strategy="beforeInteractive"
+>         />
+>         {children}
+>       </body>
+>     </html>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `strategy="beforeInteractive"` injects the script tag into the server HTML `<head>` before page hydration scripts execute.
 > 2. Reserved for critical polyfills, security consent managers, or anti-bot detectors.
 > 3. Must be declared inside `app/layout.tsx`.
-
+> 
 ---
 
 ### Exercise 3: Lazy-Loading Non-Critical Scripts with `lazyOnload`
@@ -206,29 +206,25 @@ Defer loading a non-critical chat widget script until browser idle time using `s
 >
 > ```tsx
 > import Script from "next/script";
-
-export default function ChatWidget() {
-  return (
-    <Script
-      src="https://cdn.example.com/chat-widget.js"
-      strategy="lazyOnload"
-    />
-  );
-}
-```
-
+> 
+> export default function ChatWidget() {
+>   return (
+>     <Script
+>       src="https://cdn.example.com/chat-widget.js"
+>       strategy="lazyOnload"
+>     />
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `strategy="lazyOnload"` defers script loading until all core page assets have finished downloading and the browser is idle.
 > 2. Ideal for low-priority widgets (chat bubbles, feedback widgets, social share buttons).
 > 3. Protects Web Core Vitals scores from third-party script bloat.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`<Image>` Component](next_image.md) — Optimization for visual assets.

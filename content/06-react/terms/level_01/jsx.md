@@ -172,7 +172,7 @@ function Header() {
 > React.createElement("button", { id: "btn" }, "Click Me");
 > ```
 > - `React.createElement(tag, attributes, children)`
-
+> 
 ---
 
 ### Exercise 2: Embedding JavaScript Expressions in JSX
@@ -193,7 +193,7 @@ function Header() {
 > ```
 >
 > **Explanation:** Curly braces `{}` embed dynamic JavaScript expressions inside JSX markup.
-
+> 
 ---
 
 ### Exercise 3: Inline Style Object Syntax in JSX
@@ -207,7 +207,7 @@ function Header() {
 > ```
 >
 > **Explanation:** JSX inline styles accept camelCase JavaScript objects wrapped in double curly braces.
-
+> 
 ## 7. Related Terms
 - [Fragments](fragments.md) — Wrapping adjacent JSX elements without extra DOM wrapper nodes.
 - [Components](components.md) — What you build using JSX.

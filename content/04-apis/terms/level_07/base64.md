@@ -102,7 +102,7 @@ GET /api/verify?token=abc-def_123 HTTP/1.1 ; Safe Base64URL encoding
 > Any hacker (or the database admin) can take that string, paste it into an online Base64 Decoder, and instantly see the original password ("password123"). You must use a one-way hashing algorithm (like bcrypt) for passwords!
 > ```
 > - Does Base64 require a secret key to decode? (No).
-
+> 
 ---
 
 ### Exercise 2: Base64 Overhead Size Calculation

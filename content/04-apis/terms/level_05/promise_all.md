@@ -168,8 +168,8 @@ async function getAccountData() {
 > - return { settings, theme };
 > - }
 > - ```
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Parallel API Request Wrapper Pattern

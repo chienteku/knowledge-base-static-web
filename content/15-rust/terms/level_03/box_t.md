@@ -334,7 +334,7 @@ Implement an AST calculation engine using `Box<T>` that supports recursive trave
 > 1. **Recursive Indirection with `Box<Expr>`**: Rust requires all types to have a known, fixed size at compile time (`Sized`). An enum `Expr` containing `Expr` directly creates an infinite type recursion. Placing child nodes inside `Box<Expr>` substitutes the unbounded enum variant with a fixed 8-byte pointer, enabling finite stack size calculation.
 > 2. **Dynamic Trait Dispatch (`Box<dyn CustomExpr>`)**: By wrapping `dyn CustomExpr` inside `Box`, the system achieves type erasure and runtime polymorphism. The `Box<dyn Trait>` forms a fat pointer (16 bytes on 64-bit target: 8 bytes for data address + 8 bytes for the vtable address containing virtual method pointers).
 > 3. **Ownership Transfer in `fold_constants`**: By consuming `self` by value, `fold_constants` deconstructs the AST stack frames without copying heap allocations. Folded subtrees replace deep `Box` branches with flat `Expr::Literal` nodes, releasing intermediate heap allocations automatically as sub-boxes go out of scope.
-
+> 
 ---
 
 ### Exercise 2: FFI Memory Bridge & Zero-Copy Packet Buffer (`Box::into_raw` & `Box::from_raw`)
@@ -481,7 +481,7 @@ Implement a raw packet management handle using `Box::into_raw` and `Box::from_ra
 > 1. **Suspending Safe Destruction with `Box::into_raw`**: Calling `Box::into_raw(b)` transfers the allocation out of Rust's lifetime tracking. The allocator memory remains active on the heap, but `Drop` will no longer execute when the local stack variable goes out of scope.
 > 2. **Reclaiming Memory via `Box::from_raw`**: `Box::from_raw(ptr)` reconstructs a valid `Box<T>` from a raw pointer. Once reconstructed, standard Rust single ownership resumes, and the heap memory (along with inner fields like `Vec<u8>`) is freed when the `Box` drops.
 > 3. **Defensive Double-Free Prevention**: In `reclaim()`, `self.ptr` is updated to `std::ptr::null_mut()` *before* returning. When `RawPacketHandle::drop()` executes automatically at the end of `reclaim()`, the null check prevents invoking `Box::from_raw` twice on the same memory block.
-
+> 
 ---
 
 ### Exercise 3: Dynamic API Gateway Pipeline with `Box<dyn Middleware>` & Pointer Layout Profiling
@@ -648,7 +648,7 @@ Implement a dynamic middleware execution pipeline and analyze the memory layout 
 > 1. **Heterogeneous Collection via `Box<dyn Trait>`**: `Vec<T>` requires elements to have a uniform memory size known at compile time. Since `AuthMiddleware` and `HeaderInjectorMiddleware` have different struct sizes, `Box<dyn Middleware>` standardizes their stack footprint to fat pointers while storing their heterogeneous implementations on the heap.
 > 2. **Memory Layout (Thin vs Fat Pointers)**: A concrete `Box<RequestContext>` is a **thin pointer** consisting solely of a single 64-bit heap address (8 bytes). Conversely, `Box<dyn Middleware>` is a **fat pointer** consisting of two 64-bit words (16 bytes): Word 1 points to the underlying struct payload on the heap, and Word 2 points to the vtable containing function pointers for `Middleware::handle` and drop destructors.
 > 3. **Dynamic Dispatch & Vtable Lookup**: Calling `stage.handle(ctx)` inside `execute` performs dynamic dispatch. Rust dereferences the fat pointer's vtable word, reads the function pointer offset for `handle()`, and passes the data address as the `&self` argument.
-
+> 
 ---
 
 ## 6. Related Terms

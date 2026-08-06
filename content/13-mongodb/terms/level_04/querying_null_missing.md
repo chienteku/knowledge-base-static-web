@@ -169,7 +169,7 @@ Find all documents in `users` where field `deletedAt` is explicitly set to `null
 > 1. `{ field: null }` matches both explicit `null` and missing fields.
 > 2. `{ field: { $type: "null" } }` matches ONLY explicit BSON Null values (Type 10).
 > 3. Distinguishes unassigned nulls from missing schema fields.
-
+> 
 ---
 
 ### Exercise 2: Filtering Missing Schema Fields with `$exists`
@@ -195,7 +195,7 @@ Find all customer documents where optional field `taxId` does NOT exist.
 > 1. `$exists: false` returns documents missing the specified key name.
 > 2. Does not return documents where `taxId: null` exists.
 > 3. Useful for identifying legacy documents during schema migrations.
-
+> 
 ---
 
 ### Exercise 3: Finding Non-Null Populated Fields
@@ -221,7 +221,7 @@ Query documents where `email` exists AND is not equal to `null`.
 > 1. Combining `$exists: true` and `$ne: null` guarantees the field is present and populated with a real value.
 > 2. Filters out both missing keys and explicit null placeholders.
 > 3. Standard check for mandatory values in flexible schema collections.
-
+> 
 ---
 
 

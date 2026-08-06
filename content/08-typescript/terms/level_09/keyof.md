@@ -100,19 +100,19 @@ Extract the key union type of a `User` interface using `keyof User`.
 >   name: string;
 >   email: string;
 > }
-
-type UserKeys = keyof User; // "id" | "name" | "email"
-
-const validKey: UserKeys = "email";
-// const invalidKey: UserKeys = "password"; // ❌ Compile Error!
-```
-
+> 
+> type UserKeys = keyof User; // "id" | "name" | "email"
+> 
+> const validKey: UserKeys = "email";
+> // const invalidKey: UserKeys = "password"; // ❌ Compile Error!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `keyof T` produces a string or numeric literal union of all public property keys of type `T`.
 > 2. Keeps key unions synchronized if new properties are added to `User` in the future.
 > 3. Essential operator for type-safe object property iteration and lookups.
-
+> 
 ---
 
 ### Exercise 2: Type-Safe Property Access Utility Functions
@@ -131,19 +131,19 @@ Create a type-safe `getValue<T, K extends keyof T>(obj: T, key: K)` utility.
 > function getValue<T, K extends keyof T>(obj: T, key: K): T[K] {
 >   return obj[key];
 > }
-
-const car = { make: "Toyota", year: 2022, isElectric: false };
-
-const year = getValue(car, "year"); // Inferred as number
-const make = getValue(car, "make"); // Inferred as string
-```
-
+> 
+> const car = { make: "Toyota", year: 2022, isElectric: false };
+> 
+> const year = getValue(car, "year"); // Inferred as number
+> const make = getValue(car, "make"); // Inferred as string
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `K extends keyof T` ensures callers can pass ONLY valid property keys existing on `obj`.
 > 2. `T[K]` returns the exact property return type corresponding to key `K`.
 > 3. Prevents accessing non-existent keys at compile time.
-
+> 
 ---
 
 ### Exercise 3: Auditing `keyof` Behavior on Index Signatures
@@ -162,13 +162,13 @@ Explain why `keyof Record<string, number>` evaluates to `string | number` while 
 > type DictKeys = keyof Record<string, number>; // string | number (JS coerces obj[1] to obj["1"])
 > type ArrayKeys = keyof string[];             // number | "length" | "push" | "map" | ...
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. For string index signatures (`Record<string, V>`), `keyof` returns `string | number` because JavaScript coerces numeric object keys to strings at runtime.
 > 2. For arrays, `keyof` produces a union of numeric indices (`number`) AND prototype array method names.
 > 3. Foundational rule of `keyof` type operations.
-
+> 
 ---
 
 

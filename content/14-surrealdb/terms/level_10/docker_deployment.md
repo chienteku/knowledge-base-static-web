@@ -161,7 +161,7 @@ Formulate a `docker run` command to launch a single-node persistent SurrealDB da
 > 1. `-v /var/surreal_data:/mydata` mounts host storage into the container for persistent file storage.
 > 2. `-p 8000:8000` maps container WebSocket/HTTP port 8000 to the host network.
 > 3. `file:/mydata/prod.db` specifies local disk persistence path inside the container.
-
+> 
 ---
 
 ### Exercise 2: Docker Compose Multi-Service Configuration
@@ -197,7 +197,7 @@ Write a `docker-compose.yml` file configuring a SurrealDB database container alo
 > 1. Docker Compose orchestrates database container deployment alongside application microservices.
 > 2. Named volume `surreal_data` preserves database files across container reboots.
 > 3. Simplifies local development environment setup.
-
+> 
 ---
 
 ### Exercise 3: Healthcheck Configuration for Container Services
@@ -225,7 +225,7 @@ Configure a Docker healthcheck for a SurrealDB container to verify HTTP `/health
 > 1. SurrealDB exposes an HTTP `/health` endpoint returning `200 OK` when ready.
 > 2. Docker healthchecks prevent dependent app containers from starting before the database is initialized.
 > 3. Ensures smooth multi-container orchestration.
-
+> 
 ---
 
 

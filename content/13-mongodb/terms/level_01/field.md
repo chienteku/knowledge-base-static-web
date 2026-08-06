@@ -158,7 +158,7 @@ Add a new field `loyaltyTier: "Gold"` to an existing user document using `$set`.
 > 1. `$set` adds new fields dynamically to target documents without altering schema definitions.
 > 2. Documents in the same collection can contain different fields.
 > 3. Eliminates `ALTER TABLE ADD COLUMN` DDL locks required by relational databases.
-
+> 
 ---
 
 ### Exercise 2: Field Removal with `$unset`
@@ -185,7 +185,7 @@ Remove a temporary field `draftNotes` from a user document using `$unset`.
 > 1. `$unset` deletes specified fields from matching documents.
 > 2. Reclaims document storage bytes in BSON binary structures.
 > 3. Field values are completely removed rather than set to `null`.
-
+> 
 ---
 
 ### Exercise 3: Field Renaming with `$rename`
@@ -212,7 +212,7 @@ Rename field `phone_number` to `phoneNumber` across all documents in collection 
 > 1. `$rename` updates field names atomically across existing records.
 > 2. Preserves stored field values under the new key name.
 > 3. Essential operator for schema refactoring migrations.
-
+> 
 ---
 
 

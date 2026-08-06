@@ -267,7 +267,7 @@ If a user opens the page on a mobile device where the viewport width is `300px`,
 > ```
 > - Calculate `4vw` of `300px` first.
 > - Verify if the calculated value breaches the minimum bound boundary.
-
+> 
 ---
 
 
@@ -288,7 +288,7 @@ If a user opens the page on a mobile device where the viewport width is `300px`,
 > ```
 >
 > **Explanation:** `clamp(2rem, 5vw, 4rem)` creates fluid typography scaling smoothly across viewport sizes.
-
+> 
 ---
 
 ### Exercise 3: Responsive Padding using min()
@@ -307,7 +307,7 @@ If a user opens the page on a mobile device where the viewport width is `300px`,
 > ```
 >
 > **Explanation:** `min(5vw, 40px)` applies 5vw fluid padding on mobile, clamping at 40px on desktop.
-
+> 
 ## 7. Related Terms
 - [Responsive Design (Concept)](responsive_design.md) — The adaptation philosophy.
 - [`calc()`](../level_11/calc.md) — Basic CSS math.

@@ -196,7 +196,7 @@ function SyncParent() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Lifting Shared Accordion State Up
@@ -221,7 +221,7 @@ function SyncParent() {
 > ```
 >
 > **Explanation:** Lifting state up to the closest common parent coordinates state synchronization between sibling components.
-
+> 
 ---
 
 ### Exercise 3: State Colocation Golden Rule
@@ -238,7 +238,7 @@ function SyncParent() {
 > ```
 >
 > **Explanation:** Colocating state minimizes un-necessary parent and sibling re-renders.
-
+> 
 ## 7. Related Terms
 - [Prop Drilling](../level_06/prop_drilling.md) — The code maintainability cost of lifting state too high.
 - [The Context API](../level_06/context_api.md) — The alternative state sharing mechanism for deeply nested trees.

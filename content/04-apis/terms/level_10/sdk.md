@@ -165,7 +165,7 @@ class UserServiceSDK {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: SDK vs API Distinction

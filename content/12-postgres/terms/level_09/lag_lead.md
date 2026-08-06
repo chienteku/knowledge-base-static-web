@@ -172,7 +172,7 @@ Calculate the difference in sales revenue between the current month and the prev
 > 1. `LAG(column, offset, default)` fetches column values from `offset` rows preceding the current row within the window partition.
 > 2. `offset=1` looks at the previous row; `default=0` provides a fallback when no preceding row exists.
 > 3. Eliminates issuing expensive self-joins for month-over-month comparisons.
-
+> 
 ---
 
 ### Exercise 2: Looking Ahead to Next Rows with `LEAD()`
@@ -202,7 +202,7 @@ Calculate the time interval between a user's current audit log event and their N
 > 1. `LEAD(column, offset)` accesses values from future rows following the current row.
 > 2. `PARTITION BY user_id` isolates calculation boundaries per user.
 > 3. Calculates time intervals between consecutive user actions.
-
+> 
 ---
 
 ### Exercise 3: Detecting Trend Changes across Ordered Sequences
@@ -233,7 +233,7 @@ Identify instances where a stock price dropped compared to the previous day's cl
 > 1. Combines `LAG()` positional window functions with `CASE` expressions.
 > 2. Classifies sequential row trends.
 > 3. Financial analytics pattern.
-
+> 
 ---
 
 

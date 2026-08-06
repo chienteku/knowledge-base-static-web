@@ -226,7 +226,7 @@ getUserProfile(false).then(p => console.log("Profile 2:", p));
 > ```
 > - Inside `try`, return `await fetchUserMock(successFlag)`.
 > - Inside `catch(err)`, return `{ name: "Guest" }`.
-
+> 
 ---
 
 ### Exercise 2: Safely Awaiting Async Functions with Try/Catch
@@ -253,7 +253,7 @@ getUserProfile(false).then(p => console.log("Profile 2:", p));
 > ```
 >
 > **Explanation:** `await` unrolls promise rejections into standard exceptions caught by `try/catch`.
-
+> 
 ---
 
 ### Exercise 3: Combining Async Try/Catch with Finally
@@ -279,8 +279,8 @@ getUserProfile(false).then(p => console.log("Profile 2:", p));
 > ```
 >
 > **Explanation:** `finally` guarantees state cleanup after async operations complete.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

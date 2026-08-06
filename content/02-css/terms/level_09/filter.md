@@ -215,7 +215,7 @@ img.logo { filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)); } /* Traces PNG 
 > ```
 > - Avoid using `box-shadow` because the icon container is rectangular.
 > - Apply the shadow function designed for custom outlines.
-
+> 
 ---
 
 
@@ -240,7 +240,7 @@ img.logo { filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)); } /* Traces PNG 
 > ```
 >
 > **Explanation:** `filter: grayscale()` transforms image color channels.
-
+> 
 ---
 
 ### Exercise 3: Chaining Multiple Filter Functions
@@ -259,7 +259,7 @@ img.logo { filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)); } /* Traces PNG 
 > ```
 >
 > **Explanation:** Multiple filter functions are chained space-separated in a single declaration.
-
+> 
 ## 7. Related Terms
 - [`box-shadow` (Card Shadows)](box_shadow.md) — The rectangular alternative.
 - [`backdrop-filter`](backdrop_filter.md) — Applying filters behind an element.

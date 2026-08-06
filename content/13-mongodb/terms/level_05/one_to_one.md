@@ -175,7 +175,7 @@ Model a user entity with personal profile details (`bio`, `avatarUrl`, `twitterH
 > 1. 1-to-1 relationships should be embedded in the same document by default.
 > 2. Fetches core entity and profile details in a single atomic read.
 > 3. Subdocument encapsulation keeps profile fields organized.
-
+> 
 ---
 
 ### Exercise 2: Splitting 1-to-1 Documents for Security Isolation
@@ -209,7 +209,7 @@ Separate sensitive payment credential details (`user_credentials`) into a separa
 > 1. 1-to-1 data is split into separate collections when security rules or compliance policies require restricted access.
 > 2. Allows database role-based access control (RBAC) to restrict read access on `user_credentials`.
 > 3. Protects sensitive data from accidental API response exposure.
-
+> 
 ---
 
 ### Exercise 3: Splitting 1-to-1 Documents for Large Payload Isolation
@@ -237,7 +237,7 @@ Separate large blob attributes (`user_resumes`) into a secondary collection to k
 > 1. Splitting large, infrequently accessed fields into secondary collections reduces working set sizes in RAM.
 > 2. Keeps primary collection documents small, improving cache hit ratios for routine queries.
 > 3. Fetches large blobs via `$lookup` only when requested.
-
+> 
 ---
 
 

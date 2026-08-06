@@ -173,7 +173,7 @@ Group sales orders into 1-month date buckets using `DATE_TRUNC('month', created_
 > 1. `DATE_TRUNC('unit', timestamp)` truncates a timestamp to the specified precision (e.g. `'day'`, `'month'`, `'year'`).
 > 2. Groups all orders occurring within the same calendar month into a single bucket.
 > 3. Standard date aggregation function for reporting.
-
+> 
 ---
 
 ### Exercise 2: Calculating Age Intervals with `AGE`
@@ -202,7 +202,7 @@ Calculate a user's exact age in years, months, and days based on `birth_date`.
 > 1. `AGE(timestamp1, timestamp2)` calculates the exact difference between two dates as an `INTERVAL`.
 > 2. Accounts for leap years and variable calendar month lengths.
 > 3. Returns formatted interval objects (`"25 years 3 mons 12 days"`).
-
+> 
 ---
 
 ### Exercise 3: Timezone Formatting with `AT TIME ZONE`
@@ -230,7 +230,7 @@ Convert UTC timestamps stored in `created_at` to `'America/New_York'` local time
 > 1. `AT TIME ZONE 'tz_name'` shifts a `TIMESTAMPTZ` UTC timestamp to the target local timezone.
 > 2. Handles Daylight Saving Time (DST) adjustments automatically.
 > 3. Essential for localized client dashboard reporting.
-
+> 
 ---
 
 

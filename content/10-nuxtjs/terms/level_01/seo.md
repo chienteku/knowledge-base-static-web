@@ -149,20 +149,20 @@ Configure page title, meta description, and canonical link tags inside a page co
 >   ]
 > });
 > </script>
-
-<template>
-  <main>
-    <h1>Nuxt 3 SEO Masterclass</h1>
-  </main>
-</template>
-```
-
+> 
+> <template>
+>   <main>
+>     <h1>Nuxt 3 SEO Masterclass</h1>
+>   </main>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useHead()` updates the `<head>` section of HTML documents during SSR and client-side navigation.
 > 2. Server-renders static HTML meta tags for search engine web crawlers.
 > 3. Reactive options automatically update meta tags when reactive state changes.
-
+> 
 ---
 
 ### Exercise 2: Type-Safe Meta Tag Management with `useSeoMeta()`
@@ -189,13 +189,13 @@ Set OpenGraph and Twitter card social share preview metadata using `useSeoMeta()
 > });
 > </script>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `useSeoMeta()` provides a flat, strongly typed interface for 100+ standard SEO and social meta tags.
 > 2. Prevents syntax typos in meta tag names and properties.
 > 3. Fully integrated with Nuxt 3 server-side HTML rendering.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Meta Data from Async Data Fetching
@@ -214,33 +214,29 @@ Fetch article metadata from an API and dynamically populate page title and meta 
 > <script setup lang="ts">
 > const route = useRoute();
 > const { data: article } = await useFetch(`/api/articles/${route.params.slug}`);
-
-useSeoMeta({
-  title: () => article.value?.title ?? "Article",
-  description: () => article.value?.summary ?? "Default summary"
-});
-</script>
-
-<template>
-  <article v-if="article">
-    <h1>{{ article.title }}</h1>
-    <p>{{ article.content }}</p>
-  </article>
-</template>
-```
-
+> 
+> useSeoMeta({
+>   title: () => article.value?.title ?? "Article",
+>   description: () => article.value?.summary ?? "Default summary"
+> });
+> </script>
+> 
+> <template>
+>   <article v-if="article">
+>     <h1>{{ article.title }}</h1>
+>     <p>{{ article.content }}</p>
+>   </article>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Passing getter functions (`() => article.value?.title`) ensures meta tags update reactively when async data resolves.
 > 2. Server-renders fetched article meta tags into initial HTML response for social bots and crawlers.
 > 3. Production pattern for dynamic SSR content pages.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Universal Rendering (SSR)](universal_rendering.md) — The process that produces the structured HTML.

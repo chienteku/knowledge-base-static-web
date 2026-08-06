@@ -135,13 +135,13 @@ Create a static Route Handler `app/api/static-data/route.ts` that caches JSON re
 >   return Response.json(data);
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. In Next.js App Router, `GET` Route Handlers without dynamic parameters are cached statically by default.
 > 2. Executed once during `next build` and served as static JSON artifacts.
 > 3. Delivers ultra-fast CDN edge response performance.
-
+> 
 ---
 
 ### Exercise 2: Opting Out of Route Handler Caching with `dynamic = 'force-dynamic'`
@@ -159,21 +159,21 @@ Force a `GET` Route Handler to bypass static caching and run dynamically on ever
 > ```typescript
 > // app/api/live-status/route.ts
 > export const dynamic = "force-dynamic";
-
-export async function GET() {
-  return Response.json({
-    status: "online",
-    timestamp: Date.now()
-  });
-}
-```
-
+> 
+> export async function GET() {
+>   return Response.json({
+>     status: "online",
+>     timestamp: Date.now()
+>   });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `export const dynamic = 'force-dynamic'` instructs Next.js to bypass static route caching.
 > 2. Re-evaluates the Route Handler logic on Node.js/edge servers for every incoming HTTP request.
 > 3. Essential for real-time telemetry or status endpoints.
-
+> 
 ---
 
 ### Exercise 3: Time-Based Route Handler Revalidation (`revalidate`)
@@ -191,25 +191,21 @@ Configure a `GET` Route Handler to revalidate cached JSON output every 60 second
 > ```typescript
 > // app/api/news/route.ts
 > export const revalidate = 60;
-
-export async function GET() {
-  const news = await fetch("https://api.example.com/raw-news").then((r) => r.json());
-  return Response.json(news);
-}
-```
-
+> 
+> export async function GET() {
+>   const news = await fetch("https://api.example.com/raw-news").then((r) => r.json());
+>   return Response.json(news);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `export const revalidate = seconds` enables Stale-While-Revalidate (SWR) for the Route Handler.
 > 2. Caches JSON responses for 60 seconds before triggering background revalidation.
 > 3. Efficient API response caching pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Data Caching (`force-cache`, `no-store`)](../level_05/data_caching.md) — Caching individual fetches rather than whole routes.

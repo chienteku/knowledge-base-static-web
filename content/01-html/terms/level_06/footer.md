@@ -163,7 +163,7 @@ The `<footer>` is the copyright page at the very back of the book, listing the p
 > False. While the main page footer is almost always at the bottom of the page visually and structurally, you can also use `<footer>` tags inside `<article>` or `<section>` elements, meaning they might appear in the middle of your HTML document!
 > ```
 > - Think about how the `<header>` tag works. Is it limited to just the top of the page?
-
+> 
 ---
 
 
@@ -188,7 +188,7 @@ The `<footer>` is the copyright page at the very back of the book, listing the p
 > ```
 >
 > **Explanation:** `<footer>` encapsulates page copyright, sitemap links, and site attribution metadata.
-
+> 
 ---
 
 ### Exercise 3: Footer Landmark Role
@@ -205,7 +205,7 @@ The `<footer>` is the copyright page at the very back of the book, listing the p
 > ```
 >
 > **Explanation:** Root-level `<footer>` elements act as `contentinfo` accessibility landmarks.
-
+> 
 ## 7. Related Terms
 - [`<header>`](header.md) — The introductory equivalent to the footer.
 - [`<article>` and `<section>`](article_section.md) — Often contains its own specific `<footer>`.

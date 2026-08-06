@@ -144,13 +144,13 @@ Write a minimal production `Dockerfile` leveraging standalone Node server output
 > 
 > CMD ["node", ".output/server/index.mjs"]
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Standalone builds require ONLY the `.output/` directory and a Node.js runtime.
 > 2. Omits devDependencies, TypeScript compilers, and root `node_modules/` from deployment images.
 > 3. Reduces Docker container image size from 1GB+ down to ~100MB.
-
+> 
 ---
 
 ### Exercise 2: Setting Environment Variables in Standalone Deployments
@@ -168,13 +168,13 @@ Pass environment variables `PORT=8080` and `DATABASE_URL` to a standalone server
 > ```bash
 > PORT=8080 NUXT_DATABASE_URL="postgres://..." node .output/server/index.mjs
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Standalone Nitro server reads process environment variables at startup.
 > 2. `PORT=8080` configures the HTTP listening port.
 > 3. `NUXT_` prefixed variables populate runtime configuration settings dynamically.
-
+> 
 ---
 
 ### Exercise 3: Process Management with PM2 for Standalone Builds
@@ -206,19 +206,15 @@ Configure a PM2 `ecosystem.config.js` file to run standalone Nuxt server in clus
 >   ]
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. PM2 manages standalone Node server processes, automatically restarting worker processes if crashes occur.
 > 2. `exec_mode: 'cluster'` spawns multiple Node.js worker processes across all available CPU cores.
 > 3. Production Node.js server deployment standard.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`.output/` Directory](output_directory.md) — The folder where the standalone build is stored.

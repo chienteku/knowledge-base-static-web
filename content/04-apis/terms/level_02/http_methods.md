@@ -133,7 +133,7 @@ PATCH /users/5 HTTP/1.1
 > 2. `POST`. You are creating a new "Order" record in the database.
 > ```
 > - Does the action create something new, or just read existing data?
-
+> 
 ---
 
 ### Exercise 2: HTTP Method Selection Matrix

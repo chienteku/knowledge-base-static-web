@@ -216,9 +216,9 @@ pub fn allocate_test() {
 > 2. **Alignment Calculation:** Memory allocations require addresses to be aligned to powers of two matching `layout.align()`. `(current_addr + align - 1) & !(align - 1)` rounds the pointer up to the required alignment boundary.
 > 3. **Lock-Free Bump Allocation:** `compare_exchange_weak` atomically updates `self.next` from `current` to `offset + size`. If another core or interrupt thread modified `next` concurrently, the loop retries with the updated offset.
 > 4. **Registration via `#[global_allocator]`:** Annotating `static ALLOCATOR` routes all `alloc` requests (`Vec::with_capacity`, `Box::new`) directly to our `BumpAllocator::alloc` implementation.
- 
- ---
- 
+>  
+>  ---
+>  
 ### Exercise 2: Memory Profiling & Allocation Tracking Wrapper Allocator
 
 **Scenario:** During systems debugging and software profiling, developers must monitor heap memory consumption, detect memory leaks, and identify peak usage. Implement a generic decorator allocator `TrackingAllocator<A: GlobalAlloc>` that wraps an inner allocator and tracks active memory usage, peak memory usage, and total allocation/deallocation call counts. Write a test function using `std::alloc::System` proving that dropping heap data correctly decrements active memory metrics.
@@ -328,7 +328,7 @@ pub fn allocate_test() {
 > 2. **Atomic Accounting:** `fetch_add` and `fetch_sub` provide thread-safe counter modifications without full mutex locking overhead.
 > 3. **Compare-And-Swap (CAS) Peak Tracking:** Updating `peak_memory` uses a `compare_exchange_weak` loop to ensure that concurrent allocations across multiple threads correctly update the maximum recorded high-water mark without race conditions.
 > 4. **RAII Drop Verification:** When `data` drops at the end of the inner block scope, Rust automatically invokes `GlobalAlloc::dealloc`, decrements `currently_allocated`, and increments `deallocation_count`.
-
+> 
 ---
 
 ### Exercise 3: Constant-Time Fixed-Size Block Pool Allocator for Real-Time Embedded Systems
@@ -471,7 +471,7 @@ pub fn allocate_test() {
 > 2. **Spinlock Synchronization:** `AtomicBool::swap(true, Acquire)` provides lightweight mutual exclusion in `#![no_std]` bare-metal environments where OS mutexes are unavailable. `core::hint::spin_loop()` notifies CPU execution hardware of busy waiting.
 > 3. **Pointer Arithmetic for Deallocation:** `dealloc` calculates the index of the freed block by finding `(ptr - pool_start) / BLOCK_SIZE`. This avoids searching through tables or maintaining per-block header metadata overhead.
 > 4. **Deterministic OOM & Recycling:** If all blocks are allocated (`free_head == -1`), `alloc` returns `null_mut()`. When objects drop, their block indices are immediately returned to `free_head`, enabling deterministic memory reuse without external fragmentation.
-
+> 
 ---
  
 ---

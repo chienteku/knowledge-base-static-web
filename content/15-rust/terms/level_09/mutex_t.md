@@ -335,7 +335,7 @@ Design a thread-safe `ResilientTaskQueue` that:
 > 1. **Understanding Mutex Poisoning:** In Rust, if a thread holding a `MutexGuard` panics, the `Mutex` is marked as *poisoned* to prevent unhandled corrupt state from propagating silently.
 > 2. **Poison Error Handling:** Calling `.lock()` on a poisoned mutex returns `Err(PoisonError<MutexGuard<T>>)`. Calling `err.into_inner()` retrieves the underlying `MutexGuard`, allowing the program to safely inspect or clean up data without crashing.
 > 3. **Concurrency Safety:** Combining `Arc` with `Mutex` allows safe multi-threaded sharing (`Send` + `Sync`). The `pop_or_recover()` method guarantees that task worker loops remain resilient even when individual jobs crash.
-
+> 
 ---
 
 ### Exercise 2: Non-Blocking Telemetry Aggregator using `try_lock()` Fallback Buffers
@@ -484,7 +484,7 @@ Implement `NonBlockingCollector`:
 > 1. **Non-Blocking Lock Acquisition:** `Mutex::try_lock()` attempts to acquire exclusive access immediately. If another thread holds the lock, it immediately returns `Err(TryLockError::WouldBlock)` without causing the calling thread to sleep.
 > 2. **Performance Trade-offs:** High-performance systems use `try_lock()` to avoid thread context switching overhead on critical execution paths.
 > 3. **Batch Aggregation:** When direct acquisition fails, records buffered locally can be flushed in bulk using `flush_fallback_batch()`, amortizing lock acquisition cost across multiple metric events.
-
+> 
 ---
 
 ### Exercise 3: Deadlock-Free Multi-Resource Transfers with Ordered Lock Acquisition
@@ -624,7 +624,7 @@ Implement a deadlock-free bank transaction ledger:
 > 1. **The Cause of Deadlocks:** Deadlocks occur when circular waiting occurs among threads holding locks. If Thread A holds Lock 1 and requests Lock 2, while Thread B holds Lock 2 and requests Lock 1, neither thread can proceed.
 > 2. **Global Lock Ordering Strategy:** A standard method to prevent deadlocks is acquiring multiple locks in a global total order. By converting `Arc::as_ptr()` pointer addresses to integers (`usize`), both threads lock lower-addressed Mutexes before higher-addressed Mutexes regardless of parameter order.
 > 3. **Invariant Protection:** Holding both mutex guards within the scope of `BankLedger::transfer` ensures atomic transfer between accounts while guaranteeing invariant balance conservation (`acc1.balance + acc2.balance == total`).
-
+> 
 ---
 
 ## 6. Related Terms

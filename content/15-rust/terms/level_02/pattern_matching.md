@@ -325,7 +325,7 @@ Design and implement a binary message parser `parse_trading_frame` and an execut
 > 2. **Subpattern Binding (`@`)**: In `payload @ ..`, `@` binds the rest of the slice view into `payload` without allocating new memory or copying bytes.
 > 3. **Match Guards (`if (price as u64)...`)**: Match guards extend pattern capability by evaluating boolean expressions after structural matching succeeds. Note that match guards do not affect pattern exhaustiveness; the compiler treats guarded arms as refutable and requires unguarded or catch-all arms.
 > 4. **Ownership and Move Semantics**: In `route_order(order: Order)`, struct field pattern matching `Order::Limit { price, quantity, .. }` destructures primitive scalar types (`u32`) which implement `Copy`. When passing `order` into `PriorityExecution(order)`, ownership of the original `order` value is moved cleanly without re-allocation.
-
+> 
 ---
 
 ### Exercise 2: AST Expression Optimizer and Evaluator with Nested Patterns and `@` Subpattern Bindings
@@ -523,7 +523,7 @@ Implement an AST node representation `Expr` and optimization function `optimize_
 > 2. **Range Pattern with `@` Binding (`b @ 1..=i64::MAX`)**: Subpattern binding via `@` checks if the integer falls within the valid non-zero positive range while binding the matched value to variable `b`. This prevents runtime panics when calculating constant division.
 > 3. **Box Dereferencing & Move Operations (`*opt_left`)**: When an identity arm like `(Op::Add, _, Expr::Literal(0)) => *opt_left` matches, dereferencing `*opt_left` moves the inner `Expr` out of the heap-allocated `Box<Expr>` and returns it directly, discarding the unneeded right operand cleanly.
 > 4. **Exhaustiveness and Wildcards (`(op, _, _)`)**: Pattern matching in Rust requires every possible case to be handled. The wildcard pattern `_` handles any binary operator/operand combination that did not match an algebraic identity, preserving the un-foldable subtree.
-
+> 
 ---
 
 ### Exercise 3: Telemetry Event Stream Classifier and Storage Router
@@ -740,7 +740,7 @@ Implement a telemetry processing pipeline using Rust pattern matching:
 > 2. **Ref-Matching `(&record.payload, is_hot_priority)`**: Passing `&record.payload` into `match` borrows the payload reference instead of taking ownership. This allows `classify_and_route` to operate on borrowed `&TelemetryRecord` instances without requiring `Clone` or heap allocations.
 > 3. **Range Patterns in Struct Destructuring (`status_code: 500..=599`)**: Rust allows range patterns directly inside named struct fields during enum destructuring, enabling concise HTTP status classification without nested `if/else` checks.
 > 4. **Pattern OR Chains (`|`) with Match Guards**: Pattern arms can join multiple patterns using `|`. When combining pattern OR chains with match guards (e.g. `(LogPayload::HttpAccess { ... }) | (LogPayload::HttpAccess { ... }) if ...`), the guard condition applies to any pattern in the chain before entering the arm body.
-
+> 
 ---
 
 ## 6. Related Terms

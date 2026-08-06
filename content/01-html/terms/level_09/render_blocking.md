@@ -178,7 +178,7 @@ Which of the two files (`modal-widget.js` or `custom-theme.css`) is blocking the
 > The script `modal-widget.js` blocks the stylesheet from downloading. Because the script tag is synchronous and declared first, the browser halts HTML parsing and stops searching for other links until the script is fully downloaded and executed.
 > ```
 > - The browser reads top-to-bottom. If a synchronous script halts the parser, does it see the lines below it?
-
+> 
 ---
 
 
@@ -202,7 +202,7 @@ Which of the two files (`modal-widget.js` or `custom-theme.css`) is blocking the
 > ```
 >
 > **Explanation:** External CSS stylesheets and synchronous scripts block initial page paint.
-
+> 
 ---
 
 ### Exercise 3: Eliminating Render-Blocking CSS for Critical Path
@@ -222,7 +222,7 @@ Which of the two files (`modal-widget.js` or `custom-theme.css`) is blocking the
 > ```
 >
 > **Explanation:** Inlining critical CSS enables instant above-the-fold rendering.
-
+> 
 ## 7. Related Terms
 - [Critical Rendering Path](critical_rendering_path.md) — The pipeline that gets blocked.
 - [`<link>`](../level_08/link.md) — The stylesheet wrapper.

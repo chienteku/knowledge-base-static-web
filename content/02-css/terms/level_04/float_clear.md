@@ -196,7 +196,7 @@ If you float an image, but you want the *next* paragraph to start cleanly *below
 > No! You should use Flexbox (`display: flex; justify-content: space-between;`). You only use `float` if you want a large block of text to wrap around a picture like a newspaper.
 > ```
 > - Are we wrapping text around an image, or building a UI layout?
-
+> 
 ---
 
 
@@ -218,7 +218,7 @@ If you float an image, but you want the *next* paragraph to start cleanly *below
 > ```
 >
 > **Explanation:** `float` was specifically designed to wrap text around images inside articles.
-
+> 
 ---
 
 ### Exercise 3: Clearfix CSS Snippet
@@ -239,7 +239,7 @@ If you float an image, but you want the *next* paragraph to start cleanly *below
 > ```
 >
 > **Explanation:** Clearfix pseudo-element clears floated children to prevent parent height collapse.
-
+> 
 ## 7. Related Terms
 - [`display: flex`](../level_05/display_flex.md) — The modern Flexbox layout container.
 - [Document Flow (Normal Flow)](document_flow.md) — The layout engine disrupted by floats.

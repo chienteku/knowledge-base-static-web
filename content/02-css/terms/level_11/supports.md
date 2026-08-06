@@ -218,7 +218,7 @@ Checking modern display properties:
 > ```
 > - Start by applying the opacity fallback as the default style.
 > - Wrap the filter properties inside a `@supports (filter: blur(5px))` feature query block and reset opacity to 1.
-
+> 
 ---
 
 
@@ -241,7 +241,7 @@ Checking modern display properties:
 > ```
 >
 > **Explanation:** `@supports` provides progressive enhancement Feature Queries.
-
+> 
 ---
 
 ### Exercise 3: Negated supports Condition
@@ -262,7 +262,7 @@ Checking modern display properties:
 > ```
 >
 > **Explanation:** `@supports not (...)` provides fallback styling for unsupported CSS features.
-
+> 
 ## 7. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Viewport sizing at-rules.
 - [Container Queries (`@container`)](container_queries.md) — Component container queries.

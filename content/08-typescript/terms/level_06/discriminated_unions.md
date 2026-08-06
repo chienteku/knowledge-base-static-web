@@ -144,27 +144,27 @@ Define a `Shape` discriminated union containing `Square`, `Rectangle`, and `Circ
 > type Square = { kind: "square"; size: number };
 > type Rectangle = { kind: "rectangle"; width: number; height: number };
 > type Circle = { kind: "circle"; radius: number };
-
-type Shape = Square | Rectangle | Circle;
-
-function calculateArea(shape: Shape): number {
-  switch (shape.kind) {
-    case "square":
-      return shape.size * shape.size;
-    case "rectangle":
-      return shape.width * shape.height;
-    case "circle":
-      return Math.PI * shape.radius ** 2;
-  }
-}
-```
-
+> 
+> type Shape = Square | Rectangle | Circle;
+> 
+> function calculateArea(shape: Shape): number {
+>   switch (shape.kind) {
+>     case "square":
+>       return shape.size * shape.size;
+>     case "rectangle":
+>       return shape.width * shape.height;
+>     case "circle":
+>       return Math.PI * shape.radius ** 2;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Discriminated unions share a common single-valued property tag (`kind`) across all variants.
 > 2. `switch (shape.kind)` narrows `shape` to its exact constituent type in each `case` block.
 > 3. Fundamental pattern for domain modeling and state management.
-
+> 
 ---
 
 ### Exercise 2: Modeling Asynchronous State Machines
@@ -184,25 +184,25 @@ Create an asynchronous HTTP state discriminated union (`IdleState`, `LoadingStat
 > type LoadingState = { status: "loading" };
 > type SuccessState<T> = { status: "success"; data: T };
 > type ErrorState = { status: "error"; error: string };
-
-type AsyncState<T> = IdleState | LoadingState | SuccessState<T> | ErrorState;
-
-function renderState(state: AsyncState<string[]>) {
-  switch (state.status) {
-    case "idle": return "Click to load";
-    case "loading": return "Loading items...";
-    case "success": return `Loaded ${state.data.length} items`;
-    case "error": return `Error: ${state.error}`;
-  }
-}
-```
-
+> 
+> type AsyncState<T> = IdleState | LoadingState | SuccessState<T> | ErrorState;
+> 
+> function renderState(state: AsyncState<string[]>) {
+>   switch (state.status) {
+>     case "idle": return "Click to load";
+>     case "loading": return "Loading items...";
+>     case "success": return `Loaded ${state.data.length} items`;
+>     case "error": return `Error: ${state.error}`;
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Discriminated unions prevent invalid state combinations (e.g. `loading: true` and `error: "Failed"` simultaneously).
 > 2. Guarantees that data payload properties (`data`, `error`) exist ONLY when the corresponding `status` tag matches.
 > 3. Standard architecture for UI state management (React `useReducer`, Redux).
-
+> 
 ---
 
 ### Exercise 3: Nested Discriminants and Composite Tags
@@ -221,22 +221,22 @@ Demonstrate narrowing on nested discriminant properties like `event.payload.type
 > type UserEvent = 
 >   | { meta: { type: "USER_LOGIN" }; userId: string }
 >   | { meta: { type: "USER_LOGOUT" }; timestamp: number };
-
-function handleEvent(event: UserEvent) {
-  if (event.meta.type === "USER_LOGIN") {
-    console.log("Logged in user:", event.userId);
-  } else {
-    console.log("Logged out at:", event.timestamp);
-  }
-}
-```
-
+> 
+> function handleEvent(event: UserEvent) {
+>   if (event.meta.type === "USER_LOGIN") {
+>     console.log("Logged in user:", event.userId);
+>   } else {
+>     console.log("Logged out at:", event.timestamp);
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript control-flow analysis can narrow unions using nested property tags (`event.meta.type`).
 > 2. Simplifies deep event routing and payload handling.
 > 3. Highly versatile discriminant pattern.
-
+> 
 ---
 
 

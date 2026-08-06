@@ -179,7 +179,7 @@ Compare surrogate primary key `id INTEGER GENERATED ALWAYS AS IDENTITY` against 
 > 1. Surrogate keys (`id`) are artificial 4-byte or 8-byte integers with zero business meaning.
 > 2. Natural keys (e.g. `email` or `SSN`) carry business meaning but change over time, forcing expensive cascading updates across foreign key child tables.
 > 3. Database design rule: Use immutable surrogate keys as primary keys; enforce natural uniqueness with `UNIQUE` constraints.
-
+> 
 ---
 
 ### Exercise 2: Natural Key Usage in Lookup Tables
@@ -208,7 +208,7 @@ Create a `currency_codes` lookup table using a natural 3-character ISO code (`US
 > 1. Immutable, standardized short strings (like 3-character ISO currency codes) are acceptable natural primary keys.
 > 2. Eliminates requiring extra `JOIN` operations when foreign tables store `'USD'` directly.
 > 3. High efficiency lookup table pattern.
-
+> 
 ---
 
 ### Exercise 3: UUID Surrogate Keys for Distributed Systems
@@ -236,7 +236,7 @@ Create a table using `UUID` as surrogate primary key (`gen_random_uuid()`) for c
 > 1. `UUID` (128-bit universally unique identifiers) can be generated offline by client applications without database coordination.
 > 2. Eliminates auto-increment sequence bottleneck in distributed multi-region databases.
 > 3. Modern distributed system primary key pattern.
-
+> 
 ---
 
 

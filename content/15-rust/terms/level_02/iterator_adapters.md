@@ -287,7 +287,7 @@ Write a function `process_telemetry_stream` that accepts an iterator of `RawTele
 > 4. **Edge Cases**:
 >    - An empty input stream yields an empty vector without executing `.scan()` or invoking closure state.
 >    - Corrupted records (zero sensor ID, `is_valid == false`) or extreme values (over $125^\circ\text{C}$) are dropped early in the pipeline before performing floating-point math or mutating running metrics.
-
+> 
 ---
 
 ### Exercise 2: Financial Order Book Log Auditor & Cumulative Volume Pipeline
@@ -430,7 +430,7 @@ Write a function `audit_trade_stream` accepting an iterator of string slices and
 > 4. **Edge Cases**:
 >    - Malformed log lines (incorrect pipe count, non-numeric prices/quantities) return `None` in `filter_map` and are safely skipped.
 >    - Cancelled orders or non-positive price/quantity values are safely rejected before cumulative state updates occur.
-
+> 
 ---
 
 ### Exercise 3: Network Packet Frame Decoder & Cryptographic XOR Processor
@@ -580,7 +580,7 @@ Write a function `process_network_frames` that takes an iterator of `RawFrame` s
 > 
 > 4. **Edge Cases**:
 >    - Checksum calculations use `.wrapping_add()` to prevent integer overflow panics in debug or release builds when summing byte values.
-
+> 
 ---
 
 ## 6. Related Terms

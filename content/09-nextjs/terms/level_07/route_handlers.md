@@ -134,13 +134,13 @@ Create a JSON API endpoint `app/api/health/route.ts` returning system status.
 >   });
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `route.ts` files define backend REST API endpoints in the App Router directory structure.
 > 2. Replaces legacy `pages/api/` handlers.
 > 3. Must be placed in a directory containing NO `page.tsx` file to avoid route collisions.
-
+> 
 ---
 
 ### Exercise 2: Processing JSON Request Payloads in `POST` Route Handlers
@@ -159,23 +159,23 @@ Read and validate incoming JSON body payloads in `app/api/feedback/route.ts`.
 > // app/api/feedback/route.ts
 > export async function POST(req: Request) {
 >   const body = await req.json();
-
-  if (!body.email || !body.message) {
-    return Response.json({ error: "Missing required fields" }, { status: 400 });
-  }
-
-  // Save feedback...
-
-  return Response.json({ success: true, received: body }, { status: 201 });
-}
-```
-
+> 
+>   if (!body.email || !body.message) {
+>     return Response.json({ error: "Missing required fields" }, { status: 400 });
+>   }
+> 
+>   // Save feedback...
+> 
+>   return Response.json({ success: true, received: body }, { status: 201 });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `await req.json()` parses the incoming HTTP request stream body into a JavaScript object.
 > 2. Returning `Response.json(..., { status: 400 })` sets custom status code headers.
 > 3. Standard REST API POST handler pattern.
-
+> 
 ---
 
 ### Exercise 3: Webhook Endpoint Signature Verification
@@ -195,29 +195,25 @@ Read raw text request bodies in a Stripe webhook Route Handler using `req.text()
 > export async function POST(req: Request) {
 >   const rawBody = await req.text();
 >   const signature = req.headers.get("stripe-signature");
-
-  if (!signature) {
-    return Response.json({ error: "Missing signature" }, { status: 400 });
-  }
-
-  // Verify HMAC signature against rawBody...
-
-  return Response.json({ received: true });
-}
-```
-
+> 
+>   if (!signature) {
+>     return Response.json({ error: "Missing signature" }, { status: 400 });
+>   }
+> 
+>   // Verify HMAC signature against rawBody...
+> 
+>   return Response.json({ received: true });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Webhook signature verification requires the UNPARSED raw string payload buffer (`req.text()`).
 > 2. Calling `req.json()` alters string formatting and invalidates cryptographic HMAC signatures.
 > 3. Critical pattern for payment gateway webhooks (Stripe, GitHub, Shopify).
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`NextRequest` & `NextResponse`](next_request_response.md) — The Next.js specific extensions to the standard Web Request/Response objects.

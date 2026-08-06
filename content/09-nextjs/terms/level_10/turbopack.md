@@ -114,13 +114,13 @@ Execute local development server using Turbopack in Next.js.
 > # Start local development server with Turbopack bundler
 > npx next dev --turbo
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Turbopack is an incremental bundler written in Rust designed as the successor to Webpack.
 > 2. `next dev --turbo` delivers up to 10x faster initial startup times and instant HMR updates.
 > 3. Re-evaluates ONLY modified functions using an internal function call graph.
-
+> 
 ---
 
 ### Exercise 2: Configuring Webpack Loaders in Turbopack (`experimental.turbo`)
@@ -150,13 +150,13 @@ Configure custom SVG loaders inside `next.config.js` under `experimental.turbo`.
 >   }
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `experimental.turbo` configures custom asset loading rules for Turbopack.
 > 2. Replaces traditional Webpack module rules when running `next dev --turbo`.
 > 3. Maintains custom asset loader compatibility.
-
+> 
 ---
 
 ### Exercise 3: Incremental Computation Architecture in Turbopack
@@ -178,19 +178,15 @@ Explain how Turbopack's Turbo Engine architecture caches function results in mem
 > - Step: Unchanged components and modules return cached memory results instantly!
 > Result: HMR update times stay constant regardless of application size!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Webpack re-bundles large module trees on file changes; Turbopack re-evaluates individual functions.
 > 2. Ensures HMR speed remains fast even in massive enterprise monorepos.
 > 3. Core architectural innovation of Turbopack.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [The Next.js Compiler (SWC)](swc.md) — The file compilation system.

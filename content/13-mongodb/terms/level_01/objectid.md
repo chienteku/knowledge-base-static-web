@@ -166,7 +166,7 @@ Deconstruct a 12-byte BSON ObjectId into its 3 constituent component parts.
 > 1. Byte 0-3: 4-byte Unix epoch timestamp in seconds.
 > 2. Byte 4-8: 5-byte random value unique to machine process.
 > 3. Byte 9-11: 3-byte incrementing counter initialized to a random number.
-
+> 
 ---
 
 ### Exercise 2: Extracting Timestamps from ObjectIds
@@ -191,7 +191,7 @@ Extract the exact creation timestamp of document `user:alice` directly from its 
 > 1. `getTimestamp()` extracts the embedded 4-byte Unix creation timestamp from an ObjectId.
 > 2. Eliminates the need for a dedicated `createdAt` date field in simple schemas.
 > 3. Enables sorting by creation order naturally using `_id`.
-
+> 
 ---
 
 ### Exercise 3: Time-Range Filtering using ObjectIds
@@ -220,7 +220,7 @@ Query documents created after a specific date `2026-01-01` by constructing a tar
 > 1. `ObjectId.createFromTime(seconds)` constructs an ObjectId threshold corresponding to a target date.
 > 2. Queries index `{ _id: 1 }` directly to filter records by creation time.
 > 3. Extremely efficient because `_id` is always indexed by default.
-
+> 
 ---
 
 

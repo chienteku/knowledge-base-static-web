@@ -228,7 +228,7 @@ function promote() {
 > - The component fails because `let { role } = profile` extracts a plain string, losing reactivity.
 > - You need to make `role` a ref linked to `profile`. You can use `toRefs(profile)` or `toRef(profile, 'role')`.
 > - Remember to use `.value` inside the `promote` function since `role` will now be a ref!
-
+> 
 ---
 
 ### Exercise 2: Composable toRefs Pattern
@@ -250,7 +250,7 @@ function promote() {
 > // Caller code:
 > const { count, title } = useFeature(); // Reactivity preserved!
 > ```
-
+> 
 ---
 
 ### Exercise 3: toRef Optional Default Value
@@ -267,8 +267,8 @@ function promote() {
 > ```javascript
 > const foo = toRef(props, 'foo', 'default');
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

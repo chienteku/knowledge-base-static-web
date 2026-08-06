@@ -198,8 +198,8 @@ async function processData() {
 > - 2. **Linter** (Logical bug).
 > - 3. **Formatter** (Layout appearance).
 > - 4. **Linter** (Potential hoisting code bug).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Role Division: ESLint vs Prettier
@@ -216,7 +216,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Linters catch code smells and syntax bugs; formatters enforce consistent code style layout.
-
+> 
 ---
 
 ### Exercise 3: ESLint Directive Comments
@@ -233,8 +233,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Inline ESLint directives override linting rules for specific code statements.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

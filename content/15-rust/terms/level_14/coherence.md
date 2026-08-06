@@ -298,7 +298,7 @@ pub trait DebugSummary { fn summarize_debug(&self); }
 > 1. **Coherence & Blanket Impls (`E0119`):** Rust enforces that for any pair `(Trait, Type)`, there is strictly one implementation across the program. The blanket `impl<T: Display> TelemetrySerializer for T` claims an implementation for *every* type implementing `Display`. Adding `impl TelemetrySerializer for SensorReadings` creates two overlapping implementations for `SensorReadings`, triggering error `E0119`.
 > 2. **Lack of Specialization in Stable Rust:** Unlike C++ template specialization, stable Rust does not permit specialized `impl` blocks to override generic blanket `impl` blocks.
 > 3. **Newtype Pattern Solution:** Wrapping `&SensorReadings` inside `CompactTelemetry<'a>` introduces a novel nominal type in the local crate. Because `CompactTelemetry` does not implement `Display`, it does not trigger the blanket implementation. Implementing `TelemetrySerializer` for `CompactTelemetry` is completely coherent and unambiguous.
-
+> 
 ---
 
 ### Exercise 2: Financial Engine — Resolving Overlapping Generic Blanket Bounds
@@ -435,7 +435,7 @@ pub trait DebugSummary { fn summarize_debug(&self); }
 > 1. **Overlapping Generic Bounds (`E0119`):** Rust's coherence checker checks for potential overlaps across generic bounds. Even if no struct currently implements both `AuditLog` and `ComplianceCheck`, Rust forbids two blanket `impl` blocks if a type *could* implement both traits in the future.
 > 2. **Explicit Adapter Pattern:** By wrapping `&WireTransfer` inside `AuditRiskAdapter<'a, T>` or `ComplianceRiskAdapter<'a, T>`, we transform the target type of `impl RiskEvaluator` from `T` to `AuditRiskAdapter<T>` and `ComplianceRiskAdapter<T>`.
 > 3. **Zero-Cost Disambiguation:** These adapter structs are non-allocating reference wrappers (`pub struct Adapter<'a, T>(&'a T)`). They compile down to direct function calls without runtime performance penalty while providing absolute coherence.
-
+> 
 ---
 
 ### Exercise 3: Embedded `no_std` Peripheral Driver — Disjoint Parameterized Generic Implementations
@@ -555,7 +555,7 @@ pub trait DebugSummary { fn summarize_debug(&self); }
 > 1. **Disjoint Types via Phantom Type Parameters:** By parameterizing `SensorDevice<B, Mode>` with `Mode`, `SensorDevice<MockI2cBus, SyncMode>` and `SensorDevice<MockI2cBus, AsyncMode>` become distinct, non-overlapping types in Rust's type system.
 > 2. **Coherence Preservation:** Because the types are distinct, `impl<B: RawBus> SensorDevice<B, SyncMode>` and `impl<B: RawBus> SensorDevice<B, AsyncMode>` do not overlap, completely eliminating coherence errors (`E0119`).
 > 3. **`no_std` Zero-Cost Abstraction:** Using `PhantomData<Mode>` ensures no runtime memory footprint or heap allocation is introduced, making this pattern ideal for resource-constrained embedded microcontrollers.
-
+> 
 ---
 
 ## 6. Related Terms

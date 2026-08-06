@@ -328,7 +328,7 @@ Without `where Self: Sized` constraints on methods (2) and (3), methods returnin
 > 2. **Opt-Out Mechanism via `where Self: Sized`**: Adding `where Self: Sized` to `create_default()` and `transform_batch()` explicitly informs the compiler that these methods are only available when `Self` has a static, known size. Because `dyn Plugin` is dynamically sized (`?Sized`), `dyn Plugin` does not fulfill `Self: Sized`. The compiler excludes these methods from vtable generation, preserving object safety for the rest of the trait.
 > 3. **Trait-Object Cloning Pattern**: `std::clone::Clone` requires `Self: Sized` on `fn clone(&self) -> Self`, making `Clone` non-object-safe. By implementing a custom `clone_box(&self) -> Box<dyn Plugin>` method on the trait, we delegate concrete cloning to the underlying type while returning a fat pointer (`Box<dyn Plugin>`). Implementing `Clone` for `Box<dyn Plugin>` directly invokes `clone_box()`.
 > 4. **Monomorphization vs Dynamic Dispatch**: Invoking `transform()` on `&dyn Plugin` performs dynamic dispatch by dereferencing the vtable pointer. Invoking `transform_batch()` on a concrete `TextCleaner` uses static monomorphization at compile time without any vtable indirection overhead.
-
+> 
 ---
 
 ### Exercise 2: Refactoring Generic Parameters to Trait Objects for Event Processing Pipelines
@@ -483,7 +483,7 @@ This trait breaks object safety because the compiler cannot construct a static v
 > 4. **Trade-offs (Static vs Dynamic Dispatch)**:
 >    - *Static Dispatch (Generics)*: Zero-cost abstraction, aggressive inlining, but monomorphization bloat and non-object-safe.
 >    - *Dynamic Dispatch (`&dyn Trait`)*: Trait-object compatible, heterogeneous collection support (`Vec<Box<dyn EventFilter>>`), but introduces pointer indirection and prevents compiler inlining.
-
+> 
 ---
 
 ### Exercise 3: Trait Object Safety in Heterogeneous Error Hierarchies & Dynamic Downcasting
@@ -666,7 +666,7 @@ In an asynchronous microservice framework, tasks execute across isolated subsyst
 > 2. **Lifetime Bounds (`'static`) for Downcasting**: To inspect type erasure at runtime via `err.downcast_ref::<T>()`, the trait object must satisfy the `'static` lifetime bound. This guarantees that the concrete type `T` contains no non-static references that could dangle after dynamic casting.
 > 3. **Vtable Inspection via `TypeId`**: `err.downcast_ref::<DatabaseError>()` queries the compiler-generated `TypeId` associated with the trait object's underlying concrete type inside the vtable. If `TypeId::of::<DatabaseError>()` matches the dynamic object's `TypeId`, the compiler safely casts the internal data pointer `*const ()` to `&DatabaseError`.
 > 4. **Thread-Safety Traits (`Send + Sync`)**: Adding auto trait bounds `+ Send + Sync` to `dyn Error` restricts boxed trait objects to thread-safe types, enabling safe transfer across async task executors (`tokio::spawn`, `std::thread::spawn`) without altering the structure of the vtable.
-
+> 
 ---
 
 ## 6. Related Terms

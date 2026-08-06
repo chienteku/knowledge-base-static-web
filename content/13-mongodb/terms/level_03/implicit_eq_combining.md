@@ -172,7 +172,7 @@ Query collection `orders` for documents where `status: "completed"` AND `custome
 > 1. Top-level keys in a query object automatically combine with implicit `AND` logic.
 > 2. Eliminates redundant `$and` wrapper syntax (e.g. `$and: [{ status: ... }, { customerId: ... }]`).
 > 3. Produces clean, readable query filters.
-
+> 
 ---
 
 ### Exercise 2: Combining Implicit AND with Operator Clauses
@@ -199,7 +199,7 @@ Query `products` where `category: "tech"` AND `price: { $gte: 50.00, $lte: 200.0
 > 1. Field equality and operator expressions combine seamlessly at the top level.
 > 2. Evaluates both category match and price range bounds simultaneously.
 > 3. Utilizes compound index `{ category: 1, price: 1 }`.
-
+> 
 ---
 
 ### Exercise 3: When Explicit `$and` Is Required
@@ -228,7 +228,7 @@ Explain why explicit `$and` is required when applying multiple expressions to th
 > 1. JavaScript JSON object key collision rules prevent duplicate keys at the top level.
 > 2. Explicit `$and: [...]` is required when combining multiple `$or` arrays or duplicate operator keys.
 > 3. Guarantees correct query AST parsing.
-
+> 
 ---
 
 

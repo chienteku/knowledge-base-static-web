@@ -137,7 +137,7 @@ toolchain: nightly-2026-08-01
 >
 > 1. Pinning exact nightly dates in `rust-toolchain.toml` ensures reproducible CI builds.
 > 2. Prevents breaking changes from daily toolchain updates.
-
+> 
 ---
 
 ### Exercise 2: Experimental Feature Gate Parser
@@ -181,7 +181,7 @@ toolchain: nightly-2026-08-01
 >
 > 1. Identifies unstable feature gates used in nightly crates.
 > 2. Helpful for audit tools.
-
+> 
 ---
 
 ### Exercise 3: Nightly Compiler Warning Filter
@@ -220,7 +220,7 @@ toolchain: nightly-2026-08-01
 >
 > 1. Identifies incomplete feature warnings emitted by nightly rustc.
 > 2. Helps track feature stability status.
-
+> 
 ---
 
 ## 6. Related Terms

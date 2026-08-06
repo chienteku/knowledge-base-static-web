@@ -321,7 +321,7 @@ Implement a `LendingIterator` trait utilizing a Generic Associated Type (GAT) li
 > 1. **GAT Lifetime Binding (`type Item<'a> where Self: 'a`)**: Standard `Iterator` forces `Item` to be independent of `&mut self` borrow lifetime. Declaring `type Item<'a> where Self: 'a` enables `Frame<'a>` to borrow directly from `parser` during the lifetime `'a` of each `next()` invocation.
 > 2. **Enforced Sequential Borrowing**: Because `Frame<'a>` borrows `&'a mut self`, Rust prevents holding multiple lended frames simultaneously. Each frame borrow must end before `parser.next()` can be called again.
 > 3. **The `where Self: 'a` Outlives Bound**: GAT lifetime parameters require `where Self: 'a` so the compiler guarantees `Self` outlives the returned reference lifetime `'a`.
-
+> 
 ---
 
 ### Exercise 2: Generic Smart Pointer Abstraction via Type GAT (`PointerFamily`)
@@ -424,7 +424,7 @@ Implement a `LendingIterator` trait utilizing a Generic Associated Type (GAT) li
 > 1. **Type GAT Parameterization (`type Pointer<T>`)**: Higher-kinded types (types parameterized over generic constructors like `Rc<T>` or `Arc<T>`) are expressed in Rust using GATs by attaching generic type parameter `T` directly to the associated type declaration.
 > 2. **Trait Bounds on Associated Types**: Trait bound `: Deref<Target = T>` ensures that callers can dereference `P::Pointer<T>` seamlessly regardless of the underlying container type.
 > 3. **Reusable Data Structure Design**: Data structures like `TreeNode<P, T>` can be reused across different concurrency models (`Rc` vs `Arc`) without code repetition or dynamic trait object overhead.
-
+> 
 ---
 
 ### Exercise 3: Zero-Copy Streaming Database Cursor (`LendingCursor`)
@@ -548,7 +548,7 @@ Implement a `LendingIterator` trait utilizing a Generic Associated Type (GAT) li
 > 1. **Zero-Allocation Data Scanning**: Using GATs allows `DbRecord<'a>` to yield borrowed `&'a [u8]` slices referencing page buffer memory without dynamic heap allocations.
 > 2. **Lifetime Safety Guarantees**: The compiler ensures that each lended record reference `rec1` cannot outlive the duration of its cursor borrow, preventing dangling pointers when advancing `PageCursor`.
 > 3. **Abstraction over Storage Backends**: Algorithms written against `LendingCursor` work uniformly across in-memory buffers, memory-mapped disk files, or flash storage pages with compile-time zero-cost abstractions.
-
+> 
 ---
 
 ## 6. Related Terms

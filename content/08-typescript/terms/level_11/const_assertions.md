@@ -93,17 +93,17 @@ Create an immutable configuration object using `as const` to prevent property mu
 >   timeout: 5000,
 >   allowedRoles: ["admin", "editor"]
 > } as const;
-
-// appConfig.timeout = 10000; // ❌ Compile Error: Cannot assign to read-only property!
-// appConfig.allowedRoles.push("user"); // ❌ Compile Error: Property 'push' does not exist on readonly tuple!
-```
-
+> 
+> // appConfig.timeout = 10000; // ❌ Compile Error: Cannot assign to read-only property!
+> // appConfig.allowedRoles.push("user"); // ❌ Compile Error: Property 'push' does not exist on readonly tuple!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `as const` locks all object fields into deeply `readonly` properties.
 > 2. Prevents string and number literal widening (`"https://..."` is inferred as exact literal type, not `string`).
 > 3. Converts array literals (`["admin", "editor"]`) into fixed `readonly` tuples.
-
+> 
 ---
 
 ### Exercise 2: Generating Union Types from `as const` Arrays
@@ -121,24 +121,24 @@ Extract a string literal union type from a `const` array of navigation routes.
 >
 > ```typescript
 > const ROUTES = ["/home", "/about", "/contact"] as const;
-
-type Route = (typeof ROUTES)[number];
-// Inferred as: "/home" | "/about" | "/contact"
-
-function navigateTo(route: Route) {
-  console.log(`Navigating to ${route}`);
-}
-
-navigateTo("/home");
-// navigateTo("/dashboard"); // ❌ Compile Error!
-```
-
+> 
+> type Route = (typeof ROUTES)[number];
+> // Inferred as: "/home" | "/about" | "/contact"
+> 
+> function navigateTo(route: Route) {
+>   console.log(`Navigating to ${route}`);
+> }
+> 
+> navigateTo("/home");
+> // navigateTo("/dashboard"); // ❌ Compile Error!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `as const` preserves exact string literal array element types (`readonly ["/home", ...]`).
 > 2. `(typeof ROUTES)[number]` extracts a string literal union of all array elements.
 > 3. Standard pattern for creating runtime array constants and compile-time union types simultaneously.
-
+> 
 ---
 
 ### Exercise 3: Auditing `as const` vs Object.freeze()
@@ -158,29 +158,20 @@ Formulate an architectural comparison matrix contrasting `as const` against `Obj
 > - as const: Compile-time ONLY (0 bytes in JS output). Deeply freezes all nested properties and array tuples statically.
 > - Object.freeze(): Runtime JavaScript execution. Shallow immutability (nested properties can still be mutated at runtime).
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `as const` provides deep compile-time type safety without runtime execution overhead.
 > 2. `Object.freeze()` is a shallow runtime JavaScript function call.
 > 3. Combine `Object.freeze(obj as const)` for both compile-time and runtime immutability.
-
+> 
 ---
-
-
-
-
-
----
-
-
 
 ## 6. Related Terms
 - [Type Assertions (`as`)](../level_05/type_assertions.md) — `as const` is a specialized form of the standard `as Type` syntax.
 
 ---
 
----
 
 ## 7. Key Takeaways
 

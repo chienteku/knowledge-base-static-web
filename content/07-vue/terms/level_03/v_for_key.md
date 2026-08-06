@@ -209,7 +209,7 @@ const players = ref([
 > - The current key is `:key="index"`.
 > - Replace it with a stable unique key using the player's properties.
 > - Since usernames are unique here, `player.username` is the ideal key.
-
+> 
 ---
 
 ### Exercise 2: v-for Iteration Variants
@@ -235,7 +235,7 @@ const players = ref([
 > <div v-for="(val, key) in user" :key="key">{{ key }}: {{ val }}</div>
 > <span v-for="n in 5" :key="n">{{ n }}</span>
 > ```
-
+> 
 ---
 
 ### Exercise 3: v-for and v-if Precedence Warning
@@ -257,8 +257,8 @@ const players = ref([
 > <!-- Recommended -->
 > <li v-for="user in activeUsers" :key="user.id">...</li>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

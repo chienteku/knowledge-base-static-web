@@ -121,7 +121,7 @@ console.log("3. Done.");
 > Because `fs.readFile` is Non-Blocking, Node.js hands the task to the C++ background workers and immediately jumps to line 3. Only after the file is completely read does the callback function on line 2 execute.
 > ```
 > - Does Node.js stop and wait on the `readFile` line?
-
+> 
 ---
 
 
@@ -141,7 +141,7 @@ console.log("3. Done.");
 > ```
 >
 > **Explanation:** `fs.promises` delegates file operations to thread pool without blocking the main event loop.
-
+> 
 ---
 
 ### Exercise 3: Understanding Non-Blocking Concurrency
@@ -158,7 +158,7 @@ console.log("3. Done.");
 > ```
 >
 > **Explanation:** Non-blocking I/O fires all 100 socket queries concurrently without waiting sequentially for each query to finish.
-
+> 
 ## 7. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The mechanism that acts as the "buzzer", telling the main thread that the background I/O task is finished.
 - [Callbacks & Callback Hell](../level_05/callbacks.md) — The functions you provide to handle the data once the Non-Blocking I/O is done.

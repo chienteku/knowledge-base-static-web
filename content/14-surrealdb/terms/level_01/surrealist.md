@@ -144,7 +144,7 @@ You are using Surrealist (SurrealDB's official visual management web IDE) to des
 > 1. Surrealist acts as the official visual IDE for SurrealDB (similar to pgAdmin for PostgreSQL or MongoDB Compass).
 > 2. Connects directly to local (`ws://localhost:8000`), remote, or SurrealDB Cloud database instances.
 > 3. Allows developers to test authentication tokens, inspect live query streams, and visualize graph arrow connections.
-
+> 
 ---
 
 ### Exercise 2: Testing Authentication Scopes in Surrealist
@@ -171,7 +171,7 @@ A developer is configuring `DEFINE ACCESS` rules in Surrealist and needs to test
 > 1. Surrealist allows developers to toggle between Root Admin sessions and Scoped User sessions seamlessly.
 > 2. Executing queries under scoped user sessions verifies row-level security (`PERMISSIONS`) before frontend SDK deployment.
 > 3. Prevents security misconfigurations by providing instant visual query validation.
-
+> 
 ---
 
 ### Exercise 3: Visualizing Graph Edge Connections in Explorer
@@ -198,7 +198,7 @@ You have created graph relation edges `user:1 -> wrote -> post:10` and want to i
 > 1. Surrealist automatically parses `in` and `out` record link fields on relation tables to build visual graph diagrams.
 > 2. Enables visual inspection of complex multi-hop graph networks without writing manual graph export code.
 > 3. Facilitates data modeling validation for graph-heavy application domains.
-
+> 
 ---
 
 

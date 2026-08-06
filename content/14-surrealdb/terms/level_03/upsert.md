@@ -174,7 +174,7 @@ An API integration syncs user setting records. If setting `setting:john` exists,
 > 1. `UPSERT table:id` checks primary key existence: creates record if absent, or updates record if present.
 > 2. Unlike `CREATE` (which fails on existing primary keys), `UPSERT` guarantees idempotent write execution.
 > 3. Eliminates preliminary `SELECT` check queries in application code.
-
+> 
 ---
 
 ### Exercise 2: Bulk Upserting Filtered Record Batches
@@ -203,7 +203,7 @@ A background synchronization job upserts user metrics records where `active = tr
 > 1. `UPSERT table SET ... WHERE condition` updates matching existing records and creates non-existing target records.
 > 2. Operates within an atomic write transaction block.
 > 3. Ideal for state synchronization and cache warming tasks.
-
+> 
 ---
 
 ### Exercise 3: Upserting with `MERGE` Strategy
@@ -228,7 +228,7 @@ Upsert customer preferences using `UPSERT ... MERGE { notifications: true }` to 
 > 1. Combining `UPSERT` with `MERGE` creates new records or shallow-merges JSON properties into existing records.
 > 2. Preserves unmentioned properties on existing records while initializing new records cleanly.
 > 3. Essential for partial record synchronization workflows.
-
+> 
 ---
 
 

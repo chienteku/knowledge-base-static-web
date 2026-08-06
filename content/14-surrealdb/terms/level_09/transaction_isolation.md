@@ -173,7 +173,7 @@ Demonstrate executing multiple mutations inside an ACID transaction block using 
 > 1. `BEGIN TRANSACTION` opens an isolated ACID transaction block.
 > 2. All statements execute atomically: either all mutations commit together, or none do.
 > 3. Prevents dirty reads and partial account updates in concurrent financial workloads.
-
+> 
 ---
 
 ### Exercise 2: Transaction Rollbacks on Exception Errors
@@ -202,7 +202,7 @@ Demonstrate that a transaction automatically rolls back all mutations if an erro
 > 1. If an error or `THROW` occurs inside a transaction block, SurrealDB aborts execution.
 > 2. Rolls back all uncommitted mutations automatically.
 > 3. Guarantees database state consistency.
-
+> 
 ---
 
 ### Exercise 3: Comparing Transaction Isolation in Single-Node vs Distributed TiKV
@@ -227,7 +227,7 @@ Explain how transaction isolation operates in single-node storage engines (`file
 > 1. SurrealDB decouples transaction parsing from storage engine transaction execution.
 > 2. `tikv://` provides distributed multi-master ACID transactions across server clusters.
 > 3. Guarantees linearizable transaction isolation in cloud deployments.
-
+> 
 ---
 
 

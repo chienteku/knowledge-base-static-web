@@ -260,7 +260,7 @@ onErrorCaptured((err) => { logError(err); return true; });
 > ```
 > - The `<Suspense>` component relies on two specific named slots: `#default` and `#fallback`.
 > - The loading indicator goes in the `#fallback` slot.
-
+> 
 ---
 
 ### Exercise 2: Top-Level Async Setup in SFC
@@ -279,7 +279,7 @@ onErrorCaptured((err) => { logError(err); return true; });
 > const data = await fetch('/api/user').then(r => r.json());
 > </script>
 > ```
-
+> 
 ---
 
 ### Exercise 3: Suspense Slots Matrix
@@ -301,8 +301,8 @@ onErrorCaptured((err) => { logError(err); return true; });
 >   <template #fallback><Spinner /></template>
 > </Suspense>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

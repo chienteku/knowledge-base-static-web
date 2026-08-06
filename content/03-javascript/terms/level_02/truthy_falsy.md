@@ -172,7 +172,7 @@ async function processData() {
 > 4. Falsy
 > ```
 > - There are only 6 falsy values in JavaScript: `false`, `0`, `""` (empty string), `null`, `undefined`, and `NaN`. Everything else is Truthy.
-
+> 
 ---
 
 ### Exercise 2: Falsy Value Identification
@@ -191,7 +191,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Array.prototype.filter(Boolean)` removes all 8 falsy JavaScript values.
-
+> 
 ---
 
 ### Exercise 3: Boolean Type Coercion with `Boolean()`
@@ -214,8 +214,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Non-empty strings and object references are always truthy in JavaScript.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -149,7 +149,7 @@ Connect application driver to a sharded cluster via `mongos` router instance end
 > 1. `mongos` acts as a stateless query router intercepting client database requests.
 > 2. Queries Config Servers to cache cluster chunk location routing tables.
 > 3. Hides sharded cluster topology from client application code.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Config Server Metadata Collections
@@ -175,7 +175,7 @@ Inspect the `config.shards` and `config.chunks` metadata collections on Config S
 > 1. Config Servers run as a dedicated 3-node replica set (`CSRS`) storing cluster metadata.
 > 2. `config.shards` tracks registered shard replica set connection strings.
 > 3. `config.chunks` tracks chunk ranges and target shard assignments.
-
+> 
 ---
 
 ### Exercise 3: High Availability `mongos` Router Pools
@@ -201,7 +201,7 @@ Explain how listing multiple `mongos` instances in the driver URI provides conne
 > 1. `mongos` instances are stateless and can be scaled horizontally behind load balancers.
 > 2. Driver automatically fails over to healthy `mongos` instances.
 > 3. Eliminates single points of failure in sharded clusters.
-
+> 
 ---
 
 

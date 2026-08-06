@@ -135,7 +135,7 @@ You are designing a project management schema where a `project` record stores an
 > 1. `array<record<user>>` enforces typed arrays of foreign record ID pointers.
 > 2. Stores direct primary key references (`[user:alice, user:bob]`) instead of separate junction table rows.
 > 3. Guarantees pointer integrity at write time in `SCHEMAFULL` mode.
-
+> 
 ---
 
 ### Exercise 2: Eager Resolution of Array Links with `FETCH`
@@ -160,7 +160,7 @@ Select project `project:p1` and eagerly expand the array of team member pointers
 > 1. `FETCH team_members` replaces every record link pointer in the array with its full user document object.
 > 2. Resolves all array pointers in a single database query roundtrip.
 > 3. Eliminates N+1 query loops in application API endpoints.
-
+> 
 ---
 
 ### Exercise 3: Array Pointer Modification (`+=` and `-=`)
@@ -191,7 +191,7 @@ Add a new team member `user:carol` to `project:p1`'s team members array, and sub
 > 1. `+=` appends record link pointers to array fields atomically.
 > 2. `-=` removes specific record link pointers from array fields cleanly.
 > 3. Mutates arrays in-place without full document replacements.
-
+> 
 ---
 
 

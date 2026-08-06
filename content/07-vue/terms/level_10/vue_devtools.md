@@ -104,7 +104,7 @@ define: { __VUE_PROD_DEVTOOLS__: false }
 > 5. Click the "Open in Editor" button in DevTools, and your VS Code will instantly open the exact `.vue` file!
 > ```
 > - DevTools has a bridge directly to your IDE!
-
+> 
 ---
 
 ### Exercise 2: Vue DevTools Features Matrix
@@ -125,7 +125,7 @@ define: { __VUE_PROD_DEVTOOLS__: false }
 > ```text
 > Component Inspector, Pinia Timeline, Router Inspector.
 > ```
-
+> 
 ---
 
 ### Exercise 3: Vite Plugin Vue DevTools
@@ -143,8 +143,8 @@ define: { __VUE_PROD_DEVTOOLS__: false }
 > import VueDevTools from 'vite-plugin-vue-devtools';
 > plugins: [VueDevTools()]
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

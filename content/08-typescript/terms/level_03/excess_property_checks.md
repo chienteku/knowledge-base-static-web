@@ -181,25 +181,25 @@ Demonstrate how fresh object literals trigger excess property checks while inter
 >   host: string;
 >   port: number;
 > }
-
-function setupServer(config: Config) {
-  console.log(`Server starting on ${config.host}:${config.port}`);
-}
-
-// ❌ FAILS: Direct object literal triggers Excess Property Check:
-// setupServer({ host: "localhost", port: 8080, debug: true });
-
-// ✅ SUCCEEDS: Intermediate variable reference bypasses excess property checks:
-const options = { host: "localhost", port: 8080, debug: true };
-setupServer(options);
-```
-
+> 
+> function setupServer(config: Config) {
+>   console.log(`Server starting on ${config.host}:${config.port}`);
+> }
+> 
+> // ❌ FAILS: Direct object literal triggers Excess Property Check:
+> // setupServer({ host: "localhost", port: 8080, debug: true });
+> 
+> // ✅ SUCCEEDS: Intermediate variable reference bypasses excess property checks:
+> const options = { host: "localhost", port: 8080, debug: true };
+> setupServer(options);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Fresh object literals undergo "Excess Property Checking" upon direct assignment to catch typos.
 > 2. Assigning the literal to an intermediate variable (`options`) converts it to an existing reference.
 > 3. Structural typing rules allow `options` because it satisfies the required `host` and `port` properties.
-
+> 
 ---
 
 ### Exercise 2: Using Index Signatures to Allow Extra Properties
@@ -220,22 +220,22 @@ Configure an interface that permits additional arbitrary properties using an ind
 >   port: number;
 >   [key: string]: unknown; // Permits arbitrary additional properties
 > }
-
-// Valid direct literal assignment!
-const serverConfig: FlexConfig = {
-  host: "127.0.0.1",
-  port: 3000,
-  ssl: true,
-  environment: "production"
-};
-```
-
+> 
+> // Valid direct literal assignment!
+> const serverConfig: FlexConfig = {
+>   host: "127.0.0.1",
+>   port: 3000,
+>   ssl: true,
+>   environment: "production"
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Adding an index signature (`[key: string]: unknown`) explicitly informs the compiler that extra properties are intentional.
 > 2. Disables excess property check errors for inline object literals.
 > 3. Ideal pattern for open configuration objects.
-
+> 
 ---
 
 ### Exercise 3: Auditing Typo Prevention via Excess Property Checks
@@ -255,17 +255,17 @@ Explain why excess property checks are essential for catching misspelled optiona
 >   label: string;
 >   color?: string;
 > }
-
-// ❌ Compile Error: 'collor' does not exist in type 'ButtonProps'. Did you mean 'color'?
-// const btn: ButtonProps = { label: "Click Me", collor: "blue" };
-```
-
+> 
+> // ❌ Compile Error: 'collor' does not exist in type 'ButtonProps'. Did you mean 'color'?
+> // const btn: ButtonProps = { label: "Click Me", collor: "blue" };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Without excess property checks, typos in optional properties (`collor`) would be silently ignored.
 > 2. The compiler catches typos on fresh literals immediately.
 > 3. Critical developer quality-of-life feature.
-
+> 
 ---
 
 

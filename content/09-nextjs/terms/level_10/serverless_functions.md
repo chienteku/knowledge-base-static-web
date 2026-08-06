@@ -126,13 +126,13 @@ Explain how Next.js App Router dynamic route handlers compile into auto-scaling 
 > - Auto-Scaling: Scales automatically from 0 to thousands of concurrent requests.
 > - Cold Start: Initial request spins up a new Node.js container instance (adds ~100-300ms latency).
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Serverless functions eliminate persistent server management and fixed monthly hosting costs.
 > 2. Containers spin down to 0 instances when idle to save resources.
 > 3. Core backend deployment model for modern cloud platforms.
-
+> 
 ---
 
 ### Exercise 2: Managing Global Database Connections in Serverless Environments
@@ -149,25 +149,25 @@ Reuse database connection pools across serverless function invocations using glo
 >
 > ```typescript
 > import { Pool } from "pg";
-
-let cachedPool: Pool | null = null;
-
-export function getDbPool() {
-  if (!cachedPool) {
-    cachedPool = new Pool({
-      connectionString: process.env.DATABASE_URL
-    });
-  }
-  return cachedPool;
-}
-```
-
+> 
+> let cachedPool: Pool | null = null;
+> 
+> export function getDbPool() {
+>   if (!cachedPool) {
+>     cachedPool = new Pool({
+>       connectionString: process.env.DATABASE_URL
+>     });
+>   }
+>   return cachedPool;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Serverless containers stay warm for subsequent requests, allowing global variables (`cachedPool`) to be reused.
 > 2. Reusing connection pools prevents exhausting database connection limits during traffic spikes.
 > 3. Mandatory pattern for database access in serverless environments.
-
+> 
 ---
 
 ### Exercise 3: Configuring Maximum Execution Duration (Timeout Settings)
@@ -185,25 +185,21 @@ Configure maximum execution duration for a long-running Server Action or Route H
 > ```typescript
 > // app/api/heavy-job/route.ts
 > export const maxDuration = 60; // Max execution timeout: 60 seconds
-
-export async function POST() {
-  // Heavy computation or AI processing job...
-  return Response.json({ status: "Completed" });
-}
-```
-
+> 
+> export async function POST() {
+>   // Heavy computation or AI processing job...
+>   return Response.json({ status: "Completed" });
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `maxDuration` sets maximum serverless function execution timeout limits (in seconds).
 > 2. Prevents long-running AI or image generation jobs from timing out prematurely.
 > 3. Cloud platform configuration directive.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Edge Runtime vs Node.js Runtime](edge_runtime.md) — The edge-alternative to serverless computing.

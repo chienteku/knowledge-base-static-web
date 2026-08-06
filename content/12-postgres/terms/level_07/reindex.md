@@ -160,7 +160,7 @@ Rebuild a bloated index `idx_orders_customer_id` on a production table without b
 > 1. `REINDEX` builds a fresh copy of the index structure and replaces the old fragmented pages.
 > 2. `CONCURRENTLY` performs the rebuild online without holding exclusive locks that block table writes.
 > 3. Reclaims bloated index disk space and restores $O(\log N)$ lookup performance.
-
+> 
 ---
 
 ### Exercise 2: Rebuilding All Indexes on a Table
@@ -184,7 +184,7 @@ Rebuild all secondary indexes on table `orders` concurrently after heavy update/
 > 1. `REINDEX TABLE` rebuilds all indexes associated with the specified table sequentially.
 > 2. Reclaims index bloat across primary key, foreign key, and unique indexes simultaneously.
 > 3. Standard database maintenance task.
-
+> 
 ---
 
 ### Exercise 3: Diagnosing Index Bloat in System Catalogs
@@ -214,7 +214,7 @@ Query `pg_relation_size()` to identify indexes whose byte size exceeds the size 
 > 1. Under heavy `UPDATE` and `DELETE` workloads, B-tree index pages can become fragmented and bloated with empty space.
 > 2. Indexes larger than their underlying tables indicate severe page fragmentation.
 > 3. Identifies targets for `REINDEX CONCURRENTLY`.
-
+> 
 ---
 
 

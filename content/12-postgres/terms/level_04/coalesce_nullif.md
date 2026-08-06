@@ -179,7 +179,7 @@ Select user contact details returning `mobile_phone`, falling back to `home_phon
 > 1. `COALESCE(val1, val2, ...)` returns the first non-null argument in order.
 > 2. Prevents returning raw `NULL` values to API consumers.
 > 3. Standard null fallback function.
-
+> 
 ---
 
 ### Exercise 2: Division-By-Zero Protection with NULLIF
@@ -206,7 +206,7 @@ Calculate conversion rate (`conversions / views`), preventing division by zero w
 > 1. `NULLIF(views, 0)` evaluates to `NULL` when `views = 0`.
 > 2. Dividing by `NULL` returns `NULL` instead of crashing with division by zero (Error 22012).
 > 3. Essential for safe mathematical SQL calculations.
-
+> 
 ---
 
 ### Exercise 3: Blank String to Null Normalization
@@ -232,7 +232,7 @@ Convert empty string values (`''`) to `NULL` using `NULLIF(email, '')`.
 > 1. `NULLIF(email, '')` returns `NULL` when `email` is an empty string.
 > 2. Cleans dirty user inputs, enforcing data normalization.
 > 3. Allows unique constraints on nullable email fields to work properly.
-
+> 
 ---
 
 

@@ -185,7 +185,7 @@ You are designing an e-commerce platform schema and must choose appropriate Surr
 > 1. Deterministic string IDs allow instant primary key lookup without secondary unique indexes.
 > 2. `ulid()` generates lexicographically sortable, time-prefixed 128-bit IDs ideal for sequential B-tree/LSM insertions.
 > 3. Composite array IDs `[category, type, sku]` allow multi-part primary keys natively in SurrealDB.
-
+> 
 ---
 
 ### Exercise 2: Special Character String ID Escaping
@@ -214,7 +214,7 @@ A system migration script imports legacy records containing email addresses and 
 > 1. Record IDs containing special characters (`@`, `.`, `-`) require bracket escaping `⟨...⟩` or string literals `user:'john.doe@example.com'`.
 > 2. Unescaped special characters cause SurrealQL parser errors.
 > 3. Bracket escaping allows any valid UTF-8 string to serve as a primary key.
-
+> 
 ---
 
 ### Exercise 3: Record ID Type Matching and Comparison
@@ -243,7 +243,7 @@ A developer is writing a query filter comparing record link pointers. They want 
 > 1. `user:alice` is a typed `record` ID value in SurrealDB, not a string literal `"user:alice"`.
 > 2. Comparing `author = "user:alice"` fails because typed record IDs do not equal raw strings.
 > 3. Native record ID matching enables $O(1)$ pointer index resolution.
-
+> 
 ---
 
 

@@ -188,7 +188,7 @@ Group incoming IoT temperature sensor readings into 1-hour bucket documents in c
 > 1. The Bucket Pattern groups time-series datapoints into pre-allocated time bucket documents.
 > 2. Reduces total collection document count by 60x to 1000x compared to 1-doc-per-reading models.
 > 3. Dramatically reduces index memory footprint and IOPS.
-
+> 
 ---
 
 ### Exercise 2: Computing Pre-Aggregated Bucket Metrics
@@ -221,7 +221,7 @@ Maintain pre-calculated `minVal` and `maxVal` summary fields inside sensor bucke
 > 1. `$min` and `$max` calculate running summary bounds inside bucket documents atomically.
 > 2. Allows dashboards to query pre-computed min/max values without scanning individual array items.
 > 3. Accelerates analytical reporting queries.
-
+> 
 ---
 
 ### Exercise 3: Evaluating Native Time-Series Collections vs Manual Bucketing
@@ -252,7 +252,7 @@ Compare manual Bucket Pattern schemas against MongoDB 5.0+ native Time-Series co
 > 1. Native Time-Series collections handle bucketing, columnar compression, and lifecycle management automatically.
 > 2. Manual bucketing is useful when custom bucket limits or pre-aggregations are required.
 > 3. Both models significantly reduce disk and memory overhead.
-
+> 
 ---
 
 

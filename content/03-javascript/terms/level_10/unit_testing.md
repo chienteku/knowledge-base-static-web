@@ -182,7 +182,7 @@ describe("User utilities", () => {
 > [!check]- Answer
 > - For numbers/strings, use `.toBe(value)`.
 > - For objects/arrays, use `.toEqual(object)`.
-
+> 
 ---
 
 ### Exercise 2: Structuring Tests with AAA Pattern (Arrange, Act, Assert)
@@ -199,7 +199,7 @@ describe("User utilities", () => {
 > ```
 >
 > **Explanation:** AAA pattern organizes test cases into clear setup, execution, and verification phases.
-
+> 
 ---
 
 ### Exercise 3: Mocking Dependencies with Test Spies
@@ -216,8 +216,8 @@ describe("User utilities", () => {
 > ```
 >
 > **Explanation:** Spies and mocks isolate unit test subjects from external network or database dependencies.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

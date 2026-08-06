@@ -157,7 +157,7 @@ Inspect column definitions, data types, defaults, and indexes of table `users` i
 > 1. `\d tablename` is a psql meta-command inspecting table schema definitions.
 > 2. Displays column names, data types, constraints, foreign key links, and associated indexes.
 > 3. Fast CLI schema inspection tool.
-
+> 
 ---
 
 ### Exercise 2: Executing SQL Scripts from Files in psql
@@ -181,7 +181,7 @@ Execute a database migration script file `schema.sql` against database `dev_db` 
 > 1. `-f filename` executes SQL statements contained in a file sequentially.
 > 2. Standard command for executing database setup and seed scripts in CI/CD pipelines.
 > 3. Returns execution status for each SQL command.
-
+> 
 ---
 
 ### Exercise 3: Exporting Query Results to CSV Files
@@ -205,7 +205,7 @@ Export query output for `users` table directly to a CSV file using psql `\copy`.
 > 1. `\copy` is a psql client command streaming data between PostgreSQL and local client files.
 > 2. `WITH CSV HEADER` formats output as comma-separated values with column title headers.
 > 3. Export data without requiring server file permissions.
-
+> 
 ---
 
 

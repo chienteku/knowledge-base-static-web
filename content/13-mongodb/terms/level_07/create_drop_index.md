@@ -167,7 +167,7 @@ Create a secondary index on `sku` in collection `products` specifying a custom i
 > 1. `createIndex()` builds a B-tree index structure on target collection fields.
 > 2. `{ name: "..." }` specifies a custom index name for monitoring and drop operations.
 > 3. Modern MongoDB (4.2+) builds indexes concurrently in the background without locking collection writes.
-
+> 
 ---
 
 ### Exercise 2: Dropping Unused Secondary Indexes with `dropIndex`
@@ -191,7 +191,7 @@ Drop obsolete index `idx_products_sku` from collection `products` to reclaim sto
 > 1. `dropIndex()` removes target secondary index structures.
 > 2. Reclaims RAM and disk space occupied by unused index B-trees.
 > 3. Reduces write amplification during document insertions and updates.
-
+> 
 ---
 
 ### Exercise 3: Auditing Collection Indexes with `getIndexes()`
@@ -219,7 +219,7 @@ List all active indexes and their byte footprints on collection `products`.
 > 1. `getIndexes()` lists all registered collection indexes, keys, and options.
 > 2. `stats().indexSizes` tracks individual RAM/disk byte footprints per index.
 > 3. Essential command for auditing index bloat.
-
+> 
 ---
 
 

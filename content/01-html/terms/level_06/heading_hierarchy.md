@@ -214,7 +214,7 @@ A simple outline schema:
 > ```
 > - The page jumps from `<h1>` directly to `<h3>` at "Sedans". That level must be repaired to `<h2>`.
 > - "Toyota Camry" should drop to `<h3>` since it is a subsection of "Sedans".
-
+> 
 ---
 
 
@@ -233,7 +233,7 @@ A simple outline schema:
 > ```
 >
 > **Explanation:** Heading levels must descend sequentially without skipping or reversing levels.
-
+> 
 ---
 
 ### Exercise 3: Screen Reader Heading Navigation Shortcut
@@ -250,7 +250,7 @@ A simple outline schema:
 > ```
 >
 > **Explanation:** Screen reader users rely on heading hotkeys to scan document outlines.
-
+> 
 ## 7. Related Terms
 - [Headings (`<h1>` to `<h6>`)](../level_02/headings.md) — The tags that define outline points.
 - [Semantic HTML](semantic_html.md) — The concept framework.

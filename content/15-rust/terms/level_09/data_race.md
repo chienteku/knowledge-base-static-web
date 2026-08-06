@@ -190,7 +190,7 @@ atomic.fetch_add(1, Ordering::Relaxed); // Correct: Single atomic read-modify-wr
 > 1. Unsynchronized mutation (`counter++`) across threads causes data races and cache line corruption in languages like C/C++; Rust's borrow checker rejects shared `&mut T` to prevent this at compile time.
 > 2. `AtomicU64` and `AtomicI64` wrap hardware atomic instructions, providing thread-safe interior mutability through shared references (`&self`).
 > 3. `Ordering::Relaxed` handles metric increments without memory fences, while `Ordering::Acquire` synchronizes memory reads in `snapshot()`.
-
+> 
 ---
 
 ### Exercise 2: Multi-Account Financial Ledger (Eliminating TOCTOU Race Conditions)
@@ -320,7 +320,7 @@ atomic.fetch_add(1, Ordering::Relaxed); // Correct: Single atomic read-modify-wr
 > 1. Data races refer to unsynchronized memory corruption; race conditions refer to logical timing/ordering errors.
 > 2. Holding locks for both accounts within a single critical section eliminates TOCTOU balance check races.
 > 3. Sorting lock acquisitions by account ID (`self_id < target_id`) prevents AB-BA thread deadlocks.
-
+> 
 ---
 
 ### Exercise 3: Dynamic Parallel Dispatch Pipeline with Auto-Trait Guards (`Send` & `Sync`)
@@ -442,7 +442,7 @@ atomic.fetch_add(1, Ordering::Relaxed); // Correct: Single atomic read-modify-wr
 > 1. `Send` and `Sync` auto traits guarantee thread safety, preventing single-threaded types (`Rc`, `RefCell`) from crossing thread boundaries.
 > 2. `Arc<Mutex<Receiver<Task>>>` allows multiple worker threads to safely pop task items from a shared channel.
 > 3. Dropping `task_tx` closes the channel and signals worker threads to exit cleanly upon `Err(_)`.
-
+> 
 ---
 
 ## 6. Related Terms

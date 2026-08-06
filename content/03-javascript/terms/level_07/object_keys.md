@@ -157,7 +157,7 @@ async function processData() {
 > }
 > ```
 > - Since `apiData.length` doesn't exist on Objects, you must turn it into an array first.
-
+> 
 ---
 
 ### Exercise 2: Counting Own Properties
@@ -175,7 +175,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Object.keys()` returns an array of own enumerable string property keys.
-
+> 
 ---
 
 ### Exercise 3: Filtering Keys by Value Criteria
@@ -194,8 +194,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Combining `Object.keys()` with `filter` extracts property names satisfying value predicates.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

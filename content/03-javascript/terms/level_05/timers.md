@@ -183,7 +183,7 @@ const welcomeTimer = setTimeout(() => {
 
 > [!check]- Answer
 > - Call `clearTimeout` passing the `welcomeTimer` identifier.
-
+> 
 ---
 
 ### Exercise 2: Clearing Intervals with `clearInterval`
@@ -202,7 +202,7 @@ const welcomeTimer = setTimeout(() => {
 > ```
 >
 > **Explanation:** `clearTimeout` / `clearInterval` cancel scheduled async timer callbacks.
-
+> 
 ---
 
 ### Exercise 3: Timer Parameter Passing
@@ -220,7 +220,7 @@ const welcomeTimer = setTimeout(() => {
 > ```
 >
 > **Explanation:** `setTimeout` accepts optional extra parameters forwarded directly into callback functions.
-
+> 
 ---
 
 ## 7. Related Terms

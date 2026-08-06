@@ -167,7 +167,7 @@ console.log(result);
 > ```
 > - BigInt represents integers only.
 > - Divisions that produce decimals are always rounded down (truncated) to the nearest integer.
-
+> 
 ---
 
 ### Exercise 2: Creating BigInt Values
@@ -188,7 +188,7 @@ console.log(result);
 > ```
 >
 > **Explanation:** BigInt literals require an `n` suffix or string parsing in `BigInt("...")` to avoid Number precision limits.
-
+> 
 ---
 
 ### Exercise 3: BigInt Division Truncation
@@ -205,7 +205,7 @@ console.log(result);
 > ```
 >
 > **Explanation:** BigInt division operates on integers exclusively, truncating fractional remainder components.
-
+> 
 ---
 
 ## 7. Related Terms

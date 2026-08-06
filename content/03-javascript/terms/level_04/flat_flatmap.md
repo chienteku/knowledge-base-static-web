@@ -185,7 +185,7 @@ console.log(usernames);
 > - Map each thread to its comments array, extracting the user string.
 > - Within `flatMap`, you can chain `.map(c => c.user)` on the `comments` array.
 > - e.g., `threads.flatMap(thread => thread.comments.map(c => c.user))`
-
+> 
 ---
 
 ### Exercise 2: Deep Flattening with `flat(Infinity)`
@@ -203,7 +203,7 @@ console.log(usernames);
 > ```
 >
 > **Explanation:** `flat(Infinity)` recurses through all nested array levels to produce a 1D array.
-
+> 
 ---
 
 ### Exercise 3: Mapping and Flattening with `flatMap`
@@ -221,7 +221,7 @@ console.log(usernames);
 > ```
 >
 > **Explanation:** `flatMap` combines `.map()` and `.flat(1)` in a single efficient pass.
-
+> 
 ---
 
 ## 7. Related Terms

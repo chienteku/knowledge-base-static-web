@@ -178,7 +178,7 @@ if (numCPUs > 1 && cluster.isPrimary) {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Basic Cluster Setup
@@ -201,7 +201,7 @@ if (numCPUs > 1 && cluster.isPrimary) {
 > ```
 >
 > **Explanation:** Primary process forks workers; worker processes listen on the shared HTTP port.
-
+> 
 ---
 
 ### Exercise 3: Port Sharing in Cluster
@@ -218,7 +218,7 @@ if (numCPUs > 1 && cluster.isPrimary) {
 > ```
 >
 > **Explanation:** Cluster primary hands off incoming TCP connections to worker processes transparently.
-
+> 
 ## 7. Related Terms
 - [PM2 (Process Manager)](pm2.md) — Production tool automating cluster creation and management.
 - [Load Balancing](load_balancing.md) — The networking architecture distributing traffic across server instances.

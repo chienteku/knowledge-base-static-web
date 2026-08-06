@@ -161,27 +161,27 @@ Create a `User` class with `name` and `email` properties and a `getProfile()` me
 > class User {
 >   name: string;
 >   email: string;
-
-  constructor(name: string, email: string) {
-    this.name = name;
-    this.email = email;
-  }
-
-  getProfile(): string {
-    return `${this.name} <${this.email}>`;
-  }
-}
-
-const user = new User("Alice", "alice@example.com");
-console.log(user.getProfile());
-```
-
+> 
+>   constructor(name: string, email: string) {
+>     this.name = name;
+>     this.email = email;
+>   }
+> 
+>   getProfile(): string {
+>     return `${this.name} <${this.email}>`;
+>   }
+> }
+> 
+> const user = new User("Alice", "alice@example.com");
+> console.log(user.getProfile());
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Classes act as blueprints for creating stateful object instances.
 > 2. Field types (`name: string`) are verified during assignment inside constructor functions.
 > 3. Methods are attached to `User.prototype` to minimize memory usage across instances.
-
+> 
 ---
 
 ### Exercise 2: Class Inheritance with `super()`
@@ -199,22 +199,22 @@ Extend `User` into an `AdminUser` class that calls `super()` in its constructor.
 > ```typescript
 > class AdminUser extends User {
 >   permissions: string[];
-
-  constructor(name: string, email: string, permissions: string[]) {
-    super(name, email); // Must call super() before accessing 'this'!
-    this.permissions = permissions;
-  }
-}
-
-const admin = new AdminUser("Bob", "bob@example.com", ["read", "write"]);
-```
-
+> 
+>   constructor(name: string, email: string, permissions: string[]) {
+>     super(name, email); // Must call super() before accessing 'this'!
+>     this.permissions = permissions;
+>   }
+> }
+> 
+> const admin = new AdminUser("Bob", "bob@example.com", ["read", "write"]);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Subclasses extending parent classes must invoke `super()` in their constructors.
 > 2. `super()` executes the parent constructor to initialize inherited fields.
 > 3. `this` cannot be accessed before calling `super()`.
-
+> 
 ---
 
 ### Exercise 3: Auditing Un-Initialized Class Field Errors
@@ -233,18 +233,18 @@ Explain why un-initialized class fields trigger compile errors under `"strictPro
 > class Product {
 >   // ❌ Compile Error under strictPropertyInitialization: Property 'title' has no initializer...
 >   // title: string; 
-
-  // ✅ CORRECT (Initialize in constructor or inline):
-  title: string = "Untitled";
-}
-```
-
+> 
+>   // ✅ CORRECT (Initialize in constructor or inline):
+>   title: string = "Untitled";
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `"strictPropertyInitialization": true` ensures all declared class fields are initialized.
 > 2. Fields must be initialized directly inline (`title: string = ""`) or inside the constructor body.
 > 3. Eliminates `undefined` runtime property bugs on class instances.
-
+> 
 ---
 
 

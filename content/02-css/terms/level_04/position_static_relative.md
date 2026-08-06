@@ -190,7 +190,7 @@ p { margin-top: 20px; } /* Adjusts normal flow position without leaving empty ga
 > No! The blue box stays exactly where it was. The red box will literally slide down and visually overlap the blue box. The layout of the page does not change.
 > ```
 > - Think about the "ghost" left behind by relative positioning.
-
+> 
 ---
 
 
@@ -209,7 +209,7 @@ p { margin-top: 20px; } /* Adjusts normal flow position without leaving empty ga
 > ```
 >
 > **Explanation:** `position: relative` offsets visual paint without altering surrounding document flow layout.
-
+> 
 ---
 
 ### Exercise 3: Default Position Property Value
@@ -226,7 +226,7 @@ p { margin-top: 20px; } /* Adjusts normal flow position without leaving empty ga
 > ```
 >
 > **Explanation:** `position: static` is default un-positioned normal document flow.
-
+> 
 ## 7. Related Terms
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Absolute positioning dynamics.
 - [`position: sticky`](position_sticky.md) — Hybrid layout scrolling.

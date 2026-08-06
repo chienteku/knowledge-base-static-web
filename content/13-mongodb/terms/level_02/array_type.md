@@ -172,7 +172,7 @@ Query a product catalog to find items that contain both `"electronics"` and `"ac
 > 1. `$all` matches documents where the specified array field contains all requested elements regardless of order.
 > 2. Queries array elements directly without unwrapping the array into separate tables.
 > 3. Leverages multikey indexes on array fields.
-
+> 
 ---
 
 ### Exercise 2: Atomic Array Element Manipulation
@@ -199,7 +199,7 @@ Append a new tag `"discounted"` to an order's `tags` array without creating dupl
 > 1. `$addToSet` adds an item to an array field ONLY if the item does not already exist in the array.
 > 2. Ensures array element uniqueness atomically at the database tier.
 > 3. Prevents duplicate array entries without client-side array checking.
-
+> 
 ---
 
 ### Exercise 3: Matching Array Size Criteria
@@ -225,7 +225,7 @@ Query user documents where the `roles` array contains exactly 2 assigned roles.
 > 1. `$size` filters documents by exact array element count.
 > 2. Evaluates array length directly in the query engine.
 > 3. Useful for validating multi-role assignment boundaries.
-
+> 
 ---
 
 

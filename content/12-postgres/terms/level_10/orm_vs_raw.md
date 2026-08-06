@@ -174,20 +174,20 @@ Write a type-safe database query in TypeScript using Drizzle ORM to fetch active
 > import { eq } from "drizzle-orm";
 > import { db } from "./db";
 > import { users } from "./schema";
-
-export async function getActiveUsers() {
-  return await db.select({ id: users.id, email: users.email })
-    .from(users)
-    .where(eq(users.isActive, true));
-}
-```
-
+> 
+> export async function getActiveUsers() {
+>   return await db.select({ id: users.id, email: users.email })
+>     .from(users)
+>     .where(eq(users.isActive, true));
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Type-safe query builders (Drizzle, Kysely) provide auto-completion and compile-time type safety over database schemas.
 > 2. Maps TypeScript types 1-to-1 with PostgreSQL column data types.
 > 3. Eliminates runtime SQL syntax errors.
-
+> 
 ---
 
 ### Exercise 2: High-Performance Raw SQL Execution with Native Drivers
@@ -204,25 +204,25 @@ Execute an optimized complex SQL query containing window functions using native 
 >
 > ```typescript
 > import { pool } from "./db";
-
-export async function getRankedSales() {
-  const query = `
-    SELECT 
-      id, customer_id, total_cents,
-      ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY created_at DESC) as rn
-    FROM orders
-  `;
-  const res = await pool.query(query);
-  return res.rows;
-}
-```
-
+> 
+> export async function getRankedSales() {
+>   const query = `
+>     SELECT 
+>       id, customer_id, total_cents,
+>       ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY created_at DESC) as rn
+>     FROM orders
+>   `;
+>   const res = await pool.query(query);
+>   return res.rows;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Raw SQL provides full access to advanced PostgreSQL features (window functions, CTEs, custom operators) without ORM abstraction limits.
 > 2. Zero ORM memory overhead and zero query generation latency.
 > 3. Ideal for complex analytical reporting queries.
-
+> 
 ---
 
 ### Exercise 3: Architectural Decision Matrix: ORM vs Raw SQL
@@ -250,7 +250,7 @@ Formulate a technical selection matrix comparing Heavy ORMs (Prisma), Type-Safe 
 > 1. Heavy ORMs simplify basic CRUD but obscure underlying SQL execution.
 > 2. Query builders balance type safety with explicit SQL control.
 > 3. Match data access layer to project complexity.
-
+> 
 ---
 
 

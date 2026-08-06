@@ -169,7 +169,7 @@ Create a sparse unique index on optional field `taxId` in collection `customers`
 > 1. Sparse indexes contain B-tree entries ONLY for documents where the indexed field is present.
 > 2. A non-sparse unique index treats missing fields as `null`, rejecting multiple documents with missing fields as duplicate `null` keys.
 > 3. Sparse unique indexes allow multiple documents to omit the field while enforcing uniqueness for populated values.
-
+> 
 ---
 
 ### Exercise 2: Sparse Index Query Traversal Restrictions
@@ -197,7 +197,7 @@ Explain why query `find().sort({ taxId: 1 })` bypasses a sparse index unless `ta
 > 1. Because sparse indexes omit documents missing the indexed key, MongoDB cannot use a sparse index for queries that expect a complete collection result set.
 > 2. Query filter must explicitly require key presence (`$exists: true` or `$gt`) to trigger sparse index usage.
 > 3. Prefer Partial Indexes for modern MongoDB deployments.
-
+> 
 ---
 
 ### Exercise 3: Comparing Sparse vs Partial Indexes
@@ -224,7 +224,7 @@ Formulate a technical recommendation comparing legacy Sparse Indexes against mod
 > 1. Partial indexes offer a strict superset of sparse index functionality.
 > 2. Provides explicit control over index inclusion criteria.
 > 3. Standard best practice in modern MongoDB versions.
-
+> 
 ---
 
 

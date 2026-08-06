@@ -105,17 +105,17 @@ Extract property types from a `User` interface using indexed access notation (`U
 >     zip: number;
 >   };
 > }
-
-type UserRole = User["role"];       // "admin" | "user"
-type UserCity = User["address"]["city"]; // string
-```
-
+> 
+> type UserRole = User["role"];       // "admin" | "user"
+> type UserCity = User["address"]["city"]; // string
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Indexed access types `T[K]` look up the exact type of property `K` on type `T`.
 > 2. Keeps extracted types synchronized if `User["role"]` changes in the interface definition later.
 > 3. Supports nested property lookups (`User["address"]["city"]`).
-
+> 
 ---
 
 ### Exercise 2: Inferring Array Element Types with `number` Indexing
@@ -132,19 +132,19 @@ Extract the element type of an array using `ArrayType[number]`.
 >
 > ```typescript
 > const AppLanguages = ["en", "fr", "es", "de"] as const;
-
-type LanguageList = typeof AppLanguages; // readonly ["en", "fr", "es", "de"]
-type Language = LanguageList[number];     // "en" | "fr" | "es" | "de"
-
-const activeLang: Language = "en";
-```
-
+> 
+> type LanguageList = typeof AppLanguages; // readonly ["en", "fr", "es", "de"]
+> type Language = LanguageList[number];     // "en" | "fr" | "es" | "de"
+> 
+> const activeLang: Language = "en";
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Indexing an array type with `[number]` returns the union of all array element types.
 > 2. Combined with `as const`, `ArrayType[number]` extracts a string literal union from a tuple array.
 > 3. Standard technique for generating union types from runtime constant arrays.
-
+> 
 ---
 
 ### Exercise 3: Auditing Invalid Dynamic Property Lookups
@@ -162,20 +162,20 @@ Explain why passing a variable identifier instead of a type literal to indexed a
 > ```typescript
 > interface User { name: string; age: number; }
 > const propKey = "name";
-
-// ❌ Compile Error: 'propKey' refers to a value, but is being used as a type here!
-// type Wrong = User[propKey];
-
-// ✅ CORRECT (Use typeof or literal type):
-type Correct = User[typeof propKey]; // string
-```
-
+> 
+> // ❌ Compile Error: 'propKey' refers to a value, but is being used as a type here!
+> // type Wrong = User[propKey];
+> 
+> // ✅ CORRECT (Use typeof or literal type):
+> type Correct = User[typeof propKey]; // string
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Indexed access types accept ONLY type parameters or literal types inside brackets `T[K]`.
 > 2. Value variables (`propKey`) must be converted to types using `typeof propKey` first.
 > 3. Key distinction between value-space and type-space syntax.
-
+> 
 ---
 
 
@@ -185,7 +185,6 @@ type Correct = User[typeof propKey]; // string
 
 ---
 
----
 
 ## 7. Key Takeaways
 

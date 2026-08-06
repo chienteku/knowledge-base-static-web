@@ -183,7 +183,7 @@ You are writing an administrative CLI migration script that must target the `com
 > 1. The `USE` keyword sets the current session's namespace (`NS`) and database (`DB`) context in SurrealDB.
 > 2. Specifying both `NS` and `DB` on the first call establishes full tenant target isolation.
 > 3. Switching only `DB` on subsequent calls maintains the active `NS` scope while altering database context.
-
+> 
 ---
 
 ### Exercise 2: Scoped Record Access Signin Payload
@@ -216,7 +216,7 @@ A web client application using the SurrealDB JavaScript SDK needs to authenticat
 > 1. RECORD access authentication requires specifying the exact `ns` and `db` targets where the user record exists.
 > 2. The `access` field targets SurrealDB 2.x `DEFINE ACCESS` definitions (replacing legacy 1.x `DEFINE SCOPE`).
 > 3. Scoped user credentials authenticate clients with row-level security permissions without granting root database access.
-
+> 
 ---
 
 ### Exercise 3: Database Authentication Hierarchy Classification
@@ -243,7 +243,7 @@ A security auditor is reviewing your SurrealDB deployment access architecture an
 > 1. Root credentials manage engine-wide configuration, storage backends, and namespace creation.
 > 2. Namespace credentials enable multi-tenant isolation, allowing tenant admins to manage their own databases safely.
 > 3. Database/Access Scope credentials authenticate web and mobile clients directly, enforcing SurrealDB's built-in security model.
-
+> 
 ---
 
 

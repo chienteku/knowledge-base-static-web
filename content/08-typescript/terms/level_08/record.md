@@ -122,20 +122,20 @@ Create a dictionary mapping user roles (`"admin" | "editor" | "viewer"`) to perm
 >
 > ```typescript
 > type Role = "admin" | "editor" | "viewer";
-
-const permissions: Record<Role, string[]> = {
-  admin: ["create", "read", "update", "delete"],
-  editor: ["read", "update"],
-  viewer: ["read"]
-};
-```
-
+> 
+> const permissions: Record<Role, string[]> = {
+>   admin: ["create", "read", "update", "delete"],
+>   editor: ["read", "update"],
+>   viewer: ["read"]
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Record<K, V>` constructs an object type whose keys are `K` and values are `V`.
 > 2. Enforces that EVERY key in union `K` must be present in the object literal.
 > 3. Guarantees complete enum/union key coverage.
-
+> 
 ---
 
 ### Exercise 2: Dynamic Key-Value Store Construction
@@ -152,19 +152,19 @@ Type a dynamic cache object mapping string IDs to generic `Product` items using 
 >
 > ```typescript
 > interface Product { id: string; price: number; }
-
-type ProductCache = Record<string, Product>;
-
-const cache: ProductCache = {};
-cache["p100"] = { id: "p100", price: 29.99 };
-```
-
+> 
+> type ProductCache = Record<string, Product>;
+> 
+> const cache: ProductCache = {};
+> cache["p100"] = { id: "p100", price: 29.99 };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `Record<string, V>` is equivalent to an index signature `[key: string]: V`.
 > 2. Cleaner, more concise syntax for dynamic dictionary maps.
 > 3. Idiomatic method for typing cache objects and hash maps.
-
+> 
 ---
 
 ### Exercise 3: Auditing `Record` Exhaustiveness Guarantees
@@ -181,20 +181,20 @@ Demonstrate compile error when a union key is omitted from a `Record<Union, T>` 
 >
 > ```typescript
 > type Page = "home" | "about" | "contact";
-
-// ❌ Compile Error: Property 'contact' is missing in type '{ home: string; about: string; }'!
-// const pageTitles: Record<Page, string> = {
-//   home: "Home Page",
-//   about: "About Us"
-// };
-```
-
+> 
+> // ❌ Compile Error: Property 'contact' is missing in type '{ home: string; about: string; }'!
+> // const pageTitles: Record<Page, string> = {
+> //   home: "Home Page",
+> //   about: "About Us"
+> // };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. When `K` is a union of literal strings, `Record<K, V>` enforces that ALL keys in `K` must be declared.
 > 2. Prevents missing key mapping bugs at compile time.
 > 3. High safety mapping abstraction.
-
+> 
 ---
 
 

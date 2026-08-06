@@ -155,8 +155,8 @@ fetch('https://api.com/data', {
 
 > [!check]- Answer
 > - **C** (CORS configurations are resolved on the server. The server must add `PUT` to the allowed methods headers in the preflight response).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: CORS Error Diagnostic Flowchart

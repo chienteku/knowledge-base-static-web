@@ -156,7 +156,7 @@ Step down the active primary node for maintenance using `rs.stepDown()` to trigg
 > 1. `rs.stepDown(seconds)` forces the current primary node to relinquish leadership and become a secondary.
 > 2. Blocks the stepping-down node from seeking election for the specified duration (60s).
 > 3. Triggers an automatic election among remaining secondary nodes in ~10 seconds.
-
+> 
 ---
 
 ### Exercise 2: Configuring Node Priority for Primary Election Preference
@@ -176,16 +176,16 @@ Configure secondary node `node1.example.com` with `priority: 2` so it is preferr
 > cfg.members[0].priority = 2; // Higher priority node
 > cfg.members[1].priority = 1;
 > cfg.members[2].priority = 1;
-
-rs.reconfig(cfg);
-```
-
+> 
+> rs.reconfig(cfg);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Higher `priority` values (e.g. `2` vs `1`) make a node eligible to win elections over lower priority nodes.
 > 2. Nodes with `priority: 0` can never become primary (used for passive read-only secondaries).
 > 3. Directs primary workload placement to high-capacity hardware.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Replication Election States with `rs.status()`
@@ -212,7 +212,7 @@ Inspect replica set member state codes (`PRIMARY: 1`, `SECONDARY: 2`) using `rs.
 > 1. `rs.status()` checks heartbeat ping status across all replica set nodes.
 > 2. `stateStr` reports current node role (`PRIMARY`, `SECONDARY`, `STARTUP2`, `RECOVERING`).
 > 3. Essential health check for replica set operations.
-
+> 
 ---
 
 

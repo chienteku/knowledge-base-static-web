@@ -316,7 +316,7 @@ grid-template-areas:
 > ```
 > - Represent each row inside a set of quotes.
 > - Use a period (`.`) for the empty cell in the footer row.
-
+> 
 ---
 
 
@@ -341,7 +341,7 @@ grid-template-areas:
 > ```
 >
 > **Explanation:** Named area strings define visual layout maps intuitively.
-
+> 
 ---
 
 ### Exercise 3: Empty Cell Dot Notation in Grid Areas
@@ -360,7 +360,7 @@ grid-template-areas:
 > ```
 >
 > **Explanation:** Period `.` tokens represent empty grid cell slots.
-
+> 
 ## 7. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — Sizing the track grid.
 - [`grid-column` / `grid-row` (Grid Item Placement)](grid_item.md) — Placing items manually.

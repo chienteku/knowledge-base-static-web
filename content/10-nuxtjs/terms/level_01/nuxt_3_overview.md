@@ -153,13 +153,13 @@ Configure `nuxt.config.ts` with TypeScript strict mode, CSS framework styles, an
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `defineNuxtConfig` provides full type-checked configuration for Nuxt 3 applications.
 > 2. `runtimeConfig` separates server-only private keys from `public` client-accessible configuration.
 > 3. Central configuration file for build, tooling, and environment setup.
-
+> 
 ---
 
 ### Exercise 2: Defining Page Layouts and Root Application Shell
@@ -184,13 +184,13 @@ Structure `app.vue` to support directory-based pages and layout templates via `<
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `<NuxtPage />` renders active route components from the `pages/` directory.
 > 2. `<NuxtLayout>` wraps page content inside master layout templates from `layouts/`.
 > 3. Standard entrypoint structure for Nuxt 3 applications.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Generated Nuxt Directory Artifacts
@@ -211,19 +211,15 @@ Explain the role of `.nuxt/` build directory during local development and compil
 > - .nuxt/components.d.ts: TypeScript definitions for auto-imported Vue components.
 > - .nuxt/tsconfig.json: Auto-generated TypeScript configuration extended by root tsconfig.json.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `.nuxt/` is a build artifact directory dynamically updated during development.
 > 2. Provides IDE intelligence and type definitions without polluting source code repository commits.
 > 3. Root `tsconfig.json` extends `.nuxt/tsconfig.json` automatically.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Universal Rendering (SSR)](universal_rendering.md) — The process Nuxt uses to render Vue on the server.

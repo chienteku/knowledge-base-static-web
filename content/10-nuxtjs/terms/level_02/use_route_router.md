@@ -163,25 +163,25 @@ Read route parameter `id` and query string `sort` in component `<script setup>` 
 > ```vue
 > <script setup lang="ts">
 > const route = useRoute();
-
-const productId = computed(() => route.params.id);
-const sortOrder = computed(() => route.query.sort ?? "asc");
-</script>
-
-<template>
-  <div>
-    <p>Product ID: {{ productId }}</p>
-    <p>Sort Order: {{ sortOrder }}</p>
-  </div>
-</template>
-```
-
+> 
+> const productId = computed(() => route.params.id);
+> const sortOrder = computed(() => route.query.sort ?? "asc");
+> </script>
+> 
+> <template>
+>   <div>
+>     <p>Product ID: {{ productId }}</p>
+>     <p>Sort Order: {{ sortOrder }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useRoute()` returns a reactive route location object containing `params`, `query`, `path`, and `meta`.
 > 2. `route.params` contains dynamic URL path parameters.
 > 3. `route.query` contains parsed URL query string key-value pairs.
-
+> 
 ---
 
 ### Exercise 2: Programmatic Navigation using `useRouter()`
@@ -200,28 +200,28 @@ Perform programmatic navigation to `/dashboard` after successful form submission
 > <script setup lang="ts">
 > const router = useRouter();
 > const isSubmitting = ref(false);
-
-async function handleLogin() {
-  isSubmitting.value = true;
-  // Simulate API login authentication call
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  
-  // Programmatic navigation to dashboard
-  await router.push({ path: "/dashboard", query: { loggedIn: "true" } });
-}
-</script>
-
-<template>
-  <button @click="handleLogin" :disabled="isSubmitting">Log In</button>
-</template>
-```
-
+> 
+> async function handleLogin() {
+>   isSubmitting.value = true;
+>   // Simulate API login authentication call
+>   await new Promise((resolve) => setTimeout(resolve, 500));
+>   
+>   // Programmatic navigation to dashboard
+>   await router.push({ path: "/dashboard", query: { loggedIn: "true" } });
+> }
+> </script>
+> 
+> <template>
+>   <button @click="handleLogin" :disabled="isSubmitting">Log In</button>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useRouter()` returns the Vue Router instance controlling navigation methods (`push`, `replace`, `back`).
 > 2. `router.push()` pushes a new entry onto the browser history stack.
 > 3. Supports passing path strings or target location objects with params and query options.
-
+> 
 ---
 
 ### Exercise 3: Navigating with `navigateTo()` composable
@@ -247,19 +247,15 @@ Use Nuxt 3's SSR-friendly `navigateTo()` composable inside event handlers or rou
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `navigateTo()` is Nuxt's universal navigation helper designed for server and client execution contexts.
 > 2. On the server during SSR, it performs HTTP 302 redirects.
 > 3. On the client browser, it performs SPA client-side route transitions.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Dynamic Routes](dynamic_routes.md) — The route types that produce parameters.

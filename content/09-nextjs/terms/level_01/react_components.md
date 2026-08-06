@@ -169,24 +169,24 @@ Create a reusable, typed Card component accepting `title`, `description`, and `c
 >   description?: string;
 >   children?: React.ReactNode;
 > }
-
-export default function Card({ title, description, children }: CardProps) {
-  return (
-    <div className="p-6 bg-white border rounded-lg shadow-sm">
-      <h2 className="text-xl font-bold">{title}</h2>
-      {description && <p className="text-gray-600 mt-2">{description}</p>}
-      <div className="mt-4">{children}</div>
-    </div>
-  );
-}
-```
-
+> 
+> export default function Card({ title, description, children }: CardProps) {
+>   return (
+>     <div className="p-6 bg-white border rounded-lg shadow-sm">
+>       <h2 className="text-xl font-bold">{title}</h2>
+>       {description && <p className="text-gray-600 mt-2">{description}</p>}
+>       <div className="mt-4">{children}</div>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Functional React components accept typed `props` objects to render JSX elements.
 > 2. `React.ReactNode` type argument allows passing arbitrary nested JSX elements into `children`.
 > 3. Foundation of component-driven React design systems.
-
+> 
 ---
 
 ### Exercise 2: Composing UI Layouts using Nested Components
@@ -205,30 +205,30 @@ Compose a dashboard layout combining Header, Sidebar, and Content components.
 > function Header() {
 >   return <header className="h-16 bg-blue-600 text-white p-4">App Header</header>;
 > }
-
-function Sidebar() {
-  return <aside className="w-64 bg-gray-800 text-white p-4">Sidebar Navigation</aside>;
-}
-
-export default function DashboardShell({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <div className="flex flex-1">
-        <Sidebar />
-        <main className="flex-1 p-6">{children}</main>
-      </div>
-    </div>
-  );
-}
-```
-
+> 
+> function Sidebar() {
+>   return <aside className="w-64 bg-gray-800 text-white p-4">Sidebar Navigation</aside>;
+> }
+> 
+> export default function DashboardShell({ children }: { children: React.ReactNode }) {
+>   return (
+>     <div className="min-h-screen flex flex-col">
+>       <Header />
+>       <div className="flex flex-1">
+>         <Sidebar />
+>         <main className="flex-1 p-6">{children}</main>
+>       </div>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Component composition breaks complex user interfaces into small, modular building blocks.
 > 2. Encourages reusability and maintainable code architecture.
 > 3. Primary React UI design paradigm.
-
+> 
 ---
 
 ### Exercise 3: Conditional Rendering in React Components
@@ -249,31 +249,27 @@ Render loading state, error alert, or user data conditionally based on props.
 >   error?: string;
 >   user?: { name: string };
 > }
-
-export default function UserViewState({ isLoading, error, user }: ViewStateProps) {
-  if (isLoading) return <div>Loading User...</div>;
-  if (error) return <div className="text-red-500">Error: {error}</div>;
-
-  return (
-    <div>
-      {user ? <h1>Welcome, {user.name}</h1> : <p>Guest User</p>}
-    </div>
-  );
-}
-```
-
+> 
+> export default function UserViewState({ isLoading, error, user }: ViewStateProps) {
+>   if (isLoading) return <div>Loading User...</div>;
+>   if (error) return <div className="text-red-500">Error: {error}</div>;
+> 
+>   return (
+>     <div>
+>       {user ? <h1>Welcome, {user.name}</h1> : <p>Guest User</p>}
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. React components evaluate JavaScript expressions directly inside JSX `{}` tags.
 > 2. Early return statements (`if (isLoading)`) simplify complex conditional template logic.
 > 3. Declarative UI rendering logic.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [React Server Components (RSC)](rsc.md) — Components executing exclusively on the server.

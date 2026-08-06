@@ -163,13 +163,13 @@ Abort route navigation with an HTTP 403 Forbidden error if a user attempts to ac
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `abortNavigation()` stops the active Vue Router transition pipeline immediately.
 > 2. Passing a Nuxt error object constructed via `createError()` renders the root error boundary view.
 > 3. Works seamlessly across server SSR and client-side navigation.
-
+> 
 ---
 
 ### Exercise 2: Triggering 404 Not Found Page for Non-Existent Resources
@@ -195,13 +195,13 @@ Abort route navigation with a 404 error if dynamic user ID parameter is not foun
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Calling `abortNavigation()` without arguments triggers a default 404 Page Not Found response.
 > 2. Prevents rendering empty route template components when underlying data does not exist.
 > 3. Idiomatic route guard pattern.
-
+> 
 ---
 
 ### Exercise 3: Silent Navigation Cancellation without Error Rendering
@@ -229,19 +229,15 @@ Silently cancel route navigation (staying on current page) when a user tries to 
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `abortNavigation(false)` cancels the pending route transition without throwing error screens or redirecting.
 > 2. Keeps the user on the current route path safely.
 > 3. Interactive form guard application.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Route Middleware](route_middleware.md) — The routing context where this utility is used.

@@ -162,7 +162,7 @@ Export BSON documents to Canonical Extended JSON format (`$oid`, `$date`) for tr
 > 1. Extended JSON preserves rich BSON data types across standard text-only JSON APIs.
 > 2. `$oid` represents 12-byte ObjectIds; `$date` represents 64-bit UTC timestamps.
 > 3. Prevents type loss during REST API serialization.
-
+> 
 ---
 
 ### Exercise 2: Binary Traversal Efficiency Comparison
@@ -188,7 +188,7 @@ Explain why MongoDB parses BSON field headers faster than parsing text JSON stri
 > 1. BSON embeds byte length prefixes for documents and nested sub-elements.
 > 2. Query engine skips unrequested fields in $O(1)$ constant time.
 > 3. Accelerates projection and query evaluation.
-
+> 
 ---
 
 ### Exercise 3: BSON Data Type Support Matrix
@@ -215,7 +215,7 @@ List 3 native data types supported in BSON that do not exist natively in standar
 > 1. Standard JSON only supports strings, numbers, booleans, arrays, objects, and null.
 > 2. BSON adds native binary types for dates, decimals, object IDs, and raw binary data (`BinData`).
 > 3. Provides rich data typing for application developers.
-
+> 
 ---
 
 

@@ -135,17 +135,17 @@ Create a `UserProfile` interface with optional `bio` and `avatarUrl` fields usin
 >   bio?: string;
 >   avatarUrl?: string;
 > }
-
-const minimalUser: UserProfile = { username: "coder123" };
-const fullUser: UserProfile = { username: "coder123", bio: "Full stack dev" };
-```
-
+> 
+> const minimalUser: UserProfile = { username: "coder123" };
+> const fullUser: UserProfile = { username: "coder123", bio: "Full stack dev" };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. The `?` modifier marks a property as optional during object construction.
 > 2. Automatically unions the declared type with `undefined` (`bio: string | undefined`).
 > 3. Allows creating objects without specifying optional properties.
-
+> 
 ---
 
 ### Exercise 2: Safely Handling Optional Properties with Default Values
@@ -166,18 +166,18 @@ Destructure optional property parameters and provide fallback default values.
 >   theme?: "light" | "dark";
 >   padding?: number;
 > }
-
-function renderWidget({ title, theme = "light", padding = 16 }: RenderOptions) {
-  console.log(`Rendering ${title} with theme=${theme} padding=${padding}px`);
-}
-```
-
+> 
+> function renderWidget({ title, theme = "light", padding = 16 }: RenderOptions) {
+>   console.log(`Rendering ${title} with theme=${theme} padding=${padding}px`);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Destructuring with default values (`theme = "light"`) converts `string | undefined` to a guaranteed `string` inside the function body.
 > 2. Eliminates repetitive manual `if (options.theme)` checks.
 > 3. Standard ES6 + TypeScript pattern for handling optional configuration parameters.
-
+> 
 ---
 
 ### Exercise 3: Auditing `exactOptionalPropertyTypes` Behavior
@@ -196,18 +196,18 @@ Explain the behavior difference of `bio?: string` under `"exactOptionalPropertyT
 > interface Settings {
 >   theme?: string;
 > }
-
-// Under exactOptionalPropertyTypes: true
-const s1: Settings = {}; // ✅ Valid (Property omitted)
-// const s2: Settings = { theme: undefined }; // ❌ Compile Error under exactOptionalPropertyTypes!
-```
-
+> 
+> // Under exactOptionalPropertyTypes: true
+> const s1: Settings = {}; // ✅ Valid (Property omitted)
+> // const s2: Settings = { theme: undefined }; // ❌ Compile Error under exactOptionalPropertyTypes!
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. By default, `key?: string` permits both omitting `key` AND explicitly setting `key: undefined`.
 > 2. Enabling `"exactOptionalPropertyTypes": true` forbids setting `key: undefined` explicitly; properties can ONLY be omitted or set to `string`.
 > 3. Ensures exact object key presence guarantees.
-
+> 
 ---
 
 

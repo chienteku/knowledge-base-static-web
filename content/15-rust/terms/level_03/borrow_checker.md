@@ -308,7 +308,7 @@ Implement a zero-copy structured log parser `ZeroCopyLogParser<'a>` that parses 
 > 
 > 3. **Edge Case Safety**:
 >    - Handles empty components, missing delimiters, leading/trailing whitespace (`.trim()`), and fixed output array bounds without panicking or creating dangling references.
-
+> 
 ---
 
 ### Exercise 2: Staging Batch Pipeline & Vector Reallocation Prevention
@@ -482,7 +482,7 @@ Implement a memory-safe batch pipeline `TelemetryBatchPipeline` that manages met
 > 
 > 3. **Ownership Transfer via `std::mem::take`**:
 >    - `std::mem::take(&mut self.buffer)` swaps `self.buffer` with `Vec::new()` in $O(1)$ time without allocating new memory or copying elements. Ownership of the heap block is transferred directly to the caller as `flushed`.
-
+> 
 ---
 
 ### Exercise 3: Decoupled Graph Storage Engine (Avoiding Self-Referential Borrow Loops)
@@ -660,7 +660,7 @@ Design an arena-based graph architecture `ArenaGraph<T>` that replaces pointer r
 > 
 > 3. **Fine-Grained Borrow Granularity**:
 >    - `get_mut(&mut self, id: NodeId)` borrows the graph mutably only for the duration of the lookup call. Once the returned `&mut T` reference drops out of scope (NLL), the graph is immediately unlocked for further reads or edge modifications.
-
+> 
 ---
 
 ## 6. Related Terms

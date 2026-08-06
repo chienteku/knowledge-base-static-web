@@ -303,7 +303,7 @@ thread::spawn(move || {
 > 
 > 4. **Divergence Constraint (`!` Type):**
 >    Each `else` block in `let else` contains an explicit `return Err(...)` expression. Because `return` diverges with type `!`, it satisfies Rust's type-checker requirements when pattern matching fails.
-
+> 
 ---
 
 ### Exercise 2: Binary Telemetry Protocol Frame Decoder
@@ -445,7 +445,7 @@ thread::spawn(move || {
 > 
 > 4. **Scope Isolation:**
 >    Variables bound in `let PATTERN = EXPR else` enter the scope *after* the `let` statement completes. Variables bound inside `PATTERN` are not accessible inside the `else` block, preserving clean scope boundaries and preventing accidental use of partially initialized data.
-
+> 
 ---
 
 ### Exercise 3: Compiler AST Constant Folding Optimization Pass
@@ -578,7 +578,7 @@ thread::spawn(move || {
 > 
 > 4. **Syntactic Flattening:**
 >    Without `let else`, inspecting deeply nested enum structures like AST nodes requires either complex nested `match` statements or chaining multi-clause `if let` blocks. `let else` provides a linear sequence of assertions that progressively refine compiler invariants.
-
+> 
 ---
 
 ## 6. Related Terms

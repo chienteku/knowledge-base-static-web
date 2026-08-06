@@ -186,7 +186,7 @@ Calculate a running cumulative sales revenue total for orders sorted by `created
 > 1. `SUM() OVER (ORDER BY created_at)` calculates a cumulative running total across ordered rows.
 > 2. Unlike `GROUP BY`, window functions do NOT collapse rows; each row retains its individual identity.
 > 3. Essential analytical query pattern.
-
+> 
 ---
 
 ### Exercise 2: Partitioned Group Aggregations without Collapsing Rows
@@ -216,7 +216,7 @@ Calculate the percentage of total department salary that each individual employe
 > 1. `PARTITION BY department_id` restricts the window aggregate calculations to rows sharing the same department.
 > 2. Retains individual employee row details alongside department aggregate totals.
 > 3. Powerful cross-row reporting capability.
-
+> 
 ---
 
 ### Exercise 3: Defining Window Frames (`ROWS BETWEEN ...`)
@@ -247,7 +247,7 @@ Calculate a 3-row moving average price using `ROWS BETWEEN 1 PRECEDING AND 1 FOL
 > 1. `ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING` defines explicit window frame boundaries relative to the current row.
 > 2. Calculates moving averages over a sliding 3-row window frame.
 > 3. Standard financial analytics calculation.
-
+> 
 ---
 
 

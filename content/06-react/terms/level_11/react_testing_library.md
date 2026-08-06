@@ -204,7 +204,7 @@ test('dismisses the warning message', () => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Testing User Click Interaction with userEvent
@@ -226,7 +226,7 @@ test('dismisses the warning message', () => {
 > ```
 >
 > **Explanation:** `@testing-library/user-event` simulates realistic browser user interactions.
-
+> 
 ---
 
 ### Exercise 3: Query Priority Order in RTL
@@ -243,7 +243,7 @@ test('dismisses the warning message', () => {
 > ```
 >
 > **Explanation:** Querying by accessibility roles tests components as screen readers and real users perceive them.
-
+> 
 ## 7. Related Terms
 - [Components](../level_01/components.md) — The visual units being tested.
 - [Synthetic Events](../level_05/synthetic_events.md) — The event framework simulated in testing environments.

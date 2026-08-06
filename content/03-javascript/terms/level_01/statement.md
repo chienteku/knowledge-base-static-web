@@ -156,7 +156,7 @@ console.log(score);
 > 3 statements
 > ```
 > - Look for the semicolons! In JavaScript, semicolons generally mark the end of a statement.
-
+> 
 ---
 
 ### Exercise 2: Distinguishing Statements from Expressions
@@ -180,7 +180,7 @@ console.log(score);
 > ```
 >
 > **Explanation:** Statements perform control flow actions; expressions evaluate to concrete values.
-
+> 
 ---
 
 ### Exercise 3: Expression Statements with Side Effects
@@ -199,8 +199,8 @@ console.log(score);
 > ```
 >
 > **Explanation:** Adding a semicolon to an expression forms an expression statement executed for its side effect.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

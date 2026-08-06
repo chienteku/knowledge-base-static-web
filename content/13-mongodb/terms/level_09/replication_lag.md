@@ -154,7 +154,7 @@ Query `rs.status()` to calculate the exact replication lag in seconds for second
 > 1. Replication lag measures the time difference between primary oplog write timestamps and secondary applied oplog timestamps.
 > 2. Lag > 0 indicates secondary is falling behind primary write throughput.
 > 3. High lag risks stale reads when using `readPreference: "secondary"`.
-
+> 
 ---
 
 ### Exercise 2: Mitigating Replication Lag with Flow Control
@@ -181,7 +181,7 @@ Enable Flow Control (`flowControlTargetLagSeconds`) to prevent primary write bur
 > 1. Flow Control dynamically throttles primary write rate if secondary replication lag exceeds the target threshold (e.g. 10s).
 > 2. Prevents secondary nodes from falling out of the oplog window during heavy write spikes.
 > 3. Maintains stable cluster replication bounds.
-
+> 
 ---
 
 ### Exercise 3: Preventing Stale Reads from Lagging Secondaries
@@ -208,7 +208,7 @@ Configure maximum acceptable replication lag (`maxStalenessSeconds`) on client d
 > 1. `maxStalenessSeconds` stops the driver from routing reads to secondaries whose replication lag exceeds 90 seconds.
 > 2. Prevents application users from viewing severely outdated data.
 > 3. Hardens distributed read query accuracy.
-
+> 
 ---
 
 

@@ -327,7 +327,7 @@ You are building an enterprise-grade database driver. The client configuration r
 > 
 > 4. **Monomorphization & Invariants**:
 >    The helper method `new(connection_string: impl Into<String>)` monomorphizes at compile time for any type converting into a `String` (such as `&str` or `String`). Struct fields remain strictly owned, avoiding dangling lifetime references (`E0515`).
-
+> 
 ---
 
 ### Exercise 2: Recyclable Packet Buffer Manager with Const Generics & Default Reset
@@ -490,7 +490,7 @@ In high-performance networking pipelines, allocating new packet buffers for ever
 > 
 > 3. **Memory Safety & Reset Invariants**:
 >    Resetting a slot via `*slot = T::default()` replaces the existing instance with a pristine zero/default value. If `T` owned heap data (e.g. `String` or `Vec`), Rust's assignment operator would automatically drop the prior value before writing the new `T::default()` instance into the slot location, preventing memory leaks (`E0509`/`E0507`).
-
+> 
 ---
 
 ### Exercise 3: Distributed Tracing Context Extraction with Default Fallbacks & Context Propagation
@@ -664,7 +664,7 @@ Microservice API gateways inspect incoming HTTP headers to extract distributed t
 > 
 > 3. **Ownership, Cloning, and Context Inheritance**:
 >    `child_span` clones the `trace_id`, `sampling`, and `baggage` map from `&self` while replacing `span_id`. Standard ownership rules apply: string allocations created during extraction are owned by `SpanContext`, ensuring context survival across asynchronous microservice tasks without dangling references (`E0597`).
-
+> 
 ---
 
 ## 6. Related Terms

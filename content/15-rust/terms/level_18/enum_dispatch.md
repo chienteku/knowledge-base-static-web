@@ -178,7 +178,7 @@ Use macros or `enum_dispatch` crate to automatically generate variant delegation
 >
 > 1. `Packet` enum holds fixed polymorphic packet variants in contiguous memory.
 > 2. `payload_length` performs static match dispatch, enabling LLVM inlining.
-
+> 
 ---
 
 ### Exercise 2: Abstract Game Engine Renderer Node Dispatch
@@ -230,7 +230,7 @@ Use macros or `enum_dispatch` crate to automatically generate variant delegation
 >
 > 1. Eliminates vtable dynamic allocation for scene graph elements.
 > 2. Stores nodes in contiguous stack or array memory.
-
+> 
 ---
 
 ### Exercise 3: Financial Order Execution Strategy Dispatch
@@ -279,7 +279,7 @@ Use macros or `enum_dispatch` crate to automatically generate variant delegation
 >
 > 1. High-frequency trading dispatch without dynamic vtable lookup latency.
 > 2. Maximizes L1 CPU cache hit rates.
-
+> 
 ---
 
 ## 6. Related Terms

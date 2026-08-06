@@ -171,7 +171,7 @@ Delete a single order document from collection `orders` by its primary key `_id`
 > 1. `deleteOne()` removes at most one matching document.
 > 2. Target `_id` primary key deletes execute in $O(1)$ constant time.
 > 3. Returns `deletedCount: 1` on success.
-
+> 
 ---
 
 ### Exercise 2: Batch Deletion with `deleteMany`
@@ -200,7 +200,7 @@ Delete all temporary log documents older than 30 days from collection `system_lo
 > 1. `deleteMany()` removes all collection documents satisfying the filter condition.
 > 2. Fires atomic deletion events for each document.
 > 3. Utilizes `createdAt` secondary index for fast deletion targeting.
-
+> 
 ---
 
 ### Exercise 3: Verifying Deletion Acknowledgments
@@ -227,7 +227,7 @@ Inspect the returned result object of a deletion operation to confirm acknowledg
 > 1. `acknowledged: true` verifies the database write concern acknowledged the write.
 > 2. `deletedCount` reports how many documents were actually removed.
 > 3. Provides clean write result verification.
-
+> 
 ---
 
 

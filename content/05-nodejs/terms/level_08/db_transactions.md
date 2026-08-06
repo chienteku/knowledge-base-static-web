@@ -212,7 +212,7 @@ async function placeOrder(userId, productId, price) {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Prisma Interactive Transaction Pattern
@@ -238,7 +238,7 @@ async function placeOrder(userId, productId, price) {
 > ```
 >
 > **Explanation:** Prisma `$transaction` handles `BEGIN`, `COMMIT`, and `ROLLBACK` automatically.
-
+> 
 ---
 
 ### Exercise 3: ACID Properties Definition
@@ -258,7 +258,7 @@ async function placeOrder(userId, productId, price) {
 > ```
 >
 > **Explanation:** ACID properties guarantee reliable execution of database transactions.
-
+> 
 ## 7. Related Terms
 - [Connection Pooling](connection_pools.md) — The network channels used to manage transaction streams.
 - [Migrations](migrations.md) — Schema updates executed within transactions to prevent partial updates.

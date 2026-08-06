@@ -142,7 +142,7 @@ What does this directive do, and what existing Rust mechanism would you use in `
 > #[cfg(feature_x_enabled)]
 > fn special_behavior() { /* ... */ }
 > ```
-
+> 
 ---
 
 ### Exercise 2: Writing a Realistic Build Script for a C-Backed Crate
@@ -208,7 +208,7 @@ Write the complete `build.rs` and show how `src/lib.rs` would use the `has_mysql
 > - `rustc-link-lib` solves the linker problem: it passes `-l mysqlclient` to `rustc` so the final binary can call into the C library. Without it, you'd get `undefined reference` linker errors at compile time.
 > - `rerun-if-changed` solves the stale-rebuild problem: by default Cargo re-runs `build.rs` on every `cargo build` call. Declaring a specific file path restricts re-execution to only when *that* file's mtime changes, keeping incremental builds fast.
 > - `rustc-cfg` solves the conditional compilation problem: it injects a flag identical to passing `--cfg has_mysql` to `rustc` directly, letting you use `#[cfg(has_mysql)]` in `src/` without touching `Cargo.toml` feature flags — ideal for capability detection discovered at build time.
-
+> 
 ---
 
 ### Exercise 3: Generating Code with `OUT_DIR` + `include!`
@@ -272,7 +272,7 @@ Then answer: **why must generated files go to `OUT_DIR` and not directly to `src
 >
 > **Answer to the `OUT_DIR` question:**
 > Writing into `src/` would dirty the source tree — version control would see the generated file as an untracked/modified file, creating noise in `git status` and potential conflicts between developers or CI runs that generate different content. `OUT_DIR` is inside `target/`, which is `.gitignore`d by convention, so generated files stay out of version control entirely. It also means each build profile (debug, release) gets its own `OUT_DIR`, so profile-specific generated code never collides.
-
+> 
 ---
 
 ## 6. Related Terms

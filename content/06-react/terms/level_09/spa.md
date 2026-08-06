@@ -127,7 +127,7 @@ Use Next.js SSR/SSG for public SEO marketing pages
 > ```
 >
 > **Explanation:** SPAs provide desktop-like fluid user experiences via client-side rendering and routing.
-
+> 
 ---
 
 ### Exercise 2: SPA vs MPA Tradeoffs
@@ -144,7 +144,7 @@ Use Next.js SSR/SSG for public SEO marketing pages
 > ```
 >
 > **Explanation:** Architectural choices depend on interactivity requirements vs initial SEO loading needs.
-
+> 
 ---
 
 ### Exercise 3: Updating Page Title in SPA
@@ -163,7 +163,7 @@ Use Next.js SSR/SSG for public SEO marketing pages
 > ```
 >
 > **Explanation:** Updating `document.title` in route components maintains browser tab context in SPAs.
-
+> 
 ## 7. Related Terms
 - [Client-Side Routing](client_side_routing.md) — The mechanism used to make an SPA feel like a multi-page site.
 - [Server-Side Rendering (SSR)](../level_10/ssr.md) — The modern alternative to pure SPAs to fix the SEO and initial load time issues.

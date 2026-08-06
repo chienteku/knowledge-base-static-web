@@ -295,7 +295,7 @@ Implement a thread-safe subscription system where:
 > 1. **Cycle Breaking via `Weak`:** Storing `Weak<Mutex<dyn Listener>>` instead of `Arc<Mutex<dyn Listener>>` prevents the `Publisher` from keeping listeners alive indefinitely.
 > 2. **Dynamic Weak Upgrading:** Calling `.upgrade()` on `Weak` pointers attempts to obtain a temporary `Arc` strong reference. If the subscriber has been dropped elsewhere in the application, `.upgrade()` safely returns `None`.
 > 3. **Automatic Pruning:** `list.retain()` filters the weak vector during publication, removing stale `Weak` references on the fly so the subscriber list does not accumulate memory garbage over time.
-
+> 
 ---
 
 ## 5. Practice Exercises
@@ -529,7 +529,7 @@ Implement `ConfigManager`:
 > > 1. **Asymmetric Ownership Structure:** Storing strong `Rc` in `outputs` establishes a clear parent-to-child ownership hierarchy, while storing `Weak` in `inputs` breaks back-pointer reference cycles.
 > > 2. **Cascade Deallocation:** When the root node is dropped, its `outputs` vector is dropped, decrementing the strong count of `child_a` and `child_b` from 2 to 1 (and then to 0 as local variables drop). This allows destructors (`impl Drop`) to cascade down the entire DAG automatically.
 > > 3. **Safety of Weak Upgrades:** Calling `filter_map(|w| w.upgrade())` when inspecting inputs ensures child nodes can safely access parent values without risking dangling pointer crashes if a parent node is removed from the graph prematurely.
-
+> 
 ---
 
 ## 6. Related Terms

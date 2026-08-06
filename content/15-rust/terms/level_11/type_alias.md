@@ -277,7 +277,7 @@ Implement a request execution pipeline that utilizes `ApiResult<T>` short-circui
 > 3. **Assertions in Unit Tests:**
 >    - `assert!(result.is_ok())` and `assert_eq!(...)` confirm proper data processing on valid requests.
 >    - `matches!(result.unwrap_err(), ApiError::Unauthorized)` pattern-matches enum variants without requiring manual destructuring.
-
+> 
 ---
 
 ### Exercise 2: Simplifying Complex Trait Object Closures in Event Handler Dispatchers
@@ -396,7 +396,7 @@ Construct a thread-safe `EventDispatcher` system:
 > 1. **Trait Object Cleanups:** Writing `Box<dyn Fn(&str) -> Result<String, &'static str> + Send + Sync>` in every struct field, parameter list, and return type causes intense boilerplate. Aliasing this complex combination to `EventHandler` restores clean readable code.
 > 2. **Nested Map Type Alias:** `HandlerRegistry` abstracts `HashMap<String, Vec<EventHandler>>`, simplifying structural data declarations in the `EventDispatcher` struct.
 > 3. **Thread Safety Trait Bounds:** The `Send + Sync` bounds ensure that event handlers can safely be dispatched across thread boundaries in concurrent execution environments.
-
+> 
 ---
 
 ### Exercise 3: Decoupling Thread-Safe Concurrent Storage with Nested Type Aliases
@@ -569,7 +569,7 @@ Implement a thread-safe `ConcurrentCache<V>` using nested type aliases:
 > 1. **Composite Memory Type Alias:** `SharedStore<V>` encases the generic `Arc<RwLock<HashMap<CacheKey, CacheValue<V>>>>`. Any change to underlying synchronization primitives (e.g. switching from `RwLock` to `Mutex`) can be performed in a single type alias location.
 > 2. **Interior Mutability & Mutex Guards:** The `store.write()` and `store.read()` methods acquire shared or exclusive locks on the underlying data, propagating `LockPoisoned` errors through `CacheResult<T>`.
 > 3. **Thread Safety Verification:** The `test_concurrent_thread_access` test spawns 10 separate OS threads, demonstrating that `SharedStore<V>` can safely be cloned (`Arc::clone`) and accessed across threads concurrently.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -156,7 +156,7 @@ What URL actually triggers the billing component?
 > To nest it correctly under the parent, it must not have a leading slash: `{ path: 'billing' }`.
 > ```
 > - A slash `/` means "Start at the very beginning of the domain".
-
+> 
 ---
 
 ### Exercise 2: Nested Route Structure Setup
@@ -183,7 +183,7 @@ What URL actually triggers the billing component?
 >   }
 > ];
 > ```
-
+> 
 ---
 
 ### Exercise 3: Default Nested Child Route
@@ -200,8 +200,8 @@ What URL actually triggers the billing component?
 > ```javascript
 > children: [{ path: '', component: SettingsOverview }]
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

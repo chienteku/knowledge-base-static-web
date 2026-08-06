@@ -110,7 +110,7 @@ await db.put('users', { id: 1, name: 'Alice' }); // Clean async/await
 > 3. IndexedDB (localStorage literally cannot store binary audio files).
 > ```
 > - Does it exceed 5MB? Is it a file?
-
+> 
 ---
 
 ### Exercise 2: IndexedDB vs Web Storage (LocalStorage)

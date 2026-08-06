@@ -155,7 +155,7 @@ Update user status to `'active'` and update `last_login` timestamp for user `id 
 > 1. `UPDATE` sets new column values across rows matching the `WHERE` clause.
 > 2. `WHERE id = 15` restricts modification to a single target row.
 > 3. `RETURNING` verifies updated column state.
-
+> 
 ---
 
 ### Exercise 2: Multi-Row Conditional Batch Updates
@@ -182,7 +182,7 @@ Increase prices by 10% (`price_cents * 1.10`) for all products in category `'ele
 > 1. Modifies all rows satisfying the `WHERE` filter.
 > 2. `ROUND()` ensures price integer cents remain whole numbers.
 > 3. Executes atomically as a single transaction.
-
+> 
 ---
 
 ### Exercise 3: Preventing Unbounded Table Wipes
@@ -210,7 +210,7 @@ Audit a buggy `UPDATE` query that accidentally omitted the `WHERE` clause.
 > 1. Omitting `WHERE` applies modifications to EVERY row in the table.
 > 2. Under MVCC, writes new versions for all rows, causing severe table bloat.
 > 3. Always write `WHERE` clauses first when authoring `UPDATE` queries.
-
+> 
 ---
 
 

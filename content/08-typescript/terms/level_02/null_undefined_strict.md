@@ -170,20 +170,20 @@ Safely access optional user email properties under `"strictNullChecks": true` us
 >   name: string;
 >   email?: string | null;
 > }
-
-function getEmailDomain(user: User): string {
-  // Optional chaining and nullish coalescing:
-  const email = user.email?.toLowerCase() ?? "no-email-provided";
-  return email;
-}
-```
-
+> 
+> function getEmailDomain(user: User): string {
+>   // Optional chaining and nullish coalescing:
+>   const email = user.email?.toLowerCase() ?? "no-email-provided";
+>   return email;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `"strictNullChecks": true` forces explicit handling of `null` and `undefined` types.
 > 2. Optional chaining (`?.`) short-circuits to `undefined` if the receiver object is `null` or `undefined`.
 > 3. Nullish coalescing (`??`) provides fallback defaults only for `null` or `undefined` values.
-
+> 
 ---
 
 ### Exercise 2: Non-Null Assertion Operator Danger Audit
@@ -202,23 +202,23 @@ Audit the risks of using the non-null assertion operator (`!`) to bypass strict 
 > interface Profile {
 >   avatarUrl?: string;
 > }
-
-function renderAvatar(profile: Profile) {
-  // ⚠️ DANGEROUS: Suppresses compiler warning, but crashes if avatarUrl is undefined!
-  // const url: string = profile.avatarUrl!; 
-
-  // ✅ SAFE (Explicit check or default fallback):
-  const url: string = profile.avatarUrl ?? "/default-avatar.png";
-  return url;
-}
-```
-
+> 
+> function renderAvatar(profile: Profile) {
+>   // ⚠️ DANGEROUS: Suppresses compiler warning, but crashes if avatarUrl is undefined!
+>   // const url: string = profile.avatarUrl!; 
+> 
+>   // ✅ SAFE (Explicit check or default fallback):
+>   const url: string = profile.avatarUrl ?? "/default-avatar.png";
+>   return url;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. The non-null assertion operator (`!`) tells the compiler to assume a value is not `null` or `undefined`.
 > 2. Completely erased at compile time; provides zero runtime safety.
 > 3. Prefer explicit runtime checks or fallback operators (`??`).
-
+> 
 ---
 
 ### Exercise 3: Distinguishing `null` vs `undefined` Intent
@@ -238,13 +238,13 @@ Formulate a architectural distinction matrix comparing `null` against `undefined
 > - undefined: Represents an un-initialized variable, missing object property, or omitted optional argument. Automatically assigned by JS engine.
 > - null: Represents an explicit, intentional absence of object value or empty database reference. Set deliberately by developers.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `undefined` is the default JavaScript value for unassigned identifiers.
 > 2. `null` is a deliberate value indicating "no value present".
 > 3. Both are treated as distinct types under `strictNullChecks`.
-
+> 
 ---
 
 

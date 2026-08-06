@@ -168,7 +168,7 @@ Create a `contacts` table requiring `first_name`, `last_name`, and `email` using
 > 1. `NOT NULL` prevents writing rows with unassigned or missing values in target columns.
 > 2. Attempting to insert `NULL` into a `NOT NULL` column throws a null value constraint violation.
 > 3. Guarantees mandatory data presence at the database tier.
-
+> 
 ---
 
 ### Exercise 2: Adding NOT NULL Constraints to Existing Columns
@@ -198,7 +198,7 @@ Add a `NOT NULL` constraint to column `status` on existing table `tasks` after b
 > 1. Applying `SET NOT NULL` fails if existing table rows contain `NULL` values.
 > 2. Backfilling missing values with `UPDATE` ensures constraint validation succeeds.
 > 3. Hardens table integrity.
-
+> 
 ---
 
 ### Exercise 3: Handling NOT NULL Constraint Exceptions
@@ -228,7 +228,7 @@ Catch `not_null_violation` (Error Code 23502) in PostgreSQL driver scripts.
 > 1. PostgreSQL returns Error Code `23502` (`not_null_violation`) when a `NOT NULL` constraint is violated.
 > 2. Driver exposes `err.column` identifying the missing field name.
 > 3. Maps to HTTP 400 Bad Request error responses in application APIs.
-
+> 
 ---
 
 

@@ -134,21 +134,21 @@ Read a private database connection string inside a Server Component using `proce
 > ```tsx
 > export default async function ServerDbView() {
 >   const dbUrl = process.env.DATABASE_URL;
-
-  return (
-    <div>
-      <p>Database Status: {dbUrl ? "Connected" : "Not Configured"}</p>
-    </div>
-  );
-}
-```
-
+> 
+>   return (
+>     <div>
+>       <p>Database Status: {dbUrl ? "Connected" : "Not Configured"}</p>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `process.env` properties without `NEXT_PUBLIC_` prefix are available ONLY in Node.js server execution environments.
 > 2. Never bundled into client JavaScript assets.
 > 3. Standard Node.js environment variable access pattern.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Node Environment Modes (`process.env.NODE_ENV`)
@@ -171,13 +171,13 @@ Branch application logic depending on whether `process.env.NODE_ENV` is `'develo
 >   return "error";
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Next.js automatically sets `process.env.NODE_ENV` based on the active command (`next dev` vs `next build`).
 > 2. Allows toggling debug logging and development tools conditionally.
 > 3. Standard Node.js environment mode flag.
-
+> 
 ---
 
 ### Exercise 3: Auditing Inlined Client Environment Variables
@@ -199,19 +199,15 @@ Explain why `console.log(process.env)` in a Client Component outputs an empty ob
 > - Compiled bundle: console.log("pk_test_12345")
 > - Accessing full process.env object in client JS returns {} because the global process object does not exist in browsers!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Browsers do not possess a native Node.js `process.env` runtime object.
 > 2. Next.js statically inlines `NEXT_PUBLIC_` variables during compilation.
 > 3. Always reference specific keys (`process.env.NEXT_PUBLIC_KEY`) directly.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Environment Variables (`.env.local`)](environment_variables.md) — Next.js's implementation of this concept.

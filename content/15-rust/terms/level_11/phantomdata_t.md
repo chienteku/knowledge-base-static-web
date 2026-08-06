@@ -311,7 +311,7 @@ Requirements:
 > 2. **Generic Parameter Enforcement:** `HttpRequestBuilder<State>` declares a generic type `State`. Without `_state: PhantomData<State>`, the Rust compiler raises error `E0392` (parameter `State` is never used).
 > 3. **Selective Method Implementation:** Methods like `.url()` consume `HttpRequestBuilder<Unconfigured>` and return `HttpRequestBuilder<Configured>`, moving the builder into a new state. `.send()` is defined exclusively on `HttpRequestBuilder<Ready>`. Attempting to call `.send()` on an unconfigured or configured builder results in compile-time error `E0599`.
 > 4. **Zero Runtime Cost:** At compile time, `PhantomData<State>` completely vanishes. `size_of::<HttpRequestBuilder<Unconfigured>>()` is identical to `size_of::<HttpRequestBuilder<Ready>>()`.
-
+> 
 ---
 
 ### Exercise 2: Zero-Copy Raw Slice Iterator with Lifetime Bounds (`PhantomData<&'a T>`)
@@ -429,7 +429,7 @@ Requirements:
 > 2. **Covariance:** Because `&'a T` is covariant over `'a` and `T`, `PhantomData<&'a T>` ensures that `SliceCursor<'a, T>` is also covariant over `'a` and `T`.
 > 3. **Unsafe Operations Guarded by Lifetime:** When dereferencing `&*item_ptr`, the compiler allows returning `&'a T` because `PhantomData<&'a T>` guarantees to the borrow checker that `data` outlives the cursor.
 > 4. **Memory Footprint:** `PhantomData<&'a T>` occupies 0 bytes. The struct size is strictly the sum of `ptr`, `len`, and `index`.
-
+> 
 ---
 
 ### Exercise 3: Custom Safe Heap Slot with Ownership Signaling and Auto Trait Propagation (`PhantomData<T>`)
@@ -565,7 +565,7 @@ Requirements:
 > 2. **Safely Unwrapping (`into_inner`):** `std::mem::forget(self)` prevents `OwnedSlot::drop` from executing when transferring ownership of `T`. Then `Box::from_raw(ptr)` reconstructs the `Box` so dereferencing `*boxed` moves `T` out safely.
 > 3. **Destructor Execution:** Inside `Drop for OwnedSlot<T>`, `Box::from_raw(self.ptr)` converts the raw pointer back into a `Box`, which immediately goes out of scope, deallocating the heap buffer and invoking `T`'s destructor.
 > 4. **Auto-Trait Safety (`Send` & `Sync`):** Raw pointers `*mut T` are `!Send` and `!Sync` by default to prevent unsafety. `PhantomData<T>` paired with `unsafe impl<T: Send> Send for OwnedSlot<T> {}` safely extends thread-transfer privileges only to types where `T` itself is `Send`.
-
+> 
 ---
 
 ## 6. Related Terms

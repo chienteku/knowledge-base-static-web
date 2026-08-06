@@ -111,7 +111,7 @@ const port = parseInt(process.env.PORT || '3000', 10);
 > Because `.env` files are ignored by Git (for security), you didn't download it from GitHub! You must ask your coworker for the local `.env` values, or look for a `.env.example` file to create your own `.env` file locally.
 > ```
 > - Are `.env` files supposed to be in GitHub repositories?
-
+> 
 ---
 
 
@@ -131,7 +131,7 @@ const port = parseInt(process.env.PORT || '3000', 10);
 > ```
 >
 > **Explanation:** `dotenv.config()` parses `.env` file key-values into `process.env`.
-
+> 
 ---
 
 ### Exercise 3: Node.js 20+ Native Env File Flag
@@ -148,7 +148,7 @@ const port = parseInt(process.env.PORT || '3000', 10);
 > ```
 >
 > **Explanation:** `--env-file` natively populates `process.env` at startup without npm dependencies.
-
+> 
 ## 7. Related Terms
 - [JWT (JSON Web Tokens)](jwt.md) — The JWT signature secret MUST be stored in an Environment Variable.
 - [Docker](docker.md) — Docker relies heavily on Environment Variables to configure containers dynamically.

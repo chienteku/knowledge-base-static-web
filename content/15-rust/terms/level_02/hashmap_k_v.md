@@ -281,7 +281,7 @@ use std::collections::HashMap;
 > 2. **In-Place Value Mutation**: `.and_modify()` operates directly on an exclusive reference `&mut QuotaState` inside the entry. If the entry exists, it updates `count` or resets the timestamp without re-allocating memory for the `String` key.
 > 3. **Ownership and Lookup Borrowing**: `check_and_record` accepts `&str` and converts it to an owned `String` only when creating or matching an entry key. Conversely, `get_client_count` calls `.get(client_id)`, leveraging the `Borrow<str>` implementation for `String` keys, allowing key lookups using borrowed string slices `&str` without allocating memory on heap.
 > 4. **Retain for Garbage Collection**: The `retain` method evaluates a closure over key-value pairs `(&K, &mut V)` in-place, removing items when the closure evaluates to `false`. This achieves memory reclamation for idle connections in $\mathcal{O}(N)$ without intermediate allocation of vector keys.
-
+> 
 ---
 
 ### Exercise 2: Observability Log Processing & Multi-Tag Inverted Search Index
@@ -401,7 +401,7 @@ use std::collections::HashMap;
 > 2. **Slice Borrowing (`Option<&[u64]>`)**: `query_tag` transforms `Option<&Vec<u64>>` into `Option<&[u64]>` via `.map(|v| v.as_slice())`. Returning a slice reference avoids cloning the underlying vector and decouples caller interface from internal storage structures.
 > 3. **Ownership Transfer in `.remove()`**: Calling `self.index.remove(tag)` extracts the key-value pair from the table, returning `Option<V>` (here `Option<Vec<u64>>`). The HashMap hands total ownership of the internal vector to the caller, deallocating the table entry slot.
 > 4. **Nested Retain Closures**: `purge_logs_before` nesting `retain` on both the outer `HashMap` and inner `Vec<u64>` allows atomic pruning of outdated elements. Returning `!log_ids.is_empty()` in the HashMap retain closure ensures empty key buckets are immediately dropped to minimize hash table load factor.
-
+> 
 ---
 
 ### Exercise 3: High-Frequency Market Ticker Stats & VWAP Aggregator
@@ -548,7 +548,7 @@ use std::collections::HashMap;
 > 2. **Float Arithmetic & `Option` Chaining**: Floating-point operations use `.min()` and `.max()` to compute minimum/maximum boundaries. In `get_vwap()`, `.and_then()` safely guards against zero division if `total_volume` is `0.0`.
 > 3. **Borrowed Key Queries (`&str` vs `String`)**: `HashMap<String, TickerStats>` supports lookup via `.get(&str)` because `String` implements `Borrow<str>`. This means `get_vwap` and `get_stats` pass a string slice `&str` directly without incurring allocation overhead (`.to_string()`).
 > 4. **In-place Table Filtering**: `prune_low_volume_symbols` executes `.retain(|_, stats| stats.total_volume >= min_volume)`. It iterates through hash table buckets in $\mathcal{O}(N)$ time, dropping sub-threshold entries in place and keeping overall load factor clean.
-
+> 
 ---
 
 ## 6. Related Terms

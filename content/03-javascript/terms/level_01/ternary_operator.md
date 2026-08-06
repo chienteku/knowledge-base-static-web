@@ -186,7 +186,7 @@ console.log("Button label:", buttonLabel);
 > - The condition is `isUserLoggedIn`.
 > - If true, the value is `"Logout"`.
 > - If false, the value is `"Login"`.
-
+> 
 ---
 
 ### Exercise 2: Ternary Default Value Selection
@@ -206,7 +206,7 @@ console.log("Button label:", buttonLabel);
 > ```
 >
 > **Explanation:** Ternary expressions evaluate truthy/falsy condition arms concisely.
-
+> 
 ---
 
 ### Exercise 3: Multi-Condition Ternary Status Check
@@ -228,7 +228,7 @@ console.log("Button label:", buttonLabel);
 > ```
 >
 > **Explanation:** Chained ternary expressions evaluate conditions sequentially.
-
+> 
 ---
 
 ## 7. Related Terms

@@ -251,7 +251,7 @@ Basic progress and meter tags:
 > - Connect the `value` to `1` and `max` to `4`.
 > - Set `low="2"` so 1 falls below the low threshold, triggering warning colors.
 > - Set `optimum="4"`.
-
+> 
 ---
 
 
@@ -277,7 +277,7 @@ Basic progress and meter tags:
 > ```
 >
 > **Explanation:** `<progress>` tracks task completion; `<meter>` measures scalar gauge values.
-
+> 
 ---
 
 ### Exercise 3: Indeterminate Progress State
@@ -294,7 +294,7 @@ Basic progress and meter tags:
 > ```
 >
 > **Explanation:** Omitting the `value` attribute renders an indeterminate loading animation.
-
+> 
 ## 7. Related Terms
 - [`value` Attribute (in Form Fields)](../level_05/value.md) — The data value tag.
 - [`<output>` Element](../level_05/output.md) — The semantic tag displaying calculation results.

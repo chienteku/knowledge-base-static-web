@@ -297,7 +297,7 @@ Comparing flow styles:
 > - Rule C: Out-of-Flow (Float pulls the element to the edge and text wraps, collapsing its height block).
 > ```
 > - Does the element leave a "ghost" footprint that reserves space?
-
+> 
 ---
 
 
@@ -318,7 +318,7 @@ Comparing flow styles:
 > ```
 >
 > **Explanation:** `absolute` and `fixed` remove elements completely from normal flow layout.
-
+> 
 ---
 
 ### Exercise 3: Creating Block Formatting Context (BFC)
@@ -337,7 +337,7 @@ Comparing flow styles:
 > ```
 >
 > **Explanation:** `display: flow-root` creates a BFC containing all internal floated children.
-
+> 
 ## 7. Related Terms
 - [`display: block` vs `inline` vs `inline-block`](display.md) — The fundamental flow markers.
 - [`position: static` vs `relative`](position_static_relative.md) — In-flow positioning options.

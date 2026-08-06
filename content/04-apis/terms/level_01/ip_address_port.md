@@ -141,13 +141,13 @@ app.listen(8080);
 > [!check]- Answer
 > - Secure HTTPS uses the standard encryption port `443`.
 > - Unencrypted HTTP web pages default to port `80`.
-
+> 
 > [!check]- Answer
 > - 1. Port **`443`** (HTTPS)
 > - 2. Port **`80`** (HTTP)
 > - 3. Port **`22`** (SSH)
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Private vs Public IP Address Identification

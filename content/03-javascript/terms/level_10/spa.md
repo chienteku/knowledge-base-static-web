@@ -152,7 +152,7 @@ async function processData() {
 > Because the SPA has to download the entire JavaScript bundle for the whole application (the routing logic, the UI components, the state management) before it can show anything on the screen, users often stare at a blank loading screen for a few seconds on their first visit.
 > ```
 > - If you pack for a 3-week vacation in one suitcase, that suitcase is going to be heavy.
-
+> 
 ---
 
 ### Exercise 2: Client-Side Routing with `history.pushState`
@@ -169,7 +169,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** HTML5 History API `pushState` enables seamless client-side single page application navigation.
-
+> 
 ---
 
 ### Exercise 3: Handling SPA Browser Back/Forward Buttons
@@ -186,8 +186,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `popstate` events fire when users navigate via browser back/forward buttons.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

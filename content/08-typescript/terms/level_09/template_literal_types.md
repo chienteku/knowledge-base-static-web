@@ -105,19 +105,19 @@ Generate a union of event listener method names (`"onClick"` | `"onHover"`) from
 >
 > ```typescript
 > type Event = "click" | "hover" | "submit";
-
-type EventListenerName = `on${Capitalize<Event>}`;
-// Inferred as: "onClick" | "onHover" | "onSubmit"
-
-const handlerName: EventListenerName = "onClick";
-```
-
+> 
+> type EventListenerName = `on${Capitalize<Event>}`;
+> // Inferred as: "onClick" | "onHover" | "onSubmit"
+> 
+> const handlerName: EventListenerName = "onClick";
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Template literal types (`${Prefix}_${Suffix}`) perform string interpolation at the type level.
 > 2. Automatically distributes over union types (`"click" | "hover"`).
 > 3. Integrates with intrinsic string utilities (`Capitalize`, `Uppercase`).
-
+> 
 ---
 
 ### Exercise 2: Building Type-Safe CSS Dimensional Units
@@ -135,19 +135,19 @@ Create a type `CSSLength` restricting values to strings ending in `"px"`, `"em"`
 > ```typescript
 > type Unit = "px" | "em" | "rem";
 > type CSSLength = `${number}${Unit}`;
-
-const margin: CSSLength = "16px";
-const fontSize: CSSLength = "1.5rem";
-
-// const invalid: CSSLength = "16pt"; // ❌ Compile Error: Type '"16pt"' is not assignable to type 'CSSLength'.
-```
-
+> 
+> const margin: CSSLength = "16px";
+> const fontSize: CSSLength = "1.5rem";
+> 
+> // const invalid: CSSLength = "16pt"; // ❌ Compile Error: Type '"16pt"' is not assignable to type 'CSSLength'.
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Template literal types can embed primitive type placeholders (`${number}`).
 > 2. Validates string formatting syntax at compile time.
 > 3. High precision string validation for design systems and CSS-in-JS libraries.
-
+> 
 ---
 
 ### Exercise 3: Pattern Matching and Extracting String Segments
@@ -165,17 +165,17 @@ Extract the parameter name from a route path string `"/users/:id"` using conditi
 > ```typescript
 > type ExtractParam<Route extends string> = 
 >   Route extends `/:${infer Param}` ? Param : never;
-
-type Param1 = ExtractParam<"/:userId">; // "userId"
-type Param2 = ExtractParam<"/:orderId">; // "orderId"
-```
-
+> 
+> type Param1 = ExtractParam<"/:userId">; // "userId"
+> type Param2 = ExtractParam<"/:orderId">; // "orderId"
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `infer` inside template literal types matches string substrings dynamically.
 > 2. Parses URL path parameters statically during compilation.
 > 3. Basis for type-safe routing libraries in Next.js and Express.
-
+> 
 ---
 
 

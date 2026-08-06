@@ -192,7 +192,7 @@ let client = reqwest::Client::new();
 > 2. **Header Injection**: Custom headers are set using standard `reqwest::header` constants (`USER_AGENT`, `ACCEPT`), guaranteeing valid HTTP header naming.
 > 3. **Status Check via `.error_for_status()?`**: Converts non-2xx HTTP response codes (e.g. 404 Not Found, 500 Server Error) directly into a `reqwest::Error` Result variant before attempting deserialization.
 > 4. **Asynchronous JSON Parsing**: `.json::<T>().await` streams the response body asynchronously into memory and deserializes it via `serde_json`.
-
+> 
 ---
 
 ### Exercise 2: Authenticated JSON POST Request with Custom Client Builder & Timeout
@@ -297,7 +297,7 @@ let client = reqwest::Client::new();
 > 2. **JSON Request Body**: Calling `.json(&payload)` on a `RequestBuilder` serializes the Rust value using `serde_json` and automatically sets the `Content-Type: application/json` HTTP header.
 > 3. **Authorization Header**: Formats HTTP standard `Authorization: Bearer <token>` for OAuth2/JWT secured endpoints.
 > 4. **Unit Verification**: Tests verify request body serialization and mock response deserialization with field assertions.
-
+> 
 ---
 
 ### Exercise 3: Concurrent Batch HTTP Requests with Connection Pool Reuse
@@ -405,10 +405,9 @@ let client = reqwest::Client::new();
 > 1. **Cheap `Client` Cloning (`Arc` Abstraction)**: `reqwest::Client` wraps an internal reference-counted handle (`Arc`). Cloning a client instance is an $O(1)$ operation that increments the reference counter without reallocating connection pools or socket state.
 > 2. **Concurrency with `tokio::spawn`**: Spawning tasks allows network requests to run concurrently across available Tokio worker threads, significantly reducing round-trip latency for batch operations.
 > 3. **Error Handling & Task Joining**: The outer loop waits on task `JoinHandle` instances, separating async task runtime panics from domain-specific HTTP/serialization errors.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

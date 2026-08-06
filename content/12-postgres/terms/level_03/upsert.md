@@ -173,7 +173,7 @@ Insert or update user setting for `user_id = 42`. If setting exists, update `the
 > 1. `ON CONFLICT (user_id)` detects unique constraint violations on `user_id`.
 > 2. `DO UPDATE SET` modifies the existing row using `EXCLUDED.col` pseudo-table values.
 > 3. Atomic insert-or-update operation in a single query.
-
+> 
 ---
 
 ### Exercise 2: Silent Duplicate Exclusion with `ON CONFLICT DO NOTHING`
@@ -201,7 +201,7 @@ Insert a tag into `tags` table, silently ignoring the write if the tag name alre
 > 1. `DO NOTHING` suppresses unique constraint violation errors, leaving existing rows unchanged.
 > 2. If conflict occurs, returns 0 affected rows without aborting the transaction.
 > 3. Ideal for idempotent tag and dictionary inserts.
-
+> 
 ---
 
 ### Exercise 3: Multi-Column Composite Key Upserts
@@ -230,7 +230,7 @@ Upsert daily page view metrics into `page_views` table on composite unique key `
 > 1. `ON CONFLICT (col1, col2)` targets multi-column unique constraints.
 > 2. `page_views.view_count + 1` increments running totals on existing rows atomically.
 > 3. Foundation for analytics aggregation pipelines.
-
+> 
 ---
 
 

@@ -212,7 +212,7 @@ With `transition: 1s`, it's a dimmer switch. The browser slowly turns the dial, 
 > transition: background-color 0.3s ease;
 > ```
 > - The first value in the shorthand is the specific property name.
-
+> 
 ---
 
 
@@ -237,7 +237,7 @@ With `transition: 1s`, it's a dimmer switch. The browser slowly turns the dial, 
 > ```
 >
 > **Explanation:** Explicitly listed transition properties animate hardware-accelerated transforms and shadows cleanly.
-
+> 
 ---
 
 ### Exercise 3: Non-Animatable CSS Properties
@@ -254,7 +254,7 @@ With `transition: 1s`, it's a dimmer switch. The browser slowly turns the dial, 
 > ```
 >
 > **Explanation:** Discrete properties (`display`, `visibility`) cannot interpolate intermediate animation frames without `@starting-style`.
-
+> 
 ## 7. Related Terms
 - [`transform` (Scale, Translate, Rotate)](transform.md) — The most common property to animate (e.g., smoothly scaling a button up to be 10% larger on hover).
 - [`@keyframes` & `animation`](animation.md) — The multi-step alternative for complex, non-interactive animation loops.

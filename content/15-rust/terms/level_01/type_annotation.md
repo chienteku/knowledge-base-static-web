@@ -276,7 +276,7 @@ Implement `parse_transaction_log(raw_log: &str) -> Result<Transaction, ParseErro
 > 3. **Ownership and Lifetime Guarantees**:
 >    - The input `raw_log: &str` is borrowed for splitting. String slices `&str` reference segments of the input without dynamic heap allocation. Converted values (`u64`, `u128`, `OrderSide`) implement `Copy` and are allocated directly on the stack inside `Transaction`.
 >
-
+> 
 ---
 
 ### Exercise 2: Binary Network Telemetry Frame Decoder & Bitmask Engine
@@ -450,7 +450,7 @@ Implement `decode_telemetry_frame(buffer: &[u8]) -> Result<TelemetryFrame, Telem
 > 4. **Closure and Iterator Type Annotations**:
 >    - When iterating with `chunks_exact(4)`, annotating closure parameters `.map(|chunk: &[u8]| -> f32 { ... })` and calling `.collect::<Vec<f32>>()` explicitly defines the intermediate mapping and final collection type, preventing compilation ambiguity.
 >
-
+> 
 ---
 
 ### Exercise 3: System Metrics Aggregator & Tagged Query Engine
@@ -615,7 +615,7 @@ Implement `aggregate_metrics(records: &[&str]) -> Result<MetricsSummary, MetricP
 > 3. **Error Isolation & Type-Safe Result Boundaries**:
 >    - Converting missing keys or malformed strings into strongly-typed `MetricParseError` variants ensures callers receive precise operational diagnostic information rather than unhandled standard library panics.
 >
-
+> 
 ---
 
 ## 6. Related Terms

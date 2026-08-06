@@ -191,7 +191,7 @@ A simple blog post alongside a tangential ad banner:
 > 4. <aside> (Tangential interaction element)
 > ```
 > - Ask: Is this content part of the primary document body? If not, it belongs in an `aside` or a specific navigation `nav`.
-
+> 
 ---
 
 
@@ -218,7 +218,7 @@ A simple blog post alongside a tangential ad banner:
 > ```
 >
 > **Explanation:** `<aside>` encapsulates secondary sidebar and related resource links.
-
+> 
 ---
 
 ### Exercise 3: Screen Reader Landmark for Aside
@@ -235,7 +235,7 @@ A simple blog post alongside a tangential ad banner:
 > ```
 >
 > **Explanation:** Screen readers announce top-level `<aside>` elements as complementary landmarks.
-
+> 
 ## 7. Related Terms
 - [`<main>`](main.md) — The container for the primary document content.
 - [`<article>` and `<section>`](article_section.md) — The self-contained semantic blocks.

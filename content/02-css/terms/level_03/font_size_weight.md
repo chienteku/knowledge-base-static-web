@@ -120,7 +120,7 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 > 24px! (1.5 * 16 = 24).
 > ```
 > - `1rem` = 16px. Multiply 16 by 1.5.
-
+> 
 ---
 
 
@@ -141,7 +141,7 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 > ```
 >
 > **Explanation:** `rem` values equal target pixel size divided by root font size (16px).
-
+> 
 ---
 
 ### Exercise 3: Font-Weight Keyword Mapping Matrix
@@ -168,7 +168,7 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 > ```
 >
 > **Explanation:** Numeric font-weights map standard typographic font thickness grades.
-
+> 
 ## 7. Related Terms
 - [`font-family`](font_family.md) — Defines the actual typeface.
 - [`font-style` & `font-variant`](font_style_variant.md) — Styling and small-caps variations.

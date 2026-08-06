@@ -110,7 +110,7 @@ process.on('unhandledRejection', (reason, promise) => {
 > }
 > ```
 > - Which property holds the environment variables?
-
+> 
 ---
 
 
@@ -130,7 +130,7 @@ process.on('unhandledRejection', (reason, promise) => {
 > ```
 >
 > **Explanation:** `process.argv` is an array containing CLI launch command parameters (`[node, script, args...]`).
-
+> 
 ---
 
 ### Exercise 3: Handling SIGTERM Graceful Shutdown Signal
@@ -152,7 +152,7 @@ process.on('unhandledRejection', (reason, promise) => {
 > ```
 >
 > **Explanation:** Listening for `SIGTERM` allows servers to close active socket connections cleanly before exiting.
-
+> 
 ## 7. Related Terms
 - [Environment Variables (dotenv)](../level_10/env_vars.md) — The ecosystem tool used to manage `process.env` files easily on your laptop.
 - [Global Objects (global, __dirname, __filename)](global_objects.md) — `process` is a member of this family.

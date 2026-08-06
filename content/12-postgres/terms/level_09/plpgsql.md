@@ -203,7 +203,7 @@ Write a PL/pgSQL function `get_user_discount(user_id INT)` returning `0.20` for 
 > 1. PL/pgSQL adds procedural language capabilities (`DECLARE`, `IF/ELSIF/ELSE`, `INTO variable`).
 > 2. `SELECT ... INTO v_total_spent` assigns query scalar outputs to local variables.
 > 3. Encapsulates business logic directly inside the database server.
-
+> 
 ---
 
 ### Exercise 2: Looping over Query Cursor Record Sets
@@ -236,7 +236,7 @@ Write a PL/pgSQL loop iterating over inactive users (`FOR r IN SELECT ... LOOP`)
 > 1. `FOR record_var IN query LOOP` iterates over result set rows sequentially.
 > 2. `record_var.field` accesses individual column values of the current iteration row.
 > 3. Procedural batch processing.
-
+> 
 ---
 
 ### Exercise 3: Trapping Errors with Exception Blocks
@@ -268,7 +268,7 @@ Catch `division_by_zero` exceptions inside a PL/pgSQL function, returning `NULL`
 > 1. `EXCEPTION WHEN error_condition THEN` intercepts runtime errors.
 > 2. Prevents unexpected exceptions from aborting the parent transaction.
 > 3. Robust procedural error handling.
-
+> 
 ---
 
 

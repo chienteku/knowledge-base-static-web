@@ -119,8 +119,8 @@ app.get('/healthz', (req, res) => res.status(200).send('OK'));
 
 > [!check]- Answer
 > - **100 requests.** (Under Round Robin, requests are distributed evenly down the list. Each of the 3 servers handles $300 / 3 = 100$ requests).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Layer 4 vs Layer 7 Load Balancing

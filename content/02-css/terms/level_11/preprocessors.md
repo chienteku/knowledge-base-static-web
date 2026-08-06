@@ -207,7 +207,7 @@ $primary-color: #ff007f;
 > - Nest the `__header` class inside `.card`.
 > - Use the parent reference operator `&` to join the strings together.
 > - Nest the `:hover` rule inside `__header`.
-
+> 
 ---
 
 
@@ -231,7 +231,7 @@ $primary-color: #ff007f;
 > ```
 >
 > **Explanation:** Parent selector `&` concatenates parent BEM class prefixes in SCSS.
-
+> 
 ---
 
 ### Exercise 3: Sass vs Native CSS Features
@@ -251,7 +251,7 @@ $primary-color: #ff007f;
 > ```
 >
 > **Explanation:** Modern CSS specifications natively adopt core preprocessor capabilities.
-
+> 
 ## 7. Related Terms
 - [`@import` Rule](import.md) — Bundling modular styles.
 - [CSS Methodologies (BEM, OOCSS, SMACSS)](methodologies.md) — Component naming schemes.

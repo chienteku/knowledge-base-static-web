@@ -281,7 +281,7 @@ customElementInstance.shadowRoot.querySelector('.shadow-btn');
 > - Extend `HTMLElement` in your class definition.
 > - Call `super()` inside the constructor.
 > - Bind the tag using the `customElements` registry.
-
+> 
 ---
 
 
@@ -304,7 +304,7 @@ customElementInstance.shadowRoot.querySelector('.shadow-btn');
 > ```
 >
 > **Explanation:** Web Components combine Custom Elements, Shadow DOM, and Templates for reusable UI widgets.
-
+> 
 ---
 
 ### Exercise 3: Shadow DOM Mode Syntax
@@ -321,7 +321,7 @@ customElementInstance.shadowRoot.querySelector('.shadow-btn');
 > ```
 >
 > **Explanation:** `attachShadow({ mode: 'open' })` creates an encapsulated Shadow DOM tree.
-
+> 
 ## 7. Related Terms
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent document object model.
 - [`<canvas>`](canvas.md) — Programmatic visual boards.

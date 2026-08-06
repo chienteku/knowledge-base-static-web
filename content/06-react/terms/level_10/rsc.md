@@ -114,7 +114,7 @@ import 'server-only'; // Enforces server-only execution guard at build time
 > 3. Server Component. (Requires secure server-side database access).
 > ```
 > - Interactivity = Client. Data fetching/Static UI = Server.
-
+> 
 ---
 
 
@@ -140,7 +140,7 @@ import 'server-only'; // Enforces server-only execution guard at build time
 > ```
 >
 > **Explanation:** React Server Components support direct `async/await` database queries with zero client bundle size.
-
+> 
 ---
 
 ### Exercise 3: RSC Bundle Size Advantage
@@ -157,7 +157,7 @@ import 'server-only'; // Enforces server-only execution guard at build time
 > ```
 >
 > **Explanation:** RSC architecture keeps heavy dependencies on the server, minimizing client bundle sizes.
-
+> 
 ## 7. Related Terms
 - [Hydration](hydration.md) — What Client Components do, and what Server Components intentionally skip.
 - [Next.js](nextjs.md) — The first framework to fully implement the RSC architecture.

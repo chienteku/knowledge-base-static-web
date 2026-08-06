@@ -203,7 +203,7 @@ span { font-variant: small-caps; }
 > }
 > ```
 > - Follow the sequence: style -> variant -> weight -> size/line-height -> family.
-
+> 
 ---
 
 
@@ -224,7 +224,7 @@ span { font-variant: small-caps; }
 > ```
 >
 > **Explanation:** `font-variant: small-caps` renders lowercase letters as smaller uppercase glyphs.
-
+> 
 ---
 
 ### Exercise 3: Italic vs Oblique Font Style
@@ -241,7 +241,7 @@ span { font-variant: small-caps; }
 > ```
 >
 > **Explanation:** Italic is a distinct font design; Oblique is a slanting angle transformation.
-
+> 
 ## 7. Related Terms
 - [`font-size` & `font-weight`](font_size_weight.md) — The parent typography properties.
 - [`text-transform`](../level_07/text_transform.md) — Uppercase/lowercase formatting overrides (different from small-caps).

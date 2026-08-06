@@ -150,7 +150,7 @@ async function processData() {
 > 5. `addNumbers(10, 20) * 2` (resolves to the final calculated value)
 > ```
 > - Any piece of code that you could `console.log()` is an expression.
-
+> 
 ---
 
 ### Exercise 2: Evaluating Expressions inside Template Literals
@@ -168,7 +168,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Template literal interpolations `${expression}` accept any valid JavaScript expression.
-
+> 
 ---
 
 ### Exercise 3: Comma Operator Expression Evaluation
@@ -186,8 +186,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** The comma operator evaluates each operand left-to-right and yields the value of the final rightmost expression.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

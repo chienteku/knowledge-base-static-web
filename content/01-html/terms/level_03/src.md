@@ -160,7 +160,7 @@ Different elements using `src` to load resources:
 > 5. src
 > ```
 > - Remember that stylesheets (`<link>`) are references, so they use `href`, while scripts (`<script>`) are embedded sources, so they use `src`.
-
+> 
 ---
 
 
@@ -189,7 +189,7 @@ Different elements using `src` to load resources:
 > ```
 >
 > **Explanation:** `src` embeds external resources; `href` links external documents or style resources.
-
+> 
 ---
 
 ### Exercise 3: Relative vs Absolute src Paths
@@ -206,7 +206,7 @@ Different elements using `src` to load resources:
 > ```
 >
 > **Explanation:** Leading slash `/` anchors path resolution to the domain root.
-
+> 
 ## 7. Related Terms
 - [Attribute](../level_01/attribute.md) — The concept of tag configuration keys.
 - [`href` Attribute](../level_02/href.md) — The coordinate system attribute for links.

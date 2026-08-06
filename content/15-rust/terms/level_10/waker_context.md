@@ -210,7 +210,7 @@ Always update saved wakers: self.waker = Some(cx.waker().clone());
 >
 > 1. Demonstrates `Waker` lifecycle: saving `cx.waker().clone()` when returning `Poll::Pending`.
 > 2. Timer thread invokes `waker.wake()` to notify the executor.
-
+> 
 ---
 
 ### Exercise 2: Mock Signal Waker Trigger
@@ -289,7 +289,7 @@ Always update saved wakers: self.waker = Some(cx.waker().clone());
 > #### Technical Explanation
 >
 > 1. Demonstrates event-driven asynchronous reactor notification pattern.
-
+> 
 ---
 
 ### Exercise 3: Noop Waker Context Test Runner Helper
@@ -326,7 +326,7 @@ Always update saved wakers: self.waker = Some(cx.waker().clone());
 > #### Technical Explanation
 >
 > 1. `Waker::noop()` provides non-allocating test wakers for polling futures.
-
+> 
 ---
 
 ## 5. Related Terms

@@ -132,7 +132,7 @@ By itself, it's just a blob. But if you stamp it with the `type="checkbox"` mold
 > The browser will natively block the form submission and display a built-in error message telling the user to enter a valid number. (This is why choosing the correct `type` is so important!)
 > ```
 > - Modern HTML5 does a lot of heavy lifting for you so you don't have to write JavaScript!
-
+> 
 ---
 
 
@@ -161,7 +161,7 @@ By itself, it's just a blob. But if you stamp it with the `type="checkbox"` mold
 > ```
 >
 > **Explanation:** Specialized input types activate native browser UI controls and mobile keyboards.
-
+> 
 ---
 
 ### Exercise 3: Input Pattern Regular Expression Validation
@@ -178,7 +178,7 @@ By itself, it's just a blob. But if you stamp it with the `type="checkbox"` mold
 > ```
 >
 > **Explanation:** `pattern` accepts regular expressions for native input validation.
-
+> 
 ## 7. Related Terms
 - [`<label>`](label.md) — The tag that provides an accessible text description for the input.
 - [`placeholder` Attribute](placeholder.md) — The inline visual text hint.

@@ -203,7 +203,7 @@ p {
 > Blue! The element selector (`p`) has the lowest specificity, but because it has the `!important` flag, it overrides the standard class and ID selectors.
 > ```
 > - Standard selectors cannot override a selector containing `!important`, regardless of their point values.
-
+> 
 ---
 
 
@@ -224,7 +224,7 @@ p {
 > ```
 >
 > **Explanation:** Rules with `!important` are compared against each other using standard selector specificity.
-
+> 
 ---
 
 ### Exercise 3: Valid !important Use Case
@@ -243,7 +243,7 @@ p {
 > ```
 >
 > **Explanation:** Utility classes use `!important` to ensure state overrides apply regardless of component rules.
-
+> 
 ## 7. Related Terms
 - [Specificity](specificity.md) — The point system overridden by the flag.
 - [The Cascade](the_cascade.md) — The conflict resolver.

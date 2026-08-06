@@ -161,32 +161,32 @@ Migrate a legacy Options API Vue component to Nuxt 3 `<script setup>` TypeScript
 > <script setup lang="ts">
 > const search = ref("");
 > const items = ref(["Nuxt 3", "Vue 3", "Nitro"]);
-
-const filteredItems = computed(() => {
-  return items.value.filter(item => item.toLowerCase().includes(search.value.toLowerCase()));
-});
-
-function addItem(newItem: string) {
-  items.value.push(newItem);
-}
-</script>
-
-<template>
-  <div>
-    <input v-model="search" placeholder="Search..." />
-    <ul>
-      <li v-for="item in filteredItems" :key="item">{{ item }}</li>
-    </ul>
-  </div>
-</template>
-```
-
+> 
+> const filteredItems = computed(() => {
+>   return items.value.filter(item => item.toLowerCase().includes(search.value.toLowerCase()));
+> });
+> 
+> function addItem(newItem: string) {
+>   items.value.push(newItem);
+> }
+> </script>
+> 
+> <template>
+>   <div>
+>     <input v-model="search" placeholder="Search..." />
+>     <ul>
+>       <li v-for="item in filteredItems" :key="item">{{ item }}</li>
+>     </ul>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `<script setup>` is a compile-time syntactic sugar for using the Composition API inside Single File Components.
 > 2. Variables and functions declared at top level are directly exposed to the template without `return {}` blocks.
 > 3. Provides superior TypeScript inference compared to legacy Options API.
-
+> 
 ---
 
 ### Exercise 2: Managing Reactive State with `ref()` and `reactive()`
@@ -205,33 +205,33 @@ Demonstrate the difference between primitive state management using `ref()` vs o
 > <script setup lang="ts">
 > // ref for scalar primitive value
 > const count = ref<number>(0);
-
-// reactive for structured state object
-const formState = reactive({
-  username: "",
-  email: "",
-  isSubmitting: false
-});
-
-function resetForm() {
-  count.value = 0;
-  formState.username = "";
-  formState.email = "";
-  formState.isSubmitting = false;
-}
-</script>
-
-<template>
-  <button @click="count++">Count: {{ count }}</button>
-</template>
-```
-
+> 
+> // reactive for structured state object
+> const formState = reactive({
+>   username: "",
+>   email: "",
+>   isSubmitting: false
+> });
+> 
+> function resetForm() {
+>   count.value = 0;
+>   formState.username = "";
+>   formState.email = "";
+>   formState.isSubmitting = false;
+> }
+> </script>
+> 
+> <template>
+>   <button @click="count++">Count: {{ count }}</button>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `ref()` creates a reactive wrapper with a `.value` property for scalar or complex types.
 > 2. `reactive()` creates a Proxy wrapper around an object, requiring no `.value` dereferencing in script.
 > 3. Template automatically unwraps `ref()` objects without `.value`.
-
+> 
 ---
 
 ### Exercise 3: Component Props and Emits Declaration in `<script setup>`
@@ -252,39 +252,35 @@ Define typed component props and emits using `defineProps` and `defineEmits` mac
 >   title: string;
 >   count?: number;
 > }>();
-
-const emit = defineEmits<{
-  (e: "update:title", newTitle: string): void;
-  (e: "close"): void;
-}>();
-
-function handleInput(event: Event) {
-  const target = event.target as HTMLInputElement;
-  emit("update:title", target.value);
-}
-</script>
-
-<template>
-  <div>
-    <h2>{{ props.title }}</h2>
-    <input :value="props.title" @input="handleInput" />
-    <button @click="emit('close')">Close</button>
-  </div>
-</template>
-```
-
+> 
+> const emit = defineEmits<{
+>   (e: "update:title", newTitle: string): void;
+>   (e: "close"): void;
+> }>();
+> 
+> function handleInput(event: Event) {
+>   const target = event.target as HTMLInputElement;
+>   emit("update:title", target.value);
+> }
+> </script>
+> 
+> <template>
+>   <div>
+>     <h2>{{ props.title }}</h2>
+>     <input :value="props.title" @input="handleInput" />
+>     <button @click="emit('close')">Close</button>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `defineProps` and `defineEmits` are compiler macros available automatically inside `<script setup>`.
 > 2. Pure TypeScript type arguments enable strict prop validation without runtime helper functions.
 > 3. Standard Nuxt 3 component communication model.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Auto-imports](auto_imports.md) — Why you don't need to explicitly import `ref` or `computed`.

@@ -191,7 +191,7 @@ GET /api/orders ; Standardized plural resource nouns
 > ```
 > - Remember to use Plural Nouns!
 > - To get a specific item, use a Path Variable.
-
+> 
 ---
 
 ### Exercise 2: REST Endpoint Design Refactoring

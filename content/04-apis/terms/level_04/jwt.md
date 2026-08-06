@@ -112,7 +112,7 @@ jwt.verify(token, key, { algorithms: ['HS256'] });
 > A JWT is a "Bearer Token." Whoever bears (holds) the token gets access. The server has no way of knowing the hacker isn't the real user. This is exactly why APIs MUST use HTTPS to encrypt the network so hackers can't steal the token in transit!
 > ```
 > - Does the server check IP addresses, or just the math of the signature?
-
+> 
 ---
 
 ### Exercise 2: JWT 3-Part Structural Component Deconstruction

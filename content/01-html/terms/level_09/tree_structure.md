@@ -133,7 +133,7 @@ html (Root)
 > The two `<li>` elements are Siblings to each other.
 > ```
 > - Who contains who?
-
+> 
 ---
 
 
@@ -159,7 +159,7 @@ html (Root)
 > ```
 >
 > **Explanation:** DOM tree hierarchy defines parent-child and sibling relationships.
-
+> 
 ---
 
 ### Exercise 3: DOM Node Traversal API
@@ -176,7 +176,7 @@ html (Root)
 > ```
 >
 > **Explanation:** `.parentElement` travels up one level in the DOM tree hierarchy.
-
+> 
 ## 7. Related Terms
 - [DOM (Document Object Model)](dom.md) — The system that uses this tree structure.
 - [Nesting](../level_01/nesting.md) — The act of writing the HTML code that generates this tree.

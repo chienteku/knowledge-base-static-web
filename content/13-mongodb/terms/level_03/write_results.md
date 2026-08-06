@@ -186,7 +186,7 @@ Inspect the `acknowledged` status and `insertedId` returned by an `insertOne()` 
 > 1. Write Result payloads confirm server receipt and storage status.
 > 2. `acknowledged: true` verifies the write satisfied configured Write Concern (`w: 1` or `w: "majority"`).
 > 3. `insertedId` returns the primary key ObjectId.
-
+> 
 ---
 
 ### Exercise 2: Differentiating Matched vs Modified Counts in Update Results
@@ -217,7 +217,7 @@ Inspect `matchedCount`, `modifiedCount`, and `upsertedCount` in `UpdateResult` o
 > 1. `matchedCount`: Number of documents matching query filter.
 > 2. `modifiedCount`: Number of documents whose content was actually altered.
 > 3. `upsertedCount`: 1 if upsert triggered document creation, else 0.
-
+> 
 ---
 
 ### Exercise 3: Handling Write Concern Errors in SDK Results
@@ -250,7 +250,7 @@ Handle Write Concern timeout errors (`WriteConcernError`) when writing to a mult
 > 1. Write concern errors occur when primary node writes succeed but replication acknowledgment to secondaries times out.
 > 2. `hasWriteConcernError()` checks for replication acknowledgment failures.
 > 3. Guarantees data durability awareness in multi-node clusters.
-
+> 
 ---
 
 

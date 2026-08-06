@@ -184,7 +184,7 @@ fn main() {
 >     }
 > }
 > ```
-
+> 
 ---
 
 ### Exercise 2: Selective Field Visibility in Structs
@@ -215,7 +215,7 @@ fn main() {
 >
 > #### Technical Explanation
 > Struct fields can have granular visibility independent of container struct visibility.
-
+> 
 ---
 
 ### Exercise 3: Restricting Visibility to Ancestors with `pub(in path)`
@@ -242,7 +242,7 @@ fn main() {
 >
 > #### Technical Explanation
 > `pub(in path)` restricts visibility to designated ancestor module paths.
-
+> 
 ---
 
 ## 6. Related Terms

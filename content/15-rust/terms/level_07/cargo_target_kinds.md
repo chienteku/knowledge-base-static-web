@@ -121,7 +121,7 @@ cargo run --bin tool # Specify target explicitly!
 
 > [!check]- Answer
 > **5 separate crates**: 1 library (`src/lib.rs`), 1 binary (`src/main.rs`), 2 examples (`demo1.rs`, `demo2.rs`, each its own crate), and 1 integration-test crate (`api_tests.rs`). Each is compiled and linked independently — for instance, both example crates and the test crate would each separately link against the library crate as an external dependency, exactly as an outside consumer of the library would.
-
+> 
 ---
 
 ### Exercise 2: Configuring Multiple Binary Targets
@@ -155,7 +155,7 @@ Write the `Cargo.toml` fragment covering all three, then answer: if you run `car
 >
 > **Answer to the ambiguous `cargo run` question:**
 > Cargo emits an **error**: `error: could not determine which binary to run`. When a package has more than one binary target, `cargo run` doesn't guess — you must specify `--bin <name>`. This is intentional: silently running the "first" binary would be surprising and fragile.
-
+> 
 ---
 
 ### Exercise 3: The `examples/` Target Kind — Workflow and Purpose
@@ -194,7 +194,7 @@ Answer the following:
 > #### Technical Explanation
 >
 > `examples/` is the Rust equivalent of a "getting started" code snippet that actually compiles and runs. Many popular crates (`tokio`, `axum`, `serde`) ship dozens of examples that serve as living documentation — they are guaranteed correct because they compile against the real library.
-
+> 
 ---
 
 ## 6. Related Terms

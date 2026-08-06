@@ -164,7 +164,7 @@ const result = user?.profile?.score + expensiveFunction();
 > When `user?.` evaluates to `undefined`, the entire chain "short-circuits" and stops evaluating immediately. The right side of the expression is completely ignored.
 > ```
 > - Optional chaining stops execution the exact moment it hits `null` or `undefined`.
-
+> 
 ---
 
 ### Exercise 2: Optional Method Invocations (`?.()`)
@@ -182,7 +182,7 @@ const result = user?.profile?.score + expensiveFunction();
 > ```
 >
 > **Explanation:** `obj.method?.()` short-circuits to `undefined` if `method` is `null` or `undefined`.
-
+> 
 ---
 
 ### Exercise 3: Optional Bracket Property Access (`?.[]`)
@@ -200,8 +200,8 @@ const result = user?.profile?.score + expensiveFunction();
 > ```
 >
 > **Explanation:** `?.[]` guards dynamic bracket property lookups against nullish targets.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

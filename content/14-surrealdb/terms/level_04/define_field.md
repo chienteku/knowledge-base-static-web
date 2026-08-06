@@ -169,7 +169,7 @@ You are defining schema rules for a user table requiring a typed `email` string 
 > 1. `DEFINE FIELD` establishes schema rules for individual table properties.
 > 2. `TYPE <type>` enforces strict data type validation at write time in `SCHEMAFULL` mode.
 > 3. `DEFAULT <val>` automatically populates field values if omitted during record creation.
-
+> 
 ---
 
 ### Exercise 2: Defining Readonly Timestamp Fields
@@ -197,7 +197,7 @@ Define an immutable `created_at` timestamp field on table `post` that cannot be 
 > 1. `READONLY` prevents field modifications on subsequent `UPDATE` or `MERGE` queries.
 > 2. Guarantees audit timestamp immutability at the storage engine level.
 > 3. Rejects update operations attempting to alter readonly field values.
-
+> 
 ---
 
 ### Exercise 3: Idempotent Field Overwrites with `OVERWRITE`
@@ -221,7 +221,7 @@ Update an existing field definition `age` on table `user` to change its type to 
 > 1. `OVERWRITE` updates existing field definitions idempotently without requiring prior `REMOVE FIELD` calls.
 > 2. Modifies data type constraints and assertion expressions cleanly.
 > 3. Simplifies continuous deployment schema migration scripts.
-
+> 
 ---
 
 

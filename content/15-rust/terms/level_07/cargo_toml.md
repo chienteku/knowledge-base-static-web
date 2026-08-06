@@ -142,7 +142,7 @@ reqwest = "0.11" # Locks within compatible 0.11.x minor series
 > 2. `[package]` (It's the version of YOUR code)
 > 3. `[package]` (It's the version of the Rust compiler to use)
 > 4. `[dependencies]` (It's an external library with specific features requested)
-
+> 
 ---
 
 ### Exercise 2: Reading and Diagnosing a `Cargo.toml`
@@ -186,7 +186,7 @@ serde = { version = "1.0", features = ["derive"] }
 > #### Technical Explanation
 >
 > `Cargo.toml` is both a build manifest and a publishing contract. Version constraints that are too loose (`"0"`) leave your build vulnerable to silent breaking upgrades; names with illegal characters fail at publish time; and non-standard version strings make automation tools (like `cargo semver-checks`) unreliable.
-
+> 
 ---
 
 ### Exercise 3: Renaming Dependencies — When and Why
@@ -230,7 +230,7 @@ Do the following:
 > #### Technical Explanation
 >
 > The `package` key in a dependency entry is the real name Cargo downloads from `crates.io`; the TOML key before `=` is the local alias — both the name you write in `use` statements and the name Cargo uses internally when building. This separation is what allows multiple versions of the same crate to coexist in one dependency graph.
-
+> 
 ---
 
 ## 6. Related Terms

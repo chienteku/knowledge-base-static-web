@@ -163,8 +163,8 @@ await redis.del(`product:${productId}`); // Target specific key deletion
 > - 1. **Active Eviction** (The content changes rarely. We can cache it indefinitely, but we must evict the key immediately when the author clicks "Update Post").
 > - 2. **Active Eviction** (Carts must be 100% accurate; checkout will fail if items are stale).
 > - 3. **TTL** (Weather forecasts are transient and update hourly; a 15-minute TTL is simple and acceptable).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Cache Invalidation Strategies Comparison

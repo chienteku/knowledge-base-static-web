@@ -265,7 +265,7 @@ x.set(100);
 >    - The total packet size `HEADER_SIZE + payload_len as usize` is checked against `frame_data.len()` to prevent out-of-bounds panics when returning a zero-copy subslice `&frame_data[4..expected_len]`.
 >
 >
-
+> 
 ---
 
 ### Exercise 2: Financial High-Frequency Pricing Engine & Basis-Point Fee Calculator
@@ -391,7 +391,7 @@ x.set(100);
 >    - Widening `u16` basis points to `i64` using `as` allows signed multiplication with `self.0` using `checked_mul` without risk of overflow during the cast.
 >
 >
-
+> 
 ---
 
 ### Exercise 3: Low-Level Raw Pointer Memory Arena & Alignment Inspector
@@ -532,7 +532,7 @@ x.set(100);
 >      - **Lifetime Binding:** The returned reference lifetime `'a` is tied to the input slice lifetime `&'a [u8]`.
 >
 >
-
+> 
 ---
 
 ## 6. Related Terms

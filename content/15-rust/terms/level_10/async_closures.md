@@ -240,16 +240,16 @@ Build a higher-order async closure retry runner.
 > ---
 > 
 > ### Exercise 2: Bounded Concurrent Stream Mapper Preserving Order
-
-**Scenario**: Processing large data batches requires mapping elements using an async closure while bounding concurrent execution using `Arc<tokio::sync::Semaphore>` and preserving original element order.
-
-Construct a concurrent stream mapper accepting an async closure.
-
-**Requirements**:
-1. Implement `concurrent_map<T, R, F, Fut>(items: Vec<T>, concurrency: usize, mapper: F) -> Vec<R>` where `F: Fn(T) -> Fut + Send + Sync + 'static`, `Fut: Future<Output = R> + Send + 'static`, `T: Send + 'static`, `R: Send + 'static`.
-2. Order output matching input `Vec<T>`.
-3. Add unit tests asserting order preservation and concurrency bounding.
-
+> 
+> **Scenario**: Processing large data batches requires mapping elements using an async closure while bounding concurrent execution using `Arc<tokio::sync::Semaphore>` and preserving original element order.
+> 
+> Construct a concurrent stream mapper accepting an async closure.
+> 
+> **Requirements**:
+> 1. Implement `concurrent_map<T, R, F, Fut>(items: Vec<T>, concurrency: usize, mapper: F) -> Vec<R>` where `F: Fn(T) -> Fut + Send + Sync + 'static`, `Fut: Future<Output = R> + Send + 'static`, `T: Send + 'static`, `R: Send + 'static`.
+> 2. Order output matching input `Vec<T>`.
+> 3. Add unit tests asserting order preservation and concurrency bounding.
+> 
 > [!check]- Answer
 > ```rust
 > use std::future::Future;
@@ -317,16 +317,16 @@ Construct a concurrent stream mapper accepting an async closure.
 > ---
 > 
 > ### Exercise 3: Dynamic Async Event Router with Trait Objects and Timeout Enforcement
-
-**Scenario**: Event routers map string event names to dynamic async closure handlers using trait objects `Box<dyn Fn(String) -> Pin<Box<dyn Future<Output = String> + Send>> + Send + Sync>`.
-
-Build a dynamic async event router with timeout enforcement.
-
-**Requirements**:
-1. Implement `AsyncEventRouter` mapping event keys to boxed async handlers.
-2. Implement `register_handler` and `dispatch_event(&self, event: &str, payload: String, timeout_duration: Duration)`.
-3. Add unit tests asserting handler dispatch and timeout triggers.
-
+> 
+> **Scenario**: Event routers map string event names to dynamic async closure handlers using trait objects `Box<dyn Fn(String) -> Pin<Box<dyn Future<Output = String> + Send>> + Send + Sync>`.
+> 
+> Build a dynamic async event router with timeout enforcement.
+> 
+> **Requirements**:
+> 1. Implement `AsyncEventRouter` mapping event keys to boxed async handlers.
+> 2. Implement `register_handler` and `dispatch_event(&self, event: &str, payload: String, timeout_duration: Duration)`.
+> 3. Add unit tests asserting handler dispatch and timeout triggers.
+> 
 > [!check]- Answer
 > ```rust
 > use std::collections::HashMap;

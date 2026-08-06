@@ -143,7 +143,7 @@ router.beforeEach((to) => {
 > `onBeforeRouteLeave(() => { return window.confirm("You have unsaved changes. Leave?") })`
 > ```
 > - Global guards check where you are going. In-component guards check where you are leaving.
-
+> 
 ---
 
 ### Exercise 2: Route Meta Field Authentication Guard
@@ -164,7 +164,7 @@ router.beforeEach((to) => {
 >   }
 > });
 > ```
-
+> 
 ---
 
 ### Exercise 3: Navigation Guard Types Matrix
@@ -185,8 +185,8 @@ router.beforeEach((to) => {
 > ```javascript
 > import { onBeforeRouteLeave } from 'vue-router';
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

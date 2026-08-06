@@ -165,7 +165,7 @@ Create a capped collection `system_events` capped at 100MB (104,857,600 bytes) a
 > 1. Capped collections pre-allocate circular memory buffers on disk.
 > 2. Automatically overwrites the oldest inserted documents when max size or document count is reached.
 > 3. High-throughput circular log storage.
-
+> 
 ---
 
 ### Exercise 2: Tailing Capped Collections with Tailable Cursors
@@ -197,7 +197,7 @@ Stream real-time log entries from a capped collection using a tailable cursor (`
 > 1. Tailable cursors behave like Unix `tail -f`, remaining open after reaching the end of the collection.
 > 2. `awaitData: true` pauses cursor execution until new documents are inserted.
 > 3. Low-overhead pub/sub log streaming.
-
+> 
 ---
 
 ### Exercise 3: Capped Collection Operational Constraints
@@ -224,7 +224,7 @@ Explain why documents in capped collections CANNOT be deleted or grow in size af
 > 1. Fixed disk layouts preserve contiguous insertion order on disk.
 > 2. Disallows document size growth to avoid disk fragment movement.
 > 3. High performance write throughput.
-
+> 
 ---
 
 

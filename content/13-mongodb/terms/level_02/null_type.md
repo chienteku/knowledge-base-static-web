@@ -161,7 +161,7 @@ Query collection `users` for documents where field `middleName` is explicitly se
 > 1. `{ middleName: null }` matches BOTH documents where `middleName` is `null` AND documents where `middleName` does not exist.
 > 2. `{ middleName: { $type: "null" } }` strictly matches documents with explicit `null` values.
 > 3. Essential distinction in flexible schema query modeling.
-
+> 
 ---
 
 ### Exercise 2: Finding Missing Fields with `$exists`
@@ -187,7 +187,7 @@ Query documents where optional field `phoneNumber` is completely missing from th
 > 1. `$exists: false` matches documents where the key is absent.
 > 2. Ignores documents containing `phoneNumber: null`.
 > 3. Used to find legacy documents missing newly added schema properties.
-
+> 
 ---
 
 ### Exercise 3: Setting Fields to Null with `$set`
@@ -214,7 +214,7 @@ Set a user's `temporaryCode` field to `null` to indicate the code has expired.
 > 1. `$set: { field: null }` explicitly writes a BSON Null type (Type 10).
 > 2. Preserves field key existence while marking value as empty.
 > 3. Contrast with `$unset` which completely deletes the field key.
-
+> 
 ---
 
 

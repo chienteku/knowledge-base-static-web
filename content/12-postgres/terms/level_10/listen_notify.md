@@ -188,7 +188,7 @@ Publish a real-time JSON event notification to channel `'order_events'` using `p
 > 1. `pg_notify(channel, payload)` broadcasts a real-time event message to all active client connections listening on `channel`.
 > 2. Max payload size is 8,000 bytes.
 > 3. Native Pub/Sub messaging mechanism inside PostgreSQL.
-
+> 
 ---
 
 ### Exercise 2: Subscribing to Real-Time Notifications in Node.js
@@ -205,25 +205,25 @@ Subscribe to channel `'order_events'` in a Node.js backend server using `client.
 >
 > ```typescript
 > import { Client } from "pg";
-
-const client = new Client({ connectionString: process.env.DATABASE_URL });
-await client.connect();
-
-await client.query("LISTEN order_events");
-
-client.on("notification", (msg) => {
-  console.log("Real-Time Event Received on Channel:", msg.channel);
-  const payload = JSON.parse(msg.payload || "{}");
-  console.log("Payload:", payload);
-});
-```
-
+> 
+> const client = new Client({ connectionString: process.env.DATABASE_URL });
+> await client.connect();
+> 
+> await client.query("LISTEN order_events");
+> 
+> client.on("notification", (msg) => {
+>   console.log("Real-Time Event Received on Channel:", msg.channel);
+>   const payload = JSON.parse(msg.payload || "{}");
+>   console.log("Payload:", payload);
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `LISTEN channel_name` registers the client socket connection as a listener.
 > 2. `client.on('notification')` receives async push events from the PostgreSQL server immediately upon commit.
 > 3. Powers real-time WebSockets, SSE, and GraphQL subscriptions without polling loops.
-
+> 
 ---
 
 ### Exercise 3: Automating Real-Time Notifications via Database Triggers
@@ -258,7 +258,7 @@ Create a trigger that automatically publishes a `NOTIFY` event whenever a new ro
 > 1. Database triggers automate real-time event broadcasting on data mutations.
 > 2. Notifications are sent ONLY after the enclosing transaction successfully executes `COMMIT`.
 > 3. Event-driven architecture pattern.
-
+> 
 ---
 
 

@@ -191,7 +191,7 @@ Create an `events` table storing semi-structured metadata payloads using `JSONB`
 > 1. `JSONB` parses JSON text into a decomposed binary format on insert.
 > 2. `->>` extracts JSON object values as raw `TEXT`.
 > 3. `->` extracts JSON object values as `JSONB` sub-objects.
-
+> 
 ---
 
 ### Exercise 2: Accelerating JSONB Key Queries with GIN Indexes
@@ -221,7 +221,7 @@ Create a GIN index on `events.metadata` to accelerate containment queries (`meta
 > 1. GIN (Generalized Inverted Index) indexes all keys and values inside `JSONB` documents.
 > 2. `@>` (contains operator) evaluates JSON path containment.
 > 3. Accelerates JSON queries across millions of rows to sub-millisecond execution.
-
+> 
 ---
 
 ### Exercise 3: Updating Nested Fields in JSONB Documents with `jsonb_set`
@@ -248,7 +248,7 @@ Update nested field `metadata.device` from `'mobile'` to `'desktop'` for event `
 > 1. `jsonb_set(target, path, new_value)` updates or inserts nested JSON values at specified key paths.
 > 2. Allows mutating JSON sub-properties in SQL without replacing the entire JSON object.
 > 3. Atomic JSONB manipulation.
-
+> 
 ---
 
 

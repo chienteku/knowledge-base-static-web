@@ -138,10 +138,6 @@ export const dynamic = 'force-static'; // Ensure static pre-rendering
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Building Static Web Applications with `next build`
@@ -167,13 +163,13 @@ Configure static site generation (SSG) and inspect `next build` output logs.
 > # ○  (Static)   prerendered as static content
 > # ●  (SSG)      prerendered using generateStaticParams
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Static Site Generation (SSG) pre-computes HTML and asset files during build time.
 > 2. Route symbol `○` indicates static pages; `●` indicates SSG pages generated with `generateStaticParams()`.
 > 3. Pre-rendered HTML files are uploaded to global CDN edge networks.
-
+> 
 ---
 
 ### Exercise 2: Exporting Static Builds with `output: 'export'`
@@ -194,13 +190,13 @@ Configure `next.config.js` for static HTML export (`output: 'export'`) for S3/Gi
 >   output: "export"
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `output: 'export'` compiles the application into an `out/` folder containing static HTML, CSS, and JS assets.
 > 2. Eliminates the requirement for a running Node.js server.
 > 3. Disables server-only features like Server Actions, Headers, and dynamic middleware.
-
+> 
 ---
 
 ### Exercise 3: Trade-Off Analysis: SSG vs Dynamic SSR
@@ -220,19 +216,15 @@ Formulate an architectural selection decision matrix comparing SSG against Dynam
 > - SSG (Static Site Generation): Build-time rendering. Zero Node.js server cost, fastest CDN TTFB, build times scale with page count. Use for blogs, docs, marketing sites.
 > - SSR (Server-Side Rendering): Request-time rendering. Requires Node.js server, fresh data on every hit, higher server RAM/CPU cost. Use for dashboards, personalized feeds.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. SSG is ideal for content that changes infrequently and requires maximum speed.
 > 2. SSR is required for dynamic, real-time user-specific applications.
 > 3. Core architectural decision framework.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Dynamic Rendering (SSR)](ssr.md) — The dynamic alternative.

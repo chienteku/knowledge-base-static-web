@@ -172,7 +172,7 @@ Apply the Extended Reference Pattern to an `orders` collection by copying `custo
 > 1. The Extended Reference Pattern denormalizes immutable or infrequently changed fields alongside foreign key references.
 > 2. Eliminates `$lookup` joins when rendering order summary lists.
 > 3. Trades slight data duplication for significant read performance gains.
-
+> 
 ---
 
 ### Exercise 2: Managing Change Propagation for Extended References
@@ -206,7 +206,7 @@ Handle customer name updates by updating both `users` collection and denormalize
 > 1. Extended reference values should only be copied for fields that rarely change or are historical snapshots.
 > 2. Historical records (e.g. completed invoices) should retain original snapshot values.
 > 3. Open active orders update references via asynchronous background jobs or multi-document updates.
-
+> 
 ---
 
 ### Exercise 3: Identifying Candidates for Extended Reference
@@ -232,7 +232,7 @@ Evaluate whether to duplicate `productName` and `price` inside an order's `items
 > 1. Historical transaction records require immutable point-in-time data snapshots.
 > 2. Extended references provide both read speed and business domain snapshot accuracy.
 > 3. Core pattern in e-commerce schema design.
-
+> 
 ---
 
 

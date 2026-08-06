@@ -133,7 +133,7 @@ mod foo; // ❌ Duplicate module declaration!
 > ```rust
 > mod player;
 > ```
-
+> 
 ---
 
 ### Exercise 2: Inline vs File Module Declarations
@@ -159,7 +159,7 @@ mod foo; // ❌ Duplicate module declaration!
 >
 > #### Technical Explanation
 > `mod name { ... }` defines inline submodules without separate file creation.
-
+> 
 ---
 
 ### Exercise 3: Nested Submodule Hierarchy Declarations
@@ -181,7 +181,7 @@ mod foo; // ❌ Duplicate module declaration!
 >
 > #### Technical Explanation
 > Nested `mod` declarations establish hierarchical module paths.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -293,7 +293,7 @@ thread::spawn(move || {
 > 4. **Range Query Traversal**: `.range(min_price..=max_price)` performs a binary search to find `min_price` in $O(\log N)$ time, then yields matching price levels up to `max_price`. This allows instant depth calculations without iterating through unrelated price levels.
 > 5. **Ownership & Borrowing**: In `match_market_buy`, extracting `let &best_price = self.asks.keys().next().unwrap();` copies the `u64` key, releasing the borrow on `self.asks` so `self.asks.get_mut(&best_price)` can obtain exclusive mutable access to the queue.
 > 6. **Edge Cases**: Handled partial order fills (updating `quantity` in-place), full order exhaustion (`pop_front`), price tick deletion (`self.asks.remove(&best_price)` when the queue becomes empty), and market orders exceeding total available book liquidity.
-
+> 
 ---
 
 ### Exercise 2: Time-Series APM Metrics & Retention Pruning Engine
@@ -436,7 +436,7 @@ thread::spawn(move || {
 > 3. **$O(\log N)$ Retention Pruning with `split_off`**: The `split_off(&cutoff_timestamp)` method splits a B-Tree root node along the key boundary in $O(\log N)$ time. The original tree retains keys strictly less than `cutoff_timestamp`, while the returned map contains keys greater than or equal to `cutoff_timestamp`. Reassigning `self.metrics = retained` drops all expired entries at once, avoiding element-by-element iteration ($O(K \log N)$ deletion).
 > 4. **Float Precision & Null Safety**: Floating-point aggregations handle boundaries using `f64::MAX` and `f64::MIN`. Empty ranges safely return `None` rather than producing NaN averages or division-by-zero errors.
 > 5. **Edge Cases**: Empty queries, single-element matching windows, pruning when all items are expired, and pruning when no items meet the cutoff threshold.
-
+> 
 ---
 
 ### Exercise 3: OS Kernel Free-Block Memory Manager with Adjacent Coalescing
@@ -603,7 +603,7 @@ thread::spawn(move || {
 > 4. **Right Coalescing via Key Lookup**: `self.free_blocks.get(&(addr + size))` checks if a free block starts exactly at `addr + size`. If present, removing `next_addr` and extending `size += next_size` merges the right neighbor. If both left and right neighbors are present, double coalescing occurs in a single deallocation step.
 > 5. **Safety Invariants & Overlap Detection**: Validates physical boundary constraints (`prev_addr + prev_size > addr` or `addr + size > next_start`), preventing heap corruption or double-free security vulnerabilities.
 > 6. **Edge Cases**: Zero-byte requests, full memory exhaustion, non-contiguous allocations, and double-sided coalescing.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -162,7 +162,7 @@ Declare parameter variables `$target_date` and `$min_score` to reuse across mult
 > 1. `LET $variable = expression;` binds values to parameter variables within the active session context.
 > 2. Promotes query reusability and avoids hardcoded literal values.
 > 3. Parameter values are scoped to the current script or transaction execution block.
-
+> 
 ---
 
 ### Exercise 2: Binding Subquery Results to Parameter Variables
@@ -192,7 +192,7 @@ Fetch a user's record link ID into `$user_id` using a `LET` subquery, then inser
 > 1. `LET $var = (SELECT ...)` stores subquery execution results in parameter variables.
 > 2. `FROM ONLY` unwraps single-record subqueries into scalar values.
 > 3. Simplifies multi-step relational data insertion scripts.
-
+> 
 ---
 
 ### Exercise 3: Scoped Variable Re-assignment
@@ -220,7 +220,7 @@ Demonstrate re-assigning a parameter variable `$count` inside a script block.
 > 1. Parameter variables can be re-assigned within the active script block.
 > 2. Evaluates the right-hand expression before updating variable state.
 > 3. Supports accumulator logic in procedural scripts.
-
+> 
 ---
 
 

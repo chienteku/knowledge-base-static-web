@@ -97,7 +97,7 @@ Nginx config: try_files $uri $uri/ /index.html; -- Fallback to SPA root index.ht
 > If it were Server-Side, the entire browser page would refresh, and the song would immediately stop and have to reload.
 > ```
 > - Think about what happens to the browser tab during a refresh.
-
+> 
 ---
 
 
@@ -116,7 +116,7 @@ Nginx config: try_files $uri $uri/ /index.html; -- Fallback to SPA root index.ht
 > ```
 >
 > **Explanation:** Client-side routing updates browser URL and DOM tree without requesting new HTML pages from servers.
-
+> 
 ---
 
 ### Exercise 3: HTML5 History API Methods
@@ -133,7 +133,7 @@ Nginx config: try_files $uri $uri/ /index.html; -- Fallback to SPA root index.ht
 > ```
 >
 > **Explanation:** `pushState()` and `replaceState()` update the browser URL path without triggering server page fetches.
-
+> 
 ## 7. Related Terms
 - [React Router](react_router.md) — The most popular library used to implement Client-Side Routing in React.
 - [`<Link>` Component](link_component.md) — Related concept: `<Link>` Component.

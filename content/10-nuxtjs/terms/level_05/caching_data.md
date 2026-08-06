@@ -137,20 +137,20 @@ Specify a custom unique cache key for `useAsyncData()` fetching user dashboard p
 >   return $fetch("/api/user/preferences");
 > });
 > </script>
-
-<template>
-  <div v-if="prefs">
-    <p>Theme Preference: {{ prefs.theme }}</p>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div v-if="prefs">
+>     <p>Theme Preference: {{ prefs.theme }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useAsyncData()` uses the provided string key to store and retrieve data from `NuxtPayload`.
 > 2. Prevents duplicate network fetching during client hydration by re-using payload data under `"user-dashboard-prefs"`.
 > 3. Guarantees consistent data caching across server and client renders.
-
+> 
 ---
 
 ### Exercise 2: Clearing Data Caches via `clearNuxtData()`
@@ -174,18 +174,18 @@ Invalidate and re-fetch cached user data when a user updates their profile using
 >   await refreshNuxtData("user-dashboard-prefs");
 > }
 > </script>
-
-<template>
-  <button @click="handleRefresh">Refresh Preferences</button>
-</template>
-```
-
+> 
+> <template>
+>   <button @click="handleRefresh">Refresh Preferences</button>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `clearNuxtData(key)` deletes cached data entries from Nuxt's payload cache repository.
 > 2. `refreshNuxtData(key)` triggers active `useAsyncData()` or `useFetch()` listeners to re-execute network calls.
 > 3. Standard cache invalidation pattern.
-
+> 
 ---
 
 ### Exercise 3: Setting Cache Time-To-Live (TTL) with Custom Deduplication
@@ -213,26 +213,22 @@ Configure data caching options to deduplicate duplicate component data requests 
 >   }
 > });
 > </script>
-
-<template>
-  <div>
-    <p>Stats: {{ stats }}</p>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <p>Stats: {{ stats }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `getCachedData` allows defining custom cache expiration logic based on timestamps or cache invalidation conditions.
 > 2. Returning `undefined` forces Nuxt to issue a fresh HTTP network request.
 > 3. Granular cache freshness control mechanism.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Fetching Errors & `clearNuxtData`](fetching_errors.md) — How to manually delete items from this cache.

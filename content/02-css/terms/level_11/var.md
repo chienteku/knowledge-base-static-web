@@ -121,7 +121,7 @@ color: var(--undefined-color, #005fcc); /* Fallback color provided */
 > You can then write a media query for Dark Mode (`@media (prefers-color-scheme: dark)`), and simply RE-DEFINE the variables to `--bg-color: black;` and `--text-color: white;`. The entire website will instantly swap colors without you having to write any new CSS for your actual elements!
 > ```
 > - Can you overwrite variables using media queries?
-
+> 
 ---
 
 
@@ -142,7 +142,7 @@ color: var(--undefined-color, #005fcc); /* Fallback color provided */
 > ```
 >
 > **Explanation:** `var(--name, fallback)` consumes custom properties with default fallbacks.
-
+> 
 ---
 
 ### Exercise 3: Updating Custom Properties in JavaScript
@@ -159,7 +159,7 @@ color: var(--undefined-color, #005fcc); /* Fallback color provided */
 > ```
 >
 > **Explanation:** `setProperty()` modifies live DOM CSS custom variables dynamically in runtime.
-
+> 
 ## 7. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Overwriting variables inside media queries for responsive layouts.
 - [`:root` Pseudo-class](root_pseudo_class.md) — The global scope selector where custom properties are declared.

@@ -248,7 +248,7 @@ Implement a function `parse_service_port(raw_input: &str) -> Result<ServiceEndpo
 >    - Non-numeric text (`"8080a"`) fails parsing with `ConfigError::InvalidNumericFormat`.
 >    - Privileged ports (`< 1024`) fail domain validation returning `ConfigError::RestrictedPortRange`.
 >
-
+> 
 ---
 
 ### Exercise 2: Financial Order Engine Typestate Transitions via Shadowing
@@ -409,7 +409,7 @@ Implement a financial order processor `process_financial_ledger_entry(raw: Trans
 >    - Missing signatures fail at `RawState::sign()`, returning `TransactionError::MissingSignature`.
 >    - Insufficient balances where fee exceeds transaction amount fail at `SignedState::execute()`, returning `TransactionError::InsufficientBalanceForFee`.
 >
-
+> 
 ---
 
 ### Exercise 3: Zero-Trust Security Token Redaction & Nested Scope Block Shadowing
@@ -544,7 +544,7 @@ Implement `process_auth_request(header_value: &str, log_output: &mut Vec<String>
 >    - Empty token payloads trigger `AuthError::EmptyTokenPayload`.
 >    - Tokens shorter than 6 characters use fallback redaction `"Bearer [REDACTED]"`.
 >
-
+> 
 ---
 
 ## 6. Related Terms

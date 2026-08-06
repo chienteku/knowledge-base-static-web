@@ -161,29 +161,29 @@ Create a Route Handler `app/api/draft/route.ts` that enables Next.js Draft Mode 
 > // app/api/draft/route.ts
 > import { draftMode } from "next/headers";
 > import { redirect } from "next/navigation";
-
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const secret = searchParams.get("secret");
-  const slug = searchParams.get("slug");
-
-  if (secret !== process.env.DRAFT_SECRET_TOKEN || !slug) {
-    return new Response("Invalid token", { status: 401 });
-  }
-
-  const draft = await draftMode();
-  draft.enable(); // Sets __prerender_bypass cookie!
-
-  redirect(`/blog/${slug}`);
-}
-```
-
+> 
+> export async function GET(request: Request) {
+>   const { searchParams } = new URL(request.url);
+>   const secret = searchParams.get("secret");
+>   const slug = searchParams.get("slug");
+> 
+>   if (secret !== process.env.DRAFT_SECRET_TOKEN || !slug) {
+>     return new Response("Invalid token", { status: 401 });
+>   }
+> 
+>   const draft = await draftMode();
+>   draft.enable(); // Sets __prerender_bypass cookie!
+> 
+>   redirect(`/blog/${slug}`);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `draftMode().enable()` sets a secure `__prerender_bypass` HTTP cookie in the user's browser.
 > 2. Subsequent page visits bypass static site generation (SSG) and Data Cache layers.
 > 3. Renders unpublished draft content dynamically for CMS content creators.
-
+> 
 ---
 
 ### Exercise 2: Fetching Unpublished CMS Draft Content inside Server Components
@@ -201,36 +201,36 @@ Inspect `draftMode().isEnabled` inside a Server Component and fetch unpublished 
 > ```tsx
 > // app/blog/[slug]/page.tsx
 > import { draftMode } from "next/headers";
-
-export default async function BlogPostPage({
-  params
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const draft = await draftMode();
-  const isDraft = draft.isEnabled;
-
-  const res = await fetch(`https://cms.example.com/posts/${slug}?preview=${isDraft}`, {
-    cache: isDraft ? "no-store" : "force-cache"
-  });
-  const post = await res.json();
-
-  return (
-    <article className="p-6">
-      {isDraft && <div className="p-2 bg-amber-200 text-amber-900 mb-4">Draft Preview Mode</div>}
-      <h1>{post.title}</h1>
-    </article>
-  );
-}
-```
-
+> 
+> export default async function BlogPostPage({
+>   params
+> }: {
+>   params: Promise<{ slug: string }>;
+> }) {
+>   const { slug } = await params;
+>   const draft = await draftMode();
+>   const isDraft = draft.isEnabled;
+> 
+>   const res = await fetch(`https://cms.example.com/posts/${slug}?preview=${isDraft}`, {
+>     cache: isDraft ? "no-store" : "force-cache"
+>   });
+>   const post = await res.json();
+> 
+>   return (
+>     <article className="p-6">
+>       {isDraft && <div className="p-2 bg-amber-200 text-amber-900 mb-4">Draft Preview Mode</div>}
+>       <h1>{post.title}</h1>
+>     </article>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `draftMode().isEnabled` returns `true` when the user has the draft mode preview cookie active.
 > 2. Disables fetch caching (`cache: 'no-store'`) during draft preview sessions.
 > 3. Displays live unpublished draft changes instantly.
-
+> 
 ---
 
 ### Exercise 3: Disabling Draft Mode with `draftMode().disable()`
@@ -249,27 +249,23 @@ Create a Route Handler `app/api/disable-draft/route.ts` that disables Draft Mode
 > // app/api/disable-draft/route.ts
 > import { draftMode } from "next/headers";
 > import { redirect } from "next/navigation";
-
-export async function GET() {
-  const draft = await draftMode();
-  draft.disable(); // Clears __prerender_bypass cookie!
-
-  redirect("/");
-}
-```
-
+> 
+> export async function GET() {
+>   const draft = await draftMode();
+>   draft.disable(); // Clears __prerender_bypass cookie!
+> 
+>   redirect("/");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `draftMode().disable()` clears the `__prerender_bypass` cookie.
 > 2. Restores standard static caching behavior for subsequent page visits.
 > 3. Allows users to exit draft preview mode cleanly.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — The endpoints used to toggle Draft Mode.

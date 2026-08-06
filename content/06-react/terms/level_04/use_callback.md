@@ -130,7 +130,7 @@ const handleSearch = useCallback(() => sendData(query), [query]);
 > You ONLY use `useCallback` when you are passing the function down as a Prop to a Child component that has been explicitly optimized with `React.memo`.
 > ```
 > - Does the standard HTML `<button>` care about memory addresses?
-
+> 
 ---
 
 
@@ -151,7 +151,7 @@ const handleSearch = useCallback(() => sendData(query), [query]);
 > ```
 >
 > **Explanation:** Using `setItems(prev => ...)` eliminates the need to list `items` in `useCallback` dependencies.
-
+> 
 ---
 
 ### Exercise 3: useCallback vs useMemo Relationship
@@ -168,7 +168,7 @@ const handleSearch = useCallback(() => sendData(query), [query]);
 > ```
 >
 > **Explanation:** `useCallback` is a specialized `useMemo` helper for memoizing function references.
-
+> 
 ## 7. Related Terms
 - [`useMemo` Hook](use_memo.md) — The sister hook for caching values instead of functions.
 - [React.memo](../level_08/react_memo.md) — The primary reason you need `useCallback`.

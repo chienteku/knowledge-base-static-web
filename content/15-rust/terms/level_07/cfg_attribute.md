@@ -139,7 +139,7 @@ fn windows_only_ffi() { ... } // Completely stripped from Linux compilation!
 >     println!("Everything is fine!");
 > }
 > ```
-
+> 
 ---
 
 ### Exercise 2: Conditional Target OS Compilation
@@ -165,7 +165,7 @@ fn windows_only_ffi() { ... } // Completely stripped from Linux compilation!
 >
 > #### Technical Explanation
 > `#[cfg(...)]` conditionally includes items based on target OS/architecture.
-
+> 
 ---
 
 ### Exercise 3: Composing `cfg` Predicates with `all`, `any`, and `not`
@@ -221,7 +221,7 @@ Only one of the three must compile at a time (no duplicate function error).
 > - `target_os = "android"` — catches Android (a subset of Unix, handled before `not(unix)`).
 > - `not(unix)` — catches everything that isn't Unix at all.
 > Only one branch exists in the compiled binary; the others are deleted by the compiler before any code generation.
-
+> 
 ---
 
 ## 6. Related Terms

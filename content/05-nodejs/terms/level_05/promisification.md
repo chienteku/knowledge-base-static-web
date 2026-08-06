@@ -135,7 +135,7 @@ function get() {
 > ```
 > - You need to return `new Promise(...)`.
 > - If `err` exists, what do you call? `resolve` or `reject`?
-
+> 
 ---
 
 
@@ -157,7 +157,7 @@ function get() {
 > ```
 >
 > **Explanation:** `util.promisify` converts standard Node error-first callback functions into Promise functions.
-
+> 
 ---
 
 ### Exercise 3: Native Promise Alternatives in Node.js Core
@@ -174,7 +174,7 @@ function get() {
 > ```
 >
 > **Explanation:** Modern Node.js core modules (`fs/promises`, `dns/promises`, `timers/promises`) provide native promises out-of-the-box.
-
+> 
 ## 7. Related Terms
 - [Callbacks & Callback Hell](callbacks.md) — The problem this tool solves.
 - [The fs Module (File System)](../level_02/fs_module.md) — The most common module that was historically Promisified.

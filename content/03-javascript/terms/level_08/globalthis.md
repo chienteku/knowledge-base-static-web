@@ -175,7 +175,7 @@ console.log("Console available?", hasConsole());
 
 > [!check]- Answer
 > - Check if `globalThis.console` is not `undefined`.
-
+> 
 ---
 
 ### Exercise 2: Environment Agnostic Global Property Access
@@ -192,7 +192,7 @@ console.log("Console available?", hasConsole());
 > ```
 >
 > **Explanation:** `globalThis` provides unified access to standard ECMAScript global objects across runtime hosts.
-
+> 
 ---
 
 ### Exercise 3: Attaching Global Utilities Safely
@@ -210,8 +210,8 @@ console.log("Console available?", hasConsole());
 > ```
 >
 > **Explanation:** `globalThis` serves as standard root storage for global cross-module properties.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

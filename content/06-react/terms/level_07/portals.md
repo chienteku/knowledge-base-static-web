@@ -138,7 +138,7 @@ Add Escape key listener and use react-focus-lock for modal accessibility
 > ```
 >
 > **Explanation:** `createPortal(children, domNode)` mounts React elements into arbitrary DOM containers outside the parent DOM hierarchy.
-
+> 
 ---
 
 ### Exercise 2: Common Use Cases for Portals
@@ -155,7 +155,7 @@ Add Escape key listener and use react-focus-lock for modal accessibility
 > ```
 >
 > **Explanation:** Portals prevent parent `overflow: hidden` or `z-index` stacking context clipping issues.
-
+> 
 ---
 
 ### Exercise 3: Closing Portal Modal on Escape Key
@@ -178,7 +178,7 @@ Add Escape key listener and use react-focus-lock for modal accessibility
 > ```
 >
 > **Explanation:** Global keyboard listeners close portal modals on `Escape` key events.
-
+> 
 ## 7. Related Terms
 - [Server-Side Rendering (SSR)](../level_10/ssr.md) — Portals are strictly a client-side feature since they require direct DOM manipulation.
 

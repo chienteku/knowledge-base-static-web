@@ -291,7 +291,7 @@ Provide a complete, compilable solution including structs, implementations, asyn
 > 1. `tokio::join!` takes multiple future expressions (not `.await`ed results) and drives them simultaneously within a single generated tuple state machine.
 > 2. Because the task executor alternates polling between each future whenever one hits an asynchronous yield point (such as `tokio::time::sleep`), all three network requests progress in parallel.
 > 3. The overall execution time equals the duration of the longest individual task ($\max(40, 20, 60) = 60\text{ ms}$), demonstrating significant latency reduction over sequential execution ($120\text{ ms}$).
-
+> 
 ---
 
 ### Exercise 2: Distributed Transaction Coordinator with Early-Exit Error Short-Circuiting using `tokio::try_join!`

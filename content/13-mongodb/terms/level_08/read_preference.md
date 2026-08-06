@@ -174,7 +174,7 @@ Configure an analytics pipeline to read from replica set secondary nodes using `
 > 1. `readPreference: "secondary"` routes query requests exclusively to replica set secondary members.
 > 2. Offloads heavy read-intensive reporting queries from the primary node.
 > 3. Preserves primary node CPU and RAM for write operations.
-
+> 
 ---
 
 ### Exercise 2: Fallback Read Preferences with `primaryPreferred` and `secondaryPreferred`
@@ -199,7 +199,7 @@ Configure an application API to read from secondary nodes by default, but fall b
 > 1. `secondaryPreferred` queries a secondary member if available; if all secondaries are down, it routes to the primary node.
 > 2. Ensures high read availability during secondary node maintenance windows.
 > 3. Resilient routing strategy.
-
+> 
 ---
 
 ### Exercise 3: Low-Latency Geo-Routing with `nearest` and Tag Sets
@@ -226,7 +226,7 @@ Route reads to the nearest replica set node in region `"us-east"` using `readPre
 > 1. `nearest` routes reads to the node with the lowest network latency ping, regardless of primary/secondary status.
 > 2. `tagSets` restricts candidate nodes to specific datacenter regions.
 > 3. Minimizes cross-region network latency.
-
+> 
 ---
 
 

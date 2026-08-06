@@ -142,7 +142,7 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 > Example: `<input type="text" placeholder="Enter name" required maxlength="10">`
 > ```
 > - Look at the `<img>` example in the snippets above.
-
+> 
 ---
 
 ### Exercise 2: Identifying Attributes and Values
@@ -156,7 +156,7 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 > Attribute 2 Name: target, Value: "_blank"
 > ```
 > **Explanation:** Attributes modify element behavior or provide metadata in `name="value"` format.
-
+> 
 ---
 
 ### Exercise 3: Boolean Attribute Syntax
@@ -169,7 +169,7 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 > <button disabled>Submit</button>
 > ```
 > **Explanation:** Boolean attributes are true when present, so key-only syntax (`disabled`) is sufficient.
-
+> 
 ## 7. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — Attributes live inside the opening tag of an element.
 - [Void Elements (Self-closing Tags)](void_elements.md) — Self-closing elements that are configured using attributes (like `<img>`).

@@ -161,7 +161,7 @@ In early Rust tooling (like legacy `rls`), IDE completion was slow, crashed on c
 >    - Next to closure parameters, it displays parameter name hints (`acc:`, `b:`).
 > 2. **Byte Operations & Zero-Cost Abstractions**: Demonstrates `u32::from_be_bytes` for big-endian decoding, iterator adapter chaining (`filter`, `map`), and zero-allocation iterator composition.
 > 3. **Unit Test Verification**: Uses `assert_eq!` for collection size and ID matches, and `assert!` with epsilon checking for floating-point accuracy.
-
+> 
 ---
 
 ### Exercise 2: Declarative Macro Expansion & IDE Diagnostics
@@ -239,7 +239,7 @@ In early Rust tooling (like legacy `rls`), IDE completion was slow, crashed on c
 > 1. **`rust-analyzer` Macro Expansion (`expandMacro`)**: In editors like VS Code (`Rust Analyzer: Expand macro recursively`), triggering the command on `impl_register_flag!(...)` renders the exact expanded `impl SystemControlRegister { ... }` block in a temporary buffer. This allows developers to inspect generated method signatures, verify bitwise logic, and resolve autocomplete errors without leaving the editor.
 > 2. **Bitwise Logic**: `(1 << $bit)` creates a bitmask, `|=` sets bits, and `&= !` clears target bits cleanly without affecting neighboring register flags.
 > 3. **Verification**: `assert_eq!` verifies raw bit representations (`0b1000_0000`) alongside boolean getter outputs.
-
+> 
 ---
 
 ### Exercise 3: Code Refactoring Assists (`match` to `let-else` & Extract Function)
@@ -361,10 +361,9 @@ In early Rust tooling (like legacy `rls`), IDE completion was slow, crashed on c
 >    - **Fill match arms**: Automatically generates all enum patterns when matching on decoded bytes or enums.
 > 2. **Slice Pattern Matching**: Demonstrates `let [cmd_byte, rest @ ..] = ... else { ... }` pattern matching on slice references in zero-allocation contexts.
 > 3. **Unit Tests**: Asserts happy-path decoding and error detection via `assert_eq!`.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

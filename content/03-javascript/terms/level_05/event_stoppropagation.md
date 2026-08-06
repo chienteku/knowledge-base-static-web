@@ -156,7 +156,7 @@ async function processData() {
 > (The "Body Clicked" log will not run because the bubble was popped before it reached the body).
 > ```
 > - The element that was actually clicked (the target) still fires its listener normally. It's the *ancestors* that are kept in the dark.
-
+> 
 ---
 
 ### Exercise 2: Halting Sibling Handlers with `stopImmediatePropagation`
@@ -173,7 +173,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `stopImmediatePropagation()` halts all remaining event listener callbacks registered on current target elements.
-
+> 
 ---
 
 ### Exercise 3: Propagation Stopping vs Default Prevention
@@ -190,7 +190,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Propagation controls event flow through DOM nodes; default prevention controls native browser UI behaviors.
-
+> 
 ---
 
 ## 7. Related Terms

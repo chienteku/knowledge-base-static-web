@@ -121,7 +121,7 @@ input { box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); } /* Inner inset shadow */
 > `box-shadow: inset 0px 4px 8px rgba(0,0,0,0.2);`
 > ```
 > - It's a special keyword you place right before the math values.
-
+> 
 ---
 
 
@@ -142,7 +142,7 @@ input { box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); } /* Inner inset shadow */
 > ```
 >
 > **Explanation:** `box-shadow` syntax: `offset-x offset-y blur-radius spread-radius color`.
-
+> 
 ---
 
 ### Exercise 3: Multiple Box Shadow Layering
@@ -161,7 +161,7 @@ input { box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); } /* Inner inset shadow */
 > ```
 >
 > **Explanation:** Layering multiple box shadows creates realistic lighting depth.
-
+> 
 ## 7. Related Terms
 - [Border](../level_02/border.md) — Sizing layouts with structural boundaries.
 - [`border-radius` (Rounded Corners)](border_radius.md) — Card rounding properties which crop shadow layouts.

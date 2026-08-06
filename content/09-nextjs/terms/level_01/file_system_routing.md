@@ -146,13 +146,13 @@ Structure an App Router route for a user dashboard `/dashboard/analytics` with n
 >     - analytics/
 >       - page.tsx (URL: /dashboard/analytics)
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. App Router maps directory hierarchies directly to URL route segments.
 > 2. `page.tsx` makes a route segment publicly accessible in the browser.
 > 3. `layout.tsx` wraps child route segments in nested persistent UI shells.
-
+> 
 ---
 
 ### Exercise 2: Implementing Nested App Router Layouts
@@ -187,13 +187,13 @@ Create `app/dashboard/layout.tsx` wrapping dashboard pages with a sidebar naviga
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Dashboard layout wraps all sub-routes (`/dashboard`, `/dashboard/analytics`) automatically.
 > 2. Layouts preserve component state and avoid re-rendering common UI elements during sub-route navigation.
 > 3. React Server Component layout structure.
-
+> 
 ---
 
 ### Exercise 3: Defining Dynamic Route Segments in App Router
@@ -223,19 +223,15 @@ Create a dynamic route segment `app/products/[id]/page.tsx` and render route par
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Bracket folder naming `[id]` creates a dynamic URL parameter segment.
 > 2. In Next.js 15 App Router, `params` is a Promise that resolves dynamic route parameters.
 > 3. Server Component fetches data directly on the server.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [App Router vs Pages Router](app_router_vs_pages.md) — The shift from page-based routing to folder-based routing.

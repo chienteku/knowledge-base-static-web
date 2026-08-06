@@ -333,7 +333,7 @@ Write a complete compilable module with unit tests in `#[cfg(test)] mod tests` v
 >
 > 4. **Edge Cases**:
 >    - If a corrupted frame is dropped without being pushed to the `DeadLetterQueue`, Rust automatically invokes `Drop` for `NetworkFrame`, which deallocates the underlying `Vec<u8>` heap memory, avoiding memory leaks.
-
+> 
 ---
 
 ### Exercise 2: Fixed-Capacity Memory Slot Pool with RAII Release Guard
@@ -522,7 +522,7 @@ Write a complete compilable module with unit tests in `#[cfg(test)] mod tests` v
 > 4. **Edge Cases**:
 >    - Re-acquiring slots when `capacity` is exhausted safely yields `None`.
 >    - Setting `released = true` in `release()` prevents double-free / double-release logic when `drop()` runs at the end of `release()`'s scope.
-
+> 
 ---
 
 ### Exercise 3: Consuming Artifact Transformation Pipeline with DAG Node Execution
@@ -705,7 +705,7 @@ Write a complete compilable module with unit tests in `#[cfg(test)] mod tests` v
 >
 > 4. **Edge Cases**:
 >    - If any step fails (e.g. returning `Err(PipelineError::EmptyPayload)`), the `?` operator early-returns the error. Rust automatically drops `current_artifact`, freeing its string and payload vectors immediately without memory leaks.
-
+> 
 ---
 
 ## 6. Related Terms

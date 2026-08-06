@@ -174,7 +174,7 @@ Query `orders` sorted by `status` ascending, then by `created_at` descending.
 > 1. `ORDER BY` sorts rows by first specified column, breaking ties using subsequent columns.
 > 2. `ASC` specifies ascending order; `DESC` specifies descending order.
 > 3. Utilizes compound index `{ status: 1, created_at: -1 }` for zero-RAM sort execution.
-
+> 
 ---
 
 ### Exercise 2: Null Position Control with NULLS FIRST and NULLS LAST
@@ -200,7 +200,7 @@ Query products sorted by `discount_price` ascending, placing products with `NULL
 > 1. By default, PostgreSQL sorts `NULL` as larger than non-null values (`ASC` puts NULLs last, `DESC` puts NULLs first).
 > 2. `NULLS LAST` explicitly places rows with `NULL` at the bottom of the result set regardless of sort direction.
 > 3. Explicit UI display control.
-
+> 
 ---
 
 ### Exercise 3: Sorting by Calculated Expressions
@@ -226,7 +226,7 @@ Sort users by total full name length descending using `length(first_name || last
 > 1. `ORDER BY` can sort by calculated SQL expressions.
 > 2. Evaluates the expression for candidate rows before sorting.
 > 3. Dynamic output ordering.
-
+> 
 ---
 
 

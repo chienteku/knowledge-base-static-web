@@ -174,7 +174,7 @@ console.log("Connected?", isConnected(clientA)); // true
 > [!check]- Answer
 > - Inside `connect`, write `activeConnections.add(clientObj)`.
 > - Inside `isConnected`, return `activeConnections.has(clientObj)`.
-
+> 
 ---
 
 ### Exercise 2: Automatic Garbage Collection with `WeakMap`
@@ -194,7 +194,7 @@ console.log("Connected?", isConnected(clientA)); // true
 > ```
 >
 > **Explanation:** `WeakMap` holds weak references to object keys, allowing garbage collection when key references are cleared.
-
+> 
 ---
 
 ### Exercise 3: Checking Key Existence in `WeakSet`
@@ -214,7 +214,7 @@ console.log("Connected?", isConnected(clientA)); // true
 > ```
 >
 > **Explanation:** `WeakSet` maintains weak collections of unique object references.
-
+> 
 ---
 
 ## 7. Related Terms

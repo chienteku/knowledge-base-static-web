@@ -160,7 +160,7 @@ async function processData() {
 > console.log(thirdPlace); // "Bronze"
 > ```
 > - Just put commas without a variable name!
-
+> 
 ---
 
 ### Exercise 2: Renaming Variables during Destructuring
@@ -179,7 +179,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Syntax `{ key: localName }` renames object properties to local variable names.
-
+> 
 ---
 
 ### Exercise 3: Swapping Variables without Temporary Storage
@@ -199,8 +199,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Array destructuring assignment swaps variable values inline.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

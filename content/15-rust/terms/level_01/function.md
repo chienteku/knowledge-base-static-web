@@ -154,7 +154,7 @@ fn print_val(s: &str) { println!("{s}"); } // Take reference!
 > #### Technical Explanation
 >
 > 1. Enforces explicit input type signatures `&str` and fallible return signature `Result<bool, &'static str>`.
-
+> 
 ---
 
 ### Exercise 2: Infallible Math Calculation Function
@@ -189,7 +189,7 @@ fn print_val(s: &str) { println!("{s}"); } // Take reference!
 > #### Technical Explanation
 >
 > 1. Pure mathematical function.
-
+> 
 ---
 
 ### Exercise 3: Function Accepting Closure Callback
@@ -225,7 +225,7 @@ fn print_val(s: &str) { println!("{s}"); } // Take reference!
 > #### Technical Explanation
 >
 > 1. Higher-order function taking closure parameter.
-
+> 
 ---
 
 ## 5. Related Terms

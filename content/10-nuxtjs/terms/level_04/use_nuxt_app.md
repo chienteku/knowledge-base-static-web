@@ -161,20 +161,20 @@ Access a custom helper `$formatCurrency` provided by a Nuxt plugin using `useNux
 > const { $formatCurrency } = useNuxtApp();
 > const price = ref(4999);
 > </script>
-
-<template>
-  <div>
-    <p>Price: {{ $formatCurrency(price) }}</p>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <p>Price: {{ $formatCurrency(price) }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useNuxtApp()` returns the central `NuxtApp` application runtime instance.
 > 2. Provides access to custom helpers provided by plugins via `provide` (`$helper`).
 > 3. Operates across both server and client execution contexts.
-
+> 
 ---
 
 ### Exercise 2: Hooking into Nuxt Application Lifecycle Events
@@ -192,29 +192,29 @@ Register a hook listener for `page:start` and `page:finish` to monitor client-si
 > ```vue
 > <script setup lang="ts">
 > const nuxtApp = useNuxtApp();
-
-nuxtApp.hook("page:start", () => {
-  console.log("Route transition started...");
-});
-
-nuxtApp.hook("page:finish", () => {
-  console.log("Route transition completed!");
-});
-</script>
-
-<template>
-  <div>
-    <p>Lifecycle Hook Listener Active</p>
-  </div>
-</template>
-```
-
+> 
+> nuxtApp.hook("page:start", () => {
+>   console.log("Route transition started...");
+> });
+> 
+> nuxtApp.hook("page:finish", () => {
+>   console.log("Route transition completed!");
+> });
+> </script>
+> 
+> <template>
+>   <div>
+>     <p>Lifecycle Hook Listener Active</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `nuxtApp.hook(name, cb)` subscribes to core Nuxt application lifecycle events (`app:created`, `page:start`, `vue:error`).
 > 2. Enables custom telemetry and progress bar integrations.
 > 3. Global runtime event emitter system.
-
+> 
 ---
 
 ### Exercise 3: Sharing Custom Values with `provide` / `inject` Context
@@ -236,19 +236,15 @@ Access Vue root `vueApp` instance from `useNuxtApp().vueApp` inside a plugin set
 >   nuxtApp.vueApp.config.globalProperties.$appName = "Enterprise Nuxt";
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `useNuxtApp().vueApp` grants access to the underlying Vue 3 application instance.
 > 2. Useful for registering third-party Vue plugins or global properties manually.
 > 3. Low-level integration interface.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`plugins/` Directory](../level_08/plugins_directory.md) — Where these `$variables` are actually created and injected into the Nuxt app.

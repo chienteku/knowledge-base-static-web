@@ -338,7 +338,7 @@ Implement `execute_with_retry<F>(config: RetryConfig, mut request_fn: F) -> Resu
 > 2. **Type Uniformity & Language Invariants**: Every `break` statement inside a typed `loop` expression must return the identical type. In `execute_with_retry`, all three exit arms (`break Ok(resp)`, `break Err(NetworkError::MaxRetriesExceeded { .. })`, and `break Err(NetworkError::Fatal(..))`) evaluate to `Result<Response, NetworkError>`. If any `break` arm returned a mismatched type or omitted a value, the compiler would trigger `E0308`.
 > 3. **Ownership and State Mutation**: The retry state variables (`attempt` and `current_backoff`) are mutated across iterations in the caller frame. The closure `request_fn` is declared with `FnMut(u32)` to allow mutable environment capture across retry iterations.
 > 4. **Edge Cases & Backoff Bounds**: Exponential backoff calculations can overflow integer limits if uncontrolled; `.min(config.max_backoff_ms)` ensures upper bounds are safe. When `FatalFailure` occurs, the engine breaks immediately, guaranteeing zero wasted retry cycles or side effects on unrecoverable errors.
-
+> 
 ---
 
 ### Exercise 2: Labeled Multi-Pass Stream Packet Framing & Validation Parser
@@ -501,7 +501,7 @@ Implement `parse_stream_frames(buffer: &[u8]) -> ParseSummary`.
 > 2. **Zero-Copy Slicing & Lifetimes**: During framing inspection, slices (`&remaining[2..2 + payload_len]`) borrow directly from the input `&[u8]` buffer without heap allocation. Memory allocation for `Frame` payload `Vec<u8>` occurs exclusively after verifying payload integrity and checksum.
 > 3. **Stream Resynchronization & Safety**: Binary protocol stream parsers must handle junk bytes or corrupted headers without panicking. When an invalid magic byte or corrupted checksum is encountered, the cursor advances by 1 byte and `continue 'stream` re-scans the stream sequentially, preventing infinite loops on corrupted inputs.
 > 4. **Edge Cases**: Buffer truncation (`remaining.len() < total_frame_len`) breaks the outer loop gracefully, preserving already-parsed frames and returning the exact count of processed bytes.
-
+> 
 ---
 
 ### Exercise 3: Lock-Free Ring Buffer Event Collector with CAS Retry Loop
@@ -676,7 +676,7 @@ Implement `LockFreeRingBuffer` slot reservation using `AtomicUsize` and CAS retr
 > 2. **Memory Ordering & Hardware Barriers**: `Ordering::AcqRel` on success ensures write operations performed prior to slot reservation become visible to consumer threads reading slot data (`Release`), while acquiring prior consumer tail updates (`Acquire`).
 > 3. **Wrapping Arithmetic & Overflow**: Atomic counters wrapping around integer boundaries (`usize::MAX`) are safely calculated using `wrapping_sub` and `wrapping_add`. The distance `head.wrapping_sub(tail)` correctly yields the number of active items regardless of counter rollover.
 > 4. **Thread Safety & `Sync` Trait**: `LockFreeRingBuffer` implements `Sync` automatically because all inner fields (`AtomicUsize`, `usize`) implement `Sync`, permitting safe shared borrowing across thread handles wrapped in `Arc`.
-
+> 
 ---
 
 ## 6. Related Terms

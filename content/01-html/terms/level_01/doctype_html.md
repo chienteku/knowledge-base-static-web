@@ -124,7 +124,7 @@ The `<!DOCTYPE html>` is like a giant stamp on the very first page of the bluepr
 > The browser will enter "Quirks Mode." It will intentionally emulate bugs and non-standard behavior from the late 1990s (like Netscape Navigator 4) to ensure ancient websites don't break. This will likely completely destroy modern CSS layouts.
 > ```
 > - Search for the term "Quirks Mode vs Standards Mode".
-
+> 
 ---
 
 ### Exercise 2: DOCTYPE Placement Rule
@@ -138,7 +138,7 @@ The `<!DOCTYPE html>` is like a giant stamp on the very first page of the bluepr
 > ```
 >
 > **Explanation:** `<!DOCTYPE html>` must be line 1 to inform browser rendering engines to use Standards Mode.
-
+> 
 ---
 
 ### Exercise 3: Case Sensitivity of DOCTYPE
@@ -152,7 +152,7 @@ The `<!DOCTYPE html>` is like a giant stamp on the very first page of the bluepr
 > ```
 >
 > **Explanation:** `<!DOCTYPE html>`, `<!doctype html>`, and `<!DoCtYpE hTmL>` are all valid HTML5 declarations.
-
+> 
 ## 7. Related Terms
 - [`<html>`](html_tag.md) — The tag that immediately follows the DOCTYPE declaration.
 - [Void Elements (Self-closing Tags)](void_elements.md) — Like the DOCTYPE declaration, void elements stand as single declarations without closing pairs.

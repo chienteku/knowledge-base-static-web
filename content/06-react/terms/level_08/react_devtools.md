@@ -102,7 +102,7 @@ Assign Component.displayName = 'AuthWrapper(Profile)'
 > (Netflix uses React, but they are serving the optimized Production build).
 > ```
 > - Think about what you would want exposed on a live website versus your local machine.
-
+> 
 ---
 
 
@@ -121,7 +121,7 @@ Assign Component.displayName = 'AuthWrapper(Profile)'
 > ```
 >
 > **Explanation:** The Components Tab provides live inspection of component props, state, and context.
-
+> 
 ---
 
 ### Exercise 3: DevTools $r Console Shortcut
@@ -138,7 +138,7 @@ Assign Component.displayName = 'AuthWrapper(Profile)'
 > ```
 >
 > **Explanation:** `$r` enables interactive evaluation of component props and state directly in browser console.
-
+> 
 ## 7. Related Terms
 - [Re-rendering](../level_02/re_rendering.md) — What the Profiler tab is measuring.
 - [Virtual DOM](../level_01/virtual_dom.md) — What the Components tab is displaying.

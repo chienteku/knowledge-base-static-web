@@ -290,7 +290,7 @@ Implement a thread-safe `EventBroker<M>` that stores subscriber handles as `Vec<
 > 1. **Decoupling Lifetimes (`Arc::downgrade`):** `EventBroker` stores `Weak<SubscriberHandle<M>>` instead of `Arc`. When a subscriber is registered, `Arc::downgrade(&handle)` creates a non-owning weak pointer. The broker does not increment the subscriber's strong count.
 > 2. **Attempting Promotion (`.upgrade()`):** When `publish` is called, `weak_ref.upgrade()` atomically checks if the target `SubscriberHandle` is still alive. If it is, it returns `Some(Arc<SubscriberHandle<M>>)`.
 > 3. **Automatic Dead-Reference Cleanup (`Vec::retain`):** If `.upgrade()` returns `None`, the subscriber was dropped by its caller. Returning `false` inside `.retain()` removes the stale `Weak` handle from `EventBroker`'s internal storage without requiring manual unregister calls.
-
+> 
 ---
 
 ### Exercise 2: Concurrent Thread-Safe Cache with Lock-Free Weak Eviction
@@ -421,7 +421,7 @@ Build a thread-safe `WeakCache<K, V>` using `RwLock<HashMap<K, Weak<V>>>`:
 > 1. **Read Lock Optimization (Fast Path):** Multiple threads concurrently read from `RwLock<HashMap<K, Weak<V>>>`. If the key exists and `weak_ref.upgrade()` yields `Some(Arc<V>)`, the reference count is safely incremented without blocking other reader threads.
 > 2. **Double-Checked Locking:** If a cache miss occurs under the read lock, the thread upgrades to a write lock (`RwLock::write`). Before allocating or running the expensive `init()` closure, it checks `write_guard.get(&key)` again in case another thread initialized the resource while acquiring the write lock.
 > 3. **Memory Eviction Tracking (`strong_count()`):** When all callers drop their returned `Arc<V>`, the memory allocation for `V` is deallocated. `clean_dead_entries` uses `weak_ref.strong_count() > 0` to safely remove expired keys without keeping unused payload data in memory.
-
+> 
 ---
 
 ### Exercise 3: Bidirectional Doubly-Linked Tree Node Navigation without Reference Cycles
@@ -545,7 +545,7 @@ Implement a leak-free tree structure `TreeNode`:
 > 1. **Ownership Direction (Top-Down):** `TreeNode.children` holds `Rc<TreeNode>`, establishing clear ownership from parent to children.
 > 2. **Cycle Prevention (Upward & Horizontal Weak Links):** `parent`, `prev_sibling`, and `next_sibling` are all wrapped in `Weak<TreeNode>`. Because weak pointers do not increment `strong_count`, dropping the root `Rc` decreases the root's `strong_count` to zero, triggering its `Drop` implementation which drops `children` and cascade-deallocates the entire graph.
 > 3. **Interior Mutability (`RefCell`):** `RefCell` allows updating `parent`, `prev_sibling`, and `next_sibling` links dynamically when inserting nodes into the tree graph through shared `&Rc<TreeNode>` references.
-
+> 
 ---
 
 ## 6. Related Terms

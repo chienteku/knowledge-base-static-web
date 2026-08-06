@@ -155,7 +155,7 @@ div p { color: blue; } /* Selects all descendant paragraphs at any depth */
 > An `id` attribute! The `#` symbol indicates an ID selector. The HTML would look like `<img id="hero-image" src="...">`.
 > ```
 > - Does it start with a dot, a hash, or a letter?
-
+> 
 ---
 
 
@@ -184,7 +184,7 @@ div p { color: blue; } /* Selects all descendant paragraphs at any depth */
 > ```
 >
 > **Explanation:** CSS selectors target elements by tag name, class, ID, or universal patterns.
-
+> 
 ---
 
 ### Exercise 3: Chaining Multiple Class Selectors
@@ -203,7 +203,7 @@ div p { color: blue; } /* Selects all descendant paragraphs at any depth */
 > ```
 >
 > **Explanation:** Chaining class selectors without spaces (`.btn.primary`) targets elements possessing all listed classes.
-
+> 
 ## 7. Related Terms
 - [Specificity](specificity.md) — What happens when an Element selector and a Class selector both try to style the exact same element?
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The curly braces and properties that come immediately *after* the selector.

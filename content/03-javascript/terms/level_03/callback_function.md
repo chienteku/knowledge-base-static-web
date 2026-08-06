@@ -164,7 +164,7 @@ async function processData() {
 > ```
 > - `setTimeout(() => { console.log("Time's up!"); }, 1000);`
 > - Passing anonymous arrow functions as callbacks is the most common pattern in modern React/JavaScript.
-
+> 
 ---
 
 ### Exercise 2: Higher-Order Function with Callback
@@ -185,7 +185,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Callbacks are functions passed as arguments executed inside higher-order routines.
-
+> 
 ---
 
 ### Exercise 3: Error-First Callback Pattern (Node.js style)
@@ -208,7 +208,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Error-first callbacks receive `err` as first argument and `data` as second.
-
+> 
 ---
 
 ## 7. Related Terms

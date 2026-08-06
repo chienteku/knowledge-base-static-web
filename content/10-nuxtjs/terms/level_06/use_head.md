@@ -168,20 +168,20 @@ Add a third-party analytics script tag and custom CSS stylesheet link using `use
 >   ]
 > });
 > </script>
-
-<template>
-  <div>
-    <h1>Analytics Overview</h1>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <h1>Analytics Overview</h1>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useHead()` modifies the HTML `<head>` section during SSR rendering and dynamic client navigation.
 > 2. `script` and `link` arrays append `<script>` and `<link>` tags to the rendered document head.
 > 3. Integrates with `@unhead/vue` under the hood.
-
+> 
 ---
 
 ### Exercise 2: Reactive Head Options with Computed Refs
@@ -199,25 +199,25 @@ Update document title reactively whenever a unread notifications counter changes
 > ```vue
 > <script setup lang="ts">
 > const unreadCount = ref(3);
-
-useHead({
-  title: computed(() => `(${unreadCount.value}) Inbox Messages`)
-});
-</script>
-
-<template>
-  <div>
-    <button @click="unreadCount++">Receive Message</button>
-  </div>
-</template>
-```
-
+> 
+> useHead({
+>   title: computed(() => `(${unreadCount.value}) Inbox Messages`)
+> });
+> </script>
+> 
+> <template>
+>   <div>
+>     <button @click="unreadCount++">Receive Message</button>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Passing computed refs to `useHead()` maintains reactive DOM updates in `document.title`.
 > 2. Updates browser tab title immediately when reactive state changes in the client.
 > 3. Declarative head management model.
-
+> 
 ---
 
 ### Exercise 3: Setting Global Default Head Tags in `nuxt.config.ts`
@@ -244,19 +244,15 @@ Configure global fallback document title template and charset tags in `nuxt.conf
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `app.head` sets global fallback document head properties across all pages.
 > 2. `titleTemplate: '%s - Enterprise SaaS'` automatically appends the suffix to page titles set by `useHead({ title: 'Pricing' })` ("Pricing - Enterprise SaaS").
 > 3. Standard global SEO configuration option.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useSeoMeta`](use_seo_meta.md) — A specialized version of `useHead` strictly for Open Graph and Twitter meta tags.

@@ -566,7 +566,7 @@ A logging system requires a custom trait `AuditDump` with `fn dump_audit(&self) 
 > 1. **Local Trait vs Foreign Trait Rules**: `impl<T: Debug> AuditDump for T` is valid because `AuditDump` is a trait defined in the local crate. Rust permits blanket implementations for local traits even when generic bounds (`Debug`) come from the standard library.
 > 2. **Orphan Rule Violation (`E0210`)**: Attempting `impl<T: AuditDump> std::fmt::Display for T` fails because `Display` is defined in `std` and `T` represents arbitrary generic types (which could also come from standard library or third-party crates). Allowing this would risk trait implementation collisions across crates.
 > 3. **Newtype Adapter Pattern**: By creating `struct AuditWrapper<T>(pub T)`, `AuditWrapper` becomes a local struct type owned by our crate. Implementing `Display` for `AuditWrapper<T>` satisfies orphan rules while bridging blanket trait behavior into standard formatting macros.
-
+> 
 ---
 
 ## 6. Related Terms

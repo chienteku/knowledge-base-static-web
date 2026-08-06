@@ -165,7 +165,7 @@ Query collection `users` for documents where embedded field `address.state` equa
 > 1. Dot-notation (`"address.state"`) targets specific subfields within embedded documents.
 > 2. Matches documents regardless of what other keys exist inside `address`.
 > 3. Leverages secondary index `{ "address.state": 1 }`.
-
+> 
 ---
 
 ### Exercise 2: Exact Subdocument Object Matching
@@ -191,7 +191,7 @@ Query collection `users` for documents where `address` equals exact subdocument 
 > 1. Exact object matching requires exact key order and exact field equality.
 > 2. Fails to match if `address` contains additional keys (e.g. `zip`) or reversed key order (`state`, `city`).
 > 3. Prefer dot-notation for robust subfield querying.
-
+> 
 ---
 
 ### Exercise 3: Querying Arrays of Embedded Objects
@@ -217,7 +217,7 @@ Query `orders` for documents where embedded subdocument array `items` contains i
 > 1. Dot-notation through arrays (`"items.sku"`) matches if ANY element in the array has matching `sku`.
 > 2. Multikey index indexes array subfield values.
 > 3. Simplifies nested collection queries.
-
+> 
 ---
 
 

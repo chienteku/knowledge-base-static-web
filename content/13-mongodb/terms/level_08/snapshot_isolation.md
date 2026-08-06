@@ -160,7 +160,7 @@ Execute a multi-collection financial audit query using `readConcern: "snapshot"`
 > 1. `readConcern: "snapshot"` reads data from a single WiredTiger MVCC snapshot timestamp.
 > 2. Guarantees `totalSavings` and `totalChecking` reflect the exact same database point-in-time state.
 > 3. Prevents dirty reads and phantom reads during concurrent account transfers.
-
+> 
 ---
 
 ### Exercise 2: WiredTiger MVCC Multi-Version Concurrency Mechanics
@@ -187,7 +187,7 @@ Explain how WiredTiger MVCC allows concurrent readers to inspect un-modified sna
 > 1. WiredTiger MVCC maintains multiple historical versions of document bytes in RAM cache.
 > 2. Snapshot reads inspect historical versions without acquiring shared read locks.
 > 3. Enables high-concurrency read/write workloads.
-
+> 
 ---
 
 ### Exercise 3: Handling Write Conflicts in Snapshot Transactions
@@ -219,7 +219,7 @@ Handle a `WriteConflict` exception when 2 concurrent snapshot transactions attem
 > 1. If transaction B attempts to write to a document already modified by active transaction A, transaction B throws a `WriteConflict` error.
 > 2. `withTransaction()` catches write conflicts and retries the transaction automatically.
 > 3. Preserves isolation integrity.
-
+> 
 ---
 
 

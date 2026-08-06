@@ -144,13 +144,13 @@ Wrap a non-SSR compatible browser canvas signature pad inside `<ClientOnly>`.
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `<ClientOnly>` prevents Vue from evaluating child components during Node.js server-side rendering.
 > 2. Child components are instantiated exclusively in the browser post-hydration.
 > 3. Prevents SSR crashes caused by missing `window` or `document` objects.
-
+> 
 ---
 
 ### Exercise 2: Providing Custom Fallback Slots for Skeleton Loaders
@@ -179,13 +179,13 @@ Provide a customized loading skeleton fallback slot `#fallback` inside `<ClientO
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. The `#fallback` slot renders on the server during initial SSR HTML generation.
 > 2. Prevents layout shifts by preserving component layout dimensions while client JavaScript hydrates.
 > 3. Fallback content is unmounted once the client component initializes.
-
+> 
 ---
 
 ### Exercise 3: Using `.client.vue` Naming Conventions
@@ -209,7 +209,7 @@ Create a component `components/Comments.client.vue` that automatically acts as a
 >   </div>
 > </template>
 > ```
-
+> 
 > ```vue
 > <!-- pages/article.vue -->
 > <template>
@@ -220,19 +220,15 @@ Create a component `components/Comments.client.vue` that automatically acts as a
 >   </article>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Appending `.client.vue` to component filenames instructs Nuxt to register them automatically as client-only components.
 > 2. Nuxt automatically wraps `.client.vue` components in `<ClientOnly>` under the hood.
 > 3. Cleaner syntax for browser-only component files.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process this component skips.

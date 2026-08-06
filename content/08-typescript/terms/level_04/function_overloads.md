@@ -150,13 +150,13 @@ Create function overloads for a `formatDate` utility that accepts either a `Date
 > const s1 = formatDate(new Date());
 > const s2 = formatDate(1700000000000);
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Overload signatures specify valid argument combinations available to external callers.
 > 2. The implementation signature must accept the union of all overload parameters (`Date | number`).
 > 3. Callers see only the distinct overload signatures in IDE autocomplete tooltips.
-
+> 
 ---
 
 ### Exercise 2: Differing Return Types Based on Input Overloads
@@ -181,13 +181,13 @@ Create overloaded `createElement` signatures returning `HTMLImageElement` when t
 > const img = createElement("img"); // Typed as HTMLImageElement!
 > const h1 = createElement("h1");   // Typed as HTMLHeadingElement!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Literal string parameter overloads map specific input values directly to distinct return subtypes.
 > 2. Avoids manual type assertions (`as HTMLImageElement`) at call sites.
 > 3. Standard DOM library typing pattern.
-
+> 
 ---
 
 ### Exercise 3: Overload Signature Order Rules Audit
@@ -206,21 +206,21 @@ Explain why more specific overload signatures must precede more general overload
 > // ❌ INCORRECT (General signature shadows specific signature):
 > // function process(val: any): any;
 > // function process(val: string): string;
-
-// ✅ CORRECT (Specific signatures come FIRST):
-function process(val: string): string;
-function process(val: number): number;
-function process(val: unknown): unknown {
-  return val;
-}
-```
-
+> 
+> // ✅ CORRECT (Specific signatures come FIRST):
+> function process(val: string): string;
+> function process(val: number): number;
+> function process(val: unknown): unknown {
+>   return val;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. TypeScript matches overloads sequentially from top to bottom.
 > 2. Placing a broad/general overload first causes it to intercept all caller invocations, masking more specific signatures below it.
 > 3. Always declare specific overload signatures above generic fallbacks.
-
+> 
 ---
 
 

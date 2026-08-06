@@ -150,7 +150,7 @@ Demonstrate that PostgreSQL's default `Read Committed` isolation level prevents 
 > 1. A Dirty Read occurs when a transaction reads data modified by another concurrent uncommitted transaction.
 > 2. PostgreSQL prevents Dirty Reads across ALL isolation levels (even `Read Uncommitted` behaves as `Read Committed`).
 > 3. MVCC snapshot readers inspect committed tuple versions only.
-
+> 
 ---
 
 ### Exercise 2: Understanding Non-Repeatable Reads in Read Committed
@@ -185,7 +185,7 @@ Demonstrate a `Non-Repeatable Read` where querying the same row twice within a t
 > 1. In `Read Committed` isolation, each SQL statement acquires a fresh snapshot of committed data.
 > 2. Re-executing the `SELECT` reads newly committed data from Session 2.
 > 3. Use `Repeatable Read` isolation if consistent repeatable reads are required across statements.
-
+> 
 ---
 
 ### Exercise 3: Preventing Serialization Anomalies with Repeatable Read / Serializable
@@ -214,7 +214,7 @@ Prevent Phantom Reads and Serialization Anomalies using `SET TRANSACTION ISOLATI
 > 1. `Serializable` isolation guarantees that execution outcomes match some sequential non-concurrent execution order.
 > 2. PostgreSQL uses Serializable Snapshot Isolation (SSI) to track read-write dependencies.
 > 3. Aborts conflicting transactions with Error `40001` (`serialization_failure`).
-
+> 
 ---
 
 

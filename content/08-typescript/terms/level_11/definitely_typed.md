@@ -97,13 +97,13 @@ Install type definitions for `lodash` and `express` using npm.
 > # Install matching DefinitelyTyped type definition packages as devDependencies
 > npm install --save-dev @types/lodash @types/express
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. DefinitelyTyped is a community-maintained GitHub repository hosting TypeScript type declarations for untyped npm packages.
 > 2. Published to npm under the `@types` scope (e.g. `@types/lodash`).
 > 3. Should be installed as `devDependencies` since type declarations are required only during development compilation.
-
+> 
 ---
 
 ### Exercise 2: Managing `@types` Version Alignment
@@ -128,13 +128,13 @@ Explain why `@types/package` major and minor version numbers must match the inst
 >   }
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `@types` packages follow the semantic versioning of the underlying JavaScript library.
 > 2. Installing mismatched major versions (e.g. `express@5` with `@types/express@4`) results in missing API method types or compilation errors.
 > 3. Always align `@types` major versions with runtime dependency versions.
-
+> 
 ---
 
 ### Exercise 3: Auditing `typeRoots` and `types` in `tsconfig.json`
@@ -156,29 +156,20 @@ Configure `compilerOptions.types` in `tsconfig.json` to include only specific gl
 >   }
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. By default, `tsc` includes all packages found under `node_modules/@types`.
 > 2. Configuring `"types": ["node", "jest"]` restricts global type inclusion to explicitly listed packages.
 > 3. Prevents namespace collisions between competing global type packages (e.g. Jest vs Mocha `test` functions).
-
+> 
 ---
-
-
-
-
-
----
-
-
 
 ## 6. Related Terms
 - [`tsconfig.json`](../level_01/tsconfig.md) — The `typeRoots` and `types` compiler options control how TypeScript searches for these `@types` packages.
 
 ---
 
----
 
 ## 7. Key Takeaways
 

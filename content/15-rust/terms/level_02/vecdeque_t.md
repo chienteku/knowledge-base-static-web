@@ -300,7 +300,7 @@ Implement a thread-safe-ready `SlidingWindowRateLimiter` struct:
 > 1. **Ring Buffer Mechanics & Amortized $O(1)$ Operations:** Unlike `Vec<T>`, where removing element 0 (`remove(0)`) triggers an $O(n)$ memory shift of all remaining elements, `VecDeque<T>` maintains a head and tail pointer over a circular block of allocated memory. `.pop_front()` simply increments the internal head index modulo capacity in $O(1)$ time. `.push_back()` advances the tail index in $O(1)$ amortized time.
 > 2. **`make_contiguous()` Memory Invariant:** Because `VecDeque` wraps around its internal array boundary, the stored elements may be split across two non-contiguous memory slices (`as_slices()`). Calling `.make_contiguous()` rotates and rearranges internal elements in-place so all active items reside in a single contiguous slice `&[T]`. This mutation requires `&mut self` and enables zero-copy passing to network serialization buffers or C FFI boundaries.
 > 3. **Monotonic Arithmetic Invariants:** `saturating_sub` prevents panic due to integer underflow if non-monotonic clock adjustments occur in low-level telemetry hardware.
-
+> 
 ---
 
 ### Exercise 2: Preemptive Priority Work-Stealing Task Queue
@@ -494,7 +494,7 @@ Implement a generic `WorkStealingQueue<T>`:
 > 1. **Bi-Directional Priority Semantics:** `VecDeque<T>` provides symmetric $O(1)$ operation costs for `push_front`, `push_back`, `pop_front`, and `pop_back`. Pushing urgent tasks to the front grants LIFO/preemptive scheduling for the local worker, while standard tasks appended to the back maintain FIFO fairness among non-urgent work.
 > 2. **Work-Stealing Contention Minimization:** Work-stealing scheduling architectures eliminate lock contention between local threads (operating at head/front) and remote stealer threads (operating at tail/back). When remote stealers invoke `pop_back()`, they retrieve the oldest non-urgent tasks while the local worker continues popping preemptive/urgent tasks from `pop_front()`.
 > 3. **Selective Removal Complexity:** `VecDeque::remove(i)` shifts elements inward toward the closer end (front or back) to minimize memory copying. While removing arbitrary middle elements takes $O(n)$ time in the worst case, `VecDeque` minimizes move operations by choosing the shortest shift path based on the item index relative to `head` and `tail`.
-
+> 
 ---
 
 ### Exercise 3: Financial Order Book Matching Engine with Bounded Audit Logging
@@ -738,7 +738,7 @@ Implement an `OrderBookMatcher` trading engine:
 > 1. **Price-Time Priority and Head Inspection:** Matching engines execute trades at the top of the order queue. `VecDeque::front_mut()` grants access to inspect and modify the best bid/ask without taking ownership of the order. If the top order is fully matched (`quantity == 0`), `pop_front()` removes it in $O(1)$ time, exposing the next priority order instantly.
 > 2. **Bounded Log Ring Buffering:** Storing execution history in `trades: VecDeque<TradeRecord>` creates a fixed-memory ring buffer log. Appending trades with `push_back()` paired with `pop_front()` when `len() >= max_trade_history` caps total allocated memory without requiring expensive `Vec` shift operations.
 > 3. **Ownership and In-Place Mutations:** `front_mut()` enables in-place partial fill updating (`best_ask.quantity -= fill_qty`). Borrow checker rules require matching operations to drop or release the mutable reference before invoking methods that modify `self.asks` or `self.trades` structure.
-
+> 
 ---
 
 ## 6. Related Terms

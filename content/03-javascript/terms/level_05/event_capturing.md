@@ -164,7 +164,7 @@ async function processData() {
 > element.addEventListener('click', callback, true);
 > ```
 > - The third argument is called `useCapture`.
-
+> 
 ---
 
 ### Exercise 2: Registering Capture Phase Event Listeners
@@ -181,7 +181,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Passing `true` or `{ capture: true }` attaches event listeners to the downward capture phase.
-
+> 
 ---
 
 ### Exercise 3: Capture vs Bubble Propagation Direction
@@ -198,8 +198,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Events flow down DOM trees in capture phase before bubbling back upward.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

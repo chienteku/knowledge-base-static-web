@@ -163,7 +163,7 @@ Query `orders` for unpaid invoices where `paid_at IS NULL` vs paid invoices wher
 > 1. `IS NULL` tests for the absence of column values.
 > 2. `WHERE paid_at = NULL` fails because comparing anything to `NULL` yields `UNKNOWN`.
 > 3. Correct SQL null testing syntax.
-
+> 
 ---
 
 ### Exercise 2: Partial Indexing over Nullable Columns
@@ -189,7 +189,7 @@ Create a partial index over `invoices` for unpaid orders (`WHERE paid_at IS NULL
 > 1. Partial indexes with `WHERE paid_at IS NULL` index ONLY unpaid invoice rows.
 > 2. Reduces index RAM footprint by excluding historical paid invoices.
 > 3. High-performance index optimization.
-
+> 
 ---
 
 ### Exercise 3: Combining `IS NULL` with Fallback Projections
@@ -216,7 +216,7 @@ Select users where `phone IS NULL` and display fallback label `'No Phone Number'
 > 1. `COALESCE` returns the first non-null value.
 > 2. Prevents sending raw `null` values to frontend UI templates.
 > 3. Clean SQL projection handling.
-
+> 
 ---
 
 

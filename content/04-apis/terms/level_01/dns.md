@@ -137,8 +137,8 @@ example.com.  IN  A  192.0.2.1
 > - 3. **A** (Query TLD servers)
 > - 4. **E** (Query authoritative nameserver)
 > - 5. **D** (Fetch final destination IP)
-
-
+> 
+> 
 ---
 
 ### Exercise 2: DNS Record Type Mapping

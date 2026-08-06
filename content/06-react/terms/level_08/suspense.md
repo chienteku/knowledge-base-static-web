@@ -116,7 +116,7 @@ The `<Widget>` component is lazy-loaded and says "I am not ready!". What happens
 > It immediately hides the entire `<Page>` and `<Widget>`, and displays the fallback spinner at the `<Suspense>` level until the `<Widget>` is fully ready.
 > ```
 > - Suspense acts like a blanket that covers everything inside of it until the slowest piece finishes.
-
+> 
 ---
 
 
@@ -141,7 +141,7 @@ The `<Widget>` component is lazy-loaded and says "I am not ready!". What happens
 > ```
 >
 > **Explanation:** `<Suspense>` renders fallback UI while child components suspend loading dynamic resources.
-
+> 
 ---
 
 ### Exercise 3: Suspense Resource Mechanism
@@ -158,7 +158,7 @@ The `<Widget>` component is lazy-loaded and says "I am not ready!". What happens
 > ```
 >
 > **Explanation:** Suspense catches promises thrown during component render to render fallback markup.
-
+> 
 ## 7. Related Terms
 - [Code Splitting & Lazy Loading](code_splitting.md) — The most common reason a component suspends.
 - [The Fiber Architecture](../level_01/fiber_architecture.md) — Related concept: The Fiber Architecture.

@@ -186,7 +186,7 @@ function SearchBar() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Accessible Form Input with useId
@@ -211,7 +211,7 @@ function SearchBar() {
 > ```
 >
 > **Explanation:** `useId()` generates hydration-safe unique IDs for accessible form controls.
-
+> 
 ---
 
 ### Exercise 3: Prefixing Multiple IDs with single useId
@@ -230,7 +230,7 @@ function SearchBar() {
 > ```
 >
 > **Explanation:** Single `useId()` calls support suffix formatting for related DOM accessibility attributes.
-
+> 
 ## 7. Related Terms
 - [Hydration](../level_10/hydration.md) — The SSR startup process where server-client IDs must match.
 - [Rules of Hooks](rules_of_hooks.md) — The structural laws governing hook calls.

@@ -127,29 +127,29 @@ Configure a page segment to revalidate cached data every 300 seconds (5 minutes)
 > ```tsx
 > // app/blog/page.tsx
 > export const revalidate = 300; // Revalidate route every 300 seconds
-
-export default async function BlogIndex() {
-  const posts = await fetch("https://api.example.com/posts").then((r) => r.json());
-
-  return (
-    <main className="p-6">
-      <h1>Blog Posts (SWR 5m)</h1>
-      <ul>
-        {posts.map((p: any) => (
-          <li key={p.id}>{p.title}</li>
-        ))}
-      </ul>
-    </main>
-  );
-}
-```
-
+> 
+> export default async function BlogIndex() {
+>   const posts = await fetch("https://api.example.com/posts").then((r) => r.json());
+> 
+>   return (
+>     <main className="p-6">
+>       <h1>Blog Posts (SWR 5m)</h1>
+>       <ul>
+>         {posts.map((p: any) => (
+>           <li key={p.id}>{p.title}</li>
+>         ))}
+>       </ul>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `export const revalidate = seconds` configures Stale-While-Revalidate (ISR) for all data requests in the route segment.
 > 2. Serves static cached HTML instantly while triggering background revalidation after 300 seconds.
 > 3. Standard pattern for time-based static site updates.
-
+> 
 ---
 
 ### Exercise 2: Path-Based On-Demand Revalidation (`revalidatePath`)
@@ -167,23 +167,23 @@ Purge cached HTML/data for route path `/products` inside a Server Action using `
 > ```typescript
 > // app/actions/product.ts
 > "use server";
-
-import { revalidatePath } from "next/cache";
-
-export async function updateProductPrice(id: string, newPrice: number) {
-  // Update price in database...
-
-  // Instantly purge cached route data for /products
-  revalidatePath("/products");
-}
-```
-
+> 
+> import { revalidatePath } from "next/cache";
+> 
+> export async function updateProductPrice(id: string, newPrice: number) {
+>   // Update price in database...
+> 
+>   // Instantly purge cached route data for /products
+>   revalidatePath("/products");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `revalidatePath('/products')` purges cached HTML and Data Cache entries for the specified route path.
 > 2. Next request to `/products` will render fresh data from the server.
 > 3. Crucial for instant post-mutation UI updates.
-
+> 
 ---
 
 ### Exercise 3: Tag-Based On-Demand Revalidation (`revalidateTag`)
@@ -200,29 +200,25 @@ Purge all cached data associated with tag `'user-profile'` across multiple pages
 >
 > ```typescript
 > "use server";
-
-import { revalidateTag } from "next/cache";
-
-export async function updateUserProfile(userId: string) {
-  // Update user in database...
-
-  // Purges all fetch requests tagged with 'user-profile' across ALL routes!
-  revalidateTag("user-profile");
-}
-```
-
+> 
+> import { revalidateTag } from "next/cache";
+> 
+> export async function updateUserProfile(userId: string) {
+>   // Update user in database...
+> 
+>   // Purges all fetch requests tagged with 'user-profile' across ALL routes!
+>   revalidateTag("user-profile");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `revalidateTag('tag-name')` purges matching Data Cache entries globally, regardless of which page requested them.
 > 2. Superior to `revalidatePath` when the same data entity is rendered across multiple distinct URL routes.
 > 3. Fine-grained, targeted cache invalidation pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Data Caching (`force-cache`, `no-store`)](data_caching.md) — The alternative caching strategies.

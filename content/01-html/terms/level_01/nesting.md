@@ -158,7 +158,7 @@ Nesting layout elements to create a profile card:
 > ```
 > - The `<h1>` tag is opened but never closed.
 > - The `<strong>` tag closes after the `</p>` tag, creating an overlap.
-
+> 
 ---
 
 
@@ -177,7 +177,7 @@ Nesting layout elements to create a profile card:
 > ```
 >
 > **Explanation:** Tags must be closed in exact reverse order of opening (`span` -> `p` -> `div`).
-
+> 
 ---
 
 ### Exercise 3: Anchor Tag Nesting Rules in HTML5
@@ -199,7 +199,7 @@ Nesting layout elements to create a profile card:
 > ```
 >
 > **Explanation:** HTML5 expanded `<a>` element flow content model to wrap block elements.
-
+> 
 ## 7. Related Terms
 - [Element vs. Tag](element_vs_tag.md) — The building blocks that are nested.
 - [Block-level vs Inline Elements](block_inline.md) — Nesting rules differ based on display properties (e.g., inline elements cannot contain block elements).

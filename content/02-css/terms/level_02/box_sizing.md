@@ -126,7 +126,7 @@ If you are using `box-sizing: border-box` (the modern way), what is the total wi
 > Modern (`border-box`): 400px (The browser forces the total size to equal the width you set).
 > ```
 > - Does `border-box` grow the box, or shrink the content inside?
-
+> 
 ---
 
 
@@ -147,7 +147,7 @@ If you are using `box-sizing: border-box` (the modern way), what is the total wi
 > ```
 >
 > **Explanation:** Universal `border-box` reset guarantees predictable box-model width calculations.
-
+> 
 ---
 
 ### Exercise 3: Content-Box vs Border-Box Width Formula
@@ -162,11 +162,11 @@ If you are using `box-sizing: border-box` (the modern way), what is the total wi
 > ```
 > ```text
 > content-box width: 250px (200 + 40 + 10)
-border-box width: 200px (content shrinks to 150px)
+> border-box width: 200px (content shrinks to 150px)
 > ```
 >
 > **Explanation:** `border-box` absorbs padding and border into the specified width.
-
+> 
 ## 7. Related Terms
 - [The Box Model (Concept)](box_model.md) — The fundamental math system this property modifies.
 - [`overflow` (hidden, scroll, auto, visible)](overflow.md) — How content behaves when forced into constrained borders.

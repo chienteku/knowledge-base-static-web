@@ -173,7 +173,7 @@ Atomically increment an order sequence counter `seq` in collection `counters` an
 > 1. `findOneAndUpdate()` atomically reads and modifies a single document in a single write operation.
 > 2. `returnDocument: "after"` returns the document state AFTER modifications are applied.
 > 3. Prevents duplicate sequence numbers in concurrent environments.
-
+> 
 ---
 
 ### Exercise 2: Queue Task Deletion with `findOneAndDelete`
@@ -201,7 +201,7 @@ Fetch and remove the next pending task from collection `task_queue` in a single 
 > 1. `findOneAndDelete()` finds, returns, and removes a document atomically.
 > 2. `sort` ensures highest-priority queue tasks are claimed first.
 > 3. Guarantees a task is claimed by exactly one worker process.
-
+> 
 ---
 
 ### Exercise 3: Atomic Document Replacement with `findOneAndReplace`
@@ -229,7 +229,7 @@ Replace a user draft document with a finalized document state in a single atomic
 > 1. `findOneAndReplace()` replaces document content while retaining the original `_id`.
 > 2. Returns pre-replacement or post-replacement document state based on options.
 > 3. Thread-safe atomic replacement operation.
-
+> 
 ---
 
 

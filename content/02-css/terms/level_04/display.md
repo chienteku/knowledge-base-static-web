@@ -187,7 +187,7 @@ span { display: inline-block; width: 200px; } /* Respects width dimensions */
 > If you used `block`, they would respect the width but stack vertically.
 > ```
 > - You need the best of both worlds.
-
+> 
 ---
 
 
@@ -216,7 +216,7 @@ span { display: inline-block; width: 200px; } /* Respects width dimensions */
 > ```
 >
 > **Explanation:** `display` dictates CSS box generation and flow positioning rules.
-
+> 
 ---
 
 ### Exercise 3: Modern Outer/Inner Display Syntax
@@ -235,7 +235,7 @@ span { display: inline-block; width: 200px; } /* Respects width dimensions */
 > ```
 >
 > **Explanation:** Multi-keyword `display` specifies outer layout flow and inner container context.
-
+> 
 ## 7. Related Terms
 - [`display: none` vs `visibility: hidden`](display_none_vs_visibility.md) — Hiding elements.
 - [`display: flex`](../level_05/display_flex.md) — The modern Flexbox layout container.

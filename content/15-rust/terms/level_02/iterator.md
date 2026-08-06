@@ -295,7 +295,7 @@ Rules:
 > 1. **Stateful Wrapping & Lookahead (`pending`)**: Custom iterator adapters that aggregate or split elements often need lookahead buffering. When an incoming item breaches `max_bytes` or `max_items`, it cannot be included in the current batch. Storing it in `self.pending: Option<LogEntry>` allows `LogChunker` to defer processing that entry until the next `.next()` invocation without dropping data or requiring full iterator backtracking.
 > 2. **Generic Trait Bound (`I: Iterator<Item = LogEntry>`)**: The struct is generic over `I`, accepting any iterator type (e.g. `std::vec::IntoIter<LogEntry>`, channel receivers converted to iterators, or custom stream adapters). Specifying `type Item = Vec<LogEntry>` on `Iterator` connects inner item consumption to outer vector batch production.
 > 3. **Edge Case Safety (Oversized Single Items)**: If an incoming message is longer than `max_bytes` (e.g., a 50KB stack trace when `max_bytes` is 10KB), placing it into an empty chunk (`chunk.is_empty()`) guarantees forward progress. Without this guard, an oversized item would cause an infinite loop where the adapter repeatedly refuses to insert the item into a new chunk.
-
+> 
 ---
 
 ### Exercise 2: Quantitative Trading Rolling Simple Moving Average (`SlidingWindowMA`)
@@ -414,7 +414,7 @@ Rules:
 > 1. **Constant-Time $O(1)$ Window Operations**: Standard library iterators like `.windows()` on slices require pre-existing slice memory. By building a custom `Iterator` using `std::collections::VecDeque`, elements are continuously pushed and popped in $O(1)$ time while updating a running total `sum`. This enables processing unbounded streams without memory growth.
 > 2. **Short-Circuit Early Exit (`?` operator)**: In `next()`, calling `self.iter.next()?` utilizes the `?` operator on `Option`. If the underlying stream ends before accumulating `window_size` elements or runs out of elements during a slide operation, `?` immediately evaluates to `None` and returns early from `next()`.
 > 3. **Floating Point Precision Invariants**: In high-precision contexts, continuous subtraction and addition of floating-point numbers can accumulate small rounding errors. In production applications, Kahan summation algorithms or integer fixed-point representations are paired with custom iterators to guarantee accuracy.
-
+> 
 ---
 
 ### Exercise 3: Zero-Allocation Lazy Protocol Header Tokenizer (`HeaderParser<'a>`)
@@ -529,7 +529,7 @@ Requirements:
 > 1. **Lifetime Annotations `'a`**: By tying lifetime `'a` from `HeaderParser<'a>` to `HeaderPair<'a>`, Rust's borrow checker guarantees that sub-slices `key` and `value` remain valid for as long as the underlying string slice input exists. Zero heap allocations (`String` or `Vec`) take place during iteration.
 > 2. **State Mutability via Slicing**: In each iteration of `.next()`, `self.remainder` is updated to point to the slice remaining after the delimiter index (`&self.remainder[idx + 1..]`). Rust's slice operation `&str[..idx]` is $O(1)$ as it simply adjusts pointers and length fields under the hood.
 > 3. **Fault-Tolerant Skipping**: The `while !self.remainder.is_empty()` loop handles whitespace-only segments or malformed headers without panicking or terminating iteration prematurely. Skips occur seamlessly until a valid key-value pair is encountered or the slice is completely consumed.
-
+> 
 ---
 
 ## 6. Related Terms

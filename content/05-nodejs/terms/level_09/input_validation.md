@@ -254,7 +254,7 @@ const postSchema = z.object({
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Validating Input with Zod
@@ -275,7 +275,7 @@ const postSchema = z.object({
 > ```
 >
 > **Explanation:** Zod schemas validate input types and constraints at runtime.
-
+> 
 ---
 
 ### Exercise 3: Sanitizing HTML Input
@@ -292,7 +292,7 @@ const postSchema = z.object({
 > ```
 >
 > **Explanation:** Sanitizing HTML tags prevents malicious client-side script execution.
-
+> 
 ## 7. Related Terms
 - [Body Parsing (express.json())](../level_07/body_parsing.md) — The parser feeding data to the validation schemas.
 - [SQL Injection](../level_08/sql_injection.md) — Database query vulnerabilities prevented by parameterized inputs and edge validation.

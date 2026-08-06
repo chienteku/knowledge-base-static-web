@@ -160,7 +160,7 @@ const sentence = `I am feeling ${getMood().toUpperCase()} today.`;
 > Because `${}` accepts ANY valid JavaScript expression, the engine will execute the function, run `.toUpperCase()`, and inject the final result!
 > ```
 > - If it returns a value, you can put it inside `${}`!
-
+> 
 ---
 
 ### Exercise 2: Tagged Template Literals Sanitization
@@ -184,7 +184,7 @@ const sentence = `I am feeling ${getMood().toUpperCase()} today.`;
 > ```
 >
 > **Explanation:** Tagged template functions receive raw string arrays and evaluated expression parameters for custom string parsing.
-
+> 
 ---
 
 ### Exercise 3: Raw String Access with `String.raw`
@@ -201,7 +201,7 @@ const sentence = `I am feeling ${getMood().toUpperCase()} today.`;
 > ```
 >
 > **Explanation:** `String.raw` renders escape sequences like `\n` or `\` as literal character text.
-
+> 
 ---
 
 ### Exercise 4: Multi-Line String Literals
@@ -221,7 +221,7 @@ const sentence = `I am feeling ${getMood().toUpperCase()} today.`;
 > ```
 >
 > **Explanation:** Backtick template literals support embedded multi-line text without concatenation.
-
+> 
 ---
 
 ### Exercise 5: Inline Mathematical Expression Evaluation
@@ -238,7 +238,7 @@ const sentence = `I am feeling ${getMood().toUpperCase()} today.`;
 > ```
 >
 > **Explanation:** `${expression}` evaluates any valid JavaScript expression inline.
-
+> 
 ---
 
 ## 7. Related Terms

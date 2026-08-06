@@ -154,7 +154,7 @@ cargo run --release # Enables full LLVM optimizations!
 >
 > 1. Simulates Cargo CLI flag parsing logic for build modes.
 > 2. `cargo check` bypasses LLVM code generation for fast execution.
-
+> 
 ---
 
 ### Exercise 2: SemVer Dependency Constraint Compatibility Evaluator
@@ -196,7 +196,7 @@ cargo run --release # Enables full LLVM optimizations!
 >
 > 1. Caret requirements (`^1.2.0`) permit non-breaking updates within the same major version series.
 > 2. Mimics Cargo dependency version selection algorithms.
-
+> 
 ---
 
 ### Exercise 3: Cargo Profile Optimization Level Query
@@ -232,7 +232,7 @@ cargo run --release # Enables full LLVM optimizations!
 >
 > 1. Debug builds (`opt-level = 0`) prioritize fast compilation.
 > 2. Release builds (`opt-level = 3`) enable full LLVM compiler optimizations.
-
+> 
 ---
 
 ## 5. Related Terms

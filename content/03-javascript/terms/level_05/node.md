@@ -148,7 +148,7 @@ If you create a `<p>` tag using `document.createElement('p')`, what is its `node
 > ```
 > - Tags = Elements (Type 1).
 > - The actual readable words = Text (Type 3).
-
+> 
 ---
 
 ### Exercise 2: Checking Node Relationships with `contains()`
@@ -165,7 +165,7 @@ If you create a `<p>` tag using `document.createElement('p')`, what is its `node
 > ```
 >
 > **Explanation:** `Node.contains(otherNode)` tests whether a node is a descendant of the target node.
-
+> 
 ---
 
 ### Exercise 3: Cloning Nodes with `cloneNode(true)`
@@ -182,8 +182,8 @@ If you create a `<p>` tag using `document.createElement('p')`, what is its `node
 > ```
 >
 > **Explanation:** `cloneNode(true)` recursively clones target nodes and child subtrees.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

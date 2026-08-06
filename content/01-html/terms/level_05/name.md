@@ -190,7 +190,7 @@ Form payload fields declaring names:
 > </form>
 > ```
 > - To make radio buttons group together so only one can be checked at a time, they must share the exact same `name` attribute.
-
+> 
 ---
 
 
@@ -209,7 +209,7 @@ Form payload fields declaring names:
 > ```
 >
 > **Explanation:** Form submission payloads map `name=value` pairs.
-
+> 
 ---
 
 ### Exercise 3: Multi-Select Array Syntax in PHP/Frameworks
@@ -227,7 +227,7 @@ Form payload fields declaring names:
 > ```
 >
 > **Explanation:** Trailing brackets `name[]` signal backend server body parsers to aggregate values into an array.
-
+> 
 ## 7. Related Terms
 - [`<input>`](input.md) — The input controls mapped by name tags.
 - [`<form>`](form.md) — The form collector.

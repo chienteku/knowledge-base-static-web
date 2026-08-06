@@ -161,7 +161,7 @@ async function processData() {
 > - `function multiply(a, b) { ... }`
 > - Use `console.log(a * b);` inside the block.
 > - Call it using `multiply(5, 10);`
-
+> 
 ---
 
 ### Exercise 2: Function Arity Property (`.length`)
@@ -179,7 +179,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `fn.length` measures positional expected parameters prior to default parameters.
-
+> 
 ---
 
 ### Exercise 3: Function Constructor Prototype Property
@@ -197,8 +197,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Standard function declarations automatically instantiate prototype object references.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

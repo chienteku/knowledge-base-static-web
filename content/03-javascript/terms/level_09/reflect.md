@@ -191,7 +191,7 @@ console.log(loggerProxy.name);
 > Screwdriver
 > ```
 > - Inside the trap, write `console.log("Reading property " + prop);` and return `Reflect.get(target, prop, receiver);`.
-
+> 
 ---
 
 ### Exercise 2: Forwarding Proxy Traps with `Reflect`
@@ -214,7 +214,7 @@ console.log(loggerProxy.name);
 > ```
 >
 > **Explanation:** `Reflect` methods mirror internal engine operations, safely forwarding Proxy traps.
-
+> 
 ---
 
 ### Exercise 3: Safe Property Deletion with `Reflect.deleteProperty`
@@ -232,8 +232,8 @@ console.log(loggerProxy.name);
 > ```
 >
 > **Explanation:** `Reflect.deleteProperty` returns boolean success status indicators.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -224,7 +224,7 @@ defineOptions({
 > ```
 > - Inside the script, use `defineOptions({ inheritAttrs: false })`.
 > - In the template, add `v-bind="$attrs"` to the `<button>` element.
-
+> 
 ---
 
 ### Exercise 2: v-bind $attrs Pattern
@@ -250,7 +250,7 @@ defineOptions({
 >   </div>
 > </template>
 > ```
-
+> 
 ---
 
 ### Exercise 3: useAttrs Composable in Script Setup
@@ -269,8 +269,8 @@ defineOptions({
 > const attrs = useAttrs();
 > console.log(attrs.class);
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

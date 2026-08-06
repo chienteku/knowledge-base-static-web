@@ -148,8 +148,8 @@ Explain why this happened and how to handle it.
 
 > [!check]- Answer
 > - The log size crossed the `5MB` storage limit, triggering a `QuotaExceededError`. The write was blocked. To handle this, implement a cleanup rotation (e.g. keeping only the latest 100 logs), catch the exception, and prune old entries when the quota is exceeded.
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Browser Storage Capacity Matrix

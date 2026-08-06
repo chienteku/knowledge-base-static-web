@@ -158,7 +158,7 @@ const loadProduct = () => {
 > ```
 > - Arrow functions can be `async` too! Just put the keyword before the `()`.
 > - Every `.then()` becomes a new line with `await`.
-
+> 
 ---
 
 ### Exercise 2: Converting Promises to Async/Await

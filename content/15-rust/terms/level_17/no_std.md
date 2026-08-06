@@ -610,10 +610,9 @@ pub extern "C" fn _start() -> ! {
 > > 2. **Atomic Re-Entrancy Guards**: Using `AtomicBool::swap` with `Ordering::SeqCst` detects if a panic occurs inside the panic handler itself, safely halting recursive panic loops.
 > > 3. **Non-Allocating Fault Capture**: Storing diagnostic strings in stack byte arrays (`[u8; 48]`) ensures fault logging functions without standard heap infrastructure (`alloc`).
 > > 4. **Hardware Spin Loops (`core::hint::spin_loop`)**: Halting the CPU with `core::hint::spin_loop()` issues architecture-specific hints (like `PAUSE`/`NOP`) to minimize CPU power consumption during catastrophic system failures.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

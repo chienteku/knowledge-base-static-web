@@ -169,7 +169,7 @@ async function processData() {
 > const obj = Object.fromEntries(arr); // { name: "Bob", age: 30 }
 > ```
 > - Introduced in ES10 (2019).
-
+> 
 ---
 
 ### Exercise 2: Converting Object Entries to Map
@@ -187,7 +187,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Object.entries()` returns `[key, value]` arrays compatible with `Map` constructors.
-
+> 
 ---
 
 ### Exercise 3: Rebuilding Objects with `Object.fromEntries`
@@ -205,8 +205,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** `Object.fromEntries()` transforms iterable `[key, value]` pairs back into objects.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

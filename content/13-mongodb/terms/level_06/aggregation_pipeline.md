@@ -187,7 +187,7 @@ Build a 3-stage pipeline that filters active orders (`$match`), groups by custom
 > 1. Pipeline stages execute sequentially, passing transformed document streams from stage to stage.
 > 2. `$match` at the start of the pipeline utilizes indexes to minimize data scanned.
 > 3. Computes sorted analytics in a single query invocation.
-
+> 
 ---
 
 ### Exercise 2: Pipeline Projection and Field Derivation
@@ -225,7 +225,7 @@ Filter products by category `"electronics"`, compute tax (`price * 0.0825`), and
 > 1. `$addFields` appends calculated fields without stripping existing document properties.
 > 2. `$project` shapes final response key names and excludes internal attributes.
 > 3. Server-side mathematical transformations.
-
+> 
 ---
 
 ### Exercise 3: Setting Pipeline Memory Limits with `allowDiskUse`
@@ -256,7 +256,7 @@ Execute a large dataset aggregation pipeline that exceeds the default 100MB RAM 
 > 1. Aggregation stages are limited to 100MB of RAM by default to prevent server OOM crashes.
 > 2. `{ allowDiskUse: true }` enables stages like `$sort` and `$group` to write temporary spill files to disk.
 > 3. Allows memory-intensive analytics pipelines to complete successfully.
-
+> 
 ---
 
 

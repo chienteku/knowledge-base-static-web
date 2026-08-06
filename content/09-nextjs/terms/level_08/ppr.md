@@ -119,10 +119,6 @@ module.exports = {
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Enabling Partial Prerendering in `next.config.js`
@@ -145,13 +141,13 @@ Enable experimental Partial Prerendering (PPR) support in `next.config.js`.
 >   }
 > };
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Partial Prerendering (PPR) combines static shell HTML build-time prerendering with dynamic `<Suspense>` streaming.
 > 2. `experimental.ppr = 'incremental'` enables opting individual route pages into PPR using `export const experimental_ppr = true`.
 > 3. Next-generation rendering architecture in Next.js.
-
+> 
 ---
 
 ### Exercise 2: Structuring Pages for Partial Prerendering
@@ -171,37 +167,37 @@ Structure a product page where static product details are prerendered and dynami
 > // app/products/[id]/page.tsx
 > import { Suspense } from "react";
 > import DynamicRecommendations from "./DynamicRecommendations";
-
-export const experimental_ppr = true;
-
-export default async function ProductPage({
-  params
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-
-  return (
-    <main className="p-6">
-      {/* Static Shell (Prerendered at build time) */}
-      <h1 className="text-3xl font-bold">Product #{id}</h1>
-      <p>Static product description and specifications...</p>
-
-      {/* Dynamic Hole (Streamed at request time) */}
-      <Suspense fallback={<div>Loading Personalized Recommendations...</div>}>
-        <DynamicRecommendations productId={id} />
-      </Suspense>
-    </main>
-  );
-}
-```
-
+> 
+> export const experimental_ppr = true;
+> 
+> export default async function ProductPage({
+>   params
+> }: {
+>   params: Promise<{ id: string }>;
+> }) {
+>   const { id } = await params;
+> 
+>   return (
+>     <main className="p-6">
+>       {/* Static Shell (Prerendered at build time) */}
+>       <h1 className="text-3xl font-bold">Product #{id}</h1>
+>       <p>Static product description and specifications...</p>
+> 
+>       {/* Dynamic Hole (Streamed at request time) */}
+>       <Suspense fallback={<div>Loading Personalized Recommendations...</div>}>
+>         <DynamicRecommendations productId={id} />
+>       </Suspense>
+>     </main>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. In PPR, static HTML content outside `<Suspense>` boundaries is pre-built into static CDN files.
 > 2. Dynamic components inside `<Suspense>` are left as "holes" that stream in parallel over open HTTP connections.
 > 3. Delivers instant static TTFB while preserving dynamic personalization.
-
+> 
 ---
 
 ### Exercise 3: Auditing PPR Execution Model
@@ -222,19 +218,15 @@ Explain why PPR eliminates the traditional choice between SSG vs SSR for an enti
 > - Traditional SSR: Entire page is rendered dynamically on Node.js. Server must wait for all DB calls before returning HTML.
 > - PPR (Partial Prerendering): Static shell is served from CDN instantly; dynamic holes stream in parallel on demand!
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. PPR eliminates the trade-off between static CDN performance and dynamic user personalization.
 > 2. Unifies static pre-rendering and dynamic streaming within a single route file.
 > 3. Cutting-edge Web Core Vitals optimization model.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Streaming with `<Suspense>`](../level_05/streaming.md) — The React primitive that enables PPR.

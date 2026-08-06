@@ -178,7 +178,7 @@ Query collection `orders` for documents where at least ONE item in the `items` a
 > 1. `$elemMatch` requires a SINGLE array element to satisfy ALL specified query conditions.
 > 2. Prevents false positive matches where condition A matches element 1 and condition B matches element 2.
 > 3. Essential operator for querying arrays of embedded documents.
-
+> 
 ---
 
 ### Exercise 2: Matching All Array Elements with `$all`
@@ -204,7 +204,7 @@ Query collection `products` for items containing BOTH `"electronics"` and `"wire
 > 1. `$all` matches documents where the array contains every listed item.
 > 2. Order of elements in `$all` array is ignored.
 > 3. Leverages multikey indexes on `tags`.
-
+> 
 ---
 
 ### Exercise 3: Filtering by Exact Array Length with `$size`
@@ -230,7 +230,7 @@ Query user documents where array `roles` contains exactly 3 assigned roles.
 > 1. `$size` matches documents where the array field length equals the specified integer.
 > 2. Evaluates array size directly in the database engine.
 > 3. Useful for structural array validation checks.
-
+> 
 ---
 
 

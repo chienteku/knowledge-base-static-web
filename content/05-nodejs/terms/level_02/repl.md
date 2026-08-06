@@ -154,7 +154,7 @@ undefined
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Launching Custom Context REPL
@@ -173,7 +173,7 @@ undefined
 > ```
 >
 > **Explanation:** `repl.start()` starts a interactive custom REPL shell with pre-loaded database/service contexts.
-
+> 
 ---
 
 ### Exercise 3: Node REPL History Saving
@@ -190,7 +190,7 @@ undefined
 > ```
 >
 > **Explanation:** `.save` writes the current REPL interactive command history to disk.
-
+> 
 ## 7. Related Terms
 - [Global Objects (global, __dirname, __filename)](global_objects.md) — The properties loaded in the REPL runtime scope.
 - [The process Object](process_object.md) — The system environment configurations checked via the REPL.

@@ -181,7 +181,7 @@ Query collection `orders` filtering by `status: "active"` and `customerId: Objec
 > 1. Index Intersection scans two separate single-field indexes in parallel and intersects matching record pointers (`AND_SORTED`).
 > 2. Allows queries to combine multiple single-field indexes dynamically.
 > 3. Provides flexible query filtering without creating every possible compound index.
-
+> 
 ---
 
 ### Exercise 2: Comparing Index Intersection vs Compound Index Performance
@@ -207,7 +207,7 @@ Benchmark query execution speed of Index Intersection vs a dedicated Compound In
 > 1. Dedicated compound indexes are significantly faster than index intersection because they require scanning only one B-tree.
 > 2. Prefer compound indexes for high-frequency critical application queries.
 > 3. Index intersection is a fallback mechanism.
-
+> 
 ---
 
 ### Exercise 3: Diagnosing Index Intersection Invalidation
@@ -233,7 +233,7 @@ Explain why queries requiring sort orders cannot be satisfied via index intersec
 > 1. Intersecting pointers from two indexes destroys B-tree key sort ordering.
 > 2. Forces an in-memory `SORT` stage if sort order is requested.
 > 3. Always create compound indexes for queries combining filtering and sorting.
-
+> 
 ---
 
 

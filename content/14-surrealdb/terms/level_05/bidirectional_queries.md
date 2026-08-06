@@ -185,7 +185,7 @@ Query a social network graph where user `user:alice` follows `user:bob` via rela
 > 1. `->follows->user` traverses outgoing relation edges from the current record to target records.
 > 2. `<-follows<-user` traverses incoming relation edges in reverse to find source records.
 > 3. Executes bidirectional graph navigation in $O(1)$ constant time per edge lookup.
-
+> 
 ---
 
 ### Exercise 2: Undirected / Both-Directions Arrow Traversal
@@ -209,7 +209,7 @@ Query all mutual connections connected to `user:alice` regardless of arrow direc
 > 1. `<->edge<->table` navigates both incoming and outgoing relation edges simultaneously.
 > 2. Merges incoming and outgoing graph neighbors into a single result collection.
 > 3. Ideal for undirected social graph networks (friends, connections).
-
+> 
 ---
 
 ### Exercise 3: Edge Record Inspection during Bidirectional Queries
@@ -234,7 +234,7 @@ Query incoming followers of `user:bob` and extract edge property `created_at` al
 > 1. `<-follows` returns the relation edge records themselves (including `id`, `in`, `out`, and edge properties).
 > 2. Allows inspection of edge metadata (timestamps, weights) without resolving vertex records.
 > 3. Enables detailed edge auditing in graph applications.
-
+> 
 ---
 
 

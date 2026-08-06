@@ -267,7 +267,7 @@ fn main() {
 > 2. **`clippy::clone_on_copy`**: Copy types (like `u8` and field-less enums) duplicate implicitly on assignment. Calling `.clone()` on `Copy` types is redundant and causes unnecessary code clutter.
 > 3. **`clippy::match_like_matches_macro`**: Utilizing `matches!(val, Pattern)` replaces verbose `match` expressions that evaluate directly to booleans, making branch intent immediately clear to both developers and the compiler.
 > 4. **`clippy::needless_borrow`**: Refactoring parameter types to borrow directly (`&[u8]`) prevents double indirection and avoids superfluous reference creation.
-
+> 
 ---
 
 ### Exercise 2: Scope-Based Lint Level Overrides and Custom Attributes
@@ -384,7 +384,7 @@ fn main() {
 > 1. **Inner vs. Outer Attributes**: `#![deny(clippy::pedantic)]` is an inner attribute (prefixed with `#!`) applying to the entire module/file. Outer attributes (prefixed with `#`) apply strictly to the item (struct, function, or block) immediately following them.
 > 2. **Documented Overrides**: When overriding a Clippy warning with `#[allow(...)]`, best practice requires adding a doc comment (`# Explicit Lint Override Justification:`) detailing the technical safety guarantees for future maintainers.
 > 3. **API Contract Hygiene (`#[must_use]`)**: Under `clippy::pedantic`, functions returning values or pure constructors missing `#[must_use]` attributes trigger warnings to prevent callers from inadvertently dropping return values.
-
+> 
 ---
 
 ### Exercise 3: Refactoring Complex Iterators and Fixing Redundant Closures & Unwraps
@@ -542,10 +542,9 @@ fn main() {
 > 1. **`clippy::redundant_closure_for_method_calls`**: Passing `SignalSample::is_valid` directly into `.filter()` avoids generating an extra closure instantiation and clarifies functional iterator pipelines.
 > 2. **`clippy::single_match`**: Replacing single-branch `match` constructs with `if let Some(...) = ...` simplifies control flow syntax while preserving pattern-matching capabilities.
 > 3. **`clippy::unnecessary_unwrap`**: Combining option checking and value extraction into a single atomic pattern match (`if let Some(&val) = item`) prevents unsafe runtime unwraps and eliminates redundant state checks.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

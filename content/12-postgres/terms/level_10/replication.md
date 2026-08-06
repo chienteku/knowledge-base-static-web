@@ -152,7 +152,7 @@ Configure a Streaming Replication standby node to stream WAL bytes continuously 
 > 1. Streaming Replication streams physical WAL log byte streams from primary to standby replica nodes over TCP connections.
 > 2. `hot_standby = on` allows read-only SELECT queries to run on the standby replica node.
 > 3. Enables high availability cluster failover and read scaling.
-
+> 
 ---
 
 ### Exercise 2: Configuring Logical Replication Publications and Subscriptions
@@ -182,7 +182,7 @@ Configure Logical Replication to stream table `orders` from database `db1` to da
 > 1. Logical Replication decodes logical DML modifications (`INSERT`, `UPDATE`, `DELETE`) from the WAL log.
 > 2. Allows selective table replication across different PostgreSQL major versions or different database clusters.
 > 3. Enables cross-database data streaming pipelines.
-
+> 
 ---
 
 ### Exercise 3: Monitoring Replication Lag in Bytes and Seconds
@@ -212,7 +212,7 @@ Query `pg_stat_replication` on the primary node to monitor replica connection he
 > 1. `pg_stat_replication` displays connected standby replicas, sync states (`async`, `sync`), and LSN positions.
 > 2. `pg_wal_lsn_diff()` calculates byte lag between primary writes and secondary applied replay positions.
 > 3. Essential command for replica cluster health monitoring.
-
+> 
 ---
 
 

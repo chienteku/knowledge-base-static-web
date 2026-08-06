@@ -182,14 +182,14 @@ async function processData() {
 > [!check]- Answer
 > - If it happens in your editor or during build commands, it's compile time.
 > - If it happens in a running browser page, it's runtime.
-
+> 
 > [!check]- Answer
 > - 1. **Compile Time** (Static analysis check in the IDE).
 > - 2. **Runtime** (Happens during active database execution).
 > - 3. **Compile Time** (Static build-step compilation).
 > - 4. **Runtime** (Triggered by code execution stack overflow).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Identifying Compile-Time vs Runtime Errors
@@ -206,7 +206,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Compile-time errors occur during build parsing; runtime errors occur during engine execution.
-
+> 
 ---
 
 ### Exercise 3: Code Stripping in Compile Step
@@ -223,8 +223,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** JS engines execute plain JavaScript without type metadata overhead.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

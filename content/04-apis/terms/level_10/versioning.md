@@ -108,7 +108,7 @@ Are the following changes Breaking (requires `v2`) or Non-Breaking (keep `v1`)?
 > 2. Breaking! Old apps are looking for `response.name`. Since `name` is gone, the old apps will crash trying to read `undefined`. You MUST create a v2 for this.
 > ```
 > - If you delete something that existed before, it's breaking.
-
+> 
 ---
 
 ### Exercise 2: API Versioning Strategies Matrix

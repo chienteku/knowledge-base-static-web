@@ -165,7 +165,7 @@ If a user clicks on the `<p>` tag, in what exact order will the click event trav
 > 5. document
 > ```
 > - Bubbling always goes from the innermost child (the target) UP to the outermost parent.
-
+> 
 ---
 
 ### Exercise 2: Stopping Event Propagation
@@ -182,7 +182,7 @@ If a user clicks on the `<p>` tag, in what exact order will the click event trav
 > ```
 >
 > **Explanation:** `stopPropagation()` prevents events from bubbling up DOM parent trees.
-
+> 
 ---
 
 ### Exercise 3: Inspecting Event Phase
@@ -199,8 +199,8 @@ If a user clicks on the `<p>` tag, in what exact order will the click event trav
 > ```
 >
 > **Explanation:** `eventPhase` numbers indicate current DOM event dispatch propagation stages.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

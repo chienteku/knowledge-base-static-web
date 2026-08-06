@@ -159,7 +159,7 @@ Inspect active index build progress on collection `large_orders` in `mongosh` us
 > 1. `db.currentOp()` tracks ongoing background operations including index builds.
 > 2. Reports progress percentage, target collection, and build phase.
 > 3. Essential tool for DBA database operations.
-
+> 
 ---
 
 ### Exercise 2: Rolling Index Build Process on Replica Sets
@@ -187,7 +187,7 @@ Formulate a zero-downtime rolling index creation procedure across a 3-node Mongo
 > 1. Rolling index builds prevent production cluster performance degradation during heavy index construction.
 > 2. Constructs indexes on secondary nodes independently before primary stepdown.
 > 3. Zero downtime production deployment strategy.
-
+> 
 ---
 
 ### Exercise 3: Aborting Running Index Builds
@@ -211,7 +211,7 @@ Abort a runaway background index build on collection `logs` using `dropIndexes()
 > 1. Calling `dropIndex()` on an in-progress index build sends an abort signal to the build thread.
 > 2. Safely halts index construction and cleans up temporary build files.
 > 3. Restores database CPU and IOPS capacity.
-
+> 
 ---
 
 

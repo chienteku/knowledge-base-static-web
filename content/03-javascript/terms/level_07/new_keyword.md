@@ -155,7 +155,7 @@ async function processData() {
 > If a constructor explicitly returns a non-primitive Object, the `new` keyword will respect that and return the custom object INSTEAD of the `this` object! (If you return a primitive like a string or number, it ignores it and returns `this`).
 > ```
 > - Constructors shouldn't have `return` statements for exactly this reason!
-
+> 
 ---
 
 ### Exercise 2: Tracing `new` Execution Steps
@@ -172,7 +172,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** `new` creates a blank object, binds its `__proto__`, executes constructor with `this`, and returns object.
-
+> 
 ---
 
 ### Exercise 3: Overriding Constructor Return with Objects
@@ -192,8 +192,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Returning object references from constructor functions explicitly overrides standard instance return values.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

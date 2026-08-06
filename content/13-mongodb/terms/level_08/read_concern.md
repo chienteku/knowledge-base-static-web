@@ -163,7 +163,7 @@ Configure query `find()` with `readConcern: "majority"` to guarantee returned do
 > 1. `readConcern: "majority"` returns data that has been acknowledged by a majority of replica set nodes.
 > 2. Guarantees read data is durable against primary node crash and failover rollbacks.
 > 3. Essential isolation level for financial reporting.
-
+> 
 ---
 
 ### Exercise 2: Snapshot Isolation for Point-in-Time Queries
@@ -181,21 +181,21 @@ Execute a multi-collection analytics query using `readConcern: "snapshot"` to in
 > ```javascript
 > const session = client.startSession();
 > const orders = db.collection("orders");
-
-const result = await orders.find(
-  { status: "completed" },
-  { session, readConcern: { level: "snapshot" } }
-).toArray();
-
-session.endSession();
-```
-
+> 
+> const result = await orders.find(
+>   { status: "completed" },
+>   { session, readConcern: { level: "snapshot" } }
+> ).toArray();
+> 
+> session.endSession();
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `readConcern: "snapshot"` utilizes WiredTiger MVCC to read from a single, consistent point-in-time snapshot.
 > 2. Prevents phantom reads and dirty reads across multi-collection queries.
 > 3. Used natively inside ACID transactions.
-
+> 
 ---
 
 ### Exercise 3: Comparing Read Concern Levels
@@ -223,7 +223,7 @@ Formulate a technical decision matrix comparing `local`, `majority`, `linearizab
 > 1. Higher isolation levels trade query latency for durability guarantees.
 > 2. Use `local` for high-speed dashboards; use `majority` for order confirmation.
 > 3. Tailor read concern to business domain requirements.
-
+> 
 ---
 
 

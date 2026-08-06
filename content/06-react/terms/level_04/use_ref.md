@@ -137,7 +137,7 @@ Which one should use `useState`, and which should use `useRef`?
 > `intervalId` MUST be `useRef`, because it is a background variable. If you used state, setting the ID would cause an unnecessary, invisible re-render!
 > ```
 > - Is the data visible to the user?
-
+> 
 ---
 
 
@@ -165,7 +165,7 @@ Which one should use `useState`, and which should use `useRef`?
 > ```
 >
 > **Explanation:** `useRef` holds direct references to browser DOM elements.
-
+> 
 ---
 
 ### Exercise 3: useRef vs useState Comparison
@@ -182,7 +182,7 @@ Which one should use `useState`, and which should use `useRef`?
 > ```
 >
 > **Explanation:** `useRef` acts as a hidden box holding mutable JavaScript values across renders.
-
+> 
 ## 7. Related Terms
 - [`useState` Hook](../level_02/use_state.md) — The loud, re-rendering alternative to `useRef`.
 - [Declarative Programming](../level_01/declarative_programming.md) — `useRef` is your escape hatch when you actually *need* to do something Imperative to the DOM.

@@ -156,7 +156,7 @@ Analyze query plan cost estimates (`cost=0.00..458.00 rows=100 width=32`) in `EX
 > 1. `cost=0.00..458.00`: `0.00` is startup cost (cost to fetch first row); `458.00` is total cost to complete the query in arbitrary disk fetch units.
 > 2. `rows=100`: Estimated number of rows returned.
 > 3. `width=32`: Estimated average byte width per returned row.
-
+> 
 ---
 
 ### Exercise 2: Tuning Cost Parameters (`random_page_cost`) for SSD Storage
@@ -183,7 +183,7 @@ Adjust `random_page_cost` from default `4.0` (HDD) to `1.1` (NVMe SSD) to encour
 > 1. Default `random_page_cost = 4.0` assumes slow spinning hard drives where random disk reads are 4x more expensive than sequential reads.
 > 2. On modern SSDs/NVMe storage, random page access is nearly as fast as sequential access (`random_page_cost = 1.1`).
 > 3. Instructs the query planner to favor index scans on fast storage hardware.
-
+> 
 ---
 
 ### Exercise 3: Updating Table Statistics with `ANALYZE`
@@ -207,7 +207,7 @@ Update stale catalog statistics for table `products` using `ANALYZE` after a 5,0
 > 1. `ANALYZE` samples table rows to update statistical distributions in `pg_statistic`.
 > 2. Accurate statistics enable the query planner to estimate row counts and select optimal join algorithms (`Hash Join` vs `Nested Loop`).
 > 3. Essential step following large data import scripts.
-
+> 
 ---
 
 

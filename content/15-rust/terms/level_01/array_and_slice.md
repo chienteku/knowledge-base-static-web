@@ -155,7 +155,7 @@ fn process(s: &[i32]) {} process(&[1, 2, 3, 4, 5]); // Accept &[T] slice!
 >
 > 1. Function parameter `samples: &[f64]` allows accepting stack arrays `[f64; N]`, sub-slices, or heap `Vec<f64>` zero-copy.
 > 2. Uses `.windows(N)` iterator over slice sub-views.
-
+> 
 ---
 
 ### Exercise 2: In-Place Buffer Sanitizer with Mutable Slices `&mut [T]`
@@ -196,7 +196,7 @@ fn process(s: &[i32]) {} process(&[1, 2, 3, 4, 5]); // Accept &[T] slice!
 > #### Technical Explanation
 >
 > 1. Operates directly on caller's stack array in-place without dynamic heap allocations.
-
+> 
 ---
 
 ### Exercise 3: Fixed RGB Pixel Color Channel Converter
@@ -235,7 +235,7 @@ fn process(s: &[i32]) {} process(&[1, 2, 3, 4, 5]); // Accept &[T] slice!
 > #### Technical Explanation
 >
 > 1. `[u8; 3]` enforces exact 3-element stack allocation for fixed graphics pixel data.
-
+> 
 ---
 
 ## 5. Related Terms

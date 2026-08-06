@@ -114,7 +114,7 @@ h1 { font-size: 4rem; letter-spacing: 0.05em; } /* Relative scaling tracking */
 > You should ensure it has `text-transform: uppercase;` (rather than hardcoded HTML), and then apply `letter-spacing: 1px;` (or a small `em` value) to give the letters breathing room.
 > ```
 > - How do we add horizontal space between characters?
-
+> 
 ---
 
 
@@ -136,7 +136,7 @@ h1 { font-size: 4rem; letter-spacing: 0.05em; } /* Relative scaling tracking */
 > ```
 >
 > **Explanation:** Combining uppercase transformation with subtle `em` tracking enhances header elegance.
-
+> 
 ---
 
 ### Exercise 3: Word Spacing vs Letter Spacing
@@ -153,7 +153,7 @@ h1 { font-size: 4rem; letter-spacing: 0.05em; } /* Relative scaling tracking */
 > ```
 >
 > **Explanation:** `letter-spacing` targets character tracking; `word-spacing` targets word gaps.
-
+> 
 ## 7. Related Terms
 - [`text-transform`](text_transform.md) — The property most commonly paired with `letter-spacing`.
 

@@ -130,7 +130,7 @@ expect(wrapper.text()).toContain('Count: 1');
 > For testing entire multi-page user flows that interact with real databases or third-party APIs, you should use an End-to-End (E2E) testing framework like Cypress or Playwright.
 > ```
 > - Review the difference between Unit testing and E2E testing.
-
+> 
 ---
 
 ### Exercise 2: Testing Component Props with Vue Test Utils
@@ -155,7 +155,7 @@ expect(wrapper.text()).toContain('Count: 1');
 >   expect(wrapper.text()).toContain('Alice');
 > });
 > ```
-
+> 
 ---
 
 ### Exercise 3: Emitted Events Assertion
@@ -172,8 +172,8 @@ expect(wrapper.text()).toContain('Count: 1');
 > ```javascript
 > expect(wrapper.emitted('submit')[0]).toEqual([{ id: 1 }]);
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

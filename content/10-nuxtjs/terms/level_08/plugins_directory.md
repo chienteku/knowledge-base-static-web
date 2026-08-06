@@ -161,13 +161,13 @@ Create a Nuxt plugin `plugins/format.ts` providing a custom date formatting help
 >   };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Files in `plugins/` execute automatically during Nuxt application initialization.
 > 2. Returning `{ provide: { helperName } }` injects `$helperName` globally into Vue template contexts and `useNuxtApp()`.
 > 3. Standard method for registering global utility helpers.
-
+> 
 ---
 
 ### Exercise 2: Server-Only and Client-Only Plugins
@@ -195,13 +195,13 @@ Create a client-only plugin `plugins/toast.client.ts` initializing a browser toa
 >   };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `.client.ts` suffix restricts plugin execution exclusively to the browser environment.
 > 2. `.server.ts` suffix restricts plugin execution exclusively to Node.js server SSR setup.
 > 3. Prevents executing browser-dependent libraries during server rendering.
-
+> 
 ---
 
 ### Exercise 3: Controlling Plugin Execution Order
@@ -222,19 +222,15 @@ Configure plugin execution ordering using numeric file prefixes (`01.auth.ts`, `
 > - plugins/02.auth.ts    -> Executes Second (can consume $config)
 > - plugins/03.theme.ts   -> Executes Third
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Nuxt registers plugins in alphabetical/numeric order by default.
 > 2. Prepending numbers (`01.`, `02.`) guarantees dependent plugins execute in strict sequential order.
 > 3. Essential for plugins relying on previously initialized global helpers.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Vue Plugins vs Nuxt Plugins](vue_vs_nuxt_plugins.md) — Understanding how to specifically attach standard Vue plugins.

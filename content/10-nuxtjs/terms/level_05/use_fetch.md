@@ -157,25 +157,25 @@ Fetch a product item using `useFetch("/api/products/1")` and display title, pric
 > <script setup lang="ts">
 > const { data: product, pending, error } = await useFetch("/api/products/1");
 > </script>
-
-<template>
-  <div>
-    <div v-if="pending">Loading product details...</div>
-    <div v-else-if="error">Error: {{ error.message }}</div>
-    <div v-else-if="product">
-      <h1>{{ product.title }}</h1>
-      <p>Price: ${{ product.price }}</p>
-    </div>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <div v-if="pending">Loading product details...</div>
+>     <div v-else-if="error">Error: {{ error.message }}</div>
+>     <div v-else-if="product">
+>       <h1>{{ product.title }}</h1>
+>       <p>Price: ${{ product.price }}</p>
+>     </div>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useFetch()` is Nuxt 3's primary composable combining `$fetch` and `useAsyncData()` auto-key generation into a single wrapper.
 > 2. `await useFetch()` blocks server HTML rendering until data resolves, ensuring full SSR content generation.
 > 3. Automatically handles payload caching and payload hydration.
-
+> 
 ---
 
 ### Exercise 2: Reactive URL Refetching with Computed Watchers
@@ -193,26 +193,26 @@ Re-fetch user profile data automatically whenever a reactive search parameter `s
 > ```vue
 > <script setup lang="ts">
 > const userId = ref(1);
-
-// Passing a computed URL automatically re-fetches when userId changes!
-const { data: user, pending } = await useFetch(() => `/api/users/${userId.value}`);
-</script>
-
-<template>
-  <div>
-    <button @click="userId++">Next User (ID: {{ userId }})</button>
-    <p v-if="pending">Loading user {{ userId }}...</p>
-    <p v-else-if="user">User Name: {{ user.name }}</p>
-  </div>
-</template>
-```
-
+> 
+> // Passing a computed URL automatically re-fetches when userId changes!
+> const { data: user, pending } = await useFetch(() => `/api/users/${userId.value}`);
+> </script>
+> 
+> <template>
+>   <div>
+>     <button @click="userId++">Next User (ID: {{ userId }})</button>
+>     <p v-if="pending">Loading user {{ userId }}...</p>
+>     <p v-else-if="user">User Name: {{ user.name }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Passing a getter function (`() => \`/api/users/\${userId.value}\``) to `useFetch()` instructs Nuxt to watch reactive dependencies.
 > 2. Mutating `userId.value` automatically triggers a network re-fetch for the new URL.
 > 3. Declarative reactive data fetching model.
-
+> 
 ---
 
 ### Exercise 3: Passing Headers and Query String Params to `useFetch()`
@@ -231,35 +231,31 @@ Pass reactive query parameters (`page`, `search`) and custom headers to `useFetc
 > <script setup lang="ts">
 > const page = ref(1);
 > const searchQuery = ref("");
-
-const { data: items } = await useFetch("/api/search", {
-  query: { page, q: searchQuery },
-  headers: {
-    "X-Custom-Client": "Nuxt3-Frontend"
-  }
-});
-</script>
-
-<template>
-  <div>
-    <input v-model="searchQuery" placeholder="Search items..." />
-    <button @click="page++">Next Page ({{ page }})</button>
-  </div>
-</template>
-```
-
+> 
+> const { data: items } = await useFetch("/api/search", {
+>   query: { page, q: searchQuery },
+>   headers: {
+>     "X-Custom-Client": "Nuxt3-Frontend"
+>   }
+> });
+> </script>
+> 
+> <template>
+>   <div>
+>     <input v-model="searchQuery" placeholder="Search items..." />
+>     <button @click="page++">Next Page ({{ page }})</button>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Reactive refs passed inside the `query` object are automatically watched by `useFetch()`.
 > 2. Updating `page` or `searchQuery` triggers a new query fetch with updated URL query strings (`/api/search?page=2&q=...`).
 > 3. Idiomatic Nuxt 3 search and pagination model.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`useAsyncData`](use_async_data.md) — The lower-level composable that powers `useFetch`.

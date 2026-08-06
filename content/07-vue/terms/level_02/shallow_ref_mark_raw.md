@@ -210,7 +210,7 @@ function addLog(message) {
 > ```
 > - Replace `ref` with `shallowRef`.
 > - Because `shallowRef` does not track array operations like `.push()`, you must reassign `.value` with a new array: `logs.value = [...logs.value, newLog]`.
-
+> 
 ---
 
 ### Exercise 2: Shallow Ref Manual Triggering
@@ -230,7 +230,7 @@ function addLog(message) {
 > state.value.count++;
 > triggerRef(state); // Forces template re-render
 > ```
-
+> 
 ---
 
 ### Exercise 3: markRaw Use Case
@@ -247,8 +247,8 @@ function addLog(message) {
 > ```javascript
 > const mapInstance = markRaw(new MapboxGL.Map());
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

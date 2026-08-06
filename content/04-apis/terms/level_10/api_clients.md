@@ -102,7 +102,7 @@ const res = await fetch(`${process.env.API_BASE_URL}/users`);
 > You cannot use the browser's address bar to send `POST`, `PUT`, or `DELETE` requests, and you cannot attach a JSON body to it. This is exactly why tools like Postman exist!
 > ```
 > - What HTTP Method does the browser use when you press Enter in the URL bar?
-
+> 
 ---
 
 ### Exercise 2: Axios Interceptor Authentication Pattern

@@ -179,7 +179,7 @@ A financial application records an audit log entry in table `audit_log` whenever
 > 1. `DEFINE EVENT` creates an automated trigger that runs when table records are created, updated, or deleted.
 > 2. `$before` holds the record state before mutation; `$after` holds the state after mutation.
 > 3. The `THEN` block executes SurrealQL statements atomically within the same transaction.
-
+> 
 ---
 
 ### Exercise 2: Cascading Deletion Trigger Events
@@ -206,7 +206,7 @@ When a user record is deleted from table `user`, automatically delete all associ
 > 1. `$event = "DELETE"` triggers event logic specifically during record deletion queries.
 > 2. Cascades deletion across associated tables (`session`), enforcing referential cleanup.
 > 3. Prevents orphan records without external backend clean-up routines.
-
+> 
 ---
 
 ### Exercise 3: Automatic Field Enrichment Triggers
@@ -233,7 +233,7 @@ When a new order is created in table `order`, trigger an event that sets `proces
 > 1. `$event = "CREATE"` targets new record insertion operations.
 > 2. `$after.id` provides the record primary key of the newly inserted document.
 > 3. Enables reactive asynchronous field enrichment inside the database.
-
+> 
 ---
 
 

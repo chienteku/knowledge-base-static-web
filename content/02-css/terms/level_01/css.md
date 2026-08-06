@@ -158,7 +158,7 @@ h1 {
 > You modify the `styles.css` file! You would target the button in CSS and give it a red background color, a specific width/height, and a border-radius of 50%. The HTML file just needs the `<button>` tag.
 > ```
 > - Does a giant red circle describe the *structure* of the data, or its *presentation*?
-
+> 
 ---
 
 
@@ -177,7 +177,7 @@ h1 {
 > ```
 >
 > **Explanation:** `rel="stylesheet"` binds external CSS files to HTML documents.
-
+> 
 ---
 
 ### Exercise 3: CSS Separation of Concerns
@@ -194,7 +194,7 @@ h1 {
 > ```
 >
 > **Explanation:** Centralized stylesheets decouple visual design from HTML content markup.
-
+> 
 ## 7. Related Terms
 - [Selectors (Element, Class, ID)](selectors.md) — How CSS finds the specific HTML elements to style.
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The declaration format mapping selectors.

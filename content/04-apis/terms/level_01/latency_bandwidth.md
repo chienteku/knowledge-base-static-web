@@ -146,8 +146,8 @@ const usersWithDetails = await getUsersWithBatchDetails();
 > - 1. **Bandwidth** bottleneck (The hardware pipeline throughput is too slow for the large file payload).
 > - 2. **Latency** bottleneck (Each lookup suffers a `200ms` round-trip. The data size is tiny, but the sequential travel time adds up).
 > - 3. **Latency** limit (The local connection latency has hit its physical routing minimum).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Bandwidth vs Latency Analogy

@@ -202,7 +202,7 @@ JavaScript is the painter holding the paintbrush. Without the painter, the canva
 > Example: `<canvas>A graph showing a 20% increase in sales.</canvas>`
 > ```
 > - Remember that `<canvas>` is not a void element; it has a closing tag. What happens if you put text inside it?
-
+> 
 ---
 
 ### Exercise 2: Drawing Rectangle on Canvas 2D Context
@@ -219,7 +219,7 @@ JavaScript is the painter holding the paintbrush. Without the painter, the canva
 > ```
 >
 > **Explanation:** `getContext('2d')` provides the 2D rendering API for drawing canvas shapes.
-
+> 
 ---
 
 ### Exercise 3: Canvas vs SVG Comparison
@@ -233,7 +233,7 @@ JavaScript is the painter holding the paintbrush. Without the painter, the canva
 > ```
 >
 > **Explanation:** Canvas renders pixels procedurally; SVG manages XML vector DOM node trees.
-
+> 
 ## 7. Related Terms
 - [`<svg>` (Scalable Vector Graphics)](svg.md) — The alternative way to draw graphics on the web (Vector vs. Raster).
 - [`<progress>` & `<meter>` Elements](progress_meter.md) — Semantic gauges for loading states and scalars.

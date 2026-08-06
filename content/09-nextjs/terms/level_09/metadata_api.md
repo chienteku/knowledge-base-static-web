@@ -145,35 +145,35 @@ Define static document metadata (`title`, `description`, `keywords`, `robots`) i
 > ```tsx
 > // app/layout.tsx
 > import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: {
-    template: "%s | SaaS Platform",
-    default: "SaaS Platform - Enterprise Cloud Solutions"
-  },
-  description: "Enterprise cloud software management suite.",
-  keywords: ["SaaS", "Cloud", "Enterprise"],
-  robots: {
-    index: true,
-    follow: true
-  }
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
-}
-```
-
+> 
+> export const metadata: Metadata = {
+>   title: {
+>     template: "%s | SaaS Platform",
+>     default: "SaaS Platform - Enterprise Cloud Solutions"
+>   },
+>   description: "Enterprise cloud software management suite.",
+>   keywords: ["SaaS", "Cloud", "Enterprise"],
+>   robots: {
+>     index: true,
+>     follow: true
+>   }
+> };
+> 
+> export default function RootLayout({ children }: { children: React.ReactNode }) {
+>   return (
+>     <html lang="en">
+>       <body>{children}</body>
+>     </html>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Exporting `const metadata: Metadata` in `layout.tsx` configures default fallback metadata for all sub-pages.
 > 2. `title.template` automatically appends the `%s` template string to child page titles (e.g. "Pricing | SaaS Platform").
 > 3. Standard global SEO configuration pattern.
-
+> 
 ---
 
 ### Exercise 2: Defining Canonical URLs and OpenGraph Cards
@@ -191,30 +191,30 @@ Configure canonical URL references and Twitter Card meta tags for a pricing page
 > ```tsx
 > // app/pricing/page.tsx
 > import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Pricing Plans",
-  alternates: {
-    canonical: "https://example.com/pricing"
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Pricing Plans",
-    creator: "@company"
-  }
-};
-
-export default function PricingPage() {
-  return <h1>Pricing Options</h1>;
-}
-```
-
+> 
+> export const metadata: Metadata = {
+>   title: "Pricing Plans",
+>   alternates: {
+>     canonical: "https://example.com/pricing"
+>   },
+>   twitter: {
+>     card: "summary_large_image",
+>     title: "Pricing Plans",
+>     creator: "@company"
+>   }
+> };
+> 
+> export default function PricingPage() {
+>   return <h1>Pricing Options</h1>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `alternates.canonical` renders `<link rel="canonical" href="..." />` tags to prevent duplicate content indexing penalties.
 > 2. `twitter` configures Twitter Card preview cards when links are shared on social media.
 > 3. Essential technical SEO metadata configuration.
-
+> 
 ---
 
 ### Exercise 3: Setting Custom Favicons and Icons in Metadata API
@@ -231,28 +231,24 @@ Configure apple touch icons and favicon shortcuts using `metadata.icons`.
 >
 > ```tsx
 > import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png"
-  }
-};
-```
-
+> 
+> export const metadata: Metadata = {
+>   icons: {
+>     icon: "/favicon.ico",
+>     shortcut: "/favicon-16x16.png",
+>     apple: "/apple-touch-icon.png"
+>   }
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `metadata.icons` generates `<link rel="icon">` and `<link rel="apple-touch-icon">` document head tags.
 > 2. Replaces manual `<head>` tag insertions.
 > 3. Standard favicon management in App Router.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Open Graph & Twitter Cards (`generateMetadata`)](generate_metadata.md) — The dynamic version of the Metadata API.

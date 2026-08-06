@@ -201,7 +201,7 @@ const { data: doc } = await useAsyncData(
 > ```
 > - In Nuxt, `useAsyncData` can cache payload states.
 > - The third argument configuration object supports `getCachedData(key)`.
-
+> 
 ---
 
 ### Exercise 2: Nuxt SSG Build Command
@@ -218,7 +218,7 @@ const { data: doc } = await useAsyncData(
 > ```bash
 > npx nuxi generate
 > ```
-
+> 
 ---
 
 ### Exercise 3: SSG vs SSR Hosting Comparison
@@ -235,8 +235,8 @@ const { data: doc } = await useAsyncData(
 > ```text
 > Yes. SSG requires zero server runtime environment.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

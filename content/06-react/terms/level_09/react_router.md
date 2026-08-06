@@ -134,7 +134,7 @@ React Router excels at "Nested Routing". You can have a persistent `<DashboardLa
 > Because it's a nested route, the `<Cart />` component will be injected inside the layout of the `<Store />` component.
 > ```
 > - Notice how the `shoes` and `cart` routes are nested inside the `store` route.
-
+> 
 ---
 
 
@@ -162,7 +162,7 @@ React Router excels at "Nested Routing". You can have a persistent `<DashboardLa
 > ```
 >
 > **Explanation:** `path="*"` acts as a catch-all route for un-matched URL paths.
-
+> 
 ---
 
 ### Exercise 3: Nested Routes and Outlet
@@ -186,7 +186,7 @@ React Router excels at "Nested Routing". You can have a persistent `<DashboardLa
 > ```
 >
 > **Explanation:** `<Outlet />` projects nested child route elements inside parent layout components.
-
+> 
 ## 7. Related Terms
 - [`<Link>` Component](link_component.md) — How you navigate between these defined routes.
 - [Dynamic Segments (URL Parameters)](dynamic_segments.md) — How you handle URLs like `/users/123`.

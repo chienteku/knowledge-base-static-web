@@ -288,7 +288,7 @@ function allowDrop(ev) {
 > ```
 > - Add the global `draggable` attribute.
 > - Connect a listener for the `dragstart` event.
-
+> 
 ---
 
 
@@ -309,7 +309,7 @@ function allowDrop(ev) {
 > ```
 >
 > **Explanation:** `dataTransfer.setData()` attaches drag payload data passed to drop targets.
-
+> 
 ---
 
 ### Exercise 3: HTML Drag & Drop Event Sequence
@@ -331,7 +331,7 @@ function allowDrop(ev) {
 > ```
 >
 > **Explanation:** Drag events track source pickup, target hover, and drop release.
-
+> 
 ## 7. Related Terms
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent interface hierarchy.
 - [`data-*` Attributes](../level_07/data_attributes.md) — Used to store custom metadata identifiers on dragged items.

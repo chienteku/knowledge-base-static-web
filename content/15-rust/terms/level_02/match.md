@@ -410,7 +410,7 @@ Define the telemetry structures and write a function `route_frame(frame: &Networ
 >
 > 4. **Exhaustiveness and Fallthrough Guarantee**:
 >    Rust compiler guarantees exhaustiveness. Wildcard pattern arms `NetworkFrame::Telemetry { .. }` and catch-all arms ensure that all enum variants and all potential integer/floating-point values are handled cleanly.
-
+> 
 ---
 
 ### Exercise 2: Algorithmic Trading Risk Engine & Batch Order Processor
@@ -638,7 +638,7 @@ Requirements:
 >
 > 4. **Exhaustive Wildcards (`_`)**:
 >    The fallback arm `_ => ValidationResult::Approved { order_id: id }` guarantees that all unflagged combinations pass risk validation cleanly.
-
+> 
 ---
 
 ### Exercise 3: Abstract Syntax Tree (AST) Compiler Optimizer & Evaluator
@@ -879,7 +879,7 @@ Requirements:
 > 
 > 4. **Error Propagation Pattern**:
 >    In `eval`, `Result<i64, String>` combines `match` over operators with the `?` operator for clean recursive error propagation when evaluating missing variables or division by zero.
-
+> 
 ---
 
 ## 6. Related Terms

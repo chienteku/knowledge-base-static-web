@@ -197,7 +197,7 @@ if (typeof localStorage !== "undefined") {
 > [!check]- Answer
 > - Remember that values returned by `getItem` are strings; convert them to numbers using `Number(count)` before doing math.
 > - Save the updated value using `localStorage.setItem("visitCount", updatedCount)`.
-
+> 
 ---
 
 ### Exercise 2: Storing and Parsing Objects in LocalStorage
@@ -217,7 +217,7 @@ if (typeof localStorage !== "undefined") {
 > ```
 >
 > **Explanation:** `JSON.stringify` and `JSON.parse` serialize JavaScript objects for Web Storage.
-
+> 
 ---
 
 ### Exercise 3: LocalStorage vs SessionStorage Scope
@@ -234,7 +234,7 @@ if (typeof localStorage !== "undefined") {
 > ```
 >
 > **Explanation:** `localStorage` data persists indefinitely; `sessionStorage` expires when browser tabs close.
-
+> 
 ---
 
 ## 7. Related Terms

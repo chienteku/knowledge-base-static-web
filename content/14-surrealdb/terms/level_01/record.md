@@ -170,7 +170,7 @@ You are modeling a user profile record in SurrealDB that demonstrates its multi-
 > 1. SurrealDB records are JSON-like documents containing scalar values, nested objects, arrays, and record links.
 > 2. `role:role:admin` stores a direct typed record link pointer rather than a raw foreign key string.
 > 3. Nested document fields (`settings.theme`) can be queried directly using dot-notation without unnesting.
-
+> 
 ---
 
 ### Exercise 2: Record Mutation Strategies (`MERGE` vs `CONTENT`)
@@ -198,7 +198,7 @@ You need to update `user:john`'s email address without overwriting or erasing th
 > 1. `MERGE` performs a shallow merge, updating specified fields while preserving existing document properties.
 > 2. Using `CONTENT` replaces the entire record payload, accidentally deleting any fields omitted from the payload.
 > 3. `UPDATE ... SET email = ...` is also safe for single-field mutations.
-
+> 
 ---
 
 ### Exercise 3: Record Identifier Access Patterns
@@ -224,7 +224,7 @@ A backend service needs to fetch a single user record by its primary key `user:j
 > 1. `SELECT * FROM table:id` performs a direct primary key index lookup in $O(1)$ constant time.
 > 2. Avoid using `WHERE id = ...` filters, as `user:john` acts directly as the record pointer address in SurrealDB.
 > 3. Direct record targeting bypasses table scanning algorithms completely.
-
+> 
 ---
 
 

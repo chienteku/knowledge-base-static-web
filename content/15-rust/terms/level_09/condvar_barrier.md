@@ -231,7 +231,7 @@ while !ready {
 > 1. `not_full` tracks available buffer slots for producers; `not_empty` tracks ready items for consumers.
 > 2. `while` loops prevent spurious wakeups from modifying state incorrectly.
 > 3. `cvar.wait(guard)` atomically unlocks the `Mutex` and puts the thread to sleep, preventing lost wakeups.
-
+> 
 ---
 
 ### Exercise 2: Multi-Stage Parallel Simulation with `Barrier` Rendezvous
@@ -328,7 +328,7 @@ while !ready {
 > 1. `Barrier::wait()` suspends all worker threads until all $N$ threads reach the barrier.
 > 2. `wait_res.is_leader()` evaluates to `true` for exactly one thread per barrier rendezvous.
 > 3. Barrier synchronization guarantees cross-thread data visibility between computation phases.
-
+> 
 ---
 
 ### Exercise 3: Broadcast Readiness Gate / One-Shot Synchronization Latch
@@ -407,7 +407,7 @@ while !ready {
 > 1. `notify_all()` awakens all waiting worker threads simultaneously upon initialization.
 > 2. Persistent `*open == true` state allows subsequent caller threads to pass through without sleeping.
 > 3. `Mutex` synchronization avoids lost notification signals during gate opening transitions.
-
+> 
 ---
 
 ## 6. Related Terms

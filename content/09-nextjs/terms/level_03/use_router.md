@@ -135,34 +135,34 @@ Perform programmatic navigation to `/dashboard` upon form submission using `useR
 >
 > ```tsx
 > "use client";
-
-import { useRouter } from "next/navigation";
-
-export default function LoginForm() {
-  const router = useRouter();
-
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    // Perform login API request...
-    router.push("/dashboard");
-  }
-
-  return (
-    <form onSubmit={handleLogin} className="p-4">
-      <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
-        Log In
-      </button>
-    </form>
-  );
-}
-```
-
+> 
+> import { useRouter } from "next/navigation";
+> 
+> export default function LoginForm() {
+>   const router = useRouter();
+> 
+>   async function handleLogin(e: React.FormEvent) {
+>     e.preventDefault();
+>     // Perform login API request...
+>     router.push("/dashboard");
+>   }
+> 
+>   return (
+>     <form onSubmit={handleLogin} className="p-4">
+>       <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
+>         Log In
+>       </button>
+>     </form>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useRouter()` MUST be imported from `next/navigation` in App Router (NOT `next/router`).
 > 2. `router.push('/dashboard')` performs client-side SPA navigation to the target route.
 > 3. Must be used inside Client Components marked with `"use client"`.
-
+> 
 ---
 
 ### Exercise 2: Refreshing Server Component Data with `router.refresh()`
@@ -179,31 +179,31 @@ Trigger a server data re-fetch after mutating data on the client using `router.r
 >
 > ```tsx
 > "use client";
-
-import { useRouter } from "next/navigation";
-
-export default function RefreshButton() {
-  const router = useRouter();
-
-  function handleRefresh() {
-    // Re-executes Server Component data fetches on the server
-    router.refresh();
-  }
-
-  return (
-    <button onClick={handleRefresh} className="px-3 py-1 bg-gray-200 rounded">
-      Refresh Live Data
-    </button>
-  );
-}
-```
-
+> 
+> import { useRouter } from "next/navigation";
+> 
+> export default function RefreshButton() {
+>   const router = useRouter();
+> 
+>   function handleRefresh() {
+>     // Re-executes Server Component data fetches on the server
+>     router.refresh();
+>   }
+> 
+>   return (
+>     <button onClick={handleRefresh} className="px-3 py-1 bg-gray-200 rounded">
+>       Refresh Live Data
+>     </button>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `router.refresh()` requests updated Server Component flight data from the server without losing client React state.
 > 2. Re-renders Server Components on the server and merges results into the active view.
 > 3. Standard method for invalidating server-rendered UI from Client Components.
-
+> 
 ---
 
 ### Exercise 3: Pre-Fetching Routes Programmatically
@@ -220,36 +220,32 @@ Pre-fetch the heavy `/admin` route on button hover using `router.prefetch()`.
 >
 > ```tsx
 > "use client";
-
-import { useRouter } from "next/navigation";
-
-export default function HoverLink() {
-  const router = useRouter();
-
-  return (
-    <button
-      onMouseEnter={() => router.prefetch("/admin")}
-      onClick={() => router.push("/admin")}
-      className="px-4 py-2 bg-purple-600 text-white rounded"
+> 
+> import { useRouter } from "next/navigation";
+> 
+> export default function HoverLink() {
+>   const router = useRouter();
+> 
+>   return (
+>     <button
+>       onMouseEnter={() => router.prefetch("/admin")}
+>       onClick={() => router.push("/admin")}
+>       className="px-4 py-2 bg-purple-600 text-white rounded"
     >
-      Go to Admin Panel
-    </button>
-  );
-}
-```
-
+>       Go to Admin Panel
+>     </button>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `router.prefetch(path)` pre-loads target route JavaScript and Server Component chunks in the background.
 > 2. Speeds up subsequent `router.push()` navigation execution.
 > 3. Programmatic optimization pattern for custom button navigation.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`<Link>` Component](link.md) — The preferred way to navigate when no programmatic logic is required.

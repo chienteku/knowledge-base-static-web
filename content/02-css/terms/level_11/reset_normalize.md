@@ -186,7 +186,7 @@ HTML structure index file loading order:
 > ```
 > - Use the universal selector `*` to target all boxes.
 > - Select the image tag specifically to assign block and max-width layout limits.
-
+> 
 ---
 
 
@@ -213,7 +213,7 @@ HTML structure index file loading order:
 > ```
 >
 > **Explanation:** Modern CSS resets provide clean baseline defaults for modern web apps.
-
+> 
 ---
 
 ### Exercise 3: Normalize.css Core Strategy
@@ -230,7 +230,7 @@ HTML structure index file loading order:
 > ```
 >
 > **Explanation:** Normalize.css fixes browser inconsistencies without stripping all typography.
-
+> 
 ## 7. Related Terms
 - [`@import` Rule](import.md) — Loading modular sheets.
 - [`box-sizing: border-box`](../level_02/box_sizing.md) — Sizing layouts easily.

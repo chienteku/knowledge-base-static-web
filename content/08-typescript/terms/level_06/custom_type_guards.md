@@ -141,30 +141,30 @@ Create a custom type guard function `isFish(pet: Fish | Bird): pet is Fish` to d
 > interface Fish {
 >   swim(): void;
 > }
-
-interface Bird {
-  fly(): void;
-}
-
-function isFish(pet: Fish | Bird): pet is Fish {
-  return (pet as Fish).swim !== undefined;
-}
-
-function move(pet: Fish | Bird) {
-  if (isFish(pet)) {
-    pet.swim(); // pet is narrowed to Fish!
-  } else {
-    pet.fly();  // pet is narrowed to Bird!
-  }
-}
-```
-
+> 
+> interface Bird {
+>   fly(): void;
+> }
+> 
+> function isFish(pet: Fish | Bird): pet is Fish {
+>   return (pet as Fish).swim !== undefined;
+> }
+> 
+> function move(pet: Fish | Bird) {
+>   if (isFish(pet)) {
+>     pet.swim(); // pet is narrowed to Fish!
+>   } else {
+>     pet.fly();  // pet is narrowed to Bird!
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Type predicate return types (`parameter is Type`) tell the compiler to narrow `parameter` when the function returns `true`.
 > 2. Allows writing custom domain logic to inspect untyped or union objects.
 > 3. Enables clean type narrowing across complex interface unions.
-
+> 
 ---
 
 ### Exercise 2: Filtering Array Elements with Type Guards
@@ -183,19 +183,19 @@ Filter `null` and `undefined` values out of an array using `Array.prototype.filt
 > function isNotNull<T>(val: T | null | undefined): val is T {
 >   return val !== null && val !== undefined;
 > }
-
-const values: (string | null | undefined)[] = ["a", null, "b", undefined, "c"];
-
-// Inferred cleanly as string[]:
-const validStrings: string[] = values.filter(isNotNull);
-```
-
+> 
+> const values: (string | null | undefined)[] = ["a", null, "b", undefined, "c"];
+> 
+> // Inferred cleanly as string[]:
+> const validStrings: string[] = values.filter(isNotNull);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Standard boolean expressions passed to `filter` do not automatically narrow array element types.
 > 2. Passing a type predicate (`val is T`) instructs `filter` to output a narrowed array (`T[]` instead of `(T | null)[]`).
 > 3. Essential pattern for array sanitization.
-
+> 
 ---
 
 ### Exercise 3: Auditing Dangerous/False Type Predicates
@@ -215,26 +215,26 @@ Demonstrate what happens when a type guard implementation returns `true` incorre
 >   role: "admin";
 >   deleteDatabase(): void;
 > }
-
-// ⚠️ BUGGY TYPE GUARD: Returns true even when obj is not Admin!
-function isBadAdmin(obj: any): obj is Admin {
-  return true; // LIAR!
-}
-
-function DangerousOperation(user: unknown) {
-  if (isBadAdmin(user)) {
-    // TS believes user is Admin, but crashes at runtime!
-    user.deleteDatabase(); // Uncaught TypeError: user.deleteDatabase is not a function
-  }
-}
-```
-
+> 
+> // ⚠️ BUGGY TYPE GUARD: Returns true even when obj is not Admin!
+> function isBadAdmin(obj: any): obj is Admin {
+>   return true; // LIAR!
+> }
+> 
+> function DangerousOperation(user: unknown) {
+>   if (isBadAdmin(user)) {
+>     // TS believes user is Admin, but crashes at runtime!
+>     user.deleteDatabase(); // Uncaught TypeError: user.deleteDatabase is not a function
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Type predicate functions rely entirely on developer correctness; the compiler does NOT verify that the internal boolean logic is sound.
 > 2. Returning `true` incorrectly causes unsound type assertions down the line.
 > 3. Ensure type predicate functions perform thorough runtime property validation.
-
+> 
 ---
 
 

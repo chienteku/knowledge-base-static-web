@@ -304,7 +304,7 @@ Write the `Cargo.toml` manifest release profile configuration enforcing `overflo
 > 1. **Overflow Safety in Release**: By default, `cargo build --release` sets `overflow-checks = false`, substituting panicking arithmetic with wrapping semantics (`wrapping_add`). Setting `overflow-checks = true` in `[profile.release]` forces `rustc` to emit overflow traps while allowing LLVM to perform full vectorization and inlining (`opt-level = 3`).
 > 2. **`codegen-units = 1` & `lto = "thin"`**: Setting `codegen-units = 1` merges all compilation units into a single LLVM code generation pass, enabling cross-function loop unrolling and inline expansion. Thin LTO provides cross-crate optimization with low link-time memory overhead.
 > 3. **`panic = "abort"`**: Strips unwinding frame tables (`.eh_frame`), shrinking binary size and removing landing pad branches from the generated machine code.
-
+> 
 ---
 
 ### Exercise 2: Microcontroller Sensor Telemetry — Footprint Minimization & Hardware Bitmask Parsing

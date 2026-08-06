@@ -104,7 +104,7 @@ Model useEffect as state synchronization with external systems (DOM, WebSocket, 
 > 3. Clicking "Close": The Modal is removed from the DOM (Unmounting).
 > ```
 > - Birth, Life, Death.
-
+> 
 ---
 
 
@@ -123,7 +123,7 @@ Model useEffect as state synchronization with external systems (DOM, WebSocket, 
 > ```
 >
 > **Explanation:** Function components declare lifecycle behavior through `useEffect` dependency configurations.
-
+> 
 ---
 
 ### Exercise 3: Execution Order of Render vs Mount
@@ -140,7 +140,7 @@ Model useEffect as state synchronization with external systems (DOM, WebSocket, 
 > ```
 >
 > **Explanation:** `useEffect` runs asynchronously AFTER the browser paints the screen.
-
+> 
 ## 7. Related Terms
 - [`useEffect` Hook](use_effect.md) — The tool used to execute code during these specific phases.
 - [Cleanup Functions](cleanup_functions.md) — Code that specifically runs during the Unmounting phase.

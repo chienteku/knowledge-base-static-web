@@ -180,7 +180,7 @@ An API integration receives raw string inputs from web form payloads (e.g. `"150
 > 1. `<type> value` explicitly coerces values into target SurrealDB data types.
 > 2. Coerces raw string inputs into typed integer and datetime representations.
 > 3. Ensures data payload type alignment before database insertion.
-
+> 
 ---
 
 ### Exercise 2: Casting Record ID Strings to Record Links
@@ -207,7 +207,7 @@ An incoming HTTP JSON payload contains a raw string `"user:alice"`. You need to 
 > 1. `<record<table>> "table:id"` converts raw string representations into typed record link pointers.
 > 2. Enables pointer resolution and graph traversals for raw string API inputs.
 > 3. Bridges external REST payload inputs with internal record link architectures.
-
+> 
 ---
 
 ### Exercise 3: Coercion Error Handling with Safe Casting
@@ -234,7 +234,7 @@ Demonstrate what happens when an invalid string `"abc"` is cast to `<int>`.
 > 1. Explicit casting fails gracefully with a query error if the source value cannot be converted.
 > 2. Protects database fields from receiving corrupted or invalid data types.
 > 3. Use `type::is::int()` to check conversion safety prior to casting when handling untrusted user input.
-
+> 
 ---
 
 

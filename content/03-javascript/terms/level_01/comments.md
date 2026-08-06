@@ -160,7 +160,7 @@ async function processData() {
 > The function should not run.
 > ```
 > - Just place `//` at the very beginning of the line. This is called "commenting out" code.
-
+> 
 ---
 
 ### Exercise 2: JSDoc Comment Syntax
@@ -186,7 +186,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** JSDoc comments start with `/**` and provide structured metadata for documentation generators and IDE type checkers.
-
+> 
 ---
 
 ### Exercise 3: Multi-Line Comment Edge Cases
@@ -203,8 +203,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Using single line `//` avoids accidental termination by embedded `*/` text in regex or strings.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

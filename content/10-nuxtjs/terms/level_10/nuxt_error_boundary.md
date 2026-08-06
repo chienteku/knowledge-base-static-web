@@ -166,13 +166,13 @@ Wrap a third-party widget inside `<NuxtErrorBoundary>` to prevent widget crashes
 >   </main>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `<NuxtErrorBoundary>` isolates child component crashes, preventing errors from unmounting the whole page.
 > 2. If a child component throws an error, `<NuxtErrorBoundary>` catches it and renders the `#error` slot.
 > 3. Keeps main application UI functional despite isolated component failures.
-
+> 
 ---
 
 ### Exercise 2: Clearing Component Error States with `clearError` Slot Scope
@@ -201,13 +201,13 @@ Provide a retry button inside `<NuxtErrorBoundary>` `#error` slot using `clearEr
 >   </NuxtErrorBoundary>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. The `#error` slot exposes a `clearError` function in its scope.
 > 2. Calling `clearError` clears the captured error ref and attempts to re-render default slot components.
 > 3. Enables component-level user error recovery.
-
+> 
 ---
 
 ### Exercise 3: Auditing Capturable vs Non-Capturable Errors
@@ -227,19 +227,15 @@ Explain which errors `<NuxtErrorBoundary>` captures vs errors that bubble up to 
 > - Captured: Render errors, setup() errors, and lifecycle hook errors (onMounted, watcher) originating inside child components.
 > - Not Captured: Event handler errors (button @click), async background timers, or errors originating outside the boundary wrapper.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `<NuxtErrorBoundary>` relies on Vue's `errorCaptured` lifecycle hook.
 > 2. Intercepts errors occurring during Virtual DOM rendering and component setup lifecycle.
 > 3. Standard component fault isolation pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`error.vue` & `useError`](error_vue.md) — The global equivalent that handles fatal, unrecoverable errors.

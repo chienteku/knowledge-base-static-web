@@ -179,7 +179,7 @@ Create a Materialized View `mv_monthly_sales_summary` caching heavy aggregate ca
 > 1. `CREATE MATERIALIZED VIEW` executes the underlying query once and persists the result set to a physical disk table.
 > 2. Sub-millisecond read velocity over millions of historical rows.
 > 3. Creating a unique index allows concurrent background refreshing.
-
+> 
 ---
 
 ### Exercise 2: Concurrent Zero-Downtime Refreshing
@@ -203,7 +203,7 @@ Refresh `mv_monthly_sales_summary` online without locking concurrent read querie
 > 1. Standard `REFRESH MATERIALIZED VIEW` acquires an exclusive lock blocking concurrent SELECT queries.
 > 2. `CONCURRENTLY` updates cache data in the background without blocking active read queries.
 > 3. Requires a unique index on the materialized view.
-
+> 
 ---
 
 ### Exercise 3: Trade-Off Analysis: Standard Views vs Materialized Views
@@ -230,7 +230,7 @@ Formulate a selection matrix comparing standard Virtual Views against Materializ
 > 1. Standard Views provide logical encapsulation; Materialized Views provide physical performance caching.
 > 2. Trade data freshness for read execution speed.
 > 3. High performance analytics architecture.
-
+> 
 ---
 
 

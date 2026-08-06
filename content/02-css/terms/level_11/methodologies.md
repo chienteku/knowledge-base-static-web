@@ -183,7 +183,7 @@ Created by Jonathan Snook, SMACSS categorizes CSS rules into 5 distinct categori
 > - The Block name is `navbar`.
 > - Identify sub-elements (`item`, `link`) and modifiers (`active`).
 > - Use BEM delimiters (`__` for elements, `--` for modifiers) to write classes with single specificity weights.
-
+> 
 ---
 
 
@@ -207,7 +207,7 @@ Created by Jonathan Snook, SMACSS categorizes CSS rules into 5 distinct categori
 > ```
 >
 > **Explanation:** BEM constructs modular, self-documenting CSS class names.
-
+> 
 ---
 
 ### Exercise 3: CSS Methodologies Overview
@@ -231,7 +231,7 @@ Created by Jonathan Snook, SMACSS categorizes CSS rules into 5 distinct categori
 > ```
 >
 > **Explanation:** CSS methodologies establish naming and architectural conventions.
-
+> 
 ## 7. Related Terms
 - [CSS Preprocessors (Sass & SCSS)](preprocessors.md) — Tools that help organize BEM naming modules.
 - [CSS Reset vs. Normalize](reset_normalize.md) — Base architecture configs.

@@ -168,7 +168,7 @@ Design critical invariants defensively without depending strictly on panic unwin
 >
 > 1. `panic::catch_unwind` captures thread unwinding panics at the request boundary.
 > 2. Converts worker panics into HTTP 500 status codes without crashing the web server thread.
-
+> 
 ---
 
 ### Exercise 2: Custom Panic Hook Logger
@@ -212,7 +212,7 @@ Design critical invariants defensively without depending strictly on panic unwin
 > #### Technical Explanation
 >
 > 1. `panic::set_hook` intercepts panics to log diagnostic metadata before unwinding.
-
+> 
 ---
 
 ### Exercise 3: FFI Panic Guard Wrapper
@@ -251,7 +251,7 @@ Design critical invariants defensively without depending strictly on panic unwin
 > #### Technical Explanation
 >
 > 1. Prevents Undefined Behavior caused by unwinding across FFI boundaries.
-
+> 
 ---
 
 ## 5. Related Terms

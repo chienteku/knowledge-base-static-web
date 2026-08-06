@@ -163,7 +163,7 @@ Calculate total sales revenue, average price, total order count, and highest sin
 > 1. `COUNT(*)` counts total matching rows.
 > 2. `SUM()` and `AVG()` aggregate numeric totals and averages.
 > 3. `MAX()` finds the highest numeric value in the column.
-
+> 
 ---
 
 ### Exercise 2: Counting Distinct Column Values
@@ -190,7 +190,7 @@ Count unique customers who placed orders in 2026 using `COUNT(DISTINCT customer_
 > 1. `COUNT(DISTINCT col)` deduplicates column values before counting.
 > 2. Ignores `NULL` values.
 > 3. Accurate metric calculation for distinct user counts.
-
+> 
 ---
 
 ### Exercise 3: Aggregating Arrays with `ARRAY_AGG`
@@ -218,7 +218,7 @@ Aggregate user tags into an array per user using `ARRAY_AGG(tag_name)`.
 > 1. `ARRAY_AGG()` compiles multiple row string values into a PostgreSQL array (`TEXT[]`).
 > 2. `ORDER BY tag_name` inside `ARRAY_AGG()` sorts elements within the array.
 > 3. Powerful PostgreSQL aggregate array construction.
-
+> 
 ---
 
 

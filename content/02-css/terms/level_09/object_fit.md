@@ -216,7 +216,7 @@ img { object-fit: cover; }
 > ```
 > - Set width and height explicitly.
 > - Apply the property that scales media tags to fill containers.
-
+> 
 ---
 
 
@@ -240,7 +240,7 @@ img { object-fit: cover; }
 > ```
 >
 > **Explanation:** `object-fit: cover` prevents image stretching inside fixed aspect ratio boxes.
-
+> 
 ---
 
 ### Exercise 3: Object Position Focal Point
@@ -260,7 +260,7 @@ img { object-fit: cover; }
 > ```
 >
 > **Explanation:** `object-position` shifts the alignment origin for cropped image content.
-
+> 
 ## 7. Related Terms
 - [`background-size` (cover / contain)](background_size.md) — The background equivalent.
 - [`border-radius` (Rounded Corners)](border_radius.md) — Cropping visual profiles.

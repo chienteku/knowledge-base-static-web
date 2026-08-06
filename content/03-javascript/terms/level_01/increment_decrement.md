@@ -175,7 +175,7 @@ const result = a++ + --b;
 > - `a++` returns the current value `10` first, then increments `a` to `11`.
 > - `--b` decrements `b` to `19` first, and returns `19`.
 > - Add the returned values: `10 + 19`.
-
+> 
 ---
 
 ### Exercise 2: Prefix vs Postfix Evaluation Trace
@@ -195,7 +195,7 @@ const result = a++ + --b;
 > ```
 >
 > **Explanation:** `x++` evaluates to `5` before mutating `x` to `6`; `++x` mutates `x` to `7` before evaluating to `7`.
-
+> 
 ---
 
 ### Exercise 3: Incrementing String Numbers
@@ -214,7 +214,7 @@ const result = a++ + --b;
 > ```
 >
 > **Explanation:** The `++` operator automatically coerces string operands to numbers before incrementing.
-
+> 
 ---
 
 ## 7. Related Terms

@@ -190,7 +190,7 @@ console.log(output);
 > I bought a LAPTOP made by FRUIT.
 > ```
 > - Inside the if statement, append `String(values[index]).toUpperCase()`.
-
+> 
 ---
 
 ### Exercise 2: Custom String Sanitization Tag Function
@@ -214,7 +214,7 @@ console.log(output);
 > ```
 >
 > **Explanation:** Tagged template functions intercept literal strings and evaluated expressions for custom processing.
-
+> 
 ---
 
 ### Exercise 3: Inspecting `strings.raw` Property
@@ -234,8 +234,8 @@ console.log(output);
 > ```
 >
 > **Explanation:** `strings.raw` accesses unescaped raw template literal character inputs.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

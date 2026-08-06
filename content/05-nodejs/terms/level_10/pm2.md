@@ -102,7 +102,7 @@ pm2 reload my-app # Zero-downtime rolling reload
 > `pm2` restarts the server when the APP CRASHES, and provides Load Balancing, logging, and performance monitoring. (Great for production).
 > ```
 > - What is the trigger that causes the restart in each tool?
-
+> 
 ---
 
 
@@ -121,7 +121,7 @@ pm2 reload my-app # Zero-downtime rolling reload
 > ```
 >
 > **Explanation:** `-i max` launches PM2 cluster workers matching available CPU core count.
-
+> 
 ---
 
 ### Exercise 3: PM2 Ecosystem File Generation
@@ -138,7 +138,7 @@ pm2 reload my-app # Zero-downtime rolling reload
 > ```
 >
 > **Explanation:** `pm2 init` creates an `ecosystem.config.js` configuration file for managing app environments.
-
+> 
 ## 7. Related Terms
 - [Docker](docker.md) — The modern alternative/companion to PM2. Docker also manages keeping processes alive and isolated.
 - [The os & util Modules](../level_02/os_util_modules.md) — Related concept: The os & util Modules.

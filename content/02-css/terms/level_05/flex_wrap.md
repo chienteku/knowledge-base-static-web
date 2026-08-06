@@ -114,7 +114,7 @@ Imagine typing a sentence in Microsoft Word.
 > Apply `flex-wrap: wrap;` to the Flex Container. The buttons will hit the edge of the phone screen and drop down to create multiple rows of large buttons.
 > ```
 > - Give the container permission to use multiple lines.
-
+> 
 ---
 
 
@@ -135,7 +135,7 @@ Imagine typing a sentence in Microsoft Word.
 > ```
 >
 > **Explanation:** `flex: 1 1 300px` sets basis threshold of 300px before triggering row wrapping.
-
+> 
 ---
 
 ### Exercise 3: Flex Flow Shorthand
@@ -154,7 +154,7 @@ Imagine typing a sentence in Microsoft Word.
 > ```
 >
 > **Explanation:** `flex-flow` combines `flex-direction` and `flex-wrap` properties.
-
+> 
 ## 7. Related Terms
 - [`gap` (Grid Gap)](../level_06/gap.md) — When items wrap to a new line, you need a way to put space between the rows.
 - [`align-content`](align_content.md) — Distributes multiple rows of wrapped items.

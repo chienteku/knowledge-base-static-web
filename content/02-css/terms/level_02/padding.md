@@ -128,7 +128,7 @@ span {
 > It will fill the padding area ONLY! Padding is inside the element, so backgrounds apply to it. Margin is outside the element and is completely transparent.
 > ```
 > - Does the background color stretch outside the border?
-
+> 
 ---
 
 
@@ -149,7 +149,7 @@ span {
 > ```
 >
 > **Explanation:** 2-value padding shorthand sets `Top/Bottom` (12px) and `Left/Right` (24px).
-
+> 
 ---
 
 ### Exercise 3: Padding vs Margin Selection Rule
@@ -166,7 +166,7 @@ span {
 > ```
 >
 > **Explanation:** Padding expands inner content space; margin pushes outside boundaries.
-
+> 
 ## 7. Related Terms
 - [Margin](margin.md) — The outer spacing (outside the border).
 - [`box-sizing: border-box`](box_sizing.md) — The layout sizing model.

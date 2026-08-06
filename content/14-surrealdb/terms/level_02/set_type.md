@@ -180,7 +180,7 @@ A content management system stores article tags in a `set<string>` field to guar
 > 1. `set<T>` automatically deduplicates input elements at write time.
 > 2. Guarantees set element uniqueness without requiring application-level deduplication code.
 > 3. Preserves unique element collections natively inside database records.
-
+> 
 ---
 
 ### Exercise 2: Set Union and Intersection Operations
@@ -208,7 +208,7 @@ Query user records where a set field `interests` overlaps with target interests 
 > 1. `CONTAINSANY` evaluates whether a set field shares at least one element with a target set.
 > 2. Provides set intersection checking directly in `WHERE` clauses.
 > 3. Enables fast recommendation and targeting queries.
-
+> 
 ---
 
 ### Exercise 3: Appending to Set Fields with Uniqueness Guards
@@ -236,7 +236,7 @@ Append a new tag `"database"` to an existing article's `tags` set field when `"d
 > 1. Appending (`+=`) an existing element to a `set<T>` field is a safe no-op.
 > 2. Prevents set duplication during concurrent update operations.
 > 3. Ensures mathematical set properties remain invariant across data mutations.
-
+> 
 ---
 
 

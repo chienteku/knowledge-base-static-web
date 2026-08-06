@@ -98,13 +98,13 @@ Configure `"strict": true` in `tsconfig.json` and understand the individual stri
 >   }
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `"strict": true` turns on all strict type-checking flags automatically (`noImplicitAny`, `strictNullChecks`, `strictFunctionTypes`, `noImplicitThis`, `alwaysStrict`, etc.).
 > 2. Ensures maximum compile-time type safety across the codebase.
 > 3. Baseline requirement for professional TypeScript projects.
-
+> 
 ---
 
 ### Exercise 2: Auditing Strict Function Parameter Contravariance (`strictFunctionTypes`)
@@ -122,25 +122,25 @@ Demonstrate how `"strictFunctionTypes": true` enforces function parameter contra
 > ```typescript
 > class Animal { name!: string; }
 > class Dog extends Animal { bark() {} }
-
-type DogHandler = (dog: Dog) => void;
-
-function processDog(handler: DogHandler) {}
-
-function handleAnimal(animal: Animal) {
-  console.log(animal.name);
-}
-
-// Valid under strictFunctionTypes! handleAnimal accepts any Animal (including Dog).
-processDog(handleAnimal);
-```
-
+> 
+> type DogHandler = (dog: Dog) => void;
+> 
+> function processDog(handler: DogHandler) {}
+> 
+> function handleAnimal(animal: Animal) {
+>   console.log(animal.name);
+> }
+> 
+> // Valid under strictFunctionTypes! handleAnimal accepts any Animal (including Dog).
+> processDog(handleAnimal);
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `strictFunctionTypes` checks function parameter contravariance strictly.
 > 2. Prevents passing callbacks expecting specific subtypes if the caller might supply general supertypes.
 > 3. Eliminates subtle function callback parameter runtime crashes.
-
+> 
 ---
 
 ### Exercise 3: Auditing Incremental Strict Mode Migration Strategies
@@ -162,18 +162,15 @@ Formulate a migration strategy for enabling strict mode incrementally on a large
 > - Step: Use 'suppressImplicitAnyIndexErrors' or temporary 'any' assertions ONLY during transition phase.
 > - Step: Enable master "strict": true in tsconfig.json permanently.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Enabling `"strict": true` on a large legacy project at once can produce thousands of compile errors.
 > 2. Enabling individual strict flags sequentially allows teams to fix errors incrementally in pull requests.
 > 3. Pragmatic enterprise migration strategy.
-
+> 
 ---
 
-
-
----
 
 
 
@@ -182,7 +179,6 @@ Formulate a migration strategy for enabling strict mode incrementally on a large
 
 ---
 
----
 
 ## 7. Key Takeaways
 

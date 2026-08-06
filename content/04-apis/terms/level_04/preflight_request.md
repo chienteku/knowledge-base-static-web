@@ -144,8 +144,8 @@ Access-Control-Max-Age: 86400 ; Caches preflight approval for 24 hours
 > - 2. **Yes** (`application/json` is not a simple content type).
 > - 3. **No** (Standard HTML form format meets simple conditions).
 > - 4. **Yes** (Setting a custom header triggers preflight).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Preflight Response Header Verification

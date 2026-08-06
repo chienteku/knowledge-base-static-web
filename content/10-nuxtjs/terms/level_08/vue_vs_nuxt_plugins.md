@@ -157,21 +157,21 @@ Register a third-party Vue 3 plugin (e.g. Vue Toastification or I18n) inside a N
 > ```typescript
 > // plugins/vue-component-lib.ts
 > import CustomVueLib from "custom-vue-library";
-
-export default defineNuxtPlugin((nuxtApp) => {
-  // Registers Vue 3 plugin on root Vue app instance
-  nuxtApp.vueApp.use(CustomVueLib, {
-    defaultColor: "blue"
-  });
-});
-```
-
+> 
+> export default defineNuxtPlugin((nuxtApp) => {
+>   // Registers Vue 3 plugin on root Vue app instance
+>   nuxtApp.vueApp.use(CustomVueLib, {
+>     defaultColor: "blue"
+>   });
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `nuxtApp.vueApp` grants access to the root Vue 3 application instance created by Nuxt.
 > 2. `vueApp.use()` registers standard Vue 3 plugins, directives, and global components.
 > 3. Integrates existing Vue 3 ecosystem packages into Nuxt 3 applications.
-
+> 
 ---
 
 ### Exercise 2: Accessing Nuxt Composables inside Nuxt Plugins
@@ -202,13 +202,13 @@ Access `useRuntimeConfig()` and `useCookie()` inside a Nuxt plugin setup functio
 >   };
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Nuxt plugins operate within the Nuxt runtime environment context.
 > 2. Can freely invoke Nuxt composables (`useRuntimeConfig()`, `useCookie()`, `useRoute()`).
 > 3. Superior capabilities compared to standalone Vue 3 plugins.
-
+> 
 ---
 
 ### Exercise 3: Comparing Vue 3 Plugin vs Nuxt 3 Plugin Capabilities
@@ -228,19 +228,15 @@ Formulate a selection matrix comparing Vue 3 plugins vs Nuxt 3 plugins.
 > - Vue 3 Plugin: Function receiving vueApp instance. No built-in SSR payload helper or Nitro integration.
 > - Nuxt 3 Plugin: Function receiving nuxtApp context. Provides helper injection ($helper), SSR payload hooks, and auto-registration from plugins/ directory.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Vue plugins manage client component trees.
 > 2. Nuxt plugins orchestrate isomorphic server and client initialization across the full stack.
 > 3. Fundamental platform architectural distinction.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`plugins/` Directory](plugins_directory.md) — The folder where these files must be placed.

@@ -191,13 +191,13 @@ Type and render `children` inside a TypeScript App Router layout component.
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Next.js automatically injects active child route components into layout `children` props.
 > 2. `React.ReactNode` encompasses all valid renderable JSX elements, strings, fragments, and arrays.
 > 3. Guarantees type safety for nested component slot layouts.
-
+> 
 ---
 
 ### Exercise 2: Composing Multiple Named Slot Props
@@ -232,13 +232,13 @@ Pass parallel route slot components (`@analytics`, `@team`) into a layout file.
 >   );
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Next.js App Router parallel routes (`@folder`) pass named slot props directly to layouts.
 > 2. Allows rendering multiple independent pages side-by-side in the same layout view.
 > 3. Flexible layout composition pattern.
-
+> 
 ---
 
 ### Exercise 3: Preserving Layout Component State
@@ -255,38 +255,34 @@ Demonstrate that input state inside `layout.tsx` is preserved while user navigat
 >
 > ```tsx
 > "use client";
-
-import { useState } from "react";
-import Link from "next/link";
-
-export default function NavLayout({ children }: { children: React.ReactNode }) {
-  const [search, setSearch] = useState("");
-
-  return (
-    <div>
-      <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Filter..." />
-      <nav className="flex gap-4">
-        <Link href="/dashboard/overview">Overview</Link>
-        <Link href="/dashboard/settings">Settings</Link>
-      </nav>
-      <div>{children}</div>
-    </div>
-  );
-}
-```
-
+> 
+> import { useState } from "react";
+> import Link from "next/link";
+> 
+> export default function NavLayout({ children }: { children: React.ReactNode }) {
+>   const [search, setSearch] = useState("");
+> 
+>   return (
+>     <div>
+>       <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Filter..." />
+>       <nav className="flex gap-4">
+>         <Link href="/dashboard/overview">Overview</Link>
+>         <Link href="/dashboard/settings">Settings</Link>
+>       </nav>
+>       <div>{children}</div>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Layouts persist across route navigations, maintaining local component state (`search`).
 > 2. Only the `children` prop component unmounts and updates during route transitions.
 > 3. Superior user experience compared to re-mounting whole page trees.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [React Components](../level_01/react_components.md) — The parent units that wrap children.

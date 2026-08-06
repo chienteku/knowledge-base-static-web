@@ -187,7 +187,7 @@ Write an async function `process_payment(order_id: &str, amount_cents: u64, card
 > 2. **Secret Redaction (`skip(card_token)`)**: Prevents sensitive parameters (such as PCI tokens, passwords, or encryption keys) from being recorded in telemetry logs or exported to distributed tracing collectors.
 > 3. **Deferred Field Recording (`field::Empty` & `Span::current().record`)**: Fields like `payment_status` cannot be known when entering the function. Declaring `field::Empty` reserves a slot in the span context, allowing `current_span.record(...)` to populate it dynamically once business logic yields a result.
 > 4. **Async & Thread Context**: `tracing` spans track execution across `.await` points automatically, maintaining full trace parentage even when Tokio moves the task between worker threads.
-
+> 
 ---
 
 ### Exercise 2: Custom In-Memory Telemetry Layer for Unit Testing Log Events
@@ -308,7 +308,7 @@ Design an in-memory telemetry subscriber layer `EventCaptureLayer` that implemen
 > 2. **Field Visitor Pattern (`tracing::field::Visit`)**: Struct fields attached to tracing events are opaque. The visitor pattern inspects structured key-value payloads dynamically without allocating strings unless required.
 > 3. **Thread-Safe Log Capture (`Arc<Mutex<Vec<String>>>`)**: Shares an in-memory buffer across worker threads while preserving safety under concurrent telemetry events.
 > 4. **Scoped Subscriber Testing (`tracing::subscriber::with_default`)**: Sets the subscriber only for the execution duration of a test closure. This isolates subscriber state and prevents race conditions when running tests in parallel (`cargo test`).
-
+> 
 ---
 
 ### Exercise 3: Hierarchical Parent-Child Spans & Hardware Diagnostic Sweeps
@@ -435,10 +435,9 @@ Implement a structured diagnostic sweep function `perform_hardware_sweep(sweep_i
 > 2. **RAII Scope Management (`enter()`)**: `span.enter()` returns a guard (`Entered`). As long as `_root_guard` or `_child_guard` remains in scope, that span is active on the current thread. Dropping the guard exits the span.
 > 3. **Structured Field Formatting (`format_args!`)**: Key-value metadata on spans support dynamic formatting like `format_args!("0x{:02X}", address)` without needing allocation.
 > 4. **Deterministic Diagnostics Testing**: Combining structured telemetry with return types (`SweepSummary`) allows both runtime diagnostic capturing and unit test assertion via `assert_eq!`.
-
+> 
 ---
 
----
 
 ## 6. Related Terms
 

@@ -174,7 +174,7 @@ Create a SQL migration script `V001__create_users_table.sql` with explicit trans
 > 1. Database migrations version-control DDL schema changes in code repositories.
 > 2. Wrapping DDL inside `BEGIN ... COMMIT` guarantees atomic schema migrations.
 > 3. If a migration step fails, `ROLLBACK` prevents partial broken schema states.
-
+> 
 ---
 
 ### Exercise 2: Automated Migrations using `node-pg-migrate` or Prisma/Drizzle
@@ -191,24 +191,24 @@ Execute an online migration using TypeScript migration frameworks (`node-pg-migr
 >
 > ```typescript
 > import { MigrationBuilder } from "node-pg-migrate";
-
-export async function up(pgm: MigrationBuilder): Promise<void> {
-  pgm.addColumn("users", {
-    is_verified: { type: "boolean", notNull: true, default: false }
-  });
-}
-
-export async function down(pgm: MigrationBuilder): Promise<void> {
-  pgm.dropColumn("users", "is_verified");
-}
-```
-
+> 
+> export async function up(pgm: MigrationBuilder): Promise<void> {
+>   pgm.addColumn("users", {
+>     is_verified: { type: "boolean", notNull: true, default: false }
+>   });
+> }
+> 
+> export async function down(pgm: MigrationBuilder): Promise<void> {
+>   pgm.dropColumn("users", "is_verified");
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Migration tools track executed migration scripts in a `schema_migrations` catalog table.
 > 2. `up()` applies schema additions; `down()` provides automated rollback capabilities.
 > 3. Standardizes database versioning across deployment environments.
-
+> 
 ---
 
 ### Exercise 3: Zero-Downtime 4-Phase Schema Refactoring
@@ -236,7 +236,7 @@ Rename column `user_name` to `username` without application downtime using a 4-p
 > 1. Renaming columns directly (`ALTER TABLE ... RENAME`) breaks active application servers using old column names.
 > 2. Dual-write phased migrations maintain backward and forward compatibility.
 > 3. Zero-downtime database deployment standard.
-
+> 
 ---
 
 

@@ -131,7 +131,7 @@ h1 { color: pink; }
 > Pink! Because all three rules have the exact same selector, the cascade relies entirely on source order. The last rule wins.
 > ```
 > - Which rule does the browser read last?
-
+> 
 ---
 
 
@@ -154,7 +154,7 @@ h1 { color: pink; }
 > ```
 >
 > **Explanation:** The Cascade algorithm evaluates origin, specificity, and order to determine winning styles.
-
+> 
 ---
 
 ### Exercise 3: Cascade Layers (@layer) Purpose
@@ -173,7 +173,7 @@ h1 { color: pink; }
 > ```
 >
 > **Explanation:** `@layer` grants explicit architecture control over cascade precedence.
-
+> 
 ## 7. Related Terms
 - [Specificity](specificity.md) — The only thing that can override the Rule of Source Order. If a rule is more "specific", it wins even if it comes first in the file!
 - [`!important` Declaration](important.md) — The global cascading priority flag.

@@ -134,7 +134,7 @@ try {
 > A small pool (like 20 to 50) is actually faster, because connections are returned to the pool so quickly (in 2ms) that a small number of taxis can easily handle thousands of riders.
 > ```
 > - Who has to manage and maintain those open connections? The DB!
-
+> 
 ---
 
 
@@ -154,7 +154,7 @@ try {
 > ```
 >
 > **Explanation:** `max` option restricts maximum concurrent socket connections opened by the pool.
-
+> 
 ---
 
 ### Exercise 3: Pool Query Shortcut
@@ -171,7 +171,7 @@ try {
 > ```
 >
 > **Explanation:** Direct pool queries handle connection lifecycle management automatically.
-
+> 
 ## 7. Related Terms
 - [ORMs & ODMs](orms_odms.md) — ORMs manage the Connection Pool for you automatically.
 - [Database Transactions](db_transactions.md) — Related concept: Database Transactions.

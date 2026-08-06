@@ -260,7 +260,7 @@ function remove(id) {
 > ```
 > - Match the class names: `.slide-enter-active`, `.slide-leave-active`, `.slide-enter-from`, and `.slide-leave-to`.
 > - Use standard CSS properties: `transition`, `transform`, and `opacity`.
-
+> 
 ---
 
 ### Exercise 2: Vue Transition CSS Classes Matrix
@@ -284,7 +284,7 @@ function remove(id) {
 >   opacity: 0;
 > }
 > ```
-
+> 
 ---
 
 ### Exercise 3: Transition mode Prop
@@ -303,8 +303,8 @@ function remove(id) {
 >   <component :is="activeTab" />
 > </Transition>
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

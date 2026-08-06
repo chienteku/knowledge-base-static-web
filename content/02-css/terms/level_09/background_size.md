@@ -202,7 +202,7 @@ div { background-size: cover; }
 > }
 > ```
 > - Use the three classic background properties to lock cover scaling, centering, and no repeat.
-
+> 
 ---
 
 
@@ -226,7 +226,7 @@ div { background-size: cover; }
 > ```
 >
 > **Explanation:** Combining `no-repeat`, `center`, and `cover` ensures optimal responsive background rendering.
-
+> 
 ---
 
 ### Exercise 3: Background Size Shorthand Syntax
@@ -245,7 +245,7 @@ div { background-size: cover; }
 > ```
 >
 > **Explanation:** `position / size` syntax defines background size in shorthand rules.
-
+> 
 ## 7. Related Terms
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — Base background settings.
 - [`object-fit` & `object-position`](object_fit.md) — Sizing content media tags.

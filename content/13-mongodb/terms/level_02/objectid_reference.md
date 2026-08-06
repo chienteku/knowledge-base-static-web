@@ -174,7 +174,7 @@ Create an order document in collection `orders` storing a foreign reference poin
 > 1. Foreign ObjectId references model relational links across collections.
 > 2. Avoids duplicating entire user document data inside every order.
 > 3. Standard pattern for unbounded 1-to-many relationships.
-
+> 
 ---
 
 ### Exercise 2: Resolving Referenced Documents with `$lookup`
@@ -207,7 +207,7 @@ Execute an aggregation pipeline joining `orders` with `users` on foreign key `cu
 > 1. `$lookup` performs left-outer equality joins across collection references.
 > 2. `from` specifies the foreign target collection; `as` specifies output array name.
 > 3. Requires secondary index on `localField` and `foreignField` for fast join performance.
-
+> 
 ---
 
 ### Exercise 3: Indexing Foreign Key Reference Fields
@@ -231,7 +231,7 @@ Create a secondary index on `customerId` in collection `orders` to optimize `$lo
 > 1. Secondary index `{ customerId: 1 }` converts foreign key lookups from $O(N)$ scans to $O(\log N)$ lookups.
 > 2. Essential for maintaining fast `$lookup` aggregation join speeds.
 > 3. Accelerates query filters like `db.orders.find({ customerId: ... })`.
-
+> 
 ---
 
 

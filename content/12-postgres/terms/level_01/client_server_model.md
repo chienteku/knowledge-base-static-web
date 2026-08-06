@@ -140,28 +140,28 @@ Configure a backend Node.js application using `pg` (node-postgres) to connect to
 >
 > ```typescript
 > import { Pool } from "pg";
-
-const pool = new Pool({
-  host: "localhost",
-  port: 5432,
-  database: "store_db",
-  user: "app_user",
-  password: "SecurePassword123!",
-  max: 20,
-  idleTimeoutMillis: 30000
-});
-
-export async function query(text: string, params?: any[]) {
-  return pool.query(text, params);
-}
-```
-
+> 
+> const pool = new Pool({
+>   host: "localhost",
+>   port: 5432,
+>   database: "store_db",
+>   user: "app_user",
+>   password: "SecurePassword123!",
+>   max: 20,
+>   idleTimeoutMillis: 30000
+> });
+> 
+> export async function query(text: string, params?: any[]) {
+>   return pool.query(text, params);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Client applications connect to the PostgreSQL server process (`postgres`) via TCP/IP sockets.
 > 2. Connection pooling reuses established TCP sockets across incoming HTTP requests.
 > 3. Avoids opening and closing process connections per query, optimizing server RAM usage.
-
+> 
 ---
 
 ### Exercise 2: Monitoring Active Server Backend Processes
@@ -192,7 +192,7 @@ Inspect active client backend connection processes on the PostgreSQL server usin
 > 1. PostgreSQL spawns a dedicated backend process (`pid`) for each active client connection.
 > 2. `pg_stat_activity` exposes real-time telemetry on active client query execution states.
 > 3. Essential for identifying long-running or hanging client processes.
-
+> 
 ---
 
 ### Exercise 3: Setting Client Socket Connection Timeouts
@@ -223,7 +223,7 @@ Configure connection timeout parameters to prevent client applications from hang
 > 1. `connectionTimeoutMillis` caps socket handshake wait time during connection establishment.
 > 2. Prevents application threads from blocking endlessly during database outages.
 > 3. Resilient backend system design.
-
+> 
 ---
 
 

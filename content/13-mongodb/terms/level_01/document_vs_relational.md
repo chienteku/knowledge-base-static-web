@@ -171,7 +171,7 @@ Refactor a relational 3-table schema (`orders`, `order_items`, `products`) into 
 > 1. Replaces relational SQL foreign key JOINs with embedded document arrays.
 > 2. Fetches entire order details in a single atomic $O(1)$ disk read.
 > 3. Eliminates multi-table transaction coordination for order lookups.
-
+> 
 ---
 
 ### Exercise 2: Evaluating Read-Heavy vs Write-Heavy Modeling Trade-offs
@@ -196,7 +196,7 @@ Compare denormalized embedded documents vs normalized referenced collections for
 > 1. Embedded schema optimizes read performance for bounded arrays (<100 items).
 > 2. Referenced schema prevents 16MB document size limit issues for unbounded 1-to-many relationships.
 > 3. Driven by application read/write query access patterns.
-
+> 
 ---
 
 ### Exercise 3: Multi-Document ACID Transactions vs Single-Document Atomicity
@@ -223,7 +223,7 @@ Explain why updating an embedded document in MongoDB is atomic by default withou
 > 1. All modifications to a single MongoDB document are 100% atomic by default.
 > 2. Updates embedded items and status in a single lock execution.
 > 3. Eliminates 2-phase commit overhead required by normalized relational tables.
-
+> 
 ---
 
 

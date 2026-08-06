@@ -171,7 +171,7 @@ function decodeHexFile(filePath) {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Converting Hex to Base64 via Buffer
@@ -188,7 +188,7 @@ function decodeHexFile(filePath) {
 > ```
 >
 > **Explanation:** `Buffer.from(str, encoding)` parses encoded binary representations.
-
+> 
 ---
 
 ### Exercise 3: StringDecoder Utility Role
@@ -205,7 +205,7 @@ function decodeHexFile(filePath) {
 > ```
 >
 > **Explanation:** `StringDecoder` buffers partial multi-byte UTF-8 bytes to prevent text corruption.
-
+> 
 ## 7. Related Terms
 - [Buffers](buffers.md) — The raw byte structure translated by encodings.
 - [Data Chunks](chunks.md) — The chunk payloads that risk character boundary corruption.

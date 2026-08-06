@@ -189,7 +189,7 @@ function App() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Forwarding Ref to Input Component
@@ -208,7 +208,7 @@ function App() {
 > ```
 >
 > **Explanation:** `forwardRef` exposes internal DOM nodes of child components to parent components.
-
+> 
 ---
 
 ### Exercise 3: React 19 Ref Prop Simplification
@@ -225,7 +225,7 @@ function App() {
 > ```
 >
 > **Explanation:** React 19 unifies `ref` as a standard component prop.
-
+> 
 ## 7. Related Terms
 - [`useRef` Hook](use_ref.md) — The reference object engine used to create refs.
 - [Portals](../level_07/portals.md) — Porting component nodes outside parent DOM trees.

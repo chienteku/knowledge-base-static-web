@@ -154,10 +154,6 @@ onMounted(() => { ... }); // ❌ Never executes in .server.vue components!
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Creating Non-Hydrated Nuxt Server Components (`.server.vue`)
@@ -177,22 +173,22 @@ Create a server component `components/MarkdownViewer.server.vue` that parses Mar
 > <script setup lang="ts">
 > // Heavy Markdown parser library imported ONCE on the server!
 > import { parseMarkdown } from "heavy-markdown-parser";
-
-const props = defineProps<{ content: string }>();
-const parsedHtml = parseMarkdown(props.content);
-</script>
-
-<template>
-  <div class="markdown-body" v-html="parsedHtml"></div>
-</template>
-```
-
+> 
+> const props = defineProps<{ content: string }>();
+> const parsedHtml = parseMarkdown(props.content);
+> </script>
+> 
+> <template>
+>   <div class="markdown-body" v-html="parsedHtml"></div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Components ending in `.server.vue` execute exclusively on the server during SSR.
 > 2. The component's JavaScript code and dependencies (`heavy-markdown-parser`) are NOT included in client JavaScript bundles.
 > 3. Sends pure static HTML to the client browser, reducing client JavaScript bundle size to zero bytes for that component.
-
+> 
 ---
 
 ### Exercise 2: Enabling Component Islands in `nuxt.config.ts`
@@ -215,13 +211,13 @@ Enable experimental component islands support in `nuxt.config.ts`.
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `componentIslands: true` activates Nuxt Server Components and `<NuxtIsland>` rendering features.
 > 2. Allows embedding server-rendered HTML islands inside interactive client Vue component trees.
 > 3. Advanced zero-bundle-size component rendering strategy.
-
+> 
 ---
 
 ### Exercise 3: Passing Props and Slots to Nuxt Island Components
@@ -239,30 +235,26 @@ Render a `<NuxtIsland name="MarkdownViewer" :props="{ content: text }" />` dynam
 > ```vue
 > <script setup lang="ts">
 > const markdownText = ref("# Nuxt 3 Server Components
-
-Zero client JS!");
+> 
+> Zero client JS!");
 > </script>
-
-<template>
-  <div>
-    <!-- Renders Server Component Island dynamically -->
-    <NuxtIsland name="MarkdownViewer" :props="{ content: markdownText }" />
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <!-- Renders Server Component Island dynamically -->
+>     <NuxtIsland name="MarkdownViewer" :props="{ content: markdownText }" />
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `<NuxtIsland>` fetches server component HTML over a dedicated Nitro endpoint (`/__nuxt_island/...`).
 > 2. Dynamically re-fetches server component HTML when reactive `:props` change.
 > 3. Zero-JS server island component integration.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process that compiles server components.

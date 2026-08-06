@@ -101,7 +101,7 @@ res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' })
 > Because you changed the payload, the original signature no longer matches the data. You cannot generate a new, matching signature because you don't know the server's secret `.env` key.
 > ```
 > - What is the 3rd part of the JWT used for?
-
+> 
 ---
 
 
@@ -121,7 +121,7 @@ res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' })
 > ```
 >
 > **Explanation:** `jwt.sign` signs payloads with secret keys and sets expiration claims (`exp`).
-
+> 
 ---
 
 ### Exercise 3: Verifying JWT Token
@@ -143,7 +143,7 @@ res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' })
 > ```
 >
 > **Explanation:** `jwt.verify` checks signature validity and expiration before returning decoded payload.
-
+> 
 ## 7. Related Terms
 - [Environment Variables (dotenv)](env_vars.md) — Where you store the Secret Password used to sign the JWTs.
 - [Bcrypt (Password Hashing)](bcrypt.md) — The tool used to check the user's password *before* giving them the JWT.

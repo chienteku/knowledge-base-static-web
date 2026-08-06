@@ -111,7 +111,7 @@ stream.pipe(destination);
 > A chunk is not a String! It is raw binary Buffer data.
 > ```
 > - Remember what streams are made of (1s and 0s).
-
+> 
 ---
 
 
@@ -130,7 +130,7 @@ stream.pipe(destination);
 > ```
 >
 > **Explanation:** `highWaterMark` configures internal buffer size limits for stream chunks.
-
+> 
 ---
 
 ### Exercise 3: Default Stream highWaterMark Sizes
@@ -148,7 +148,7 @@ stream.pipe(destination);
 > ```
 >
 > **Explanation:** Default highWaterMark specifies byte thresholds for binary buffers vs item count for object streams.
-
+> 
 ## 7. Related Terms
 - [Buffers](buffers.md) — What a chunk actually is.
 - [Streams (General Concept)](streams.md) — The system that produces chunks.

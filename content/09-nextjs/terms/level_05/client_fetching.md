@@ -128,27 +128,27 @@ Fetch real-time user profile data in a Client Component using `useSWR()`.
 >
 > ```tsx
 > "use client";
-
-import useSWR from "swr";
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-export default function UserProfile() {
-  const { data, error, isLoading } = useSWR("/api/user", fetcher);
-
-  if (isLoading) return <div>Loading Profile...</div>;
-  if (error) return <div>Failed to load profile.</div>;
-
-  return <div>Welcome, {data.name}</div>;
-}
-```
-
+> 
+> import useSWR from "swr";
+> 
+> const fetcher = (url: string) => fetch(url).then((res) => res.json());
+> 
+> export default function UserProfile() {
+>   const { data, error, isLoading } = useSWR("/api/user", fetcher);
+> 
+>   if (isLoading) return <div>Loading Profile...</div>;
+>   if (error) return <div>Failed to load profile.</div>;
+> 
+>   return <div>Welcome, {data.name}</div>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useSWR()` manages client-side caching, revalidation, focus tracking, and optimistic UI updates.
 > 2. `fetcher` function handles the underlying HTTP network request execution.
 > 3. Reduces boilerplate code compared to raw `useEffect` + `useState` fetching.
-
+> 
 ---
 
 ### Exercise 2: Implementing Optimistic UI Updates in Client Components
@@ -165,43 +165,43 @@ Use React `useOptimistic()` to instantly update UI state before a server mutatio
 >
 > ```tsx
 > "use client";
-
-import { useOptimistic } from "react";
-
-export default function CommentList({ comments }: { comments: string[] }) {
-  const [optimisticComments, addOptimisticComment] = useOptimistic(
-    comments,
-    (state, newComment: string) => [...state, newComment]
-  );
-
-  async function handleSubmit(formData: FormData) {
-    const text = formData.get("text") as string;
-    addOptimisticComment(text); // Instant UI update!
-    // Execute Server Action...
-  }
-
-  return (
-    <div>
-      <form action={handleSubmit}>
-        <input name="text" required />
-        <button type="submit">Post Comment</button>
-      </form>
-      <ul>
-        {optimisticComments.map((c, i) => (
-          <li key={i}>{c}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-```
-
+> 
+> import { useOptimistic } from "react";
+> 
+> export default function CommentList({ comments }: { comments: string[] }) {
+>   const [optimisticComments, addOptimisticComment] = useOptimistic(
+>     comments,
+>     (state, newComment: string) => [...state, newComment]
+>   );
+> 
+>   async function handleSubmit(formData: FormData) {
+>     const text = formData.get("text") as string;
+>     addOptimisticComment(text); // Instant UI update!
+>     // Execute Server Action...
+>   }
+> 
+>   return (
+>     <div>
+>       <form action={handleSubmit}>
+>         <input name="text" required />
+>         <button type="submit">Post Comment</button>
+>       </form>
+>       <ul>
+>         {optimisticComments.map((c, i) => (
+>           <li key={i}>{c}</li>
+>         ))}
+>       </ul>
+>     </div>
+>   );
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `useOptimistic()` displays immediate speculative state changes while background server requests resolve.
 > 2. Automatically rolls back state if the server request fails.
 > 3. Delivers zero-latency user experience for interactive forms.
-
+> 
 ---
 
 ### Exercise 3: Architectural Decision Matrix: RSC vs Client Fetching
@@ -221,19 +221,15 @@ Formulate a selection decision matrix comparing Server Component data fetching a
 > - Server Component (RSC): Zero client bundle weight, direct DB access, fast initial HTML paint, excellent SEO. Use for initial page loads & static feeds.
 > - Client Component (SWR/React Query): Adds client JS dependencies, post-mount polling, instant cached updates. Use for real-time notifications & highly interactive forms.
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Prefer Server Component fetching by default for performance and security.
 > 2. Reserve client-side fetching for post-mount user polling or real-time web sockets.
 > 3. Primary Next.js data architecture rule.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Server-side Fetching (Extended `fetch`)](fetch.md) — The default and preferred fetching method.

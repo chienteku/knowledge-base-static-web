@@ -145,7 +145,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics'; hoistNonReactStatics
 > ```
 >
 > **Explanation:** HOCs take a component and return an enhanced component wrapping cross-cutting concern logic.
-
+> 
 ---
 
 ### Exercise 2: HOCs vs Custom Hooks Choice
@@ -162,7 +162,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics'; hoistNonReactStatics
 > ```
 >
 > **Explanation:** Custom Hooks decouple logic from component tree nesting structures.
-
+> 
 ---
 
 ### Exercise 3: Display Name Convention for HOCs
@@ -179,7 +179,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics'; hoistNonReactStatics
 > ```
 >
 > **Explanation:** Assigning `displayName` identifies HOC wrapper components clearly in React DevTools.
-
+> 
 ## 7. Related Terms
 - [Custom Hooks](../level_04/custom_hooks.md) — The modern React feature that effectively killed the widespread use of HOCs.
 

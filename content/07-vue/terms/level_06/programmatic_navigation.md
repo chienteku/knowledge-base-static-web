@@ -237,7 +237,7 @@ function goBack() {
 > ```
 > - The router instance has a dedicated `.back()` method.
 > - Alternatively, you can use `.go(-1)`.
-
+> 
 ---
 
 ### Exercise 2: router.push Navigation Variants
@@ -263,7 +263,7 @@ function goBack() {
 > router.push({ name: 'user-profile', params: { id: 10 } });
 > router.push({ path: '/search', query: { search: 'vue' } });
 > ```
-
+> 
 ---
 
 ### Exercise 3: router.replace vs router.push
@@ -281,8 +281,8 @@ function goBack() {
 > ```javascript
 > router.replace('/login');
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

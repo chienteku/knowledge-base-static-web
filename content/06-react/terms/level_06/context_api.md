@@ -134,7 +134,7 @@ Can the `<Footer />` access the "dark" theme?
 > A component can only consume context if it is nested INSIDE the `<Context.Provider>` tags. Since Footer is outside the Provider, it cannot hear the broadcast.
 > ```
 > - Think about HTML hierarchy. Where does the Provider close?
-
+> 
 ---
 
 
@@ -166,7 +166,7 @@ Can the `<Footer />` access the "dark" theme?
 > ```
 >
 > **Explanation:** Context Providers wrap child trees to supply global state without prop drilling.
-
+> 
 ---
 
 ### Exercise 3: Context Default Value Fallback
@@ -183,7 +183,7 @@ Can the `<Footer />` access the "dark" theme?
 > ```
 >
 > **Explanation:** Providing default values in `createContext()` provides fallback values during testing.
-
+> 
 ## 7. Related Terms
 - [`useContext` Hook](use_context.md) — How the Child actually grabs the data out of the Context.
 - [Prop Drilling](prop_drilling.md) — What Context prevents.

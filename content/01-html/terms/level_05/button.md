@@ -143,7 +143,7 @@ The `<button>` element is the physical plastic square you push. The `type` attri
 > Buttons (`<button>`) are for actions (submitting forms, opening modals). Anchors (`<a>`) are for navigation (going to a new URL). Using a button for navigation breaks accessibility and prevents users from right-clicking to "Open in new tab".
 > ```
 > - Think about the semantic *purpose* of the action. Is the user traveling, or is the user commanding?
-
+> 
 ---
 
 
@@ -166,7 +166,7 @@ The `<button>` element is the physical plastic square you push. The `type` attri
 > ```
 >
 > **Explanation:** `type` dictates button form interaction behavior.
-
+> 
 ---
 
 ### Exercise 3: Keyboard Button Triggering
@@ -183,7 +183,7 @@ The `<button>` element is the physical plastic square you push. The `type` attri
 > ```
 >
 > **Explanation:** Native `<button>` tags provide built-in keyboard accessibility for Enter and Space.
-
+> 
 ## 7. Related Terms
 - [`<form>`](form.md) — The element that the button usually submits.
 - [`action` & `method` Attributes](action_method.md) — The parameters that govern form submission when `type="submit"` is pressed.

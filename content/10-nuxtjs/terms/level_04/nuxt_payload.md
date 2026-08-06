@@ -140,27 +140,27 @@ Inspect the serialized `window.__NUXT__` payload object generated during server 
 > ```vue
 > <script setup lang="ts">
 > const nuxtApp = useNuxtApp();
-
-onMounted(() => {
-  console.log("Hydrating Nuxt State Payload:", nuxtApp.payload);
-  console.log("Fetched Data Cache:", nuxtApp.payload.data);
-  console.log("Shared State Keys:", nuxtApp.payload.state);
-});
-</script>
-
-<template>
-  <div>
-    <p>Payload Inspection View</p>
-  </div>
-</template>
-```
-
+> 
+> onMounted(() => {
+>   console.log("Hydrating Nuxt State Payload:", nuxtApp.payload);
+>   console.log("Fetched Data Cache:", nuxtApp.payload.data);
+>   console.log("Shared State Keys:", nuxtApp.payload.state);
+> });
+> </script>
+> 
+> <template>
+>   <div>
+>     <p>Payload Inspection View</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `NuxtPayload` serializes server state, `useState()` values, and `useFetch()` data into an inline JSON script during SSR.
 > 2. The client hydrates Vue state directly from `window.__NUXT__` without re-fetching API data over the network.
 > 3. Prevents duplicate API data fetching during client hydration.
-
+> 
 ---
 
 ### Exercise 2: Registering Custom Payload Reducers with `definePayloadReducer`
@@ -182,13 +182,13 @@ Register a custom payload reducer to serialize custom JavaScript `Set` or `Map` 
 >   definePayloadReviver("CustomSet", (data) => new Set(data as any[]));
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Standard `JSON.stringify` converts non-serializable objects (`Map`, `Set`, `Date`, custom classes) into plain strings or empty objects.
 > 2. `definePayloadReducer` and `definePayloadReviver` enable rich data structure serialization across server-client boundaries.
 > 3. De-value serialization engine feature in Nuxt 3.
-
+> 
 ---
 
 ### Exercise 3: Reducing Hydration Payload Size
@@ -213,26 +213,22 @@ Optimize a `useFetch()` call using `pick` or `transform` options to exclude unus
 >   })
 > });
 > </script>
-
-<template>
-  <div>
-    <p>User: {{ userSummary?.username }}</p>
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <p>User: {{ userSummary?.username }}</p>
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Unfiltered API responses append large JSON blobs to `NuxtPayload`, increasing initial HTML document byte size.
 > 2. `transform` or `pick` strips unnecessary API properties on the server before payload serialization.
 > 3. Reduces initial HTML payload download latency.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Hydration](../level_01/hydration.md) — The process that uses this payload to align client components.

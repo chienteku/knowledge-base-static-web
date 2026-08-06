@@ -183,7 +183,7 @@ console.log("C");
 > B
 > ```
 > - Even with a 0ms delay, `setTimeout` pushes the callback to the background. JavaScript *always* finishes its current synchronous tasks before checking on background async tasks!
-
+> 
 ---
 
 ### Exercise 2: Non-Blocking Async Trace
@@ -204,7 +204,7 @@ console.log("C");
 > ```
 >
 > **Explanation:** `setTimeout` yields execution to the event loop macrotask queue, running after synchronous code finishes.
-
+> 
 ---
 
 ### Exercise 3: Async Callback Delegation
@@ -224,8 +224,8 @@ console.log("C");
 > ```
 >
 > **Explanation:** Asynchronous functions execute callbacks out-of-band without blocking main execution lines.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

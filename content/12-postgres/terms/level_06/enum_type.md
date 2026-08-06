@@ -176,7 +176,7 @@ Create a custom enum type `order_status` with values `'pending'`, `'processing'`
 > 1. `CREATE TYPE ... AS ENUM` defines a strongly-typed static set of allowed string labels.
 > 2. Stores enum values internally as 4-byte OID integers, saving disk space compared to raw `TEXT`.
 > 3. Automatically rejects invalid status strings at the database boundary.
-
+> 
 ---
 
 ### Exercise 2: Altering ENUM Types to Add New Values
@@ -201,7 +201,7 @@ Add a new enum value `'refunded'` to `order_status` after `'delivered'`.
 > 1. `ALTER TYPE ... ADD VALUE` adds new labels to existing enum types online.
 > 2. Does NOT require rewriting underlying table heap pages.
 > 3. Fast schema alteration.
-
+> 
 ---
 
 ### Exercise 3: Trade-Off Analysis: ENUM Types vs Foreign Key Lookup Tables
@@ -228,7 +228,7 @@ Compare PostgreSQL `ENUM` types vs a lookup table `statuses` with a foreign key 
 > 1. ENUM types are ideal for static application constants (e.g. user roles: `'admin'`, `'user'`).
 > 2. Foreign key lookup tables are ideal for categories managed by application admins via UI dashboards.
 > 3. Match implementation to domain lifecycle.
-
+> 
 ---
 
 

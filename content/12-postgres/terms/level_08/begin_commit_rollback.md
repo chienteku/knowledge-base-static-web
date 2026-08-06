@@ -191,7 +191,7 @@ Execute a multi-statement order creation block inside `BEGIN` and `COMMIT`.
 > 1. `BEGIN` initializes an explicit transaction block, disabling autocommit mode.
 > 2. Statements execute within an isolated snapshot until `COMMIT` is called.
 > 3. `COMMIT` flushes WAL writes and makes modifications permanently visible to other transactions.
-
+> 
 ---
 
 ### Exercise 2: Rolling Back Failed Transaction Blocks
@@ -222,7 +222,7 @@ Simulate an invalid write failure during multi-statement execution, aborting the
 > 1. Any SQL error encountered within a transaction marks the transaction state as `ABORTED`.
 > 2. Subsequent queries in an aborted transaction throw `current transaction is aborted, commands ignored until end of transaction block`.
 > 3. `ROLLBACK` clears the aborted state and reverts all uncommitted modifications.
-
+> 
 ---
 
 ### Exercise 3: Autocommit vs Explicit Transaction Boundaries
@@ -248,7 +248,7 @@ Contrast PostgreSQL default autocommit behavior for standalone SQL statements vs
 > 1. Standalone SQL statements run in autocommit mode, wrapping each statement in an implicit single-statement transaction.
 > 2. `BEGIN` disables autocommit for multi-statement atomic execution.
 > 3. Core database transaction control mechanism.
-
+> 
 ---
 
 

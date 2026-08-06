@@ -200,7 +200,7 @@ fn process_request(query: String) -> String {
 > 1. `thread::spawn` requires the closure payload `F: 'static`.
 > 2. `JobPayload` is an owned struct containing `u64` and `String`, satisfying `T: 'static`.
 > 3. Moving `job` into the spawned thread avoids referencing parent stack frames.
-
+> 
 ---
 
 ### Exercise 2: High-Performance Interned String Dictionary (`Box::leak`)
@@ -264,7 +264,7 @@ fn process_request(query: String) -> String {
 > 1. `Box::leak` converts dynamic `String` allocations into `'static` references.
 > 2. `HashSet<&'static str>` dedupes strings so each unique string is leaked at most once.
 > 3. `std::ptr::eq` confirms both returned slices point to the exact same memory address.
-
+> 
 ---
 
 ### Exercise 3: Global Thread-Safe Lazy Configuration
@@ -314,7 +314,7 @@ fn process_request(query: String) -> String {
 >
 > 1. `LazyLock` initializes static data lazily on first access.
 > 2. Static globals exist for the duration of the process, returning `&'static str` safely across concurrent threads.
-
+> 
 ---
 
 ## 6. Related Terms

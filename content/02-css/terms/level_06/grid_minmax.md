@@ -259,7 +259,7 @@ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 > ```
 > - Define three space-separated track widths.
 > - Use the `minmax()` helper for the second column constraint.
-
+> 
 ---
 
 
@@ -281,7 +281,7 @@ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 > ```
 >
 > **Explanation:** `250px minmax(500px, 1fr)` defines fixed sidebar and fluid main area.
-
+> 
 ---
 
 ### Exercise 3: minmax Min Content Keyword
@@ -298,7 +298,7 @@ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 > ```
 >
 > **Explanation:** `min-content` clamps column width to minimum content requirements.
-
+> 
 ## 7. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint.
 - [`auto-fill` / `auto-fit`](grid_auto_fill_fit.md) — The responsive counts keywords often paired with `minmax()`.

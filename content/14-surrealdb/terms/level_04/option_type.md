@@ -170,7 +170,7 @@ A user profile schema requires a mandatory `username` string and an optional `mi
 > 1. `option<T>` designates a field as optional, permitting `NONE` or `NULL` values.
 > 2. In `SCHEMAFULL` mode, non-option fields require explicit values during creation.
 > 3. Replaces SQL `NULLABLE` column designations.
-
+> 
 ---
 
 ### Exercise 2: Optional Record Link Pointers
@@ -197,7 +197,7 @@ Define an optional manager link pointer `option<record<user>>` on table `employe
 > 1. `option<record<table>>` allows optional foreign record link pointers.
 > 2. Permits top-level entities (like a CEO) to omit manager pointers cleanly.
 > 3. Enables flexible relational modeling.
-
+> 
 ---
 
 ### Exercise 3: Querying Optional Fields with `NONE` Checks
@@ -221,7 +221,7 @@ Query employees who do not have an assigned manager (`manager = NONE`).
 > 1. `WHERE field = NONE` checks for omitted optional fields.
 > 2. Distinguishes missing optional fields from set values.
 > 3. Evaluates optional field presence in table scans.
-
+> 
 ---
 
 

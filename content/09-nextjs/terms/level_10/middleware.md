@@ -135,22 +135,22 @@ Create `middleware.ts` to log incoming request paths and attach a custom respons
 > // middleware.ts
 > import { NextResponse } from "next/server";
 > import type { NextRequest } from "next/server";
-
-export function middleware(req: NextRequest) {
-  const res = NextResponse.next();
-  res.headers.set("X-Request-Time", Date.now().toString());
-
-  console.log(`[Middleware] ${req.method} ${req.nextUrl.pathname}`);
-  return res;
-}
-```
-
+> 
+> export function middleware(req: NextRequest) {
+>   const res = NextResponse.next();
+>   res.headers.set("X-Request-Time", Date.now().toString());
+> 
+>   console.log(`[Middleware] ${req.method} ${req.nextUrl.pathname}`);
+>   return res;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `middleware.ts` placed at the project root executes on every incoming server request before page/route resolution.
 > 2. `NextResponse.next()` allows the request to continue to downstream page handlers while attaching custom response headers.
 > 3. Central entry point for server request interception.
-
+> 
 ---
 
 ### Exercise 2: Filtering Middleware Execution with `config.matcher`
@@ -168,22 +168,22 @@ Restrict `middleware.ts` execution strictly to `/dashboard/**` and `/api/protect
 > ```typescript
 > import { NextResponse } from "next/server";
 > import type { NextRequest } from "next/server";
-
-export function middleware(req: NextRequest) {
-  return NextResponse.next();
-}
-
-export const config = {
-  matcher: ["/dashboard/:path*", "/api/protected/:path*"]
-};
-```
-
+> 
+> export function middleware(req: NextRequest) {
+>   return NextResponse.next();
+> }
+> 
+> export const config = {
+>   matcher: ["/dashboard/:path*", "/api/protected/:path*"]
+> };
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `config.matcher` filters which URL paths trigger middleware execution.
 > 2. Bypasses middleware execution for static assets (`/_next/static`, images, favicons).
 > 3. Essential performance optimization to avoid unnecessary middleware runs on static files.
-
+> 
 ---
 
 ### Exercise 3: Performing Conditional Redirects in Middleware
@@ -201,28 +201,24 @@ Redirect users attempting to access `/admin` without a `role=admin` cookie to `/
 > ```typescript
 > import { NextResponse } from "next/server";
 > import type { NextRequest } from "next/server";
-
-export function middleware(req: NextRequest) {
-  const role = req.cookies.get("role")?.value;
-
-  if (req.nextUrl.pathname.startsWith("/admin") && role !== "admin") {
-    return NextResponse.redirect(new URL("/unauthorized", req.url));
-  }
-}
-```
-
+> 
+> export function middleware(req: NextRequest) {
+>   const role = req.cookies.get("role")?.value;
+> 
+>   if (req.nextUrl.pathname.startsWith("/admin") && role !== "admin") {
+>     return NextResponse.redirect(new URL("/unauthorized", req.url));
+>   }
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `NextResponse.redirect()` issues an immediate HTTP 307 temporary redirect response.
 > 2. Intercepts unauthorized requests before server rendering or database querying begins.
 > 3. High performance server security guard.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Edge Runtime vs Node.js Runtime](edge_runtime.md) — The restricted environment where Middleware runs.

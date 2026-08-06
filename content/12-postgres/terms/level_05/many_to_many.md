@@ -173,7 +173,7 @@ Model a Many-to-Many association between `posts` and `tags` using a `post_tags` 
 > 1. Many-to-Many relationships cannot be stored directly in relational columns without violating First Normal Form (1NF).
 > 2. `post_tags` junction table links post IDs to tag IDs.
 > 3. Primary key `(post_id, tag_id)` prevents duplicate tag assignments.
-
+> 
 ---
 
 ### Exercise 2: Inserting Rows across Many-to-Many Associations
@@ -200,7 +200,7 @@ Associate post `id = 1` with tags `'sql'` (id = 5) and `'postgres'` (id = 8).
 > 1. Inserts association pairs into the junction table.
 > 2. Enforces foreign key checks against `posts` and `tags`.
 > 3. Multi-row insertion pattern.
-
+> 
 ---
 
 ### Exercise 3: Querying Tagged Entities with `STRING_AGG`
@@ -231,7 +231,7 @@ Query all posts alongside a comma-separated string list of their assigned tags.
 > 1. `STRING_AGG(expression, delimiter)` concatenates grouped string values.
 > 2. Groups tags by post ID.
 > 3. Returns formatted tag string lists (`"postgres, sql"`).
-
+> 
 ---
 
 

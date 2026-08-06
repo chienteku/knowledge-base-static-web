@@ -282,7 +282,7 @@ Which keyword (`auto-fill` or `auto-fit`) do you use for Option A, and which for
 > - Option B: Use `auto-fit` (collapses the empty slots, stretching the single card).
 > ```
 > - Which keyword "fills" the layout row with empty spaces, and which "fits" the active items?
-
+> 
 ---
 
 
@@ -305,7 +305,7 @@ Which keyword (`auto-fill` or `auto-fit`) do you use for Option A, and which for
 > ```
 >
 > **Explanation:** The `repeat(auto-fit, minmax(280px, 1fr))` pattern builds responsive grids with zero media queries.
-
+> 
 ---
 
 ### Exercise 3: auto-fill vs auto-fit Trait Difference
@@ -322,7 +322,7 @@ Which keyword (`auto-fill` or `auto-fit`) do you use for Option A, and which for
 > ```
 >
 > **Explanation:** `auto-fit` stretches items across full width; `auto-fill` preserves empty track slots.
-
+> 
 ## 7. Related Terms
 - [`repeat()` Function](grid_repeat.md) — The loop container.
 - [`minmax()` Function](grid_minmax.md) — The required track bounds function.

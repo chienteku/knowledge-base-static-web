@@ -173,7 +173,7 @@ calculate(10, 20).then(result => console.log("Result:", result));
 
 > [!check]- Answer
 > - Inside the async function, write `const math = await import("./math.js");` and return `math.add(a, b);`.
-
+> 
 ---
 
 ### Exercise 2: Dynamic Module Loading with Async/Await
@@ -190,7 +190,7 @@ calculate(10, 20).then(result => console.log("Result:", result));
 > ```
 >
 > **Explanation:** `import(path)` returns a Promise resolving to the target module namespace object.
-
+> 
 ---
 
 ### Exercise 3: Destructuring Default Exports from Dynamic Imports
@@ -207,7 +207,7 @@ calculate(10, 20).then(result => console.log("Result:", result));
 > ```
 >
 > **Explanation:** Dynamic import module namespace objects store default exports under key `default`.
-
+> 
 ---
 
 ## 7. Related Terms

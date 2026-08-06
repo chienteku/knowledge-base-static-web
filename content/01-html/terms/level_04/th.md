@@ -132,7 +132,7 @@ Usually, you type your column names there and make the text bold so it stands ou
 > Yes! A table can have row headers. For example, in a schedule, the left-most column might be `<th>` elements representing the days of the week (Monday, Tuesday), while the rest of the row contains `<td>` elements for the events on those days.
 > ```
 > - Think about a timetable or a calendar. Where are the labels?
-
+> 
 ---
 
 
@@ -154,7 +154,7 @@ Usually, you type your column names there and make the text bold so it stands ou
 > ```
 >
 > **Explanation:** `scope="row"` designates `<th>` as header for the horizontal row.
-
+> 
 ---
 
 ### Exercise 3: Default th Styling
@@ -171,7 +171,7 @@ Usually, you type your column names there and make the text bold so it stands ou
 > ```
 >
 > **Explanation:** Browsers render header cells bold and centered by default.
-
+> 
 ## 7. Related Terms
 - [`<tr>` (Table Row)](tr.md) — The row that contains the `<th>`.
 - [`<td>` (Table Data)](td.md) — The standard data cell that corresponds to the `<th>`.

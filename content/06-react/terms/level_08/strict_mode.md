@@ -106,7 +106,7 @@ useEffect(() => {
 > The developer will see TWO headings on the screen, instantly realizing they wrote an impure, unsafe side effect!
 > ```
 > - Think about what `+=` does if it runs twice in a row.
-
+> 
 ---
 
 
@@ -129,7 +129,7 @@ useEffect(() => {
 > ```
 >
 > **Explanation:** `<React.StrictMode>` enables development-only checks for React applications.
-
+> 
 ---
 
 ### Exercise 3: Checks Performed by StrictMode
@@ -146,7 +146,7 @@ useEffect(() => {
 > ```
 >
 > **Explanation:** StrictMode surfaces latent memory leaks and impure side-effects during development.
-
+> 
 ## 7. Related Terms
 - [Side Effects](../level_03/side_effects.md) — What Strict Mode audits.
 - [Cleanup Functions](../level_03/cleanup_functions.md) — The specific thing Strict Mode is checking for.

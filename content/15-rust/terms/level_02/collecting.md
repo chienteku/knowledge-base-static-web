@@ -261,7 +261,7 @@ Implement a function `parse_and_aggregate_telemetry` that accepts an iterator ov
 > 2. **Collecting Key-Value Pairs into HashMaps**: `Iterator::collect()` requires an explicit collection type because `collect()` can produce any type implementing `FromIterator`. In Step 2, calling `.collect::<HashMap<String, NodeAggregate>>()` drives the iterator to consume key-value tuples `(String, NodeAggregate)` and insert them directly into the hash map.
 > 3. **Ownership and Memory Lifetime**: String slices `&'a str` are owned by the caller. When building `HashMap<String, NodeAggregate>`, new owned `String` keys are constructed via `.to_string()`, transferring exclusive heap ownership into the returned `HashMap`.
 > 4. **Edge Cases**: Empty logs or inputs containing only corrupted lines yield an empty `HashMap`. Zero-latency or single-sample cases are handled cleanly by `unwrap_or(0)` and `samples.len()`.
-
+> 
 ---
 
 ### Exercise 2: Fail-Fast Financial Batch Processor vs Complete Audit Partition Collector
@@ -393,7 +393,7 @@ The system requires two distinct processing strategies powered by Rust collectio
 > 2. **Partitioning Iterators**: `Iterator::partition` splits an iterator into two collections based on a predicate closure (`Result::is_ok`). Because `partition` collects both sides simultaneously into a tuple `(A, B)`, it consumes the source batch in a single pass without extra memory allocations beyond the output vectors.
 > 3. **Ownership and Value Transfer**: `into_iter()` transfers full ownership of `RawTransaction` structs from the input vector. Validated instances wrap owned `String` fields without intermediate string cloning or allocations.
 > 4. **Edge Cases**: Empty transaction batches collect cleanly into `Ok(vec![])` or `(vec![], vec![])`. Large batches short-circuit immediately on early errors, optimizing memory and throughput.
-
+> 
 ---
 
 ### Exercise 3: High-Performance Log Indexer via Custom `FromIterator` Implementation
@@ -502,7 +502,7 @@ Requirements:
 > 2. **Generic Flexibility (`S: Into<String>`)**: By using the trait bound `S: Into<String>`, `TokenHistogram` can collect from iterators over borrowed string slices `&str` (such as `split_whitespace()`) as well as owned `String` streams without needing duplicate trait implementations.
 > 3. **Frequency Ranking & Memory Efficiency**: The `top_n` method creates borrowed tuples `(&str, usize)` referencing internal map keys `&String`, avoiding unnecessary allocations when querying rankings. Sorting uses `b.1.cmp(&a.1)` for descending frequency and `a.0.cmp(b.0)` for deterministic alphabetical tie-breaking.
 > 4. **Edge Cases**: Empty tokens (`""`) are skipped during insertion. An empty stream produces a valid `TokenHistogram` with `total_tokens == 0` and `unique_tokens == 0`.
-
+> 
 ---
 
 ## 6. Related Terms

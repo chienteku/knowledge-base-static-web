@@ -281,7 +281,7 @@ exports.createPost = async (req, res, next) => {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Separating Controller and Service Responsibilities
@@ -308,7 +308,7 @@ exports.createPost = async (req, res, next) => {
 > ```
 >
 > **Explanation:** Controllers handle HTTP transport layer (req/res); Services handle core business domain logic.
-
+> 
 ---
 
 ### Exercise 3: Service Layer Unit Testing Advantage
@@ -325,7 +325,7 @@ exports.createPost = async (req, res, next) => {
 > ```
 >
 > **Explanation:** Framework-agnostic service layer functions can be unit-tested with standard input values.
-
+> 
 ## 7. Related Terms
 - [MVC Pattern (Model–View–Controller)](mvc_pattern.md) — The parent application layout pattern.
 - [Error Handling Middleware](error_handling_middleware.md) — Receives errors bubble-passed by controllers and services.

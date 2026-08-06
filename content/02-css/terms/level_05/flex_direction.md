@@ -111,7 +111,7 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 > 3, 2, 1! `row-reverse` flips the axis, meaning it starts packing items against the right side of the screen first.
 > ```
 > - Which side of the screen does `reverse` start on?
-
+> 
 ---
 
 
@@ -134,7 +134,7 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 > ```
 >
 > **Explanation:** `flex-direction: column` stacks flex items vertically.
-
+> 
 ---
 
 ### Exercise 3: Flex Direction Values List
@@ -157,7 +157,7 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 > ```
 >
 > **Explanation:** `flex-direction` dictates main axis orientation and direction.
-
+> 
 ## 7. Related Terms
 - [`justify-content`](justify_content.md) — Aligns children along the axis defined by `flex-direction`.
 - [`align-items`](align_items.md) — Aligns children along the perpendicular (cross) axis.

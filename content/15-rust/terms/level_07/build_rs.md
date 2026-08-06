@@ -163,7 +163,7 @@ fs::write(std::path::Path::new(&out_dir).join("generated.rs"), code);
 >
 > 1. Simulates `build.rs` writing generated Rust code to `$OUT_DIR`.
 > 2. Main crate includes generated file via `include!(concat!(env!("OUT_DIR"), "/build_info.rs"));`.
-
+> 
 ---
 
 ### Exercise 2: Cargo Linker Directive Generator
@@ -205,7 +205,7 @@ fs::write(std::path::Path::new(&out_dir).join("generated.rs"), code);
 >
 > 1. `build.rs` outputs these directives to stdout to instruct `cargo` and `rustc` linkers.
 > 2. Configures native library paths and static linking rules.
-
+> 
 ---
 
 ### Exercise 3: C Header Dependency Watcher Generator
@@ -242,7 +242,7 @@ fs::write(std::path::Path::new(&out_dir).join("generated.rs"), code);
 >
 > 1. Prevents stale builds by monitoring C header modifications.
 > 2. Informs Cargo's incremental build cache engine.
-
+> 
 ---
 
 ## 5. Related Terms

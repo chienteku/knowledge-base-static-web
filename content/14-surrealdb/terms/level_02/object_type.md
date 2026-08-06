@@ -180,7 +180,7 @@ A user management system stores user address details inside a nested `address` o
 > 1. Dot-notation (`address.city`) extracts nested object properties directly without unnesting.
 > 2. `object` types store structured key-value dictionaries inside SurrealDB records.
 > 3. Combines document store flexibility with SQL selection semantics.
-
+> 
 ---
 
 ### Exercise 2: Defining Rigid vs Flexible Object Schemas
@@ -212,7 +212,7 @@ You need to define a `SCHEMAFULL` table `profile` with a strict `settings` objec
 > 1. Defining sub-fields with dot-notation (`settings.theme`) enforces strict validation rules on nested object keys.
 > 2. `SCHEMAFULL` mode rejects unapproved keys inside the nested object.
 > 3. Provides deep schema safety for complex nested document structures.
-
+> 
 ---
 
 ### Exercise 3: Merging Deep Nested Object Keys
@@ -239,7 +239,7 @@ Update a user's notification preference inside `settings.notifications` without 
 > 1. Dot-notation assignment (`SET settings.notifications = false`) mutates targeted nested properties atomically.
 > 2. Preserves all other sibling keys (`settings.theme`) intact within the object.
 > 3. Eliminates full-document fetch-modify-replace cycles required by traditional document databases.
-
+> 
 ---
 
 

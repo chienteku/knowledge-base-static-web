@@ -130,23 +130,23 @@ Dynamically load a heavy modal component `components/UserModal.vue` ONLY when a 
 > <script setup lang="ts">
 > const isModalOpen = ref(false);
 > </script>
-
-<template>
-  <div>
-    <button @click="isModalOpen = true">Open User Modal</button>
-    
-    <!-- Code chunk is fetched asynchronously ONLY when isModalOpen becomes true! -->
-    <LazyUserModal v-if="isModalOpen" @close="isModalOpen = false" />
-  </div>
-</template>
-```
-
+> 
+> <template>
+>   <div>
+>     <button @click="isModalOpen = true">Open User Modal</button>
+>     
+>     <!-- Code chunk is fetched asynchronously ONLY when isModalOpen becomes true! -->
+>     <LazyUserModal v-if="isModalOpen" @close="isModalOpen = false" />
+>   </div>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Prepending `Lazy` to any auto-imported component name (`LazyUserModal`) converts it into an asynchronous component.
 > 2. Vite creates a separate JavaScript bundle chunk for the lazy component.
 > 3. Defers network fetching of the component JavaScript until `v-if` evaluates to `true`.
-
+> 
 ---
 
 ### Exercise 2: Awaiting Lazy Component Hydration with `hydrateOnVisible`
@@ -165,23 +165,23 @@ Hydrate a lazy component when it enters the user's browser viewport using `hydra
 > <script setup lang="ts">
 > // Trigger lazy chunk fetch when component enters viewport
 > </script>
-
-<template>
-  <main>
-    <div class="hero-section">Top Hero Content</div>
-    
-    <!-- Deferred loading until user scrolls down! -->
-    <LazyHeavyFooterWidget />
-  </main>
-</template>
-```
-
+> 
+> <template>
+>   <main>
+>     <div class="hero-section">Top Hero Content</div>
+>     
+>     <!-- Deferred loading until user scrolls down! -->
+>     <LazyHeavyFooterWidget />
+>   </main>
+> </template>
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Lazy components reduce initial page bundle size and improve Time-To-Interactive (TTI).
 > 2. Non-critical below-the-fold UI components can be lazy-loaded on scroll.
 > 3. Core bundle optimization pattern.
-
+> 
 ---
 
 ### Exercise 3: Handling Async Loading States for Lazy Components
@@ -210,19 +210,15 @@ Handle async loading delays when rendering a Lazy component using Vue `<Suspense
 >   </div>
 > </template>
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. Vue `<Suspense>` manages pending async loading states while lazy components download over the network.
 > 2. Renders `#fallback` template until the JavaScript chunk resolves.
 > 3. Prevents UI pop-in artifacts.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`components/` Directory](components_directory.md) — The directory that auto-generates these Lazy versions.

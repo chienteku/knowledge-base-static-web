@@ -323,7 +323,7 @@ thread::spawn(move || {
 > 2. **Type Alias `Self`**: Inside `impl DbPoolConfig`, using `Self` as the return type ensures code maintainability. If the struct is later renamed or refactored, the constructor signatures remain unchanged.
 > 3. **Static Namespace Validation**: `DbPoolConfig::validate_limits` demonstrates that associated functions are not limited to returning `Self`. They serve effectively as domain-specific static functions, encapsulating validation rules directly within the relevant type's module namespace.
 > 4. **Ownership and Lifetimes**: `from_url` accepts a borrowed string slice `&str` and constructs new owned `String` instances using `.to_string()`, transferring exclusive ownership of the initialized `DbPoolConfig` to the caller.
-
+> 
 ---
 
 ### Exercise 2: Financial Trading Pair Normalizer and Spread Calculator
@@ -518,7 +518,7 @@ thread::spawn(move || {
 > 2. **Chaining Associated Function Calls**: Inside `TradingPair::parse_pair`, `Self::normalize_symbol(symbol)` is invoked directly. Associated functions within the same `impl` block can be cleanly chained using `Self::` or `TypeName::`.
 > 3. **Invariant Enforcement**: Domain constructors like `TradingPair::new` guarantee that invalid domain instances (e.g. `BTC/BTC`) can never be created in memory, transforming runtime invariant checks into explicit `Result` handling at call sites.
 > 4. **Memory Optimization**: `Currency` implements `Copy`, making parameter passing zero-cost and avoiding heap allocation when building `TradingPair` values.
-
+> 
 ---
 
 ### Exercise 3: Network Telemetry Binary Frame Synthesizer and Checksum Validator
@@ -732,7 +732,7 @@ thread::spawn(move || {
 > 2. **Bitwise Checksum Calculation**: `calculate_checksum` is a pure function attached to `NetworkFrame` via `impl`. It takes primitive data (`u8`, `u32`, `&[u8]`) and performs wrapping addition (`wrapping_add`) to prevent panic in debug builds when integer overflow occurs.
 > 3. **Specialized Factory Constructors**: `new_ping` and `new_data` encapsulate domain-specific default parameters (such as automatically assigning `FrameType::Ping` or validating maximum payload lengths) before computing checksums internally via `Self::calculate_checksum`.
 > 4. **Endianness Handling**: Endian safety is maintained using `u32::from_be_bytes` and `u16::from_be_bytes`, ensuring multi-byte binary values are parsed correctly regardless of target host architecture.
-
+> 
 ---
 
 ## 6. Related Terms

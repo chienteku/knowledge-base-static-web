@@ -198,7 +198,7 @@ console.log("Final tasks:", tasks);
 > - Add to the start using `.unshift()`.
 > - Add to the end using `.push()`.
 > - Remove from the end using `.pop()`.
-
+> 
 ---
 
 ### Exercise 2: Stack Operations with `push` and `pop`
@@ -219,7 +219,7 @@ console.log("Final tasks:", tasks);
 > ```
 >
 > **Explanation:** `push` appends elements to end; `pop` removes and returns last element ($O(1)$).
-
+> 
 ---
 
 ### Exercise 3: Return Values of Push vs Pop
@@ -239,8 +239,8 @@ console.log("Final tasks:", tasks);
 > ```
 >
 > **Explanation:** `push()` returns the new array length; `pop()` returns the removed element.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

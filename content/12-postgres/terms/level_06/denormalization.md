@@ -166,7 +166,7 @@ Denormalize `users` table by adding a cached `total_orders_count` column to avoi
 > 1. Denormalization stores redundant pre-computed summary metrics directly in parent rows.
 > 2. Eliminates issuing `COUNT(*)` aggregate table scans on every user profile view ($O(1)$ read velocity).
 > 3. Trade-off: Requires maintaining sync integrity during order inserts/deletes using triggers or application logic.
-
+> 
 ---
 
 ### Exercise 2: Maintaining Denormalized Cache Columns via Triggers
@@ -203,7 +203,7 @@ Create a PostgreSQL trigger function that automatically updates `users.total_ord
 > 1. Database triggers enforce automatic cache synchronization at the storage layer.
 > 2. Guarantees denormalized counts remain 100% accurate across concurrent application transactions.
 > 3. Prevents cache drift bugs.
-
+> 
 ---
 
 ### Exercise 3: Trade-Off Analysis: Normalization vs Denormalization
@@ -230,7 +230,7 @@ Formulate a technical trade-off matrix comparing strict 3NF schema vs Denormaliz
 > 1. Normalization optimizes write safety and data integrity.
 > 2. Denormalization optimizes read velocity for high-traffic read-heavy workloads.
 > 3. Base choice on measured system bottlenecks.
-
+> 
 ---
 
 

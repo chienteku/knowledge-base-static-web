@@ -174,7 +174,7 @@ Create a multikey index on array field `tags` in collection `products` to speed 
 > 1. When an indexed field contains an array, MongoDB automatically flags the index as a Multikey Index.
 > 2. Creates a separate B-tree index entry for every individual element in the array.
 > 3. Accelerates queries matching array elements.
-
+> 
 ---
 
 ### Exercise 2: Multikey Index Bounds and Constraints
@@ -200,7 +200,7 @@ Explain why a compound multikey index CANNOT index more than ONE array field per
 > 1. MongoDB prohibits compound multikey indexes from covering more than one array field per document.
 > 2. Indexing two arrays with $M$ and $N$ elements would create Cartesian product $M 	imes N$ index keys per document, causing severe index bloat.
 > 3. Restricts compound multikey indexes to at most one array field.
-
+> 
 ---
 
 ### Exercise 3: Optimizing Array Query Bounds with `$elemMatch`
@@ -233,7 +233,7 @@ Use `$elemMatch` to optimize multikey index bound scanning over arrays of embedd
 > 1. `$elemMatch` bounds multikey index scans so both conditions evaluate over the same array element.
 > 2. Narrows index scan ranges significantly compared to non-elemMatch array queries.
 > 3. Essential for indexing arrays of embedded objects.
-
+> 
 ---
 
 

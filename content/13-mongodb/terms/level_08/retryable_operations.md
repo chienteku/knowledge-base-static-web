@@ -160,7 +160,7 @@ Configure MongoDB client connection URI with `retryWrites=true` to handle transi
 > 1. `retryWrites=true` instructs the driver to automatically retry supported write operations (`insertOne`, `updateOne`, `deleteOne`) once upon encountering network failures.
 > 2. Client assigns a unique statement ID (`txnNumber`) to each write command.
 > 3. Server checks statement ID to prevent executing the write twice if the first attempt succeeded server-side.
-
+> 
 ---
 
 ### Exercise 2: Enabling Automatic Retryable Reads
@@ -187,7 +187,7 @@ Configure client connection options with `retryReads=true` (enabled by default i
 > 1. `retryReads=true` automatically retries supported read operations (`find`, `aggregate`, `countDocuments`) once if network errors occur.
 > 2. Re-routes read request to an alternate secondary node during failover.
 > 3. Eliminates transient read exception spikes in client applications.
-
+> 
 ---
 
 ### Exercise 3: Supported vs Unsupported Operations for Retryable Writes
@@ -213,7 +213,7 @@ Distinguish between write operations supported by `retryWrites` vs unsupported o
 > 1. `updateMany()` and `deleteMany()` are not retryable because retrying multi-document writes could lead to partial duplicate modifications.
 > 2. Use single-document operations or transactions for full retry safety.
 > 3. Critical driver integration awareness.
-
+> 
 ---
 
 

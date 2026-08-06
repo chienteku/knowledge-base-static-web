@@ -215,7 +215,7 @@ The `<div>` is that plain cardboard box. It doesn't do anything on its own; it j
 > To the naked eye, it will look almost identical. The only difference is that the browser automatically adds vertical spacing (margin) above and below a `<p>`, but adds absolutely no styling or spacing to a `<div>`.
 > ```
 > - Remember that `<div>` has zero semantic meaning and zero default styling (other than being a block).
-
+> 
 ---
 
 ### Exercise 2: Refactoring Divitis to Semantic HTML
@@ -231,7 +231,7 @@ The `<div>` is that plain cardboard box. It doesn't do anything on its own; it j
 > ```
 >
 > **Explanation:** Replace generic `<div>` wrappers with semantic layout elements (`<header>`, `<footer>`, `<main>`).
-
+> 
 ---
 
 ### Exercise 3: Valid Div Usage
@@ -248,7 +248,7 @@ The `<div>` is that plain cardboard box. It doesn't do anything on its own; it j
 > ```
 >
 > **Explanation:** `<div>` is the designated element for non-semantic CSS layout grouping.
-
+> 
 ## 7. Related Terms
 - [`<span>` (Inline container)](span.md) — The inline equivalent of the `<div>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing generic divisions.

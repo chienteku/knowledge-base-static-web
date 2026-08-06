@@ -170,7 +170,7 @@ The **`<section>`** is the "Sports Page" or the "Classifieds". If you cut out ju
 > An `<article>`. A Tweet is completely self-contained. It has an author, a timestamp, and a message. If you took that single Tweet and embedded it on a different website, it would still make perfect sense.
 > ```
 > - Apply the "Scissor Test." If you cut it out and hand it to a stranger, does it make sense?
-
+> 
 ---
 
 
@@ -199,7 +199,7 @@ The **`<section>`** is the "Sports Page" or the "Classifieds". If you cut out ju
 > ```
 >
 > **Explanation:** `<article>` for independent reusable content; `<section>` for thematic document sub-divisions.
-
+> 
 ---
 
 ### Exercise 3: Section Heading Requirement
@@ -219,7 +219,7 @@ The **`<section>`** is the "Sports Page" or the "Classifieds". If you cut out ju
 > ```
 >
 > **Explanation:** Semantic `<section>` elements require a heading to establish document outline hierarchy.
-
+> 
 ## 7. Related Terms
 - [`<div>` (Block container)](../level_02/div.md) — The non-semantic wrapper you should use if your block doesn't warrant an `<article>` or `<section>`.
 - [`<main>`](main.md) — The parent container for these elements.

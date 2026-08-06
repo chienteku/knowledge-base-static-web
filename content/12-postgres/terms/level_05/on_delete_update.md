@@ -179,7 +179,7 @@ Create an `order_items` table that automatically deletes child items when parent
 > 1. `ON DELETE CASCADE` automatically deletes dependent child rows when the parent primary key row is deleted.
 > 2. Prevents orphan child rows.
 > 3. Automates relational cleanup.
-
+> 
 ---
 
 ### Exercise 2: Protecting Parent Rows with `ON DELETE RESTRICT`
@@ -207,7 +207,7 @@ Protect `categories` from being deleted if any `products` reference the category
 > 1. `ON DELETE RESTRICT` throws a foreign key violation error if an application attempts to delete a category that has active products.
 > 2. Protects master catalog data from accidental deletion.
 > 3. Enforces domain integrity.
-
+> 
 ---
 
 ### Exercise 3: Setting Null References with `ON DELETE SET NULL`
@@ -235,7 +235,7 @@ When a `manager` user is deleted, set `manager_id` in `employees` table to `NULL
 > 1. `ON DELETE SET NULL` sets the child foreign key column to `NULL` when the parent row is deleted.
 > 2. Requires child foreign key column to allow `NULL` values.
 > 3. Preserves child record while clearing parent reference.
-
+> 
 ---
 
 

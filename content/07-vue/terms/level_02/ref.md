@@ -127,7 +127,7 @@ user = "Alice";
 > (This is why you should always declare refs with `const`, not `let`).
 > ```
 > - `user` is the tracking object. You should never overwrite the tracking object itself.
-
+> 
 ---
 
 ### Exercise 2: Ref Initialization and Mutation
@@ -148,7 +148,7 @@ user = "Alice";
 >   todos.value.push(task);
 > }
 > ```
-
+> 
 ---
 
 ### Exercise 3: Ref Reassignment Feature
@@ -166,8 +166,8 @@ user = "Alice";
 > const items = ref([1, 2]);
 > items.value = [3, 4, 5]; // Fully reactive replacement!
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

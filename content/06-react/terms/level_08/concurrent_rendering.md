@@ -144,8 +144,8 @@ onChange={e => {
 > - To fix this:
 > - 1.  Verify the input state update (the search query) is processed immediately.
 > - 2.  Wrap the state setter for the search results in a `useTransition` callback so React can pause the list rendering to process input events.
-
-
+> 
+> 
 ---
 
 
@@ -164,7 +164,7 @@ onChange={e => {
 > ```
 >
 > **Explanation:** Concurrent features allow React to interrupt low-priority renders for urgent user input events.
-
+> 
 ---
 
 ### Exercise 3: Urgent vs Non-Urgent Update Priority
@@ -181,7 +181,7 @@ onChange={e => {
 > ```
 >
 > **Explanation:** Interruptible transitions keep urgent interaction events smooth.
-
+> 
 ## 7. Related Terms
 - [The Fiber Architecture](../level_01/fiber_architecture.md) — The virtual stack frame structure that allows React to pause rendering.
 - [`useTransition` Hook](use_transition.md) — The hook used to mark state updates as interruptible transitions.

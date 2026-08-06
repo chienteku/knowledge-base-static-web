@@ -565,8 +565,8 @@ Design a custom `unsafe` marker trait `Pod` (Plain Old Data) to enforce zero-cop
 > 2. **Zero-Copy Efficiency**: The `as_byte_slice` function performs an $O(1)$ memory reinterpretation pointer cast without heap allocation or buffer copying.
 > 3. **Memory Safety Bounds**: Restricting `as_byte_slice` to `T: Pod` prevents passing non-POD types (e.g. `String`, `Box<T>`, or types with alignment padding), ruling out memory leaks, wild pointer dereferences, and security data exposure.
 > 
-
-
+> 
+> 
 ---
 
 ## 6. Related Terms

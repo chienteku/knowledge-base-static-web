@@ -187,7 +187,7 @@ function SearchResults() {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Tab Switching with useTransition
@@ -220,7 +220,7 @@ function SearchResults() {
 > ```
 >
 > **Explanation:** `useTransition` marks tab state updates as non-blocking transitions while providing `isPending` status.
-
+> 
 ---
 
 ### Exercise 3: useTransition Hook Signature
@@ -237,7 +237,7 @@ function SearchResults() {
 > ```
 >
 > **Explanation:** `isPending` indicates whether a background transition render is currently in progress.
-
+> 
 ## 7. Related Terms
 - [Concurrent Rendering](concurrent_rendering.md) — The rendering mode that supports transitions.
 - [`useDeferredValue` Hook](use_deferred_value.md) — Deferring updates when you do not control the state setter.

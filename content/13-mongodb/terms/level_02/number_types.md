@@ -158,7 +158,7 @@ Insert a server metric document specifying `Int32` for `port` (27017) and `Int64
 > 1. `NumberInt()` forces 32-bit BSON integer encoding (4 bytes).
 > 2. `NumberLong()` forces 64-bit BSON long integer encoding (8 bytes).
 > 3. Prevents JavaScript numbers from defaulting to 64-bit double precision floats.
-
+> 
 ---
 
 ### Exercise 2: Atomic Incrementing with `$inc`
@@ -185,7 +185,7 @@ Increment a product's `views` count by 1 and decrement `stock` count by 1 atomic
 > 1. `$inc` performs atomic numeric addition and subtraction at the storage engine level.
 > 2. Prevents race conditions during concurrent write updates.
 > 3. Operates over integer, long, float, and decimal types.
-
+> 
 ---
 
 ### Exercise 3: Querying Numeric Ranges with `$gt` and `$lt`
@@ -214,7 +214,7 @@ Query products with price between 50.00 and 150.00.
 > 1. Range comparison operators evaluate numeric values according to BSON type comparison rules.
 > 2. Numeric types (Int32, Int64, Double, Decimal128) compare across type boundaries correctly.
 > 3. Efficiently utilizes numeric B-tree indexes.
-
+> 
 ---
 
 

@@ -248,8 +248,8 @@ At what time will the server detect the drop and terminate the socket resource?
 
 > [!check]- Answer
 > - **`12:00:50`** (The next ping is scheduled for 12:00:45. Since the phone is disconnected, it will not reply. The server waits for the 5-second timeout, detects the missing pong at 12:00:50, and terminates the socket).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Ping-Pong Protocol Frame Types

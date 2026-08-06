@@ -259,7 +259,7 @@ Create a domain-safe system using the Newtype pattern:
 > 1. **Compile-Time Domain Safety:** By wrapping raw `u64` in `UserId` and `TenantId`, the Rust compiler prevents accidentally swapping arguments (e.g., passing a `TenantId` where a `UserId` is expected).
 > 2. **State Transition & Invariant Enforcement:** `UnsanitizedHtml` cannot be rendered directly into HTML components. The only way to obtain a `SanitizedHtml` instance is by consuming the `UnsanitizedHtml` through `.sanitize()`.
 > 3. **Zero-Cost Abstraction:** Rust optimizes single-element tuple structs to have the exact memory layout as the underlying primitive, incurring zero runtime performance penalty.
-
+> 
 ---
 
 ### Exercise 2: Physical Unit Safety & Operator Overloading
@@ -383,7 +383,7 @@ Implement a dimensional unit calculation system using Newtypes and operator over
 >
 > 1. **Dimensional Analysis in Type System:** Operator trait implementations (`Div<Seconds>` for `Meters`, `Mul<Seconds>` for `MetersPerSecond`) codify physical equations directly into Rust's type system. Attempting `Meters + Seconds` fails at compile time because `Add<Seconds>` is not implemented for `Meters`.
 > 2. **Memory Layout Guarantees:** Using `#[repr(transparent)]` guarantees that each newtype wrapper matches ABI layout and alignment of `f64` precisely, allowing seamless pass-by-value efficiency across function boundaries.
-
+> 
 ---
 
 ### Exercise 3: Bypassing the Orphan Rule & Smart Pointer Dereferencing
@@ -543,7 +543,7 @@ Solve this problem using the Newtype pattern combined with smart pointer derefer
 > 1. **Bypassing Orphan Rule:** `AuditConfig` is defined in the local crate, allowing `impl Auditable for AuditConfig` even though `ExternalConfig` originates from an external crate.
 > 2. **Ergonomic Deref Coercion:** Implementing `Deref` and `DerefMut` allows `AuditConfig` to automatically coercion-dereference into `ExternalConfig`. Field access (`audit_cfg.endpoint`) and field mutations transparently pass through to the inner type without boiler-plate getter/setter forwarding methods.
 > 3. **Encapsulated Invariant Check:** Constructor `AuditConfig::new` acts as a validation gate, ensuring that any instance of `AuditConfig` in the system adheres to operational constraints.
-
+> 
 ---
 
 ## 6. Related Terms

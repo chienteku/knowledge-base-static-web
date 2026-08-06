@@ -166,7 +166,7 @@ Audit a vulnerable Express API handler concatenating raw user input strings into
 > 1. String concatenation allows malicious input strings containing `'` or `--` to alter the SQL query syntax tree.
 > 2. Parameterized queries send SQL text and input values in separate binary protocol frames.
 > 3. Completely eliminates SQL injection attacks.
-
+> 
 ---
 
 ### Exercise 2: Sanitizing Dynamic Identifiers (`TABLE` or `COLUMN` Names)
@@ -183,24 +183,24 @@ Safely sanitize dynamic column names in `ORDER BY` queries using `pg-format` or 
 >
 > ```typescript
 > const allowedSortColumns = new Set(["id", "username", "created_at"]);
-
-export async function getUsersSorted(sortBy: string) {
-  if (!allowedSortColumns.has(sortBy)) {
-    throw new Error("Invalid sort column parameter!");
-  }
-  
-  // Safe to interpolate AFTER strict whitelist validation!
-  const query = `SELECT id, username FROM users ORDER BY ${sortBy} DESC`;
-  return pool.query(query);
-}
-```
-
+> 
+> export async function getUsersSorted(sortBy: string) {
+>   if (!allowedSortColumns.has(sortBy)) {
+>     throw new Error("Invalid sort column parameter!");
+>   }
+>   
+>   // Safe to interpolate AFTER strict whitelist validation!
+>   const query = `SELECT id, username FROM users ORDER BY ${sortBy} DESC`;
+>   return pool.query(query);
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. Parameterized placeholders (`$1`) CANNOT be used for table or column names in SQL syntax.
 > 2. Dynamic identifiers MUST be validated against strict in-memory whitelists or escaped with identifier quotation (`quote_ident()`).
 > 3. Essential dynamic SQL security pattern.
-
+> 
 ---
 
 ### Exercise 3: Preventing Second-Order SQL Injection
@@ -228,7 +228,7 @@ Explain how un-sanitized data read from a database table can trigger Second-Orde
 > 1. Second-order injection occurs when stored malicious data is re-used in dynamic SQL strings later in the application pipeline.
 > 2. Parameterizing all database queries neutralizes second-order attacks.
 > 3. Enterprise security hygiene guideline.
-
+> 
 ---
 
 

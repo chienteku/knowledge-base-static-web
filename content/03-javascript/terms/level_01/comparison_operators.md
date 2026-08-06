@@ -178,7 +178,7 @@ console.log("Eligible:", isEligibleForFreeShipping);
 > Eligible: false
 > ```
 > - Use the `>=` operator to test if a value is greater than or equal to a target.
-
+> 
 ---
 
 ### Exercise 2: Relational Comparison Type Coercion
@@ -203,7 +203,7 @@ console.log("Eligible:", isEligibleForFreeShipping);
 > ```
 >
 > **Explanation:** Relational operators (`>`, `>=`, `<`, `<=`) coerce nullish/string operands to numbers. `null` becomes `0`, while `undefined` becomes `NaN` (making all comparisons `false`).
-
+> 
 ---
 
 ### Exercise 3: Object Relational ValueOf Coercion
@@ -221,7 +221,7 @@ console.log("Eligible:", isEligibleForFreeShipping);
 > ```
 >
 > **Explanation:** Comparison operators call `.valueOf()` or `.toString()` to convert objects into primitives before comparing.
-
+> 
 ---
 
 ## 7. Related Terms

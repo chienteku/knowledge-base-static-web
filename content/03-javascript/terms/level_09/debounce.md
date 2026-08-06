@@ -171,7 +171,7 @@ async function processData() {
 > Because recalculating a complex layout 100 times per second will freeze the browser. By debouncing it (e.g., 200ms), the layout only recalculates ONCE, exactly when the user finally lets go of the mouse button and stops dragging the window.
 > ```
 > - Think about the "Elevator" metaphor. We wait for the chaos to stop.
-
+> 
 ---
 
 ### Exercise 2: Implementing Basic Debounce
@@ -196,7 +196,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Debouncing delays execution until a burst of rapid events pauses for specified duration.
-
+> 
 ---
 
 ### Exercise 3: Immediate Leading Edge Debouncing
@@ -213,8 +213,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Leading edge options execute immediately upon event start before initiating quiet timer delays.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

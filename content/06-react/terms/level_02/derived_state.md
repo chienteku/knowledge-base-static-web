@@ -212,7 +212,7 @@ function SearchList({ users }) {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Calculating Filtered Items as Derived State
@@ -236,7 +236,7 @@ function SearchList({ users }) {
 > ```
 >
 > **Explanation:** Computing values directly during render eliminates redundant state and extra render cycles.
-
+> 
 ---
 
 ### Exercise 3: When to Memoize Derived State
@@ -253,7 +253,7 @@ function SearchList({ users }) {
 > ```
 >
 > **Explanation:** Simple derived state calculations (string concatenations, array maps of small lists) require zero memoization overhead.
-
+> 
 ## 7. Related Terms
 - [`useMemo` Hook](../level_04/use_memo.md) — Optimization hook used to cache heavy derived state calculations.
 - [Render Purity](../level_01/render_purity.md) — The rule that calculations during render must remain self-contained.

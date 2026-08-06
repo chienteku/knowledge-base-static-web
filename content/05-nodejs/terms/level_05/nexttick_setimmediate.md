@@ -157,8 +157,8 @@ app.get('/health', (res) => res.send('OK'));
 
 > [!check]- Answer
 > - The server will freeze and incoming HTTP requests to `/health` will time out. Because `heavyQueue` calls `process.nextTick` recursively, the microtask queue is never empty. The Event Loop is starved and cannot spin to the Poll phase to accept new socket connections.
-
-
+> 
+> 
 ---
 
 
@@ -177,7 +177,7 @@ app.get('/health', (res) => res.send('OK'));
 > ```
 >
 > **Explanation:** Within an I/O callback (Poll phase), the Check phase (`setImmediate`) is entered immediately next.
-
+> 
 ---
 
 ### Exercise 3: Use Case for process.nextTick
@@ -197,7 +197,7 @@ app.get('/health', (res) => res.send('OK'));
 > ```
 >
 > **Explanation:** `process.nextTick` defers emission until after current call stack finishes listener attachments.
-
+> 
 ## 7. Related Terms
 - [Microtasks vs Macrotasks](microtasks_macrotasks.md) — The standard V8 microtask scheduling queues.
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The parent routing system managing execution phases.

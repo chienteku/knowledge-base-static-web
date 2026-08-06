@@ -274,7 +274,7 @@ thread::spawn(move || {
 >
 > 4. **Closure Capture & Ownership:**
 >    - The `move` keyword on `move |line| filter_predicate(line)` transfers ownership of the `filter_predicate` closure parameter into the `.filter(...)` iterator adapter struct. This ensures the adapter owns all required environment state throughout its execution lifecycle.
-
+> 
 ---
 
 ### Exercise 2: Higher-Order Cryptographic Pipeline Factory (RPIT with Closures & Error Handling)
@@ -366,7 +366,7 @@ thread::spawn(move || {
 > 3. **Single Concrete Type Invariant for RPIT:**
 >    - RPIT functions must return a **single concrete type** across all control paths inside the function body.
 >    - Even if two closures have identical signatures (`|x| x + 1` vs `|x| x + 2`), they represent distinct anonymous types. Returning different closures from `if/else` branches within an RPIT function causes compile error `E0308`. Here, a single `move` closure handles all branches, satisfying the invariant.
-
+> 
 ---
 
 ### Exercise 3: Plug-and-Play Middleware Chain with Opaque Struct Abstraction (RPIT with Trait Composition)
@@ -474,7 +474,7 @@ thread::spawn(move || {
 > 3. **Associated Type Constraints in RPIT:**
 >    - The trait bound `impl Processor<Input = String, Output = Result<String, ProcessError>>` uses associated type bindings (`Input = String`, `Output = ...`).
 >    - Associated type constraints ensure that callers can interact with the inputs and outputs of the opaque type safely without requiring additional type parameters on the enclosing function scope.
-
+> 
 ---
 
 ## 6. Related Terms

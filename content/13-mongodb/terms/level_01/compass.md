@@ -134,7 +134,7 @@ A database developer inspects collection `users` in MongoDB Compass filtering fo
 > 1. Compass Query Bar parses JSON filter documents and translates them into `find()` queries.
 > 2. Provides visual document browsing with tree, JSON, and table view modes.
 > 3. Displays query execution time and returned record counts.
-
+> 
 ---
 
 ### Exercise 2: Schema Sampling and Visual Type Distribution
@@ -161,7 +161,7 @@ Use Compass Schema View to detect mixed data types stored in field `age`.
 > 1. Compass samples collection records to build data type distribution charts.
 > 2. Uncovers schema inconsistencies (e.g. string numbers vs numeric integers).
 > 3. Guides data cleanup and Schema Validation rule creation.
-
+> 
 ---
 
 ### Exercise 3: Visual Aggregation Pipeline Builder
@@ -193,7 +193,7 @@ Construct a 2-stage aggregation pipeline in Compass to group orders by customer.
 > 1. Compass Aggregation Builder displays live sample outputs per stage.
 > 2. Facilitates debugging complex pipeline transformations stage-by-stage.
 > 3. Exports working pipeline code directly to Node.js, Python, or Shell syntax.
-
+> 
 ---
 
 

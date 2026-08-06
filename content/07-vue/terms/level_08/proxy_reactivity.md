@@ -119,7 +119,7 @@ state.count++; // Mutate Proxy wrapper to trigger reactive reactivity traps
 > The new `name` variable is just a string; it has no Proxy wrapper, so it has no `get` or `set` traps to intercept changes!
 > ```
 > - Does the extracted primitive value still have the `set` trap attached to it?
-
+> 
 ---
 
 ### Exercise 2: toRaw Utility Function
@@ -138,7 +138,7 @@ state.count++; // Mutate Proxy wrapper to trigger reactive reactivity traps
 > const state = reactive({ count: 0 });
 > const raw = toRaw(state);
 > ```
-
+> 
 ---
 
 ### Exercise 3: Vue 2 Object.defineProperty vs Vue 3 Proxy
@@ -155,8 +155,8 @@ state.count++; // Mutate Proxy wrapper to trigger reactive reactivity traps
 > ```text
 > ES6 Proxy traps intercept dynamic object key additions dynamically.
 > ```
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

@@ -291,7 +291,7 @@ To satisfy regulatory security rules (SOC2 compliance), transaction records must
 >    - Invalid numeric strings trigger early return via `map_err(|_| AuditError::InvalidAmountFormat)`.
 > 
 >
-
+> 
 ---
 
 ### Exercise 2: Network Telemetry Packet Ingestion Engine (Scoped Immutability, Transient Memory Lifetimes & Variable Shadowing)
@@ -463,7 +463,7 @@ To prevent memory leaks and buffer leaks, transient parsing buffers and checksum
 >    - Payloads shorter than declared lengths trigger `FrameError::PayloadTruncated`.
 > 
 >
-
+> 
 ---
 
 ### Exercise 3: Concurrent Microservice Read-Only Configuration Engine (Thread-Safe Immutable Bindings & `Arc` Reference Sharing)
@@ -642,7 +642,7 @@ You must build a thread-safe configuration processing system using `std::sync::A
 >    Each `thread::spawn` invocation yields a `JoinHandle<WorkerResult>`. Calling `.join()` blocks until the spawned thread completes, returning the `WorkerResult` evaluated inside that thread.
 > 
 >
-
+> 
 ---
 
 ## 6. Related Terms

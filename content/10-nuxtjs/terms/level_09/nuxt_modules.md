@@ -123,10 +123,6 @@ export default defineNuxtModule({
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Authoring Custom Local Nuxt Modules with `defineNuxtModule`
@@ -144,28 +140,28 @@ Create a custom inline module `modules/my-module.ts` that automatically logs bui
 > ```typescript
 > // modules/my-module.ts
 > import { defineNuxtModule, addPlugin, createResolver } from "@nuxt/kit";
-
-export default defineNuxtModule({
-  meta: {
-    name: "my-custom-module",
-    configKey: "myModule"
-  },
-  setup(options, nuxt) {
-    const resolver = createResolver(import.meta.url);
-    console.log("Custom Nuxt Module initialized!");
-    
-    // Inject plugin automatically into Nuxt application
-    addPlugin(resolver.resolve("./runtime/plugin"));
-  }
-});
-```
-
+> 
+> export default defineNuxtModule({
+>   meta: {
+>     name: "my-custom-module",
+>     configKey: "myModule"
+>   },
+>   setup(options, nuxt) {
+>     const resolver = createResolver(import.meta.url);
+>     console.log("Custom Nuxt Module initialized!");
+>     
+>     // Inject plugin automatically into Nuxt application
+>     addPlugin(resolver.resolve("./runtime/plugin"));
+>   }
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `defineNuxtModule` provides the entry point for custom Nuxt build modules.
 > 2. `setup(options, nuxt)` hook grants access to Nuxt compiler hooks and configuration instances.
 > 3. `@nuxt/kit` provides utility helpers (`addPlugin`, `addImports`, `createResolver`) for module authoring.
-
+> 
 ---
 
 ### Exercise 2: Auto-Registering Components and Composables inside Modules
@@ -182,33 +178,33 @@ Use `@nuxt/kit` helpers `addComponent` and `addImports` inside a custom module s
 >
 > ```typescript
 > import { defineNuxtModule, addComponent, addImports, createResolver } from "@nuxt/kit";
-
-export default defineNuxtModule({
-  setup(options, nuxt) {
-    const resolver = createResolver(import.meta.url);
-    
-    // Auto-register custom component
-    addComponent({
-      name: "CustomWidget",
-      filePath: resolver.resolve("./runtime/components/Widget.vue")
-    });
-    
-    // Auto-register custom composable
-    addImports({
-      name: "useCustomHelper",
-      as: "useCustomHelper",
-      from: resolver.resolve("./runtime/composables/useCustomHelper")
-    });
-  }
-});
-```
-
+> 
+> export default defineNuxtModule({
+>   setup(options, nuxt) {
+>     const resolver = createResolver(import.meta.url);
+>     
+>     // Auto-register custom component
+>     addComponent({
+>       name: "CustomWidget",
+>       filePath: resolver.resolve("./runtime/components/Widget.vue")
+>     });
+>     
+>     // Auto-register custom composable
+>     addImports({
+>       name: "useCustomHelper",
+>       as: "useCustomHelper",
+>       from: resolver.resolve("./runtime/composables/useCustomHelper")
+>     });
+>   }
+> });
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `addComponent` registers Vue components globally across user applications.
 > 2. `addImports` adds composables to Nuxt's global auto-import system.
 > 3. Allows modules to distribute full component and composable libraries seamlessly.
-
+> 
 ---
 
 ### Exercise 3: Hooking into Nuxt Build Lifecycle Hooks (`nuxt:config`, `build:before`)
@@ -232,19 +228,15 @@ Subscribe to Nuxt build lifecycle hooks inside a module to modify Vite options d
 >   }
 > });
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. `nuxt.hook()` allows modules to intercept and modify build steps (`vite:extendConfig`, `nitro:config`).
 > 2. Enables deep integration with underlying bundlers and server compilers.
 > 3. Advanced module extensibility pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — Where modules are registered.

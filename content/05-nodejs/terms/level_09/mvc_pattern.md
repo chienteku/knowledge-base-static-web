@@ -284,7 +284,7 @@ module.exports = router;
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Matching MVC Component Roles
@@ -308,7 +308,7 @@ module.exports = router;
 > ```
 >
 > **Explanation:** Model manages data; View handles presentation; Controller orchestrates requests.
-
+> 
 ---
 
 ### Exercise 3: Express res.render Method
@@ -325,7 +325,7 @@ module.exports = router;
 > ```
 >
 > **Explanation:** `res.render` compiles template files with data objects and returns HTML to client.
-
+> 
 ## 7. Related Terms
 - [Controllers & Services](controllers_services.md) — A deeper separation refining the controller layer.
 - [ORMs & ODMs](../level_08/orms_odms.md) — The database mapping technologies representing Models.

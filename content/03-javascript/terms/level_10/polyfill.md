@@ -160,7 +160,7 @@ async function processData() {
 > It was named after "Polyfilla", a brand of spackling paste used in the UK to fill holes and cracks in walls before painting. Just like the paste fills holes in walls to make them smooth, a polyfill fills holes in an old browser's feature set to make the API surface smooth and uniform!
 > ```
 > - Think about home improvement and fixing drywall!
-
+> 
 ---
 
 ### Exercise 2: Feature Detection for Conditional Polyfills
@@ -180,7 +180,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Conditional polyfills inspect global prototypes before patching missing APIs.
-
+> 
 ---
 
 ### Exercise 3: Polyfill vs Transpiler Distinction
@@ -197,8 +197,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Missing global classes and prototype methods require polyfill library implementations.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

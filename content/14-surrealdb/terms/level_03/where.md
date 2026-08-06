@@ -167,7 +167,7 @@ An admin query selects active premium customers who registered within the last 3
 > 1. `WHERE` filters table records based on boolean logical evaluation (`AND`, `OR`, `NOT`).
 > 2. Short-circuit evaluation evaluates criteria in sequence, stopping early on failed `AND` branches.
 > 3. Uses B-tree or secondary indexes when available to optimize record selection speed.
-
+> 
 ---
 
 ### Exercise 2: Filtering on Nested Object Properties
@@ -196,7 +196,7 @@ Filter customer profiles where nested property `address.city` equals `"Austin"`.
 > 1. Dot-notation (`address.city`) accesses nested object properties inside `WHERE` clauses natively.
 > 2. Eliminates SQL JSON extraction functions (`json_extract` / `->>`) or MongoDB `$elemMatch` blocks.
 > 3. Evaluates nested document properties seamlessly in table scans.
-
+> 
 ---
 
 ### Exercise 3: Containment Filtering with `INSIDE` and `CONTAINS`
@@ -225,7 +225,7 @@ Select all products whose `category` is `INSIDE` a target list `["electronics", 
 > 1. `INSIDE` checks if a record field value belongs to a target array or set collection.
 > 2. Equivalent to SQL `IN (...)` and MongoDB `$in [...]`.
 > 3. Provides clean set-based filtering syntax.
-
+> 
 ---
 
 

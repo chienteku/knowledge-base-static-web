@@ -146,7 +146,7 @@ A DevOps engineer exports a complete SurrealQL schema and data dump file `prod_b
 > 1. `surreal export` exports valid SurrealQL DDL (`DEFINE`) and DML (`CREATE`) statements to a plain-text script file.
 > 2. Captures tables, fields, indexes, events, access rules, and stored records.
 > 3. Provides clean backup files for disaster recovery and version control.
-
+> 
 ---
 
 ### Exercise 2: Database Restoration with `surreal import`
@@ -170,7 +170,7 @@ Restore database state by importing `prod_backup.surql` into a fresh staging dat
 > 1. `surreal import` reads and executes SurrealQL script files sequentially against the target cluster.
 > 2. Restores table schemas, index structures, and record datasets.
 > 3. Automates database environment seeding in deployment pipelines.
-
+> 
 ---
 
 ### Exercise 3: Compressed Backup Export Streams
@@ -194,7 +194,7 @@ Pipe `surreal export` output directly through `gzip` to generate a compressed ba
 > 1. Outputting export data to stdout (`-`) enables direct piping to compression utilities (`gzip`).
 > 2. Reduces backup storage footprint significantly for multi-gigabyte databases.
 > 3. Facilitates efficient cloud storage backups (S3 / GCS).
-
+> 
 ---
 
 

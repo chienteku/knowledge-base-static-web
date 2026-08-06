@@ -178,7 +178,7 @@ Catch and handle `E11000 duplicate key error` during account registration in Nod
 > 1. Unique index violations return `MongoServerError` with error code `11000`.
 > 2. Catching `11000` allows applications to return HTTP 409 Conflict status codes cleanly.
 > 3. Prevents unhandled application server crashes.
-
+> 
 ---
 
 ### Exercise 2: Inspecting Bulk Write Partial Error Arrays
@@ -213,7 +213,7 @@ Inspect `writeErrors` array returned when an unordered `bulkWrite()` encounters 
 > 1. In unordered bulk writes (`ordered: false`), failed items generate entries in `writeErrors` while valid items succeed.
 > 2. `err.writeErrors` contains details on exact document index positions and error codes.
 > 3. Enables fine-grained batch error recovery.
-
+> 
 ---
 
 ### Exercise 3: Handling Write Concern Timeout Errors
@@ -246,7 +246,7 @@ Catch `WriteConcernError` when a majority write fails to replicate within specif
 > 1. `WriteConcernError` indicates the write completed on the primary node, but secondary replication acknowledgment exceeded `wtimeout`.
 > 2. The write was NOT rolled back, but durability acknowledgment failed within the timeout.
 > 3. Crucial distinction for distributed system error handling.
-
+> 
 ---
 
 

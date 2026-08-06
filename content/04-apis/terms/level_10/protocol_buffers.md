@@ -171,7 +171,7 @@ message Product {
 
 > [!check]- Answer
 > - Complete problem steps as outlined above.
-
+> 
 ---
 
 ### Exercise 2: Protobuf Definition File Syntax

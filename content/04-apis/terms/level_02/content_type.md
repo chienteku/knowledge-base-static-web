@@ -161,8 +161,8 @@ fetch('/upload', {
 > - 1. **`multipart/form-data`** (Necessary to segment files and metadata inputs).
 > - 2. **`application/json`** (Standard API text payload format).
 > - 3. **`application/x-www-form-urlencoded`** (Standard key-value form format).
-
-
+> 
+> 
 ---
 
 ### Exercise 2: Common MIME Type Mapping

@@ -186,7 +186,7 @@ You are designing an e-commerce platform and selecting ID generation strategies 
 > 1. Deterministic string IDs allow instant primary key lookup without secondary unique indexes.
 > 2. `ulid()` generates 128-bit lexicographically sortable IDs, optimizing B-tree index page insertions.
 > 3. Composite array IDs `[category, type, sku]` represent multi-column primary keys natively.
-
+> 
 ---
 
 ### Exercise 2: Special Character ID Escaping
@@ -215,7 +215,7 @@ A migration script imports legacy records containing email addresses as primary 
 > 1. Record IDs containing special characters (`@`, `.`, `-`) require bracket escaping `⟨...⟩`.
 > 2. Unescaped special characters trigger syntax parser errors.
 > 3. Bracket escaping allows any valid UTF-8 string to serve as a primary key.
-
+> 
 ---
 
 ### Exercise 3: Automatic Random Numeric ID Generation
@@ -244,7 +244,7 @@ When no ID is specified in a `CREATE` statement, SurrealDB generates a random al
 > 1. Omitting the record ID in `CREATE table` causes SurrealDB to generate a unique random string ID automatically.
 > 2. Prevents ID collisions in high-concurrency insert workloads.
 > 3. Provides NoSQL-style auto-generated document identifiers out of the box.
-
+> 
 ---
 
 

@@ -211,7 +211,7 @@ POST /api/transactions HTTP/1.1 ; RESTful resource endpoint style
 > ```
 > - You are creating data. What HTTP method should you use?
 > - Can GET requests have bodies? Where should large data payloads go?
-
+> 
 ---
 
 ### Exercise 2: 6 Architectural Constraints of REST

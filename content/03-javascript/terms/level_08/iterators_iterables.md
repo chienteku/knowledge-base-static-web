@@ -213,7 +213,7 @@ console.log([...evens]);
 > [ 2, 4, 6 ]
 > ```
 > - Inside the `next()` method, check if `current <= limit`. If true, return `{ value: current, done: false }` and increment `current` by `2`. Else, return `{ done: true }`.
-
+> 
 ---
 
 ### Exercise 2: Implementing Custom Iterable with `Symbol.iterator`
@@ -242,7 +242,7 @@ console.log([...evens]);
 > ```
 >
 > **Explanation:** Objects implementing `[Symbol.iterator]()` protocol can be iterated via `for...of` loops.
-
+> 
 ---
 
 ### Exercise 3: Generator Functions as Iterable Iterators
@@ -264,8 +264,8 @@ console.log([...evens]);
 > ```
 >
 > **Explanation:** Generators return iterator objects complying with iterator/iterable protocols.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

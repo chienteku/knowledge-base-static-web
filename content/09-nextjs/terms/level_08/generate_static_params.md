@@ -149,10 +149,6 @@ export const dynamicParams = true; // Fallback renders new product pages at runt
 ---
 
 
-
-
----
-
 ## 5. Practice Exercises
 
 ### Exercise 1: Prerendering Dynamic Parameter Routes
@@ -175,23 +171,23 @@ Prerender popular blog post slugs (`/blog/nextjs-15`, `/blog/react-19`) at build
 >     { slug: "react-19" }
 >   ];
 > }
-
-export default async function BlogPost({
-  params
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  return <h1>Post: {slug}</h1>;
-}
-```
-
+> 
+> export default async function BlogPost({
+>   params
+> }: {
+>   params: Promise<{ slug: string }>;
+> }) {
+>   const { slug } = await params;
+>   return <h1>Post: {slug}</h1>;
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `generateStaticParams()` informs Next.js which dynamic parameter values to prerender at build time.
 > 2. Generates static HTML files for matched routes during `next build`.
 > 3. Speeds up initial page loads by serving pre-rendered HTML from CDN edge nodes.
-
+> 
 ---
 
 ### Exercise 2: Handling Non-Prerendered Parameter Fallbacks
@@ -208,18 +204,18 @@ Configure `dynamicParams = true` to render un-prerendered slugs dynamically on d
 >
 > ```tsx
 > export const dynamicParams = true; // Default behavior
-
-export async function generateStaticParams() {
-  return [{ slug: "featured-1" }];
-}
-```
-
+> 
+> export async function generateStaticParams() {
+>   return [{ slug: "featured-1" }];
+> }
+> ```
+> 
 > #### Technical Explanation
 >
 > 1. `dynamicParams = true` allows dynamic slugs not returned by `generateStaticParams()` to be rendered on demand via SSR.
 > 2. Setting `dynamicParams = false` returns a 404 page for any un-prerendered slug.
 > 3. Flexible static site generation fallback control.
-
+> 
 ---
 
 ### Exercise 3: Prerendering Nested Parent-Child Parameters
@@ -243,19 +239,15 @@ Prerender nested category and item routes (`app/[category]/[item]/page.tsx`).
 >   ];
 > }
 > ```
-
+> 
 > #### Technical Explanation
 >
 > 1. For nested dynamic routes, `generateStaticParams()` returns objects containing all parent and child parameter keys.
 > 2. Pre-computes full nested route paths during build time compilation.
 > 3. Idiomatic multi-level SSG pattern.
-
+> 
 ---
 
-
-
-
----
 
 ## 6. Related Terms
 - [Static Site Generation (SSG)](ssg.md) — The output target.

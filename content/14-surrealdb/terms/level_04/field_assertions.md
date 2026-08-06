@@ -173,7 +173,7 @@ Enforce that an employee's `salary` field on table `employee` must be a decimal 
 > 1. `ASSERT` validates field conditions during `CREATE` and `UPDATE` mutations.
 > 2. Rejects write attempts violating the minimum salary constraint.
 > 3. Enforces domain invariants directly at the database tier.
-
+> 
 ---
 
 ### Exercise 2: String Format Assertions with Built-in Functions
@@ -202,7 +202,7 @@ Validate that a user's `website` field is a valid URL using `string::is::url($va
 > 1. Built-in validator functions (`string::is::url`, `string::is::email`) simplify assertion rules.
 > 2. Ensures stored text strings conform to valid URL syntax.
 > 3. Protects downstream web clients from malformed input data.
-
+> 
 ---
 
 ### Exercise 3: Array Length Assertions
@@ -231,7 +231,7 @@ Ensure a blog post's `tags` array contains at least 1 tag and no more than 5 tag
 > 1. `array::len($value)` returns element counts for array fields.
 > 2. Validates array collection sizes prior to transaction commits.
 > 3. Prevents empty or oversized tag arrays.
-
+> 
 ---
 
 

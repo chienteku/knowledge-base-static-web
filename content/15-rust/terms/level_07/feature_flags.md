@@ -146,7 +146,7 @@ reqwest = { version = "0.11", default-features = false, features = ["json"] } # 
 > [dependencies]
 > reqwest = { version = "0.11", default-features = false, features = ["json"] }
 > ```
-
+> 
 ---
 
 ### Exercise 2: Designing a `[features]` Section
@@ -190,7 +190,7 @@ Write the complete `[features]` section in `Cargo.toml` for this crate, then ans
 > #### Technical Explanation
 >
 > Feature design is a core library authorship skill. The `default` feature controls the out-of-the-box experience; `dep:` keeps the feature namespace clean; and `default-features = false` gives downstream users the escape hatch to build a minimal version.
-
+> 
 ---
 
 ### Exercise 3: Conditional Feature Code Gating
@@ -216,7 +216,7 @@ Write the complete `[features]` section in `Cargo.toml` for this crate, then ans
 >
 > #### Technical Explanation
 > Feature flags map directly to `#[cfg(feature = "...")]` conditional compilation gates.
-
+> 
 ---
 
 ## 6. Related Terms

@@ -188,7 +188,7 @@ async function processData() {
 > }
 > ```
 > - Object keys must be strings. You need to combine `a` and `b` into a single string key!
-
+> 
 ---
 
 ### Exercise 2: Implementing Memoize Cache Function
@@ -218,7 +218,7 @@ async function processData() {
 > ```
 >
 > **Explanation:** Memoization caches function computation results mapped to argument keys.
-
+> 
 ---
 
 ### Exercise 3: Cache Memory Size Management
@@ -235,8 +235,8 @@ async function processData() {
 > ```
 >
 > **Explanation:** Caching every unique input argument without eviction policies (e.g. LRU) causes memory growth.
-
-
+> 
+> 
 ---
 
 ## 7. Related Terms

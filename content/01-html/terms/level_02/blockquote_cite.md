@@ -237,7 +237,7 @@ A simple nested blockquote showing visual indentation and attribution:
 > - The quote itself is a block of text, so use `<blockquote>`.
 > - The source URL goes in the `cite` attribute.
 > - The title of the speech is a citation, so wrap it in `<cite>`.
-
+> 
 ---
 
 ### Exercise 2: Structuring Complete Blockquote with Cite
@@ -254,7 +254,7 @@ A simple nested blockquote showing visual indentation and attribution:
 > ```
 >
 > **Explanation:** `cite` attribute holds source URL; `<cite>` tag holds work title inside quote attribution.
-
+> 
 ---
 
 ### Exercise 3: q Tag for Inline Quotations
@@ -268,7 +268,7 @@ A simple nested blockquote showing visual indentation and attribution:
 > ```
 >
 > **Explanation:** `<q>` automatically adds language-appropriate quotation marks around inline quotes.
-
+> 
 ## 7. Related Terms
 - [`<p>` (Paragraph)](p.md) — Standard text container, often nested inside `<blockquote>`.
 - [`<strong>` & `<em>`](strong_em.md) — Inline emphasis tags that sit alongside `<cite>`.

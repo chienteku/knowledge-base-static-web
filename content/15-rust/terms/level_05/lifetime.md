@@ -233,7 +233,7 @@ fn get_prefix<'a, 'b>(input: &'a str, _log_label: &'b str) -> &'a str {
 > 1. **Zero-Copy Sub-Slice Borrowing (`&'a str`)**: The return type `Result<&'a str, LogParseError>` binds the lifetime of the returned slice `&'a str` directly to the input parameter `log_line: &'a str`. No memory is copied or allocated on the heap.
 > 2. **Static Lifetime Contract Enforcement**: The borrow checker guarantees at compile time that callers cannot use the returned `&'a str` token after the underlying string `log_line` is dropped or mutated.
 > 3. **Sub-slice Indexing Invariants**: Slicing `&trimmed[..=end_idx]` produces a string slice pointing to the exact bytes within `log_line`'s memory buffer, preserving UTF-8 alignment.
-
+> 
 ---
 
 ### Exercise 2: Multi-Buffer Text Disambiguator with Decoupled Lifetimes
@@ -304,7 +304,7 @@ fn get_prefix<'a, 'b>(input: &'a str, _log_label: &'b str) -> &'a str {
 > 1. **Decoupled Lifetime Parameters (`'a`, `'b`)**: Specifying two distinct lifetime parameters `'a` and `'b` informs the compiler that `primary` and `fallback` have independent lifetimes.
 > 2. **Result Disambiguation**: Returning `Result<&'a str, &'b str>` ties the `Ok` variant exclusively to lifetime `'a` and the `Err` variant to lifetime `'b`. This allows callers to safely use the `Err` fallback reference even after the `primary` buffer has been dropped.
 > 3. **Flexibility Over Intersection**: If both parameters were tied to `'a`, the compiler would force both inputs to share the minimum lifetime scope, needlessly restricting the lifespan of the fallback reference.
-
+> 
 ---
 
 ### Exercise 3: Zero-Allocation Configuration Search Engine
@@ -390,7 +390,7 @@ fn get_prefix<'a, 'b>(input: &'a str, _log_label: &'b str) -> &'a str {
 > 1. **Struct Lifetime Elision & Binding (`ConfigMatch<'a>`)**: Structs containing reference fields require explicit lifetime parameters (`ConfigMatch<'a>`). The struct instance cannot outlive the string data referenced by `key` and `value`.
 > 2. **Input Sub-Slice Lifetime Propagation**: Function `find_longest_config_val` returns `Option<ConfigMatch<'a>>`, extending lifetime `'a` from `env_data` to both `key` and `value` fields in the returned struct.
 > 3. **Search Key Decoupling**: Parameters `key1` and `key2` are passed as `&str` without lifetime `'a` because the search keys are only inspected during iteration and are not referenced in the returned `ConfigMatch<'a>`.
-
+> 
 ---
 
 ## 6. Related Terms

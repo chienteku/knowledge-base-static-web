@@ -278,17 +278,17 @@ Build a manual `Future` implementation for retry logic.
 > ---
 > 
 > ### Exercise 2: Shared Single-Execution Asynchronous Cell (`AsyncOnceCell`)
-
-**Scenario**: Database connection pools or configuration loaders use an `AsyncOnceCell<T>` to ensure an expensive initialization future runs only once. If multiple caller tasks `.await` the cell concurrently while initialization is in progress, all callers register their `Waker`s and receive the initialized result once complete.
-
-Construct a shared single-execution cell using manual `Future` waker registration.
-
-**Requirements**:
-1. Define `AsyncOnceCell<T>` with shared `Arc<Mutex<CellState<T>>>`.
-2. `CellState<T>` contains `value: Option<T>`, `wakers: Vec<Waker>`, and `is_initializing: bool`.
-3. Implement `get_or_init<F>(&self, init: F)` returning a custom `OnceCellFuture<T>`.
-4. Add unit tests asserting single initialization execution across multiple concurrent task callers.
-
+> 
+> **Scenario**: Database connection pools or configuration loaders use an `AsyncOnceCell<T>` to ensure an expensive initialization future runs only once. If multiple caller tasks `.await` the cell concurrently while initialization is in progress, all callers register their `Waker`s and receive the initialized result once complete.
+> 
+> Construct a shared single-execution cell using manual `Future` waker registration.
+> 
+> **Requirements**:
+> 1. Define `AsyncOnceCell<T>` with shared `Arc<Mutex<CellState<T>>>`.
+> 2. `CellState<T>` contains `value: Option<T>`, `wakers: Vec<Waker>`, and `is_initializing: bool`.
+> 3. Implement `get_or_init<F>(&self, init: F)` returning a custom `OnceCellFuture<T>`.
+> 4. Add unit tests asserting single initialization execution across multiple concurrent task callers.
+> 
 > [!check]- Answer
 > ```rust
 > use std::future::Future;
@@ -379,17 +379,17 @@ Construct a shared single-execution cell using manual `Future` waker registratio
 > ---
 > 
 > ### Exercise 3: Custom Cancellation-Safe `Select2` Combinator with Safe Pinned Projection
-
-**Scenario**: `tokio::select!` races two futures. To understand its internal mechanics, build a custom zero-allocation `Select2<F1, F2>` combinator implementing `Future`.
-
-Construct a manual `Select2` combinator with pinned projection.
-
-**Requirements**:
-1. Implement `Select2<F1, F2>` struct holding `fut1: F1` and `fut2: F2`.
-2. Implement `Future` returning `Poll::Ready(Either<F1::Output, F2::Output>)`.
-3. Perform structural pin projection using `unsafe { Pin::new_unchecked(...) }`.
-4. Add unit tests asserting branch winning behavior and cancellation of the losing future.
-
+> 
+> **Scenario**: `tokio::select!` races two futures. To understand its internal mechanics, build a custom zero-allocation `Select2<F1, F2>` combinator implementing `Future`.
+> 
+> Construct a manual `Select2` combinator with pinned projection.
+> 
+> **Requirements**:
+> 1. Implement `Select2<F1, F2>` struct holding `fut1: F1` and `fut2: F2`.
+> 2. Implement `Future` returning `Poll::Ready(Either<F1::Output, F2::Output>)`.
+> 3. Perform structural pin projection using `unsafe { Pin::new_unchecked(...) }`.
+> 4. Add unit tests asserting branch winning behavior and cancellation of the losing future.
+> 
 > [!check]- Answer
 > ```rust
 > use std::future::Future;
