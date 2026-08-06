@@ -1,158 +1,299 @@
 # Vue CLI (Webpack)
 
-> **Level 10 — Tooling & Build Step**
-> The historical, Webpack-based command-line interface used to scaffold and build Vue applications. **It is now officially deprecated and replaced by Vite.**
+> **Level 10 — Tooling & Ecosystem**
+> The historical, Webpack-based command-line interface used to scaffold and build legacy Vue applications. **It is officially deprecated in favor of Vite (`create-vue`).**
 
 ---
 
 ## 1. Prerequisites
-- [Build Step (Compilation)](build_step.md) — The process the Vue CLI managed.
-- [Vite](vite.md) — The modern replacement.
+
+- [Build Step (Compilation)](build_step.md) — The asset compilation process that Vue CLI managed using Webpack.
+- [Vite](vite.md) — The modern, official replacement for Vue CLI.
 
 ---
 
 ## 2. Term Category
-- **Tooling / Deprecated**
+
+**Deprecated Tooling (Legacy Toolchain)**: Vue CLI (`@vue/cli`) was the standard command-line scaffolding and build management tool for Vue 2 and early Vue 3 projects. Powered internally by Webpack and `@vue/cli-service`, it abstracted complex Webpack configurations behind an opinionated options file (`vue.config.js`).
+
+As of Vue 3.2+, the Vue Core Team officially placed Vue CLI into **maintenance mode (deprecated status)**. Modern Vue applications are scaffolded using `npm create vue@latest` (powered by Vite and Rollup), which delivers 10x–100x faster dev server startup speeds and instant Hot Module Replacement (HMR).
 
 ---
 
-## 3. Environment Context
-- **Legacy Build-Time**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In 2017, setting up a Vue project manually was a nightmare. You had to configure Webpack, Babel (for transpilation), ESLint, and CSS pre-processors from scratch. It took hours.
-The **Vue CLI** (Command Line Interface) was created as an abstraction layer. You typed `vue create my-app`, answered a few prompts, and the CLI generated a fully configured, production-ready project. It completely hid the complex Webpack configuration inside a package called `@vue/cli-service`.
+In 2017 (the Vue 2 era), setting up a production-grade Webpack configuration from scratch required writing hundreds of lines of complex configuration code: configuring Babel transpilers, ESLint rules, PostCSS plugins, `vue-loader`, and file asset loaders. Developers spent days battling Webpack config errors before writing a single component.
 
-### (2) The Webpack Engine
-Under the hood, Vue CLI was powered by **Webpack**. 
-Webpack bundles applications by starting at an entry point (`main.js`), crawling every single `import` in your entire project, and compiling them into a massive dependency graph *before* the dev server could start.
-As Vue apps grew to enterprise scale, this Webpack architecture became incredibly slow, leading to 30+ second dev server boot times.
+Vue CLI was created to solve configuration fatigue. By running `vue create my-project`, developers answered interactive terminal prompts, and Vue CLI generated a pre-configured project structure. It hid Webpack's complexity inside `@vue/cli-service`, allowing teams to customize build behavior via a simplified `vue.config.js` file.
 
-### (3) Deprecation and The Future
-Because Webpack's architecture hit a fundamental performance ceiling, Evan You created [Vite](../level_10/vite.md).
-As of Vue 3.2+, the Vue Core Team officially placed the Vue CLI into maintenance mode. It will receive security updates, but no new features.
+### (2) Reality Metaphor
+Imagine a steam-powered locomotive train from the late 19th century. When it was invented, it revolutionized transportation, allowing people to cross continents reliably compared to horse-drawn carriages. However, to start a steam locomotive, engineers had to spend hours shoveling coal, heating water boilers, and building up steam pressure before the train could move a single inch.
 
----
+Vue CLI (Webpack) was that steam locomotive. It revolutionized frontend project setup in 2017, but requires massive "boiler warm-up time" (Webpack bundling unbundled source code) before the dev server can start. Vite is a modern high-speed electric bullet train—you flip a switch, and it moves instantly.
 
-## 5. Common Mistakes & Pitfalls
+### (3) Vue Code Examples
 
-### Mistake 1: Starting new projects with `vue-cli`
-
-**The mistake:** A developer is hired at a new company to build a modern Vue 3 application. They open their terminal and type `npm install -g @vue/cli` and `vue create app`.
-
-**Why it's wrong:** They are scaffolding a brand new project using a deprecated build tool with inferior performance. They are dooming the project to slow build times and missing out on the modern ecosystem.
-**Golden Rule:** NEVER use Vue CLI for new projects. Always use `npm create vue@latest` to scaffold a Vite-powered application.
-
----
-
-### Mistake 2: Starting New Vue 3 Projects in 2026 Using Deprecated `vue-cli` (`vue create`)
-
-**The mistake:** Running `vue create my-app` to scaffold new Vue 3 projects.
-
-**Why it's wrong:** Vue CLI is in **maintenance mode**. Official Vue tooling replaced Vue CLI with **Vite** (`create-vue`). Vite offers 10x faster startup and instant HMR.
-
-*Incorrect:*
-```bash
-npm install -g @vue/cli
-vue create my-project # ❌ Deprecated legacy tooling!
-```
-
-*Fix:*
-```bash
-npm create vue@latest # Official modern scaffolding powered by Vite
-```
-
----
-
-### Mistake 3: Attempting to Modify Webpack Configuration Directly Without `vue.config.js`
-
-**The mistake:** Editing hidden `node_modules/@vue/cli-service/webpack.config.js` directly.
-
-**Why it's wrong:** Vue CLI manages Webpack via `vue.config.js` using `chainWebpack` or `configureWebpack`. Editing `node_modules` gets overwritten on npm installs.
-
-*Incorrect:*
-```vue
-/* Modifying webpack config inside node_modules directory */
-```
-
-*Fix:*
-```vue
-// Configure Webpack extensions in vue.config.js:
+#### Short Snippet
+```javascript
+// Legacy vue.config.js (Vue CLI Webpack Configuration)
 module.exports = {
-  configureWebpack: { plugins: [...] }
-};
+  // Webpack dev server configuration
+  devServer: {
+    port: 8080,
+    proxy: 'http://localhost:3000'
+  },
+  // Customizing Webpack options via webpack-chain
+  chainWebpack: config => {
+    config.plugin('html').tap(args => {
+      args[0].title = 'Legacy Vue CLI App'
+      return args
+    })
+  }
+}
 ```
 
+#### Fuller Example
+```javascript
+// Migration Guide: Identifying Vue CLI vs Vite Projects
+// Check root directory files:
+
+/* 
+  LEGACY VUE CLI PROJECT (Webpack):
+  ├── vue.config.js          <-- Primary giveaway for Vue CLI!
+  ├── package.json           <-- Contains "@vue/cli-service" dependency
+  └── src/
+      └── main.js            <-- Uses require() or legacy Webpack plugins
+
+  MODERN VUE PROJECT (Vite):
+  ├── vite.config.js         <-- Primary indicator for Vite!
+  ├── index.html             <-- Located at ROOT (not in public/)
+  ├── package.json           <-- Contains "vite" and "@vitejs/plugin-vue"
+  └── src/
+      └── main.js            <-- Uses native ES modules (import / export)
+*/
+
+// package.json script comparison:
+// Legacy Vue CLI:
+// "scripts": { "serve": "vue-cli-service serve", "build": "vue-cli-service build" }
+// Modern Vite:
+// "scripts": { "dev": "vite", "build": "vite build" }
+```
 
 ---
 
-## 6. Practice Exercises
+## 4. Common Mistakes & Pitfalls
 
-### Exercise 1: Configuration Files
+### Mistake 1: Scaffolding New Vue Projects in 2026 Using `vue create`
 
-**Problem:** You join a company and are assigned to fix a bug in a Vue project. You look at the root folder and see a `vue.config.js` file. What build tool is this project using?
+**The mistake:** Opening a terminal and running `npm install -g @vue/cli` followed by `vue create my-app` to start a new Vue 3 project.
 
-**Expected output:**
+**Why it's wrong:** Vue CLI is deprecated and in maintenance mode. Scaffolding new projects with Vue CLI dooms the repository to legacy Webpack dependencies, slow dev server boot times, and lack of modern ecosystem updates.
+
+*Incorrect:*
+```bash
+# ❌ Deprecated legacy scaffolding tool!
+npm install -g @vue/cli
+vue create my-project
+```
+
+*Fix:*
+```bash
+# ✅ Official modern scaffolding command powered by Vite
+npm create vue@latest
+```
+
+---
+
+### Mistake 2: Modifying Webpack Files Inside `node_modules/@vue/cli-service` Directly
+
+**The mistake:** Editing hidden Webpack configuration files inside `node_modules/@vue/cli-service/webpack.config.js`.
+
+**Why it's wrong:** Any changes made directly inside `node_modules` are completely erased whenever `npm install` or CI/CD build scripts run.
+
+*Incorrect:*
+```text
+Editing Webpack configs directly inside node_modules directory.
+```
+
+*Fix:*
+```javascript
+// vue.config.js
+// ✅ Extend Webpack configuration safely inside vue.config.js
+module.exports = {
+  configureWebpack: {
+    plugins: [ /* Custom Webpack Plugins */ ]
+  }
+}
+```
+
+---
+
+### Mistake 3: Expecting Vite Environment Variables (`import.meta.env`) to Work in Vue CLI
+
+**The mistake:** Writing `import.meta.env.VITE_API_URL` inside a legacy Vue CLI project.
+
+**Why it's wrong:** Vue CLI uses Webpack's `DefinePlugin` and exposes environment variables on `process.env.VUE_APP_*`. It does not support `import.meta.env`.
+
+*Incorrect:*
+```javascript
+// ❌ Fails in Vue CLI (Webpack)!
+const url = import.meta.env.VITE_API_URL
+```
+
+*Fix:*
+```javascript
+// ✅ Vue CLI uses process.env with VUE_APP_ prefix
+const url = process.env.VUE_APP_API_URL
+```
+
+---
+
+## 5. Practice Exercises
+
+### Exercise 1: IoT Legacy Vue CLI Maintenance Auditor
+
+**Scenario:** An industrial IoT engineering team inherits a legacy telemetry dashboard created in 2019. An auditor script inspects `package.json` to detect whether the project uses legacy Vue CLI or modern Vite.
+
+**Requirements:**
+1. Parse dependency objects.
+2. Detect presence of `@vue/cli-service` vs `vite`.
+3. Return a toolchain classification string.
+4. Include a test assertion validating toolchain detection logic.
+
 > [!check]- Answer
-> ```text
-> It is using the legacy Vue CLI (Webpack)!
-> A modern Vite project will have a `vite.config.js` or `vite.config.ts` file instead. 
-> Seeing `vue.config.js` is the immediate giveaway that you are working in an older codebase.
+>
+> #### Implementation
+> ```javascript
+> // toolchainAudit.test.js
+> function detectToolchain(packageJson) {
+>   const deps = { ...packageJson.dependencies, ...packageJson.devDependencies }
+>   if (deps['@vue/cli-service']) return 'LEGACY_VUE_CLI'
+>   if (deps['vite']) return 'MODERN_VITE'
+>   return 'UNKNOWN'
+> }
+> 
+> function testToolchainDetection() {
+>   const legacyPkg = { devDependencies: { '@vue/cli-service': '^4.5.0' } }
+>   const modernPkg = { devDependencies: { 'vite': '^5.0.0' } }
+> 
+>   console.assert(detectToolchain(legacyPkg) === 'LEGACY_VUE_CLI', 'Test Failed: Legacy detection failed')
+>   console.assert(detectToolchain(modernPkg) === 'MODERN_VITE', 'Test Failed: Modern detection failed')
+>   console.log('Toolchain Detection Test Passed')
+> }
+> 
+> testToolchainDetection()
 > ```
-> - Which config file belongs to which tool?
+>
+> #### Technical Explanation
+> 1. **Concept**: `@vue/cli-service` is the core npm dependency indicating a Vue CLI Webpack project.
+> 2. **Concept**: `vite` indicates a modern ES module build pipeline.
+> 3. **Concept**: Auditing toolchains ensures projects follow active security and performance guidelines.
+> 4. **Concept**: Unit assertions verify detection accuracy.
 > 
 ---
 
-### Exercise 2: Official Vue Project Scaffolding Command
+### Exercise 2: Financial Environment Variable Migration Helper
 
-**Problem:** Which modern CLI command scaffolds a new Vue 3 project using Vite and create-vue?
+**Scenario:** A financial firm migrates a legacy Vue CLI application to Vite. The team writes a helper function to translate legacy `process.env.VUE_APP_*` keys into modern `import.meta.env.VITE_*` keys.
 
-**Expected output:**
+**Requirements:**
+1. Accept an object of legacy `VUE_APP_` environment keys.
+2. Rename keys to use `VITE_` prefix.
+3. Preserve key values.
+4. Include a test assertion checking key renaming.
+
 > [!check]- Answer
-> ```text
-> npm create vue@latest
-> ```
-> - `npm create vue@latest` is the official modern starter tool.
+>
+> #### Implementation
+> ```javascript
+> // envMigrate.test.js
+> function migrateEnvKeys(legacyEnv) {
+>   const migrated = {}
+>   for (const [key, value] of Object.entries(legacyEnv)) {
+>     if (key.startsWith('VUE_APP_')) {
+>       const newKey = key.replace('VUE_APP_', 'VITE_')
+>       migrated[newKey] = value
+>     } else {
+>       migrated[key] = value
+>     }
+>   }
+>   return migrated
+> }
 > 
-> ```bash
-> npm create vue@latest
+> function testEnvMigration() {
+>   const legacy = { VUE_APP_API_URL: 'https://finance.api.com', VUE_APP_TIMEOUT: '5000' }
+>   const migrated = migrateEnvKeys(legacy)
+> 
+>   console.assert(migrated.VITE_API_URL === 'https://finance.api.com', 'Test Failed: Key renaming failed')
+>   console.assert(migrated.VITE_TIMEOUT === '5000', 'Test Failed: Value lost')
+>   console.log('Env Migration Test Passed')
+> }
+> 
+> testEnvMigration()
 > ```
+>
+> #### Technical Explanation
+> 1. **Concept**: Vue CLI required `VUE_APP_` prefixes for client variable injection.
+> 2. **Concept**: Vite requires `VITE_` prefixes for `import.meta.env` client variable injection.
+> 3. **Concept**: Migrating environment keys is an essential step when upgrading legacy codebases.
+> 4. **Concept**: Unit tests verify string transformation correctness.
 > 
 ---
 
-### Exercise 3: Vue CLI vs Vite Tooling Transition
+### Exercise 3: E-Commerce Webpack Alias Transformer
 
-**Problem:** What underlying bundler powered Vue CLI vs Vite?
+**Scenario:** An e-commerce engineering team updates legacy `vue.config.js` Webpack aliases into `vite.config.js` alias definitions.
 
-**Expected output:**
+**Requirements:**
+1. Transform Webpack `@` alias format to Vite `resolve.alias` format.
+2. Map `@/components` paths.
+3. Include a test assertion checking path resolution mappings.
+
 > [!check]- Answer
-> ```text
-> Vue CLI: Webpack
-> Vite: Esbuild (Dev) + Rollup (Prod)
-> ```
-> - Vue CLI -> Webpack
-> - Vite -> Esbuild & Rollup
+>
+> #### Implementation
+> ```javascript
+> // aliasMigrate.test.js
+> function convertWebpackAliasToVite(webpackAliasObj) {
+>   const viteAlias = {}
+>   for (const [alias, targetPath] of Object.entries(webpackAliasObj)) {
+>     viteAlias[alias] = targetPath
+>   }
+>   return { resolve: { alias: viteAlias } }
+> }
 > 
-> ```text
-> Vue CLI used Webpack; Vite uses Esbuild and Rollup.
-> ```
+> function testAliasMigration() {
+>   const webpackAliases = { '@': '/src', '@components': '/src/components' }
+>   const viteConfig = convertWebpackAliasToVite(webpackAliases)
 > 
+>   console.assert(viteConfig.resolve.alias['@'] === '/src', 'Test Failed: Alias mapping failed')
+>   console.log('Alias Migration Test Passed')
+> }
+> 
+> testAliasMigration()
+> ```
+>
+> #### Technical Explanation
+> 1. **Concept**: `vue.config.js` used Webpack `configureWebpack.resolve.alias`.
+> 2. **Concept**: `vite.config.js` uses `resolve.alias` objects or array definitions.
+> 3. **Concept**: Path aliases simplify component imports across large application trees.
+> 4. **Concept**: Assertions confirm object mapping.
 > 
 ---
 
-## 7. Related Terms
-- [Vite](vite.md) — The tool you should actually be using.
-- [Build Step (Compilation)](build_step.md) — What these tools do.
+## 6. Related Terms
+
+- [Vite](vite.md) — The modern, official build tool that replaces Vue CLI.
+- [Build Step (Compilation)](build_step.md) — The asset compilation process managed by Vue CLI and Webpack.
+- [Single-File Components (SFCs)](../level_04/sfc.md) — SFC format compiled by `vue-loader` in Vue CLI.
 
 ---
 
-## 8. Key Takeaways
-- **Vue CLI** is the legacy, Webpack-based toolchain for Vue development.
-- It is officially **deprecated** and in maintenance mode.
-- It suffers from slow dev-server startup times on large projects due to Webpack's bundling architecture.
-- For all new projects, you must use Vite (`npm create vue@latest`).
-- You can identify a legacy Vue CLI project by the presence of a `vue.config.js` file.
+## 7. Key Takeaways
+
+- **Vue CLI (`@vue/cli`)** is the legacy, Webpack-based scaffolding tool for Vue 2 and early Vue 3 apps.
+- It is officially **deprecated** and placed in maintenance mode by the Vue Core Team.
+- Suffer from slow dev server boot times on large repositories due to Webpack's bundling architecture.
+- For all new Vue projects, use Vite scaffolding (`npm create vue@latest`).
+- Legacy Vue CLI projects are identified by the presence of a `vue.config.js` file and `@vue/cli-service` dependencies.

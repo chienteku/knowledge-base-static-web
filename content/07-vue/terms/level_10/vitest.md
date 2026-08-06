@@ -1,285 +1,328 @@
 # Vitest (Unit Testing)
 
-> **Level 10 — Ecosystem & Tooling**
-> A modern, Vite-native testing runner that shares Vite's build pipeline, plugins, and module resolution, providing extremely fast unit and component test execution with full Jest-compatible APIs.
+> **Level 10 — Tooling & Ecosystem**
+> A modern, Vite-native unit testing runner that shares Vite's build pipeline, plugins, and module resolution, delivering fast test execution and full Jest API compatibility out of the box.
 
 ---
 
 ## 1. Prerequisites
-- [Vue Test Utils](vue_test_utils.md) — The library for mounting and interacting with Vue components.
-- [Vite](vite.md) — The development server and bundler.
-- [Build Step (Compilation)](build_step.md) — How code compilation pipelines operate.
+
+- [Vue Test Utils](vue_test_utils.md) — The official utility library for mounting Vue components inside Vitest specs.
+- [Vite](vite.md) — The underlying build engine powering Vitest's module transformation pipeline.
+- [Build Step (Compilation)](build_step.md) — Asset compilation pipelines shared between dev servers and test runners.
 
 ---
 
 ## 2. Term Category
-- **Ecosystem Tool**
+
+**Testing Framework (Vite-Native Test Runner)**: Vitest is a modern unit and component testing framework built natively on top of Vite. It provides Jest-compatible assertion APIs (`describe`, `test`, `expect`, `vi`), fast worker thread isolation, native TypeScript and JSX execution, and instant watch mode re-runs leveraging Vite's Hot Module Replacement (HMR) module graph cache.
+
+Compared to Jest (which requires maintaining separate Babel/TypeScript preprocessors and duplicate `jest.config.js` path alias rules), Vitest uses your application's existing `vite.config.js` file directly. If a file compiles in your Vite browser dev server, it runs in Vitest without configuration drift.
 
 ---
 
-## 3. Environment Context
-- **Build-Time**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-For years, Jest was the undisputed leader in JavaScript unit testing. However, as Vite emerged as the standard frontend compiler, a frustrating developer experience (DX) gap appeared:
-- Vite ran development servers using ultra-fast native ES modules.
-- Jest ran tests by compiling files separately using Babel or custom TypeScript preprocessors.
+Historically, frontend teams using Jest with modern build tools encountered frustrating "configuration drift." Developers had to maintain two completely separate compilation pipelines:
+1. `vite.config.js` for running the application in dev servers and building for production.
+2. `jest.config.js` for compiling TypeScript, path aliases (`@/`), and `.vue` SFC templates inside Jest's Babel runner.
 
-This meant teams had to maintain **two separate compilation setups**: one in `vite.config.js` for running the app, and one in `jest.config.js` for compiling files for tests. If you registered a path alias (like `@/` pointing to `src/`) or a Vue plugin in Vite, you had to duplicate that exact configuration in Jest. If you forgot, your tests would fail.
+When developers added new path aliases or Vite plugins, tests broke in Jest because the configurations diverged. Furthermore, Jest's cold startup and file transformation overhead made watch modes sluggish. **Vitest** was created to unify tooling: it hooks directly into Vite's dev server engine, eliminating duplicate configs and executing tests at native ESM speed.
 
-**Vitest** was designed to solve this configuration drift. It is built directly on top of Vite. It uses the exact same dev server pipeline to transform and resolve your files during tests. If a file works in your browser under Vite, it will work in your tests under Vitest, with zero double-configurations.
+### (2) Reality Metaphor
+Imagine a motor sports pit crew maintaining two identical race cars. 
 
-### (2) How it works under the hood
-When you execute `vitest` in your terminal:
-1. It boots up Vite's internal transformer pipeline.
-2. It crawls your test files (e.g. `*.test.js` or `*.spec.ts`).
-3. As the test runner imports components or utility files, Vite compiles them on-the-fly, resolving path aliases, TypeScript files, and `.vue` templates using the exact plugins configured in `vite.config.js`.
-4. It executes the tests inside worker threads using a simulated DOM environment (like `jsdom` or `happy-dom`) if needed.
-5. It watches for changes. Because it leverages Vite's Hot Module Replacement (HMR) graphs, it knows exactly which tests are affected by a file modification and only re-runs those, making watch mode near-instant.
+Under the old Jest setup, the team maintained Car A with a V8 gasoline engine (Vite) for Sunday races, and Car B with a completely separate diesel engine (Jest) for qualifying tests. Every time engineers upgraded a part on Car A, they had to design a custom adapter to fit Car B. If they forgot, Car B broke during qualification.
 
-Vitest uses the exact same syntax as Jest (providing `describe`, `test`, `it`, `expect`, and `vi` mocking utilities), making it a drop-in replacement.
+Vitest acts as a single, unified modular chassis. The pit crew runs the exact same engine and parts for both Sunday races (production build) and qualifying tests (Vitest). Upgrading a part once applies to both automatically.
 
-### (3) Code Examples
+### (3) Vue Code Examples
 
 #### Short Snippet
-Testing a simple helper function in isolation:
 ```javascript
-// math.test.js
+// math.test.js (Basic Vitest Unit Test)
 import { describe, test, expect } from 'vitest'
-import { sum } from './math.js'
+import { calculateTax } from './tax.js'
 
-describe('Math Utilities', () => {
-  test('adds two numbers correctly', () => {
-    expect(sum(2, 3)).toBe(5)
+describe('Tax Calculator', () => {
+  test('calculates 10% tax rate correctly', () => {
+    const result = calculateTax(100, 0.10)
+    expect(result).toBe(110)
   })
 })
 ```
 
 #### Fuller Example
-Testing a Vue Counter component using Vitest and Vue Test Utils. Notice how we declare the virtual browser DOM environment at the top of the file.
-
-```vue
-<!-- Counter.vue -->
-<script setup>
-import { ref } from 'vue'
-const count = ref(0)
-</script>
-
-<template>
-  <div>
-    <p>Clicks: {{ count }}</p>
-    <button @click="count++">Increment</button>
-  </div>
-</template>
-```
-
 ```javascript
-// Counter.spec.js
+// Counter.spec.js (Vitest Component Test with Vue Test Utils)
 // @vitest-environment jsdom
 
-import { describe, test, expect } from 'vitest'
+import { describe, test, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import Counter from './Counter.vue'
+import CounterComponent from './CounterComponent.vue'
 
-describe('Counter Component', () => {
-  test('increments score when button is clicked', async () => {
-    // 1. Mount the SFC component
-    const wrapper = mount(Counter)
-    
-    // 2. Verify initial UI state
-    expect(wrapper.text()).toContain('Clicks: 0')
-    
-    // 3. Trigger button click event
-    const button = wrapper.find('button')
-    await button.trigger('click')
-    
-    // 4. Assert updated UI state
-    expect(wrapper.text()).toContain('Clicks: 1')
-  })
-})
-```
-
----
-
-## 5. Common Mistakes & Pitfalls
-
-### Mistake 1: Attempting to test Vue components without a DOM environment
-
-**The mistake:** Running tests for Vue components that rely on DOM elements without configuring Vitest's environment.
-
-**Why it's wrong:** By default, Vitest runs in Node.js, which has no DOM (no `document`, `window`, or `HTMLElement` representations). Running `mount()` in Node will throw a fatal error: `document is not defined`.
-
-*Incorrect:*
-```javascript
-// my-component.spec.js
-import { mount } from '@vue/test-utils'
-import MyComp from './MyComp.vue'
-
-// Runs in Node by default - fails!
-const wrapper = mount(MyComp) 
-```
-
-*Fix:* Declare a JSDOM header comment at the top of the test file, or configure it globally in `vite.config.ts`.
-```javascript
-// my-component.spec.js
-// @vitest-environment jsdom  <-- Correct! Registers simulated browser DOM.
-
-import { mount } from '@vue/test-utils'
-import MyComp from './MyComp.vue'
-
-const wrapper = mount(MyComp) // Works perfectly!
-```
-
-**Golden Rule:** Always set the environment to `jsdom` or `happy-dom` when writing component tests that access HTML nodes or trigger events.
-
----
-
-### Mistake 2: Confusing Jest with Vitest Configuration Files (`jest.config.js` vs `vite.config.js`)
-
-**The mistake:** Adding separate `jest.config.js` files to a Vite project.
-
-**Why it's wrong:** Vitest integrates directly into `vite.config.js` sharing the exact same transformation pipeline and aliases. Adding Jest introduces duplicate configuration maintenance.
-
-*Incorrect:*
-```vue
-/* Creating separate jest.config.js in Vite project */
-```
-
-*Fix:*
-```vue
-// Configure Vitest directly inside vite.config.js:
-export default defineConfig({
-  test: { environment: 'jsdom' }
-});
-```
-
----
-
-### Mistake 3: Forgetting to Specify `environment: 'jsdom'` or `'happy-dom'` for Vue Component Tests
-
-**The mistake:** Running Vitest component unit tests in default Node.js environment without DOM APIs.
-
-**Why it's wrong:** Testing Vue components requires DOM APIs (`document`, `window`). Running component tests in raw Node.js environment throws errors when mounting components.
-
-*Incorrect:*
-```vue
-/* Vitest running component test in raw Node environment -> document is undefined error! */
-```
-
-*Fix:*
-```javascript
-// Configure test environment in vite.config.js:
-test: {
-  environment: 'jsdom' // Or 'happy-dom'
-}
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: Asserting Prop Rendering
-
-**Problem:** Complete the Vitest spec below to assert that the component renders a title passed down as a prop.
-
-```vue
-<!-- TitleCard.vue -->
-<script setup>
-defineProps({ title: String })
-</script>
-<template>
-  <h1>{{ title }}</h1>
-</template>
-```
-
-```javascript
-// TitleCard.spec.js
-// @vitest-environment jsdom
-
-import { describe, test, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import TitleCard from './TitleCard.vue'
-
-describe('TitleCard', () => {
-  test('renders title prop correctly', () => {
-    // 1. Mount with props
-    const wrapper = mount(TitleCard, {
-      props: { title: 'Welcome Developer' }
+describe('CounterComponent.vue', () => {
+  test('increments counter display upon button click', async () => {
+    // 1. Mount component in simulated JSDOM environment
+    const wrapper = mount(CounterComponent, {
+      props: { initialCount: 5 }
     })
-    
-    // 2. Complete the assertion to verify h1 text
-    expect(wrapper.find('h1').text()).toBe('Welcome Developer')
+
+    // 2. Assert initial rendered text
+    expect(wrapper.text()).toContain('Current Count: 5')
+
+    // 3. Trigger button click event
+    const button = wrapper.find('button.inc-btn')
+    await button.trigger('click')
+
+    // 4. Assert reactive DOM patch
+    expect(wrapper.text()).toContain('Current Count: 6')
+  })
+
+  test('emits limitReached event when count reaches 10', async () => {
+    const wrapper = mount(CounterComponent, {
+      props: { initialCount: 9 }
+    })
+
+    await wrapper.find('button.inc-btn').trigger('click')
+
+    // 5. Assert emitted custom component events
+    expect(wrapper.emitted()).toHaveProperty('limitReached')
+    expect(wrapper.emitted('limitReached')[0]).toEqual([10])
   })
 })
 ```
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> The test mounts the component with the target prop value and asserts the inner HTML of the h1 element matches it.
-> ```
-> - The component mount options object accepts a `props` object: `{ props: { key: value } }`.
-> - Use `.find('h1')` to query the heading tag, and `.text()` to read its content.
-> 
 ---
 
-### Exercise 2: Vitest Basic Component Test Pattern
+## 4. Common Mistakes & Pitfalls
 
-**Problem:** Write Vitest test block using `@vue/test-utils` `mount()` verifying component renders text `'Welcome'`. 
+### Mistake 1: Testing Vue Components Without Configuring a DOM Environment
 
-**Expected output:**
+**The mistake:** Running component tests that access HTML nodes (`wrapper.find('button')`) without specifying a simulated DOM environment (`jsdom` or `happy-dom`).
+
+**Why it's wrong:** By default, Vitest executes inside Node.js, which has no `window` or `document` DOM representation. Mounting components without a DOM environment throws runtime crashes (`ReferenceError: document is not defined`).
+
+*Incorrect:*
+```javascript
+// my-comp.spec.js
+// ❌ Runs in raw Node.js without DOM environment -> Fails on mount()!
+import { mount } from '@vue/test-utils'
+import MyComp from './MyComp.vue'
+
+test('renders component', () => {
+  const wrapper = mount(MyComp)
+})
+```
+
+*Fix:*
+```javascript
+// my-comp.spec.js
+// @vitest-environment jsdom
+// ✅ Registers JSDOM environment for this test file
+
+import { mount } from '@vue/test-utils'
+import MyComp from './MyComp.vue'
+
+test('renders component', () => {
+  const wrapper = mount(MyComp)
+})
+```
+
+---
+
+### Mistake 2: Maintaining Duplicate `jest.config.js` Files in Vite Projects
+
+**The mistake:** Adding separate `jest.config.js` configuration files to Vite applications.
+
+**Why it's wrong:** Vitest integrates directly into your existing `vite.config.js` file, sharing aliases, plugins, and transformation rules automatically. Adding Jest re-introduces duplicate configuration maintenance.
+
+*Incorrect:*
+```javascript
+// Creating separate jest.config.js in a Vite project
+```
+
+*Fix:*
+```javascript
+// vite.config.js
+export default defineConfig({
+  plugins: [vue()],
+  test: {
+    environment: 'jsdom',
+    globals: true
+  }
+})
+```
+
+---
+
+### Mistake 3: Forgetting to `await` Event Triggers in Component Assertions
+
+**The mistake:** Triggering events (`wrapper.find('button').trigger('click')`) synchronously and asserting DOM text on the very next line without `await`.
+
+**Why it's wrong:** Vue flushes DOM updates asynchronously on `nextTick()`. `trigger()` returns a Promise. Omitting `await` causes assertions to execute before Vue finishes patching the DOM, resulting in flaky test failures.
+
+*Incorrect:*
+```javascript
+// ❌ Assertion fails because DOM hasn't patched yet!
+wrapper.find('button').trigger('click')
+expect(wrapper.text()).toContain('Updated')
+```
+
+*Fix:*
+```javascript
+// ✅ Await trigger Promise to allow DOM flush
+await wrapper.find('button').trigger('click')
+expect(wrapper.text()).toContain('Updated')
+```
+
+---
+
+## 5. Practice Exercises
+
+### Exercise 1: IoT Sensor Alert Composable Vitest Spec
+
+**Scenario:** An industrial IoT engineering team tests a `useTemperatureAlert(threshold)` composable using Vitest. The test verifies alert state triggering when sensor readings exceed threshold values.
+
+**Requirements:**
+1. Test initial `isAlert` boolean state ($false$).
+2. Mutate temperature ref above threshold ($> 50\,^\circ\text{C}$).
+3. Assert that `isAlert` updates reactively to $true$.
+4. Use Vitest `describe`, `test`, `expect` functions.
+
 > [!check]- Answer
+>
+> #### Implementation
 > ```javascript
-> import { test, expect } from 'vitest'; import { mount } from '@vue/test-utils'; import Welcome from './Welcome.vue'; test('renders welcome text', () => { const wrapper = mount(Welcome); expect(wrapper.text()).toContain('Welcome'); });
-> ```
-> - Vitest provides Jest-compatible `test` and `expect` APIs.
+> // sensorAlert.spec.js
+> import { describe, test, expect } from 'vitest'
+> import { ref, computed } from 'vue'
 > 
-> ```javascript
-> import { test, expect } from 'vitest';
-> import { mount } from '@vue/test-utils';
-> import Welcome from './Welcome.vue';
+> function useTemperatureAlert(threshold = 50) {
+>   const temp = ref(22)
+>   const isAlert = computed(() => temp.value > threshold)
+>   return { temp, isAlert }
+> }
 > 
-> test('renders welcome text', () => {
->   const wrapper = mount(Welcome);
->   expect(wrapper.text()).toContain('Welcome');
-> });
+> describe('useTemperatureAlert Composable', () => {
+>   test('triggers alert state when temperature exceeds threshold', () => {
+>     const { temp, isAlert } = useTemperatureAlert(50)
+> 
+>     expect(isAlert.value).toBe(false)
+> 
+>     temp.value = 55.4
+>     expect(isAlert.value).toBe(true)
+>   })
+> })
 > ```
+>
+> #### Technical Explanation
+> 1. **Concept**: Vitest tests Vue Composition API reactivity functions natively without requiring full DOM mounting.
+> 2. **Concept**: Mutating `temp.value` causes `computed` states to update synchronously during test execution.
+> 3. **Concept**: `expect(isAlert.value).toBe(true)` asserts boolean reactivity contracts.
+> 4. **Concept**: Instant test execution via Vitest ESM runner.
 > 
 ---
 
-### Exercise 3: Vitest Watch Mode Efficiency
+### Exercise 2: Financial Order Validation Vitest Suite with Mock Functions
 
-**Problem:** Why is Vitest significantly faster than Jest when running tests in Watch mode on Vite projects?
+**Scenario:** A financial trading firm tests an order execution function. Vitest `vi.fn()` mocks API submission functions to verify call counts and parameter payloads.
 
-**Expected output:**
+**Requirements:**
+1. Mock backend API submission function using `vi.fn()`.
+2. Execute order processing function with valid trade payloads.
+3. Assert that mock function was called exactly once (`toHaveBeenCalledTimes(1)`).
+4. Assert parameter payloads match expected order objects (`toHaveBeenCalledWith(...)`).
+
 > [!check]- Answer
-> ```text
-> Vitest re-uses Vite's fast module graph dependency cache to re-execute ONLY tests affected by modified files.
-> ```
-> - Leverages Vite module graph for smart test re-execution.
+>
+> #### Implementation
+> ```javascript
+> // orderExecution.spec.js
+> import { describe, test, expect, vi } from 'vitest'
 > 
-> ```text
-> Re-executes only tests affected by changed files.
-> ```
+> function processFinancialOrder(order, submitApi) {
+>   if (order.shares <= 0) throw new Error('Invalid share count')
+>   submitApi({ ticker: order.ticker, total: order.shares * order.price })
+> }
 > 
+> describe('Financial Order Processing', () => {
+>   test('submits calculated order payload to API mock', () => {
+>     const apiMock = vi.fn()
+>     const order = { ticker: 'NVDA', shares: 10, price: 450.00 }
+> 
+>     processFinancialOrder(order, apiMock)
+> 
+>     expect(apiMock).toHaveBeenCalledTimes(1)
+>     expect(apiMock).toHaveBeenCalledWith({ ticker: 'NVDA', total: 4500.00 })
+>   })
+> })
+> ```
+>
+> #### Technical Explanation
+> 1. **Concept**: `vi.fn()` creates spy mocks to record function invocations and arguments.
+> 2. **Concept**: `toHaveBeenCalledWith` verifies mathematical payload accuracy.
+> 3. **Concept**: Vitest mocks replace real backend network calls during unit testing.
+> 4. **Concept**: Isolates business logic from external infrastructure.
 > 
 ---
 
-## 7. Related Terms
-- [Vue Test Utils](vue_test_utils.md) — The utility suite for mounting and checking Vue components.
-- [Vite](vite.md) — The underlying transformer engine and bundler.
-- [Build Step (Compilation)](build_step.md) — The compilation pipeline.
+### Exercise 3: E-Commerce Discount Code Vitest Spec Suite
+
+**Scenario:** An online store tests coupon discount calculations across different shopping cart totals using Vitest table-driven test patterns (`test.each`).
+
+**Requirements:**
+1. Use `test.each` to execute table-driven test parameters.
+2. Calculate discounted totals for 10%, 20%, and 50% promo codes.
+3. Assert expected final prices match calculations.
+4. Verify invalid promo codes return un-discounted prices.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```javascript
+> // discount.spec.js
+> import { describe, test, expect } from 'vitest'
+> 
+> function applyDiscount(total, code) {
+>   const discounts = { 'SAVE10': 0.10, 'SAVE20': 0.20, 'HALF': 0.50 }
+>   const rate = discounts[code] || 0
+>   return total * (1 - rate)
+> }
+> 
+> describe('E-Commerce Discount Calculator', () => {
+>   test.each([
+>     [100, 'SAVE10', 90],
+>     [100, 'SAVE20', 80],
+>     [200, 'HALF', 100],
+>     [100, 'INVALID', 100]
+>   ])('given total $%i and code %s, returns $%i', (total, code, expected) => {
+>     expect(applyDiscount(total, code)).toBe(expected)
+>   })
+> })
+> ```
+>
+> #### Technical Explanation
+> 1. **Concept**: `test.each` executes repetitive test suites cleanly across parameterized inputs.
+> 2. **Concept**: Asserts pricing boundary conditions (valid vs invalid promo codes).
+> 3. **Concept**: Vitest formats parameter descriptions automatically in test terminal output.
+> 4. **Concept**: Fast execution ensures regression safety during refactoring.
+> 
+---
+
+## 6. Related Terms
+
+- [Vue Test Utils](vue_test_utils.md) — Component mounting utility library executed inside Vitest.
+- [Vite](vite.md) — The underlying build tool sharing configuration and transformation rules with Vitest.
+- [Build Step (Compilation)](build_step.md) — Compilation pipeline shared between application builds and test execution.
 
 ---
 
-## 8. Key Takeaways
-- **Vitest** is a modern unit testing runner built on top of the Vite compilation server.
-- Shares the exact same config files, plugins, and module resolution rules as Vite.
-- Implements full api compatibility with Jest's assertion frameworks (`describe`, `expect`, `vi`).
-- Leverages Vite's hot module graph HMR to run tests near-instantly when files change in watch mode.
-- Set the environment hook to `jsdom` or `happy-dom` when testing component layout or interaction logic.
+## 7. Key Takeaways
+
+- **Vitest** is a modern, Vite-native unit testing runner that eliminates dual-configuration drift.
+- Shares the exact same `vite.config.js` plugins, path aliases (`@/`), and transformation rules as your dev server.
+- Implements full API compatibility with Jest assertion frameworks (`describe`, `test`, `expect`, `vi`).
+- Set `environment: 'jsdom'` or `'happy-dom'` when testing Vue components that access DOM elements or trigger events.
+- Always `await` asynchronous triggers (`await wrapper.find('button').trigger('click')`) before asserting reactive DOM updates.

@@ -2,7 +2,7 @@
   "$schema": "../../_meta/relationships.schema.json",
   "module": "07-vue",
   "version": 1,
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-06",
   "terms": {
     "composition_api": {
       "level": 1,
@@ -12,39 +12,44 @@
         {
           "term": "options_api",
           "module": "07-vue",
-          "description": "Understanding the limitations of the old way helps explain why the Composition API exists."
+          "description": "Understanding the object-based legacy API clarifies why the Composition API was introduced."
         },
         {
           "term": "declarative_rendering",
           "module": "07-vue",
-          "description": "The core principle Vue operates on."
+          "description": "The fundamental reactive rendering mechanism of Vue components."
         }
       ],
       "related": [
         {
           "term": "ref",
           "module": "07-vue",
-          "description": "The primary tool used to create state in the Composition API."
+          "description": "The fundamental reactive reference primitive used inside script setup."
         },
         {
           "term": "composables",
           "module": "07-vue",
-          "description": "The ultimate superpower of the Composition API: extracting logic into reusable files."
+          "description": "Reusable, stateful logic functions enabled by the Composition API."
         },
         {
           "term": "script_setup",
           "module": "07-vue",
-          "description": "The standard compilation sugar for Composition API."
+          "description": "Ergonomic compile-time syntactic sugar for writing Composition API."
         },
         {
           "term": "options_api",
           "module": "07-vue",
-          "description": "Related concept: Options API."
+          "description": "The legacy component paradigm replaced by Composition API."
         },
         {
           "module": "07-vue",
           "term": "reactive_state",
           "description": "Reactive state API."
+        },
+        {
+          "term": "sfc",
+          "module": "07-vue",
+          "description": "Related concept: Single-File Components (SFCs)."
         }
       ]
     },
@@ -56,24 +61,34 @@
         {
           "term": "template_syntax",
           "module": "07-vue",
-          "description": "How you declare the UI in Vue."
+          "description": "How you declare UI elements and bindings in Vue."
         },
         {
           "term": "dom",
           "module": "01-html",
-          "description": "The imperative approach that declarative rendering replaces."
+          "description": "The imperative structure that declarative rendering replaces."
         }
       ],
       "related": [
         {
-          "term": "reactive_state",
-          "module": "07-vue",
-          "description": "The data that powers declarative rendering."
-        },
-        {
           "term": "template_syntax",
           "module": "07-vue",
-          "description": "The tool used to declare the UI."
+          "description": "The HTML-based syntax used to express declarative rendering rules."
+        },
+        {
+          "term": "reactive_state",
+          "module": "07-vue",
+          "description": "The data dependencies monitored by Vue to trigger rendering."
+        },
+        {
+          "term": "virtual_dom",
+          "module": "07-vue",
+          "description": "The underlying rendering engine that converts declarative templates into efficient DOM operations."
+        },
+        {
+          "term": "options_api",
+          "module": "07-vue",
+          "description": "The legacy component authoring structure."
         }
       ]
     },
@@ -85,29 +100,44 @@
         {
           "term": "components",
           "module": "07-vue",
-          "description": "The building blocks you are writing."
+          "description": "The fundamental UI building blocks defined via options objects."
         },
         {
           "term": "declarative_rendering",
           "module": "07-vue",
-          "description": "What the Options API manages."
+          "description": "The rendering model managed by Options API components."
         }
       ],
       "related": [
         {
           "term": "composition_api",
           "module": "07-vue",
-          "description": "The modern replacement for the Options API."
+          "description": "The modern replacement for the Options API in Vue 3."
+        },
+        {
+          "term": "vue_instance",
+          "module": "07-vue",
+          "description": "The component instance context accessed via `this`."
         },
         {
           "term": "reactive_state",
           "module": "07-vue",
-          "description": "What the `data()` option creates."
+          "description": "The underlying reactivity created by the `data()` option."
         },
         {
+          "term": "computed_properties",
           "module": "07-vue",
-          "term": "vue_instance",
-          "description": "Vue component instance."
+          "description": "The derived evaluation option inside Options API components."
+        },
+        {
+          "term": "declarative_rendering",
+          "module": "07-vue",
+          "description": "Related concept: Declarative Rendering."
+        },
+        {
+          "term": "actions",
+          "module": "07-vue",
+          "description": "Related concept: Actions (Pinia)."
         }
       ]
     },
@@ -119,29 +149,29 @@
         {
           "term": "html",
           "module": "01-html",
-          "description": "Vue templates are just extended HTML."
+          "description": "Vue templates are 100% valid HTML extended with dynamic directives."
         }
       ],
       "related": [
         {
           "term": "directives",
           "module": "07-vue",
-          "description": "The special `v-` attributes used in templates."
-        },
-        {
-          "term": "computed_properties",
-          "module": "07-vue",
-          "description": "Where complex logic should live instead of the template."
+          "description": "The specialized `v-` attributes used inside Vue templates."
         },
         {
           "term": "declarative_rendering",
           "module": "07-vue",
-          "description": "Related concept: Declarative Rendering."
+          "description": "The underlying rendering concept behind template syntax."
+        },
+        {
+          "term": "computed_properties",
+          "module": "07-vue",
+          "description": "The recommended home for complex logic extracted out of templates."
         },
         {
           "term": "virtual_dom",
           "module": "07-vue",
-          "description": "Related concept: Virtual DOM (Vue)."
+          "description": "The compiled output produced by the Vue template compiler."
         },
         {
           "module": "07-vue",
@@ -158,19 +188,39 @@
         {
           "term": "dom",
           "module": "01-html",
-          "description": "What the Vue Instance is ultimately controlling."
+          "description": "The browser DOM tree that the Vue Instance attaches to and controls."
+        },
+        {
+          "term": "sfc",
+          "module": "07-vue",
+          "description": "The root component loaded by the application instance."
         }
       ],
       "related": [
         {
-          "term": "components",
+          "term": "sfc",
           "module": "07-vue",
-          "description": "What the Vue Instance actually renders."
+          "description": "The root component loaded by `createApp(RootComponent)`."
+        },
+        {
+          "term": "pinia",
+          "module": "07-vue",
+          "description": "State management plugin installed on the instance via `app.use(pinia)`."
+        },
+        {
+          "term": "vue_router",
+          "module": "07-vue",
+          "description": "Routing plugin installed on the instance via `app.use(router)`."
         },
         {
           "term": "virtual_dom",
           "module": "07-vue",
-          "description": "The engine that the Vue instance boots up."
+          "description": "The rendering engine booted up by the application instance."
+        },
+        {
+          "term": "components",
+          "module": "07-vue",
+          "description": "What the Vue Instance actually renders."
         },
         {
           "module": "07-vue",
@@ -192,29 +242,34 @@
         {
           "term": "reactive_state",
           "module": "07-vue",
-          "description": "The dependencies that computed properties rely on."
+          "description": "The reactive data sources evaluated inside computed getters."
         },
         {
           "term": "template_syntax",
           "module": "07-vue",
-          "description": "Why complex logic shouldn't be put directly in the HTML."
+          "description": "Why complex evaluation logic should be extracted out of template mustaches."
         }
       ],
       "related": [
         {
-          "term": "watchers",
-          "module": "07-vue",
-          "description": "The tool you should use instead if you need to perform side effects."
-        },
-        {
           "term": "ref",
           "module": "07-vue",
-          "description": "A computed property actually returns a special, read-only `ref` object under the hood!"
+          "description": "The reactive variable primitive evaluated inside computed properties."
+        },
+        {
+          "term": "watchers",
+          "module": "07-vue",
+          "description": "The reactivity tool used for asynchronous side effects (which computed getters forbid)."
         },
         {
           "term": "watch_effect",
           "module": "07-vue",
-          "description": "Auto-tracking reactivity watcher."
+          "description": "Automatic reactivity watcher for side effects."
+        },
+        {
+          "term": "reactive_state",
+          "module": "07-vue",
+          "description": "The fundamental reactivity system powering computed getters."
         },
         {
           "term": "template_syntax",
@@ -230,6 +285,11 @@
           "term": "v_once_memo",
           "module": "07-vue",
           "description": "Related concept: `v-once` & `v-memo`."
+        },
+        {
+          "term": "options_api",
+          "module": "07-vue",
+          "description": "Related concept: Options API."
         }
       ]
     },
@@ -241,34 +301,34 @@
         {
           "term": "ref",
           "module": "07-vue",
-          "description": "The standard way to create state, which `reactive` acts as an alternative to."
+          "description": "The fundamental reactive reference primitive, which `reactive()` acts as a specialized alternative to."
         },
         {
           "term": "proxy_reactivity",
           "module": "07-vue",
-          "description": "The underlying JavaScript feature that powers `reactive`."
+          "description": "The underlying ES6 Proxy API that powers `reactive()`."
         }
       ],
       "related": [
         {
           "term": "ref",
           "module": "07-vue",
-          "description": "The recommended alternative for declaring state."
-        },
-        {
-          "term": "proxy_reactivity",
-          "module": "07-vue",
-          "description": "The ES6 feature that powers `reactive`."
+          "description": "The recommended state primitive for primitives and reassignable structures."
         },
         {
           "term": "to_refs",
           "module": "07-vue",
-          "description": "The utility to safely destructure reactive objects."
+          "description": "The utility function required to safely destructure `reactive()` objects."
+        },
+        {
+          "term": "proxy_reactivity",
+          "module": "07-vue",
+          "description": "The underlying ES6 Proxy feature powering `reactive()`."
         },
         {
           "term": "shallow_ref_mark_raw",
           "module": "07-vue",
-          "description": "Reactivity escape hatches for performance."
+          "description": "Escape hatches to opt-out of deep proxying for performance."
         },
         {
           "term": "reactive_state",
@@ -285,24 +345,34 @@
         {
           "term": "declarative_rendering",
           "module": "07-vue",
-          "description": "The concept that relies entirely on reactive state."
+          "description": "The UI concept powered by reactive state tracking."
+        },
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "The DOM structure updated by reactive state changes."
         }
       ],
       "related": [
         {
           "term": "ref",
           "module": "07-vue",
-          "description": "The function used to create reactive state for primitives."
+          "description": "The reactivity API function for primitive values."
         },
         {
           "term": "reactive",
           "module": "07-vue",
-          "description": "The function used to create reactive state for objects."
+          "description": "The reactivity API function for objects and arrays."
         },
         {
           "term": "declarative_rendering",
           "module": "07-vue",
-          "description": "Related concept: Declarative Rendering."
+          "description": "The core UI principle driven by reactive state."
+        },
+        {
+          "term": "proxy_reactivity",
+          "module": "07-vue",
+          "description": "The ES6 mechanism powering Vue 3's reactive state."
         },
         {
           "term": "options_api",
@@ -318,6 +388,16 @@
           "module": "07-vue",
           "term": "composition_api",
           "description": "Related concept: Composition API."
+        },
+        {
+          "term": "computed_properties",
+          "module": "07-vue",
+          "description": "Related concept: Computed Properties."
+        },
+        {
+          "term": "hydration",
+          "module": "07-vue",
+          "description": "Related concept: Hydration (Vue)."
         }
       ]
     },
@@ -329,19 +409,34 @@
         {
           "term": "reactive_state",
           "module": "07-vue",
-          "description": "What `ref` creates."
+          "description": "The fundamental reactive data model created by `ref()`."
         },
         {
           "term": "composition_api",
           "module": "07-vue",
-          "description": "The syntax where `ref` is primarily used."
+          "description": "The modern component setup syntax where `ref()` is primarily used."
         }
       ],
       "related": [
         {
           "term": "reactive",
           "module": "07-vue",
-          "description": "The alternative way to declare state specifically for Objects."
+          "description": "The alternative reactivity function designed specifically for objects."
+        },
+        {
+          "term": "to_refs",
+          "module": "07-vue",
+          "description": "The utility function converting reactive object properties into individual refs."
+        },
+        {
+          "term": "computed_properties",
+          "module": "07-vue",
+          "description": "Read-only refs derived from reactive dependencies."
+        },
+        {
+          "term": "shallow_ref_mark_raw",
+          "module": "07-vue",
+          "description": "Performance escape hatches for non-deep ref wrapping."
         },
         {
           "term": "reactive_state",
@@ -349,24 +444,9 @@
           "description": "The overarching concept."
         },
         {
-          "term": "shallow_ref_mark_raw",
-          "module": "07-vue",
-          "description": "Reactivity escape hatches for performance."
-        },
-        {
           "term": "composition_api",
           "module": "07-vue",
           "description": "Related concept: Composition API."
-        },
-        {
-          "term": "computed_properties",
-          "module": "07-vue",
-          "description": "Related concept: Computed Properties."
-        },
-        {
-          "term": "to_refs",
-          "module": "07-vue",
-          "description": "Related concept: `toRefs` / `toRef`."
         },
         {
           "term": "watchers",
@@ -377,6 +457,16 @@
           "term": "vueuse",
           "module": "07-vue",
           "description": "Related concept: VueUse."
+        },
+        {
+          "term": "watch_effect",
+          "module": "07-vue",
+          "description": "Related concept: `watchEffect`."
+        },
+        {
+          "term": "state_getters",
+          "module": "07-vue",
+          "description": "Related concept: State & Getters (Pinia)."
         }
       ]
     },
@@ -388,29 +478,34 @@
         {
           "term": "ref",
           "module": "07-vue",
-          "description": "The standard reactive wrapper."
+          "description": "The standard reactive wrapper primitive that `shallowRef` acts as a shallow alternative to."
         },
         {
           "term": "reactive",
           "module": "07-vue",
-          "description": "The API that makes objects recursively reactive."
+          "description": "The API that makes objects recursively reactive, which `markRaw` explicitly opts-out of."
         }
       ],
       "related": [
         {
           "term": "ref",
           "module": "07-vue",
-          "description": "The standard reactive wrapper."
+          "description": "The standard deep reactive ref API."
         },
         {
           "term": "reactive",
           "module": "07-vue",
-          "description": "The deep reactive object wrapper."
+          "description": "The deep reactive object API."
         },
         {
           "term": "virtual_dom",
           "module": "07-vue",
-          "description": "The virtual representation of the DOM that Vue updates when reactive variables change."
+          "description": "The rendering system updated when ref pointers change."
+        },
+        {
+          "term": "proxy_reactivity",
+          "module": "07-vue",
+          "description": "Related concept: Proxy Reactivity."
         }
       ]
     },
@@ -422,29 +517,34 @@
         {
           "term": "reactive",
           "module": "07-vue",
-          "description": "The reactivity API used to make objects reactive."
+          "description": "The reactivity API used to define reactive objects that `toRefs()` unpacks."
         },
         {
           "term": "ref",
           "module": "07-vue",
-          "description": "The reactivity API for wrapping single values."
+          "description": "The reactive reference primitive produced for each object property."
         }
       ],
       "related": [
         {
           "term": "reactive",
           "module": "07-vue",
-          "description": "The API for defining reactive objects."
+          "description": "The reactive object API that `toRefs()` bridges."
         },
         {
           "term": "ref",
           "module": "07-vue",
-          "description": "The API for defining single reactive values."
+          "description": "The reactive reference object created for each property key."
+        },
+        {
+          "term": "composables",
+          "module": "07-vue",
+          "description": "Reusable logic functions that rely on `toRefs()` for safe state exports."
         },
         {
           "term": "proxy_reactivity",
           "module": "07-vue",
-          "description": "The underlying ES6 Proxy engine that makes `reactive` function."
+          "description": "The underlying ES6 Proxy system being projected."
         }
       ]
     },
@@ -456,24 +556,34 @@
         {
           "term": "ref",
           "module": "07-vue",
-          "description": "The fundamental reactive reference."
+          "description": "The fundamental reactive reference tracked by `watchEffect()`."
         },
         {
           "term": "watchers",
           "module": "07-vue",
-          "description": "The base tracking mechanism that monitors changes."
+          "description": "The base tracking watcher concept that `watchEffect()` automates."
         }
       ],
       "related": [
         {
           "term": "watchers",
           "module": "07-vue",
-          "description": "The explicit tracking mechanism."
+          "description": "The explicit watcher function (`watch`) with access to `newValue` and `oldValue`."
         },
         {
           "term": "computed_properties",
           "module": "07-vue",
-          "description": "Track dependencies to compute a new cached value rather than executing a side effect."
+          "description": "Evaluates cached return values (which `watchEffect` should NOT be used for)."
+        },
+        {
+          "term": "ref",
+          "module": "07-vue",
+          "description": "The reactive state primitive monitored inside effects."
+        },
+        {
+          "term": "component_lifecycle",
+          "module": "07-vue",
+          "description": "The component lifecycle managing effect unbinds."
         },
         {
           "term": "vueuse",
@@ -490,34 +600,34 @@
         {
           "term": "reactive_state",
           "module": "07-vue",
-          "description": "The data you are watching."
+          "description": "The reactive data sources observed by watchers."
         },
         {
           "term": "computed_properties",
           "module": "07-vue",
-          "description": "The tool you use for deriving data (which Watchers should NOT be used for)."
+          "description": "The declarative derived data engine (which watchers should NOT be misused for)."
         }
       ],
       "related": [
         {
           "term": "computed_properties",
           "module": "07-vue",
-          "description": "The declarative alternative for deriving data."
-        },
-        {
-          "term": "ref",
-          "module": "07-vue",
-          "description": "The variables you are most commonly watching."
+          "description": "The declarative alternative for derived calculations."
         },
         {
           "term": "watch_effect",
           "module": "07-vue",
-          "description": "Auto-tracking reactivity watcher."
+          "description": "Automated dependency watcher for side effects."
+        },
+        {
+          "term": "ref",
+          "module": "07-vue",
+          "description": "The primary target data source monitored by watchers."
         },
         {
           "term": "next_tick",
           "module": "07-vue",
-          "description": "Awaiting the next DOM update flush."
+          "description": "Flush timing utility for post-DOM update watchers."
         },
         {
           "term": "component_lifecycle",
@@ -566,7 +676,7 @@
         {
           "term": "directives",
           "module": "07-vue",
-          "description": "Related concept: Directives."
+          "description": "Built-in template directives."
         }
       ]
     },
@@ -590,7 +700,7 @@
         {
           "term": "v_bind",
           "module": "07-vue",
-          "description": "The most common directive."
+          "description": "Attribute binding directive."
         },
         {
           "term": "template_syntax",
@@ -605,22 +715,27 @@
         {
           "term": "custom_directives",
           "module": "07-vue",
-          "description": "Creating your own directive lifecycle handlers."
+          "description": "Creating custom directive handlers."
         },
         {
           "term": "modifiers",
           "module": "07-vue",
-          "description": "Related concept: Event, Key & Form Modifiers."
+          "description": "Directive modifiers."
         },
         {
-          "module": "07-vue",
           "term": "v_if_show",
-          "description": "Related concept: `v-if` / `v-show`."
+          "module": "07-vue",
+          "description": "Conditional directives."
         },
         {
-          "module": "07-vue",
           "term": "v_model",
-          "description": "Related concept: `v-model`."
+          "module": "07-vue",
+          "description": "Two-way binding directive."
+        },
+        {
+          "term": "v_once_memo",
+          "module": "07-vue",
+          "description": "Related concept: `v-once` & `v-memo`."
         }
       ]
     },
@@ -644,7 +759,7 @@
         {
           "term": "directives",
           "module": "07-vue",
-          "description": "The directive system."
+          "description": "The parent directive system."
         },
         {
           "term": "v_on",
@@ -678,27 +793,27 @@
         {
           "term": "directives",
           "module": "07-vue",
-          "description": "The parent concept."
+          "description": "The parent directive system."
         },
         {
           "term": "props",
           "module": "07-vue",
-          "description": "`v-bind` is how you pass variables down to child components as props."
+          "description": "Passing data to child components via `v-bind`."
         },
         {
           "term": "custom_directives",
           "module": "07-vue",
-          "description": "Related concept: Custom Directives (`v-*`)."
+          "description": "Custom directive extensions."
         },
         {
           "term": "v_model",
           "module": "07-vue",
-          "description": "Related concept: `v-model`."
+          "description": "Two-way data binding."
         },
         {
           "term": "v_on",
           "module": "07-vue",
-          "description": "Related concept: `v-on`."
+          "description": "Event listening."
         }
       ]
     },
@@ -710,19 +825,19 @@
         {
           "term": "directives",
           "module": "07-vue",
-          "description": "The foundation of Vue's template attributes."
+          "description": "Built-in attribute system."
         },
         {
           "term": "template_syntax",
           "module": "07-vue",
-          "description": "The rules for writing Vue templates."
+          "description": "Vue template syntax."
         }
       ],
       "related": [
         {
           "term": "directives",
           "module": "07-vue",
-          "description": "The core attribute system in Vue."
+          "description": "Built-in directive system."
         },
         {
           "term": "v_if_show",
@@ -732,12 +847,12 @@
         {
           "term": "v_once_memo",
           "module": "07-vue",
-          "description": "Performance directives for static and memoized list sections."
+          "description": "List performance directives."
         },
         {
           "term": "virtual_dom",
           "module": "07-vue",
-          "description": "The engine that diffs keys to perform updates."
+          "description": "Reconciliation algorithm."
         }
       ]
     },
@@ -749,44 +864,44 @@
         {
           "term": "directives",
           "module": "07-vue",
-          "description": "The category these belong to."
+          "description": "The category these directives belong to."
         },
         {
           "term": "declarative_rendering",
           "module": "07-vue",
-          "description": "The philosophy of hiding things via state rather than `display: none`."
+          "description": "The philosophy of controlling visibility via reactive state."
         }
       ],
       "related": [
         {
           "term": "component_lifecycle",
           "module": "07-vue",
-          "description": "`v-if` triggers the Mount/Unmount lifecycles. `v-show` does not."
+          "description": "`v-if` triggers unmount/mount hooks; `v-show` does not."
         },
         {
           "term": "reactive_state",
           "module": "07-vue",
-          "description": "The boolean data that controls these directives."
+          "description": "Reactive data controlling visibility."
         },
         {
           "term": "v_for_key",
           "module": "07-vue",
-          "description": "Related concept: `v-for` (List Rendering) & `:key`."
+          "description": "List rendering directives."
         },
         {
           "term": "async_components",
           "module": "07-vue",
-          "description": "Related concept: Async Components."
+          "description": "Lazy-loaded dynamic components."
         },
         {
           "term": "keepalive",
           "module": "07-vue",
-          "description": "Related concept: KeepAlive."
+          "description": "Caching dynamic component state."
         },
         {
           "term": "transition",
           "module": "07-vue",
-          "description": "Related concept: Transitions & Animations."
+          "description": "Animated conditional visibility."
         },
         {
           "module": "07-vue",
@@ -808,33 +923,33 @@
         {
           "term": "v_bind",
           "module": "07-vue",
-          "description": "Binds data from JS to HTML (One-way)."
+          "description": "Binds JavaScript data down to HTML attributes (One-way)."
         },
         {
           "term": "v_on",
           "module": "07-vue",
-          "description": "Binds data from HTML to JS (One-way)."
+          "description": "Listens to DOM events from HTML to JavaScript (One-way)."
         }
       ],
       "related": [
         {
           "term": "v_bind",
           "module": "07-vue",
-          "description": "The one-way downward binding."
+          "description": "One-way downward attribute binding."
         },
         {
           "term": "v_on",
           "module": "07-vue",
-          "description": "The one-way upward event listening."
+          "description": "One-way upward event listening."
         },
         {
           "term": "modifiers",
           "module": "07-vue",
-          "description": "Suffixes for input sync timing and parsing."
+          "description": "Suffixes for input sync timing (`.lazy`, `.number`, `.trim`)."
         },
         {
-          "module": "07-vue",
           "term": "directives",
+          "module": "07-vue",
           "description": "Built-in directives."
         }
       ]
@@ -852,29 +967,29 @@
         {
           "term": "reactive_state",
           "module": "07-vue",
-          "description": "What events typically mutate."
+          "description": "The JavaScript data that event listeners typically mutate."
         }
       ],
       "related": [
         {
           "term": "v_bind",
           "module": "07-vue",
-          "description": "The other half of the coin (Binding attributes vs listening to events)."
+          "description": "Attribute binding (the other half of template directives)."
         },
         {
           "term": "emit",
           "module": "07-vue",
-          "description": "How you use `@` to listen to custom events emitted by child components."
+          "description": "Custom child component event triggers."
         },
         {
           "term": "modifiers",
           "module": "07-vue",
-          "description": "The full modifier system for events."
+          "description": "Directive modifier suffixes."
         },
         {
           "term": "v_model",
           "module": "07-vue",
-          "description": "Related concept: `v-model`."
+          "description": "Two-way data binding."
         }
       ]
     },
@@ -886,49 +1001,54 @@
         {
           "term": "components",
           "module": "07-vue",
-          "description": "What is going through the lifecycle."
+          "description": "The building blocks going through the lifecycle."
         },
         {
           "term": "v_if_show",
           "module": "07-vue",
-          "description": "`v-if` physically triggers the Mount/Unmount lifecycles!"
+          "description": "`v-if` physically triggers component mount and unmount lifecycles."
         }
       ],
       "related": [
         {
           "term": "v_if_show",
           "module": "07-vue",
-          "description": "When `v-if` becomes false, it triggers the `onUnmounted` hook."
+          "description": "`v-if` physically triggers mount/unmount lifecycles."
         },
         {
           "term": "watchers",
           "module": "07-vue",
-          "description": "A better alternative to `onUpdated`."
+          "description": "Reactive data tracking alternative to `onUpdated`."
         },
         {
           "term": "next_tick",
           "module": "07-vue",
-          "description": "Awaiting the next DOM update flush."
+          "description": "Awaiting DOM update flush tasks."
         },
         {
           "term": "custom_directives",
           "module": "07-vue",
-          "description": "Related concept: Custom Directives (`v-*`)."
+          "description": "Directive lifecycle hooks."
         },
         {
           "term": "navigation_guards",
           "module": "07-vue",
-          "description": "Related concept: Navigation Guards."
+          "description": "Router route transition hooks."
         },
         {
           "term": "keepalive",
           "module": "07-vue",
-          "description": "Related concept: KeepAlive."
+          "description": "Component caching activation hooks (`onActivated`, `onDeactivated`)."
         },
         {
           "term": "universal_code",
           "module": "07-vue",
           "description": "Related concept: Universal Code (Isomorphic)."
+        },
+        {
+          "term": "watch_effect",
+          "module": "07-vue",
+          "description": "Related concept: `watchEffect`."
         }
       ]
     },
@@ -940,39 +1060,49 @@
         {
           "term": "vue_instance",
           "module": "07-vue",
-          "description": "The root that holds all components."
+          "description": "The root instance that mounts the component tree."
         },
         {
           "term": "declarative_rendering",
           "module": "07-vue",
-          "description": "The logic components use internally."
+          "description": "The core reactivity paradigm components use internally."
         }
       ],
       "related": [
         {
           "term": "sfc",
           "module": "07-vue",
-          "description": "The physical file format used to write components."
+          "description": "Physical `.vue` file structure."
         },
         {
           "term": "props",
           "module": "07-vue",
-          "description": "How you pass data into a component."
+          "description": "Passing data down into components."
+        },
+        {
+          "term": "emit",
+          "module": "07-vue",
+          "description": "Sending event messages up from components."
+        },
+        {
+          "term": "dynamic_components",
+          "module": "07-vue",
+          "description": "Runtime component swapping."
+        },
+        {
+          "term": "fallthrough_attributes",
+          "module": "07-vue",
+          "description": "Undeclared attribute forwarding."
+        },
+        {
+          "term": "slots",
+          "module": "07-vue",
+          "description": "Content distribution outlets."
         },
         {
           "term": "vue_instance",
           "module": "07-vue",
           "description": "Related concept: Vue Instance."
-        },
-        {
-          "term": "dynamic_components",
-          "module": "07-vue",
-          "description": "Related concept: Dynamic Components (`<component :is>`)."
-        },
-        {
-          "term": "fallthrough_attributes",
-          "module": "07-vue",
-          "description": "Related concept: Fallthrough Attributes (`$attrs`)."
         },
         {
           "term": "teleport",
@@ -996,13 +1126,13 @@
         },
         {
           "module": "07-vue",
-          "term": "slots",
-          "description": "Related concept: Slots."
-        },
-        {
-          "module": "07-vue",
           "term": "provide_inject",
           "description": "Related concept: Provide / Inject."
+        },
+        {
+          "term": "async_components",
+          "module": "07-vue",
+          "description": "Related concept: Async Components."
         }
       ]
     },
@@ -1019,14 +1149,14 @@
         {
           "term": "v_bind",
           "module": "07-vue",
-          "description": "Dynamically passing attributes."
+          "description": "Passing attributes and properties dynamically."
         }
       ],
       "related": [
         {
           "term": "components",
           "module": "07-vue",
-          "description": "The fundamental Vue components."
+          "description": "Fundamental component concept."
         },
         {
           "term": "keepalive",
@@ -1036,12 +1166,12 @@
         {
           "term": "async_components",
           "module": "07-vue",
-          "description": "Lazily loading components only when they are rendered."
+          "description": "Lazily loading component chunks over network."
         },
         {
           "term": "transition",
           "module": "07-vue",
-          "description": "Related concept: Transitions & Animations."
+          "description": "Animating dynamic view switches."
         }
       ]
     },
@@ -1053,34 +1183,44 @@
         {
           "term": "props",
           "module": "07-vue",
-          "description": "Why Emits are necessary (because Props are read-only)."
+          "description": "Understand why emits are necessary (because props are strictly read-only)."
         },
         {
           "term": "v_on",
           "module": "07-vue",
-          "description": "How the Parent listens to the emitted events."
+          "description": "How parent components listen for emitted events in templates."
         }
       ],
       "related": [
         {
           "term": "props",
           "module": "07-vue",
-          "description": "The Top-Down data flow (Props Down, Events Up)."
+          "description": "The downward half of Vue data flow (Props Down, Events Up)."
         },
         {
           "term": "v_on",
           "module": "07-vue",
-          "description": "How the Parent listens to the emit."
+          "description": "Parent directive listening for emitted custom events."
         },
         {
           "term": "fallthrough_attributes",
           "module": "07-vue",
-          "description": "How event listeners passed to components fall through to root elements."
+          "description": "Forwarding undeclared attributes."
         },
         {
           "term": "script_setup",
           "module": "07-vue",
-          "description": "Related concept: `<script setup>` & Compiler Macros."
+          "description": "`defineEmits` compiler macro."
+        },
+        {
+          "term": "components",
+          "module": "07-vue",
+          "description": "Related concept: Components."
+        },
+        {
+          "term": "state_management",
+          "module": "07-vue",
+          "description": "Related concept: State Management."
         }
       ]
     },
@@ -1092,34 +1232,34 @@
         {
           "term": "components",
           "module": "07-vue",
-          "description": "Reusable HTML layouts."
+          "description": "Reusable component layouts."
         },
         {
           "term": "props",
           "module": "07-vue",
-          "description": "Explicit component inputs."
+          "description": "Explicit component input declarations."
         },
         {
           "term": "emit",
           "module": "07-vue",
-          "description": "Communicating triggers up to parent scopes."
+          "description": "Component event declarations."
         }
       ],
       "related": [
         {
           "term": "props",
           "module": "07-vue",
-          "description": "The explicit input channel for components."
+          "description": "Explicit input channels for components."
         },
         {
           "term": "emit",
           "module": "07-vue",
-          "description": "The channel to notify parent scopes."
+          "description": "Upward event messaging channels."
         },
         {
           "term": "components",
           "module": "07-vue",
-          "description": "Modular templates."
+          "description": "Modular Vue components."
         }
       ]
     },
@@ -1131,29 +1271,29 @@
         {
           "term": "reactive_state",
           "module": "07-vue",
-          "description": "How Vue detects data changes."
+          "description": "How Vue detects data mutations reactively."
         },
         {
           "term": "component_lifecycle",
           "module": "07-vue",
-          "description": "The timing phases of rendering."
+          "description": "The timing phases of component rendering and updates."
         }
       ],
       "related": [
         {
           "term": "watchers",
           "module": "07-vue",
-          "description": "Listening for state changes to perform async tasks."
+          "description": "Watching reactive state mutations."
         },
         {
           "term": "virtual_dom",
           "module": "07-vue",
-          "description": "The lightweight in-memory tree that Vue updates before flushing changes to the screen."
+          "description": "In-memory tree flushed to physical DOM."
         },
         {
           "term": "component_lifecycle",
           "module": "07-vue",
-          "description": "The sequence of hooks coordinating component rendering."
+          "description": "Timing phases of rendering."
         }
       ]
     },
@@ -1165,44 +1305,44 @@
         {
           "term": "components",
           "module": "07-vue",
-          "description": "The entities passing data to each other."
+          "description": "The building blocks passing data between each other."
         },
         {
           "term": "v_bind",
           "module": "07-vue",
-          "description": "The directive used to pass dynamic variables as props."
+          "description": "The directive used to pass dynamic variables or non-string primitives as props."
         }
       ],
       "related": [
         {
           "term": "emit",
           "module": "07-vue",
-          "description": "The opposite of Props. (Props go down, Events go up)."
+          "description": "Upward communication (Props Down, Events Up)."
         },
         {
           "term": "v_bind",
           "module": "07-vue",
-          "description": "The directive used to pass reactive variables as props."
+          "description": "Directive for passing dynamic prop primitives."
         },
         {
           "term": "fallthrough_attributes",
           "module": "07-vue",
-          "description": "How undeclared attributes pass through components."
+          "description": "Undeclared attributes forwarding."
         },
         {
           "term": "components",
           "module": "07-vue",
-          "description": "Related concept: Components."
+          "description": "Component architecture foundation."
         },
         {
           "term": "script_setup",
           "module": "07-vue",
-          "description": "Related concept: `<script setup>` & Compiler Macros."
+          "description": "`defineProps` macro."
         },
         {
           "term": "provide_inject",
           "module": "07-vue",
-          "description": "Related concept: Provide / Inject."
+          "description": "Bypassing prop drilling for deep trees."
         },
         {
           "term": "slots",
@@ -1229,17 +1369,17 @@
         {
           "term": "composition_api",
           "module": "07-vue",
-          "description": "The functional state-management model."
+          "description": "The functional reactivity model powering `<script setup>`."
         },
         {
           "term": "components",
           "module": "07-vue",
-          "description": "The visual units of a Vue application."
+          "description": "The modular building blocks of a Vue application."
         },
         {
           "term": "sfc",
           "module": "07-vue",
-          "description": "Single-File Components (`.vue` files)."
+          "description": "Vue's `.vue` single-file component format."
         }
       ],
       "related": [
@@ -1251,22 +1391,22 @@
         {
           "term": "props",
           "module": "07-vue",
-          "description": "Custom configuration values passed into components."
+          "description": "`defineProps` compiler macro."
         },
         {
           "term": "emit",
           "module": "07-vue",
-          "description": "Raising custom DOM and application triggers."
+          "description": "`defineEmits` compiler macro."
+        },
+        {
+          "term": "sfc",
+          "module": "07-vue",
+          "description": "`.vue` single-file component format."
         },
         {
           "term": "typescript_vue",
           "module": "07-vue",
-          "description": "Related concept: TypeScript with Vue."
-        },
-        {
-          "module": "07-vue",
-          "term": "sfc",
-          "description": "Related concept: Single-File Components (SFCs)."
+          "description": "Using `<script setup lang=\"ts\">`."
         }
       ]
     },
@@ -1274,48 +1414,52 @@
       "level": 4,
       "file": "terms/level_04/sfc.md",
       "display_name": "Single-File Components (SFCs)",
-      "prerequisites": [
-        {
-          "term": "components",
-          "module": "07-vue",
-          "description": "What an SFC represents physically."
-        },
-        {
-          "term": "composition_api",
-          "module": "07-vue",
-          "description": "The JavaScript syntax usually written inside the SFC."
-        }
-      ],
+      "prerequisites": [],
       "related": [
         {
           "term": "components",
           "module": "07-vue",
-          "description": "The architectural concept that SFCs physically represent."
+          "description": "Architectural component concept."
         },
         {
           "term": "vite",
           "module": "07-vue",
-          "description": "The build tool that compiles `.vue` files."
+          "description": "Build tool that compiles `.vue` files."
         },
         {
           "term": "teleport",
           "module": "07-vue",
-          "description": "Related concept: Teleport."
+          "description": "Moving rendered SFC DOM nodes."
         },
         {
           "term": "build_step",
           "module": "07-vue",
-          "description": "Related concept: Build Step (Compilation)."
+          "description": "Transpilation step for SFCs."
         },
         {
-          "module": "07-vue",
           "term": "script_setup",
-          "description": "<script setup> compiler macro."
+          "module": "07-vue",
+          "description": "Compiler macros inside SFCs."
         },
         {
-          "module": "07-vue",
           "term": "typescript_vue",
-          "description": "Related concept: TypeScript with Vue."
+          "module": "07-vue",
+          "description": "Using `<script setup lang=\"ts\">`."
+        },
+        {
+          "term": "vue_instance",
+          "module": "07-vue",
+          "description": "Related concept: Vue Instance."
+        },
+        {
+          "term": "vue_cli",
+          "module": "07-vue",
+          "description": "Related concept: Vue CLI (Webpack)."
+        },
+        {
+          "term": "composition_api",
+          "module": "07-vue",
+          "description": "The reactive JavaScript paradigm written inside SFC script blocks."
         }
       ]
     },
@@ -1370,6 +1514,26 @@
           "term": "typescript_vue",
           "module": "07-vue",
           "description": "Related concept: TypeScript with Vue."
+        },
+        {
+          "term": "to_refs",
+          "module": "07-vue",
+          "description": "Related concept: `toRefs` / `toRef`."
+        },
+        {
+          "term": "actions",
+          "module": "07-vue",
+          "description": "Related concept: Actions (Pinia)."
+        },
+        {
+          "term": "state_management",
+          "module": "07-vue",
+          "description": "Related concept: State Management."
+        },
+        {
+          "term": "store",
+          "module": "07-vue",
+          "description": "Related concept: Store (Pinia)."
         }
       ]
     },
@@ -1401,9 +1565,9 @@
           "description": "The ultimate solution for Global State."
         },
         {
-          "module": "07-vue",
           "term": "components",
-          "description": "Component tree."
+          "module": "07-vue",
+          "description": "Component tree hierarchy."
         }
       ]
     },
@@ -1442,7 +1606,7 @@
       "display_name": "Slots",
       "prerequisites": [
         {
-          "term": "components",
+          "term": "props",
           "module": "07-vue",
           "description": "The building blocks involved."
         },
@@ -1464,8 +1628,8 @@
           "description": "For passing JavaScript data instead of HTML structure."
         },
         {
-          "module": "07-vue",
           "term": "components",
+          "module": "07-vue",
           "description": "Component template insertion."
         }
       ]
@@ -1571,8 +1735,8 @@
           "description": "Related concept: Route Params, Query & Meta."
         },
         {
-          "module": "07-vue",
           "term": "nested_routes",
+          "module": "07-vue",
           "description": "Related concept: Nested Routes."
         }
       ]
@@ -1639,9 +1803,9 @@
           "description": "The overarching library."
         },
         {
-          "module": "07-vue",
           "term": "dynamic_routing",
-          "description": "Configuring nested router views and dynamic route params."
+          "module": "07-vue",
+          "description": "Related concept: Dynamic Routing."
         }
       ]
     },
@@ -1818,6 +1982,11 @@
           "module": "07-vue",
           "term": "nuxt",
           "description": "Related concept: Nuxt.js."
+        },
+        {
+          "term": "vue_instance",
+          "module": "07-vue",
+          "description": "Related concept: Vue Instance."
         }
       ]
     },
@@ -1829,24 +1998,39 @@
         {
           "term": "state_getters",
           "module": "07-vue",
-          "description": "The data that Actions are modifying."
+          "description": "The data structures that Actions read, write, and manipulate."
         },
         {
           "term": "store",
           "module": "07-vue",
-          "description": "Where Actions live."
+          "description": "The Pinia container where Actions are encapsulated."
         }
       ],
       "related": [
         {
           "term": "store",
           "module": "07-vue",
-          "description": "The container for Actions."
+          "description": "The Pinia container where actions and state are encapsulated."
         },
         {
           "term": "state_getters",
           "module": "07-vue",
-          "description": "What the Actions manipulate."
+          "description": "The reactive data structures modified and derived by Pinia actions."
+        },
+        {
+          "term": "pinia",
+          "module": "07-vue",
+          "description": "Vue 3's official modular state management library."
+        },
+        {
+          "term": "composables",
+          "module": "07-vue",
+          "description": "Reusable stateful logic functions that follow identical Composition API conventions."
+        },
+        {
+          "term": "options_api",
+          "module": "07-vue",
+          "description": "Legacy Vue syntax structure that previously separated mutations and actions in Vuex."
         }
       ]
     },
@@ -1858,39 +2042,54 @@
         {
           "term": "state_management",
           "module": "07-vue",
-          "description": "The concept that Pinia implements."
+          "description": "The central state management architectural concept that Pinia implements."
         },
         {
           "term": "composition_api",
           "module": "07-vue",
-          "description": "The syntax pattern Pinia natively mimics."
+          "description": "The functional programming pattern and reactivity model Pinia natively mirrors."
         }
       ],
       "related": [
         {
           "term": "store",
           "module": "07-vue",
-          "description": "The actual files you create inside Pinia."
-        },
-        {
-          "term": "composables",
-          "module": "07-vue",
-          "description": "The local-logic equivalent of a Pinia store."
-        },
-        {
-          "term": "provide_inject",
-          "module": "07-vue",
-          "description": "Related concept: Provide / Inject."
+          "description": "The individual store files created using Pinia's `defineStore`."
         },
         {
           "term": "state_management",
           "module": "07-vue",
-          "description": "Related concept: State Management."
+          "description": "The global architectural paradigm implemented by Pinia."
+        },
+        {
+          "term": "composables",
+          "module": "07-vue",
+          "description": "Component-decoupled Composition API functions that share structural patterns with setup stores."
+        },
+        {
+          "term": "provide_inject",
+          "module": "07-vue",
+          "description": "Vue's built-in dependency injection system used internally by Pinia."
         },
         {
           "term": "vue_devtools",
           "module": "07-vue",
-          "description": "Related concept: Vue DevTools."
+          "description": "Developer tools providing state inspection and time-travel debugging for Pinia."
+        },
+        {
+          "term": "vue_instance",
+          "module": "07-vue",
+          "description": "Related concept: Vue Instance."
+        },
+        {
+          "term": "actions",
+          "module": "07-vue",
+          "description": "Related concept: Actions (Pinia)."
+        },
+        {
+          "term": "state_getters",
+          "module": "07-vue",
+          "description": "Related concept: State & Getters (Pinia)."
         }
       ]
     },
@@ -1902,29 +2101,39 @@
         {
           "term": "store",
           "module": "07-vue",
-          "description": "The container where State and Getters live."
+          "description": "The modular container where State and Getters are defined."
         },
         {
           "term": "computed_properties",
           "module": "07-vue",
-          "description": "Getters are literally just Computed Properties!"
+          "description": "The reactivity mechanism that powers Pinia Getters under the hood."
         }
       ],
       "related": [
         {
+          "term": "store",
+          "module": "07-vue",
+          "description": "The Pinia container where State and Getters are defined."
+        },
+        {
           "term": "computed_properties",
           "module": "07-vue",
-          "description": "The underlying technology of Getters."
+          "description": "The underlying Vue Composition API primitive powering Getters."
         },
         {
           "term": "actions",
           "module": "07-vue",
-          "description": "The tool used to actually mutate the State."
+          "description": "The imperative store functions used to mutate State."
         },
         {
-          "term": "store",
+          "term": "pinia",
           "module": "07-vue",
-          "description": "Related concept: Store (Pinia)."
+          "description": "The parent state management library."
+        },
+        {
+          "term": "ref",
+          "module": "07-vue",
+          "description": "The primary reactivity wrapper used to define State variables in setup stores."
         }
       ]
     },
@@ -1936,24 +2145,39 @@
         {
           "term": "props",
           "module": "07-vue",
-          "description": "The local way of passing state, which breaks down at scale."
+          "description": "The local, top-down mechanism for passing state, which breaks down in deeply nested component trees."
         },
         {
           "term": "emit",
           "module": "07-vue",
-          "description": "The local way of mutating state, which also breaks down at scale."
+          "description": "The local, bottom-up mechanism for notifying state changes, which creates coupling when chained across multiple levels."
         }
       ],
       "related": [
         {
           "term": "pinia",
           "module": "07-vue",
-          "description": "The specific tool Vue uses to implement State Management."
+          "description": "Vue 3's official implementation tool for state management."
         },
         {
           "term": "props",
           "module": "07-vue",
-          "description": "The tool for Local State Management."
+          "description": "Top-down component data passing mechanism."
+        },
+        {
+          "term": "emit",
+          "module": "07-vue",
+          "description": "Bottom-up event notification mechanism."
+        },
+        {
+          "term": "store",
+          "module": "07-vue",
+          "description": "The modular state file container within Pinia."
+        },
+        {
+          "term": "composables",
+          "module": "07-vue",
+          "description": "Reusable logic functions that manage local or shared reactivity."
         }
       ]
     },
@@ -1965,29 +2189,39 @@
         {
           "term": "pinia",
           "module": "07-vue",
-          "description": "The library that powers the Store."
+          "description": "The state management library powering Pinia Store modules."
         },
         {
           "term": "composition_api",
           "module": "07-vue",
-          "description": "Stores are written using Composition API syntax."
+          "description": "The functional programming paradigm used to define modern Pinia Setup Stores."
         }
       ],
       "related": [
         {
+          "term": "pinia",
+          "module": "07-vue",
+          "description": "The parent state management library powering Pinia Store modules."
+        },
+        {
           "term": "state_getters",
           "module": "07-vue",
-          "description": "The data inside the store."
+          "description": "The data structures defined inside a store."
         },
         {
           "term": "actions",
           "module": "07-vue",
-          "description": "The functions inside the store."
+          "description": "The functions defined inside a store."
         },
         {
-          "term": "pinia",
+          "term": "state_management",
           "module": "07-vue",
-          "description": "Related concept: Pinia."
+          "description": "The overall frontend architecture pattern."
+        },
+        {
+          "term": "composables",
+          "module": "07-vue",
+          "description": "Composition API logic functions sharing structural patterns with setup stores."
         }
       ]
     },
@@ -1999,39 +2233,49 @@
         {
           "term": "components",
           "module": "07-vue",
-          "description": "What is being loaded."
+          "description": "The fundamental Vue building blocks being split and asynchronously loaded."
         },
         {
           "term": "vite",
           "module": "07-vue",
-          "description": "The build tools that split the code into chunks."
+          "description": "The modern build tool responsible for analyzing dynamic imports and splitting JavaScript code into separate chunk files."
         }
       ],
       "related": [
+        {
+          "term": "components",
+          "module": "07-vue",
+          "description": "The Vue component building blocks being split."
+        },
+        {
+          "term": "vite",
+          "module": "07-vue",
+          "description": "The build tool performing code splitting for dynamic `import()`."
+        },
+        {
+          "term": "suspense",
+          "module": "07-vue",
+          "description": "Built-in component for handling async component loading trees."
+        },
+        {
+          "term": "vue_router",
+          "module": "07-vue",
+          "description": "Primary application location utilizing route-level lazy loading."
+        },
+        {
+          "term": "keepalive",
+          "module": "07-vue",
+          "description": "Built-in component used to cache lazy-loaded async components after fetch."
+        },
         {
           "term": "v_if_show",
           "module": "07-vue",
           "description": "Used to trigger the rendering (and downloading) of the async component."
         },
         {
-          "term": "vue_router",
-          "module": "07-vue",
-          "description": "The most common place lazy loading is used."
-        },
-        {
-          "term": "suspense",
-          "module": "07-vue",
-          "description": "The wrapper component that coordinates loading states for async components."
-        },
-        {
           "term": "dynamic_components",
           "module": "07-vue",
           "description": "Related concept: Dynamic Components (`<component :is>`)."
-        },
-        {
-          "module": "07-vue",
-          "term": "keepalive",
-          "description": "Related concept: KeepAlive."
         }
       ]
     },
@@ -2043,34 +2287,34 @@
         {
           "term": "component_lifecycle",
           "module": "07-vue",
-          "description": "`KeepAlive` fundamentally alters the standard lifecycle."
+          "description": "The baseline mounting and unmounting lifecycle process that `<KeepAlive>` fundamentally alters."
         },
         {
           "term": "v_if_show",
           "module": "07-vue",
-          "description": "`KeepAlive` is the bridge between `v-if` (destruction) and `v-show` (hiding)."
+          "description": "The conditional rendering directives where `<KeepAlive>` serves as the middle ground between node destruction (`v-if`) and CSS hiding (`v-show`)."
         }
       ],
       "related": [
         {
-          "term": "v_if_show",
-          "module": "07-vue",
-          "description": "Another way to preserve state by hiding elements with CSS, but `KeepAlive` is better for complex routing/component swapping."
-        },
-        {
           "term": "component_lifecycle",
           "module": "07-vue",
-          "description": "The baseline behavior `KeepAlive` alters."
+          "description": "The lifecycle system modified by `<KeepAlive>`."
+        },
+        {
+          "term": "v_if_show",
+          "module": "07-vue",
+          "description": "Alternative conditional rendering strategies."
         },
         {
           "term": "dynamic_components",
           "module": "07-vue",
-          "description": "Dynamic swapping layouts that are commonly wrapped in `<KeepAlive>`."
+          "description": "Dynamic component swapping mechanism wrapped by `<KeepAlive>`."
         },
         {
-          "module": "07-vue",
           "term": "async_components",
-          "description": "Async components."
+          "module": "07-vue",
+          "description": "Lazy-loaded components commonly paired with `<KeepAlive>`."
         }
       ]
     },
@@ -2082,24 +2326,34 @@
         {
           "term": "reactive_state",
           "module": "07-vue",
-          "description": "The concept powered by Proxies."
+          "description": "The fundamental Vue state concept powered by Proxy wrappers under the hood."
         }
       ],
       "related": [
         {
+          "term": "reactive_state",
+          "module": "07-vue",
+          "description": "The core Vue concept powered by Proxy reactivity."
+        },
+        {
           "term": "reactive",
           "module": "07-vue",
-          "description": "The Vue API that directly returns a Proxy."
+          "description": "The primary Vue Composition API function returning Proxy wrappers."
         },
         {
           "term": "virtual_dom",
           "module": "07-vue",
-          "description": "What gets triggered when the Proxy's `set` trap fires."
+          "description": "The rendering engine triggered when Proxy `set` traps fire."
         },
         {
           "term": "to_refs",
           "module": "07-vue",
-          "description": "The solution to preserve reactivity when destructuring proxies."
+          "description": "Utilities used to preserve reactivity when destructuring Proxy objects."
+        },
+        {
+          "term": "shallow_ref_mark_raw",
+          "module": "07-vue",
+          "description": "Performance escape hatches used to bypass Proxy wrapping."
         }
       ]
     },
@@ -2111,29 +2365,34 @@
         {
           "term": "virtual_dom",
           "module": "07-vue",
-          "description": "The diffing process that these directives try to skip."
+          "description": "The VNode diffing algorithm that `v-once` and `v-memo` explicitly optimize and skip."
         },
         {
           "term": "directives",
           "module": "07-vue",
-          "description": "What these are."
+          "description": "The foundation of Vue's special template attributes."
         }
       ],
       "related": [
         {
           "term": "virtual_dom",
           "module": "07-vue",
-          "description": "What `v-once` and `v-memo` are explicitly optimizing."
+          "description": "The VNode patching process optimized by `v-once` and `v-memo`."
         },
         {
           "term": "computed_properties",
           "module": "07-vue",
-          "description": "The JavaScript equivalent of caching derived logic."
+          "description": "The JavaScript equivalent for caching derived values."
         },
         {
           "term": "v_for_key",
           "module": "07-vue",
-          "description": "Related concept: `v-for` (List Rendering) & `:key`."
+          "description": "The list rendering directive where `v-memo` provides peak performance gains."
+        },
+        {
+          "term": "directives",
+          "module": "07-vue",
+          "description": "The parent directive system in Vue."
         }
       ]
     },
@@ -2145,29 +2404,39 @@
         {
           "term": "dom",
           "module": "01-html",
-          "description": "The slow, expensive API the Virtual DOM is trying to avoid."
+          "description": "The browser's native, heavy layout node tree that the Virtual DOM abstracts and optimizes."
         },
         {
           "term": "declarative_rendering",
           "module": "07-vue",
-          "description": "The concept that the Virtual DOM enables."
+          "description": "The core Vue principle enabling developers to describe UI states while the Virtual DOM handles underlying DOM updates."
         }
       ],
       "related": [
         {
           "term": "proxy_reactivity",
           "module": "07-vue",
-          "description": "What triggers the Virtual DOM to create a new tree."
+          "description": "The reactivity engine triggering Virtual DOM patch cycles upon state mutation."
         },
         {
           "term": "template_syntax",
           "module": "07-vue",
-          "description": "What the compiler turns into the Virtual DOM."
+          "description": "Declarative markup compiled down into VNode render functions."
         },
         {
           "term": "v_for_key",
           "module": "07-vue",
-          "description": "The loop directive that relies on keys for V-DOM diffing."
+          "description": "Directive relying on VNode keys for list diffing algorithms."
+        },
+        {
+          "term": "v_once_memo",
+          "module": "07-vue",
+          "description": "Performance directives used to bypass Virtual DOM diffing."
+        },
+        {
+          "term": "next_tick",
+          "module": "07-vue",
+          "description": "Vue utility for awaiting Virtual DOM patch completion."
         },
         {
           "term": "vue_instance",
@@ -2180,14 +2449,9 @@
           "description": "Related concept: `shallowRef` / `markRaw`."
         },
         {
-          "term": "next_tick",
+          "term": "declarative_rendering",
           "module": "07-vue",
-          "description": "Related concept: `nextTick`."
-        },
-        {
-          "term": "v_once_memo",
-          "module": "07-vue",
-          "description": "Related concept: `v-once` & `v-memo`."
+          "description": "Related concept: Declarative Rendering."
         }
       ]
     },
@@ -2199,24 +2463,39 @@
         {
           "term": "vue_instance",
           "module": "07-vue",
-          "description": "What takes over the browser in CSR."
+          "description": "What mounts to the DOM and takes over the browser in CSR."
         },
         {
           "term": "vue_router",
           "module": "07-vue",
-          "description": "The mechanism that handles navigation entirely in the browser."
+          "description": "The client-side routing library that handles navigation without full-page reloads."
         }
       ],
       "related": [
         {
           "term": "ssr",
           "module": "07-vue",
-          "description": "The alternative strategy designed to fix CSR's flaws."
+          "description": "The alternative rendering architecture designed to overcome CSR SEO and initial load limitations."
         },
         {
           "term": "vue_router",
           "module": "07-vue",
-          "description": "The tool that makes CSR routing possible without page refreshes."
+          "description": "The client-side routing library enabling Single-Page Application navigation without page reloads."
+        },
+        {
+          "term": "hydration",
+          "module": "07-vue",
+          "description": "The client process that attaches event listeners to pre-rendered server markup in SSR."
+        },
+        {
+          "term": "build_step",
+          "module": "07-vue",
+          "description": "The compilation process that bundles Vue components for CSR deployment."
+        },
+        {
+          "term": "ssg",
+          "module": "07-vue",
+          "description": "Related concept: Static Site Generation (SSG)."
         }
       ]
     },
@@ -2228,29 +2507,39 @@
         {
           "term": "ssr",
           "module": "07-vue",
-          "description": "Hydration is the required second half of the SSR process."
+          "description": "The rendering process that outputs raw server HTML requiring client hydration."
         },
         {
           "term": "reactive_state",
           "module": "07-vue",
-          "description": "What is being \"attached\" to the HTML."
+          "description": "The client-side reactive state attached to static DOM nodes during hydration."
         }
       ],
       "related": [
         {
           "term": "ssr",
           "module": "07-vue",
-          "description": "The process that necessitates Hydration."
+          "description": "The backend process generating initial HTML that requires hydration."
         },
         {
           "term": "universal_code",
           "module": "07-vue",
-          "description": "Writing code that avoids Hydration mismatches."
+          "description": "Writing cross-platform code that prevents hydration mismatch errors."
         },
         {
           "term": "nuxt",
           "module": "07-vue",
-          "description": "Related concept: Nuxt.js."
+          "description": "The Vue meta-framework managing server rendering and client hydration pipelines automatically."
+        },
+        {
+          "term": "reactive_state",
+          "module": "07-vue",
+          "description": "The state system bound to static DOM elements during hydration."
+        },
+        {
+          "term": "csr",
+          "module": "07-vue",
+          "description": "Related concept: Client-Side Rendering (CSR)."
         }
       ]
     },
@@ -2262,34 +2551,34 @@
         {
           "term": "ssr",
           "module": "07-vue",
-          "description": "The primary architecture Nuxt simplifies."
+          "description": "The core architecture that Nuxt automates and simplifies."
         },
         {
           "term": "vue_router",
           "module": "07-vue",
-          "description": "Nuxt completely automates this."
+          "description": "The routing system that Nuxt completely abstracts via file-based routing conventions."
         }
       ],
       "related": [
         {
           "term": "ssr",
           "module": "07-vue",
-          "description": "What Nuxt provides out of the box."
+          "description": "The fundamental architecture that Nuxt simplifies out of the box."
         },
         {
           "term": "hydration",
           "module": "07-vue",
-          "description": "The process Nuxt manages between the server and client."
+          "description": "The process Nuxt coordinates between server HTML and client activation."
         },
         {
           "term": "ssg",
           "module": "07-vue",
-          "description": "The static build target option for Nuxt sites."
+          "description": "The static build generation target option in Nuxt."
         },
         {
-          "module": "07-vue",
           "term": "vue_router",
-          "description": "Vue Router."
+          "module": "07-vue",
+          "description": "The router engine abstracted by Nuxt file-based routing."
         }
       ]
     },
@@ -2301,34 +2590,39 @@
         {
           "term": "ssr",
           "module": "07-vue",
-          "description": "Dynamic server pre-rendering."
+          "description": "Dynamic server rendering mechanics used during build compilation."
         },
         {
           "term": "universal_code",
           "module": "07-vue",
-          "description": "JavaScript that runs on both server and client."
+          "description": "Cross-platform JavaScript that executes in build Node environments and browser clients."
         },
         {
           "term": "nuxt",
           "module": "07-vue",
-          "description": "The Vue meta-framework that compiles SSG sites."
+          "description": "The Vue meta-framework that compiles static site builds."
         }
       ],
       "related": [
         {
           "term": "ssr",
           "module": "07-vue",
-          "description": ""
+          "description": "Dynamic per-request server rendering alternative to static compilation."
         },
         {
           "term": "universal_code",
           "module": "07-vue",
-          "description": ""
+          "description": "Cross-platform JavaScript required for build-time compilation."
         },
         {
           "term": "nuxt",
           "module": "07-vue",
-          "description": ""
+          "description": "The framework executing SSG build triggers (`nuxi generate`)."
+        },
+        {
+          "term": "csr",
+          "module": "07-vue",
+          "description": "Client activation model post-SSG HTML hydration."
         }
       ]
     },
@@ -2340,39 +2634,39 @@
         {
           "term": "vue_instance",
           "module": "07-vue",
-          "description": "What is usually running in the browser, but is now running on the server."
+          "description": "What runs on the Node.js backend server during server rendering."
         },
         {
           "term": "csr",
           "module": "07-vue",
-          "description": "The default behavior that SSR is trying to fix."
+          "description": "The default browser rendering architecture that SSR optimizes for SEO and initial load speed."
         }
       ],
       "related": [
         {
           "term": "csr",
           "module": "07-vue",
-          "description": "The opposite rendering strategy."
+          "description": "The opposite rendering strategy where UI generation occurs entirely in the browser."
         },
         {
           "term": "hydration",
           "module": "07-vue",
-          "description": "Step 5 of the SSR process."
+          "description": "The client process that attaches reactivity to pre-rendered server HTML."
         },
         {
           "term": "nuxt",
           "module": "07-vue",
-          "description": "The framework used to easily build SSR Vue apps."
+          "description": "The full-stack framework simplifying SSR build pipelines."
         },
         {
           "term": "ssg",
           "module": "07-vue",
-          "description": "Pre-rendering pages to static HTML at build time."
+          "description": "Pre-rendering pages to static HTML during build compilation."
         },
         {
           "term": "universal_code",
           "module": "07-vue",
-          "description": "Related concept: Universal Code (Isomorphic)."
+          "description": "Writing code compatible with Node.js and browser environments."
         }
       ]
     },
@@ -2384,34 +2678,34 @@
         {
           "term": "ssr",
           "module": "07-vue",
-          "description": "The architecture that demands Universal Code."
+          "description": "The architecture that executes components on both backend servers and client browsers."
         },
         {
           "term": "hydration",
           "module": "07-vue",
-          "description": "The process that relies on Universal Code matching perfectly."
+          "description": "The client process that relies on matching virtual DOM output produced by universal setup scripts."
         }
       ],
       "related": [
         {
           "term": "ssr",
           "module": "07-vue",
-          "description": "The architecture that forces you to think universally."
-        },
-        {
-          "term": "component_lifecycle",
-          "module": "07-vue",
-          "description": "Understanding that `onMounted` is your escape hatch for browser-only code."
+          "description": "The rendering architecture that requires universal code compliance."
         },
         {
           "term": "hydration",
           "module": "07-vue",
-          "description": "Related concept: Hydration (Vue)."
+          "description": "The client activation process relying on identical universal setup outputs."
         },
         {
           "term": "ssg",
           "module": "07-vue",
-          "description": "Related concept: Static Site Generation (SSG)."
+          "description": "Build compilation process executing components in Node.js environments."
+        },
+        {
+          "term": "component_lifecycle",
+          "module": "07-vue",
+          "description": "Understanding that `onMounted` serves as the primary browser-only escape hatch."
         }
       ]
     },
@@ -2423,34 +2717,39 @@
         {
           "term": "sfc",
           "module": "07-vue",
-          "description": "The primary file type that requires a build step."
+          "description": "The `.vue` file format requiring compilation into native JavaScript render functions."
         },
         {
           "term": "virtual_dom",
           "module": "07-vue",
-          "description": "The Build Step optimizes the HTML template for the Virtual DOM."
+          "description": "The optimization target of Vue template compilation during the build step."
         }
       ],
       "related": [
         {
           "term": "sfc",
           "module": "07-vue",
-          "description": "What is being compiled."
+          "description": "The template, script, and style component files compiled during the build step."
         },
         {
           "term": "vite",
           "module": "07-vue",
-          "description": "The tool that actually performs the build step in modern Vue."
-        },
-        {
-          "term": "vitest",
-          "module": "07-vue",
-          "description": "Related concept: Vitest (Unit Testing)."
+          "description": "The modern build tool executing development server and production compilation pipelines."
         },
         {
           "term": "vue_cli",
           "module": "07-vue",
-          "description": "Related concept: Vue CLI (Webpack)."
+          "description": "The legacy Webpack-based build tool replaced by Vite."
+        },
+        {
+          "term": "vitest",
+          "module": "07-vue",
+          "description": "The testing framework sharing Vite's build transformer pipeline."
+        },
+        {
+          "term": "csr",
+          "module": "07-vue",
+          "description": "Related concept: Client-Side Rendering (CSR)."
         }
       ]
     },
@@ -2462,34 +2761,34 @@
         {
           "term": "components",
           "module": "07-vue",
-          "description": "Base template layouts."
+          "description": "Custom template structures wrapped by transition components."
         },
         {
           "term": "v_if_show",
           "module": "07-vue",
-          "description": "Conditional rendering triggers."
+          "description": "Visibility directives triggering element insertion and removal transitions."
         },
         {
           "term": "dynamic_components",
           "module": "07-vue",
-          "description": "Dynamic swapping layouts."
+          "description": "Dynamic component swapping animated via transition modes."
         }
       ],
       "related": [
         {
           "term": "dynamic_components",
           "module": "07-vue",
-          "description": "Swapping active nodes."
+          "description": "Swapping dynamic component layouts animated by transitions."
         },
         {
           "term": "v_if_show",
           "module": "07-vue",
-          "description": "The visibility attributes that trigger transitions."
+          "description": "Visibility directives triggering element insertion and removal transitions."
         },
         {
           "term": "components",
           "module": "07-vue",
-          "description": "Custom templates."
+          "description": "Template building blocks animated by transition wrappers."
         }
       ]
     },
@@ -2501,39 +2800,39 @@
         {
           "term": "props",
           "module": "07-vue",
-          "description": "Declaring data variables passed to components."
+          "description": "Component inputs typed using TypeScript generics in `defineProps<T>()`."
         },
         {
           "term": "sfc",
           "module": "07-vue",
-          "description": "Single-File Components."
+          "description": "Single-File Components updated with `<script setup lang=\"ts\">`."
         },
         {
           "term": "script_setup",
           "module": "07-vue",
-          "description": "Compiler directives."
+          "description": "Compiler macros optimized for type-only generic declarations."
         }
       ],
       "related": [
         {
           "term": "props",
           "module": "07-vue",
-          "description": "Component inputs."
+          "description": "Component inputs typed using generic parameter macros."
         },
         {
           "term": "script_setup",
           "module": "07-vue",
-          "description": "The sugar compilation syntax."
+          "description": "Script compiler directives optimized for TypeScript."
         },
         {
           "term": "composables",
           "module": "07-vue",
-          "description": "Type-safe reusable business functions."
+          "description": "Type-safe reusable business logic functions."
         },
         {
-          "module": "07-vue",
           "term": "sfc",
-          "description": "Single File Components with TypeScript."
+          "module": "07-vue",
+          "description": "SFC format upgraded with `<script setup lang=\"ts\">`."
         }
       ]
     },
@@ -2545,34 +2844,44 @@
         {
           "term": "build_step",
           "module": "07-vue",
-          "description": "Vite is the tool that executes the Build Step."
+          "description": "The asset compilation process that Vite executes."
+        },
+        {
+          "term": "sfc",
+          "module": "07-vue",
+          "description": "`.vue` components compiled by `@vitejs/plugin-vue`."
         }
       ],
       "related": [
         {
           "term": "build_step",
           "module": "07-vue",
-          "description": "What Vite accomplishes."
+          "description": "Asset compilation orchestrated by Vite."
         },
         {
           "term": "vue_cli",
           "module": "07-vue",
-          "description": "The deprecated Webpack-based tool Vite replaces."
-        },
-        {
-          "term": "sfc",
-          "module": "07-vue",
-          "description": "Related concept: Single-File Components (SFCs)."
+          "description": "The legacy build tool replaced by Vite."
         },
         {
           "term": "vitest",
           "module": "07-vue",
-          "description": "Related concept: Vitest (Unit Testing)."
+          "description": "The Vite-native testing framework sharing Vite's transformer pipeline."
+        },
+        {
+          "term": "sfc",
+          "module": "07-vue",
+          "description": "Component SFC format compiled by Vite plugins."
         },
         {
           "term": "vue_test_utils",
           "module": "07-vue",
           "description": "Related concept: Vue Test Utils."
+        },
+        {
+          "term": "async_components",
+          "module": "07-vue",
+          "description": "Related concept: Async Components."
         }
       ]
     },
@@ -2584,34 +2893,34 @@
         {
           "term": "vue_test_utils",
           "module": "07-vue",
-          "description": "The library for mounting and interacting with Vue components."
+          "description": "The official utility library for mounting Vue components inside Vitest specs."
         },
         {
           "term": "vite",
           "module": "07-vue",
-          "description": "The development server and bundler."
+          "description": "The underlying build engine powering Vitest's module transformation pipeline."
         },
         {
           "term": "build_step",
           "module": "07-vue",
-          "description": "How code compilation pipelines operate."
+          "description": "Asset compilation pipelines shared between dev servers and test runners."
         }
       ],
       "related": [
         {
           "term": "vue_test_utils",
           "module": "07-vue",
-          "description": "The utility suite for mounting and checking Vue components."
+          "description": "Component mounting utility library executed inside Vitest."
         },
         {
           "term": "vite",
           "module": "07-vue",
-          "description": "The underlying transformer engine and bundler."
+          "description": "The underlying build tool sharing configuration and transformation rules with Vitest."
         },
         {
           "term": "build_step",
           "module": "07-vue",
-          "description": "The compilation pipeline."
+          "description": "Compilation pipeline shared between application builds and test execution."
         }
       ]
     },
@@ -2623,24 +2932,29 @@
         {
           "term": "build_step",
           "module": "07-vue",
-          "description": "The process the Vue CLI managed."
+          "description": "The asset compilation process that Vue CLI managed using Webpack."
         },
         {
           "term": "vite",
           "module": "07-vue",
-          "description": "The modern replacement."
+          "description": "The modern, official replacement for Vue CLI."
         }
       ],
       "related": [
         {
           "term": "vite",
           "module": "07-vue",
-          "description": "The tool you should actually be using."
+          "description": "The modern, official build tool that replaces Vue CLI."
         },
         {
           "term": "build_step",
           "module": "07-vue",
-          "description": "What these tools do."
+          "description": "The asset compilation process managed by Vue CLI and Webpack."
+        },
+        {
+          "term": "sfc",
+          "module": "07-vue",
+          "description": "SFC format compiled by `vue-loader` in Vue CLI."
         }
       ]
     },
@@ -2652,29 +2966,29 @@
         {
           "term": "components",
           "module": "07-vue",
-          "description": "What you are inspecting."
+          "description": "The component hierarchy inspected in DevTools."
         },
         {
           "term": "reactive_state",
           "module": "07-vue",
-          "description": "What you are modifying via the DevTools."
+          "description": "The reactive `ref` and `reactive` variables inspected and mutated in DevTools."
         }
       ],
       "related": [
         {
           "term": "pinia",
           "module": "07-vue",
-          "description": "DevTools tracks all Pinia state changes."
+          "description": "Global state store framework integrated into Vue DevTools inspection panels."
         },
         {
           "term": "components",
           "module": "07-vue",
-          "description": "What the DevTools visualizes perfectly."
+          "description": "Vue template units visualized in DevTools component tree hierarchy."
         },
         {
-          "module": "07-vue",
           "term": "vue_instance",
-          "description": "Debugging Vue component state and Pinia stores in Vue Devtools."
+          "module": "07-vue",
+          "description": "The root engine instance inspected by DevTools."
         }
       ]
     },
@@ -2686,24 +3000,24 @@
         {
           "term": "components",
           "module": "07-vue",
-          "description": "The specific units being tested."
+          "description": "The specific Vue component units mounted and tested in spec files."
         }
       ],
       "related": [
         {
           "term": "components",
           "module": "07-vue",
-          "description": "What Vue Test Utils is designed to mount."
-        },
-        {
-          "term": "vite",
-          "module": "07-vue",
-          "description": "Vite powers **Vitest**, the modern testing framework that runs Vue Test Utils."
+          "description": "The template building blocks mounted and tested by Vue Test Utils."
         },
         {
           "term": "vitest",
           "module": "07-vue",
-          "description": "The test runner that executes spec scripts containing Vue Test Utils assertions."
+          "description": "The test runner executing spec files containing Vue Test Utils calls."
+        },
+        {
+          "term": "vite",
+          "module": "07-vue",
+          "description": "The build engine powering Vitest and Vue Test Utils module compilation."
         }
       ]
     },
@@ -2715,34 +3029,34 @@
         {
           "term": "composables",
           "module": "07-vue",
-          "description": "The reuse pattern for stateful logic."
+          "description": "The state encapsulation design pattern that VueUse builds upon."
         },
         {
           "term": "ref",
           "module": "07-vue",
-          "description": "The basic reactive state wrapper."
+          "description": "The fundamental reactive state wrapper returned by VueUse utilities."
         },
         {
           "term": "watch_effect",
           "module": "07-vue",
-          "description": "Reactive dependency tracking."
+          "description": "Automatic dependency tracking utilized by VueUse for side-effect management."
         }
       ],
       "related": [
         {
           "term": "composables",
           "module": "07-vue",
-          "description": "The state encapsulation pattern."
+          "description": "The state encapsulation design pattern implemented by VueUse."
         },
         {
           "term": "ref",
           "module": "07-vue",
-          "description": "The reactivity wrapper."
+          "description": "The fundamental reactive state wrapper returned by VueUse composables."
         },
         {
           "term": "watch_effect",
           "module": "07-vue",
-          "description": "Automatic side-effect tracking."
+          "description": "Automatic side-effect tracking used by VueUse hooks."
         }
       ]
     }

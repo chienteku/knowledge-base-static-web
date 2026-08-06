@@ -1,86 +1,105 @@
 # Compound Components
 
 > **Level 7 — Component Patterns**
-> A parent + subcomponents sharing implicit state via context (`<Tabs><Tab/></Tabs>`).
+> A design pattern where a group of related components work together sharing implicit state via Context to build expressive, flexible UI controls.
 
 ---
 
 ## 1. Prerequisites
-- [The Context API](../level_06/context_api.md) — The state-sharing mechanism used under the hood.
-- [Children Prop](children_prop.md) — The property enabling flexible subcomponent layout structures.
+
+- [The Context API](../level_06/context_api.md) — The state-sharing mechanism used under the hood to coordinate compound subcomponents.
+- [Children Prop](children_prop.md) — Enabling flexible, nested markup structures within compound parent components.
+- [Composition over Inheritance](composition_inheritance.md) — Assembling complex UI controls from small, modular subcomponents.
 
 ---
 
 ## 2. Term Category
-- **Component Pattern**
+
+**Component Pattern (implicit state coordination)**: The Compound Components Pattern is an advanced React design pattern used to construct complex, multi-part UI controls (such as Tabs, Accordions, Dropdown Select Menus, or Steppers).
+
+Instead of rendering a single monolithic component driven by a giant, rigid configuration object (`<Tabs data={tabArray} />`), the Compound Components pattern splits the control into a coordinated family of components (`<Tabs>`, `<Tabs.List>`, `<Tabs.Tab>`, `<Tabs.Panel>`). The parent container component manages active state and shares it implicitly with all nested subcomponents via a private React Context. Subcomponents subscribe to this context using `useContext` under the hood, allowing developers to nest, re-order, and style child elements freely in JSX.
 
 ---
 
-## 3. Environment Context
-- **Client-Side (SPA) / Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-When building complex, interactive UI controls (such as tabs, accordions, dropdown select menus, or menu bars), parent and child elements need to share state. For example, clicking a tab button must tell the parent layout to update the active index, which in turn determines which tab panel is visible.
 
-A basic prop-driven approach results in a single, complex component with a verbose API:
+When building interactive UI controls (like a tabbed navigation bar or accordion list), sub-elements must coordinate state. For example, clicking a tab button must notify the parent container to switch active tab state, which in turn determines which tab panel renders.
+
+Building this with a monolithic component API results in a rigid structure:
+
 ```jsx
-// MONOLITHIC PROP API: Rigid and difficult to customize!
-<Tabs 
-  activeIndex={activeIndex} 
-  onChange={setIndex} 
-  data={[{ label: 'Tab 1', content: '...' }, { label: 'Tab 2', content: '...' }]} 
-/>
+// MONOLITHIC API: Rigid, difficult to customize or insert custom HTML!
+<Tabs data={[{ title: 'Tab 1', content: <Content1 /> }, { title: 'Tab 2', content: <Content2 /> }]} />
 ```
 
-This monolithic structure is highly inflexible: you cannot easily insert an icon inside one tab button, add a separator element between tabs, or adjust the nesting structure of your HTML layout without modifying the `data` array structure.
-
-To allow flexible layouts while sharing state implicitly, developers use the **Compound Components Pattern**:
--   **Coordinated Ecosystem:** Split the interface into a group of related components (e.g. `<Tabs>`, `<TabList>`, `<Tab>`, `<TabPanel>`).
--   **Shared Context:** The parent component acts as a wrapper that manages state and exposes it to all child components via a private React Context Provider.
--   **Implicit Sharing:** Child components subscribe to the parent's context using `useContext` under the hood. This allows developers to arrange, nest, and style the subcomponents however they choose.
-
----
+This monolithic structure makes it impossible to insert custom HTML icons between tab buttons, add separator lines, or re-arrange element layout without altering the underlying data schema. The Compound Components pattern solves this by giving consumers full control over component layout and styling while hiding state management inside an implicit context pipeline.
 
 ### (2) Reality Metaphor
-Imagine a passenger train.
-- **Monolithic Component (City Bus):** A bus is a single, rigid vehicle. You cannot remove seats, insert a dining table in the middle, or rearrange the layout. The configuration is fixed at the factory.
-- **Compound Components (Coupled Train Cars):** The train engine (**the parent component**) provides a power line (**the Context Provider**) running the length of the train. Each individual carriage (**the child components**)—such as the dining car, passenger car, and luggage van—can be coupled in any order. They all draw power from the main engine line implicitly, but you can arrange and customize them to fit the journey.
 
----
+Imagine a passenger train composed of a locomotive engine and coupled train cars.
 
-### (3) React Code Example: Building a Tab Layout
+A **Monolithic Component** is like a rigid city bus. The engine, seating rows, windows, and doors are molded into a single fixed chassis at the factory. You cannot insert a dining table in the middle of seat row #3 or detach the rear section.
+
+**Compound Components** are like a coupled train. The main locomotive engine (**the parent component `<Tabs>`**) provides a central electric power line (**the private React Context Provider**) running the entire length of the train. Each individual carriage (**subcomponents `<Tabs.Tab>`, `<Tabs.Panel>`**)—such as the dining car, sleeper car, or observation deck—couples onto the train in any order chosen by the conductor. All carriages draw electric power from the locomotive's central line implicitly, while allowing the conductor to arrange and decorate each carriage freely.
+
+### (3) React Code Examples
+
+#### Short Snippet
 
 ```jsx
 import React, { createContext, useContext, useState } from 'react';
 
-// 1. Create the shared context
-const TabsContext = createContext(null);
+const ToggleContext = createContext(null);
 
-// 2. Parent Component: Manages state and provides context
-function Tabs({ children, defaultValue }) {
-  const [activeTab, setActiveTab] = useState(defaultValue);
-
-  return (
-    <TabsContext.Provider value={{ activeTab, setActiveTab }}>
-      <div className="tabs-container">{children}</div>
-    </TabsContext.Provider>
-  );
+// Parent Compound Component
+function Toggle({ children }) {
+  const [on, setOn] = useState(false);
+  const toggle = () => setOn((prev) => !prev);
+  return <ToggleContext.Provider value={{ on, toggle }}>{children}</ToggleContext.Provider>;
 }
 
-// Helper hook to protect child context access
+// Subcomponent Subscribing Implicitly
+function ToggleButton() {
+  const { on, toggle } = useContext(ToggleContext);
+  return <button onClick={toggle}>{on ? 'ON' : 'OFF'}</button>;
+}
+
+// Compound Namespace Assignment
+Toggle.Button = ToggleButton;
+export default Toggle;
+```
+
+#### Fuller Example
+
+```jsx
+import React, { createContext, useContext, useState } from 'react';
+
+// 1. Create Private Context
+const TabsContext = createContext(null);
+
+// Custom hook to protect child context access
 function useTabsContext() {
   const context = useContext(TabsContext);
   if (!context) {
-    throw new Error('Tabs child components must be used inside a <Tabs> provider!');
+    throw new Error('Tabs subcomponents must be rendered within a <Tabs> container');
   }
   return context;
 }
 
-// 3. Child Component: Tab Trigger Button
+// 2. Parent Container Component
+export function Tabs({ defaultValue, children }) {
+  const [activeTab, setActiveTab] = useState(defaultValue);
+
+  return (
+    <TabsContext.Provider value={{ activeTab, setActiveTab }}>
+      <div className="tabs-compound-container">{children}</div>
+    </TabsContext.Provider>
+  );
+}
+
+// 3. Subcomponent: Tab Button
 function Tab({ value, children }) {
   const { activeTab, setActiveTab } = useTabsContext();
   const isActive = activeTab === value;
@@ -95,33 +114,39 @@ function Tab({ value, children }) {
   );
 }
 
-// 4. Child Component: Tab Content Panel
+// 4. Subcomponent: Tab Panel
 function Panel({ value, children }) {
   const { activeTab } = useTabsContext();
-  if (activeTab !== value) return null; // Hide if not active
+  if (activeTab !== value) return null; // Hide if inactive
   return <div className="tab-panel">{children}</div>;
 }
 
-// 5. Compose the compound components
+// 5. Attach subcomponents to Parent namespace
 Tabs.Tab = Tab;
 Tabs.Panel = Panel;
 
-export default function App() {
+// Usage Example showcasing complete layout freedom
+export function IndustrialTabsDemo() {
   return (
-    <Tabs defaultValue="home">
-      <div className="tab-bar">
-        {/* We can structure and style the buttons however we want! */}
-        <Tabs.Tab value="home">🏠 Home</Tabs.Tab>
-        <span className="separator">|</span>
-        <Tabs.Tab value="settings">⚙️ Settings</Tabs.Tab>
+    <Tabs defaultValue="telemetry">
+      <div className="custom-tab-bar">
+        {/* Consumers can arrange and style tabs freely! */}
+        <Tabs.Tab value="telemetry">📊 Telemetry</Tabs.Tab>
+        <span className="divider">|</span>
+        <Tabs.Tab value="alarms">🚨 Alarms</Tabs.Tab>
       </div>
 
-      <Tabs.Panel value="home">
-        <h3>Welcome Home!</h3>
-      </Tabs.Panel>
-      <Tabs.Panel value="settings">
-        <h3>System Settings</h3>
-      </Tabs.Panel>
+      <div className="panel-area">
+        <Tabs.Panel value="telemetry">
+          <h4>Live Sensor Stream</h4>
+          <p>Temperature: 42°C | Pressure: 101 kPa</p>
+        </Tabs.Panel>
+
+        <Tabs.Panel value="alarms">
+          <h4>Active Alarm Logs</h4>
+          <p>No critical alarms registered.</p>
+        </Tabs.Panel>
+      </div>
     </Tabs>
   );
 }
@@ -129,183 +154,258 @@ export default function App() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Rendering a compound subcomponent outside of its parent container
+### Mistake 1: Rendering Compound Subcomponents Outside the Parent Container
 
-**The mistake:** Rendering a component that expects shared context (like `<Tabs.Tab>`) outside of the parent provider wrapper:
+**The mistake:** Rendering `<Tabs.Tab>` outside of the `<Tabs>` parent container in JSX.
 
+**Why it's wrong:** Subcomponents rely on `useContext` to read parent state. If rendered outside the parent provider wrapper, `useContext` returns `null` or `undefined`, causing destructuring crashes (`TypeError: Cannot destructure property 'activeTab' of 'null'`).
+
+*Incorrect:*
 ```jsx
-// BUG: Will crash because there is no parent <Tabs> context provider!
-function Header() {
+function BrokenHeader() {
+  // ❌ Crashes! Rendered outside <Tabs> provider
   return <Tabs.Tab value="home">Home</Tabs.Tab>;
 }
 ```
 
-**Why it's wrong:** Sibling or child elements in a compound pattern rely on `useContext` to access state. If a child is rendered outside the parent provider, `useContext` returns `null`, and attempting to destructure it will cause a runtime crash.
-
-*Fix:* Implement a safety check inside your custom context hook (like `useTabsContext`) to throw a clear, developer-friendly error message if the context is missing.
-
----
-
-
-
-### Mistake 2: Attempting to Use Compound Components Without Passing Shared Context to Sub-Components
-
-**The mistake:** Creating `<Select>` and `<Option>` components where `<Option>` cannot access selected value because Context was omitted.
-
-**Why it's wrong:** Compound components (`<Select>`, `<Select.Option>`) rely on a shared implicit Context to communicate state between parent and child sub-components without explicit prop drilling.
-
-*Incorrect:*
-```javascript
-// Option sub-component unable to read active value because Provider was omitted
-```
-
 *Fix:*
-```javascript
-Wrap sub-components in parent SelectContext.Provider
-```
-
-### Mistake 3: Restricting Compound Component Children Placement to Immediate Direct Children Only
-
-**The mistake:** Using `React.Children.map()` directly in parent compound component expecting sub-components to be immediate children.
-
-**Why it's wrong:** `React.Children.map()` works ONLY on immediate direct child elements. If a user wraps `<Option>` inside a `<div>`, `Children.map` breaks! Use Context API so sub-components can be nested at arbitrary DOM depths.
-
-*Incorrect:*
-```javascript
-React.Children.map(props.children, child => ...) // ❌ Fails if sub-components are nested inside divs!
-```
-
-*Fix:*
-```javascript
-Use React Context API to share state with deeply nested sub-components
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Compound Toggle Accordion
-
-**Problem:** Complete the accordion component below by implementing a compound pattern. The accordion should toggle its visible pane when clicked:
-
 ```jsx
-import React, { createContext, useContext, useState } from 'react';
-
-const AccordionContext = createContext(null);
-
-// Solution:
-function Accordion({ children }) {
-  const [openId, setOpenId] = useState(null);
-
-  const toggle = (id) => {
-    setOpenId(openId === id ? null : id);
-  };
-
-  return (
-    <AccordionContext.Provider value={{ openId, toggle }}>
-      <div className="accordion">{children}</div>
-    </AccordionContext.Provider>
-  );
+function useTabsContext() {
+  const context = useContext(TabsContext);
+  if (!context) {
+    throw new Error('Tabs subcomponents must be used inside a <Tabs> provider');
+  }
+  return context;
 }
+```
 
-function Item({ id, children }) {
-  return <div className="accordion-item">{children}</div>;
-}
+### Mistake 2: Using `React.Children.map()` Instead of Context for State Sharing
 
-function Trigger({ id, children }) {
-  const { toggle } = useContext(AccordionContext);
-  return <button onClick={() => toggle(id)}>{children}</button>;
-}
+**The mistake:** Inspecting and mapping immediate `props.children` to pass props to subcomponents.
 
-function Content({ id, children }) {
-  const { openId } = useContext(AccordionContext);
-  if (openId !== id) return null;
-  return <div className="accordion-content">{children}</div>;
-}
+**Why it's wrong:** `React.Children.map()` ONLY works on *immediate direct child elements*. If a developer wraps a subcomponent inside a simple `<div>` or wrapper tag (`<div><Tabs.Tab /></div>`), `React.Children.map()` fails to find the subcomponent, breaking state passing. Use the Context API so subcomponents can be nested at arbitrary DOM depths.
 
-// Composition Usage
-function App() {
-  return (
-    <Accordion>
-      <Item id="pane-1">
-        <Trigger id="pane-1">Item A</Trigger>
-        <Content id="pane-1">Details A</Content>
-      </Item>
-    </Accordion>
-  );
-}
+*Incorrect:*
+```jsx
+// ❌ Fails if <Tabs.Tab> is wrapped inside a sub-div!
+React.Children.map(props.children, child => React.cloneElement(child, { activeTab }));
+```
+
+*Fix:*
+```jsx
+// Use Context API for implicit state sharing at arbitrary depths
+```
+
+### Mistake 3: Omitting Namespace Attachments (`Parent.Child = Child`)
+
+**The mistake:** Exporting 10 standalone subcomponent functions separately (`export function Tab()`, `export function Panel()`).
+
+**Why it's wrong:** Exporting subcomponents as loose standalone functions litters the module export namespace and makes component discoverability difficult. Attaching subcomponents directly to the parent namespace (`Tabs.Tab = Tab`) provides clean auto-complete in IDEs.
+
+*Incorrect:*
+```jsx
+export function Tab() { ... }
+export function Panel() { ... }
+```
+
+*Fix:*
+```jsx
+Tabs.Tab = Tab;
+Tabs.Panel = Panel;
+export default Tabs;
 ```
 
 ---
 
+## 5. Practice Exercises
+
+### Exercise 1: Industrial IoT Accordion Compound Component
+
+**Scenario:** Implement a compound `<Accordion>` component where clicking `<Accordion.Header>` toggles the visibility of matching `<Accordion.Body>`.
+
+**Requirements:**
+1. Create `AccordionContext` for implicit state sharing.
+2. Implement `<Accordion>`, `<Accordion.Item>`, `<Accordion.Header>`, and `<Accordion.Body>`.
+3. Include context safety guard checks in subcomponents.
+4. Add runtime assertions for accordion rendering.
+
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Compound Select Component Pattern
-
-**Problem:** Build compound `Select` component with `Select.Option` sub-component using Context.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const SelectContext = createContext(); function Select({ value, onChange, children }) { return <SelectContext.Provider value={{ value, onChange }}>{children}</SelectContext.Provider>; } Select.Option = function Option({ val, children }) { const { value, onChange } = useContext(SelectContext); return <div onClick={() => onChange(val)} className={value === val ? 'active' : ''}>{children}</div>; };
-> ```
-> ```javascript
-> const SelectContext = createContext();
 >
-> function Select({ value, onChange, children }) {
+> #### Implementation
+> ```jsx
+> import React, { createContext, useContext, useState } from 'react';
+> 
+> const AccordionContext = createContext(null);
+> 
+> function useAccordion() {
+>   const ctx = useContext(AccordionContext);
+>   if (!ctx) throw new Error('Accordion subcomponents must be used in <Accordion>');
+>   return ctx;
+> }
+> 
+> export function Accordion({ children, defaultOpenId = null }) {
+>   const [openId, setOpenId] = useState(defaultOpenId);
+>   const toggle = (id) => setOpenId((prev) => (prev === id ? null : id));
+> 
 >   return (
->     <SelectContext.Provider value={{ value, onChange }}>
->       {children}
+>     <AccordionContext.Provider value={{ openId, toggle }}>
+>       <div className="accordion">{children}</div>
+>     </AccordionContext.Provider>
+>   );
+> }
+> 
+> function Header({ id, children }) {
+>   const { toggle } = useAccordion();
+>   return <button onClick={() => toggle(id)}>{children}</button>;
+> }
+> 
+> function Body({ id, children }) {
+>   const { openId } = useAccordion();
+>   if (openId !== id) return null;
+>   return <div className="accordion-body">{children}</div>;
+> }
+> 
+> Accordion.Header = Header;
+> Accordion.Body = Body;
+> 
+> export function testAccordionCompound() {
+>   const res = Accordion({ defaultOpenId: 'item1', children: null });
+>   console.assert(res.props.value.openId === 'item1', 'Accordion initial state check');
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Implicit State Coordination**: Coordinates active accordion items via private `AccordionContext`.
+> 2. **Arbitrary Placement Freedom**: Subcomponents compute visibility independently via `openId === id`.
+> 3. **Context Safety Guard**: Protects subcomponents with custom hook error handling.
+> 4. **Namespace Organization**: Groups subcomponents cleanly onto `Accordion.Header` and `Accordion.Body`.
+> 
+### Exercise 2: Financial Trading Desk Compound Select Menu
+
+**Scenario:** Build a compound dropdown select control `<Select>` with subcomponents `<Select.Option>` and `<Select.Trigger>`.
+
+**Requirements:**
+1. Share active selected value and setter via Context.
+2. Implement `<Select.Option>` highlighting active selection.
+3. Include runtime test assertions for compound select component output.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> import React, { createContext, useContext, useState } from 'react';
+> 
+> const SelectContext = createContext(null);
+> 
+> export function Select({ defaultValue, onChange, children }) {
+>   const [val, setVal] = useState(defaultValue);
+>   const selectOption = (newVal) => {
+>     setVal(newVal);
+>     if (onChange) onChange(newVal);
+>   };
+> 
+>   return (
+>     <SelectContext.Provider value={{ val, selectOption }}>
+>       <div className="select-compound">{children}</div>
 >     </SelectContext.Provider>
 >   );
 > }
->
-> Select.Option = function Option({ val, children }) {
->   const { value, onChange } = useContext(SelectContext);
+> 
+> function Option({ value, children }) {
+>   const ctx = useContext(SelectContext);
+>   if (!ctx) throw new Error('Option must be used in Select');
+>   const isSelected = ctx.val === value;
+> 
 >   return (
 >     <div
->       onClick={() => onChange(val)}
->       className={value === val ? 'active' : ''}
+>       className={`select-option ${isSelected ? 'selected' : ''}`}
+>       onClick={() => ctx.selectOption(value)}
 >     >
 >       {children}
 >     </div>
 >   );
-> };
+> }
+> 
+> Select.Option = Option;
+> 
+> export function testSelectCompound() {
+>   const res = Select({ defaultValue: 'USD', children: null });
+>   console.assert(res.props.value.val === 'USD', 'Compound select initial value check');
+> }
 > ```
 >
-> **Explanation:** Compound components share implicit state via Context while exposing expressive declarative markup.
+> #### Technical Explanation
+> 1. **Shared State Coordination**: Drives dropdown selection via Context `selectOption` updaters.
+> 2. **Active Style Branching**: Applies `.selected` CSS classes dynamically inside subcomponents.
+> 3. **Declarative Markup API**: Offers expressive, readable component structures (`<Select.Option value="USD">`).
+> 4. **Encapsulated Callbacks**: Triggers parent `onChange` handlers seamlessly upon option selection.
 > 
----
+### Exercise 3: Healthcare Patient EHR Stepper Compound Component
 
-### Exercise 3: Benefits of Compound Component Pattern
+**Scenario:** Create an EHR patient wizard compound stepper component `<Stepper>` with `<Stepper.Step>` and `<Stepper.Controls>`.
 
-**Problem:** List 2 benefits of Compound Component design pattern (1. Expressive declarative API; 2. Flexible layout sub-component positioning).
+**Requirements:**
+1. Manage `activeStep` integer state in `<Stepper>`.
+2. Implement `<Stepper.Step>` showing content only when `stepIndex === activeStep`.
+3. Include test assertions for stepper step calculations.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Expressive declarative API; 2. Flexible layout sub-component positioning
-> ```
-> ```text
-> 1. Expressive declarative API; 2. Flexible layout sub-component positioning
+>
+> #### Implementation
+> ```jsx
+> import React, { createContext, useContext, useState } from 'react';
+> 
+> const StepperContext = createContext(null);
+> 
+> export function Stepper({ children }) {
+>   const [activeStep, setActiveStep] = useState(1);
+>   const next = () => setActiveStep((s) => s + 1);
+>   const prev = () => setActiveStep((s) => Math.max(s - 1, 1));
+> 
+>   return (
+>     <StepperContext.Provider value={{ activeStep, next, prev }}>
+>       <div className="stepper-compound">{children}</div>
+>     </StepperContext.Provider>
+>   );
+> }
+> 
+> function Step({ index, children }) {
+>   const ctx = useContext(StepperContext);
+>   if (ctx.activeStep !== index) return null;
+>   return <div className="step-content">{children}</div>;
+> }
+> 
+> Stepper.Step = Step;
+> 
+> export function testStepperCompound() {
+>   const res = Stepper({ children: null });
+>   console.assert(res.props.value.activeStep === 1, 'Stepper initial step check');
+> }
 > ```
 >
-> **Explanation:** Compound components allow consumers to arrange child elements flexibly.
+> #### Technical Explanation
+> 1. **Step Visibility Guard**: Renders child steps selectively based on active step indices.
+> 2. **Centralized Step Navigation**: Manages step advancement logic (`next`, `prev`) inside parent context.
+> 3. **Declarative Multi-Step Form**: Provides expressive markup for complex multi-step patient intake forms.
+> 4. **Protected Subcomponents**: Validates context presence before rendering step panels.
 > 
-## 7. Related Terms
-- [The Context API](../level_06/context_api.md) — The state transport vehicle used by compound parent-child pairings.
-- [Children Prop](children_prop.md) — The JSX container that allows subcomponent markup structures.
-- [Higher-Order Components (HOC)](hoc.md) — Related concept: Higher-Order Components (HOC).
+---
+
+## 6. Related Terms
+
+- [The Context API](../level_06/context_api.md) — The state-sharing pipeline powering compound component subcomponents.
+- [Children Prop](children_prop.md) — The slot primitive enabling subcomponent nesting.
+- [Composition over Inheritance](composition_inheritance.md) — The overarching architectural design paradigm.
+- [Render Props](render_props.md) — Alternative logic-sharing component pattern.
 
 ---
 
-## 8. Key Takeaways
-- The Compound Components Pattern shares state implicitly between parent and child elements.
-- It provides high layout flexibility, allowing custom nesting and styling.
-- The parent component manages the state and exposes it via a Context Provider.
-- Child components subscribe to the parent's context using `useContext`.
-- Always check if context is undefined inside child components and throw descriptive errors.
-- Group subcomponents onto the parent namespace (e.g. `Tabs.Tab = Tab`) to improve discoverability.
+## 7. Key Takeaways
+
+- The Compound Components pattern coordinates a family of related subcomponents using implicit state shared via Context.
+- It provides maximum layout flexibility, allowing consumers to arrange, nest, and style subcomponents freely in JSX.
+- Parent components manage state and expose a private Context Provider; subcomponents consume state via `useContext`.
+- Always add safety guard checks in custom context hooks to throw descriptive errors if subcomponents are rendered outside the parent container.
+- Attach subcomponents directly to the parent component namespace (e.g. `Tabs.Tab = Tab`) for clean IDE auto-complete.

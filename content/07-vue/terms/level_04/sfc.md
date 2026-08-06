@@ -1,89 +1,143 @@
 # Single-File Components (SFCs)
 
-> **Level 4 — Components & Props**
-> Vue's signature file format (`.vue` files) that allows you to write HTML, JavaScript, and CSS for a single component all within the exact same file.
+> **Level 4 — Components & Lifecycle**
+> Vue's signature file format (`.vue` files) that encapsulates HTML structure, JavaScript logic, and CSS styling for a component inside a single unified file.
 
 ---
 
 ## 1. Prerequisites
-- [Components](components.md) — What an SFC represents physically.
-- [Composition API](../level_01/composition_api.md) — The JavaScript syntax usually written inside the SFC.
+
+- None!
 
 ---
 
 ## 2. Term Category
-- **Vue Tooling / File Format**
+
+**Physical File Format (Build-Time Transpilation Target)**: Single-File Components (`.vue` files) are Vue's standard authoring format for web UI modules. Built around three top-level language blocks (`<script>`, `<template>`, `<style>`), SFCs co-locate component logic, markup, and styling into a single physical source file. SFCs require a build compilation step (`@vue/compiler-sfc` via Vite or Webpack) to parse and transpile `.vue` files into standard JavaScript modules and CSS stylesheets that browser engines can execute. SFCs support features like CSS scoping (`<style scoped>`) and dynamic CSS state binding (`v-bind()`).
 
 ---
 
-## 3. Environment Context
-- **Build-Time (Requires Vite/Webpack)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In traditional development, a button required 3 files: `button.html`, `button.js`, and `button.css`. Jumping between 3 files just to understand how one simple button works is annoying.
-Vue invented the **Single-File Component (`.vue`)**. It perfectly encapsulates the three pillars of the web into three distinct blocks within one file.
 
-### (2) The Anatomy of an SFC
-A `.vue` file is strictly divided into three blocks:
+In traditional web development, building a single UI element (such as a custom modal or button) forced developers to maintain three separate files in different directories: `button.html`, `button.js`, and `button.css`.
 
+Jumping across three separate directory paths just to make a minor styling change or add a click event listener created heavy context switching. Furthermore, CSS rules written in global `.css` files frequently leaked styles across unrelated HTML pages, causing accidental visual bugs.
+
+Vue invented the **Single-File Component (`.vue` format)** to solve file fragmentation and CSS leakage. An SFC encapsulates the three core web pillars into three distinct top-level blocks within one single `.vue` file:
+1. `<script setup>`: The component's JavaScript/TypeScript reactivity and business logic.
+2. `<template>`: The component's HTML structure and data binding markup.
+3. `<style scoped>`: The component's CSS styling, automatically scoped to prevent leaks.
+
+### (2) Reality Metaphor
+
+Imagine a commercial modular house builder manufacturing pre-fabricated bathroom pods in a factory.
+
+The old traditional approach is like shipping loose plumbing pipes in one truck (`button.html`), loose electrical wires in a second truck (`button.js`), and loose ceramic tiles in a third truck (`button.css`) to a construction site, forcing builders to assemble everything on site while hoping wires don't cross into the living room.
+
+An **SFC (`.vue` file)** is like delivering a complete, pre-fabricated, fully sealed bathroom pod truck. The plumbing (`<template>`), electrical wiring (`<script>`), and tile finishes (`<style scoped>`) are manufactured together inside one sealed box. When dropped into a house frame (the Component Tree), the sealed box plugs in cleanly without leaking water (CSS rules) into adjacent bedrooms.
+
+### (3) Vue Code Examples
+
+#### Short Snippet
 ```vue
-<!-- 1. The Logic (JavaScript) -->
+<!-- BaseBadge.vue: Anatomy of a Single-File Component (.vue) -->
 <script setup>
-import { ref } from 'vue'
-const color = ref('red')
+defineProps({
+  count: Number
+})
 </script>
 
-<!-- 2. The Structure (HTML) -->
 <template>
-  <button class="btn">I am a {{ color }} button!</button>
+  <span class="badge">{{ count }}</span>
 </template>
 
-<!-- 3. The Styling (CSS) -->
 <style scoped>
-.btn {
-  border-radius: 4px;
+/* 'scoped' attribute guarantees this CSS cannot leak to other components */
+.badge {
+  padding: 4px 8px;
+  background: #1890ff;
+  color: white;
+  border-radius: 10px;
 }
 </style>
 ```
 
-### (3) The Compiler Requirement
-Browsers have absolutely no idea what a `.vue` file is. If you send a `.vue` file to Chrome, it will fail.
-SFCs are a "Developer Experience" (DX) feature. They require a build tool (like Vite or Webpack). When you run `npm run build`, the Vue Compiler parses the `.vue` file, rips out the `<style>` into a real `.css` file, and compiles the `<template>` and `<script>` into a standard `.js` file that the browser can understand.
+#### Fuller Example
+```vue
+<!-- UserStatusCard.vue: SFC showcasing script setup, template, scoped CSS, and CSS v-bind -->
+<script setup>
+import { ref, computed } from 'vue'
+
+const isOnline = ref(true)
+const userName = ref('Alice Architect')
+
+// Dynamic theme color consumed directly in CSS <style> block via v-bind()
+const statusColor = computed(() => isOnline.value ? '#52c41a' : '#ff4d4f')
+
+function toggleStatus() {
+  isOnline.value = !isOnline.value
+}
+</script>
+
+<template>
+  <div class="status-card">
+    <div class="avatar">
+      <span class="indicator"></span>
+      <h3>{{ userName }}</h3>
+    </div>
+    
+    <p>Current Status: {{ isOnline ? 'Online' : 'Offline' }}</p>
+    <button @click="toggleStatus">Toggle Status</button>
+  </div>
+</template>
+
+<style scoped>
+.status-card {
+  padding: 16px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Consuming reactive JavaScript variable directly in CSS using v-bind() */
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: v-bind(statusColor);
+}
+</style>
+```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Forgetting the `scoped` attribute
+### Mistake 1: Forgetting the `scoped` attribute on `<style>` blocks (Global CSS Leakage)
 
-**The mistake:** A developer writes `<style>` inside `Header.vue` and sets `h1 { color: blue; }`. Suddenly, every `<h1>` on the entire website turns blue, not just the one in the header!
+**The mistake:** Writing plain `<style>` inside `Header.vue` and setting `h1 { color: blue; }`.
 
-**Why it's wrong:** By default, CSS inside a Vue file is Global. It leaks out to the rest of the application. 
-**Golden Rule:** Always add the `scoped` attribute: `<style scoped>`. Vue will automatically generate a unique data attribute (like `data-v-f3f3eg9`) and attach it to the component's HTML and CSS, guaranteeing the styles cannot leak to other components!
-
----
-
-### Mistake 2: Using Global Unscoped `<style>` Tags Leading to CSS Class Leakage Across Components
-
-**The mistake:** Adding plain `<style>` blocks with generic classes (`.button`, `.header`) inside an SFC component.
-
-**Why it's wrong:** Unscoped `<style>` rules leak globally across the entire web application, overriding CSS styles in unrelated components. Use `<style scoped>`.
+**Why it's wrong:** By default, CSS inside `<style>` blocks is **Global**. It leaks out to the entire application, turning every `<h1>` on every page blue.
 
 *Incorrect:*
 ```vue
-<!-- Unscoped style leaks .title class to all components -->
+<!-- Unscoped style leaks .title class to all components in the entire app! -->
 <style>
 .title { color: red; }
 </style>
 ```
 
-*Fix:*
+*Fix:* Always add the `scoped` attribute: `<style scoped>`. Vue automatically appends a unique scope attribute (e.g. `data-v-7ba5e15a`) to component elements and CSS selectors, guaranteeing styles cannot leak.
 ```vue
-<!-- Scoped style restricts class rules to current component scope -->
+<!-- Scoped style isolates rules strictly to this component -->
 <style scoped>
 .title { color: red; }
 </style>
@@ -91,16 +145,36 @@ SFCs are a "Developer Experience" (DX) feature. They require a build tool (like 
 
 ---
 
-### Mistake 3: Attempting to Style Child Component Deep Elements Without the `:deep()` Pseudo-Class
+### Mistake 2: Expecting web browsers to execute raw `.vue` files natively without a build tool
 
-**The mistake:** Writing `.parent-box .child-title` inside a `<style scoped>` block expecting to style child component elements.
+**The mistake:** Writing `<script src="MyComponent.vue"></script>` directly in a static HTML file and expecting Chrome or Safari to load it.
 
-**Why it's wrong:** Scoped CSS targets ONLY elements in the current component's template. To target elements rendered deep inside child components, use the `:deep()` selector (`:deep(.child-title)`).
+**Why it's wrong:** Browsers understand standard `.html`, `.js`, and `.css` files. They have no concept of `.vue` files or top-level template tags. SFCs require a build tool compiler (like Vite or Webpack) that compiles `.vue` files into standard JS and CSS assets during build time.
+
+*Incorrect:*
+```html
+<!-- Attempting to load raw SFC in browser -->
+<script src="MyComponent.vue"></script>
+```
+
+*Fix:*
+```javascript
+// Import compiled SFC via Vite / ES Modules
+import MyComponent from './MyComponent.vue'
+```
+
+---
+
+### Mistake 3: Attempting to style child component deep elements without the `:deep()` pseudo-class
+
+**The mistake:** Writing `.parent-card .child-title` inside a `<style scoped>` block expecting to style elements rendered deep inside a child component.
+
+**Why it's wrong:** Scoped CSS targets ONLY elements in the current component's direct template. To target DOM nodes rendered deep inside child components, use the `:deep()` pseudo-class selector.
 
 *Incorrect:*
 ```vue
 <style scoped>
-.card .child-badge { color: blue; } /* ❌ Fails to target child component element! */
+.card .child-badge { color: blue; } /* ❌ Fails to target child component elements! */
 </style>
 ```
 
@@ -111,89 +185,158 @@ SFCs are a "Developer Experience" (DX) feature. They require a build tool (like 
 </style>
 ```
 
-
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Order of Blocks
+### Exercise 1: IoT Sensor Monitor SFC with Scoped CSS & CSS v-bind (IoT)
 
-**Problem:** Does Vue care what order the `<script>`, `<template>`, and `<style>` blocks are written in within the `.vue` file?
+**Scenario:** An industrial IoT sensor tile component `<SensorTile.vue>` displays temperature readings. You must build an SFC where the temperature text color changes dynamically to red when temperature exceeds 80°C using CSS `v-bind()`.
 
-**Expected output:**
+**Requirements:**
+1. Create `.vue` file containing `<script setup>`, `<template>`, and `<style scoped>`.
+2. Compute `tempColor` ref ('#ff4d4f' when temp > 80, else '#52c41a').
+3. Bind `tempColor` inside `<style scoped>` using `color: v-bind(tempColor)`.
+
 > [!check]- Answer
-> ```text
-> No! The Vue compiler doesn't care.
-> However, the official Vue Style Guide strongly recommends a specific order for consistency across projects:
-> 1. `<script setup>`
-> 2. `<template>`
-> 3. `<style scoped>`
-> ```
-> - Technically no, culturally yes.
-> 
----
-
-### Exercise 2: SFC Structure Breakdown
-
-**Problem:** Identify the 3 top-level block tags that compose a standard Vue Single File Component (`.vue`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. <script> (or <script setup>)
-> 2. <template>
-> 3. <style> (or <style scoped>)
-> ```
-> - `<script>` -> Component logic
-> - `<template>` -> HTML layout structure
-> - `<style>` -> CSS styling
-> 
+>
+> #### Implementation
 > ```vue
-> <script setup></script>
-> <template></template>
-> <style scoped></style>
-> ```
-> 
----
-
-### Exercise 3: CSS v-bind in SFC Style Blocks
-
-**Problem:** Write CSS rule inside `<style scoped>` consuming dynamic JavaScript reactive variable `themeColor` using `v-bind()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```css
-> <style scoped> .text { color: v-bind(themeColor); } </style>
-> ```
-> - SFC styles support `v-bind()` to consume script setup variables directly in CSS.
-> 
-> ```vue
+> <!-- SensorTile.vue -->
 > <script setup>
-> const themeColor = ref('red');
+> import { ref, computed } from 'vue'
+> 
+> const temp = ref(75)
+> 
+> const tempColor = computed(() => temp.value > 80 ? '#ff4d4f' : '#52c41a')
 > </script>
 > 
+> <template>
+>   <div class="sensor-tile">
+>     <h4>Exhaust Temperature</h4>
+>     <p class="reading">{{ temp }} °C</p>
+>     <button @click="temp += 10">Increase Temp</button>
+>   </div>
+> </template>
+> 
 > <style scoped>
-> .text {
->   color: v-bind(themeColor);
+> .sensor-tile { padding: 16px; border: 1px solid #ccc; border-radius: 8px; }
+> .reading {
+>   font-size: 24px;
+>   font-weight: bold;
+>   /* CSS v-bind consumes reactive JS computed property */
+>   color: v-bind(tempColor);
 > }
 > </style>
 > ```
-> 
+>
+> #### Technical Explanation
+> 1. **Concept**: SFC co-locates `<script setup>`, `<template>`, and `<style scoped>` in one `.vue` file.
+> 2. **Concept**: `<style scoped>` isolates CSS selectors using unique `data-v-*` attributes.
+> 3. **Concept**: CSS `v-bind()` binds reactive JS state directly to CSS property values.
+> 4. **Concept**: Transpiled by Vite into optimized CSS variables.
 > 
 ---
 
-## 7. Related Terms
-- [Components](components.md) — The architectural concept that SFCs physically represent.
-- [Vite](../level_10/vite.md) — The build tool that compiles `.vue` files.
-- [Teleport](../level_05/teleport.md) — Related concept: Teleport.
-- [Build Step (Compilation)](../level_10/build_step.md) — Related concept: Build Step (Compilation).
-- [`<script setup>` & Compiler Macros](script_setup.md) — <script setup> compiler macro.
-- [TypeScript with Vue](../level_10/typescript_vue.md) — Related concept: TypeScript with Vue.
+### Exercise 2: Financial Stock Ticker SFC Scoped Deep Selector (Finance)
+
+**Scenario:** A stock trading application contains a parent component `<Watchlist.vue>` using a third-party child component `<StockBadge>`. You need to override the inner text color of `.badge-text` inside the child using the `:deep()` selector.
+
+**Requirements:**
+1. Build parent SFC `<Watchlist.vue>`.
+2. Use `<style scoped>` with `:deep(.badge-text)` selector to override child styles.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```vue
+> <!-- Watchlist.vue -->
+> <script setup>
+> import StockBadge from './StockBadge.vue'
+> </script>
+> 
+> <template>
+>   <div class="watchlist-panel">
+>     <h2>Market Watchlist</h2>
+>     <StockBadge symbol="NVDA" price="120.50" />
+>   </div>
+> </template>
+> 
+> <style scoped>
+> .watchlist-panel { padding: 16px; }
+> 
+> /* Scoped :deep() selector allows parent to style deep child elements safely */
+> .watchlist-panel :deep(.badge-text) {
+>   font-size: 18px;
+>   font-weight: 800;
+>   color: #1890ff;
+> }
+> </style>
+> ```
+>
+> #### Technical Explanation
+> 1. **Concept**: Scoped CSS normally stops at child component root elements.
+> 2. **Concept**: The `:deep()` pseudo-class selector allows scoped styles to penetrate child component subtrees.
+> 3. **Concept**: Avoids removing the `scoped` attribute and polluting global CSS.
+> 4. **Concept**: Maintains encapsulated design system overrides.
+> 
+---
+
+### Exercise 3: Real-Time Network Packet Inspector SFC Block Ordering (Networking)
+
+**Scenario:** A network analyst tool requires organizing an SFC `.vue` file following the official Vue Style Guide recommended block ordering (`<script setup>`, `<template>`, `<style scoped>`).
+
+**Requirements:**
+1. Structure `.vue` file in exact order: `<script setup>` first, `<template>` second, `<style scoped>` third.
+2. Demonstrate clean SFC layout.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```vue
+> <!-- PacketInspector.vue -->
+> <!-- 1. Script block first -->
+> <script setup>
+> import { ref } from 'vue'
+> const packetCount = ref(1024)
+> </script>
+> 
+> <!-- 2. Template block second -->
+> <template>
+>   <div class="inspector">
+>     <p>Inspected Packets: {{ packetCount }}</p>
+>   </div>
+> </template>
+> 
+> <!-- 3. Style block third -->
+> <style scoped>
+> .inspector { padding: 12px; background: #222; color: #00ff00; }
+> </style>
+> ```
+>
+> #### Technical Explanation
+> 1. **Concept**: The official Vue Style Guide recommends ordering blocks: `<script setup>`, `<template>`, `<style scoped>`.
+> 2. **Concept**: Although the compiler accepts any block order, standard ordering improves codebase consistency.
+> 3. **Concept**: SFC format encapsulates full component implementation cleanly.
+> 4. **Concept**: Simplifies IDE navigation and team collaboration.
+> 
+---
+
+## 6. Related Terms
+
+- [Components](components.md) — Architectural component concept.
+- [Vite](../level_10/vite.md) — Build tool that compiles `.vue` files.
+- [Teleport](../level_05/teleport.md) — Moving rendered SFC DOM nodes.
+- [Build Step (Compilation)](../level_10/build_step.md) — Transpilation step for SFCs.
+- [`<script setup>` & Compiler Macros](script_setup.md) — Compiler macros inside SFCs.
+- [TypeScript with Vue](../level_10/typescript_vue.md) — Using `<script setup lang="ts">`.
 
 ---
 
-## 8. Key Takeaways
-- **Single-File Components (SFCs)** use the `.vue` extension.
-- They encapsulate logic (`<script>`), structure (`<template>`), and styling (`<style>`) in one place.
-- Browsers cannot read `.vue` files; they must be compiled by a build tool (like Vite) into standard JS/CSS.
-- Always use `<style scoped>` to prevent your component's CSS from leaking and ruining the rest of the app's styling.
+## 7. Key Takeaways
+
+- **Single-File Components (SFCs)** use the `.vue` file extension.
+- They encapsulate logic (`<script setup>`), structure (`<template>`), and styling (`<style>`) in a single file.
+- Browsers cannot execute `.vue` files natively; they must be compiled by a build tool (like Vite) into standard JS/CSS assets.
+- Always use **`<style scoped>`** to prevent component CSS rules from leaking to other parts of the application.
+- Use CSS **`v-bind()`** to consume reactive JavaScript variables directly inside `<style scoped>` blocks.

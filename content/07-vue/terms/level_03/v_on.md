@@ -1,104 +1,158 @@
 # `v-on`
 
-> **Level 3 — Directives**
-> A Vue directive used to listen to DOM events (like clicks, keypresses, or form submissions) and trigger JavaScript methods in response.
+> **Level 3 — Directives & Template Features**
+> A fundamental Vue directive used to attach event listeners to HTML DOM elements or custom component events, executing JavaScript handlers when interactions occur.
 
 ---
 
 ## 1. Prerequisites
+
 - [Directives](directives.md) — The category `v-on` belongs to.
-- [Reactive State](../level_02/reactive_state.md) — What events typically mutate.
+- [Reactive State](../level_02/reactive_state.md) — The JavaScript data that event listeners typically mutate.
 
 ---
 
 ## 2. Term Category
-- **Vue Directive**
+
+**Core Event Handling Directive (One-Way Upward Event Binding)**: `v-on` is Vue's primary syntax for binding user interactions (clicks, keypresses, mouse moves, form submissions) and custom component emits to JavaScript method execution. Operating at client-side browser DOM execution runtime, `v-on` automatically manages raw DOM `addEventListener` calls when elements enter the document and unbinds `removeEventListener` calls when elements are unmounted, preventing browser memory leaks.
 
 ---
 
-## 3. Environment Context
-- **Vue Templates**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In Vanilla JavaScript, listening to user interaction requires imperative code: `document.getElementById('btn').addEventListener('click', doSomething)`. You have to manually manage these listeners and remember to remove them when the element is destroyed to prevent memory leaks.
-Vue solves this declaratively with **`v-on`**. You attach the listener directly in the HTML template. Vue automatically handles adding the `addEventListener` under the hood, and automatically cleans it up when the component is unmounted!
 
-### (2) The Shorthand Syntax (`@`)
-Just like `v-bind` has the `:` shorthand, `v-on` is so common that it has its own shorthand: the **`@`** symbol.
+In Vanilla JavaScript, listening to user events required writing imperative DOM code:
+```javascript
+const btn = document.getElementById('submit-btn');
+btn.addEventListener('click', handleSubmit);
+```
+This imperative approach suffered from two major operational problems:
+1. **Memory Leaks:** Developers frequently forgot to call `removeEventListener` when elements were destroyed, trapping callbacks and DOM nodes in memory.
+2. **Coupling:** Event registration logic was scattered across JS files rather than declared right on the visual HTML elements being interacted with.
 
-```html
+Vue introduced **`v-on`** to handle event listening declaratively inside HTML templates. By writing `v-on:click="submitData"` (or shorthand `@click="submitData"`), Vue automatically manages underlying DOM listener attachments on mount and performs complete teardown when components unmount.
+
+### (2) Reality Metaphor
+
+Imagine a large office building equipped with physical wall light switches controlling hallway lights.
+
+Writing imperative Vanilla JS `addEventListener` code is like sending an electrician into the building with a spool of copper wire every morning to manually twist copper wires onto the light switches, and hoping the electrician remembers to snip the wires every evening before leaving. If the electrician forgets, tangled live wires accumulate behind walls.
+
+**`v-on`** is like installing pre-wired smart toggle switches. The electrical connections are specified directly on the switch blueprint (`@click="toggleLight"`). When a switch is unmounted or moved during office renovations, the smart wiring disconnects automatically—no manual wire snipping or memory leaks required.
+
+### (3) Vue Code Examples
+
+#### Short Snippet
+```vue
 <script setup>
 import { ref } from 'vue'
+
 const count = ref(0)
-function submitForm() { /* ... */ }
+
+function increment() {
+  count.value++
+}
 </script>
 
 <template>
-  <!-- Long way -->
-  <button v-on:click="count++">Increment</button>
-
-  <!-- Modern shorthand (Use this!) -->
-  <button @click="count++">Increment</button>
-
-  <!-- Listening to form submissions -->
-  <form @submit="submitForm"></form>
+  <!-- v-on shorthand '@' binds click events to script setup functions -->
+  <button @click="increment">Clicked {{ count }} times</button>
 </template>
 ```
 
-### (3) Event Modifiers
-Normally, if you want to stop a form from refreshing the page, you have to write `event.preventDefault()` inside your JavaScript function. 
-Vue provides **Modifiers** to handle this in the template, keeping your JavaScript functions clean and purely focused on data.
-- `@submit.prevent="submitForm"` (Calls `event.preventDefault()`)
-- `@click.stop="doSomething"` (Calls `event.stopPropagation()`)
-- `@keyup.enter="login"` (Only triggers when the 'Enter' key is released!)
+#### Fuller Example
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const logMessages = ref([])
+
+function logEvent(name, event) {
+  logMessages.value.unshift({
+    id: Date.now(),
+    text: `${name} triggered at X:${event.clientX}, Y:${event.clientY}`
+  })
+}
+
+function handleKeySubmit(event) {
+  logMessages.value.unshift({
+    id: Date.now(),
+    text: `Enter key pressed in input: ${event.target.value}`
+  })
+}
+</script>
+
+<template>
+  <div class="event-demo">
+    <h3>Interactive Event Monitor</h3>
+
+    <!-- 1. Passing native $event to inline methods -->
+    <button @click="logEvent('Primary Button', $event)">
+      Click Me (Passes $event)
+    </button>
+
+    <!-- 2. Listening to keyup events -->
+    <input 
+      type="text" 
+      placeholder="Type and press Enter..." 
+      @keyup.enter="handleKeySubmit" 
+    />
+
+    <!-- 3. Mouse move tracking -->
+    <div class="mouse-box" @mousemove="logEvent('Mouse Box', $event)">
+      Hover Mouse Over Me
+    </div>
+
+    <h4>Log History:</h4>
+    <ul>
+      <li v-for="log in logMessages" :key="log.id">{{ log.text }}</li>
+    </ul>
+  </div>
+</template>
+
+<style scoped>
+.event-demo { display: flex; flex-direction: column; gap: 10px; max-width: 500px; }
+.mouse-box { padding: 20px; background: #e6f7ff; border: 1px dashed #1890ff; text-align: center; }
+</style>
+```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Calling the function instead of passing it
+### Mistake 1: Invoking methods instantly in template bindings (`@click="handleClick()"` vs `@click="handleClick"`)
 
-**The mistake:** A developer writes `<button @click="submitData()">Submit</button>` instead of `<button @click="submitData">Submit</button>`.
+**The mistake:** Writing `@click="deleteUser()"` when `deleteUser` expects an event parameter without arguments.
 
-**Why it's wrong (sometimes):** If you include the parentheses `()`, you are explicitly evaluating that function immediately in the template. If `submitData` doesn't take arguments, it's safer and cleaner to just pass the *reference* to the function without parentheses.
-**Golden Rule:** If you need to pass a custom argument (e.g., `@click="deleteUser(user.id)"`), use parentheses. If you don't need custom arguments, just pass the function name (`@click="submitData"`), and Vue will automatically pass the native DOM event object to it.
-
----
-
-### Mistake 2: Invoking Functions Instantly in Template Event Bindings (`@click="handleClick()"` vs `@click="handleClick"`)
-
-**The mistake:** Writing `@click="deleteUser(id)"` when `deleteUser` expects an event object parameter without arguments.
-
-**Why it's wrong:** Writing `@click="handler()"` executes inline function calls. If you pass arguments, pass explicit parameters or use parameterless method reference `@click="handler"` to automatically receive the DOM event.
+**Why it's wrong:** Writing `@click="handler()"` with empty parentheses executes inline function calls, discarding Vue's automatic DOM event parameter passing. Use parameterless method reference `@click="handler"` to receive native `$event` automatically.
 
 *Incorrect:*
 ```vue
-<button @click="submitForm()">Submit</button> <!-- Ignores native $event parameter -->
+<!-- Discards native $event parameter -->
+<button @click="submitForm()">Submit</button>
 ```
 
 *Fix:*
 ```vue
-<button @click="submitForm">Submit</button> <!-- Passes native event automatically -->
-<!-- Or inline event passing: -->
-<button @click="submitForm($event, id)">Submit</button>
+<!-- Passes native DOM $event automatically -->
+<button @click="submitForm">Submit</button>
+<!-- Or explicitly pass $event when custom arguments are needed: -->
+<button @click="submitForm($event, userId)">Submit</button>
 ```
 
 ---
 
-### Mistake 3: Forgetting `.prevent` Modifier on Form Submissions
+### Mistake 2: Forgetting `.prevent` modifier on form submit buttons
 
-**The mistake:** Binding `@click="saveData"` to a `<button type="submit">` inside a `<form>`.
+**The mistake:** Binding `@click="saveData"` to `<button type="submit">` inside a `<form>` without intercepting submission.
 
-**Why it's wrong:** Clicking a submit button inside a form triggers browser default form page reloads. Use `<form @submit.prevent="saveData">` to intercept submission cleanly.
+**Why it's wrong:** Clicking a submit button inside an HTML form triggers native browser page reloads, destroying Vue single-page application state. Use `<form @submit.prevent="saveData">`.
 
 *Incorrect:*
 ```vue
 <form>
-  <button type="submit" @click="saveData">Save</button> <!-- ❌ Triggers browser page reload! -->
+  <button type="submit" @click="saveData">Save</button> <!-- ❌ Triggers page reload! -->
 </form>
 ```
 
@@ -109,69 +163,218 @@ Vue provides **Modifiers** to handle this in the template, keeping your JavaScri
 </form>
 ```
 
+---
+
+### Mistake 3: Object syntax `@click` instead of array or individual listener declarations
+
+**The mistake:** Writing `@click="{ handleA, handleB }"` expecting multiple functions to run sequentially.
+
+**Why it's wrong:** `v-on` object syntax is reserved for binding multiple different event types at once (`v-on="{ click: handleA, mouseover: handleB }"`). To execute multiple statements on a single event, separate statements with semicolons or call a wrapper method.
+
+*Incorrect:*
+```vue
+<button @click="{ step1(), step2() }">Run Steps</button> <!-- ❌ Invalid syntax! -->
+```
+
+*Fix:*
+```vue
+<button @click="step1(); step2()">Run Steps</button> <!-- Valid inline statements -->
+```
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Magic Key
+### Exercise 1: IoT Device Control Command Listener (IoT)
 
-**Problem:** You have an input field for a search bar. You want to trigger the `search()` function *only* when the user presses the 'Escape' key. How do you write this in Vue?
+**Scenario:** An IoT telemetry terminal allows operators to send control commands. You need to bind click listeners for buttons, intercept form submission reloads, and capture keydown shortcuts.
 
-**Expected output:**
+**Requirements:**
+1. Bind form submission using `@submit.prevent="sendTelemetryCommand"`.
+2. Bind button click using `@click="emergencyShutdown"`.
+3. Capture `Ctrl + S` keydown shortcut using `@keydown.ctrl.s.prevent="saveLogs"`.
+
 > [!check]- Answer
-> ```html
-> <input @keyup.escape="search" />
+>
+> #### Implementation
+> ```vue
+> <script setup>
+> import { ref } from 'vue'
+> 
+> const commandInput = ref('')
+> const terminalLogs = ref([])
+> 
+> function sendTelemetryCommand() {
+>   terminalLogs.value.unshift(`Executed: ${commandInput.value}`)
+>   commandInput.value = ''
+> }
+> 
+> function emergencyShutdown() {
+>   terminalLogs.value.unshift('EMERGENCY SHUTDOWN INITIATED')
+> }
+> 
+> function saveLogs() {
+>   terminalLogs.value.unshift('Terminal logs saved to disk.')
+> }
+> </script>
+> 
+> <template>
+>   <div class="terminal" tabIndex="0" @keydown.ctrl.s.prevent="saveLogs">
+>     <!-- 1. @submit.prevent -->
+>     <form @submit.prevent="sendTelemetryCommand">
+>       <input v-model="commandInput" placeholder="Enter CLI command..." />
+>       <button type="submit">Send</button>
+>     </form>
+> 
+>     <!-- 2. @click -->
+>     <button class="danger" @click="emergencyShutdown">
+>       Emergency Shutdown
+>     </button>
+> 
+>     <p>Press Ctrl+S to save logs.</p>
+>     <ul>
+>       <li v-for="(log, i) in terminalLogs" :key="i">{{ log }}</li>
+>     </ul>
+>   </div>
+> </template>
+> 
+> <style scoped>
+> .danger { background: #ff4d4f; color: white; margin-top: 10px; }
+> </style>
 > ```
-> - Use `v-on` (the `@` shorthand), listen to `keyup`, and apply a modifier for the specific key!
+>
+> #### Technical Explanation
+> 1. **Concept**: `@submit.prevent` intercepts standard HTML browser form submissions.
+> 2. **Concept**: `@click` listens for mouse button press events on DOM elements.
+> 3. **Concept**: Modifier chain `@keydown.ctrl.s.prevent` intercepts custom browser keyboard shortcuts.
+> 4. **Concept**: Vue automatically cleans up DOM event listeners when components unmount.
 > 
 ---
 
-### Exercise 2: Inline Parameter and Event Passing
+### Exercise 2: Financial Trade Form Inline Parameter Passing (Finance)
 
-**Problem:** Write `@click` template binding passing user ID `42` AND the native DOM event `$event` to method `removeUser(id, event)`.
+**Scenario:** A stock trading application displays order rows. Traders can execute trades by clicking "Buy" or "Sell" buttons, which must pass the stock symbol, order direction, and native mouse event to the handler.
 
-**Expected output:**
+**Requirements:**
+1. Bind `@click` handler passing parameters `'AAPL'`, `'BUY'`, and `$event`.
+2. Read `clientX` and `clientY` from `$event` parameter.
+
 > [!check]- Answer
-> ```html
-> <button @click="removeUser(42, $event)">Delete</button>
-> ```
-> - Use `$event` special keyword to pass native DOM event in inline handlers.
+>
+> #### Implementation
+> ```vue
+> <script setup>
+> import { ref } from 'vue'
 > 
-> ```html
-> <button @click="removeUser(42, $event)">Delete User</button>
+> const statusMessage = ref('')
+> 
+> function executeOrder(symbol, side, event) {
+>   statusMessage.value = `Order Executed: ${side} ${symbol} at Click Coordinates (${event.clientX}, ${event.clientY})`
+> }
+> </script>
+> 
+> <template>
+>   <div class="trader">
+>     <h3>Quick Order Execution</h3>
+>     
+>     <!-- Inline parameters + native $event -->
+>     <button @click="executeOrder('AAPL', 'BUY', $event)">
+>       Buy AAPL
+>     </button>
+>     
+>     <button @click="executeOrder('AAPL', 'SELL', $event)">
+>       Sell AAPL
+>     </button>
+> 
+>     <p>{{ statusMessage }}</p>
+>   </div>
+> </template>
 > ```
+>
+> #### Technical Explanation
+> 1. **Concept**: `$event` is a special Vue template variable representing the native DOM event object.
+> 2. **Concept**: Passing `$event` alongside custom parameters permits reading event coordinates and targets.
+> 3. **Concept**: Inline function calls allow passing dynamic argument primitives cleanly.
+> 4. **Concept**: Methods operate declaratively based on template arguments.
 > 
 ---
 
-### Exercise 3: Keyboard Event Modifier Chaining
+### Exercise 3: Real-Time Network Packet Inspection Mouse Drag Events (Networking)
 
-**Problem:** Write template binding triggering `saveDoc()` ONLY when user presses `Ctrl + S` (`@keydown.ctrl.s.prevent`).
+**Scenario:** A network packet analyzer allows expanding packet row height via dragging a splitter handle using `mousedown`, `mousemove`, and `mouseup` events.
 
-**Expected output:**
+**Requirements:**
+1. Attach `mousedown` listener to splitter handle.
+2. Bind `mousemove` and `mouseup` events cleanly.
+
 > [!check]- Answer
-> ```html
-> <input @keydown.ctrl.s.prevent="saveDoc" />
-> ```
-> - System modifier keys: `.ctrl`, `.alt`, `.shift`, `.meta`.
+>
+> #### Implementation
+> ```vue
+> <script setup>
+> import { ref } from 'vue'
 > 
-> ```html
-> <div @keydown.ctrl.s.prevent="saveDoc">Save Document</div>
-> ```
+> const panelHeight = ref(150)
+> let isDragging = false
 > 
+> function startDrag() {
+>   isDragging = true
+>   window.addEventListener('mousemove', onDrag)
+>   window.addEventListener('mouseup', stopDrag)
+> }
+> 
+> function onDrag(e) {
+>   if (isDragging) {
+>     panelHeight.value = Math.max(50, e.clientY - 100)
+>   }
+> }
+> 
+> function stopDrag() {
+>   isDragging = false
+>   window.removeEventListener('mousemove', onDrag)
+>   window.removeEventListener('mouseup', stopDrag)
+> }
+> </script>
+> 
+> <template>
+>   <div class="analyzer">
+>     <div class="packet-panel" :style="{ height: panelHeight + 'px' }">
+>       Packet Inspection Log Window
+>     </div>
+>     <!-- v-on:mousedown starter -->
+>     <div class="splitter-bar" @mousedown="startDrag">
+>       === Drag to Resize ===
+>     </div>
+>   </div>
+> </template>
+> 
+> <style scoped>
+> .packet-panel { background: #1f1f1f; color: #52c41a; padding: 10px; }
+> .splitter-bar { background: #ccc; cursor: ns-resize; text-align: center; font-size: 12px; }
+> </style>
+> ```
+>
+> #### Technical Explanation
+> 1. **Concept**: `@mousedown` initiates drag sequences declaratively from the template element.
+> 2. **Concept**: Window listeners added during drag are cleaned up in `stopDrag()` to prevent memory leaks.
+> 3. **Concept**: Dynamic style binding `:style` updates element dimensions based on reactive `panelHeight`.
+> 4. **Concept**: Declarative directives integrate smoothly with low-level browser interaction APIs.
 > 
 ---
 
-## 7. Related Terms
-- [`v-bind`](v_bind.md) — The other half of the coin (Binding attributes vs listening to events).
-- [Emitting Events (`defineEmits`)](../level_04/emit.md) — How you use `@` to listen to custom events emitted by child components.
-- [Event, Key & Form Modifiers](modifiers.md) — The full modifier system for events.
-- [`v-model`](v_model.md) — Related concept: `v-model`.
+## 6. Related Terms
+
+- [`v-bind`](v_bind.md) — Attribute binding (the other half of template directives).
+- [Emitting Events (`defineEmits`)](../level_04/emit.md) — Custom child component event triggers.
+- [Event, Key & Form Modifiers](modifiers.md) — Directive modifier suffixes.
+- [`v-model`](v_model.md) — Two-way data binding.
 
 ---
 
-## 8. Key Takeaways
-- **`v-on`** is used to listen to DOM events (clicks, inputs, form submissions).
-- You should always use the shorthand syntax: the **`@`** symbol.
-- Vue automatically manages adding and removing the underlying `addEventListener` logic to prevent memory leaks.
-- Use **Event Modifiers** (like `.prevent`, `.stop`, or `.enter`) to handle standard DOM event logic in the template, keeping your JavaScript functions pure.
+## 7. Key Takeaways
+
+- **`v-on`** attaches event listeners to DOM elements or custom component events.
+- Always use the standard shorthand syntax: the **`@`** symbol (`@click`, `@submit`).
+- Vue automatically manages `addEventListener` and `removeEventListener` calls to prevent memory leaks.
+- Pass `$event` explicitly when calling inline methods that require both custom arguments and the native DOM event.
+- Use event modifiers (`.prevent`, `.stop`, `.enter`) to keep JavaScript method logic clean and pure.

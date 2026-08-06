@@ -2,7 +2,7 @@
   "$schema": "../../_meta/relationships.schema.json",
   "module": "06-react",
   "version": 1,
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-06",
   "terms": {
     "components": {
       "level": 1,
@@ -12,34 +12,34 @@
         {
           "term": "jsx",
           "module": "06-react",
-          "description": "What components return."
+          "description": "What components return to define UI structure."
         }
       ],
       "related": [
         {
           "term": "render_purity",
           "module": "06-react",
-          "description": "The rule that components must be pure functions."
+          "description": "The fundamental rule that components must be pure functions of their props and state."
         },
         {
           "term": "fragments",
           "module": "06-react",
-          "description": "Grouping sibling elements without adding wrapper nodes."
+          "description": "Tool for grouping sibling elements inside a component without adding wrapper DOM nodes."
         },
         {
           "term": "props",
           "module": "06-react",
-          "description": "How you pass data into these components to customize them."
+          "description": "How configuration data and callbacks are passed into components."
         },
         {
           "term": "jsx",
           "module": "06-react",
-          "description": "What the component returns."
+          "description": "The syntax extension components return to define UI structure."
         },
         {
           "term": "custom_hooks",
           "module": "06-react",
-          "description": "Related concept: Custom Hooks."
+          "description": "Reusable stateful logic extracted from functional components."
         },
         {
           "term": "rules_of_hooks",
@@ -65,6 +65,31 @@
           "module": "06-react",
           "term": "error_boundaries",
           "description": "Related concept: Error Boundaries."
+        },
+        {
+          "term": "forward_ref",
+          "module": "06-react",
+          "description": "Related concept: `forwardRef` & `useImperativeHandle`."
+        },
+        {
+          "term": "use_id",
+          "module": "06-react",
+          "description": "Related concept: `useId` Hook."
+        },
+        {
+          "term": "composition_inheritance",
+          "module": "06-react",
+          "description": "Related concept: Composition over Inheritance."
+        },
+        {
+          "term": "react_native",
+          "module": "06-react",
+          "description": "Related concept: React Native."
+        },
+        {
+          "term": "declarative_programming",
+          "module": "06-react",
+          "description": "Related concept: Declarative Programming."
         }
       ]
     },
@@ -77,17 +102,22 @@
         {
           "term": "state",
           "module": "06-react",
-          "description": "The data that powers Declarative UIs."
+          "description": "The dynamic data powering declarative UI transformations."
         },
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "The technology React uses to turn your declarative orders into imperative DOM commands."
+          "description": "The abstraction React uses to convert declarative JSX into real DOM commands."
         },
         {
           "term": "use_ref",
           "module": "06-react",
-          "description": "Related concept: `useRef` Hook."
+          "description": "Escape hatch hook used when imperative DOM access is strictly necessary."
+        },
+        {
+          "term": "reconciliation",
+          "module": "06-react",
+          "description": "The diffing process that computes minimal real DOM updates from declarative trees."
         },
         {
           "term": "framer_motion",
@@ -98,6 +128,36 @@
           "term": "react_native",
           "module": "06-react",
           "description": "Related concept: React Native."
+        },
+        {
+          "term": "jsx",
+          "module": "06-react",
+          "description": "Related concept: JSX (JavaScript XML)."
+        },
+        {
+          "term": "conditional_rendering",
+          "module": "06-react",
+          "description": "Related concept: Conditional Rendering."
+        },
+        {
+          "term": "synthetic_events",
+          "module": "06-react",
+          "description": "Related concept: Synthetic Events."
+        },
+        {
+          "term": "uncontrolled_components",
+          "module": "06-react",
+          "description": "Related concept: Uncontrolled Components."
+        },
+        {
+          "term": "error_boundaries",
+          "module": "06-react",
+          "description": "Related concept: Error Boundaries."
+        },
+        {
+          "term": "components",
+          "module": "06-react",
+          "description": "The visual building blocks declared to represent UI states."
         }
       ]
     },
@@ -109,34 +169,39 @@
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "The visual tree structure represented by Fiber nodes."
+          "description": "The visual tree structure represented internally by Fiber nodes."
         },
         {
           "term": "reconciliation",
           "module": "06-react",
-          "description": "The diffing process scheduled by the Fiber engine."
+          "description": "The diffing process scheduled and executed by the Fiber engine."
         }
       ],
       "related": [
         {
           "term": "reconciliation",
           "module": "06-react",
-          "description": "The diffing process executed by Fiber nodes."
-        },
-        {
-          "term": "concurrent_rendering",
-          "module": "06-react",
-          "description": "The feature set made possible by Fiber's interruptible pipeline."
-        },
-        {
-          "term": "suspense",
-          "module": "06-react",
-          "description": "Pausing component tree rendering while waiting for data."
+          "description": "The diffing process scheduled and executed by the Fiber engine."
         },
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "Related concept: Virtual DOM."
+          "description": "The in-memory tree nodes represented by Fiber architecture structures."
+        },
+        {
+          "term": "concurrent_rendering",
+          "module": "06-react",
+          "description": "Advanced feature set built on top of Fiber's interruptible engine."
+        },
+        {
+          "term": "suspense",
+          "module": "06-react",
+          "description": "Async rendering feature that pauses component subtrees until data dependencies resolve."
+        },
+        {
+          "term": "automatic_batching",
+          "module": "06-react",
+          "description": "Related concept: Automatic Batching."
         }
       ]
     },
@@ -148,34 +213,34 @@
         {
           "term": "jsx",
           "module": "06-react",
-          "description": "The XML-like syntax that compiles to elements."
+          "description": "The syntax extension that compiles component JSX tags down to JavaScript function calls."
         },
         {
           "term": "components",
           "module": "06-react",
-          "description": "React's reusable building blocks."
+          "description": "React's reusable building block units."
         }
       ],
       "related": [
         {
+          "term": "jsx",
+          "module": "06-react",
+          "description": "The syntax extension compiled down to element creation functions requiring single roots."
+        },
+        {
+          "term": "components",
+          "module": "06-react",
+          "description": "Reusable component structures returning JSX trees."
+        },
+        {
           "term": "lists_and_keys",
           "module": "06-react",
-          "description": "Managing render loops using key tags."
+          "description": "Rules for assigning key attributes when mapping array elements in React."
         },
         {
           "term": "children_prop",
           "module": "06-react",
           "description": "Passing elements down component nesting lines."
-        },
-        {
-          "term": "components",
-          "module": "06-react",
-          "description": "Related concept: Components."
-        },
-        {
-          "term": "jsx",
-          "module": "06-react",
-          "description": "Related concept: JSX (JavaScript XML)."
         }
       ]
     },
@@ -187,24 +252,29 @@
         {
           "term": "declarative_programming",
           "module": "06-react",
-          "description": ""
+          "description": "The programming paradigm underlying JSX template declarations."
         }
       ],
       "related": [
         {
+          "term": "declarative_programming",
+          "module": "06-react",
+          "description": "The paradigm underlying JSX template declarations."
+        },
+        {
           "term": "fragments",
           "module": "06-react",
-          "description": "Wrapping adjacent JSX elements without extra DOM wrapper nodes."
+          "description": "Tool for wrapping adjacent JSX elements without adding wrapper DOM nodes."
         },
         {
           "term": "components",
           "module": "06-react",
-          "description": "What you build using JSX."
+          "description": "Modular functional units returning JSX trees."
         },
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "What those `React.createElement` calls actually produce."
+          "description": "The object tree generated by compiled `React.createElement` calls."
         },
         {
           "term": "conditional_rendering",
@@ -220,6 +290,11 @@
           "module": "06-react",
           "term": "styled_components",
           "description": "Related concept: Styled Components / Emotion (CSS-in-JS)."
+        },
+        {
+          "term": "lists_and_keys",
+          "module": "06-react",
+          "description": "Related concept: Lists & Keys."
         }
       ]
     },
@@ -231,29 +306,29 @@
         {
           "term": "components",
           "module": "06-react",
-          "description": "You pass props into components."
+          "description": "The visual functional units that receive props as function arguments."
         }
       ],
       "related": [
         {
           "term": "render_purity",
           "module": "06-react",
-          "description": "Why props must remain read-only snapshots during render."
+          "description": "The rule explaining why props must remain read-only snapshots during render."
         },
         {
           "term": "state",
           "module": "06-react",
-          "description": "Unlike Props (which are read-only and passed down), State is data that the component owns and can mutate."
+          "description": "Unlike Props (passed down read-only), State is internal component data that mutates to trigger renders."
         },
         {
           "term": "unidirectional_flow",
           "module": "06-react",
-          "description": "The rule that Props only go down, never up."
+          "description": "The architectural rule specifying that props only flow top-down."
         },
         {
           "term": "components",
           "module": "06-react",
-          "description": "Related concept: Components."
+          "description": "Reusable functional units receiving props."
         },
         {
           "term": "typescript_react",
@@ -264,6 +339,21 @@
           "module": "06-react",
           "term": "lifting_state_up",
           "description": "Related concept: Lifting State Up."
+        },
+        {
+          "term": "children_prop",
+          "module": "06-react",
+          "description": "Related concept: Children Prop."
+        },
+        {
+          "term": "render_props",
+          "module": "06-react",
+          "description": "Related concept: Render Props."
+        },
+        {
+          "term": "styled_components",
+          "module": "06-react",
+          "description": "Related concept: Styled Components / Emotion (CSS-in-JS)."
         }
       ]
     },
@@ -275,10 +365,15 @@
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "The in-memory tree structures compared by this algorithm."
+          "description": "The in-memory tree structures compared by the reconciliation algorithm."
         }
       ],
       "related": [
+        {
+          "term": "virtual_dom",
+          "module": "06-react",
+          "description": "The in-memory tree snapshots compared during reconciliation."
+        },
         {
           "term": "fiber_architecture",
           "module": "06-react",
@@ -287,17 +382,17 @@
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "The process that generates the Virtual DOM tree for diffing."
+          "description": "The process that evaluates components to generate new Virtual DOM trees."
         },
         {
           "term": "lists_and_keys",
           "module": "06-react",
-          "description": "The developer control hook for reconciliation."
+          "description": "Developer rules for providing stable keys to list reconciliation."
         },
         {
-          "term": "virtual_dom",
+          "term": "declarative_programming",
           "module": "06-react",
-          "description": "Related concept: Virtual DOM."
+          "description": "Related concept: Declarative Programming."
         }
       ]
     },
@@ -309,44 +404,49 @@
         {
           "term": "components",
           "module": "06-react",
-          "description": "The functional units that must remain pure."
+          "description": "The functional units that must remain pure during render."
         },
         {
           "term": "props",
           "module": "06-react",
-          "description": "The read-only inputs passed to components."
+          "description": "The read-only input parameters passed to components."
         }
       ],
       "related": [
         {
-          "term": "side_effects",
-          "module": "06-react",
-          "description": "The operations that must be isolated from render execution."
-        },
-        {
-          "term": "strict_mode",
-          "module": "06-react",
-          "description": "A React utility that runs components twice in development to catch purity bugs."
-        },
-        {
-          "term": "use_effect",
-          "module": "06-react",
-          "description": "The React hook used to execute side effects safely."
-        },
-        {
           "term": "components",
           "module": "06-react",
-          "description": "Related concept: Components."
+          "description": "The functional units required to comply with render purity contracts."
         },
         {
           "term": "props",
           "module": "06-react",
-          "description": "Related concept: Props (Properties)."
+          "description": "Read-only input parameters passed into pure component functions."
+        },
+        {
+          "term": "side_effects",
+          "module": "06-react",
+          "description": "Operations (fetching, subscriptions) that must be isolated from render execution."
+        },
+        {
+          "term": "use_effect",
+          "module": "06-react",
+          "description": "React hook used to execute side effects safely outside render passes."
+        },
+        {
+          "term": "strict_mode",
+          "module": "06-react",
+          "description": "Development tool that double-invokes renders to catch purity violations."
         },
         {
           "term": "derived_state",
           "module": "06-react",
           "description": "Related concept: Derived State."
+        },
+        {
+          "term": "synthetic_events",
+          "module": "06-react",
+          "description": "Related concept: Synthetic Events."
         }
       ]
     },
@@ -358,29 +458,29 @@
         {
           "term": "jsx",
           "module": "06-react",
-          "description": "The syntax that creates the Virtual DOM nodes."
+          "description": "The syntax compiled into element creation calls that build Virtual DOM trees."
         }
       ],
       "related": [
         {
+          "term": "jsx",
+          "module": "06-react",
+          "description": "The syntax extension compiled into `React.createElement` Virtual DOM nodes."
+        },
+        {
           "term": "reconciliation",
           "module": "06-react",
-          "description": "The diffing process comparing Virtual DOM states."
+          "description": "The diffing algorithm comparing Virtual DOM trees."
         },
         {
           "term": "fiber_architecture",
           "module": "06-react",
-          "description": "The engine driving the rendering cycles."
+          "description": "The unit-of-work engine managing Virtual DOM tree traversal."
         },
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "The process of creating the new Virtual DOM tree."
-        },
-        {
-          "term": "jsx",
-          "module": "06-react",
-          "description": "The syntax used to write the blueprints."
+          "description": "The execution cycle generating new Virtual DOM trees."
         },
         {
           "term": "declarative_programming",
@@ -427,29 +527,39 @@
         {
           "term": "state",
           "module": "06-react",
-          "description": "The variables being modified."
+          "description": "The state variables being updated."
         },
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "The UI update cycle triggered by state changes."
+          "description": "The component re-evaluation cycle triggered by state updates."
         },
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "The hook used to trigger state updates."
+          "description": "The hook used to declare and update state variables."
         }
       ],
       "related": [
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "The UI update cycle triggered by state changes."
+          "description": "The UI update cycle triggered when batched state updates execute."
+        },
+        {
+          "term": "state",
+          "module": "06-react",
+          "description": "Component memory variables managed by batching update queues."
         },
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "The hook used to define and trigger state updates."
+          "description": "The primary hook used to queue batched state updates."
+        },
+        {
+          "term": "fiber_architecture",
+          "module": "06-react",
+          "description": "The unit-of-work engine that schedules batched rendering queues."
         }
       ]
     },
@@ -461,29 +571,34 @@
         {
           "term": "state",
           "module": "06-react",
-          "description": "The source variables from which data is derived."
+          "description": "The primary source state variables from which derived values are calculated."
         },
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "The render execution loop that recalculates variables."
+          "description": "The component execution loop that re-calculates local variables on every render pass."
         }
       ],
       "related": [
         {
-          "term": "use_memo",
+          "term": "state",
           "module": "06-react",
-          "description": "Optimization hook used to cache heavy derived state calculations."
+          "description": "Primary source data variables managed in component memory."
+        },
+        {
+          "term": "re_rendering",
+          "module": "06-react",
+          "description": "The component re-evaluation loop where derived variables update."
         },
         {
           "term": "render_purity",
           "module": "06-react",
-          "description": "The rule that calculations during render must remain self-contained."
+          "description": "The functional rule requiring derived calculations to remain self-contained."
         },
         {
+          "term": "use_memo",
           "module": "06-react",
-          "term": "state",
-          "description": "Related concept: State."
+          "description": "Optimization hook used to cache expensive derived state calculations."
         }
       ]
     },
@@ -495,29 +610,44 @@
         {
           "term": "state",
           "module": "06-react",
-          "description": "This rule strictly applies to how you update React State."
+          "description": "The memory storage mechanism governed by immutability rules."
         },
         {
-          "module": "06-react",
           "term": "virtual_dom",
-          "description": "Virtual DOM reconciliation and state immutability."
+          "module": "06-react",
+          "description": "Virtual DOM diffing relies on shallow referential equality checks enabled by immutability."
         }
       ],
       "related": [
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "The function that requires you to follow this rule."
+          "description": "The hook requiring immutable update calls to trigger re-renders."
         },
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "What fails to happen if you break the rule of Immutability."
+          "description": "What fails to execute if immutability rules are violated."
+        },
+        {
+          "term": "state",
+          "module": "06-react",
+          "description": "Component memory variables governed by immutability principles."
         },
         {
           "term": "dependency_array",
           "module": "06-react",
-          "description": "Related concept: Dependency Array."
+          "description": "Hook dependency comparison arrays relying on referential equality."
+        },
+        {
+          "term": "referential_equality",
+          "module": "06-react",
+          "description": "Related concept: Referential Equality."
+        },
+        {
+          "term": "use_reducer",
+          "module": "06-react",
+          "description": "Related concept: `useReducer` Hook."
         }
       ]
     },
@@ -529,34 +659,44 @@
         {
           "term": "state",
           "module": "06-react",
-          "description": "The dynamic data being shared."
+          "description": "The dynamic data needing to be shared between components."
         },
         {
           "term": "props",
           "module": "06-react",
-          "description": "The vehicle used to pass state and setters down."
+          "description": "The mechanism used to pass state values down and callback setters down/up."
         },
         {
           "term": "unidirectional_flow",
           "module": "06-react",
-          "description": "The top-down data flow rules."
+          "description": "The top-down data architecture enforcing state sharing boundaries."
         }
       ],
       "related": [
         {
+          "term": "state",
+          "module": "06-react",
+          "description": "The dynamic data lifted up to common parent components."
+        },
+        {
+          "term": "props",
+          "module": "06-react",
+          "description": "The vehicle carrying lifted state values down and callbacks up."
+        },
+        {
+          "term": "unidirectional_flow",
+          "module": "06-react",
+          "description": "The data architecture requiring state to be lifted up for sibling sharing."
+        },
+        {
           "term": "prop_drilling",
           "module": "06-react",
-          "description": "The code maintainability cost of lifting state too high."
+          "description": "The maintainability issue caused by lifting state too high."
         },
         {
           "term": "context_api",
           "module": "06-react",
           "description": "The alternative state sharing mechanism for deeply nested trees."
-        },
-        {
-          "module": "06-react",
-          "term": "props",
-          "description": "Passing state down via props."
         },
         {
           "module": "06-react",
@@ -573,24 +713,34 @@
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "Re-rendering is the process of generating a new Virtual DOM."
+          "description": "Re-rendering is the process of building new Virtual DOM trees in RAM."
+        },
+        {
+          "term": "state",
+          "module": "06-react",
+          "description": "State mutations serve as the primary trigger for component re-renders."
+        }
+      ],
+      "related": [
+        {
+          "term": "virtual_dom",
+          "module": "06-react",
+          "description": "What React constructs during a component re-render pass."
         },
         {
           "term": "state",
           "module": "06-react",
           "description": "Changing state is the primary trigger for a re-render."
-        }
-      ],
-      "related": [
+        },
+        {
+          "term": "automatic_batching",
+          "module": "06-react",
+          "description": "Performance mechanic grouping state setters into a single re-render pass."
+        },
         {
           "term": "react_memo",
           "module": "06-react",
-          "description": "How you stop the waterfall effect and prevent unnecessary re-renders."
-        },
-        {
-          "term": "virtual_dom",
-          "module": "06-react",
-          "description": "What React actually generates during a re-render."
+          "description": "Wrapper used to skip unnecessary child re-renders."
         },
         {
           "term": "reconciliation",
@@ -598,19 +748,9 @@
           "description": "Related concept: Reconciliation."
         },
         {
-          "term": "automatic_batching",
-          "module": "06-react",
-          "description": "Related concept: Automatic Batching."
-        },
-        {
           "term": "immutability",
           "module": "06-react",
           "description": "Related concept: Immutability."
-        },
-        {
-          "term": "state",
-          "module": "06-react",
-          "description": "Related concept: State."
         },
         {
           "term": "react_devtools",
@@ -621,6 +761,16 @@
           "module": "06-react",
           "term": "use_state",
           "description": "Related concept: `useState` Hook."
+        },
+        {
+          "term": "derived_state",
+          "module": "06-react",
+          "description": "Related concept: Derived State."
+        },
+        {
+          "term": "component_lifecycle",
+          "module": "06-react",
+          "description": "Related concept: Component Lifecycle."
         }
       ]
     },
@@ -632,24 +782,34 @@
         {
           "term": "components",
           "module": "06-react",
-          "description": "State lives inside components."
+          "description": "The visual functional units that hold internal state memory."
         },
         {
           "term": "props",
           "module": "06-react",
-          "description": "The read-only counterpart to State."
+          "description": "The external read-only counterpart to internal state."
         }
       ],
       "related": [
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "How you actually create State in modern React."
+          "description": "The official React hook used to declare and update state memory."
+        },
+        {
+          "term": "props",
+          "module": "06-react",
+          "description": "Read-only counterpart to internal state memory."
         },
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "What happens immediately after State changes."
+          "description": "The component execution phase triggered when state updates."
+        },
+        {
+          "term": "derived_state",
+          "module": "06-react",
+          "description": "Values calculated dynamically on-the-fly from state memory."
         },
         {
           "term": "declarative_programming",
@@ -657,19 +817,29 @@
           "description": "Related concept: Declarative Programming."
         },
         {
-          "term": "props",
-          "module": "06-react",
-          "description": "Related concept: Props (Properties)."
-        },
-        {
-          "module": "06-react",
-          "term": "derived_state",
-          "description": "Derived state."
-        },
-        {
           "module": "06-react",
           "term": "unidirectional_flow",
           "description": "Unidirectional data flow."
+        },
+        {
+          "term": "automatic_batching",
+          "module": "06-react",
+          "description": "Related concept: Automatic Batching."
+        },
+        {
+          "term": "immutability",
+          "module": "06-react",
+          "description": "Related concept: Immutability."
+        },
+        {
+          "term": "lifting_state_up",
+          "module": "06-react",
+          "description": "Related concept: Lifting State Up."
+        },
+        {
+          "term": "conditional_rendering",
+          "module": "06-react",
+          "description": "Related concept: Conditional Rendering."
         }
       ]
     },
@@ -681,34 +851,39 @@
         {
           "term": "props",
           "module": "06-react",
-          "description": "The vehicle that carries the data down."
+          "description": "The vehicle that carries data downwards through component trees."
         },
         {
           "term": "state",
           "module": "06-react",
-          "description": "The source of the data."
+          "description": "The source of dynamic data that flows top-down."
         }
       ],
       "related": [
         {
           "term": "props",
           "module": "06-react",
-          "description": "The water flowing down the waterfall."
+          "description": "The vehicle carrying data down through unidirectional component trees."
+        },
+        {
+          "term": "state",
+          "module": "06-react",
+          "description": "The source data managed by parent components."
+        },
+        {
+          "term": "lifting_state_up",
+          "module": "06-react",
+          "description": "The pattern used to position state in the closest common parent for unidirectional flow."
+        },
+        {
+          "term": "controlled_components",
+          "module": "06-react",
+          "description": "Form inputs governed by unidirectional state and callback props."
         },
         {
           "term": "prop_drilling",
           "module": "06-react",
           "description": "The dark side of Unidirectional flow (when the waterfall is 20 components deep)."
-        },
-        {
-          "term": "controlled_components",
-          "module": "06-react",
-          "description": "Related concept: Controlled Components."
-        },
-        {
-          "module": "06-react",
-          "term": "state",
-          "description": "Related concept: State."
         }
       ]
     },
@@ -720,29 +895,34 @@
         {
           "term": "state",
           "module": "06-react",
-          "description": "You must understand what State is before you use this hook to create it."
+          "description": "The fundamental memory concept implemented by the `useState` hook."
         }
       ],
       "related": [
         {
           "term": "state",
           "module": "06-react",
-          "description": "The concept that `useState` implements."
+          "description": "The fundamental memory concept implemented by `useState`."
+        },
+        {
+          "term": "re_rendering",
+          "module": "06-react",
+          "description": "The component execution phase triggered when state setters execute."
+        },
+        {
+          "term": "automatic_batching",
+          "module": "06-react",
+          "description": "Performance mechanic grouping multiple state setter calls into a single re-render pass."
+        },
+        {
+          "term": "immutability",
+          "module": "06-react",
+          "description": "The architectural rule requiring new object references when calling `useState` setters."
         },
         {
           "term": "rules_of_hooks",
           "module": "06-react",
           "description": "Strict rules on where you are allowed to type `useState()`."
-        },
-        {
-          "term": "automatic_batching",
-          "module": "06-react",
-          "description": "Related concept: Automatic Batching."
-        },
-        {
-          "term": "immutability",
-          "module": "06-react",
-          "description": "Related concept: Immutability."
         },
         {
           "term": "data_fetching_race_conditions",
@@ -766,13 +946,18 @@
         },
         {
           "module": "06-react",
-          "term": "re_rendering",
-          "description": "Re-rendering triggered by state."
-        },
-        {
-          "module": "06-react",
           "term": "controlled_components",
           "description": "Related concept: Controlled Components."
+        },
+        {
+          "term": "custom_hooks",
+          "module": "06-react",
+          "description": "Related concept: Custom Hooks."
+        },
+        {
+          "term": "use_action_state",
+          "module": "06-react",
+          "description": "Related concept: `useActionState` Hook."
         }
       ]
     },
@@ -784,34 +969,34 @@
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "You return the cleanup function from inside `useEffect`."
+          "description": "The React hook where cleanup functions are registered and returned."
         },
         {
           "term": "component_lifecycle",
           "module": "06-react",
-          "description": "Cleanup happens during the \"Unmounting\" phase."
+          "description": "Understanding the unmounting phase and dependency update triggers."
         }
       ],
       "related": [
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "The parent of the cleanup function."
+          "description": "The core hook for managing asynchronous side effects and returning cleanup callbacks."
         },
         {
           "term": "component_lifecycle",
           "module": "06-react",
-          "description": "The Unmounting phase."
+          "description": "The rendering lifecycle phases (mounting, updating, unmounting) controlling cleanup execution."
         },
         {
           "term": "data_fetching_race_conditions",
           "module": "06-react",
-          "description": "Related concept: Data Fetching & Race Conditions."
+          "description": "Utilizing cleanup functions with boolean flags or `AbortController` to handle out-of-order network responses."
         },
         {
           "term": "side_effects",
           "module": "06-react",
-          "description": "Related concept: Side Effects."
+          "description": "External browser interactions that must be isolated and managed via cleanups."
         },
         {
           "term": "strict_mode",
@@ -828,29 +1013,49 @@
         {
           "term": "components",
           "module": "06-react",
-          "description": "What the lifecycle applies to."
+          "description": "The fundamental UI building blocks governed by lifecycle execution phases."
         },
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "The \"Updating\" phase of the lifecycle."
+          "description": "The render execution cycle representing the updating lifecycle phase."
         }
       ],
       "related": [
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "The tool used to execute code during these specific phases."
+          "description": "The hook API for executing side effects across component lifecycle phases."
         },
         {
           "term": "cleanup_functions",
           "module": "06-react",
-          "description": "Code that specifically runs during the Unmounting phase."
+          "description": "Functions returned from effects to handle unmounting teardown."
+        },
+        {
+          "term": "re_rendering",
+          "module": "06-react",
+          "description": "The component updating phase triggered by state or prop modifications."
+        },
+        {
+          "term": "side_effects",
+          "module": "06-react",
+          "description": "Operations executed during mounting or updating lifecycle phases."
         },
         {
           "module": "06-react",
           "term": "error_boundaries",
           "description": "Related concept: Error Boundaries."
+        },
+        {
+          "term": "use_layout_effect",
+          "module": "06-react",
+          "description": "Related concept: `useLayoutEffect` Hook."
+        },
+        {
+          "term": "framer_motion",
+          "module": "06-react",
+          "description": "Related concept: Framer Motion."
         }
       ]
     },
@@ -862,24 +1067,34 @@
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "The hook containing asynchronous data fetches."
+          "description": "The hook encapsulating asynchronous data fetching queries."
         },
         {
           "term": "cleanup_functions",
           "module": "06-react",
-          "description": "The function used to discard out-of-date responses."
+          "description": "The mechanism used to cancel or ignore out-of-date HTTP requests."
         }
       ],
       "related": [
         {
           "term": "cleanup_functions",
           "module": "06-react",
-          "description": "The lifecycle hooks used to execute fetch cancelations."
+          "description": "The effect return callback mechanism executing fetch cancellations."
+        },
+        {
+          "term": "use_effect",
+          "module": "06-react",
+          "description": "The parent hook encapsulating asynchronous data fetching routines."
         },
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "The state variables updated by fetch results."
+          "description": "The state primitives updated by API fetch resolutions."
+        },
+        {
+          "term": "side_effects",
+          "module": "06-react",
+          "description": "External network requests managed within React components."
         }
       ]
     },
@@ -891,34 +1106,34 @@
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "Where the Dependency Array is used."
+          "description": "The hook whose execution schedule is controlled by the dependency array."
         },
         {
           "term": "component_lifecycle",
           "module": "06-react",
-          "description": "The array directly controls the Mounting and Updating phases."
+          "description": "Understanding how updates and re-renders trigger dependency checks."
         }
       ],
       "related": [
         {
-          "term": "use_callback",
+          "term": "use_effect",
           "module": "06-react",
-          "description": "Another hook that relies heavily on the Dependency Array."
+          "description": "The hook whose timing is controlled by dependency arrays."
+        },
+        {
+          "term": "stale_closures",
+          "module": "06-react",
+          "description": "Bugs caused by omitting referenced values from dependency arrays."
         },
         {
           "term": "immutability",
           "module": "06-react",
-          "description": "Why React uses memory addresses to compare items in the dependency array."
+          "description": "The requirement for array objects to change references on updates."
         },
         {
-          "term": "use_effect",
+          "term": "use_callback",
           "module": "06-react",
-          "description": "Related concept: `useEffect` Hook."
-        },
-        {
-          "module": "06-react",
-          "term": "stale_closures",
-          "description": "Stale closure bugs."
+          "description": "Performance hook using dependency arrays to cache functions."
         }
       ]
     },
@@ -928,31 +1143,36 @@
       "display_name": "Side Effects",
       "prerequisites": [
         {
-          "term": "state",
+          "term": "render_purity",
           "module": "06-react",
-          "description": "The internal data that should NOT be modified by a side effect directly during a render."
+          "description": "The rule that rendering functions must be pure and free of side effects."
         },
         {
           "term": "declarative_programming",
           "module": "06-react",
-          "description": "Side effects are the imperative actions that must be carefully managed."
+          "description": "Isolating imperative side-effects from declarative component markup."
         }
       ],
       "related": [
         {
+          "term": "render_purity",
+          "module": "06-react",
+          "description": "The core principle forbidding side effects during render."
+        },
+        {
           "term": "use_effect",
           "module": "06-react",
-          "description": "The official tool React gives you to safely execute Side Effects."
+          "description": "The hook designed to encapsulate side effects."
         },
         {
           "term": "cleanup_functions",
           "module": "06-react",
-          "description": "How you manage Side Effects that need to be turned off."
+          "description": "Teardown callbacks for side effects."
         },
         {
-          "term": "render_purity",
+          "term": "component_lifecycle",
           "module": "06-react",
-          "description": "Related concept: Render Purity."
+          "description": "Lifecycle timing governing effect execution."
         },
         {
           "term": "strict_mode",
@@ -963,6 +1183,16 @@
           "term": "use_navigate",
           "module": "06-react",
           "description": "Related concept: `useNavigate` Hook."
+        },
+        {
+          "term": "data_fetching_race_conditions",
+          "module": "06-react",
+          "description": "Related concept: Data Fetching & Race Conditions."
+        },
+        {
+          "term": "react_query",
+          "module": "06-react",
+          "description": "Related concept: React Query (TanStack Query) / SWR."
         }
       ]
     },
@@ -974,29 +1204,39 @@
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "The hook where stale closures commonly manifest."
+          "description": "The hook where stale closure bugs frequently manifest."
         },
         {
           "term": "dependency_array",
           "module": "06-react",
-          "description": "The array used to refresh closure snapshots."
+          "description": "The watchlist mechanism used to refresh captured closure scopes."
         }
       ],
       "related": [
         {
-          "term": "rules_of_hooks",
+          "term": "dependency_array",
           "module": "06-react",
-          "description": "The guidelines ensuring dependencies match usage."
+          "description": "The watchlist mechanism used to refresh captured closure scopes."
+        },
+        {
+          "term": "use_effect",
+          "module": "06-react",
+          "description": "The hook where stale closure bugs commonly manifest."
+        },
+        {
+          "term": "use_ref",
+          "module": "06-react",
+          "description": "The mutable container hook used to bypass stale closures."
         },
         {
           "term": "use_callback",
           "module": "06-react",
-          "description": "The hook for caching callback functions, prone to stale closures."
+          "description": "Performance hook vulnerable to stale closures when dependencies are omitted."
         },
         {
+          "term": "rules_of_hooks",
           "module": "06-react",
-          "term": "dependency_array",
-          "description": "Related concept: Dependency Array."
+          "description": "The guidelines ensuring dependencies match usage."
         }
       ]
     },
@@ -1008,24 +1248,34 @@
         {
           "term": "side_effects",
           "module": "06-react",
-          "description": "The actions you execute inside this hook."
+          "description": "Understanding external operations executed outside render cycles."
         },
         {
           "term": "component_lifecycle",
           "module": "06-react",
-          "description": "When this hook actually runs."
+          "description": "Understanding the mounting, updating, and unmounting rendering phases."
         }
       ],
       "related": [
         {
           "term": "dependency_array",
           "module": "06-react",
-          "description": "The second argument of `useEffect` that controls its timing."
+          "description": "The watchlist controlling `useEffect` execution timing."
         },
         {
           "term": "cleanup_functions",
           "module": "06-react",
-          "description": "What you return from `useEffect` to handle the Unmounting phase."
+          "description": "Teardown functions returned from `useEffect`."
+        },
+        {
+          "term": "side_effects",
+          "module": "06-react",
+          "description": "External operations managed by `useEffect`."
+        },
+        {
+          "term": "use_layout_effect",
+          "module": "06-react",
+          "description": "Synchronous layout measurement sibling to `useEffect`."
         },
         {
           "term": "render_purity",
@@ -1036,16 +1286,6 @@
           "term": "component_lifecycle",
           "module": "06-react",
           "description": "Related concept: Component Lifecycle."
-        },
-        {
-          "term": "side_effects",
-          "module": "06-react",
-          "description": "Related concept: Side Effects."
-        },
-        {
-          "term": "use_layout_effect",
-          "module": "06-react",
-          "description": "Related concept: `useLayoutEffect` Hook."
         },
         {
           "term": "dynamic_segments",
@@ -1061,6 +1301,21 @@
           "module": "06-react",
           "term": "synthetic_events",
           "description": "Related concept: Synthetic Events."
+        },
+        {
+          "term": "data_fetching_race_conditions",
+          "module": "06-react",
+          "description": "Related concept: Data Fetching & Race Conditions."
+        },
+        {
+          "term": "stale_closures",
+          "module": "06-react",
+          "description": "Related concept: Stale Closures."
+        },
+        {
+          "term": "custom_hooks",
+          "module": "06-react",
+          "description": "Related concept: Custom Hooks."
         }
       ]
     },
@@ -1072,24 +1327,29 @@
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "The asynchronous counterpart to this hook."
+          "description": "The asynchronous counterpart executed post-paint."
         },
         {
           "term": "component_lifecycle",
           "module": "06-react",
-          "description": "The rendering stages where effects are scheduled."
+          "description": "Understanding render commit and paint stages."
         }
       ],
       "related": [
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "The standard asynchronous hook for side effects."
+          "description": "Asynchronous post-paint effect counterpart."
         },
         {
           "term": "use_ref",
           "module": "06-react",
-          "description": "The hook used to reference DOM nodes for layout measurement."
+          "description": "Reference hook used for measuring DOM nodes."
+        },
+        {
+          "term": "component_lifecycle",
+          "module": "06-react",
+          "description": "Render and commit execution pipeline."
         }
       ]
     },
@@ -1101,19 +1361,34 @@
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "Custom hooks are usually just a combination of these built-in hooks."
+          "description": "The fundamental hook frequently composed inside custom hooks."
         },
         {
           "term": "rules_of_hooks",
           "module": "06-react",
-          "description": "The rules apply strictly to your custom hooks."
+          "description": "The architectural guidelines governing custom hook implementations."
         }
       ],
       "related": [
         {
           "term": "rules_of_hooks",
           "module": "06-react",
-          "description": "Why the \"use\" prefix is strictly enforced."
+          "description": "The architectural laws governing custom hook invocations."
+        },
+        {
+          "term": "use_effect",
+          "module": "06-react",
+          "description": "Built-in hook composed within custom hooks."
+        },
+        {
+          "term": "use_state",
+          "module": "06-react",
+          "description": "Built-in state primitive composed within custom hooks."
+        },
+        {
+          "term": "hoc",
+          "module": "06-react",
+          "description": "Legacy pattern replaced by custom hooks."
         },
         {
           "term": "components",
@@ -1124,11 +1399,6 @@
           "term": "use_context",
           "module": "06-react",
           "description": "Related concept: `useContext` Hook."
-        },
-        {
-          "term": "hoc",
-          "module": "06-react",
-          "description": "Related concept: Higher-Order Components (HOC)."
         },
         {
           "term": "render_props",
@@ -1150,19 +1420,29 @@
         {
           "term": "use_ref",
           "module": "06-react",
-          "description": "The reference container mechanism."
+          "description": "The reference container hook mechanism."
         },
         {
           "term": "components",
           "module": "06-react",
-          "description": "The visual boundaries crossed by refs."
+          "description": "Custom component boundaries crossed by ref attributes."
         }
       ],
       "related": [
         {
           "term": "use_ref",
           "module": "06-react",
-          "description": "The reference object engine used to create refs."
+          "description": "The reference container engine used to create ref objects."
+        },
+        {
+          "term": "components",
+          "module": "06-react",
+          "description": "The structural boundaries crossed by forwarded refs."
+        },
+        {
+          "term": "uncontrolled_components",
+          "module": "06-react",
+          "description": "Form components relying on refs for input values."
         },
         {
           "term": "portals",
@@ -1179,29 +1459,34 @@
         {
           "term": "use_memo",
           "module": "06-react",
-          "description": "The primary hook implementing this concept for values."
+          "description": "The primary hook implementing value memoization."
         },
         {
           "term": "use_callback",
           "module": "06-react",
-          "description": "The hook implementing this concept for function references."
+          "description": "The hook implementing function reference memoization."
         }
       ],
       "related": [
         {
           "term": "use_memo",
           "module": "06-react",
-          "description": "The hook implementation of value memoization."
+          "description": "The value memoization hook."
         },
         {
           "term": "use_callback",
           "module": "06-react",
-          "description": "The hook implementation of function reference memoization."
+          "description": "The function reference memoization hook."
         },
         {
           "term": "react_memo",
           "module": "06-react",
-          "description": "Component render caching."
+          "description": "Component render caching optimization."
+        },
+        {
+          "term": "referential_equality",
+          "module": "06-react",
+          "description": "Reference memory address comparison driving memoization decisions."
         }
       ]
     },
@@ -1213,29 +1498,39 @@
         {
           "term": "immutability",
           "module": "06-react",
-          "description": "Modifying reference variables requires creating copy instances."
+          "description": "Modifying reference data structures requires allocating copy instances."
         },
         {
           "term": "use_memo",
           "module": "06-react",
-          "description": "The hook used to preserve reference identities."
+          "description": "The hook used to preserve reference identities across renders."
         }
       ],
       "related": [
         {
           "term": "use_callback",
           "module": "06-react",
-          "description": "The hook designed to preserve function reference identities."
+          "description": "Hook designed to preserve function reference identities."
+        },
+        {
+          "term": "use_memo",
+          "module": "06-react",
+          "description": "Hook designed to preserve object/array reference identities."
         },
         {
           "term": "react_memo",
           "module": "06-react",
-          "description": "The component rendering cache that relies on shallow reference equality."
+          "description": "Component render cache relying on shallow reference equality."
         },
         {
+          "term": "immutability",
           "module": "06-react",
-          "term": "use_memo",
-          "description": "Related concept: `useMemo` Hook."
+          "description": "Requirement for state updates to allocate fresh reference objects."
+        },
+        {
+          "term": "memoization",
+          "module": "06-react",
+          "description": "Related concept: Memoization (the concept)."
         }
       ]
     },
@@ -1247,29 +1542,34 @@
         {
           "term": "components",
           "module": "06-react",
-          "description": "Hooks must be used inside them."
+          "description": "Functional components where hooks are declared."
         },
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "The most common hook that follows these rules."
+          "description": "Core hook governed by these rules."
         }
       ],
       "related": [
         {
           "term": "custom_hooks",
           "module": "06-react",
-          "description": "The only other place (besides components) where you are allowed to call a hook."
+          "description": "Custom functions governed by the Rules of Hooks."
         },
         {
           "term": "components",
           "module": "06-react",
-          "description": "Where hooks belong."
+          "description": "Functional components where hooks belong."
         },
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "Related concept: `useState` Hook."
+          "description": "Core hook relying on call order mapping."
+        },
+        {
+          "term": "use_id",
+          "module": "06-react",
+          "description": "Hook governed by top-level execution rules."
         },
         {
           "term": "stale_closures",
@@ -1277,9 +1577,19 @@
           "description": "Related concept: Stale Closures."
         },
         {
-          "term": "use_id",
+          "term": "use_context",
           "module": "06-react",
-          "description": "Related concept: `useId` Hook."
+          "description": "Related concept: `useContext` Hook."
+        },
+        {
+          "term": "use_reducer",
+          "module": "06-react",
+          "description": "Related concept: `useReducer` Hook."
+        },
+        {
+          "term": "use_sync_external_store",
+          "module": "06-react",
+          "description": "Related concept: `useSyncExternalStore` Hook."
         }
       ]
     },
@@ -1291,24 +1601,34 @@
         {
           "term": "use_memo",
           "module": "06-react",
-          "description": "`useCallback` is basically identical, but exclusively for Functions."
+          "description": "The sister hook for memoizing values instead of function references."
         },
         {
           "term": "react_memo",
           "module": "06-react",
-          "description": "The primary reason `useCallback` exists."
+          "description": "Component render caching optimization relying on stable prop references."
         }
       ],
       "related": [
         {
           "term": "use_memo",
           "module": "06-react",
-          "description": "The sister hook for caching values instead of functions."
+          "description": "Sister hook for caching value outputs."
         },
         {
           "term": "react_memo",
           "module": "06-react",
-          "description": "The primary reason you need `useCallback`."
+          "description": "Component render caching optimization."
+        },
+        {
+          "term": "referential_equality",
+          "module": "06-react",
+          "description": "Memory reference address comparison."
+        },
+        {
+          "term": "stale_closures",
+          "module": "06-react",
+          "description": "Bugs caused by omitting referenced values from dependency arrays."
         },
         {
           "term": "dependency_array",
@@ -1316,19 +1636,9 @@
           "description": "Related concept: Dependency Array."
         },
         {
-          "term": "stale_closures",
-          "module": "06-react",
-          "description": "Related concept: Stale Closures."
-        },
-        {
           "term": "memoization",
           "module": "06-react",
           "description": "Related concept: Memoization (the concept)."
-        },
-        {
-          "term": "referential_equality",
-          "module": "06-react",
-          "description": "Related concept: Referential Equality."
         }
       ]
     },
@@ -1340,24 +1650,29 @@
         {
           "term": "rules_of_hooks",
           "module": "06-react",
-          "description": "The usage guidelines governing hook invocations."
+          "description": "The structural laws governing hook invocations."
         },
         {
-          "module": "06-react",
           "term": "components",
-          "description": "Generating unique accessible IDs for components."
+          "module": "06-react",
+          "description": "Generating accessible identifiers inside component subtrees."
         }
       ],
       "related": [
         {
-          "term": "hydration",
-          "module": "06-react",
-          "description": "The SSR startup process where server-client IDs must match."
-        },
-        {
           "term": "rules_of_hooks",
           "module": "06-react",
-          "description": "The structural laws governing hook calls."
+          "description": "Architectural guidelines governing hook invocations."
+        },
+        {
+          "term": "components",
+          "module": "06-react",
+          "description": "UI components containing form controls."
+        },
+        {
+          "term": "hydration",
+          "module": "06-react",
+          "description": "SSR client startup process requiring matching server-client IDs."
         },
         {
           "module": "06-react",
@@ -1374,39 +1689,39 @@
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "You must understand that component functions run repeatedly."
+          "description": "Understanding that functional components re-execute top-to-bottom on updates."
         },
         {
           "term": "dependency_array",
           "module": "06-react",
-          "description": "`useMemo` uses this exact same array to know when to recalculate."
+          "description": "The watchlist mechanism controlling when `useMemo` recalculates outputs."
         }
       ],
       "related": [
         {
           "term": "use_callback",
           "module": "06-react",
-          "description": "The exact same concept, but specifically for memorizing Functions instead of Values."
+          "description": "Sister hook for memoizing function references."
+        },
+        {
+          "term": "memoization",
+          "module": "06-react",
+          "description": "The computer science optimization concept."
+        },
+        {
+          "term": "derived_state",
+          "module": "06-react",
+          "description": "Values derived during render passes."
+        },
+        {
+          "term": "referential_equality",
+          "module": "06-react",
+          "description": "Reference comparison driving `useMemo` decisions."
         },
         {
           "term": "react_memo",
           "module": "06-react",
           "description": "A tool that memorizes an entire Component, which heavily relies on `useMemo` to work properly."
-        },
-        {
-          "term": "derived_state",
-          "module": "06-react",
-          "description": "Related concept: Derived State."
-        },
-        {
-          "term": "memoization",
-          "module": "06-react",
-          "description": "Related concept: Memoization (the concept)."
-        },
-        {
-          "module": "06-react",
-          "term": "referential_equality",
-          "description": "Referential equality."
         },
         {
           "module": "06-react",
@@ -1423,34 +1738,34 @@
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "`useRef` is the \"silent\" cousin of `useState`."
+          "description": "The reactive counterpart to `useRef` that triggers UI re-renders on change."
         },
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "What `useRef` intentionally avoids."
+          "description": "The component execution cycle intentionally bypassed by `useRef`."
         }
       ],
       "related": [
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "The loud, re-rendering alternative to `useRef`."
+          "description": "The reactive state counterpart to `useRef`."
         },
         {
           "term": "declarative_programming",
           "module": "06-react",
-          "description": "`useRef` is your escape hatch when you actually *need* to do something Imperative to the DOM."
+          "description": "`useRef` acts as an escape hatch for imperative DOM actions."
         },
         {
           "term": "use_layout_effect",
           "module": "06-react",
-          "description": "Related concept: `useLayoutEffect` Hook."
+          "description": "Hook used for measuring DOM nodes held by refs."
         },
         {
           "term": "forward_ref",
           "module": "06-react",
-          "description": "Related concept: `forwardRef` & `useImperativeHandle`."
+          "description": "Pattern for passing refs down component trees."
         },
         {
           "term": "uncontrolled_components",
@@ -1461,6 +1776,11 @@
           "module": "06-react",
           "term": "use_id",
           "description": "Related concept: `useId` Hook."
+        },
+        {
+          "term": "stale_closures",
+          "module": "06-react",
+          "description": "Related concept: Stale Closures."
         }
       ]
     },
@@ -1472,24 +1792,39 @@
         {
           "term": "jsx",
           "module": "06-react",
-          "description": "Understanding how to embed JavaScript expressions using `{}`."
+          "description": "Embedding JavaScript expressions within markup."
         },
         {
           "term": "state",
           "module": "06-react",
-          "description": "The boolean data that usually drives the condition."
+          "description": "Reactive data changes driving UI branches."
+        },
+        {
+          "term": "render_purity",
+          "module": "06-react",
+          "description": "Ensuring conditional render evaluations remain side-effect free."
         }
       ],
       "related": [
         {
           "term": "jsx",
           "module": "06-react",
-          "description": "The syntax that allows us to inject JS operators."
+          "description": "The syntax foundation allowing embedded JS conditional expressions."
         },
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "When a condition turns false, React removes that node from the Virtual DOM, destroying the component."
+          "description": "The engine mechanism that reconciles conditionally mounted and unmounted DOM nodes."
+        },
+        {
+          "term": "declarative_programming",
+          "module": "06-react",
+          "description": "The architectural philosophy behind declaring state-driven UI views."
+        },
+        {
+          "term": "state",
+          "module": "06-react",
+          "description": "The reactive data source that powers conditional evaluation rules."
         },
         {
           "term": "framer_motion",
@@ -1506,34 +1841,49 @@
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "The mechanism used to control the input."
+          "description": "The state hook used to hold and drive form input values."
         },
         {
           "term": "synthetic_events",
           "module": "06-react",
-          "description": "Specifically `onChange`, which captures keystrokes."
+          "description": "Listening to `onChange` form events across browser implementations."
+        },
+        {
+          "term": "unidirectional_flow",
+          "module": "06-react",
+          "description": "The data architecture pattern requiring state updates to flow strictly downwards to input values."
         }
       ],
       "related": [
         {
           "term": "uncontrolled_components",
           "module": "06-react",
-          "description": "The alternative way to handle forms without tying every keystroke to state."
+          "description": "The alternative pattern delegating form state management back to browser DOM refs."
+        },
+        {
+          "term": "use_state",
+          "module": "06-react",
+          "description": "The fundamental state hook underpinning controlled component values."
+        },
+        {
+          "term": "synthetic_events",
+          "module": "06-react",
+          "description": "React's cross-browser event wrappers driving `onChange` input updates."
         },
         {
           "term": "unidirectional_flow",
           "module": "06-react",
-          "description": "Controlled components perfectly demonstrate this concept."
+          "description": "The architectural principle enforcing state to value binding."
         },
         {
+          "term": "portals",
           "module": "06-react",
-          "term": "use_state",
-          "description": "useState for form inputs."
+          "description": "Related concept: Portals."
         },
         {
+          "term": "react_testing_library",
           "module": "06-react",
-          "term": "synthetic_events",
-          "description": "Related concept: Synthetic Events."
+          "description": "Related concept: Testing: React Testing Library + Jest."
         }
       ]
     },
@@ -1545,29 +1895,39 @@
         {
           "term": "jsx",
           "module": "06-react",
-          "description": "Understanding that JSX elements can be stored in arrays."
+          "description": "Rendering arrays of JSX elements inside templates."
         },
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "How React diffs arrays of elements to find changes."
+          "description": "Understanding element diffing and DOM node reuse."
+        },
+        {
+          "term": "reconciliation",
+          "module": "06-react",
+          "description": "The engine algorithm relying on keys to track element movements."
         }
       ],
       "related": [
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "The system that requires the Keys to perform efficient diffing."
-        },
-        {
-          "term": "fragments",
-          "module": "06-react",
-          "description": "Related concept: Fragments."
+          "description": "The virtual representation of UI diffed using keys."
         },
         {
           "term": "reconciliation",
           "module": "06-react",
-          "description": "Related concept: Reconciliation."
+          "description": "The core engine algorithm relying on keys for item matching."
+        },
+        {
+          "term": "jsx",
+          "module": "06-react",
+          "description": "The template syntax used for `.map()` list expressions."
+        },
+        {
+          "term": "fragments",
+          "module": "06-react",
+          "description": "Using `<React.Fragment key={id}>` when mapping sibling lists."
         }
       ]
     },
@@ -1579,19 +1939,39 @@
         {
           "term": "declarative_programming",
           "module": "06-react",
-          "description": "You use Synthetic events instead of `addEventListener`."
+          "description": "Declaring inline event handlers rather than imperatively calling `addEventListener`."
         },
         {
-          "module": "06-react",
           "term": "jsx",
-          "description": "Handling synthetic DOM events in JSX templates."
+          "module": "06-react",
+          "description": "Using camelCase event listener attributes (`onClick`, `onChange`, `onSubmit`)."
+        },
+        {
+          "term": "render_purity",
+          "module": "06-react",
+          "description": "Keeping side effects inside event handler functions, off the main render path."
         }
       ],
       "related": [
         {
+          "term": "declarative_programming",
+          "module": "06-react",
+          "description": "Declaring inline event handlers rather than imperative manual DOM listener attachment."
+        },
+        {
           "term": "jsx",
           "module": "06-react",
-          "description": "Where you attach these event handlers using camelCase."
+          "description": "Attaching synthetic event handlers via camelCase props."
+        },
+        {
+          "term": "controlled_components",
+          "module": "06-react",
+          "description": "Synthetic `onChange` events driving form state updates."
+        },
+        {
+          "term": "render_purity",
+          "module": "06-react",
+          "description": "Housing side effects safely inside event handler functions."
         },
         {
           "term": "react_testing_library",
@@ -1600,13 +1980,18 @@
         },
         {
           "module": "06-react",
-          "term": "controlled_components",
-          "description": "Form input events."
-        },
-        {
-          "module": "06-react",
           "term": "use_effect",
           "description": "Cleaning up native vs synthetic event listeners."
+        },
+        {
+          "term": "uncontrolled_components",
+          "module": "06-react",
+          "description": "Related concept: Uncontrolled Components."
+        },
+        {
+          "term": "portals",
+          "module": "06-react",
+          "description": "Related concept: Portals."
         }
       ]
     },
@@ -1618,24 +2003,44 @@
         {
           "term": "controlled_components",
           "module": "06-react",
-          "description": "You must understand the standard way to handle forms to understand the alternative."
+          "description": "Understanding the primary state-driven form handling pattern to evaluate alternative trade-offs."
         },
         {
           "term": "use_ref",
           "module": "06-react",
-          "description": "The hook used to grab data from Uncontrolled Components."
+          "description": "The hook used to grab direct references to DOM input nodes."
+        },
+        {
+          "term": "declarative_programming",
+          "module": "06-react",
+          "description": "Contrast between React declarative state updates and imperative DOM reads."
         }
       ],
       "related": [
         {
           "term": "controlled_components",
           "module": "06-react",
-          "description": "The standard, React-centric way to handle forms."
+          "description": "The state-driven alternative for form inputs."
         },
         {
           "term": "use_ref",
           "module": "06-react",
-          "description": "The mechanism used to interact with uncontrolled inputs."
+          "description": "The primary hook enabling direct DOM node references."
+        },
+        {
+          "term": "declarative_programming",
+          "module": "06-react",
+          "description": "Contrast with imperative DOM value extraction."
+        },
+        {
+          "term": "synthetic_events",
+          "module": "06-react",
+          "description": "Handling `onSubmit` synthetic events on uncontrolled forms."
+        },
+        {
+          "term": "forward_ref",
+          "module": "06-react",
+          "description": "Related concept: `forwardRef` & `useImperativeHandle`."
         }
       ]
     },
@@ -1647,39 +2052,44 @@
         {
           "term": "prop_drilling",
           "module": "06-react",
-          "description": "The exact problem that the Context API was created to solve."
+          "description": "The specific structural architectural issue Context was created to solve."
         },
         {
-          "module": "06-react",
           "term": "components",
-          "description": "Passing data through component trees without prop drilling."
+          "module": "06-react",
+          "description": "Passing data through component hierarchies."
+        },
+        {
+          "term": "use_state",
+          "module": "06-react",
+          "description": "Managing the reactive state held inside Context Providers."
         }
       ],
       "related": [
         {
           "term": "use_context",
           "module": "06-react",
-          "description": "How the Child actually grabs the data out of the Context."
+          "description": "The hook used by child components to subscribe to Context broadcasts."
         },
         {
           "term": "prop_drilling",
           "module": "06-react",
-          "description": "What Context prevents."
+          "description": "The exact anti-pattern solved by the Context API."
+        },
+        {
+          "term": "state_management",
+          "module": "06-react",
+          "description": "External state store alternatives optimized for high-frequency updates."
+        },
+        {
+          "term": "compound_components",
+          "module": "06-react",
+          "description": "Advanced design pattern using Context to share implicit state between parent and child components."
         },
         {
           "term": "lifting_state_up",
           "module": "06-react",
           "description": "Related concept: Lifting State Up."
-        },
-        {
-          "term": "state_management",
-          "module": "06-react",
-          "description": "Related concept: State Management (Redux / Zustand)."
-        },
-        {
-          "term": "compound_components",
-          "module": "06-react",
-          "description": "Related concept: Compound Components."
         },
         {
           "term": "use_hook",
@@ -1701,34 +2111,44 @@
         {
           "term": "props",
           "module": "06-react",
-          "description": "The vehicle being drilled."
+          "description": "The mechanism passed through component signatures."
         },
         {
           "term": "unidirectional_flow",
           "module": "06-react",
-          "description": "The strict rule that forces Prop Drilling to exist in the first place."
+          "description": "The strict downward data flow principle that causes prop drilling."
+        },
+        {
+          "term": "components",
+          "module": "06-react",
+          "description": "Building nested UI trees in React."
         }
       ],
       "related": [
         {
           "term": "context_api",
           "module": "06-react",
-          "description": "The official React feature designed to bypass Prop Drilling."
+          "description": "The built-in React API designed to eliminate Prop Drilling."
         },
         {
           "term": "state_management",
           "module": "06-react",
-          "description": "Third-party libraries (Zustand/Redux) designed to solve this exact problem at scale."
+          "description": "External state stores solving prop drilling at application scale."
+        },
+        {
+          "term": "children_prop",
+          "module": "06-react",
+          "description": "The composition mechanism enabling slot-based layout patterns."
+        },
+        {
+          "term": "unidirectional_flow",
+          "module": "06-react",
+          "description": "The fundamental data flow rule driving prop drilling."
         },
         {
           "term": "lifting_state_up",
           "module": "06-react",
           "description": "Related concept: Lifting State Up."
-        },
-        {
-          "term": "unidirectional_flow",
-          "module": "06-react",
-          "description": "Related concept: Unidirectional Data Flow."
         },
         {
           "module": "06-react",
@@ -1745,34 +2165,39 @@
         {
           "term": "context_api",
           "module": "06-react",
-          "description": "State managers are the heavy-duty alternative to the built-in Context API."
-        },
-        {
-          "term": "unidirectional_flow",
-          "module": "06-react",
-          "description": "State managers use tricks to bypass this safely."
-        }
-      ],
-      "related": [
-        {
-          "term": "use_reducer",
-          "module": "06-react",
-          "description": "React's built-in hook that mimics the Action/Reducer pattern of Redux on a local component level."
-        },
-        {
-          "term": "context_api",
-          "module": "06-react",
-          "description": "The built-in alternative."
+          "description": "Understanding built-in React context broadcasting and its reactivity limitations."
         },
         {
           "term": "prop_drilling",
           "module": "06-react",
-          "description": "Related concept: Prop Drilling."
+          "description": "The data-flow anti-pattern solved by centralized state stores."
+        },
+        {
+          "term": "unidirectional_flow",
+          "module": "06-react",
+          "description": "The core state update architecture underpinning external store models."
+        }
+      ],
+      "related": [
+        {
+          "term": "context_api",
+          "module": "06-react",
+          "description": "Built-in React context broadcasting mechanism."
+        },
+        {
+          "term": "use_reducer",
+          "module": "06-react",
+          "description": "Local component state hook implementing the Redux action/reducer pattern."
+        },
+        {
+          "term": "prop_drilling",
+          "module": "06-react",
+          "description": "Passing props down component trees without global stores."
         },
         {
           "term": "react_query",
           "module": "06-react",
-          "description": "Related concept: React Query (TanStack Query) / SWR."
+          "description": "Specialized library for managing server API cache data."
         },
         {
           "term": "use_sync_external_store",
@@ -1788,6 +2213,11 @@
           "module": "06-react",
           "term": "lifting_state_up",
           "description": "Related concept: Lifting State Up."
+        },
+        {
+          "term": "redux",
+          "module": "06-react",
+          "description": "Related concept: Redux."
         }
       ]
     },
@@ -1799,24 +2229,39 @@
         {
           "term": "context_api",
           "module": "06-react",
-          "description": "You must understand how to Create and Provide Context before you can Consume it."
+          "description": "Creating and providing Context via `createContext()` and `<Context.Provider>`."
+        },
+        {
+          "term": "rules_of_hooks",
+          "module": "06-react",
+          "description": "Mandatory execution constraints governing where Hooks can be called."
+        },
+        {
+          "term": "custom_hooks",
+          "module": "06-react",
+          "description": "Wrapping `useContext` calls inside reusable custom hooks."
         }
       ],
       "related": [
         {
           "term": "context_api",
           "module": "06-react",
-          "description": "The system that powers this hook."
+          "description": "The core context broadcasting mechanism consumed by `useContext`."
         },
         {
           "term": "custom_hooks",
           "module": "06-react",
-          "description": "Often used to wrap `useContext` for cleaner code."
+          "description": "The recommended pattern for wrapping `useContext` calls."
         },
         {
+          "term": "rules_of_hooks",
           "module": "06-react",
+          "description": "Execution rules governing `useContext` invocations."
+        },
+        {
           "term": "prop_drilling",
-          "description": "Solving prop drilling."
+          "module": "06-react",
+          "description": "The structural anti-pattern eliminated by Context consumption."
         }
       ]
     },
@@ -1828,24 +2273,39 @@
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "`useReducer` is just a more powerful version of `useState`."
+          "description": "Understanding standard state updates before transitioning to reducer-driven state machines."
+        },
+        {
+          "term": "immutability",
+          "module": "06-react",
+          "description": "The strict rule requiring reducers to return new state object references."
         },
         {
           "term": "state_management",
           "module": "06-react",
-          "description": "`useReducer` perfectly implements the Redux pattern, just locally."
+          "description": "The global architecture pattern that `useReducer` mirrors locally inside components."
         }
       ],
       "related": [
         {
-          "term": "state_management",
-          "module": "06-react",
-          "description": "Redux uses this exact same pattern, but on a global scale."
-        },
-        {
           "term": "use_state",
           "module": "06-react",
-          "description": "Under the hood, React actually uses `useReducer` to build `useState`!"
+          "description": "The fundamental state hook replaced by `useReducer` for complex state logic."
+        },
+        {
+          "term": "immutability",
+          "module": "06-react",
+          "description": "The strict requirement for returning new state object snapshots."
+        },
+        {
+          "term": "state_management",
+          "module": "06-react",
+          "description": "The global state store pattern mirrored locally by `useReducer`."
+        },
+        {
+          "term": "rules_of_hooks",
+          "module": "06-react",
+          "description": "Mandatory execution rules governing `useReducer` declarations."
         },
         {
           "term": "redux",
@@ -1862,19 +2322,39 @@
         {
           "term": "props",
           "module": "06-react",
-          "description": "The mechanism `children` uses."
+          "description": "The fundamental mechanism through which `children` is passed."
         },
         {
           "term": "components",
           "module": "06-react",
-          "description": "Where this prop is passed."
+          "description": "Creating reusable wrapper components in React."
+        },
+        {
+          "term": "composition_inheritance",
+          "module": "06-react",
+          "description": "The core design paradigm enabled by the `children` prop."
         }
       ],
       "related": [
         {
+          "term": "composition_inheritance",
+          "module": "06-react",
+          "description": "The fundamental architecture model powered by `children`."
+        },
+        {
+          "term": "props",
+          "module": "06-react",
+          "description": "The base property mechanism delivering `children`."
+        },
+        {
+          "term": "compound_components",
+          "module": "06-react",
+          "description": "Advanced pattern utilizing `children` and Context."
+        },
+        {
           "term": "render_props",
           "module": "06-react",
-          "description": "An advanced pattern where the `children` prop is explicitly a function instead of JSX."
+          "description": "Pattern where `children` is passed as a function instead of JSX."
         },
         {
           "term": "fragments",
@@ -1882,14 +2362,9 @@
           "description": "Related concept: Fragments."
         },
         {
-          "term": "composition_inheritance",
+          "term": "prop_drilling",
           "module": "06-react",
-          "description": "Related concept: Composition over Inheritance."
-        },
-        {
-          "term": "compound_components",
-          "module": "06-react",
-          "description": "Related concept: Compound Components."
+          "description": "Related concept: Prop Drilling."
         }
       ]
     },
@@ -1901,24 +2376,39 @@
         {
           "term": "components",
           "module": "06-react",
-          "description": "The modular elements being combined."
+          "description": "The independent modular elements assembled into complex UI trees."
         },
         {
-          "term": "children_prop",
+          "term": "props",
           "module": "06-react",
-          "description": "The primary mechanism enabling element nesting."
+          "description": "Passing data and JSX elements to customize specialized components."
         }
       ],
       "related": [
         {
           "term": "children_prop",
           "module": "06-react",
-          "description": "The property that enables nesting components."
+          "description": "The fundamental prop mechanism powering Containment composition."
+        },
+        {
+          "term": "components",
+          "module": "06-react",
+          "description": "The modular building blocks combined via composition."
         },
         {
           "term": "hoc",
           "module": "06-react",
-          "description": "An alternative pattern for component wrapper logic."
+          "description": "Alternative wrapper function pattern for sharing logic."
+        },
+        {
+          "term": "render_props",
+          "module": "06-react",
+          "description": "Delegating component rendering via function props."
+        },
+        {
+          "term": "compound_components",
+          "module": "06-react",
+          "description": "Related concept: Compound Components."
         }
       ]
     },
@@ -1930,24 +2420,39 @@
         {
           "term": "context_api",
           "module": "06-react",
-          "description": "The state-sharing mechanism used under the hood."
+          "description": "The state-sharing mechanism used under the hood to coordinate compound subcomponents."
         },
         {
           "term": "children_prop",
           "module": "06-react",
-          "description": "The property enabling flexible subcomponent layout structures."
+          "description": "Enabling flexible, nested markup structures within compound parent components."
+        },
+        {
+          "term": "composition_inheritance",
+          "module": "06-react",
+          "description": "Assembling complex UI controls from small, modular subcomponents."
         }
       ],
       "related": [
         {
           "term": "context_api",
           "module": "06-react",
-          "description": "The state transport vehicle used by compound parent-child pairings."
+          "description": "The state-sharing pipeline powering compound component subcomponents."
         },
         {
           "term": "children_prop",
           "module": "06-react",
-          "description": "The JSX container that allows subcomponent markup structures."
+          "description": "The slot primitive enabling subcomponent nesting."
+        },
+        {
+          "term": "composition_inheritance",
+          "module": "06-react",
+          "description": "The overarching architectural design paradigm."
+        },
+        {
+          "term": "render_props",
+          "module": "06-react",
+          "description": "Alternative logic-sharing component pattern."
         },
         {
           "module": "06-react",
@@ -1964,29 +2469,44 @@
         {
           "term": "component_lifecycle",
           "module": "06-react",
-          "description": "Error Boundaries rely on specific, class-based lifecycle methods."
+          "description": "Error Boundaries rely on specific Class lifecycle methods (`componentDidCatch`, `getDerivedStateFromError`)."
         },
         {
-          "module": "06-react",
           "term": "components",
-          "description": "Catching JavaScript errors anywhere in component trees."
+          "module": "06-react",
+          "description": "Wrapping component trees with safety fallback containers."
+        },
+        {
+          "term": "declarative_programming",
+          "module": "06-react",
+          "description": "Declaring fallback UI views for component failure states."
         }
       ],
       "related": [
         {
+          "term": "component_lifecycle",
+          "module": "06-react",
+          "description": "The class lifecycle methods (`componentDidCatch`) underlying error boundaries."
+        },
+        {
+          "term": "components",
+          "module": "06-react",
+          "description": "Wrapping component subtrees with failure safety nets."
+        },
+        {
+          "term": "declarative_programming",
+          "module": "06-react",
+          "description": "Declaring fallback UI views for failure states."
+        },
+        {
+          "term": "error",
+          "module": "06-react",
+          "description": "Next.js framework error boundary file conventions."
+        },
+        {
           "term": "error",
           "module": "09-nextjs",
           "description": "The Next.js framework has built-in Error Boundaries disguised as simple files."
-        },
-        {
-          "module": "06-react",
-          "term": "component_lifecycle",
-          "description": "componentDidCatch lifecycle hook."
-        },
-        {
-          "module": "06-react",
-          "term": "components",
-          "description": "Wrapping component subtrees with Error Boundaries."
         },
         {
           "module": "06-react",
@@ -2003,29 +2523,39 @@
         {
           "term": "components",
           "module": "06-react",
-          "description": "The building blocks HOCs wrap."
+          "description": "The target building blocks wrapped and enhanced by HOCs."
         },
         {
           "term": "higher_order_function",
-          "module": "03-javascript",
-          "description": "The JavaScript concept this pattern is named after."
+          "module": "06-react",
+          "description": "The foundational JavaScript functional programming concept HOCs are named after."
+        },
+        {
+          "term": "custom_hooks",
+          "module": "06-react",
+          "description": "The modern React mechanism that replaced HOCs for sharing stateful logic."
         }
       ],
       "related": [
         {
           "term": "custom_hooks",
           "module": "06-react",
-          "description": "The modern React feature that effectively killed the widespread use of HOCs."
+          "description": "The modern React feature that largely superseded HOCs."
+        },
+        {
+          "term": "higher_order_function",
+          "module": "06-react",
+          "description": "The JS functional programming foundation of HOCs."
+        },
+        {
+          "term": "render_props",
+          "module": "06-react",
+          "description": "Competing pre-Hooks pattern for sharing component logic."
         },
         {
           "term": "composition_inheritance",
           "module": "06-react",
-          "description": "Related concept: Composition over Inheritance."
-        },
-        {
-          "module": "06-react",
-          "term": "render_props",
-          "description": "Render props pattern."
+          "description": "The underlying design paradigm favoring wrappers over class inheritance."
         },
         {
           "module": "06-react",
@@ -2042,24 +2572,44 @@
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "Portals allow you to escape the root node of the React tree."
+          "description": "Understanding how React maintains Virtual DOM positions independently of physical browser DOM nodes."
+        },
+        {
+          "term": "synthetic_events",
+          "module": "06-react",
+          "description": "Understanding event delegation bubbling across portal component trees."
+        },
+        {
+          "term": "use_ref",
+          "module": "06-react",
+          "description": "Obtaining DOM node target references for portal rendering."
         }
       ],
       "related": [
         {
+          "term": "virtual_dom",
+          "module": "06-react",
+          "description": "Maintaining virtual tree positions independently of physical DOM nodes."
+        },
+        {
+          "term": "synthetic_events",
+          "module": "06-react",
+          "description": "Event delegation bubbling across portal boundaries."
+        },
+        {
+          "term": "controlled_components",
+          "module": "06-react",
+          "description": "Managing form controls inside modal portals."
+        },
+        {
           "term": "ssr",
           "module": "06-react",
-          "description": "Portals are strictly a client-side feature since they require direct DOM manipulation."
+          "description": "Handling browser document guards during SSR."
         },
         {
           "term": "forward_ref",
           "module": "06-react",
           "description": "Related concept: `forwardRef` & `useImperativeHandle`."
-        },
-        {
-          "module": "06-react",
-          "term": "virtual_dom",
-          "description": "Rendering modal dialogs and tooltips via React Portals."
         }
       ]
     },
@@ -2071,29 +2621,49 @@
         {
           "term": "props",
           "module": "06-react",
-          "description": "The mechanism being used."
+          "description": "Passing functions as component props."
         },
         {
           "term": "hoc",
           "module": "06-react",
-          "description": "The alternative pattern that Render Props competed against before Hooks."
+          "description": "The competing pre-Hooks pattern for sharing component logic."
+        },
+        {
+          "term": "custom_hooks",
+          "module": "06-react",
+          "description": "The modern React feature that largely superseded Render Props."
         }
       ],
       "related": [
         {
           "term": "custom_hooks",
           "module": "06-react",
-          "description": "Just like HOCs, the Render Props pattern was largely replaced by Custom Hooks, which achieve the same logic-sharing much cleaner."
+          "description": "The modern React feature that superseded Render Props for logic sharing."
+        },
+        {
+          "term": "hoc",
+          "module": "06-react",
+          "description": "Competing pre-Hooks pattern for sharing component logic."
         },
         {
           "term": "children_prop",
           "module": "06-react",
-          "description": "Related concept: Children Prop."
+          "description": "The prop mechanism used when passing functions as `children`."
         },
         {
+          "term": "props",
           "module": "06-react",
-          "term": "hoc",
-          "description": "Related concept: Higher-Order Components (HOC)."
+          "description": "The base property delivery mechanism."
+        },
+        {
+          "term": "composition_inheritance",
+          "module": "06-react",
+          "description": "Related concept: Composition over Inheritance."
+        },
+        {
+          "term": "compound_components",
+          "module": "06-react",
+          "description": "Related concept: Compound Components."
         }
       ]
     },
@@ -2105,24 +2675,24 @@
         {
           "term": "code_splitting",
           "module": "06-react",
-          "description": "The process of splitting bundle outputs."
+          "description": "The process of splitting bundle outputs into on-demand chunks."
         },
         {
-          "module": "06-react",
           "term": "components",
-          "description": "Bundling and tree-shaking React component modules."
+          "module": "06-react",
+          "description": "React component definitions compiled and bundled for browser delivery."
         }
       ],
       "related": [
         {
           "term": "code_splitting",
           "module": "06-react",
-          "description": "Dividing the main bundle into lazy-loaded files."
+          "description": "Dividing the main bundle into lazy-loaded chunks."
         },
         {
           "term": "nextjs",
           "module": "06-react",
-          "description": "The meta-framework that automates bundling and route-based code splitting."
+          "description": "The meta-framework automating production bundling and route-based code splitting."
         }
       ]
     },
@@ -2134,29 +2704,29 @@
         {
           "term": "client_side_routing",
           "module": "06-react",
-          "description": "Code splitting is almost always done at the Route level."
+          "description": "Code splitting is most frequently applied at route boundaries."
         },
         {
           "term": "suspense",
           "module": "06-react",
-          "description": "The UI boundary used to show a loading state while the split code downloads."
+          "description": "The component boundary used to display fallback UI while lazy modules download."
         }
       ],
       "related": [
         {
           "term": "suspense",
           "module": "06-react",
-          "description": "The UI boundary that catches the loading state of the code split."
+          "description": "The UI boundary handling loading fallback states for lazy components."
         },
         {
           "term": "react_router",
           "module": "06-react",
-          "description": "The primary place where Code Splitting is implemented."
+          "description": "Routing framework where route-level code splitting is implemented."
         },
         {
           "term": "bundler_tree_shaking",
           "module": "06-react",
-          "description": "Related concept: Bundler & Tree-Shaking."
+          "description": "Build-time bundle creation and dead-code elimination."
         }
       ]
     },
@@ -2168,29 +2738,29 @@
         {
           "term": "fiber_architecture",
           "module": "06-react",
-          "description": "The cooperative scheduling engine enabling chunking."
+          "description": "The cooperative scheduling engine enabling chunked render execution."
         },
         {
           "term": "render_purity",
           "module": "06-react",
-          "description": "Crucial because paused rendering cycles can be run multiple times before committing."
+          "description": "Crucial because paused concurrent rendering cycles can be re-evaluated multiple times before committing."
         }
       ],
       "related": [
         {
           "term": "fiber_architecture",
           "module": "06-react",
-          "description": "The virtual stack frame structure that allows React to pause rendering."
+          "description": "The virtual frame data structure enabling interruptible rendering."
         },
         {
           "term": "use_transition",
           "module": "06-react",
-          "description": "The hook used to mark state updates as interruptible transitions."
+          "description": "Hook for marking state updates as non-blocking transition priorities."
         },
         {
           "term": "use_deferred_value",
           "module": "06-react",
-          "description": "Related concept: `useDeferredValue` Hook."
+          "description": "Hook for deferring expensive derived values."
         },
         {
           "term": "streaming_ssr",
@@ -2207,29 +2777,29 @@
         {
           "term": "components",
           "module": "06-react",
-          "description": "What the DevTools display."
+          "description": "The component hierarchy displayed by DevTools."
         },
         {
           "term": "state",
           "module": "06-react",
-          "description": ""
+          "description": "The internal reactive data inspected and edited via DevTools sidebars."
         }
       ],
       "related": [
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "What the Profiler tab is measuring."
+          "description": "UI updates measured and highlighted in DevTools."
         },
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "What the Components tab is displaying."
+          "description": "Memory tree hierarchy displayed in Components tab."
         },
         {
           "term": "react_profiler",
           "module": "06-react",
-          "description": "Related concept: The React Profiler."
+          "description": "Profiling tab for measuring render timing and flamegraphs."
         }
       ]
     },
@@ -2241,29 +2811,29 @@
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "The default behavior that `React.memo` stops."
+          "description": "The default top-down re-rendering behavior that `React.memo` skips."
         },
         {
           "term": "use_memo",
           "module": "06-react",
-          "description": "The hooks required to make `React.memo` actually work properly."
+          "description": "Hook used by parent components to stabilize object/array prop references passed to `memo` children."
         }
       ],
       "related": [
         {
           "term": "use_callback",
           "module": "06-react",
-          "description": "Used by the Parent to pass stable functions to a `memo` child."
+          "description": "Hook for preserving function reference stability."
         },
         {
           "term": "use_memo",
           "module": "06-react",
-          "description": "Used by the Parent to pass stable objects/arrays to a `memo` child."
+          "description": "Hook for preserving object/array reference stability."
         },
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "Related concept: Re-rendering."
+          "description": "The render execution loop optimized by memoization."
         },
         {
           "term": "memoization",
@@ -2279,6 +2849,11 @@
           "term": "react_profiler",
           "module": "06-react",
           "description": "Related concept: The React Profiler."
+        },
+        {
+          "term": "use_deferred_value",
+          "module": "06-react",
+          "description": "Related concept: `useDeferredValue` Hook."
         }
       ]
     },
@@ -2290,29 +2865,29 @@
         {
           "term": "react_devtools",
           "module": "06-react",
-          "description": "The browser extension containing the Profiler tool interface."
+          "description": "The browser extension containing the Profiler tab UI."
         },
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "What the Profiler measures."
+          "description": "The render lifecycle measured by the Profiler engine."
         }
       ],
       "related": [
         {
           "term": "react_devtools",
           "module": "06-react",
-          "description": "The parent browser utility containing the Profiler interface."
+          "description": "The browser extension hosting the visual Profiler tab."
         },
         {
           "term": "react_memo",
           "module": "06-react",
-          "description": "The caching HOC verified using the Profiler."
+          "description": "The memoization HOC whose performance impact is verified using the Profiler."
         },
         {
-          "module": "06-react",
           "term": "use_memo",
-          "description": "Measuring component render performance and memoization impact."
+          "module": "06-react",
+          "description": "Hook performance measured via Profiler commits."
         }
       ]
     },
@@ -2322,31 +2897,31 @@
       "display_name": "Strict Mode",
       "prerequisites": [
         {
-          "term": "component_lifecycle",
+          "term": "render_purity",
           "module": "06-react",
-          "description": "What Strict Mode is manipulating."
-        },
-        {
-          "term": "side_effects",
-          "module": "06-react",
-          "description": "What Strict Mode is trying to expose."
-        }
-      ],
-      "related": [
-        {
-          "term": "side_effects",
-          "module": "06-react",
-          "description": "What Strict Mode audits."
+          "description": "Strict Mode double-renders components to enforce functional render purity."
         },
         {
           "term": "cleanup_functions",
           "module": "06-react",
-          "description": "The specific thing Strict Mode is checking for."
-        },
+          "description": "Strict Mode double-fires `useEffect` setup/cleanup to uncover missing cleanup logic."
+        }
+      ],
+      "related": [
         {
           "term": "render_purity",
           "module": "06-react",
-          "description": "Related concept: Render Purity."
+          "description": "Core React rule verified by Strict Mode."
+        },
+        {
+          "term": "cleanup_functions",
+          "module": "06-react",
+          "description": "Destruction handlers verified by Strict Mode."
+        },
+        {
+          "term": "side_effects",
+          "module": "06-react",
+          "description": "Asynchronous tasks audited by Strict Mode."
         }
       ]
     },
@@ -2358,19 +2933,29 @@
         {
           "term": "conditional_rendering",
           "module": "06-react",
-          "description": "What Suspense aims to replace."
+          "description": "The legacy imperative pattern (`if (loading) return <Spinner />`) replaced by declarative Suspense boundaries."
         },
         {
-          "module": "06-react",
           "term": "components",
-          "description": "Handling async component loading with React Suspense."
+          "module": "06-react",
+          "description": "Component boundaries that suspend during asynchronous module or data loading."
         }
       ],
       "related": [
         {
           "term": "code_splitting",
           "module": "06-react",
-          "description": "The most common reason a component suspends."
+          "description": "Primary client-side mechanism triggering Suspense boundaries."
+        },
+        {
+          "term": "use_transition",
+          "module": "06-react",
+          "description": "Hook for maintaining current UI visible while Suspense renders new routes in background."
+        },
+        {
+          "term": "error_boundaries",
+          "module": "06-react",
+          "description": "Structural counterpart for catching asynchronous errors."
         },
         {
           "term": "rsc",
@@ -2389,18 +2974,13 @@
         },
         {
           "module": "06-react",
-          "term": "use_transition",
-          "description": "useTransition hook."
-        },
-        {
-          "module": "06-react",
           "term": "use_deferred_value",
           "description": "useDeferredValue hook."
         },
         {
+          "term": "streaming_ssr",
           "module": "06-react",
-          "term": "error_boundaries",
-          "description": "Related concept: Error Boundaries."
+          "description": "Related concept: Streaming SSR."
         }
       ]
     },
@@ -2412,24 +2992,29 @@
         {
           "term": "concurrent_rendering",
           "module": "06-react",
-          "description": "The core engine scheduling deferred rendering."
+          "description": "The underlying engine scheduling deferred value updates."
         },
         {
           "term": "re_rendering",
           "module": "06-react",
-          "description": "The process React optimizes by delaying updates."
+          "description": "The render execution loop optimized by delaying value propagation."
         }
       ],
       "related": [
         {
           "term": "use_transition",
           "module": "06-react",
-          "description": "Deferring updates when you control the state setter."
+          "description": "Companion hook used when you control the state setter callback directly."
         },
         {
           "term": "concurrent_rendering",
           "module": "06-react",
-          "description": "The engine architecture that enables deferred rendering."
+          "description": "Concurrent scheduling engine enabling deferred renders."
+        },
+        {
+          "term": "react_memo",
+          "module": "06-react",
+          "description": "Memoization HOC used to optimize child re-renders with deferred values."
         },
         {
           "module": "06-react",
@@ -2446,29 +3031,29 @@
         {
           "term": "concurrent_rendering",
           "module": "06-react",
-          "description": "The engine mode that powers transitions."
+          "description": "The engine mode powering transition scheduling."
         },
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "The hook creating the states being updated."
+          "description": "The hook creating state updates enclosed inside transition callbacks."
         }
       ],
       "related": [
         {
           "term": "concurrent_rendering",
           "module": "06-react",
-          "description": "The rendering mode that supports transitions."
+          "description": "Concurrent rendering engine supporting transitions."
         },
         {
           "term": "use_deferred_value",
           "module": "06-react",
-          "description": "Deferring updates when you do not control the state setter."
+          "description": "Companion hook used when deferring prop values without direct setter access."
         },
         {
-          "module": "06-react",
           "term": "suspense",
-          "description": "Related concept: Suspense."
+          "module": "06-react",
+          "description": "Boundary integrated with transitions to avoid hiding existing UI."
         }
       ]
     },
@@ -2479,64 +3064,69 @@
       "prerequisites": [
         {
           "term": "spa",
-          "module": "03-javascript",
-          "description": "The architecture that requires Client-Side routing."
+          "module": "06-react",
+          "description": "The Single Page Application architecture enabled by client-side routing."
         },
         {
-          "term": "dom",
-          "module": "01-html",
-          "description": "What routing is actually doing under the hood."
+          "term": "virtual_dom",
+          "module": "06-react",
+          "description": "The in-memory tree mechanism React uses to swap route views dynamically."
         }
       ],
       "related": [
         {
           "term": "react_router",
           "module": "06-react",
-          "description": "The most popular library used to implement Client-Side Routing in React."
+          "description": "Popular library for implementing Client-Side Routing in React."
+        },
+        {
+          "term": "link_component",
+          "module": "06-react",
+          "description": "Declarative component for client-side navigation."
+        },
+        {
+          "term": "spa",
+          "module": "06-react",
+          "description": "Parent architecture powered by client-side routing."
         },
         {
           "term": "spa",
           "module": "03-javascript",
           "description": "The parent architecture."
-        },
-        {
-          "term": "link_component",
-          "module": "06-react",
-          "description": "Related concept: `<Link>` Component."
-        },
-        {
-          "term": "spa",
-          "module": "06-react",
-          "description": "Related concept: Single Page Applications (SPA)."
         }
       ]
     },
     "dynamic_segments": {
       "level": 9,
       "file": "terms/level_09/dynamic_segments.md",
-      "display_name": "Dynamic Segments (URL Parameters)",
+      "display_name": "Dynamic Segments",
       "prerequisites": [
         {
           "term": "react_router",
           "module": "06-react",
-          "description": "Where you define these routes."
+          "description": "The routing framework where dynamic segments are declared."
         },
         {
           "term": "link_component",
           "module": "06-react",
-          "description": "How you navigate to these routes."
+          "description": "How users navigate to URLs containing dynamic parameter values."
         }
       ],
       "related": [
         {
           "term": "react_router",
           "module": "06-react",
-          "description": "The library that powers this."
+          "description": "The primary routing engine supporting dynamic segment matching."
+        },
+        {
+          "term": "use_navigate",
+          "module": "06-react",
+          "description": "Imperative navigation hook used to navigate to dynamic paths programmatically."
         },
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "You usually take the URL parameter and immediately use it inside `useEffect` to fetch data."
+          "description": "Hook commonly used to trigger data fetches when parameter values change."
         }
       ]
     },
@@ -2548,29 +3138,29 @@
         {
           "term": "react_router",
           "module": "06-react",
-          "description": "The library that provides this component."
+          "description": "The router library that exports the `<Link>` component."
         },
         {
           "term": "client_side_routing",
           "module": "06-react",
-          "description": "Why we cannot use `<a>` tags."
+          "description": "The underlying navigation mechanic preventing browser page reloads."
         }
       ],
       "related": [
         {
+          "term": "react_router",
+          "module": "06-react",
+          "description": "Routing framework providing `<Link>` and `<NavLink>`."
+        },
+        {
           "term": "use_navigate",
           "module": "06-react",
-          "description": "The imperative alternative to `<Link>`. (Used for buttons and redirects)."
+          "description": "Imperative counterpart for programmatic navigation."
         },
         {
           "term": "client_side_routing",
           "module": "06-react",
-          "description": "The core concept powering this."
-        },
-        {
-          "term": "react_router",
-          "module": "06-react",
-          "description": "Related concept: React Router."
+          "description": "Client-side navigation engine."
         }
       ]
     },
@@ -2582,24 +3172,29 @@
         {
           "term": "client_side_routing",
           "module": "06-react",
-          "description": "The concept this library implements."
+          "description": "The core web concept implemented by React Router."
         },
         {
           "term": "components",
           "module": "06-react",
-          "description": "React Router uses components to define routes."
+          "description": "React Router uses components (`<BrowserRouter>`, `<Routes>`, `<Route>`) to construct the routing hierarchy."
         }
       ],
       "related": [
         {
           "term": "link_component",
           "module": "06-react",
-          "description": "How you navigate between these defined routes."
+          "description": "Declarative navigation link component."
         },
         {
           "term": "dynamic_segments",
           "module": "06-react",
-          "description": "How you handle URLs like `/users/123`."
+          "description": "URL parameter matching in React Router."
+        },
+        {
+          "term": "use_navigate",
+          "module": "06-react",
+          "description": "Programmatic navigation hook."
         },
         {
           "term": "code_splitting",
@@ -2610,6 +3205,11 @@
           "term": "client_side_routing",
           "module": "06-react",
           "description": "Related concept: Client-Side Routing."
+        },
+        {
+          "term": "spa",
+          "module": "06-react",
+          "description": "Related concept: Single Page Applications (SPA)."
         }
       ]
     },
@@ -2621,19 +3221,29 @@
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "The technology React uses to rewrite the page so quickly."
+          "description": "The fast in-memory tree manipulation technology React uses to update SPA views without page reloads."
         },
         {
-          "module": "06-react",
           "term": "components",
-          "description": "Building Single Page Applications with React components."
+          "module": "06-react",
+          "description": "Modular building blocks used to compose SPA application views."
         }
       ],
       "related": [
         {
           "term": "client_side_routing",
           "module": "06-react",
-          "description": "The mechanism used to make an SPA feel like a multi-page site."
+          "description": "Mechanism that handles navigation in SPAs."
+        },
+        {
+          "term": "react_router",
+          "module": "06-react",
+          "description": "Routing framework for SPAs."
+        },
+        {
+          "term": "hydration",
+          "module": "06-react",
+          "description": "Process of attaching event listeners to server-rendered markup in hybrid architectures."
         },
         {
           "term": "ssr",
@@ -2650,24 +3260,34 @@
         {
           "term": "react_router",
           "module": "06-react",
-          "description": "The library that provides this hook."
+          "description": "The library exporting the `useNavigate` hook."
         },
         {
           "term": "link_component",
           "module": "06-react",
-          "description": "The declarative alternative to this imperative hook."
+          "description": "The declarative sibling to imperative `useNavigate` navigation."
         }
       ],
       "related": [
         {
           "term": "link_component",
           "module": "06-react",
-          "description": "The declarative sibling."
+          "description": "Declarative navigation link component."
+        },
+        {
+          "term": "react_router",
+          "module": "06-react",
+          "description": "Framework providing `useNavigate`."
         },
         {
           "term": "side_effects",
           "module": "06-react",
-          "description": "You often use `useNavigate` inside a `useEffect` (e.g., \"If user is not logged in, navigate to /login\")."
+          "description": "Asynchronous tasks and effects commonly triggering programmatic navigation."
+        },
+        {
+          "term": "dynamic_segments",
+          "module": "06-react",
+          "description": "Related concept: Dynamic Segments."
         }
       ]
     },
@@ -2679,24 +3299,34 @@
         {
           "term": "rsc",
           "module": "06-react",
-          "description": "The server-only architecture that serves as the default."
+          "description": "The server-only component architecture that serves as the default model."
         },
         {
           "term": "hydration",
           "module": "06-react",
-          "description": "The process that client components undergo to become interactive."
+          "description": "The process through which server HTML becomes interactive on the client."
         }
       ],
       "related": [
         {
           "term": "rsc",
           "module": "06-react",
-          "description": "The default server-side rendering architecture."
+          "description": "The core architecture that defaults all components to server-only rendering."
+        },
+        {
+          "term": "hydration",
+          "module": "06-react",
+          "description": "The process of attaching client DOM event listeners to server-rendered HTML."
         },
         {
           "term": "server_actions",
           "module": "06-react",
-          "description": "Calling server-side database handlers from client-side buttons."
+          "description": "Asynchronous functions defined on the server that can be invoked from client components."
+        },
+        {
+          "term": "nextjs",
+          "module": "06-react",
+          "description": "The modern React framework implementing Client and Server component boundaries via the App Router."
         }
       ]
     },
@@ -2708,24 +3338,34 @@
         {
           "term": "ssr",
           "module": "06-react",
-          "description": "Hydration only happens after SSR or SSG."
+          "description": "Hydration occurs on the client after static server HTML is rendered and downloaded."
         },
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "Hydration is the process of building the initial Virtual DOM."
+          "description": "Hydration constructs the initial client Virtual DOM tree to match server HTML."
         }
       ],
       "related": [
         {
           "term": "ssr",
           "module": "06-react",
-          "description": "The process that creates the \"dry\" HTML."
+          "description": "The server-side rendering pipeline that generates dry HTML."
         },
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "The data structure built during hydration."
+          "description": "The memory structure built and reconciled during hydration."
+        },
+        {
+          "term": "rsc",
+          "module": "06-react",
+          "description": "Server components that run on the server and completely skip client hydration."
+        },
+        {
+          "term": "streaming_ssr",
+          "module": "06-react",
+          "description": "Progressive HTML chunk delivery featuring selective hydration."
         },
         {
           "term": "use_id",
@@ -2733,14 +3373,19 @@
           "description": "Related concept: `useId` Hook."
         },
         {
-          "term": "rsc",
+          "term": "spa",
           "module": "06-react",
-          "description": "Related concept: React Server Components (RSC)."
+          "description": "Related concept: Single Page Applications (SPA)."
         },
         {
-          "term": "streaming_ssr",
+          "term": "client_server_components",
           "module": "06-react",
-          "description": "Related concept: Streaming SSR."
+          "description": "Related concept: Client vs Server Components & `\"use client\"`."
+        },
+        {
+          "term": "ssg",
+          "module": "06-react",
+          "description": "Related concept: Static Site Generation (SSG)."
         }
       ]
     },
@@ -2752,24 +3397,34 @@
         {
           "term": "declarative_programming",
           "module": "06-react",
-          "description": "Next.js is just a framework *for* React."
+          "description": "Next.js builds directly on React's declarative component architecture."
         },
         {
           "term": "client_side_routing",
           "module": "06-react",
-          "description": "Next.js provides its own alternative to React Router."
+          "description": "Next.js provides file-system routing as an alternative to external routers."
         }
       ],
       "related": [
         {
           "term": "ssr",
           "module": "06-react",
-          "description": "The flagship feature of Next.js."
+          "description": "The dynamic server HTML rendering strategy provided by Next.js."
+        },
+        {
+          "term": "ssg",
+          "module": "06-react",
+          "description": "Build-time static HTML generation in Next.js."
         },
         {
           "term": "rsc",
           "module": "06-react",
-          "description": "The cutting-edge React architecture that Next.js 13+ is built around."
+          "description": "The default component model used in Next.js App Router."
+        },
+        {
+          "term": "client_server_components",
+          "module": "06-react",
+          "description": "The module boundary system used by Next.js."
         },
         {
           "term": "bundler_tree_shaking",
@@ -2777,9 +3432,9 @@
           "description": "Related concept: Bundler & Tree-Shaking."
         },
         {
-          "term": "ssg",
+          "term": "server_actions",
           "module": "06-react",
-          "description": "Related concept: Static Site Generation (SSG)."
+          "description": "Related concept: Server Actions & `\"use server\"`."
         }
       ]
     },
@@ -2791,34 +3446,39 @@
         {
           "term": "ssr",
           "module": "06-react",
-          "description": "SSR is about rendering initial HTML. RSC is about *staying* on the server permanently."
+          "description": "SSR renders initial HTML on the server; RSC allows components to run exclusively on the server permanently."
         },
         {
           "term": "hydration",
           "module": "06-react",
-          "description": "RSCs completely skip the Hydration process!"
+          "description": "React Server Components completely bypass the client hydration process."
         }
       ],
       "related": [
         {
+          "term": "ssr",
+          "module": "06-react",
+          "description": "The baseline server rendering strategy."
+        },
+        {
           "term": "hydration",
           "module": "06-react",
-          "description": "What Client Components do, and what Server Components intentionally skip."
+          "description": "The client process that RSCs bypass."
+        },
+        {
+          "term": "client_server_components",
+          "module": "06-react",
+          "description": "The component boundary system separating RSCs from interactive components."
+        },
+        {
+          "term": "server_actions",
+          "module": "06-react",
+          "description": "Server-side mutation handlers invoked from client components."
         },
         {
           "term": "nextjs",
           "module": "06-react",
           "description": "The first framework to fully implement the RSC architecture."
-        },
-        {
-          "term": "client_server_components",
-          "module": "06-react",
-          "description": "Related concept: Client vs Server Components & `\"use client\"`."
-        },
-        {
-          "module": "06-react",
-          "term": "server_actions",
-          "description": "Server Actions."
         },
         {
           "module": "06-react",
@@ -2829,6 +3489,16 @@
           "module": "06-react",
           "term": "use_hook",
           "description": "Related concept: Suspense for Data Fetching & the `use()` Hook."
+        },
+        {
+          "term": "ssg",
+          "module": "06-react",
+          "description": "Related concept: Static Site Generation (SSG)."
+        },
+        {
+          "term": "streaming_ssr",
+          "module": "06-react",
+          "description": "Related concept: Streaming SSR."
         }
       ]
     },
@@ -2840,29 +3510,34 @@
         {
           "term": "rsc",
           "module": "06-react",
-          "description": "The environment where actions execute."
+          "description": "The server-only component architecture where actions execute."
         },
         {
           "term": "client_server_components",
           "module": "06-react",
-          "description": "The boundary separating client triggers from server code."
+          "description": "The boundary separating client UI triggers from server execution."
         }
       ],
       "related": [
         {
+          "term": "rsc",
+          "module": "06-react",
+          "description": "The server environment where actions execute."
+        },
+        {
           "term": "client_server_components",
           "module": "06-react",
-          "description": "The environment boundaries separating code."
+          "description": "The boundary separating client components from server actions."
         },
         {
           "term": "use_action_state",
           "module": "06-react",
-          "description": "The hook used to read the return status of a Server Action."
+          "description": "The React 19 hook for managing form action pending states and return results."
         },
         {
+          "term": "nextjs",
           "module": "06-react",
-          "term": "rsc",
-          "description": "Related concept: React Server Components (RSC)."
+          "description": "The meta-framework providing server revalidation utilities for Server Actions."
         }
       ]
     },
@@ -2874,24 +3549,34 @@
         {
           "term": "ssr",
           "module": "06-react",
-          "description": "SSG is essentially SSR, but done ahead of time."
+          "description": "SSG executes server rendering ahead of time during application build compilation."
         },
         {
           "term": "nextjs",
           "module": "06-react",
-          "description": "The framework that popularized SSG."
+          "description": "The primary production framework implementing SSG and Incremental Static Regeneration (ISR)."
         }
       ],
       "related": [
         {
           "term": "ssr",
           "module": "06-react",
-          "description": "Rendering on-demand per request."
+          "description": "On-demand server rendering per request."
         },
         {
           "term": "nextjs",
           "module": "06-react",
-          "description": "Next.js allows you to mix SSG and SSR in the exact same application on a per-page basis!"
+          "description": "The production meta-framework implementing SSG and ISR."
+        },
+        {
+          "term": "hydration",
+          "module": "06-react",
+          "description": "The client process attaching event handlers to SSG static HTML."
+        },
+        {
+          "term": "rsc",
+          "module": "06-react",
+          "description": "Component architecture powering Next.js static pre-rendering."
         }
       ]
     },
@@ -2902,25 +3587,35 @@
       "prerequisites": [
         {
           "term": "spa",
-          "module": "03-javascript",
-          "description": "The opposite of SSR (Client-Side Rendering)."
+          "module": "06-react",
+          "description": "The client-side rendering model that SSR improves upon."
         },
         {
           "term": "nextjs",
           "module": "06-react",
-          "description": "The framework that makes SSR easy in React."
+          "description": "The production meta-framework that automates server-side rendering in React."
         }
       ],
       "related": [
         {
           "term": "hydration",
           "module": "06-react",
-          "description": "The process of attaching interactivity to the SSR HTML once it reaches the browser."
+          "description": "The process that links event handlers to server-rendered HTML."
         },
         {
           "term": "ssg",
           "module": "06-react",
-          "description": "SSR's faster, pre-rendered cousin."
+          "description": "Build-time pre-rendering alternative to SSR."
+        },
+        {
+          "term": "streaming_ssr",
+          "module": "06-react",
+          "description": "Progressive server HTML chunk streaming."
+        },
+        {
+          "term": "nextjs",
+          "module": "06-react",
+          "description": "The framework providing automated SSR infrastructure."
         },
         {
           "term": "portals",
@@ -2933,14 +3628,9 @@
           "description": "Related concept: Single Page Applications (SPA)."
         },
         {
-          "term": "nextjs",
+          "term": "rsc",
           "module": "06-react",
-          "description": "Related concept: Next.js."
-        },
-        {
-          "term": "streaming_ssr",
-          "module": "06-react",
-          "description": "Related concept: Streaming SSR."
+          "description": "Related concept: React Server Components (RSC)."
         }
       ]
     },
@@ -2952,29 +3642,73 @@
         {
           "term": "ssr",
           "module": "06-react",
-          "description": "The static rendering foundation that streaming improves."
+          "description": "The baseline server HTML rendering model that streaming enhances."
         },
         {
           "term": "suspense",
           "module": "06-react",
-          "description": "The boundary markers used to divide layout sections."
+          "description": "The component boundary mechanism that isolates slow async components during streaming."
         }
       ],
       "related": [
         {
           "term": "ssr",
           "module": "06-react",
-          "description": "The baseline server rendering pattern."
+          "description": "The baseline server rendering model enhanced by streaming."
+        },
+        {
+          "term": "suspense",
+          "module": "06-react",
+          "description": "The component boundary mechanism catching async promises."
+        },
+        {
+          "term": "concurrent_rendering",
+          "module": "06-react",
+          "description": "The engine prioritizing component hydration."
+        },
+        {
+          "term": "rsc",
+          "module": "06-react",
+          "description": "Server architecture leveraging streaming payloads."
         },
         {
           "term": "hydration",
           "module": "06-react",
           "description": "The process that links event handlers to static HTML."
+        }
+      ]
+    },
+    "use_action_state": {
+      "level": 10,
+      "file": "terms/level_10/use_action_state.md",
+      "display_name": "`useActionState` Hook",
+      "prerequisites": [
+        {
+          "term": "use_state",
+          "module": "06-react",
+          "description": "The core state primitive hook."
         },
         {
-          "term": "concurrent_rendering",
+          "term": "server_actions",
           "module": "06-react",
-          "description": "The prioritizing engine supporting Selective Hydration."
+          "description": "Asynchronous server functions invoked via form actions."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_state",
+          "module": "06-react",
+          "description": "Primitive state hook replaced by `useActionState` for form flows."
+        },
+        {
+          "term": "server_actions",
+          "module": "06-react",
+          "description": "Asynchronous server functions managed by `useActionState`."
+        },
+        {
+          "term": "rsc",
+          "module": "06-react",
+          "description": "The server component engine executing form actions."
         }
       ]
     },
@@ -2986,29 +3720,29 @@
         {
           "term": "context_api",
           "module": "06-react",
-          "description": "The global data provider that `use()` can consume."
+          "description": "The global data provider that `use()` can consume conditionally."
         },
         {
           "term": "suspense",
           "module": "06-react",
-          "description": "The boundary system that catches pending promises."
+          "description": "The component boundary system that catches pending promises unwrapped by `use()`."
         }
       ],
       "related": [
         {
           "term": "context_api",
           "module": "06-react",
-          "description": "The data sharing mechanism read by `use()`."
+          "description": "The global data sharing mechanism read conditionally by `use()`."
         },
         {
           "term": "suspense",
           "module": "06-react",
-          "description": "The UI fallback catcher for pending promises."
+          "description": "The boundary system catching pending promises unwrapped by `use()`."
         },
         {
-          "module": "06-react",
           "term": "rsc",
-          "description": "React Server Components."
+          "module": "06-react",
+          "description": "Server components generating data promises for `use()`."
         }
       ]
     },
@@ -3020,24 +3754,29 @@
         {
           "term": "declarative_programming",
           "module": "06-react",
-          "description": "Framer Motion is the ultimate expression of declarative animation."
+          "description": "Framer Motion expresses animations declaratively via component props."
         },
         {
           "term": "component_lifecycle",
           "module": "06-react",
-          "description": "Framer Motion specializes in animating components as they Mount and Unmount."
+          "description": "Framer Motion orchestrates enter, update, and exit lifecycle phase animations."
         }
       ],
       "related": [
         {
           "term": "conditional_rendering",
           "module": "06-react",
-          "description": "What `<AnimatePresence>` supercharges."
+          "description": "The conditional rendering pattern enhanced by `<AnimatePresence>`."
         },
         {
           "term": "declarative_programming",
           "module": "06-react",
-          "description": "You declare *what* the animation should look like, Framer Motion figures out *how* to do the math."
+          "description": "The programming model underlying Framer Motion props."
+        },
+        {
+          "term": "component_lifecycle",
+          "module": "06-react",
+          "description": "The mount/unmount phase transitions managed by motion components."
         }
       ]
     },
@@ -3049,24 +3788,29 @@
         {
           "term": "declarative_programming",
           "module": "06-react",
-          "description": "React Native uses the exact same React Hooks, State, and architecture."
+          "description": "React Native utilizes React's declarative component architecture, state hooks, and reconciliation."
         },
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "The engine that powers React Native."
+          "description": "The abstract UI data structure that allows React to target native mobile platforms."
         }
       ],
       "related": [
         {
           "term": "declarative_programming",
           "module": "06-react",
-          "description": "The parent library."
+          "description": "The parent programming model powering React Native."
         },
         {
           "term": "virtual_dom",
           "module": "06-react",
-          "description": "The abstract layer that makes React Native possible."
+          "description": "The abstract tree structure enabling non-browser platform rendering."
+        },
+        {
+          "term": "components",
+          "module": "06-react",
+          "description": "Core functional units mapped to native platform controls."
         }
       ]
     },
@@ -3078,29 +3822,39 @@
         {
           "term": "side_effects",
           "module": "06-react",
-          "description": "These libraries are the modern replacement for manual side effects."
+          "description": "Asynchronous data fetching is a side effect managed declaratively by React Query."
         },
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "What these libraries allow you to delete."
+          "description": "The manual hook pattern that React Query replaces for API interactions."
         }
       ],
       "related": [
         {
           "term": "use_effect",
           "module": "06-react",
-          "description": "The manual tool that React Query makes obsolete for data fetching."
+          "description": "The manual effect hook replaced by React Query."
+        },
+        {
+          "term": "side_effects",
+          "module": "06-react",
+          "description": "Async network requests managed declaratively."
+        },
+        {
+          "term": "redux",
+          "module": "06-react",
+          "description": "Client state container distinct from server state management."
+        },
+        {
+          "term": "zustand",
+          "module": "06-react",
+          "description": "Lightweight client state manager."
         },
         {
           "term": "state_management",
           "module": "06-react",
           "description": "React Query acts as the global state manager specifically for API data."
-        },
-        {
-          "module": "06-react",
-          "term": "redux",
-          "description": "Related concept: Redux."
         }
       ]
     },
@@ -3112,24 +3866,29 @@
         {
           "term": "components",
           "module": "06-react",
-          "description": "The visual units being tested."
+          "description": "The visual units of user interface being tested."
         },
         {
           "term": "synthetic_events",
           "module": "06-react",
-          "description": "The simulated interactions triggered during tests."
+          "description": "The simulated DOM user interactions dispatched during test execution."
         }
       ],
       "related": [
         {
           "term": "components",
           "module": "06-react",
-          "description": "The visual units being tested."
+          "description": "The UI components under test."
         },
         {
           "term": "synthetic_events",
           "module": "06-react",
-          "description": "The event framework simulated in testing environments."
+          "description": "The DOM event layer simulated during testing."
+        },
+        {
+          "term": "controlled_components",
+          "module": "06-react",
+          "description": "Form components tested via input typing and change handlers."
         }
       ]
     },
@@ -3141,19 +3900,34 @@
         {
           "term": "state_management",
           "module": "06-react",
-          "description": "Redux is the implementation of this concept."
+          "description": "The global state container architecture implemented by Redux."
         },
         {
           "term": "use_reducer",
           "module": "06-react",
-          "description": "React's built-in version of the Redux pattern."
+          "description": "React's built-in hook implementing the flux reducer pattern."
         }
       ],
       "related": [
         {
+          "term": "state_management",
+          "module": "06-react",
+          "description": "The parent architectural paradigm."
+        },
+        {
           "term": "use_reducer",
           "module": "06-react",
-          "description": "The localized React version of this pattern."
+          "description": "React's built-in single-component reducer hook."
+        },
+        {
+          "term": "zustand",
+          "module": "06-react",
+          "description": "Lightweight, selector-based global state alternative."
+        },
+        {
+          "term": "react_query",
+          "module": "06-react",
+          "description": "Async server state manager replacing API state in Redux."
         },
         {
           "term": "context_api",
@@ -3161,14 +3935,9 @@
           "description": "The built-in alternative for simpler global state."
         },
         {
-          "term": "zustand",
+          "term": "use_sync_external_store",
           "module": "06-react",
-          "description": "Related concept: Zustand."
-        },
-        {
-          "module": "06-react",
-          "term": "react_query",
-          "description": "React Query server state."
+          "description": "Related concept: `useSyncExternalStore` Hook."
         }
       ]
     },
@@ -3180,19 +3949,24 @@
         {
           "term": "components",
           "module": "06-react",
-          "description": "What you are styling."
+          "description": "The visual UI components styled by CSS-in-JS libraries."
         },
         {
           "term": "props",
           "module": "06-react",
-          "description": "How CSS-in-JS conditionally changes styles."
+          "description": "How styled components evaluate dynamic JavaScript variables to compute CSS styles."
         }
       ],
       "related": [
         {
           "term": "components",
           "module": "06-react",
-          "description": "Styled Components are just React Components that render a specific HTML tag with injected CSS."
+          "description": "The React components styled by CSS-in-JS primitives."
+        },
+        {
+          "term": "props",
+          "module": "06-react",
+          "description": "The data properties evaluated inside styled templates."
         },
         {
           "module": "06-react",
@@ -3209,34 +3983,34 @@
         {
           "term": "props",
           "module": "06-react",
-          "description": "The parameters typed by TypeScript."
+          "description": "The data parameters typed and validated by TypeScript interfaces."
         },
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "The state hook that utilizes TypeScript generics."
+          "description": "The state primitive hook utilizing TypeScript generics."
         }
       ],
       "related": [
         {
           "term": "props",
           "module": "06-react",
-          "description": "The data structure typed by interfaces."
+          "description": "The data parameters typed by TypeScript interfaces."
         },
         {
           "term": "use_state",
           "module": "06-react",
-          "description": "The state manager utilizing generics."
+          "description": "The state hook utilizing TypeScript generics."
         },
         {
-          "module": "06-react",
           "term": "components",
-          "description": "Typed component props."
+          "module": "06-react",
+          "description": "Typed functional component units."
         },
         {
-          "module": "06-react",
           "term": "custom_hooks",
-          "description": "Typed custom hooks."
+          "module": "06-react",
+          "description": "Reusable typed hook abstractions."
         }
       ]
     },
@@ -3248,24 +4022,34 @@
         {
           "term": "state_management",
           "module": "06-react",
-          "description": "The concept of external data stores."
+          "description": "The concept of external data stores operating outside React's Fiber tree."
         },
         {
           "term": "rules_of_hooks",
           "module": "06-react",
-          "description": "The usage guidelines governing hook execution."
+          "description": "The usage guidelines governing hook execution and lifecycle subscriptions."
         }
       ],
       "related": [
         {
           "term": "state_management",
           "module": "06-react",
-          "description": "The global state container architectures."
+          "description": "The global state container architectures integrated by `useSyncExternalStore`."
+        },
+        {
+          "term": "rules_of_hooks",
+          "module": "06-react",
+          "description": "Guidelines governing hook execution."
         },
         {
           "term": "zustand",
           "module": "06-react",
-          "description": "The state library that uses this hook under the hood."
+          "description": "State management library utilizing `useSyncExternalStore` under the hood."
+        },
+        {
+          "term": "redux",
+          "module": "06-react",
+          "description": "Global state container library integrated via `useSyncExternalStore`."
         }
       ]
     },
@@ -3277,53 +4061,36 @@
         {
           "term": "state_management",
           "module": "06-react",
-          "description": "The global state container concept."
+          "description": "The global state container concept implemented by Zustand."
         },
         {
           "term": "use_reducer",
           "module": "06-react",
-          "description": "The state-update logic pattern."
+          "description": "The state update pattern underlying store actions."
         }
       ],
       "related": [
         {
           "term": "state_management",
           "module": "06-react",
-          "description": "The architectural patterns for application data."
-        },
-        {
-          "term": "redux",
-          "module": "06-react",
-          "description": "The traditional, action-reducer global state manager."
+          "description": "The global state container architecture."
         },
         {
           "term": "use_sync_external_store",
           "module": "06-react",
-          "description": "The built-in React 18 hook that integrates stores with React state."
-        }
-      ]
-    },
-    "use_action_state": {
-      "file": "terms/level_10/use_action_state.md",
-      "prerequisites": [
-        {
-          "module": "06-react",
-          "term": "use_state"
-        }
-      ],
-      "related": [
-        {
-          "module": "06-react",
-          "term": "server_actions"
+          "description": "The built-in React 18 hook powering Zustand's store subscriptions."
         },
         {
+          "term": "redux",
           "module": "06-react",
-          "term": "rsc",
-          "description": "Related concept: React Server Components (RSC)."
+          "description": "Action-reducer based state container alternative."
+        },
+        {
+          "term": "react_query",
+          "module": "06-react",
+          "description": "Async server state manager complementary to Zustand."
         }
-      ],
-      "display_name": "`useActionState` Hook",
-      "level": 10
+      ]
     }
   }
 }

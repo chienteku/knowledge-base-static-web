@@ -1,11 +1,12 @@
 # Programmatic Navigation (`useRouter` / `useRoute`)
 
 > **Level 6 — Routing (Vue Router)**
-> The ability to navigate, redirect, and inspect route data inside JavaScript logic using Vue Router's Composition API composables instead of standard HTML anchor links.
+> Navigating between routes using JavaScript code (such as `router.push('/dashboard')`) inside component functions instead of HTML links.
 
 ---
 
 ## 1. Prerequisites
+
 - [Vue Router](vue_router.md) — The core routing library.
 - [Composition API](../level_01/composition_api.md) — The custom hook paradigm.
 - [Navigation Guards](navigation_guards.md) — Routing middleware.
@@ -13,72 +14,48 @@
 ---
 
 ## 2. Term Category
-- **Ecosystem Tool**
+
+**Vue Ecosystem (Routing API / Composition API Hooks)**: Programmatic Navigation is the technique of executing URL route transitions using JavaScript API methods (`router.push()`, `router.replace()`, `router.go()`) inside component methods, composables, or event handlers. In Vue 3 Composition API, developers access router controller instance methods and active route state via `useRouter()` and `useRoute()` composable hooks.
+
+Unlike declarative navigation using `<RouterLink to="...">`—which renders standard HTML `<a>` anchor tags for user clicks—programmatic navigation is executed via JavaScript logic. It is typically triggered after asynchronous side effects, such as form submissions, payment gateway API calls, or timer expirations. In React Router v6+, this functionality is provided by `useNavigate()` and `useLocation()`. Vue Router separates router action methods (`useRouter()`) from current route state inspection (`useRoute()`).
 
 ---
 
-## 3. Environment Context
-- **Composition API (`<script setup>`)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In a typical web application, most navigation is user-driven. Users click links, and the application changes pages. In Vue Router, this is handled declaratively in templates using `<router-link to="/about">`.
+While declarative `<RouterLink>` tags excel at rendering navigation menus and static links, web applications frequently require navigation triggered by imperative business logic. For example, when a user submits a credit card payment form, the app must perform an asynchronous API request, validate the response token, update global state, and *then* navigate to `/checkout/success`.
 
-However, many navigations must be triggered **programmatically** in response to JavaScript logic. For example:
-- Redirecting a user to the dashboard after a successful login form submission.
-- Redirecting to a `/404` error page when an API fetch fails to locate a resource.
-- Directing a user back to their previous page when they click a "Cancel" button.
-- Changing search filters in the URL when a user checks a checkbox.
+You cannot use a simple HTML link for this workflow because navigation must wait for the API call to succeed. Programmatic Navigation provides JavaScript methods (`router.push()`) that allow developers to trigger route transitions imperatively from code, passing dynamic parameters, query strings, and custom state objects.
 
-To handle these scenarios, we need low-level access to the router engine inside our script block. In Vue 3's Composition API, this is achieved using the **`useRouter`** and **`useRoute`** composables.
+### (2) Reality Metaphor
+Think of Programmatic Navigation like an Automated Airport Passenger Tram System controlled by a central dispatch computer. A declarative `<RouterLink>` is like a fixed staircase—passengers walk up the steps whenever they choose. Programmatic Navigation (`router.push()`), by contrast, is like an automated tram door: passengers step inside, the system verifies ticket validation and baggage scans (async API calls), and only after all checks pass does the central dispatch computer lock the doors and launch the tram toward Terminal B (the target route).
 
-### (2) How it works under the hood
-When you register Vue Router in your application (`app.use(router)`), it injects a router instance globally. 
-
-In `<script setup>`, you access this instance via two hooks:
-
-#### `useRouter()`
-Returns the global **router instance**. It provides methods to trigger navigation:
-- `router.push(path)`: Navigates to a new page. It pushes a new entry onto the browser's history stack, so the user can click the browser's "Back" button to return to the original page.
-- `router.replace(path)`: Navigates to a new page, but replaces the current page in the history stack. The browser's "Back" button will skip the replaced page.
-- `router.go(n)` / `router.back()` / `router.forward()`: Moves backward or forward in history by `n` steps.
-
-#### `useRoute()`
-Returns the **current route location object**. It is a reactive object representing the active state of the URL. It contains properties such as:
-- `route.params`: Route parameters (e.g. `/users/:id`).
-- `route.query`: Query string parameters (e.g. `?search=vue`).
-- `route.path`: The active path string.
-- `route.meta`: User-defined custom metadata attached to the route configuration.
-
-### (3) Code Examples
+### (3) Vue Code Examples
 
 #### Short Snippet
 ```vue
 <script setup>
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
-// 1. Get the router instance
-const router = useRouter()
+const router = useRouter() // Instance method controller
+const route = useRoute()   // Reactive current route location state
 
-function goToSettings() {
-  // 2. Navigate programmatically to '/settings'
-  router.push('/settings')
+function navigateToDashboard() {
+  // Push new location onto browser history stack
+  router.push('/dashboard')
 }
 </script>
 
 <template>
-  <button @click="goToSettings">Settings Panel</button>
+  <button @click="navigateToDashboard">Go to Dashboard</button>
+  <p>Current Path: {{ route.fullPath }}</p>
 </template>
 ```
 
 #### Fuller Example
-Below is a login component that handles form submission, shows a loading state, and redirects the user to their original destination (stored in the query string) upon success using `router.replace()`.
-
 ```vue
-<!-- Login.vue -->
+<!-- UserLoginForm.vue (Async API login with programmatic navigation) -->
 <script setup>
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
@@ -88,108 +65,111 @@ const route = useRoute()
 
 const username = ref('')
 const password = ref('')
-const isLoading = ref(false)
+const isSubmitting = ref(false)
+const errorMessage = ref('')
 
-async function login() {
-  isLoading.value = true
-  
+async function handleLogin() {
+  isSubmitting.value = true
+  errorMessage.value = ''
+
   try {
-    // Simulate authentication API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // Check if the user was redirected here from a private route
-    // e.g. /login?redirect=/admin
-    const destination = route.query.redirect || '/dashboard'
-    
-    // Redirect using replace so they can't press back to log out
-    router.replace(destination)
+    // Simulate async authentication API request
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (username.value === 'admin' && password.value === 'secret') {
+          resolve({ token: 'jwt-xyz-123' })
+        } else {
+          reject(new Error('Invalid username or password'))
+        }
+      }, 600)
+    })
+
+    localStorage.setItem('authToken', 'jwt-xyz-123')
+
+    // Check if user was redirected to login from a protected page
+    const redirectPath = route.query.redirect || '/dashboard'
+
+    // Replace current history entry so pressing Back does not return to login form
+    router.replace(String(redirectPath))
   } catch (err) {
-    console.error('Authentication failed', err)
+    errorMessage.value = err.message
   } finally {
-    isLoading.value = false
+    isSubmitting.value = false
   }
 }
 </script>
 
 <template>
-  <form @submit.prevent="login">
-    <input v-model="username" type="text" placeholder="Username" />
-    <input v-model="password" type="password" placeholder="Password" />
-    
-    <button :disabled="isLoading">
-      {{ isLoading ? 'Logging in...' : 'Login' }}
-    </button>
-  </form>
+  <div class="login-card">
+    <h2>System Authorization</h2>
+    <form @submit.prevent="handleLogin">
+      <input v-model="username" placeholder="Username" required />
+      <input v-model="password" type="password" placeholder="Password" required />
+      <button type="submit" :disabled="isSubmitting">
+        {{ isSubmitting ? 'Authenticating...' : 'Sign In' }}
+      </button>
+    </form>
+    <p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
+  </div>
 </template>
 ```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Confusing `useRouter` with `useRoute`
+### Mistake 1: Destructuring Properties Directly from `useRoute()`
 
-**The mistake:** Calling navigation methods (like `.push`) on `useRoute()`, or reading URL params off `useRouter()`.
+**The mistake:** Destructuring properties directly from the object returned by `useRoute()` (`const { params } = useRoute()`).
 
-**Why it's wrong:** They are separate tools. `useRouter` represents the active router engine, while `useRoute` represents the static data details of the page you are currently viewing.
-
-*Incorrect:*
-```javascript
-import { useRoute } from 'vue-router'
-const route = useRoute()
-
-function goHome() {
-  route.push('/') // Error: route.push is not a function!
-}
-```
-
-*Fix:*
-```javascript
-import { useRouter, useRoute } from 'vue-router'
-const router = useRouter()
-const route = useRoute()
-
-function goHome() {
-  router.push('/') // Correct!
-}
-```
-
-**Golden Rule:** Use `useRouter()` to *go* somewhere; use `useRoute()` to read *where* you are.
-
----
-
-### Mistake 2: Mixing `path` with `params` in `router.push()` (Params Ignored Trap)
-
-**The mistake:** Writing `router.push({ path: '/user', params: { id: '5' } })`.
-
-**Why it's wrong:** If `path` is specified in `router.push()`, `params` are completely IGNORED by Vue Router. Use named routes (`name` + `params`) or construct the path string directly.
+**Why it's wrong:** The object returned by `useRoute()` is a reactive Proxy. Direct ES6 destructuring extracts primitive copies of `params` or `query` at setup time, severing Vue's reactivity link. Subsequent URL parameter changes will not be tracked.
 
 *Incorrect:*
 ```javascript
-router.push({ path: '/user', params: { id: 5 } }); // ❌ params are IGNORED when path is provided!
+// ❌ Destructuring breaks route reactivity!
+const { params } = useRoute();
+console.log(params.id);
 ```
 
-*Fix:*
+*Fix:* Keep the route object intact, or wrap destructured properties in `toRefs()`:
 ```javascript
-// Use named route with params:
-router.push({ name: 'user-details', params: { id: 5 } });
-// Or string template:
-router.push(`/user/${id}`);
+const route = useRoute();
+console.log(route.params.id); // Access reactive route properties via route reference
 ```
 
 ---
 
-### Mistake 3: Accessing `this.$router` inside `<script setup>` (Composition API)
+### Mistake 2: Confusing `router.push()` with `router.replace()`
 
-**The mistake:** Attempting to call `this.$router.push('/dashboard')` inside `<script setup>`.
+**The mistake:** Using `router.push('/dashboard')` after a successful login or logout action.
 
-**Why it's wrong:** `this` is undefined inside `<script setup>`. Import and call the `useRouter()` composable instead.
+**Why it's wrong:** `router.push()` adds a new entry to the browser history stack. After logging in, if the user clicks the browser Back button, they are pushed back to the `/login` page. `router.replace()` replaces the current history entry, preventing unwanted back-navigation.
+
+*Incorrect:*
+```javascript
+// ❌ User can click Back button and land back on login form:
+router.push('/login');
+```
+
+*Fix:* Use `router.replace()` for authentication transitions and redirects:
+```javascript
+// Replaces active history entry:
+router.replace('/login');
+```
+
+---
+
+### Mistake 3: Attempting to Access `this.$router` inside `<script setup>`
+
+**The mistake:** Writing `this.$router.push('/dashboard')` inside Composition API `<script setup>`.
+
+**Why it's wrong:** Inside `<script setup>`, code executes prior to component instance binding, and `this` is `undefined`. Access router instance methods using the `useRouter()` composable hook.
 
 *Incorrect:*
 ```vue
 <script setup>
-function navigate() {
-  this.$router.push('/dashboard'); // ❌ TypeError: Cannot read properties of undefined!
+function goToSettings() {
+  this.$router.push('/settings'); // ❌ TypeError: Cannot read properties of undefined
 }
 </script>
 ```
@@ -199,102 +179,187 @@ function navigate() {
 <script setup>
 import { useRouter } from 'vue-router';
 const router = useRouter();
-function navigate() {
-  router.push('/dashboard');
+
+function goToSettings() {
+  router.push('/settings');
 }
 </script>
 ```
 
-
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Build a Back Button
+### Exercise 1: E-Commerce Checkout Form Success Navigation
 
-**Problem:** You are building a checkout page. Add a button that returns the user to the previous step in their browser history when clicked. Fill in the handler using `useRouter`.
+**Scenario:** An e-commerce payment component processes credit card transactions. Upon receiving payment confirmation, navigate programmatically to named route `'order-confirmation'` passing parameter `orderId`.
 
-```vue
-<script setup>
-import { useRouter } from 'vue-router'
+**Requirements:**
+1. Use `useRouter()` inside `<script setup>`.
+2. Navigate using named route object `router.push({ name: 'order-confirmation', params: { orderId: 'ORD-990' } })`.
+3. Include error handling for failed transactions.
 
-const router = useRouter()
-
-function goBack() {
-  // Implement back navigation
-}
-</script>
-
-<template>
-  <button @click="goBack">Go Back</button>
-</template>
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Clicking the button triggers `router.back()` or `router.go(-1)` to navigate back.
+>
+> #### Implementation
+> ```vue
+> <!-- PaymentCheckout.vue -->
+> <script setup>
+> import { ref } from 'vue';
+> import { useRouter } from 'vue-router';
+> 
+> const router = useRouter();
+> const isProcessing = ref(false);
+> 
+> async function processPayment() {
+>   isProcessing.value = true;
+>   try {
+>     // Simulate payment processing delay
+>     await new Promise(r => setTimeout(r, 500));
+>     const generatedOrderId = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
+>     
+>     // Navigate programmatically using named route descriptor
+>     await router.push({
+>       name: 'order-confirmation',
+>       params: { orderId: generatedOrderId }
+>     });
+>   } catch (err) {
+>     alert('Payment failed: ' + err.message);
+>   } finally {
+>     isProcessing.value = false;
+>   }
+> }
+> </script>
+> 
+> <template>
+>   <div class="checkout-box">
+>     <button :disabled="isProcessing" @click="processPayment">
+>       {{ isProcessing ? 'Authorizing Payment...' : 'Pay Now' }}
+>     </button>
+>   </div>
+> </template>
 > ```
-> - The router instance has a dedicated `.back()` method.
-> - Alternatively, you can use `.go(-1)`.
+>
+> #### Technical Explanation
+> 1. **Named Route Navigation**: `router.push({ name, params })` decouples navigation calls from raw URL path strings.
+> 2. **Async Integration**: Executes navigation cleanly inside `async/await` transaction handlers.
+> 3. **State Guarding**: Disables submit button via `isProcessing` ref during in-flight network calls.
+> 4. **History Stack Entry**: Adds confirmation page entry to browser history stack.
 > 
 ---
 
-### Exercise 2: router.push Navigation Variants
+### Exercise 2: Financial Application Session Timeout Token Logout
 
-**Problem:** Write `router.push()` calls for:
-1. Path string navigation to `/dashboard` 
-2. Named route `'user-profile'` with params `{ id: 10 }` 
-3. Route navigation with query parameter `{ search: 'vue' }` 
+**Scenario:** A banking portal runs an inactivity timer composable `useSessionTimer()`. When the session expires, execute `router.replace('/login')` with query parameter `reason=timeout`.
 
-**Expected output:**
+**Requirements:**
+1. Import `useRouter()`.
+2. Execute `router.replace()` passing path and query object `{ path: '/login', query: { reason: 'timeout' } }`.
+3. Include test assertions for route replacement.
+
 > [!check]- Answer
+>
+> #### Implementation
 > ```javascript
-> 1. router.push('/dashboard');
-> 2. router.push({ name: 'user-profile', params: { id: 10 } });
-> 3. router.push({ path: '/search', query: { search: 'vue' } });
-> ```
-> - String path: `router.push('/path')`
-> - Named route with params: `router.push({ name, params })`
-> - Query parameters: `router.push({ path, query })`
+> import { useRouter } from 'vue-router';
 > 
-> ```javascript
-> router.push('/dashboard');
-> router.push({ name: 'user-profile', params: { id: 10 } });
-> router.push({ path: '/search', query: { search: 'vue' } });
+> export function useSessionLogout() {
+>   const router = useRouter();
+> 
+>   function handleSessionTimeout() {
+>     // Clear security tokens
+>     localStorage.removeItem('sessionToken');
+>     
+>     // Replace history entry to prevent back-navigation into sensitive screens
+>     router.replace({
+>       path: '/login',
+>       query: { reason: 'timeout' }
+>     });
+>   }
+> 
+>   return { handleSessionTimeout };
+> }
+> 
+> // Technical Assertion Test
+> const { handleSessionTimeout } = useSessionLogout();
+> console.assert(typeof handleSessionTimeout === 'function', 'Timeout handler defined');
 > ```
+>
+> #### Technical Explanation
+> 1. **History Replacement**: `router.replace()` overwrites active browser history, blocking Back button access to cached banking screens.
+> 2. **Query String Injection**: `query: { reason: 'timeout' }` appends `?reason=timeout` to the destination URL.
+> 3. **Security Encapsulation**: Clears local token storage before initiating route replacement.
+> 4. **Reusable Composable**: Encapsulates session expiration logic cleanly inside a JavaScript helper module.
 > 
 ---
 
-### Exercise 3: router.replace vs router.push
+### Exercise 3: Healthcare Telehealth Dynamic Filter Navigation (`router.push` with query)
 
-**Problem:** Contrast `router.push('/login')` vs `router.replace('/login')` regarding browser history stack.
+**Scenario:** A hospital ER dashboard filters incoming patients by triage priority. Selecting a priority filter updates URL query parameters without reloading the page (`/er/dashboard?priority=critical`).
 
-**Expected output:**
+**Requirements:**
+1. Read active query using `useRoute()`.
+2. Update query parameters using `router.push({ query: { priority: selectedPriority } })`.
+3. Maintain existing non-conflicting query parameters.
+
 > [!check]- Answer
-> ```text
-> router.push() adds a new entry to the browser history stack; router.replace() replaces the current entry without adding a new history step.
-> ```
-> - `push()` -> Adds new entry to history (Back button returns to previous page).
-> - `replace()` -> Overwrites current history entry (Back button skips replaced page).
+>
+> #### Implementation
+> ```vue
+> <!-- ErDashboard.vue -->
+> <script setup>
+> import { ref, watch } from 'vue';
+> import { useRouter, useRoute } from 'vue-router';
 > 
-> ```javascript
-> router.replace('/login');
-> ```
+> const router = useRouter();
+> const route = useRoute();
 > 
+> const selectedPriority = ref(route.query.priority || 'all');
+> 
+> function applyFilter(priority) {
+>   selectedPriority.value = priority;
+>   
+>   // Preserve existing query params while updating 'priority'
+>   router.push({
+>     query: {
+>       ...route.query,
+>       priority: priority === 'all' ? undefined : priority
+>     }
+>   });
+> }
+> </script>
+> 
+> <template>
+>   <div class="er-dashboard">
+>     <h2>Triage Filter</h2>
+>     <button @click="applyFilter('all')">All</button>
+>     <button @click="applyFilter('critical')">Critical Only</button>
+>     <button @click="applyFilter('stable')">Stable Only</button>
+>     <p>Active Priority Filter: {{ route.query.priority || 'All' }}</p>
+>   </div>
+> </template>
+> ```
+>
+> #### Technical Explanation
+> 1. **Query Parameter Update**: `router.push({ query })` dynamically syncs UI filter state with the URL query string.
+> 2. **Parameter Preservation**: `{ ...route.query }` retains existing search parameters when updating filter keys.
+> 3. **Clean URL Cleanup**: Setting parameter to `undefined` strips redundant `?priority=all` strings from the browser URL bar.
+> 4. **Shareable Deep Links**: Enables users to bookmark or share filtered dashboard URLs directly.
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
+
 - [Vue Router](vue_router.md) — The routing ecosystem package.
 - [Navigation Guards](navigation_guards.md) — Global, per-route, or in-component middleware.
 - [Router View / Router Link](router_view_link.md) — Template elements for displaying and declaring route links.
 
 ---
 
-## 8. Key Takeaways
-- **Programmatic Navigation** enables routing changes from within script blocks rather than template links.
-- **`useRouter()`** fetches the router engine instance, giving you access to `push`, `replace`, and `go` methods.
-- **`useRoute()`** fetches the current active route descriptor, containing parameters, queries, and metadata.
-- Use `router.push()` when you want the user to be able to navigate back. Use `router.replace()` to replace the current history record (e.g. after login or logout).
-- Never mix up their scopes: Router is the action runner, Route is the data snapshot.
+## 7. Key Takeaways
+
+- **Programmatic Navigation** executes route transitions via JavaScript API calls inside setup scripts, composables, or event handlers.
+- Use **`useRouter()`** to access router action methods (`push`, `replace`, `go`); use **`useRoute()`** to inspect current route location state.
+- Use **`router.push()`** to append new entries to the browser history stack for standard navigation.
+- Use **`router.replace()`** after authentication or redirects to overwrite the current history entry, preventing Back button loops.
+- Do **not** destructure properties directly from `useRoute()`—keep the route object intact to preserve Vue's reactive proxy tracking.

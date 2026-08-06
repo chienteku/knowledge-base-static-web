@@ -1,269 +1,389 @@
 # `watchEffect`
 
 > **Level 2 — Reactivity System**
-> A reactive utility that automatically tracks dependencies read during its execution and re-runs the side effect whenever any tracked dependency changes.
+> An automated reactivity watcher function that executes immediately upon creation and automatically re-runs whenever any reactive dependency accessed synchronously during execution mutates.
 
 ---
 
 ## 1. Prerequisites
-- [`ref`](ref.md) — The fundamental reactive reference.
-- [Watchers](watchers.md) — The base tracking mechanism that monitors changes.
+
+- [`ref`](ref.md) — The fundamental reactive reference tracked by `watchEffect()`.
+- [Watchers](watchers.md) — The base tracking watcher concept that `watchEffect()` automates.
 
 ---
 
 ## 2. Term Category
-- **Vue Reactivity API**
+
+**Vue Reactivity API / Side Effect Runner (Automated Dependency Watcher)**: `watchEffect()` is Vue 3's high-level function for running automated reactive side effects. Unlike standard `watch()`, which requires developers to explicitly specify target dependency sources (`watch(source, callback)`), `watchEffect()` automatically tracks every reactive ref or proxy property accessed synchronously during its callback execution.
+
+Executing immediately upon initialization to discover initial dependencies, `watchEffect()` re-runs whenever any tracked dependency mutates. Designed for client-side side effects (network requests, localStorage sync, DOM subscriptions), it automatically unbinds when the host component unmounts.
 
 ---
 
-## 3. Environment Context
-- **Composition API (`<script setup>`)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In Vue, standard watchers (`watch`) are highly explicit. You tell Vue exactly what property to monitor, and Vue gives you a callback with the new and old values. This works wonderfully for simple updates.
+In complex applications, developers frequently need to run side effects that depend on multiple reactive state sources simultaneously. 
 
-However, sometimes you need to write a side effect that depends on *multiple* reactive sources. For example, if you are saving user settings to localStorage, you might need to track `userId`, `theme`, and `fontSize`. Declaring all three as watch sources in `watch([userId, theme, fontSize], ...)` is verbose. If you add a fourth dependency tomorrow, you must remember to update both the watch source array and the callback signature.
+For example, when persisting user preferences to `localStorage`, a side effect might depend on `userId`, `theme`, `fontSize`, and `notificationsEnabled`. Using standard `watch()`, developers must explicitly list every dependency in a source array:
 
-**`watchEffect`** removes this friction. It doesn't ask you *what* you want to watch. Instead, it immediately runs your side-effect code, listens to what reactive values you touch *during* the execution, and registers them as dependencies automatically.
-
-### (2) How it works under the hood
-When `watchEffect(fn)` is declared:
-1. It executes the callback function `fn` immediately.
-2. While `fn` runs, Vue sets a global "active effect" pointer.
-3. Every time a reactive dependency (like a `ref` or `reactive` property) is read, its getter checks for the active effect and adds it to its subscriber list.
-4. If any of those read variables change in the future, the subscriber list is triggered, and `fn` runs again.
-
-Unlike `watch`, `watchEffect` is run once immediately during initialization so that Vue can discover the initial dependencies.
-
-### (3) Code Examples
-
-#### Short Snippet
 ```javascript
-import { ref, watchEffect } from 'vue'
-
-const count = ref(0)
-const limit = ref(10)
-
-// watchEffect runs immediately: console logs "Count is: 0"
-// It will re-run automatically whenever `count` or `limit` is updated
-watchEffect(() => {
-  if (count.value >= limit.value) {
-    console.log(`Limit reached: ${count.value}`)
-  } else {
-    console.log(`Count is: ${count.value}`)
-  }
+watch([userId, theme, fontSize, notificationsEnabled], () => {
+  savePreferences()
 })
 ```
 
-#### Fuller Example
-In real-world applications, side effects often involve asynchronous tasks (like fetching data). When dependency updates occur rapidly, older pending requests must be cancelled to prevent race conditions. `watchEffect` solves this by passing an `onCleanup` function.
+This explicit approach introduces maintenance friction. If a developer adds a fifth setting property (`compactMode`) tomorrow, they must remember to update both the `watch` dependency source array and the callback signature. If they forget, side effects fail to trigger for the new variable.
 
+Vue created **`watchEffect()`** to eliminate dependency tracking boilerplate. You write the side effect logic naturally. As `watchEffect()` executes, Vue automatically sets a active effect tracker pointer, recording every reactive variable accessed synchronously. If any of those accessed variables mutate in the future, Vue re-runs the effect callback automatically.
+
+### (2) Reality Metaphor
+Think of an Automated Smart Security Sensor (Automated `watchEffect()`) versus a Manual Motion Detector Guard List (Explicit `watch()`).
+
+With a Manual Guard List (`watch()`), security officers must explicitly write down every specific door number on a paper clipboard: *"Monitor Door 101, Door 102, and Door 103."* If an architect adds Door 104 to the building and forgets to update the guard's paper clipboard, Door 104 remains completely unmonitored.
+
+An Automated Smart Security Sensor (`watchEffect()`) turns on the moment it is plugged in. It scans the entire room during its initial activation sweep, automatically detecting every active sensor line connected to the room. If any line trips in the future, the alarm sounds automatically without manual clipboard registration.
+
+### (3) Vue Code Examples
+
+#### Short Snippet
+```vue
+<script setup>
+import { ref, watchEffect } from 'vue'
+
+const count = ref(0)
+const maxLimit = ref(5)
+
+// watchEffect runs immediately on initialization!
+// Automatically tracks count.value and maxLimit.value
+watchEffect(() => {
+  if (count.value >= maxLimit.value) {
+    console.log(`Alert: Count ${count.value} reached max limit ${maxLimit.value}!`)
+  }
+})
+</script>
+
+<template>
+  <button @click="count++">Increment: {{ count }}</button>
+</template>
+```
+
+#### Fuller Example
 ```vue
 <script setup>
 import { ref, watchEffect } from 'vue'
 
 const userId = ref(1)
 const userData = ref(null)
+const isLoading = ref(false)
+const errorMessage = ref('')
 
+// watchEffect handles async data fetching with automatic AbortController cleanup
 watchEffect((onCleanup) => {
   const controller = new AbortController()
   const signal = controller.signal
 
-  // 1. Run the fetch
+  isLoading.value = true
+  errorMessage.value = ''
+
   fetch(`https://jsonplaceholder.typicode.com/users/${userId.value}`, { signal })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error('Failed to fetch user profile')
+      return res.json()
+    })
     .then(data => {
       userData.value = data
+      isLoading.value = false
     })
     .catch(err => {
-      if (err.name !== 'AbortError') console.error(err)
+      if (err.name !== 'AbortError') {
+        errorMessage.value = err.message
+        isLoading.value = false
+      }
     })
 
-  // 2. Register cleanup: triggers before the next run or when component unmounts
+  // Register cleanup function triggered before the next run or component unmount
   onCleanup(() => {
-    controller.abort() // Cancel the outdated request
+    controller.abort() // Cancel outdated pending HTTP request
   })
 })
 </script>
 
 <template>
-  <div>
+  <div class="user-profile-card">
     <select v-model.number="userId">
-      <option :value="1">User 1</option>
-      <option :value="2">User 2</option>
+      <option :value="1">User #1</option>
+      <option :value="2">User #2</option>
+      <option :value="3">User #3</option>
     </select>
-    <pre v-if="userData">{{ userData }}</pre>
-    <p v-else>Loading...</p>
+
+    <p v-if="isLoading">Loading profile data...</p>
+    <p v-else-if="errorMessage" class="error">{{ errorMessage }}</p>
+    <pre v-else-if="userData">{{ userData }}</pre>
   </div>
 </template>
 ```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Accessing reactive values after an `await` statement
+### Mistake 1: Accessing Reactive Variables AFTER an `await` Asynchronous Boundary
 
-**The mistake:** Expecting `watchEffect` to track a reactive value read *after* an asynchronous boundary.
+**The mistake:** Accessing reactive variables *after* an `await` statement inside an async `watchEffect()` callback.
 
-**Why it's wrong:** Vue's dependency tracking is completely synchronous. As soon as the first `await` is hit, the synchronous execution of the callback ends, and Vue stops recording dependencies. Any reactive variables accessed after `await` will not be registered.
+**Why it's wrong:** Vue's dependency tracking operates strictly **synchronously**. As soon as execution reaches an `await` keyword, the synchronous setup call yields, and Vue clears the active effect tracking context. Any reactive variables accessed *after* `await` will NOT be registered as dependencies.
 
 *Incorrect:*
 ```javascript
 watchEffect(async () => {
-  // Vue tracks this!
-  console.log(`Fetching updates for ID: ${id.value}`) 
-  
-  const data = await fetchData(id.value)
-  
-  // Vue WILL NOT track this. Changes to theme.value will not trigger re-run.
-  console.log(`Applying theme: ${theme.value}`) 
+  console.log(`User ID: ${userId.value}`) // Tracked!
+  const res = await fetch(`/api/user/${userId.value}`)
+  // Vue WILL NOT track theme.value below because it is after await!
+  console.log(`Applying Theme: ${theme.value}`) 
 })
-```
-
-*Fix:* Make sure all reactive variables are read synchronously at the start of the effect before any `await` statements.
-```javascript
-watchEffect(async () => {
-  const currentId = id.value
-  const currentTheme = theme.value // Read synchronously, tracked!
-  
-  console.log(`Fetching updates for ID: ${currentId}`)
-  const data = await fetchData(currentId)
-  console.log(`Applying theme: ${currentTheme}`)
-})
-```
-
-**Golden Rule:** `watchEffect` only tracks reactive properties accessed synchronously *before* the first asynchronous operation (`await`, `setTimeout`, etc.).
-
----
-
-### Mistake 2: Expecting `watchEffect()` to Track Dependencies Un-Evaluated Inside Conditional Branches
-
-**The mistake:** Expecting `watchEffect()` to re-run when `b` changes, when initial run executed `if (a)` and `a` was false.
-
-**Why it's wrong:** `watchEffect()` tracks ONLY dependencies accessed DURING its synchronous execution. If `b` is inside an un-executed `else` block, it is not tracked until `a` becomes true.
-
-*Incorrect:*
-```javascript
-watchEffect(() => {
-  if (show.value) console.log(data.value);
-  // ❌ data is NOT tracked while show.value is false!
-});
 ```
 
 *Fix:*
 ```javascript
-// Use explicit watch() if tracking must happen regardless of execution paths:
-watch([show, data], ([newShow, newData]) => { ... });
+watchEffect(async () => {
+  // Read ALL reactive dependencies synchronously before the first await!
+  const currentUserId = userId.value
+  const currentTheme = theme.value // Read synchronously, tracked cleanly!
+
+  console.log(`User ID: ${currentUserId}`)
+  const res = await fetch(`/api/user/${currentUserId}`)
+  console.log(`Applying Theme: ${currentTheme}`)
+})
+```
+
+---
+
+### Mistake 2: Expecting Un-Evaluated Conditional Branches to Be Tracked
+
+**The mistake:** Expecting `watchEffect()` to re-run when `data.value` changes, when the initial run executed `if (show.value)` and `show.value` was `false`.
+
+**Why it's wrong:** `watchEffect()` tracks ONLY dependencies accessed DURING its actual synchronous execution. If `data.value` is inside an un-executed `else` block or behind a false condition, it is not read, so Vue does not register it.
+
+*Incorrect:*
+```javascript
+watchEffect(() => {
+  if (show.value) {
+    console.log(data.value) // ❌ data.value is NOT tracked while show.value is false!
+  }
+})
+```
+
+*Fix:*
+```javascript
+// Read data.value synchronously outside condition if it must always be tracked:
+watchEffect(() => {
+  const currentData = data.value
+  if (show.value) {
+    console.log(currentData)
+  }
+})
 ```
 
 ---
 
 ### Mistake 3: Creating Infinite Loops by Mutating Tracked State Inside `watchEffect()`
 
-**The mistake:** Mutating `count.value++` inside `watchEffect(() => { console.log(count.value); count.value++; })`.
+**The mistake:** Mutating a tracked ref inside its own `watchEffect()` callback (e.g. `watchEffect(() => { console.log(count.value); count.value++ })`).
 
-**Why it's wrong:** Reading `count.value` registers it as a dependency. Mutating `count.value` inside the same callback triggers the effect to re-run immediately, causing an infinite loop.
+**Why it's wrong:** Reading `count.value` registers it as a dependency. Incrementing `count.value++` inside the same effect callback notifies subscribers immediately, causing `watchEffect()` to re-trigger itself in an infinite crash loop.
 
 *Incorrect:*
 ```javascript
 watchEffect(() => {
-  console.log(count.value);
-  count.value++; // ❌ Infinite effect execution loop!
-});
+  console.log(count.value)
+  count.value++ // ❌ Infinite effect re-execution loop!
+})
 ```
 
 *Fix:*
 ```javascript
-// Perform state mutations outside effect callbacks or use explicit watch()
+// Perform state mutations in event handlers, or use explicit watch() with getters
 ```
-
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Auto-Saving State
+### Exercise 1: E-Commerce Auto-Saving Shopping Preferences Engine
 
-**Problem:** You are building a form component and want to auto-save its settings to `localStorage` every time the user edits them. Complete the script block using `watchEffect` to perform this task automatically.
+**Scenario:** An e-commerce settings panel auto-saves user preferences to `localStorage` using `watchEffect()`.
+**Requirements:**
+1. Declare `reactive()` `preferences` object (`theme`, `currency`, `notifications`).
+2. Write `watchEffect()` persisting `preferences` to `localStorage` key `'user-pref'`.
+3. Mutate `preferences.theme` and assert that `localStorage` receives the updated JSON payload.
 
-```vue
-<script setup>
-import { reactive, watchEffect } from 'vue'
-
-const settings = reactive({
-  theme: 'dark',
-  notifications: true
-})
-</script>
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Every time `settings.theme` or `settings.notifications` changes, the entry in localStorage is updated.
-> ```
-> - Remember that `watchEffect` automatically tracks what you read inside. You just need to run `localStorage.setItem('user-settings', JSON.stringify(settings))` inside the effect.
-> - Since `settings` is reactive, touching its properties or converting it to string inside the effect will trigger Vue's tracking.
+>
+> #### Implementation
+> ```vue
+> <script setup>
+> import { reactive, watchEffect } from 'vue'
 > 
----
-
-### Exercise 2: watchEffect Immediate Execution Rule
-
-**Problem:** Does `watchEffect()` execute its callback function immediately upon component creation, or wait for dependency changes?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> watchEffect() executes IMMEDIATELY upon creation to track dependencies during initial run.
-> ```
-> - `watchEffect()` runs immediately to discover dependencies.
-> - `watch()` runs lazily by default.
+> // Mock localStorage for Node test environments
+> const mockLocalStorage = {
+>   storage: {},
+>   setItem(key, val) { this.storage[key] = String(val) },
+>   getItem(key) { return this.storage[key] }
+> }
 > 
-> ```javascript
+> const preferences = reactive({
+>   theme: 'dark',
+>   currency: 'USD',
+>   notifications: true
+> })
+> 
 > watchEffect(() => {
->   console.log('Runs immediately on setup');
-> });
+>   // Touch properties or serialize JSON synchronously to track dependency
+>   const payload = JSON.stringify({
+>     theme: preferences.theme,
+>     currency: preferences.currency,
+>     notifications: preferences.notifications
+>   })
+>   mockLocalStorage.setItem('user-pref', payload)
+> })
+> 
+> // Test assertion
+> const initialSaved = JSON.parse(mockLocalStorage.getItem('user-pref'))
+> console.assert(initialSaved.theme === 'dark', 'Initial theme should be saved automatically')
+> preferences.theme = 'light' // Mutate preference property
+> const updatedSaved = JSON.parse(mockLocalStorage.getItem('user-pref'))
+> console.assert(updatedSaved.theme === 'light', 'Updated theme must reflect in localStorage')
+> </script>
+> 
+> <template>
+>   <div>
+>     <select v-model="preferences.theme">
+>       <option value="dark">Dark</option>
+>       <option value="light">Light</option>
+>     </select>
+>   </div>
+> </template>
 > ```
+>
+> #### Technical Explanation
+> 1. **Immediate initial run**: `watchEffect()` executes immediately on setup, writing initial preferences.
+> 2. **Automated tracking**: `JSON.stringify(preferences)` reads all nested properties, registering them as dependencies.
+> 3. **Direct mutation reaction**: Updating `preferences.theme` triggers re-execution automatically.
+> 4. **No manual watcher arrays**: Eliminates verbose `watch([() => pref.theme, ...])` boilerplate.
 > 
 ---
 
-### Exercise 3: watchEffect Cleanup Callback
+### Exercise 2: Industrial IoT Sensor Telemetry Stream Abort Cleanup Controller
 
-**Problem:** Write `watchEffect()` using `onCleanup` callback to abort pending fetch requests when dependencies change.
+**Scenario:** An IoT dashboard connects to live telemetry endpoints using `watchEffect()` with `onCleanup` abort signaling.
+**Requirements:**
+1. Declare `sensorId = ref(101)`.
+2. Write `watchEffect((onCleanup) => ...)` managing an `AbortController`.
+3. Track cleanup execution via test assertion.
 
-**Expected output:**
 > [!check]- Answer
-> ```javascript
-> watchEffect((onCleanup) => { const controller = new AbortController(); fetch(url.value, { signal: controller.signal }); onCleanup(() => controller.abort()); });
-> ```
-> - `onCleanup()` registers cleanup functions executed before re-runs.
+>
+> #### Implementation
+> ```vue
+> <script setup>
+> import { ref, watchEffect } from 'vue'
 > 
-> ```javascript
+> const sensorId = ref(101)
+> let cleanupExecutedCount = 0
+> 
 > watchEffect((onCleanup) => {
->   const controller = new AbortController();
->   fetch(url.value, { signal: controller.signal });
->   onCleanup(() => controller.abort());
-> });
+>   const currentId = sensorId.value // Synchronous dependency read
+>   const controller = new AbortController()
+>   
+>   onCleanup(() => {
+>     cleanupExecutedCount++
+>     controller.abort() // Cancel previous telemetry stream connection
+>   })
+> })
+> 
+> // Test assertions
+> console.assert(cleanupExecutedCount === 0, 'No cleanup should run on initial setup')
+> sensorId.value = 102 // Mutate ref to trigger re-run
+> console.assert(cleanupExecutedCount === 1, 'Cleanup must run prior to second execution')
+> sensorId.value = 103
+> console.assert(cleanupExecutedCount === 2, 'Cleanup must run prior to third execution')
+> </script>
+> 
+> <template>
+>   <div>
+>     <button @click="sensorId = 102">Switch Sensor</button>
+>   </div>
+> </template>
 > ```
-> 
+>
+> #### Technical Explanation
+> 1. **`onCleanup` callback parameter**: `watchEffect` provides `onCleanup` to register teardown tasks before re-execution or unmount.
+> 2. **Race condition prevention**: Aborting stale requests prevents out-of-order API response bugs.
+> 3. **Synchronous reading rule**: Reading `sensorId.value` before async operations ensures reliable dependency registration.
+> 4. **Lifecycle teardown**: Unmounting the component automatically invokes the latest `onCleanup` callback.
 > 
 ---
 
-## 7. Related Terms
-- [Watchers](watchers.md) — The explicit tracking mechanism.
-- [Computed Properties](computed_properties.md) — Track dependencies to compute a new cached value rather than executing a side effect.
-- [VueUse](../level_10/vueuse.md) — Related concept: VueUse.
+### Exercise 3: Financial Currency Live FX Rate Ticker Auto-Subscriber
+
+**Scenario:** A currency exchange view subscribes to live ticker feeds based on reactive base/quote currency pairs using `watchEffect()`.
+**Requirements:**
+1. Track `baseCurrency` and `quoteCurrency` refs.
+2. Form active subscription topic string inside `watchEffect()`.
+3. Validate subscription string updates via test assertion.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```vue
+> <script setup>
+> import { ref, watchEffect } from 'vue'
+> 
+> const baseCurrency = ref('USD')
+> const quoteCurrency = ref('EUR')
+> let activeTopic = ''
+> 
+> watchEffect(() => {
+>   activeTopic = `FX_TICKER_${baseCurrency.value}_${quoteCurrency.value}`
+> })
+> 
+> // Test assertion
+> console.assert(activeTopic === 'FX_TICKER_USD_EUR', 'Initial topic should set correctly')
+> quoteCurrency.value = 'JPY'
+> console.assert(activeTopic === 'FX_TICKER_USD_JPY', 'Topic must update when quoteCurrency changes')
+> baseCurrency.value = 'GBP'
+> console.assert(activeTopic === 'FX_TICKER_GBP_JPY', 'Topic must update when baseCurrency changes')
+> </script>
+> 
+> <template>
+>   <div>
+>     <p>Active Market Feed: {{ activeTopic }}</p>
+>   </div>
+> </template>
+> ```
+>
+> #### Technical Explanation
+> 1. **Automated multi-dependency subscription**: `watchEffect` tracks both `baseCurrency` and `quoteCurrency` implicitly.
+> 2. **Immediate initial execution**: `activeTopic` is populated synchronously during component setup.
+> 3. **Declarative side effects**: Keeps external ticker subscriptions in sync with reactive state.
+> 4. **Clean unbinds**: Teardown hooks release socket subscriptions automatically on component unmount.
+> 
+---
+
+## 6. Related Terms
+
+- [Watchers](watchers.md) — The explicit watcher function (`watch`) with access to `newValue` and `oldValue`.
+- [Computed Properties](computed_properties.md) — Evaluates cached return values (which `watchEffect` should NOT be used for).
+- [`ref`](ref.md) — The reactive state primitive monitored inside effects.
+- [Component Lifecycle](../level_04/component_lifecycle.md) — The component lifecycle managing effect unbinds.
 
 ---
 
-## 8. Key Takeaways
-- **`watchEffect()`** automatically tracks all reactive properties read during its synchronous execution.
-- It executes its callback immediately upon initialization, and then re-runs on any dependency change.
-- Unlike `watch`, it does not require explicit source tracking and does not provide `oldValue` / `newValue`.
-- Dependecy tracking is synchronous; anything accessed after an `await` statement is ignored.
-- Use the `onCleanup` parameter callback to cancel pending async processes or clean up timers before the effect re-runs.
+## 7. Key Takeaways
+
+- **`watchEffect()`** automatically tracks all reactive variables read synchronously during its callback execution.
+- It runs **immediately** upon initialization to discover dependencies and establish tracking.
+- Unlike `watch()`, it does not require explicit dependency source arrays and does not provide `oldValue` / `newValue` parameters.
+- Reactive variables accessed *after* an `await` statement are NOT registered as dependencies.
+- Use the `onCleanup` parameter callback to cancel pending async network requests or timers before the effect re-runs.

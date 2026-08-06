@@ -1,254 +1,360 @@
 # Zustand
 
 > **Level 11 — Ecosystem Libraries**
-> A minimal, fast, and selector-based global state manager that avoids Context re-render issues.
+> A minimal, fast, and selector-based global state management library for React that eliminates Context re-render bottlenecks and Provider wrappers.
 
 ---
 
 ## 1. Prerequisites
-- [State Management (Redux / Zustand)](../level_06/state_management.md) — The global state container concept.
-- [`useReducer` Hook](../level_06/use_reducer.md) — The state-update logic pattern.
+
+- [State Management (Redux / Zustand)](../level_06/state_management.md) — The global state container concept implemented by Zustand.
+- [`useReducer` Hook](../level_06/use_reducer.md) — The state update pattern underlying store actions.
 
 ---
 
 ## 2. Term Category
-- **Ecosystem / State Manager**
+
+**Ecosystem (lightweight state store)**: Zustand is a lightweight, unopinionated global state management library for React. Built on a publish-subscribe architecture and powered internally by [`useSyncExternalStore`](use_sync_external_store.md), Zustand allows developers to create centralized data stores as standalone vanilla JavaScript objects without requiring top-level `<Provider>` wrapper components in the React tree.
+
+Zustand uses **selector-based subscriptions** (`useStore(state => state.user)`). Components subscribe strictly to specific primitive properties or slices of global state. When unrelated state properties in the store change, subscribing components do not re-render, eliminating the performance re-render bottlenecks associated with React Context.
 
 ---
 
-## 3. Environment Context
-- **Client-Side (SPA) / Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
+
 Managing global state across multiple components in React has historically been handled by either the Context API or Redux:
--   **Context API Bottleneck:** Context is easy to set up but suffers from performance issues. When a state variable inside a Context Provider changes, **every** component consuming that Context (via `useContext`) is forced to re-render, even if they only read a different, unrelated sub-property.
--   **Redux Boilerplate:** Redux is highly performant but requires significant boilerplate (actions, reducers, store configuration, action creators, middleware) to set up and maintain.
+1. **Context API Bottlenecks:** While Context is built into React, it suffers from severe performance issues in medium-to-large apps. When any state value inside a Context Provider updates, **every** component consuming that Context (via `useContext`) is forced to re-render, even if the component only reads an unrelated property.
+2. **Redux Boilerplate:** Redux is highly performant but requires significant boilerplate code (slices, actions, dispatchers, store providers, middleware) for simple global state needs.
 
-To bridge this gap, the community created **Zustand**:
--   **Selector-based Subscriptions:** Components subscribe to specific slices of global state using selector functions: `const user = useStore(state => state.user)`.
--   **Performance Optimization:** If other properties in the store change (e.g. `state.theme`), the component will not re-render because the selected value (`state.user`) remains referentially equal. This solves the Context re-render issue.
--   **Provider-less Store:** You do not need to wrap your component tree in Context Providers. The store is a standalone vanilla JavaScript object that can be read from and written to from anywhere, even outside of React components.
-
----
+Zustand was created to bridge this architectural gap:
+- **Provider-less Architecture:** You do not wrap component trees in `<Context.Provider>` wrappers. The store is created once using `create()` and exported as a custom React hook.
+- **Selector-based Subscriptions:** Components subscribe to specific state slices via selector functions: `const count = useStore(state => state.count)`. If `state.userName` updates elsewhere in the store, the component reading `state.count` does not re-render.
+- **Outside-React Usage:** Store state can be read, updated, and subscribed to directly in vanilla JavaScript files outside React components via `store.getState()` and `store.setState()`.
 
 ### (2) Reality Metaphor
-Imagine sharing office updates.
-- **Context API (Building Intercom):** An announcer broadcasts over the office intercom: *"Accountant Bob is heading to lunch."* Every employee in the building stops working, listens to the announcement, and returns to work, even if they do not work with Bob (**wasted rendering cycles**).
-- **Zustand (Direct Pager System):** You subscribe to updates only for your team. When Bob goes to lunch, only the accounting team's pagers ring (**selector-based subscriptions**). Employees in other departments continue working without interruption (**no unnecessary renders**).
 
----
+Imagine an office communication system.
 
-### (3) React Code Example: Counter & User Store
+- **React Context API (Building PA Intercom System):** The office administrator announces over the building-wide intercom: *"Accountant Bob's desk telephone number has changed."* Every employee in the building stops working, listens to the entire announcement, and resumes work (**wasted re-render cycles across all context consumers**), even though 95% of employees never call Bob.
+- **Zustand (Direct Pager System):** Employees subscribe only to topics relevant to their specific department (**selector-based subscriptions**). When Accountant Bob's number changes, only the accounting team's pagers buzz (**selective re-rendering**). Employees in marketing and engineering continue working without interruption (**zero unnecessary re-renders**).
 
-#### 1. Creating the Store (`store.js`)
+### (3) React Code Examples
+
+#### Short Snippet
+
 ```javascript
-// store.js
+// store/useCounterStore.js (Zustand Store Creation)
 import { create } from 'zustand';
 
-// Define the global store containing state and action methods
-export const useStore = create((set) => ({
+export const useCounterStore = create((set) => ({
   count: 0,
-  username: 'Alice',
-  
-  // Action to increment count
   increment: () => set((state) => ({ count: state.count + 1 })),
-  
-  // Action to update username
-  setUsername: (name) => set({ username: name })
+  decrement: () => set((state) => ({ count: state.count - 1 })),
+  reset: () => set({ count: 0 })
 }));
 ```
 
-#### 2. Consuming the Store with Selectors
-```jsx
-// CounterDisplay.js
-import React from 'react';
-import { useStore } from './store';
+#### Fuller Example
 
-export default function CounterDisplay() {
-  // Select only the count state.
-  // This component will ONLY re-render when state.count changes!
-  const count = useStore((state) => state.count);
-  const increment = useStore((state) => state.increment);
+```jsx
+// components/UserDashboard.jsx
+'use client';
+
+import { create } from 'zustand';
+
+// 1. Create centralized store containing state and actions
+const useUserStore = create((set) => ({
+  userName: 'Alex Rivera',
+  role: 'Architect',
+  loginCount: 42,
+  
+  // Actions
+  setUserName: (name) => set({ userName: name }),
+  incrementLogin: () => set((state) => ({ loginCount: state.loginCount + 1 }))
+}));
+
+// 2. Component subscribing ONLY to userName
+export function UserBadge() {
+  // Selector function ensures component re-renders ONLY when userName updates
+  const userName = useUserStore((state) => state.userName);
+  
+  return <span className="badge">User: {userName}</span>;
+}
+
+// 3. Component subscribing ONLY to loginCount and actions
+export function LoginTracker() {
+  const loginCount = useUserStore((state) => state.loginCount);
+  const incrementLogin = useUserStore((state) => state.incrementLogin);
 
   return (
-    <div>
-      <h2>Count: {count}</h2>
-      <button onClick={increment}>Add 1</button>
+    <div className="login-card">
+      <p>Logins: {loginCount}</p>
+      <button onClick={incrementLogin}>Record Login</button>
     </div>
   );
 }
 ```
 
+---
+
+## 4. Common Mistakes & Pitfalls
+
+### Mistake 1: Destructuring the entire store object without supplying selector functions
+
+**The mistake:** Calling `const { userName, count } = useUserStore()` without passing a selector function to the store hook.
+
+**Why it's wrong:** Calling `useStore()` without a selector function subscribes the component to ALL state updates in that store. If `count` updates, components that only destructure `userName` will still be forced to re-render, re-introducing Context API performance bottlenecks.
+
+*Incorrect:*
 ```jsx
-// UsernameDisplay.js
-import React from 'react';
-import { useStore } from './store';
-
-export default function UsernameDisplay() {
-  // Selects only username. Changes to 'count' will NOT cause this to re-render!
-  const username = useStore((state) => state.username);
-
-  return <h3>Welcome back, {username}!</h3>;
+// ❌ Anti-pattern: Subscribes component to ALL store updates!
+function Profile() {
+  const { userName } = useUserStore(); // Missing selector!
+  return <div>{userName}</div>;
 }
 ```
 
----
-
-## 5. Common Mistakes & Pitfalls
-
-### Mistake 1: Destructuring the entire store object without using selector functions
-
-**The mistake:** Destructuring state variables directly from the store hook call:
-
-```javascript
-// BAD: Subscribes the component to the ENTIRE store, causing unnecessary re-renders!
-const { username, count } = useStore(); 
+*Fix:*
+```jsx
+// Supply granular selector function
+function Profile() {
+  const userName = useUserStore((state) => state.userName);
+  return <div>{userName}</div>;
+}
 ```
 
-**Why it's wrong:** Calling `useStore()` without a selector function subscribes the component to all state updates in that store. If the `count` state updates, components that only read `username` will still be forced to re-render, re-introducing the Context API performance bottleneck.
+### Mistake 2: Mutating state directly inside Zustand store actions without returning new object references or using Immer
 
-*Fix:* Always use selector functions to extract only the specific state values your component needs:
+**The mistake:** Writing `set((state) => { state.count += 1; return state; })` inside a store action without Immer middleware.
 
-```javascript
-// GOOD: Component only updates when username changes
-const username = useStore((state) => state.username);
-```
-
----
-
-
-
-### Mistake 2: Selecting Entire Store Object in Components (`useStore(state => state)`) Triggering Unneeded Re-Renders
-
-**The mistake:** Calling `const state = useUserStore()` without selector functions.
-
-**Why it's wrong:** Consuming the entire store causes the component to re-render whenever ANY property in the Zustand store mutates! Use selector functions `useUserStore(state => state.name)`.
+**Why it's wrong:** Zustand performs shallow equality checks on returned state objects. Mutating `state` directly without returning a new object reference causes `useSyncExternalStore` equality checks to evaluate as unchanged, skipping component updates.
 
 *Incorrect:*
 ```javascript
-const store = useUserStore(); // ❌ Component re-renders on ANY store update!
+// ❌ Direct state mutation without Immer! Skipping component re-renders!
+inc: () => set((state) => { state.count += 1; return state; })
 ```
 
 *Fix:*
 ```javascript
-const name = useUserStore(state => state.name); // Selective re-rendering
+// Return new state object reference using spread syntax
+inc: () => set((state) => ({ count: state.count + 1 }))
 ```
 
-### Mistake 3: Mutating State Directly inside Zustand Actions Without Spread Syntax or Immer Middleware
+### Mistake 3: Storing API server response data in Zustand stores instead of using async state tools like React Query
 
-**The mistake:** Writing `set(state => { state.count += 1; return state; })` without Immer.
+**The mistake:** Fetching server API endpoints and manually storing response arrays inside a Zustand store.
 
-**Why it's wrong:** Zustand relies on shallow equality comparison of returned state objects. Mutating `state` directly without returning a new object reference prevents component updates.
+**Why it's wrong:** Server response data is **Server State** (data owned remotely that can go stale). Storing API data in Zustand requires manual implementation of caching, loading flags, background refetching, and deduplication.
 
 *Incorrect:*
 ```javascript
-inc: () => set(state => { state.count += 1; }) // ❌ Direct mutation without Immer!
+// ❌ Anti-pattern: Manually storing server API data in Zustand!
+fetchUsers: async () => {
+  const res = await fetch('/api/users');
+  set({ users: await res.json() });
+}
 ```
 
 *Fix:*
 ```javascript
-inc: () => set(state => ({ count: state.count + 1 })) // Immutable state object
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Theme Toggle Store
-
-**Problem:** Complete the Zustand store and component below to support a global theme switcher (`'light'` or `'dark'`):
-
-```jsx
-import { create } from 'zustand';
-
-// 1. Create the store
-// Solution:
-export const useThemeStore = create((set) => ({
-  theme: 'light',
-  toggleTheme: () => set((state) => ({ 
-    theme: state.theme === 'light' ? 'dark' : 'light' 
-  }))
-}));
-
-// 2. Component consumption
-import React from 'react';
-
-function ThemeToggleButton() {
-  const theme = useThemeStore((state) => state.theme);
-  const toggleTheme = useThemeStore((state) => state.toggleTheme);
-
-  return (
-    <button 
-      onClick={toggleTheme}
-      style={{ 
-        background: theme === 'dark' ? '#333' : '#fff',
-        color: theme === 'dark' ? '#fff' : '#000'
-      }}
-    >
-      Active Theme: {theme}
-    </button>
-  );
-}
+// Use React Query for Server State; keep Zustand for Client State
+const { data: users } = useQuery({ queryKey: ['users'], queryFn: fetchUsers });
 ```
 
 ---
+
+## 5. Practice Exercises
+
+### Exercise 1: IoT Telemetry Unit Preference Store
+
+**Scenario:** Create a Zustand store `useTelemetryStore` managing global temperature unit preferences (`'CELSIUS'` or `'FAHRENHEIT'`). Implement selector-based components to toggle units and display converted sensor temperatures.
+
+**Requirements:**
+1. Create store with `unit` state (`'CELSIUS'` default) and `toggleUnit` action.
+2. Build `UnitToggleButton` component selecting `toggleUnit`.
+3. Build `TemperatureReadout` selecting `unit` and converting °C to °F.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+> ```jsx
+> 'use client';
 > 
----
-
-### Exercise 2: Creating Zustand Store
-
-**Problem:** Create Zustand store `useCounterStore` with `count` state and `increment` action.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> import { create } from 'zustand'; const useCounterStore = create(set => ({ count: 0, increment: () => set(state => ({ count: state.count + 1 })) }));
-> ```
-> ```javascript
 > import { create } from 'zustand';
->
-> const useCounterStore = create(set => ({
->   count: 0,
->   increment: () => set(state => ({ count: state.count + 1 }))
+> 
+> // 1. Create Zustand Store
+> export const useTelemetryStore = create((set) => ({
+>   unit: 'CELSIUS',
+>   toggleUnit: () => set((state) => ({ 
+>     unit: state.unit === 'CELSIUS' ? 'FAHRENHEIT' : 'CELSIUS' 
+>   }))
 > }));
+> 
+> // 2. Toggle Button Component
+> export function UnitToggleButton() {
+>   const unit = useTelemetryStore((state) => state.unit);
+>   const toggleUnit = useTelemetryStore((state) => state.toggleUnit);
+> 
+>   return (
+>     <button onClick={toggleUnit} className="btn-toggle">
+>       Active Unit: °{unit === 'CELSIUS' ? 'C' : 'F'} (Click to Toggle)
+>     </button>
+>   );
+> }
+> 
+> // 3. Readout Component
+> export function TemperatureReadout({ tempInCelsius }) {
+>   const unit = useTelemetryStore((state) => state.unit);
+>   
+>   const displayTemp = unit === 'FAHRENHEIT' 
+>     ? (tempInCelsius * 9/5 + 32).toFixed(1)
+>     : tempInCelsius.toFixed(1);
+> 
+>   return (
+>     <div className="readout">
+>       <span>Temperature: {displayTemp} °{unit === 'CELSIUS' ? 'C' : 'F'}</span>
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** `create()` returns a custom React hook to consume and update state across components.
+> #### Technical Explanation
+> 1. **Zero Provider Overhead**: Store initializes via `create()` without root `<Provider>` wrappers.
+> 2. **Granular Selectors**: `useTelemetryStore(state => state.unit)` subscribes strictly to `unit` state updates.
+> 3. **Immutable Action Updates**: `toggleUnit` returns a fresh state object `{ unit: ... }`.
+> 4. **Runtime Conversion**: `TemperatureReadout` computes displayed value dynamically during render based on selected unit.
 > 
----
+### Exercise 2: Financial Trading Order Ticket State Store
 
-### Exercise 3: Zustand Outside-React Usage
+**Scenario:** Develop a Zustand store `useOrderTicketStore` managing dynamic stock ticker symbols, order types (`'MARKET'` or `'LIMIT'`), and share quantities for a trading terminal desk.
 
-**Problem:** How do you read/write Zustand store state outside React components (e.g. in vanilla JS files)? (Use `useCounterStore.getState()` and `useCounterStore.setState()`).
+**Requirements:**
+1. Create store with `symbol`, `orderType`, `quantity`, and setter actions.
+2. Implement `OrderSummary` selecting only `symbol` and `quantity`.
+3. Implement `OrderControls` dispatching setter actions.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> useCounterStore.getState() and useCounterStore.setState()
-> ```
-> ```javascript
-> const count = useCounterStore.getState().count;
-> useCounterStore.setState({ count: 10 });
+>
+> #### Implementation
+> ```jsx
+> 'use client';
+> 
+> import { create } from 'zustand';
+> 
+> export const useOrderTicketStore = create((set) => ({
+>   symbol: 'AAPL',
+>   orderType: 'MARKET',
+>   quantity: 10,
+>   setSymbol: (symbol) => set({ symbol }),
+>   setOrderType: (orderType) => set({ orderType }),
+>   setQuantity: (quantity) => set({ quantity: Math.max(1, quantity) })
+> }));
+> 
+> export function OrderSummary() {
+>   // Select only symbol and quantity
+>   const symbol = useOrderTicketStore((state) => state.symbol);
+>   const quantity = useOrderTicketStore((state) => state.quantity);
+> 
+>   return (
+>     <div className="summary-box">
+>       <h4>Order Ticket Summary</h4>
+>       <p>Target: {quantity} shares of {symbol}</p>
+>     </div>
+>   );
+> }
+> 
+> export function OrderControls() {
+>   const quantity = useOrderTicketStore((state) => state.quantity);
+>   const setQuantity = useOrderTicketStore((state) => state.setQuantity);
+> 
+>   return (
+>     <div className="qty-controls">
+>       <button onClick={() => setQuantity(quantity - 1)}>-</button>
+>       <span>Qty: {quantity}</span>
+>       <button onClick={() => setQuantity(quantity + 1)}>+</button>
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** Zustand stores expose utility methods (`getState`, `setState`) for usage outside React component trees.
+> #### Technical Explanation
+> 1. **Selector Re-render Isolation**: Changes to `orderType` will not trigger re-renders in `OrderSummary` or `OrderControls`.
+> 2. **State Validation**: `setQuantity` enforces minimum quantity bounds (`Math.max(1, quantity)`).
+> 3. **Action Co-location**: Store actions are co-located directly alongside state properties inside the store definition.
+> 4. **Decoupled Architecture**: Components consume shared state without prop drilling.
 > 
-## 7. Related Terms
-- [State Management (Redux / Zustand)](../level_06/state_management.md) — The architectural patterns for application data.
-- [Redux](redux.md) — The traditional, action-reducer global state manager.
-- [`useSyncExternalStore` Hook](use_sync_external_store.md) — The built-in React 18 hook that integrates stores with React state.
+### Exercise 3: E-Commerce Shopping Drawer Open/Close Store (Outside-React Usage)
+
+**Scenario:** Implement a global Zustand drawer store `useDrawerStore` for an e-commerce platform. Demonstrate calling `useDrawerStore.getState().openDrawer()` from a vanilla JavaScript analytics event listener outside React components.
+
+**Requirements:**
+1. Create `useDrawerStore` managing `isOpen` state and `openDrawer` / `closeDrawer` actions.
+2. Build `CartDrawer` component subscribing to `isOpen`.
+3. Demonstrate vanilla JS outside-React store execution.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> 'use client';
+> 
+> import { create } from 'zustand';
+> 
+> export const useDrawerStore = create((set) => ({
+>   isOpen: false,
+>   openDrawer: () => set({ isOpen: true }),
+>   closeDrawer: () => set({ isOpen: false })
+> }));
+> 
+> // Vanilla JavaScript helper function outside React component trees
+> export function triggerCartOpenFromAnalytics() {
+>   // Outside-React store access via getState()
+>   console.log('Opening cart drawer from external analytics trigger...');
+>   useDrawerStore.getState().openDrawer();
+> }
+> 
+> export function CartDrawer() {
+>   const isOpen = useDrawerStore((state) => state.isOpen);
+>   const closeDrawer = useDrawerStore((state) => state.closeDrawer);
+> 
+>   if (!isOpen) return null;
+> 
+>   return (
+>     <div className="drawer-overlay">
+>       <aside className="drawer-panel">
+>         <h3>Your Shopping Cart</h3>
+>         <button onClick={closeDrawer} className="btn-close">Close Drawer</button>
+>       </aside>
+>     </div>
+>   );
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Outside-React Store API**: `useDrawerStore.getState()` reads and dispatches actions directly from non-React JavaScript code.
+> 2. **Provider-less Mount**: `CartDrawer` reads store state without needing root `<DrawerProvider>` context wrappers.
+> 3. **Boolean Conditional Render**: Returns `null` when `isOpen` is `false`.
+> 4. **Performance Efficiency**: Only components selecting `isOpen` re-render during drawer state toggles.
+> 
+---
+
+## 6. Related Terms
+
+- [State Management (Redux / Zustand)](../level_06/state_management.md) — The global state container architecture.
+- [`useSyncExternalStore` Hook](use_sync_external_store.md) — The built-in React 18 hook powering Zustand's store subscriptions.
+- [Redux](redux.md) — Action-reducer based state container alternative.
+- [React Query (TanStack Query) / SWR](react_query.md) — Async server state manager complementary to Zustand.
 
 ---
 
-## 8. Key Takeaways
-- Zustand is a lightweight global state management library for React.
-- It uses selector-based subscriptions to prevent unnecessary component re-renders.
-- Stores do not require wrapper Context Providers at the root of your application.
-- State can be read and updated from anywhere, including outside of React components.
-- Always use selector functions to target specific state slices.
-- Do not destructure the hook directly without selectors to avoid performance issues.
+## 7. Key Takeaways
+
+- Zustand is a lightweight, fast global state management library for React.
+- Does not require top-level `<Provider>` wrapper components in the React tree.
+- Uses selector-based subscriptions (`useStore(state => state.prop)`) to eliminate Context API re-render bottlenecks.
+- Action methods are defined directly inside the store object alongside state variables.
+- Always use selector functions when consuming store state to prevent unnecessary component re-renders.
+- Store state can be accessed and mutated outside of React components using `store.getState()` and `store.setState()`.

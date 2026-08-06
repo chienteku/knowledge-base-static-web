@@ -1,162 +1,351 @@
 # Strict Mode
 
 > **Level 8 — Performance Optimization**
-> A developer tool built into React that intentionally double-invokes certain lifecycle methods and renders in development mode to expose hidden bugs and side effects.
+> Development-only wrapper component that intentionally double-invokes component functions and effects to surface side-effect bugs and memory leaks.
 
 ---
 
 ## 1. Prerequisites
-- [Component Lifecycle](../level_03/component_lifecycle.md) — What Strict Mode is manipulating.
-- [Side Effects](../level_03/side_effects.md) — What Strict Mode is trying to expose.
+
+- [Render Purity](../level_01/render_purity.md) — Strict Mode double-renders components to enforce functional render purity.
+- [Cleanup Functions](../level_03/cleanup_functions.md) — Strict Mode double-fires `useEffect` setup/cleanup to uncover missing cleanup logic.
 
 ---
 
 ## 2. Term Category
-- **React Development Tool**
+
+**Rendering Mechanic (development auditor)**: Development-only tool (`<React.StrictMode>`) that adds diagnostic checks and warnings to component subtrees. It carries zero production overhead and does not render HTML DOM elements. In React 18+, it intentionally mounts, unmounts, and re-mounts components in development to expose uncleaned side effects, race conditions, and impure render behaviors.
 
 ---
 
-## 3. Environment Context
-- **Development Only**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-React requires that your components are Pure Functions and that your Side Effects are cleaned up properly. But developers are human, and they make mistakes.
-A developer might write a `useEffect` that subscribes to a WebSocket, but they forget to write the [Cleanup Function](../level_03/cleanup_functions.md). In a normal environment, this bug might lay dormant for weeks until it causes a memory leak in production.
-React designed **`<React.StrictMode>`** to catch these bugs immediately on your local machine.
+In React 18+, Concurrent Rendering allows React to pause, discard, or re-run component renders mid-execution. Additionally, future React features (such as Offscreen UI restoration) require components to mount, unmount, and re-mount while preserving state.
 
-### (2) The "Double Render" Behavior
-When you wrap your app in `<React.StrictMode>`, React will intentionally do the following things **TWICE** every time a component mounts:
-1. It renders the component twice.
-2. It runs `useEffect` twice (Mount -> Unmount -> Mount).
+If a component contains impure side effects in its render phase (e.g., mutating global objects) or fails to unsubscribe from event listeners inside `useEffect`, it will cause subtle memory leaks, duplicate network requests, and unpredictable state bugs in production.
 
-If your component is truly a Pure Function, rendering it twice will do absolutely no harm. 
-If your `useEffect` has a proper cleanup function, the sequence (Subscribe -> Unsubscribe -> Subscribe) will work perfectly.
-But if you forgot your cleanup function, the double-render will immediately break your app on your local machine, forcing you to fix it before it goes to production.
-
-### (3) Production Safety
-Strict Mode is completely ignored in the Production build. It has absolutely zero impact on the performance of your live website. It is strictly a safety net for developers.
+To surface these latent bugs during development, React provides **Strict Mode**:
+1. **Double-Rendering Components**: In development, React intentionally calls component functions twice (`Render -> Render`) to verify that render logic is pure and idempotent.
+2. **Double-Executing Effects**: React simulates an immediate unmount and re-mount cycle for every effect (`Mount -> Unmount -> Mount`). It runs `useEffect` setup, executes the cleanup function immediately, and then re-runs setup.
+3. **Deprecation Audits**: Warns about deprecated APIs (e.g., legacy string refs, `findDOMNode`, legacy context API).
 
 ---
 
-## 5. Common Mistakes & Pitfalls
-
-### Mistake 1: Trying to "fix" the Double Console Log
-
-**The mistake:** A beginner starts learning React. They put `console.log("Rendering!")` in their component. They see it print twice in the console. They think their app is broken and spend 3 hours trying to "fix" it by removing Strict Mode.
-
-**Why it's wrong:** The double console log is NOT a bug. It is Strict Mode doing exactly what it was designed to do. 
-**Golden Rule:** Never disable Strict Mode just to hide double console logs. Leave it on. It is protecting you from catastrophic memory leaks.
+### (2) Reality Metaphor
+Imagine a commercial building safety inspector testing fire sprinklers.
+- **Without Strict Mode (Single Untested Run)**: A building installer turns on the water main once. Water flows into the pipes. However, nobody tests turning the valve off and on again. When a real emergency occurs, the valve gets stuck open and floods the building.
+- **With Strict Mode (Intentional Double Test)**: The safety inspector opens the valve (**mount**), immediately shuts it off (**unmount/cleanup**), and opens it a second time (**re-mount**). If the pipes leak or the valve fails to close completely during the second cycle, the inspector catches the defect before the building opens to the public.
 
 ---
 
+### (3) React Code Examples
 
+#### Short Snippet
+```jsx
+import React, { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App';
 
-### Mistake 2: Removing `StrictMode` to Avoid Double-Render Behavior in Development
+const root = createRoot(document.getElementById('root'));
+root.render(
+  <StrictMode>
+    {/* StrictMode audits App and all descendant components in Development */}
+    <App />
+  </StrictMode>
+);
+```
 
-**The mistake:** Removing `<React.StrictMode>` from `index.js` because components double-render or log twice.
+#### Fuller Example
+```jsx
+import React, { useState, useEffect } from 'react';
 
-**Why it's wrong:** Double rendering in development is an intentional feature of `StrictMode` designed to catch impure render side-effects and missing cleanup functions before deploying to production! Fix the impure code instead.
+export function WindowResizeTracker() {
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 0
+  );
+
+  useEffect(() => {
+    // Setup listener
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // CLEANUP FUNCTION: Strictly required for Strict Mode safety!
+    // Strict Mode will call setup -> cleanup -> setup immediately in dev.
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return (
+    <div className="resize-card">
+      <h3>Window Width Monitor</h3>
+      <p>Current Width: {windowWidth}px</p>
+    </div>
+  );
+}
+```
+
+---
+
+## 4. Common Mistakes & Pitfalls
+
+### Mistake 1: Panicking and Disabling Strict Mode Because `console.log` Fires Twice
+
+**The mistake:** Seeing duplicate console output in development logs and removing `<StrictMode>` from `index.jsx` to "fix" it.
+
+**Why it's wrong:** Duplicate logs in development are intentional behavior designed to warn developers about impure side effects. Removing Strict Mode hides critical bugs that will break when deployed to Concurrent React environments.
 
 *Incorrect:*
-```javascript
-// Removing <React.StrictMode> to stop double rendering in dev mode
+```jsx
+// BAD: Removing StrictMode to hide double console.logs
+root.render(<App />);
 ```
 
 *Fix:*
-```javascript
-Keep <React.StrictMode> enabled and ensure render functions are pure calculations
+```jsx
+// GOOD: Keep StrictMode active; ensure render functions and effects are pure
+root.render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
 ```
 
-### Mistake 3: Expecting `StrictMode` Double-Rendering in Production Builds
+---
 
-**The mistake:** Worrying that `StrictMode` will cause double rendering and slow performance for production users.
+### Mistake 2: Writing Side Effects Directly Inside Component Render Bodies
 
-**Why it's wrong:** `StrictMode` checks run ONLY in development builds! Production builds automatically strip all `StrictMode` double-render checks completely.
+**The mistake:** Mutating global arrays or triggering network calls directly inside the render body instead of `useEffect`.
+
+**Why it's wrong:** Under Strict Mode, render bodies execute twice. Impure operations inside render will push duplicate items or fire duplicate HTTP requests on every single render.
 
 *Incorrect:*
-```javascript
-// Worrying about StrictMode performance impact on production users
+```jsx
+let globalItems = [];
+
+function BadComponent() {
+  // BAD: Impure global push runs TWICE per render in Strict Mode!
+  globalItems.push('item');
+  return <div>{globalItems.length}</div>;
+}
 ```
 
 *Fix:*
-```javascript
-StrictMode has ZERO impact on production build bundle size or execution performance
+```jsx
+function GoodComponent() {
+  const [items, setItems] = useState([]);
+  
+  useEffect(() => {
+    // GOOD: Side effects belong inside useEffect with proper cleanup
+    setItems((prev) => [...prev, 'item']);
+  }, []);
+
+  return <div>{items.length}</div>;
+}
 ```
 
-## 6. Practice Exercises
+---
 
-### Exercise 1: Spot the Bug that Strict Mode Catches
+### Mistake 3: Omitting Cleanup Functions from `useEffect` Subscriptions
 
-**Problem:** Look at this `useEffect`. Why will this component instantly break on a developer's machine if Strict Mode is turned on?
-```javascript
+**The mistake:** Attaching event listeners or WebSocket connections in `useEffect` without returning a cleanup function.
+
+**Why it's wrong:** Strict Mode's `Mount -> Unmount -> Mount` cycle will leave the first event listener active while attaching a second listener, causing duplicate event handlers and memory leaks.
+
+*Incorrect:*
+```jsx
 useEffect(() => {
-  document.body.innerHTML += "<h1>Welcome!</h1>";
+  // BAD: Missing return () => window.removeEventListener(...)
+  window.addEventListener('scroll', handleScroll);
 }, []);
 ```
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Strict Mode runs effects twice on mount!
-> Because there is no cleanup function, the effect will run, append `<h1>Welcome!</h1>`, then run AGAIN and append a second `<h1>Welcome!</h1>`. 
-> The developer will see TWO headings on the screen, instantly realizing they wrote an impure, unsafe side effect!
-> ```
-> - Think about what `+=` does if it runs twice in a row.
-> 
+*Fix:*
+```jsx
+useEffect(() => {
+  window.addEventListener('scroll', handleScroll);
+  // GOOD: Return cleanup function to remove listener on unmount
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+```
+
 ---
 
+## 5. Practice Exercises
 
+### Exercise 1: IoT Sensor Event Listener Cleanup
 
-### Exercise 2: Wrapping Root App in StrictMode
+**Scenario:** An industrial telemetry component subscribes to a custom window telemetry event. In development under Strict Mode, event handlers fire twice for every sensor pulse. You must add proper cleanup logic to ensure single event handling.
 
-**Problem:** Wrap `<App />` root in `<React.StrictMode>` component.
+**Requirements:**
+1. Attach custom event listener in `useEffect`.
+2. Return cleanup function removing event listener.
+3. Verify cleanup prevents duplicate handler accumulation.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> root.render(<React.StrictMode><App /></React.StrictMode>);
-> ```
-> ```javascript
-> root.render(
->   <React.StrictMode>
->     <App />
->   </React.StrictMode>
-> );
+>
+> #### Implementation
+> ```jsx
+> import React, { useState, useEffect } from 'react';
+> 
+> export function IoTSensorListener() {
+>   const [telemetry, setTelemetry] = useState(0);
+> 
+>   useEffect(() => {
+>     const handleSensorPulse = (e) => {
+>       setTelemetry((prev) => prev + 1);
+>     };
+> 
+>     window.addEventListener('sensorPulse', handleSensorPulse);
+> 
+>     // Strict Mode safely verifies this cleanup function on mount
+>     return () => {
+>       window.removeEventListener('sensorPulse', handleSensorPulse);
+>     };
+>   }, []);
+> 
+>   return (
+>     <div className="sensor-listener">
+>       <h3>Telemetry Pulse Count: {telemetry}</h3>
+>     </div>
+>   );
+> }
+> 
+> if (typeof window !== 'undefined') {
+>   console.assert(typeof IoTSensorListener === 'function', 'Valid component');
+> }
 > ```
 >
-> **Explanation:** `<React.StrictMode>` enables development-only checks for React applications.
+> #### Technical Explanation
+> 1. **Double-Mount Audit**: In Strict Mode development, React runs `setup -> cleanup -> setup`. The first listener is safely removed before the second mounts.
+> 2. **Memory Leak Prevention**: Discarded component instances clear window listener references.
+> 3. **Idempotent Effects**: Setup and cleanup balance out completely, preserving state accuracy.
+> 4. **Production Parity**: Carries zero code footprint or performance cost in production builds.
 > 
 ---
 
-### Exercise 3: Checks Performed by StrictMode
+### Exercise 2: Crypto Exchange WebSocket Connection
 
-**Problem:** List 2 checks performed by StrictMode (1. Double-renders components to detect impure side-effects; 2. Double-runs effects to verify cleanup functions).
+**Scenario:** A trading desk component connects to a WebSocket server for live BTC prices. You need to handle WebSocket lifecycle management cleanly so Strict Mode double-mounting does not create duplicate zombie connections.
 
-**Expected output:**
+**Requirements:**
+1. Open WebSocket connection in `useEffect`.
+2. Close socket in cleanup return function.
+3. Validate connection state management.
+
 > [!check]- Answer
-> ```text
-> 1. Double-renders components to detect impure side-effects; 2. Double-runs effects to verify cleanup functions
-> ```
-> ```text
-> 1. Double-renders components to detect impure side-effects; 2. Double-runs effects to verify cleanup functions
+>
+> #### Implementation
+> ```jsx
+> import React, { useState, useEffect } from 'react';
+> 
+> export function CryptoTickerSocket() {
+>   const [price, setPrice] = useState(64000);
+> 
+>   useEffect(() => {
+>     // Mock WebSocket connection object
+>     const mockSocket = {
+>       connected: true,
+>       close: () => {
+>         mockSocket.connected = false;
+>       }
+>     };
+> 
+>     // Return cleanup function to close socket on unmount
+>     return () => {
+>       mockSocket.close();
+>     };
+>   }, []);
+> 
+>   return (
+>     <div className="crypto-ticker">
+>       <h3>BTC/USD: ${price}</h3>
+>     </div>
+>   );
+> }
+> 
+> if (typeof window !== 'undefined') {
+>   console.assert(typeof CryptoTickerSocket === 'function', 'Valid component');
+> }
 > ```
 >
-> **Explanation:** StrictMode surfaces latent memory leaks and impure side-effects during development.
+> #### Technical Explanation
+> 1. **Socket Lifecycle**: Closing `mockSocket` in cleanup prevents zombie socket connections from accumulating during development re-mounts.
+> 2. **Strict Mode Safety**: Ensures socket allocation and release remain symmetric.
+> 3. **Resource Leak Elimination**: Prevents duplicate network bandwidth usage.
+> 4. **Concurrent Readiness**: Prepares component for future React Offscreen rendering features.
 > 
-## 7. Related Terms
-- [Side Effects](../level_03/side_effects.md) — What Strict Mode audits.
-- [Cleanup Functions](../level_03/cleanup_functions.md) — The specific thing Strict Mode is checking for.
-- [Render Purity](../level_01/render_purity.md) — Related concept: Render Purity.
+---
+
+### Exercise 3: E-Commerce Keyboard Shortcut Listener
+
+**Scenario:** An online store allows customers to press `Escape` to close their cart drawer. You must add a keydown event listener inside `useEffect` that is fully compliant with Strict Mode audit rules.
+
+**Requirements:**
+1. Bind keydown listener in `useEffect`.
+2. Unbind keydown listener in cleanup callback.
+3. Use updater function for cart state updates.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> import React, { useState, useEffect } from 'react';
+> 
+> export function CartDrawer() {
+>   const [isOpen, setIsOpen] = useState(true);
+> 
+>   useEffect(() => {
+>     const handleKeyDown = (e) => {
+>       if (e.key === 'Escape') {
+>         setIsOpen(false);
+>       }
+>     };
+> 
+>     window.addEventListener('keydown', handleKeyDown);
+> 
+>     return () => {
+>       window.removeEventListener('keydown', handleKeyDown);
+>     };
+>   }, []);
+> 
+>   return (
+>     <div className="cart-drawer">
+>       <p>Cart Status: {isOpen ? 'OPEN (Press ESC to close)' : 'CLOSED'}</p>
+>       <button onClick={() => setIsOpen(true)}>Reopen Cart</button>
+>     </div>
+>   );
+> }
+> 
+> if (typeof window !== 'undefined') {
+>   console.assert(typeof CartDrawer === 'function', 'Valid component');
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Listener Unbinding**: Returning `removeEventListener` ensures Strict Mode double-invocations leave exactly 1 active keydown listener.
+> 2. **Event Isolation**: Pressing `Escape` triggers handler exactly once.
+> 3. **Zero Overhead**: `<StrictMode>` checks are automatically stripped in production builds.
+> 4. **Code Quality**: Enforces best practices for subscription lifetime management across all team developers.
+> 
+---
+
+## 6. Related Terms
+
+- [Render Purity](../level_01/render_purity.md) — Core React rule verified by Strict Mode.
+- [Cleanup Functions](../level_03/cleanup_functions.md) — Destruction handlers verified by Strict Mode.
+- [Side Effects](../level_03/side_effects.md) — Asynchronous tasks audited by Strict Mode.
 
 ---
 
-## 8. Key Takeaways
-- **`<React.StrictMode>`** is a wrapper component that helps you find hidden bugs.
-- It intentionally double-renders your components and double-runs your effects in Development Mode.
-- It verifies that your components are Pure and that your Cleanup Functions work.
-- The "double console log" is an intentional feature, not a bug.
-- It is automatically disabled in Production and does not affect live performance.
+## 7. Key Takeaways
+
+- `<React.StrictMode>` is a development-only tool that audits component subtrees for latent bugs.
+- It carries zero production bundle overhead and renders no physical HTML DOM wrapper nodes.
+- In development, it double-invokes render functions to enforce functional render purity.
+- It double-runs `useEffect` setup and cleanup cycles (`Mount -> Unmount -> Mount`) to expose missing effect cleanups.
+- Never remove `<StrictMode>` to hide duplicate console logs; fix the underlying impure code instead.

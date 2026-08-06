@@ -1,181 +1,454 @@
 # React Query (TanStack Query) / SWR
 
 > **Level 11 — Ecosystem Libraries**
-> Powerful data-fetching libraries that manage server state, caching, background refetching, and synchronization, completely replacing the traditional `useEffect` + `fetch` pattern.
+> Industry-standard data-fetching libraries that manage server state, caching, background refetching, and synchronization.
 
 ---
 
 ## 1. Prerequisites
-- [Side Effects](../level_03/side_effects.md) — These libraries are the modern replacement for manual side effects.
-- [`useEffect` Hook](../level_03/use_effect.md) — What these libraries allow you to delete.
+
+- [Side Effects](../level_03/side_effects.md) — Asynchronous data fetching is a side effect managed declaratively by React Query.
+- [`useEffect` Hook](../level_03/use_effect.md) — The manual hook pattern that React Query replaces for API interactions.
 
 ---
 
 ## 2. Term Category
-- **React Ecosystem / Data Fetching Library**
+
+**Ecosystem (async state manager)**: React Query (part of TanStack Query) and SWR are specialized asynchronous server state management libraries for React. While client state managers (like Redux or Zustand) handle synchronous UI state owned by the browser application, React Query manages **Server State**—data hosted remotely on backend databases or microservices that can go out of date without client knowledge.
+
+React Query replaces manual `useEffect` data-fetching logic by providing specialized custom hooks (`useQuery`, `useMutation`). It automatically manages cache indexing, loading/error states, duplicate request deduplication, background refetching upon window refocus, retries, optimistic updates, and garbage collection.
 
 ---
 
-## 3. Environment Context
-- **Client-Side (React DOM)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In traditional React, fetching data from an API is a nightmare. You have to create three separate state variables (`data`, `isLoading`, `isError`). You have to write a `useEffect` to trigger the fetch. You have to handle race conditions, caching, and retries manually.
-```javascript
-// The Old, Painful Way
+
+In traditional Client-Side Rendered React applications, fetching API data required writing repetitive, error-prone imperative boilerplate inside every component:
+```jsx
+// Legacy useEffect + useState data fetching pattern
 const [data, setData] = useState(null);
 const [isLoading, setIsLoading] = useState(true);
 const [error, setError] = useState(null);
 
 useEffect(() => {
+  let isMounted = true;
   fetch('/api/users')
     .then(res => res.json())
-    .then(data => { setData(data); setIsLoading(false); })
-    .catch(err => { setError(err); setIsLoading(false); });
+    .then(resData => {
+      if (isMounted) {
+        setData(resData);
+        setIsLoading(false);
+      }
+    })
+    .catch(err => {
+      if (isMounted) {
+        setError(err);
+        setIsLoading(false);
+      }
+    });
+  return () => { isMounted = false; }; // Race condition handling
 }, []);
 ```
-**React Query** (and its competitor, **SWR**) completely delete all of that code. They provide a custom hook that does everything for you.
 
-### (2) The Modern Way
-With React Query, fetching data takes one line of code:
-```javascript
+This manual approach introduces severe production issues:
+1. **No Shared Cache:** If two components read the same user data, both fire separate redundant network requests.
+2. **Stale Data:** Data downloaded into local component state stays static; if another user updates the database, the screen displays stale data indefinitely.
+3. **Complex Boilerplate:** Every single data component requires 20+ lines of identical state setup.
+
+React Query completely eliminates this boilerplate. Utilizing a **Stale-While-Revalidate (SWR)** caching strategy, `useQuery` immediately serves cached data to the screen (zero loading spinner latency) while background-refetching fresh data from the server and updating the UI seamlessly.
+
+### (2) Reality Metaphor
+
+Imagine a library reference desk.
+
+- **Manual `useEffect` (Hiring an Investigator Every Visit):** Every time you enter a room and want to check a book's availability, you hire a research assistant (**write `useEffect` & `fetch`**). The assistant puts on a coat, walks across town to the central library (**network request**), searches the stacks, and walks back 15 minutes later (**high latency**). If you walk into another room and ask the same question, a second assistant is dispatched to walk across town again (**duplicate fetch**).
+- **React Query (Local Desktop Cache with Radio Wire):** You walk into the room. A local reference ledger sits on your desk (**global React Query cache**). You open the ledger and read the answer instantly (**sub-millisecond cache read**). Meanwhile, a silent radio operator on the desk calls the central library in the background (**background refetch**). If the library reports a book was checked out, the operator updates your ledger, and your display refreshes silently.
+
+### (3) React Code Examples
+
+#### Short Snippet
+
+```jsx
+// UserList.jsx (TanStack React Query v5)
 import { useQuery } from '@tanstack/react-query';
 
-function UserList() {
-  // It provides the loading state, the error state, and the data automatically!
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['users'], 
+export function UserList() {
+  // useQuery handles loading, error, caching, and background refetching automatically
+  const { data: users, isLoading, isError, error } = useQuery({
+    queryKey: ['users'],
     queryFn: () => fetch('/api/users').then(res => res.json())
   });
 
-  if (isLoading) return <Spinner />;
-  if (isError) return <p>Something went wrong!</p>;
-  return <ul>{data.map(user => <li>{user.name}</li>)}</ul>;
+  if (isLoading) return <div className="spinner">Loading users...</div>;
+  if (isError) return <div className="error">Error: {error.message}</div>;
+
+  return (
+    <ul className="user-list">
+      {users.map(user => (
+        <li key={user.id}>{user.name} ({user.email})</li>
+      ))}
+    </ul>
+  );
 }
 ```
 
-### (3) The Magic of Caching & Stale-While-Revalidate
-These libraries do much more than fetch data. They **Cache** the data globally!
-If you visit the `<UserList>` component, it fetches the data and caches it under the key `['users']`.
-If you navigate to a different page and come back, React Query will instantly show you the cached data (zero loading spinner!), while secretly fetching the newest data in the background and silently updating the UI if anything changed. This is called **Stale-While-Revalidate (SWR)**.
+#### Fuller Example
+
+```jsx
+// PatientVitalsTracker.jsx
+'use client';
+
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+async function fetchPatientVitals(patientId) {
+  const res = await fetch(`/api/patients/${patientId}/vitals`);
+  if (!res.ok) throw new Error('Failed to fetch patient vitals');
+  return res.json();
+}
+
+async function updateVitalsBaseline({ patientId, newHr }) {
+  const res = await fetch(`/api/patients/${patientId}/vitals`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ heartRate: newHr })
+  });
+  if (!res.ok) throw new Error('Failed to update vitals');
+  return res.json();
+}
+
+export function PatientVitalsTracker({ patientId }) {
+  const queryClient = useQueryClient();
+
+  // 1. Fetch server state with unique query key
+  const { data: vitals, isLoading, isError } = useQuery({
+    queryKey: ['patient-vitals', patientId],
+    queryFn: () => fetchPatientVitals(patientId),
+    staleTime: 10000 // Data remains fresh for 10 seconds before background refetch
+  });
+
+  // 2. Mutation handler for updating server state
+  const mutation = useMutation({
+    mutationFn: updateVitalsBaseline,
+    onSuccess: () => {
+      // Invalidate query cache to trigger automatic refetching
+      queryClient.invalidateQueries({ queryKey: ['patient-vitals', patientId] });
+    }
+  });
+
+  const handleUpdate = () => {
+    mutation.mutate({ patientId, newHr: 72 });
+  };
+
+  if (isLoading) return <p>Loading patient telemetry...</p>;
+  if (isError) return <p>Telemetry stream offline.</p>;
+
+  return (
+    <div className="vitals-card">
+      <h3>Patient #{patientId} Vitals</h3>
+      <p>Heart Rate: {vitals.heartRate} BPM</p>
+      <p>Blood Pressure: {vitals.bpSys}/{vitals.bpDia} mmHg</p>
+
+      <button 
+        onClick={handleUpdate} 
+        disabled={mutation.isPending}
+        className="btn-update"
+      >
+        {mutation.isPending ? 'Syncing...' : 'Reset HR Baseline (72 BPM)'}
+      </button>
+    </div>
+  );
+}
+```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Storing Server Data in Redux/Global State
+### Mistake 1: Storing server API data in global client state stores (Redux or Zustand)
 
-**The mistake:** A developer fetches a list of 500 users from their API, and immediately saves that entire list into their Redux Global Store so other components can use it.
+**The mistake:** Fetching API data and immediately saving the array response into a global Redux or Zustand store.
 
-**Why it's wrong:** API data is **Server State** (data you do not own; the server owns it and it can go out of date). Redux is for **Client State** (data the user controls, like dark mode or an open modal). 
-**Golden Rule:** Never put API data in Redux. Let React Query handle the caching of Server State, and use Redux/Zustand strictly for Client UI State.
+**Why it's wrong:** API data is **Server State** (remotely owned data subject to staleness). Redux/Zustand are designed for **Client State** (locally owned UI state like modal visibility or dark mode). Storing API data in Redux forces developers to manually re-implement caching, loading, refetching, and normalization logic.
 
----
+*Incorrect:*
+```jsx
+// ❌ Anti-pattern: Storing server API data manually inside global Redux!
+useEffect(() => {
+  fetch('/api/users').then(res => res.json()).then(data => {
+    dispatch(setGlobalUsers(data));
+  });
+}, []);
+```
 
+*Fix:*
+```jsx
+// Let React Query handle server state caching automatically
+const { data: users } = useQuery({ queryKey: ['users'], queryFn: fetchUsers });
+```
 
+### Mistake 2: Using non-unique query keys for parameterized queries
 
-### Mistake 2: Using Non-Unique String Array Query Keys in `useQuery()`
+**The mistake:** Using a static `queryKey: ['user']` for queries that accept dynamic parameters (e.g. `userId`).
 
-**The mistake:** Using `useQuery({ queryKey: ['users'], queryFn: () => fetchUser(id) })` without including `id` in the query key.
-
-**Why it's wrong:** React Query uses `queryKey` for internal cache indexing and refetching! Omitting `id` from `queryKey` causes all users to share the exact same cached data result. Include reactive parameters in keys: `queryKey: ['users', id]`.
+**Why it's wrong:** React Query indexes its global cache based on `queryKey`. Omitting reactive variables (like `userId`) causes all users to share the exact same cached response object.
 
 *Incorrect:*
 ```javascript
-useQuery({ queryKey: ['user'], queryFn: () => fetchUser(id) }); // ❌ Missing id in queryKey!
+// ❌ Static key: user #1 and user #2 will return identical cached data!
+useQuery({ queryKey: ['user'], queryFn: () => fetchUser(userId) });
 ```
 
 *Fix:*
 ```javascript
-useQuery({ queryKey: ['user', id], queryFn: () => fetchUser(id) }); // Unique query key
+// Include reactive parameters in the queryKey array
+useQuery({ queryKey: ['user', userId], queryFn: () => fetchUser(userId) });
 ```
 
-### Mistake 3: Forgetting to Invalidate Queries via `queryClient.invalidateQueries()` After `useMutation()`
+### Mistake 3: Forgetting to invalidate queries via `queryClient.invalidateQueries()` after mutations
 
-**The mistake:** Executing a data mutation `useMutation({ mutationFn: addTodo })` without invalidating the `'todos'` query cache.
+**The mistake:** Executing a `useMutation` write operation (e.g., adding a new item) without invalidating the relevant query key cache.
 
-**Why it's wrong:** After a mutation succeeds, React Query's cached list remains stale until invalidated or refetched! Call `queryClient.invalidateQueries({ queryKey: ['todos'] })` in `onSuccess`.
+**Why it's wrong:** After a mutation succeeds on the backend database, React Query's cached list remains stale until explicitly invalidated or refetched.
 
 *Incorrect:*
 ```javascript
-useMutation({ mutationFn: addTodo }); // ❌ Query cache remains stale!
+// ❌ Cache remains stale after mutation succeeds!
+const mutation = useMutation({ mutationFn: createTodo });
 ```
 
 *Fix:*
 ```javascript
-useMutation({
-  mutationFn: addTodo,
-  onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] })
+const queryClient = useQueryClient();
+const mutation = useMutation({
+  mutationFn: createTodo,
+  onSuccess: () => {
+    // Purge stale cache and refetch fresh list automatically
+    queryClient.invalidateQueries({ queryKey: ['todos'] });
+  }
 });
 ```
 
-## 6. Practice Exercises
-
-### Exercise 1: The Magic Cache
-
-**Problem:** You use React Query to fetch the `['users']` data in the `<Header>` component. Deep down in the app, the `<Footer>` component also needs the user data. Do you need to pass it down via Props? Do you need to put it in Context?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> No! You just call the exact same `useQuery` hook in the `<Footer>` component.
-> Because React Query caches data globally by the `queryKey`, the `<Footer>` will instantly read the data from the cache without triggering a second network request. It acts as a global state manager for your API data!
-> ```
-> - Think about what the `queryKey` does.
-> 
 ---
 
+## 5. Practice Exercises
 
+### Exercise 1: IoT Turbine Telemetry Query with Refetch Interval
 
-### Exercise 2: Fetching Data with useQuery Hook
+**Scenario:** Develop an IoT telemetry dashboard component that queries live turbine metrics using React Query, polling the backend API automatically every 5 seconds.
 
-**Problem:** Fetch user data for `userId` using `useQuery` from `@tanstack/react-query`.
+**Requirements:**
+1. Use `useQuery` with `queryKey: ['turbine-telemetry', turbineId]`.
+2. Configure `refetchInterval: 5000` (5-second polling).
+3. Render live RPM and temperature metrics.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> const { data, isLoading, error } = useQuery({ queryKey: ['user', userId], queryFn: () => fetchUser(userId) });
-> ```
-> ```javascript
-> const { data, isLoading, error } = useQuery({
->   queryKey: ['user', userId],
->   queryFn: () => fetchUser(userId)
-> });
+>
+> #### Implementation
+> ```jsx
+> 'use client';
+>
+> import { useQuery } from '@tanstack/react-query';
+>
+> async function fetchTurbineMetrics(turbineId) {
+>   const res = await fetch(`/api/iot/turbines/${turbineId}`);
+>   if (!res.ok) throw new Error('Telemetry fetch failed');
+>   return res.json();
+> }
+>
+> export function TurbineTelemetryWidget({ turbineId = 't-401' }) {
+>   const { data: metrics, isLoading, isError, isFetching } = useQuery({
+>     queryKey: ['turbine-telemetry', turbineId],
+>     queryFn: () => fetchTurbineMetrics(turbineId),
+>     refetchInterval: 5000 // Polling every 5 seconds
+>   });
+> 
+>   if (isLoading) return <p>Connecting to turbine sensors...</p>;
+>   if (isError) return <p>Error: Telemetry stream unreachable.</p>;
+> 
+>   return (
+>     <div className="telemetry-card">
+>       <header className="card-header">
+>         <h3>Turbine #{turbineId} Telemetry</h3>
+>         {isFetching && <span className="refetch-pill">Syncing...</span>}
+>       </header>
+> 
+>       <div className="metrics-body">
+>         <p>Rotational Speed: <strong>{metrics.rpm} RPM</strong></p>
+>         <p>Core Temp: <strong>{metrics.temp}°C</strong></p>
+>         <p>Vibration Index: <strong>{metrics.vibration} mm/s</strong></p>
+>       </div>
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** `useQuery` manages server state, caching, loading statuses, and refetching automatically.
+> #### Technical Explanation
+> 1. **Automatic Polling**: `refetchInterval: 5000` configures background polling without writing manual `setInterval` hooks.
+> 2. **Background Indicator**: `isFetching` indicates active background refetching while preserving existing `data` on screen.
+> 3. **Unique Cache Index**: `queryKey: ['turbine-telemetry', turbineId]` isolates cache entries per turbine ID.
+> 4. **Declarative Error States**: Handles loading and error statuses cleanly via destructuring.
 > 
----
+### Exercise 2: Financial Order Cancellation Mutation
 
-### Exercise 3: Stale Time vs GC Time (Cache Time)
+**Scenario:** Build a Financial Trading open orders panel where clicking "Cancel Order" triggers a `useMutation` call, invalidating the `['open-orders']` query cache upon completion.
 
-**Problem:** Compare: `staleTime` (Duration data is considered fresh before background refetch); `gcTime` (Duration unused query cache remains in memory before garbage collection).
+**Requirements:**
+1. Implement `useQuery` fetching open orders.
+2. Implement `useMutation` executing order cancellation POST request.
+3. Invalidate `['open-orders']` inside `onSuccess` callback.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> staleTime: duration data is considered fresh; gcTime: duration unused cache remains in memory
-> ```
-> ```text
-> staleTime: duration data is considered fresh; gcTime: duration unused cache remains in memory
+>
+> #### Implementation
+> ```jsx
+> 'use client';
+>
+> import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+>
+> async function fetchOpenOrders() {
+>   const res = await fetch('/api/trading/orders/open');
+>   return res.json();
+> }
+>
+> async function cancelOrderApi(orderId) {
+>   const res = await fetch(`/api/trading/orders/${orderId}/cancel`, { method: 'POST' });
+>   return res.json();
+> }
+>
+> export function OpenOrdersDesk() {
+>   const queryClient = useQueryClient();
+> 
+>   const { data: orders, isLoading } = useQuery({
+>     queryKey: ['open-orders'],
+>     queryFn: fetchOpenOrders
+>   });
+> 
+>   const cancelMutation = useMutation({
+>     mutationFn: cancelOrderApi,
+>     onSuccess: () => {
+>       // Invalidate open orders cache to force immediate refetch
+>       queryClient.invalidateQueries({ queryKey: ['open-orders'] });
+>     }
+>   });
+> 
+>   if (isLoading) return <p>Loading active order desk...</p>;
+> 
+>   return (
+>     <div className="orders-desk">
+>       <h3>Active Open Orders</h3>
+>       <ul>
+>         {orders.map(order => (
+>           <li key={order.id} className="order-row">
+>             <span>{order.symbol} ({order.qty} @ ${order.price})</span>
+>             <button 
+>               onClick={() => cancelMutation.mutate(order.id)}
+>               disabled={cancelMutation.isPending}
+>               className="btn-cancel"
+>             >
+>               {cancelMutation.isPending ? 'Canceling...' : 'Cancel Order'}
+>             </button>
+>           </li>
+>         ))}
+>       </ul>
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** `staleTime` controls background refetching frequency; `gcTime` manages memory garbage collection.
+> #### Technical Explanation
+> 1. **Cache Invalidation**: `invalidateQueries({ queryKey: ['open-orders'] })` forces React Query to purge stale orders and refetch fresh data.
+> 2. **Mutation State**: `cancelMutation.isPending` disables buttons during active network cancellation requests.
+> 3. **Declarative Mutation Execution**: `cancelMutation.mutate(order.id)` triggers mutation execution cleanly on click.
+> 4. **Decoupled Server State**: Order desk data remains synchronized without manual array splicing in client state.
 > 
-## 7. Related Terms
-- [`useEffect` Hook](../level_03/use_effect.md) — The manual tool that React Query makes obsolete for data fetching.
-- [State Management (Redux / Zustand)](../level_06/state_management.md) — React Query acts as the global state manager specifically for API data.
-- [Redux](redux.md) — Related concept: Redux.
+### Exercise 3: E-Commerce Shopping Cart Optimistic Update
+
+**Scenario:** Implement an e-commerce shopping cart item quantity updater using React Query's `onMutate` optimistic update callback to modify cart cache before network completion.
+
+**Requirements:**
+1. Configure `useMutation` with `onMutate` callback.
+2. Update cache optimistically via `queryClient.setQueryData()`.
+3. Roll back cache context if network request fails inside `onError`.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> 'use client';
+>
+> import { useMutation, useQueryClient } from '@tanstack/react-query';
+>
+> async function updateItemQtyApi({ itemId, quantity }) {
+>   const res = await fetch(`/api/cart/items/${itemId}`, {
+>     method: 'PATCH',
+>     headers: { 'Content-Type': 'application/json' },
+>     body: JSON.stringify({ quantity })
+>   });
+>   if (!res.ok) throw new Error('Update failed');
+>   return res.json();
+> }
+>
+> export function OptimisticCartItem({ item }) {
+>   const queryClient = useQueryClient();
+> 
+>   const mutation = useMutation({
+>     mutationFn: updateItemQtyApi,
+>     onMutate: async (newItem) => {
+>       // 1. Cancel outgoing refetches
+>       await queryClient.cancelQueries({ queryKey: ['cart'] });
+>       // 2. Snapshot previous value
+>       const previousCart = queryClient.getQueryData(['cart']);
+>       // 3. Optimistically update cache
+>       queryClient.setQueryData(['cart'], old => 
+>         old ? old.map(i => i.id === newItem.itemId ? { ...i, quantity: newItem.quantity } : i) : []
+>       );
+>       return { previousCart };
+>     },
+>     onError: (err, newItem, context) => {
+>       // 4. Rollback to snapshot on error
+>       if (context?.previousCart) {
+>         queryClient.setQueryData(['cart'], context.previousCart);
+>       }
+>     },
+>     onSettled: () => {
+>       queryClient.invalidateQueries({ queryKey: ['cart'] });
+>     }
+>   });
+> 
+>   return (
+>     <div className="cart-item-row">
+>       <span>{item.name}</span>
+>       <button onClick={() => mutation.mutate({ itemId: item.id, quantity: item.quantity + 1 })}>
+>         +1 (Optimistic)
+>       </button>
+>     </div>
+>   );
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Optimistic Cache Mutation**: `setQueryData()` updates local cache immediately before network round-trip completes.
+> 2. **Rollback Snapshot**: `context.previousCart` captures pre-mutation state to revert UI safely if network fails.
+> 3. **Refetch Synchronization**: `onSettled` invalidates queries to guarantee server-client consistency.
+> 4. **Sub-Millisecond UI Response**: User views quantity updates instantly without waiting for server response latency.
+> 
+---
+
+## 6. Related Terms
+
+- [`useEffect` Hook](../level_03/use_effect.md) — The manual effect hook replaced by React Query.
+- [Side Effects](../level_03/side_effects.md) — Async network requests managed declaratively.
+- [Redux](redux.md) — Client state container distinct from server state management.
+- [Zustand](zustand.md) — Lightweight client state manager.
 
 ---
 
-## 8. Key Takeaways
-- **React Query** and **SWR** are the modern industry standards for fetching data in React.
-- They completely replace the manual `useState` + `useEffect` fetching pattern.
-- They automatically manage `isLoading`, `isError`, caching, and retries.
-- They use a "Stale-While-Revalidate" strategy to show cached data instantly while updating it in the background.
-- They eliminate the need to store API data in global state managers like Redux.
+## 7. Key Takeaways
+
+- React Query and SWR manage asynchronous **Server State**, caching, loading, and refetching automatically.
+- Replaces manual `useState` + `useEffect` fetching boilerplate with single `useQuery` calls.
+- Leverages Stale-While-Revalidate (SWR) caching to serve instant cached UI while refetching in the background.
+- Include all reactive parameters in `queryKey` arrays to ensure unique cache indexing.
+- Use `useMutation` for write operations, invalidating queries via `invalidateQueries()` on success.
+- Never store API server data inside client state managers like Redux or Zustand.
