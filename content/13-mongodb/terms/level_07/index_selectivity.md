@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Index / Performance** (Index Cardinality & Filtering Efficiency): Index Selectivity measures an index's capability to narrow down target candidate documents, with high selectivity fields drastically reducing disk IOPS.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Core optimization science across all relational SQL and NoSQL engines. Used by the Cost-Based Query Planner to decide whether to run index scans or fall back to collection scans).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Developers designing database indexes often assume that if a field is used in a query filter, it should be indexed:
@@ -76,7 +77,7 @@ Imagine searching for books in a library:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating single-field indexes on low-cardinality boolean or status enum fields
 
@@ -90,6 +91,8 @@ Imagine searching for books in a library:
 **Fix: Do not index low-cardinality fields by themselves. If you frequently filter by `status` alongside other fields, combine it into a Compound Index where the first field has high cardinality: `{ email: 1, status: 1 }`.**
 
 ---
+
+
 
 
 
@@ -109,6 +112,8 @@ db.users.createIndex({ isVerified: 1 }); // ❌ Low selectivity index!
 Index high selectivity unique fields like email or userId
 ```
 
+
+
 ### Mistake 3: Placing Low Selectivity Fields First in Compound Indexes
 
 **The mistake:** Creating compound index `{ gender: 1, email: 1 }`.
@@ -127,96 +132,89 @@ db.users.createIndex({ email: 1, gender: 1 });
 
 
 
-### Mistake 4: Creating Single-Field Indexes on Low Selectivity Fields
+## 5. Practice Exercises
 
-**The mistake:** Creating an index on `isVerified: 1` where 95% of documents have `isVerified: true`.
+### Exercise 1: High vs Low Cardinality Field Indexing
 
-**Why it's wrong:** Low selectivity fields match large portions of the collection, offering minimal query acceleration while consuming write overhead. Index high-selectivity fields.
+**Scenario:**
+Compare index selectivity for high-cardinality `email` vs low-cardinality `gender` fields.
 
-*Incorrect:*
-```javascript
-db.users.createIndex({ isVerified: 1 }); // ❌ Low selectivity index!
-```
+**Requirements:**
+1. Explain why indexing `email` is high-selectivity and `gender` is low-selectivity.
 
-*Fix:*
-```javascript
-Index high selectivity unique fields like email or userId
-```
-
-### Mistake 5: Placing Low Selectivity Fields First in Compound Indexes
-
-**The mistake:** Creating compound index `{ gender: 1, email: 1 }`.
-
-**Why it's wrong:** Placing low-selectivity fields first reduces early index filtering efficiency. Place high-selectivity fields first unless ESR rule dictates otherwise.
-
-*Incorrect:*
-```javascript
-db.users.createIndex({ gender: 1, email: 1 });
-```
-
-*Fix:*
-```javascript
-db.users.createIndex({ email: 1, gender: 1 });
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Selectivity Calculation
-
-**Problem:** You have a `products` collection containing `1,000,000` documents. 
--   Query A: `{ status: "available" }` matches `800,000` documents.
--   Query B: `{ sku: "SKU-9908" }` matches `1` document.
-1.  Calculate the selectivity percentage for Query A and Query B.
-2.  State which field (`status` or `sku`) should receive a database index.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. Selectivity Calculation:
->    - Query A (status): 800,000 / 1,000,000 = 80% (Low Selectivity)
->    - Query B (sku): 1 / 1,000,000 = 0.0001% (High Selectivity)
-> 2. The `sku` field should receive the index. Its high selectivity allows the query planner to jump directly to the target record in logarithmic time, whereas a status index will be ignored due to its low selectivity.
+> Index Selectivity Comparison:
+> - High Selectivity (email): 1,000,000 unique emails for 1,000,000 users. Querying 1 email isolates 0.0001% of collection -> Fast $O(\log N)$ lookup!
+> - Low Selectivity (gender): 2 unique values for 1,000,000 users. Querying 1 value matches 50% of collection -> Scanning index is useless!
 > ```
-> - Selectivity is the ratio of matching documents to total documents.
-> - Indexes are effective only when selectivity ratios are very small.
+>
+> #### Technical Explanation
+>
+> 1. Index Selectivity measures the proportion of collection documents eliminated by an index filter.
+> 2. High-cardinality unique fields isolate tiny candidate sets instantly.
+> 3. Low-cardinality fields should NOT be indexed alone; combine in compound indexes.
+
+---
+
+### Exercise 2: Building Compound Indexes for Low-Cardinality Fields
+
+**Scenario:**
+Optimize queries filtering by low-cardinality `status` and high-cardinality `createdAt` using compound indexing.
+
+**Requirements:**
+1. Create compound index `{ status: 1, createdAt: -1 }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.createIndex({ status: 1, createdAt: -1 });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combining a low-cardinality field (`status`) with a high-cardinality field (`createdAt`) produces a highly selective compound index.
+> 2. Narrows candidate set to active status, then immediately isolates date ranges.
+> 3. Standard compound indexing strategy.
+
+---
+
+### Exercise 3: Measuring Selectivity Ratios with `explain()`
+
+**Scenario:**
+Calculate the Selectivity Ratio (`nReturned / totalDocsExamined`) in `explain()` diagnostics.
+
+**Requirements:**
+1. Compute Selectivity Ratio formula.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const plan = db.users.find({ status: "active" }).explain("executionStats");
+> const stats = plan.executionStats;
+> const selectivityRatio = (stats.nReturned / stats.totalDocsExamined).toFixed(4);
+> 
+> console.log(`Selectivity Ratio: ${selectivityRatio} (Target: 1.0)`);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. A Selectivity Ratio close to 1.0 indicates perfect index filtering (zero unneeded document reads).
+> 2. Low ratios (< 0.1) indicate poor selectivity, scanning 10x more documents than returned.
+> 3. Key metric for evaluating index health.
 
 ---
 
 
 
-### Exercise 2: High vs Low Selectivity Comparison
-
-**Problem:** Which field has higher selectivity: `email` (unique) or `status` (3 values)? (`email`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> email (high selectivity unique values)
-> ```
-> ```text
-> email (high selectivity unique values)
-> ```
->
-> **Explanation:** High selectivity fields narrow down query candidate sets rapidly.
-
----
-
-### Exercise 3: Selectivity Definition
-
-**Problem:** Define index selectivity in MongoDB (The ratio of distinct field values to total collection document count).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Ratio of unique field values to total collection document count
-> ```
-> ```text
-> Ratio of unique field values to total collection document count
-> ```
->
-> **Explanation:** High selectivity (approaching 1.0) maximizes index filtering speed.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree structure.
 - [Collection Scan vs Index Scan](collection_scan_vs_index.md) — The query planner choices.
@@ -224,7 +222,7 @@ db.users.createIndex({ email: 1, gender: 1 });
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Cardinality measures the count of unique values in a field.
 - Selectivity measures how effectively a filter narrows the document search space.
 - Highly selective queries return a tiny fraction of the collection (ideal).

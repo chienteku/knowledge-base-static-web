@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Advanced Feature** (Fixed-Size High-Speed Circular Queue Collection): Capped Collections are fixed-size circular BSON collections that preserve insertion order and automatically overwrite oldest documents when maximum byte capacity is reached.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Configured during collection creation. Space is pre-allocated on disk to guarantee insertion speed).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Many database logging systems only care about the most recent events:
@@ -88,7 +89,7 @@ db.app_logs.insertOne({ log_time: new Date(), msg: "User logged in" });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to run delete operations on a capped collection, resulting in application runtime query exceptions
 
@@ -137,75 +138,105 @@ db.capped_logs.updateOne({ _id: id }, { $set: { extraData: "very_long_string" } 
 Keep document sizes fixed or use standard non-capped collections
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Update Feasibility Diagnostic
+### Exercise 1: Creating Fixed-Size Capped Collections
 
-**Problem:** You have a capped collection `chat_history`. A document is stored as:
-`{ _id: 1, user: "Bob", status: "online" }`
-Evaluate whether the following two update operations will succeed on this document:
-1.  `db.chat_history.updateOne({ _id: 1 }, { $set: { status: "offline" } })`
-2.  `db.chat_history.updateOne({ _id: 1 }, { $push: { messages: "Hello!" } })`
+**Scenario:**
+Create a capped collection `system_events` capped at 100MB (104,857,600 bytes) and a maximum of 50,000 documents.
 
-**Expected output:**
+**Requirements:**
+1. Execute `db.createCollection("system_events", { capped: true, size: 104857600, max: 50000 })`.
+
 > [!check]- Answer
-> ```text
-> 1. Succeeds: Setting `status` from "online" to "offline" changes string value but keeps the document within its pre-allocated size bounds.
-> 2. Fails: The `$push` operator adds an array field and an element, growing the document's size beyond its pre-allocated disk slot. MongoDB will block this operation to prevent size violations in the capped collection.
-> ```
-> - Review the size growth restrictions in capped collections.
-> - Consider if array modifications alter BSON byte sizes on disk.
-
----
-
-
-
-### Exercise 2: Creating Capped Collection
-
-**Problem:** Create capped collection `app_logs` capped at 10MB (10485760 bytes) and max 5000 documents.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.createCollection("app_logs", { capped: true, size: 10485760, max: 5000 });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.createCollection("app_logs", {
+> db.createCollection("system_events", {
 >   capped: true,
->   size: 10485760,
->   max: 5000
+>   size: 104857600,
+>   max: 50000
 > });
 > ```
 >
-> **Explanation:** `capped: true` maintains fixed-size circular buffer storage collections.
+> #### Technical Explanation
+>
+> 1. Capped collections pre-allocate circular memory buffers on disk.
+> 2. Automatically overwrites the oldest inserted documents when max size or document count is reached.
+> 3. High-throughput circular log storage.
 
 ---
 
-### Exercise 3: Tailable Cursor on Capped Collection
+### Exercise 2: Tailing Capped Collections with Tailable Cursors
 
-**Problem:** Create tailable cursor listening for new insertions in capped collection `app_logs`.
+**Scenario:**
+Stream real-time log entries from a capped collection using a tailable cursor (`tailable: true`, `awaitData: true`).
 
-**Expected output:**
+**Requirements:**
+1. Configure tailable cursor streaming loop in driver code.
+
 > [!check]- Answer
-> ```text
-> const cursor = db.app_logs.find().addCursorFlag("tailable", true).addCursorFlag("awaitData", true);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const cursor = db.app_logs.find()
->   .addCursorFlag("tailable", true)
->   .addCursorFlag("awaitData", true);
+> const cursor = db.collection("system_events").find(
+>   {},
+>   { tailable: true, awaitData: true }
+> );
+> 
+> while (await cursor.hasNext()) {
+>   const logEntry = await cursor.next();
+>   console.log("Real-Time Event:", logEntry);
+> }
 > ```
 >
-> **Explanation:** Tailable cursors remain open after reaching the end of capped collections, streaming new inserts like `tail -f`.
+> #### Technical Explanation
+>
+> 1. Tailable cursors behave like Unix `tail -f`, remaining open after reaching the end of the collection.
+> 2. `awaitData: true` pauses cursor execution until new documents are inserted.
+> 3. Low-overhead pub/sub log streaming.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Capped Collection Operational Constraints
+
+**Scenario:**
+Explain why documents in capped collections CANNOT be deleted or grow in size after insertion.
+
+**Requirements:**
+1. List capped collection operational restrictions.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Capped Collection Constraints:
+> - Cannot delete individual documents (must drop entire collection or let auto-overwrite occur).
+> - Document updates CANNOT increase document byte size.
+> - Preserves natural insertion order without secondary index fragmentation.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Fixed disk layouts preserve contiguous insertion order on disk.
+> 2. Disallows document size growth to avoid disk fragment movement.
+> 3. High performance write throughput.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Oplog (Operations Log)](../level_09/oplog.md) — The most famous capped collection.
 - [Time-Series Collections](time_series.md) — Chronological metrics.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Capped collections maintain a fixed size on disk as a circular buffer queue.
 - Automatically overwrite the oldest documents when size limits are reached.
 - Pre-allocated storage space guarantees high-speed insert write rates.

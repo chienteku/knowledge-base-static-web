@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Directory Structure**
+
+**Routing / Navigation** (View Route Page Components): The `pages/` directory automatically generates application routes for each Vue component file placed within it.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building a website, the concept of a "Page" is universally understood. By enforcing a strict `pages/` directory, Nuxt creates a standardized project structure. Any developer joining your team immediately knows exactly where to look to find the code for `yoursite.com/contact`.
@@ -60,7 +61,7 @@ definePageMeta({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on `pages/` for small components
 **The mistake:** Creating a file `pages/Navbar.vue` and importing it into `pages/index.vue`.
@@ -107,65 +108,115 @@ definePageMeta({
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Configuring Page Metadata
+### Exercise 1: Creating Basic Route Components in `pages/`
 
-**Problem:** You have a file `pages/login.vue`. Write the script block required to apply a custom layout named `minimal` to this specific page.
+**Scenario:**
+Create `pages/index.vue` and `pages/about.vue` with navigation using `<NuxtLink>`.
 
-**Expected output:**
+**Requirements:**
+1. Create `pages/index.vue` and `pages/about.vue`.
+2. Navigate between routes using `<NuxtLink to="...">`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <!-- pages/index.vue -->
+> <template>
+>   <div>
+>     <h1>Home Page</h1>
+>     <NuxtLink to="/about">Go to About</NuxtLink>
+>   </div>
+> </template>
+> ```
+
+> ```vue
+> <!-- pages/about.vue -->
+> <template>
+>   <div>
+>     <h1>About Page</h1>
+>     <NuxtLink to="/">Back to Home</NuxtLink>
+>   </div>
+> </template>
+> ```
+
+> #### Technical Explanation
+>
+> 1. Vue files placed in `pages/` automatically become accessible top-level routes.
+> 2. `<NuxtLink>` performs optimized client-side navigation without triggering full page reloads.
+> 3. Prefetches JavaScript chunks for linked pages when links enter the browser viewport.
+
+---
+
+### Exercise 2: Implementing Nested Sub-Directory Routes
+
+**Scenario:**
+Structure `pages/settings/profile.vue` and `pages/settings/security.vue` under a settings sub-folder.
+
+**Requirements:**
+1. Create files in `pages/settings/`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Directory Structure:
+> - pages/settings/profile.vue  -> URL: /settings/profile
+> - pages/settings/security.vue -> URL: /settings/security
+> ```
+
+> #### Technical Explanation
+>
+> 1. Sub-directories in `pages/` map directly to URL sub-path prefixes.
+> 2. Keeps route organization clean and modular across complex applications.
+> 3. Automatically registered in Vue Router.
+
+---
+
+### Exercise 3: Customizing Route Keys for Re-render Optimization
+
+**Scenario:**
+Force page re-mounting when query parameters change using `key` property in `definePageMeta()`.
+
+**Requirements:**
+1. Configure `key: route => route.fullPath` in `definePageMeta()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
 > <script setup lang="ts">
 > definePageMeta({
->   layout: 'minimal'
+>   key: (route) => route.fullPath
 > });
 > </script>
-> ```
-> - The `definePageMeta` macro is auto-imported globally and can accept a configuration object with a `layout` string key matching the layout filename.
+
+<template>
+  <div>
+    <p>Search Query: {{ $route.query.q }}</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. By default, Vue Router reuses component instances when navigating between routes sharing the same component template.
+> 2. Setting `key: route => route.fullPath` forces component destruction and re-creation whenever query parameters change.
+> 3. Guarantees lifecycle hooks (`onMounted`) re-run on query navigation.
 
 ---
 
-### Exercise 2: Pages Directory Enable Check
 
-**Problem:** What simple project structure action automatically enables Vue Router in a Nuxt 3 project?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Creating a pages/ directory containing at least 1 .vue page file (e.g. pages/index.vue).
-> ```
-> - Creating the `pages/` directory automatically activates Vue Router.
-> 
-> ```text
-> pages/index.vue -> Activates Vue Router
-> ```
-
----
-
-### Exercise 3: Custom Router Options Configuration
-
-**Problem:** Which file in project root allows customizing Vue Router options (e.g. scrollBehavior)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> app/router.options.ts
-> ```
-> - `app/router.options.ts` configures custom Vue Router options.
-> 
-> ```typescript
-> export default {
->   scrollBehavior(to, from, savedPosition) {
->     return savedPosition || { top: 0 };
->   }
-> };
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`components/` Directory](../level_03/components_directory.md) — Where non-routable Vue components belong.
 - [Dynamic Routes](dynamic_routes.md) — How to create pages that handle variable URLs like `/products/123`.
 - [`app.vue`](app_vue.md) — Related concept: `app.vue`.
@@ -179,7 +230,7 @@ definePageMeta({
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `pages/` directory powers Nuxt's file-based routing.
 - Every `.vue` file in this folder becomes a public URL.
 - Use `definePageMeta` to assign layouts or route-specific middleware.

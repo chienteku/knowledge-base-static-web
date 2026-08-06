@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Keyword**
+
+**SQL Command / Clause** (Projection & Table Renaming): Aliases (`AS`) assign temporary names to projected columns or tables in SQL queries.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported natively by all SQL database engines. Aliases exist only for the duration of the query execution and do not alter database schemas on disk).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database design, column names are optimized for storage standards, which can make them long or confusing (e.g., `cust_first_name_str`). 
@@ -105,7 +106,7 @@ SELECT id first_name FROM employees;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting commas between columns, triggering accidental aliasing
 
@@ -151,66 +152,108 @@ SELECT name AS 'User Name' FROM users; -- ❌ Single quotes used for identifier 
 SELECT name AS "User Name" FROM users; -- Double quotes for spaces in aliases
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Clean Invoice Query
+### Exercise 1: Column Aliasing in Projection Expressions
 
-**Problem:** You have a table `invoices` with columns `id`, `unit_price`, `quantity`, and `shipping_fee`. Write a SQL query that calculates the total invoice cost as `(unit_price * quantity) + shipping_fee` and returns it as a column named `total_invoice_cost`.
+**Scenario:**
+Select `price_cents` converted to dollars and alias output column as `price_usd`.
 
-**Expected output:**
+**Requirements:**
+1. Use `price_cents / 100.0 AS price_usd`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT (unit_price * quantity) + shipping_fee AS total_invoice_cost 
-> FROM invoices;
+> SELECT 
+>   id, 
+>   name, 
+>   price_cents / 100.0 AS price_usd 
+> FROM products;
 > ```
-> - Construct the mathematical formula inside the `SELECT` projection.
-> - Append the `AS` keyword followed by the requested target column label.
+>
+> #### Technical Explanation
+>
+> 1. Column aliases (`AS alias_name`) rename projected query output columns.
+> 2. Provides clean property keys in Node.js API query result objects.
+> 3. Standard SQL projection formatting.
+
+---
+
+### Exercise 2: Table Aliasing in Multi-Table Joins
+
+**Scenario:**
+Alias `customers` as `c` and `invoices` as `i` in a multi-table `JOIN` query.
+
+**Requirements:**
+1. Execute `SELECT c.name, i.total FROM customers c JOIN invoices i ON c.id = i.customer_id`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   c.company_name, 
+>   i.id AS invoice_id, 
+>   i.amount_cents 
+> FROM customers AS c 
+> JOIN invoices AS i ON c.id = i.customer_id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Table aliases (`customers AS c`) assign short identifiers to table references.
+> 2. Resolves column name ambiguity when joined tables share duplicate column names (e.g. `c.id` vs `i.id`).
+> 3. Improves query readability.
+
+---
+
+### Exercise 3: Derived Subquery Table Aliases
+
+**Scenario:**
+Query a derived subquery in `FROM`, aliasing the subquery table as `monthly_sales`.
+
+**Requirements:**
+1. Execute `FROM (SELECT ...) AS monthly_sales`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   monthly_sales.sales_month, 
+>   monthly_sales.total_revenue 
+> FROM (
+>   SELECT 
+>     DATE_TRUNC('month', created_at) AS sales_month, 
+>     SUM(total_cents) AS total_revenue 
+>   FROM orders 
+>   GROUP BY sales_month
+> ) AS monthly_sales 
+> WHERE monthly_sales.total_revenue >= 100000;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. PostgreSQL requires all subqueries in `FROM` clauses to have an explicit table alias (`AS monthly_sales`).
+> 2. Treats the subquery result set as a virtual in-memory relation.
+> 3. Enables outer query filtering.
 
 ---
 
 
 
-### Exercise 2: Table and Column Aliases in JOIN
-
-**Problem:** Join `users` (alias `u`) and `orders` (alias `o`) selecting `u.name` and `o.total` as `order_total`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT u.name, o.total AS order_total FROM users u JOIN orders o ON u.id = o.user_id;
-> ```
-> ```sql
-> SELECT u.name, o.total AS order_total
-> FROM users u
-> JOIN orders o ON u.id = o.user_id;
-> ```
->
-> **Explanation:** Table aliases (`users u`) simplify qualified column references in JOIN queries.
-
----
-
-### Exercise 3: Referencing Aliases in `ORDER BY`
-
-**Problem:** Can column aliases created in `SELECT` be referenced in `ORDER BY`? (Yes, ORDER BY evaluates after SELECT).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Yes, ORDER BY evaluates after SELECT in SQL logical execution order
-> ```
-> ```text
-> Yes, ORDER BY evaluates after SELECT in SQL logical execution order
-> ```
->
-> **Explanation:** `ORDER BY` executes after `SELECT` projection, making column aliases available for sorting.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`SELECT`](../level_03/select.md) — The parent query command.
 - [Self-Join](../level_05/self_join.md) — Related concept: Self-Join.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Aliases temporarily rename columns or tables inside a SQL query.
 - Assigned using the `AS` keyword (e.g. `SELECT name AS user_name`).
 - Column aliases simplify output keys for application client libraries.

@@ -146,8 +146,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Tenant API Gateway Request Deduplicator & Client Tracking (`HashSet`)
 
-**Scenario**: You are developing a high-throughput microservice gateway processing incoming HTTP request payloads. Due to mobile network retries and webhook replay attacks, duplicate request payloads frequently hit the endpoint. You must implement a payload deduplication system and active client IP tracker using `HashSet<T>`.
+**Scenario:** **Scenario**: You are developing a high-throughput microservice gateway processing incoming HTTP request payloads. Due to mobile network retries and webhook replay attacks, duplicate request payloads frequently hit the endpoint. You must implement a payload deduplication system and active client IP tracker using `HashSet<T>`.
 
+**Requirements:**
 **Requirements**:
 1. Create an `ApiPayload` struct holding `request_id: String`, `client_ip: String`, and `endpoint: String`.
 2. Implement custom `PartialEq`, `Eq`, and `Hash` for `ApiPayload` such that two payloads are considered equal and produce identical hash values based solely on their `request_id` (enabling O(1) hash table deduplication regardless of other field differences).
@@ -284,8 +285,9 @@ thread::spawn(move || {
 
 ### Exercise 2: Kernel Memory Slab & Page Range Allocator (`BTreeSet`)
 
-**Scenario**: In an operating system kernel or microkernel memory manager, physical memory blocks are indexed by their starting physical address offsets. To enable range-based address allocation, deterministic sorted iteration, and fast upper/lower bound range queries, build a physical memory range slab allocator using `BTreeSet<T>`.
+**Scenario:** **Scenario**: In an operating system kernel or microkernel memory manager, physical memory blocks are indexed by their starting physical address offsets. To enable range-based address allocation, deterministic sorted iteration, and fast upper/lower bound range queries, build a physical memory range slab allocator using `BTreeSet<T>`.
 
+**Requirements:**
 **Requirements**:
 1. Define a `MemoryBlock` struct with `base_addr: u64` and `size_bytes: usize`. Implement `PartialEq`, `Eq`, `PartialOrd`, and `Ord` ordered strictly by `base_addr`.
 2. Build a `SlabAllocator` struct containing `free_blocks: BTreeSet<MemoryBlock>`.
@@ -419,8 +421,9 @@ thread::spawn(move || {
 
 ### Exercise 3: Role-Based Access Control (RBAC) & Compliance Scope Audit Engine (`HashSet` & `BTreeSet`)
 
-**Scenario**: An enterprise IAM (Identity and Access Management) engine evaluates user authorization by executing set algebra operations across Granted Scopes, Required Scopes, and Denied Blacklist Scopes. Security compliance mandates that compliance audit reports present all evaluated scopes in strict, deterministic alphabetical order.
+**Scenario:** **Scenario**: An enterprise IAM (Identity and Access Management) engine evaluates user authorization by executing set algebra operations across Granted Scopes, Required Scopes, and Denied Blacklist Scopes. Security compliance mandates that compliance audit reports present all evaluated scopes in strict, deterministic alphabetical order.
 
+**Requirements:**
 **Requirements**:
 1. Implement an `RbacEngine` struct that performs permission scope set algebra.
 2. Implement `calculate_effective_permissions(granted: &HashSet<String>, required: &HashSet<String>, denied: &HashSet<String>) -> (HashSet<String>, bool)` computing allowed permissions as `(granted ∩ required) \ denied`. Return `(effective_set, is_fully_authorized)`, where `is_fully_authorized` is `true` iff all `required` scopes are present in `effective_set`.

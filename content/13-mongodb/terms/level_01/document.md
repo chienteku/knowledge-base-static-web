@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Core Concept** (Primary Data Unit): A Document is the fundamental record unit in MongoDB, represented as a field-and-value structure supporting nested arrays and embedded documents.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported conceptually by all document databases. Represented as JSON in application code and compiled as BSON on the database disk files).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational databases (like PostgreSQL), the fundamental unit of data is the **Row**:
@@ -80,7 +81,7 @@ Documents are written using curly braces `{}` containing keys and values, separa
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Flattening document structures to mimic SQL rows
 
@@ -128,71 +129,97 @@ db.logs.insertOne({ userId: id, ...logEntry }); // Separate collection for logs
 Flatten object hierarchies into top-level or shallow 2-3 level fields
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Document Structure Identification
+### Exercise 1: Modeling Hierarchical Documents with Embedded Arrays
 
-**Problem:** Inspect the following document:
-```json
-{
-  "order_id": 105,
-  "client": "John Doe",
-  "items": [
-    { "name": "mouse", "price": 20 },
-    { "name": "cable", "price": 10 }
-  ]
-}
-```
-1.  What BSON data type is the `items` field?
-2.  What is nested inside that field?
+**Scenario:**
+Create a user document in collection `users` containing an embedded `address` object and an array of `roles`.
 
-**Expected output:**
+**Requirements:**
+1. Embed object `address: { city: "Austin", state: "TX" }`.
+2. Embed array `roles: ["admin", "developer"]`.
+
 > [!check]- Answer
-> ```text
-> 1. The `items` field is an Array.
-> 2. Inside the array are two nested Embedded Documents (representing order items).
-> ```
-> - Square brackets `[]` define arrays.
-> - Curly braces `{}` define documents.
-
----
-
-
-
-### Exercise 2: Inspecting Document Size in Bytes
-
-**Problem:** Calculate size in bytes of document using `Object.bsonsize(doc)` in mongosh.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Object.bsonsize(doc)
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const doc = db.users.findOne();
-> Object.bsonsize(doc);
+> db.users.insertOne({
+>   name: "Alice Smith",
+>   email: "alice@example.com",
+>   address: {
+>     street: "123 Tech Way",
+>     city: "Austin",
+>     state: "TX"
+>   },
+>   roles: ["admin", "developer"],
+>   createdAt: new Date()
+> });
 > ```
 >
-> **Explanation:** `Object.bsonsize(doc)` evaluates exact BSON byte sizes of documents.
+> #### Technical Explanation
+>
+> 1. Documents store complex nested structures natively without relational JOIN tables.
+> 2. Embedded objects (`address`) and arrays (`roles`) are retrieved in a single read operation.
+> 3. Aligns database representation with application object models.
 
 ---
 
-### Exercise 3: Top-Level Document Identifiers
+### Exercise 2: Querying Nested Document Fields with Dot-Notation
 
-**Problem:** What mandatory field is required on all top-level MongoDB documents? (`_id`).
+**Scenario:**
+Query user documents where embedded field `address.city` is `"Austin"`.
 
-**Expected output:**
+**Requirements:**
+1. Use dot-notation string key `"address.city"`.
+
 > [!check]- Answer
-> ```text
-> _id
-> ```
-> ```text
-> _id
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   "address.city": "Austin"
+> });
 > ```
 >
-> **Explanation:** `_id` acts as the primary key unique identifier for every MongoDB document.
+> #### Technical Explanation
+>
+> 1. Dot-notation (`"parent.child"`) traverses nested document properties cleanly.
+> 2. Dot-notation keys must be enclosed in quotation marks.
+> 3. Secondary indexes can be defined directly on nested dot-notation fields.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Document Size Enforcement
+
+**Scenario:**
+Demonstrate what happens when attempting to insert a document exceeding MongoDB's 16MB document size limit.
+
+**Requirements:**
+1. Describe the 16MB document size limit enforcement.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Limit Exception:
+> Attempting to insert a document > 16MB throws BSONObjectTooLarge error (code 10334).
+> ```
+>
+> #### Technical Explanation
+>
+> 1. MongoDB enforces a strict 16MB maximum BSON size limit per document.
+> 2. Prevents unbounded document growth from degrading RAM and network performance.
+> 3. Use GridFS or reference collections when storing large binary files or unbounded arrays.
+
+---
+
+
+
+## 6. Related Terms
 
 
 - [MongoDB](mongodb.md)
@@ -202,7 +229,7 @@ Flatten object hierarchies into top-level or shallow 2-3 level fields
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A document is the core data record unit in MongoDB.
 - Analogous to a row in PostgreSQL, but supports nested object values.
 - Written as field-value pairs in JSON format (stored as BSON on disk).

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DDL Statement**
+
+**SQL Command / Clause** (Index DDL Statements): `CREATE INDEX` and `DROP INDEX` construct or remove index access structures over table columns.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DDL** (Building a standard index locks the table against writes. PostgreSQL supports the **`CONCURRENTLY`** parameter to build indexes in the background without blocking application queries).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational database engines automatically build search indexes on columns defined as a `PRIMARY KEY` or carrying a `UNIQUE` constraint. 
@@ -89,7 +90,7 @@ DROP INDEX idx_customers_city;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running standard CREATE INDEX queries on massive production tables during peak traffic hours
 
@@ -142,68 +143,97 @@ BEGIN; CREATE INDEX CONCURRENTLY idx ON t (a); COMMIT; -- ❌ Error!
 CREATE INDEX CONCURRENTLY idx ON t (a); -- Run outside transaction blocks
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Migration Script Design
+### Exercise 1: Zero-Downtime Concurrent Index Creation
 
-**Problem:** You are deploying a database migration. The `articles` table has a column `published_date` that is slowing down homepage news sorting queries. Write the SQL statements to:
-1.  Create a production-safe, background index named `idx_articles_pub_date` on the `published_date` column.
-2.  Write the query to delete a legacy, unused index named `idx_articles_old_tags`.
+**Scenario:**
+Create an index on a 20,000,000 row production table `users` without locking concurrent table writes (`CONCURRENTLY`).
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE INDEX CONCURRENTLY idx_users_email ON users(email)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE INDEX CONCURRENTLY idx_articles_pub_date ON articles(published_date);
+> CREATE INDEX CONCURRENTLY idx_users_email 
+> ON users (email);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Standard `CREATE INDEX` acquires a `ShareLock` that blocks concurrent `INSERT`, `UPDATE`, and `DELETE` writes during index builds.
+> 2. `CONCURRENTLY` builds the index in two passes without blocking write operations.
+> 3. Essential zero-downtime production database administration command.
+
+---
+
+### Exercise 2: Safely Dropping Obsolete Indexes
+
+**Scenario:**
+Safely drop an unused legacy index `idx_users_old_phone` without blocking concurrent queries (`CONCURRENTLY`).
+
+**Requirements:**
+1. Execute `DROP INDEX CONCURRENTLY IF EXISTS idx_users_old_phone`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> DROP INDEX CONCURRENTLY IF EXISTS idx_users_old_phone;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DROP INDEX` removes index access structures and reclaims disk storage.
+> 2. `CONCURRENTLY` drops the index without holding exclusive locks that block active queries.
+> 3. Safe production maintenance pattern.
+
+---
+
+### Exercise 3: Handling Invalid Concurrent Indexes
+
+**Scenario:**
+Identify and resolve an `INVALID` index status caused by a failed `CREATE INDEX CONCURRENTLY` build.
+
+**Requirements:**
+1. Query `pg_index` for `indisvalid = false` and re-build with `REINDEX`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- 1. Identify invalid indexes
+> SELECT indexrelid::regclass AS index_name 
+> FROM pg_index 
+> WHERE indisvalid = FALSE;
 > 
-> DROP INDEX idx_articles_old_tags;
+> -- 2. Fix invalid index safely
+> REINDEX INDEX CONCURRENTLY idx_users_email;
 > ```
-> - Remember that concurrent indexing cannot run inside transaction blocks.
-> - Ensure index names are correctly spelled in the drop clause.
+>
+> #### Technical Explanation
+>
+> 1. If a `CREATE INDEX CONCURRENTLY` build encounters a transaction error or deadlock, PostgreSQL leaves behind an `INVALID` index entry.
+> 2. Invalid indexes consume disk space but are ignored by the query planner.
+> 3. Rebuilding with `REINDEX INDEX CONCURRENTLY` restores valid index state.
 
 ---
 
 
 
-### Exercise 2: Non-Blocking Concurrent Index Creation
-
-**Problem:** Create index `idx_logs_date` on `logs(created_at)` concurrently without blocking table writes.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE INDEX CONCURRENTLY idx_logs_date ON logs (created_at);
-> ```
-> ```sql
-> CREATE INDEX CONCURRENTLY idx_logs_date ON logs (created_at);
-> ```
->
-> **Explanation:** `CONCURRENTLY` builds indexes without acquiring write-blocking locks.
-
----
-
-### Exercise 3: Dropping Invalid Index Concurrently
-
-**Problem:** Drop failed index `idx_failed` concurrently using `DROP INDEX CONCURRENTLY`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DROP INDEX CONCURRENTLY IF EXISTS idx_failed;
-> ```
-> ```sql
-> DROP INDEX CONCURRENTLY IF EXISTS idx_failed;
-> ```
->
-> **Explanation:** `DROP INDEX CONCURRENTLY` removes indexes without blocking concurrent queries.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Index (Concept)](index_concept.md) — The parent performance concept.
 - [`REINDEX`](reindex.md) — Rebuilding corrupted index files.
 - [B-tree Index](btree_index.md) — Related concept: B-tree Index.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `CREATE INDEX` compiles helper index files to speed up column lookups.
 - `DROP INDEX` deletes index files, freeing disk space and speeding up writes.
 - Default index creation locks tables, blocking concurrent write transactions.

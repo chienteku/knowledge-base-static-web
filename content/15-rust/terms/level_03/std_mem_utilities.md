@@ -161,7 +161,7 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Throughput Event Ingestion Buffer Management via `std::mem::take` & `std::mem::swap`
 
-**Problem:**
+**Scenario:**
 In high-throughput logging engines and event streaming pipelines, allocating memory on the heap per batch flush introduces latency spikes and memory fragmentation. To maximize ingestion performance, a buffer processor maintains an active event buffer (`Vec<LogEntry>`). When a flush boundary is reached or the buffer reaches capacity, the active buffer must be extracted for downstream processing while leaving the processor with a valid buffer—ideally recycling pre-allocated capacity from a standby buffer pool.
 
 Write a production-grade `BatchBufferProcessor` that implements:
@@ -273,7 +273,7 @@ Write a production-grade `BatchBufferProcessor` that implements:
 
 ### Exercise 2: Zero-Copy Finite State Machine (FSM) Transitions using `std::mem::replace`
 
-**Problem:**
+**Scenario:**
 In high-frequency network protocol handlers or transaction engines, finite state machines (FSMs) store complex owned resources inside enum variants (e.g., sockets, encryption keys, non-`Copy` tokens). When transitioning state behind a mutable borrow `&mut self`, Rust forbids extracting inner variant fields because doing so would temporarily leave `*self` partially moved or uninitialized (compiler error `E0507`).
 
 Implement a `SessionState` state machine that performs zero-allocation state transitions without using `Option` wrappers or invoking `.clone()`:
@@ -402,7 +402,7 @@ Implement a `SessionState` state machine that performs zero-allocation state tra
 
 ### Exercise 3: In-Place Binary Tree Rotation & Deterministic Memory Reclamation using `std::mem::swap` & `std::mem::drop`
 
-**Problem:**
+**Scenario:**
 In database index balancing (AVL/Red-Black trees) and cryptographic session key management:
 1. Tree node rotations require re-linking parent-child pointer graphs (`Option<Box<TreeNode>>`). Using `.clone()` on nodes would recursively clone entire subtrees causing $O(N)$ allocations and memory exhaustion. `std::mem::swap` and `std::mem::take` allow $O(1)$ in-place pointer manipulation without heap reallocation.
 2. In cryptographic key management, sensitive buffers (such as secret keys) must be zeroized in RAM immediately after use, followed by immediate destruction with `std::mem::drop` to prevent key exposure in process dumps or deferred garbage accumulation.

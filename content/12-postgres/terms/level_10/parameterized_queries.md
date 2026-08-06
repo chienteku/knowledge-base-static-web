@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Feature / Security**
+
+**Administration / Operations** (SQL Injection Mitigation): Parameterized Queries pass SQL text and user inputs separately to the database parser, eliminating SQL injection vulnerabilities.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported natively by the PostgreSQL protocol. Evaluated at the engine parser layer. Placeholders are written as `$1`, `$2` in Postgres SQL syntax).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `sql_injection.md`, concatenating user input directly into SQL strings allows attackers to manipulate query structures, creating severe security vulnerabilities.
@@ -73,7 +74,7 @@ const result = await db.query(queryText, queryValues);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use placeholders ($1) for table names or column names
 
@@ -140,71 +141,109 @@ SELECT * FROM $1 WHERE id = $2; -- ❌ Syntax error: cannot parameterize table n
 Use pg-format: format('SELECT * FROM %I WHERE id = $1', tableName), [id]
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Refactoring to Secure Code
+### Exercise 1: Parameterized Query Execution in Node.js
 
-**Problem:** You have a vulnerable Python SQL query:
-`query = f"SELECT * FROM products WHERE category = '{cat}' AND price < {max_price}"`
-Refactor this into a secure parameterized query structure using Postgres placeholder syntax.
+**Scenario:**
+Write a parameterized user login query in Node.js using `pg` to prevent SQL Injection.
 
-**Expected output:**
+**Requirements:**
+1. Use `pool.query('SELECT * FROM users WHERE email = $1 AND password_hash = $2', [email, hash])`.
+
 > [!check]- Answer
-> ```python
-> # Query structure containing placeholders
-> query = "SELECT * FROM products WHERE category = $1 AND price < $2"
-> # Parameters sent separately
-> parameters = (cat, max_price)
+>
+> #### Implementation
+>
+> ```typescript
+> import { pool } from "./db";
+
+export async function authenticateUser(email: string, passwordHash: string) {
+  const text = "SELECT id, username, email FROM users WHERE email = $1 AND password_hash = $2";
+  const values = [email, passwordHash];
+  
+  const res = await pool.query(text, values);
+  return res.rows[0] || null;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `$1` and `$2` pass parameter values separately from the SQL statement string.
+> 2. PostgreSQL prepares the query execution plan for the SQL text first, ensuring user input values are treated strictly as data literals (NOT executable SQL syntax).
+> 3. Fundamental SQL Injection defense rule.
+
+---
+
+### Exercise 2: Server-Side Prepared Statements with `PREPARE` and `EXECUTE`
+
+**Scenario:**
+Create a server-side prepared statement `get_user_by_id` and execute it with parameter values.
+
+**Requirements:**
+1. Execute `PREPARE get_user_by_id (INT) AS SELECT ...`, followed by `EXECUTE get_user_by_id(42)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> PREPARE get_user_by_id (INTEGER) AS 
+> SELECT id, username, email 
+> FROM users 
+> WHERE id = $1;
+> 
+> EXECUTE get_user_by_id(42);
+> 
+> DEALLOCATE get_user_by_id;
 > ```
-> - Replace the variable concatenations (`{cat}`) with `$1` and `$2` placeholders.
-> - Store the data values in a separate list or tuple.
+>
+> #### Technical Explanation
+>
+> 1. `PREPARE statement_name (types) AS query` parses and plans the query once on the PostgreSQL server.
+> 2. `EXECUTE statement_name(values)` reuses the pre-planned query execution plan with new parameter values.
+> 3. Saves query parsing and planning CPU cycles on repeated high-frequency queries.
+
+---
+
+### Exercise 3: Auditing String Concatenation Vulnerabilities
+
+**Scenario:**
+Audit a vulnerable database query using string template literals (`${email}`) and refactor it to a parameterized query.
+
+**Requirements:**
+1. Contrast vulnerable template literal vs secure parameterized query.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // ❌ VULNERABLE TO SQL INJECTION (Attacker passes email = "' OR '1'='1")
+> // const query = `SELECT * FROM users WHERE email = '${req.body.email}'`;
+> 
+> // ✅ SECURE PARAMETERIZED QUERY
+> const query = "SELECT id, username, email FROM users WHERE email = $1";
+> const res = await pool.query(query, [req.body.email]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. String concatenation inserts raw user input text directly into the SQL parser pipeline.
+> 2. Parameterized queries send SQL code and data values over separate binary protocol frames.
+> 3. Eliminates SQL injection vulnerabilities entirely.
 
 ---
 
 
 
-### Exercise 2: Writing Parameterized Query in Node.js
-
-**Problem:** Write safe parameterized query in Node.js `pg` driver searching `email = inputEmail` and `active = true`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const res = await pool.query('SELECT * FROM users WHERE email = $1 AND active = $2', [inputEmail, true]);
-> ```
-> ```javascript
-> const res = await pool.query(
->   'SELECT * FROM users WHERE email = $1 AND active = $2',
->   [inputEmail, true]
-> );
-> ```
->
-> **Explanation:** Parameterized query placeholders (`$1`, `$2`) separate SQL query code from untrusted user data.
-
----
-
-### Exercise 3: PostgreSQL Parameter Placeholder Syntax
-
-**Problem:** What positional placeholder syntax does PostgreSQL use? (`$1`, `$2`, `$3`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> $1, $2, $3
-> ```
-> ```text
-> $1, $2, $3
-> ```
->
-> **Explanation:** PostgreSQL native protocol identifies query parameters using `$N` positional tokens.
-
-## 7. Related Terms
+## 6. Related Terms
 - [SQL Injection](sql_injection.md) — The vulnerability blocked.
 - [ORM vs. Query Builder vs. Raw SQL](orm_vs_raw.md) — Related concept: ORM vs. Query Builder vs. Raw SQL.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Parameterized queries separate SQL logic commands from data values.
 - Blocks SQL injection by treating all inputs strictly as literal values.
 - PostgreSQL placeholders are defined using `$1`, `$2` sequence formats.

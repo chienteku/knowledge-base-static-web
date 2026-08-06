@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Performance Architecture**: Polymorphism via enum dispatch instead of dynamic trait objects (`dyn Trait`).
+
+
+**Rust Architectural Pattern (zero-cost enum dynamic dispatch)**: Polymorphism via enum dispatch instead of dynamic trait objects (`dyn Trait`).
 
 ---
 
@@ -280,7 +282,7 @@ Use macros or `enum_dispatch` crate to automatically generate variant delegation
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Visitor Pattern](visitor_pattern.md) — Visitor pattern alternative.
 - [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — Trait objects vs static enum dispatch.

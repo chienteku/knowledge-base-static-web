@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Syntax**
+
+**TypeScript Core Syntax** (Optional & Default Parameter Typing): Optional (`param?: T`) and default (`param: T = val`) parameters allow function calls with omitted arguments.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Optional Parameters (`?`)
 In JavaScript, you can call `function add(a, b)` with just `add(5)`. In TypeScript, that throws an error (`Expected 2 arguments, got 1`).
@@ -58,7 +59,7 @@ logMessage2("Alice"); // Outputs: "Hello Alice"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Combining `?` with a default value
 
@@ -104,71 +105,105 @@ function greet(age: number, name?: string) {} // Correct order
 function count(step: number = 1) {} // Automatically optional with default
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Ordering Rule
+### Exercise 1: Combining Optional and Required Parameters
 
-**Problem:** Why does `function register(age?: number, name: string)` throw a compilation error?
+**Scenario:**
+Create a `createLogger` function with a required `prefix` and optional `timestamp` parameter.
 
-**Expected output:**
+**Requirements:**
+1. Place optional parameters after required parameters.
+
 > [!check]- Answer
-> ```text
-> Because an optional parameter cannot precede a required parameter.
-> If you called `register(28)`, how does the compiler know if `28` is meant for `age` or `name`? It doesn't. 
-> Therefore, all required parameters must come first, and all optional parameters must be pushed to the very end of the signature.
-> ```
-> - Think about how positional arguments work in JS.
+>
+> #### Implementation
+>
+> ```typescript
+> function logMessage(prefix: string, message: string, timestamp?: Date) {
+>   const timeStr = timestamp ? `[${timestamp.toISOString()}] ` : "";
+>   console.log(`${timeStr}${prefix}: ${message}`);
+> }
+
+logMessage("INFO", "System initialized");
+logMessage("ERROR", "Database connection lost", new Date());
+```
+
+> #### Technical Explanation
+>
+> 1. Optional parameters (`timestamp?: Date`) must be declared AFTER all required parameters.
+> 2. Inside the function body, `timestamp` has type `Date | undefined`.
+> 3. Allows callers to omit optional arguments at call sites.
+
+---
+
+### Exercise 2: Utilizing Default Parameters for Automatic Type Inference
+
+**Scenario:**
+Create a `connect` function with default `timeout` (5000) and `retry` (true) parameters.
+
+**Requirements:**
+1. Use default assignment syntax (`timeout = 5000`).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function connect(host: string, timeout = 5000, retry = true) {
+>   console.log(`Connecting to ${host} (timeout=${timeout}ms, retry=${retry})`);
+> }
+
+connect("api.example.com");             // Uses defaults (5000, true)
+connect("api.example.com", 10000, false); // Overrides defaults
+```
+
+> #### Technical Explanation
+>
+> 1. Default parameters (`timeout = 5000`) automatically infer parameter types (`number`).
+> 2. Unlike optional parameters, default parameters preserve non-nullable types (`number` instead of `number | undefined`) inside the function body.
+> 3. If callers explicitly pass `undefined`, the default parameter value is evaluated.
+
+---
+
+### Exercise 3: Auditing Parameter Ordering Rule Violations
+
+**Scenario:**
+Explain why placing an optional or default parameter BEFORE a required parameter causes a compilation error.
+
+**Requirements:**
+1. Demonstrate invalid parameter order.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // ❌ Compile Error: Required parameter cannot follow an optional parameter!
+> // function invalid(optional?: string, required: number) {}
+
+// ✅ CORRECT (Re-order parameters or pass undefined):
+function valid(required: number, optional?: string) {}
+```
+
+> #### Technical Explanation
+>
+> 1. JavaScript positional arguments require arguments to be supplied from left to right.
+> 2. Placing optional parameters first would require callers to pass `undefined` explicitly to reach required positional parameters.
+> 3. Enforces left-to-right positional clarity.
 
 ---
 
 
 
-### Exercise 2: Inferred Types in Default Parameters
-
-**Problem:** What is the inferred parameter type for `function multiply(x = 10)`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> number
-> ```
-> ```typescript
-> function multiply(x = 10) {
->   return x * 2;
-> }
-> console.log("number");
-> ```
->
-> **Explanation:** TypeScript infers parameter types from default assignment values.
-
----
-
-### Exercise 3: Passing `undefined` to Trigger Defaults
-
-**Problem:** Demonstrate that passing `undefined` triggers parameter default initializer.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Hello Guest
-> ```
-> ```typescript
-> function greet(name = "Guest") {
->   console.log(`Hello ${name}`);
-> }
-> greet(undefined);
-> ```
->
-> **Explanation:** `undefined` triggers default parameter initializers at runtime.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Function Types](function_types.md) — The parent topic.
 - [Optional Properties (`?`)](../level_03/optional_properties.md) — How `?` works inside objects.
 - [Generic Default Types (`=`)](../level_07/default_generics.md) — Related concept: Generic Default Types (`=`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use **Optional Parameters** (`arg?: type`) to allow callers to skip an argument. The argument will be `undefined` inside the function.
 - Use **Default Parameters** (`arg = value`) to provide a fallback value. TS automatically infers the type and marks it as optional.
 - Never use both `?` and `=` on the same parameter.

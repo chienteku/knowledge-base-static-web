@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Performance / Optimization**
+
+**Performance / Optimization** (Index Access Methods Overview): Indexes are auxiliary data structures that accelerate row retrieval from disk heaps without scanning every table page.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all relational and non-relational database management systems. Saved as separate physical files on disk alongside the table heap files).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational database tables store millions of rows. 
@@ -71,7 +72,7 @@ When you query `WHERE email = 'alice@example.com'`:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Indexing every single column in a table to "make all queries fast"
 
@@ -117,61 +118,100 @@ Keep small lookup tables un-indexed
 Maintain targeted composite indexes using ESR rule
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Read/Write Trade-off Audit
+### Exercise 1: Index Type Selection Matrix
 
-**Problem:** You are building an analytics logging table `click_events` that receives 5,000 write insertions per second, but is only queried once a week by administrators to compile reports. Should you build 5 separate indexes on this table? Explain why.
+**Scenario:**
+Map common database query workloads to appropriate PostgreSQL index types (`B-Tree`, `GIN`, `GiST`, `BRIN`).
 
-**Expected output:**
+**Requirements:**
+1. Match index types to workload requirements.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> No, you should not build multiple indexes!
-> Because the table is write-heavy (5,000 inserts/sec) and read-light (once a week), the performance cost of updating indexes on every write would cripple the database. 
-> It is better to have slow weekly queries than to freeze the database's ability to save incoming events.
-> ```
-> - Balance the frequency of write transactions vs the frequency of read transactions.
-> - Consider which operation impacts live users more.
-
----
-
-
-
-### Exercise 2: PostgreSQL Index Types List
-
-**Problem:** List 5 index access types supported natively in PostgreSQL (`B-Tree`, `GIN`, `GiST`, `BRIN`, `Hash`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> B-Tree, GIN, GiST, BRIN, Hash
-> ```
-> ```text
-> B-Tree, GIN, GiST, BRIN, Hash
+> PostgreSQL Index Selection Guide:
+> - B-Tree: Standard scalar equality (=), ranges (<, >, BETWEEN), sorting (ORDER BY). Default choice!
+> - GIN: Multi-element containment (@>, &&) over JSONB, Arrays, and Full-Text Search.
+> - GiST: Geometric/spatial data (PostGIS), IP ranges, and nearest-neighbor KNN searches.
+> - BRIN: Massive time-series / append-only tables (100M+ rows) with naturally ordered data.
 > ```
 >
-> **Explanation:** PostgreSQL provides specialized index types tailored for relational, text, geospatial, and array data.
+> #### Technical Explanation
+>
+> 1. B-Tree is the default index type for 90% of relational columns.
+> 2. Specialized index access methods handle non-scalar data types.
+> 3. Select index types based on query operator requirements.
 
 ---
 
-### Exercise 3: Checking Unused Indexes in System Catalog
+### Exercise 2: Evaluating Index Overhead Trade-Offs
 
-**Problem:** Query unused indexes with 0 scans from `pg_stat_user_indexes`.
+**Scenario:**
+Explain why creating 15 indexes on a single high-frequency `orders` table degrades write performance (`INSERT`/`UPDATE`/`DELETE`).
 
-**Expected output:**
+**Requirements:**
+1. Explain write amplification and RAM buffer pool contention.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> SELECT indexrelname, idx_scan FROM pg_stat_user_indexes WHERE idx_scan = 0;
+> Index Overhead Analysis:
+> - Every INSERT or DELETE must update the table heap AND all 15 secondary index structures!
+> - Every UPDATE that modifies indexed columns forces secondary index page updates.
+> - Excessive indexes consume memory in shared_buffers, displacing cached table pages.
+> Rule: Index selectively based on empirical EXPLAIN ANALYZE profile data.
 > ```
+>
+> #### Technical Explanation
+>
+> 1. Secondary indexes trade write velocity for read speed.
+> 2. Unused indexes waste disk space and slow down DML write commands.
+> 3. Database performance tuning rule.
+
+---
+
+### Exercise 3: Auditing Unused Indexes in System Catalogs
+
+**Scenario:**
+Query `pg_stat_user_indexes` to identify unused indexes that can be safely dropped to reclaim RAM and disk space.
+
+**Requirements:**
+1. Query `pg_stat_user_indexes` filtering `idx_scan = 0`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT indexrelname, idx_scan
-> FROM pg_stat_user_indexes
-> WHERE idx_scan = 0;
+> SELECT 
+>   schemaname, 
+>   relname AS table_name, 
+>   indexrelname AS index_name, 
+>   idx_scan AS total_index_scans, 
+>   pg_size_pretty(pg_relation_size(indexrelid)) AS index_size 
+> FROM pg_stat_user_indexes 
+> WHERE idx_scan = 0 
+>   AND indexrelname NOT LIKE '%_pkey' 
+> ORDER BY pg_relation_size(indexrelid) DESC;
 > ```
 >
-> **Explanation:** `pg_stat_user_indexes` tracks index scan statistics to identify candidate indexes for cleanup.
+> #### Technical Explanation
+>
+> 1. `pg_stat_user_indexes` tracks cumulative index scan counts since database startup.
+> 2. `idx_scan = 0` identifies indexes that have never been used by the query planner.
+> 3. Safely locate candidates for removal.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [`CREATE INDEX` / `DROP INDEX`](create_drop_index.md) — The SQL commands.
 - [Sequential Scan vs. Index Scan](seq_scan_vs_index_scan.md) — Scenting read routes.
 - [B-tree Index](btree_index.md) — Related concept: B-tree Index.
@@ -181,7 +221,7 @@ Maintain targeted composite indexes using ESR rule
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - An index is a helper data structure that speeds up database reads.
 - Links search values directly to physical row pointers (TIDs) on disk.
 - Prevents slow Sequential Scans that read entire tables off the hard drive.

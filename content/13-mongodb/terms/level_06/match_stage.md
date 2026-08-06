@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Aggregation** (Document Selection Filter Stage): The $match stage filters the document stream to pass only documents matching specified query criteria to subsequent pipeline stages.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Optimized by the query planner. If placed as the very first stage, it converts query criteria into index scan boundaries, bypassing full collection scans).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database querying, you rarely aggregate your entire database. 
@@ -101,7 +102,7 @@ db.orders.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use aggregation expressions (like cross-field comparisons) inside a standard '$match' stage without wrapping them in '$expr'
 
@@ -160,77 +161,103 @@ db.orders.aggregate([{ $match: { $gt: ["$spent", "$budget"] } }]); // ❌ Invali
 db.orders.aggregate([{ $match: { $expr: { $gt: ["$spent", "$budget"] } } }]);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Pipeline Match Formulation
+### Exercise 1: Early Index-Backed Filtering with `$match`
 
-**Problem:** You have a `products` collection. Write the aggregation pipeline array containing a single `$match` stage that filters documents to select only those where:
-1.  The `qty` is greater than or equal to `10`.
-2.  The `status` is exactly `"active"`.
+**Scenario:**
+Filter collection `orders` at the beginning of an aggregation pipeline to include ONLY `status: "active"` created in 2026.
 
-**Expected output:**
+**Requirements:**
+1. Place `$match` as stage 1 of the pipeline.
+
 > [!check]- Answer
-> ```javascript
-> [
->   {
->     $match: {
->       qty: { $gte: 10 },
->       status: "active"
->     }
->   }
-> ]
-> ```
-> - The `$match` stage wraps a standard query filter document.
-> - Combine the two parameters inside a single query filter object.
-
----
-
-
-
-### Exercise 2: Initial Pipeline Filter with `$match`
-
-**Problem:** Filter `orders` collection for active completed orders using `$match` as first pipeline stage.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.orders.aggregate([{ $match: { status: "completed", active: true } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.orders.aggregate([
->   { $match: { status: "completed", active: true } }
+>   {
+>     $match: {
+>       status: "active",
+>       createdAt: { $gte: new Date("2026-01-01") }
+>     }
+>   }
 > ]);
 > ```
 >
-> **Explanation:** `$match` filters incoming collection documents using standard query syntax.
+> #### Technical Explanation
+>
+> 1. `$match` uses standard MongoDB query filter syntax.
+> 2. Placing `$match` at the start of the pipeline enables index scans (`IXSCAN`).
+> 3. Filters out irrelevant documents early, minimizing RAM usage in subsequent stages.
 
 ---
 
-### Exercise 3: Comparing Fields in `$match` with `$expr`
+### Exercise 2: Combining `$match` with Text Index Search
 
-**Problem:** Filter documents where `qty` exceeds `minStock` using `$match` and `$expr`.
+**Scenario:**
+Execute a full-text search query inside `$match` as the first stage of an aggregation pipeline.
 
-**Expected output:**
+**Requirements:**
+1. Use `{ $match: { $text: { $search: "database" } } }`.
+
 > [!check]- Answer
-> ```text
-> db.inventory.aggregate([{ $match: { $expr: { $gt: ["$qty", "$minStock"] } } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.inventory.aggregate([
->   { $match: { $expr: { $gt: ["$qty", "$minStock"] } } }
+> db.articles.aggregate([
+>   { $match: { $text: { $search: "database" } } },
+>   { $group: { _id: "$author", count: { $sum: 1 } } }
 > ]);
 > ```
 >
-> **Explanation:** `$expr` enables evaluating aggregation expressions inside `$match` stages.
+> #### Technical Explanation
+>
+> 1. `$text` search queries MUST appear in the first `$match` stage of a pipeline.
+> 2. Utilizes inverted text index to select matching documents.
+> 3. Combines full-text search with pipeline analytics.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Mid-Pipeline Filtering
+
+**Scenario:**
+Filter grouped results after a `$group` stage to return ONLY categories with total sales exceeding `$10,000`.
+
+**Requirements:**
+1. Place `$match` after `$group` (behaving like a SQL `HAVING` clause).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.aggregate([
+>   { $group: { _id: "$category", totalSales: { $sum: "$total" } } },
+>   { $match: { totalSales: { $gt: 10000 } } }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$match` can appear multiple times in a pipeline.
+> 2. When placed after `$group`, `$match` acts like a SQL `HAVING` clause filtering aggregated results.
+> 3. Trims summary outputs before returning payload to client.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [`$group` Stage](group_stage.md) — The grouping stage.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$match` filters documents flowing through the aggregation pipeline.
 - Direct equivalent to SQL's `WHERE` and `HAVING` clauses.
 - Uses the exact same syntax as the standard `find()` query filters.

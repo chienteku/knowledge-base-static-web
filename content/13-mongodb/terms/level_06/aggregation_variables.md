@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Query Syntax**
+
+**Aggregation** (Pipeline System Variables): Aggregation System Variables ($$ROOT, $$CURRENT, $$REMOVE, $$DESCEND, $$NOW) reference document context and runtime state within aggregation pipeline expressions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Managed in the aggregation compiler scope. System variables are resolved in memory at runtime during document processing iterations).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 During complex document transformations inside a pipeline, you often need to access context outside the current field:
@@ -90,7 +91,7 @@ db.products.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Utilizing a single dollar sign prefix ($ROOT) instead of a double dollar sign ($$ROOT) when referencing system variables
 
@@ -143,48 +144,61 @@ db.users.aggregate([{ $project: { activeTags: { $filter: { input: "$tags", as: "
 Use user-defined variable names without system prefixes in $let blocks
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Timestamp Integration
+### Exercise 1: Accessing Root Documents with `$$ROOT`
 
-**Problem:** You have a `users` collection. Write the aggregation pipeline containing a single `$addFields` (or `$set`) stage that appends a new field named `processed_at` carrying the exact server date-time (using the system variable).
+**Scenario:**
+Inside a `$group` stage, collect the entire original input document into an array using system variable `$$ROOT`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$push: "$$ROOT"`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> [
+> db.orders.aggregate([
 >   {
->     $set: {
->       processed_at: "$$NOW"
+>     $group: {
+>       _id: "$status",
+>       allOrders: { $push: "$$ROOT" }
 >     }
 >   }
-> ]
+> ]);
 > ```
-> - The database-level time variable requires double dollar signs.
-> - Assign the variable value to the new key `processed_at`.
+>
+> #### Technical Explanation
+>
+> 1. `$$ROOT` references the top-level document currently being processed in the pipeline stage.
+> 2. Preserves all original document fields inside group arrays.
+> 3. Useful for document grouping and hierarchical restructuring.
 
 ---
 
+### Exercise 2: Conditionally Omitting Fields with `$$REMOVE`
 
+**Scenario:**
+Project customer documents, dynamically omitting field `middleName` if it is null or empty using `$$REMOVE`.
 
-### Exercise 2: Filtering Array Elements with Variable `$$item`
+**Requirements:**
+1. Use `$cond` returning `"$middleName"` or `$$REMOVE`.
 
-**Problem:** Filter `scores` array returning items greater than 80 using `$filter` and `$$score`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> db.students.aggregate([{ $project: { highScores: { $filter: { input: "$scores", as: "score", cond: { $gt: ["$$score", 80] } } } } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.students.aggregate([
+> db.users.aggregate([
 >   {
 >     $project: {
->       highScores: {
->         $filter: {
->           input: "$scores",
->           as: "score",
->           cond: { $gt: ["$$score", 80] }
+>       name: 1,
+>       middleName: {
+>         $cond: {
+>           if: { $eq: ["$middleName", null] },
+>           then: "$$REMOVE",
+>           else: "$middleName"
 >         }
 >       }
 >     }
@@ -192,41 +206,61 @@ Use user-defined variable names without system prefixes in $let blocks
 > ]);
 > ```
 >
-> **Explanation:** `as: "score"` defines an array item variable accessed via `$$score` inside expressions.
+> #### Technical Explanation
+>
+> 1. Returning `$$REMOVE` in an expression causes MongoDB to omit the field key completely from output documents.
+> 2. Avoids outputting `middleName: null` fields in clean API responses.
+> 3. Dynamic schema cleanup.
 
 ---
 
-### Exercise 3: Current Timestamp System Variable `$$NOW`
+### Exercise 3: Accessing Pipeline Execution Time with `$$NOW`
 
-**Problem:** Calculate age in days using `$$NOW` system date variable inside `$project`.
+**Scenario:**
+Calculate document age in days by comparing `createdAt` against system variable `$$NOW`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$$NOW` inside `$dateDiff`.
+
 > [!check]- Answer
-> ```text
-> db.users.aggregate([{ $project: { ageDays: { $divide: [{ $subtract: ["$$NOW", "$createdAt"] }, 86400000] } } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.users.aggregate([
+> db.posts.aggregate([
 >   {
 >     $project: {
+>       title: 1,
 >       ageDays: {
->         $divide: [{ $subtract: ["$$NOW", "$createdAt"] }, 86400000]
+>         $dateDiff: {
+>           startDate: "$createdAt",
+>           endDate: "$$NOW",
+>           unit: "day"
+>         }
 >       }
 >     }
 >   }
 > ]);
 > ```
 >
-> **Explanation:** `$$NOW` provides the current UTC execution timestamp constant.
+> #### Technical Explanation
+>
+> 1. `$$NOW` returns the exact datetime timestamp at which the pipeline execution started.
+> 2. Guarantees consistent time comparisons across all documents in a multi-second aggregation run.
+> 3. Built-in system variable.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [`$lookup` Stage](lookup_stage.md) — The join stage using `let`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Aggregation variables access system state and user parameters in expressions.
 - Always prefixed with double dollar signs (`$$`) to separate them from fields.
 - `$$ROOT` references the top-level document entering the pipeline.

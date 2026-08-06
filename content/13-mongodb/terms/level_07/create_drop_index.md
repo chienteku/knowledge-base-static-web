@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DDL Operator**
+
+**Index / Performance** (Index DDL Management): createIndex() and dropIndex() commands construct and remove secondary index structures on MongoDB collections.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executed inside `mongosh` or through migrations script. Creating an index on a large collection builds the index asynchronously in the background by default).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Once you identify high-cardinality fields that are slowing down your search filters (like user email lookups), you need a way to tell the database to compile and maintain a sorted search index.
@@ -85,7 +86,7 @@ db.users.dropIndex("email_1");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to create a unique index on a field that already contains duplicate values in the collection
 
@@ -99,6 +100,8 @@ If duplicates exist, the index build will abort and throw a duplicate key error:
 **Fix: Before building a unique index, you must search and clean up duplicate records in the collection, or write scripts to delete or merge the duplicate profiles.**
 
 ---
+
+
 
 
 
@@ -118,6 +121,8 @@ If duplicates exist, the index build will abort and throw a duplicate key error:
 Hide index using db.collection.hideIndex() first to test impact before dropping
 ```
 
+
+
 ### Mistake 3: Re-Building Existing Indexes Without Checking `db.collection.getIndexes()`
 
 **The mistake:** Executing duplicate `createIndex()` commands on every application boot routine.
@@ -136,89 +141,90 @@ Execute index creation migration scripts separately in deployment pipelines
 
 
 
-### Mistake 4: Dropping Production Indexes During Peak Business Traffic Hours
+## 5. Practice Exercises
 
-**The mistake:** Running `db.collection.dropIndex('large_idx')` during peak traffic.
+### Exercise 1: Asynchronous Index Construction with `createIndex`
 
-**Why it's wrong:** Dropping an active index during peak hours forces executing queries into un-indexed `COLLSCAN`s, collapsing application throughput.
+**Scenario:**
+Create a secondary index on `sku` in collection `products` specifying a custom index name `idx_products_sku`.
 
-*Incorrect:*
-```javascript
-// Running dropIndex on production during peak traffic
-```
+**Requirements:**
+1. Execute `createIndex({ sku: 1 }, { name: "idx_products_sku" })`.
 
-*Fix:*
-```javascript
-Hide index using db.collection.hideIndex() first to test impact before dropping
-```
-
-### Mistake 5: Re-Building Existing Indexes Without Checking `db.collection.getIndexes()`
-
-**The mistake:** Executing duplicate `createIndex()` commands on every application boot routine.
-
-**Why it's wrong:** Although `createIndex()` is idempotent, checking `getIndexes()` avoids un-necessary database RPC roundtrips during startup.
-
-*Incorrect:*
-```javascript
-// Calling createIndex 50 times on every app restart
-```
-
-*Fix:*
-```javascript
-Execute index creation migration scripts separately in deployment pipelines
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Unique Index Creation
-
-**Problem:** You have a `products` collection. Write the MongoDB query to create a unique index on the `sku` field, sorting in ascending order.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.createIndex({ sku: 1 }, { unique: true });
+> db.products.createIndex(
+>   { sku: 1 },
+>   { name: "idx_products_sku" }
+> );
 > ```
-> - The key specification is `{ sku: 1 }`.
-> - Pass the unique option flag inside the second parameter object.
+>
+> #### Technical Explanation
+>
+> 1. `createIndex()` builds a B-tree index structure on target collection fields.
+> 2. `{ name: "..." }` specifies a custom index name for monitoring and drop operations.
+> 3. Modern MongoDB (4.2+) builds indexes concurrently in the background without locking collection writes.
+
+---
+
+### Exercise 2: Dropping Unused Secondary Indexes with `dropIndex`
+
+**Scenario:**
+Drop obsolete index `idx_products_sku` from collection `products` to reclaim storage space.
+
+**Requirements:**
+1. Execute `db.products.dropIndex("idx_products_sku")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.dropIndex("idx_products_sku");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `dropIndex()` removes target secondary index structures.
+> 2. Reclaims RAM and disk space occupied by unused index B-trees.
+> 3. Reduces write amplification during document insertions and updates.
+
+---
+
+### Exercise 3: Auditing Collection Indexes with `getIndexes()`
+
+**Scenario:**
+List all active indexes and their byte footprints on collection `products`.
+
+**Requirements:**
+1. Execute `db.products.getIndexes()` and `db.products.stats().indexSizes`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const indexList = db.products.getIndexes();
+> const indexSizes = db.products.stats().indexSizes;
+> 
+> console.log("Active Indexes:", indexList);
+> console.log("Index Sizes (Bytes):", indexSizes);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `getIndexes()` lists all registered collection indexes, keys, and options.
+> 2. `stats().indexSizes` tracks individual RAM/disk byte footprints per index.
+> 3. Essential command for auditing index bloat.
 
 ---
 
 
 
-### Exercise 2: Creating Single Field Index
-
-**Problem:** Create ascending index on `email` field named `email_asc_idx`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.createIndex({ email: 1 }, { name: "email_asc_idx" });
-> ```
-> ```javascript
-> db.users.createIndex({ email: 1 }, { name: "email_asc_idx" });
-> ```
->
-> **Explanation:** `createIndex({ field: 1 })` builds an ascending B-Tree index.
-
----
-
-### Exercise 3: Hiding Index with `hideIndex`
-
-**Problem:** Hide index `old_idx` to test if query performance drops without deleting the index.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.hideIndex("old_idx");
-> ```
-> ```javascript
-> db.users.hideIndex("old_idx");
-> ```
->
-> **Explanation:** `hideIndex()` hides an index from the query planner to safely test index removal impact.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 - [Background / Rolling Index Builds](index_builds.md) — Index construction locks.
@@ -230,7 +236,7 @@ Execute index creation migration scripts separately in deployment pipelines
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `createIndex()` builds B-Tree indexes; `dropIndex()` removes them.
 - Direct NoSQL equivalent to SQL's `CREATE INDEX` and `DROP INDEX` commands.
 - Use `{ unique: true }` to enforce value uniqueness at the database layer.

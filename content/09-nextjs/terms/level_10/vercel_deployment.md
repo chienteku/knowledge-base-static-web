@@ -14,16 +14,17 @@
 ---
 
 ## 2. Term Category
-- **Infrastructure / DevOps**
+
+**Build & Deployment** (Vercel Platform Integration): Vercel Deployment integrates Next.js build output with automated edge caching, preview deployments, and serverless functions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Production**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Deploying a full-stack Next.js app on a traditional server (like AWS EC2 or DigitalOcean) requires configuring Node.js, setting up a reverse proxy (Nginx), configuring SSL certificates, establishing a CI/CD pipeline from GitHub, and manually managing a CDN for your static assets.
@@ -41,7 +42,7 @@ One of Vercel's most powerful features. Whenever you open a Pull Request on GitH
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on Server-Side State or File Systems
 
@@ -89,66 +90,110 @@ One of Vercel's most powerful features. Whenever you open a Pull Request on GitH
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Background Jobs
+### Exercise 1: Deploying Next.js Projects to Vercel via CLI
 
-**Problem:** A user clicks "Generate Report". The report takes 5 minutes to generate. Can you use a Next.js Server Action to run this process on Vercel?
+**Scenario:**
+Deploy a Next.js App Router application to Vercel production using Vercel CLI.
 
-**Expected output:**
+**Requirements:**
+1. Run `vercel --prod` CLI command.
+
 > [!check]- Answer
-> ```text
-> No!
-> Vercel Serverless Functions have a strict execution timeout (usually 10 to 60 seconds, depending on your plan). If your Server Action runs for 5 minutes, Vercel will forcefully terminate it, and the user will get a 504 Gateway Timeout error.
-> For long-running background jobs, you must use an external queuing service like Inngest, Trigger.dev, or AWS SQS.
-> ```
-> - Serverless functions are designed to be fast and ephemeral.
-
----
-
-### Exercise 2: Vercel Preview Deployment Advantage
-
-**Problem:** Explain how Vercel Preview Deployments improve team code review workflows.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Every Git branch or Pull Request automatically generates a unique live preview URL, allowing teams to test code changes in a real production-like environment before merging to main.
-> ```
-> - Generates unique live preview URLs for every Pull Request.
-> 
-> ```text
-> Git Push Branch -> Automated Vercel Live Preview URL
-> ```
-
----
-
-### Exercise 3: Vercel CLI Deployment Command
-
-**Problem:** Which CLI command deploys a Next.js project to production using Vercel CLI?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> vercel --prod
-> ```
-> - `vercel --prod` triggers production deployment.
-> 
+>
+> #### Implementation
+>
 > ```bash
-> vercel --prod
+> # Deploy to Vercel Production
+> npx vercel --prod
 > ```
+
+> #### Technical Explanation
+>
+> 1. Vercel automatically detects Next.js build output and configures CDN edge caching, serverless functions, and image optimization.
+> 2. `vercel --prod` compiles the build locally or remotely and deploys to the production domain.
+> 3. Zero-config deployment platform for Next.js.
+
+---
+
+### Exercise 2: Configuring Git Preview Deployments
+
+**Scenario:**
+Explain how Vercel Git integration creates automatic preview deployment URLs for every pull request.
+
+**Requirements:**
+1. Detail PR preview URL generation and environment variable isolation.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Git Preview Deployment Workflow:
+> - Step: Developer opens Pull Request on GitHub/GitLab.
+> - Step: Vercel automatically triggers 'next build' in isolated Preview Environment.
+> - Step: Generates unique preview URL (e.g. my-app-git-feature-team.vercel.app).
+> - Step: Comments preview link directly on the PR for staging testing!
+> ```
+
+> #### Technical Explanation
+>
+> 1. Vercel generates isolated preview deployment URLs for every git branch and pull request.
+> 2. Allows testing changes in production-identical staging environments before merging to main.
+> 3. Core collaborative CI/CD workflow feature.
+
+---
+
+### Exercise 3: Configuring Vercel Speed Insights and Analytics
+
+**Scenario:**
+Enable Vercel Speed Insights package `@vercel/speed-insights/next` in `app/layout.tsx`.
+
+**Requirements:**
+1. Render `<SpeedInsights />` component in root layout.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // app/layout.tsx
+> import { SpeedInsights } from "@vercel/speed-insights/next";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <SpeedInsights />
+      </body>
+    </html>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `<SpeedInsights />` captures real-user performance data (RUM) in client browsers.
+> 2. Reports Core Web Vitals metrics directly to the Vercel project analytics dashboard.
+> 3. Seamless performance monitoring integration.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Docker & Standalone Build](standalone_build.md) — The alternative to Vercel for self-hosting.
 - [Environment Variables (`.env.local`)](environment_variables.md) — Must be configured in the Vercel Dashboard.
 - [Serverless Functions](serverless_functions.md) — Related concept: Serverless Functions.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Vercel** is the optimal hosting platform for Next.js, requiring zero configuration.
 - It splits your app into three pieces: Static Assets (CDN), Serverless Functions (SSR/Node), and Edge Functions (Middleware).
 - Because it uses Serverless Functions, your Next.js backend must be completely **stateless**. You cannot save files to disk or rely on server memory.

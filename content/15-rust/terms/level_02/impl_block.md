@@ -171,9 +171,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Financial Order Book & State Transition Engine
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 High-frequency trading engines require separating order data definitions from matching logic and state transitions. You need to model an order book where orders transition between statuses safely, while matching bids and asks using distinct `impl` blocks.
 
+**Requirements:**
 Implement the following:
 1. An `OrderStatus` enum with variants `Pending`, `Filled { executed_price: u64 }`, and `Cancelled { reason: String }`.
 2. An `impl OrderStatus` block featuring self-consuming state transition methods:
@@ -342,9 +343,10 @@ Implement the following:
 
 ### Exercise 2: Zero-Copy Network Frame Buffer & Packet Decoder
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 High-performance streaming servers receive byte fragments over TCP sockets that must be validated and parsed into protocol packets without copying memory excessively.
 
+**Requirements:**
 Design a binary packet parsing engine:
 1. Define a `FrameError` enum (`InvalidMagic`, `IncompleteFrame`, `ChecksumMismatch`).
 2. Define a `Packet` struct with an `impl Packet` block containing slice borrow methods (`payload(&self) -> &[u8]`), length inspection (`payload_len`), and XOR checksum validation (`verify_checksum`).
@@ -490,9 +492,10 @@ Design a binary packet parsing engine:
 
 ### Exercise 3: Token Bucket Rate Limiter & Telemetry Analytics
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 API gateways protect backend microservices from load surges using token bucket rate limiters. Implement a modularized `RateLimiter` using 3 separate `impl` blocks for strict concern separation.
 
+**Requirements:**
 Requirements:
 1. Implement a builder pattern via `RateLimiterBuilder` and `impl RateLimiterBuilder`.
 2. Implement `RateLimiter` across 3 separate `impl` blocks:

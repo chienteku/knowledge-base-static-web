@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Unsafe / Systems**: `core::arch::asm!` macro for inserting raw machine assembly instructions directly into Rust code inside `unsafe` blocks.
+
+
+**Rust Low-Level Primitive (inline asm! macro instruction emitter)**: `core::arch::asm!` macro for inserting raw machine assembly instructions directly into Rust code inside `unsafe` blocks.
 
 ---
 

@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Index / Performance** (Present-Keys-Only Sub-Index): A Sparse Index contains B-tree entries ONLY for documents where the indexed field is present, omitting missing fields.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Calculated during the index insertion loop. Reduces index storage space by excluding documents missing the targeted key).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `unique_index.md`, unique indexes on optional fields crash when a second document is inserted without the field, because MongoDB indexes the missing keys as duplicate `null` values.
@@ -89,7 +90,7 @@ db.users.find({ referral_code: { $exists: true } }).sort({ referral_code: 1 });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running paginated sorting queries on optional sparse fields, wondering why query speeds are slow
 
@@ -100,6 +101,8 @@ db.users.find({ referral_code: { $exists: true } }).sort({ referral_code: 1 });
 **Fix: When sorting by a sparse index field, you must add the `{ field: { $exists: true } }` condition to your query filter to unlock index optimization.**
 
 ---
+
+
 
 
 
@@ -120,6 +123,8 @@ db.users.find().sort({ phone: 1 }); // ❌ Bypasses sparse index!
 db.users.find({ phone: { $exists: true } }).sort({ phone: 1 });
 ```
 
+
+
 ### Mistake 3: Using Sparse Indexes When Partial Indexes Provide Greater Control
 
 **The mistake:** Using `sparse: true` for compound indexes.
@@ -138,107 +143,100 @@ Use partialFilterExpression for compound conditional index rules
 
 
 
-### Mistake 4: Expecting Sparse Indexes to Satisfy `sort()` Queries Without Filter Predicates
+## 5. Practice Exercises
 
-**The mistake:** Creating sparse index `{ phone: 1 }` and querying `db.users.find().sort({ phone: 1 })`.
+### Exercise 1: Creating Present-Keys-Only Sparse Indexes
 
-**Why it's wrong:** If a query lacks `{ phone: { $exists: true } }` filter predicates, the query planner bypasses sparse indexes for `sort()` to avoid missing documents where `phone` is absent.
+**Scenario:**
+Create a sparse unique index on optional field `taxId` in collection `customers` to allow multiple documents to omit `taxId`.
 
-*Incorrect:*
-```javascript
-db.users.createIndex({ phone: 1 }, { sparse: true });
-db.users.find().sort({ phone: 1 }); // ❌ Bypasses sparse index!
-```
+**Requirements:**
+1. Execute `createIndex({ taxId: 1 }, { unique: true, sparse: true })`.
 
-*Fix:*
-```javascript
-db.users.find({ phone: { $exists: true } }).sort({ phone: 1 });
-```
-
-### Mistake 5: Using Sparse Indexes When Partial Indexes Provide Greater Control
-
-**The mistake:** Using `sparse: true` for compound indexes.
-
-**Why it's wrong:** For compound indexes, sparse indexes index documents where at least one indexed field exists. Use `partialFilterExpression` for explicit field existence rules.
-
-*Incorrect:*
-```javascript
-// Using sparse for compound index conditional rules
-```
-
-*Fix:*
-```javascript
-Use partialFilterExpression for compound conditional index rules
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Sparse Index Diagnostic
-
-**Problem:** You have a `users` collection with a unique sparse index:
-`db.users.createIndex({ passport_num: 1 }, { unique: true, sparse: true });`
-State whether the index is **Used** or **Ignored** in these queries:
-1.  `db.users.find({ passport_num: "US-12345" })`
-2.  `db.users.find().sort({ passport_num: 1 })`
-3.  `db.users.find({ passport_num: { $exists: true } }).sort({ passport_num: 1 })`
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Used: The query searches for a specific value on the indexed field.
-> 2. Ignored: The sort query lacks an exists filter, so the planner ignores the index to ensure documents missing the passport_num are not excluded from the output.
-> 3. Used: The query explicitly filters for passport_num existence, allowing the index to satisfy the sort path safely.
-> ```
-> - Check if the query targets a specific value, or sorts without filtering.
-> - Look for the presence of the `$exists: true` constraint.
-
----
-
-
-
-### Exercise 2: Creating Sparse Index for Optional Field
-
-**Problem:** Create sparse unique index on optional field `passportNumber`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.createIndex({ passportNumber: 1 }, { unique: true, sparse: true });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.users.createIndex(
->   { passportNumber: 1 },
+> db.customers.createIndex(
+>   { taxId: 1 },
 >   { unique: true, sparse: true }
 > );
 > ```
 >
-> **Explanation:** `sparse: true` indexes documents containing `passportNumber`, omitting absent fields.
+> #### Technical Explanation
+>
+> 1. Sparse indexes contain B-tree entries ONLY for documents where the indexed field is present.
+> 2. A non-sparse unique index treats missing fields as `null`, rejecting multiple documents with missing fields as duplicate `null` keys.
+> 3. Sparse unique indexes allow multiple documents to omit the field while enforcing uniqueness for populated values.
 
 ---
 
-### Exercise 3: Sparse vs Standard Indexing of Absent Keys
+### Exercise 2: Sparse Index Query Traversal Restrictions
 
-**Problem:** How does a sparse index store documents missing the indexed key? (Omits missing documents from the index B-Tree).
+**Scenario:**
+Explain why query `find().sort({ taxId: 1 })` bypasses a sparse index unless `taxId` is present in the query filter.
 
-**Expected output:**
+**Requirements:**
+1. Explain sparse index sort bypass behavior.
+
 > [!check]- Answer
-> ```text
-> Omits missing documents from the index B-Tree
-> ```
-> ```text
-> Omits missing documents from the index B-Tree
+>
+> #### Implementation
+>
+> ```javascript
+> // ❌ Bypasses Sparse Index -> Forces COLLSCAN (sparse index omits missing keys, cannot guarantee complete result set)
+> db.customers.find().sort({ taxId: 1 });
+> 
+> // ✅ Uses Sparse Index (filter guarantees field presence)
+> db.customers.find({ taxId: { $exists: true } }).sort({ taxId: 1 });
 > ```
 >
-> **Explanation:** Sparse indexes save RAM by omitting documents lacking the target field.
+> #### Technical Explanation
+>
+> 1. Because sparse indexes omit documents missing the indexed key, MongoDB cannot use a sparse index for queries that expect a complete collection result set.
+> 2. Query filter must explicitly require key presence (`$exists: true` or `$gt`) to trigger sparse index usage.
+> 3. Prefer Partial Indexes for modern MongoDB deployments.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Comparing Sparse vs Partial Indexes
+
+**Scenario:**
+Formulate a technical recommendation comparing legacy Sparse Indexes against modern Partial Indexes.
+
+**Requirements:**
+1. Contrast `sparse: true` vs `partialFilterExpression: { field: { $exists: true } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Index Selection Guidance:
+> - Sparse Index: Legacy option (indexes present keys only).
+> - Partial Index: Modern superset (allows filtering on presence, value ranges, and multi-field expressions).
+> Recommendation: Use Partial Indexes for all new schema designs.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Partial indexes offer a strict superset of sparse index functionality.
+> 2. Provides explicit control over index inclusion criteria.
+> 3. Standard best practice in modern MongoDB versions.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Unique Index](unique_index.md) — The parent constraint.
 - [Partial Index](partial_index.md) — The modern alternative.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Sparse Index only indexes documents containing the specified field.
 - Resolves the duplicate null crash when creating unique indexes on optional fields.
 - Saves disk storage and memory by skipping documents missing the field.

@@ -16,7 +16,9 @@
 
 ## 2. Term Category
 
-**Advanced Lifetimes**: Higher-Ranked Trait Bounds (`for<'a>`) specifying that a trait bound or closure must hold universally for *all* possible reference lifetimes `'a`.
+
+
+**Rust Advanced Lifetime Feature (higher-ranked trait bounds for<'a>)**: Higher-Ranked Trait Bounds (`for<'a>`) specifying that a trait bound or closure must hold universally for *all* possible reference lifetimes `'a`.
 
 ---
 

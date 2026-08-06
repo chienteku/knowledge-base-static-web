@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Compiler Internals**: Low-level coroutines and generator state machines.
+
+
+**Rust Experimental Feature (resumable coroutine state machines)**: Low-level coroutines and generator state machines.
 
 ---
 
@@ -309,7 +311,7 @@ Iterate or invoke .resume() inside an executor loop!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`async fn`](../level_10/async_fn.md) — Async/await runtime foundation.
 - [`Future` Trait](../level_10/future_trait.md) — Future trait.

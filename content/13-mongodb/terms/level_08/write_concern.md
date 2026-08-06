@@ -14,16 +14,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Administration / Operations** (Write Durability Acknowledgment Level): Write Concern (`w: 1`, `w: "majority"`, `j: true`, `wtimeout`) configures the level of durability acknowledgment required from `mongod` before returning write success.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Configurable at the client connection level, database level, or per-query. Governs replica set synchronization handshakes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a distributed database cluster (Replica Set), data is copied across multiple servers for high availability.
@@ -93,7 +94,7 @@ db.clicks.insertOne(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using 'w: 0' (Unacknowledged) writes for critical business transactions (such as payments or user registrations)
 
@@ -143,66 +144,92 @@ db.orders.insertOne({ ... }, { writeConcern: { w: 5, wtimeoutMS: 5000 } }); // �
 db.orders.insertOne({ ... }, { writeConcern: { w: "majority" } }); // Dynamically targets active majority
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Durability Trade-off Analysis
+### Exercise 1: Configuring Majority Write Durability
 
-**Problem:** You are designing a high-volume sensor monitoring database. Telemetry metrics are logged 10,000 times a second. Occasional data point loss is acceptable.
-State the optimal Write Concern parameters (`w` and `j` settings) to handle this workload, and explain why.
+**Scenario:**
+Execute an `insertOne()` write operation with `writeConcern: { w: "majority", wtimeout: 5000 }` to guarantee cross-node durability.
 
-**Expected output:**
+**Requirements:**
+1. Pass `writeConcern: { w: "majority", wtimeout: 5000 }` in write options.
+
 > [!check]- Answer
-> ```text
-> The optimal settings are `{ w: 1 }` or `{ w: 0 }` with `{ j: false }`. 
-> Since data loss is acceptable and writes are extremely frequent (10,000/sec), you want to minimize network and disk wait states. 
-> By avoiding `w: "majority"` and `j: true`, you prevent the database from blocking writes on disk flushes and network handshakes, maximizing server throughput.
-> ```
-> - Assess if data verification overhead is needed for telemetry data.
-> - Consider write speed performance under high logging throughput.
-
----
-
-
-
-### Exercise 2: Majority Write Concern with Journaling
-
-**Problem:** Configure write concern ensuring write is acknowledged by majority nodes and committed to disk journal (`w: 'majority'`, `j: true`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.orders.insertOne(doc, { writeConcern: { w: "majority", j: true, wtimeoutMS: 5000 } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.orders.insertOne(doc, {
->   writeConcern: {
->     w: "majority",
->     j: true,
->     wtimeoutMS: 5000
->   }
-> });
+> db.orders.insertOne(
+>   { orderId: "ORD-99", amount: 199.99, createdAt: new Date() },
+>   { writeConcern: { w: "majority", wtimeout: 5000 } }
+> );
 > ```
 >
-> **Explanation:** `w: 'majority'` + `j: true` guarantees durability across cluster node failovers.
+> #### Technical Explanation
+>
+> 1. `w: "majority"` requires the write operation to be acknowledged by a majority of replica set nodes before returning success.
+> 2. `wtimeout: 5000` prevents client driver from blocking indefinitely if secondary replication lags.
+> 3. Guarantees write durability against primary node crash failovers.
 
 ---
 
-### Exercise 3: Write Concern Timeout Protection
+### Exercise 2: Journal Flushing Control with `j: true`
 
-**Problem:** Why specify `wtimeoutMS` in write concern configurations? (Prevents write operations from blocking indefinitely if node replication stalls).
+**Scenario:**
+Configure a high-security financial transaction write requiring disk journal flushing acknowledgment (`j: true`).
 
-**Expected output:**
+**Requirements:**
+1. Pass `writeConcern: { w: "majority", j: true }`.
+
 > [!check]- Answer
-> ```text
-> Prevents operations from blocking indefinitely if replica nodes stall
-> ```
-> ```text
-> Prevents operations from blocking indefinitely if replica nodes stall
+>
+> #### Implementation
+>
+> ```javascript
+> db.ledger.insertOne(
+>   { txId: "TX-1001", amount: 5000 },
+>   { writeConcern: { w: "majority", j: true } }
+> );
 > ```
 >
-> **Explanation:** `wtimeoutMS` aborts write concern waiting if replication fails to fulfill requirements in time.
+> #### Technical Explanation
+>
+> 1. `j: true` requires `mongod` to flush the write operation to the on-disk WiredTiger journal file before acknowledging success.
+> 2. Protects write durability even if all replica set nodes suffer simultaneous power loss.
+> 3. Maximum single-node write durability option.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Unacknowledged Writes (`w: 0`) for High-Volume Telemetry
+
+**Scenario:**
+Configure an unacknowledged write (`w: 0`) for non-critical high-frequency IoT log ingestion.
+
+**Requirements:**
+1. Pass `writeConcern: { w: 0 }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.sensor_logs.insertOne(
+>   { deviceId: "DEV-01", temp: 22.1, time: new Date() },
+>   { writeConcern: { w: 0 } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `w: 0` sends the write command over network socket without waiting for server acknowledgment.
+> 2. Provides maximum write throughput at the cost of zero error detection (network drops or duplicate key errors are ignored).
+> 3. Use only for non-critical logging where losing occasional data points is acceptable.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Read Concern](read_concern.md) — Read durability parameters.
 - [Replica Set](../level_09/replica_set.md) — The cluster context.
@@ -210,7 +237,7 @@ State the optimal Write Concern parameters (`w` and `j` settings) to handle this
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Write Concern configures write durability verification thresholds.
 - `w` controls how many replica nodes must acknowledge the write.
 - `w: 0` is unacknowledged (fastest, no error reporting).

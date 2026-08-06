@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (mathematical computation builtin functions)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed natively by the Rust execution engine. Preserves arbitrary precision when operating on `decimal` data types).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Numeric computations in applications fall into two main categories:
@@ -94,7 +93,7 @@ FROM metrics;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using 'AVG()' instead of 'math::mean()' in aggregate queries
 
@@ -148,64 +147,97 @@ LET $ratio = $val / 0; // ❌ Division by zero!
 LET $ratio = IF $divisor != 0 THEN $val / $divisor ELSE 0 END;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Financial Rounding & Summation
+### Exercise 1: Rounding & Ceil Monetary Calculations
 
-**Problem:** You have an `invoices` table containing a `total` field (`decimal`).
-Write the SurrealQL query to:
-1. Calculate the total sum of all invoices as `grand_total`.
-2. Round `grand_total` to 2 decimal places using `math::round()`.
-3. Group globally using `GROUP ALL`.
+**Scenario:**
+An e-commerce billing query rounds calculated tax amounts to 2 decimal places using `math::round()` and computes ceiling shipping fees using `math::ceil()`.
 
-**Expected output:**
+**Requirements:**
+1. Calculate tax `math::round(19.99dec * 0.0825dec)`.
+2. Calculate ceiling fee `math::ceil(4.12)`.
+
 > [!check]- Answer
-> ```sql
+>
+> #### Implementation
+>
+> ```surrealql
 > SELECT 
->   math::round(math::sum(total), 2) AS grand_total 
-> FROM invoices 
+>     math::round(19.99dec * 0.0825dec) AS tax_rounded,
+>     math::ceil(4.12) AS shipping_ceil;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `math::round(val)` rounds numeric values to nearest integers or specified decimal places.
+> 2. `math::ceil(val)` rounds floating-point values UP to the nearest integer.
+> 3. Maintains calculation precision for monetary transactions.
+
+---
+
+### Exercise 2: Statistical Aggregate Metrics
+
+**Scenario:**
+An analytics query computes the minimum, maximum, sum, and mean of product prices in table `product`.
+
+**Requirements:**
+1. Query `math::min(price)`, `math::max(price)`, `math::sum(price)`, `math::mean(price)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE product:p1 SET price = 10.00dec;
+> CREATE product:p2 SET price = 50.00dec;
+> CREATE product:p3 SET price = 90.00dec;
+> 
+> SELECT 
+>     math::min(price) AS min_p,
+>     math::max(price) AS max_p,
+>     math::sum(price) AS total_p,
+>     math::mean(price) AS avg_p
+> FROM product
 > GROUP ALL;
 > ```
-> - Nest `math::sum()` inside `math::round()`.
-> - The second argument to `math::round(val, precision)` specifies decimal places.
+>
+> #### Technical Explanation
+>
+> 1. `math::*` aggregate functions compute statistical metrics over record collections.
+> 2. `GROUP ALL` aggregates across all matching table records.
+> 3. Executes statistical calculations natively inside the database engine.
+
+---
+
+### Exercise 3: Absolute Difference Calculations
+
+**Scenario:**
+Calculate the absolute numeric difference between two target values using `math::abs()`.
+
+**Requirements:**
+1. Calculate `math::abs(100 - 250)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT math::abs(100 - 250) AS distance;
+> -- Output: 150
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `math::abs(val)` returns the non-negative absolute magnitude of numeric expressions.
+> 2. Eliminates manual sign checking in distance queries.
+> 3. Works over integer, float, and decimal inputs.
 
 ---
 
 
 
-### Exercise 2: Rounding and Precision Functions
-
-**Problem:** Round `19.8567` to 2 decimal places using `math::fixed()` or `math::round()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> math::fixed(19.8567, 2)
-> ```
-> ```surrealql
-> RETURN math::fixed(19.8567, 2);
-> ```
->
-> **Explanation:** `math::fixed(val, precision)` rounds numbers to fixed decimal places.
-
----
-
-### Exercise 3: Summing Array of Numbers
-
-**Problem:** Calculate sum of `[10, 20, 30]` using `math::sum()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 60
-> ```
-> ```surrealql
-> RETURN math::sum([10, 20, 30]);
-> ```
->
-> **Explanation:** `math::sum(array)` returns the total sum of array element numbers.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Built-in Functions Overview](builtin_functions.md) — The parent library.
 - [`int` / `float` / `decimal`](../level_02/number_types.md) — Numeric types.
@@ -213,7 +245,7 @@ Write the SurrealQL query to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `math::*` module contains both scalar math and aggregate statistical functions.
 - `math::mean()` computes arithmetic averages (replacing SQL's `AVG()`).
 - `math::round(val, precision)` rounds to nearest integer or decimal places.

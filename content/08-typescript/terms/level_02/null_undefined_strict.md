@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Type System Fundamental**
+
+**Type System Fundamental** (Strict Null Handling): `null` and `undefined` represent absent values, strictly checked under `"strictNullChecks": true` to eliminate runtime null crashes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-time** (The strict checking happens during compilation, compiling down to standard JavaScript value checks at runtime).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, `null` (representing intentional absence of an object) and `undefined` (representing unintentional absence or uninitialized state) are core primitives.
@@ -82,7 +83,7 @@ function renderAvatar(profile: UserProfile) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Bypassing strict checks using Non-null Assertions (`!`) lazily
 
@@ -150,68 +151,105 @@ const el = document.getElementById("missing");
 if (el) { /* Safely access el */ }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Safe Input Check
+### Exercise 1: Narrowing Optional and Nullable Properties
 
-**Problem:** The function below is rejected by the compiler. Correct it using a conditional type guard to satisfy `strictNullChecks`.
+**Scenario:**
+Safely access optional user email properties under `"strictNullChecks": true` using optional chaining (`?.`) or null checking.
 
-```typescript
-function getLength(str: string | undefined): number {
-  return str.length; // Error: str is possibly undefined
+**Requirements:**
+1. Handle `string | null | undefined` safely.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface User {
+>   name: string;
+>   email?: string | null;
+> }
+
+function getEmailDomain(user: User): string {
+  // Optional chaining and nullish coalescing:
+  const email = user.email?.toLowerCase() ?? "no-email-provided";
+  return email;
 }
 ```
 
-**Expected output:**
+> #### Technical Explanation
+>
+> 1. `"strictNullChecks": true` forces explicit handling of `null` and `undefined` types.
+> 2. Optional chaining (`?.`) short-circuits to `undefined` if the receiver object is `null` or `undefined`.
+> 3. Nullish coalescing (`??`) provides fallback defaults only for `null` or `undefined` values.
+
+---
+
+### Exercise 2: Non-Null Assertion Operator Danger Audit
+
+**Scenario:**
+Audit the risks of using the non-null assertion operator (`!`) to bypass strict null checks.
+
+**Requirements:**
+1. Show how `user.email!` causes runtime crashes if `email` is `null`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> function getLength(str: string | undefined): number {
->   if (str === undefined) return 0;
->   return str.length;
+> interface Profile {
+>   avatarUrl?: string;
 > }
-> // OR using ternary/nullish coalescing
+
+function renderAvatar(profile: Profile) {
+  // ⚠️ DANGEROUS: Suppresses compiler warning, but crashes if avatarUrl is undefined!
+  // const url: string = profile.avatarUrl!; 
+
+  // ✅ SAFE (Explicit check or default fallback):
+  const url: string = profile.avatarUrl ?? "/default-avatar.png";
+  return url;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. The non-null assertion operator (`!`) tells the compiler to assume a value is not `null` or `undefined`.
+> 2. Completely erased at compile time; provides zero runtime safety.
+> 3. Prefer explicit runtime checks or fallback operators (`??`).
+
+---
+
+### Exercise 3: Distinguishing `null` vs `undefined` Intent
+
+**Scenario:**
+Formulate a architectural distinction matrix comparing `null` against `undefined`.
+
+**Requirements:**
+1. Contrast explicit absence vs un-initialized/missing properties.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> null vs undefined Matrix:
+> - undefined: Represents an un-initialized variable, missing object property, or omitted optional argument. Automatically assigned by JS engine.
+> - null: Represents an explicit, intentional absence of object value or empty database reference. Set deliberately by developers.
 > ```
-> - The type of `str` inside the function is a union.
-> - Use an `if` block checking `str === undefined` or `!str` to narrow the type to `string`.
+
+> #### Technical Explanation
+>
+> 1. `undefined` is the default JavaScript value for unassigned identifiers.
+> 2. `null` is a deliberate value indicating "no value present".
+> 3. Both are treated as distinct types under `strictNullChecks`.
 
 ---
 
 
 
-### Exercise 2: Nullish Coalescing Fallbacks
-
-**Problem:** Use `??` operator to supply default string `"Anonymous"` for `name: string | null`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Anonymous
-> ```
-> ```typescript
-> const name: string | null = null;
-> console.log(name ?? "Anonymous");
-> ```
->
-> **Explanation:** `??` provides default values when expressions evaluate to `null` or `undefined`.
-
----
-
-### Exercise 3: Strict Null Checks Flag Verification
-
-**Problem:** Which tsconfig flag prevents implicit assignment of `null` to `string` variables?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> strictNullChecks: true
-> ```
-> ```typescript
-> console.log("strictNullChecks: true");
-> ```
->
-> **Explanation:** `strictNullChecks` treats `null` and `undefined` as distinct domain types.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Primitive Types](primitive_types.md) — Basic data types.
 - [`void` & `never`](void_never.md) — The other non-value types.
 - [Strict Mode](../level_11/strict_mode.md) — The setting that turns on strict null checking.
@@ -219,7 +257,7 @@ function getLength(str: string | undefined): number {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `null` and `undefined` represent empty values in JavaScript.
 - **`strictNullChecks`** forces developers to explicitly declare nullable values using Union Types (`T | null`).
 - Enabling this flag eliminates a massive category of common runtime errors.

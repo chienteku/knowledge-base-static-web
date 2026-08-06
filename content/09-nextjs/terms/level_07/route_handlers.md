@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **API Endpoint**
+
+**Server & Edge API** (App Router REST API Endpoints): Route Handlers (`route.ts`) define custom backend REST/JSON API endpoints inside the App Router directory structure.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the legacy Pages Router, you created API endpoints in the `pages/api/` folder. They used the Node.js `req` and `res` objects (like Express.js).
@@ -55,7 +56,7 @@ Notice that we return a standard Web `Response` object. In the old Pages router,
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing `route.ts` and `page.tsx` in the same folder
 
@@ -109,72 +110,116 @@ export async function POST(req: Request) {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Server Actions vs Route Handlers
+### Exercise 1: Authoring App Router REST API Endpoints
 
-**Problem:** You have a "Contact Us" form on your website. Should you build a `POST` Route Handler for it, or use a Server Action?
+**Scenario:**
+Create a JSON API endpoint `app/api/health/route.ts` returning system status.
 
-**Expected output:**
+**Requirements:**
+1. Export `GET` handler in `app/api/health/route.ts`.
+
 > [!check]- Answer
-> ```text
-> You should use a Server Action!
-> In the App Router era, Route Handlers (`route.ts`) should primarily be used for interacting with EXTERNAL systems (like webhooks from Stripe, or building an API for a mobile app). 
-> If you are just mutating data from your own Next.js React UI, Server Actions are the officially recommended and vastly superior approach.
-> ```
-> - Think about what we learned in Level 6 regarding form submissions.
-
----
-
-### Exercise 2: Complete REST POST Route Handler Pattern
-
-**Problem:** Write complete `app/api/items/route.ts` handling `POST` request, reading JSON body `{ title }`, creating item in DB, returning HTTP 201 response.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import { NextResponse } from 'next/server'; export async function POST(req: Request) { const body = await req.json(); const item = await db.item.create({ data: { title: body.title } }); return NextResponse.json(item, { status: 201 }); }
-> ```
-> - Route Handlers parse JSON bodies and return `NextResponse.json()`.
-> 
-> ```typescript
-> import { NextResponse } from 'next/server';
-> import { db } from '@/lib/db';
-> 
-> export async function POST(request: Request) {
->   try {
->     const body = await request.json();
->     const newItem = await db.item.create({
->       data: { title: body.title }
->     });
->     return NextResponse.json(newItem, { status: 201 });
->   } catch (error) {
->     return NextResponse.json({ error: 'Failed to create item' }, { status: 500 });
->   }
+> // app/api/health/route.ts
+> export async function GET() {
+>   return Response.json({
+>     status: "ok",
+>     uptime: process.uptime(),
+>     timestamp: new Date().toISOString()
+>   });
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. `route.ts` files define backend REST API endpoints in the App Router directory structure.
+> 2. Replaces legacy `pages/api/` handlers.
+> 3. Must be placed in a directory containing NO `page.tsx` file to avoid route collisions.
+
 ---
 
-### Exercise 3: Route Handler File Naming Convention
+### Exercise 2: Processing JSON Request Payloads in `POST` Route Handlers
 
-**Problem:** What is the mandatory reserved filename for Route Handlers in Next.js App Router?
+**Scenario:**
+Read and validate incoming JSON body payloads in `app/api/feedback/route.ts`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `await req.json()` inside `POST` handler.
+
 > [!check]- Answer
-> ```text
-> route.ts (or route.js)
-> ```
-> - `route.ts` defines backend API endpoints in the App Router.
-> 
-> ```text
-> app/api/v1/users/route.ts
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> // app/api/feedback/route.ts
+> export async function POST(req: Request) {
+>   const body = await req.json();
+
+  if (!body.email || !body.message) {
+    return Response.json({ error: "Missing required fields" }, { status: 400 });
+  }
+
+  // Save feedback...
+
+  return Response.json({ success: true, received: body }, { status: 201 });
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `await req.json()` parses the incoming HTTP request stream body into a JavaScript object.
+> 2. Returning `Response.json(..., { status: 400 })` sets custom status code headers.
+> 3. Standard REST API POST handler pattern.
+
+---
+
+### Exercise 3: Webhook Endpoint Signature Verification
+
+**Scenario:**
+Read raw text request bodies in a Stripe webhook Route Handler using `req.text()` for HMAC signature verification.
+
+**Requirements:**
+1. Call `await req.text()` to get raw unparsed body.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // app/api/webhooks/stripe/route.ts
+> export async function POST(req: Request) {
+>   const rawBody = await req.text();
+>   const signature = req.headers.get("stripe-signature");
+
+  if (!signature) {
+    return Response.json({ error: "Missing signature" }, { status: 400 });
+  }
+
+  // Verify HMAC signature against rawBody...
+
+  return Response.json({ received: true });
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Webhook signature verification requires the UNPARSED raw string payload buffer (`req.text()`).
+> 2. Calling `req.json()` alters string formatting and invalidates cryptographic HMAC signatures.
+> 3. Critical pattern for payment gateway webhooks (Stripe, GitHub, Shopify).
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`NextRequest` & `NextResponse`](next_request_response.md) — The Next.js specific extensions to the standard Web Request/Response objects.
 - [Server Actions Overview (`"use server"`)](../level_06/server_actions.md) — The alternative to Route Handlers for internal app mutations.
 - [Client-side Fetching (SWR / React Query)](../level_05/client_fetching.md) — Related concept: Client-side Fetching (SWR / React Query).
@@ -188,7 +233,7 @@ export async function POST(req: Request) {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Route Handlers** (`route.ts`) are the App Router's way of creating API endpoints.
 - You define them by exporting named HTTP methods (`GET`, `POST`, `DELETE`, etc.).
 - They rely entirely on standard Web APIs (`Request` and `Response`) rather than Node-specific objects.

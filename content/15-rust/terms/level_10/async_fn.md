@@ -169,8 +169,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Asynchronous Telemetry Batch Processor with Timeout Pipeline
 
-**Scenario**: You are constructing a telemetry processing microservice for a cloud analytics platform. Raw telemetry batches arrive concurrently and must undergo validation, item processing, and per-batch deadline enforcement. Because `async fn` returns an unexecuted `Future` state machine, calling processing logic creates an idle task graph until driven by an async runtime (`tokio`).
+**Scenario:** You are constructing a telemetry processing microservice for a cloud analytics platform. Raw telemetry batches arrive concurrently and must undergo validation, item processing, and per-batch deadline enforcement. Because `async fn` returns an unexecuted `Future` state machine, calling processing logic creates an idle task graph until driven by an async runtime (`tokio`).
 
+**Requirements:**
 Write an async pipeline that validates and transforms incoming telemetry batches while wrapping processing operations inside deadline timeouts.
 
 **Requirements**:
@@ -182,6 +183,9 @@ Write an async pipeline that validates and transforms incoming telemetry batches
 6. Add unit tests asserting batch processing success, error conditions, timeout behavior, and demonstrating the lazy creation of futures.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::time::Duration;
 > use tokio::time::timeout;
@@ -301,7 +305,8 @@ Write an async pipeline that validates and transforms incoming telemetry batches
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Async Signature Desugaring**: Declaring `async fn process_telemetry_batch(...) -> Result<ProcessedBatch, PipelineError>` desugars into `fn process_telemetry_batch(...) -> impl Future<Output = Result<ProcessedBatch, PipelineError>>`. Returning an opaque future allows lazy scheduling.
 > 2. **State Machine Generation**: The compiler generates an anonymous `enum`/`struct` holding parameters `batch` and `delay`. During the call `process_telemetry_batch(...)`, no code executes; memory is allocated for the state struct on the caller's stack/frame.
 > 3. **Non-Blocking Sleep**: `tokio::time::sleep(delay).await` yields execution back to the Tokio event loop without blocking the host OS thread.

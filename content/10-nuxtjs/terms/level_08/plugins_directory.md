@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Extensibility**
+
+**Extensibility & Modules** (Runtime Application Extension Plugins): The `plugins/` directory registers runtime extensions (`defineNuxtPlugin`) that execute during Vue application setup on server and client.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a standard Vue 3 application, `main.ts` is where you initialize the app (`createApp(App)`) and attach global libraries (`app.use(router)`, `app.use(pinia)`, `app.component('Icon', Icon)`). 
@@ -74,7 +75,7 @@ console.log($hello('Nuxt')); // "Hello, Nuxt!"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on DOM APIs in universal plugins
 **The mistake:** Initializing a third-party charting library that requires `window.document` directly inside a standard plugin file.
@@ -130,77 +131,119 @@ window.analytics.init(); // ❌ ReferenceError on server SSR!
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Client-Only Plugins
+### Exercise 1: Registering Universal Nuxt Plugins with `defineNuxtPlugin`
 
-**Problem:** You are installing a Google Analytics plugin that only works in the browser. You create the file `plugins/analytics.ts`. When you start the dev server, it crashes with `window is not defined`. How do you fix the filename?
+**Scenario:**
+Create a Nuxt plugin `plugins/format.ts` providing a custom date formatting helper `$formatDate`.
 
-**Expected output:**
+**Requirements:**
+1. Export `defineNuxtPlugin` returning `{ provide: { formatDate } }`.
+
 > [!check]- Answer
-> ```text
-> Rename it to `plugins/analytics.client.ts`.
-> ```
-> - You can append `.client` or `.server` to plugin filenames to tell Nuxt to run them in only one environment.
-
----
-
-### Exercise 2: defineNuxtPlugin Helper Provide Pattern
-
-**Problem:** Write Nuxt 3 plugin `plugins/format.ts` providing helper `$formatCurrency(val)` accessible via `useNuxtApp()`. 
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> export default defineNuxtPlugin((nuxtApp) => {
->   return {
->     provide: {
->       formatCurrency: (val: number) => `$${val.toFixed(2)}` 
->     }
->   };
-> });
-> ```
-> - `provide` object registers helper functions on `nuxtApp` (`$formatCurrency`).
-> 
+>
+> #### Implementation
+>
 > ```typescript
 > // plugins/format.ts
-> export default defineNuxtPlugin((nuxtApp) => {
+> export default defineNuxtPlugin(() => {
 >   return {
 >     provide: {
->       formatCurrency: (val: number) => `$${val.toFixed(2)}`
+>       formatDate: (dateString: string) => {
+>         return new Date(dateString).toLocaleDateString("en-US", {
+>           year: "numeric",
+>           month: "short",
+>           day: "numeric"
+>         });
+>       }
 >     }
 >   };
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. Files in `plugins/` execute automatically during Nuxt application initialization.
+> 2. Returning `{ provide: { helperName } }` injects `$helperName` globally into Vue template contexts and `useNuxtApp()`.
+> 3. Standard method for registering global utility helpers.
+
 ---
 
-### Exercise 3: Plugin Execution Order Prefix
+### Exercise 2: Server-Only and Client-Only Plugins
 
-**Problem:** How can you enforce a specific execution order for plugins in the `plugins/` directory?
+**Scenario:**
+Create a client-only plugin `plugins/toast.client.ts` initializing a browser toast notification library.
 
-**Expected output:**
+**Requirements:**
+1. Create `plugins/toast.client.ts`.
+
 > [!check]- Answer
-> ```text
-> By prefixing filenames with numbers (e.g. plugins/01.setup.ts, plugins/02.auth.ts).
+>
+> #### Implementation
+>
+> ```typescript
+> // plugins/toast.client.ts
+> export default defineNuxtPlugin((nuxtApp) => {
+>   // Executed strictly in browser client environment!
+>   const toast = {
+>     show: (msg: string) => alert(msg)
+>   };
+>   
+>   return {
+>     provide: { toast }
+>   };
+> });
 > ```
-> - Numerical filename prefixes enforce sequential plugin execution.
-> 
+
+> #### Technical Explanation
+>
+> 1. `.client.ts` suffix restricts plugin execution exclusively to the browser environment.
+> 2. `.server.ts` suffix restricts plugin execution exclusively to Node.js server SSR setup.
+> 3. Prevents executing browser-dependent libraries during server rendering.
+
+---
+
+### Exercise 3: Controlling Plugin Execution Order
+
+**Scenario:**
+Configure plugin execution ordering using numeric file prefixes (`01.auth.ts`, `02.router.ts`).
+
+**Requirements:**
+1. Use numeric prefixes in `plugins/`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> plugins/01.config.ts -> plugins/02.auth.ts
+> Plugin Registration Directory:
+> - plugins/01.config.ts  -> Executes First
+> - plugins/02.auth.ts    -> Executes Second (can consume $config)
+> - plugins/03.theme.ts   -> Executes Third
 > ```
+
+> #### Technical Explanation
+>
+> 1. Nuxt registers plugins in alphabetical/numeric order by default.
+> 2. Prepending numbers (`01.`, `02.`) guarantees dependent plugins execute in strict sequential order.
+> 3. Essential for plugins relying on previously initialized global helpers.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Vue Plugins vs Nuxt Plugins](vue_vs_nuxt_plugins.md) — Understanding how to specifically attach standard Vue plugins.
 - [`useNuxtApp` Context](../level_04/use_nuxt_app.md) — How you retrieve the provided `$helpers`.
 - [Nuxt Modules System](../level_09/nuxt_modules.md) — Related concept: Nuxt Modules System.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `plugins/` directory replaces standard Vue's `main.ts` for app initialization.
 - All files in `plugins/` are executed automatically before Vue mounts.
 - Returning a `provide` object injects `$helpers` globally.

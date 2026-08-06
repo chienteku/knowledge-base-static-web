@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Query Syntax**
+
+**Aggregation** (Field Transformation Functions): Expression Operators evaluate string, math, date, and logical transformation functions on document fields within aggregation pipeline stages.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Evaluated in memory on the database server. Extends pipeline processing capabilities, allowing complex calculations to run near the data).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Raw fields stored on disk are rarely formatted exactly as your front-end UI needs them. 
@@ -107,7 +108,7 @@ db.users.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use aggregation expression operators (like $concat) directly inside a standard find() query filter
 
@@ -155,55 +156,27 @@ It cannot process expression transformations like `$concat` natively.
 { $multiply: [{ $toDouble: "$price" }, "$qty"] }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: SQL to Mongo Expression Translation
+### Exercise 1: String Trimming and Lowercasing
 
-**Problem:** Translate the following SQL SELECT statement columns into a valid MongoDB `$set` aggregation stage:
-`SELECT COALESCE(nickname, 'No Nickname') AS username, CASE WHEN score >= 90 THEN 'A' ELSE 'B' END AS grade FROM students;`
+**Scenario:**
+Sanitize user email input in an aggregation stage by converting to lowercase and removing surrounding whitespace.
 
-**Expected output:**
+**Requirements:**
+1. Use `$toLower` and `$trim`.
+
 > [!check]- Answer
-> ```javascript
-> {
->   $set: {
->     username: { $ifNull: [ "$nickname", "No Nickname" ] },
->     grade: {
->       $cond: {
->         if: { $gte: [ "$score", 90 ] },
->         then: "A",
->         else: "B"
->       }
->     }
->   }
-> }
-> ```
-> - Map `COALESCE` to the `$ifNull` array format.
-> - Map the `CASE WHEN` branches to the `$cond` if/then/else format.
-> - Ensure all field references are prefixed with `$` inside the expression operators.
-
----
-
-
-
-### Exercise 2: Conditional Expressions with `$cond`
-
-**Problem:** Project `status` field: if `age >= 18` return `"Adult"` else `"Minor"` using `$cond`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.aggregate([{ $project: { status: { $cond: { if: { $gte: ["$age", 18] }, then: "Adult", else: "Minor" } } } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.users.aggregate([
 >   {
 >     $project: {
->       status: {
->         $cond: {
->           if: { $gte: ["$age", 18] },
->           then: "Adult",
->           else: "Minor"
+>       cleanEmail: {
+>         $toLower: {
+>           $trim: { input: "$email" }
 >         }
 >       }
 >     }
@@ -211,28 +184,38 @@ It cannot process expression transformations like `$concat` natively.
 > ]);
 > ```
 >
-> **Explanation:** `$cond: { if, then, else }` evaluates ternary conditional expressions in pipelines.
+> #### Technical Explanation
+>
+> 1. `$trim` strips leading/trailing spaces.
+> 2. `$toLower` normalizes string characters to lowercase UTF-8.
+> 3. Standard string sanitization operator combination.
 
 ---
 
-### Exercise 3: Transforming Array Elements with `$map`
+### Exercise 2: Conditional Logic Branching with `$switch`
 
-**Problem:** Multiply all numbers in `prices` array by 1.1 (adding 10% tax) using `$map`.
+**Scenario:**
+Assign customer tier labels (`"VIP"`, `"Gold"`, `"Standard"`) based on `totalSpent` thresholds using `$switch`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$switch` with `branches` array.
+
 > [!check]- Answer
-> ```text
-> db.products.aggregate([{ $project: { taxedPrices: { $map: { input: "$prices", as: "p", in: { $multiply: ["$$p", 1.1] } } } } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.aggregate([
+> db.customers.aggregate([
 >   {
 >     $project: {
->       taxedPrices: {
->         $map: {
->           input: "$prices",
->           as: "p",
->           in: { $multiply: ["$$p", 1.1] }
+>       name: 1,
+>       tier: {
+>         $switch: {
+>           branches: [
+>             { case: { $gte: ["$totalSpent", 10000] }, then: "VIP" },
+>             { case: { $gte: ["$totalSpent", 2500] }, then: "Gold" }
+>           ],
+>           default: "Standard"
 >         }
 >       }
 >     }
@@ -240,16 +223,69 @@ It cannot process expression transformations like `$concat` natively.
 > ]);
 > ```
 >
-> **Explanation:** `$map` transforms each item in an array using specified expression logic.
+> #### Technical Explanation
+>
+> 1. `$switch` evaluates a series of case expressions sequentially.
+> 2. Returns the `then` value of the first matching case.
+> 3. Replaces nested `$cond` expressions for clean multi-branch logic.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Array Mapping and Filtering with `$map` and `$filter`
+
+**Scenario:**
+Filter an order's `items` array to include ONLY items costing > `$20`, and double their `price` in output.
+
+**Requirements:**
+1. Combine `$map` and `$filter`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.aggregate([
+>   {
+>     $project: {
+>       discountedItems: {
+>         $map: {
+>           input: {
+>             $filter: {
+>               input: "$items",
+>               as: "item",
+>               cond: { $gt: ["$$item.price", 20] }
+>             }
+>           },
+>           as: "filteredItem",
+>           in: {
+>             name: "$$filteredItem.name",
+>             newPrice: { $multiply: ["$$filteredItem.price", 0.5] }
+>           }
+>         }
+>       }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$filter` selects elements from an input array satisfying a condition.
+> 2. `$map` applies an expression to each item in an array to output a transformed array.
+> 3. Functional array processing directly inside aggregation pipelines.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [`$project` / `$addFields` Stages](project_addfields.md) — The executing stages.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Expression operators transform field values inside aggregation stages.
 - `$cond` executes ternary if/then/else logical checks.
 - `$ifNull` handles missing or null values (equivalent to SQL `COALESCE`).

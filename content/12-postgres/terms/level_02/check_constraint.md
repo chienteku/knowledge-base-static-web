@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Constraint**
+
+**Constraint** (Custom Expression Constraint): A `CHECK` constraint evaluates a Boolean expression against column values to reject invalid row modifications at the database tier.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Evaluated in-memory during write operations. Blocks transactions before writing bytes to storage files if validation conditions fail).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While data types prevent you from putting text in number columns, they are too broad to enforce business logic:
@@ -94,7 +95,7 @@ INSERT INTO products (id, name, price, discount) VALUES (3, 'Error Box', 10.00, 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing a CHECK constraint blocks NULL values
 
@@ -145,70 +146,105 @@ ALTER TABLE t ADD CHECK (date_col <= NOW()); -- ❌ Error: cannot use system fun
 Use triggers or application layer validation for dynamic date checks
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: School Grading Rules
+### Exercise 1: Enforcing Non-Negative Price Thresholds
 
-**Problem:** You are building a student tracking database. Write a SQL `CREATE TABLE` query for a table named `course_grades` containing:
-1.  An auto-generated ID.
-2.  A student name text field (required).
-3.  A numeric grade column `score` (required, must be between `0.0` and `100.0` inclusive).
+**Scenario:**
+Add a `CHECK` constraint to table `products` ensuring `price_cents >= 0`.
 
-**Expected output:**
+**Requirements:**
+1. Create table with `CONSTRAINT chk_products_price_cents CHECK (price_cents >= 0)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE course_grades (
->   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
->   student_name VARCHAR(100) NOT NULL,
->   score NUMERIC(5,2) NOT NULL CHECK (score >= 0.0 AND score <= 100.0)
+> CREATE TABLE products (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   name TEXT NOT NULL,
+>   price_cents INTEGER NOT NULL,
+>   CONSTRAINT chk_products_price_cents CHECK (price_cents >= 0)
 > );
 > ```
-> - Combine numeric range constraints using the logical operator `AND`.
-> - Don't forget the required constraints on name and score.
+>
+> #### Technical Explanation
+>
+> 1. `CHECK` constraints validate column expressions on every `INSERT` and `UPDATE`.
+> 2. Prevents writing invalid negative prices to the database.
+> 3. Enforces domain invariants directly at the storage engine tier.
+
+---
+
+### Exercise 2: Enforcing Multi-Column Date Range Consistency
+
+**Scenario:**
+Enforce that an event's `end_time` MUST be strictly greater than its `start_time`.
+
+**Requirements:**
+1. Add `CONSTRAINT chk_events_time_range CHECK (end_time > start_time)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE events (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   title TEXT NOT NULL,
+>   start_time TIMESTAMPTZ NOT NULL,
+>   end_time TIMESTAMPTZ NOT NULL,
+>   CONSTRAINT chk_events_time_range CHECK (end_time > start_time)
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Multi-column `CHECK` constraints compare values across multiple fields within the same row.
+> 2. Rejects rows where `end_time <= start_time` with a SQL check violation error.
+> 3. Eliminates application-layer date range bugs.
+
+---
+
+### Exercise 3: Adding CHECK Constraints to Existing Tables
+
+**Scenario:**
+Add a `CHECK` constraint to an existing `users` table verifying `length(username) >= 3` without locking reads.
+
+**Requirements:**
+1. Execute `ALTER TABLE users ADD CONSTRAINT ... NOT VALID`, followed by `VALIDATE CONSTRAINT`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TABLE users 
+> ADD CONSTRAINT chk_users_username_min_length 
+> CHECK (length(username) >= 3) NOT VALID;
+> 
+> ALTER TABLE users 
+> VALIDATE CONSTRAINT chk_users_username_min_length;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `NOT VALID` adds the constraint for new writes without holding an exclusive lock to scan existing rows.
+> 2. `VALIDATE CONSTRAINT` scans existing rows concurrently without blocking concurrent table writes.
+> 3. Safe zero-downtime migration strategy for large tables.
 
 ---
 
 
 
-### Exercise 2: Adding Multi-Column CHECK Constraint
-
-**Problem:** Add CHECK constraint ensuring `end_date >= start_date` on `events` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ALTER TABLE events ADD CONSTRAINT check_dates CHECK (end_date >= start_date);
-> ```
-> ```sql
-> ALTER TABLE events ADD CONSTRAINT check_dates CHECK (end_date >= start_date);
-> ```
->
-> **Explanation:** Multi-column CHECK constraints validate logical relationships across table columns.
-
----
-
-### Exercise 3: CHECK Constraint Array Length Validation
-
-**Problem:** Write CHECK constraint validating array `tags` contains between 1 and 5 items using `array_length()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CHECK (array_length(tags, 1) BETWEEN 1 AND 5)
-> ```
-> ```sql
-> ALTER TABLE posts ADD CONSTRAINT check_tags_count CHECK (array_length(tags, 1) BETWEEN 1 AND 5);
-> ```
->
-> **Explanation:** Functions operating deterministically on row arrays can be evaluated inside CHECK constraints.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Data Types (Overview)](data_types.md) — The typing foundation.
 - [`NOT NULL` Constraint](not_null.md) — Often paired with check rules.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `CHECK` constraints validate database inputs against custom boolean expressions.
 - Rejects inserts and updates if the expression evaluates to `FALSE`.
 - Lets `NULL` values pass; combine with `NOT NULL` to block missing records.

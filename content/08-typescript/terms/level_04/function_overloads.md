@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Advanced Syntax**
+
+**TypeScript Core Syntax** (Multiple Function Signature Polymorphism): Function overloads define multiple candidate parameter/return signatures for a single function implementation.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine a highly flexible utility function `formatData`. 
@@ -58,7 +59,7 @@ const b = formatData([" A ", " B "]);  // TS knows `b` is strictly a `string[]`
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Making the implementation signature too strict
 
@@ -118,68 +119,119 @@ function parse(x: number): string;
 function parse(x: string | number): any {} // Accepts all overload variants
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Invisible Implementation
+### Exercise 1: Authoring Polymorphic Function Overloads
 
-**Problem:** If you hover over the `formatData` function call in your IDE, how many signatures will it show you? Will it show you the implementation signature?
+**Scenario:**
+Create function overloads for a `formatDate` utility that accepts either a `Date` object or a `number` timestamp, returning a `string`.
 
-**Expected output:**
+**Requirements:**
+1. Declare two overload signatures.
+2. Author single implementation signature.
+
 > [!check]- Answer
-> ```text
-> It will show you exactly TWO signatures (1/2: string -> string, and 2/2: string[] -> string[]).
-> It will completely hide the implementation signature from the IDE tooltip. The implementation is just the "engine"; the overloads are the "interface".
-> ```
-> - Overloads exist to create a clean developer experience.
-
----
-
-
-
-### Exercise 2: Single vs Multi-Argument Overloads
-
-**Problem:** Create overloads for `makeList(item: string): string[]` and `makeList(items: string[]): string[]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Overload signatures created
-> ```
+>
+> #### Implementation
+>
 > ```typescript
-> function makeList(item: string): string[];
-> function makeList(items: string[]): string[];
-> function makeList(arg: string | string[]): string[] {
->   return Array.isArray(arg) ? arg : [arg];
+> // Overload signatures:
+> function formatDate(date: Date): string;
+> function formatDate(timestamp: number): string;
+> 
+> // Implementation signature:
+> function formatDate(input: Date | number): string {
+>   if (input instanceof Date) {
+>     return input.toISOString();
+>   }
+>   return new Date(input).toISOString();
 > }
-> console.log("Overload signatures created");
+> 
+> const s1 = formatDate(new Date());
+> const s2 = formatDate(1700000000000);
 > ```
+
+> #### Technical Explanation
 >
-> **Explanation:** Function overloads specify precise input/output mapping contracts.
+> 1. Overload signatures specify valid argument combinations available to external callers.
+> 2. The implementation signature must accept the union of all overload parameters (`Date | number`).
+> 3. Callers see only the distinct overload signatures in IDE autocomplete tooltips.
 
 ---
 
-### Exercise 3: Overload Order Precedence
+### Exercise 2: Differing Return Types Based on Input Overloads
 
-**Problem:** Explain why specific overload signatures must be ordered BEFORE generic overload signatures.
+**Scenario:**
+Create overloaded `createElement` signatures returning `HTMLImageElement` when tag is `"img"` and `HTMLHeadingElement` when tag is `"h1"`.
 
-**Expected output:**
+**Requirements:**
+1. Return specific HTML element subtypes for specific string literal tags.
+
 > [!check]- Answer
-> ```text
-> TypeScript evaluates overload signatures in top-to-bottom order
-> ```
-> ```typescript
-> console.log("TypeScript evaluates overload signatures in top-to-bottom order");
-> ```
 >
-> **Explanation:** TS matches the first compatible overload signature from top to bottom.
+> #### Implementation
+>
+> ```typescript
+> function createElement(tag: "img"): HTMLImageElement;
+> function createElement(tag: "h1"): HTMLHeadingElement;
+> function createElement(tag: string): HTMLElement {
+>   return document.createElement(tag);
+> }
+> 
+> const img = createElement("img"); // Typed as HTMLImageElement!
+> const h1 = createElement("h1");   // Typed as HTMLHeadingElement!
+> ```
 
-## 7. Related Terms
+> #### Technical Explanation
+>
+> 1. Literal string parameter overloads map specific input values directly to distinct return subtypes.
+> 2. Avoids manual type assertions (`as HTMLImageElement`) at call sites.
+> 3. Standard DOM library typing pattern.
+
+---
+
+### Exercise 3: Overload Signature Order Rules Audit
+
+**Scenario:**
+Explain why more specific overload signatures must precede more general overload signatures.
+
+**Requirements:**
+1. Demonstrate incorrect overload ordering bug.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // ❌ INCORRECT (General signature shadows specific signature):
+> // function process(val: any): any;
+> // function process(val: string): string;
+
+// ✅ CORRECT (Specific signatures come FIRST):
+function process(val: string): string;
+function process(val: number): number;
+function process(val: unknown): unknown {
+  return val;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. TypeScript matches overloads sequentially from top to bottom.
+> 2. Placing a broad/general overload first causes it to intercept all caller invocations, masking more specific signatures below it.
+> 3. Always declare specific overload signatures above generic fallbacks.
+
+---
+
+
+
+## 6. Related Terms
 - [Function Types](function_types.md) — What you are overloading.
 - [Union Types (`|`)](../level_05/union_types.md) — What you use inside the implementation body.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Function Overloads** allow a single function to have multiple distinct type signatures.
 - They are used when the Return Type changes based specifically on the Parameter Type.
 - You define Overloads by writing multiple function signatures (without bodies) stacked on top of an Implementation signature (with a body).

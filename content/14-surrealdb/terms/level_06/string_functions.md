@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (string transformation & regex builtin functions)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Executed natively in memory during query evaluation. Fully supports multi-byte UTF-8 Unicode characters and emojis).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Text processing is one of the most common tasks in web applications:
@@ -91,7 +90,7 @@ FROM article;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using 'string::len()' inside ASSERT constraints for optional fields without a 'NONE' bypass check
 
@@ -143,64 +142,95 @@ LET $str = "hi"; RETURN string::slice($str, 10, 20);
 LET $str = "hi"; RETURN string::slice($str, 0, string::len($str));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: String Function Expression
+### Exercise 1: String Normalization and Trimming
 
-**Problem:** Write a SurrealQL query to update a `user` record (`user:alice`), setting their `website_slug` to the URL slug version of their `company_name` field (lowercased and hyphenated).
+**Scenario:**
+Sanitize user profile input `"   JANE DOE   "` by trimming whitespace and converting to title slug format using `string::slug()`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `string::slug(string::trim("   JANE DOE   "))`.
+
 > [!check]- Answer
-> ```sql
-> UPDATE user:alice SET website_slug = string::slug(company_name);
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT string::slug(string::trim("   JANE DOE   ")) AS user_slug;
+> -- Output: "jane-doe"
 > ```
-> - The slug generator function is `string::slug()`.
-> - Pass the target field `company_name` directly into the function.
+>
+> #### Technical Explanation
+>
+> 1. `string::trim()` removes leading and trailing whitespace.
+> 2. `string::slug()` converts string text into URL-friendly slug strings ("jane-doe").
+> 3. Automates URL slug generation directly inside database queries.
+
+---
+
+### Exercise 2: String Substring and Length Inspections
+
+**Scenario:**
+Inspect string length using `string::len()` and extract the first 5 characters using `string::slice()`.
+
+**Requirements:**
+1. Test `string::len("SurrealDB")`.
+2. Test `string::slice("SurrealDB", 0, 7)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT 
+>     string::len("SurrealDB") AS total_len,
+>     string::slice("SurrealDB", 0, 7) AS sub_str;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `string::len()` returns UTF-8 character counts accurately.
+> 2. `string::slice(str, start, end)` extracts character range substrings.
+> 3. Enables string parsing and truncation server-side.
+
+---
+
+### Exercise 3: String Replacement & Pattern Matching
+
+**Scenario:**
+Replace all occurrences of `"PostgreSQL"` with `"SurrealDB"` in a description text using `string::replace()`.
+
+**Requirements:**
+1. Execute `string::replace("Migrating from PostgreSQL to PostgreSQL", "PostgreSQL", "SurrealDB")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT string::replace("Migrating from PostgreSQL to PostgreSQL", "PostgreSQL", "SurrealDB") AS updated_text;
+> -- Output: "Migrating from SurrealDB to SurrealDB"
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `string::replace(str, pattern, replacement)` replaces all matching string occurrences.
+> 2. Performs global text replacement natively inside the database.
+> 3. Useful for content migration and text transformations.
 
 ---
 
 
 
-### Exercise 2: String Trimming and Case Conversion
-
-**Problem:** Trim whitespace and convert `"  Hello World  "` to lowercase.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> string::lowercase(string::trim("  Hello World  "))
-> ```
-> ```surrealql
-> RETURN string::lowercase(string::trim("  Hello World  "));
-> ```
->
-> **Explanation:** Chaining `string::trim()` and `string::lowercase()` cleanses text input.
-
----
-
-### Exercise 3: String Replacement
-
-**Problem:** Replace `"foo"` with `"bar"` in string `"foo test"` using `string::replace()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> string::replace("foo test", "foo", "bar")
-> ```
-> ```surrealql
-> RETURN string::replace("foo test", "foo", "bar");
-> ```
->
-> **Explanation:** `string::replace(str, target, replacement)` substitutes matching substrings.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Built-in Functions Overview](builtin_functions.md) — The parent library.
 - [`string`](../level_02/string.md) — The string data type.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `string::*` module provides text formatting, inspection, and validation utilities.
 - `string::slug()` generates URL-safe slugs from strings automatically.
 - `string::is::*` functions validate emails, URLs, and UUID strings.

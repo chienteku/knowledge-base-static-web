@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Data Fetching**
+
+**Data Fetching & Caching** (Extended Server Fetch API): Next.js extends the native Web `fetch()` API with automatic caching (`cache`), tag invalidation (`next: { tags }`), and revalidation controls.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only (for the extended Next.js features)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard React (CSR), you use `useEffect` and `fetch()` to grab data from an API *after* the component loads on the screen. This is slow and causes loading spinners.
@@ -59,7 +60,7 @@ What if you need the `user` data in the `layout.tsx`, the `page.tsx`, and a deep
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `fetch` with relative URLs on the Server
 
@@ -114,64 +115,110 @@ const data = await res.json(); // Store parsed JSON in variable once
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Prop Drilling vs Fetching
+### Exercise 1: Extended `fetch()` API Usage in Server Components
 
-**Problem:** You have a `RootLayout` and a deeply nested `UserProfile` Server Component. Both need to check `fetch('https://api.com/auth/status')`. Should the Layout fetch it and pass it down as a prop through 5 layers?
+**Scenario:**
+Fetch data using Next.js's extended `fetch()` API with custom headers and caching options.
 
-**Expected output:**
+**Requirements:**
+1. Execute `await fetch(url, options)` in Server Component.
+
 > [!check]- Answer
-> ```text
-> No!
-> Because of Next.js Request Memoization, you should just write `await fetch('https://api.com/auth/status')` in BOTH the Layout and the UserProfile. Next.js will automatically deduplicate the request so it only hits the external API once.
-> ```
-> - Think about what Next.js does to multiple identical `fetch` requests.
+>
+> #### Implementation
+>
+> ```tsx
+> export default async function FetchDemo() {
+>   const res = await fetch("https://api.example.com/data", {
+>     headers: {
+>       Authorization: `Bearer ${process.env.API_SECRET_KEY}`
+>     },
+>     next: { revalidate: 3600 }
+>   });
+>   const data = await res.json();
+
+  return <div>Data: {data.value}</div>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Next.js patches the native Web `fetch()` API on the server to automatically integrate with the Next.js Data Cache.
+> 2. Supports `next.revalidate` and `next.tags` extension options.
+> 3. Performs automatic request memoization when multiple identical `fetch()` calls occur in a single render pass.
 
 ---
 
-### Exercise 2: Next.js Patched fetch Helper
+### Exercise 2: Bypassing Request Memoization for Unique Fetch Options
 
-**Problem:** Write async function `fetchData(url)` with proper error handling (`!res.ok`), returning parsed JSON with `{ next: { revalidate: 300 } }`.
+**Scenario:**
+Explain why passing different headers or `AbortController` signals to identical URLs bypasses React request memoization.
 
-**Expected output:**
+**Requirements:**
+1. Detail memoization key generation rules.
+
 > [!check]- Answer
-> ```typescript
-> async function fetchData(url: string) { const res = await fetch(url, { next: { revalidate: 300 } }); if (!res.ok) throw new Error('Fetch failed'); return await res.json(); }
+>
+> #### Implementation
+>
+> ```text
+> Request Memoization Key Matching:
+> - Fetch 1: fetch('/api/data', { headers: { 'X-ID': '1' } })
+> - Fetch 2: fetch('/api/data', { headers: { 'X-ID': '2' } })
+> Result: Next.js treats these as TWO DISTINCT requests because headers differ! Duplicate network calls WILL execute.
 > ```
-> - Always check `res.ok` before parsing response bodies.
-> 
-> ```typescript
-> export async function fetchData<T>(url: string): Promise<T> {
->   const res = await fetch(url, { next: { revalidate: 300 } });
+
+> #### Technical Explanation
+>
+> 1. Next.js memoizes `fetch()` calls by hashing the URL string AND options object (headers, method, credentials).
+> 2. Divergent option objects generate different cache keys.
+> 3. Keep fetch options identical across components to benefit from request memoization.
+
+---
+
+### Exercise 3: Handling HTTP Errors in Extended `fetch()`
+
+**Scenario:**
+Check `res.ok` status when using `fetch()` and throw custom errors if requests fail.
+
+**Requirements:**
+1. Check `if (!res.ok) throw new Error(...)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> async function getSecureData() {
+>   const res = await fetch("https://api.example.com/protected");
 >   if (!res.ok) {
->     throw new Error(`Failed to fetch data: ${res.statusText}`);
+>     throw new Error(`HTTP Fetch Error: Status ${res.status}`);
 >   }
 >   return res.json();
 > }
-> ```
+
+export default async function Page() {
+  const data = await getSecureData();
+  return <div>Data Loaded: {data.id}</div>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `fetch()` Promises do NOT reject on HTTP 404 or 500 status codes (only on network failures).
+> 2. Checking `res.ok` ensures invalid HTTP responses trigger error boundary handlers.
+> 3. Standard API error checking requirement.
 
 ---
 
-### Exercise 3: Next.js Request Deduplication
 
-**Problem:** If 3 separate Server Components call `fetch('https://api.example.com/user')` during a single server render, how many network HTTP requests are sent?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1 HTTP request (Next.js request memoization automatically deduplicates identical fetch GET requests within a render pass).
-> ```
-> - Next.js automatically deduplicates identical `fetch` calls during render.
-> 
-> ```text
-> 3 Components calling fetch() -> 1 Network HTTP Request
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Data Caching (`force-cache`, `no-store`)](data_caching.md) — How to control how long the `fetch` result is stored.
 - [React Server Components (RSC)](../level_01/rsc.md) — The components that allow top-level `async/await`.
 - [Client-side Fetching (SWR / React Query)](client_fetching.md) — Related concept: Client-side Fetching (SWR / React Query).
@@ -181,7 +228,7 @@ const data = await res.json(); // Store parsed JSON in variable once
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - In the App Router, you fetch data by making your Server Component `async` and calling the standard `await fetch()` API.
 - Next.js extends the native `fetch` API to provide advanced caching on the server.
 - **Request Memoization** automatically deduplicates identical `fetch` calls across your component tree during a single render pass, eliminating the need for prop drilling data.

@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Compile-Time Functions**: Functions marked with `const fn` executable in compile-time contexts.
+
+
+**Rust Language Keyword (compile-time evaluated function modifier)**: Functions marked with `const fn` executable in compile-time contexts.
 
 ---
 
@@ -253,7 +255,7 @@ Validate inputs inside const fn using conditional guards or Option/Result!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`const` Generics](const_generics.md) — Const generics.
 - [Const Evaluation Ctfe](const_evaluation_ctfe.md) — Compile-time evaluation.

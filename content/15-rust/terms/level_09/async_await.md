@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Asynchronous Concurrency**: `async` and `.await` syntax construct zero-cost, cooperative asynchronous state machines (`Future`s) in Rust.
+
+
+**Rust Asynchronous Feature (cooperative task execution syntax)**: `async` and `.await` syntax construct zero-cost, cooperative asynchronous state machines (`Future`s) in Rust.
 
 ---
 

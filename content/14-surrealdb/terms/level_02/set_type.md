@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Data Type (unique unordered element collection type)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Enforced at the storage layer. Compiles array inputs into sorted unique indexing blocks).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database schemas, you often need to store collections of unique values:
@@ -96,7 +95,7 @@ SELECT roles FROM user:tobie;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on 'set' fields to preserve the index order of items, leading to broken sorting logic in frontend components
 
@@ -148,62 +147,101 @@ CREATE user set = [1, 2]; // 'set' used as field name without escaping
 DEFINE FIELD tags ON TABLE article TYPE set<string>; // Data type definition
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Container Deduplication
+### Exercise 1: Unique Tag Collection Storage
 
-**Problem:** You have a schema-less collection. You run these two updates in mongosh/SurrealQL:
-`UPDATE user:john SET tags = ["rust", "database", "rust"];`
-Predict the exact JSON array output returned for the `tags` field under these two scenarios:
-1.  The `tags` field is defined as `TYPE array<string>`.
-2.  The `tags` field is defined as `TYPE set<string>`.
+**Scenario:**
+A content management system stores article tags in a `set<string>` field to guarantee that duplicate tags are automatically eliminated.
 
-**Expected output:**
+**Requirements:**
+1. Define table `article` in `SCHEMAFULL` mode.
+2. Define field `tags` as `set<string>`.
+3. Insert record `article:1` with duplicate tags `["rust", "database", "rust"]`.
+4. Inspect the saved record to verify tag uniqueness.
+
 > [!check]- Answer
-> ```text
-> 1. Array: ["rust", "database", "rust"] (Duplicates are preserved, order is maintained).
-> 2. Set: ["database", "rust"] (The duplicate "rust" is discarded, and elements are sorted/unordered).
-> ```
-> - Check which container type enforces uniqueness.
-> - Consider how duplicates are discarded on writes.
-
----
-
-
-
-### Exercise 2: Set Field Schema Definition
-
-**Problem:** Define field `categories` on `product` table as a set of strings.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD categories ON TABLE product TYPE set<string>;
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> DEFINE FIELD categories ON TABLE product TYPE set<string>;
+> DEFINE TABLE article SCHEMAFULL;
+> DEFINE FIELD tags ON TABLE article TYPE set<string>;
+> 
+> -- Insert duplicate elements in array payload
+> CREATE article:1 SET tags = ["rust", "database", "rust"];
+> 
+> SELECT tags FROM article:1;
+> -- Output: { tags: ["rust", "database"] }  (duplicates automatically removed!)
 > ```
 >
-> **Explanation:** `TYPE set<type>` enforces unique element collections.
+> #### Technical Explanation
+>
+> 1. `set<T>` automatically deduplicates input elements at write time.
+> 2. Guarantees set element uniqueness without requiring application-level deduplication code.
+> 3. Preserves unique element collections natively inside database records.
 
 ---
 
-### Exercise 3: Automatic Set Deduplication
+### Exercise 2: Set Union and Intersection Operations
 
-**Problem:** What happens when `[1, 1, 2]` is inserted into a `set<number>` field? (`[1, 2]`).
+**Scenario:**
+Query user records where a set field `interests` overlaps with target interests `["music", "sports"]`.
 
-**Expected output:**
+**Requirements:**
+1. Create user `user:u1` with `interests = ["coding", "music"]`.
+2. Query users where `interests` contains any target interest using `CONTAINSANY`.
+
 > [!check]- Answer
-> ```text
-> [1, 2]
-> ```
-> ```text
-> [1, 2]
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:u1 SET interests = ["coding", "music"];
+> 
+> -- Query users with matching set interests
+> SELECT * FROM user WHERE interests CONTAINSANY ["music", "sports"];
 > ```
 >
-> **Explanation:** Sets automatically discard duplicate element values upon insertion.
+> #### Technical Explanation
+>
+> 1. `CONTAINSANY` evaluates whether a set field shares at least one element with a target set.
+> 2. Provides set intersection checking directly in `WHERE` clauses.
+> 3. Enables fast recommendation and targeting queries.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Appending to Set Fields with Uniqueness Guards
+
+**Scenario:**
+Append a new tag `"database"` to an existing article's `tags` set field when `"database"` already exists in the set.
+
+**Requirements:**
+1. Update `article:1` using `SET tags += "database"`.
+2. Verify that duplicate insertion is safely ignored.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Attempt to append an existing tag
+> UPDATE article:1 SET tags += "database";
+> 
+> SELECT tags FROM article:1;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Appending (`+=`) an existing element to a `set<T>` field is a safe no-op.
+> 2. Prevents set duplication during concurrent update operations.
+> 3. Ensures mathematical set properties remain invariant across data mutations.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`array`](array_type.md) — The non-unique list context.
 - [Data Types (Overview)](data_types.md) — The parent type system.
@@ -211,7 +249,7 @@ Predict the exact JSON array output returned for the `tags` field under these tw
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `set` type stores an unordered collection of unique values.
 - Automatically deduplicates inputs at the database engine layer.
 - Neither PostgreSQL nor MongoDB has a native, first-class `set` data type.

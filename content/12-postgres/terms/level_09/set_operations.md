@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Syntax**
+
+**SQL Command / Clause** (Set Combination Operators): Set operations (`UNION`, `UNION ALL`, `INTERSECT`, `EXCEPT`) combine or compare query result sets based on relational set theory.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all SQL engines. Set calculations require that all queries contain the **exact same number of columns** in the same position, carrying compatible data types).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database design, data is normalized into separate tables (like `employees` and `customers`). 
@@ -104,7 +105,7 @@ SELECT city FROM customers;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using UNION instead of UNION ALL when duplicate removal is not required
 
@@ -154,69 +155,95 @@ SELECT email FROM users UNION SELECT id FROM orders; -- ❌ Type mismatch error!
 Ensure column counts and data types match across all set operation queries
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Compatible Union Refactor
+### Exercise 1: Combining Result Sets with UNION and UNION ALL
 
-**Problem:** You try to run the following query:
-```sql
-SELECT id, name FROM users
-UNION ALL
-SELECT name, email FROM contacts;
-```
-1.  Explain why this query fails.
-2.  Write the refactored SQL query to safely merge the names from both tables.
+**Scenario:**
+Combine active users from `current_users` and archived users from `archived_users` into a single list.
 
-**Expected output:**
+**Requirements:**
+1. Contrast `UNION` (deduplicates) vs `UNION ALL` (preserves duplicates).
+
 > [!check]- Answer
-> ```text
-> 1. The query fails because the columns are not type-compatible: the first query selects an integer `id` in column 1, whereas the second query selects a text `name` in column 1. SQL set operations require matching data types in corresponding columns.
+>
+> #### Implementation
+>
+> ```sql
+> -- UNION ALL (Fastest - Preserves all rows without deduplication overhead)
+> SELECT id, email FROM current_users 
+> UNION ALL 
+> SELECT id, email FROM archived_users;
 > ```
-> - Adjust the select list to ensure both sides of the `UNION ALL` return the exact same column structures.
-> - Match strings to strings.
+>
+> #### Technical Explanation
+>
+> 1. `UNION ALL` concatenates result sets directly without sorting or deduplicating.
+> 2. `UNION` performs a sort/hash pass to eliminate duplicate rows across sets (higher CPU overhead).
+> 3. Golden rule: Always use `UNION ALL` unless deduplication is explicitly required.
+
+---
+
+### Exercise 2: Finding Set Intersections with INTERSECT
+
+**Scenario:**
+Find user IDs that exist in BOTH `premium_subscribers` AND `beta_testers` tables.
+
+**Requirements:**
+1. Execute `SELECT user_id FROM premium_subscribers INTERSECT SELECT user_id FROM beta_testers`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT user_id FROM premium_subscribers 
+> INTERSECT 
+> SELECT user_id FROM beta_testers;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INTERSECT` returns only distinct rows that exist in BOTH query result sets.
+> 2. Operates on relational set intersection logic.
+> 3. Selects overlapping entities across categories.
+
+---
+
+### Exercise 3: Set Difference Exclusion with EXCEPT
+
+**Scenario:**
+Find customers who exist in `customers` table but have NEVER placed an order in `orders`.
+
+**Requirements:**
+1. Execute `SELECT id FROM customers EXCEPT SELECT customer_id FROM orders`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id AS customer_id FROM customers 
+> EXCEPT 
+> SELECT customer_id FROM orders;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `EXCEPT` (relational set difference) returns distinct rows from the first query that do NOT exist in the second query.
+> 2. Both query SELECT lists MUST match in column count and compatible data types.
+> 3. Elegant alternative to `NOT IN` / `NOT EXISTS`.
 
 ---
 
 
 
-### Exercise 2: Finding Difference with EXCEPT
-
-**Problem:** Query user IDs in `users` table that do NOT exist in `orders` table using `EXCEPT`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT id FROM users EXCEPT SELECT user_id FROM orders;
-> ```
-> ```sql
-> SELECT id FROM users EXCEPT SELECT user_id FROM orders;
-> ```
->
-> **Explanation:** `EXCEPT` returns distinct rows present in LHS query that do not exist in RHS query.
-
----
-
-### Exercise 3: Intersecting Datasets with INTERSECT
-
-**Problem:** Query email addresses present in BOTH `customers` and `employees` tables using `INTERSECT`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT email FROM customers INTERSECT SELECT email FROM employees;
-> ```
-> ```sql
-> SELECT email FROM customers INTERSECT SELECT email FROM employees;
-> ```
->
-> **Explanation:** `INTERSECT` returns distinct rows common to both input queries.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`SELECT`](../level_03/select.md) — The query basics.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Set operators combine outputs of multiple queries into a single grid.
 - Queries must be union-compatible (same column counts and compatible types).
 - `UNION` merges outputs and removes duplicate rows (requires sorting/CPU).

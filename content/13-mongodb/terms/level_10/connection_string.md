@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Driver / Integration** (MongoDB URI Connection Specification): MongoDB Connection Strings (`mongodb://` and `mongodb+srv://`) specify seed node hosts, credentials, database targets, replica sets, TLS options, and driver parameters.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported across all MongoDB drivers, shell environments, and GUI clients like MongoDB Compass. Managed via client connection initialization).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To connect your backend application (or a dashboard like Compass) to a database, you must supply connection configuration details:
@@ -94,7 +95,7 @@ const srvUri = "mongodb+srv://siteAdmin:myPassword@cluster0.abcde.mongodb.net/sh
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Failing to URL-encode special characters (like '@' or '/') inside database passwords, causing connection parser crashes
 
@@ -147,63 +148,90 @@ mongodb://cluster0.mongodb.net/app // ❌ SRV seedlist requires mongodb+srv:// s
 mongodb+srv://user:pass@cluster0.mongodb.net/app // Correct SRV scheme for Atlas
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Connection URI Construction
+### Exercise 1: Standard vs SRV Connection String Format Comparison
 
-**Problem:** Construct the standard connection string URI for the following database credentials:
--   Username: `"worker"`
--   Password: `"pass123"`
--   Hosts: `"db-01:27017"` and `"db-02:27017"`
--   Replica Set name: `"prodRS"`
--   Target Database: `"inventory"`
--   Authentication database source: `"admin"`
+**Scenario:**
+Compare a standard direct seed connection string (`mongodb://`) against an Atlas DNS SRV connection string (`mongodb+srv://`).
 
-**Expected output:**
+**Requirements:**
+1. Formulate both connection string syntax examples.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> mongodb://worker:pass123@db-01:27017,db-02:27017/inventory?authSource=admin&replicaSet=prodRS
+> // Standard Connection String (Explicit Seed List)
+> const stdUri = "mongodb://node1.example.com:27017,node2.example.com:27017/store?replicaSet=rs0&ssl=true";
+> 
+> // DNS SRV Connection String (Dynamic DNS SRV Lookup)
+> const srvUri = "mongodb+srv://user:pass@cluster0.abc.mongodb.net/store?retryWrites=true&w=majority";
 > ```
-> - The standard prefix is `mongodb://`.
-> - Pass the parameters `authSource` and `replicaSet` in the query string after the database name.
+>
+> #### Technical Explanation
+>
+> 1. `mongodb+srv://` queries DNS SRV records to discover replica set seed nodes automatically.
+> 2. `mongodb+srv://` automatically enables `tls=true` and allows updating replica nodes without changing client code.
+> 3. Modern connection string standard.
+
+---
+
+### Exercise 2: Configuring Write Concern and Replica Set Options in Connection URI
+
+**Scenario:**
+Pass `w=majority`, `wtimeoutMS=5000`, and `readPreference=secondaryPreferred` inside a connection URI.
+
+**Requirements:**
+1. Append options to URI string.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const uri = "mongodb://db1.example.com:27017/prod_db?replicaSet=rs0&w=majority&wtimeoutMS=5000&readPreference=secondaryPreferred";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Connection URI parameters configure default driver write concern and read preference behavior globally.
+> 2. `wtimeoutMS=5000` prevents majority writes from hanging indefinitely.
+> 3. Standardizes client driver configuration.
+
+---
+
+### Exercise 3: Escaping Special Characters in URI Password Passwords
+
+**Scenario:**
+Percent-encode special characters in database passwords (`P@ss#w0rd!`) for valid URI parsing.
+
+**Requirements:**
+1. Use `encodeURIComponent("P@ss#w0rd!")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const rawPassword = "P@ss#w0rd!";
+> const safePassword = encodeURIComponent(rawPassword); // P%40ss%23w0rd%21
+> 
+> const uri = `mongodb+srv://app_user:${safePassword}@cluster0.abc.mongodb.net/app`;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Special characters (`@`, `:`, `/`, `#`, `%`) break URI parser regex if unescaped.
+> 2. `encodeURIComponent()` converts special characters into percent-encoded hex sequences.
+> 3. Prevents connection string authentication parse errors.
 
 ---
 
 
 
-### Exercise 2: Percent-Encoding Special Password Characters
-
-**Problem:** Percent-encode password `pass@123` for connection URI using `encodeURIComponent()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> pass%40123
-> ```
-> ```javascript
-> encodeURIComponent("pass@123");
-> ```
->
-> **Explanation:** `encodeURIComponent()` converts reserved URI characters into percent-encoded strings.
-
----
-
-### Exercise 3: Connection URI Options
-
-**Problem:** Construct URI specifying `retryWrites=true` and `w=majority` query options.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> mongodb+srv://user:pass@cluster.mongodb.net/app?retryWrites=true&w=majority
-> ```
-> ```text
-> mongodb+srv://user:pass@cluster.mongodb.net/app?retryWrites=true&w=majority
-> ```
->
-> **Explanation:** Connection URI query string parameters set driver configuration flags.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Authentication & Authorization (SCRAM, RBAC)](auth.md) — Credentials validation.
 - [MongoDB Node.js Driver](node_driver.md) — The executing driver.
@@ -211,7 +239,7 @@ mongodb+srv://user:pass@cluster0.mongodb.net/app // Correct SRV scheme for Atlas
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Connection String URI consolidates server, auth, and query settings.
 - `mongodb://` lists replica set members and port mappings manually.
 - `mongodb+srv://` queries DNS SRV records to discover active nodes dynamically.

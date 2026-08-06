@@ -160,7 +160,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Zero-Cost Streaming Event Processor Pipeline (APIT & RPIT with Iterators)
 
-**Problem:** You are building a high-performance log processing service. Implement a function `build_log_pipeline` that accepts an arbitrary log stream as an iterator (`impl Iterator<Item = String>`) and a filtering closure (`impl Fn(&str) -> bool`). The pipeline must filter out unwanted log lines, assign sequential 1-based IDs, classify each entry's severity (`"ERROR"`, `"WARN"`, or `"INFO"`), and return a zero-cost opaque iterator (`impl Iterator<Item = LogEntry>`). Avoid using dynamic trait objects (`Box<dyn Iterator>`) or heap-allocated intermediate collections (`Vec`) to preserve zero-cost static dispatch.
+**Scenario:** You are building a high-performance log processing service. Implement a function `build_log_pipeline` that accepts an arbitrary log stream as an iterator (`impl Iterator<Item = String>`) and a filtering closure (`impl Fn(&str) -> bool`). The pipeline must filter out unwanted log lines, assign sequential 1-based IDs, classify each entry's severity (`"ERROR"`, `"WARN"`, or `"INFO"`), and return a zero-cost opaque iterator (`impl Iterator<Item = LogEntry>`). Avoid using dynamic trait objects (`Box<dyn Iterator>`) or heap-allocated intermediate collections (`Vec`) to preserve zero-cost static dispatch.
 
 > [!check]- Answer
 >
@@ -279,7 +279,7 @@ thread::spawn(move || {
 
 ### Exercise 2: Higher-Order Cryptographic Pipeline Factory (RPIT with Closures & Error Handling)
 
-**Problem:** Design a cryptographic middleware generator `create_crypto_pipeline(salt: Vec<u8>, iterations: u32)` that returns a stateful data transformation function `impl Fn(&[u8]) -> Result<Vec<u8>, CryptoError>`. The returned function must validate payload data, execute multi-round salted byte-wise XOR transformations, and handle invalid states (`CryptoError::EmptyPayload` or `CryptoError::InvalidSalt`). Because closures in Rust generate unique, unnamable compiler types, use RPIT to export the closure without resorting to trait object allocation (`Box<dyn Fn(...)>`).
+**Scenario:** Design a cryptographic middleware generator `create_crypto_pipeline(salt: Vec<u8>, iterations: u32)` that returns a stateful data transformation function `impl Fn(&[u8]) -> Result<Vec<u8>, CryptoError>`. The returned function must validate payload data, execute multi-round salted byte-wise XOR transformations, and handle invalid states (`CryptoError::EmptyPayload` or `CryptoError::InvalidSalt`). Because closures in Rust generate unique, unnamable compiler types, use RPIT to export the closure without resorting to trait object allocation (`Box<dyn Fn(...)>`).
 
 > [!check]- Answer
 >
@@ -371,7 +371,7 @@ thread::spawn(move || {
 
 ### Exercise 3: Plug-and-Play Middleware Chain with Opaque Struct Abstraction (RPIT with Trait Composition)
 
-**Problem:** Implement a composable data sanitization and prefix decoration pipeline using a custom `Processor` trait. Build a factory function `build_resilient_processor(prefix: String)` that wraps a concrete `Sanitizer` processor inside a `PrefixDecorator` wrapper. To prevent public module coupling to internal decorator struct names (`PrefixDecorator<Sanitizer>`), expose the pipeline behind an opaque interface `impl Processor<Input = String, Output = Result<String, ProcessError>>`.
+**Scenario:** Implement a composable data sanitization and prefix decoration pipeline using a custom `Processor` trait. Build a factory function `build_resilient_processor(prefix: String)` that wraps a concrete `Sanitizer` processor inside a `PrefixDecorator` wrapper. To prevent public module coupling to internal decorator struct names (`PrefixDecorator<Sanitizer>`), expose the pipeline behind an opaque interface `impl Processor<Input = String, Output = Result<String, ProcessError>>`.
 
 > [!check]- Answer
 >

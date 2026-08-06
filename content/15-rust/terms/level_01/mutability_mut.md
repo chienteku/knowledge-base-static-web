@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Rust-specific**: While mutability exists in all languages, Rust's strict "opt-in" mutability by default is a core language design choice for safety and concurrency.
+
+
+**Rust Core Keyword (explicit state mutability)**: While mutability exists in all languages, Rust's strict "opt-in" mutability by default is a core language design choice for safety and concurrency.
 
 ---
 
@@ -139,7 +141,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Real-Time Financial Order Aggregator & Volume-Weighted Average Price (VWAP) Engine
 
-**Problem:** In high-frequency trading (HFT) systems, allocating memory on hot execution paths introduces latency spikes and allocator lock contention. Implement an in-place financial trade aggregator `TradeAggregator` that tracks active trades, total volume, total transaction value (in cents), and peak price, mutating state in-place without unnecessary memory re-allocation.
+**Scenario:** In production software engineering contexts, developers must handle complex system behaviors robustly.
+
+**Requirements:**
+In high-frequency trading (HFT) systems, allocating memory on hot execution paths introduces latency spikes and allocator lock contention. Implement an in-place financial trade aggregator `TradeAggregator` that tracks active trades, total volume, total transaction value (in cents), and peak price, mutating state in-place without unnecessary memory re-allocation.
 
 Your implementation must support:
 - `process_trade(&mut self, trade: Trade) -> Result<(), AggregatorError>` validating inputs, enforcing buffer capacity, and mutating total volume, total value, and peak price in-place.
@@ -336,7 +341,10 @@ Your implementation must support:
 
 ### Exercise 2: Zero-Copy Network Frame Protocol Parser & In-Place Payload Sanitizer
 
-**Problem:** High-throughput network edge proxies require zero-copy packet manipulation to process network frames without allocating new buffer memory. Implement a zero-copy frame transformation function `process_packet_inplace(frame: &mut [u8], xor_key: Option<u8>) -> Result<usize, PacketError>` that operates on raw byte buffers.
+**Scenario:** In production software engineering contexts, developers must handle complex system behaviors robustly.
+
+**Requirements:**
+High-throughput network edge proxies require zero-copy packet manipulation to process network frames without allocating new buffer memory. Implement a zero-copy frame transformation function `process_packet_inplace(frame: &mut [u8], xor_key: Option<u8>) -> Result<usize, PacketError>` that operates on raw byte buffers.
 
 Binary Frame Specification:
 - **Header Bytes [0..4]**:
@@ -471,8 +479,9 @@ Your implementation must:
 
 ### Exercise 3: Telemetry Sliding Window Ring Buffer with In-Place Compaction
 
-**Problem:** Telemetry sidecars collect continuous sensor metrics over sliding windows. To prevent memory fragmentation, telemetry collectors rely on fixed-capacity ring buffers that mutate state in-place as new samples arrive.
+**Scenario:** Telemetry sidecars collect continuous sensor metrics over sliding windows. To prevent memory fragmentation, telemetry collectors rely on fixed-capacity ring buffers that mutate state in-place as new samples arrive.
 
+**Requirements:**
 Implement `TelemetryRingBuffer` managing telemetry sample streams:
 - `new(capacity: usize) -> Self` initializing fixed-capacity ring buffer storage.
 - `push(&mut self, sample: u64)` appending or overwriting samples using a sliding write cursor `(write_pos + 1) % capacity`.

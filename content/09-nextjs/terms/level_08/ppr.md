@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Rendering Strategy / Bleeding Edge**
+
+**Rendering Strategy** (Partial Prerendering Architecture): Partial Prerendering (PPR) combines static shell HTML prerendering with dynamic `<Suspense>` streaming in a single HTTP request.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server (Build-Time & Request-Time)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Historically, a Next.js page was either entirely Static (SSG) or entirely Dynamic (SSR). 
@@ -62,7 +63,7 @@ You get the instant First Contentful Paint (FCP) of a static site, but the perso
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Calling dynamic functions outside of Suspense
 
@@ -72,6 +73,8 @@ You get the instant First Contentful Paint (FCP) of a static site, but the perso
 **Golden Rule:** To utilize PPR, you must strictly isolate all dynamic functions (`cookies`, `headers`, `no-store` fetches) inside child components, and wrap those specific children in `<Suspense>`.
 
 ---
+
+
 
 ### Mistake 2: Assuming Partial Prerendering (PPR) Requires Complete Architectural Rewrites
 
@@ -90,6 +93,8 @@ You get the instant First Contentful Paint (FCP) of a static site, but the perso
 ```
 
 ---
+
+
 
 ### Mistake 3: Using PPR in Production Without Enabling Experimental Config Flags
 
@@ -113,142 +118,125 @@ module.exports = {
 
 ---
 
-### Mistake 4: Assuming Partial Prerendering (PPR) Requires Complete Architectural Rewrites
 
-**The mistake:** Rewriting static pages into client components to prepare for Partial Prerendering.
-
-**Why it's wrong:** PPR leverages existing React Suspense boundaries automatically. Static HTML layout shells render instantly while dynamic Suspense boundaries stream in concurrently.
-
-*Incorrect:*
-```tsx
-/* Rewriting static layout components into client components for PPR */
-```
-
-*Fix:*
-```tsx
-/* Wrap dynamic server components in <Suspense> boundaries; PPR handles the hybrid shell automatically */
-```
-
----
-
-### Mistake 5: Using PPR in Production Without Enabling Experimental Config Flags
-
-**The mistake:** Expecting PPR to function without enabling `experimental.ppr` in `next.config.js`.
-
-**Why it's wrong:** Partial Prerendering (PPR) is an experimental feature in Next.js 14/15 requiring explicit opt-in configuration.
-
-*Incorrect:*
-```tsx
-/* Expecting PPR hybrid rendering without experimental next.config.js flag */
-```
-
-*Fix:*
-```javascript
-// next.config.js
-module.exports = {
-  experimental: { ppr: 'incremental' }
-};
-```
 
 
 ---
 
-### Mistake 6: Assuming Partial Prerendering (PPR) Requires Complete Architectural Rewrites
+## 5. Practice Exercises
 
-**The mistake:** Rewriting static pages into client components to prepare for Partial Prerendering.
+### Exercise 1: Enabling Partial Prerendering in `next.config.js`
 
-**Why it's wrong:** PPR leverages existing React Suspense boundaries automatically. Static HTML layout shells render instantly while dynamic Suspense boundaries stream in concurrently.
+**Scenario:**
+Enable experimental Partial Prerendering (PPR) support in `next.config.js`.
 
-*Incorrect:*
-```tsx
-/* Rewriting static layout components into client components for PPR */
-```
+**Requirements:**
+1. Set `experimental.ppr: "incremental"` in `next.config.js`.
 
-*Fix:*
-```tsx
-/* Wrap dynamic server components in <Suspense> boundaries; PPR handles the hybrid shell automatically */
-```
-
----
-
-### Mistake 7: Using PPR in Production Without Enabling Experimental Config Flags
-
-**The mistake:** Expecting PPR to function without enabling `experimental.ppr` in `next.config.js`.
-
-**Why it's wrong:** Partial Prerendering (PPR) is an experimental feature in Next.js 14/15 requiring explicit opt-in configuration.
-
-*Incorrect:*
-```tsx
-/* Expecting PPR hybrid rendering without experimental next.config.js flag */
-```
-
-*Fix:*
-```javascript
-// next.config.js
-module.exports = {
-  experimental: { ppr: 'incremental' }
-};
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: PPR vs Streaming
-
-**Problem:** What is the difference between standard Streaming (Level 5) and PPR? They both use `<Suspense>`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Standard Streaming (SSR): The server still receives the request, waits for the Node process to boot, renders the static parts dynamically, and sends them. It just doesn't wait for the slow data.
-> PPR: The static parts are pre-rendered at BUILD TIME into an actual HTML file stored on a CDN. The CDN instantly serves the shell without the Node server doing any work. The Node server ONLY boots up to fill in the Suspense holes.
-> ```
-> - Think about where the initial HTML comes from (CDN vs Node.js).
-
----
-
-### Exercise 2: PPR Hybrid Architecture Flow
-
-**Problem:** Describe how Partial Prerendering (PPR) combines SSG and SSR into a single page HTTP response.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> PPR pre-renders the static HTML shell at build time (SSG), serving it instantly, while streaming dynamic Suspense holes from the server in parallel (SSR).
-> ```
-> - PPR combines instant static HTML shell + dynamic Suspense streaming.
-> 
-> ```text
-> Instant Static Shell (SSG) + Streamed Dynamic Holes (SSR)
-> ```
-
----
-
-### Exercise 3: PPR Experimental Config Syntax
-
-**Problem:** Write `next.config.js` snippet enabling incremental PPR support.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> module.exports = { experimental: { ppr: 'incremental' } };
-> ```
-> - `experimental.ppr = 'incremental'` enables route-level PPR opt-in.
-> 
-> ```javascript
+> // next.config.js
 > module.exports = {
 >   experimental: {
->     ppr: 'incremental'
+>     ppr: "incremental"
 >   }
 > };
 > ```
 
+> #### Technical Explanation
+>
+> 1. Partial Prerendering (PPR) combines static shell HTML build-time prerendering with dynamic `<Suspense>` streaming.
+> 2. `experimental.ppr = 'incremental'` enables opting individual route pages into PPR using `export const experimental_ppr = true`.
+> 3. Next-generation rendering architecture in Next.js.
 
 ---
 
-## 7. Related Terms
+### Exercise 2: Structuring Pages for Partial Prerendering
+
+**Scenario:**
+Structure a product page where static product details are prerendered and dynamic user recommendations are wrapped in `<Suspense>`.
+
+**Requirements:**
+1. Export `experimental_ppr = true`.
+2. Wrap dynamic component in `<Suspense>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // app/products/[id]/page.tsx
+> import { Suspense } from "react";
+> import DynamicRecommendations from "./DynamicRecommendations";
+
+export const experimental_ppr = true;
+
+export default async function ProductPage({
+  params
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return (
+    <main className="p-6">
+      {/* Static Shell (Prerendered at build time) */}
+      <h1 className="text-3xl font-bold">Product #{id}</h1>
+      <p>Static product description and specifications...</p>
+
+      {/* Dynamic Hole (Streamed at request time) */}
+      <Suspense fallback={<div>Loading Personalized Recommendations...</div>}>
+        <DynamicRecommendations productId={id} />
+      </Suspense>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. In PPR, static HTML content outside `<Suspense>` boundaries is pre-built into static CDN files.
+> 2. Dynamic components inside `<Suspense>` are left as "holes" that stream in parallel over open HTTP connections.
+> 3. Delivers instant static TTFB while preserving dynamic personalization.
+
+---
+
+### Exercise 3: Auditing PPR Execution Model
+
+**Scenario:**
+Explain why PPR eliminates the traditional choice between SSG vs SSR for an entire page.
+
+**Requirements:**
+1. Contrast full page SSG/SSR vs PPR hybrid execution.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> PPR Architecture Benefits:
+> - Traditional SSG: Entire page must be static. Dynamic user data breaks static build optimization.
+> - Traditional SSR: Entire page is rendered dynamically on Node.js. Server must wait for all DB calls before returning HTML.
+> - PPR (Partial Prerendering): Static shell is served from CDN instantly; dynamic holes stream in parallel on demand!
+> ```
+
+> #### Technical Explanation
+>
+> 1. PPR eliminates the trade-off between static CDN performance and dynamic user personalization.
+> 2. Unifies static pre-rendering and dynamic streaming within a single route file.
+> 3. Cutting-edge Web Core Vitals optimization model.
+
+---
+
+
+
+
+---
+
+## 6. Related Terms
 - [Streaming with `<Suspense>`](../level_05/streaming.md) — The React primitive that enables PPR.
 - [Static Site Generation (SSG)](ssg.md) — The strategy used for the "shell."
 - [React Server Components (RSC)](../level_01/rsc.md) — React Server Components.
@@ -256,7 +244,7 @@ module.exports = {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Partial Prerendering (PPR)** is an advanced rendering strategy that combines SSG and SSR on the same page.
 - At build time, Next.js generates a static HTML shell containing all static content and the Suspense `fallback` UIs.
 - At request time, the static shell is served instantly, while the dynamic components inside the Suspense boundaries are rendered on the server and streamed in.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing / Navigation**
+
+**Routing & Layouts** (Client Navigation Link Component): `<Link>` enables client-side SPA navigation, route chunk prefetching, and soft page transitions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Component or Client Component**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you use a standard HTML `<a href="/about">` tag in a Next.js app, clicking it tells the browser to throw away the current page, make a full hard request to the server, download the CSS and JS all over again, and render the new page. This is slow and destroys any application state.
@@ -52,7 +53,7 @@ By the time the user actually moves their mouse and clicks the link, the destina
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `<a>` tags for internal links
 
@@ -104,82 +105,126 @@ By the time the user actually moves their mouse and clicks the link, the destina
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Disabling Prefetching
+### Exercise 1: Client-Side SPA Navigation with `<Link>`
 
-**Problem:** You have a massive table of 500 users, each with a `<Link href="/user/123">` button. You notice your server is getting slammed because Next.js is prefetching all 500 user profiles as soon as the table loads. How do you disable this?
+**Scenario:**
+Implement client-side SPA navigation between `/` and `/about` using `<Link>`.
 
-**Expected output:**
+**Requirements:**
+1. Render `<Link href="/about">About</Link>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> // You can pass the `prefetch={false}` prop!
-> // Note: It will still prefetch if the user physically hovers their mouse over it.
-> <Link href={`/user/${user.id}`} prefetch={false}>
->   View Profile
-> </Link>
-> ```
-> - Check the props available on the Link component.
+> import Link from "next/link";
+
+export default function Navigation() {
+  return (
+    <nav className="flex gap-4 p-4 bg-slate-100">
+      <Link href="/" className="hover:underline">
+        Home
+      </Link>
+      <Link href="/about" className="hover:underline">
+        About Us
+      </Link>
+    </nav>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `<Link>` intercepts navigation clicks to perform fast client-side SPA route transitions.
+> 2. Avoids triggering full browser page reloads.
+> 3. Automatically prefetches route JavaScript chunks when links enter the browser viewport.
 
 ---
 
-### Exercise 2: Link Object Prop Syntax
+### Exercise 2: Disabling Automatic Route Prefetching
 
-**Problem:** Write `<Link>` passing URL path `/search` with query parameter `{ q: 'nextjs' }` and hash `#results`.
+**Scenario:**
+Disable automatic viewport prefetching for a heavy admin dashboard link using `prefetch={false}`.
 
-**Expected output:**
+**Requirements:**
+1. Set `prefetch={false}` on `<Link>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> <Link href={{ pathname: '/search', query: { q: 'nextjs' }, hash: 'results' }}>Search</Link>
-> ```
-> - `<Link href={{ ... }}>` accepts URL location objects.
-> 
-> ```tsx
-> import Link from 'next/link';
-> 
-> export function SearchLink() {
->   return (
->     <Link
->       href={{
->         pathname: '/search',
->         query: { q: 'nextjs' },
->         hash: 'results'
->       }}
->     >
->       Search Next.js
->     </Link>
->   );
-> }
-> ```
+> import Link from "next/link";
+
+export default function Footer() {
+  return (
+    <footer>
+      <Link href="/admin/analytics" prefetch={false}>
+        Admin Analytics (No Prefetch)
+      </Link>
+    </footer>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. By default, Next.js prefetches code chunks for all `<Link>` elements visible in the viewport.
+> 2. `prefetch={false}` disables prefetching until the user hovers or clicks the link.
+> 3. Reduces network data usage on mobile networks and heavy pages.
 
 ---
 
-### Exercise 3: Link Viewport Prefetching Rule
+### Exercise 3: Dynamic Route Passing to `<Link>`
 
-**Problem:** When does Next.js automatically prefetch code for `<Link>` components in production?
+**Scenario:**
+Construct dynamic href paths dynamically for product cards.
 
-**Expected output:**
+**Requirements:**
+1. Pass template literal or object to `href`.
+
 > [!check]- Answer
-> ```text
-> When the <Link> component enters the browser viewport.
-> ```
-> - Prefetching executes when links enter the browser viewport.
-> 
-> ```text
-> Intersection Observer detects Link -> Background RSC payload prefetch
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> import Link from "next/link";
+
+export default function ProductCard({ id, slug }: { id: string; slug: string }) {
+  return (
+    <div className="card">
+      <Link href={`/products/${id}?ref=${slug}`}>
+        View Product
+      </Link>
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Href prop accepts string paths or URL location objects (`{ pathname, query }`).
+> 2. Preserves search parameters and dynamic segments during navigation.
+> 3. Idiomatic navigation pattern in Next.js.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useRouter` Hook](use_router.md) — How to navigate programmatically without a clickable link.
 - [`page.tsx`](../level_02/page.md) — The file that the `<Link>` ultimately resolves to.
 - [Intercepting Routes (`(..)folder`)](../level_04/intercepting_routes.md) — Related concept: Intercepting Routes (`(..)folder`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use **`<Link href="...">`** instead of `<a href="...">` for all internal navigation in Next.js.
 - It enables client-side routing, meaning the page doesn't hard-refresh when clicked.
 - It automatically **prefetches** destination routes when the link enters the viewport, making navigation feel instantaneous.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Data Fetching**
+
+**Data Fetching** (Non-Blocking Lazy Data Fetching): `useLazyFetch()` executes data fetching asynchronously without blocking client-side or server-side route navigation transitions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client** (Executed server-side during initial load rendering, and client-side during instant route navigations).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, the statement `await useFetch()` is **blocking**. When a user navigates between pages on the client side (e.g., clicking a link to `/reports`):
@@ -82,7 +83,7 @@ Use `useLazyAsyncData` when you need to run custom promise operations (e.g. hitt
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to access data properties in setup code before resolution
 
@@ -146,95 +147,134 @@ const pageTitle = post.value.title;
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Safe Property Reading
+### Exercise 1: Implementing Non-Blocking Page Navigation with `useLazyFetch()`
 
-**Problem:** Complete the setup script block below using a watch expression to print the value of `post.title` to the console as soon as it resolves:
+**Scenario:**
+Fetch product recommendations using `useLazyFetch()` to avoid blocking client page navigation transitions.
 
-```vue
-<script setup lang="ts">
-import { watch } from 'vue';
+**Requirements:**
+1. Execute `useLazyFetch("/api/recommendations")`.
 
-const { data: post } = useLazyFetch('/api/post');
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const { data: recommendations, pending } = useLazyFetch("/api/recommendations");
+> </script>
 
-// Solution:
-watch(post, (newPost) => {
-  if (newPost) {
-    console.log(newPost.title);
-  }
-});
-</script>
+<template>
+  <div>
+    <h2>Product Recommendations</h2>
+    <div v-if="pending" class="skeleton-loader">
+      <p>Loading personalized recommendations...</p>
+    </div>
+    <ul v-else-if="recommendations">
+      <li v-for="item in recommendations" :key="item.id">{{ item.name }}</li>
+    </ul>
+  </div>
+</template>
 ```
 
-> [!check]- Answer
-> - The watch hook executes its callback whenever the watched reactive ref value (in this case, `post`) changes.
+> #### Technical Explanation
+>
+> 1. `useLazyFetch()` is shorthand for `useFetch(url, { lazy: true })`.
+> 2. Route navigation transitions complete immediately without waiting for server network requests to resolve.
+> 3. `pending` state indicates when background data processing completes.
 
 ---
 
-### Exercise 2: useLazyFetch Non-Blocking Pattern
+### Exercise 2: Combining `useLazyFetch()` with Client-Side Skeletons
 
-**Problem:** Write Vue component using `useLazyFetch('/api/comments')` displaying a loading spinner while `pending` is true.
+**Scenario:**
+Display a UI card skeleton while `useLazyFetch()` loads secondary dashboard widgets.
 
-**Expected output:**
+**Requirements:**
+1. Render skeleton UI when `pending` is `true`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
-> const { data: comments, pending } = await useLazyFetch('/api/comments');
+> <script setup lang="ts">
+> const { data: stats, pending } = useLazyFetch("/api/analytics/summary");
 > </script>
-> <template>
->   <div v-if="pending">Loading comments...</div>
->   <ul v-else>
->     <li v-for="c in comments" :key="c.id">{{ c.text }}</li>
->   </ul>
-> </template>
-> ```
-> - `useLazyFetch` provides instant page transitions with background data loading.
-> 
-> ```vue
-> <script setup>
-> const { data: comments, pending } = await useLazyFetch('/api/comments');
-> </script>
-> 
-> <template>
->   <div>
->     <div v-if="pending" class="spinner">Loading comments...</div>
->     <ul v-else-if="comments">
->       <li v-for="comment in comments" :key="comment.id">
->         {{ comment.text }}
->       </li>
->     </ul>
->   </div>
-> </template>
-> ```
+
+<template>
+  <div class="widget-card">
+    <h3>Analytics Summary</h3>
+    <template v-if="pending">
+      <div class="placeholder-shimmer">---</div>
+    </template>
+    <template v-else-if="stats">
+      <p>Total Views: {{ stats.views }}</p>
+      <p>Conversions: {{ stats.conversions }}</p>
+    </template>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Non-blocking lazy fetching allows primary page elements to display instantly while secondary data loads asynchronously.
+> 2. Prevents slow secondary microservice endpoints from delaying page load transitions.
+> 3. Improves Web Vitals and perceived user interaction speed.
 
 ---
 
-### Exercise 3: useFetch({ lazy: true }) Equivalence
+### Exercise 3: Controlling Server-Side Execution of Lazy Fetches
 
-**Problem:** Is `useLazyFetch(url)` identical to calling `useFetch(url, { lazy: true })`?
+**Scenario:**
+Configure `useLazyFetch()` to execute ONLY on the client browser (`server: false`).
 
-**Expected output:**
+**Requirements:**
+1. Pass `{ server: false }` to `useLazyFetch()`.
+
 > [!check]- Answer
-> ```text
-> Yes. useLazyFetch is a shorthand wrapper for useFetch with { lazy: true } option.
-> ```
-> - `useLazyFetch` is a shorthand for `useFetch(url, { lazy: true })`.
-> 
-> ```text
-> useLazyFetch(url) === useFetch(url, { lazy: true })
-> ```
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const { data: userActivity, pending } = useLazyFetch("/api/user/activity", {
+>   server: false
+> });
+> </script>
+
+<template>
+  <div>
+    <p v-if="pending">Fetching live user activity...</p>
+    <div v-else-if="userActivity">
+      <p>Last Login: {{ userActivity.lastLogin }}</p>
+    </div>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `server: false` instructs Nuxt to skip data fetching completely during server SSR rendering.
+> 2. Data fetching begins in the browser immediately after client hydration completes.
+> 3. Ideal for non-critical user activity logs or browser-only widgets.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useFetch`](use_fetch.md) — The blocking sibling composable.
 - [`useAsyncData`](use_async_data.md) — The core promise wrapping composable.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useLazyFetch` triggers immediate page routing and loads data in the background.
 - It returns `pending: true` and `data: null` immediately upon initialization.
 - Use it to improve User Experience (UX) by rendering loading skeletons.

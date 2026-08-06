@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Aggregation** (Recursive Graph Traversal): The $graphLookup stage performs recursive search operations over graph-structured or hierarchical collections (e.g. org charts, category trees).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Evaluated in the aggregation engine. Automatically tracks visited nodes in memory to prevent infinite loops when traversing circular graph structures).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In application data modeling, you occasionally need to represent hierarchies of unknown depth:
@@ -104,7 +105,7 @@ db.employees.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting recursion depth caps (maxDepth) on extremely deep or circular datasets, risking memory exhaustion
 
@@ -166,97 +167,116 @@ db.users.aggregate([{ $graphLookup: { from: "users", startWith: "$reportsTo", co
 db.users.createIndex({ _id: 1 }); // Ensure connectToField is indexed
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Recursive Category Search
+### Exercise 1: Recursive Organizational Chart Traversal
 
-**Problem:** You have a `categories` collection. Each category document links to its parent category via a `parent_id` field:
-`{ _id: "Laptops", parent_id: "Computers" }`
-Write the `$graphLookup` stage (as a JSON block) to recursively find all ancestor categories for a given starting category, storing results in the array field `"ancestors"`.
+**Scenario:**
+Traverse an employee reporting hierarchy in collection `employees` to retrieve all recursive direct and indirect reports for manager `"emp_mgr_01"`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$graphLookup` with `startWith: "$_id"`, `connectFromField: "_id"`, `connectToField: "managerId"`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> {
->   $graphLookup: {
->     from: "categories",
->     startWith: "$parent_id",
->     connectFromField: "parent_id",
->     connectToField: "_id",
->     as: "ancestors"
->   }
-> }
-> ```
-> - The target collection is `"categories"`.
-> - The links are resolved by mapping `parent_id` to `_id` recursively.
-
----
-
-
-
-### Exercise 2: Organizational Hierarchy Recursive Traversal
-
-**Problem:** Traverse management reporting hierarchy up to 3 levels deep using `$graphLookup`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.aggregate([{ $graphLookup: { from: "users", startWith: "$managerId", connectFromField: "managerId", connectToField: "_id", maxDepth: 3, as: "managers" } }]);
-> ```
-> ```javascript
-> db.users.aggregate([
+> db.employees.aggregate([
+>   { $match: { _id: "emp_mgr_01" } },
 >   {
 >     $graphLookup: {
->       from: "users",
->       startWith: "$managerId",
->       connectFromField: "managerId",
->       connectToField: "_id",
->       maxDepth: 3,
->       as: "managers"
+>       from: "employees",
+>       startWith: "$_id",
+>       connectFromField: "_id",
+>       connectToField: "managerId",
+>       as: "allReports"
 >     }
 >   }
 > ]);
 > ```
 >
-> **Explanation:** `$graphLookup` performs recursive graph traversals over parent-child relationships.
+> #### Technical Explanation
+>
+> 1. `$graphLookup` performs recursive graph traversal across document references.
+> 2. `connectFromField` specifies the field value to search for in target `connectToField`.
+> 3. Recursively collects all management hierarchy descendants into an array.
 
 ---
 
-### Exercise 3: Tracking Depth Level with `depthField`
+### Exercise 2: Capping Traversal Depth with `maxDepth`
 
-**Problem:** Add depth level number to recursive graph results using `depthField: "level"`.
+**Scenario:**
+Traverse social connections up to 2 degrees of separation (`maxDepth: 1`) using `$graphLookup`.
 
-**Expected output:**
+**Requirements:**
+1. Pass `maxDepth: 1` and `depthField: "degrees"`.
+
 > [!check]- Answer
-> ```text
-> db.users.aggregate([{ $graphLookup: { ..., depthField: "level", as: "network" } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.users.aggregate([
+>   { $match: { username: "alice" } },
 >   {
 >     $graphLookup: {
 >       from: "users",
->       startWith: "$friends",
->       connectFromField: "friends",
+>       startWith: "$friendIds",
+>       connectFromField: "friendIds",
 >       connectToField: "_id",
->       maxDepth: 2,
->       depthField: "level",
->       as: "network"
+>       maxDepth: 1,
+>       depthField: "degrees",
+>       as: "extendedNetwork"
 >     }
 >   }
 > ]);
 > ```
 >
-> **Explanation:** `depthField` attaches recursion iteration depth numbers to joined graph elements.
+> #### Technical Explanation
+>
+> 1. `maxDepth` limits the recursive search depth (0 = direct links, 1 = 2 degrees of separation).
+> 2. `depthField` injects the traversal step count into returned graph subdocuments.
+> 3. Prevents runaway infinite loops on cyclic graph structures.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Circular Graph Prevention with `$graphLookup`
+
+**Scenario:**
+Explain how MongoDB automatically prevents infinite recursion when traversing cyclic graph references.
+
+**Requirements:**
+1. Describe `$graphLookup` internal visited-node tracking.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Graph Visited Node Cache:
+> $graphLookup maintains an internal set of visited document _id keys during traversal.
+> If a node is re-encountered, it is skipped automatically to break circular loops.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Built-in cycle detection prevents infinite loops during graph traversal.
+> 2. Safe execution over complex, cyclic social networks and graph topologies.
+> 3. High performance graph querying.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`$lookup` Stage](lookup_stage.md) — The parent non-recursive join.
 - [Recursive CTE](../../../12-postgres/terms/level_09/recursive_cte.md) — Relational recursive joins.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$graphLookup` performs recursive lookups to traverse trees and graphs.
 - Direct NoSQL equivalent to PostgreSQL's `WITH RECURSIVE` CTE query.
 - Eliminates the need to write multiple chained `$lookup` stages.

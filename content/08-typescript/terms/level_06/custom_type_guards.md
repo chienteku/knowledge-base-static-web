@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Advanced Syntax**
+
+**Type System Fundamental** (User-Defined Type Predicates): User-defined type guards (`arg is T`) use type predicate return values to narrow untyped or union values inside conditional statements.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time Contract**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 You find yourself constantly writing `if ("fly" in animal)` or `if (typeof data === "string")` across your app. You want to extract this logic into a clean, reusable helper function.
@@ -66,7 +67,7 @@ const clean: string[] = mixed.filter((item): item is string => item !== undefine
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Lying in your Type Guard
 
@@ -122,72 +123,130 @@ function isStr(val: any): val is string { return typeof val === "string"; }
 // if (isStr(x)) { x.toUpperCase(); } // Correct: x narrowed to string
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Duck Test Guard
+### Exercise 1: Authoring Custom User-Defined Type Predicates
 
-**Problem:** Write a Custom Type Guard function named `isBird` that accepts an `animal: unknown` and narrows it to the `Bird` interface (assuming Bird requires a `fly` method).
+**Scenario:**
+Create a custom type guard function `isFish(pet: Fish | Bird): pet is Fish` to differentiate interface instances.
 
-**Expected output:**
+**Requirements:**
+1. Annotate return type as `pet is Fish`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> interface Bird { fly(): void; }
-> 
-> function isBird(animal: unknown): animal is Bird {
->   // We have to assert animal to any/object first to safely check the property
->   return typeof animal === "object" && animal !== null && "fly" in animal;
+> interface Fish {
+>   swim(): void;
 > }
-> ```
-> - Remember to return `animal is Bird`.
-> - Check if it's an object before using the `in` operator!
+
+interface Bird {
+  fly(): void;
+}
+
+function isFish(pet: Fish | Bird): pet is Fish {
+  return (pet as Fish).swim !== undefined;
+}
+
+function move(pet: Fish | Bird) {
+  if (isFish(pet)) {
+    pet.swim(); // pet is narrowed to Fish!
+  } else {
+    pet.fly();  // pet is narrowed to Bird!
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Type predicate return types (`parameter is Type`) tell the compiler to narrow `parameter` when the function returns `true`.
+> 2. Allows writing custom domain logic to inspect untyped or union objects.
+> 3. Enables clean type narrowing across complex interface unions.
+
+---
+
+### Exercise 2: Filtering Array Elements with Type Guards
+
+**Scenario:**
+Filter `null` and `undefined` values out of an array using `Array.prototype.filter` with a custom type guard.
+
+**Requirements:**
+1. Write a non-null type guard `isNotNull<T>(val: T | null | undefined): val is T`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function isNotNull<T>(val: T | null | undefined): val is T {
+>   return val !== null && val !== undefined;
+> }
+
+const values: (string | null | undefined)[] = ["a", null, "b", undefined, "c"];
+
+// Inferred cleanly as string[]:
+const validStrings: string[] = values.filter(isNotNull);
+```
+
+> #### Technical Explanation
+>
+> 1. Standard boolean expressions passed to `filter` do not automatically narrow array element types.
+> 2. Passing a type predicate (`val is T`) instructs `filter` to output a narrowed array (`T[]` instead of `(T | null)[]`).
+> 3. Essential pattern for array sanitization.
+
+---
+
+### Exercise 3: Auditing Dangerous/False Type Predicates
+
+**Scenario:**
+Demonstrate what happens when a type guard implementation returns `true` incorrectly.
+
+**Requirements:**
+1. Show runtime crash caused by a buggy type predicate function.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Admin {
+>   role: "admin";
+>   deleteDatabase(): void;
+> }
+
+// ⚠️ BUGGY TYPE GUARD: Returns true even when obj is not Admin!
+function isBadAdmin(obj: any): obj is Admin {
+  return true; // LIAR!
+}
+
+function DangerousOperation(user: unknown) {
+  if (isBadAdmin(user)) {
+    // TS believes user is Admin, but crashes at runtime!
+    user.deleteDatabase(); // Uncaught TypeError: user.deleteDatabase is not a function
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Type predicate functions rely entirely on developer correctness; the compiler does NOT verify that the internal boolean logic is sound.
+> 2. Returning `true` incorrectly causes unsound type assertions down the line.
+> 3. Ensure type predicate functions perform thorough runtime property validation.
 
 ---
 
 
 
-### Exercise 2: Custom Array Guard `isStringArray`
-
-**Problem:** Implement type guard `isStringArray(arr: unknown): arr is string[]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> isStringArray type guard created
-> ```
-> ```typescript
-> function isStringArray(arr: unknown): arr is string[] {
->   return Array.isArray(arr) && arr.every(item => typeof item === "string");
-> }
-> console.log(isStringArray(["a", "b"]));
-> ```
->
-> **Explanation:** Array guards validate both array container and item types.
-
----
-
-### Exercise 3: Type Guard Predicate Syntax
-
-**Problem:** Syntax format for custom type guard return annotation (`paramName is TargetType`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> paramName is TargetType
-> ```
-> ```typescript
-> console.log("paramName is TargetType");
-> ```
->
-> **Explanation:** Type predicate syntax binds parameter narrowing to boolean return values.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Type Narrowing](type_narrowing.md) — What this function achieves.
 - [`in` Operator Narrowing](in_operator.md) — Often used inside the body of a Custom Type Guard.
 - [Assertion Functions (`asserts`)](assertion_functions.md) — Related concept: Assertion Functions (`asserts`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Custom Type Guards** allow you to extract narrowing logic into reusable helper functions.
 - You create them by replacing the `boolean` return type with a **Type Predicate**: `param is Type`.
 - When the function returns `true`, the TypeScript compiler will automatically narrow the variable to the specified type in the calling block.

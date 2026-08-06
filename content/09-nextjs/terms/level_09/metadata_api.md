@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SEO / Head Management**
+
+**SEO & Metadata** (App Router Metadata API): The Metadata API provides static and dynamic configuration objects for document head elements (`title`, `description`, `openGraph`, `robots`).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Component ONLY**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard React (CSR), managing SEO is difficult. If you try to change the `<title>` using `document.title = "My Page"`, the change happens *after* the page loads. When a Twitter bot scrapes your site, it sees a blank title.
@@ -71,7 +72,7 @@ export const metadata: Metadata = {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Exporting Metadata from a Client Component
 
@@ -127,80 +128,140 @@ export const metadata = {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Overriding Metadata
+### Exercise 1: Configuring Static Page Metadata with `Metadata` Objects
 
-**Problem:** You set `robots: { index: true }` in your root `layout.tsx`. In your `app/secret/page.tsx`, you want to prevent search engines from indexing the page. How do you override it?
+**Scenario:**
+Define static document metadata (`title`, `description`, `keywords`, `robots`) in `layout.tsx`.
 
-**Expected output:**
+**Requirements:**
+1. Export `const metadata: Metadata`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> // app/secret/page.tsx
-> export const metadata = {
->   // Just define it in the page! Page metadata always overwrites Layout metadata.
->   robots: {
->     index: false,
->     follow: false,
->   }
-> };
-> ```
-> - Child pages always have priority in the merge hierarchy.
+> // app/layout.tsx
+> import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s | SaaS Platform",
+    default: "SaaS Platform - Enterprise Cloud Solutions"
+  },
+  description: "Enterprise cloud software management suite.",
+  keywords: ["SaaS", "Cloud", "Enterprise"],
+  robots: {
+    index: true,
+    follow: true
+  }
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Exporting `const metadata: Metadata` in `layout.tsx` configures default fallback metadata for all sub-pages.
+> 2. `title.template` automatically appends the `%s` template string to child page titles (e.g. "Pricing | SaaS Platform").
+> 3. Standard global SEO configuration pattern.
 
 ---
 
-### Exercise 2: Root Metadata Template Configuration
+### Exercise 2: Defining Canonical URLs and OpenGraph Cards
 
-**Problem:** Write root layout `metadata` object with `title.default = 'Store'`, `title.template = '%s | Store'`, and `metadataBase` set to `https://example.com`.
+**Scenario:**
+Configure canonical URL references and Twitter Card meta tags for a pricing page.
 
-**Expected output:**
+**Requirements:**
+1. Add `alternates.canonical` and `twitter` properties to `metadata`.
+
 > [!check]- Answer
-> ```typescript
-> export const metadata: Metadata = { metadataBase: new URL('https://example.com'), title: { default: 'Store', template: '%s | Store' } };
-> ```
-> - `metadataBase` resolves relative OpenGraph image URLs.
-> 
-> ```typescript
-> import type { Metadata } from 'next';
-> 
-> export const metadata: Metadata = {
->   metadataBase: new URL('https://example.com'),
->   title: {
->     default: 'My E-Commerce Store',
->     template: '%s | Store'
->   },
->   description: 'Official store website'
-> };
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> // app/pricing/page.tsx
+> import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Pricing Plans",
+  alternates: {
+    canonical: "https://example.com/pricing"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pricing Plans",
+    creator: "@company"
+  }
+};
+
+export default function PricingPage() {
+  return <h1>Pricing Options</h1>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `alternates.canonical` renders `<link rel="canonical" href="..." />` tags to prevent duplicate content indexing penalties.
+> 2. `twitter` configures Twitter Card preview cards when links are shared on social media.
+> 3. Essential technical SEO metadata configuration.
 
 ---
 
-### Exercise 3: Metadata Inheritance Resolution
+### Exercise 3: Setting Custom Favicons and Icons in Metadata API
 
-**Problem:** How does Next.js resolve metadata defined in both `app/layout.tsx` and nested `app/blog/page.tsx`?
+**Scenario:**
+Configure apple touch icons and favicon shortcuts using `metadata.icons`.
 
-**Expected output:**
+**Requirements:**
+1. Define `icons` object in `metadata`.
+
 > [!check]- Answer
-> ```text
-> Next.js merges metadata shallowly, overriding parent properties with child page properties while inheriting un-specified parent tags.
-> ```
-> - Child metadata overrides parent metadata tags shallowly.
-> 
-> ```text
-> Root Layout Metadata + Child Page Metadata = Merged Final <head>
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png"
+  }
+};
+```
+
+> #### Technical Explanation
+>
+> 1. `metadata.icons` generates `<link rel="icon">` and `<link rel="apple-touch-icon">` document head tags.
+> 2. Replaces manual `<head>` tag insertions.
+> 3. Standard favicon management in App Router.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Open Graph & Twitter Cards (`generateMetadata`)](generate_metadata.md) — The dynamic version of the Metadata API.
 - [`layout.tsx`](../level_02/layout.md) — The best place to establish your base metadata templates.
 - [SEO (Search Engine Optimization)](../level_01/seo.md) — SEO optimizations.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **Metadata API** allows you to manage `<title>`, `<meta>`, and Open Graph tags by exporting a static `metadata` object.
 - Metadata is automatically merged. Root layouts provide defaults, and specific pages override them.
 - You can use the `title.template` string in your root layout to automatically append your brand name to all child page titles.

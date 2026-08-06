@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Server-Side Development**
+
+**Server & Nitro Engine** (JSON API Endpoints): Server API Routes in `server/api/` handle backend REST/JSON API endpoints, processing HTTP GET/POST/PUT/DELETE requests.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a typical Vue application, if you need a backend to talk to a database, you have to build a completely separate Node.js project (like an Express app). You must manage two repositories, configure CORS, and manually share TypeScript interfaces between the frontend and backend.
@@ -58,7 +59,7 @@ The most powerful feature of `server/api/` is implicit type safety. When you fet
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Returning raw `res.send()` or `res.json()`
 **The mistake:** Trying to use traditional Express.js syntax inside a Nitro API route.
@@ -125,72 +126,118 @@ export default defineEventHandler((event) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: File Naming
+### Exercise 1: Handling HTTP Method Specific API Routes
 
-**Problem:** You want to create an endpoint that creates a new product in the database. The URL should be `/api/products` and it should strictly only accept `POST` requests. What should the exact file path and name be?
+**Scenario:**
+Create explicit GET and DELETE endpoints for `/api/products` using file suffixes.
 
-**Expected output:**
+**Requirements:**
+1. Create `server/api/products.get.ts` and `server/api/products.delete.ts`.
+
 > [!check]- Answer
-> ```text
-> server/api/products.post.ts
-> ```
-> - Restricting to a specific HTTP method requires appending `.post`, `.get`, etc., to the file path structure within the server api directory.
-
----
-
-### Exercise 2: Nitro REST API POST Handler Pattern
-
-**Problem:** Write Nitro server handler `server/api/items.post.ts` reading JSON body `{ title }` and returning status HTTP 201 response.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> export default defineEventHandler(async (event) => {
->   const body = await readBody(event);
->   setResponseStatus(event, 201);
->   return { success: true, item: body };
-> });
-> ```
-> - `.post.ts` file suffix routes POST HTTP requests automatically.
-> 
-> ```typescript
-> // server/api/items.post.ts
-> export default defineEventHandler(async (event) => {
->   const body = await readBody(event);
->   setResponseStatus(event, 201);
->   return {
->     success: true,
->     created: body
->   };
+> // server/api/products.get.ts
+> export default defineEventHandler(() => {
+>   return [
+>     { id: 1, name: "Keyboard" },
+>     { id: 2, name: "Mouse" }
+>   ];
 > });
 > ```
 
+> ```typescript
+> // server/api/products.delete.ts
+> export default defineEventHandler(async (event) => {
+>   const query = getQuery(event);
+>   return { deletedId: query.id, success: true };
+> });
+> ```
+
+> #### Technical Explanation
+>
+> 1. File suffixes `.get.ts`, `.post.ts`, `.put.ts`, `.delete.ts` automatically bind route handlers to specific HTTP methods.
+> 2. Returning non-matching HTTP methods throws an automatic 450/405 Method Not Allowed error.
+> 3. Idiomatic REST API structure in Nuxt 3.
+
 ---
 
-### Exercise 3: Dynamic Route Parameters in Server API Routes
+### Exercise 2: Implementing Server-Side Error Handling with `createError()`
 
-**Problem:** How do you access parameter `id` in dynamic server API file `server/api/users/[id].ts`?
+**Scenario:**
+Validate API payload input and throw an HTTP 400 Bad Request error if required fields are missing.
 
-**Expected output:**
+**Requirements:**
+1. Throw `createError({ statusCode: 400, message: '...' })`.
+
 > [!check]- Answer
-> ```text
-> Via getRouterParam(event, 'id') or event.context.params.id.
-> ```
-> - `getRouterParam(event, 'id')` extracts dynamic route parameters.
-> 
+>
+> #### Implementation
+>
 > ```typescript
+> // server/api/contact.post.ts
+> export default defineEventHandler(async (event) => {
+>   const body = await readBody(event);
+>   
+>   if (!body.email || !body.message) {
+>     throw createError({
+>       statusCode: 400,
+>       statusMessage: "Bad Request: Email and message are required fields."
+>     });
+>   }
+>   
+>   return { sent: true };
+> });
+> ```
+
+> #### Technical Explanation
+>
+> 1. `createError()` constructs an H3 error object containing `statusCode` and `statusMessage`.
+> 2. Nitro formats errors into standardized JSON response payloads for API clients.
+> 3. Standard API error handling pattern.
+
+---
+
+### Exercise 3: Proxying External Third-Party APIs
+
+**Scenario:**
+Proxy a request to an external third-party API service while hiding private API credentials using `proxyRequest()`.
+
+**Requirements:**
+1. Execute `proxyRequest(event, targetUrl)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // server/api/weather.ts
 > export default defineEventHandler((event) => {
->   const id = getRouterParam(event, 'id');
->   return { userId: id };
+>   const config = useRuntimeConfig(event);
+>   const targetUrl = `https://api.weather.com/v1?apiKey=${config.weatherApiKey}`;
+>   
+>   return proxyRequest(event, targetUrl);
 > });
 > ```
+
+> #### Technical Explanation
+>
+> 1. `proxyRequest()` streams incoming request parameters directly to a target external URL.
+> 2. Keeps private API keys (`weatherApiKey`) isolated on the backend server.
+> 3. Prevents exposing third-party API credentials to client browser bundles.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`server/routes/`](server_routes.md) — Similar to `api/`, but does not prefix the URL with `/api`.
 - [H3 Request Handlers (`defineEventHandler`)](h3_handlers.md) — The utility (`defineEventHandler`) used inside these files.
 - [Nitro Engine](../level_01/nitro_engine.md) — Related concept: Nitro Engine.
@@ -198,7 +245,7 @@ export default defineEventHandler((event) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Files in `server/api/` automatically become backend endpoints at `/api/...`.
 - Append the HTTP method to the filename (e.g., `user.post.ts`) to restrict allowed methods.
 - Returns are automatically typed and available to `useFetch` on the frontend.

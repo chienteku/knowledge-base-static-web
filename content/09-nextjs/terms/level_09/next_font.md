@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Styling / Performance**
+
+**Performance & Optimization** (Automatic Web Font Optimization): `next/font` automatically optimizes Google and custom web fonts by self-hosting font files and inlining CSS to eliminate layout shift.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Traditionally, to use a Google Font like "Inter", you placed a `<link>` tag in your HTML head. 
@@ -68,7 +69,7 @@ Because the font is downloaded during `npm run build` and hosted on your own dom
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Defining the font inside a React Component body
 
@@ -123,81 +124,117 @@ export default function Page() { return <div className={inter.className}>Text</d
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Local Fonts
+### Exercise 1: Configuring Google Fonts with `next/font/google`
 
-**Problem:** You bought a premium font called "Helvetica Neue.woff2". It isn't on Google Fonts. Can you still optimize it with `next/font`?
+**Scenario:**
+Configure Inter Google Font using `next/font/google` and apply its CSS variable to `app/layout.tsx`.
 
-**Expected output:**
+**Requirements:**
+1. Import font loader from `next/font/google`.
+2. Apply font variable to `<html>` or `<body>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> // Yes! You use `next/font/local` instead of `next/font/google`.
-> import localFont from 'next/font/local';
-> 
-> const helvetica = localFont({
->   src: './fonts/HelveticaNeue.woff2',
->   display: 'swap',
-> });
-> 
-> export default function RootLayout({ children }) {
->   return <body className={helvetica.className}>{children}</body>;
-> }
-> ```
-> - Next.js has a specific import path for local font files.
+> // app/layout.tsx
+> import { Inter } from "next/font/google";
+> import "@/app/globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap"
+});
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${inter.variable} font-sans`}>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `next/font/google` automatically downloads and self-hosts font files at build time.
+> 2. Inlines font CSS declarations to eliminate external HTTP network roundtrips to Google Fonts.
+> 3. `display: 'swap'` ensures text remains visible while fonts load, preventing Cumulative Layout Shift (CLS).
 
 ---
 
-### Exercise 2: next/font Google Font Setup Pattern
+### Exercise 2: Loading Local Custom Fonts with `next/font/local`
 
-**Problem:** Write `app/layout.tsx` importing Google font `Inter` from `next/font/google` and applying `inter.className` to the `<body>` tag.
+**Scenario:**
+Load a custom local font file (`/fonts/CustomFont.woff2`) using `next/font/local`.
 
-**Expected output:**
+**Requirements:**
+1. Import `localFont` from `next/font/local`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> import { Inter } from 'next/font/google'; const inter = Inter({ subsets: ['latin'] }); export default function RootLayout({ children }: { children: React.ReactNode }) { return ( <html lang="en"> <body className={inter.className}>{children}</body> </html> ); }
-> ```
-> - `next/font` downloads font files at build time, self-hosting them automatically.
-> 
-> ```tsx
-> import { Inter } from 'next/font/google';
-> 
-> const inter = Inter({ subsets: ['latin'] });
-> 
-> export default function RootLayout({
->   children
-> }: {
->   children: React.ReactNode;
-> }) {
->   return (
->     <html lang="en">
->       <body className={inter.className}>{children}</body>
->     </html>
->   );
-> }
-> ```
+> import localFont from "next/font/local";
+
+const myCustomFont = localFont({
+  src: "../public/fonts/CustomFont.woff2",
+  display: "swap",
+  variable: "--font-custom"
+});
+
+export default function CustomText({ children }: { children: React.ReactNode }) {
+  return <div className={myCustomFont.className}>{children}</div>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `next/font/local` optimizes and self-hosts proprietary or custom woff2 font files.
+> 2. `myCustomFont.className` applies a unique hashed font class name directly to components.
+> 3. Zero network requests to third-party font servers.
 
 ---
 
-### Exercise 3: next/font CSS Variable Integration
+### Exercise 3: Eliminating Cumulative Layout Shift (CLS) with Size Adjust
 
-**Problem:** How do you configure `next/font` to expose a font as a CSS variable for Tailwind CSS integration?
+**Scenario:**
+Explain how `next/font` calculates fallback font size adjustments to prevent layout shifts during font loading.
 
-**Expected output:**
+**Requirements:**
+1. Detail `size-adjust` and `font-display: swap` mechanics.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> By passing variable property: const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+> Font CLS Elimination Architecture:
+> - Step 1: next/font measures metric glyph dimensions of web font files at build time.
+> - Step 2: Generates fallback font CSS declarations with size-adjust and letter-spacing overrides.
+> - Step 3: Ensures fallback system font (Arial/Times) occupies EXACTLY the same layout width/height as the web font!
+> Result: ZERO layout shift when web font finishes loading!
 > ```
-> - `variable` option binds font family to CSS variables.
-> 
-> ```typescript
-> const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-> ```
+>
+> #### Technical Explanation
+>
+> 1. Traditional web fonts cause visual text jumps (layout shifts) when loading finishes.
+> 2. `next/font` calculates metric fallback overrides automatically.
+> 3. Eliminates CLS web vital penalties for web typography.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`<Image>` Component](next_image.md) — Another built-in performance optimization tool.
 - [`layout.tsx`](../level_02/layout.md) — The best place to inject a global font.
 - [`<Script>` Component](next_script.md) — Related concept: `<Script>` Component.
@@ -205,7 +242,7 @@ export default function Page() { return <div className={inter.className}>Text</d
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`next/font`** automatically downloads custom fonts at build-time and self-hosts them.
 - It completely eliminates privacy issues (GDPR) associated with third-party font tracking.
 - It prevents Cumulative Layout Shift (CLS) by automatically injecting size-adjust CSS properties.

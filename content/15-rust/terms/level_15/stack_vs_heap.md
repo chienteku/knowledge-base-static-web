@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Memory / Performance**: Stack vs Heap is a core computer systems concept. In Rust, understanding the performance trade-offs between stack and heap allocations is critical for writing high-performance systems code. Values stored on the stack must have a known, fixed size at compile time (`Sized`), while values allocated on the heap (`Box`, `Vec`, `String`) can grow dynamically at runtime.
+
+
+**Rust Memory Architecture (stack vs heap memory allocation models)**: Stack vs Heap is a core computer systems concept. In Rust, understanding the performance trade-offs between stack and heap allocations is critical for writing high-performance systems code. Values stored on the stack must have a known, fixed size at compile time (`Sized`), while values allocated on the heap (`Box`, `Vec`, `String`) can grow dynamically at runtime.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: Stack memory exists across all Rust targets (`std`, `no_std`, embedded microcontrollers). Heap memory requires a memory allocator (available by default in `std`, or configured via `#![no_std]` custom allocators).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -129,7 +127,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Causing a Stack Overflow via Massive Stack Allocations or Deep Recursion
 
@@ -187,15 +185,18 @@ for i in 0..1_000_000 {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: AST Node Evaluation with `Box<T>` for Infinite Size Resolution & Heap Indirection
 
-**Problem:** In compiler design and expression evaluation engines, abstract syntax trees (AST) represent nested mathematical expressions. A naive recursive enum definition such as `enum Expr { Val(i64), Add(Expr, Expr) }` fails to compile in Rust because `Expr` would have an infinite size at compile time (`E0072`). Furthermore, placing massive AST structures directly on the call stack risks triggering stack overflow when deeply nested expressions are evaluated.
+**Scenario:** In compiler design and expression evaluation engines, abstract syntax trees (AST) represent nested mathematical expressions. A naive recursive enum definition such as `enum Expr { Val(i64), Add(Expr, Expr) }` fails to compile in Rust because `Expr` would have an infinite size at compile time (`E0072`). Furthermore, placing massive AST structures directly on the call stack risks triggering stack overflow when deeply nested expressions are evaluated.
 
 Implement a recursive expression evaluator `Expr` that uses `Box<Expr>` to break the infinite type size, ensuring `std::mem::size_of::<Expr>()` remains small and constant on the stack while node payloads are allocated on the heap. Write an `eval(&self) -> i64` method, a helper function to measure total heap nodes, and unit tests validating evaluation correctness and memory layout.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Eq)]
 > pub enum Expr {
@@ -269,7 +270,8 @@ Implement a recursive expression evaluator `Expr` that uses `Box<Expr>` to break
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Infinite Size Resolution (`E0072`)**: Without `Box<T>`, calculating `size_of::<Expr>()` requires knowing the size of `Expr`, which contains two `Expr`s, leading to infinite compile-time size. Replacing `Expr` with `Box<Expr>` stores an 8-byte pointer (on 64-bit architectures) inside the enum, giving `Expr` a fixed size on the stack.
 > 2. **Stack Footprint**: The `Expr` enum header lives on the stack frame and occupies only 24 bytes (1 byte enum discriminant + padding + 2 $\times$ 8-byte `Box` pointers). The actual tree nodes live on the heap.
 > 3. **Recursive Traversal & Evaluation**: Calling `left.eval()` dereferences the `Box<Expr>` pointer to read heap memory and evaluate sub-expressions recursively.
@@ -279,11 +281,14 @@ Implement a recursive expression evaluator `Expr` that uses `Box<Expr>` to break
 
 ### Exercise 2: Small Vector Optimization (Stack-First Allocation with Heap Fallback)
 
-**Problem:** High-throughput web servers parse HTTP headers for every incoming request. The vast majority of HTTP requests contain 8 or fewer headers. Allocating a heap-backed `Vec<Header>` for every single request causes severe global memory allocator lock contention and cache misses.
+**Scenario:** High-throughput web servers parse HTTP headers for every incoming request. The vast majority of HTTP requests contain 8 or fewer headers. Allocating a heap-backed `Vec<Header>` for every single request causes severe global memory allocator lock contention and cache misses.
 
 Implement a stack-first small vector `SmallHeaderBuffer<const N: usize>` that stores up to `N` items directly in an inline stack array (`[Option<Header>; N]`) without any heap allocation. If the number of items exceeds `N`, it dynamically spills over and migrates all elements into a heap-allocated `Vec<Header>`. Include helper methods to query whether memory is currently on the stack vs heap, and write unit tests to verify stack-to-heap transition behavior.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 > pub struct Header {
@@ -408,7 +413,8 @@ Implement a stack-first small vector `SmallHeaderBuffer<const N: usize>` that st
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Small Buffer Optimization Pattern**: By leveraging Rust const generics (`const N: usize`), `SmallHeaderBuffer` allocates fixed inline storage on the stack frame. Common payloads ($N \le 4$) execute with zero heap allocation calls (`malloc`/`free`).
 > 2. **In-place State Transition**: When `len == N` and `push` is called, the buffer transfers existing elements from inline stack memory into a newly allocated heap `Vec`, replacing `*self` with `Self::Heap(vec)`.
 > 3. **Cache Locality**: Storing elements on the stack keeps data contiguous in CPU L1/L2 cache lines, significantly improving iteration speed over heap-allocated vectors for short-lived HTTP requests.
@@ -418,11 +424,14 @@ Implement a stack-first small vector `SmallHeaderBuffer<const N: usize>` that st
 
 ### Exercise 3: Zero-Allocation Stack Ring Buffer for Embedded Microcontrollers (`#![no_std]`)
 
-**Problem:** In embedded systems (such as ARM Cortex-M microcontrollers operating under `#![no_std]`), global heap allocators are often disabled to prevent runtime memory fragmentation, non-deterministic latency, and out-of-memory panics. An automotive sensor sampling module requires a fixed-capacity ring buffer to record incoming ADC (Analog-to-Digital Converter) voltage readings entirely on the stack.
+**Scenario:** In embedded systems (such as ARM Cortex-M microcontrollers operating under `#![no_std]`), global heap allocators are often disabled to prevent runtime memory fragmentation, non-deterministic latency, and out-of-memory panics. An automotive sensor sampling module requires a fixed-capacity ring buffer to record incoming ADC (Analog-to-Digital Converter) voltage readings entirely on the stack.
 
 Implement a `#![no_std]` compatible `StackRingBuffer<const CAP: usize>` that allocates zero heap memory, maintains a sliding window of sensor readings, overwrites the oldest sample when capacity is reached, and calculates the moving average. Include unit tests demonstrating zero heap allocation and correct circular overwriting.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -509,125 +518,18 @@ Implement a `#![no_std]` compatible `StackRingBuffer<const CAP: usize>` that all
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`#![no_std]` Safety**: `StackRingBuffer` relies solely on core language primitive types (`f32`, `usize`, fixed arrays `[f32; CAP]`). It does not import `std` or `alloc`, guaranteeing compatibility with bare-metal microcontrollers without a dynamic memory allocator.
 > 2. **Deterministic Const Initialization**: `StackRingBuffer::new()` is declared `const fn`, allowing the buffer to be allocated at compile time in `.bss` or directly on the function stack frame.
 > 3. **Fixed Memory Footprint**: `size_of::<StackRingBuffer<4>>()` equals $4 \times 4$ bytes (`f32` array) $+ 2 \times 8$ bytes (`head` and `len` indices), occupying exactly 32 bytes on the stack with zero risk of heap fragmentation.
 > 4. **Circular Modulo Arithmetic**: `(self.head + 1) % CAP` efficiently recycles array indices in constant $O(1)$ time without re-allocating or shifting memory elements.
 > 
----
 
-### Exercise 4: Memory Cache Locality & Dereference Cost (Contiguous Stack Slices vs Vector of Heap Boxes)
-
-**Problem:** In real-time graphics rendering engines and high-frequency financial calculations, data layout determines performance. Storing a collection of 3D spatial points as a contiguous stack array `[Point3D; N]` allows the CPU prefetcher to load adjacent points directly into high-speed L1/L2 cache lines. Conversely, storing points as a collection of heap smart pointers `Vec<Box<Point3D>>` forces the CPU to follow indirect pointer jumps across disparate heap memory addresses, causing frequent CPU cache misses.
-
-Write a benchmark and verification suite containing a `Point3D` struct. Implement two spatial centroid calculation functions: one operating on a contiguous slice `&[Point3D]` (stack/contiguous layout) and another operating on `&[Box<Point3D>]` (heap-indirection layout). Write unit tests verifying that both approaches compute identical results and inspect the memory addresses to prove contiguous stack layout vs pointer indirection on the heap.
-
-> [!check]- Answer
-> ```rust
-> #[derive(Debug, Clone, Copy, PartialEq)]
-> pub struct Point3D {
->     pub x: f64,
->     pub y: f64,
->     pub z: f64,
-> }
-> 
-> /// Compute centroid using contiguous memory layout (high CPU cache locality)
-> pub fn compute_centroid_contiguous(points: &[Point3D]) -> Point3D {
->     if points.is_empty() {
->         return Point3D { x: 0.0, y: 0.0, z: 0.0 };
->     }
->     let mut sum_x = 0.0;
->     let mut sum_y = 0.0;
->     let mut sum_z = 0.0;
-> 
->     for p in points {
->         sum_x += p.x;
->         sum_y += p.y;
->         sum_z += p.z;
->     }
-> 
->     let count = points.len() as f64;
->     Point3D {
->         x: sum_x / count,
->         y: sum_y / count,
->         z: sum_z / count,
->     }
-> }
-> 
-> /// Compute centroid using boxed heap pointers (pointer indirection penalty)
-> pub fn compute_centroid_boxed(points: &[Box<Point3D>]) -> Point3D {
->     if points.is_empty() {
->         return Point3D { x: 0.0, y: 0.0, z: 0.0 };
->     }
->     let mut sum_x = 0.0;
->     let mut sum_y = 0.0;
->     let mut sum_z = 0.0;
-> 
->     for p_box in points {
->         sum_x += p_box.x; // Indirection: Dereferences Box pointer to read heap memory
->         sum_y += p_box.y;
->         sum_z += p_box.z;
->     }
-> 
->     let count = points.len() as f64;
->     Point3D {
->         x: sum_x / count,
->         y: sum_y / count,
->         z: sum_z / count,
->     }
-> }
-> 
-> #[cfg(test)]
-> mod tests {
->     use super::*;
-> 
->     #[test]
->     fn test_centroid_equivalence_and_address_contiguity() {
->         // 1. Contiguous Stack Allocation
->         let stack_points: [Point3D; 3] = [
->             Point3D { x: 1.0, y: 2.0, z: 3.0 },
->             Point3D { x: 4.0, y: 5.0, z: 6.0 },
->             Point3D { x: 7.0, y: 8.0, z: 9.0 },
->         ];
-> 
->         // 2. Boxed Heap Allocation
->         let boxed_points: Vec<Box<Point3D>> = vec![
->             Box::new(Point3D { x: 1.0, y: 2.0, z: 3.0 }),
->             Box::new(Point3D { x: 4.0, y: 5.0, z: 6.0 }),
->             Box::new(Point3D { x: 7.0, y: 8.0, z: 9.0 }),
->         ];
-> 
->         // 3. Assert mathematical result equivalence
->         let c1 = compute_centroid_contiguous(&stack_points);
->         let c2 = compute_centroid_boxed(&boxed_points);
->         assert_eq!(c1, Point3D { x: 4.0, y: 5.0, z: 6.0 });
->         assert_eq!(c1, c2);
-> 
->         // 4. Verify contiguous memory layout of stack array
->         let ptr0 = &stack_points[0] as *const Point3D as usize;
->         let ptr1 = &stack_points[1] as *const Point3D as usize;
->         let stride = std::mem::size_of::<Point3D>(); // 3 * 8 = 24 bytes
->         assert_eq!(ptr1 - ptr0, stride, "Stack elements must be laid out contiguously");
-> 
->         // 5. Inspect boxed pointers: the pointers in Vec are contiguous, but pointed-to data live on heap
->         let box0_heap_addr = &*boxed_points[0] as *const Point3D as usize;
->         let box1_heap_addr = &*boxed_points[1] as *const Point3D as usize;
->         assert_ne!(box0_heap_addr, ptr0);
->         // Heap allocations may have padding/header metadata between them
->         assert!(box0_heap_addr != box1_heap_addr);
->     }
-> }
-> ```
-> 
-> **Explanation:**
-> 1. **Contiguous Cache Locality**: `stack_points` allocates 72 contiguous bytes ($3 \times 24$ bytes) directly on the stack. Iterating through `&[Point3D]` allows CPU hardware prefetchers to load sequential memory addresses into CPU L1 cache with zero cache misses.
-> 2. **Pointer Indirection Overhead**: `Vec<Box<Point3D>>` stores 3 pointers (24 bytes) in the vector memory buffer, but each pointer targets a separate 24-byte block scattered across heap memory. Traversing `p_box.x` forces the CPU to perform a pointer dereference to an arbitrary heap location, risking cache line misses.
-> 3. **Memory Layout Verification**: The test proves that `ptr1 - ptr0` equals `size_of::<Point3D>()` (24 bytes), demonstrating exact contiguous memory packing for stack arrays.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Ownership](../level_03/ownership.md) — Memory ownership rules managing stack/heap deallocation.
@@ -637,7 +539,7 @@ Write a benchmark and verification suite containing a `Point3D` struct. Implemen
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - The **Stack** stores fixed-size local variables (`Sized`); allocation is $O(1)$ and ultra-fast via CPU stack pointer movement.
 - The **Heap** stores dynamic or large data (`Vec`, `Box`, `String`); allocation requires requesting memory from the system memory allocator.

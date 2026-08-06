@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: Present in almost all statically-typed languages (like C++, Java, and TypeScript) as the primary way to define the shape and constraints of data.
+
+
+**Rust Type System (explicit static type specification)**: Present in almost all statically-typed languages (like C++, Java, and TypeScript) as the primary way to define the shape and constraints of data.
 
 ---
 

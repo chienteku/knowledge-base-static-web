@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Rust-specific**: While `if` statements exist in almost every programming language, Rust elevates them by making them **expressions** (meaning they can return a value directly), eliminating the need for the "ternary operator" (`condition ? a : b`) found in languages like C, Java, or JavaScript.
+
+
+**Rust Control Flow (expression-based branching)**: While `if` statements exist in almost every programming language, Rust elevates them by making them **expressions** (meaning they can return a value directly), eliminating the need for the "ternary operator" (`condition ? a : b`) found in languages like C, Java, or JavaScript.
 
 ---
 

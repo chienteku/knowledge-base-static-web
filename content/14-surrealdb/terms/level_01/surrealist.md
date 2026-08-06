@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Integration / Ecosystem (visual web IDE and management GUI)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **Web Browser** (Accessed online via `https://surrealist.app` or run as a standalone desktop application. Connects directly to local or cloud databases using WebSockets).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Querying a database exclusively through command-line terminal shells can be slow and abstract:
@@ -73,7 +72,7 @@ To connect Surrealist to a local database:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Getting connection errors when connecting the HTTPS web app (surrealist.app) to a local HTTP database, unaware of mixed-content browser blocks
 
@@ -119,65 +118,92 @@ REMOVE TABLE user; -- Executed accidentally against Production connection
 -- Use Sandbox environment or dev connection tabs for destructive schema testing
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Connection Parameter Assembly
+### Exercise 1: Surrealist Query Execution and Explorer Workflow
 
-**Problem:** You are configuring a Surrealist profile to inspect a remote staging database. 
-Identify which connection parameter panel input (**Endpoint**, **Namespace**, **Database**, or **Authentication**) corresponds to these settings:
-1.  Selecting the database name `"inventory"`.
-2.  Providing the connection protocol address `"wss://staging-db.example.com/rpc"`.
-3.  Defining the tenant company name `"corp_alpha"`.
-4.  Entering the admin username and password.
+**Scenario:**
+You are using Surrealist (SurrealDB's official visual management web IDE) to design and test a database schema interactively.
 
-**Expected output:**
+**Requirements:**
+1. Describe the primary workflow in Surrealist for executing multi-statement SurrealQL queries.
+2. Describe how Surrealist displays document records, record links, and graph edge connections visually.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. Database (DB)
-> 2. Endpoint
-> 3. Namespace (NS)
-> 4. Authentication
+> - Query View: Write, format, and execute multi-statement SurrealQL queries with syntax highlighting and JSON output inspection.
+> - Designer View: Visually create tables, fields, indexes, and PERMISSIONS rules without writing manual DDL commands.
+> - Explorer View: Browse records as interactive document trees and inspect graph relationships as node-edge visual graphs.
 > ```
-> - The Endpoint represents the network protocol URI address.
-> - Namespace handles the tenant boundary groupings.
+>
+> #### Technical Explanation
+>
+> 1. Surrealist acts as the official visual IDE for SurrealDB (similar to pgAdmin for PostgreSQL or MongoDB Compass).
+> 2. Connects directly to local (`ws://localhost:8000`), remote, or SurrealDB Cloud database instances.
+> 3. Allows developers to test authentication tokens, inspect live query streams, and visualize graph arrow connections.
+
+---
+
+### Exercise 2: Testing Authentication Scopes in Surrealist
+
+**Scenario:**
+A developer is configuring `DEFINE ACCESS` rules in Surrealist and needs to test client query execution under a simulated user auth session.
+
+**Requirements:**
+1. Explain how to configure session authentication variables inside Surrealist's query view settings.
+2. Describe how Surrealist validates row-level security `PERMISSIONS` during query testing.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> - Open Session Variables panel in Surrealist Query View.
+> - Set namespace (ns), database (db), and authentication access mode (e.g. RECORD access token).
+> - Execute queries to verify that PERMISSIONS clauses restrict visible records correctly.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Surrealist allows developers to toggle between Root Admin sessions and Scoped User sessions seamlessly.
+> 2. Executing queries under scoped user sessions verifies row-level security (`PERMISSIONS`) before frontend SDK deployment.
+> 3. Prevents security misconfigurations by providing instant visual query validation.
+
+---
+
+### Exercise 3: Visualizing Graph Edge Connections in Explorer
+
+**Scenario:**
+You have created graph relation edges `user:1 -> wrote -> post:10` and want to inspect the connection visually using Surrealist Graph View.
+
+**Requirements:**
+1. Navigate to Explorer / Graph View in Surrealist.
+2. Describe how node records (`user`, `post`) and edge records (`wrote`) are rendered visually.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Node Rendering: 'user:1' and 'post:10' render as circular vertex nodes.
+> Edge Rendering: 'wrote' renders as a directed line arrow connecting 'user:1' to 'post:10'.
+> Edge Properties: Clicking the 'wrote' arrow displays stored edge metadata (e.g. created_at).
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Surrealist automatically parses `in` and `out` record link fields on relation tables to build visual graph diagrams.
+> 2. Enables visual inspection of complex multi-hop graph networks without writing manual graph export code.
+> 3. Facilitates data modeling validation for graph-heavy application domains.
 
 ---
 
 
 
-### Exercise 2: Surrealist Tool Views Overview
-
-**Problem:** List 3 primary views in Surrealist GUI (Query Editor, Explorer / Table Inspector, Designer / Schema Visualizer).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Query Editor, Explorer / Table Inspector, Designer / Schema Visualizer
-> ```
-> ```text
-> Query Editor, Explorer / Table Inspector, Designer / Schema Visualizer
-> ```
->
-> **Explanation:** Surrealist provides visual query editing, table inspection, and schema design views.
-
----
-
-### Exercise 3: Surrealist Sandbox Mode
-
-**Problem:** What is the purpose of Surrealist's built-in Sandbox mode? (Runs an ephemeral in-memory database for testing without running a separate server).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Runs an in-memory database instance directly in the browser/GUI for instant testing
-> ```
-> ```text
-> Runs an in-memory database instance directly in the browser/GUI for instant testing
-> ```
->
-> **Explanation:** Sandbox mode provides an instant, isolated testing environment inside Surrealist.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](connection_uri.md) — Connect string setups.
 - [SurrealDB CLI (`surreal sql`)](surreal_cli.md) — Terminal commands.
@@ -186,7 +212,7 @@ Identify which connection parameter panel input (**Endpoint**, **Namespace**, **
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Surrealist is the official web-based and desktop graphical IDE for SurrealDB.
 - Equivalent to PostgreSQL's pgAdmin and MongoDB's Compass utilities.
 - Provides interactive query consoles, schema designs, and data explorers.

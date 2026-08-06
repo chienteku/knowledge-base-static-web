@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Application Context**
+
+**Framework Architecture** (Nuxt Application Runtime Context): `useNuxtApp()` provides access to shared Nuxt runtime instances, registered plugins, and global runtime hooks.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a global Node.js server environment, many users are hitting your application at the exact same time. If Nuxt stored global variables (like the current Vue router instance, or a third-party analytics library) on a global JavaScript `window` or `globalThis` object, User A's data would bleed into User B's request.
@@ -60,7 +61,7 @@ const nuxtApp = useNuxtApp();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `useNuxtApp()` outside of the setup context
 **The mistake:** Calling `useNuxtApp()` inside an asynchronous callback (like `setTimeout` or after an `await` fetch call) in a place where Nuxt has lost track of the current Vue component.
@@ -141,79 +142,121 @@ export default defineNuxtPlugin((nuxtApp) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Accessing an Injected Formatter
+### Exercise 1: Accessing Registered Plugins via `useNuxtApp()`
 
-**Problem:** A teammate wrote a Nuxt plugin that provides a global currency formatter accessible at `$formatCurrency`. How do you access and use this formatter to format the number `500` inside a component?
+**Scenario:**
+Access a custom helper `$formatCurrency` provided by a Nuxt plugin using `useNuxtApp()`.
 
-**Expected output:**
+**Requirements:**
+1. Access `$formatCurrency` from `useNuxtApp()`.
+
 > [!check]- Answer
-> ```typescript
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
 > const { $formatCurrency } = useNuxtApp();
-> const price = $formatCurrency(500);
-> ```
-> - Call `useNuxtApp()` and destructure the `$formatCurrency` variable from the returned object.
+> const price = ref(4999);
+> </script>
+
+<template>
+  <div>
+    <p>Price: {{ $formatCurrency(price) }}</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useNuxtApp()` returns the central `NuxtApp` application runtime instance.
+> 2. Provides access to custom helpers provided by plugins via `provide` (`$helper`).
+> 3. Operates across both server and client execution contexts.
 
 ---
 
-### Exercise 2: useNuxtApp Hook Event Registration
+### Exercise 2: Hooking into Nuxt Application Lifecycle Events
 
-**Problem:** Write Vue component using `useNuxtApp().hook('page:finish', callback)` executing function when page navigation finishes.
+**Scenario:**
+Register a hook listener for `page:start` and `page:finish` to monitor client-side route navigation timing.
 
-**Expected output:**
+**Requirements:**
+1. Register `nuxtApp.hook("page:start", ...)` in `<script setup>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
+> <script setup lang="ts">
 > const nuxtApp = useNuxtApp();
-> nuxtApp.hook('page:finish', () => {
->   console.log('Page transition complete');
-> });
-> </script>
-> ```
-> - `nuxtApp.hook()` listens to internal Nuxt lifecycle events.
-> 
-> ```vue
-> <script setup>
-> const nuxtApp = useNuxtApp();
-> 
-> nuxtApp.hook('page:finish', () => {
->   console.log('Page navigation and rendering finished!');
-> });
-> </script>
-> ```
+
+nuxtApp.hook("page:start", () => {
+  console.log("Route transition started...");
+});
+
+nuxtApp.hook("page:finish", () => {
+  console.log("Route transition completed!");
+});
+</script>
+
+<template>
+  <div>
+    <p>Lifecycle Hook Listener Active</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `nuxtApp.hook(name, cb)` subscribes to core Nuxt application lifecycle events (`app:created`, `page:start`, `vue:error`).
+> 2. Enables custom telemetry and progress bar integrations.
+> 3. Global runtime event emitter system.
 
 ---
 
-### Exercise 3: useNuxtApp Provided Properties
+### Exercise 3: Sharing Custom Values with `provide` / `inject` Context
 
-**Problem:** List 3 built-in properties attached to the `useNuxtApp()` instance object.
+**Scenario:**
+Access Vue root `vueApp` instance from `useNuxtApp().vueApp` inside a plugin setup context.
 
-**Expected output:**
+**Requirements:**
+1. Access `nuxtApp.vueApp.use(...)`.
+
 > [!check]- Answer
-> ```text
-> 1. $fetch (Universal fetch helper)
-> 2. payload (Serialized Nuxt payload)
-> 3. ssrContext (Node.js server request context)
-> ```
-> - `$fetch` -> Universal fetch utility
-> - `payload` -> Serialized SSR state payload
-> - `ssrContext` -> Nitro server request context
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> const { $fetch, payload, ssrContext } = useNuxtApp();
+> // plugins/custom-plugin.ts
+> export default defineNuxtPlugin((nuxtApp) => {
+>   // Access underlying Vue 3 application instance
+>   nuxtApp.vueApp.config.globalProperties.$appName = "Enterprise Nuxt";
+> });
 > ```
+
+> #### Technical Explanation
+>
+> 1. `useNuxtApp().vueApp` grants access to the underlying Vue 3 application instance.
+> 2. Useful for registering third-party Vue plugins or global properties manually.
+> 3. Low-level integration interface.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`plugins/` Directory](../level_08/plugins_directory.md) — Where these `$variables` are actually created and injected into the Nuxt app.
 - [Vue Plugins vs Nuxt Plugins](../level_08/vue_vs_nuxt_plugins.md) — Related concept: Vue Plugins vs Nuxt Plugins.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useNuxtApp()` provides access to the isolated context of the current application instance.
 - It prevents cross-request data leaks during Server-Side Rendering.
 - It is the primary way to access globally injected plugins (e.g., `$toast`, `$analytics`).

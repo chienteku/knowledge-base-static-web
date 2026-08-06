@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Core Architecture Concept**
+
+**Core Concept** (Null Handling in Aggregations): Null in Aggregates explains how PostgreSQL aggregate functions ignore `NULL` values during calculation.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Enforced in all relational SQL query engines. Standardized by the ANSI-SQL spec).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In real-world databases, tables contain missing data (`NULL`). 
@@ -89,7 +90,7 @@ FROM employees;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming `AVG(column)` treats NULL values as zero
 
@@ -140,70 +141,101 @@ SELECT AVG(COALESCE(bonus, 0)) FROM employees; -- Evaluates 500 / 10 = 50
 Use COUNT(*) for total rows; use COUNT(col) for non-null column counts
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Aggregate Analysis
+### Exercise 1: Verifying Null Exclusion in Aggregate Functions
 
-**Problem:** You have a table `survey_responses` containing 100 rows. The column `rating` contains:
--   80 rows with integer ratings (1 to 5).
--   20 rows with `NULL` (skipped questions).
+**Scenario:**
+Demonstrate how `AVG()` and `SUM()` ignore `NULL` values when computing averages over column `discount_cents`.
 
-Calculate the output numbers of the following two queries:
-1.  `SELECT COUNT(*) FROM survey_responses;`
-2.  `SELECT COUNT(rating) FROM survey_responses;`
+**Requirements:**
+1. Compare `AVG(discount_cents)` on dataset `(100, 200, NULL)`.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Query 1 returns: 100 (COUNT(*) counts all rows in the dataset).
-> 2. Query 2 returns: 80 (COUNT(column) skips the 20 rows containing NULL ratings).
-> ```
-> - Differentiate between counting grid cards vs counting specific non-empty cells.
-
----
-
-
-
-### Exercise 2: Null-Safe Average Calculation
-
-**Problem:** Calculate average score treating NULL scores as 0 using `AVG(COALESCE(score, 0))`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT AVG(COALESCE(score, 0)) AS avg_score FROM tests;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> SELECT AVG(COALESCE(score, 0)) AS avg_score FROM tests;
+> -- Dataset: (100, 200, NULL)
+> SELECT 
+>   AVG(discount_cents) AS avg_discount, -- Returns 150 (300 / 2 valid rows)
+>   SUM(discount_cents) AS sum_discount, -- Returns 300
+>   COUNT(discount_cents) AS count_non_null, -- Returns 2
+>   COUNT(*) AS count_all_rows -- Returns 3
+> FROM test_discounts;
 > ```
 >
-> **Explanation:** `COALESCE(score, 0)` replaces NULLs with 0 so all rows contribute to the average.
+> #### Technical Explanation
+>
+> 1. Aggregate functions (`AVG`, `SUM`, `MIN`, `MAX`) automatically ignore `NULL` values during calculation.
+> 2. `AVG()` divides total sum (300) by non-null row count (2), yielding `150` (NOT 100).
+> 3. `COUNT(col)` counts non-null rows; `COUNT(*)` counts all rows regardless of nulls.
 
 ---
 
-### Exercise 3: Null Handling in `SUM()` Function
+### Exercise 2: Forcing Null Substitution in Aggregations with `COALESCE`
 
-**Problem:** What does `SUM(val)` return if all rows in a group are NULL? (`NULL`).
+**Scenario:**
+Calculate average discount treating `NULL` values as `0` discount (`AVG(COALESCE(discount_cents, 0))`).
 
-**Expected output:**
+**Requirements:**
+1. Use `AVG(COALESCE(discount_cents, 0))`.
+
 > [!check]- Answer
-> ```text
-> NULL
-> ```
-> ```text
-> NULL
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   AVG(COALESCE(discount_cents, 0)) AS avg_discount_including_zeroes 
+> FROM test_discounts;
 > ```
 >
-> **Explanation:** `SUM()` on all-null groups returns NULL; use `COALESCE(SUM(val), 0)` to default to 0.
+> #### Technical Explanation
+>
+> 1. Wrapping columns in `COALESCE(col, 0)` converts `NULL` to `0` before aggregation occurs.
+> 2. Forces `AVG()` to divide by total row count (3), yielding `100` (300 / 3).
+> 3. Business logic choice based on domain requirements.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Handling Empty Aggregation Results
+
+**Scenario:**
+Handle empty `SUM()` query results when 0 matching rows exist using `COALESCE(SUM(amount), 0)`.
+
+**Requirements:**
+1. Execute `SELECT COALESCE(SUM(total_cents), 0) FROM orders WHERE customer_id = 999`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   COALESCE(SUM(total_cents), 0) AS total_spent 
+> FROM orders 
+> WHERE customer_id = 999;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SUM()` over an empty result set (0 rows) returns `NULL` (NOT 0).
+> 2. `COALESCE(SUM(...), 0)` converts empty aggregation `NULL` output into `0`.
+> 3. Prevents returning `null` to financial calculations.
+
+---
+
+
+
+## 6. Related Terms
 - [`NULL`](../level_02/null.md) — The parent absent state.
 - [Aggregate Functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`)](aggregate_functions.md) — Standard calculations.
 - [`COALESCE` / `NULLIF`](coalesce_nullif.md) — Swapping NULLs for safe defaults.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Mathematical operations involving `NULL` immediately result in `NULL`.
 - Aggregate functions (`SUM`, `AVG`, `MIN`, `MAX`) skip `NULL` rows entirely.
 - `AVG` calculates averages by dividing by the count of non-null rows only.

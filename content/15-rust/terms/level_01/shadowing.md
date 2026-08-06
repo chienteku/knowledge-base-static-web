@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-specific**: While other languages allow variables in inner scopes to shadow outer scopes, Rust actively encourages intentional shadowing *in the exact same scope* as an idiomatic way to transform data without inventing awkward variable names.
+
+
+**Rust Language Feature (immutable re-declaration in scope)**: While other languages allow variables in inner scopes to shadow outer scopes, Rust actively encourages intentional shadowing *in the exact same scope* as an idiomatic way to transform data without inventing awkward variable names.
 
 ---
 
@@ -144,8 +146,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Stage Telemetry Configuration Ingestion & Type Transformation
 
-**Problem:** In high-throughput microservices, configuration parameters often arrive from environment variables or remote config servers as raw, untrusted strings (e.g. `"  9090 \n"`). Standard imperative code often introduces clutter with intermediate variable names like `port_raw_str`, `port_trimmed_str`, `port_u16_num`, and `port_endpoint_addr`. In Rust, **variable shadowing** allows developers to re-bind the same variable identifier (`port`) across sequential parsing, sanitization, validation, and domain-object construction stages without introducing mutability or variable name proliferation.
+**Scenario:** In high-throughput microservices, configuration parameters often arrive from environment variables or remote config servers as raw, untrusted strings (e.g. `"  9090 \n"`). Standard imperative code often introduces clutter with intermediate variable names like `port_raw_str`, `port_trimmed_str`, `port_u16_num`, and `port_endpoint_addr`. In Rust, **variable shadowing** allows developers to re-bind the same variable identifier (`port`) across sequential parsing, sanitization, validation, and domain-object construction stages without introducing mutability or variable name proliferation.
 
+**Requirements:**
 Implement a function `parse_service_port(raw_input: &str) -> Result<ServiceEndpoint, ConfigError>` that sequentially shadows `port`:
 1. Trim whitespace from the raw string (`&str` -> `&str`).
 2. Parse string into a numerical representation (`u16`).
@@ -250,8 +253,9 @@ Implement a function `parse_service_port(raw_input: &str) -> Result<ServiceEndpo
 
 ### Exercise 2: Financial Order Engine Typestate Transitions via Shadowing
 
-**Problem:** In high-frequency financial trading systems, transactions pass through strict typestate transitions (`Raw` -> `Signed` -> `Executed`). Preventing accidental reuse of intermediate unvalidated transactions is paramount. Combining the **Typestate Pattern** with **variable shadowing** allows developers to shadow `tx` at every state transition. This moves ownership of the old transaction state and hides its binding, ensuring that unvalidated states cannot be accessed after transition.
+**Scenario:** In high-frequency financial trading systems, transactions pass through strict typestate transitions (`Raw` -> `Signed` -> `Executed`). Preventing accidental reuse of intermediate unvalidated transactions is paramount. Combining the **Typestate Pattern** with **variable shadowing** allows developers to shadow `tx` at every state transition. This moves ownership of the old transaction state and hides its binding, ensuring that unvalidated states cannot be accessed after transition.
 
+**Requirements:**
 Implement a financial order processor `process_financial_ledger_entry(raw: Transaction<RawState>) -> Result<Transaction<ExecutedState>, TransactionError>`:
 1. Shadow `tx` by validating the digital signature metadata (`RawState` -> `SignedState`).
 2. Shadow `tx` by applying transaction fee deduction (`SignedState` -> `ExecutedState`).
@@ -410,8 +414,9 @@ Implement a financial order processor `process_financial_ledger_entry(raw: Trans
 
 ### Exercise 3: Zero-Trust Security Token Redaction & Nested Scope Block Shadowing
 
-**Problem:** In zero-trust authorization systems, audit loggers must record incoming requests without writing raw authentication tokens or secret credentials to log files. Using **nested scope block shadowing**, a secret identifier (`token`) can be shadowed inside an isolated block (`{ ... }`) with a redacted string representation (`"Bearer usr_..."`). Once the logging block exits, the inner redacted variable is dropped, restoring visibility of the outer unredacted token for downstream payload parsing and claim extraction.
+**Scenario:** In zero-trust authorization systems, audit loggers must record incoming requests without writing raw authentication tokens or secret credentials to log files. Using **nested scope block shadowing**, a secret identifier (`token`) can be shadowed inside an isolated block (`{ ... }`) with a redacted string representation (`"Bearer usr_..."`). Once the logging block exits, the inner redacted variable is dropped, restoring visibility of the outer unredacted token for downstream payload parsing and claim extraction.
 
+**Requirements:**
 Implement `process_auth_request(header_value: &str, log_output: &mut Vec<String>) -> Result<TokenClaims, AuthError>`:
 1. Strip `"Bearer "` header prefix and shadow `token` to store the raw token slice (`&str`).
 2. Open a block scope `{ ... }` and shadow `token` into a redacted string slice/formatted string for logging.

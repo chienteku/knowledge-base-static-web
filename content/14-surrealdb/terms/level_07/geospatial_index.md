@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Performance / Operations (R-tree spatial coordinate index)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the spatial engine. Uses spatial bounding box indexes to evaluate spherical earth trigonometry during queries).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Spatial queries operate on multi-dimensional geographic coordinates:
@@ -83,7 +82,7 @@ ORDER BY distance_meters ASC;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Reversing coordinate pairs when defining or querying geospatial points, causing index lookups to target wrong geographic locations
 
@@ -134,71 +133,107 @@ CREATE store SET location = { type: "Point", coordinates: [51.5074, -0.1278] }; 
 CREATE store SET location = { type: "Point", coordinates: [-0.1278, 51.5074] };
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Spatial Index & Radius Query
+### Exercise 1: MTREE Geospatial Index Creation
 
-**Problem:** You have a `drivers` table with a `location` field (`TYPE geometry`).
-Write the SurrealQL statements to:
-1. Create a spatial index named `idx_driver_loc` on table `drivers`, column `location`.
-2. Write a query to select `driver_id` from `drivers` where `geo::distance(location, $client_loc)` is less than or equal to `2000` meters.
+**Scenario:**
+A rideshare service indexes vehicle locations (`location` GeoJSON Point) using an R-Tree / MTREE spatial index.
 
-**Expected output:**
+**Requirements:**
+1. Define field `location` as `geometry<point>`.
+2. Define spatial index `idx_vehicle_loc` ON TABLE `vehicle` COLUMNS `location` MTREE.
+
 > [!check]- Answer
-> ```sql
-> -- 1. Define Index
-> DEFINE INDEX idx_driver_loc ON drivers COLUMNS location;
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE vehicle SCHEMAFULL;
+> DEFINE FIELD location ON TABLE vehicle TYPE geometry<point>;
 > 
-> -- 2. Radius Query
-> SELECT driver_id FROM drivers WHERE geo::distance(location, $client_loc) <= 2000;
+> -- Define MTREE spatial index
+> DEFINE INDEX idx_vehicle_loc ON TABLE vehicle COLUMNS location MTREE;
 > ```
-> - Define the spatial index with `DEFINE INDEX idx_driver_loc ON drivers COLUMNS location;`.
-> - Distance comparison is in meters (`<= 2000`).
+>
+> #### Technical Explanation
+>
+> 1. `MTREE` builds bounding-box spatial R-tree index structures for GeoJSON geometries.
+> 2. Accelerates spatial proximity (`geo::distance`) and bounding box containment queries.
+> 3. Converts spatial $O(N)$ scans into fast spatial index lookups.
+
+---
+
+### Exercise 2: Spatial Proximity Queries with MTREE
+
+**Scenario:**
+Find all vehicles located within 5000 meters of coordinates `[-73.9851, 40.7589]` using spatial indexing.
+
+**Requirements:**
+1. Write a `SELECT` query utilizing `geo::distance()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT * FROM vehicle 
+> WHERE geo::distance(location, { type: "Point", coordinates: [-73.9851, 40.7589] }) <= 5000;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `geo::distance()` evaluates spherical distance in meters.
+> 2. SurrealDB's query planner leverages `MTREE` indexes to prune distant spatial regions.
+> 3. Powers real-time geospatial location features.
+
+---
+
+### Exercise 3: Polygon Boundary Spatial Search
+
+**Scenario:**
+Query vehicles located inside a delivery zone GeoJSON Polygon.
+
+**Requirements:**
+1. Use `INSIDE` operator with a polygon variable `$zone`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $zone = {
+>     type: "Polygon",
+>     coordinates: [[
+>         [-74.00, 40.70],
+>         [-73.95, 40.70],
+>         [-73.95, 40.80],
+>         [-74.00, 40.80],
+>         [-74.00, 40.70]
+>     ]]
+> };
+> 
+> SELECT * FROM vehicle WHERE location INSIDE $zone;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INSIDE` evaluates point-in-polygon containment using MTREE spatial indexes.
+> 2. Prunes spatial search areas outside polygon bounding boxes.
+> 3. Enables automated geofencing coverage checks.
 
 ---
 
 
 
-### Exercise 2: Defining Spatial MTREE Index
-
-**Problem:** Define MTREE spatial index `store_geo_idx` on `store` table for `location` geometry field.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX store_geo_idx ON TABLE store FIELDS location MTREE;
-> ```
-> ```surrealql
-> DEFINE INDEX store_geo_idx ON TABLE store FIELDS location MTREE;
-> ```
->
-> **Explanation:** `MTREE` indexes spatial geometry fields for `<inside>` spatial queries.
-
----
-
-### Exercise 3: Spatial Polygon Containment Query
-
-**Problem:** Select all stores whose `location` is inside `$boundary_polygon`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM store WHERE location <inside> $boundary_polygon;
-> ```
-> ```surrealql
-> SELECT * FROM store WHERE location <inside> $boundary_polygon;
-> ```
->
-> **Explanation:** `<inside>` evaluates spatial polygon containment utilizing MTREE indexes.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`geometry` (GeoJSON)](../level_02/geometry_type.md) — Geospatial data type.
 - [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Geospatial indexes accelerate spatial radius lookups and boundary checks.
 - Automatically handles GeoJSON `geometry` data types (Point, Polygon, etc.).
 - Relational equivalent to PostGIS `GIST` indexes; NoSQL equivalent to MongoDB `2dsphere` indexes.

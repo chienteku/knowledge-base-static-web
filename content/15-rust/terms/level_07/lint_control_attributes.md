@@ -111,7 +111,7 @@ fn helper() {}
 
 ### Exercise 1: Predict the Compile Outcome
 
-**Problem:** Given this code, will `cargo build` succeed or fail?
+**Scenario:** Given this code, will `cargo build` succeed or fail?
 ```rust
 #![forbid(dead_code)]
 
@@ -128,13 +128,16 @@ mod internal {
 
 ### Exercise 2: Allowing Specific Unused Variable Warnings
 
-**Problem:** Suppress unused variable warning on `let unused = 42;` using `#[allow(unused_variables)]`.
+**Scenario:** Suppress unused variable warning on `let unused = 42;` using `#[allow(unused_variables)]`.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Lint suppressed cleanly
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > fn main() {
 >     #[allow(unused_variables)]
@@ -143,13 +146,14 @@ mod internal {
 > }
 > ```
 >
-> **Explanation:** `#[allow(lint_name)]` localizes lint suppression to single items or statements.
+> #### Technical Explanation
+> `#[allow(lint_name)]` localizes lint suppression to single items or statements.
 
 ---
 
 ### Exercise 3: Crate-Level Lint Enforcement for CI
 
-**Problem:**
+**Scenario:**
 In CI pipelines it's common to turn warnings into hard errors so that warning debt doesn't accumulate silently. The two most common crate-level lint attributes for this are `#![deny(warnings)]` and `#![deny(clippy::all)]`.
 
 Write a complete `src/lib.rs` that:
@@ -169,6 +173,9 @@ Then answer: **why do many projects prefer `RUSTFLAGS="-D warnings"` (or `RUSTDO
 > - **Hint 1:** `#![...]` (with `!`) at the top of a file applies the attribute to the whole crate/module, not just the next item. It must appear before any `use` or `fn` declarations (only module-level attributes are allowed before items).
 > - **Hint 2:** `#[allow(clippy::some_lint)]` on a specific function overrides the crate-level `#![deny(clippy::all)]` for just that function — `deny` can be locally overridden by `allow` (unlike `forbid`).
 > - **Hint 3:** Clippy runs separately from `cargo build`: you need `cargo clippy` or `cargo clippy -- -D clippy::all`. The `#![deny]` in source only fires when clippy inspects the file, not during a plain `cargo build`.
+>
+>
+> #### Implementation
 >
 > ```rust
 > // src/lib.rs

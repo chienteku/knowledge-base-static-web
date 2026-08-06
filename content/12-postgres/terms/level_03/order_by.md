@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Clause**
+
+**SQL Command / Clause** (Result Sorting Clause): `ORDER BY` sorts returned query rows in ascending (`ASC`) or descending (`DESC`) order.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (Evaluated late in the execution pipeline. If sorting by a non-indexed column, the database engine must buffer rows in memory (using `work_mem`) to run a Sort execution pass).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Under relational database theory, tables are treated as unsorted mathematical sets. 
@@ -102,7 +103,7 @@ ORDER BY department ASC, salary DESC;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Sorting massive tables by non-indexed columns in production
 
@@ -148,66 +149,95 @@ SELECT * FROM users ORDER BY score DESC NULLS LAST; -- Explicit NULL position
 CREATE INDEX idx_logs_created_at ON logs (created_at DESC);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multi-field Sorting
+### Exercise 1: Multi-Column Sorting Rules
 
-**Problem:** You are building a blog dashboard. Write a SQL query to select `title` and `published_at` columns from the `articles` table. The output must be sorted so that the most recently published articles appear at the top. If multiple articles were published at the exact same second, sort them alphabetically by title.
+**Scenario:**
+Query `orders` sorted by `status` ascending, then by `created_at` descending.
 
-**Expected output:**
+**Requirements:**
+1. Execute `ORDER BY status ASC, created_at DESC`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT title, published_at 
-> FROM articles 
-> ORDER BY published_at DESC, title ASC;
+> SELECT id, customer_id, status, created_at 
+> FROM orders 
+> ORDER BY status ASC, created_at DESC;
 > ```
-> - Identify the primary sort column (most recent date = descending).
-> - Set up the tie-breaker column (alphabetical title = ascending).
+>
+> #### Technical Explanation
+>
+> 1. `ORDER BY` sorts rows by first specified column, breaking ties using subsequent columns.
+> 2. `ASC` specifies ascending order; `DESC` specifies descending order.
+> 3. Utilizes compound index `{ status: 1, created_at: -1 }` for zero-RAM sort execution.
+
+---
+
+### Exercise 2: Null Position Control with NULLS FIRST and NULLS LAST
+
+**Scenario:**
+Query products sorted by `discount_price` ascending, placing products with `NULL` discount at the end.
+
+**Requirements:**
+1. Use `ORDER BY discount_price ASC NULLS LAST`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, name, discount_price 
+> FROM products 
+> ORDER BY discount_price ASC NULLS LAST;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. By default, PostgreSQL sorts `NULL` as larger than non-null values (`ASC` puts NULLs last, `DESC` puts NULLs first).
+> 2. `NULLS LAST` explicitly places rows with `NULL` at the bottom of the result set regardless of sort direction.
+> 3. Explicit UI display control.
+
+---
+
+### Exercise 3: Sorting by Calculated Expressions
+
+**Scenario:**
+Sort users by total full name length descending using `length(first_name || last_name)`.
+
+**Requirements:**
+1. Use `ORDER BY length(first_name || last_name) DESC`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, first_name, last_name 
+> FROM users 
+> ORDER BY length(first_name || ' ' || last_name) DESC;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ORDER BY` can sort by calculated SQL expressions.
+> 2. Evaluates the expression for candidate rows before sorting.
+> 3. Dynamic output ordering.
 
 ---
 
 
 
-### Exercise 2: Sorting with Explicit NULL Placement
-
-**Problem:** Sort users by `rating` descending with NULLs at the end, then by `name` ascending.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users ORDER BY rating DESC NULLS LAST, name ASC;
-> ```
-> ```sql
-> SELECT * FROM users
-> ORDER BY rating DESC NULLS LAST, name ASC;
-> ```
->
-> **Explanation:** `NULLS LAST` explicitly positions null values after non-null sorted items.
-
----
-
-### Exercise 3: Multi-Column Sort Direction
-
-**Problem:** Sort orders by `status` ascending and `total` descending.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM orders ORDER BY status ASC, total DESC;
-> ```
-> ```sql
-> SELECT * FROM orders ORDER BY status ASC, total DESC;
-> ```
->
-> **Explanation:** `ORDER BY` allows independent sort directions for each specified column.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`SELECT`](select.md) — The query starter.
 - [`LIMIT` / `OFFSET`](limit_offset.md) — Restricting sorted output counts.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `ORDER BY` sorts database query outputs.
 - `ASC` sorts smallest-to-largest (default); `DESC` sorts largest-to-smallest.
 - You can sort by multiple columns to resolve ties (separated by commas).

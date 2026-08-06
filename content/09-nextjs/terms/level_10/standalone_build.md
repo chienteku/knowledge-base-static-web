@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Infrastructure / DevOps**
+
+**Build & Deployment** (Zero-Dependency Node Server Bundle): Standalone builds (`output: "standalone"`) package Next.js into a self-contained Node server runnable without root `node_modules`.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Production (Self-Hosted)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you decide you don't want to use Vercel (perhaps your company requires deploying to your own private AWS or Kubernetes cluster), you need to "Self-Host" Next.js.
@@ -50,7 +51,7 @@ node .next/standalone/server.js
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not understanding Cache persistence in Docker
 
@@ -100,67 +101,108 @@ COPY --from=builder /app/public ./public
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Why Docker?
+### Exercise 1: Configuring Standalone Output in `next.config.js`
 
-**Problem:** Why is the `standalone` output specifically designed for Docker?
+**Scenario:**
+Configure `output: 'standalone'` in `next.config.js` to generate a self-contained Node.js server bundle.
 
-**Expected output:**
+**Requirements:**
+1. Set `output: "standalone"` in `next.config.js`.
+
 > [!check]- Answer
-> ```text
-> Docker images thrive on being as small as possible so they can be pulled and booted up quickly in cloud environments. 
-> A standard Next.js project might have an 800MB `node_modules` folder full of TypeScript tools and dev-dependencies. The `standalone` output uses file tracing to shrink the required Node environment down to just a few megabytes, resulting in a tiny, highly-efficient Docker image.
-> ```
-> - Think about the size of a standard `node_modules` folder.
-
----
-
-### Exercise 2: Standalone Output Config
-
-**Problem:** Write `next.config.js` configuration enabling standalone build output for Docker deployments.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> module.exports = { output: 'standalone' };
-> ```
-> - `output: 'standalone'` builds minimal production server output.
-> 
-> ```javascript
+> // next.config.js
 > module.exports = {
->   output: 'standalone'
+>   output: "standalone"
 > };
 > ```
 
+> #### Technical Explanation
+>
+> 1. `output: 'standalone'` automatically traces dependencies and copies ONLY required node_modules into `.next/standalone/`.
+> 2. Dramatically reduces production Docker container image sizes from 1GB+ down to ~100MB.
+> 3. Standard build configuration for Docker and Kubernetes deployments.
+
 ---
 
-### Exercise 3: Standalone Server Entrypoint
+### Exercise 2: Writing a Production Dockerfile for Standalone Builds
 
-**Problem:** Which file serves as the Node.js entrypoint script inside the `.next/standalone` directory?
+**Scenario:**
+Write a minimal multi-stage `Dockerfile` leveraging `.next/standalone` output.
 
-**Expected output:**
+**Requirements:**
+1. Copy `.next/standalone` and `.next/static` in runner stage.
+
 > [!check]- Answer
-> ```text
-> node .next/standalone/server.js
-> ```
-> - `server.js` starts the standalone Node.js production server.
+>
+> #### Implementation
+>
+> ```dockerfile
+> FROM node:18-alpine AS runner
+> WORKDIR /app
 > 
-> ```bash
-> node .next/standalone/server.js
+> ENV NODE_ENV=production
+> ENV PORT=3000
+> 
+> COPY .next/standalone ./
+> COPY .next/static ./.next/static
+> COPY public ./public
+> 
+> EXPOSE 3000
+> CMD ["node", "server.js"]
 > ```
+
+> #### Technical Explanation
+>
+> 1. Standalone server runs directly via `node server.js` without requiring `npm install` on the target container.
+> 2. Static assets (`.next/static` and `public/`) must be explicitly copied into the container folder.
+> 3. Optimized Docker deployment pattern.
+
+---
+
+### Exercise 3: Setting Environment Variables in Standalone Containers
+
+**Scenario:**
+Pass runtime environment variables (`PORT=8080`, `DATABASE_URL`) to a standalone container process.
+
+**Requirements:**
+1. Pass environment variables before `node server.js`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> # Run standalone container with environment variables
+> docker run -p 8080:8080 -e PORT=8080 -e DATABASE_URL="postgresql://..." my-next-app
+> ```
+
+> #### Technical Explanation
+>
+> 1. Standalone Next.js server reads process environment variables at container startup.
+> 2. `PORT=8080` configures the HTTP listening port.
+> 3. Decouples build-time compilation from runtime environment configuration.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Deployment (Vercel)](vercel_deployment.md) — The zero-config alternative to self-hosting.
 - [Incremental Static Regeneration (ISR)](../level_08/isr.md) — The feature that breaks if your Docker cache isn't configured correctly.
 - [The Next.js Compiler (SWC)](swc.md) — Related concept: The Next.js Compiler (SWC).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **`output: 'standalone'`** config tells Next.js to compile your app into a miniaturized, self-contained Node.js server.
 - It drastically reduces the size of `node_modules`, making it the perfect artifact for Docker images and Kubernetes clusters.
 - You run the standalone app using `node server.js` rather than `npm run start`.

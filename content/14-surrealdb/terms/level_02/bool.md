@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Data Type (boolean truth value type)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Enforced at the parser level. Used by query optimization execution planners to resolve logical filters).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Applications frequently need to store simple, two-state flags:
@@ -87,7 +86,7 @@ SELECT * FROM newsletter_subscription WHERE active;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to insert integer codes (like 1 or 0) into fields defined as 'bool' in schema-full tables
 
@@ -136,71 +135,109 @@ SELECT * FROM user WHERE settings; // Does not perform implicit JS-style truthin
 SELECT * FROM user WHERE type::bool(settings);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Boolean Filter Analysis
+### Exercise 1: Boolean Flag Filtering and Defaults
 
-**Problem:** You have a `products` table where the `in_stock` field is defined as `TYPE bool`. 
-Select the queries below that will execute successfully and return documents where `in_stock` is active:
-1.  `SELECT * FROM products WHERE in_stock = "true";`
-2.  `SELECT * FROM products WHERE in_stock = true;`
-3.  `SELECT * FROM products WHERE in_stock;`
+**Scenario:**
+You are defining a user account table where accounts must be inactive (`active = false`) by default until email verification is complete.
 
-**Expected output:**
+**Requirements:**
+1. Define table `user` in `SCHEMAFULL` mode.
+2. Define field `active` as `bool` with default value `false`.
+3. Create user `user:u1` without specifying `active` to verify default behavior.
+4. Select all active users using `WHERE active = true`.
+
 > [!check]- Answer
-> ```text
-> Queries 2 and 3 will execute successfully.
-> - Query 1 fails to find matches because `"true"` is a string, not a boolean literal.
-> - Query 2 is a standard boolean equality check.
-> - Query 3 is a valid SQL shortcut that automatically filters for truthy boolean values.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE FIELD active ON TABLE user TYPE bool DEFAULT false;
+> 
+> CREATE user:u1 SET email = "u1@example.com";
+> 
+> -- Select verified active users
+> SELECT * FROM user WHERE active = true;
 > ```
-> - Determine if string quotes change the data type of the filter value.
-> - Recall the shortcut rules for evaluating boolean fields in SQL.
+>
+> #### Technical Explanation
+>
+> 1. `TYPE bool` restricts field values strictly to boolean `true` or `false`.
+> 2. `DEFAULT false` automatically populates boolean flags when omitted from creation payloads.
+> 3. Boolean conditions in `WHERE` clauses allow compact truthiness evaluation (`WHERE active`).
+
+---
+
+### Exercise 2: Logical Operators and Truth Tables
+
+**Scenario:**
+A feature flag service determines feature visibility using boolean fields `is_beta_tester` and `has_paid_subscription`.
+
+**Requirements:**
+1. Create user `user:beta` with `is_beta_tester = true` and `has_paid_subscription = false`.
+2. Query users who are either beta testers OR paid subscribers using boolean logical `OR`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:beta SET is_beta_tester = true, has_paid_subscription = false;
+> 
+> -- Filter users eligible for premium preview features
+> SELECT * FROM user WHERE is_beta_tester = true OR has_paid_subscription = true;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. SurrealQL supports standard logical boolean operators (`AND`, `OR`, `NOT`).
+> 2. Short-circuit evaluation short-circuits boolean expressions for optimized query execution.
+> 3. Boolean flags simplify entitlement and feature gating query logic.
+
+---
+
+### Exercise 3: Boolean Negation and Inverse Selection
+
+**Scenario:**
+An e-commerce cleanup task needs to find all unpublished or inactive product listings using boolean negation (`NOT` or `!= true`).
+
+**Requirements:**
+1. Insert product `product:draft` with `published = false`.
+2. Write a query selecting all products where `published` is false using `NOT published`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE product:draft SET name = "Draft Item", published = false;
+> 
+> -- Select unpublished products using boolean negation
+> SELECT * FROM product WHERE NOT published;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `NOT` negates boolean truth values, evaluating `NOT false` to `true`.
+> 2. `WHERE NOT published` is cleaner and equivalent to `WHERE published = false`.
+> 3. Ensures unindexed boolean flags evaluate correctly without NULL coercions.
 
 ---
 
 
 
-### Exercise 2: Boolean Field Assertion
 
-**Problem:** Define field `is_admin` on `user` as boolean type defaulting to `false`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD is_admin ON TABLE user TYPE bool DEFAULT false;
-> ```
-> ```surrealql
-> DEFINE FIELD is_admin ON TABLE user TYPE bool DEFAULT false;
-> ```
->
-> **Explanation:** `TYPE bool DEFAULT false` sets boolean field constraints and default values.
-
----
-
-### Exercise 3: Explicit Boolean Type Casting
-
-**Problem:** Cast string `"true"` to boolean using `<bool>` or `type::bool()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
-> ```surrealql
-> RETURN <bool> "true";
-> ```
->
-> **Explanation:** Casting `<bool>` parses valid boolean representations into boolean primitives.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [Type Casting & Coercion](type_casting.md) — Converting between types.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `bool` type stores binary logical values (`true` or `false`).
 - Direct NoSQL equivalent to PostgreSQL's `BOOLEAN` and MongoDB's Boolean BSON.
 - Literals must be written in lowercase without quotes: `true` / `false`.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DML Statement**
+
+**SQL Command / Clause** (Row Removal Command): `DELETE FROM` removes matching rows from a table permanently while enforcing foreign key constraints.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (Postgres flags deleted rows as invisible (using MVCC visibility maps) rather than instantly erasing them from physical disk sectors. The physical storage space is only reclaimed for reuse when the database runs its background **Vacuum** process).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Data in a database cannot grow forever. To keep database drives clean, you must delete obsolete records:
@@ -82,7 +83,7 @@ WHERE status = 'resolved';
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the WHERE clause when writing delete queries
 
@@ -136,68 +137,94 @@ DELETE FROM logs; -- Slow row-by-row WAL logging
 TRUNCATE TABLE logs; -- Fast DDL table truncation
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Session Expiry Cleanup
+### Exercise 1: Single Row Deletion with Primary Key
 
-**Problem:** You are building a session cleanup daemon. The `user_sessions` table has columns `session_token`, `username`, and `expires_at`. Write the SQL query to delete all sessions that have expired (where the `expires_at` timestamp is strictly less than the current time `NOW()`).
+**Scenario:**
+Delete a single user record from `users` where `id = 42`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `DELETE FROM users WHERE id = 42`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> DELETE FROM user_sessions 
-> WHERE expires_at < NOW();
+> DELETE FROM users 
+> WHERE id = 42 
+> RETURNING id, username;
 > ```
-> - Target the session table using the `DELETE FROM` clause.
-> - Use the inequality operator `<` to compare expiration times to `NOW()`.
+>
+> #### Technical Explanation
+>
+> 1. `DELETE FROM` removes matching rows from the target table.
+> 2. `WHERE id = 42` targets a single primary key row in $O(\log N)$ time using the primary key index.
+> 3. `RETURNING` confirms deleted row attributes.
+
+---
+
+### Exercise 2: Cascading Deletions Across Related Tables
+
+**Scenario:**
+Delete an order record from `orders` ensuring child line items in `order_items` delete automatically via foreign key cascade.
+
+**Requirements:**
+1. Execute `DELETE FROM orders WHERE id = 100`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> DELETE FROM orders 
+> WHERE id = 100;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. If foreign key constraint is configured with `ON DELETE CASCADE`, child rows in `order_items` delete automatically.
+> 2. Prevents orphan child records in relational tables.
+> 3. Enforces referential integrity.
+
+---
+
+### Exercise 3: Batch Deleting Expired Logs
+
+**Scenario:**
+Delete all audit log records created over 30 days ago.
+
+**Requirements:**
+1. Execute `DELETE FROM audit_logs WHERE created_at < CURRENT_TIMESTAMP - INTERVAL '30 days'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> DELETE FROM audit_logs 
+> WHERE created_at < CURRENT_TIMESTAMP - INTERVAL '30 days';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Deletes all rows satisfying the date threshold filter.
+> 2. Utilizes `created_at` index to find target rows quickly.
+> 3. Reclaims table storage space during subsequent `VACUUM` runs.
 
 ---
 
 
 
-### Exercise 2: Deleting Rows with RETURNING Clause
-
-**Problem:** Delete inactive users updated before 2026 returning deleted user IDs.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DELETE FROM users WHERE last_login < '2026-01-01' RETURNING id;
-> ```
-> ```sql
-> DELETE FROM users
-> WHERE last_login < '2026-01-01'
-> RETURNING id;
-> ```
->
-> **Explanation:** `DELETE ... RETURNING` returns column attributes of deleted rows.
-
----
-
-### Exercise 3: Deleting Rows with Subquery Predicate
-
-**Problem:** Delete posts where `author_id` belongs to banned users in `banned_users` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DELETE FROM posts WHERE author_id IN (SELECT id FROM banned_users);
-> ```
-> ```sql
-> DELETE FROM posts
-> WHERE author_id IN (SELECT id FROM banned_users);
-> ```
->
-> **Explanation:** Subquery predicates filter rows targeted for deletion.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`WHERE` Clause](where.md) — The query target filter.
 - [`TRUNCATE`](truncate.md) — The high-speed table emptying alternative.
 - [`RETURNING` Clause](returning.md) — Related concept: `RETURNING` Clause.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DELETE` removes row records from a database table.
 - Always append a `WHERE` clause to target specific rows for deletion.
 - Omitting the `WHERE` clause deletes every single row in the table.

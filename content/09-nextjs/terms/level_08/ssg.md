@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Rendering Strategy / Optimization**
+
+**Rendering Strategy** (Static Site Generation Prerendering): Static Site Generation (SSG) compiles route HTML pages and assets into static files during build execution for CDN edge delivery.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time (Server)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you build a blog, the contents of a blog post rarely change. If 10,000 users visit the post, running the React rendering engine on the server 10,000 times (SSR) is a massive waste of CPU.
@@ -80,7 +81,7 @@ export default async function BlogPost({ params }) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting a static page to update in Production
 
@@ -90,6 +91,8 @@ export default async function BlogPost({ params }) {
 **Golden Rule:** If the underlying data changes, an SSG page must either be completely rebuilt and redeployed, OR you must use Incremental Static Regeneration (ISR) or On-Demand Revalidation.
 
 ---
+
+
 
 ### Mistake 2: Using Dynamic Request Functions (`cookies()`, `headers()`) in SSG Pages
 
@@ -113,6 +116,8 @@ export default async function Page() {
 
 ---
 
+
+
 ### Mistake 3: Over-Using `force-dynamic` on Pure Static Pages
 
 **The mistake:** Adding `export const dynamic = 'force-dynamic'` to static Terms of Service or Privacy Policy pages.
@@ -132,144 +137,104 @@ export const dynamic = 'force-static'; // Ensure static pre-rendering
 
 ---
 
-### Mistake 4: Using Dynamic Request Functions (`cookies()`, `headers()`) in SSG Pages
 
-**The mistake:** Calling `cookies()` or `headers()` inside a static blog page intended for SSG.
-
-**Why it's wrong:** Calling request-time dynamic functions (`cookies()`, `headers()`, `searchParams`) automatically forces Next.js to opt out of Static Site Generation (SSG) and switch to dynamic SSR.
-
-*Incorrect:*
-```typescript
-// Intended as static SSG page
-import { cookies } from 'next/headers';
-export default async function Page() {
-  const token = cookies().get('token'); // ❌ Forces page into dynamic request-time SSR!
-}
-```
-
-*Fix:*
-```typescript
-// Keep SSG pages pure; read user cookies in Client Components or Server Actions
-```
-
----
-
-### Mistake 5: Over-Using `force-dynamic` on Pure Static Pages
-
-**The mistake:** Adding `export const dynamic = 'force-dynamic'` to static Terms of Service or Privacy Policy pages.
-
-**Why it's wrong:** Forcing dynamic rendering on purely static pages wastes server CPU and increases latency. Leave static pages to SSG pre-rendering default.
-
-*Incorrect:*
-```tsx
-export const dynamic = 'force-dynamic'; // ❌ Wastes CPU on static Privacy Policy page!
-```
-
-*Fix:*
-```tsx
-export const dynamic = 'force-static'; // Ensure static pre-rendering
-```
 
 
 ---
 
-### Mistake 6: Using Dynamic Request Functions (`cookies()`, `headers()`) in SSG Pages
+## 5. Practice Exercises
 
-**The mistake:** Calling `cookies()` or `headers()` inside a static blog page intended for SSG.
+### Exercise 1: Building Static Web Applications with `next build`
 
-**Why it's wrong:** Calling request-time dynamic functions (`cookies()`, `headers()`, `searchParams`) automatically forces Next.js to opt out of Static Site Generation (SSG) and switch to dynamic SSR.
+**Scenario:**
+Configure static site generation (SSG) and inspect `next build` output logs.
 
-*Incorrect:*
-```typescript
-// Intended as static SSG page
-import { cookies } from 'next/headers';
-export default async function Page() {
-  const token = cookies().get('token'); // ❌ Forces page into dynamic request-time SSR!
-}
-```
+**Requirements:**
+1. Run `next build` and analyze output symbols.
 
-*Fix:*
-```typescript
-// Keep SSG pages pure; read user cookies in Client Components or Server Actions
-```
-
----
-
-### Mistake 7: Over-Using `force-dynamic` on Pure Static Pages
-
-**The mistake:** Adding `export const dynamic = 'force-dynamic'` to static Terms of Service or Privacy Policy pages.
-
-**Why it's wrong:** Forcing dynamic rendering on purely static pages wastes server CPU and increases latency. Leave static pages to SSG pre-rendering default.
-
-*Incorrect:*
-```tsx
-export const dynamic = 'force-dynamic'; // ❌ Wastes CPU on static Privacy Policy page!
-```
-
-*Fix:*
-```tsx
-export const dynamic = 'force-static'; // Ensure static pre-rendering
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: Identifying the Build Step
-
-**Problem:** You have a `console.log("Fetching users")` inside an SSG `page.tsx` component. You deploy the app. 1,000 users visit the page. How many times will that log appear in your production server logs?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Zero!
-> The component executed, and the `console.log` fired exactly ONCE during the build process (`npm run build`) on your CI/CD pipeline. 
-> When the 1,000 users visit, they are just receiving static HTML. The React component itself does not execute on the production server.
-> ```
-> - Think about when and where the HTML is generated.
-
----
-
-### Exercise 2: Static Build Output Inspection
-
-**Problem:** Which build output symbol in `npm run build` console logs indicates that a route segment was compiled as a static SSG route?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ○ (Static) or ● (SSG / Prerendered)
-> ```
-> - `○ (Static)` indicates static SSG pre-rendered HTML.
-> - `ƒ (Dynamic)` indicates dynamic request-time SSR.
+>
+> #### Implementation
+>
+> ```bash
+> npm run build
 > 
-> ```text
-> ○ /about                             1.2 kB
+> # Build Output Log:
+> # Route (app)                              Size     First Load JS
+> # ┌ ○ /                                    1.2 kB         85 kB
+> # ├ ○ /about                               1.5 kB         86 kB
+> # └ ● /blog/[slug]                         2.1 kB         87 kB
+> # ○  (Static)   prerendered as static content
+> # ●  (SSG)      prerendered using generateStaticParams
 > ```
+
+> #### Technical Explanation
+>
+> 1. Static Site Generation (SSG) pre-computes HTML and asset files during build time.
+> 2. Route symbol `○` indicates static pages; `●` indicates SSG pages generated with `generateStaticParams()`.
+> 3. Pre-rendered HTML files are uploaded to global CDN edge networks.
 
 ---
 
-### Exercise 3: SSG Deployment Advantage
+### Exercise 2: Exporting Static Builds with `output: 'export'`
 
-**Problem:** State 2 major technical advantages of Static Site Generation (SSG).
+**Scenario:**
+Configure `next.config.js` for static HTML export (`output: 'export'`) for S3/GitHub Pages hosting.
 
-**Expected output:**
+**Requirements:**
+1. Set `output: "export"` in `next.config.js`.
+
 > [!check]- Answer
-> ```text
-> 1. Ultrafast global CDN caching and response speeds (TTFB)
-> 2. High server cost efficiency (Zero Node.js server computation per request)
+>
+> #### Implementation
+>
+> ```javascript
+> // next.config.js
+> module.exports = {
+>   output: "export"
+> };
 > ```
-> - Instant global CDN delivery.
-> - Zero server compute cost per request.
-> 
+
+> #### Technical Explanation
+>
+> 1. `output: 'export'` compiles the application into an `out/` folder containing static HTML, CSS, and JS assets.
+> 2. Eliminates the requirement for a running Node.js server.
+> 3. Disables server-only features like Server Actions, Headers, and dynamic middleware.
+
+---
+
+### Exercise 3: Trade-Off Analysis: SSG vs Dynamic SSR
+
+**Scenario:**
+Formulate an architectural selection decision matrix comparing SSG against Dynamic SSR.
+
+**Requirements:**
+1. Contrast build time duration, CDN caching, data freshness, and server cost.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Ultra-low latency TTFB + Low CDN hosting costs.
+> SSG vs SSR Selection Matrix:
+> - SSG (Static Site Generation): Build-time rendering. Zero Node.js server cost, fastest CDN TTFB, build times scale with page count. Use for blogs, docs, marketing sites.
+> - SSR (Server-Side Rendering): Request-time rendering. Requires Node.js server, fresh data on every hit, higher server RAM/CPU cost. Use for dashboards, personalized feeds.
 > ```
+
+> #### Technical Explanation
+>
+> 1. SSG is ideal for content that changes infrequently and requires maximum speed.
+> 2. SSR is required for dynamic, real-time user-specific applications.
+> 3. Core architectural decision framework.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Dynamic Rendering (SSR)](ssr.md) — The dynamic alternative.
 - [Incremental Static Regeneration (ISR)](isr.md) — The solution to updating SSG pages without rebuilding the whole app.
 - [Data Caching (`force-cache`, `no-store`)](../level_05/data_caching.md) — Related concept: Data Caching (`force-cache`, `no-store`).
@@ -280,7 +245,7 @@ export const dynamic = 'force-static'; // Ensure static pre-rendering
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Static Site Generation (SSG)** pre-renders React components into HTML at Build Time.
 - In the App Router, it is officially known as **Static Rendering**.
 - It is the default behavior for all Next.js pages unless dynamic functions are used.

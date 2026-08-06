@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Security Vulnerability**
+
+**Administration / Operations** (Database Security & Injection Mitigation): NoSQL Injection occurs when un-sanitized user inputs containing query operators (e.g., `{ $ne: "" }`) manipulate database query logic.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (A critical vulnerability class in web applications using document databases. Checked at the application server layer before database queries are executed).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A common security myth is that NoSQL databases are immune to SQL injection because they do not compile query strings.
@@ -108,7 +109,7 @@ app.post('/login-secure-b', async (req, res) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming that NoSQL databases are naturally immune to injection attacks because they do not compile raw SQL strings
 
@@ -154,69 +155,108 @@ db.users.findOne({ username: String(req.body.username), password: String(req.bod
 Use type validation schemas (Zod/Mongoose) to enforce scalar string inputs
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Attack Vector Identification
+### Exercise 1: Auditing NoSQL Injection Vulnerabilities
 
-**Problem:** You are reviewing a logs database. An attacker submits this query payload to your search endpoint:
-`{ "category": { "$gt": "" } }`
-1.  Explain what query logic this payload injects.
-2.  State the data leakage consequence if your search controller runs this query directly.
+**Scenario:**
+Demonstrate how un-sanitized Express `req.body` input allows an attacker to bypass authentication using operator injection `{ $ne: "" }`.
 
-**Expected output:**
+**Requirements:**
+1. Show vulnerable query vs sanitized query.
+
 > [!check]- Answer
-> ```text
-> 1. The payload injects the `$gt` (greater than) operator, instructing MongoDB to search for all documents where the `category` field is greater than an empty string.
-> 2. Because almost all text categories are greater than an empty string, the query will return all documents in the collection, leaking confidential records to the client.
-> ```
-> - The operator `$gt: ""` matches any non-empty string.
-> - Consider if this bypasses category filtering constraints.
-
----
-
-
-
-### Exercise 2: Sanitizing Input to Prevent Operator Injection
-
-**Problem:** Sanitize input string `req.body.user` enforcing string type before passing to MongoDB query filter.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const username = String(req.body.username); db.users.find({ username });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const username = String(req.body.username);
-> const user = await db.users.findOne({ username });
+> // ❌ Vulnerable Express Handler (Attacker passes req.body = { username: "admin", password: { $ne: "" } })
+> const user = await db.collection("users").findOne({
+>   username: req.body.username,
+>   password: req.body.password // Bypasses password check! Matches admin user!
+> });
+> 
+> // ✅ Sanitized Handler (Forces inputs to string types)
+> const user = await db.collection("users").findOne({
+>   username: String(req.body.username),
+>   password: String(req.body.password)
+> });
 > ```
 >
-> **Explanation:** Explicitly casting inputs to `String()` neutralizes object operator injection payloads like `{ $ne: null }`.
+> #### Technical Explanation
+>
+> 1. Express `express.json()` parses nested JSON objects, allowing attackers to pass query operators (`$ne`, `$gt`) in place of strings.
+> 2. Explicit type casting (`String(input)`) strips operator objects, neutralizing NoSQL injection attacks.
+> 3. Critical web application security rule.
 
 ---
 
-### Exercise 3: Express `express-mongo-sanitize` Middleware
+### Exercise 2: Sanitizing Request Inputs with `mongo-express-sanitize`
 
-**Problem:** What characters are stripped by `express-mongo-sanitize` to prevent injection? (`$` and `.`).
+**Scenario:**
+Integrate `mongo-express-sanitize` middleware into an Express app to strip `$` and `.` characters from input bodies automatically.
 
-**Expected output:**
+**Requirements:**
+1. Use `mongo-express-sanitize` middleware.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> import express from "express";
+> import mongoSanitize from "express-mongo-sanitize";
+
+const app = express();
+app.use(express.json());
+app.use(mongoSanitize()); // Strips any keys starting with '$' or containing '.'
+```
+
+> #### Technical Explanation
+>
+> 1. `express-mongo-sanitize` recursively inspects `req.body`, `req.query`, and `req.params`, removing keys starting with `$`.
+> 2. Neutralizes operator injection attacks across all Express routes globally.
+> 3. Standard security middleware component.
+
+---
+
+### Exercise 3: Preventing Security Flaws from `$where` JavaScript Evaluation
+
+**Scenario:**
+Explain why raw JavaScript string execution via `$where` or `$accumulator` should be disabled or strictly avoided.
+
+**Requirements:**
+1. Explain risks of server-side JavaScript evaluation.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Prohibits or strips keys starting with $ or containing .
-> ```
-> ```text
-> Prohibits or strips keys starting with $ or containing .
+> $where Security Vulnerabilities:
+> 1. $where executes arbitrary JavaScript code inside the mongod process.
+> 2. Un-sanitized string concatenation in $where enables Remote Code Execution (RCE) attacks.
+> Recommendation: Disable server-side JS in mongod.conf with security.javascriptEnabled: false.
 > ```
 >
-> **Explanation:** Stripping `$` prevents clients from injecting BSON query operators into query filters.
+> #### Technical Explanation
+>
+> 1. `$where` bypasses B-tree indexes and executes JavaScript code on every collection document.
+> 2. Setting `javascriptEnabled: false` hardens database servers against RCE attacks.
+> 3. Security hardening standard.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [Query Filter (Filter Document)](../level_03/query_filter.md) — The query syntax manipulated.
 - [Authentication & Authorization (SCRAM, RBAC)](auth.md) — The database security model.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - NoSQL Injection allows attackers to manipulate query structures using BSON operators.
 - Vulnerability occurs when request objects are passed to queries unsanitized.
 - Attackers use operators like `$ne` and `$gt` to bypass login checks.

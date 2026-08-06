@@ -14,16 +14,15 @@
 ---
 
 ## 2. Term Category
-- **Production & Resilience**
+
+
+**Integration / Ecosystem (SDK error catching and exception handling)**: - **Production & Resilience**
+
+
 
 ---
 
-## 3. Environment Context
-- **Production Client & Server Services** (Executed in Node.js backends or browser frontends to ensure uninterrupted operation during network or database events).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In production environments, network connections drop, mobile devices switch between Wi-Fi and cellular data, databases fail over, and concurrent write transactions encounter optimistic lock conflicts. If an application crashes every time a temporary network drop or write conflict occurs, user experience suffers.
@@ -86,7 +85,7 @@ await executeWithRetry(async () => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating Transient Transaction Conflicts as Fatal Application Errors
 
@@ -150,94 +149,111 @@ db.on('error', (err) => console.error('SurrealDB Connection Error:', err));
 
 
 
-### Mistake 4: Swallowing Exceptions Returned by `db.query()` Invocation Results
 
-**The mistake:** Calling `const res = await db.query(...)` without checking result status codes or catching exceptions.
 
-**Why it's wrong:** Multi-statement batch queries in `db.query()` return array response objects. Individual statements inside batches may contain error objects.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-const res = await db.query("SELECT * FROM invalid_table"); // Result array contains error!
-```
+### Exercise 1: Try-Catch Exception Handling for SDK Queries
 
-*Fix:*
-```surrealql
-const [res] = await db.query("SELECT * FROM user"); if (res.status === 'ERR') throw res.result;
-```
+**Scenario:**
+Wrap SDK query calls in a try-catch block to catch and handle write assertion failures gracefully.
 
-### Mistake 5: Failing to Handle WebSocket Disconnection Errors in Production Node.js Services
-
-**The mistake:** Deploying background services without listening for SDK connection error events.
-
-**Why it's wrong:** Un-handled connection errors in background workers can cause process crashes or un-handled promise rejections.
-
-*Incorrect:*
-```surrealql
--- No connection error listener
-```
-
-*Fix:*
-```surrealql
-db.on('error', (err) => console.error('SurrealDB Connection Error:', err));
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Identify Exponential Backoff Delays
-If initial delay is `100ms` and multiplier is `2`, calculate the delay duration for attempts 1, 2, and 3.
+**Requirements:**
+1. Execute `db.create()` inside try-catch block.
+2. Catch and log error messages.
 
 > [!check]- Answer
-> - Attempt 1: 100ms.
-> - Attempt 2: 200ms.
-> - Attempt 3: 400ms.
-
----
-
-
-
-### Exercise 2: Safely Parsing `db.query` Response Batches
-
-**Problem:** Write JS helper checking `res.status === 'OK'` on `db.query()` response arrays.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const [res] = await db.query(sql); if (res.status === 'OK') return res.result;
-> ```
-> ```javascript
-> const [res] = await db.query(sql);
-> if (res.status === 'OK') {
->   return res.result;
-> } else {
->   throw new Error(res.result);
-> }
-> ```
 >
-> **Explanation:** `db.query()` returns arrays of response objects containing `status` and `result` fields.
-
----
-
-### Exercise 3: Handling Permission Denied Exceptions
-
-**Problem:** Catch `PERMISSIONS` denied exception when running unauthorized SDK queries.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> try { await db.select('secret'); } catch (err) { console.error('Access Denied:', err); }
-> ```
-> ```javascript
+> #### Implementation
+>
+> ```typescript
 > try {
->   await db.select('secret');
-> } catch (err) {
->   console.error('Access Denied:', err);
+>   await db.create("user", {
+>     email: "invalid-email-format"
+>   });
+> } catch (err: any) {
+>   console.error("Database operation failed:", err.message);
 > }
 > ```
 >
-> **Explanation:** Unauthorized query executions throw access permission error exceptions.
+> #### Technical Explanation
+>
+> 1. SDK query methods throw exceptions when database errors occur (assertion failures, primary key conflicts, syntax errors).
+> 2. `err.message` contains descriptive error strings returned by SurrealDB.
+> 3. Prevents unhandled promise rejections in Node.js apps.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Handling Specific Record Conflict Errors
+
+**Scenario:**
+Detect primary key conflict errors when creating duplicate records.
+
+**Requirements:**
+1. Catch collision exceptions and check error message strings.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> try {
+>   await db.create("user:alice", { name: "Alice" });
+> } catch (err: any) {
+>   if (err.message.includes("already exists")) {
+>     console.warn("User already exists, switching to update...");
+>     await db.merge("user:alice", { name: "Alice Updated" });
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Inspecting error messages allows application code to execute fallback strategies.
+> 2. Differentiates primary key collisions from connection failures.
+> 3. Improves application error resilience.
+
+---
+
+### Exercise 3: Handling Authentication Failures
+
+**Scenario:**
+Catch authentication error exceptions thrown during `db.signin()` when invalid credentials are provided.
+
+**Requirements:**
+1. Handle invalid password login failures.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> try {
+>   await db.signin({
+>     access: "user_access",
+>     ns: "main",
+>     db: "app",
+>     username: "alice",
+>     pass: "WrongPass"
+>   });
+> } catch (err: any) {
+>   console.error("Authentication failed: Invalid username or password.");
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Failed signin attempts throw authentication exceptions.
+> 2. Protects application endpoints by preventing token issuance on invalid credentials.
+> 3. Provides clean error feedback to login UI components.
+
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [Transaction Isolation & Atomicity Semantics](../level_09/transaction_isolation.md) — Snapshot isolation semantics.
 - [JavaScript / TypeScript SDK](js_sdk.md) — Client package overview.
@@ -245,7 +261,7 @@ If initial delay is `100ms` and multiplier is `2`, calculate the delay duration 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use SDK connection event listeners (`disconnected`, `connected`) to monitor WebSocket health.
 - Wrap multi-statement transactions in exponential backoff retry loops to handle optimistic write conflicts.
 - Distinguish between fatal schema errors and transient network/concurrency errors.

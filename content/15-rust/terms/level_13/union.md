@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Unsafe / Type System / Data Structures**: A `union` in Rust is a specialized data structure declaration syntax (`pub union MyUnion { ... }`). Unlike a `struct` (where fields are laid out sequentially in memory) or an `enum` (which includes a hidden discriminant tag indicating the active variant), a `union` places all declared fields at offset 0 in the exact same memory location. Consequently, the size of a `union` is determined by the size of its largest field (aligned to the largest field's alignment requirement).
+
+
+**Rust Low-Level Type (overlapping memory field data structure)**: A `union` in Rust is a specialized data structure declaration syntax (`pub union MyUnion { ... }`). Unlike a `struct` (where fields are laid out sequentially in memory) or an `enum` (which includes a hidden discriminant tag indicating the active variant), a `union` places all declared fields at offset 0 in the exact same memory location. Consequently, the size of a `union` is determined by the size of its largest field (aligned to the largest field's alignment requirement).
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: `union` is available across all Rust compilation targets (`std`, `no_std`, WASM, embedded). It is essential for C FFI bindings (interacting with C `union` declarations), embedded hardware register overlays, and zero-allocation type punning.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -137,7 +135,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing Non-`Copy` Types inside Untagged Unions without `ManuallyDrop`
 
@@ -197,16 +195,17 @@ let u = IllegalTypePunning { byte: 0xFE };
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Hardware Register Overlay for Embedded Microcontroller (MMIO)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In embedded microcontroller programming (`#![no_std]`), Memory-Mapped I/O (MMIO) peripheral registers are often 32 bits wide. Drivers frequently need to read/write either:
 - The entire 32-bit raw register (`raw: u32`).
 - Upper and lower 16-bit halves (`halves: RegisterHalves`).
 - Individual 8-bit bytes (`bytes: [u8; 4]`).
 
+**Requirements:**
 Design a 32-bit hardware register overlay using a `#[repr(C)]` union:
 1. Define `#[repr(C)] #[derive(Clone, Copy)] struct RegisterHalves { pub low: u16, pub high: u16 }`.
 2. Define `#[repr(C)] pub union Register32` with fields `raw: u32`, `halves: RegisterHalves`, and `bytes: [u8; 4]`.
@@ -214,6 +213,9 @@ Design a 32-bit hardware register overlay using a `#[repr(C)]` union:
 4. Include unit tests verifying `size_of::<Register32>() == 4`, endianness byte access, and in-place field updates with `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::mem::size_of;
 > 
@@ -285,7 +287,8 @@ Design a 32-bit hardware register overlay using a `#[repr(C)]` union:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Zero-Cost Overlay:** Placing `raw`, `halves`, and `bytes` in a `#[repr(C)] union` maps all three fields to offset 0 in memory. Modifying a byte in `bytes` immediately updates the corresponding bits in `raw` and `halves` without extra CPU instructions.
 > 2. **Memory Alignment:** `#[repr(C)]` ensures the union is aligned to 4 bytes (the maximum alignment requirement among `u32`, `RegisterHalves`, and `[u8; 4]`), matching hardware MMIO bus requirements.
 > 3. **Encapsulating `unsafe`:** The helper methods encapsulate `unsafe` union field reads inside safe Rust functions, asserting bounds checks on byte indices before performing raw writes.
@@ -294,9 +297,10 @@ Design a 32-bit hardware register overlay using a `#[repr(C)]` union:
 
 ### Exercise 2: Interfacing with C FFI Untagged Unions (`CNetworkPacket`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 Legacy C networking stacks send raw untagged binary packets over sockets. The C protocol header format is defined as:
 
+**Requirements:**
 ```c
 struct SensorData { uint32_t sensor_id; float reading; };
 struct CommandData { uint16_t cmd_code; uint16_t flags; };
@@ -322,6 +326,9 @@ Requirements:
 5. Write parsing function and unit tests with `assert_eq!` verifying variant extraction.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[repr(C)]
 > #[derive(Debug, Clone, Copy, PartialEq)]
@@ -444,7 +451,8 @@ Requirements:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **C Foreign Interoperability:** `#[repr(C)]` guarantees that Rust uses the exact same field offsets, memory padding, and alignment rules as C compilers (GCC/Clang).
 > 2. **Untagged Union Safety Contract:** The C protocol uses `payload_type` as a discriminant tag. In Rust, we inspect `payload_type` inside a safe `match` statement before entering `unsafe` blocks to read the active variant.
 > 3. **Idiomatic Rust Conversion:** Converting C-style raw structures into an idiomatic Rust `enum` isolates unsafe FFI boundaries at the edge of your application.
@@ -453,9 +461,10 @@ Requirements:
 
 ### Exercise 3: Safe Polymorphic Node Storage using `ManuallyDrop<T>`
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 Standard Rust `union` declarations require all field types to implement `Copy` or be wrapped in `std::mem::ManuallyDrop<T>`. When building custom memory-efficient tree or graph nodes that can hold either a primitive `u64` integer or a heap-allocated `String`, using `ManuallyDrop<T>` prevents automatic destruction while allowing polymorphic memory storage.
 
+**Requirements:**
 Design a memory-optimized node storage structure:
 1. Define a `union NodeValue` with fields `int_val: u64` and `str_val: ManuallyDrop<String>`.
 2. Define a wrapper `struct ValueNode` containing a `tag: u8` (0 for integer, 1 for string) and `value: NodeValue`.
@@ -465,6 +474,9 @@ Design a memory-optimized node storage structure:
 6. Write unit tests with assertions (`assert_eq!`) verifying memory allocation cleanup and value retrieval.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::mem::ManuallyDrop;
 > 
@@ -547,79 +559,17 @@ Design a memory-optimized node storage structure:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Why `ManuallyDrop<T>` is Required:** Non-`Copy` types (like `String`) manage heap memory. Rust forbids raw non-`Copy` fields in unions because the compiler does not know which field to drop when the union is destroyed. `ManuallyDrop<T>` disables automatic drop checking.
 > 2. **Custom Destructor Implementation:** We implement `Drop for ValueNode` to inspect the runtime `tag`. When `tag == 1`, we invoke `unsafe { ManuallyDrop::drop(&mut self.value.str_val) }` to free heap string memory without leaking.
 > 3. **Safety Isolation:** Encapsulating `NodeValue` inside `ValueNode` ensures that external callers interact with safe APIs (`as_int()`, `as_str()`) while maintaining 0-cost memory optimization under the hood.
 
----
 
-### Exercise 4: IEEE 754 Floating-Point Bit Inspection Overlay
-
-**Problem Statement:**
-In graphics pipelines, game engines, and numerical signal processing, fast math algorithms (like fast inverse square root or exponent extraction) inspect the raw bit pattern of IEEE 754 floating-point numbers without calling expensive FPU branch operations.
-
-Construct a bit inspection overlay using a `#[repr(C)]` union:
-1. Define `#[repr(C)] pub union FloatOverlay { pub f: f32, pub bits: u32 }`.
-2. Implement helper functions:
-   - `extract_sign_bit(val: f32) -> u32` (returns 1 if negative, 0 if positive).
-   - `extract_exponent(val: f32) -> u8` (extracts the 8-bit biased IEEE 754 exponent).
-3. Write unit tests with assertions (`assert_eq!`) validating sign bit behavior (`-0.0`, `1.0`, `-42.0`) and exponent extraction.
-
-> [!check]- Answer
-> ```rust
-> #[repr(C)]
-> pub union FloatOverlay {
->     pub f: f32,
->     pub bits: u32,
-> }
-> 
-> /// Extracts the 1-bit sign flag from an IEEE 754 32-bit float
-> pub fn extract_sign_bit(val: f32) -> u32 {
->     let overlay = FloatOverlay { f: val };
->     // SAFETY: Reading 32-bit raw integer representation from valid f32
->     let raw_bits = unsafe { overlay.bits };
->     (raw_bits >> 31) & 0x01
-> }
-> 
-> /// Extracts the 8-bit biased exponent from an IEEE 754 32-bit float
-> pub fn extract_exponent(val: f32) -> u8 {
->     let overlay = FloatOverlay { f: val };
->     // SAFETY: Reading raw bits of f32 is safe as all 32-bit patterns are valid u32
->     let raw_bits = unsafe { overlay.bits };
->     ((raw_bits >> 23) & 0xFF) as u8
-> }
-> 
-> #[cfg(test)]
-> mod tests {
->     use super::*;
-> 
->     #[test]
->     fn test_float_sign_bit_extraction() {
->         assert_eq!(extract_sign_bit(1.0), 0);
->         assert_eq!(extract_sign_bit(42.5), 0);
->         assert_eq!(extract_sign_bit(-1.0), 1);
->         assert_eq!(extract_sign_bit(-0.0), 1); // Negative zero has sign bit set
->     }
-> 
->     #[test]
->     fn test_float_exponent_extraction() {
->         // 1.0 in IEEE 754 has biased exponent 127 (0x7F)
->         assert_eq!(extract_exponent(1.0), 127);
->         // 2.0 has exponent 128 (0x80)
->         assert_eq!(extract_exponent(2.0), 128);
->     }
-> }
-> ```
-> 
-> **Explanation:**
-> 1. **IEEE 754 Single-Precision Format:** An `f32` consists of 1 sign bit (bit 31), 8 exponent bits (bits 23..30), and 23 mantissa/fraction bits (bits 0..22).
-> 2. **Type Punning Safety:** Reinterpreting an `f32` as `u32` via a `union` is safe in Rust because every 32-bit integer pattern is a valid `u32`. (Note: The reverse—converting arbitrary `u32` to `bool` or `char`—would be unsafe, but `u32` accepts all 32-bit values).
-> 3. **Performance:** Bitwise shifting `(raw_bits >> 31) & 0x01` avoids floating-point branch conditions, generating fast CPU bitmask assembly instructions.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`unsafe` Block](unsafe_block.md) — Unsafe block semantics and memory safety contracts.
@@ -628,7 +578,7 @@ Construct a bit inspection overlay using a `#[repr(C)]` union:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - A `union` places all declared fields at offset 0 in the exact same memory location; its size equals the size of its largest field.
 - Writing to a `union` field is safe; reading from a `union` field is **`unsafe`** because Rust cannot track the active variant.

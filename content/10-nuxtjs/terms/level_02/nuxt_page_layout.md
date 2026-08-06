@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing**
+
+**Routing / Navigation** (Routing & Layout Rendering Components): `<NuxtPage>` and `<NuxtLayout>` are core components that render active route views and master layout wrappers.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client** (Parsed on the server during initial SSR compilation and updated dynamically in the browser during SPA routing).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a typical full-stack web application, different routes share identical layout structures (like navigation sidebars, headers, and footers), but need to swap their central content block. 
@@ -68,7 +69,7 @@ Nuxt resolves this structure as follows:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Wrapping components double-layouts inside both `app.vue` and the page template
 
@@ -144,101 +145,123 @@ definePageMeta({ layout: 'custom' }); // Set layout cleanly in page meta
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Conditional Layout Rendering
+### Exercise 1: Rendering Active Routes with `<NuxtPage>`
 
-**Problem:** You want your application's routes to load within the standard layout by default, except for the `/login` route, which requires a clean, empty canvas. Show how to configure `app.vue` and `pages/login.vue` using metadata configurations.
+**Scenario:**
+Implement `<NuxtPage>` inside `app.vue` with custom loading fallback slots.
 
-```vue
-<!-- app.vue (Solution): -->
-<template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
-</template>
-```
-
-```vue
-<!-- pages/login.vue (Solution): -->
-<script setup lang="ts">
-definePageMeta({
-  layout: false // Disables the layout container for this page completely
-});
-</script>
-
-<template>
-  <form>
-    <input type="email" placeholder="Email" />
-    <input type="password" placeholder="Password" />
-    <button>Log In</button>
-  </form>
-</template>
-```
+**Requirements:**
+1. Render `<NuxtPage />` inside `app.vue`.
 
 > [!check]- Answer
-> - Setting `layout: false` in `definePageMeta` tells `<NuxtLayout>` to bypass wrapping and pass `<NuxtPage />` through directly.
-
----
-
-### Exercise 2: Dynamic Layout Switching Pattern
-
-**Problem:** Write `<script setup>` function toggling layout between `'default'` and `'dark'` using `setPageLayout()`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
-> function toggleLayout() {
->   setPageLayout('dark');
-> }
-> </script>
-> ```
-> - `setPageLayout()` dynamically changes the active layout at runtime.
-> 
-> ```vue
-> <script setup>
-> const isDark = ref(false);
-> 
-> function switchLayout() {
->   isDark.value = !isDark.value;
->   setPageLayout(isDark.value ? 'dark' : 'default');
-> }
-> </script>
-> 
+> <!-- app.vue -->
 > <template>
->   <button @click="switchLayout">Toggle Dark Layout</button>
+>   <div>
+>     <NuxtPage />
+>   </div>
 > </template>
 > ```
 
+> #### Technical Explanation
+>
+> 1. `<NuxtPage />` is Nuxt's wrapper built on top of Vue Router's `<RouterView />`.
+> 2. Handles page component resolution, transitions, keep-alive state, and route key bindings.
+> 3. Required for displaying views defined in the `pages/` directory.
+
 ---
 
-### Exercise 3: NuxtLayout Slot Props
+### Exercise 2: Overriding Layout Bindings with `<NuxtLayout>` Props
 
-**Problem:** How do you pass custom slot props from `<NuxtLayout>` to layout templates?
+**Scenario:**
+Explicitly bind a custom layout name to `<NuxtLayout :name="layoutName">` dynamically.
 
-**Expected output:**
+**Requirements:**
+1. Use `<NuxtLayout :name="currentLayout">`.
+
 > [!check]- Answer
-> ```text
-> Via named or default slots on <NuxtLayout :name="layoutName">.
-> ```
-> - `<NuxtLayout>` accepts props passed down to layout components.
-> 
+>
+> #### Implementation
+>
 > ```vue
-> <NuxtLayout name="custom" :user="currentUser" />
+> <script setup lang="ts">
+> const currentLayout = ref("default");
+> </script>
+
+<template>
+  <div>
+    <button @click="currentLayout = currentLayout === 'default' ? 'auth' : 'default'">
+      Toggle Layout
+    </button>
+    <NuxtLayout :name="currentLayout">
+      <NuxtPage />
+    </NuxtLayout>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Binding `:name` on `<NuxtLayout>` explicitly overrides page-defined metadata layouts.
+> 2. Enables global layout switching controlled by root application state.
+> 3. High-level layout orchestration pattern.
+
+---
+
+### Exercise 3: Passing Props to Layouts using Named Slots
+
+**Scenario:**
+Pass custom header titles from pages into `<NuxtLayout>` named slots.
+
+**Requirements:**
+1. Use named slot `#header` inside layout and page.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <!-- layouts/default.vue -->
+> <template>
+>   <div>
+>     <header>
+>       <slot name="header">
+>         <h1>Default Header Title</h1>
+>       </slot>
+>     </header>
+>     <main>
+>       <slot />
+>     </main>
+>   </div>
+> </template>
 > ```
+
+> #### Technical Explanation
+>
+> 1. `<NuxtLayout>` supports named Vue slots (`#header`, `#footer`).
+> 2. Pages can project custom headers into parent layout templates directly.
+> 3. Flexible slot-based template composition.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`app.vue`](app_vue.md) — The root node of the Vue app tree.
 - [`layouts/` Directory](layouts_directory.md) — The folder where layout templates are stored.
 - [`pages/` Directory](pages_directory.md) — Related concept: `pages/` Directory.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<NuxtPage>` renders the component corresponding to the active route.
 - `<NuxtLayout>` wraps pages in reusable layouts from the `layouts/` directory.
 - Keep layout wraps singular (typically wrapping `<NuxtPage>` in `app.vue`).

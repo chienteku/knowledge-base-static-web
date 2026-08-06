@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Real-Time & Subscriptions**
+
+
+**Query Feature (real-time live query subscription statement)**: - **Real-Time & Subscriptions**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB WebSocket Protocol & SDKs** (Maintains stateful subscriptions on the server, pushing JSON delta events over WebSocket streams).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional web architectures, pushing real-time data updates to browsers requires complex infrastructure: polling endpoints periodically (high latency & server load), configuring Redis Pub/Sub, running Socket.io servers, or setting up PostgreSQL `LISTEN`/`NOTIFY` with custom backend handlers.
@@ -70,7 +69,7 @@ console.log('Active Live Query UUID:', liveQueryUuid);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting LIVE SELECT over Stateless HTTP Requests
 
@@ -136,89 +135,95 @@ db.live("user", (action, result) => {
 
 
 
-### Mistake 4: Executing `LIVE SELECT` Over Stateless HTTP Connections
 
-**The mistake:** Connecting SDK via `http://` endpoint and calling `db.live('user')`.
 
-**Why it's wrong:** Stateless HTTP connections do NOT support real-time WebSocket live query push events. Connect via `ws://` or `wss://`.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-// HTTP connection
-const db = new Surreal(); await db.connect("http://localhost:8000/rpc");
-await db.live("user"); // ❌ Fails on HTTP!
-```
+### Exercise 1: Subscribing to Table Mutations with `LIVE SELECT`
 
-*Fix:*
-```surrealql
-const db = new Surreal(); await db.connect("ws://localhost:8000/rpc");
-await db.live("user"); // WebSocket live subscription
-```
+**Scenario:**
+A dashboard application subscribes to real-time order creation events on table `order` using `LIVE SELECT`.
 
-### Mistake 5: Ignoring `action` Types in Live Query Subscriptions
-
-**The mistake:** Assuming live query events only stream newly created records.
-
-**Why it's wrong:** Live queries push events for `CREATE`, `UPDATE`, and `DELETE` actions. Handle `action` metadata ('CREATE', 'UPDATE', 'DELETE') in client handlers.
-
-*Incorrect:*
-```surrealql
-db.live("user", (action, result) => { updateList(result); }); // Ignores DELETE action!
-```
-
-*Fix:*
-```surrealql
-db.live("user", (action, result) => {
-  if (action === 'DELETE') removeItem(result.id);
-  else upsertItem(result);
-});
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Filtered Live Query
-Write a `LIVE SELECT` statement that subscribes only to `order` table updates where `status = 'pending'`.
+**Requirements:**
+1. Execute `LIVE SELECT * FROM order;`.
 
 > [!check]- Answer
-> - Combine `LIVE SELECT * FROM order` with `WHERE status = 'pending'`.
-
----
-
-
-
-### Exercise 2: Subscribing to Filtered Live Query
-
-**Problem:** Write SurrealQL query subscribing to live updates on `article` table where `published = true`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> LIVE SELECT * FROM article WHERE published = true;
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> LIVE SELECT * FROM article WHERE published = true;
+> -- Subscribe to real-time table mutations
+> LIVE SELECT * FROM order;
 > ```
 >
-> **Explanation:** `LIVE SELECT ... WHERE` pushes live delta events for records matching predicates.
+> #### Technical Explanation
+>
+> 1. `LIVE SELECT * FROM <table>` opens a persistent real-time streaming subscription over WebSockets.
+> 2. Pushes mutation events (`CREATE`, `UPDATE`, `DELETE`) to the client instantly.
+> 3. Eliminates client polling loops and external message brokers (Socket.io, Redis).
 
 ---
 
-### Exercise 3: JS SDK Live Query Listener
+### Exercise 2: Filtered Live Query Subscriptions
 
-**Problem:** Subscribe to `order` table updates using `db.live('order', callback)`.
+**Scenario:**
+Subscribe ONLY to high-priority order creation events where `total > 500dec`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `LIVE SELECT * FROM order WHERE total > 500dec;`.
+
 > [!check]- Answer
-> ```text
-> const queryId = await db.live('order', (action, result) => console.log(action, result));
-> ```
-> ```javascript
-> const queryId = await db.live('order', (action, result) => console.log(action, result));
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Filtered real-time live subscription
+> LIVE SELECT * FROM order WHERE total > 500dec;
 > ```
 >
-> **Explanation:** `db.live(table, callback)` registers real-time event handlers over WebSockets.
+> #### Technical Explanation
+>
+> 1. `WHERE` clauses filter live query events on the database server before streaming to clients.
+> 2. Only mutations satisfying the filter condition generate server push notifications.
+> 3. Saves network bandwidth by filtering unwanted event traffic server-side.
 
-## 7. Related Terms
+---
+
+### Exercise 3: JavaScript SDK Live Query Event Handling
+
+**Scenario:**
+Write the JavaScript SDK code to listen for `CREATE` and `UPDATE` events on table `notification`.
+
+**Requirements:**
+1. Use `db.live("notification", callback)` in TypeScript.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const liveUuid = await db.live("notification", (action, result) => {
+>   if (action === "CREATE") {
+>     console.log("New notification received:", result);
+>   } else if (action === "UPDATE") {
+>     console.log("Notification updated:", result);
+>   }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `db.live()` registers a callback receiving `action` (`"CREATE"`, `"UPDATE"`, `"DELETE"`) and `result` record payloads.
+> 2. Automatically decodes binary WebSocket frames into JavaScript objects.
+> 3. Enables reactive UI rendering in frontend web applications.
+
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [`KILL` (Stopping Live Queries)](kill_live_query.md) — Terminating active live query subscriptions.
 - [Changefeed (`DEFINE TABLE ... CHANGEFEED`)](changefeed.md) — Table change history tracking.
@@ -231,7 +236,7 @@ Write a `LIVE SELECT` statement that subscribes only to `order` table updates wh
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `LIVE SELECT` enables real-time push subscriptions directly from SurrealDB.
 - Pushes `CREATE`, `UPDATE`, and `DELETE` notifications over WebSocket connections.
 - Replaces polling, Redis Pub/Sub, and backend Socket.io infrastructure.

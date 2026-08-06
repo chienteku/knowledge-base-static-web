@@ -3,6 +3,16 @@
 > **Level 14 — Advanced Traits & Type System**
 > An API design pattern that encodes the state machine lifecycle of a system directly into Rust's type system using generic marker types, enforcing state transition rules at compile time and making invalid state operations unrepresentable.
 
+
+
+### Mistake 3: Exposing Mutable Fields or Operations Across Invalid States
+
+**The mistake:** Implementing state-agnostic methods directly on the base struct without wrapping them in state-specific `impl` blocks or keeping inner fields public.
+
+**Why it's wrong:** If struct fields are public, callers can mutate internal fields or bypass state transition checks. Typestate safety relies on private fields and state-parameterized `impl` blocks (`impl Engine<Stopped>`).
+
+*Fix:* Keep state struct fields private and expose transition methods only on appropriate `impl Engine<State>` blocks.
+
 ---
 
 ## 1. Prerequisites
@@ -16,17 +26,15 @@
 
 ## 2. Term Category
 
-**Pattern / Architecture / Type System**: The Type-State Pattern is an architectural design pattern in Rust. Instead of storing an enum field or boolean flag (`struct Connection { state: ConnectionState }`) and checking state at runtime with `if self.state == Connected`, the state is represented as a static generic parameter (`Connection<Disconnected>`, `Connection<Connected>`). Methods are implemented *only* for specific state parameters, forcing state transitions to consume `self` and return a new state struct.
+
+
+**Rust Design Pattern (zero-cost compile-time state machine)**: The Type-State Pattern is an architectural design pattern in Rust. Instead of storing an enum field or boolean flag (`struct Connection { state: ConnectionState }`) and checking state at runtime with `if self.state == Connected`, the state is represented as a static generic parameter (`Connection<Disconnected>`, `Connection<Connected>`). Methods are implemented *only* for specific state parameters, forcing state transitions to consume `self` and return a new state struct.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: The Type-State Pattern is supported across all Rust targets (`std`, `no_std`, WASM, embedded). It is heavily used in embedded driver crates (`embedded-hal` GPIO pins `Pin<Input>`, `Pin<Output>`), network client handshakes (`hyper`, `reqwest`), and builder patterns (`CommandBuilder<NeedsProgram>`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -185,7 +193,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Borrowing `&self` Instead of Consuming `self` in State Transitions
 
@@ -217,11 +225,11 @@ impl Connection<Disconnected> {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Embedded Hardware Driver State Machine (GPIO Pin Control)
 
-**Problem:** In embedded systems (`#![no_std]`), microcontroller GPIO hardware pins can be configured in either `Disabled`, `Input`, or `Output` modes. Reading digital levels is only valid when the pin is in `Input` mode, while toggling high/low output voltage is only valid in `Output` mode. 
+**Scenario:** In embedded systems (`#![no_std]`), microcontroller GPIO hardware pins can be configured in either `Disabled`, `Input`, or `Output` modes. Reading digital levels is only valid when the pin is in `Input` mode, while toggling high/low output voltage is only valid in `Output` mode. 
 
 Build a `#![no_std]` compatible GPIO pin type-state machine:
 1. Define zero-sized marker structs `Disabled`, `Input`, and `Output`.
@@ -237,6 +245,9 @@ Build a `#![no_std]` compatible GPIO pin type-state machine:
 7. Write unit tests with assertions (`assert!`, `assert_eq!`) validating output toggling and input reading.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -344,7 +355,8 @@ Build a `#![no_std]` compatible GPIO pin type-state machine:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Zero Memory Overhead:** `PhantomData<State>` costs 0 bytes at runtime. The GPIO pin struct contains only primitive fields (`pin_id`, `output_high`).
 > 2. **State Transition Safety:** Methods like `into_input(self)` take ownership of `self` by value, consuming the `GpioPin<Disabled>` instance so it can no longer be referenced.
 > 3. **Unrepresentable Invalid States:** `GpioPin<Input>` does not define `set_high()`, and `GpioPin<Disabled>` defines neither `read_digital()` nor `set_high()`. Calling inappropriate methods causes a compile-time error (`E0599`).
@@ -353,7 +365,7 @@ Build a `#![no_std]` compatible GPIO pin type-state machine:
 
 ### Exercise 2: Secure TLS Connection Handshake Protocol State Machine
 
-**Problem:** Network client protocols follow a mandatory sequence: `Disconnected` $\rightarrow$ `Handshaking` $\rightarrow$ `Authenticated`. Attempting to send application payload data before authentication must be rejected at compile time. Fallible state transitions (e.g. handshake verification failure) must return `Result<TlsSession<Authenticated>, HandshakeError>` to handle bad security credentials.
+**Scenario:** Network client protocols follow a mandatory sequence: `Disconnected` $\rightarrow$ `Handshaking` $\rightarrow$ `Authenticated`. Attempting to send application payload data before authentication must be rejected at compile time. Fallible state transitions (e.g. handshake verification failure) must return `Result<TlsSession<Authenticated>, HandshakeError>` to handle bad security credentials.
 
 Build a TLS session typestate machine:
 1. Define state markers `Disconnected`, `Handshaking`, and `Authenticated`.
@@ -364,6 +376,9 @@ Build a TLS session typestate machine:
 6. Write unit tests testing successful handshake lifecycle and authentication error handling (`unwrap_err()`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::marker::PhantomData;
 > 
@@ -445,7 +460,8 @@ Build a TLS session typestate machine:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Fallible Typestate Transitions:** `authenticate(self, secret: &str)` returns a `Result<TlsSession<Authenticated>, HandshakeError>`. If authentication fails, ownership of `TlsSession<Handshaking>` is dropped and no `TlsSession<Authenticated>` instance is produced.
 > 2. **Compile-Time Data Protection:** `send_data` is declared exclusively on `TlsSession<Authenticated>`. It is impossible to send unencrypted payload bytes while in the `Disconnected` or `Handshaking` states.
 
@@ -453,7 +469,7 @@ Build a TLS session typestate machine:
 
 ### Exercise 3: Financial Transaction Pipeline with State-Specific Payload Carrying
 
-**Problem:** In fintech payment processing, financial transactions progress through distinct states: `Draft` $\rightarrow$ `Approved` $\rightarrow$ `Executed`. Unlike zero-sized marker patterns, each state stage accumulates domain data: `Approved` adds a `manager_signature: String`, and `Executed` adds a `receipt_id: u64`.
+**Scenario:** In fintech payment processing, financial transactions progress through distinct states: `Draft` $\rightarrow$ `Approved` $\rightarrow$ `Executed`. Unlike zero-sized marker patterns, each state stage accumulates domain data: `Approved` adds a `manager_signature: String`, and `Executed` adds a `receipt_id: u64`.
 
 Build a data-carrying typestate transaction engine:
 1. Define state structs holding state-specific payload fields:
@@ -468,6 +484,9 @@ Build a data-carrying typestate transaction engine:
 7. Write unit tests verifying valid workflow execution, zero-amount rejection, and missing signature rejection.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Eq)]
 > pub struct DraftData;
@@ -577,14 +596,15 @@ Build a data-carrying typestate transaction engine:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Data-Carrying Typestates:** Unlike zero-sized marker types, state structs (`ApprovedData`, `ExecutedData`) carry operational data specific to that stage of the lifecycle.
 > 2. **Progressive Accumulation:** Transitioning from `ApprovedData` to `ExecutedData` preserves the `manager_signature` field while introducing the `receipt_id` field.
 > 3. **Compile-Time Receipt Generation:** Calling `.receipt()` is valid ONLY on `Transaction<ExecutedData>`, guaranteeing that unapproved or unexecuted transactions can never generate a receipt string.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Marker Traits](marker_traits.md) — Empty traits used as state bounds.
@@ -597,7 +617,7 @@ Build a data-carrying typestate transaction engine:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - The Type-State Pattern encodes state machine lifecycles directly into Rust's static type system (`Struct<State>`).
 - State transition methods MUST consume `self` by value to invalidate the previous state variable.

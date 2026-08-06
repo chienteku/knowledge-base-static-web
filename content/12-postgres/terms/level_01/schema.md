@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Logical Namespace**
+
+**Core Concept** (Database Namespace Division): A Schema is a named namespace within a PostgreSQL database that groups related tables, views, and functions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported natively in PostgreSQL. Every database defaults to using a standard namespace named `public`).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you create a fresh database, you might only start with 5 or 10 tables. 
@@ -87,7 +88,7 @@ JOIN inventory.transactions i ON b.id = i.id;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing different schemas are separate physical databases
 
@@ -133,66 +134,94 @@ CREATE TABLE users (...); -- Created in public schema by default
 CREATE SCHEMA auth; CREATE TABLE auth.users (...);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Namespace Resolution
+### Exercise 1: Creating Namespace Schemas for Application Isolation
 
-**Problem:** You have created a custom schema named `security` containing a table named `tokens`. If you run the query:
-`SELECT * FROM tokens;`
-Postgres returns an error saying "relation 'tokens' does not exist." Why did this happen, and how do you fix it?
+**Scenario:**
+Create isolated schemas `app_v1` and `analytics` within database `store_db`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE SCHEMA app_v1` and `CREATE SCHEMA analytics`.
+
 > [!check]- Answer
-> ```text
-> It happened because Postgres defaulted to looking for the table inside the `public` schema (`public.tokens`). Since `tokens` was created inside the `security` schema, Postgres cannot find it. 
-> To fix this, you must explicitly specify the schema path in the query: `SELECT * FROM security.tokens;`.
+>
+> #### Implementation
+>
+> ```sql
+> CREATE SCHEMA app_v1;
+> CREATE SCHEMA analytics;
 > ```
-> - Remember that Postgres falls back to the `public` namespace unless instructed otherwise.
-> - Look up the search path concept or explicit schema referencing.
+>
+> #### Technical Explanation
+>
+> 1. `CREATE SCHEMA` allocates a named namespace within the active database.
+> 2. Groups related tables, views, and functions logically.
+> 3. Allows separate schemas to contain tables with duplicate names (e.g. `app_v1.users` vs `analytics.users`).
+
+---
+
+### Exercise 2: Configuring Search Path Resolution with `search_path`
+
+**Scenario:**
+Set the session `search_path` to check `app_v1`, `public` in order.
+
+**Requirements:**
+1. Execute `SET search_path TO app_v1, public`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SET search_path TO app_v1, public;
+> 
+> -- Query resolves to app_v1.users automatically!
+> SELECT * FROM users;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `search_path` determines the order in which PostgreSQL resolves un-qualified table names.
+> 2. `SET search_path TO app_v1, public` checks `app_v1` first; if not found, checks `public`.
+> 3. Simplifies SQL queries across multi-schema databases.
+
+---
+
+### Exercise 3: Qualified Schema Table Operations
+
+**Scenario:**
+Query a table in `analytics` schema explicitly using schema-qualified name `analytics.monthly_reports`.
+
+**Requirements:**
+1. Use qualified identifier `analytics.monthly_reports`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT * FROM analytics.monthly_reports 
+> WHERE report_year = 2026;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Schema-qualified names (`schema_name.table_name`) bypass `search_path` ambiguity.
+> 2. Guarantees queries target the exact intended table.
+> 3. Recommended best practice for cross-schema triggers and functions.
 
 ---
 
 
 
-### Exercise 2: Setting Search Path to Custom Schema
-
-**Problem:** Set active connection `search_path` to custom schema `app_schema`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SET search_path TO app_schema, public;
-> ```
-> ```sql
-> SET search_path TO app_schema, public;
-> ```
->
-> **Explanation:** `search_path` specifies ordered schema namespaces for un-qualified table references.
-
----
-
-### Exercise 3: Creating Custom Schema
-
-**Problem:** Create custom schema `inventory` if it does not exist.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE SCHEMA IF NOT EXISTS inventory;
-> ```
-> ```sql
-> CREATE SCHEMA IF NOT EXISTS inventory;
-> ```
->
-> **Explanation:** `CREATE SCHEMA IF NOT EXISTS` creates schema namespaces safely.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Database](database.md) — The parent container.
 - [Table (Relation)](table.md) — The child object.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A schema is a logical namespace (folder) inside a database.
 - Every database starts with a default schema named `public`.
 - Schemas prevent naming collisions by letting tables share the same name in different folders.

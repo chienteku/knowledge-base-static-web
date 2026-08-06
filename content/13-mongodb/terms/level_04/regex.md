@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Query Operator** (Pattern Matching Regular Expressions): The $regex operator matches string field values against regular expression patterns within query filters.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported across NoSQL platforms. Uses Perl Compatible Regular Expressions (PCRE) to execute character-by-character string comparisons).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Users rarely search for exact string matches in search inputs. 
@@ -93,7 +94,7 @@ db.products.find({ name: /Smart/i }); // CPU-heavy! Scans all strings.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Implementing unanchored, case-insensitive regex queries as the primary search engine for massive collections
 
@@ -141,64 +142,95 @@ db.posts.find({ body: { $regex: /mongodb/i } }); // Slow regex text search
 db.posts.find({ $text: { $search: "mongodb" } }); // Fast text index search
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Prefix Match Query
+### Exercise 1: Case-Insensitive Prefix Matching with `$regex`
 
-**Problem:** You have a `users` collection. Write the query to find all users whose `email` field starts with the string `"admin"` (case-insensitive). Use the JavaScript regex literal format.
+**Scenario:**
+Find all users whose `name` begins with `"alice"` (case-insensitive).
 
-**Expected output:**
+**Requirements:**
+1. Use `{ name: { $regex: "^alice", $options: "i" } }`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.users.find({ email: /^admin/i });
+> db.users.find({
+>   name: { $regex: "^alice", $options: "i" }
+> });
 > ```
-> - Anchor the query to the start of the string using the caret symbol `^`.
-> - Apply the case-insensitivity flag `i` after the closing slash.
+>
+> #### Technical Explanation
+>
+> 1. `$regex: "^prefix"` matches strings beginning with target characters.
+> 2. `$options: "i"` enables case-insensitive matching.
+> 3. Prefix regex queries (`^pattern`) can utilize standard indexes if collation matches.
+
+---
+
+### Exercise 2: Suffix Matching with `$regex`
+
+**Scenario:**
+Query documents where `email` ends with `@company.org`.
+
+**Requirements:**
+1. Use `{ email: { $regex: "@company\.org$" } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   email: { $regex: "@company\.org$" }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$regex: "pattern$"` matches string endings.
+> 2. Escapes special characters (`\.`) to match literal dots.
+> 3. Note: Unanchored or suffix regex queries require collection scans; consider text indexes for full-text search.
+
+---
+
+### Exercise 3: Validating Regex Index Execution with `explain()`
+
+**Scenario:**
+Inspect whether a regex query utilizes an index or forces a full collection scan using `explain()`.
+
+**Requirements:**
+1. Execute `db.users.find({ email: /^alice/ }).explain("executionStats")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const plan = db.users.find({ email: /^alice/ }).explain("executionStats");
+> console.log("Stage:", plan.executionStats.executionStages.stage);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Anchored regex (`/^alice/`) allows the B-tree index to isolate matching prefix ranges (`IXSCAN`).
+> 2. Unanchored regex (`/alice/`) forces an `COLLSCAN` across all collection documents.
+> 3. Always test regex query performance with `explain()`.
 
 ---
 
 
 
-### Exercise 2: Case-Insensitive Regex Query
-
-**Problem:** Query users where `username` starts with `"admin"` case-insensitively using `$regex` and `$options: "i"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ username: { $regex: "^admin", $options: "i" } });
-> ```
-> ```javascript
-> db.users.find({ username: { $regex: "^admin", $options: "i" } });
-> ```
->
-> **Explanation:** `$options: "i"` performs case-insensitive regex matching; `^` anchors to string start.
-
----
-
-### Exercise 3: Anchored Regex Index Scan
-
-**Problem:** Why are anchored regex queries (`^prefix`) faster than un-anchored regex queries? (Anchored regex utilizes B-Tree index range scans).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Anchored regex queries utilize B-Tree index range scans
-> ```
-> ```text
-> Anchored regex queries utilize B-Tree index range scans
-> ```
->
-> **Explanation:** Leading text anchors allow B-Tree indexes to jump directly to matching prefix keys.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Evaluation Query Operators (`$regex`, `$expr`, `$mod`)](evaluation_operators.md) — The parent context.
 - [Text Search (`$text` / `$search`)](text_search.md) — Large text indexing alternatives.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$regex` provides regular expression pattern matching for text strings.
 - Direct equivalent of SQL's `LIKE` and `ILIKE` pattern operations.
 - Write queries using literals (`/pattern/i`) or object keys (`{ $regex: "...", $options: "..." }`).

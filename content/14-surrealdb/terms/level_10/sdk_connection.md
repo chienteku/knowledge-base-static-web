@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **SDK & Lifecycle**
+
+
+**Integration / Ecosystem (SDK connection lifecycle management)**: - **SDK & Lifecycle**
+
+
 
 ---
 
-## 3. Environment Context
-- **Client Application Lifecycle** (Executed during application startup, worker initialization, or teardown).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To query a SurrealDB instance reliably, a client application must progress through a deterministic sequence of state transitions:
@@ -94,7 +93,7 @@ class DatabaseClient {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating a New Surreal Client Instance on Every API Route Handler
 
@@ -169,97 +168,103 @@ await db.close(); // Closes WebSocket connection cleanly
 
 
 
-### Mistake 4: Using `http://` Connection Endpoints for Real-Time `db.live()` Subscriptions
 
-**The mistake:** Connecting SDK to `http://` endpoint when using `db.live()` listeners.
 
-**Why it's wrong:** HTTP protocol is stateless and does NOT support real-time WebSocket live query push events. Connect via `ws://` or `wss://`.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-await db.connect("http://127.0.0.1:8000/rpc");
-await db.live("user"); // ❌ Live queries unsupported over HTTP!
-```
+### Exercise 1: Connection Lifecycle Management
 
-*Fix:*
-```surrealql
-await db.connect("ws://127.0.0.1:8000/rpc");
-await db.live("user"); // WebSocket connection enables live queries
-```
+**Scenario:**
+Manage an SDK connection lifecycle: connect over WebSockets, target namespace/database using `db.use()`, and disconnect on exit.
 
-### Mistake 5: Omitting Connection Closing in Ephemeral Node.js Scripts
-
-**The mistake:** Running batch CLI scripts using JS SDK without calling `await db.close()` before script exit.
-
-**Why it's wrong:** Un-closed WebSocket connections keep Node.js event loops active, preventing CLI scripts from exiting cleanly.
-
-*Incorrect:*
-```surrealql
-// Script finishes without closing connection
-await db.select("user"); // ❌ Node process hangs!
-```
-
-*Fix:*
-```surrealql
-await db.select("user");
-await db.close(); // Closes WebSocket connection cleanly
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Arrange Lifecycle Steps
-Order the four SDK lifecycle steps in their correct execution order:
-a. `signin()`
-b. `connect()`
-c. `close()`
-d. `use()`
+**Requirements:**
+1. Call `db.connect()`.
+2. Call `db.use({ ns: "prod", db: "main" })`.
+3. Call `db.close()`.
 
 > [!check]- Answer
-> - Order: `connect()` -> `use()` -> `signin()` -> `close()`.
+>
+> #### Implementation
+>
+> ```typescript
+> import Surreal from "@surrealdb/surrealdb";
+
+const db = new Surreal();
+
+await db.connect("ws://localhost:8000/rpc");
+await db.use({ ns: "prod", db: "main" });
+
+// Perform operations...
+
+await db.close();
+```
+
+> #### Technical Explanation
+>
+> 1. `db.connect()` initializes binary WebSocket protocol connections.
+> 2. `db.use({ ns, db })` updates active session namespace and database targets.
+> 3. `db.close()` terminates the connection cleanly.
 
 ---
 
+### Exercise 2: Managing Connection State Status
 
+**Scenario:**
+Inspect connection status flags (`db.status`) to verify whether the SDK is actively connected before running queries.
 
-### Exercise 2: SDK Connection and Cleanup
+**Requirements:**
+1. Check connection status before executing queries.
 
-**Problem:** Write async function connecting to `ws://localhost:8000/rpc` and closing connection cleanly with `db.close()`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> const db = new Surreal(); await db.connect(uri); ... await db.close();
-> ```
-> ```javascript
-> const db = new Surreal();
-> try {
->   await db.connect("ws://localhost:8000/rpc");
->   // Operations ...
-> } finally {
->   await db.close();
+>
+> #### Implementation
+>
+> ```typescript
+> if (db.status === "connected") {
+>   const result = await db.select("product");
+> } else {
+>   console.error("SDK is not connected!");
 > }
 > ```
 >
-> **Explanation:** `db.close()` closes active WebSocket connections cleanly.
+> #### Technical Explanation
+>
+> 1. `db.status` exposes connection state (`"disconnected"`, `"connecting"`, `"connected"`).
+> 2. Prevents executing queries on uninitialized WebSocket connections.
+> 3. Simplifies connection state handling in UI frameworks (React/Vue).
 
 ---
 
-### Exercise 3: SDK Automatic Reconnection Configuration
+### Exercise 3: Automatic Connection Reconnection
 
-**Problem:** How do SurrealDB SDKs handle temporary network drops? (Automatically reconnects over WebSockets).
+**Scenario:**
+Configure SDK connection options to enable automatic reconnection if the network drops temporarily.
 
-**Expected output:**
+**Requirements:**
+1. Describe built-in SDK WebSocket auto-reconnect capabilities.
+
 > [!check]- Answer
-> ```text
-> SDKs manage automatic WebSocket reconnection and query state resubscription
-> ```
-> ```text
-> SDKs manage automatic WebSocket reconnection and query state resubscription
+>
+> #### Implementation
+>
+> ```typescript
+> // SDK automatically attempts WebSocket reconnection on network drop
+> await db.connect("wss://db.example.com/rpc");
 > ```
 >
-> **Explanation:** Official SDKs include built-in automatic WebSocket reconnection handlers.
+> #### Technical Explanation
+>
+> 1. The SurrealDB JavaScript SDK includes built-in exponential backoff auto-reconnection logic.
+> 2. Re-establishes WebSocket channels automatically when network connectivity recovers.
+> 3. Re-authenticates active session tokens on successful reconnection.
 
-## 7. Related Terms
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [JavaScript / TypeScript SDK](js_sdk.md) — SurrealDB npm package overview.
 - [Connection Credentials (`USE NS ... DB ...`)](../level_01/connection_credentials.md) — Scope selection.
@@ -267,7 +272,7 @@ d. `use()`
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The standard connection sequence is `.connect()` → `.use()` → `.signin()` → `.close()`.
 - Reuse a single connected client instance across requests rather than instantiating new clients per query.
 - Always invoke `.close()` during application teardown to free server sockets.

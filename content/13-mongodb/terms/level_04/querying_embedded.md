@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Query Syntax**
+
+**CRUD Operation** (Nested Document Query Patterns): Querying Embedded Documents covers techniques for matching exact subdocument objects vs targeting specific subfields using dot notation.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Evaluated by the query planner. Exact matches check binary BSON byte-stream equality; dot notation evaluates individual field-value matches).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `embedded_document.md`, document databases allow nesting objects. 
@@ -91,7 +92,7 @@ db.contacts.find({ "info.phone": "555-12" });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on exact subdocument queries in application drivers where object key order is not guaranteed
 
@@ -139,71 +140,96 @@ db.users.updateOne({ _id: id }, { $set: { address: { city: "Boston" } } }); // �
 db.users.updateOne({ _id: id }, { $set: { "address.city": "Boston" } });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Robust Query Refactor
+### Exercise 1: Querying Subdocument Fields with Dot-Notation
 
-**Problem:** The following query is fragile and fails if the document contains a `street` field or different key ordering:
-`db.companies.find({ location: { city: "New York", state: "NY" } });`
-Refactor this query using dot notation to make it robust.
+**Scenario:**
+Query collection `users` for documents where embedded field `address.state` equals `"CA"`.
 
-**Expected output:**
+**Requirements:**
+1. Filter `{ "address.state": "CA" }`.
+
 > [!check]- Answer
-> ```javascript
-> db.companies.find({ "location.city": "New York", "location.state": "NY" });
-> ```
-> - Split the nested document keys into separate dot-notation paths.
-> - Wrap the paths in string quotes (`""`).
-> - Combine the fields inside a single match filter object.
-
----
-
-
-
-### Exercise 2: Querying Embedded Fields with Dot-Notation
-
-**Problem:** Query users where embedded `specs.ram` is greater than or equal to `16`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.devices.find({ "specs.ram": { $gte: 16 } });
-> ```
-> ```javascript
-> db.devices.find({ "specs.ram": { $gte: 16 } });
-> ```
 >
-> **Explanation:** Dot-notation `"specs.ram"` queries fields inside embedded sub-documents.
-
----
-
-### Exercise 3: Updating Embedded Sub-Document Field
-
-**Problem:** Update `profile.avatar` URL for `user:1` using dot-notation `$set`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.updateOne({ _id: 1 }, { $set: { "profile.avatar": "http://img.png" } });
-> ```
+> #### Implementation
+>
 > ```javascript
-> db.users.updateOne({
->   _id: 1
-> }, {
->   $set: { "profile.avatar": "http://img.png" }
+> db.users.find({
+>   "address.state": "CA"
 > });
 > ```
 >
-> **Explanation:** Dot-notation updates specific sub-document fields preserving other properties.
+> #### Technical Explanation
+>
+> 1. Dot-notation (`"address.state"`) targets specific subfields within embedded documents.
+> 2. Matches documents regardless of what other keys exist inside `address`.
+> 3. Leverages secondary index `{ "address.state": 1 }`.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Exact Subdocument Object Matching
+
+**Scenario:**
+Query collection `users` for documents where `address` equals exact subdocument `{ city: "Austin", state: "TX" }`.
+
+**Requirements:**
+1. Filter `{ address: { city: "Austin", state: "TX" } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   address: { city: "Austin", state: "TX" }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Exact object matching requires exact key order and exact field equality.
+> 2. Fails to match if `address` contains additional keys (e.g. `zip`) or reversed key order (`state`, `city`).
+> 3. Prefer dot-notation for robust subfield querying.
+
+---
+
+### Exercise 3: Querying Arrays of Embedded Objects
+
+**Scenario:**
+Query `orders` for documents where embedded subdocument array `items` contains item with `sku: "SKU-99"`.
+
+**Requirements:**
+1. Filter `{ "items.sku": "SKU-99" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.find({
+>   "items.sku": "SKU-99"
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Dot-notation through arrays (`"items.sku"`) matches if ANY element in the array has matching `sku`.
+> 2. Multikey index indexes array subfield values.
+> 3. Simplifies nested collection queries.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Dot Notation](dot_notation.md) — The path syntax.
 - [Embedded Document (Subdocument)](../level_02/embedded_document.md) — The data structure.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Querying subdocuments can be done via exact match or dot notation paths.
 - Exact subdocument matching requires byte-perfect order and field matches.
 - JavaScript key re-ordering causes exact subdocument queries to fail randomly.

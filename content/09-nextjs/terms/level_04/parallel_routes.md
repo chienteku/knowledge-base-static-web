@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing / UI Architecture**
+
+**Routing & Layouts** (Parallel Route Slot Composition): Parallel Routes (`@slot`) allow rendering multiple independent pages side-by-side inside a single shared layout.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time (Routing)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine a complex Dashboard. You want an Analytics chart on the left, and a Team Activity feed on the right. Both sections need their own loading states (`loading.tsx`), their own error boundaries (`error.tsx`), and they should fetch their data independently.
@@ -72,7 +73,7 @@ export default function DashboardLayout({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting `default.tsx` during hard navigation
 
@@ -120,91 +121,133 @@ export default function DashboardLayout({
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Conditional Rendering
+### Exercise 1: Creating Parallel Route Slots `@slot`
 
-**Problem:** You have a layout receiving an `@adminDashboard` slot. How can you easily hide it from standard users?
+**Scenario:**
+Create parallel slots `@team` and `@analytics` inside `app/dashboard/` and render them in `app/dashboard/layout.tsx`.
 
-**Expected output:**
+**Requirements:**
+1. Use `@folder` slot directory naming.
+2. Accept slots as props in layout.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> export default function Layout({ children, adminDashboard }) {
->   const isAdmin = checkUserRole();
->   return (
->     <>
->       {children}
->       {/* Just use standard React conditional logic! */}
->       {isAdmin ? adminDashboard : null} 
->     </>
->   );
-> }
-> ```
-> - Slots are just React nodes passed as props.
-
----
-
-### Exercise 2: Parallel Route Layout Slot Pattern
-
-**Problem:** Write `app/layout.tsx` accepting `children`, `@team`, and `@analytics` parallel slot props.
-
-**Expected output:**
-> [!check]- Answer
-> ```tsx
-> export default function Layout({ children, team, analytics }: { children: React.ReactNode; team: React.ReactNode; analytics: React.ReactNode }) { return ( <div> {children} <div className="flex">{team}{analytics}</div> </div> ); }
-> ```
-> - Named slot folders `@slot` pass matching props to parent layout.
-> 
-> ```tsx
-> export default function Layout({
+> // app/dashboard/layout.tsx
+> export default function ParallelDashboardLayout({
 >   children,
->   team,
->   analytics
+>   analytics,
+>   team
 > }: {
 >   children: React.ReactNode;
->   team: React.ReactNode;
 >   analytics: React.ReactNode;
+>   team: React.ReactNode;
 > }) {
 >   return (
->     <div>
->       {children}
+>     <div className="space-y-6 p-6">
+>       <div>{children}</div>
 >       <div className="grid grid-cols-2 gap-4">
->         {team}
->         {analytics}
+>         <div>{analytics}</div>
+>         <div>{team}</div>
 >       </div>
 >     </div>
 >   );
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. Folders named `@slotName` define parallel route slots that do NOT affect URL paths.
+> 2. Next.js passes slots directly as props to the parent `layout.tsx`.
+> 3. Renders independent page components side-by-side in a unified view.
+
 ---
 
-### Exercise 3: Parallel Route Folder Naming Convention
+### Exercise 2: Conditional Slot Rendering Based on User Role
 
-**Problem:** Which symbol prefix defines a Parallel Route slot folder in Next.js App Router?
+**Scenario:**
+Render `@admin` slot conditionally inside layout based on active user authentication role.
 
-**Expected output:**
+**Requirements:**
+1. Check user role in Server Layout and render slot or `null`.
+
 > [!check]- Answer
-> ```text
-> @ (e.g. app/@slotName)
+>
+> #### Implementation
+>
+> ```tsx
+> import { getUser } from "@/lib/auth";
+
+export default async function ConditionalDashboardLayout({
+  children,
+  admin
+}: {
+  children: React.ReactNode;
+  admin: React.ReactNode;
+}) {
+  const user = await getUser();
+
+  return (
+    <div>
+      {children}
+      {user.role === "ADMIN" ? admin : null}
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Parallel slots are standard React Node props, allowing conditional rendering based on server state.
+> 2. Admin analytics pages are fetched and rendered ONLY when authorized.
+> 3. Secure dashboard composition pattern.
+
+---
+
+### Exercise 3: Handling Fallback Un-Matched Routes with `default.tsx`
+
+**Scenario:**
+Create `app/dashboard/@analytics/default.tsx` to handle slot rendering when sub-routes update.
+
+**Requirements:**
+1. Export default fallback component in `default.tsx`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // app/dashboard/@analytics/default.tsx
+> export default function DefaultAnalytics() {
+>   return <div>Analytics Overview (Default Fallback)</div>;
+> }
 > ```
-> - `@` prefix defines named parallel route slots.
-> 
-> ```text
-> app/@modal/page.tsx -> Passes 'modal' prop to app/layout.tsx
-> ```
+
+> #### Technical Explanation
+>
+> 1. When navigating between sub-routes, Next.js renders `default.tsx` for parallel slots if their active state cannot be determined.
+> 2. Prevents empty or blank slot panels during client transitions or page refreshes.
+> 3. Essential component for parallel routing systems.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`layout.tsx`](../level_02/layout.md) — The file that orchestrates the slots.
 - [Intercepting Routes (`(..)folder`)](intercepting_routes.md) — Often combined with Parallel Routes to build modal windows.
 - [Route Groups (`(group)`)](../level_03/route_groups.md) — Related concept: Route Groups (`(group)`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Parallel Routes** use the `@folderName` convention.
 - They allow you to render multiple pages simultaneously within the same layout.
 - Each slot acts as an independent Next.js route, meaning they get their own `loading.tsx` and `error.tsx`.

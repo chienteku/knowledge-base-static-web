@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Tooling**: `rustup` is the gateway tool for Rust development. Similar to `nvm` in Node.js or `pyenv` in Python, `rustup` manages installation channels (`stable`, `beta`, `nightly`), toolchains, and platform target triples (e.g. `x86_64-unknown-linux-gnu`, `wasm32-unknown-unknown`, `thumbv7em-none-eabihf`).
+
+
+**Rust Ecosystem Tool (toolchain installer & manager)**: `rustup` is the gateway tool for Rust development. Similar to `nvm` in Node.js or `pyenv` in Python, `rustup` manages installation channels (`stable`, `beta`, `nightly`), toolchains, and platform target triples (e.g. `x86_64-unknown-linux-gnu`, `wasm32-unknown-unknown`, `thumbv7em-none-eabihf`).
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Tooling**: `rustup` runs on Linux, macOS, and Windows. It installs `rustc`, `cargo`, `rustdoc`, and core toolchain binaries into `~/.cargo/bin/` and `~/.rustup/`.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -89,7 +87,15 @@ targets = ["wasm32-unknown-unknown", "x86_64-unknown-linux-gnu"]
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 3: Hardcoding Specific Nightly Compiler Versions in Shared CI Scripts
+
+**The mistake:** Writing `cargo +nightly-2023-01-01 build` directly in CI scripts without a `rust-toolchain.toml` file.
+
+**Why it's wrong:** Disconnects local developer environments from CI environments, leading to "works on my machine" compiler errors.
+
+*Fix:* Define a `rust-toolchain.toml` file at project root to synchronize toolchains automatically.
+
 
 ### Mistake 1: Installing `rustc` via OS Package Managers (`apt`, `brew`) instead of `rustup`
 
@@ -117,15 +123,18 @@ cargo build --target wasm32-unknown-unknown
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Target Triple Parser & Platform Compatibility Evaluator
 
-**Problem:**
+**Scenario:**
 When managing multi-platform builds with `rustup`, automated scripts and developer tooling must parse target triples (formatted as `<arch>-<vendor>-<sys>-<abi>`) to determine host dependencies, whether a target requires `#![no_std]` bare-metal toolchains, WebAssembly components (`wasm32-unknown-unknown`), or hardware floating-point support (`eabihf`).
 Implement a `#![no_std]` target triple parser `RustupTargetTriple` that parses standard Rust target strings, categorizes target platform attributes, recommends necessary `rustup` components, and determines host compatibility. Write unit test functions with `assert_eq!`, `assert!`, and `assert_ne!` proving correct parsing across diverse target architectures.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -270,7 +279,8 @@ Implement a `#![no_std]` target triple parser `RustupTargetTriple` that parses s
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Target Triple Specification Structure**: Rust platform targets managed by `rustup target add` follow the standardized convention `architecture-vendor-operating_system-abi`. Parsing this string enables automated build scripts to detect whether a compilation target needs cross-compilers or specialized standard library builds.
 > 2. **Zero-Allocation Slicing (`#![no_std]`)**: By leveraging string splitting (`triple.split('-')`) and lifetime-borrowed slices (`&'a str`), the triple evaluator operates without requiring dynamic memory allocation (`alloc`) or the Rust standard library (`std`).
 > 3. **Component Mapping for Target Architecture**: Embedded targets (`sys = "none"`) require source libraries (`rust-src`) and LLVM binutils (`llvm-tools`) for linkers, while WebAssembly targets (`wasm32-unknown-unknown`) pair with `wasm-bindgen` tools.
@@ -279,11 +289,14 @@ Implement a `#![no_std]` target triple parser `RustupTargetTriple` that parses s
 
 ### Exercise 2: `rust-toolchain.toml` Config Parser & Validation Engine
 
-**Problem:**
+**Scenario:**
 To guarantee reproducible builds across development machines and CI/CD pipelines, projects use `rust-toolchain.toml` to specify toolchain channels (`stable`, `beta`, `nightly`, or pinned version `1.78.0`), required developer components (`clippy`, `rustfmt`, `miri`), and target build architectures (`wasm32-unknown-unknown`, `thumbv7em-none-eabihf`).
 Implement a `#![no_std]` toolchain configuration parser `RustupToolchainConfig` that extracts channel definitions, target lists, and component requirements, verifies if nightly features are mandated by components like `miri`, and validates active host environment compatibility. Include unit test functions with `assert_eq!`, `assert!`, and `assert_ne!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -448,7 +461,8 @@ Implement a `#![no_std]` toolchain configuration parser `RustupToolchainConfig` 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Toolchain Version Pinning**: Placed in `rust-toolchain.toml`, channel specifications enforce consistent Rust compiler versions across team members and automated CI systems, preventing breakage caused by toolchain drift.
 > 2. **Nightly Component Constraints**: Certain developer components like `miri` (Rust's undefined-behavior interpreter) rely on unstable internal compiler APIs and can only be installed on `nightly` channels via `rustup component add miri`.
 > 3. **Static Allocation in `#![no_std]`**: Fixed-length arrays (`[&'a str; MAX_COMPONENTS]`) provide memory safety and predictability without needing heap allocation runtime logic (`alloc`).
@@ -457,11 +471,14 @@ Implement a `#![no_std]` toolchain configuration parser `RustupToolchainConfig` 
 
 ### Exercise 3: Dynamic Toolchain Channel & Target Feature Dispatcher
 
-**Problem:**
+**Scenario:**
 Rust projects targeting both embedded microcontrollers (`#![no_std]`) and WebAssembly, or toggling between `stable` and `nightly` channels, often implement fallback execution strategies based on active toolchain capabilities. For example, unstable SIMD intrinsics or experimental memory tracking (`miri`) may only be available under `nightly`, requiring portable scalar fallbacks when built using `stable`.
 Implement a `#![no_std]` toolchain capability dispatcher `RustupFeatureDispatcher` that detects channel features (`Stable`, `Nightly`), manages target capability flags, and dispatches data processing operations to either a fast-path SIMD algorithm or a portable scalar fallback. Write unit test functions with `assert_eq!`, `assert!`, and `assert_ne!` confirming equivalent output across feature branches.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -590,14 +607,15 @@ Implement a `#![no_std]` toolchain capability dispatcher `RustupFeatureDispatche
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Multi-Channel Release Lifecycle**: `rustup` maintains parallel toolchains (`stable`, `beta`, `nightly`). Experimental compiler features and unstable intrinsics are locked behind the `nightly` channel.
 > 2. **Portable Fallback Architecture**: High-performance libraries use feature dispatching to run unstable vector acceleration when built under `nightly`, while maintaining a deterministic scalar fallback when built under `stable`.
 > 3. **CI Pipeline Integration**: `rustup run <channel> cargo test` allows automated testing matrix environments to validate both `stable` scalar paths and `nightly` SIMD paths before merging code.
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Cargo CLI](../level_07/cargo_cli.md) — Build tool managed by `rustup`.
@@ -608,7 +626,7 @@ Implement a `#![no_std]` toolchain capability dispatcher `RustupFeatureDispatche
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `rustup` is the official installer and toolchain manager for Rust.
 - It manages release channels (`stable`, `beta`, `nightly`), toolchains, components (`clippy`, `rustfmt`), and build targets (`wasm32`, `thumbv7`).

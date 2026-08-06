@@ -13,53 +13,23 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Advanced Mechanics**
+
+**TypeScript Advanced Type** (Iterative Object Transformation Types): Mapped types (`{[K in keyof T]: ...}`) iterate over property keys to transform existing object types into new structures.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
 
----
 
-## 4. Explanation
-
-### (1) Design Motivation — "Why did we design this?"
-You have an `interface User { name: string; age: number; }`.
-You want to create a new type where every single property is optional (`name?: string; age?: number;`). 
-You could write it out manually, but that violates DRY. 
-You know the `Partial<T>` utility type does this automatically. But *how* does `Partial<T>` actually work under the hood? It uses a **Mapped Type**. It loops over every key in `User` and slaps a `?` on it.
-
-### (2) The Syntax
-A Mapped Type looks like an Index Signature, but it uses the `in` operator (not to be confused with the Type Guard `in`) to iterate over a Union of keys.
-
-```typescript
-// 1. Let's look at the actual source code for `Partial<T>`
-type MyPartial<T> = {
-  // "For every Key (P) in the union of keys of T..."
-  // "...add a question mark (?), and keep its original Type (T[P])"
-  [P in keyof T]?: T[P];
-};
-
-interface User { name: string; age: number; }
-type OptionalUser = MyPartial<User>; 
-// Result: { name?: string; age?: number; }
-```
-
-### (3) Mapping Modifiers
-You can use `+` or `-` to add or remove modifiers like `readonly` or `?`.
-
-```typescript
-// The source code for the `Required<T>` utility type!
-type MyRequired<T> = {
-  // The `-?` means "remove the optional modifier from this key"
-  [P in keyof T]-?: T[P];
-};
-```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to Map over an Array
 
@@ -104,63 +74,113 @@ type MakeRequired<T> = { [K in keyof T]?: T[K] }; // ❌ Adds optionality instea
 type MakeRequired<T> = { [K in keyof T]-?: T[K] }; // Correct: Strips '?' optionality
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Readonly Mapped Type
+### Exercise 1: Creating Custom `ReadonlyMap<T>` Mapped Types
 
-**Problem:** How would you write your own `MyReadonly<T>` mapped type that takes an object and locks every single property so it cannot be mutated?
+**Scenario:**
+Re-implement the built-in `Readonly<T>` utility type using a mapped type syntax `{[K in keyof T]: T[K]}`.
 
-**Expected output:**
+**Requirements:**
+1. Define `type MyReadonly<T> = { readonly [K in keyof T]: T[K] }`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
 > type MyReadonly<T> = {
->   // We add the `readonly` modifier to the left of the iterator!
->   readonly [P in keyof T]: T[P];
+>   readonly [K in keyof T]: T[K];
 > };
-> ```
-> - Where does the `readonly` keyword usually go in an interface?
+
+interface User {
+  name: string;
+  age: number;
+}
+
+type ReadonlyUser = MyReadonly<User>;
+// Inferred as: { readonly name: string; readonly age: number; }
+```
+
+> #### Technical Explanation
+>
+> 1. Mapped types `{[K in keyof T]: ...}` iterate over every key in type `T`.
+> 2. Adding `readonly` before the brackets applies the `readonly` modifier to all mapped properties.
+> 3. Fundamental syntax for building custom object transformation utilities.
+
+---
+
+### Exercise 2: Stripping Readonly and Optional Modifiers
+
+**Scenario:**
+Create a utility type `Mutable<T>` that strips `readonly` modifiers using `-readonly`.
+
+**Requirements:**
+1. Define `type Mutable<T> = { -readonly [K in keyof T]: T[K] }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type Mutable<T> = {
+>   -readonly [K in keyof T]: T[K];
+> };
+
+interface FrozenState {
+  readonly id: string;
+  readonly active: boolean;
+}
+
+type WritableState = Mutable<FrozenState>;
+// Inferred as: { id: string; active: boolean; }
+```
+
+> #### Technical Explanation
+>
+> 1. Prefixing modifiers with `-` (e.g. `-readonly` or `-?`) removes those modifiers from mapped properties.
+> 2. `Mutable<T>` strips immutability constraints from all fields.
+> 3. Essential technique for type transformation pipelines.
+
+---
+
+### Exercise 3: Mapping Properties to Nullable Unions
+
+**Scenario:**
+Create a mapped type `NullableProperties<T>` that wraps every property value in a `T[K] | null` union.
+
+**Requirements:**
+1. Define `type NullableProperties<T> = { [K in keyof T]: T[K] | null }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type NullableProperties<T> = {
+>   [K in keyof T]: T[K] | null;
+> };
+
+interface Profile {
+  username: string;
+  age: number;
+}
+
+type NullableProfile = NullableProperties<Profile>;
+// Inferred as: { username: string | null; age: number | null; }
+```
+
+> #### Technical Explanation
+>
+> 1. Mapped types can transform the value type `T[K]` associated with each key `K`.
+> 2. `T[K] | null` converts all fields into nullable options.
+> 3. Standard pattern for draft form state management.
 
 ---
 
 
 
-### Exercise 2: Custom `ReadonlyMap` Type
-
-**Problem:** Implement custom `MyReadonly<T> = { readonly [K in keyof T]: T[K] }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> MyReadonly mapped type created
-> ```
-> ```typescript
-> type MyReadonly<T> = { readonly [K in keyof T]: T[K] };
-> type FrozenUser = MyReadonly<{ name: string }>;
-> console.log("MyReadonly mapped type created");
-> ```
->
-> **Explanation:** Mapped types iterate over keys of `T` applying property modifiers.
-
----
-
-### Exercise 3: Removing Readonly Modifier
-
-**Problem:** Implement `Mutable<T> = { -readonly [K in keyof T]: T[K] }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Mutable mapped type created
-> ```
-> ```typescript
-> type Mutable<T> = { -readonly [K in keyof T]: T[K] };
-> type NormalUser = Mutable<{ readonly name: string }>;
-> console.log("Mutable mapped type created");
-> ```
->
-> **Explanation:** `-readonly` strips read-only modifiers from target object properties.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`Partial<T>` & `Required<T>`](../level_08/partial_required.md) — Utility types powered entirely by Mapped Types.
 - [`Record<Keys, Type>`](../level_08/record.md) — A utility type built on a Mapped Type.
 - [Key Remapping in Mapped Types (`as`)](key_remapping_mapped_types.md) — Related concept: Key Remapping in Mapped Types (`as`).
@@ -171,7 +191,7 @@ type MakeRequired<T> = { [K in keyof T]-?: T[K] }; // Correct: Strips '?' option
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Mapped Types** are a way to loop over the keys of an existing type to mathematically generate a brand new type.
 - Syntax: `[Key in keyof Type]: NewValueType`.
 - You can add or remove `?` (optional) and `readonly` modifiers during the mapping process using `+` and `-`.

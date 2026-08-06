@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Driver / Integration** (Official Node.js MongoDB Client Library): The MongoDB Node.js Driver is the low-level official client library executing native BSON CRUD operations, connection pooling, and command execution.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **JavaScript / Node.js** (Installed as a runtime dependency via `npm install mongodb`. Executed inside the Node.js event loop on the application server).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 MongoDB runs as a standalone daemon process (`mongod`) communicating over TCP using a custom binary protocol (wire protocol). 
@@ -98,7 +99,7 @@ run();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to run database queries before the client.connect() Promise has successfully resolved
 
@@ -154,67 +155,113 @@ app.get('/users', async (req, res) => { const client = new MongoClient(uri); ...
 Reuse single shared client instance initialized at application boot
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Execution Command
+### Exercise 1: Connecting to MongoDB with the Native Node.js Driver
 
-**Problem:** You have a Node.js script connected to MongoDB. 
-Write the asynchronous JavaScript code line (using `await`) to find all documents in the `products` collection where the `price` is less than `50`, converting the cursor results to a standard JavaScript array.
-Assume you have the `products` collection collection variable.
+**Scenario:**
+Write native Node.js MongoDB driver code to establish a database connection and query `products`.
 
-**Expected output:**
+**Requirements:**
+1. Use `MongoClient.connect()` and `db.collection()`.
+
 > [!check]- Answer
-> ```javascript
-> const cheapProducts = await products.find({ price: { $lt: 50 } }).toArray();
+>
+> #### Implementation
+>
+> ```typescript
+> import { MongoClient } from "mongodb";
+
+const uri = "mongodb://localhost:27017";
+const client = new MongoClient(uri);
+
+async function run() {
+  try {
+    await client.connect();
+    const db = client.db("store");
+    const products = await db.collection("products").find({ price: { $lt: 50 } }).toArray();
+    console.log("Products Found:", products.length);
+  } finally {
+    await client.close();
+  }
+}
+run();
+```
+
+> #### Technical Explanation
+>
+> 1. The official `@mongodb` Node.js driver provides direct, high-performance BSON API access.
+> 2. `client.connect()` initializes connection pooling and seed node discovery.
+> 3. `toArray()` streams cursor batches into a JavaScript array.
+
+---
+
+### Exercise 2: Native Driver Bulk Operations with `bulkWrite`
+
+**Scenario:**
+Execute high-throughput batch writes using the native Node.js driver `bulkWrite()`.
+
+**Requirements:**
+1. Execute `collection.bulkWrite([...])`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const collection = db.collection("inventory");
+> 
+> const result = await collection.bulkWrite([
+>   { insertOne: { document: { sku: "A1", qty: 10 } } },
+>   { updateOne: { filter: { sku: "B2" }, update: { $inc: { qty: 5 } } } }
+> ]);
+> console.log("Inserted:", result.insertedCount, "Modified:", result.modifiedCount);
 > ```
-> - The search uses the `$lt` comparison operator.
-> - Call the `.toArray()` method on the returned cursor to resolve the Promise.
+>
+> #### Technical Explanation
+>
+> 1. Native driver `bulkWrite()` sends multiple write operations in a single binary socket payload.
+> 2. Eliminates Node.js async event loop network roundtrip latency.
+> 3. Ideal for high-speed ETL ingestion pipelines.
+
+---
+
+### Exercise 3: Native BSON Type Construction (`ObjectId`, `Decimal128`)
+
+**Scenario:**
+Construct explicit BSON `ObjectId` and `Decimal128` types using the native driver BSON library.
+
+**Requirements:**
+1. Use `new ObjectId()` and `Decimal128.fromString()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { ObjectId, Decimal128 } from "mongodb";
+
+const id = new ObjectId("60c72b2f9b1d8b2c88888880");
+const price = Decimal128.fromString("199.99");
+
+await db.collection("orders").insertOne({
+  _id: id,
+  total: price,
+  createdAt: new Date()
+});
+```
+
+> #### Technical Explanation
+>
+> 1. Native driver exports explicit BSON type constructors (`ObjectId`, `Decimal128`, `Long`, `Binary`).
+> 2. Prevents JavaScript numbers from defaulting to 64-bit IEEE floating-point values.
+> 3. Guarantees binary schema compatibility.
 
 ---
 
 
 
-### Exercise 2: Node.js Driver Connection and Insert Flow
-
-**Problem:** Write async code connecting `MongoClient`, inserting document into `users`, and closing client in `finally`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const client = new MongoClient(uri); try { await client.connect(); await client.db('app').collection('users').insertOne(doc); } finally { await client.close(); }
-> ```
-> ```javascript
-> const { MongoClient } = require('mongodb');
-> const client = new MongoClient(uri);
-> try {
->   await client.connect();
->   const db = client.db('app');
->   await db.collection('users').insertOne({ name: "Alice" });
-> } finally {
->   await client.close();
-> }
-> ```
->
-> **Explanation:** Native Node.js MongoDB driver manages connection lifecycle and BSON CRUD calls.
-
----
-
-### Exercise 3: Driver Import Package
-
-**Problem:** Official npm package name for MongoDB Node.js driver (`mongodb`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> mongodb
-> ```
-> ```text
-> mongodb
-> ```
->
-> **Explanation:** `npm install mongodb` installs the official MongoDB Node.js driver.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Connection String URI](connection_string.md) — The connection configurations.
 - [Mongoose (ODM)](mongoose.md) — The schema wrapper library.
@@ -222,7 +269,7 @@ Assume you have the `products` collection collection variable.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Node.js Driver is the official client library for connecting Node.js to MongoDB.
 - Translates JavaScript objects to BSON binary payloads over the wire.
 - Operates asynchronously, returning native JavaScript Promises.

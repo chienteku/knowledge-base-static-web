@@ -12,78 +12,23 @@
 ---
 
 ## 2. Term Category
-- **Advanced Type**
+
+**TypeScript Advanced Type** (String Pattern Matching & Interpolation): Template literal types (`${Prefix}_${Suffix}`) build string literal union types using embedded string type interpolation.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-time** (Like mapped and conditional types, template literal checks occur at compile time and compile down to standard JS string concatenation).
 
----
 
-## 4. Explanation
-
-### (1) Design Motivation — "Why did we design this?"
-In JavaScript, we frequently construct string structures on the fly. For instance, in UI libraries, you might have actions or event handlers named by combining strings:
-```javascript
-const eventHandlerName = `on${eventName}`; // e.g. "onClick", "onMouseOver"
-```
-Before TypeScript 4.1, typing these patterns was highly tedious. If you wanted strict type checking for dynamic string values, you had to manually write out all permutations:
-```typescript
-type Handlers = 'onClick' | 'onChange' | 'onHover' | 'onFocus' ...
-```
-This duplication was prone to spelling errors and hard to keep synced with changes. 
-
-**Template Literal Types** were introduced to bring JavaScript's dynamic ES6 template string interpolation into type space. They allow developers to programmatically generate, prefix, suffix, and transform string unions dynamically.
-
-### (2) Core Mechanics
-Template literal types use the exact same backtick syntax as JavaScript: `` `hello ${Type}` ``.
-
-When you pass a **Union Type** into one of the string placeholders, TypeScript automatically calculates the **cross-product (permutation)** of all possible combinations.
-
-```typescript
-type Direction = 'top' | 'bottom';
-type Alignment = 'left' | 'right';
-
-// Automatically generates a union of 4 types!
-type Position = `${Direction}-${Alignment}`;
-// Result: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
-```
-
-#### Intrinsic String Manipulation Utilities
-TypeScript includes four built-in global generic utility types to transform the casing of template variables:
-- **`Uppercase<S>`**: Converts all characters to uppercase.
-- **`Lowercase<S>`**: Converts all characters to lowercase.
-- **`Capitalize<S>`**: Capitalizes the first letter of the string.
-- **`Uncapitalize<S>`**: Uncapitalizes the first letter of the string.
-
-```typescript
-type Event = 'click' | 'change';
-// prefix + Capitalize: "onClick" | "onChange"
-type Handler = `on${Capitalize<Event>}`; 
-```
-
-### (3) Real-World Application
-Typing database query selectors or styling configuration parameters.
-
-```typescript
-type PaddingSide = 'Top' | 'Right' | 'Bottom' | 'Left';
-type PaddingProperty = `padding${PaddingSide}`; 
-// Inferred: 'paddingTop' | 'paddingRight' | 'paddingBottom' | 'paddingLeft'
-
-type CSSPadding = Record<PaddingProperty, string | number>;
-
-const style: CSSPadding = {
-  paddingTop: 10,
-  paddingRight: '20px',
-  paddingBottom: 0,
-  paddingLeft: '1rem'
-};
-```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating combinatorial explosions that crash the compiler
 
@@ -144,69 +89,98 @@ const id = "123";
 const path = `user_${id}` as const; // Infers exact template literal type
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: API Route Mapper
+### Exercise 1: Generating Event Handler Names with Template Literals
 
-**Problem:** You are typing an API module. All api fetch requests must start with `/api/v1/`. Construct a template literal type called `ApiRoute` that prefixes any endpoint type with `/api/v1/`.
+**Scenario:**
+Generate a union of event listener method names (`"onClick"` | `"onHover"`) from a base event union (`"click"` | `"hover"`).
 
-```typescript
-type Endpoint = 'users' | 'products' | 'orders';
+**Requirements:**
+1. Define `type EventListenerName = `on${Capitalize<Event>}`.
 
-// Complete the definition:
-type ApiRoute = `/api/v1/${Endpoint}`;
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type Event = "click" | "hover" | "submit";
 
-const fetchApi = (route: ApiRoute) => { ... };
-// fetchApi('/api/v1/users'); // OK
-// fetchApi('/users');        // Error!
+type EventListenerName = `on${Capitalize<Event>}`;
+// Inferred as: "onClick" | "onHover" | "onSubmit"
+
+const handlerName: EventListenerName = "onClick";
 ```
 
-**Expected output:**
+> #### Technical Explanation
+>
+> 1. Template literal types (`${Prefix}_${Suffix}`) perform string interpolation at the type level.
+> 2. Automatically distributes over union types (`"click" | "hover"`).
+> 3. Integrates with intrinsic string utilities (`Capitalize`, `Uppercase`).
+
+---
+
+### Exercise 2: Building Type-Safe CSS Dimensional Units
+
+**Scenario:**
+Create a type `CSSLength` restricting values to strings ending in `"px"`, `"em"`, or `"rem"` (e.g. `"10px"`, `"2rem"`).
+
+**Requirements:**
+1. Define `type CSSLength = `${number}${"px" | "em" | "rem"}`.
+
 > [!check]- Answer
-> ```text
-> ApiRoute evaluates to "/api/v1/users" | "/api/v1/products" | "/api/v1/orders".
-> ```
-> - The prefix string `/api/v1/` can be written directly inside the backticks, followed by the `${Endpoint}` variable.
+>
+> #### Implementation
+>
+> ```typescript
+> type Unit = "px" | "em" | "rem";
+> type CSSLength = `${number}${Unit}`;
+
+const margin: CSSLength = "16px";
+const fontSize: CSSLength = "1.5rem";
+
+// const invalid: CSSLength = "16pt"; // ❌ Compile Error: Type '"16pt"' is not assignable to type 'CSSLength'.
+```
+
+> #### Technical Explanation
+>
+> 1. Template literal types can embed primitive type placeholders (`${number}`).
+> 2. Validates string formatting syntax at compile time.
+> 3. High precision string validation for design systems and CSS-in-JS libraries.
+
+---
+
+### Exercise 3: Pattern Matching and Extracting String Segments
+
+**Scenario:**
+Extract the parameter name from a route path string `"/users/:id"` using conditional types and template literal inference (`"/:path"`).
+
+**Requirements:**
+1. Infer parameter name from `Route extends `/:${infer Param}``.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type ExtractParam<Route extends string> = 
+>   Route extends `/:${infer Param}` ? Param : never;
+
+type Param1 = ExtractParam<"/:userId">; // "userId"
+type Param2 = ExtractParam<"/:orderId">; // "orderId"
+```
+
+> #### Technical Explanation
+>
+> 1. `infer` inside template literal types matches string substrings dynamically.
+> 2. Parses URL path parameters statically during compilation.
+> 3. Basis for type-safe routing libraries in Next.js and Express.
 
 ---
 
 
 
-### Exercise 2: CSS Event Handler Type Generator
-
-**Problem:** Generate `EventName` type combining `"click" | "scroll"` into `"onClick" | "onScroll"` using `Capitalize`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> "onClick" | "onScroll"
-> ```
-> ```typescript
-> type Event = "click" | "scroll";
-> type EventName = `on${Capitalize<Event>}`;
-> console.log("\"onClick\" | \"onScroll\"");
-> ```
->
-> **Explanation:** Template literal types concatenate string unions with intrinsic type helpers like `Capitalize`.
-
----
-
-### Exercise 3: Intrinsic String Manipulation Utilities
-
-**Problem:** List 4 intrinsic string type utilities (`Uppercase`, `Lowercase`, `Capitalize`, `Uncapitalize`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Uppercase, Lowercase, Capitalize, Uncapitalize
-> ```
-> ```typescript
-> console.log("Uppercase, Lowercase, Capitalize, Uncapitalize");
-> ```
->
-> **Explanation:** TS provides intrinsic compiler helpers for type-level string manipulation.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Literal Types](../level_05/literal_types.md) — The primitive values that build templates.
 - [Mapped Types](mapped_types.md) — Using literal keys to rebuild object definitions.
 - [`keyof` Operator](keyof.md) — Extracting keys to feed into template transformations.
@@ -215,7 +189,7 @@ const fetchApi = (route: ApiRoute) => { ... };
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Template Literal Types** construct dynamic string types using ES6 backtick template syntax inside type space.
 - They generate permutations automatically when string unions are passed to placeholders.
 - Intrinsic helpers (`Uppercase`, `Lowercase`, `Capitalize`, `Uncapitalize`) allow case adjustments on dynamic string parameters.

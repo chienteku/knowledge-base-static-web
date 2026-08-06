@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Data Type**
+
+**Core Concept** (High-Precision Monetary BSON Type): Decimal128 is the 128-bit IEEE 754-2008 BSON decimal format designed for exact monetary and financial calculations without floating-point rounding errors.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Conforms to the IEEE 754-2008 decimal floating-point standard. Stored as 16 bytes of data. Enforced in queries using `NumberDecimal()` constructors).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database design, storing money requires absolute precision. 
@@ -90,7 +91,7 @@ db.wallets.find();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting quotation marks around the numeric value inside the NumberDecimal constructor
 
@@ -138,66 +139,118 @@ NumberDecimal(0.1 + 0.2); // ❌ Preserves float rounding error 0.30000000000000
 NumberDecimal("0.1"); // Pass exact string literal
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Constructor Validation
+### Exercise 1: Precision Financial Price Calculation
 
-**Problem:** You are writing a backend payment route. The transaction amount is `45.90`. 
-Explain why `NumberDecimal("45.90")` is correct, whereas `NumberDecimal(45.90)` is incorrect.
+**Scenario:**
+Calculate total price including tax for a product costing `NumberDecimal("19.99")` at tax rate `NumberDecimal("0.0825")`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$multiply` and `$add` in aggregation with `Decimal128` values.
+
 > [!check]- Answer
-> ```text
-> - `NumberDecimal("45.90")` is correct because passing a string skips JavaScript's floating-point parsing. The string characters are sent directly to MongoDB, which parses them into a precise 128-bit decimal representation on disk.
-> - `NumberDecimal(45.90)` is incorrect because the JavaScript interpreter immediately converts the unquoted number `45.90` into a binary float double, introducing rounding noise before the database wrapper can compile it.
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.aggregate([
+>   {
+>     $project: {
+>       name: 1,
+>       basePrice: "$price",
+>       taxAmount: { $multiply: ["$price", NumberDecimal("0.0825")] },
+>       totalWithTax: {
+>         $add: [
+>           "$price",
+>           { $multiply: ["$price", NumberDecimal("0.0825")] }
+>         ]
+>       }
+>     }
+>   }
+> ]);
 > ```
-> - Assess the boundary where JavaScript hands variables to database drivers.
-> - Consider which parameter type prevents floating-point parsing.
+>
+> #### Technical Explanation
+>
+> 1. `Decimal128` arithmetic maintains 34 decimal digits of IEEE 754-2008 precision.
+> 2. Prevents binary floating-point errors (e.g. `0.1 + 0.2 = 0.30000000000000004`).
+> 3. Standard choice for accounting and monetary database fields.
+
+---
+
+### Exercise 2: Aggregating Decimal Sums with `$sum`
+
+**Scenario:**
+Compute the sum total of all account balances in collection `accounts`.
+
+**Requirements:**
+1. Aggregate `$sum` over `NumberDecimal` balance fields.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.accounts.aggregate([
+>   {
+>     $group: {
+>       _id: null,
+>       totalAssets: { $sum: "$balance" }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$sum` preserves `Decimal128` types during aggregation math.
+> 2. Accumulates exact balances across millions of documents without rounding drift.
+> 3. Outputs a single `Decimal128` result payload.
+
+---
+
+### Exercise 3: Constructing Decimal128 Objects in Node.js
+
+**Scenario:**
+Write Node.js MongoDB driver code to insert a `Decimal128` value using `Decimal128.fromString()`.
+
+**Requirements:**
+1. Use `Decimal128.fromString("299.95")` in Node.js.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { MongoClient, Decimal128 } from "mongodb";
+
+const client = new MongoClient("mongodb://localhost:27017");
+const db = client.db("store");
+
+await db.collection("orders").insertOne({
+  orderId: "ORD-9912",
+  amount: Decimal128.fromString("299.95")
+});
+```
+
+> #### Technical Explanation
+>
+> 1. `Decimal128.fromString(str)` parses exact decimal strings into BSON binary structures.
+> 2. Avoids passing JavaScript numbers (`299.95`) which would cast to 64-bit IEEE double floats.
+> 3. Guarantees client-to-database precision integrity.
 
 ---
 
 
 
-### Exercise 2: Constructing Decimal128 in mongosh
-
-**Problem:** Create exact Decimal128 value for `$99.95` using `NumberDecimal()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> NumberDecimal("99.95")
-> ```
-> ```javascript
-> NumberDecimal("99.95");
-> ```
->
-> **Explanation:** `NumberDecimal("str")` constructs 128-bit IEEE 754-2008 decimal floating-point values.
-
----
-
-### Exercise 3: Node.js Driver Decimal128 Usage
-
-**Problem:** Import Decimal128 in Node.js MongoDB driver (`const { Decimal128 } = require('mongodb')`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Decimal128.fromString("99.95")
-> ```
-> ```javascript
-> const { Decimal128 } = require('mongodb');
-> const amount = Decimal128.fromString("99.95");
-> ```
->
-> **Explanation:** `Decimal128.fromString()` creates exact decimal objects in Node.js.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Number Types (`Int32`, `Int64` / `Long`, `Double`, `Decimal128`)](number_types.md) — The parent types.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Decimal128 is a 128-bit BSON type designed for exact base-10 decimal math.
 - Serves as the MongoDB equivalent to PostgreSQL's `NUMERIC` and `DECIMAL` types.
 - Natively prevents floating-point binary rounding errors.

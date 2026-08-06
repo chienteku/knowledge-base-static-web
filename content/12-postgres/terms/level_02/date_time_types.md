@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Data Type**
+
+**Data Type** (Temporal Types): Date and Time data types (`DATE`, `TIME`, `TIMESTAMP`, `TIMESTAMPTZ`, `INTERVAL`) represent calendar dates and microsecond-precision timestamps.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Internally stores timestamps as 8-byte integers representing microseconds since January 1, 2000. Timezone conversions are evaluated on-the-fly based on client session settings).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Handling date and time in software is notoriously difficult due to:
@@ -100,7 +101,7 @@ SELECT scheduled_arrival FROM flights;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using TIMESTAMP (without timezone) for application log fields
 
@@ -146,68 +147,103 @@ created_at TIMESTAMPTZ -- UTC normalized timestamp storage
 Store timezone name string in separate column if original timezone name is required
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Datetime Selection
+### Exercise 1: Storing UTC Timestamps with `TIMESTAMPTZ`
 
-**Problem:** You are building a movie ticket app. Choose the most appropriate database type (`DATE`, `TIME`, `TIMESTAMP`, or `TIMESTAMPTZ`) for:
-1.  A user's date of birth.
-2.  The exact moment a user completed their credit card checkout.
-3.  A movie screening slot (e.g., Spider-Man screens on Friday at 8:00 PM local theater time).
+**Scenario:**
+Create an `audit_logs` table storing user event timestamps using `TIMESTAMPTZ`.
 
-**Expected output:**
+**Requirements:**
+1. Use `created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP`.
+
 > [!check]- Answer
-> ```text
-> 1. Birthday: DATE (Only calendar day matters, timezones are irrelevant).
-> 2. Checkout Moment: TIMESTAMPTZ (Audit logging must record the exact global absolute moment to prevent fraud and handle payment reconciliation).
-> 3. Screening Slot: TIMESTAMP (A screening at 8:00 PM happens at 8:00 PM local theater time, regardless of what timezone the server hosting the database runs in).
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE audit_logs (
+>   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   event_name TEXT NOT NULL,
+>   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+> );
 > ```
-> - Determine if absolute global time matching (timezone) is critical for audits.
-> - Consider if local clock representation takes precedence.
+>
+> #### Technical Explanation
+>
+> 1. `TIMESTAMPTZ` converts input datetimes from the client's timezone into UTC for storage.
+> 2. Re-converts UTC timestamps back into the requesting client's timezone on retrieval.
+> 3. Golden rule: Always use `TIMESTAMPTZ` instead of plain `TIMESTAMP` for application timestamps.
+
+---
+
+### Exercise 2: Date Arithmetic with `INTERVAL`
+
+**Scenario:**
+Calculate subscription expiration dates set to 30 days after signup date using `INTERVAL`.
+
+**Requirements:**
+1. Execute `signup_date + INTERVAL '30 days'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   id, 
+>   created_at AS signup_date,
+>   created_at + INTERVAL '30 days' AS expires_at 
+> FROM subscriptions;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INTERVAL` represents time spans (e.g., `'30 days'`, `'2 hours'`, `'1 month'`).
+> 2. Adding `INTERVAL` to `TIMESTAMPTZ` handles leap years and variable month lengths automatically.
+> 3. Dynamic server-side date arithmetic.
+
+---
+
+### Exercise 3: Extracting Calendar Fields with `EXTRACT`
+
+**Scenario:**
+Extract year, month, and day components from `created_at` in an order summary report.
+
+**Requirements:**
+1. Use `EXTRACT(YEAR FROM created_at)` and `EXTRACT(MONTH FROM created_at)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   EXTRACT(YEAR FROM created_at) AS order_year,
+>   EXTRACT(MONTH FROM created_at) AS order_month,
+>   COUNT(*) AS total_orders 
+> FROM orders 
+> GROUP BY order_year, order_month 
+> ORDER BY order_year DESC, order_month DESC;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `EXTRACT(field FROM timestamp)` isolates specific date/time parts (`YEAR`, `MONTH`, `DAY`, `DOW`).
+> 2. Grouping by extracted year and month produces monthly sales totals.
+> 3. Executes natively inside PostgreSQL query engine.
 
 ---
 
 
 
-### Exercise 2: Current UTC Timestamp Functions
-
-**Problem:** SQL statement getting current UTC timestamp (`NOW()`, `CURRENT_TIMESTAMP`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT NOW();
-> ```
-> ```sql
-> SELECT NOW();
-> ```
->
-> **Explanation:** `NOW()` and `CURRENT_TIMESTAMP` return active transaction start `TIMESTAMPTZ` values.
-
----
-
-### Exercise 3: Timezone Conversion with `AT TIME ZONE`
-
-**Problem:** Convert current timestamp to `'UTC'` or `'America/New_York'` using `AT TIME ZONE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT NOW() AT TIME ZONE 'America/New_York';
-> ```
-> ```sql
-> SELECT NOW() AT TIME ZONE 'America/New_York';
-> ```
->
-> **Explanation:** `AT TIME ZONE` converts timestamps to specified timezone wall-clock dates.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Data Types (Overview)](data_types.md) — The parent typing framework.
 - [Date/Time Functions (`NOW()`, `CURRENT_DATE`, `AGE()`, `EXTRACT`, `DATE_TRUNC`, `INTERVAL`)](../level_04/date_time_functions.md) — Related concept: Date/Time Functions (`NOW()`, `CURRENT_DATE`, `AGE()`, `EXTRACT`, `DATE_TRUNC`, `INTERVAL`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PostgreSQL date/time types are `DATE`, `TIME`, `TIMESTAMP`, and `TIMESTAMPTZ`.
 - `TIMESTAMPTZ` is the industry default best practice for event logging and audit trails.
 - `TIMESTAMPTZ` stores dates in UTC on disk and translates them to the client timezone on query.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Rendering Strategy / UX**
+
+**Rendering Strategy** (HTML & Component Streaming): Streaming UI delivers server-rendered HTML chunks progressively over an open HTTP connection using React `<Suspense>` boundaries.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine a complex `Dashboard` Server Component. It fetches `User Profile` (takes 100ms) and `Revenue Analytics` (takes 3000ms).
@@ -59,7 +60,7 @@ Using `<Suspense>` manually allows for **granular streaming**—loading differen
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Awaiting data at the page level instead of the component level
 
@@ -119,77 +120,121 @@ export default function Page() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Sequential vs Parallel Fetching
+### Exercise 1: Streaming Route Pages with `loading.tsx`
 
-**Problem:** If you have `<FastComponent />` and `<SlowComponent />` rendered next to each other, and neither is wrapped in Suspense, what happens?
+**Scenario:**
+Enable full route segment streaming for `/dashboard` by creating `app/dashboard/loading.tsx`.
 
-**Expected output:**
+**Requirements:**
+1. Create `loading.tsx` skeleton UI.
+
 > [!check]- Answer
-> ```text
-> The entire page is blocked.
-> Next.js Server Components render sequentially by default. The server will not send any HTML to the client until both the fast and slow components have finished fetching their data. This is why wrapping slow components in `<Suspense>` is critical for UX!
-> ```
-> - A chain is only as fast as its slowest link.
-
----
-
-### Exercise 2: Granular Streaming Layout Setup
-
-**Problem:** Write Page component rendering instant header text, wrapping slow `<Recommendations />` component in `<Suspense fallback={<Skeleton />}>`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> export default function Page() { return ( <div> <h1>Dashboard</h1> <Suspense fallback={<Skeleton />}><Recommendations /></Suspense> </div> ); }
-> ```
-> - Inline `<Suspense>` streams slow components without delaying instant layout text.
-> 
-> ```tsx
-> import { Suspense } from 'react';
-> import { Recommendations, Skeleton } from './components';
-> 
-> export default function Page() {
+> // app/dashboard/loading.tsx
+> export default function Loading() {
 >   return (
->     <main>
->       <h1>Product Catalog</h1>
->       <Suspense fallback={<Skeleton />}>
->         <Recommendations />
->       </Suspense>
->     </main>
+>     <div className="p-6 animate-pulse space-y-4">
+>       <div className="h-8 bg-gray-200 rounded w-1/3" />
+>       <div className="h-64 bg-gray-200 rounded" />
+>     </div>
 >   );
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. Next.js automatically wraps `page.tsx` in a React `<Suspense>` boundary when `loading.tsx` exists.
+> 2. Streams the initial HTML layout and loading skeleton instantly over HTTP.
+> 3. Once Server Component data resolves, Next.js streams inline script tags to swap the skeleton with final content.
+
 ---
 
-### Exercise 3: HTTP 1.1 Chunked Transfer Encoding
+### Exercise 2: Selective Component Streaming with `<Suspense>`
 
-**Problem:** Which network feature allows Next.js servers to stream HTML chunks progressively over a single HTTP connection?
+**Scenario:**
+Stream a slow comments widget (`<Comments />`) without blocking the primary article text rendering.
 
-**Expected output:**
+**Requirements:**
+1. Wrap slow component in `<Suspense fallback={...}>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> import { Suspense } from "react";
+
+async function Comments() {
+  const comments = await fetch("https://api.example.com/comments", { cache: "no-store" }).then(r => r.json());
+  return <ul>{comments.map((c: any) => <li key={c.id}>{c.text}</li>)}</ul>;
+}
+
+export default function ArticlePage() {
+  return (
+    <article className="p-6">
+      <h1>Main Article Title</h1>
+      <p>Fast server-rendered article content body...</p>
+      
+      <Suspense fallback={<div>Loading Comments...</div>}>
+        <Comments />
+      </Suspense>
+    </article>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Fast content (article title & body) renders and streams immediately to the browser.
+> 2. Slow content (`<Comments />`) streams progressively as it resolves on the server.
+> 3. Dramatically improves First Contentful Paint (FCP) and Time To First Byte (TTFB).
+
+---
+
+### Exercise 3: Auditing HTTP Response Headers for Streaming
+
+**Scenario:**
+Verify that HTTP streaming is active by checking `Transfer-Encoding: chunked` headers.
+
+**Requirements:**
+1. Inspect HTTP response headers for streaming indicators.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> HTTP/1.1 Chunked Transfer Encoding (Transfer-Encoding: chunked)
+> Streaming HTTP Header Audit:
+> - Response Header: Transfer-Encoding: chunked
+> - Response Header: Content-Type: text/html; charset=utf-8
 > ```
-> - Transfer-Encoding: chunked streams partial HTML response chunks.
-> 
-> ```text
-> Transfer-Encoding: chunked
-> ```
+
+> #### Technical Explanation
+>
+> 1. `Transfer-Encoding: chunked` indicates the HTTP server is streaming data in progressive chunks without specifying `Content-Length`.
+> 2. Enables browsers to parse and render HTML chunks as they arrive over the wire.
+> 3. Empirical verification of server HTML streaming architecture.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`loading.tsx`](../level_02/loading.md) — The automatic page-level implementation of Streaming.
 - [React Suspense](../level_02/react_suspense.md) — The React core primitive that powers this Next.js feature.
 - [Partial Prerendering (PPR)](../level_08/ppr.md) — Related concept: Partial Prerendering (PPR).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Streaming** allows the server to send HTML to the browser in chunks, rather than waiting for the entire page to finish rendering.
 - It prevents slow database queries from blocking the entire UI.
 - You implement granular streaming by wrapping slow Server Components inside React's **`<Suspense>`** boundary.

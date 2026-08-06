@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **React Component Pattern**
+
+**Framework Architecture** (React Error Boundary Interception): React Error Boundaries intercept JavaScript errors in child component trees, preventing full application crashes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Only** (Runtime error interception and recovery must occur inside the client's browser DOM).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In raw HTML, if a script error occurs, the rest of the page remains visible. In standard React, if a JavaScript error (like `Cannot read properties of undefined`) is thrown during the rendering phase, React's default behavior is to completely unmount the entire component tree. This leaves the user staring at a blank screen without any context on what went wrong or how to recover.
@@ -97,7 +98,7 @@ Error Boundaries only catch errors that occur during the **render phase**, in li
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to catch event handler errors using an Error Boundary
 
@@ -168,69 +169,154 @@ async function handleClick() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify Catchable Errors
+### Exercise 1: Authoring Fallback UI in Error Boundaries
 
-**Problem:** Look at the three scenarios below. State whether a parent Error Boundary will catch the error:
-1. A syntax typo inside a component's JSX render path.
-2. A failed network request promise inside a client-side `fetch()` helper function.
-3. A variable lookup on an undefined value during component rendering.
+**Scenario:**
+Implement a custom React Error Boundary component capturing child rendering crashes.
 
-**Expected output:**
+**Requirements:**
+1. Implement `componentDidCatch()` or `getDerivedStateFromError()`.
+
 > [!check]- Answer
-> ```text
-> 1. Yes. Render phase syntax or runtime execution errors are caught.
-> 2. No. Asynchronous promise rejections are not caught by Error Boundaries.
-> 3. Yes. Rendering property lookups on undefined variables are caught immediately.
-> ```
-> - Remember that Error Boundaries only intercept errors that occur during the active rendering lifecycle of React.
-
----
-
-### Exercise 2: Nested Error Boundary Isolation
-
-**Problem:** Explain the benefit of placing localized `error.tsx` files inside sub-route folders (e.g. `app/dashboard/settings/error.tsx`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Isolated error boundaries catch errors within their specific sub-tree, allowing the rest of the layout (sidebar, header) to remain interactive.
-> ```
-> - Localized error boundaries isolate runtime failures to sub-routes.
-> 
-> ```text
-> Settings sub-route crashes -> Error boundary renders inside Settings tab;
-> Sidebar and Main Header remain fully functional!
-> ```
-
----
-
-### Exercise 3: Error Digest Tracking
-
-**Problem:** What is the `error.digest` property passed to `error.tsx` components in Next.js?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> A server-generated hash digest matching the server log entry for security audit and tracking.
-> ```
-> - `digest` bridges client error views with server log entries.
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> console.log('Server Error Digest:', error.digest);
-> ```
+> "use client";
+
+import React from "react";
+
+export class CustomErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-4 bg-red-50 text-red-700 rounded">
+          <h2>Component Error Captured!</h2>
+          <p>{this.state.error?.message}</p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. React Error Boundaries intercept uncaught exceptions in child component render methods and lifecycle hooks.
+> 2. Renders fallback UI instead of unmounting the entire application view tree.
+> 3. Must be written as class components or generated via Next.js `error.tsx`.
+
+---
+
+### Exercise 2: Recovering from Errors with Reset Handlers
+
+**Scenario:**
+Provide a reset button inside an error boundary allowing users to retry component execution.
+
+**Requirements:**
+1. Call reset callback function to clear error state.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+export default function ErrorFallback({
+  error,
+  reset
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <div className="p-6 border border-red-200 bg-red-50 rounded">
+      <h3 className="text-lg font-semibold text-red-800">Something went wrong!</h3>
+      <p className="text-sm text-red-600 mt-1">{error.message}</p>
+      <button
+        onClick={() => reset()}
+        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+      >
+        Try Again
+      </button>
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Next.js passes a `reset()` callback function to error fallback components.
+> 2. Executing `reset()` re-attempts to render the failed route segment component tree.
+> 3. Standard user error recovery workflow.
+
+---
+
+### Exercise 3: Auditing Error Digest Hashing for Production Security
+
+**Scenario:**
+Inspect `error.digest` hash in production error logs to prevent exposing database details to users.
+
+**Requirements:**
+1. Log `error.digest` while displaying friendly message.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+export default function SecureErrorPage({
+  error
+}: {
+  error: Error & { digest?: string };
+}) {
+  return (
+    <div>
+      <h2>Application Error</h2>
+      <p>Reference Code: {error.digest ?? "N/A"}</p>
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. In production builds, Next.js strips sensitive exception stack traces before sending errors to the client.
+> 2. Attaches a unique `error.digest` hash value for server log tracking.
+> 3. Protects internal database connection strings and secrets from leaking.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`error.tsx` & `global-error.tsx`](error.md) — Next.js's wrapper that creates Error Boundaries automatically.
 - [React Components](../level_01/react_components.md) — The components wrapped by boundaries.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Error Boundaries act as UI `try/catch` blocks to prevent full application crashes.
 - They must be written as class components utilizing `getDerivedStateFromError`.
 - They only catch errors that occur during the React render phase, constructor execution, and lifecycle updates.

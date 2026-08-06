@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Development Practice**
+
+**Administration / Operations** (Data Access Abstraction Strategy): ORM vs Raw SQL compares Object-Relational Mappers (Prisma, Drizzle, TypeORM) against native SQL driver queries.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (A core decision in application backend design. Relates to libraries in Node.js (Prisma, Drizzle, pg), Python (SQLAlchemy, Django ORM), or Java (Hibernate)).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing a web server backend (like an API in Node.js or Python), the code must query the database to fetch records. 
@@ -102,7 +103,7 @@ const { rows } = await client.query(queryText, ['active']);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on ORMs for complex analytical queries or bulk data migrations
 
@@ -155,66 +156,112 @@ const orders = await Order.findAll(); const total = orders.reduce((s, o) => s + 
 const [{ sum }] = await db.query('SELECT SUM(total) FROM orders');
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Interface Strategy Selection
+### Exercise 1: Type-Safe Query Builder Access (Drizzle / Kysely)
 
-**Problem:** You are building a new startup project. Select the best database interface strategy (**ORM**, **Query Builder**, or **Raw SQL**) for these developer priorities:
-1.  You have a team of junior web developers who don't know SQL. You need to build a prototype website within a tight 2-week deadline.
-2.  You are building a high-traffic financial app in TypeScript. You want to guarantee that if you change a column name in the database, the TypeScript compiler will immediately flag errors in your code before deployment.
+**Scenario:**
+Write a type-safe database query in TypeScript using Drizzle ORM to fetch active users.
 
-**Expected output:**
+**Requirements:**
+1. Code Drizzle ORM query syntax.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { eq } from "drizzle-orm";
+> import { db } from "./db";
+> import { users } from "./schema";
+
+export async function getActiveUsers() {
+  return await db.select({ id: users.id, email: users.email })
+    .from(users)
+    .where(eq(users.isActive, true));
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Type-safe query builders (Drizzle, Kysely) provide auto-completion and compile-time type safety over database schemas.
+> 2. Maps TypeScript types 1-to-1 with PostgreSQL column data types.
+> 3. Eliminates runtime SQL syntax errors.
+
+---
+
+### Exercise 2: High-Performance Raw SQL Execution with Native Drivers
+
+**Scenario:**
+Execute an optimized complex SQL query containing window functions using native driver raw SQL (`pg`).
+
+**Requirements:**
+1. Code `pool.query()` raw SQL execution.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { pool } from "./db";
+
+export async function getRankedSales() {
+  const query = `
+    SELECT 
+      id, customer_id, total_cents,
+      ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY created_at DESC) as rn
+    FROM orders
+  `;
+  const res = await pool.query(query);
+  return res.rows;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Raw SQL provides full access to advanced PostgreSQL features (window functions, CTEs, custom operators) without ORM abstraction limits.
+> 2. Zero ORM memory overhead and zero query generation latency.
+> 3. Ideal for complex analytical reporting queries.
+
+---
+
+### Exercise 3: Architectural Decision Matrix: ORM vs Raw SQL
+
+**Scenario:**
+Formulate a technical selection matrix comparing Heavy ORMs (Prisma), Type-Safe Query Builders (Drizzle), and Raw SQL (`pg`).
+
+**Requirements:**
+1. Contrast developer velocity, query control, type safety, and runtime performance.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. ORM: Ideal for rapid prototyping. It handles DDL creation and relationships automatically, allowing junior developers to write code without worrying about SQL syntax.
-> 2. Query Builder (like Drizzle): Ideal for type-safe applications. It maintains a schema map that generates TypeScript types, ensuring compile-time safety and checking database references.
+> Data Access Architecture Selection Matrix:
+> - Heavy ORM (Prisma): Maximum developer velocity, auto-generated migrations, abstraction over SQL, higher RAM usage & N+1 query risk.
+> - Query Builder (Drizzle/Kysely): Type-safe, close to SQL syntax, lightweight runtime, great performance & flexibility.
+> - Raw SQL (pg / postgres.js): Maximum performance, 100% access to advanced PG features, requires manual TypeScript type definitions.
+> Recommendation: Use Drizzle for general application CRUD; use Raw SQL for complex reporting pipelines!
 > ```
-> - Balance development speed priorities against type-safety requirements.
-> - Consider which interface maps database changes directly to type systems.
+>
+> #### Technical Explanation
+>
+> 1. Heavy ORMs simplify basic CRUD but obscure underlying SQL execution.
+> 2. Query builders balance type safety with explicit SQL control.
+> 3. Match data access layer to project complexity.
 
 ---
 
 
 
-### Exercise 2: Identifying N+1 Query Fix
-
-**Problem:** How to resolve N+1 query problem in ORMs? (Use eager loading `include` / `JOIN` or batch `IN (...)` queries).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Use eager loading include / JOIN or batch IN (...) queries
-> ```
-> ```text
-> Use eager loading include / JOIN or batch IN (...) queries
-> ```
->
-> **Explanation:** Eager loading fetches related child entities in a single JOIN query.
-
----
-
-### Exercise 3: ORM vs Raw SQL Comparison Matrix
-
-**Problem:** Compare: ORM (High developer productivity, type safety, migration tools); Raw SQL (Maximum performance, query optimizer control, zero memory overhead).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ORM: high productivity and type safety; Raw SQL: maximum performance and query optimizer control
-> ```
-> ```text
-> ORM: high productivity and type safety; Raw SQL: maximum performance and query optimizer control
-> ```
->
-> **Explanation:** Hybrid architectures use ORMs for CRUD workflows and raw SQL for heavy analytics.
-
-## 7. Related Terms
+## 6. Related Terms
 - [SQL Injection](sql_injection.md) — The vulnerability risk.
 - [Parameterized Queries / Prepared Statements](parameterized_queries.md) — Secure raw query patterns.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - ORMs map database tables directly to object classes in your application code.
 - Query Builders construct queries programmatically using chained method APIs.
 - Raw SQL queries execute direct text query strings using drivers.

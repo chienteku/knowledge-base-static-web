@@ -105,7 +105,7 @@ fn main() {
 
 ### Exercise 1: The Time Traveler
 
-**Problem:** You download a library crate that was written in 2018 (`edition = "2018"`). Your own project is written in 2021 (`edition = "2021"`). You add the 2018 library to your `[dependencies]`. When you run `cargo build`, will your project compile successfully? 
+**Scenario:** You download a library crate that was written in 2018 (`edition = "2018"`). Your own project is written in 2021 (`edition = "2021"`). You add the 2018 library to your `[dependencies]`. When you run `cargo build`, will your project compile successfully? 
 
 > [!check]- Answer
 > **Yes, absolutely!**
@@ -116,7 +116,7 @@ fn main() {
 
 ### Exercise 2: Edition Keyword Changes in Practice
 
-**Problem:**
+**Scenario:**
 Rust editions can reserve new keywords, which could break code that used those words as identifiers. The 2018 edition reserved `async`, `await`, and `try`. The 2021 edition reserved nothing new (it changed import rules instead).
 
 Consider this code written in 2015:
@@ -139,6 +139,9 @@ Answer the following:
 > Because `try` became a reserved keyword in edition 2018, using it as a function name is a parse error. The compiler refuses to compile the file.
 >
 > **2. Fix WITHOUT renaming — use raw identifiers:**
+>
+> #### Implementation
+>
 > ```rust
 > // `r#` prefix lets you use a keyword as an identifier in edition 2018+
 > fn r#try(x: i32) -> i32 { x + 1 }
@@ -149,14 +152,15 @@ Answer the following:
 > **3. Cross-edition interoperability:**
 > **Yes, you can still call it.** Each crate is compiled under its own edition — the 2015 crate compiles `fn try()` successfully. From your edition 2021 crate, you call it using the raw identifier syntax: `library::r#try(5)`. Editions only affect the *syntax* of the source file being compiled, not the compiled binary interface (symbols, types, ABI) — so cross-edition function calls work seamlessly.
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > This is the fundamental promise of Rust editions: they never break cross-crate compatibility. New keywords in one edition don't make previously-published libraries unusable — raw identifiers bridge the gap.
 
 ---
 
 ### Exercise 3: Migrating Editions with `cargo fix --edition`
 
-**Problem:**
+**Scenario:**
 You have a large 2018-edition crate and want to upgrade to 2021. Answer the following:
 
 1. What is the exact command to run the automated edition migration?
@@ -184,7 +188,8 @@ You have a large 2018-edition crate and want to upgrade to 2021. Answer the foll
 > **4. Can it break behavior?**
 > Theoretically yes — if your code relied on the old closure capture semantics in a subtle way, the new narrower captures could change what gets moved into a closure. In practice this is rare and the compiler will catch type errors from it. `cargo fix --edition` is a safe starting point, not a guarantee of zero-diff semantics.
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > Edition migrations are designed to be low-risk and incremental. The Rust team writes automated fixes for the vast majority of required changes. The recommended approach is always: run `cargo fix --edition`, then manually bump the edition key, then review with `cargo test`.
 
 ---

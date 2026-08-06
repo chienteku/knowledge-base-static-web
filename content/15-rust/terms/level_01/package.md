@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-specific**
+
+
+**Rust Cargo Construct (bundle of one or more crates)**
 
 A Cargo-specific concept that organizes one or more crates and defines how they are built.
 

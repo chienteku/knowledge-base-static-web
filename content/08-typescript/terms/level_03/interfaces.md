@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Syntax**
+
+**TypeScript Core Syntax** (Object Interface Contracts): Interfaces define object structure contracts, supporting inheritance extension (`extends`) and automatic declaration merging.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Writing inline Object Types (`{ name: string, age: number }`) inside every function signature is unreadable and violates the DRY (Don't Repeat Yourself) principle. 
@@ -62,7 +63,7 @@ const myDog: Dog = { name: "Rex", breed: "German Shepherd" };
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Declaration Merging (Accidental Overwrites)
 
@@ -111,62 +112,113 @@ interface A { a: number }
 interface B extends A { b: string } // Interface inheritance
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Interface vs Type Alias
+### Exercise 1: Extending Interfaces with `extends`
 
-**Problem:** You can also define an object shape using `type User = { name: string }`. In modern TypeScript, when should you use `interface` and when should you use `type`?
+**Scenario:**
+Define a base `Entity` interface and extend it into a `UserEntity` interface.
 
-**Expected output:**
+**Requirements:**
+1. Create `Entity` with `id` and `createdAt`.
+2. Extend `Entity` to create `UserEntity` with `email`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Entity {
+>   id: string;
+>   createdAt: Date;
+> }
+
+interface UserEntity extends Entity {
+  email: string;
+  role: "admin" | "user";
+}
+
+const user: UserEntity = {
+  id: "usr_100",
+  createdAt: new Date(),
+  email: "admin@example.com",
+  role: "admin"
+};
+```
+
+> #### Technical Explanation
+>
+> 1. `interface Child extends Parent` inherits all properties from the parent interface.
+> 2. Enables clean OOP composition and interface inheritance hierarchies.
+> 3. Improves compilation performance compared to complex type intersections (`&`).
+
+---
+
+### Exercise 2: Implementing Interfaces in Classes
+
+**Scenario:**
+Create a class implementing a `Printable` interface contract.
+
+**Requirements:**
+1. Define `Printable` interface with `print(): void` method.
+2. Implement interface in `Invoice` class.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Printable {
+>   print(): void;
+> }
+
+class Invoice implements Printable {
+  constructor(public id: number, public amount: number) {}
+
+  print(): void {
+    console.log(`Invoice #${this.id}: $${this.amount}`);
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `class ClassName implements InterfaceName` verifies that the class satisfies the interface contract.
+> 2. Ensures that required methods (`print()`) and properties are present on class instances.
+> 3. Standard object-oriented architecture pattern.
+
+---
+
+### Exercise 3: Comparative Decision Matrix: `interface` vs `type`
+
+**Scenario:**
+Formulate an architectural selection matrix comparing `interface` against Type Aliases (`type`).
+
+**Requirements:**
+1. Contrast declaration merging, extension syntax, object shape modeling, and union type support.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> The modern TS community consensus:
-> - Use `interface` by default when defining the shape of Objects or Classes. It provides better error messages and is more performant for the compiler.
-> - Use `type` when you need advanced type manipulation (like Unions `type A = string | number`, Intersections, or mapped types).
+> interface vs type Selection Matrix:
+> - interface: Declaration merging SUPPORTED, extends syntax, best for object shapes & OOP contracts. Cannot represent primitives, unions, or tuples directly.
+> - type: Declaration merging UNSUPPORTED, intersection (&) syntax, supports primitive aliases, unions ('A' | 'B'), tuples, and mapped types.
+> Rule of Thumb: Prefer interface for public APIs & object shapes; use type for unions, primitives & utility computations.
 > ```
-> - Which one supports `extends` naturally?
+
+> #### Technical Explanation
+>
+> 1. Interfaces are open and extensible via declaration merging and `extends`.
+> 2. Type aliases are closed and versatile for complex type mathematics and unions.
+> 3. Foundational architectural choice in TypeScript.
 
 ---
 
 
 
-### Exercise 2: Extending Multiple Interfaces
-
-**Problem:** Create `interface Child extends Parent1, Parent2` combining `id: number` and `name: string`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Child interface extends multiple parents
-> ```
-> ```typescript
-> interface Parent1 { id: number }
-> interface Parent2 { name: string }
-> interface Child extends Parent1, Parent2 {}
-> const c: Child = { id: 1, name: "Alice" };
-> console.log("Child interface extends multiple parents");
-> ```
->
-> **Explanation:** Interfaces can extend multiple parent interfaces simultaneously.
-
----
-
-### Exercise 3: Interface vs Type Alias Selection Rule
-
-**Problem:** State recommended TS guideline for modeling public object shapes (Prefer Interface).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Prefer interface for object shapes to enable declaration merging & performance
-> ```
-> ```typescript
-> console.log("Prefer interface for object shapes to enable declaration merging & performance");
-> ```
->
-> **Explanation:** Interfaces offer better compiler caching and extension semantics for object types.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Type Aliases (`type`)](../level_05/type_aliases.md) — The alternative way to name a type.
 - [`implements` Keyword](../level_10/implements.md) — How Classes use Interfaces to enforce their own shape.
 - [Structural Typing / Duck Typing](../level_01/structural_typing.md) — Related concept: Structural Typing / Duck Typing.
@@ -182,7 +234,7 @@ interface B extends A { b: string } // Interface inheritance
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Interfaces** are named contracts that define the required shape of an object.
 - They drastically improve code readability and reusability.
 - Interfaces can inherit from one another using the `extends` keyword.

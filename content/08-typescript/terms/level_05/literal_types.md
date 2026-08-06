@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Syntax**
+
+**Type System Fundamental** (Exact Value Types): Literal types constrain variable values to specific exact string, number, or boolean literal primitives.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine a UI Button component. It accepts a `size` property. 
@@ -52,7 +53,7 @@ const roll: DiceRoll = 7; // ❌ Error!
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Literal Inference mismatch with `let`
 
@@ -105,62 +106,109 @@ let verb: Method = "GET";
 req(verb); // Explicit literal union type annotation
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: `const` vs `let`
+### Exercise 1: Constraining Inputs with String Literal Unions
 
-**Problem:** If you write `const a = "Hello"`, what is the inferred type? If you write `let b = "Hello"`, what is the inferred type?
+**Scenario:**
+Create a `ButtonTheme` union type restricting valid themes to `"primary"`, `"secondary"`, or `"danger"`.
 
-**Expected output:**
+**Requirements:**
+1. Define `type ButtonTheme = "primary" | "secondary" | "danger"`.
+
 > [!check]- Answer
-> ```text
-> `const a` is inferred as the Literal Type `"Hello"`. Because it's a const, it can never be any other string!
-> `let b` is inferred as the generic Primitive Type `string`. Because it's a let, you could reassign it to "World" later.
-> ```
-> - Think about mutability!
+>
+> #### Implementation
+>
+> ```typescript
+> type ButtonTheme = "primary" | "secondary" | "danger";
+
+function renderButton(theme: ButtonTheme) {
+  console.log(`Rendering ${theme} button`);
+}
+
+renderButton("primary");
+// renderButton("warning"); // ❌ Compile Error: Argument of type '"warning"' is not assignable to parameter of type 'ButtonTheme'.
+```
+
+> #### Technical Explanation
+>
+> 1. String literal types constrain string parameters to precise allowed string values.
+> 2. Provides IDE autocomplete suggestions for literal options.
+> 3. Replaces magic string constants with compile-time checked type definitions.
+
+---
+
+### Exercise 2: Defining Numeric Literal Unions
+
+**Scenario:**
+Constrain HTTP status code parameters to exact numeric literal values (`200 | 404 | 500`).
+
+**Requirements:**
+1. Define `type HttpStatus = 200 | 404 | 500`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type HttpStatus = 200 | 404 | 500;
+
+function handleStatus(status: HttpStatus) {
+  if (status === 200) console.log("OK");
+  else if (status === 404) console.log("Not Found");
+  else console.log("Server Error");
+}
+
+handleStatus(200);
+// handleStatus(201); // ❌ Compile Error: Type '201' is not assignable to type 'HttpStatus'.
+```
+
+> #### Technical Explanation
+>
+> 1. Numeric literal types restrict numbers to explicit allowed values.
+> 2. Prevents passing arbitrary invalid integer values to functions.
+> 3. Ideal pattern for status flags and configuration codes.
+
+---
+
+### Exercise 3: Combining Boolean Literals and Discriminants
+
+**Scenario:**
+Define a `Result<T>` discriminated union using boolean literal discriminants `success: true` vs `success: false`.
+
+**Requirements:**
+1. Create `SuccessResult` and `ErrorResult` using boolean literals.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type SuccessResult<T> = { success: true; data: T };
+> type ErrorResult = { success: false; error: string };
+> type Result<T> = SuccessResult<T> | ErrorResult;
+
+function handleResult(res: Result<number>) {
+  if (res.success) {
+    console.log("Data:", res.data); // res.data is accessible!
+  } else {
+    console.log("Error:", res.error); // res.error is accessible!
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Boolean literal types (`success: true`) act as precise type discriminants.
+> 2. TypeScript automatically narrows union branches inside `if (res.success)` blocks.
+> 3. Standard pattern for return type error handling.
 
 ---
 
 
 
-### Exercise 2: Numeric and Boolean Literals
-
-**Problem:** Define literal type `DiceRoll = 1 | 2 | 3 | 4 | 5 | 6`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DiceRoll type created
-> ```
-> ```typescript
-> type DiceRoll = 1 | 2 | 3 | 4 | 5 | 6;
-> const roll: DiceRoll = 6;
-> console.log("DiceRoll type created");
-> ```
->
-> **Explanation:** Literal types restrict variables to specific exact values.
-
----
-
-### Exercise 3: Template Literal Union Combinations
-
-**Problem:** Combine `"top" | "bottom"` with `"left" | "right"` into `Position` type.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> "top-left" | "top-right" | "bottom-left" | "bottom-right"
-> ```
-> ```typescript
-> type V = "top" | "bottom";
-> type H = "left" | "right";
-> type Position = `${V}-${H}`;
-> console.log("\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\"");
-> ```
->
-> **Explanation:** Template literal types distribute over unions to construct dynamic combinations.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Union Types (`|`)](union_types.md) — The glue that makes Literal Types useful.
 - [Type Inference](../level_01/type_inference.md) — How TS decides between a string and a literal string.
 - [Type Widening](../level_01/type_widening.md) — Related concept: Type Widening.
@@ -170,7 +218,7 @@ req(verb); // Explicit literal union type annotation
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Literal Types** use exact, specific values (like `"GET"`, `0`, or `false`) as the type definition.
 - They are almost always combined with Unions (`"GET" | "POST"`) to create strict allowed-value sets.
 - They are significantly safer than generic primitives because they prevent invalid data completely.

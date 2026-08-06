@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Syntax / Unsafe / FFI**: `extern "C"` is a low-level keyword combination in Rust. It specifies the Application Binary Interface (ABI) — the exact machine-level rules for how function arguments are passed in CPU registers/stack, how return values are handed back, and how stack frames are managed — matching the standard C language calling convention (`cdecl` / `system`).
+
+
+**Rust FFI Keyword (foreign function interface ABI specifier)**: `extern "C"` is a low-level keyword combination in Rust. It specifies the Application Binary Interface (ABI) — the exact machine-level rules for how function arguments are passed in CPU registers/stack, how return values are handed back, and how stack frames are managed — matching the standard C language calling convention (`cdecl` / `system`).
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: `extern "C"` is supported across all platforms (`std`, `no_std`, WASM, embedded microcontrollers). It is used both in `extern "C" { ... }` blocks (to import foreign C functions) and on function definitions (`pub extern "C" fn foo(...)`) to export Rust functions to C, C++, Python, Node.js, or OS kernels.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -110,7 +108,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting `#[no_mangle]` on Exported `extern "C"` Functions
 
@@ -177,13 +175,16 @@ pub extern "C" fn process_data(ptr: *const c_char, len: usize) { ... }
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Embedded ADC Sensor Processing via `extern "C"` Callback
 
-**Problem:** In an embedded IoT system, a C hardware driver collects raw ADC 12-bit voltage samples and triggers processing via a C-compatible callback. Export a library function `process_sensor_batch` using `#[no_mangle]` and `extern "C"`. The function must take a raw pointer `data_ptr: *const u16`, length `len: usize`, and an optional callback `Option<extern "C" fn(sample_index: u32, scaled_val: f32) -> i32>`. Convert raw ADC values ($V_{out} = \frac{\text{raw} \times 3.3}{4095.0}$), invoke the callback, handle null pointers safely, and return status codes (`0` for success, `-1` for invalid parameters, `-2` for early callback abort). Write unit tests verifying execution.
+**Scenario:** In an embedded IoT system, a C hardware driver collects raw ADC 12-bit voltage samples and triggers processing via a C-compatible callback. Export a library function `process_sensor_batch` using `#[no_mangle]` and `extern "C"`. The function must take a raw pointer `data_ptr: *const u16`, length `len: usize`, and an optional callback `Option<extern "C" fn(sample_index: u32, scaled_val: f32) -> i32>`. Convert raw ADC values ($V_{out} = \frac{\text{raw} \times 3.3}{4095.0}$), invoke the callback, handle null pointers safely, and return status codes (`0` for success, `-1` for invalid parameters, `-2` for early callback abort). Write unit tests verifying execution.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::os::raw::c_int;
 > 
@@ -275,7 +276,8 @@ pub extern "C" fn process_data(ptr: *const c_char, len: usize) { ... }
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`extern "C"` ABI Modifier**: Mandates standard C calling conventions (stack register parameter passing and caller/callee cleanup), ensuring raw function calls cross FFI boundaries safely.
 > 2. **`#[no_mangle]` Symbol Preservation**: Instructs `rustc` not to hash/mangle `process_sensor_batch` in object binary symbol tables, allowing foreign C linkers to resolve the function by literal name.
 > 3. **Null-Pointer Optimization (NPO)**: Using `Option<SensorCallback>` allows safe representation of optional function pointers. In Rust's C ABI representation, `None` compiles directly to a C `NULL` pointer.
@@ -285,9 +287,12 @@ pub extern "C" fn process_data(ptr: *const c_char, len: usize) { ... }
 
 ### Exercise 2: Packet Alert Dispatcher Interfacing with C Raw Strings (`CStr`)
 
-**Problem:** A C network stack triggers alert dispatches into a Rust module by invoking an exported callback `rust_on_packet_alert(packet_id: u64, payload_ptr: *const c_char) -> c_int`. Export this function with `#[no_mangle]` and `extern "C"`. Inspect `payload_ptr` via `std::ffi::CStr`, check if the string contains `"CRITICAL"`, handle null pointers (`-1`) and UTF-8 errors (`-2`), and return `1` for critical alerts or `0` for normal alerts. Include unit tests with `CString`.
+**Scenario:** A C network stack triggers alert dispatches into a Rust module by invoking an exported callback `rust_on_packet_alert(packet_id: u64, payload_ptr: *const c_char) -> c_int`. Export this function with `#[no_mangle]` and `extern "C"`. Inspect `payload_ptr` via `std::ffi::CStr`, check if the string contains `"CRITICAL"`, handle null pointers (`-1`) and UTF-8 errors (`-2`), and return `1` for critical alerts or `0` for normal alerts. Include unit tests with `CString`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::ffi::{CStr, CString};
 > use std::os::raw::{c_char, c_int};
@@ -360,7 +365,8 @@ pub extern "C" fn process_data(ptr: *const c_char, len: usize) { ... }
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Foreign C Function Declarations**: `extern "C" { ... }` blocks inform the Rust compiler of external C functions available at link time, applying host C ABI calling conventions.
 > 2. **C String Pointer Representation**: C string pointers (`*const c_char`) point to null-terminated (`\0`) byte sequences. Rust string slices (`&str`) are fat pointers containing address and byte length.
 > 3. **`CStr` Zero-Copy Inspection**: `CStr::from_ptr` scans raw memory starting at `payload_ptr` until finding the terminating `\0` byte, providing a safe borrow slice without extra heap allocations.
@@ -370,9 +376,12 @@ pub extern "C" fn process_data(ptr: *const c_char, len: usize) { ... }
 
 ### Exercise 3: Cross-ABI Hardware Virtual Table (`#[repr(C)]` VTable & Function Pointers)
 
-**Problem:** Design a C-compatible Hardware Abstraction Layer (HAL) UART device driver interface using a `#[repr(C)]` VTable struct containing `extern "C"` function pointers (`write_byte`, `read_byte`, `flush`). Implement concrete C-ABI handlers, wrap the vtable inside a high-level Rust driver struct `HardwareDriver`, and write unit tests with assertions verifying write, read, and error states across the FFI boundary.
+**Scenario:** Design a C-compatible Hardware Abstraction Layer (HAL) UART device driver interface using a `#[repr(C)]` VTable struct containing `extern "C"` function pointers (`write_byte`, `read_byte`, `flush`). Implement concrete C-ABI handlers, wrap the vtable inside a high-level Rust driver struct `HardwareDriver`, and write unit tests with assertions verifying write, read, and error states across the FFI boundary.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::os::raw::c_int;
 > 
@@ -481,7 +490,8 @@ pub extern "C" fn process_data(ptr: *const c_char, len: usize) { ... }
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`#[repr(C)]` Struct Layout**: Guarantees struct field alignment and padding match C struct layout rules (`struct uart_ops`), matching function pointer offsets across compiler boundaries.
 > 2. **`extern "C" fn` Function Pointers**: Specifying `extern "C"` on function pointer field signatures ensures callers pass arguments via C CPU registers rather than Rust ABI registers.
 > 3. **Output via Raw Pointers**: Passing `out_byte: *mut u8` enables C-compatible out-parameter data output without creating unaligned Rust reference aliasing.
@@ -489,7 +499,7 @@ pub extern "C" fn process_data(ptr: *const c_char, len: usize) { ... }
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [FFI (Foreign Function Interface)](ffi.md) — The parent topic covering cross-language interoperability.
@@ -501,7 +511,7 @@ pub extern "C" fn process_data(ptr: *const c_char, len: usize) { ... }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `extern "C"` specifies the standard C Application Binary Interface (ABI) calling convention.
 - Use `extern "C" { ... }` blocks to import foreign C functions.

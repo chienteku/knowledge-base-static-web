@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Type System Fundamental**
+
+**Type System Fundamental** (Compile-Time Exhaustiveness Enforcement): Exhaustiveness checking assigns unhandled union variants to `never` in `switch` defaults to ensure all possibilities are explicitly handled.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-time** (The verification checks occur during compilation, translating to safety exceptions at runtime if checks fail).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing applications, you often write code that branches based on a type category—such as resolving payment options (`'card' | 'paypal'`), processing user permissions (`'admin' | 'editor'`), or handling action types in state reducers.
@@ -83,7 +84,7 @@ function getArea(shape: Shape) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on standard `default` blocks without `never` validation
 
@@ -180,92 +181,131 @@ switch(shape.kind) {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: State Transition Security
+### Exercise 1: Enforcing Exhaustiveness Checking with `never`
 
-**Problem:** You are building a payment transition handler. A new state `'refunded'` has been added to the `PaymentState` union. The compiler is flagging an error. Implement the missing switch case to fix the compiler error.
+**Scenario:**
+Enforce compile-time exhaustiveness checking on a `PaymentMethod` union (`"credit_card" | "paypal" | "crypto"`).
 
-```typescript
-type PaymentState = 'processing' | 'completed' | 'failed' | 'refunded';
+**Requirements:**
+1. Assign unhandled default to `never` variable.
 
-function handlePayment(state: PaymentState) {
-  switch (state) {
-    case 'processing':
-      console.log('Hold on...');
-      break;
-    case 'completed':
-      console.log('Paid!');
-      break;
-    case 'failed':
-      console.log('Failed transaction');
-      break;
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type PaymentMethod = "credit_card" | "paypal" | "crypto";
+
+function processPayment(method: PaymentMethod) {
+  switch (method) {
+    case "credit_card":
+      return "Processing Card...";
+    case "paypal":
+      return "Redirecting to PayPal...";
+    case "crypto":
+      return "Awaiting Blockchain Confirmations...";
     default:
-      // Error: 'refunded' is not assignable to 'never'
-      const check: never = state;
-      throw new Error(`Unknown state: ${check}`);
+      // Exhaustiveness check: fails compilation if any payment method is unhandled!
+      const _exhaustiveCheck: never = method;
+      return _exhaustiveCheck;
   }
 }
 ```
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> The compilation passes after adding:
-> case 'refunded':
->   console.log('Money returned');
->   break;
-> ```
-> - The compiler checks if any possible payment states enter the `default` block.
-> - Adding a `case 'refunded'` handles the final state, so the type of `state` inside `default` successfully falls back to `never`.
+> #### Technical Explanation
+>
+> 1. Assigning `method` to a `never` variable in `default:` causes a compile error if any union member is omitted.
+> 2. If a new payment method (e.g. `"apple_pay"`) is added to `PaymentMethod` later, `tsc` highlights all unhandled `switch` statements instantly.
+> 3. Crucial technique for refactoring large discriminated union codebases safely.
 
 ---
 
+### Exercise 2: Helper Functions for Unreachable Code
 
+**Scenario:**
+Create a reusable `assertNever(x: never): never` utility function for exhaustiveness checking.
 
-### Exercise 2: Implementing Custom `assertNever` Helper
+**Requirements:**
+1. Export `function assertNever(x: never): never`.
 
-**Problem:** Write `function assertNever(x: never): never { throw new Error("Unexpected: " + x); }`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> assertNever helper created
-> ```
+>
+> #### Implementation
+>
 > ```typescript
-> function assertNever(x: never): never {
->   throw new Error(`Unexpected object: ${x}`);
+> export function assertNever(x: never): never {
+>   throw new Error(`Unexpected object in exhaustive check: ${JSON.stringify(x)}`);
 > }
-> console.log("assertNever helper created");
-> ```
+
+type Role = "admin" | "user";
+
+function getPermissions(role: Role) {
+  switch (role) {
+    case "admin":
+      return ["read", "write", "delete"];
+    case "user":
+      return ["read"];
+    default:
+      return assertNever(role);
+  }
+}
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** `assertNever` verifies that all union variants have been handled at compile time.
+> 1. `assertNever` combines static compile-time checking (`x: never`) with runtime exception safety (`throw Error`).
+> 2. Reusable helper across the entire application for union exhaustiveness.
+> 3. Standard functional utility pattern.
 
 ---
 
-### Exercise 3: Exhaustiveness Compiler Diagnostics
+### Exercise 3: Auditing Missing Switch Case Warnings
 
-**Problem:** What compile error occurs when passing an unhandled union member to `assertNever(x)`?
+**Scenario:**
+Demonstrate the compile error triggered when adding a new variant to a union without updating exhaustive `switch` statements.
 
-**Expected output:**
+**Requirements:**
+1. Show compile error on `_exhaustiveCheck`.
+
 > [!check]- Answer
-> ```text
-> Argument of type 'T' is not assignable to parameter of type 'never'
-> ```
-> ```typescript
-> console.log("Argument of type 'T' is not assignable to parameter of type 'never'");
-> ```
 >
-> **Explanation:** TS flags unhandled variants because non-never types cannot be assigned to `never`.
+> #### Implementation
+>
+> ```typescript
+> type Transport = "bus" | "train" | "plane"; // Added 'plane'!
 
-## 7. Related Terms
+function getTicketPrice(t: Transport): number {
+  switch (t) {
+    case "bus": return 2.5;
+    case "train": return 15.0;
+    default:
+      // ❌ Compile Error: Type 'string' (plane) is not assignable to type 'never'.
+      const _check: never = t;
+      return _check;
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. When `"plane"` is added to `Transport`, `t` in `default:` has type `"plane"` instead of `never`.
+> 2. The assignment `const _check: never = t` fails immediately at compile time.
+> 3. Guarantees 100% code branch coverage across union additions.
+
+---
+
+
+
+## 6. Related Terms
 - [Discriminated Unions](discriminated_unions.md) — The type format that exhaustiveness checks protect.
 - [`void` & `never`](../level_02/void_never.md) — The structural types representing emptiness.
 - [Type Narrowing](type_narrowing.md) — The process of reducing union types.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Exhaustiveness Checking** triggers build-time warnings if you omit cases when matching union members.
 - Utilizes type narrowing: if all cases are matched, the remaining types evaluate to `never`.
 - Triggered by assigning the default state to a `never` variable or passing it to `assertUnreachable(value: never)`.

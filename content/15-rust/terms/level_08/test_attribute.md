@@ -166,9 +166,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Currency Banking Ledger & Fallible Test Suite (`Result<(), E>`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In high-frequency financial platforms, ledger accounting systems must guarantee atomic transfers, strict currency validation, and descriptive error reporting. Unit testing such fallible operations often requires checking happy paths with clean `?` propagation as well as explicitly matching error variants.
 
+**Requirements:**
 Implement a multi-currency ledger system `BankLedger` with custom error handling (`LedgerError`), and write a robust unit test suite using `#[test]` functions that return `Result<(), LedgerError>` alongside assertions (`assert_eq!`, `assert!`, `matches!`).
 
 Requirements:
@@ -188,6 +189,9 @@ Requirements:
    - `test_currency_mismatch_returns_error`: uses `assert_eq!` to check mismatch variant equality.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > 
@@ -364,9 +368,10 @@ Requirements:
 
 ### Exercise 2: Bounded LRU Cache Storage Engine & Invariant Testing
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In-memory caching services (like Redis or Memcached microservices) enforce strict capacity limits and Least-Recently-Used (LRU) eviction algorithms. Unit tests must rigorously verify state invariants, such as eviction on capacity overflow and updating access recency upon read operations.
 
+**Requirements:**
 Implement a generic bounded cache `BoundedCache<K, V>` and write comprehensive unit tests with `#[test]`, `assert_eq!`, `assert_ne!`, and `assert!`.
 
 Requirements:
@@ -382,6 +387,9 @@ Requirements:
    - `test_update_existing_key_does_not_evict`: verifies updating keys doesn't overflow or evict unrelated items.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > use std::hash::Hash;
@@ -517,9 +525,10 @@ Requirements:
 
 ### Exercise 3: Webhook Dispatcher with Mock Transport Trait & Retry Verification
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In distributed microservices, outbound webhook delivery services implement retry loops with status code inspection. Unit testing network code directly against real HTTP endpoints makes tests slow and non-deterministic. The standard Rust testing pattern abstracts network I/O behind a trait and creates a mock implementation within unit test modules.
 
+**Requirements:**
 Design a trait-based `WebhookDispatcher` and implement a deterministic mock transport to test retry mechanisms and failure scenarios.
 
 Requirements:
@@ -537,6 +546,9 @@ Requirements:
    - `test_dispatch_exhausts_retries_and_fails`: queued errors exceed max retries and fail with formatted error string.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::cell::RefCell;
 > 

@@ -190,8 +190,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Cancellation-Safe Event Stream Multiplexer
 
-**Scenario**: High-throughput microservice event loops continuously process incoming telemetry messages from an `mpsc` channel, periodic interval ticks for batch flushing, and emergency shutdown signals from a `oneshot` channel. `.await` points inside `tokio::select!` must be cancellation-safe to avoid message loss during racing conditions.
+**Scenario:** High-throughput microservice event loops continuously process incoming telemetry messages from an `mpsc` channel, periodic interval ticks for batch flushing, and emergency shutdown signals from a `oneshot` channel. `.await` points inside `tokio::select!` must be cancellation-safe to avoid message loss during racing conditions.
 
+**Requirements:**
 Build an event multiplexer loop using `tokio::select!`.
 
 **Requirements**:
@@ -201,6 +202,9 @@ Build an event multiplexer loop using `tokio::select!`.
 4. Add unit tests asserting processing count and clean exit on shutdown.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::time::Duration;
 > use tokio::sync::{mpsc, oneshot};
@@ -265,7 +269,8 @@ Build an event multiplexer loop using `tokio::select!`.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Cancellation Safety**: `mpsc::Receiver::recv()` and `Interval::tick()` are cancellation-safe. If one branch finishes first, dropping the uncompleted future of the other branch leaves state consistent without losing data.
 > 2. **Branch Multiplexing**: `tokio::select!` polls all branches simultaneously, executing the branch corresponding to whichever future ready first.
 > 
@@ -332,7 +337,8 @@ Construct a priority dispatcher using `tokio::select!` with `biased;`.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Biased Select**: Standard `tokio::select!` randomizes branch polling order to prevent starvation. Inserting `biased;` enforces strict top-to-bottom declaration order, ensuring `high_rx` is always checked before `low_rx`.
 > 
 > ---
@@ -397,7 +403,8 @@ Build a hedged RPC dispatcher using `futures::future::select_all` combined with 
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Dynamic Future Racing (`select_all`)**: `futures::future::select_all` races a `Vec` of pinned futures dynamically, returning the winner and remaining incomplete futures.
 > 2. **Timeout Wrap**: Wrapping `select_all` inside `tokio::select!` against a `sleep` timer ensures the entire hedged race fails fast if all nodes exceed the deadline.
 > 

@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Syntax / Data Structure**
+
+**TypeScript Core Syntax** (Named Constant Value Enumerations): Enums (`enum`) define sets of named numeric or string constants with bi-directional or unidirectional value mappings.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time & Runtime**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In languages like C# and Java, Enums are heavily used to group related constants together (e.g., `Direction.Up`, `Direction.Down`).
@@ -62,7 +63,7 @@ console.log(Status.Success); // Prints "SUCCESS"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Enums in modern TypeScript
 
@@ -111,68 +112,129 @@ enum Direction { Up, Down } // Emits IIFE lookup object in compiled JS
 type Direction = "Up" | "Down"; // Zero JS runtime code overhead
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Const Enums
+### Exercise 1: Numeric vs String Enums
 
-**Problem:** If you really want to use an Enum, but you don't want it to bloat your final compiled JavaScript, what keyword can you put in front of `enum`?
+**Scenario:**
+Create a numeric enum `Direction` and a string enum `LogLevel`.
 
-**Expected output:**
+**Requirements:**
+1. Define numeric enum `Direction` (`Up`, `Down`).
+2. Define string enum `LogLevel` (`INFO = "INFO"`).
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> const enum Direction { Up, Down }
-> // `const enum` tells TS: "Use this for type checking, but when you compile to JS, just replace `Direction.Up` with the raw number `0` inline, and delete the Enum structure completely."
-> ```
-> - It uses the standard JS variable declaration keyword for immutable variables.
-
----
-
-
-
-### Exercise 2: String Enum Definition
-
-**Problem:** Define string enum `enum Direction { North = "NORTH", South = "SOUTH" }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> String enum created
-> ```
-> ```typescript
+> // Numeric Enum (auto-incrementing 0, 1, 2...):
 > enum Direction {
->   North = "NORTH",
->   South = "SOUTH"
+>   Up,    // 0
+>   Down,  // 1
+>   Left,  // 2
+>   Right  // 3
 > }
-> console.log(Direction.North);
-> console.log("String enum created");
-> ```
+
+// String Enum:
+enum LogLevel {
+  Info = "INFO",
+  Warn = "WARN",
+  Error = "ERROR"
+}
+
+console.log(Direction.Up);   // 0
+console.log(LogLevel.Info);  // "INFO"
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** String enums enforce exact string value assignment contracts.
+> 1. Numeric enums automatically assign auto-incrementing integer values starting from 0.
+> 2. String enums require explicit string value initializers for each member.
+> 3. String enums produce readable values in debugging output and log files.
 
 ---
 
-### Exercise 3: `const enum` Inlining Advantage
+### Exercise 2: Inlining Enums with `const enum`
 
-**Problem:** State what happens to `const enum Status { OK = 200 }` during compilation (Inlined directly as 200).
+**Scenario:**
+Optimize transpiled JavaScript bundle size using `const enum`.
 
-**Expected output:**
+**Requirements:**
+1. Define `const enum Status { Active, Inactive }`.
+
 > [!check]- Answer
-> ```text
-> Inlined directly as literal values at call sites
-> ```
-> ```typescript
-> console.log("Inlined directly as literal values at call sites");
-> ```
 >
-> **Explanation:** `const enum` inlines primitive values directly, emitting zero object runtime code.
+> #### Implementation
+>
+> ```typescript
+> // TypeScript Source:
+> const enum Status {
+>   Active = 1,
+>   Inactive = 0
+> }
 
-## 7. Related Terms
+const currentStatus = Status.Active;
+```
+
+> ```javascript
+> // Transpiled Output (JS):
+> const currentStatus = 1; // Inlined completely! No enum object generated!
+> ```
+
+> #### Technical Explanation
+>
+> 1. `const enum` instructs `tsc` to inline enum member values directly at call sites during compilation.
+> 2. Does NOT generate a runtime JavaScript object, saving memory and bundle size.
+> 3. Cannot be used when reverse mapping or dynamic enum iteration is required.
+
+---
+
+### Exercise 3: Auditing Numeric Enum Reverse Mapping Security
+
+**Scenario:**
+Explain why numeric enums generate bi-directional reverse mappings in JavaScript output while string enums do not.
+
+**Requirements:**
+1. Show JS output for numeric vs string enums.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Numeric Enum JS Output:
+> var Direction;
+> (function (Direction) {
+>     Direction[Direction["Up"] = 0] = "Up"; // Creates Direction[0] = "Up" AND Direction["Up"] = 0!
+> })(Direction || (Direction = {}));
+> 
+> Direction[0]; // Returns "Up" (Reverse Mapping)
+> ```
+
+> #### Technical Explanation
+>
+> 1. Numeric enums create bi-directional mappings (`Enum[0]` returns `"Up"` and `Enum["Up"]` returns `0`).
+> 2. Reverse mapping allows converting numeric status codes back into human-readable member names at runtime.
+> 3. String enums do NOT generate reverse mappings.
+
+---
+
+
+
+
+
+---
+
+
+
+## 6. Related Terms
 - [Literal Types](../level_05/literal_types.md) — The modern replacement for Enums.
 - [Const Assertions (`as const`)](const_assertions.md) — Used with standard JS objects to replace Enums.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Enums** allow you to group named constants together.
 - They can be Numeric (default, auto-incrementing from 0) or String-based.
 - They act as both a **Type** and a **Value**.

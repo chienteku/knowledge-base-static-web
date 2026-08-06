@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Core Architecture Concept**
+
+**Core Concept** (Type System Specification): Data Types define the binary storage layout, operations, and validation rules for table columns in PostgreSQL.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Every relational database enforces a strict typing system. PostgreSQL translates SQL types to native C data types under the hood).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In dynamic programming languages like JavaScript, variables can hold anything:
@@ -74,7 +75,7 @@ VALUES (1, 'john_doe', TRUE, 'invalid_date_string');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing all data as VARCHAR or TEXT to "simplify design"
 
@@ -120,65 +121,97 @@ balance DOUBLE PRECISION -- ❌ Floating-point rounding errors!
 balance NUMERIC(12, 2) -- Exact fixed-point decimal precision
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Category Match
+### Exercise 1: Selecting Appropriate Numeric Types
 
-**Problem:** You are building an e-commerce catalog database. Determine the most appropriate general data type category (Numeric, Text, Temporal, or Boolean) for each of the following properties:
-1.  Customer reviews rating (e.g., rating from 1 to 5).
-2.  Product description paragraph.
-3.  Is the product currently in stock?
-4.  Date the product was added to inventory.
+**Scenario:**
+Design an e-commerce `orders` table selecting exact data types for IDs (`BIGINT`), status (`TEXT`), and price (`NUMERIC(10,2)`).
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE TABLE orders (...)`.
+
 > [!check]- Answer
-> ```text
-> 1. Rating: Numeric
-> 2. Description: Text
-> 3. In Stock: Boolean
-> 4. Inventory Date: Temporal
-> ```
-> - Determine if the field represents a count, character details, a flag, or a point in time.
-
----
-
-
-
-### Exercise 2: Selecting Optimal Data Types
-
-**Problem:** Choose optimal PostgreSQL data types for: 1. User ID (`BIGINT` / `UUID`), 2. Price (`NUMERIC(10,2)`), 3. Bio text (`TEXT`), 4. Active status (`BOOLEAN`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. BIGINT/UUID, 2. NUMERIC(10,2), 3. TEXT, 4. BOOLEAN
-> ```
-> ```text
-> 1. BIGINT/UUID, 2. NUMERIC(10,2), 3. TEXT, 4. BOOLEAN
-> ```
 >
-> **Explanation:** Selecting domain-appropriate data types optimizes storage efficiency and precision.
-
----
-
-### Exercise 3: Inspecting Column Data Types in Catalog
-
-**Problem:** Query column data types for table `users` from `information_schema.columns`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'users';
-> ```
+> #### Implementation
+>
 > ```sql
-> SELECT column_name, data_type
-> FROM information_schema.columns
-> WHERE table_name = 'users';
+> CREATE TABLE orders (
+>   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   order_status TEXT NOT NULL,
+>   total_amount NUMERIC(10, 2) NOT NULL,
+>   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+> );
 > ```
 >
-> **Explanation:** `information_schema.columns` details column data type definitions.
+> #### Technical Explanation
+>
+> 1. `BIGINT` (8-byte integer) prevents ID sequence exhaustion on high-volume tables.
+> 2. `NUMERIC(10, 2)` guarantees exact decimal financial calculations without binary float rounding errors.
+> 3. `TIMESTAMPTZ` stores microsecond UTC timestamps.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Auditing Column Data Types in System Catalogs
+
+**Scenario:**
+Query PostgreSQL system catalog `information_schema.columns` to inspect data types for table `orders`.
+
+**Requirements:**
+1. Query `information_schema.columns` filtering `table_name = 'orders'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   column_name, 
+>   data_type, 
+>   is_nullable, 
+>   column_default 
+> FROM information_schema.columns 
+> WHERE table_name = 'orders';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `information_schema.columns` provides ANSI SQL compliant metadata telemetry on table structures.
+> 2. Inspects target data types, nullability rules, and default expressions.
+> 3. Useful for building automated schema generators and documentation tools.
+
+---
+
+### Exercise 3: Explicit Column Type Conversion with CAST
+
+**Scenario:**
+Cast a string numeric column `price_str` to `NUMERIC(10, 2)` in a data cleanup `SELECT` query.
+
+**Requirements:**
+1. Use `CAST(price_str AS NUMERIC(10, 2))` or `price_str::NUMERIC(10, 2)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   id, 
+>   price_str::NUMERIC(10, 2) AS price_numeric 
+> FROM legacy_products;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `::` is the PostgreSQL shorthand cast operator (equivalent to ANSI `CAST(x AS type)`).
+> 2. Converts string representations into binary numeric data types.
+> 3. Throws a SQL cast error if string contains unparseable non-numeric characters.
+
+---
+
+
+
+## 6. Related Terms
 - [`INTEGER` / `BIGINT` / `SMALLINT`](integer_types.md) — Numeric integer types.
 - [`TEXT` / `VARCHAR` / `CHAR`](text_types.md) — Character text types.
 - [`BOOLEAN`](boolean.md) — Related concept: `BOOLEAN`.
@@ -194,7 +227,7 @@ balance NUMERIC(12, 2) -- Exact fixed-point decimal precision
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Relational databases enforce strict typing on all table columns.
 - Data types validate incoming data, optimize storage space, and enable indexing.
 - Type errors cause the database server to immediately reject invalid query writes.

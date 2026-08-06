@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**CRUD Operation** (Conditional Insert or Update): Upsert is an update option (upsert: true) that inserts a new document if no documents match the update query filter.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported across all relational and document databases. Handled atomically on the server to prevent race conditions during check-and-insert steps).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In application logic, you frequently need to log metrics conditionally:
@@ -87,7 +88,7 @@ If a new document was inserted, the write result returns details under `upserted
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming upsert is active by default on standard updateOne() queries
 
@@ -100,6 +101,8 @@ The `matchedCount` and `modifiedCount` will both be `0`.
 **Fix: You must explicitly pass `{ upsert: true }` in the third options argument if you want missing documents to be created.**
 
 ---
+
+
 
 
 
@@ -119,6 +122,8 @@ db.users.updateOne({ email }, { $set: { status }, $setOnInsert: { updatedAt: new
 db.users.updateOne({ email }, { $set: { status, updatedAt: new Date() }, $setOnInsert: { createdAt: new Date() } }, { upsert: true });
 ```
 
+
+
 ### Mistake 3: Forgetting `{ upsert: true }` Option Flag in Update Invocation Arguments
 
 **The mistake:** Running `db.users.updateOne({ email }, { $set: { name } })` expecting it to create missing users.
@@ -137,105 +142,103 @@ db.users.updateOne({ email: "new@ex.com" }, { $set: { name: "New" } }, { upsert:
 
 
 
-### Mistake 4: Expecting `$setOnInsert` Fields to Update During Existing Document Mutations
+## 5. Practice Exercises
 
-**The mistake:** Putting `updatedAt: new Date()` inside `$setOnInsert` clauses.
+### Exercise 1: Conditional Upsert Execution with `upsert: true`
 
-**Why it's wrong:** `$setOnInsert` fields execute ONLY when a new document is inserted during an upsert operation. They are skipped when updating existing documents.
+**Scenario:**
+Update user settings for `userId: ObjectId(...)`. If settings document exists, update `theme`; if missing, insert a new settings document.
 
-*Incorrect:*
-```javascript
-db.users.updateOne({ email }, { $set: { status }, $setOnInsert: { updatedAt: new Date() } }, { upsert: true }); // ❌ Skipped on update!
-```
+**Requirements:**
+1. Execute `updateOne()` with `upsert: true`.
 
-*Fix:*
-```javascript
-db.users.updateOne({ email }, { $set: { status, updatedAt: new Date() }, $setOnInsert: { createdAt: new Date() } }, { upsert: true });
-```
-
-### Mistake 5: Forgetting `{ upsert: true }` Option Flag in Update Invocation Arguments
-
-**The mistake:** Running `db.users.updateOne({ email }, { $set: { name } })` expecting it to create missing users.
-
-**Why it's wrong:** Without `{ upsert: true }`, `updateOne()` does nothing if no matching document is found.
-
-*Incorrect:*
-```javascript
-db.users.updateOne({ email: "new@ex.com" }, { $set: { name: "New" } }); // ❌ No document modified or inserted!
-```
-
-*Fix:*
-```javascript
-db.users.updateOne({ email: "new@ex.com" }, { $set: { name: "New" } }, { upsert: true });
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Stats Tracker Query
-
-**Problem:** You are building a game dashboard. Write the MongoDB query to update a document in the `player_stats` collection for a player where the `player_id` is exactly `104`. The update must:
-1.  Set their `status` to `"online"`.
-2.  Increment their `games_played` count by `1`.
-3.  Ensure the document is created dynamically if player `104` has no records yet.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.player_stats.updateOne(
->   { player_id: 104 },
+> const userId = new ObjectId("60c72b2f9b1d8b2c88888880");
+> 
+> const result = db.user_settings.updateOne(
+>   { userId: userId },
 >   {
->     $set: { status: "online" },
->     $inc: { games_played: 1 }
+>     $set: { theme: "dark", updatedAt: new Date() },
+>     $setOnInsert: { createdAt: new Date() }
 >   },
 >   { upsert: true }
 > );
+> console.log("Upserted ID:", result.upsertedId);
 > ```
-> - Specify the query filter matching the ID.
-> - Chain the `$set` and `$inc` operators.
-> - Pass the upsert flag in the options block.
+>
+> #### Technical Explanation
+>
+> 1. `upsert: true` inserts a new document if no documents match the query filter.
+> 2. `$setOnInsert` sets specified fields ONLY when an insert operation occurs.
+> 3. Prevents overwriting `createdAt` timestamps during subsequent updates.
 
 ---
 
+### Exercise 2: Unique Index Protection against Upsert Race Conditions
 
+**Scenario:**
+Create a unique index on `sku` in collection `products` to prevent duplicate insertions during concurrent upserts.
 
-### Exercise 2: Idempotent Document Upsert
+**Requirements:**
+1. Create unique index `{ sku: 1 }`.
 
-**Problem:** Upsert user by `email: "a@b.com"` setting `name: "Alice"` and `$setOnInsert` `createdAt: new Date()`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> db.users.updateOne({ email: "a@b.com" }, { $set: { name: "Alice" }, $setOnInsert: { createdAt: new Date() } }, { upsert: true });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.users.updateOne(
->   { email: "a@b.com" },
->   { $set: { name: "Alice" }, $setOnInsert: { createdAt: new Date() } },
+> db.products.createIndex({ sku: 1 }, { unique: true });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Unique index on filter fields (`sku`) prevents duplicate document creation under high-concurrency write surges.
+> 2. If two concurrent requests execute upserts simultaneously, unique index rejects the second insert with duplicate key error.
+> 3. Application retries write as a standard update.
+
+---
+
+### Exercise 3: Inspecting Upsert Response Payloads
+
+**Scenario:**
+Inspect `upsertedCount` and `upsertedId` in the return object of an upsert write operation.
+
+**Requirements:**
+1. Check `result.upsertedCount` and `result.upsertedId`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const res = db.settings.updateOne(
+>   { key: "site_name" },
+>   { $set: { value: "My Store" } },
 >   { upsert: true }
 > );
+> 
+> if (res.upsertedCount > 0) {
+>   console.log("Inserted new settings document with ID:", res.upsertedId);
+> } else {
+>   console.log("Updated existing settings document.");
+> }
 > ```
 >
-> **Explanation:** Combining `{ upsert: true }` with `$setOnInsert` initializes creation timestamps only on insert.
+> #### Technical Explanation
+>
+> 1. `upsertedCount: 1` indicates a new document was created.
+> 2. `upsertedId` contains the `_id` of the newly created document.
+> 3. If an existing document was updated, `upsertedCount` is 0.
 
 ---
 
-### Exercise 3: Inspecting Upserted Result ID
 
-**Problem:** Inspect `upsertedId` field on MongoDB driver write result objects.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> result.upsertedId
-> ```
-> ```javascript
-> const res = await db.users.updateOne({ _id: 99 }, { $set: { a: 1 } }, { upsert: true });
-> console.log(res.upsertedId);
-> ```
->
-> **Explanation:** `res.upsertedId` contains generated primary key IDs for upsert insertions.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`updateOne()` / `updateMany()`](update.md) — The parent update methods.
 - [Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)](write_results.md) — The query output indicators.
@@ -244,7 +247,7 @@ db.users.updateOne({ email: "new@ex.com" }, { $set: { name: "New" } }, { upsert:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Upsert inserts a new document if no records match the query filter.
 - Serves as the MongoDB equivalent of SQL's `ON CONFLICT DO UPDATE` clause.
 - Passed inside the options object argument as `{ upsert: true }`.

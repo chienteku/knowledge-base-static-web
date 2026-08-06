@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DML Statement / Control**
+
+**SQL Command / Clause** (Partial Transaction Rollback Points): `SAVEPOINT` and `ROLLBACK TO SAVEPOINT` establish sub-transaction boundaries allowing partial rollback of failed statements within a transaction block.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Stored in-memory inside the active transaction state. Every active savepoint consumes memory; creating thousands of nested savepoints can cause transaction performance lag).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard SQL transactions, if a single query crashes, the entire transaction is marked as aborted. 
@@ -94,7 +95,7 @@ COMMIT;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving thousands of active savepoints open inside a single loop
 
@@ -142,74 +143,114 @@ RELEASE SAVEPOINT sp; -- Free savepoint memory when inner block completes
 Execute COMMIT or ROLLBACK to conclude the outer transaction block
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Seeding Script Checkpoints
+### Exercise 1: Setting Savepoints and Rolling Back Partial Failures
 
-**Problem:** You have a seeding script. You want to insert a user `'Frank'`, set a checkpoint named `'post_frank'`, insert a second user `'Grace'` (which will fail because Grace already exists in the unique database list), roll back the failure, insert a third user `'Heidi'`, and commit. 
+**Scenario:**
+Execute a batch transaction that sets a `SAVEPOINT`, attempts an update, and rolls back ONLY the failed update using `ROLLBACK TO SAVEPOINT`.
 
-Write the complete SQL transaction script.
+**Requirements:**
+1. Execute `SAVEPOINT my_savepoint` and `ROLLBACK TO SAVEPOINT my_savepoint`.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
 > BEGIN;
-> INSERT INTO users (username) VALUES ('Frank');
-> SAVEPOINT post_frank;
-> INSERT INTO users (username) VALUES ('Grace'); -- Simulates duplicate crash
-> ROLLBACK TO post_frank;
-> INSERT INTO users (username) VALUES ('Heidi');
+> 
+> INSERT INTO accounts (account_name, balance_cents) VALUES ('Account 1', 10000);
+> 
+> SAVEPOINT before_second_insert;
+> 
+> -- Failed insert (duplicate name)
+> INSERT INTO accounts (account_name, balance_cents) VALUES ('Account 1', 20000);
+> 
+> -- Roll back ONLY to savepoint, preserving first insert!
+> ROLLBACK TO SAVEPOINT before_second_insert;
+> 
+> COMMIT; -- First account remains inserted!
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SAVEPOINT name` establishes a named sub-transaction checkpoint within a transaction block.
+> 2. `ROLLBACK TO SAVEPOINT name` reverts queries executed AFTER the savepoint, clearing aborted transaction state.
+> 3. Preserves work performed prior to the savepoint.
+
+---
+
+### Exercise 2: Releasing Savepoints with `RELEASE SAVEPOINT`
+
+**Scenario:**
+Release a savepoint after a sub-operation succeeds using `RELEASE SAVEPOINT`.
+
+**Requirements:**
+1. Execute `RELEASE SAVEPOINT my_savepoint`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> BEGIN;
+> 
+> SAVEPOINT step_one;
+> INSERT INTO audit_logs (event) VALUES ('task_a');
+> RELEASE SAVEPOINT step_one; -- Destroys savepoint marker without rolling back
+> 
 > COMMIT;
 > ```
-> - Set the savepoint name after the insert of Frank.
-> - Target the exact checkpoint name inside the `ROLLBACK TO` clause.
+>
+> #### Technical Explanation
+>
+> 1. `RELEASE SAVEPOINT name` removes the specified savepoint marker from the transaction stack.
+> 2. Reclaims server memory used to track sub-transaction savepoints.
+> 3. Sub-transaction operations remain part of the parent transaction block.
+
+---
+
+### Exercise 3: Nesting Multiple Savepoints
+
+**Scenario:**
+Demonstrate nested savepoints (`savepoint_a`, `savepoint_b`) inside a multi-stage data import pipeline.
+
+**Requirements:**
+1. Set nested savepoints and roll back to intermediate markers.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> BEGIN;
+> SAVEPOINT sp_a;
+> INSERT INTO logs VALUES ('log 1');
+> 
+> SAVEPOINT sp_b;
+> INSERT INTO logs VALUES ('log 2');
+> 
+> ROLLBACK TO SAVEPOINT sp_b; -- Undoes log 2, keeps log 1!
+> COMMIT;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Savepoints form a hierarchical sub-transaction stack.
+> 2. Rolling back to an earlier savepoint (`sp_a`) automatically destroys all later savepoints (`sp_b`).
+> 3. Enables complex nested transaction error recovery.
 
 ---
 
 
 
-### Exercise 2: Savepoint Syntax Workflow
-
-**Problem:** Write SQL workflow creating `SAVEPOINT my_sp`, inserting a test row, and rolling back to `my_sp`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> BEGIN; SAVEPOINT my_sp; INSERT INTO users (name) VALUES ('Test'); ROLLBACK TO SAVEPOINT my_sp; COMMIT;
-> ```
-> ```sql
-> BEGIN;
-> SAVEPOINT my_sp;
-> INSERT INTO users (name) VALUES ('Test');
-> ROLLBACK TO SAVEPOINT my_sp;
-> COMMIT;
-> ```
->
-> **Explanation:** `ROLLBACK TO SAVEPOINT` undoes mutations executed after the savepoint without aborting the main transaction.
-
----
-
-### Exercise 3: Releasing Savepoints
-
-**Problem:** Command to release savepoint `sp1` freeing internal memory (`RELEASE SAVEPOINT sp1;`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> RELEASE SAVEPOINT sp1;
-> ```
-> ```sql
-> RELEASE SAVEPOINT sp1;
-> ```
->
-> **Explanation:** `RELEASE SAVEPOINT` destroys sub-transaction markers while keeping data mutations intact.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`BEGIN` / `COMMIT` / `ROLLBACK`](begin_commit_rollback.md) — The parent transaction controls.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Savepoints are named checkpoints set inside an active transaction.
 - `ROLLBACK TO` undoes only queries executed after the savepoint was created.
 - Allows transactions to survive single query errors without full rollbacks.

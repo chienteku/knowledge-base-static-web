@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Compiler Architecture**: Mid-Level Intermediate Representation (MIR) in `rustc`.
+
+
+**Rust Compiler Intermediate Representation (control flow graph mid-level IR)**: Mid-Level Intermediate Representation (MIR) in `rustc`.
 
 ---
 
@@ -246,7 +248,7 @@ Proc macros transform AST TokenStream; MIR is generated internally by rustc!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Hir High Level Ir](hir_high_level_ir.md) — High-level IR.
 - [Llvm Codegen Backend](llvm_codegen_backend.md) — LLVM backend.

@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Operating System Threading Primitives**: `std::thread::spawn` for launching concurrent operating system (OS) threads.
+
+
+**Rust Concurrency Primitive (OS-level thread execution)**: `std::thread::spawn` for launching concurrent operating system (OS) threads.
 
 ---
 

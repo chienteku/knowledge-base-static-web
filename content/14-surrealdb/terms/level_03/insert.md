@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (bulk record insertion statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Enforces standard SQL query parser rules. Designed for fast bulk loading of tabular records into the database storage engine).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While SurrealQL's native `CREATE` statement is powerful for single-document writes, it lacks the structure for bulk tabular inserts:
@@ -82,7 +81,7 @@ SELECT * FROM product;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the mandatory SQL 'INTO' keyword when writing 'INSERT' statements, causing compiler crashes
 
@@ -142,66 +141,100 @@ INSERT INTO user:alice { name: "Alice Smith" }; // ❌ Primary key collision err
 UPDATE user:alice SET name = "Alice Smith"; // Correct update statement
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Bulk Insert Construction
+### Exercise 1: Bulk Record Insertion with Single Statement
 
-**Problem:** Write the SQL-compatible SurrealQL query to insert two records into the `tags` table in a single statement:
--   Row 1: ID is `tags:rust`, `popularity` is `95`.
--   Row 2: ID is `tags:javascript`, `popularity` is `90`.
+**Scenario:**
+An inventory seeding script inserts multiple product documents into table `product` in a single high-performance `INSERT` statement.
 
-**Expected output:**
+**Requirements:**
+1. Write an `INSERT INTO product` statement inserting 2 product objects.
+2. Specify fields `name` and `price`.
+
 > [!check]- Answer
-> ```sql
-> INSERT INTO tags (id, popularity) VALUES (tags:rust, 95), (tags:javascript, 90);
+>
+> #### Implementation
+>
+> ```surrealql
+> INSERT INTO product [
+>     { name: "Keyboard", price: 79.99dec },
+>     { name: "Mouse", price: 29.99dec }
+> ];
 > ```
-> - The statement must start with `INSERT INTO`.
-> - Separate the value rows using parentheses and commas: `VALUES (row1), (row2)`.
+>
+> #### Technical Explanation
+>
+> 1. `INSERT INTO table [ {...}, {...} ]` bulk-inserts an array of document objects in a single database roundtrip.
+> 2. Operates similarly to SQL `INSERT INTO ... VALUES` and MongoDB `insertMany()`.
+> 3. Automatically generates unique random IDs for inserted records if IDs are omitted.
+
+---
+
+### Exercise 2: Bulk Insertion with Explicit Record IDs
+
+**Scenario:**
+A user migration script bulk-inserts user records with explicit string primary keys (`user:alice`, `user:bob`).
+
+**Requirements:**
+1. Write an `INSERT INTO user` statement inserting 2 users with explicit `id` keys.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> INSERT INTO user [
+>     { id: user:alice, name: "Alice Smith", role: "admin" },
+>     { id: user:bob, name: "Bob Jones", role: "developer" }
+> ];
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Specifying `id: table:explicit_id` inside bulk insertion objects assigns primary keys explicitly.
+> 2. If an ID already exists, the `INSERT` operation fails with a primary key collision error.
+> 3. Ensures deterministic primary key seeding during migrations.
+
+---
+
+### Exercise 3: Inserting Single Record Objects
+
+**Scenario:**
+Insert a single customer record into table `customer` using `INSERT INTO` instead of `CREATE`.
+
+**Requirements:**
+1. Write an `INSERT INTO customer` statement for customer `{ name: "Carol", email: "carol@example.com" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> INSERT INTO customer {
+>     name: "Carol",
+>     email: "carol@example.com"
+> };
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INSERT INTO table { ... }` inserts a single document object without wrapping in an array.
+> 2. Returns the created record document payload.
+> 3. Provides familiar SQL DML insertion syntax.
 
 ---
 
 
 
-### Exercise 2: Bulk Batch Insertion
-
-**Problem:** Bulk insert 2 records into `tag` table using `INSERT INTO tag [ { name: "a" }, { name: "b" } ]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INSERT INTO tag [ { name: "a" }, { name: "b" } ];
-> ```
-> ```surrealql
-> INSERT INTO tag [ { name: "a" }, { name: "b" } ];
-> ```
->
-> **Explanation:** `INSERT INTO table [ ... ]` performs bulk record insertions.
-
----
-
-### Exercise 3: INSERT VALUES Syntax
-
-**Problem:** Insert a record into `user` table using `VALUES` syntax.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INSERT INTO user (name, age) VALUES ("Alice", 30);
-> ```
-> ```surrealql
-> INSERT INTO user (name, age) VALUES ("Alice", 30);
-> ```
->
-> **Explanation:** `INSERT (fields) VALUES (vals)` provides SQL-style bulk insertion syntax.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`CREATE`](create.md) — The native write equivalent.
 - [`INSERT ... ON DUPLICATE KEY UPDATE`](insert_on_duplicate.md) — The SQL upsert modifier.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `INSERT` statement provides standard SQL compatibility for database writes.
 - Direct NoSQL equivalent to PostgreSQL's `INSERT INTO` command.
 - Supports bulk multi-row insertions in a single query (`VALUES (a), (b)`).

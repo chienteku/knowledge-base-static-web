@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Data Type**
+
+**Core Concept** (Logical Truth Value BSON Type): The Boolean BSON data type stores true or false binary flags used for conditional filtering and status tracking in MongoDB documents.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Booleans are represented natively in JavaScript, JSON, and BSON. Consumes exactly 1 byte in the serialized BSON binary stream).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Applications require binary toggle states to drive logic:
@@ -69,7 +70,7 @@ db.customers.find({ active: false });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using text strings ("true" / "false") or integer numbers (1 / 0) to represent boolean toggles
 
@@ -126,66 +127,100 @@ db.users.find({ active: true }); // ❌ Number 1 is not equal to boolean true!
 db.users.find({ $or: [{ active: true }, { active: 1 }] });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Boolean Toggle Filter
+### Exercise 1: Status Flag Filtering with Booleans
 
-**Problem:** You have a `products` collection. You want to select all products where:
--   The `in_stock` field is BSON Boolean `true`.
--   The `on_sale` field is BSON Boolean `false`.
-Write the MongoDB query.
+**Scenario:**
+Query collection `users` for active user accounts where `isActive: true` and `isVerified: true`.
 
-**Expected output:**
+**Requirements:**
+1. Combine boolean equality filters.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.find({ in_stock: true, on_sale: false });
+> db.users.find({
+>   isActive: true,
+>   isVerified: true
+> });
 > ```
-> - Combine query filters inside a single document object separated by commas.
-> - Use unquoted `true` and `false` literals in JavaScript.
+>
+> #### Technical Explanation
+>
+> 1. Boolean BSON values consume a single byte of storage per document.
+> 2. Fast binary equality evaluation in query filters.
+> 3. Indexing boolean fields produces low cardinality indexes; combine in compound indexes.
+
+---
+
+### Exercise 2: Toggling Boolean Flags Atomically
+
+**Scenario:**
+Toggle a user's `isMuted` boolean setting to `true` using `$set`.
+
+**Requirements:**
+1. Execute `updateOne()` with `$set: { isMuted: true }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { $set: { isMuted: true } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$set` modifies boolean field values atomically.
+> 2. Replaces whole-document updates with targeted field mutation.
+> 3. Fires changefeed events with updated boolean state.
+
+---
+
+### Exercise 3: Querying Missing vs False Boolean Fields
+
+**Scenario:**
+Query documents where `isArchived` is either `false` OR the field does not exist on the document.
+
+**Requirements:**
+1. Combine `$or`, `{ isArchived: false }`, and `{ isArchived: { $exists: false } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.documents.find({
+>   $or: [
+>     { isArchived: false },
+>     { isArchived: { $exists: false } }
+>   ]
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. In MongoDB's flexible schema, a missing field is conceptually distinct from `false`.
+> 2. `$exists: false` checks for field absence.
+> 3. Ensures legacy documents without the flag are included in query results.
 
 ---
 
 
 
-### Exercise 2: Querying Boolean Fields
-
-**Problem:** Query all documents in `users` collection where `verified` is `false`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ verified: false });
-> ```
-> ```javascript
-> db.users.find({ verified: false });
-> ```
->
-> **Explanation:** Passing boolean `false` matches documents with boolean false fields.
-
----
-
-### Exercise 3: Filtering Missing vs False Booleans
-
-**Problem:** Query users where `isBan` is either `false` or field does not exist (`$exists: false`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ $or: [{ isBan: false }, { isBan: { $exists: false } }] });
-> ```
-> ```javascript
-> db.users.find({ $or: [{ isBan: false }, { isBan: { $exists: false } }] });
-> ```
->
-> **Explanation:** Combining boolean matching with `$exists` handles un-initialized fields.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent types.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - BSON Boolean represents binary logic values: `true` or `false`.
 - Identical in concept to PostgreSQL's `BOOLEAN` column type.
 - Highly optimized, consuming only 1 byte of disk storage.

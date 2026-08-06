@@ -165,7 +165,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Production Library Domain Error Taxonomy (`thiserror` Pattern)
 
-**Problem:**
+**Scenario:**
 You are developing a core storage engine crate (`storage_engine`) used across distributed database microservices. Library callers require a strongly-typed, zero-cost error hierarchy `StorageError` that enables precise, programmatic match-based recovery while adhering strictly to `std::error::Error` trait conventions.
 
 Design and implement `StorageError` featuring:
@@ -335,7 +335,7 @@ Design and implement `StorageError` featuring:
 
 ### Exercise 2: Application Context Propagation Pipeline (`anyhow` Pattern)
 
-**Problem:**
+**Scenario:**
 When developing application binaries (CLI microservices, ETL pipelines), creating distinct enum variants for every transient parsing or configuration failure is unproductive. Applications require context-rich error propagation that wraps arbitrary lower-level errors (`std::io::Error`, `ParseIntError`) while accumulating diagnostic application context as errors bubble up the stack frame.
 
 Implement an application context pipeline featuring:
@@ -546,7 +546,7 @@ Implement an application context pipeline featuring:
 
 ### Exercise 3: Dynamic Dispatch vs Static Dispatch Architecture (Library-to-Application Boundary Bridge)
 
-**Problem:**
+**Scenario:**
 Production Rust architectures follow a clear separation of concerns: underlying library crates emit strongly-typed `thiserror` error enums for internal monomorphization efficiency, while application service boundaries catch these library errors, decorate them with domain context, and type-erase them into `anyhow` trait object containers.
 
 Implement a library-to-application error handling boundary:

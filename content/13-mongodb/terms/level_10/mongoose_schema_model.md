@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Driver / Integration** (Mongoose Document Schema & Model Mapping): Mongoose Schemas & Models define document structure constraints, default values, virtual properties, and collection wrapper methods for Node.js applications.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **JavaScript / Node.js** (Written in application controller modules. Models are registered globally in the Mongoose connection manager memory).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In Mongoose development, you cannot write database operations without defining data shapes first. 
@@ -109,7 +110,7 @@ async function createProduct() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to call query methods (like find or create) directly on a Schema object instead of the compiled Model
 
@@ -163,76 +164,110 @@ const schema = new Schema({ first: String, last: String }); // Virtual fullName 
 const schema = new Schema({ ... }, { toJSON: { virtuals: true } });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Model Compilation
+### Exercise 1: Computing Virtual Properties with Mongoose
 
-**Problem:** Write the Mongoose code block to:
-1.  Define a schema named `blogSchema` containing a required string field `title` and a string field `body`.
-2.  Compile the schema into a model named `Blog` (state what collection name this model will map to on MongoDB).
+**Scenario:**
+Define a Mongoose virtual property `fullName` that concatenates `firstName` and `lastName` without storing `fullName` in MongoDB.
 
-**Expected output:**
+**Requirements:**
+1. Define `UserSchema.virtual("fullName").get(function() { ... })`.
+
 > [!check]- Answer
-> ```javascript
-> // 1. Schema definition
-> const blogSchema = new mongoose.Schema({
->   title: { type: String, required: true },
->   body: { type: String }
+>
+> #### Implementation
+>
+> ```typescript
+> UserSchema.virtual("fullName").get(function() {
+>   return `${this.firstName} ${this.lastName}`;
 > });
 > 
-> // 2. Model compilation
-> const Blog = mongoose.model('Blog', blogSchema);
-> // The model will map to the collection "blogs" on MongoDB.
+> UserSchema.set("toJSON", { virtuals: true });
 > ```
-> - Use the `new mongoose.Schema` constructor for the blueprint.
-> - Pass the model string name `"Blog"` to `mongoose.model` to trigger plural collection mapping.
+>
+> #### Technical Explanation
+>
+> 1. Virtual properties are dynamic getter/setter attributes computed on the fly in Node.js.
+> 2. Do not consume BSON disk storage in MongoDB collections.
+> 3. Included in `toJSON()` API responses when `virtuals: true` is configured.
 
 ---
 
+### Exercise 2: Defining Custom Instance and Static Model Methods
 
+**Scenario:**
+Add a custom instance method `verifyPassword()` and static model method `findByEmail()` to a Mongoose schema.
 
-### Exercise 2: Defining Virtual Getter Property
+**Requirements:**
+1. Attach methods to `UserSchema.methods` and `UserSchema.statics`.
 
-**Problem:** Define virtual property `fullName` concatenating `first` and `last` name fields.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> userSchema.virtual('fullName').get(function() { return `${this.first} ${this.last}`; });
+>
+> #### Implementation
+>
+> ```typescript
+> // Instance Method (operates on document instance)
+> UserSchema.methods.verifyPassword = async function(candidatePassword: string) {
+>   return await bcrypt.compare(candidatePassword, this.password);
+> };
+> 
+> // Static Method (operates on Model collection)
+> UserSchema.statics.findByEmail = function(email: string) {
+>   return this.findOne({ email: email.toLowerCase() });
+> };
 > ```
-> ```javascript
-> userSchema.virtual('fullName').get(function() {
->   return `${this.first} ${this.last}`;
+>
+> #### Technical Explanation
+>
+> 1. `methods` attach custom helper functions to document instances (`user.verifyPassword()`).
+> 2. `statics` attach custom query helpers directly to the compiled Model (`User.findByEmail()`).
+> 3. Promotes Active Record business logic encapsulation.
+
+---
+
+### Exercise 3: Defining Custom Schema Field Validators
+
+**Scenario:**
+Add a custom regex validator ensuring `phone` strings conform to valid US phone number formats.
+
+**Requirements:**
+1. Add `validate` object to field definition.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const UserSchema = new Schema({
+>   phone: {
+>     type: String,
+>     validate: {
+>       validator: (v: string) => /^\d{3}-\d{3}-\d{4}$/.test(v),
+>       message: (props: any) => `${props.value} is not a valid phone number (XXX-XXX-XXXX)!`
+>     }
+>   }
 > });
 > ```
 >
-> **Explanation:** Virtual properties compute dynamic fields without persisting data to database storage.
+> #### Technical Explanation
+>
+> 1. Custom `validate` functions evaluate field inputs before saving documents to MongoDB.
+> 2. Returns custom error messages on validation failure.
+> 3. Enforces domain data validation in Mongoose.
 
 ---
 
-### Exercise 3: Schema Instance Methods vs Static Methods
 
-**Problem:** Compare: `methods` (functions attached to document instances); `statics` (functions attached to Model class).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> methods: document instance functions; statics: Model class query helper functions
-> ```
-> ```text
-> methods: document instance functions; statics: Model class query helper functions
-> ```
->
-> **Explanation:** Instance methods operate on `this` document; statics operate on the collection Model.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Mongoose (ODM)](mongoose.md) — The parent ODM framework.
 - [Mongoose Middleware (Hooks)](mongoose_middleware.md) — Lifecycle hooks.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Schema is the blueprint defining document fields, types, and constraints.
 - The Model is the compiled class used to perform collection CRUD operations.
 - Schemas run in-memory; they cannot connect or query the database.

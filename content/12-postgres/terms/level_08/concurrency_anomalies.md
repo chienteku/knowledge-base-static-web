@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Core Concept** (Transactional Concurrency Violations): Concurrency Anomalies (Dirty Reads, Non-Repeatable Reads, Phantom Reads, Serialization Anomalies) define transactional data inconsistencies prevented by SQL isolation levels.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Standardized by the SQL-92 specification. Used to define transaction isolation level boundaries across all relational engines).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational databases must support concurrent operations. 
@@ -71,7 +72,7 @@ Transaction A runs a query filtering a range of rows (e.g. `WHERE salary > 50000
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing PostgreSQL allows dirty reads under "Read Uncommitted" isolation
 
@@ -117,67 +118,114 @@ UPDATE users SET score = score + 1 WHERE id = 1; -- Atomic SQL update
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Anomaly Diagnostics
+### Exercise 1: Preventing Dirty Reads with Read Committed Isolation
 
-**Problem:** Identify which specific concurrency anomaly occurred in the following scenario logs:
--   `Session 1:` Runs `SELECT count FROM store WHERE id = 1;` -> returns `10`.
--   `Session 2:` Runs `UPDATE store SET count = 20 WHERE id = 1; COMMIT;`
--   `Session 1:` Runs `SELECT count FROM store WHERE id = 1;` -> returns `20`.
+**Scenario:**
+Demonstrate that PostgreSQL's default `Read Committed` isolation level prevents `Dirty Reads` (reading uncommitted data from another transaction).
 
-**Expected output:**
+**Requirements:**
+1. Show Session 1 updating a row without committing, and Session 2 querying the original row.
+
 > [!check]- Answer
-> ```text
-> Non-Repeatable Read!
-> Session 1 queried the exact same row (id = 1) twice inside the same transaction block, but the value changed between reads due to Session 2's committed update.
-> ```
-> - The target row remains the same, but the inner value shifts.
-> - Identify if the transaction completed its commit sequence.
-
----
-
-
-
-### Exercise 2: Concurrency Anomalies Breakdown
-
-**Problem:** Match anomalies: 1. Dirty Read (Reads uncommitted data); 2. Non-Repeatable Read (Re-read returns modified values); 3. Phantom Read (Re-read returns newly inserted rows).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Dirty Read, 2. Non-Repeatable Read, 3. Phantom Read
-> ```
-> ```text
-> 1. Dirty Read, 2. Non-Repeatable Read, 3. Phantom Read
-> ```
 >
-> **Explanation:** Concurrency anomalies describe data inconsistencies caused by un-isolated concurrent transactions.
-
----
-
-### Exercise 3: Preventing Lost Updates
-
-**Problem:** Write atomic SQL statement preventing Lost Update anomaly when incrementing user `points`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPDATE users SET points = points + 10 WHERE id = 1;
-> ```
+> #### Implementation
+>
 > ```sql
-> UPDATE users SET points = points + 10 WHERE id = 1;
+> -- Session 1:
+> BEGIN;
+> UPDATE accounts SET balance_cents = 0 WHERE id = 1; -- Uncommitted update!
+> 
+> -- Session 2 (Concurrent):
+> BEGIN;
+> SELECT balance_cents FROM accounts WHERE id = 1; -- Returns original balance 10000! (Dirty Read Prevented!)
+> 
+> -- Session 1:
+> ROLLBACK;
 > ```
 >
-> **Explanation:** Performing arithmetic inside atomic SQL `UPDATE` statements guarantees concurrent update safety.
+> #### Technical Explanation
+>
+> 1. A Dirty Read occurs when a transaction reads data modified by another concurrent uncommitted transaction.
+> 2. PostgreSQL prevents Dirty Reads across ALL isolation levels (even `Read Uncommitted` behaves as `Read Committed`).
+> 3. MVCC snapshot readers inspect committed tuple versions only.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Understanding Non-Repeatable Reads in Read Committed
+
+**Scenario:**
+Demonstrate a `Non-Repeatable Read` where querying the same row twice within a transaction yields different values after another transaction commits.
+
+**Requirements:**
+1. Show Session 1 reading, Session 2 updating & committing, Session 1 re-reading.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- Session 1:
+> BEGIN;
+> SELECT balance_cents FROM accounts WHERE id = 1; -- Returns 10000
+> 
+> -- Session 2 (Concurrent):
+> BEGIN;
+> UPDATE accounts SET balance_cents = 5000 WHERE id = 1;
+> COMMIT;
+> 
+> -- Session 1:
+> SELECT balance_cents FROM accounts WHERE id = 1; -- Returns 5000! (Non-Repeatable Read)
+> COMMIT;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. In `Read Committed` isolation, each SQL statement acquires a fresh snapshot of committed data.
+> 2. Re-executing the `SELECT` reads newly committed data from Session 2.
+> 3. Use `Repeatable Read` isolation if consistent repeatable reads are required across statements.
+
+---
+
+### Exercise 3: Preventing Serialization Anomalies with Repeatable Read / Serializable
+
+**Scenario:**
+Prevent Phantom Reads and Serialization Anomalies using `SET TRANSACTION ISOLATION LEVEL SERIALIZABLE`.
+
+**Requirements:**
+1. Execute `SET TRANSACTION ISOLATION LEVEL SERIALIZABLE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> BEGIN;
+> SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+> 
+> SELECT SUM(balance_cents) FROM accounts;
+> 
+> COMMIT;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `Serializable` isolation guarantees that execution outcomes match some sequential non-concurrent execution order.
+> 2. PostgreSQL uses Serializable Snapshot Isolation (SSI) to track read-write dependencies.
+> 3. Aborts conflicting transactions with Error `40001` (`serialization_failure`).
+
+---
+
+
+
+## 6. Related Terms
 - [MVCC (Multi-Version Concurrency Control)](mvcc.md) — The version snapshot driver.
 - [Transaction Isolation Levels](isolation_levels.md) — The settings used to block anomalies.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Concurrency anomalies are read consistency errors occurring during parallel execution.
 - Dirty Read: Reading uncommitted edits (prevented natively in PostgreSQL).
 - Non-Repeatable Read: An existing row changes values mid-transaction.

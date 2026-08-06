@@ -166,7 +166,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Microservice Extension Framework — Type-Safe Heterogeneous State Store
 
-**Problem:**
+**Scenario:**
 In high-throughput microservices and HTTP web frameworks (such as Axum or Actix-web), request context maps store arbitrary state objects (database connection pools, authentication claims, custom rate limiters) keyed by their unique concrete type.
 
 Design and implement a type-safe `TypeMap` container backed by a `HashMap<TypeId, Box<dyn Any + Send + Sync>>`.
@@ -321,7 +321,7 @@ Your implementation must support:
 
 ### Exercise 2: Telemetry & Event Pipeline — Trait Object Downcasting with `AsAny` Pattern
 
-**Problem:**
+**Scenario:**
 In dynamic event handling engines, handlers accept trait objects `dyn Event` rather than raw `dyn Any`. However, Rust trait object vtables do not support automatic upcasting or downcasting from custom traits (`&dyn Event`) directly to concrete types (`&OrderPlacedEvent`).
 
 Implement the production `AsAny` trait pattern to enable safe dynamic downcasting for custom trait objects:
@@ -527,7 +527,7 @@ Implement the production `AsAny` trait pattern to enable safe dynamic downcastin
 
 ### Exercise 3: Runtime Diagnostics Framework — Panic Payload Interception & Dynamic Metadata Parsing
 
-**Problem:**
+**Scenario:**
 When handling unexpected application panics via `std::panic::catch_unwind`, Rust returns `Err(Box<dyn Any + Send>)`. Panic payloads can be static string slices (`&'static str`), owned strings (`String`), or custom diagnostic structs passed via `std::panic::panic_any`.
 
 Design a panic payload inspector and dynamic diagnostic context system:

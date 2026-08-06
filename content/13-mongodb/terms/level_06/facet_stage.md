@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Aggregation** (Parallel Pipeline Processing): The $facet stage processes multiple aggregation sub-pipelines concurrently over the same input document stream to construct faceted search and dashboard analytics in a single database request.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Evaluated in the aggregation engine. Distributes sub-pipelines in parallel across internal threads, combining outputs into a single document in RAM).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When loading an e-commerce search results page (like searching for "shoes" on Amazon), the UI must display:
@@ -79,7 +80,7 @@ Imagine auditing a pile of store receipts:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing massive document lists inside facet sub-pipelines, causing the final document to exceed the 16MB limit
 
@@ -125,94 +126,124 @@ db.products.aggregate([{ $facet: { cat1: [{ $match: { category: "tech" } }] } }]
 db.products.aggregate([{ $match: { status: "active" } }, { $facet: { ... } }]);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Facet Dashboard Construction
+### Exercise 1: Building Multi-Faceted E-Commerce Search Aggregations
 
-**Problem:** You have a `tickets` collection. Write the aggregation pipeline containing a single `$facet` stage to calculate:
-1.  An array named `total_count` containing the total count of all tickets (hint: use `$group` with `$sum`).
-2.  An array named `status_groups` grouping tickets by `status` and counting them.
+**Scenario:**
+In a single database request, return matching product documents AND compute summary facets for `priceRanges` and `topCategories`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$facet` with 3 sub-pipelines (`products`, `priceRanges`, `topCategories`).
+
 > [!check]- Answer
-> ```javascript
-> [
->   {
->     $facet: {
->       total_count: [
->         { $group: { _id: null, count: { $sum: 1 } } }
->       ],
->       status_groups: [
->         { $group: { _id: "$status", count: { $sum: 1 } } }
->       ]
->     }
->   }
-> ]
-> ```
-> - Construct the two independent pipelines inside the `$facet` object keys.
-> - Use `{ _id: null }` in the first pipeline to calculate the global database count.
-
----
-
-
-
-### Exercise 2: Multi-Faceted Aggregation for UI Dashboard
-
-**Problem:** Create `$facet` stage returning simultaneous total product count (`totalCount`) and top 5 categories (`topCategories`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.products.aggregate([{ $facet: { totalCount: [{ $count: "count" }], topCategories: [{ $group: { _id: "$category", count: { $sum: 1 } } }, { $limit: 5 }] } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.products.aggregate([
+>   { $match: { inStock: true } },
 >   {
 >     $facet: {
->       totalCount: [{ $count: "count" }],
+>       products: [{ $sort: { price: 1 } }, { $limit: 10 }],
+>       priceRanges: [
+>         { $bucket: { groupBy: "$price", boundaries: [0, 25, 100, Infinity] } }
+>       ],
 >       topCategories: [
->         { $group: { _id: "$category", count: { $sum: 1 } } },
->         { $limit: 5 }
+>         { $group: { _id: "$category", count: { $sum: 1 } } }
 >       ]
 >     }
 >   }
 > ]);
 > ```
 >
-> **Explanation:** `$facet` runs multi-branch aggregation sub-pipelines in a single database roundtrip.
+> #### Technical Explanation
+>
+> 1. `$facet` processes multiple sub-pipelines concurrently over the input document stream.
+> 2. Returns a single document containing array fields for each facet sub-pipeline result.
+> 3. Powers search engine result pages (SERPs) and dashboard widgets efficiently.
 
 ---
 
-### Exercise 3: Combining `$facet` with Pagination
+### Exercise 2: Multi-Metrics Analytics Dashboards with `$facet`
 
-**Problem:** Build faceted pipeline returning both total matching items count and paginated items array.
+**Scenario:**
+Compute overall platform metrics (`totalRevenue`, `totalOrders`, `avgOrderValue`) alongside regional sales breakdowns in a single query.
 
-**Expected output:**
+**Requirements:**
+1. Use `$facet` for global summary and regional group.
+
 > [!check]- Answer
-> ```text
-> db.items.aggregate([{ $facet: { metadata: [{ $count: "total" }], data: [{ $skip: 0 }, { $limit: 10 }] } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.items.aggregate([
+> db.orders.aggregate([
 >   {
 >     $facet: {
->       metadata: [{ $count: "total" }],
->       data: [{ $skip: 0 }, { $limit: 10 }]
+>       globalStats: [
+>         {
+>           $group: {
+>             _id: null,
+>             revenue: { $sum: "$total" },
+>             avgValue: { $avg: "$total" },
+>             count: { $sum: 1 }
+>           }
+>         }
+>       ],
+>       regionalStats: [
+>         { $group: { _id: "$shippingRegion", revenue: { $sum: "$total" } } }
+>       ]
 >     }
 >   }
 > ]);
 > ```
 >
-> **Explanation:** Faceted pagination computes total result counts and paginated data arrays simultaneously.
+> #### Technical Explanation
+>
+> 1. Combines different grouping dimensions into a single database roundtrip.
+> 2. Eliminates sending multiple separate `aggregate()` calls from the application server.
+> 3. Reduces network overhead significantly.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Handling `$facet` Memory Bounds
+
+**Scenario:**
+Explain why sub-pipelines inside `$facet` cannot contain another `$facet` stage and must stay within the 100MB RAM limit.
+
+**Requirements:**
+1. Describe `$facet` restrictions.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> $facet Memory Constraints:
+> - Cannot nest $facet inside another $facet stage.
+> - Output payload must fit inside the 16MB BSON document limit.
+> - Memory usage across sub-pipelines is bounded by the 100MB RAM limit unless allowDiskUse is enabled.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$facet` buffers sub-pipeline output streams into a single result document.
+> 2. Ensure facet results are bounded using `$limit` or bucket aggregations.
+> 3. Guarantees server stability.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [Document Size Limit (16 MB)](../level_05/document_size_limit.md) — The size constraint.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$facet` executes multiple independent sub-pipelines on a single input stream.
 - Excellent for building multi-faceted search sidebar filters and dashboards.
 - Combines parallel query outputs into a single returned JSON document.

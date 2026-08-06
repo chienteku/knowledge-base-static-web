@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Advanced Mechanics**
+
+**TypeScript Advanced Type** (Generic Constraint Bounds): Generic constraints (`<T extends Constraint>`) restrict candidate generic type parameters to subtypes matching specific structural interfaces.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you write a generic function `function logLength<T>(data: T)`, you cannot access `data.length` because `T` could be a number, and numbers don't have lengths.
@@ -58,7 +59,7 @@ By using `<T extends HasLength>(data: T): T`, if you pass an Array in, you get a
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `extends` in Generics with `extends` in Classes
 
@@ -103,64 +104,108 @@ function getLength<T extends { length: number }>(arg: T) { return arg.length; } 
 function getProp<T, K extends keyof T>(obj: T, key: K) { return obj[key]; }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Constraining to an Object
+### Exercise 1: Constraining Generics to Objects with Length Properties
 
-**Problem:** You are writing a generic `merge` function that combines two things together. You want to strictly enforce that both things passed in are Objects (not strings, not numbers). How do you constrain the generics?
+**Scenario:**
+Create a generic `logLength<T extends { length: number }>(arg: T)` function enforcing that inputs possess a `.length` property.
 
-**Expected output:**
+**Requirements:**
+1. Add `<T extends { length: number }>` constraint.
+
 > [!check]- Answer
-> ```typescript
-> function merge<T extends object, U extends object>(obj1: T, obj2: U) {
->   return { ...obj1, ...obj2 };
-> }
-> ```
-> - `object` is a valid type in TS!
-
----
-
-
-
-### Exercise 2: Constraining Generics to Objects with `extends object`
-
-**Problem:** Constrain function `function merge<T extends object, U extends object>(a: T, b: U): T & U`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Generic objects merged
-> ```
-> ```typescript
-> function merge<T extends object, U extends object>(a: T, b: U): T & U {
->   return { ...a, ...b };
-> }
-> console.log(merge({ a: 1 }, { b: 2 }));
-> ```
 >
-> **Explanation:** `extends object` restricts generic type arguments to non-primitive objects.
+> #### Implementation
+>
+> ```typescript
+> function logLength<T extends { length: number }>(arg: T): T {
+>   console.log(`Length: ${arg.length}`);
+>   return arg;
+> }
+
+logLength("Hello World");   // Valid! (strings have length)
+logLength([1, 2, 3, 4]);     // Valid! (arrays have length)
+logLength({ length: 10 });  // Valid! (objects with length property)
+
+// logLength(12345);        // ❌ Compile Error: Argument of type 'number' is not assignable to '{ length: number }'.
+```
+
+> #### Technical Explanation
+>
+> 1. `<T extends Structure>` restricts generic parameter `T` to types satisfying the structural contract.
+> 2. Permits accessing `.length` safely inside the function body without runtime errors.
+> 3. Retains the specific return type `T` (e.g. returns `string` or `number[]`).
 
 ---
 
-### Exercise 3: Keyof Constraint Pattern
+### Exercise 2: Using `keyof` Constraints in Property Lookups
 
-**Problem:** Write generic helper `function getProperty<T, K extends keyof T>(obj: T, key: K): T[K]`.
+**Scenario:**
+Create a type-safe `getProperty<T, K extends keyof T>(obj: T, key: K)` utility.
 
-**Expected output:**
+**Requirements:**
+1. Constrain `K` using `K extends keyof T`.
+
 > [!check]- Answer
-> ```text
-> Alice
-> ```
+>
+> #### Implementation
+>
 > ```typescript
 > function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
 >   return obj[key];
 > }
-> console.log(getProperty({ name: "Alice", age: 30 }, "name"));
-> ```
->
-> **Explanation:** `K extends keyof T` guarantees that `key` exists on target object `T`.
 
-## 7. Related Terms
+const user = { id: 1, name: "Alice", isMember: true };
+
+const name = getProperty(user, "name"); // Inferred as string
+const id = getProperty(user, "id");     // Inferred as number
+
+// getProperty(user, "invalidKey");    // ❌ Compile Error: Argument of type '"invalidKey"' is not assignable to keyof User.
+```
+
+> #### Technical Explanation
+>
+> 1. `K extends keyof T` constrains parameter `K` to valid key strings existing on object type `T`.
+> 2. `T[K]` returns the exact indexed access property type corresponding to key `K`.
+> 3. Standard type-safe property extraction utility.
+
+---
+
+### Exercise 3: Multiple Intersected Generic Constraints
+
+**Scenario:**
+Constrain a generic type parameter to implement both `Nameable` and `Identifiable` interfaces (`T extends Nameable & Identifiable`).
+
+**Requirements:**
+1. Combine constraints with `&`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Identifiable { id: string; }
+> interface Nameable { name: string; }
+
+function printEntity<T extends Identifiable & Nameable>(entity: T) {
+  console.log(`[${entity.id}] ${entity.name}`);
+}
+
+printEntity({ id: "e100", name: "Widget", price: 19.99 });
+```
+
+> #### Technical Explanation
+>
+> 1. Using `&` inside generic constraints (`T extends A & B`) requires `T` to satisfy both interfaces simultaneously.
+> 2. Structural typing allows extra properties (`price`) while guaranteeing required contract keys (`id`, `name`).
+> 3. Flexible multi-interface constraint pattern.
+
+---
+
+
+
+## 6. Related Terms
 - [Generics Overview (`<T>`)](generics.md) — The parent topic.
 - [Multiple Generics](multiple_generics.md) — You can constrain multiple generics simultaneously.
 - [Structural Typing / Duck Typing](../level_01/structural_typing.md) — Related concept: Structural Typing / Duck Typing.
@@ -169,7 +214,7 @@ function getProp<T, K extends keyof T>(obj: T, key: K) { return obj[key]; }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Generic Constraints** use the `extends` keyword inside `<...>` to limit what types can be passed into a Generic.
 - Syntax: `<T extends RequiredShape>`.
 - It allows you to safely access specific properties inside a generic function without throwing compiler errors.

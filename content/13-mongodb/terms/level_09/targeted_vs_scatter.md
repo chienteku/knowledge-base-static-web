@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Administration / Operations** (Sharded Query Routing Strategies): Targeted Queries route directly to a single shard using the shard key, whereas Scatter-Gather Queries broadcast to every shard in the cluster.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Determined during query parsing at the `mongos` router. Auditable inside query execution plans to identify cluster performance bottlenecks).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 The main goal of sharding is to scale performance by dividing work:
@@ -81,7 +82,7 @@ db.orders.find({ status: "completed", amount: { $gt: 100 } });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Designing an application query path that forgets to pass the shard key on high-frequency API routes (like user login or profile lookups)
 
@@ -129,70 +130,95 @@ db.users.find({ tenantId: 100, email: "alice@ex.com" }); // Targeted single-shar
 Include shard key in initial $match stage to route aggregation to a single shard
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Routing Classification
+### Exercise 1: Diagnosing Targeted Single-Shard Queries with `explain()`
 
-**Problem:** A collection `products` is sharded on the shard key `{ sku: 1 }`. 
-Classify these queries as either **Targeted** or **Scatter-Gather**:
-1.  `db.products.find({ sku: "SKU-9908" })`
-2.  `db.products.find({ category: "shoes", price: { $lt: 50 } })`
-3.  `db.products.find({ sku: "SKU-9908", price: { $lt: 50 } })`
+**Scenario:**
+Verify that a query including the shard key `{ customerId: "CUST-100" }` executes as a Single-Shard Targeted Query.
 
-**Expected output:**
+**Requirements:**
+1. Inspect `shards` object in `explain()` output.
+
 > [!check]- Answer
-> ```text
-> 1. Targeted: The query filters on the shard key `sku` directly.
-> 2. Scatter-Gather: The query filter lacks the shard key `sku`, forcing `mongos` to broadcast to all shards.
-> 3. Targeted: The query filters on `sku` (shard key) and `price`. Since the shard key is present, `mongos` can route the query directly to the correct shard.
+>
+> #### Implementation
+>
+> ```javascript
+> const plan = db.orders.find({ customerId: "CUST-100" }).explain("executionStats");
+> console.log("Targeted Shards Count:", Object.keys(plan.executionStats.executionStages.shards).length);
 > ```
-> - Check for the presence of the shard key `sku` inside each query filter object.
-> - Additional filter parameters do not disable targeted routing.
+>
+> #### Technical Explanation
+>
+> 1. Including the shard key in the query filter allows `mongos` to consult Config Server metadata and route the query to a SINGLE target shard.
+> 2. `shards` object in `explain()` contains exactly 1 entry.
+> 3. Maximum query throughput and lowest network latency.
+
+---
+
+### Exercise 2: Identifying Scatter-Gather Query Overhead
+
+**Scenario:**
+Run `explain()` on a query omitting the shard key (`find({ unindexedField: "value" })`) to demonstrate Scatter-Gather execution.
+
+**Requirements:**
+1. Inspect multi-shard broadcast execution.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const plan = db.orders.find({ unindexedField: "value" }).explain("executionStats");
+> console.log("Broadcast Shards Count:", Object.keys(plan.executionStats.executionStages.shards).length);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Queries omitting the shard key MUST be broadcast by `mongos` to EVERY shard in the cluster (Scatter-Gather).
+> 2. `mongos` waits for all shards to respond and merges results in memory.
+> 3. Degrades cluster scalability as shard node counts grow.
+
+---
+
+### Exercise 3: Architectural Rules to Eliminate Scatter-Gather Queries
+
+**Scenario:**
+Formulate a 3-point design rulebook ensuring top application API endpoints run as targeted queries.
+
+**Requirements:**
+1. Outline shard key query inclusion requirements.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Targeted Query Optimization Rules:
+> - Rule 1: Ensure all high-frequency API endpoints include the shard key in their query filters.
+> - Rule 2: For multi-tenant applications, use `tenantId` as the leading key in compound shard patterns.
+> - Rule 3: Reserve scatter-gather queries for low-frequency background analytical reports.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Targeted queries scale linearly with cluster growth ($O(1)$ routing).
+> 2. Scatter-gather queries suffer from long-tail shard latency ($O(S)$ where $S$ is shard count).
+> 3. Core design goal for sharded cluster architectures.
 
 ---
 
 
 
-### Exercise 2: Targeted vs Scatter-Gather Comparison
-
-**Problem:** State difference: Targeted Query (Includes shard key, routed directly to 1 shard); Scatter-Gather Query (Omits shard key, broadcast to all shards).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Targeted: routed to 1 shard via shard key; Scatter-Gather: broadcast to all cluster shards
-> ```
-> ```text
-> Targeted: routed to 1 shard via shard key; Scatter-Gather: broadcast to all cluster shards
-> ```
->
-> **Explanation:** Targeted queries minimize network RPCs and CPU churn in sharded clusters.
-
----
-
-### Exercise 3: Verifying Shard Routing in Explain Output
-
-**Problem:** What explain output property indicates single-shard targeted query routing? (`SINGLE_SHARD` stage or single shard execution stats).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SINGLE_SHARD execution stage
-> ```
-> ```text
-> SINGLE_SHARD execution stage
-> ```
->
-> **Explanation:** `SINGLE_SHARD` verifies that `mongos` routed the query to a single target shard.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Shard Key](shard_key.md) — The partitioning index key.
 - [Hashed vs. Ranged Sharding](hashed_vs_ranged.md) — Distribution strategies.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Targeted queries route to a single shard using the shard key.
 - Scatter-gather queries broadcast to all shards because the shard key is missing.
 - Targeted queries scale performance and latency linearly as shards are added.

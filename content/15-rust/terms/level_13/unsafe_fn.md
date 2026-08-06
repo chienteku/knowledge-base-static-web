@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Unsafe / FFI**: An `unsafe fn` is a function whose type signature includes the `unsafe` keyword (`unsafe fn foo(...)`). Marking a function as `unsafe` declares to the Rust compiler and downstream developers that the function's internal implementation contains operations with safety invariants that *cannot* be guaranteed for all possible inputs, shifting the burden of verifying safety preconditions onto the caller.
+
+
+**Rust Function Specifier (contract-requiring unsafe function header)**: An `unsafe fn` is a function whose type signature includes the `unsafe` keyword (`unsafe fn foo(...)`). Marking a function as `unsafe` declares to the Rust compiler and downstream developers that the function's internal implementation contains operations with safety invariants that *cannot* be guaranteed for all possible inputs, shifting the burden of verifying safety preconditions onto the caller.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: `unsafe fn` definitions are widely used in low-level systems programming, embedded device drivers, WebAssembly bindings, C FFI boundaries, and standard library internals (e.g. `Vec::set_len`, `String::from_utf8_unchecked`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -108,7 +106,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the `# Safety` Documentation Section
 
@@ -190,11 +188,11 @@ pub unsafe fn get_unchecked_val(ptr: *const i32) -> i32 {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Embedded Hardware MMIO Driver with `unsafe fn`
 
-**Problem:** In embedded systems programming (`#![no_std]`), peripheral drivers interact directly with hardware registers mapped to physical memory addresses (Memory-Mapped I/O or MMIO). Reading or writing raw memory addresses directly can cause hardware crashes or memory corruption if addresses are invalid or misaligned, so register access operations must be exposed as `unsafe fn` functions with strict caller safety invariants.
+**Scenario:** In embedded systems programming (`#![no_std]`), peripheral drivers interact directly with hardware registers mapped to physical memory addresses (Memory-Mapped I/O or MMIO). Reading or writing raw memory addresses directly can cause hardware crashes or memory corruption if addresses are invalid or misaligned, so register access operations must be exposed as `unsafe fn` functions with strict caller safety invariants.
 
 Implement a generic hardware register wrapper `MmioRegister<T>` containing a raw pointer `address: *mut T`. Provide two `pub unsafe fn` methods:
 1. `unsafe fn write_volatile(&mut self, value: T)` — Uses `core::ptr::write_volatile` to store a value without compiler optimization reordering.
@@ -203,6 +201,9 @@ Implement a generic hardware register wrapper `MmioRegister<T>` containing a raw
 Include an explicit `# Safety` doc comment section for both methods. Write a unit test `test_mmio_register_read_write` using a stack-allocated variable as simulated MMIO hardware memory to verify read and write operations using `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > use core::ptr;
@@ -274,7 +275,8 @@ Include an explicit `# Safety` doc comment section for both methods. Write a uni
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Embedded `#![no_std]` Compatibility**: Bare-metal embedded drivers cannot rely on the Rust standard library (`std`). Using `core::ptr` enables raw memory manipulation in standard-free environments.
 > 2. **Volatile Operations**: `ptr::write_volatile` and `ptr::read_volatile` prevent LLVM compiler optimizations from caching or removing reads/writes to memory addresses whose values can change outside Rust's knowledge (such as hardware peripheral registers).
 > 3. **Safety Contract (`# Safety`)**: Marking methods as `unsafe fn` shifts the burden of verifying memory validity, pointer alignment, and data race prevention to the caller.
@@ -284,7 +286,7 @@ Include an explicit `# Safety` doc comment section for both methods. Write a uni
 
 ### Exercise 2: High-Performance Network Packet Header Parser (`unsafe fn` Unchecked Read)
 
-**Problem:** In high-speed network packet processing, checking array bounds on every field lookup adds latency. When packet header boundaries are pre-validated during initial ingress verification, subsequent field extractors use `unsafe fn` to bypass redundant bounds checks.
+**Scenario:** In high-speed network packet processing, checking array bounds on every field lookup adds latency. When packet header boundaries are pre-validated during initial ingress verification, subsequent field extractors use `unsafe fn` to bypass redundant bounds checks.
 
 Implement:
 1. An `unsafe fn read_u16_be_unchecked(slice: &[u8], offset: usize) -> u16` function that extracts a 16-bit big-endian integer from a byte slice at `offset` using raw pointer arithmetic (`slice.as_ptr().add(offset)`) and `core::ptr::read_unaligned`.
@@ -292,6 +294,9 @@ Implement:
 3. Unit tests verifying both direct `unsafe` invocation and boundary checking in the safe wrapper with `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use core::ptr;
 > 
@@ -357,7 +362,8 @@ Implement:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Raw Pointer Arithmetic (`as_ptr().add()`)**: Obtains a raw pointer to `slice` elements and offsets it by `offset` bytes without performing runtime bounds validation.
 > 2. **Unaligned Read (`ptr::read_unaligned`)**: Network packet headers are frequently packed without memory alignment padding. `read_unaligned` safely reads multi-byte primitive types from arbitrary raw pointers regardless of alignment constraints on architectures like ARM.
 > 3. **Endianness Conversion (`u16::from_be_bytes`)**: Converts network byte order (Big Endian) to the host architecture's native byte order.
@@ -367,7 +373,7 @@ Implement:
 
 ### Exercise 3: Zero-Overhead Parallel Slice Splitting (`unsafe fn split_at_mut_unchecked`)
 
-**Problem:** In parallel algorithms (such as divide-and-conquer map-reduce or thread pool work stealers), a mutable slice `&mut [T]` needs to be split into two non-overlapping mutable slices `(&mut [T], &mut [T])`. Rust's safe `split_at_mut` performs bounds checking (`mid <= len`). In tight inner loops where `mid` is proven valid by algorithm invariants, an unchecked variant avoids redundant branching.
+**Scenario:** In parallel algorithms (such as divide-and-conquer map-reduce or thread pool work stealers), a mutable slice `&mut [T]` needs to be split into two non-overlapping mutable slices `(&mut [T], &mut [T])`. Rust's safe `split_at_mut` performs bounds checking (`mid <= len`). In tight inner loops where `mid` is proven valid by algorithm invariants, an unchecked variant avoids redundant branching.
 
 Implement:
 1. `pub unsafe fn split_at_mut_unchecked<T>(slice: &mut [T], mid: usize) -> (&mut [T], &mut [T])` which creates two non-overlapping mutable slices derived from `slice`.
@@ -375,6 +381,9 @@ Implement:
 3. Write a unit test `test_split_at_mut_unchecked_concurrent_edits` demonstrating that both resulting slices can be concurrently mutated and verified using `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use core::slice;
 > 
@@ -428,14 +437,15 @@ Implement:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Aliasing Invariant Upholding**: Rust's borrow checker strictly forbids multiple active mutable references (`&mut T`) to overlapping memory. By deriving two non-overlapping raw pointers (`ptr` and `ptr.add(mid)`), `split_at_mut_unchecked` safely bypasses the borrow checker's slice overlap checks while maintaining the core aliasing guarantee.
 > 2. **`slice::from_raw_parts_mut`**: Reconstructs a valid Rust mutable slice from a base raw pointer and length count.
 > 3. **Precondition Responsibility**: Shifting the responsibility of `mid <= len` to the caller allows compiler LLVM optimization passes to eliminate branch instructions in hot performance loops.
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`unsafe` Block](unsafe_block.md) — The block construct used by callers to execute an `unsafe fn`.
@@ -445,7 +455,7 @@ Implement:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `unsafe fn` signals that calling the function requires callers to satisfy safety preconditions that the compiler cannot check.
 - Always include a detailed `# Safety` section in doc comments listing caller invariant requirements.

@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: A general programming concept (Functions).
+
+
+**Rust Keyword (function declaration primitive)**: A general programming concept (Functions).
 
 ---
 
@@ -140,8 +142,9 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Throughput Network Telemetry Packet Pipeline
 
-**Problem:** In real-time network streaming services, incoming telemetry packets must be validated and transformed through a pipeline of processing stages before persistence. Using Rust function pointers (`fn(Packet) -> Result<Packet, PacketError>`), implement a zero-allocation pipeline processor.
+**Scenario:** In real-time network streaming services, incoming telemetry packets must be validated and transformed through a pipeline of processing stages before persistence. Using Rust function pointers (`fn(Packet) -> Result<Packet, PacketError>`), implement a zero-allocation pipeline processor.
 
+**Requirements:**
 1. Define a `Packet` struct containing `id: u64`, `payload: Vec<u8>`, and `checksum: u32`.
 2. Define a `PacketError` enum with variants `EmptyPayload`, `InvalidChecksum { expected: u32, found: u32 }`, and `PayloadTooLarge { max: usize, actual: usize }`.
 3. Create stage functions:
@@ -151,6 +154,7 @@ thread::spawn(move || {
 4. Implement `run_pipeline(packet: Packet, pipeline: &[fn(Packet) -> Result<Packet, PacketError>]) -> Result<Packet, PacketError>` which evaluates each function pointer stage sequentially using early returns (`?`) on error.
 
 **Expected output:**
+
 > [!check]- Answer
 >
 > #### Implementation
@@ -293,8 +297,9 @@ thread::spawn(move || {
 
 ### Exercise 2: Low-Latency Financial Matching Engine Order Dispatcher
 
-**Problem:** Financial trading matching engines operate under strict microsecond latency SLAs. Passing dynamic closures with vtable allocations (`Box<dyn Fn>`) introduces latency spikes. A function-pointer array (`[fn(&OrderEvent, &mut EngineContext) -> Result<(), DispatchError>; N]`) enables static dispatch without heap allocations.
+**Scenario:** Financial trading matching engines operate under strict microsecond latency SLAs. Passing dynamic closures with vtable allocations (`Box<dyn Fn>`) introduces latency spikes. A function-pointer array (`[fn(&OrderEvent, &mut EngineContext) -> Result<(), DispatchError>; N]`) enables static dispatch without heap allocations.
 
+**Requirements:**
 Implement an event dispatcher system:
 1. `OrderEvent` enum with `NewOrder { order_id: u64, price: u64, quantity: u32, trader_id: u32 }` and `CancelOrder { order_id: u64, trader_id: u32 }`.
 2. `EngineContext` struct tracking `max_order_quantity: u32`, `active_traders: Vec<u32>`, `processed_count: u64`, and `audit_log: Vec<String>`.
@@ -306,6 +311,7 @@ Implement an event dispatcher system:
 5. `dispatch_order_event`: Iterates over the handler function pointer slice and executes each handler against the event and mutable context.
 
 **Expected output:**
+
 > [!check]- Answer
 >
 > #### Implementation
@@ -501,8 +507,9 @@ Implement an event dispatcher system:
 
 ### Exercise 3: AST Arithmetic Expression Evaluator with Operator Function Mapping
 
-**Problem:** Compilers and query engines evaluate math expressions by building an Abstract Syntax Tree (AST). Write an AST evaluator (`eval_expr`) that uses function pointers to map binary operator nodes to checked arithmetic functions.
+**Scenario:** Compilers and query engines evaluate math expressions by building an Abstract Syntax Tree (AST). Write an AST evaluator (`eval_expr`) that uses function pointers to map binary operator nodes to checked arithmetic functions.
 
+**Requirements:**
 1. Define enums:
    - `BinaryOperator`: `Add`, `Subtract`, `Multiply`, `Divide`.
    - `Expr`: `Literal(i64)`, `Variable(String)`, `BinaryOp { left: Box<Expr>, right: Box<Expr>, op: BinaryOperator }`.
@@ -516,6 +523,7 @@ Implement an event dispatcher system:
 4. Implement `eval_expr(expr: &Expr, symbols: &HashMap<String, i64>) -> Result<i64, EvalError>` to evaluate expressions recursively.
 
 **Expected output:**
+
 > [!check]- Answer
 >
 > #### Implementation

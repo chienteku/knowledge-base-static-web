@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Core Architecture Concept**
+
+**Core Concept** (Logical Storage Container): A Database is a logically isolated namespace container storing schemas, tables, views, functions, and security roles.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal standard** (Fundamental concept of all modern software engineering. Solves the core challenge of persistent state storage).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In early computer programming, developers saved application data in plain text files (like `users.txt` or a JSON file like `data.json`). 
@@ -65,7 +66,7 @@ SELECT * FROM users WHERE email = 'alice@example.com';
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating a database like a simple file explorer
 
@@ -111,58 +112,87 @@ CREATE DATABASE tenant_123; -- ❌ Database sprawl anti-pattern!
 CREATE SCHEMA tenant_123; -- Isolated schemas inside shared database
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identifying Concurrency Issues
+### Exercise 1: Listing All Databases in psql
 
-**Problem:** You are building an ticketing site. Two customers click the "Buy Ticket" button for the last remaining seat at the exact same millisecond. If you are storing ticket counts in a simple text file (`tickets.txt`), what visual bug will occur, and how does a database prevent this?
+**Scenario:**
+List all databases available on the current PostgreSQL cluster instance in `psql`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `\l` or query `pg_database`.
+
 > [!check]- Answer
-> ```text
-> In a text file, both requests would open the file, see "1 ticket left," write "0 tickets left," and both users would be charged and issued the same seat, causing a double-booking bug. 
-> A database prevents this using "transactions" and "write locks." It locks the row containing the seat when User A accesses it, forcing User B's request to wait until A's purchase completes. Once A buys the seat, B's query is re-evaluated and fails safely with "No seats available."
-> ```
-> - Think about what happens when two separate processes read and write to the same text file simultaneously.
-> - Look up the difference between a write lock and plain file writing.
-
----
-
-
-
-### Exercise 2: Database Isolation Principles
-
-**Problem:** Can two different databases inside the same PostgreSQL server instance share tables in a single JOIN query? (No, databases are isolated).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> No, cross-database SQL JOIN queries are not supported without Foreign Data Wrappers
-> ```
-> ```text
-> No, cross-database SQL JOIN queries are not supported without Foreign Data Wrappers
-> ```
 >
-> **Explanation:** Databases provide hard administrative isolation in PostgreSQL.
-
----
-
-### Exercise 3: Inspecting Active Database
-
-**Problem:** SQL function returning name of current active database (`SELECT current_database();`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT current_database();
-> ```
+> #### Implementation
+>
 > ```sql
-> SELECT current_database();
+> -- Query catalog table
+> SELECT datname, datcollate, datencoding FROM pg_database;
+> 
+> -- Or in psql CLI:
+> -- \l
 > ```
 >
-> **Explanation:** `current_database()` returns the active connected database name.
+> #### Technical Explanation
+>
+> 1. `pg_database` is the system catalog table tracking all databases in the cluster instance.
+> 2. Each database represents a distinct logical storage boundary.
+> 3. Displays encoding (`UTF8`) and collation settings per database.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Switching Active Databases in psql
+
+**Scenario:**
+Switch current terminal connection from default database `postgres` to target database `analytics_db`.
+
+**Requirements:**
+1. Execute `\c analytics_db`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> \c analytics_db
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `\c dbname` closes the active database socket and opens a new connection to `dbname`.
+> 2. SQL queries cannot join tables across separate databases; cross-database queries require Foreign Data Wrappers (`postgres_fdw`).
+> 3. Enforces logical database isolation boundaries.
+
+---
+
+### Exercise 3: Inspecting Database Disk Footprints
+
+**Scenario:**
+Query total byte size of database `store_db` using `pg_database_size()`.
+
+**Requirements:**
+1. Execute `SELECT pg_size_pretty(pg_database_size('store_db'))`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT pg_size_pretty(pg_database_size('store_db')) AS total_db_size;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `pg_database_size('dbname')` calculates total disk space consumed by tables, indexes, and Toast files in the database.
+> 2. `pg_size_pretty()` formats raw byte counts into human-readable units (e.g. `150 MB`).
+> 3. Essential metric for capacity monitoring.
+
+---
+
+
+
+## 6. Related Terms
 - [PostgreSQL (Postgres)](postgresql.md) — A specific type of database management system.
 - [Relational Database](relational_database.md) — The relational structural philosophy.
 - [`CREATE DATABASE` / `DROP DATABASE`](create_drop_database.md) — Related concept: `CREATE DATABASE` / `DROP DATABASE`.
@@ -171,7 +201,7 @@ CREATE SCHEMA tenant_123; -- Isolated schemas inside shared database
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A database is an electronic filing system optimized for speed and reliability.
 - Text files are slow to search, cannot handle concurrent writes, and are prone to corruption.
 - Databases use indexes to retrieve records in milliseconds, even across billions of rows.

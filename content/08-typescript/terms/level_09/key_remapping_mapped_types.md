@@ -12,104 +12,23 @@
 ---
 
 ## 2. Term Category
-- **Advanced Type**
+
+**TypeScript Advanced Type** (As-Clause Key Remapping): Key remapping using `as` in mapped types enables filtering, renaming, or transforming object property keys dynamically.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-time** (Key remapping operations run entirely during compilation to construct new interfaces, compiling down to normal JS objects).
 
----
 
-## 4. Explanation
-
-### (1) Design Motivation — "Why did we design this?"
-Standard Mapped Types let you iterate over the properties of an object to modify their accessibility or value types. For example, you can make every property optional or convert their values to promises:
-```typescript
-type Options<T> = { [K in keyof T]?: T[K] };
-```
-However, standard mapped types have a strict limitation: **the keys of the new type must match the original keys exactly.** You cannot rename `'name'` to `'getName'`, nor can you delete specific keys during iteration.
-
-This made it difficult to model common JavaScript design patterns, such as automatically generating getters and setters for configuration fields:
-```javascript
-// Map properties to getter method signatures:
-// { name: string } -> { getName: () => string }
-```
-TypeScript introduced **Key Remapping** using the `as` clause to allow developers to rename or filter property keys during mapped type iteration.
-
-### (2) Core Mechanics
-The syntax adds an `as` clause after the loop declaration: 
-`{ [K in keyof T as NewKeyType]: T[K] }`
-
-The compiler runs the loop for key `K`, but names the property in the final object type using whatever type `NewKeyType` resolves to.
-
-#### Renaming Keys
-You can combine key remapping with **Template Literal Types** to capitalize and rename property keys.
-
-```typescript
-type Getters<T> = {
-  // We intersect K with string (K & string) to make sure TS knows it is a string key
-  [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K]
-};
-
-interface User {
-  name: string;
-  age: number;
-}
-
-type UserGetters = Getters<User>;
-/* Result:
-   {
-     getName: () => string;
-     getAge: () => number;
-   }
-*/
-```
-
-#### Filtering Keys
-If the `NewKeyType` resolves to **`never`**, that property is completely omitted from the final object type. This allows you to write conditional filters on object keys.
-
-```typescript
-// Keep only properties of T whose value matches type ValueType
-type FilterByValue<T, ValueType> = {
-  [K in keyof T as T[K] extends ValueType ? K : never]: T[K]
-};
-
-interface Profile {
-  username: string;
-  avatarUrl: string;
-  followers: number;
-}
-
-type StringPropsOnly = FilterByValue<Profile, string>;
-// Result: { username: string; avatarUrl: string } (followers is omitted!)
-```
-
-### (3) Real-World Application
-Extracting API payload configurations or wrapping event emitter callbacks from state models.
-
-```typescript
-interface AppState {
-  theme: 'light' | 'dark';
-  volume: number;
-  sidebarOpen: boolean;
-}
-
-// Generate an events listener interface for changes
-type StateChangeEvents = {
-  [K in keyof AppState as `on${Capitalize<K & string>}Change`]: (value: AppState[K]) => void;
-};
-
-const listener: StateChangeEvents = {
-  onThemeChange: (theme) => console.log(theme), // theme is light | dark
-  onVolumeChange: (vol) => console.log(vol),     // vol is number
-  onSidebarOpenChange: (open) => console.log(open) // open is boolean
-};
-```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting symbol or number keys during string mapping
 
@@ -169,86 +88,123 @@ type RemoveId<T> = { [K in keyof T as K extends "id" ? never : K]: T[K] }; // Id
 type Getters<T> = { [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K] };
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Stripping Function Keys
+### Exercise 1: Prefixing Object Property Keys using `as`
 
-**Problem:** You are saving configuration state to LocalStorage. You want to strip any function/methods off the configuration object since they cannot be serialized. Write a utility type called `DataPropertiesOnly<T>` that filters out any property that is a function.
+**Scenario:**
+Remap all keys of a `State` object to add a `get` prefix (`getTheme`, `getSidebarOpen`) using key remapping.
 
-```typescript
-type DataPropertiesOnly<T> = {
-  [K in keyof T as T[K] extends Function ? never : K]: T[K]
+**Requirements:**
+1. Use mapped type `[K in keyof T as `get${Capitalize<string & K>}`]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface State {
+>   theme: string;
+>   sidebarOpen: boolean;
+> }
+
+type Getters<T> = {
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
 };
 
-interface UserSession {
-  token: string;
-  userId: number;
-  saveSession: () => void;
-}
-
-type CleanSession = DataPropertiesOnly<UserSession>;
+type StateGetters = Getters<State>;
+// Inferred as: { getTheme: () => string; getSidebarOpen: () => boolean; }
 ```
 
-**Expected output:**
+> #### Technical Explanation
+>
+> 1. `[K in keyof T as NewKey]` remaps property key names dynamically during mapped type iteration.
+> 2. Combined with template literal types (`get${Capitalize<string & K>}`), it generates getter method names automatically.
+> 3. Standard pattern for building reactive state getters or store abstractions.
+
+---
+
+### Exercise 2: Filtering Keys by Value Type with `never`
+
+**Scenario:**
+Create a utility `MethodsOnly<T>` that filters an object interface to keep ONLY property keys whose values are functions.
+
+**Requirements:**
+1. Remap non-function keys to `never`.
+
 > [!check]- Answer
-> ```text
-> CleanSession matches the type structure: { token: string; userId: number; }
-> ```
-> - Loop using `K in keyof T as T[K] extends Function ? never : K`.
-> - If the value of key `T[K]` extends `Function`, return `never` to exclude it, otherwise return its key `K`.
+>
+> #### Implementation
+>
+> ```typescript
+> type MethodsOnly<T> = {
+>   [K in keyof T as T[K] extends Function ? K : never]: T[K];
+> };
+
+interface Service {
+  id: string;
+  name: string;
+  connect(): void;
+  disconnect(): void;
+}
+
+type ServiceMethods = MethodsOnly<Service>;
+// Inferred as: { connect: () => void; disconnect: () => void; }
+```
+
+> #### Technical Explanation
+>
+> 1. Remapping a key to `never` (`as T[K] extends Function ? K : never`) excludes that key from the resulting mapped object type.
+> 2. Enables filtering object interfaces based on value types.
+> 3. Advanced mapped type key filtering technique.
+
+---
+
+### Exercise 3: Stripping Specific Key Prefixes
+
+**Scenario:**
+Strip the `_` prefix from private key names (`_id`, `_name`) using key remapping and template literals.
+
+**Requirements:**
+1. Remap `_` prefixed keys to un-prefixed keys.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type UnprefixPrivate<T> = {
+>   [K in keyof T as K extends `_${infer Rest}` ? Rest : K]: T[K];
+> };
+
+interface PrivateData {
+  _id: string;
+  _secret: number;
+  publicName: string;
+}
+
+type PublicData = UnprefixPrivate<PrivateData>;
+// Inferred as: { id: string; secret: number; publicName: string; }
+```
+
+> #### Technical Explanation
+>
+> 1. Key remapping combines template literal pattern matching (`K extends \`_${infer Rest}\``) with `as` clauses.
+> 2. Strips leading underscore prefixes dynamically.
+> 3. Powerful structural refactoring tool.
 
 ---
 
 
 
-### Exercise 2: Getter Method Key Remapping
-
-**Problem:** Remap object `{ name: string }` to getter methods `{ getName: () => string }` using `as` remapping.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Getters remapped
-> ```
-> ```typescript
-> type Getters<T> = {
->   [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K]
-> };
-> type UserGetters = Getters<{ name: string }>;
-> console.log("Getters remapped");
-> ```
->
-> **Explanation:** Key remapping with `as` and `Capitalize` generates type-safe getter signatures.
-
----
-
-### Exercise 3: Filtering Property Keys with `never`
-
-**Problem:** Remap mapped type keys to filter out properties starting with `_`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Private keys filtered
-> ```
-> ```typescript
-> type PublicOnly<T> = {
->   [K in keyof T as K extends `_${string}` ? never : K]: T[K]
-> };
-> type Clean = PublicOnly<{ _secret: number; name: string }>;
-> console.log("Private keys filtered");
-> ```
->
-> **Explanation:** Remapping mapped type keys to `never` removes matching property keys.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Mapped Types](mapped_types.md) — The loop mechanism that `as` extends.
 - [Template Literal Types](template_literal_types.md) — Constructing the renamed key strings.
 - [`Exclude` / `Extract` / `NonNullable`](../level_08/exclude_extract_nonnullable.md) — The basic set operation logic.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Key Remapping** uses the `as` keyword inside mapped types to rename or filter property keys.
 - Integrates with Template Literal Types to dynamically adjust casing (`Capitalize`, `Uppercase`) and format names.
 - Filters keys out of object types when mapping key names to `never`.

@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (grouping and aggregation clause)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the query post-projection phase. Collects matching index nodes in memory to run mathematical aggregations before generating outputs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building analytics dashboards, you often need to calculate summary statistics:
@@ -99,7 +98,7 @@ GROUP ALL;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to select un-grouped fields that are not wrapped inside aggregate functions, returning query errors
 
@@ -160,67 +159,114 @@ SELECT role, count() FROM user GROUP BY role HAVING count() > 5;
 -- Or filter array results
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Aggregation Query Construction
+### Exercise 1: Grouping Order Quantities by Customer
 
-**Problem:** You have a `transactions` table. Write the SurrealQL query to:
-1.  Calculate the total sum of the `amount` field, aliasing it as `sales_sum`.
-2.  Group the results by the `store_id` field.
-3.  Filter only transactions where the `status` is `"cleared"`.
+**Scenario:**
+An analytics query calculates total items purchased by each customer from table `order`.
 
-**Expected output:**
+**Requirements:**
+1. Create order records with fields `customer` and `quantity`.
+2. Write a query grouping by `customer` and summing `quantity`.
+
 > [!check]- Answer
-> ```sql
-> SELECT store_id, math::sum(amount) AS sales_sum FROM transactions WHERE status = "cleared" GROUP BY store_id;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE order:1 SET customer = user:alice, quantity = 2;
+> CREATE order:2 SET customer = user:alice, quantity = 5;
+> CREATE order:3 SET customer = user:bob, quantity = 1;
+> 
+> -- Group orders by customer and sum quantities
+> SELECT customer, math::sum(quantity) AS total_quantity 
+> FROM order 
+> GROUP BY customer;
 > ```
-> - The table source is `transactions`.
-> - Apply the `WHERE` filter before writing the `GROUP BY` clause.
+>
+> #### Technical Explanation
+>
+> 1. `GROUP BY customer` buckets order records sharing identical `customer` record links.
+> 2. `math::sum(quantity)` aggregates item counts within each customer group bucket.
+> 3. Returns a structured JSON result array containing customer pointers and total quantities.
+
+---
+
+### Exercise 2: Global Aggregation with `GROUP ALL`
+
+**Scenario:**
+Compute overall platform metrics (total revenue, average price, total products) across all products in table `product`.
+
+**Requirements:**
+1. Write a `SELECT` query calculating `math::sum(price)`, `math::mean(price)`, and `count()` using `GROUP ALL`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE product:p1 SET price = 100.00dec;
+> CREATE product:p2 SET price = 200.00dec;
+> 
+> -- Collapse all product records into a single global summary
+> SELECT 
+>     math::sum(price) AS total_revenue,
+>     math::mean(price) AS avg_price,
+>     count() AS total_products
+> FROM product
+> GROUP ALL;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `GROUP ALL` collapses all matching table records into a single global aggregate result object.
+> 2. Evaluates aggregate functions over the entire record set.
+> 3. Equivalent to SQL `SELECT SUM(...), AVG(...) FROM table` without a `GROUP BY` clause.
+
+---
+
+### Exercise 3: Grouping by Array Elements
+
+**Scenario:**
+An analytics service counts how many articles belong to each topic tag where `tags` is an array of strings.
+
+**Requirements:**
+1. Group articles by individual tag elements inside `tags`.
+2. Compute `count()` for each tag.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE article:1 SET tags = ["rust", "database"];
+> CREATE article:2 SET tags = ["rust", "web"];
+> 
+> -- Group by array elements
+> SELECT tags AS tag, count() AS total_articles 
+> FROM article 
+> GROUP BY tags;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Grouping by an array field (`GROUP BY tags`) expands array elements and groups by individual items.
+> 2. Counts occurrences of each distinct tag across all articles.
+> 3. Replaces complex SQL `UNNEST()` / `LATERAL JOIN` queries with concise grouping syntax.
 
 ---
 
 
 
-### Exercise 2: Group By Multiple Fields
-
-**Problem:** Group sales by `country` and `year` calculating total sales with `math::sum(amount)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT country, year, math::sum(amount) AS total FROM sale GROUP BY country, year;
-> ```
-> ```surrealql
-> SELECT country, year, math::sum(amount) AS total FROM sale GROUP BY country, year;
-> ```
->
-> **Explanation:** `GROUP BY f1, f2` aggregates records by multi-field composite keys.
-
----
-
-### Exercise 3: Group All Aggregation
-
-**Problem:** Calculate average age across all records in `user` table using `GROUP ALL`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT math::mean(age) FROM user GROUP ALL;
-> ```
-> ```surrealql
-> SELECT math::mean(age) FROM user GROUP ALL;
-> ```
->
-> **Explanation:** `GROUP ALL` aggregates the entire table dataset into a single summary result.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`SELECT`](select.md) — The parent query statement.
 - [Aggregate Functions](aggregate_functions.md) — The calculation functions.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `GROUP BY` aggregates data by matching categories; `GROUP ALL` aggregates globally.
 - Direct NoSQL equivalent to SQL's `GROUP BY` and MongoDB's `$group` pipelines.
 - Projected fields must be in the `GROUP BY` list or wrapped in aggregate functions.

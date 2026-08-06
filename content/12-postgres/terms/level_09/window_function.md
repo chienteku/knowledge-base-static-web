@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Syntax**
+
+**Advanced Feature** (Cross-Row Analytical Computation): Window Functions (`OVER (PARTITION BY ... ORDER BY ...)`) compute analytical calculations across related row sets without collapsing rows into a single summary.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported by all relational SQL engines. Processed after the `HAVING` clause, meaning they cannot be used directly inside `WHERE` or `HAVING` filters).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard SQL aggregation functions collapse your rows:
@@ -91,7 +92,7 @@ FROM employees;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to filter window function results inside the query's WHERE clause
 
@@ -157,73 +158,108 @@ WITH ranked AS (SELECT name, ROW_NUMBER() OVER (ORDER BY points DESC) AS rn FROM
 Use GROUP BY if collapsing rows is desired; use OVER (PARTITION BY) to retain individual rows
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Cumulative Sales Percentage
+### Exercise 1: Calculating Running Totals with `SUM() OVER ()`
 
-**Problem:** You have a `sales` table (columns: `id`, `amount`). Write the SQL query to select:
-1.  Every sale amount.
-2.  The total sum of all sales in the table, displayed next to every row (use the alias `grand_total`).
+**Scenario:**
+Calculate a running cumulative sales revenue total for orders sorted by `created_at`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SUM(total_cents) OVER (ORDER BY created_at ASC)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
 > SELECT 
->   amount,
->   SUM(amount) OVER() AS grand_total
-> FROM sales;
+>   id AS order_id, 
+>   created_at, 
+>   total_cents / 100.0 AS order_amount,
+>   SUM(total_cents) OVER (ORDER BY created_at ASC) / 100.0 AS running_total_dollars 
+> FROM orders;
 > ```
-> - Run the `SUM` aggregate function as a window function.
-> - Since we want the total for the entire table, leave the `OVER()` clause empty.
+>
+> #### Technical Explanation
+>
+> 1. `SUM() OVER (ORDER BY created_at)` calculates a cumulative running total across ordered rows.
+> 2. Unlike `GROUP BY`, window functions do NOT collapse rows; each row retains its individual identity.
+> 3. Essential analytical query pattern.
+
+---
+
+### Exercise 2: Partitioned Group Aggregations without Collapsing Rows
+
+**Scenario:**
+Calculate the percentage of total department salary that each individual employee represents (`salary / SUM(salary) OVER (PARTITION BY dept_id)`).
+
+**Requirements:**
+1. Use `salary / SUM(salary) OVER (PARTITION BY department_id)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   name, 
+>   department_id, 
+>   salary,
+>   SUM(salary) OVER (PARTITION BY department_id) AS dept_total_salary,
+>   ROUND((salary / SUM(salary) OVER (PARTITION BY department_id)) * 100, 2) AS pct_of_dept_salary 
+> FROM employees;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `PARTITION BY department_id` restricts the window aggregate calculations to rows sharing the same department.
+> 2. Retains individual employee row details alongside department aggregate totals.
+> 3. Powerful cross-row reporting capability.
+
+---
+
+### Exercise 3: Defining Window Frames (`ROWS BETWEEN ...`)
+
+**Scenario:**
+Calculate a 3-row moving average price using `ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING`.
+
+**Requirements:**
+1. Execute `AVG(price) OVER (ORDER BY date ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   trade_date, 
+>   closing_price, 
+>   AVG(closing_price) OVER (
+>     ORDER BY trade_date ASC 
+>     ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
+>   ) AS moving_avg_3day 
+> FROM stock_prices;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING` defines explicit window frame boundaries relative to the current row.
+> 2. Calculates moving averages over a sliding 3-row window frame.
+> 3. Standard financial analytics calculation.
 
 ---
 
 
 
-### Exercise 2: Calculating Running Total with Window Function
-
-**Problem:** Calculate running total of `amount` ordered by `created_at` using `SUM(amount) OVER (ORDER BY created_at ASC)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT created_at, amount, SUM(amount) OVER (ORDER BY created_at ASC) AS running_total FROM transactions;
-> ```
-> ```sql
-> SELECT created_at, amount,
->   SUM(amount) OVER (ORDER BY created_at ASC) AS running_total
-> FROM transactions;
-> ```
->
-> **Explanation:** `SUM(col) OVER (ORDER BY ...)` calculates cumulative running totals.
-
----
-
-### Exercise 3: Window Frame Specification (ROWS BETWEEN)
-
-**Problem:** Specify 3-row moving average window frame: `ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> AVG(price) OVER (ORDER BY date ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)
-> ```
-> ```sql
-> SELECT date, price,
->   AVG(price) OVER (ORDER BY date ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS moving_avg
-> FROM daily_prices;
-> ```
->
-> **Explanation:** Window frame clauses (`ROWS BETWEEN ...`) restrict calculation bounds around target rows.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`OVER()` / `PARTITION BY` / `ORDER BY` (Window Clause)](window_clause.md) — The parent window definition syntax.
 - [`ROW_NUMBER()` / `RANK()` / `DENSE_RANK()`](row_number_rank.md) — Positional window functions.
 - [`LAG()` / `LEAD()`](lag_lead.md) — Related concept: `LAG()` / `LEAD()`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Window functions perform calculations across rows while preserving individual row detail.
 - Returns a calculated result value for every row in the output set.
 - Converts standard aggregates (`SUM`, `AVG`, `COUNT`) into windows using `OVER()`.

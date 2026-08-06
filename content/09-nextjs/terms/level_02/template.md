@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing / UI Architecture**
+
+**Routing & Layouts** (Re-Mounting Subtree Shell Component): `template.tsx` is a layout-like wrapper that creates a new component instance and re-mounts state on every route navigation.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Component (Default) or Client Component**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We just learned that `layout.tsx` is amazing because it *does not remount* on navigation, preserving state.
@@ -60,7 +61,7 @@ If a folder has both a `layout.tsx` and a `template.tsx`, the layout wraps the t
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Template when Layout is needed
 
@@ -116,80 +117,120 @@ export default function Template({ children }: { children: React.ReactNode }) {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Form State Reset
+### Exercise 1: Resetting State on Route Transitions with `template.tsx`
 
-**Problem:** You have a multi-step checkout process (`/checkout/step1`, `/checkout/step2`). You want to ensure a specific feedback form resets its text input every time the user moves to a new step. Should the feedback form live in `layout.tsx` or `template.tsx`?
+**Scenario:**
+Create `app/dashboard/template.tsx` to force component re-instantiation and state reset on sub-route changes.
 
-**Expected output:**
+**Requirements:**
+1. Export default component in `template.tsx`.
+
 > [!check]- Answer
-> ```text
-> It should live in `template.tsx`.
-> If it lived in `layout.tsx`, the text the user typed into the feedback form on Step 1 would still be sitting there on Step 2. By using a Template, the component is remounted, wiping the `useState` back to its initial empty string.
-> ```
-> - Do you want the state preserved or destroyed?
-
----
-
-### Exercise 2: Template Enter Animation Pattern
-
-**Problem:** Write App Router `template.tsx` triggering page entrance animations using `useEffect` on every route navigation.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> 'use client'; import { useEffect } from 'react'; export default function Template({ children }: { children: React.ReactNode }) { useEffect(() => { logPageView(); }, []); return <div className="animate-fade-in">{children}</div>; }
-> ```
-> - `template.tsx` re-mounts on every route transition, re-firing `useEffect`.
-> 
-> ```tsx
-> 'use client';
-> import { useEffect } from 'react';
-> 
-> export default function Template({ children }: { children: React.ReactNode }) {
->   useEffect(() => {
->     console.log('Route navigated, template re-mounted');
->   }, []);
->   
->   return <div className="animate-fade-in">{children}</div>;
+> // app/dashboard/template.tsx
+> export default function DashboardTemplate({
+>   children
+> }: {
+>   children: React.ReactNode;
+> }) {
+>   return (
+>     <div className="animate-fade-in">
+>       {children}
+>     </div>
+>   );
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. Unlike `layout.tsx`, `template.tsx` creates a NEW component instance on every route transition.
+> 2. Resets local component state and triggers enter/exit CSS animations on navigation.
+> 3. Useful when route changes require clean state resets or analytics page view tracking.
+
 ---
 
-### Exercise 3: Layout vs Template Matrix
+### Exercise 2: Triggering Route Transition Animations in Templates
 
-**Problem:** Compare `layout.tsx` vs `template.tsx` across:
-1. Component instance re-creation on navigation
-2. DOM state preservation
-3. useEffect re-triggering
+**Scenario:**
+Use Framer Motion or CSS animation libraries inside `template.tsx` to animate page entrance effects.
 
-**Expected output:**
+**Requirements:**
+1. Add animation wrappers in `template.tsx`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { motion } from "framer-motion";
+
+export default function AnimatedTemplate({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Because `layout.tsx` stays mounted, Framer Motion exit/enter animations will NOT fire on sub-route changes inside layouts.
+> 2. `template.tsx` re-mounts on every navigation, allowing page transition animations to execute reliably.
+> 3. Idiomatic pattern for route transition animations in App Router.
+
+---
+
+### Exercise 3: Choosing Between `layout.tsx` vs `template.tsx`
+
+**Scenario:**
+Formulate an architectural selection decision matrix explaining when to use `layout.tsx` vs `template.tsx`.
+
+**Requirements:**
+1. Contrast state persistence, re-rendering, and animation behavior.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. layout.tsx: Persists instance; template.tsx: Re-creates instance
-> 2. layout.tsx: Preserves DOM state; template.tsx: Wipes DOM state
-> 3. layout.tsx: useEffect runs once; template.tsx: useEffect runs on every navigation
+> Layout vs Template Selection Matrix:
+> - layout.tsx: Persistent shell. Preserves state, skips re-rendering common UI, does NOT re-trigger useEffect on sub-navigation. Use for sidebars, navbars, persistent forms.
+> - template.tsx: Re-mounting shell. Resets state, re-executes useEffect hooks, re-triggers CSS/Framer animations. Use for page view analytics, enter animations, modal resets.
 > ```
-> - `layout.tsx` -> Persistent, state-preserving, runs effect once.
-> - `template.tsx` -> Instantiates fresh component on every navigation.
-> 
-> ```text
-> Use layout for persistent wrappers; Use template for navigation-triggered animations.
-> ```
+
+> #### Technical Explanation
+>
+> 1. `layout.tsx` is the default choice for performance and state persistence.
+> 2. `template.tsx` is explicitly chosen when state reset or re-animation is required.
+> 3. Core App Router layout architecture choice.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`layout.tsx`](layout.md) — The state-preserving default wrapper.
 - [`page.tsx`](page.md) — The child UI being wrapped.
 - [React `useEffect` Hook](use_effect.md) — Related concept: React `useEffect` Hook.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`template.tsx`** is a shared UI wrapper, just like a Layout.
 - Unlike Layouts, **Templates remount on every navigation**, destroying their state and re-running their effects.
 - They are primarily used for enter/exit animations, resetting state on navigation, or logging page views via `useEffect`.

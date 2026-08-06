@@ -17,17 +17,15 @@
 
 ## 2. Term Category
 
-**Core Concept / Language Feature**: Macro Hygiene is the compiler mechanism that prevents macro-generated code from unexpectedly interfering with the caller's local scope. In Rust, declarative macros (`macro_rules!`) are hygienic for local variables: a variable declared inside a macro expansion (e.g. `let x = 10;`) lives in a distinct syntax context, preventing it from accidentally shadowing a variable named `x` in the calling function.
+
+
+**Rust Macro System (lexical scope identifier isolation)**: Macro Hygiene is the compiler mechanism that prevents macro-generated code from unexpectedly interfering with the caller's local scope. In Rust, declarative macros (`macro_rules!`) are hygienic for local variables: a variable declared inside a macro expansion (e.g. `let x = 10;`) lives in a distinct syntax context, preventing it from accidentally shadowing a variable named `x` in the calling function.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: Hygiene rules are enforced automatically by `rustc` across all Rust compilation targets (`std`, `no_std`, WASM, embedded).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -118,7 +116,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming Item Names (Functions/Types) Are Fully Hygienic in `macro_rules!`
 
@@ -207,13 +205,14 @@ fn main() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Hygienic Performance Profiling Macro vs. Caller Identifier Shadowing
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In real-time network services or embedded sensor pipelines, developers frequently instrument code using diagnostic macros. Suppose you need to implement a timing benchmark macro `profile_block!` that tracks execution latency by instantiating temporary local variables (`start_time`, `elapsed`, `result`).
 
+**Requirements:**
 If Rust's macro system were unhygienic (like C `#define`), invoking `profile_block!` inside a function that *already* defines variables named `start_time` or `elapsed` would cause variable shadowing bugs or compilation errors.
 
 Write a declarative macro `profile_block!` that:
@@ -223,6 +222,9 @@ Write a declarative macro `profile_block!` that:
 4. Includes unit tests verifying that both the caller's variables retain their original values and the macro correctly returns the computed result.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > macro_rules! profile_block {
 >     ($expr:expr) => {{
@@ -261,7 +263,8 @@ Write a declarative macro `profile_block!` that:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Syntax Context (`Span`) Tagging:** When `rustc` expands `profile_block!`, it assigns a unique `SyntaxContext` ID to every token generated inside the macro body. Even though the macro declares `let start_time = ...`, the compiler treats this token as `start_time#1` (macro scope), whereas the caller's variable is `start_time#0` (caller scope).
 > 2. **Preventing Shadowing and Interference:** Because of distinct `SyntaxContext` tags, `start_time` inside the macro block does not collide with or shadow `let start_time = "Caller string start_time";` in `test_profile_block_hygiene()`.
 > 3. **Block Expression Isolation:** Wrapping macro logic in double braces `{{ ... }}` creates an expression block, ensuring that temporary intermediate calculations return values cleanly without leaking macro tokens into surrounding code.
@@ -270,9 +273,10 @@ Write a declarative macro `profile_block!` that:
 
 ### Exercise 2: Crate Path Hygiene with Fully Qualified Absolute Imports (`$crate::...` / `::core::...`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In a library crate designed for embedded or `no_std` environments, you build a custom telemetry packet framing macro `build_telemetry_packet!`. The macro creates a byte array packet using `core::option::Option`.
 
+**Requirements:**
 However, user code consuming your library might define a conflicting type or alias in local module scope (such as `struct Option;` or `type Option = MyCustomType;`). Because `macro_rules!` uses **mixed hygiene** (local variables are hygienic, but item names resolve in caller scope), unqualified references like `Option::Some` can fail to compile when invoked in caller modules with shadowed names.
 
 Write a crate-safe macro `build_telemetry_packet!` that:
@@ -281,6 +285,9 @@ Write a crate-safe macro `build_telemetry_packet!` that:
 3. Includes unit tests where the caller scope explicitly shadows standard item names (such as `Option`), proving that the macro expands and executes safely without compilation errors.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > // Simulated library macro using fully qualified item paths for path hygiene
 > macro_rules! build_telemetry_packet {
@@ -333,7 +340,8 @@ Write a crate-safe macro `build_telemetry_packet!` that:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Mixed Hygiene Model:** In Rust `macro_rules!`, local variable bindings are hygienic, but item names (types, traits, modules, functions) resolve in the *caller's* lexical scope.
 > 2. **Preventing Item Hijacking:** If the macro used plain `Option::Some`, calling it in a module containing `struct Option;` would cause a type mismatch compilation error. Using `::core::option::Option` forces path resolution from the root crate namespace (`::`), bypassing local module shadowing completely.
 > 3. **Library Macro Best Practice:** Crate macros exported for external use should always prepend `$crate::` for internal crate items and `::core::` or `::std::` for standard library types.
@@ -342,9 +350,10 @@ Write a crate-safe macro `build_telemetry_packet!` that:
 
 ### Exercise 3: Controlled Scope Mutation vs. Internal Isolation in DSL Macro Generators
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 When building Domain-Specific Languages (DSLs) in Rust—such as state machine builders, event dispatchers, or database transaction runners—macros often need to perform a mix of **isolated internal operations** (e.g. tracking retry counts, intermediate status flags) and **intentional caller mutations** (e.g. updating a caller's state variable or output accumulator).
 
+**Requirements:**
 Write a macro `execute_transaction!` that:
 1. Accepts an explicit target identifier `$target_state:ident`, a maximum retry count `$max_retries:expr`, and a closure/expression `$op:expr`.
 2. Uses hygienic local variables (`let mut retries = 0;`, `let mut success = false;`) for internal loop management and retry counters so they never collide with the caller's local scope.
@@ -352,6 +361,9 @@ Write a macro `execute_transaction!` that:
 4. Includes unit tests demonstrating that internal loop variables (`retries`, `success`) do not leak into or collide with caller variables of the same name, while the passed `$target_state` identifier is updated correctly across retries.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Eq)]
 > pub enum TransactionState {
@@ -421,14 +433,15 @@ Write a macro `execute_transaction!` that:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Identifier Matcher (`$ident:ident`) Hygiene Bypass:** Passing an explicit identifier token `$target_state:ident` allows the macro to operate on a variable defined in the caller's syntax context. The compiler preserves the token's origin span, making `$target_state` refer directly to `state` in `test_controlled_hygiene_and_mutation()`.
 > 2. **Internal Scope Hygiene:** Local declarations inside the macro (`let mut retries = 0;`, `let mut success = false;`) receive the macro's internal syntax context. They are isolated from the caller's variables (`let retries = ...`, `let success = ...`).
 > 3. **Controlled Scope Mutation Pattern:** This demonstrates the standard Rust macro design pattern: maintain clean isolation for internal implementation details while accepting explicit identifier arguments when mutating caller state is required.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Declarative Macros (`macro_rules!`)](declarative_macros_macro_rules.md) — The pattern-matching macro system built with automatic local hygiene.
@@ -438,7 +451,7 @@ Write a macro `execute_transaction!` that:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Macro Hygiene prevents macro-generated local variables from colliding with or shadowing caller scope variables.
 - Declarative macros (`macro_rules!`) feature automatic local variable hygiene.

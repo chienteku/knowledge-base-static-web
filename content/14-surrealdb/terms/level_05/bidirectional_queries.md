@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Query Feature (bidirectional graph edge traversal)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Supported by the relationship index engine. Evaluates queries from both the `in` pointer and `out` pointer branches in parallel, yielding fast bidirectional lookups).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database systems (PostgreSQL), many-to-many relationships (like "friendships") are hard to model:
@@ -89,7 +88,7 @@ FROM user:alice;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Inserting two reciprocal edge records for mutual relationships, wasting storage space and doubling write transaction workloads
 
@@ -151,107 +150,105 @@ SELECT ->follows->user FROM user:alice; // Outgoing following users only
 
 
 
-### Mistake 4: Confusing Incoming `<-` and Outgoing `->` Graph Arrow Directions
 
-**The mistake:** Writing `SELECT <-wrote<-post FROM user:alice;` expecting outgoing articles.
 
-**Why it's wrong:** `->` represents outgoing edge traversals (`user:alice -> wrote -> post`). `<-` represents incoming edge traversals (`post <- wrote <- user:alice`). Reversing arrows flips edge traversal logic.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
--- Expecting posts written by alice, but using incoming arrow
-SELECT <-wrote<-post FROM user:alice; // ❌ Flips edge direction!
-```
+### Exercise 1: Outgoing vs Incoming Graph Traversals
 
-*Fix:*
-```surrealql
--- Outgoing edge traversal from user to post
-SELECT ->wrote->post FROM user:alice;
-```
+**Scenario:**
+Query a social network graph where user `user:alice` follows `user:bob` via relation edge `follows`. Traverse both outgoing (`->follows->user`) and incoming (`<-follows<-user`) connections.
 
-### Mistake 5: Using Undirected Arrow `<->` when Explicit Edge Direction is Required
+**Requirements:**
+1. Relate `user:alice -> follows -> user:bob`.
+2. Write outgoing query from `user:alice` to find who Alice follows.
+3. Write incoming query from `user:bob` to find Bob's followers.
 
-**The mistake:** Using `user:alice<->friend<->user` expecting to enforce asymmetric follower relationships.
-
-**Why it's wrong:** `<->` traverses graph edges in BOTH incoming and outgoing directions bi-directionally. For directed relationships (like follower/following), specify explicit `->` or `<-` arrows.
-
-*Incorrect:*
-```surrealql
-SELECT <->follows<->user FROM user:alice; // Traverses followers AND following!
-```
-
-*Fix:*
-```surrealql
-SELECT ->follows->user FROM user:alice; // Outgoing following users only
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Bidirectional Query Construction
-
-**Problem:** You are building a student-course enrollment database. 
-The relationship was created using: `RELATE student:alice -> enrolled -> course:math;`
-Write the SurrealQL queries to:
-1.  Find all course names student `student:alice` is enrolled in.
-2.  Find all student names enrolled in course `course:math`.
-
-**Expected output:**
 > [!check]- Answer
-> ```sql
-> -- 1. Courses Alice is in (Outgoing)
-> SELECT ->enrolled->course.name AS courses FROM student:alice;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET name = "Alice";
+> CREATE user:bob SET name = "Bob";
+> RELATE user:alice->follows->user:bob;
 > 
-> -- 2. Students in Math (Incoming)
-> SELECT <-enrolled<-student.name AS students FROM course:math;
+> -- Outgoing: Who does Alice follow?
+> SELECT ->follows->user.name AS following FROM user:alice;
+> 
+> -- Incoming: Who is following Bob?
+> SELECT <-follows<-user.name AS followers FROM user:bob;
 > ```
-> - The edge table is `enrolled`.
-> - Check which node corresponds to the `in` source (student) and which to the `out` target (course) to orient your arrow queries.
+>
+> #### Technical Explanation
+>
+> 1. `->follows->user` traverses outgoing relation edges from the current record to target records.
+> 2. `<-follows<-user` traverses incoming relation edges in reverse to find source records.
+> 3. Executes bidirectional graph navigation in $O(1)$ constant time per edge lookup.
+
+---
+
+### Exercise 2: Undirected / Both-Directions Arrow Traversal
+
+**Scenario:**
+Query all mutual connections connected to `user:alice` regardless of arrow direction using `<->follows<->user`.
+
+**Requirements:**
+1. Write the bidirectional traversal query using `<->follows<->user`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT <->follows<->user.name AS all_connections FROM user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `<->edge<->table` navigates both incoming and outgoing relation edges simultaneously.
+> 2. Merges incoming and outgoing graph neighbors into a single result collection.
+> 3. Ideal for undirected social graph networks (friends, connections).
+
+---
+
+### Exercise 3: Edge Record Inspection during Bidirectional Queries
+
+**Scenario:**
+Query incoming followers of `user:bob` and extract edge property `created_at` along with the follower's name.
+
+**Requirements:**
+1. Relate `user:alice -> follows -> user:bob SET created_at = time::now()`.
+2. Select incoming `<-follows` edge records from `user:bob`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT <-follows AS follower_edges FROM user:bob;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `<-follows` returns the relation edge records themselves (including `id`, `in`, `out`, and edge properties).
+> 2. Allows inspection of edge metadata (timestamps, weights) without resolving vertex records.
+> 3. Enables detailed edge auditing in graph applications.
 
 ---
 
 
 
-### Exercise 2: Bidirectional Social Follower Traversal
 
-**Problem:** Write SurrealQL queries to select: 1. Users `user:alice` follows (`->follows->user`), 2. Users following `user:alice` (`<-follows<-user`).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. SELECT ->follows->user FROM user:alice; 2. SELECT <-follows<-user FROM user:alice;
-> ```
-> ```surrealql
-> SELECT ->follows->user FROM user:alice;
-> SELECT <-follows<-user FROM user:alice;
-> ```
->
-> **Explanation:** `->` traverses outgoing edges; `<-` traverses incoming edges.
-
----
-
-### Exercise 3: Undirected Friendship Graph Query
-
-**Problem:** Query all friends connected via `friend_of` in either direction using `<->`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT <->friend_of<->user AS friends FROM user:alice;
-> ```
-> ```surrealql
-> SELECT <->friend_of<->user AS friends FROM user:alice;
-> ```
->
-> **Explanation:** `<->` traverses graph relations in both directions simultaneously.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
 - [Graph Traversal vs. Relational JOINs](graph_vs_joins.md) — Speed performance trade-offs.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Bidirectional queries allow relationships to be navigated from both sides.
 - A single edge record is sufficient to connect two nodes bidirectionally.
 - Outgoing query paths (`->`) find targets; incoming paths (`<-`) find sources.

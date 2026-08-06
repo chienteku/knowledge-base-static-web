@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Language Syntax**: Expressions (evaluating to values) versus Statements (executing instructions ending in `;`).
+
+
+**Rust Core Semantics (the expression-oriented paradigm)**: Expressions (evaluating to values) versus Statements (executing instructions ending in `;`).
 
 ---
 

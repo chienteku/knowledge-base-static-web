@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Keyword**
+
+**SQL Command / Clause** (Row Deduplication Modifier): `DISTINCT` eliminates duplicate rows from query output result sets.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all SQL databases. Instructs the query optimizer to perform a Unique Sort or Hash Aggregation pass before streaming results back to the client socket).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database tables, columns that do not carry unique constraints will naturally accumulate duplicate values. 
@@ -91,7 +92,7 @@ FROM product_catalog;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming DISTINCT applies only to the first column listed in a query
 
@@ -137,66 +138,100 @@ SELECT DISTINCT ON (category) name, price FROM products; -- ❌ Non-deterministi
 SELECT DISTINCT ON (category) name, price FROM products ORDER BY category, price DESC;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Unique Role Search
+### Exercise 1: Eliminating Duplicate Column Results
 
-**Problem:** You have an `employees` table with columns `name`, `department`, and `job_title`. Multiple employees share the same department and job title. Write a SQL query to list all unique combinations of departments and job titles.
+**Scenario:**
+Select all unique customer countries from `addresses` table.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT DISTINCT country FROM addresses`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT DISTINCT department, job_title 
-> FROM employees;
+> SELECT DISTINCT country 
+> FROM addresses 
+> WHERE country IS NOT NULL 
+> ORDER BY country ASC;
 > ```
-> - Place `DISTINCT` immediately after the `SELECT` keyword.
-> - List the two columns separated by a comma.
+>
+> #### Technical Explanation
+>
+> 1. `DISTINCT` eliminates duplicate result rows from query output.
+> 2. Sorts or hashes candidate rows in memory to find unique values.
+> 3. Ignores null values when combined with `IS NOT NULL`.
 
 ---
 
+### Exercise 2: Selecting Distinct Multi-Column Combinations
 
+**Scenario:**
+Select unique combinations of `city` and `state` from `addresses`.
 
-### Exercise 2: First Row Per Group with `DISTINCT ON`
+**Requirements:**
+1. Execute `SELECT DISTINCT city, state FROM addresses`.
 
-**Problem:** Query latest order per customer selecting `customer_id`, `id`, and `created_at` using `DISTINCT ON`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> SELECT DISTINCT ON (customer_id) customer_id, id, created_at FROM orders ORDER BY customer_id, created_at DESC;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> SELECT DISTINCT ON (customer_id) customer_id, id, created_at
-> FROM orders
+> SELECT DISTINCT city, state 
+> FROM addresses 
+> ORDER BY state ASC, city ASC;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Multi-column `DISTINCT` deduplicates rows based on the COMBINATION of specified column values.
+> 2. Returns distinct city/state pairs.
+> 3. Useful for populating dropdown filter menus.
+
+---
+
+### Exercise 3: Deduplicating Rows using `DISTINCT ON`
+
+**Scenario:**
+Select the LATEST order (`ORDER BY created_at DESC`) for each customer using PostgreSQL's `DISTINCT ON`.
+
+**Requirements:**
+1. Use `SELECT DISTINCT ON (customer_id) ... ORDER BY customer_id, created_at DESC`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT DISTINCT ON (customer_id) 
+>   id AS latest_order_id, 
+>   customer_id, 
+>   total_cents, 
+>   created_at 
+> FROM orders 
 > ORDER BY customer_id, created_at DESC;
 > ```
 >
-> **Explanation:** `DISTINCT ON (col)` paired with matching `ORDER BY` selects the top 1 row per group.
+> #### Technical Explanation
+>
+> 1. `DISTINCT ON (expression)` keeps ONLY the first row returned for each distinct value group.
+> 2. `ORDER BY customer_id, created_at DESC` ensures the first row per customer is their most recent order.
+> 3. Powerful PostgreSQL extension for top-1 per group queries.
 
 ---
 
-### Exercise 3: Counting Unique Values with `COUNT(DISTINCT col)`
 
-**Problem:** Count unique active countries in `users` table using `COUNT(DISTINCT country)`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT COUNT(DISTINCT country) FROM users WHERE active IS TRUE;
-> ```
-> ```sql
-> SELECT COUNT(DISTINCT country) FROM users WHERE active IS TRUE;
-> ```
->
-> **Explanation:** `COUNT(DISTINCT col)` counts unique non-null column values.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`SELECT`](../level_03/select.md) — The parent query command.
 - [`GROUP BY`](group_by.md) — Another way to collapse duplicate rows.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DISTINCT` filters out duplicate rows from query results.
 - Placed immediately after `SELECT` and evaluates all columns in the projection list.
 - Multi-column `DISTINCT` evaluates the uniqueness of combined column values.

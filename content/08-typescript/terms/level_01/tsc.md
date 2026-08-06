@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Tooling / CLI**
+
+**TypeScript Ecosystem & Tooling** (TypeScript Compiler CLI): `tsc` is the command-line TypeScript compiler executable that parses, type-checks, and transpiles TypeScript code to JavaScript.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time (Terminal)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 You wrote a beautiful file named `app.ts`. You try to run it in the browser or via `node app.ts`. The computer immediately throws an error: `SyntaxError: Unexpected token ':'`.
@@ -37,7 +38,7 @@ Why? Because TypeScript believes that even if the types are slightly wrong, the 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on `tsc` for bundling
 
@@ -88,64 +89,92 @@ $ tsc src/index.ts # ❌ Ignores tsconfig.json options!
 $ tsc # Correct: Uses tsconfig.json settings
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The `--noEmit` Flag
+### Exercise 1: Compiling TypeScript Files via `tsc` CLI
 
-**Problem:** If you run `npx tsc --noEmit`, what happens?
+**Scenario:**
+Execute `tsc` command-line options to transpile `main.ts` to ES2022 JavaScript without emitting JS files on type errors.
 
-**Expected output:**
+**Requirements:**
+1. Run `tsc` with `--noEmitOnError` and `--target ES2022`.
+
 > [!check]- Answer
-> ```text
-> The compiler will read your code and perform the Type Checking step (reporting any errors in the console). 
-> However, it will completely skip the Code Emission step. No `.js` files will be generated.
-> This is exactly how modern frameworks like Vite use TypeScript! They handle the JS building themselves, and just use `tsc` as a linter.
+>
+> #### Implementation
+>
+> ```bash
+> # Transpile main.ts with strict error checking
+> npx tsc main.ts --target ES2022 --noEmitOnError --strict
 > ```
-> - What does "Emit" mean in the context of compilers?
+
+> #### Technical Explanation
+>
+> 1. `tsc` parses, type-checks, and transpiles TypeScript source code to JavaScript.
+> 2. `--noEmitOnError` prevents generating `.js` output files if type errors occur.
+> 3. `--target ES2022` sets the target JavaScript syntax version.
+
+---
+
+### Exercise 2: Generating Declaration Files (`.d.ts`) with `tsc`
+
+**Scenario:**
+Configure `tsc` CLI options to emit TypeScript declaration files (`.d.ts`) alongside transpiled JavaScript files.
+
+**Requirements:**
+1. Use `--declaration` flag in `tsc`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> # Emit JS and .d.ts type declaration files into dist/ folder
+> npx tsc --declaration --outDir dist
+> ```
+
+> #### Technical Explanation
+>
+> 1. `--declaration` instructs `tsc` to generate matching `.d.ts` type definition files.
+> 2. Enables published npm packages to provide type IntelliSense to external TypeScript consumers.
+> 3. Standard library build step.
+
+---
+
+### Exercise 3: Running Type Checking in Watch Mode (`tsc --watch`)
+
+**Scenario:**
+Run `tsc` in background watch mode during local development.
+
+**Requirements:**
+1. Execute `tsc --watch` or `tsc -w`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> # Start incremental background compilation watch mode
+> npx tsc --watch
+> ```
+
+> #### Technical Explanation
+>
+> 1. `tsc --watch` monitors source files for changes and performs fast incremental re-compilation.
+> 2. Provides immediate feedback in terminal consoles when type errors are introduced.
+> 3. Essential local developer CLI workflow.
 
 ---
 
 
 
-### Exercise 2: TSC Output Verification
-
-**Problem:** Command to compile project in watch mode automatically recompiling on file save.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> tsc --watch
-> ```
-> ```typescript
-> console.log("tsc --watch");
-> ```
->
-> **Explanation:** `tsc -w` / `tsc --watch` runs incremental compilations on file modifications.
-
----
-
-### Exercise 3: Type Checking Without JS Code Generation
-
-**Problem:** Command to run type check without emitting `.js` output files.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> tsc --noEmit
-> ```
-> ```typescript
-> console.log("tsc --noEmit");
-> ```
->
-> **Explanation:** `tsc --noEmit` validates type safety without writing files to disk.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`tsconfig.json`](tsconfig.md) — The configuration file that tells `tsc` exactly how to behave.
 - [TypeScript](typescript.md) — The language syntax `tsc` parses.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`tsc`** stands for the TypeScript Compiler.
 - It has two distinct jobs: Type Checking (finding bugs) and Code Emission (generating JS).
 - By default, `tsc` will still generate JS files even if there are type errors in your code.

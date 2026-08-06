@@ -14,17 +14,15 @@
 
 ## 2. Term Category
 
-**Attribute / Embedded / Low-Level**: `#![no_main]` tells the Rust compiler not to generate the standard C runtime startup code (`crt0`) and default `main()` wrapper.
+
+
+**Rust Binary Entrypoint (custom runtime startup entrypoint)**: `#![no_main]` tells the Rust compiler not to generate the standard C runtime startup code (`crt0`) and default `main()` wrapper.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Bare-Metal & Firmware**: Required for microcontrollers (ARM Cortex-M, RISC-V, AVR), OS kernel development, bootloaders, and custom WebAssembly runtimes.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -69,7 +67,23 @@ pub extern "C" fn _start() -> ! {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Returning from `_start` Entrypoint Functions
+
+**The mistake:** Allowing a `#![no_main]` entrypoint function to return.
+
+**Why it's wrong:** On bare-metal hardware, returning from `_start` executes random memory instructions, triggering CPU hard faults.
+
+*Fix:* Ensure `_start` ends in an infinite loop (`loop {}`) or system shutdown call.
+
+### Mistake 3: Forgetting `#[no_mangle]` or `pub extern "C"` on Reset Handlers
+
+**The mistake:** Defining `_start` without `#[no_mangle]` or incorrect C calling convention.
+
+**Why it's wrong:** The linker cannot locate the entrypoint symbol if the compiler mangles the function name.
+
+*Fix:* Annotate entrypoint functions with `#[no_mangle] pub extern "C" fn _start() -> !`.
+
 
 ### Mistake 1: Returning from a `#![no_main]` Entry Point
 
@@ -79,11 +93,11 @@ pub extern "C" fn _start() -> ! {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Bare-Metal RAM Initialization and Hardware Vector Table in `#![no_main]`
 
-**Problem:** In bare-metal microcontrollers (such as ARM Cortex-M or RISC-V), there is no C runtime startup (`crt0`) or operating system to initialize global variables before execution starts. When power is applied, the hardware reads the entry vector table directly from Flash ROM and jumps straight to the reset handler function defined in a `#![no_main]` crate.
+**Scenario:** In bare-metal microcontrollers (such as ARM Cortex-M or RISC-V), there is no C runtime startup (`crt0`) or operating system to initialize global variables before execution starts. When power is applied, the hardware reads the entry vector table directly from Flash ROM and jumps straight to the reset handler function defined in a `#![no_main]` crate.
 Before executing application logic, the reset handler must perform early startup tasks:
 1. Copy the `.data` section (initialized global/static variables) from Flash ROM into SRAM.
 2. Clear the `.bss` section (zero-initialized global/static variables) in SRAM.
@@ -91,6 +105,9 @@ Before executing application logic, the reset handler must perform early startup
 Construct a `#![no_std]` and `#![no_main]` embedded initialization module. Define a C-compatible ARM Cortex-M `VectorTable` structure placed in the `.vector_table` linker section. Implement `copy_data_section` and `zero_bss_section` helpers operating safely on pointer boundaries, and write unit tests with assertions (`assert_eq!`, `assert!`) verifying that memory initialization correctly relocates global values and zeros uninitialized memory sections.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![cfg_attr(not(test), no_std)]
 > #![cfg_attr(not(test), no_main)]
@@ -202,7 +219,8 @@ Construct a `#![no_std]` and `#![no_main]` embedded initialization module. Defin
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Crate Attributes (`#![no_std]` and `#![no_main]`)**: `#![no_main]` disables standard runtime entry point generation (`fn main()`), delegating initial CPU execution directly to `reset_handler`. Using `cfg_attr(not(test), ...)` allows the module to be compiled and unit tested under host `cargo test` harnesses while remaining zero-dependency bare-metal code for target microcontrollers.
 > 2. **Hardware Startup Memory Setup**: On microcontrollers, persistent Flash memory stores global read-only data and static initializers, but RAM starts in an uninitialized garbage state. `copy_data_section` moves initialized static variables into SRAM, while `zero_bss_section` clears uninitialized zero-allocated memory before application logic runs.
 > 3. **Hardware Vector Table (`#[repr(C)]` & `#[link_section]`)**: The `VectorTable` structure uses `#[repr(C)]` to guarantee sequential layout in memory matching CPU hardware specifications. The `#[link_section = ".vector_table"]` attribute directs the linker script to place `VECTORS` at memory address `0x0000_0000` in Flash ROM.
@@ -212,12 +230,15 @@ Construct a `#![no_std]` and `#![no_main]` embedded initialization module. Defin
 
 ### Exercise 2: Embedded Watchdog Feed & Diverging Application Loop in `#![no_main]`
 
-**Problem:** Standard Rust `fn main()` entry functions return an integer exit code to the host operating system upon completion. In a bare-metal `#![no_main]` binary, there is no host operating system to receive a return value. As a result, entry point functions must be marked as *diverging* (`fn _start() -> !`), meaning they never return.
+**Scenario:** Standard Rust `fn main()` entry functions return an integer exit code to the host operating system upon completion. In a bare-metal `#![no_main]` binary, there is no host operating system to receive a return value. As a result, entry point functions must be marked as *diverging* (`fn _start() -> !`), meaning they never return.
 In hardware firmware (e.g. IoT edge sensors or industrial controllers), entry points enter an infinite loop. To prevent system freezes caused by software deadlocks, the hardware incorporates a Hardware Watchdog Timer (WDT). The main loop must process application events and periodically reset ("feed") the watchdog timer within a mandatory tick threshold. If the loop stalls, the watchdog counter expires and triggers an automatic hardware CPU reset.
 
 Design a `#![no_std]` `#![no_main]` software watchdog subsystem. Implement a `WatchdogTimer` struct with `feed()`, `tick()`, and `is_expired()` methods, alongside a `SystemLoop` struct that runs task processing. Write a `#![no_main]` diverging entry point `_start()` that executes the watchdog main loop, and include comprehensive unit tests with assertions (`assert_eq!`, `assert!`) verifying watchdog decay, timer feeding, freeze detection, and diverging loop behavior.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![cfg_attr(not(test), no_std)]
 > #![cfg_attr(not(test), no_main)]
@@ -350,7 +371,8 @@ Design a `#![no_std]` `#![no_main]` software watchdog subsystem. Implement a `Wa
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Diverging Function Signature (`-> !`)**: In `#![no_main]` binaries, the entry function signature must specify the diverging return type `!` because there is no underlying operating system runtime to return control to. The CPU must stay active inside an explicit `loop {}`.
 > 2. **Hardware Watchdog Pattern**: Mission-critical firmware uses watchdog timers to recover from unhandled runtime faults or infinite spinlocks. Calling `watchdog.feed()` inside `sys.step()` continuously reloads the hardware counter during normal operation.
 > 3. **Volatile Peripheral Control**: When a watchdog failure or system error occurs, bare-metal hardware resets are triggered by writing control flags to memory-mapped registers via `core::ptr::write_volatile`.
@@ -360,12 +382,15 @@ Design a `#![no_std]` `#![no_main]` software watchdog subsystem. Implement a `Wa
 
 ### Exercise 3: Bootloader Stage-2 Handshake and Boot Information Validation in `#![no_main]`
 
-**Problem:** In custom operating system development and embedded bootloader architecture, Stage 1 bootloader (which runs immediately after power-on) loads the Stage 2 kernel image into memory and jumps to its entry point.
+**Scenario:** In custom operating system development and embedded bootloader architecture, Stage 1 bootloader (which runs immediately after power-on) loads the Stage 2 kernel image into memory and jumps to its entry point.
 The Stage 1 bootloader passes system configuration parameters (such as RAM boundaries, device tree address, and hardware info) to the `#![no_main]` entry point via a memory pointer to a `BootInformation` structure. If corrupted data or an incompatible bootloader version calls the kernel entry point, execution must halt immediately to prevent physical hardware damage or severe memory corruption.
 
 Implement a C-ABI compliant `BootInformation` header structure with magic header validation (`0x52555354` — ASCII `"RUST"`), memory size validation, and 32-bit XOR checksum calculation. Write a `#![no_main]` kernel entry function `_start_kernel(boot_info_ptr: *const BootInformation) -> !` that validates the boot header before starting kernel subsystems, and provide comprehensive unit tests with assertions (`assert_eq!`, `assert!`) covering valid handshakes, magic code mismatches, and corrupted checksum detection.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![cfg_attr(not(test), no_std)]
 > #![cfg_attr(not(test), no_main)]
@@ -503,7 +528,8 @@ Implement a C-ABI compliant `BootInformation` header structure with magic header
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **C Calling Convention and FFI Entry**: In `#![no_main]` binaries that boot from legacy C stage-1 bootloaders, the entry point function must be annotated with `#[no_mangle] pub unsafe extern "C" fn`. This prevents symbol name mangling and guarantees argument passing via CPU hardware registers according to the C ABI.
 > 2. **`#[repr(C)]` Memory Layout**: The `BootInformation` struct uses `#[repr(C)]` so that field offsets match memory packed by external assembly or C bootloaders without Rust struct layout reordering.
 > 3. **Defensive Firmware Validation**: Bare-metal kernels must validate boot parameters passed via raw pointers prior to initializing subsystems. Magic headers (`BOOT_MAGIC`) and XOR checksums prevent corrupted bootloader data from causing silent memory corruption.

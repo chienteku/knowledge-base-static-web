@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Function**
+
+**SQL Command / Clause** (Text Transformation Functions): String functions (`CONCAT()`, `SUBSTRING()`, `TRIM()`, `REPLACE()`, `LENGTH()`) transform text values in SQL queries.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all SQL databases. Evaluated on-the-fly row-by-row as the database engine streams records through memory).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Data stored in database text columns is often messy or structured in separate chunks:
@@ -83,7 +84,7 @@ FROM user_links;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using the concatenation operator (||) on columns that can contain NULL values
 
@@ -139,68 +140,97 @@ SELECT SUBSTRING('Postgres' FROM 0 FOR 3); -- Extracts 2 chars ('Po')!
 SELECT SUBSTRING('Postgres' FROM 1 FOR 3); -- Extracts 3 chars ('Pos')
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Username Generator
+### Exercise 1: String Concatenation and Formatting
 
-**Problem:** You are building an email signup table. You want to generate a unique username from a user's `email` column. The username should be:
-1.  All lowercase.
-2.  Cleaned of spaces.
-3.  Extracted to show only the first 8 characters of their email.
-Write the SQL query.
+**Scenario:**
+Concatenate `first_name` and `last_name` into `full_name` using `CONCAT_WS()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT CONCAT_WS(' ', first_name, last_name) AS full_name`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT SUBSTRING(LOWER(TRIM(email)) FROM 1 FOR 8) AS system_username 
-> FROM subscribers;
-> ```
-> - Nest string functions inside each other (e.g. `FUNCTION_A(FUNCTION_B(col))`).
-> - Apply `TRIM`, then `LOWER`, and finally `SUBSTRING` from index `1` for length `8`.
-
----
-
-
-
-### Exercise 2: Formatting Full Name and Lowercase Email
-
-**Problem:** Select concatenated `UPPER(last_name) || ', ' || first_name` as `formal_name` and `LOWER(email)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT UPPER(last_name) || ', ' || first_name AS formal_name, LOWER(email) FROM users;
-> ```
-> ```sql
-> SELECT UPPER(last_name) || ', ' || first_name AS formal_name, LOWER(email)
+> SELECT 
+>   id, 
+>   CONCAT_WS(' ', first_name, last_name) AS full_name 
 > FROM users;
 > ```
 >
-> **Explanation:** `UPPER()`, `LOWER()`, and `||` transform and concatenate string expressions.
+> #### Technical Explanation
+>
+> 1. `CONCAT_WS(separator, str1, str2, ...)` concatenates strings with a specified separator.
+> 2. Automatically skips `NULL` arguments without returning `NULL`.
+> 3. Superior to raw `||` operator when fields may contain `NULL`.
 
 ---
 
-### Exercise 3: Trimming Whitespace with `TRIM()`
+### Exercise 2: Substring Extraction and Trimming
 
-**Problem:** Trim leading and trailing whitespace from input string `input_str` using `TRIM()`.
+**Scenario:**
+Extract the domain name from an email address (`"alice@example.com"` -> `"example.com"`).
 
-**Expected output:**
+**Requirements:**
+1. Use `SUBSTRING(email FROM POSITION('@' IN email) + 1)`.
+
 > [!check]- Answer
-> ```text
-> SELECT TRIM(input_str) FROM t;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> SELECT TRIM(input_str) FROM t;
+> SELECT 
+>   email, 
+>   SUBSTRING(email FROM POSITION('@' IN email) + 1) AS email_domain 
+> FROM users;
 > ```
 >
-> **Explanation:** `TRIM(str)` strips whitespace padding from string boundaries.
+> #### Technical Explanation
+>
+> 1. `POSITION('@' IN email)` finds the 1-based character index of `'@'`.
+> 2. `SUBSTRING(string FROM start)` extracts remaining text.
+> 3. Server-side text parsing.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Text Replacement and Case Normalization
+
+**Scenario:**
+Sanitize user bio text by converting to lowercase (`LOWER()`) and replacing forbidden words (`REPLACE()`).
+
+**Requirements:**
+1. Combine `REPLACE(LOWER(bio), 'badword', '***')`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   id, 
+>   REPLACE(LOWER(bio), 'spam', '[redacted]') AS clean_bio 
+> FROM user_profiles;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `LOWER()` normalizes character casing.
+> 2. `REPLACE(text, target, replacement)` substitutes matching text patterns.
+> 3. Executes text transformation in SQL.
+
+---
+
+
+
+## 6. Related Terms
 - [`LIKE` / `ILIKE` Pattern Matching](like_ilike.md) — Wildcard text searches.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - String functions manipulate and format text dynamically inside queries.
 - Use `LOWER` and `TRIM` to clean user inputs (e.g. email checks).
 - `CONCAT()` is safer than the `||` operator because it ignores `NULL` inputs.

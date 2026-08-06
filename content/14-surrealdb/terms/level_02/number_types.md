@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Data Type (int, float, and decimal numeric types)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the CPU arithmetic level. Type conversions are managed by the query compiler based on numeric suffixes and explicit schema declarations).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Computers represent numbers using binary bits. 
@@ -88,7 +87,7 @@ CREATE invoice:01 SET item_count = 5, total_price = 50.00dec;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using 'float' types (or un-suffixed decimal numbers) to store and calculate money balances in database schemas
 
@@ -146,64 +145,103 @@ LET $val = 9223372036854775808; // Exceeds i64 max bounds
 LET $val = 9223372036854775808dec; // Arbitrary precision decimal
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Numeric Type Audit
+### Exercise 1: Currency Decimal Precision Enforcement
 
-**Problem:** Identify the implicit data type (**int**, **float**, or **decimal**) SurrealDB will assign to these query literals:
-1.  `150dec`
-2.  `150`
-3.  `150.0`
-4.  `<decimal> 150`
+**Scenario:**
+An e-commerce payment service requires exact monetary calculations for product prices and sales tax to prevent floating-point rounding errors.
 
-**Expected output:**
+**Requirements:**
+1. Define table `product` in `SCHEMAFULL` mode.
+2. Define field `price` as `decimal`.
+3. Create product `product:p1` setting `price = 19.99dec`.
+4. Calculate tax `price * 0.08dec`.
+
 > [!check]- Answer
-> ```text
-> 1. decimal (explicitly declared via suffix)
-> 2. int (no decimal point)
-> 3. float (contains decimal point, defaults to float double)
-> 4. decimal (explicitly cast using <decimal> operator)
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE product SCHEMAFULL;
+> DEFINE FIELD price ON TABLE product TYPE decimal;
+> 
+> CREATE product:p1 SET name = "Widget", price = 19.99dec;
+> 
+> -- Calculate exact decimal tax
+> SELECT price, price * 0.08dec AS tax FROM product:p1;
 > ```
-> - Literals with decimal points default to floats unless overridden.
-> - Cast blocks and suffixes force exact data types.
+>
+> #### Technical Explanation
+>
+> 1. The `dec` suffix creates an exact fixed-point `decimal` literal (`19.99dec`).
+> 2. `decimal` avoids binary floating-point inaccuracies (e.g. `0.1 + 0.2 = 0.30000000000000004`).
+> 3. Mandatory for financial ledger and e-commerce billing calculations.
+
+---
+
+### Exercise 2: Integer Bounds & Overflow Checks
+
+**Scenario:**
+A analytics counter tracks page views using signed 64-bit integers (`int`).
+
+**Requirements:**
+1. Define field `views` as `int` on table `page`.
+2. Increment `views` using `UPDATE page:home SET views += 1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE page SCHEMAFULL;
+> DEFINE FIELD views ON TABLE page TYPE int DEFAULT 0;
+> 
+> CREATE page:home SET views = 100;
+> 
+> -- Increment page view counter atomically
+> UPDATE page:home SET views += 1;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `int` stores signed 64-bit integer values in SurrealDB.
+> 2. Atomic increment operator `+=` adds to integer fields safely.
+> 3. Integer operations provide high-performance counter tracking.
+
+---
+
+### Exercise 3: Floating-Point Scientific Computations
+
+**Scenario:**
+A weather monitoring service stores temperature readings and wind velocities using 64-bit IEEE-754 floating-point numbers (`float`).
+
+**Requirements:**
+1. Create reading `reading:r1` with `temp = 23.45` and `velocity = 12.8`.
+2. Compute average temperature using `math::mean()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE reading:r1 SET temp = 23.45, velocity = 12.8;
+> CREATE reading:r2 SET temp = 25.10, velocity = 14.2;
+> 
+> SELECT math::mean(temp) AS avg_temp FROM reading;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `float` stores 64-bit floating-point numbers suitable for scientific measurements.
+> 2. Built-in math functions (`math::mean()`, `math::sum()`) process numeric collections natively.
+> 3. Floats trade exact decimal precision for high-performance scientific calculations.
 
 ---
 
 
 
-### Exercise 2: Decimal Literal Suffix
-
-**Problem:** Create exact decimal number literal using `dec` suffix (e.g. `10.50dec`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 10.50dec
-> ```
-> ```surrealql
-> RETURN 10.50dec;
-> ```
->
-> **Explanation:** The `dec` suffix creates arbitrary precision decimal numbers.
-
----
-
-### Exercise 3: Number Type Casting
-
-**Problem:** Cast string `"42"` to integer using `<int>` casting.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 42
-> ```
-> ```surrealql
-> RETURN <int> "42";
-> ```
->
-> **Explanation:** `<int>` parses string representations into integer numbers.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [Type Casting & Coercion](type_casting.md) — Converting between types.
@@ -211,7 +249,7 @@ LET $val = 9223372036854775808dec; // Arbitrary precision decimal
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Whole numbers default to `int` (64-bit signed integer).
 - Fractional numbers default to `float` (64-bit IEEE 754 float double).
 - Floating-point numbers are fast but subject to binary rounding errors.

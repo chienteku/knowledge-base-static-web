@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Query Syntax**
+
+**CRUD Operation** (Array Query Patterns): Querying Arrays covers patterns for matching exact arrays, subset elements, and element combinations in document array fields.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Parsed by the query planner. Queries on arrays automatically utilize Multi-key Indexes to search elements without scanning full collections).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In document databases, fields frequently store lists (arrays) of values:
@@ -92,7 +93,7 @@ db.products.find({ tags: { $size: 2 } });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Utilizing exact list queries ({ tags: ["A", "B"] }) when you actually want to check if the document contains both tags
 
@@ -140,75 +141,101 @@ db.posts.find({ tags: ["tech"] }); // ❌ Exact single-element array match only!
 db.posts.find({ tags: "tech" }); // Matches any array containing string "tech"
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Array Query Translation
+### Exercise 1: Matching Exact Array Equality
 
-**Problem:** You have a `users` collection. Each user has an array field named `roles` (e.g. `["admin", "billing"]`). 
-Write the MongoDB queries to:
-1.  Find all users who have the `"admin"` role.
-2.  Find all users who have exactly 3 roles.
-3.  Find all users who carry both the `"admin"` role and the `"billing"` role.
+**Scenario:**
+Query collection `products` for documents where `tags` equals the exact array `["electronics", "gadgets"]` in exact order.
 
-**Expected output:**
+**Requirements:**
+1. Filter `{ tags: ["electronics", "gadgets"] }`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> // 1. Implicit element search
-> db.users.find({ roles: "admin" });
-> 
-> // 2. Array length search
-> db.users.find({ roles: { $size: 3 } });
-> 
-> // 3. Array membership subset search
-> db.users.find({ roles: { $all: ["admin", "billing"] } });
+> db.products.find({
+>   tags: ["electronics", "gadgets"]
+> });
 > ```
-> - Simple element searches do not require BSON operators.
-> - Use `$size` for length checks and `$all` for multi-value checks.
+>
+> #### Technical Explanation
+>
+> 1. Passing a raw array (`tags: [...]`) matches exact array equality (same elements, same order).
+> 2. Does not match documents where `tags` contains additional items or different order.
+> 3. Use `$all` or `$in` when order-independent element matching is desired.
+
+---
+
+### Exercise 2: Matching Single Array Element Values
+
+**Scenario:**
+Query `products` where `tags` array contains element `"electronics"`.
+
+**Requirements:**
+1. Filter `{ tags: "electronics" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.find({
+>   tags: "electronics"
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Target field equality (`tags: "electronics"`) automatically matches if any element in the array equals the scalar value.
+> 2. Transparently handles both scalar fields and array fields.
+> 3. Uses multikey indexes on `tags`.
+
+---
+
+### Exercise 3: Querying Arrays of Embedded Documents with `$elemMatch`
+
+**Scenario:**
+Query `orders` for documents where at least one item in `items` array has `qty >= 5` AND `price <= 20.00`.
+
+**Requirements:**
+1. Use `$elemMatch`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.find({
+>   items: {
+>     $elemMatch: {
+>       qty: { $gte: 5 },
+>       price: { $lte: 20.00 }
+>     }
+>   }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$elemMatch` ensures both `qty` and `price` conditions match on the SAME embedded subdocument.
+> 2. Prevents false positive matches across different array items.
+> 3. Essential for subdocument array querying.
 
 ---
 
 
 
-### Exercise 2: Querying Scalar Array Membership
-
-**Problem:** Query posts containing tag `"mongodb"` in `tags` array.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.find({ tags: "mongodb" });
-> ```
-> ```javascript
-> db.posts.find({ tags: "mongodb" });
-> ```
->
-> **Explanation:** Passing a scalar value to an array field checks if the array contains that element.
-
----
-
-### Exercise 3: Exact Array Element Count Query
-
-**Problem:** Query documents where `comments` array has exactly 5 elements using `$size`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.find({ comments: { $size: 5 } });
-> ```
-> ```javascript
-> db.posts.find({ comments: { $size: 5 } });
-> ```
->
-> **Explanation:** `{ $size: N }` matches documents where array length equals N.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Array](../level_02/array_type.md) — The data structure.
 - [Array Query Operators (`$elemMatch`, `$all`, `$size`)](array_query_operators.md) — Complex array filters.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Querying arrays supports element checks, exact matches, containment, and size.
 - Implicit element matching checks if a value is present anywhere in the array.
 - Exact array matching requires byte-perfect order and length matches (fragile).

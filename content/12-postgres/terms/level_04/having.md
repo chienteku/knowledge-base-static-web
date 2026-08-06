@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Clause**
+
+**SQL Command / Clause** (Group Predicate Filter): `HAVING` filters aggregated group rows after `GROUP BY` reduction.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (Evaluated late in the query execution plan. Runs after table scans, join merges, row filters, and group aggregations have completed).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A common challenge in data reporting is filtering categories by aggregate metrics:
@@ -85,7 +86,7 @@ HAVING SUM(price) > 500.00; -- 2. Filter out low-spending customers after groupi
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using HAVING to filter static columns that could be filtered in WHERE
 
@@ -147,69 +148,107 @@ SELECT category, COUNT(*) FROM products GROUP BY category HAVING status = 'activ
 SELECT category, COUNT(*) FROM products WHERE status = 'active' GROUP BY category;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Category Filter
+### Exercise 1: Filtering Aggregated Groups with `HAVING`
 
-**Problem:** You have a `books` table with columns `category`, `title`, and `price`. Write a SQL query that returns the name of each `category` along with the average price of books in that category. Filter the results so you only display categories where the average price is strictly greater than `15.00`.
+**Scenario:**
+Find all customers who have placed MORE than 5 total orders.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT customer_id, COUNT(*) FROM orders GROUP BY customer_id HAVING COUNT(*) > 5`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT category, AVG(price) AS avg_price 
-> FROM books 
+> SELECT 
+>   customer_id, 
+>   COUNT(*) AS total_orders 
+> FROM orders 
+> GROUP BY customer_id 
+> HAVING COUNT(*) > 5;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `HAVING` filters aggregated group rows AFTER `GROUP BY` reduction occurs.
+> 2. `WHERE` cannot filter on aggregate results (`WHERE COUNT(*) > 5` throws a syntax error).
+> 3. Filters output groups based on metric thresholds.
+
+---
+
+### Exercise 2: Combining WHERE Row Filters with HAVING Group Filters
+
+**Scenario:**
+Find categories with average price over $50, considering ONLY active products (`is_active = TRUE`).
+
+**Requirements:**
+1. Combine `WHERE is_active = TRUE` and `HAVING AVG(price_cents) > 5000`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   category, 
+>   AVG(price_cents) / 100.0 AS avg_price 
+> FROM products 
+> WHERE is_active = TRUE 
 > GROUP BY category 
-> HAVING AVG(price) > 15.00;
+> HAVING AVG(price_cents) > 5000;
 > ```
-> - Group by the category column first.
-> - Target the averaged price limit in the `HAVING` clause.
+>
+> #### Technical Explanation
+>
+> 1. `WHERE` filters individual rows BEFORE `GROUP BY` aggregation.
+> 2. `GROUP BY` collapses surviving rows into category groups.
+> 3. `HAVING` filters category groups based on the calculated `AVG()` metric.
 
 ---
 
+### Exercise 3: Filtering Groups on Multiple Aggregate Thresholds
 
+**Scenario:**
+Find high-value customer groups where `COUNT(*) >= 3` AND `SUM(total_cents) >= 50000`.
 
-### Exercise 2: Filtering Group Aggregates with HAVING
+**Requirements:**
+1. Use `HAVING COUNT(*) >= 3 AND SUM(total_cents) >= 50000`.
 
-**Problem:** Query product categories having total count `COUNT(*) >= 5` and average price `AVG(price) > 50`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> SELECT category, COUNT(*), AVG(price) FROM products GROUP BY category HAVING COUNT(*) >= 5 AND AVG(price) > 50;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> SELECT category, COUNT(*), AVG(price)
-> FROM products
-> GROUP BY category
-> HAVING COUNT(*) >= 5 AND AVG(price) > 50;
+> SELECT 
+>   customer_id, 
+>   COUNT(*) AS order_count,
+>   SUM(total_cents) / 100.0 AS total_spent 
+> FROM orders 
+> GROUP BY customer_id 
+> HAVING COUNT(*) >= 3 
+>    AND SUM(total_cents) >= 50000;
 > ```
 >
-> **Explanation:** `HAVING` filters aggregated group results after `GROUP BY` evaluation.
+> #### Technical Explanation
+>
+> 1. `HAVING` evaluates complex boolean expressions combining multiple aggregate functions.
+> 2. Identifies VIP customer segments meeting multiple threshold criteria.
+> 3. Analytics pipeline pattern.
 
 ---
 
-### Exercise 3: WHERE vs HAVING Execution Order
 
-**Problem:** Explain execution order: `WHERE` (filters raw rows before grouping) -> `GROUP BY` -> `HAVING` (filters summary groups).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> WHERE filters rows before grouping; HAVING filters summary groups after grouping
-> ```
-> ```text
-> WHERE filters rows before grouping; HAVING filters summary groups after grouping
-> ```
->
-> **Explanation:** `WHERE` optimizes input dataset size before aggregate calculations occur.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`WHERE` Clause](../level_03/where.md) — The pre-grouping filter.
 - [`GROUP BY`](group_by.md) — The grouping engine.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `HAVING` filters aggregated groups; `WHERE` filters individual source rows.
 - Evaluated late in the query engine pipeline (after `GROUP BY` execution).
 - Use `HAVING` exclusively for conditions containing aggregate functions (e.g. `SUM`, `COUNT`).

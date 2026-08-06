@@ -171,10 +171,13 @@ thread::spawn(move || {
 
 ### Exercise 1: Parallel Chunked Task Processing with Panic Safety
 
-**Problem:**
+**Scenario:**
 Build a resilient parallel compute engine `parallel_map_reduce` that splits a dataset `Vec<T>` into worker chunks of size `chunk_size`, spawns OS threads using `std::thread::spawn` to map each chunk concurrently, and joins the threads to aggregate partial results. If any worker thread panics, the engine must safely intercept the panic payload via `JoinHandle::join()`, extract the panic error message, and return `Err(String)` without unwinding the main thread.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::Arc;
 > use std::thread;
@@ -291,7 +294,8 @@ Build a resilient parallel compute engine `parallel_map_reduce` that splits a da
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Data Partitioning**: The input vector is dynamically grouped into fixed-size chunks using memory replacement without requiring elements `T` to implement `Clone`.
 > 2. **Thread Spawning with `Arc`**: `Arc::clone` safely shares immutable references to `map_fn` across threads while satisfying `'static` lifetime requirements.
 > 3. **Panic Extraction**: When `handle.join()` returns `Err(Box<dyn Any + Send>)`, `downcast_ref` attempts to downcast the payload first to `&str` and then to `String` to construct a descriptive error message.
@@ -300,13 +304,16 @@ Build a resilient parallel compute engine `parallel_map_reduce` that splits a da
 
 ### Exercise 2: Multi-Stage Pipeline with Thread Builder & MPSC Streaming
 
-**Problem:**
+**Scenario:**
 Design a multi-stage streaming pipeline using `std::thread::Builder` and `std::sync::mpsc` channels. 
 - Stage 1 (`Producer` thread named `"stage-producer"` with 2 MB stack size) processes raw log strings, filters out empty lines, attaches sequence numbers, and streams them into an `mpsc::channel`.
 - Stage 2 (`Aggregator` thread named `"stage-aggregator"` with 2 MB stack size) receives records from the channel, counts total valid records and error instances containing `"[ERROR]"` or `"[FATAL]"`, and returns aggregated metrics.
 - The pipeline function must join both threads and return `PipelineStats`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::mpsc;
 > use std::thread;
@@ -412,7 +419,8 @@ Design a multi-stage streaming pipeline using `std::thread::Builder` and `std::s
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Thread Customization**: `std::thread::Builder` configures thread OS names and allocates 2 MB custom stack size per worker thread.
 > 2. **Streaming Synchronization**: `tx_producer` sends tuple items `(seq, log)` across the channel. When the producer thread finishes and drops `tx_producer`, the `rx_worker` iterator terminates cleanly.
 > 3. **Validation**: Thread metadata is queried inside worker closures via `thread::current().name()` and verified in unit tests.
@@ -421,10 +429,13 @@ Design a multi-stage streaming pipeline using `std::thread::Builder` and `std::s
 
 ### Exercise 3: Dynamic Task Batch Dispatcher with Atomic Metrics and Panic Interception
 
-**Problem:**
+**Scenario:**
 Implement a resilient task dispatch manager `execute_task_batch` that accepts a vector of dynamic heap-allocated task closures (`Box<dyn FnOnce() -> String + Send + 'static>`). Spawn an OS worker thread for each task using `thread::Builder`, track completion status using atomic counters (`AtomicUsize`), capture panicked tasks using `JoinHandle::join()`, and aggregate completed outputs into an `ExecutionReport`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::atomic::{AtomicUsize, Ordering};
 > use std::sync::Arc;
@@ -521,7 +532,8 @@ Implement a resilient task dispatch manager `execute_task_batch` that accepts a 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Dynamic Task Trait Objects**: Tasks are boxed closures satisfying `FnOnce() -> String + Send + 'static`, permitting execution of heterogeneous dynamic closures across thread boundaries.
 > 2. **Atomic Synchronization**: `AtomicUsize::fetch_add` with `Ordering::SeqCst` provides thread-safe execution tracking without lock contention overhead.
 > 3. **Fault Isolation**: The caller thread joins worker handles sequentially. If a worker panics, `handle.join()` captures the panic `Err`, incrementing the `failed_counter` while successful outputs are preserved.

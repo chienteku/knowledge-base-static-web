@@ -159,7 +159,7 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Performance Zero-Copy Event Pipeline (Sequential Ownership Transfer)
 
-**Problem:** In real-time event streaming systems and network packet processors, copying payload buffers between processing stages creates severe memory allocation and cache thrashing overhead. By leveraging Rust's move semantics, pipeline stages can transfer ownership of packet buffers sequentially zero-copy.
+**Scenario:** In real-time event streaming systems and network packet processors, copying payload buffers between processing stages creates severe memory allocation and cache thrashing overhead. By leveraging Rust's move semantics, pipeline stages can transfer ownership of packet buffers sequentially zero-copy.
 
 Implement a multi-stage event processing pipeline (`IngestStage` -> `TransformStage` -> `DispatchStage`):
 1. Define a `Header` struct (`stream_id: u32`, `checksum: u8`) and a `PacketBuffer` struct (`header: Header`, `payload: Vec<u8>`).
@@ -278,7 +278,7 @@ Write unit tests confirming that ownership transfers through all stages, payload
 
 ### Exercise 2: Compile-Time Safe Type-State Machine for Database Transactions (Affine Types)
 
-**Problem:** In database client drivers and financial engines, performing operations on uncommitted, committed, or rolled-back transactions out of order can lead to severe runtime errors. By using Rust move semantics with the Type-State pattern, transition methods consume `self` by value, ensuring that previous transaction handles are invalidated at compile time.
+**Scenario:** In database client drivers and financial engines, performing operations on uncommitted, committed, or rolled-back transactions out of order can lead to severe runtime errors. By using Rust move semantics with the Type-State pattern, transition methods consume `self` by value, ensuring that previous transaction handles are invalidated at compile time.
 
 Implement a database transaction manager:
 1. Define zero-sized phantom state types: `Uninitialized`, `Active`, `Committed`, and `RolledBack`.
@@ -424,7 +424,7 @@ Write unit tests verifying state transitions, log recording, and pattern matchin
 
 ### Exercise 3: Zero-Cost Buffer Recycling & Selective Partial Moves (`std::mem::replace` & `Option::take`)
 
-**Problem:** In custom network buffer pools and ring buffers, extracting heap-allocated payload buffers from wrapper structs via mutable references `&mut Self` is prohibited because Rust forbids partial moves out of borrowed references (compile error `E0507`). Using `Option::take()` and `std::mem::replace`, developers can extract or swap heavy inner heap vectors in $O(1)$ constant time without cloning or reallocating.
+**Scenario:** In custom network buffer pools and ring buffers, extracting heap-allocated payload buffers from wrapper structs via mutable references `&mut Self` is prohibited because Rust forbids partial moves out of borrowed references (compile error `E0507`). Using `Option::take()` and `std::mem::replace`, developers can extract or swap heavy inner heap vectors in $O(1)$ constant time without cloning or reallocating.
 
 Implement a buffer slot recycling system:
 1. Define a `BufferSlot` struct containing `id: u64`, `payload: Option<Vec<u8>>`, and `metadata: String`.

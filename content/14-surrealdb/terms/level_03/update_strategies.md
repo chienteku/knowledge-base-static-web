@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (MERGE vs CONTENT update strategies)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the document compilation phase. Governs whether SurrealDB merges binary BSON trees on disk or overwrites blocks entirely).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When updating records in a NoSQL database, you have different modification needs:
@@ -100,7 +99,7 @@ UPDATE user:tobie PATCH [
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using 'CONTENT' instead of 'MERGE' to update a nested profile dictionary, accidentally wiping out all other fields in the record
 
@@ -157,64 +156,104 @@ UPDATE user:alice PATCH { age: 30 }; // ❌ Syntax error!
 UPDATE user:alice PATCH [{ op: "replace", path: "/age", value: 30 }];
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Strategy Selector
+### Exercise 1: Comparing `SET`, `MERGE`, and `CONTENT` Update Strategies
 
-**Problem:** Select the optimal update strategy (**SET**, **CONTENT**, **MERGE**, or **PATCH**) for these application operations:
-1.  Replacing an entire system settings JSON document with a new upload, discarding any old custom settings keys.
-2.  Adding a tag `"news"` to index position `0` of an array of tag strings inside a post record.
-3.  Merging a user-submitted registration form object containing `phone` and `city` fields into their profile.
-4.  Incrementing a user's loyalty points by `10`.
+**Scenario:**
+Demonstrate the fundamental behavioral differences between `SET`, `MERGE`, and `CONTENT` update clauses when mutating an existing record `user:u1`.
 
-**Expected output:**
+**Requirements:**
+1. Create `user:u1` with fields `name = "Alice"`, `role = "admin"`, `theme = "light"`.
+2. Demonstrate modifying a single field using `SET`.
+3. Demonstrate adding a field using `MERGE`.
+4. Demonstrate complete document replacement using `CONTENT`.
+
 > [!check]- Answer
-> ```text
-> 1. CONTENT (replaces the entire document, discarding old parameters)
-> 2. PATCH (allows specific array index insertions via JSON Patch operations)
-> 3. MERGE (merges object keys without deleting surrounding profile values)
-> 4. SET (ideal for direct field assignments and mathematical increments: `SET points += 10`)
-> ```
-> - Check if the operation replaces the document or target specific properties.
-> - Consider if array index manipulations are required.
-
----
-
-
-
-### Exercise 2: Selecting Strategy: SET vs MERGE vs CONTENT vs PATCH
-
-**Problem:** Match strategy: 1. Modify single field (`SET`), 2. JSON Patch operations (`PATCH`), 3. Replace object (`CONTENT`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. SET, 2. PATCH, 3. CONTENT
-> ```
-> ```text
-> 1. SET, 2. PATCH, 3. CONTENT
-> ```
 >
-> **Explanation:** SurrealDB offers SET, MERGE, CONTENT, and PATCH update strategies.
-
----
-
-### Exercise 3: Array Element Removal Strategy
-
-**Problem:** Remove item `"guest"` from `roles` array field using `-=` operator.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPDATE user:alice SET roles -= "guest";
-> ```
+> #### Implementation
+>
 > ```surrealql
-> UPDATE user:alice SET roles -= "guest";
+> CREATE user:u1 SET name = "Alice", role = "admin", theme = "light";
+> 
+> -- 1. SET: Mutates targeted field explicitly
+> UPDATE user:u1 SET theme = "dark";
+> 
+> -- 2. MERGE: Performs shallow merge, adding new fields safely
+> UPDATE user:u1 MERGE { verified: true };
+> 
+> -- 3. CONTENT: Replaces entire document payload completely
+> UPDATE user:u1 CONTENT { name: "Alice Updated", role: "user" };
+> -- (Note: 'theme' and 'verified' fields are erased by CONTENT!)
 > ```
 >
-> **Explanation:** `-=` operator removes specified items from array or set fields.
+> #### Technical Explanation
+>
+> 1. `SET` mutates specific target fields explicitly without affecting sibling properties.
+> 2. `MERGE` merges JSON key-value pairs into existing documents safely.
+> 3. `CONTENT` completely replaces the record object payload, removing any omitted fields.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Atomic Array Element Appending with `+=`
+
+**Scenario:**
+Append a new tag `"rust"` to an article's `tags` array using the `+=` array modification operator in a `SET` statement.
+
+**Requirements:**
+1. Create `article:a1` with `tags = ["database"]`.
+2. Update `article:a1` using `SET tags += "rust"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE article:a1 SET tags = ["database"];
+> 
+> -- Atomic array element append
+> UPDATE article:a1 SET tags += "rust";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SET array_field += item` appends elements to array fields atomically at the database engine level.
+> 2. Avoids race conditions inherent to fetch-modify-replace application logic.
+> 3. Preserves array element ordering.
+
+---
+
+### Exercise 3: Incremental Numeric Counter Mutations
+
+**Scenario:**
+Increment a product's `views` counter by 1 using the `+=` arithmetic operator in `UPDATE`.
+
+**Requirements:**
+1. Create product `product:p1` with `views = 100`.
+2. Update `product:p1` using `SET views += 1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE product:p1 SET views = 100;
+> 
+> -- Atomic numeric counter increment
+> UPDATE product:p1 SET views += 1;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SET numeric_field += value` performs atomic numeric addition.
+> 2. Ensures thread-safe counter increments across concurrent application traffic.
+> 3. Eliminates lost update anomalies in multi-client environments.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`UPDATE`](update.md) — The parent modification statement.
 - [Operators in SurrealQL](operators.md) — The assignment operators.
@@ -224,7 +263,7 @@ UPDATE user:alice PATCH [{ op: "replace", path: "/age", value: 30 }];
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `SET` updates individual properties; `CONTENT` replaces the entire record.
 - `MERGE` merges JSON key-value updates while preserving other fields.
 - `PATCH` applies surgical JSON Patch adjustments (RFC 6902 specification).

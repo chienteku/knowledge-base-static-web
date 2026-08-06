@@ -16,7 +16,9 @@
 
 ## 2. Term Category
 
-**Borrow-Checker Analysis Model**: Non-Lexical Lifetimes (NLL) is the borrow checking analysis engine introduced in Rust 2018 (and stabilized for all editions in 2021). Instead of tying a borrow's validity duration to textual block scopes (`{ ... }`), NLL analyzes the program's **Control Flow Graph (CFG)** on Mid-level Intermediate Representation (MIR) nodes. A borrow's effective lifetime ends at the exact location of its **last actual point of use**.
+
+
+**Rust Borrow Checker Feature (control-flow-aware reference scopes)**: Non-Lexical Lifetimes (NLL) is the borrow checking analysis engine introduced in Rust 2018 (and stabilized for all editions in 2021). Instead of tying a borrow's validity duration to textual block scopes (`{ ... }`), NLL analyzes the program's **Control Flow Graph (CFG)** on Mid-level Intermediate Representation (MIR) nodes. A borrow's effective lifetime ends at the exact location of its **last actual point of use**.
 
 ---
 

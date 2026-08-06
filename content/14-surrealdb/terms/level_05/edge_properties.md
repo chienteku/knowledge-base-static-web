@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Schema & Modeling (graph edge record properties and metadata)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Stored directly inside the relation table records. Serialized on disk alongside the mandatory `in` and `out` pointer blocks).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relationships in the real world have attributes:
@@ -102,7 +101,7 @@ SELECT ->bought AS purchases FROM user:john;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to query edge properties by chaining through the target node, resulting in 'NONE' evaluations
 
@@ -160,101 +159,107 @@ SELECT ->member_of[WHERE role = "admin"]->group AS admin_groups FROM user:alice;
 
 
 
-### Mistake 4: Storing Relationship Properties in Node Records instead of Graph Edge Records
 
-**The mistake:** Storing `relationship_created_at` or `role` fields on the `user` or `group` node records.
 
-**Why it's wrong:** Properties belonging to the *connection itself* (like `rating`, `permission_level`, `created_at`) belong on the edge record created by `RELATE`.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-CREATE user:alice SET membership_role = "admin"; // ❌ Store on node instead of edge!
-```
+### Exercise 1: Adding Metadata Properties to Relation Edges
 
-*Fix:*
-```surrealql
-RELATE user:alice->member_of->group:tech SET role = "admin", created_at = time::now();
-```
+**Scenario:**
+An e-commerce system relates a `user` to a `product` via a `purchased` relation edge, storing metadata fields `price_paid` (`decimal`) and `purchased_at` (`datetime`).
 
-### Mistake 5: Querying Edge Properties Without Including Edge Table Names in Arrow Paths
+**Requirements:**
+1. Execute `RELATE user:alice -> purchased -> product:p1` setting edge metadata fields.
+2. Select the relation edge record to verify stored properties.
 
-**The mistake:** Writing `SELECT ->member_of.role FROM user:alice;` omitting the target node table.
-
-**Why it's wrong:** To project edge properties, reference the edge table in the arrow path `->member_of[WHERE role = 'admin']->group` or query the edge table directly.
-
-*Incorrect:*
-```surrealql
-SELECT ->member_of.role FROM user:alice; // ❌ Incomplete arrow projection!
-```
-
-*Fix:*
-```surrealql
-SELECT ->member_of[WHERE role = "admin"]->group AS admin_groups FROM user:alice;
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Edge Property Querying
-
-**Problem:** You are building a school grading app. 
-The database connects students to tests using a `took` relationship edge, storing scores on the edge:
-`RELATE student:alice -> took -> test:math SET score = 95;`
-Write the SurrealQL query to:
-1.  Select the student `student:alice`.
-2.  Retrieve a list of the `score` values stored on the `took` edges.
-
-**Expected output:**
 > [!check]- Answer
-> ```sql
-> SELECT ->took.score FROM student:alice;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET name = "Alice";
+> CREATE product:p1 SET name = "Laptop";
+> 
+> -- Create relation edge with metadata properties
+> RELATE user:alice->purchased->product:p1 SET 
+>     price_paid = 1199.99dec,
+>     purchased_at = time::now(),
+>     rating = 5;
+> 
+> SELECT * FROM purchased;
 > ```
-> - The source node is `student:alice`.
-> - Do not traverse past the edge to the `test` table; select `score` directly from the `took` path.
+>
+> #### Technical Explanation
+>
+> 1. SurrealDB relation edges are first-class record documents capable of storing arbitrary properties.
+> 2. Stores `in` (source pointer), `out` (target pointer), and custom metadata fields (`price_paid`).
+> 3. Eliminates separate SQL junction tables with extra payload columns.
+
+---
+
+### Exercise 2: Filtering Queries by Edge Properties
+
+**Scenario:**
+Query all products purchased by `user:alice` where the edge metadata property `rating` is $\ge 4$.
+
+**Requirements:**
+1. Write a `SELECT` query traversing `->purchased[WHERE rating >= 4]->product`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Filter traversal by edge record metadata property
+> SELECT ->purchased[WHERE rating >= 4]->product.name AS highly_rated_purchases 
+> FROM user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `[WHERE rating >= 4]` filters the relation edge records (`purchased`) during arrow traversal.
+> 2. Only follows edge paths that satisfy edge property constraints.
+> 3. Combines graph topology navigation with rich metadata filtering.
+
+---
+
+### Exercise 3: Updating Properties on Existing Relation Edges
+
+**Scenario:**
+Update the `rating` property on an existing `purchased` relation edge between `user:alice` and `product:p1`.
+
+**Requirements:**
+1. Update relation edge `purchased` setting `rating = 5`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Update edge property
+> UPDATE purchased SET rating = 5 WHERE in = user:alice AND out = product:p1;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Relation edges can be updated like standard database tables using `UPDATE`.
+> 2. Matching on `in` and `out` targets specific edge instances directly.
+> 3. Mutates edge properties without breaking graph vertex connections.
 
 ---
 
 
 
-### Exercise 2: Creating Graph Edge with Custom Properties
 
-**Problem:** Relate `user:alice` to `product:99` with edge `reviewed` setting `rating = 5` and `comment = "Great!"`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> RELATE user:alice->reviewed->product:99 SET rating = 5, comment = "Great!";
-> ```
-> ```surrealql
-> RELATE user:alice->reviewed->product:99 SET rating = 5, comment = "Great!";
-> ```
->
-> **Explanation:** `RELATE ... SET key = val` attaches rich metadata properties directly to graph edge records.
-
----
-
-### Exercise 3: Querying Edge Properties directly
-
-**Problem:** Select all `reviewed` edge records where `rating >= 4`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM reviewed WHERE rating >= 4;
-> ```
-> ```surrealql
-> SELECT * FROM reviewed WHERE rating >= 4;
-> ```
->
-> **Explanation:** Graph edge tables (like `reviewed`) can be queried directly like standard tables.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`RELATE` Statement](relate.md) — The command creating the edges.
 - [Graph Traversal Filtering (`WHERE` on edges)](graph_filtering.md) — Filtering using edge properties.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Edges act as first-class documents and can store any data type properties.
 - Relational equivalent to columns in SQL many-to-many junction tables.
 - Querying `->edge->target` bypasses edge properties to fetch target fields.

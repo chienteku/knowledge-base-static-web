@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Compiler Architecture**: High-Level Intermediate Representation (HIR) in `rustc`.
+
+
+**Rust Compiler Intermediate Representation (desugared AST high-level IR)**: High-Level Intermediate Representation (HIR) in `rustc`.
 
 ---
 
@@ -242,7 +244,7 @@ HIR is lowered to MIR before borrow checking and lifetime validation!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Mir Mid Level Ir](mir_mid_level_ir.md) — Mid-level IR.
 

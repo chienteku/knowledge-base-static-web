@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Administration / Operations** (Raft-like Primary Election Protocol): Failover and Elections automatically elect a new primary node when the active primary node becomes unreachable or steps down.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Calculated automatically by consensus protocols. During the short election window—typically under 12 seconds—the replica set blocks writes and becomes read-only).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional database administration, if the main database server crashes, a human system administrator receives an alert, wakes up, inspects logs, manually launches a standby server, updates the DNS IP records, and restarts the web application. 
@@ -82,7 +83,7 @@ Imagine a team of guards in a dark forest:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Configuring an even number of voting nodes in a replica set (e.g., a 4-node cluster) without an Arbiter, leading to election deadlocks during network splits
 
@@ -132,69 +133,98 @@ settings: { electionTimeoutMillis: 1000 } // ❌ Triggers false-alarm elections!
 Keep default electionTimeoutMillis: 10000 (10 seconds)
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Split-Brain Election Analysis
+### Exercise 1: Triggering Manual Primary Stepdown with `replSetStepDown`
 
-**Problem:** You have a 5-node replica set. Nodes 1, 2, and 3 are on Server Rack A. Nodes 4 and 5 are on Server Rack B. 
-A power failure cuts the network link between Rack A and Rack B (network partition).
-Explain:
-1.  Whether the nodes on Rack A (Nodes 1, 2, 3) can elect a Primary.
-2.  Whether the nodes on Rack B (Nodes 4, 5) can elect a Primary.
+**Scenario:**
+Step down the active primary node for maintenance using `rs.stepDown()` to trigger an automatic election.
 
-**Expected output:**
+**Requirements:**
+1. Execute `rs.stepDown(60)`.
+
 > [!check]- Answer
-> ```text
-> 1. Yes: Rack A contains 3 nodes. Since 3 is a strict majority of the total 5 nodes (3 / 5 = 60%), the nodes on Rack A can vote and successfully elect a Primary.
-> 2. No: Rack B only contains 2 nodes. Since 2 is not a majority of 5 (2 / 5 = 40%), the nodes on Rack B cannot achieve the 3 votes required, and will remain as read-only secondaries.
-> ```
-> - The voting majority threshold is calculated based on the total cluster configuration (5 nodes), not local partitions.
-> - A partition must hold at least 3 nodes to nominate a primary.
-
----
-
-
-
-### Exercise 2: Calculating Primary Election Majority Vote
-
-**Problem:** Calculate minimum votes needed to elect primary in 5-node replica set ($5/2 + 1 = 3$).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 3 votes (majority of 5 nodes)
-> ```
-> ```text
-> 3 votes (majority of 5 nodes)
-> ```
 >
-> **Explanation:** Replica set elections require a strict majority vote ($N/2 + 1$).
-
----
-
-### Exercise 3: Replica Set Status Inspection
-
-**Problem:** Command in `mongosh` to inspect replica set member health and election state (`rs.status()`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> rs.status();
-> ```
+> #### Implementation
+>
 > ```javascript
-> rs.status();
+> rs.stepDown(60);
 > ```
 >
-> **Explanation:** `rs.status()` details member node health, heartbeat latencies, and election states.
+> #### Technical Explanation
+>
+> 1. `rs.stepDown(seconds)` forces the current primary node to relinquish leadership and become a secondary.
+> 2. Blocks the stepping-down node from seeking election for the specified duration (60s).
+> 3. Triggers an automatic election among remaining secondary nodes in ~10 seconds.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Configuring Node Priority for Primary Election Preference
+
+**Scenario:**
+Configure secondary node `node1.example.com` with `priority: 2` so it is preferred during primary elections.
+
+**Requirements:**
+1. Update `rs.conf()` node priority.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const cfg = rs.conf();
+> cfg.members[0].priority = 2; // Higher priority node
+> cfg.members[1].priority = 1;
+> cfg.members[2].priority = 1;
+
+rs.reconfig(cfg);
+```
+
+> #### Technical Explanation
+>
+> 1. Higher `priority` values (e.g. `2` vs `1`) make a node eligible to win elections over lower priority nodes.
+> 2. Nodes with `priority: 0` can never become primary (used for passive read-only secondaries).
+> 3. Directs primary workload placement to high-capacity hardware.
+
+---
+
+### Exercise 3: Inspecting Replication Election States with `rs.status()`
+
+**Scenario:**
+Inspect replica set member state codes (`PRIMARY: 1`, `SECONDARY: 2`) using `rs.status()`.
+
+**Requirements:**
+1. Check `rs.status().members[i].stateStr`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const status = rs.status();
+> status.members.forEach(m => {
+>   console.log(`Node: ${m.name} | State: ${m.stateStr} | Health: ${m.health}`);
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `rs.status()` checks heartbeat ping status across all replica set nodes.
+> 2. `stateStr` reports current node role (`PRIMARY`, `SECONDARY`, `STARTUP2`, `RECOVERING`).
+> 3. Essential health check for replica set operations.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Replica Set](replica_set.md) — The parent cluster architecture.
 - [Primary / Secondary / Arbiter](primary_secondary_arbiter.md) — Node roles.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Automatic Failover removes the need for manual DB administrator recovery.
 - Nodes exchange heartbeat pings once every 2 seconds.
 - Primary offline status is triggered after a 10-second heartbeat silence.

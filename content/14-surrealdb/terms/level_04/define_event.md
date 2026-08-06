@@ -11,16 +11,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Advanced Feature (table event trigger definition)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed inside write transaction blocks. Executes events synchronously; event errors will roll back the main write transaction).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In application development, certain actions must occur automatically whenever data changes:
@@ -95,7 +94,7 @@ DEFINE EVENT delete_user_sessions ON user
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing slow or heavy queries inside event definitions, blocking database write transaction speeds
 
@@ -149,69 +148,103 @@ DEFINE EVENT update_count ON TABLE user WHEN $event = 'UPDATE' THEN (UPDATE user
 DEFINE EVENT audit ON TABLE user WHEN $event = 'UPDATE' THEN (CREATE user_audit CONTENT { user: $after.id });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Event Trigger Design
+### Exercise 1: Audit Log Trigger Event Creation
 
-**Problem:** You have a `posts` table. 
-Write the SurrealQL command to define an event named `log_new_post` that automatically creates a record in the `notifications` table whenever a new post is created. 
--   The notification should set `message = "New post: " + $after.title`.
+**Scenario:**
+A financial application records an audit log entry in table `audit_log` whenever an account balance is updated.
 
-**Expected output:**
+**Requirements:**
+1. Define event `balance_change` on table `account`.
+2. Trigger the event when `$event = "UPDATE" AND $before.balance != $after.balance`.
+3. Create an audit record containing `$before` and `$after` states.
+
 > [!check]- Answer
-> ```sql
-> DEFINE EVENT log_new_post ON posts
->   WHEN $before = NONE
->   THEN (
->     CREATE notifications SET message = "New post: " + $after.title
->   );
-> ```
-> - The trigger condition for a creation event is `WHEN $before = NONE`.
-> - Access the new post's title using the `$after` variable: `$after.title`.
-
----
-
-
-
-### Exercise 2: Audit Log Event Definition
-
-**Problem:** Define event `user_created` on `user` table creating an `audit` record when `$event = "CREATE"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
+> DEFINE EVENT balance_change ON TABLE account WHEN $event = "UPDATE" AND $before.balance != $after.balance THEN (
+>     CREATE audit_log SET 
+>         account = $after.id,
+>         old_balance = $before.balance,
+>         new_balance = $after.balance,
+>         updated_at = time::now()
+> );
 > ```
 >
-> **Explanation:** `DEFINE EVENT` triggers asynchronous or transactional event side-effects.
+> #### Technical Explanation
+>
+> 1. `DEFINE EVENT` creates an automated trigger that runs when table records are created, updated, or deleted.
+> 2. `$before` holds the record state before mutation; `$after` holds the state after mutation.
+> 3. The `THEN` block executes SurrealQL statements atomically within the same transaction.
 
 ---
 
-### Exercise 3: Accessing `$before` and `$after` in Events
+### Exercise 2: Cascading Deletion Trigger Events
 
-**Problem:** Explain difference between `$before` (pre-update record state) and `$after` (post-update record state).
+**Scenario:**
+When a user record is deleted from table `user`, automatically delete all associated session records from table `session`.
 
-**Expected output:**
+**Requirements:**
+1. Define event `user_deleted` on table `user` when `$event = "DELETE"`.
+2. Delete records from `session` where `user = $before.id`.
+
 > [!check]- Answer
-> ```text
-> $before holds state before mutation; $after holds state after mutation
-> ```
-> ```text
-> $before holds state before mutation; $after holds state after mutation
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE EVENT user_deleted ON TABLE user WHEN $event = "DELETE" THEN (
+>     DELETE session WHERE user = $before.id
+> );
 > ```
 >
-> **Explanation:** Event context variables provide pre-mutation and post-mutation record snapshots.
+> #### Technical Explanation
+>
+> 1. `$event = "DELETE"` triggers event logic specifically during record deletion queries.
+> 2. Cascades deletion across associated tables (`session`), enforcing referential cleanup.
+> 3. Prevents orphan records without external backend clean-up routines.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Automatic Field Enrichment Triggers
+
+**Scenario:**
+When a new order is created in table `order`, trigger an event that sets `processed_at = time::now()` automatically.
+
+**Requirements:**
+1. Define event `order_created` on table `order` when `$event = "CREATE"`.
+2. Update the newly created order record setting `processed = true`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE EVENT order_created ON TABLE order WHEN $event = "CREATE" THEN (
+>     UPDATE $after.id SET processed = true
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$event = "CREATE"` targets new record insertion operations.
+> 2. `$after.id` provides the record primary key of the newly inserted document.
+> 3. Enables reactive asynchronous field enrichment inside the database.
+
+---
+
+
+
+## 6. Related Terms
 - [`DEFINE TABLE`](define_table.md) — The parent schema context.
 - [`REMOVE` Statement](remove_statement.md) — Deleting events.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE EVENT` configures automatic database triggers.
 - Relational equivalent to database triggers; NoSQL equivalent to trigger services.
 - Executes synchronous code inside the main write transaction block.

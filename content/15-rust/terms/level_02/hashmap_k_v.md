@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: A standard dictionary or map structure found in almost all programming languages. It is known as a `dict` in Python, `HashMap` in Java, `Object` or `Map` in JavaScript, and `std::unordered_map` in C++.
+
+
+**Rust Collection (hash table key-value map)**: A standard dictionary or map structure found in almost all programming languages. It is known as a `dict` in Python, `HashMap` in Java, `Object` or `Map` in JavaScript, and `std::unordered_map` in C++.
 
 ---
 
@@ -148,9 +150,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Distributed Microservice API Rate Limiter & Sliding Window Quota Manager
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In high-throughput microservices, backend platforms enforce rate limits on API keys or client IP addresses to prevent service overload and guarantee service availability.
 
+**Requirements:**
 Implement an in-memory rate limiter using `HashMap<String, QuotaState>`.
 1. Define a struct `QuotaState` with `count: u32` and `window_start_sec: u64`.
 2. Define a `RateLimiter` struct encapsulating `max_requests: u32`, `window_duration_sec: u64`, and `clients: HashMap<String, QuotaState>`.
@@ -283,9 +286,10 @@ use std::collections::HashMap;
 
 ### Exercise 2: Observability Log Processing & Multi-Tag Inverted Search Index
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 Log analytics systems index structured log messages under arbitrary metadata tags (e.g. `"env:prod"`, `"level:error"`, `"service:auth"`) to enable instant filtered queries.
 
+**Requirements:**
 Implement a multi-tag search index using `HashMap<String, Vec<u64>>` where the key is a tag string and the value is a vector of unique log record IDs (`u64`).
 1. Define a `LogInvertedIndex` struct wrapping `index: HashMap<String, Vec<u64>>`.
 2. Implement the following methods:
@@ -402,9 +406,10 @@ use std::collections::HashMap;
 
 ### Exercise 3: High-Frequency Market Ticker Stats & VWAP Aggregator
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 Financial exchanges aggregate trade executions across multiple stock/crypto ticker symbols (`"BTC-USD"`, `"AAPL"`, `"ETH-USD"`). Aggregators track metrics per symbol: count of trades, total volume, min execution price, max execution price, and cumulative Volume-Weighted Average Price (VWAP).
 
+**Requirements:**
 Implement a financial market trade aggregator using `HashMap<String, TickerStats>`.
 1. Define a `TickerStats` struct with fields:
    - `trade_count: u64`

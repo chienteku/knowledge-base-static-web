@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Compiler Toolchain**: The Rust Nightly release channel (`rustup default nightly`).
+
+
+**Rust Release Channel (experimental compiler feature channel)**: The Rust Nightly release channel (`rustup default nightly`).
 
 ---
 
@@ -221,7 +223,7 @@ toolchain: nightly-2026-08-01
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Specialization](specialization.md) — Unstable specialization.
 - [Generators Coroutines](generators_coroutines.md) — Unstable coroutines.

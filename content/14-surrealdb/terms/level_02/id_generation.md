@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Core Concept (record identifier generation functions)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Parsed by the server query compiler. Used to optimize B-Tree index node distributions during record insertions).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In SQL databases, you default to auto-incrementing integer IDs (`1`, `2`, `3`). 
@@ -102,7 +101,7 @@ CREATE logs:rand(15) SET msg = "Connection established";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting SurrealDB to automatically auto-increment numerical record IDs (like SQL serial columns) when omitting the ID parameter
 
@@ -151,69 +150,113 @@ CREATE log:uuid(); // Random insertion location in index
 CREATE log:ulid(); // Time-ordered sequential insertion in index
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Execution Assessment
+### Exercise 1: ID Generation Strategy Matrix
 
-**Problem:** You execute these two queries in SurrealQL:
-`CREATE logs:ulid() SET msg = "Log A";`
-`CREATE logs:uuid() SET msg = "Log B";`
-1.  State which record will have an ID that is sortable by creation time.
-2.  Explain the performance benefit of using ULID over UUID for high-volume logs databases.
+**Scenario:**
+You are designing an e-commerce platform and selecting ID generation strategies for different entities (`user`, `order`, `session`, `product_sku`).
 
-**Expected output:**
+**Requirements:**
+1. Use deterministic string IDs for predictable user lookups (`user:john`).
+2. Use `ulid()` for time-ordered sequential order IDs (`order:ulid()`).
+3. Use `rand::uuid()` for cryptographically random session tokens (`session:rand::uuid()`).
+4. Use array composite IDs for multi-part product SKUs (`product:['electronics', 'laptop', 101]`).
+
 > [!check]- Answer
-> ```text
-> 1. The record generated via `logs:ulid()` will be sortable by creation time.
-> 2. Because ULIDs are time-sortable, new inserts are appended sequentially to the end of the B-Tree index on disk. Random UUIDs insert keys randomly, forcing the database to rewrite index pages constantly (index fragmentation), which slows down write throughput under high concurrency.
-> ```
-> - Analyze the lexicographical sortability properties of ULIDs.
-> - Consider how sequential writes impact B-Tree index fragmentation.
-
----
-
-
-
-### Exercise 2: Comparing ID Generator Functions
-
-**Problem:** Match generator function: 1. Random UUID v4 (`uuid()`), 2. Time-ordered lexicographical (`ulid()`), 3. Cryptographic random string (`rand()`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. uuid(), 2. ulid(), 3. rand()
-> ```
-> ```text
-> 1. uuid(), 2. ulid(), 3. rand()
-> ```
 >
-> **Explanation:** `ulid()` provides time-ordered IDs; `uuid()` creates standard UUIDs; `rand()` produces random strings.
-
----
-
-### Exercise 3: Custom Record ID Generation in CREATE
-
-**Problem:** Create a record in `session` table using ULID generator syntax.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE session:ulid() SET started_at = time::now();
-> ```
+> #### Implementation
+>
 > ```surrealql
-> CREATE session:ulid() SET started_at = time::now();
+> -- 1. Deterministic String ID
+> CREATE user:john SET name = "John Doe";
+> 
+> -- 2. ULID (Time-sortable, unique)
+> CREATE order:ulid() SET amount = 149.99dec;
+> 
+> -- 3. UUID (Cryptographically random)
+> CREATE session:rand::uuid() SET user = user:john;
+> 
+> -- 4. Composite Array ID
+> CREATE product:['electronics', 'laptop', 101] SET stock = 50;
 > ```
 >
-> **Explanation:** `CREATE table:ulid()` generates a time-sortable ULID Record ID.
+> #### Technical Explanation
+>
+> 1. Deterministic string IDs allow instant primary key lookup without secondary unique indexes.
+> 2. `ulid()` generates 128-bit lexicographically sortable IDs, optimizing B-tree index page insertions.
+> 3. Composite array IDs `[category, type, sku]` represent multi-column primary keys natively.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Special Character ID Escaping
+
+**Scenario:**
+A migration script imports legacy records containing email addresses as primary keys (e.g. `user:john.doe@example.com`).
+
+**Requirements:**
+1. Write the correctly escaped SurrealQL record creation statement for an email ID.
+2. Write a `SELECT` query retrieving the record using bracket `⟨ ⟩` escaping.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Record ID creation with bracket escaping
+> CREATE user:⟨john.doe@example.com⟩ SET active = true;
+> 
+> -- Record retrieval
+> SELECT * FROM user:⟨john.doe@example.com⟩;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Record IDs containing special characters (`@`, `.`, `-`) require bracket escaping `⟨...⟩`.
+> 2. Unescaped special characters trigger syntax parser errors.
+> 3. Bracket escaping allows any valid UTF-8 string to serve as a primary key.
+
+---
+
+### Exercise 3: Automatic Random Numeric ID Generation
+
+**Scenario:**
+When no ID is specified in a `CREATE` statement, SurrealDB generates a random alphanumeric record ID automatically. Demonstrate this behavior.
+
+**Requirements:**
+1. Execute `CREATE user SET name = "Anonymous User";` without specifying an ID.
+2. Inspect the generated record ID returned in the result payload.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Generate automatic random ID
+> CREATE user SET name = "Anonymous User";
+> 
+> -- Output payload contains an auto-generated random ID:
+> -- [ { id: user:a7x9q2m..., name: "Anonymous User" } ]
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Omitting the record ID in `CREATE table` causes SurrealDB to generate a unique random string ID automatically.
+> 2. Prevents ID collisions in high-concurrency insert workloads.
+> 3. Provides NoSQL-style auto-generated document identifiers out of the box.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Record ID (`table:id`)](../level_01/record_id.md) — The composite identifier format.
 - [`uuid`](uuid_type.md) — The binary unique hash.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SurrealDB supports custom strings, numbers, UUIDs, ULIDs, and random IDs.
 - Omitting the ID defaults to generating a random alphanumeric string.
 - SurrealDB does not support auto-incrementing serial integers natively.

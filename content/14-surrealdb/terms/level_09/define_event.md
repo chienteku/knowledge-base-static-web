@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Server-Side Logic & Triggers**
+
+
+**Advanced Feature (table mutation trigger event definition)**: - **Server-Side Logic & Triggers**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Engine Transaction Pipeline** (Evaluated synchronously or asynchronously inside database write transactions).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational databases (PostgreSQL), server-side triggers require writing complex stored procedures in PL/pgSQL, attaching them with `CREATE TRIGGER`, and carefully managing BEFORE/AFTER execution phases. In MongoDB, reactive logic requires configuring external change stream microservices.
@@ -70,7 +69,7 @@ DEFINE EVENT welcome_notification ON user
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating Infinite Trigger Loops in Event Handlers
 
@@ -131,85 +130,98 @@ DEFINE EVENT log ON TABLE user WHEN $event = 'CREATE' THEN (CREATE audit SET new
 
 
 
-### Mistake 4: Creating Infinite Event Loops by Mutating Target Table Inside `THEN` Blocks
 
-**The mistake:** Creating an event on table `user` that executes an `UPDATE user` statement inside its `THEN` handler.
 
-**Why it's wrong:** Updating table `user` inside a `user` table event handler triggers the event again recursively, causing infinite loops and stack overflow.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
--- Recursive infinite event loop!
-DEFINE EVENT inc_count ON TABLE user WHEN $event = 'UPDATE' THEN (UPDATE user SET count += 1);
-```
+### Exercise 1: Automatic Audit Trigger Event
 
-*Fix:*
-```surrealql
-DEFINE EVENT audit ON TABLE user WHEN $event = 'UPDATE' THEN (CREATE user_audit CONTENT { user: $after.id });
-```
+**Scenario:**
+Create an automated event trigger `audit_balance` on table `account` that logs balance changes to table `audit_log` whenever an account balance is updated.
 
-### Mistake 5: Referencing Un-Set Context Variables in Event Handlers
-
-**The mistake:** Referencing `$before` in event handlers matching `$event = 'CREATE'`. 
-
-**Why it's wrong:** During `CREATE` events, `$before` is `NONE` because no prior record existed. During `DELETE` events, `$after` is `NONE`.
-
-*Incorrect:*
-```surrealql
-DEFINE EVENT log ON TABLE user WHEN $event = 'CREATE' THEN (CREATE audit SET old_name = $before.name); // $before is NONE!
-```
-
-*Fix:*
-```surrealql
-DEFINE EVENT log ON TABLE user WHEN $event = 'CREATE' THEN (CREATE audit SET new_name = $after.name);
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Define Order Audit Event
-Write a `DEFINE EVENT` named `audit_order_cancel` on table `order` that triggers when `$event = 'UPDATE'` and `$after.status = 'cancelled'`, creating a record in `order_audit`.
+**Requirements:**
+1. Define event `audit_balance` ON TABLE `account`.
+2. Execute WHEN `$event = "UPDATE" AND $before.balance != $after.balance`.
+3. Create an `audit_log` record inside the `THEN` block.
 
 > [!check]- Answer
-> - Combine `WHEN $event = 'UPDATE' AND $after.status = 'cancelled'`.
-> - Action: `THEN (CREATE order_audit SET order_id = $after.id, time = time::now());`.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE EVENT audit_balance ON TABLE account WHEN $event = "UPDATE" AND $before.balance != $after.balance THEN (
+>     CREATE audit_log SET 
+>         account = $after.id,
+>         old_balance = $before.balance,
+>         new_balance = $after.balance,
+>         updated_at = time::now()
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DEFINE EVENT` creates reactive triggers that execute automatically during table mutations.
+> 2. `$before` and `$after` provide access to pre-mutation and post-mutation record states.
+> 3. Executes atomically within the mutation's database transaction.
+
+---
+
+### Exercise 2: Cascading Deletion Trigger Events
+
+**Scenario:**
+Define an event trigger `cascade_user_deletion` on table `user` that automatically deletes all associated `session` records when a user is deleted.
+
+**Requirements:**
+1. Define event `cascade_user_deletion` ON TABLE `user` WHEN `$event = "DELETE"`.
+2. Delete records from `session` where `user = $before.id`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE EVENT cascade_user_deletion ON TABLE user WHEN $event = "DELETE" THEN (
+>     DELETE session WHERE user = $before.id
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$event = "DELETE"` targets record deletion queries.
+> 2. `$before.id` provides the primary key of the record being deleted.
+> 3. Automates relational cleanup without backend API clean-up routines.
+
+---
+
+### Exercise 3: Dropping Table Event Triggers with `REMOVE EVENT`
+
+**Scenario:**
+Drop obsolete trigger event `audit_balance` from table `account`.
+
+**Requirements:**
+1. Write `REMOVE EVENT audit_balance ON TABLE account`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> REMOVE EVENT audit_balance ON TABLE account;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE EVENT` drops event trigger definitions from table metadata.
+> 2. Stops future trigger execution on table mutations.
+> 3. Account table data records remain unaffected.
 
 ---
 
 
 
-### Exercise 2: Creating Audit Log Event
 
-**Problem:** Define event `user_created` on `user` table creating an `audit` record when `$event = "CREATE"`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
-> ```
-> ```surrealql
-> DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
-> ```
->
-> **Explanation:** `DEFINE EVENT` triggers asynchronous or transactional event handlers.
-
----
-
-### Exercise 3: Event Action Filter
-
-**Problem:** Trigger event `on_delete` ONLY when `$event = "DELETE"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE EVENT on_delete ON TABLE user WHEN $event = "DELETE" THEN (...);
-> ```
-> ```surrealql
-> DEFINE EVENT on_delete ON TABLE user WHEN $event = "DELETE" THEN (CREATE deleted_log CONTENT { user: $before.id });
-> ```
->
-> **Explanation:** `WHEN $event = ...` filters event execution by mutation type.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`$before` / `$after` / `$event` / `$value` Variables (in Events)](event_variables.md) — Event context variables.
 - [`DEFINE FUNCTION`](define_function.md) — Reusable server-side functions.
@@ -218,7 +230,7 @@ Write a `DEFINE EVENT` named `audit_order_cancel` on table `order` that triggers
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE EVENT` creates server-side triggers bound to table write operations.
 - Triggers execute based on the declarative `WHEN` condition.
 - Essential for audit trails, cascading record updates, auto-notifications, and business rule enforcement.

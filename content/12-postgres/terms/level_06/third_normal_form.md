@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Schema Design** (Transitive Dependency Normalization): Third Normal Form (3NF) satisfies 2NF and eliminates transitive functional dependencies, ensuring non-key attributes depend strictly on the primary key alone.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (The standard design goal for production transactional databases (OLTP) to guarantee data integrity).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A table can be in Second Normal Form (all cells atomic, no partial dependencies) but still suffer from data anomalies. This happens when columns depend on each other indirectly through a middle column.
@@ -107,7 +108,7 @@ CREATE TABLE employees (
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing 2NF and 3NF violations
 
@@ -157,72 +158,108 @@ CREATE TABLE order_items ( price NUMERIC, qty INT, total NUMERIC ); -- ❌ 3NF v
 total NUMERIC GENERATED ALWAYS AS (price * qty) STORED
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Store Inventory Normalization
+### Exercise 1: Identifying Transitive Dependencies in 3NF Audits
 
-**Problem:** You have a table:
-`products (id, title, manufacturer_name, manufacturer_country)`
-The primary key is `id`.
-1.  Identify the transitive dependency.
-2.  Write the SQL queries to normalize this schema into 3NF.
+**Scenario:**
+Analyze table `employees(id, name, dept_id, dept_name)` where `id -> dept_id` and `dept_id -> dept_name`.
 
-**Expected output:**
+**Requirements:**
+1. Identify transitive link `id -> dept_name` via `dept_id`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. Transitive Dependency: `id -> manufacturer_name -> manufacturer_country` (The product ID determines the manufacturer, which then determines the manufacturer's country).
+> 3NF Violation Analysis:
+> - Primary Key: id
+> - Direct Dependency: id -> dept_id
+> - Transitive Dependency: dept_id -> dept_name (Non-key column determines non-key column!)
+> - Transitive Link: id -> dept_name via dept_id -> 3NF VIOLATION!
 > ```
-> - Remove `manufacturer_country` from the products table because it depends on the manufacturer name, not the product ID.
-> - Create a separate lookup table for manufacturers.
+>
+> #### Technical Explanation
+>
+> 1. 3NF requires that no non-key attribute depends transitively on the primary key through another non-key attribute.
+> 2. `dept_name` depends on `dept_id`, causing redundant duplication of department names across all employees in that department.
+> 3. Violates 3NF.
 
 ---
 
+### Exercise 2: Decomposing Transitive Schemas into 3NF
 
+**Scenario:**
+Decompose `employees` to eliminate transitive dependency `dept_id -> dept_name`.
 
-### Exercise 2: Normalizing Transitive Dependency to 3NF
+**Requirements:**
+1. Create `departments` table and reference `dept_id` in `employees`.
 
-**Problem:** Normalize `employees (id, dept_id, dept_name)` into 3NF by creating `departments` table.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> departments (dept_id PRIMARY KEY, dept_name) and employees (id PRIMARY KEY, dept_id REFERENCES departments)
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE departments ( dept_id INT PRIMARY KEY, dept_name TEXT );
+> CREATE TABLE departments (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   name TEXT NOT NULL UNIQUE
+> );
+> 
 > CREATE TABLE employees (
->   id INT PRIMARY KEY,
->   dept_id INT REFERENCES departments(dept_id)
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   name TEXT NOT NULL,
+>   dept_id INTEGER NOT NULL REFERENCES departments(id)
 > );
 > ```
 >
-> **Explanation:** Removing transitive dependency `dept_name` into `departments` satisfies 3NF.
+> #### Technical Explanation
+>
+> 1. Moving `departments` into a dedicated table eliminates transitive dependency.
+> 2. `dept_name` updates occur in a single location (`departments.name`), maintaining consistency.
+> 3. Achieves 3NF compliance.
 
 ---
 
-### Exercise 3: 3NF Definition Summary
+### Exercise 3: The 3NF Canonical Rule
 
-**Problem:** State 3NF rule (Table must be in 2NF and contain no transitive functional dependencies).
+**Scenario:**
+Recite Bill Kent's classic canonical rule summarizing 3NF schema requirements.
 
-**Expected output:**
+**Requirements:**
+1. State the 3NF canonical rule quote.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Must be in 2NF and contain no non-key attribute dependent on another non-key attribute
-> ```
-> ```text
-> Must be in 2NF and contain no non-key attribute dependent on another non-key attribute
+> 3NF Canonical Rule:
+> "Every non-key attribute must provide a fact about the key, the whole key, and nothing but the key."
+> 
+> - "The key" -> First Normal Form (1NF)
+> - "The whole key" -> Second Normal Form (2NF)
+> - "Nothing but the key" -> Third Normal Form (3NF)
 > ```
 >
-> **Explanation:** 3NF guarantees every non-key column depends directly on the primary key ('The key, the whole key, and nothing but the key').
+> #### Technical Explanation
+>
+> 1. Summarizes all three relational normalization forms concisely.
+> 2. Guarantees relational tables are free of data redundancy anomalies.
+> 3. Standard database engineering mantra.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [Second Normal Form (2NF)](second_normal_form.md) — The prerequisite standard.
 - [Denormalization](denormalization.md) — Intentionally breaking 3NF for speed.
 - [Normalization](normalization.md) — Related concept: Normalization.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Third Normal Form (3NF) eliminates transitive (indirect) dependencies.
 - Every non-key column must depend directly on the primary key, and nothing else.
 - Prevents anomalies associated with updating attributes shared by non-key records.

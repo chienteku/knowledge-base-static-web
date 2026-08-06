@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Design Pattern**: Visitor pattern for traversing hierarchical AST data structures.
+
+
+**Rust Design Pattern (AST double-dispatch traversal pattern)**: Visitor pattern for traversing hierarchical AST data structures.
 
 ---
 
@@ -282,7 +284,7 @@ Provide default empty method implementations: `fn visit_a(&mut self) {}`!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Enum Dispatch](enum_dispatch.md) — Enum dispatch alternative.
 - [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — Dynamic trait objects.

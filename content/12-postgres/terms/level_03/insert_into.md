@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DML Statement**
+
+**SQL Command / Clause** (Row Insertion Command): `INSERT INTO` adds new tuple rows into a database table.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (Checked against table schema constraint rules at write-time. Successfully inserted rows are written to the table's heap files on disk).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Once you define tables and columns inside a database, the tables start completely empty. To make the database useful, we need a command to write data into them.
@@ -89,7 +90,7 @@ SELECT * FROM inventory;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misaligning the columns list with the values list count or type sequence
 
@@ -143,68 +144,96 @@ INSERT INTO users (name, email) VALUES ('Alice', 'alice@ex.com'); -- Explicit co
 INSERT INTO users (name, email) VALUES ('A', 'a@ex.com'), ('B', 'b@ex.com'); -- Single multi-row insert
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: User Log Entry
+### Exercise 1: Single Row Insertion with Generated Keys
 
-**Problem:** You have a table `system_logs` defined below. Write the SQL `INSERT` statement to log an error message `'Failed to connect to authentication server'` with a priority rating of `5`. Do not specify the ID or the timestamp (let the database generate those defaults).
+**Scenario:**
+Insert a new product row into `products` and retrieve its auto-generated `id`.
 
-```sql
-CREATE TABLE system_logs (
-  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  log_message TEXT NOT NULL,
-  priority SMALLINT DEFAULT 1,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
+**Requirements:**
+1. Execute `INSERT INTO products (name, price_cents) VALUES (...) RETURNING id`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> INSERT INTO products (sku, name, price_cents) 
+> VALUES ('SKU-100', 'Wireless Mouse', 2999) 
+> RETURNING id, created_at;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INSERT INTO` adds a new row to the table.
+> 2. Omitting `id` triggers the identity sequence generator.
+> 3. `RETURNING id` returns the newly generated primary key in a single database roundtrip.
+
+---
+
+### Exercise 2: Inserting Rows with Default Column Expressions
+
+**Scenario:**
+Insert a user row omitting `is_active` and `created_at` to rely on column default expressions.
+
+**Requirements:**
+1. Execute `INSERT INTO users (username, email) VALUES (...)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> INSERT INTO users (username, email) 
+> VALUES ('alice', 'alice@example.com');
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Columns omitted from the `INSERT` column list automatically receive their `DEFAULT` expressions.
+> 2. Populates `is_active` as `TRUE` and `created_at` as `CURRENT_TIMESTAMP`.
+> 3. Simplifies client insertion payloads.
+
+---
+
+### Exercise 3: Inserting Parameterized Data in Node.js
+
+**Scenario:**
+Execute a parameterized `INSERT` query from a Node.js Express route.
+
+**Requirements:**
+1. Use `pool.query('INSERT INTO ... VALUES ($1, $2)', [name, price])`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { pool } from "./db";
+
+export async function createProduct(name: string, priceCents: number) {
+  const text = `
+    INSERT INTO products (name, price_cents) 
+    VALUES ($1, $2) 
+    RETURNING id, name, price_cents
+  `;
+  const res = await pool.query(text, [name, priceCents]);
+  return res.rows[0];
+}
 ```
 
-**Expected output:**
-> [!check]- Answer
-> ```sql
-> INSERT INTO system_logs (log_message, priority) 
-> VALUES ('Failed to connect to authentication server', 5);
-> ```
-> - Only include the columns you want to manually configure inside the column parenthesis.
-> - Ensure the text values map to the text columns and integers map to integer columns.
+> #### Technical Explanation
+>
+> 1. Parameterized queries (`$1`, `$2`) protect applications against SQL Injection.
+> 2. Returns inserted row object cleanly.
+> 3. Node.js backend integration.
 
 ---
 
 
 
-### Exercise 2: Inserting Row and Returning Auto-Generated Primary Key
-
-**Problem:** Insert new user `'Bob'` and return auto-generated `id` using `RETURNING id`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INSERT INTO users (name) VALUES ('Bob') RETURNING id;
-> ```
-> ```sql
-> INSERT INTO users (name) VALUES ('Bob') RETURNING id;
-> ```
->
-> **Explanation:** `RETURNING id` returns generated sequence keys without requiring secondary queries.
-
----
-
-### Exercise 3: Inserting Query Results with `INSERT INTO ... SELECT`
-
-**Problem:** Copy active users from `legacy_users` into `users` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INSERT INTO users (name, email) SELECT name, email FROM legacy_users WHERE active IS TRUE;
-> ```
-> ```sql
-> INSERT INTO users (name, email)
-> SELECT name, email FROM legacy_users WHERE active IS TRUE;
-> ```
->
-> **Explanation:** `INSERT INTO ... SELECT` copies rows directly between database tables.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Table (Relation)](../level_01/table.md) — The target data storage container.
 - [Multi-row `INSERT` / `INSERT ... SELECT`](multi_row_insert.md) — Bulk insert optimizations.
 - [`RETURNING` Clause](returning.md) — Returning data immediately after inserts.
@@ -212,7 +241,7 @@ CREATE TABLE system_logs (
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `INSERT INTO` is the SQL command used to write new rows of data into a table.
 - Values are mapped to columns sequentially based on their index positions.
 - Omitted columns are automatically populated with their default values or `NULL`.

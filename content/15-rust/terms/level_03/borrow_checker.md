@@ -160,9 +160,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Zero-Copy Network Telemetry Parser & Lifetime Slice Iterator
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 In high-performance networking microservices, raw telemetry log entries arrive as fast byte or text buffers formatted as `key1=val1; key2=val2; key3=val3`. Allocating dynamic `String` objects for every extracted key-value pair creates significant memory fragmentation and garbage collection overhead.
 
+**Requirements:**
 Implement a zero-copy structured log parser `ZeroCopyLogParser<'a>` that parses key-value pairs directly from borrowed string slices without performing any dynamic heap allocations.
 
 **Requirements:**
@@ -312,9 +313,10 @@ Implement a zero-copy structured log parser `ZeroCopyLogParser<'a>` that parses 
 
 ### Exercise 2: Staging Batch Pipeline & Vector Reallocation Prevention
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 In real-time metric streams, event data is appended to an in-memory staging buffer. A common rookie mistake is attempting to store element references `&MetricEvent` from the buffer while simultaneously adding new events into the buffer. The borrow checker rejects this with error `E0502` (`cannot borrow as mutable because it is also borrowed as immutable`). This is because appending to a `Vec` can trigger memory re-allocation, moving all elements to a new heap location and turning any existing references into dangling pointers.
 
+**Requirements:**
 Implement a memory-safe batch pipeline `TelemetryBatchPipeline` that manages metric events, supports in-place processing without borrow locks, and provides atomic batch flushing.
 
 **Requirements:**
@@ -485,7 +487,7 @@ Implement a memory-safe batch pipeline `TelemetryBatchPipeline` that manages met
 
 ### Exercise 3: Decoupled Graph Storage Engine (Avoiding Self-Referential Borrow Loops)
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 In graph computing engines, dependency managers, or network topologies, graph nodes need to store relationships with neighboring nodes. Attempting to implement graph nodes with direct reference pointers:
 ```rust
 struct Node<'a> {
@@ -495,6 +497,7 @@ struct Node<'a> {
 ```
 triggers borrow checker errors because `'a` creates self-referential lifetime constraints. Once a node reference is stored inside a neighbor list, the target node becomes borrowed immutably forever, rendering the entire graph unmodifiable.
 
+**Requirements:**
 Design an arena-based graph architecture `ArenaGraph<T>` that replaces pointer references with lightweight integer handles `NodeId(usize)` to achieve safe, mutable graph updates.
 
 **Requirements:**

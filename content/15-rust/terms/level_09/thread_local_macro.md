@@ -163,7 +163,7 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Performance Per-Thread Scratch Buffer Pool
 
-**Problem:**
+**Scenario:**
 In high-throughput network services or serialization pipelines, creating new heap allocations (`Vec<u8>`) inside hot processing loops causes allocator lock contention and memory fragmentation. You need to implement a zero-allocation parsing helper using `thread_local!` to maintain a per-thread scratch buffer.
 
 Implement `with_scratch_buffer<F, R>(f: F) -> R` and `encode_hex_with_scratch(bytes: &[u8]) -> String`:
@@ -173,6 +173,9 @@ Implement `with_scratch_buffer<F, R>(f: F) -> R` and `encode_hex_with_scratch(by
 4. Include a unit test module verifying buffer capacity reuse on the same thread and complete memory storage isolation across multiple spawned OS threads.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::cell::RefCell;
 > use std::thread;
@@ -255,7 +258,8 @@ Implement `with_scratch_buffer<F, R>(f: F) -> R` and `encode_hex_with_scratch(by
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Zero-Locking Per-Thread Buffer**: `SCRATCH_BUFFER` uses `thread_local!` combined with `RefCell<Vec<u8>>`. Because each thread accesses its own distinct `Vec<u8>`, borrowing via `.borrow_mut()` incurs zero synchronization locks or atomic overhead.
 > 2. **Capacity Retention**: Calling `.clear()` empties the buffer length to 0 while keeping the underlying heap capacity allocated. Subsequent calls reuse the allocated memory without performing new heap allocations.
 > 3. **Thread Memory Isolation**: Spawning 4 worker threads causes each thread to initialize its own separate `SCRATCH_BUFFER` instance on first access. Mutating or clearing the buffer in one thread has zero side effects on other threads.
@@ -264,7 +268,7 @@ Implement `with_scratch_buffer<F, R>(f: F) -> R` and `encode_hex_with_scratch(by
 
 ### Exercise 2: Per-Thread Lock-Free Metrics Aggregator & Batch Harvest Pipeline
 
-**Problem:**
+**Scenario:**
 In high-concurrency systems, writing telemetry metrics directly into shared `Arc<Mutex<Metrics>>` or atomic counters on every request creates cache-line contention and mutex bottlenecking. A common pattern is to aggregate metrics locally per thread using `thread_local!`, and periodically flush aggregated batches into a central global metric collector.
 
 Implement `MetricsCollector` with lock-free local recording and batched flushing:
@@ -275,6 +279,9 @@ Implement `MetricsCollector` with lock-free local recording and batched flushing
 5. Provide unit tests testing thread-local aggregation, post-flush local state resetting, and multithreaded concurrent batch harvesting.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::cell::RefCell;
 > use std::sync::{Arc, Mutex};
@@ -383,7 +390,8 @@ Implement `MetricsCollector` with lock-free local recording and batched flushing
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Atomic Free Hot Path**: `record_request` operates exclusively on thread-local storage (`RefCell<ThreadMetrics>`), eliminating lock acquisitions and atomic cache invalidations during request handling.
 > 2. **Batch Aggregation**: Mutex acquisition only occurs during `flush()`. Instead of 50 mutex locks across 5 worker threads, only 5 batch lock acquisitions occur.
 > 3. **State Isolation & Clean Reset**: `*local = ThreadMetrics::default()` clears thread-local state back to zero after flushing, ensuring subsequent requests on recycled threads begin with clean accumulators.
@@ -392,7 +400,7 @@ Implement `MetricsCollector` with lock-free local recording and batched flushing
 
 ### Exercise 3: Per-Thread Fast PRNG & Automatic Thread-Local `Drop` Destructor Cleanup
 
-**Problem:**
+**Scenario:**
 Thread-safe random number generation using shared global mutexes degrades performance in concurrent algorithms. Furthermore, understanding the lifecycle of `thread_local!` variables requires knowing when their `Drop` implementations run (upon OS thread exit).
 
 Implement a thread-isolated Fast Xorshift PRNG and thread-exit cleanup guard:
@@ -403,6 +411,9 @@ Implement a thread-isolated Fast Xorshift PRNG and thread-exit cleanup guard:
 5. Write unit tests verifying PRNG determinism upon reseeding, thread-local sequence isolation, and automatic destruction of thread-local items when spawned threads complete execution.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::cell::RefCell;
 > use std::sync::Arc;
@@ -506,7 +517,8 @@ Implement a thread-isolated Fast Xorshift PRNG and thread-exit cleanup guard:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Lock-Free PRNG**: Using `thread_local!` for pseudo-random number generation provides each worker thread with its own state register, avoiding atomic lock contention or global seed serialization.
 > 2. **Deterministic Reseeding**: Reseeding `PER_THREAD_RNG` mutates only the caller thread's RNG instance, enabling deterministic replay in per-thread simulations or property-based tests.
 > 3. **Thread Lifecycle Destructors**: Rust automatically calls `Drop::drop` on `thread_local!` instances when an OS thread completes execution. In `ThreadCleanupGuard::drop`, `active_count.fetch_sub(1)` runs automatically as each spawned thread exits, cleanly tracking thread lifecycles without explicit teardown hooks.

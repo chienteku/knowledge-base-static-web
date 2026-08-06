@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Advanced Feature** (Native Time-Series Data Compression): Time-Series Collections store time-ordered measurements (IoT, financial ticks) using automated columnar bucket compression and optimized layout.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Introduced in MongoDB 5.0. Managed at the database storage engine layer. Under the hood, reads/writes interact with standard collections while files are compressed in columnar formats).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Applications frequently log data points over time:
@@ -109,7 +110,7 @@ db.weather_metrics.find({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating time-series collections as standard transactional collections, attempting frequent updates and document deletions
 
@@ -161,79 +162,111 @@ db.createCollection("sensor_data", { timeseries: { timeField: "timestamp", metaF
 Design time-series collections for append-only data ingestion workflows
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Collection Configuration
+### Exercise 1: Creating Native Time-Series Collections
 
-**Problem:** Write the mongosh command to initialize a time-series collection named `"stock_ticks"`.
--   The timestamp field is named `"trade_time"`.
--   The metadata field is named `"ticker_symbol"`.
--   The write frequency is configured to the level of seconds.
+**Scenario:**
+Create a native MongoDB 5.0+ Time-Series collection `weather_metrics` configured with `timeField: "timestamp"`, `metaField: "metadata"`, and `granularity: "minutes"`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `db.createCollection("weather_metrics", { timeseries: { ... } })`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.createCollection("stock_ticks", {
->   timeseries: {
->     timeField: "trade_time",
->     metaField: "ticker_symbol",
->     granularity: "seconds"
->   }
-> });
-> ```
-> - The collection creator helper is `db.createCollection`.
-> - Declare the `timeseries` configurations inside the options object argument.
-
----
-
-
-
-### Exercise 2: Creating Native Time-Series Collection
-
-**Problem:** Create Time-Series Collection `weather` with `timeField: "timestamp"` and `metaField: "stationId"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.createCollection("weather", { timeseries: { timeField: "timestamp", metaField: "stationId", granularity: "minutes" } });
-> ```
-> ```javascript
-> db.createCollection("weather", {
+> db.createCollection("weather_metrics", {
 >   timeseries: {
 >     timeField: "timestamp",
->     metaField: "stationId",
+>     metaField: "metadata",
 >     granularity: "minutes"
 >   }
 > });
 > ```
 >
-> **Explanation:** `timeseries: { timeField, metaField }` creates columnar-compressed time-series storage.
+> #### Technical Explanation
+>
+> 1. Native Time-Series collections automatically optimize storage for time-ordered measurements.
+> 2. `timeField` specifies the mandatory BSON Date timestamp field.
+> 3. `metaField` groups related sensor metadata into optimized columnar storage blocks.
 
 ---
 
-### Exercise 3: Time-Series Granularity Options
+### Exercise 2: Ingesting Datapoints into Time-Series Collections
 
-**Problem:** List 3 granularity settings for Time-Series Collections (`"seconds"`, `"minutes"`, `"hours"`).
+**Scenario:**
+Insert temperature and humidity datapoints into time-series collection `weather_metrics`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `insertOne()` with `timestamp` and `metadata`.
+
 > [!check]- Answer
-> ```text
-> "seconds", "minutes", "hours"
-> ```
-> ```text
-> "seconds", "minutes", "hours"
+>
+> #### Implementation
+>
+> ```javascript
+> db.weather_metrics.insertOne({
+>   metadata: { sensorId: "SENSOR-A1", location: "Building 4" },
+>   timestamp: new Date(),
+>   temperature: 24.5,
+>   humidity: 52.1
+> });
 > ```
 >
-> **Explanation:** `granularity` tunes internal bucket compression intervals for metric ingestion streams.
+> #### Technical Explanation
+>
+> 1. Datapoints are inserted as standard flat documents.
+> 2. WiredTiger compresses time-series measurements into columnar buckets behind the scenes.
+> 3. Reduces disk storage footprint by up to 90% compared to standard collections.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Aggregating Time-Series Data with `$dateTrunc`
+
+**Scenario:**
+Group sensor measurements into 1-hour time buckets and compute average temperature using `$dateTrunc`.
+
+**Requirements:**
+1. Aggregate using `$dateTrunc: { date: "$timestamp", unit: "hour" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.weather_metrics.aggregate([
+>   {
+>     $group: {
+>       _id: {
+>         sensor: "$metadata.sensorId",
+>         hourBucket: { $dateTrunc: { date: "$timestamp", unit: "hour" } }
+>       },
+>       avgTemp: { $avg: "$temperature" }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$dateTrunc` truncates BSON Dates to specified time intervals (`"hour"`, `"day"`).
+> 2. Native Time-Series collections accelerate date aggregation queries using columnar index scans.
+> 3. High performance telemetry processing.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Capped Collections](capped_collections.md) — Circular storage logs.
 - [The Outlier Pattern](../level_05/outlier_pattern.md) — The manual predecessor template.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Time-series collections optimize storage for sequential chronological metrics.
 - Automatically compress metrics on disk using columnar formats.
 - Eliminates application-layer boilerplate of manual bucket patterns.

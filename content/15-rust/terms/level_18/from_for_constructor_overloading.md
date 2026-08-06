@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Design Pattern**: Constructor polymorphism using `From` and `Into` traits.
+
+
+**Rust Idiom Pattern (From/Into flexible constructor overloading)**: Constructor polymorphism using `From` and `Into` traits.
 
 ---
 
@@ -257,7 +259,7 @@ impl From<&str> for Person
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`From` / `Into` Traits](../level_04/from_into_traits.md) — From trait conversions.
 

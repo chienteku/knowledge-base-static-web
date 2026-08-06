@@ -173,7 +173,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Asynchronous Event Bus with Weak Subscriber Registration
 
-**Problem:** 
+**Scenario:** 
 In high-throughput event-driven systems (such as UI event loops or pub-sub message brokers), subscribers register handles with a central dispatcher. If the dispatcher holds strong `Arc<T>` references to subscribers, subscribers are kept alive forever by the dispatcher—causing severe memory leaks when UI elements or worker tasks finish their work.
 
 Implement a thread-safe `EventBroker<M>` that stores subscriber handles as `Vec<Weak<SubscriberHandle<M>>>`:
@@ -182,6 +182,9 @@ Implement a thread-safe `EventBroker<M>` that stores subscriber handles as `Vec<
 3. Implement `EventBroker::publish(&self, msg: M) -> usize` which iterates through subscribers, attempts `.upgrade()` on each `Weak` reference, delivers `msg` to surviving subscribers, and purges expired `Weak` handles using `Vec::retain`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::{Arc, Mutex, Weak};
 >
@@ -282,7 +285,8 @@ Implement a thread-safe `EventBroker<M>` that stores subscriber handles as `Vec<
 > }
 > ```
 >
-> **Step-by-step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Decoupling Lifetimes (`Arc::downgrade`):** `EventBroker` stores `Weak<SubscriberHandle<M>>` instead of `Arc`. When a subscriber is registered, `Arc::downgrade(&handle)` creates a non-owning weak pointer. The broker does not increment the subscriber's strong count.
 > 2. **Attempting Promotion (`.upgrade()`):** When `publish` is called, `weak_ref.upgrade()` atomically checks if the target `SubscriberHandle` is still alive. If it is, it returns `Some(Arc<SubscriberHandle<M>>)`.
 > 3. **Automatic Dead-Reference Cleanup (`Vec::retain`):** If `.upgrade()` returns `None`, the subscriber was dropped by its caller. Returning `false` inside `.retain()` removes the stale `Weak` handle from `EventBroker`'s internal storage without requiring manual unregister calls.
@@ -291,7 +295,7 @@ Implement a thread-safe `EventBroker<M>` that stores subscriber handles as `Vec<
 
 ### Exercise 2: Concurrent Thread-Safe Cache with Lock-Free Weak Eviction
 
-**Problem:** 
+**Scenario:** 
 In resource-constrained microservices, dynamic resources (like parsed configuration blobs or database schemas) should be shared among worker threads. Resources should remain cached as long as at least one worker thread is actively holding a strong reference (`Arc<V>`). Once all workers drop their handles, the resource should be freed from memory while maintaining a weak index in the cache map.
 
 Build a thread-safe `WeakCache<K, V>` using `RwLock<HashMap<K, Weak<V>>>`:
@@ -299,6 +303,9 @@ Build a thread-safe `WeakCache<K, V>` using `RwLock<HashMap<K, Weak<V>>>`:
 2. Implement `clean_dead_entries(&self) -> usize` to purge expired weak references whose strong count is zero.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > use std::hash::Hash;
@@ -409,7 +416,8 @@ Build a thread-safe `WeakCache<K, V>` using `RwLock<HashMap<K, Weak<V>>>`:
 > }
 > ```
 >
-> **Step-by-step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Read Lock Optimization (Fast Path):** Multiple threads concurrently read from `RwLock<HashMap<K, Weak<V>>>`. If the key exists and `weak_ref.upgrade()` yields `Some(Arc<V>)`, the reference count is safely incremented without blocking other reader threads.
 > 2. **Double-Checked Locking:** If a cache miss occurs under the read lock, the thread upgrades to a write lock (`RwLock::write`). Before allocating or running the expensive `init()` closure, it checks `write_guard.get(&key)` again in case another thread initialized the resource while acquiring the write lock.
 > 3. **Memory Eviction Tracking (`strong_count()`):** When all callers drop their returned `Arc<V>`, the memory allocation for `V` is deallocated. `clean_dead_entries` uses `weak_ref.strong_count() > 0` to safely remove expired keys without keeping unused payload data in memory.
@@ -418,7 +426,7 @@ Build a thread-safe `WeakCache<K, V>` using `RwLock<HashMap<K, Weak<V>>>`:
 
 ### Exercise 3: Bidirectional Doubly-Linked Tree Node Navigation without Reference Cycles
 
-**Problem:** 
+**Scenario:** 
 In hierarchical document tree systems (such as HTML DOM elements or scene graphs), nodes require bidirectional traversal: parents own their children (`Rc<Node>`), children hold parent back-links (`Weak<Node>`), and sibling nodes hold relative previous/next pointers (`Weak<Node>`). Using strong `Rc` pointers for back-links or sibling links creates cyclical dependencies that leak memory when the root node is dropped.
 
 Implement a leak-free tree structure `TreeNode`:
@@ -428,6 +436,9 @@ Implement a leak-free tree structure `TreeNode`:
 4. Implement `sibling_values(node: &Rc<Self>) -> (Option<String>, Option<String>)`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::cell::RefCell;
 > use std::rc::{Rc, Weak};
@@ -529,7 +540,8 @@ Implement a leak-free tree structure `TreeNode`:
 > }
 > ```
 >
-> **Step-by-step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Ownership Direction (Top-Down):** `TreeNode.children` holds `Rc<TreeNode>`, establishing clear ownership from parent to children.
 > 2. **Cycle Prevention (Upward & Horizontal Weak Links):** `parent`, `prev_sibling`, and `next_sibling` are all wrapped in `Weak<TreeNode>`. Because weak pointers do not increment `strong_count`, dropping the root `Rc` decreases the root's `strong_count` to zero, triggering its `Drop` implementation which drops `children` and cascade-deallocates the entire graph.
 > 3. **Interior Mutability (`RefCell`):** `RefCell` allows updating `parent`, `prev_sibling`, and `next_sibling` links dynamically when inserting nodes into the tree graph through shared `&Rc<TreeNode>` references.

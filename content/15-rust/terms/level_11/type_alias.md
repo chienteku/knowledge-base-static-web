@@ -164,7 +164,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Standardizing Microservice API Errors with Domain `Result` Type Aliases
 
-**Problem:**
+**Scenario:**
 In high-throughput microservices and REST API backends, writing `Result<T, ApiError>` repeatedly across dozens of internal pipeline functions introduces boilerplate visual clutter. Following standard Rust idioms (like `std::io::Result<T>`), module authors define a generic type alias `type ApiResult<T> = Result<T, ApiError>;` that binds the concrete domain error type once.
 
 Implement a request execution pipeline that utilizes `ApiResult<T>` short-circuiting:
@@ -174,6 +174,9 @@ Implement a request execution pipeline that utilizes `ApiResult<T>` short-circui
 4. Include comprehensive unit tests verifying successful pipeline execution, authentication failures (`ApiError::Unauthorized`), and validation errors (`ApiError::ValidationError`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Eq)]
 > pub enum ApiError {
@@ -267,7 +270,8 @@ Implement a request execution pipeline that utilizes `ApiResult<T>` short-circui
 > }
 > ```
 > 
-> **Detailed Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Domain `Result` Type Alias:** By declaring `pub type ApiResult<T> = Result<T, ApiError>;`, we fix the second generic parameter (`E`) of Rust's standard `Result<T, E>`. Callers only need to supply `T`.
 > 2. **Operator `?` Compatibility:** Because `ApiResult<T>` is physically identical to `Result<T, ApiError>`, the standard `?` operator functions seamlessly for error propagation across pipeline methods.
 > 3. **Assertions in Unit Tests:**
@@ -278,7 +282,7 @@ Implement a request execution pipeline that utilizes `ApiResult<T>` short-circui
 
 ### Exercise 2: Simplifying Complex Trait Object Closures in Event Handler Dispatchers
 
-**Problem:**
+**Scenario:**
 In asynchronous frameworks, event dispatchers, or plugin systems, callback signatures involving trait objects can become unreadable (e.g. `Box<dyn Fn(&str) -> Result<String, &'static str> + Send + Sync>`). Without type aliases, registering handlers and managing internal registry maps generates verbose function signatures.
 
 Construct a thread-safe `EventDispatcher` system:
@@ -289,6 +293,9 @@ Construct a thread-safe `EventDispatcher` system:
 5. Write unit tests ensuring multiple subscribers per event execute, errors propagate cleanly, and unregistered channels safely return empty vectors.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > 
@@ -384,7 +391,8 @@ Construct a thread-safe `EventDispatcher` system:
 > }
 > ```
 > 
-> **Detailed Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Trait Object Cleanups:** Writing `Box<dyn Fn(&str) -> Result<String, &'static str> + Send + Sync>` in every struct field, parameter list, and return type causes intense boilerplate. Aliasing this complex combination to `EventHandler` restores clean readable code.
 > 2. **Nested Map Type Alias:** `HandlerRegistry` abstracts `HashMap<String, Vec<EventHandler>>`, simplifying structural data declarations in the `EventDispatcher` struct.
 > 3. **Thread Safety Trait Bounds:** The `Send + Sync` bounds ensure that event handlers can safely be dispatched across thread boundaries in concurrent execution environments.
@@ -393,7 +401,7 @@ Construct a thread-safe `EventDispatcher` system:
 
 ### Exercise 3: Decoupling Thread-Safe Concurrent Storage with Nested Type Aliases
 
-**Problem:**
+**Scenario:**
 Building concurrent data structures like in-memory caches or database connections involves wrapping collections inside composite smart pointers (e.g. `Arc<RwLock<HashMap<K, V>>>`). Directly typing `Arc<RwLock<HashMap<CacheKey, CacheValue<V>>>>` across storage managers makes code verbose and rigid.
 
 Implement a thread-safe `ConcurrentCache<V>` using nested type aliases:
@@ -405,6 +413,9 @@ Implement a thread-safe `ConcurrentCache<V>` using nested type aliases:
 6. Write unit tests evaluating TTL expiration logic, purge operations, and multi-threaded concurrent mutations across OS threads using `std::thread::spawn`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > use std::sync::{Arc, RwLock};
@@ -553,7 +564,8 @@ Implement a thread-safe `ConcurrentCache<V>` using nested type aliases:
 > }
 > ```
 > 
-> **Detailed Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Composite Memory Type Alias:** `SharedStore<V>` encases the generic `Arc<RwLock<HashMap<CacheKey, CacheValue<V>>>>`. Any change to underlying synchronization primitives (e.g. switching from `RwLock` to `Mutex`) can be performed in a single type alias location.
 > 2. **Interior Mutability & Mutex Guards:** The `store.write()` and `store.read()` methods acquire shared or exclusive locks on the underlying data, propagating `LockPoisoned` errors through `CacheResult<T>`.
 > 3. **Thread Safety Verification:** The `test_concurrent_thread_access` test spawns 10 separate OS threads, demonstrating that `SharedStore<V>` can safely be cloned (`Arc::clone`) and accessed across threads concurrently.

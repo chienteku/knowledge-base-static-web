@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing / Server Logic**
+
+**Routing & Layouts** (Server-Side Route Redirection): `redirect()` issues immediate HTTP 307/308 redirects from Server Components, Server Actions, or Route Handlers.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a Server Component, you don't have access to the browser's `window.location` or the `useRouter()` hook. If a user tries to access `/dashboard` but your database says they aren't logged in, how do you kick them back to `/login`?
@@ -52,7 +53,7 @@ You use this when a URL has permanently moved (e.g., you renamed a user's profil
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `redirect()` inside a `try/catch` block
 
@@ -127,75 +128,128 @@ import { redirect } from 'next/navigation'; // Correct App Router import
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: External Redirects
+### Exercise 1: Redirecting Unauthorized Users from Server Components
 
-**Problem:** You are building a URL shortener app. You have a route `app/[shortCode]/page.tsx`. If the user visits `/g`, you look up the code and find the URL is `https://google.com`. Can you use `redirect()` to send them to an external website?
+**Scenario:**
+Redirect unauthenticated users to `/login` from a protected Server Component using `redirect()`.
 
-**Expected output:**
+**Requirements:**
+1. Import `redirect` from `next/navigation`.
+
 > [!check]- Answer
-> ```text
-> Yes!
-> `redirect()` accepts absolute URLs. 
-> You simply call: `redirect('https://google.com')` and Next.js will instantly bounce the user to Google.
-> ```
-> - Does a redirect require a relative path?
+>
+> #### Implementation
+>
+> ```tsx
+> // app/dashboard/page.tsx
+> import { redirect } from "next/navigation";
+> import { getSession } from "@/lib/auth";
+
+export default async function DashboardPage() {
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/login?reason=unauthorized");
+  }
+
+  return <h1>Welcome to Dashboard</h1>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `redirect()` throws a specialized internal Next.js exception that immediately halts component rendering.
+> 2. Issues an HTTP 307 temporary redirect response header to the browser.
+> 3. Works seamlessly inside async Server Components, Server Actions, and Route Handlers.
 
 ---
 
-### Exercise 2: Server Component Auth Redirect Pattern
+### Exercise 2: Server Action Redirects After Mutation
 
-**Problem:** Write Server Component `app/dashboard/page.tsx` checking `session` and executing `redirect('/login')` if unauthenticated.
+**Scenario:**
+Redirect users to `/posts` after creating a new post inside a Server Action.
 
-**Expected output:**
+**Requirements:**
+1. Call `redirect('/posts')` after database mutation in Server Action.
+
 > [!check]- Answer
-> ```tsx
-> import { redirect } from 'next/navigation'; export default async function Page() { const session = await getSession(); if (!session) redirect('/login'); return <h1>Dashboard</h1>; }
-> ```
-> - `redirect()` executes immediate server-side HTTP 307/308 redirects.
-> 
-> ```tsx
-> import { redirect } from 'next/navigation';
-> 
-> export default async function Page() {
->   const session = await getSession();
->   if (!session) {
->     redirect('/login');
->   }
->   
->   return <h1>Welcome to Dashboard</h1>;
-> }
-> ```
-
----
-
-### Exercise 3: Redirect Type Shorthands
-
-**Problem:** What default HTTP status code is used by Next.js `redirect()` for temporary redirects?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> HTTP 307 Temporary Redirect (Use RedirectType.replace for 308 permanent redirects)
-> ```
-> - `redirect(url)` defaults to HTTP 307 Temporary Redirect.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> redirect('/login', RedirectType.replace); // Permanent redirect
+> // app/actions/post.ts
+> "use server";
+
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+export async function createPost(formData: FormData) {
+  const title = formData.get("title");
+  // Save post to database...
+
+  revalidatePath("/posts");
+  redirect("/posts");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. In Server Actions, `redirect()` MUST be called OUTSIDE `try/catch` blocks (or re-thrown if caught).
+> 2. Tells the client router to navigate to the new path after revalidating cache data.
+> 3. Standard post-mutation workflow.
+
+---
+
+### Exercise 3: Permanent vs Temporary Redirects in `next.config.js`
+
+**Scenario:**
+Configure permanent 301 redirects for legacy URLs in `next.config.js`.
+
+**Requirements:**
+1. Set `permanent: true` in `redirects()` array.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> // next.config.js
+> module.exports = {
+>   async redirects() {
+>     return [
+>       {
+>         source: "/old-pricing",
+>         destination: "/pricing",
+>         permanent: true // HTTP 301 Permanent Redirect
+>       }
+>     ];
+>   }
+> };
 > ```
+
+> #### Technical Explanation
+>
+> 1. `permanent: true` emits HTTP 301 status headers, instructing search crawlers and browsers to cache the redirect permanently.
+> 2. `permanent: false` emits HTTP 307 status headers for temporary redirects.
+> 3. Preserves SEO page rank equity for migrated page URLs.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useRouter` Hook](../level_03/use_router.md) — Used for redirecting in Client Components.
 - [`not-found.tsx` & `notFound()`](not_found.md) — The sister function used for 404s instead of 307s.
 - [On-Demand Revalidation (`revalidatePath`, `revalidateTag`)](../level_06/on_demand_revalidation.md) — Related concept: On-Demand Revalidation (`revalidatePath`, `revalidateTag`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`redirect('/path')`** is a server-side function that instantly redirects a user to a different URL (HTTP 307).
 - **`permanentRedirect('/path')`** tells browsers and search engines the page has moved forever (HTTP 308).
 - They work by throwing a special internal error.

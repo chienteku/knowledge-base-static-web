@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SEO / Dynamic Routing**
+
+**SEO & Metadata** (Dynamic Route Metadata Generation): `generateMetadata()` generates dynamic SEO page titles, meta descriptions, and OpenGraph images based on route parameters and API data.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Component ONLY**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Exporting `const metadata = { title: 'About' }` is fine for static pages like `/about` or `/pricing`.
@@ -70,7 +71,7 @@ In the code above, we called `db.product.findUnique` in `generateMetadata` AND i
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on data fetched inside the page component
 
@@ -124,92 +125,128 @@ const getItem = cache(async (id: string) => db.item.findUnique({ where: { id } }
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Accessing Parent Metadata
+### Exercise 1: Generating Dynamic SEO Titles from Database APIs
 
-**Problem:** You are in `/blog/[slug]/page.tsx`. You want to dynamically set the Open Graph image, but you want to *keep* all the Open Graph tags defined in the parent `layout.tsx`. How does `generateMetadata` access the parent's data?
+**Scenario:**
+Fetch product details inside `generateMetadata({ params })` to render dynamic document titles and OpenGraph cards.
 
-**Expected output:**
+**Requirements:**
+1. Export `generateMetadata({ params }): Promise<Metadata>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> // generateMetadata accepts a second parameter: parent!
-> export async function generateMetadata(
->   { params }: Props,
->   parent: ResolvingMetadata
-> ): Promise<Metadata> {
->   const post = await fetchPost(params.slug);
->   
->   // Await the parent metadata resolution
->   const previousImages = (await parent).openGraph?.images || [];
-> 
->   return {
->     openGraph: {
->       // Append the new image, preserving the parent images!
->       images: [post.coverImage, ...previousImages],
->     },
->   };
-> }
-> ```
-> - `generateMetadata` has a second argument called `parent` (of type `ResolvingMetadata`).
+> // app/products/[id]/page.tsx
+> import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const res = await fetch(`https://api.example.com/products/${id}`);
+  const product = await res.json();
+
+  return {
+    title: `${product.name} | My Store`,
+    description: product.description,
+    openGraph: {
+      title: product.name,
+      images: [product.imageUrl]
+    }
+  };
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `generateMetadata()` resolves dynamic route parameters and constructs dynamic page metadata on the server.
+> 2. `fetch()` calls inside `generateMetadata()` are automatically memoized when shared with the page component.
+> 3. Renders server-side `<head>` meta tags for search engine crawlers.
 
 ---
 
-### Exercise 2: generateMetadata Parent Metadata Resolution
+### Exercise 2: Defining Parent Metadata Inheritance with `parent`
 
-**Problem:** Write `generateMetadata()` snippet resolving parent metadata via `parent: ResolvingMetadata` and extending page title.
+**Scenario:**
+Inherit parent layout OpenGraph image arrays and append route-specific images in `generateMetadata()`.
 
-**Expected output:**
+**Requirements:**
+1. Accept `parent: ResolvingMetadata` parameter.
+
 > [!check]- Answer
-> ```typescript
-> import { Metadata, ResolvingMetadata } from 'next'; export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> { const parentMeta = await parent; return { title: `Child - ${parentMeta.title?.absolute}` }; }
-> ```
-> - `parent` argument resolves metadata inherited from parent layout segments.
-> 
-> ```typescript
-> import { Metadata, ResolvingMetadata } from 'next';
-> 
-> export async function generateMetadata(
->   { params }: { params: { id: string } },
->   parent: ResolvingMetadata
-> ): Promise<Metadata> {
->   const parentMeta = await parent;
->   return {
->     title: `Item ${params.id} | ${parentMeta.title?.absolute}`
->   };
-> }
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> import type { Metadata, ResolvingMetadata } from "next";
+
+export async function generateMetadata(
+  props: any,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const parentOgImages = (await parent).openGraph?.images || [];
+
+  return {
+    openGraph: {
+      images: ["/page-specific-og.jpg", ...parentOgImages]
+    }
+  };
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `ResolvingMetadata` resolves metadata exported by parent layout segments.
+> 2. `await parent` grants access to inherited parent metadata properties.
+> 3. Allows cascading and extending SEO metadata cleanly across nested routes.
 
 ---
 
-### Exercise 3: Dynamic OpenGraph Image Generation
+### Exercise 3: Auditing Request Memoization in Metadata Generation
 
-**Problem:** Which special filename in an `app/` route directory automatically generates dynamic OpenGraph social preview images using `@vercel/og`?
+**Scenario:**
+Verify that calling `fetch('/api/item/1')` in both `generateMetadata()` and `Page()` executes only 1 network call.
 
-**Expected output:**
+**Requirements:**
+1. Detail request memoization behavior.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> opengraph-image.tsx (or twitter-image.tsx)
+> Metadata Request Memoization Audit:
+> 1. Next.js server executes generateMetadata() -> fetch('/api/item/1') [Network Call 1 executed].
+> 2. Next.js server executes Page() -> fetch('/api/item/1') [Request Memoized - 0 Network Calls].
+> Total Network Roundtrips: EXACTLY 1.
 > ```
-> - `opengraph-image.tsx` generates dynamic OG images at build/runtime.
-> 
-> ```tsx
-> import { ImageResponse } from 'next/og';
-> export default function Image() {
->   return new ImageResponse(<div>Dynamic OG Image</div>);
-> }
-> ```
+
+> #### Technical Explanation
+>
+> 1. Next.js automatically memoizes identical `fetch()` requests across `generateMetadata()` and component rendering passes.
+> 2. Eliminates duplicate data fetching overhead.
+> 3. Essential performance feature for dynamic SEO pages.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Metadata API (`metadata`)](metadata_api.md) — The static equivalent.
 - [Server-side Fetching (Extended `fetch`)](../level_05/fetch.md) — The mechanism used to deduplicate the API calls made in this function.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`generateMetadata`** is an async function used to create dynamic SEO tags based on route parameters.
 - It is crucial for dynamic routes like blog posts and product pages to ensure correct Open Graph sharing on social media.
 - It receives the `params` (and `searchParams`) exactly like the page component does.

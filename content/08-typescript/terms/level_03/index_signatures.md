@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Syntax**
+
+**TypeScript Core Syntax** (Dynamic Key-Value Map Annotations): Index signatures (`[key: string]: T`) define explicit types for objects with dynamic or unknown property names.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes you build objects that act as dynamic dictionaries or caches. 
@@ -65,7 +66,7 @@ interface UserCache {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The `undefined` trap in Strict Mode
 
@@ -121,57 +122,112 @@ interface Good {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Record Utility Type
+### Exercise 1: Typing Dynamic Dictionary Maps
 
-**Problem:** Writing `[key: string]: number` in an interface every time is slightly tedious. What is the built-in Generic Utility Type that accomplishes the exact same thing in a single line?
+**Scenario:**
+Create a type-safe dynamic dictionary storing user scores keyed by string usernames (`Record<string, number>` or index signature).
 
-**Expected output:**
+**Requirements:**
+1. Use `[username: string]: number` index signature.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> const scores: Record<string, number> = {};
-> // Record<KeyType, ValueType> is the exact same thing as an Index Signature!
-> ```
-> - It starts with 'R'.
+> interface UserScores {
+>   [username: string]: number;
+> }
+
+const scores: UserScores = {
+  alice: 95,
+  bob: 88,
+  charlie: 92
+};
+
+scores["david"] = 100;
+```
+
+> #### Technical Explanation
+>
+> 1. Index signatures (`[key: string]: number`) declare that any string property key maps to a `number` value.
+> 2. Ideal for modeling dynamic hash maps or dictionary data structures.
+> 3. Enforces value type consistency across dynamic object keys.
+
+---
+
+### Exercise 2: Combining Explicit Properties with Index Signatures
+
+**Scenario:**
+Combine explicit fixed properties (`id: string`) with a dynamic string index signature.
+
+**Requirements:**
+1. Enforce that all properties conform to index signature value type.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Dictionary {
+>   name: string; // Explicit property
+>   [key: string]: string; // All additional properties MUST also be string!
+> }
+
+const dict: Dictionary = {
+  name: "English Terms",
+  description: "Standard terminology",
+  category: "Language"
+};
+```
+
+> #### Technical Explanation
+>
+> 1. Explicit properties (`name: string`) must have types compatible with the index signature value type (`string`).
+> 2. Setting `[key: string]: string | number` allows explicit properties of type `number` or `string`.
+> 3. Ensures strict key-value type guarantees across the entire object.
+
+---
+
+### Exercise 3: Safely Handling Missing Keys with `undefined`
+
+**Scenario:**
+Configure index signatures to return `T | undefined` when accessing arbitrary keys (`"noUncheckedIndexedAccess": true`).
+
+**Requirements:**
+1. Show how `"noUncheckedIndexedAccess": true` forces checking for `undefined` on index lookups.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Cache {
+>   [key: string]: string;
+> }
+
+function getCachedValue(cache: Cache, key: string): string {
+  const val = cache[key]; // Under noUncheckedIndexedAccess, val is string | undefined!
+  if (val !== undefined) {
+    return val.toUpperCase();
+  }
+  return "MISSING";
+}
+```
+
+> #### Technical Explanation
+>
+> 1. By default, index signature lookups return `T` without checking if the key actually exists at runtime.
+> 2. `"noUncheckedIndexedAccess": true` automatically unions index signature return types with `undefined`.
+> 3. Prevents runtime `TypeError` crashes on missing dictionary keys.
 
 ---
 
 
 
-### Exercise 2: Configuring `noUncheckedIndexedAccess`
-
-**Problem:** What tsconfig compiler option automatically adds `| undefined` to index signature lookups?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> noUncheckedIndexedAccess: true
-> ```
-> ```typescript
-> console.log("noUncheckedIndexedAccess: true");
-> ```
->
-> **Explanation:** `noUncheckedIndexedAccess` forces index lookups to include `undefined` in their return types.
-
----
-
-### Exercise 3: Symbol and Number Index Signatures
-
-**Problem:** Can number index signatures be assignable to string index signatures? (Yes)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Yes, number keys convert to strings in JS object indexing
-> ```
-> ```typescript
-> console.log("Yes, number keys convert to strings in JS object indexing");
-> ```
->
-> **Explanation:** JS coerces numeric index keys to strings during property lookups.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Interfaces](interfaces.md) — Where index signatures live.
 - [Utility Types Overview](../level_08/utility_types.md) — The `Record` type is the generic equivalent of this.
 - [Excess Property Checks](excess_property_checks.md) — Related concept: Excess Property Checks.
@@ -179,7 +235,7 @@ interface Good {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Index Signatures** are used to type objects acting as dynamic dictionaries/maps where the property names are unknown ahead of time.
 - Syntax: `[key: string]: number`.
 - If an interface has an index signature, all other explicitly named properties in that interface must be compatible with the index signature's value type.

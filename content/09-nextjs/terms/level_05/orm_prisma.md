@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Data Fetching**
+
+**Data Fetching & Caching** (Server Database ORM Integration): Prisma ORM integrates with Next.js React Server Components to provide type-safe database queries without building REST endpoints.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (Database connections and queries must execute strictly on the server).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To access database tables (such as a users table) in traditional web programs, developers had to write raw, imperative SQL query strings (e.g. `SELECT * FROM users WHERE id = $1`). This is tedious and vulnerable to SQL injection attacks.
@@ -69,7 +70,7 @@ To prevent this, you must store the Prisma client instance on the Node.js global
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Importing the database client inside Client Components
 
@@ -136,89 +137,137 @@ const users = await prisma.user.findMany({ take: 20, skip: 0 }); // Paginated qu
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Prisma Client Singleton
+### Exercise 1: Instantiating Prisma Client Singleton for Next.js
 
-**Problem:** Complete the database setup utility below to prevent creating duplicate connection client instances during local development hot-reloads:
+**Scenario:**
+Create a global Prisma client singleton instance `lib/prisma.ts` to prevent connection pool exhaustion during Next.js hot module reloading (HMR).
 
-```typescript
-// lib/db.ts
-import { PrismaClient } from '@prisma/client';
+**Requirements:**
+1. Attach `prisma` to `globalThis` in development.
 
-// Solution:
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // lib/prisma.ts
+> import { PrismaClient } from "@prisma/client";
+
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log: ['query'],
-  });
+export const prisma = globalForPrisma.prisma ?? new PrismaClient();
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
 ```
 
-> [!check]- Answer
-> - Attach the initialized `PrismaClient` to `globalThis` when not in a production environment to reuse the instance.
+> #### Technical Explanation
+>
+> 1. Next.js development HMR re-evaluates server files frequently, which would spawn hundreds of duplicate Prisma DB connections.
+> 2. Attaching the client instance to `globalThis` reuses a single connection pool across hot reloads.
+> 3. Mandatory setup pattern for Prisma ORM with Next.js.
 
 ---
 
-### Exercise 2: Prisma Singleton File Pattern
+### Exercise 2: Querying Database Records in Server Components
 
-**Problem:** Write `lib/db.ts` Prisma singleton exporting a single reusable `prisma` instance across Next.js HMR reloads.
+**Scenario:**
+Query a list of users directly inside a Server Component using `prisma.user.findMany()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `await prisma.user.findMany()` inside async RSC.
+
 > [!check]- Answer
-> ```typescript
-> import { PrismaClient } from '@prisma/client'; const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }; export const prisma = globalForPrisma.prisma || new PrismaClient(); if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
-> ```
-> - Global singleton pattern prevents connection leaks during dev HMR.
-> 
-> ```typescript
-> import { PrismaClient } from '@prisma/client';
-> 
-> const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
-> 
-> export const prisma = globalForPrisma.prisma ?? new PrismaClient();
-> 
-> if (process.env.NODE_ENV !== 'production') {
->   globalForPrisma.prisma = prisma;
-> }
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> // app/users/page.tsx
+> import { prisma } from "@/lib/prisma";
+
+export default async function UsersPage() {
+  const users = await prisma.user.findMany({
+    where: { active: true },
+    select: { id: true, name: true, email: true }
+  });
+
+  return (
+    <main className="p-6">
+      <h1 className="text-2xl font-bold">Active Users</h1>
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>{user.name} ({user.email})</li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Server Components execute on the Node.js server, allowing direct, type-safe Prisma database queries.
+> 2. Database connection strings and SQL queries never leak to client JavaScript bundles.
+> 3. Replaces intermediate REST API endpoints.
 
 ---
 
-### Exercise 3: Prisma Select Optimization
+### Exercise 3: Mutating Database Records inside Server Actions
 
-**Problem:** How does specifying `select: { id: true, name: true }` in Prisma queries improve Next.js performance?
+**Scenario:**
+Create a new user record inside a Server Action using `prisma.user.create()` and revalidate the path.
 
-**Expected output:**
+**Requirements:**
+1. Execute `await prisma.user.create()` in Server Action.
+
 > [!check]- Answer
-> ```text
-> It fetches ONLY required fields from SQL database, reducing network payload size and database memory footprint.
-> ```
-> - `select` reduces SQL database query payload sizes.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> const users = await prisma.user.findMany({
->   select: { id: true, name: true }
-> });
-> ```
+> // app/actions/user.ts
+> "use server";
+
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+
+export async function createUser(formData: FormData) {
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
+
+  await prisma.user.create({
+    data: { name, email }
+  });
+
+  revalidatePath("/users");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Server Actions execute asynchronously on the server, making them ideal for Prisma database mutations.
+> 2. `revalidatePath('/users')` invalidates static route cache data, automatically updating the UI.
+> 3. End-to-end type-safe full-stack mutation pattern.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [React Server Components (RSC)](../level_01/rsc.md) — The secure server execution context.
 - [`React.cache()` Function](react_cache.md) — How you deduplicate ORM requests.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - ORMs translate database tables into type-safe JavaScript objects.
 - Next.js Server Components query databases directly, removing API route requirements.
 - Never import database clients or run queries inside Client Components.

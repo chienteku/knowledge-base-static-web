@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **React Architecture**
+
+**Framework Architecture** (React Component Foundations): React Components are modular, reusable UI building blocks composing user interfaces across client and server boundaries.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Runs on the server during pre-rendering, and in the browser during interactivity).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional web development, a page is a single, large HTML document styled with CSS and manipulated using imperative JavaScript (e.g. `document.getElementById('btn').addEventListener(...)`). As applications grow, this makes code maintenance difficult because the layout (HTML), styles (CSS), and logic (JS) are separated across different files, making the UI fragile and hard to update.
@@ -84,7 +85,7 @@ In Next.js, components can render in one of two modes:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Mutating component props directly
 
@@ -148,78 +149,133 @@ export default function Parent() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Create a Stateful Button
+### Exercise 1: Authoring Functional React Components with TypeScript Props
 
-**Problem:** Complete the component below to accept a `label` prop and type it strictly in TypeScript:
+**Scenario:**
+Create a reusable, typed Card component accepting `title`, `description`, and `children`.
 
-```typescript
-// components/Button.tsx
-import React from 'react';
+**Requirements:**
+1. Export default React component with typed props.
 
-// Solution:
-interface ButtonProps {
-  label: string;
-}
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> interface CardProps {
+>   title: string;
+>   description?: string;
+>   children?: React.ReactNode;
+> }
 
-export default function Button({ label }: ButtonProps) {
+export default function Card({ title, description, children }: CardProps) {
   return (
-    <button className="primary-btn">
-      {label}
-    </button>
+    <div className="p-6 bg-white border rounded-lg shadow-sm">
+      <h2 className="text-xl font-bold">{title}</h2>
+      {description && <p className="text-gray-600 mt-2">{description}</p>}
+      <div className="mt-4">{children}</div>
+    </div>
   );
 }
 ```
 
-> [!check]- Answer
-> - Define a TypeScript interface for the component props containing a required `label` string field.
+> #### Technical Explanation
+>
+> 1. Functional React components accept typed `props` objects to render JSX elements.
+> 2. `React.ReactNode` type argument allows passing arbitrary nested JSX elements into `children`.
+> 3. Foundation of component-driven React design systems.
 
 ---
 
-### Exercise 2: Server Component Default Rule
+### Exercise 2: Composing UI Layouts using Nested Components
 
-**Problem:** In the Next.js App Router, are components in the `app/` directory React Server Components (RSC) or Client Components by default?
+**Scenario:**
+Compose a dashboard layout combining Header, Sidebar, and Content components.
 
-**Expected output:**
+**Requirements:**
+1. Render nested sub-components.
+
 > [!check]- Answer
-> ```text
-> React Server Components (RSC) by default unless marked with 'use client'.
-> ```
-> - All components in `app/` are Server Components by default.
-> 
-> ```text
-> Default = Server Component; 'use client' = Client Component.
-> ```
-
----
-
-### Exercise 3: Component Props Typing in TSX
-
-**Problem:** Write TypeScript interface and functional component definition for `UserCard` accepting `name: string` and optional `age?: number`.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> interface UserCardProps { name: string; age?: number; } export function UserCard({ name, age }: UserCardProps) { return <div>{name}</div>; }
-> ```
-> - Type component props using explicit TypeScript interfaces.
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> interface UserCardProps {
->   name: string;
->   age?: number;
+> function Header() {
+>   return <header className="h-16 bg-blue-600 text-white p-4">App Header</header>;
 > }
-> 
-> export function UserCard({ name, age }: UserCardProps) {
->   return <div>{name} ({age ?? 'N/A'})</div>;
+
+function Sidebar() {
+  return <aside className="w-64 bg-gray-800 text-white p-4">Sidebar Navigation</aside>;
+}
+
+export default function DashboardShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <div className="flex flex-1">
+        <Sidebar />
+        <main className="flex-1 p-6">{children}</main>
+      </div>
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Component composition breaks complex user interfaces into small, modular building blocks.
+> 2. Encourages reusability and maintainable code architecture.
+> 3. Primary React UI design paradigm.
+
+---
+
+### Exercise 3: Conditional Rendering in React Components
+
+**Scenario:**
+Render loading state, error alert, or user data conditionally based on props.
+
+**Requirements:**
+1. Use ternary operators and logical AND (`&&`) for conditional rendering.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> interface ViewStateProps {
+>   isLoading: boolean;
+>   error?: string;
+>   user?: { name: string };
 > }
-> ```
+
+export default function UserViewState({ isLoading, error, user }: ViewStateProps) {
+  if (isLoading) return <div>Loading User...</div>;
+  if (error) return <div className="text-red-500">Error: {error}</div>;
+
+  return (
+    <div>
+      {user ? <h1>Welcome, {user.name}</h1> : <p>Guest User</p>}
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. React components evaluate JavaScript expressions directly inside JSX `{}` tags.
+> 2. Early return statements (`if (isLoading)`) simplify complex conditional template logic.
+> 3. Declarative UI rendering logic.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [React Server Components (RSC)](rsc.md) — Components executing exclusively on the server.
 - [Client Components (`"use client"`)](client_components.md) — Interactive components executed on both server and client.
 - [React Hooks](react_hooks.md) — Related concept: React Hooks.
@@ -228,7 +284,7 @@ export default function Button({ label }: ButtonProps) {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - React Components are independent, reusable building blocks of user interfaces.
 - Props allow you to pass configuration data down the component tree.
 - Props must be treated as read-only, immutable values.

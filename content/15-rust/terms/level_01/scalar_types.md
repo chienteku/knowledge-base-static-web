@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: A general programming concept (primitive data types), though Rust's specific integer naming convention (`i32`, `u8`) is distinct.
+
+
+**Rust Core Primitives (fixed-width numeric & boolean types)**: A general programming concept (primitive data types), though Rust's specific integer naming convention (`i32`, `u8`) is distinct.
 
 ---
 

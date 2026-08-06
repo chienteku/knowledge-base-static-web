@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Borrowing Trait**: `std::borrow::Borrow` for abstraction over owned and borrowed data with hash equality invariants.
+
+
+**Rust Standard Trait (borrowed reference abstraction)**: `std::borrow::Borrow` for abstraction over owned and borrowed data with hash equality invariants.
 
 ---
 

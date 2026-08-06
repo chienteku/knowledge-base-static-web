@@ -15,17 +15,15 @@
 
 ## 2. Term Category
 
-**Syntax / Language Feature**: A Token Stream is the fundamental data representation used by Rust procedural macros. Exposed by the compiler's built-in `proc_macro` crate as `proc_macro::TokenStream` (and mirrored in ecosystem crates as `proc_macro2::TokenStream`), it represents Rust source code not as raw plain text strings, but as an abstract sequence of lexical tokens and nested token trees.
+
+
+**Rust Compiler API (lexical token sequence type)**: A Token Stream is the fundamental data representation used by Rust procedural macros. Exposed by the compiler's built-in `proc_macro` crate as `proc_macro::TokenStream` (and mirrored in ecosystem crates as `proc_macro2::TokenStream`), it represents Rust source code not as raw plain text strings, but as an abstract sequence of lexical tokens and nested token trees.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust (Host Compiler Context)**: `proc_macro::TokenStream` is available exclusively within procedural macro crates running on the build host during compilation. Ecosystem code outside proc macro crates uses `proc_macro2::TokenStream` to enable unit testing and out-of-proc-macro code generation.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -117,7 +115,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating `TokenStream` as a Plain String for Code Generation
 
@@ -208,17 +206,21 @@ fn process_stream(stream: proc_macro2::TokenStream) {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Recursive Embedded Hardware Config Token Stream Analyzer
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In an embedded firmware generator or micro-DSL parser, configuration blocks contain hardware register declarations, pin definitions, and telemetry metadata nested inside groups such as:
 `config! { pins: { pin_a: 1, pin_b: 2 }, telemetry: [baud_9600, parity_none] }`
 
+**Requirements:**
 Write a recursive analyzer function `fn analyze_dsl_tokens(stream: TokenStream, idents: &mut Vec<String>, literals: &mut Vec<String>)` using `proc_macro2` that inspects all nested `TokenTree::Group` nodes, collects all identifier names into `idents`, and collects all literal values into `literals`. Include unit tests with assertions proving that nested group contents are successfully extracted.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use proc_macro2::{TokenStream, TokenTree};
 > use quote::quote;
@@ -289,7 +291,8 @@ Write a recursive analyzer function `fn analyze_dsl_tokens(stream: TokenStream, 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Group Recursion:** A `TokenStream` preserves code hierarchy by wrapping enclosed blocks (`{...}`, `[...]`, `(...)`) inside `TokenTree::Group`. Flat iteration only visits the `Group` node itself; calling `group.stream()` extracts the inner `TokenStream` for recursive inspection.
 > 2. **Variant Destructuring:** Using `match tt`, we discriminate between `TokenTree::Ident` (names), `TokenTree::Literal` (values), `TokenTree::Punct` (operators/delimiters), and `TokenTree::Group` (nested sub-streams).
 > 3. **Verification Assertions:** The unit test constructs a `TokenStream` using `quote!`, runs `analyze_dsl_tokens`, and validates exact item collections using `assert_eq!` and membership checks using `assert!`.
@@ -298,12 +301,16 @@ Write a recursive analyzer function `fn analyze_dsl_tokens(stream: TokenStream, 
 
 ### Exercise 2: Real-Time Telemetry Identifier Prefixing & Span-Preserving Token Rewriter
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In an IoT sensor telemetry library, procedural macros modify user-provided macro code blocks to prevent symbol collisions by prepending a prefix (e.g. `sensor_`) to all identifiers. For instance, `read_adc(adc_ch0, 100);` must be transformed into `sensor_read_adc(sensor_adc_ch0, 100);`.
 
+**Requirements:**
 Write a function `fn prefix_telemetry_idents(stream: TokenStream, prefix: &str) -> TokenStream` using `proc_macro2` that rewrites all identifiers, preserves original group delimiters and `Span` metadata, and include unit tests verifying token structures and strings.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use proc_macro2::{Ident, TokenStream, TokenTree};
 > use quote::quote;
@@ -383,7 +390,8 @@ Write a function `fn prefix_telemetry_idents(stream: TokenStream, prefix: &str) 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Span Preservation:** Creating new identifiers using `Ident::new(&new_name, original_ident.span())` transfers source location metadata to the new token. If compiler errors occur on the generated code, `rustc` correctly highlights the original source line.
 > 2. **Group Reconstruction:** Groups cannot be mutated in-place; we build a new `proc_macro2::Group` containing the recursively transformed inner stream and copy the original span via `.set_span(group.span())`.
 > 3. **Token Accumulation:** Transformed `TokenTree` instances are appended into a new `TokenStream` via `output.extend(std::iter::once(transformed_tt))`.
@@ -392,9 +400,10 @@ Write a function `fn prefix_telemetry_idents(stream: TokenStream, prefix: &str) 
 
 ### Exercise 3: Low-Level Peripheral Register Bitmask Token Sequence Validator
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In bare-metal embedded Rust driver development, procedural macros validate bitwise flag combinations passed into register configuration macros, such as `(CTRL_ENABLE | CTRL_INTERRUPT) << 2`.
 
+**Requirements:**
 Write a validation function `fn validate_register_expression(stream: TokenStream) -> Result<usize, String>` using `proc_macro2` that inspects a `TokenStream`, verifying that:
 1. Every punctuation token belongs to an allowed set of register operators (`|`, `&`, `^`, `~`, `<`, `>`).
 2. Disallowed operators or punctuation (such as `;`, `$`, or `@`) immediately return a descriptive `Err(String)`.
@@ -403,6 +412,9 @@ Write a validation function `fn validate_register_expression(stream: TokenStream
 Write unit tests verifying both success cases (correct operator count) and failure cases (error message content).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use proc_macro2::{Spacing, TokenStream, TokenTree};
 > use quote::quote;
@@ -472,14 +484,15 @@ Write unit tests verifying both success cases (correct operator count) and failu
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Punctuation Inspection:** `TokenTree::Punct` provides `.as_char()` to inspect the single character of the punctuation token and `.spacing()` (`Spacing::Joint` vs `Spacing::Alone`) to detect multi-character tokens like `<<`.
 > 2. **Early Error Propagation:** Using the `?` operator on recursive `validate_register_expression(group.stream())?` calls ensures any invalid token inside nested parentheses immediately short-circuits execution and bubbles up the `Err(String)`.
 > 3. **Validation Assertions:** Unit tests check `result.is_ok()`, assert exact operator counts with `assert_eq!`, and verify error handling using `result.is_err()` and substring assertions.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Procedural Macros](procedural_macros.md) — The metaprogramming function features that consume and produce token streams.
@@ -493,7 +506,7 @@ Write unit tests verifying both success cases (correct operator count) and failu
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `TokenStream` (`proc_macro::TokenStream` / `proc_macro2::TokenStream`) represents source code as lexical tokens.
 - It consists of four fundamental `TokenTree` variants: `Group`, `Ident`, `Punct`, and `Literal`.

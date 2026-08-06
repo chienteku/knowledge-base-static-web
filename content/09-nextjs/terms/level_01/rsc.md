@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **React Server Component**
+
+**React Server Component** (React Server Components Architecture): React Server Components (RSC) execute exclusively on the server, streaming zero-bundle-size HTML flight data to the client.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Historically, React components ran on the client (the browser). If a component needed the `date-fns` library to format a date, the user's browser had to download the entire `date-fns` JS library. If a component needed database data, the browser had to make a network request, wait for the response, and then render.
@@ -59,7 +60,7 @@ If you need any of these, you must use a [Client Component](../level_01/client_c
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to add interactivity to a Server Component
 
@@ -116,65 +117,116 @@ const [user, posts] = await Promise.all([fetchUser(), fetchPosts()]);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Bundle Size
+### Exercise 1: Accessing Database Resources Directly in Server Components
 
-**Problem:** You have a Server Component that imports a massive 5MB markdown-parsing library to convert a database string into HTML. How much of that 5MB library is downloaded by the user's browser?
+**Scenario:**
+Query a PostgreSQL database directly inside a React Server Component using `pg` or an ORM.
 
-**Expected output:**
+**Requirements:**
+1. Query database inside async RSC component without API routes.
+
 > [!check]- Answer
-> ```text
-> Zero! 0 bytes.
-> Because the component executes exclusively on the server, the library is executed on the server, and only the resulting HTML string is sent to the browser. This is the superpower of RSCs!
-> ```
-> - Think about where the code executes.
-
----
-
-### Exercise 2: Async RSC Component Syntax
-
-**Problem:** Write async React Server Component `UserPage({ params })` fetching user data directly with `await` and rendering user name.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> export default async function UserPage({ params }: { params: { id: string } }) { const user = await db.user.findUnique({ where: { id: params.id } }); return <h1>{user?.name}</h1>; }
-> ```
-> - RSC components can be `async` functions fetching data directly.
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> export default async function UserPage({
->   params
-> }: {
->   params: { id: string }
-> }) {
->   const user = await db.user.findUnique({ where: { id: params.id } });
->   return <h1>{user?.name}</h1>;
-> }
-> ```
+> // app/posts/page.tsx
+> import { db } from "@/lib/db";
+
+export default async function PostsPage() {
+  // Direct database query on Node.js server!
+  const posts = await db.query("SELECT id, title FROM posts LIMIT 10");
+
+  return (
+    <main className="p-6">
+      <h1 className="text-2xl font-bold">Latest Posts</h1>
+      <ul>
+        {posts.rows.map((post: any) => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. React Server Components execute exclusively on the server, allowing direct database or file system access.
+> 2. Database access credentials and query logic never leak to the client browser.
+> 3. Eliminates building intermediate API routes solely for component data fetching.
 
 ---
 
-### Exercise 3: RSC Bundle Advantage
+### Exercise 2: Verifying Zero Client Bundle Footprint for RSC Dependencies
 
-**Problem:** Why do React Server Component dependencies (e.g. heavy markdown parsers like `marked`) NOT add weight to the browser client JS bundle?
+**Scenario:**
+Import a heavy 500KB Markdown parsing library inside a Server Component and verify client JS bundle size.
 
-**Expected output:**
+**Requirements:**
+1. Import library in Server Component.
+
 > [!check]- Answer
-> ```text
-> Server Components execute exclusively on the server. Their code dependencies are executed on the server and stripped from the browser JavaScript bundle.
-> ```
-> - RSC dependencies stay on the server, reducing client bundle size.
-> 
-> ```text
-> Zero client bundle impact for server-only dependencies.
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> // app/article/page.tsx
+> import { marked } from "marked";
+
+export default async function ArticlePage({ content }: { content: string }) {
+  const html = marked(content);
+
+  return (
+    <article className="prose" dangerouslySetInnerHTML={{ __html: html }} />
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Server Component dependencies (`marked`) are executed on the server and stripped from client JavaScript bundles.
+> 2. Client receives only the rendered static HTML output.
+> 3. Significantly reduces total client bundle download size.
+
+---
+
+### Exercise 3: Auditing RSC Serialization Boundaries
+
+**Scenario:**
+Explain why passing non-serializable objects (functions, Symbol, class instances) as props from Server Components to Client Components throws a serialization error.
+
+**Requirements:**
+1. Contrast serializable JSON props vs non-serializable props.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // ❌ INCORRECT (Functions cannot be passed across RSC boundary):
+> // <ClientButton onClick={() => console.log('click')} />
+
+// ✅ CORRECT (Pass serializable primitive data props):
+// <ClientButton productId="123" />
+```
+
+> #### Technical Explanation
+>
+> 1. Props passed across the Server-to-Client boundary are serialized as JSON-like flight data streams.
+> 2. Functions and non-serializable class instances cannot be serialized over flight streams.
+> 3. Always pass serializable data primitives across RSC boundaries.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Client Components (`"use client"`)](client_components.md) — The interactive counterpart to RSCs.
 - [Dynamic Rendering (SSR)](../level_08/ssr.md) — A related, but distinct concept about generating initial HTML.
 - [App Router vs Pages Router](app_router_vs_pages.md) — Related concept: App Router vs Pages Router.
@@ -190,7 +242,7 @@ const [user, posts] = await Promise.all([fetchUser(), fetchPosts()]);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - In the Next.js App Router, **all components are Server Components by default**.
 - They execute entirely on the server and send zero JavaScript to the client.
 - They allow you to write `async/await` directly in your component to fetch data from databases or APIs.

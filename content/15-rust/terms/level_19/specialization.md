@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Type System**: Trait specialization allowing specialized implementations for specific types.
+
+
+**Rust Experimental Feature (overlapping generic trait specialization)**: Trait specialization allowing specialized implementations for specific types.
 
 ---
 
@@ -252,7 +254,7 @@ Rust requires explicit default impl annotations for specialization!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Blanket Implementation](../level_14/blanket_implementation.md) — Overriding blanket implementations.
 - [Nightly Compiler](nightly_compiler.md) — Related concept: Nightly Compiler.

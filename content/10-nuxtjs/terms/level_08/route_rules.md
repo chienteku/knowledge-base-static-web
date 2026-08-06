@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing**
+
+**Rendering Strategy** (Route-Level Hybrid Rendering Configuration): `routeRules` configures per-route rendering strategies (SWR, ISR, SSG, SPA) and proxy rules in `nuxt.config.ts`.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server / Build-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Historically, if you wanted to change how a framework behaved, it was an "all or nothing" decision. You either made your *entire* site a Single Page App (SPA), or your *entire* site Server-Side Rendered (SSR).
@@ -60,7 +61,7 @@ The `{ swr: 60 }` rule is incredible for high-traffic sites. If 1,000 users visi
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing Route Rules with Route Middleware
 **The mistake:** Trying to use Route Rules to secure an admin dashboard.
@@ -112,84 +113,105 @@ routeRules: { '/live-ticker': { ssr: false } } // Disable SSR for real-time clie
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Hybrid Architecture
+### Exercise 1: Configuring SWR Edge Caching with `routeRules`
 
-**Problem:** You are building a Nuxt app. The default is SSR. Write the `routeRules` block to achieve two things:
-1. Make every route under `/app/` render as a Single Page App (No SSR).
-2. Ensure requests to `/api/v1/public` include CORS headers.
+**Scenario:**
+Configure Stale-While-Revalidate caching for all product pages (`/products/**`) for 10 minutes in `nuxt.config.ts`.
 
-**Expected output:**
+**Requirements:**
+1. Configure `routeRules` with `swr: 600`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // nuxt.config.ts
 > export default defineNuxtConfig({
 >   routeRules: {
->     '/app/**': { ssr: false },
->     '/api/v1/public/**': { cors: true }
->   }
-> })
-> ```
-> - Map glob patterns to specific rule targets: `/app/**` maps to `{ ssr: false }` and `/api/v1/public/**` maps to `{ cors: true }`.
-
----
-
-### Exercise 2: Hybrid Rendering routeRules Matrix
-
-**Problem:** Write `nuxt.config.ts` `routeRules` configuring:
-1. `/` -> Prerender static SSG
-2. `/blog/**` -> SWR cache for 1 hour (3600s)
-3. `/admin/**` -> SPA mode (`ssr: false`)
-4. `/old-path` -> Redirect to `/new-path` (301)
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> export default defineNuxtConfig({
->   routeRules: {
->     '/': { prerender: true },
->     '/blog/**': { swr: 3600 },
->     '/admin/**': { ssr: false },
->     '/old-path': { redirect: { to: '/new-path', statusCode: 301 } }
->   }
-> });
-> ```
-> - `routeRules` configures per-route hybrid rendering and caching.
-> 
-> ```typescript
-> export default defineNuxtConfig({
->   routeRules: {
->     '/': { prerender: true },
->     '/blog/**': { swr: 3600 },
->     '/admin/**': { ssr: false },
->     '/old-path': { redirect: { to: '/new-path', statusCode: 301 } }
+>     "/products/**": { swr: 600 },
+>     "/blog/**": { isr: 3600 }
 >   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `swr: 600` caches rendered HTML responses at the CDN/server edge for 600 seconds (10 minutes).
+> 2. Subsequent requests receive instant cached responses while revalidating fresh HTML in the background.
+> 3. Core Hybrid Rendering optimization feature.
+
 ---
 
-### Exercise 3: routeRules CORS Config
+### Exercise 2: Setting Custom Response Headers and Redirect Rules
 
-**Problem:** Write `routeRules` snippet applying `cors: true` headers to all API endpoints under `/api/**`.
+**Scenario:**
+Configure permanent 301 redirects from `/old-about` to `/about` and attach CORS headers to `/api/**`.
 
-**Expected output:**
+**Requirements:**
+1. Configure `redirect` and `headers` in `routeRules`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> routeRules: { '/api/**': { cors: true } }
+> // nuxt.config.ts
+> export default defineNuxtConfig({
+>   routeRules: {
+>     "/old-about": { redirect: { to: "/about", statusCode: 301 } },
+>     "/api/**": {
+>       headers: { "Access-Control-Allow-Origin": "*" }
+>     }
+>   }
+> });
 > ```
-> - `cors: true` adds CORS headers to matching route patterns.
-> 
+
+> #### Technical Explanation
+>
+> 1. `redirect` rule delegates HTTP redirects directly to the Nitro engine layer without booting Vue application logic.
+> 2. `headers` attaches default HTTP headers to all matching route responses.
+> 3. High performance server configuration rule.
+
+---
+
+### Exercise 3: Configuring SPA Fallback Rendering for Protected Apps
+
+**Scenario:**
+Disable server SSR rendering for all dashboard routes (`/app/**`) to run as a pure client-side SPA.
+
+**Requirements:**
+1. Configure `ssr: false` in `routeRules`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> routeRules: {
->   '/api/**': { cors: true }
-> }
+> // nuxt.config.ts
+> export default defineNuxtConfig({
+>   routeRules: {
+>     "/app/**": { ssr: false }
+>   }
+> });
 > ```
+
+> #### Technical Explanation
+>
+> 1. `ssr: false` disables server-side rendering for matched paths, sending a lightweight HTML wrapper to the browser.
+> 2. Client browser executes full rendering as a Single Page Application (SPA).
+> 3. Reduces server Node.js CPU rendering overhead for authenticated user dashboards.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Hybrid Rendering](../level_09/hybrid_rendering.md) — The architectural pattern that Route Rules enables.
 - [Static Site Generation (SSG)](../level_09/ssg.md) — The `prerender: true` rule.
 - [Single Page Application (SPA) Mode](../level_09/spa.md) — Related concept: Single Page Application (SPA) Mode.
@@ -197,7 +219,7 @@ routeRules: { '/live-ticker': { ssr: false } } // Disable SSR for real-time clie
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `routeRules` in `nuxt.config.ts` give you fine-grained control over specific URLs.
 - You can mix SSR, SPA, and SSG in the exact same application.
 - Use `{ ssr: false }` to disable server rendering for highly dynamic or secure routes.

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **React Component Pattern**
+
+**React Server Component** (Layout Children Composition): `children` prop passes nested child route components into layouts and templates without triggering unnecessary re-renders.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Used for layout compositions rendered on the server and updated in the browser).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In web design, many pages share a common outer layout structure (like a side navigation drawer, a header brand bar, and a footer banner). If a developer had to duplicate this wrapper code inside every single page component file, it would lead to massive duplication.
@@ -102,7 +103,7 @@ export default function Page() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Typing `children` as `any` in TypeScript
 
@@ -162,96 +163,138 @@ function Layout({ children }: { children: React.ReactNode }) // Strongly typed R
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Create a Layout Wrapper
+### Exercise 1: Typing and Passing Children Props in Layouts
 
-**Problem:** Complete the prop interface and layout component below to strictly type the `children` prop:
+**Scenario:**
+Type and render `children` inside a TypeScript App Router layout component.
 
-```typescript
-// components/SidebarLayout.tsx
-import React from 'react';
-
-// Solution:
-interface SidebarLayoutProps {
-  children: React.ReactNode;
-}
-
-export default function SidebarLayout({ children }: SidebarLayoutProps) {
-  return (
-    <div className="flex">
-      <aside className="w-64 bg-gray-800 text-white">Navigation Sidebar</aside>
-      <main className="flex-1 p-6">{children}</main>
-    </div>
-  );
-}
-```
+**Requirements:**
+1. Use `React.ReactNode` type annotation for `{ children }`.
 
 > [!check]- Answer
-> - Import `React` and type the layout prop using `React.ReactNode`.
-
----
-
-### Exercise 2: Root Layout TypeScript Props Pattern
-
-**Problem:** Write App Router `RootLayout` component accepting `children` typed with `React.ReactNode`, rendering `<html>` and `<body>` tags.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> export default function RootLayout({ children }: { children: React.ReactNode }) { return ( <html lang="en"> <body>{children}</body> </html> ); }
-> ```
-> - Root Layout MUST contain `<html>` and `<body>` tags.
-> 
-> ```tsx
-> export default function RootLayout({
+> export default function SectionLayout({
 >   children
 > }: {
 >   children: React.ReactNode;
 > }) {
 >   return (
->     <html lang="en">
->       <body>{children}</body>
->     </html>
+>     <section className="container mx-auto p-4">
+>       <header className="mb-4">Section Header</header>
+>       <main>{children}</main>
+>     </section>
 >   );
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. Next.js automatically injects active child route components into layout `children` props.
+> 2. `React.ReactNode` encompasses all valid renderable JSX elements, strings, fragments, and arrays.
+> 3. Guarantees type safety for nested component slot layouts.
+
 ---
 
-### Exercise 3: Parallel Routes Slot Props
+### Exercise 2: Composing Multiple Named Slot Props
 
-**Problem:** Besides `children`, which additional props do Layout components receive when using Parallel Routes (e.g. `@analytics`)?
+**Scenario:**
+Pass parallel route slot components (`@analytics`, `@team`) into a layout file.
 
-**Expected output:**
+**Requirements:**
+1. Type multiple slot props `{ children, analytics, team }`.
+
 > [!check]- Answer
-> ```text
-> Slot props matching the parallel route folder name (e.g. { children, analytics }).
-> ```
-> - Parallel routes pass named slot props to parent layouts.
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> export default function Layout({
+> // app/dashboard/layout.tsx
+> export default function ParallelDashboardLayout({
 >   children,
->   analytics
+>   analytics,
+>   team
 > }: {
 >   children: React.ReactNode;
 >   analytics: React.ReactNode;
+>   team: React.ReactNode;
 > }) {
->   return <div>{children}{analytics}</div>;
+>   return (
+>     <div className="grid grid-cols-2 gap-4 p-6">
+>       <div>{children}</div>
+>       <div>{analytics}</div>
+>       <div className="col-span-2">{team}</div>
+>     </div>
+>   );
 > }
 > ```
+
+> #### Technical Explanation
+>
+> 1. Next.js App Router parallel routes (`@folder`) pass named slot props directly to layouts.
+> 2. Allows rendering multiple independent pages side-by-side in the same layout view.
+> 3. Flexible layout composition pattern.
+
+---
+
+### Exercise 3: Preserving Layout Component State
+
+**Scenario:**
+Demonstrate that input state inside `layout.tsx` is preserved while user navigates between child routes (`children`).
+
+**Requirements:**
+1. Add interactive state input in layout shell.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { useState } from "react";
+import Link from "next/link";
+
+export default function NavLayout({ children }: { children: React.ReactNode }) {
+  const [search, setSearch] = useState("");
+
+  return (
+    <div>
+      <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Filter..." />
+      <nav className="flex gap-4">
+        <Link href="/dashboard/overview">Overview</Link>
+        <Link href="/dashboard/settings">Settings</Link>
+      </nav>
+      <div>{children}</div>
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Layouts persist across route navigations, maintaining local component state (`search`).
+> 2. Only the `children` prop component unmounts and updates during route transitions.
+> 3. Superior user experience compared to re-mounting whole page trees.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [React Components](../level_01/react_components.md) — The parent units that wrap children.
 - [`layout.tsx`](layout.md) — The primary Next.js file that wraps pages via the children prop.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `children` prop allows components to wrap and compose other React nodes.
 - Component composition reduces duplication by sharing layouts.
 - In Next.js, wrap Server Components as children inside Client Components to retain server-only execution benefits.

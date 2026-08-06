@@ -155,7 +155,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Resilient Worker Thread Pool with Panic Payload Extraction and Isolated Task Recovery
 
-**Problem:**
+**Scenario:**
 In high-throughput multi-threaded worker pools, individual tasks submitted by plugins or external code may encounter bug-induced panics. A crash in a single task must not terminate the worker thread or corrupt shared monitoring telemetry.
 
 Design a `TaskRunner` system that:
@@ -310,7 +310,7 @@ Design a `TaskRunner` system that:
 
 ### Exercise 2: Structured Telemetry Panic Hook with Custom Panic Payload Logging & Contextual Stack Capture
 
-**Problem:**
+**Scenario:**
 In production microservices, relying on raw stderr panic prints makes incident debugging difficult because unstructured log streams lack structured telemetry fields like thread names and exact source code line coordinates.
 
 Implement a telemetry recorder `TelemetryLogger` that:
@@ -425,7 +425,7 @@ Implement a telemetry recorder `TelemetryLogger` that:
 
 ### Exercise 3: FFI Exception Boundary Guard & Abort Safety Wrapper
 
-**Problem:**
+**Scenario:**
 When exporting Rust library functions to C/C++ via dynamic libraries or Foreign Function Interfaces (FFI), permitting a Rust stack panic to unwind across an `extern "C"` binary interface boundary triggers Undefined Behavior (UB) or forces process termination.
 
 Design an FFI-safe exception boundary function `ffi_exception_guard` that:

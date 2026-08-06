@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Embedded Tooling**: `svd2rust` generator for Peripheral Access Crates (PACs).
+
+
+**Rust Embedded Tooling (SVD-to-PAC code generator tool)**: `svd2rust` generator for Peripheral Access Crates (PACs).
 
 ---
 

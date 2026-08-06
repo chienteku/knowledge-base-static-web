@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (query selection statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the server query execution planner. Maps index trees to compile projection blocks in memory before returning JSON responses to clients).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Data retrieval is the most frequent action in databases.
@@ -80,7 +79,7 @@ SELECT * FROM [user:tobie, user:alice];
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing slow 'WHERE id = user:john' filters to fetch a single record, instead of targeting the Record ID directly in the 'FROM' clause
 
@@ -136,60 +135,96 @@ SELECT * FROM user; // ❌ Exposes all fields unless permissions filter
 SELECT id, name, email FROM user; // Explicit column projection
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Projective Query Translation
+### Exercise 1: Tabular Selection with Field Alias Expressions
 
-**Problem:** You have a `companies` table. Write the SurrealQL query to:
-1.  Retrieve the `name` field, aliasing it as `company_name`.
-2.  Retrieve the nested `city` field from the `address` object (`address: { city: "Paris" }`).
-3.  Target only the company record with ID `company:acme`.
+**Scenario:**
+An employee directory API selects employee names, calculates annual salaries from monthly pay, and aliases the calculated field as `annual_salary`.
 
-**Expected output:**
+**Requirements:**
+1. Create employee `employee:e1` with `name = "Alice"` and `monthly_pay = 5000dec`.
+2. Select `name` and `monthly_pay * 12dec AS annual_salary`.
+
 > [!check]- Answer
-> ```sql
-> SELECT name AS company_name, address.city FROM company:acme;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE employee:e1 SET name = "Alice", monthly_pay = 5000dec;
+> 
+> -- Tabular query with field aliasing and arithmetic calculation
+> SELECT name, monthly_pay * 12dec AS annual_salary FROM employee:e1;
 > ```
-> - The target source is a specific Record ID, not the whole table name.
-> - Chain sub-properties using dot notation: `address.city`.
+>
+> #### Technical Explanation
+>
+> 1. `SELECT field1, field2 FROM <table>` projects targeted fields from record collections.
+> 2. `AS alias_name` renames projected fields or calculated expressions in the output JSON.
+> 3. Evaluates arithmetic calculations on the database server during query execution.
+
+---
+
+### Exercise 2: Selecting Nested Object Properties
+
+**Scenario:**
+A profile service selects a user's display name and nested notification preference `settings.email_notifications`.
+
+**Requirements:**
+1. Create profile `profile:p1` with nested `settings = { theme: "dark", email_notifications: true }`.
+2. Write a `SELECT` query projecting `name` and `settings.email_notifications`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE profile:p1 SET 
+>     name = "Bob",
+>     settings = { theme: "dark", email_notifications: true };
+> 
+> -- Project nested object field directly
+> SELECT name, settings.email_notifications FROM profile:p1;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Dot-notation (`settings.email_notifications`) extracts nested object properties directly in projection lists.
+> 2. Avoids fetching unneeded sibling properties (`settings.theme`), saving payload bandwidth.
+> 3. Blends SQL column selection with NoSQL document traversal.
+
+---
+
+### Exercise 3: Selecting All Fields with Wildcard (`*`)
+
+**Scenario:**
+Retrieve complete record documents from table `product` for debugging purposes using the wildcard `*` projection operator.
+
+**Requirements:**
+1. Write a `SELECT * FROM product;` query.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE product:p1 SET name = "Widget", price = 10.00dec;
+> 
+> -- Wildcard full-record selection
+> SELECT * FROM product;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SELECT *` projects all field properties for every matching record in the target table.
+> 2. Returns an array of full JSON record objects.
+> 3. Equivalent to standard SQL `SELECT *` and MongoDB `db.collection.find({})`.
 
 ---
 
 
 
-### Exercise 2: Aliasing Projected Expressions
-
-**Problem:** Select `first_name` and `last_name` aliased as `full_name` using `string::concat()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT string::concat(first_name, " ", last_name) AS full_name FROM user;
-> ```
-> ```surrealql
-> SELECT string::concat(first_name, " ", last_name) AS full_name FROM user;
-> ```
->
-> **Explanation:** `AS alias` renames projected expression columns in query outputs.
-
----
-
-### Exercise 3: Selecting Omitted Fields with `OMIT`
-
-**Problem:** Select all fields from `user` table except `password_hash` using `OMIT`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * OMIT password_hash FROM user;
-> ```
-> ```surrealql
-> SELECT * OMIT password_hash FROM user;
-> ```
->
-> **Explanation:** `SELECT * OMIT field` projects all fields except specified sensitive keys.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`SELECT VALUE` (Single Field Extraction)](select_value.md) — Flattening query returns.
 - [`SELECT` with Record Link Fetching (`FETCH`)](select_fetch.md) — Resolving record links.
@@ -203,7 +238,7 @@ SELECT id, name, email FROM user; // Explicit column projection
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `SELECT` statement reads and projects records in SurrealQL.
 - Follows standard SQL layout, making it readable and familiar.
 - Supports dot-notation paths to extract deeply nested object properties natively.

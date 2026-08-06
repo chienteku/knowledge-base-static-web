@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **State Management**
+
+**State Management** (SSR-Friendly Cookie Composable): `useCookie()` manages browser and server HTTP cookies reactively during SSR and client runtime.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard web development, reading a cookie on the server requires parsing the raw `req.headers.cookie` string. Reading a cookie on the client requires parsing the messy `document.cookie` string. Furthermore, if you change a cookie in the browser, your Vue components won't automatically re-render unless you manually trigger an update.
@@ -60,7 +61,7 @@ Because cookies are sent to the server on every request, `useCookie` is the ulti
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `localStorage` for SSR-critical data
 **The mistake:** Storing an Auth Token or a Theme preference in `localStorage`.
@@ -111,79 +112,124 @@ const token = useCookie('token', {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Storing a JWT
+### Exercise 1: Reading and Writing Reactive Cookies with `useCookie()`
 
-**Problem:** You receive a JWT string from an API. Write the Nuxt code to store this token in a cookie named `auth_token` that expires when the browser closes (session cookie).
+**Scenario:**
+Create a theme toggle switcher persisting user preference (`light` or `dark`) in a cookie via `useCookie()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `const theme = useCookie("theme_pref", { default: () => "light" })`.
+
 > [!check]- Answer
-> ```typescript
-> const authToken = useCookie('auth_token');
-> authToken.value = 'eyJhbGciOiJIUz...'; 
-> // Omitting 'maxAge' makes it a session cookie by default!
-> ```
-> - Initialize `useCookie('auth_token')` without configuring `maxAge` or `expires` parameters, then assign the value directly to `.value`.
-
----
-
-### Exercise 2: useCookie Auth Session Pattern
-
-**Problem:** Write `<script setup>` reading cookie `'auth_token'` with 7-day expiration (`maxAge: 604800`) and function `logout()` clearing the cookie.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
-> const token = useCookie('auth_token', { maxAge: 604800 });
-> function logout() {
->   token.value = null;
-> }
-> </script>
-> ```
-> - Setting `cookie.value = null` clears cookie storage.
-> 
-> ```vue
-> <script setup>
-> const authToken = useCookie('auth_token', {
->   maxAge: 604800, // 7 days in seconds
->   sameSite: 'lax'
+> <script setup lang="ts">
+> const theme = useCookie<string>("theme_pref", {
+>   default: () => "light",
+>   maxAge: 60 * 60 * 24 * 365 // 1 year expiry
 > });
-> 
-> function logout() {
->   authToken.value = null; // Clears cookie on server and client
-> }
-> </script>
-> ```
+
+function toggleTheme() {
+  theme.value = theme.value === "light" ? "dark" : "light";
+}
+</script>
+
+<template>
+  <div>
+    <p>Current Theme: {{ theme }}</p>
+    <button @click="toggleTheme">Toggle Theme</button>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useCookie()` creates an SSR-friendly reactive wrapper around HTTP cookies.
+> 2. On the server during SSR, it reads incoming request `Cookie` headers and appends `Set-Cookie` response headers.
+> 3. On the client, mutating `theme.value` updates `document.cookie` reactively.
 
 ---
 
-### Exercise 3: useCookie SSR Header Injection
+### Exercise 2: Configuring Secure Cookie Options
 
-**Problem:** How does `useCookie()` sync cookie changes made during server-side rendering (SSR) back to the browser?
+**Scenario:**
+Configure an authentication session cookie with `httpOnly: false`, `sameSite: "lax"`, and `secure: true`.
 
-**Expected output:**
+**Requirements:**
+1. Configure cookie options in `useCookie()`.
+
 > [!check]- Answer
-> ```text
-> Nitro automatically injects Set-Cookie HTTP response headers in the SSR HTTP response payload.
+>
+> #### Implementation
+>
+> ```typescript
+> const authToken = useCookie<string | null>("auth_token", {
+>   maxAge: 60 * 60 * 24, // 24 hours
+>   sameSite: "lax",
+>   secure: true,
+>   path: "/"
+> });
 > ```
-> - Injects `Set-Cookie` HTTP response headers during SSR.
-> 
-> ```text
-> Server useCookie mutation -> Set-Cookie HTTP Response Header -> Browser Storage
-> ```
+
+> #### Technical Explanation
+>
+> 1. `sameSite: "lax"` protects cookies against Cross-Site Request Forgery (CSRF) attacks.
+> 2. `secure: true` guarantees cookies are transmitted exclusively over encrypted HTTPS connections.
+> 3. `path: "/"` ensures cookie availability across all application route paths.
+
+---
+
+### Exercise 3: Clearing Cookies on Logout
+
+**Scenario:**
+Clear an existing session cookie by setting its value to `null` or `undefined`.
+
+**Requirements:**
+1. Set `cookie.value = null`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const userSession = useCookie("user_session");
+
+function handleLogout() {
+  userSession.value = null; // Emits Set-Cookie with past expiration date!
+  navigateTo("/login");
+}
+</script>
+
+<template>
+  <button @click="handleLogout">Clear Session & Logout</button>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Setting `useCookie()` value to `null` or `undefined` instructs Nuxt to send a `Set-Cookie` deletion header (`Expires=Thu, 01 Jan 1970 00:00:00 GMT`).
+> 2. Clears cookie state in both browser and server memory contexts.
+> 3. Standard session destruction method.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useState` Hook](use_state.md) — The non-persistent alternative to `useCookie`.
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — Why reading cookies on the server is so important.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useCookie` returns a reactive `Ref` linked to a physical browser cookie.
 - It works flawlessly on both the Server and the Client.
 - Mutating `.value` automatically updates the cookie.

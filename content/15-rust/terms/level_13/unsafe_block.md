@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Unsafe / FFI**: An `unsafe` block is a explicit opt-in syntax block (`unsafe { ... }`) in Rust. It does not turn off the borrow checker or disable type checking, but rather unlocks five specific "superpowers" that the compiler cannot statically verify for memory safety.
+
+
+**Rust Safety Keyword (unchecked unsafe operations block)**: An `unsafe` block is a explicit opt-in syntax block (`unsafe { ... }`) in Rust. It does not turn off the borrow checker or disable type checking, but rather unlocks five specific "superpowers" that the compiler cannot statically verify for memory safety.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: `unsafe` blocks work in all Rust environments, including standard library (`std`), `no_std`, systems programming, embedded microcontrollers, and WebAssembly FFI bindings.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -119,7 +117,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing `unsafe` Disables the Borrow Checker
 
@@ -206,11 +204,11 @@ unsafe {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Zero-Copy Network Packet Header & Payload Splitter
 
-**Problem:** In network stack implementation and embedded packet processing (e.g. Ethernet frame parsers or DMA buffer managers), contiguous network buffers must be partitioned into header and payload mutable slices without dynamic memory allocation or byte copying. Standard borrow checking prevents creating two mutable slices (`&mut [u8]`) from the same underlying array simultaneously without low-level pointer operations.
+**Scenario:** In network stack implementation and embedded packet processing (e.g. Ethernet frame parsers or DMA buffer managers), contiguous network buffers must be partitioned into header and payload mutable slices without dynamic memory allocation or byte copying. Standard borrow checking prevents creating two mutable slices (`&mut [u8]`) from the same underlying array simultaneously without low-level pointer operations.
 
 Implement a safe function:
 `pub fn split_packet_mut<'a>(packet: &'a mut [u8], header_len: usize) -> Result<(&'a mut [u8], &'a mut [u8]), PacketError>`
@@ -224,6 +222,9 @@ The function must:
 5. Include comprehensive unit tests testing header/payload mutation, boundary conditions (`header_len == 0` and `header_len == packet.len()`), and out-of-bounds error handling.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use core::fmt;
 > 
@@ -323,7 +324,8 @@ The function must:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Safe Encapsulation of `unsafe` Blocks**: The function verifies bounds dynamically (`header_len <= total_len`) before entering the `unsafe` block, converting raw pointer manipulations into a 100% safe public API contract.
 > 2. **Disjoint Memory Aliasing Guarantees**: Rust forbids multiple overlapping mutable references (`&mut T`). `core::slice::from_raw_parts_mut` creates two slices derived from the same base pointer, but because their memory ranges `[0..header_len]` and `[header_len..total_len]` are completely disjoint, no aliasing rule violation occurs.
 > 3. **Raw Pointer Offset Arithmetic**: `ptr.add(header_len)` computes byte pointer offsets without intermediate standard reference allocation.
@@ -333,7 +335,7 @@ The function must:
 
 ### Exercise 2: Lock-Free SPSC Ring Buffer with `UnsafeCell` and `Send`/`Sync`
 
-**Problem:** In real-time audio streams, embedded IPC channels, and high-frequency messaging systems, threads exchange messages using Single-Producer Single-Consumer (SPSC) ring buffers without Mutex lock contention. Implementing shared mutability across threads requires wrapping raw buffer slots in `core::cell::UnsafeCell`, writing/reading slots via raw pointers inside `unsafe` blocks, and manually implementing `unsafe trait Send` and `unsafe trait Sync`.
+**Scenario:** In real-time audio streams, embedded IPC channels, and high-frequency messaging systems, threads exchange messages using Single-Producer Single-Consumer (SPSC) ring buffers without Mutex lock contention. Implementing shared mutability across threads requires wrapping raw buffer slots in `core::cell::UnsafeCell`, writing/reading slots via raw pointers inside `unsafe` blocks, and manually implementing `unsafe trait Send` and `unsafe trait Sync`.
 
 Implement a lock-free queue struct `SpscChannel<T, const CAP: usize>` for `T: Copy + Default` with fields:
 - `buffer: [UnsafeCell<T>; CAP]`
@@ -347,6 +349,9 @@ Requirements:
 4. Write unit tests with assertions (`assert_eq!`, `assert!`) testing sequential push/pop operations, queue overflow behavior, index wrap-around, and multi-threaded data transfer via `std::thread::spawn`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use core::cell::UnsafeCell;
 > use core::sync::atomic::{AtomicUsize, Ordering};
@@ -511,7 +516,8 @@ Requirements:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Unsafe Traits `Send` & `Sync`**: By default, `UnsafeCell<T>` disables `Sync` because it provides interior mutability without lock protection. Implementing `unsafe impl Sync` informs compiler that `SpscChannel` is safe to share across threads under SPSC access constraints.
 > 2. **Interior Mutability via `UnsafeCell::get`**: `UnsafeCell::get()` returns a `*mut T` raw pointer to the slot. Dereferencing `*slot_ptr` inside `unsafe` blocks enables modifying buffer slots through shared `&self` references without Mutex allocation.
 > 3. **Atomic Synchronization Orderings**: Using `Ordering::Release` when publishing updated indices (`head` / `tail`) and `Ordering::Acquire` when reading indices guarantees memory barrier visibility across CPU cores before raw pointer dereferences occur.
@@ -521,7 +527,7 @@ Requirements:
 
 ### Exercise 3: Bare-Metal Memory-Mapped I/O (MMIO) Volatile Peripheral Driver (`#![no_std]`)
 
-**Problem:** In bare-metal embedded device drivers (`#![no_std]`), microcontroller hardware peripherals (like UARTs, SPI buses, or Timers) are controlled by reading and writing hardware registers mapped to specific physical memory addresses (Memory-Mapped I/O). Standard pointer operations are subject to compiler optimizations that cache, reorder, or elide repeated memory reads/writes. Interacting with hardware registers requires calling `core::ptr::read_volatile` and `core::ptr::write_volatile` inside `unsafe` blocks.
+**Scenario:** In bare-metal embedded device drivers (`#![no_std]`), microcontroller hardware peripherals (like UARTs, SPI buses, or Timers) are controlled by reading and writing hardware registers mapped to specific physical memory addresses (Memory-Mapped I/O). Standard pointer operations are subject to compiler optimizations that cache, reorder, or elide repeated memory reads/writes. Interacting with hardware registers requires calling `core::ptr::read_volatile` and `core::ptr::write_volatile` inside `unsafe` blocks.
 
 Implement an embedded UART driver `MmioUartDriver` for a peripheral mapped at base address `base_ptr: *mut u32` with register offsets:
 - `DATA_REG` (offset 0): Transmit/Receive data byte (bits `0..=7`).
@@ -538,6 +544,9 @@ Requirements:
 7. In `#[cfg(test)]`, simulate MMIO hardware using a stack memory array `[u32; 3]` and test enable toggling, transmit buffer checks, byte reception, and error handling with `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -699,7 +708,8 @@ Requirements:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Volatile Pointer Reads & Writes (`read_volatile` / `write_volatile`)**: Hardware registers can change state asynchronously outside normal CPU control flow. `read_volatile` and `write_volatile` inside `unsafe` blocks instruct `rustc` and LLVM to execute physical memory bus transactions every time without caching values in CPU registers or optimizing away repeated reads.
 > 2. **Type-Safe Hardware Drivers**: Tuple struct wrappers around raw memory pointers (`base_ptr: *mut u32`) abstract physical hardware registers into safe Rust API calls (`enable()`, `transmit_byte()`, `receive_byte()`).
 > 3. **Pointer Scaling for MMIO Offset Arithmetic**: `base_ptr.add(offset)` calculates target 32-bit register addresses by scaling `offset` by `size_of::<u32>()` (4 bytes per register index).
@@ -707,7 +717,7 @@ Requirements:
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Raw Pointers (`*const T`, `*mut T`)](raw_pointers.md) — Unsafe pointer types that bypass borrow checking.
@@ -724,7 +734,7 @@ Requirements:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `unsafe` blocks unlock 5 superpowers: dereferencing raw pointers, calling unsafe fns/FFI, mutating mutable statics, implementing unsafe traits, and accessing union fields.
 - `unsafe` does NOT disable type checking, lifetime verification, or standard borrow checking.

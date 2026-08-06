@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **API Helpers**
+
+**Server & Edge API** (NextRequest & NextResponse Extensions): `NextRequest` and `NextResponse` extend standard Web Request/Response objects with cookie helpers and URL rewriting.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only (Route Handlers & Middleware)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Route Handlers use the standard Web `Request` object. If you want to read a cookie named "session" from a standard `Request`, you have to get the `Cookie` string header, split it by semicolons, loop through it, and find the key. It's tedious.
@@ -68,7 +69,7 @@ export async function POST() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `NextResponse.redirect()` instead of `redirect()` in Server Actions
 
@@ -122,83 +123,124 @@ return NextResponse.json({ status: 'ok' }); // Sets headers & serializes JSON au
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Setting Cookies
+### Exercise 1: URL Rewriting with `NextResponse.rewrite()`
 
-**Problem:** How do you set a cookie inside a Route Handler response?
+**Scenario:**
+Rewrite request URL `/old-path` to `/new-path` without changing the visible browser URL bar using `NextResponse.rewrite()`.
 
-**Expected output:**
+**Requirements:**
+1. Call `NextResponse.rewrite(new URL('/new-path', req.url))`.
+
 > [!check]- Answer
-> ```ts
-> export async function POST() {
->   // Create a base response
->   const response = NextResponse.json({ success: true });
->   
->   // Use the cookies API to attach the Set-Cookie header!
->   response.cookies.set('theme', 'dark', { secure: true });
->   
->   return response;
-> }
-> ```
-> - Just like `NextRequest.cookies.get`, `NextResponse` has a `.cookies.set` method.
+>
+> #### Implementation
+>
+> ```typescript
+> // middleware.ts
+> import { NextResponse } from "next/server";
+> import type { NextRequest } from "next/server";
+
+export function middleware(req: NextRequest) {
+  if (req.nextUrl.pathname === "/old-docs") {
+    return NextResponse.rewrite(new URL("/docs/v2", req.url));
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `NextResponse.rewrite()` changes the destination target page while preserving the original URL in the browser bar.
+> 2. Distinct from `NextResponse.redirect()` which changes the visible browser URL.
+> 3. Useful for A/B testing, feature flags, and multi-tenant domain routing.
 
 ---
 
-### Exercise 2: NextResponse Cookie Setting Pattern
+### Exercise 2: Reading and Writing Cookies with `NextRequest` & `NextResponse`
 
-**Problem:** Write Route Handler setting HttpOnly cookie `'token'` using `NextResponse` response cookies helper.
+**Scenario:**
+Read request cookie `token` and set response cookie `visited=true` in Middleware.
 
-**Expected output:**
+**Requirements:**
+1. Access `req.cookies` and call `res.cookies.set()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import { NextResponse } from 'next/server'; const res = NextResponse.json({ success: true }); res.cookies.set('token', 'val', { httpOnly: true, secure: true }); return res;
-> ```
-> - `NextResponse` provides `.cookies.set()` helper methods.
-> 
-> ```typescript
-> import { NextResponse } from 'next/server';
-> 
-> export async function POST() {
->   const response = NextResponse.json({ success: true });
->   response.cookies.set('token', 'secret-val', {
->     httpOnly: true,
->     secure: true,
->     sameSite: 'strict'
->   });
->   return response;
-> }
-> ```
+> import { NextResponse } from "next/server";
+> import type { NextRequest } from "next/server";
+
+export function middleware(req: NextRequest) {
+  const token = req.cookies.get("session_token")?.value;
+  const res = NextResponse.next();
+
+  res.cookies.set("visited", "true", {
+    path: "/",
+    httpOnly: true
+  });
+
+  return res;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `NextRequest.cookies` reads incoming request cookie headers.
+> 2. `NextResponse.cookies.set()` appends `Set-Cookie` headers to outgoing responses.
+> 3. Simplifies HTTP cookie management in server interceptors.
 
 ---
 
-### Exercise 3: NextResponse.rewrite Method
+### Exercise 3: Accessing Parsed URL Properties with `req.nextUrl`
 
-**Problem:** What is the difference between `NextResponse.redirect()` and `NextResponse.rewrite()`?
+**Scenario:**
+Inspect query parameters `req.nextUrl.searchParams` and hostname `req.nextUrl.hostname` in `NextRequest`.
 
-**Expected output:**
+**Requirements:**
+1. Access `req.nextUrl` properties.
+
 > [!check]- Answer
-> ```text
-> redirect() changes the browser URL location; rewrite() serves target content while preserving the original browser URL location.
-> ```
-> - `redirect()` -> Updates browser URL address.
-> - `rewrite()` -> Proxies content while keeping browser URL intact.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> return NextResponse.rewrite(new URL('/proxy-path', req.url));
-> ```
+> import { NextRequest, NextResponse } from "next/server";
+
+export function middleware(req: NextRequest) {
+  const pathname = req.nextUrl.pathname;
+  const searchParam = req.nextUrl.searchParams.get("ref");
+  const host = req.nextUrl.hostname;
+
+  console.log(`[Middleware Log] ${host}${pathname}?ref=${searchParam}`);
+
+  return NextResponse.next();
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `NextRequest.nextUrl` is an extended `URL` object with pre-parsed query string parameters and path segments.
+> 2. Avoids manual string splitting or regex parsing of `req.url`.
+> 3. Idiomatic Next.js URL inspection object.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Route Handlers (`route.ts`)](route_handlers.md) — Where these objects are used.
 - [Middleware (`middleware.ts`)](../level_10/middleware.md) — The other Next.js feature that heavily relies on `NextRequest` and `NextResponse`.
 - [HTTP Methods (GET, POST, PUT, DELETE)](http_methods.md) — Related concept: HTTP Methods (GET, POST, PUT, DELETE).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`NextRequest`** extends the native Web Request object, adding easy access to `.cookies` and `.nextUrl`.
 - **`NextResponse`** extends the native Web Response object, adding helper methods like `NextResponse.json()` and `NextResponse.redirect()`.
 - They are imported from `next/server`.

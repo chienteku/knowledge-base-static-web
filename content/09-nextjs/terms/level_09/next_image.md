@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **UI Component / Performance**
+
+**Performance & Optimization** (Advanced Image Asset Optimization): `<Image>` provides automatic WebP/AVIF format conversion, responsive image resizing, blur placeholders, and LCP preloading.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client Components**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Images account for a massive percentage of the internet's bandwidth. If a user uploads a 5MB, 4000x4000px photograph of a dog, and you display it in a 300x300px square on your website using a standard `<img src="dog.jpg">`, the user's phone still downloads the full 5MB file. This destroys page load speeds and mobile data plans.
@@ -70,7 +71,7 @@ You use the `fill` prop. The parent container MUST have `position: relative` (or
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not configuring `remotePatterns`
 
@@ -133,69 +134,128 @@ export default {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The `priority` Prop
+### Exercise 1: Optimizing Local Images with `next/image`
 
-**Problem:** Your homepage has a massive Hero image at the very top. When testing performance, Google PageSpeed Insights complains about the Largest Contentful Paint (LCP) being too slow. How do you fix the `<Image>`?
+**Scenario:**
+Optimize a local image asset using `<Image>` component imports to prevent Cumulative Layout Shift (CLS).
 
-**Expected output:**
+**Requirements:**
+1. Import local image asset.
+2. Render `<Image src={logo} alt="Logo" />`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> <Image src="/hero.jpg" alt="Hero" width={1200} height={800} priority />
-> ```
-> - By default, `<Image>` lazy-loads images (waits until you scroll to them). The Hero image is at the top of the page! We need to tell Next.js to load it immediately.
+> import Image from "next/image";
+> import profilePic from "@/public/profile.jpg";
+
+export default function Profile() {
+  return (
+    <div className="avatar-container">
+      <Image
+        src={profilePic}
+        alt="User Profile Picture"
+        placeholder="blur"
+        className="rounded-full"
+      />
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `next/image` automatically measures width, height, and generates blur placeholders for static imported images.
+> 2. Serves images in modern WebP/AVIF formats scaled to the user's viewport device resolution.
+> 3. Eliminates Cumulative Layout Shift (CLS) web vital penalties.
 
 ---
 
-### Exercise 2: Next.js Image Priority Loading Pattern
+### Exercise 2: Configuring Remote Domain Image Hosts
 
-**Problem:** Write `<Image />` component for a hero banner image `/hero.png` with size `1200x600`, setting `priority` prop to optimize LCP.
+**Scenario:**
+Configure `next.config.js` to allow rendering remote images from `images.unsplash.com`.
 
-**Expected output:**
+**Requirements:**
+1. Add `images.remotePatterns` entry in `next.config.js`.
+
 > [!check]- Answer
-> ```tsx
-> import Image from 'next/image'; <Image src="/hero.png" alt="Hero Banner" width={1200} height={600} priority />
+>
+> #### Implementation
+>
+> ```javascript
+> // next.config.js
+> module.exports = {
+>   images: {
+>     remotePatterns: [
+>       {
+>         protocol: "https",
+>         hostname: "images.unsplash.com",
+>         port: "",
+>         pathname: "/**"
+>       }
+>     ]
+>   }
+> };
 > ```
-> - `priority` prop preloads LCP (Largest Contentful Paint) hero images.
-> 
-> ```tsx
-> import Image from 'next/image';
-> 
-> export function HeroBanner() {
->   return (
->     <Image
->       src="/hero.png"
->       alt="Hero Banner"
->       width={1200}
->       height={600}
->       priority
->     />
->   );
-> }
-> ```
+
+> #### Technical Explanation
+>
+> 1. Next.js restricts remote image optimization to explicitly allowed domains in `remotePatterns` for security.
+> 2. Prevents malicious actors from abusing your server's image optimization endpoint.
+> 3. Required setup for remote image hosting services.
 
 ---
 
-### Exercise 3: Image Quality Prop Default
+### Exercise 3: Using `fill` for Responsive Card Banners
 
-**Problem:** What is the default image compression quality integer value used by `next/image`?
+**Scenario:**
+Render a responsive hero image that fills its parent container using `fill` prop.
 
-**Expected output:**
+**Requirements:**
+1. Pass `fill`, `sizes`, and `priority` props to `<Image>`.
+
 > [!check]- Answer
-> ```text
-> 75 (Can be overridden via quality prop, e.g. quality={85})
-> ```
-> - Default image quality is 75.
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> <Image src="/pic.jpg" alt="Pic" width={400} height={300} quality={85} />
-> ```
+> import Image from "next/image";
+
+export default function HeroBanner({ src }: { src: string }) {
+  return (
+    <div className="relative w-full h-64 overflow-hidden">
+      <Image
+        src={src}
+        alt="Hero Banner"
+        fill
+        priority
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className="object-cover"
+      />
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `fill` instructs the image to stretch and fit its nearest `position: relative` parent container.
+> 2. `priority` preloads LCP (Largest Contentful Paint) hero images immediately.
+> 3. `sizes` assists the browser in selecting the optimal srcset image width.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — Metrics improved by this component (CLS, LCP).
 - [`next/font` Optimization](next_font.md) — A similar built-in optimization tool.
 - [HTML `<img>` Element](html_img.md) — Related concept: HTML `<img>` Element.
@@ -203,7 +263,7 @@ export default {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `<Image>` component replaces the HTML `<img>` tag.
 - It automatically resizes images, converts them to WebP/AVIF, lazy-loads them, and prevents Layout Shift.
 - You must provide `width` and `height` for remote images, OR use the `fill` prop within a relatively positioned parent.

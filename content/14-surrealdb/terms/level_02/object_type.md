@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Data Type (nested JSON object dictionary type)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Parsed as binary BSON-like structures on disk. Properties are traversed in memory using query index path trees).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database design (PostgreSQL), data must be normalized (split into flat tables). 
@@ -89,7 +88,7 @@ SELECT name.first, name.last FROM user WHERE name.first = "John";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Defining a field as 'TYPE object' in a schema-full table, but forgetting to define its sub-properties, leaving the nested fields un-validated
 
@@ -148,59 +147,104 @@ CREATE user_setting_2 CONTENT { ... };
 UPDATE user:alice SET settings = { theme: "dark", notifications: true };
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Extraction
+### Exercise 1: Nested Object Property Extraction
 
-**Problem:** You have a `companies` table where the `contact` field is an object. A record is stored as:
-`{ id: company:01, name: "Acme", contact: { email: "info@acme.com", phones: { office: "555-1234" } } }`
-Write the SurrealQL query to retrieve only the `name` and the nested `office` phone number of all companies.
+**Scenario:**
+A user management system stores user address details inside a nested `address` object `{ street: "123 Main St", city: "Austin", zip: "78701" }`.
 
-**Expected output:**
+**Requirements:**
+1. Create user `user:u1` with nested object `address`.
+2. Query user `user:u1` extracting only `address.city` and `address.zip` using dot-notation.
+
 > [!check]- Answer
-> ```sql
-> SELECT name, contact.phones.office FROM companies;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:u1 SET 
+>     name = "Alice",
+>     address = {
+>         street: "123 Main St",
+>         city: "Austin",
+>         zip: "78701"
+>     };
+> 
+> -- Extract nested object properties
+> SELECT address.city, address.zip FROM user:u1;
 > ```
-> - Traverse multiple levels of objects by chaining dots: `contact.phones.office`.
-> - Do not include SQL `JOIN` operators; simply list the paths in the `SELECT` clause.
+>
+> #### Technical Explanation
+>
+> 1. Dot-notation (`address.city`) extracts nested object properties directly without unnesting.
+> 2. `object` types store structured key-value dictionaries inside SurrealDB records.
+> 3. Combines document store flexibility with SQL selection semantics.
+
+---
+
+### Exercise 2: Defining Rigid vs Flexible Object Schemas
+
+**Scenario:**
+You need to define a `SCHEMAFULL` table `profile` with a strict `settings` object where only `theme` (`string`) and `notifications` (`bool`) keys are permitted.
+
+**Requirements:**
+1. Define table `profile` in `SCHEMAFULL` mode.
+2. Define field `settings` as `object`.
+3. Define field `settings.theme` as `string`.
+4. Define field `settings.notifications` as `bool`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE profile SCHEMAFULL;
+> DEFINE FIELD settings ON TABLE profile TYPE object;
+> DEFINE FIELD settings.theme ON TABLE profile TYPE string;
+> DEFINE FIELD settings.notifications ON TABLE profile TYPE bool;
+> 
+> CREATE profile:p1 SET settings = { theme: "dark", notifications: true };
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Defining sub-fields with dot-notation (`settings.theme`) enforces strict validation rules on nested object keys.
+> 2. `SCHEMAFULL` mode rejects unapproved keys inside the nested object.
+> 3. Provides deep schema safety for complex nested document structures.
+
+---
+
+### Exercise 3: Merging Deep Nested Object Keys
+
+**Scenario:**
+Update a user's notification preference inside `settings.notifications` without overwriting the existing `settings.theme` property.
+
+**Requirements:**
+1. Update `profile:p1` setting `settings.notifications = false` using dot-notation assignment.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Update specific nested key directly
+> UPDATE profile:p1 SET settings.notifications = false;
+> 
+> SELECT * FROM profile:p1;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Dot-notation assignment (`SET settings.notifications = false`) mutates targeted nested properties atomically.
+> 2. Preserves all other sibling keys (`settings.theme`) intact within the object.
+> 3. Eliminates full-document fetch-modify-replace cycles required by traditional document databases.
 
 ---
 
 
 
-### Exercise 2: Flexible vs Strict Object Fields
-
-**Problem:** Define field `metadata` on `article` as flexible object `TYPE object FLEXIBLE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD metadata ON TABLE article TYPE object FLEXIBLE;
-> ```
-> ```surrealql
-> DEFINE FIELD metadata ON TABLE article TYPE object FLEXIBLE;
-> ```
->
-> **Explanation:** `FLEXIBLE` permits arbitrary nested keys inside object fields.
-
----
-
-### Exercise 3: Nested Field Path Queries
-
-**Problem:** Select `settings.theme` from `user:alice`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT settings.theme FROM user:alice;
-> ```
-> ```surrealql
-> SELECT settings.theme FROM user:alice;
-> ```
->
-> **Explanation:** Dot notation traverses nested object property paths.
-
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [SurrealDB](../level_01/surrealdb.md)
@@ -208,7 +252,7 @@ Write the SurrealQL query to retrieve only the `name` and the nested `office` ph
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `object` type stores nested key-value dictionaries inside records.
 - Direct NoSQL equivalent to PostgreSQL's `JSONB` and MongoDB's embedded documents.
 - Query nested object values using standard Dot Notation (e.g. `object.field`).

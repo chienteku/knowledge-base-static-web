@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Performance / Operations (concurrent block execution modifier)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the Rust thread-pool engine. Distributes record evaluation tasks across available multi-core CPU threads in parallel).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When operating on massive tables containing hundreds of thousands of records:
@@ -83,7 +82,7 @@ PARALLEL;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Appending 'PARALLEL' to single-record queries or tiny tables, expecting performance gains
 
@@ -131,61 +130,91 @@ LET $u = (CREATE user:1);
 SELECT * FROM $u; // Sequential execution preserves variable order
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Bulk Parallel Migration Query
+### Exercise 1: Concurrent Block Execution with `PARALLEL`
 
-**Problem:** You are running a database migration on a `logs` table containing 500,000 entries.
-Write the SurrealQL query to:
-1. Update all records in the `logs` table.
-2. Set the `archived` field to `true`.
-3. Add the `PARALLEL` keyword to execute the write across multi-core CPU threads.
+**Scenario:**
+A reporting query executes multiple heavy analytical subqueries concurrently using the `PARALLEL` block keyword modifier.
 
-**Expected output:**
+**Requirements:**
+1. Execute two subqueries in a `PARALLEL` block.
+
 > [!check]- Answer
-> ```sql
-> UPDATE logs SET archived = true PARALLEL;
-> ```
-> - Append the keyword `PARALLEL` to the very end of the statement.
-
----
-
-
-
-### Exercise 2: Executing Concurrent Batch Queries
-
-**Problem:** Execute two independent SELECT queries on `user` and `product` in parallel using `PARALLEL`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM user; SELECT * FROM product PARALLEL;
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> SELECT * FROM user;
-> SELECT * FROM product PARALLEL;
+> PARALLEL {
+>     LET $total_users = (SELECT count() FROM user GROUP ALL);
+>     LET $total_orders = (SELECT count() FROM order GROUP ALL);
+> };
 > ```
 >
-> **Explanation:** `PARALLEL` instructs database engine to execute query batch statements concurrently.
+> #### Technical Explanation
+>
+> 1. `PARALLEL { ... }` executes statements within the block concurrently across available CPU threads.
+> 2. Reduces overall query response latency for independent subqueries.
+> 3. Leverages SurrealDB's async Rust Tokio runtime threads.
 
 ---
 
-### Exercise 3: Parallel Query Execution Benefit
+### Exercise 2: Parallel Batch Record Creation
 
-**Problem:** What is the primary benefit of `PARALLEL` execution in multi-statement queries? (Reduces overall batch latency by executing I/O tasks concurrently).
+**Scenario:**
+Create multiple independent audit records concurrently using `PARALLEL`.
 
-**Expected output:**
+**Requirements:**
+1. Wrap multiple `CREATE` statements in a `PARALLEL` block.
+
 > [!check]- Answer
-> ```text
-> Executes independent storage read tasks concurrently to minimize total latency
-> ```
-> ```text
-> Executes independent storage read tasks concurrently to minimize total latency
+>
+> #### Implementation
+>
+> ```surrealql
+> PARALLEL {
+>     CREATE audit:1 SET action = "task_a";
+>     CREATE audit:2 SET action = "task_b";
+>     CREATE audit:3 SET action = "task_c";
+> };
 > ```
 >
-> **Explanation:** Concurrent query execution utilizes multi-core CPU and I/O parallelism.
+> #### Technical Explanation
+>
+> 1. Dispatches write statements to parallel execution channels.
+> 2. Improves write throughput for un-correlated database insertions.
+> 3. All statements commit together upon block completion.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Parallel vs Sequential Execution Performance
+
+**Scenario:**
+Compare sequential query execution against `PARALLEL` execution for independent lookups.
+
+**Requirements:**
+1. Explain when to use `PARALLEL` vs standard sequential blocks.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Use Sequential Blocks: When query step B depends on parameter output from query step A.
+> Use PARALLEL Blocks: When query steps A, B, and C are completely independent and can run concurrently.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `PARALLEL` optimizes latency for non-dependent read/write operations.
+> 2. Sequential execution remains mandatory for dependent data pipelines.
+> 3. Maximizes multi-core CPU utilization during complex query scripts.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`UPDATE`](../level_03/update.md) — Bulk write statement.
 - [SurrealDB Server (`surreal start`)](../level_01/surreal_start.md) — Server multi-threading context.
@@ -193,7 +222,7 @@ Write the SurrealQL query to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `PARALLEL` keyword instructs SurrealDB to process queries concurrently.
 - Leverages multi-core CPU thread pools in Rust for multi-threaded execution.
 - Dramatically accelerates bulk `UPDATE`, `DELETE`, and complex `SELECT` queries on large datasets.

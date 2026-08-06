@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Data Type**
+
+**Core Concept** (64-Bit UTC Timestamp BSON Type): The Date BSON data type stores 64-bit UTC timestamps representing milliseconds since the Unix epoch.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Stored internally as a 64-bit signed integer. The MongoDB shell (`mongosh`) wraps this type in a helper output function called `ISODate()`).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Tracking time is essential in application database design:
@@ -85,7 +86,7 @@ db.logs.find({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Calling 'Date()' without the 'new' keyword when inserting timestamps in mongosh
 
@@ -141,62 +142,110 @@ db.logs.find({ createdAt: { $gt: new Date("2026-01-01T00:00:00Z") } }); // BSON 
 Store timezone string in separate field: { date: new Date(), tz: "Asia/Taipei" }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Date Range Query
+### Exercise 1: Constructing BSON Date Query Ranges
 
-**Problem:** You have a `transactions` collection. Write the query to select all transactions created between Jan 1, 2026 (inclusive) and Jan 2, 2026 (exclusive).
+**Scenario:**
+Query audit logs recorded between `2026-08-01` and `2026-08-05` using BSON Date objects.
 
-**Expected output:**
+**Requirements:**
+1. Use `$gte` and `$lte` with `new Date()` objects.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.transactions.find({
->   created_at: {
->     $gte: new Date("2026-01-01T00:00:00Z"),
->     $lt: new Date("2026-01-02T00:00:00Z")
+> db.audit_logs.find({
+>   timestamp: {
+>     $gte: new Date("2026-08-01T00:00:00Z"),
+>     $lte: new Date("2026-08-05T23:59:59Z")
 >   }
 > });
 > ```
-> - Combine the greater-than-or-equal `$gte` and less-than `$lt` operators in a single filter sub-document.
-> - Instantiate two date constructors wrapping ISO strings.
+>
+> #### Technical Explanation
+>
+> 1. BSON Date objects compare 64-bit UTC epoch timestamps directly.
+> 2. Range queries (`$gte` / `$lte`) execute efficiently over date indexes.
+> 3. Automatically handles client time-zone conversions to UTC.
+
+---
+
+### Exercise 2: Aggregation Date Aggregation Operators
+
+**Scenario:**
+Extract the year, month, and day components from `createdAt` fields in an aggregation report.
+
+**Requirements:**
+1. Use `$year`, `$month`, `$dayOfMonth` operators.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.aggregate([
+>   {
+>     $project: {
+>       year: { $year: "$createdAt" },
+>       month: { $month: "$createdAt" },
+>       day: { $dayOfMonth: "$createdAt" }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Date aggregation operators extract calendar components natively in UTC.
+> 2. Enables grouping sales reports by year/month/day.
+> 3. Avoids formatting dates on client application servers.
+
+---
+
+### Exercise 3: Date Arithmetic with `$dateAdd`
+
+**Scenario:**
+Calculate subscription expiration dates set to exactly 30 days after signup date.
+
+**Requirements:**
+1. Use `$dateAdd` pipeline stage.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.subscriptions.aggregate([
+>   {
+>     $project: {
+>       userId: 1,
+>       signupDate: 1,
+>       expiresAt: {
+>         $dateAdd: {
+>           startDate: "$signupDate",
+>           unit: "day",
+>           amount: 30
+>         }
+>       }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$dateAdd` performs native date math across time units (`"day"`, `"month"`, `"hour"`).
+> 2. Correctly handles leap years and variable month lengths.
+> 3. Computes dynamic expiration dates server-side.
 
 ---
 
 
 
-### Exercise 2: Date Range Query
-
-**Problem:** Query logs created after `2026-01-01T00:00:00Z` using `ISODate()` or `new Date()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.logs.find({ createdAt: { $gte: ISODate("2026-01-01T00:00:00Z") } });
-> ```
-> ```javascript
-> db.logs.find({ createdAt: { $gte: ISODate("2026-01-01T00:00:00Z") } });
-> ```
->
-> **Explanation:** `ISODate()` constructs BSON Date objects from ISO 8601 strings in mongosh.
-
----
-
-### Exercise 3: Current Timestamp Date Insertion
-
-**Problem:** Insert user document with `createdAt` field set to current date timestamp (`new Date()`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.insertOne({ name: "Alice", createdAt: new Date() });
-> ```
-> ```javascript
-> db.users.insertOne({ name: "Alice", createdAt: new Date() });
-> ```
->
-> **Explanation:** `new Date()` captures current UTC timestamp as a BSON Date primitive.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent types.
 - [`Timestamp` vs. `Date`](timestamp_vs_date.md) — Internal logging difference.
@@ -204,7 +253,7 @@ Store timezone string in separate field: { date: new Date(), tz: "Asia/Taipei" }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The BSON Date type stores calendar timestamps as 64-bit UTC integers.
 - Serves as the MongoDB equivalent to PostgreSQL's `TIMESTAMPTZ` type.
 - Always stored in UTC format internally; drivers translate timezone offsets.

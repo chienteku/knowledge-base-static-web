@@ -2,7 +2,7 @@
   "$schema": "../../_meta/relationships.schema.json",
   "module": "14-surrealdb",
   "version": 1,
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-05",
   "terms": {
     "connection_credentials": {
       "level": 1,
@@ -307,8 +307,8 @@
           "description": "The graphical counterpart."
         },
         {
-          "module": "14-surrealdb",
           "term": "surrealdb",
+          "module": "14-surrealdb",
           "description": "SurrealDB binary."
         }
       ],
@@ -344,8 +344,8 @@
           "description": "Related concept: `surreal validate` (Query Validation)."
         },
         {
-          "module": "14-surrealdb",
           "term": "surrealql",
+          "module": "14-surrealdb",
           "description": "Running SurrealQL queries."
         }
       ]
@@ -495,8 +495,8 @@
           "description": "Related concept: SurrealDB Cloud."
         },
         {
-          "module": "14-surrealdb",
           "term": "surrealql",
+          "module": "14-surrealdb",
           "description": "Related concept: SurrealQL."
         }
       ]
@@ -544,13 +544,13 @@
           "description": "Related concept: Parameters (`$param`)."
         },
         {
-          "module": "14-surrealdb",
           "term": "surreal_cli",
+          "module": "14-surrealdb",
           "description": "Surreal CLI query execution."
         },
         {
-          "module": "14-surrealdb",
           "term": "surrealist",
+          "module": "14-surrealdb",
           "description": "Surrealist GUI query editor."
         }
       ]
@@ -668,8 +668,8 @@
           "description": "The storage context."
         },
         {
-          "module": "14-surrealdb",
           "term": "surrealdb",
+          "module": "14-surrealdb",
           "description": "SurrealDB core concepts."
         }
       ],
@@ -725,8 +725,8 @@
           "description": "Related concept: `uuid`."
         },
         {
-          "module": "14-surrealdb",
           "term": "record_link_type",
+          "module": "14-surrealdb",
           "description": "Record link types."
         }
       ]
@@ -928,13 +928,13 @@
           "description": "Related concept: `SELECT` with Record Link Fetching (`FETCH`)."
         },
         {
-          "module": "14-surrealdb",
           "term": "array_record_links",
+          "module": "14-surrealdb",
           "description": "Arrays of record links."
         },
         {
-          "module": "14-surrealdb",
           "term": "data_types",
+          "module": "14-surrealdb",
           "description": "Related concept: Data Types (Overview)."
         }
       ]
@@ -950,8 +950,8 @@
           "description": "The non-unique list context."
         },
         {
-          "module": "14-surrealdb",
           "term": "data_types",
+          "module": "14-surrealdb",
           "description": "SurrealDB data types overview."
         }
       ],
@@ -1076,8 +1076,8 @@
           "description": "The aggregation context."
         },
         {
-          "module": "14-surrealdb",
           "term": "select",
+          "module": "14-surrealdb",
           "description": "Executing SELECT queries before aggregating results."
         }
       ],
@@ -1284,8 +1284,8 @@
           "description": "The native write equivalent."
         },
         {
-          "module": "14-surrealdb",
           "term": "table",
+          "module": "14-surrealdb",
           "description": "Inserting records into defined or dynamic tables."
         }
       ],
@@ -1490,6 +1490,11 @@
       ],
       "related": [
         {
+          "term": "array_record_links",
+          "module": "14-surrealdb",
+          "description": "Array record link collections."
+        },
+        {
           "term": "select",
           "module": "14-surrealdb",
           "description": "The parent query statement."
@@ -1676,6 +1681,45 @@
         }
       ]
     },
+    "assert_clause": {
+      "level": 4,
+      "file": "terms/level_04/assert_clause.md",
+      "display_name": "`ASSERT` Clause",
+      "prerequisites": [
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "Defining schema fields in SurrealDB."
+        },
+        {
+          "term": "operators",
+          "module": "14-surrealdb",
+          "description": "Expressions used inside `ASSERT`."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "Statement used to define schema fields."
+        },
+        {
+          "term": "field_assertions",
+          "module": "14-surrealdb",
+          "description": "Comprehensive field validation patterns."
+        },
+        {
+          "term": "schemafull_validation",
+          "module": "14-surrealdb",
+          "description": "Table-level schema enforcement."
+        },
+        {
+          "term": "event_variables",
+          "module": "14-surrealdb",
+          "description": ""
+        }
+      ]
+    },
     "define_event": {
       "level": 9,
       "file": "terms/level_09/define_event.md",
@@ -1709,8 +1753,8 @@
           "description": "Table change logging."
         },
         {
-          "module": "14-surrealdb",
           "term": "live_select",
+          "module": "14-surrealdb",
           "description": "LIVE SELECT subscriptions."
         }
       ]
@@ -1732,6 +1776,11 @@
         }
       ],
       "related": [
+        {
+          "term": "assert_clause",
+          "module": "14-surrealdb",
+          "description": "Field assertion clause."
+        },
         {
           "term": "define_table",
           "module": "14-surrealdb",
@@ -1763,8 +1812,8 @@
           "description": "Related concept: `SCHEMAFULL` Validation Assertion Patterns."
         },
         {
-          "module": "14-surrealdb",
           "term": "overwrite_keyword",
+          "module": "14-surrealdb",
           "description": "Related concept: `OVERWRITE` Keyword."
         }
       ]
@@ -1880,6 +1929,11 @@
       ],
       "related": [
         {
+          "term": "overwrite_keyword",
+          "module": "14-surrealdb",
+          "description": "Overwriting table definitions."
+        },
+        {
           "term": "table",
           "module": "14-surrealdb",
           "description": "The basic collection container."
@@ -1939,8 +1993,8 @@
           "description": "Value modification attributes."
         },
         {
-          "module": "14-surrealdb",
           "term": "assert_clause",
+          "module": "14-surrealdb",
           "description": "Related concept: `ASSERT` Clause."
         }
       ]
@@ -1997,8 +2051,8 @@
           "description": "Designing schemas."
         },
         {
-          "module": "14-surrealdb",
           "term": "overwrite_keyword",
+          "module": "14-surrealdb",
           "description": "Related concept: `OVERWRITE` Keyword."
         }
       ]
@@ -2034,6 +2088,50 @@
           "term": "schemafull_validation",
           "module": "14-surrealdb",
           "description": "Related concept: `SCHEMAFULL` Validation Assertion Patterns."
+        }
+      ]
+    },
+    "overwrite_keyword": {
+      "level": 4,
+      "file": "terms/level_04/overwrite_keyword.md",
+      "display_name": "`OVERWRITE` Keyword",
+      "prerequisites": [
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "Defining table schemas."
+        },
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "Defining table field constraints."
+        },
+        {
+          "term": "idempotent_migrations",
+          "module": "14-surrealdb",
+          "description": "Managing schema changes safely."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "Table definition statement."
+        },
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "Field definition statement."
+        },
+        {
+          "term": "idempotent_migrations",
+          "module": "14-surrealdb",
+          "description": "Migration automation practices."
+        },
+        {
+          "term": "data_migrations",
+          "module": "14-surrealdb",
+          "description": ""
         }
       ]
     },
@@ -2104,8 +2202,8 @@
           "description": "Defining schemas safely."
         },
         {
-          "module": "14-surrealdb",
           "term": "assert_clause",
+          "module": "14-surrealdb",
           "description": "Related concept: `ASSERT` Clause."
         }
       ]
@@ -2133,13 +2231,13 @@
           "description": "Query operators."
         },
         {
-          "module": "14-surrealdb",
           "term": "search_index_analyzer",
+          "module": "14-surrealdb",
           "description": "Search analyzers and tokenizers."
         },
         {
-          "module": "14-surrealdb",
           "term": "search_functions",
+          "module": "14-surrealdb",
           "description": "search::score() search functions."
         }
       ]
@@ -2230,9 +2328,53 @@
           "description": "Querying vectors."
         },
         {
-          "module": "14-surrealdb",
           "term": "hnsw_index",
+          "module": "14-surrealdb",
           "description": "HNSW vector indexing."
+        }
+      ]
+    },
+    "array_record_links": {
+      "level": 5,
+      "file": "terms/level_05/array_record_links.md",
+      "display_name": "Array of Record Links",
+      "prerequisites": [
+        {
+          "term": "record_link_concept",
+          "module": "14-surrealdb",
+          "description": "Direct pointer references in SurrealDB."
+        },
+        {
+          "term": "array_type",
+          "module": "14-surrealdb",
+          "description": "Array data types in SurrealDB."
+        },
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "Schema field definitions."
+        }
+      ],
+      "related": [
+        {
+          "term": "record_link_concept",
+          "module": "14-surrealdb",
+          "description": "Base record link architecture."
+        },
+        {
+          "term": "record_link_type",
+          "module": "14-surrealdb",
+          "description": "Record link data type."
+        },
+        {
+          "term": "select_fetch",
+          "module": "14-surrealdb",
+          "description": "Eager link resolution."
+        },
+        {
+          "term": "indexing_record_links",
+          "module": "14-surrealdb",
+          "description": ""
         }
       ]
     },
@@ -2378,8 +2520,8 @@
           "description": "The query filter context."
         },
         {
-          "module": "14-surrealdb",
           "term": "graph_arrows",
+          "module": "14-surrealdb",
           "description": "Graph arrow operators for traversal filtering."
         }
       ],
@@ -2424,8 +2566,8 @@
           "description": "Creating graph edges."
         },
         {
-          "module": "14-surrealdb",
           "term": "graph_vs_joins",
+          "module": "14-surrealdb",
           "description": "Graph traversal vs SQL JOINs."
         }
       ]
@@ -2463,8 +2605,8 @@
           "description": "Related concept: Bidirectional Relationship Queries."
         },
         {
-          "module": "14-surrealdb",
           "term": "graph_overview",
+          "module": "14-surrealdb",
           "description": "Related concept: Graph Connections (Overview: Nodes vs Edges)."
         }
       ]
@@ -2504,13 +2646,13 @@
           "description": "The data type validation rules."
         },
         {
-          "module": "14-surrealdb",
           "term": "record_id",
+          "module": "14-surrealdb",
           "description": "Record IDs."
         },
         {
-          "module": "14-surrealdb",
           "term": "table",
+          "module": "14-surrealdb",
           "description": "Table entities."
         }
       ],
@@ -2531,13 +2673,13 @@
           "description": "Related concept: Indexing Record Link Fields."
         },
         {
-          "module": "14-surrealdb",
           "term": "relate",
+          "module": "14-surrealdb",
           "description": "RELATE statement."
         },
         {
-          "module": "14-surrealdb",
           "term": "array_record_links",
+          "module": "14-surrealdb",
           "description": "Array of record links."
         }
       ]
@@ -2553,8 +2695,8 @@
           "description": "The parent paradigm."
         },
         {
-          "module": "14-surrealdb",
           "term": "record_link_concept",
+          "module": "14-surrealdb",
           "description": "Record link concept."
         }
       ],
@@ -2575,8 +2717,8 @@
           "description": "Related concept: Edge Properties."
         },
         {
-          "module": "14-surrealdb",
           "term": "record_link_concept",
+          "module": "14-surrealdb",
           "description": "Related concept: Record Link (Concept)."
         }
       ]
@@ -3293,8 +3435,8 @@
           "description": "The parent index context."
         },
         {
-          "module": "14-surrealdb",
           "term": "vector_index",
+          "module": "14-surrealdb",
           "description": "Vector index architecture overview."
         }
       ],
@@ -3310,8 +3452,8 @@
           "description": "The parent index context."
         },
         {
-          "module": "14-surrealdb",
           "term": "vector_index",
+          "module": "14-surrealdb",
           "description": "Related concept: Vector Index (Overview)."
         }
       ]
@@ -3412,8 +3554,8 @@
           "description": "Query operators."
         },
         {
-          "module": "14-surrealdb",
           "term": "search_index",
+          "module": "14-surrealdb",
           "description": "Related concept: `SEARCH` Index (Full-Text Search)."
         }
       ]
@@ -3446,8 +3588,8 @@
           "description": "Querying full-text search."
         },
         {
-          "module": "14-surrealdb",
           "term": "search_index",
+          "module": "14-surrealdb",
           "description": "Related concept: `SEARCH` Index (Full-Text Search)."
         }
       ]
@@ -3519,8 +3661,8 @@
           "description": "Architectural pattern for client-side connections."
         },
         {
-          "module": "14-surrealdb",
           "term": "jwt_auth",
+          "module": "14-surrealdb",
           "description": "JWT authentication."
         }
       ]
@@ -3851,8 +3993,8 @@
           "description": "Related concept: `SIGNUP` / `SIGNIN` Clauses."
         },
         {
-          "module": "14-surrealdb",
           "term": "auth_architecture",
+          "module": "14-surrealdb",
           "description": "Related concept: Authentication Architecture (Root, Namespace, Database, Record)."
         }
       ]
@@ -4212,8 +4354,8 @@
           "description": "Related concept: WebSocket vs HTTP Connection."
         },
         {
-          "module": "14-surrealdb",
           "term": "define_event",
+          "module": "14-surrealdb",
           "description": "DEFINE EVENT triggers."
         }
       ]
@@ -4492,8 +4634,8 @@
           "description": "Client authentication."
         },
         {
-          "module": "14-surrealdb",
           "term": "surrealdb",
+          "module": "14-surrealdb",
           "description": "SurrealDB core server."
         }
       ],
@@ -4624,8 +4766,8 @@
           "description": "Write conflicts in snapshot isolation."
         },
         {
-          "module": "14-surrealdb",
           "term": "sdk_connection",
+          "module": "14-surrealdb",
           "description": "Handling network and query errors in SDKs."
         }
       ],
@@ -4702,8 +4844,8 @@
           "description": "Parameter binding syntax."
         },
         {
-          "module": "14-surrealdb",
           "term": "sdk_connection",
+          "module": "14-surrealdb",
           "description": "Executing raw SurrealQL queries via SDKs."
         }
       ],
@@ -4909,95 +5051,6 @@
           "description": "Related concept: SDK Error Handling & Retry Patterns."
         }
       ]
-    },
-    "assert_clause": {
-      "file": "terms/level_04/assert_clause.md",
-      "prerequisites": [
-        {
-          "module": "14-surrealdb",
-          "term": "define_field",
-          "description": "DEFINE FIELD statement."
-        }
-      ],
-      "related": [
-        {
-          "module": "14-surrealdb",
-          "term": "event_variables"
-        },
-        {
-          "module": "14-surrealdb",
-          "term": "field_assertions",
-          "description": "Field assertion constraints."
-        },
-        {
-          "module": "14-surrealdb",
-          "term": "schemafull_validation",
-          "description": "Schemafull validation rules."
-        }
-      ],
-      "display_name": "`ASSERT` Clause",
-      "level": 4
-    },
-    "overwrite_keyword": {
-      "file": "terms/level_04/overwrite_keyword.md",
-      "prerequisites": [
-        {
-          "module": "14-surrealdb",
-          "term": "define_table",
-          "description": "DEFINE TABLE DDL statement."
-        }
-      ],
-      "related": [
-        {
-          "module": "14-surrealdb",
-          "term": "data_migrations"
-        },
-        {
-          "module": "14-surrealdb",
-          "term": "define_field",
-          "description": "DEFINE FIELD overwriting."
-        },
-        {
-          "module": "14-surrealdb",
-          "term": "idempotent_migrations",
-          "description": "Idempotent schema migrations."
-        }
-      ],
-      "display_name": "`OVERWRITE` Keyword",
-      "level": 4
-    },
-    "array_record_links": {
-      "file": "terms/level_05/array_record_links.md",
-      "prerequisites": [
-        {
-          "module": "14-surrealdb",
-          "term": "record_link_concept",
-          "description": "Record link references."
-        },
-        {
-          "module": "14-surrealdb",
-          "term": "array_type",
-          "description": "Array data types."
-        }
-      ],
-      "related": [
-        {
-          "module": "14-surrealdb",
-          "term": "indexing_record_links"
-        },
-        {
-          "module": "14-surrealdb",
-          "term": "record_link_type",
-          "description": "Record link type specification."
-        },
-        {
-          "module": "14-surrealdb",
-          "term": "record_link_concept",
-          "description": "Related concept: Record Link (Concept)."
-        }
-      ],
-      "display_name": "Array of Record Links (`array<record<table>>`)",
-      "level": 5
     }
   }
 }

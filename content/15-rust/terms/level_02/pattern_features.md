@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Pattern Matching**: Advanced pattern matching features (guards `if`, `@` bindings, `..` rest patterns, `|` or-patterns).
+
+
+**Rust Language Feature (destructuring & guard syntax)**: Advanced pattern matching features (guards `if`, `@` bindings, `..` rest patterns, `|` or-patterns).
 
 ---
 

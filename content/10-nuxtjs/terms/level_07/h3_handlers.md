@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Server-Side Development**
+
+**Server & Nitro Engine** (H3 Event Handlers): H3 Event Handlers (`defineEventHandler()`) provide lightweight, composable HTTP event processing powering Nitro server routes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard Express.js apps, everything is attached to two massive objects: `req` (Request) and `res` (Response). If you want to read a cookie, you do `req.cookies`. If you want to read the body, you need body-parser middleware and then read `req.body`. This mutates the core Node.js objects and makes the code difficult to run in Edge environments (like Cloudflare) where Node.js `req/res` objects don't exist.
@@ -62,7 +63,7 @@ export default defineEventHandler(async (event) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `readBody` on a GET request
 **The mistake:** Calling `const body = await readBody(event)` inside an endpoint that processes `GET` requests.
@@ -117,75 +118,118 @@ export default defineEventHandler((event) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Redirecting Users
+### Exercise 1: Extracting Route Parameters and Headers in H3
 
-**Problem:** You are migrating old routes. Write a Nitro endpoint at `server/routes/old-page.ts` that intercepts the request and instantly redirects the user to `/new-page` with a 301 Permanent Redirect status code. (Hint: H3 provides a `sendRedirect` utility).
+**Scenario:**
+Create an H3 handler `server/api/users/[id].ts` parsing path parameters, query parameters, and custom request headers.
 
-**Expected output:**
+**Requirements:**
+1. Use `getRouterParam()`, `getQuery()`, and `getHeader()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> export default defineEventHandler(async (event) => {
->   await sendRedirect(event, '/new-page', 301);
-> });
-> ```
-> - H3 auto-imports `sendRedirect`, which accepts the current `event`, target redirect URL, and optional HTTP status code.
-
----
-
-### Exercise 2: H3 Utility Functions Matrix
-
-**Problem:** Match H3 utility helper to its purpose:
-1. `getQuery(event)` 
-2. `readBody(event)` 
-3. `getRouterParam(event, 'id')` 
-4. `setCookie(event, name, val)` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Parses URL query search parameters
-> 2. Reads and parses JSON request body payload
-> 3. Retrieves dynamic route parameters
-> 4. Sets HTTP response cookie header
-> ```
-> - `getQuery(event)` -> Reads URL query params (`?q=val`)
-> - `readBody(event)` -> Reads JSON body payload
-> - `getRouterParam(event, 'id')` -> Reads dynamic path params
-> - `setCookie(event, 'token', val)` -> Sets response cookie
-> 
-> ```typescript
-> export default defineEventHandler(async (event) => {
+> // server/api/users/[id].ts
+> export default defineEventHandler((event) => {
+>   const id = getRouterParam(event, "id");
 >   const query = getQuery(event);
->   const body = await readBody(event);
+>   const authHeader = getHeader(event, "authorization");
+>   
+>   return {
+>     userId: id,
+>     filter: query.filter,
+>     hasToken: !!authHeader
+>   };
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `getRouterParam(event, name)` extracts dynamic path parameters (`[id]`).
+> 2. `getQuery(event)` parses incoming URL query parameters into a typed object.
+> 3. `getHeader(event, name)` reads HTTP request headers case-insensitively.
+
 ---
 
-### Exercise 3: H3 Custom Error Throwing
+### Exercise 2: Setting HTTP Status Codes and Headers
 
-**Problem:** Write H3 line throwing HTTP 401 Unauthorized error using `createError()`.
+**Scenario:**
+Set a custom response header `X-Cache-Status: HIT` and return HTTP status `201 Created` upon resource creation.
 
-**Expected output:**
+**Requirements:**
+1. Use `setResponseStatus()` and `setResponseHeader()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> throw createError({ statusCode: 401, statusMessage: 'Unauthorized' });
-> ```
-> - `createError` throws structured H3 HTTP error exceptions.
-> 
-> ```typescript
-> throw createError({
->   statusCode: 401,
->   statusMessage: 'Unauthorized Access'
+> // server/api/items.post.ts
+> export default defineEventHandler(async (event) => {
+>   const body = await readBody(event);
+>   
+>   setResponseStatus(event, 201);
+>   setResponseHeader(event, "X-Cache-Status", "BYPASS");
+>   setResponseHeader(event, "Location", `/api/items/${body.id}`);
+>   
+>   return { success: true, item: body };
 > });
 > ```
+
+> #### Technical Explanation
+>
+> 1. `setResponseStatus(event, code)` explicitly sets the HTTP response status code.
+> 2. `setResponseHeader(event, key, val)` attaches custom HTTP response headers.
+> 3. Standard REST API handler pattern in H3.
+
+---
+
+### Exercise 3: Reading and Writing HTTP Cookies in H3
+
+**Scenario:**
+Read a session cookie `session_id` and set a new secure cookie in an H3 event handler.
+
+**Requirements:**
+1. Use `getCookie()` and `setCookie()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // server/api/session.ts
+> export default defineEventHandler((event) => {
+>   const currentSession = getCookie(event, "session_id");
+>   
+>   setCookie(event, "session_id", "new_sec_token_999", {
+>     httpOnly: true,
+>     secure: true,
+>     sameSite: "lax",
+>     maxAge: 60 * 60 * 24
+>   });
+>   
+>   return { previousSession: currentSession, active: true };
+> });
+> ```
+
+> #### Technical Explanation
+>
+> 1. `getCookie(event, name)` parses request cookie headers on the server.
+> 2. `setCookie(event, name, value, options)` appends `Set-Cookie` headers to HTTP responses.
+> 3. `httpOnly: true` prevents browser client-side JavaScript access to sensitive cookies.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Server Middleware](server_middleware.md) — Middleware files use the exact same H3 `defineEventHandler` syntax.
 - [Express.js (Legacy Node Server Context)](express_js.md) — Related concept: Express.js (Legacy Node Server Context).
 - [`server/api/` Routes](server_api_routes.md) — Related concept: `server/api/` Routes.
@@ -194,7 +238,7 @@ export default defineEventHandler((event) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - H3 is the underlying HTTP framework powering Nuxt backend routes.
 - It relies on pure utility functions (`readBody`, `getQuery`, `getCookie`) instead of mutating global request objects.
 - It is highly optimized to run in Node.js, Serverless, and Edge environments.

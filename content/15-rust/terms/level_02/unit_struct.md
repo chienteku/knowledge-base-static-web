@@ -146,7 +146,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Typestate Pattern for High-Performance Network Protocol Client
 
-**Problem:**
+**Scenario:**
 You are designing a high-reliability TCP protocol client for an industrial telemetry pipeline. The client connection can exist in three states: `Disconnected`, `Connected`, and `Authenticated`. To eliminate runtime state checks and prevent bugs (such as attempting to transmit data before authenticating), enforce state transitions at compile time using zero-sized Unit Structs as state markers with `PhantomData<State>`.
 
 Requirements:
@@ -287,7 +287,7 @@ Requirements:
 
 ### Exercise 2: Zero-Cost Strategy Pattern for Telemetry Encoding
 
-**Problem:**
+**Scenario:**
 In a real-time event processing platform, log messages must be formatted and dispatched using different encoding strategies (`JsonFormat`, `CompactTextFormat`, `CsvFormat`). Instead of using dynamic trait objects (`Box<dyn Formatter>`) which introduce runtime vtable lookups and heap allocations, implement a zero-cost strategy pattern using Unit Structs and static trait dispatch.
 
 Requirements:
@@ -407,7 +407,7 @@ Requirements:
 
 ### Exercise 3: Type-Safe Hardware Register Access Control via Capability Tokens
 
-**Problem:**
+**Scenario:**
 In embedded hardware driver design, memory-mapped registers possess explicit access permissions: `ReadOnly` (e.g. hardware status registers), `WriteOnly` (e.g. command trigger registers), and `ReadWrite` (e.g. configuration registers). Using Unit Structs as access capability tokens, build a type-safe register abstraction `Register<T, AccessMode>` that guarantees permission correctness at compile time.
 
 Requirements:

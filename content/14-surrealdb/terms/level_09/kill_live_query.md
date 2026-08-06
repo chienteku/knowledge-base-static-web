@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Real-Time & Resource Management**
+
+
+**SurrealQL Command (live query subscription termination statement)**: - **Real-Time & Resource Management**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB WebSocket Session** (Frees server memory and network bandwidth by closing subscription channels).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a client application starts a `LIVE SELECT` subscription, the SurrealDB server allocates memory and CPU resources to evaluate matching record events for that session. If a user navigates to another page, closes a tab, or unmounts a UI component without canceling the subscription, orphaned subscriptions continue consuming server bandwidth and memory.
@@ -84,7 +83,7 @@ function LiveChatFeed() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to Unsubscribe on Component Unmount
 
@@ -152,88 +151,99 @@ useEffect(() => {
 
 
 
-### Mistake 4: Passing Non-UUID Arguments to `KILL` Statements
 
-**The mistake:** Executing `KILL 'user';` or passing table names to `KILL`.
 
-**Why it's wrong:** `KILL` requires the exact UUID string returned when establishing a `LIVE SELECT` subscription (e.g. `KILL u"f47ac10b-58cc-4372-a567-0e02b2c3d479";`).
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-KILL "user"; // ❌ Invalid UUID live query target!
-```
+### Exercise 1: Subscribing and Terminating Live Queries
 
-*Fix:*
-```surrealql
-KILL u"f47ac10b-58cc-4372-a567-0e02b2c3d479"; // Valid live query UUID target
-```
+**Scenario:**
+A web client subscribes to a live query on table `order`, receives a subscription UUID, and subsequently terminates the live query using `KILL`.
 
-### Mistake 5: Forgetting to Cancel Live Queries in Client Application Un-Mount Hooks
-
-**The mistake:** Leaving `LIVE SELECT` subscriptions active when React components unmount.
-
-**Why it's wrong:** Un-killed live queries keep WebSocket channels and server memory buffers active indefinitely. Always call `db.kill(liveQueryId)` or `KILL` on component unmount.
-
-*Incorrect:*
-```surrealql
-// React useEffect missing cleanup function
-useEffect(() => { db.live('user', callback); }, []);
-```
-
-*Fix:*
-```surrealql
-useEffect(() => {
-  let id;
-  db.live('user', callback).then(res => id = res);
-  return () => { if (id) db.kill(id); };
-}, []);
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Kill Command Syntax
-Write the SurrealQL command to kill a live subscription with UUID `u"a1b2c3d4-e5f6-7890-abcd-ef1234567890"`.
+**Requirements:**
+1. Execute `LIVE SELECT * FROM order;` and capture the returned UUID.
+2. Execute `KILL "live-query-uuid";` to terminate the subscription.
 
 > [!check]- Answer
-> - Syntax: `KILL u"<UUID>";`
-
----
-
-
-
-### Exercise 2: Killing Live Query in SurrealQL
-
-**Problem:** Kill live query subscription with UUID `u"12345678-1234-1234-1234-1234567890ab"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> KILL u"12345678-1234-1234-1234-1234567890ab";
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> KILL u"12345678-1234-1234-1234-1234567890ab";
+> -- 1. Subscribe to live query (returns UUID string e.g. "018c4e6a-7b3f-7123-89ab-cdef01234567")
+> LIVE SELECT * FROM order;
+> 
+> -- 2. Terminate live query subscription by UUID
+> KILL "018c4e6a-7b3f-7123-89ab-cdef01234567";
 > ```
 >
-> **Explanation:** `KILL query_uuid` terminates active real-time WebSocket live query subscriptions.
+> #### Technical Explanation
+>
+> 1. `LIVE SELECT` returns a unique UUID identifying the active real-time subscription channel.
+> 2. `KILL "<uuid>"` terminates the background live query stream on the server.
+> 3. Frees WebSocket connection memory and server listener resources.
 
 ---
 
-### Exercise 3: SDK Live Query Cleanup
+### Exercise 2: Terminating Live Queries from JavaScript SDK
 
-**Problem:** Write JS SDK call cancelling a live query using `db.kill(queryId)`.
+**Scenario:**
+Write the JavaScript SDK code to unsubscribe from an active live query using `db.kill(uuid)`.
 
-**Expected output:**
+**Requirements:**
+1. Unsubscribe from live query using `await db.kill(queryUuid)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const queryUuid = await db.live("order", (action, result) => {
+>   console.log("Order update:", action, result);
+> });
+
+// Later, unsubscribe and release resources
+await db.kill(queryUuid);
+console.log("Unsubscribed live query subscription.");
+```
+
+> #### Technical Explanation
+>
+> 1. SDK client `db.kill(uuid)` sends a `KILL` statement over the WebSocket channel.
+> 2. Removes the live query listener on the SurrealDB server process.
+> 3. Prevents memory leaks in single-page web apps when UI components unmount.
+
+---
+
+### Exercise 3: Automatic Server-Side Live Query Cleanup
+
+**Scenario:**
+Explain what happens to active live queries when a client WebSocket connection drops unexpectedly.
+
+**Requirements:**
+1. Describe automatic connection cleanup behavior.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> await db.kill(queryId);
-> ```
-> ```javascript
-> await db.kill(queryId);
+> Server Connection Cleanup:
+> When a client WebSocket disconnects unexpectedly, SurrealDB automatically terminates and kills all active live query listeners associated with that connection session.
 > ```
 >
-> **Explanation:** `db.kill(queryId)` closes real-time WebSocket subscription listeners.
+> #### Technical Explanation
+>
+> 1. SurrealDB binds live query subscriptions to active client connection session IDs.
+> 2. Automatically cleans up orphan live queries when client sockets disconnect.
+> 3. Protects database server memory against leaked subscriptions.
 
-## 7. Related Terms
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [`LIVE SELECT` (Live Queries)](live_select.md) — Starting live subscriptions.
 - [JavaScript / TypeScript SDK](../level_10/js_sdk.md) — Client SDK lifecycle methods.
@@ -242,7 +252,7 @@ Write the SurrealQL command to kill a live subscription with UUID `u"a1b2c3d4-e5
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `KILL` terminates active `LIVE SELECT` subscriptions using their UUID.
 - Essential for preventing server memory leaks and redundant network events in SPAs.
 - In SDKs, invoke `db.kill(uuid)` during component cleanup/unmount lifecycle phases.

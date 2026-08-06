@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Feature**
+
+**SQL Command / Clause** (Conditional Insert or Update Clause): `ON CONFLICT ... DO UPDATE` (Upsert) performs an update if a key conflict occurs during row insertion.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Introduced in PostgreSQL 9.5. Executes atomically within the storage engine, preventing race conditions (dirty reads/writes) between competing client connections).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In web applications, you often encounter situations where you want to write a record, but update it if it already exists:
@@ -96,7 +97,7 @@ DO UPDATE SET views_count = page_views.views_count + 1;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that ON CONFLICT requires a unique index target
 
@@ -143,71 +144,104 @@ ON CONFLICT (id) DO UPDATE SET name = name; -- ❌ Sets name to existing value!
 ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name; -- Sets name to proposed new value
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Session Upsert
+### Exercise 1: Conditional Upsert Execution with `ON CONFLICT DO UPDATE`
 
-**Problem:** You are building a user tracking table `active_users`. The table has columns `username` (unique) and `last_seen` (timestamp). Write an SQL statement that inserts user `'charlie'` with the current time `NOW()`. If Charlie already exists in the table, update his `last_seen` timestamp to `NOW()` instead of crashing.
+**Scenario:**
+Insert or update user setting for `user_id = 42`. If setting exists, update `theme`; if missing, insert a new setting row.
 
-**Expected output:**
+**Requirements:**
+1. Execute `INSERT INTO ... ON CONFLICT (user_id) DO UPDATE SET ...`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> INSERT INTO active_users (username, last_seen) 
-> VALUES ('charlie', NOW())
-> ON CONFLICT (username) 
-> DO UPDATE SET last_seen = EXCLUDED.last_seen;
+> INSERT INTO user_settings (user_id, theme, updated_at) 
+> VALUES (42, 'dark', CURRENT_TIMESTAMP) 
+> ON CONFLICT (user_id) 
+> DO UPDATE SET 
+>   theme = EXCLUDED.theme,
+>   updated_at = EXCLUDED.updated_at 
+> RETURNING user_id, theme;
 > ```
-> - The target conflict column is `username`.
-> - Use the virtual table `EXCLUDED` to fetch the incoming timestamp value.
+>
+> #### Technical Explanation
+>
+> 1. `ON CONFLICT (user_id)` detects unique constraint violations on `user_id`.
+> 2. `DO UPDATE SET` modifies the existing row using `EXCLUDED.col` pseudo-table values.
+> 3. Atomic insert-or-update operation in a single query.
+
+---
+
+### Exercise 2: Silent Duplicate Exclusion with `ON CONFLICT DO NOTHING`
+
+**Scenario:**
+Insert a tag into `tags` table, silently ignoring the write if the tag name already exists.
+
+**Requirements:**
+1. Execute `INSERT INTO tags (name) VALUES ('sql') ON CONFLICT (name) DO NOTHING`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> INSERT INTO tags (name) 
+> VALUES ('postgresql') 
+> ON CONFLICT (name) 
+> DO NOTHING 
+> RETURNING id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DO NOTHING` suppresses unique constraint violation errors, leaving existing rows unchanged.
+> 2. If conflict occurs, returns 0 affected rows without aborting the transaction.
+> 3. Ideal for idempotent tag and dictionary inserts.
+
+---
+
+### Exercise 3: Multi-Column Composite Key Upserts
+
+**Scenario:**
+Upsert daily page view metrics into `page_views` table on composite unique key `(page_url, view_date)`.
+
+**Requirements:**
+1. Execute `ON CONFLICT (page_url, view_date) DO UPDATE SET view_count = page_views.view_count + 1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> INSERT INTO page_views (page_url, view_date, view_count) 
+> VALUES ('/home', CURRENT_DATE, 1) 
+> ON CONFLICT (page_url, view_date) 
+> DO UPDATE SET 
+>   view_count = page_views.view_count + 1 
+> RETURNING page_url, view_count;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ON CONFLICT (col1, col2)` targets multi-column unique constraints.
+> 2. `page_views.view_count + 1` increments running totals on existing rows atomically.
+> 3. Foundation for analytics aggregation pipelines.
 
 ---
 
 
 
-### Exercise 2: Idempotent User Upsert with `EXCLUDED`
-
-**Problem:** Insert user `email: 'a@ex.com'`, `name: 'Alice'` on conflict `(email)` update `name = EXCLUDED.name` and `updated_at = NOW()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INSERT INTO users (email, name) VALUES ('a@ex.com', 'Alice') ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, updated_at = NOW();
-> ```
-> ```sql
-> INSERT INTO users (email, name)
-> VALUES ('a@ex.com', 'Alice')
-> ON CONFLICT (email) DO UPDATE
->   SET name = EXCLUDED.name,
->       updated_at = NOW();
-> ```
->
-> **Explanation:** `EXCLUDED.column` references newly proposed insert values during conflict resolution.
-
----
-
-### Exercise 3: Conflict Resolution with `DO NOTHING`
-
-**Problem:** Insert tag `'web'` on conflict `(name)` do nothing using `ON CONFLICT DO NOTHING`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INSERT INTO tags (name) VALUES ('web') ON CONFLICT (name) DO NOTHING;
-> ```
-> ```sql
-> INSERT INTO tags (name) VALUES ('web')
-> ON CONFLICT (name) DO NOTHING;
-> ```
->
-> **Explanation:** `ON CONFLICT DO NOTHING` silently skips duplicate key insertions idempotently.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`INSERT INTO`](insert_into.md) — The parent write statement.
 - [`UNIQUE` Constraint](../level_02/unique_constraint.md) — The trigger rule for conflicts.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - An UPSERT (insert-or-update) is written in Postgres using `ON CONFLICT`.
 - Runs atomically inside the database engine, eliminating application race conditions.
 - `ON CONFLICT DO NOTHING` bypasses writes silently if unique constraints fail.

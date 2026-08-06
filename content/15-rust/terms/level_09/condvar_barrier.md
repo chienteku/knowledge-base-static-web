@@ -16,7 +16,9 @@
 
 ## 2. Term Category
 
-**Low-Level Synchronization Primitives**: `Condvar` (Condition Variable) and `Barrier` provide event-driven thread sleeping/notification and multi-thread phase synchronization.
+
+
+**Rust Concurrency Primitives (thread synchronization barriers & condition variables)**: `Condvar` (Condition Variable) and `Barrier` provide event-driven thread sleeping/notification and multi-thread phase synchronization.
 
 ---
 

@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Rendering Strategies**
+
+**Rendering Strategy** (Per-Route Rendering Mode Selection): Hybrid Rendering allows Nuxt 3 applications to assign different rendering strategies (SSR, SWR, SSG, SPA) per route rule.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server / Build-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Historically, web frameworks forced you into a global architectural decision. You had to choose: "Is my app an SPA? Or is it an SSR app? Or is it an SSG blog?"
@@ -61,7 +62,7 @@ By utilizing Hybrid Rendering, you drastically reduce your server costs. Instead
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `prerender` on routes with dynamic user content
 **The mistake:** Setting `'/profile/**': { prerender: true }` so that user profiles load lightning fast.
@@ -70,6 +71,8 @@ By utilizing Hybrid Rendering, you drastically reduce your server costs. Instead
 **Golden Rule:** Never use `{ prerender: true }` on routes that require authentication or rely on dynamic URL parameters that constantly change.
 
 ---
+
+
 
 ### Mistake 2: Disabling SSR Globally (`ssr: false`) Instead of Using Granular `routeRules`
 
@@ -95,6 +98,8 @@ export default defineNuxtConfig({
 
 ---
 
+
+
 ### Mistake 3: Using `prerender: true` on Routes with Frequent User-Generated Dynamic Content
 
 **The mistake:** Setting `prerender: true` on live stock trading or real-time chat routes.
@@ -114,164 +119,107 @@ routeRules: { '/live-chat': { ssr: false } } // Dynamic client execution for liv
 
 ---
 
-### Mistake 4: Disabling SSR Globally (`ssr: false`) Instead of Using Granular `routeRules`
 
-**The mistake:** Setting `ssr: false` in `nuxt.config.ts` when only `/admin` dashboard requires SPA mode.
-
-**Why it's wrong:** Disabling SSR globally destroys server rendering and SEO for all public pages. Use `routeRules` for granular per-route rendering strategies.
-
-*Incorrect:*
-```vue
-export default defineNuxtConfig({
-  ssr: false // ❌ Turns entire app into SPA, destroying SEO!
-});
-```
-
-*Fix:*
-```vue
-export default defineNuxtConfig({
-  routeRules: {
-    '/admin/**': { ssr: false } // SPA mode only for admin dashboard
-  }
-});
-```
-
----
-
-### Mistake 5: Using `prerender: true` on Routes with Frequent User-Generated Dynamic Content
-
-**The mistake:** Setting `prerender: true` on live stock trading or real-time chat routes.
-
-**Why it's wrong:** `prerender: true` generates static HTML once at build time. Users visiting live routes will see stale HTML generated during deployment. Use `ssr: true` or `swr: 60`.
-
-*Incorrect:*
-```vue
-routeRules: { '/live-chat': { prerender: true } } // ❌ Serves stale build-time HTML!
-```
-
-*Fix:*
-```vue
-routeRules: { '/live-chat': { ssr: false } } // Dynamic client execution for live data
-```
 
 
 ---
 
-### Mistake 6: Disabling SSR Globally (`ssr: false`) Instead of Using Granular `routeRules`
+## 5. Practice Exercises
 
-**The mistake:** Setting `ssr: false` in `nuxt.config.ts` when only `/admin` dashboard requires SPA mode.
+### Exercise 1: Multi-Mode Route Configuration with `routeRules`
 
-**Why it's wrong:** Disabling SSR globally destroys server rendering and SEO for all public pages. Use `routeRules` for granular per-route rendering strategies.
+**Scenario:**
+Configure `nuxt.config.ts` to assign SSR, SWR, SSG, and SPA modes to different URL paths.
 
-*Incorrect:*
-```vue
-export default defineNuxtConfig({
-  ssr: false // ❌ Turns entire app into SPA, destroying SEO!
-});
-```
+**Requirements:**
+1. Configure `routeRules` with `/` (SSR), `/blog/**` (SWR), `/about` (prerender), `/admin/**` (SPA).
 
-*Fix:*
-```vue
-export default defineNuxtConfig({
-  routeRules: {
-    '/admin/**': { ssr: false } // SPA mode only for admin dashboard
-  }
-});
-```
-
----
-
-### Mistake 7: Using `prerender: true` on Routes with Frequent User-Generated Dynamic Content
-
-**The mistake:** Setting `prerender: true` on live stock trading or real-time chat routes.
-
-**Why it's wrong:** `prerender: true` generates static HTML once at build time. Users visiting live routes will see stale HTML generated during deployment. Use `ssr: true` or `swr: 60`.
-
-*Incorrect:*
-```vue
-routeRules: { '/live-chat': { prerender: true } } // ❌ Serves stale build-time HTML!
-```
-
-*Fix:*
-```vue
-routeRules: { '/live-chat': { ssr: false } } // Dynamic client execution for live data
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: Caching the API
-
-**Problem:** Hybrid rendering applies to API routes too! Write a route rule that caches all requests to `/api/public-stats` for exactly 1 hour (3600 seconds) using the Stale-While-Revalidate (SWR) strategy.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // nuxt.config.ts
 > export default defineNuxtConfig({
 >   routeRules: {
->     '/api/public-stats': { swr: 3600 }
->   }
-> })
-> ```
-> - SWR caching is applied using the `swr` configuration property, passing the duration in seconds.
-
----
-
-### Exercise 2: Hybrid Rendering routeRules Pattern
-
-**Problem:** Write `nuxt.config.ts` `routeRules` configuring:
-1. `/` -> Prerendered SSG
-2. `/blog/**` -> SWR 1 hour (3600s)
-3. `/dashboard/**` -> Client SPA (`ssr: false`)
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> export default defineNuxtConfig({
->   routeRules: {
->     '/': { prerender: true },
->     '/blog/**': { swr: 3600 },
->     '/dashboard/**': { ssr: false }
->   }
-> });
-> ```
-> - `routeRules` mixes SSG, SWR, SSR, and SPA in a single application.
-> 
-> ```typescript
-> export default defineNuxtConfig({
->   routeRules: {
->     '/': { prerender: true },
->     '/blog/**': { swr: 3600 },
->     '/dashboard/**': { ssr: false }
+>     "/": { ssr: true },                    // Universal SSR (Default)
+>     "/about": { prerender: true },          // Static Site Generation (SSG)
+>     "/blog/**": { swr: 3600 },              // SWR (Cached 1 hour)
+>     "/admin/**": { ssr: false }             // Client-side Single Page App (SPA)
 >   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. Hybrid Rendering assigns the optimal rendering strategy per route path.
+> 2. `prerender` generates static HTML during build time; `swr` caches responses dynamically at runtime.
+> 3. `ssr: false` disables server rendering for private interactive dashboards.
+
 ---
 
-### Exercise 3: SWR vs Prerender Distinction
+### Exercise 2: Configuring Invalidation Windows for Incremental Static Regeneration (ISR)
 
-**Problem:** Contrast `swr: 60` vs `prerender: true` in `routeRules`.
+**Scenario:**
+Configure ISR (Incremental Static Regeneration) for `/news/**` with a 5-minute background revalidation window.
 
-**Expected output:**
+**Requirements:**
+1. Set `isr: 300` in `routeRules`.
+
 > [!check]- Answer
-> ```text
-> swr: 60: Serves cached static page and revalidates in background on server every 60 seconds;
-> prerender: true: Generates static page ONCE during build time.
+>
+> #### Implementation
+>
+> ```typescript
+> // nuxt.config.ts
+> export default defineNuxtConfig({
+>   routeRules: {
+>     "/news/**": { isr: 300 } // Revalidates every 5 minutes (300 seconds)
+>   }
+> });
 > ```
-> - `swr: 60` -> Background server revalidation on timer.
-> - `prerender: true` -> Static build-time generation.
-> 
+
+> #### Technical Explanation
+>
+> 1. `isr` caches static HTML responses at the edge/server and updates them in the background after the expiration window.
+> 2. Delivers static file performance with dynamic content updates.
+> 3. Popular strategy for high-traffic content sites.
+
+---
+
+### Exercise 3: Testing Hybrid Route Execution Modes
+
+**Scenario:**
+Verify route rendering modes by inspecting `X-Nitro-Cache` and HTML document structures.
+
+**Requirements:**
+1. Inspect response headers and HTML payloads.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> swr = Background Revalidate; prerender = Build-Time Static
+> Route Verification Audit:
+> - Prerendered Route (/about): Renders static HTML file directly from disk.
+> - SWR Route (/blog/1): Returns 'X-Nitro-Cache: HIT' on repeated requests.
+> - SPA Route (/admin): Renders minimal <div id="__nuxt"></div> wrapper without initial content.
 > ```
+
+> #### Technical Explanation
+>
+> 1. SWR routes emit Nitro cache headers indicating cache hit/miss status.
+> 2. SPA routes contain empty HTML bodies relying on client JavaScript initialization.
+> 3. Empirical verification of hybrid rendering setup.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Route Rules Configuration](../level_08/route_rules.md) — The syntax used to configure Hybrid Rendering.
 - [Edge-Side Rendering (ESR)](esr.md) — Related concept: Edge-Side Rendering (ESR).
 - [Static Site Generation (SSG)](ssg.md) — Static site generation.
@@ -280,7 +228,7 @@ routeRules: { '/live-chat': { ssr: false } } // Dynamic client execution for liv
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Hybrid Rendering allows you to mix SSR, SPA, and SSG in the same application.
 - It is configured using `routeRules` in `nuxt.config.ts`.
 - It drastically optimizes server costs by only using SSR when necessary.

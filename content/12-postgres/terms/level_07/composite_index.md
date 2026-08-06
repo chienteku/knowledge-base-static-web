@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Index Type**
+
+**Performance / Optimization** (Multi-Column B-Tree Index): Composite Indexes store multi-column key tuples in a single B-tree index, optimizing multi-attribute filtering and left-prefix matching.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Supported up to 32 columns per index. Under the hood, Postgres concatenates column values into single search keys sorted by index position).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In real-world applications, search filters are rarely simple. Users filter catalogs by multiple categories at once:
@@ -93,7 +94,7 @@ SELECT * FROM users WHERE country = 'US';
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Reversing column order during index declaration
 
@@ -140,71 +141,105 @@ CREATE INDEX idx_created_status ON orders (created_at, status);
 CREATE INDEX idx_status_created ON orders (status, created_at DESC);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Index Match Analysis
+### Exercise 1: Creating Multi-Column Composite Indexes
 
-**Problem:** You have a composite B-tree index defined as:
-`CREATE INDEX idx_logs ON system_logs (priority, logged_at);`
-Which of the following queries will **successfully leverage** the index?
-1.  `SELECT * FROM system_logs WHERE priority = 5 AND logged_at > '2026-01-01';`
-2.  `SELECT * FROM system_logs WHERE logged_at > '2026-01-01';`
-3.  `SELECT * FROM system_logs WHERE priority = 2;`
+**Scenario:**
+Create a composite index on `orders(customer_id, status)` to optimize queries filtering both fields.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE INDEX idx_orders_customer_status ON orders(customer_id, status)`.
+
 > [!check]- Answer
-> ```text
-> Queries 1 and 3 will leverage the index!
-> 1. Query 1 filters by both columns, matching the index structure.
-> 2. Query 2 will bypass the index because it filters only by `logged_at`, which is not the leftmost prefix of the index.
-> 3. Query 3 will leverage the index because `priority` is the leftmost prefix.
-> ```
-> - Check if the leftmost column (`priority`) is present in the `WHERE` filter.
-
----
-
-
-
-### Exercise 2: Creating Compound B-Tree Index
-
-**Problem:** Create compound index `idx_orders_user_date` on `user_id` ascending and `created_at` descending.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE INDEX idx_orders_user_date ON orders (user_id ASC, created_at DESC);
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> CREATE INDEX idx_orders_user_date ON orders (user_id ASC, created_at DESC);
+> CREATE INDEX idx_orders_customer_status 
+> ON orders (customer_id, status);
+> 
+> SELECT id, total_cents 
+> FROM orders 
+> WHERE customer_id = 100 AND status = 'pending';
 > ```
 >
-> **Explanation:** Compound indexes support multi-column filtering and multi-column sort orders.
+> #### Technical Explanation
+>
+> 1. Composite indexes store multi-column key pairs in a single B-tree index.
+> 2. Optimizes queries filtering both `customer_id` and `status` simultaneously.
+> 3. Superior to creating 2 separate single-column indexes.
 
 ---
 
-### Exercise 3: Compound Index Prefix Matching Rules
+### Exercise 2: Applying the Left-Prefix Rule
 
-**Problem:** Given index `(a, b, c)`, list supported column query filters (`(a)`, `(a, b)`, `(a, b, c)`).
+**Scenario:**
+Demonstrate why `idx_orders_customer_status` accelerates `WHERE customer_id = 100` but NOT `WHERE status = 'pending'`.
 
-**Expected output:**
+**Requirements:**
+1. Explain composite index left-prefix matching behavior.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> (a), (a, b), (a, b, c)
-> ```
-> ```text
-> (a), (a, b), (a, b, c)
+> Composite Left-Prefix Rule:
+> - Composite Index: (customer_id, status)
+> - Query 1: WHERE customer_id = 100 -> HITS INDEX (Matches leading column!).
+> - Query 2: WHERE customer_id = 100 AND status = 'pending' -> HITS INDEX (Matches both!).
+> - Query 3: WHERE status = 'pending' -> MISSES INDEX (Omits leading column 'customer_id'!).
 > ```
 >
-> **Explanation:** Compound indexes accelerate queries matching leading column prefix subsets.
+> #### Technical Explanation
+>
+> 1. Composite B-trees sort data by the first column first, then by the second column.
+> 2. Queries MUST include the leading column to hit the index.
+> 3. Always place the most frequently queried column as the leading key.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Include Columns in Indexes for Index-Only Scans
+
+**Scenario:**
+Create a composite index incorporating `INCLUDE (total_cents)` to enable Index-Only Scans without indexing `total_cents` for sorting.
+
+**Requirements:**
+1. Execute `CREATE INDEX ... ON orders(customer_id) INCLUDE (total_cents)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE INDEX idx_orders_customer_include_total 
+> ON orders (customer_id) 
+> INCLUDE (total_cents);
+> 
+> SELECT total_cents 
+> FROM orders 
+> WHERE customer_id = 100;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INCLUDE (col)` appends non-key payload attributes to the leaf pages of a B-tree index.
+> 2. Enables Index-Only Scans for `SELECT total_cents` without increasing key comparison overhead.
+> 3. Modern PostgreSQL (PG 11+) covering index feature.
+
+---
+
+
+
+## 6. Related Terms
 - [B-tree Index](btree_index.md) — The parent sorted tree structure.
 - [Composite Key](../level_06/composite_key.md) — Slicing multi-column constraints.
 - [Index (Concept)](index_concept.md) — Related concept: Index (Concept).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A composite index is built across two or more columns in a single table.
 - Significantly speeds up queries containing multi-column logical filters.
 - Follows the strict **Prefix Rule** (leftmost columns must be present in query filters).

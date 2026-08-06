@@ -173,8 +173,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Asynchronous Event Pipeline with Backpressure and Graceful Shutdown
 
-**Scenario**: You are building a production telemetry processing engine in Tokio. High-volume incoming events arrive from network interfaces and must be dispatched through an asynchronous bounded channel (`tokio::sync::mpsc`) to background worker tasks. The worker task processes events, enforces backpressure, prioritizes emergency events using `tokio::select!` with `biased;`, and handles graceful shutdown when a termination signal is received via `tokio::sync::watch`.
+**Scenario:** You are building a production telemetry processing engine in Tokio. High-volume incoming events arrive from network interfaces and must be dispatched through an asynchronous bounded channel (`tokio::sync::mpsc`) to background worker tasks. The worker task processes events, enforces backpressure, prioritizes emergency events using `tokio::select!` with `biased;`, and handles graceful shutdown when a termination signal is received via `tokio::sync::watch`.
 
+**Requirements:**
 Construct a complete Tokio pipeline with bounded channel backpressure, priority message processing, and graceful shutdown draining.
 
 **Requirements**:
@@ -185,6 +186,9 @@ Construct a complete Tokio pipeline with bounded channel backpressure, priority 
 5. Add unit tests asserting event processing count, emergency prioritization order, and clean shutdown draining.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::Arc;
 > use tokio::sync::{mpsc, watch, Mutex};
@@ -314,7 +318,8 @@ Construct a complete Tokio pipeline with bounded channel backpressure, priority 
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Bounded Channel Backpressure**: `mpsc::channel(buffer_size)` limits channel memory capacity. If the channel is full, calls to `.send().await` suspend the calling task asynchronously without blocking worker OS threads.
 > 2. **Biased Directive**: `biased;` in `tokio::select!` enforces top-to-bottom branch evaluation, guaranteeing that shutdown signals are checked before processing standard messages.
 > 3. **Watch Channel Shutdown**: `watch::channel` broadcasts shutdown signals across multiple Tokio tasks efficiently.

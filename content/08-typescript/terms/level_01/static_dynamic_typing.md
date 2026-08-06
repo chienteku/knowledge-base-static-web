@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Computer Science Theory / Language Paradigm**
+
+**Type System Fundamental** (Static vs Dynamic Typing Paradigm): Static vs Dynamic typing contrasts compile-time type checking in TypeScript against runtime type evaluation in JavaScript.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time vs Runtime**
-
----
-
-## 4. Explanation
 
 ### (1) Dynamic Typing (JavaScript)
 In a dynamically typed language, variables don't have types; only values have types. The type is checked **at Runtime** (when the code is actually executing).
@@ -44,7 +45,7 @@ score = "You won!"; // ❌ ERROR in your IDE: Type 'string' is not assignable to
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Fighting the Compiler instead of listening to it
 
@@ -97,63 +98,101 @@ function isUser(obj: any): obj is User {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Spot the paradigm
+### Exercise 1: Catching Runtime Type Errors at Compile Time
 
-**Problem:** Is Python statically or dynamically typed? What about Java?
+**Scenario:**
+Identify a runtime type crash caused by calling a non-existent method on a string, and fix it using static type annotations.
 
-**Expected output:**
+**Requirements:**
+1. Annotate function parameters explicitly.
+2. Prevent compile-time property access errors.
+
 > [!check]- Answer
-> ```text
-> Python is dynamically typed (like JavaScript). You can reassign a string to a number variable.
-> Java is statically typed (like TypeScript). You must declare `int x = 5;` and it can never be a string.
+>
+> #### Implementation
+>
+> ```typescript
+> function formatUsername(name: string): string {
+>   // Static type checking prevents calling string.toFixed() at compile time!
+>   return name.trim().toLowerCase();
+> }
+> 
+> formatUsername("  Alice  ");
 > ```
-> - Think about whether you have to declare variable types in Python.
+
+> #### Technical Explanation
+>
+> 1. Static typing checks type compatibility and valid method signatures during compilation (`tsc`).
+> 2. Dynamic typing defers type checking to runtime, leading to uncaught `TypeError: name.toFixed is not a function` crashes.
+> 3. Eliminates entire classes of runtime type errors before code deployment.
+
+---
+
+### Exercise 2: Defining Strict Function Return Contracts
+
+**Scenario:**
+Define a function calculating total order prices with explicit return type contracts.
+
+**Requirements:**
+1. Type input parameters and return value.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function calculateTotal(price: number, quantity: number): number {
+>   return price * quantity;
+> }
+> 
+> const total: number = calculateTotal(29.99, 3);
+> ```
+
+> #### Technical Explanation
+>
+> 1. Explicit parameter types (`number`) enforce valid caller input data.
+> 2. Return type annotations (`: number`) verify that function return expressions conform to expected interface contracts.
+> 3. Makes code self-documenting for IDE autocomplete and developer tooling.
+
+---
+
+### Exercise 3: Comparative Analysis: Static vs Dynamic Typing
+
+**Scenario:**
+Formulate an architectural comparison matrix contrasting Static Typing (TypeScript) against Dynamic Typing (JavaScript).
+
+**Requirements:**
+1. Contrast compilation stage, error detection timing, tooling support, and execution performance.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Static vs Dynamic Typing Matrix:
+> - Static Typing (TypeScript): Type checking occurs at compile-time. Catches typos and shape errors early, enables IDE autocomplete, compiles down to plain JS.
+> - Dynamic Typing (JavaScript): Type checking occurs at runtime. Flexible, but errors manifest as runtime exceptions during execution.
+> ```
+
+> #### Technical Explanation
+>
+> 1. Static typing adds a compilation step (`tsc`) to validate type soundness.
+> 2. TypeScript types are erased completely during compilation, producing plain JavaScript output.
+> 3. Zero runtime performance overhead from type annotations.
 
 ---
 
 
 
-### Exercise 2: Static vs Dynamic Typing Identification
-
-**Problem:** Identify whether type checking occurs at Compile-Time (Static) or Runtime (Dynamic).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Static: Compile-Time, Dynamic: Runtime
-> ```
-> ```typescript
-> console.log("Static: Compile-Time, Dynamic: Runtime");
-> ```
->
-> **Explanation:** Static typing verifies types during compilation; dynamic typing checks types during execution.
-
----
-
-### Exercise 3: Type Error Detection Timing
-
-**Problem:** Explain why `"hello".toUpperCase()` typo in static TS is caught in editor vs dynamic JS in browser.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Caught immediately in editor at build time
-> ```
-> ```typescript
-> console.log("Caught immediately in editor at build time");
-> ```
->
-> **Explanation:** Static type analyzers flag missing methods immediately during development.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Type Inference](type_inference.md) — How TypeScript gives you Static Typing without forcing you to manually type everything.
 - [TypeScript](typescript.md) — The language implementation.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Dynamic Typing** (JavaScript): Types are checked while the program is running. Variables can change types freely. Very flexible, highly error-prone.
 - **Static Typing** (TypeScript): Types are checked by the compiler before the program runs. Variables are locked to a specific type. Extremely safe, requires more boilerplate.
 - Static Typing moves bugs from Runtime (Browser Crashes) to Compile-Time (Editor red squiggles).

@@ -14,17 +14,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Tooling**: Clippy is the official linter for Rust. While the `rustc` compiler checks type correctness, safety rules, and lifetime borrows, Clippy goes much further by analyzing semantics, idiomatic Rust API usage, performance traps, and potential logic bugs.
+
+
+**Rust Ecosystem Tool (official linter & code quality analyzer)**: Clippy is the official linter for Rust. While the `rustc` compiler checks type correctness, safety rules, and lifetime borrows, Clippy goes much further by analyzing semantics, idiomatic Rust API usage, performance traps, and potential logic bugs.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Tooling**: Clippy is installed via `rustup component add clippy` and run via `cargo clippy`. It categorizes lints into distinct levels: `correctness`, `suspicious`, `style`, `complexity`, `perf`, `pedantic`, `restriction`, and `cargo`.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -77,7 +75,23 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Over-Suppressing Warnings with Top-Level `#![allow(clippy::all)]`
+
+**The mistake:** Adding `#![allow(clippy::all)]` at the top of a crate to bypass lints.
+
+**Why it's wrong:** Disabling all Clippy lints masks memory leaks, performance traps, and subtle bugs. Lints should only be suppressed selectively on specific function scopes.
+
+*Fix:* Apply `#[allow(clippy::lint_name)]` on the narrowest inner scope possible.
+
+### Mistake 3: Ignoring Safety Contracts in `clippy::undocumented_unsafe_blocks`
+
+**The mistake:** Writing `unsafe` blocks without `// SAFETY:` explanatory comments.
+
+**Why it's wrong:** Undocumented `unsafe` code makes code audits difficult and increases the risk of introducing Undefined Behavior during refactoring.
+
+*Fix:* Always precede `unsafe` blocks with explicit `// SAFETY:` invariant explanations.
+
 
 ### Mistake 1: Ignoring Clippy Warnings in CI
 
@@ -87,13 +101,16 @@ fn main() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Refactoring Un-idiomatic Embedded Telemetry Parser
 
-**Problem:** In an embedded `#![no_std]` telemetry system, raw sensor frames arrive as 4-byte arrays containing sensor ID, status byte, raw payload, and parity bit. The original parsing module triggers multiple Clippy warnings (`clippy::manual_map`, `clippy::clone_on_copy`, `clippy::match_like_matches_macro`, and `clippy::needless_borrow`). Refactor the telemetry parser to compile cleanly in a `#![no_std]` environment, eliminate all Clippy lint warnings, and provide unit tests with assertions validating sensor reading parsing, status flags, and checksum verification.
+**Scenario:** In an embedded `#![no_std]` telemetry system, raw sensor frames arrive as 4-byte arrays containing sensor ID, status byte, raw payload, and parity bit. The original parsing module triggers multiple Clippy warnings (`clippy::manual_map`, `clippy::clone_on_copy`, `clippy::match_like_matches_macro`, and `clippy::needless_borrow`). Refactor the telemetry parser to compile cleanly in a `#![no_std]` environment, eliminate all Clippy lint warnings, and provide unit tests with assertions validating sensor reading parsing, status flags, and checksum verification.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -244,7 +261,8 @@ fn main() {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`clippy::manual_map`**: Replaces manual `match` destructuring of `Option`/`Result` with standard monadic `.map()` calls, yielding cleaner declarative syntax and zero runtime overhead.
 > 2. **`clippy::clone_on_copy`**: Copy types (like `u8` and field-less enums) duplicate implicitly on assignment. Calling `.clone()` on `Copy` types is redundant and causes unnecessary code clutter.
 > 3. **`clippy::match_like_matches_macro`**: Utilizing `matches!(val, Pattern)` replaces verbose `match` expressions that evaluate directly to booleans, making branch intent immediately clear to both developers and the compiler.
@@ -254,9 +272,12 @@ fn main() {
 
 ### Exercise 2: Scope-Based Lint Level Overrides and Custom Attributes
 
-**Problem:** In a `#![no_std]` embedded hardware driver crate, global coding standards enforce strict code quality via `#![deny(clippy::pedantic)]` and `#![warn(clippy::unwrap_used)]`. However, raw Memory-Mapped I/O (MMIO) register manipulations perform intentional 16-bit truncations and integer bit shifts that trigger `clippy::cast_possible_truncation`. Implement a `RegisterControl` struct that maintains strict pedantic compliance globally while safely overriding specific warnings using localized outer attributes (`#[allow(...)]`) with documented justifications. Include unit tests with assertions verifying register flag setting, field masking, and error handling.
+**Scenario:** In a `#![no_std]` embedded hardware driver crate, global coding standards enforce strict code quality via `#![deny(clippy::pedantic)]` and `#![warn(clippy::unwrap_used)]`. However, raw Memory-Mapped I/O (MMIO) register manipulations perform intentional 16-bit truncations and integer bit shifts that trigger `clippy::cast_possible_truncation`. Implement a `RegisterControl` struct that maintains strict pedantic compliance globally while safely overriding specific warnings using localized outer attributes (`#[allow(...)]`) with documented justifications. Include unit tests with assertions verifying register flag setting, field masking, and error handling.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > // Enforce strict crate/module lint policies
@@ -358,7 +379,8 @@ fn main() {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Inner vs. Outer Attributes**: `#![deny(clippy::pedantic)]` is an inner attribute (prefixed with `#!`) applying to the entire module/file. Outer attributes (prefixed with `#`) apply strictly to the item (struct, function, or block) immediately following them.
 > 2. **Documented Overrides**: When overriding a Clippy warning with `#[allow(...)]`, best practice requires adding a doc comment (`# Explicit Lint Override Justification:`) detailing the technical safety guarantees for future maintainers.
 > 3. **API Contract Hygiene (`#[must_use]`)**: Under `clippy::pedantic`, functions returning values or pure constructors missing `#[must_use]` attributes trigger warnings to prevent callers from inadvertently dropping return values.
@@ -367,9 +389,12 @@ fn main() {
 
 ### Exercise 3: Refactoring Complex Iterators and Fixing Redundant Closures & Unwraps
 
-**Problem:** A high-throughput telemetry stream filtering pipeline receives raw signal samples and converts them into normalized metric streams. The initial implementation triggers several performance and complexity Clippy lints: `clippy::redundant_closure_for_method_calls`, `clippy::single_match`, and `clippy::unnecessary_unwrap`. Refactor the stream processing pipeline to compile in `#![no_std]` using fixed-size buffers, eliminate all Clippy warnings, and write unit tests with assertions verifying sample filtering, metric transformation, and flattened buffer extraction.
+**Scenario:** A high-throughput telemetry stream filtering pipeline receives raw signal samples and converts them into normalized metric streams. The initial implementation triggers several performance and complexity Clippy lints: `clippy::redundant_closure_for_method_calls`, `clippy::single_match`, and `clippy::unnecessary_unwrap`. Refactor the stream processing pipeline to compile in `#![no_std]` using fixed-size buffers, eliminate all Clippy warnings, and write unit tests with assertions verifying sample filtering, metric transformation, and flattened buffer extraction.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -512,7 +537,8 @@ fn main() {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`clippy::redundant_closure_for_method_calls`**: Passing `SignalSample::is_valid` directly into `.filter()` avoids generating an extra closure instantiation and clarifies functional iterator pipelines.
 > 2. **`clippy::single_match`**: Replacing single-branch `match` constructs with `if let Some(...) = ...` simplifies control flow syntax while preserving pattern-matching capabilities.
 > 3. **`clippy::unnecessary_unwrap`**: Combining option checking and value extraction into a single atomic pattern match (`if let Some(&val) = item`) prevents unsafe runtime unwraps and eliminates redundant state checks.

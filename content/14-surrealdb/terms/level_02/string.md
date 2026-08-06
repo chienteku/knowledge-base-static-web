@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Data Type (UTF-8 text string type)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Stored internally as UTF-8 bytes. Queried using standard string manipulation functions).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In SQL databases (like PostgreSQL), strings are divided into multiple types with physical storage trade-offs:
@@ -82,7 +81,7 @@ SELECT * FROM profile WHERE username = 'Alice Emojis 🚀';
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to define string length constraints using SQL syntax like 'TYPE string(255)', resulting in syntax errors
 
@@ -138,66 +137,98 @@ LET $full = string::concat($first, " ", $last);
 LET $full = `${$first} ${$last}`;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multi-line String Assessment
+### Exercise 1: String Format Validation and Case Transformation
 
-**Problem:** You execute this SurrealQL insert command:
-```sql
-CREATE post:new SET content = "Line 1
-Line 2
-Line 3";
-```
-1.  State whether this query will compile successfully.
-2.  Explain how SurrealDB handles the line breaks when returning the data to a Node.js client.
+**Scenario:**
+A user registration service converts email input to lowercase and validates string length and format using built-in string functions.
 
-**Expected output:**
+**Requirements:**
+1. Define table `user` in `SCHEMAFULL` mode.
+2. Define field `email` as `string` asserting valid email format.
+3. Insert user converting email `"ALICE@EXAMPLE.COM"` to lowercase using `string::lowercase()`.
+
 > [!check]- Answer
-> ```text
-> 1. Yes: The query will compile successfully. SurrealDB natively supports multi-line strings.
-> 2. SurrealDB preserves the line breaks and returns them to the Node.js client as a string containing new-line escape characters (`Line 1\nLine 2\nLine 3`).
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE FIELD email ON TABLE user TYPE string ASSERT string::is::email($value);
+> 
+> CREATE user:u1 SET email = string::lowercase("ALICE@EXAMPLE.COM");
 > ```
-> - Check if SurrealDB allows unescaped line breaks inside double quotes.
-> - Consider how multi-line blocks are translated to JSON strings over network sockets.
+>
+> #### Technical Explanation
+>
+> 1. `string::lowercase()` normalizes string casing at write time.
+> 2. `string::is::email($value)` validates RFC email syntax inside `ASSERT` clauses.
+> 3. Ensures consistent normalized string data across user records.
+
+---
+
+### Exercise 2: String Pattern Searching with Regex
+
+**Scenario:**
+An admin dashboard searches for user accounts where the `username` starts with `"admin_"` using string functions or regex matching.
+
+**Requirements:**
+1. Create users `user:a1` (`username = "admin_john"`) and `user:u2` (`username = "user_jane"`).
+2. Query users where `username` starts with `"admin_"` using `string::starts_with()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:a1 SET username = "admin_john";
+> CREATE user:u2 SET username = "user_jane";
+> 
+> -- Filter usernames starting with 'admin_'
+> SELECT * FROM user WHERE string::starts_with(username, "admin_");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `string::starts_with(str, prefix)` performs prefix matching on string fields.
+> 2. `string::*` namespace provides rich string functions (`concat`, `replace`, `trim`, `split`).
+> 3. Enables clean text filtering without complex regular expressions.
+
+---
+
+### Exercise 3: String Length & Trimming Constraints
+
+**Scenario:**
+Enforce string length constraints on a blog post `title` field (between 5 and 100 characters) after trimming whitespace.
+
+**Requirements:**
+1. Define field `title` on table `post` as `string`.
+2. Add an `ASSERT` clause checking `string::len(string::trim($value)) >= 5`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE post SCHEMAFULL;
+> DEFINE FIELD title ON TABLE post TYPE string 
+>     ASSERT string::len(string::trim($value)) >= 5 AND string::len($value) <= 100;
+> 
+> CREATE post:p1 SET title = "   SurrealQL Basics   ";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `string::trim()` strips leading and trailing whitespace.
+> 2. `string::len()` counts character length accurately for UTF-8 strings.
+> 3. Prevents empty or whitespace-only strings from bypassing validation rules.
 
 ---
 
 
 
-### Exercise 2: String Function Manipulation
-
-**Problem:** Convert string `"hello world"` to uppercase and lowercase using string functions.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> string::uppercase("hello world"), string::lowercase("HELLO WORLD")
-> ```
-> ```surrealql
-> RETURN string::uppercase("hello world");
-> RETURN string::lowercase("HELLO WORLD");
-> ```
->
-> **Explanation:** `string::uppercase()` and `string::lowercase()` format text strings.
-
----
-
-### Exercise 3: Regex String Matching with `~`
-
-**Problem:** Check if email field contains `@domain.com` using fuzzy regex match `~`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM user WHERE email ~ "@domain.com";
-> ```
-> ```surrealql
-> SELECT * FROM user WHERE email ~ "@domain.com";
-> ```
->
-> **Explanation:** `~` performs case-insensitive regex or substring matching.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [Type Casting & Coercion](type_casting.md) — Converting between types.
@@ -205,7 +236,7 @@ Line 3";
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `string` type stores UTF-8 text sequences.
 - Direct NoSQL equivalent to PostgreSQL's `TEXT` and MongoDB's String BSON.
 - Supports both single quotes (`'`) and double quotes (`"`).

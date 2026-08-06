@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Compiler Magic**: Automatic Deref coercion converting `&T` to `&U` when `T: Deref<Target = U>`.
+
+
+**Rust Implicit Conversion (smart pointer reference deref coercion)**: Automatic Deref coercion converting `&T` to `&U` when `T: Deref<Target = U>`.
 
 ---
 

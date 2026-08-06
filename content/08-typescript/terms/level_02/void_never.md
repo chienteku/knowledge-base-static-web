@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Type Annotation**
+
+**Type System Fundamental** (Bottom & Absent Return Types): `void` signifies functions returning no value, while `never` signifies the bottom type for unreachable code paths or throwing functions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) `void` (The Function Returns Nothing)
 In JavaScript, if a function doesn't have a `return` statement, it implicitly returns `undefined`.
@@ -56,7 +57,7 @@ function runServer(): never {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `void` with `undefined`
 
@@ -120,65 +121,107 @@ function area(s: Shape) {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Exhaustive Checking with `never`
+### Exercise 1: Distinguishing `void` Return Types in Callback Functions
 
-**Problem:** Advanced TypeScript developers use the `never` type to create "Exhaustive Switch Statements". How does assigning a value to a `never` variable help catch bugs?
+**Scenario:**
+Define event handler callbacks using `void` return types.
 
-**Expected output:**
+**Requirements:**
+1. Annotate callback parameter `onComplete: () => void`.
+
 > [!check]- Answer
-> ```text
-> The `never` type represents an impossible state. Nothing can be assigned to `never`.
-> If you have a Switch statement handling "Red" and "Blue", you put a `never` assignment in the `default` block. If someone later adds "Green" to the type, the Switch drops down to the `default` block, tries to assign "Green" to the `never` variable, and causes a Compile Error! It forces the developer to update the Switch statement.
-> ```
-> - Can a string be assigned to a type that represents impossibility?
-
----
-
-
-
-### Exercise 2: `never` Exhaustiveness Checking
-
-**Problem:** Implement an exhaustive switch default check assigning unhandled variants to `const _check: never = s`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Exhaustiveness check pattern verified
-> ```
+>
+> #### Implementation
+>
 > ```typescript
-> type Direction = "North" | "South";
-> function move(d: Direction) {
->   switch(d) {
->     case "North": return 1;
->     case "South": return 2;
->     default: const _check: never = d; return _check;
->   }
+> function executeTask(onComplete: () => void) {
+>   console.log("Task executed.");
+>   onComplete();
 > }
-> console.log("Exhaustiveness check pattern verified");
+> 
+> // Callback can return a value (ignored by caller):
+> executeTask(() => {
+>   return 42; // Allowed! void in callback signatures means "ignore return value".
+> });
 > ```
+
+> #### Technical Explanation
 >
-> **Explanation:** Assigning unhandled cases to `never` triggers compile errors if new union members are added.
+> 1. `void` in function return signatures indicates that callers should ignore any returned value.
+> 2. In callback function types, `() => void` permits implementation callbacks to return values without compilation errors.
+> 3. Ensures callback flexibility while preventing callers from consuming return values.
 
 ---
 
-### Exercise 3: `void` Callback Return Flexibility
+### Exercise 2: Exhaustiveness Checking with the `never` Type
 
-**Problem:** State why TS permits callbacks returning numbers `() => number` to be passed to `() => void` parameters.
+**Scenario:**
+Use the `never` type to enforce compile-time exhaustiveness checking in a `switch` statement over a discriminated union.
 
-**Expected output:**
+**Requirements:**
+1. Assign unhandled union branches to a `never` variable in `default:`.
+
 > [!check]- Answer
-> ```text
-> void parameters ignore returned callback values
-> ```
-> ```typescript
-> console.log("void parameters ignore returned callback values");
-> ```
 >
-> **Explanation:** `void` parameter callbacks allow functions to return values that callers simply ignore.
+> #### Implementation
+>
+> ```typescript
+> type Shape = { kind: "circle"; radius: number } | { kind: "square"; size: number };
 
-## 7. Related Terms
+function getArea(shape: Shape): number {
+  switch (shape.kind) {
+    case "circle":
+      return Math.PI * shape.radius ** 2;
+    case "square":
+      return shape.size ** 2;
+    default:
+      // If a new shape is added to Shape union, this line fails at compile time!
+      const _exhaustiveCheck: never = shape;
+      return _exhaustiveCheck;
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `never` is the bottom type in TypeScript, containing no possible values.
+> 2. Assigning `shape` to a `never` variable in `default` ensures all union members have been handled.
+> 3. If a new member is added to the union later, `tsc` throws a compile error at the exhaustiveness check.
+
+---
+
+### Exercise 3: Comparative Analysis: `void` vs `never` vs `undefined`
+
+**Scenario:**
+Formulate an architectural comparison matrix contrasting `void`, `never`, and `undefined`.
+
+**Requirements:**
+1. Contrast return execution, value existence, and type hierarchy positions.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> void vs never vs undefined Matrix:
+> - undefined: A real JavaScript primitive value. Function completes normally and explicitly returns undefined.
+> - void: Represents absent return value. Function completes execution normally, but callers should ignore any returned result.
+> - never: Bottom type. Function NEVER finishes execution (throws exception or runs infinite loop). No value can exist for never.
+> ```
+
+> #### Technical Explanation
+>
+> 1. `undefined` is a concrete runtime value.
+> 2. `void` is a type-level indicator of omitted/ignored return values.
+> 3. `never` represents impossible states or non-terminating code execution paths.
+
+---
+
+
+
+## 6. Related Terms
 - [Function Types](../level_04/function_types.md) — Where `void` is heavily used.
 - [Type Narrowing](../level_06/type_narrowing.md) — Exhaustive checks using `never` rely on this.
 - [`null`, `undefined` & `strictNullChecks`](null_undefined_strict.md) — Related concept: `null`, `undefined` & `strictNullChecks`.
@@ -189,7 +232,7 @@ function area(s: Shape) {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`void`** indicates that a function successfully completes its execution but does not return a usable value (it is meant for side-effects).
 - **`never`** indicates an impossible state; it means a function will throw an error or loop infinitely, meaning it will literally never complete.
 - Do not use `void` to type variables; use it only for function return signatures.

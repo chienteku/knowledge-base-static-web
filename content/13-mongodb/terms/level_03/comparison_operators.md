@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Query Operator** (Value Comparison Operators): Comparison Operators ($eq, $gt, $gte, $lt, $lte, $ne, $in, $nin) match document fields based on value comparison criteria.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported natively by all document NoSQL platforms. Handled by the index scanner engine to perform ranged indexes queries).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When filtering data, we rarely look for exact matches:
@@ -90,7 +91,7 @@ db.users.find({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to nest the comparison operator inside a subdocument wrapper
 
@@ -113,6 +114,8 @@ db.users.find({ age: { $gt: 25 } });
 
 
 
+
+
 ### Mistake 2: Using String Numbers in Numeric Comparison Operators (`$gt`, `$lt`)
 
 **The mistake:** Querying `{ age: { $gt: "18" } }` when `age` is stored as BSON integer number `18`.
@@ -128,6 +131,8 @@ db.users.find({ age: { $gt: "18" } }); // ❌ String comparison against number f
 ```javascript
 db.users.find({ age: { $gt: 18 } }); // Numeric comparison
 ```
+
+
 
 ### Mistake 3: Confusing `$in` Array Values with Single Element Predicates
 
@@ -147,101 +152,96 @@ db.users.find({ status: { $in: ["active", "pending"] } });
 
 
 
-### Mistake 4: Using String Numbers in Numeric Comparison Operators (`$gt`, `$lt`)
+## 5. Practice Exercises
 
-**The mistake:** Querying `{ age: { $gt: "18" } }` when `age` is stored as BSON integer number `18`.
+### Exercise 1: Querying Range Thresholds with `$gt` and `$lt`
 
-**Why it's wrong:** MongoDB compares string `"18"` against number `18` using BSON Type Comparison Order. Strings sort higher than numbers, returning unexpected query results.
+**Scenario:**
+Query collection `products` for items with price between `$20.00` and `$100.00`.
 
-*Incorrect:*
-```javascript
-db.users.find({ age: { $gt: "18" } }); // ❌ String comparison against number field!
-```
+**Requirements:**
+1. Combine `$gt: 20.00` and `$lt: 100.00`.
 
-*Fix:*
-```javascript
-db.users.find({ age: { $gt: 18 } }); // Numeric comparison
-```
-
-### Mistake 5: Confusing `$in` Array Values with Single Element Predicates
-
-**The mistake:** Writing `{ status: { $in: "active" } }` passing a scalar string.
-
-**Why it's wrong:** `$in` strictly expects an array of values `{ status: { $in: ["active", "pending"] } }`.
-
-*Incorrect:*
-```javascript
-db.users.find({ status: { $in: "active" } }); // ❌ Expected array!
-```
-
-*Fix:*
-```javascript
-db.users.find({ status: { $in: ["active", "pending"] } });
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Range Query Translation
-
-**Problem:** Translate this SQL query into a valid MongoDB query:
-`SELECT * FROM inventory WHERE status = 'low' AND qty <= 5;`
-
-**Expected output:**
 > [!check]- Answer
-> ```javascript
-> db.inventory.find({ status: "low", qty: { $lte: 5 } });
-> ```
-> - Combine the status and quantity conditions inside a single JSON object.
-> - Map the SQL `<=` symbol to the BSON `$lte` operator.
-
----
-
-
-
-### Exercise 2: Range Predicate Query with `$gte` and `$lte`
-
-**Problem:** Query products with `price` between 20 and 50 inclusive using `$gte` and `$lte`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.products.find({ price: { $gte: 20, $lte: 50 } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.products.find({
->   price: { $gte: 20, $lte: 50 }
+>   price: { $gt: 20.00, $lt: 100.00 }
 > });
 > ```
 >
-> **Explanation:** Combining `$gte` and `$lte` filters documents within numeric range boundaries.
+> #### Technical Explanation
+>
+> 1. Comparison operators evaluate field values against numeric, string, or date thresholds.
+> 2. Range queries hit single-field B-tree indexes efficiently.
+> 3. Combines multiple comparison bounds within a single field filter.
 
 ---
 
-### Exercise 3: Excluding Values with `$nin`
+### Exercise 2: Matching Discrete Values with `$in`
 
-**Problem:** Query users whose `role` is neither `"admin"` nor `"manager"` using `$nin`.
+**Scenario:**
+Query collection `orders` for documents where `status` is either `"pending"`, `"processing"`, or `"shipped"`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$in: ["pending", "processing", "shipped"]`.
+
 > [!check]- Answer
-> ```text
-> db.users.find({ role: { $nin: ["admin", "manager"] } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.users.find({
->   role: { $nin: ["admin", "manager"] }
+> db.orders.find({
+>   status: { $in: ["pending", "processing", "shipped"] }
 > });
 > ```
 >
-> **Explanation:** `$nin` matches documents whose field value is not contained in the specified array.
+> #### Technical Explanation
+>
+> 1. `$in` checks whether a field value equals any element in the specified array.
+> 2. Replaces multiple `$or` equality clauses with clean syntax.
+> 3. Utilizes secondary indexes on `status`.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Inequality Filtering with `$ne`
+
+**Scenario:**
+Query user documents where `role` is NOT equal to `"admin"`.
+
+**Requirements:**
+1. Use `$ne: "admin"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   role: { $ne: "admin" }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$ne` matches documents where the field is not equal to the specified value (including missing fields).
+> 2. Note: `$ne` queries cannot isolate small index bounds and usually require scanning index pages.
+> 3. Combine with high-cardinality filters to optimize query execution.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter layout.
 - [Logical Query Operators (`$and`, `$or`, `$not`, `$nor`)](logical_operators.md) — - Combining filters.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - BSON comparison query operators evaluate field values mathematically.
 - Direct equivalents of SQL relational symbols (`=`, `>`, `<=`, `IN`).
 - Written nested under the field key: `{ field: { $operator: value } }`.

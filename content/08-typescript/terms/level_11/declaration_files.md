@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Architecture / Tooling**
+
+**TypeScript Ecosystem & Tooling** (Type Definition Files): Declaration files (`.d.ts`) provide ambient type definitions for untyped JavaScript libraries without emitting executable code.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 You install a popular npm package written entirely in pure, vanilla JavaScript (e.g., `lodash` or `express`).
@@ -41,7 +42,7 @@ This downloads the `.d.ts` files created by the community, instantly providing p
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting logic in a `.d.ts` file
 
@@ -94,63 +95,107 @@ declare global {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Generating Declaration Files
+### Exercise 1: Authoring Ambient Module Declarations (`.d.ts`)
 
-**Problem:** You are writing a library in TypeScript, and you want to publish it to NPM so other people can use it. How do you generate the `.d.ts` files automatically so developers who download your library get autocomplete?
+**Scenario:**
+Create an ambient declaration file `global.d.ts` declaring types for an un-typed legacy JavaScript module `my-legacy-lib`.
 
-**Expected output:**
+**Requirements:**
+1. Declare module `"my-legacy-lib"`.
+
 > [!check]- Answer
-> ```text
-> You enable the `"declaration": true` flag in your `tsconfig.json`!
-> When you run `tsc`, it will compile your `.ts` files into `.js` files (for runtime), AND it will automatically generate `.d.ts` files alongside them (for compile-time typing).
+>
+> #### Implementation
+>
+> ```typescript
+> // global.d.ts
+> declare module "my-legacy-lib" {
+>   export function init(apiKey: string): void;
+>   export function track(eventName: string, payload?: object): void;
+> }
 > ```
-> - Check the `tsconfig.json` options!
+
+> #### Technical Explanation
+>
+> 1. `.d.ts` declaration files contain type definitions without any executable JavaScript code output.
+> 2. `declare module "name"` provides ambient type intelligence for external untyped JavaScript libraries.
+> 3. Allows TypeScript developers to import un-typed npm packages safely with IDE autocomplete.
 
 ---
 
+### Exercise 2: Declaring Ambient Global Variables and Window Extensions
 
+**Scenario:**
+Extend the global `Window` object interface in `env.d.ts` to include a custom `ENV_CONFIG` global object.
 
-### Exercise 2: Declaring Module Augmentation for External Package
+**Requirements:**
+1. Declare `interface Window` inside `declare global`.
 
-**Problem:** Augment external module `'express'` to add `user: User` property to `Request` interface.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Express Request augmented
-> ```
+>
+> #### Implementation
+>
 > ```typescript
-> declare module 'express' {
->   interface Request {
->     user?: { id: string; name: string };
+> // env.d.ts
+> declare global {
+>   interface Window {
+>     ENV_CONFIG: {
+>       apiHost: string;
+>       debugMode: boolean;
+>     };
 >   }
 > }
-> console.log("Express Request augmented");
-> ```
+
+export {};
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** `declare module 'pkg'` extends type definitions for third-party libraries.
+> 1. `declare global` grants access to the global scope within module files containing imports/exports.
+> 2. Interface declaration merging appends `ENV_CONFIG` to the global `Window` interface.
+> 3. Enables type-safe access to `window.ENV_CONFIG` across the codebase.
 
 ---
 
-### Exercise 3: Ambient Window Global Property Declaration
+### Exercise 3: Auditing Executable Code Restrictions in `.d.ts` Files
 
-**Problem:** Declare global variable `declare const __VERSION__: string`.
+**Scenario:**
+Explain why including executable code (`const x = 10;` or function bodies) inside `.d.ts` files triggers a compilation error.
 
-**Expected output:**
+**Requirements:**
+1. Detail ambient-only code rules in `.d.ts`.
+
 > [!check]- Answer
-> ```text
-> Ambient global variable declared
-> ```
-> ```typescript
-> declare const __VERSION__: string;
-> console.log("Ambient global variable declared");
-> ```
 >
-> **Explanation:** `declare const` informs TS about global variables provided by script tags or bundler defines.
+> #### Implementation
+>
+> ```typescript
+> // ❌ INCORRECT (Executable function body in .d.ts):
+> // export function add(a: number, b: number) { return a + b; }
 
-## 7. Related Terms
+// ✅ CORRECT (Ambient declaration only):
+export function add(a: number, b: number): number;
+```
+
+> #### Technical Explanation
+>
+> 1. `.d.ts` files are stripped during build output and are NEVER transpiled to `.js` files.
+> 2. Executable code in `.d.ts` files would result in missing runtime JavaScript functions.
+> 3. `.d.ts` files must contain ambient declarations (`declare`) and type signatures only.
+
+---
+
+
+
+
+
+---
+
+
+
+## 6. Related Terms
 - [`tsconfig.json`](../level_01/tsconfig.md) — Where you configure TS to emit declaration files.
 - [Interfaces](../level_03/interfaces.md) — The core content of `.d.ts` files.
 - [Namespaces](namespaces.md) — Related concept: Namespaces.
@@ -159,7 +204,7 @@ declare global {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Declaration Files** (`.d.ts`) are files that contain purely TypeScript type definitions and zero executable logic.
 - They are used to describe the "shape" of vanilla JavaScript libraries so the TS compiler can type-check them.
 - You install community-maintained declaration files via the `@types/` npm scope.

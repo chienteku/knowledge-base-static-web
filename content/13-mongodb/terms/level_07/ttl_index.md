@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Constraint**
+
+**Index / Performance** (Time-To-Live Expiration Indexing): A TTL Index automatically purges documents from a collection after a specified time interval (expireAfterSeconds) has elapsed.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Managed by a background thread running once every 60 seconds on the primary database server, which executes delete operations on expired records).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `data_lifecycle.md`, temporary records (like sessions, logs, or OTP tokens) must be cleaned up to protect storage capacity.
@@ -85,7 +86,7 @@ db.promotions.insertOne({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to build a TTL index on the primary key '_id' field, expecting it to expire documents
 
@@ -100,6 +101,8 @@ The command will either fail or have no effect, and guest profiles will remain i
 **Fix: Always create a dedicated BSON Date field (like `created_at` or `expireAt`) to support your TTL index configurations.**
 
 ---
+
+
 
 
 
@@ -119,6 +122,8 @@ db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 }); // Fiel
 Ensure field values are BSON Date objects: { createdAt: new Date() }
 ```
 
+
+
 ### Mistake 3: Attempting to Create TTL Indexes on Compound Indexes
 
 **The mistake:** Creating a compound TTL index `{ createdAt: 1, userId: 1 }` with `expireAfterSeconds`.
@@ -137,100 +142,104 @@ db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
 
 
 
-### Mistake 4: Creating TTL Indexes on Non-Date Primitive Fields
+## 5. Practice Exercises
 
-**The mistake:** Creating a TTL index on a field containing Unix epoch seconds or ISO text strings.
+### Exercise 1: Automatic Document Expiration after Relative Time
 
-**Why it's wrong:** MongoDB TTL background threads monitor ONLY BSON `Date` primitives (`new Date()`). TTL threads ignore number and string fields.
+**Scenario:**
+Create a TTL index on `createdAt` in collection `sessions` expiring documents 3,600 seconds (1 hour) after creation.
 
-*Incorrect:*
-```javascript
-db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 }); // Field stores string ISO date!
-```
+**Requirements:**
+1. Execute `createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 })`.
 
-*Fix:*
-```javascript
-Ensure field values are BSON Date objects: { createdAt: new Date() }
-```
-
-### Mistake 5: Attempting to Create TTL Indexes on Compound Indexes
-
-**The mistake:** Creating a compound TTL index `{ createdAt: 1, userId: 1 }` with `expireAfterSeconds`.
-
-**Why it's wrong:** MongoDB TTL indexes CANNOT be compound indexes! TTL indexes must target a single BSON Date field.
-
-*Incorrect:*
-```javascript
-db.sessions.createIndex({ createdAt: 1, userId: 1 }, { expireAfterSeconds: 3600 }); // ❌ Compound TTL error!
-```
-
-*Fix:*
-```javascript
-db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Absolute TTL Index Definition
-
-**Problem:** You have a `tasks` collection. You want to schedule tasks to automatically delete at a specific date and time stored in the `delete_time` field.
-Write the MongoDB command to build the appropriate TTL index.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.tasks.createIndex(
->   { delete_time: 1 },
->   { expireAfterSeconds: 0 }
+> db.sessions.createIndex(
+>   { createdAt: 1 },
+>   { expireAfterSeconds: 3600 }
 > );
 > ```
-> - The target field path is `delete_time`.
-> - Set `expireAfterSeconds` to `0` to execute absolute calendar expiration.
+>
+> #### Technical Explanation
+>
+> 1. TTL indexes automatically purge expired documents from collections.
+> 2. Background thread runs every 60 seconds deleting documents where `createdAt + expireAfterSeconds < current_time`.
+> 3. Automates session and temporary token lifecycle management.
+
+---
+
+### Exercise 2: Explicit Dynamic Expiration Datetime
+
+**Scenario:**
+Create a TTL index with `expireAfterSeconds: 0` expiring documents at an explicit datetime stored in `expireAt`.
+
+**Requirements:**
+1. Execute `createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.auth_tokens.createIndex(
+>   { expireAt: 1 },
+>   { expireAfterSeconds: 0 }
+> );
+> 
+> db.auth_tokens.insertOne({
+>   token: "ABC-123",
+>   expireAt: new Date("2026-12-31T23:59:59Z")
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Setting `expireAfterSeconds: 0` expires documents at the exact BSON Date stored in field `expireAt`.
+> 2. Allows individual documents to define custom expiration timestamps.
+> 3. Ideal for custom promotional leases and dynamic access tokens.
+
+---
+
+### Exercise 3: TTL Index Constraints and Limitations
+
+**Scenario:**
+Explain why TTL indexes CANNOT be created on compound indexes or primary key `_id`.
+
+**Requirements:**
+1. List TTL index constraints.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> TTL Index Constraints:
+> - Cannot be created on compound indexes (must be single-field).
+> - Target field MUST contain a valid BSON Date object (strings/numbers are ignored).
+> - Cannot be created on primary key '_id'.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. TTL background cleanup thread expects single-field date B-trees.
+> 2. Non-date field values (strings, numbers) are skipped by the TTL monitor.
+> 3. Essential operational constraints.
 
 ---
 
 
 
-### Exercise 2: Creating TTL Expiry Index
-
-**Problem:** Create TTL index expiring documents 1 hour (3600 seconds) after `createdAt` date.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
-> ```
-> ```javascript
-> db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
-> ```
->
-> **Explanation:** `expireAfterSeconds` automatically deletes documents N seconds after target BSON Dates.
-
----
-
-### Exercise 3: Dynamic Expiry Date Pattern with `expireAfterSeconds: 0`
-
-**Problem:** Configure TTL index to expire documents at exact date stored in `expireAt` field.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.tasks.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
-> ```
-> ```javascript
-> db.tasks.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
-> ```
->
-> **Explanation:** Setting `expireAfterSeconds: 0` expires documents at the exact timestamp specified in `expireAt`.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [Data Lifecycle & TTL Strategies](../level_05/data_lifecycle.md) — The parent modeling rules.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - TTL indexes automate document deletion based on BSON Date fields.
 - Managed by a background system thread that runs once every 60 seconds.
 - Relative expiration deletes documents after a set number of seconds.

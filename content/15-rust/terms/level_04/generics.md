@@ -174,7 +174,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Generic In-Memory Time-Series Metric Cache with Type-Safe Aggregation
 
-**Problem:** In telemetry microservices, metrics (e.g., CPU load, request latencies, network byte counts) arrive continuously and must be accumulated per metric key using type-safe arithmetic operations while maintaining retention policy metadata.
+**Scenario:** In telemetry microservices, metrics (e.g., CPU load, request latencies, network byte counts) arrive continuously and must be accumulated per metric key using type-safe arithmetic operations while maintaining retention policy metadata.
 
 Design and implement a generic metric buffer structure `MetricBuffer<K, V, P>` parameterized over key type `K`, metric sample type `V`, and policy configuration type `P`.
 
@@ -293,7 +293,7 @@ Design and implement a generic metric buffer structure `MetricBuffer<K, V, P>` p
 
 ### Exercise 2: Type-Safe Compile-Time State Machine for Transaction Pipelines (`PhantomData`)
 
-**Problem:** Financial processing engines require strict order state transitions (`Draft` -> `Validated` -> `Executed`). Executing an unvalidated transaction or re-validating an executed transaction must be impossible at run time.
+**Scenario:** Financial processing engines require strict order state transitions (`Draft` -> `Validated` -> `Executed`). Executing an unvalidated transaction or re-validating an executed transaction must be impossible at run time.
 
 Implement a compile-time enforced state machine using generics, state marker structs, ownership consumption (`self`), and `std::marker::PhantomData`.
 
@@ -445,7 +445,7 @@ Implement a compile-time enforced state machine using generics, state marker str
 
 ### Exercise 3: Composable Generic Stream Event Processor Pipeline
 
-**Problem:** High-performance stream processing engines need composable processing pipelines (`map`, `filter`) that operate over streaming events with zero dynamic allocation or vtable dynamic dispatch overhead.
+**Scenario:** High-performance stream processing engines need composable processing pipelines (`map`, `filter`) that operate over streaming events with zero dynamic allocation or vtable dynamic dispatch overhead.
 
 Implement a zero-cost generic stream processing framework using generic traits, wrapper structs, and extension trait combinators.
 

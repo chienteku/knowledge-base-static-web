@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Security & Architecture**
+
+
+**Authentication & Permissions (built-in security & access architecture)**: - **Security & Architecture**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core Engine** (Evaluated during session connection and statement execution across HTTP, WebSocket, or SDK sessions).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Traditional databases like PostgreSQL or MongoDB implement a **two-tier access model**: administrative database users (roles) connect from backend applications, while end-users are authenticated separately inside backend web servers (Express, Next.js, Django). The database engine itself has no concept of who the end-user is — to PostgreSQL, every web request looks like it came from `app_user`.
@@ -72,7 +71,7 @@ SELECT * FROM document WHERE owner = $auth.id;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Root Credentials in Application SDK Clients
 
@@ -135,88 +134,115 @@ await db.signin({ access: "user_access", ns: "production", db: "main", username:
 
 
 
-### Mistake 4: Using Root Credentials in Web Client Applications
 
-**The mistake:** Embedding root username and password in web frontend connections.
 
-**Why it's wrong:** Root credentials bypass all permissions and give clients total administrative control over the entire database server. Use RECORD access scopes or JWT tokens for web clients.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-// Web Client SDK
-await db.signin({ user: "root", pass: "root" }); // ❌ Exposes root credentials!
-```
+### Exercise 1: Multi-Level Auth Credentials Matrix
 
-*Fix:*
-```surrealql
-await db.signin({ access: "user_access", ns: "main", db: "app", username: "alice", pass: "123" });
-```
+**Scenario:**
+An infrastructure architect configures database access levels across Root, Namespace, Database, and Record Access scopes in SurrealDB.
 
-### Mistake 5: Forgetting Namespace or Database Scope Contexts in Access Tokens
-
-**The mistake:** Attempting RECORD scope authentication without specifying target `ns` and `db`.
-
-**Why it's wrong:** Record access scopes belong to specific Namespace or Database boundaries. Omitting `ns` or `db` parameters causes authentication failure.
-
-*Incorrect:*
-```surrealql
-await db.signin({ access: "user_access", username: "alice", pass: "123" }); // ❌ Missing ns and db!
-```
-
-*Fix:*
-```surrealql
-await db.signin({ access: "user_access", ns: "production", db: "main", username: "alice", pass: "123" });
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Identify Auth Tiers
-Categorize the following credentials into Root, Namespace, Database, or Record level:
-1. A service account deploying schema migrations to `NS app DB prod`.
-2. A web user logging into `user:alice`.
-3. A cluster admin creating a new Namespace.
+**Requirements:**
+1. Define a Root-level administrator user `sysadmin`.
+2. Define a Namespace-level administrator user `tenant_admin` on namespace `acme`.
+3. Define a Database-level Record access method `user_access` on database `app`.
 
 > [!check]- Answer
-> - Admin users managing schemas belong to Database/Namespace level.
-> - Individual end-users logging in via app UI belong to Record level.
+>
+> #### Implementation
+>
+> ```surrealql
+> -- 1. Root Level Administrator
+> DEFINE USER sysadmin ON ROOT PASSWORD "RootPass123!" ROLES OWNER;
+> 
+> -- 2. Namespace Level Administrator
+> USE NS acme;
+> DEFINE USER tenant_admin ON NAMESPACE PASSWORD "TenantPass123!" ROLES OWNER;
+> 
+> -- 3. Database Scoped RECORD Access Method
+> USE DB app;
+> DEFINE ACCESS user_access ON DATABASE TYPE RECORD
+>     SIGNIN (SELECT * FROM user WHERE username = $username AND crypto::argon2::compare(password, $pass));
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Root users hold engine-wide cluster management privileges across all namespaces and databases.
+> 2. Namespace users hold administrative authority restricted to databases within their designated tenant namespace.
+> 3. Record access scopes authenticate end-user web applications, enforcing row-level security PERMISSIONS.
+
+---
+
+### Exercise 2: Evaluating Direct Web Client Access
+
+**Scenario:**
+A web development team evaluates replacing an intermediate Express.js authentication API with direct browser-to-SurrealDB connections.
+
+**Requirements:**
+1. Describe how SurrealDB's built-in access methods validate web client credentials.
+2. Explain how row-level security `PERMISSIONS` protect data without custom API endpoints.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // Direct SDK client authentication over WebSockets
+> import Surreal from "surrealdb";
+
+const db = new Surreal();
+await db.connect("wss://db.example.com/rpc");
+
+// Authenticate directly using RECORD access method
+const token = await db.signin({
+  access: "user_access",
+  ns: "acme",
+  db: "app",
+  username: "alice",
+  pass: "Secret123!"
+});
+
+console.log("Authenticated directly over WebSockets:", token);
+```
+
+> #### Technical Explanation
+>
+> 1. Direct WebSocket client connections authenticate against `DEFINE ACCESS` methods defined inside SurrealDB.
+> 2. Issues a cryptographically signed JWT token stored by the client SDK.
+> 3. Eliminates custom Express/FastAPI authentication middleware boilerplate.
+
+---
+
+### Exercise 3: Restricting Admin Privileges with Roles
+
+**Scenario:**
+Define a database-level administrative user `auditor` with read-only viewer roles.
+
+**Requirements:**
+1. Write `DEFINE USER auditor ON DATABASE PASSWORD "AuditPass123!" ROLES VIEWER`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE USER auditor ON DATABASE PASSWORD "AuditPass123!" ROLES VIEWER;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ROLES VIEWER` grants read-only schema and record inspection privileges.
+> 2. Prevents administrative accounts from executing unintended data mutations.
+> 3. Implements the principle of least privilege.
 
 ---
 
 
 
-### Exercise 2: Auth Architecture Level Comparison
 
-**Problem:** List 3 authentication levels in SurrealDB (Root level, Namespace level, Database/Record Access level).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Root level, Namespace level, Database/Record Access level
-> ```
-> ```text
-> Root level, Namespace level, Database/Record Access level
-> ```
->
-> **Explanation:** SurrealDB enforces multi-tenant authentication at root, namespace, and database levels.
-
----
-
-### Exercise 3: Direct Client-to-Database Security Model
-
-**Problem:** How does SurrealDB authorize direct web browser query access safely? (Via SCOPE/ACCESS definitions and table PERMISSIONS).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Through RECORD access authentication tokens evaluated against SurrealQL PERMISSIONS rules
-> ```
-> ```text
-> Through RECORD access authentication tokens evaluated against SurrealQL PERMISSIONS rules
-> ```
->
-> **Explanation:** SCOPE/ACCESS tokens inject `$auth` identity context into table `PERMISSIONS` rules.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [System Users (`DEFINE USER`)](define_user.md) — Creating Root, NS, and DB admins.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Authenticating end-users as table records.
@@ -225,7 +251,7 @@ Categorize the following credentials into Root, Namespace, Database, or Record l
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SurrealDB features a 4-tier auth hierarchy: Root, Namespace, Database, and Record.
 - System Users (Root/NS/DB) are designed for admins and backend infrastructure.
 - Record Access is designed for end-users, enabling row-level security and direct client connectivity.

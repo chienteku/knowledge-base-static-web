@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Server Engine**
+
+**Server & Nitro Engine** (Universal Server Engine): Nitro is Nuxt 3's lightweight, cross-platform server engine that powers API routes, server middleware, and hybrid rendering across any hosting provider.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (Or Edge networks).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In older versions of Nuxt (and most JavaScript frameworks), the server-side rendering engine was heavily tied to Node.js and frameworks like Express. This meant if you wanted to deploy your application to a modern "Edge" network (like Cloudflare Workers, Vercel Edge, or Deno) which don't run a full Node.js environment, your app simply wouldn't work.
@@ -53,7 +54,7 @@ export default defineEventHandler((event) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use Express/Node-specific APIs on the Edge
 **The mistake:** Importing standard Node.js modules like `fs` (file system) or `child_process` inside a Nitro API route and then deploying to Cloudflare Workers.
@@ -104,68 +105,113 @@ export default defineEventHandler((event) => { return { status: 'ok' }; });
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Creating a Nitro API Route
+### Exercise 1: Creating Server API Endpoints with Nitro
 
-**Problem:** How do you define a server route in Nitro that returns a boolean value `true`?
+**Scenario:**
+Create a Nitro server endpoint `server/api/health.ts` returning JSON metadata including timestamp and server status.
 
-**Expected output:**
+**Requirements:**
+1. Create `defineEventHandler` in `server/api/health.ts`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> // Inside server/api/status.ts
-> export default defineEventHandler((event) => {
->   return true;
-> });
-> ```
-> - Create a file in `server/api/` containing a default export wrapped in `defineEventHandler()`. Returning JSON is as simple as returning the value itself.
-
----
-
-### Exercise 2: Nitro Server API Handler Pattern
-
-**Problem:** Write Nitro server handler `server/api/status.ts` returning JSON object `{ status: 'online', timestamp: Date.now() }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> export default defineEventHandler((event) => { return { status: 'online', timestamp: Date.now() }; });
-> ```
-> - `defineEventHandler` creates Nitro backend server routes.
-> 
-> ```typescript
-> // server/api/status.ts
+> // server/api/health.ts
 > export default defineEventHandler((event) => {
 >   return {
->     status: 'online',
->     timestamp: Date.now()
+>     status: "ok",
+>     timestamp: new Date().toISOString(),
+>     engine: "Nitro"
 >   };
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. Nitro maps files in `server/api/` directly to HTTP API endpoints.
+> 2. `defineEventHandler` wraps H3 event context processing for incoming requests.
+> 3. Objects returned from event handlers are automatically serialized as JSON responses.
+
 ---
 
-### Exercise 3: Nitro Cross-Platform Deployment Target
+### Exercise 2: Processing POST Requests and Request Bodies in Nitro
 
-**Problem:** Name 3 serverless/edge deployment platforms supported natively as preset build targets by Nitro.
+**Scenario:**
+Create a Nitro endpoint `server/api/users.post.ts` handling HTTP POST requests and parsing JSON payload bodies with `readBody()`.
 
-**Expected output:**
+**Requirements:**
+1. Export `defineEventHandler` using `readBody(event)`.
+
 > [!check]- Answer
-> ```text
-> 1. Vercel (Edge & Serverless)
-> 2. Cloudflare Workers / Pages
-> 3. AWS Lambda (or Netlify / Node.js standalone)
+>
+> #### Implementation
+>
+> ```typescript
+> // server/api/users.post.ts
+> export default defineEventHandler(async (event) => {
+>   const body = await readBody(event);
+>   
+>   if (!body.email) {
+>     throw createError({
+>       statusCode: 400,
+>       statusMessage: "Email is required"
+>     });
+>   }
+
+  return {
+    success: true,
+    user: { id: 101, email: body.email }
+  };
+});
+```
+
+> #### Technical Explanation
+>
+> 1. File suffix `.post.ts` restricts endpoint execution exclusively to HTTP POST requests.
+> 2. `readBody(event)` parses JSON payload streams asynchronously.
+> 3. `createError()` throws structured HTTP error responses handled automatically by Nitro.
+
+---
+
+### Exercise 3: Cross-Platform Deployment Target Selection
+
+**Scenario:**
+Configure `nuxt.config.ts` to build Nitro output targeting Vercel, Node.js server, or Cloudflare Workers.
+
+**Requirements:**
+1. Set `nitro.preset` in `nuxt.config.ts`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // nuxt.config.ts
+> export default defineNuxtConfig({
+>   nitro: {
+>     preset: "node-server" // Or 'vercel', 'cloudflare-pages', 'aws-lambda'
+>   }
+> });
 > ```
-> - Vercel, Cloudflare Workers, AWS Lambda, Netlify, Node.js.
-> 
-> ```text
-> Nitro presets compile to multi-cloud serverless and edge runtimes.
-> ```
+
+> #### Technical Explanation
+>
+> 1. Nitro abstracts runtime differences across Node.js, Deno, Bun, and serverless edge providers.
+> 2. Compiles server code into zero-dependency bundles optimized for the target deployment environment.
+> 3. Enables vendor lock-in-free full-stack deployment.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`server/api/` Routes](../level_07/server_api_routes.md) — How you define endpoints in your project.
 - [Edge Deployment](../level_10/edge_deployment.md) — The environments where Nitro truly shines.
 - [Nuxt 3 Overview](nuxt_3_overview.md) — Related concept: Nuxt 3 Overview.
@@ -179,7 +225,7 @@ export default defineEventHandler((event) => { return { status: 'ok' }; });
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Nitro is the server engine that powers Nuxt 3.
 - It handles both Server-Side Rendering (SSR) and API routes.
 - It uses the ultra-fast H3 web framework.

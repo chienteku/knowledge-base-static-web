@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Aggregation** (Field Mutation Pipeline Stages): The $set and $unset pipeline stages add, update, or remove fields from pipeline documents during aggregation processing.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Introduced in MongoDB 4.2 to provide readable stage names. Evaluated in the aggregation memory executor).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In MongoDB development, the terms `$set` and `$unset` wear **two completely different hats.** 
@@ -82,7 +83,7 @@ db.products.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming that running an aggregation pipeline containing a '$set' stage will modify the documents stored in the collection
 
@@ -132,72 +133,102 @@ db.users.aggregate([{ $unset: "tempField" }]); // Correct string syntax
 Use $set as an alias for $addFields inside aggregate([ { $set: { ... } } ]) pipelines
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Context Identification
+### Exercise 1: Adding Calculated Fields with `$set`
 
-**Problem:** Identify the context (**Update Operator** or **Aggregation Stage**) for the `$set` keyword in these two queries:
-1.  `db.logs.aggregate([ { $set: { viewed: true } } ])`
-2.  `db.logs.updateMany({}, { $set: { viewed: true } })`
-State which query alters data on disk.
+**Scenario:**
+Add a calculated `discountedPrice` field (`price * 0.9`) to pipeline documents using `$set`.
 
-**Expected output:**
+**Requirements:**
+1. Append stage `{ $set: { discountedPrice: { $multiply: ["$price", 0.9] } } }`.
+
 > [!check]- Answer
-> ```text
-> 1. Aggregation Stage: Modifies the `viewed` field to `true` in memory only as the documents flow through the pipeline. Does not alter data on disk.
-> 2. Update Operator: Modifies the `viewed` field permanently on disk for all documents in the collection.
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.aggregate([
+>   {
+>     $set: {
+>       discountedPrice: { $multiply: ["$price", 0.9] }
+>     }
+>   }
+> ]);
 > ```
-> - Inspect the method names `aggregate` and `updateMany`.
-> - Relate this back to disk persistence behaviors.
+>
+> #### Technical Explanation
+>
+> 1. `$set` (alias for `$addFields`) appends or updates fields while retaining all unmentioned document keys.
+> 2. Replaces verbose `$project` stages when whole-document field retention is needed.
+> 3. Improves pipeline readability.
+
+---
+
+### Exercise 2: Removing Unwanted Fields with `$unset`
+
+**Scenario:**
+Remove internal fields `passwordHash` and `tempTokens` from output documents using `$unset`.
+
+**Requirements:**
+1. Append stage `{ $unset: ["passwordHash", "tempTokens"] }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.aggregate([
+>   { $unset: ["passwordHash", "tempTokens"] }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$unset` (alias for `$project: { field: 0 }`) removes specified field names from pipeline documents.
+> 2. Accepts a single field string or an array of field string names.
+> 3. Cleans sensitive attributes before sending payloads to clients.
+
+---
+
+### Exercise 3: Combining `$set` and `$unset` for Schema Normalization
+
+**Scenario:**
+Rename field `oldTitle` to `title` by combining `$set` and `$unset`.
+
+**Requirements:**
+1. Stage 1: `{ $set: { title: "$oldTitle" } }`.
+2. Stage 2: `{ $unset: "oldTitle" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.posts.aggregate([
+>   { $set: { title: "$oldTitle" } },
+>   { $unset: "oldTitle" }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combining `$set` and `$unset` renames fields without losing other document keys.
+> 2. Normalizes legacy schema properties on the fly.
+> 3. Clean 2-stage field renaming pattern.
 
 ---
 
 
 
-### Exercise 2: Setting Computed Field with Aggregation `$set`
-
-**Problem:** Set computed boolean field `isAdult` (`age >= 18`) using `$set` stage.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.aggregate([{ $set: { isAdult: { $gte: ["$age", 18] } } }]);
-> ```
-> ```javascript
-> db.users.aggregate([
->   { $set: { isAdult: { $gte: ["$age", 18] } } }
-> ]);
-> ```
->
-> **Explanation:** Aggregation `$set` stage appends computed fields while preserving existing document fields.
-
----
-
-### Exercise 3: Removing Temporary Fields with `$unset`
-
-**Problem:** Remove temporary processing fields `tempHash` and `internalId` using `$unset` stage.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.aggregate([{ $unset: ["tempHash", "internalId"] }]);
-> ```
-> ```javascript
-> db.users.aggregate([
->   { $unset: ["tempHash", "internalId"] }
-> ]);
-> ```
->
-> **Explanation:** `$unset` stage strips specified fields from pipeline document streams.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`$project` / `$addFields` Stages](project_addfields.md) — The parent reshaping stages.
 - [Update Operators (`$set`, `$unset`, `$inc`, `$rename`, `$currentDate`)](../level_03/update_operators.md) — The write operators.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$set` and `$unset` can act as update operators or aggregation stages.
 - Aggregation `$set` is an alias for `$addFields`; aggregates in memory.
 - Aggregation `$unset` is an alias for `$project` exclusions; deletes fields in memory.

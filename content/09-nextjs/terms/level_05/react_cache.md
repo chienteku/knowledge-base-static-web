@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Data Fetching**
+
+**Data Fetching & Caching** (React Request Memoization): React `cache()` memoizes function return values per HTTP request cycle, preventing duplicate database or calculation calls during rendering.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (Memoization occurs within the server request rendering pipeline).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Next.js extends the standard web `fetch()` API with automatic **Request Memoization**. If you request the same API endpoint (`fetch('/api/user')`) in three different components during the same rendering pass, Next.js only executes the network request once. 
@@ -78,7 +79,7 @@ export default async function DashboardPage() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Initializing the `cache` wrapper inside the component render body
 
@@ -144,78 +145,108 @@ getCachedUser(5); // Primitive argument matches reference correctly
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Wrap Database Call
+### Exercise 1: Memoizing Async Data Queries with React `cache()`
 
-**Problem:** Complete the file below to export a memoized database query that fetches user articles by category:
+**Scenario:**
+Wrap a database query helper in React `cache()` to prevent duplicate SQL queries when called from multiple Server Components in the same render pass.
 
-```typescript
-// lib/db-queries.ts
-import { cache } from 'react';
-import { prisma } from './db';
+**Requirements:**
+1. Import `cache` from `react`.
+2. Wrap query function `cache(async (id) => ...)`.
 
-// Solution:
-export const getCachedArticles = cache(async (category: string) => {
-  return prisma.article.findMany({
-    where: { category }
-  });
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // lib/data.ts
+> import { cache } from "react";
+> import { db } from "@/lib/db";
+
+export const getUser = cache(async (id: string) => {
+  console.log(`[DB Query Executed] Fetching user ${id}`);
+  return db.user.findUnique({ where: { id } });
 });
 ```
 
-> [!check]- Answer
-> - Wrap the database-fetching function in `cache` from the `'react'` package.
+> #### Technical Explanation
+>
+> 1. React `cache()` memoizes function call return values for the duration of a single HTTP server request cycle.
+> 2. If `getUser('123')` is called in `layout.tsx`, `page.tsx`, and `generateMetadata()`, the database query executes ONLY ONCE.
+> 3. Eliminates prop drilling for fetched data across Server Component trees.
 
 ---
 
-### Exercise 2: React.cache Function Memoization Pattern
+### Exercise 2: Comparing React `cache()` vs Next.js Data Cache
 
-**Problem:** Write `React.cache()` wrapper around async function `getUser(id: string)` deduplicating requests within a server render pass.
+**Scenario:**
+Formulate a comparative analysis contrasting React `cache()` (Request Memoization) against Next.js Data Cache.
 
-**Expected output:**
+**Requirements:**
+1. Contrast lifecycle duration, storage persistence, and scope.
+
 > [!check]- Answer
-> ```typescript
-> import { cache } from 'react'; export const getCachedUser = cache(async (id: string) => { return await db.user.findUnique({ where: { id } }); });
-> ```
-> - `cache()` from `react` memoizes async functions per request.
-> 
-> ```typescript
-> import { cache } from 'react';
-> 
-> export const getCachedUser = cache(async (id: string) => {
->   console.log('Fetching user from DB:', id);
->   return await db.user.findUnique({ where: { id } });
-> });
-> ```
-
----
-
-### Exercise 3: React.cache Lifespan Scope
-
-**Problem:** What is the exact lifespan of data cached by `React.cache()`?
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> The duration of a single server HTTP request render pass (wiped when server render completes).
+> Caching Layer Comparison:
+> - React cache() (Request Memoization): In-memory per-request cache. Lifetime: Single HTTP request cycle. Purged automatically after request finishes.
+> - Next.js Data Cache: Persistent server-side storage (filesystem/Redis). Lifetime: Across multiple requests and users until explicitly revalidated.
 > ```
-> - `React.cache()` scope is limited to a single server render request.
-> 
-> ```text
-> Single HTTP Request Scope (Memoized per-render pass)
-> ```
+
+> #### Technical Explanation
+>
+> 1. React `cache()` prevents duplicate function calls within ONE incoming request pass.
+> 2. Next.js Data Cache persists HTTP fetch responses across ALL incoming requests.
+> 3. Complementary multi-layer caching architecture.
+
+---
+
+### Exercise 3: Memoizing Custom Computation Functions
+
+**Scenario:**
+Use React `cache()` to memoize an expensive CPU-bound Markdown parsing calculation in a Server Component.
+
+**Requirements:**
+1. Wrap CPU calculation in `cache()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { cache } from "react";
+> import { marked } from "marked";
+
+export const parseMarkdownMemoized = cache((content: string) => {
+  return marked(content);
+});
+```
+
+> #### Technical Explanation
+>
+> 1. React `cache()` works with ANY function (database queries, external calculations, ORM queries), not just `fetch()`.
+> 2. Caches return values based on argument reference equality.
+> 3. Optimizes CPU calculation overhead during server rendering.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Server-side Fetching (Extended `fetch`)](fetch.md) — The automatic request deduplication model.
 - [ORM (Object-Relational Mapping) & Prisma](orm_prisma.md) — The queries commonly optimized by `React.cache()`.
 - [Data Caching (`force-cache`, `no-store`)](data_caching.md) — Related concept: Data Caching (`force-cache`, `no-store`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `React.cache()` provides manual request memoization for non-fetch functions on the server.
 - It prevents duplicate database, file-system, or SDK queries during a single render pass.
 - Declare the cached function at the file level outside components.

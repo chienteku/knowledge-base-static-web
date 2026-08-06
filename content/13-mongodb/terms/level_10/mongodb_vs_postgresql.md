@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Paradigm**
+
+**Core Concept** (Document NoSQL vs Object-Relational Database): MongoDB vs PostgreSQL compares flexible schema document databases (BSON, horizontal sharding, $lookup) against strict relational databases (SQL, ACID tables, foreign keys).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Core system design trade-offs evaluated during backend application planning and database selection phases).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A common junior developer mistake is asking: *"Which database is better: MongoDB or PostgreSQL?"*
@@ -79,7 +80,7 @@ We study this comparison to choose the correct tool for the job.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Choosing MongoDB because "NoSQL is faster and easier," only to write complex, nested '$lookup' join pipelines on normalized collections in your code
 
@@ -129,70 +130,101 @@ Use MongoDB for document-native workloads requiring flexible schema and sharding
 Use PostgreSQL for deeply normalized 3NF relational data architectures
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Database Selection Advisor
+### Exercise 1: Structural Paradigm Comparison: BSON Documents vs Relational Tables
 
-**Problem:** You are the Lead Architect for three software projects. 
-Recommend the optimal database (**PostgreSQL** or **MongoDB**) for each requirement, and justify your choice:
-1.  A global social networking feed app where users post status updates containing nested comments, tags, and media links.
-2.  An inventory management ERP system for a car manufacturer tracking parts, sub-assemblies, suppliers, invoices, and accounting balances.
-3.  A modern IoT dashboard logging telemetry streams from 100,000 devices.
+**Scenario:**
+Compare data representation for a user with multiple addresses in MongoDB (Embedded BSON Document) vs PostgreSQL (Normalized Relational Tables with Foreign Key).
 
-**Expected output:**
+**Requirements:**
+1. Contrast single-document embedding vs multi-table SQL JOINs.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. MongoDB: The feed data maps naturally to document trees (nested comments, tags, media arrays). It avoids complex SQL joins and allows rapid updates as post types evolve.
-> 2. PostgreSQL: Car inventory is highly relational (parts lead to assemblies which tie to suppliers and billing ledgers). Strict constraints, foreign keys, and immediate consistency are required to prevent double-spending or inventory mismatch bugs.
-> 3. MongoDB (or Time-Series): High write throughput from 100,000 devices scales horizontally using MongoDB sharding, and metrics fit column-based chronological compression models.
+> Data Model Paradigm Comparison:
+> - MongoDB (Document BSON):
+>   { _id: 1, name: "Alice", addresses: [{ city: "Austin" }, { city: "Dallas" }] }
+>   -> Fetches user and all addresses in 1 single O(1) query!
+>
+> - PostgreSQL (Relational SQL):
+>   SELECT * FROM users JOIN addresses ON users.id = addresses.user_id WHERE users.id = 1;
+>   -> Requires foreign keys, JOIN operations, and relational table normalization.
 > ```
-> - Assess if the data structures are hierarchical or tabular.
-> - Consider the importance of strict constraints and foreign keys for inventory calculations.
+>
+> #### Technical Explanation
+>
+> 1. MongoDB embeds bounded hierarchical data inside a single BSON document, optimizing read velocity.
+> 2. PostgreSQL normalizes data across separate tables, requiring foreign key constraints and `JOIN` operations.
+> 3. Fundamental architectural difference between Document NoSQL and RDBMS.
+
+---
+
+### Exercise 2: Schema Flexibility vs Strict Table Schemas
+
+**Scenario:**
+Evaluate schema migration requirements when adding a new optional field `twitterHandle` in MongoDB vs PostgreSQL.
+
+**Requirements:**
+1. Contrast instant document write vs SQL `ALTER TABLE` DDL lock.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Schema Evolution Comparison:
+> - MongoDB: Insert { twitterHandle: "@alice" } directly. No DDL statements or table locks required!
+> - PostgreSQL: Must execute ALTER TABLE users ADD COLUMN twitter_handle VARCHAR(255); (Requires DDL lock on large tables).
+> ```
+>
+> #### Technical Explanation
+>
+> 1. MongoDB offers flexible schema design, allowing documents in the same collection to have different fields.
+> 2. Relational databases require strict column definitions enforced across all rows.
+> 3. Accelerates agile product iteration.
+
+---
+
+### Exercise 3: Architecture Selection Matrix: MongoDB vs PostgreSQL
+
+**Scenario:**
+Formulate a technology selection decision matrix choosing between MongoDB and PostgreSQL.
+
+**Requirements:**
+1. Contrast use cases (Polymorphic data/speed vs Complex relational SQL joins).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Technology Selection Matrix:
+> Choose MongoDB when: High-velocity reads, flexible schemas, unstructured/polymorphic data, horizontal sharded scale.
+> Choose PostgreSQL when: Highly complex relational schemas (10+ table joins), rigid SQL reporting, strict legacy DB integration.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. MongoDB excels at application-driven document workloads and scale-out architectures.
+> 2. PostgreSQL excels at deeply normalized relational data modeling and complex SQL analytics.
+> 3. Align database selection with domain data structures.
 
 ---
 
 
 
-### Exercise 2: MongoDB vs PostgreSQL Architectural Comparison
-
-**Problem:** Compare: MongoDB (Document BSON, Schema-flexible, Native Sharding), PostgreSQL (Relational SQL, Strict 3NF, JSONB support).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> MongoDB: document-oriented native sharding; PostgreSQL: relational SQL strict normalization
-> ```
-> ```text
-> MongoDB: document-oriented native sharding; PostgreSQL: relational SQL strict normalization
-> ```
->
-> **Explanation:** Paradigm selection depends on relational normalization vs document co-location requirements.
-
----
-
-### Exercise 3: Horizontal Scaling Comparison
-
-**Problem:** How does MongoDB scale out write throughput horizontally vs PostgreSQL? (Native Sharding across cluster shards).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> MongoDB natively shards collections across multi-node clusters
-> ```
-> ```text
-> MongoDB natively shards collections across multi-node clusters
-> ```
->
-> **Explanation:** MongoDB includes built-in sharding routers and config servers for horizontal scaling.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Database](../../../12-postgres/terms/level_01/database.md) — Relational paradigm.
 - [Database (MongoDB Context)](../level_01/database_context.md) — Document paradigm.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PostgreSQL uses normalized tables; MongoDB uses denormalized documents.
 - PostgreSQL enforces schemas strictly; MongoDB allows dynamic BSON shapes.
 - PostgreSQL scales vertically; MongoDB scales horizontally via sharding.

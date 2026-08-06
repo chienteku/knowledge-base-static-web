@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Performance / Operations (pluggable storage engine backends)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Selected as the final startup argument. Decoupled from the SurrealQL query compiler layer).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional databases, the query parser and the storage format are tightly coupled:
@@ -97,7 +96,7 @@ surreal start --user root --pass root tikv://10.0.0.1:2379,10.0.0.2:2379
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Launching a production application pointing to the 'memory' storage backend, resulting in complete database data loss on server reboots
 
@@ -147,63 +146,94 @@ $ surreal start rocksdb://shared_nfs/data.db # ❌ File lock contention in clust
 $ surreal start tikv://10.0.0.1:2379 # Distributed TiKV cluster storage
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Backend Selector
+### Exercise 1: Storage Engine Selection Matrix
 
-**Problem:** You are managing the database lifecycle for a new startup. 
-Select the optimal storage backend (**memory**, **file**, or **tikv**) for each phase:
-1.  Running automated unit tests in a Github Actions CI/CD pipeline (needs to run in under 30 seconds).
-2.  Deploying the initial MVP product to a single AWS EC2 virtual machine (requires data to survive server restarts, but budget is minimal).
-3.  Upgrading the production database to handle 50,000 transactions per second across 5 server instances with automatic failover backup redundancy.
+**Scenario:**
+An infrastructure architect is selecting storage engine backends for three distinct SurrealDB deployment workloads.
 
-**Expected output:**
+**Requirements:**
+1. Select a storage engine for stateless microservice CI/CD unit testing.
+2. Select a storage engine for a single-node persistent edge gateway device.
+3. Select a storage engine for a multi-node distributed cloud deployment handling petabytes of data.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. memory: In-memory is fast, requires zero disk cleanup between test runs, and volatile loss is fine because tests discard data anyway.
-> 2. file (file://): Local file-based RocksDB/SurrealKV provides disk persistence on a single VM without the cost or complexity of a cluster.
-> 3. tikv (tikv://): The distributed TiKV backend scales horizontally across multiple servers, providing high-availability replication and sharding.
+> - Unit Testing: Memory Engine (mem://)
+> - Single-Node Edge Persistence: SurrealKV or RocksDB (file://data/app.db or rocksdb://data/app.db)
+> - Multi-Node Distributed Cloud: TiKV Cluster (tikv://localhost:2379)
 > ```
-> - Match speed requirements and volatility profiles to the engine characteristics.
-> - Consider if the deployment is a single machine or a multi-server cluster.
+>
+> #### Technical Explanation
+>
+> 1. `mem://` runs in RAM with zero disk I/O, providing instantaneous startup and teardown for test suites.
+> 2. `SurrealKV` / `RocksDB` provide ACID persistent key-value storage on local disk for single-instance deployments.
+> 3. `TiKV` is a CNCF distributed transactional key-value store that allows SurrealDB to scale horizontally across server clusters.
+
+---
+
+### Exercise 2: CLI Startup for Distributed TiKV Backend
+
+**Scenario:**
+A DevOps engineer needs to start a production SurrealDB instance connecting to an existing TiKV cluster at `10.0.0.1:2379`.
+
+**Requirements:**
+1. Formulate the `surreal start` command specifying the TiKV storage engine path.
+2. Include authentication and binding configurations.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> surreal start >   --bind 0.0.0.0:8000 >   --user root >   --pass SuperSecretRootPass123 >   tikv://10.0.0.1:2379
+> ```
+>
+> #### Technical Explanation
+>
+> 1. The `tikv://` URI prefix instructs SurrealDB to delegate key-value storage operations to a TiKV cluster.
+> 2. Decouples SurrealDB compute nodes from underlying storage, enabling stateless auto-scaling of database compute instances.
+> 3. `--bind 0.0.0.0:8000` exposes the SurrealDB WebSocket/HTTP interface to external application traffic.
+
+---
+
+### Exercise 3: Storage Backend Abstraction Invariants
+
+**Scenario:**
+A developer asks if SurrealQL queries (`SELECT`, `RELATE`, `DEFINE TABLE`) need to be rewritten when migrating from single-node `file://` storage to distributed `tikv://` storage.
+
+**Requirements:**
+1. State whether SurrealQL code changes across storage engines.
+2. Explain the storage abstraction layer architecture of SurrealDB.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Answer: No, zero SurrealQL query code changes are required.
+> ```
+> 
+> ```surrealql
+> -- This query executes identically regardless of whether the backend is mem://, file://, or tikv://!
+> SELECT * FROM user WHERE status = "active";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. SurrealDB uses a pluggable Key-Value (KV) storage abstraction layer separating query parsing from physical storage engines.
+> 2. All tables, documents, indexes, and graph edges are serialized into standardized key-value ranges regardless of storage engine.
+> 3. Applications can move from local prototyping (`mem://`) to single-node disk (`file://`) to cloud clusters (`tikv://`) without modifying SurrealQL query scripts.
 
 ---
 
 
 
-### Exercise 2: Selecting Storage Backend Schemes
-
-**Problem:** Match use case with scheme: Local persistent single-node (`rocksdb://` / `surrealkv://`), Multi-node cluster (`tikv://`), Testing (`mem://`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Testing: mem://, Local Disk: rocksdb:// or surrealkv://, Cluster: tikv://
-> ```
-> ```text
-> Testing: mem://, Local Disk: rocksdb:// or surrealkv://, Cluster: tikv://
-> ```
->
-> **Explanation:** Storage engine backends plug into SurrealDB core depending on deployment scale.
-
----
-
-### Exercise 3: Native SurrealKV Engine
-
-**Problem:** What is SurrealDB's embedded Rust key-value storage engine backend? (`surrealkv://`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> surrealkv://
-> ```
-> ```text
-> surrealkv://
-> ```
->
-> **Explanation:** SurrealKV is SurrealDB's native, zero-dependency embedded Rust storage backend.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [SurrealDB Server (`surreal start`)](surreal_start.md) — The startup command configuration.
 - [TiKV Backend (Distributed Mode)](../level_10/tikv_backend.md) — The distributed mode.
@@ -213,7 +243,7 @@ Select the optimal storage backend (**memory**, **file**, or **tikv**) for each 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Pluggable storage architecture separates query parsing from physical disk writes.
 - Changing storage backends does not require altering query SurrealQL code.
 - `memory` stores data in RAM (blazing fast, volatile, ideal for local tests).

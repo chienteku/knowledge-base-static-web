@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Data Mutation / Backend Logic**
+
+**Data Mutation & Actions** (Server Action Mutation Framework): Server Actions are asynchronous server-side functions invoked directly from client components or HTML forms without API endpoints.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Historically, if you wanted a user to submit a "Contact Us" form and save it to a database, you had to:
@@ -65,7 +66,7 @@ When the user clicks "Save", Next.js automatically makes a hidden `POST` request
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting validation and security
 
@@ -131,65 +132,130 @@ export async function deleteUser(id: string) {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Server Actions in Client Components
+### Exercise 1: Authoring Standalone Server Actions
 
-**Problem:** Can you define a Server Action directly inside a Client Component (`"use client"`)?
+**Scenario:**
+Create `app/actions/comments.ts` with exported `"use server"` action functions.
 
-**Expected output:**
+**Requirements:**
+1. Add `"use server"` directive at the top of the file.
+
 > [!check]- Answer
-> ```text
-> No! You cannot define an inline `"use server"` function inside a `"use client"` file.
-> If you need to use a Server Action inside a Client Component, you must create a separate file (e.g., `actions.ts`), put `"use server"` at the top of that file, export the function, and then import it into your Client Component.
-> ```
-> - Think about the "Network Boundary" rule from Level 1.
-
----
-
-### Exercise 2: Inline vs Dedicated File Server Actions
-
-**Problem:** Where can the `'use server'` directive be placed in a Next.js App Router application?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. At the top of an async function body inside a Server Component.
-> 2. At the top of a dedicated .ts/.js file to export actions for Client Components.
-> ```
-> - Inside Server Component: Place `'use server'` inside function body.
-> - Dedicated File: Place `'use server'` at top of file.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> // Dedicated file: app/actions.ts
-> 'use server';
-> export async function myAction() {}
-> ```
+> // app/actions/comments.ts
+> "use server";
+
+import { revalidatePath } from "next/cache";
+
+export async function addCommentAction(formData: FormData) {
+  const text = formData.get("text") as string;
+  if (!text) throw new Error("Comment text is required");
+
+  // Save comment to database...
+
+  revalidatePath("/blog/[slug]", "page");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Adding `"use server"` at the top of a file exports all functions as callable Server Actions.
+> 2. Allows importing actions into Client Components (`"use client"`).
+> 3. Standard organization pattern for application mutations.
 
 ---
 
-### Exercise 3: Server Action Return Value Serialization
+### Exercise 2: Invoking Server Actions inside Client Component Buttons
 
-**Problem:** Can a Server Action return JSON response objects back to a Client Component caller?
+**Scenario:**
+Invoke a Server Action imperatively inside a Client Component button click handler.
 
-**Expected output:**
+**Requirements:**
+1. Call imported Server Action inside `startTransition()`.
+
 > [!check]- Answer
-> ```text
-> Yes. Server Actions can return serializable objects (e.g. { success: true, message: 'Saved' }).
-> ```
-> - Server Actions return serializable responses to Client Components.
-> 
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { useTransition } from "react";
+import { addCommentAction } from "@/app/actions/comments";
+
+export default function QuickAddButton() {
+  const [isPending, startTransition] = useTransition();
+
+  function handleClick() {
+    startTransition(async () => {
+      const formData = new FormData();
+      formData.append("text", "Quick Comment!");
+      await addCommentAction(formData);
+    });
+  }
+
+  return (
+    <button onClick={handleClick} disabled={isPending}>
+      {isPending ? "Adding..." : "Quick Add Comment"}
+    </button>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Server Actions can be invoked imperatively inside client event handlers (not just HTML forms).
+> 2. `useTransition` tracks action execution pending state without blocking UI responsiveness.
+> 3. Flexible client interaction pattern.
+
+---
+
+### Exercise 3: Handling Server Action Return Values and Errors
+
+**Scenario:**
+Return typed response objects `{ success: boolean, message: string }` from a Server Action.
+
+**Requirements:**
+1. Return JSON-serializable status object from action.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> 'use server';
-> export async function save() {
->   return { success: true, id: '123' };
-> }
-> ```
+> "use server";
+
+export async function safeMutation(formData: FormData) {
+  const title = formData.get("title");
+  if (!title) {
+    return { success: false, message: "Title field is mandatory" };
+  }
+
+  // Perform database mutation...
+
+  return { success: true, message: "Mutation completed successfully!" };
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Server Actions can return JSON-serializable primitive objects or values.
+> 2. Returning status objects avoids throwing raw unhandled exceptions across the network boundary.
+> 3. Idiomatic error handling pattern for user forms.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Form Actions](form_actions.md) — How Server Actions are actually invoked.
 - [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — The legacy way to handle mutations.
 - [`useFormState` Hook](use_form_state.md) — Related concept: `useFormState` Hook.
@@ -198,7 +264,7 @@ export async function deleteUser(id: string) {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Server Actions** are `async` functions that execute on the server but can be called directly from your React UI.
 - They eliminate the need to manually build API routes and `fetch` requests for simple data mutations.
 - You declare them using the `"use server"` directive inside the function body, or at the top of a file.

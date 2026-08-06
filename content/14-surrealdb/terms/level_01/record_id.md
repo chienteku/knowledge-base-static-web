@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Core Concept (table-scoped record identifier syntax)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed as a primitive data type `record` on the server. Used by client drivers to locate documents in the database indexing tree).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In other databases, unique identifiers are separate from table namespaces:
@@ -85,7 +84,7 @@ SELECT * FROM user:tobie;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating a Record ID as a standard text string in query parameters or schema comparisons
 
@@ -150,66 +149,106 @@ CREATE user:`alice@example.com`;
 CREATE user:[alice@example.com];
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: ID Format Identification
+### Exercise 1: Record ID Generation Strategy Matrix
 
-**Problem:** You are auditing a database log. Identify the format strategy (e.g. **Custom String**, **ULID**, **UUID**, or **Numeric**) used for each Record ID:
-1.  `product:88991`
-2.  `user:01H7V4W0M5A5QY8K2W3B1Z6X9C`
-3.  `customer:alice_smith`
-4.  `session:b1a457f9-8c2d-4f10-b67c-5a1248cf9af4`
+**Scenario:**
+You are designing an e-commerce platform schema and must choose appropriate SurrealDB record ID generation strategies for different table types based on performance and audit requirements.
 
-**Expected output:**
+**Requirements:**
+1. Choose an ID strategy for deterministic string-based user lookups (`user:john`).
+2. Choose an ID strategy for high-throughput time-ordered transaction logs (`ulid()`).
+3. Choose an ID strategy for cryptographically random session tokens (`rand::uuid()`).
+4. Choose an ID strategy for complex composite product SKUs (`product:['electronics', 'laptop', 101]`).
+
 > [!check]- Answer
-> ```text
-> 1. Numeric
-> 2. ULID (Time-sortable random character string)
-> 3. Custom String (Human-readable key)
-> 4. UUID (Standard random hexadecimal hash)
+>
+> #### Implementation
+>
+> ```surrealql
+> -- 1. Deterministic String ID
+> CREATE user:john SET name = "John Doe";
+> 
+> -- 2. ULID (Time-ordered, unique)
+> CREATE log:ulid() SET event = "login_success";
+> 
+> -- 3. UUID (Cryptographically random)
+> CREATE session:rand::uuid() SET user = user:john;
+> 
+> -- 4. Complex Array Composite ID
+> CREATE product:['electronics', 'laptop', 101] SET stock = 50;
 > ```
-> - Look for standard UUID hash patterns (dashes separating hex codes).
-> - Analyze if the characters are human-readable words or random sorted codes.
+>
+> #### Technical Explanation
+>
+> 1. Deterministic string IDs allow instant primary key lookup without secondary unique indexes.
+> 2. `ulid()` generates lexicographically sortable, time-prefixed 128-bit IDs ideal for sequential B-tree/LSM insertions.
+> 3. Composite array IDs `[category, type, sku]` allow multi-part primary keys natively in SurrealDB.
+
+---
+
+### Exercise 2: Special Character String ID Escaping
+
+**Scenario:**
+A system migration script imports legacy records containing email addresses and special characters as record IDs (e.g. `user:john.doe@example.com`).
+
+**Requirements:**
+1. Write the correctly escaped SurrealQL record ID syntax for an email identifier.
+2. Demonstrate querying the record using bracket `⟨ ⟩` escaping syntax.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Record ID creation with bracket escaping
+> CREATE user:⟨john.doe@example.com⟩ SET active = true;
+> 
+> -- Record lookup
+> SELECT * FROM user:⟨john.doe@example.com⟩;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Record IDs containing special characters (`@`, `.`, `-`) require bracket escaping `⟨...⟩` or string literals `user:'john.doe@example.com'`.
+> 2. Unescaped special characters cause SurrealQL parser errors.
+> 3. Bracket escaping allows any valid UTF-8 string to serve as a primary key.
+
+---
+
+### Exercise 3: Record ID Type Matching and Comparison
+
+**Scenario:**
+A developer is writing a query filter comparing record link pointers. They want to ensure they pass a typed record ID rather than a raw string.
+
+**Requirements:**
+1. Write a query creating a blog post `post:1` linked to `user:alice`.
+2. Write a `SELECT` query searching for posts where `author = user:alice`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET name = "Alice";
+> CREATE post:1 SET title = "SurrealDB Record IDs", author = user:alice;
+> 
+> -- Correct record ID pointer comparison
+> SELECT * FROM post WHERE author = user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `user:alice` is a typed `record` ID value in SurrealDB, not a string literal `"user:alice"`.
+> 2. Comparing `author = "user:alice"` fails because typed record IDs do not equal raw strings.
+> 3. Native record ID matching enables $O(1)$ pointer index resolution.
 
 ---
 
 
 
-### Exercise 2: Complex Escaped Record ID Creation
-
-**Problem:** Create a record in `user` table using email `admin@domain.com` as record ID.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE user:[admin@domain.com] SET name = "Admin";
-> ```
-> ```surrealql
-> CREATE user:[admin@domain.com] SET name = "Admin";
-> ```
->
-> **Explanation:** Brackets `[id]` allow arbitrary special characters inside Record IDs.
-
----
-
-### Exercise 3: Built-in ID Generator Functions
-
-**Problem:** Generate record IDs using `rand()`, `ulid()`, and `uuid()` in `CREATE user` statements.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE user:ulid(), CREATE user:uuid(), CREATE user:rand()
-> ```
-> ```surrealql
-> CREATE user:ulid();
-> CREATE user:uuid();
-> CREATE user:rand();
-> ```
->
-> **Explanation:** Generator functions create cryptographically random, ULID, or UUID Record IDs.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Record](record.md) — The fundamental unit identified.
 - [Table](table.md) — The collection namespace.
@@ -220,7 +259,7 @@ CREATE user:[alice@example.com];
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Record IDs fuse the table name and unique ID value (e.g., `table:id`).
 - Fused IDs serve as a first-class `record` data type, not standard strings.
 - Eliminates the need for separate ID columns and table namespace arguments.

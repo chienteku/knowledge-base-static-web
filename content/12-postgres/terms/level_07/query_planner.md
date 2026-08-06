@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Core Engine**
+
+**Performance / Optimization** (Cost-Based Query Optimizer): The Query Planner evaluates cost metrics (`random_page_cost`, table statistics) to generate the optimal physical execution plan for a SQL query.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Runs automatically during the query parsing pipeline. Accesses the `pg_statistic` system catalog to evaluate plan costs).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 SQL is a **declarative** language. 
@@ -81,7 +82,7 @@ graph TD
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming the Query Planner is always right on dynamic tables
 
@@ -132,70 +133,92 @@ Use enable_seqscan = off ONLY in session testing to debug query planner choices
 ANALYZE table_name; -- Updates query planner catalog statistics
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Planner Cost Variables
+### Exercise 1: Inspecting Cost Estimates in EXPLAIN Output
 
-**Problem:** Match the database components/terms to their roles in query optimization:
-1.  `pg_statistic`
-2.  `EXPLAIN`
-3.  `random_page_cost`
-4.  `ANALYZE`
+**Scenario:**
+Analyze query plan cost estimates (`cost=0.00..458.00 rows=100 width=32`) in `EXPLAIN` output.
 
-**Expected output:**
+**Requirements:**
+1. Explain startup cost, total cost, estimated row count, and row width metrics.
+
 > [!check]- Answer
-> ```text
-> 1. pg_statistic: The system catalog table storing table histograms and null fractions.
-> 2. EXPLAIN: The SQL command used by developers to inspect the planner's selected plan.
-> 3. random_page_cost: The cost variable representing random disk seek reads.
-> 4. ANALYZE: The maintenance command used to update statistics.
-> ```
-> - Differentiate diagnostic query statements from system catalog tables.
-> - Consider which parameter represents page-read penalty ratios.
-
----
-
-
-
-### Exercise 2: Updating Query Planner Statistics
-
-**Problem:** SQL command updating statistics catalog for `orders` table (`ANALYZE orders;`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ANALYZE orders;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> ANALYZE orders;
+> EXPLAIN SELECT id, username, email FROM users WHERE is_active = TRUE;
 > ```
 >
-> **Explanation:** `ANALYZE` updates `pg_statistic` catalog entries used by the query planner.
+> #### Technical Explanation
+>
+> 1. `cost=0.00..458.00`: `0.00` is startup cost (cost to fetch first row); `458.00` is total cost to complete the query in arbitrary disk fetch units.
+> 2. `rows=100`: Estimated number of rows returned.
+> 3. `width=32`: Estimated average byte width per returned row.
 
 ---
 
-### Exercise 3: Inspecting Estimated Query Costs
+### Exercise 2: Tuning Cost Parameters (`random_page_cost`) for SSD Storage
 
-**Problem:** What do the numbers `cost=0.00..8.50` represent in `EXPLAIN` output? (Query planner estimated startup cost and total execution cost units).
+**Scenario:**
+Adjust `random_page_cost` from default `4.0` (HDD) to `1.1` (NVMe SSD) to encourage the planner to prefer index scans over sequential table scans.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SET random_page_cost = 1.1`.
+
 > [!check]- Answer
-> ```text
-> Estimated startup cost and total execution cost units calculated by the planner
-> ```
-> ```text
-> Estimated startup cost and total execution cost units calculated by the planner
+>
+> #### Implementation
+>
+> ```sql
+> -- Set for current session or postgresql.conf
+> SET random_page_cost = 1.1;
+> 
+> EXPLAIN SELECT * FROM orders WHERE customer_id = 100;
 > ```
 >
-> **Explanation:** Planner cost units evaluate disk page reads (`seq_page_cost`, `random_page_cost`) and CPU operations.
+> #### Technical Explanation
+>
+> 1. Default `random_page_cost = 4.0` assumes slow spinning hard drives where random disk reads are 4x more expensive than sequential reads.
+> 2. On modern SSDs/NVMe storage, random page access is nearly as fast as sequential access (`random_page_cost = 1.1`).
+> 3. Instructs the query planner to favor index scans on fast storage hardware.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Updating Table Statistics with `ANALYZE`
+
+**Scenario:**
+Update stale catalog statistics for table `products` using `ANALYZE` after a 5,000,000 row bulk insertion.
+
+**Requirements:**
+1. Execute `ANALYZE products`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ANALYZE products;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ANALYZE` samples table rows to update statistical distributions in `pg_statistic`.
+> 2. Accurate statistics enable the query planner to estimate row counts and select optimal join algorithms (`Hash Join` vs `Nested Loop`).
+> 3. Essential step following large data import scripts.
+
+---
+
+
+
+## 6. Related Terms
 - [`EXPLAIN` / `EXPLAIN ANALYZE`](explain_analyze.md) — Inspecting planner outputs.
 - [`VACUUM` / `ANALYZE`](vacuum_analyze.md) — - Updating catalog statistics.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Query Planner chooses the most efficient physical execution path for SQL queries.
 - Uses Cost-Based Optimization (CBO) to score plans in arbitrary cost units.
 - Evaluates plan costs using page read weights (`seq_page_cost`, `random_page_cost`).

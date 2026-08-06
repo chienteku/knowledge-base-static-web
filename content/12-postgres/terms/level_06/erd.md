@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Design Tool / Methodology**
+
+**Schema Design** (Entity-Relationship Diagraming): An Entity-Relationship Diagram (ERD) visually models entities, attributes, primary keys, and foreign key relationship cardinalities.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Visual / Architecture** (Executed during the design phase of database engineering. Saved as diagram assets or mapped using modeling tools like pgAdmin, dbdiagram.io, or draw.io).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before building a house, an architect drafts blueprints. They map out structural columns, walls, and plumbing lines. If they skip the blueprints and start building immediately, the house is highly likely to collapse.
@@ -95,7 +96,7 @@ erDiagram
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Designing databases "blindly" without mapping out an ERD first
 
@@ -141,68 +142,111 @@ Use explicit Crow's Foot notation (1-to-Many, Many-to-Many) on relationship line
 Model core domain entities (User, Account, Subscription)
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Diagram Interpretation
+### Exercise 1: Mapping Entities and Cardinalities into ERD Diagrams
 
-**Problem:** Inspect the Mermaid diagram in Section 4. Describe:
-1.  The relationship type between `CUSTOMERS` and `ORDERS`.
-2.  Can an order exist without a customer matching it?
-3.  The relationship type between `ORDERS` and `ORDER_ITEMS`.
+**Scenario:**
+Draw a conceptual ERD modeling `Customer` (1) to `Order` (N) and `Order` (N) to `Product` (N) via `OrderItem`.
 
-**Expected output:**
+**Requirements:**
+1. Outline entity attributes, primary keys, and relationship cardinalities in text format.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. One-to-Many Relationship (one customer can place zero or many orders).
-> 2. No. The double line `||` on the CUSTOMERS side of the relationship line indicates that every order must connect to exactly one customer.
-> 3. One-to-Many Relationship (one order contains one or many order items).
+> ERD Schema Relationship Architecture:
+> - Customer (id PK, email)  <1 --- N>  Order (id PK, customer_id FK)
+> - Order (id PK)             <1 --- N>  OrderItem (order_id FK, product_id FK)
+> - Product (id PK, name)    <1 --- N>  OrderItem (order_id FK, product_id FK)
 > ```
-> - Identify the symbols at the endpoints of the relationship connector lines.
-> - Look for the crow's foot forks (`{`) and straight vertical bars (`|`).
+>
+> #### Technical Explanation
+>
+> 1. ERDs model real-world business entities and their relational connections visually.
+> 2. Identifies Primary Key (PK) and Foreign Key (FK) cardinalities (`1:1`, `1:N`, `N:M`).
+> 3. Essential blueprint before writing DDL `CREATE TABLE` scripts.
+
+---
+
+### Exercise 2: Translating ERD Diagrams to PostgreSQL DDL Scripts
+
+**Scenario:**
+Translate the `Customer` -> `Order` 1-to-Many ERD blueprint into executable SQL DDL statements.
+
+**Requirements:**
+1. Write DDL for `customers` and `orders`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE customers (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   email TEXT NOT NULL UNIQUE
+> );
+> 
+> CREATE TABLE orders (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   customer_id INTEGER NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+>   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Entities become relational tables.
+> 2. Entity attributes become columns with target data types.
+> 3. `1:N` relationships become foreign key constraints on the child table.
+
+---
+
+### Exercise 3: Reverse-Engineering System Catalogs into ERDs
+
+**Scenario:**
+Query `information_schema.table_constraints` to extract foreign key links for automated ERD generation tools.
+
+**Requirements:**
+1. Query `information_schema.table_constraints` filtering `constraint_type = 'FOREIGN KEY'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   tc.table_name AS child_table, 
+>   kcu.column_name AS child_column, 
+>   ccu.table_name AS parent_table, 
+>   ccu.column_name AS parent_column 
+> FROM information_schema.table_constraints AS tc 
+> JOIN information_schema.key_column_usage AS kcu 
+>   ON tc.constraint_name = kcu.constraint_name 
+> JOIN information_schema.constraint_column_usage AS ccu 
+>   ON ccu.constraint_name = tc.constraint_name 
+> WHERE tc.constraint_type = 'FOREIGN KEY';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. System catalog joins extract existing foreign key topology directly from running databases.
+> 2. Used by ERD visualization tools (e.g. pgAdmin, DBeaver, Prisma Studio) to render schema diagrams.
+> 3. Automated database documentation.
 
 ---
 
 
 
-### Exercise 2: ERD Cardinality Notation
-
-**Problem:** Identify ERD cardinality: User has many Orders (1:N); Student has many Courses (N:M).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> User to Order: 1:N; Student to Course: N:M
-> ```
-> ```text
-> User to Order: 1:N; Student to Course: N:M
-> ```
->
-> **Explanation:** ERD diagrams visualize entity relationship cardinalities before database physical implementation.
-
----
-
-### Exercise 3: Conceptual vs Physical ERD
-
-**Problem:** Compare: Conceptual ERD (High-level business entities); Physical ERD (Exact database tables, column types, foreign keys).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Conceptual: business entities; Physical: database tables, column types, foreign keys
-> ```
-> ```text
-> Conceptual: business entities; Physical: database tables, column types, foreign keys
-> ```
->
-> **Explanation:** Physical ERDs translate conceptual business models into concrete SQL DDL schemas.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Normalization](normalization.md) — The mathematical rules of schema structuring.
 - [Junction Table (Bridge / Pivot Table)](../level_05/junction_table.md) — The physical resolution of M:N relationships in ERDs.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - An ERD is a visual blueprint mapping tables, columns, and relationships.
 - Entities represent tables; Attributes represent columns.
 - Crow's Foot notation details relationship cardinalities (1:1, 1:N, M:N).

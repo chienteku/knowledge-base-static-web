@@ -155,7 +155,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Microservice Database Connection Pool & Global Config (`LazyLock` & `OnceLock`)
 
-**Problem Statement:**
+**Scenario:**
 In high-concurrency microservices, initializing database connection pools and parsing service configurations from external sources must happen lazily and exactly once across all worker threads.
 You are tasked with building a thread-safe global connection manager:
 1. Define a global `LazyLock<ServerConfig>` that automatically parses configuration settings on first access.
@@ -164,7 +164,11 @@ You are tasked with building a thread-safe global connection manager:
 4. Demonstrate thread safety by spawning 20 concurrent threads that simultaneously call `get_or_init_pool()` and attempt to acquire connections.
 5. Write unit tests in `#[cfg(test)] mod tests` verifying that the initialization closure runs exactly once despite thread contention, connections are distributed up to capacity, and configuration settings match expectations.
 
+**Requirements:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::{LazyLock, OnceLock};
 > use std::sync::atomic::{AtomicUsize, Ordering};
@@ -257,7 +261,8 @@ You are tasked with building a thread-safe global connection manager:
 > }
 > ```
 > 
-> **Explanation & Key Takeaways:**
+> #### Technical Explanation
+>
 > 1. **Lazy Static Initialization (`LazyLock`)**: `GLOBAL_CONFIG` encapsulates configuration parsing logic. By wrapping it in `LazyLock`, Rust guarantees that no work is done at program startup; the closure evaluates automatically on the first dereference (`&*GLOBAL_CONFIG`).
 > 2. **Explicit Thread-Safe Initialization (`OnceLock`)**: `DB_POOL.get_or_init()` guarantees that even when 20 worker threads concurrently call `get_or_init_pool()`, exactly one thread executes the initialization closure while the remaining threads block until the initialized `&'static DbConnectionPool` reference is available.
 > 3. **Atomic State & Concurrency Safety**: The test verifies atomic initialization counts (`POOL_INIT_COUNT == 1`) and thread connection bounds without requiring `unsafe` code or manual Mutex locking during reads.
@@ -266,7 +271,7 @@ You are tasked with building a thread-safe global connection manager:
 
 ### Exercise 2: High-Performance Concurrent Log Masking Pipeline (`LazyLock` & Atomic Metrics)
 
-**Problem Statement:**
+**Scenario:**
 In enterprise telemetry pipelines, user audit logs contain sensitive Personally Identifiable Information (PII) such as email tokens, credit card identifiers, and SSN formats. Compiling string redactors or regex rules per incoming request introduces severe latency penalties.
 You are tasked with implementing a zero-overhead, multi-threaded log scrubbing system:
 1. Construct a `PatternRedactor` struct containing masking rules for sensitive tokens.
@@ -275,7 +280,11 @@ You are tasked with implementing a zero-overhead, multi-threaded log scrubbing s
 4. Implement `process_log_line(line: &str) -> String` to sanitize log streams concurrently across worker threads.
 5. Create a complete unit test module `#[cfg(test)] mod tests` verifying pattern replacements, atomic counter accuracy, and thread-safe parallel processing across concurrent worker threads.
 
+**Requirements:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::LazyLock;
 > use std::sync::atomic::{AtomicUsize, Ordering};
@@ -363,7 +372,8 @@ You are tasked with implementing a zero-overhead, multi-threaded log scrubbing s
 > }
 > ```
 > 
-> **Explanation & Key Takeaways:**
+> #### Technical Explanation
+>
 > 1. **Lazy Pre-compilation**: Initializing `REDACTOR` via `LazyLock` defers setup until runtime while ensuring the redactor rules are compiled only once across all worker threads.
 > 2. **Shared Read-Only Access (`Sync`)**: `LazyLock<PatternRedactor>` implements `Sync` because `PatternRedactor` only exposes immutable reference borrows (`&self`), allowing all 8 worker threads to query the exact same memory location without contention or lock acquisitions.
 > 3. **Atomic Operations**: Thread-safe atomic counters (`AtomicUsize`) track metric totals across concurrent worker threads without requiring explicit synchronization primitives like `Mutex`.
@@ -372,14 +382,18 @@ You are tasked with implementing a zero-overhead, multi-threaded log scrubbing s
 
 ### Exercise 3: Fallible Thread-Safe Authentication Service (`OnceLock<Result<T, E>>`)
 
-**Problem Statement:**
+**Scenario:**
 In distributed microservice architectures, initializing remote security keys or token validators can fail due to transient network glitches or missing API tokens. Unlike `LazyLock` (which panics if initialization panics), `OnceLock` can hold fallible types such as `Result<T, E>`.
 You are tasked with implementing a fallible thread-safe authentication manager:
 1. Define an `AuthService` struct containing a `OnceLock<Result<String, AuthError>>` token cache and an atomic attempt counter.
 2. Implement `get_or_initialize_token(&self, simulate_success: bool) -> Result<&str, AuthError>` using `OnceLock::get_or_init` to store the result of the initialization attempt.
 3. Write unit tests in `#[cfg(test)] mod tests` demonstrating multi-threaded concurrent access, caching of results (whether `Ok` or `Err`), and verifying that subsequent reads receive cached outcomes without re-invoking initialization.
 
+**Requirements:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::{Arc, OnceLock};
 > use std::sync::atomic::{AtomicUsize, Ordering};
@@ -465,7 +479,8 @@ You are tasked with implementing a fallible thread-safe authentication manager:
 > }
 > ```
 > 
-> **Explanation & Key Takeaways:**
+> #### Technical Explanation
+>
 > 1. **Fallible Lazy Initialization**: Wrapping `Result<T, E>` inside `OnceLock` allows safe lazy initialization of fallible resources without panicking worker threads.
 > 2. **Single-Execution Guarantee**: `OnceLock::get_or_init` guarantees that the closure runs at most once across all threads. Once computed, the inner `Result` (whether `Ok` or `Err`) is cached for the lifetime of the `OnceLock`.
 > 3. **Thread-Safe Borrowing**: Returning references `Result<&str, AuthError>` directly borrows from the static/heap storage managed inside `OnceLock`, preventing unnecessary allocations on reads.

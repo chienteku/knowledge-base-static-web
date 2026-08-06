@@ -16,7 +16,9 @@
 
 ## 2. Term Category
 
-**Rust-specific**: Other languages often hide whether variable assignment is performing a cheap pointer copy or an expensive full data copy. Rust forces expensive "Deep Copies" to be incredibly explicit via the `.clone()` method.
+
+
+**Rust Core Trait (explicit deep copy capability)**: Other languages often hide whether variable assignment is performing a cheap pointer copy or an expensive full data copy. Rust forces expensive "Deep Copies" to be incredibly explicit via the `.clone()` method.
 
 ---
 
@@ -157,7 +159,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Custom Deep Copying and Reference-Counted Shared State in Transactional Snapshots
 
-**Problem:**
+**Scenario:**
 In high-concurrency database storage engines, transaction snapshots isolate uncommitted mutations while sharing global metadata across instances. Automatic `#[derive(Clone)]` on complex data structures can lead to unexpected behavior if pointer duplication vs value deep-copying is not explicitly managed.
 
 Implement a custom `Clone` implementation for a transactional storage cache. You are given a struct `CacheNode` containing a unique `u64` node ID, a dynamic heap-allocated payload buffer `Vec<u8>`, and a shared schema pointer `Arc<SchemaMetadata>`.
@@ -296,7 +298,7 @@ Your task is to:
 
 ### Exercise 2: Buffer Allocation Reuse via Overridden `Clone::clone_from`
 
-**Problem:**
+**Scenario:**
 High-throughput network proxies and gRPC parsing engines process millions of protocol frames per second. Repeated calls to standard `Clone::clone` allocate brand-new heap memory for payload buffers, driving OS allocator churn and CPU cache misses. The `Clone` trait offers an optimization hook: `fn clone_from(&mut self, source: &Self)`. By default, `clone_from` falls back to `*self = source.clone()`, but overriding it allows destination buffers to clear and reuse existing heap allocations without dropping and re-allocating memory.
 
 Implement `NetworkFrame` featuring a `PacketHeader` and a dynamic `payload: Vec<u8>`. Override `clone_from` for `NetworkFrame` so that when copying a source frame into an existing destination frame, the destination's pre-allocated heap capacity is preserved and reused.
@@ -412,7 +414,7 @@ Write unit tests in `#[cfg(test)] mod tests` using `assert_eq!`, `assert!`, `ass
 
 ### Exercise 3: Deep Cloning Dynamic Directed Acyclic Graphs (DAG) with Isolated Task Execution States
 
-**Problem:**
+**Scenario:**
 In workflow orchestration frameworks (e.g. Apache Airflow, DAG build tools), pipelines are represented as graphs of connected `TaskNode` structures. When an execution job is spawned from a master pipeline template, the engine must clone the DAG graph into an active execution run. Every task node stores execution parameters (`Vec<(String, String)>`), job metadata, and dynamic state tracking (`NodeStatus`). Mutating task state or recording errors during run execution must never pollute the template graph or parallel run instances.
 
 Implement custom `Clone` logic for `TaskNode` and `TaskPipeline`. Ensure that all strings, metadata, parameter vectors, and state variants are deeply cloned into independent memory addresses.

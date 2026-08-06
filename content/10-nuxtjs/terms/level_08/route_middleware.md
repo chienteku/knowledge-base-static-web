@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing**
+
+**Security & Middleware** (Client & Server Route Guards): Route Middleware (`defineNuxtRouteMiddleware`) executes guard logic before entering a route, handling authentication, redirects, and permissions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you build a Dashboard page, you don't want unauthenticated users to see it. If you put the auth-checking logic directly inside the `dashboard.vue` component's `onMounted` hook, the page will briefly render, the user will see a flash of the dashboard, and *then* they will be redirected to the login page. This is insecure and looks terrible.
@@ -68,7 +69,7 @@ definePageMeta({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `useRouter().push()` inside Middleware
 **The mistake:** Trying to redirect the user by calling the standard Vue router push method inside a middleware function.
@@ -139,87 +140,129 @@ export default defineNuxtRouteMiddleware((to) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Aborting Navigation
+### Exercise 1: Redirecting Unauthorized Users with `navigateTo()`
 
-**Problem:** Write a Route Middleware named `admin.ts` that checks if `useUser().isAdmin` is true. If they are an admin, let them pass. If they are not an admin, immediately cancel the navigation and throw a 403 Forbidden error using `abortNavigation()`.
+**Scenario:**
+Write route middleware redirecting unauthenticated users to `/login?redirect=...`.
 
-**Expected output:**
+**Requirements:**
+1. Use `navigateTo("/login?redirect=...")` inside route middleware.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> export default defineNuxtRouteMiddleware((to, from) => {
->   const { isAdmin } = useUser();
+> // middleware/auth.ts
+> export default defineNuxtRouteMiddleware((to) => {
+>   const user = useUser();
 >   
->   if (!isAdmin) {
->     return abortNavigation(createError({ statusCode: 403, message: 'Forbidden' }));
+>   if (!user.value) {
+>     return navigateTo({
+>       path: "/login",
+>       query: { redirect: to.fullPath }
+>     });
 >   }
 > });
 > ```
-> - Combine `abortNavigation` with `createError({ statusCode: 403 })` to interrupt the transition.
+
+> #### Technical Explanation
+>
+> 1. `defineNuxtRouteMiddleware((to, from))` receives target route (`to`) and origin route (`from`).
+> 2. Returning `navigateTo()` performs HTTP 302 redirects on the server during SSR and SPA transitions on the client.
+> 3. Preserves original target route path in URL query parameters for post-login redirection.
 
 ---
 
-### Exercise 2: Inline Page Route Middleware Pattern
+### Exercise 2: Implementing Anonymous Inline Route Middleware
 
-**Problem:** Write `definePageMeta()` block defining inline route middleware function checking `auth` state.
+**Scenario:**
+Define an anonymous inline middleware function directly inside `definePageMeta()` in a page component.
 
-**Expected output:**
+**Requirements:**
+1. Define inline function in `definePageMeta({ middleware: [...] })`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
-> definePageMeta({
->   middleware: [
->     function (to, from) {
->       const auth = useAuth();
->       if (!auth.value.isLoggedIn) return navigateTo('/login');
->     }
->   ]
-> });
-> </script>
-> ```
-> - Inline middleware functions are declared directly inside `definePageMeta`.
-> 
-> ```vue
-> <script setup>
+> <!-- pages/special.vue -->
+> <script setup lang="ts">
 > definePageMeta({
 >   middleware: [
 >     (to, from) => {
->       const user = useUser();
->       if (!user.value && to.path !== '/login') {
->         return navigateTo('/login');
+>       console.log("Executing inline middleware for special page");
+>       if (to.query.secret !== "true") {
+>         return navigateTo("/");
 >       }
 >     }
 >   ]
 > });
 > </script>
-> ```
+
+<template>
+  <div>
+    <h1>Secret Special Page</h1>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Inline middleware functions are scoped strictly to the page component where they are defined.
+> 2. Useful for single-use page guard logic without creating standalone files in `middleware/`.
+> 3. Compact page guard pattern.
 
 ---
 
-### Exercise 3: Route Middleware Arguments
+### Exercise 3: Asynchronous Route Middleware Execution
 
-**Problem:** What 2 arguments are passed to `defineNuxtRouteMiddleware((to, from) => {})`?
+**Scenario:**
+Execute async token validation inside route middleware before granting access to protected routes.
 
-**Expected output:**
+**Requirements:**
+1. Use `async (to) => { await $fetch(...) }`.
+
 > [!check]- Answer
-> ```text
-> 1. to (Target route location object)
-> 2. from (Previous route location object)
-> ```
-> - `to` -> Target destination route object.
-> - `from` -> Originating route object.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> defineNuxtRouteMiddleware((to, from) => {
->   console.log(`Navigating from ${from.path} to ${to.path}`);
+> // middleware/verify-session.ts
+> export default defineNuxtRouteMiddleware(async (to) => {
+>   const token = useCookie("token");
+>   
+>   if (token.value) {
+>     try {
+>       // Asynchronously validate session token with backend API
+>       await $fetch("/api/auth/validate", {
+>         headers: { Authorization: `Bearer ${token.value}` }
+>       });
+>     } catch (err) {
+>       token.value = null;
+>       return navigateTo("/login");
+>     }
+>   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. Route middleware supports returning Promises or using `async/await`.
+> 2. Route navigation pauses until the async middleware Promise resolves.
+> 3. Prevents page rendering until session verification completes.
 
 ---
 
-## 7. Related Terms
+
+
+
+---
+
+## 6. Related Terms
 - [Global vs Named Middleware](global_vs_named_middleware.md) — The two ways to apply these functions.
 - [`pages/` Directory](../level_02/pages_directory.md) — Where middleware is applied via `definePageMeta`.
 - [`definePageMeta` Compiler Macro](../level_02/define_page_meta.md) — Related concept: `definePageMeta` Compiler Macro.
@@ -229,7 +272,7 @@ export default defineNuxtRouteMiddleware((to) => {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Route Middleware intercepts Vue Router navigation *before* the page renders.
 - It is located in the `middleware/` directory (NOT `server/middleware/`).
 - Use `return navigateTo()` to safely redirect users.

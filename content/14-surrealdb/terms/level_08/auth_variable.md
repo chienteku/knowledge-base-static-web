@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **System Variable / Security**
+
+
+**Authentication & Permissions ($auth session record context variable)**: - **System Variable / Security**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Query Engine** (Automatically populated whenever a request is authenticated via a Record Access JWT token).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When an application end-user executes a query or updates a record, the database engine must know *who* is performing the action. In standard SQL databases, developers must pass the user ID manually in query parameters (`WHERE author_id = $1`).
@@ -60,7 +59,7 @@ SELECT * FROM comment WHERE author = $auth.id;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting $auth to exist during Root/DB Admin Sessions
 
@@ -120,85 +119,93 @@ Authenticate via db.signin() to set $auth context
 
 
 
-### Mistake 4: Expecting `$auth` Variable to Be Available in Un-Authenticated Root Queries
 
-**The mistake:** Referencing `$auth.id` when executing queries as root administrator.
 
-**Why it's wrong:** `$auth` is populated ONLY when a client connects using a RECORD access scope token! Root administrator sessions do not populate `$auth` (evaluates to `NONE`).
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
--- Executed as Root admin:
-SELECT * FROM article WHERE author = $auth.id; // ❌ $auth is NONE for Root admin!
-```
+### Exercise 1: Row-Level Owner Isolation with `$auth`
 
-*Fix:*
-```surrealql
-SELECT * FROM article WHERE author = user:alice;
--- Use $auth in table PERMISSIONS for record scope users
-```
+**Scenario:**
+Configure a `PERMISSIONS` clause on table `document` ensuring users can only select and update documents where `owner = $auth.id`.
 
-### Mistake 5: Attempting Direct Assignment to `$auth` Variable in Queries
-
-**The mistake:** Executing `LET $auth = user:alice;` in client query scripts.
-
-**Why it's wrong:** `$auth` is a read-only system variable injected automatically by the authentication engine upon verifying JWT access tokens. Client scripts cannot reassign `$auth`.
-
-*Incorrect:*
-```surrealql
-LET $auth = user:alice; // ❌ Cannot reassign system variable $auth!
-```
-
-*Fix:*
-```surrealql
-Authenticate via db.signin() to set $auth context
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Auto-assign Created By
-Write a `DEFINE FIELD` statement for a `task` table named `created_by` of type `record<user>` that defaults automatically to `$auth.id` and is `READONLY`.
+**Requirements:**
+1. Define table `document` with `PERMISSIONS FOR select, update WHERE owner = $auth.id`.
 
 > [!check]- Answer
-> - Combine `TYPE record<user>`, `DEFAULT $auth.id`, and `READONLY`.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE document SCHEMAFULL
+>     PERMISSIONS 
+>         FOR select, update WHERE owner = $auth.id,
+>         FOR create WHERE owner = $auth.id,
+>         FOR delete WHERE owner = $auth.id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$auth` represents the authenticated user's record document during active scoped client sessions.
+> 2. `$auth.id` extracts the primary key ID pointer (`user:alice`) of the active user.
+> 3. Enforces row-level security automatically across client queries.
+
+---
+
+### Exercise 2: Role-Based Access Control with `$auth.role`
+
+**Scenario:**
+Allow document deletion if the active user owns the document (`owner = $auth.id`) OR holds role `"admin"` (`$auth.role = "admin"`).
+
+**Requirements:**
+1. Apply `PERMISSIONS FOR delete WHERE owner = $auth.id OR $auth.role = "admin"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE document SCHEMAFULL
+>     PERMISSIONS 
+>         FOR delete WHERE owner = $auth.id OR $auth.role = "admin";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$auth.role` inspects custom properties stored on the authenticated user record object.
+> 2. Combines record ownership checks with role-based access control (RBAC).
+> 3. Evaluates security rules dynamically per record mutation.
+
+---
+
+### Exercise 3: Inspecting Active `$auth` Context
+
+**Scenario:**
+Execute a test query returning current `$auth.id` and `$auth.email` details during a client session.
+
+**Requirements:**
+1. Select `$auth.id`, `$auth.email`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT $auth.id AS current_user_id, $auth.email AS current_user_email;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Selecting `$auth` projects the authenticated session's record context.
+> 2. Evaluates to `NONE` if the query is executed by an unauthenticated guest connection.
+> 3. Enables frontend SDK apps to retrieve current user session state directly.
 
 ---
 
 
 
-### Exercise 2: Row-Level Security with `$auth`
 
-**Problem:** Define SELECT permission on `article` table restricting users to reading their own articles using `$auth.id`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE TABLE article PERMISSIONS FOR select WHERE author = $auth.id;
-> ```
-> ```surrealql
-> DEFINE TABLE article PERMISSIONS FOR select WHERE author = $auth.id;
-> ```
->
-> **Explanation:** `$auth.id` injects the authenticated user's Record ID into row-level security rules.
-
----
-
-### Exercise 3: Admin Role Check via `$auth`
-
-**Problem:** Allow SELECT access if user is owner (`author = $auth.id`) OR user role is admin (`$auth.role = "admin"`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE TABLE article PERMISSIONS FOR select WHERE author = $auth.id OR $auth.role = "admin";
-> ```
-> ```surrealql
-> DEFINE TABLE article PERMISSIONS FOR select WHERE author = $auth.id OR $auth.role = "admin";
-> ```
->
-> **Explanation:** Access permissions evaluate `$auth` record fields dynamically.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`PERMISSIONS` Clause (Table & Field Level)](permissions_clause.md) — Table and field level security.
 - [`$auth.id` vs `$auth.*` (Accessing Auth Record Fields)](auth_record_fields.md) — Accessing specific properties of `$auth`.
@@ -208,7 +215,7 @@ Write a `DEFINE FIELD` statement for a `task` table named `created_by` of type `
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$auth` represents the authenticated record user (e.g. `user:tobie`).
 - Automatically populated when client SDKs connect using Record Access JWT tokens.
 - Available in `PERMISSIONS`, `DEFAULT`, `ASSERT`, `VALUE`, and SurrealQL queries.

@@ -155,9 +155,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Layered Financial Message Router with Slice Patterns and Match Guards
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 In high-frequency financial trading systems, raw TCP packets containing order execution messages must be decoded and validated with microsecond-level latency. The protocol uses a 4-byte header (`[0x50, 0x4B, major_ver, minor_ver]`) followed by dynamic command payloads.
 
+**Requirements:**
 Design and implement a binary message parser `parse_trading_frame` and an execution router `route_order` using Rust's advanced pattern matching features:
 - Use **slice pattern matching** (`[header.., tail]`, range patterns `1..=2`) to validate protocol magic bytes `['P', 'K']` and version numbers.
 - Match sub-slice payloads for Limit Orders (`0x01`), Cancel Orders (`0x02`), and Heartbeats (`0x03`).
@@ -329,9 +330,10 @@ Design and implement a binary message parser `parse_trading_frame` and an execut
 
 ### Exercise 2: AST Expression Optimizer and Evaluator with Nested Patterns and `@` Subpattern Bindings
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 In database query engines and compiler intermediate representation (IR) pipelines, tree-structured Abstract Syntax Trees (ASTs) undergo algebraic simplification and constant folding passes to eliminate redundant calculations before code generation or query execution.
 
+**Requirements:**
 Implement an AST node representation `Expr` and optimization function `optimize_expr`:
 - Use **recursive nested enum/struct pattern matching** to fold operations on literal numbers (e.g. `Add(Literal(a), Literal(b))` -> `Literal(a + b)`).
 - Implement **algebraic identity reductions**:
@@ -526,9 +528,10 @@ Implement an AST node representation `Expr` and optimization function `optimize_
 
 ### Exercise 3: Telemetry Event Stream Classifier and Storage Router
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 Distributed cloud applications process millions of telemetry metrics and log records per minute. Ingestion nodes classify incoming event records based on geographic region, HTTP status code ranges, alert severity levels, and priority header flags to determine if the event should be routed to Hot, Warm, or Cold storage tiers or trigger immediate system alerts.
 
+**Requirements:**
 Implement a telemetry processing pipeline using Rust pattern matching:
 - Parse array slice patterns `[b'U', b'S']`, `[b'E', b'U']`, `[b'A', b'P']` into structured `Region` variants.
 - Match on `TelemetryRecord` using **tuple & struct patterns**, bitmask checks (`flags & 0x80`), and **range patterns** (`200..=299`, `500..=599`, `5..=u8::MAX`).

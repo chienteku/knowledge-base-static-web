@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Constraint** (Multi-Column Identity Constraint): A Composite Key combines two or more columns to form a unique primary or candidate key identifier.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all SQL engines. Enforced at the index lookup layer by concatenating values into a single index node).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A standard primary key uses a single column (like a surrogate `id`) to uniquely identify rows. 
@@ -98,7 +99,7 @@ INSERT INTO project_tasks VALUES (10, 1, 'Duplicate Task');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using composite keys as parent anchors for tables that are heavily referenced by other tables
 
@@ -144,59 +145,100 @@ CREATE INDEX idx_user_roles_role_id ON user_roles (role_id);
 Use surrogate id primary key alongside UNIQUE (col1, col2, col3, col4)
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Warehouse Shelf Mapping
+### Exercise 1: Defining Composite Primary Keys
 
-**Problem:** You are designing a warehouse inventory tracker. Items are stored on shelves. A shelf is identified by a `warehouse_id`, a `room_code`, and a `shelf_number`. Write the SQL `CREATE TABLE` query for a table named `shelves` containing these three columns (all are integers/codes, required) and make them the composite primary key.
+**Scenario:**
+Create an `order_items` table with a composite primary key over `(order_id, line_item_id)`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE TABLE order_items (order_id INT, line_item_id INT, ..., PRIMARY KEY (order_id, line_item_id))`.
+
 > [!check]- Answer
-> ```sql
-> CREATE TABLE shelves (
->   warehouse_id INT NOT NULL,
->   room_code VARCHAR(10) NOT NULL,
->   shelf_number INT NOT NULL,
->   PRIMARY KEY (warehouse_id, room_code, shelf_number)
-> );
-> ```
-> - Declare the three columns first.
-> - Append the composite `PRIMARY KEY` parameter listing all three columns separated by commas.
-
----
-
-### Exercise 2: Defining Composite Primary Key in DDL
-
-**Problem:** Create junction table `order_items` with composite primary key `(order_id, item_id)`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
 > CREATE TABLE order_items (
->   order_id INT REFERENCES orders(id),
->   item_id INT REFERENCES items(id),
->   quantity INT DEFAULT 1,
->   PRIMARY KEY (order_id, item_id)
+>   order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+>   line_item_id INTEGER NOT NULL,
+>   product_id INTEGER NOT NULL REFERENCES products(id),
+>   quantity INTEGER NOT NULL CHECK (quantity > 0),
+>   PRIMARY KEY (order_id, line_item_id)
 > );
 > ```
 >
-> **Explanation:** Composite primary keys enforce row uniqueness across multi-column combinations.
+> #### Technical Explanation
+>
+> 1. Composite primary keys enforce uniqueness across the COMBINATION of multiple columns.
+> 2. Prevents duplicate `line_item_id` values within the same `order_id`.
+> 3. Creates an underlying multi-column B-tree unique index.
 
 ---
 
-### Exercise 3: Composite Key Index Prefix Matching
+### Exercise 2: Referencing Composite Primary Keys with Composite Foreign Keys
 
-**Problem:** Given composite primary key `(tenant_id, user_id)`, can query `WHERE user_id = 5` use the primary key index? (No, skips leading tenant_id prefix).
+**Scenario:**
+Create a `line_item_audits` table referencing composite key `(order_id, line_item_id)` in `order_items`.
 
-**Expected output:**
+**Requirements:**
+1. Include `FOREIGN KEY (order_id, line_item_id) REFERENCES order_items(order_id, line_item_id)`.
+
 > [!check]- Answer
-> ```text
-> No, queries skipping the leading prefix cannot utilize compound B-Tree indexes
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE line_item_audits (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   order_id INTEGER NOT NULL,
+>   line_item_id INTEGER NOT NULL,
+>   action_type TEXT NOT NULL,
+>   CONSTRAINT fk_audits_order_item 
+>     FOREIGN KEY (order_id, line_item_id) 
+>     REFERENCES order_items(order_id, line_item_id) ON DELETE CASCADE
+> );
 > ```
 >
-> **Explanation:** B-Tree index prefix rules mandate filtering leading composite key fields.
+> #### Technical Explanation
+>
+> 1. Composite foreign keys must match the exact number and order of columns in the target composite primary key.
+> 2. Enforces multi-column referential integrity.
+> 3. Ensures child audit records link to valid parent line items.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Column Order Strategy for Composite Index Scans
+
+**Scenario:**
+Explain why column order in composite key `(order_id, line_item_id)` matters for `WHERE` clause index matching.
+
+**Requirements:**
+1. Contrast index usage for `WHERE order_id = 10` vs `WHERE line_item_id = 1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Composite Index Left-Prefix Rule:
+> - PRIMARY KEY (order_id, line_item_id) optimizes queries filtering by 'order_id' OR '(order_id AND line_item_id)'.
+> - Queries filtering ONLY by leading column 'order_id' hit the composite B-tree index efficiently.
+> - Queries filtering ONLY by trailing column 'line_item_id' CANNOT hit the index (requires separate index on line_item_id).
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Composite indexes sort entries by the leading column first.
+> 2. Place the most frequently queried filtering column as the leading key.
+> 3. Fundamental indexing rule.
+
+---
+
+
+
+## 6. Related Terms
 - [`PRIMARY KEY`](../level_02/primary_key.md) — The parent single-column key standard.
 - [Junction Table (Bridge / Pivot Table)](../level_05/junction_table.md) — The primary target for composite keys.
 - [Second Normal Form (2NF)](second_normal_form.md) — Slicing composite key dependencies.
@@ -204,7 +246,7 @@ Use surrogate id primary key alongside UNIQUE (col1, col2, col3, col4)
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A composite key is a primary or unique key spanning multiple columns.
 - Enforces the uniqueness of combined column value sets.
 - Essential for mapping junction tables to prevent duplicate relationship rows.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Index Type**
+
+**Performance / Optimization** (Functional Expression Index): Expression Indexes index the result of a function or expression (e.g. `LOWER(email)`) to accelerate queries over computed values.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Fully supported. Evaluating expression indexes adds write CPU overhead during inserts because Postgres must compute the function output before writing to the index nodes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in Level 4 (`like_ilike.md`), standard databases are case-sensitive. 
@@ -94,7 +95,7 @@ SELECT * FROM users WHERE email = 'Alice@example.com';
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Querying with a slightly different expression than the index definition
 
@@ -141,65 +142,105 @@ CREATE INDEX idx_date ON events (NOW()); -- ❌ Error: function must be IMMUTABL
 CREATE INDEX idx_date ON events ((created_at AT TIME ZONE 'UTC'));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: JSONB Asset Search Index
+### Exercise 1: Indexing Lowercase Case-Insensitive Expressions
 
-**Problem:** You have a `server_assets` table with a `metadata` JSONB column. The JSON document stores a nested key `{"status": "active"}`. Write the SQL query to build a production-safe, background index named `idx_asset_status` on the nested status text extraction.
+**Scenario:**
+Create an expression index on `users(LOWER(email))` to optimize case-insensitive email authentication lookups.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE INDEX idx_users_lower_email ON users(LOWER(email))`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE INDEX CONCURRENTLY idx_asset_status 
-> ON server_assets ((metadata ->> 'status'));
+> CREATE INDEX idx_users_lower_email 
+> ON users (LOWER(email));
+> 
+> SELECT id, username 
+> FROM users 
+> WHERE LOWER(email) = LOWER('ALICE@EXAMPLE.COM');
 > ```
-> - Remember to use double parentheses `((...))` to wrap the JSONB text extraction operator `->>`.
-> - Use the `CONCURRENTLY` keyword to make the build production-safe.
+>
+> #### Technical Explanation
+>
+> 1. Queries using `WHERE LOWER(email) = ...` cannot hit a standard B-tree index on `email`.
+> 2. `CREATE INDEX ON users (LOWER(email))` evaluates and stores the result of `LOWER(email)` in the index.
+> 3. Accelerates case-insensitive queries from sequential scans to fast $O(\log N)$ index lookups.
+
+---
+
+### Exercise 2: Indexing Calculated Date Expressions
+
+**Scenario:**
+Create an expression index on `orders(EXTRACT(YEAR FROM created_at))` to optimize yearly sales reports.
+
+**Requirements:**
+1. Execute `CREATE INDEX idx_orders_created_year ON orders((EXTRACT(YEAR FROM created_at)))`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE INDEX idx_orders_created_year 
+> ON orders ((EXTRACT(YEAR FROM created_at)));
+> 
+> SELECT COUNT(*) 
+> FROM orders 
+> WHERE EXTRACT(YEAR FROM created_at) = 2026;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Double parentheses `((expression))` are required in DDL syntax when indexing complex SQL functions.
+> 2. Pre-calculates and indexes yearly values.
+> 3. Accelerates date function filtering.
+
+---
+
+### Exercise 3: Indexing JSONB Fields via Expressions
+
+**Scenario:**
+Create an expression index targeting a specific nested JSONB key path (`(metadata->>'device')`).
+
+**Requirements:**
+1. Execute `CREATE INDEX idx_events_device ON events((metadata->>'device'))`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE INDEX idx_events_device 
+> ON events ((metadata->>'device'));
+> 
+> SELECT id, event_name 
+> FROM events 
+> WHERE metadata->>'device' = 'mobile';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Expression indexes allow indexing specific high-frequency JSONB key paths without indexing the entire JSON document.
+> 2. Consumes significantly less RAM than full GIN indexes.
+> 3. Targeted JSON indexing pattern.
 
 ---
 
 
 
-### Exercise 2: Creating Case-Insensitive Lowercase Expression Index
-
-**Problem:** Create expression index `idx_users_lower_email` on `LOWER(email)` for case-insensitive email searches.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE INDEX idx_users_lower_email ON users (LOWER(email));
-> ```
-> ```sql
-> CREATE INDEX idx_users_lower_email ON users (LOWER(email));
-> ```
->
-> **Explanation:** Expression indexes evaluate SQL functions (`LOWER()`) to index computed results.
-
----
-
-### Exercise 3: JSONB Expression Indexing
-
-**Problem:** Create expression index indexing nested JSONB field `(metadata->>'user_id')` as integer.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE INDEX idx_meta_user_id ON users (((metadata->>'user_id')::INT));
-> ```
-> ```sql
-> CREATE INDEX idx_meta_user_id ON users (((metadata->>'user_id')::INT));
-> ```
->
-> **Explanation:** Expression indexes can cast and index extracted JSONB attributes.
-
-## 7. Related Terms
+## 6. Related Terms
 - [B-tree Index](btree_index.md) — The parent sorted tree structure.
 - [`JSON` / `JSONB` Type](../level_06/json_jsonb.md) — Storing nested documents.
 - [Full-Text Search (`tsvector`, `tsquery`)](../level_10/full_text_search.md) — Related concept: Full-Text Search (`tsvector`, `tsquery`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Expression indexes store the calculated results of functions applied to columns.
 - Enables index optimization for functional queries (like `LOWER(email)`).
 - Critical for indexing nested attributes inside `JSONB` columns.

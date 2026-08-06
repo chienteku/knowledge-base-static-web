@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Administration / Operations** (Replica Set Read Routing): Read Preference determines how client drivers route query read traffic across replica set members (`primary`, `primaryPreferred`, `secondary`, `secondaryPreferred`, `nearest`).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Configurable in the connection string URI or per-query options. Governs driver-side connection routing logic).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, in a replica set, all writes and **all reads** are processed by the single Primary node. 
@@ -99,7 +100,7 @@ db.orders.find().readPref("secondary");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting read preference to 'secondary' for the entire application to "speed things up," leading to consistency bugs
 
@@ -149,66 +150,88 @@ Use readPreference: 'primary' for read-after-write user profile views
 Use Sharding to scale cluster write throughput horizontally
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Read Preference Selector
+### Exercise 1: Offloading Analytical Queries to Secondary Nodes
 
-**Problem:** You are configuring a global replica set deployed across New York, London, and Tokyo.
-Select the optimal Read Preference mode for these application tasks:
-1.  A nightly offline marketing report script that exports sales metrics.
-2.  A global user checkout page that reads stock levels.
-3.  A mobile user looking up static help articles, where fast page loads are critical.
+**Scenario:**
+Configure an analytics pipeline to read from replica set secondary nodes using `readPreference: "secondary"`.
 
-**Expected output:**
+**Requirements:**
+1. Pass `readPreference: "secondary"` in query options.
+
 > [!check]- Answer
-> ```text
-> 1. secondary: Offloads heavy log analysis queries completely from the primary node to prevent CPU lockups.
-> 2. primary: Guarantees strong consistency to prevent double-selling inventory due to replication lag.
-> 3. nearest: Routes queries to the closest geographic server node (New York, London, or Tokyo) to minimize page load latency.
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.find({ category: "analytics" })
+>   .readPref("secondary");
 > ```
-> - Evaluate the impact of stale data on the action.
-> - Consider if network latency is the primary bottleneck.
+>
+> #### Technical Explanation
+>
+> 1. `readPreference: "secondary"` routes query requests exclusively to replica set secondary members.
+> 2. Offloads heavy read-intensive reporting queries from the primary node.
+> 3. Preserves primary node CPU and RAM for write operations.
 
 ---
 
+### Exercise 2: Fallback Read Preferences with `primaryPreferred` and `secondaryPreferred`
 
+**Scenario:**
+Configure an application API to read from secondary nodes by default, but fall back to the primary node if secondaries are unreachable.
 
-### Exercise 2: Configuring Secondary Read Preference with Tag Sets
+**Requirements:**
+1. Use `readPreference: "secondaryPreferred"`.
 
-**Problem:** Configure read preference routing queries to secondary nodes in datacenter `analytics` (`{ dc: "analytics" }`).
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> db.orders.find({}, { readPreference: new ReadPreference("secondary", [{ dc: "analytics" }]) });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const { ReadPreference } = require('mongodb');
-> db.orders.find({}, {
->   readPreference: new ReadPreference("secondary", [{ dc: "analytics" }])
+> const cursor = db.products.find({ active: true })
+>   .readPref("secondaryPreferred");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `secondaryPreferred` queries a secondary member if available; if all secondaries are down, it routes to the primary node.
+> 2. Ensures high read availability during secondary node maintenance windows.
+> 3. Resilient routing strategy.
+
+---
+
+### Exercise 3: Low-Latency Geo-Routing with `nearest` and Tag Sets
+
+**Scenario:**
+Route reads to the nearest replica set node in region `"us-east"` using `readPreference: "nearest"` with `tagSets`.
+
+**Requirements:**
+1. Configure `nearest` with `tagSets: [{ region: "us-east" }]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const client = new MongoClient(uri, {
+>   readPreference: ReadPreference.NEAREST,
+>   readPreferenceTags: [{ region: "us-east" }]
 > });
 > ```
 >
-> **Explanation:** Tag sets route secondary read queries to specific designated datacenter nodes.
+> #### Technical Explanation
+>
+> 1. `nearest` routes reads to the node with the lowest network latency ping, regardless of primary/secondary status.
+> 2. `tagSets` restricts candidate nodes to specific datacenter regions.
+> 3. Minimizes cross-region network latency.
 
 ---
 
-### Exercise 3: Read Preference Modes List
 
-**Problem:** List 5 read preference modes in MongoDB (`primary`, `primaryPreferred`, `secondary`, `secondaryPreferred`, `nearest`).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> primary, primaryPreferred, secondary, secondaryPreferred, nearest
-> ```
-> ```text
-> primary, primaryPreferred, secondary, secondaryPreferred, nearest
-> ```
->
-> **Explanation:** Read preferences dictate which replica set nodes execute read queries.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Read Concern](read_concern.md) — The read isolation configuration.
 - [Replica Set](../level_09/replica_set.md) — The target cluster.
@@ -217,7 +240,7 @@ Select the optimal Read Preference mode for these application tasks:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Read Preference determines how reads are routed across a replica set.
 - `primary` (default) routes reads only to the primary node (strong consistency).
 - `secondary` routes reads only to secondary backup nodes (offloads traffic).

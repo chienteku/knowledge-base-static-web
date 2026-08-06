@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Advanced Mechanics**
+
+**TypeScript Advanced Type** (Default Generic Parameter Subsitutions): Default generic parameters (`<T = string>`) provide fallback type arguments when generic callers omit explicit type parameters.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 You build a heavily used `interface ApiResponse<T>`. 
@@ -56,7 +57,7 @@ interface Config<T extends object = Record<string, unknown>> { ... }
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Ordering rules for multiple generics
 
@@ -103,73 +104,118 @@ type State<T = string> = { data: T };
 const s: State = { data: "default string" }; // Omitting type uses default 'string'
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The generic DOM default
+### Exercise 1: Providing Default Generic Type Parameters
 
-**Problem:** In the DOM, `document.querySelector<E>()` is a generic function. If you just call `document.querySelector(".btn")` without providing a generic, what do you think the Default Type is set to under the hood?
+**Scenario:**
+Create a generic `ApiResponse<T = string>` interface where `T` defaults to `string` if not explicitly specified.
 
-**Expected output:**
+**Requirements:**
+1. Declare `<T = string>` in `ApiResponse`.
+
 > [!check]- Answer
-> ```text
-> The default is `Element`.
-> Under the hood, it looks something like: `querySelector<E extends Element = Element>(selector: string): E | null`
-> This ensures that if you don't provide a specific type (like HTMLButtonElement), it safely falls back to the generic `Element` interface.
-> ```
-> - What is the most basic building block of the DOM?
-
----
-
-
-
-### Exercise 2: Generic Interface Default Parameters
-
-**Problem:** Define `interface Response<T = unknown> { status: number; data: T }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Response interface with default generic created
-> ```
+>
+> #### Implementation
+>
 > ```typescript
-> interface Response<T = unknown> {
->   status: number;
+> interface ApiResponse<T = string> {
 >   data: T;
+>   status: number;
 > }
-> const res: Response = { status: 200, data: "raw string" };
-> console.log("Response interface with default generic created");
-> ```
+
+// T defaults to string:
+const res1: ApiResponse = { data: "Operation Successful", status: 200 };
+
+// T explicitly specified as number[]:
+const res2: ApiResponse<number[]> = { data: [10, 20, 30], status: 200 };
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** Default generic parameters supply fallback types when callers omit generic arguments.
+> 1. Default generic type parameters (`<T = DefaultType>`) supply a default type argument when callers omit explicit generic types.
+> 2. Reduces boilerplate when a specific type parameter is used in the vast majority of cases.
+> 3. Standard library design pattern for generic interfaces.
 
 ---
 
-### Exercise 3: Default Generics in Functions
+### Exercise 2: Combining Default Generics with Generic Constraints
 
-**Problem:** Define generic function `function createRef<T = HTMLDivElement>(): T | null`.
+**Scenario:**
+Combine a generic constraint with a default type parameter `<T extends HTMLElement = HTMLDivElement>`.
 
-**Expected output:**
+**Requirements:**
+1. Declare `<T extends HTMLElement = HTMLDivElement>`.
+
 > [!check]- Answer
-> ```text
-> HTMLDivElement | null
-> ```
-> ```typescript
-> function createRef<T = HTMLDivElement>(): T | null {
->   return null;
-> }
-> console.log("HTMLDivElement | null");
-> ```
 >
-> **Explanation:** Generic defaults in functions provide convenient default return and parameter types.
+> #### Implementation
+>
+> ```typescript
+> type ElementWrapper<T extends HTMLElement = HTMLDivElement> = {
+>   element: T;
+>   render: () => void;
+> };
 
-## 7. Related Terms
+// Defaults to HTMLDivElement:
+const divWrapper: ElementWrapper = {
+  element: document.createElement("div"),
+  render: () => console.log("Rendering div")
+};
+
+// Explicitly specified as HTMLButtonElement:
+const btnWrapper: ElementWrapper<HTMLButtonElement> = {
+  element: document.createElement("button"),
+  render: () => console.log("Rendering button")
+};
+```
+
+> #### Technical Explanation
+>
+> 1. `T extends Constraint = DefaultType` ensures that `T` MUST satisfy `Constraint` while providing a default fallback.
+> 2. The default type (`HTMLDivElement`) must be assignable to the constraint (`HTMLElement`).
+> 3. High-level generic component design pattern.
+
+---
+
+### Exercise 3: Default Parameter Ordering Rules Audit
+
+**Scenario:**
+Explain why generic type parameters with defaults must follow required generic parameters without defaults.
+
+**Requirements:**
+1. Demonstrate invalid generic parameter order `<T = string, U>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // ❌ Compile Error: Required type parameter cannot follow an optional type parameter!
+> // type Invalid<T = string, U> = { t: T; u: U };
+
+// ✅ CORRECT (Required parameters come FIRST):
+type Valid<U, T = string> = { u: U; t: T };
+```
+
+> #### Technical Explanation
+>
+> 1. Generic type parameters evaluate positionally from left to right.
+> 2. Optional generic parameters with defaults (`T = string`) must follow all required generic parameters without defaults (`U`).
+> 3. Enforces consistent positional generic resolution.
+
+---
+
+
+
+## 6. Related Terms
 - [Optional & Default Parameters](../level_04/optional_default_parameters.md) — The runtime equivalent of this compile-time feature.
 - [Generic Constraints (`extends`)](generic_constraints.md) — The other modifier applied inside `<...>`.
 - [Generics Overview (`<T>`)](generics.md) — Related concept: Generics Overview (`<T>`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Generic Defaults** (`<T = DefaultType>`) provide a fallback type if the user doesn't explicitly provide one.
 - It dramatically improves developer experience (DX) by removing the need to repeatedly type obvious or generic shapes.
 - Generics with defaults must always appear at the end of the Generic list (after all required generics).

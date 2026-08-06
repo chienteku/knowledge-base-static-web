@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Advanced Mechanics**
+
+**TypeScript Advanced Type** (Multi-Type Parameter Generics): Multiple generic type parameters (`<T, U, V>`) instantiate multiple independent parametric type variables within functions, classes, or interfaces.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes a function deals with two completely unrelated types of data at the same time. 
@@ -61,7 +62,7 @@ getProperty(user, "email"); // ❌ Error: Argument of type '"email"' is not assi
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Terrible Naming Conventions in Complex Code
 
@@ -108,71 +109,109 @@ type ComplexInput<T, U> = { a: T; b: U };
 function simple<T, U>(input: ComplexInput<T, U>) {}
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Map Function
+### Exercise 1: Mapping Key-Value Pairs with Dual Generics
 
-**Problem:** The built-in Array `.map()` function takes an array of one type, and returns an array of a *potentially different* type. How many generics do you think the `.map()` method uses under the hood?
+**Scenario:**
+Create a `Pair<K, V>` interface representing key-value tuple pairs with distinct generic parameters.
 
-**Expected output:**
+**Requirements:**
+1. Declare `<K, V>` in `Pair`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Pair<K, V> {
+>   key: K;
+>   value: V;
+> }
+
+const entry: Pair<string, number> = { key: "age", value: 30 };
+const flag: Pair<number, boolean> = { key: 1, value: true };
+```
+
+> #### Technical Explanation
+>
+> 1. Multiple generic parameters (`<K, V>`) allow functions or interfaces to handle multiple independent types.
+> 2. `key` is bound to `K` while `value` is bound to `V` independently.
+> 3. Standard structure for dictionary entries and key-value mapping tuples.
+
+---
+
+### Exercise 2: Mapping Tuple Transformation Functions
+
+**Scenario:**
+Create a generic `mapPair<T, U, R>` function that takes a pair `[T, U]` and a mapper function `(t: T, u: U) => R`.
+
+**Requirements:**
+1. Declare three generic parameters `<T, U, R>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function mapPair<T, U, R>(
+>   pair: [T, U],
+>   mapper: (first: T, second: U) => R
+> ): R {
+>   return mapper(pair[0], pair[1]);
+> }
+
+const formatted = mapPair([10, "apples"], (qty, item) => `${qty} ${item}`);
+console.log(formatted); // "10 apples" (inferred as string)
+```
+
+> #### Technical Explanation
+>
+> 1. `T` and `U` represent input tuple element types, while `R` represents the mapped return type.
+> 2. TypeScript automatically infers `T=number`, `U=string`, and `R=string` from function arguments.
+> 3. Advanced functional composition utility.
+
+---
+
+### Exercise 3: Naming Conventions for Multiple Generics Audit
+
+**Scenario:**
+Explain standard naming conventions for multiple generic type parameters (`T`, `U`, `V`, `K`, `V`, `E`).
+
+**Requirements:**
+1. List standard generic parameter naming rules.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> It uses Two! 
-> 1. The type of the items currently in the Array (let's call it `T`).
-> 2. The type of the items being returned by the callback function (let's call it `U`).
-> `map<U>(callbackfn: (value: T) => U): U[]`
+> Generic Parameter Naming Conventions:
+> - T: Type (Default generic choice)
+> - U, V: Subsequent generic types following T
+> - K, V: Key and Value (used in dictionaries / maps)
+> - E: Element (used in collections / arrays)
+> - P: Property / Props (used in React / Component frameworks)
+> - R: Return type (used in function wrappers)
 > ```
-> - Think about `[1, 2, 3].map(n => n.toString())`. Input is number, output is string.
+
+> #### Technical Explanation
+>
+> 1. Single uppercase letters are traditional conventions for short generic type variables.
+> 2. For complex domain logic, descriptive multi-letter generic names (e.g. `<TEntity, TResponse>`) can be used for clarity.
+> 3. Promotes readable codebase conventions.
 
 ---
 
 
 
-### Exercise 2: Generic Map Function Signature
-
-**Problem:** Write `mapArray<T, U>(arr: T[], fn: (item: T) => U): U[]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [2, 4, 6]
-> ```
-> ```typescript
-> function mapArray<T, U>(arr: T[], fn: (item: T) => U): U[] {
->   return arr.map(fn);
-> }
-> console.log(mapArray([1, 2, 3], x => x * 2));
-> ```
->
-> **Explanation:** Multi-generics `<T, U>` transform input array element types `T` into output array element types `U`.
-
----
-
-### Exercise 3: Pair Tuple Construction
-
-**Problem:** Write `makePair<K, V>(key: K, val: V): [K, V]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ["id", 100]
-> ```
-> ```typescript
-> function makePair<K, V>(key: K, val: V): [K, V] {
->   return [key, val];
-> }
-> console.log(makePair("id", 100));
-> ```
->
-> **Explanation:** Multi-generics construct strongly-typed tuple key-value pairs.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`keyof` Operator](../level_09/keyof.md) — The operator used to link `K extends keyof T`.
 - [Generic Constraints (`extends`)](generic_constraints.md) — How you relate `U` to `T`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - You can declare **Multiple Generics** using comma-separated syntax: `<T, U, V>`.
 - It is used when a function or class manages multiple independent types simultaneously.
 - You can constrain one Generic using another Generic (e.g., `<T, K extends keyof T>`), which is how TypeScript achieves perfect autocomplete for dynamic object property access.

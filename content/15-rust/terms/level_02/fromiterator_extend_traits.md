@@ -151,9 +151,10 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Throughput Log Tag Aggregator (`TagIndex`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In distributed microservice log ingestion pipelines, streaming metadata tags (e.g. `("env", "prod")`, `("service", "auth")`) must be aggregated into tag frequency metrics without unnecessary container reallocations. Design a custom metadata index container `TagIndex` that stores metric tag counts and total processed tag entries.
 
+**Requirements:**
 1. Create a `TagIndex` struct with `counts: HashMap<String, usize>` and `total_tags: usize`.
 2. Implement `FromIterator<(String, String)>` and `FromIterator<(&'a str, &'a str)>` for `TagIndex` so callers can construct an index directly using `.collect()`.
 3. Implement `Extend<(String, String)>` and `Extend<(&'a str, &'a str)>` for `TagIndex` to support appending new tag batches via `.extend()`.
@@ -297,9 +298,10 @@ In distributed microservice log ingestion pipelines, streaming metadata tags (e.
 
 ### Exercise 2: Financial Order Book & Price-Level Depth Aggregator (`OrderBookDepth`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 High-frequency trading engines require order book data structures that consolidate streams of price-level quotes `(price, volume)` into a sorted depth representation using `BTreeMap<u64, u64>`. Implement `OrderBookDepth` to support both single-quote stream processing and multi-snapshot aggregation.
 
+**Requirements:**
 1. Define `OrderBookDepth` with `levels: BTreeMap<u64, u64>` and `total_volume: u64`.
 2. Implement `FromIterator<(u64, u64)>` to build an order book snapshot using `.collect()`.
 3. Implement `Extend<(u64, u64)>` to incrementally add price levels and aggregate depth via `.extend()`.
@@ -424,9 +426,10 @@ High-frequency trading engines require order book data structures that consolida
 
 ### Exercise 3: Fallible Route Collector & Network Subnet Router (`RoutingTable`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 Network daemons parse routing configurations from file or wire formats where individual route rules may fail validation. A custom collection `RoutingTable` must support building from parsed rules and work seamlessly with Rust's fallible `Result` collecting mechanics (`Result<RoutingTable, RoutingError>`).
 
+**Requirements:**
 1. Define a `RoutingError` enum (`InvalidDestination(String)`, `InvalidGateway(String)`).
 2. Define a `RouteRule` struct (`destination: String`, `gateway: String`) and a fallible validator function `RouteRule::parse(dest: &str, gw: &str) -> Result<RouteRule, RoutingError>`.
 3. Define a `RoutingTable` struct storing `routes: HashMap<String, String>`.

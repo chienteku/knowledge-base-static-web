@@ -86,6 +86,30 @@ fn main() {
 
 ---
 
+
+
+### Mistake 3: Misusing Inner Doc Comments `//!` Inside Function Items
+
+**The mistake:** Placing `//!` inside function bodies to document internal code lines instead of using `//`.
+
+**Why it's wrong:** `//!` attaches to the enclosing item scope. Using it inside a function causes compiler errors or attaches documentation to the wrong parent module.
+
+*Incorrect:*
+```rust
+fn process() {
+    //! Internal helper note inside function
+}
+```
+
+*Fix:*
+```rust
+fn process() {
+    // Internal helper note inside function
+}
+```
+
+---
+
 ## 5. Practice Exercises
 
 ### Exercise 1: Doctest Code Snippet Extractor Simulator
@@ -221,7 +245,7 @@ fn main() {
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Comments](../level_01/comments.md) — Related concept: Comments.
 

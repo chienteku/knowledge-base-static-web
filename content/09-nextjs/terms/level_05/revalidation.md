@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Data Fetching / Optimization**
+
+**Data Fetching & Caching** (Data Cache Revalidation Strategies): Revalidation (`revalidatePath`, `revalidateTag`, `next.revalidate`) purges cached data to render updated content on demand or time intervals.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 `force-cache` is great, but what if your marketing team updates the site copy? The site is stuck showing the old copy forever unless you completely rebuild and redeploy the app.
@@ -54,7 +55,7 @@ This ensures no user *ever* has to wait for a slow network request!
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting revalidate too low
 
@@ -109,85 +110,128 @@ revalidateTag('comments'); // Targeted cache purge for specific tag
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Route Segment Config
+### Exercise 1: Time-Based Cache Revalidation (`next.revalidate`)
 
-**Problem:** You aren't using `fetch`. You are using a direct database client (`await prisma.user.findMany()`), so you can't pass the `next.revalidate` option. How can you apply a 60-second revalidation to the *entire page*?
+**Scenario:**
+Configure a page segment to revalidate cached data every 300 seconds (5 minutes) using `revalidate` route segment config.
 
-**Expected output:**
+**Requirements:**
+1. Export `export const revalidate = 300` in `page.tsx`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> // You export a Route Segment Config variable at the top of page.tsx!
-> export const revalidate = 60; // Applies a 60s cache to the entire route
-> 
-> export default async function Page() {
->   const users = await prisma.user.findMany(); // Now this is cached for 60s!
->   return <div>...</div>;
-> }
-> ```
-> - There are exported variables Next.js looks for in a `page.tsx` file to configure the route.
+> // app/blog/page.tsx
+> export const revalidate = 300; // Revalidate route every 300 seconds
+
+export default async function BlogIndex() {
+  const posts = await fetch("https://api.example.com/posts").then((r) => r.json());
+
+  return (
+    <main className="p-6">
+      <h1>Blog Posts (SWR 5m)</h1>
+      <ul>
+        {posts.map((p: any) => (
+          <li key={p.id}>{p.title}</li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `export const revalidate = seconds` configures Stale-While-Revalidate (ISR) for all data requests in the route segment.
+> 2. Serves static cached HTML instantly while triggering background revalidation after 300 seconds.
+> 3. Standard pattern for time-based static site updates.
 
 ---
 
-### Exercise 2: Tag-Based Revalidation Flow
+### Exercise 2: Path-Based On-Demand Revalidation (`revalidatePath`)
 
-**Problem:** Write a `fetch()` call tagged with `'products'` and a Server Action `revalidateTag('products')` purging product cache upon mutation.
+**Scenario:**
+Purge cached HTML/data for route path `/products` inside a Server Action using `revalidatePath()`.
 
-**Expected output:**
+**Requirements:**
+1. Import `revalidatePath` from `next/cache`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> // Fetch: fetch(url, { next: { tags: ['products'] } });
-> // Revalidate: 'use server'; import { revalidateTag } from 'next/cache'; revalidateTag('products');
-> ```
-> - Tag-based revalidation allows targeted cache invalidation.
-> 
-> ```typescript
-> // Data Fetching:
-> const res = await fetch('https://api.com/products', {
->   next: { tags: ['products'] }
-> });
-> 
-> // Server Action Invalidation:
-> 'use server';
-> import { revalidateTag } from 'next/cache';
-> 
-> export async function addProduct() {
->   await db.product.create(...);
->   revalidateTag('products');
-> }
-> ```
+> // app/actions/product.ts
+> "use server";
+
+import { revalidatePath } from "next/cache";
+
+export async function updateProductPrice(id: string, newPrice: number) {
+  // Update price in database...
+
+  // Instantly purge cached route data for /products
+  revalidatePath("/products");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `revalidatePath('/products')` purges cached HTML and Data Cache entries for the specified route path.
+> 2. Next request to `/products` will render fresh data from the server.
+> 3. Crucial for instant post-mutation UI updates.
 
 ---
 
-### Exercise 3: Time-Based vs On-Demand Revalidation
+### Exercise 3: Tag-Based On-Demand Revalidation (`revalidateTag`)
 
-**Problem:** Contrast Time-Based Revalidation vs On-Demand Revalidation.
+**Scenario:**
+Purge all cached data associated with tag `'user-profile'` across multiple pages using `revalidateTag()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `revalidateTag('user-profile')` in Server Action.
+
 > [!check]- Answer
-> ```text
-> Time-Based: Revalidates automatically after a specified time interval (e.g. revalidate: 60).
-> On-Demand: Revalidates instantly when triggered by events via revalidatePath() or revalidateTag().
-> ```
-> - Time-Based: Automatic background refresh on timer interval.
-> - On-Demand: Instant purge triggered by user mutations.
-> 
-> ```text
-> Time-Based = ISR revalidate timer; On-Demand = revalidateTag() trigger.
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> "use server";
+
+import { revalidateTag } from "next/cache";
+
+export async function updateUserProfile(userId: string) {
+  // Update user in database...
+
+  // Purges all fetch requests tagged with 'user-profile' across ALL routes!
+  revalidateTag("user-profile");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `revalidateTag('tag-name')` purges matching Data Cache entries globally, regardless of which page requested them.
+> 2. Superior to `revalidatePath` when the same data entity is rendered across multiple distinct URL routes.
+> 3. Fine-grained, targeted cache invalidation pattern.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Data Caching (`force-cache`, `no-store`)](data_caching.md) — The alternative caching strategies.
 - [On-Demand Revalidation (`revalidatePath`, `revalidateTag`)](../level_06/on_demand_revalidation.md) — Updating the cache via a button click rather than a timer.
 - [Incremental Static Regeneration (ISR)](../level_08/isr.md) — Related concept: Incremental Static Regeneration (ISR).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Time-based Revalidation** (`next: { revalidate: seconds }`) caches data for a specific duration.
 - It uses a "Stale-While-Revalidate" pattern. When the cache expires, the next visitor gets the stale data instantly, but triggers a background refresh so future visitors get fresh data.
 - It is the perfect balance between the speed of `force-cache` and the freshness of `no-store`.

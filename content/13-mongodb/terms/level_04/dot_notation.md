@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Query Syntax**
+
+**Core Concept** (Subdocument Field Path Syntax): Dot Notation is the string path syntax ("parent.child") used by MongoDB to access nested fields inside embedded documents and array elements.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Case-sensitive and whitespace-sensitive. Parsed by the query optimizer to route path searches directly into indexes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database structures, table schemas are flat. You query a column directly by name: `SELECT city FROM users;`.
@@ -93,7 +94,7 @@ db.users.find({ "favorites.0": "coding" }); // Matches Alice
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting quotation marks around dot-notation keys inside query objects
 
@@ -141,66 +142,97 @@ db.users.updateOne({ _id: id }, { $set: { address: { city: "NY" } } }); // ❌ D
 db.users.updateOne({ _id: id }, { $set: { "address.city": "NY" } }); // Preserves address.zip
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Dot Path Formulation
+### Exercise 1: Querying Deeply Nested Subdocument Paths
 
-**Problem:** You have a `companies` collection. Each document contains an array of nested documents named `employees` (e.g. `[ { name: "Bob", role: "admin" } ]`). 
-Write the query path string (wrapped in quotes) using dot notation to target:
-1.  The `role` field of the **second** employee in the array (hint: arrays are zero-indexed, so the second index is `1`).
+**Scenario:**
+Query collection `customers` for documents where `address.geo.lat` is less than `0.0`.
 
-**Expected output:**
+**Requirements:**
+1. Use dot-notation string key `"address.geo.lat"`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> "employees.1.role"
+> db.customers.find({
+>   "address.geo.lat": { $lt: 0.0 }
+> });
 > ```
-> - The array index acts as a key in the path traversal.
-> - Separate the collection key, index number, and field key with dots.
+>
+> #### Technical Explanation
+>
+> 1. Dot-notation (`"parent.child.subchild"`) navigates multi-level subdocument hierarchies.
+> 2. Must be enclosed in double quotes in query filters.
+> 3. Can be indexed with secondary B-tree indexes.
+
+---
+
+### Exercise 2: Targeting Array Elements by Index
+
+**Scenario:**
+Query user documents where the first item in the `phoneNumbers` array (`phoneNumbers.0.type`) is `"home"`.
+
+**Requirements:**
+1. Use dot-notation index path `"phoneNumbers.0.type"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   "phoneNumbers.0.type": "home"
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Numeric indexes in dot-notation (`"array.0.field"`) target specific array positions.
+> 2. Zero-indexed (`0` matches first element).
+> 3. Evaluates positional array properties.
+
+---
+
+### Exercise 3: Updating Subdocument Properties via Dot-Notation
+
+**Scenario:**
+Update the `city` field inside a user's `address` subdocument to `"Austin"` without replacing `street`.
+
+**Requirements:**
+1. Execute `updateOne()` with `$set: { "address.city": "Austin" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { $set: { "address.city": "Austin" } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Dot-notation in `$set` targets subfields selectively.
+> 2. Preserves unmentioned sibling keys (`street`, `zip`).
+> 3. Atomic in-place subfield modification.
 
 ---
 
 
 
-### Exercise 2: Nested Object Field Query with Dot-Notation
-
-**Problem:** Query users where nested `contact.phone.mobile` equals `"555-1234"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ "contact.phone.mobile": "555-1234" });
-> ```
-> ```javascript
-> db.users.find({ "contact.phone.mobile": "555-1234" });
-> ```
->
-> **Explanation:** Dot-notation in quotes `"a.b.c"` traverses deeply nested sub-documents.
-
----
-
-### Exercise 3: Positional Array Dot-Notation Query
-
-**Problem:** Query posts where 2nd comment author `"comments.1.author"` equals `"alice"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.find({ "comments.1.author": "alice" });
-> ```
-> ```javascript
-> db.posts.find({ "comments.1.author": "alice" });
-> ```
->
-> **Explanation:** `"array.index.field"` indexes specific positional array elements.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Embedded Document (Subdocument)](../level_02/embedded_document.md) — The nested data.
 - [Querying Embedded Documents](querying_embedded.md) — Dynamic nested filtering.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Dot Notation traverses BSON subdocuments and arrays using periods (`.`).
 - Bypasses exact document matches to query specific nested keys.
 - Always wrap dot-notation keys in quotation marks (e.g., `"parent.child"`).

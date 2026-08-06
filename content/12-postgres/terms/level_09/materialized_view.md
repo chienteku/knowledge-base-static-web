@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Object / Abstraction Layer**
+
+**Advanced Feature** (Persisted Aggregate View Caches): Materialized Views persist aggregation query results into physical disk tables, supporting online asynchronous cache updates (`REFRESH MATERIALIZED VIEW`).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Fully supported. Requires a unique index on the view to run background, lock-free **`CONCURRENTLY`** refreshes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In `view.md`, we learned that standard views evaluate on-the-fly, which means they do not speed up heavy queries.
@@ -99,7 +100,7 @@ SELECT * FROM mv_hourly_totals;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using materialized views for real-time transactional operations
 
@@ -147,73 +148,100 @@ CREATE UNIQUE INDEX idx_mv_id ON view_name (id);
 REFRESH MATERIALIZED VIEW CONCURRENTLY view_name;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Analytics View Setup
+### Exercise 1: Creating Materialized Views for Aggregation Caching
 
-**Problem:** You have a `clicks` table containing millions of records. Write the SQL queries to:
-1.  Create a materialized view named `mv_clicks_by_device` that counts total click records grouped by the `device_type` column.
-2.  Write the command to rebuild and refresh the cache concurrently in the background (assume a unique index is already active on the device type).
+**Scenario:**
+Create a Materialized View `mv_monthly_sales_summary` caching heavy aggregate calculations over table `orders`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE MATERIALIZED VIEW mv_monthly_sales_summary AS SELECT DATE_TRUNC('month', created_at) ...`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE MATERIALIZED VIEW mv_clicks_by_device AS
-> SELECT device_type, COUNT(*) AS click_count
-> FROM clicks
-> GROUP BY device_type;
+> CREATE MATERIALIZED VIEW mv_monthly_sales_summary AS 
+> SELECT 
+>   DATE_TRUNC('month', created_at) AS sales_month,
+>   COUNT(*) AS total_orders,
+>   SUM(total_cents) / 100.0 AS total_revenue 
+> FROM orders 
+> GROUP BY sales_month;
 > 
-> REFRESH MATERIALIZED VIEW CONCURRENTLY mv_clicks_by_device;
+> CREATE UNIQUE INDEX idx_mv_sales_month ON mv_monthly_sales_summary(sales_month);
 > ```
-> - Remember to include the `MATERIALIZED` keyword in the view creation command.
-> - Specify `CONCURRENTLY` in the refresh command to avoid table locks.
+>
+> #### Technical Explanation
+>
+> 1. `CREATE MATERIALIZED VIEW` executes the underlying query once and persists the result set to a physical disk table.
+> 2. Sub-millisecond read velocity over millions of historical rows.
+> 3. Creating a unique index allows concurrent background refreshing.
+
+---
+
+### Exercise 2: Concurrent Zero-Downtime Refreshing
+
+**Scenario:**
+Refresh `mv_monthly_sales_summary` online without locking concurrent read queries using `CONCURRENTLY`.
+
+**Requirements:**
+1. Execute `REFRESH MATERIALIZED VIEW CONCURRENTLY mv_monthly_sales_summary`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> REFRESH MATERIALIZED VIEW CONCURRENTLY mv_monthly_sales_summary;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Standard `REFRESH MATERIALIZED VIEW` acquires an exclusive lock blocking concurrent SELECT queries.
+> 2. `CONCURRENTLY` updates cache data in the background without blocking active read queries.
+> 3. Requires a unique index on the materialized view.
+
+---
+
+### Exercise 3: Trade-Off Analysis: Standard Views vs Materialized Views
+
+**Scenario:**
+Formulate a selection matrix comparing standard Virtual Views against Materialized Views.
+
+**Requirements:**
+1. Contrast compute freshness, disk storage, and read query speed.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> View Architecture Selection Matrix:
+> - Standard View: Zero disk storage, 100% real-time data freshness, executes query on every SELECT (higher CPU/latency).
+> - Materialized View: Consumes disk space, data is stale until REFRESH, instant sub-millisecond query execution.
+> Selection Rule: Use Standard Views for lightweight abstractions; use Materialized Views for expensive multi-table analytical aggregations.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Standard Views provide logical encapsulation; Materialized Views provide physical performance caching.
+> 2. Trade data freshness for read execution speed.
+> 3. High performance analytics architecture.
 
 ---
 
 
 
-### Exercise 2: Creating Materialized View and Unique Index
-
-**Problem:** Create materialized view `mv_daily_sales` summarizing daily total sales and create unique index on `sale_date`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE MATERIALIZED VIEW mv_daily_sales AS SELECT DATE(created_at) AS sale_date, SUM(total) AS total_sales FROM orders GROUP BY DATE(created_at); CREATE UNIQUE INDEX idx_mv_sale_date ON mv_daily_sales (sale_date);
-> ```
-> ```sql
-> CREATE MATERIALIZED VIEW mv_daily_sales AS
-> SELECT DATE(created_at) AS sale_date, SUM(total) AS total_sales
-> FROM orders GROUP BY DATE(created_at);
-> CREATE UNIQUE INDEX idx_mv_sale_date ON mv_daily_sales (sale_date);
-> ```
->
-> **Explanation:** Materialized views cache computed query results physically on disk.
-
----
-
-### Exercise 3: Refreshing Materialized View Concurrently
-
-**Problem:** Refresh `mv_daily_sales` concurrently without blocking reader queries.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> REFRESH MATERIALIZED VIEW CONCURRENTLY mv_daily_sales;
-> ```
-> ```sql
-> REFRESH MATERIALIZED VIEW CONCURRENTLY mv_daily_sales;
-> ```
->
-> **Explanation:** `CONCURRENTLY` uses unique indexes to swap updated materialized view pages without locking readers.
-
-## 7. Related Terms
+## 6. Related Terms
 - [View](view.md) — The parent virtual view concept.
 - [Denormalization](../level_06/denormalization.md) — The caching design theory.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Materialized View physically saves its query results to disk files.
 - Acts as a cached snapshotted table to speed up heavy analytics queries.
 - Does not update automatically; base table changes are invisible until refreshed.

@@ -14,17 +14,15 @@
 
 ## 2. Term Category
 
-**Embedded / Drivers / Architecture**: A Hardware Abstraction Layer (HAL) bridges raw chip registers (PAC) and portable embedded applications. It uses Rust's type system (including the Type-State Pattern) to ensure hardware safety — for example, preventing a developer from reading a GPIO pin configured as an output pin at compile time!
+
+
+**Rust Embedded Architecture (hardware abstraction layer driver)**: A Hardware Abstraction Layer (HAL) bridges raw chip registers (PAC) and portable embedded applications. It uses Rust's type system (including the Type-State Pattern) to ensure hardware safety — for example, preventing a developer from reading a GPIO pin configured as an output pin at compile time!
+
+
 
 ---
 
-## 3. Environment Context
-
-**Microcontroller Ecosystem**: Specific to microcontroller product families (e.g. `stm32f4xx-hal`, `rp2040-hal`, `esp32-hal`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -63,7 +61,23 @@ pub fn init_hardware() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Accessing Peripheral Registers Directly Without Taking PAC Hardware Ownership
+
+**The mistake:** Bypassing the HAL abstraction to write raw registers while a HAL driver owns the peripheral.
+
+**Why it's wrong:** Creates hardware race conditions and breaks HAL state tracking invariants.
+
+*Fix:* Access hardware strictly through safe HAL driver methods.
+
+### Mistake 3: Failing to Disable Interrupts While Mutating Shared Hardware Peripheral Handles
+
+**The mistake:** Mutating a shared HAL peripheral inside an interrupt handler without a critical section.
+
+**Why it's wrong:** Causes data corruption and hardware register corruption if an interrupt fires mid-write.
+
+*Fix:* Wrap shared HAL handles in `cortex_m::interrupt::free` critical sections.
+
 
 ### Mistake 1: Attempting to Re-Configure a Pin in Wrong State
 
@@ -73,13 +87,16 @@ pub fn init_hardware() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Type-State GPIO Driver with Safe Pin Transitions
 
-**Problem:** Design a `#![no_std]` GPIO Hardware Abstraction Layer (HAL) driver for a microcontroller pin using the Type-State Pattern. Define zero-sized state markers (`Input`, `Output<PushPull>`, `Output<OpenDrain>`), implement state transitions (`into_push_pull_output`, `into_open_drain_output`, `into_input`), restrict output operations (`set_high`, `set_low`, `toggle`) to output pins, and write unit tests in a `#[cfg(test)]` module asserting pin state changes and bitmask register updates.
+**Scenario:** Design a `#![no_std]` GPIO Hardware Abstraction Layer (HAL) driver for a microcontroller pin using the Type-State Pattern. Define zero-sized state markers (`Input`, `Output<PushPull>`, `Output<OpenDrain>`), implement state transitions (`into_push_pull_output`, `into_open_drain_output`, `into_input`), restrict output operations (`set_high`, `set_low`, `toggle`) to output pins, and write unit tests in a `#[cfg(test)]` module asserting pin state changes and bitmask register updates.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -198,7 +215,8 @@ pub fn init_hardware() {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Zero-Cost Type-State Encoding**: By using zero-sized marker structs (`Input`, `PushPull`, `OpenDrain`) and `PhantomData<MODE>`, the pin mode state is tracked entirely at compile time without incurring runtime RAM or code size penalties.
 > 2. **Ownership and Move Semantics**: State transition methods consume `self` by value (e.g., `into_push_pull_output(self)`). Moving ownership invalidates the previous `Pin<ID, Input>` binding, preventing pin aliasing or illegal concurrent configurations.
 > 3. **Compile-Time Safety Enforcement**: Output functions (`set_high()`, `toggle()`) are implemented exclusively on `Pin<ID, Output<M>>`. Invoking `.set_high()` on a `Pin<ID, Input>` produces a compile-time type mismatch error before code can be flashed to hardware.
@@ -207,9 +225,12 @@ pub fn init_hardware() {
 
 ### Exercise 2: Implementing a HAL Timer Peripheral & Frequency Prescaling Driver
 
-**Problem:** Construct a `#![no_std]` HAL timer driver (`TimerDriver`) wrapping peripheral registers (`PSC`, `ARR`, `CNT`, `CR1`). Implement methods to initialize the timer driver with a system clock frequency, calculate clock prescaler/auto-reload values for a target frequency in `start()`, and execute blocking tick delays in `delay_ticks()`. Include unit tests asserting prescaler calculations and delay completion.
+**Scenario:** Construct a `#![no_std]` HAL timer driver (`TimerDriver`) wrapping peripheral registers (`PSC`, `ARR`, `CNT`, `CR1`). Implement methods to initialize the timer driver with a system clock frequency, calculate clock prescaler/auto-reload values for a target frequency in `start()`, and execute blocking tick delays in `delay_ticks()`. Include unit tests asserting prescaler calculations and delay completion.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -303,7 +324,8 @@ pub fn init_hardware() {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Peripheral Register Encapsulation**: The `TimerDriver` wraps memory-mapped registers (`PSC`, `ARR`, `CNT`, `CR1`), providing safe, ergonomic hardware abstractions over raw bit manipulations.
 > 2. **Frequency Prescaling Calculations**: The driver derives auto-reload values using clock math (`ARR = (sysclk / target_freq) - 1`), allowing high-level applications to request human-readable frequencies (e.g., 1 kHz).
 > 3. **Robust Error Handling**: Instead of risking silent integer overflow or division-by-zero during clock configuration, invalid parameters are safely trapped using `Result<T, TimerError>`.
@@ -312,9 +334,12 @@ pub fn init_hardware() {
 
 ### Exercise 3: HAL Serial UART Driver with Status Flag Trapping & Error Handling
 
-**Problem:** Implement a `#![no_std]` HAL UART driver (`UartDriver`) wrapping peripheral registers (`SR`, `TXDR`, `RXDR`). Implement `send_byte`, `send_str`, and `read_byte` while monitoring status bits (`STATUS_TXE`, `STATUS_RXNE`, `STATUS_ORE`, `STATUS_FE`). Write unit tests in a `#[cfg(test)]` module verifying string transmission and the trapping/clearing of overrun (`STATUS_ORE`) and framing (`STATUS_FE`) errors.
+**Scenario:** Implement a `#![no_std]` HAL UART driver (`UartDriver`) wrapping peripheral registers (`SR`, `TXDR`, `RXDR`). Implement `send_byte`, `send_str`, and `read_byte` while monitoring status bits (`STATUS_TXE`, `STATUS_RXNE`, `STATUS_ORE`, `STATUS_FE`). Write unit tests in a `#[cfg(test)]` module verifying string transmission and the trapping/clearing of overrun (`STATUS_ORE`) and framing (`STATUS_FE`) errors.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -431,7 +456,8 @@ pub fn init_hardware() {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Hardware Bitmask Trapping**: The HAL inspects hardware status registers (`SR`) before performing data register operations, preventing unbuffered data overwrites or reading invalid register values.
 > 2. **Error Recovery & Bit Clearing**: Hardware timing anomalies (such as bit alignment or missed bytes) are converted into structured Rust `UartError` variants while clearing status bits to restore serial line functionality.
 > 3. **High-Level Trait Bridging**: High-level abstractions like `send_str` map Rust slice primitives (`&str`) to low-level register writes using error propagation (`?`), illustrating the essential role of HAL crates in embedded software systems.

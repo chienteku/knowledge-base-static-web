@@ -158,9 +158,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Zero-Allocation Binary Parser vs. Allocating Parser Benchmarking Harness
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 You are benchmarking high-frequency trading binary data packet parsers. You need to compare an allocating parser (`parse_allocating`) that allocates strings against a zero-copy parser (`parse_zero_copy`) that returns string slices. You must implement both parsing strategies, write a benchmark harness leveraging `std::hint::black_box`, and include a unit test suite (`#[cfg(test)] mod tests`) verifying parsing correctness using assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
+**Requirements:**
 Requirements:
 1. Define `BinaryPacket` with header magic `0xFA`, key slice/string, and payload slice/vec.
 2. Implement `parse_allocating(input: &[u8]) -> Result<(String, Vec<u8>), &'static str>`.
@@ -169,6 +170,9 @@ Requirements:
 5. In `#[cfg(test)] mod tests`, write unit tests verifying output parity, error variants on corrupt magic bytes, and allocation differences (`assert_eq!`, `assert!`, `assert_ne!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::hint::black_box;
 > 
@@ -286,9 +290,10 @@ Requirements:
 
 ### Exercise 2: SIMD Parallel Search vs. Linear Scan Benchmarking Simulation
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 You are benchmarking search algorithms for vector data structures. You must implement a linear search algorithm (`linear_search`) and a chunked parallel SIMD-style search algorithm (`chunked_search`), and create a benchmarking simulation harness using `black_box`.
 
+**Requirements:**
 Requirements:
 1. Implement `linear_search(haystack: &[u64], target: u64) -> Option<usize>`.
 2. Implement `chunked_search(haystack: &[u64], target: u64) -> Option<usize>` processing 4 elements per iteration loop.
@@ -296,6 +301,9 @@ Requirements:
 4. Write unit tests in `#[cfg(test)] mod tests` verifying search result equivalence, edge case empty slices, and target missing scenarios (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::hint::black_box;
 > 
@@ -374,15 +382,19 @@ Requirements:
 
 ### Exercise 3: In-Memory Mutex vs. Atomic Counter Throughput Benchmark
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 You are benchmarking thread synchronization primitives for high-concurrency event telemetry counters. You must compare an `AtomicU64` counter against a `Mutex<u64>` counter under multi-threaded contention.
 
+**Requirements:**
 Requirements:
 1. Implement `benchmark_atomic_counter(threads: usize, ops_per_thread: usize) -> u64`.
 2. Implement `benchmark_mutex_counter(threads: usize, ops_per_thread: usize) -> u64`.
 3. In `#[cfg(test)] mod tests`, write unit tests asserting final counter totals match `threads * ops_per_thread` (`assert_eq!`, `assert!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::hint::black_box;
 > use std::sync::atomic::{AtomicU64, Ordering};

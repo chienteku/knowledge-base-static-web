@@ -150,8 +150,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Recursive AST & Dynamic Expression Evaluator with Constant Folding
 
-**Problem Scenario:** You are designing an Abstract Syntax Tree (AST) query engine for a production financial rules calculator. Because sub-expression nodes in an AST are inherently recursive (`Expr::BinaryOp` contains child `Expr` nodes) and customizable via dynamic plugins (`Box<dyn CustomExpr>`), stack allocation fails at compile time due to infinite type size.
+**Scenario:** **Problem Scenario:** You are designing an Abstract Syntax Tree (AST) query engine for a production financial rules calculator. Because sub-expression nodes in an AST are inherently recursive (`Expr::BinaryOp` contains child `Expr` nodes) and customizable via dynamic plugins (`Box<dyn CustomExpr>`), stack allocation fails at compile time due to infinite type size.
 
+**Requirements:**
 Implement an AST calculation engine using `Box<T>` that supports recursive traversal, dynamic trait dispatch, depth computation, and AST constant folding (evaluating static literal subtrees into single literal nodes).
 
 **Requirements:**
@@ -338,8 +339,9 @@ Implement an AST calculation engine using `Box<T>` that supports recursive trave
 
 ### Exercise 2: FFI Memory Bridge & Zero-Copy Packet Buffer (`Box::into_raw` & `Box::from_raw`)
 
-**Problem Scenario:** You are building a zero-copy low-latency packet queue bridging Rust network logic with an external C driver framework (such as DPDK or raw Linux socket callbacks). Safe automatic `Drop` behavior must be suspended when releasing heap buffers into C raw pointer boundaries, and re-established when reclaiming buffer ownership in Rust.
+**Scenario:** **Problem Scenario:** You are building a zero-copy low-latency packet queue bridging Rust network logic with an external C driver framework (such as DPDK or raw Linux socket callbacks). Safe automatic `Drop` behavior must be suspended when releasing heap buffers into C raw pointer boundaries, and re-established when reclaiming buffer ownership in Rust.
 
+**Requirements:**
 Implement a raw packet management handle using `Box::into_raw` and `Box::from_raw` that prevents memory leaks and ensures panic-safe memory deallocation.
 
 **Requirements:**
@@ -484,8 +486,9 @@ Implement a raw packet management handle using `Box::into_raw` and `Box::from_ra
 
 ### Exercise 3: Dynamic API Gateway Pipeline with `Box<dyn Middleware>` & Pointer Layout Profiling
 
-**Problem Scenario:** In an asynchronous microservice gateway, inbound HTTP requests pass through a sequence of dynamic middleware plug-in stages (Authentication, Header Injection, Logging). Because middleware implementations vary in size, storing them in a uniform `Vec` requires boxed trait objects (`Box<dyn Middleware>`).
+**Scenario:** **Problem Scenario:** In an asynchronous microservice gateway, inbound HTTP requests pass through a sequence of dynamic middleware plug-in stages (Authentication, Header Injection, Logging). Because middleware implementations vary in size, storing them in a uniform `Vec` requires boxed trait objects (`Box<dyn Middleware>`).
 
+**Requirements:**
 Implement a dynamic middleware execution pipeline and analyze the memory layout differences between thin pointer boxed types (`Box<T>`) and fat pointer dynamic trait objects (`Box<dyn Trait>`).
 
 **Requirements:**

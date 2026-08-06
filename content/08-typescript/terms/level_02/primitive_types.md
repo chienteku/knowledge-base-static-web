@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Type Annotation**
+
+**Type System Fundamental** (Built-in Primitive Data Types): Primitive types (`string`, `number`, `boolean`, `symbol`, `bigint`) represent fundamental un-boxed JavaScript primitive values.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, a variable can hold text, a numerical value, or a true/false flag. Because JS is dynamically typed, it's very easy to accidentally attempt math on a piece of text (`"5" * 10`), resulting in the dreaded `NaN`.
@@ -50,7 +51,7 @@ dynamicName = "Bob";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Capitalized Primitive Types
 
@@ -96,69 +97,104 @@ const sum = 10n + 5; // ❌ Cannot mix BigInt and other types
 const sum = 10n + BigInt(5);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: BigInt and Symbol
+### Exercise 1: Annotating JavaScript Primitive Data Types
 
-**Problem:** You need to work with a massive number that exceeds JavaScript's standard number limit, so you use ES2020's `BigInt`. How do you type this in TypeScript?
+**Scenario:**
+Annotate primitive data types (`string`, `number`, `boolean`, `symbol`, `bigint`) in a user account record.
 
-**Expected output:**
+**Requirements:**
+1. Use explicit primitive type annotations.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> const hugeNumber: bigint = 9007199254740991n;
-> // Notice it is lowercase `bigint`!
-> // (You must configure your tsconfig.json `target` to "ES2020" for this to work).
+> const username: string = "alex_dev";
+> const userId: number = 10482;
+> const isPremium: boolean = true;
+> const uniqueId: symbol = Symbol("id");
+> const accountBalance: bigint = 9007199254740991n;
 > ```
-> - Does `BigInt` have a primitive type in TS?
+
+> #### Technical Explanation
+>
+> 1. TypeScript primitive types correspond directly to JavaScript `typeof` primitive return values.
+> 2. `bigint` handles arbitrary precision integers beyond `Number.MAX_SAFE_INTEGER`.
+> 3. Lowercase primitive type annotations (`string`, `number`) must be used instead of boxed wrapper objects (`String`, `Number`).
+
+---
+
+### Exercise 2: Auditing Boxed Wrapper Object Anti-Patterns
+
+**Scenario:**
+Explain why using boxed wrapper types (`String`, `Number`, `Boolean`) instead of primitive types (`string`, `number`, `boolean`) is an anti-pattern.
+
+**Requirements:**
+1. Show type mismatch between `String` object and `string` primitive.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // ❌ INCORRECT (Using boxed Object wrappers):
+> // let title: String = "Hello";
+> // let rawString: string = title; // FAILS under strict checks!
+
+// ✅ CORRECT (Use lowercase primitive types):
+let title: string = "Hello";
+```
+
+> #### Technical Explanation
+>
+> 1. `String`, `Number`, and `Boolean` refer to JavaScript boxed wrapper object instances (`new String()`), NOT primitives.
+> 2. Primitive values (`"hello"`) are not assignable to object wrapper types in strict mode.
+> 3. Always use lowercase primitive type keywords in TypeScript annotations.
+
+---
+
+### Exercise 3: Type Checking Primitives with `typeof`
+
+**Scenario:**
+Narrow a primitive union parameter `string | number` using `typeof` type guards.
+
+**Requirements:**
+1. Use `typeof` operator inside an `if` block.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function formatInput(val: string | number): string {
+>   if (typeof val === "string") {
+>     return val.trim().toUpperCase(); // val narrowed to string
+>   }
+>   return val.toFixed(2); // val narrowed to number
+> }
+> ```
+
+> #### Technical Explanation
+>
+> 1. `typeof` expressions act as TypeScript control-flow type guards.
+> 2. Automatically narrows union types to specific primitive branches inside `if` blocks.
+> 3. Safe pattern for handling primitive union arguments.
 
 ---
 
 
 
-### Exercise 2: Primitive Type Annotations
-
-**Problem:** Annotate variables `age` (25), `isStudent` (true), `symbolKey` (Symbol()).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> age: number, isStudent: boolean, symbolKey: symbol
-> ```
-> ```typescript
-> const age: number = 25;
-> const isStudent: boolean = true;
-> const symbolKey: symbol = Symbol();
-> console.log("age: number, isStudent: boolean, symbolKey: symbol");
-> ```
->
-> **Explanation:** Lowercase annotations represent core JavaScript primitive data types.
-
----
-
-### Exercise 3: BigInt Type Usage
-
-**Problem:** Annotate a 64-bit integer literal `100n` using primitive `bigint`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 100n: bigint
-> ```
-> ```javascript
-> const big: bigint = 100n;
-> console.log("100n: bigint");
-> ```
->
-> **Explanation:** `bigint` primitive type handles arbitrary precision integers ending with `n`.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Type Inference](../level_01/type_inference.md) — Why you rarely need to write primitive type annotations.
 - [Arrays & Tuples](arrays_tuples.md) — How to group primitives together.
 - [`null`, `undefined` & `strictNullChecks`](null_undefined_strict.md) — Related concept: `null`, `undefined` & `strictNullChecks`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Primitive Types** in TypeScript map exactly to JavaScript primitives.
 - The core three are `string`, `number`, and `boolean` (always lowercase!).
 - Never use the capitalized Object wrapper equivalents (`String`, `Number`, `Boolean`).

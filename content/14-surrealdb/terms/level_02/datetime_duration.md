@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Data Type (ISO-8601 temporal and duration types)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Stored internally as nanoseconds since Unix epoch. Timezone conversions are evaluated at the database compiler layer).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Handling date formatting and time math in database queries is notoriously frustrating:
@@ -91,7 +90,7 @@ SELECT * FROM auth_token WHERE created_at > time::now() - 7d;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the 'd' prefix when writing datetime literals in queries, causing SurrealDB to parse values as strings
 
@@ -149,59 +148,105 @@ LET $now = time::now();
 RETURN $now + 5m; // Correct: Adds 5 minutes duration
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Chronological Calculation
+### Exercise 1: ISO Datetime Formatting and Retrieval
 
-**Problem:** You execute this query at `2026-07-21T12:00:00Z`:
-`SELECT d"2026-07-21T10:00:00Z" + 1d2h30m;`
-Calculate the resulting UTC datetime value returned by the database.
+**Scenario:**
+You are logging audit events in a security table `audit_log` with automatic timestamping and querying events created within the last 24 hours.
 
-**Expected output:**
+**Requirements:**
+1. Define table `audit_log` in `SCHEMAFULL` mode.
+2. Define field `created_at` as `datetime` defaulting to `time::now()`.
+3. Create a log record `audit_log:log1`.
+4. Query logs created after `time::now() - 1d`.
+
 > [!check]- Answer
-> ```text
-> d"2026-07-22T12:30:00Z"
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE audit_log SCHEMAFULL;
+> DEFINE FIELD created_at ON TABLE audit_log TYPE datetime DEFAULT time::now();
+> 
+> CREATE audit_log:log1 SET action = "user_login";
+> 
+> -- Query recent logs created in the last 24 hours
+> SELECT * FROM audit_log WHERE created_at > time::now() - 1d;
 > ```
-> - Add 1 day to the starting date: `2026-07-22T10:00:00Z`.
-> - Add 2 hours and 30 minutes to the calculated intermediate date time.
+>
+> #### Technical Explanation
+>
+> 1. `datetime` stores ISO-8601 timestamps with microsecond precision (`d"2026-08-06T00:00:00Z"`).
+> 2. `time::now()` outputs the current UTC timestamp during query execution.
+> 3. Subtracting duration `1d` from `time::now()` performs instant temporal arithmetic.
 
 ---
 
+### Exercise 2: Duration Arithmetic for Subscription Expiration
 
+**Scenario:**
+A SaaS billing engine calculates subscription expiration dates by adding duration offsets (e.g. `30d` or `1y`) to the subscription start date.
 
-### Exercise 2: Duration Unit Arithmetic
+**Requirements:**
+1. Create a subscription `sub:s1` setting `start_date = time::now()`.
+2. Set `expires_at = start_date + 30d`.
+3. Query active subscriptions where `expires_at > time::now()`.
 
-**Problem:** Calculate expiration datetime 7 days from `time::now()` using `7d` duration.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> time::now() + 7d
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> RETURN time::now() + 7d;
+> CREATE sub:s1 SET 
+>     start_date = time::now(),
+>     expires_at = time::now() + 30d;
+> 
+> -- Query active non-expired subscriptions
+> SELECT * FROM sub WHERE expires_at > time::now();
 > ```
 >
-> **Explanation:** Durations (`7d`, `24h`, `30s`) add directly to native `datetime` values.
+> #### Technical Explanation
+>
+> 1. Durations represent time intervals (`30d`, `2w`, `12h`, `45m`, `30s`).
+> 2. Adding a duration (`+ 30d`) to a `datetime` produces a valid future `datetime`.
+> 3. Enables native subscription expiration logic without external date utility libraries.
 
 ---
 
 ### Exercise 3: Formatting Datetimes with `time::format()`
 
-**Problem:** Format `time::now()` into year-month-day string format `%Y-%m-%d`.
+**Scenario:**
+A reporting API needs to output human-readable formatted date strings (e.g. `"2026-08-06"`) from stored `datetime` fields.
 
-**Expected output:**
+**Requirements:**
+1. Query `audit_log:log1`.
+2. Format `created_at` as a YYYY-MM-DD date string using `time::format()`.
+
 > [!check]- Answer
-> ```text
-> time::format(time::now(), "%Y-%m-%d")
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> RETURN time::format(time::now(), "%Y-%m-%d");
+> SELECT 
+>     created_at,
+>     time::format(created_at, "%Y-%m-%d") AS formatted_date 
+> FROM audit_log:log1;
 > ```
 >
-> **Explanation:** `time::format()` formats `datetime` values into custom string layouts.
+> #### Technical Explanation
+>
+> 1. `time::format(datetime, format_string)` formats timestamps using standard strftime specifiers.
+> 2. Formats dates on the database server, reducing client-side formatting code.
+> 3. Returns a clean formatted `string` representation while preserving stored `datetime` precision.
 
-## 7. Related Terms
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [Time Functions (`time::*`)](../level_06/time_functions.md) — Chronological operations.
@@ -209,7 +254,7 @@ Calculate the resulting UTC datetime value returned by the database.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `datetime` stores UTC timestamps; `duration` stores elapsed time spans.
 - Datetime literals must be prefixed with the `d` character (e.g. `d"..."`).
 - Duration literals use unit suffixes (e.g. `30s`, `15m`, `2h`, `7d`, `1w`).

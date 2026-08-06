@@ -3,6 +3,74 @@
 > **Level 17 — Embedded & Systems Programming**
 > The foundational, dependency-free subset of the Rust Standard Library — containing essential types (`Option`, `Result`, `Iterator`), language traits (`Copy`, `Clone`, `Send`), and intrinsics that require zero operating system support and zero heap memory allocations.
 
+
+
+---
+
+### Exercise 3: Bare-Metal Fixed-Point Mathematics and Bit Manipulation (`core::num`)
+
+**Scenario:**
+In an embedded motor speed controller (`#![no_std]`), floating-point hardware is disabled to conserve power. Motor velocity and acceleration must be calculated using 32-bit fixed-point arithmetic (`Q16.16` format) provided by `core::num` and bitwise bit manipulation methods (`leading_zeros`, `rotate_left`, `saturating_add`).
+
+1. Implement `FixedPoint16` wrapping `i32`.
+2. Implement fixed-point multiplication and saturating addition using `core` methods.
+3. Include unit tests with assertions (`assert_eq!`) verifying fixed-point math and overflow saturation.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> #![no_std]
+> 
+> #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+> pub struct FixedPoint16(pub i32); // Q16.16 fixed-point format
+> 
+> impl FixedPoint16 {
+>     pub const SCALE: i32 = 65536; // 2^16
+> 
+>     pub fn from_int(val: i32) -> Self {
+>         Self(val.saturating_mul(Self::SCALE))
+>     }
+> 
+>     pub fn to_int(self) -> i32 {
+>         self.0 / Self::SCALE
+>     }
+> 
+>     pub fn add(self, rhs: Self) -> Self {
+>         Self(self.0.saturating_add(rhs.0))
+>     }
+> 
+>     pub fn mul_q16(self, rhs: Self) -> Self {
+>         let product = (self.0 as i64).saturating_mul(rhs.0 as i64);
+>         Self((product >> 16) as i32)
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_fixed_point_math() {
+>         let a = FixedPoint16::from_int(10);
+>         let b = FixedPoint16::from_int(5);
+> 
+>         let sum = a.add(b);
+>         assert_eq!(sum.to_int(), 15);
+> 
+>         let prod = a.mul_q16(b);
+>         assert_eq!(prod.to_int(), 50);
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Zero-Dependency Math**: `core::num` provides saturating arithmetic (`saturating_add`, `saturating_mul`) without requiring OS or standard library support.
+> 2. **Fixed-Point Scaling**: Shift arithmetic (`>> 16`) maintains fixed-point precision within 32-bit registers.
+> 3. **No-Std Safety**: Pure `core` math executes safely across any microcontroller CPU target.
+
 ---
 
 ## 1. Prerequisites
@@ -14,17 +82,15 @@
 
 ## 2. Term Category
 
-**Standard Library / Core / Embedded**: `core` is the minimal core of the Rust Standard Library. It is implicitly embedded inside `std` (`std::option::Option` is re-exported from `core::option::Option`). In `#![no_std]` environments, `core` is always present and guarantees zero OS syscalls and zero dynamic memory allocations.
+
+
+**Rust Core Foundation (dependency-free platform-agnostic library)**: `core` is the minimal core of the Rust Standard Library. It is implicitly embedded inside `std` (`std::option::Option` is re-exported from `core::option::Option`). In `#![no_std]` environments, `core` is always present and guarantees zero OS syscalls and zero dynamic memory allocations.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Foundation**: `core` is available everywhere — from 8-bit microcontrollers with 1 KB of RAM to 64-bit cloud servers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -63,7 +129,23 @@ pub fn safe_divide(numerator: u32, denominator: u32) -> Option<u32> {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Attempting to Use `std::vec::Vec` or `std::string::String` Directly from `core`
+
+**The mistake:** Expecting `core` to contain heap-allocated collections like `Vec` or `HashMap`.
+
+**Why it's wrong:** `core` is completely platform-agnostic and contains zero heap-allocation abstractions.
+
+*Fix:* Import heap types from `alloc` or use fixed-capacity stack arrays in `core`.
+
+### Mistake 3: Invoking OS-Dependent Threading or Filesystem APIs Inside `core` Code
+
+**The mistake:** Expecting thread spawning or file I/O to be supported in `core`.
+
+**Why it's wrong:** `core` targets bare-metal hardware where operating system primitives do not exist.
+
+*Fix:* Restrict `core` code to pure algorithms, data formatting, and pointer manipulation.
+
 
 ### Mistake 1: Assuming `core` Performs Heap Allocations
 
@@ -73,13 +155,16 @@ pub fn safe_divide(numerator: u32, denominator: u32) -> Option<u32> {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Zero-Allocation `core` Slice & Iterator Processing
 
-**Problem:** Implement a `#![no_std]` binary payload parser `fn extract_packet<'a>(buffer: &'a [u8], magic_header: &[u8]) -> Result<(&'a [u8], &'a [u8]), &'static str>` using only `core::slice` and `core::result::Result`. The function must locate a frame delimited by `magic_header`, extract a 2-byte big-endian payload length header, and return a tuple `(payload, remaining_bytes)` without allocating heap memory or using `std`.
+**Scenario:** Implement a `#![no_std]` binary payload parser `fn extract_packet<'a>(buffer: &'a [u8], magic_header: &[u8]) -> Result<(&'a [u8], &'a [u8]), &'static str>` using only `core::slice` and `core::result::Result`. The function must locate a frame delimited by `magic_header`, extract a 2-byte big-endian payload length header, and return a tuple `(payload, remaining_bytes)` without allocating heap memory or using `std`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -139,7 +224,8 @@ pub fn safe_divide(numerator: u32, denominator: u32) -> Option<u32> {
 > }
 > ```
 >
-> **Explanation:** 
+> #### Technical Explanation
+> 
 > 1. Uses `core::slice::windows` and `Iterator::position` to search for subslice patterns without standard library string or vector helpers.
 > 2. `u16::from_be_bytes` converts fixed 2-byte slices directly into numeric lengths in `#![no_std]`.
 > 3. Zero-copy lifetime propagation (`'a`) ensures extracted payload slices borrow directly from the input buffer without allocation.
@@ -148,9 +234,12 @@ pub fn safe_divide(numerator: u32, denominator: u32) -> Option<u32> {
 
 ### Exercise 2: Custom `core::fmt::Display` & Zero-Heap Telemetry Formatter
 
-**Problem:** Implement `core::fmt::Display` for a telemetry sensor diagnostic enumeration `enum TelemetryStatus { Nominal { voltage_mv: u16 }, Degraded { err_code: u8 }, Critical(&'static str) }` using `core::fmt::Formatter`. Write a test function using a static fixed-size `core::fmt::Write` adapter buffer to print formatted status messages in a `#![no_std]` environment.
+**Scenario:** Implement `core::fmt::Display` for a telemetry sensor diagnostic enumeration `enum TelemetryStatus { Nominal { voltage_mv: u16 }, Degraded { err_code: u8 }, Critical(&'static str) }` using `core::fmt::Formatter`. Write a test function using a static fixed-size `core::fmt::Write` adapter buffer to print formatted status messages in a `#![no_std]` environment.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -216,7 +305,8 @@ pub fn safe_divide(numerator: u32, denominator: u32) -> Option<u32> {
 > }
 > ```
 >
-> **Explanation:** 
+> #### Technical Explanation
+> 
 > 1. Custom domain data structures implement `core::fmt::Display` using `write!` macro provided entirely by `core`.
 > 2. Implement `core::fmt::Write` on a stack-allocated byte array buffer (`ArrayString<N>`), enabling string formatting in embedded software without depending on `std::string::String` or heap allocation.
 

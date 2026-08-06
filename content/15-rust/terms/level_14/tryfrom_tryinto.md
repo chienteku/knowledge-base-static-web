@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Fallible Conversion Traits**: `TryFrom` and `TryInto` for conversions that can fail.
+
+
+**Rust Conversion Traits (fallible value conversion traits)**: `TryFrom` and `TryInto` for conversions that can fail.
 
 ---
 

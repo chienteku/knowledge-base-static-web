@@ -16,7 +16,9 @@
 
 ## 2. Term Category
 
-**Message-Passing Concurrency**: `std::sync::mpsc` provides Multi-Producer, Single-Consumer channels for safe, lock-free inter-thread communication.
+
+
+**Rust Concurrency Primitive (multi-producer single-consumer channel)**: `std::sync::mpsc` provides Multi-Producer, Single-Consumer channels for safe, lock-free inter-thread communication.
 
 ---
 

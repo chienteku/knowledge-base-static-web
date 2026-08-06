@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Compiler / Config**
+
+**Compiler Configuration** (Module Path Resolution Engine): Module resolution (`NodeNext`, `bundler`) dictates how TypeScript maps import specifiers to physical file locations on disk.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-time** (Resolving paths is a compilation process used to verify module compatibility; output path translations must be supported by the bundler or runtime engine).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In large-scale codebases, deep directory trees often lead to messy, confusing relative import paths:
@@ -106,7 +107,7 @@ export default defineConfig({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Configuring `paths` in `tsconfig` and expecting it to run in Node.js without resolution engines
 
@@ -165,77 +166,117 @@ node -r tsconfig-paths/register dist/index.js # Resolves aliases at runtime!
 // Configure Vite vite.config.ts / Webpack alias matching tsconfig paths
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Absolute Config Mapping
+### Exercise 1: Configuring NodeNext Module Resolution
 
-**Problem:** You want to add a path alias `@services/*` pointing to `src/services/*` inside `tsconfig.json`. Fill in the missing JSON configuration.
+**Scenario:**
+Configure `tsconfig.json` for modern Node.js ES Modules using `"moduleResolution": "NodeNext"`.
 
-```json
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      // Complete this line:
-      "@services/*": ["src/services/*"]
-    }
-  }
-}
-```
+**Requirements:**
+1. Set `"module": "NodeNext"` and `"moduleResolution": "NodeNext"`.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> The compiler successfully resolves Service imports:
-> import { UserService } from '@services/UserService';
+>
+> #### Implementation
+>
+> ```json
+> {
+>   "compilerOptions": {
+>     "target": "ES2022",
+>     "module": "NodeNext",
+>     "moduleResolution": "NodeNext"
+>   }
+> }
 > ```
-> - The key is the alias pattern `"@services/*"`.
-> - The value is an array containing the path relative to `baseUrl`: `["src/services/*"]`.
+
+> #### Technical Explanation
+>
+> 1. `"NodeNext"` module resolution mirrors modern Node.js ECMAScript module resolution mechanics.
+> 2. Enforces explicit `.js` file extensions in relative import paths (`import { foo } from "./foo.js"`).
+> 3. Respects `package.json` `"type": "module"` configuration flags.
+
+---
+
+### Exercise 2: Configuring Path Aliases with `baseUrl` and `paths`
+
+**Scenario:**
+Configure import aliases (`@/components/*`) in `tsconfig.json`.
+
+**Requirements:**
+1. Configure `baseUrl` and `paths`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```json
+> {
+>   "compilerOptions": {
+>     "baseUrl": ".",
+>     "paths": {
+>       "@/components/*": ["src/components/*"],
+>       "@/utils/*": ["src/utils/*"]
+>     }
+>   }
+> }
+> ```
+
+> #### Technical Explanation
+>
+> 1. `"baseUrl"` establishes the root directory for resolving non-relative module names.
+> 2. `"paths"` configures path mapping aliases relative to `baseUrl`.
+> 3. Replaces deep relative import paths (`../../../../components/Button`) with clean aliases (`@/components/Button`).
+
+---
+
+### Exercise 3: Auditing Bundler Resolution Mode (`"moduleResolution": "bundler"`)
+
+**Scenario:**
+Configure `tsconfig.json` for modern web bundlers (Vite, Webpack, Next.js) using `"moduleResolution": "bundler"`.
+
+**Requirements:**
+1. Set `"moduleResolution": "bundler"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```json
+> {
+>   "compilerOptions": {
+>     "target": "ES2022",
+>     "module": "ESNext",
+>     "moduleResolution": "bundler",
+>     "allowImportingTsExtensions": true
+>   }
+> }
+> ```
+
+> #### Technical Explanation
+>
+> 1. `"bundler"` module resolution mode mimics resolution rules of modern web bundlers (Vite, Next.js, ESBuild).
+> 2. Permits importing modules without explicit `.js` file extensions.
+> 3. Designed specifically for front-end bundler workflows.
 
 ---
 
 
 
-### Exercise 2: Path Aliasing Configuration
 
-**Problem:** Configure `baseUrl: "."` and `paths: { "@components/*": ["src/components/*"] }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Path aliases configured
-> ```
-> ```typescript
-> console.log("Path aliases configured");
-> ```
->
-> **Explanation:** `paths` and `baseUrl` create concise import path aliases in TS projects.
 
 ---
 
-### Exercise 3: ESM `.js` File Extension Imports
 
-**Problem:** Why does `moduleResolution: "node16"` require writing `import { foo } from './foo.js'` in `.ts` files?
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Node16 module resolution enforces explicit file extension imports
-> ```
-> ```typescript
-> console.log("Node16 module resolution enforces explicit file extension imports");
-> ```
->
-> **Explanation:** ESM Node.js standards mandate explicit relative file extensions in import specifiers.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`tsconfig.json`](../level_01/tsconfig.md) — The compiler options file.
 - [ES Modules in TypeScript](modules.md) — The modular loading specification.
 - [DefinitelyTyped](definitely_typed.md) — The third-party modules type registry.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Module Resolution** is the compiler's algorithm to resolve relative and non-relative import paths to files on disk.
 - **`moduleResolution`** options (like `"bundler"` and `"nodenext"`) select lookup behaviors matching specific environments.
 - **Path Aliases** (`"paths"`) replace long, nested relative paths (`../../../`) with clean absolute shortcuts (like `@/`).

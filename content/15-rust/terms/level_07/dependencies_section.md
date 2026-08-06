@@ -119,7 +119,7 @@ rand = "0.8" # Correct!
 
 ### Exercise 1: The Syntax Error
 
-**Problem:** You are trying to add the `rand` crate to your project. You open `Cargo.toml` and write the following line. When you run `cargo build`, it throws a parsing error. What is wrong with the line?
+**Scenario:** You are trying to add the `rand` crate to your project. You open `Cargo.toml` and write the following line. When you run `cargo build`, it throws a parsing error. What is wrong with the line?
 
 ```toml
 [dependencies]
@@ -138,7 +138,7 @@ rand = 0.8
 
 ### Exercise 2: Optional Dependencies — The Full Pattern
 
-**Problem:**
+**Scenario:**
 You are writing a serialization library. By default, you want zero dependencies. But users who want JSON support should be able to opt in to `serde` without it being forced on everyone.
 
 Write the complete `Cargo.toml` configuration that:
@@ -167,6 +167,9 @@ Then answer: **if a downstream user writes `my_lib = "1.0"` with no features, do
 > ```
 >
 > **Your `src/lib.rs`:**
+>
+> #### Implementation
+>
 > ```rust
 > // Only compiled (and serde only linked) when the "json" feature is active.
 > #[cfg(feature = "json")]
@@ -191,7 +194,7 @@ Then answer: **if a downstream user writes `my_lib = "1.0"` with no features, do
 
 ### Exercise 3: Git Dependencies — When, How, and the Risks
 
-**Problem:**
+**Scenario:**
 You need to use a bug-fix commit in `rand` that was merged to `master` but hasn't been published to `crates.io` yet. Answer the following:
 
 1. Write the `Cargo.toml` entry for a git dependency on `rand`'s `master` branch.
@@ -224,7 +227,8 @@ You need to use a bug-fix commit in `rand` that was merged to `master` but hasn'
 >
 > Switch back as soon as the fixed version is published: `rand = "0.8.6"`.
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > Git dependencies are a short-term escape hatch, not a long-term solution. Use `rev` (not `branch`) if you must use one, commit your `Cargo.lock`, and migrate to a published version as soon as possible.
 
 ---

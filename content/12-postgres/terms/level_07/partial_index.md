@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Index Type**
+
+**Performance / Optimization** (Filtered Predicate Index): Partial Indexes index a subset of table rows satisfying a specified `WHERE` predicate, minimizing index size and maintenance overhead.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Fully supported. The query planner matches the query's `WHERE` clauses against the index's `WHERE` definition to verify if the index can safely resolve the query).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, creating an index on a column builds an index entry for **every single row** in the table.
@@ -88,7 +89,7 @@ WHERE level = 'info' AND logged_at > '2026-01-01';
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing queries that omit the partial index filter condition
 
@@ -148,65 +149,100 @@ CREATE INDEX idx_all ON orders (user_id); -- Indexes soft-deleted rows unnecessa
 CREATE INDEX idx_active_orders ON orders (user_id) WHERE deleted_at IS NULL;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Unpaid Invoice Index
+### Exercise 1: Creating Filtered Partial Indexes
 
-**Problem:** You have an `invoices` table with columns `id`, `customer_name`, `amount`, and `paid_at` (timestamp, `NULL` if unpaid). 95% of invoices are paid. Write the SQL query to create an optimized partial index named `idx_unpaid_invoices` on the `amount` column that only indexes unpaid invoices.
+**Scenario:**
+Create a partial index on `orders(customer_id)` indexing ONLY active pending orders (`WHERE status = 'pending'`).
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE INDEX idx_orders_pending ON orders(customer_id) WHERE status = 'pending'`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE INDEX idx_unpaid_invoices 
-> ON invoices(amount) 
-> WHERE paid_at IS NULL;
+> CREATE INDEX idx_orders_pending 
+> ON orders (customer_id) 
+> WHERE status = 'pending';
+> 
+> SELECT id, total_cents 
+> FROM orders 
+> WHERE customer_id = 100 AND status = 'pending';
 > ```
-> - The condition for unpaid invoices checks for `IS NULL` status.
-> - Append the `WHERE` condition at the end of the `CREATE INDEX` query.
+>
+> #### Technical Explanation
+>
+> 1. Partial indexes specify a `WHERE` predicate filter during index creation.
+> 2. Indexes ONLY rows that satisfy the predicate (`status = 'pending'`).
+> 3. Consumes up to 95% less RAM and disk space than indexing millions of historical completed orders.
+
+---
+
+### Exercise 2: Enforcing Conditional Uniqueness with Partial Indexes
+
+**Scenario:**
+Enforce that a user can have at most ONE active primary email address (`WHERE is_primary = TRUE`), while allowing multiple historical inactive emails.
+
+**Requirements:**
+1. Execute `CREATE UNIQUE INDEX uq_user_primary_email ON user_emails(user_id) WHERE is_primary = TRUE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE UNIQUE INDEX uq_user_primary_email 
+> ON user_emails (user_id) 
+> WHERE is_primary = TRUE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Partial unique indexes enforce uniqueness ONLY over matching rows.
+> 2. Prevents a user from setting `is_primary = TRUE` on multiple rows, while allowing unlimited `is_primary = FALSE` rows.
+> 3. Powerful conditional business rule enforcement pattern.
+
+---
+
+### Exercise 3: Matching Partial Index Predicates in Queries
+
+**Scenario:**
+Explain why query `WHERE customer_id = 100` MISSES index `idx_orders_pending` unless `WHERE status = 'pending'` is explicitly included.
+
+**Requirements:**
+1. Explain query planner predicate matching requirements for partial indexes.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Partial Index Predicate Matching Rule:
+> - Partial Index Predicate: WHERE status = 'pending'
+> - Query 1: WHERE customer_id = 100 AND status = 'pending' -> HITS PARTIAL INDEX!
+> - Query 2: WHERE customer_id = 100 -> MISSES PARTIAL INDEX (Planner cannot guarantee all rows for customer 100 are pending!).
+> ```
+>
+> #### Technical Explanation
+>
+> 1. The query planner will ONLY select a partial index if the query's `WHERE` clause implies the partial index predicate.
+> 2. Always include the partial index predicate in application queries.
+> 3. Critical rule for partial index optimization.
 
 ---
 
 
 
-### Exercise 2: Creating Partial Index for Active Records
-
-**Problem:** Create partial index `idx_unprocessed_jobs` on `jobs(id)` where `status = 'pending'`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE INDEX idx_unprocessed_jobs ON jobs (id) WHERE status = 'pending';
-> ```
-> ```sql
-> CREATE INDEX idx_unprocessed_jobs ON jobs (id) WHERE status = 'pending';
-> ```
->
-> **Explanation:** Partial indexes index only rows matching `WHERE` filter predicates.
-
----
-
-### Exercise 3: Partial Unique Index for Nullable Columns
-
-**Problem:** Create partial unique index on `passport_num` where `passport_num IS NOT NULL`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE UNIQUE INDEX idx_passport ON users (passport_num) WHERE passport_num IS NOT NULL;
-> ```
-> ```sql
-> CREATE UNIQUE INDEX idx_passport ON users (passport_num) WHERE passport_num IS NOT NULL;
-> ```
->
-> **Explanation:** Partial unique indexes enforce uniqueness on non-null values while ignoring NULLs.
-
-## 7. Related Terms
+## 6. Related Terms
 - [B-tree Index](btree_index.md) — The parent sorted tree structure.
 - [Unique Index](unique_index.md) — Customizing partial unique indexes.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A partial index indexes only a subset of table rows defined by a `WHERE` clause.
 - Dramatically reduces index file sizes on disk, saving server RAM.
 - Speeds up search scans by shrinking B-tree depths.

@@ -147,7 +147,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Zero-Copy Binary Protocol Stream Parser with Reborrowed Slices
 
-**Problem:**
+**Scenario:**
 In high-performance networking pipelines (such as custom IPC protocols or game server frame decoders), binary parsing must operate without dynamic memory allocations by returning zero-copy slice references `&'a [u8]`. The parser state is maintained inside a cursor struct `StreamCursor<'a>`. Because methods on `StreamCursor<'a>` take `&mut self` to advance internal slice pointers, passing the cursor into sub-parsing helper functions (`parse_header`, `parse_payload`) would consume (move) the mutable reference if `&mut T` were treated as a non-copyable moved value.
 
 Implement `StreamCursor<'a>`, `PacketHeader`, and `ParsedPacket<'a>`. Write `parse_header` and `parse_packet` functions, demonstrating how `parse_packet` uses explicit or implicit reborrowing (`&mut *cursor`) to call `parse_header` and subsequently read payload bytes from the same cursor instance. Finally, construct `parse_all_packets` which reborrows `cursor` inside a `while` loop to parse a sequence of contiguous framing packets zero-copy.
@@ -352,7 +352,7 @@ Implement `StreamCursor<'a>`, `PacketHeader`, and `ParsedPacket<'a>`. Write `par
 
 ### Exercise 2: Multi-Pass State Machine Pipeline & Two-Phase Method Calls
 
-**Problem:**
+**Scenario:**
 In game simulation engines or graph processing frameworks, graph nodes undergo multi-stage physical updates (`apply_forces`, `integrate_velocity`, `apply_damping`). Furthermore, node storage structures (`GraphStore`) provide builder methods where allocating a node requires generating an ID via shared access (`&store`) while concurrently passing that ID to a mutable storage insertion method (`&mut store`).
 
 Implement a `GraphNode` structure and a `GraphStore` allocator. Demonstrate two-phase borrows during method calls like `store.insert_node(store.next_node_id(), ...)`. Write an execution pipeline `execute_node_pipeline` that reborrows `&mut GraphNode` sequentially across multiple stage functions, and implement a recursive/chained node traversal function `traverse_and_update_chain` that reborrows mutable pointer references inside a pointer-advancing loop.
@@ -516,7 +516,7 @@ Implement a `GraphNode` structure and a `GraphStore` allocator. Demonstrate two-
 
 ### Exercise 3: Zero-Allocation Ring Buffer with Computed Pushes & Reborrowed Slice Views
 
-**Problem:**
+**Scenario:**
 In high-throughput telemetry, IPC queues, or embedded microservices, ring buffers store data elements in a fixed-size contiguous buffer `[Option<T>; N]`.
 1. When calling `buf.push_with_calc(|b| b.available_capacity() * 10)`, the method signature requires `&mut self` to insert the element, while the closure argument requires `&self` to compute the element value dynamically based on current capacity.
 2. When performing batch item transformations or invariant validation (`mutate_queued_items`), the ring buffer splits queued elements across circular boundary slices `(&mut [Option<T>], &mut [Option<T>])`. Passing these mutable slices to sub-routine helpers requires **reborrowing** slice handles (`&mut *slice`) so that the outer slice references remain valid for subsequent operations.

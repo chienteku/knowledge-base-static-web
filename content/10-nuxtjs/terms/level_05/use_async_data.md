@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Data Fetching**
+
+**Data Fetching** (Asynchronous Data Resolution Composable): `useAsyncData()` wraps asynchronous data fetching logic with SSR payload caching, pending indicators, and key-based deduplication.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 `useFetch` is perfect for hitting REST APIs via HTTP. But what if you aren't using an HTTP API? What if you are using a GraphQL client (like Apollo), a headless CMS SDK (like Contentful), or querying a local database directly?
@@ -67,7 +68,7 @@ const { data } = await useAsyncData('dashboard-data', async () => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Re-using the same key across different API calls
 **The mistake:** Naming your `useAsyncData` key something generic like `'data'` on multiple different pages.
@@ -114,71 +115,132 @@ const { data } = await useAsyncData('key', async () => 'plain string');
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Transforming Data
+### Exercise 1: Combining Multiple `$fetch` Calls inside `useAsyncData()`
 
-**Problem:** You are fetching an array of 100 users, but your UI only needs the first 3 usernames. Sending 100 full user objects from the server to the client wastes massive payload size. How can you use the `transform` option in `useAsyncData` to only return the necessary data?
+**Scenario:**
+Fetch user data and user permissions in parallel using `Promise.all` inside `useAsyncData()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `Promise.all([$fetch('/api/user'), $fetch('/api/permissions')])` inside `useAsyncData()`.
+
 > [!check]- Answer
-> ```typescript
-> const { data } = await useAsyncData('users', 
->   () => $fetch('/api/users'), 
->   {
->     transform: (users) => users.slice(0, 3).map(u => u.username)
->   }
-> );
-> ```
-> - The `transform` configuration property accepts a mapping function that receives the raw resolved API result and returns the sliced format.
-
----
-
-### Exercise 2: useAsyncData Transform Data Pattern
-
-**Problem:** Write `useAsyncData` call with custom `transform` function mapping array of user objects to extract only user names.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> const { data: names } = await useAsyncData('users-names', () => $fetch('/api/users'), {
->   transform: (users) => users.map(u => u.name)
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const { data } = await useAsyncData("user-profile-bundle", async () => {
+>   const [user, permissions] = await Promise.all([
+>     $fetch("/api/user"),
+>     $fetch("/api/permissions")
+>   ]);
+>   return { user, permissions };
 > });
-> ```
-> - `transform` option sanitizes data payload before payload serialization.
-> 
-> ```typescript
-> const { data: userNames } = await useAsyncData(
->   'user-names-list',
->   () => $fetch('/api/users'),
+> </script>
+
+<template>
+  <div v-if="data">
+    <h1>Welcome, {{ data.user.name }}</h1>
+    <p>Role: {{ data.permissions.role }}</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useAsyncData()` wraps custom async functions, allowing multiple API requests to execute in parallel during SSR.
+> 2. Bundles combined data results into a single payload cache entry under `"user-profile-bundle"`.
+> 3. Reduces waterfall network request delays.
+
+---
+
+### Exercise 2: Using the `transform` Option to Filter Response Attributes
+
+**Scenario:**
+Transform an API user list to extract ONLY user names and IDs before payload serialization.
+
+**Requirements:**
+1. Pass `transform` callback option to `useAsyncData()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const { data: userList } = await useAsyncData(
+>   "users-summary",
+>   () => $fetch("/api/users"),
 >   {
->     transform: (users: Array<{ id: number; name: string }>) =>
->       users.map((user) => user.name)
+>     transform: (users: any[]) => {
+>       return users.map(u => ({ id: u.id, name: u.name }));
+>     }
 >   }
 > );
-> ```
+> </script>
+
+<template>
+  <ul>
+    <li v-for="u in userList" :key="u.id">{{ u.name }}</li>
+  </ul>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `transform` modifies the return data before it is written to the reactive `data` ref and `NuxtPayload`.
+> 2. Filters out heavy, unnecessary API response attributes.
+> 3. Reduces memory usage and SSR payload size.
 
 ---
 
-### Exercise 3: useAsyncData lazy Option
+### Exercise 3: Deferred Data Fetching with `lazy: true`
 
-**Problem:** What effect does setting `{ lazy: true }` have on `useAsyncData` during navigation?
+**Scenario:**
+Execute `useAsyncData()` without blocking client-side route navigation transitions using `lazy: true`.
 
-**Expected output:**
+**Requirements:**
+1. Pass `{ lazy: true }` options object to `useAsyncData()`.
+
 > [!check]- Answer
-> ```text
-> It prevents navigation blocking, resolving the async data in background while page transition renders immediately.
-> ```
-> - `{ lazy: true }` renders page immediately without blocking router navigation.
-> 
-> ```typescript
-> const { data, pending } = await useAsyncData('key', () => fetcher(), { lazy: true });
-> ```
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const { data: reports, pending } = useAsyncData(
+>   "analytics-reports",
+>   () => $fetch("/api/reports"),
+>   { lazy: true }
+> );
+> </script>
+
+<template>
+  <div>
+    <div v-if="pending">Loading Reports...</div>
+    <div v-else-if="reports">
+      <p>Total Reports: {{ reports.length }}</p>
+    </div>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `lazy: true` instructs Nuxt to navigate to the target page immediately while data fetching resolves in the background.
+> 2. `pending` indicates whether background data resolution is currently in progress.
+> 3. Improves perceived routing speed for heavy analytical pages.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Caching Data](caching_data.md) — How the unique string key is used to cache data across navigations.
 - [`$fetch` (ofetch)](dollar_fetch.md) — Related concept: `$fetch` (ofetch).
 - [Fetching Errors & `clearNuxtData`](fetching_errors.md) — Related concept: Fetching Errors & `clearNuxtData`.
@@ -187,7 +249,7 @@ const { data } = await useAsyncData('key', async () => 'plain string');
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useAsyncData` is the SSR-safe wrapper for *any* asynchronous logic.
 - It requires a globally unique string key.
 - It returns the exact same reactive properties as `useFetch` (`data`, `pending`, `refresh`).

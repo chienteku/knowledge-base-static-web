@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Function**
+
+**SQL Command / Clause** (Aggregation Functions): Aggregate functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`) compute a single summary value over a set of input rows.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all SQL databases. Evaluated on-the-fly. Database engines scan index nodes or table heap blocks to accumulate calculations in-memory).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In high-volume applications, you often need metadata summaries:
@@ -81,7 +82,7 @@ FROM product_catalog;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Mixing aggregated and non-aggregated columns without a GROUP BY clause
 
@@ -134,76 +135,102 @@ SELECT COUNT(phone) FROM users; -- Ignores rows where phone IS NULL
 SELECT COUNT(*) FROM users; -- Counts total rows including NULLs
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Sales Analysis
+### Exercise 1: Summarizing Metrics with Aggregate Functions
 
-**Problem:** You have a table `sales_receipts` with columns `id`, `amount`, and `cashier_name`. Write a SQL query to calculate:
-1.  The total number of sales transactions.
-2.  The maximum transaction amount.
-3.  The minimum transaction amount.
+**Scenario:**
+Calculate total sales revenue, average price, total order count, and highest single sale from `orders`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT COUNT(*), SUM(total_cents), AVG(total_cents), MAX(total_cents) FROM orders`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
 > SELECT 
->   COUNT(*) AS total_transactions,
->   MAX(amount) AS highest_sale,
->   MIN(amount) AS lowest_sale
-> FROM sales_receipts;
+>   COUNT(*) AS total_orders,
+>   SUM(total_cents) / 100.0 AS total_revenue_dollars,
+>   ROUND(AVG(total_cents) / 100.0, 2) AS avg_order_dollars,
+>   MAX(total_cents) / 100.0 AS max_order_dollars 
+> FROM orders;
 > ```
-> - Select the correct aggregate function names.
-> - Map them to the target amount column and use aliases to make the output headers clean.
+>
+> #### Technical Explanation
+>
+> 1. `COUNT(*)` counts total matching rows.
+> 2. `SUM()` and `AVG()` aggregate numeric totals and averages.
+> 3. `MAX()` finds the highest numeric value in the column.
+
+---
+
+### Exercise 2: Counting Distinct Column Values
+
+**Scenario:**
+Count unique customers who placed orders in 2026 using `COUNT(DISTINCT customer_id)`.
+
+**Requirements:**
+1. Execute `SELECT COUNT(DISTINCT customer_id) FROM orders WHERE created_at >= '2026-01-01'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   COUNT(DISTINCT customer_id) AS unique_active_customers 
+> FROM orders 
+> WHERE created_at >= '2026-01-01';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `COUNT(DISTINCT col)` deduplicates column values before counting.
+> 2. Ignores `NULL` values.
+> 3. Accurate metric calculation for distinct user counts.
+
+---
+
+### Exercise 3: Aggregating Arrays with `ARRAY_AGG`
+
+**Scenario:**
+Aggregate user tags into an array per user using `ARRAY_AGG(tag_name)`.
+
+**Requirements:**
+1. Execute `SELECT user_id, ARRAY_AGG(tag_name) FROM user_tags GROUP BY user_id`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   user_id, 
+>   ARRAY_AGG(tag_name ORDER BY tag_name ASC) AS user_tag_list 
+> FROM user_tags 
+> GROUP BY user_id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ARRAY_AGG()` compiles multiple row string values into a PostgreSQL array (`TEXT[]`).
+> 2. `ORDER BY tag_name` inside `ARRAY_AGG()` sorts elements within the array.
+> 3. Powerful PostgreSQL aggregate array construction.
 
 ---
 
 
 
-### Exercise 2: Calculating Group Averages with `AVG()`
-
-**Problem:** Calculate average product price per `category` rounded to 2 decimal places using `ROUND(AVG(price), 2)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT category, ROUND(AVG(price), 2) AS avg_price FROM products GROUP BY category;
-> ```
-> ```sql
-> SELECT category, ROUND(AVG(price), 2) AS avg_price
-> FROM products
-> GROUP BY category;
-> ```
->
-> **Explanation:** `AVG()` accumulates average numeric values across grouped row sets.
-
----
-
-### Exercise 3: Combining Aggregates with `FILTER` Clause
-
-**Problem:** Count total active users vs inactive users in a single query using `COUNT(*) FILTER (WHERE active IS TRUE)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT COUNT(*) FILTER (WHERE active IS TRUE) AS active_cnt, COUNT(*) FILTER (WHERE active IS FALSE) AS inactive_cnt FROM users;
-> ```
-> ```sql
-> SELECT
->   COUNT(*) FILTER (WHERE active IS TRUE) AS active_cnt,
->   COUNT(*) FILTER (WHERE active IS FALSE) AS inactive_cnt
-> FROM users;
-> ```
->
-> **Explanation:** `FILTER (WHERE ...)` applies conditional filtering directly to aggregate functions.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`SELECT`](../level_03/select.md) — The parent query command.
 - [`NULL` Behavior in Expressions & Aggregates](null_in_aggregates.md) — How missing values affect summaries.
 - [`GROUP BY`](group_by.md) — Slicing aggregates into categories.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Aggregate functions perform math calculations across rows to return a single summary.
 - Standard functions are `COUNT`, `SUM`, `AVG`, `MIN`, and `MAX`.
 - `COUNT(*)` counts all rows; `COUNT(column)` ignores `NULL` rows.

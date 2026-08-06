@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Control Flow**: Labeled loops (`'label: loop`) for breaking or continuing outer nested loops.
+
+
+**Rust Control Flow (nested loop break target tags)**: Labeled loops (`'label: loop`) for breaking or continuing outer nested loops.
 
 ---
 

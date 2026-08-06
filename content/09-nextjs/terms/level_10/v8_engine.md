@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture**
+
+**Build & Deployment** (V8 JavaScript Runtime Engine): The V8 Engine compiles and executes JavaScript code inside Node.js and Chromium browser runtime environments.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Runs inside the Google Chrome browser and powers backend server execution environments).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Computers do not understand JavaScript. CPU chips can only execute binary machine code instructions. In early web development, browsers parsed JavaScript line-by-line using slow interpreters, resulting in poor performance for web applications.
@@ -47,7 +48,7 @@ Because the Next.js Edge Runtime runs on raw V8 isolates directly (without the o
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming all server-side libraries can run on the V8 Edge Runtime
 
@@ -110,74 +111,114 @@ const nums = [1, 2, 3, 4]; // Homogeneous integer array for maximum V8 speed
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify API Availability
+### Exercise 1: Analyzing V8 JIT Compilation Pipeline
 
-**Problem:** Classify the APIs below as either **V8/Web Standard** (available in Edge and Node) or **Node-Specific** (only available in standard Node.js):
-1. `crypto.subtle` (Web Cryptography API)
-2. `process.env` (Node process environment bindings)
-3. `setTimeout` (Timers interface)
-4. `path.join` (Node path module helper)
+**Scenario:**
+Explain the V8 JavaScript execution pipeline (Ignition Interpreter -> TurboFan JIT Compiler).
 
-**Expected output:**
+**Requirements:**
+1. Detail bytecode interpretation and optimizing JIT compilation steps.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. V8/Web Standard (part of the standard web runtime spec, supported in Edge).
-> 2. Node-Specific (Edge runtime uses global env variable lookups but lacks full process binds).
-> 3. V8/Web Standard (globally supported timer mechanism).
-> 4. Node-Specific (requires importing Node's 'path' module, not supported in raw V8).
+> V8 Execution Pipeline:
+> - Step: Parser: Parses JS source code into an Abstract Syntax Tree (AST).
+> - Step: Ignition: Interprets AST into bytecode for fast initial execution.
+> - Step: TurboFan: Compiles hot bytecode functions into highly optimized machine code JIT assembly!
 > ```
-> - Standard Web APIs are supported natively in both Edge and Node runtimes.
+
+> #### Technical Explanation
+>
+> 1. V8 is Google's open-source C++ JavaScript engine powering Node.js and Chromium browsers.
+> 2. Ignition generates bytecode quickly for fast cold starts; TurboFan optimizes hot functions.
+> 3. Core execution engine underlying Next.js server and client runtimes.
 
 ---
 
-### Exercise 2: V8 Garbage Collection Memory Management
+### Exercise 2: Optimizing Hidden Classes and Inline Caches
 
-**Problem:** Name the 2 primary memory spaces managed by V8 Garbage Collector (Orinoco).
+**Scenario:**
+Write JavaScript object initialization patterns that preserve V8 hidden class shape optimizations.
 
-**Expected output:**
+**Requirements:**
+1. Initialize object properties in consistent order.
+
 > [!check]- Answer
-> ```text
-> 1. Young Generation (Scavenger - short-lived objects)
-> 2. Old Generation (Mark-Sweep-Compact - long-lived objects)
-> ```
-> - Young Generation -> Fast Scavenger GC for short-lived objects.
-> - Old Generation -> Mark-Sweep-Compact GC for persistent objects.
-> 
-> ```text
-> Young Generation (New Space) -> Old Generation (Tenured Space)
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> // ❌ UNOPTIMIZED (Creates multiple hidden class shapes):
+> // const obj1 = {}; obj1.x = 1; obj1.y = 2;
+> // const obj2 = {}; obj2.y = 2; obj2.x = 1;
+
+// ✅ OPTIMIZED (Identical property order preserves hidden class shape):
+class UserPoint {
+  x: number;
+  y: number;
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. V8 creates internal "hidden classes" (shapes) to track object property offsets in memory.
+> 2. Initializing object properties in identical order allows V8 to share hidden class shapes.
+> 3. Enables V8 Inline Caches (IC) to execute property access in 1 machine instruction.
 
 ---
 
-### Exercise 3: V8 JIT Compiler Names
+### Exercise 3: Auditing V8 Garbage Collection Memory Leaks
 
-**Problem:** Identify V8's baseline compiler and optimizing JIT compiler.
+**Scenario:**
+Identify global event listener references causing V8 heap memory leaks in Server Components or Node servers.
 
-**Expected output:**
+**Requirements:**
+1. Remove event listeners on unmount/cleanup.
+
 > [!check]- Answer
-> ```text
-> Baseline compiler: Ignition (Bytecode interpreter)
-> Optimizing compiler: TurboFan (JIT Compiler)
+>
+> #### Implementation
+>
+> ```typescript
+> // Memory leak fix: Always unbind global event listeners!
+> function setupListener() {
+>   const handler = () => console.log("Event");
+>   process.on("uncaughtException", handler);
+>   
+>   // Cleanup function unbinds reference so V8 Garbage Collector can free memory
+>   return () => process.off("uncaughtException", handler);
+> }
 > ```
-> - Ignition -> Bytecode Interpreter
-> - TurboFan -> Optimizing JIT Compiler
-> 
-> ```text
-> Ignition (Bytecode) -> TurboFan (Optimized Machine Code)
-> ```
+
+> #### Technical Explanation
+>
+> 1. V8 Garbage Collector (Mark-and-Sweep) cannot free objects that remain reachable from root references (e.g. `process` or `globalThis`).
+> 2. Retained references cause V8 heap memory leaks over time in Node.js server processes.
+> 3. Essential Node.js memory optimization rule.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Edge Runtime vs Node.js Runtime](edge_runtime.md) — The Next.js runtimes powered by V8.
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The traditional server environment built on V8.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - V8 is Google's open-source engine that JIT-compiles JavaScript to machine code.
 - Engines handle execution, while runtimes inject platform APIs.
 - Next.js Edge Runtime runs on V8 isolates directly for near-instant cold starts.

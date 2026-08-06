@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Clause**
+
+**SQL Command / Clause** (Row Filtering Clause): `WHERE` filters candidate table rows based on specified boolean predicate conditions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (Evaluated early in the query pipeline. The query engine uses indexes on columns referenced in `WHERE` filters to locate target rows on disk without scanning the entire table).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational tables store huge sets of data rows. 
@@ -91,7 +92,7 @@ WHERE id = 110;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to filter by SELECT aliases in the WHERE clause
 
@@ -151,61 +152,96 @@ SELECT category, COUNT(*) FROM products WHERE COUNT(*) > 5 GROUP BY category; --
 SELECT category, COUNT(*) FROM products GROUP BY category HAVING COUNT(*) > 5;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Construction
+### Exercise 1: Multi-Condition Row Filtering with AND/OR Logic
 
-**Problem:** You have a table `users` with columns `username`, `status`, and `registration_year`. Write a SQL query to select the `username` column for all users whose `status` is exactly `'inactive'` and who registered in the year `2024`.
+**Scenario:**
+Query `users` for active users who registered in 2026 OR possess role `'admin'`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `WHERE (is_active = TRUE AND created_at >= '2026-01-01') OR role = 'admin'`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT username 
+> SELECT id, username, role, created_at 
 > FROM users 
-> WHERE status = 'inactive' AND registration_year = 2024;
+> WHERE (is_active = TRUE AND created_at >= '2026-01-01') 
+>    OR role = 'admin';
 > ```
-> - Combine filter criteria inside the `WHERE` clause using the logical `AND` operator.
-> - Match string parameters using exact single quotes.
+>
+> #### Technical Explanation
+>
+> 1. `WHERE` filters candidate table rows using boolean predicates.
+> 2. Parentheses enforce explicit operator evaluation precedence (`AND` evaluated before `OR`).
+> 3. Selects rows matching combined logic.
+
+---
+
+### Exercise 2: Filtering Range Bounds with Operators
+
+**Scenario:**
+Query products with price between 1000 and 5000 cents using `WHERE`.
+
+**Requirements:**
+1. Execute `WHERE price_cents >= 1000 AND price_cents <= 5000`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, name, price_cents 
+> FROM products 
+> WHERE price_cents >= 1000 
+>   AND price_cents <= 5000;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Comparison operators (`>=`, `<=`) specify lower and upper range bounds.
+> 2. Evaluates index scan bounds on `price_cents`.
+> 3. Standard range query syntax.
+
+---
+
+### Exercise 3: Parameterized WHERE Filtering in Application Drivers
+
+**Scenario:**
+Execute a safe parameterized `WHERE` query in Node.js to prevent SQL Injection.
+
+**Requirements:**
+1. Use `pool.query('SELECT * FROM users WHERE status = $1 AND role = $2', [status, role])`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { pool } from "./db";
+
+export async function filterUsers(status: string, role: string) {
+  const text = "SELECT id, username, email FROM users WHERE status = $1 AND role = $2";
+  const values = [status, role];
+  const res = await pool.query(text, values);
+  return res.rows;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `$1` and `$2` pass user input values safely without string concatenation.
+> 2. Prevents malicious input strings from breaking `WHERE` clause syntax.
+> 3. Secure database programming standard.
 
 ---
 
 
 
-### Exercise 2: Filtering Range and In-Set Predicates
-
-**Problem:** Query active users (`status = 'active'`) created in year 2026 (`created_at >= '2026-01-01'`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users WHERE status = 'active' AND created_at >= '2026-01-01';
-> ```
-> ```sql
-> SELECT * FROM users
-> WHERE status = 'active'
->   AND created_at >= '2026-01-01';
-> ```
->
-> **Explanation:** `WHERE` clauses filter individual row tuples before grouping or projection.
-
----
-
-### Exercise 3: Pattern Matching Predicates with `ILIKE`
-
-**Problem:** Query products where `name` starts with `'Pro'` case-insensitively using `ILIKE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM products WHERE name ILIKE 'Pro%';
-> ```
-> ```sql
-> SELECT * FROM products WHERE name ILIKE 'Pro%';
-> ```
->
-> **Explanation:** `ILIKE 'pattern%'` filters text columns using case-insensitive wildcard matching.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`SELECT`](select.md) — Sourcing data.
 - [Comparison & Logical Operators](operators.md) — The parameters used to write conditions.
 - [`IS NULL` / `IS NOT NULL`](is_null.md) — Handling missing data filters.
@@ -216,7 +252,7 @@ SELECT category, COUNT(*) FROM products GROUP BY category HAVING COUNT(*) > 5;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `WHERE` clause filters rows based on a custom logical expression.
 - Only rows that evaluate to `TRUE` are processed; `FALSE` or `NULL` states are skipped.
 - Enforcing `WHERE` filters in `UPDATE` and `DELETE` prevents accidental global overrides.

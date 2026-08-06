@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (conditional branch control expression)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Evaluated inline during query execution. Branches expression trees based on boolean evaluation).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Dynamic queries often require conditional branching:
@@ -96,7 +95,7 @@ IF $user_active = true {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the mandatory 'END' keyword when writing inline IF expressions inside SELECT statements
 
@@ -151,73 +150,106 @@ LET $status = $age >= 18 ? "adult" : "minor"; // ❌ Invalid ternary syntax!
 LET $status = IF $age >= 18 THEN "adult" ELSE "minor" END;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Conditional Projection Formulation
+### Exercise 1: Multi-Branch Tier Classification Logic
 
-**Problem:** You have an `inventory` table with a `stock` field (`int`).
-Write a SurrealQL query to retrieve the product `name` and a calculated `availability` field:
-- If `stock` is `0`, return `"Out of Stock"`.
-- If `stock` is less than `10`, return `"Low Stock"`.
-- Otherwise, return `"In Stock"`.
+**Scenario:**
+A billing service calculates customer discount tiers based on total purchase volume (`$volume`).
 
-**Expected output:**
+**Requirements:**
+1. If `$volume >= 1000.0dec`, tier is `"Gold"`.
+2. Else if `$volume >= 500.0dec`, tier is `"Silver"`.
+3. Else tier is `"Bronze"`.
+
 > [!check]- Answer
-> ```sql
-> SELECT 
->   name,
->   IF stock = 0 THEN "Out of Stock"
->   ELSE IF stock < 10 THEN "Low Stock"
->   ELSE "In Stock"
->   END AS availability
-> FROM inventory;
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $volume = 750.0dec;
+> 
+> LET $tier = IF $volume >= 1000.0dec THEN
+>     "Gold"
+> ELSE IF $volume >= 500.0dec THEN
+>     "Silver"
+> ELSE
+>     "Bronze"
+> END;
+> 
+> RETURN $tier;
 > ```
-> - Chain conditions using `ELSE IF`.
-> - Close the expression with `END` before aliasing with `AS availability`.
+>
+> #### Technical Explanation
+>
+> 1. `IF ... THEN ... ELSE IF ... ELSE ... END` evaluates multi-branch conditional expressions.
+> 2. Returns the evaluated expression value of the first matching truthy branch.
+> 3. Enables declarative stored procedure rules directly inside SurrealQL.
+
+---
+
+### Exercise 2: Conditional Field Value Projection in `SELECT`
+
+**Scenario:**
+A user directory query projects an `account_status` string ("Active" or "Inactive") based on boolean field `active`.
+
+**Requirements:**
+1. Project `IF active THEN "Active" ELSE "Inactive" END AS account_status`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:u1 SET active = true;
+> 
+> SELECT name, IF active THEN "Active" ELSE "Inactive" END AS account_status 
+> FROM user:u1;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `IF` expressions can be embedded directly inside `SELECT` projection lists.
+> 2. Replaces SQL `CASE WHEN ... THEN ... END` syntax.
+> 3. Formats API response fields server-side.
+
+---
+
+### Exercise 3: Conditional Database Mutation
+
+**Scenario:**
+Update a user's credit balance only if the requested withdrawal amount does not exceed current credit.
+
+**Requirements:**
+1. Check if `$balance >= $withdrawal`.
+2. Update balance if true; throw exception if false.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $balance = 100.0dec;
+> LET $withdrawal = 40.0dec;
+> 
+> IF $balance >= $withdrawal THEN (
+>     UPDATE user:u1 SET balance -= $withdrawal
+> ) ELSE (
+>     THROW "Insufficient funds!"
+> ) END;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `IF` blocks can enclose multi-statement transaction operations.
+> 2. Protects against invalid state mutations atomically.
+> 3. Replaces complex database stored procedures.
 
 ---
 
 
 
-### Exercise 2: Inline IF THEN ELSE Expression
-
-**Problem:** Assign `$tier = IF $points > 1000 THEN "gold" ELSE "standard" END`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> LET $tier = IF $points > 1000 THEN "gold" ELSE "standard" END;
-> ```
-> ```surrealql
-> LET $tier = IF $points > 1000 THEN "gold" ELSE "standard" END;
-> ```
->
-> **Explanation:** `IF ... THEN ... ELSE ... END` evaluates inline conditional value expressions.
-
----
-
-### Exercise 3: Multi-Branch IF ELSE IF Statement
-
-**Problem:** Write `IF / ELSE IF / ELSE` block evaluating `$role` string.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> IF $role = "admin" { RETURN "full"; } ELSE IF $role = "mod" { RETURN "partial"; } ELSE { RETURN "read"; };
-> ```
-> ```surrealql
-> IF $role = "admin" {
->   RETURN "full";
-> } ELSE IF $role = "mod" {
->   RETURN "partial";
-> } ELSE {
->   RETURN "read";
-> };
-> ```
->
-> **Explanation:** `IF / ELSE IF / ELSE` blocks branch statement logic across multiple conditions.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
 - [`THROW` Expression](throw_expression.md) — Raising errors in ELSE blocks.
@@ -226,7 +258,7 @@ Write a SurrealQL query to retrieve the product `name` and a calculated `availab
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `IF` / `ELSE` expressions provide conditional branching in SurrealQL.
 - Replaces SQL's `CASE WHEN` and MongoDB's `$cond` with readable syntax.
 - Inline form (`IF ... THEN ... ELSE ... END`) embeds inside `SELECT` and `SET`.

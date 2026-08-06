@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Data Modeling** (Fundamental Relationship Trade-off): Embedding vs Referencing is the central decision in MongoDB schema design, balancing single-document read speed (embedding) against unbounded array growth scaling (referencing).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Core modeling choice across all document databases. Drives physical storage allocation, network sizes, and index performance).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In MongoDB, you don't have SQL foreign key constraints to dictate how tables connect. 
@@ -102,7 +103,7 @@ A sensor device reporting climate log metrics. A device logs metrics every 5 sec
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Embedding unbounded, rapidly growing arrays inside parent documents
 
@@ -154,60 +155,103 @@ Store orders in separate collection: db.orders.insertOne({ customerId: id, ...or
 Embed address sub-document directly inside user profile document
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Modeling Selector Strategy
+### Exercise 1: Decision Matrix for Embedding vs Referencing
 
-**Problem:** You are modeling a school system with `students` and `classes`. A class has up to 30 students. A student can enroll in up to 6 classes.
-1.  Explain why you should not embed the full student records inside the class document.
-2.  State the correct modeling strategy (Embedding or Referencing) for this relationship.
+**Scenario:**
+Formulate a schema design decision matrix evaluating when to embed vs when to reference based on relationship cardinality and query access patterns.
 
-**Expected output:**
+**Requirements:**
+1. Evaluate 1-to-1, bounded 1-to-many, and unbounded 1-to-many relationships.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. You should not embed full student records inside the class document because a single student can enroll in multiple classes. If you embed them, the student's name, email, and grades are duplicated across multiple class documents. If a student changes their email, the application must run updates across all their enrolled classes, risking data inconsistency. Furthermore, embedding large student arrays could cause the class document to bloat.
-> 2. Referencing: Store students and classes in separate collections, and link them using arrays of ObjectIds (Many-to-Many referencing).
+> Relationship Cardinality & Modeling Decision Matrix:
+> - 1-to-1 (e.g. User Profile): EMBED in single document.
+> - Bounded 1-to-Many (<100 items, e.g. Order Items): EMBED array in document.
+> - Unbounded 1-to-Many (>1000 items, e.g. Log Events): REFERENCE across separate collections.
+> - Many-to-Many (e.g. Students & Courses): REFERENCE array of ObjectIds.
 > ```
-> - Assess the duplication risks of many-to-many structures.
-> - Consider data consistency constraints during updates.
+>
+> #### Technical Explanation
+>
+> 1. Embedding provides maximum read performance by fetching related data in a single $O(1)$ read.
+> 2. Referencing prevents 16MB document size limit breaches and avoids document movement on disk.
+> 3. Schema design should be driven primarily by application query access patterns.
+
+---
+
+### Exercise 2: Modeling Bounded 1-to-Many Relationships with Embedding
+
+**Scenario:**
+Model a customer `order` document embedding an array of up to 10 `orderItems`.
+
+**Requirements:**
+1. Embed `orderItems` array inside `orders` document.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.insertOne({
+>   _id: new ObjectId(),
+>   customerName: "Alice",
+>   items: [
+>     { productId: new ObjectId(), name: "Book", price: 15.00, qty: 2 },
+>     { productId: new ObjectId(), name: "Pen", price: 2.50, qty: 5 }
+>   ],
+>   total: 42.50,
+>   createdAt: new Date()
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Bounded 1-to-many items (e.g. items in a single shopping cart) are ideal for embedding.
+> 2. Order details and items are written and read together atomically.
+> 3. Eliminates multi-table joins.
+
+---
+
+### Exercise 3: Modeling Unbounded 1-to-Many Relationships with Referencing
+
+**Scenario:**
+Model a `sensor` entity generating millions of telemetry `readings` over time using referencing.
+
+**Requirements:**
+1. Store `sensorId` reference in `readings` collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.readings.insertOne({
+>   sensorId: new ObjectId("60c72b2f9b1d8b2c88888880"),
+>   temp: 23.5,
+>   humidity: 45.2,
+>   timestamp: new Date()
+> });
+> 
+> db.readings.createIndex({ sensorId: 1, timestamp: -1 });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Unbounded relationships (millions of child items) MUST use referencing.
+> 2. Prevents child arrays from bloating parent documents past 16MB.
+> 3. Index on `{ sensorId: 1, timestamp: -1 }` ensures fast query pagination.
 
 ---
 
 
 
-### Exercise 2: Embedding vs Referencing Decision Rule
-
-**Problem:** State rule: 1. Embed (1-to-Few, data read together), 2. Reference (1-to-Many unbounded, data updated/accessed independently).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Embed 1-to-Few co-located data; Reference 1-to-Many unbounded or independently updated data
-> ```
-> ```text
-> Embed 1-to-Few co-located data; Reference 1-to-Many unbounded or independently updated data
-> ```
->
-> **Explanation:** Schema design balances read latency (embedding) against document size limits (referencing).
-
----
-
-### Exercise 3: Modeling E-Commerce Shopping Cart
-
-**Problem:** Should active shopping cart items be embedded or referenced in a user document? (Embedded).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Embedded (small, bounded, read and updated together with cart state)
-> ```
-> ```text
-> Embedded (small, bounded, read and updated together with cart state)
-> ```
->
-> **Explanation:** Active shopping cart items are bounded and queried together as a single unit.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
 - [Document Size Limit (16 MB)](document_size_limit.md) — The size constraint.
@@ -221,7 +265,7 @@ Embed address sub-document directly inside user profile document
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Embedding nests data directly; Referencing links data via IDs.
 - Embedding optimizes read speeds by fetching related data in one lookup.
 - Referencing handles unbounded growth and prevents data duplication.

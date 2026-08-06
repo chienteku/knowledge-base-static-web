@@ -156,9 +156,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Asynchronous Database Client Doc Tests with `#` Hidden Hashing & Connection Setup
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 You are authoring library documentation for a high-performance database connection pool (`AsyncDbClient`). The documentation needs to demonstrate how users query database records using doc tests, while using `#` hidden lines to perform mock connection initialization and setup without cluttering the rendered documentation HTML.
 
+**Requirements:**
 Requirements:
 1. Define `DbError` enum with `NotFound` and `ConnectionFailed` variants deriving `Debug` and `PartialEq`.
 2. Struct `AsyncDbClient` storing `url: String` and internal record cache `HashMap<String, String>`.
@@ -167,6 +168,9 @@ Requirements:
 5. In `#[cfg(test)] mod tests`, write unit tests verifying query successes, missing users, and assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > 
@@ -243,9 +247,10 @@ Requirements:
 
 ### Exercise 2: `should_panic` Doc Tests for Bounded Buffer Invariants
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 Doc tests can verify intentional failure modes. You are implementing a fixed-capacity circular buffer (`BoundedBuffer<T>`) that panics if initialized with zero capacity or when pushing beyond capacity. You must document these panicking behaviors using ```` ```should_panic ```` doc tests.
 
+**Requirements:**
 Requirements:
 1. Struct `BoundedBuffer<T>` holding `storage: Vec<T>` and `capacity: usize`.
 2. Implement `BoundedBuffer::new(capacity: usize) -> Self` (panics with `"Capacity must be non-zero"` if `capacity == 0`).
@@ -254,6 +259,9 @@ Requirements:
 5. In `#[cfg(test)] mod tests`, write unit tests verifying non-panicking push/pop operations and assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > /// Fixed-capacity circular element buffer.
 > pub struct BoundedBuffer<T> {
@@ -328,9 +336,10 @@ Requirements:
 
 ### Exercise 3: Cross-Crate Intra-Doc Links & Complex Doc Test Verification
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 When writing crate documentation, doc tests often demonstrate complex type interactions while relying on intra-doc links (`[`Token`]`, `[`AuthEngine`]`) to connect related items.
 
+**Requirements:**
 Requirements:
 1. Define struct `Token` with `id: String` and `expires_at: u64`.
 2. Define `AuthEngine` with method `validate(&self, token: &Token) -> bool`.
@@ -338,6 +347,9 @@ Requirements:
 4. In `#[cfg(test)] mod tests`, write unit tests verifying expired vs active token checks with assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > /// Authentication security token.
 > #[derive(Debug, Clone, PartialEq, Eq)]

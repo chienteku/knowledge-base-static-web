@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Advanced Feature** (Lucene Full-Text Search Engine): Atlas Search integrates Apache Lucene directly alongside MongoDB data nodes, enabling full-text search, fuzzy matching, and autocomplete within aggregation pipelines without external Elasticsearch sync pipelines.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Atlas** (Requires hosting on the MongoDB Atlas cloud service. The `$search` aggregation stage is **not** supported on self-hosted local community edition installations).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While MongoDB's built-in `$text` index is useful for basic matches, it lacks the advanced features required by modern application search boxes:
@@ -92,7 +93,7 @@ db.products.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to run the '$search' aggregation pipeline stage on a local self-hosted MongoDB Community server
 
@@ -140,83 +141,124 @@ db.coll.aggregate([{ $search: { text: { query: "mongodb", path: "title" } } }]);
 Create Search Index 'default' in Atlas UI before running $search aggregation pipelines
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Autocomplete Query Diagnostic
+### Exercise 1: Atlas Search Full-Text Pipeline Execution
 
-**Problem:** You are building a search box for an online movie database hosted on Atlas. 
-Write the aggregation pipeline stage utilizing the `$search` operator to search the `"title"` path using the term `"aven"` with autocomplete parameters. Assume your autocomplete index is named `"movie-autocomplete"`.
+**Scenario:**
+Execute a full-text search pipeline stage (`$search`) with fuzzy term matching over product descriptions in MongoDB Atlas.
 
-**Expected output:**
+**Requirements:**
+1. Use `$search: { text: { query: "headphone", path: "description", fuzzy: { maxEdits: 1 } } }`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> {
->   $search: {
->     index: "movie-autocomplete",
->     autocomplete: {
->       query: "aven",
->       path: "title"
->     }
->   }
-> }
-> ```
-> - The target stage is `$search`.
-> - Replace the `text` field object with `autocomplete` configurations.
-
----
-
-
-
-### Exercise 2: Basic Atlas Search Aggregation Pipeline
-
-**Problem:** Construct `$search` pipeline stage querying text `"database"` in field `title` using `default` index.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.aggregate([{ $search: { index: "default", text: { query: "database", path: "title" } } }]);
-> ```
-> ```javascript
-> db.posts.aggregate([
+> db.products.aggregate([
 >   {
 >     $search: {
 >       index: "default",
->       text: { query: "database", path: "title" }
+>       text: {
+>         query: "headphone",
+>         path: "description",
+>         fuzzy: { maxEdits: 1 }
+>       }
+>     }
+>   },
+>   { $limit: 5 }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$search` executes Apache Lucene full-text search directly inside MongoDB Atlas aggregation pipelines.
+> 2. `fuzzy: { maxEdits: 1 }` handles user typos and minor spelling variations.
+> 3. Eliminates managing separate Elasticsearch sync pipelines.
+
+---
+
+### Exercise 2: Atlas Search Autocomplete Pipeline
+
+**Scenario:**
+Implement real-time search autocomplete for movie titles using `$search` with `autocomplete`.
+
+**Requirements:**
+1. Use `autocomplete: { query: "matr", path: "title" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.movies.aggregate([
+>   {
+>     $search: {
+>       index: "title_autocomplete",
+>       autocomplete: {
+>         query: "matr",
+>         path: "title"
+>       }
+>     }
+>   },
+>   { $project: { title: 1, _id: 0 } },
+>   { $limit: 5 }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `autocomplete` operator evaluates edge n-gram token indexes for instant search-as-you-type UI widgets.
+> 2. Matches partial word prefixes (`"matr"` matches `"Matrix"`).
+> 3. Sub-millisecond search response latency.
+
+---
+
+### Exercise 3: Sorting Atlas Search Results by Compound Relevance Score
+
+**Scenario:**
+Combine full-text search with metadata filtering (`category: "electronics"`) inside `$search`.
+
+**Requirements:**
+1. Use `compound` search operator with `must` and `filter` clauses.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.aggregate([
+>   {
+>     $search: {
+>       index: "default",
+>       compound: {
+>         must: [{ text: { query: "wireless", path: "name" } }],
+>         filter: [{ text: { query: "electronics", path: "category" } }]
+>       }
 >     }
 >   }
 > ]);
 > ```
 >
-> **Explanation:** `$search` invokes full-text Lucene search indexing in MongoDB Atlas.
+> #### Technical Explanation
+>
+> 1. `compound` combines multiple search clauses using Boolean logic (`must`, `should`, `filter`, `mustNot`).
+> 2. `filter` clause restricts search space without altering relevance scoring.
+> 3. Production search pipeline architecture.
 
 ---
 
-### Exercise 3: Atlas Search Score Projection
 
-**Problem:** Project relevance score in Atlas Search results using `score: { $meta: "searchScore" }`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.aggregate([{ $search: { ... } }, { $project: { title: 1, score: { $meta: "searchScore" } } }]);
-> ```
-> ```javascript
-> db.posts.aggregate([
->   { $search: { index: "default", text: { query: "database", path: "title" } } },
->   { $project: { title: 1, score: { $meta: "searchScore" } } }
-> ]);
-> ```
->
-> **Explanation:** `{ $meta: "searchScore" }` projects Lucene relevance scores for ranking results.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Text Index](../level_07/text_index.md) — The built-in, self-hosted text limits.
 - [Aggregation Pipeline (Concept)](../level_06/aggregation_pipeline.md) — The aggregation context.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Atlas Search embeds Apache Lucene directly inside MongoDB Atlas clusters.
 - Eliminates the need to spin up and sync external Elasticsearch instances.
 - Must be queried using the `$search` aggregation stage as the first pipeline step.

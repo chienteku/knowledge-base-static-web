@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Unsafe / FFI**: An `unsafe trait` is a trait whose declaration is prefixed with `unsafe` (`pub unsafe trait MyTrait`). Marking a trait as `unsafe` declares that implementers must satisfy specific safety invariants that the compiler cannot verify. Consequently, implementing an `unsafe trait` requires using the `unsafe impl` keyword syntax (`unsafe impl MyTrait for MyType`).
+
+
+**Rust Trait Specifier (safety-invariant implementing marker trait)**: An `unsafe trait` is a trait whose declaration is prefixed with `unsafe` (`pub unsafe trait MyTrait`). Marking a trait as `unsafe` declares that implementers must satisfy specific safety invariants that the compiler cannot verify. Consequently, implementing an `unsafe trait` requires using the `unsafe impl` keyword syntax (`unsafe impl MyTrait for MyType`).
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: `unsafe trait` definitions are used throughout the Rust Standard Library (notably `Send`, `Sync`, and `GlobalAlloc`) and across the async/concurrency ecosystem (e.g. `tokio`, `rayon`) to enforce thread-safety invariants at compile time.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -131,7 +129,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Implementing an `unsafe trait` with Standard `impl` Syntax
 
@@ -206,13 +204,14 @@ struct SharedState(Mutex<i32>);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Building a Thread-Safe Custom Buffer (`unsafe impl Send` and `Sync`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In high-performance networking and low-level systems code, data buffers are often backed by heap-allocated raw memory pointers (`*mut u8`). In Rust, raw pointers automatically opt out of the auto-traits `Send` and `Sync` (`!Send` and `!Sync`) to prevent accidental thread-safety violations.
 
+**Requirements:**
 Design a custom raw byte buffer struct `RawPacketBuffer` that manages a heap-allocated memory region using `std::alloc::{alloc, dealloc, Layout}`. Because raw pointers do not implement `Send` or `Sync` automatically, implement `Send` and `Sync` for `RawPacketBuffer` using `unsafe impl` with explicit `// SAFETY:` invariant comments.
 
 Requirements:
@@ -224,6 +223,9 @@ Requirements:
 6. Include a unit test `test_raw_packet_buffer_threads()` using `std::thread` and `Arc` with assertions (`assert_eq!`) proving cross-thread ownership transfer (`Send`) and concurrent access (`Sync`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::alloc::{alloc, dealloc, Layout};
 > use std::slice;
@@ -346,7 +348,8 @@ Requirements:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Raw Pointer Auto-Trait Opt-out:** Rust automatically implements `Send` and `Sync` for types whose fields are all `Send` and `Sync`. Because `*mut u8` is raw and untrusted, the compiler marks `RawPacketBuffer` as `!Send` and `!Sync` by default.
 > 2. **`unsafe impl Send` Rationale:** `Send` indicates that ownership can move across thread boundaries. `RawPacketBuffer` owns its memory layout exclusively and has no shared aliasing, making thread movement completely safe.
 > 3. **`unsafe impl Sync` Rationale:** `Sync` indicates that shared references `&T` can be sent across threads. Since immutable methods (`as_slice`, `len`) only read from memory and do not perform unsynchronized interior mutation, concurrent reads cannot cause data races.
@@ -356,11 +359,12 @@ Requirements:
 
 ### Exercise 2: Defining a Custom `unsafe trait` for Hardware DMA Alignment (`unsafe trait DmaBuffer`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In embedded hardware systems and kernel drivers, Direct Memory Access (DMA) controllers bypass the CPU to write directly into system RAM. Hardware DMA controllers require buffers to satisfy strict invariants:
 1. Memory must be aligned to specific byte boundaries (e.g., 64-byte cache line alignment).
 2. The memory layout must remain pinned and physically valid during transfers.
 
+**Requirements:**
 Because the Rust compiler cannot inspect physical hardware alignment contracts at compile time, declare a custom `pub unsafe trait DmaBuffer`.
 
 Requirements:
@@ -371,6 +375,9 @@ Requirements:
 5. Write unit tests using `assert_eq!` and `assert!` to verify alignment properties and execution results.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::alloc::{alloc_zeroed, dealloc, Layout};
 > use std::ptr::NonNull;
@@ -484,7 +491,8 @@ Requirements:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Why `unsafe trait` is required:** Standard trait declarations allow any type to implement them without compiler verification. If `DmaBuffer` were a safe trait, a buggy implementation could return an unaligned pointer or invalid address, leading to hardware crashes or physical memory corruption. Marking `DmaBuffer` as `unsafe trait` forces implementers to use `unsafe impl` and guarantee hardware invariants.
 > 2. **Const Generics Alignment:** `AlignedDmaBuffer<const ALIGN: usize>` uses Rust const generics and `Layout::from_size_align` to request custom hardware-aligned heap memory.
 > 3. **Consuming Generic Trait Bounds:** Functions like `execute_dma_transfer<T: DmaBuffer>` can safely assume that types satisfying `DmaBuffer` uphold alignment and memory pinning contracts without adding extra runtime overhead.
@@ -493,9 +501,10 @@ Requirements:
 
 ### Exercise 3: Zero-Copy Serialization via Custom `unsafe trait` (`unsafe trait SafeForeignPod`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In high-throughput IPC, socket messaging, and FFI bindings, Rust data types are often serialized zero-copy by casting references `&T` directly into byte slices `&[u8]`.
 
+**Requirements:**
 However, arbitrary type serialization is **unsafe** if the type contains:
 1. Indirection pointers (`String`, `Vec`, raw pointers) that become dangling across process boundaries.
 2. Padding bytes containing uninitialized memory, which triggers Undefined Behavior when read as bytes or leaks confidential stack data.
@@ -511,6 +520,9 @@ Requirements:
 5. Write unit tests using `assert_eq!` verifying byte slice length, endianness conversion, and round-trip deserialization.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::mem;
 > use std::slice;
@@ -591,14 +603,15 @@ Requirements:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Safety Assertions as Trait Bounds:** `serialize_pod` is a completely safe function (`fn serialize_pod`) because the safety burden was already verified at the `unsafe impl SafeForeignPod` implementation site.
 > 2. **Memory Alignment & Layout (`#[repr(C)]`):** Rust's default struct layout (`repr(Rust)`) allows field reordering. `#[repr(C)]` guarantees fixed C-compatible struct field order across compilation target boundaries.
 > 3. **Preventing Undefined Behavior:** Passing non-`SafeForeignPod` types (e.g. types with `String` or pointers) into low-level transmutes causes immediate UB. The custom `unsafe trait` creates a compile-time safety gate preventing unsafe transmutes.
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`unsafe` Block](unsafe_block.md) — The core unsafe syntax construct.
@@ -608,7 +621,7 @@ Requirements:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - An `unsafe trait` is a trait whose declaration is prefixed with `unsafe trait`, signaling that implementation carries safety obligations.
 - Implementing an `unsafe trait` requires explicit `unsafe impl` syntax.

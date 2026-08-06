@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Syntax**
+
+**TypeScript Core Syntax** (Disjunctive Type Union Operator): Union types (`T | U`) declare that a value can be one of several possible constituent types.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, a function parameter often handles different data shapes gracefully. For example, a `printId(id)` function might accept `123` (a number) or `"ABC-123"` (a string). 
@@ -59,7 +60,7 @@ function printId(id: number | string) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to access type-specific methods without Narrowing
 
@@ -112,63 +113,119 @@ val = 42; // Valid
 let val: string | number; // Represents a value that can be either string or number
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Nullable Types
+### Exercise 1: Narrowing Union Parameter Types with Control Flow
 
-**Problem:** How do you type a User object where the `age` property might be a number, but it could also be `null` because they haven't set it yet?
+**Scenario:**
+Write a `padLeft` function taking `value: string` and `padding: string | number`.
 
-**Expected output:**
+**Requirements:**
+1. Narrow `padding` using `typeof padding === "number"`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> interface User {
->   // You use a Union with null!
->   age: number | null;
+> function padLeft(value: string, padding: string | number): string {
+>   if (typeof padding === "number") {
+>     return " ".repeat(padding) + value; // padding is number
+>   }
+>   return padding + value; // padding is string
 > }
-> ```
-> - `null` is a valid type in TypeScript!
+
+console.log(padLeft("Hello", 4));      // "    Hello"
+console.log(padLeft("Hello", ">> ")); // ">> Hello"
+```
+
+> #### Technical Explanation
+>
+> 1. Union types (`T | U`) declare that a parameter can accept any of the specified constituent types.
+> 2. `typeof` checks inside `if` branches narrow union types to specific primitive branches.
+> 3. Guarantees type-safe execution for all possible union members.
+
+---
+
+### Exercise 2: Accessing Common Properties on Object Unions
+
+**Scenario:**
+Access common properties on an un-narrowed union of `Cat | Dog` objects.
+
+**Requirements:**
+1. Define `Cat` and `Dog` interfaces sharing a `name: string` property.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Cat {
+>   name: string;
+>   meow(): void;
+> }
+
+interface Dog {
+  name: string;
+  bark(): void;
+}
+
+function getPetName(pet: Cat | Dog): string {
+  // Allowed without narrowing because 'name' exists on BOTH Cat and Dog:
+  return pet.name;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Properties present on ALL members of a union can be accessed directly without type narrowing.
+> 2. Properties unique to specific union members (`meow()`, `bark()`) require type narrowing before invocation.
+> 3. Core rule for union property access.
+
+---
+
+### Exercise 3: Discriminated Union Pattern with Literal Tags
+
+**Scenario:**
+Create a discriminated union representing network request states (`LoadingState`, `SuccessState`, `ErrorState`).
+
+**Requirements:**
+1. Add `state` literal string discriminant property to each interface.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type LoadingState = { state: "loading" };
+> type SuccessState = { state: "success"; data: string[] };
+> type ErrorState = { state: "error"; error: string };
+
+type NetworkState = LoadingState | SuccessState | ErrorState;
+
+function renderUI(status: NetworkState) {
+  switch (status.state) {
+    case "loading":
+      return "Loading...";
+    case "success":
+      return `Data: ${status.data.join(", ")}`;
+    case "error":
+      return `Error: ${status.error}`;
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Discriminated unions share a common literal property (`state`) across all members.
+> 2. `switch` or `if` statements on the discriminant property narrow the union to single concrete branches.
+> 3. Standard pattern for modeling state machines and API request lifecycles.
 
 ---
 
 
 
-### Exercise 2: Discriminated Union Variant Access
-
-**Problem:** Narrow `type State = { status: "loading" } | { status: "success"; data: string }` using `s.status === "success"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> State narrowed to success
-> ```
-> ```typescript
-> type State = { status: "loading" } | { status: "success"; data: string };
-> function render(s: State) {
->   if (s.status === "success") console.log(s.data);
-> }
-> render({ status: "success", data: "State narrowed to success" });
-> ```
->
-> **Explanation:** Discriminant properties (`status`) enable clean control flow type narrowing.
-
----
-
-### Exercise 3: Array Union Precedence
-
-**Problem:** Difference between `string | number[]` (string OR array of numbers) vs `(string | number)[]` (array of strings/numbers).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> (string | number)[] specifies array containing string or number items
-> ```
-> ```typescript
-> console.log("(string | number)[] specifies array containing string or number items");
-> ```
->
-> **Explanation:** Parentheses establish binding operator precedence in array union definitions.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Intersection Types (`&`)](intersection_types.md) — The exact opposite (AND instead of OR).
 - [Type Narrowing](../level_06/type_narrowing.md) — The mandatory step required to actually *use* Union types safely.
 - [Arrays & Tuples](../level_02/arrays_tuples.md) — Related concept: Arrays & Tuples.
@@ -182,7 +239,7 @@ let val: string | number; // Represents a value that can be either string or num
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Union Types** use the `|` (pipe) operator to allow a variable to be one of multiple types (Type A OR Type B).
 - It is frequently used for IDs (string or number) or nullable values (string or null).
 - You can only directly access properties/methods that exist on ALL members of the union.

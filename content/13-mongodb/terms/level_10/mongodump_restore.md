@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Administration / Operations** (BSON Backup & Restore Utilities): mongodump and mongorestore are CLI utilities for creating compressed BSON binary database backups and restoring collection snapshots.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Operating System Shell** (Standalone terminal executable commands run in the bash/linux console. They are **not** run inside the `mongosh` database shell).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To protect against system crashes, administrator errors, or ransom attacks, you must maintain backups of your database.
@@ -76,7 +77,7 @@ mongorestore --db shop_restore /backups/july-2026/shop --gzip
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to execute the 'mongodump' or 'mongorestore' commands inside the 'mongosh' javascript shell prompt
 
@@ -124,68 +125,93 @@ $ mongorestore --db app dump/app # Merges into existing dirty collection
 $ mongorestore --db app --drop dump/app # Drops existing collection before restore
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Backup Command Construction
+### Exercise 1: Exporting Database Backups with `mongodump`
 
-**Problem:** You need to backup your production database. 
--   Database name: `"analytics"`
--   Host: `"production-db.example.com"`
--   Port: `"27017"`
--   Output folder path: `"/data/backup"`
-Write the terminal command to execute this, using gzip compression.
+**Scenario:**
+Export a compressed BSON backup of database `store_db` to directory `/backups/2026-08-05` using `mongodump`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `mongodump --db=store_db --out=/backups/2026-08-05 --gzip`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```bash
-> mongodump --host production-db.example.com --port 27017 --db analytics --out /data/backup --gzip
+> mongodump --uri="mongodb+srv://user:pass@cluster0.abc.mongodb.net/store_db" >   --out=/backups/2026-08-05 >   --gzip
 > ```
-> - The host parameter is `--host`; the database parameter is `--db`.
-> - Include the `--gzip` flag at the end to compress files.
+>
+> #### Technical Explanation
+>
+> 1. `mongodump` exports collection data as raw binary BSON files alongside JSON metadata definitions.
+> 2. `--gzip` compresses output files to minimize backup disk storage.
+> 3. Standard CLI utility for logical database backups.
+
+---
+
+### Exercise 2: Restoring Database Backups with `mongorestore`
+
+**Scenario:**
+Restore compressed database backup `/backups/2026-08-05/store_db` into target database `store_db_restored` using `mongorestore`.
+
+**Requirements:**
+1. Execute `mongorestore --db=store_db_restored --gzip`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> mongorestore --uri="mongodb://localhost:27017" >   --db=store_db_restored >   --gzip >   /backups/2026-08-05/store_db
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `mongorestore` parses BSON backup files and inserts documents and secondary indexes into target collections.
+> 2. `--nsInclude` or `--db` allows restoring backups under new database namespace names.
+> 3. Core command for disaster recovery and staging environment populating.
+
+---
+
+### Exercise 3: Point-in-Time Oplog Backup Restoration
+
+**Scenario:**
+Perform a point-in-time backup restoration using `mongodump --oplog` and `mongorestore --oplogReplay`.
+
+**Requirements:**
+1. Explain `--oplog` capture during logical dumps.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> # 1. Capture dump with active oplog
+> mongodump --uri="..." --oplog --out=/backups/pit_dump
+> 
+> # 2. Restore with oplog replay to capture writes that occurred during dump execution
+> mongorestore --uri="..." --oplogReplay /backups/pit_dump
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `--oplog` captures oplog entries generated while `mongodump` was running.
+> 2. `--oplogReplay` replays those oplog entries after restoring BSON files, ensuring point-in-time transactional consistency.
+> 3. Prevents dirty backup state in high-write production databases.
 
 ---
 
 
 
-### Exercise 2: Exporting Single Collection Dump
-
-**Problem:** CLI command to dump `users` collection from database `app` to directory `backup`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> mongodump --db app --collection users --out backup
-> ```
-> ```bash
-> mongodump --db app --collection users --out backup
-> ```
->
-> **Explanation:** `mongodump` exports collection BSON documents and index metadata.
-
----
-
-### Exercise 3: Restoring Database Dump
-
-**Problem:** CLI command to restore database `app` from `backup/app` directory dropping existing collections.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> mongorestore --db app --drop backup/app
-> ```
-> ```bash
-> mongorestore --db app --drop backup/app
-> ```
->
-> **Explanation:** `mongorestore` restores BSON data dumps into target database collections.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Database (MongoDB Context)](../level_01/database_context.md) — The single `mongod` process.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `mongodump` exports databases to disk; `mongorestore` restores them.
 - Direct NoSQL equivalent to SQL's `pg_dump` and `pg_restore` utilities.
 - Executed inside the operating system terminal, not inside the `mongosh` shell.

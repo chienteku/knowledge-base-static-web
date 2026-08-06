@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Framework**
+
+**Framework Architecture** (Next.js Platform Overview): Next.js is a full-stack React framework providing hybrid rendering, file-based routing, server components, and edge deployment capabilities.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 React is brilliant at rendering UI, but out of the box, it is just a Client-Side Rendering (CSR) library. When you build a pure React app (like with Create React App or Vite), the server sends an empty HTML file to the browser, and the browser must download massive JS files to construct the page. This is terrible for SEO, initial load times, and low-end devices.
@@ -37,7 +38,7 @@ In version 13, Next.js completely rewrote its architecture, introducing the **Ap
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating Next.js like a traditional SPA
 
@@ -86,62 +87,107 @@ import Image from 'next/image';
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Framework vs Library
+### Exercise 1: Configuring Master Next.js Options in `next.config.js`
 
-**Problem:** Why is React called a "Library", but Next.js is called a "Framework"?
+**Scenario:**
+Configure strict React mode, custom redirects, and experimental options in `next.config.js`.
 
-**Expected output:**
+**Requirements:**
+1. Export configuration object in `next.config.js`.
+
 > [!check]- Answer
-> ```text
-> A Library is a tool you call to perform a specific task (React just handles UI rendering).
-> A Framework provides an architecture. It calls *your* code. Next.js dictates where you put your files (Routing), how you fetch data, and how your code is bundled and deployed. It provides the entire house; React is just the bricks.
-> ```
-> - Who is in control of the file structure?
+>
+> #### Implementation
+>
+> ```javascript
+> /** @type {import('next').NextConfig} */
+> const nextConfig = {
+>   reactStrictMode: true,
+>   async redirects() {
+>     return [
+>       {
+>         source: "/old-blog/:slug",
+>         destination: "/blog/:slug",
+>         permanent: true
+>       }
+>     ];
+>   }
+> };
+
+module.exports = nextConfig;
+```
+
+> #### Technical Explanation
+>
+> 1. `next.config.js` is the master configuration file for Next.js build and runtime behavior.
+> 2. `redirects()` executes server-side 301/302 redirects before routing logic.
+> 3. Central entry point for framework customization.
 
 ---
 
-### Exercise 2: Next.js Full-Stack Architecture
+### Exercise 2: Building Production Output with `next build`
 
-**Problem:** List 3 core production capabilities provided out-of-the-box by Next.js over vanilla React.
+**Scenario:**
+Execute the Next.js production build process and analyze output compilation logs.
 
-**Expected output:**
+**Requirements:**
+1. Explain `next build` outputs.
+
 > [!check]- Answer
-> ```text
-> 1. Hybrid Server Rendering (RSC, SSR, SSG, ISR)
-> 2. File-system based Routing
-> 3. Built-in performance optimizations (Image, Font, Script)
-> ```
-> - Hybrid Rendering: RSC, SSR, SSG, ISR.
-> - File-system routing: App Router & Pages Router.
-> - Automatic performance optimization: `next/image`, `next/font`.
+>
+> #### Implementation
+>
+> ```bash
+> # Production Build Command
+> npm run build
 > 
-> ```text
-> Full-stack React framework with server rendering and optimization.
+> # Output Symbols:
+> # ○  (Static)   prerendered as static content
+> # ƒ  (Dynamic)  server-rendered on demand using Node.js
 > ```
+
+> #### Technical Explanation
+>
+> 1. `next build` compiles TypeScript, bundles Server/Client components, and pre-renders static routes.
+> 2. Generates optimized build output inside `.next/` directory.
+> 3. Distinguishes static routes (`○`) from dynamic SSR routes (`ƒ`).
 
 ---
 
-### Exercise 3: Vercel Platform Integration
+### Exercise 3: Inspecting `.next` Build Artifacts
 
-**Problem:** Why does Next.js deploy seamlessly to Vercel's Edge Network?
+**Scenario:**
+Explain the purpose of `.next/server` and `.next/static` build directories.
 
-**Expected output:**
+**Requirements:**
+1. Contrast server bundle directory vs static assets directory.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Next.js is maintained by Vercel; its build output compiles directly into serverless and edge functions optimized for Vercel CDN infrastructure.
+> .next Directory Inspection:
+> - .next/server/: Compiled React Server Components and server API routes.
+> - .next/static/: Client JavaScript bundles, CSS stylesheets, and pre-rendered HTML.
 > ```
-> - Build outputs compile to serverless and edge function primitives.
-> 
-> ```text
-> Next.js build targets native Vercel Edge/Serverless primitives.
-> ```
+
+> #### Technical Explanation
+>
+> 1. `.next/server/` contains Node.js server code executed at runtime.
+> 2. `.next/static/` contains public assets uploaded to CDN edge nodes.
+> 3. Standard Next.js compilation artifact structure.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Dynamic Rendering (SSR)](../level_08/ssr.md) — The core performance feature of Next.js.
 - [App Router vs Pages Router](app_router_vs_pages.md) — The two different architectures of Next.js.
 - [Client-Side Rendering (CSR) / SPA](csr_spa.md) — Related concept: Client-Side Rendering (CSR) / SPA.
@@ -153,7 +199,7 @@ import Image from 'next/image';
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Next.js** is a full-stack framework built on top of React.
 - It solves React's biggest weaknesses: SEO, slow initial load times, and lack of built-in backend features.
 - It achieves this primarily through Server-Side Rendering (SSR) and React Server Components.

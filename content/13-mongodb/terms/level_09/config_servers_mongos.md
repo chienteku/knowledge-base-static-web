@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Administration / Operations** (Sharded Cluster Metadata & Routing): Config Servers store cluster configuration metadata while mongos query routers intercept and route client queries to appropriate shard nodes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Must be deployed on separate physical servers or container runtimes to prevent single points of failure. Manage cluster communication routing).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a sharded database, data is split across multiple independent servers. 
@@ -76,7 +77,7 @@ const uri = "mongodb://mongos-router-01.example.com:27017,mongos-router-02.examp
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Connecting client applications directly to a shard replica set node instead of the 'mongos' router when using sharding
 
@@ -124,69 +125,95 @@ $ mongod --configsvr ... # Single node config server
 Deploy 3-node Config Server Replica Set (CSRS)
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Execution Path
+### Exercise 1: Routing Queries Through `mongos`
 
-**Problem:** You execute the query `db.users.findOne({ customer_id: "alice" })` from your Node.js application in a sharded cluster. 
-Trace the physical path of this query across the cluster components (write the names of the components in the correct, sequential execution order).
+**Scenario:**
+Connect application driver to a sharded cluster via `mongos` router instance endpoints.
 
-**Expected output:**
+**Requirements:**
+1. Specify `mongos` hosts in connection URI.
+
 > [!check]- Answer
-> ```text
-> 1. Node.js Application (Sends query to the `mongos` router).
-> 2. `mongos` Router (Intercepts query, checks its cached map from the Config Servers to locate the shard owning "alice").
-> 3. Shard Replica Set (mongos forwards the query to the Primary node of that specific shard).
-> 4. `mongos` Router (Shard returns document to mongos).
-> 5. Node.js Application (mongos returns document to client).
+>
+> #### Implementation
+>
+> ```javascript
+> const uri = "mongodb://mongos1.example.com:27017,mongos2.example.com:27017/store_db";
+> const client = new MongoClient(uri);
 > ```
-> - The client application never communicates directly with config servers or shards.
-> - The stateless router acts as the coordinator middleman.
+>
+> #### Technical Explanation
+>
+> 1. `mongos` acts as a stateless query router intercepting client database requests.
+> 2. Queries Config Servers to cache cluster chunk location routing tables.
+> 3. Hides sharded cluster topology from client application code.
+
+---
+
+### Exercise 2: Inspecting Config Server Metadata Collections
+
+**Scenario:**
+Inspect the `config.shards` and `config.chunks` metadata collections on Config Servers.
+
+**Requirements:**
+1. Query `config.shards` and `config.chunks`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> use config;
+> console.log("Shard Nodes:", db.shards.find().toArray());
+> console.log("Chunk Count:", db.chunks.countDocuments());
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Config Servers run as a dedicated 3-node replica set (`CSRS`) storing cluster metadata.
+> 2. `config.shards` tracks registered shard replica set connection strings.
+> 3. `config.chunks` tracks chunk ranges and target shard assignments.
+
+---
+
+### Exercise 3: High Availability `mongos` Router Pools
+
+**Scenario:**
+Explain how listing multiple `mongos` instances in the driver URI provides connection failover.
+
+**Requirements:**
+1. Describe multi-mongos client connection pool routing.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Multi-Mongos Architecture:
+> - Client drivers maintain active connection pools to all listed mongos instances.
+> - If mongos1 crashes, driver automatically routes queries to mongos2 seamlessly.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `mongos` instances are stateless and can be scaled horizontally behind load balancers.
+> 2. Driver automatically fails over to healthy `mongos` instances.
+> 3. Eliminates single points of failure in sharded clusters.
 
 ---
 
 
 
-### Exercise 2: Connecting Drivers to `mongos` Router Pool
-
-**Problem:** Construct URI connecting client driver to 2 `mongos` instances (`mongos1:27017`, `mongos2:27017`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> mongodb://mongos1:27017,mongos2:27017/app
-> ```
-> ```text
-> mongodb://mongos1:27017,mongos2:27017/app
-> ```
->
-> **Explanation:** Connection URIs specify `mongos` router pools for automatic failover and load balancing.
-
----
-
-### Exercise 3: Config Server Replica Set Role
-
-**Problem:** What metadata is stored by Config Server Replica Sets (CSRS)? (Metadata mapping chunks to specific cluster shards).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Cluster metadata mapping dataset chunks to specific storage shards
-> ```
-> ```text
-> Cluster metadata mapping dataset chunks to specific storage shards
-> ```
->
-> **Explanation:** Config servers maintain authoritative cluster routing metadata.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Sharding (Horizontal Scaling)](sharding.md) — The parent partitioning concept.
 - [Chunks & Balancing](chunks_balancing.md) — The balancing logic.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `mongos` is the stateless router interface for client applications.
 - Config Servers store the master metadata mapping chunks to shards.
 - Config Servers must be configured as a replica set to prevent cluster lockups.

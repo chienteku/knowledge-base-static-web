@@ -2,7 +2,7 @@
   "$schema": "../../_meta/relationships.schema.json",
   "module": "08-typescript",
   "version": 1,
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-06",
   "terms": {
     "static_dynamic_typing": {
       "level": 1,
@@ -66,18 +66,18 @@
           "description": "Related concept: Branded / Nominal Types."
         },
         {
-          "module": "08-typescript",
           "term": "type_aliases",
+          "module": "08-typescript",
           "description": "Type aliases."
         },
         {
-          "module": "08-typescript",
           "term": "excess_property_checks",
+          "module": "08-typescript",
           "description": "Excess property checks."
         },
         {
-          "module": "08-typescript",
           "term": "typescript",
+          "module": "08-typescript",
           "description": "Related concept: TypeScript."
         }
       ]
@@ -198,8 +198,8 @@
           "description": "Related concept: `ReturnType<T>`."
         },
         {
-          "module": "08-typescript",
           "term": "satisfies_operator",
+          "module": "08-typescript",
           "description": "satisfies operator."
         }
       ]
@@ -260,8 +260,8 @@
           "description": "The fundamental difference between TS and JS."
         },
         {
-          "module": "08-typescript",
           "term": "structural_typing",
+          "module": "08-typescript",
           "description": "Structural type system."
         }
       ]
@@ -299,8 +299,8 @@
           "description": "Related concept: Strict Mode."
         },
         {
-          "module": "08-typescript",
           "term": "void_never",
+          "module": "08-typescript",
           "description": "Related concept: `void` & `never`."
         }
       ]
@@ -333,8 +333,8 @@
           "description": "Related concept: Rest Parameters (`...`)."
         },
         {
-          "module": "08-typescript",
           "term": "readonly",
+          "module": "08-typescript",
           "description": "Readonly tuples and arrays."
         }
       ]
@@ -430,13 +430,13 @@
           "description": "The process of unlocking an `unknown` variable."
         },
         {
-          "module": "08-typescript",
           "term": "void_never",
+          "module": "08-typescript",
           "description": "Related concept: `void` & `never`."
         },
         {
-          "module": "08-typescript",
           "term": "type_assertions",
+          "module": "08-typescript",
           "description": "Related concept: Type Assertions (`as`)."
         }
       ]
@@ -447,8 +447,8 @@
       "display_name": "`void` & `never`",
       "prerequisites": [
         {
-          "module": "08-typescript",
           "term": "primitive_types",
+          "module": "08-typescript",
           "description": "TypeScript primitive types overview."
         }
       ],
@@ -479,13 +479,13 @@
           "description": "Related concept: Exhaustiveness Checking (`never`)."
         },
         {
-          "module": "08-typescript",
           "term": "unknown",
+          "module": "08-typescript",
           "description": "unknown type."
         },
         {
-          "module": "08-typescript",
           "term": "any",
+          "module": "08-typescript",
           "description": "any type."
         }
       ]
@@ -557,8 +557,8 @@
           "description": "Overriding compiler type decisions."
         },
         {
-          "module": "08-typescript",
           "term": "structural_typing",
+          "module": "08-typescript",
           "description": "Structural typing."
         }
       ]
@@ -574,8 +574,8 @@
           "description": "The structure this syntax is used within."
         },
         {
-          "module": "08-typescript",
           "term": "object_types",
+          "module": "08-typescript",
           "description": "Defining dynamic object key-value properties."
         }
       ],
@@ -767,8 +767,8 @@
           "description": "Where the `Readonly<T>` global helper lives."
         },
         {
-          "module": "08-typescript",
           "term": "arrays_tuples",
+          "module": "08-typescript",
           "description": "Related concept: Arrays & Tuples."
         }
       ]
@@ -1108,8 +1108,8 @@
           "description": "The process that `satisfies` avoids."
         },
         {
-          "module": "08-typescript",
           "term": "type_inference",
+          "module": "08-typescript",
           "description": "Preserving inferred types."
         }
       ]
@@ -1152,8 +1152,8 @@
           "description": "Related concept: Generic Interfaces & Classes."
         },
         {
-          "module": "08-typescript",
           "term": "structural_typing",
+          "module": "08-typescript",
           "description": "Related concept: Structural Typing / Duck Typing."
         }
       ]
@@ -1206,8 +1206,8 @@
           "description": "Related concept: Const Assertions (`as const`)."
         },
         {
-          "module": "08-typescript",
           "term": "unknown",
+          "module": "08-typescript",
           "description": "Safely asserting unknown types."
         }
       ]
@@ -1275,8 +1275,8 @@
           "description": "Related concept: `Record<Keys, Type>`."
         },
         {
-          "module": "08-typescript",
           "term": "discriminated_unions",
+          "module": "08-typescript",
           "description": "Discriminated unions."
         }
       ]
@@ -1387,13 +1387,13 @@
           "description": "Related concept: `in` Operator Narrowing."
         },
         {
-          "module": "08-typescript",
           "term": "union_types",
+          "module": "08-typescript",
           "description": "Union types."
         },
         {
-          "module": "08-typescript",
           "term": "type_narrowing",
+          "module": "08-typescript",
           "description": "Related concept: Type Narrowing."
         }
       ]
@@ -1529,8 +1529,8 @@
           "description": "Related concept: Exhaustiveness Checking (`never`)."
         },
         {
-          "module": "08-typescript",
           "term": "discriminated_unions",
+          "module": "08-typescript",
           "description": "Discriminated union narrowing."
         }
       ]
@@ -1597,8 +1597,8 @@
           "description": "The other modifier applied inside `<...>`."
         },
         {
-          "module": "08-typescript",
           "term": "generics",
+          "module": "08-typescript",
           "description": "Related concept: Generics Overview (`<T>`)."
         }
       ]
@@ -1641,8 +1641,8 @@
           "description": "Related concept: Generic Default Types (`=`)."
         },
         {
-          "module": "08-typescript",
           "term": "keyof",
+          "module": "08-typescript",
           "description": "keyof constraints."
         }
       ]
@@ -1675,8 +1675,8 @@
           "description": "The OOP structures being made generic."
         },
         {
-          "module": "08-typescript",
           "term": "generics",
+          "module": "08-typescript",
           "description": "Related concept: Generics Overview (`<T>`)."
         }
       ]
@@ -1714,13 +1714,13 @@
           "description": "Related concept: Conditional Types."
         },
         {
-          "module": "08-typescript",
           "term": "default_generics",
+          "module": "08-typescript",
           "description": "Default generic parameters."
         },
         {
-          "module": "08-typescript",
           "term": "generic_interfaces_classes",
+          "module": "08-typescript",
           "description": "Generic interfaces and classes."
         }
       ]
@@ -1933,8 +1933,8 @@
           "description": "Related concept: Mapped Types."
         },
         {
-          "module": "08-typescript",
           "term": "utility_types",
+          "module": "08-typescript",
           "description": "Related concept: Utility Types Overview."
         }
       ]
@@ -1982,8 +1982,8 @@
           "description": "Sibling utilities that extract parameters and Promise contents."
         },
         {
-          "module": "08-typescript",
           "term": "typeof",
+          "module": "08-typescript",
           "description": "typeof function return type."
         }
       ]
@@ -2041,8 +2041,8 @@
           "description": "Related concept: Conditional Types."
         },
         {
-          "module": "08-typescript",
           "term": "record",
+          "module": "08-typescript",
           "description": "Record utility type."
         }
       ]
@@ -2124,13 +2124,13 @@
           "description": "Related concept: `Parameters` / `ConstructorParameters` / `Awaited`."
         },
         {
-          "module": "08-typescript",
           "term": "template_literal_types",
+          "module": "08-typescript",
           "description": "Template literal types."
         },
         {
-          "module": "08-typescript",
           "term": "mapped_types",
+          "module": "08-typescript",
           "description": "Mapped types."
         }
       ]
@@ -2146,8 +2146,8 @@
           "description": "The structures you are accessing properties from."
         },
         {
-          "module": "08-typescript",
           "term": "keyof",
+          "module": "08-typescript",
           "description": "Extracting property keys using keyof operator."
         }
       ],
@@ -2250,11 +2250,6 @@
       ],
       "related": [
         {
-          "term": "typeof",
-          "module": "03-javascript",
-          "description": "Used alongside `keyof` to read JS objects."
-        },
-        {
           "term": "mapped_types",
           "module": "08-typescript",
           "description": "The advanced feature that relies entirely on `keyof`."
@@ -2280,9 +2275,14 @@
           "description": "Related concept: `typeof` Operator."
         },
         {
-          "module": "08-typescript",
           "term": "generic_constraints",
+          "module": "08-typescript",
           "description": "Related concept: Generic Constraints (`extends`)."
+        },
+        {
+          "term": "typeof",
+          "module": "03-javascript",
+          "description": "Used alongside `keyof` to read JS objects."
         }
       ]
     },
@@ -2334,13 +2334,13 @@
           "description": "Related concept: Template Literal Types."
         },
         {
-          "module": "08-typescript",
           "term": "indexed_access",
+          "module": "08-typescript",
           "description": "Indexed access types."
         },
         {
-          "module": "08-typescript",
           "term": "conditional_types",
+          "module": "08-typescript",
           "description": "Related concept: Conditional Types."
         }
       ]
@@ -2383,8 +2383,8 @@
           "description": "Related concept: Key Remapping in Mapped Types (`as`)."
         },
         {
-          "module": "08-typescript",
           "term": "conditional_types",
+          "module": "08-typescript",
           "description": "Related concept: Conditional Types."
         }
       ]
@@ -2400,8 +2400,8 @@
           "description": "The runtime version of this keyword."
         },
         {
-          "module": "08-typescript",
           "term": "type_aliases",
+          "module": "08-typescript",
           "description": "Creating type aliases from JavaScript values."
         }
       ],
@@ -2446,8 +2446,8 @@
           "description": "How you apply an Interface to a class (similar to how you `extends` an abstract class)."
         },
         {
-          "module": "08-typescript",
           "term": "classes",
+          "module": "08-typescript",
           "description": "Related concept: Classes Overview."
         }
       ]
@@ -2539,8 +2539,8 @@
           "description": "Related concept: Parameter Properties."
         },
         {
-          "module": "08-typescript",
           "term": "abstract_classes",
+          "module": "08-typescript",
           "description": "Abstract classes."
         },
         {
@@ -2758,8 +2758,8 @@
           "description": "Related concept: Type-Only Imports & Exports."
         },
         {
-          "module": "08-typescript",
           "term": "definitely_typed",
+          "module": "08-typescript",
           "description": "DefinitelyTyped / @types."
         }
       ]
@@ -2775,8 +2775,8 @@
           "description": "The `.d.ts` files that DefinitelyTyped provides."
         },
         {
-          "module": "08-typescript",
           "term": "tsconfig",
+          "module": "08-typescript",
           "description": "Configuring type declaration resolution in tsconfig.json."
         }
       ],
@@ -2814,8 +2814,8 @@
           "description": "Usually combined with Literal Types to replace Enums."
         },
         {
-          "module": "08-typescript",
           "term": "primitive_types",
+          "module": "08-typescript",
           "description": "TypeScript numeric and string enum declarations."
         }
       ],

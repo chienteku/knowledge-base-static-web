@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Query Operator** (Spatial Location Queries): Geospatial Query Operators ($near, $geoWithin, $geoIntersects) execute spatial proximity and boundary containment queries over GeoJSON geometries.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Requires using standardized GeoJSON objects. Geospatial operators automatically calculate distances using spherical geometry formulas (haversine formula) on a model of the Earth's surface).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Modern mobile applications require location-aware databases:
@@ -109,7 +110,7 @@ db.cafes.find({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing coordinates with Latitude first, violating GeoJSON standards
 
@@ -161,84 +162,115 @@ db.places.createIndex({ location: "2dsphere" });
 db.places.find({ location: { $near: { $geometry: point } } });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Proximity Query Construction
+### Exercise 1: Proximity Search with `$near` and `$maxDistance`
 
-**Problem:** You are building a store locator API. You receive a user's location at longitude `-73.935242` and latitude `40.730610`. 
-Write the query to find all documents in the `stores` collection located within `5000` meters (5 km) of the user, sorting them closest-first.
+**Scenario:**
+Find all restaurant locations in collection `places` within 2,000 meters of longitude `-73.9667` and latitude `40.78` using a `2dsphere` index.
 
-**Expected output:**
+**Requirements:**
+1. Use `$near` with `$geometry` Point and `$maxDistance: 2000`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.stores.find({
+> db.places.find({
 >   location: {
 >     $near: {
 >       $geometry: {
 >         type: "Point",
->         coordinates: [ -73.935242, 40.730610 ]
+>         coordinates: [-73.9667, 40.78]
 >       },
->       $maxDistance: 5000
+>       $maxDistance: 2000
 >     }
 >   }
 > });
 > ```
-> - Order the user's coordinates with longitude `-73.935242` first.
-> - Supply the max distance parameter in meters inside the `$near` subdocument.
+>
+> #### Technical Explanation
+>
+> 1. `$near` calculates spherical distances over GeoJSON Point geometries.
+> 2. `$maxDistance` specifies maximum proximity radius in meters.
+> 3. Requires a `2dsphere` spatial index on field `location`.
 
 ---
 
+### Exercise 2: Boundary Polygon Containment with `$geoWithin`
 
+**Scenario:**
+Query delivery drivers located inside a delivery zone GeoJSON Polygon boundary.
 
-### Exercise 2: Proximity Search with `$near`
+**Requirements:**
+1. Use `$geoWithin` with `$geometry` Polygon.
 
-**Problem:** Find places within 5000 meters of GeoJSON Point `[-73.97, 40.77]` using `$near` and `$maxDistance`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> db.places.find({ location: { $near: { $geometry: { type: "Point", coordinates: [-73.97, 40.77] }, $maxDistance: 5000 } } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.places.find({
+> db.drivers.find({
 >   location: {
->     $near: {
->       $geometry: { type: "Point", coordinates: [-73.97, 40.77] },
->       $maxDistance: 5000
+>     $geoWithin: {
+>       $geometry: {
+>         type: "Polygon",
+>         coordinates: [[
+>           [-74.0, 40.7],
+>           [-73.9, 40.7],
+>           [-73.9, 40.8],
+>           [-74.0, 40.8],
+>           [-74.0, 40.7]
+>         ]]
+>       }
 >     }
 >   }
 > });
 > ```
 >
-> **Explanation:** `$near` with `$maxDistance` returns spatial documents sorted by distance from query points.
+> #### Technical Explanation
+>
+> 1. `$geoWithin` filters geometries contained entirely inside a target GeoJSON boundary.
+> 2. Does not require sorted distance output.
+> 3. Underpins geofencing applications.
 
 ---
 
-### Exercise 3: GeoJSON Polygon Containment with `$geoWithin`
+### Exercise 3: Creating `2dsphere` Spatial Indexes
 
-**Problem:** Query places inside GeoJSON Polygon using `$geoWithin`.
+**Scenario:**
+Create a 2D sphere index on field `location` in collection `places` to enable geospatial query execution.
 
-**Expected output:**
+**Requirements:**
+1. Execute `createIndex({ location: "2dsphere" })`.
+
 > [!check]- Answer
-> ```text
-> db.places.find({ location: { $geoWithin: { $geometry: polygonDoc } } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.places.find({
->   location: { $geoWithin: { $geometry: polygonDoc } }
-> });
+> db.places.createIndex({ location: "2dsphere" });
 > ```
 >
-> **Explanation:** `$geoWithin` finds points enclosed within target polygon boundaries.
+> #### Technical Explanation
+>
+> 1. `"2dsphere"` indexes calculate distances over spherical Earth geodesics (WGS84 datum).
+> 2. Required for `$near` and `$geoIntersects` queries over GeoJSON points and polygons.
+> 3. Converts spatial scans into fast spatial index lookups.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [`find()` / `findOne()`](../level_03/find.md) — The query framework.
 - [Geospatial Index (`2dsphere` / `2d`)](../level_07/geospatial_index.md) — Related concept: Geospatial Index (`2dsphere` / `2d`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Geospatial queries check proximity and containment shapes natively.
 - Relies on GeoJSON coordinate notation (`type: "Point"`).
 - **Longitude comes first** in coordinates: `[ Longitude, Latitude ]` ("Lo before La").

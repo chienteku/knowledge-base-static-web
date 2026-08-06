@@ -158,7 +158,7 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Volume Event Aggregator & Heavy Stress Testing
 
-**Problem:**
+**Scenario:**
 In high-throughput financial or metrics ingestion systems, software engineers must ensure that local development TDD runs (`cargo test`) complete in milliseconds. However, heavy soak/stress tests processing millions of transactions are still required to detect memory leaks, boundary errors, or balance drift.
 
 Implement a financial transaction ledger system:
@@ -172,6 +172,9 @@ Implement a financial transaction ledger system:
 6. Use assertions including `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, Clone, PartialEq, Eq)]
 > pub struct Transaction {
@@ -292,7 +295,7 @@ Implement a financial transaction ledger system:
 
 ### Exercise 2: Payment Gateway Client & Live Integration Gate
 
-**Problem:**
+**Scenario:**
 Microservice architectures frequently communicate with external HTTP services (e.g., Stripe or PayPal). In-memory mock clients allow instant unit testing, while live sandbox integration tests verify authentication headers and remote server responses. However, executing live integration tests on every local build causes network bottlenecks, rate limiting, and failures when developers are offline.
 
 Design a Payment Gateway module:
@@ -306,6 +309,9 @@ Design a Payment Gateway module:
 6. Verify behavior using `assert_eq!`, `assert!`, `assert_ne!`, `matches!`, and `panic!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, Clone, PartialEq, Eq)]
 > pub enum PaymentStatus {
@@ -451,7 +457,7 @@ Design a Payment Gateway module:
 
 ### Exercise 3: Database Schema Migration Engine & Destructive Migration Testing
 
-**Problem:**
+**Scenario:**
 Database migration frameworks must run schema structure checks quickly, while isolating tests that alter large production-like database tables or perform destructive column operations.
 
 Design a schema migration engine:
@@ -465,6 +471,9 @@ Design a schema migration engine:
 6. Include assertions: `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, Clone, PartialEq, Eq)]
 > pub struct MigrationStep {

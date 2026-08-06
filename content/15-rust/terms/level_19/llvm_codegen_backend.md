@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Compiler Architecture**: LLVM code generation and optimization backend.
+
+
+**Rust Compiler Subsystem (LLVM target machine code generator)**: LLVM code generation and optimization backend.
 
 ---
 
@@ -222,7 +224,7 @@ Rustc guarantees safety before LLVM lowering; invalid LLVM IR causes undefined b
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Mir Mid Level Ir](mir_mid_level_ir.md) — MIR intermediate representation.
 - [Link-Time Optimization (LTO)](../level_15/link_time_optimization.md) — Link time optimization.

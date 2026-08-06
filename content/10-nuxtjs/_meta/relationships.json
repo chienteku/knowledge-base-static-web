@@ -2,7 +2,7 @@
   "$schema": "../../_meta/relationships.schema.json",
   "module": "10-nuxtjs",
   "version": 1,
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-06",
   "terms": {
     "auto_imports": {
       "level": 1,
@@ -37,8 +37,8 @@
           "description": "Related concept: Vue 3 Composition API Context."
         },
         {
-          "module": "10-nuxtjs",
           "term": "nuxt_3_overview",
+          "module": "10-nuxtjs",
           "description": "Related concept: Nuxt 3 Overview."
         }
       ]
@@ -159,18 +159,18 @@
           "description": "Related concept: Nuxt DevTools."
         },
         {
-          "module": "10-nuxtjs",
           "term": "server_routes",
+          "module": "10-nuxtjs",
           "description": "Nitro server routes."
         },
         {
-          "module": "10-nuxtjs",
           "term": "h3_handlers",
+          "module": "10-nuxtjs",
           "description": "H3 event handlers."
         },
         {
-          "module": "10-nuxtjs",
           "term": "standalone_build",
+          "module": "10-nuxtjs",
           "description": "Related concept: Standalone Build (Node server)."
         },
         {
@@ -213,8 +213,8 @@
           "description": "The core UI framework."
         },
         {
-          "module": "10-nuxtjs",
           "term": "auto_imports",
+          "module": "10-nuxtjs",
           "description": "Auto-import system."
         }
       ]
@@ -236,8 +236,8 @@
           "description": "The composable helper used to write head properties."
         },
         {
-          "module": "10-nuxtjs",
           "term": "use_seo_meta",
+          "module": "10-nuxtjs",
           "description": "useSeoMeta composable."
         }
       ]
@@ -310,8 +310,8 @@
           "description": "Related concept: `.output/` Directory."
         },
         {
-          "module": "10-nuxtjs",
           "term": "hybrid_rendering",
+          "module": "10-nuxtjs",
           "description": "Hybrid rendering modes."
         }
       ]
@@ -378,8 +378,8 @@
           "description": "The middleware handlers attached via this macro."
         },
         {
-          "module": "10-nuxtjs",
           "term": "layouts_directory",
+          "module": "10-nuxtjs",
           "description": "Custom layout selection."
         }
       ]
@@ -495,13 +495,13 @@
           "description": "Related concept: `<NuxtPage>` & `<NuxtLayout>` Components."
         },
         {
-          "module": "10-nuxtjs",
           "term": "pages_directory",
+          "module": "10-nuxtjs",
           "description": "pages/ directory."
         },
         {
-          "module": "10-nuxtjs",
           "term": "define_page_meta",
+          "module": "10-nuxtjs",
           "description": "Related concept: `definePageMeta` Compiler Macro."
         }
       ]
@@ -534,8 +534,8 @@
           "description": "The folder where layout templates are stored."
         },
         {
-          "module": "10-nuxtjs",
           "term": "pages_directory",
+          "module": "10-nuxtjs",
           "description": "Related concept: `pages/` Directory."
         }
       ]
@@ -598,13 +598,13 @@
           "description": "Related concept: Route Middleware."
         },
         {
-          "module": "10-nuxtjs",
           "term": "nuxt_page_layout",
+          "module": "10-nuxtjs",
           "description": "NuxtPage component."
         },
         {
-          "module": "10-nuxtjs",
           "term": "layouts_directory",
+          "module": "10-nuxtjs",
           "description": "layouts/ directory."
         }
       ]
@@ -758,8 +758,8 @@
           "description": "Related concept: Nuxt Server Components (Islands)."
         },
         {
-          "module": "10-nuxtjs",
           "term": "nuxtlink_component",
+          "module": "10-nuxtjs",
           "description": "NuxtLink prefetching."
         }
       ]
@@ -787,8 +787,8 @@
           "description": "The destination of internal NuxtLinks."
         },
         {
-          "module": "10-nuxtjs",
           "term": "lazy_components",
+          "module": "10-nuxtjs",
           "description": "Related concept: Lazy Components."
         }
       ]
@@ -940,8 +940,8 @@
           "description": "How this composable is accessed."
         },
         {
-          "module": "10-nuxtjs",
           "term": "composition_api_context",
+          "module": "10-nuxtjs",
           "description": "Nuxt runtime context and composables overview."
         }
       ],
@@ -1247,8 +1247,8 @@
           "description": "How the app config is exposed to components."
         },
         {
-          "module": "10-nuxtjs",
           "term": "nuxt_config",
+          "module": "10-nuxtjs",
           "description": "Configuring application-level reactive constants."
         }
       ],
@@ -1308,8 +1308,8 @@
           "description": "Related concept: Nuxt DevTools."
         },
         {
-          "module": "10-nuxtjs",
           "term": "route_rules",
+          "module": "10-nuxtjs",
           "description": "Route rules."
         }
       ]
@@ -1400,8 +1400,8 @@
           "description": "The tool used for scripts and stylesheets."
         },
         {
-          "module": "10-nuxtjs",
           "term": "seo",
+          "module": "10-nuxtjs",
           "description": "SEO fundamentals."
         }
       ]
@@ -1478,8 +1478,8 @@
           "description": "Related concept: `server/routes/`."
         },
         {
-          "module": "10-nuxtjs",
           "term": "nitro_engine",
+          "module": "10-nuxtjs",
           "description": "Nitro server engine."
         }
       ]
@@ -1590,8 +1590,8 @@
           "description": "The utilities used to parse incoming webhooks in these routes."
         },
         {
-          "module": "10-nuxtjs",
           "term": "nitro_engine",
+          "module": "10-nuxtjs",
           "description": "Related concept: Nitro Engine."
         },
         {
@@ -1721,8 +1721,8 @@
           "description": "How you retrieve the provided `$helpers`."
         },
         {
-          "module": "10-nuxtjs",
           "term": "nuxt_modules",
+          "module": "10-nuxtjs",
           "description": "Related concept: Nuxt Modules System."
         }
       ]
@@ -1809,8 +1809,8 @@
           "description": "Related concept: Single Page Application (SPA) Mode."
         },
         {
-          "module": "10-nuxtjs",
           "term": "nuxt_config",
+          "module": "10-nuxtjs",
           "description": "nuxt.config.ts configuration."
         }
       ]
@@ -1911,18 +1911,18 @@
           "description": "Related concept: Edge-Side Rendering (ESR)."
         },
         {
-          "module": "10-nuxtjs",
           "term": "ssg",
+          "module": "10-nuxtjs",
           "description": "Static site generation."
         },
         {
-          "module": "10-nuxtjs",
           "term": "spa",
+          "module": "10-nuxtjs",
           "description": "Single page app mode."
         },
         {
-          "module": "10-nuxtjs",
           "term": "universal_rendering",
+          "module": "10-nuxtjs",
           "description": "Related concept: Universal Rendering (SSR)."
         }
       ]
@@ -1955,8 +1955,8 @@
           "description": "An example of a tool that is installed via a Nuxt Module."
         },
         {
-          "module": "10-nuxtjs",
           "term": "plugins_directory",
+          "module": "10-nuxtjs",
           "description": "Plugin registration."
         }
       ]
@@ -2018,8 +2018,8 @@
           "description": "Another non-Node.js deployment strategy, but with perfect SEO."
         },
         {
-          "module": "10-nuxtjs",
           "term": "hybrid_rendering",
+          "module": "10-nuxtjs",
           "description": "Related concept: Hybrid Rendering."
         }
       ]
@@ -2057,8 +2057,8 @@
           "description": "Related concept: `.output/` Directory."
         },
         {
-          "module": "10-nuxtjs",
           "term": "hybrid_rendering",
+          "module": "10-nuxtjs",
           "description": "Related concept: Hybrid Rendering."
         }
       ]
@@ -2079,8 +2079,8 @@
           "description": "Specifically, the use of top-level `await` inside `<script setup>`."
         },
         {
-          "module": "10-nuxtjs",
           "term": "hydration",
+          "module": "10-nuxtjs",
           "description": "Asynchronous component resolution during client hydration."
         }
       ],
@@ -2343,8 +2343,8 @@
           "description": "Related concept: Edge Deployment."
         },
         {
-          "module": "10-nuxtjs",
           "term": "nitro_engine",
+          "module": "10-nuxtjs",
           "description": "Nitro standalone server."
         }
       ]

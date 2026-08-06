@@ -127,7 +127,7 @@ Cargo.lock # ❌ Wrong for application binaries!
 
 ### Exercise 1: The Code Review
 
-**Problem:** You are doing a Code Review for a junior developer. They are building a command-line tool (a binary). You notice they have manually modified a number inside `Cargo.lock`, and they have also added `Cargo.lock` to the `.gitignore` file. 
+**Scenario:** You are doing a Code Review for a junior developer. They are building a command-line tool (a binary). You notice they have manually modified a number inside `Cargo.lock`, and they have also added `Cargo.lock` to the `.gitignore` file. 
 
 What two pieces of feedback should you give them?
 
@@ -139,7 +139,7 @@ What two pieces of feedback should you give them?
 
 ### Exercise 2: Surgical Dependency Updates
 
-**Problem:**
+**Scenario:**
 Your team runs `cargo audit` and finds a security advisory for version `0.8.3` of `rand`. The latest patched version is `0.8.6`. You have 20 other dependencies you do NOT want to change. Answer the following:
 
 1. What command updates **only** `rand` in `Cargo.lock` (staying within the semver range declared in `Cargo.toml`)?
@@ -161,14 +161,15 @@ Your team runs `cargo audit` and finds a security advisory for version `0.8.3` o
 > 1. Edit `Cargo.toml`: change `rand = "0.8"` to `rand = "0.9"`.
 > 2. Run `cargo update -p rand` (or just `cargo build`) — Cargo will now resolve to `0.9.x`.
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > `cargo update` is a safe, surgical tool: it only updates what you ask for and only within the constraints you already declared. The distinction between "edit `Cargo.toml`" (change intent) and "run `cargo update`" (re-resolve within intent) is the fundamental mental model for managing Rust dependencies.
 
 ---
 
 ### Exercise 3: `Cargo.lock` Commit Policy — Four Scenarios
 
-**Problem:**
+**Scenario:**
 The rule "commit for binaries, don't commit for libraries" has important nuance. For each scenario below, decide whether `Cargo.lock` should be committed to version control, and explain why:
 
 1. A CLI tool (`src/main.rs`) deployed to production servers.
@@ -189,7 +190,8 @@ The rule "commit for binaries, don't commit for libraries" has important nuance.
 > **4. Library with minimal-version CI testing → Do NOT commit `Cargo.lock`; use `-Z minimal-versions`.**
 > Running `cargo +nightly update -Z minimal-versions` forces Cargo to resolve each dependency to the *lowest* version allowed by the semver constraint, not the latest. This catches bugs where your `Cargo.toml` says `rand = "0.8"` but your code accidentally uses an API only available in `0.8.5`. This requires nightly Cargo and a clean (or absent) `Cargo.lock`.
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > The core principle: commit `Cargo.lock` wherever you want **reproducible, deterministic** builds; omit it wherever you need **flexibility** for downstream consumers or CI coverage of the full version range.
 
 ---

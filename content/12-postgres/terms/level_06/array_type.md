@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Data Type**
+
+**Data Type** (Multi-Dimensional Element Arrays): Array data types (`type[]`) store ordered multi-element arrays within a single table column.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Specific** (A non-standard SQL extension. Supported natively by PostgreSQL, but absent or implemented differently in other database systems like MySQL or SQL Server).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Under First Normal Form (1NF) rules, every column cell must store only single, atomic values. 
@@ -95,7 +96,7 @@ WHERE tags @> ARRAY['coding'];
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using arrays for data that requires foreign key constraints
 
@@ -141,66 +142,110 @@ CREATE INDEX idx_tags ON posts (tags); -- ❌ Cannot accelerate @> array element
 CREATE INDEX idx_tags_gin ON posts USING GIN (tags); -- Fast GIN array element index
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Tag Finder Query
+### Exercise 1: Storing and Querying Array Data Types
 
-**Problem:** You have a `products` table with columns `name` and `features` (a `TEXT[]` array). Write a SQL query to select the `name` of all products that have the feature `'waterproof'` inside their features list.
+**Scenario:**
+Create a `posts` table storing string tags as an array (`TEXT[]`) and query posts containing `'postgres'`.
 
-**Expected output:**
+**Requirements:**
+1. Use `tags TEXT[] NOT NULL DEFAULT '{}'`.
+2. Query using array overlaps operator `tags @> ARRAY['postgres']`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT name 
-> FROM products 
-> WHERE features @> ARRAY['waterproof'];
+> CREATE TABLE posts (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   title TEXT NOT NULL,
+>   tags TEXT[] NOT NULL DEFAULT '{}'
+> );
+> 
+> INSERT INTO posts (title, tags) 
+> VALUES ('PG Guide', ARRAY['postgres', 'sql', 'database']);
+> 
+> SELECT id, title 
+> FROM posts 
+> WHERE tags @> ARRAY['postgres'];
 > ```
-> - Use the containment operator `@>` in the `WHERE` clause.
-> - Construct the search target array using `ARRAY['waterproof']`.
+>
+> #### Technical Explanation
+>
+> 1. `TEXT[]` stores ordered arrays of text strings in a single column.
+> 2. `@>` (contains operator) checks if the array column contains all elements of the target array.
+> 3. Can be indexed using GIN indexes for fast array membership searching.
+
+---
+
+### Exercise 2: Appending Elements to Arrays
+
+**Scenario:**
+Append a new tag `'docker'` to the `tags` array for post `id = 1`.
+
+**Requirements:**
+1. Execute `UPDATE posts SET tags = array_append(tags, 'docker') WHERE id = 1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> UPDATE posts 
+> SET tags = array_append(tags, 'docker') 
+> WHERE id = 1 
+> RETURNING id, tags;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `array_append(array, element)` appends a new element to the end of an array.
+> 2. `array_remove(array, element)` removes matching elements.
+> 3. Modifies array contents in SQL.
+
+---
+
+### Exercise 3: Unnesting Arrays into Separate Output Rows
+
+**Scenario:**
+Expand array tags into individual rows using `UNNEST(tags)` for tag frequency reporting.
+
+**Requirements:**
+1. Execute `SELECT UNNEST(tags) AS tag_name, COUNT(*) FROM posts GROUP BY tag_name`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   UNNEST(tags) AS tag_name, 
+>   COUNT(*) AS tag_frequency 
+> FROM posts 
+> GROUP BY tag_name 
+> ORDER BY tag_frequency DESC;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `UNNEST(array)` expands an array into a set of distinct table rows.
+> 2. Grouping by unnested tags produces tag frequency summary metrics.
+> 3. Dynamic array expansion.
 
 ---
 
 
 
-### Exercise 2: Querying Array Element Containment with `@>`
-
-**Problem:** Query posts where `tags` array contains `'postgres'` using GIN array operator `@>`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM posts WHERE tags @> ARRAY['postgres'];
-> ```
-> ```sql
-> SELECT * FROM posts WHERE tags @> ARRAY['postgres'];
-> ```
->
-> **Explanation:** The `@>` operator tests if the LHS array contains all elements of the RHS array.
-
----
-
-### Exercise 3: Unnesting Arrays with `UNNEST()`
-
-**Problem:** Unnest `tags` array into individual rows using `UNNEST()` function.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT title, UNNEST(tags) AS tag FROM posts;
-> ```
-> ```sql
-> SELECT title, UNNEST(tags) AS tag FROM posts;
-> ```
->
-> **Explanation:** `UNNEST(array)` expands array elements into a set of individual rows.
-
-## 7. Related Terms
+## 6. Related Terms
 - [First Normal Form (1NF)](first_normal_form.md) — The relational atomicity standard.
 - [`JSON` / `JSONB` Type](json_jsonb.md) — Storing unstructured documents.
 - [GIN Index](../level_07/gin_index.md) — Related concept: GIN Index.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `ARRAY` stores a variable-length list of matching data types in a single column.
 - Violates the pure mathematical atomicity of First Normal Form (1NF).
 - PostgreSQL arrays are 1-indexed (index starts at `1`, not `0`).

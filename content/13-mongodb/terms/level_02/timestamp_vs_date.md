@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Data Type**
+
+**Core Concept** (Internal Replication vs Application Time): Timestamp vs Date contrasts MongoDB's internal 64-bit replication op-log timestamp counter against application-facing UTC BSON Date objects.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Both are stored as 64-bit values. `Date` is standard; `Timestamp` carries special behaviors that cause it to auto-increment when written to database indexes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 MongoDB developers exploring system catalogs or documentation often spot two similar time data types: `Date` and `Timestamp`. 
@@ -89,7 +90,7 @@ If you insert another document immediately in the same session, the ordinal coun
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing application calendar dates (like registration date or payment date) using the BSON Timestamp type
 
@@ -140,72 +141,97 @@ new Date(1700000000); // ❌ Evaluates to Jan 20, 1970!
 new Date(1700000000 * 1000); // Correct millisecond conversion
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Time Type Audit
+### Exercise 1: Inspecting Oplog BSON Timestamps
 
-**Problem:** You are auditing a user schema. A junior developer has written this document structure:
-```json
-{
-  "username": "coder",
-  "joined_at": Timestamp()
-}
-```
-1.  Explain why this schema violates database design standards.
-2.  Write the corrected document write statement.
+**Scenario:**
+Inspect the internal 64-bit BSON `Timestamp` stored in a replica set oplog entry in `local.oplog.rs`.
 
-**Expected output:**
+**Requirements:**
+1. Query `local.oplog.rs` for the latest oplog entry.
+
 > [!check]- Answer
-> ```text
-> 1. The schema violates standards because it uses the internal `Timestamp` type instead of `Date` for application tracking. This causes the join time to lose millisecond precision and risk unexpected updates due to replication counters.
-> ```
-> - The BSON `Timestamp` type is reserved for database engine log syncing.
-> - Call the standard JavaScript date constructor using the `new` keyword.
-
----
-
-
-
-### Exercise 2: Application Date vs Internal Oplog Timestamp
-
-**Problem:** State use case difference: BSON `Date` (Application wall-clock date), BSON `Timestamp` (Internal replication oplog ordering).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Date: application code timestamps; Timestamp: internal oplog replication sequence
-> ```
-> ```text
-> Date: application code timestamps; Timestamp: internal oplog replication sequence
-> ```
 >
-> **Explanation:** `Date` stores 64-bit UTC wall-clock time; `Timestamp` stores internal oplog sequence numbers.
-
----
-
-### Exercise 3: Date to Milliseconds Epoch Conversion
-
-**Problem:** Convert BSON Date to Unix epoch milliseconds using `.getTime()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> new Date().getTime();
-> ```
+> #### Implementation
+>
 > ```javascript
-> new Date().getTime();
+> use local;
+> const latestOp = db.oplog.rs.find().sort({ $natural: -1 }).limit(1).next();
+> console.log("Oplog BSON Timestamp (ts):", latestOp.ts);
 > ```
 >
-> **Explanation:** `.getTime()` returns 64-bit UTC epoch millisecond numbers.
+> #### Technical Explanation
+>
+> 1. BSON `Timestamp` (Type 17) is a 64-bit value: 32-bit epoch seconds + 32-bit incrementing ordinal counter.
+> 2. Used internally by MongoDB replication and change streams to order oplog events deterministically.
+> 3. Distinct from application BSON `Date` (Type 9).
 
-## 7. Related Terms
+---
+
+### Exercise 2: Application Date Field Selection
+
+**Scenario:**
+Store user registration time using application-facing BSON `Date` instead of internal `Timestamp`.
+
+**Requirements:**
+1. Insert document using `registeredAt: new Date()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.insertOne({
+>   username: "alice",
+>   registeredAt: new Date()
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. BSON `Date` (Type 9) is the standard type for application datetime attributes.
+> 2. Supported natively across all language drivers (Node.js `Date`, Python `datetime`).
+> 3. `Timestamp` should only be used when dealing with internal replication or change stream resume tokens.
+
+---
+
+### Exercise 3: Comparing BSON Type Codes for Timestamp vs Date
+
+**Scenario:**
+Query collection `events` using `$type` to confirm field `time` is BSON `Date` (Code 9 / `"date"`) and not `Timestamp` (Code 17 / `"timestamp"`).
+
+**Requirements:**
+1. Filter using `{ time: { $type: "date" } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.events.find({
+>   time: { $type: "date" }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. BSON Type Code 9 = `Date` (64-bit UTC timestamp).
+> 2. BSON Type Code 17 = `Timestamp` (internal replication opcode counter).
+> 3. Ensures schema type correctness across document properties.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Date](date_type.md) — The developer date type.
 - [Replication (Streaming / Logical)](../../../12-postgres/terms/level_10/replication.md) — The replication pipeline.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `Date` stores calendar times with millisecond precision; use for applications.
 - `Timestamp` is a specialized type reserved for MongoDB replication syncs.
 - `Timestamp` combines epoch seconds with an ordinal counter to order events.

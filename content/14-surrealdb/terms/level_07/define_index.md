@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Performance / Operations (database index definition DDL)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the index management engine. Maintains ordered B-Tree nodes on persistent disk storage to speed up lookups).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Without indexes, finding records in a large table requires a **Full Table Scan**:
@@ -74,7 +73,7 @@ SELECT * FROM user WHERE age >= 21 AND age <= 35;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Over-indexing write-heavy tables, degrading database insert and update throughput
 
@@ -122,59 +121,88 @@ DEFINE INDEX user_email_idx ON TABLE user FIELDS email;
 Keep indexes scoped strictly to required query filter fields
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Index Optimization Analysis
+### Exercise 1: Secondary Index DDL Creation
 
-**Problem:** You have a `transactions` table with 5,000,000 records.
-The query `SELECT * FROM transactions WHERE status = "pending";` takes 3 seconds to run.
-Write the SurrealQL statement to create a B-Tree index named `idx_status` on the `status` field to accelerate this query.
+**Scenario:**
+Create a secondary index `idx_user_email` on table `user` to speed up email lookup queries.
 
-**Expected output:**
+**Requirements:**
+1. Define table `user` as `SCHEMAFULL`.
+2. Write `DEFINE INDEX idx_user_email ON TABLE user COLUMNS email`.
+
 > [!check]- Answer
-> ```sql
-> DEFINE INDEX idx_status ON transactions COLUMNS status;
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE FIELD email ON TABLE user TYPE string;
+> 
+> -- Define secondary index DDL
+> DEFINE INDEX idx_user_email ON TABLE user COLUMNS email;
 > ```
-> - Use the `DEFINE INDEX` DDL statement.
-> - Specify the target table `transactions` and column `status`.
+>
+> #### Technical Explanation
+>
+> 1. `DEFINE INDEX` creates secondary B-tree index structures for fast field lookups.
+> 2. Converts $O(N)$ table scans into $O(\log N)$ B-tree index searches.
+> 3. Indexes update automatically during record insertions and modifications.
+
+---
+
+### Exercise 2: Unique Index DDL Creation
+
+**Scenario:**
+Create a unique index `idx_unique_username` on table `user` ensuring no duplicate usernames can be registered.
+
+**Requirements:**
+1. Add `UNIQUE` keyword to index definition.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE INDEX idx_unique_username ON TABLE user COLUMNS username UNIQUE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `UNIQUE` enforces unique constraints at write time, aborting duplicate insertions.
+> 2. Protects database integrity against race conditions.
+> 3. Combines lookup acceleration with constraint enforcement.
+
+---
+
+### Exercise 3: Dropping Secondary Indexes with `REMOVE INDEX`
+
+**Scenario:**
+Drop index `idx_user_email` from table `user`.
+
+**Requirements:**
+1. Write `REMOVE INDEX idx_user_email ON TABLE user`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> REMOVE INDEX idx_user_email ON TABLE user;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE INDEX` drops secondary index structures from storage metadata registers.
+> 2. Frees index disk storage and reduces write amplification.
+> 3. Table data records remain unaffected.
 
 ---
 
 
 
-### Exercise 2: Basic Single-Field Index Definition
-
-**Problem:** Define index `user_email_idx` on `user` table for `email` field.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX user_email_idx ON TABLE user FIELDS email;
-> ```
-> ```surrealql
-> DEFINE INDEX user_email_idx ON TABLE user FIELDS email;
-> ```
->
-> **Explanation:** `DEFINE INDEX` accelerates equality and range lookup queries.
-
----
-
-### Exercise 3: Removing Index
-
-**Problem:** Command to drop index `user_email_idx` from `user` table (`REMOVE INDEX user_email_idx ON TABLE user;`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> REMOVE INDEX user_email_idx ON TABLE user;
-> ```
-> ```surrealql
-> REMOVE INDEX user_email_idx ON TABLE user;
-> ```
->
-> **Explanation:** `REMOVE INDEX` drops specified index structures.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Unique Index](unique_index.md) — Unique constraints.
 - [Composite Index](composite_index.md) — Multi-column indexes.
@@ -189,7 +217,7 @@ Write the SurrealQL statement to create a B-Tree index named `idx_status` on the
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE INDEX` creates B-Tree indexes to replace full table scans with $O(\log N)$ searches.
 - Relational equivalent to `CREATE INDEX`; NoSQL equivalent to `createIndex()`.
 - Supports exact equality (`=`) and range lookups (`<`, `>`, `BETWEEN`).

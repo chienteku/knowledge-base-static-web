@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Standard Library**: The `std` library providing OS primitives, collections, I/O, networking, and concurrency.
+
+
+**Rust Standard Library (operating-system integrated runtime library)**: The `std` library providing OS primitives, collections, I/O, networking, and concurrency.
 
 ---
 

@@ -151,7 +151,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Real-Time Network Packet Telemetry Aggregator
 
-**Problem:**
+**Scenario:**
 In a high-throughput network monitoring service, raw telemetry streams arrive as string records formatted as `"<node_id>:<bytes_transferred>:<latency_ms>"`. Corrupted lines (incorrect field counts or non-numeric values) must be filtered out without breaking stream processing.
 
 Implement a function `parse_and_aggregate_telemetry` that accepts an iterator over raw string slices (`impl IntoIterator<Item = &'a str>`). It must perform the following:
@@ -266,7 +266,7 @@ Implement a function `parse_and_aggregate_telemetry` that accepts an iterator ov
 
 ### Exercise 2: Fail-Fast Financial Batch Processor vs Complete Audit Partition Collector
 
-**Problem:**
+**Scenario:**
 A financial transaction engine receives raw batches of incoming payment requests (`RawTransaction`). Each record must be validated against business rules: non-empty account identifier, positive transfer amount in cents, and supported currency code (`"USD"` or `"EUR"`).
 
 The system requires two distinct processing strategies powered by Rust collection idioms:
@@ -398,7 +398,7 @@ The system requires two distinct processing strategies powered by Rust collectio
 
 ### Exercise 3: High-Performance Log Indexer via Custom `FromIterator` Implementation
 
-**Problem:**
+**Scenario:**
 In search engine tokenizers and log indexers, streaming text tokens are frequently parsed and collected into term frequency statistics. Rather than building custom looping constructs across calling code, Rust allows custom types to participate directly in `.collect()` by implementing `std::iter::FromIterator`.
 
 Implement a domain data structure `TokenHistogram` and its `FromIterator<S>` trait for any type `S: Into<String>` (handling string slices `&str` and owned `String`s seamlessly).

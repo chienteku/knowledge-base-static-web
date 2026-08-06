@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Architecture Pattern**: Layered error handling using `thiserror` for libraries and `anyhow` for applications.
+
+
+**Rust Error Handling Architecture (layered domain error hierarchy)**: Layered error handling using `thiserror` for libraries and `anyhow` for applications.
 
 ---
 
@@ -273,7 +275,7 @@ impl From<std::io::Error> for MyError { ... }
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`anyhow` / `thiserror`](../level_04/anyhow_thiserror.md) — Error libraries.
 - [Custom Error Types](../level_04/custom_error_types.md) — Custom error types.

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DML Statement**
+
+**SQL Command / Clause** (Row-Level Locking Query Clause): `SELECT FOR UPDATE` acquires explicit `RowShare` / `Exclusive` locks on selected rows, preventing concurrent transactions from updating or locking them.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Must be executed inside an active transaction block (`BEGIN`/`COMMIT`). Supports advanced sub-clauses like **`NOWAIT`** and **`SKIP LOCKED`**).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Under default PostgreSQL MVCC rules, reads are non-blocking. 
@@ -102,7 +103,7 @@ COMMIT;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running SELECT ... FOR UPDATE outside an active transaction block
 
@@ -148,67 +149,114 @@ SELECT * FROM users WHERE id = 1 FOR UPDATE; -- Lock releases immediately!
 BEGIN; SELECT * FROM users WHERE id = 1 FOR UPDATE; /* update work */ COMMIT;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Queue Task Selection
+### Exercise 1: Acquiring Exclusive Row Locks with `SELECT FOR UPDATE`
 
-**Problem:** You are building a background worker script. Multiple worker servers run at the same time. You have a `tasks` table. Write the SQL transaction queries to select and lock the single oldest pending task (`status = 'queued'`) without letting workers wait for each other's locks.
+**Scenario:**
+Lock an inventory row exclusively during a checkout transaction to prevent concurrent stock depletion.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT stock FROM products WHERE id = 1 FOR UPDATE`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
 > BEGIN;
-> SELECT id FROM tasks 
-> WHERE status = 'queued' 
+> 
+> SELECT id, stock 
+> FROM products 
+> WHERE id = 1 
+> FOR UPDATE;
+> 
+> UPDATE products 
+> SET stock = stock - 1 
+> WHERE id = 1;
+> 
+> COMMIT;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `FOR UPDATE` acquires an exclusive row-level lock on all matching rows.
+> 2. Prevents concurrent transactions from modifying, deleting, or locking the same rows until `COMMIT`.
+> 3. Guarantees serializable access to specific row entities.
+
+---
+
+### Exercise 2: Skipping Locked Rows with `SKIP LOCKED`
+
+**Scenario:**
+Implement a high-throughput job queue worker using `FOR UPDATE SKIP LOCKED` to pull available un-processed jobs without blocking concurrent workers.
+
+**Requirements:**
+1. Execute `SELECT * FROM job_queue WHERE status = 'pending' LIMIT 1 FOR UPDATE SKIP LOCKED`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> BEGIN;
+> 
+> SELECT id, payload 
+> FROM job_queue 
+> WHERE status = 'pending' 
 > ORDER BY id ASC 
 > LIMIT 1 
 > FOR UPDATE SKIP LOCKED;
-> -- Followed by UPDATE and COMMIT
+> 
+> UPDATE job_queue 
+> SET status = 'processing' 
+> WHERE id = 42;
+> 
+> COMMIT;
 > ```
-> - Combine the `FOR UPDATE` query modifier with the `SKIP LOCKED` sub-clause.
-> - Ensure you order tasks by ID or timestamp to find the oldest.
+>
+> #### Technical Explanation
+>
+> 1. `SKIP LOCKED` instructs PostgreSQL to skip any rows currently locked by another concurrent transaction worker.
+> 2. Allows 100 concurrent queue workers to pull different pending job rows simultaneously with zero lock waiting.
+> 3. Industry standard pattern for high-performance SQL job queues.
 
 ---
 
+### Exercise 3: Non-Blocking Lock Attempts with `NOWAIT`
 
+**Scenario:**
+Attempt to lock a seat reservation row using `FOR UPDATE NOWAIT`, failing immediately if another customer is currently checking out the same seat.
 
-### Exercise 2: High-Throughput Job Queue Fetch Pattern
+**Requirements:**
+1. Execute `SELECT ... FOR UPDATE NOWAIT`.
 
-**Problem:** Write SQL statement for background workers fetching 1 pending job without blocking other workers using `FOR UPDATE SKIP LOCKED`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> BEGIN; SELECT * FROM jobs WHERE status = 'pending' ORDER BY id ASC LIMIT 1 FOR UPDATE SKIP LOCKED;
-> ```
+>
+> #### Implementation
+>
 > ```sql
 > BEGIN;
-> SELECT * FROM jobs
-> WHERE status = 'pending'
-> ORDER BY id ASC LIMIT 1
-> FOR UPDATE SKIP LOCKED;
+> 
+> SELECT seat_number 
+> FROM concert_seats 
+> WHERE id = 500 
+> FOR UPDATE NOWAIT;
+> 
+> COMMIT;
 > ```
 >
-> **Explanation:** `FOR UPDATE SKIP LOCKED` skips rows locked by concurrent workers, enabling parallel queue processing.
+> #### Technical Explanation
+>
+> 1. `NOWAIT` raises Error `55P03` (`lock_not_available`) immediately if target rows are locked by another session.
+> 2. Prevents ticket booking transactions from blocking endlessly.
+> 3. Returns immediate conflict feedback to application users.
 
 ---
 
-### Exercise 3: FOR UPDATE vs FOR SHARE Comparison
 
-**Problem:** Compare: `FOR UPDATE` (Exclusive row lock blocking reads/writes); `FOR SHARE` (Shared row lock permitting concurrent reads but blocking updates).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> FOR UPDATE: exclusive row lock; FOR SHARE: shared row lock permitting concurrent reads
-> ```
-> ```text
-> FOR UPDATE: exclusive row lock; FOR SHARE: shared row lock permitting concurrent reads
-> ```
->
-> **Explanation:** `FOR SHARE` prevents other transactions from modifying or deleting locked rows.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Locking (Row-level, Table-level)](locking.md) — The locking basics.
 - [Deadlock](deadlock.md) — Gridlocks caused by locking conflicts.
 - [Advisory Locks](advisory_locks.md) — Related concept: Advisory Locks.
@@ -216,7 +264,7 @@ BEGIN; SELECT * FROM users WHERE id = 1 FOR UPDATE; /* update work */ COMMIT;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `SELECT ... FOR UPDATE` locks rows during read operations to protect writes.
 - Essential for securing "Read-Modify-Write" workflows (like checkouts).
 - Must be executed inside explicit `BEGIN`/`COMMIT` transaction blocks.

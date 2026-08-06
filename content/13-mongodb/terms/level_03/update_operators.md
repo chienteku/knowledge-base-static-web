@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Query Operator** (Field Mutation Operators): Update Operators ($set, $unset, $inc, $mul, $rename, $min, $max) perform targeted atomic modifications on document fields.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported by all document NoSQL platforms. Handled atomically by the database engine to guarantee write safety).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When updating a document, you rarely want to replace the whole record. 
@@ -89,7 +90,7 @@ db.users.updateOne(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing Query Operators (like $gt) with Update Operators (like $set)
 
@@ -103,6 +104,8 @@ Mixing their scopes will result in syntax and validation errors.
 **Fix: Keep them separate. Only use update operators inside the update parameter (the second argument of `updateOne()` / `updateMany()`).**
 
 ---
+
+
 
 
 
@@ -122,6 +125,8 @@ db.posts.updateOne({ _id: id }, { $set: { views: currentViews + 1 } }); // ❌ R
 db.posts.updateOne({ _id: id }, { $inc: { views: 1 } }); // Atomic server-side increment
 ```
 
+
+
 ### Mistake 3: Updating Current Timestamp Fields with Client System Time instead of `$currentDate`
 
 **The mistake:** Updating `{ $set: { updatedAt: new Date() } }` from client application servers.
@@ -140,105 +145,92 @@ db.users.updateOne({ _id: id }, { $currentDate: { updatedAt: true } }); // Serve
 
 
 
-### Mistake 4: Confusing `$set` (Field Assignment) with `$inc` (Numeric Increment)
+## 5. Practice Exercises
 
-**The mistake:** Using `$set: { views: views + 1 }` in client application updates.
+### Exercise 1: Field Multiplication with `$mul`
 
-**Why it's wrong:** Using `$set` for counters creates race conditions where concurrent updates overwrite each other. Use atomic `$inc: { views: 1 }`.
+**Scenario:**
+Apply a 10% price increase (multiply by `1.10`) to all products in category `"electronics"`.
 
-*Incorrect:*
-```javascript
-db.posts.updateOne({ _id: id }, { $set: { views: currentViews + 1 } }); // ❌ Race condition!
-```
+**Requirements:**
+1. Execute `updateMany()` with `$mul: { price: 1.10 }`.
 
-*Fix:*
-```javascript
-db.posts.updateOne({ _id: id }, { $inc: { views: 1 } }); // Atomic server-side increment
-```
-
-### Mistake 5: Updating Current Timestamp Fields with Client System Time instead of `$currentDate`
-
-**The mistake:** Updating `{ $set: { updatedAt: new Date() } }` from client application servers.
-
-**Why it's wrong:** Client application server clocks may drift. Use `$currentDate: { updatedAt: true }` to enforce server-side database timestamps.
-
-*Incorrect:*
-```javascript
-db.users.updateOne({ _id: id }, { $set: { updatedAt: new Date() } }); // Client clock drift
-```
-
-*Fix:*
-```javascript
-db.users.updateOne({ _id: id }, { $currentDate: { updatedAt: true } }); // Server-side timestamp
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Multi-Operator Query Construction
-
-**Problem:** You have a `products` collection. Write the query to update a single document where the `sku` is `"HAMMER-1"`. The update must:
-1.  Decrement the `stock` field by `2` (hint: use `$inc` with a negative number).
-2.  Set the `last_purchased` field to the current server date/timestamp.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.updateOne(
->   { sku: "HAMMER-1" },
->   {
->     $inc: { stock: -2 },
->     $currentDate: { last_purchased: true }
->   }
+> db.products.updateMany(
+>   { category: "electronics" },
+>   { $mul: { price: 1.10 } }
 > );
 > ```
-> - Target the document using a query filter first.
-> - Chain the `$inc` and `$currentDate` operators in the update object.
+>
+> #### Technical Explanation
+>
+> 1. `$mul` multiplies numeric field values by a specified factor atomically.
+> 2. If the field does not exist, `$mul` sets the field to 0.
+> 3. Operates over integer, float, and decimal types.
+
+---
+
+### Exercise 2: Atomic Min/Max Bound Enforcement with `$min` and `$max`
+
+**Scenario:**
+Update a user's `highScore` to `250` ONLY IF `250` is greater than the current stored `highScore`.
+
+**Requirements:**
+1. Execute `updateOne()` with `$max: { highScore: 250 }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { $max: { highScore: 250 } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$max` updates the field value ONLY IF the specified value is greater than the current stored value.
+> 2. `$min` updates the field value ONLY IF the specified value is less than the current stored value.
+> 3. Eliminates client-side value comparison reads.
+
+---
+
+### Exercise 3: Field Deletion with `$unset`
+
+**Scenario:**
+Remove obsolete field `legacyId` from all documents in collection `customers`.
+
+**Requirements:**
+1. Execute `updateMany()` with `$unset: { legacyId: "" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.customers.updateMany(
+>   { legacyId: { $exists: true } },
+>   { $unset: { legacyId: "" } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$unset` completely removes specified field keys from matching BSON documents.
+> 2. Reclaims storage space occupied by obsolete fields.
+> 3. Standard operator for schema cleanup migrations.
 
 ---
 
 
 
-### Exercise 2: Updating Timestamps with `$currentDate`
-
-**Problem:** Update `updatedAt` to current date timestamp on `user:1` using `$currentDate`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.updateOne({ _id: 1 }, { $currentDate: { updatedAt: true } });
-> ```
-> ```javascript
-> db.users.updateOne({
->   _id: 1
-> }, {
->   $currentDate: { updatedAt: true }
-> });
-> ```
->
-> **Explanation:** `$currentDate` sets target field values to current server dates or timestamps.
-
----
-
-### Exercise 3: Setting Min/Max Field Boundaries with `$min` and `$max`
-
-**Problem:** Update `highScore` on `game:1` to 500 ONLY if 500 is greater than current score using `$max`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.games.updateOne({ _id: 1 }, { $max: { highScore: 500 } });
-> ```
-> ```javascript
-> db.games.updateOne({
->   _id: 1
-> }, {
->   $max: { highScore: 500 }
-> });
-> ```
->
-> **Explanation:** `$max` updates fields ONLY if the new value is greater than existing field values.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`updateOne()` / `updateMany()`](update.md) — The parent update methods.
 - [Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`)](array_update_operators.md) — Related concept: Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`).
@@ -247,7 +239,7 @@ db.users.updateOne({ _id: id }, { $currentDate: { updatedAt: true } }); // Serve
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Update operators modify document values atomically on the database server.
 - Prevents write race conditions (like overlapping click counters) in applications.
 - `$set` creates or updates fields; `$unset` deletes fields entirely.

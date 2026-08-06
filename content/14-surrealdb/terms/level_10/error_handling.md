@@ -14,16 +14,15 @@
 ---
 
 ## 2. Term Category
-- **Troubleshooting & Diagnostics**
+
+
+**SurrealQL Command (database transaction error handling mechanisms)**: - **Troubleshooting & Diagnostics**
+
+
 
 ---
 
-## 3. Environment Context
-- **Development & Operations** (Applied when troubleshooting failed queries, rejected permissions, or connection issues in production or local environments).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 During application development and database maintenance, queries fail for various reasons: syntax typos, record constraint failures (`ASSERT`), unauthorized permission checks (`PERMISSIONS`), connection drops, or write transaction conflicts.
@@ -92,7 +91,7 @@ async function safeQueryExecution() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing "Record Not Found" with "Permission Denied" in Record Auth Queries
 
@@ -141,90 +140,109 @@ Implement exponential backoff retry loops for transactional operations
 
 
 
-### Mistake 4: Swallowing Query Execution Errors in Client Application Code
 
-**The mistake:** Wrapping database calls in empty `try { ... } catch {}` blocks without logging or retrying.
 
-**Why it's wrong:** Swallowing errors masks permission failures, unique constraint violations, and transaction conflicts, making root-cause debugging impossible.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-try { await db.create('user', data); } catch (e) {} // ❌ Swallows errors silently!
-```
+### Exercise 1: Custom Exception Throwing in Transactions
 
-*Fix:*
-```surrealql
-try { await db.create('user', data); } catch (err) { console.error('SurrealDB Error:', err); throw err; }
-```
+**Scenario:**
+Check an account balance inside a transaction script. If balance is less than withdrawal amount, throw a custom exception using `THROW`.
 
-### Mistake 5: Ignoring Transaction Conflict Aborts in Distributed Clusters
-
-**The mistake:** Executing concurrent transactions without retry mechanisms on conflict errors.
-
-**Why it's wrong:** Optimistic concurrency control in distributed storage engines throws transaction conflicts under concurrent writes. Catch conflict errors and retry transactions.
-
-*Incorrect:*
-```surrealql
-// Un-handled OCC transaction conflict
-```
-
-*Fix:*
-```surrealql
-Implement exponential backoff retry loops for transactional operations
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Diagnostic Step
-If a query fails with `"Found invalid token 'SELEKT'"`, what tool should you use to validate script syntax before executing?
-a. `surreal validate`
-b. `surreal import`
-c. `surreal export`
+**Requirements:**
+1. Declare `LET $balance = 50.00dec;`.
+2. Check `IF $balance < $withdrawal THEN THROW "Insufficient funds!" END;`.
 
 > [!check]- Answer
-> - Static syntax validation is performed by `surreal validate`. Answer: a.
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $balance = 50.00dec;
+> LET $withdrawal = 100.00dec;
+> 
+> BEGIN TRANSACTION;
+> 
+> IF $balance < $withdrawal THEN (
+>     THROW "Insufficient funds! Current balance: " + <string> $balance
+> ) END;
+> 
+> UPDATE account:a1 SET balance -= $withdrawal;
+> 
+> COMMIT TRANSACTION;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `THROW` aborts transaction execution immediately and returns a custom error exception payload.
+> 2. Automatically rolls back all uncommitted mutations inside the active transaction block.
+> 3. Enforces domain validation rules at the database tier.
+
+---
+
+### Exercise 2: Catching Errors in Field Assertions
+
+**Scenario:**
+Catch assertion write errors when inserting an invalid email address into table `user`.
+
+**Requirements:**
+1. Define field `email` with `ASSERT string::is::email($value)`.
+2. Demonstrate write failure on invalid string.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE FIELD email ON TABLE user TYPE string 
+>     ASSERT string::is::email($value) OR THROW "Invalid email address format!";
+> 
+> -- Fails with custom assertion error!
+> CREATE user:u1 SET email = "not-an-email";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combining `ASSERT` with `OR THROW` customizes field validation error messages.
+> 2. Returns clear error descriptions to SDK callers.
+> 3. Prevents invalid data insertion.
+
+---
+
+### Exercise 3: Handling Primary Key Collision Errors
+
+**Scenario:**
+Handle primary key collision errors when creating a record `user:alice` that already exists.
+
+**Requirements:**
+1. Execute `CREATE user:alice` twice to demonstrate primary key conflict error.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET name = "Alice";
+> 
+> -- Second execution fails with record conflict error:
+> -- "Database record 'user:alice' already exists"
+> CREATE user:alice SET name = "Alice Duplicate";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `CREATE` throws a primary key collision exception if the record ID already exists.
+> 2. Use `UPSERT` or `INSERT ON DUPLICATE KEY UPDATE` if collision updates are desired.
+> 3. Guarantees primary key uniqueness.
 
 ---
 
 
 
-### Exercise 2: Catching SDK Connection Errors
 
-**Problem:** Write JavaScript `try / catch` block handling SDK connection failures.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> try { await db.connect(uri); } catch (err) { console.error("Connection failed:", err); }
-> ```
-> ```javascript
-> try {
->   await db.connect(uri);
-> } catch (err) {
->   console.error("Connection failed:", err);
-> }
-> ```
->
-> **Explanation:** `try / catch` handles network and RPC connection exceptions.
-
----
-
-### Exercise 3: SurrealDB RPC Error Code Parsing
-
-**Problem:** Inspect error code properties on SDK exception objects (`err.code`, `err.message`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> err.code, err.message
-> ```
-> ```javascript
-> console.log(err.code, err.message);
-> ```
->
-> **Explanation:** SDK error objects expose JSON-RPC error codes and detailed diagnostic strings.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — Interactive CLI console.
 - [`surreal validate` (Query Validation)](surreal_validate.md) — Pre-flight syntax validation.
@@ -233,7 +251,7 @@ c. `surreal export`
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `surreal validate` to catch static syntax typos in `.surql` files.
 - Enable `--log trace` on the server CLI to inspect detailed execution logs.
 - Test queries as Root superuser vs Record user to isolate `PERMISSIONS` issues from missing data.

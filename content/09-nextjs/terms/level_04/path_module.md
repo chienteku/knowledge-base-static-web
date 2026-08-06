@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture**
+
+**Server & Edge API** (Node.js Path Resolution Utility): Node.js `path` module utilities (`path.join`, `path.resolve`) manipulate server filesystem paths safely.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (File system operations can only execute on the backend server).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing full-stack software, resolving paths to files on the host computer is a daily task. However, different operating systems use different separator characters to represent directories:
@@ -60,7 +61,7 @@ For example, a folder named `app/feed/(..)photo/[id]/page.tsx` intercepts reques
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Importing the Node.js `path` module inside a Client Component
 
@@ -123,86 +124,134 @@ const filePath = path.join(process.cwd(), 'data', 'file.json'); // Cross-platfor
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multi-segment Join
+### Exercise 1: Joining Filesystem Paths Safely with `path.join()`
 
-**Problem:** Complete the Server Component below to safely resolve the absolute path to a configuration file located at `<workspace_root>/config/settings.json`:
+**Scenario:**
+Use Node.js `path.join()` inside a Server Component to read a local JSON data file safely across OS platforms.
 
-```typescript
-// app/admin/page.tsx (Server Component)
-import React from 'react';
-import fs from 'fs';
-import path from 'path';
+**Requirements:**
+1. Import `path` module.
+2. Resolve file path with `path.join(process.cwd(), 'data', 'file.json')`.
 
-// Solution:
-export default function AdminPage() {
-  // Resolve path cross-platform
-  const configPath = path.join(process.cwd(), 'config', 'settings.json');
-  const rawData = fs.readFileSync(configPath, 'utf8');
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> import path from "node:path";
+> import fs from "node:fs/promises";
+
+export default async function DataPage() {
+  const filePath = path.join(process.cwd(), "data", "users.json");
+  const fileContent = await fs.readFile(filePath, "utf-8");
+  const users = JSON.parse(fileContent);
 
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
-      <pre>{rawData}</pre>
-    </div>
+    <main className="p-6">
+      <h1>Local Users</h1>
+      <ul>
+        {users.map((u: any) => (
+          <li key={u.id}>{u.name}</li>
+        ))}
+      </ul>
+    </main>
   );
 }
 ```
 
-> [!check]- Answer
-> - Combine the workspace root directory `process.cwd()` with the folder `'config'` and the target file name `'settings.json'` using `path.join()`.
+> #### Technical Explanation
+>
+> 1. `path.join()` concatenates path segments using platform-specific delimiters (`/` on Linux/macOS, `\` on Windows).
+> 2. `process.cwd()` returns the root directory of the Next.js project.
+> 3. Prevents path traversal security vulnerabilities and cross-platform path errors.
 
 ---
 
-### Exercise 2: Safe File Path Construction Pattern
+### Exercise 2: Extracting File Extensions with `path.extname()`
 
-**Problem:** Write Node.js Server Component helper reading file path `content/posts/slug.md` from `process.cwd()` using `path.join()`.
+**Scenario:**
+Validate file extensions of uploaded files inside a Route Handler using `path.extname()`.
 
-**Expected output:**
+**Requirements:**
+1. Call `path.extname(filename)` in server code.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import path from 'path'; const filePath = path.join(process.cwd(), 'content', 'posts', `${slug}.md`);
-> ```
-> - `path.join()` safely normalizes cross-platform file paths.
-> 
-> ```typescript
-> import path from 'path';
-> import fs from 'fs/promises';
-> 
-> export async function getPostData(slug: string) {
->   const filePath = path.join(process.cwd(), 'content', 'posts', `${slug}.md`);
->   return await fs.readFile(filePath, 'utf-8');
-> }
-> ```
+> // app/api/upload/route.ts
+> import path from "node:path";
+
+export async function POST(req: Request) {
+  const { fileName } = await req.json();
+  const ext = path.extname(fileName).toLowerCase();
+
+  if (![".png", ".jpg", ".webp"].includes(ext)) {
+    return Response.json({ error: "Invalid image format" }, { status: 400 });
+  }
+
+  return Response.json({ success: true, extension: ext });
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `path.extname()` extracts file extensions from file path strings.
+> 2. Server-side file format validation prevents unsafe file upload processing.
+> 3. Utility pattern for server-side API handlers.
 
 ---
 
-### Exercise 3: process.cwd() vs __dirname in Next.js
+### Exercise 3: Preventing Directory Traversal Security Vulnerabilities
 
-**Problem:** Why is `process.cwd()` preferred over `__dirname` when referencing project root files in Next.js Server Components?
+**Scenario:**
+Sanitize user-supplied file path inputs using `path.resolve()` and `path.normalize()` to prevent `../` attacks.
 
-**Expected output:**
+**Requirements:**
+1. Validate resolved path starts with base directory.
+
 > [!check]- Answer
-> ```text
-> `process.cwd()` returns the root working directory of the Next.js project execution, whereas `__dirname` resolves to compiled build target folders (.next/server).
-> ```
-> - `process.cwd()` reliably points to project root across dev and production builds.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> const rootDir = process.cwd();
-> ```
+> import path from "node:path";
+
+export function getSafeFilePath(userInputPath: string) {
+  const baseDir = path.resolve(process.cwd(), "public/uploads");
+  const safePath = path.resolve(baseDir, path.normalize(userInputPath));
+
+  if (!safePath.startsWith(baseDir)) {
+    throw new Error("Security Violation: Directory Traversal Attempt Blocked");
+  }
+
+  return safePath;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Malicious user inputs (`../../etc/passwd`) attempt to break out of public directories.
+> 2. `path.resolve()` resolves relative path segments into absolute paths.
+> 3. Checking `safePath.startsWith(baseDir)` guarantees files stay within authorized folders.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The parent execution runtime.
 - [Intercepting Routes (`(..)folder`)](intercepting_routes.md) — The routing feature utilizing path navigation operators.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Node.js `path` module provides cross-platform file path resolution tools.
 - Use `path.join()` instead of manual string concatenation to support Windows and POSIX hosts.
 - `path.resolve()` returns absolute paths; `path.basename()` extracts the filename segment.

@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (nested field destructuring expression)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Parsed during the query projection phase. Extracts listed keys from nested memory objects into the output stream).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In document-oriented databases, records frequently store deeply nested objects (e.g. `address: { street: "123 Main", city: "London", country: "UK", zip: "EC1A" }`).
@@ -78,7 +77,7 @@ SELECT title, author.{name, email} FROM post FETCH author;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing spaces between the object name and the dot-bracket syntax, causing parser errors
 
@@ -133,65 +132,100 @@ SELECT { theme: settings.theme } FROM user;
 SELECT settings.{ theme, mode } FROM user; // Path destructuring syntax
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Destructuring Query Formulation
+### Exercise 1: Destructuring Nested Object Properties
 
-**Problem:** You have a `company` table with a nested `contact` object (`contact: { phone: "555-0199", email: "info@corp.com", fax: "555-0100" }`).
-Write the SurrealQL query to retrieve the company `name` along with only the `phone` and `email` properties from the `contact` object using destructuring notation.
+**Scenario:**
+An API endpoint selects user `user:alice` and unpacks nested object `profile` directly into top-level result fields (`first_name`, `last_name`).
 
-**Expected output:**
+**Requirements:**
+1. Create `user:alice` with nested object `profile = { first_name: "Alice", last_name: "Smith" }`.
+2. Write a `SELECT` query destructuring `profile.*`.
+
 > [!check]- Answer
-> ```sql
-> SELECT name, contact.{phone, email} FROM company;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET profile = { first_name: "Alice", last_name: "Smith" };
+> 
+> -- Destructure nested profile object fields to top-level
+> SELECT profile.* FROM user:alice;
 > ```
-> - Attach the brace list directly to `contact.`.
-> - Include `phone` and `email` inside `{}`.
+>
+> #### Technical Explanation
+>
+> 1. `SELECT object.*` unpacks nested object properties into top-level result JSON keys.
+> 2. Eliminates manual field aliasing (`profile.first_name AS first_name`).
+> 3. Simplifies REST API response payload structuring.
+
+---
+
+### Exercise 2: Selective Destructuring with Aliases
+
+**Scenario:**
+Destructure specific nested fields from `address` while renaming `street` to `street_address`.
+
+**Requirements:**
+1. Select `address.street AS street_address` and `address.city`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:bob SET address = { street: "123 Main St", city: "Austin" };
+> 
+> -- Selective field destructuring with alias
+> SELECT address.street AS street_address, address.city FROM user:bob;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Dot-notation projection extracts specific nested properties cleanly.
+> 2. Aliasing (`AS street_address`) renames output properties.
+> 3. Prevents fetching unneeded object properties.
+
+---
+
+### Exercise 3: Destructuring Fetched Record Link Documents
+
+**Scenario:**
+Fetch linked `company` record on `user:alice` and destructure the company's fields directly into the output.
+
+**Requirements:**
+1. Fetch `company` and project `company.name` and `company.industry`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE company:acme SET name = "Acme Corp", industry = "Tech";
+> CREATE user:alice SET company = company:acme;
+> 
+> SELECT company.name, company.industry FROM user:alice FETCH company;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combines `FETCH` pointer resolution with property destructuring.
+> 2. Unpacks foreign record fields inline.
+> 3. Avoids multi-stage join queries.
 
 ---
 
 
 
-### Exercise 2: Nested Path Destructuring
-
-**Problem:** Select `street` and `city` from nested `address` object using destructuring syntax `address.{ street, city }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT address.{ street, city } FROM user;
-> ```
-> ```surrealql
-> SELECT address.{ street, city } FROM user;
-> ```
->
-> **Explanation:** `path.{ f1, f2 }` unwraps specified nested fields into top-level projections.
-
----
-
-### Exercise 3: Multi-Level Object Destructuring
-
-**Problem:** Select `profile.name` and `settings.theme` using multi-path projection.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT profile.name, settings.theme FROM user;
-> ```
-> ```surrealql
-> SELECT profile.name, settings.theme FROM user;
-> ```
->
-> **Explanation:** Dot-notation path projection extracts specific properties across nested objects.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`SELECT`](../level_03/select.md) — The query statement.
 - [`object`](../level_02/object_type.md) — Nested structures.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Object destructuring uses `object.{field1, field2}` syntax.
 - Eliminates repetitive dot-notation path references in `SELECT` projections.
 - Matches modern JavaScript object destructuring mental models.

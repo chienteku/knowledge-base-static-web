@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Core Storage Unit**
+
+**Core Concept** (Relation Data Structure): A Table is a 2-dimensional relation comprising named columns and ordered tuple rows storing structured records.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal standard** (Called a "Relation" in formal relational database theory. Physical disk engines write tables as structured heap files on disk).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A database can hold millions of pieces of information, but it cannot store them in a messy, unstructured pile. We need a way to categorize different concepts.
@@ -69,7 +70,7 @@ VALUES (1, 'The Hobbit', 'J.R.R. Tolkien', 1937);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating "catch-all" tables that store unrelated data
 
@@ -116,67 +117,91 @@ SET lock_timeout = '2s';
 ALTER TABLE heavy_table ADD COLUMN new_col INT DEFAULT 0;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Table Design Blueprint
+### Exercise 1: Table Creation with Data Integrity Constraints
 
-**Problem:** You are building an inventory system for a car dealership. You need to store cars. Create a SQL table named `cars` that stores a unique ID, the car's model name, make, manufacture year, and price.
+**Scenario:**
+Create an `inventory` table storing product stock, unit price, and reorder thresholds.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE TABLE inventory (...)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE cars (
->   id INTEGER PRIMARY KEY,
->   make VARCHAR(50),
->   model VARCHAR(50),
->   manufacture_year INTEGER,
->   price NUMERIC(10,2)
+> CREATE TABLE inventory (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   product_name TEXT NOT NULL,
+>   quantity_in_stock INTEGER NOT NULL DEFAULT 0 CHECK (quantity_in_stock >= 0),
+>   unit_price_cents INTEGER NOT NULL CHECK (unit_price_cents > 0),
+>   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 > );
 > ```
-> - Define clean, descriptive names for all columns.
-> - Think about what data type fits price numbers (decimals are best handled by `NUMERIC`).
+>
+> #### Technical Explanation
+>
+> 1. Tables are 2-dimensional grid relations where columns define schema types and rows store data records.
+> 2. `CHECK (quantity_in_stock >= 0)` guarantees negative stock values can never be written.
+> 3. `DEFAULT 0` populates omitted fields during new row inserts.
+
+---
+
+### Exercise 2: Truncating Table Records with `TRUNCATE`
+
+**Scenario:**
+Fast-delete all rows from a temporary staging table `staging_logs` using `TRUNCATE`.
+
+**Requirements:**
+1. Execute `TRUNCATE TABLE staging_logs`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> TRUNCATE TABLE staging_logs RESTART IDENTITY;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `TRUNCATE` removes all rows from a table by deallocating underlying data pages instantly.
+> 2. Orders of magnitude faster than `DELETE FROM` on large tables because it avoids individual row MVCC processing.
+> 3. `RESTART IDENTITY` resets auto-increment sequence counters to 1.
+
+---
+
+### Exercise 3: Inspecting Table Disk Footprint Statistics
+
+**Scenario:**
+Query total disk space used by table `orders` including its indexes and toast tables using `pg_total_relation_size()`.
+
+**Requirements:**
+1. Execute `SELECT pg_size_pretty(pg_total_relation_size('orders'))`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   pg_size_pretty(pg_relation_size('orders')) AS table_data_size,
+>   pg_size_pretty(pg_total_relation_size('orders')) AS total_size_with_indexes;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `pg_relation_size('orders')` calculates raw table heap data file sizes.
+> 2. `pg_total_relation_size('orders')` includes associated B-tree indexes and TOAST storage.
+> 3. Essential command for monitoring table storage growth.
 
 ---
 
 
 
-### Exercise 2: Creating Table with Constraints
-
-**Problem:** Create table `products` with `id` primary key, `name` (NOT NULL), and `price` (CHECK price > 0).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TABLE products ( id SERIAL PRIMARY KEY, name TEXT NOT NULL, price NUMERIC CHECK (price > 0) );
-> ```
-> ```sql
-> CREATE TABLE products (
->   id SERIAL PRIMARY KEY,
->   name TEXT NOT NULL,
->   price NUMERIC CHECK (price > 0)
-> );
-> ```
->
-> **Explanation:** DDL column constraints enforce data integrity at table creation.
-
----
-
-### Exercise 3: Inspecting Table Schema in `psql`
-
-**Problem:** Command in `psql` to inspect schema definition of table `products` (`\d products`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> \d products
-> ```
-> ```text
-> \d products
-> ```
->
-> **Explanation:** `\d table_name` displays column types, defaults, and index definitions in `psql`.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Row (Record / Tuple)](row.md) — The horizontal table entries.
 - [Column (Field / Attribute)](column.md) — The vertical table columns.
 - [`CREATE TABLE` / `DROP TABLE`](create_drop_table.md) — The table lifecycle SQL commands.
@@ -187,7 +212,7 @@ ALTER TABLE heavy_table ADD COLUMN new_col INT DEFAULT 0;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A table is a structured grid of rows and columns representing a single entity type.
 - Every table has a unique name (e.g., `users`, `products`) inside the database.
 - It is the relational database equivalent of a single sheet tab in a spreadsheet.

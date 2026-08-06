@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Core Architecture Concept**
+
+**Core Concept** (Absence of Value Marker): `NULL` is an explicit SQL marker representing unknown, unassigned, or missing data across database fields.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all SQL databases. Implements ANSI-SQL three-valued logic).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In real-world data collection, information is often missing:
@@ -96,7 +97,7 @@ SELECT * FROM staff WHERE phone IS NULL;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using arithmetic operations on nullable columns without fallbacks
 
@@ -152,61 +153,97 @@ SELECT * FROM users WHERE middle_name IS NULL; -- Correct NULL check
 CREATE UNIQUE INDEX idx_email ON users (email); -- Allows multiple NULL rows
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Debugging
+### Exercise 1: Querying NULL and NOT NULL States with `IS NULL`
 
-**Problem:** You run the following query to find all staff members who do *not* have the phone number `'555-0199'`:
-`SELECT * FROM staff WHERE phone <> '555-0199';`
-However, you notice that Alice (whose phone is `NULL`) is missing from the output list. Why was she excluded, and how do you write the query to include her?
+**Scenario:**
+Query table `users` for accounts where `deleted_at IS NULL` (active) vs `deleted_at IS NOT NULL` (soft-deleted).
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT` with `IS NULL` and `IS NOT NULL`.
+
 > [!check]- Answer
-> ```text
-> Alice was excluded because `NULL <> '555-0199'` evaluates to `UNKNOWN`. SQL query WHERE clauses only return rows where the condition evaluates strictly to `TRUE`. 
-> To fix this, you must explicitly include NULLs using `OR IS NULL`:
-> `SELECT * FROM staff WHERE phone <> '555-0199' OR phone IS NULL;`
+>
+> #### Implementation
+>
+> ```sql
+> -- Active Users
+> SELECT id, username 
+> FROM users 
+> WHERE deleted_at IS NULL;
+> 
+> -- Soft-Deleted Users
+> SELECT id, username, deleted_at 
+> FROM users 
+> WHERE deleted_at IS NOT NULL;
 > ```
-> - Check how comparative evaluation filters rows.
-> - Ensure the query logic explicitly checks for missing phone markers.
+>
+> #### Technical Explanation
+>
+> 1. `NULL` represents the absence of a value; standard equality (`deleted_at = NULL`) returns `UNKNOWN` (fails to match).
+> 2. You MUST use `IS NULL` or `IS NOT NULL` to test for null state presence.
+> 3. Core SQL 3-valued logic rule.
+
+---
+
+### Exercise 2: Providing Fallback Values with `COALESCE`
+
+**Scenario:**
+Return a user's `display_name` if present; if `NULL`, fall back to `username`; if both are `NULL`, fall back to `'Anonymous'`.
+
+**Requirements:**
+1. Use `COALESCE(display_name, username, 'Anonymous')`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   id, 
+>   COALESCE(display_name, username, 'Anonymous') AS public_name 
+> FROM users;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `COALESCE(val1, val2, ...)` returns the FIRST non-null argument in its list.
+> 2. Evaluates arguments in order until a valid value is encountered.
+> 3. Prevents returning raw `NULL` values to UI rendering templates.
+
+---
+
+### Exercise 3: Converting Zero Values to NULL with `NULLIF`
+
+**Scenario:**
+Prevent division-by-zero SQL errors when calculating average price per unit (`total_cost / NULLIF(units, 0)`).
+
+**Requirements:**
+1. Use `NULLIF(units, 0)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   id, 
+>   total_cost / NULLIF(units, 0) AS avg_unit_cost 
+> FROM purchases;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `NULLIF(a, b)` returns `NULL` if `a = b`; otherwise returns `a`.
+> 2. If `units = 0`, `NULLIF(units, 0)` returns `NULL`, causing division by `NULL` (which yields `NULL` instead of crashing with division by zero).
+> 3. Essential pattern for safe mathematical SQL calculations.
 
 ---
 
 
 
-### Exercise 2: Correct NULL Comparison Predicate
-
-**Problem:** Query users whose `deleted_at` timestamp is NOT NULL.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users WHERE deleted_at IS NOT NULL;
-> ```
-> ```sql
-> SELECT * FROM users WHERE deleted_at IS NOT NULL;
-> ```
->
-> **Explanation:** `IS NOT NULL` correctly checks for non-null field presence in SQL.
-
----
-
-### Exercise 3: Handling NULLs with `COALESCE`
-
-**Problem:** Replace NULL `nickname` values with `'Guest'` using `COALESCE()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT COALESCE(nickname, 'Guest') FROM users;
-> ```
-> ```sql
-> SELECT COALESCE(nickname, 'Guest') FROM users;
-> ```
->
-> **Explanation:** `COALESCE(val, fallback)` returns the first non-null argument expression.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Data Types (Overview)](data_types.md) — The typing foundation.
 - [`NOT NULL` Constraint](not_null.md) — Blocking NULL values.
 - [`BOOLEAN`](boolean.md) — Related concept: `BOOLEAN`.
@@ -217,7 +254,7 @@ However, you notice that Alice (whose phone is `NULL`) is missing from the outpu
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `NULL` represents the absence of a value, not a zero or an empty string.
 - SQL uses three-valued logic: `TRUE`, `FALSE`, and `UNKNOWN`.
 - You must use `IS NULL` and `IS NOT NULL` to compare null states; `=` will fail.

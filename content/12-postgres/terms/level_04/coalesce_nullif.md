@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Function**
+
+**SQL Command / Clause** (Null Fallback & Comparison Functions): `COALESCE` returns the first non-null argument, while `NULLIF` converts matching values into `NULL` to prevent calculation errors.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all SQL databases. Evaluated dynamically row-by-row during query execution).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Handling `NULL` values is a constant chore in web development:
@@ -97,7 +98,7 @@ FROM conversions;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Passing different data types into COALESCE
 
@@ -151,66 +152,99 @@ SELECT COALESCE(created_at, 'N/A') FROM users; -- ❌ Error: invalid input synta
 SELECT COALESCE(created_at::TEXT, 'N/A') FROM users;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Clean Math Ledger
+### Exercise 1: Substituting Null Values with COALESCE
 
-**Problem:** You have a `ledgers` table with columns `revenue` and `expenses` (both numeric, can be `NULL`). Write a SQL query that calculates the profit as `revenue - expenses`. If either column is `NULL`, treat its value as `0` in the math. Label the output column as `net_profit`.
+**Scenario:**
+Select user contact details returning `mobile_phone`, falling back to `home_phone`, falling back to `'No Phone Available'`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT COALESCE(mobile_phone, home_phone, 'No Phone Available')`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT COALESCE(revenue, 0.00) - COALESCE(expenses, 0.00) AS net_profit 
-> FROM ledgers;
+> SELECT 
+>   id, 
+>   username, 
+>   COALESCE(mobile_phone, home_phone, 'No Phone Available') AS primary_phone 
+> FROM user_contacts;
 > ```
-> - Wrap both columns in `COALESCE` before doing subtraction to prevent NULL propagation.
-> - Use `0.00` as the fallback value.
+>
+> #### Technical Explanation
+>
+> 1. `COALESCE(val1, val2, ...)` returns the first non-null argument in order.
+> 2. Prevents returning raw `NULL` values to API consumers.
+> 3. Standard null fallback function.
+
+---
+
+### Exercise 2: Division-By-Zero Protection with NULLIF
+
+**Scenario:**
+Calculate conversion rate (`conversions / views`), preventing division by zero when `views = 0`.
+
+**Requirements:**
+1. Use `conversions / NULLIF(views, 0)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   campaign_name, 
+>   ROUND(conversions::NUMERIC / NULLIF(views, 0), 4) AS conversion_rate 
+> FROM ad_campaigns;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `NULLIF(views, 0)` evaluates to `NULL` when `views = 0`.
+> 2. Dividing by `NULL` returns `NULL` instead of crashing with division by zero (Error 22012).
+> 3. Essential for safe mathematical SQL calculations.
+
+---
+
+### Exercise 3: Blank String to Null Normalization
+
+**Scenario:**
+Convert empty string values (`''`) to `NULL` using `NULLIF(email, '')`.
+
+**Requirements:**
+1. Use `NULLIF(email, '')`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> UPDATE users 
+> SET email = NULLIF(email, '') 
+> WHERE email = '';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `NULLIF(email, '')` returns `NULL` when `email` is an empty string.
+> 2. Cleans dirty user inputs, enforcing data normalization.
+> 3. Allows unique constraints on nullable email fields to work properly.
 
 ---
 
 
 
-### Exercise 2: Preventing Division by Zero with `NULLIF`
-
-**Problem:** Prevent division by zero when calculating `total / count` when `count` is 0 using `NULLIF(count, 0)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT total / NULLIF(count, 0) AS avg_val FROM stats;
-> ```
-> ```sql
-> SELECT total / NULLIF(count, 0) AS avg_val FROM stats;
-> ```
->
-> **Explanation:** `NULLIF(count, 0)` converts 0 to NULL, causing division by NULL to evaluate safely to NULL without crashing.
-
----
-
-### Exercise 3: Multi-Fallback `COALESCE` Chain
-
-**Problem:** Select user contact info trying `mobile_phone`, falling back to `home_phone`, then `email`, then `'No Contact'`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT COALESCE(mobile_phone, home_phone, email, 'No Contact') AS primary_contact FROM users;
-> ```
-> ```sql
-> SELECT COALESCE(mobile_phone, home_phone, email, 'No Contact') AS primary_contact
-> FROM users;
-> ```
->
-> **Explanation:** `COALESCE()` evaluates arguments sequentially, returning the first non-null value.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`NULL`](../level_02/null.md) — The parent absent state.
 - [Type Casting (`CAST` / `::`)](type_casting.md) — Converting data types inside functions.
 - [`NULL` Behavior in Expressions & Aggregates](null_in_aggregates.md) — Related concept: `NULL` Behavior in Expressions & Aggregates.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `COALESCE` returns the first non-null value from a list of arguments (left-to-right).
 - `NULLIF(a, b)` returns `NULL` if `a` equals `b`; otherwise it returns `a`.
 - Use `COALESCE` to display default text values or secure calculations.

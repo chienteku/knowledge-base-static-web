@@ -167,8 +167,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Self-Referential Pinned Buffer with Heap Pinning (`Pin<Box<T>>`)
 
-**Scenario**: Low-level networking and graphics engines often require self-referential buffers where a slice reference `&[u8]` inside a struct points directly to another heap-allocated buffer stored within the same struct instance. If this struct moves in memory, the raw pointer/slice becomes invalid.
+**Scenario:** Low-level networking and graphics engines often require self-referential buffers where a slice reference `&[u8]` inside a struct points directly to another heap-allocated buffer stored within the same struct instance. If this struct moves in memory, the raw pointer/slice becomes invalid.
 
+**Requirements:**
 Build a self-referential struct `SelfReferentialBuffer` using `PhantomPinned` and heap-pinning via `Box::pin`.
 
 **Requirements**:
@@ -178,6 +179,9 @@ Build a self-referential struct `SelfReferentialBuffer` using `PhantomPinned` an
 4. Add unit tests asserting pointer stability, slice content validity, and testing memory assertions.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::marker::PhantomPinned;
 > use std::pin::Pin;
@@ -248,7 +252,8 @@ Build a self-referential struct `SelfReferentialBuffer` using `PhantomPinned` an
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **PhantomPinned Marker**: Including `_pin: PhantomPinned` opts out of the default `Unpin` auto-trait implementation for `SelfReferentialBuffer`.
 > 2. **Heap Pinning via `Box::pin` / `Box::into_pin`**: Placing the struct inside a `Box` ensures memory lives on the heap. Converting `Box<T>` into `Pin<Box<T>>` disables APIs that move `T` out of the heap box.
 > 3. **Self-Pointer Safety**: Because `Pin<Box<T>>` guarantees that `T`'s heap address will never change, the internal `slice_ptr` pointer remains permanently valid for the entire lifetime of the pinned box.
@@ -349,7 +354,8 @@ Build a self-referential struct `SelfReferentialBuffer` using `PhantomPinned` an
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Pin Projection Requirements**: When polling a struct field `self.future` inside `poll(self: Pin<&mut Self>, ...)`, you cannot move fields out of `self`. You must project `Pin<&mut TimeoutFuture<F>>` into `Pin<&mut F>`.
 > 2. **`get_unchecked_mut` & `Pin::new_unchecked`**: `this = self.get_unchecked_mut()` obtains mutable access to struct fields. `Pin::new_unchecked(&mut this.future)` re-pins the field reference, guaranteeing structural pinning.
 > 3. **Future Composition**: Polling both projected futures sequentially inside `poll` enables custom async combinators without dynamic heap allocation (`Box::pin`).

@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (conditional creation modifier)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Evaluated by the schema manager engine. Prevents query aborts by checking system catalog tables before executing schema definitions).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When deploying full-stack web applications, you write schema configuration scripts (migrations) to set up tables, fields, and indexes:
@@ -79,7 +78,7 @@ REMOVE TABLE user IF EXISTS;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to append 'IF NOT EXISTS' to standard CRUD queries like 'CREATE', expecting it to bypass record conflicts
 
@@ -136,66 +135,92 @@ INSERT IF NOT EXISTS INTO user ...;
 UPSERT user:1 SET name = "Alice"; // Data upsert statement
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Migration Script Auditing
+### Exercise 1: Conditional Record Creation without Conflicts
 
-**Problem:** You are reviewing a database initialization file. 
-State whether this script will **Succeed** or **Fail** on its second consecutive run, and explain why:
-```sql
-DEFINE TABLE posts SCHEMALESS;
-DEFINE INDEX post_title ON posts IF NOT EXISTS COLUMNS title;
-```
+**Scenario:**
+A seed script creates initial system configuration records (like `config:theme`) only if they do not already exist.
 
-**Expected output:**
+**Requirements:**
+1. Write the `CREATE IF NOT EXISTS` statement for `config:theme`.
+2. Execute the script twice to verify that no error is thrown on the second execution.
+
 > [!check]- Answer
-> ```text
-> The script will fail on its second run.
-> Although the index creation is protected by `IF NOT EXISTS`, the first line (`DEFINE TABLE posts`) has no conditional guard. 
-> On the second run, the database will attempt to define the `posts` table again, see that it already exists, throw an error, and halt execution. 
-> To fix it, change the first line to `DEFINE TABLE posts IF NOT EXISTS SCHEMALESS;`.
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Create config record if not already present
+> CREATE IF NOT EXISTS config:theme SET mode = "dark";
+> 
+> -- Second execution safely skips creation without throwing error
+> CREATE IF NOT EXISTS config:theme SET mode = "light";
 > ```
-> - Check every command starting with the `DEFINE` keyword.
-> - Consider if any command lacks error suppression guards.
+>
+> #### Technical Explanation
+>
+> 1. `CREATE IF NOT EXISTS table:id` checks primary key existence before inserting.
+> 2. If `config:theme` exists, SurrealDB skips record creation silently without raising a primary key conflict error.
+> 3. Essential for idempotent environment seeding scripts in deployment pipelines.
+
+---
+
+### Exercise 2: Conditional Field Definition in Schema Migrations
+
+**Scenario:**
+A migration script adds a new field `discount_code` to table `coupon` only if the field is not already defined.
+
+**Requirements:**
+1. Write the `DEFINE FIELD IF NOT EXISTS` statement.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE IF NOT EXISTS coupon SCHEMAFULL;
+> 
+> -- Define field conditionally
+> DEFINE FIELD IF NOT EXISTS discount_code ON TABLE coupon TYPE string;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `IF NOT EXISTS` on DDL statements (`DEFINE TABLE`, `DEFINE FIELD`) prevents "item already exists" errors during migration script execution.
+> 2. Ensures schema migration scripts can be re-run safely in CI/CD pipelines.
+> 3. Complements `DEFINE ... OVERWRITE` for idempotent schema management.
+
+---
+
+### Exercise 3: Conditional Table Removal with `IF EXISTS`
+
+**Scenario:**
+A cleanup script drops temporary table `temp_import` only if the table currently exists in the active database.
+
+**Requirements:**
+1. Write the `REMOVE TABLE IF EXISTS` statement.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Remove table safely if present
+> REMOVE TABLE IF EXISTS temp_import;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE TABLE IF EXISTS` drops table schema metadata and records if present.
+> 2. If `temp_import` does not exist, SurrealDB skips removal without throwing a "table not found" error.
+> 3. Simplifies teardown scripts across variable deployment environments.
 
 ---
 
 
 
-### Exercise 2: Idempotent Schema Migration Script
-
-**Problem:** Write idempotent SurrealQL statements to define `article` table and `title` field.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE TABLE IF NOT EXISTS article; DEFINE FIELD IF NOT EXISTS title ON TABLE article TYPE string;
-> ```
-> ```surrealql
-> DEFINE TABLE IF NOT EXISTS article;
-> DEFINE FIELD IF NOT EXISTS title ON TABLE article TYPE string;
-> ```
->
-> **Explanation:** `IF NOT EXISTS` guarantees idempotent schema migrations across deployments.
-
----
-
-### Exercise 3: Idempotent Index Definition
-
-**Problem:** Define unique index on `user.email` using `IF NOT EXISTS`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX IF NOT EXISTS user_email_idx ON TABLE user FIELDS email UNIQUE;
-> ```
-> ```surrealql
-> DEFINE INDEX IF NOT EXISTS user_email_idx ON TABLE user FIELDS email UNIQUE;
-> ```
->
-> **Explanation:** `DEFINE INDEX IF NOT EXISTS` prevents index re-creation errors.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`CREATE`](create.md) — The parent write statement.
 - [Table](../level_01/table.md) — The schema container.
@@ -204,7 +229,7 @@ DEFINE INDEX post_title ON posts IF NOT EXISTS COLUMNS title;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `IF NOT EXISTS` / `IF EXISTS` are modifiers for schema definition queries.
 - Prevents database deployment crashes by suppressing object conflict errors.
 - Used with DDL commands starting with `DEFINE` and `REMOVE`.

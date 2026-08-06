@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (session parameter variable assignment)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the session layer. Keeps defined parameter keys in memory for the duration of the query block or connection connection).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Complex database workflows often require multi-step processing:
@@ -79,7 +78,7 @@ CREATE system_log SET info = $metadata;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that a subquery assigned to a LET variable returns an array unless indexed or wrapped in SELECT VALUE ... LIMIT 1
 
@@ -134,65 +133,99 @@ LET $unassigned_var = "admin";
 SELECT * FROM user WHERE role = $unassigned_var;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multi-step LET Scripting
+### Exercise 1: Declaring Parameter Variables for Reusable Queries
 
-**Problem:** Write a SurrealQL script using `LET` statements to:
-1. Define a variable `$discount_rate` set to `0.15dec`.
-2. Define a variable `$target_product` set to `product:keyboard`.
-3. Update `$target_product`, setting its `sale_price` to `price - (price * $discount_rate)`.
+**Scenario:**
+Declare parameter variables `$target_date` and `$min_score` to reuse across multiple analytical queries in a script.
 
-**Expected output:**
+**Requirements:**
+1. Declare `LET $target_date = d"2026-08-01T00:00:00Z";`.
+2. Declare `LET $min_score = 80;`.
+3. Use variables in a `SELECT` query.
+
 > [!check]- Answer
-> ```sql
-> LET $discount_rate = 0.15dec;
-> LET $target_product = product:keyboard;
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $target_date = d"2026-08-01T00:00:00Z";
+> LET $min_score = 80;
 > 
-> UPDATE $target_product SET sale_price = price - (price * $discount_rate);
+> SELECT * FROM audit_log 
+> WHERE timestamp >= $target_date AND score >= $min_score;
 > ```
-> - Prefix variable names with `$`.
-> - Target `$target_product` directly as the target of the `UPDATE` statement.
+>
+> #### Technical Explanation
+>
+> 1. `LET $variable = expression;` binds values to parameter variables within the active session context.
+> 2. Promotes query reusability and avoids hardcoded literal values.
+> 3. Parameter values are scoped to the current script or transaction execution block.
+
+---
+
+### Exercise 2: Binding Subquery Results to Parameter Variables
+
+**Scenario:**
+Fetch a user's record link ID into `$user_id` using a `LET` subquery, then insert a post linked to `$user_id`.
+
+**Requirements:**
+1. Bind `LET $user_id = (SELECT VALUE id FROM ONLY user WHERE email = "alice@example.com");`.
+2. Create post linked to `$user_id`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET email = "alice@example.com";
+> 
+> -- Bind subquery result to parameter
+> LET $user_id = (SELECT VALUE id FROM ONLY user WHERE email = "alice@example.com");
+> 
+> CREATE post:p1 SET title = "Bound Subquery Post", author = $user_id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `LET $var = (SELECT ...)` stores subquery execution results in parameter variables.
+> 2. `FROM ONLY` unwraps single-record subqueries into scalar values.
+> 3. Simplifies multi-step relational data insertion scripts.
+
+---
+
+### Exercise 3: Scoped Variable Re-assignment
+
+**Scenario:**
+Demonstrate re-assigning a parameter variable `$count` inside a script block.
+
+**Requirements:**
+1. Initialize `LET $count = 1;`.
+2. Re-assign `LET $count = $count + 1;`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $count = 1;
+> LET $count = $count + 1;
+> 
+> RETURN $count;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Parameter variables can be re-assigned within the active script block.
+> 2. Evaluates the right-hand expression before updating variable state.
+> 3. Supports accumulator logic in procedural scripts.
 
 ---
 
 
 
-### Exercise 2: Binding Subquery Output to Variable
-
-**Problem:** Bind count of active users to `$active_count` using `LET` and subquery.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> LET $active_count = (SELECT VALUE count() FROM user WHERE active = true GROUP ALL)[0];
-> ```
-> ```surrealql
-> LET $active_count = (SELECT VALUE count() FROM user WHERE active = true GROUP ALL)[0];
-> ```
->
-> **Explanation:** `LET $var = (subquery)` binds subquery results to reusable parameter variables.
-
----
-
-### Exercise 3: Using Variables in Graph Edge Creation
-
-**Problem:** Set `$u = user:alice`, `$p = post:10`, and execute `RELATE $u->wrote->$p`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> LET $u = user:alice; LET $p = post:10; RELATE $u->wrote->$p;
-> ```
-> ```surrealql
-> LET $u = user:alice;
-> LET $p = post:10;
-> RELATE $u->wrote->$p;
-> ```
->
-> **Explanation:** Parameters `$u` and `$p` parameterize record targets in graph queries.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Parameters (`$param`)](parameters.md) — Parameter variable rules.
 - [Subqueries](subqueries.md) — Evaluated subquery inputs.
@@ -202,7 +235,7 @@ SELECT * FROM user WHERE role = $unassigned_var;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `LET` declares and assigns values to scoped parameter variables (`$var`).
 - Enables procedural, multi-step scripting within a single SurrealQL execution.
 - Variables can store primitives, objects, arrays, or subquery results.

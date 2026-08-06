@@ -14,16 +14,15 @@
 ---
 
 ## 2. Term Category
-- **Security & Authorization**
+
+
+**Authentication & Permissions (table and field row-level security PERMISSIONS clause)**: - **Security & Authorization**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core Engine** (Evaluated automatically on every CRUD statement executed by record-level users or client SDKs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional database design, authorization rules (who can read or write which rows) are enforced inside backend application code (e.g., Express middleware checks `if (req.user.id !== post.author_id) throw 403`). In PostgreSQL, Row-Level Security (RLS) policies exist but require complex SQL policies and session variable management.
@@ -65,7 +64,7 @@ DEFINE FIELD salary ON employee TYPE number
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving Table PERMISSIONS Empty in Public Record Auth Apps
 
@@ -126,84 +125,94 @@ DEFINE FIELD pass ON TABLE user PERMISSIONS NONE; // Field hidden from select qu
 
 
 
-### Mistake 4: Setting `PERMISSIONS FULL` on Production Tables Exposing Private Data
 
-**The mistake:** Defining `DEFINE TABLE user PERMISSIONS FULL;` in web-facing databases.
 
-**Why it's wrong:** `PERMISSIONS FULL` allows ANY connected scope client to read, modify, or delete any record in the table.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-DEFINE TABLE user PERMISSIONS FULL; // ❌ Unrestricted open permissions!
-```
+### Exercise 1: Table-Level Row Security Configuration
 
-*Fix:*
-```surrealql
-DEFINE TABLE user PERMISSIONS FOR select WHERE id = $auth.id, FOR update WHERE id = $auth.id;
-```
+**Scenario:**
+Configure table `post` with CRUD permissions: anyone can `select` published posts, but only the `author` can `update` or `delete`.
 
-### Mistake 5: Confusing Table Level `PERMISSIONS` with Field Level `PERMISSIONS`
-
-**The mistake:** Expecting table-level `PERMISSIONS` to hide sensitive fields like `password_hash` automatically.
-
-**Why it's wrong:** Table permissions grant or deny access to whole records. To hide specific fields within records, define field-level `PERMISSIONS` (e.g. `DEFINE FIELD pass ON TABLE user PERMISSIONS NONE;`).
-
-*Incorrect:*
-```surrealql
--- Sensitive field exposed in record reads if table permission passes
-```
-
-*Fix:*
-```surrealql
-DEFINE FIELD pass ON TABLE user PERMISSIONS NONE; // Field hidden from select queries
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Define Own-Record Update Rule
-Write a `PERMISSIONS` clause for a `profile` table allowing any authenticated user to `select` any profile, but restricting `update` and `delete` to only when `id = $auth.id`.
+**Requirements:**
+1. Apply `PERMISSIONS FOR select WHERE published = true OR author = $auth.id`.
+2. Apply `PERMISSIONS FOR update, delete WHERE author = $auth.id`.
 
 > [!check]- Answer
-> - Use `FOR select FULL`.
-> - Use `FOR update, delete WHERE id = $auth.id`.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE post SCHEMAFULL
+>     PERMISSIONS 
+>         FOR select WHERE published = true OR author = $auth.id,
+>         FOR create WHERE author = $auth.id,
+>         FOR update, delete WHERE author = $auth.id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `PERMISSIONS` clauses define granular row-level security rules per operation (`select`, `create`, `update`, `delete`).
+> 2. Evaluates boolean filter expressions for every candidate record.
+> 3. Automatically filters out unauthorized records from query result arrays.
+
+---
+
+### Exercise 2: Field-Level Read Permissions
+
+**Scenario:**
+Restrict field `salary` on table `employee` so that only managers (`$auth.role = "manager"`) or the employee themselves (`id = $auth.id`) can view it.
+
+**Requirements:**
+1. Apply `PERMISSIONS FOR select WHERE id = $auth.id OR $auth.role = "manager"` to field `salary`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE FIELD salary ON TABLE employee TYPE decimal 
+>     PERMISSIONS FOR select WHERE id = $auth.id OR $auth.role = "manager";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Field-level `PERMISSIONS` restrict visibility for specific record properties.
+> 2. Redacts unauthorized fields (`salary: NONE`) while allowing access to non-sensitive fields.
+> 3. Enforces field privacy at the database tier.
+
+---
+
+### Exercise 3: Complete Access Blockage with `NONE`
+
+**Scenario:**
+Block all client `delete` operations on table `audit_log` by specifying `PERMISSIONS FOR delete NONE`.
+
+**Requirements:**
+1. Apply `PERMISSIONS FOR delete NONE` to table `audit_log`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE audit_log SCHEMAFULL
+>     PERMISSIONS FOR delete NONE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `PERMISSIONS FOR delete NONE` blocks deletion attempts across all scoped client sessions.
+> 2. Guarantees append-only audit trail immutability.
+> 3. Root/admin connections bypass RLS permissions.
 
 ---
 
 
 
-### Exercise 2: Row-Level Security Rule Definition
 
-**Problem:** Define `article` table permissions allowing `select` and `update` ONLY if `author = $auth.id`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE TABLE article PERMISSIONS FOR select, update WHERE author = $auth.id;
-> ```
-> ```surrealql
-> DEFINE TABLE article PERMISSIONS FOR select, update WHERE author = $auth.id;
-> ```
->
-> **Explanation:** `PERMISSIONS FOR statement WHERE condition` enforces fine-grained row-level security.
-
----
-
-### Exercise 3: Hiding Sensitive Field with PERMISSIONS NONE
-
-**Problem:** Hide field `password_hash` on `user` table from all read queries using `PERMISSIONS NONE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD password_hash ON TABLE user PERMISSIONS NONE;
-> ```
-> ```surrealql
-> DEFINE FIELD password_hash ON TABLE user PERMISSIONS NONE;
-> ```
->
-> **Explanation:** `PERMISSIONS NONE` on a field prevents it from being exposed in projection outputs.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`$auth` Variable](auth_variable.md) — The bound context user variable.
 - [`$auth.id` vs `$auth.*` (Accessing Auth Record Fields)](auth_record_fields.md) — Using record properties in permissions.
@@ -213,7 +222,7 @@ Write a `PERMISSIONS` clause for a `profile` table allowing any authenticated us
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `PERMISSIONS` provides declarative Row-Level Security (RLS) and Field-Level Security directly in SurrealQL.
 - Supports granular operation scoping: `FOR select`, `FOR create`, `FOR update`, `FOR delete`, and `FOR full`.
 - System users (`ROOT`, `NAMESPACE`, `DATABASE`) bypass permissions; `RECORD` access users are governed strictly by permissions.

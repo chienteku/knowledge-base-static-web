@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture**
+
+**Build & Deployment** (Node.js Server Execution Engine): The Node.js Runtime provides server-side execution environments for Next.js Server Components, API handlers, and Server Actions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 JavaScript was originally designed as a client-side scripting language running inside web browsers. To build full-stack web applications, developers had to write their frontend code in JavaScript and their backend APIs in a different server-side language (like Ruby, Python, or Java). 
@@ -79,7 +80,7 @@ export default async function BlogPage() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Accessing browser-only APIs in Server Components
 
@@ -140,72 +141,107 @@ await redis.set(`session:${id}`, token);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Read Server Environment Variable
+### Exercise 1: Configuring Runtime Environments (Node.js vs Edge)
 
-**Problem:** Complete the Server Component below to read the system host environment port number using Node.js `process.env` APIs:
+**Scenario:**
+Configure a route segment to execute on Node.js runtime vs Edge runtime.
 
-```typescript
-// app/status/page.tsx (Server Component)
-export default function StatusPage() {
-  // Solution:
-  const port = process.env.PORT || '3000';
+**Requirements:**
+1. Export `runtime = "nodejs"` or `runtime = "edge"`.
 
-  return (
-    <div>
-      <h1>Server Status</h1>
-      <p>Server is running on port: {port}</p>
-    </div>
-  );
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // app/api/compute/route.ts
+> export const runtime = "nodejs"; // Default Node.js runtime
+
+export async function GET() {
+  return Response.json({ runtime: "Node.js Server" });
 }
 ```
 
-> [!check]- Answer
-> - In Node.js, environment configurations are read from the global `process.env` object.
+> #### Technical Explanation
+>
+> 1. `export const runtime = 'nodejs'` forces execution inside a full Node.js environment.
+> 2. Node.js runtime grants access to native C++ modules, filesystem (`fs`), and full npm packages.
+> 3. Default execution engine for Next.js App Router.
 
 ---
 
-### Exercise 2: Route Runtime Declaration
+### Exercise 2: Reading Environment Variables in Node.js Runtime
 
-**Problem:** Write route segment configuration line switching a Route Handler runtime from Node.js to Edge Runtime.
+**Scenario:**
+Read server-only environment variables securely inside a Server Component.
 
-**Expected output:**
+**Requirements:**
+1. Access `process.env.DATABASE_URL`.
+
 > [!check]- Answer
-> ```typescript
-> export const runtime = 'edge';
-> ```
-> - `export const runtime = 'edge'` selects V8 Edge Runtime.
-> 
-> ```typescript
-> export const runtime = 'edge';
-> 
-> export async function GET() {
->   return new Response('Edge Response');
+>
+> #### Implementation
+>
+> ```tsx
+> export default async function ServerSecretView() {
+>   const dbUrl = process.env.DATABASE_URL;
+>   
+>   return (
+>     <div>
+>       <p>Database Connection Status: {dbUrl ? "Configured" : "Missing"}</p>
+>     </div>
+>   );
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. Environment variables without `NEXT_PUBLIC_` prefix are available ONLY in Node.js server execution contexts.
+> 2. Stripped from client bundles automatically to prevent credential leaks.
+> 3. Core security guarantee of Node.js Server Component runtimes.
+
 ---
 
-### Exercise 3: Serverless Cold Starts
+### Exercise 3: Handling Node.js Streams in Server Routes
 
-**Problem:** Explain what a "Cold Start" means in Next.js Serverless Node.js execution.
+**Scenario:**
+Stream file contents asynchronously using Node.js `fs.createReadStream()`.
 
-**Expected output:**
+**Requirements:**
+1. Return readable stream in Route Handler.
+
 > [!check]- Answer
-> ```text
-> The delay experienced when a new serverless container instance is initialized from scratch to handle an incoming HTTP request.
-> ```
-> - Cold start is the initialization latency of new serverless containers.
-> 
-> ```text
-> Container Spin-Up -> Module Load -> Request Handler Execution
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> // app/api/file/route.ts
+> import fs from "node:fs";
+
+export async function GET() {
+  const fileStream = fs.createReadStream("./public/large-dataset.csv");
+  return new Response(fileStream as any, {
+    headers: { "Content-Type": "text/csv" }
+  });
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Node.js runtime supports streaming data buffers via native `fs` streams and Web Streams.
+> 2. Avoids reading entire multi-gigabyte files into server RAM memory.
+> 3. Standard backend Node.js performance optimization pattern.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Next.js Overview](nextjs.md) — The framework running on top of Node.js.
 - [React Server Components (RSC)](rsc.md) — Components executing inside this runtime.
 - [Node.js `path` Module](../level_04/path_module.md) — Related concept: Node.js `path` Module.
@@ -215,7 +251,7 @@ export default function StatusPage() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Node.js is a server-side JavaScript runtime built on Chrome's V8 engine.
 - Next.js uses the Node.js runtime to compile static sites, render pages, and run API routes.
 - Browser APIs like `window`, `document`, and `localStorage` are not available in Node.js.

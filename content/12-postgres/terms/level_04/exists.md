@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Operator**
+
+**SQL Command / Clause** (Subquery Existence Predicate): `EXISTS` tests whether a correlated subquery returns at least one row, evaluating as a fast boolean predicate.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all SQL databases. Highly optimized via **Short-Circuit Evaluation** inside query execution engines).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational databases, you frequently need to check for the presence of related data in another table before returning a row:
@@ -94,7 +95,7 @@ WHERE NOT EXISTS (
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing columns or SELECT * inside EXISTS subqueries because you think they are required
 
@@ -140,76 +141,104 @@ SELECT * FROM users u WHERE EXISTS (SELECT 1 FROM orders WHERE user_id = u.id); 
 EXISTS (SELECT 1 FROM ...) is idiomatic, but SELECT * has zero performance penalty inside EXISTS
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Inactive Author Audit
+### Exercise 1: Correlated Subquery Filtering with `EXISTS`
 
-**Problem:** You have an `authors` table (columns: `id`, `name`) and an `articles` table (columns: `id`, `author_id`, `title`). Write a SQL query to list the names of all authors who have **never** published an article. Use the `NOT EXISTS` operator.
+**Scenario:**
+Find all customers who have placed at least one order in table `orders`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `WHERE EXISTS (SELECT 1 FROM orders WHERE orders.customer_id = customers.id)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT name 
-> FROM authors a
+> SELECT id, company_name 
+> FROM customers AS c 
+> WHERE EXISTS (
+>   SELECT 1 
+>   FROM orders AS o 
+>   WHERE o.customer_id = c.id
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `EXISTS` evaluates to `TRUE` as soon as the inner subquery returns a single matching row.
+> 2. Stops subquery execution immediately upon finding the first match ($O(1)$ short-circuiting).
+> 3. Outperforms `IN (SELECT customer_id FROM orders)` when subqueries return large result sets.
+
+---
+
+### Exercise 2: Finding Inactive Entities with `NOT EXISTS`
+
+**Scenario:**
+Find all customers who have NEVER placed an order.
+
+**Requirements:**
+1. Use `WHERE NOT EXISTS (...)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, company_name 
+> FROM customers AS c 
 > WHERE NOT EXISTS (
 >   SELECT 1 
->   FROM articles ar 
->   WHERE ar.author_id = a.id
+>   FROM orders AS o 
+>   WHERE o.customer_id = c.id
 > );
 > ```
-> - Correlate the subquery by matching `ar.author_id` to the parent `a.id`.
-> - Use the `SELECT 1` convention inside the `NOT EXISTS` block.
+>
+> #### Technical Explanation
+>
+> 1. `NOT EXISTS` checks if the inner subquery returns zero rows.
+> 2. Safely handles `NULL` values in foreign keys without unexpected 3-valued logic pitfalls.
+> 3. Standard anti-join pattern.
+
+---
+
+### Exercise 3: Performance Comparison: EXISTS vs IN vs LEFT JOIN
+
+**Scenario:**
+Evaluate why `EXISTS` is preferred over `IN` for subqueries containing potential `NULL` values.
+
+**Requirements:**
+1. Contrast `NOT EXISTS` vs `NOT IN`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Subquery Security Comparison:
+> - NOT IN (SELECT nullable_col FROM ...): Returns ZERO rows if ANY subquery row returns NULL! (3-valued logic trap).
+> - NOT EXISTS (SELECT 1 FROM ...): Handles NULL values safely and short-circuits execution.
+> Recommendation: Always use NOT EXISTS over NOT IN for subquery filtering.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `NOT IN` fails when subquery results contain `NULL` because `val NOT IN (1, 2, NULL)` evaluates to `UNKNOWN`.
+> 2. `NOT EXISTS` relies on boolean row counts, bypassing `NULL` value bugs.
+> 3. Production SQL safety rule.
 
 ---
 
 
 
-### Exercise 2: Correlated `EXISTS` Subquery Filter
-
-**Problem:** Query users who have placed at least one completed order using `EXISTS`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users u WHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id AND o.status = 'completed');
-> ```
-> ```sql
-> SELECT * FROM users u
-> WHERE EXISTS (
->   SELECT 1 FROM orders o
->   WHERE o.user_id = u.id AND o.status = 'completed'
-> );
-> ```
->
-> **Explanation:** `EXISTS` evaluates true if the correlated subquery returns 1 or more rows.
-
----
-
-### Exercise 3: Negated `NOT EXISTS` Subquery Filter
-
-**Problem:** Query users who have NEVER placed an order using `NOT EXISTS`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users u WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id);
-> ```
-> ```sql
-> SELECT * FROM users u
-> WHERE NOT EXISTS (
->   SELECT 1 FROM orders o WHERE o.user_id = u.id
-> );
-> ```
->
-> **Explanation:** `NOT EXISTS` filters rows where no corresponding subquery tuple exists.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Subquery (Nested Query)](subquery.md) — The query container.
 - [`WHERE` Clause](../level_03/where.md) — The parent filter wrapper.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `EXISTS` tests if a nested subquery returns at least one row (returns `TRUE` or `FALSE`).
 - `NOT EXISTS` returns `TRUE` if the subquery returns zero rows.
 - Highly optimized because it short-circuits the scan the moment a match is found.

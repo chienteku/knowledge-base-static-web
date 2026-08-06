@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Advanced Feature** (On-The-Fly Aggregation Read-Only Views): Views (and On-Demand Materialized Views) are read-only virtual collections defined by an aggregation pipeline expression computed dynamically upon query execution.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Managed at the database level. Queries sent to a view are translated internally by the query planner into aggregation stages on the source collections).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In complex database architectures, you frequently write large queries to prepare data:
@@ -107,7 +108,7 @@ db.public_profiles.find({ username: "alice" });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to run insert or update operations on a MongoDB View, expecting them to propagate to the source collection
 
@@ -156,74 +157,113 @@ db.active_users_view.createIndex({ email: 1 }); // ❌ Cannot create index on vi
 Index underlying source collection fields or build Materialized Views via $merge
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: View Definition
+### Exercise 1: Creating Non-Materialized On-The-Fly Read-Only Views
 
-**Problem:** You have a `sales` collection. Write the mongosh command to create a View named `"active_high_value_sales"` pointing to the `sales` collection, filtering only documents where the `amount` is greater than `1000` and the `status` is `"active"`.
+**Scenario:**
+Create a read-only View `active_users_view` on collection `users` filtering `status: "active"` and projecting non-sensitive fields.
 
-**Expected output:**
+**Requirements:**
+1. Execute `db.createView("active_users_view", "users", pipeline)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
 > db.createView(
->   "active_high_value_sales",
->   "sales",
+>   "active_users_view",
+>   "users",
 >   [
->     { $match: { amount: { $gt: 1000 }, status: "active" } }
+>     { $match: { status: "active" } },
+>     { $project: { passwordHash: 0, salt: 0 } }
 >   ]
 > );
 > ```
-> - The creator helper is `db.createView(viewName, sourceCollection, pipeline)`.
-> - Use the `$match` aggregation stage for the filter query object.
+>
+> #### Technical Explanation
+>
+> 1. `db.createView()` creates a non-materialized read-only virtual collection defined by an aggregation pipeline.
+> 2. Queries against the view execute the underlying pipeline on the fly.
+> 3. Restricts sensitive fields and enforces security access boundaries.
 
 ---
 
+### Exercise 2: Querying Views with Secondary Query Filters
 
+**Scenario:**
+Query `active_users_view` with additional query filters (`find({ role: "admin" })`).
 
-### Exercise 2: Creating Read-Only MongoDB View
+**Requirements:**
+1. Execute `db.active_users_view.find({ role: "admin" })`.
 
-**Problem:** Create view `active_users` on `users` collection filtering for `active: true` using `db.createView()`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> db.createView("active_users", "users", [{ $match: { active: true } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.createView(
->   "active_users",
->   "users",
->   [{ $match: { active: true } }]
-> );
+> db.active_users_view.find({ role: "admin" });
 > ```
 >
-> **Explanation:** `db.createView(viewName, sourceColl, pipeline)` builds read-only virtual collections.
+> #### Technical Explanation
+>
+> 1. Queries against views append client filter conditions to the view's underlying aggregation pipeline.
+> 2. Evaluates secondary query filters using indexes on the underlying source collection.
+> 3. Behaves like a standard MongoDB collection for read operations.
 
 ---
 
-### Exercise 3: On-Demand Views vs Materialized Views
+### Exercise 3: On-Demand Materialized Views with `$merge`
 
-**Problem:** Compare: On-Demand Views (computed dynamically on query); Materialized Views (persisted to disk via `$merge`).
+**Scenario:**
+Create an On-Demand Materialized View `daily_sales_summary` using an aggregation pipeline ending with `$merge`.
 
-**Expected output:**
+**Requirements:**
+1. Execute pipeline with `$merge: { into: "daily_sales_summary", ... }`.
+
 > [!check]- Answer
-> ```text
-> On-Demand Views: computed dynamically; Materialized Views: persisted on disk via $merge
-> ```
-> ```text
-> On-Demand Views: computed dynamically; Materialized Views: persisted on disk via $merge
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.aggregate([
+>   { $match: { status: "completed" } },
+>   {
+>     $group: {
+>       _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+>       totalRevenue: { $sum: "$amount" }
+>     }
+>   },
+>   {
+>     $merge: {
+>       into: "daily_sales_summary",
+>       on: "_id",
+>       whenMatched: "replace",
+>       whenNotMatched: "insert"
+>     }
+>   }
+> ]);
 > ```
 >
-> **Explanation:** On-demand views compute results dynamically; materialized views cache results on disk.
+> #### Technical Explanation
+>
+> 1. Non-materialized views compute results on the fly for every query.
+> 2. Materialized views using `$merge` persist pre-computed results into a real physical collection.
+> 3. Delivers sub-millisecond query response times for heavy analytical dashboards.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [Aggregation Pipeline (Concept)](../level_06/aggregation_pipeline.md) — The defining query format.
 - [View](../../../12-postgres/terms/level_09/view.md) — Relational views.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Views are virtual, read-only collections defined by aggregation pipelines.
 - Direct NoSQL equivalent to relational database views.
 - Do not store physical data on disk; queries compute dynamic aggregates on the fly.

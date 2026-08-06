@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Data Modeling** (N-to-N Relationship Patterns): Many-to-Many Relationships model N-to-N associations between collections using array references on one or both sides of the relationship.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Applies to all NoSQL document architectures. Optimizes read pathways by resolving associations without table index merges).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database design, you cannot link tables directly in a Many-to-Many (N:M) relationship. 
@@ -102,7 +103,7 @@ db.products.find({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating a dedicated junction collection in MongoDB to link two collections
 
@@ -150,73 +151,112 @@ db.students.updateOne({ _id: sId }, { $addToSet: { courseIds: cId } }); // Array
 Store array references on the side with smaller cardinality (e.g. user.groupIds)
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Many-to-Many Schema Design
+### Exercise 1: Modeling N-to-N Relationships with Array References
 
-**Problem:** You are designing a movie database. A movie can have multiple actors. An actor can star in multiple movies. A movie typically has less than 50 actors. An actor typically stars in less than 100 movies.
-1.  Define where the array of references should be stored (Movie collection, Actor collection, or both).
-2.  Write a sample movie document referencing its actors.
+**Scenario:**
+Model a Many-to-Many relationship between `students` and `courses` by embedding an array of `courseIds` inside `student` documents.
 
-**Expected output:**
+**Requirements:**
+1. Store `courseIds: [ObjectId(...), ObjectId(...)]` in `students`.
+
 > [!check]- Answer
-> ```text
-> 1. The array of references can be stored on the Movie collection (storing `actor_ids`). Since movies are queried most often to see their cast list, storing the references in the movie document optimizes the primary read path. (Alternatively, storing them on both sides is acceptable because both arrays are small and bounded).
+>
+> #### Implementation
+>
+> ```javascript
+> const courseA = new ObjectId("60c72b2f9b1d8b2c88888881");
+> const courseB = new ObjectId("60c72b2f9b1d8b2c88888882");
+> 
+> db.students.insertOne({
+>   name: "Alice Smith",
+>   email: "alice@university.edu",
+>   courseIds: [courseA, courseB]
+> });
+> 
+> db.students.createIndex({ courseIds: 1 });
 > ```
-> - Assess the primary read queries of a movie database.
-> - Avoid creating a third collection. Store references inside array fields.
+>
+> #### Technical Explanation
+>
+> 1. N-to-N relationships can be modeled by storing arrays of target ObjectIds on one side of the relationship.
+> 2. Multikey index `{ courseIds: 1 }` allows querying all students enrolled in a specific course in $O(\log N)$ time.
+> 3. Eliminates relational join tables (`student_courses`).
+
+---
+
+### Exercise 2: Bi-Directional N-to-N Array Referencing
+
+**Scenario:**
+Model bi-directional references between `authors` (`bookIds: [...]`) and `books` (`authorIds: [...]`).
+
+**Requirements:**
+1. Store arrays of references on both entities.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const authorId = new ObjectId("60c72b2f9b1d8b2c88888880");
+> const bookId = new ObjectId("60c72b2f9b1d8b2c88888899");
+> 
+> db.authors.insertOne({ _id: authorId, name: "C.J. Date", bookIds: [bookId] });
+> db.books.insertOne({ _id: bookId, title: "Database Systems", authorIds: [authorId] });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Bi-directional references allow fast lookups starting from either side of the relationship.
+> 2. Requires application code to maintain reference synchronization when links are added or removed.
+> 3. Ideal when both read directions occur with high frequency.
+
+---
+
+### Exercise 3: Resolving N-to-N Links with `$lookup`
+
+**Scenario:**
+Execute an aggregation pipeline joining `students` with `courses` using `$lookup` over array references.
+
+**Requirements:**
+1. Execute `$lookup` over `courseIds` array field.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.students.aggregate([
+>   {
+>     $lookup: {
+>       from: "courses",
+>       localField: "courseIds",
+>       foreignField: "_id",
+>       as: "enrolledCourses"
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$lookup` automatically resolves arrays of foreign ObjectIds (`courseIds`) against target `_id` fields.
+> 2. Returns an array of matching course documents for each student.
+> 3. Efficiently evaluates multi-document joins.
 
 ---
 
 
 
-### Exercise 2: Modeling Student and Course Many-to-Many
-
-**Problem:** Model `student` document referencing array of enrolled `courseIds`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> { name: "Alice", courseIds: [ ObjectId("..."), ObjectId("...") ] }
-> ```
-> ```javascript
-> const student = {
->   _id: new ObjectId(),
->   name: "Alice",
->   courseIds: [
->     new ObjectId("60d5ecb8b5c9c22b9c8b4567"),
->     new ObjectId("60d5ecb8b5c9c22b9c8b4568")
->   ]
-> };
-> ```
->
-> **Explanation:** Storing arrays of ObjectIds models Many-to-Many relationships cleanly.
-
----
-
-### Exercise 3: Querying Many-to-Many Array References
-
-**Problem:** Query students enrolled in course `courseId` using direct array element match.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.students.find({ courseIds: courseId });
-> ```
-> ```javascript
-> db.students.find({ courseIds: courseId });
-> ```
->
-> **Explanation:** Passing a scalar ObjectId queries if the ID exists inside the `courseIds` array.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [One-to-Many Relationship (Embedding vs. Referencing)](one_to_many.md) — The cardinality context.
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The parent modeling rules.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Many-to-Many relationships are modeled using Arrays of References.
 - Eliminates the relational requirement for third-party junction collections.
 - Single-side referencing stores ID lists on the primary read-path target.

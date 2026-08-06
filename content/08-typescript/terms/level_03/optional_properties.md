@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Type Modifier**
+
+**TypeScript Core Syntax** (Optional Property Modifiers): Optional properties (`key?: T`) mark object fields as optional, implicitly unioning their declared type with `undefined`.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In real-world applications, data is often incomplete. A `User` object might always have an `email` and a `password`, but their `phoneNumber` might be blank because they skipped that step during signup.
@@ -63,7 +64,7 @@ function dial(user: User) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `?` with `| undefined`
 
@@ -114,61 +115,104 @@ type User = { bio?: string }
 function logBio(u: User) { return u.bio?.toUpperCase(); }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Optional Chaining
+### Exercise 1: Defining Optional Properties with `?`
 
-**Problem:** Instead of writing a bulky `if (user.phoneNumber)` block, what is the modern ES2020/TypeScript operator used to safely access optional properties in a single line?
+**Scenario:**
+Create a `UserProfile` interface with optional `bio` and `avatarUrl` fields using `?`.
 
-**Expected output:**
+**Requirements:**
+1. Use `?` modifier on optional properties.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> // The Optional Chaining operator (?.)
-> const length = user.phoneNumber?.length;
-> // If phoneNumber is undefined, the whole expression safely evaluates to undefined, avoiding a crash!
-> ```
-> - It shares the same symbol as the Optional Property modifier!
+> interface UserProfile {
+>   username: string;
+>   bio?: string;
+>   avatarUrl?: string;
+> }
+
+const minimalUser: UserProfile = { username: "coder123" };
+const fullUser: UserProfile = { username: "coder123", bio: "Full stack dev" };
+```
+
+> #### Technical Explanation
+>
+> 1. The `?` modifier marks a property as optional during object construction.
+> 2. Automatically unions the declared type with `undefined` (`bio: string | undefined`).
+> 3. Allows creating objects without specifying optional properties.
+
+---
+
+### Exercise 2: Safely Handling Optional Properties with Default Values
+
+**Scenario:**
+Destructure optional property parameters and provide fallback default values.
+
+**Requirements:**
+1. Destructure `options` with default property values.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface RenderOptions {
+>   title: string;
+>   theme?: "light" | "dark";
+>   padding?: number;
+> }
+
+function renderWidget({ title, theme = "light", padding = 16 }: RenderOptions) {
+  console.log(`Rendering ${title} with theme=${theme} padding=${padding}px`);
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Destructuring with default values (`theme = "light"`) converts `string | undefined` to a guaranteed `string` inside the function body.
+> 2. Eliminates repetitive manual `if (options.theme)` checks.
+> 3. Standard ES6 + TypeScript pattern for handling optional configuration parameters.
+
+---
+
+### Exercise 3: Auditing `exactOptionalPropertyTypes` Behavior
+
+**Scenario:**
+Explain the behavior difference of `bio?: string` under `"exactOptionalPropertyTypes": true`.
+
+**Requirements:**
+1. Detail `bio?: string` under `exactOptionalPropertyTypes`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Settings {
+>   theme?: string;
+> }
+
+// Under exactOptionalPropertyTypes: true
+const s1: Settings = {}; // ✅ Valid (Property omitted)
+// const s2: Settings = { theme: undefined }; // ❌ Compile Error under exactOptionalPropertyTypes!
+```
+
+> #### Technical Explanation
+>
+> 1. By default, `key?: string` permits both omitting `key` AND explicitly setting `key: undefined`.
+> 2. Enabling `"exactOptionalPropertyTypes": true` forbids setting `key: undefined` explicitly; properties can ONLY be omitted or set to `string`.
+> 3. Ensures exact object key presence guarantees.
 
 ---
 
 
 
-### Exercise 2: Exact Optional Property Types (`exactOptionalPropertyTypes`)
-
-**Problem:** What tsconfig flag prevents assigning explicit `undefined` to `prop?: string`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> exactOptionalPropertyTypes: true
-> ```
-> ```typescript
-> console.log("exactOptionalPropertyTypes: true");
-> ```
->
-> **Explanation:** `exactOptionalPropertyTypes` distinguishes omitted keys from keys assigned `undefined`.
-
----
-
-### Exercise 3: Destructuring Optional Properties with Defaults
-
-**Problem:** Destructure `const { role = "guest" } = user` for `role?: string`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> guest
-> ```
-> ```typescript
-> type User = { role?: string };
-> const user: User = {};
-> const { role = "guest" } = user;
-> console.log(role);
-> ```
->
-> **Explanation:** Destructuring default initializers handle missing optional properties gracefully.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Interfaces](interfaces.md) — The parent structure.
 - [Type Narrowing](../level_06/type_narrowing.md) — How you safely interact with an optional property.
 - [Object Types](object_types.md) — Related concept: Object Types.
@@ -177,7 +221,7 @@ function logBio(u: User) { return u.bio?.toUpperCase(); }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Optional Properties** (denoted by `?`) allow an object to be valid even if that specific property is missing.
 - The property's type is invisibly expanded to include `| undefined`.
 - TypeScript will force you to verify the property exists (via `if` statements or Optional Chaining `?.`) before you attempt to access methods on it.

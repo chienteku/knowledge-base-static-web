@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Schema & Modeling (field default and value attributes)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed during the write transaction pipeline. Field modifiers are executed in memory by the engine before serialization).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing applications, you need tools to maintain data integrity and automate calculations:
@@ -91,7 +90,7 @@ DEFINE FIELD created_at ON user TYPE datetime DEFAULT time::now() READONLY;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using 'DEFAULT' instead of 'VALUE' for computed fields, expecting the database to recalculate values during updates
 
@@ -146,72 +145,104 @@ UPDATE user:1 SET status = "active"; // ❌ Cannot modify READONLY field!
 DEFINE FIELD created_at ON TABLE user TYPE datetime READONLY; // Ideal for creation timestamps
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Behavior Prediction
+### Exercise 1: Readonly Audit Timestamps
 
-**Problem:** You have a `user` table with this schema:
-```sql
-DEFINE FIELD points ON user TYPE int DEFAULT 100;
-DEFINE FIELD tier ON user TYPE string VALUE IF points >= 200 { "VIP" } ELSE { "Basic" };
-```
-Predict the values stored in `points` and `tier` for these write actions:
-1.  `CREATE user:01;`
-2.  `CREATE user:02 SET points = 250;`
+**Scenario:**
+Configure an immutable `created_at` field on table `order` that defaults to `time::now()` and cannot be modified after creation.
 
-**Expected output:**
+**Requirements:**
+1. Define field `created_at` on table `order` as `datetime`.
+2. Apply `DEFAULT time::now()` and `READONLY`.
+
 > [!check]- Answer
-> ```text
-> 1. `points` = 100 (uses DEFAULT), `tier` = "Basic" (calculated using VALUE because points < 200).
-> 2. `points` = 250 (overrides DEFAULT), `tier` = "VIP" (calculated using VALUE because points >= 200).
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE order SCHEMAFULL;
+> DEFINE FIELD created_at ON TABLE order TYPE datetime 
+>     DEFAULT time::now() 
+>     READONLY;
+> 
+> CREATE order:o1;
 > ```
-> - Identify when the `DEFAULT` clause is executed.
-> - Recall that `VALUE` recalculates its expression on every insert, reading the active field values.
+>
+> #### Technical Explanation
+>
+> 1. `READONLY` locks field values against subsequent updates.
+> 2. `DEFAULT time::now()` populates creation timestamps automatically.
+> 3. Guarantees audit trail immutability.
+
+---
+
+### Exercise 2: Calculated Fields with `VALUE` Attributes
+
+**Scenario:**
+Define a dynamically calculated field `full_name` on table `user` that automatically concatenates `first_name` and `last_name`.
+
+**Requirements:**
+1. Define field `full_name` on table `user` as `string`.
+2. Apply `VALUE string::join(" ", $parent.first_name, $parent.last_name)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE FIELD first_name ON TABLE user TYPE string;
+> DEFINE FIELD last_name ON TABLE user TYPE string;
+> DEFINE FIELD full_name ON TABLE user TYPE string 
+>     VALUE string::join(" ", $parent.first_name, $parent.last_name);
+> 
+> CREATE user:u1 SET first_name = "Jane", last_name = "Doe";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `VALUE <expr>` evaluates calculated field expressions automatically during writes.
+> 2. `$parent` accesses sibling fields on the current record object.
+> 3. Replaces SQL generated columns and computed properties.
+
+---
+
+### Exercise 3: Field-Level Row Security with `PERMISSIONS`
+
+**Scenario:**
+Restrict access to a user's `ssn` (Social Security Number) field so that only the account owner (`id = $auth.id`) can view it.
+
+**Requirements:**
+1. Define field `ssn` on table `user` with `PERMISSIONS FOR select WHERE id = $auth.id`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE FIELD ssn ON TABLE user TYPE string 
+>     PERMISSIONS FOR select WHERE id = $auth.id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `PERMISSIONS` clauses enforce row and field-level security directly in database queries.
+> 2. `$auth.id` checks active client session authentication tokens.
+> 3. Redacts unauthorized fields automatically from query result payloads.
 
 ---
 
 
 
-### Exercise 2: Configuring Readonly Timestamp
-
-**Problem:** Define field `created_at` on `post` as `datetime` defaulting to `time::now()` and marked `READONLY`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD created_at ON TABLE post TYPE datetime DEFAULT time::now() READONLY;
-> ```
-> ```surrealql
-> DEFINE FIELD created_at ON TABLE post TYPE datetime DEFAULT time::now() READONLY;
-> ```
->
-> **Explanation:** Combining `DEFAULT` and `READONLY` freezes creation timestamps at record instantiation time.
-
----
-
-### Exercise 3: Dynamic Future Field Attribute
-
-**Problem:** Define field `total` computing `count * price` dynamically on every query using `VALUE <future>`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD total ON TABLE invoice VALUE <future> { count * price };
-> ```
-> ```surrealql
-> DEFINE FIELD total ON TABLE invoice VALUE <future> { count * price };
-> ```
->
-> **Explanation:** `VALUE <future>` computes dynamic expressions on demand when records are queried.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`DEFINE FIELD`](define_field.md) — The field declaration context.
 - [Assertions (`ASSERT`)](field_assertions.md) — Field-level validation rules.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFAULT` sets creation fallbacks; `VALUE` computes values dynamically on every write.
 - `READONLY` prevents fields from being modified after record creation.
 - `DEFAULT` only runs on creation and allows client overrides.

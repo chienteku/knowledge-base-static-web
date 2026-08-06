@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Schema Design** (Primary Key Strategy Comparison): Natural vs Surrogate Keys compares business domain attributes (e.g. SSN, ISBN) against artificial sequence/UUID primary keys.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (A core architectural design principle applicable across all relational database systems).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Every table in a relational database needs a Primary Key to uniquely identify rows and establish foreign key relationships. 
@@ -97,7 +98,7 @@ CREATE TABLE books (
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing a Natural Key like "Phone Number" or "Full Name" is a safe primary key
 
@@ -110,6 +111,8 @@ CREATE TABLE books (
 **Fix: Never use transient, recycled, or generic human details as primary keys. Default to artificial surrogate keys.**
 
 ---
+
+
 
 
 
@@ -129,6 +132,8 @@ CREATE TABLE users ( email TEXT PRIMARY KEY ); -- ❌ Mutable natural key!
 CREATE TABLE users ( id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, email TEXT UNIQUE );
 ```
 
+
+
 ### Mistake 3: Creating Un-Necessary Composite Natural Keys for Entities Lacking Natural Identity
 
 **The mistake:** Creating a 4-column composite primary key on standard transactional tables.
@@ -147,103 +152,103 @@ id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, UNIQUE (org_id, dept_id, yea
 
 
 
-### Mistake 4: Using Mutable Business Fields (like Email or SSN) as Primary Keys
+## 5. Practice Exercises
 
-**The mistake:** Defining `email TEXT PRIMARY KEY` on `users` table.
+### Exercise 1: Surrogate Identity Primary Keys vs Natural Keys
 
-**Why it's wrong:** If a user updates their email, updating primary key values requires updating foreign key references across all child tables. Prefer immutable surrogate keys (`IDENTITY`, `SERIAL`, `UUID`).
+**Scenario:**
+Compare surrogate primary key `id INTEGER GENERATED ALWAYS AS IDENTITY` against natural key `email TEXT`.
 
-*Incorrect:*
-```sql
-CREATE TABLE users ( email TEXT PRIMARY KEY ); -- ❌ Mutable natural key!
-```
+**Requirements:**
+1. Contrast surrogate vs natural key trade-offs.
 
-*Fix:*
-```sql
-CREATE TABLE users ( id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, email TEXT UNIQUE );
-```
-
-### Mistake 5: Creating Un-Necessary Composite Natural Keys for Entities Lacking Natural Identity
-
-**The mistake:** Creating a 4-column composite primary key on standard transactional tables.
-
-**Why it's wrong:** Multi-column composite natural keys complicate foreign key references in child tables. Use simple surrogate keys (`id`).
-
-*Incorrect:*
-```sql
-PRIMARY KEY (org_id, dept_id, year, seq_num) -- Complex foreign key propagation
-```
-
-*Fix:*
-```sql
-id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, UNIQUE (org_id, dept_id, year, seq_num)
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Key Trade-off Matrix
-
-**Problem:** Match the primary key type (Natural vs. Surrogate) to the characteristics below:
-1.  Provides faster table JOIN query performance.
-2.  Requires an extra column in the table schema.
-3.  Prone to breaking foreign key links if business details shift.
-4.  Guarantees static, permanent index addresses.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Surrogate Key (integers are faster to compare than strings).
-> 2. Surrogate Key (requires generating an ID alongside business columns).
-> 3. Natural Key (real-world values can change).
-> 4. Surrogate Key (artificial IDs are immutable).
+>
+> #### Implementation
+>
+> ```sql
+> -- Recommended Surrogate Key Pattern
+> CREATE TABLE users (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   email TEXT NOT NULL UNIQUE
+> );
 > ```
-> - Evaluate how string size impacts index lookup speeds.
-> - Consider which key is decoupled from real-world data corrections.
+>
+> #### Technical Explanation
+>
+> 1. Surrogate keys (`id`) are artificial 4-byte or 8-byte integers with zero business meaning.
+> 2. Natural keys (e.g. `email` or `SSN`) carry business meaning but change over time, forcing expensive cascading updates across foreign key child tables.
+> 3. Database design rule: Use immutable surrogate keys as primary keys; enforce natural uniqueness with `UNIQUE` constraints.
+
+---
+
+### Exercise 2: Natural Key Usage in Lookup Tables
+
+**Scenario:**
+Create a `currency_codes` lookup table using a natural 3-character ISO code (`USD`, `EUR`) as primary key.
+
+**Requirements:**
+1. Execute `CREATE TABLE currency_codes (code CHAR(3) PRIMARY KEY, name TEXT NOT NULL)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE currency_codes (
+>   code CHAR(3) PRIMARY KEY,
+>   currency_name TEXT NOT NULL
+> );
+> 
+> INSERT INTO currency_codes VALUES ('USD', 'US Dollar'), ('EUR', 'Euro');
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Immutable, standardized short strings (like 3-character ISO currency codes) are acceptable natural primary keys.
+> 2. Eliminates requiring extra `JOIN` operations when foreign tables store `'USD'` directly.
+> 3. High efficiency lookup table pattern.
+
+---
+
+### Exercise 3: UUID Surrogate Keys for Distributed Systems
+
+**Scenario:**
+Create a table using `UUID` as surrogate primary key (`gen_random_uuid()`) for client-side key generation.
+
+**Requirements:**
+1. Use `id UUID PRIMARY KEY DEFAULT gen_random_uuid()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE distributed_events (
+>   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+>   event_type TEXT NOT NULL,
+>   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `UUID` (128-bit universally unique identifiers) can be generated offline by client applications without database coordination.
+> 2. Eliminates auto-increment sequence bottleneck in distributed multi-region databases.
+> 3. Modern distributed system primary key pattern.
 
 ---
 
 
 
-### Exercise 2: Natural vs Surrogate Key Comparison
-
-**Problem:** Compare: Natural Key (Data field with real-world business meaning like SSN/ISBN); Surrogate Key (System-generated synthetic key like IDENTITY/UUID).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Natural Key: business domain data field; Surrogate Key: synthetic system-generated ID
-> ```
-> ```text
-> Natural Key: business domain data field; Surrogate Key: synthetic system-generated ID
-> ```
->
-> **Explanation:** Surrogate keys provide immutable row identity independent of business domain mutations.
-
----
-
-### Exercise 3: Best Practice Schema Pattern
-
-**Problem:** State best practice pattern for user table primary keys (Use surrogate `id` primary key + unique constraint on natural `email`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Use surrogate id primary key alongside UNIQUE constraint on natural email
-> ```
-> ```text
-> Use surrogate id primary key alongside UNIQUE constraint on natural email
-> ```
->
-> **Explanation:** Combining surrogate primary keys with natural unique constraints balances integrity and flexibility.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`PRIMARY KEY`](../level_02/primary_key.md) — The parent unique identifier.
 - [`FOREIGN KEY`](foreign_key.md) — The constraint referencing the keys.
 - [`UUID` Type](../level_06/uuid_type.md) — Related concept: `UUID` Type.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Natural keys use existing real-world values (email, ISBN); Surrogate keys use generated IDs.
 - Natural keys are prone to changing, which can break cascaded table relationships.
 - Surrogate keys are static, immutable, and faster to index and join.

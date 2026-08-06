@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Index / Performance** (Zero-Fetch Index-Only Query): A Covered Query is a query satisfied entirely from B-tree index key entries without reading underlying raw documents from storage disk (stage: IXSCAN, totalDocsExamined: 0).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported across all relational SQL (Index-Only Scan) and NoSQL engines. Maximizes memory efficiency by eliminating disk read latency).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a typical index query:
@@ -95,7 +96,7 @@ db.users.find(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to exclude '_id: 0' in the query projection, preventing the query from being covered by the index
 
@@ -116,6 +117,8 @@ db.users.find({ username: "alice" }, { username: 1, status: 1, _id: 0 });
 
 
 
+
+
 ### Mistake 2: Failing to Exclude `_id` in Covered Queries Returning Projected Fields
 
 **The mistake:** Querying `db.users.find({ status: 'active' }, { name: 1 })` expecting a covered query using index `{ status: 1, name: 1 }`.
@@ -131,6 +134,8 @@ db.users.find({ status: "active" }, { name: 1 }); // Fetches disk for _id!
 ```javascript
 db.users.find({ status: "active" }, { name: 1, _id: 0 }); // Fully covered query
 ```
+
+
 
 ### Mistake 3: Expecting Covered Queries on Array Fields (Multikey Indexes)
 
@@ -150,103 +155,103 @@ Covered queries require scalar (non-array) indexed fields
 
 
 
-### Mistake 4: Failing to Exclude `_id` in Covered Queries Returning Projected Fields
+## 5. Practice Exercises
 
-**The mistake:** Querying `db.users.find({ status: 'active' }, { name: 1 })` expecting a covered query using index `{ status: 1, name: 1 }`.
+### Exercise 1: Achieving Covered Query Execution
 
-**Why it's wrong:** By default, queries return `_id`. If `_id` is NOT part of the compound index, `mongod` must fetch the document on disk to read `_id`, turning off covered query mode. Exclude `_id: 0` in projection.
+**Scenario:**
+Construct a covered query on collection `users` using compound index `{ email: 1, name: 1 }` returning ONLY `name` (excluding `_id`).
 
-*Incorrect:*
-```javascript
-db.users.find({ status: "active" }, { name: 1 }); // Fetches disk for _id!
-```
+**Requirements:**
+1. Execute `find({ email: ... }, { name: 1, _id: 0 })`.
 
-*Fix:*
-```javascript
-db.users.find({ status: "active" }, { name: 1, _id: 0 }); // Fully covered query
-```
-
-### Mistake 5: Expecting Covered Queries on Array Fields (Multikey Indexes)
-
-**The mistake:** Expecting covered queries on index `{ tags: 1 }` where `tags` is an array field.
-
-**Why it's wrong:** Multikey indexes on array fields CANNOT cover queries because array elements require document inspection for accurate bounds.
-
-*Incorrect:*
-```javascript
-// Expecting covered query on array index
-```
-
-*Fix:*
-```javascript
-Covered queries require scalar (non-array) indexed fields
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Covered Query Diagnostics
-
-**Problem:** You have a `products` collection with the index: `{ sku: 1, price: 1 }`.
-Analyze why the following queries are **Not Covered** by the index, and state the changes required to cover them:
-1.  `db.products.find({ sku: "A10" }, { price: 1 })`
-2.  `db.products.find({ sku: "A10" }, { price: 1, description: 1, _id: 0 })`
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Not Covered: The projection defaults to returning the `_id` field, forcing a disk fetch. To fix: Add `_id: 0` to the projection.
-> 2. Not Covered: The projection requests the `description` field, which is not part of the index keys, forcing a disk fetch. To fix: Remove `description` from the projection, or add it to the compound index.
-> ```
-> - Check if the projection returns the default `_id` field.
-> - Verify if all fields in the projection are included in the index definition.
-
----
-
-
-
-### Exercise 2: Constructing Fully Covered Query
-
-**Problem:** Construct covered query on index `{ status: 1, email: 1 }` returning `email` without fetching documents.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ status: "active" }, { email: 1, _id: 0 });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
+> db.users.createIndex({ email: 1, name: 1 });
+> 
 > db.users.find(
->   { status: "active" },
->   { email: 1, _id: 0 }
+>   { email: "alice@example.com" },
+>   { name: 1, _id: 0 }
 > );
 > ```
 >
-> **Explanation:** Covered queries satisfy all filtered and projected fields directly from index B-Trees (`totalDocsExamined: 0`).
+> #### Technical Explanation
+>
+> 1. A query is covered when ALL requested fields in filter and projection exist inside the B-tree index.
+> 2. `_id: 0` is required unless `_id` is explicitly part of the index pattern.
+> 3. Server reads zero document pages from disk (`totalDocsExamined: 0`).
 
 ---
 
-### Exercise 3: Verifying Covered Query in Explain Output
+### Exercise 2: Inspecting Covered Query Diagnostics in `explain()`
 
-**Problem:** What value of `totalDocsExamined` in `explain()` indicates a covered query? (`0`).
+**Scenario:**
+Verify covered query status by inspecting `totalDocsExamined` in `explain("executionStats")`.
 
-**Expected output:**
+**Requirements:**
+1. Inspect `plan.executionStats.totalDocsExamined`.
+
 > [!check]- Answer
-> ```text
-> totalDocsExamined: 0
-> ```
-> ```text
-> totalDocsExamined: 0
+>
+> #### Implementation
+>
+> ```javascript
+> const plan = db.users.find(
+>   { email: "alice@example.com" },
+>   { name: 1, _id: 0 }
+> ).explain("executionStats");
+> 
+> console.log("Total Keys Examined:", plan.executionStats.totalKeysExamined);
+> console.log("Total Docs Examined:", plan.executionStats.totalDocsExamined);
 > ```
 >
-> **Explanation:** `totalDocsExamined: 0` proves that zero collection disk documents were read.
+> #### Technical Explanation
+>
+> 1. Covered queries report `totalDocsExamined: 0`.
+> 2. `totalKeysExamined` > 0 indicates B-tree index keys were read.
+> 3. Maximum possible read performance optimization.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Identifying Non-Covered Query Invalidation Reasons
+
+**Scenario:**
+Explain why including `profilePic` in projection invalidates covered query status.
+
+**Requirements:**
+1. Contrast covered vs non-covered projection fields.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Covered Query Invalidation Rules:
+> 1. Projecting un-indexed fields (e.g. 'profilePic') forces WiredTiger to fetch raw documents from disk (totalDocsExamined > 0).
+> 2. Querying array fields (multikey indexes) cannot produce covered queries.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. If any requested field is missing from index keys, MongoDB must fetch the full document payload from disk storage.
+> 2. Multikey indexes on arrays store separate index keys, preventing covered query execution.
+> 3. Design covered indexes for high-frequency lightweight lookups.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`explain()` Method](explain.md) — The plan analyzer.
 - [Compound Index](compound_index.md) — The target multi-key index.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Covered Query retrieves data entirely from the RAM index B-Tree.
 - Eliminates the `FETCH` stage; `totalDocsExamined` is exactly `0`.
 - Direct equivalent to an Index-Only Scan in relational SQL databases.

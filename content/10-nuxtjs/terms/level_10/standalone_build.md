@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Deployment**
+
+**Server & Nitro Engine** (Zero-Dependency Node Server Bundle): Standalone Node Server builds (`preset: "node-server"`) package the application into a self-contained Node server runnable with `node .output/server/index.mjs`.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (Runs as a persistent backend Node.js process to listen to client requests).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In development, you run `npm run dev`, which compiles code on-the-fly, watches files, and hot-reloads the browser. This process consumes significant memory, includes dev-only code, and is insecure for production.
@@ -66,7 +67,7 @@ pm2 start .output/server/index.mjs --name "nuxt-app"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Copying the whole root repository to production
 
@@ -115,76 +116,111 @@ PORT=8080 NODE_ENV=production node .output/server/index.mjs
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Starting the Production Server
+### Exercise 1: Building a Standalone Docker Container for Nuxt 3
 
-**Problem:** You have compiled your application using `npm run build`. Write the command to launch the standalone production server locally using Node.js.
+**Scenario:**
+Write a minimal production `Dockerfile` leveraging standalone Node server output (`.output/server`).
 
-**Expected output:**
+**Requirements:**
+1. Write multi-stage Dockerfile copying `.output/`.
+
 > [!check]- Answer
-> ```bash
-> node .output/server/index.mjs
-> ```
-> - Execute the entrypoint javascript module located inside the compiled server directory.
-
----
-
-### Exercise 2: Minimal Nuxt 3 Dockerfile Pattern
-
-**Problem:** Write multi-stage Dockerfile compiling `.output/` and launching `node .output/server/index.mjs` in lightweight `node:18-alpine` runtime.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```dockerfile
-> FROM node:18-alpine AS builder
-> WORKDIR /app
-> COPY . .
-> RUN npm install && npm run build
-> 
+> # Production Dockerfile
 > FROM node:18-alpine AS runner
 > WORKDIR /app
-> COPY --from=builder /app/.output ./.output
-> EXPOSE 3000
-> CMD ["node", ".output/server/index.mjs"]
-> ```
-> - Standalone `.output/` requires zero external `node_modules` in production containers.
 > 
-> ```dockerfile
-> FROM node:18-alpine AS builder
-> WORKDIR /app
-> COPY . .
-> RUN npm ci && npm run build
+> # Copy pre-built standalone server output
+> COPY .output /app/.output
 > 
-> FROM node:18-alpine AS runner
-> WORKDIR /app
-> COPY --from=builder /app/.output ./.output
 > ENV PORT=3000
+> ENV NODE_ENV=production
 > EXPOSE 3000
+> 
 > CMD ["node", ".output/server/index.mjs"]
 > ```
 
+> #### Technical Explanation
+>
+> 1. Standalone builds require ONLY the `.output/` directory and a Node.js runtime.
+> 2. Omits devDependencies, TypeScript compilers, and root `node_modules/` from deployment images.
+> 3. Reduces Docker container image size from 1GB+ down to ~100MB.
+
 ---
 
-### Exercise 3: Standalone Zero-Dependency Engine
+### Exercise 2: Setting Environment Variables in Standalone Deployments
 
-**Problem:** Why is the `.output/server/index.mjs` file self-contained without needing `package.json`?
+**Scenario:**
+Pass environment variables `PORT=8080` and `DATABASE_URL` to a standalone server process.
 
-**Expected output:**
+**Requirements:**
+1. Pass environment variables before `node .output/server/index.mjs`.
+
 > [!check]- Answer
-> ```text
-> Nitro bundles and tree-shakes all server dependencies into the single compiled ESM module file at build time.
+>
+> #### Implementation
+>
+> ```bash
+> PORT=8080 NUXT_DATABASE_URL="postgres://..." node .output/server/index.mjs
 > ```
-> - Nitro bundles all server dependencies into the standalone `.output/server` directory.
-> 
-> ```text
-> Zero production node_modules dependencies required!
+
+> #### Technical Explanation
+>
+> 1. Standalone Nitro server reads process environment variables at startup.
+> 2. `PORT=8080` configures the HTTP listening port.
+> 3. `NUXT_` prefixed variables populate runtime configuration settings dynamically.
+
+---
+
+### Exercise 3: Process Management with PM2 for Standalone Builds
+
+**Scenario:**
+Configure a PM2 `ecosystem.config.js` file to run standalone Nuxt server in cluster mode.
+
+**Requirements:**
+1. Write PM2 `ecosystem.config.js` targeting `.output/server/index.mjs`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> // ecosystem.config.js
+> module.exports = {
+>   apps: [
+>     {
+>       name: "nuxt-app",
+>       script: "./.output/server/index.mjs",
+>       instances: "max",
+>       exec_mode: "cluster",
+>       env: {
+>         PORT: 3000,
+>         NODE_ENV: "production"
+>       }
+>     }
+>   ]
+> };
 > ```
+
+> #### Technical Explanation
+>
+> 1. PM2 manages standalone Node server processes, automatically restarting worker processes if crashes occur.
+> 2. `exec_mode: 'cluster'` spawns multiple Node.js worker processes across all available CPU cores.
+> 3. Production Node.js server deployment standard.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`.output/` Directory](output_directory.md) — The folder where the standalone build is stored.
 - [Environment Variables (`.env`)](env_variables.md) — Configuring production values for the standalone server.
 - [Edge Deployment](edge_deployment.md) — Related concept: Edge Deployment.
@@ -192,7 +228,7 @@ PORT=8080 NODE_ENV=production node .output/server/index.mjs
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Standalone Build is a portable, production-ready bundle located in the `.output/` folder.
 - It is generated by running the `npm run build` command.
 - The entrypoint to run the server is `node .output/server/index.mjs`.

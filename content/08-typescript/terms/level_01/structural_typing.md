@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Type System Fundamental**
+
+**Type System Fundamental** (Structural Duck Typing Engine): Structural typing verifies compatibility based on object shape and member property structure rather than explicit nominal class declarations.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-time** (Compatibility checks are performed entirely by the compiler; runtime JavaScript is oblivious to these structural types).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional statically typed languages like Java, C#, or C++, type systems are **nominal**. This means type equivalence is based on explicit names and declarations. If you have two classes with the exact same fields and methods but different names, you cannot assign an instance of one to a variable typed as the other. 
@@ -85,7 +86,7 @@ console.log(welcomeUser(mockStorage, '123')); // Works seamlessly
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting Nominal Type Protection
 
@@ -171,77 +172,108 @@ type StrictlyEmpty = Record<string, never>;
 // const val: StrictlyEmpty = { a: 1 }; // ❌ Type Error: Type 'number' is not assignable to type 'never'
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Structural Check
+### Exercise 1: Structural Compatibility of Object Shapes
 
-**Problem:** Review this code. Will the TypeScript compiler compile this successfully, or will it throw a build error?
+**Scenario:**
+Demonstrate structural duck typing by passing an object with extra properties into a function expecting a narrower interface.
 
-```typescript
-class Dog {
-  bark() {
-    return 'Woof!';
-  }
+**Requirements:**
+1. Define `Point2D` interface.
+2. Pass object containing `x`, `y`, and `z` properties.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Point2D {
+>   x: number;
+>   y: number;
+> }
+
+function logPoint(point: Point2D) {
+  console.log(`Point: (${point.x}, ${point.y})`);
 }
 
-class Cat {
-  bark() {
-    return 'Meow?'; // Cat has the same method name as Dog!
-  }
-}
+const point3D = { x: 10, y: 20, z: 30 };
 
-const myDog: Dog = new Cat();
+// Valid! point3D satisfies the structural shape of Point2D (contains x and y).
+logPoint(point3D);
 ```
 
-**Expected output:**
+> #### Technical Explanation
+>
+> 1. TypeScript uses structural typing (duck typing), comparing objects by their member shape rather than explicit class names.
+> 2. `point3D` is structurally compatible with `Point2D` because it possesses required `x` and `y` properties.
+> 3. Extra properties (`z`) are allowed when passing variable references.
+
+---
+
+### Exercise 2: Strict Object Literal Excess Property Checks
+
+**Scenario:**
+Fix a compile error caused by direct inline object literal excess property checking.
+
+**Requirements:**
+1. Fix inline object literal assignment error.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface User {
+>   id: number;
+>   name: string;
+> }
+
+// ❌ FAILS due to Excess Property Checks on direct object literals:
+// const user: User = { id: 1, name: "Alice", role: "admin" };
+
+// ✅ CORRECT (Assign to intermediate variable or extend interface):
+const userData = { id: 1, name: "Alice", role: "admin" };
+const user: User = userData; // Allowed structurally!
+```
+
+> #### Technical Explanation
+>
+> 1. Fresh inline object literals undergo strict "Excess Property Checks" to catch typos (`role` in `User`).
+> 2. Assigning the object literal to an intermediate variable (`userData`) bypasses fresh excess property checks.
+> 3. Keeps structural typing rules consistent while preventing inline typo mistakes.
+
+---
+
+### Exercise 3: Structural vs Nominal Type Systems
+
+**Scenario:**
+Formulate an architectural comparison matrix contrasting Structural Typing (TypeScript) against Nominal Typing (Java/C#).
+
+**Requirements:**
+1. Contrast shape matching vs explicit class inheritance declarations.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> It will compile successfully! 
-> Because both `Dog` and `Cat` have a shape containing a single method `bark(): string`, the TypeScript compiler considers their structures completely compatible, even though they represent different animals.
+> Structural vs Nominal Matrix:
+> - Structural Typing (TypeScript): Compatibility is based on object shape (members & types). Two distinct types with identical shapes are assignable to each other.
+> - Nominal Typing (Java / C#): Compatibility is based on explicit class name declarations and class hierarchy (implements / extends).
 > ```
-> - Does `Cat` possess every property and method shape declared in `Dog`?
-> - Remember, the class name does not matter during structural type comparisons.
+
+> #### Technical Explanation
+>
+> 1. Nominal type systems require explicit inheritance relationships (`class Car implements Vehicle`).
+> 2. Structural type systems allow any object matching required properties to satisfy interface contracts.
+> 3. Aligns perfectly with idiomatic JavaScript object manipulation patterns.
 
 ---
 
 
 
-### Exercise 2: Structural Compatibility Verification
-
-**Problem:** Verify whether `{ name: "Alice", age: 30, role: "admin" }` is assignable to `{ name: string }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> true
-> ```
-> ```typescript
-> type Named = { name: string };
-> const user = { name: "Alice", age: 30, role: "admin" };
-> const namedUser: Named = user; // Valid due to structural typing!
-> console.log(true);
-> ```
->
-> **Explanation:** Structural typing requires target properties to exist, permitting extra properties on indirect object assignments.
-
----
-
-### Exercise 3: Structural vs Nominal Typing
-
-**Problem:** State whether TypeScript (Structural) or Java/C# (Nominal) matches types by shape rather than declared name.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> TypeScript matches by shape (Structural)
-> ```
-> ```typescript
-> console.log("TypeScript matches by shape (Structural)");
-> ```
->
-> **Explanation:** TypeScript checks compatible structure rather than nominal inheritance declarations.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Interfaces](../level_03/interfaces.md) — Defining structured object shapes.
 - [Generic Constraints (`extends`)](../level_07/generic_constraints.md) — Restricting generics based on structural shapes.
 - [`implements` Keyword](../level_10/implements.md) — Asserting that a class shape matches an interface.
@@ -252,7 +284,7 @@ const myDog: Dog = new Cat();
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Structural Typing** compares types by their properties and methods (their shape), not their names.
 - This aligns with JavaScript's native dynamic "duck typing" execution model.
 - An object is compatible with a type if it has *at least* the properties defined in that type.

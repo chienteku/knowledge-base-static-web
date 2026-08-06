@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: Every programming language has comments. However, Rust's built-in, first-class support for "doc comments" that generate HTML documentation is a standout feature of the Rust ecosystem.
+
+
+**Universal Language Construct (the documentation engine)**: Every programming language has comments. However, Rust's built-in, first-class support for "doc comments" that generate HTML documentation is a standout feature of the Rust ecosystem.
 
 ---
 

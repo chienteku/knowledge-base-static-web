@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Schema & Modeling (record collection table entity)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Managed at the database level. Tables can be defined explicitly using schema statements or created implicitly on the first record insert).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building full-stack applications, you have different safety needs for different datasets:
@@ -92,7 +91,7 @@ CREATE payment:pay02 SET amount = 45.00, currency = "EUR", tax_id = 9988;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming that tables must be explicitly defined using DDL schema files before running insert queries
 
@@ -144,62 +143,91 @@ DROP TABLE user; // ❌ Invalid SurrealQL syntax!
 REMOVE TABLE user; // Correct SurrealQL table removal
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Table Behavior Diagnostic
+### Exercise 1: Schemafull Table & Relation Table Setup
 
-**Problem:** You define a table using this SurrealQL command:
-`DEFINE TABLE logs SCHEMAFULL;`
-State whether the following query will succeed or fail, and explain why:
-`CREATE logs:log01 SET message = "Server Ok", user_id = "user:12";`
+**Scenario:**
+You are defining schema rules for an e-commerce system: a standard entity table `product` and a graph relation table `purchased` connecting `user` to `product`.
 
-**Expected output:**
+**Requirements:**
+1. Define table `product` as `SCHEMAFULL`.
+2. Define field `title` as `string` on `product`.
+3. Define table `purchased` as `TYPE RELATION IN user OUT product`.
+
 > [!check]- Answer
-> ```text
-> The query will fail. 
-> Because the `logs` table is defined as `SCHEMAFULL`, it rejects any fields that have not been explicitly registered. 
-> Since no `DEFINE FIELD` commands were run for `message` or `user_id` on the `logs` table, SurrealDB will block the write.
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Define standard entity table
+> DEFINE TABLE product SCHEMAFULL;
+> DEFINE FIELD title ON TABLE product TYPE string;
+> 
+> -- Define graph relation table
+> DEFINE TABLE purchased TYPE RELATION IN user OUT product;
 > ```
-> - Check the schema validation rules of the `SCHEMAFULL` toggle.
-> - Consider if any schema fields have been declared.
+>
+> #### Technical Explanation
+>
+> 1. Standard tables (`product`) store entity records containing scalar values, nested documents, and arrays.
+> 2. Relation tables (`purchased`) defined with `TYPE RELATION` store graph edges with mandatory `in` and `out` record links.
+> 3. Specifying `IN user OUT product` constrains the relation edge endpoints strictly to valid user and product records.
+
+---
+
+### Exercise 2: Table Inspection with `INFO FOR TABLE`
+
+**Scenario:**
+A database administrator wants to inspect all field definitions, indexes, and event triggers configured on table `product`.
+
+**Requirements:**
+1. Write the SurrealQL statement to inspect schema metadata for table `product`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> INFO FOR TABLE product;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INFO FOR TABLE <table>` returns an object containing defined fields, indexes, events, and permissions for the target table.
+> 2. Facilitates schema verification and automated DDL migration checking.
+> 3. Provides complete visibility into active table-level constraint rules.
+
+---
+
+### Exercise 3: Dropping a Table Definition with `REMOVE TABLE`
+
+**Scenario:**
+A database cleanup migration needs to drop an obsolete table `legacy_logs` and all its associated schema definitions.
+
+**Requirements:**
+1. Write the SurrealQL DDL statement to remove table `legacy_logs`.
+2. Explain the difference between `DELETE legacy_logs` and `REMOVE TABLE legacy_logs`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> REMOVE TABLE legacy_logs;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE TABLE` is a DDL statement that drops the table schema metadata, fields, indexes, and stored records completely.
+> 2. `DELETE legacy_logs` is a DML statement that deletes stored data records while preserving the table schema definition.
+> 3. `REMOVE TABLE` corresponds to SQL `DROP TABLE`.
 
 ---
 
 
 
-### Exercise 2: Defining Schemafull Table
-
-**Problem:** Define table `customer` as `SCHEMAFULL` with `DROP` permissions restricted.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE TABLE customer SCHEMAFULL;
-> ```
-> ```surrealql
-> DEFINE TABLE customer SCHEMAFULL;
-> ```
->
-> **Explanation:** `DEFINE TABLE` specifies table schema enforcement and permissions.
-
----
-
-### Exercise 3: Dropping Table Contents vs Structure
-
-**Problem:** Command to delete all records in `log` table without removing the table schema (`DELETE log;`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DELETE log;
-> ```
-> ```surrealql
-> DELETE log;
-> ```
->
-> **Explanation:** `DELETE table` deletes all record data while keeping `DEFINE TABLE` schemas intact.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Record](record.md) — The individual data units stored.
 - [`SCHEMAFULL` vs `SCHEMALESS`](schemafull_schemaless.md) — The schema modes.
@@ -210,7 +238,7 @@ State whether the following query will succeed or fail, and explain why:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Table is a collection of records in SurrealDB.
 - Directly equivalent to a SQL table or a MongoDB collection.
 - Can be created implicitly on write, or explicitly using `DEFINE TABLE`.

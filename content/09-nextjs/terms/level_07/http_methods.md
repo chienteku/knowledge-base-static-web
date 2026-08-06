@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture**
+
+**Server & Edge API** (HTTP Method Handler Export): Route Handlers export named functions (`GET`, `POST`, `PUT`, `DELETE`, `PATCH`) corresponding to standard HTTP verbs.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Triggered by client-side browser actions and processed by backend server routing engines).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In early web design, client-server communication lacked structured protocols. If a page wanted to delete a user, it might send a GET request to `/delete-user?id=5`. If a web crawler (like Google's search bot) scanned the page and crawled all links, it would trigger all the delete endpoints, unintentionally wiping database records.
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using a GET request to mutate data or delete records
 
@@ -129,76 +130,118 @@ export async function OPTIONS() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify Method Semantics
+### Exercise 1: Exporting Multiple HTTP Verbs in a Single Route File
 
-**Problem:** Match each task to its correct semantic HTTP method:
-1. Update only the profile banner image of a user profile.
-2. Read list of search results.
-3. Remove a blog post from the publishing database.
-4. Process a credit card payment transaction.
+**Scenario:**
+Export `GET`, `POST`, and `DELETE` handlers inside `app/api/products/route.ts`.
 
-**Expected output:**
+**Requirements:**
+1. Export uppercase named functions (`GET`, `POST`, `DELETE`).
+
 > [!check]- Answer
-> ```text
-> 1. PATCH (partial update of a user record).
-> 2. GET (read-only search query).
-> 3. DELETE (removal of a resource).
-> 4. POST (non-idempotent state change mutation).
-> ```
-> - Choose PATCH for partial updates, and POST for payment submissions.
-
----
-
-### Exercise 2: Supported HTTP Verbs Matrix
-
-**Problem:** List 5 uppercase HTTP verb function names supported out-of-the-box by Next.js Route Handlers.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. GET
-> 2. POST
-> 3. PUT
-> 4. PATCH
-> 5. DELETE (or HEAD, OPTIONS)
-> ```
-> - `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS`.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> export async function GET() {}
-> export async function POST() {}
-> export async function DELETE() {}
-> ```
+> // app/api/products/route.ts
+> export async function GET() {
+>   return Response.json([{ id: "1", title: "Product 1" }]);
+> }
+
+export async function POST(req: Request) {
+  const body = await req.json();
+  return Response.json({ created: body }, { status: 201 });
+}
+
+export async function DELETE(req: Request) {
+  return Response.json({ message: "Product deleted" });
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Route Handlers export named functions matching HTTP verbs (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`).
+> 2. Next.js automatically routes incoming requests to the matching exported function based on HTTP method.
+> 3. Requests to unexported methods (e.g. `PUT`) automatically return HTTP `405 Method Not Allowed`.
 
 ---
 
-### Exercise 3: Un-Supported HTTP Method Response
+### Exercise 2: Handling Preflight OPTIONS Requests
 
-**Problem:** What HTTP status code does Next.js automatically return if a client sends a `DELETE` request to a `route.ts` that exports only `GET` and `POST`?
+**Scenario:**
+Export an `OPTIONS` handler to configure CORS (Cross-Origin Resource Sharing) headers for API clients.
 
-**Expected output:**
+**Requirements:**
+1. Export `OPTIONS` handler setting `Access-Control-Allow-Origin`.
+
 > [!check]- Answer
-> ```text
-> HTTP 451 / 405 Method Not Allowed
+>
+> #### Implementation
+>
+> ```typescript
+> export async function OPTIONS() {
+>   return new Response(null, {
+>     status: 204,
+>     headers: {
+>       "Access-Control-Allow-Origin": "*",
+>       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+>       "Access-Control-Allow-Headers": "Content-Type, Authorization"
+>     }
+>   });
+> }
 > ```
-> - Next.js returns HTTP 405 Method Not Allowed for un-exported HTTP verbs.
-> 
-> ```text
-> 405 Method Not Allowed
-> ```
+
+> #### Technical Explanation
+>
+> 1. `OPTIONS` handlers respond to browser CORS preflight requests before cross-origin POST/PUT requests execute.
+> 2. `status: 204` returns a No Content response with attached CORS header options.
+> 3. Essential for public cross-origin API endpoints.
+
+---
+
+### Exercise 3: Validating HTTP Method Signatures with TypeScript
+
+**Scenario:**
+Type Route Handler HTTP methods using standard `NextRequest` and `Response` types.
+
+**Requirements:**
+1. Type parameters as `(req: NextRequest) => Promise<Response>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { NextRequest, NextResponse } from "next/server";
+
+export async function PATCH(req: NextRequest): Promise<NextResponse> {
+  const body = await req.json();
+  return NextResponse.json({ updated: body });
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `NextRequest` extends standard Web `Request` with Next.js specific helper properties (`nextUrl`, `cookies`).
+> 2. `NextResponse.json()` is the Next.js helper wrapper for constructing JSON responses.
+> 3. Type-safe Route Handler declaration pattern.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Route Handlers (`route.ts`)](route_handlers.md) — The Next.js API endpoints that export these methods.
 - [`NextRequest` & `NextResponse`](next_request_response.md) — The HTTP transaction objects.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - HTTP Methods indicate the semantic intent of client-server requests.
 - `GET` requests must be safe, idempotent, and are cached by default.
 - Use `POST` to submit data for resource creation or payment processing.

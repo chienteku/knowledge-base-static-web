@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing / UI Architecture**
+
+**Routing & Layouts** (Intercepting Route Overlays): Intercepting Routes (`(..)photo`) intercept route transitions to render modal overlays while preserving shareable deep URLs.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time (Routing)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Think about a Reddit or Instagram feed. You scroll down and click a photo. 
@@ -61,7 +62,7 @@ app/
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misunderstanding the folder levels
 
@@ -109,74 +110,125 @@ app/
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Refreshing the page
+### Exercise 1: Implementing Modal Intercepting Routes
 
-**Problem:** You are viewing a photo inside an intercepted Modal. The URL is `/photo/99`. You press `Cmd+R` to hard refresh the browser. Does the Modal reappear?
+**Scenario:**
+Create an intercepting modal route `app/feed/(..)photo/[id]/page.tsx` displaying a photo modal over the main feed.
 
-**Expected output:**
+**Requirements:**
+1. Use `(..)` folder syntax for relative path interception.
+
 > [!check]- Answer
-> ```text
-> No!
-> Intercepting Routes ONLY trigger during client-side navigation (clicking a <Link> or using `router.push()`). 
-> A hard refresh hits the server directly. The server ignores the interception and serves the standard non-intercepted route (the full-page version). This is the exact intended behavior for shareable links!
-> ```
-> - Think about how a friend sees the link when you share it with them.
+>
+> #### Implementation
+>
+> ```tsx
+> // app/feed/(..)photo/[id]/page.tsx
+> export default async function PhotoModal({
+>   params
+> }: {
+>   params: Promise<{ id: string }>;
+> }) {
+>   const { id } = await params;
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
+      <div className="bg-white p-6 rounded-lg max-w-lg">
+        <h2>Photo Modal #{id}</h2>
+      </div>
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `(..)` matches 1 level up in the segment hierarchy, intercepting `/photo/[id]` when navigated to from `/feed`.
+> 2. Renders photo content as a modal overlay on top of the active feed layout.
+> 3. Reloading or deep linking directly to `/photo/123` bypasses the modal and loads full page view.
 
 ---
 
-### Exercise 2: Photo Modal Interception Pattern
+### Exercise 2: Combining Intercepting Routes with Parallel Routes
 
-**Problem:** Explain how Intercepting Routes and Parallel Routes combine to build a modal gallery (e.g. Instagram feed photo modal).
+**Scenario:**
+Combine parallel slot `@modal` with intercepting route `(..)photo/[id]` to render modal slots cleanly inside layout.
 
-**Expected output:**
+**Requirements:**
+1. Pass `@modal` slot into layout `children`.
+
 > [!check]- Answer
-> ```text
-> Parallel routes provide a named modal slot (e.g. @modal); Intercepting routes intercept <Link href="/photo/1"> to render the photo inside the modal slot while URL updates.
+>
+> #### Implementation
+>
+> ```tsx
+> // app/feed/layout.tsx
+> export default function FeedLayout({
+>   children,
+>   modal
+> }: {
+>   children: React.ReactNode;
+>   modal: React.ReactNode;
+> }) {
+>   return (
+>     <div>
+>       {children}
+>       {modal}
+>     </div>
+>   );
+> }
 > ```
-> - Combining Parallel Routes + Intercepting Routes creates URL-sharable modal overlays.
-> 
-> ```text
-> app/feed/@modal/(.)photo/[id]/page.tsx -> Renders photo in modal on client navigation
-> app/photo/[id]/page.tsx -> Renders full photo page on hard reload
-> ```
+
+> #### Technical Explanation
+>
+> 1. Parallel route slot `@modal` acts as a target container for intercepted routes.
+> 2. Allows opening modal overlays without breaking layout components.
+> 3. Standard pattern for Instagram-style or Pinterest-style modal feeds.
 
 ---
 
-### Exercise 3: Interception Match Matrix
+### Exercise 3: Handling Hard Page Refresh Fallbacks
 
-**Problem:** Match interception prefix to target route level:
-1. `(.)` 
-2. `(..)` 
-3. `(...)` 
+**Scenario:**
+Provide `default.tsx` fallback UI for parallel modal slots when users perform a hard browser refresh on dynamic URLs.
 
-**Expected output:**
+**Requirements:**
+1. Create `app/feed/@modal/default.tsx` returning `null`.
+
 > [!check]- Answer
-> ```text
-> 1. Same directory level
-> 2. One directory level above
-> 3. Root app directory level
+>
+> #### Implementation
+>
+> ```tsx
+> // app/feed/@modal/default.tsx
+> export default function DefaultModal() {
+>   return null;
+> }
 > ```
-> - `(.)` -> Same level
-> - `(..)` -> One level up
-> - `(...)` -> Root app level
-> 
-> ```text
-> (.)same-level, (..)one-up, (...)root-app
-> ```
+
+> #### Technical Explanation
+>
+> 1. Next.js uses `default.tsx` to render fallback UI when a parallel slot cannot be matched during hard refreshes.
+> 2. Returning `null` hides the empty modal slot container during initial page loads.
+> 3. Essential guard for parallel intercepting routes.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Parallel Routes (`@folder`)](parallel_routes.md) — The mechanism used to display the intercepted content without losing the background page.
 - [`<Link>` Component](../level_03/link.md) — The trigger for the interception.
 - [Node.js `path` Module](path_module.md) — Related concept: Node.js `path` Module.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Intercepting Routes** allow you to hijack client-side navigation to a new URL, displaying that URL's content within your current layout instead of navigating away.
 - They are almost exclusively used in combination with Parallel Routes to build robust, shareable Modals.
 - They use `(.)`, `(..)`, and `(...)` syntax to target which route they are intercepting based on folder depth.

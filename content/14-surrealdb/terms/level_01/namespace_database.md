@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Core Concept (multi-tenant namespace and database hierarchy)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Managed at the connection session level. Governs authentication token scopes and data access isolation).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you are building a **Multi-Tenant SaaS** application (a software platform where multiple customer companies share the same application server):
@@ -97,7 +96,7 @@ USE NS company_b DB production;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running CRUD queries on a new database session without executing the 'USE' command first
 
@@ -149,64 +148,107 @@ USE NS production DB db_b;
 SELECT * FROM user;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Hierarchy Navigation
+### Exercise 1: Multi-Tenant Hierarchy Setup Script
 
-**Problem:** You are configuring a SurrealDB database cluster. 
-Write the SurrealQL commands to:
-1.  Target a namespace named `"saas_tenant_01"` and a database named `"billing"`.
-2.  Switch the database target to `"analytics"` under the same namespace.
+**Scenario:**
+You are setting up a multi-tenant SaaS application architecture in SurrealDB where tenant organizations are isolated in separate namespaces, and environments (production, staging) are isolated in databases.
 
-**Expected output:**
+**Requirements:**
+1. Write the SurrealQL statements to create namespace `tenant_acme` and target database `production`.
+2. Define a table `customer` in `tenant_acme:production`.
+3. Create namespace `tenant_globex` and target database `production`.
+4. Define a table `customer` in `tenant_globex:production`.
+
 > [!check]- Answer
-> ```sql
-> -- 1. Target Namespace and Database
-> USE NS saas_tenant_01 DB billing;
-> 
-> -- 2. Switch Database context
-> USE DB analytics;
-> ```
-> - The keyword to select database context scopes is `USE`.
-> - If you only change the database, you can omit the `NS` prefix parameter.
-
----
-
-
-
-### Exercise 2: SurrealQL Scope Selection Command
-
-**Problem:** Write SurrealQL command to select namespace `tenant_a` and database `billing`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> USE NS tenant_a DB billing;
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> USE NS tenant_a DB billing;
+> -- Setup Acme Tenant Production Scope
+> USE NS tenant_acme DB production;
+> DEFINE TABLE customer SCHEMAFULL;
+> CREATE customer:c1 SET name = "Acme Corp Customer 1";
+> 
+> -- Setup Globex Tenant Production Scope
+> USE NS tenant_globex DB production;
+> DEFINE TABLE customer SCHEMAFULL;
+> CREATE customer:c1 SET name = "Globex Corp Customer 1";
 > ```
 >
-> **Explanation:** The `USE` statement sets active namespace and database context for subsequent queries.
+> #### Technical Explanation
+>
+> 1. SurrealDB structures data hierarchically: `Instance -> Namespace -> Database -> Table -> Record`.
+> 2. Namespaces provide hard tenant isolation; tables in different namespaces cannot leak data across boundaries.
+> 3. Identical table names (`customer`) and record IDs (`customer:c1`) can safely exist independently across namespaces.
 
 ---
 
-### Exercise 3: Multi-Tenancy Hierarchy Isolation
+### Exercise 2: Context Introspection with `INFO` Commands
 
-**Problem:** Explain how Namespaces enable multi-tenant application isolation.
+**Scenario:**
+A database administrator needs to inspect all databases present within namespace `tenant_acme` and list all tables within database `production`.
 
-**Expected output:**
+**Requirements:**
+1. Target namespace `tenant_acme`.
+2. Run the SurrealQL introspection statement to list all databases in `tenant_acme`.
+3. Target database `production` and list all table definitions.
+
 > [!check]- Answer
-> ```text
-> Namespaces isolate databases, users, and tokens per tenant boundary
-> ```
-> ```text
-> Namespaces isolate databases, users, and tokens per tenant boundary
+>
+> #### Implementation
+>
+> ```surrealql
+> USE NS tenant_acme;
+> INFO FOR NS;
+> 
+> USE DB production;
+> INFO FOR DB;
 > ```
 >
-> **Explanation:** Namespaces group databases per tenant, preventing cross-tenant data leaks.
+> #### Technical Explanation
+>
+> 1. `INFO FOR NS` returns metadata about all databases, users, and access methods defined under the active namespace.
+> 2. `INFO FOR DB` returns metadata about all tables, functions, analyzers, and parameters defined under the active database.
+> 3. Introspection commands verify multi-tenant schema isolation during administrative audits.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Cross-Namespace Data Isolation Rules
+
+**Scenario:**
+A developer asks if a single `SELECT` query in SurrealDB can join or fetch records across two different namespaces (`NS tenant_a` and `NS tenant_b`).
+
+**Requirements:**
+1. Answer whether cross-namespace queries are permitted in SurrealDB.
+2. Explain the architectural reasoning for this security design.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Answer: No, cross-namespace queries are strictly prohibited in SurrealDB.
+> ```
+> 
+> ```surrealql
+> -- This session is scoped strictly to tenant_a; tenant_b is completely inaccessible!
+> USE NS tenant_a DB main;
+> SELECT * FROM customer; 
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Namespaces form hard multi-tenant security boundaries in SurrealDB's storage engine.
+> 2. Blocking cross-namespace queries prevents accidental data leakage between SaaS tenants at the database engine level.
+> 3. Applications needing shared global lookup data should place shared tables in a dedicated common namespace.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Table](table.md) — The collections grouped.
 - [Connection Credentials (`USE NS ... DB ...`)](connection_credentials.md) — Session authentication.
@@ -214,7 +256,7 @@ Write the SurrealQL commands to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Namespace and Database form SurrealDB's multi-tenant hierarchy.
 - A Namespace isolates independent projects or client tenants.
 - A Database isolates data environments within a specific namespace.

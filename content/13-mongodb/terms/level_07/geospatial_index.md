@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Index / Performance** (2D & 2DSphere Spatial Indexing): Geospatial Indexes (2dsphere, 2d) calculate spherical surface geodesics and planar coordinates to optimize location proximity queries.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Coordinates must adhere strictly to coordinate bounds. Evaluated using Geohash-based indexing algorithms on the server).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `geospatial_queries.md`, finding items within physical distances (e.g. nearby restaurants) requires specialized coordinate calculations. 
@@ -95,7 +96,7 @@ db.stores.find({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to build a 2dsphere index when the collection contains documents with coordinate values that fall out of spherical bounds
 
@@ -118,6 +119,8 @@ db.stores.find({ "location.coordinates.1": { $lt: -90 } });
 
 
 
+
+
 ### Mistake 2: Creating `2d` Legacy Flat Indexes for Spherical Earth Surface Calculations
 
 **The mistake:** Creating legacy `2d` index for global GPS coordinate queries.
@@ -133,6 +136,8 @@ db.places.createIndex({ location: "2d" }); // ❌ Flat Euclidean plane index!
 ```javascript
 db.places.createIndex({ location: "2dsphere" }); // Spherical Earth GeoJSON index
 ```
+
+
 
 ### Mistake 3: Reversing Coordinates in GeoJSON Points Indexed by `2dsphere`
 
@@ -152,99 +157,100 @@ coordinates: [-74.0060, 40.7128] // Correct [longitude, latitude]
 
 
 
-### Mistake 4: Creating `2d` Legacy Flat Indexes for Spherical Earth Surface Calculations
+## 5. Practice Exercises
 
-**The mistake:** Creating legacy `2d` index for global GPS coordinate queries.
+### Exercise 1: Creating `2dsphere` Spatial Indexes
 
-**Why it's wrong:** Legacy `2d` indexes calculate distances on a flat Euclidean plane, producing location errors over long distances. Use `2dsphere` indexes for spherical Earth calculations.
+**Scenario:**
+Create a `2dsphere` index on field `location` in collection `stores` to support GeoJSON point queries.
 
-*Incorrect:*
-```javascript
-db.places.createIndex({ location: "2d" }); // ❌ Flat Euclidean plane index!
-```
+**Requirements:**
+1. Execute `createIndex({ location: "2dsphere" })`.
 
-*Fix:*
-```javascript
-db.places.createIndex({ location: "2dsphere" }); // Spherical Earth GeoJSON index
-```
-
-### Mistake 5: Reversing Coordinates in GeoJSON Points Indexed by `2dsphere`
-
-**The mistake:** Indexing GeoJSON points stored as `[latitude, longitude]`.
-
-**Why it's wrong:** GeoJSON strictly mandates `[longitude, latitude]` coordinate ordering.
-
-*Incorrect:*
-```javascript
-coordinates: [40.7128, -74.0060] // Reversed latitude/longitude
-```
-
-*Fix:*
-```javascript
-coordinates: [-74.0060, 40.7128] // Correct [longitude, latitude]
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Geospatial Index Selector
-
-**Problem:** You are building two systems. Select the correct index type (**2dsphere** or **2d**) for each requirement:
-1.  A mobile food delivery application locating users near restaurants on Earth.
-2.  A 2D multiplayer video game tracking player coordinates `[x, y]` on a flat virtual board of size $1000 \times 1000$.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. 2dsphere: Because food delivery coordinates reside on the curved spherical surface of the Earth, requiring GeoJSON calculations.
-> 2. 2d: Because the video game maps coordinates onto a flat 2D coordinate grid, requiring Cartesian geometry calculations.
-> ```
-> - Determine if the coordinates exist on a spherical earth or a flat grid coordinate system.
-> - Spherical geometry rules are mandatory for GeoJSON datums.
-
----
-
-
-
-### Exercise 2: Creating 2dsphere Index
-
-**Problem:** Create `2dsphere` index on `loc` field of `stores` collection.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.stores.createIndex({ loc: "2dsphere" });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.stores.createIndex({ loc: "2dsphere" });
+> db.stores.createIndex({ location: "2dsphere" });
 > ```
 >
-> **Explanation:** `2dsphere` indexes support GeoJSON spatial queries (`$near`, `$geoWithin`).
+> #### Technical Explanation
+>
+> 1. `2dsphere` indexes compute spatial coordinates over Earth's spherical surface (WGS84 ellipsoid).
+> 2. Required for `$near`, `$geoWithin`, and `$geoIntersects` operators over GeoJSON geometries.
+> 3. High performance spatial indexing.
 
 ---
 
-### Exercise 3: Geospatial Index Type Comparison
+### Exercise 2: Proximity Searching with `$near` and `2dsphere`
 
-**Problem:** State difference between `2d` and `2dsphere` indexes (2d: flat 2D plane; 2dsphere: spherical Earth geometry).
+**Scenario:**
+Find all stores within 5,000 meters of coordinates `[longitude: -97.7431, latitude: 30.2672]`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$near` with `$geometry` Point and `$maxDistance: 5000`.
+
 > [!check]- Answer
-> ```text
-> 2d: flat Euclidean plane; 2dsphere: spherical Earth geometry
-> ```
-> ```text
-> 2d: flat Euclidean plane; 2dsphere: spherical Earth geometry
+>
+> #### Implementation
+>
+> ```javascript
+> db.stores.find({
+>   location: {
+>     $near: {
+>       $geometry: {
+>         type: "Point",
+>         coordinates: [-97.7431, 30.2672]
+>       },
+>       $maxDistance: 5000
+>     }
+>   }
+> });
 > ```
 >
-> **Explanation:** `2dsphere` calculates real-world geodesic Earth distances.
+> #### Technical Explanation
+>
+> 1. `$near` calculates spherical distances over `2dsphere` index keys.
+> 2. `$maxDistance` specifies maximum proximity radius in meters.
+> 3. Returns matching documents pre-sorted by distance.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Compound Geospatial Indexes
+
+**Scenario:**
+Create a compound geospatial index combining category equality (`category: 1`) with spatial location (`location: "2dsphere"`).
+
+**Requirements:**
+1. Execute `createIndex({ category: 1, location: "2dsphere" })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.stores.createIndex({ category: 1, location: "2dsphere" });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Compound geospatial indexes filter by scalar fields (e.g. `category`) before evaluating spatial bounds.
+> 2. Narrows spatial candidate search bounds drastically.
+> 3. Standard pattern for store locator applications.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Geospatial Queries (`$near`, `$geoWithin`, `2dsphere`)](../level_04/geospatial_queries.md) — The query command.
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The DDL triggers.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `2dsphere` indexes curved surfaces (Earth); `2d` indexes flat grids.
 - Proximity queries like `$near` require a geospatial index to run.
 - GeoJSON coordinates must be structured as `[ Longitude, Latitude ]`.

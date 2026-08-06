@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript OOP Architecture**
+
+**Object-Oriented Programming** (Interface Contract Realization): The `implements` clause verifies that a class satisfies the structural contract of one or more interfaces.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 You are building an app with multiple payment gateways (Stripe, PayPal, ApplePay).
@@ -71,7 +72,7 @@ class Server implements Logger, Pingable {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting `implements` to inherit logic
 
@@ -83,6 +84,8 @@ class Server implements Logger, Pingable {
 - If you want to enforce a structural shape contract, use `implements` (with interfaces).
 
 ---
+
+
 
 
 
@@ -103,6 +106,8 @@ interface Printable { print(msg: string): void }
 interface Printable { print(msg: string): void }
 class User implements Printable { print(msg: string): void {} } // Explicit parameter types required
 ```
+
+
 
 ### Mistake 3: Confusing Class Inheritance `extends` with Contract Implementation `implements`
 
@@ -126,143 +131,117 @@ class Child extends Base {} // Inherits runtime code implementation
 
 
 
-### Mistake 4: Expecting `implements` to Automatically Infer Class Parameter Types
+## 5. Practice Exercises
 
-**The mistake:** Writing `class User implements Printable { print(msg) {} }` expecting `msg` parameter type to be inferred.
+### Exercise 1: Realizing Interface Contracts with `implements`
 
-**Why it's wrong:** The `implements` clause checks contract compatibility; it does NOT infer or annotate constructor or method parameter types automatically!
+**Scenario:**
+Create an `Authenticatable` interface and implement it inside a `UserSession` class.
 
-*Incorrect:*
-```typescript
-interface Printable { print(msg: string): void }
-// class User implements Printable { print(msg) {} } // ❌ Parameter 'msg' implicitly has an 'any' type
-```
+**Requirements:**
+1. Use `implements Authenticatable` on `UserSession` class.
 
-*Fix:*
-```typescript
-interface Printable { print(msg: string): void }
-class User implements Printable { print(msg: string): void {} } // Explicit parameter types required
-```
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Authenticatable {
+>   token: string;
+>   authenticate(): boolean;
+> }
 
-### Mistake 5: Confusing Class Inheritance `extends` with Contract Implementation `implements`
+class UserSession implements Authenticatable {
+  constructor(public token: string) {}
 
-**The mistake:** Using `implements` expecting to inherit method implementation code from parent class.
-
-**Why it's wrong:** `implements` checks type shape contracts ONLY, inheriting ZERO runtime implementation code. Use `extends` to inherit code.
-
-*Incorrect:*
-```typescript
-class Base { greet() { return "hi"; } }
-class Child implements Base {
-    // greet is NOT inherited! Must re-declare implementation!
+  authenticate(): boolean {
+    return this.token.length > 0;
+  }
 }
 ```
 
-*Fix:*
-```typescript
-class Base { greet() { return "hi"; } }
-class Child extends Base {} // Inherits runtime code implementation
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Structural Typing vs Nominal Typing
-
-**Problem:** You have `interface Logger { log(): void }`. You write `class MyLogger { log() { console.log("hi"); } }`. You completely forgot to write `implements Logger` on the class. 
-Can you still pass `new MyLogger()` into a function `function run(logger: Logger)`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Yes, you absolutely can!
-> Because TypeScript is Structurally Typed (Duck Typing), it checks if the class instance has a `log()` method. It does! So it accepts it.
-> The `implements` keyword is purely a developer tool to catch errors *early* while writing the class. It does not magically change the identity of the class at runtime.
-> ```
-> - Remember the Duck Test from earlier levels!
+> #### Technical Explanation
+>
+> 1. `implements Interface` verifies that the class satisfies the structural interface contract.
+> 2. `implements` is checked strictly at compile time; completely erased in output JavaScript code.
+> 3. Ensures that class instances can be safely passed to functions expecting `Authenticatable`.
 
 ---
-
-
 
 ### Exercise 2: Implementing Multiple Interfaces
 
-**Problem:** Implement `class Service implements Loggable, Serializable`.
+**Scenario:**
+Create a class `DocumentProcessor` implementing both `Printable` and `Serializable` interfaces.
 
-**Expected output:**
+**Requirements:**
+1. Use `implements Printable, Serializable`.
+
 > [!check]- Answer
-> ```text
-> Class implements multiple interfaces
-> ```
+>
+> #### Implementation
+>
 > ```typescript
-> interface Loggable { log(): void }
-> interface Serializable { serialize(): string }
-> class Service implements Loggable, Serializable {
->   log() {}
->   serialize() { return "{}"; }
+> interface Printable { print(): void; }
+> interface Serializable { serialize(): string; }
+
+class DocumentProcessor implements Printable, Serializable {
+  print(): void {
+    console.log("Printing document...");
+  }
+
+  serialize(): string {
+    return JSON.stringify({ status: "printed" });
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Classes can implement multiple comma-separated interfaces (`implements A, B`).
+> 2. Bypasses single class inheritance limitations by composing multiple interface capabilities.
+> 3. Standard object-oriented contract composition pattern.
+
+---
+
+### Exercise 3: Auditing `implements` Type Inference Limitations
+
+**Scenario:**
+Explain why `implements Interface` does NOT automatically infer parameter types on class methods.
+
+**Requirements:**
+1. Show why method parameters in `implements` classes must still be explicitly typed.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Calculator {
+>   add(a: number, b: number): number;
 > }
-> console.log("Class implements multiple interfaces");
-> ```
+
+class FastCalc implements Calculator {
+  // ❌ FAILS with noImplicitAny if parameters are un-typed:
+  // add(a, b) { return a + b; }
+
+  // ✅ CORRECT (Must explicitly annotate method parameters):
+  add(a: number, b: number): number {
+    return a + b;
+  }
+}
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** Classes can implement multiple interface contracts separated by commas.
+> 1. `implements` checks that method implementations match the interface; it does NOT automatically infer method parameter types.
+> 2. Method parameters must still be annotated explicitly when `noImplicitAny` is enabled.
+> 3. Common misconception when working with `implements`.
 
 ---
 
-### Exercise 3: `implements` Runtime Code Emission
 
-**Problem:** State how many lines of JavaScript code the `implements` clause emits during `tsc` compilation (Zero lines).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Zero lines emitted; implements is compile-time only
-> ```
-> ```typescript
-> console.log("Zero lines emitted; implements is compile-time only");
-> ```
->
-> **Explanation:** `implements` is a compile-time check erased during JavaScript output generation.
-
----
-
-### Exercise 4: Implementing Multiple Interfaces
-
-**Problem:** Implement `class Service implements Loggable, Serializable`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Class implements multiple interfaces
-> ```
-> ```typescript
-> interface Loggable { log(): void }
-> interface Serializable { serialize(): string }
-> class Service implements Loggable, Serializable {
->   log() {}
->   serialize() { return "{}"; }
-> }
-> console.log("Class implements multiple interfaces");
-> ```
->
-> **Explanation:** Classes can implement multiple interface contracts separated by commas.
-
----
-
-### Exercise 5: `implements` Runtime Code Emission
-
-**Problem:** State how many lines of JavaScript code the `implements` clause emits during `tsc` compilation (Zero lines).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Zero lines emitted; implements is compile-time only
-> ```
-> ```typescript
-> console.log("Zero lines emitted; implements is compile-time only");
-> ```
->
-> **Explanation:** `implements` is a compile-time check erased during JavaScript output generation.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Abstract Classes](abstract_classes.md) — The alternative way to mandate class structure (using `extends` instead of `implements`).
 - [Interfaces](../level_03/interfaces.md) — What is being implemented.
 - [Structural Typing / Duck Typing](../level_01/structural_typing.md) — The type assignment paradigm that permits this behavior.
@@ -270,7 +249,7 @@ Can you still pass `new MyLogger()` into a function `function run(logger: Logger
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **`implements`** keyword forces a Class to adhere to the shape of an Interface.
 - If the Class is missing any properties or methods defined in the Interface, the compiler throws an error.
 - A class can `implement` infinite interfaces (separated by commas).

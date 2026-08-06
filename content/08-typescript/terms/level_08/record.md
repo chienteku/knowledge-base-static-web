@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Standard Library**
+
+**TypeScript Utility Type** (Mapped Key-Value Pair Construction): `Record<K, V>` constructs object types mapping property keys `K` to uniform value types `V`.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you want to type an object that acts as a dictionary (e.g., mapping usernames to ages), you can use an Index Signature: `{ [username: string]: number }`.
@@ -58,7 +59,7 @@ const apiEndpoints: Record<Environment, string> = {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The `undefined` runtime trap
 
@@ -105,70 +106,100 @@ console.log(map["missing"]?.toUpperCase());
 type Good = Record<string, string>; // Valid PropertyKey type
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Empty Object
+### Exercise 1: Mapping Enum/Union Keys to Values with `Record<K, V>`
 
-**Problem:** How do you type an object that is completely empty and is not allowed to have any properties assigned to it?
+**Scenario:**
+Create a dictionary mapping user roles (`"admin" | "editor" | "viewer"`) to permission strings using `Record`.
 
-**Expected output:**
+**Requirements:**
+1. Define `type RolePermissions = Record<Role, string[]>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> // The built-in Record type can achieve this using `never`!
-> const empty: Record<never, never> = {};
-> 
-> // Alternatively, the most common way is:
-> const empty2: Record<string, never> = {};
-> ```
-> - Think about the type that represents "impossible".
+> type Role = "admin" | "editor" | "viewer";
+
+const permissions: Record<Role, string[]> = {
+  admin: ["create", "read", "update", "delete"],
+  editor: ["read", "update"],
+  viewer: ["read"]
+};
+```
+
+> #### Technical Explanation
+>
+> 1. `Record<K, V>` constructs an object type whose keys are `K` and values are `V`.
+> 2. Enforces that EVERY key in union `K` must be present in the object literal.
+> 3. Guarantees complete enum/union key coverage.
+
+---
+
+### Exercise 2: Dynamic Key-Value Store Construction
+
+**Scenario:**
+Type a dynamic cache object mapping string IDs to generic `Product` items using `Record<string, Product>`.
+
+**Requirements:**
+1. Define `Record<string, Product>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Product { id: string; price: number; }
+
+type ProductCache = Record<string, Product>;
+
+const cache: ProductCache = {};
+cache["p100"] = { id: "p100", price: 29.99 };
+```
+
+> #### Technical Explanation
+>
+> 1. `Record<string, V>` is equivalent to an index signature `[key: string]: V`.
+> 2. Cleaner, more concise syntax for dynamic dictionary maps.
+> 3. Idiomatic method for typing cache objects and hash maps.
+
+---
+
+### Exercise 3: Auditing `Record` Exhaustiveness Guarantees
+
+**Scenario:**
+Demonstrate compile error when a union key is omitted from a `Record<Union, T>` definition.
+
+**Requirements:**
+1. Show compile error when omitting a key in `Record<Role, Page>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type Page = "home" | "about" | "contact";
+
+// ❌ Compile Error: Property 'contact' is missing in type '{ home: string; about: string; }'!
+// const pageTitles: Record<Page, string> = {
+//   home: "Home Page",
+//   about: "About Us"
+// };
+```
+
+> #### Technical Explanation
+>
+> 1. When `K` is a union of literal strings, `Record<K, V>` enforces that ALL keys in `K` must be declared.
+> 2. Prevents missing key mapping bugs at compile time.
+> 3. High safety mapping abstraction.
 
 ---
 
 
 
-### Exercise 2: Mapping Union Enums to Record Values
-
-**Problem:** Create `RolePermissions` mapping `"admin" | "user"` to `string[]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Record mapping created
-> ```
-> ```typescript
-> type Role = "admin" | "user";
-> type RolePermissions = Record<Role, string[]>;
-> const perms: RolePermissions = {
->   admin: ["read", "write"],
->   user: ["read"]
-> };
-> console.log("Record mapping created");
-> ```
->
-> **Explanation:** `Record<K, V>` enforces that all keys in union `K` are present in object definitions.
-
----
-
-### Exercise 3: Dictionary Records with Number Keys
-
-**Problem:** Define `Record<number, string>` for HTTP status message lookups.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> HTTP 200: OK
-> ```
-> ```typescript
-> const httpMessages: Record<number, string> = {
->   200: "OK",
->   404: "Not Found"
-> };
-> console.log(`HTTP 200: ${httpMessages[200]}`);
-> ```
->
-> **Explanation:** `Record<number, V>` models number-indexed lookup maps.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Index Signatures](../level_03/index_signatures.md) — The raw syntax equivalent to `Record<string, Type>`.
 - [Union Types (`|`)](../level_05/union_types.md) — What you pass into `Record` to enforce specific keys.
 - [Mapped Types](../level_09/mapped_types.md) — Related concept: Mapped Types.
@@ -176,7 +207,7 @@ type Good = Record<string, string>; // Valid PropertyKey type
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`Record<Keys, Type>`** is the cleanest way to type dictionaries and maps in TypeScript.
 - It accepts two arguments: the type of the Keys, and the type of the Values.
 - You can pass a Union of literal strings as the Keys, forcing the resulting object to implement exactly those keys.

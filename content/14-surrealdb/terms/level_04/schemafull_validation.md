@@ -14,16 +14,15 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Paradigm**
+
+
+**Schema & Modeling (strict table schema validation rules)**: - **Database Theory / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the schema engine layer. Evaluates assertion logic gates synchronously during write operations before storage write commits).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Enforcing data integrity in schema-full databases requires writing robust validation patterns. 
@@ -105,7 +104,7 @@ DEFINE FIELD phone ON user TYPE option<string>
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the '$value = NONE OR' bypass inside assertions for optional fields, causing inserts to fail when those fields are omitted
 
@@ -170,68 +169,96 @@ CREATE log SET metadata = { custom_key: "val" }; // ❌ Nested key rejected!
 DEFINE FIELD metadata ON TABLE log TYPE object FLEXIBLE; // Permits nested keys
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Validation Schema Construction
+### Exercise 1: Validating Undeclared Field Rejections
 
-**Problem:** You are defining a schema for a `products` table. Write the SurrealQL statements to:
-1.  Define the table `products` as `SCHEMAFULL`.
-2.  Define a field `category` as a required string that must be either `"books"`, `"clothing"`, or `"electronics"`.
-3.  Define a field `discount_percent` as an optional integer. If provided, it must be between `1` and `99` (inclusive).
+**Scenario:**
+Demonstrate that a `SCHEMAFULL` table rejects writes containing undeclared field properties.
 
-**Expected output:**
+**Requirements:**
+1. Define table `article` as `SCHEMAFULL` with field `title`.
+2. Attempt to create a record with undeclared field `bogus_field`.
+
 > [!check]- Answer
-> ```sql
-> DEFINE TABLE products SCHEMAFULL;
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE article SCHEMAFULL;
+> DEFINE FIELD title ON TABLE article TYPE string;
 > 
-> DEFINE FIELD category ON products TYPE string
->   ASSERT $value INSIDE ["books", "clothing", "electronics"];
-> 
-> DEFINE FIELD discount_percent ON products TYPE option<int>
->   ASSERT $value = NONE OR ($value >= 1 AND $value <= 99);
+> -- Fails with schema validation error!
+> CREATE article:1 SET title = "Title", bogus_field = "Illegal";
 > ```
-> - Use the `INSIDE` operator to enforce enum checks.
-> - For the optional `discount_percent` field, ensure your assertion starts with the `$value = NONE OR` bypass.
+>
+> #### Technical Explanation
+>
+> 1. `SCHEMAFULL` tables reject undeclared fields at write time.
+> 2. Guards against typo fields and schema corruption.
+> 3. Enforces strict contract boundaries.
 
 ---
 
+### Exercise 2: Type Coercion Write Rejections
 
+**Scenario:**
+Attempt to write a string `"hello"` into integer field `age` on a `SCHEMAFULL` table.
 
-### Exercise 2: Defining Complete SCHEMAFULL User Table
+**Requirements:**
+1. Define field `age` as `int`.
+2. Attempt write with `"hello"`.
 
-**Problem:** Define `SCHEMAFULL` table `user` with required `name` (string) and `email` (string with `is::email` assertion).
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> DEFINE TABLE user SCHEMAFULL; DEFINE FIELD name ON user TYPE string; DEFINE FIELD email ON user TYPE string ASSERT is::email($value);
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
 > DEFINE TABLE user SCHEMAFULL;
-> DEFINE FIELD name ON TABLE user TYPE string;
-> DEFINE FIELD email ON TABLE user TYPE string ASSERT is::email($value);
+> DEFINE FIELD age ON TABLE user TYPE int;
+> 
+> -- Fails with type mismatch error!
+> CREATE user:u1 SET age = "hello";
 > ```
 >
-> **Explanation:** `SCHEMAFULL` table schema definitions strictly validate fields and assertions.
+> #### Technical Explanation
+>
+> 1. Validates field data types prior to committing transactions.
+> 2. Aborts invalid type writes automatically.
+> 3. Maintains database type safety.
 
 ---
 
-### Exercise 3: Schema Validation Rejection Behavior
+### Exercise 3: Allowing Flexible Nested Objects in SCHEMAFULL Tables
 
-**Problem:** What occurs when inserting an invalid data type into a `SCHEMAFULL` table field? (Fails with schema validation error).
+**Scenario:**
+Define a `SCHEMAFULL` table `profile` with a `FLEXIBLE` nested `metadata` object that accepts arbitrary keys.
 
-**Expected output:**
+**Requirements:**
+1. Define field `metadata` as `object FLEXIBLE`.
+
 > [!check]- Answer
-> ```text
-> Transaction rejects insert with schema validation error
-> ```
-> ```text
-> Transaction rejects insert with schema validation error
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE profile SCHEMAFULL;
+> DEFINE FIELD metadata ON TABLE profile TYPE object FLEXIBLE;
+> 
+> CREATE profile:p1 SET metadata = { custom_theme: "dark", layout_id: 42 };
 > ```
 >
-> **Explanation:** `SCHEMAFULL` validation rejects invalid data type mutations.
+> #### Technical Explanation
+>
+> 1. `FLEXIBLE` allows arbitrary nested JSON keys inside specific object fields.
+> 2. Combines strict outer schema rules with flexible nested documents.
+> 3. Ideal for user metadata and settings storage.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [`DEFINE FIELD`](define_field.md) — The field declaration context.
 - [`option<T>` (Optional Fields)](option_type.md) — Optional fields wrapper.
@@ -240,7 +267,7 @@ DEFINE FIELD metadata ON TABLE log TYPE object FLEXIBLE; // Permits nested keys
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Schema-full tables use assertions to enforce business rules.
 - The `INSIDE` operator validates enum list configurations.
 - Range checks combine comparisons (e.g. `$value >= min AND $value <= max`).

@@ -166,13 +166,16 @@ thread::spawn(move || {
 
 ### Exercise 1: Resilient Service Router with Diverging Error Fallbacks (`-> !`)
 
-**Problem:**
+**Scenario:**
 In a production microservice gateway, authentication tokens must be parsed into an `AuthContext`. However, when critical parsing failures occur (e.g. invalid format or expired token), the service policy dictates that execution must immediately trigger a fatal security panic via a dedicated diverging logger `fn log_and_terminate(err: AuthError) -> !`.
 
 Implement `RequestRouter::resolve_or_diverge` and `RequestRouter::resolve_with_match`. Show how calling a diverging function returning `!` allows the error closure in `Result::unwrap_or_else` or the `Err` match arm to seamlessly coerce into the expected `AuthContext` type without type-checker errors. Include comprehensive unit tests verifying both successful token resolution and panic behavior on failure.
 
 > [!check]- Answer
 > **Implementation:**
+>
+> #### Implementation
+>
 > ```rust
 > use std::fmt;
 > 
@@ -274,7 +277,8 @@ Implement `RequestRouter::resolve_or_diverge` and `RequestRouter::resolve_with_m
 > }
 > ```
 > 
-> **Step-by-step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Diverging Function Declaration (`-> !`)**: `log_and_terminate` explicitly declares `-> !` as its return type. Because the function body ends in `panic!`, control flow will never exit this function normally.
 > 2. **Type Coercion in Closure & Match Arms**: `Result::unwrap_or_else` expects an error closure returning `AuthContext`. Because `log_and_terminate` returns `!`, the compiler automatically coerces `!` to `AuthContext`.
 > 3. **Mathematical Guarantee**: The Rust type checker enforces that because `!` can never produce an actual runtime value, treating it as `AuthContext` is sound—execution stops before any value inspection takes place.
@@ -283,13 +287,16 @@ Implement `RequestRouter::resolve_or_diverge` and `RequestRouter::resolve_with_m
 
 ### Exercise 2: Infallible Generic Pipeline Stages & Exhaustive Pattern Matching (`std::convert::Infallible`)
 
-**Problem:**
+**Scenario:**
 In high-throughput ETL pipelines, generic processing stages return `Result<T, E>`. However, certain transformations (such as string uppercase conversion) can mathematically never fail. Rust uses `std::convert::Infallible` (an uninhabited enum conceptually equivalent to the Never Type `!`) as the associated error type `type Error = Infallible;` for infallible operations.
 
 Write a generic `PipelineStage` trait and implement an infallible `UppercaseStage`. Implement an `unwrap_infallible<T>(res: Result<T, Infallible>) -> T` helper function that extracts the inner value using exhaustive pattern matching (`match never {}`) without requiring runtime panic code. Include unit tests asserting correct processing and zero-overhead unwrapping.
 
 > [!check]- Answer
 > **Implementation:**
+>
+> #### Implementation
+>
 > ```rust
 > use std::convert::Infallible;
 > 
@@ -365,7 +372,8 @@ Write a generic `PipelineStage` trait and implement an infallible `UppercaseStag
 > }
 > ```
 > 
-> **Step-by-step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Uninhabited Types**: `std::convert::Infallible` is defined as `enum Infallible {}` with 0 variants. Because it has no valid constructible instances, it represents the concept of `!`.
 > 2. **Exhaustive Matching (`match never {}`)**: When pattern matching on an uninhabited enum value `never`, Rust recognizes that no branches exist. `match never {}` compiles cleanly and acts as an unreachable control flow statement of type `!`.
 > 3. **Zero-Cost Unwrapping**: Unlike `.unwrap()` or `.expect()`, `unwrap_infallible` guarantees at compile time that panic code generation is entirely omitted, optimizing the compiled machine code.
@@ -374,7 +382,7 @@ Write a generic `PipelineStage` trait and implement an infallible `UppercaseStag
 
 ### Exercise 3: Worker State Machine with Diverging Flow Control (`break`, `continue`, `panic!`)
 
-**Problem:**
+**Scenario:**
 In a multi-threaded event processing system, background worker loops iterate through task commands (`Compute(u32)`, `Skip`, `FatalError(String)`, `Shutdown`).
 Inside a `match` statement expecting a unified result type `u32`:
 - `Command::Compute(val)` yields `val * 2` (`u32`).
@@ -386,6 +394,9 @@ Implement `WorkerLoop::run_queue` showcasing how `break`, `continue`, and diverg
 
 > [!check]- Answer
 > **Implementation:**
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Eq, Clone)]
 > pub enum Command {
@@ -491,7 +502,8 @@ Implement `WorkerLoop::run_queue` showcasing how `break`, `continue`, and diverg
 > }
 > ```
 > 
-> **Step-by-step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Diverging Control Keywords**: In Rust syntax, `continue`, `break`, and `return` are expressions, and their static type is `!`.
 > 2. **Match Arm Unification**: A `match` expression requires every branch to return the same type (here, `u32`). Because `!` coercively unifies with any type, branches returning `continue`, `break`, or calling `handle_fatal(...)` satisfy the `u32` requirement seamlessly.
 > 3. **Unreachable Code Elimination**: Code located after a `!` expression (such as processing statistics after `continue` or `break`) is skipped at runtime, ensuring strict control flow safety.

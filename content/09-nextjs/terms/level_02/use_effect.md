@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **React Hook**
+
+**React Server Component** (Client Side Effect Hook): `useEffect()` manages client-side DOM mutations, timer intervals, and external event subscriptions inside Client Components.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Only** (Side effects run after rendering inside the client's browser DOM).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 React components should ideally be pure functions that accept props, read state, and return JSX. However, real-world applications need to interact with external services and APIs that are not managed by React's rendering pipeline. Examples include:
@@ -88,7 +89,7 @@ export default function ScrollListener() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting state unconditionally inside `useEffect` without dependencies
 
@@ -165,92 +166,141 @@ useEffect(() => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Window Resize Listener
+### Exercise 1: Managing Client Side Effects with `useEffect()`
 
-**Problem:** Complete the component below to safely track the browser window width using `useEffect`, cleaning up the listener on unmount to prevent leaks:
+**Scenario:**
+Subscribe to browser window resize events using `useEffect()` and clean up the listener on unmount.
 
-```typescript
-// components/WindowTracker.tsx
-'use client';
+**Requirements:**
+1. Add event listener in `useEffect()` and return cleanup function.
 
-import React, { useState, useEffect } from 'react';
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
 
-export default function WindowTracker() {
+import { useState, useEffect } from "react";
+
+export default function WindowSize() {
   const [width, setWidth] = useState<number>(0);
 
-  // Solution:
   useEffect(() => {
-    // Only runs on the client after mount
+    // Client-side window access
     setWidth(window.innerWidth);
-
+    
     const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    // Cleanup listener on component unmount
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return <p>Current Window Width: {width}px</p>;
+  return <p>Window Width: {width}px</p>;
 }
 ```
 
-> [!check]- Answer
-> - Add a listener for `resize` events to the global `window` inside the effect, and return a callback that removes it.
+> #### Technical Explanation
+>
+> 1. `useEffect(callback, dependencies)` executes side effects after component rendering.
+> 2. Returning a function from the callback performs cleanup when the component unmounts or dependencies update.
+> 3. Empty dependency array `[]` runs the effect once on mount.
 
 ---
 
-### Exercise 2: Valid useEffect Use Case
+### Exercise 2: Fetching Data in Client Components with AbortController
 
-**Problem:** Identify 1 valid scenario where `useEffect` is required inside a Next.js App Router Client Component.
+**Scenario:**
+Implement client-side data fetching in `useEffect()` with `AbortController` cleanup to cancel stale network requests.
 
-**Expected output:**
+**Requirements:**
+1. Pass `signal` to `fetch()` and abort on cleanup.
+
 > [!check]- Answer
-> ```text
-> Synchronizing third-party browser DOM libraries (e.g. D3.js charts, Mapbox maps, or browser localStorage synchronization).
-> ```
-> - `useEffect` is intended for browser DOM synchronization and third-party widgets.
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> 'use client';
-> useEffect(() => {
->   const chart = new Chart(canvasRef.current);
->   return () => chart.destroy();
-> }, []);
-> ```
+> "use client";
+
+import { useState, useEffect } from "react";
+
+export default function ClientSearch({ query }: { query: string }) {
+  const [results, setResults] = useState<any[]>([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(`/api/search?q=${query}`, { signal: controller.signal })
+      .then((res) => res.json())
+      .then((data) => setResults(data))
+      .catch((err) => {
+        if (err.name !== "AbortError") console.error(err);
+      });
+
+    return () => controller.abort();
+  }, [query]);
+
+  return <ul>{results.map((r, i) => <li key={i}>{r.name}</li>)}</ul>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `controller.abort()` cancels ongoing HTTP fetch requests when `query` prop updates rapidly.
+> 2. Prevents race conditions where old responses overwrite newer search results.
+> 3. Robust client-side side effect pattern.
 
 ---
 
-### Exercise 3: useEffect Missing Dependency Bug
+### Exercise 3: Avoiding `useEffect()` for Server Component Migration
 
-**Problem:** Why is omitting referenced variables from the `useEffect` dependency array (`[dept]`) dangerous in React?
+**Scenario:**
+Refactor a Client Component using `useEffect()` for initial data fetching into a zero-bundle-size async Server Component.
 
-**Expected output:**
+**Requirements:**
+1. Replace `useEffect()` data fetching with direct `await fetch()` in Server Component.
+
 > [!check]- Answer
-> ```text
-> The effect callback will capture stale closures of un-tracked variables, failing to re-run when dependencies change.
-> ```
-> - Missing dependencies create stale closure bugs.
-> 
-> ```typescript
-> // Always include all referenced reactive values in dependency array
-> useEffect(() => {
->   fetchData(id);
-> }, [id]);
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> // ❌ OLD CLIENT APPROACH:
+> // useEffect(() => { fetch('/api/user').then(...) }, []);
+
+// ✅ NEW RSC APPROACH (app/user/page.tsx):
+export default async function UserPage() {
+  const res = await fetch("https://api.example.com/user");
+  const user = await res.json();
+
+  return <div>User: {user.name}</div>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. In Next.js App Router, prefer Server Components over `useEffect()` for initial data fetching.
+> 2. Eliminates client-side loading spinners and waterfall network roundtrips.
+> 3. Reduces client JavaScript bundle size to zero bytes for data fetching.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [React Hooks](../level_01/react_hooks.md) — The parent hook mechanism.
 - [`template.tsx`](template.md) — The Next.js UI file that intentionally re-triggers effects on page navigations.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useEffect` coordinates side effects that sync React state with external systems.
 - Effects execute asynchronously after rendering and paint are completed.
 - Use the dependency array to limit execution to when specific variables change.

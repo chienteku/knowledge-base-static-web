@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Performance / Operations (database index definition statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the index manager. Builds background index tables on disk and updates memory caches to optimize execution scan trees).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a table contains only a few dozen records, finding a specific user is instant: the database reads all records (Full Table Scan) and filters them. 
@@ -86,7 +85,7 @@ SELECT * FROM user WHERE email = "alice@example.com";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating indexes on fields that are write-heavy but rarely targeted in queries, slowing down database writes
 
@@ -139,66 +138,95 @@ DEFINE FIELD active ON TABLE user TYPE bool;
 DEFINE INDEX idx ON TABLE user FIELDS active;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Index Design
+### Exercise 1: Secondary Unique Index Creation
 
-**Problem:** You have a `products` table. The application frequently runs this query:
-`SELECT * FROM products WHERE category = $cat AND price <= $max_price;`
-Write the SurrealQL statement to define an index that optimizes this specific query.
+**Scenario:**
+Create a unique secondary index on table `user` to guarantee that no two users can share the same `email` address.
 
-**Expected output:**
+**Requirements:**
+1. Write the `DEFINE INDEX` statement for index `user_email_idx` on field `email`.
+2. Apply the `UNIQUE` constraint keyword.
+
 > [!check]- Answer
-> ```sql
-> DEFINE INDEX product_cat_price ON products COLUMNS category, price;
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE FIELD email ON TABLE user TYPE string;
+> 
+> -- Define unique secondary index
+> DEFINE INDEX user_email_idx ON TABLE user COLUMNS email UNIQUE;
 > ```
-> - The target table is `products`.
-> - Combine both filtering columns into a single composite index definition.
+>
+> #### Technical Explanation
+>
+> 1. `DEFINE INDEX` creates secondary index structures for fast field lookups.
+> 2. `UNIQUE` enforces uniqueness constraints, aborting writes on duplicate values.
+> 3. Accelerates `SELECT * FROM user WHERE email = ...` lookups.
+
+---
+
+### Exercise 2: Multi-Column Composite Index Creation
+
+**Scenario:**
+An e-commerce query frequently filters products by `category` and `status` simultaneously. Create a composite index covering both columns.
+
+**Requirements:**
+1. Write `DEFINE INDEX product_cat_status` covering `category` and `status`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE INDEX product_cat_status ON TABLE product COLUMNS category, status;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Composite indexes (`COLUMNS col1, col2`) index multi-field combinations together.
+> 2. Accelerates queries containing multi-field `WHERE` filter clauses.
+> 3. Optimizes B-tree index page traversals for complex queries.
+
+---
+
+### Exercise 3: Removing Secondary Indexes with `REMOVE INDEX`
+
+**Scenario:**
+Drop an obsolete index `temp_idx` from table `product`.
+
+**Requirements:**
+1. Write the `REMOVE INDEX` DDL statement.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> REMOVE INDEX temp_idx ON TABLE product;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE INDEX` drops secondary index structures from storage metadata.
+> 2. Frees index storage space on disk and reduces write amplification.
+> 3. Table data records remain unaffected.
 
 ---
 
 
 
-### Exercise 2: Defining Composite Index
-
-**Problem:** Define composite index `user_name_age` on `user` table covering `name` and `age` fields.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX user_name_age ON TABLE user FIELDS name, age;
-> ```
-> ```surrealql
-> DEFINE INDEX user_name_age ON TABLE user FIELDS name, age;
-> ```
->
-> **Explanation:** Composite indexes speed up multi-column `WHERE` queries.
-
----
-
-### Exercise 3: Dropping Index Definition
-
-**Problem:** Command to remove index `user_email` from `user` table (`REMOVE INDEX user_email ON TABLE user;`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> REMOVE INDEX user_email ON TABLE user;
-> ```
-> ```surrealql
-> REMOVE INDEX user_email ON TABLE user;
-> ```
->
-> **Explanation:** `REMOVE INDEX` drops specified index structures.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`DEFINE TABLE`](define_table.md) — The parent schema context.
 - [`UNIQUE` Index](unique_index.md) — Unique constraints.
 - [`SEARCH` Index](search_index.md) — Full-text search indexing.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE INDEX` creates database indexes to accelerate query reads.
 - Relational equivalent to `CREATE INDEX`; NoSQL equivalent to `createIndex()`.
 - Supports single-column, composite, and nested dot-notation path indexes.

@@ -113,7 +113,7 @@ pub use internal::Engine; // Re-exports Engine to crate public API!
 
 ### Exercise 1: Flattening the API
 
-**Problem:** You wrote a crate called `database_lib`. Your `lib.rs` currently looks like this. Users are complaining that they have to write `use database_lib::storage::postgres::Database;`, which is too long. 
+**Scenario:** You wrote a crate called `database_lib`. Your `lib.rs` currently looks like this. Users are complaining that they have to write `use database_lib::storage::postgres::Database;`, which is too long. 
 
 Modify the code below to Re-Export `Database` so users can just write `use database_lib::Database;`.
 
@@ -130,6 +130,9 @@ pub mod storage {
 ```
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > pub mod storage {
 >     pub mod postgres {
@@ -145,13 +148,16 @@ pub mod storage {
 
 ### Exercise 2: Flattening Module Structures with `pub use`
 
-**Problem:** Re-export a deeply nested function `pub use deep::nested::core_action;` at top level.
+**Scenario:** Re-export a deeply nested function `pub use deep::nested::core_action;` at top level.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Core action executed
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > mod deep {
 >     pub mod nested {
@@ -164,13 +170,14 @@ pub mod storage {
 > }
 > ```
 >
-> **Explanation:** `pub use` exposes nested items under convenient top-level module paths.
+> #### Technical Explanation
+> `pub use` exposes nested items under convenient top-level module paths.
 
 ---
 
 ### Exercise 3: Re-Exporting External Types \u2014 The Diamond Problem
 
-**Problem:**
+**Scenario:**
 Re-exporting external dependency types from your library's public API solves a subtle versioning problem called the **diamond dependency conflict**.
 
 Consider this scenario:
@@ -190,6 +197,9 @@ Write:
 > - **Hint 1:** In Rust, `serde::Serialize` at version `1.0.0` and `serde::Serialize` at version `1.0.1` are the **same trait** (same `Cargo.toml` semver range). But `serde v1.0` and (hypothetically) `serde v2.0` would be **different traits** — a struct implementing `v1::Serialize` does NOT implement `v2::Serialize`, even if they look identical.
 > - **Hint 2:** If `my_lib` re-exports `serde::Serialize`, the user who writes `use my_lib::Serialize` gets exactly the same trait object as the one `my_lib` uses internally — they come from the same resolved crate, same version, same type ID. No mismatch possible.
 > - **Hint 3:** If `my_lib` does NOT re-export `Serialize`, the user must add `serde` to their own `Cargo.toml`. If they pick a different semver-incompatible version, `cargo build` may fail with `error[E0277]: the trait Serialize is not implemented` even though their struct clearly derives it — because two different versions of the trait exist simultaneously.
+>
+>
+> #### Implementation
 >
 > ```rust
 > // my_lib/src/lib.rs

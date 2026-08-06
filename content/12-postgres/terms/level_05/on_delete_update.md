@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Constraint**
+
+**Constraint** (Cascading Referential Actions): `ON DELETE` and `ON UPDATE` clauses (`CASCADE`, `RESTRICT`, `SET NULL`, `NO ACTION`) define automatic foreign key cascades.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Triggered synchronously during write operations. Resolves cascades inside the same transaction block, ensuring changes commit atomically).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `referential_integrity.md`, the database blocks you from deleting a parent record if child records still reference it. 
@@ -90,7 +91,7 @@ CREATE TABLE projects (
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Declaring ON DELETE SET NULL on a column marked NOT NULL
 
@@ -112,6 +113,8 @@ CREATE TABLE projects (
 
 
 
+
+
 ### Mistake 2: Using `ON DELETE CASCADE` Accidental Mass Data Loss Traps
 
 **The mistake:** Setting `ON DELETE CASCADE` on critical financial transactions linked to `users`.
@@ -127,6 +130,8 @@ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE -- ❌ Silently pur
 ```sql
 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT -- Prevents deletion if transactions exist
 ```
+
+
 
 ### Mistake 3: Using `ON DELETE SET NULL` on `NOT NULL` Foreign Key Columns
 
@@ -146,105 +151,102 @@ user_id INT REFERENCES users(id) ON DELETE SET NULL -- Allow NULLs
 
 
 
-### Mistake 4: Using `ON DELETE CASCADE` Accidental Mass Data Loss Traps
+## 5. Practice Exercises
 
-**The mistake:** Setting `ON DELETE CASCADE` on critical financial transactions linked to `users`.
+### Exercise 1: Automatic Deletion with `ON DELETE CASCADE`
 
-**Why it's wrong:** Deleting a `user` row silently PURGES all historic transaction records! Use `ON DELETE RESTRICT` or `ON DELETE SET NULL` for audit trails.
+**Scenario:**
+Create an `order_items` table that automatically deletes child items when parent order row is deleted.
 
-*Incorrect:*
-```sql
-FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE -- ❌ Silently purges transaction logs!
-```
+**Requirements:**
+1. Use `REFERENCES orders(id) ON DELETE CASCADE`.
 
-*Fix:*
-```sql
-FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT -- Prevents deletion if transactions exist
-```
-
-### Mistake 5: Using `ON DELETE SET NULL` on `NOT NULL` Foreign Key Columns
-
-**The mistake:** Defining column `user_id INT NOT NULL` with foreign key `ON DELETE SET NULL`.
-
-**Why it's wrong:** If a parent row is deleted, PostgreSQL attempts to set `user_id` to NULL, violating the `NOT NULL` constraint and failing!
-
-*Incorrect:*
-```sql
-user_id INT NOT NULL REFERENCES users(id) ON DELETE SET NULL -- ❌ Violates NOT NULL constraint!
-```
-
-*Fix:*
-```sql
-user_id INT REFERENCES users(id) ON DELETE SET NULL -- Allow NULLs
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Task Assignment Rules
-
-**Problem:** You have an `employees` table (columns: `id` PRIMARY KEY, `name`) and a `tasks` table. Write the SQL `CREATE TABLE` statement for `tasks` containing:
-1.  An integer primary key `id`.
-2.  A description text `description`.
-3.  An integer column `assigned_employee_id` referencing `employees(id)`. If an employee is deleted from the company, keep the task active but set the assigned employee to `NULL`.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE tasks (
->   id INT PRIMARY KEY,
->   description TEXT,
->   assigned_employee_id INT REFERENCES employees(id) ON DELETE SET NULL
+> CREATE TABLE order_items (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+>   product_id INTEGER NOT NULL REFERENCES products(id),
+>   quantity INTEGER NOT NULL CHECK (quantity > 0)
 > );
 > ```
-> - The column `assigned_employee_id` must allow null values (do not add `NOT NULL`).
-> - Append the specific referential delete action rule at the end of the foreign key constraint.
+>
+> #### Technical Explanation
+>
+> 1. `ON DELETE CASCADE` automatically deletes dependent child rows when the parent primary key row is deleted.
+> 2. Prevents orphan child rows.
+> 3. Automates relational cleanup.
 
 ---
 
+### Exercise 2: Protecting Parent Rows with `ON DELETE RESTRICT`
 
+**Scenario:**
+Protect `categories` from being deleted if any `products` reference the category (`ON DELETE RESTRICT`).
 
-### Exercise 2: Setting Foreign Key Action Rules
+**Requirements:**
+1. Use `REFERENCES categories(id) ON DELETE RESTRICT`.
 
-**Problem:** Add foreign key specifying `ON DELETE SET NULL` and `ON UPDATE CASCADE`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> ALTER TABLE orders ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> ALTER TABLE orders
-> ADD CONSTRAINT fk_user
-> FOREIGN KEY (user_id) REFERENCES users(id)
-> ON DELETE SET NULL ON UPDATE CASCADE;
+> CREATE TABLE products (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   name TEXT NOT NULL,
+>   category_id INTEGER NOT NULL REFERENCES categories(id) ON DELETE RESTRICT
+> );
 > ```
 >
-> **Explanation:** Foreign key action rules dictate cascading behavior for parent updates and deletions.
+> #### Technical Explanation
+>
+> 1. `ON DELETE RESTRICT` throws a foreign key violation error if an application attempts to delete a category that has active products.
+> 2. Protects master catalog data from accidental deletion.
+> 3. Enforces domain integrity.
 
 ---
 
-### Exercise 3: Foreign Key Action Options List
+### Exercise 3: Setting Null References with `ON DELETE SET NULL`
 
-**Problem:** List 4 foreign key ON DELETE / ON UPDATE actions (`NO ACTION`, `RESTRICT`, `CASCADE`, `SET NULL`, `SET DEFAULT`).
+**Scenario:**
+When a `manager` user is deleted, set `manager_id` in `employees` table to `NULL` (`ON DELETE SET NULL`).
 
-**Expected output:**
+**Requirements:**
+1. Use `REFERENCES employees(id) ON DELETE SET NULL`.
+
 > [!check]- Answer
-> ```text
-> NO ACTION, RESTRICT, CASCADE, SET NULL, SET DEFAULT
-> ```
-> ```text
-> NO ACTION, RESTRICT, CASCADE, SET NULL, SET DEFAULT
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE employees (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   name TEXT NOT NULL,
+>   manager_id INTEGER REFERENCES employees(id) ON DELETE SET NULL
+> );
 > ```
 >
-> **Explanation:** Action options control referential cascade behavior across relational tables.
+> #### Technical Explanation
+>
+> 1. `ON DELETE SET NULL` sets the child foreign key column to `NULL` when the parent row is deleted.
+> 2. Requires child foreign key column to allow `NULL` values.
+> 3. Preserves child record while clearing parent reference.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [`FOREIGN KEY`](foreign_key.md) — The parent constraint.
 - [Referential Integrity](referential_integrity.md) — The parent safety concept.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Referential actions automate child table updates during parent modifications.
 - `CASCADE` deletes or updates child rows when the parent row is modified.
 - `SET NULL` detaches references by setting the child foreign key column to `NULL`.

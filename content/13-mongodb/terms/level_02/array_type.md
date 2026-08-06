@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Data Type**
+
+**Core Concept** (Ordered Collection BSON Type): The Array type in BSON allows documents to store ordered lists of elements (primitives, objects, or nested arrays) directly within a single document field.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported natively in JSON, JavaScript, and BSON. Query engines parse array indexes using Multi-key indexes under the hood).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database theory, one-to-many relationships (like a blog post having multiple category tags) must be normalized:
@@ -96,7 +97,7 @@ db.users.find({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Permitting arrays to grow infinitely without bounds
 
@@ -146,58 +147,90 @@ db.posts.find({ tags: ["tech"] }); // ❌ Matches exact array ["tech"] only!
 db.posts.find({ tags: "tech" }); // Matches any array containing "tech"
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Implicit Array Search
+### Exercise 1: Querying Array Content with Operator Expressions
 
-**Problem:** You have a `products` collection. Each product has a `categories` array field (e.g. `["electronics", "accessories"]`). 
-Write the MongoDB query to select all products that belong to the `'electronics'` category.
+**Scenario:**
+Query a product catalog to find items that contain both `"electronics"` and `"accessories"` in their `tags` array field.
 
-**Expected output:**
+**Requirements:**
+1. Use `$all` operator to query array elements.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.find({ categories: "electronics" });
+> db.products.find({
+>   tags: { $all: ["electronics", "accessories"] }
+> });
 > ```
-> - You do not need special array search operators for basic element matching.
-> - Direct matching triggers implicit unwrapping searches.
+>
+> #### Technical Explanation
+>
+> 1. `$all` matches documents where the specified array field contains all requested elements regardless of order.
+> 2. Queries array elements directly without unwrapping the array into separate tables.
+> 3. Leverages multikey indexes on array fields.
+
+---
+
+### Exercise 2: Atomic Array Element Manipulation
+
+**Scenario:**
+Append a new tag `"discounted"` to an order's `tags` array without creating duplicate entries.
+
+**Requirements:**
+1. Use `$addToSet` operator in `updateOne()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { $addToSet: { tags: "discounted" } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$addToSet` adds an item to an array field ONLY if the item does not already exist in the array.
+> 2. Ensures array element uniqueness atomically at the database tier.
+> 3. Prevents duplicate array entries without client-side array checking.
+
+---
+
+### Exercise 3: Matching Array Size Criteria
+
+**Scenario:**
+Query user documents where the `roles` array contains exactly 2 assigned roles.
+
+**Requirements:**
+1. Use `$size` operator in filter.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   roles: { $size: 2 }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$size` filters documents by exact array element count.
+> 2. Evaluates array length directly in the query engine.
+> 3. Useful for validating multi-role assignment boundaries.
 
 ---
 
 
 
-### Exercise 2: Matching Any Array Element
-
-**Problem:** Query all documents in `posts` collection containing tag `"mongodb"` inside `tags` array.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.find({ tags: "mongodb" });
-> ```
-> ```javascript
-> db.posts.find({ tags: "mongodb" });
-> ```
->
-> **Explanation:** Passing a scalar value to an array field queries if any array element matches.
-
----
-
-### Exercise 3: Querying Array Size with `$size`
-
-**Problem:** Query posts where `tags` array contains exactly 3 items using `$size`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.find({ tags: { $size: 3 } });
-> ```
-> ```javascript
-> db.posts.find({ tags: { $size: 3 } });
-> ```
->
-> **Explanation:** `{ $size: N }` matches documents where array length equals N.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Embedded Document (Subdocument)](embedded_document.md) — Nested document lists.
 - [`ObjectId` as a Manual Reference](objectid_reference.md) — Referencing alternatives.
@@ -209,7 +242,7 @@ Write the MongoDB query to select all products that belong to the `'electronics'
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - BSON Array stores ordered lists of values in a single document field.
 - Resolves one-to-many relationships without requiring relational junction tables.
 - Supports storing primitive datatypes, nested subdocuments, or nested arrays.

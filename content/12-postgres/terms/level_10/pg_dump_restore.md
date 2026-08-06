@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command-Line Tool**
+
+**Administration / Operations** (Backup & Restore Utilities): `pg_dump` and `pg_restore` generate logical SQL or compressed custom binary backups for database restoration.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Executed in the operating system shell (bash/cmd), not inside the PostgreSQL SQL query terminal. Connects to PostgreSQL over standard network sockets).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 The first rule of database administration is: **always have backups.**
@@ -77,7 +78,7 @@ pg_restore -h localhost -U postgres -d recovery_db -v production_backup.dump
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Saving backup dump files on the database server's local hard drive without offsite replication
 
@@ -125,69 +126,91 @@ pg_restore -d dbname backup.sql -- ❌ Error: input file does not appear to be a
 psql -d dbname -f backup.sql -- Use psql for plain text SQL dumps
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Backup Script Shell Commands
+### Exercise 1: Exporting Compressed Logical Database Backups with `pg_dump`
 
-**Problem:** You are writing a deployment script. Write the operating system terminal command to:
-1.  Back up a database named `ecom_store` to a file named `store.sql` in plain SQL text format (hint: use the format flag `-F p` for plain text).
-2.  Write the restore command to execute that SQL script backup file against a database named `ecom_restore` (hint: plain text SQL dumps are executed using standard client terminals like `psql -f`, not `pg_restore`!).
+**Scenario:**
+Export a compressed custom-format backup of database `store_db` to `/backups/store_db.dump` using `pg_dump`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `pg_dump -Fc -d store_db -f /backups/store_db.dump`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```bash
-> # 1. Backup to SQL script
-> pg_dump -h localhost -U postgres -F p -f store.sql ecom_store
+> pg_dump -h localhost -U postgres -Fc -d store_db -f /backups/store_db_20260805.dump
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `pg_dump` extracts a logical schema and data backup from a running PostgreSQL database.
+> 2. `-Fc` selects PostgreSQL custom binary archive format (supports compression and parallel restoration).
+> 3. Logical backup utility standard.
+
+---
+
+### Exercise 2: Restoring Databases with `pg_restore`
+
+**Scenario:**
+Restore compressed backup file `/backups/store_db.dump` into target database `store_db_staging` in parallel using 4 CPU jobs (`-j 4`).
+
+**Requirements:**
+1. Execute `pg_restore -d store_db_staging -j 4 /backups/store_db.dump`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> createdb -h localhost -U postgres store_db_staging
 > 
-> # 2. Restore plain text SQL script
-> psql -h localhost -U postgres -d ecom_restore -f store.sql
+> pg_restore -h localhost -U postgres -d store_db_staging -j 4 /backups/store_db_20260805.dump
 > ```
-> - Differentiate plain text SQL files (restored via `psql -f`) from binary custom archives (restored via `pg_restore`).
-> - Specify host `-h` and user `-U` flags.
+>
+> #### Technical Explanation
+>
+> 1. `pg_restore` restores database schemas, tables, indexes, and data from custom `-Fc` dump archives.
+> 2. `-j 4` runs restoration tasks across 4 parallel worker threads, speeding up index builds and data loading.
+> 3. Standard disaster recovery restoration utility.
+
+---
+
+### Exercise 3: Dumping Single Tables with Data-Only Flags
+
+**Scenario:**
+Export ONLY data rows from table `users` as plain text SQL `INSERT` statements using `pg_dump --table --data-only`.
+
+**Requirements:**
+1. Execute `pg_dump --table=users --data-only --inserts`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> pg_dump -h localhost -U postgres -d store_db --table=users --data-only --inserts -f /backups/users_data.sql
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `--table=tablename` restricts logical export to a specific target table.
+> 2. `--data-only` omits DDL `CREATE TABLE` statements.
+> 3. `--inserts` formats data rows as standard `INSERT INTO` statements.
 
 ---
 
 
 
-### Exercise 2: Parallel Directory Dump Command
-
-**Problem:** CLI command running parallel `pg_dump` with 4 jobs in directory format (`-Fd`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> pg_dump -Fd -j 4 -f /backups/db_dump prod_db
-> ```
-> ```bash
-> pg_dump -Fd -j 4 -f /backups/db_dump prod_db
-> ```
->
-> **Explanation:** `pg_dump -Fd -j N` performs high-speed multi-threaded directory backups.
-
----
-
-### Exercise 3: Parallel Restore Command
-
-**Problem:** CLI command restoring custom format dump `/backups/db.dump` using `pg_restore` with 4 jobs.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> pg_restore -d target_db -j 4 /backups/db.dump
-> ```
-> ```bash
-> pg_restore -d target_db -j 4 /backups/db.dump
-> ```
->
-> **Explanation:** `pg_restore -j N` restores database schemas and data in parallel across N CPU threads.
-
-## 7. Related Terms
+## 6. Related Terms
 - [WAL (Write-Ahead Log)](wal.md) — The physical log alternative.
 - [Point-in-Time Recovery (PITR)](pitr.md) — Advanced transaction-level recovery.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `pg_dump` creates a logical backup file of a single PostgreSQL database.
 - `pg_restore` rebuilds a database from a custom binary `pg_dump` file.
 - Non-blocking: Backups run on active databases without interrupting write traffic.

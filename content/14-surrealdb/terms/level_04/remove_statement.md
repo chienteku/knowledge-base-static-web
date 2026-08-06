@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (schema entity removal statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the system catalog. Wipes schema config nodes from memory and frees associated disk storage instantly).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 During the lifecycle of a database, schemas shift:
@@ -83,7 +82,7 @@ REMOVE INDEX user_email ON TABLE user IF EXISTS;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running 'DELETE <table>' expecting the table's schema, defined fields, and indexes to be deleted from the database configuration
 
@@ -141,70 +140,90 @@ REMOVE FIELD email; // ❌ Parse error!
 REMOVE FIELD email ON TABLE user;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Cleanup Script Construction
+### Exercise 1: Dropping Table Schemas with `REMOVE TABLE`
 
-**Problem:** You are refactoring an analytics database. 
-Write the SurrealQL commands to:
-1.  Remove an index named `log_timestamp` on the `logs` table.
-2.  Remove a field named `session_hash` on the `logs` table.
-3.  Add error suppression guards to both statements to ensure the script runs safely.
+**Scenario:**
+Drop obsolete table `temp_logs` and all stored records.
 
-**Expected output:**
+**Requirements:**
+1. Write `REMOVE TABLE temp_logs`.
+
 > [!check]- Answer
-> ```sql
-> REMOVE INDEX log_timestamp ON TABLE logs IF EXISTS;
-> REMOVE FIELD session_hash ON TABLE logs IF EXISTS;
+>
+> #### Implementation
+>
+> ```surrealql
+> REMOVE TABLE temp_logs;
 > ```
-> - The target schema component is specified using `ON TABLE logs`.
-> - Append the conditional modifier `IF EXISTS` to both commands.
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE TABLE` drops table schema metadata and stored records completely.
+> 2. Frees disk space allocation.
+> 3. Equivalent to SQL `DROP TABLE`.
+
+---
+
+### Exercise 2: Dropping Field Definitions with `REMOVE FIELD`
+
+**Scenario:**
+Remove an obsolete field `legacy_sk` from table `user`.
+
+**Requirements:**
+1. Write `REMOVE FIELD legacy_sk ON TABLE user`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> REMOVE FIELD legacy_sk ON TABLE user;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE FIELD` drops field schema rules from table definitions.
+> 2. Existing stored record data remains until mutated.
+> 3. Updates table schema metadata registers.
+
+---
+
+### Exercise 3: Dropping Secondary Indexes with `REMOVE INDEX`
+
+**Scenario:**
+Remove secondary index `old_idx` from table `product`.
+
+**Requirements:**
+1. Write `REMOVE INDEX old_idx ON TABLE product`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> REMOVE INDEX old_idx ON TABLE product;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE INDEX` drops secondary index structures from disk.
+> 2. Reduces write amplification overhead.
+> 3. Preserves stored table record data.
 
 ---
 
 
 
-### Exercise 2: Removing Schema Definitions
-
-**Problem:** Write commands to remove field `legacy_age` and index `user_age_idx` from `user` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> REMOVE FIELD legacy_age ON TABLE user; REMOVE INDEX user_age_idx ON TABLE user;
-> ```
-> ```surrealql
-> REMOVE FIELD legacy_age ON TABLE user;
-> REMOVE INDEX user_age_idx ON TABLE user;
-> ```
->
-> **Explanation:** `REMOVE FIELD` and `REMOVE INDEX` drop schema definitions.
-
----
-
-### Exercise 3: Removing Database Scope
-
-**Problem:** Command to drop entire database `test_db` from namespace (`REMOVE DATABASE test_db;`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> REMOVE DATABASE test_db;
-> ```
-> ```surrealql
-> REMOVE DATABASE test_db;
-> ```
->
-> **Explanation:** `REMOVE DATABASE` drops database schemas and all associated records.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`DEFINE TABLE`](define_table.md) — The table creation DDL.
 - [`DELETE`](../level_03/delete.md) — Data record deletion.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `REMOVE` statement deletes schema configurations from SurrealDB.
 - Unifies SQL's `DROP` and `ALTER TABLE DROP` verbs under a single keyword.
 - Used to delete tables, fields, indexes, events, scopes, databases, and namespaces.

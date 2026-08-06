@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Atomic Concurrency Primitives**: `std::sync::atomic::Ordering` (`Relaxed`, `Acquire`, `Release`, `AcqRel`, `SeqCst`) controlling hardware memory barrier instructions and compiler reordering.
+
+
+**Rust Concurrency Memory Model (atomic memory barrier ordering)**: `std::sync::atomic::Ordering` (`Relaxed`, `Acquire`, `Release`, `AcqRel`, `SeqCst`) controlling hardware memory barrier instructions and compiler reordering.
 
 ---
 

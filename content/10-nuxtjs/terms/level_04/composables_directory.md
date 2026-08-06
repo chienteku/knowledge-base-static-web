@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Directory Structure**
+
+**Framework Architecture** (Automated Composable Functions): The `composables/` directory houses custom composition functions auto-imported globally across Vue components and pages.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern Vue 3 development, the standard way to share logic between multiple components (like managing a shopping cart, formatting dates, or tracking mouse position) is to write a "Composable." A Composable is simply a function that utilizes Vue's reactive APIs (`ref`, `computed`, `watch`).
@@ -67,7 +68,7 @@ Nuxt auto-imports rely strictly on **Named Exports** or **Default Exports**. How
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Deeply nested composables not auto-importing
 **The mistake:** Creating a file at `composables/auth/useLogin.ts` and wondering why `useLogin()` throws an "is not defined" error.
@@ -126,84 +127,110 @@ export const useUser = () => useState('user-key', () => null);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Writing a Composable
+### Exercise 1: Authoring Auto-Imported State Composables
 
-**Problem:** Write the code for a file named `composables/useTheme.ts` that exports a function. The function should return a reactive string `theme` initialized to `'light'`, and a function `toggleTheme` that switches it to `'dark'`.
+**Scenario:**
+Create a custom composable `composables/useCart.ts` managing items in a shopping cart.
 
-**Expected output:**
+**Requirements:**
+1. Export `useCart` composable function.
+2. Provide reactive state and mutation helpers.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> // composables/useTheme.ts
-> export const useTheme = () => {
->   const theme = ref('light');
+> // composables/useCart.ts
+> export const useCart = () => {
+>   const items = useState<string[]>("cart-items", () => []);
 >   
->   const toggleTheme = () => {
->     theme.value = theme.value === 'light' ? 'dark' : 'light';
+>   const addItem = (item: string) => {
+>     items.value.push(item);
 >   };
 >   
->   return { theme, toggleTheme };
-> };
-> ```
-> - Export a named function, declare a reactive state container using `ref()`, and return them in an object.
-
----
-
-### Exercise 2: SSR-Safe Composable State Pattern
-
-**Problem:** Write custom composable `composables/useTheme.ts` returning SSR-safe state `'theme'` using `useState()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> export const useTheme = () => {
->   const theme = useState('theme', () => 'light');
->   const toggleTheme = () => {
->     theme.value = theme.value === 'light' ? 'dark' : 'light';
->   };
->   return { theme, toggleTheme };
-> };
-> ```
-> - `useState()` creates SSR-safe state scoped to individual requests.
-> 
-> ```typescript
-> // composables/useTheme.ts
-> export const useTheme = () => {
->   const theme = useState<string>('app-theme', () => 'light');
+>   const itemCount = computed(() => items.value.length);
 >   
->   const toggleTheme = () => {
->     theme.value = theme.value === 'light' ? 'dark' : 'light';
->   };
->   
->   return {
->     theme,
->     toggleTheme
->   };
+>   return { items, addItem, itemCount };
 > };
 > ```
 
+> #### Technical Explanation
+>
+> 1. Top-level exports from files in `composables/` are auto-imported across the application.
+> 2. `useState()` guarantees cart state is initialized safely on the server and hydrated on the client.
+> 3. Encapsulates reusable business logic cleanly.
+
 ---
 
-### Exercise 3: Nested Composables Auto-Import Rule
+### Exercise 2: Defining Nested Composable Utilities
 
-**Problem:** How does Nuxt 3 auto-import composables placed inside nested sub-directories (e.g. `composables/nested/useCustom.ts`)?
+**Scenario:**
+Structure `composables/api/useProducts.ts` and verify how Nuxt resolves named exports vs directory prefixes.
 
-**Expected output:**
+**Requirements:**
+1. Export `useProducts` from nested folder.
+
 > [!check]- Answer
-> ```text
-> Nuxt auto-imports named exports from first-level files or index files inside sub-directories automatically.
+>
+> #### Implementation
+>
+> ```typescript
+> // composables/api/useProducts.ts
+> export const useProducts = () => {
+>   const fetchProducts = async () => {
+>     return await $fetch("/api/products");
+>   };
+>   return { fetchProducts };
+> };
 > ```
-> - First-level files and `index.ts` files in sub-folders auto-import automatically.
-> 
-> ```text
-> composables/auth/useUser.ts -> auto-imported
+
+> #### Technical Explanation
+>
+> 1. Composables in nested directories are auto-imported based on export function names (`useProducts`).
+> 2. If index files or default exports are used, parent folder names may be prepended.
+> 3. Standard API abstraction structure.
+
+---
+
+### Exercise 3: Passing Parameters into Parametric Composables
+
+**Scenario:**
+Create a parametric composable `composables/useCounter.ts` accepting an initial starting number.
+
+**Requirements:**
+1. Accept parameter `initialValue: number`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // composables/useCounter.ts
+> export const useCounter = (initialValue: number = 0) => {
+>   const count = ref(initialValue);
+>   const increment = () => count.value++;
+>   const decrement = () => count.value--;
+>   return { count, increment, decrement };
+> };
 > ```
+
+> #### Technical Explanation
+>
+> 1. Composables can accept runtime configuration parameters.
+> 2. Returns reactive references (`count`) and mutator methods.
+> 3. Flexible factory composable pattern.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useState` Hook](use_state.md) — A Nuxt-specific composable often used *inside* your custom composables to create global state.
 - [`components/` Directory](../level_03/components_directory.md) — The visual equivalent to `composables/`.
 - [Auto-imports](../level_01/auto_imports.md) — Related concept: Auto-imports.
@@ -211,7 +238,7 @@ export const useUser = () => useState('user-key', () => null);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `composables/` directory is for reusable Vue 3 logic.
 - Exported functions are auto-imported everywhere in your app.
 - Always name your functions starting with `use` (e.g., `useAuth`).

@@ -15,17 +15,15 @@
 
 ## 2. Term Category
 
-**Performance / Memory / Layout**: `#[repr(packed)]` and `#[repr(align(N))]` are memory layout attributes in Rust. By default, the compiler aligns struct fields according to their scalar type requirements (e.g. `u32` aligned to 4-byte boundaries, `u64` aligned to 8-byte boundaries), inserting invisible padding bytes between fields. `#[repr(packed)]` forces the compiler to remove all padding bytes (alignment = 1), while `#[repr(align(N))]` forces the struct's starting address to be a multiple of `N` bytes.
+
+
+**Rust Memory Alignment Attributes (repr(packed) and repr(align) data layout layout attributes)**: `#[repr(packed)]` and `#[repr(align(N))]` are memory layout attributes in Rust. By default, the compiler aligns struct fields according to their scalar type requirements (e.g. `u32` aligned to 4-byte boundaries, `u64` aligned to 8-byte boundaries), inserting invisible padding bytes between fields. `#[repr(packed)]` forces the compiler to remove all padding bytes (alignment = 1), while `#[repr(align(N))]` forces the struct's starting address to be a multiple of `N` bytes.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: `#[repr(packed)]` and `#[repr(align(N))]` are available across all Rust targets (`std`, `no_std`, WASM, embedded systems). They are critical for network protocol parsing (TCP/IP headers), hardware MMIO register mapping, cache line false-sharing prevention in concurrent data structures, and SIMD alignment.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -161,7 +159,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating a Reference `&field` to an Unaligned Field in `#[repr(packed)]`
 
@@ -228,11 +226,11 @@ struct GoodAlign;
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Embedded Network Telemetry Packet Parsing with `#[repr(C, packed)]` (`#![no_std]`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In an embedded IoT gateway receiving telemetry frames over a serial link (UART/CAN bus), network packets arrive packed tightly without any padding bytes to minimize transmission bandwidth. The binary frame format consists of:
 - `magic`: 1 byte (`u8`, value `0xAA`)
 - `device_id`: 2 bytes (`u16`) at byte offset 1
@@ -240,6 +238,7 @@ In an embedded IoT gateway receiving telemetry frames over a serial link (UART/C
 - `temperature_mc`: 4 bytes (`i32`) at byte offset 7
 - `checksum`: 2 bytes (`u16`) at byte offset 11
 
+**Requirements:**
 Total packet size is exactly 13 bytes.
 
 1. Define a struct `TelemetryPacket` with `#[repr(C, packed)]` in a `#![no_std]` environment.
@@ -247,6 +246,9 @@ Total packet size is exactly 13 bytes.
 3. Write unit tests with assertions (`assert_eq!`) validating struct size, alignment, field layout, zero-copy packet deserialization from raw byte slices, and field value extraction.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > use core::mem::{align_of, size_of};
@@ -321,7 +323,8 @@ Total packet size is exactly 13 bytes.
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Why `#[repr(C, packed)]` is required:** Default Rust memory layout (`#[repr(Rust)]` or standard `#[repr(C)]`) inserts padding bytes to align fields to their natural scalar alignment (`u16` aligned to 2 bytes, `u32`/`i32` aligned to 4 bytes). With default layout, 1 padding byte is inserted after `magic`, inflating struct size from 13 to 16 bytes. `#[repr(C, packed)]` strips all padding bytes so the struct matches the exact 13-byte wire protocol.
 > 2. **Preventing Undefined Behavior (UB) from unaligned references:** In Rust, standard references (`&T` or `&mut T`) MUST be aligned to `align_of::<T>()`. Creating an unaligned reference like `let r = &packet.timestamp;` causes immediate Undefined Behavior.
 > 3. **Safe Unaligned Pointer Operations:** `core::ptr::addr_of!(self.timestamp)` computes raw pointer `*const u32` directly without creating an intermediate reference `&u32`. `core::ptr::read_unaligned` then safely performs a byte-by-byte copy from unaligned memory into a local stack variable.
@@ -330,14 +333,18 @@ Total packet size is exactly 13 bytes.
 
 ### Exercise 2: High-Performance Cache-Line Alignment (`#[repr(C, align(64))]`) to Eliminate False Sharing
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In multi-threaded lock-free data structures (such as SPSC queues or concurrent metrics collectors), two atomic variables—`head` (modified by producer thread) and `tail` (modified by consumer thread)—are updated continuously by separate CPU cores. If stored in a standard struct, both variables share a single 64-byte L1 CPU cache line. Mutating `head` on CPU Core 1 causes the CPU hardware bus to constantly invalidate Core 2's L1 cache line containing `tail` ("False Sharing"), causing a severe performance penalty.
 
+**Requirements:**
 1. Implement a cache-isolated atomic structure using `#[repr(C, align(64))]`.
 2. Define a `ConcurrentQueueIndices` struct holding `head` and `tail` atomic counters, each wrapped in a 64-byte aligned structure to guarantee placement on distinct L1 cache lines.
 3. Write unit tests with assertions validating `align_of`, `size_of`, runtime pointer address alignment, and field offsets to prove complete cache line separation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::mem::{align_of, size_of};
 > use std::sync::atomic::{AtomicU64, Ordering};
@@ -404,7 +411,8 @@ In multi-threaded lock-free data structures (such as SPSC queues or concurrent m
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **False Sharing Mechanics:** CPU L1 caches manage memory in fixed-size blocks (typically 64 bytes, called cache lines). When CPU Core 1 writes to a memory location, the MESI cache coherency protocol invalidates that entire 64-byte cache line across all other CPU cores. If `head` and `tail` share a cache line, Core 1 and Core 2 continuously force each other to reload L1 cache lines from L2/L3 cache, slowing execution down by up to 50x.
 > 2. **How `#[repr(align(64))]` Works:** By marking `CachePaddedAtomicU64` with `align(64)`, the compiler forces its starting address to be a multiple of 64 and pads its total memory size to a multiple of 64 bytes (8 bytes data + 56 bytes trailing padding).
 > 3. **Memory Isolation:** Storing two `CachePaddedAtomicU64` fields inside `ConcurrentQueueIndices` guarantees `head` occupies Cache Line $N$ (bytes 0..64) and `tail` occupies Cache Line $N+1$ (bytes 64..128), completely eliminating false sharing.
@@ -413,14 +421,18 @@ In multi-threaded lock-free data structures (such as SPSC queues or concurrent m
 
 ### Exercise 3: SIMD Hardware Vector Buffer Alignment (`#[repr(C, align(32))]`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 High-performance SIMD vector instruction sets (such as Intel AVX2 256-bit operations `vmovdqa` / `_mm256_load_ps`) require float vectors (`[f32; 8]`) to be aligned to 32-byte hardware memory boundaries. Attempting to execute aligned vector instructions on unaligned addresses causes a CPU General Protection Fault hardware exception.
 
+**Requirements:**
 1. Define a SIMD block struct `SimdBlock8` holding 8 `f32` elements aligned to 32 bytes using `#[repr(C, align(32))]`.
 2. Implement vector operations (e.g. scalar scaling) operating on `SimdBlock8`.
 3. Write unit tests with assertions verifying hardware alignment (`ptr % 32 == 0`), struct size (`32` bytes), alignment requirement (`align_of::<SimdBlock8>() == 32`), and arithmetic correctness.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::mem::{align_of, size_of};
 > 
@@ -470,14 +482,15 @@ High-performance SIMD vector instruction sets (such as Intel AVX2 256-bit operat
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Hardware Vector Alignment Requirements:** Modern CPU architectures feature vector extension units (AVX/AVX2/AVX-512) that load 256-bit (32-byte) or 512-bit (64-byte) registers directly from L1 cache. Instructions like `vmovdqa` require target memory addresses to be exact multiples of 32 bytes.
 > 2. **Power-of-Two Alignment Enforcement:** In Rust, `N` in `#[repr(align(N))]` must be a power of two ($2, 4, 8, 16, 32, 64, \dots$). Marking `SimdBlock8` with `#[repr(C, align(32))]` forces the compiler to place heap allocations and stack frames on 32-byte boundaries (`address % 32 == 0`).
 > 3. **Struct Sizing & Trailing Padding:** The Rust compiler calculates struct size as a multiple of its alignment. Since `[f32; 8]` is exactly $8 \times 4 = 32$ bytes, no trailing padding is needed. If the field were `[f32; 5]` (20 bytes), `#[repr(align(32))]` would automatically insert 12 trailing padding bytes to maintain a total size of 32 bytes.
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [SIMD (`std::simd`)](simd.md) — Hardware vector instructions requiring `#[repr(align(32))]` or `align(64)`.
@@ -486,7 +499,7 @@ High-performance SIMD vector instruction sets (such as Intel AVX2 256-bit operat
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `#[repr(packed)]` removes all padding bytes (alignment = 1), minimizing memory footprint and matching binary wire protocols (TCP/IP packets).
 - `#[repr(align(N))]` increases struct alignment to $N$ bytes (must be a power of 2: 2, 4, 8, 16, 32, 64).

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Configuration File**
+
+**Administration / Operations** (Server Configuration File): `postgresql.conf` controls core server memory settings (`shared_buffers`, `work_mem`), WAL settings, and connection limits.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Server Configuration** (Stored in the database server's data directory. Some settings take effect after a config reload, while others require a full PostgreSQL service restart to reallocate system RAM).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you install PostgreSQL, it is configured with highly conservative default settings. 
@@ -87,7 +88,7 @@ SELECT pg_reload_conf();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting 'work_mem' too high in an attempt to speed up sort queries
 
@@ -145,60 +146,93 @@ work_mem = 4GB -- ❌ Triggers OOM crash during concurrent sorts!
 work_mem = 64MB -- Global setting; set higher per session for specific heavy queries
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: RAM Budget Calculation
+### Exercise 1: Tuning Shared Buffers and Work Memory
 
-**Problem:** You are deploying PostgreSQL to a server with **32GB of RAM**. Calculate the recommended sizes for:
-1.  `shared_buffers`
-2.  `maintenance_work_mem` (recommended standard: 5% to 10% of RAM, up to 2GB).
+**Scenario:**
+Configure `shared_buffers = 4GB` and `work_mem = 64MB` in `postgresql.conf` for a 16GB RAM database server.
 
-**Expected output:**
+**Requirements:**
+1. Code `postgresql.conf` memory parameter tuning entries.
+
 > [!check]- Answer
-> ```text
-> 1. shared_buffers: 8GB (25% of 32GB system RAM).
-> 2. maintenance_work_mem: 2GB (A safe allocation for high-speed index builds on a 32GB server).
-> ```
-> - Multiply the total system RAM (32GB) by 0.25 to find the shared buffers target.
-> - Ensure maintenance work memory is set to a standard DBA target size.
-
----
-
-
-
-### Exercise 2: Key Memory Parameter Tuning Rules
-
-**Problem:** State recommended baseline settings for: 1. `shared_buffers` (25% of RAM); 2. `effective_cache_size` (75% of RAM).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> shared_buffers: 25% of RAM; effective_cache_size: 75% of RAM
-> ```
-> ```text
-> shared_buffers: 25% of RAM; effective_cache_size: 75% of RAM
+>
+> #### Implementation
+>
+> ```ini
+> # postgresql.conf
+> shared_buffers = 4GB      # ~25% of total system RAM for page caching
+> work_mem = 64MB           # Memory for internal sort/hash operations per query operation
+> maintenance_work_mem = 1GB # Memory for VACUUM and CREATE INDEX builds
 > ```
 >
-> **Explanation:** Standard baseline memory configurations optimize PostgreSQL RAM caching performance.
+> #### Technical Explanation
+>
+> 1. `shared_buffers` allocates dedicated RAM for caching 8KB table and index pages inside PostgreSQL.
+> 2. `work_mem` allocates RAM per sort/hash operation within a query; setting it too high causes out-of-memory (OOM) crashes under high concurrency.
+> 3. Core PostgreSQL memory tuning standard.
 
 ---
 
-### Exercise 3: Reloading Configuration Settings
+### Exercise 2: Tuning Checkpoints for High Write Performance
 
-**Problem:** SQL command reloading `postgresql.conf` parameters without server restart (`SELECT pg_reload_conf();`).
+**Scenario:**
+Tune `max_wal_size = 16GB` and `checkpoint_completion_target = 0.9` to eliminate frequent checkpoint I/O spikes.
 
-**Expected output:**
+**Requirements:**
+1. Code checkpoint tuning settings.
+
 > [!check]- Answer
-> ```text
-> SELECT pg_reload_conf();
+>
+> #### Implementation
+>
+> ```ini
+> # postgresql.conf
+> max_wal_size = 16GB
+> min_wal_size = 2GB
+> checkpoint_completion_target = 0.9
 > ```
+>
+> #### Technical Explanation
+>
+> 1. `max_wal_size` expands WAL capacity before forcing a dirty page checkpoint flush.
+> 2. `checkpoint_completion_target = 0.9` spreads dirty page disk writes evenly over 90% of the checkpoint interval.
+> 3. Prevents severe disk I/O latency spikes during heavy write workloads.
+
+---
+
+### Exercise 3: Inspecting Active Configuration Parameters with `SHOW`
+
+**Scenario:**
+Query active server configuration parameters using `SHOW` and `pg_settings`.
+
+**Requirements:**
+1. Execute `SHOW max_connections;` and query `pg_settings`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT pg_reload_conf();
+> SHOW max_connections;
+> 
+> SELECT name, setting, unit, context 
+> FROM pg_settings 
+> WHERE name IN ('shared_buffers', 'work_mem', 'random_page_cost');
 > ```
 >
-> **Explanation:** `pg_reload_conf()` applies non-restart configuration parameter changes.
+> #### Technical Explanation
+>
+> 1. `SHOW param_name` displays the active runtime value of a configuration setting.
+> 2. `pg_settings` exposes parameter metadata, units, and reload contexts (`sighup`, `postmaster`).
+> 3. Runtime configuration inspection.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [`pg_hba.conf` (Host-Based Authentication)](pg_hba_conf.md) — Network permissions file.
 - [Connection Pooling](connection_pooling.md) — Managing connection caps.
 - [Managed PostgreSQL Services (Supabase, Neon, AWS RDS)](managed_services.md) — Related concept: Managed PostgreSQL Services (Supabase, Neon, AWS RDS).
@@ -206,7 +240,7 @@ work_mem = 64MB -- Global setting; set higher per session for specific heavy que
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `postgresql.conf` is the main file containing PostgreSQL engine parameters.
 - Default settings are highly conservative and must be tuned for production.
 - `shared_buffers` caches data blocks; set to 25% of total system RAM.

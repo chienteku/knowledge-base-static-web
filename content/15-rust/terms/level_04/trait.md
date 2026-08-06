@@ -186,9 +186,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Resilient Telemetry Pipeline & Metric Extractor Trait
 
-**Problem Scenario:**
-In an enterprise Rust microservice architecture, telemetry data (HTTP latency, database connection pool utilization, memory metrics) must be continuously extracted and emitted to monitoring backends like Prometheus or Datadog. 
+**Scenario:** **Problem Scenario:**
+In an enterprise Rust microservice architecture, telemetry data (HTTP latency, database connection pool utilization, memory metrics) must be continuously extracted and emitted to monitoring backends like Prometheus or Datadog.
 
+**Requirements:**
 Your task is to design a unified `MetricExtractor` trait that allows different telemetry types to report their metrics cleanly while providing default formatting behavior:
 
 1. Define a trait `MetricExtractor` with the following contract:
@@ -353,9 +354,10 @@ Your task is to design a unified `MetricExtractor` trait that allows different t
 
 ### Exercise 2: Extensible Storage Engine Trait with Batching & Default Fallback Logic
 
-**Problem Scenario:**
-A high-performance caching layer needs a pluggable `StorageEngine` trait to support multiple underlying storage backends (e.g., In-Memory HashMap, Disk KV engine, Redis Proxy). 
+**Scenario:** **Problem Scenario:**
+A high-performance caching layer needs a pluggable `StorageEngine` trait to support multiple underlying storage backends (e.g., In-Memory HashMap, Disk KV engine, Redis Proxy).
 
+**Requirements:**
 You need to build a trait interface with default fallback lookup, membership checks, and transaction batching mechanics:
 
 1. Define a `StorageError` enum with variants: `KeyNotFound(String)`, `PermissionDenied`, `StorageFull`, `IoError(String)`.
@@ -522,9 +524,10 @@ You need to build a trait interface with default fallback lookup, membership che
 
 ### Exercise 3: Supertrait Dependency Hierarchy for Cryptographic Payload Serialization & Verification
 
-**Problem Scenario:**
-In a secure blockchain engine or signed RPC messaging system, payloads transmitted over the wire must satisfy serialization requirements before cryptographic signing can take place. 
+**Scenario:** **Problem Scenario:**
+In a secure blockchain engine or signed RPC messaging system, payloads transmitted over the wire must satisfy serialization requirements before cryptographic signing can take place.
 
+**Requirements:**
 To enforce this structural constraint at compile time, design a supertrait relationship where `Signable` depends on `Serializable`:
 
 1. Define trait `Serializable`:

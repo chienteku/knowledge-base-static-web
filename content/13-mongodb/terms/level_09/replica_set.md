@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Administration / Operations** (High Availability Cluster Topology): A Replica Set is a group of `mongod` instances maintaining identical data copies for high availability, failover, and read scaling.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (The mandatory configuration standard for production systems. Multi-document transactions, causal consistency, and retryable operations all depend on a replica set environment to function).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Running a database on a single server machine is a major risk:
@@ -84,7 +85,7 @@ rs.status();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running production applications on standalone MongoDB instances, assuming standard backups are sufficient for high availability
 
@@ -132,65 +133,90 @@ mongodb://node1:27017/app // Missing replicaSet parameter!
 mongodb://node1:27017,node2:27017,node3:27017/app?replicaSet=rs0
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: High Availability Calculations
+### Exercise 1: Initializing a 3-Node Replica Set with `rs.initiate()`
 
-**Problem:** You manage a 3-node replica set. Server A is the Primary, and Servers B and C are Secondaries. 
-A backhoe digs up the network fiber trunk line to Server A, disconnecting it from the internet.
-Explain:
-1.  What will happen to the write traffic sent by your application.
-2.  What roles Servers B and C will assume.
+**Scenario:**
+Initialize a new 3-node replica set named `rs0` connecting `node1`, `node2`, and `node3`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `rs.initiate(config)` in `mongosh`.
+
 > [!check]- Answer
-> ```text
-> 1. Write traffic will pause briefly (for a few seconds) while the driver detects the connection drop.
-> 2. Servers B and C will recognize that Server A is offline, hold an election, promote one of themselves (e.g. Server B) to be the new Primary, and resume processing write traffic. Server A, when reconnected, will join as a Secondary.
-> ```
-> - Replica sets monitor nodes using heartbeat pings.
-> - Consider how elections promote standby secondary servers.
-
----
-
-
-
-### Exercise 2: Initiating Replica Set in mongosh
-
-**Problem:** Command to initialize a new replica set named `rs0` with local node.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "localhost:27017" }] });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > rs.initiate({
 >   _id: "rs0",
->   members: [{ _id: 0, host: "localhost:27017" }]
+>   members: [
+>     { _id: 0, host: "node1.example.com:27017" },
+>     { _id: 1, host: "node2.example.com:27017" },
+>     { _id: 2, host: "node3.example.com:27017" }
+>   ]
 > });
 > ```
 >
-> **Explanation:** `rs.initiate()` initializes new replica set configurations.
+> #### Technical Explanation
+>
+> 1. `rs.initiate()` bootstraps replica set configuration across target node addresses.
+> 2. Nodes conduct an initial election to establish the primary node.
+> 3. Establishes high availability database infrastructure.
 
 ---
 
-### Exercise 3: Inspecting Replication Lag
+### Exercise 2: Checking Replication Health with `rs.printReplicationInfo()`
 
-**Problem:** Command to print replication lag details across secondary nodes (`rs.printSlaveReplicationInfo()`).
+**Scenario:**
+Check replication lag and oplog status across all secondary members using `rs.printSlaveReplicationInfo()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `rs.printSlaveReplicationInfo()`.
+
 > [!check]- Answer
-> ```text
-> rs.printSecondaryReplicationInfo();
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> rs.printSecondaryReplicationInfo();
+> rs.printSlaveReplicationInfo();
 > ```
 >
-> **Explanation:** `rs.printSecondaryReplicationInfo()` displays seconds of replication lag per secondary node.
+> #### Technical Explanation
+>
+> 1. `rs.printSlaveReplicationInfo()` calculates replication lag in seconds for each secondary node.
+> 2. Identifies slow or lagging secondary members.
+> 3. Essential command for monitoring cluster health.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Adding New Secondary Nodes with `rs.add()`
+
+**Scenario:**
+Add a 4th secondary node `node4.example.com` to an existing replica set cluster.
+
+**Requirements:**
+1. Execute `rs.add("node4.example.com:27017")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> rs.add("node4.example.com:27017");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `rs.add()` dynamically adds a new node member to the running replica set.
+> 2. The new node performs an Initial Sync to copy all collection data and catch up on the oplog.
+> 3. Expands read scaling and data redundancy capacity.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Primary / Secondary / Arbiter](primary_secondary_arbiter.md) — Node roles.
 - [Automatic Failover & Elections](failover_elections.md) — The election process.
@@ -204,7 +230,7 @@ Explain:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Replica Set is a group of database servers maintaining identical data.
 - Provides data redundancy, high availability, and disaster recovery.
 - Consists of exactly one Primary server and multiple Secondary servers.

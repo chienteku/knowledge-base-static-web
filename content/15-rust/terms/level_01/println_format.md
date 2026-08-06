@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-specific**: While printing to the console is universal, Rust implements these tools as *macros* (denoted by the `!`) which uniquely parse and validate your formatting at compile-time to guarantee safety.
+
+
+**Rust Standard Macro (compile-time string formatting)**: While printing to the console is universal, Rust implements these tools as *macros* (denoted by the `!`) which uniquely parse and validate your formatting at compile-time to guarantee safety.
 
 ---
 
@@ -149,7 +151,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Production Structured Telemetry & Log Event Formatter
 
-**Problem Context:**
+**Scenario:**
 In high-throughput microservices and distributed telemetry systems, log aggregation pipelines (such as Elasticsearch, Vector, or Fluentd) require structured, deterministic formatting. Log entries must follow precise width, alignment, and numerical representation rules so that regular expressions or binary ingest parsers can process log lines without allocations or syntax failures.
 
 **Task:**
@@ -305,7 +307,7 @@ pub fn format_log_entry(event: &LogEvent) -> String {
 
 ### Exercise 2: Network Packet Frame Hex & ASCII Inspection Dump
 
-**Problem Context:**
+**Scenario:**
 Network protocol analysis tools (such as Wireshark CLI or embedded debug monitors) dump raw binary buffers into aligned hex tables with side-by-side ASCII rendering. Displaying raw bytes requires formatting byte offsets, converting binary values to uppercase hexadecimal strings, padding incomplete lines, and filtering non-printable ASCII control characters.
 
 **Task:**
@@ -415,7 +417,7 @@ pub fn format_hex_dump(data: &[u8], bytes_per_line: usize) -> String {
 
 ### Exercise 3: High-Frequency Trading Order Book Console Renderer
 
-**Problem Context:**
+**Scenario:**
 High-frequency financial trading applications render real-time Level-2 market depth (Bids & Asks) on operator terminals. Tables must display fixed column widths, aligned floating-point numbers with precise decimal places, fill characters for table headers, and explicit plus/minus signs for spread indicators.
 
 **Task:**

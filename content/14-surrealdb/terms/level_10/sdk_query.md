@@ -15,16 +15,15 @@
 ---
 
 ## 2. Term Category
-- **SDK Methods & Querying**
+
+
+**Integration / Ecosystem (SDK raw SurrealQL query execution & parameter binding)**: - **SDK Methods & Querying**
+
+
 
 ---
 
-## 3. Environment Context
-- **Client Application Code** (Used when executing complex analytical queries, graph traversals, subqueries, or multi-statement transactions).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While high-level CRUD methods (`.select()`, `.create()`) handle simple single-table operations, real-world applications frequently require advanced SurrealQL features: graph traversals (`->wrote->post`), record link fetching (`FETCH`), aggregation (`GROUP BY`), conditional blocks (`IF/ELSE`), or multi-statement transactions (`BEGIN ... COMMIT`).
@@ -83,7 +82,7 @@ async function fetchUserPosts(db: Surreal, authorId: RecordId<'user'>) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that `.query()` Returns an Array of Result Sets
 
@@ -143,91 +142,101 @@ const [res] = await db.query('SELECT * FROM user:alice'); const user = res.resul
 
 
 
-### Mistake 4: Concatenating Untrusted Client Variables into `db.query()` Strings
 
-**The mistake:** Calling `db.query('SELECT * FROM user WHERE name = "' + name + '"')`.
 
-**Why it's wrong:** String concatenation introduces SQL injection vulnerabilities. Always pass parameters using `$var` placeholders and parameter objects.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-await db.query(`SELECT * FROM user WHERE name = '${input}'`); // ❌ Injection risk!
-```
+### Exercise 1: Raw SurrealQL Execution with `db.query()`
 
-*Fix:*
-```surrealql
-await db.query('SELECT * FROM user WHERE name = $name', { name: input }); // Safe parameter binding
-```
+**Scenario:**
+Execute a multi-statement raw SurrealQL script containing parameter bindings using `db.query()`.
 
-### Mistake 5: Expecting `db.query()` to Return a Single Unwrapped Record Result directly
-
-**The mistake:** Expecting `const user = await db.query('SELECT * FROM user:alice')` to return `{ id: user:alice }`.
-
-**Why it's wrong:** `db.query()` returns an array of response objects `[{ status: 'OK', result: [...] }]`. Un-array the batch response array.
-
-*Incorrect:*
-```surrealql
-const user = await db.query('SELECT * FROM user:alice'); // ❌ Returns response array, not user object!
-```
-
-*Fix:*
-```surrealql
-const [res] = await db.query('SELECT * FROM user:alice'); const user = res.result[0];
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Write Parameterized SDK Query
-Write a `.query()` call that fetches all records from table `invoice` where `amount > $min_val` and `status = $status`, passing `$min_val = 500` and `$status = 'unpaid'`.
+**Requirements:**
+1. Execute `db.query()` passing SurrealQL string and parameter map.
 
 > [!check]- Answer
-> - Pass SQL string with `$min_val` and `$status`.
-> - Pass `{ min_val: 500, status: 'unpaid' }` as 2nd parameter.
+>
+> #### Implementation
+>
+> ```typescript
+> const [users, orders] = await db.query<[User[], Order[]]>(
+>   "SELECT * FROM user WHERE active = $active; SELECT * FROM order;",
+>   { active: true }
+> );
+> 
+> console.log("Active users count:", users.length);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `db.query(surrealql, params)` executes raw multi-statement SurrealQL scripts.
+> 2. Parameter map (`{ active: true }`) binds parameter variables safely, preventing SQL injection.
+> 3. Returns a tuple array containing results of each statement in order.
+
+---
+
+### Exercise 2: Type-Safe Tuple Result Destructuring
+
+**Scenario:**
+Destructure multi-statement query results into strongly-typed TypeScript array variables.
+
+**Requirements:**
+1. Type output tuple array `[User[], Product[]]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const [userList, productList] = await db.query<[User[], Product[]]>(`
+>   SELECT * FROM user;
+>   SELECT * FROM product;
+> `);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Generic tuple types (`<[User[], Product[]]>`) enforce strict typing on multi-statement returns.
+> 2. Unpacks array results cleanly.
+> 3. Combines raw query flexibility with TypeScript type safety.
+
+---
+
+### Exercise 3: Passing Dynamic Parameters to `db.query()`
+
+**Scenario:**
+Pass complex parameters (like record links and datetimes) safely to `db.query()`.
+
+**Requirements:**
+1. Pass `{ targetUser: "user:alice", minDate: new Date() }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const results = await db.query(
+>   "SELECT * FROM post WHERE author = $targetUser AND created_at > $minDate;",
+>   {
+>     targetUser: "user:alice",
+>     minDate: new Date().toISOString()
+>   }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Parameter maps accept strings, numbers, booleans, arrays, and ISO date strings.
+> 2. Encodes parameter types safely before transmission over WebSockets.
+> 3. Provides secure parameter binding for dynamic queries.
 
 ---
 
 
 
-### Exercise 2: Parameterized SDK Batch Query
 
-**Problem:** Execute batch query setting `$u` and selecting user with parameter `{ id: "user:alice" }`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> await db.query('LET $u = $id; SELECT * FROM $u;', { id: "user:alice" });
-> ```
-> ```javascript
-> const [letRes, selectRes] = await db.query(
->   'LET $u = $id; SELECT * FROM $u;',
->   { id: "user:alice" }
-> );
-> ```
->
-> **Explanation:** `db.query(sql, params)` executes multi-statement SurrealQL scripts safely.
-
----
-
-### Exercise 3: Destructuring Multi-Statement Batch Query Responses
-
-**Problem:** Destructure response array from `db.query('SELECT * FROM user; SELECT * FROM product;')`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const [usersRes, productsRes] = await db.query(...);
-> ```
-> ```javascript
-> const [usersRes, productsRes] = await db.query(
->   'SELECT * FROM user; SELECT * FROM product;'
-> );
-> const users = usersRes.result;
-> const products = productsRes.result;
-> ```
->
-> **Explanation:** `db.query()` returns array elements corresponding to each semicolon-separated statement.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [SurrealQL Injection Prevention](../level_08/injection_prevention.md) — Security protections.
 - [SDK CRUD Methods (`.select()` / `.create()` / `.update()` / `.delete()`)](sdk_crud.md) — High-level CRUD alternative.
@@ -235,7 +244,7 @@ Write a `.query()` call that fetches all records from table `invoice` where `amo
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `db.query()` executes raw SurrealQL query strings with variable parameter maps.
 - Always use the second parameter object `{ key: value }` for dynamic input to prevent injection attacks.
 - Destructure return values (`const [result] = await db.query(...)`) to access individual statement result sets.

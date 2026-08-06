@@ -139,7 +139,7 @@ members = ["crate_a", "crate_b"] # Correct!
 
 ### Exercise 1: Declare the Workspace
 
-**Problem:** You are building a multiplayer game. You have created a root folder with a `Cargo.toml` file. Inside the root folder, you have created two crates (folders) named `game_client` and `game_server`. 
+**Scenario:** You are building a multiplayer game. You have created a root folder with a `Cargo.toml` file. Inside the root folder, you have created two crates (folders) named `game_client` and `game_server`. 
 
 Write the exact TOML code that must go in the root `Cargo.toml` to link these two crates into a Workspace.
 
@@ -156,7 +156,7 @@ Write the exact TOML code that must go in the root `Cargo.toml` to link these tw
 
 ### Exercise 2: Sharing Dependencies Across Workspace Members
 
-**Problem:**
+**Scenario:**
 A workspace with 5 member crates all depend on `serde` and `tokio`. Without shared workspace dependencies, each crate's `Cargo.toml` repeats the same version strings, and bumping `serde` from `1.0.100` to `1.0.150` requires editing 5 files. The `[workspace.dependencies]` table (Cargo 1.64+) solves this.
 
 Write the **root** `Cargo.toml` for a workspace called `my_platform` with members `api_server` and `data_worker`, that:
@@ -195,14 +195,15 @@ Write the **root** `Cargo.toml` for a workspace called `my_platform` with member
 > **Answer to the features question:**
 > A member crate that uses `{ workspace = true }` inherits the *version* from the root, but can **add** additional features using `features = ["extra"]`. It **cannot** remove or disable features declared at the workspace level — features only union, never subtract. So if the workspace declares `features = ["full"]` for tokio, a member that also specifies `{ workspace = true, features = ["rt"] }` will compile tokio with `full` + `rt` (both sets combined).
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > `[workspace.dependencies]` is a DRY principle applied to dependency management. It acts as a single source of truth for versions across all crates in the workspace. When you upgrade `serde`, you change one line in the root `Cargo.toml` and every member crate picks up the change automatically on the next `cargo build`.
 
 ---
 
 ### Exercise 3: Virtual Workspaces and Shared `target/`
 
-**Problem:**
+**Scenario:**
 A "virtual workspace" is a workspace whose root `Cargo.toml` has a `[workspace]` section but NO `[package]` section and no `src/` folder — it's a pure container for member crates.
 
 You are building a monorepo for a platform with three crates: `core_lib`, `api_server`, and `admin_cli`. The root should be a virtual workspace.
@@ -239,7 +240,8 @@ You are building a monorepo for a platform with three crates: `core_lib`, `api_s
 > **4. `Cargo.lock` location:**
 > `Cargo.lock` lives at the **workspace root** (next to the root `Cargo.toml`), not inside each member crate. There is exactly **one** lockfile per workspace, regardless of how many members exist. This is what enforces the single resolved dependency graph.
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > The virtual workspace pattern is the standard for monorepos: all crates benefit from shared compilation without any crate being forced to also be the "root" package. The root is a pure manifest — an organizational container with no code of its own.
 
 ---

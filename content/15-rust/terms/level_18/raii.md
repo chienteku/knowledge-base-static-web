@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Resource Management**: Resource Acquisition Is Initialization (RAII) via `Drop` trait.
+
+
+**Rust Core Idiom (resource acquisition is initialization RAII)**: Resource Acquisition Is Initialization (RAII) via `Drop` trait.
 
 ---
 
@@ -275,7 +277,7 @@ let _guard = lock.lock().unwrap(); // Held until end of block scope!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Scoped Threads (`std::thread::scope`)](../level_09/scoped_threads.md)
 - [`Drop` Trait](../level_03/drop_trait.md) — Drop trait destructors.

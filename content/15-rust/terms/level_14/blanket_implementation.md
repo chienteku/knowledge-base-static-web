@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Trait / Abstraction**: A Blanket Implementation is a generic implementation pattern in Rust. Instead of manually writing `impl TraitB for Type1`, `impl TraitB for Type2`, and `impl TraitB for Type3`, you write a single generic `impl<T: TraitA> TraitB for T`. This automatically grants `TraitB` to *every* current and future type in existence that implements `TraitA`.
+
+
+**Rust Trait System (universal generic trait implementation)**: A Blanket Implementation is a generic implementation pattern in Rust. Instead of manually writing `impl TraitB for Type1`, `impl TraitB for Type2`, and `impl TraitB for Type3`, you write a single generic `impl<T: TraitA> TraitB for T`. This automatically grants `TraitB` to *every* current and future type in existence that implements `TraitA`.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: Blanket implementations are used heavily throughout the Rust Standard Library (e.g. `impl<T: Display> ToString for T`, `impl<T> From<T> for T`, `impl<T, U> Into<U> for T where U: From<T>`) and in ecosystem libraries (`serde`, `tokio`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -131,7 +129,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running Afoul of the Orphan Rule / Coherence
 
@@ -212,13 +210,14 @@ impl<T: std::fmt::Display> MyTrait for T { ... }
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: IoT Sensor Telemetry Packet Encoding via Blanket Implementation
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 An industrial IoT gateway collects measurements from diverse hardware sensors (e.g., `TempSensor` reading millidegrees Celsius, `PressureSensor` reading pascals). Every sensor type implements a low-level domain trait `SensorReading`:
 
+**Requirements:**
 ```rust
 pub trait SensorReading {
     fn sensor_id(&self) -> u16;
@@ -236,6 +235,9 @@ Rather than writing repetitive binary encoding code for every sensor type indivi
 Implement two concrete sensor structs (`TempSensor` and `PressureSensor`), write unit tests (`#[test]`) using `assert_eq!` to prove that both structs automatically gain `.encode_packet()` and verify packet length, byte layouts, and checksum calculations.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > pub trait SensorReading {
 >     fn sensor_id(&self) -> u16;
@@ -340,7 +342,8 @@ Implement two concrete sensor structs (`TempSensor` and `PressureSensor`), write
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Blanket Trait Bound (`impl<T: SensorReading> TelemetryFraming for T`)**: The single `impl` block attaches `TelemetryFraming` to any type satisfying `SensorReading`. Neither `TempSensor` nor `PressureSensor` needed manual implementation of `TelemetryFraming`.
 > 2. **Code Deduplication & Extensibility**: Adding a future sensor (e.g., `HumiditySensor`) requires implementing only `SensorReading`. It instantly inherits packet encoding and checksum validation without modifying existing framing code.
 > 3. **Deterministic Binary Serialization**: The solution converts integer primitives to fixed-endian byte slices (`to_be_bytes()`) and appends a rolling XOR checksum, verified with assertions in unit tests.
@@ -349,9 +352,10 @@ Implement two concrete sensor structs (`TempSensor` and `PressureSensor`), write
 
 ### Exercise 2: Generic Resilience Retry Middleware for Fallible Operations
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In network communication and database clients, network blips cause transient failures that succeed when retried. Non-transient errors (e.g., authentication failures or invalid payload formats) should fail immediately without wasting retry budget.
 
+**Requirements:**
 Define a trait `RetryableError`:
 ```rust
 pub trait RetryableError {
@@ -367,6 +371,9 @@ Define a domain error `DbError` with transient (`Timeout`) and permanent (`Acces
 3. Retrying returns an error once transient attempts exceed `max_retries`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > pub trait RetryableError {
 >     fn is_transient(&self) -> bool;
@@ -462,7 +469,8 @@ Define a domain error `DbError` with transient (`Timeout`) and permanent (`Acces
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Blanket Implementation on Anonymous Closure Types**: In Rust, every closure expression produces a unique, unnameable type that implements one of the `Fn`/`FnMut`/`FnOnce` traits. By writing `impl<F, T, E> RetryTask<T, E> for F where F: FnMut() -> Result<T, E>`, we grant `.run_with_retry()` to all matching closures across the codebase.
 > 2. **Extension Trait Pattern**: This exercise demonstrates how popular Rust ecosystem crates (e.g., `tokio::time::timeout`, `itertools`, `futures::stream::StreamExt`) extend standard types or closures with rich helper APIs via blanket trait implementations.
 > 3. **Bounded Trait Constraints**: The blanket implementation restricts execution to error types satisfying `E: RetryableError`, ensuring type safety so non-transient errors like `DbError::AccessDenied` terminate early.
@@ -471,14 +479,18 @@ Define a domain error `DbError` with transient (`Timeout`) and permanent (`Acces
 
 ### Exercise 3: Navigating Orphan Rules and Newtype Wrappers in Blanket Trait Designs
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 A logging system requires a custom trait `AuditDump` with `fn dump_audit(&self) -> String`.
 1. Implement a blanket trait `impl<T: std::fmt::Debug> AuditDump for T` so any type deriving `Debug` automatically supports `.dump_audit()`.
 2. Suppose we also want to display types implementing `AuditDump` using standard `std::fmt::Display` formatting (`"{}"`). Why does writing `impl<T: AuditDump> std::fmt::Display for T` fail to compile (Compiler Error `E0210`)?
 3. Solve this coherence issue using the **Newtype Adapter Pattern**: create `pub struct AuditWrapper<T>(pub T);` and implement `std::fmt::Display` for `AuditWrapper<T>` where `T: AuditDump`.
 4. Write unit tests with `assert_eq!` verifying both `.dump_audit()` and `format!("{}", AuditWrapper(struct_instance))`.
 
+**Requirements:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::fmt;
 > 
@@ -549,14 +561,15 @@ A logging system requires a custom trait `AuditDump` with `fn dump_audit(&self) 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Local Trait vs Foreign Trait Rules**: `impl<T: Debug> AuditDump for T` is valid because `AuditDump` is a trait defined in the local crate. Rust permits blanket implementations for local traits even when generic bounds (`Debug`) come from the standard library.
 > 2. **Orphan Rule Violation (`E0210`)**: Attempting `impl<T: AuditDump> std::fmt::Display for T` fails because `Display` is defined in `std` and `T` represents arbitrary generic types (which could also come from standard library or third-party crates). Allowing this would risk trait implementation collisions across crates.
 > 3. **Newtype Adapter Pattern**: By creating `struct AuditWrapper<T>(pub T)`, `AuditWrapper` becomes a local struct type owned by our crate. Implementing `Display` for `AuditWrapper<T>` satisfies orphan rules while bridging blanket trait behavior into standard formatting macros.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Trait](../level_04/trait.md) — The fundamental abstraction mechanism.
@@ -569,7 +582,7 @@ A logging system requires a custom trait `AuditDump` with `fn dump_audit(&self) 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - A Blanket Implementation implements a trait generically for any type `T` meeting specified bounds (`impl<T: Bound> Trait for T`).
 - Standard library examples include `impl<T: Display> ToString for T` and `impl<T, U> Into<U> for T where U: From<T>`.

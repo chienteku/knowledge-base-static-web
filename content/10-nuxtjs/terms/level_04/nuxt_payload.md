@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **State Management**
+
+**Rendering Strategy** (SSR-to-Client State Payload): `NuxtPayload` serializes server state, fetched data, and state hydration objects into JSON payloads transferred to the client.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client** (Serialized on the server during compile time and parsed on the client browser during hydration bootstrapping).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Server-Side Rendering (SSR) executes your code on the server, loading components, performing database queries, and executing fetch requests to build the final HTML. 
@@ -63,7 +64,7 @@ Nuxt uses **`devalue`** under the hood to compile the payload. This custom seria
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing unserializable values in shared state cache
 
@@ -122,65 +123,124 @@ const { data } = await useFetch('/api/user'); // Serializes data into payload, p
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Inspecting the Payload
+### Exercise 1: Inspecting Serialized SSR Hydration Payloads
 
-**Problem:** You use `useFetch('/api/profile')` inside `app.vue`. Explain why the browser's Network tab shows zero outgoing HTTP requests to `/api/profile` when you refresh the page.
+**Scenario:**
+Inspect the serialized `window.__NUXT__` payload object generated during server rendering in the browser console.
 
-**Expected output:**
+**Requirements:**
+1. Access `useNuxtApp().payload`.
+
 > [!check]- Answer
-> ```text
-> Because of the Nuxt Payload mechanism, the API response is fetched on the server during SSR, serialized, and embedded inside the initial HTML page payload. During hydration, Nuxt reads this embedded data directly to populate the useFetch cache, bypassing the need to trigger a browser network request.
-> ```
-> - Think about where the data is fetched first, and how the client obtains it.
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const nuxtApp = useNuxtApp();
+
+onMounted(() => {
+  console.log("Hydrating Nuxt State Payload:", nuxtApp.payload);
+  console.log("Fetched Data Cache:", nuxtApp.payload.data);
+  console.log("Shared State Keys:", nuxtApp.payload.state);
+});
+</script>
+
+<template>
+  <div>
+    <p>Payload Inspection View</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `NuxtPayload` serializes server state, `useState()` values, and `useFetch()` data into an inline JSON script during SSR.
+> 2. The client hydrates Vue state directly from `window.__NUXT__` without re-fetching API data over the network.
+> 3. Prevents duplicate API data fetching during client hydration.
 
 ---
 
-### Exercise 2: Payload Inspection in HTML Source
+### Exercise 2: Registering Custom Payload Reducers with `definePayloadReducer`
 
-**Problem:** Where is the serialized Nuxt Payload embedded in the server-rendered HTML document?
+**Scenario:**
+Register a custom payload reducer to serialize custom JavaScript `Set` or `Map` objects safely across SSR boundaries.
 
-**Expected output:**
+**Requirements:**
+1. Code `definePayloadReducer` plugin setup.
+
 > [!check]- Answer
-> ```text
-> Inside a window.__NUXT__ script tag embedded at the bottom of the HTML <body>.
-> ```
-> - Nuxt Payload is embedded inside `<script>window.__NUXT__=...</script>`.
-> 
-> ```text
-> Server Render -> Embed __NUXT__ Payload in HTML -> Client Hydrates Payload
-> ```
-
----
-
-### Exercise 3: Custom Payload Reducer Registration
-
-**Problem:** Which plugin method allows registering custom serialization reducers for complex objects (e.g. Date or Map) in Nuxt Payload?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> nuxtApp.provide('payload', ...) or createPayloadPlugin()
-> ```
-> - Custom payload plugins serialize non-primitive data types.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> export default defineNuxtPlugin((nuxtApp) => {
->   nuxtApp.hooks.hook('app:rendered', () => { ... });
+> // plugins/payload.ts
+> export default defineNuxtPlugin(() => {
+>   definePayloadReducer("CustomSet", (data) => data instanceof Set && Array.from(data));
+>   definePayloadReviver("CustomSet", (data) => new Set(data as any[]));
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. Standard `JSON.stringify` converts non-serializable objects (`Map`, `Set`, `Date`, custom classes) into plain strings or empty objects.
+> 2. `definePayloadReducer` and `definePayloadReviver` enable rich data structure serialization across server-client boundaries.
+> 3. De-value serialization engine feature in Nuxt 3.
 
 ---
 
-## 7. Related Terms
+### Exercise 3: Reducing Hydration Payload Size
+
+**Scenario:**
+Optimize a `useFetch()` call using `pick` or `transform` options to exclude unused heavy properties from `NuxtPayload`.
+
+**Requirements:**
+1. Use `transform` to return small payload subset.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> // Strips heavy unused fields before serializing into NuxtPayload
+> const { data: userSummary } = await useFetch("/api/user/large-profile", {
+>   transform: (user: any) => ({
+>     id: user.id,
+>     username: user.username
+>   })
+> });
+> </script>
+
+<template>
+  <div>
+    <p>User: {{ userSummary?.username }}</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Unfiltered API responses append large JSON blobs to `NuxtPayload`, increasing initial HTML document byte size.
+> 2. `transform` or `pick` strips unnecessary API properties on the server before payload serialization.
+> 3. Reduces initial HTML payload download latency.
+
+---
+
+
+
+
+---
+
+## 6. Related Terms
 - [Hydration](../level_01/hydration.md) — The process that uses this payload to align client components.
 - [`useState` Hook](use_state.md) — The state mechanism serialized inside the payload.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Nuxt Payload is a serialized state block embedded inside the SSR HTML.
 - It prevents client-side double-fetching and hydration mismatches.
 - It is powered by `devalue`, supporting Dates, Maps, Sets, and special numbers.

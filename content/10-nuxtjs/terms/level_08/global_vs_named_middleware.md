@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing**
+
+**Security & Middleware** (Middleware Scope & Precedence): Global middleware (`.global.ts`) executes automatically on every route transition, whereas named middleware (`auth.ts`) is assigned per-page.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Not all routing rules are created equal. 
@@ -59,7 +60,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Infinite Redirect Loops in Global Middleware
 **The mistake:** Writing a global middleware that redirects unauthenticated users to `/login`, but forgetting to check if they are *already* going to `/login`.
@@ -130,66 +131,117 @@ export default defineNuxtRouteMiddleware((to) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: File Naming Convention
+### Exercise 1: Authoring Global Route Middleware
 
-**Problem:** You want to create a middleware that checks if the application is currently in "Maintenance Mode." If it is, you want every single URL to redirect to `/maintenance`. What should you name the file in the `middleware/` directory?
+**Scenario:**
+Create a global middleware `middleware/01.analytics.global.ts` that tracks route views for every page navigation.
 
-**Expected output:**
+**Requirements:**
+1. Create `middleware/*.global.ts`.
+
 > [!check]- Answer
-> ```text
-> maintenance.global.ts
+>
+> #### Implementation
+>
+> ```typescript
+> // middleware/01.analytics.global.ts
+> export default defineNuxtRouteMiddleware((to, from) => {
+>   if (import.meta.client) {
+>     console.log(`[Global Analytics] Navigating from ${from.path} to ${to.path}`);
+>   }
+> });
 > ```
-> - Suffixing a middleware file name with `.global` marks it for universal execution across all route transitions.
+
+> #### Technical Explanation
+>
+> 1. Filenames ending in `.global.ts` are automatically registered as global route middleware.
+> 2. Executes on every route transition without requiring `definePageMeta()` configuration on individual pages.
+> 3. Numeric prefix `01.` controls middleware execution order.
 
 ---
 
-### Exercise 2: Global vs Named Middleware Structure Pattern
+### Exercise 2: Authoring Named Page Middleware
 
-**Problem:** Contrast file naming conventions for Global vs Named route middleware in the `middleware/` directory.
+**Scenario:**
+Create a named middleware `middleware/auth.ts` and attach it to `pages/dashboard.vue`.
 
-**Expected output:**
+**Requirements:**
+1. Create `middleware/auth.ts`.
+2. Attach via `definePageMeta({ middleware: ["auth"] })`.
+
 > [!check]- Answer
-> ```text
-> Global Middleware: middleware/log.global.ts (.global.ts suffix);
-> Named Middleware: middleware/auth.ts (no global suffix).
+>
+> #### Implementation
+>
+> ```typescript
+> // middleware/auth.ts
+> export default defineNuxtRouteMiddleware((to) => {
+>   const { isLoggedIn } = useAuth();
+>   
+>   if (!isLoggedIn.value) {
+>     return navigateTo("/login");
+>   }
+> });
 > ```
-> - Global -> `middleware/analytics.global.ts` (Executes automatically everywhere).
-> - Named -> `middleware/auth.ts` (Registered per page).
-> 
-> ```text
-> *.global.ts = Runs Everywhere; *.ts = Registered via definePageMeta
+
+> ```vue
+> <!-- pages/dashboard.vue -->
+> <script setup lang="ts">
+> definePageMeta({
+>   middleware: ["auth"]
+> });
+> </script>
 > ```
+
+> #### Technical Explanation
+>
+> 1. Named middleware files (without `.global.ts`) are executed ONLY when explicitly referenced in `definePageMeta()`.
+> 2. `middleware: ['auth']` executes named guard logic before component rendering.
+> 3. Modular route protection pattern.
 
 ---
 
-### Exercise 3: Middleware Execution Order
+### Exercise 3: Middleware Execution Precedence Rules
 
-**Problem:** In what sequence do Global vs Named middleware execute during a page transition?
+**Scenario:**
+Formulate an execution order matrix for inline middleware, global middleware, and named middleware.
 
-**Expected output:**
+**Requirements:**
+1. Outline execution order steps.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. Global Middleware (ordered alphabetically by filename or numerical prefix 01.log.global.ts)
-> 2. Named Middleware (in order defined in definePageMeta array)
+> Route Middleware Execution Order:
+> - Step 1: Global Middleware (sorted alphabetically or by numeric prefix e.g. 01.auth.global.ts).
+> - Step 2: Named Middleware (defined in middleware/ and assigned in page definePageMeta).
+> - Step 3: Anonymous Inline Middleware (defined directly inside definePageMeta({ middleware: [] })).
 > ```
-> - Global middleware runs first, followed by page named middleware.
-> 
-> ```text
-> 1. Global Middleware (*.global.ts) -> 2. Page Named Middleware
-> ```
+>
+> #### Technical Explanation
+>
+> 1. Global middleware runs first for all application routes.
+> 2. Named and inline page middleware execute sequentially afterwards.
+> 3. Deterministic middleware precedence model.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`pages/` Directory](../level_02/pages_directory.md) — The macro used to attach Named Middleware to a specific page.
 - [Route Middleware](route_middleware.md) — Related concept: Route Middleware.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Named middleware (e.g., `auth.ts`) must be explicitly applied to pages.
 - Global middleware (e.g., `auth.global.ts`) automatically applies to all pages.
 - When redirecting inside Global middleware, always check `to.path` to prevent infinite loops.

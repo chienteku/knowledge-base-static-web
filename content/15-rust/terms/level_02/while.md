@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: The `while` loop is a fundamental construct found in almost every programming language (C, Java, Python, JavaScript) to repeat code based on a condition.
+
+
+**Rust Control Flow (conditional loop execution)**: The `while` loop is a fundamental construct found in almost every programming language (C, Java, Python, JavaScript) to repeat code based on a condition.
 
 ---
 
@@ -153,9 +155,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Resilience Engine with Exponential Backoff State Loop
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In distributed network services, operations (such as HTTP requests, RPCs, or database transactions) frequently fail due to transient errors like network jitter, connection timeouts, or service overload. To ensure system resilience, engineers implement retry loops with exponential backoff.
 
+**Requirements:**
 Design a `BackoffRetryEngine` struct with an `execute` method that executes a closure `F` inside a `while` loop under the following constraints:
 1. Maintain state counters for `attempts` (starting at 0) and `total_delay_ms` (starting at 0).
 2. The `while` loop must continue while `attempts < policy.max_attempts`.
@@ -349,9 +352,10 @@ Include comprehensive unit tests covering:
 
 ### Exercise 2: Length-Prefixed Binary Stream Parser & Frame Decoder
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 High-performance network services (such as Redis, Kafka, or custom TCP protocols) transmit binary frames over stream sockets. Because TCP delivers byte streams rather than discrete packets, incoming data arrives in arbitrary chunks into an accumulating buffer `Vec<u8>`.
 
+**Requirements:**
 Implement `StreamFrameDecoder::decode_stream` to parse binary frames from a mutable buffer reference `&mut Vec<u8>`.
 Each binary frame consists of:
 - Magic Byte: `0xAA` (1 byte).
@@ -507,9 +511,10 @@ Write unit tests verifying:
 
 ### Exercise 3: Financial Order Book Batch Processor with Compound Conditions
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In high-frequency trading engines, pending stock market orders accumulate in an order queue `VecDeque<Order>`. To balance order matching throughput with strict memory and risk limits, a batch processing engine drains orders using a `while` loop governed by compound conditions.
 
+**Requirements:**
 Implement `OrderBookProcessor::process_batch` which operates on `queue: &mut VecDeque<Order>` under the following requirements:
 1. Initialize `processed_count = 0`, `total_volume = 0`, `total_cost = 0.0`, and `flushed_early = false`.
 2. Execute a `while` loop while `!queue.is_empty() && processed_count < max_batch_size && total_volume < max_batch_volume`.

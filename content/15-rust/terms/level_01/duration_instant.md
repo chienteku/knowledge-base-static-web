@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Time Measurement**: `std::time::Duration` representing elapsed time spans and `std::time::Instant` for monotonic clock timing.
+
+
+**Rust Standard Library (monotonic time & measurement)**: `std::time::Duration` representing elapsed time spans and `std::time::Instant` for monotonic clock timing.
 
 ---
 

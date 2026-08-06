@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Paradigm**
+
+
+**Data Type (missing vs null value representation)**: - **Database Theory / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Enforced at the storage layer. Dictates how SurrealDB index structures evaluate missing keys in BSON records).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database design, representing "missing" or "empty" data is notoriously ambiguous:
@@ -94,7 +93,7 @@ SELECT * FROM user WHERE middle_name = NONE OR middle_name = null;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Querying for missing fields using '= null' in SurrealQL, missing documents where the field is 'NONE' (absent)
 
@@ -155,70 +154,111 @@ CREATE user CONTENT { "name": "Alice", "bio": NONE }; // ❌ Parse error!
 CREATE user CONTENT { "name": "Alice" };
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: State Evaluation
+### Exercise 1: Distinguishing `NONE` vs `NULL`
 
-**Problem:** You insert two records:
-`CREATE product:01 SET name = "Laptop", discount = null;`
-`CREATE product:02 SET name = "Mouse";`
-Evaluate the result (returns **product:01**, **product:02**, **both**, or **neither**) for these queries:
-1.  `SELECT * FROM product WHERE discount = null;`
-2.  `SELECT * FROM product WHERE discount = NONE;`
+**Scenario:**
+You are updating a customer profile. Setting `phone = NULL` explicitly indicates the user has no phone number, while setting `phone = NONE` (or omitting it) leaves the existing phone number unchanged during partial updates.
 
-**Expected output:**
+**Requirements:**
+1. Create customer `customer:c1` with `phone = "555-0199"`.
+2. Update `customer:c1` setting `phone = NULL` to clear the phone number.
+3. Query records where `phone IS NULL` vs `phone IS NONE`.
+
 > [!check]- Answer
-> ```text
-> 1. product:01 (The field exists and is explicitly set to null).
-> 2. product:02 (The discount field is completely absent from product:02, so it evaluates to NONE).
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE customer:c1 SET phone = "555-0199";
+> 
+> -- Explicitly set phone to NULL (cleared/empty value)
+> UPDATE customer:c1 SET phone = NULL;
+> 
+> -- Query customers with explicit NULL phone
+> SELECT * FROM customer WHERE phone IS NULL;
 > ```
-> - Differentiate between an explicit null assignment and an absent field.
-> - Match the filter keyword to the correct record state.
+>
+> #### Technical Explanation
+>
+> 1. `NONE` represents a missing or undefined field state (similar to JavaScript `undefined`).
+> 2. `NULL` represents an explicitly set null value (similar to SQL `NULL` or JavaScript `null`).
+> 3. `WHERE field IS NONE` checks for missing fields; `WHERE field IS NULL` checks for explicit null values.
+
+---
+
+### Exercise 2: `NONE` Field Omission in SCHEMALESS Mode
+
+**Scenario:**
+Demonstrate that setting a field to `NONE` on a `SCHEMALESS` table removes the field key entirely from the record object.
+
+**Requirements:**
+1. Create record `profile:p1` with `bio = "Hello world"`.
+2. Update `profile:p1` setting `bio = NONE`.
+3. Inspect the updated record to verify key `bio` is omitted.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE profile:p1 SET bio = "Hello world";
+> 
+> -- Remove field key by setting to NONE
+> UPDATE profile:p1 SET bio = NONE;
+> 
+> SELECT * FROM profile:p1;
+> -- Output: { id: profile:p1 }  (field 'bio' is completely gone!)
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Assigning `NONE` to a field in a `SCHEMALESS` table deletes the field property key from the stored JSON object.
+> 2. Setting `bio = NULL` preserves key `bio` with a null value `{ id: profile:p1, bio: null }`.
+> 3. Understanding `NONE` vs `NULL` prevents subtle bugs in dynamic document schemas.
+
+---
+
+### Exercise 3: Safe Null Coalescing with `IF NOT` or Default Values
+
+**Scenario:**
+A reporting query needs to return a fallback default string `"N/A"` whenever a user's `middle_name` field is `NONE` or `NULL`.
+
+**Requirements:**
+1. Write a `SELECT` query utilizing `IF ... THEN ... ELSE` or coalescing to return `"N/A"` for missing middle names.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:u1 SET first_name = "Jane", last_name = "Doe";
+> 
+> SELECT 
+>     first_name,
+>     IF middle_name != NONE AND middle_name != NULL THEN middle_name ELSE "N/A" END AS middle_name
+> FROM user:u1;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Checking `!= NONE AND != NULL` guards against both missing and explicit null fields.
+> 2. Conditional expressions (`IF ... THEN ... ELSE ... END`) process missing values during query execution.
+> 3. Guarantees consistent string payloads for API responses.
 
 ---
 
 
 
-### Exercise 2: `IS NONE` and `IS NULL` Field Operators
-
-**Problem:** Query all records in `user` table where `email` is absent using `IS NONE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM user WHERE email IS NONE;
-> ```
-> ```surrealql
-> SELECT * FROM user WHERE email IS NONE;
-> ```
->
-> **Explanation:** `IS NONE` tests whether a field key is absent from target records.
-
----
-
-### Exercise 3: Setting Field to NONE
-
-**Problem:** Remove field `temporary_token` from `user:alice` by setting it to `NONE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPDATE user:alice SET temporary_token = NONE;
-> ```
-> ```surrealql
-> UPDATE user:alice SET temporary_token = NONE;
-> ```
->
-> **Explanation:** Setting a field to `NONE` deletes the field key from the record.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`SCHEMAFULL` vs `SCHEMALESS`](../level_01/schemafull_schemaless.md) — The schema constraint context.
 - [`option<T>` (Optional Fields)](../level_04/option_type.md) — Optional fields wrapper.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `null` indicates an existing empty field; `NONE` indicates a completely missing field.
 - Solves the SQL ambiguity of whether `NULL` means empty or missing.
 - In schema-full tables, missing fields evaluate to `NONE`.

@@ -154,7 +154,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Thread-Safe Subscriber System and Reference Cycle Prevention (`Arc<Mutex<T>>` & `Weak`)
 
-**Problem:**
+**Scenario:**
 In event-driven backend architectures, services register listeners to receive broadcast updates. A naive implementation stores strong `Arc<Mutex<dyn Listener>>` references inside the `Publisher`, while listeners store an `Arc<Publisher>` handle to unregister themselves. This creates a multi-thread reference cycle: neither the publisher nor the listeners can ever be dropped, resulting in a persistent memory leak.
 
 Implement a thread-safe subscription system where:
@@ -164,6 +164,9 @@ Implement a thread-safe subscription system where:
 4. Add unit tests (`#[test]`) using `assert_eq!`, `assert!`, and an `AtomicUsize` drop tracker to verify that listener destruction fires properly and no memory leaks occur when listeners drop out of scope.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::{Arc, Mutex, Weak};
 > use std::sync::atomic::{AtomicUsize, Ordering};
@@ -287,7 +290,8 @@ Implement a thread-safe subscription system where:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Cycle Breaking via `Weak`:** Storing `Weak<Mutex<dyn Listener>>` instead of `Arc<Mutex<dyn Listener>>` prevents the `Publisher` from keeping listeners alive indefinitely.
 > 2. **Dynamic Weak Upgrading:** Calling `.upgrade()` on `Weak` pointers attempts to obtain a temporary `Arc` strong reference. If the subscriber has been dropped elsewhere in the application, `.upgrade()` safely returns `None`.
 > 3. **Automatic Pruning:** `list.retain()` filters the weak vector during publication, removing stale `Weak` references on the fly so the subscriber list does not accumulate memory garbage over time.
@@ -298,7 +302,7 @@ Implement a thread-safe subscription system where:
 
 ### Exercise 2: Intentional Static Leaks with `Box::leak` for Zero-Copy Process-Wide Configuration
 
-**Problem:**
+**Scenario:**
 In microservice architectures, configuration values or large static buffers parsed at startup must be accessed across dozens of worker threads. Passing `Arc<Config>` incurs atomic reference counting overhead on every borrow, while copying strings wastes heap memory. Rust allows intentionally leaking dynamically allocated data using `Box::leak` to yield `'static` references (`&'static Config` or `&'static mut [u8]`) that live for the lifetime of the process without lifetime annotations or `Arc` wrapper overhead.
 
 Implement `ConfigManager`:
@@ -307,6 +311,9 @@ Implement `ConfigManager`:
 3. Write unit tests (`#[test]`) using `assert_eq!`, `assert!`, and `std::thread::spawn` demonstrating zero-copy concurrent access across thread boundaries and direct slice mutation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::thread;
 > 
@@ -386,7 +393,8 @@ Implement `ConfigManager`:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Intentional Memory Leak via `Box::leak`:** `Box::leak` transfers ownership of the allocated data away from Rust's RAII drop mechanism and returns a mutable reference with a `'static` lifetime (`&'static mut T`).
 > 2. **Thread Safety:** Because static references (`&'static T`) are guaranteed to remain valid for the entire runtime of the binary, they can be freely moved into threads spawned by `thread::spawn` without needing `Arc` reference counting or lifetime specifiers.
 > 3. **Use Cases:** Ideal for initializing process-wide global caches, lookup tables, or standard buffers created at application startup.
@@ -395,7 +403,7 @@ Implement `ConfigManager`:
 > 
 > ### Exercise 3: Reactive Dataflow DAG and Cycle Prevention (`Rc<RefCell<T>>` vs `Weak`)
 > 
-> **Problem:**
+> **Scenario:**
 > In reactive dataflow engines (such as GUI component graphs or task dependency trees), parent nodes trigger updates to child nodes through forward edges (`outputs`), while child nodes inspect parent states through back-edges (`inputs`). Using `Rc<RefCell<Node>>` for both forward and back-edges forms circular reference graphs that leak the entire node network when the root node goes out of scope.
 > 
 > Implement a leak-free reactive node graph system:

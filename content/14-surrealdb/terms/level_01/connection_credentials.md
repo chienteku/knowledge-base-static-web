@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Authentication & Permissions (connection authentication credentials)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the session layer. Evaluated during client driver authentication handshakes).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In other database systems, you define your target database and credentials inside the connection string (for example, `mongodb://user:pass@host:27017/dbname`). 
@@ -93,7 +92,7 @@ DEFINE TABLE connections SCHEMALESS;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on the client SDK connection string credentials to select the database, without calling the '.use()' method in application startup, causing query scope crashes
 
@@ -154,73 +153,102 @@ await db.signin({ username: "alice", pass: "123" }); // ❌ Missing ns and db pa
 await db.signin({ access: "user_access", ns: "production", db: "main", username: "alice", pass: "123" });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Session Scoping Script
+### Exercise 1: Multi-Tenant Session Scope Target
 
-**Problem:** You are writing an administrative script to migrate schema layouts. 
-Write the SurrealQL code block to:
-1.  Target namespace `"company_hq"` and database `"production"`.
-2.  Create a record `user:john` with field `status = "active"`.
-3.  Switch database context to `"archive"`.
-4.  Create a record `user:john` with field `status = "archived"`.
+**Scenario:**
+You are writing an administrative CLI migration script that must target the `company_hq` namespace and the `production` database, create an active user record `user:john`, and then switch the active database context to `archive` to record the user's archived state.
 
-**Expected output:**
+**Requirements:**
+1. Target namespace `company_hq` and database `production` using SurrealQL scope configuration.
+2. Insert record `user:john` with `status = "active"`.
+3. Switch database scope context to `archive`.
+4. Insert record `user:john` with `status = "archived"`.
+
 > [!check]- Answer
-> ```sql
+>
+> #### Implementation
+>
+> ```surrealql
 > USE NS company_hq DB production;
 > CREATE user:john SET status = "active";
 > 
 > USE DB archive;
 > CREATE user:john SET status = "archived";
 > ```
-> - Use the `USE` keyword to set session scopes.
-> - Specify both `NS` and `DB` on the first call; switch only `DB` on the second call.
+>
+> #### Technical Explanation
+>
+> 1. The `USE` keyword sets the current session's namespace (`NS`) and database (`DB`) context in SurrealDB.
+> 2. Specifying both `NS` and `DB` on the first call establishes full tenant target isolation.
+> 3. Switching only `DB` on subsequent calls maintains the active `NS` scope while altering database context.
 
 ---
 
+### Exercise 2: Scoped Record Access Signin Payload
 
+**Scenario:**
+A web client application using the SurrealDB JavaScript SDK needs to authenticate a regular user against a predefined RECORD access method `user_access` residing within namespace `main` and database `app`.
 
-### Exercise 2: Scoped User Signin Payload
+**Requirements:**
+1. Construct the JavaScript client signin payload object.
+2. Include the target `access` method name, namespace `ns`, database `db`, and user credentials.
 
-**Problem:** Construct signin payload for record access `user_access` in NS `main` and DB `app`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Scoped signin payload created
-> ```
-> ```javascript
-> const payload = {
+>
+> #### Implementation
+>
+> ```typescript
+> const signinPayload = {
 >   access: "user_access",
 >   ns: "main",
 >   db: "app",
->   username: "user1",
->   pass: "secret"
+>   username: "alice",
+>   pass: "SecretPass123!"
 > };
-> console.log("Scoped signin payload created");
+> 
+> console.log("Configured scoped signin payload:", signinPayload);
 > ```
 >
-> **Explanation:** Access signin payloads identify target scope, namespace, database, and credentials.
+> #### Technical Explanation
+>
+> 1. RECORD access authentication requires specifying the exact `ns` and `db` targets where the user record exists.
+> 2. The `access` field targets SurrealDB 2.x `DEFINE ACCESS` definitions (replacing legacy 1.x `DEFINE SCOPE`).
+> 3. Scoped user credentials authenticate clients with row-level security permissions without granting root database access.
 
 ---
 
-### Exercise 3: Authentication Hierarchy Levels
+### Exercise 3: Database Authentication Hierarchy Classification
 
-**Problem:** List 3 authentication levels in SurrealDB (Root, Namespace, Database / Access Scope).
+**Scenario:**
+A security auditor is reviewing your SurrealDB deployment access architecture and requires a breakdown of SurrealDB's multi-level authentication hierarchy and role scopes.
 
-**Expected output:**
+**Requirements:**
+1. List the 3 primary levels of authentication credentials supported in SurrealDB.
+2. Briefly describe the scope of authority for each level.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Root level, Namespace level, Database/Access Scope level
-> ```
-> ```text
-> Root level, Namespace level, Database/Access Scope level
+> - Root Level: Global cluster administrator credentials with total access across all namespaces and databases.
+> - Namespace Level: Administrative credentials restricted to managing databases and schemas within a single namespace.
+> - Database / Access Scope Level: Scoped credentials for end-user applications restricted by table and row-level PERMISSIONS.
 > ```
 >
-> **Explanation:** SurrealDB enforces multi-tenant authentication at root, namespace, and database/scope levels.
+> #### Technical Explanation
+>
+> 1. Root credentials manage engine-wide configuration, storage backends, and namespace creation.
+> 2. Namespace credentials enable multi-tenant isolation, allowing tenant admins to manage their own databases safely.
+> 3. Database/Access Scope credentials authenticate web and mobile clients directly, enforcing SurrealDB's built-in security model.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [Namespace & Database](namespace_database.md) — The logical containers targeted.
 - [SurrealDB CLI (`surreal sql`)](surreal_cli.md) — The executing client environment.
@@ -228,7 +256,7 @@ Write the SurrealQL code block to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Connection credentials authenticate and scope database client sessions.
 - `USE NS` targets the namespace; `USE DB` targets the database.
 - A single WebSocket connection can switch scopes dynamically at runtime.

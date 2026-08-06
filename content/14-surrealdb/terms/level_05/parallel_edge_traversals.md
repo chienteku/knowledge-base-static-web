@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Query Feature (multi-edge parallel graph traversal)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the projection compilation stage. Executes parallel read sub-queries in memory to resolve different edge paths before merging them into the final JSON output object).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In application interfaces (like user dashboards), you need to display multiple related lists at once:
@@ -95,7 +94,7 @@ FROM user:john;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to write parallel relationship lookups as a single chained arrow path, resulting in empty array returns
 
@@ -156,102 +155,106 @@ SELECT ->wrote->post AS wrote, ->liked->post AS liked FROM user:alice;
 
 
 
-### Mistake 4: Traversing Multiple Parallel Edges Without Union Brackets
 
-**The mistake:** Writing `SELECT ->(wrote, liked)->post FROM user:alice;` using incorrect syntax.
 
-**Why it's wrong:** Traversing multiple parallel edge relationships simultaneously uses array or multi-edge syntax `->(wrote | liked)->post` or `->(wrote, liked)->post`.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-SELECT ->wrote, liked->post FROM user:alice; // ❌ Invalid syntax!
-```
+### Exercise 1: Multi-Edge Type Parallel Traversal
 
-*Fix:*
-```surrealql
-SELECT ->wrote->post AS created, ->liked->post AS liked FROM user:alice;
--- Or combined multi-edge traversal
-```
+**Scenario:**
+A user profile activity feed queries both posts `wrote` by `user:alice` AND posts `liked` by `user:alice` in a single parallel edge traversal.
 
-### Mistake 5: Confusing Parallel Edge Traversals with Parallel Transaction Execution (`PARALLEL`)
+**Requirements:**
+1. Relate `user:alice -> wrote -> post:p1`.
+2. Relate `user:alice -> liked -> post:p2`.
+3. Select `->(wrote, liked)->post.title` from `user:alice`.
 
-**The mistake:** Using `PARALLEL` keyword expecting multi-edge graph traversal.
-
-**Why it's wrong:** The `PARALLEL` keyword executes statement queries concurrently. Parallel edge traversal refers to querying multiple relationship edge types in a graph.
-
-*Incorrect:*
-```surrealql
-SELECT PARALLEL ->wrote->post FROM user:alice;
-```
-
-*Fix:*
-```surrealql
-SELECT ->wrote->post AS wrote, ->liked->post AS liked FROM user:alice;
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Dashboard Query Design
-
-**Problem:** You are building a student profile page. 
--   Students belong to classes (`->enrolled_in->class`).
--   Students borrow library books (`->borrowed->book`).
-Write the SurrealQL query starting from `student:alice` to retrieve the student's `name` along with two parallel arrays:
-1.  `classes`: List of class names she is enrolled in.
-2.  `books`: List of book titles she has borrowed.
-
-**Expected output:**
 > [!check]- Answer
-> ```sql
-> SELECT name, ->enrolled_in->class.name AS classes, ->borrowed->book.title AS books FROM student:alice;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET name = "Alice";
+> CREATE post:p1 SET title = "Authored Post";
+> CREATE post:p2 SET title = "Liked Post";
+> 
+> RELATE user:alice->wrote->post:p1;
+> RELATE user:alice->liked->post:p2;
+> 
+> -- Parallel multi-edge traversal
+> SELECT ->(wrote, liked)->post.title AS activity_posts FROM user:alice;
 > ```
-> - The source node is `student:alice`.
-> - Project the two relationship paths as separate, comma-separated fields in the `SELECT` statement.
+>
+> #### Technical Explanation
+>
+> 1. `->(edge1, edge2)->table` traverses multiple edge tables in parallel within a single query pass.
+> 2. Merges records from both `wrote` and `liked` relation edges into a unified result set.
+> 3. Eliminates duplicate queries or manual application-side array merging.
+
+---
+
+### Exercise 2: Parallel Edge Filtering
+
+**Scenario:**
+Query posts connected to `user:alice` via `wrote` or `bookmarked` edges where the edge creation date is within the last 7 days.
+
+**Requirements:**
+1. Write `SELECT ->(wrote, bookmarked)[WHERE created_at > time::now() - 7d]->post.title FROM user:alice`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT ->(wrote, bookmarked)[WHERE created_at > time::now() - 7d]->post.title AS recent_activity 
+> FROM user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Applies filter conditions `[WHERE created_at > ...]` to all parallel edge types simultaneously.
+> 2. Filters out stale relation edges across both edge tables.
+> 3. Optimizes activity feed generation queries.
+
+---
+
+### Exercise 3: Flattening Parallel Traversal Collections
+
+**Scenario:**
+Flatten parallel traversal results from `->(wrote, liked)->post.title` into a single 1D array of unique post titles using `array::distinct()`.
+
+**Requirements:**
+1. Combine `SELECT VALUE` and `array::distinct()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT array::distinct(array::flatten(->(wrote, liked)->post.title)) AS unique_titles 
+> FROM user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `array::flatten()` unwraps multi-edge result arrays.
+> 2. `array::distinct()` removes duplicate post titles if a post was both written AND liked.
+> 3. Returns a clean deduplicated list of activity titles.
 
 ---
 
 
 
-### Exercise 2: Parallel Graph Edge Projection
 
-**Problem:** Query user `user:alice` projecting both `wrote` posts and `liked` posts in a single statement.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT ->wrote->post AS wrote, ->liked->post AS liked FROM user:alice;
-> ```
-> ```surrealql
-> SELECT ->wrote->post AS wrote, ->liked->post AS liked FROM user:alice;
-> ```
->
-> **Explanation:** Projecting multiple arrow paths retrieves parallel edge relationship targets.
-
----
-
-### Exercise 3: Deduplicating Multi-Edge Traversals
-
-**Problem:** Combine and deduplicate post IDs from both `wrote` and `liked` edges.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT array::distinct(array::add(->wrote->post, ->liked->post)) AS all_posts FROM user:alice;
-> ```
-> ```surrealql
-> SELECT array::distinct(array::add(->wrote->post, ->liked->post)) AS all_posts FROM user:alice;
-> ```
->
-> **Explanation:** `array::distinct()` deduplicates record IDs retrieved across multiple edge paths.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
 - [Deep Graph Traversal (Chained arrows)](deep_graph_traversal.md) — Sequential path walks.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Parallel edge traversals query multiple relationship paths in a single statement.
 - Projects independent relationship streams as separate fields in the query.
 - Returns nested JSON arrays, preventing SQL-style Cartesian product duplicate rows.

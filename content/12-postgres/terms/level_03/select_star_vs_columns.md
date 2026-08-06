@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Best Practice**
+
+**SQL Command / Clause** (Projection Performance Optimization): `SELECT *` vs Explicit Columns contrasts fetching all columns against selecting specific required attributes to minimize network I/O.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (`SELECT *` is convenient for local CLI debugging but is considered a dangerous anti-pattern inside production application codebases).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing SQL, the asterisk (`*`) acts as a wildcard meaning **"all columns."** 
@@ -78,7 +79,7 @@ SELECT title, author FROM wiki_pages;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using SELECT * in production API routes because "it saves development typing time"
 
@@ -137,63 +138,98 @@ const [id, name, email] = row; // ❌ Breaks if new column is added!
 SELECT id, name, email FROM users; -- Immutable explicit column list
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Optimization
+### Exercise 1: Explicit Column Selection Optimization
 
-**Problem:** You are building a mobile app dashboard. The dashboard displays a user's name and avatar image link. The database `profiles` table has columns `id`, `user_name`, `avatar_url`, `hashed_password`, `street_address`, `zip_code`, and `bio_description`. Write the optimized SQL query to fetch the dashboard data.
+**Scenario:**
+Refactor a bloated `SELECT *` query returning 30 columns on a 1,000,000 row table to return ONLY `id` and `email`.
 
-**Expected output:**
+**Requirements:**
+1. Compare `SELECT *` vs `SELECT id, email`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT user_name, avatar_url 
-> FROM profiles;
+> -- ❌ Bloated projection (transfers unneeded text/bytea columns over network)
+> -- SELECT * FROM users;
+> 
+> -- ✅ Optimized explicit column projection
+> SELECT id, email 
+> FROM users;
 > ```
-> - Only include the columns requested by the dashboard (name and avatar).
-> - Exclude security-sensitive columns like passwords and heavy columns like descriptions.
+>
+> #### Technical Explanation
+>
+> 1. `SELECT *` fetches every column, including large `TEXT`, `JSONB`, or `BYTEA` blobs, consuming excess RAM and network I/O.
+> 2. Explicit column selection reduces network payload sizes significantly.
+> 3. Allows PostgreSQL to execute Index-Only Scans (`Covered Queries`).
+
+---
+
+### Exercise 2: Enabling Index-Only Scans via Projection
+
+**Scenario:**
+Demonstrate how explicit column projection enables an `Index-Only Scan` using index `{ email: 1, username: 1 }`.
+
+**Requirements:**
+1. Execute `EXPLAIN ANALYZE SELECT email, username FROM users WHERE email = 'alice@example.com'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> EXPLAIN ANALYZE 
+> SELECT email, username 
+> FROM users 
+> WHERE email = 'alice@example.com';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. If query projects ONLY fields stored in the B-tree index, PostgreSQL reads keys directly from the index (`Index-Only Scan`).
+> 2. `SELECT *` forces PostgreSQL to fetch raw table heap pages from disk (`Heap Fetches`).
+> 3. Critical performance rule.
+
+---
+
+### Exercise 3: API Schema Safety Trade-Offs
+
+**Scenario:**
+Explain why using `SELECT *` in production API handlers causes breaking changes when new table columns are added.
+
+**Requirements:**
+1. Contrast explicit interface projection vs raw table SELECT *.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> API Schema Safety Analysis:
+> - SELECT * exposes internal/sensitive new columns (e.g. 'password_hash') added during database migrations to client JSON outputs automatically.
+> - Explicit column lists (SELECT id, username, email) guarantee stable, secure API contracts.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Explicit projections prevent accidental data exposure when new columns are added to tables.
+> 2. Hardens backend API contract security.
+> 3. Production database practice.
 
 ---
 
 
 
-### Exercise 2: Covered Query Column Selection
-
-**Problem:** Rewrite `SELECT * FROM users WHERE status = 'active';` to allow covered index scan on index `{ status, id }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT id, status FROM users WHERE status = 'active';
-> ```
-> ```sql
-> SELECT id, status FROM users WHERE status = 'active';
-> ```
->
-> **Explanation:** Selecting only indexed columns enables Index Only Scans without reading table disk heaps.
-
----
-
-### Exercise 3: SELECT * Bandwidth Overhead
-
-**Problem:** State 2 reasons why explicit column listing is superior to `SELECT *` (1. Reduces network bandwidth; 2. Enables Covered Index Scans).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Reduces network bandwidth; enables Covered Index Scans
-> ```
-> ```text
-> Reduces network bandwidth; enables Covered Index Scans
-> ```
->
-> **Explanation:** Explicit column selection optimizes memory, network, and index efficiency.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`SELECT`](select.md) — The parent query command.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `SELECT *` retrieves all columns in a table; Column List retrieves specific ones.
 - Asterisk queries waste network bandwidth, database RAM, and client memory.
 - `SELECT *` exposes databases to security leaks (e.g. passwords, tokens).

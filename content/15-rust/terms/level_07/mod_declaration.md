@@ -122,10 +122,13 @@ mod foo; // ❌ Duplicate module declaration!
 
 ### Exercise 1: The Invisible File
 
-**Problem:** You are building a game. You have a `main.rs` and you just created a `player.rs` file in the same folder. However, when you write `player::jump();` in your `main.rs`, the compiler says `use of undeclared crate or module 'player'`. How do you fix it?
+**Scenario:** You are building a game. You have a `main.rs` and you just created a `player.rs` file in the same folder. However, when you write `player::jump();` in your `main.rs`, the compiler says `use of undeclared crate or module 'player'`. How do you fix it?
 
 > [!check]- Answer
 > You must explicitly declare the module so the compiler knows the file exists! Add this to the top of your `main.rs`:
+>
+>
+> #### Implementation
 >
 > ```rust
 > mod player;
@@ -135,13 +138,16 @@ mod foo; // ❌ Duplicate module declaration!
 
 ### Exercise 2: Inline vs File Module Declarations
 
-**Problem:** Declare an inline module `mod utils { pub fn ping() {} }` and call `utils::ping()`.
+**Scenario:** Declare an inline module `mod utils { pub fn ping() {} }` and call `utils::ping()`.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Pinged
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > mod utils {
 >     pub fn ping() { println!("Pinged"); }
@@ -151,25 +157,30 @@ mod foo; // ❌ Duplicate module declaration!
 > }
 > ```
 >
-> **Explanation:** `mod name { ... }` defines inline submodules without separate file creation.
+> #### Technical Explanation
+> `mod name { ... }` defines inline submodules without separate file creation.
 
 ---
 
 ### Exercise 3: Nested Submodule Hierarchy Declarations
 
-**Problem:** Access `net::http::client::connect()` through nested module paths.
+**Scenario:** Access `net::http::client::connect()` through nested module paths.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Connected
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > mod net { pub mod http { pub mod client { pub fn connect() { println!("Connected"); } } } }
 > fn main() { net::http::client::connect(); }
 > ```
 >
-> **Explanation:** Nested `mod` declarations establish hierarchical module paths.
+> #### Technical Explanation
+> Nested `mod` declarations establish hierarchical module paths.
 
 ---
 

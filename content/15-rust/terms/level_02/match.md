@@ -153,7 +153,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Telemetry Network Packet Dispatcher & Filter Engine
 
-**Problem:** You are building an edge IoT gateway that ingests telemetry packet frames over TCP/UDP network sockets. The gateway must classify incoming frames and emit routing directives to backend microservices.
+**Scenario:** You are building an edge IoT gateway that ingests telemetry packet frames over TCP/UDP network sockets. The gateway must classify incoming frames and emit routing directives to backend microservices.
 
 Define the telemetry structures and write a function `route_frame(frame: &NetworkFrame) -> RoutingDirective` that uses pattern matching with destructuring, ranges, pattern binding (`@`), and match guards (`if`) to enforce the following business rules:
 
@@ -415,7 +415,7 @@ Define the telemetry structures and write a function `route_frame(frame: &Networ
 
 ### Exercise 2: Algorithmic Trading Risk Engine & Batch Order Processor
 
-**Problem:** An electronic trading execution engine processes incoming orders (`OrderRequest`) and validates risk controls using multi-variable pattern matching and slice recursion.
+**Scenario:** An electronic trading execution engine processes incoming orders (`OrderRequest`) and validates risk controls using multi-variable pattern matching and slice recursion.
 
 Requirements:
 1. `validate_order(order: &OrderRequest) -> ValidationResult`:
@@ -643,7 +643,7 @@ Requirements:
 
 ### Exercise 3: Abstract Syntax Tree (AST) Compiler Optimizer & Evaluator
 
-**Problem:** Design a constant-folding pass and evaluation engine for a domain-specific mathematical language represented as an AST `Expr`.
+**Scenario:** Design a constant-folding pass and evaluation engine for a domain-specific mathematical language represented as an AST `Expr`.
 
 Requirements:
 1. `fold_constants(expr: Expr) -> Expr`:

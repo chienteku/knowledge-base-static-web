@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Query Syntax**
+
+**Query Operator** (Array Query Selection Operators): Array Query Operators ($all, $elemMatch, $size) match documents based on array element values and structural criteria.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported across document NoSQL platforms. Handled by the query compiler to restrict search logic parameters).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Querying arrays of primitive values (like `["shoes", "sale"]`) is simple. 
@@ -94,7 +95,7 @@ db.users.find({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Overusing '$elemMatch' for simple queries on arrays of primitive values
 
@@ -147,67 +148,94 @@ db.posts.find({ comments: { $elemMatch: { user: "alice", score: { $gt: 5 } } } }
 Use $all to check if an array contains a set of required elements
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Subdocument Array Query
+### Exercise 1: Multi-Criterion Array Matching with `$elemMatch`
 
-**Problem:** You have a `companies` collection. Each company document contains an array of nested documents named `employees` (containing fields: `role` and `salary`). 
-Write the MongoDB query to select all companies that employ **at least one employee** whose `role` is exactly `"engineer"` AND whose `salary` is greater than or equal to `100000`.
+**Scenario:**
+Query collection `orders` for documents where at least ONE item in the `items` array has `name: "laptop"` AND `price: { $gt: 500 }`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$elemMatch: { name: "laptop", price: { $gt: 500 } }`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.companies.find({
->   employees: {
+> db.orders.find({
+>   items: {
 >     $elemMatch: {
->       role: "engineer",
->       salary: { $gte: 100000 }
+>       name: "laptop",
+>       price: { $gt: 500 }
 >     }
 >   }
 > });
 > ```
-> - The search targets multiple conditions locked to the same nested employee object.
-> - Use the `$elemMatch` operator wrapping the target properties.
+>
+> #### Technical Explanation
+>
+> 1. `$elemMatch` requires a SINGLE array element to satisfy ALL specified query conditions.
+> 2. Prevents false positive matches where condition A matches element 1 and condition B matches element 2.
+> 3. Essential operator for querying arrays of embedded documents.
 
 ---
 
+### Exercise 2: Matching All Array Elements with `$all`
 
+**Scenario:**
+Query collection `products` for items containing BOTH `"electronics"` and `"wireless"` in `tags`.
 
-### Exercise 2: Matching Same Array Element with `$elemMatch`
+**Requirements:**
+1. Use `tags: { $all: ["electronics", "wireless"] }`.
 
-**Problem:** Query students possessing a grade sub-document matching `{ mean: { $gt: 80 }, grade: "A" }` using `$elemMatch`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> db.students.find({ grades: { $elemMatch: { mean: { $gt: 80 }, grade: "A" } } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.students.find({
->   grades: { $elemMatch: { mean: { $gt: 80 }, grade: "A" } }
+> db.products.find({
+>   tags: { $all: ["electronics", "wireless"] }
 > });
 > ```
 >
-> **Explanation:** `$elemMatch` enforces that all specified query conditions match the SAME array element.
+> #### Technical Explanation
+>
+> 1. `$all` matches documents where the array contains every listed item.
+> 2. Order of elements in `$all` array is ignored.
+> 3. Leverages multikey indexes on `tags`.
 
 ---
 
-### Exercise 3: Matching Subset of Array Elements with `$all`
+### Exercise 3: Filtering by Exact Array Length with `$size`
 
-**Problem:** Query posts containing both tags `"mongodb"` and `"nosql"` using `$all`.
+**Scenario:**
+Query user documents where array `roles` contains exactly 3 assigned roles.
 
-**Expected output:**
+**Requirements:**
+1. Use `{ roles: { $size: 3 } }`.
+
 > [!check]- Answer
-> ```text
-> db.posts.find({ tags: { $all: ["mongodb", "nosql"] } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.posts.find({ tags: { $all: ["mongodb", "nosql"] } });
+> db.users.find({
+>   roles: { $size: 3 }
+> });
 > ```
 >
-> **Explanation:** `$all` matches documents whose array contains all specified list items.
+> #### Technical Explanation
+>
+> 1. `$size` matches documents where the array field length equals the specified integer.
+> 2. Evaluates array size directly in the database engine.
+> 3. Useful for structural array validation checks.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [Array](../level_02/array_type.md) — The data structure.
 - [Querying Arrays](querying_arrays.md) — The parent array querying.
@@ -215,7 +243,7 @@ Write the MongoDB query to select all companies that employ **at least one emplo
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Array query operators build advanced filters for list properties.
 - `$elemMatch` locks multiple search filters to a single array element.
 - Crucial for querying arrays of nested subdocuments to prevent logic leakage.

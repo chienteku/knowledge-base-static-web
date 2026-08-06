@@ -15,20 +15,15 @@
 
 ## 2. Term Category
 
-**Trait / Abstraction / Operator Overloading**: `Deref` (`std::ops::Deref`) and `DerefMut` (`std::ops::DerefMut`) are operator traits in Rust. Implementing `Deref` allows a custom type `T` to define how it converts to a reference of an inner associated type `Target` (`fn deref(&self) -> &Self::Target`). This customizes the `*` dereference operator and unlocks **Deref Coercion** — allowing references `&T` to automatically coercion-borrow as `&Target` when passed to function parameters.
+
+
+**Rust Standard Traits (smart pointer dereferencing traits)**: `Deref` (`std::ops::Deref`) and `DerefMut` (`std::ops::DerefMut`) are operator traits in Rust. Implementing `Deref` allows a custom type `T` to define how it converts to a reference of an inner associated type `Target` (`fn deref(&self) -> &Self::Target`). This customizes the `*` dereference operator and unlocks **Deref Coercion** — allowing references `&T` to automatically coercion-borrow as `&Target` when passed to function parameters.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: `Deref` and `DerefMut` are available across all Rust targets (`std`, `no_std`, WASM, embedded). They underpin key standard library types:
-- `String` implements `Deref<Target = str>`, allowing `&String` to coerce to `&str`.
-- `Vec<T>` implements `Deref<Target = [T]>`, allowing `&Vec<T>` to coerce to `&[T]` slice methods.
-- `Box<T>`, `Rc<T>`, `Arc<T>`, and `RefMut<'a, T>` implement `Deref`/`DerefMut` to expose inner `T` methods.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -144,7 +139,7 @@ Rust applies Deref Coercion automatically in three scenarios:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misusing `Deref` for Object-Oriented Class Inheritance
 
@@ -201,13 +196,16 @@ impl<T> MySmartVec<T> {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Multi-Tier Deref Coercion in an Embedded Telemetry Buffer
 
-**Problem:** In an embedded telemetry network, UART packet frames are wrapped inside a `TelemetryFrame` struct containing metadata (header ID) and a byte payload (`Vec<u8>`). Implement `Deref<Target = Vec<u8>>` and `DerefMut` for `TelemetryFrame`. Demonstrate multi-tier deref coercion (`&TelemetryFrame` $\rightarrow$ `&Vec<u8>` $\rightarrow$ `&[u8]`) by passing a `&TelemetryFrame` reference directly to a function expecting a byte slice `&[u8]`, calling slice methods (`.len()`, `.split_at()`), and modifying inner bytes in-place via `DerefMut`.
+**Scenario:** In an embedded telemetry network, UART packet frames are wrapped inside a `TelemetryFrame` struct containing metadata (header ID) and a byte payload (`Vec<u8>`). Implement `Deref<Target = Vec<u8>>` and `DerefMut` for `TelemetryFrame`. Demonstrate multi-tier deref coercion (`&TelemetryFrame` $\rightarrow$ `&Vec<u8>` $\rightarrow$ `&[u8]`) by passing a `&TelemetryFrame` reference directly to a function expecting a byte slice `&[u8]`, calling slice methods (`.len()`, `.split_at()`), and modifying inner bytes in-place via `DerefMut`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::ops::{Deref, DerefMut};
 > 
@@ -277,7 +275,8 @@ impl<T> MySmartVec<T> {
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Multi-Tier Deref Coercion**: When passing `&frame` (`&TelemetryFrame`) to `verify_packet_prefix(&[u8])`, Rust dereferences `TelemetryFrame` to `Vec<u8>`, and then recursively applies `Vec<u8>`'s `Deref` implementation to yield `&[u8]`. This zero-cost conversion occurs at compile time without heap allocations or runtime overhead.
 > 2. **Transparent Method Delegation**: Method calls like `frame.len()` and `frame.split_at(2)` trigger Rust's method resolution logic: if the outer type (`TelemetryFrame`) does not define the method, Rust dereferences to `Vec<u8>` and subsequently to `[u8]` slice methods.
 > 3. **In-Place Mutation with `DerefMut`**: Implementing `DerefMut` enables mutable indexing (`frame[0] = 0xFF`) and calling mutating collection methods (`frame.push(0x33)`). Note that `DerefMut` requires `Deref` as a supertrait (`pub trait DerefMut: Deref`).
@@ -286,9 +285,12 @@ impl<T> MySmartVec<T> {
 
 ### Exercise 2: Implementing an Audited Access RAII Guard
 
-**Problem:** In high-integrity systems and embedded diagnostic tools, read and write accesses to shared data or configuration blocks must be monitored for audit trails. Implement a custom RAII guard struct `AuditedGuard<'a, T>` wrapping a mutable reference `&'a mut T` and a reference to an `AuditTracker`. Implement `Deref` and `DerefMut` for `AuditedGuard` to increment read and write counters inside `AuditTracker` whenever the underlying data is dereferenced for reading or writing.
+**Scenario:** In high-integrity systems and embedded diagnostic tools, read and write accesses to shared data or configuration blocks must be monitored for audit trails. Implement a custom RAII guard struct `AuditedGuard<'a, T>` wrapping a mutable reference `&'a mut T` and a reference to an `AuditTracker`. Implement `Deref` and `DerefMut` for `AuditedGuard` to increment read and write counters inside `AuditTracker` whenever the underlying data is dereferenced for reading or writing.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::cell::Cell;
 > use std::ops::{Deref, DerefMut};
@@ -391,7 +393,8 @@ impl<T> MySmartVec<T> {
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Custom Smart Pointer Guard Pattern**: `AuditedGuard<'a, T>` mimics standard library RAII types like `MutexGuard` or `RefMut`. It temporarily owns an exclusive borrow `&'a mut T`.
 > 2. **Interior Mutability in `Deref`**: The `deref(&self)` signature takes an immutable shared reference `&self`. To increment `tracker.reads` without requiring `&mut self`, `AuditTracker` utilizes `std::cell::Cell<usize>`, allowing interior mutability through shared references.
 > 3. **Implicit Operator Hooking**: Field accesses (`guard.baud_rate`) and method calls automatically invoke `deref()` or `deref_mut()` under the hood, seamlessly instrumenting field reads and writes without altering user-facing access syntax.
@@ -401,9 +404,12 @@ impl<T> MySmartVec<T> {
 
 ### Exercise 3: Protecting Domain Invariants with Read-Only Deref Coercion
 
-**Problem:** In network protocol handlers and IoT edge gateways, newtype wrappers like `ValidatedHostname` guarantee that string data conforms to domain formatting rules (e.g. non-empty, ASCII alphanumeric/hyphens/dots, maximum 63 characters). Implementing `Deref<Target = str>` enables convenient read-only operations and Deref coercion to `&str`. Explain and demonstrate why `DerefMut` must be **deliberately omitted** to prevent caller code from corrupting validated domain invariants post-construction.
+**Scenario:** In network protocol handlers and IoT edge gateways, newtype wrappers like `ValidatedHostname` guarantee that string data conforms to domain formatting rules (e.g. non-empty, ASCII alphanumeric/hyphens/dots, maximum 63 characters). Implementing `Deref<Target = str>` enables convenient read-only operations and Deref coercion to `&str`. Explain and demonstrate why `DerefMut` must be **deliberately omitted** to prevent caller code from corrupting validated domain invariants post-construction.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::ops::Deref;
 > 
@@ -471,14 +477,15 @@ impl<T> MySmartVec<T> {
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Newtype Pattern with Read-Only Deref**: Wrapping `String` in `ValidatedHostname(String)` encapsulates the inner field. Implementing `Deref<Target = str>` allows callers to read data using standard slice functions without needing redundant getters like `pub fn as_str(&self) -> &str`.
 > 2. **Invariant Safety via Omission**: If `DerefMut` were implemented targeting `String` or `str`, caller code could execute `host.push_str(" invalid space!")` or `host.clear()`, violating the structural validation invariants established during `parse()`. Omitting `DerefMut` statically guarantees immutability through dereferencing.
 > 3. **Coercion Target Selection**: `ValidatedHostname` targets `str` (`type Target = str;`) rather than `String`. Dereferencing to `str` is idiomatic in Rust because `&str` provides all read-only string algorithms (`.len()`, `.find()`, `.to_uppercase()`, slicing) without exposing allocation methods (`.reserve()`, `.shrink_to_fit()`).
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Smart Pointers (`Box`, `Rc`, `Arc`)](../level_10/smart_pointers.md) — Wrapper types that rely heavily on `Deref`.
@@ -490,7 +497,7 @@ impl<T> MySmartVec<T> {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `Deref` (`fn deref(&self) -> &Target`) and `DerefMut` (`fn deref_mut(&mut self) -> &mut Target`) customize the `*` dereference operator.
 - They enable **Deref Coercion**, automatically converting `&SmartPointer<T>` to `&T` (and `&String` $\rightarrow$ `&str`, `&Vec<T>` $\rightarrow$ `&[T]`).

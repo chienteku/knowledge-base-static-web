@@ -147,7 +147,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Generic Batch Data Ingestion Pipeline with Associated Type Bounds
 
-**Problem Context:**
+**Scenario:**
 In high-throughput ETL data ingestion services, processing functions consume streamed record batches from a generic iterator, validate each record using a validation closure, and persist valid items into a target storage sink.
 
 Without a `where` clause, expressing constraints across generic iterators, associated item types (`I::Item`), closure signature bounds, and storage sink traits results in an unreadable horizontal line of trait bounds.
@@ -309,7 +309,7 @@ Without a `where` clause, expressing constraints across generic iterators, assoc
 
 ### Exercise 2: Middleware Plugin Event Dispatcher with Conditional `impl` Bounds
 
-**Problem Context:**
+**Scenario:**
 In decoupled microservices and plugin-based system architectures, event dispatchers route incoming domain events through security or audit logging middleware before persisting them.
 
 When defining generic structs like `EventDispatcher<E, P>`, placing complex bounds on the struct declaration itself is an anti-pattern. Instead, bounds should be placed on the `impl<E, P>` block using a `where` clause.
@@ -520,7 +520,7 @@ When defining generic structs like `EventDispatcher<E, P>`, placing complex boun
 
 ### Exercise 3: Generic Tiered In-Memory Cache & Storage Synchronization Layer
 
-**Problem Context:**
+**Scenario:**
 High-performance storage engine drivers maintain a fast L1 in-memory cache (`HashMap<K, V>`) backed by a persistent storage backend `S`.
 
 Implementing generic methods for tiered caches involves multiple intersecting trait requirements: key hashability and equality (`Hash + Eq`), cloning semantics for values (`Clone`), storage driver associated type matching (`S::Key = K`, `S::Value = V`), and closure predicates for invalidation. A multi-line `where` clause is essential to make this code maintainable.

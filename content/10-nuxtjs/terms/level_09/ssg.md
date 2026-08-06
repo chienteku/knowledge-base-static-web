@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Rendering Strategies**
+
+**Rendering Strategy** (Static Site Generation Prerendering): Static Site Generation (SSG / `nuxi generate`) prerenders all application routes into static HTML and asset files at build time.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Server-Side Rendering (SSR) is great for SEO, but it requires a running Node.js server. If 100,000 users visit your blog post simultaneously, the Node server has to render that exact same blog post 100,000 times. This is inefficient and expensive.
@@ -51,7 +52,7 @@ npm run generate
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using SSG for highly dynamic data
 **The mistake:** Building a live sports ticker or a cryptocurrency dashboard and deploying it via `npm run generate`.
@@ -60,6 +61,8 @@ npm run generate
 **Golden Rule:** Only use SSG for content that changes infrequently (Blogs, Marketing Pages, Documentation). For highly dynamic data, use SSR or fetch the data purely on the client side using SPA mode.
 
 ---
+
+
 
 ### Mistake 2: Using `npx nuxi build` Instead of `npx nuxi generate` for Static Site Generation
 
@@ -78,6 +81,8 @@ nuxi generate # Pre-renders static HTML files into .output/public/
 ```
 
 ---
+
+
 
 ### Mistake 3: Using Dynamic Request Functions (`useCookie`, `useRequestHeaders`) in SSG Pages
 
@@ -102,152 +107,107 @@ const headers = useRequestHeaders(); // ❌ Undefined during nuxi generate stati
 
 ---
 
-### Mistake 4: Using `npx nuxi build` Instead of `npx nuxi generate` for Static Site Generation
 
-**The mistake:** Running `nuxi build` expecting a static HTML output directory (`.output/public`).
-
-**Why it's wrong:** `nuxi build` compiles a Node.js server output (`.output/server`). `nuxi generate` pre-renders all routes into static HTML files for static CDN hosting (`.output/public`).
-
-*Incorrect:*
-```bash
-nuxi build // ❌ Builds Node.js server output, NOT static HTML files!
-```
-
-*Fix:*
-```vue
-nuxi generate # Pre-renders static HTML files into .output/public/
-```
-
----
-
-### Mistake 5: Using Dynamic Request Functions (`useCookie`, `useRequestHeaders`) in SSG Pages
-
-**The mistake:** Reading request headers inside a static blog page intended for `nuxi generate`.
-
-**Why it's wrong:** During `nuxi generate`, there is no incoming HTTP request object. Reading request headers returns `undefined` or throws build errors.
-
-*Incorrect:*
-```vue
-<script setup>
-const headers = useRequestHeaders(); // ❌ Undefined during nuxi generate static build!
-</script>
-```
-
-*Fix:*
-```vue
-<script setup>
-// Keep SSG pages pure; read user cookies in Client Components or onMounted
-</script>
-```
 
 
 ---
 
-### Mistake 6: Using `npx nuxi build` Instead of `npx nuxi generate` for Static Site Generation
+## 5. Practice Exercises
 
-**The mistake:** Running `nuxi build` expecting a static HTML output directory (`.output/public`).
+### Exercise 1: Generating Static Web Applications with `nuxi generate`
 
-**Why it's wrong:** `nuxi build` compiles a Node.js server output (`.output/server`). `nuxi generate` pre-renders all routes into static HTML files for static CDN hosting (`.output/public`).
+**Scenario:**
+Configure static site generation (SSG) and execute `nuxi generate` build command.
 
-*Incorrect:*
-```bash
-nuxi build // ❌ Builds Node.js server output, NOT static HTML files!
-```
+**Requirements:**
+1. Run `nuxi generate` CLI command.
 
-*Fix:*
-```vue
-nuxi generate # Pre-renders static HTML files into .output/public/
-```
-
----
-
-### Mistake 7: Using Dynamic Request Functions (`useCookie`, `useRequestHeaders`) in SSG Pages
-
-**The mistake:** Reading request headers inside a static blog page intended for `nuxi generate`.
-
-**Why it's wrong:** During `nuxi generate`, there is no incoming HTTP request object. Reading request headers returns `undefined` or throws build errors.
-
-*Incorrect:*
-```vue
-<script setup>
-const headers = useRequestHeaders(); // ❌ Undefined during nuxi generate static build!
-</script>
-```
-
-*Fix:*
-```vue
-<script setup>
-// Keep SSG pages pure; read user cookies in Client Components or onMounted
-</script>
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: Comparing Rendering Modes
-
-**Problem:** You are building a Documentation website. The markdown files change maybe once a week. You want perfect SEO and you want to host it for free on GitHub Pages (which only supports static files). Which rendering mode should you use: SSR, SPA, or SSG?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> SSG (Static Site Generation).
-> It provides perfect SEO (unlike SPA), and does not require a Node.js server (unlike SSR), meaning it can be hosted for free on GitHub pages.
+>
+> #### Implementation
+>
+> ```bash
+> # Prerenders all static HTML files into .output/public/ directory
+> npx nuxi generate
 > ```
-> - Documentation sites that change infrequently do not require runtime dynamic database renders but still require full indexing accessibility.
+
+> #### Technical Explanation
+>
+> 1. `nuxi generate` triggers Static Site Generation (SSG).
+> 2. Nitro crawls all application routes, fetching data and saving rendered HTML files directly to disk.
+> 3. Output directory `.output/public/` can be deployed directly to static hosts (GitHub Pages, Netlify, S3).
 
 ---
 
-### Exercise 2: Static Crawl Prerender Pattern
+### Exercise 2: Pre-Crawling Dynamic Routes for SSG Prerendering
 
-**Problem:** Write `nuxt.config.ts` configuration instructing `nuxi generate` to pre-render dynamic routes `/posts/1` and `/posts/2`.
+**Scenario:**
+Configure `nuxt.config.ts` `nitro.prerender.routes` to prerender dynamic blog post URLs (`/blog/post-1`, `/blog/post-2`).
 
-**Expected output:**
+**Requirements:**
+1. Configure `nitro.prerender.routes` array in `nuxt.config.ts`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // nuxt.config.ts
 > export default defineNuxtConfig({
 >   nitro: {
 >     prerender: {
->       routes: ['/posts/1', '/posts/2']
->     }
->   }
-> });
-> ```
-> - `nitro.prerender.routes` specifies explicit static pre-rendering targets.
-> 
-> ```typescript
-> export default defineNuxtConfig({
->   nitro: {
->     prerender: {
->       routes: ['/posts/1', '/posts/2']
+>       routes: ["/blog/post-1", "/blog/post-2", "/sitemap.xml"],
+>       crawlLinks: true // Automatically crawls all discovered internal <NuxtLink> targets!
 >     }
 >   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. Static site generators must know dynamic route paths during build time to generate corresponding HTML files.
+> 2. `crawlLinks: true` automatically follows all `<NuxtLink>` elements discovered during prerendering.
+> 3. `routes` array explicitly specifies dynamic route paths for SSG generation.
+
 ---
 
-### Exercise 3: SSG Generation Output Folder
+### Exercise 3: Handling Fallback Routes for Static Hosting
 
-**Problem:** Where does `nuxi generate` save compiled static HTML files and static assets?
+**Scenario:**
+Configure a 404 fallback page for static web servers when users access un-prerendered dynamic paths.
 
-**Expected output:**
+**Requirements:**
+1. Configure `nitro.prerender.failOnError: false`.
+
 > [!check]- Answer
-> ```text
-> .output/public/ (or dist/)
+>
+> #### Implementation
+>
+> ```typescript
+> // nuxt.config.ts
+> export default defineNuxtConfig({
+>   nitro: {
+>     prerender: {
+>       failOnError: false
+>     }
+>   }
+> });
 > ```
-> - `.output/public/` contains pre-rendered static HTML and assets.
-> 
-> ```text
-> .output/public/index.html
-> ```
+
+> #### Technical Explanation
+>
+> 1. Static file hosting services (Nginx, Netlify) route un-matched file requests to `200.html` or `404.html`.
+> 2. Un-prerendered dynamic paths fall back to client-side SPA rendering in the browser.
+> 3. Robust static site hosting pattern.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Single Page Application (SPA) Mode](spa.md) — The other rendering mode that doesn't require a Node server, but sacrifices SEO.
 - [Route Rules Configuration](../level_08/route_rules.md) — How to apply `prerender: true` to specific routes instead of the whole app.
 - [`.output/` Directory](../level_10/output_directory.md) — Related concept: `.output/` Directory.
@@ -255,7 +215,7 @@ const headers = useRequestHeaders(); // ❌ Undefined during nuxi generate stati
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SSG pre-renders your application into static HTML files during the build process.
 - It is triggered using the `nuxi generate` command.
 - It provides perfect SEO and the absolute fastest possible loading speeds.

@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Schema & Modeling (idempotent schema migration scripts)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (Software engineering deployment patterns. Implemented inside CD pipeline configuration scripts to automate server setups).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern DevOps and CI/CD pipelines, application code and database schemas are updated constantly. 
@@ -87,7 +86,7 @@ COMMIT TRANSACTION;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running migration scripts without wrapping them inside transaction blocks, leaving the database in a corrupted 'partially-migrated' state on failures
 
@@ -140,73 +139,88 @@ CREATE setting:1 SET value = "dark"; // ❌ Fails on second container startup!
 UPSERT setting:1 SET value = "dark"; // Idempotent data initialisation
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Migration Safety Audit
+### Exercise 1: Idempotent Schema Creation with `OVERWRITE`
 
-**Problem:** You are deploying a schema update. 
-Explain why the following script is not safe for continuous integration (CI/CD) pipelines:
-```sql
-BEGIN TRANSACTION;
-REMOVE TABLE logs;
-DEFINE TABLE logs SCHEMAFULL;
-DEFINE FIELD message ON logs TYPE string;
-COMMIT TRANSACTION;
-```
+**Scenario:**
+Write a deployment migration script defining table `product` that can be re-run safely multiple times using `DEFINE TABLE OVERWRITE`.
 
-**Expected output:**
+**Requirements:**
+1. Write `DEFINE TABLE OVERWRITE product SCHEMAFULL`.
+2. Write `DEFINE FIELD OVERWRITE name ON TABLE product TYPE string`.
+
 > [!check]- Answer
-> ```text
-> The script is not safe because:
-> 1. The `REMOVE TABLE logs` statement does not have an `IF EXISTS` guard. On the very first run of this migration script (when the database is completely empty), this command will fail because the table does not exist, causing the entire transaction to rollback and fail.
-> 2. The `DEFINE TABLE` and `DEFINE FIELD` commands do not have `IF NOT EXISTS` guards.
-> To make it safe, it must be rewritten as:
-> BEGIN TRANSACTION;
-> REMOVE TABLE logs IF EXISTS;
-> DEFINE TABLE logs IF NOT EXISTS SCHEMAFULL;
-> DEFINE FIELD message ON logs IF NOT EXISTS TYPE string;
-> COMMIT TRANSACTION;
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Idempotent table definition migration
+> DEFINE TABLE OVERWRITE product SCHEMAFULL;
+> DEFINE FIELD OVERWRITE name ON TABLE product TYPE string;
+> DEFINE FIELD OVERWRITE price ON TABLE product TYPE decimal;
 > ```
-> - Assess what happens on the first run when the `logs` table is completely absent.
-> - Apply error-suppression keywords to every DDL statement in the transaction.
+>
+> #### Technical Explanation
+>
+> 1. `DEFINE ... OVERWRITE` replaces existing definitions or creates them if absent.
+> 2. Prevents "item already exists" errors when re-executing deployment scripts in CI/CD.
+> 3. Enables repeatable schema migration pipelines.
+
+---
+
+### Exercise 2: Conditional Schema Definitions with `IF NOT EXISTS`
+
+**Scenario:**
+Write a migration script adding table `config` only if it does not already exist in the target environment.
+
+**Requirements:**
+1. Write `DEFINE TABLE IF NOT EXISTS config SCHEMAFULL`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE IF NOT EXISTS config SCHEMAFULL;
+> DEFINE FIELD IF NOT EXISTS theme ON TABLE config TYPE string DEFAULT "dark";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `IF NOT EXISTS` skips execution if the target definition is already present.
+> 2. Preserves existing schema rules without overwriting them.
+> 3. Ideal for environment seeding scripts.
+
+---
+
+### Exercise 3: Safe Idempotent Drop Operations with `IF EXISTS`
+
+**Scenario:**
+Write a teardown migration dropping an obsolete table `temp_import` safely using `REMOVE TABLE IF EXISTS`.
+
+**Requirements:**
+1. Write `REMOVE TABLE IF EXISTS temp_import`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> REMOVE TABLE IF EXISTS temp_import;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE TABLE IF EXISTS` drops table schema and records if present.
+> 2. If absent, execution completes silently without throwing error exceptions.
+> 3. Ensures clean teardown execution across variable deployment environments.
 
 ---
 
 
 
-### Exercise 2: Idempotent Index Creation
-
-**Problem:** Define unique index on `user.username` idempotently.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX IF NOT EXISTS user_username_idx ON TABLE user FIELDS username UNIQUE;
-> ```
-> ```surrealql
-> DEFINE INDEX IF NOT EXISTS user_username_idx ON TABLE user FIELDS username UNIQUE;
-> ```
->
-> **Explanation:** `IF NOT EXISTS` prevents index re-creation errors during repeated deployment runs.
-
----
-
-### Exercise 3: Idempotent Data Seeding
-
-**Problem:** Write idempotent SurrealQL query to seed initial admin user `user:admin`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPSERT user:admin SET name = "Admin", role = "admin";
-> ```
-> ```surrealql
-> UPSERT user:admin SET name = "Admin", role = "admin";
-> ```
->
-> **Explanation:** `UPSERT` seeds record data safely without failing if records already exist.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`IF NOT EXISTS` / `IF EXISTS`](../level_03/if_not_exists.md) — The execution guards.
 - [`SCHEMAFULL` Validation Assertion Patterns](schemafull_validation.md) — Designing schemas.
@@ -214,7 +228,7 @@ COMMIT TRANSACTION;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Idempotency ensures migration scripts can run repeatedly without errors.
 - Wrap all migration commands in `BEGIN TRANSACTION` and `COMMIT TRANSACTION` blocks.
 - Transactions guarantee that migrations succeed completely or fail completely.

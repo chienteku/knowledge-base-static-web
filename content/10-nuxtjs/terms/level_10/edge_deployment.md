@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Deployment**
+
+**Performance & Optimization** (Serverless Edge Platform Deployment): Edge Deployment compiles Nitro server handlers into WebAssembly or V8 isolates hosted on global edge networks (Vercel, Cloudflare, Netlify).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (Hosted on serverless CDN environments).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Hosting a Node.js server on a Virtual Private Server (VPS) is the traditional way to deploy full-stack apps. However, VPS deployments introduce operational overhead:
@@ -50,7 +51,7 @@ Edge Deployment platforms bypass this by utilizing **V8 Isolates** instead of fu
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to use standard TCP database sockets
 
@@ -113,73 +114,114 @@ setHeader(event, 'Cache-Control', 'private, no-store'); // Prevents CDN edge cac
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Database Adapter Choice
+### Exercise 1: Configuring Edge Targets in Nitro
 
-**Problem:** You are deploying a Nuxt application to Vercel Edge and need to query a PostgreSQL database. Which database connection method is edge-compatible: a standard TCP library (`pg`), or Neon's serverless driver using HTTP websockets?
+**Scenario:**
+Configure `nuxt.config.ts` for Vercel Edge functions deployment.
 
-**Expected output:**
+**Requirements:**
+1. Set `nitro.preset: "vercel-edge"`.
+
 > [!check]- Answer
-> ```text
-> Neon's serverless driver using HTTP websockets.
-> Standard TCP libraries like `pg` require raw TCP socket access, which is blocked by Edge V8 isolates. Neon's driver uses HTTP/websockets to bypass this restriction.
-> ```
-> - Consider which network protocols are allowed inside V8 edge sandboxes.
-
----
-
-### Exercise 2: Edge Preset Configuration
-
-**Problem:** Write `nuxt.config.ts` Nitro preset setting for Cloudflare Workers edge deployment.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // nuxt.config.ts
 > export default defineNuxtConfig({
 >   nitro: {
->     preset: 'cloudflare-module'
->   }
-> });
-> ```
-> - `nitro.preset` compiles project output for specific edge providers.
-> 
-> ```typescript
-> export default defineNuxtConfig({
->   nitro: {
->     preset: 'cloudflare-module'
+>     preset: "vercel-edge"
 >   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `preset: "vercel-edge"` instructs Nitro to compile server handlers into V8 edge isolate code.
+> 2. Deploys server logic to global CDN edge nodes near end users.
+> 3. Lowers latency and eliminates traditional cold start delays.
+
 ---
 
-### Exercise 3: Edge Cold Start Performance
+### Exercise 2: Auditing Edge-Compatible Node Dependencies
 
-**Problem:** How do Edge deployments achieve sub-5ms cold start times compared to standard Node.js serverless functions?
+**Scenario:**
+Audit third-party npm packages to ensure they do not depend on Node.js native C++ modules.
 
-**Expected output:**
+**Requirements:**
+1. Replace Node `fs` or `crypto` imports with Web APIs (`fetch`, `Web Crypto`).
+
 > [!check]- Answer
-> ```text
-> Edge platforms use V8 isolate contexts instead of spinning up heavy virtualized Node.js container environments.
+>
+> #### Implementation
+>
+> ```typescript
+> // server/api/hash.ts
+> export default defineEventHandler(async (event) => {
+>   const body = await readBody(event);
+>   
+>   // Use Web-standard Crypto API compatible with Edge V8 Isolates!
+>   const encoder = new TextEncoder();
+>   const data = encoder.encode(body.text);
+>   const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+>   
+>   return { hashHex: Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("") };
+> });
 > ```
-> - V8 isolates start in sub-5ms by skipping heavy Node container initialization.
-> 
-> ```text
-> V8 Isolates = Sub-5ms Cold Start Execution
+
+> #### Technical Explanation
+>
+> 1. Edge runtimes lack full Node.js standard libraries (`node:fs`, `node:child_process`).
+> 2. Web-standard APIs (`crypto.subtle`, `TextEncoder`) run seamlessly on Edge isolates, Cloudflare Workers, and Node.js.
+> 3. Edge-ready API development standard.
+
+---
+
+### Exercise 3: Setting Edge Cache Headers in Nitro Handlers
+
+**Scenario:**
+Configure Edge CDN cache headers (`Cache-Control: s-maxage=3600`) inside a server route handler.
+
+**Requirements:**
+1. Use `setResponseHeader(event, "Cache-Control", ...)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // server/api/cdn-data.ts
+> export default defineEventHandler((event) => {
+>   // Instruct Edge CDN to cache response for 1 hour
+>   setResponseHeader(event, "Cache-Control", "public, s-maxage=3600, stale-while-revalidate=60");
+>   
+>   return { data: "Cached Edge Payload" };
+> });
 > ```
+
+> #### Technical Explanation
+>
+> 1. `s-maxage=3600` instructs Edge CDN nodes to cache the response payload for 3600 seconds.
+> 2. `stale-while-revalidate=60` allows CDN to serve stale content while fetching fresh updates in the background.
+> 3. High performance Edge caching pattern.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Edge-Side Rendering (ESR)](../level_09/esr.md) — The architecture used to execute edge code.
 - [Standalone Build (Node server)](standalone_build.md) — The centralized alternative to edge deployments.
 - [Nitro Engine](../level_01/nitro_engine.md) — Related concept: Nitro Engine.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Edge Deployment distributes your server rendering globally across CDN nodes.
 - Popular platforms include Cloudflare Pages, Vercel Edge, and Netlify.
 - Edge runtimes use V8 Isolates, which have near-zero cold start times.

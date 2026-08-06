@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Index / Performance** (Query Plan Execution Strategy): Collection Scan (COLLSCAN) vs Index Scan (IXSCAN) compares scanning every raw document in a collection against utilizing B-tree index bounds to satisfy query filters.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Core execution paths in all relational databases (Table Scan vs Index Scan) and NoSQL engines. Determines CPU utilization and Disk I/O throughput).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To build high-performance applications, you must understand how databases retrieve data. 
@@ -83,7 +84,7 @@ Imagine locating the word `"Database"` in a dictionary:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming a COLLSCAN is acceptable because "the collection currently only has 500 documents and queries are instant"
 
@@ -96,6 +97,8 @@ A query that takes 1ms on 500 documents will take 10 seconds on 5,000,000 docume
 **Fix: Always design indexes for your queries during development, regardless of collection size, to guarantee logarithmic search times as your database grows.**
 
 ---
+
+
 
 
 
@@ -115,6 +118,8 @@ db.users.find({ unindexedEmail: "alice@example.com" }); // ❌ COLLSCAN full col
 db.users.createIndex({ email: 1 }); // IXSCAN index scan
 ```
 
+
+
 ### Mistake 3: Assuming Small Collection Scans Require Index Optimization
 
 **The mistake:** Creating 10 compound indexes on a static 20-row lookup collection.
@@ -133,95 +138,92 @@ Keep small static lookup tables un-indexed or indexed on primary key only
 
 
 
-### Mistake 4: Allowing Production Queries to Fall Back to Full Collection Scans (`COLLSCAN`)
+## 5. Practice Exercises
 
-**The mistake:** Running high-frequency API queries without index coverage on 50M document collections.
+### Exercise 1: Diagnosing Collection Scans with `explain()`
 
-**Why it's wrong:** Un-indexed queries trigger `COLLSCAN`, scanning every single document on disk, pinning CPU at 100% and exhausting WiredTiger cache memory.
+**Scenario:**
+Run `explain("executionStats")` on an un-indexed query filtering collection `users` by `email` and inspect `winningPlan.stage`.
 
-*Incorrect:*
-```javascript
-db.users.find({ unindexedEmail: "alice@example.com" }); // ❌ COLLSCAN full collection scan!
-```
+**Requirements:**
+1. Execute `db.users.find({ email: "alice@example.com" }).explain("executionStats")`.
 
-*Fix:*
-```javascript
-db.users.createIndex({ email: 1 }); // IXSCAN index scan
-```
-
-### Mistake 5: Assuming Small Collection Scans Require Index Optimization
-
-**The mistake:** Creating 10 compound indexes on a static 20-row lookup collection.
-
-**Why it's wrong:** For tiny static collections (e.g. < 100 rows), `COLLSCAN` in RAM is faster than navigating B-Tree index pointers. Do not over-index small static lookup tables.
-
-*Incorrect:*
-```javascript
-// Over-indexing a 10-row country lookup table
-```
-
-*Fix:*
-```javascript
-Keep small static lookup tables un-indexed or indexed on primary key only
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Search Comparison Analysis
-
-**Problem:** You have a `users` collection.
--   Query 1: `db.users.find({ age: 25 })` (unindexed, triggers `COLLSCAN`).
--   Query 2: `db.users.find({ email: "test@mail.com" })` (indexed, triggers `IXSCAN`).
-If the collection size increases from `1,000` documents to `1,000,000` documents:
-1.  Explain how the search time of Query 1 will change.
-2.  Explain how the search time of Query 2 will change.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Query 1 (COLLSCAN) uses $O(N)$ linear time. If the collection grows 1,000x, the database must scan 1,000x more documents on disk, causing search times to increase linearly (e.g. from 2ms to 2000ms).
-> 2. Query 2 (IXSCAN) uses $O(\log N)$ logarithmic time. If the collection grows 1,000x, the B-Tree search path only requires a few extra node comparisons, so search times will stay almost instant (e.g. from 0.1ms to 0.2ms).
+>
+> #### Implementation
+>
+> ```javascript
+> const plan = db.users.find({ email: "alice@example.com" }).explain("executionStats");
+> console.log("Execution Stage:", plan.executionStats.executionStages.stage);
+> console.log("Total Docs Examined:", plan.executionStats.totalDocsExamined);
 > ```
-> - Apply the principles of $O(N)$ vs $O(\log N)$ complexities.
-> - Contrast disk-bound scans with memory B-Tree traversals.
+>
+> #### Technical Explanation
+>
+> 1. Un-indexed queries produce `COLLSCAN` (Collection Scan) execution stages.
+> 2. `totalDocsExamined` equals total collection document count ($O(N)$ complexity).
+> 3. Consumes excessive disk IOPS and RAM cache on large collections.
+
+---
+
+### Exercise 2: Optimizing Queries with Index Scans
+
+**Scenario:**
+Create a secondary index on `email` and verify `explain()` changes to `IXSCAN`.
+
+**Requirements:**
+1. Create index `createIndex({ email: 1 })`.
+2. Inspect `explain()` output.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.createIndex({ email: 1 });
+> 
+> const plan = db.users.find({ email: "alice@example.com" }).explain("executionStats");
+> console.log("New Execution Stage:", plan.executionStats.executionStages.winningPlan.stage);
+> console.log("Total Docs Examined:", plan.executionStats.totalDocsExamined);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Creating `{ email: 1 }` transforms execution stage from `COLLSCAN` to `IXSCAN` (Index Scan).
+> 2. `totalDocsExamined` drops from $N$ to 1 document ($O(\log N)$ B-tree lookup).
+> 3. Dramatically reduces query latency.
+
+---
+
+### Exercise 3: Performance Impact Comparison
+
+**Scenario:**
+Compare query latency and disk reads between COLLSCAN and IXSCAN over a 1,000,000 document collection.
+
+**Requirements:**
+1. Contrast $O(N)$ vs $O(\log N)$ execution metrics.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Performance Benchmark Comparison (1,000,000 Documents):
+> - COLLSCAN: Scans 1,000,000 docs -> 450ms execution time -> High IOPS & RAM churn.
+> - IXSCAN: Scans 1 index entry -> 1ms execution time -> Near-zero IOPS impact.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. COLLSCAN reads every collection page into RAM, evicting active cache entries.
+> 2. IXSCAN targets exact B-tree key pages, minimizing memory footprint.
+> 3. Core rule of MongoDB performance tuning.
 
 ---
 
 
 
-### Exercise 2: Identifying Execution Stage in Explain Output
-
-**Problem:** What execution stage in `explain("executionStats")` indicates an un-indexed query? (`COLLSCAN`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> COLLSCAN
-> ```
-> ```text
-> COLLSCAN
-> ```
->
-> **Explanation:** `COLLSCAN` indicates that the database scanned all collection documents sequentially.
-
----
-
-### Exercise 3: Ideal `totalDocsExamined` to `nReturned` Ratio
-
-**Problem:** What is the target `totalDocsExamined` to `nReturned` ratio for fully indexed queries? (1:1 ratio or 0 for covered queries).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1:1 ratio (totalDocsExamined equals nReturned)
-> ```
-> ```text
-> 1:1 ratio (totalDocsExamined equals nReturned)
-> ```
->
-> **Explanation:** An index scan targets only matching documents, avoiding un-necessary document reads.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 - [`explain()` Method](explain.md) — The query planner analyzer.
@@ -229,7 +231,7 @@ If the collection size increases from `1,000` documents to `1,000,000` documents
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - COLLSCAN scans every document on disk sequentially; time complexity is $O(N)$.
 - IXSCAN searches a sorted B-Tree index in memory; time complexity is $O(\log N)$.
 - COLLSCAN is disk-bound and CPU-heavy; IXSCAN is RAM-bound and CPU-light.

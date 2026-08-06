@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Data Type**
+
+**Core Concept** (12-Byte Primary Key): ObjectId is MongoDB's default 12-byte BSON data type used to generate globally unique primary key _id values without central coordination.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Enforced automatically by the storage engine. If a write query omits the `_id` field, the MongoDB driver or server automatically generates an `ObjectId` and inserts it before writing to disk).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational databases, tables use a **Primary Key** (usually an auto-incrementing integer like `id SERIAL` or a `UUID`) to uniquely identify rows.
@@ -80,7 +81,7 @@ db.users.findOne({ _id: ObjectId("65fc71239b1d8b2e88a8d1a1") });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to modify the '_id' field of a document after it has been created
 
@@ -139,59 +140,92 @@ new ObjectId("12345"); // ❌ BSONTypeError: Argument passed in must be a 24 cha
 if (ObjectId.isValid(str)) { new ObjectId(str); }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Shell Diagnostic Commands
+### Exercise 1: Deconstructing BSON ObjectId Structure
 
-**Problem:** You query a document and get this output:
-`{ _id: ObjectId("60c72b2f9b1d8b2e88a8d1a1"), username: "tester" }`
-Write the `mongosh` shell command to extract and view the exact year and date this document was inserted into the database.
+**Scenario:**
+Deconstruct a 12-byte BSON ObjectId into its 3 constituent component parts.
 
-**Expected output:**
+**Requirements:**
+1. Identify 4-byte timestamp, 5-byte random value, and 3-byte counter.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> ObjectId("60c72b2f9b1d8b2e88a8d1a1").getTimestamp()
+> const id = new ObjectId();
+> 
+> console.log("Hex String (24 chars):", id.toHexString());
+> console.log("Embedded Timestamp:", id.getTimestamp());
 > ```
-> - The helper method `getTimestamp()` is built into the `ObjectId` object prototype.
-> - Call the method directly on the hexadecimal string wrapped in `ObjectId()`.
+>
+> #### Technical Explanation
+>
+> 1. Byte 0-3: 4-byte Unix epoch timestamp in seconds.
+> 2. Byte 4-8: 5-byte random value unique to machine process.
+> 3. Byte 9-11: 3-byte incrementing counter initialized to a random number.
+
+---
+
+### Exercise 2: Extracting Timestamps from ObjectIds
+
+**Scenario:**
+Extract the exact creation timestamp of document `user:alice` directly from its `_id` field without storing a separate `createdAt` field.
+
+**Requirements:**
+1. Execute `doc._id.getTimestamp()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const user = db.users.findOne({ email: "alice@example.com" });
+> console.log("User Created At:", user._id.getTimestamp());
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `getTimestamp()` extracts the embedded 4-byte Unix creation timestamp from an ObjectId.
+> 2. Eliminates the need for a dedicated `createdAt` date field in simple schemas.
+> 3. Enables sorting by creation order naturally using `_id`.
+
+---
+
+### Exercise 3: Time-Range Filtering using ObjectIds
+
+**Scenario:**
+Query documents created after a specific date `2026-01-01` by constructing a target ObjectId threshold.
+
+**Requirements:**
+1. Create threshold `ObjectId.createFromTime(timestamp)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const targetDate = new Date("2026-01-01T00:00:00Z");
+> const targetId = ObjectId.createFromTime(targetDate.getTime() / 1000);
+> 
+> db.logs.find({
+>   _id: { $gte: targetId }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ObjectId.createFromTime(seconds)` constructs an ObjectId threshold corresponding to a target date.
+> 2. Queries index `{ _id: 1 }` directly to filter records by creation time.
+> 3. Extremely efficient because `_id` is always indexed by default.
 
 ---
 
 
 
-### Exercise 2: Extracting Timestamp from ObjectId
-
-**Problem:** Extract creation date timestamp from `_id` using `_id.getTimestamp()` in mongosh.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.findOne()._id.getTimestamp();
-> ```
-> ```javascript
-> db.users.findOne()._id.getTimestamp();
-> ```
->
-> **Explanation:** The first 4 bytes of a 12-byte BSON ObjectId store a Unix epoch timestamp.
-
----
-
-### Exercise 3: ObjectId Structure Breakdown
-
-**Problem:** State byte composition of 12-byte BSON ObjectId (4-byte timestamp, 5-byte random, 3-byte incrementing counter).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 4-byte timestamp, 5-byte random value, 3-byte incrementing counter
-> ```
-> ```text
-> 4-byte timestamp, 5-byte random value, 3-byte incrementing counter
-> ```
->
-> **Explanation:** ObjectId components guarantee distributed uniqueness without central coordination.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Field](field.md) — The parent attribute structure.
 - [BSON (Binary JSON)](bson.md) — The serialization format.
@@ -199,7 +233,7 @@ Write the `mongosh` shell command to extract and view the exact year and date th
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `_id` field is the mandatory, immutable primary key for every document.
 - `ObjectId` is the default 12-byte binary type auto-generated for the `_id` field.
 - Decentralized design allows clients to generate unique IDs without network lag.

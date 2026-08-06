@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Data Fetching**
+
+**Rendering Strategy** (Build-Time Route Prerendering): `generateStaticParams()` replaces `getStaticPaths` to pre-generate dynamic route segment parameters at build time.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time** (Executes on the server once during compilation to compile static file outputs).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Static rendering (SSG) is the gold standard for web performance. If a page is static, Next.js saves it as raw HTML and JSON files on disk. When a user requests that URL, the hosting provider serves it instantly from a Content Delivery Network (CDN) edge cache.
@@ -82,7 +83,7 @@ What if a new post is added to the database *after* the build completes? You con
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Returning raw values instead of objects mapping to parameters
 
@@ -101,6 +102,8 @@ export async function generateStaticParams() {
 **Golden Rule:** Always return an array of objects: `[{ myParamName: 'value' }]`.
 
 ---
+
+
 
 ### Mistake 2: Returning Plain String Arrays Instead of Parameter Objects in `generateStaticParams()`
 
@@ -124,6 +127,8 @@ export async function generateStaticParams() {
 
 ---
 
+
+
 ### Mistake 3: Configuring `export const dynamicParams = false` When New Un-Rendered Slugs Must Load at Runtime
 
 **The mistake:** Setting `export const dynamicParams = false` on dynamic product pages when new products are added daily.
@@ -143,163 +148,122 @@ export const dynamicParams = true; // Fallback renders new product pages at runt
 
 ---
 
-### Mistake 4: Returning Plain String Arrays Instead of Parameter Objects in `generateStaticParams()`
 
-**The mistake:** Returning `return ['1', '2', '3']` inside `generateStaticParams()`.
-
-**Why it's wrong:** `generateStaticParams()` MUST return an array of objects matching parameter key names (e.g. `[{ id: '1' }, { id: '2' }]`). Returning raw strings causes build errors.
-
-*Incorrect:*
-```typescript
-export async function generateStaticParams() {
-  return ['1', '2', '3']; // ❌ Must return array of parameter objects!
-}
-```
-
-*Fix:*
-```typescript
-export async function generateStaticParams() {
-  return [{ id: '1' }, { id: '2' }, { id: '3' }]; // Array of parameter objects
-}
-```
-
----
-
-### Mistake 5: Configuring `export const dynamicParams = false` When New Un-Rendered Slugs Must Load at Runtime
-
-**The mistake:** Setting `export const dynamicParams = false` on dynamic product pages when new products are added daily.
-
-**Why it's wrong:** Setting `dynamicParams = false` causes Next.js to return a 404 for ANY parameter slug not pre-generated at build time. Use `dynamicParams = true` (default) for runtime fallback.
-
-*Incorrect:*
-```tsx
-export const dynamicParams = false; // ❌ Un-rendered new products return 404!
-```
-
-*Fix:*
-```tsx
-export const dynamicParams = true; // Fallback renders new product pages at runtime on demand
-```
 
 
 ---
 
-### Mistake 6: Returning Plain String Arrays Instead of Parameter Objects in `generateStaticParams()`
+## 5. Practice Exercises
 
-**The mistake:** Returning `return ['1', '2', '3']` inside `generateStaticParams()`.
+### Exercise 1: Prerendering Dynamic Parameter Routes
 
-**Why it's wrong:** `generateStaticParams()` MUST return an array of objects matching parameter key names (e.g. `[{ id: '1' }, { id: '2' }]`). Returning raw strings causes build errors.
+**Scenario:**
+Prerender popular blog post slugs (`/blog/nextjs-15`, `/blog/react-19`) at build time using `generateStaticParams()`.
 
-*Incorrect:*
-```typescript
-export async function generateStaticParams() {
-  return ['1', '2', '3']; // ❌ Must return array of parameter objects!
-}
-```
-
-*Fix:*
-```typescript
-export async function generateStaticParams() {
-  return [{ id: '1' }, { id: '2' }, { id: '3' }]; // Array of parameter objects
-}
-```
-
----
-
-### Mistake 7: Configuring `export const dynamicParams = false` When New Un-Rendered Slugs Must Load at Runtime
-
-**The mistake:** Setting `export const dynamicParams = false` on dynamic product pages when new products are added daily.
-
-**Why it's wrong:** Setting `dynamicParams = false` causes Next.js to return a 404 for ANY parameter slug not pre-generated at build time. Use `dynamicParams = true` (default) for runtime fallback.
-
-*Incorrect:*
-```tsx
-export const dynamicParams = false; // ❌ Un-rendered new products return 404!
-```
-
-*Fix:*
-```tsx
-export const dynamicParams = true; // Fallback renders new product pages at runtime on demand
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: Multi-parameter Routes
-
-**Problem:** You have a nested dynamic route `app/shop/[category]/[productId]/page.tsx`. Write a `generateStaticParams` function that statically pre-renders two items:
-- Category: `'shoes'`, Product ID: `'101'`
-- Category: `'hats'`, Product ID: `'202'`
-
-```typescript
-// app/shop/[category]/[productId]/page.tsx
-// Solution:
-export async function generateStaticParams() {
-  return [
-    { category: 'shoes', productId: '101' },
-    { category: 'hats', productId: '202' }
-  ];
-}
-```
+**Requirements:**
+1. Export `generateStaticParams()` returning array of `{ slug: string }` objects.
 
 > [!check]- Answer
-> - The objects in the returned array must contain keys for both `category` and `productId`.
-
----
-
-### Exercise 2: generateStaticParams Setup Pattern
-
-**Problem:** Write `generateStaticParams()` fetching top 100 post IDs from database for pre-rendering `app/posts/[id]/page.tsx`.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> export async function generateStaticParams() { const posts = await db.post.findMany({ select: { id: true }, take: 100 }); return posts.map(post => ({ id: post.id })); }
-> ```
-> - `generateStaticParams()` map objects to route parameters.
-> 
-> ```typescript
+>
+> #### Implementation
+>
+> ```tsx
+> // app/blog/[slug]/page.tsx
 > export async function generateStaticParams() {
->   const posts = await db.post.findMany({
->     select: { id: true },
->     take: 100
->   });
->   
->   return posts.map((post) => ({
->     id: post.id.toString()
->   }));
+>   return [
+>     { slug: "nextjs-15" },
+>     { slug: "react-19" }
+>   ];
+> }
+
+export default async function BlogPost({
+  params
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  return <h1>Post: {slug}</h1>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `generateStaticParams()` informs Next.js which dynamic parameter values to prerender at build time.
+> 2. Generates static HTML files for matched routes during `next build`.
+> 3. Speeds up initial page loads by serving pre-rendered HTML from CDN edge nodes.
+
+---
+
+### Exercise 2: Handling Non-Prerendered Parameter Fallbacks
+
+**Scenario:**
+Configure `dynamicParams = true` to render un-prerendered slugs dynamically on demand.
+
+**Requirements:**
+1. Export `export const dynamicParams = true`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> export const dynamicParams = true; // Default behavior
+
+export async function generateStaticParams() {
+  return [{ slug: "featured-1" }];
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `dynamicParams = true` allows dynamic slugs not returned by `generateStaticParams()` to be rendered on demand via SSR.
+> 2. Setting `dynamicParams = false` returns a 404 page for any un-prerendered slug.
+> 3. Flexible static site generation fallback control.
+
+---
+
+### Exercise 3: Prerendering Nested Parent-Child Parameters
+
+**Scenario:**
+Prerender nested category and item routes (`app/[category]/[item]/page.tsx`).
+
+**Requirements:**
+1. Return array of `{ category: string, item: string }` objects.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // app/[category]/[item]/page.tsx
+> export async function generateStaticParams() {
+>   return [
+>     { category: "electronics", item: "laptop" },
+>     { category: "clothing", item: "jacket" }
+>   ];
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. For nested dynamic routes, `generateStaticParams()` returns objects containing all parent and child parameter keys.
+> 2. Pre-computes full nested route paths during build time compilation.
+> 3. Idiomatic multi-level SSG pattern.
+
 ---
 
-### Exercise 3: Nested generateStaticParams Execution
 
-**Problem:** How does `generateStaticParams()` behave when nested inside parent and child route segments (`/category/[cat]/[id]`)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Next.js executes generateStaticParams() top-down from parent to child, generating all combinations of parent and child static routes.
-> ```
-> - Executes top-down, combining parent and child parameter combinations.
-> 
-> ```text
-> Parent generateStaticParams() x Child generateStaticParams()
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Static Site Generation (SSG)](ssg.md) — The output target.
 - [Incremental Static Regeneration (ISR)](isr.md) — Related concept: Incremental Static Regeneration (ISR).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `generateStaticParams` informs the compiler which dynamic parameters to pre-build statically.
 - The function must return an array of objects matching the segment variables.
 - Use `export const dynamicParams = false` to reject visiting ungenerated paths.

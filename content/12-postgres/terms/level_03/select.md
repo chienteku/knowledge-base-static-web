@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DML Statement**
+
+**SQL Command / Clause** (Data Query Statement): `SELECT` retrieves data rows from one or more database tables.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (The most frequently executed SQL statement. Generates read-only locks, allowing multiple clients to run selections concurrently without blocking writes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Writing data into a database is only half the battle. The ultimate value of any database lies in your ability to search, filter, and retrieve that data later.
@@ -87,7 +88,7 @@ FROM products;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Swapping the SELECT and FROM clauses sequence
 
@@ -138,58 +139,91 @@ SELECT first_name || ' ' || last_name FROM users; -- Column name is ?column?
 SELECT first_name || ' ' || last_name AS full_name FROM users;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Article Fields Retrieval
+### Exercise 1: Basic Column Projection and Filtering
 
-**Problem:** You have a table `articles` with columns `id`, `title`, `body_text`, `author_id`, and `published_at`. Write a SQL query to retrieve the `title` and `published_at` columns of all articles. Rename the `published_at` column to `date_posted` in the output.
+**Scenario:**
+Query `users` table returning `username` and `email` for active users.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT username, email FROM users WHERE is_active = TRUE`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT title, published_at AS date_posted 
-> FROM articles;
+> SELECT username, email 
+> FROM users 
+> WHERE is_active = TRUE;
 > ```
-> - Start the statement with `SELECT`.
-> - Apply the renaming alias keyword `AS`.
+>
+> #### Technical Explanation
+>
+> 1. `SELECT` specifies output column projections.
+> 2. `FROM` identifies source table.
+> 3. `WHERE` filters row results.
+
+---
+
+### Exercise 2: Aliasing Column Names in Select Projections
+
+**Scenario:**
+Select `price_cents` divided by 100.0, aliasing output column as `price_dollars`.
+
+**Requirements:**
+1. Use `price_cents / 100.0 AS price_dollars`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   name, 
+>   price_cents / 100.0 AS price_dollars 
+> FROM products;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `AS alias_name` renames output columns in returned query result sets.
+> 2. Formats calculated expressions cleanly.
+> 3. Developer ergonomics.
+
+---
+
+### Exercise 3: Deduplicating Result Rows with `DISTINCT`
+
+**Scenario:**
+Select all unique customer states from `addresses` table using `DISTINCT`.
+
+**Requirements:**
+1. Execute `SELECT DISTINCT state FROM addresses`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT DISTINCT state 
+> FROM addresses 
+> WHERE state IS NOT NULL 
+> ORDER BY state ASC;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DISTINCT` eliminates duplicate rows from the query output.
+> 2. Sorts or hashes rows in memory to find unique values.
+> 3. Returns unique state lists.
 
 ---
 
 
 
-### Exercise 2: Selecting Explicit Columns with Aliases
-
-**Problem:** Select `id`, `name`, and computed column `price * 1.1` as `taxed_price` from `products`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT id, name, price * 1.1 AS taxed_price FROM products;
-> ```
-> ```sql
-> SELECT id, name, price * 1.1 AS taxed_price FROM products;
-> ```
->
-> **Explanation:** Column aliases (`AS name`) provide clean field identifiers for calculated expressions.
-
----
-
-### Exercise 3: Evaluating Expressions Without Tables
-
-**Problem:** Execute SQL statement evaluating mathematical expression `2 * 3` (`SELECT 2 * 3;`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT 2 * 3;
-> ```
-> ```sql
-> SELECT 2 * 3;
-> ```
->
-> **Explanation:** PostgreSQL permits `SELECT` statements without `FROM` clauses to evaluate expressions.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`SELECT *` vs. Column List](select_star_vs_columns.md) — Sizing selection scopes.
 - [`WHERE` Clause](where.md) — Filtering query results.
 - [Multi-row `INSERT` / `INSERT ... SELECT`](multi_row_insert.md) — Related concept: Multi-row `INSERT` / `INSERT ... SELECT`.
@@ -203,7 +237,7 @@ SELECT first_name || ' ' || last_name AS full_name FROM users;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `SELECT` is the primary SQL command used to retrieve data rows.
 - Basic syntax structure: `SELECT columns FROM table;`.
 - Use the `AS` keyword to rename output columns dynamically.

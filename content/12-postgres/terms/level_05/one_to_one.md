@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Schema Design** (Unique Singular Association Pattern): A One-to-One relationship links a single row in one table to exactly one row in another table using a unique foreign key constraint.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Enforced in all relational database engines. Limits relationships at the index verification layer).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a One-to-One (1:1) relationship, exactly two rows are linked:
@@ -91,7 +92,7 @@ INSERT INTO user_profiles (id, bio, user_id) VALUES (102, 'Attempt two', 1);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the UNIQUE constraint on the foreign key column
 
@@ -102,6 +103,8 @@ INSERT INTO user_profiles (id, bio, user_id) VALUES (102, 'Attempt two', 1);
 **Fix: Always apply a `UNIQUE` constraint to foreign key columns representing one-to-one links.**
 
 ---
+
+
 
 
 
@@ -121,6 +124,8 @@ CREATE TABLE user_profiles ( user_id INT REFERENCES users(id) ); -- ❌ Allows m
 CREATE TABLE user_profiles ( user_id INT UNIQUE REFERENCES users(id) ); -- Enforces 1-to-1
 ```
 
+
+
 ### Mistake 3: Splitting 1-to-1 Data into 2 Tables Without Performance or Security Rationale
 
 **The mistake:** Splitting `users` name and `users` email into two 1-to-1 tables.
@@ -139,106 +144,109 @@ Keep name and email in single users table
 
 
 
-### Mistake 4: Omitting UNIQUE Constraint on Foreign Keys in 1-to-1 Relationships
+## 5. Practice Exercises
 
-**The mistake:** Creating `user_profiles (user_id INT REFERENCES users(id))` without a `UNIQUE` constraint.
+### Exercise 1: Modeling 1-to-1 Relationships with Unique Foreign Keys
 
-**Why it's wrong:** Without a `UNIQUE` constraint on `user_id`, multiple profile rows can be inserted for the same user, turning the 1-to-1 relationship into a 1-to-Many relationship! Add `UNIQUE(user_id)`.
+**Scenario:**
+Model a 1-to-1 association between `users` and `user_profiles` using a `UNIQUE` foreign key.
 
-*Incorrect:*
-```sql
-CREATE TABLE user_profiles ( user_id INT REFERENCES users(id) ); -- ❌ Allows multiple profiles per user!
-```
+**Requirements:**
+1. Create `user_profiles` with `user_id INTEGER NOT NULL UNIQUE REFERENCES users(id)`.
 
-*Fix:*
-```sql
-CREATE TABLE user_profiles ( user_id INT UNIQUE REFERENCES users(id) ); -- Enforces 1-to-1
-```
-
-### Mistake 5: Splitting 1-to-1 Data into 2 Tables Without Performance or Security Rationale
-
-**The mistake:** Splitting `users` name and `users` email into two 1-to-1 tables.
-
-**Why it's wrong:** Splitting 1-to-1 data that is always read together forces un-necessary JOIN queries. Keep co-located 1-to-1 fields in a single table unless security or table width warrants splitting.
-
-*Incorrect:*
-```sql
-// Splitting name and email into 2 separate 1-to-1 tables
-```
-
-*Fix:*
-```sql
-Keep name and email in single users table
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Settings Portal Schema
-
-**Problem:** You are building a system. Every user has exactly one set of settings. You have a `users` table (columns: `id` PRIMARY KEY, `username`). Write the SQL `CREATE TABLE` query for a table named `user_settings` containing:
-1.  An integer primary key `settings_id`.
-2.  A boolean flag `dark_mode_enabled` (defaults to `FALSE`).
-3.  A unique foreign key column `user_id` pointing to `users(id)`.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE user_settings (
->   settings_id INT PRIMARY KEY,
->   dark_mode_enabled BOOLEAN DEFAULT FALSE,
->   user_id INT UNIQUE REFERENCES users(id)
+> CREATE TABLE users (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   username TEXT NOT NULL UNIQUE
+> );
+> 
+> CREATE TABLE user_profiles (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   user_id INTEGER NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+>   bio TEXT,
+>   avatar_url TEXT
 > );
 > ```
-> - Combine the `UNIQUE` and `REFERENCES` inline parameters inside the `user_id` declaration.
-> - Ensure the default value is properly declared using `DEFAULT`.
+>
+> #### Technical Explanation
+>
+> 1. One-to-One relationships require a `UNIQUE` constraint on the foreign key column (`user_id`).
+> 2. Prevents inserting multiple profile rows for the same `user_id`.
+> 3. Enforces strict 1-to-1 cardinal associations.
+
+---
+
+### Exercise 2: Splitting Infrequently Queried Columns into 1-to-1 Tables
+
+**Scenario:**
+Explain why large `BYTEA` avatar images or long `bio` text should be isolated in a separate 1-to-1 `user_profiles` table.
+
+**Requirements:**
+1. Contrast table heap size and RAM caching efficiency.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Table Normalization Performance Analysis:
+> - Keeping 'users' table small (id, username, email) allows PostgreSQL to fit thousands of user rows into a single 8KB disk page.
+> - Moving large 'bio' or 'avatar' columns to 1-to-1 'user_profiles' keeps hot 'users' table scans sub-millisecond fast.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Table heap page sizes are fixed at 8KB.
+> 2. Excluding large, infrequently accessed columns from main tables maximizes CPU buffer cache efficiency.
+> 3. Advanced schema design optimization.
+
+---
+
+### Exercise 3: Querying 1-to-1 Tables with INNER JOIN
+
+**Scenario:**
+Fetch a user alongside their profile details in a single query.
+
+**Requirements:**
+1. Execute `SELECT u.username, p.bio FROM users u JOIN user_profiles p ON u.id = p.user_id`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   u.id, 
+>   u.username, 
+>   p.bio, 
+>   p.avatar_url 
+> FROM users AS u 
+> JOIN user_profiles AS p ON u.id = p.user_id 
+> WHERE u.id = 42;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `JOIN` resolves 1-to-1 table relations seamlessly.
+> 2. Unique index on `user_id` guarantees $O(1)$ single-row lookup performance.
+> 3. Clean API payload assembly.
 
 ---
 
 
 
-### Exercise 2: Defining 1-to-1 Relationship Schema
-
-**Problem:** Create `user_settings` table establishing 1-to-1 relationship with `users` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TABLE user_settings ( user_id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, theme TEXT DEFAULT 'dark' );
-> ```
-> ```sql
-> CREATE TABLE user_settings (
->   user_id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
->   theme TEXT DEFAULT 'dark'
-> );
-> ```
->
-> **Explanation:** Using the foreign key as primary key (`user_id INT PRIMARY KEY`) guarantees 1-to-1 uniqueness.
-
----
-
-### Exercise 3: When to Split 1-to-1 Tables
-
-**Problem:** List 2 valid reasons for splitting 1-to-1 data into separate tables (1. Isolating rare/large blob columns; 2. Strict column-level security permissions).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Isolating rare/large blob columns; strict column-level security permissions
-> ```
-> ```text
-> Isolating rare/large blob columns; strict column-level security permissions
-> ```
->
-> **Explanation:** Splitting 1-to-1 tables keeps primary tables compact while isolating sensitive fields.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`FOREIGN KEY`](foreign_key.md) — The parent reference logic.
 - [One-to-Many Relationship](one_to_many.md) — The hierarchical default link.
 - [`UNIQUE` Constraint](../level_02/unique_constraint.md) — The one-to-one validator.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - One-to-One links one record in Table A to at most one record in Table B.
 - Implemented by combining a `FOREIGN KEY` with a `UNIQUE` constraint.
 - Splitting tables in 1:1 improves database buffer performance and isolates security.

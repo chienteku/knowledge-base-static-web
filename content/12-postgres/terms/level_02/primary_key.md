@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Constraint**
+
+**Constraint** (Unique Identity Constraint): A `PRIMARY KEY` constraint uniquely identifies each row in a table by combining `NOT NULL` and `UNIQUE` constraints.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Postgres automatically builds a unique **B-Tree Index** (`pg_index` catalog) on the primary key column, optimizing physical row lookups).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational databases contain tables with thousands or millions of rows. 
@@ -101,7 +102,7 @@ CREATE TABLE project_memberships (
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing a table can have multiple independent primary keys
 
@@ -163,70 +164,94 @@ email TEXT PRIMARY KEY -- ❌ Mutable natural primary key!
 id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, email TEXT UNIQUE
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Key Integrity Analysis
+### Exercise 1: Declaring Single-Column Primary Keys with Identity Sequences
 
-**Problem:** You have a table defined with a composite primary key:
-`PRIMARY KEY (order_id, item_id)`
-You attempt to insert the following four rows:
-1.  `(101, 1)`
-2.  `(101, 2)`
-3.  `(102, 1)`
-4.  `(101, 1)`
-Which row will fail, and why?
+**Scenario:**
+Create a `customers` table with a surrogate primary key `id` using `GENERATED ALWAYS AS IDENTITY`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE TABLE customers (id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, ...)`.
+
 > [!check]- Answer
-> ```text
-> Row 4 will fail! 
-> A composite primary key checks the uniqueness of the *combined* values. 
-> Rows 1, 2, and 3 are unique combinations. 
-> Row 4 repeats the exact combination of `order_id = 101` and `item_id = 1` which was already written in Row 1, violating the unique constraint.
-> ```
-> - Evaluate the combinations of values in each row.
-> - Identify the duplicate pair.
-
----
-
-
-
-### Exercise 2: Defining Identity Primary Key
-
-**Problem:** Create table `orders` with `id` as `BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TABLE orders ( id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, total NUMERIC(10,2) );
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE orders (
->   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
->   total NUMERIC(10,2)
+> CREATE TABLE customers (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   company_name TEXT NOT NULL,
+>   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 > );
 > ```
 >
-> **Explanation:** `IDENTITY PRIMARY KEY` specifies standard auto-incrementing primary key columns.
+> #### Technical Explanation
+>
+> 1. `PRIMARY KEY` enforces both `NOT NULL` and `UNIQUE` constraints on the `id` column automatically.
+> 2. Automatically creates an underlying B-tree unique index (`customers_pkey`).
+> 3. `GENERATED ALWAYS AS IDENTITY` is the modern SQL-standard replacement for legacy `SERIAL`.
 
 ---
 
-### Exercise 3: Primary Key Constraints Combination
+### Exercise 2: Defining Composite Primary Keys for Junction Tables
 
-**Problem:** What 2 SQL column constraints are implicitly included in every PRIMARY KEY constraint? (`NOT NULL` and `UNIQUE`).
+**Scenario:**
+Create a `order_items` junction table with a composite primary key consisting of `(order_id, product_id)`.
 
-**Expected output:**
+**Requirements:**
+1. Define `PRIMARY KEY (order_id, product_id)`.
+
 > [!check]- Answer
-> ```text
-> NOT NULL and UNIQUE
-> ```
-> ```text
-> NOT NULL and UNIQUE
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE order_items (
+>   order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+>   product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
+>   quantity INTEGER NOT NULL CHECK (quantity > 0),
+>   unit_price_cents INTEGER NOT NULL CHECK (unit_price_cents >= 0),
+>   PRIMARY KEY (order_id, product_id)
+> );
 > ```
 >
-> **Explanation:** PRIMARY KEY constraints enforce non-null values and row uniqueness.
+> #### Technical Explanation
+>
+> 1. Composite primary keys enforce uniqueness across the COMBINATION of specified columns.
+> 2. Prevents duplicate entries for the same product within a single order.
+> 3. Standard pattern for N-to-N junction tables.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Primary Key Lookups via `EXPLAIN`
+
+**Scenario:**
+Verify that querying a row by `PRIMARY KEY` executes a single-row $O(\log N)$ B-tree index lookup (`Index Scan`).
+
+**Requirements:**
+1. Execute `EXPLAIN ANALYZE SELECT * FROM customers WHERE id = 42`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> EXPLAIN ANALYZE 
+> SELECT * FROM customers WHERE id = 42;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Primary key queries execute via `Index Scan` on `customers_pkey`.
+> 2. `totalDocsExamined` or `rows` equals 1.
+> 3. Executes in under 1 millisecond.
+
+---
+
+
+
+## 6. Related Terms
 - [`UNIQUE` Constraint](unique_constraint.md) — Ensuring distinct values without primary key anchors.
 - [`SERIAL` / `GENERATED ALWAYS AS IDENTITY`](serial_identity.md) — How primary key numbers are usually generated.
 - [Natural Key vs. Surrogate Key](../level_05/natural_vs_surrogate_key.md) — Related concept: Natural Key vs. Surrogate Key.
@@ -235,7 +260,7 @@ Which row will fail, and why?
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A primary key uniquely identifies each horizontal row in a table.
 - A table can only have one primary key (though it can span multiple columns).
 - Primary keys implicitly combine `NOT NULL` and `UNIQUE` constraint rules.

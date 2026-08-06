@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (array and record set aggregation functions)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Evaluated by the query aggregation pipeline. Iterates over temporary record sets in server memory to compute values).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When grouping records, you compress many individual rows into a single output row. 
@@ -80,7 +79,7 @@ GROUP BY category;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing the standard SQL function 'AVG()' instead of 'math::mean()' to calculate averages, triggering syntax errors
 
@@ -137,72 +136,112 @@ RETURN math::sum([10, "20"]); // ❌ Mixed non-numeric elements!
 RETURN math::sum([10, <number> "20"]); // Explicit numeric casting
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Aggregate Syntax Translation
+### Exercise 1: Computing Order Totals with `math::sum()`
 
-**Problem:** You are migrating an aggregation query from a PostgreSQL database:
-`SELECT category, COUNT(*), SUM(stock), MIN(last_updated) FROM inventory GROUP BY category;`
-Write the equivalent query in SurrealQL.
+**Scenario:**
+An e-commerce reporting service calculates the total revenue generated from completed order line items stored in table `order_item`.
 
-**Expected output:**
+**Requirements:**
+1. Insert 3 `order_item` records with decimal prices (`19.99dec`, `49.50dec`, `120.00dec`).
+2. Write a SurrealQL query calculating total revenue using `math::sum()`.
+
 > [!check]- Answer
-> ```sql
-> SELECT
->   category,
->   count() AS count,
->   math::sum(stock) AS sum,
->   math::min(last_updated) AS min
-> FROM inventory
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE order_item:1 SET price = 19.99dec;
+> CREATE order_item:2 SET price = 49.50dec;
+> CREATE order_item:3 SET price = 120.00dec;
+> 
+> -- Calculate total order revenue sum
+> SELECT math::sum(price) AS total_revenue FROM order_item;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `math::sum(field)` calculates the sum of numeric field values across selected record sets.
+> 2. Works natively over `decimal` types, maintaining exact financial precision without rounding errors.
+> 3. Eliminates manual application-side loops by aggregating calculations directly on the database engine.
+
+---
+
+### Exercise 2: Grouped Minimum and Maximum Price Analysis
+
+**Scenario:**
+A product catalog analytics service computes the minimum and maximum product price per product category (`category`).
+
+**Requirements:**
+1. Group products by `category`.
+2. Compute `math::min(price)` and `math::max(price)` for each category.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE product:p1 SET category = "electronics", price = 199.99dec;
+> CREATE product:p2 SET category = "electronics", price = 899.99dec;
+> CREATE product:p3 SET category = "books", price = 15.00dec;
+> 
+> -- Group products by category and calculate min/max price bounds
+> SELECT 
+>     category,
+>     math::min(price) AS min_price,
+>     math::max(price) AS max_price
+> FROM product
 > GROUP BY category;
 > ```
-> - Replace `COUNT(*)` with the empty function argument syntax `count()`.
-> - Map mathematical functions to their namespaced equivalents: `math::sum()` and `math::min()`.
+>
+> #### Technical Explanation
+>
+> 1. Combining aggregate functions (`math::min`, `math::max`) with `GROUP BY` aggregates values within each group bucket.
+> 2. Returns structured JSON result objects containing category keys and calculated bounds.
+> 3. Executes in parallel across table record storage blocks.
+
+---
+
+### Exercise 3: Record Set Counting with `count()`
+
+**Scenario:**
+A user metrics dashboard counts the total number of active user accounts stored in table `user`.
+
+**Requirements:**
+1. Write a `SELECT` query calculating active user count using `count()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:u1 SET active = true;
+> CREATE user:u2 SET active = true;
+> CREATE user:u3 SET active = false;
+> 
+> -- Count active users
+> SELECT count() AS total_active FROM user WHERE active = true GROUP ALL;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `count()` counts the number of matching records in the evaluated query group.
+> 2. `GROUP ALL` collapses all matching records into a single global aggregate result object.
+> 3. Returns `0` if no matching records satisfy the filter conditions.
 
 ---
 
 
 
-### Exercise 2: Grouping and Aggregating Record Counts
-
-**Problem:** Count users grouped by `role` field from `user` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT role, count() FROM user GROUP BY role;
-> ```
-> ```surrealql
-> SELECT role, count() FROM user GROUP BY role;
-> ```
->
-> **Explanation:** `GROUP BY field` aggregates record groups with `count()`.
-
----
-
-### Exercise 3: Min/Max Aggregations
-
-**Problem:** Calculate min and max product prices from `product` table using `math::min()` and `math::max()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT math::min(price), math::max(price) FROM product GROUP ALL;
-> ```
-> ```surrealql
-> SELECT math::min(price), math::max(price) FROM product GROUP ALL;
-> ```
->
-> **Explanation:** `GROUP ALL` calculates aggregates across the entire table.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`GROUP BY` / `GROUP ALL`](group_by.md) — The aggregation context.
 - [Math Functions (`math::*`)](../level_06/math_functions.md) — Related concept: Math Functions (`math::*`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Aggregate functions compute summary calculations across grouped records.
 - Standard math functions are namespaced inside the `math::*` library path.
 - `count()` calculates row totals (syntax uses empty parenthesis: `count()`).

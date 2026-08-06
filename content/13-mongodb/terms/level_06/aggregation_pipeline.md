@@ -14,16 +14,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Aggregation** (Multi-Stage Data Transformation): An Aggregation Pipeline is a multi-stage data processing framework where documents pass through a sequential series of transformation stages to compute aggregated results.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executed on the database server. Processes data streams in memory, utilizing physical disk storage space for temporary spillover when executing large sorting operations).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While basic query methods like `find()` and `project()` are great for retrieving documents, they cannot perform calculations across documents:
@@ -90,7 +91,7 @@ db.products.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing the filter stage ($match) late in the pipeline after heavy group or reshape operations
 
@@ -154,66 +155,113 @@ db.large.aggregate([{ $sort: { unindexedField: 1 } }]); // ❌ Memory limit exce
 db.large.aggregate([{ $sort: { unindexedField: 1 } }], { allowDiskUse: true });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Pipeline Stage Ordering
+### Exercise 1: Multi-Stage Filtering and Reporting Pipeline
 
-**Problem:** You want to write an aggregation query to:
-1.  Filter users to keep only those with `status: "active"`.
-2.  Sort them by `age` descending.
-3.  Limit the results to the top 5 users.
-Arrange these actions as a list of three MongoDB aggregation stage names in the correct, most efficient execution order.
+**Scenario:**
+Build a 3-stage pipeline that filters active orders (`$match`), groups by customer (`$group`), and sorts top spenders descending (`$sort`).
 
-**Expected output:**
+**Requirements:**
+1. Chain `$match`, `$group`, and `$sort`.
+
 > [!check]- Answer
-> ```text
-> 1. $match (Filters inactive users early, allowing index usage).
-> 2. $sort  (Orders the filtered active users).
-> 3. $limit (Restricts the output count to 5, preventing full array sorting).
-> ```
-> - Identify the stage operators corresponding to WHERE, ORDER BY, and LIMIT.
-> - Apply the rule of pruning data as early as possible in the pipeline.
-
----
-
-
-
-### Exercise 2: Basic Pipeline Match and Group
-
-**Problem:** Filter orders `status: "completed"` and group by `customerId` counting total orders.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.orders.aggregate([ { $match: { status: "completed" } }, { $group: { _id: "$customerId", count: { $sum: 1 } } } ]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.orders.aggregate([
 >   { $match: { status: "completed" } },
->   { $group: { _id: "$customerId", count: { $sum: 1 } } }
+>   {
+>     $group: {
+>       _id: "$customerId",
+>       totalSpent: { $sum: "$amount" }
+>     }
+>   },
+>   { $sort: { totalSpent: -1 } }
 > ]);
 > ```
 >
-> **Explanation:** Pipelines execute sequentially: `$match` filters documents first, followed by `$group` aggregation.
+> #### Technical Explanation
+>
+> 1. Pipeline stages execute sequentially, passing transformed document streams from stage to stage.
+> 2. `$match` at the start of the pipeline utilizes indexes to minimize data scanned.
+> 3. Computes sorted analytics in a single query invocation.
 
 ---
 
-### Exercise 3: Allowing Disk Use for Large Aggregations
+### Exercise 2: Pipeline Projection and Field Derivation
 
-**Problem:** Configure aggregation query to allow temporary disk spillover using `{ allowDiskUse: true }`.
+**Scenario:**
+Filter products by category `"electronics"`, compute tax (`price * 0.0825`), and project formatted output documents.
 
-**Expected output:**
+**Requirements:**
+1. Use `$match`, `$addFields`, and `$project`.
+
 > [!check]- Answer
-> ```text
-> db.orders.aggregate(pipeline, { allowDiskUse: true });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.orders.aggregate(pipeline, { allowDiskUse: true });
+> db.products.aggregate([
+>   { $match: { category: "electronics" } },
+>   {
+>     $addFields: {
+>       tax: { $multiply: ["$price", 0.0825] }
+>     }
+>   },
+>   {
+>     $project: {
+>       name: 1,
+>       price: 1,
+>       totalPrice: { $add: ["$price", "$tax"] }
+>     }
+>   }
+> ]);
 > ```
 >
-> **Explanation:** `{ allowDiskUse: true }` allows memory-intensive stages to spill over to disk.
+> #### Technical Explanation
+>
+> 1. `$addFields` appends calculated fields without stripping existing document properties.
+> 2. `$project` shapes final response key names and excludes internal attributes.
+> 3. Server-side mathematical transformations.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Setting Pipeline Memory Limits with `allowDiskUse`
+
+**Scenario:**
+Execute a large dataset aggregation pipeline that exceeds the default 100MB RAM stage memory buffer.
+
+**Requirements:**
+1. Pass `{ allowDiskUse: true }` option to `aggregate()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.large_logs.aggregate(
+>   [
+>     { $match: { level: "ERROR" } },
+>     { $group: { _id: "$sourceIp", count: { $sum: 1 } } },
+>     { $sort: { count: -1 } }
+>   ],
+>   { allowDiskUse: true }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Aggregation stages are limited to 100MB of RAM by default to prevent server OOM crashes.
+> 2. `{ allowDiskUse: true }` enables stages like `$sort` and `$group` to write temporary spill files to disk.
+> 3. Allows memory-intensive analytics pipelines to complete successfully.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`$match` Stage](match_stage.md) — The filtering stage.
 - [`$group` Stage](group_stage.md) — The grouping stage.
@@ -232,7 +280,7 @@ Arrange these actions as a list of three MongoDB aggregation stage names in the 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Aggregation Framework processes data through sequential stage filters.
 - Direct NoSQL equivalent to SQL's `GROUP BY`, aggregates, and joins.
 - Executed using `db.collection.aggregate([ {stage1}, {stage2} ])`.

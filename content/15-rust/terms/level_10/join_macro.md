@@ -164,7 +164,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Source Distributed Health & Metrics Aggregator
 
-**Problem:**
+**Scenario:**
 In a cloud-native microservice dashboard, an API gateway needs to aggregate metrics from three downstream microservices:
 1. `DatabaseClient::fetch_health(&self) -> DatabaseStatus` (sleeps 40ms, returning `DatabaseStatus { active_connections: 128, avg_query_time_ms: 3.5 }`).
 2. `CacheClient::fetch_stats(&self) -> CacheStats` (sleeps 20ms, returning `CacheStats { hit_ratio: 0.94, total_keys: 50000 }`).
@@ -175,6 +175,9 @@ Write a function `aggregate_dashboard_metrics` that accepts references to these 
 Provide a complete, compilable solution including structs, implementations, async function, and a unit test module `#[cfg(test)] mod tests` with explicit assertions (`assert_eq!`, `assert!`) verifying field accuracy and wall-clock execution concurrency (verifying total time is significantly below the sequential 120ms sum).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::time::{Duration, Instant};
 > use tokio::time::sleep;
@@ -283,7 +286,8 @@ Provide a complete, compilable solution including structs, implementations, asyn
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. `tokio::join!` takes multiple future expressions (not `.await`ed results) and drives them simultaneously within a single generated tuple state machine.
 > 2. Because the task executor alternates polling between each future whenever one hits an asynchronous yield point (such as `tokio::time::sleep`), all three network requests progress in parallel.
 > 3. The overall execution time equals the duration of the longest individual task ($\max(40, 20, 60) = 60\text{ ms}$), demonstrating significant latency reduction over sequential execution ($120\text{ ms}$).
@@ -292,7 +296,7 @@ Provide a complete, compilable solution including structs, implementations, asyn
 
 ### Exercise 2: Distributed Transaction Coordinator with Early-Exit Error Short-Circuiting using `tokio::try_join!`
 
-**Problem:**
+**Scenario:**
 In a financial microservice architecture, a distributed transaction requires reserving items across three distinct services:
 1. `reserve_inventory(item_id: &str)` -> `Result<String, TransactionError>` (takes 30ms).
 2. `lock_funds(user_id: &str, amount: u64)` -> `Result<String, TransactionError>` (takes 15ms).
@@ -305,6 +309,9 @@ Write a function `coordinate_reservation` using `tokio::try_join!` that coordina
 - Short-circuit failure when `lock_funds` fails at 15ms, verifying that execution terminates early (<35ms) without waiting for `write_ledger`'s 45ms timer to complete.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::time::{Duration, Instant};
 > use tokio::time::sleep;
@@ -404,7 +411,8 @@ Write a function `coordinate_reservation` using `tokio::try_join!` that coordina
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. `tokio::try_join!` polls all futures concurrently until all return `Ok(...)`, or until any single future yields `Err(...)`.
 > 2. When `lock_funds` completes at 15ms with `Err(TransactionError::InsufficientFunds)`, `try_join!` immediately stops polling the remaining futures (`reserve_inventory` and `write_ledger`) and drops them.
 > 3. In Rust, dropping an uncompleted future acts as automatic cancellation (RAII drop guarantees), terminating pending timer futures without wasting system resources or waiting for slower downstream steps to complete.
@@ -413,7 +421,7 @@ Write a function `coordinate_reservation` using `tokio::try_join!` that coordina
 > 
 > ### Exercise 3: Heterogeneous Pipeline Concurrency: Combining Fixed `tokio::join!` with Dynamic Batching via `futures::future::join_all`
 > 
-> **Problem:**
+> **Scenario:**
 > In a real-time analytics streaming engine, incoming telemetry data needs multi-stage validation:
 > - **Stage 1 (Payload Decoding):** Parse raw binary byte stream into structured log counts (`parse_payload` takes 25ms).
 > - **Stage 2 (Dynamic IP Threat Intelligence Fan-out):** Perform IP intelligence checks for a variable list of IP addresses using `futures::future::join_all` (each IP lookup takes 15ms concurrently).

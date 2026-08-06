@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing / Organization**
+
+**Routing & Layouts** (Route Organization & Grouping): Route Groups (`(groupName)`) organize routes into logical directories without affecting URL path structures.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time (Routing)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In the App Router, every folder you create becomes a URL path. 
@@ -51,7 +52,7 @@ You can even use Route Groups to completely bypass the root layout. If you delet
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: URL Collisions
 
@@ -106,67 +107,109 @@ app/
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Clean Architecture
+### Exercise 1: Organizing Routes with Route Groups `(group)`
 
-**Problem:** You have an authentication flow: `login`, `register`, and `forgot-password`. You want them to share a specific "Split Screen" layout. How do you organize this without making the URLs `/auth/login`?
+**Scenario:**
+Organize authentication routes `login` and `register` inside a `(auth)` route group without adding `/auth` to the URL.
 
-**Expected output:**
+**Requirements:**
+1. Use parenthesized folder syntax `(auth)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Create a Route Group named `(auth)`.
-> Inside `(auth)`, create a `layout.tsx` returning your split-screen design.
-> Place the `login`, `register`, and `forgot-password` folders inside `(auth)`.
-> The URLs remain `/login` and `/register`, but they now share the isolated layout!
+> Directory Structure:
+> - app/
+>   - (auth)/
+>     - login/
+>       - page.tsx (URL: /login)
+>     - register/
+>       - page.tsx (URL: /register)
 > ```
-> - Wrap the grouping word in parentheses.
+
+> #### Technical Explanation
+>
+> 1. Parenthesized folders `(groupName)` create Route Groups that are omitted from URL path resolution.
+> 2. `app/(auth)/login/page.tsx` maps directly to URL `/login`, NOT `/auth/login`.
+> 3. Allows grouping related code logically without mutating public URL structures.
 
 ---
 
-### Exercise 2: Multiple Root Layout Pattern via Route Groups
+### Exercise 2: Applying Multiple Root Layouts using Route Groups
 
-**Problem:** Describe how Route Groups allow creating 2 completely distinct root layouts (`(marketing)` vs `(dashboard)`) in the same App Router app.
+**Scenario:**
+Apply a dark theme layout to `(marketing)` routes and a sidebar layout to `(dashboard)` routes.
 
-**Expected output:**
+**Requirements:**
+1. Create separate `layout.tsx` files inside `(marketing)` and `(dashboard)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> By removing the top-level app/layout.tsx and creating distinct app/(marketing)/layout.tsx and app/(dashboard)/layout.tsx each with their own <html> and <body> tags.
+> Multiple Root Layouts:
+> - app/
+>   - (marketing)/
+>     - layout.tsx (Marketing Layout)
+>     - page.tsx (URL: /)
+>   - (dashboard)/
+>     - layout.tsx (Dashboard Layout)
+>     - dashboard/
+>       - page.tsx (URL: /dashboard)
 > ```
-> - Route groups allow splitting applications into isolated root layout sub-trees.
-> 
-> ```text
-> app/(marketing)/layout.tsx -> Marketing root layout (with header/footer)
-> app/(dashboard)/layout.tsx -> Dashboard root layout (with sidebar)
-> ```
+
+> #### Technical Explanation
+>
+> 1. Route Groups allow creating completely different root layouts for different sections of an application.
+> 2. Omitting top-level `app/layout.tsx` and adding `layout.tsx` to route groups creates distinct root document shells.
+> 3. Essential for multi-tenant or marketing vs application UI design.
 
 ---
 
-### Exercise 3: Route Group Syntax
+### Exercise 3: Resolving Route Group Naming Conflicts
 
-**Problem:** Which character convention defines a Route Group folder name in Next.js App Router?
+**Scenario:**
+Explain why creating `app/(groupA)/about/page.tsx` and `app/(groupB)/about/page.tsx` causes a build error.
 
-**Expected output:**
+**Requirements:**
+1. Detail URL path collision rule.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Parentheses (e.g. (groupName))
+> ❌ BUILD ERROR (Route Conflict):
+> - app/(marketing)/about/page.tsx  -> Resolves to URL: /about
+> - app/(company)/about/page.tsx    -> Resolves to URL: /about
+> Result: Next.js build fails due to conflicting URL routes targeting the same path!
 > ```
-> - Parentheses `(folder)` omit the folder from URL paths.
-> 
-> ```text
-> app/(auth)/login/page.tsx -> /login
-> ```
+
+> #### Technical Explanation
+>
+> 1. Because route group folder names are omitted from URL paths, both files resolve to `/about`.
+> 2. Next.js enforces strict unique URL path mapping across all route groups.
+> 3. Always ensure page paths remain unique across all route groups.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`layout.tsx`](../level_02/layout.md) — The file that leverages Route Groups the most.
 - [Parallel Routes (`@folder`)](../level_04/parallel_routes.md) — Another special folder convention that does not affect the URL string.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Route Groups (`(groupName)`)** are folders wrapped in parentheses.
 - They are completely ignored by the Next.js router when building the URL path.
 - Their primary purpose is to apply a specific `layout.tsx` to a subset of routes without changing their public URL.

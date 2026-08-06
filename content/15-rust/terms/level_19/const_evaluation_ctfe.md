@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Compile-Time Evaluation**: Compile-Time Function Execution (CTFE) for evaluating code during compilation.
+
+
+**Rust Compiler Subsystem (compile-time function evaluation CTFE engine)**: Compile-Time Function Execution (CTFE) for evaluating code during compilation.
 
 ---
 
@@ -274,7 +276,7 @@ Ensure all loops in const fn have provable termination bounds!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`const fn`](const_fn.md) — Const functions.
 - [`const` Generics](const_generics.md) — Const generics.

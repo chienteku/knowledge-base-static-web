@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Standard Library**
+
+**TypeScript Utility Type** (Object Key Selection & Exclusions): `Pick<T, K>` creates object types by selecting specific keys, whereas `Omit<T, K>` creates object types by stripping specific keys.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) `Pick<Type, Keys>`
 Creates a new type by picking a specific set of properties from an existing type.
@@ -68,7 +69,7 @@ type PublicUser = Omit<DatabaseUser, "passwordHash">;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Spelling mistakes in `Omit`
 
@@ -117,70 +118,112 @@ type Union = "a" | "b" | "c";
 type Good = Exclude<Union, "a">; // Result: "b" | "c"
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Pick vs Omit
+### Exercise 1: Picking Specific Fields with `Pick<T, K>`
 
-**Problem:** You have an interface with 10 properties. You need a new type with 8 of those properties. Should you use `Pick` or `Omit`?
+**Scenario:**
+Create a `UserPreview` type containing only `id` and `name` from a full `User` entity using `Pick`.
 
-**Expected output:**
+**Requirements:**
+1. Define `type UserPreview = Pick<User, "id" | "name">`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface User {
+>   id: string;
+>   name: string;
+>   email: string;
+>   hashedPassword: string;
+>   createdAt: Date;
+> }
+
+type UserPreview = Pick<User, "id" | "name">;
+
+const preview: UserPreview = { id: "u1", name: "Alice" };
+```
+
+> #### Technical Explanation
+>
+> 1. `Pick<T, K>` constructs a type by selecting specific keys `K` from `T`.
+> 2. Keeps `UserPreview` synchronized with `User` if `name` or `id` types change in the future.
+> 3. Ideal for modeling lightweight UI projection types.
+
+---
+
+### Exercise 2: Omitting Sensitive Fields with `Omit<T, K>`
+
+**Scenario:**
+Create a public user profile type by stripping sensitive fields (`hashedPassword`, `ssn`) using `Omit`.
+
+**Requirements:**
+1. Define `type PublicUser = Omit<User, "hashedPassword" | "ssn">`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface UserAccount {
+>   id: string;
+>   email: string;
+>   hashedPassword: string;
+>   ssn: string;
+> }
+
+type PublicUser = Omit<UserAccount, "hashedPassword" | "ssn">;
+
+const publicInfo: PublicUser = { id: "u100", email: "user@example.com" };
+```
+
+> #### Technical Explanation
+>
+> 1. `Omit<T, K>` constructs a type by picking all properties from `T` and then removing keys matching `K`.
+> 2. Implemented internally as `Pick<T, Exclude<keyof T, K>>`.
+> 3. Prevents exposing sensitive data fields in API response types.
+
+---
+
+### Exercise 3: Comparative Decision Matrix: `Pick` vs `Omit`
+
+**Scenario:**
+Formulate an architectural selection matrix comparing `Pick<T, K>` against `Omit<T, K>`.
+
+**Requirements:**
+1. Contrast maintainability when new properties are added to `T`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> You should almost certainly use `Omit<Type, "key1" | "key2">`.
-> Writing out 8 keys for `Pick` is tedious and harder to read. Always use whichever one results in typing fewer literal keys.
+> Pick vs Omit Selection Matrix:
+> - Pick<T, K>: Explicit whitelist. Selecting a small subset of known keys. Resilient to new properties added to T later.
+> - Omit<T, K>: Explicit blacklist. Excluding a small subset of unwanted keys. DANGER: New properties added to T later are AUTOMATICALLY INCLUDED in Omit!
+> Rule: Prefer Pick for API DTOs and public boundaries to avoid accidentally leaking newly added internal fields.
 > ```
-> - Which one requires less typing?
+
+> #### Technical Explanation
+>
+> 1. `Pick` acts as a whitelist, requiring explicit opting-in for new fields.
+> 2. `Omit` acts as a blacklist, automatically inheriting un-listed future fields.
+> 3. Critical security and maintainability distinction.
 
 ---
 
 
 
-### Exercise 2: Constructing DTOs with `Pick`
-
-**Problem:** Construct `UserPreview` picking `id` and `name` from `User` interface.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Pick DTO created
-> ```
-> ```typescript
-> interface User { id: number; name: string; email: string; passwordHash: string }
-> type UserPreview = Pick<User, "id" | "name">;
-> const preview: UserPreview = { id: 1, name: "Alice" };
-> console.log("Pick DTO created");
-> ```
->
-> **Explanation:** `Pick<T, K>` constructs object types containing specified subset keys.
-
----
-
-### Exercise 3: Stripping Sensitive Fields with `Omit`
-
-**Problem:** Omit `passwordHash` from `User` interface.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Omit sanitized interface created
-> ```
-> ```typescript
-> interface User { id: number; name: string; passwordHash: string }
-> type SafeUser = Omit<User, "passwordHash">;
-> const safe: SafeUser = { id: 1, name: "Alice" };
-> console.log("Omit sanitized interface created");
-> ```
->
-> **Explanation:** `Omit<T, K>` creates object types excluding specified keys.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`Partial<T>` & `Required<T>`](partial_required.md) — The utilities that modify the `?` flag instead of the properties themselves.
 - [Union Types (`|`)](../level_05/union_types.md) — What you use to pass multiple keys into Pick/Omit (e.g. `"id" | "name"`).
 - [Utility Types Overview](utility_types.md) — Related concept: Utility Types Overview.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`Pick<T, K>`** creates a new object type containing ONLY the specified keys from the original type.
 - **`Omit<T, K>`** creates a new object type containing ALL keys from the original type EXCEPT the specified keys.
 - You pass the keys as a Union of Literal strings (`"key1" | "key2"`).

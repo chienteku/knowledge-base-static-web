@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture**
+
+**React Server Component** (Server-to-Client Serialization Boundary): The Network Boundary defines the serializable split point between Server Component execution and Client Component hydration.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Defines the transition boundary between Server and Client rendering).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard Single Page Applications (SPAs), the entire application is bundled into a single file and runs in the user's browser. With the introduction of React Server Components (RSC), Next.js splits execution: some components execute only on the server, while others run in the browser. 
@@ -81,7 +82,7 @@ export default async function UsersPage() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Passing non-serializable objects across the boundary
 
@@ -146,89 +147,143 @@ export const dbSecret = process.env.DATABASE_SECRET;
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Fix Serialization Error
+### Exercise 1: Auditing the Server-to-Client Serialization Boundary
 
-**Problem:** Fix the Server Component below to pass a serializable object to the Client Component `DateDisplay`:
+**Scenario:**
+Pass a serializable data object from a Server Component across the network boundary to a Client Component.
 
-```typescript
-// app/event/page.tsx (Server Component)
-import DateDisplay from './DateDisplay'; // Client Component ('use client')
+**Requirements:**
+1. Define props interface for Client Component accepting JSON primitives.
 
-// Before:
-// export default function EventPage() {
-//   const eventInfo = {
-//     title: "Next.js Conference",
-//     date: new Date() // Non-serializable Date object
-//   };
-//   return <DateDisplay event={eventInfo} />;
-// }
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // app/components/ClientUserProfile.tsx
+> "use client";
 
-// Solution:
-import React from 'react';
+interface UserProps {
+  id: string;
+  name: string;
+  roles: string[];
+}
 
-export default function EventPage() {
-  const eventInfo = {
-    title: "Next.js Conference",
-    date: new Date().toISOString() // Convert to serializable string
-  };
-  return <DateDisplay event={eventInfo} />;
+export default function ClientUserProfile({ user }: { user: UserProps }) {
+  return (
+    <div className="p-4 border rounded">
+      <h2>{user.name}</h2>
+      <p>Roles: {user.roles.join(", ")}</p>
+    </div>
+  );
 }
 ```
 
-> [!check]- Answer
-> - A JavaScript `Date` object is a class instance. Convert it into an ISO string before passing it as a prop.
+> #### Technical Explanation
+>
+> 1. The Network Boundary separates components executing on the server from components executing in the browser.
+> 2. Props passed across the boundary are serialized into React Server Component flight data.
+> 3. Passing plain JavaScript objects, strings, numbers, and arrays ensures valid boundary serialization.
 
 ---
 
-### Exercise 2: Network Boundary Prop Validation
+### Exercise 2: Resolving Non-Serializable Function Prop Errors
 
-**Problem:** Which of the following props CAN be safely passed from a Server Component to a Client Component?
-1. `user: { id: 5, name: 'Alice' }`
-2. `onSave: () => void`
-3. `createdDate: Date`
+**Scenario:**
+Fix a serialization build error caused by passing a server callback function as a prop to a Client Component.
 
-**Expected output:**
+**Requirements:**
+1. Convert callback function into a Server Action (`"use server"`).
+
 > [!check]- Answer
-> ```text
-> Prop 1 (Plain JSON-serializable object). Dates (3) should be converted to ISO strings; Functions (2) must be Server Actions.
-> ```
-> - Serializable: Strings, Numbers, Booleans, Plain Objects, Arrays, Server Actions.
-> - Non-serializable: Functions, Classes, Symbols, DOM elements.
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> <ClientUserCard user={{ id: 5, name: 'Alice' }} />
-> ```
+> // app/actions/user.ts
+> "use server";
+
+export async function handleUserUpdate(userId: string) {
+  console.log(`Updated user ${userId} on server`);
+}
+```
+
+> ```tsx
+> // app/components/ClientButton.tsx
+> "use client";
+
+import { handleUserUpdate } from "@/app/actions/user";
+
+export default function ClientButton({ userId }: { userId: string }) {
+  return (
+    <button onClick={() => handleUserUpdate(userId)}>
+      Update User
+    </button>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Plain JavaScript functions cannot be serialized over the flight stream across the Network Boundary.
+> 2. Server Actions marked with `"use server"` create RPC references that CAN be passed to Client Components.
+> 3. Standard method for handling server callbacks from client UI boundaries.
 
 ---
 
-### Exercise 3: client-only Package Safeguard
+### Exercise 3: Passing Server Component Slots Across the Network Boundary
 
-**Problem:** Which npm package enforces that a utility module can ONLY be imported by Client Components?
+**Scenario:**
+Pass a Server Component through a Client Component layout wrapper using `children`.
 
-**Expected output:**
+**Requirements:**
+1. Render `children` inside Client Component.
+
 > [!check]- Answer
-> ```text
-> import 'client-only';
-> ```
-> - `client-only` prevents server components from importing browser-dependent utilities.
-> 
-> ```typescript
-> import 'client-only';
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> // app/components/ClientModal.tsx
+> "use client";
+
+import { useState } from "react";
+
+export default function ClientModal({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setOpen(true)}>Open Modal</button>
+      {open && <div className="modal">{children}</div>}
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Server Components passed as `children` to Client Components execute ON THE SERVER.
+> 2. The server serializes the Server Component's output into the flight stream payload.
+> 3. Client Component renders the pre-computed Server Component slot without taking on client JS bundle weight.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [React Server Components (RSC)](rsc.md) — The server side of the boundary.
 - [Client Components (`"use client"`)](client_components.md) — The client side of the boundary.
 - [React Server Component Payload (RSC Payload)](../level_08/rsc_payload.md) — Related concept: React Server Component Payload (RSC Payload).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Network Boundary separates server-exclusive code from client-interactive code.
 - Mark the entry point of your client component tree with the `"use client"` directive.
 - All files imported by a `"use client"` component are bundled for the browser.

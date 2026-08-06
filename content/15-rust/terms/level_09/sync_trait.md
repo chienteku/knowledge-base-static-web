@@ -165,12 +165,15 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Throughput Telemetry System with Atomic `Sync` Guarantees
 
-**Problem:**  
+**Scenario:**  
 In a multi-threaded web server framework, worker threads concurrently record runtime metrics (request counts, error counters, and status updates) via shared references `&MetricsCollector`. Standard cell types like `RefCell<T>` cannot be shared across threads because `RefCell` does not implement `Sync`. 
 
 Implement a thread-safe telemetry collector `MetricsCollector` that uses atomic types (`AtomicU64`, `AtomicBool`) so that all fields automatically satisfy the compiler's `Sync` auto-trait requirement. Include methods `record_request(&self)`, `record_error(&self)`, `get_metrics(&self) -> (u64, u64)`, and `deactivate(&self)`. Write unit tests verifying that concurrent calls from 10 spawned threads accurately increment counters across shared references without data races or locking overhead.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 > use std::sync::Arc;
@@ -262,7 +265,8 @@ Implement a thread-safe telemetry collector `MetricsCollector` that uses atomic 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Auto-Trait Mechanics:** `MetricsCollector` contains `AtomicU64` and `AtomicBool`. Since all composite fields implement `Sync`, the compiler automatically derives `Sync` for `MetricsCollector`.
 > 2. **Shared Mutation (`&self`):** Atomic types provide lock-free interior mutability using CPU hardware atomic instructions (`fetch_add`, `store`, `load`). Because mutation occurs through immutable references `&self`, sharing `&MetricsCollector` across worker threads is completely thread-safe.
 > 3. **Validation:** `assert_sync::<MetricsCollector>()` statically verifies the trait bound `T: Sync`.
@@ -271,12 +275,15 @@ Implement a thread-safe telemetry collector `MetricsCollector` that uses atomic 
 
 ### Exercise 2: Concurrent Sharded In-Memory Cache with `RwLock` and `Sync` Bounds
 
-**Problem:**  
+**Scenario:**  
 In read-heavy application services, global locks create lock contention across worker threads. A common pattern is a sharded key-value cache `ShardedCache<K, V, const SHARDS: usize>`, where key-value entries are partitioned across an array of `RwLock<HashMap<K, V>>` shards.
 
 Implement a generic `ShardedCache<K, V, SHARDS>` struct that allows multiple concurrent readers to access different shards via `&ShardedCache`. Explain why `ShardedCache<K, V>` automatically implements `Sync` when `K: Send + Sync` and `V: Send + Sync`. Write a comprehensive unit test suite where 8 parallel threads concurrently read and write entries across shards, using `assert_eq!` to verify stored values and thread safety.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::hash_map::DefaultHasher;
 > use std::collections::HashMap;
@@ -359,7 +366,8 @@ Implement a generic `ShardedCache<K, V, SHARDS>` struct that allows multiple con
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Trait Derivation Requirements:** `RwLock<T>` is `Sync` if and only if `T: Send + Sync`. Because `HashMap<K, V>` stores `K` and `V`, `ShardedCache<K, V>` automatically inherits `Sync` whenever `K: Send + Sync` and `V: Send + Sync`.
 > 2. **Concurrent Reading:** Multiple threads hold immutable references `&ShardedCache` simultaneously. Inside `get()`, acquire `RwLock::read()` allows parallel concurrent read access across threads without exclusive locking.
 > 3. **Reduced Contention:** Partitioning data into `SHARDS` minimizes thread locking bottlenecks under high reader/writer concurrency.
@@ -368,12 +376,15 @@ Implement a generic `ShardedCache<K, V, SHARDS>` struct that allows multiple con
 
 ### Exercise 3: Manual `Sync` Implementation for an UnsafeCell Sequence Buffer
 
-**Problem:**  
+**Scenario:**  
 Rust's compiler automatically marks types containing `UnsafeCell<T>` as `!Sync` because `UnsafeCell` provides raw interior mutability without synchronization. However, low-level lock-free data structures can use `UnsafeCell` safely if thread synchronization is enforced via atomic operations and release/acquire memory orderings.
 
 Implement a fixed-capacity sequence buffer `AtomicSeqBuffer<T, const N: usize>` backed by `UnsafeCell`. Because `UnsafeCell` disables auto-derived `Sync`, explicitly write `unsafe impl<T: Send, const N: usize> Sync for AtomicSeqBuffer<T, N>`. Explain the exact safety invariants required for this `unsafe impl`. Write a unit test module testing multi-producer insertion across threads, validating index allocation, bounded slot checks (`matches!`), and element retrieval assertions.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::cell::UnsafeCell;
 > use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
@@ -483,7 +494,8 @@ Implement a fixed-capacity sequence buffer `AtomicSeqBuffer<T, const N: usize>` 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Why `UnsafeCell` Opts Out of `Sync`:** `UnsafeCell<T>` allows raw interior mutability (`*cell.get() = ...`) without compile-time aliasing checks. Hence, Rust marks it `!Sync` to prevent data races.
 > 2. **Safety Invariants for `unsafe impl Sync`:**
 >    - Unique index allocation via atomic `fetch_add` guarantees no two threads mutate the same slot.

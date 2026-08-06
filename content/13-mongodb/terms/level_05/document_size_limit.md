@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Constraint**
+
+**Core Concept** (16MB BSON Limit Boundary): The 16MB Document Size Limit is MongoDB's maximum allocation boundary per BSON document, preventing unbounded RAM consumption and network latency.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Hard-coded at the engine level. Applies to all documents written to collections, including system configuration settings and index keys payloads).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database systems, tables can theoretically hold massive amounts of columns and text content across multiple storage blocks.
@@ -73,7 +74,7 @@ If your application attempts to save a document that exceeds 16MB, the MongoDB d
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing binary files (such as high-res images, PDF documents, or audio clips) directly inside a document's binary field
 
@@ -121,71 +122,96 @@ Store array items in a separate collection or use Subset Pattern
 Store small documents directly inside standard BSON collections
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Size Constraint Audit
+### Exercise 1: Calculating Document Byte Sizes in mongosh
 
-**Problem:** You are reviewing a logging system design. A developer proposes this structure for tracking server health metrics:
-```json
-{
-  "server_name": "db-01",
-  "pings": [
-    { "timestamp": "10:00:00", "status": "online" },
-    // ... ping entries appended every 5 seconds forever
-  ]
-}
-```
-Explain why this design will eventually crash the database, and state how to fix it.
+**Scenario:**
+Inspect the current BSON byte size of a document in collection `users` to ensure it is comfortably below the 16MB limit.
 
-**Expected output:**
+**Requirements:**
+1. Use `Object.bsonsize(doc)` in `mongosh`.
+
 > [!check]- Answer
-> ```text
-> The design will crash because the `pings` array is unbounded and appends data every 5 seconds forever. 
-> Over time, the array will grow to millions of items, eventually exceeding the 16MB document size limit and throwing BSON size errors. 
-> To fix this, separate the pings into their own collection, storing the parent `server_id` inside each ping document (Child Referencing), or use the Bucket Pattern to split pings into fixed daily documents.
-> ```
-> - Evaluate the growth boundary of a 5-second interval log over months.
-> - Relate the crash back to the BSON maximum payload constraint.
-
----
-
-
-
-### Exercise 2: Document Size Validation in Code
-
-**Problem:** Check BSON size of document using `Object.bsonsize(doc)` before saving.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> if (Object.bsonsize(doc) > 16777216) throw new Error("Document exceeds 16MB limit");
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> if (Object.bsonsize(doc) > 16 * 1024 * 1024) {
->   throw new Error("Document exceeds 16MB limit");
-> }
+> const doc = db.users.findOne({ email: "alice@example.com" });
+> const bytes = Object.bsonsize(doc);
+> const megaBytes = (bytes / (1024 * 1024)).toFixed(2);
+> 
+> console.log(`Document Size: ${bytes} Bytes (${megaBytes} MB / 16 MB)`);
 > ```
 >
-> **Explanation:** `Object.bsonsize(doc)` calculates exact BSON byte sizes.
+> #### Technical Explanation
+>
+> 1. `Object.bsonsize(doc)` calculates exact binary byte footprints of BSON documents.
+> 2. Documents approaching 16MB indicate schema anti-patterns (unbounded array growth).
+> 3. Helps monitor collection schema health.
 
 ---
 
-### Exercise 3: GridFS Usage Threshold
+### Exercise 2: Refactoring Oversized Array Documents into References
 
-**Problem:** State threshold size for using GridFS instead of standard BSON documents (16MB).
+**Scenario:**
+Refactor a `company` document containing an embedded array of 100,000 `employees` that exceeds 16MB into a referenced model.
 
-**Expected output:**
+**Requirements:**
+1. Create `employees` collection with `companyId` reference.
+
 > [!check]- Answer
-> ```text
-> Files larger than 16MB threshold
-> ```
-> ```text
-> Files larger than 16MB threshold
+>
+> #### Implementation
+>
+> ```javascript
+> // Refactored schema: Move employees to separate collection
+> db.employees.insertOne({
+>   companyId: new ObjectId("60c72b2f9b1d8b2c88888880"),
+>   name: "Bob Jones",
+>   role: "Engineer"
+> });
+> 
+> db.employees.createIndex({ companyId: 1 });
 > ```
 >
-> **Explanation:** GridFS chunks binary files exceeding the 16MB document size limit.
+> #### Technical Explanation
+>
+> 1. Moving 1-to-many child entities to a separate collection resolves 16MB document size limits.
+> 2. Allows child entities to scale to billions of documents independently.
+> 3. Preserves fast indexing on foreign key `companyId`.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Handling Large Files with GridFS
+
+**Scenario:**
+Store 50MB PDF documents in MongoDB without breaching the 16MB BSON document limit using GridFS.
+
+**Requirements:**
+1. Explain how GridFS chunks large files across `fs.files` and `fs.chunks`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> GridFS Architecture:
+> - fs.files: Stores file metadata document (filename, length, chunkSize, uploadDate).
+> - fs.chunks: Stores file payload split into 255KB binary BSON chunk documents.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. GridFS splits files larger than 16MB into small 255KB chunk documents stored in `fs.chunks`.
+> 2. `fs.files` maintains parent metadata documents.
+> 3. Streams large binary files seamlessly without exceeding BSON size boundaries.
+
+---
+
+
+
+## 6. Related Terms
 
 - [BSON (Binary JSON)](../level_01/bson.md) — The binary format.
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The parent modeling rules.
@@ -198,7 +224,7 @@ Explain why this design will eventually crash the database, and state how to fix
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - MongoDB limits any single BSON document size to exactly 16 Megabytes.
 - Standardized to protect server RAM cache and prevent network bottlenecks.
 - Prevents expensive disk I/O rewrites during updates.

@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Runtime / Concurrency**: `tokio` is the de facto async runtime ecosystem for Rust. While the Rust standard library provides the `Future` trait and `async/await` syntax, it intentionally excludes an async runtime executor. `tokio` provides the multi-threaded work-stealing task scheduler, non-blocking I/O event reactor (epoll/kqueue/IOCP), and async networking primitives that power crates like `reqwest`, `axum`, `hyper`, and `tonic`.
+
+
+**Rust Ecosystem Library (asynchronous event loop runtime)**: `tokio` is the de facto async runtime ecosystem for Rust. While the Rust standard library provides the `Future` trait and `async/await` syntax, it intentionally excludes an async runtime executor. `tokio` provides the multi-threaded work-stealing task scheduler, non-blocking I/O event reactor (epoll/kqueue/IOCP), and async networking primitives that power crates like `reqwest`, `axum`, `hyper`, and `tonic`.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Server Ecosystem**: `tokio` underpins web servers, RPC frameworks, database drivers, microservices, and distributed streaming engines.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -83,7 +81,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Holding `std::sync::MutexGuard` Across `.await` Yield Points
+
+**The mistake:** Locking `std::sync::Mutex` and calling `.await` while holding the guard.
+
+**Why it's wrong:** Standard mutexes block the underlying OS thread, deadlocking Tokio worker pools and causing `!Send` future compiler errors.
+
+*Fix:* Use `tokio::sync::Mutex` when holding locks across yield points.
+
+### Mistake 3: Spawning Tasks Without Managing `JoinHandle` Panic / Cancellation Errors
+
+**The mistake:** Calling `tokio::spawn(async { ... })` and discarding the returned `JoinHandle`.
+
+**Why it's wrong:** If the spawned background task panics, the panic is swallowed silently without logging or alerting the parent application.
+
+*Fix:* Await `handle.await` and inspect `JoinError` to handle background panics cleanly.
+
 
 ### Mistake 1: Blocking the Tokio Worker Thread with Synchronous I/O or Heavy Loops
 
@@ -101,10 +115,10 @@ tokio::task::spawn_blocking(move || {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Bounded Concurrency Task Worker Pool with MPSC Channels
-**Problem:** In microservices architecture, processing bulk workloads (e.g., document indexing or outbound batch API notifications) concurrently can overwhelm downstream endpoints or saturate OS file descriptors. Implement a bounded task worker pool using Tokio's MPSC channel (`tokio::sync::mpsc`) and a concurrency-limiting `tokio::sync::Semaphore`.
+**Scenario:** In microservices architecture, processing bulk workloads (e.g., document indexing or outbound batch API notifications) concurrently can overwhelm downstream endpoints or saturate OS file descriptors. Implement a bounded task worker pool using Tokio's MPSC channel (`tokio::sync::mpsc`) and a concurrency-limiting `tokio::sync::Semaphore`.
 Your implementation must:
 1. Define a `Job` struct containing `id: u64` and `payload: String`.
 2. Define a `JobResult` struct containing `job_id: u64`, `worker_id: usize`, and `status: String`.
@@ -114,6 +128,9 @@ Your implementation must:
 6. Write a comprehensive unit test using `#[tokio::test]` with assertions verifying total processed job count, correct status formatting, and job ordering.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::Arc;
 > use tokio::sync::{mpsc, Semaphore};
@@ -247,7 +264,8 @@ Your implementation must:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`tokio::sync::mpsc` Channel:** Multi-producer single-consumer channel transfers tasks asynchronously from callers to workers.
 > 2. **`tokio::sync::Semaphore` Permits:** Enforces hard upper bounds on active concurrent processing tasks, preventing resource exhaustion under peak loads.
 > 3. **Channel Termination Protocol:** Dropping `job_tx` causes `recv().await` to return `None`, naturally terminating worker tasks without polling flags or manual cancellation tokens.
@@ -255,7 +273,7 @@ Your implementation must:
 ---
 
 ### Exercise 2: Resilient RPC Fetcher with Timeout and Fallback via `tokio::time::timeout`
-**Problem:** Distributed services calling upstream services or remote databases must handle latency spikes gracefully. Build a resilient async RPC client function using `tokio::time::timeout`.
+**Scenario:** Distributed services calling upstream services or remote databases must handle latency spikes gracefully. Build a resilient async RPC client function using `tokio::time::timeout`.
 Your implementation must:
 1. Define a `QueryResponse` enum representing `Success(String)`, `Fallback(String)`, or `TimedOut`.
 2. Implement `fetch_with_resilience` taking a primary async query closure, a fallback async query closure, and a timeout duration `deadline`.
@@ -265,6 +283,9 @@ Your implementation must:
 6. Write unit tests with `#[tokio::test]` asserting primary success, primary timeout leading to fallback success, and dual timeout failure.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use tokio::time::{sleep, Duration, timeout};
 > 
@@ -347,7 +368,8 @@ Your implementation must:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`tokio::time::timeout` Deadline Safety:** Wraps any `Future` with a time constraint. If the timer fires before the underlying `Future` resolves, Tokio drops the `Future`, immediately aborting pending operations.
 > 2. **Async Future Cancellation:** Tokio futures are lazy and state-machine-driven. Dropping an uncompleted future cleanly drops all internal task resources without leaks.
 > 3. **Higher-Order Async Closures:** Accepting `FnOnce() -> Future` avoids premature execution of fallback logic until primary failure occurs.
@@ -355,7 +377,7 @@ Your implementation must:
 ---
 
 ### Exercise 3: Offloading CPU Work & Broadcasting State via `spawn_blocking` and `watch` Channels
-**Problem:** In asynchronous network servers, performing intensive synchronous CPU tasks (such as password hashing or cryptography) on Tokio worker threads freezes the runtime and starves network I/O.
+**Scenario:** In asynchronous network servers, performing intensive synchronous CPU tasks (such as password hashing or cryptography) on Tokio worker threads freezes the runtime and starves network I/O.
 Implement a service where:
 1. Heavy CPU computation (hashing byte data) is safely offloaded to Tokio's dedicated blocking threadpool using `tokio::task::spawn_blocking`.
 2. Computation updates are published to subscriber tasks using a `tokio::sync::watch` channel (single producer, multi-subscriber).
@@ -363,6 +385,9 @@ Implement a service where:
 4. Write unit tests with `#[tokio::test]` verifying that blocking tasks resolve correctly off-worker threads and subscriber watch receivers receive updated values.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use tokio::sync::watch;
 > use tokio::task;
@@ -442,7 +467,8 @@ Implement a service where:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`tokio::task::spawn_blocking`:** Delegates CPU-bound or synchronous blocking tasks to a separate OS thread pool managed by Tokio, preserving reactor threads for non-blocking I/O.
 > 2. **`tokio::sync::watch` Channel:** Efficient single-producer, multi-consumer state broadcast channel where receivers observe state change notifications without queuing historical values.
 > 3. **`rx.changed().await` & `rx.borrow()`:** `changed()` yields asynchronously when a new value is sent, while `borrow()` provides zero-copy read access to the current shared state.

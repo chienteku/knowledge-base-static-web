@@ -155,9 +155,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Microservice Bootstrapping & Invariant-Guaranteed Configuration Engine
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In enterprise microservices, application startup relies on parsing both hardcoded system defaults (e.g., default loopback listener IP) and dynamic user configuration sources (e.g., environment variable maps). Using unannotated `.unwrap()` during initialization creates dangerous ambiguity: if static string parsing fails, diagnosing the build artifact failure is difficult without custom diagnostic context messages (`.expect()`). Conversely, runtime failures from missing user environment variables should use explicit non-panicking fallback strategies (`.unwrap_or_else()`, `.unwrap_or()`) or return domain-specific diagnostic errors.
 
+**Requirements:**
 Implement a generic `ConfigLoader` trait and a `ServerConfig` bootstrap builder that parses raw environment values:
 1. Implement static constant/hardcoded parsing using `.expect("INVARIANT_VIOLATION: ...")` with precise error messages explaining why the hardcoded value must parse successfully.
 2. Implement dynamic environment value retrieval with `.unwrap_or_else()` to supply calculated defaults when optional configuration variables are omitted.
@@ -305,10 +306,11 @@ Implement a generic `ConfigLoader` trait and a `ServerConfig` bootstrap builder 
 
 ### Exercise 2: High-Throughput Fixed-Capacity Invariant Buffer with Safe Unwrapping
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 High-performance telemetry pipelines often utilize a fixed-capacity ring buffer (`BoundedRingBuffer<T, const CAP: usize>`) to avoid dynamic heap allocations on every write. When popping items, internal index invariants (`count > 0`) ensure that slots populated prior to incrementing `tail` contain `Some(T)`.
 Direct indexing into an unvalidated slice risks out-of-bounds panics, whereas calling `.take()` on an `Option<T>` slot guarded by structural buffer invariants allows the buffer to extract the inner item using `.expect("INVARIANT_VIOLATION: Ring buffer count > 0 but slot contained None")`.
 
+**Requirements:**
 Implement a generic bounded ring buffer `BoundedRingBuffer<T, const CAP: usize>` that:
 1. Implements `push(&mut self, item: T) -> Result<(), BufferError>` returning an error if full.
 2. Implements `pop(&mut self) -> Result<T, BufferError>` using index arithmetic and `.take().expect("...")` on buffer slots, where `.expect()` documents the mathematical proof that the slot cannot be `None`.
@@ -465,10 +467,11 @@ Implement a generic bounded ring buffer `BoundedRingBuffer<T, const CAP: usize>`
 
 ### Exercise 3: Dynamic Microservice Plugin Registry with Dynamic Dispatch & Contract Enforcement
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 An enterprise API gateway handles HTTP requests through a pipeline of middleware filters (`RequestFilter` trait). The system registers mandatory core filters (e.g. `AuthGuardFilter`) and optional extension filters (e.g. `RateLimitFilter`).
 During application initialization, mandatory core filters are registered into a hash map indexed by filter name. During request processing, fetching a mandatory filter from the internal registry uses `.expect("FATAL_BOOTSTRAP_ERROR: Mandatory plugin 'auth_guard' missing from registry")` to enforce initialization invariants. Optional filters use `.get()` with safe `if let` handling.
 
+**Requirements:**
 Implement:
 1. A trait `RequestFilter: Send + Sync` with `fn filter_id(&self) -> &'static str` and `fn apply(&self, req: &mut RequestContext) -> Result<(), FilterError>`.
 2. A `GatewayPipeline` using trait objects (`Box<dyn RequestFilter>`) for dynamic dispatch.

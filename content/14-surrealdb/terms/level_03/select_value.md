@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (single-field value extraction clause)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the projection resolver layer. Bypasses JSON object serialization, returning raw primitive lists directly over network WebSockets).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard databases, executing a projection query always returns an array of structured documents:
@@ -92,7 +91,7 @@ SELECT VALUE age * 2 FROM user;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to select multiple comma-separated fields using the 'SELECT VALUE' syntax, expecting multiple arrays
 
@@ -149,64 +148,94 @@ SELECT VALUE id, name FROM user; // ❌ Select value expects a single expression
 SELECT VALUE { id: id, name: name } FROM user; // Wrap in single object expression
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Output Formatting Diagnostics
+### Exercise 1: Extracting Scalar Array Values
 
-**Problem:** You have a `members` table containing:
-`{ id: member:01, tags: ["active", "vip"] }`
-`{ id: member:02, tags: ["new"] }`
-Predict the exact JSON output returned by this query:
-`SELECT VALUE tags FROM members;`
+**Scenario:**
+A user notification service queries the raw string email address of user `user:alice` as a flat scalar string rather than a JSON object `{ email: "alice@example.com" }`.
 
-**Expected output:**
+**Requirements:**
+1. Create user `user:alice` with `email = "alice@example.com"`.
+2. Write a `SELECT VALUE email` query targeting `user:alice`.
+
 > [!check]- Answer
-> ```json
-> [
->   ["active", "vip"],
->   ["new"]
-> ]
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET email = "alice@example.com";
+> 
+> -- Extract raw scalar value string
+> SELECT VALUE email FROM user:alice;
+> -- Output: [ "alice@example.com" ]
 > ```
-> - Check if `SELECT VALUE` flattens inner array elements, or only removes the outer JSON keys.
-> - The return shape will be an array containing the direct values of the `tags` field.
+>
+> #### Technical Explanation
+>
+> 1. `SELECT VALUE field` unwraps the target property key, returning raw scalar values directly inside the result array.
+> 2. Eliminates object key wrappers (`{ email: "..." }`), simplifying SDK client value consumption.
+> 3. Useful for extracting list arrays of strings, numbers, or record IDs.
+
+---
+
+### Exercise 2: Extracting Single Field Arrays of Record IDs
+
+**Scenario:**
+An authorization check retrieves a flat array of group record links (`group:g1`, `group:g2`) assigned to user `user:alice`.
+
+**Requirements:**
+1. Create user `user:alice` with `groups = [group:g1, group:g2]`.
+2. Execute `SELECT VALUE groups FROM user:alice`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET groups = [group:g1, group:g2];
+> 
+> -- Extract flat array of record links
+> SELECT VALUE groups FROM user:alice;
+> -- Output: [ [ group:g1, group:g2 ] ]
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SELECT VALUE` on an array field extracts the underlying array payload without key nesting.
+> 2. Returns typed record link pointers directly to the caller.
+> 3. Ideal for passing array parameters directly into downstream subqueries.
+
+---
+
+### Exercise 3: Combining `SELECT VALUE` with `ONLY` Unwrapping
+
+**Scenario:**
+An API route fetches a single user's email address as a plain unboxed string `"alice@example.com"` (unwrapping both object key and result array).
+
+**Requirements:**
+1. Write a query combining `SELECT VALUE email FROM user:alice` with the `ONLY` modifier keyword.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT VALUE email FROM ONLY user:alice;
+> -- Output: "alice@example.com"  (completely unboxed scalar string!)
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combining `SELECT VALUE` with `ONLY` strips both the object key wrapper AND the outer result array wrapper.
+> 2. Returns a raw unboxed scalar value (`"alice@example.com"`) directly.
+> 3. Simplifies single-value API response generation in SDK applications.
 
 ---
 
 
 
-### Exercise 2: Flat Array Extraction with `SELECT VALUE`
-
-**Problem:** Extract flat array of all user email strings from `user` table using `SELECT VALUE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT VALUE email FROM user;
-> ```
-> ```surrealql
-> SELECT VALUE email FROM user;
-> ```
->
-> **Explanation:** `SELECT VALUE field` unwraps field values into a flat primitive array.
-
----
-
-### Exercise 3: Combining `ONLY` and `VALUE` for Single Scalar Returns
-
-**Problem:** Extract a single scalar email string from `user:alice` using `SELECT ONLY VALUE email FROM user:alice`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT ONLY VALUE email FROM user:alice;
-> ```
-> ```surrealql
-> SELECT ONLY VALUE email FROM user:alice;
-> ```
->
-> **Explanation:** `ONLY VALUE` returns a raw scalar primitive value without array or object wrappers.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`SELECT`](select.md) — The parent query statement.
 - [Array Functions (`array::*`)](../level_06/array_functions.md) — Manipulating lists.
@@ -215,7 +244,7 @@ Predict the exact JSON output returned by this query:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `SELECT VALUE` flattens query responses into a raw array of values.
 - Discards outer JSON key-value object wrappers (`{ key: value }`).
 - Saves network bandwidth by eliminating key names from the payload.

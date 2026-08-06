@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Query Language**
+
+**Core Concept** (Structured Query Language): SQL (Structured Query Language) is the domain-specific standard language for querying, manipulating, and administering relational databases.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Standardized by ANSI and ISO. Supported natively by PostgreSQL, MySQL, SQLite, Oracle, and SQL Server).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational databases store data in complex binary formats on the hard drive. 
@@ -78,7 +79,7 @@ SELECT * FROM users WHERE age >= 18;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting SQL queries to execute sequentially line-by-line
 
@@ -124,79 +125,108 @@ Use DDL for schema changes and DML for row data mutations
 Use standard ANSI SQL statements wherever applicable
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: JS to SQL Translation
+### Exercise 1: Composing Declarative SQL Data Retrieval Queries
 
-**Problem:** Translate the following JavaScript filtering code into a declarative SQL statement.
+**Scenario:**
+Write a SQL `SELECT` query retrieving active users registered in 2026, ordered by creation date descending.
 
-```javascript
-const activeProducts = [];
-for (let i = 0; i < items.length; i++) {
-  if (items[i].status === 'active' && items[i].price < 50) {
-    activeProducts.push({
-      title: items[i].name,
-      cost: items[i].price
-    });
-  }
+**Requirements:**
+1. Use `SELECT`, `FROM`, `WHERE`, `ORDER BY`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, username, email, created_at 
+> FROM users 
+> WHERE is_active = TRUE 
+>   AND created_at >= '2026-01-01' 
+> ORDER BY created_at DESC;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. SQL is a declarative language: you specify *what* data you need, and the PostgreSQL query engine plans *how* to fetch it.
+> 2. `WHERE` filters candidate rows based on boolean conditions.
+> 3. `ORDER BY created_at DESC` sorts output records descending.
+
+---
+
+### Exercise 2: Atomic Data Mutation with `INSERT`, `UPDATE`, `DELETE`
+
+**Scenario:**
+Demonstrate standard SQL DML operations: insert a user, update their email, and delete the user.
+
+**Requirements:**
+1. Write `INSERT`, `UPDATE`, and `DELETE` statements.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- 1. Insert
+> INSERT INTO users (username, email) VALUES ('carol', 'carol@example.com');
+> 
+> -- 2. Update
+> UPDATE users SET email = 'carol_new@example.com' WHERE username = 'carol';
+> 
+> -- 3. Delete
+> DELETE FROM users WHERE username = 'carol';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INSERT`, `UPDATE`, and `DELETE` comprise the Data Manipulation Language (DML) subset of SQL.
+> 2. Executes atomic record modifications adhering to table integrity constraints.
+> 3. Underpins backend application CRUD APIs.
+
+---
+
+### Exercise 3: Parameterized SQL Execution in Node.js
+
+**Scenario:**
+Execute a parameterized SQL query in Node.js using `pg` to prevent SQL Injection vulnerabilities.
+
+**Requirements:**
+1. Use `$1`, `$2` parameter placeholders.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { pool } from "./db";
+
+export async function findUserByEmail(email: string) {
+  const text = "SELECT id, username, email FROM users WHERE email = $1";
+  const values = [email];
+  const res = await pool.query(text, values);
+  return res.rows[0];
 }
 ```
 
-**Expected output:**
-> [!check]- Answer
-> ```sql
-> SELECT name AS title, price AS cost 
-> FROM items 
-> WHERE status = 'active' AND price < 50;
-> ```
-> - Translate array name `items` to table name `FROM items`.
-> - Convert filter criteria inside the `if` block to `WHERE` conditions.
-> - Map the output object keys (`title`, `cost`) using column renaming commands (`AS`).
+> #### Technical Explanation
+>
+> 1. Parameterized queries (`$1`, `$2`) send SQL code and user parameter values separately to the database server.
+> 2. Prevents malicious SQL input strings from altering query syntax trees (SQL Injection prevention).
+> 3. Essential security pattern in database programming.
 
 ---
 
 
 
-### Exercise 2: SQL Sub-Language Categories
-
-**Problem:** Categorize statements: 1. `CREATE TABLE` (DDL), 2. `SELECT` (DQL), 3. `UPDATE` (DML), 4. `GRANT` (DCL).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. DDL, 2. DQL, 3. DML, 4. DCL
-> ```
-> ```text
-> 1. DDL, 2. DQL, 3. DML, 4. DCL
-> ```
->
-> **Explanation:** SQL is divided into Data Definition (DDL), Query (DQL), Manipulation (DML), and Control (DCL).
-
----
-
-### Exercise 3: ANSI SQL Standard Compliance
-
-**Problem:** Why is PostgreSQL renowned among relational databases? (Strict ANSI-SQL standards compliance and feature richness).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Strict compliance with ANSI-SQL standards and enterprise reliability
-> ```
-> ```text
-> Strict compliance with ANSI-SQL standards and enterprise reliability
-> ```
->
-> **Explanation:** PostgreSQL enforces strict SQL standard specifications.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Database](database.md) — The query target.
 - [`CREATE TABLE` / `DROP TABLE`](create_drop_table.md) — Core SQL DDL statements.
 - [Relational Database](relational_database.md) — Related concept: Relational Database.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SQL is the standard language for communicating with relational databases.
 - It is declarative: you define what data you want, not how to retrieve it.
 - DDL manages schemas and tables; DML manages row entries.

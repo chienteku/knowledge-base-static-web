@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DML Statement**
+
+**SQL Command / Clause** (Outer & Complete Joins): `RIGHT JOIN` preserves all rows from the right table, while `FULL OUTER JOIN` preserves all rows from both tables regardless of match state.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (Fully supported. The PostgreSQL query planner translates outer joins using hash tables or merge indexes to locate unmatched keys on both sides).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We have learned how `LEFT JOIN` preserves all rows in the first table. 
@@ -91,7 +92,7 @@ FULL OUTER JOIN projects ON departments.id = projects.dept_id;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing RIGHT JOINs when a LEFT JOIN would be easier to read
 
@@ -119,6 +120,8 @@ LEFT JOIN orders AS o ON c.id = o.customer_id;
 
 
 
+
+
 ### Mistake 2: Overusing `RIGHT JOIN` When `LEFT JOIN` Is Clearer and More Idiomatic
 
 **The mistake:** Writing `SELECT * FROM orders o RIGHT JOIN users u ON o.user_id = u.id;`.
@@ -134,6 +137,8 @@ SELECT * FROM orders o RIGHT JOIN users u ON o.user_id = u.id; -- Confusing read
 ```sql
 SELECT * FROM users u LEFT JOIN orders o ON u.id = o.user_id; -- Idiomatic LEFT JOIN
 ```
+
+
 
 ### Mistake 3: Confusing `FULL OUTER JOIN` with `INNER JOIN` Logic
 
@@ -153,99 +158,106 @@ SELECT * FROM table_a INNER JOIN table_b ON ...;
 
 
 
-### Mistake 4: Overusing `RIGHT JOIN` When `LEFT JOIN` Is Clearer and More Idiomatic
+## 5. Practice Exercises
 
-**The mistake:** Writing `SELECT * FROM orders o RIGHT JOIN users u ON o.user_id = u.id;`.
+### Exercise 1: Full Outer Join Operations
 
-**Why it's wrong:** `RIGHT JOIN` reverses table reading order, making SQL queries hard to read. Rewrite as `FROM users u LEFT JOIN orders o ON u.id = o.user_id` for clarity.
+**Scenario:**
+Perform a `FULL OUTER JOIN` between `employees` and `departments` to list all employees and all departments, including un-matched rows on both sides.
 
-*Incorrect:*
-```sql
-SELECT * FROM orders o RIGHT JOIN users u ON o.user_id = u.id; -- Confusing reading order
-```
+**Requirements:**
+1. Execute `SELECT e.name, d.name FROM employees e FULL OUTER JOIN departments d ON e.dept_id = d.id`.
 
-*Fix:*
-```sql
-SELECT * FROM users u LEFT JOIN orders o ON u.id = o.user_id; -- Idiomatic LEFT JOIN
-```
-
-### Mistake 5: Confusing `FULL OUTER JOIN` with `INNER JOIN` Logic
-
-**The mistake:** Using `FULL OUTER JOIN` expecting it to return ONLY rows present in both tables.
-
-**Why it's wrong:** `FULL OUTER JOIN` returns ALL rows from BOTH tables, filling unmatched columns with NULLs. Use `INNER JOIN` for matching rows only.
-
-*Incorrect:*
-```sql
-SELECT * FROM table_a FULL JOIN table_b ON ...; -- Returns all unmatched rows from both sides!
-```
-
-*Fix:*
-```sql
-SELECT * FROM table_a INNER JOIN table_b ON ...;
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: System Gap Audit
-
-**Problem:** You have a `users` table and a `laptops` table (columns: `id`, `serial_number`, `assigned_user_id` references `users(id)`). Some users don't have laptops, and some laptop assets sit in the storage closet assigned to no one. Write a SQL query using `FULL OUTER JOIN` to show the names of all users and serial numbers of all laptops.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT users.username, laptops.serial_number 
-> FROM users
-> FULL OUTER JOIN laptops ON users.id = laptops.assigned_user_id;
+> SELECT 
+>   e.name AS employee_name, 
+>   d.name AS department_name 
+> FROM employees AS e 
+> FULL OUTER JOIN departments AS d ON e.dept_id = d.id;
 > ```
-> - A full outer join merges all rows from both tables.
-> - Align the child foreign key `laptops.assigned_user_id` to the parent primary key `users.id`.
+>
+> #### Technical Explanation
+>
+> 1. `FULL OUTER JOIN` combines `LEFT JOIN` and `RIGHT JOIN` semantics.
+> 2. Returns matched rows + un-matched employees (with `NULL` department) + un-matched departments (with `NULL` employee).
+> 3. Complete outer join coverage.
+
+---
+
+### Exercise 2: Converting RIGHT JOIN to Idiomatic LEFT JOIN
+
+**Scenario:**
+Refactor a `RIGHT JOIN` query into an equivalent idiomatic `LEFT JOIN` query for code readability.
+
+**Requirements:**
+1. Reverse table order in `FROM` clause and swap `RIGHT JOIN` to `LEFT JOIN`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- ❌ Un-idiomatic RIGHT JOIN
+> -- SELECT e.name, d.name FROM employees e RIGHT JOIN departments d ON e.dept_id = d.id;
+> 
+> -- ✅ Idiomatic LEFT JOIN equivalent
+> SELECT 
+>   e.name AS employee_name, 
+>   d.name AS department_name 
+> FROM departments AS d 
+> LEFT JOIN employees AS e ON d.id = e.dept_id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `RIGHT JOIN` preserves all rows from the right table.
+> 2. Reversing table order in `FROM` allows rewriting any `RIGHT JOIN` as a clearer `LEFT JOIN`.
+> 3. SQL style guideline: Standardize on `LEFT JOIN`.
+
+---
+
+### Exercise 3: Isolating Symmetric Disjoint Sets with FULL JOIN
+
+**Scenario:**
+Find rows that exist in `Table A` OR `Table B`, but NOT in both (Symmetric Difference).
+
+**Requirements:**
+1. Execute `FULL JOIN` with `WHERE a.id IS NULL OR b.id IS NULL`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   a.id AS a_id, 
+>   b.id AS b_id 
+> FROM table_a AS a 
+> FULL OUTER JOIN table_b AS b ON a.id = b.id 
+> WHERE a.id IS NULL OR b.id IS NULL;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `WHERE a.id IS NULL OR b.id IS NULL` filters out matching intersection rows.
+> 2. Returns only rows unique to `Table A` or unique to `Table B`.
+> 3. Data reconciliation pattern.
 
 ---
 
 
 
-### Exercise 2: FULL OUTER JOIN for Data Reconciliation
-
-**Problem:** Perform `FULL OUTER JOIN` between `system_a` and `system_b` to identify unmatched records on both sides.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT a.id AS a_id, b.id AS b_id FROM system_a a FULL OUTER JOIN system_b b ON a.id = b.id;
-> ```
-> ```sql
-> SELECT a.id AS a_id, b.id AS b_id
-> FROM system_a a
-> FULL OUTER JOIN system_b b ON a.id = b.id;
-> ```
->
-> **Explanation:** `FULL OUTER JOIN` returns all matched and unmatched rows from both tables.
-
----
-
-### Exercise 3: Rewriting RIGHT JOIN as LEFT JOIN
-
-**Problem:** Rewrite `SELECT * FROM b RIGHT JOIN a ON b.id = a.b_id` using `LEFT JOIN`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM a LEFT JOIN b ON a.b_id = b.id;
-> ```
-> ```sql
-> SELECT * FROM a LEFT JOIN b ON a.b_id = b.id;
-> ```
->
-> **Explanation:** Swapping table positions converts `RIGHT JOIN` into idiomatic `LEFT JOIN`.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`LEFT JOIN` (`LEFT OUTER JOIN`)](left_join.md) — The left-side master default.
 - [`INNER JOIN`](inner_join.md) — The intersection-only match.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `RIGHT JOIN` retains all rows from the second table (rarely used in practice).
 - `FULL OUTER JOIN` retains all rows from both tables, listing unmatched elements.
 - Swapping table positions lets you replace `RIGHT JOIN` with readable `LEFT JOIN` queries.

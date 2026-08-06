@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Routing**
+
+**Routing & Layouts** (Catch-All Dynamic Route Resolution): Catch-all segments (`[...slug]`) match multiple nested URL path segments into an array of parameter strings.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A standard Dynamic Route like `app/docs/[slug]/page.tsx` matches exactly one URL segment. It will match `/docs/intro`. But it will **fail** to match `/docs/intro/advanced/setup`.
@@ -56,7 +57,7 @@ If you want the route to catch the root `/docs` path AS WELL as the nested paths
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Typing `params.slug` as a string
 
@@ -112,78 +113,135 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Handling the array
+### Exercise 1: Handling Multi-Segment Docs Paths with `[...slug]`
 
-**Problem:** You have a route `app/store/[...filters]/page.tsx`. A user visits `/store/shoes/nike/red`. How would you extract "shoes" as the category, and the rest of the array elements as tags, using JavaScript destructuring?
+**Scenario:**
+Create `app/docs/[...slug]/page.tsx` parsing multi-segment documentation paths (`/docs/v2/getting-started/installation`).
 
-**Expected output:**
+**Requirements:**
+1. Access `params.slug` array prop in async Server Component.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> export default function Store({ params }: { params: { filters: string[] } }) {
->   // Using array destructuring and the REST operator!
->   const [category, ...tags] = params.filters;
->   
->   console.log(category); // "shoes"
->   console.log(tags);     // ["nike", "red"]
-> }
-> ```
-> - Combine your knowledge of Next.js routing with your JS Level 4 knowledge!
+> // app/docs/[...slug]/page.tsx
+> export default async function DocsPage({
+>   params
+> }: {
+>   params: Promise<{ slug: string[] }>;
+> }) {
+>   const { slug } = await params;
+
+  return (
+    <main className="p-6">
+      <h1 className="text-2xl font-bold">Documentation Path</h1>
+      <p>Segments: {slug.join(" / ")}</p>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Catch-all folder syntax `[...slug]` matches all subsequent nested path segments into an array of strings.
+> 2. Accessing `/docs/a/b/c` resolves `params.slug` as `['a', 'b', 'c']`.
+> 3. Standard directory structure for CMS documentation systems.
 
 ---
 
-### Exercise 2: Catch-All Parameter Array Resolution
+### Exercise 2: Generating Static Parameters for Catch-All Routes
 
-**Problem:** Given route `app/shop/[[...slug]]/page.tsx`, resolve `params.slug` value for:
-1. `/shop` 
-2. `/shop/clothing` 
-3. `/shop/clothing/tops/shirts` 
+**Scenario:**
+Prerender nested documentation paths at build time using `generateStaticParams()`.
 
-**Expected output:**
+**Requirements:**
+1. Return array of `{ slug: string[] }` objects.
+
 > [!check]- Answer
-> ```text
-> 1. undefined (or empty array)
-> 2. ['clothing']
-> 3. ['clothing', 'tops', 'shirts']
-> ```
-> - Optional catch-all `[[...slug]]` resolves root as `undefined`.
-> 
-> ```text
-> 1. /shop -> undefined
-> 2. /shop/clothing -> ['clothing']
-> 3. /shop/clothing/tops/shirts -> ['clothing', 'tops', 'shirts']
-> ```
-
----
-
-### Exercise 3: Catch-All Route Definition
-
-**Problem:** Write `PageProps` TypeScript type for optional catch-all segment `[[...slug]]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> interface PageProps { params: { slug?: string[] }; }
-> ```
-> - Optional catch-all `slug` parameter is typed as `string[] | undefined`.
-> 
-> ```typescript
-> interface PageProps {
->   params: { slug?: string[] };
+>
+> #### Implementation
+>
+> ```tsx
+> export async function generateStaticParams() {
+>   return [
+>     { slug: ["v1", "overview"] },
+>     { slug: ["v2", "installation"] },
+>     { slug: ["v2", "config", "advanced"] }
+>   ];
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. For catch-all routes, `generateStaticParams()` returns arrays of string segments for each `slug`.
+> 2. Next.js prerenders static HTML for each nested route path during build compilation.
+> 3. Enables static site generation (SSG) performance for multi-tiered docs.
 
 ---
 
-## 7. Related Terms
+### Exercise 3: Fallback Breadcrumb Generation
+
+**Scenario:**
+Generate breadcrumb navigation links dynamically from `params.slug` segments.
+
+**Requirements:**
+1. Map over `slug` array to construct href strings.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> import Link from "next/link";
+
+export default async function BreadcrumbDocs({
+  params
+}: {
+  params: Promise<{ slug: string[] }>;
+}) {
+  const { slug } = await params;
+  let currentPath = "/docs";
+
+  return (
+    <nav className="flex gap-2 text-sm text-gray-600">
+      <Link href="/docs">Docs</Link>
+      {slug.map((segment) => {
+        currentPath += `/${segment}`;
+        return (
+          <span key={currentPath}>
+            / <Link href={currentPath}>{segment}</Link>
+          </span>
+        );
+      })}
+    </nav>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Iterating over `params.slug` allows programmatically reconstructing nested URL paths.
+> 2. Generates server-rendered breadcrumb links without client-side DOM parsing.
+> 3. Idiomatic catch-all route component implementation.
+
+---
+
+
+
+
+---
+
+## 6. Related Terms
 - [Route Groups (`(group)`)](route_groups.md) — Another special folder naming convention that modifies routing behavior.
 - [JavaScript Rest Parameters (`...`)](rest_parameters.md) — Related concept: JavaScript Rest Parameters (`...`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Catch-all Segments (`[...slug]`)** allow a single folder to match URLs with infinite nested slashes (e.g., `/a/b/c/d`).
 - The `params` prop receives an **Array of strings**, split by the slashes.
 - To make the route also match the root path without any parameters (e.g., `/a`), use the **Optional Catch-all** syntax: `[[...slug]]`.

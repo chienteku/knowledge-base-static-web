@@ -183,7 +183,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Single-Threaded Production Query Engine LRU Cache using `RefCell` and `Cell`
 
-**Problem:** You are building a high-throughput, single-threaded query caching wrapper for a read-heavy service interface defined as `pub trait QueryEngine { fn query(&self, key: &str) -> Option<String>; }`. Because the trait interface requires an immutable shared reference (`&self`), directly mutating internal cache data structures causes compile failures under Rust's aliasing XOR mutability rules.
+**Scenario:** You are building a high-throughput, single-threaded query caching wrapper for a read-heavy service interface defined as `pub trait QueryEngine { fn query(&self, key: &str) -> Option<String>; }`. Because the trait interface requires an immutable shared reference (`&self`), directly mutating internal cache data structures causes compile failures under Rust's aliasing XOR mutability rules.
 
 Implement `CachedQueryEngine` wrapping a `Box<dyn QueryEngine>` with the following requirements:
 1. Track overall cache performance metrics `hit_count: Cell<u64>` and `miss_count: Cell<u64>` (using `Cell<T>` for lightweight, zero-overhead primitive mutability without dynamic borrow checks).
@@ -340,7 +340,7 @@ Implement `CachedQueryEngine` wrapping a `Box<dyn QueryEngine>` with the followi
 
 ### Exercise 2: Multi-Threaded Reactive Event Bus with Listener Metrics using `Arc`, `RwLock`, and `Mutex`
 
-**Problem:** In a multi-threaded telemetry pipeline or event-driven server architecture, event dispatchers pass event references to listeners registered across shared threads. The event bus interface enforces shared read-only dispatching via `&self`:
+**Scenario:** In a multi-threaded telemetry pipeline or event-driven server architecture, event dispatchers pass event references to listeners registered across shared threads. The event bus interface enforces shared read-only dispatching via `&self`:
 ```rust
 pub trait EventHandler: Send + Sync {
     fn handle_event(&self, topic: &str, payload: &str);
@@ -475,7 +475,7 @@ Construct a thread-safe event routing pipeline with thread-safe interior mutabil
 
 ### Exercise 3: Hierarchical Graph Component Tree with Parent/Child Links using `Rc<RefCell<Node>>` & `Weak<RefCell<Node>>`
 
-**Problem:** UI scene graphs and graph structures require parent-child relationship tracking where parents own children, and children maintain references back to their parents. Shared ownership and cyclic references in Rust present ownership challenges: standard references require explicit lifetimes, while strong `Rc` loops prevent memory from being deallocated.
+**Scenario:** UI scene graphs and graph structures require parent-child relationship tracking where parents own children, and children maintain references back to their parents. Shared ownership and cyclic references in Rust present ownership challenges: standard references require explicit lifetimes, while strong `Rc` loops prevent memory from being deallocated.
 
 Build a doubly-linked tree node hierarchy utilizing interior mutability:
 1. Define `GraphNode` containing:

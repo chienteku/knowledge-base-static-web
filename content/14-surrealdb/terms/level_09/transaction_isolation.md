@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Internals & Concurrency**
+
+
+**Performance / Operations (ACID transaction isolation level guarantees)**: - **Database Internals & Concurrency**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Storage Engine & MVCC Layer** (Evaluates read snapshots and write conflict detection across single-node and distributed TiKV clusters).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When hundreds of concurrent requests read and update the database at the same time, database engines must prevent anomaly bugs:
@@ -82,7 +81,7 @@ async function transferFundsWithRetry(fromId, toId, amount, maxRetries = 3) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming Blocking Row Locks instead of Optimistic Concurrency Control
 
@@ -142,85 +141,100 @@ Implement exponential backoff retry loops for transactional database operations
 
 
 
-### Mistake 4: Assuming Long-Running Interactive Transactions Do Not Hold Lock Contention in High-Concurrency Systems
 
-**The mistake:** Holding open transactional blocks while performing slow external network API calls.
 
-**Why it's wrong:** Holding open transactions locks underlying storage resources, leading to transaction conflict retries and timeouts under high concurrency. Keep transactions short.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-BEGIN TRANSACTION;
--- Slow external API call ...
-COMMIT TRANSACTION;
-```
+### Exercise 1: ACID Transaction Isolation Execution
 
-*Fix:*
-```surrealql
-// Perform API call first, then run fast atomic database transaction block
-```
+**Scenario:**
+Demonstrate executing multiple mutations inside an ACID transaction block using `BEGIN TRANSACTION` and `COMMIT TRANSACTION`.
 
-### Mistake 5: Ignoring Transaction Conflict Retry Errors in High-Write TiKV Clusters
-
-**The mistake:** Executing concurrent transactions without handling optimistic concurrency control (OCC) conflict retries.
-
-**Why it's wrong:** Distributed storage engines (TiKV) use optimistic concurrency control. Conflicting concurrent transactions must be retried by application code.
-
-*Incorrect:*
-```surrealql
--- Un-handled OCC transaction conflict
-```
-
-*Fix:*
-```surrealql
-Implement exponential backoff retry loops for transactional database operations
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Identify Isolation Level
-What isolation level does SurrealDB provide by default for transaction execution?
+**Requirements:**
+1. Begin transaction block.
+2. Deduct `$amount` from `account:a1` and credit `$amount` to `account:a2`.
+3. Commit transaction.
 
 > [!check]- Answer
-> - SurrealDB implements Snapshot Isolation via MVCC (Multi-Version Concurrency Control).
+>
+> #### Implementation
+>
+> ```surrealql
+> BEGIN TRANSACTION;
+> 
+> UPDATE account:a1 SET balance -= 100.00dec;
+> UPDATE account:a2 SET balance += 100.00dec;
+> 
+> COMMIT TRANSACTION;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `BEGIN TRANSACTION` opens an isolated ACID transaction block.
+> 2. All statements execute atomically: either all mutations commit together, or none do.
+> 3. Prevents dirty reads and partial account updates in concurrent financial workloads.
+
+---
+
+### Exercise 2: Transaction Rollbacks on Exception Errors
+
+**Scenario:**
+Demonstrate that a transaction automatically rolls back all mutations if an error occurs prior to `COMMIT TRANSACTION`.
+
+**Requirements:**
+1. Begin transaction, perform an update, throw an exception, commit transaction.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> BEGIN TRANSACTION;
+> 
+> UPDATE account:a1 SET balance -= 100.00dec;
+> THROW "Simulated transfer error!";
+> 
+> COMMIT TRANSACTION;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. If an error or `THROW` occurs inside a transaction block, SurrealDB aborts execution.
+> 2. Rolls back all uncommitted mutations automatically.
+> 3. Guarantees database state consistency.
+
+---
+
+### Exercise 3: Comparing Transaction Isolation in Single-Node vs Distributed TiKV
+
+**Scenario:**
+Explain how transaction isolation operates in single-node storage engines (`file://`) vs distributed cluster backends (`tikv://`).
+
+**Requirements:**
+1. Describe how TiKV provides distributed ACID transactions.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Single-Node (file:// / SurrealKV): Uses local MVCC key-value storage engine transaction locks.
+> Distributed (tikv://): Delegates multi-region ACID transactions to TiKV's 2-Phase Commit (2PC) and Raft consensus protocols.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. SurrealDB decouples transaction parsing from storage engine transaction execution.
+> 2. `tikv://` provides distributed multi-master ACID transactions across server clusters.
+> 3. Guarantees linearizable transaction isolation in cloud deployments.
 
 ---
 
 
 
-### Exercise 2: SurrealDB Transaction Guarantees
 
-**Problem:** State ACID transaction guarantees provided by SurrealDB (Atomic, Consistent, Isolated, Durable).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Full ACID transaction guarantees
-> ```
-> ```text
-> Full ACID transaction guarantees
-> ```
->
-> **Explanation:** SurrealDB executes transactional query blocks with strict ACID guarantees.
-
----
-
-### Exercise 3: Optimistic Concurrency Control (OCC) Handling
-
-**Problem:** Why should transactional writes be kept short in distributed clusters? (Minimizes OCC lock contention and transaction abort retries).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Minimizes OCC lock contention and transaction abort retries
-> ```
-> ```text
-> Minimizes OCC lock contention and transaction abort retries
-> ```
->
-> **Explanation:** Short transactions reduce write conflict probability in concurrent storage engines.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Transactions (`BEGIN` / `COMMIT` / `CANCEL`)](transactions.md) — Transaction commands.
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — Single-node and distributed storage backends.
@@ -228,7 +242,7 @@ What isolation level does SurrealDB provide by default for transaction execution
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SurrealDB uses Snapshot Isolation built on Multi-Version Concurrency Control (MVCC).
 - Reads see a consistent snapshot; reads and writes do not block each other.
 - Concurrent write conflicts are detected at commit time, requiring clean client retry patterns.

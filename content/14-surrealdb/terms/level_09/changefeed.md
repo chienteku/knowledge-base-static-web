@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Data Persistence & Audit**
+
+
+**Advanced Feature (table level mutation changefeed stream)**: - **Data Persistence & Audit**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Storage Layer** (Stores historical version deltas on disk alongside primary table records).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional databases, tracking historical record changes requires building complex custom trigger systems, audit log tables, or setting up external CDC (Change Data Capture) pipelines like Debezium or Kafka.
@@ -57,7 +56,7 @@ INFO FOR TABLE financial_ledger;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting Unreasonably Long Changefeed Retention on High-Write Tables
 
@@ -116,84 +115,88 @@ DEFINE TABLE log CHANGEFEED 24h; // Sufficient retention window
 
 
 
-### Mistake 4: Executing `SHOW CHANGES` on Tables Without `CHANGEFEED` Definitions
 
-**The mistake:** Running `SHOW CHANGES FOR TABLE user SINCE 1;` when `CHANGEFEED` was never defined on `user`.
 
-**Why it's wrong:** Change feeds must be explicitly enabled using `DEFINE TABLE user CHANGEFEED 7d;` before change history can be recorded or queried.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-SHOW CHANGES FOR TABLE user SINCE 1; // ❌ Fails if CHANGEFEED is disabled!
-```
+### Exercise 1: Enabling Table Changefeeds with Retention
 
-*Fix:*
-```surrealql
-DEFINE TABLE user CHANGEFEED 7d;
-SHOW CHANGES FOR TABLE user SINCE d"2026-01-01T00:00:00Z";
-```
+**Scenario:**
+An event-driven microservice architecture requires real-time delta tracking for table `order` with a 7-day change history retention window.
 
-### Mistake 5: Configuring Insufficient Changefeed Retention Windows for High-Volume Systems
-
-**The mistake:** Setting `CHANGEFEED 1h` when sync consumers poll every 6 hours.
-
-**Why it's wrong:** Data mutations older than the retention window (`1h`) are pruned, causing consumers to miss historical sync changes. Align retention duration with consumer polling intervals.
-
-*Incorrect:*
-```surrealql
-DEFINE TABLE log CHANGEFEED 1h; // ❌ Pruned before 6h sync run!
-```
-
-*Fix:*
-```surrealql
-DEFINE TABLE log CHANGEFEED 24h; // Sufficient retention window
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Define Changefeed Table
-Write a `DEFINE TABLE` statement for a `user_profile` table with `SCHEMAFULL` mode and a 14-day (`14d`) changefeed retention duration.
+**Requirements:**
+1. Define table `order` in `SCHEMAFULL` mode.
+2. Enable changefeed streaming with retention `7d`.
 
 > [!check]- Answer
-> - Combine `DEFINE TABLE user_profile SCHEMAFULL CHANGEFEED 14d;`.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE order SCHEMAFULL CHANGEFEED 7d;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `CHANGEFEED <duration>` enables transaction log change tracking for table mutations.
+> 2. `7d` retains mutation history deltas for 7 days before garbage collection.
+> 3. Underpins real-time live query subscriptions and Change Data Capture (CDC) pipelines.
+
+---
+
+### Exercise 2: Inspecting Historical Table Mutations with `SHOW CHANGES`
+
+**Scenario:**
+An audit service streams all mutation changes for table `order` recorded since a target timestamp `d"2026-08-01T00:00:00Z"`.
+
+**Requirements:**
+1. Execute `SHOW CHANGES FOR TABLE order SINCE d"2026-08-01T00:00:00Z"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SHOW CHANGES FOR TABLE order SINCE d"2026-08-01T00:00:00Z";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SHOW CHANGES FOR TABLE` outputs an array of historical mutation events (`CREATE`, `UPDATE`, `DELETE`).
+> 2. `SINCE` filters changes recorded after a specific timestamp or version sequence number.
+> 3. Replaces external CDC tools (Debezium/Kafka) with native database change inspection.
+
+---
+
+### Exercise 3: Changefeed Version Sequence Syncing
+
+**Scenario:**
+An offline sync client resumes streaming table changes starting from version sequence number `150`.
+
+**Requirements:**
+1. Execute `SHOW CHANGES FOR TABLE order SINCE 150`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SHOW CHANGES FOR TABLE order SINCE 150;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Sequence numbers provide deterministic offsets for changefeed event consumption.
+> 2. Guarantees exactly-once delta processing for disconnected clients.
+> 3. Enables reliable offline-first database synchronization protocols.
 
 ---
 
 
 
-### Exercise 2: Defining Changefeed with Retention
 
-**Problem:** Define table `product` with a 14-day changefeed retention window.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE TABLE product CHANGEFEED 14d;
-> ```
-> ```surrealql
-> DEFINE TABLE product CHANGEFEED 14d;
-> ```
->
-> **Explanation:** `CHANGEFEED duration` maintains historical delta feeds for offline consumers.
-
----
-
-### Exercise 3: Streaming Changefeed Deltas
-
-**Problem:** Query changefeed for `product` table since timestamp `$last_sync`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SHOW CHANGES FOR TABLE product SINCE $last_sync;
-> ```
-> ```surrealql
-> SHOW CHANGES FOR TABLE product SINCE $last_sync;
-> ```
->
-> **Explanation:** `SHOW CHANGES FOR TABLE ... SINCE` retrieves record mutation history.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`SHOW CHANGES FOR TABLE ... SINCE ...`](show_changes.md) — Querying recorded changefeed logs.
 - [`DEFINE EVENT`](define_event.md) — Real-time server-side triggers.
@@ -201,7 +204,7 @@ Write a `DEFINE TABLE` statement for a `user_profile` table with `SCHEMAFULL` mo
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `CHANGEFEED` logs historical creates, updates, and deletes at the table level.
 - Retention is configured per table using duration strings (e.g. `1h`, `7d`, `30d`).
 - Enables native audit logging, historical replay, and catch-up data synchronization.

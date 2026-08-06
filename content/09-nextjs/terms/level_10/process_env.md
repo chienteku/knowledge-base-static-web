@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Configuration**
+
+**Security & Middleware** (Node.js Process Environment Storage): `process.env` accesses environment variables inside Node.js server runtimes, Server Components, and Server Actions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (Operating system environment variables are restricted strictly to server execution; they are invisible to browser runtimes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Applications require configuration settings that change based on where they run:
@@ -62,7 +63,7 @@ Next.js builds on top of this system by parsing local `.env` files (like `.env.l
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Committing local configuration files containing secrets to version control (Git)
 
@@ -116,81 +117,109 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL; // Access full path directly
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Validate Required Environment Keys
+### Exercise 1: Accessing Server-Side Environment Variables
 
-**Problem:** Complete the function below to check if the `STRIPE_SECRET_KEY` environment variable is defined. If it is missing, throw an error. If it exists, return it:
+**Scenario:**
+Read a private database connection string inside a Server Component using `process.env`.
 
-```typescript
-// lib/payments.ts
-// Solution:
-export function getStripeKey(): string {
-  const key = process.env.STRIPE_SECRET_KEY;
-  
-  if (!key) {
-    throw new Error("Missing STRIPE_SECRET_KEY in environment variables!");
-  }
-  
-  return key;
+**Requirements:**
+1. Access `process.env.DATABASE_URL`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> export default async function ServerDbView() {
+>   const dbUrl = process.env.DATABASE_URL;
+
+  return (
+    <div>
+      <p>Database Status: {dbUrl ? "Connected" : "Not Configured"}</p>
+    </div>
+  );
 }
 ```
 
-> [!check]- Answer
-> - Access the variable via `process.env.STRIPE_SECRET_KEY` and check if it has a truthy value.
+> #### Technical Explanation
+>
+> 1. `process.env` properties without `NEXT_PUBLIC_` prefix are available ONLY in Node.js server execution environments.
+> 2. Never bundled into client JavaScript assets.
+> 3. Standard Node.js environment variable access pattern.
 
 ---
 
-### Exercise 2: process.env Client vs Server Matrix
+### Exercise 2: Inspecting Node Environment Modes (`process.env.NODE_ENV`)
 
-**Problem:** Which environment variables are accessible in:
-1. Server Components
-2. Client Components
+**Scenario:**
+Branch application logic depending on whether `process.env.NODE_ENV` is `'development'`, `'test'`, or `'production'`.
 
-**Expected output:**
+**Requirements:**
+1. Check `process.env.NODE_ENV`.
+
 > [!check]- Answer
-> ```text
-> 1. Server Components: ALL process.env variables (private and public)
-> 2. Client Components: ONLY variables prefixed with NEXT_PUBLIC_
-> ```
-> - Server: Accesses all environment variables.
-> - Client: Accesses ONLY `NEXT_PUBLIC_` variables.
-> 
-> ```text
-> Server = All vars; Client = NEXT_PUBLIC_ vars only.
-> ```
-
----
-
-### Exercise 3: process.env.NODE_ENV Values
-
-**Problem:** List the 3 standard values `process.env.NODE_ENV` takes in Next.js applications.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. 'development' (npm run dev)
-> 2. 'production' (npm run start / build)
-> 3. 'test' (vitest / jest)
-> ```
-> - `development`, `production`, `test`.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> if (process.env.NODE_ENV === 'production') {
->   // Production only logic
+> export function getLogLevel() {
+>   if (process.env.NODE_ENV === "development") {
+>     return "debug";
+>   }
+>   return "error";
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. Next.js automatically sets `process.env.NODE_ENV` based on the active command (`next dev` vs `next build`).
+> 2. Allows toggling debug logging and development tools conditionally.
+> 3. Standard Node.js environment mode flag.
 
 ---
 
-## 7. Related Terms
+### Exercise 3: Auditing Inlined Client Environment Variables
+
+**Scenario:**
+Explain why `console.log(process.env)` in a Client Component outputs an empty object `{}` while `console.log(process.env.NEXT_PUBLIC_KEY)` outputs the string value.
+
+**Requirements:**
+1. Detail build-time string replacement behavior.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Client Environment Inlining Mechanics:
+> - Next.js compiler replaces exact occurrences of process.env.NEXT_PUBLIC_* with string literals at build time!
+> - Source code: console.log(process.env.NEXT_PUBLIC_KEY)
+> - Compiled bundle: console.log("pk_test_12345")
+> - Accessing full process.env object in client JS returns {} because the global process object does not exist in browsers!
+> ```
+
+> #### Technical Explanation
+>
+> 1. Browsers do not possess a native Node.js `process.env` runtime object.
+> 2. Next.js statically inlines `NEXT_PUBLIC_` variables during compilation.
+> 3. Always reference specific keys (`process.env.NEXT_PUBLIC_KEY`) directly.
+
+---
+
+
+
+
+---
+
+## 6. Related Terms
 - [Environment Variables (`.env.local`)](environment_variables.md) — Next.js's implementation of this concept.
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The backend engine exposing the `process` global.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Environment Variables keep app configurations separate from source code.
 - Node.js accesses these variables via the global `process.env` object.
 - Secrets remain server-side and are never exposed to the client by default.

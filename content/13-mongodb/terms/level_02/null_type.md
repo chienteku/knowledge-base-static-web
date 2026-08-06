@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Data Type**
+
+**Core Concept** (Missing/Empty Value BSON Type): The Null BSON data type represents missing, unassigned, or explicitly empty field values within MongoDB documents.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported natively in JSON, JavaScript, and BSON. Query engines parse nulls using index filters, but carry specialized rules for field existence).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational databases, when a row has no data for an attribute:
@@ -84,7 +85,7 @@ db.users.find({ middle_name: { $exists: false } });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing explicit 'null' fields in documents out of SQL habit
 
@@ -135,57 +136,90 @@ db.users.find({ middleName: { $type: "null" } }); // Matches ONLY explicit BSON 
 { name: "Alice" } // Omit optional keys to save BSON space
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Missing Field Isolation
+### Exercise 1: Querying Null vs Missing Fields
 
-**Problem:** You have a `products` collection. Write the query to select all products that are missing the `discount_rate` field entirely (meaning the field does not exist).
+**Scenario:**
+Query collection `users` for documents where field `middleName` is explicitly set to `null`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$type: "null"` to distinguish explicit `null` from missing fields.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.find({ discount_rate: { $exists: false } });
+> db.users.find({
+>   middleName: { $type: "null" }
+> });
 > ```
-> - Use the query operator `$exists`.
-> - Pass the boolean value `false` to the operator to select non-existent keys.
+>
+> #### Technical Explanation
+>
+> 1. `{ middleName: null }` matches BOTH documents where `middleName` is `null` AND documents where `middleName` does not exist.
+> 2. `{ middleName: { $type: "null" } }` strictly matches documents with explicit `null` values.
+> 3. Essential distinction in flexible schema query modeling.
+
+---
+
+### Exercise 2: Finding Missing Fields with `$exists`
+
+**Scenario:**
+Query documents where optional field `phoneNumber` is completely missing from the document.
+
+**Requirements:**
+1. Use `{ phoneNumber: { $exists: false } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   phoneNumber: { $exists: false }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$exists: false` matches documents where the key is absent.
+> 2. Ignores documents containing `phoneNumber: null`.
+> 3. Used to find legacy documents missing newly added schema properties.
+
+---
+
+### Exercise 3: Setting Fields to Null with `$set`
+
+**Scenario:**
+Set a user's `temporaryCode` field to `null` to indicate the code has expired.
+
+**Requirements:**
+1. Execute `updateOne()` with `$set: { temporaryCode: null }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { $set: { temporaryCode: null } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$set: { field: null }` explicitly writes a BSON Null type (Type 10).
+> 2. Preserves field key existence while marking value as empty.
+> 3. Contrast with `$unset` which completely deletes the field key.
 
 ---
 
 
 
-### Exercise 2: Explicit Null Type Matching with `$type`
-
-**Problem:** Query documents where `bio` is explicitly assigned BSON `null` using `{ $type: "null" }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ bio: { $type: "null" } });
-> ```
-> ```javascript
-> db.users.find({ bio: { $type: "null" } });
-> ```
->
-> **Explanation:** `{ $type: "null" }` matches explicit BSON null values while ignoring missing fields.
-
----
-
-### Exercise 3: Finding Missing Fields with `$exists`
-
-**Problem:** Query documents where `deletedAt` field is absent (`$exists: false`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ deletedAt: { $exists: false } });
-> ```
-> ```javascript
-> db.users.find({ deletedAt: { $exists: false } });
-> ```
->
-> **Explanation:** `{ $exists: false }` checks whether a field key is absent from target documents.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent BSON types.
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The concept of dynamic layouts.
@@ -194,7 +228,7 @@ db.users.find({ middleName: { $type: "null" } }); // Matches ONLY explicit BSON 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - BSON Null represents an intentionally empty value.
 - SQL requires NULL placeholders; MongoDB allows omitting fields entirely.
 - Defaulting to field omission saves disk space and simplifies documents.

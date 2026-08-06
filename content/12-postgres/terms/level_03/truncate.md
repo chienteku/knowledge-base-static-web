@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DDL Statement**
+
+**SQL Command / Clause** (Fast Table De-Allocation Command): `TRUNCATE` de-allocates all table data pages instantly without scanning individual rows under MVCC.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DDL** (Requires an `ACCESS EXCLUSIVE` lock on the table. Immediately reclaims physical disk storage space by bypassing write-ahead logging (WAL) for individual rows).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you have a log table containing 20 million entries, and you want to empty it completely, you might run:
@@ -88,7 +89,7 @@ TRUNCATE TABLE import_buffer RESTART IDENTITY;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use a WHERE clause with TRUNCATE
 
@@ -134,65 +135,89 @@ TRUNCATE TABLE users CASCADE; -- Truncates target and dependent child tables
 TRUNCATE is fully transactional in PostgreSQL and can be rolled back inside BEGIN...ROLLBACK
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Clean Script Refactor
+### Exercise 1: Fast Table De-Allocation with TRUNCATE
 
-**Problem:** You are writing an automated seeding script for a database containing 5 million rows of test users. The script currently runs:
-`DELETE FROM test_users;`
-It takes over 2 minutes to execute, slowing down your deployment pipeline. Refactor the script to make it complete in milliseconds, and ensure the auto-increment ID counter starts back at 1.
+**Scenario:**
+Clear all data rows from a 10,000,000 row log table `temp_logs` instantly.
 
-**Expected output:**
+**Requirements:**
+1. Execute `TRUNCATE TABLE temp_logs`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> TRUNCATE TABLE test_users RESTART IDENTITY;
+> TRUNCATE TABLE temp_logs;
 > ```
-> - Replace DML delete loops with DDL file resets.
-> - Append the identity reset parameter.
+>
+> #### Technical Explanation
+>
+> 1. `TRUNCATE` de-allocates underlying table data files instantly without scanning individual rows under MVCC.
+> 2. Orders of magnitude faster than `DELETE FROM` on large tables.
+> 3. Requires `TRUNCATE` table privileges.
+
+---
+
+### Exercise 2: Resetting Identity Sequences During Truncation
+
+**Scenario:**
+Truncate a staging table `test_items` and reset its auto-incrementing identity sequence back to 1.
+
+**Requirements:**
+1. Execute `TRUNCATE TABLE test_items RESTART IDENTITY`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> TRUNCATE TABLE test_items RESTART IDENTITY;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `RESTART IDENTITY` resets identity sequence generators back to their initial starting value (1).
+> 2. `CONTINUE IDENTITY` (default) preserves sequence counters.
+> 3. Essential for resetting test databases between test runs.
+
+---
+
+### Exercise 3: Truncating Cascading Dependent Tables
+
+**Scenario:**
+Truncate parent table `categories` and all child tables referencing it using `CASCADE`.
+
+**Requirements:**
+1. Execute `TRUNCATE TABLE categories CASCADE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> TRUNCATE TABLE categories CASCADE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `CASCADE` automatically truncates all tables holding foreign key references to the target table.
+> 2. Operates quickly across whole table structures.
+> 3. Use with caution.
 
 ---
 
 
 
-### Exercise 2: Truncating Table and Restarting Sequences
-
-**Problem:** Truncate `logs` table and reset identity sequence numbers using `RESTART IDENTITY`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> TRUNCATE TABLE logs RESTART IDENTITY;
-> ```
-> ```sql
-> TRUNCATE TABLE logs RESTART IDENTITY;
-> ```
->
-> **Explanation:** `RESTART IDENTITY` resets underlying auto-increment sequence generators to 1.
-
----
-
-### Exercise 3: TRUNCATE vs DELETE Comparison
-
-**Problem:** Why is `TRUNCATE` faster than `DELETE FROM table` for wiping tables? (Re-allocates table storage files directly instead of scanning and deleting row tuples).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Re-allocates storage files directly instead of logging individual row tuple deletions
-> ```
-> ```text
-> Re-allocates storage files directly instead of logging individual row tuple deletions
-> ```
->
-> **Explanation:** `TRUNCATE` is a fast DDL operation that drops physical data pages.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`DELETE`](delete.md) — The DML row-filtering deletion command.
 - [`CREATE TABLE` / `DROP TABLE`](../level_01/create_drop_table.md) — Managing table lifecycles.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `TRUNCATE` is a high-speed DDL command used to completely empty a table.
 - Operates on the physical file system, deleting table files and creating fresh ones.
 - Runs in milliseconds, regardless of table row size.

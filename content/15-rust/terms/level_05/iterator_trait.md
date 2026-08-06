@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Functional Trait**: `std::iter::Iterator` is Rust's foundational trait for lazy sequence processing. It defines an interface for consuming items sequentially (`.next()`) and provides over 70 default adaptor methods (`.map()`, `.filter()`, `.take()`, `.fold()`, `.collect()`) that allow declarative, zero-cost data processing pipelines.
+
+
+**Rust Core Trait (lazy sequence processing abstraction)**: `std::iter::Iterator` is Rust's foundational trait for lazy sequence processing. It defines an interface for consuming items sequentially (`.next()`) and provides over 70 default adaptor methods (`.map()`, `.filter()`, `.take()`, `.fold()`, `.collect()`) that allow declarative, zero-cost data processing pipelines.
 
 ---
 

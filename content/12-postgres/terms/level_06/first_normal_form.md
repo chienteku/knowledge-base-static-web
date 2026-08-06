@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Schema Design** (Atomic Value Normalization): First Normal Form (1NF) requires each column to store atomic (indivisible) scalar values and eliminates repeating groups.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (The absolute baseline requirement for any table to be considered a valid relational table in SQL).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In legacy spreadsheets, developers often save time by stuffing lists of values into a single cell. For example, a `users` table:
@@ -91,7 +92,7 @@ CREATE TABLE article_tags (
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing lists of IDs or tags as comma-separated strings to "avoid creating a new table"
 
@@ -137,72 +138,100 @@ CREATE TABLE users ( phone1 TEXT, phone2 TEXT, phone3 TEXT ); -- ❌ Repeating g
 CREATE TABLE user_phones ( user_id INT REFERENCES users(id), phone TEXT );
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Repeating Columns Refactor
+### Exercise 1: Refactoring Un-Atomic Delimited String Columns into 1NF
 
-**Problem:** You have a table that violates 1NF:
-`employee_projects (emp_id, emp_name, project_1, project_2, project_3)`
-Write the SQL DDL queries to normalize this schema into 1NF.
+**Scenario:**
+Refactor an un-atomic legacy table `users` storing comma-separated phones (`'555-1234, 555-5678'`) to satisfy First Normal Form (1NF).
 
-**Expected output:**
+**Requirements:**
+1. Create normalized `user_phones` child table.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE employees (
->   emp_id INT PRIMARY KEY,
->   emp_name VARCHAR(100) NOT NULL
+> -- ❌ Un-atomic 1NF Violation
+> -- CREATE TABLE legacy_users (id INT, name TEXT, phones TEXT); -- Stores '555-1111, 555-2222'
+> 
+> -- ✅ 1NF Compliant Schema
+> CREATE TABLE users (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   name TEXT NOT NULL
 > );
 > 
-> CREATE TABLE employee_project_links (
->   emp_id INT REFERENCES employees(emp_id),
->   project_name VARCHAR(100),
->   PRIMARY KEY (emp_id, project_name)
-> );
-> ```
-> - Remove repeating columns (`project_1`, `project_2`) and store projects as rows in a separate link table.
-> - Define a composite primary key on the link table to ensure row uniqueness.
-
----
-
-
-
-### Exercise 2: Normalizing Non-Atomic CSV String Column into 1NF
-
-**Problem:** Convert non-atomic `users (id, phones_csv)` into 1NF schema using child table `user_phones`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TABLE user_phones ( user_id INT REFERENCES users(id), phone TEXT, PRIMARY KEY (user_id, phone) );
-> ```
-> ```sql
 > CREATE TABLE user_phones (
->   user_id INT REFERENCES users(id),
->   phone TEXT,
->   PRIMARY KEY (user_id, phone)
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+>   phone_number TEXT NOT NULL
 > );
 > ```
 >
-> **Explanation:** Moving non-atomic values into a child table satisfies 1NF atomic value requirements.
+> #### Technical Explanation
+>
+> 1. 1NF requires each column to store atomic (indivisible) scalar values.
+> 2. Comma-separated strings violate 1NF because multiple data elements inhabit a single cell.
+> 3. Moving multi-value attributes into a child table enables fast SQL filtering and indexing.
 
 ---
 
-### Exercise 3: 1NF Rules Summary
+### Exercise 2: Eliminating Repeating Field Columns
 
-**Problem:** List 2 primary rules of First Normal Form (1. Each column contains atomic single values; 2. No repeating column groups).
+**Scenario:**
+Refactor a table storing repeating columns (`phone1`, `phone2`, `phone3`) into 1NF.
 
-**Expected output:**
+**Requirements:**
+1. Explain why repeating columns violate 1NF and migrate to child table.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. Columns contain atomic single values; 2. No repeating column groups
-> ```
-> ```text
-> 1. Columns contain atomic single values; 2. No repeating column groups
+> 1NF Repeating Column Analysis:
+> - Columns 'phone1', 'phone2', 'phone3' limit users to exactly 3 phone numbers and waste storage with NULLs.
+> - Querying "find user by phone number" requires checking 3 separate OR conditions.
+> - 1NF Solution: Store all phone numbers as distinct rows in a 'user_phones' child table.
 > ```
 >
-> **Explanation:** 1NF ensures basic structural regularity across relational tables.
+> #### Technical Explanation
+>
+> 1. Repeating group columns create fixed limits and require complex multi-column `OR` queries.
+> 2. Normalizing to 1NF allows users to have 0 to N phone numbers flexibly.
+> 3. Fundamental rule of relational schema design.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Validating Unique Row Identification
+
+**Scenario:**
+Ensure a table has a primary key or unique constraint to guarantee distinct row identification (1NF requirement).
+
+**Requirements:**
+1. Add `id GENERATED ALWAYS AS IDENTITY PRIMARY KEY`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TABLE legacy_logs 
+> ADD COLUMN id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. 1NF requires that every table row can be uniquely identified.
+> 2. Adding a surrogate primary key guarantees row uniqueness.
+> 3. Enforces 1NF compliance.
+
+---
+
+
+
+## 6. Related Terms
 - [Normalization](normalization.md) — The parent process.
 - [Second Normal Form (2NF)](second_normal_form.md) — Eliminating partial key dependencies.
 - [`ARRAY` Type](array_type.md) — Related concept: `ARRAY` Type.
@@ -210,7 +239,7 @@ Write the SQL DDL queries to normalize this schema into 1NF.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - First Normal Form (1NF) is the baseline standard for relational database tables.
 - Requires all column cell values to be atomic (indivisible).
 - Forbids storing lists, arrays, or comma-separated strings inside a single cell.

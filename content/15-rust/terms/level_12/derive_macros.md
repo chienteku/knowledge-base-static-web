@@ -17,17 +17,15 @@
 
 ## 2. Term Category
 
-**Syntax / Language Feature**: Derive Macros are the most widely used category of procedural macros in Rust. Applied via the built-in `#[derive(TraitName)]` attribute, derive macros inspect the syntax definition of a `struct`, `enum`, or `union`, and append *additional* Rust code (typically `impl Trait for MyStruct` blocks) without modifying or destroying the target item itself.
+
+
+**Rust Procedural Macro (custom #[derive] trait code generator)**: Derive Macros are the most widely used category of procedural macros in Rust. Applied via the built-in `#[derive(TraitName)]` attribute, derive macros inspect the syntax definition of a `struct`, `enum`, or `union`, and append *additional* Rust code (typically `impl Trait for MyStruct` blocks) without modifying or destroying the target item itself.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust (Compile-time Generation)**: Derive macros run on the host compiler during `rustc` compilation. Standard library built-in derives include `#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]`. Ecosystem crates provide custom derives such as `serde` (`#[derive(Serialize, Deserialize)]`), `clap` (`#[derive(Parser)]`), and `thiserror` (`#[derive(Error)]`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -118,7 +116,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to Derive Traits on Unsupported Types (e.g. Fn pointers or Trait Objects)
 
@@ -193,11 +191,11 @@ pub fn derive_trait(input: TokenStream) -> TokenStream { ... }
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Embedded Telemetry Derive Macro with Helper Attributes
 
-**Problem:** In embedded IoT devices and industrial telemetry systems (`#![no_std]`), sensor metrics (e.g. voltage, temperature, error counts) are collected in domain structs. Manually writing diagnostic serialization logic for dozens of telemetry structs is tedious and error-prone.
+**Scenario:** In embedded IoT devices and industrial telemetry systems (`#![no_std]`), sensor metrics (e.g. voltage, temperature, error counts) are collected in domain structs. Manually writing diagnostic serialization logic for dozens of telemetry structs is tedious and error-prone.
 Implement the core procedural macro transformation logic for a custom derive macro `#[derive(EmbeddedTelemetry)]` with a field-level helper attribute `#[telemetry(skip)]`.
 
 The generated `EmbeddedTelemetry` trait implementation must:
@@ -209,6 +207,9 @@ The generated `EmbeddedTelemetry` trait implementation must:
 Write a complete, compilable-style Rust module containing the trait definition, AST generator function (`generate_embedded_telemetry_derive`), a concrete telemetry struct, and a unit test suite with assertions (`assert_eq!`, `assert!`) verifying macro token expansion, field skipping, and buffer output formatting.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use proc_macro2::TokenStream;
 > use quote::quote;
@@ -385,7 +386,8 @@ Write a complete, compilable-style Rust module containing the trait definition, 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **AST Struct Verification**: The derive logic matches on `syn::Data::Struct` and `syn::Fields::Named` to confirm target compatibility before code generation.
 > 2. **Helper Attribute Inspection (`attributes(telemetry)`)**: Iterating over `field.attrs` checks for `#[telemetry(skip)]` attributes, allowing field-level filtering at compile time.
 > 3. **Quasi-Quoting Repetition (`quote!`)**: The `#(#field_writers)*` macro repetition syntax appends field formatting logic into a single companion `impl EmbeddedTelemetry for Struct` block.
@@ -395,7 +397,7 @@ Write a complete, compilable-style Rust module containing the trait definition, 
 
 ### Exercise 2: Auto-Deriving Hardware Register Bit Pattern Conversion Traits
 
-**Problem:** Bare-metal microcontroller peripheral drivers (`#![no_std]`) handle hardware status registers returning byte codes (e.g. `0x00` = OK, `0x01` = Timeout, `0x02` = Overcurrent, `0x03` = BusError). Writing manual `TryFrom<u8>` and `From<Enum>` bitwise parsing for dozens of register enums causes boilerplate duplication.
+**Scenario:** Bare-metal microcontroller peripheral drivers (`#![no_std]`) handle hardware status registers returning byte codes (e.g. `0x00` = OK, `0x01` = Timeout, `0x02` = Overcurrent, `0x03` = BusError). Writing manual `TryFrom<u8>` and `From<Enum>` bitwise parsing for dozens of register enums causes boilerplate duplication.
 Implement the procedural derive macro builder `generate_enum_register_converter` for `#[derive(EnumRegisterConverter)]`.
 
 The derive macro must:
@@ -407,6 +409,9 @@ The derive macro must:
 Write a complete, compilable-style Rust module containing the derive AST builder, custom conversion error type, concrete runtime enum test fixture, and unit tests with assertions (`assert_eq!`, `assert!`, `matches!`) validating trait code generation, round-trip conversions, unrecognized byte errors, and struct rejection.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use proc_macro2::TokenStream;
 > use quote::quote;
@@ -580,7 +585,8 @@ Write a complete, compilable-style Rust module containing the derive AST builder
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Enum AST Parsing via `syn::Data::Enum`**: The macro filters for `Data::Enum`, iterating through `data_enum.variants` to discover variant names and explicit/implicit discriminant integers.
 > 2. **Discriminant Extraction**: Checking `variant.discriminant` allows parsing explicit values (such as `= 0x10`) using `Lit::Int::base10_parse::<u8>()` or falling back to auto-incrementing counters.
 > 3. **Generating Standard Library Trait Implementations**: Deriving `TryFrom<u8>` and `From<Enum> for u8` provides type-safe, zero-cost conversion between hardware byte registers and Rust domain enums.
@@ -588,7 +594,7 @@ Write a complete, compilable-style Rust module containing the derive AST builder
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Procedural Macros](procedural_macros.md) — The parent compile-time metaprogramming system.
@@ -599,7 +605,134 @@ Write a complete, compilable-style Rust module containing the derive AST builder
 
 ---
 
-## 8. Key Takeaways
+
+
+---
+
+### Exercise 3: Auto-Deriving SQL Table Builder Traits (`#[derive(TableBuilder)]`)
+
+**Scenario:**
+In enterprise database ORM frameworks, domain model structs map to relational database tables. Manually writing SQL column lists, insert statements, and positional parameters for dozens of database entities leads to boilerplate duplication and schema mismatches.
+
+Implement a procedural derive macro generator `generate_table_builder_derive` for `#[derive(TableBuilder)]`.
+
+The macro must:
+1. Extract the struct name and map it to a table name (lowercase string).
+2. Extract field names and generate a static method `fn column_names() -> &'static [&'static str]`.
+3. Generate a method `fn sql_insert_query(&self) -> String` that constructs a parameterized SQL statement (e.g. `INSERT INTO table (col1, col2) VALUES ($1, $2)`).
+4. Include unit tests in `#[cfg(test)] mod tests` asserting table name mapping, column list generation, and parameterized SQL query formatting.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use proc_macro2::TokenStream;
+> use quote::quote;
+> use syn::{parse_str, Data, DeriveInput, Fields};
+> 
+> pub trait TableBuilder {
+>     fn table_name() -> &'static str;
+>     fn column_names() -> &'static [&'static str];
+>     fn sql_insert_query(&self) -> String;
+> }
+> 
+> pub fn generate_table_builder_derive(input_ast: &DeriveInput) -> Result<TokenStream, syn::Error> {
+>     let struct_name = &input_ast.ident;
+>     let table_name_str = struct_name.to_string().to_lowercase();
+> 
+>     let fields = match &input_ast.data {
+>         Data::Struct(data_struct) => match &data_struct.fields {
+>             Fields::Named(fields_named) => &fields_named.named,
+>             _ => {
+>                 return Err(syn::Error::new_spanned(
+>                     input_ast,
+>                     "#[derive(TableBuilder)] requires named fields",
+>                 ))
+>             }
+>         },
+>         _ => {
+>             return Err(syn::Error::new_spanned(
+>                 input_ast,
+>                 "#[derive(TableBuilder)] can only be applied to structs",
+>             ))
+>         }
+>     };
+> 
+>     let col_names: Vec<String> = fields
+>         .iter()
+>         .map(|f| f.ident.as_ref().unwrap().to_string())
+>         .collect();
+
+>     let placeholders: Vec<String> = (1..=col_names.len())
+>         .map(|idx| format!("${idx}"))
+>         .collect();
+
+>     let cols_joined = col_names.join(", ");
+>     let placeholders_joined = placeholders.join(", ");
+> 
+>     let insert_query_fmt = format!(
+>         "INSERT INTO {table_name_str} ({cols_joined}) VALUES ({placeholders_joined})"
+>     );
+> 
+>     let expanded = quote! {
+>         impl TableBuilder for #struct_name {
+>             fn table_name() -> &'static str {
+>                 #table_name_str
+>             }
+> 
+>             fn column_names() -> &'static [&'static str] {
+>                 &[ #(#col_names),* ]
+>             }
+> 
+>             fn sql_insert_query(&self) -> String {
+>                 #insert_query_fmt.to_string()
+>             }
+>         }
+>     };
+> 
+>     Ok(expanded)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_table_builder_derive() {
+>         let source = r#"
+>             #[derive(TableBuilder)]
+>             struct UserAccount {
+>                 user_id: u64,
+>                 email: String,
+>                 is_active: bool,
+>             }
+>         "#;
+> 
+>         let ast: DeriveInput = parse_str(source).unwrap();
+>         let tokens = generate_table_builder_derive(&ast).unwrap();
+>         let code = tokens.to_string();
+> 
+>         assert!(code.contains("impl TableBuilder for UserAccount"));
+>         assert!(code.contains(""useraccount""));
+>         assert!(code.contains(""user_id""));
+>         assert!(code.contains(""email""));
+>         assert!(code.contains(""is_active""));
+>         assert!(code.contains("INSERT INTO useraccount (user_id, email, is_active) VALUES ($1, $2, $3)"));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **AST Struct Introspection**: The derive generator extracts `struct_name` and named fields from `syn::DeriveInput` at compile time.
+> 2. **Parameterized Query Generation**: Positional placeholder strings (`$1, $2, $3`) are constructed during macro expansion, eliminating runtime query formatting overhead.
+> 3. **Static Metadata**: Column names are generated as a static string array (`&'static [&'static str]`), allowing zero-allocation schema inspection.
+
+
+---
+
+## 7. Key Takeaways
 
 - Derive Macros (`#[proc_macro_derive]`) generate companion code (such as `impl Trait`) via the `#[derive(...)]` attribute.
 - They are strictly **append-only** and non-destructive: the original struct, enum, or union definition remains unchanged.

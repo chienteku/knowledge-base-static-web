@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**CRUD Operation** (Document Update Methods): Update operations (updateOne(), updateMany()) modify specified fields across matching collection documents.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executed inside `mongosh` or through drivers. Requires using specialized BSON update operators (like `$set`) to perform partial modifications on disk blocks).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In application logic, data is dynamic:
@@ -81,7 +82,7 @@ db.users.updateMany(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the update operator ($set) inside the update parameter document
 
@@ -105,6 +106,8 @@ db.users.updateOne({ _id: 1 }, { $set: { status: "active" } });
 
 
 
+
+
 ### Mistake 2: Omitting Update Operators (`$set`, `$inc`) in `updateOne()` Calls
 
 **The mistake:** Executing `db.users.updateOne({ _id: id }, { name: "Alice" })`.
@@ -120,6 +123,8 @@ db.users.updateOne({ _id: id }, { name: "Alice" }); // ❌ Missing $set operator
 ```javascript
 db.users.updateOne({ _id: id }, { $set: { name: "Alice" } });
 ```
+
+
 
 ### Mistake 3: Executing `updateMany()` Without Filter Predicates in Production
 
@@ -139,100 +144,102 @@ db.users.updateMany({ active: false }, { $set: { verified: false } });
 
 
 
-### Mistake 4: Omitting Update Operators (`$set`, `$inc`) in `updateOne()` Calls
+## 5. Practice Exercises
 
-**The mistake:** Executing `db.users.updateOne({ _id: id }, { name: "Alice" })`.
+### Exercise 1: Single Document Field Update with `updateOne`
 
-**Why it's wrong:** In MongoDB drivers, update documents MUST contain update operators (`$set`, `$inc`, `$push`). Passing plain objects throws an error.
+**Scenario:**
+Update user `user:alice`'s account status to `"verified"` and set `verifiedAt` timestamp.
 
-*Incorrect:*
-```javascript
-db.users.updateOne({ _id: id }, { name: "Alice" }); // ❌ Missing $set operator!
-```
+**Requirements:**
+1. Execute `updateOne({ email: "alice@example.com" }, { $set: ... })`.
 
-*Fix:*
-```javascript
-db.users.updateOne({ _id: id }, { $set: { name: "Alice" } });
-```
-
-### Mistake 5: Executing `updateMany()` Without Filter Predicates in Production
-
-**The mistake:** Running `db.users.updateMany({}, { $set: { verified: false } })`.
-
-**Why it's wrong:** Passing an empty filter `{}` updates EVERY document in the collection.
-
-*Incorrect:*
-```javascript
-db.users.updateMany({}, { $set: { verified: false } }); // 💥 Mutates ALL users!
-```
-
-*Fix:*
-```javascript
-db.users.updateMany({ active: false }, { $set: { verified: false } });
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Bulk Update Query
-
-**Problem:** You have an `inventory` collection. Write the MongoDB query to update all documents where the `qty` is exactly `0`, setting their `status` field to the string `"out_of_stock"`.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.inventory.updateMany(
->   { qty: 0 },
->   { $set: { status: "out_of_stock" } }
+> const result = db.users.updateOne(
+>   { email: "alice@example.com" },
+>   {
+>     $set: {
+>       status: "verified",
+>       verifiedAt: new Date()
+>     }
+>   }
 > );
+> console.log("Matched:", result.matchedCount, "Modified:", result.modifiedCount);
 > ```
-> - Choose the bulk modification method `updateMany`.
-> - Use the `$set` update operator to declare the field changes.
+>
+> #### Technical Explanation
+>
+> 1. `updateOne()` modifies at most one matching document.
+> 2. `$set` updates specified field values atomically.
+> 3. Returns `matchedCount` and `modifiedCount`.
+
+---
+
+### Exercise 2: Multi-Document Mass Update with `updateMany`
+
+**Scenario:**
+Mark all pending orders created over 7 days ago as `"expired"`.
+
+**Requirements:**
+1. Execute `updateMany({ status: "pending", createdAt: { $lt: sevenDaysAgo } }, { $set: { status: "expired" } })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+> 
+> const result = db.orders.updateMany(
+>   { status: "pending", createdAt: { $lt: sevenDaysAgo } },
+>   { $set: { status: "expired" } }
+> );
+> console.log("Expired Orders Modified:", result.modifiedCount);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `updateMany()` modifies all documents matching the query filter.
+> 2. Executes atomic write operations document by document.
+> 3. Leverages compound index `{ status: 1, createdAt: 1 }`.
+
+---
+
+### Exercise 3: Inspecting Update Acknowledgment Metrics
+
+**Scenario:**
+Distinguish between `matchedCount` and `modifiedCount` in write result responses.
+
+**Requirements:**
+1. Explain why `modifiedCount` can be 0 when `matchedCount` is 1.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const res = db.users.updateOne(
+>   { email: "alice@example.com" },
+>   { $set: { status: "active" } }
+> );
+> console.log(`Matched ${res.matchedCount}, Modified ${res.modifiedCount}`);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `matchedCount` counts documents satisfying the query filter.
+> 2. `modifiedCount` counts documents whose field values actually changed.
+> 3. If target field already equaled the `$set` value, `modifiedCount` is 0 to avoid redundant disk writes.
 
 ---
 
 
 
-### Exercise 2: Incrementing Field with `$inc`
-
-**Problem:** Increment `loginCount` on `user:1` by 1 using `$inc`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.updateOne({ _id: 1 }, { $inc: { loginCount: 1 } });
-> ```
-> ```javascript
-> db.users.updateOne({
->   _id: 1
-> }, {
->   $inc: { loginCount: 1 }
-> });
-> ```
->
-> **Explanation:** `$inc` atomically increments numeric field values.
-
----
-
-### Exercise 3: Unsetting Field with `$unset`
-
-**Problem:** Remove field `tempToken` from `user:1` using `$unset`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.updateOne({ _id: 1 }, { $unset: { tempToken: "" } });
-> ```
-> ```javascript
-> db.users.updateOne({
->   _id: 1
-> }, {
->   $unset: { tempToken: "" }
-> });
-> ```
->
-> **Explanation:** `$unset` deletes specified fields from target documents.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Update Operators (`$set`, `$unset`, `$inc`, `$rename`, `$currentDate`)](update_operators.md) — The modification commands.
 - [Upsert (`upsert: true`)](upsert.md) — - Dynamic insert on updates.
@@ -244,7 +251,7 @@ db.users.updateMany({ active: false }, { $set: { verified: false } });
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `updateOne()` modifies the first matching document; `updateMany()` modifies all matches.
 - Serves as the MongoDB equivalent to SQL's `UPDATE` statement.
 - Requires passing BSON update operators (like `$set`) in the second argument.

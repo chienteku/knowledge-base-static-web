@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Data Modeling** (1-to-1 Relationship Patterns): One-to-One Relationships combine related fields into a single embedded document, splitting into separate collections only for security or performance isolation.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Applies across all document NoSQL platforms. Simplifies collections list count and eliminates join lookups).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database systems, entities are mapped to their own tables. 
@@ -93,7 +94,7 @@ Imagine carrying your identification credentials:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Splitting 1:1 relationships into separate collections because "they represent logically distinct business objects"
 
@@ -143,90 +144,112 @@ Embed settings object directly inside user document: { name, settings: { theme: 
 Store medical details in separate user_medical collection, fetching only when needed
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: SQL to Mongo 1:1 Translation
+### Exercise 1: Embedded 1-to-1 Document Modeling
 
-**Problem:** You have a SQL database schema:
-```sql
-CREATE TABLE users (
-    id INT PRIMARY KEY,
-    email VARCHAR(100)
-);
-CREATE TABLE user_settings (
-    user_id INT PRIMARY KEY REFERENCES users(id),
-    dark_mode BOOLEAN,
-    timezone VARCHAR(50)
-);
-```
-Write the equivalent MongoDB document schema structure for a user named Alice (`email: "alice@mail.com"`, `dark_mode: true`, `timezone: "UTC"`) using the correct 1:1 modeling pattern.
+**Scenario:**
+Model a user entity with personal profile details (`bio`, `avatarUrl`, `twitterHandle`) in a single collection `users`.
 
-**Expected output:**
+**Requirements:**
+1. Embed object `profile: { bio, avatarUrl, twitterHandle }` inside `users`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> {
->   _id: 1,
->   email: "alice@mail.com",
->   settings: {
->     dark_mode: true,
->     timezone: "UTC"
+> db.users.insertOne({
+>   username: "alice",
+>   email: "alice@example.com",
+>   profile: {
+>     bio: "Full-stack developer and database enthusiast.",
+>     avatarUrl: "https://example.com/avatar.png",
+>     twitterHandle: "@alice_dev"
 >   }
-> }
+> });
 > ```
-> - Collapse the two relational tables into a single document.
-> - Embed the settings fields inside a dedicated nested key object (e.g. `settings`).
+>
+> #### Technical Explanation
+>
+> 1. 1-to-1 relationships should be embedded in the same document by default.
+> 2. Fetches core entity and profile details in a single atomic read.
+> 3. Subdocument encapsulation keeps profile fields organized.
+
+---
+
+### Exercise 2: Splitting 1-to-1 Documents for Security Isolation
+
+**Scenario:**
+Separate sensitive payment credential details (`user_credentials`) into a separate collection from public user profiles for security access control.
+
+**Requirements:**
+1. Store sensitive credentials in `user_credentials` referencing `userId`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const userId = new ObjectId("60c72b2f9b1d8b2c88888880");
+> 
+> // Public User Record
+> db.users.insertOne({ _id: userId, username: "alice", email: "alice@example.com" });
+> 
+> // Isolated Sensitive Credentials Record
+> db.user_credentials.insertOne({
+>   userId: userId,
+>   ssnHash: "hash_bytes_here",
+>   mfaSecret: "JBSWY3DPEHPK3PXP"
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. 1-to-1 data is split into separate collections when security rules or compliance policies require restricted access.
+> 2. Allows database role-based access control (RBAC) to restrict read access on `user_credentials`.
+> 3. Protects sensitive data from accidental API response exposure.
+
+---
+
+### Exercise 3: Splitting 1-to-1 Documents for Large Payload Isolation
+
+**Scenario:**
+Separate large blob attributes (`user_resumes`) into a secondary collection to keep primary `users` working set small in memory.
+
+**Requirements:**
+1. Store large text blob in `user_resumes` collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.user_resumes.insertOne({
+>   userId: new ObjectId("60c72b2f9b1d8b2c88888880"),
+>   fullTextResume: "Long multiline resume text...",
+>   parsedSkills: ["MongoDB", "Node.js", "TypeScript"]
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Splitting large, infrequently accessed fields into secondary collections reduces working set sizes in RAM.
+> 2. Keeps primary collection documents small, improving cache hit ratios for routine queries.
+> 3. Fetches large blobs via `$lookup` only when requested.
 
 ---
 
 
 
-### Exercise 2: 1-to-1 Embedded Document Schema
-
-**Problem:** Model user document embedding 1-to-1 `settings` sub-document.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> { name: "Alice", settings: { theme: "dark", notifications: true } }
-> ```
-> ```javascript
-> const user = {
->   _id: new ObjectId(),
->   name: "Alice",
->   settings: {
->     theme: "dark",
->     notifications: true
->   }
-> };
-> ```
->
-> **Explanation:** 1-to-1 data is embedded directly inside parent documents for optimal read performance.
-
----
-
-### Exercise 3: 1-to-1 Field Isolation Exception
-
-**Problem:** When should 1-to-1 data be split into a separate collection? (When fields are large/rarely accessed or require security isolation).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> When fields are large, rarely accessed, or require separate security/permission isolation
-> ```
-> ```text
-> When fields are large, rarely accessed, or require separate security/permission isolation
-> ```
->
-> **Explanation:** Isolating large or secret 1-to-1 fields keeps primary collection documents compact.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Embedded Document (Subdocument)](../level_02/embedded_document.md) — The nested structure.
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The general pattern comparison.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - One-to-One relationships should be modeled by Embedding by default.
 - Eliminates relational `JOIN` overhead, allowing single-query reads.
 - Supports atomic updates across all parent and nested fields in one write.

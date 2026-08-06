@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Configuration / Security**
+
+**Security & Middleware** (Environment Variable Management): Environment Variables configure server secrets (`.env`) and client-exposed parameters (`NEXT_PUBLIC_`).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server (Default) / Client (Opt-in)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 You have a Stripe Secret Key used to process payments. You absolutely cannot commit this key to GitHub, or hackers will steal your money.
@@ -69,7 +70,7 @@ export default function Tracker() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Destructuring `process.env` dynamically
 
@@ -123,77 +124,120 @@ DB_PASS=supersecret // Private server-only variable
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Vercel Deployments
+### Exercise 1: Separating Server Secrets vs Client Environment Variables
 
-**Problem:** You deployed your app to Vercel, but the app crashed because `process.env.DATABASE_URL` is undefined. You double-checked, and it's definitely in your `.env.local` file! What went wrong?
+**Scenario:**
+Define server-only secrets and client-exposed variables in `.env.local` and access them in code.
 
-**Expected output:**
+**Requirements:**
+1. Define `DATABASE_URL` and `NEXT_PUBLIC_STRIPE_KEY` in `.env.local`.
+
 > [!check]- Answer
-> ```text
-> The `.env.local` file is explicitly ignored by Git (`.gitignore`). It only exists on your laptop!
-> When Vercel pulls your code from GitHub to build it, the `.env.local` file is missing. 
-> You must log into the Vercel dashboard, go to the Project Settings -> Environment Variables, and manually paste your keys there!
+>
+> #### Implementation
+>
+> ```ini
+> # .env.local
+> DATABASE_URL="postgresql://user:pass@localhost:5432/mydb"
+> NEXT_PUBLIC_STRIPE_KEY="pk_test_123456789"
 > ```
-> - Think about what files are actually pushed to GitHub.
+
+> ```tsx
+> // Server Component (app/page.tsx)
+> export default async function Page() {
+>   // Safe: DATABASE_URL is accessible on server ONLY
+>   console.log("Server DB URL:", process.env.DATABASE_URL);
+>   return <div>Public Key: {process.env.NEXT_PUBLIC_STRIPE_KEY}</div>;
+> }
+> ```
+
+> #### Technical Explanation
+>
+> 1. Environment variables without `NEXT_PUBLIC_` prefix are available ONLY in Node.js server execution contexts.
+> 2. Variables prefixed with `NEXT_PUBLIC_` are inlined into client JavaScript bundles at build time.
+> 3. Critical security boundary for API secret keys.
 
 ---
 
-### Exercise 2: Environment Variable Priority Resolution
+### Exercise 2: Overriding Environment Variables across Environments
 
-**Problem:** Order Next.js environment file resolution priority (highest to lowest):
-`.env`, `.env.local`, `.env.production`
+**Scenario:**
+Explain the precedence hierarchy of `.env` files in Next.js (`.env.production.local`, `.env.production`, `.env.local`, `.env`).
 
-**Expected output:**
+**Requirements:**
+1. Detail `.env` file evaluation order.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. .env.production.local
-> 2. .env.local
-> 3. .env.production
-> 4. .env
+> Environment File Precedence Hierarchy (Highest to Lowest):
+> - Step: process.env (System Environment Variables)
+> - Step: .env.${NODE_ENV}.local (e.g. .env.production.local)
+> - Step: .env.local (Not checked when NODE_ENV === 'test')
+> - Step: .env.${NODE_ENV} (e.g. .env.production)
+> - Step: .env (Global Fallback)
 > ```
-> - `.local` files take precedence over default environment files.
-> 
-> ```text
-> 1. process.env -> 2. .env.production.local -> 3. .env.local -> 4. .env
-> ```
+
+> #### Technical Explanation
+>
+> 1. System environment variables explicitly set on deployment platforms override `.env` files.
+> 2. `.env.local` is ignored in git to store local development secrets securely.
+> 3. Standard environment variable resolution order.
 
 ---
 
-### Exercise 3: Zod Environment Variable Validation
+### Exercise 3: Validating Environment Variables with Zod at Build Time
 
-**Problem:** Write Zod schema validating `process.env` containing `DATABASE_URL` (url) and `NEXT_PUBLIC_API_URL` (url).
+**Scenario:**
+Validate required environment variables at application startup using a Zod schema `env.mjs`.
 
-**Expected output:**
+**Requirements:**
+1. Throw build error if required `DATABASE_URL` is missing.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import { z } from 'zod'; const envSchema = z.object({ DATABASE_URL: z.string().url(), NEXT_PUBLIC_API_URL: z.string().url() }); export const env = envSchema.parse(process.env);
-> ```
-> - Validating `process.env` with Zod prevents runtime configuration crashes.
-> 
-> ```typescript
-> import { z } from 'zod';
-> 
-> const envSchema = z.object({
->   DATABASE_URL: z.string().url(),
->   NEXT_PUBLIC_API_URL: z.string().url()
-> });
-> 
-> export const env = envSchema.parse(process.env);
-> ```
+> // env.mjs
+> import { z } from "zod";
+
+const envSchema = z.object({
+  DATABASE_URL: z.string().url(),
+  NEXT_PUBLIC_SITE_URL: z.string().url()
+});
+
+export const env = envSchema.parse({
+  DATABASE_URL: process.env.DATABASE_URL,
+  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL
+});
+```
+
+> #### Technical Explanation
+>
+> 1. Validating environment variables at startup prevents silent runtime 500 crashes during production deployments.
+> 2. `envSchema.parse()` throws an immediate build error if required environment variables are missing or malformed.
+> 3. Production deployment sanity check.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Deployment (Vercel)](vercel_deployment.md) — Where you configure production variables.
 - [Client Components (`"use client"`)](../level_01/client_components.md) — The environment that requires the `NEXT_PUBLIC_` prefix.
 - [Node.js Environment Variables (`process.env`)](process_env.md) — Related concept: Node.js Environment Variables (`process.env`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`.env.local`** is the standard file used in Next.js to store sensitive API keys and config settings. It should never be committed to Git.
 - By default, variables are only accessible on the Server.
 - To expose a variable to the browser (Client Components), you must prefix the name with **`NEXT_PUBLIC_`**.

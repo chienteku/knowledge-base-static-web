@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Architecture Pattern**
+
+**TypeScript Core Syntax** (Tagged Union Pattern): Discriminated unions combine object variant types sharing a common literal property tag for pattern matching and type narrowing.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Using the [`in` operator](../level_06/in_operator.md) or Custom Type Guards works fine for simple unions (`Bird | Fish`). But what if you have a complex union of 10 different Event types, or 5 different API response states (Loading, Success, Error)?
@@ -69,7 +70,7 @@ function renderUI(state: APIState) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the literal type
 
@@ -124,66 +125,123 @@ type VariantA = { type: "A"; val: number };
 type VariantB = { type: "B"; str: string };
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Redux Actions
+### Exercise 1: Pattern Matching Discriminated Unions
 
-**Problem:** The popular React state management library, Redux, relies entirely on Discriminated Unions. Look at a standard Redux action: `{ type: "ADD_TODO", payload: "Buy milk" }`. What is the "discriminant" property in Redux?
+**Scenario:**
+Define a `Shape` discriminated union containing `Square`, `Rectangle`, and `Circle` variants with a common `kind` literal tag.
 
-**Expected output:**
+**Requirements:**
+1. Create variants sharing `kind` discriminant string literal.
+2. Implement area calculator using `switch(shape.kind)`.
+
 > [!check]- Answer
-> ```text
-> The `type` property is the discriminant!
-> By putting a `switch(action.type)` inside a Redux Reducer, TypeScript can perfectly narrow the `action` object, ensuring you only access `payload` if that specific action type actually has a payload.
-> ```
-> - Which property dictates the shape of the rest of the object?
+>
+> #### Implementation
+>
+> ```typescript
+> type Square = { kind: "square"; size: number };
+> type Rectangle = { kind: "rectangle"; width: number; height: number };
+> type Circle = { kind: "circle"; radius: number };
+
+type Shape = Square | Rectangle | Circle;
+
+function calculateArea(shape: Shape): number {
+  switch (shape.kind) {
+    case "square":
+      return shape.size * shape.size;
+    case "rectangle":
+      return shape.width * shape.height;
+    case "circle":
+      return Math.PI * shape.radius ** 2;
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Discriminated unions share a common single-valued property tag (`kind`) across all variants.
+> 2. `switch (shape.kind)` narrows `shape` to its exact constituent type in each `case` block.
+> 3. Fundamental pattern for domain modeling and state management.
+
+---
+
+### Exercise 2: Modeling Asynchronous State Machines
+
+**Scenario:**
+Create an asynchronous HTTP state discriminated union (`IdleState`, `LoadingState`, `SuccessState<T>`, `ErrorState`).
+
+**Requirements:**
+1. Use `status` discriminant tag across 4 state variants.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type IdleState = { status: "idle" };
+> type LoadingState = { status: "loading" };
+> type SuccessState<T> = { status: "success"; data: T };
+> type ErrorState = { status: "error"; error: string };
+
+type AsyncState<T> = IdleState | LoadingState | SuccessState<T> | ErrorState;
+
+function renderState(state: AsyncState<string[]>) {
+  switch (state.status) {
+    case "idle": return "Click to load";
+    case "loading": return "Loading items...";
+    case "success": return `Loaded ${state.data.length} items`;
+    case "error": return `Error: ${state.error}`;
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Discriminated unions prevent invalid state combinations (e.g. `loading: true` and `error: "Failed"` simultaneously).
+> 2. Guarantees that data payload properties (`data`, `error`) exist ONLY when the corresponding `status` tag matches.
+> 3. Standard architecture for UI state management (React `useReducer`, Redux).
+
+---
+
+### Exercise 3: Nested Discriminants and Composite Tags
+
+**Scenario:**
+Demonstrate narrowing on nested discriminant properties like `event.payload.type`.
+
+**Requirements:**
+1. Narrow nested discriminant `action.meta.type`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type UserEvent = 
+>   | { meta: { type: "USER_LOGIN" }; userId: string }
+>   | { meta: { type: "USER_LOGOUT" }; timestamp: number };
+
+function handleEvent(event: UserEvent) {
+  if (event.meta.type === "USER_LOGIN") {
+    console.log("Logged in user:", event.userId);
+  } else {
+    console.log("Logged out at:", event.timestamp);
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. TypeScript control-flow analysis can narrow unions using nested property tags (`event.meta.type`).
+> 2. Simplifies deep event routing and payload handling.
+> 3. Highly versatile discriminant pattern.
 
 ---
 
 
 
-### Exercise 2: API Response Discriminated Union
-
-**Problem:** Create `Result` union with `{ status: "success"; data: string } | { status: "error"; error: Error }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Discriminated union created
-> ```
-> ```typescript
-> type Result =
->   | { status: "success"; data: string }
->   | { status: "error"; error: Error };
-> console.log("Discriminated union created");
-> ```
->
-> **Explanation:** Literal tag `status` provides clean discriminant narrowing across async result variants.
-
----
-
-### Exercise 3: Narrowing with Switch Statements
-
-**Problem:** Use `switch (res.status)` to handle success and error states safely.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Handled success status
-> ```
-> ```typescript
-> function handle(res: Result) {
->   switch (res.status) {
->     case "success": return res.data;
->     case "error": throw res.error;
->   }
-> }
-> console.log("Handled success status");
-> ```
->
-> **Explanation:** `switch` statements over discriminant tags narrow variant types in each `case` block.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Literal Types](../level_05/literal_types.md) — The building blocks of the discriminant.
 - [`void` & `never`](../level_02/void_never.md) — `never` is used in the `default` case of a Discriminated Union switch statement for exhaustive checking.
 - [Exhaustiveness Checking (`never`)](exhaustiveness_checking.md) — Related concept: Exhaustiveness Checking (`never`).
@@ -193,7 +251,7 @@ type VariantB = { type: "B"; str: string };
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A **Discriminated Union** is a union of object types that all share a common property (the "discriminant").
 - The discriminant property must be a unique **Literal Type** for each object (e.g., `kind: "circle"` vs `kind: "square"`).
 - It is the cleanest, most scalable way to narrow complex state, especially when using `switch` statements.

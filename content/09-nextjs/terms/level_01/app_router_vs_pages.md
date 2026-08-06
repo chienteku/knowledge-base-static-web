@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture**
+
+**Framework Architecture** (App Router vs Pages Router Architecture): App Router vs Pages Router compares legacy `pages/` routing against modern `app/` directory React Server Component nested layouts.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 From version 1 to 12, Next.js used the **Pages Router** (the `pages/` directory). In this architecture, routing was simple (every file in `pages/` became a route), but data fetching was clunky. You had to use special, isolated functions like `getServerSideProps` at the page level, and you couldn't easily fetch data deep inside nested components. All components were essentially Client Components.
@@ -41,7 +42,7 @@ When React introduced Server Components, Next.js realized they needed a complete
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Mixing paradigms
 
@@ -89,68 +90,103 @@ import { useRouter } from 'next/navigation'; // Correct App Router import
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: File Structure Translation
+### Exercise 1: Mapping Architectural Differences (Pages vs App Router)
 
-**Problem:** How would you translate the following Pages Router structure into the new App Router structure?
-`pages/index.tsx`
-`pages/blog.tsx`
+**Scenario:**
+Formulate an architectural comparison matrix contrasting Pages Router against App Router.
 
-**Expected output:**
+**Requirements:**
+1. Contrast routing directories, component models, and layout patterns.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> app/
->   page.tsx        -> (translates to /)
->   blog/
->     page.tsx      -> (translates to /blog)
+> Router Architecture Comparison:
+> - Pages Router (pages/): Client-heavy by default, getServerSideProps/getStaticProps for data fetching, custom _app.js for global layouts.
+> - App Router (app/): React Server Components by default, async/await data fetching inside components, nested layout.tsx files.
 > ```
-> - In the App Router, folders define routes, files define UI.
+
+> #### Technical Explanation
+>
+> 1. Pages Router relies on top-level data fetching methods (`getServerSideProps`).
+> 2. App Router brings data fetching directly into individual Server Components.
+> 3. App Router provides superior component-level streaming and smaller client JS bundles.
 
 ---
 
-### Exercise 2: Router Migration Comparison
+### Exercise 2: Migrating Pages Router `_app.js` to App Router Root Layout
 
-**Problem:** Contrast Pages Router `getServerSideProps` with App Router React Server Components (RSC) data fetching.
+**Scenario:**
+Migrate global providers and CSS imports from `pages/_app.js` to `app/layout.tsx`.
 
-**Expected output:**
+**Requirements:**
+1. Move global CSS and providers into `app/layout.tsx`.
+
 > [!check]- Answer
-> ```text
-> Pages Router fetches data in a top-level exported function `getServerSideProps`; App Router components are async functions that fetch data directly inside the component body.
-> ```
-> - Pages Router: `export async function getServerSideProps() {}`
-> - App Router: `export default async function Page() { const data = await fetch(...); }`
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> // App Router Async RSC Data Fetching
-> export default async function Page() {
->   const res = await fetch('https://api.example.com/data');
->   const data = await res.json();
->   return <div>{data.title}</div>;
-> }
-> ```
+> // app/layout.tsx
+> import "@/app/globals.css";
+
+export default function RootLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `app/layout.tsx` replaces `pages/_app.js` and `pages/_document.js`.
+> 2. Must include `<html>` and `<body>` tags.
+> 3. Enforces standard root document shell for all pages.
 
 ---
 
-### Exercise 3: Directory Default Component Architecture
+### Exercise 3: Incremental Adoption Strategy (Co-existing Routers)
 
-**Problem:** Which file in an `app/` directory route folder is responsible for rendering the unique UI for a route?
+**Scenario:**
+Explain how Next.js supports co-existing `pages/` and `app/` directories during incremental migrations.
 
-**Expected output:**
+**Requirements:**
+1. Detail route precedence when paths conflict between routers.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> page.tsx (or page.jsx / page.js)
+> Co-existence & Precedence Rule:
+> - Next.js allows pages/ and app/ to exist in the same codebase for incremental migration.
+> - CRITICAL: An App Router route (app/about/page.tsx) takes precedence over a Pages Router route (pages/about.tsx) if paths conflict!
 > ```
-> - `page.tsx` defines the publicly accessible UI for a route segment.
-> 
-> ```text
-> app/dashboard/page.tsx -> Renders /dashboard UI
-> ```
+
+> #### Technical Explanation
+>
+> 1. App Router routes automatically override Pages Router routes sharing the same URL path.
+> 2. Allows migrating application routes incrementally one page at a time.
+> 3. Zero-downtime migration strategy.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [React Server Components (RSC)](rsc.md) — The technology that powers the App Router.
 - [`page.tsx`](../level_02/page.md) — The file that defines UI in the App Router.
 - [Client Components (`"use client"`)](client_components.md) — Related concept: Client Components (`"use client"`).
@@ -159,7 +195,7 @@ import { useRouter } from 'next/navigation'; // Correct App Router import
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **Pages Router** (`pages/`) is the legacy Next.js architecture. It relies on `getServerSideProps`.
 - The **App Router** (`app/`) is the modern architecture. It is powered by React Server Components.
 - In the App Router, routing is defined by folders, and UI is defined by specific files like `page.tsx` and `layout.tsx`.

@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (record creation statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Executed by the server query processor. Runs within an implicit or explicit ACID write transaction block).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database SQL (PostgreSQL), inserting records is tabular:
@@ -76,7 +75,7 @@ CREATE post:ulid() SET title = "SurrealDB CRUD Syntax";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to insert records using PostgreSQL-style parenthesis column-value syntax with the 'CREATE' statement
 
@@ -136,60 +135,96 @@ CREATE SET name = "Alice"; // ❌ Parse error: missing target table
 CREATE user SET name = "Alice"; // Specifies target table 'user'
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Write Statement Construction
+### Exercise 1: Creating Records with Explicit Record IDs
 
-**Problem:** Write the SurrealQL statement to create a record in the `products` table.
--   The record ID must be `"product:laptop_pro"`.
--   The field `name` must be set to `"Laptop Pro"`.
--   The field `price` must be set to `1200.00dec`.
+**Scenario:**
+A user registration service creates user records using deterministic primary key IDs (such as `user:john`) to allow direct single-record lookups.
 
-**Expected output:**
+**Requirements:**
+1. Write a `CREATE` query creating record `user:john`.
+2. Set scalar fields `name = "John Doe"` and `email = "john@example.com"`.
+
 > [!check]- Answer
-> ```sql
-> CREATE product:laptop_pro SET name = "Laptop Pro", price = 1200.00dec;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:john SET 
+>     name = "John Doe",
+>     email = "john@example.com";
 > ```
-> - The target record address is `product:laptop_pro`.
-> - Use the `SET` keyword followed by comma-separated field assignments.
+>
+> #### Technical Explanation
+>
+> 1. `CREATE table:id` creates a record with an explicit primary key identifier (`user:john`).
+> 2. `SET key = val` specifies field assignments cleanly.
+> 3. If `user:john` already exists, `CREATE` fails with a record conflict error (unlike `UPSERT`).
+
+---
+
+### Exercise 2: Bulk Document Creation with `CONTENT` Payloads
+
+**Scenario:**
+A product inventory service creates a new product document using a single JSON `CONTENT` payload object.
+
+**Requirements:**
+1. Create record `product:laptop` using `CONTENT { ... }`.
+2. Include fields `name`, `price`, and nested object `specs`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE product:laptop CONTENT {
+>     name: "Pro Laptop 15",
+>     price: 1299.99dec,
+>     specs: {
+>         cpu: "M3 Pro",
+>         ram_gb: 18
+>     }
+> };
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `CREATE ... CONTENT { ... }` inserts a complete JSON document object in a single statement.
+> 2. Supports nested objects (`specs`) and arrays natively within the payload.
+> 3. Matches document database (MongoDB) insertion semantics while retaining SQL table structure.
+
+---
+
+### Exercise 3: Automatic Random ID Generation
+
+**Scenario:**
+An event logger inserts audit events into table `audit_log` allowing SurrealDB to generate a unique random ID automatically.
+
+**Requirements:**
+1. Execute `CREATE audit_log SET action = "login", timestamp = time::now();` without specifying a record ID.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE audit_log SET 
+>     action = "login",
+>     timestamp = time::now();
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Omitting the record ID in `CREATE <table>` generates a random unique string ID automatically (e.g. `audit_log:a7x9q2m...`).
+> 2. Prevents primary key collisions in high-concurrency event ingestion pipelines.
+> 3. Returns the newly generated record object containing its assigned `id`.
 
 ---
 
 
 
-### Exercise 2: Creating Record with Random ID
-
-**Problem:** Create new record in `article` table setting `title = "New Post"` letting SurrealDB generate ID.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE article SET title = "New Post";
-> ```
-> ```surrealql
-> CREATE article SET title = "New Post";
-> ```
->
-> **Explanation:** `CREATE table` automatically generates a unique Record ID.
-
----
-
-### Exercise 3: Creating Multiple Records in One Statement
-
-**Problem:** Create two records in `category` table using array content `[{ name: "Tech" }, { name: "Design" }]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE category CONTENT [{ name: "Tech" }, { name: "Design" }];
-> ```
-> ```surrealql
-> CREATE category CONTENT [{ name: "Tech" }, { name: "Design" }];
-> ```
->
-> **Explanation:** `CREATE table CONTENT [ ... ]` inserts multiple records in a single statement.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`CREATE` with Content (`SET` vs `CONTENT`)](create_set_content.md) — Create syntax variants.
 - [`INSERT`](insert.md) — The SQL-compatible alternative.
@@ -198,7 +233,7 @@ CREATE user SET name = "Alice"; // Specifies target table 'user'
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `CREATE` statement inserts new records into a SurrealDB table.
 - Directly supports explicit Record ID assignment (e.g. `CREATE user:john`).
 - Omitting the ID triggers automatic random alphanumeric ID generation.

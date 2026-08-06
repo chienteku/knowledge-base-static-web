@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Server-Side Development**
+
+**Server & Nitro Engine** (Global Request Interceptor Middleware): Server Middleware in `server/middleware/` runs on every incoming server request before route handlers, processing headers, auth tokens, and logging.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you have 50 different API routes that all require a user to be logged in, copying and pasting the token verification logic into all 50 files is a security risk. If you forget it in one file, your database is compromised.
@@ -66,7 +67,7 @@ export default defineEventHandler((event) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Returning data from middleware
 **The mistake:** Using `return { success: true }` or `return next()` inside a server middleware file.
@@ -123,85 +124,117 @@ export default defineEventHandler((event) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Protecting specific routes
+### Exercise 1: Creating Global Request Logging Server Middleware
 
-**Problem:** Server middleware runs on *every* request, including requests for public CSS files. Write the logic inside a middleware file to only execute a block of auth-checking code if the URL starts with `/api/admin`.
+**Scenario:**
+Create a server middleware `server/middleware/logger.ts` logging request URL and execution method for every incoming request.
 
-**Expected output:**
+**Requirements:**
+1. Export `defineEventHandler` in `server/middleware/logger.ts`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // server/middleware/logger.ts
 > export default defineEventHandler((event) => {
->   // Read the requested URL
->   const url = getRequestURL(event);
+>   const method = event.method;
+>   const url = getRequestURL(event).pathname;
 >   
->   // Only intercept /api/admin routes
->   if (url.pathname.startsWith('/api/admin')) {
->      const token = getCookie(event, 'token');
->      if (!token) throw createError({ statusCode: 401, message: 'Unauthorized' });
->   }
+>   console.log(`[Nitro Server Log] ${method} ${url} at ${new Date().toISOString()}`);
 > });
 > ```
-> - Read the pathname using the `getRequestURL(event)` helper and conditionally check auth credentials.
+
+> #### Technical Explanation
+>
+> 1. Files in `server/middleware/` run automatically on EVERY incoming server HTTP request (both page requests and API requests).
+> 2. Server middleware does NOT return responses unless halting execution.
+> 3. Ideal for global request logging and telemetry.
 
 ---
 
-### Exercise 2: Server Middleware Context Extension Pattern
+### Exercise 2: Authenticating Bearer Tokens in Server Middleware
 
-**Problem:** Write server middleware `server/middleware/user.ts` parsing JWT token cookie and attaching `event.context.user` object.
+**Scenario:**
+Validate authorization header tokens in server middleware, attaching user context to `event.context.user`.
 
-**Expected output:**
+**Requirements:**
+1. Attach user data to `event.context.user`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // server/middleware/auth.ts
 > export default defineEventHandler((event) => {
->   const token = getCookie(event, 'token');
->   if (token) {
->     event.context.user = verifyToken(token);
+>   const authHeader = getHeader(event, "authorization");
+>   
+>   if (authHeader && authHeader.startsWith("Bearer ")) {
+>     const token = authHeader.substring(7);
+>     // Attach decoded user context to H3 event object!
+>     event.context.user = { id: 42, role: "admin", token };
 >   }
 > });
 > ```
-> - Server middleware extends `event.context` for downstream route handlers.
-> 
-> ```typescript
-> // server/middleware/user.ts
-> export default defineEventHandler((event) => {
->   const token = getCookie(event, 'auth_token');
->   if (token) {
->     event.context.user = { id: 1, name: 'Alice' }; // Extend context
->   }
-> });
-> ```
+
+> #### Technical Explanation
+>
+> 1. `event.context` is a shared context object passed through the H3 handler lifecycle.
+> 2. Server middleware can populate `event.context.user` for downstream API routes to consume.
+> 3. Centralized request authentication pattern.
 
 ---
 
-### Exercise 3: Server Middleware vs Route Middleware
+### Exercise 3: Selectively Bypassing Middleware on Specific Paths
 
-**Problem:** Contrast Nitro Server Middleware (`server/middleware/`) vs Vue Route Middleware (`middleware/`).
+**Scenario:**
+Skip token validation in server middleware when request path starts with `/public/` or `/_nuxt/`.
 
-**Expected output:**
+**Requirements:**
+1. Check `event.path` in middleware conditional.
+
 > [!check]- Answer
-> ```text
-> Server Middleware: Executes on Node.js server before Nitro routes for all HTTP requests;
-> Route Middleware: Vue Router navigation guard executing on page transitions.
+>
+> #### Implementation
+>
+> ```typescript
+> // server/middleware/auth-guard.ts
+> export default defineEventHandler((event) => {
+>   const path = event.path;
+>   
+>   // Skip authentication logic for static assets and public routes
+>   if (path.startsWith("/_nuxt") || path.startsWith("/api/public")) {
+>     return;
+>   }
+>   
+>   // Perform protected path validation...
+> });
 > ```
-> - Server Middleware -> Backend Nitro HTTP request interceptor.
-> - Route Middleware -> Frontend Vue Router page navigation guard.
-> 
-> ```text
-> server/middleware/ = Nitro Backend; middleware/ = Vue Frontend Router.
-> ```
+
+> #### Technical Explanation
+>
+> 1. Server middleware runs on all static asset and page requests unless explicitly conditionally bypassed.
+> 2. Returning early without throwing errors allows execution to continue to target handlers.
+> 3. Essential performance guard conditional.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Route Middleware](../level_08/route_middleware.md) — The frontend equivalent that runs during Vue router navigation (do not confuse the two!).
 - [H3 Request Handlers (`defineEventHandler`)](h3_handlers.md) — The utility `defineEventHandler` used to write the middleware.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Server Middleware runs on the Node server for every single incoming request.
 - It is ideal for logging, authentication checks, and setting headers.
 - Never `return` a value from middleware unless you explicitly want to block the request.

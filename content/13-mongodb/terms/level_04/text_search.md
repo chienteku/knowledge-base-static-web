@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Query Operator** (Text Index Search Queries): Text Search ($text, $search) performs full-text keyword searches across collections using text indexes with language stemming and relevance scoring.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Requires creating a dedicated `text` index on target fields. Matches terms using language-specific dictionaries to normalize words).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you build a blog or product review site, users expect a Google-like search bar:
@@ -79,7 +80,7 @@ db.articles.find(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to run a '$text' query on a collection without first building a text index on the target fields
 
@@ -130,80 +131,99 @@ db.posts.createIndex({ body: "text" }); // ❌ Error: Collection already has a t
 db.posts.createIndex({ title: "text", body: "text" }); // Single multi-field text index
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Article Search Formulation
+### Exercise 1: Creating Text Indexes across Multiple Fields
 
-**Problem:** You have a `posts` collection containing `subject` and `body` fields.
-1.  Write the query to create a text index covering both fields.
-2.  Write the search query to find all documents matching the term `"javascript guide"`, sorted by relevance score (highest first).
+**Scenario:**
+Create a full-text search index `idx_text_search` on fields `title` and `description` in collection `articles`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `createIndex({ title: "text", description: "text" })`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> // 1. Create text index
-> db.posts.createIndex({ subject: "text", body: "text" });
-> 
-> // 2. Execute text search
-> db.posts.find(
->   { $text: { $search: "javascript guide" } },
+> db.articles.createIndex({
+>   title: "text",
+>   description: "text"
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `"text"` creates an inverted text search index tokenizing text words.
+> 2. A collection can have at most ONE text index (which can cover multiple string fields).
+> 3. Applies language stemming and stop-word filtering automatically.
+
+---
+
+### Exercise 2: Text Search Queries with `$text` and `$search`
+
+**Scenario:**
+Execute a full-text search query finding articles containing keywords `"mongodb performance"`.
+
+**Requirements:**
+1. Use `{ $text: { $search: "mongodb performance" } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.articles.find({
+>   $text: { $search: "mongodb performance" }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$text: { $search: "words" }` searches for tokenized keywords across text-indexed fields.
+> 2. Performs logical OR matching across search terms by default.
+> 3. Enclose phrases in escaped quotes (`""exact phrase""`) for exact match.
+
+---
+
+### Exercise 3: Relevance Score Sorting with `$meta: "textScore"`
+
+**Scenario:**
+Order text search results by BM25 text relevance score descending.
+
+**Requirements:**
+1. Project `{ score: { $meta: "textScore" } }` and sort by `{ score: { $meta: "textScore" } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.articles.find(
+>   { $text: { $search: "database indexing" } },
 >   { score: { $meta: "textScore" } }
 > )
 > .sort({ score: { $meta: "textScore" } });
 > ```
-> - The index declaration specifies the string `"text"` as the index type.
-> - Use the projection helper `$meta: "textScore"` to expose the scoring column.
+>
+> #### Technical Explanation
+>
+> 1. `$meta: "textScore"` projects the calculated text relevance score for each matching document.
+> 2. Sorting by `{ score: { $meta: "textScore" } }` places most relevant matches at top.
+> 3. Provides native search engine ranking capabilities.
 
 ---
 
 
 
-### Exercise 2: Creating Multi-Field Text Index
-
-**Problem:** Create text index `post_text_idx` on `title` and `body` fields of `posts` collection.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.createIndex({ title: "text", body: "text" }, { name: "post_text_idx" });
-> ```
-> ```javascript
-> db.posts.createIndex(
->   { title: "text", body: "text" },
->   { name: "post_text_idx" }
-> );
-> ```
->
-> **Explanation:** Creating a compound text index indexes multiple string fields for `$text` search.
-
----
-
-### Exercise 3: Text Search with Relevance Score Ordering
-
-**Problem:** Query `$text` search for `"nosql database"` returning `textScore` meta projection ordered by score descending.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.find({ $text: { $search: "nosql database" } }, { projection: { score: { $meta: "textScore" } } }).sort({ score: { $meta: "textScore" } });
-> ```
-> ```javascript
-> db.posts.find(
->   { $text: { $search: "nosql database" } },
->   { projection: { score: { $meta: "textScore" } } }
-> ).sort({ score: { $meta: "textScore" } });
-> ```
->
-> **Explanation:** `{ $meta: "textScore" }` projects and sorts search results by full-text relevance score.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`$regex` (Regular Expressions)](regex.md) — Pattern searches.
 - [Text Index](../level_07/text_index.md) — Related concept: Text Index.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Text Search provides full-text dictionary searches on collections.
 - Direct equivalent to PostgreSQL's `tsvector` and `tsquery` tools.
 - Requires building a dedicated text index (`createIndex({ field: "text" })`).

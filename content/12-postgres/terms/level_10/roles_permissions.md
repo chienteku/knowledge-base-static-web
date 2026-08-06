@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Administration / Security**
+
+**Administration / Operations** (Role-Based Access Control): Roles and Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`) enforce role-based privilege security across database objects.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Stored globally inside the database cluster catalog. In PostgreSQL, there is no physical distinction between "users" and "groups"—both are defined as **Roles**).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you initialize a new PostgreSQL database, the engine creates a default superuser account named `postgres`. 
@@ -81,7 +82,7 @@ REVOKE SELECT ON TABLE customers FROM analyst_bob;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Connecting your live web application to the production database using the default 'postgres' superuser role
 
@@ -128,71 +129,102 @@ GRANT USAGE ON SCHEMA public TO app_role;
 GRANT SELECT ON users TO app_role;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Read-Write Role Setup
+### Exercise 1: Creating Application Database Roles with Least Privilege
 
-**Problem:** You are setting up a backend analytics service. Write the SQL queries to:
-1.  Create a login role named `service_writer` with the password `'write_secure_123'`.
-2.  Grant the role permissions to read (`SELECT`) and write (`INSERT`, `UPDATE`) data on a table named `reports`.
+**Scenario:**
+Create a read-write application role `app_user` with restricted permissions on database `store_db`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE ROLE app_user LOGIN PASSWORD '...'` and `GRANT` table privileges.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE ROLE service_writer WITH LOGIN PASSWORD 'write_secure_123';
+> CREATE ROLE app_user WITH LOGIN PASSWORD 'SecurePass123!';
 > 
-> GRANT USAGE ON SCHEMA public TO service_writer;
-> GRANT SELECT, INSERT, UPDATE ON TABLE reports TO service_writer;
+> GRANT CONNECT ON DATABASE store_db TO app_user;
+> GRANT USAGE ON SCHEMA public TO app_user;
+> GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO app_user;
+> GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user;
 > ```
-> - Remember to grant schema `USAGE` permission first, otherwise table lookups fail.
-> - Chain multiple privileges in the `GRANT` statement separating them with commas.
+>
+> #### Technical Explanation
+>
+> 1. `CREATE ROLE ... LOGIN` creates an authenticating database user account.
+> 2. `GRANT` explicitly assigns object privileges (Principle of Least Privilege).
+> 3. Restricts `app_user` from dropping tables or executing administrative DDL commands.
+
+---
+
+### Exercise 2: Managing Role Inheritance with Group Roles
+
+**Scenario:**
+Create a group role `read_only_group` and grant membership to user role `analyst_bob`.
+
+**Requirements:**
+1. Execute `CREATE ROLE read_only_group`, `GRANT SELECT`, `GRANT read_only_group TO analyst_bob`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE ROLE read_only_group NOLOGIN;
+> GRANT CONNECT ON DATABASE store_db TO read_only_group;
+> GRANT USAGE ON SCHEMA public TO read_only_group;
+> GRANT SELECT ON ALL TABLES IN SCHEMA public TO read_only_group;
+
+CREATE ROLE analyst_bob WITH LOGIN PASSWORD 'AnalystPass123!';
+GRANT read_only_group TO analyst_bob;
+```
+
+> #### Technical Explanation
+>
+> 1. Group roles (`NOLOGIN`) simplify privilege management by grouping permissions.
+> 2. User roles inherit group privileges via membership assignments (`GRANT group TO user`).
+> 3. Scalable role security architecture.
+
+---
+
+### Exercise 3: Altering Default Privileges for Future Tables
+
+**Scenario:**
+Configure `ALTER DEFAULT PRIVILEGES` so future tables created by `admin_user` automatically grant `SELECT` to `read_only_group`.
+
+**Requirements:**
+1. Execute `ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO read_only_group`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER DEFAULT PRIVILEGES IN SCHEMA public 
+> GRANT SELECT ON TABLES TO read_only_group;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. By default, `GRANT` statements apply ONLY to existing tables in the schema.
+> 2. `ALTER DEFAULT PRIVILEGES` automatically applies specified permissions to tables created in the future.
+> 3. Eliminates manual permission grant steps during schema migrations.
 
 ---
 
 
 
-### Exercise 2: Creating Read-Only Application Role
-
-**Problem:** Create role `read_only_role` with login password and grant `SELECT` on all tables in schema `public`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE ROLE read_only_role WITH LOGIN PASSWORD 'pass'; GRANT USAGE ON SCHEMA public TO read_only_role; GRANT SELECT ON ALL TABLES IN SCHEMA public TO read_only_role;
-> ```
-> ```sql
-> CREATE ROLE read_only_role WITH LOGIN PASSWORD 'pass';
-> GRANT USAGE ON SCHEMA public TO read_only_role;
-> GRANT SELECT ON ALL TABLES IN SCHEMA public TO read_only_role;
-> ```
->
-> **Explanation:** Roles combine user identity and permission grouping in PostgreSQL.
-
----
-
-### Exercise 3: Revoking Permissions
-
-**Problem:** Revoke `DELETE` permission on table `orders` from role `app_user`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> REVOKE DELETE ON orders FROM app_user;
-> ```
-> ```sql
-> REVOKE DELETE ON orders FROM app_user;
-> ```
->
-> **Explanation:** `REVOKE permission ON table FROM role` strips specific privileges.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`pg_hba.conf` (Host-Based Authentication)](pg_hba_conf.md) — Remote connection security configurations.
 - [Row-Level Security (RLS)](row_level_security.md) — Finer security filters.
 - [SQL Injection](sql_injection.md) — Related concept: SQL Injection.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Roles are database accounts that manage login credentials and permissions.
 - PostgreSQL unified users and groups into the single `ROLE` concept.
 - `GRANT` assigns schema, table, or database permissions to roles.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Core SQL Concept**
+
+**SQL Command / Clause** (Nested SQL Expressions): Subqueries are nested `SELECT` queries embedded within `WHERE`, `FROM`, or projection clauses of an outer query.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all SQL databases. Evaluated by the query planner, which often optimizes subqueries into standard JOIN operations under the hood).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In SQL, you often need to filter records based on calculations that require checking the entire table:
@@ -105,7 +106,7 @@ FROM (
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Comparing a scalar operator (=, >, <) with a subquery returning multiple rows
 
@@ -164,71 +165,110 @@ SELECT name, (SELECT total FROM orders WHERE user_id = u.id) FROM users u; -- �
 Use JOIN: SELECT u.name, o.total FROM users u JOIN orders o ON u.id = o.user_id;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: High Earners
+### Exercise 1: Scalar Subqueries in WHERE Filtering
 
-**Problem:** You have an `employees` table with columns `name`, `department`, and `salary`. Write a SQL query to find the names of all employees who earn strictly more than the salary of the employee named `'Bob'`. Assume there is only one employee named Bob.
+**Scenario:**
+Query products with price greater than the AVERAGE price of all products.
 
-**Expected output:**
+**Requirements:**
+1. Execute `WHERE price_cents > (SELECT AVG(price_cents) FROM products)`.
+
 > [!check]- Answer
-> ```sql
-> SELECT name 
-> FROM employees 
-> WHERE salary > (SELECT salary FROM employees WHERE name = 'Bob');
-> ```
-> - Write the inner query to fetch Bob's salary first.
-> - Nest it inside the outer query's `WHERE` clause comparing salaries.
-
----
-
-
-
-### Exercise 2: Scalar Subquery in WHERE Clause
-
-**Problem:** Query products whose `price` exceeds the overall average product price using a scalar subquery.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM products WHERE price > (SELECT AVG(price) FROM products);
-> ```
-> ```sql
-> SELECT * FROM products
-> WHERE price > (SELECT AVG(price) FROM products);
-> ```
 >
-> **Explanation:** Scalar subqueries evaluate to a single value usable in comparison predicates.
-
----
-
-### Exercise 3: Derived Table Subquery in FROM Clause
-
-**Problem:** Select max category total from derived summary table `SELECT category, SUM(price) AS cat_total FROM products GROUP BY category`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT MAX(cat_total) FROM (SELECT category, SUM(price) AS cat_total FROM products GROUP BY category) AS sub;
-> ```
+> #### Implementation
+>
 > ```sql
-> SELECT MAX(cat_total)
-> FROM (
->   SELECT category, SUM(price) AS cat_total
+> SELECT id, name, price_cents 
+> FROM products 
+> WHERE price_cents > (
+>   SELECT AVG(price_cents) 
 >   FROM products
->   GROUP BY category
-> ) AS sub;
+> );
 > ```
 >
-> **Explanation:** Derived table subqueries in `FROM` clauses require alias names (`AS sub`).
+> #### Technical Explanation
+>
+> 1. Scalar subqueries return a single row and single column value.
+> 2. Evaluates average price first, passing the calculated value to the outer query filter.
+> 3. Dynamic metric threshold filtering.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Correlated Subqueries in SELECT Projections
+
+**Scenario:**
+Select customers alongside their latest order date using a correlated scalar subquery.
+
+**Requirements:**
+1. Select `(SELECT MAX(created_at) FROM orders WHERE customer_id = customers.id)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   c.id, 
+>   c.company_name,
+>   (
+>     SELECT MAX(o.created_at) 
+>     FROM orders AS o 
+>     WHERE o.customer_id = c.id
+>   ) AS latest_order_date 
+> FROM customers AS c;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Correlated subqueries reference columns from the outer query (`c.id`).
+> 2. Evaluated for each row processed by the outer query.
+> 3. Useful for single scalar projections per parent row.
+
+---
+
+### Exercise 3: Derived Table Subqueries in FROM Clauses
+
+**Scenario:**
+Calculate average order count per customer by querying a derived table subquery in `FROM`.
+
+**Requirements:**
+1. Query `FROM (SELECT customer_id, COUNT(*) AS order_count FROM orders GROUP BY customer_id) AS customer_orders`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   AVG(customer_orders.order_count) AS avg_orders_per_customer 
+> FROM (
+>   SELECT 
+>     customer_id, 
+>     COUNT(*) AS order_count 
+>   FROM orders 
+>   GROUP BY customer_id
+> ) AS customer_orders;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Subqueries in `FROM` clauses generate transient virtual tables.
+> 2. MUST include a table alias (`AS customer_orders`).
+> 3. Enables multi-stage aggregate calculations.
+
+---
+
+
+
+## 6. Related Terms
 - [`SELECT`](../level_03/select.md) — The query starter.
 - [`EXISTS` / `NOT EXISTS`](exists.md) — Testing subquery row matching.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A subquery is a `SELECT` statement nested inside another SQL parent query.
 - Evaluated first (inner query) before the results are fed to the parent (outer query).
 - Can be placed inside `WHERE` (filters), `FROM` (tables), or `SELECT` (projections).

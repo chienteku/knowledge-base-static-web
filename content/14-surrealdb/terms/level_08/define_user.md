@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Security**
+
+
+**Authentication & Permissions (administrative system user definition)**: - **Database Command / Security**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core Engine** (Executed by administrators via CLI or migration tools to configure system roles).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database management, administrative tasks (creating tables, applying migrations, taking backups) must be strictly separated from application end-user traffic. In PostgreSQL, this is handled via `CREATE ROLE` and `GRANT`. In MongoDB, it is handled via `db.createUser()`.
@@ -60,7 +59,7 @@ INFO FOR DB;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Plaintext PASS When Versioning Schema Files
 
@@ -119,85 +118,94 @@ DEFINE USER metrics ON DATABASE PASSWORD "pass" ROLES VIEWER;
 
 
 
-### Mistake 4: Confusing System `DEFINE USER` with Application Record Users (`user` Table)
 
-**The mistake:** Using `DEFINE USER` to register end-user application clients in a web app.
 
-**Why it's wrong:** `DEFINE USER` creates database system administrators (Root, NS, DB users). Application end-users should be records in a `user` table managed via `DEFINE ACCESS ... TYPE RECORD`.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
--- Creating app end-user as DB admin:
-DEFINE USER john ON DATABASE PASSWORD "123" ROLES OWNER; // ❌ Exposes admin database access!
-```
+### Exercise 1: Root Administrator User Creation
 
-*Fix:*
-```surrealql
-CREATE user:john SET email = "john@example.com"; // Application end-user record
-```
+**Scenario:**
+Create a global cluster administrator user `sysadmin` on ROOT with full `OWNER` privileges.
 
-### Mistake 5: Assigning Inappropriate System Roles to Database Users
-
-**The mistake:** Assigning `ROLES OWNER` to read-only database metrics users.
-
-**Why it's wrong:** `OWNER` role grants full read/write/schema alteration rights. Use `ROLES VIEWER` or `ROLES EDITOR` for restricted system users.
-
-*Incorrect:*
-```surrealql
-DEFINE USER metrics ON DATABASE PASSWORD "pass" ROLES OWNER; // ❌ Excessive privileges!
-```
-
-*Fix:*
-```surrealql
-DEFINE USER metrics ON DATABASE PASSWORD "pass" ROLES VIEWER;
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Define a DB Viewer
-Write a `DEFINE USER` statement that creates a database user named `support_agent` on the database level with the `VIEWER` role.
+**Requirements:**
+1. Write `DEFINE USER sysadmin ON ROOT PASSWORD "SuperRootPass2026!" ROLES OWNER`.
 
 > [!check]- Answer
-> - Use `DEFINE USER support_agent ON DATABASE`.
-> - Specify `PASSWORD` or `PASSHASH` and `ROLES VIEWER`.
-
----
-
-
-
-### Exercise 2: Defining Database Editor System User
-
-**Problem:** Define database system user `dev_editor` on database `main` with password `"pass123"` and role `EDITOR`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE USER dev_editor ON DATABASE PASSWORD "pass123" ROLES EDITOR;
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> DEFINE USER dev_editor ON DATABASE PASSWORD "pass123" ROLES EDITOR;
+> DEFINE USER sysadmin ON ROOT 
+>     PASSWORD "SuperRootPass2026!" 
+>     ROLES OWNER;
 > ```
 >
-> **Explanation:** `DEFINE USER` creates system database administrators with specified role privileges.
+> #### Technical Explanation
+>
+> 1. `DEFINE USER ... ON ROOT` creates global cluster administrative accounts.
+> 2. `ROLES OWNER` grants unrestricted access across all namespaces and databases.
+> 3. Managed securely in database system metadata.
 
 ---
 
-### Exercise 3: System User Roles Overview
+### Exercise 2: Namespace Tenant User Creation
 
-**Problem:** List 3 built-in system user roles in SurrealDB (`OWNER`, `EDITOR`, `VIEWER`).
+**Scenario:**
+Create a tenant administrator user `acme_admin` restricted strictly to namespace `tenant_acme`.
 
-**Expected output:**
+**Requirements:**
+1. Target namespace `tenant_acme`.
+2. Write `DEFINE USER acme_admin ON NAMESPACE PASSWORD "AcmePass123!" ROLES OWNER`.
+
 > [!check]- Answer
-> ```text
-> OWNER, EDITOR, VIEWER
-> ```
-> ```text
-> OWNER, EDITOR, VIEWER
+>
+> #### Implementation
+>
+> ```surrealql
+> USE NS tenant_acme;
+> 
+> DEFINE USER acme_admin ON NAMESPACE 
+>     PASSWORD "AcmePass123!" 
+>     ROLES OWNER;
 > ```
 >
-> **Explanation:** Built-in system roles specify administrative privilege levels.
+> #### Technical Explanation
+>
+> 1. `ON NAMESPACE` restricts user administrative privileges strictly to the active namespace.
+> 2. Cannot access or modify other tenant namespaces.
+> 3. Enables multi-tenant administration.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Dropping Administrative System Users
+
+**Scenario:**
+Drop administrative user `old_admin` from the current database scope using `REMOVE USER`.
+
+**Requirements:**
+1. Write `REMOVE USER old_admin ON DATABASE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> REMOVE USER old_admin ON DATABASE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE USER` revokes system user accounts.
+> 2. Blocks subsequent administrative login attempts using those credentials.
+> 3. Maintains administrative access hygiene.
+
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — The overall 4-tier security system.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Contrast with end-user table authentication.
@@ -205,7 +213,7 @@ Write a `DEFINE USER` statement that creates a database user named `support_agen
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE USER` configures system administrators and backend service roles.
 - Users can be scoped `ON ROOT`, `ON NAMESPACE`, or `ON DATABASE`.
 - Supported roles include `OWNER` (full DDL/DML access), `EDITOR` (data modification), and `VIEWER` (read-only).

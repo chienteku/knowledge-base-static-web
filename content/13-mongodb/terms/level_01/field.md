@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Core Concept** (Document Attribute Key-Value): A Field is a name-value pair within a MongoDB document, serving as the fundamental attribute unit analogous to a column in a relational table.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported conceptually by all document-based storage models. Case-sensitive and whitespace-sensitive in MongoDB query engines).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational databases, tables use **Columns** to define attributes:
@@ -81,7 +82,7 @@ In this document, the keys on the left are **Fields**, and the values on the rig
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Inconsistent field name capitalization or spelling across documents in a collection
 
@@ -131,70 +132,92 @@ The query engine treats them as two completely unrelated columns, resulting in d
 metrics: [{ date: "2026-01-01", count: 100 }, { date: "2026-01-02", count: 200 }]
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Field Type Parsing
+### Exercise 1: Dynamic Field Addition
 
-**Problem:** Inspect the following document:
-```json
-{
-  "_id": 1,
-  "sku": "ITEM-900",
-  "pricing": {
-    "retail": 49.99,
-    "discounted": 39.99
-  }
-}
-```
-1.  List the names of all fields at the top-level of the document.
-2.  List the fields nested inside the `pricing` field.
+**Scenario:**
+Add a new field `loyaltyTier: "Gold"` to an existing user document using `$set`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `updateOne()` with `$set: { loyaltyTier: "Gold" }`.
+
 > [!check]- Answer
-> ```text
-> 1. Top-level fields: `_id`, `sku`, and `pricing`.
-> 2. Nested fields inside `pricing`: `retail` and `discounted`.
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.updateOne(
+>   { email: "alice@example.com" },
+>   { $set: { loyaltyTier: "Gold" } }
+> );
 > ```
-> - Top-level keys reside directly inside the outermost curly braces.
-> - Nested keys reside inside the subdocument brace block.
+>
+> #### Technical Explanation
+>
+> 1. `$set` adds new fields dynamically to target documents without altering schema definitions.
+> 2. Documents in the same collection can contain different fields.
+> 3. Eliminates `ALTER TABLE ADD COLUMN` DDL locks required by relational databases.
+
+---
+
+### Exercise 2: Field Removal with `$unset`
+
+**Scenario:**
+Remove a temporary field `draftNotes` from a user document using `$unset`.
+
+**Requirements:**
+1. Execute `updateOne()` with `$unset: { draftNotes: "" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.updateOne(
+>   { email: "alice@example.com" },
+>   { $unset: { draftNotes: "" } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$unset` deletes specified fields from matching documents.
+> 2. Reclaims document storage bytes in BSON binary structures.
+> 3. Field values are completely removed rather than set to `null`.
+
+---
+
+### Exercise 3: Field Renaming with `$rename`
+
+**Scenario:**
+Rename field `phone_number` to `phoneNumber` across all documents in collection `users`.
+
+**Requirements:**
+1. Execute `updateMany()` with `$rename: { "phone_number": "phoneNumber" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.updateMany(
+>   {},
+>   { $rename: { "phone_number": "phoneNumber" } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$rename` updates field names atomically across existing records.
+> 2. Preserves stored field values under the new key name.
+> 3. Essential operator for schema refactoring migrations.
 
 ---
 
 
 
-### Exercise 2: Dot Notation Field Queries
-
-**Problem:** Query users where nested field `address.city` equals `"New York"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ "address.city": "New York" });
-> ```
-> ```javascript
-> db.users.find({ "address.city": "New York" });
-> ```
->
-> **Explanation:** Dot-notation in quotes `"address.city"` accesses nested sub-document fields.
-
----
-
-### Exercise 3: Array Element Position Query
-
-**Problem:** Query documents where first tag `tags.0` equals `"tech"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.find({ "tags.0": "tech" });
-> ```
-> ```javascript
-> db.posts.find({ "tags.0": "tech" });
-> ```
->
-> **Explanation:** `"array.0"` indexes specific positional array elements in field paths.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Document](document.md) — The parent container.
 - [BSON Data Types (Overview)](../level_02/bson_data_types.md) — The types of values fields can store.
@@ -202,7 +225,7 @@ metrics: [{ date: "2026-01-01", count: 100 }, { date: "2026-01-02", count: 200 }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Field is a case-sensitive key-value pair stored inside a document.
 - Serving as the document equivalent of a relational database column.
 - Can store primitive values, arrays, or complete nested subdocuments.

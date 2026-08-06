@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SEO**
+
+**SEO & Meta Management** (Search Engine Optimization): SEO in Nuxt 3 integrates server-rendered semantic HTML with meta tag composables (`useHead`, `useSeoMeta`) for maximum search visibility.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (SEO properties are compiled server-side inside header tags and parsed by external search crawler engines).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Organic search traffic is critical for e-commerce, blogs, and marketing platforms. To determine where your website ranks in search results, search engine spiders (crawlers) request page URLs, parse the raw text source, and analyze the content structure.
@@ -53,7 +54,7 @@ Nuxt 3 builds on top of Vue's reactive head manager (`@unhead/vue`), exposing co
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on client-side client routing for initial SEO tags
 
@@ -121,96 +122,134 @@ useHead({
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify the SEO Value
+### Exercise 1: Setting Meta Tags with `useHead()`
 
-**Problem:** Read the two HTML structures below. State which document is optimized for search indexing, and explain why:
+**Scenario:**
+Configure page title, meta description, and canonical link tags inside a page component using `useHead()`.
 
-**Document A:**
-```html
-<body><div id="app"></div></body>
-```
+**Requirements:**
+1. Execute `useHead()` with title, meta array, and link array.
 
-**Document B:**
-```html
-<body>
-  <div id="app">
-    <h1>Nuxt.js Tutorial</h1>
-    <p>Learn how to build server-side rendered Vue applications from scratch.</p>
-  </div>
-</body>
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Document B is optimized for search indexing. 
-> It contains raw semantic HTML elements (h1, p) directly inside the body. 
-> Search crawlers can read this content immediately upon download without executing JavaScript, whereas Document A is blank and requires JS compilation to show any text.
-> ```
-> - Search engines inspect raw HTTP response text bodies.
-
----
-
-### Exercise 2: useSeoMeta Composables Pattern
-
-**Problem:** Write `<script setup>` using `useSeoMeta()` configuring `title`, `description`, and OpenGraph image `ogImage`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
-> useSeoMeta({
->   title: 'My Product',
->   description: 'Product Description',
->   ogImage: 'https://example.com/og.jpg'
-> });
-> </script>
-> ```
-> - `useSeoMeta()` provides strongly typed, auto-completed SEO metadata.
-> 
-> ```vue
-> <script setup>
-> useSeoMeta({
->   title: 'E-Commerce Store',
->   description: 'Shop top quality products online.',
->   ogTitle: 'E-Commerce Store',
->   ogImage: 'https://example.com/og-image.png'
-> });
-> </script>
-> ```
-
----
-
-### Exercise 3: Robots Meta Config
-
-**Problem:** Write `useHead()` code line setting meta tag `robots: 'noindex, nofollow'` for secret admin pages.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> useHead({ meta: [{ name: 'robots', content: 'noindex, nofollow' }] });
-> ```
-> - Prevents search engine crawlers from indexing secret routes.
-> 
-> ```typescript
+> <script setup lang="ts">
 > useHead({
->   meta: [{ name: 'robots', content: 'noindex, nofollow' }]
+>   title: "Nuxt 3 SEO Guide",
+>   meta: [
+>     { name: "description", content: "Comprehensive guide to mastering SEO in Nuxt 3 applications." },
+>     { property: "og:title", content: "Nuxt 3 SEO Guide" }
+>   ],
+>   link: [
+>     { rel: "canonical", href: "https://example.com/seo-guide" }
+>   ]
 > });
+> </script>
+
+<template>
+  <main>
+    <h1>Nuxt 3 SEO Masterclass</h1>
+  </main>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useHead()` updates the `<head>` section of HTML documents during SSR and client-side navigation.
+> 2. Server-renders static HTML meta tags for search engine web crawlers.
+> 3. Reactive options automatically update meta tags when reactive state changes.
+
+---
+
+### Exercise 2: Type-Safe Meta Tag Management with `useSeoMeta()`
+
+**Scenario:**
+Set OpenGraph and Twitter card social share preview metadata using `useSeoMeta()`.
+
+**Requirements:**
+1. Use `useSeoMeta()` with `ogTitle`, `ogDescription`, `ogImage`, and `twitterCard`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> useSeoMeta({
+>   title: "Product Overview",
+>   description: "Explore our next-generation cloud analytics platform.",
+>   ogTitle: "Product Overview - Cloud Analytics",
+>   ogDescription: "Explore our next-generation cloud analytics platform.",
+>   ogImage: "https://example.com/og-image.jpg",
+>   twitterCard: "summary_large_image"
+> });
+> </script>
 > ```
+
+> #### Technical Explanation
+>
+> 1. `useSeoMeta()` provides a flat, strongly typed interface for 100+ standard SEO and social meta tags.
+> 2. Prevents syntax typos in meta tag names and properties.
+> 3. Fully integrated with Nuxt 3 server-side HTML rendering.
+
+---
+
+### Exercise 3: Dynamic Meta Data from Async Data Fetching
+
+**Scenario:**
+Fetch article metadata from an API and dynamically populate page title and meta tags.
+
+**Requirements:**
+1. Combine `useFetch` data with dynamic `useSeoMeta()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const route = useRoute();
+> const { data: article } = await useFetch(`/api/articles/${route.params.slug}`);
+
+useSeoMeta({
+  title: () => article.value?.title ?? "Article",
+  description: () => article.value?.summary ?? "Default summary"
+});
+</script>
+
+<template>
+  <article v-if="article">
+    <h1>{{ article.title }}</h1>
+    <p>{{ article.content }}</p>
+  </article>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Passing getter functions (`() => article.value?.title`) ensures meta tags update reactively when async data resolves.
+> 2. Server-renders fetched article meta tags into initial HTML response for social bots and crawlers.
+> 3. Production pattern for dynamic SSR content pages.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Universal Rendering (SSR)](universal_rendering.md) — The process that produces the structured HTML.
 - [`useHead`](../level_06/use_head.md) — The composable helper used to write head properties.
 - [`useSeoMeta`](../level_06/use_seo_meta.md) — useSeoMeta composable.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SEO optimizes website code to rank higher on search engines.
 - Client-Side Rendering (CSR) serves blank HTML, which harms search ranking.
 - Nuxt SSR renders Vue layouts on the server, serving fully readable HTML.

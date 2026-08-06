@@ -173,8 +173,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Asynchronous Ring Buffer Stream with Safe `Pin::get_mut` Unpin Projection
 
-**Scenario**: Asynchronous ring buffer streams store data in an internal circular `VecDeque<T>` array. Because `VecDeque` implements `Unpin`, safe methods inside `Stream::poll_next` can project `Pin<&mut AsyncRingBuffer>` into a mutable reference `&mut AsyncRingBuffer` using `Pin::get_mut()` without requiring `unsafe` blocks.
+**Scenario:** Asynchronous ring buffer streams store data in an internal circular `VecDeque<T>` array. Because `VecDeque` implements `Unpin`, safe methods inside `Stream::poll_next` can project `Pin<&mut AsyncRingBuffer>` into a mutable reference `&mut AsyncRingBuffer` using `Pin::get_mut()` without requiring `unsafe` blocks.
 
+**Requirements:**
 Implement a custom `AsyncRingBufferStream` using `Pin::get_mut()`.
 
 **Requirements**:
@@ -184,6 +185,9 @@ Implement a custom `AsyncRingBufferStream` using `Pin::get_mut()`.
 4. Add unit tests asserting item sequence and safe `get_mut` usage.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use futures_core::stream::Stream;
 > use std::collections::VecDeque;
@@ -235,7 +239,8 @@ Implement a custom `AsyncRingBufferStream` using `Pin::get_mut()`.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Safe `Pin::get_mut`**: When a type `T` implements `Unpin`, Rust allows calling `Pin::get_mut(pinned_ref)` to obtain a standard mutable reference `&mut T` safely.
 > 2. **No `unsafe` Required**: Because `AsyncRingBufferStream` contains no self-referential pointers, moving it in memory does not break invariants.
 > 
@@ -310,7 +315,8 @@ Implement a protocol controller demonstrating hybrid field projection.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Hybrid Projection**: Fields containing `PhantomPinned` render the top-level struct `!Unpin`.
 > 2. **Field Access Safety**: While projecting `future` requires `Pin::new_unchecked`, mutating scalar fields like `bytes_read` is safe because primitive types do not rely on memory address stability.
 > 
@@ -361,7 +367,8 @@ Demonstrate `Pin::into_inner` extraction for `Unpin` types.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **`Pin::into_inner` Bound**: `Pin::into_inner(pin)` requires `T: Unpin`, allowing callers to consume the `Pin` wrapper and extract the inner owned data safely.
 > 
 > ---

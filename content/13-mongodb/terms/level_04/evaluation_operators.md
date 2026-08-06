@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Query Operator** (Custom Evaluation Operators): Evaluation Operators ($expr, $jsonSchema, $mod, $regex, $text, $where) evaluate fields against complex expressions or custom logic.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Evaluated in memory. Aggregation expressions inside `$expr` require parsing by the document projection engine, making these operations CPU-intensive compared to simple indexes lookups).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard query filters evaluate a field against a static, constant value:
@@ -95,7 +96,7 @@ db.products.find({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the '$' prefix on field paths inside the '$expr' operator array
 
@@ -150,68 +151,95 @@ db.orders.find({ $expr: { $gt: ["price", "cost"] } }); // ❌ Compares literal s
 db.orders.find({ $expr: { $gt: ["$price", "$cost"] } }); // Compares document field values
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Cross-Field Comparison Query
+### Exercise 1: Field-to-Field Comparisons with `$expr`
 
-**Problem:** You have a `users` collection. Each document contains `monthly_budget` and `monthly_spending` fields. 
-Write the query to locate all users who have exceeded their budget (where `monthly_spending` is strictly greater than `monthly_budget`).
+**Scenario:**
+Query collection `orders` for documents where `amountPaid` is greater than `totalAmount`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$expr: { $gt: ["$amountPaid", "$totalAmount"] }`.
+
 > [!check]- Answer
-> ```javascript
-> db.users.find({
->   $expr: { $gt: [ "$monthly_spending", "$monthly_budget" ] }
-> });
-> ```
-> - The query compares two fields in the same document, requiring the `$expr` operator.
-> - Prefix both fields with the dollar sign `$` inside the comparison array.
-
----
-
-
-
-### Exercise 2: Comparing Two Fields in Same Document with `$expr`
-
-**Problem:** Query orders where `spent` amount exceeds `budget` field using `$expr`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.orders.find({ $expr: { $gt: ["$spent", "$budget"] } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.orders.find({
->   $expr: { $gt: ["$spent", "$budget"] }
+>   $expr: { $gt: ["$amountPaid", "$totalAmount"] }
 > });
 > ```
 >
-> **Explanation:** `$expr` allows using aggregation expressions inside standard `find()` query filters.
+> #### Technical Explanation
+>
+> 1. `$expr` enables aggregation expressions and field-to-field comparisons within standard `find()` query filters.
+> 2. Field names prefixed with `$` (e.g. `"$amountPaid"`) reference document values dynamically.
+> 3. Solves queries that compare two fields on the same document.
 
 ---
 
-### Exercise 3: Modulus Evaluation with `$mod`
+### Exercise 2: Modulo Arithmetic Matching with `$mod`
 
-**Problem:** Query documents where `qty` is divisible by 5 using `$mod: [5, 0]`.
+**Scenario:**
+Query collection `inventory` for documents where `quantity` is an even number (`quantity % 2 == 0`).
 
-**Expected output:**
+**Requirements:**
+1. Use `{ quantity: { $mod: [2, 0] } }`.
+
 > [!check]- Answer
-> ```text
-> db.inventory.find({ qty: { $mod: [5, 0] } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.inventory.find({ qty: { $mod: [5, 0] } });
+> db.inventory.find({
+>   quantity: { $mod: [2, 0] }
+> });
 > ```
 >
-> **Explanation:** `{ field: { $mod: [divisor, remainder] } }` evaluates modulo arithmetic operations.
+> #### Technical Explanation
+>
+> 1. `$mod: [divisor, remainder]` performs modulo arithmetic on numeric fields.
+> 2. Matches documents where `field % divisor == remainder`.
+> 3. Useful for partition key checks and odd/even filtering.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Pattern Matching with `$regex`
+
+**Scenario:**
+Find all users whose `email` ends with `"@example.com"`.
+
+**Requirements:**
+1. Use `{ email: { $regex: "@example\.com$" } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   email: { $regex: "@example\.com$" }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$regex` evaluates regular expression pattern matching on string fields.
+> 2. Anchored patterns (e.g. `^prefix`) can utilize standard indexes.
+> 3. Provides flexible text matching capabilities.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`$regex` (Regular Expressions)](regex.md) — String matching.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Evaluation operators execute calculations or logic checks during queries.
 - `$expr` allows the comparison of two fields within the same document.
 - Fields inside `$expr` must be prefixed with `$` to read their values.

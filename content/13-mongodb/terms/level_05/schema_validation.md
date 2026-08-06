@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Data Modeling** (JSON Schema Constraint Validation): Schema Validation ($jsonSchema) enforces structural types, required fields, and value ranges on collection writes directly at the database tier.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Checked during the write pipeline on the database server. Aborts writes and rolls back changes if validations fail).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Because MongoDB has a **Flexible Schema** by default, you can write any document to a collection. 
@@ -93,7 +94,7 @@ db.createCollection("users", {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Declaring validation rules using JSON 'type' instead of BSON 'bsonType' for numeric constraints
 
@@ -141,89 +142,116 @@ db.runCommand({ collMod: "legacy", validator: { ... }, validationLevel: "strict"
 db.runCommand({ collMod: "legacy", validator: { ... }, validationLevel: "moderate" });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Validation Rule Construction
+### Exercise 1: Enforcing Mandatory Fields with `$jsonSchema`
 
-**Problem:** You want to create a `products` collection. The schema validation must enforce:
-1.  The `title` field is required and must be a BSON `string`.
-2.  The `price` field is required and must be a BSON `decimal` (Decimal128).
-Write the `db.createCollection` command.
+**Scenario:**
+Add a `$jsonSchema` validation rule to collection `users` requiring fields `username` (`string`), `email` (`string`), and `age` (`number`).
 
-**Expected output:**
+**Requirements:**
+1. Use `createCollection()` with `validator: { $jsonSchema: ... }`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.createCollection("products", {
+> db.createCollection("users", {
 >   validator: {
 >     $jsonSchema: {
 >       bsonType: "object",
->       required: [ "title", "price" ],
+>       required: ["username", "email", "age"],
 >       properties: {
->         title: {
->           bsonType: "string"
->         },
->         price: {
->           bsonType: "decimal"
->         }
->       }
->     }
->   }
-> });
-> ```
-> - Add `title` and `price` to the `required` array list.
-> - Specify the exact BSON type aliases `"string"` and `"decimal"` under properties.
-
----
-
-
-
-### Exercise 2: Adding `$jsonSchema` Validation Rule
-
-**Problem:** Create collection `account` requiring `email` (string) and `balance` (number).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.createCollection("account", { validator: { $jsonSchema: { required: ["email", "balance"], properties: { email: { bsonType: "string" }, balance: { bsonType: ["int", "double", "decimal"] } } } } });
-> ```
-> ```javascript
-> db.createCollection("account", {
->   validator: {
->     $jsonSchema: {
->       bsonType: "object",
->       required: ["email", "balance"],
->       properties: {
->         email: { bsonType: "string" },
->         balance: { bsonType: ["int", "double", "decimal"] }
+>         username: { bsonType: "string", description: "must be a string" },
+>         email: { bsonType: "string", pattern: "^.+@.+$", description: "must be valid email" },
+>         age: { bsonType: "int", minimum: 18, description: "must be integer >= 18" }
 >       }
 >     }
 >   }
 > });
 > ```
 >
-> **Explanation:** `$jsonSchema` enforces database-level type validation on document insertions.
+> #### Technical Explanation
+>
+> 1. `$jsonSchema` enforces document structural invariants directly at the database engine tier.
+> 2. `required` array specifies mandatory field keys.
+> 3. `bsonType` and `minimum` enforce data types and numeric range boundaries on all write operations.
 
 ---
 
-### Exercise 3: Modifying Schema Validator with `collMod`
+### Exercise 2: Updating Validation Rules with `collMod`
 
-**Problem:** Command to update schema validator rules on existing collection `account` (`collMod`).
+**Scenario:**
+Modify existing collection `users` validation rules to require a new field `status` using `collMod`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `db.runCommand({ collMod: "users", validator: ... })`.
+
 > [!check]- Answer
-> ```text
-> db.runCommand({ collMod: "account", validator: { ... } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.runCommand({
->   collMod: "account",
->   validator: { $jsonSchema: { ... } }
+>   collMod: "users",
+>   validator: {
+>     $jsonSchema: {
+>       bsonType: "object",
+>       required: ["username", "email", "status"],
+>       properties: {
+>         status: { enum: ["active", "pending", "suspended"] }
+>       }
+>     }
+>   },
+>   validationLevel: "strict",
+>   validationAction: "error"
 > });
 > ```
 >
-> **Explanation:** `collMod` updates validator rules on active collections without dropping data.
+> #### Technical Explanation
+>
+> 1. `collMod` updates collection Schema Validation rules dynamically without dropping data.
+> 2. `enum` restricts field values to a specified list of allowed string values.
+> 3. `validationAction: "error"` rejects invalid write attempts immediately.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Handling Validation Failures in Write Commands
+
+**Scenario:**
+Demonstrate write rejection error output when inserting a document violating `$jsonSchema` rules.
+
+**Requirements:**
+1. Attempt invalid write and inspect `DocumentValidationFailure` exception.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> try {
+>   db.users.insertOne({
+>     username: "alice",
+>     email: "invalid-email-format",
+>     age: 15 // Violates minimum: 18
+>   });
+> } catch (err) {
+>   console.error("Write Rejected by Schema Validator:", err.message);
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Writes violating `$jsonSchema` rules throw `DocumentValidationFailure` (Error Code 121).
+> 2. Prevents malformed or low-quality data from entering the database.
+> 3. Complements application-tier Mongoose/Zod validation models.
+
+---
+
+
+
+## 6. Related Terms
 
 - [BSON Data Types (Overview)](../level_02/bson_data_types.md) — The target types.
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
@@ -231,7 +259,7 @@ Write the `db.createCollection` command.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$jsonSchema` enforces document structure rules at the database layer.
 - Runs automatically on every database insert and update query.
 - Rejects writes that violate rules, preventing data corruption.

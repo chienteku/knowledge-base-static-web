@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Security & Protocol**
+
+
+**Authentication & Permissions (JSON Web Token token authentication)**: - **Security & Protocol**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Transport Layer** (Validated on every HTTP Authorization header `Bearer <token>` or WebSocket auth handshake).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Stateful session databases (like traditional session tables stored in Redis or SQL) require every single incoming web request to perform a database lookup to check if the session cookie is valid. For high-throughput applications, this creates a massive bottleneck.
@@ -70,7 +69,7 @@ await db.authenticate(token);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting Infinite Token Lifetimes in Production
 
@@ -130,89 +129,94 @@ Use environment variables or asymmetric RS256 JWKS endpoint URLs
 
 
 
-### Mistake 4: Hardcoding JWT Secret Keys in Public Frontend Repositories
 
-**The mistake:** Storing `DEFINE ACCESS ... KEY "my_secret_key"` inside open source client repos.
 
-**Why it's wrong:** Anyone with access to the secret key can forge valid JWT tokens and bypass authentication.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-// Public repo
-DEFINE ACCESS jwt ON DATABASE TYPE JWT ALGORITHM HS256 KEY "public_secret";
-```
+### Exercise 1: Decoding JWT Session Claims
 
-*Fix:*
-```surrealql
-Use environment variables or asymmetric RS256 JWKS endpoint URLs
-```
+**Scenario:**
+Inspect decoded JWT session claims stored in `$token` during an authenticated client session.
 
-### Mistake 5: Omitting Expiration `exp` Claims in Generated JWT Tokens
-
-**The mistake:** Issuing JWT tokens without an `exp` (expiration timestamp) claim.
-
-**Why it's wrong:** JWTs without expiration remain valid forever, preventing token revocation if compromised. Always set `exp` claims.
-
-*Incorrect:*
-```surrealql
-// Token payload without exp claim
-{ sub: "user:alice" } // ❌ Never expires!
-```
-
-*Fix:*
-```surrealql
-// Token payload with exp claim
-{ sub: "user:alice", exp: 1700000000 } // Time-bound expiration
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Decode JWT Payload Claims
-Identify the 4 core system claims included in every SurrealDB Record Access JWT token.
+**Requirements:**
+1. Select `$token.sub`, `$token.exp`, `$token.iss`.
 
 > [!check]- Answer
-> - Target Namespace (`NS`).
-> - Target Database (`DB`).
-> - Access Definition Name (`AC`).
-> - Authenticated Record ID (`ID` / `sub`).
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT 
+>     $token.sub AS subject,
+>     $token.exp AS expiration_timestamp,
+>     $token.iss AS issuer;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$token` contains decoded JSON Web Token claims parsed from client authorization headers.
+> 2. Includes standard JWT fields (`sub`, `exp`, `iss`, `nbf`).
+> 3. Available across all queries executed during active sessions.
+
+---
+
+### Exercise 2: Using Custom JWT Claims in Row Security
+
+**Scenario:**
+Restrict access to table `project` so that users can only select projects matching their token's tenant claim (`$token.tenant_id`).
+
+**Requirements:**
+1. Define table `project` with `PERMISSIONS FOR select WHERE tenant_id = $token.tenant_id`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE project SCHEMAFULL
+>     PERMISSIONS FOR select WHERE tenant_id = $token.tenant_id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Custom JWT claims (e.g. `tenant_id`) are accessible via `$token.tenant_id`.
+> 2. Enforces multi-tenant row security dynamically using external JWT claims.
+> 3. Eliminates manual tenant filtering in client queries.
+
+---
+
+### Exercise 3: Validating JWT Expiration Lifetimes
+
+**Scenario:**
+Explain how SurrealDB automatically rejects expired JSON Web Tokens.
+
+**Requirements:**
+1. Describe how SurrealDB checks the `$token.exp` claim against current time.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> When a client passes a JWT:
+> - SurrealDB verifies the cryptographic signature (using KEY & ALGORITHM).
+> - SurrealDB checks if $token.exp < current_timestamp.
+> - If expired, the request is rejected with an unauthenticated 401 response.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. SurrealDB validates JWT expiration (`exp`) automatically during token parsing.
+> 2. Rejects expired tokens before executing database queries.
+> 3. Protects against stale authentication session reuse.
 
 ---
 
 
 
-### Exercise 2: SurrealDB JWT Claims Structure
 
-**Problem:** List essential claims in SurrealDB JWT tokens (`NS`, `DB`, `AC` / access scope, `ID` / `$auth.id`).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> NS, DB, AC (access scope), ID ($auth.id)
-> ```
-> ```text
-> NS, DB, AC (access scope), ID ($auth.id)
-> ```
->
-> **Explanation:** SurrealDB JWT claims specify target namespace, database, access scope, and user identity.
-
----
-
-### Exercise 3: Authenticating SDK with Raw JWT Token
-
-**Problem:** Write JS SDK call authenticating using token `await db.authenticate(token)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> await db.authenticate(token);
-> ```
-> ```javascript
-> await db.authenticate(token);
-> ```
->
-> **Explanation:** `db.authenticate(token)` establishes SDK session state using a raw JWT string.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Built-in access definition.
 - [`$session` / `$token` Variables](session_token_variables.md) — Accessing decoded JWT claims in SurrealQL.
@@ -222,7 +226,7 @@ Identify the 4 core system claims included in every SurrealDB Record Access JWT 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SurrealDB issues and verifies standard RFC 7519 JSON Web Tokens (JWTs).
 - Enables stateless authentication across HTTP endpoints and WebSocket streams.
 - Tokens contain signature, expiration (`exp`), subject (`ID`), and targeted database boundaries (`NS`/`DB`/`AC`).

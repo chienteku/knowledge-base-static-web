@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (single-record object unwrapping modifier)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the final query projection layer. Flattens single-element array wrappers into direct JSON object returns).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default in SQL and database drivers, a `SELECT` query always returns an **Array of results**:
@@ -83,7 +82,7 @@ RETURN $current_user.name;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using 'ONLY' on queries that return multiple records, causing runtime errors or unexpected truncations
 
@@ -145,65 +144,101 @@ SELECT ONLY * FROM user:alice; // Returns unwrapped object { ... }
 SELECT * FROM user:alice; // Returns standard array response [{ ... }]
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Single Object Extraction
+### Exercise 1: Single Record Document Unboxing with `ONLY`
 
-**Problem:** You are fetching an account record by ID (`account:101`).
-Write the SurrealQL query using the `ONLY` keyword to retrieve the `balance` and `status` fields as a direct JSON object (without an outer array wrapper).
+**Scenario:**
+An API route fetches a single user record `user:alice` and unboxes the document from the outer result array payload using `FROM ONLY`.
 
-**Expected output:**
+**Requirements:**
+1. Create `user:alice`.
+2. Select `SELECT * FROM ONLY user:alice`.
+
 > [!check]- Answer
-> ```sql
-> SELECT balance, status FROM ONLY account:101;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET name = "Alice Smith";
+> 
+> -- Unbox single record result payload
+> SELECT * FROM ONLY user:alice;
+> -- Output: { id: user:alice, name: "Alice Smith" } (not wrapped in array!)
 > ```
-> - Place `ONLY` immediately after `FROM`.
-> - Target the Record ID `account:101`.
+>
+> #### Technical Explanation
+>
+> 1. `FROM ONLY` unwraps single-record queries, returning a single JSON object instead of a 1-element array `[{...}]`.
+> 2. If the query returns zero or multiple records, `ONLY` throws a runtime error.
+> 3. Eliminates client-side array index unboxing (`result[0]`).
+
+---
+
+### Exercise 2: Unboxing Scalar Subquery Values
+
+**Scenario:**
+Extract a user's email as a plain unboxed scalar string using `SELECT VALUE email FROM ONLY user:alice`.
+
+**Requirements:**
+1. Select `SELECT VALUE email FROM ONLY user:alice`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT VALUE email FROM ONLY user:alice;
+> -- Output: "alice@example.com"
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combining `SELECT VALUE` with `ONLY` unwraps both the property key AND the outer result array.
+> 2. Returns a raw unboxed scalar value (`"alice@example.com"`).
+> 3. Ideal for binding subquery scalar values to parameters in scripts.
+
+---
+
+### Exercise 3: Enforcing Single-Record Invariants
+
+**Scenario:**
+Demonstrate that `FROM ONLY` throws an error when a query returns multiple records.
+
+**Requirements:**
+1. Create 2 user records.
+2. Attempt `SELECT * FROM ONLY user;`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:u1 SET name = "User 1";
+> CREATE user:u2 SET name = "User 2";
+> 
+> -- Fails with error: "Expected a single record result, but found 2 records"
+> SELECT * FROM ONLY user;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `FROM ONLY` enforces single-record result invariants at query runtime.
+> 2. Guards against unexpected multi-record query returns.
+> 3. Ensures strict single-document API responses.
 
 ---
 
 
 
-### Exercise 2: Unwrapping Single Record Query Result
-
-**Problem:** Query single record `user:alice` returning raw object without array wrapper using `ONLY`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT ONLY * FROM user:alice;
-> ```
-> ```surrealql
-> SELECT ONLY * FROM user:alice;
-> ```
->
-> **Explanation:** `SELECT ONLY` unwraps single-item array results into direct object responses.
-
----
-
-### Exercise 3: Combining `ONLY` and `VALUE`
-
-**Problem:** Extract raw scalar string value of `email` from `user:alice` using `SELECT ONLY VALUE email FROM user:alice`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT ONLY VALUE email FROM user:alice;
-> ```
-> ```surrealql
-> SELECT ONLY VALUE email FROM user:alice;
-> ```
->
-> **Explanation:** `ONLY VALUE` returns raw primitive values without array or object wrappers.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`SELECT`](../level_03/select.md) — The query statement.
 - [`SELECT VALUE` (Single Field Extraction)](../level_03/select_value.md) — Flat value extraction.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `ONLY` keyword unwraps query results, returning a single record object.
 - Eliminates outer array wrappers (`[...]`) for single-record lookups.
 - Removes the need to write `.map()` or `[0]` index access in application SDK code.

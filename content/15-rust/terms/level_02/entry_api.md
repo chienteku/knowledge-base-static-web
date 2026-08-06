@@ -152,12 +152,13 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Tenant API Rate Limiter & Token Bucket Aggregator
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In a high-performance network API gateway, rate limiting is applied per client tenant and API endpoint route combination. Each tenant-route pair operates a token bucket algorithm to enforce rate limits. If a tenant makes a request, the system must check whether a bucket exists for `(client_id, endpoint)`:
 1. If the token bucket already exists, replenish its tokens based on the elapsed time since `last_refill_timestamp` before consuming requested tokens.
 2. If the token bucket does not exist, initialize a new `TokenBucket` with default capacity and current timestamp using lazy insertion.
 3. If sufficient tokens are available, deduct the requested tokens and return `Ok(remaining_tokens)`. Otherwise, return `Err(RateLimitError::Exceeded { remaining, requested })`.
 
+**Requirements:**
 Implement `RateLimiter::consume` using `HashMap::entry`, chaining `.and_modify()` for token replenishment on existing buckets and `.or_insert_with_key()` for lazy bucket initialization. Ensure your unit tests verify token deduction, error handling when tokens are exhausted, token replenishment over simulated time, and type assertions using `matches!`.
 
 > [!check]- Answer
@@ -298,12 +299,13 @@ Implement `RateLimiter::consume` using `HashMap::entry`, chaining `.and_modify()
 
 ### Exercise 2: Real-Time Financial Order Book Depth & Price Level Pruning Engine
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In an electronic trading engine, order books maintain bid and ask depth indexed by price ticks using a sorted map (`BTreeMap<u64, PriceLevel>`). When market participants submit or cancel orders:
 1. `add_order` should update an existing price level by adding quantity and incrementing order count, or create a new price level if vacant.
 2. `cancel_order` should locate the price level at `price_cents`. If occupied, it decrements the available volume. If the volume reaches 0 (or quantity requested for cancellation covers all volume), it must prune the price level entirely from the `BTreeMap` without performing a secondary lookup by key.
 3. If attempting to cancel from a vacant price level, it must return a clear `Result::Err`.
 
+**Requirements:**
 Implement `OrderBook` using `BTreeMap::entry` and pattern match on `Entry::Occupied(mut entry)` to invoke `OccupiedEntry::remove` for $O(\log N)$ in-place level pruning. Write unit tests confirming order aggregation, partial cancellation, total pruning, and error handling for missing price levels.
 
 > [!check]- Answer
@@ -437,13 +439,14 @@ Implement `OrderBook` using `BTreeMap::entry` and pattern match on `Entry::Occup
 
 ### Exercise 3: Lexical Symbol Table with Lazy Type Inference & Re-binding
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In a language compiler AST traversal, a symbol table tracks variable scope bindings, dynamic types, and reference usage counts.
 1. When resolving a symbol reference via `resolve_or_define(name, default_kind)`:
    - If the symbol already exists in the table, increment its `reference_count` by 1 using `.and_modify()` without altering its declared `kind`.
    - If the symbol does not exist, initialize a new `SymbolRecord` with `reference_count = 1` and `is_exported = false` using `or_insert_with_key` to borrow the key reference without redundant allocations.
 2. `export_symbol(name)` locates the symbol using `Entry::Occupied` to set `is_exported = true` and returns `Ok(previous_is_exported_state)`. If the symbol is absent (`Entry::Vacant`), it returns `Err`.
 
+**Requirements:**
 Implement `SymbolTable` using the Entry API. Write unit tests with assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`) covering symbol creation, reference count increments, type preservation, and export flags.
 
 > [!check]- Answer

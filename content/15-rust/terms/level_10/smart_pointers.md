@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Pointer Abstraction**: Smart pointers (`Box<T>`, `Rc<T>`, `Arc<T>`, `RefCell<T>`) providing memory allocation and ownership semantics.
+
+
+**Rust Abstraction Pattern (heap pointer & ownership wrappers)**: Smart pointers (`Box<T>`, `Rc<T>`, `Arc<T>`, `RefCell<T>`) providing memory allocation and ownership semantics.
 
 ---
 

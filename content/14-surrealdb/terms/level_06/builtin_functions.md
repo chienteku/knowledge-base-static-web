@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (SurrealQL standard function namespace overview)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Compiled natively inside the Rust database engine. Executes in memory during query processing with zero IPC or network overhead).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Traditional databases vary in how they organize utility functions:
@@ -89,7 +88,7 @@ CREATE ticket SET
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Calling built-in functions without their mandatory namespace prefix, triggering parser errors
 
@@ -143,62 +142,90 @@ RETURN string::slice("hello"); // ❌ Missing start/end index arguments!
 RETURN string::slice("hello", 0, 2); // Correct argument signature
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Function Namespace Mapping
+### Exercise 1: Namespaced Function Invocation Matrix
 
-**Problem:** Match each task to its correct SurrealDB built-in function call:
-1. Generate a random UUID string.
-2. Check if a string is a valid email address.
-3. Find the average value of a numeric field across records.
+**Scenario:**
+Demonstrate function namespace routing in SurrealQL using `string::*`, `math::*`, `time::*`, and `type::*` functions.
 
-**Expected output:**
+**Requirements:**
+1. Uppercase string `"surrealdb"` using `string::uppercase()`.
+2. Round decimal `99.45dec` to nearest integer using `math::round()`.
+3. Add duration `1d` to current time using `time::now() + 1d`.
+4. Inspect type of `d"2026-08-06"` using `type::of()`.
+
 > [!check]- Answer
-> ```text
-> 1. rand::uuid()
-> 2. string::is::email($val)
-> 3. math::mean(field)
-> ```
-> - Random generators live in the `rand::` module.
-> - Validation checks live in `string::is::`.
-
----
-
-
-
-### Exercise 2: Built-in Function Namespaces Overview
-
-**Problem:** List 5 built-in function namespaces in SurrealQL (string, math, array, time, crypto).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> string, math, array, time, crypto
-> ```
-> ```text
-> string, math, array, time, crypto
-> ```
 >
-> **Explanation:** SurrealQL organizes utility functions into scoped domain namespaces.
-
----
-
-### Exercise 3: Random String Generation
-
-**Problem:** Generate a 16-character random alphanumeric string using `rand::string()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> rand::string(16)
-> ```
+> #### Implementation
+>
 > ```surrealql
-> RETURN rand::string(16);
+> SELECT 
+>     string::uppercase("surrealdb") AS upper_name,
+>     math::round(99.45dec) AS rounded_val,
+>     time::now() + 1d AS tomorrow,
+>     type::of(d"2026-08-06T00:00:00Z") AS date_type;
 > ```
 >
-> **Explanation:** `rand::string(length)` generates cryptographically random strings.
+> #### Technical Explanation
+>
+> 1. SurrealQL organizes built-in functions into double-colon namespaces (`namespace::function()`).
+> 2. Functions operate over rich native types (`decimal`, `datetime`, `string`).
+> 3. Executes scalar transformations directly inside database execution blocks.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Chaining Built-in Functions
+
+**Scenario:**
+Sanitize user input string `"   ALICE@EXAMPLE.COM   "` by trimming whitespace and converting to lowercase in a single expression.
+
+**Requirements:**
+1. Apply `string::lowercase()` and `string::trim()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT string::lowercase(string::trim("   ALICE@EXAMPLE.COM   ")) AS clean_email;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Built-in functions can be nested dynamically (`fn2(fn1(val))`).
+> 2. Normalizes text inputs before database write commits.
+> 3. Reduces backend API data sanitization boilerplate.
+
+---
+
+### Exercise 3: Type Checking with `type::is::*` Functions
+
+**Scenario:**
+Validate whether an incoming value is a valid record link pointer before executing graph traversals.
+
+**Requirements:**
+1. Test `type::is::record(user:alice)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT type::is::record(user:alice) AS is_record_pointer;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `type::is::record(val)` evaluates whether a value is a valid typed record ID pointer.
+> 2. Returns boolean `true` or `false`.
+> 3. Guards dynamic queries against invalid type inputs.
+
+---
+
+
+
+## 6. Related Terms
 
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
 - [String Functions (`string::*`)](string_functions.md) — Text module.
@@ -210,7 +237,7 @@ RETURN string::slice("hello", 0, 2); // Correct argument signature
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SurrealDB functions are organized into hierarchical namespaces (`module::function()`).
 - Eliminates global function naming collisions and improves query readability.
 - Modules cover strings, arrays, math, time, types, cryptography, randoms, and geometry.

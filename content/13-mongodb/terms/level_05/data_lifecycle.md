@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Data Modeling** (TTL & Archive Management): Data Lifecycle Management controls document retention using Time-to-Live (TTL) indexes and archival strategies for automated data expiration.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported natively by MongoDB, Redis, and DynamoDB. Governs storage capacity sizing and disk cleaning routines).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Not all database data should live forever:
@@ -85,7 +86,7 @@ To verify index creation, run:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing the date field as a text string instead of a BSON Date type when using TTL indexes
 
@@ -133,70 +134,104 @@ db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 }); // Fiel
 Ensure field values are BSON Date objects: { createdAt: new Date() }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: TTL Config Diagnose
+### Exercise 1: Configuring Time-To-Live (TTL) Automatic Document Expiration
 
-**Problem:** You build a rate-limiting collection and write this index command:
-`db.api_limits.createIndex({ ip: 1, created_at: 1 }, { expireAfterSeconds: 60 });`
-The documents do not delete after 60 seconds.
-1.  Explain why the TTL index is failing.
-2.  Write the corrected index command.
+**Scenario:**
+Configure a TTL index on collection `user_sessions` so that session documents automatically expire 24 hours (86,400 seconds) after `createdAt`.
 
-**Expected output:**
+**Requirements:**
+1. Create TTL index on `createdAt` with `expireAfterSeconds: 86400`.
+
 > [!check]- Answer
-> ```text
-> 1. The TTL index is failing because it was declared as a compound index (`{ ip: 1, created_at: 1 }`). MongoDB TTL indexes must be single-field indexes; the database engine cannot apply expiration rules to compound paths.
-> ```
-> - Check the number of fields in the index definition keys.
-> - TTL indexes can only be bound to a single date field.
-
----
-
-
-
-### Exercise 2: Configuring TTL Automatic Data Expiry
-
-**Problem:** Create TTL index on `sessions` collection expiring documents 30 days (2592000 seconds) after `createdAt`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 2592000 });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.sessions.createIndex(
+> db.user_sessions.createIndex(
 >   { createdAt: 1 },
->   { expireAfterSeconds: 2592000 }
+>   { expireAfterSeconds: 86400 }
 > );
 > ```
 >
-> **Explanation:** TTL indexes automatically delete expired documents in background threads.
+> #### Technical Explanation
+>
+> 1. TTL indexes automatically delete expired documents in the background.
+> 2. A background thread runs every 60 seconds to purge documents where `createdAt + expireAfterSeconds < current_time`.
+> 3. Eliminates manual cleanup cron jobs.
 
 ---
 
-### Exercise 3: Modifying Existing TTL Expiry Duration
+### Exercise 2: Dynamic Per-Document Expiration Times
 
-**Problem:** Command to modify existing TTL index expiry time using `collMod` command.
+**Scenario:**
+Configure a TTL index with `expireAfterSeconds: 0` so that documents expire at an explicit datetime stored in field `expireAt`.
 
-**Expected output:**
+**Requirements:**
+1. Create TTL index on `expireAt` with `expireAfterSeconds: 0`.
+
 > [!check]- Answer
-> ```text
-> db.runCommand({ collMod: "sessions", index: { keyPattern: { createdAt: 1 }, expireAfterSeconds: 86400 } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.runCommand({
->   collMod: "sessions",
->   index: {
->     keyPattern: { createdAt: 1 },
->     expireAfterSeconds: 86400
->   }
+> db.promo_codes.createIndex(
+>   { expireAt: 1 },
+>   { expireAfterSeconds: 0 }
+> );
+> 
+> // Insert promo code expiring at explicit target date
+> db.promo_codes.insertOne({
+>   code: "SUMMER2026",
+>   expireAt: new Date("2026-08-31T23:59:59Z")
 > });
 > ```
 >
-> **Explanation:** `collMod` updates index parameters without dropping and re-building indexes.
+> #### Technical Explanation
+>
+> 1. Setting `expireAfterSeconds: 0` expires documents at the exact BSON Date value stored in the indexed field.
+> 2. Allows individual documents to specify custom, dynamic expiration timestamps.
+> 3. Ideal for promotional codes, temporary tokens, and custom leases.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Archiving Historical Data to Cold Storage
+
+**Scenario:**
+Move orders older than 1 year from active collection `orders` to archive collection `orders_archive` before deletion.
+
+**Requirements:**
+1. Execute bulk export/copy and `deleteMany()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+> 
+> // 1. Copy old orders to archive collection
+> const oldOrders = db.orders.find({ createdAt: { $lt: oneYearAgo } }).toArray();
+> if (oldOrders.length > 0) {
+>   db.orders_archive.insertMany(oldOrders);
+>   
+>   // 2. Delete copied orders from active collection
+>   db.orders.deleteMany({ createdAt: { $lt: oneYearAgo } });
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Archiving old data maintains small working sets in active operational collections.
+> 2. Keeps active index sizes small enough to fit within RAM.
+> 3. Reduces disk IOPS and speeds up daily queries.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Date](../level_02/date_type.md) — The data type.
 - [Schema Design (Document Modeling)](schema_design.md) — Modeling rules.
@@ -204,7 +239,7 @@ The documents do not delete after 60 seconds.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Data lifecycle strategies automate database cleanup for temporary records.
 - TTL Indexes delete documents automatically after a specified time window.
 - The TTL background thread runs once every 60 seconds on the server.

@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Metaprogramming**: A syntactic macro system using `macro_rules!` to generate code based on pattern matching token trees.
+
+
+**Rust Metaprogramming (pattern matching macro_rules! engine)**: A syntactic macro system using `macro_rules!` to generate code based on pattern matching token trees.
 
 ---
 

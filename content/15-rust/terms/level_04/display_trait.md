@@ -177,7 +177,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Zero-Allocation Audit Record Formatter with Dynamic Specifier Flags
 
-**Problem:**
+**Scenario:**
 In a high-frequency financial backend, log formatting must be zero-allocation to prevent memory fragmentation and latency spikes. You are building a telemetry library and need to implement `std::fmt::Display` for an `AuditRecord` struct representing financial transactions.
 
 Requirements:
@@ -304,7 +304,7 @@ Requirements:
 
 ### Exercise 2: Hierarchical Diagnostic Error Chain with Recursive Display & Trait Objects
 
-**Problem:**
+**Scenario:**
 Distributed database engines and API gateways require multi-tiered error reporting where low-level I/O failures bubble up through database queries and top-level HTTP request handlers. You are tasked with implementing `std::fmt::Display` and `std::error::Error` for a `ChainableError` type that wraps nested causes using dynamic trait objects (`Box<dyn std::error::Error + Send + Sync + 'static>`).
 
 Requirements:
@@ -428,7 +428,7 @@ Requirements:
 
 ### Exercise 3: Monomorphized Generic Table Formatter with Dynamic Width Calculation
 
-**Problem:**
+**Scenario:**
 CLI observability tools (e.g. status dashboards, container monitors) need to format tabular metrics where each column's type implements `Display`. You must design a generic table renderer `TableReport<T>` where `T: std::fmt::Display`.
 
 Requirements:

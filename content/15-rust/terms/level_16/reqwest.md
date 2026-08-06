@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Library / Networking**: `reqwest` is the de facto standard HTTP client for Rust. Similar to `axios` or `fetch` in JavaScript, `reqwest` provides an ergonomic, feature-complete HTTP client interface for sending GET, POST, PUT, DELETE requests asynchronously.
+
+
+**Rust Ecosystem Crate (asynchronous HTTP client library)**: `reqwest` is the de facto standard HTTP client for Rust. Similar to `axios` or `fetch` in JavaScript, `reqwest` provides an ergonomic, feature-complete HTTP client interface for sending GET, POST, PUT, DELETE requests asynchronously.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Client Ecosystem**: Used across CLI tools, backend microservices, web scrapers, and API integrations. (Also supports blocking mode via `reqwest::blocking`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -72,7 +70,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Forgetting Timeout Configurations on Asynchronous HTTP Requests
+
+**The mistake:** Issuing requests using `reqwest::get` without setting a timeout.
+
+**Why it's wrong:** If a remote server hangs, the HTTP request hangs indefinitely, leaking async tasks and worker resources.
+
+*Fix:* Build a client with `.timeout(Duration::from_secs(10))` explicit limits.
+
+### Mistake 3: Swallowing Response Status Errors Without Calling `.error_for_status()`
+
+**The mistake:** Reading response bodies directly without checking `res.status().is_success()`.
+
+**Why it's wrong:** HTTP 4xx/5xx responses return valid HTML/JSON error bodies that will fail deserialization with confusing error messages.
+
+*Fix:* Call `res.error_for_status()?` to convert HTTP error codes into `reqwest::Error`.
+
 
 ### Mistake 1: Re-instantiating `reqwest::Client::new()` on Every Request
 
@@ -88,13 +102,16 @@ let client = reqwest::Client::new();
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Asynchronous HTTP GET Request with Query Parameters and Headers
 
-**Problem:** Construct an asynchronous function `fetch_weather_report` that uses `reqwest::Client` to send an HTTP `GET` request to a weather service API (`"{base_url}/weather"`). The function must attach query parameters (`q` for city, `appid` for API key, and `units` set to `"metric"`), configure standard HTTP headers (`User-Agent` and `Accept`), handle HTTP error status codes, and deserialize the JSON response into a strongly-typed `WeatherResponse` struct. Write unit tests with assertions (`assert_eq!`, `assert!`) verifying the JSON deserialization logic.
+**Scenario:** Construct an asynchronous function `fetch_weather_report` that uses `reqwest::Client` to send an HTTP `GET` request to a weather service API (`"{base_url}/weather"`). The function must attach query parameters (`q` for city, `appid` for API key, and `units` set to `"metric"`), configure standard HTTP headers (`User-Agent` and `Accept`), handle HTTP error status codes, and deserialize the JSON response into a strongly-typed `WeatherResponse` struct. Write unit tests with assertions (`assert_eq!`, `assert!`) verifying the JSON deserialization logic.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use reqwest::header::{ACCEPT, USER_AGENT};
 > use serde::{Deserialize, Serialize};
@@ -169,7 +186,8 @@ let client = reqwest::Client::new();
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Query String Serialization**: `.query(&[("q", city), ...])` converts key-value slices into URL-encoded query strings automatically.
 > 2. **Header Injection**: Custom headers are set using standard `reqwest::header` constants (`USER_AGENT`, `ACCEPT`), guaranteeing valid HTTP header naming.
 > 3. **Status Check via `.error_for_status()?`**: Converts non-2xx HTTP response codes (e.g. 404 Not Found, 500 Server Error) directly into a `reqwest::Error` Result variant before attempting deserialization.
@@ -179,9 +197,12 @@ let client = reqwest::Client::new();
 
 ### Exercise 2: Authenticated JSON POST Request with Custom Client Builder & Timeout
 
-**Problem:** Build an API client module for user registration. Create a function `create_configured_client` that builds a `reqwest::Client` configured with custom request timeouts and TCP keep-alive settings. Then implement an asynchronous `register_user` function that sends an HTTP `POST` request containing a JSON body (`CreateUserPayload`) and a `Bearer` token Authorization header, returning a parsed `UserCreatedResponse`. Write unit tests with `assert_eq!` and `assert!` to test client setup, payload serialization, and response parsing.
+**Scenario:** Build an API client module for user registration. Create a function `create_configured_client` that builds a `reqwest::Client` configured with custom request timeouts and TCP keep-alive settings. Then implement an asynchronous `register_user` function that sends an HTTP `POST` request containing a JSON body (`CreateUserPayload`) and a `Bearer` token Authorization header, returning a parsed `UserCreatedResponse`. Write unit tests with `assert_eq!` and `assert!` to test client setup, payload serialization, and response parsing.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::time::Duration;
 > use reqwest::header::{AUTHORIZATION, USER_AGENT};
@@ -270,7 +291,8 @@ let client = reqwest::Client::new();
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Client Customization**: `reqwest::Client::builder()` configures connection-level parameters (e.g. timeouts, TLS, connection pools) once per application lifetime.
 > 2. **JSON Request Body**: Calling `.json(&payload)` on a `RequestBuilder` serializes the Rust value using `serde_json` and automatically sets the `Content-Type: application/json` HTTP header.
 > 3. **Authorization Header**: Formats HTTP standard `Authorization: Bearer <token>` for OAuth2/JWT secured endpoints.
@@ -280,9 +302,12 @@ let client = reqwest::Client::new();
 
 ### Exercise 3: Concurrent Batch HTTP Requests with Connection Pool Reuse
 
-**Problem:** When retrieving data from multiple endpoints, sequential HTTP requests introduce cumulative network latency. Implement an asynchronous function `fetch_posts_batch` that receives a shared `&reqwest::Client`, a base URL, and a slice of post IDs (`&[u32]`). Spawn concurrent tasks using `tokio::spawn` to fetch posts in parallel while reusing the client's internal connection pool, returning `Result<Vec<Post>, String>`. Write unit tests with assertions (`assert_eq!`, `assert!`) validating batch response parsing and struct field values.
+**Scenario:** When retrieving data from multiple endpoints, sequential HTTP requests introduce cumulative network latency. Implement an asynchronous function `fetch_posts_batch` that receives a shared `&reqwest::Client`, a base URL, and a slice of post IDs (`&[u32]`). Spawn concurrent tasks using `tokio::spawn` to fetch posts in parallel while reusing the client's internal connection pool, returning `Result<Vec<Post>, String>`. Write unit tests with assertions (`assert_eq!`, `assert!`) validating batch response parsing and struct field values.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use serde::{Deserialize, Serialize};
 > 
@@ -375,7 +400,8 @@ let client = reqwest::Client::new();
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Cheap `Client` Cloning (`Arc` Abstraction)**: `reqwest::Client` wraps an internal reference-counted handle (`Arc`). Cloning a client instance is an $O(1)$ operation that increments the reference counter without reallocating connection pools or socket state.
 > 2. **Concurrency with `tokio::spawn`**: Spawning tasks allows network requests to run concurrently across available Tokio worker threads, significantly reducing round-trip latency for batch operations.
 > 3. **Error Handling & Task Joining**: The outer loop waits on task `JoinHandle` instances, separating async task runtime panics from domain-specific HTTP/serialization errors.

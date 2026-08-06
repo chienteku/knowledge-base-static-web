@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Core Architecture**
+
+**Core Concept** (Write-Ahead Logging): Write-Ahead Logging (WAL) logs all data page modifications to disk before applying them to main heap pages, guaranteeing ACID durability.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Stored physically as 16MB segment files inside the `pg_wal/` directory. Critical for crash recovery, streaming replication, and Point-in-Time Recovery).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational database tables are split into standard `8KB` blocks (pages) containing row values. 
@@ -75,7 +76,7 @@ graph TD
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting 'synchronous_commit = off' globally without understanding the durability risk
 
@@ -123,65 +124,94 @@ Keep fsync = on enabled in production; use fast NVMe SSD storage instead
 Drop unused replication slots: SELECT pg_drop_replication_slot('replica1');
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Recovery Path Mapping
+### Exercise 1: Inspecting Write-Ahead Log System Metrics
 
-**Problem:** A database crashes at `12:04 PM`. 
--   The last successful **Checkpoint** completed at `12:00 PM`.
--   Between `12:00 PM` and `12:04 PM`, 500 purchase transactions were committed.
-Explain the step-by-step actions the database engine takes upon rebooting to recover the data.
+**Scenario:**
+Query active Write-Ahead Log (WAL) location coordinates (`LSN`) using system functions.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT pg_current_wal_lsn()`.
+
 > [!check]- Answer
-> ```text
-> PostgreSQL Recovery Steps:
-> 1. The engine reboots and identifies the last valid Checkpoint record at 12:00 PM.
-> 2. It scans the WAL files starting from the 12:00 PM log offset forward to the end of the file (12:04 PM).
-> 3. It replays (applies) the modifications from the 500 committed purchases to the table files on disk.
-> 4. Any uncommitted transaction writes active during the crash are rolled back.
-> 5. The database opens for connections, restored to a consistent state.
-> ```
-> - The database restarts at the last saved checkpoint.
-> - Relate the log entries back to the tables on disk.
-
----
-
-
-
-### Exercise 2: WAL System Role Summary
-
-**Problem:** What is the primary role of the Write-Ahead Log (WAL)? (Guarantees Atomicity and Durability by logging data changes to disk BEFORE modifying data heap pages).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Guarantees Atomicity and Durability by logging data changes to disk BEFORE modifying data heap pages
-> ```
-> ```text
-> Guarantees Atomicity and Durability by logging data changes to disk BEFORE modifying data heap pages
-> ```
 >
-> **Explanation:** WAL protocol ensures transaction durability and enables crash recovery.
-
----
-
-### Exercise 3: Inspecting Replication Slots
-
-**Problem:** Query active replication slots from `pg_replication_slots` to identify abandoned WAL retainers.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT slot_name, active, wal_status FROM pg_replication_slots;
-> ```
+> #### Implementation
+>
 > ```sql
-> SELECT slot_name, active, wal_status FROM pg_replication_slots;
+> SELECT 
+>   pg_current_wal_lsn() AS current_wal_lsn,
+>   pg_walfile_name(pg_current_wal_lsn()) AS current_wal_file;
 > ```
 >
-> **Explanation:** `pg_replication_slots` monitors replication slot statuses and WAL retention boundaries.
+> #### Technical Explanation
+>
+> 1. `pg_current_wal_lsn()` returns the Log Sequence Number (LSN) byte offset coordinate in the WAL stream.
+> 2. `pg_walfile_name()` resolves the 24-character hex WAL filename (e.g. `000000010000000000000042`).
+> 3. Core WAL telemetry inspection.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Verifying WAL Durability Sequence
+
+**Scenario:**
+Explain the exact sequential order in which write transactions write to WAL buffers, disk WAL files, and table heap pages.
+
+**Requirements:**
+1. Outline the 3-step WAL write sequence.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Write-Ahead Logging (WAL) Architecture:
+> Step 1: Transaction modifies data in RAM (shared_buffers) and writes a WAL log record describing the change into WAL buffers.
+> Step 2: On COMMIT, PostgreSQL flushes WAL buffer bytes to disk WAL log files (/pg_wal).
+> Step 3: Modified dirty table pages in shared_buffers are written to main table heap files asynchronously later during Checkpoints.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. WAL protocol rules: A dirty data page in RAM can NEVER be written to main table heap files until the corresponding WAL record has been flushed to disk.
+> 2. Guarantees that if the server crashes or loses power, PostgreSQL can replay WAL files during startup crash recovery.
+> 3. Foundation of ACID Durability in PostgreSQL.
+
+---
+
+### Exercise 3: WAL Archiving and Retention Monitoring
+
+**Scenario:**
+Query `pg_stat_archiver` to monitor continuous WAL archiving status and archive failures.
+
+**Requirements:**
+1. Query `pg_stat_archiver`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   archived_count, 
+>   last_archived_wal, 
+>   last_archived_time, 
+>   failed_count, 
+>   last_failed_wal 
+> FROM pg_stat_archiver;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `pg_stat_archiver` monitors the background WAL archiver process.
+> 2. `failed_count > 0` alerts administrators that WAL archive commands (e.g. copying to S3) are failing.
+> 3. Critical backup health monitoring query.
+
+---
+
+
+
+## 6. Related Terms
 - [ACID Properties](../level_08/acid.md) — The Durability guarantee powered by WAL.
 - [Point-in-Time Recovery (PITR)](pitr.md) — - Restoring database state using WAL archives.
 - [Replication (Streaming / Logical)](replication.md) — Using WAL to sync replica databases.
@@ -189,7 +219,7 @@ Explain the step-by-step actions the database engine takes upon rebooting to rec
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - WAL records data modifications sequentially to disk before writing to table files.
 - Protects Durability (ACID) while optimizing database write speeds.
 - Writes to WAL are fast, sequential appends; writes to tables are slow, random page I/Os.

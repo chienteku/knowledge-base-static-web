@@ -181,7 +181,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Type-Safe HTTP Request Builder via Typestate Pattern
 
-**Problem:**
+**Scenario:**
 In network applications, sending an incomplete HTTP request before mandatory configurations (such as setting the target URL and payload body) leads to runtime failures. By employing the **Typestate Pattern** with `PhantomData<State>`, we can make invalid state transitions impossible at compile time with zero runtime overhead.
 
 Implement a zero-cost `HttpRequestBuilder<State>` that transitions through three explicit states:
@@ -200,6 +200,9 @@ Requirements:
 - Verify with unit tests (`#[test]`) that `send()` returns the built request tuple and that `size_of::<HttpRequestBuilder<Unconfigured>>()` equals `size_of::<HttpRequestBuilder<Ready>>()`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::marker::PhantomData;
 > 
@@ -302,7 +305,8 @@ Requirements:
 > }
 > ```
 > 
-> **Step-by-Step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **State Markers as ZSTs:** `Unconfigured`, `Configured`, and `Ready` take 0 bytes of memory. They serve strictly as type parameter tags.
 > 2. **Generic Parameter Enforcement:** `HttpRequestBuilder<State>` declares a generic type `State`. Without `_state: PhantomData<State>`, the Rust compiler raises error `E0392` (parameter `State` is never used).
 > 3. **Selective Method Implementation:** Methods like `.url()` consume `HttpRequestBuilder<Unconfigured>` and return `HttpRequestBuilder<Configured>`, moving the builder into a new state. `.send()` is defined exclusively on `HttpRequestBuilder<Ready>`. Attempting to call `.send()` on an unconfigured or configured builder results in compile-time error `E0599`.
@@ -312,7 +316,7 @@ Requirements:
 
 ### Exercise 2: Zero-Copy Raw Slice Iterator with Lifetime Bounds (`PhantomData<&'a T>`)
 
-**Problem:**
+**Scenario:**
 When implementing low-level slice iterators or zero-copy parsers over raw pointers (`*const T`), the raw pointer `*const T` does not carry a lifetime or variance information. Without proper lifetime annotations, the Rust borrow checker cannot verify that references handed out by the iterator remain valid for lifetime `'a`.
 
 Implement a high-performance slice iterator `SliceCursor<'a, T>` backed by a raw pointer `*const T` that uses `PhantomData<&'a T>` to bind lifetime `'a` and establish covariance over `T`.
@@ -325,6 +329,9 @@ Requirements:
 - Provide comprehensive unit tests (`#[test]`) checking iteration bounds, subslice inspection, and zero memory footprint of `PhantomData<&'a T>`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::marker::PhantomData;
 > 
@@ -416,7 +423,8 @@ Requirements:
 > }
 > ```
 > 
-> **Step-by-Step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Why `PhantomData<&'a T>` is Required:** Raw pointers (`*const T`) carry neither lifetime constraints nor lifetime covariance. Using `PhantomData<&'a T>` signals to Rust's compiler that `SliceCursor` logically borrows data of type `T` for lifetime `'a`.
 > 2. **Covariance:** Because `&'a T` is covariant over `'a` and `T`, `PhantomData<&'a T>` ensures that `SliceCursor<'a, T>` is also covariant over `'a` and `T`.
 > 3. **Unsafe Operations Guarded by Lifetime:** When dereferencing `&*item_ptr`, the compiler allows returning `&'a T` because `PhantomData<&'a T>` guarantees to the borrow checker that `data` outlives the cursor.
@@ -426,7 +434,7 @@ Requirements:
 
 ### Exercise 3: Custom Safe Heap Slot with Ownership Signaling and Auto Trait Propagation (`PhantomData<T>`)
 
-**Problem:**
+**Scenario:**
 When building custom memory containers or slab allocators wrapping heap pointers (`*mut T`), raw pointers do not signal ownership to Rust's compiler. Consequently:
 1. The **drop checker** cannot automatically infer that dropping the container drops an instance of `T`.
 2. Raw pointers default to `!Send` and `!Sync`, preventing cross-thread movement even when `T: Send`.
@@ -443,6 +451,9 @@ Requirements:
 - Write unit tests (`#[test]`) confirming value access, proper `Drop` invocation via a tracking struct, and `Send` execution across thread boundaries.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::marker::PhantomData;
 > use std::sync::atomic::{AtomicBool, Ordering};
@@ -548,7 +559,8 @@ Requirements:
 > }
 > ```
 > 
-> **Step-by-Step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Ownership Signaling (`PhantomData<T>` vs `PhantomData<*mut T>`):** Using `PhantomData<T>` informs the compiler's drop checker that `OwnedSlot<T>` *owns* an instance of `T`. This ensures correct drop order analysis and strict verification when `T` has non-trivial destructors.
 > 2. **Safely Unwrapping (`into_inner`):** `std::mem::forget(self)` prevents `OwnedSlot::drop` from executing when transferring ownership of `T`. Then `Box::from_raw(ptr)` reconstructs the `Box` so dereferencing `*boxed` moves `T` out safely.
 > 3. **Destructor Execution:** Inside `Drop for OwnedSlot<T>`, `Box::from_raw(self.ptr)` converts the raw pointer back into a `Box`, which immediately goes out of scope, deallocating the heap buffer and invoking `T`'s destructor.

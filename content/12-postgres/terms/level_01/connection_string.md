@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Network Protocol Parameter**
+
+**Administration / Operations** (Client Connection URI): A Connection String specifies the host, port, database name, user credentials, and SSL parameters required for client applications to establish a TCP database session.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Also known as a **DSN (Data Source Name)**. Adopted universally by database client drivers across JavaScript, Python, Go, and Java).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To connect any client application (like a Node.js backend) to a PostgreSQL database server, the client driver must know five critical pieces of information:
@@ -84,7 +85,7 @@ psql "postgresql://postgres:secret123@localhost:5432/postgres"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to URL-encode special characters in passwords
 
@@ -140,72 +141,108 @@ postgresql://user:pass@db.cloud.com:5432/production -- ❌ Plaintext connection!
 postgresql://user:pass@db.cloud.com:5432/production?sslmode=require
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Connection String Construction
+### Exercise 1: Constructing Standard PostgreSQL Connection URIs
 
-**Problem:** You are deploying a web application. Your cloud database details are:
--   Database Host: `db-instance.neon.tech`
--   Port: `5432`
--   Database Name: `users_db`
--   Username: `webapp_user`
--   Password: `p@ss#word` (Note the special characters `@` and `#`!)
+**Scenario:**
+Formulate a PostgreSQL connection URI string incorporating user, password, host, port, database name, and SSL options.
 
-Construct the correct, URL-safe connection string to connect your application. Refer to standard URL encoding tables: `@` is `%40`, `#` is `%23`.
+**Requirements:**
+1. Format `postgresql://user:password@host:port/dbname?sslmode=require`.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> postgresql://webapp_user:p%40ss%23word@db-instance.neon.tech:5432/users_db
+>
+> #### Implementation
+>
+> ```typescript
+> // Standard PostgreSQL URI format
+> const connectionString = "postgresql://app_user:SecurePass123!@localhost:5432/store_db?sslmode=require";
+> 
+> import { Pool } from "pg";
+> const pool = new Pool({ connectionString });
 > ```
-> - Start with the scheme `postgresql://`.
-> - URL-encode the special characters in the password.
-> - Assemble the parts using `@`, `:`, and `/` separators.
+>
+> #### Technical Explanation
+>
+> 1. Connection strings encapsulate host, port (`5432`), user credentials, and database target in a unified URI.
+> 2. `sslmode=require` enforces TLS/SSL encrypted TCP socket transport.
+> 3. Standard configuration string across cloud providers (Supabase, Neon, AWS RDS).
+
+---
+
+### Exercise 2: Percent-Encoding Special Characters in Passwords
+
+**Scenario:**
+Safely encode a database password containing special characters (`P@ss#w0rd!`) inside a connection URI.
+
+**Requirements:**
+1. Use `encodeURIComponent()` in Node.js.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const rawPassword = "P@ss#w0rd!";
+> const encodedPassword = encodeURIComponent(rawPassword); // P%40ss%23w0rd%21
+> 
+> const dbUrl = `postgresql://db_user:${encodedPassword}@db.example.com:5432/app_db`;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Characters `@`, `:`, `/`, and `#` have special structural meaning in URI syntax.
+> 2. `encodeURIComponent()` converts reserved characters into percent-encoded hex equivalents.
+> 3. Prevents URI parser errors during connection establishment.
+
+---
+
+### Exercise 3: Environment Variable Connection String Ingestion
+
+**Scenario:**
+Read `DATABASE_URL` safely from environment variables using `dotenv` in a Node.js backend app.
+
+**Requirements:**
+1. Use `process.env.DATABASE_URL`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import dotenv from "dotenv";
+> import { Pool } from "pg";
+> 
+> dotenv.config();
+> 
+> if (!process.env.DATABASE_URL) {
+>   throw new Error("DATABASE_URL environment variable is missing!");
+> }
+> 
+> const pool = new Pool({
+>   connectionString: process.env.DATABASE_URL
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Hardcoding connection strings in source code exposes production credentials to git repositories.
+> 2. `process.env.DATABASE_URL` ingests credentials dynamically from secure runtime environments.
+> 3. Fundamental security hygiene rule.
 
 ---
 
 
 
-### Exercise 2: Constructing Standard Connection URI
-
-**Problem:** Construct PostgreSQL URI connecting user `app_user` with password `secret` to database `prod` on host `db.example.com`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> postgresql://app_user:secret@db.example.com:5432/prod?sslmode=require
-> ```
-> ```text
-> postgresql://app_user:secret@db.example.com:5432/prod?sslmode=require
-> ```
->
-> **Explanation:** Standard PostgreSQL URIs specify scheme, user, password, host, port, database, and query options.
-
----
-
-### Exercise 3: PostgreSQL URI Schemes
-
-**Problem:** List 2 valid connection URI schemes for PostgreSQL (`postgres://`, `postgresql://`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> postgres://, postgresql://
-> ```
-> ```text
-> postgres://, postgresql://
-> ```
->
-> **Explanation:** Both `postgres://` and `postgresql://` schemes are supported by standard client drivers.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Client-Server Model (in Databases)](client_server_model.md) — The network structure.
 - [`psql` (Interactive Terminal)](psql.md) — Connects using connection strings.
 - [pgAdmin & GUI Tools](pgadmin.md) — Related concept: pgAdmin & GUI Tools.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A connection string is a single URI address containing all database credentials.
 - Standard syntax: `postgresql://user:password@host:port/database`.
 - DSN (Data Source Name) is another common name for a connection string.

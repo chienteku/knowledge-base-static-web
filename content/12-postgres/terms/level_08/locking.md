@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Core Architecture**
+
+**Core Concept** (Table & Row Lock Modes): Locking mechanisms (`RowShare`, `RowExclusive`, `AccessExclusive`, `FOR UPDATE`) coordinate concurrent row and table modifications without data corruption.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Managed by the Lock Manager in RAM. Active locks can be queried in real-time by administrators via the **`pg_locks`** system catalog view).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational databases protect data integrity. 
@@ -83,7 +84,7 @@ UPDATE products SET stock = stock - 2 WHERE id = 12;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Acquiring manual table locks inside web application transaction loops
 
@@ -133,60 +134,109 @@ SET lock_timeout = '2s'; ALTER TABLE heavy_table ADD COLUMN c INT;
 CREATE INDEX idx_users_category ON users (category);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Lock Compatibility Test
+### Exercise 1: Acquiring Table-Level Locks with `LOCK TABLE`
 
-**Problem:** Transaction A holds an **Exclusive Lock** on Row 5. Transaction B tries to run a query on Row 5. Determine whether Transaction B is **Blocked** or **Allowed to proceed** for these two queries:
-1.  `SELECT * FROM accounts WHERE id = 5;` (under default Read Committed isolation).
-2.  `UPDATE accounts SET balance = 100 WHERE id = 5;`
+**Scenario:**
+Acquire an `EXCLUSIVE` table lock on table `inventory` during bulk data maintenance to block concurrent writes.
 
-**Expected output:**
+**Requirements:**
+1. Execute `LOCK TABLE inventory IN EXCLUSIVE MODE`.
+
 > [!check]- Answer
-> ```text
-> 1. Proceed. Under MVCC, readers do not block writers, and writers do not block readers. Transaction B's read query will read the old snapshot version of Row 5 without waiting.
-> 2. Blocked. Transaction B is attempting to acquire an Exclusive Write Lock on the same row. It must wait until Transaction A commits or rolls back to release its lock.
-> ```
-> - Differentiate read queries (shared/snapshot) from write queries (exclusive).
-> - Recall the MVCC rule: "readers never block writers, writers never block readers".
-
----
-
-
-
-### Exercise 2: Inspecting Active Locks in System Catalog
-
-**Problem:** Query active granted and waiting locks from `pg_locks` and `pg_stat_activity`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT pid, locktype, mode, granted FROM pg_locks;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> SELECT pid, locktype, mode, granted FROM pg_locks;
+> BEGIN;
+> 
+> LOCK TABLE inventory IN EXCLUSIVE MODE;
+> 
+> -- Perform maintenance batch updates...
+> 
+> COMMIT;
 > ```
 >
-> **Explanation:** `pg_locks` details active lock types, modes, and process wait statuses.
+> #### Technical Explanation
+>
+> 1. `LOCK TABLE` acquires explicit table-level lock modes.
+> 2. `EXCLUSIVE` mode blocks concurrent `UPDATE`, `DELETE`, and `INSERT` statements, while permitting concurrent `SELECT` reads.
+> 3. Lock is released automatically at `COMMIT` or `ROLLBACK`.
 
 ---
 
-### Exercise 3: Lock Compatibility Matrix Rule
+### Exercise 2: Non-Blocking Lock Attempts with `NOWAIT`
 
-**Problem:** Do `SELECT` queries (`ACCESS SHARE` locks) block concurrent `UPDATE` queries (`ROW EXCLUSIVE` locks)? (No, reads do not block writes in PostgreSQL).
+**Scenario:**
+Attempt to lock table `accounts` using `NOWAIT`, raising an error immediately if another transaction holds a conflicting lock.
 
-**Expected output:**
+**Requirements:**
+1. Execute `LOCK TABLE accounts IN EXCLUSIVE MODE NOWAIT`.
+
 > [!check]- Answer
-> ```text
-> No, reads do not block writes in PostgreSQL MVCC
-> ```
-> ```text
-> No, reads do not block writes in PostgreSQL MVCC
+>
+> #### Implementation
+>
+> ```sql
+> BEGIN;
+> 
+> LOCK TABLE accounts IN EXCLUSIVE MODE NOWAIT;
+> 
+> COMMIT;
 > ```
 >
-> **Explanation:** PostgreSQL MVCC architecture guarantees that readers never block writers and writers never block readers.
+> #### Technical Explanation
+>
+> 1. `NOWAIT` instructs PostgreSQL not to wait for conflicting locks to be released.
+> 2. Raises Error `55P03` (`lock_not_available`) immediately if locked.
+> 3. Prevents application threads from blocking during high contention.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Inspecting Active Locks in System Views
+
+**Scenario:**
+Query `pg_locks` joined with `pg_stat_activity` to locate active lock contention and blocked sessions.
+
+**Requirements:**
+1. Query `pg_locks` filtering `granted = false`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   blocked_locks.pid AS blocked_pid,
+>   blocked_activity.usename AS blocked_user,
+>   blocking_locks.pid AS blocking_pid,
+>   blocking_activity.usename AS blocking_user,
+>   blocked_activity.query AS blocked_statement 
+> FROM pg_catalog.pg_locks AS blocked_locks 
+> JOIN pg_catalog.pg_stat_activity AS blocked_activity ON blocked_activity.pid = blocked_locks.pid 
+> JOIN pg_catalog.pg_locks AS blocking_locks 
+>   ON blocking_locks.locktype = blocked_locks.locktype 
+>  AND blocking_locks.DATABASE IS NOT DISTINCT FROM blocked_locks.DATABASE 
+>  AND blocking_locks.relation IS NOT DISTINCT FROM blocked_locks.relation 
+>  AND blocking_locks.page IS NOT DISTINCT FROM blocked_locks.page 
+>  AND blocking_locks.tuple IS NOT DISTINCT FROM blocked_locks.tuple 
+>  AND blocking_locks.pid != blocked_locks.pid 
+> JOIN pg_catalog.pg_stat_activity AS blocking_activity ON blocking_activity.pid = blocking_locks.pid 
+> WHERE NOT blocked_locks.granted;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `pg_locks` exposes real-time lock allocation tables across all PostgreSQL processes.
+> 2. `NOT granted` identifies sessions currently blocked waiting for locks.
+> 3. Essential DBA diagnostic query for resolving lock contention.
+
+---
+
+
+
+## 6. Related Terms
 - [Transaction Isolation Levels](isolation_levels.md) — The settings controlling read visibility.
 - [Deadlock](deadlock.md) — Gridlocks caused by lock loops.
 - [`SELECT ... FOR UPDATE`](select_for_update.md) — Manually locking rows during reads.
@@ -195,7 +245,7 @@ CREATE INDEX idx_users_category ON users (category);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Locks prevent concurrent transactions from corrupting shared data blocks.
 - Row-level locks lock individual rows, enabling high concurrent write speeds.
 - Table-level locks lock the entire table, blocking all other write actions.

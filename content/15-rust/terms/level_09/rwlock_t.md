@@ -195,7 +195,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Thread-Safe In-Memory Cache with TTL Expiration
 
-**Problem:** 
+**Scenario:** 
 In high-throughput web applications, in-memory caches handle high read-to-write ratios. Multiple HTTP worker threads frequently read cached data, while a background janitor thread periodically removes expired entries or writes new values. Using a standard `Mutex` would block all reader threads during every read lookup, causing significant latency spikes.
 
 Implement a thread-safe `TtlCache<K, V>` struct using `RwLock` and `HashMap`.
@@ -206,6 +206,9 @@ Implement a thread-safe `TtlCache<K, V>` struct using `RwLock` and `HashMap`.
 5. Provide a unit test module verifying concurrent reader threads reading valid data simultaneously while a background thread updates entries and prunes expired items without deadlocks or data corruption.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > use std::hash::Hash;
@@ -325,7 +328,8 @@ Implement a thread-safe `TtlCache<K, V>` struct using `RwLock` and `HashMap`.
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Read Lock for non-blocking lookup (`.read()`):** Multiple threads calling `get()` acquire shared read guards. They do not block each other, allowing true parallel reads.
 > 2. **Write Lock for modification (`.write()`):** `insert()` and `prune_expired()` obtain exclusive access. All reader threads wait briefly while the map is modified.
 > 3. **Deadlock Prevention:** `get()` releases its read lock as soon as it returns the cloned value, ensuring no read guard is held across write lock calls.
@@ -334,7 +338,7 @@ Implement a thread-safe `TtlCache<K, V>` struct using `RwLock` and `HashMap`.
 
 ### Exercise 2: Hot-Reloadable Application Configuration with Versioning
 
-**Problem:**
+**Scenario:**
 Microservice API gateways often store global configuration settings (such as rate limits, routing rules, and feature flags) that change infrequently. Thousands of incoming requests per second read this configuration concurrently. When an administrator reloads the config, the system must update all values atomically and increment a version number without crashing active readers or serving partially updated state.
 
 Design a `ConfigRegistry` struct:
@@ -344,6 +348,9 @@ Design a `ConfigRegistry` struct:
 4. Implement a comprehensive unit test suite where multiple worker threads continuously read active feature flags while a management thread updates the configuration, verifying that readers always see consistent state matching the reported version.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::atomic::{AtomicU64, Ordering};
 > use std::sync::{Arc, RwLock};
@@ -469,7 +476,8 @@ Design a `ConfigRegistry` struct:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Atomic Configuration Updates:** By acquiring a write lock before replacing `*guard = new_config`, readers never see intermediate or partially initialized states.
 > 2. **Version Synchronization:** Using `AtomicU64` with `Ordering::AcqRel` ensures version counter updates are safely visible across threads alongside the updated data structure.
 > 3. **Closure-based Scoped Access (`get_config`):** Passing a reader closure `FnOnce(&AppConfig) -> R` ensures the read lock guard is automatically dropped when the closure returns, preventing callers from accidentally leaking read guards across long operations.
@@ -478,7 +486,7 @@ Design a `ConfigRegistry` struct:
 
 ### Exercise 3: Resilient Metrics Aggregator & Lock Poisoning Recovery
 
-**Problem:**
+**Scenario:**
 In a production monitoring service, multiple worker threads record diagnostic counts (`HashMap<String, u64>`) while an exporter thread periodically reads metrics to report telemetry data. If a worker thread panics while holding a write lock on the shared `RwLock`, standard acquisition calls like `.read()` or `.write()` return a `PoisonError`. Rather than allowing the entire application to crash, a resilient service must recover from lock poisoning, retain unaffected metrics, and continue operating normally.
 
 Implement a `ResilientMetrics` aggregator:
@@ -489,6 +497,9 @@ Implement a `ResilientMetrics` aggregator:
 5. Write unit tests that deliberately trigger a thread panic inside a write lock guard, verify that subsequent calls successfully recover via `into_inner()`, and assert that metric accumulation resumes seamlessly.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > use std::sync::{Arc, RwLock};
@@ -575,7 +586,8 @@ Implement a `ResilientMetrics` aggregator:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Understanding Lock Poisoning:** In Rust, if a thread panics while holding an `RwLockWriteGuard` (or `MutexGuard`), Rust marks the lock as *poisoned* to warn other threads that shared data might be in an inconsistent state.
 > 2. **Poison Recovery with `into_inner()`:** Calling `poison_err.into_inner()` extracts the underlying lock guard despite the poison status. This allows application logic to inspect, clean up, or continue using the data safely without aborting the entire process.
 > 3. **Robust Telemetry Systems:** Microservices and telemetry agents rely on poison recovery so isolated worker panics do not cause cascading failures across unrelated API endpoints.

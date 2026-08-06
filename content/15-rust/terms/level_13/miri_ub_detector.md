@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Undefined Behavior Diagnostic**: The Miri interpreter for detecting Undefined Behavior (UB).
+
+
+**Rust Ecosystem Tool (interpreter & undefined behavior detector)**: The Miri interpreter for detecting Undefined Behavior (UB).
 
 ---
 

@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Security & Authorization**
+
+
+**Authentication & Permissions (authenticated user record fields)**: - **Security & Authorization**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Query Engine** (Evaluates `$auth.*` attributes in memory during permission checks).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional authorization (RBAC/ABAC), checking whether a user has access to a resource requires two pieces of information:
@@ -66,7 +65,7 @@ DEFINE TABLE project SCHEMAFULL
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Querying the User Table inside PERMISSIONS to check a user field
 
@@ -124,84 +123,100 @@ DEFINE ACCESS user ... SIGNIN (SELECT * FROM user WHERE email = $email AND crypt
 
 
 
-### Mistake 4: Storing Un-Hashed Plaintext Passwords in User Records
 
-**The mistake:** Writing `CREATE user SET email = $email, pass = $pass;` in `SIGNUP` scope clauses.
 
-**Why it's wrong:** Storing un-hashed passwords exposes user credentials if the table is compromised. Always hash passwords using `crypto::argon2::generate($pass)`.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-DEFINE ACCESS user ON DATABASE TYPE RECORD SIGNUP (CREATE user SET pass = $pass); // ❌ Plaintext password!
-```
+### Exercise 1: Secure Password Hashing with Argon2
 
-*Fix:*
-```surrealql
-DEFINE ACCESS user ON DATABASE TYPE RECORD SIGNUP (CREATE user SET pass = crypto::argon2::generate($pass));
-```
+**Scenario:**
+You are building a user registration table where user passwords must be hashed securely using Argon2 before storing in table `user`.
 
-### Mistake 5: Comparing Hashes using Standard Equality Operators in `SIGNIN`
-
-**The mistake:** Writing `WHERE email = $email AND pass = crypto::argon2::generate($pass)` in `SIGNIN` clauses.
-
-**Why it's wrong:** Regenerating an Argon2 hash yields a new random salt string! Comparing generated hashes with stored hashes using `=` fails. Use `crypto::argon2::compare(pass, $pass)`.
-
-*Incorrect:*
-```surrealql
-DEFINE ACCESS user ... SIGNIN (SELECT * FROM user WHERE email = $email AND pass = crypto::argon2::generate($pass)); // ❌ Fails!
-```
-
-*Fix:*
-```surrealql
-DEFINE ACCESS user ... SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass));
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Multi-tenant Role Check
-Write a `PERMISSIONS` clause for an `invoice` table allowing `select` if `organization = $auth.organization`, and `update` if `organization = $auth.organization` AND `$auth.role = 'billing_admin'`.
+**Requirements:**
+1. Define table `user` as `SCHEMAFULL`.
+2. Define field `password` as `string`.
+3. Create user `user:alice` hashing password using `crypto::argon2::generate($pass)`.
 
 > [!check]- Answer
-> - Check `organization = $auth.organization`.
-> - Check `$auth.role = 'billing_admin'`.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE FIELD username ON TABLE user TYPE string;
+> DEFINE FIELD password ON TABLE user TYPE string;
+> 
+> CREATE user:alice SET 
+>     username = "alice",
+>     password = crypto::argon2::generate("MySecretPassword123!");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `crypto::argon2::generate(secret)` hashes plaintext passwords using the password-hashing algorithm Argon2id.
+> 2. Automatically generates random cryptographic salts to prevent rainbow table attacks.
+> 3. Hashes passwords at the database engine tier during record creation.
+
+---
+
+### Exercise 2: Validating Passwords with Argon2 Compare
+
+**Scenario:**
+Write a `SIGNIN` query for a `RECORD` access method that compares an incoming login password `$pass` against stored hash `password`.
+
+**Requirements:**
+1. Use `crypto::argon2::compare(password, $pass)` inside `SIGNIN`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE ACCESS user_access ON DATABASE TYPE RECORD
+>     SIGNIN (
+>         SELECT * FROM user 
+>         WHERE username = $username AND crypto::argon2::compare(password, $pass)
+>     );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `crypto::argon2::compare(hash, secret)` verifies plaintext password inputs against stored Argon2 hashes.
+> 2. Returns boolean `true` if credentials match, issuing a valid authentication token.
+> 3. Protects authentication checks against timing side-channel attacks.
+
+---
+
+### Exercise 3: Protecting Password Fields with PERMISSIONS
+
+**Scenario:**
+Restrict access to field `password` on table `user` so that no client (even the account owner) can select or read raw password hashes.
+
+**Requirements:**
+1. Apply `PERMISSIONS FOR select NONE` to field `password`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE FIELD password ON TABLE user TYPE string 
+>     PERMISSIONS FOR select NONE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `PERMISSIONS FOR select NONE` redacts field values from all `SELECT` query results.
+> 2. Prevents password hashes from leaking in client-side API response payloads.
+> 3. Enforces field-level security independently from table read permissions.
 
 ---
 
 
 
-### Exercise 2: Argon2 Password Hashing in SIGNUP
 
-**Problem:** Write `SIGNUP` scope query storing user email and Argon2 hashed password.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass))
-> ```
-> ```surrealql
-> SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass))
-> ```
->
-> **Explanation:** `crypto::argon2::generate($pass)` generates salted Argon2 password hashes.
-
----
-
-### Exercise 3: Argon2 Password Verification in SIGNIN
-
-**Problem:** Write `SIGNIN` scope query verifying user email and password using `crypto::argon2::compare()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass))
-> ```
-> ```surrealql
-> SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass))
-> ```
->
-> **Explanation:** `crypto::argon2::compare(hash, password)` verifies plain passwords against stored Argon2 hashes.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`$auth` Variable](auth_variable.md) — The parent authenticated user variable.
 - [`PERMISSIONS` Clause (Table & Field Level)](permissions_clause.md) — Table and field level permission rules.
@@ -209,7 +224,7 @@ Write a `PERMISSIONS` clause for an `invoice` table allowing `select` if `organi
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$auth` is not just an ID string; it is the complete user record object.
 - Any field on the user record (`$auth.role`, `$auth.tenant`, `$auth.plan`) is accessible directly.
 - Enables high-performance Attribute-Based Access Control (ABAC) without secondary table joins.

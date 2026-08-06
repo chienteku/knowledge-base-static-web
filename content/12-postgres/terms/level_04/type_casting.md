@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Syntax**
+
+**SQL Command / Clause** (Explicit Type Conversion): Type Casting (`CAST(val AS type)` or `val::type`) converts data values between compatible PostgreSQL data types.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Postgres supports the standard `CAST` syntax and provides the highly popular `::` double-colon shorthand for brevity).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational databases enforce strict typing. But sometimes, queries require you to treat a value as a different type:
@@ -87,7 +88,7 @@ WHERE user_code::INTEGER > 100;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to cast unparsable strings to numbers
 
@@ -139,65 +140,95 @@ SELECT * FROM users WHERE age = 30; -- Matching integer literal
 Use val::text for concise Postgres casting or CAST(val AS text) for ANSI SQL compliance
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Percentage Calculation
+### Exercise 1: Casting Strings to Integer and Decimal Types
 
-**Problem:** You have a table `clicks_log` with columns `clicks` and `views` (both are `INTEGER` columns). Write a SQL query that calculates the click-through rate as `clicks / views`. Multiply by 100 to get a percentage. Ensure the calculation uses decimal division (so you don't get `0` returned!). Label the output column as `ctr_percent`.
+**Scenario:**
+Cast a string numeric value `'1299'` to `INTEGER` and `'99.95'` to `NUMERIC(10, 2)`.
 
-**Expected output:**
+**Requirements:**
+1. Use `'1299'::INTEGER` and `CAST('99.95' AS NUMERIC(10, 2))`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT (clicks::FLOAT / views) * 100 AS ctr_percent 
-> FROM clicks_log;
+> SELECT 
+>   '1299'::INTEGER AS price_cents,
+>   CAST('99.95' AS NUMERIC(10, 2)) AS price_dollars;
 > ```
-> - Cast the `clicks` column to `FLOAT` (using `::FLOAT`) before performing the division.
-> - Wrap the division in parenthesis before multiplying by 100.
+>
+> #### Technical Explanation
+>
+> 1. `::type` is PostgreSQL shorthand cast syntax; `CAST(val AS type)` is ANSI SQL standard.
+> 2. Converts binary representations into target data types.
+> 3. Throws error 22P02 (`invalid_text_representation`) if string contains unparseable values.
+
+---
+
+### Exercise 2: Casting JSON Strings to JSONB Objects
+
+**Scenario:**
+Cast a text JSON string into a binary `JSONB` data type to execute JSON key extraction.
+
+**Requirements:**
+1. Use `'{"theme": "dark"}'::JSONB`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   ('{"theme": "dark", "notifications": true}'::JSONB)->>'theme' AS user_theme;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Casting string text to `JSONB` parses and validates JSON syntax.
+> 2. Enables PostgreSQL `JSONB` operators (`->`, `->>`).
+> 3. Crucial for handling un-parsed JSON payloads.
+
+---
+
+### Exercise 3: Integer to Text Array Casting for Dynamic Queries
+
+**Scenario:**
+Cast integer `id` to `TEXT` for string concatenation in report formatting.
+
+**Requirements:**
+1. Use `id::TEXT`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   'USR-' || LPAD(id::TEXT, 6, '0') AS formatted_user_code 
+> FROM users;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. String concatenation (`||`) requires compatible text types.
+> 2. `id::TEXT` converts integer keys into text strings for `LPAD()` formatting.
+> 3. Produces zero-padded codes (`"USR-000042"`).
 
 ---
 
 
 
-### Exercise 2: Casting String to Integer and Timestamp
-
-**Problem:** Cast string `'123'` to integer and string `'2026-01-01'` to `TIMESTAMPTZ` using `::` syntax.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT '123'::INT AS num, '2026-01-01'::TIMESTAMPTZ AS ts;
-> ```
-> ```sql
-> SELECT '123'::INT AS num, '2026-01-01'::TIMESTAMPTZ AS ts;
-> ```
->
-> **Explanation:** `expression::type` performs explicit data type casting in PostgreSQL.
-
----
-
-### Exercise 3: Safe Casting with `pg_input_is_valid()`
-
-**Problem:** Check if string `'abc'` is a valid integer before casting using `pg_input_is_valid()` in Postgres 16+.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT pg_input_is_valid('abc', 'integer');
-> ```
-> ```sql
-> SELECT pg_input_is_valid('abc', 'integer');
-> ```
->
-> **Explanation:** `pg_input_is_valid(string, type)` tests whether strings can be cast safely without throwing errors.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Data Types (Overview)](../level_02/data_types.md) — The parent typing framework.
 - [`CASE` Expression](case_expression.md) — Related concept: `CASE` Expression.
 - [`COALESCE` / `NULLIF`](coalesce_nullif.md) — Related concept: `COALESCE` / `NULLIF`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Type casting temporarily converts a value's data type inside a query.
 - Standard syntax is `CAST(expression AS type)`.
 - PostgreSQL shorthand is `expression::type` (e.g. `price::INTEGER`).

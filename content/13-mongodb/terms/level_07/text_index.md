@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Index / Performance** (Inverted Word Indexing): A Text Index creates an inverted word-stemmed index over string fields to support full-text search queries ($text).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Calculated on the database engine. String values are tokenized and stemmed using language dictionaries (like Snowball stemmers) before being written to the index files).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `text_search.md`, regular expressions cannot handle advanced full-text search patterns (stemming, stop words, or relevance scoring).
@@ -96,7 +97,7 @@ db.products.createIndex({ "$**": "text" }); // Wildcard text index
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to create a second text index on a collection without dropping the old one first
 
@@ -118,6 +119,8 @@ db.articles.createIndex({ title: "text", description: "text" }); // Build new co
 
 
 
+
+
 ### Mistake 2: Creating Multiple Text Indexes on a Single Collection
 
 **The mistake:** Attempting to create two separate text indexes on `title` and `description`.
@@ -133,6 +136,8 @@ db.posts.createIndex({ title: "text" }); db.posts.createIndex({ description: "te
 ```javascript
 db.posts.createIndex({ title: "text", description: "text" });
 ```
+
+
 
 ### Mistake 3: Using `$text` Indexes for Real-Time Wildcard Prefix Substring Search
 
@@ -152,109 +157,97 @@ Use Atlas Search edgeGram analyzer or Wildcard Indexes for autocomplete
 
 
 
-### Mistake 4: Creating Multiple Text Indexes on a Single Collection
+## 5. Practice Exercises
 
-**The mistake:** Attempting to create two separate text indexes on `title` and `description`.
+### Exercise 1: Multi-Field Text Index Construction
 
-**Why it's wrong:** MongoDB permits at most ONE Text Index per collection! Combine fields into a single compound text index `{ title: "text", description: "text" }`.
+**Scenario:**
+Create a full-text search index on `title` (weight: 10) and `body` (weight: 1) in collection `articles`.
 
-*Incorrect:*
-```javascript
-db.posts.createIndex({ title: "text" }); db.posts.createIndex({ description: "text" }); // ❌ Multiple text index error!
-```
+**Requirements:**
+1. Execute `createIndex({ title: "text", body: "text" }, { weights: { title: 10, body: 1 } })`.
 
-*Fix:*
-```javascript
-db.posts.createIndex({ title: "text", description: "text" });
-```
-
-### Mistake 5: Using `$text` Indexes for Real-Time Wildcard Prefix Substring Search
-
-**The mistake:** Using `$text` for real-time `"admin*"` autocomplete search.
-
-**Why it's wrong:** `$text` indexes tokenize words using language stemmers, making substring autocomplete slow. Use Wildcard Indexes or Atlas Search for autocomplete.
-
-*Incorrect:*
-```javascript
-// Using $text for real-time search box autocomplete
-```
-
-*Fix:*
-```javascript
-Use Atlas Search edgeGram analyzer or Wildcard Indexes for autocomplete
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Weighted Index Creation
-
-**Problem:** You have a `products` collection containing `name`, `summary`, and `details` fields. 
-Write the MongoDB command to create a text index on all three fields, assigning weights:
--   `name`: weight `15`
--   `summary`: weight `5`
--   `details`: weight `1`
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.createIndex(
+> db.articles.createIndex(
+>   { title: "text", body: "text" },
 >   {
->     name: "text",
->     summary: "text",
->     details: "text"
->   },
->   {
->     weights: {
->       name: 15,
->       summary: 5,
->       details: 1
->     }
+>     weights: { title: 10, body: 1 },
+>     name: "idx_article_text_search"
 >   }
 > );
 > ```
-> - The keys object maps the target fields to the string value `"text"`.
-> - Specify the weights configuration inside the second options object.
+>
+> #### Technical Explanation
+>
+> 1. `"text"` creates an inverted text search index tokenizing text words.
+> 2. `weights` assigns relative relevance importance to field matches (title matches score 10x higher than body matches).
+> 3. Applies language stemming (e.g. "running" matches "run").
+
+---
+
+### Exercise 2: Text Search Queries with Phrase Matching and Negation
+
+**Scenario:**
+Search `articles` for exact phrase `"database design"` while excluding articles containing keyword `"oracle"`.
+
+**Requirements:**
+1. Use `$text: { $search: ""database design" -oracle" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.articles.find({
+>   $text: {
+>     $search: ""database design" -oracle"
+>   }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Escaped quotes (`"phrase"`) enforce exact phrase matching.
+> 2. Hyphen prefix (`-word`) excludes documents containing specified keywords.
+> 3. Advanced text query syntax.
+
+---
+
+### Exercise 3: Relevance Score Projection and Sorting
+
+**Scenario:**
+Project and sort text search results by BM25 text score relevance.
+
+**Requirements:**
+1. Project `{ score: { $meta: "textScore" } }` and sort by `{ score: { $meta: "textScore" } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.articles.find(
+>   { $text: { $search: "mongodb index" } },
+>   { score: { $meta: "textScore" } }
+> )
+> .sort({ score: { $meta: "textScore" } });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$meta: "textScore"` calculates keyword frequency relevance scores.
+> 2. Sorting by text score ranks best matching documents at the top of results.
+> 3. Native search engine capabilities.
 
 ---
 
 
 
-### Exercise 2: Creating Multi-Field Text Index with Weights
-
-**Problem:** Create text index on `title` (weight 10) and `body` (weight 1).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.createIndex({ title: "text", body: "text" }, { weights: { title: 10, body: 1 } });
-> ```
-> ```javascript
-> db.posts.createIndex(
->   { title: "text", body: "text" },
->   { weights: { title: 10, body: 1 } }
-> );
-> ```
->
-> **Explanation:** `weights` assigns higher relevance scores to matches in specified fields.
-
----
-
-### Exercise 3: Full-Text Search Phrase Match
-
-**Problem:** Query `$text` search matching exact phrase `"database index"` in quotes.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.find({ $text: { $search: "\"database index\"" } });
-> ```
-> ```javascript
-> db.posts.find({ $text: { $search: "\"database index\"" } });
-> ```
->
-> **Explanation:** Escaped quotes `"\"phrase\""` perform exact phrase full-text searches.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Text Search (`$text` / `$search`)](../level_04/text_search.md) — The query command.
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The DDL triggers.
@@ -262,7 +255,7 @@ Write the MongoDB command to create a text index on all three fields, assigning 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Text Indexes tokenize, stem, and filter string values for full-text search.
 - Only one text index is allowed per collection.
 - Text indexes can cover multiple fields at the same time (composite text index).

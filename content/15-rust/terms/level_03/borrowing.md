@@ -157,7 +157,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Zero-Copy HTTP Protocol Packet & Header Inspector
 
-**Problem:** High-throughput API proxies process tens of thousands of requests per second. Constructing owned `String` instances for every HTTP header key and value creates severe heap allocation overhead and garbage accumulation.
+**Scenario:** High-throughput API proxies process tens of thousands of requests per second. Constructing owned `String` instances for every HTTP header key and value creates severe heap allocation overhead and garbage accumulation.
 
 Implement a zero-copy HTTP header inspector struct `HeaderInspector<'a>` that borrows header slices (`&'a [Header<'a>]`) directly from an immutable socket buffer.
 
@@ -273,7 +273,7 @@ Implement a zero-copy HTTP header inspector struct `HeaderInspector<'a>` that bo
 
 ### Exercise 2: Shared Multi-View In-Memory Log Snapshot Query Engine
 
-**Problem:** Production log storage systems maintain contiguous snapshot buffers in memory. Running multiple query filters (filtering by level, time window, or substring match) must execute without copying log entries or mutating log state.
+**Scenario:** Production log storage systems maintain contiguous snapshot buffers in memory. Running multiple query filters (filtering by level, time window, or substring match) must execute without copying log entries or mutating log state.
 
 Implement a snapshot query analyzer `SnapshotQuery<'a>` operating over borrowed slice references `&'a [LogRecord<'a>]`.
 
@@ -400,7 +400,7 @@ Implement a snapshot query analyzer `SnapshotQuery<'a>` operating over borrowed 
 
 ### Exercise 3: Multi-Observer Telemetry Dispatcher & Observer Routing
 
-**Problem:** Distributed real-time monitoring infrastructure routes stream metrics to diverse analytical subscribers (e.g. CPU anomaly detectors, HTTP error rate trackers). Cloning telemetry events for every observer introduces massive CPU overhead.
+**Scenario:** Distributed real-time monitoring infrastructure routes stream metrics to diverse analytical subscribers (e.g. CPU anomaly detectors, HTTP error rate trackers). Cloning telemetry events for every observer introduces massive CPU overhead.
 
 Implement a telemetry dispatcher `TelemetryDispatcher<'a>` that broadcasts borrowed immutable event references `&TelemetryEvent` to multiple registered observers implementing an `Observer` trait.
 

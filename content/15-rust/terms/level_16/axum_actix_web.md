@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Web Framework / HTTP**: `axum` and `actix-web` are the two dominant web microservice frameworks in the Rust ecosystem. Both leverage Rust's strong type system and `async/await` syntax to map HTTP routes to strongly-typed async handler functions with zero runtime reflection overhead.
+
+
+**Rust Ecosystem Framework (asynchronous web application frameworks)**: `axum` and `actix-web` are the two dominant web microservice frameworks in the Rust ecosystem. Both leverage Rust's strong type system and `async/await` syntax to map HTTP routes to strongly-typed async handler functions with zero runtime reflection overhead.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Backend Ecosystem**: Powering production REST APIs, gRPC web endpoints, WebSocket streams, and backend microservices.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -137,7 +135,23 @@ async fn main() -> std::io::Result<()> {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Missing Error Extractor or Swallowing Errors in Handlers
+
+**The mistake:** Returning generic `StatusCode::INTERNAL_SERVER_ERROR` from handlers without structured error types.
+
+**Why it's wrong:** Swallowing underlying errors prevents client diagnostics and breaks API error contracts. Handlers should implement `IntoResponse` for custom error enums.
+
+*Fix:* Implement `IntoResponse` for domain error enums to yield clean JSON error payloads.
+
+### Mistake 3: Shared Mutable State Bottlenecks Without Async Mutex / Atomic Primitives
+
+**The mistake:** Locking `std::sync::Mutex` across `.await` points in Axum/Actix handlers.
+
+**Why it's wrong:** Holding a synchronous mutex across async yield points blocks the web server worker thread, creating severe request latency spikes.
+
+*Fix:* Use `tokio::sync::Mutex` or atomic types (`AtomicUsize`) for shared web state.
+
 
 ### Mistake 1: Placing Axum State Extractors Out of Order
 
@@ -147,11 +161,11 @@ async fn main() -> std::io::Result<()> {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Shared Application State & REST Endpoints in `axum`
 
-**Problem:** Build an in-memory user registry service using `axum`.
+**Scenario:** Build an in-memory user registry service using `axum`.
 1. Define an `AppState` struct holding thread-safe shared state: `users: Arc<RwLock<HashMap<u64, User>>>`.
 2. Implement route handlers:
    - `POST /users`: Accepts `Json<CreateUserPayload>`, generates an incremental ID, inserts the user into state, and returns `(StatusCode::CREATED, Json<User>)`.
@@ -159,6 +173,9 @@ async fn main() -> std::io::Result<()> {
 3. Write socket-less integration unit tests using `tower::ServiceExt::oneshot` to execute requests against `app` and verify response status codes and body contents using `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use axum::{
 >     extract::{Path, State},
@@ -295,7 +312,8 @@ async fn main() -> std::io::Result<()> {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Thread-Safe State (`Arc<RwLock<...>>`)**: Wraps application state so it can be safely shared across Tokio threads handling concurrent HTTP requests.
 > 2. **State Extractor Order**: The `State(state)` extractor is listed before `Json(payload)` because `Json` consumes the HTTP request body stream.
 > 3. **Socket-less Testing**: `app.oneshot(request)` tests web services directly in memory without binding to actual network sockets or ports.
@@ -304,13 +322,16 @@ async fn main() -> std::io::Result<()> {
 
 ### Exercise 2: `actix-web` Query Parameters, App State, and Integration Testing
 
-**Problem:** Build a product search endpoint using `actix-web`.
+**Scenario:** Build a product search endpoint using `actix-web`.
 1. Define a `CatalogState` struct holding a static list of `Product` items (`id: u64`, `name: String`, `price_cents: u64`).
 2. Define a `SearchQuery` struct for query string parameters: `max_price: Option<u64>`.
 3. Implement a handler `search_products(data: web::Data<CatalogState>, query: web::Query<SearchQuery>) -> impl Responder`. If `max_price` is provided, filter products whose price is `<= max_price`.
 4. Write integration unit tests using `actix_web::test` (`init_service`, `TestRequest`, `call_service`, `read_body_json`) verifying query string parsing and filtering logic.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use actix_web::{get, web, App, HttpResponse, Responder};
 > use serde::{Deserialize, Serialize};
@@ -393,7 +414,8 @@ async fn main() -> std::io::Result<()> {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`web::Query<T>` Extractor**: Automatically parses URL query parameters (`?max_price=3000`) into typed Rust structs via Serde.
 > 2. **`web::Data<T>` State Injection**: Actix-web manages shared thread state using `web::Data` wrappers around application data structures.
 > 3. **Actix Test Suite**: `actix_web::test::init_service` constructs a test instance of the application pipeline for in-memory integration testing.
@@ -402,13 +424,16 @@ async fn main() -> std::io::Result<()> {
 
 ### Exercise 3: Custom Header Extractor and Custom Response Error Mapping in `axum`
 
-**Problem:** Implement a custom header extractor for Bearer token authentication in `axum`.
+**Scenario:** Implement a custom header extractor for Bearer token authentication in `axum`.
 1. Define an `AuthClaims` struct: `pub user_id: u64`.
 2. Implement `axum::extract::FromRequestParts<S>` for `AuthClaims`. Look up the `"Authorization"` header. If missing or invalid format (e.g. not starting with `"Bearer secret-token-"`), return an error tuple `(StatusCode::UNAUTHORIZED, "Invalid Auth Header")`.
 3. Create a protected route handler `dashboard(claims: AuthClaims) -> String` that returns `"Welcome user <user_id>"`.
 4. Write unit tests with `tower::ServiceExt::oneshot` verifying both authorized (200 OK) and unauthorized (401 Unauthorized) requests using `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use axum::{
 >     async_trait,
@@ -493,7 +518,8 @@ async fn main() -> std::io::Result<()> {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`FromRequestParts` Trait**: Allows implementing custom header/metadata extractors without consuming the request body stream.
 > 2. **Declarative Route Security**: Simply adding `claims: AuthClaims` to a route handler's parameters enforces authentication automatically. If validation fails, `axum` returns the rejection response before executing the handler.
 > 3. **Error Mapping**: Standard HTTP status code tuples `(StatusCode, &'static str)` implement `IntoResponse`, converting extractor failures cleanly into HTTP responses.

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Schema Design** (Redundancy Elimination Design Process): Database Normalization is a systematic schema design method (1NF, 2NF, 3NF) that eliminates data redundancy and prevents modification anomalies.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (A core database design theory applied across all relational SQL systems during the schema mapping phase).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When designing a database schema, it is tempting to create one giant table containing everything (similar to an Excel spreadsheet). For example, a `store_sales` table:
@@ -93,7 +94,7 @@ CREATE TABLE orders (
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Over-normalizing schemas beyond practical business needs
 
@@ -139,62 +140,98 @@ Maintain pragmatic 3NF or denormalize measured read bottlenecks
 Store customer address in normalized customers table
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Anomaly Auditing
+### Exercise 1: Normalizing Un-Normalized Data Tables into 3NF
 
-**Problem:** You have a table:
-`courses (course_id, course_title, instructor_name, instructor_office_phone)`
-Identify:
-1.  The anomaly that occurs if you delete a course, but the instructor still works at the school.
-2.  The anomaly that occurs if the instructor moves to a new office room.
+**Scenario:**
+Normalize a flat spreadsheet-style `orders_flat` table storing customer and product data into 3NF (`customers`, `products`, `orders`, `order_items`).
 
-**Expected output:**
+**Requirements:**
+1. Outline normalization steps from un-normalized -> 1NF -> 2NF -> 3NF.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. Deletion Anomaly (deleting the course wipes out the instructor's office phone record from the database).
-> 2. Update Anomaly (you have to locate and update the phone number in multiple rows if the instructor teaches multiple courses, risking inconsistent data).
+> 4-Step Normalization Workflow:
+> - Step 1: Un-Normalized: Single flat table with repeated customer and product columns.
+> - Step 2: 1NF: Split multi-valued fields into distinct rows and add Primary Key.
+> - Step 3: 2NF: Remove partial dependencies by splitting (Order + Product) items into 'order_items'.
+> - Step 4: 3NF: Remove transitive dependencies by moving customer addresses to 'customers'.
 > ```
-> - Differentiate what data is lost when deleting top-level nodes.
-> - Consider the effort required to update shared attributes across rows.
+>
+> #### Technical Explanation
+>
+> 1. Normalization eliminates data redundancy across entities.
+> 2. Prevents insertion, update, and deletion anomalies.
+> 3. Foundation of enterprise relational database architecture.
+
+---
+
+### Exercise 2: Identifying Modification Anomalies in Un-Normalized Schemas
+
+**Scenario:**
+Demonstrate insertion, update, and deletion anomalies on an un-normalized table storing customer addresses inside order rows.
+
+**Requirements:**
+1. Explain Insertion Anomaly, Update Anomaly, Deletion Anomaly.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Modification Anomaly Examples:
+> - Insertion Anomaly: Cannot add a new customer without forcing them to create a dummy order first.
+> - Update Anomaly: Changing a customer's address requires updating 500 historical order rows (risks partial updates).
+> - Deletion Anomaly: Deleting a customer's only order accidentally deletes their customer record permanently.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Anomalies occur when distinct business entities inhabit a single un-normalized table.
+> 2. 3NF normalization isolates entities into dedicated tables, preventing all three anomaly types.
+> 3. Ensures data integrity.
+
+---
+
+### Exercise 3: Auditing Schemas for Third Normal Form Compliance
+
+**Scenario:**
+Audit table `invoices(id, customer_id, customer_email, total)` and refactor to satisfy 3NF.
+
+**Requirements:**
+1. Remove transitive dependency `customer_id -> customer_email`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- ❌ 3NF Violation: customer_email depends on customer_id (not invoices.id!)
+> -- ALTER TABLE invoices ADD COLUMN customer_email TEXT;
+> 
+> -- ✅ 3NF Compliant: Fetch email via JOIN to customers table
+> SELECT 
+>   i.id AS invoice_id, 
+>   c.email AS customer_email 
+> FROM invoices AS i 
+> JOIN customers AS c ON i.customer_id = c.id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. In 3NF, all non-key attributes MUST depend "on the key, the whole key, and nothing but the key".
+> 2. `customer_email` depends on `customer_id`, violating 3NF when placed in `invoices`.
+> 3. Fetching attributes via `JOIN` maintains 3NF compliance.
 
 ---
 
 
 
-### Exercise 2: Normal Forms Progression List
-
-**Problem:** List 3 standard Normal Forms in database design (1NF: atomic values; 2NF: no partial dependencies; 3NF: no transitive dependencies).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1NF (atomic values), 2NF (no partial dependencies), 3NF (no transitive dependencies)
-> ```
-> ```text
-> 1NF (atomic values), 2NF (no partial dependencies), 3NF (no transitive dependencies)
-> ```
->
-> **Explanation:** Normal forms eliminate data redundancy and prevent update/delete anomalies.
-
----
-
-### Exercise 3: Goal of Relational Normalization
-
-**Problem:** What is the primary goal of relational database normalization? (Eliminates data redundancy and update anomalies).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Eliminates data redundancy and update/delete anomalies
-> ```
-> ```text
-> Eliminates data redundancy and update/delete anomalies
-> ```
->
-> **Explanation:** Normalization organizes attributes to guarantee data integrity across table updates.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Functional Dependency](functional_dependency.md) — The prerequisite math concept behind normal forms.
 - [First Normal Form (1NF)](first_normal_form.md) — The atomic data standard.
 - [Entity-Relationship Diagram (ERD)](erd.md) — Related concept: Entity-Relationship Diagram (ERD).
@@ -204,7 +241,7 @@ Identify:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Normalization minimizes database data redundancy and prevents write anomalies.
 - Prevents update, insertion, and deletion anomalies.
 - Progresses through mathematical checks called Normal Forms (1NF, 2NF, 3NF).

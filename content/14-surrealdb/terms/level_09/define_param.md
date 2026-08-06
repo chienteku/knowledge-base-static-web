@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Configuration & State**
+
+
+**Advanced Feature (global custom parameter definition)**: - **Database Configuration & State**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Engine Schema Engine** (Stored in database schema metadata and accessible globally across all queries).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Applications frequently need global configuration values, feature toggles, or shared constants (e.g. system tax rate, platform maintenance status, max file upload sizes) accessible to all queries and server-side functions.
@@ -69,7 +68,7 @@ DEFINE PARAM $app_config VALUE {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing LET (Session-Scoped) with DEFINE PARAM (Database-Scoped)
 
@@ -132,84 +131,92 @@ DEFINE PARAM $MAX_LIMIT ON DATABASE VALUE 200; // Re-define schema parameter
 
 
 
-### Mistake 4: Omitting `$` Prefix in `DEFINE PARAM` Declarations
 
-**The mistake:** Writing `DEFINE PARAM MAX_LIMIT ON DATABASE VALUE 100;` (SyntaxError).
 
-**Why it's wrong:** Parameter names in SurrealQL MUST start with a `$` prefix (e.g. `DEFINE PARAM $MAX_LIMIT`).
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-DEFINE PARAM MAX_LIMIT ON DATABASE VALUE 100; // ❌ Parse error: missing $ prefix!
-```
+### Exercise 1: Defining Global System Parameters
 
-*Fix:*
-```surrealql
-DEFINE PARAM $MAX_LIMIT ON DATABASE VALUE 100; // Correct $ prefix
-```
+**Scenario:**
+Define a global database parameter `$tax_rate` set to `0.0825dec` so that all financial queries reference a single constant rate.
 
-### Mistake 5: Attempting Global Reassignment of `DEFINE PARAM` Variables inside Client Queries
-
-**The mistake:** Writing `LET $MAX_LIMIT = 200;` expecting to overwrite global `DEFINE PARAM $MAX_LIMIT`.
-
-**Why it's wrong:** `LET` creates a local query script variable shadowing the global parameter. To modify persistent global parameters, execute `DEFINE PARAM` again or use `REMOVE PARAM`.
-
-*Incorrect:*
-```surrealql
--- Local script shadowing does not mutate global database schema param
-LET $MAX_LIMIT = 200;
-```
-
-*Fix:*
-```surrealql
-DEFINE PARAM $MAX_LIMIT ON DATABASE VALUE 200; // Re-define schema parameter
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Define Global App Title
-Write a `DEFINE PARAM` statement that sets a persistent global string parameter named `$site_name` to `"My Tech Blog"`.
+**Requirements:**
+1. Write `DEFINE PARAM $tax_rate VALUE 0.0825dec`.
+2. Use `$tax_rate` in a `SELECT` calculation.
 
 > [!check]- Answer
-> - Syntax: `DEFINE PARAM $site_name VALUE "My Tech Blog";`
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Define global system parameter
+> DEFINE PARAM $tax_rate VALUE 0.0825dec;
+> 
+> -- Reference parameter in queries
+> SELECT price, price * $tax_rate AS tax FROM product;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DEFINE PARAM $name VALUE expr` creates global database parameters accessible across all client sessions.
+> 2. Standardizes global constants (tax rates, feature flags, API limits) in database metadata.
+> 3. Updates to `$tax_rate` immediately affect all subsequent query calculations.
+
+---
+
+### Exercise 2: Idempotent Parameter Overwrites with `OVERWRITE`
+
+**Scenario:**
+Update global parameter `$tax_rate` to `0.0850dec` using `DEFINE PARAM OVERWRITE`.
+
+**Requirements:**
+1. Write `DEFINE PARAM OVERWRITE $tax_rate VALUE 0.0850dec`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE PARAM OVERWRITE $tax_rate VALUE 0.0850dec;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `OVERWRITE` updates existing parameter values idempotently without throwing "item exists" errors.
+> 2. Simplifies deployment migration scripts.
+> 3. Takes effect across new transactions instantly.
+
+---
+
+### Exercise 3: Dropping Global Parameters with `REMOVE PARAM`
+
+**Scenario:**
+Drop global parameter `$tax_rate` using `REMOVE PARAM`.
+
+**Requirements:**
+1. Write `REMOVE PARAM $tax_rate`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> REMOVE PARAM $tax_rate;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE PARAM` drops global parameters from database metadata.
+> 2. Prevents queries from referencing obsolete parameter names.
+> 3. Cleans up unused global constants.
 
 ---
 
 
 
-### Exercise 2: Defining Global Database Constant
 
-**Problem:** Define global database parameter `$DEFAULT_ROLE` set to `"user"`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE PARAM $DEFAULT_ROLE ON DATABASE VALUE "user";
-> ```
-> ```surrealql
-> DEFINE PARAM $DEFAULT_ROLE ON DATABASE VALUE "user";
-> ```
->
-> **Explanation:** `DEFINE PARAM $var ON DATABASE VALUE val` sets global database constants.
-
----
-
-### Exercise 3: Removing Global Schema Parameter
-
-**Problem:** Command to remove global database parameter `$OLD_PARAM` (`REMOVE PARAM $OLD_PARAM ON DATABASE;`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> REMOVE PARAM $OLD_PARAM ON DATABASE;
-> ```
-> ```surrealql
-> REMOVE PARAM $OLD_PARAM ON DATABASE;
-> ```
->
-> **Explanation:** `REMOVE PARAM` drops global schema parameter definitions.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Parameters (`$param`)](../level_06/parameters.md) — Query-level parameter syntax.
 - [`LET` Statement](../level_06/let_statement.md) — Transient session variables.
@@ -217,7 +224,7 @@ Write a `DEFINE PARAM` statement that sets a persistent global string parameter 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE PARAM` creates persistent, database-wide global parameters.
 - Unlike `LET` (query-scoped), `DEFINE PARAM` persists across all client connections and server restarts.
 - Ideal for global application configuration, feature toggles, and shared system constants.

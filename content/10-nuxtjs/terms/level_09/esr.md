@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Rendering Strategies**
+
+**Rendering Strategy** (Edge-Side Rendering Architecture): Edge-Side Rendering (ESR) deploys Nitro server handlers to global edge networks (Cloudflare Workers, Vercel Edge) to render HTML close to end users.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (Executed strictly inside remote CDN serverless edge runtimes like Cloudflare Workers or Vercel Edge).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional Server-Side Rendering (SSR), your Node.js application runs on a single server or cluster in a specific data center (e.g., Virginia, USA). 
@@ -44,7 +45,7 @@ When combined with **Hybrid Rendering**, ESR becomes exceptionally powerful. If 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Importing Node.js built-in modules in Edge routes
 
@@ -67,6 +68,8 @@ export default defineEventHandler((event) => {
 
 ---
 
+
+
 ### Mistake 2: Using Full Node.js Core Modules (`fs`, `child_process`) in Edge Side Rendering (ESR) Builds
 
 **The mistake:** Configuring Nitro preset `nitro: { preset: 'cloudflare-pages' }` while importing Node `fs` in server routes.
@@ -85,6 +88,8 @@ import fs from 'fs'; // ❌ Build Error: Node module 'fs' not supported in Edge 
 ```
 
 ---
+
+
 
 ### Mistake 3: Assuming ESR Edge Functions Have Unlimited CPU Execution Times
 
@@ -105,152 +110,111 @@ import fs from 'fs'; // ❌ Build Error: Node module 'fs' not supported in Edge 
 
 ---
 
-### Mistake 4: Using Full Node.js Core Modules (`fs`, `child_process`) in Edge Side Rendering (ESR) Builds
 
-**The mistake:** Configuring Nitro preset `nitro: { preset: 'cloudflare-pages' }` while importing Node `fs` in server routes.
-
-**Why it's wrong:** Edge environments (Cloudflare Workers, Vercel Edge) run on lightweight V8 engines that do NOT support Node.js C++ bindings like `fs`. Use Web Standard APIs (`fetch`, `crypto`, `WebStreams`).
-
-*Incorrect:*
-```typescript
-// server/api/file.ts on Cloudflare Pages preset
-import fs from 'fs'; // ❌ Build Error: Node module 'fs' not supported in Edge Runtime!
-```
-
-*Fix:*
-```vue
-// Use Web Standard APIs or persistent storage drivers (useStorage('kv'))
-```
-
----
-
-### Mistake 5: Assuming ESR Edge Functions Have Unlimited CPU Execution Times
-
-**The mistake:** Running 60-second video encoding scripts inside an Edge Side Rendered route.
-
-**Why it's wrong:** Edge networks enforce strict CPU limits (e.g. 50ms CPU time). Exceeding CPU limits causes Edge function termination. Offload heavy processing to standard Node.js serverless functions.
-
-*Incorrect:*
-```vue
-/* Running 60-second video processing script inside Edge route */
-```
-
-*Fix:*
-```vue
-/* Execute heavy processing tasks in standard Node.js serverless functions */
-```
 
 
 ---
 
-### Mistake 6: Using Full Node.js Core Modules (`fs`, `child_process`) in Edge Side Rendering (ESR) Builds
+## 5. Practice Exercises
 
-**The mistake:** Configuring Nitro preset `nitro: { preset: 'cloudflare-pages' }` while importing Node `fs` in server routes.
+### Exercise 1: Configuring Edge Deployment Presets in Nitro
 
-**Why it's wrong:** Edge environments (Cloudflare Workers, Vercel Edge) run on lightweight V8 engines that do NOT support Node.js C++ bindings like `fs`. Use Web Standard APIs (`fetch`, `crypto`, `WebStreams`).
+**Scenario:**
+Configure `nuxt.config.ts` to target Cloudflare Pages edge deployment using Nitro preset settings.
 
-*Incorrect:*
-```typescript
-// server/api/file.ts on Cloudflare Pages preset
-import fs from 'fs'; // ❌ Build Error: Node module 'fs' not supported in Edge Runtime!
-```
+**Requirements:**
+1. Set `nitro.preset: "cloudflare-pages"`.
 
-*Fix:*
-```vue
-// Use Web Standard APIs or persistent storage drivers (useStorage('kv'))
-```
-
----
-
-### Mistake 7: Assuming ESR Edge Functions Have Unlimited CPU Execution Times
-
-**The mistake:** Running 60-second video encoding scripts inside an Edge Side Rendered route.
-
-**Why it's wrong:** Edge networks enforce strict CPU limits (e.g. 50ms CPU time). Exceeding CPU limits causes Edge function termination. Offload heavy processing to standard Node.js serverless functions.
-
-*Incorrect:*
-```vue
-/* Running 60-second video processing script inside Edge route */
-```
-
-*Fix:*
-```vue
-/* Execute heavy processing tasks in standard Node.js serverless functions */
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: Nitro Preset Config
-
-**Problem:** You are deploying your Nuxt application to Cloudflare Pages. Write the build configuration block in `nuxt.config.ts` to instruct Nitro to compile the application for the `cloudflare-pages` preset.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // nuxt.config.ts
 > export default defineNuxtConfig({
 >   nitro: {
->     preset: 'cloudflare-pages'
->   }
-> })
-> ```
-> - Specify the target platform name inside the `nitro.preset` property in the config.
-
----
-
-### Exercise 2: ESR Nitro Preset Configuration
-
-**Problem:** Write `nuxt.config.ts` setting Nitro preset to `'cloudflare-pages'` for Edge Side Rendering.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> export default defineNuxtConfig({
->   nitro: {
->     preset: 'cloudflare-pages'
->   }
-> });
-> ```
-> - `nitro.preset` compiles project output to Edge runtimes.
-> 
-> ```typescript
-> export default defineNuxtConfig({
->   nitro: {
->     preset: 'cloudflare-pages'
+>     preset: "cloudflare-pages" // Or 'vercel-edge', 'deno-deploy', 'netlify-edge'
 >   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. Edge-Side Rendering (ESR) executes Nitro server handlers on global CDN edge nodes.
+> 2. `preset: "cloudflare-pages"` compiles server code into lightweight WebAssembly/V8 isolates.
+> 3. Reduces TTFB (Time-To-First-Byte) latency by rendering HTML geographically close to users.
+
 ---
 
-### Exercise 3: ESR Global Edge Network Benefit
+### Exercise 2: Accessing Edge Request Context Objects
 
-**Problem:** Why does Edge Side Rendering (ESR) dramatically lower TTFB latency for global users?
+**Scenario:**
+Access request geo-location data provided by edge runtime headers (`cf-ipcountry` or `x-vercel-ip-country`).
 
-**Expected output:**
+**Requirements:**
+1. Read edge headers using `getHeader()`.
+
 > [!check]- Answer
-> ```text
-> ESR executes HTML rendering and API logic on CDN PoP nodes located geographically close to the user, eliminating physical network distance roundtrips.
+>
+> #### Implementation
+>
+> ```typescript
+> // server/api/geo.ts
+> export default defineEventHandler((event) => {
+>   // Read geo-location headers attached by edge networks
+>   const country = getHeader(event, "cf-ipcountry") || getHeader(event, "x-vercel-ip-country") || "US";
+>   
+>   return { country };
+> });
 > ```
-> - Executes rendering logic in CDN PoP data centers nearest to the user.
-> 
+
+> #### Technical Explanation
+>
+> 1. Edge networks attach client geo-location metadata to incoming HTTP request headers.
+> 2. `getHeader()` reads custom edge headers inside Nitro event handlers.
+> 3. Enables instant localized edge HTML rendering.
+
+---
+
+### Exercise 3: Optimizing Edge Bundle Sizes
+
+**Scenario:**
+Explain why heavy Node.js built-in modules (`fs`, `child_process`) must be avoided when deploying to Edge runtime isolates.
+
+**Requirements:**
+1. Detail V8 edge isolate runtime limitations.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> User Request -> Nearest CDN Edge Node (Renders HTML) -> User Response
+> Edge Runtime Bundle Rules:
+> - Edge isolates (V8 isolates) lack full Node.js C++ bindings (no fs, child_process, or native C modules).
+> - Solution: Use web-standard APIs (fetch, Request, Response, TransformStream, Web Crypto API) inside Nitro handlers.
 > ```
+
+> #### Technical Explanation
+>
+> 1. Edge runtimes execute on lightweight JS engine workers rather than full Node.js servers.
+> 2. Standard Web APIs (`fetch`, `crypto`) guarantee cross-platform edge compatibility.
+> 3. Essential rule for building edge-ready Nuxt applications.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Nitro Engine](../level_01/nitro_engine.md) — The engine that compiles the edge-compatible output.
 - [Hybrid Rendering](hybrid_rendering.md) — The routing system that coordinates edge caching.
 - [Edge Deployment](../level_10/edge_deployment.md) — Related concept: Edge Deployment.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - ESR runs server rendering inside regional V8 runtimes closest to the user.
 - It bypasses global network latency to deliver near-zero Time to First Byte (TTFB).
 - It is enabled by Nitro compiling the server code into Edge V8 sandboxes.

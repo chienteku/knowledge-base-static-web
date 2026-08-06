@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Deployment & Containers**
+
+
+**Performance / Operations (Docker container deployment configuration)**: - **Deployment & Containers**
+
+
 
 ---
 
-## 3. Environment Context
-- **Container Infrastructure** (Local Docker Desktop, Docker Compose, Kubernetes, or Cloud Container services).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To ensure local development environments match production deployment setups exactly, developers use containerization via Docker. Running SurrealDB inside Docker containers eliminates "works on my machine" issues, simplifies integration testing, and enables automated orchestration in Kubernetes or AWS ECS clusters.
@@ -76,7 +75,7 @@ volumes:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting Volume Mounts for Persistent Storage
 
@@ -135,84 +134,105 @@ $ docker run -v /var/surreal-data:/data surrealdb/surrealdb:latest start rocksdb
 
 
 
-### Mistake 4: Binding Docker Container Database to `127.0.0.1` Network Loopback
 
-**The mistake:** Passing `--bind 127.0.0.1:8000` to `surreal start` inside Docker containers.
 
-**Why it's wrong:** `127.0.0.1` binds exclusively to internal container loopback. External host applications cannot connect to the database. Bind to `--bind 0.0.0.0:8000`.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-# Docker CMD
-CMD ["start", "--bind", "127.0.0.1:8000", "rocksdb://data.db"] # ❌ Unreachable from host!
-```
+### Exercise 1: Single-Node Docker Container Startup
 
-*Fix:*
-```surrealql
-CMD ["start", "--bind", "0.0.0.0:8000", "rocksdb://data.db"] # Binds to all interfaces
-```
+**Scenario:**
+Formulate a `docker run` command to launch a single-node persistent SurrealDB database container storing data on a mounted host directory volume.
 
-### Mistake 5: Forgetting Persistent Volume Mounts in Docker Containers
-
-**The mistake:** Running `docker run surrealdb/surrealdb:latest start rocksdb://data.db` without volume mounts.
-
-**Why it's wrong:** Without mounting host storage volumes (`-v /host/path:/surreal-data`), all database data is lost when the Docker container stops.
-
-*Incorrect:*
-```surrealql
-$ docker run surrealdb/surrealdb:latest start rocksdb://data.db # ❌ Container storage is ephemeral!
-```
-
-*Fix:*
-```surrealql
-$ docker run -v /var/surreal-data:/data surrealdb/surrealdb:latest start rocksdb:///data/my.db
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Container Port Mapping
-In the Docker flag `-p 8000:8000`, identify which number represents the host port and which represents the container port.
+**Requirements:**
+1. Bind port `8000:8000`.
+2. Mount host path `/var/surreal_data` to `/mydata`.
+3. Set root credentials `root` / `root`.
 
 > [!check]- Answer
-> - Docker port format: `-p <HOST_PORT>:<CONTAINER_PORT>`. Both are 8000.
+>
+> #### Implementation
+>
+> ```bash
+> docker run -d >   --name surrealdb >   -p 8000:8000 >   -v /var/surreal_data:/mydata >   surrealdb/surrealdb:latest >   start --user root --pass root file:/mydata/prod.db
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `-v /var/surreal_data:/mydata` mounts host storage into the container for persistent file storage.
+> 2. `-p 8000:8000` maps container WebSocket/HTTP port 8000 to the host network.
+> 3. `file:/mydata/prod.db` specifies local disk persistence path inside the container.
+
+---
+
+### Exercise 2: Docker Compose Multi-Service Configuration
+
+**Scenario:**
+Write a `docker-compose.yml` file configuring a SurrealDB database container alongside a Node.js web application service.
+
+**Requirements:**
+1. Configure `surrealdb` service with environment credentials and persistent volume.
+2. Configure `web` service depending on `surrealdb`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```yaml
+> version: "3.8"
+> services:
+>   surrealdb:
+>     image: surrealdb/surrealdb:latest
+>     ports:
+>       - "8000:8000"
+>     volumes:
+>       - surreal_data:/mydata
+>     command: start --user root --pass root file:/mydata/app.db
+> 
+> volumes:
+>   surreal_data:
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Docker Compose orchestrates database container deployment alongside application microservices.
+> 2. Named volume `surreal_data` preserves database files across container reboots.
+> 3. Simplifies local development environment setup.
+
+---
+
+### Exercise 3: Healthcheck Configuration for Container Services
+
+**Scenario:**
+Configure a Docker healthcheck for a SurrealDB container to verify HTTP `/health` availability before starting dependent services.
+
+**Requirements:**
+1. Add healthcheck testing `curl -f http://localhost:8000/health`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```yaml
+> healthcheck:
+>   test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+>   interval: 10s
+>   timeout: 5s
+>   retries: 3
+> ```
+>
+> #### Technical Explanation
+>
+> 1. SurrealDB exposes an HTTP `/health` endpoint returning `200 OK` when ready.
+> 2. Docker healthchecks prevent dependent app containers from starting before the database is initialized.
+> 3. Ensures smooth multi-container orchestration.
 
 ---
 
 
 
-### Exercise 2: Docker Container Run Command
 
-**Problem:** Write `docker run` command running SurrealDB with persistent volume `-v /data:/data` on port `8000`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> docker run -p 8000:8000 -v /data:/data surrealdb/surrealdb:latest start --bind 0.0.0.0:8000 rocksdb:///data/my.db
-> ```
-> ```text
-> docker run -p 8000:8000 -v /data:/data surrealdb/surrealdb:latest start --bind 0.0.0.0:8000 rocksdb:///data/my.db
-> ```
->
-> **Explanation:** `-p` forwards host ports; `-v` mounts persistent disk volumes into containers.
-
----
-
-### Exercise 3: Docker Compose Configuration
-
-**Problem:** Specify essential SurrealDB environment variables in Docker Compose (`SURREAL_USER`, `SURREAL_PASS`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SURREAL_USER=root, SURREAL_PASS=root
-> ```
-> ```text
-> SURREAL_USER=root, SURREAL_PASS=root
-> ```
->
-> **Explanation:** Container environment variables configure initial root credentials.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [SurrealDB Server (`surreal start`)](../level_01/surreal_start.md) — Startup configuration flags.
 - [SurrealDB Cloud](surrealdb_cloud.md) — Managed cloud alternative.
@@ -220,7 +240,7 @@ In the Docker flag `-p 8000:8000`, identify which number represents the host por
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Official container image: `surrealdb/surrealdb:latest`.
 - Always mount host directory or volume (`-v`) for persistent database storage.
 - Easily orchestrate local full-stack development setups using `docker-compose`.

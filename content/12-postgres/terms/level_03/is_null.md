@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Operator**
+
+**SQL Command / Clause** (Null State Comparison Predicate): `IS NULL` and `IS NOT NULL` test for the presence or absence of `NULL` states in table columns.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Enforced in all relational SQL query engines. Standardized by the ANSI-SQL spec).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When filtering data rows, you frequently need to check for missing information:
@@ -85,7 +86,7 @@ SELECT subject FROM support_tickets WHERE resolved_at = NULL;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `= NULL` or `!= NULL` inside query scripts
 
@@ -131,75 +132,103 @@ SELECT * FROM users WHERE phone != NULL; -- ❌ Returns 0 rows!
 SELECT * FROM users WHERE phone IS NOT NULL;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Bug Repair
+### Exercise 1: Querying Null vs Non-Null Rows
 
-**Problem:** You are building a billing portal. You write the following query to find the names of all customers who have **not** paid their invoices yet (where `payment_date` is blank):
+**Scenario:**
+Query `orders` for unpaid invoices where `paid_at IS NULL` vs paid invoices where `paid_at IS NOT NULL`.
 
-```sql
--- Table columns: customer_name, payment_date
-SELECT customer_name 
-FROM invoices 
-WHERE payment_date = NULL;
-```
+**Requirements:**
+1. Execute `SELECT` with `IS NULL` and `IS NOT NULL`.
 
-However, the dashboard displays an empty list. Fix the query so that it successfully locates unpaid customers.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT customer_name 
+> -- Unpaid Invoices
+> SELECT id, customer_id, total_cents 
 > FROM invoices 
-> WHERE payment_date IS NULL;
+> WHERE paid_at IS NULL;
+> 
+> -- Paid Invoices
+> SELECT id, customer_id, paid_at 
+> FROM invoices 
+> WHERE paid_at IS NOT NULL;
 > ```
-> - Identify the comparison operator in the `WHERE` clause.
-> - Swap the equal operator for the dedicated missing state checker.
+>
+> #### Technical Explanation
+>
+> 1. `IS NULL` tests for the absence of column values.
+> 2. `WHERE paid_at = NULL` fails because comparing anything to `NULL` yields `UNKNOWN`.
+> 3. Correct SQL null testing syntax.
+
+---
+
+### Exercise 2: Partial Indexing over Nullable Columns
+
+**Scenario:**
+Create a partial index over `invoices` for unpaid orders (`WHERE paid_at IS NULL`).
+
+**Requirements:**
+1. Execute `CREATE INDEX ON invoices (customer_id) WHERE paid_at IS NULL`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE INDEX idx_unpaid_invoices 
+> ON invoices (customer_id) 
+> WHERE paid_at IS NULL;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Partial indexes with `WHERE paid_at IS NULL` index ONLY unpaid invoice rows.
+> 2. Reduces index RAM footprint by excluding historical paid invoices.
+> 3. High-performance index optimization.
+
+---
+
+### Exercise 3: Combining `IS NULL` with Fallback Projections
+
+**Scenario:**
+Select users where `phone IS NULL` and display fallback label `'No Phone Number'`.
+
+**Requirements:**
+1. Combine `CASE WHEN phone IS NULL` or `COALESCE(phone, 'No Phone Number')`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   username, 
+>   COALESCE(phone, 'No Phone Number') AS contact_phone 
+> FROM users;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `COALESCE` returns the first non-null value.
+> 2. Prevents sending raw `null` values to frontend UI templates.
+> 3. Clean SQL projection handling.
 
 ---
 
 
 
-### Exercise 2: Filtering Missing Optional Fields
-
-**Problem:** Query users missing both `phone` and `address` using `IS NULL`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users WHERE phone IS NULL AND address IS NULL;
-> ```
-> ```sql
-> SELECT * FROM users WHERE phone IS NULL AND address IS NULL;
-> ```
->
-> **Explanation:** `IS NULL` filters rows lacking optional column values.
-
----
-
-### Exercise 3: IS DISTINCT FROM Null-Safe Comparison
-
-**Problem:** Compare column `status` to `'active'` safely when `status` can be NULL using `IS DISTINCT FROM`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users WHERE status IS DISTINCT FROM 'active';
-> ```
-> ```sql
-> SELECT * FROM users WHERE status IS DISTINCT FROM 'active';
-> ```
->
-> **Explanation:** `IS DISTINCT FROM` treats NULL as a distinct value without returning Unknown.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`NULL`](../level_02/null.md) — The parent absent state.
 - [`WHERE` Clause](where.md) — The query filter wrapper.
 - [Comparison & Logical Operators](operators.md) — Related concept: Comparison & Logical Operators.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - You cannot use `=` or `!=` to compare columns to `NULL`.
 - Direct comparisons with `NULL` yield `UNKNOWN`, which filters out the rows.
 - Use `IS NULL` to query rows where a column contains missing or blank states.

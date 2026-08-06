@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Smart Pointer**: `std::borrow::Cow` (Copy-On-Write) for opportunistic borrowing.
+
+
+**Rust Idiom Pattern (clone-on-write zero-copy flexibility)**: `std::borrow::Cow` (Copy-On-Write) for opportunistic borrowing.
 
 ---
 
@@ -273,7 +275,7 @@ fn always_transform(s: &str) -> String { s.to_uppercase() }
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`Cow<'a, T>`](../level_11/cow_t.md) — Clone-on-write pointer.
 - [`ToOwned` Trait](../level_11/toowned_trait.md) — ToOwned trait.

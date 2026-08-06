@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Performance / Tooling / Ecosystem**: The Release Profile is Cargo's built-in build configuration for production deployments. Activated via `cargo build --release` (or `cargo run --release`), it contrasts with Cargo's default Debug profile (`dev`), which prioritizes fast incremental compilation and step-debugging over runtime execution speed.
+
+
+**Cargo Build Configuration (production compilation profile settings)**: The Release Profile is Cargo's built-in build configuration for production deployments. Activated via `cargo build --release` (or `cargo run --release`), it contrasts with Cargo's default Debug profile (`dev`), which prioritizes fast incremental compilation and step-debugging over runtime execution speed.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Cargo Build Configuration (`Cargo.toml`)**: Configured globally in `Cargo.toml` under the `[profile.release]` table. Dictates code generation settings for binaries, libraries, WebAssembly modules, and embedded firmware targets.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -188,9 +186,10 @@ debug = true # Keep debug symbols for flamegraph/perf profiling without hurting 
 
 ### Exercise 1: High-Frequency Trading Volume Tracker — Profile Safety & Overflow Verification
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In a high-frequency trading (HFT) matching engine running under strict latency budgets, the production deployment team configures `[profile.release]` with `opt-level = 3`, `lto = "thin"`, `codegen-units = 1`, and `panic = "abort"` for ultra-low latency execution. However, Cargo disables integer overflow checks in release builds by default (`overflow-checks = false`), causing arithmetic overflows like `u64::MAX + 1` to wrap around silently to `0` without error.
 
+**Requirements:**
 Write the `Cargo.toml` manifest release profile configuration enforcing `overflow-checks = true` alongside LLVM release optimizations, implement a `#![no_std]` compatible trading volume tracking module (`TradeTracker`), and write unit tests with assertions (`assert_eq!`, `assert!`, `#[should_panic]`) verifying trade accumulation, checked arithmetic, and panic behavior on integer overflow.
 
 > [!check]- Answer
@@ -203,6 +202,9 @@ Write the `Cargo.toml` manifest release profile configuration enforcing `overflo
 > panic = "abort"        # Strip stack unwinding tables for smaller binary footprint
 > overflow-checks = true # Force integer overflow checks to panic in production release
 > ```
+>
+>
+> #### Implementation
 >
 > ```rust
 > #![cfg_attr(not(test), no_std)]
@@ -297,7 +299,8 @@ Write the `Cargo.toml` manifest release profile configuration enforcing `overflo
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Overflow Safety in Release**: By default, `cargo build --release` sets `overflow-checks = false`, substituting panicking arithmetic with wrapping semantics (`wrapping_add`). Setting `overflow-checks = true` in `[profile.release]` forces `rustc` to emit overflow traps while allowing LLVM to perform full vectorization and inlining (`opt-level = 3`).
 > 2. **`codegen-units = 1` & `lto = "thin"`**: Setting `codegen-units = 1` merges all compilation units into a single LLVM code generation pass, enabling cross-function loop unrolling and inline expansion. Thin LTO provides cross-crate optimization with low link-time memory overhead.
 > 3. **`panic = "abort"`**: Strips unwinding frame tables (`.eh_frame`), shrinking binary size and removing landing pad branches from the generated machine code.
@@ -306,9 +309,10 @@ Write the `Cargo.toml` manifest release profile configuration enforcing `overflo
 
 ### Exercise 2: Microcontroller Sensor Telemetry — Footprint Minimization & Hardware Bitmask Parsing
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 An IoT embedded microcontroller running on ARM Cortex-M architecture has only 64 KB of Flash memory. Standard release builds with `opt-level = 3` inflate binary size beyond memory capacity due to loop unrolling and function duplication. Furthermore, stack unwinding tables (`panic = "unwind"`) consume excessive Flash space.
 
+**Requirements:**
 Write a `Cargo.toml` `[profile.release]` configuration optimized for minimal binary size (`opt-level = "z"`, `codegen-units = 1`, `lto = true`, `panic = "abort"`, `strip = true`), implement a `#![no_std]` 32-bit hardware sensor register bitmask parser (`SensorRegister`), and write unit tests with assertions (`assert!`, `assert_eq!`) verifying bitwise flag extraction, battery percentage parsing, and health status evaluation.
 
 > [!check]- Answer
@@ -321,6 +325,9 @@ Write a `Cargo.toml` `[profile.release]` configuration optimized for minimal bin
 > panic = "abort"     # Remove stack unwinding tables (.eh_frame DWARF sections)
 > strip = true        # Strip symbol tables and debug headers from output ELF binary
 > ```
+>
+>
+> #### Implementation
 >
 > ```rust
 > #![cfg_attr(not(test), no_std)]
@@ -411,7 +418,8 @@ Write a `Cargo.toml` `[profile.release]` configuration optimized for minimal bin
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`opt-level = "z"` Code Compression**: Unlike `opt-level = 3` which trade-offs binary size for execution speed via loop unrolling and function inline cloning, `opt-level = "z"` optimizes specifically for binary size reduction, instructing LLVM to choose compact instruction encodings.
 > 2. **Fat LTO (`lto = true`) & `strip = true`**: Setting `lto = true` alongside `codegen-units = 1` forces a single optimization pass across all compiled crates, enabling aggressive dead-code elimination. `strip = true` strips ELF section headers and symbol tables, shrinking total output size by up to 40%.
 > 3. **`#![no_std]` Bitmask Decoding**: Operating directly on packed `u32` integers using const bit shifts and bitwise AND operations (`&`) guarantees zero heap allocations and deterministic stack usage.
@@ -420,9 +428,10 @@ Write a `Cargo.toml` `[profile.release]` configuration optimized for minimal bin
 
 ### Exercise 3: Production Microservice Profiling — DWARF Symbol Retention & Pixel Transformation
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 A production image processing microservice deployed in Kubernetes experiences unexpected CPU usage spikes. The site reliability engineering (SRE) team attempts to capture flamegraphs using Linux `perf`, but because production release builds strip symbol tables (`debug = false`), the generated flamegraphs show unhelpful memory offset addresses (`0x7f9a_2011`) rather than function names like `apply_contrast`.
 
+**Requirements:**
 Configure a production release profile `[profile.release]` that preserves DWARF debug symbols (`debug = true`) while retaining full LLVM optimizations (`opt-level = 3`, `lto = "thin"`, `codegen-units = 1`). Implement an image pixel buffer transformation module (`PixelBuffer`) performing contrast scaling and saturating brightness adjustments, and write unit tests with assertions (`assert_eq!`, `assert!`) verifying pixel values across saturation boundaries.
 
 > [!check]- Answer
@@ -434,6 +443,9 @@ Configure a production release profile `[profile.release]` that preserves DWARF 
 > lto = "thin"           # Thin Link-Time Optimization for cross-crate inlining
 > codegen-units = 1      # Single codegen unit for optimal whole-crate LLVM optimization scope
 > ```
+>
+>
+> #### Implementation
 >
 > ```rust
 > /// Image pixel buffer processor for microservices.
@@ -522,14 +534,15 @@ Configure a production release profile `[profile.release]` that preserves DWARF 
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`debug = true` Zero-Overhead Profiling**: Enabling `debug = true` (or `debug = "line-tables-only"`) instructs `rustc` to emit DWARF debug symbol tables into the compiled ELF file. Crucially, debug symbols reside in separate ELF metadata sections that are ignored by the CPU during code execution, allowing `perf` and `flamegraph` to resolve function symbol names without degrading LLVM runtime optimization (`opt-level = 3`).
 > 2. **SIMD Vectorization under `opt-level = 3`**: At `opt-level = 3`, LLVM auto-vectorizes loops like `pixels.iter_mut()`, converting sequential byte operations into multi-byte SIMD (AVX2/NEON) vector instructions for maximum throughput.
 > 3. **Defensive Boundary Handling**: Using saturating arithmetic (`saturating_add`, `saturating_sub`) and float clamping guarantees image data integrity regardless of profile overflow flags.
 > 
 ---
 
-## 8. Related Terms
+## 6. Related Terms
 
 
 - [Zero-Cost Abstractions](zero_cost_abstractions.md) — Performance optimizations realized in release profile.
@@ -542,7 +555,7 @@ Configure a production release profile `[profile.release]` that preserves DWARF 
 
 ---
 
-## 9. Key Takeaways
+## 7. Key Takeaways
 
 - The Release Profile (`cargo build --release` / `[profile.release]`) enables LLVM optimization passes (`opt-level = 3`) for production deployments.
 - Debug builds (`target/debug/`) prioritize fast compile times and step-debugging; Release builds (`target/release/`) prioritize 100x execution speed and small binary size.

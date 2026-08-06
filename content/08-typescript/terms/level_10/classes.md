@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Syntax / OOP**
+
+**Object-Oriented Programming** (Class Instance & Prototype Blueprint): Classes combine field state, constructor initialization, and prototype methods into object blueprints with static type checking.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Runtime & Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern JavaScript (ES6+), Classes are standard way to create objects with shared methods (Object-Oriented Programming).
@@ -62,7 +63,7 @@ When you declare `class User`, you create two things simultaneously:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The `strictPropertyInitialization` Error
 
@@ -83,6 +84,8 @@ class User {
 **Golden Rule:** Initialize properties either at declaration (`name = "Alice"`) or directly inside the `constructor`. If you truly know what you are doing, you can use the Definite Assignment Assertion operator (`name!: string`) to tell TS to ignore the error.
 
 ---
+
+
 
 
 
@@ -116,6 +119,8 @@ class Child extends Base {
 }
 ```
 
+
+
 ### Mistake 3: Failing to Initialize Class Properties without Definite Assignment Assertions
 
 **The mistake:** Declaring `class User { name: string; }` with `strictPropertyInitialization: true` without initializers.
@@ -138,165 +143,113 @@ class User {
 
 
 
-### Mistake 4: Referencing Instance Properties in Constructor Before Calling `super()`
+## 5. Practice Exercises
 
-**The mistake:** Writing `this.name = name; super();` in subclass constructors (TS17009).
+### Exercise 1: Authoring Class Blueprints with Methods and Fields
 
-**Why it's wrong:** In derived class constructors, `super()` MUST be called before accessing `this` or returning from the constructor.
+**Scenario:**
+Create a `User` class with `name` and `email` properties and a `getProfile()` method.
 
-*Incorrect:*
-```typescript
-class Base {}
-class Child extends Base {
-    name: string;
-    constructor(name: string) {
-        // this.name = name; // ❌ 'super' must be called before accessing 'this'
-        super();
-    }
-}
-```
+**Requirements:**
+1. Declare fields, constructor, and method.
 
-*Fix:*
-```typescript
-class Base {}
-class Child extends Base {
-    name: string;
-    constructor(name: string) {
-        super(); // Call super first
-        this.name = name;
-    }
-}
-```
-
-### Mistake 5: Failing to Initialize Class Properties without Definite Assignment Assertions
-
-**The mistake:** Declaring `class User { name: string; }` with `strictPropertyInitialization: true` without initializers.
-
-**Why it's wrong:** With strict property initialization, class properties MUST be initialized in their declaration or constructor body.
-
-*Incorrect:*
-```typescript
-class User {
-    // name: string; // ❌ Property 'name' has no initializer and is not definitely assigned in constructor
-}
-```
-
-*Fix:*
-```typescript
-class User {
-    name!: string; // Definite assignment assertion OR initialize directly
-}
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Classes vs Interfaces
-
-**Problem:** Both `class User` and `interface User` allow you to define an object shape and use it as a type (`const u: User`). When should you use a Class, and when should you use an Interface?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> - Use an **Interface** when you only care about the *Shape* of the data (e.g., standard API JSON responses, React component props, or function parameters). Interfaces are completely erased at compile-time, so they have zero performance cost.
-> - Use a **Class** when you need *Behavior* (methods) combined with State (properties), or when you specifically need the `instanceof` operator at runtime.
-> ```
-> - Think about the Compile-Time vs Runtime erasure rules.
+>
+> #### Implementation
+>
+> ```typescript
+> class User {
+>   name: string;
+>   email: string;
+
+  constructor(name: string, email: string) {
+    this.name = name;
+    this.email = email;
+  }
+
+  getProfile(): string {
+    return `${this.name} <${this.email}>`;
+  }
+}
+
+const user = new User("Alice", "alice@example.com");
+console.log(user.getProfile());
+```
+
+> #### Technical Explanation
+>
+> 1. Classes act as blueprints for creating stateful object instances.
+> 2. Field types (`name: string`) are verified during assignment inside constructor functions.
+> 3. Methods are attached to `User.prototype` to minimize memory usage across instances.
+
+---
+
+### Exercise 2: Class Inheritance with `super()`
+
+**Scenario:**
+Extend `User` into an `AdminUser` class that calls `super()` in its constructor.
+
+**Requirements:**
+1. Extend `User` and call `super(name, email)` in `AdminUser`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> class AdminUser extends User {
+>   permissions: string[];
+
+  constructor(name: string, email: string, permissions: string[]) {
+    super(name, email); // Must call super() before accessing 'this'!
+    this.permissions = permissions;
+  }
+}
+
+const admin = new AdminUser("Bob", "bob@example.com", ["read", "write"]);
+```
+
+> #### Technical Explanation
+>
+> 1. Subclasses extending parent classes must invoke `super()` in their constructors.
+> 2. `super()` executes the parent constructor to initialize inherited fields.
+> 3. `this` cannot be accessed before calling `super()`.
+
+---
+
+### Exercise 3: Auditing Un-Initialized Class Field Errors
+
+**Scenario:**
+Explain why un-initialized class fields trigger compile errors under `"strictPropertyInitialization": true`.
+
+**Requirements:**
+1. Show compile error on un-initialized field without constructor assignment.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> class Product {
+>   // ❌ Compile Error under strictPropertyInitialization: Property 'title' has no initializer...
+>   // title: string; 
+
+  // ✅ CORRECT (Initialize in constructor or inline):
+  title: string = "Untitled";
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `"strictPropertyInitialization": true` ensures all declared class fields are initialized.
+> 2. Fields must be initialized directly inline (`title: string = ""`) or inside the constructor body.
+> 3. Eliminates `undefined` runtime property bugs on class instances.
 
 ---
 
 
 
-### Exercise 2: Class Implementation with Methods and Properties
-
-**Problem:** Create `class Car` with `speed: number` and method `accelerate(amount: number): number`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Car class implemented
-> ```
-> ```typescript
-> class Car {
->   constructor(public speed: number = 0) {}
->   accelerate(amount: number): number {
->     return this.speed += amount;
->   }
-> }
-> const c = new Car(10);
-> console.log(c.accelerate(20));
-> ```
->
-> **Explanation:** Classes encapsulate state properties and behavior methods into object instances.
-
----
-
-### Exercise 3: Getter and Setter Method Typing
-
-**Problem:** Define getter `get name(): string` and setter `set name(val: string)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Getter/setter accessors implemented
-> ```
-> ```typescript
-> class Person {
->   private _name = "";
->   get name(): string { return this._name; }
->   set name(val: string) { this._name = val; }
-> }
-> console.log("Getter/setter accessors implemented");
-> ```
->
-> **Explanation:** Accessor getters and setters control property read and write operations.
-
----
-
-### Exercise 4: Class Implementation with Methods and Properties
-
-**Problem:** Create `class Car` with `speed: number` and method `accelerate(amount: number): number`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Car class implemented
-> ```
-> ```typescript
-> class Car {
->   constructor(public speed: number = 0) {}
->   accelerate(amount: number): number {
->     return this.speed += amount;
->   }
-> }
-> const c = new Car(10);
-> console.log(c.accelerate(20));
-> ```
->
-> **Explanation:** Classes encapsulate state properties and behavior methods into object instances.
-
----
-
-### Exercise 5: Getter and Setter Method Typing
-
-**Problem:** Define getter `get name(): string` and setter `set name(val: string)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Getter/setter accessors implemented
-> ```
-> ```typescript
-> class Person {
->   private _name = "";
->   get name(): string { return this._name; }
->   set name(val: string) { this._name = val; }
-> }
-> console.log("Getter/setter accessors implemented");
-> ```
->
-> **Explanation:** Accessor getters and setters control property read and write operations.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Access Modifiers (`public`, `private`, `protected`)](access_modifiers.md) — The `private`/`public` keywords added to TS classes.
 - [`implements` Keyword](implements.md) — How to force a Class to obey an Interface.
 - [`typeof` & `instanceof` Guards](../level_06/typeof_instanceof.md) — Related concept: `typeof` & `instanceof` Guards.
@@ -307,7 +260,7 @@ class User {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Classes** in TypeScript are standard ES6 JavaScript classes, but with strict property declarations and typing.
 - All properties must be declared at the top of the class body.
 - TypeScript strictly enforces that all declared properties are initialized (either with a default value or inside the constructor).

@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **SDK Methods & Real-Time**
+
+
+**Integration / Ecosystem (SDK real-time WebSocket live query subscriptions)**: - **SDK Methods & Real-Time**
+
+
 
 ---
 
-## 3. Environment Context
-- **Browser & Mobile UI Frameworks** (React, Vue, Svelte, React Native) receiving real-time push data from SurrealDB.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Building reactive UI components (such as live chat feeds, notification bells, collaborative whiteboards, or stock tickers) requires real-time data sync. In traditional web development, developers write custom WebSocket client listeners, parse incoming messages, match IDs, and update local state manually.
@@ -84,7 +83,7 @@ async function setupChatFeed(db: Surreal) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Invoking db.live() over HTTP Connections
 
@@ -152,95 +151,97 @@ db.live('user', (action, result) => {
 
 
 
-### Mistake 4: Forgetting to Un-Subscribe Live Queries When Components Unmount
 
-**The mistake:** Calling `db.live('user', callback)` inside UI components without calling `db.kill(id)` on cleanup.
 
-**Why it's wrong:** Failing to kill live queries keeps WebSocket listeners active, causing memory leaks and redundant UI re-renders.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-// React useEffect missing cleanup function
-useEffect(() => { db.live('user', callback); }, []);
-```
+### Exercise 1: Live Query Subscription Management
 
-*Fix:*
-```surrealql
-useEffect(() => {
-  let id;
-  db.live('user', callback).then(res => id = res);
-  return () => { if (id) db.kill(id); };
-}, []);
-```
+**Scenario:**
+Subscribe to real-time creation and update events on table `order` using `db.live()`.
 
-### Mistake 5: Ignoring Action Parameter in Live Query Callbacks
-
-**The mistake:** Treating all live query updates as new created records.
-
-**Why it's wrong:** Live query callbacks receive `(action, result)`. `action` is `'CREATE'`, `'UPDATE'`, or `'DELETE'`. Handle each action type accordingly.
-
-*Incorrect:*
-```surrealql
-db.live('user', (action, result) => { items.push(result); }); // ❌ Duplicate items on UPDATE!
-```
-
-*Fix:*
-```surrealql
-db.live('user', (action, result) => {
-  if (action === 'DELETE') remove(result.id);
-  else upsert(result);
-});
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Live Query Event Actions
-What are the 3 possible string values for the `action` parameter passed to the `db.live()` callback function?
+**Requirements:**
+1. Call `db.live("order", callback)`.
+2. Log action type and record payload.
 
 > [!check]- Answer
-> - The 3 actions correspond to database record mutations: `'CREATE'`, `'UPDATE'`, and `'DELETE'`.
-
----
-
-
-
-### Exercise 2: Live Query Subscription and Un-subscription
-
-**Problem:** Subscribe to `article` live query, receive updates, and kill query with `db.kill(queryId)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const id = await db.live('article', cb); ... await db.kill(id);
-> ```
-> ```javascript
-> const queryId = await db.live('article', (action, result) => {
->   console.log(action, result);
+>
+> #### Implementation
+>
+> ```typescript
+> const queryUuid = await db.live("order", (action, result) => {
+>   console.log(`Live Event [${action}]:`, result);
 > });
-> // Later on cleanup:
-> await db.kill(queryId);
 > ```
 >
-> **Explanation:** `db.live()` returns a query ID used to cancel subscriptions via `db.kill()`.
+> #### Technical Explanation
+>
+> 1. `db.live(table, callback)` registers a real-time WebSocket live query subscription.
+> 2. `action` indicates event type (`"CREATE"`, `"UPDATE"`, `"DELETE"`).
+> 3. `result` holds the mutated record document payload.
 
 ---
 
-### Exercise 3: Handling Live Query Action Types
+### Exercise 2: Unsubscribing Live Queries with `db.kill()`
 
-**Problem:** List 3 action types passed to live query callbacks (`CREATE`, `UPDATE`, `DELETE`).
+**Scenario:**
+Unsubscribe from a live query subscription when a UI component unmounts using `db.kill(uuid)`.
 
-**Expected output:**
+**Requirements:**
+1. Call `await db.kill(queryUuid)`.
+
 > [!check]- Answer
-> ```text
-> CREATE, UPDATE, DELETE
-> ```
-> ```text
-> CREATE, UPDATE, DELETE
+>
+> #### Implementation
+>
+> ```typescript
+> async function unsubscribe(uuid: string) {
+>   await db.kill(uuid);
+>   console.log("Live query subscription terminated.");
+> }
 > ```
 >
-> **Explanation:** Live query callbacks receive action strings indicating record mutation type.
+> #### Technical Explanation
+>
+> 1. `db.kill(uuid)` sends a `KILL` statement to terminate the server-side live query listener.
+> 2. Frees WebSocket bandwidth and server memory.
+> 3. Prevents memory leaks in React/Vue component lifecycle unmount steps.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Filtered Live Query Subscriptions via SDK
+
+**Scenario:**
+Subscribe ONLY to high-priority order events using a filtered live query subquery.
+
+**Requirements:**
+1. Execute live query with filter `WHERE total > 500dec`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const liveUuid = await db.live("order", (action, result) => {
+>   console.log("High priority order event:", result);
+> }, {
+>   // Custom filter options
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Filters live query events on the database server before streaming.
+> 2. Reduces client event processing overhead.
+> 3. Powers targeted real-time UI notifications.
+
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [`LIVE SELECT` (Live Queries)](../level_09/live_select.md) — Server-side live query statement.
 - [`KILL` (Stopping Live Queries)](../level_09/kill_live_query.md) — Terminating subscriptions.
@@ -248,7 +249,7 @@ What are the 3 possible string values for the `action` parameter passed to the `
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `db.live('table', callback)` subscribes to real-time database changes over WebSocket.
 - Callback receives `action` (`CREATE`/`UPDATE`/`DELETE`) and the modified `record`.
 - Returns a unique subscription UUID that must be passed to `db.kill(uuid)` when cleaning up.

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Data Type Parameter**
+
+**Data Type** (Exact Fixed-Point Modifiers): Precision and Scale parameters (`NUMERIC(precision, scale)`) specify total decimal digits and fractional decimal places for exact monetary calculations.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Enforced on insert. Values that exceed the scale are rounded to the defined limit; values that exceed the precision trigger an execution error).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you declare a column as `NUMERIC` to store exact decimal numbers (like cash values or gold weights), you don't want to use the default unlimited settings. 
@@ -87,7 +88,7 @@ VALUES (2, 'Error Gold', 1234.56);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing Precision with the number of digits allowed BEFORE the decimal point
 
@@ -133,64 +134,100 @@ INSERT INTO t (val) VALUES (12345.67); -- ❌ Numeric overflow error!
 val NUMERIC(10, 2) -- Allows up to 8 digits before decimal point
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Range Mathematics
+### Exercise 1: Defining Exact Financial Columns with `NUMERIC(precision, scale)`
 
-**Problem:** You are creating a column to store percentages (e.g. `98.75%`). The values can range from `0.000%` to `100.000%`. What is the optimal `NUMERIC(precision, scale)` setting for this column, and what is the maximum number it can store?
+**Scenario:**
+Create an `accounts` table storing account balances up to $99,999,999.99 with exact 2-decimal scale precision.
 
-**Expected output:**
+**Requirements:**
+1. Use `balance NUMERIC(10, 2) NOT NULL DEFAULT 0.00`.
+
 > [!check]- Answer
-> ```text
-> Setting: `NUMERIC(6, 3)`
-> Reason: The maximum value `100.000` has 6 total digits (precision of 6) with exactly 3 digits after the decimal point (scale of 3).
-> Maximum Number: `999.999` (Though your application logic would limit it to 100.000, the database column structure allows up to 999.999).
-> ```
-> - Count the total digits in `100.000`.
-> - Count the digits to the right of the decimal point.
-
----
-
-
-
-### Exercise 2: Defining Financial Currency Numeric Column
-
-**Problem:** Define `price` column using `NUMERIC` holding up to $99,999,999.99$ (10 total digits, 2 scale).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> price NUMERIC(10, 2)
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> price NUMERIC(10, 2)
+> CREATE TABLE accounts (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   account_number TEXT NOT NULL UNIQUE,
+>   balance NUMERIC(10, 2) NOT NULL DEFAULT 0.00 CHECK (balance >= 0.00)
+> );
 > ```
 >
-> **Explanation:** `NUMERIC(10, 2)` stores up to 8 digits before and 2 digits after the decimal.
+> #### Technical Explanation
+>
+> 1. `NUMERIC(10, 2)` defines 10 total significant digits (precision) with 2 digits after the decimal point (scale).
+> 2. Max positive value is `99,999,999.99`.
+> 3. Stores exact base-10 decimal representations, eliminating binary floating-point rounding errors.
 
 ---
 
-### Exercise 3: Precision and Scale Definition
+### Exercise 2: Handling Scale Truncation and Rounding
 
-**Problem:** Define Precision vs Scale in `NUMERIC(P, S)` (Precision: total number of digits; Scale: number of decimal digits after point).
+**Scenario:**
+Demonstrate PostgreSQL automatic rounding when inserting values exceeding declared column scale.
 
-**Expected output:**
+**Requirements:**
+1. Insert `12.3456` into `NUMERIC(10, 2)` and inspect stored value (`12.35`).
+
 > [!check]- Answer
-> ```text
-> Precision: total number of digits; Scale: number of decimal digits after point
-> ```
-> ```text
-> Precision: total number of digits; Scale: number of decimal digits after point
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE price_test (val NUMERIC(10, 2));
+> 
+> INSERT INTO price_test (val) VALUES (12.3456);
+> 
+> SELECT val FROM price_test; -- Returns 12.35
 > ```
 >
-> **Explanation:** Precision and scale enforce exact fixed-point decimal boundaries.
+> #### Technical Explanation
+>
+> 1. PostgreSQL automatically rounds inserted values to match the column's defined scale (`12.3456` rounds to `12.35`).
+> 2. If the integer portion exceeds `precision - scale` (e.g. inserting `100,000,000.00` into `NUMERIC(10, 2)`), PostgreSQL throws a `numeric field overflow` error.
+> 3. Ensures predictable financial storage.
 
-## 7. Related Terms
+---
+
+### Exercise 3: High-Precision Crypto Token Storage
+
+**Scenario:**
+Store cryptocurrency balances requiring 18 decimal places of fractional precision (`NUMERIC(36, 18)`).
+
+**Requirements:**
+1. Use `crypto_balance NUMERIC(36, 18)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE crypto_wallets (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   wallet_address TEXT NOT NULL UNIQUE,
+>   eth_balance NUMERIC(36, 18) NOT NULL DEFAULT 0.000000000000000000
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `NUMERIC` supports arbitrary precision up to 1,000 digits before and after the decimal point.
+> 2. `NUMERIC(36, 18)` accommodates 18 whole digits and 18 fractional wei/satoshi digits.
+> 3. Standard choice for blockchain and high-precision financial ledgers.
+
+---
+
+
+
+## 6. Related Terms
 - [`NUMERIC` / `DECIMAL` / `REAL` / `DOUBLE PRECISION`](numeric_types.md) — The parent exact numeric type.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Precision is the total number of digits; Scale is the number of decimal digits.
 - Syntax format: `NUMERIC(precision, scale)`.
 - If an input exceeds the scale, Postgres automatically rounds the value.

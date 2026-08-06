@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Schema Design** (Full Functional Dependency Normalization): Second Normal Form (2NF) satisfies 1NF and guarantees that all non-key attributes are fully functionally dependent on the entire primary key.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Enforced during logical database schema modeling. Optimizes composite key tables by separating parent metadata from link tables).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A table can satisfy First Normal Form (all cells atomic) but still contain severe data redundancy. This typically happens in tables that use a **Composite Primary Key** (a key made of two or more columns).
@@ -108,7 +109,7 @@ CREATE TABLE enrollments (
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Worrying about 2NF on tables with single-column primary keys
 
@@ -154,67 +155,98 @@ Keep item_name in items table; order_items stores only (order_id, item_id, quant
 Tables with single-column primary keys are automatically in 2NF
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Order Details Refactor
+### Exercise 1: Identifying Second Normal Form Violations
 
-**Problem:** You have a table:
-`order_items (order_id, product_id, product_name, unit_price, quantity)`
-The primary key is `(order_id, product_id)`.
-1.  Identify the partial dependencies.
-2.  Write the SQL queries to normalize this schema into 2NF.
+**Scenario:**
+Analyze a table `student_courses(student_id, course_id, student_name, grade)` with composite primary key `(student_id, course_id)`.
 
-**Expected output:**
+**Requirements:**
+1. Identify partial dependency `student_id -> student_name`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. Partial Dependencies: `product_name` and `unit_price` depend only on `product_id` (not `order_id`).
+> 2NF Violation Analysis:
+> - Composite Primary Key: (student_id, course_id)
+> - Non-key attribute 'grade' depends on FULL key (student_id AND course_id) -> Valid!
+> - Non-key attribute 'student_name' depends ONLY on 'student_id' (Part of key!) -> 2NF VIOLATION!
 > ```
-> - The `quantity` column depends on both order and product, so it stays in the bridge table.
-> - Split product names and prices to a dedicated catalog table.
+>
+> #### Technical Explanation
+>
+> 1. 2NF applies to tables with composite primary keys.
+> 2. Requires every non-key column to depend on the ENTIRE primary key, not just a subset of key columns.
+> 3. `student_name` depends solely on `student_id`, causing partial dependency redundancy.
 
 ---
 
+### Exercise 2: Decomposing Composite Schemas into 2NF
 
+**Scenario:**
+Decompose `student_courses` into 2NF compliant tables (`students` and `enrollments`).
 
-### Exercise 2: Decomposing 2NF Violation
+**Requirements:**
+1. Create `students` table and `enrollments` junction table.
 
-**Problem:** Decompose `student_courses (student_id, course_id, course_name, grade)` into 2NF tables.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> courses (course_id, course_name) and student_courses (student_id, course_id, grade)
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE courses ( course_id INT PRIMARY KEY, course_name TEXT );
-> CREATE TABLE student_courses (
->   student_id INT REFERENCES students(id),
->   course_id INT REFERENCES courses(course_id),
->   grade VARCHAR(2),
+> CREATE TABLE students (
+>   id INTEGER PRIMARY KEY,
+>   student_name TEXT NOT NULL
+> );
+> 
+> CREATE TABLE enrollments (
+>   student_id INTEGER REFERENCES students(id),
+>   course_id INTEGER REFERENCES courses(id),
+>   grade TEXT,
 >   PRIMARY KEY (student_id, course_id)
 > );
 > ```
 >
-> **Explanation:** Removing partial dependency `course_name` into `courses` satisfies 2NF.
+> #### Technical Explanation
+>
+> 1. Moving `student_name` into `students` table eliminates partial dependency.
+> 2. `enrollments` retains only attributes dependent on both `student_id` and `course_id` (`grade`).
+> 3. Achieves 2NF compliance.
 
 ---
 
-### Exercise 3: 2NF Rule Definition
+### Exercise 3: 2NF Verification Checklist
 
-**Problem:** State 2NF rule (Table must be in 1NF and all non-key attributes must be fully functionally dependent on the entire primary key).
+**Scenario:**
+Formulate a 2-point checklist for verifying whether a table satisfies 2NF.
 
-**Expected output:**
+**Requirements:**
+1. Outline 1NF verification + Partial Dependency check.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Must be in 1NF and no non-key attribute can depend on part of a composite primary key
-> ```
-> ```text
-> Must be in 1NF and no non-key attribute can depend on part of a composite primary key
+> 2NF Verification Checklist:
+> 1. Does the table satisfy First Normal Form (1NF)? (Atomic columns, primary key).
+> 2. Are ALL non-key attributes fully dependent on the entire primary key? (If primary key is a single column, table is AUTOMATICALLY in 2NF!).
 > ```
 >
-> **Explanation:** 2NF eliminates partial functional dependencies in composite key tables.
+> #### Technical Explanation
+>
+> 1. Single-column primary key tables automatically satisfy 2NF because partial key subsets cannot exist.
+> 2. 2NF testing is only required for composite primary key tables.
+> 3. Schema design rule.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [First Normal Form (1NF)](first_normal_form.md) — The prerequisite atomic standard.
 - [Third Normal Form (3NF)](third_normal_form.md) — Eliminating indirect (transitive) dependencies.
 - [Composite Key](composite_key.md) — Forward reference: multi-column keys.
@@ -222,7 +254,7 @@ The primary key is `(order_id, product_id)`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Second Normal Form (2NF) eliminates partial primary key dependencies.
 - Applies exclusively to tables that utilize composite primary keys.
 - If a table has a single-column primary key and is in 1NF, it is already in 2NF.

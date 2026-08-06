@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Core Storage Unit**
+
+**Core Concept** (Table Attribute Specification): A Column defines a named attribute with a specified data type and constraints within a relational database table.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal standard** (Commonly called a **Field** in software engineering and an **Attribute** in mathematical database theory).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If tables organize datasets and rows store individual records, we need a way to dictate the **structure** of those records. 
@@ -84,7 +85,7 @@ You can inspect the column structure of a table in the terminal:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to store mismatched data types in a column
 
@@ -130,65 +131,99 @@ CREATE TABLE users ( firstName VARCHAR(50) ); -- Column created as lowercase 'fi
 CREATE TABLE users ( first_name VARCHAR(50) ); -- Idiomatic snake_case column names
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Column Mapping
+### Exercise 1: Defining Columns with Data Types and Integrity Constraints
 
-**Problem:** You are building an user profile table. You want to store user phone numbers. Should you define the phone number column as an `INTEGER` type or a `VARCHAR` (text) type, and why?
+**Scenario:**
+Create a `products` table specifying strict column data types, default values, and `NOT NULL` constraints.
 
-**Expected output:**
+**Requirements:**
+1. Use `CREATE TABLE products`.
+2. Include `id`, `sku`, `name`, `price_cents`, and `created_at`.
+
 > [!check]- Answer
-> ```text
-> `VARCHAR` (text)! 
-> Phone numbers contain leading zeros (which would be stripped away in an integer type, e.g. `09123` becomes `9123`), and they often contain formatting symbols like spaces, dashes, or the plus sign (e.g. `+1-555-0199`). Also, you never perform math operations (like addition or averaging) on phone numbers.
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE products (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   sku TEXT NOT NULL UNIQUE,
+>   name TEXT NOT NULL,
+>   price_cents INTEGER NOT NULL CHECK (price_cents >= 0),
+>   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+> );
 > ```
-> - Think about what happens to the number `0123` if you save it as a math integer.
-> - Consider if you ever need to sum or average user phone numbers.
+>
+> #### Technical Explanation
+>
+> 1. Each column definition combines a name, data type (`INTEGER`, `TEXT`, `TIMESTAMPTZ`), and column constraints.
+> 2. `NOT NULL` prevents unassigned NULL values in mandatory fields.
+> 3. `CHECK (price_cents >= 0)` enforces domain business rules directly at the database tier.
+
+---
+
+### Exercise 2: Adding New Columns with Default Values
+
+**Scenario:**
+Add a new column `is_published` (`BOOLEAN`) to an existing `posts` table defaulting to `FALSE`.
+
+**Requirements:**
+1. Execute `ALTER TABLE posts ADD COLUMN`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TABLE posts 
+> ADD COLUMN is_published BOOLEAN NOT NULL DEFAULT FALSE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ALTER TABLE ... ADD COLUMN` modifies existing table structural definitions.
+> 2. `DEFAULT FALSE` populates existing rows with `FALSE` during column creation.
+> 3. Avoids table locks on modern PostgreSQL (PG 11+ handles non-volatile defaults instantly).
+
+---
+
+### Exercise 3: Dropping Obsolete Columns Safely
+
+**Scenario:**
+Remove an obsolete legacy column `temp_token` from table `users`.
+
+**Requirements:**
+1. Execute `ALTER TABLE users DROP COLUMN`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TABLE users 
+> DROP COLUMN temp_token;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DROP COLUMN` removes column definitions from table metadata.
+> 2. Data in dropped columns is marked invalid and reclaimed during future `VACUUM` runs.
+> 3. Verify application code no longer queries dropped columns prior to execution.
 
 ---
 
 
 
-### Exercise 2: Adding Column with DEFAULT Constraint
-
-**Problem:** Write SQL statement adding `status` column defaulting to `'active'` to `users` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ALTER TABLE users ADD COLUMN status VARCHAR(20) DEFAULT 'active';
-> ```
-> ```sql
-> ALTER TABLE users ADD COLUMN status VARCHAR(20) DEFAULT 'active';
-> ```
->
-> **Explanation:** `ALTER TABLE ... ADD COLUMN` appends new columns to existing table schemas.
-
----
-
-### Exercise 3: Renaming Table Column
-
-**Problem:** Rename column `uname` to `username` on table `users`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ALTER TABLE users RENAME COLUMN uname TO username;
-> ```
-> ```sql
-> ALTER TABLE users RENAME COLUMN uname TO username;
-> ```
->
-> **Explanation:** `RENAME COLUMN` changes column attribute identifiers cleanly.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Table (Relation)](table.md) — The parent container.
 - [Row (Record / Tuple)](row.md) — The horizontal record unit.
 - [Relational Database](relational_database.md) — Related concept: Relational Database.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A column is a vertical category that enforces structure across all rows in a table.
 - Also called a "Field" in coding or an "Attribute" in formal relational database theory.
 - Every column has a unique name and a strict data type (integer, text, date, etc.).

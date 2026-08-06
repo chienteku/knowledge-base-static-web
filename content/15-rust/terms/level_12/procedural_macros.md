@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Syntax / Language Feature**: Procedural Macros are advanced metaprogramming constructs in Rust. Unlike declarative macros (`macro_rules!`) which match token patterns structurally, procedural macros are full Rust functions that execute during compilation to read, parse, mutate, and generate Rust code.
+
+
+**Rust Compiler Subsystem (TokenStream-to-TokenStream compiler plugin)**: Procedural Macros are advanced metaprogramming constructs in Rust. Unlike declarative macros (`macro_rules!`) which match token patterns structurally, procedural macros are full Rust functions that execute during compilation to read, parse, mutate, and generate Rust code.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust (Compile-time Execution)**: Procedural macros execute inside `rustc` during compilation on the host compiler target. The generated code operates in whatever target environment (`std`, `no_std`, WASM, embedded) the parent crate targets.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -106,7 +104,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Defining a Procedural Macro inside a Standard Crate
 
@@ -199,13 +197,16 @@ syn = { version = "2.0", features = ["derive"] }
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Derive Procedural Macro — `#[derive(Telemetry)]` for Automatic Field Inspection & Serialization
 
-**Problem:** In an embedded telemetry gateway monitoring IoT sensors, you need to output diagnostic key-value summaries for data structures without runtime reflection overhead. Implement a custom Derive Procedural Macro named `#[derive(Telemetry)]` that automatically generates an implementation of the `Telemetry` trait for structs with named fields. The `Telemetry` trait provides `field_count() -> usize`, `telemetry_keys() -> &'static [&'static str]`, and `to_telemetry_pairs(&self) -> Vec<(&'static str, String)>`. Write the complete proc-macro crate code, the application usage code, and unit tests with assertions (`assert_eq!`, `assert!`) verifying field inspection and serialization.
+**Scenario:** In an embedded telemetry gateway monitoring IoT sensors, you need to output diagnostic key-value summaries for data structures without runtime reflection overhead. Implement a custom Derive Procedural Macro named `#[derive(Telemetry)]` that automatically generates an implementation of the `Telemetry` trait for structs with named fields. The `Telemetry` trait provides `field_count() -> usize`, `telemetry_keys() -> &'static [&'static str]`, and `to_telemetry_pairs(&self) -> Vec<(&'static str, String)>`. Write the complete proc-macro crate code, the application usage code, and unit tests with assertions (`assert_eq!`, `assert!`) verifying field inspection and serialization.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > // ===========================================================================
 > // 1. Dedicated Proc-Macro Crate Definition: `my_telemetry_derive`
@@ -329,7 +330,8 @@ syn = { version = "2.0", features = ["derive"] }
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Proc-Macro Crate Configuration**: Procedural macros cannot be defined in standard application binaries; they require a library crate with `proc-macro = true` in `Cargo.toml`.
 > 2. **AST Parsing (`syn`)**: `parse_macro_input!(input as DeriveInput)` parses raw compiler tokens into a structured syntax tree. `input.data` allows matching on `Data::Struct` and accessing `Fields::Named`.
 > 3. **Code Generation (`quote!`)**: The `quote!` macro constructs Rust token streams. Interpolations like `#struct_name` substitute identifiers, while `#(#field_name_strs),*` performs repetition matching over field arrays.
@@ -339,9 +341,12 @@ syn = { version = "2.0", features = ["derive"] }
 
 ### Exercise 2: Attribute Procedural Macro — `#[retry(max_attempts = N)]` for Fault-Tolerant I/O Operations
 
-**Problem:** In hardware register communication (such as I2C/SPI sensor reads), transient bus interference frequently causes transient errors. Writing manual retry loops inside every I/O function creates repetitive boilerplate. Construct an Attribute Procedural Macro named `#[retry]` (accepting an optional integer literal argument like `#[retry(3)]`) that transforms any function returning `Result<T, E>`. The macro rewrites the function body to execute inside a retry loop, retrying up to `max_attempts` times before returning the final error. Write complete proc-macro crate code, usage code with failure simulation, and unit tests with assertions (`assert_eq!`, `assert!`) verifying retry execution counts and success/failure outcomes.
+**Scenario:** In hardware register communication (such as I2C/SPI sensor reads), transient bus interference frequently causes transient errors. Writing manual retry loops inside every I/O function creates repetitive boilerplate. Construct an Attribute Procedural Macro named `#[retry]` (accepting an optional integer literal argument like `#[retry(3)]`) that transforms any function returning `Result<T, E>`. The macro rewrites the function body to execute inside a retry loop, retrying up to `max_attempts` times before returning the final error. Write complete proc-macro crate code, usage code with failure simulation, and unit tests with assertions (`assert_eq!`, `assert!`) verifying retry execution counts and success/failure outcomes.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > // ===========================================================================
 > // 1. Dedicated Proc-Macro Crate Definition: `my_retry_macro`
@@ -455,7 +460,8 @@ syn = { version = "2.0", features = ["derive"] }
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Attribute Macro Signature**: Attribute procedural macros receive two `TokenStream` parameters: `attr` (tokens inside `#[retry(...)]`) and `item` (the syntax item attached to the attribute, such as `fn`).
 > 2. **Parsing Attribute Literals**: `parse_macro_input!(attr as LitInt)` parses integer literals passed to the attribute macro, providing customizable retry thresholds per function.
 > 3. **AST Reconstruction**: The macro captures visibility (`#vis`), signature (`#sig`), and body (`#block`) of the original function and reconstructs a new function body wrapping `#block` in an escalating attempt loop.
@@ -465,9 +471,12 @@ syn = { version = "2.0", features = ["derive"] }
 
 ### Exercise 3: Function-Like Procedural Macro — `register_mask!` for Compile-Time Bitfield Struct Generation
 
-**Problem:** In embedded microcontroller development (`#![no_std]`), peripheral control registers (like UART, SPI, or I2C) rely on bitwise mask constants. Manually calculating bit-shift positions (`1 << 0`, `1 << 1`, `1 << 2`) is prone to off-by-one errors. Implement a function-like procedural macro `register_mask!` that parses syntax like `register_mask!(ControlRegister => TX_EN, RX_EN, INT_EN)` and expands it into a bitfield struct containing `const` mask definitions and type-safe bitwise methods (`empty()`, `set()`, `unset()`, `contains()`). Write complete proc-macro crate code, custom `syn::parse::Parse` implementation, user application code, and unit tests with assertions (`assert!`, `assert_eq!`) verifying bitmask values and bitwise operations.
+**Scenario:** In embedded microcontroller development (`#![no_std]`), peripheral control registers (like UART, SPI, or I2C) rely on bitwise mask constants. Manually calculating bit-shift positions (`1 << 0`, `1 << 1`, `1 << 2`) is prone to off-by-one errors. Implement a function-like procedural macro `register_mask!` that parses syntax like `register_mask!(ControlRegister => TX_EN, RX_EN, INT_EN)` and expands it into a bitfield struct containing `const` mask definitions and type-safe bitwise methods (`empty()`, `set()`, `unset()`, `contains()`). Write complete proc-macro crate code, custom `syn::parse::Parse` implementation, user application code, and unit tests with assertions (`assert!`, `assert_eq!`) verifying bitmask values and bitwise operations.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > // ===========================================================================
 > // 1. Dedicated Proc-Macro Crate Definition: `my_bitmask_macro`
@@ -612,7 +621,8 @@ syn = { version = "2.0", features = ["derive"] }
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Function-Like Proc Macro Entrypoint**: `#[proc_macro]` functions receive a single `TokenStream` representing all tokens inside `register_mask!(...)`.
 > 2. **Custom Syntax Parsing**: Implementing `syn::parse::Parse` for custom data structures allows parsing non-standard Rust DSLs (such as matching custom tokens like `Token![=>]` and comma-separated identifier lists using `Punctuated`).
 > 3. **Compile-Time Bit Calculations**: The macro computes bit shifts (`1 << index`) during compilation, embedding zero-cost `const` field values into the emitted struct definition.
@@ -620,7 +630,7 @@ syn = { version = "2.0", features = ["derive"] }
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Declarative Macros (`macro_rules!`)](declarative_macros_macro_rules.md) — Pattern-matching declarative macro system in Rust.
@@ -633,7 +643,7 @@ syn = { version = "2.0", features = ["derive"] }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Procedural Macros are compile-time Rust functions operating on source code token streams (`TokenStream`).
 - Proc macros come in three forms: **Derive** (`#[derive(...)]`), **Attribute** (`#[attr]`), and **Function-like** (`macro!(...)`).

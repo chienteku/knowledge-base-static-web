@@ -158,7 +158,7 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Performance Network Framing Engine with Default Associated Constants
 
-**Problem:** In network microservices, binary protocols require framing rules—magic headers, maximum frame payloads, and fixed header lengths—to be baked into packet parsers and serializers.
+**Scenario:** In network microservices, binary protocols require framing rules—magic headers, maximum frame payloads, and fixed header lengths—to be baked into packet parsers and serializers.
 1. Define a trait `NetworkFrame` declaring:
    - Default associated constant `const MAGIC_BYTES: [u8; 4] = [0xAA, 0xBB, 0xCC, 0xDD];`.
    - Required associated constant `const MAX_PAYLOAD_BYTES: usize;`.
@@ -295,7 +295,7 @@ thread::spawn(move || {
 
 ### Exercise 2: Cryptographic Cipher Engine Specification & Static Key Validation
 
-**Problem:** In secure telemetry systems, cryptographic primitives must declare fixed key sizes, nonces, and tag lengths.
+**Scenario:** In secure telemetry systems, cryptographic primitives must declare fixed key sizes, nonces, and tag lengths.
 1. Define a trait `CipherEngine` declaring associated constants:
    - `const ALGORITHM_NAME: &'static str;`
    - `const KEY_LEN: usize;`
@@ -437,7 +437,7 @@ thread::spawn(move || {
 
 ### Exercise 3: Database Storage Page Allocator & Generic Buffer Policy Manager
 
-**Problem:** Embedded database engines require custom memory page layouts (e.g. data page vs index page) with differing sizes, header reservations, and cache line alignment bounds.
+**Scenario:** Embedded database engines require custom memory page layouts (e.g. data page vs index page) with differing sizes, header reservations, and cache line alignment bounds.
 1. Define trait `PageLayout`:
    - `const PAGE_SIZE_BYTES: usize;`
    - `const HEADER_SIZE_BYTES: usize;`

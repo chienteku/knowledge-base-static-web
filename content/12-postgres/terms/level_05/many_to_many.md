@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Schema Design** (Bi-Directional Association Pattern): A Many-to-Many relationship allows multiple records in one table to associate with multiple records in another table via a intermediary junction table.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all relational databases. Modeled using primary-to-foreign key mappings across a bridge index).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database design, you frequently encounter entities that associate bidirectionally on a multiple basis:
@@ -83,7 +84,7 @@ Assume we want to relate articles and tags:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to avoid a junction table by using text arrays inside a single column
 
@@ -94,6 +95,8 @@ Assume we want to relate articles and tags:
 **Fix: Always use a junction table to resolve many-to-many relationships.**
 
 ---
+
+
 
 
 
@@ -113,6 +116,8 @@ CREATE TABLE students ( courses_csv TEXT ); -- ❌ Un-normalized Many-to-Many!
 Use a dedicated junction table: student_courses (student_id, course_id)
 ```
 
+
+
 ### Mistake 3: Omitting `ON DELETE CASCADE` on Junction Table Foreign Keys
 
 **The mistake:** Creating junction table foreign keys without `ON DELETE CASCADE`.
@@ -131,104 +136,113 @@ student_id INT REFERENCES students(id) ON DELETE CASCADE
 
 
 
-### Mistake 4: Attempting to Model Many-to-Many Relationships Without a Junction Table
+## 5. Practice Exercises
 
-**The mistake:** Storing arrays or CSV strings `'1,2,3'` inside parent entity tables to represent Many-to-Many links.
+### Exercise 1: Modeling Many-to-Many Relationships
 
-**Why it's wrong:** Storing CSV strings or array columns breaks 1NF normalization, hindering referential integrity checks and foreign key constraints.
+**Scenario:**
+Model a Many-to-Many association between `posts` and `tags` using a `post_tags` junction table.
 
-*Incorrect:*
-```sql
-CREATE TABLE students ( courses_csv TEXT ); -- ❌ Un-normalized Many-to-Many!
-```
+**Requirements:**
+1. Create `posts`, `tags`, and `post_tags` tables.
 
-*Fix:*
-```sql
-Use a dedicated junction table: student_courses (student_id, course_id)
-```
-
-### Mistake 5: Omitting `ON DELETE CASCADE` on Junction Table Foreign Keys
-
-**The mistake:** Creating junction table foreign keys without `ON DELETE CASCADE`.
-
-**Why it's wrong:** Deleting a student or course entity fails if junction table rows exist. Add `ON DELETE CASCADE` to junction foreign keys.
-
-*Incorrect:*
-```sql
-student_id INT REFERENCES students(id) -- ❌ Blocks parent entity deletion!
-```
-
-*Fix:*
-```sql
-student_id INT REFERENCES students(id) ON DELETE CASCADE
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Real-World Relationship Audit
-
-**Problem:** You are building a system for a medical clinic. You have two tables: `doctors` and `patients`. A doctor treats many patients. A patient can see multiple different specialized doctors.
-1.  What type of relationship is this?
-2.  How many tables are required to model this database relationship in SQL?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Many-to-Many Relationship (M:N).
-> 2. 3 tables (doctors, patients, and a junction table to map the visits).
-> ```
-> - Check if doctor-patient assignments are strictly one-to-one or if they cross over.
-> - Decouple assignments by counting parent tables vs connection tables.
-
----
-
-
-
-### Exercise 2: Modeling Many-to-Many Relationship
-
-**Problem:** Create 3 tables for Many-to-Many relationship between `articles` and `tags` using junction table `article_tags`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TABLE articles ( id SERIAL PRIMARY KEY, title TEXT ); CREATE TABLE tags ( id SERIAL PRIMARY KEY, name TEXT ); CREATE TABLE article_tags ( article_id INT REFERENCES articles(id) ON DELETE CASCADE, tag_id INT REFERENCES tags(id) ON DELETE CASCADE, PRIMARY KEY (article_id, tag_id) );
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE articles ( id SERIAL PRIMARY KEY, title TEXT );
-> CREATE TABLE tags ( id SERIAL PRIMARY KEY, name TEXT );
-> CREATE TABLE article_tags (
->   article_id INT REFERENCES articles(id) ON DELETE CASCADE,
->   tag_id INT REFERENCES tags(id) ON DELETE CASCADE,
->   PRIMARY KEY (article_id, tag_id)
+> CREATE TABLE posts (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   title TEXT NOT NULL
+> );
+> 
+> CREATE TABLE tags (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   name TEXT NOT NULL UNIQUE
+> );
+> 
+> CREATE TABLE post_tags (
+>   post_id INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+>   tag_id INTEGER NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
+>   PRIMARY KEY (post_id, tag_id)
 > );
 > ```
 >
-> **Explanation:** Junction tables model Many-to-Many relationships using foreign key pairs.
+> #### Technical Explanation
+>
+> 1. Many-to-Many relationships cannot be stored directly in relational columns without violating First Normal Form (1NF).
+> 2. `post_tags` junction table links post IDs to tag IDs.
+> 3. Primary key `(post_id, tag_id)` prevents duplicate tag assignments.
 
 ---
 
-### Exercise 3: Deleting Junction Entries
+### Exercise 2: Inserting Rows across Many-to-Many Associations
 
-**Problem:** Remove tag `tag_id = 5` from article `article_id = 10`.
+**Scenario:**
+Associate post `id = 1` with tags `'sql'` (id = 5) and `'postgres'` (id = 8).
 
-**Expected output:**
+**Requirements:**
+1. Execute `INSERT INTO post_tags (post_id, tag_id) VALUES (1, 5), (1, 8)`.
+
 > [!check]- Answer
-> ```text
-> DELETE FROM article_tags WHERE article_id = 10 AND tag_id = 5;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> DELETE FROM article_tags WHERE article_id = 10 AND tag_id = 5;
+> INSERT INTO post_tags (post_id, tag_id) 
+> VALUES 
+>   (1, 5),
+>   (1, 8);
 > ```
 >
-> **Explanation:** Deleting rows from junction tables severs Many-to-Many relationships cleanly.
+> #### Technical Explanation
+>
+> 1. Inserts association pairs into the junction table.
+> 2. Enforces foreign key checks against `posts` and `tags`.
+> 3. Multi-row insertion pattern.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Querying Tagged Entities with `STRING_AGG`
+
+**Scenario:**
+Query all posts alongside a comma-separated string list of their assigned tags.
+
+**Requirements:**
+1. Use `STRING_AGG(t.name, ', ')`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   p.id, 
+>   p.title, 
+>   STRING_AGG(t.name, ', ' ORDER BY t.name ASC) AS tag_list 
+> FROM posts AS p 
+> LEFT JOIN post_tags AS pt ON p.id = pt.post_id 
+> LEFT JOIN tags AS t ON pt.tag_id = t.id 
+> GROUP BY p.id, p.title;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `STRING_AGG(expression, delimiter)` concatenates grouped string values.
+> 2. Groups tags by post ID.
+> 3. Returns formatted tag string lists (`"postgres, sql"`).
+
+---
+
+
+
+## 6. Related Terms
 - [One-to-Many Relationship](one_to_many.md) — The single-direction default pattern.
 - [Junction Table (Bridge / Pivot Table)](junction_table.md) — The physical implementation table.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Many-to-Many links multiple rows in Table A to multiple rows in Table B.
 - Cannot be implemented with a single foreign key inside the parent tables.
 - Requires creating a third, separate table called a "Junction Table."

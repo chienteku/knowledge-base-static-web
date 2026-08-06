@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (iterative loop control expression)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the procedural interpreter. Iterates over array elements in server memory, executing enclosed statement blocks for each item).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In application development, batch processing tasks frequently arise:
@@ -86,7 +85,7 @@ FOR $u IN $users {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to use JavaScript-style 'for (let i = 0; i < N; i++)' syntax in SurrealQL
 
@@ -140,68 +139,96 @@ FOR $v IN $arr { LET $v = $v * 2; }; // ❌ Does not mutate $arr!
 LET $arr = array::map($arr, |$v| $v * 2);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Batch Record Creation
+### Exercise 1: Iterative Batch Processing with `FOR` Loops
 
-**Problem:** You are initializing default roles for a tenant.
-Write a SurrealQL script to:
-1. Assign an array `["admin", "member", "guest"]` to variable `$roles`.
-2. Use a `FOR` loop to iterate over `$roles`, creating a `role` record for each role name with `active = true`.
+**Scenario:**
+An administrative script iterates over an array of user record IDs and creates a default notification record for each user.
 
-**Expected output:**
+**Requirements:**
+1. Write a `FOR` loop iterating over `[user:u1, user:u2, user:u3]`.
+2. Create a `notification` record for each user inside the loop block.
+
 > [!check]- Answer
-> ```sql
-> LET $roles = ["admin", "member", "guest"];
+>
+> #### Implementation
+>
+> ```surrealql
+> FOR $user IN [user:u1, user:u2, user:u3] {
+>     CREATE notification SET recipient = $user, message = "Welcome!";
+> };
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `FOR $item IN $array { ... }` iterates over array elements sequentially.
+> 2. Binds the loop variable (`$user`) for use inside the loop block.
+> 3. Executes procedural database mutations in a single transaction.
+
+---
+
+### Exercise 2: Calculating Iterative Sums in `FOR` Loops
+
+**Scenario:**
+Iterate over a list of order amounts, accumulate a running total in a parameter variable `$total`, and return the result.
+
+**Requirements:**
+1. Initialize `LET $total = 0.0dec;`.
+2. Loop over amounts `[10.0dec, 25.5dec, 14.5dec]`.
+3. Add amount to `$total` in each iteration.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $total = 0.0dec;
 > 
-> FOR $r IN $roles {
->   CREATE role SET name = $r, active = true;
+> FOR $amount IN [10.0dec, 25.5dec, 14.5dec] {
+>     LET $total = $total + $amount;
+> };
+> 
+> RETURN $total;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Parameter variables (`LET $total`) can be updated inside `FOR` loop bodies.
+> 2. Retains accumulator state across iterations.
+> 3. Enables stored procedure logic inside SurrealQL scripts.
+
+---
+
+### Exercise 3: Array Mapping with `FOR` Expressions
+
+**Scenario:**
+Transform an array of product prices `[100, 200, 300]` by applying a 10% discount to each item using a `FOR` loop expression.
+
+**Requirements:**
+1. Use `FOR` loop to output array of discounted prices.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> FOR $price IN [100.0dec, 200.0dec, 300.0dec] {
+>     RETURN $price * 0.9dec;
 > };
 > ```
-> - The loop format is `FOR $var IN $array { ... };`.
-> - Access the current iteration item using `$r`.
+>
+> #### Technical Explanation
+>
+> 1. `FOR` expressions evaluate to an array containing results of each iteration step.
+> 2. Provides functional array mapping capabilities.
+> 3. Transforms collection data without external application code.
 
 ---
 
 
 
-### Exercise 2: Iterating and Creating Records with FOR Loop
-
-**Problem:** Iterate array `["Alice", "Bob"]` using `FOR $name IN [...]` to create user records.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> FOR $name IN ["Alice", "Bob"] { CREATE user SET name = $name; };
-> ```
-> ```surrealql
-> FOR $name IN ["Alice", "Bob"] {
->   CREATE user SET name = $name;
-> };
-> ```
->
-> **Explanation:** `FOR $var IN array { ... }` loops over collection elements executing statements.
-
----
-
-### Exercise 3: Returning Array Results from FOR Block
-
-**Problem:** Collect squared numbers for `[1, 2, 3]` using a FOR loop expression.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> FOR $n IN [1, 2, 3] { RETURN $n * $n; };
-> ```
-> ```surrealql
-> FOR $n IN [1, 2, 3] {
->   RETURN $n * $n;
-> };
-> ```
->
-> **Explanation:** `FOR` block expressions aggregate returned loop iteration values into an array.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`LET` Statement](let_statement.md) — Script variables.
 - [`array`](../level_02/array_type.md) — Iteration target lists.
@@ -209,7 +236,7 @@ Write a SurrealQL script to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `FOR $item IN $list` iterates over arrays, sets, and ranges.
 - Numeric range syntax (`1..N`) enables index loops.
 - Executes batch updates and creations in a single script session.

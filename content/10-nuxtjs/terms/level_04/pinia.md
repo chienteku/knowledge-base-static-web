@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **State Management**
+
+**State Management** (Centralized Reactive Store): Pinia is the official modular state management library for Vue 3 and Nuxt 3, providing devtools support and SSR state hydration.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While Nuxt's built-in `useState()` is fantastic for simple variables (like a string or a boolean), it becomes messy when managing complex logic. For example, a "Shopping Cart" needs state (items), getters (total price), and actions (addItem, removeItem, checkout).
@@ -76,7 +77,7 @@ const cart = useCartStore();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Destructuring state without `storeToRefs`
 **The mistake:** Trying to use ES6 destructuring to pull state out of a Pinia store to make the template cleaner.
@@ -150,91 +151,143 @@ export const useAuthStore = defineStore('auth', () => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Defining a User Store
+### Exercise 1: Defining Setup Stores in Nuxt 3 with `@pinia/nuxt`
 
-**Problem:** Write a minimal Pinia Setup Store named `user` that holds a `username` (string, default empty) and a `login` action that sets the `username` to "Admin".
+**Scenario:**
+Create a Pinia setup store `stores/useAuthStore.ts` using composition syntax and TypeScript interfaces.
 
-**Expected output:**
+**Requirements:**
+1. Use `defineStore("auth", () => { ... })`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import { defineStore } from 'pinia';
-> 
-> export const useUserStore = defineStore('user', () => {
->   const username = ref('');
->   
->   function login() {
->     username.value = 'Admin';
->   }
->   
->   return { username, login };
-> });
-> ```
-> - Wrap your setup code in `defineStore('user', () => { ... })` and return state and action properties.
+> // stores/useAuthStore.ts
+> import { defineStore } from "pinia";
+
+export const useAuthStore = defineStore("auth", () => {
+  const token = ref<string | null>(null);
+  const user = ref<{ id: number; name: string } | null>(null);
+  
+  const isAuthenticated = computed(() => !!token.value);
+  
+  function setAuth(newToken: string, userData: { id: number; name: string }) {
+    token.value = newToken;
+    user.value = userData;
+  }
+  
+  function logout() {
+    token.value = null;
+    user.value = null;
+  }
+  
+  return { token, user, isAuthenticated, setAuth, logout };
+});
+```
+
+> #### Technical Explanation
+>
+> 1. `@pinia/nuxt` enables auto-importing for `defineStore` and custom store composables inside Nuxt 3.
+> 2. Setup stores use Vue 3 Composition API syntax (`ref`, `computed`, functions).
+> 3. State is automatically hydrated from server to client seamlessly.
 
 ---
 
-### Exercise 2: Pinia Setup Store Pattern in Nuxt 3
+### Exercise 2: Consuming Pinia Stores in Vue Components
 
-**Problem:** Write Pinia Setup Store `stores/user.ts` containing ref `user`, computed `isLoggedIn`, and action `setUser(data)`.
+**Scenario:**
+Consume `useAuthStore()` inside a login header component.
 
-**Expected output:**
+**Requirements:**
+1. Consume store state and actions in `<script setup>`.
+
 > [!check]- Answer
-> ```typescript
-> export const useUserStore = defineStore('user', () => {
->   const user = ref(null);
->   const isLoggedIn = computed(() => !!user.value);
->   function setUser(data) { user.value = data; }
->   return { user, isLoggedIn, setUser };
-> });
-> ```
-> - `@pinia/nuxt` module auto-imports `defineStore` across Nuxt projects.
-> 
-> ```typescript
-> // stores/user.ts
-> export const useUserStore = defineStore('user', () => {
->   const user = ref<{ id: number; name: string } | null>(null);
->   const isLoggedIn = computed(() => !!user.value);
->   
->   function setUser(userData: { id: number; name: string }) {
->     user.value = userData;
->   }
->   
->   return { user, isLoggedIn, setUser };
-> });
-> ```
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const authStore = useAuthStore();
+> </script>
+
+<template>
+  <div>
+    <div v-if="authStore.isAuthenticated">
+      <span>Welcome, {{ authStore.user?.name }}</span>
+      <button @click="authStore.logout">Log Out</button>
+    </div>
+    <div v-else>
+      <button @click="authStore.setAuth('token123', { id: 1, name: 'Alice' })">
+        Log In
+      </button>
+    </div>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Stores are instantiated reactively across components.
+> 2. `authStore.isAuthenticated` computes state updates across components automatically.
+> 3. Centralized global state architecture.
 
 ---
 
-### Exercise 3: Pinia Nuxt Module Installation
+### Exercise 3: Preserving Store Reactivity with `storeToRefs()`
 
-**Problem:** Which module name must be added to `modules` array in `nuxt.config.ts` for Pinia integration?
+**Scenario:**
+Destructure store state properties safely using `storeToRefs()` without breaking Vue reactivity.
 
-**Expected output:**
+**Requirements:**
+1. Use `const { token, isAuthenticated } = storeToRefs(authStore)`.
+
 > [!check]- Answer
-> ```text
-> @pinia/nuxt
-> ```
-> - `@pinia/nuxt` provides automatic store auto-imports and SSR hydration.
-> 
-> ```typescript
-> export default defineNuxtConfig({
->   modules: ['@pinia/nuxt']
-> });
-> ```
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> import { storeToRefs } from "pinia";
+
+const authStore = useAuthStore();
+// Preserves reactive bindings when destructuring!
+const { user, isAuthenticated } = storeToRefs(authStore);
+const { logout } = authStore; // Methods can be destructured directly
+</script>
+
+<template>
+  <div v-if="isAuthenticated">
+    <p>User: {{ user?.name }}</p>
+    <button @click="logout">Log Out</button>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Direct ES6 object destructuring (`const { user } = authStore`) breaks Vue reactivity tracking.
+> 2. `storeToRefs()` wraps state and computed properties in reactive `ref` objects.
+> 3. Actions and methods do not need `storeToRefs()` and can be destructured directly.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`composables/` Directory](composables_directory.md) — Pinia stores are essentially super-powered composables.
 - [`useState` Hook](use_state.md) — Related concept: `useState` Hook.
 - [Nuxt Modules System](../level_09/nuxt_modules.md) — Related concept: Nuxt Modules System.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Pinia is the official state management library for Vue and Nuxt.
 - Use Setup Stores to write Pinia logic using standard Composition API syntax (`ref`, `computed`, functions).
 - Pinia handles Nuxt SSR state serialization automatically.

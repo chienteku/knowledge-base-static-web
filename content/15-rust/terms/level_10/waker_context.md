@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Asynchronous Runtime**: `std::task::Waker` and `Context` for notifying executors when asynchronous tasks become ready.
+
+
+**Rust Asynchronous Primitives (task wake notification & context)**: `std::task::Waker` and `Context` for notifying executors when asynchronous tasks become ready.
 
 ---
 

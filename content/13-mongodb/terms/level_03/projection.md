@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**CRUD Operation** (Field Selection Filter): Projection specifies which fields to include or exclude in query result documents, reducing network bandwidth usage.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Passed as the optional **second argument** to query methods. Evaluated at the query executor level, reducing network payload sizes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, queries like `db.users.find()` return complete documents containing all fields.
@@ -97,7 +98,7 @@ db.users.find(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Mixing inclusion (1) and exclusion (0) rules in the same projection object
 
@@ -118,6 +119,8 @@ db.users.find({}, { name: 1, email: 1 });
 
 
 
+
+
 ### Mistake 2: Mixing Inclusion (`1`) and Exclusion (`0`) in the Same Projection Object
 
 **The mistake:** Writing `db.users.find({}, { name: 1, age: 0 })`.
@@ -133,6 +136,8 @@ db.users.find({}, { name: 1, age: 0 }); // ❌ Cannot do inclusion and exclusion
 ```javascript
 db.users.find({}, { name: 1, _id: 0 }); // Inclusion list with _id suppression
 ```
+
+
 
 ### Mistake 3: Assuming Excluding `_id` Is Default in Projection Objects
 
@@ -152,99 +157,92 @@ db.users.find({}, { name: 1, _id: 0 }); // Explicitly excludes _id
 
 
 
-### Mistake 4: Mixing Inclusion (`1`) and Exclusion (`0`) in the Same Projection Object
+## 5. Practice Exercises
 
-**The mistake:** Writing `db.users.find({}, { name: 1, age: 0 })`.
+### Exercise 1: Inclusion Projections for Field Optimization
 
-**Why it's wrong:** In MongoDB projections, you cannot mix inclusion `1` and exclusion `0` flags in the same projection object (except for suppressing `_id: 0`).
+**Scenario:**
+Query collection `users` returning ONLY `name` and `email` fields to minimize API network payload size.
 
-*Incorrect:*
-```javascript
-db.users.find({}, { name: 1, age: 0 }); // ❌ Cannot do inclusion and exclusion together!
-```
+**Requirements:**
+1. Projection `{ name: 1, email: 1, _id: 0 }`.
 
-*Fix:*
-```javascript
-db.users.find({}, { name: 1, _id: 0 }); // Inclusion list with _id suppression
-```
-
-### Mistake 5: Assuming Excluding `_id` Is Default in Projection Objects
-
-**The mistake:** Writing `db.users.find({}, { name: 1 })` expecting `_id` field to be omitted.
-
-**Why it's wrong:** The `_id` primary key field is included by default in all projection outputs unless explicitly excluded via `_id: 0`.
-
-*Incorrect:*
-```javascript
-db.users.find({}, { name: 1 }); // Returns _id AND name!
-```
-
-*Fix:*
-```javascript
-db.users.find({}, { name: 1, _id: 0 }); // Explicitly excludes _id
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Projection Filter Construction
-
-**Problem:** You have a `products` collection. Write the query to find all products where `qty` is greater than 10, returning only the `name` and `price` fields, while explicitly hiding the `_id` field.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.find(
->   { qty: { $gt: 10 } },
->   { name: 1, price: 1, _id: 0 }
+> db.users.find(
+>   { status: "active" },
+>   { name: 1, email: 1, _id: 0 }
 > );
 > ```
-> - The first argument is the query filter.
-> - The second argument is the projection.
-> - Explicitly mark `_id` as `0` to exclude it from the whitelist.
+>
+> #### Technical Explanation
+>
+> 1. Inclusion projections (`field: 1`) specify exact keys to include in output documents.
+> 2. `_id: 0` explicitly suppresses the default primary key.
+> 3. BSON parser skips unprojected document fields during network encoding.
+
+---
+
+### Exercise 2: Exclusion Projections for Sensitive Fields
+
+**Scenario:**
+Query user profile documents excluding sensitive internal fields `passwordHash` and `salt`.
+
+**Requirements:**
+1. Projection `{ passwordHash: 0, salt: 0 }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { passwordHash: 0, salt: 0 }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Exclusion projections (`field: 0`) omit specific sensitive keys while returning all other document fields.
+> 2. Note: You cannot mix inclusion (1) and exclusion (0) in the same projection object (except for `_id`).
+> 3. Prevents sensitive data leakage in API responses.
+
+---
+
+### Exercise 3: Array Element Slicing Projections with `$slice`
+
+**Scenario:**
+Query blog post documents returning ONLY the 3 most recent comments in the `comments` array.
+
+**Requirements:**
+1. Use `$slice` operator in projection `{ comments: { $slice: -3 } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.posts.find(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { title: 1, comments: { $slice: -3 } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$slice: -3` projects the last 3 elements of an embedded array.
+> 2. Prevents returning massive arrays when displaying preview snippets.
+> 3. Trims array payload size server-side.
 
 ---
 
 
 
-### Exercise 2: Projecting Specific Fields
-
-**Problem:** Project ONLY `title` and `author` fields from `posts` collection excluding `_id`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.find({}, { projection: { title: 1, author: 1, _id: 0 } });
-> ```
-> ```javascript
-> db.posts.find({}, {
->   projection: { title: 1, author: 1, _id: 0 }
-> });
-> ```
->
-> **Explanation:** `{ field: 1, _id: 0 }` includes specified fields while excluding `_id`.
-
----
-
-### Exercise 3: Positional Array Projection Operator `$`
-
-**Problem:** Project first matching array element from `comments` using positional `$` operator.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.find({ "comments.user": "alice" }, { projection: { "comments.$": 1 } });
-> ```
-> ```javascript
-> db.posts.find({
->   "comments.user": "alice"
-> }, {
->   projection: { "comments.$": 1 }
-> });
-> ```
->
-> **Explanation:** `"array.$": 1` projects ONLY the first array element matching query filters.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`find()` / `findOne()`](find.md) — The executing methods.
 - [`sort()` / `limit()` / `skip()`](sort_limit_skip.md) — Related concept: `sort()` / `limit()` / `skip()`.
@@ -252,7 +250,7 @@ db.users.find({}, { name: 1, _id: 0 }); // Explicitly excludes _id
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Projection selects which document fields are returned by queries.
 - Serves as the MongoDB equivalent to selecting columns in SQL.
 - Passed as the optional second argument to `find()` and `findOne()`.

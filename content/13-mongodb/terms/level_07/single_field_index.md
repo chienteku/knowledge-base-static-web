@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Index / Performance** (Single Attribute B-Tree Index): A Single Field Index creates a B-tree index over a single top-level or embedded field path in a collection.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Stored as a B-Tree structure mapping the single key value. Handled in memory to accelerate queries referencing that exact path).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When users search a catalog, they frequently filter by a single attribute:
@@ -85,7 +86,7 @@ db.players.find().sort({ score: -1 });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating separate single-field indexes on two fields, expecting them to run fast on a query that filters by both fields
 
@@ -100,6 +101,8 @@ It must choose one index (e.g. `first_name_1`), use it to find all "Alices", and
 **Fix: If you frequently query by multiple fields together, do not use separate single-field indexes. Create a single Compound Index containing both fields: `{ first_name: 1, last_name: 1 }`.**
 
 ---
+
+
 
 
 
@@ -120,6 +123,8 @@ db.users.createIndex({ age: -1 }); // ❌ Redundant duplicate index!
 db.users.createIndex({ age: 1 }); // Traverses both ascending and descending
 ```
 
+
+
 ### Mistake 3: Indexing Default Primary Key `_id` Field Explicitly
 
 **The mistake:** Running `db.users.createIndex({ _id: 1 })` on a newly created collection.
@@ -138,98 +143,90 @@ Rely on automatic default _id index
 
 
 
-### Mistake 4: Specifying Ascending (`1`) vs Descending (`-1`) Direction for Single-Field Indexes
+## 5. Practice Exercises
 
-**The mistake:** Creating two single-field indexes `{ age: 1 }` and `{ age: -1 }` on the same field.
+### Exercise 1: Single Field Primary and Secondary Indexing
 
-**Why it's wrong:** For single-field indexes, direction does NOT matter! MongoDB can traverse single-field B-Tree indexes in both forward and reverse directions. `{ age: -1 }` is redundant.
+**Scenario:**
+Create a single field ascending index on `username` in collection `users`.
 
-*Incorrect:*
-```javascript
-db.users.createIndex({ age: 1 });
-db.users.createIndex({ age: -1 }); // ❌ Redundant duplicate index!
-```
+**Requirements:**
+1. Execute `createIndex({ username: 1 })`.
 
-*Fix:*
-```javascript
-db.users.createIndex({ age: 1 }); // Traverses both ascending and descending
-```
-
-### Mistake 5: Indexing Default Primary Key `_id` Field Explicitly
-
-**The mistake:** Running `db.users.createIndex({ _id: 1 })` on a newly created collection.
-
-**Why it's wrong:** MongoDB automatically creates an ascending unique index on `_id` for every collection. Re-creating `_id` index is redundant.
-
-*Incorrect:*
-```javascript
-db.users.createIndex({ _id: 1 }); // Redundant default index
-```
-
-*Fix:*
-```javascript
-Rely on automatic default _id index
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Index Creation Command
-
-**Problem:** You have an `orders` collection. Users frequently query orders placed after a specific date, sorting them from newest to oldest. 
-Write the query to create a single-field index on the `created_at` field (use ascending order).
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.orders.createIndex({ created_at: 1 });
+> db.users.createIndex({ username: 1 });
 > ```
-> - The index targets only the single field `created_at`.
-> - Use the value `1` to specify the index key direction.
+>
+> #### Technical Explanation
+>
+> 1. Single field indexes build a B-tree over a single top-level or embedded field.
+> 2. Ascending (`1`) vs descending (`-1`) direction does not matter for single field sorts, as MongoDB can traverse single field B-trees in either direction.
+> 3. Converts equality lookups from $O(N)$ scans to $O(\log N)$ lookups.
+
+---
+
+### Exercise 2: Indexing Embedded Subdocument Paths
+
+**Scenario:**
+Create a single field index on embedded path `address.zip` in collection `customers`.
+
+**Requirements:**
+1. Execute `createIndex({ "address.zip": 1 })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.customers.createIndex({ "address.zip": 1 });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Single field indexes can target dot-notation subdocument paths (`"address.zip"`).
+> 2. Indexes nested subfield values directly.
+> 3. Speeds up location filtering queries.
+
+---
+
+### Exercise 3: Single Field Sort Traversal
+
+**Scenario:**
+Execute query `find().sort({ username: -1 })` using single field index `{ username: 1 }`.
+
+**Requirements:**
+1. Verify reverse index traversal behavior.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find().sort({ username: -1 });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Single field indexes support sorting in BOTH ascending (`1`) and descending (`-1`) directions.
+> 2. WiredTiger traverses the B-tree in reverse for descending sorts.
+> 3. Note: This reverse traversal flexibility applies ONLY to single field indexes, not compound indexes.
 
 ---
 
 
 
-### Exercise 2: Creating Single-Field Index
-
-**Problem:** Create ascending single-field index on `username` in `users` collection.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.createIndex({ username: 1 });
-> ```
-> ```javascript
-> db.users.createIndex({ username: 1 });
-> ```
->
-> **Explanation:** `createIndex({ field: 1 })` indexes a single field in ascending B-Tree order.
-
----
-
-### Exercise 3: Single-Field Index Traversal Direction
-
-**Problem:** Can single-field index `{ age: 1 }` satisfy query `.sort({ age: -1 })`? (Yes, single-field indexes traverse both directions).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Yes, single-field indexes traverse both ascending and descending directions
-> ```
-> ```text
-> Yes, single-field indexes traverse both ascending and descending directions
-> ```
->
-> **Explanation:** B-Tree pointers allow reverse traversal for single-field index queries.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 - [Compound Index](compound_index.md) — Multi-field index structures.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Single-Field Index is built on a single document field.
 - Optimizes equality queries, range queries, and sorting.
 - Can be traversed bidirectionally (forward and backward) with equal speed.

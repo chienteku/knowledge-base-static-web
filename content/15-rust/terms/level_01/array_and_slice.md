@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Data Structure**: Fixed-size stack arrays `[T; N]` and dynamically-sized reference slice views `&[T]`.
+
+
+**Rust Data Structure (the stack/view dichotomy)**: Fixed-size stack arrays `[T; N]` and dynamically-sized reference slice views `&[T]`.
 
 ---
 

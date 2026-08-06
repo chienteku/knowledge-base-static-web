@@ -165,7 +165,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Financial Market Engine — Order Event Classification
 
-**Problem:** In a high-frequency trading platform, order lifecycle events are emitted as an un-derived enum `OrderEvent`:
+**Scenario:** In a high-frequency trading platform, order lifecycle events are emitted as an un-derived enum `OrderEvent`:
 
 ```rust
 pub enum OrderEvent {
@@ -281,7 +281,7 @@ Include a complete unit test module `#[cfg(test)] mod tests` using `assert!`, `a
 
 ### Exercise 2: Protocol Security Gateway — HTTP/2 Binary Frame Inspector
 
-**Problem:** In an edge network proxy, binary protocol frames of HTTP/2 connections are decoded into an un-derived enum `Http2Frame`:
+**Scenario:** In an edge network proxy, binary protocol frames of HTTP/2 connections are decoded into an un-derived enum `Http2Frame`:
 
 ```rust
 pub enum Http2Frame {
@@ -401,7 +401,7 @@ Include a complete unit test module `#[cfg(test)] mod tests` using `assert!`, `a
 
 ### Exercise 3: SQL AST Security Analyzer & Query Audit Firewall
 
-**Problem:** A database firewall middleware inspects Abstract Syntax Tree (AST) query nodes before query execution to detect dangerous operations:
+**Scenario:** A database firewall middleware inspects Abstract Syntax Tree (AST) query nodes before query execution to detect dangerous operations:
 
 ```rust
 pub enum SqlAstNode {

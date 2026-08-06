@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Administration / Security**
+
+**Administration / Operations** (Point-In-Time Disaster Recovery): Point-In-Time Recovery (PITR) combines base physical backups with archived WAL files to restore databases to an exact past timestamp.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Requires configuring `archive_mode = on` and setting an `archive_command` in `postgresql.conf`. Recovery target directives are written inside the `postgresql.conf` or `recovery.signal` files depending on the Postgres version).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Logical backups (`pg_dump`) are excellent for small databases. 
@@ -87,7 +88,7 @@ recovery_target_time = '2026-07-21 14:14:59'
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Failing to regularly test your PITR restore configuration in a staging sandbox
 
@@ -135,66 +136,99 @@ Enable archive_mode = on and configure WAL archiving command (e.g. pgBackRest / 
 Inspect WAL logs or pgBackRest info before setting recovery_target_time
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Recovery Decision Audit
+### Exercise 1: Configuring Continuous WAL Archiving for PITR
 
-**Problem:** You are the Lead Database Administrator. A junior developer runs an unauthorized database update at `10:30:15 AM`, corrupting client transaction rates. 
-1.  Explain why `pg_dump` is insufficient to resolve this issue.
-2.  Write the recovery target parameter value you would set to resolve this with PITR.
+**Scenario:**
+Configure `postgresql.conf` parameters `wal_level = replica`, `archive_mode = on`, and `archive_command` for WAL disaster recovery.
 
-**Expected output:**
+**Requirements:**
+1. Code `postgresql.conf` WAL archiving parameters.
+
 > [!check]- Answer
-> ```text
-> 1. pg_dump is insufficient because it only captures daily snapshots (e.g. at midnight). If we restored the midnight dump, we would lose all valid customer transactions that occurred between midnight and 10:30 AM.
+>
+> #### Implementation
+>
+> ```ini
+> # postgresql.conf
+> wal_level = replica
+> archive_mode = on
+> archive_command = 'cp %p /var/lib/pg_archive/%f'
 > ```
-> - Evaluate the time gaps of data loss.
-> - Target the timestamp immediately preceding the developer's update.
+>
+> #### Technical Explanation
+>
+> 1. `wal_level = replica` writes full transaction log information to WAL files.
+> 2. `archive_mode = on` activates automatic continuous WAL archiving.
+> 3. `archive_command` copies completed 16MB WAL segment files to secure backup storage.
+
+---
+
+### Exercise 2: Restoring Databases to an Exact Past Timestamp
+
+**Scenario:**
+Configure `recovery.signal` and `restore_command` to perform Point-In-Time Recovery to `2026-08-05 14:30:00 UTC`.
+
+**Requirements:**
+1. Code `recovery.signal` and `recovery_target_time` parameters.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```ini
+> # postgresql.conf (Recovery Settings)
+> restore_command = 'cp /var/lib/pg_archive/%f %p'
+> recovery_target_time = '2026-08-05 14:30:00 UTC'
+> recovery_target_action = 'promote'
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Touch file `recovery.signal` puts PostgreSQL into recovery mode upon startup.
+> 2. `restore_command` fetches archived WAL files sequentially.
+> 3. `recovery_target_time` stops WAL replay at the exact target timestamp, restoring database state right before a disaster occurred.
+
+---
+
+### Exercise 3: Validating Disaster Recovery Timelines
+
+**Scenario:**
+Explain how PostgreSQL recovery timelines prevent overwriting archived WAL files during recovery promotion.
+
+**Requirements:**
+1. Explain PostgreSQL timeline IDs and recovery history files.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Recovery Timeline Architecture:
+> - Initial Timeline (Timeline 1): Standard database production operation line.
+> - Promotion Event (PITR Recovery): Upon reaching target recovery time, PostgreSQL increments timeline ID to Timeline 2!
+> - Benefit: Prevents new post-recovery WAL writes from overwriting historical Timeline 1 WAL archives.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Timelines branch WAL history whenever a database is promoted out of recovery mode.
+> 2. Guarantees historical WAL archives remain immutable.
+> 3. Advanced disaster recovery architecture.
 
 ---
 
 
 
-### Exercise 2: Configuring Recovery Target Time in postgresql.conf
-
-**Problem:** Set PITR target recovery timestamp to `'2026-07-24 14:00:00 UTC'`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> recovery_target_time = '2026-07-24 14:00:00 UTC'
-> ```
-> ```text
-> recovery_target_time = '2026-07-24 14:00:00 UTC'
-> ```
->
-> **Explanation:** `recovery_target_time` specifies the exact point-in-time boundary for WAL replay.
-
----
-
-### Exercise 3: Core Components of PITR
-
-**Problem:** List 2 essential prerequisites for Point-in-Time Recovery (1. Physical Base Backup; 2. Continuous Write-Ahead Log WAL Archives).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Physical Base Backup; 2. Continuous Write-Ahead Log (WAL) Archives
-> ```
-> ```text
-> 1. Physical Base Backup; 2. Continuous Write-Ahead Log (WAL) Archives
-> ```
->
-> **Explanation:** Replaying archived WAL segments over a physical base backup restores databases to arbitrary historical seconds.
-
-## 7. Related Terms
+## 6. Related Terms
 - [WAL (Write-Ahead Log)](wal.md) — The physical log files.
 - [`pg_dump` / `pg_restore` (Backups)](pg_dump_restore.md) — Logical alternatives.
 - [Replication (Streaming / Logical)](replication.md) — Related concept: Replication (Streaming / Logical).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PITR restores database states to any specific timestamp in the past.
 - Combines a physical filesystem base backup with archived WAL logs.
 - Prevents transaction data loss caused by mid-day deletions or corruptions.

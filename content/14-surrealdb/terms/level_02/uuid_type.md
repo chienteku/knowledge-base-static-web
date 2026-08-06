@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Data Type (universally unique identifier type)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Stored internally as a 16-byte binary block, optimizing storage footprint compared to standard 36-character string representations).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern web applications, you need unique identifiers that cannot be guessed:
@@ -82,7 +81,7 @@ SELECT * FROM device WHERE device_id = <uuid> "b1a457f9-8c2d-4f10-b67c-5a1248cf9
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing UUID values as standard text strings, wasting index storage and CPU RAM cache space
 
@@ -132,69 +131,99 @@ RETURN <uuid> "12345"; // ❌ Invalid UUID string format
 RETURN <uuid> "f47ac10b-58cc-4372-a567-0e02b2c3d479"; // Valid 36-char UUID string
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: UUID Query Formatting
+### Exercise 1: UUID Field Definition and Generation
 
-**Problem:** You are writing a query to search for a user by their tracking UUID. 
-Explain the difference in execution behavior between these two SurrealQL queries:
-1.  `SELECT * FROM user WHERE tracking_id = "d3b07384-d113-11e7-8beb-6814015c7e11";`
-2.  `SELECT * FROM user WHERE tracking_id = <uuid> "d3b07384-d113-11e7-8beb-6814015c7e11";`
-Assume `tracking_id` is defined as `TYPE uuid` on the table.
+**Scenario:**
+A microservice architecture requires globally unique UUID identifiers for distributed order tracking.
 
-**Expected output:**
+**Requirements:**
+1. Define table `orders` in `SCHEMAFULL` mode.
+2. Define field `tracking_id` as `uuid` defaulting to `rand::uuid()`.
+3. Create an order record `orders:o1`.
+
 > [!check]- Answer
-> ```text
-> - Query 1 will fail or return no results because `"d3b0... "` is a string type, which does not match the binary `uuid` type stored in `tracking_id`.
-> - Query 2 will succeed because the `<uuid>` casting operator converts the string literal into a native `uuid` type, allowing a binary comparison.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE orders SCHEMAFULL;
+> DEFINE FIELD tracking_id ON TABLE orders TYPE uuid DEFAULT rand::uuid();
+> 
+> CREATE orders:o1 SET amount = 250.00dec;
+> 
+> SELECT * FROM orders:o1;
 > ```
-> - Check the type conversion operators in SurrealQL.
-> - Consider if type mismatch filters block matches on schema-full tables.
+>
+> #### Technical Explanation
+>
+> 1. `TYPE uuid` restricts field values strictly to valid 128-bit UUID bytes/strings.
+> 2. `rand::uuid()` generates cryptographically random UUID v4 values automatically.
+> 3. Guarantees global identifier uniqueness across distributed database clusters.
+
+---
+
+### Exercise 2: UUID Record Primary Key Creation
+
+**Scenario:**
+Create a record in table `session` where the primary key itself is a generated UUID (`session:uuid()`).
+
+**Requirements:**
+1. Write the `CREATE` statement using `session:uuid()`.
+2. Inspect the returned primary key.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE session:uuid() SET user = user:alice, logged_in = time::now();
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `session:uuid()` uses SurrealDB's built-in UUID primary key generator function.
+> 2. Generates record IDs in the format `session:u'018c4e6a-7b3f-7123-89ab-cdef01234567'`.
+> 3. Provides unique, unguessable primary keys for sensitive authentication sessions.
+
+---
+
+### Exercise 3: Parsing and Validating UUID Strings
+
+**Scenario:**
+Verify whether a given string is a valid UUID before storing it in a `uuid` field using `is::uuid()`.
+
+**Requirements:**
+1. Test validity of string `"018c4e6a-7b3f-7123-89ab-cdef01234567"` using `string::is::uuid()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT string::is::uuid("018c4e6a-7b3f-7123-89ab-cdef01234567") AS valid_uuid;
+> -- Output: { valid_uuid: true }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `string::is::uuid(str)` validates whether a string matches standard 36-character UUID formatting.
+> 2. Used inside field `ASSERT` clauses to sanitize incoming string parameters.
+> 3. Prevents invalid UUID strings from reaching application logic.
 
 ---
 
 
 
-### Exercise 2: Generating UUID v4 Values
-
-**Problem:** Generate a new UUID v4 using `rand::uuid::v4()` or `rand::uuid()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> rand::uuid::v4()
-> ```
-> ```surrealql
-> RETURN rand::uuid::v4();
-> ```
->
-> **Explanation:** `rand::uuid::v4()` generates random UUID v4 values.
-
----
-
-### Exercise 3: UUID Field Schema Definition
-
-**Problem:** Define field `session_id` on `user` table as native `TYPE uuid`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD session_id ON TABLE user TYPE uuid;
-> ```
-> ```surrealql
-> DEFINE FIELD session_id ON TABLE user TYPE uuid;
-> ```
->
-> **Explanation:** `TYPE uuid` enforces binary 16-byte UUID field validation.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [ID Generation Strategies (`ulid()`, `uuid()`, `rand::*`, String, Numeric)](id_generation.md) — Generating Record IDs.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `uuid` type stores 128-bit Universally Unique Identifiers natively.
 - Direct NoSQL equivalent to PostgreSQL's native `UUID` column type.
 - Stored as a compressed 16-byte binary block on disk, saving index space.

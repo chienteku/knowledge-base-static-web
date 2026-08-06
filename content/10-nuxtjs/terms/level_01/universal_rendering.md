@@ -14,16 +14,17 @@
 ---
 
 ## 2. Term Category
-- **Rendering Strategy**
+
+**Rendering Strategy** (Isomorphic Server & Client Rendering): Universal Rendering (SSR) executes Vue components on the server to generate HTML for initial requests, followed by client hydration for SPA interactivity.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard Single Page Applications (SPAs) send a blank HTML file to the browser, forcing the user to wait until all JavaScript downloads and executes before they see any content. This is terrible for SEO (search engines see a blank page) and terrible for users on slow devices.
@@ -44,7 +45,7 @@ Because the app runs twice—once on the server, and once on the client—the ou
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Hydration Mismatches via Browser APIs
 **The mistake:** Rendering content conditionally based on browser-only APIs without waiting for hydration to complete.
@@ -130,66 +131,119 @@ routeRules: { '/admin/**': { ssr: false } }
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Understanding the execution flow
+### Exercise 1: Auditing Execution Contexts (Server vs Client)
 
-**Problem:** If you put `console.log("Component setup")` directly inside a `<script setup>` in a page component, where will that log appear on a fresh page load?
+**Scenario:**
+Add conditional logging to verify code execution on the server during initial load and on the client during hydration.
 
-**Expected output:**
+**Requirements:**
+1. Inspect `import.meta.server` and `import.meta.client` flags inside `<script setup>`.
+
 > [!check]- Answer
-> ```text
-> It will appear in BOTH the server terminal (Node.js) AND the browser's developer console, because the component executes twice during Universal Rendering.
-> ```
-> - Think about the double execution nature of Universal Rendering: first, the server generates static HTML (runs component setup), then the client hydrates it (runs setup again to hook reactivity).
-
----
-
-### Exercise 2: Universal Execution Flow Matrix
-
-**Problem:** Identify where the following execution lifecycle steps occur during initial page request under Universal Rendering:
-1. `<script setup>` top-level execution
-2. `onMounted()` hook execution
-3. Nitro server API request
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Server AND Client
-> 2. Client ONLY
-> 3. Server ONLY
-> ```
-> - `<script setup>` -> Executes on Server (SSR) and re-executes on Client (Hydration).
-> - `onMounted()` -> Client ONLY.
-> - Nitro API -> Server ONLY.
-> 
-> ```text
-> Server Render -> Send HTML -> Client Hydrate -> onMounted()
-> ```
-
----
-
-### Exercise 3: process.server / process.client Guards
-
-**Problem:** Write an `if` condition using Nuxt process guards executing `console.log('Server Execution')` only when rendering on the server.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> if (import.meta.server) { console.log('Server Execution'); } (or if (process.server))
-> ```
-> - `import.meta.server` (or `process.server`) isolates server execution.
-> 
-> ```typescript
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
 > if (import.meta.server) {
->   console.log('Executing on Node.js Nitro Server');
+>   console.log("Executing on Nitro Node.js Server!");
 > }
+
+if (import.meta.client) {
+  console.log("Executing on Browser Client!");
+}
+</script>
+
+<template>
+  <div>
+    <p>Universal Rendering Execution Audit</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. In Universal Rendering, `<script setup>` executes ONCE on the server during HTML generation and ONCE on the client during hydration.
+> 2. `import.meta.server` (or `process.server`) isolates server-side operations (database queries, secret keys).
+> 3. `import.meta.client` (or `process.client`) isolates browser-only operations (`localStorage`, DOM events).
+
+---
+
+### Exercise 2: Preventing Server Execution of Browser APIs
+
+**Scenario:**
+Fix a server rendering crash caused by calling `window.localStorage.getItem()` directly in `<script setup>`.
+
+**Requirements:**
+1. Move `localStorage` access into `onMounted()` or wrap with `import.meta.client`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const token = ref<string | null>(null);
+
+onMounted(() => {
+  // Executed strictly in browser after hydration!
+  token.value = localStorage.getItem("auth_token");
+});
+</script>
+
+<template>
+  <div>
+    <p>Auth Token: {{ token ?? "None" }}</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Node.js server environment lacks browser globals like `window`, `document`, and `localStorage`.
+> 2. Calling browser globals directly in `<script setup>` causes SSR 500 compilation errors.
+> 3. Lifecycle hook `onMounted()` executes strictly in the client browser environment.
+
+---
+
+### Exercise 3: Switching Route Rendering Modes via Route Rules
+
+**Scenario:**
+Configure `nuxt.config.ts` `routeRules` to enforce SPA rendering for admin pages while keeping Universal Rendering for public pages.
+
+**Requirements:**
+1. Configure `routeRules` in `nuxt.config.ts`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // nuxt.config.ts
+> export default defineNuxtConfig({
+>   routeRules: {
+>     "/": { ssr: true },             // Universal SSR Rendering (Default)
+>     "/admin/**": { ssr: false }     // Client-Side SPA Rendering Only
+>   }
+> });
 > ```
+
+> #### Technical Explanation
+>
+> 1. `routeRules` enables Hybrid Rendering, applying different rendering strategies per route path.
+> 2. `ssr: false` disables server HTML rendering for `/admin/**`, sending a minimal SPA wrapper to the browser.
+> 3. Optimizes server CPU load while preserving SSR benefits for public SEO pages.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [ClientOnly Component](../level_03/client_only_component.md) — A utility to force a component to completely skip server rendering.
 - [Nitro Engine](nitro_engine.md) — The server responsible for executing the SSR phase.
 - [Hydration](hydration.md) — Related concept: Hydration.
@@ -202,7 +256,7 @@ routeRules: { '/admin/**': { ssr: false } }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Universal Rendering provides the SEO/speed of SSR and the interactivity of an SPA.
 - The initial load is Server-Side Rendered. All subsequent navigation is Client-Side.
 - Code in your components runs on **both** the server and the client.

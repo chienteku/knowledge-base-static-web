@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Testing & Debugging**
+
+
+**SurrealQL Command (query execution delay SLEEP statement)**: - **Testing & Debugging**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealQL Execution Engine** (Pauses thread execution for the specified duration).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 During testing, integration development, or debugging, developers need to simulate delay conditions: testing live query push delays (`LIVE SELECT`), verifying event trigger timing (`DEFINE EVENT`), or testing application timeout handling in client SDKs.
@@ -58,7 +57,7 @@ COMMIT TRANSACTION;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving SLEEP Statements in Production Application Code
 
@@ -108,92 +107,95 @@ sleep(5s); // Correct 5 seconds duration
 
 
 
-### Mistake 4: Using Long `sleep()` Durations Inside Synchronous Transaction Blocks
 
-**The mistake:** Executing `BEGIN TRANSACTION; sleep(10s); COMMIT TRANSACTION;`.
 
-**Why it's wrong:** Holding open transactions while sleeping locks storage resources and causes transaction timeout aborts under high concurrency. Avoid long sleeps inside transactions.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-BEGIN TRANSACTION;
-sleep(10s); // ❌ Locks storage resources!
-COMMIT TRANSACTION;
-```
+### Exercise 1: Query Execution Delays with `SLEEP`
 
-*Fix:*
-```surrealql
-sleep(10s); // Use outside transaction blocks
-```
+**Scenario:**
+Introduce a temporary execution delay of 500 milliseconds inside a test transaction script using `SLEEP`.
 
-### Mistake 5: Passing Plain Numbers to `sleep()` Without Duration Suffixes
-
-**The mistake:** Writing `sleep(5)` expecting to sleep 5 seconds.
-
-**Why it's wrong:** `sleep()` requires explicit duration literals like `5s`, `500ms`, `1m`.
-
-*Incorrect:*
-```surrealql
-sleep(5); // ❌ Missing duration unit suffix!
-```
-
-*Fix:*
-```surrealql
-sleep(5s); // Correct 5 seconds duration
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Valid Duration Syntax
-Which of the following are valid duration literals for the `SLEEP` statement?
-a. `SLEEP 100ms;`
-b. `SLEEP 2.5s;`
-c. `SLEEP 1m;`
-d. All of the above.
+**Requirements:**
+1. Write `SLEEP 500ms;`.
 
 > [!check]- Answer
-> - SurrealDB supports `ms` (milliseconds), `s` (seconds), `m` (minutes), etc. Answer: d.
+>
+> #### Implementation
+>
+> ```surrealql
+> BEGIN TRANSACTION;
+> 
+> CREATE audit:1 SET step = "start";
+> SLEEP 500ms;
+> CREATE audit:2 SET step = "complete";
+> 
+> COMMIT TRANSACTION;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SLEEP <duration>` pauses query execution for the specified duration (`500ms`, `2s`).
+> 2. Non-blocking delay in SurrealDB's async Rust runtime.
+> 3. Useful in test scripts simulating long-running operations or polling delays.
+
+---
+
+### Exercise 2: Simulating Latency in Test Scripts
+
+**Scenario:**
+Simulate a slow background task delay of 1 second before returning a stored procedure calculation.
+
+**Requirements:**
+1. Execute `SLEEP 1s; RETURN "Task completed";`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SLEEP 1s;
+> RETURN "Background task completed";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Suspends script execution for 1 second.
+> 2. Helps developers test client SDK timeout handling.
+> 3. Simulates asynchronous processing steps.
+
+---
+
+### Exercise 3: Non-Blocking Execution Model
+
+**Scenario:**
+Explain why executing `SLEEP` in one query session does not block other concurrent database query sessions.
+
+**Requirements:**
+1. Describe async Tokio thread pool execution.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Async Non-Blocking Execution:
+> SurrealDB runs on Tokio async tasks. Calling SLEEP yields thread execution to other concurrent client queries, preventing server-wide thread blocking.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SLEEP` yields async task execution back to the Tokio runtime.
+> 2. Other connection sessions continue processing queries without delay.
+> 3. Ensures high concurrency under load.
 
 ---
 
 
 
-### Exercise 2: Pausing Query Script Execution
 
-**Problem:** Pause SurrealQL script execution for 500 milliseconds using `sleep()`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> sleep(500ms);
-> ```
-> ```surrealql
-> sleep(500ms);
-> ```
->
-> **Explanation:** `sleep(duration)` pauses script execution for specified duration intervals.
-
----
-
-### Exercise 3: Simulating Rate Limiting Delays
-
-**Problem:** Use `sleep(1s)` inside a loop to rate-limit batch operations.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> FOR $id IN $ids { UPDATE $id SET processed = true; sleep(1s); };
-> ```
-> ```surrealql
-> FOR $id IN $ids {
->   UPDATE $id SET processed = true;
->   sleep(1s);
-> };
-> ```
->
-> **Explanation:** `sleep()` inserts controlled delays between batch iteration steps.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`datetime` / `duration`](../level_02/datetime_duration.md) — Duration literals syntax.
 - [Transactions (`BEGIN` / `COMMIT` / `CANCEL`)](../level_09/transactions.md) — Multi-statement execution blocks.
@@ -201,7 +203,7 @@ d. All of the above.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `SLEEP` pauses query execution for a specified duration (e.g., `SLEEP 500ms;`).
 - Useful for testing live query callbacks, simulating latency, and testing transaction timing.
 - Always remove `SLEEP` statements before deploying code to production environments.

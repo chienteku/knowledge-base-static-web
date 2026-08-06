@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Core Architecture**
+
+**Core Concept** (Mutual Lock Dependency Resolution): A Deadlock occurs when two or more transactions hold locks while waiting for locks held by each other, resolved by PostgreSQL aborting one transaction with a deadlock detection error.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Managed by the background Deadlock Detector thread. Checks lock dependency queues periodically based on the **`deadlock_timeout`** parameter (default: 1 second)).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In `locking.md`, we learned that database transactions lock rows to prevent writing conflicts, forcing other transactions to queue and wait. 
@@ -96,7 +97,7 @@ UPDATE accounts SET balance = balance - 10 WHERE id = 1; -- (Triggers Deadlock!)
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming you have to reboot the database server to clear a deadlock
 
@@ -144,71 +145,105 @@ deadlock_timeout = 60s -- ❌ Long client wait latencies during deadlocks
 deadlock_timeout = '1s' -- Fast deadlock detection
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Lock Ordering Refactor
+### Exercise 1: Reproducing a Deadlock Scenario
 
-**Problem:** You have two concurrent transactions that deadlock:
--   **Transaction 1:** Updates `users` (id=5) first, then updates `profiles` (user_id=5).
--   **Transaction 2:** Updates `profiles` (user_id=5) first, then updates `users` (id=5).
+**Scenario:**
+Reproduce a Deadlock by having Session 1 lock Row A then Row B, while Session 2 locks Row B then Row A.
 
-Rewrite the steps of Transaction 2 to prevent deadlocks.
+**Requirements:**
+1. Code Session 1 and Session 2 update ordering causing a Deadlock error (`40P01`).
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Refactored Transaction 2 Steps:
-> 1. Update `users` (id=5) first.
-> 2. Update `profiles` (user_id=5) second.
-> 
-> By ordering the locks consistently (always updating `users` before `profiles`), Transaction 2 will queue behind Transaction 1's lock on the users table, eliminating the circular wait state.
-> ```
-> - Match the exact order of the tables modified in Transaction 1.
-> - Ensure no crossover locks can be acquired simultaneously.
-
----
-
-
-
-### Exercise 2: Deterministic Lock Order Pattern
-
-**Problem:** Write SQL pattern preventing deadlocks when transferring money between `account_a` and `account_b`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM accounts WHERE id IN (10, 20) ORDER BY id ASC FOR UPDATE;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> SELECT * FROM accounts WHERE id IN (10, 20) ORDER BY id ASC FOR UPDATE;
+> -- Session 1:
+> BEGIN;
+> UPDATE accounts SET balance_cents = balance_cents - 100 WHERE id = 1; -- Locks Row 1
+> 
+> -- Session 2 (Concurrent):
+> BEGIN;
+> UPDATE accounts SET balance_cents = balance_cents - 100 WHERE id = 2; -- Locks Row 2
+> 
+> -- Session 1:
+> UPDATE accounts SET balance_cents = balance_cents + 100 WHERE id = 2; -- Waits for Row 2...
+> 
+> -- Session 2:
+> UPDATE accounts SET balance_cents = balance_cents + 100 WHERE id = 1; -- Deadlock Detected! Session 2 aborts!
 > ```
 >
-> **Explanation:** Acquiring locks in strict ascending primary key order (`ORDER BY id ASC`) eliminates deadlock circular dependencies.
+> #### Technical Explanation
+>
+> 1. A Deadlock occurs when two transactions wait for locks held by each other.
+> 2. PostgreSQL background daemon detects cyclic wait dependency graphs and aborts one transaction with Error `40P01` (`deadlock_detected`).
+> 3. The aborted transaction must roll back and retry.
 
 ---
 
-### Exercise 3: Handling Deadlock Exceptions in Application Code
+### Exercise 2: Preventing Deadlocks via Consistent Lock Ordering
 
-**Problem:** What PostgreSQL error code indicates a Deadlock detection? (`40P01`).
+**Scenario:**
+Eliminate deadlocks by enforcing consistent primary key lock ordering (`id ASC`) across all application write transactions.
 
-**Expected output:**
+**Requirements:**
+1. Sort update IDs in code before acquiring locks.
+
 > [!check]- Answer
-> ```text
-> 40P01 (deadlock_detected)
-> ```
-> ```text
-> 40P01 (deadlock_detected)
+>
+> #### Implementation
+>
+> ```typescript
+> // Sort target account IDs ascending before acquiring row locks!
+> const [firstId, secondId] = [fromId, toId].sort((a, b) => a - b);
+
+await client.query("UPDATE accounts SET balance_cents = balance_cents - $1 WHERE id = $2", [amount, firstId]);
+await client.query("UPDATE accounts SET balance_cents = balance_cents + $1 WHERE id = $2", [amount, secondId]);
+```
+
+> #### Technical Explanation
+>
+> 1. Enforcing consistent lock acquisition order (e.g. always updating smaller `id` before larger `id`) eliminates cyclic wait graph dependencies.
+> 2. Eliminates deadlock errors mathematically.
+> 3. Essential pattern for high-concurrency financial transactions.
+
+---
+
+### Exercise 3: Tuning Deadlock Detection Timeout (`deadlock_timeout`)
+
+**Scenario:**
+Inspect `deadlock_timeout` parameter controlling how long PostgreSQL waits before checking for deadlocks.
+
+**Requirements:**
+1. Execute `SHOW deadlock_timeout`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SHOW deadlock_timeout;
 > ```
 >
-> **Explanation:** Catching error code `40P01` enables applications to retry failed transactions safely.
+> #### Technical Explanation
+>
+> 1. `deadlock_timeout` (default `1s`) sets the wait time before the deadlock detector checks the lock dependency graph.
+> 2. Checking for deadlocks requires acquiring expensive global lock manager locks.
+> 3. Keep at default `1s` for balanced performance and deadlock resolution speed.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [Locking (Row-level, Table-level)](locking.md) — The locking basics.
 - [`SELECT ... FOR UPDATE`](select_for_update.md) — Query locks.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A deadlock occurs when transactions wait for each other's locks in a circle.
 - The PostgreSQL Deadlock Detector scans active queues for circular blocks.
 - Clears deadlocks by aborting one transaction, throwing error `40P01`.

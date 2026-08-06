@@ -16,7 +16,9 @@
 
 ## 2. Term Category
 
-**Rust-specific**: While other systems languages differentiate between dynamic strings and string literals, Rust's explicit duality (`String` vs `&str`) is a signature feature that forces developers to think about memory allocation.
+
+
+**Rust Type Dichotomy (owned buffer vs borrowed slice view)**: While other systems languages differentiate between dynamic strings and string literals, Rust's explicit duality (`String` vs `&str`) is a signature feature that forces developers to think about memory allocation.
 
 ---
 

@@ -15,17 +15,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Diagnostics / Logging**: `tracing` is the official Tokio project framework for collecting structured, contextual diagnostic data from Rust applications. Unlike traditional logging libraries (such as `log` or `env_logger`) that output flat unstructured text lines (`println!`), `tracing` expands logging into **Structured Spans**: time-bounded execution contexts (`span!`) that track causal relationships across asynchronous `.await` boundaries and multi-threaded tasks.
+
+
+**Rust Ecosystem Crate (structured diagnostics & telemetry framework)**: `tracing` is the official Tokio project framework for collecting structured, contextual diagnostic data from Rust applications. Unlike traditional logging libraries (such as `log` or `env_logger`) that output flat unstructured text lines (`println!`), `tracing` expands logging into **Structured Spans**: time-bounded execution contexts (`span!`) that track causal relationships across asynchronous `.await` boundaries and multi-threaded tasks.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Logging Framework**: `tracing` is standard across async web frameworks (`axum`, `actix-web`), gRPC (`tonic`), database engines, and production microservices.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -74,7 +72,23 @@ async fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Forgetting `tracing_subscriber::fmt::init()` in Program `main` Entrypoint
+
+**The mistake:** Emitting `tracing::info!` events without initializing a `Subscriber`.
+
+**Why it's wrong:** Tracing events are completely ignored and dropped if no global subscriber is registered, producing empty log output.
+
+*Fix:* Always call `tracing_subscriber::fmt::init()` at the start of `main()`.
+
+### Mistake 3: Logging Sensitive PII / Secret Data Fields in Unmasked Structured Span Events
+
+**The mistake:** Passing raw passwords or auth tokens to `tracing::info!(secret = %token)`.
+
+**Why it's wrong:** Structured loggers emit span fields to stdout, central log collectors, and external monitoring dashboards, exposing plain-text secrets.
+
+*Fix:* Mask sensitive fields (e.g. `secret = "[REDACTED]"`) before logging.
+
 
 ### Mistake 1: Forgetting to Initialize `tracing_subscriber` in `main()`
 
@@ -84,11 +98,11 @@ async fn main() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Async Payment Service Instrumentation & Secret Masking
 
-**Problem:** In an e-commerce microservice, you are building an async payment processing module. To comply with security standards (e.g., PCI-DSS), sensitive data like credit card tokens (`card_token`) must **never** be logged. However, for debugging and telemetry, you need to track `order_id`, `amount_cents`, and dynamically record the `payment_status` within the active span once processing completes.
+**Scenario:** In an e-commerce microservice, you are building an async payment processing module. To comply with security standards (e.g., PCI-DSS), sensitive data like credit card tokens (`card_token`) must **never** be logged. However, for debugging and telemetry, you need to track `order_id`, `amount_cents`, and dynamically record the `payment_status` within the active span once processing completes.
 
 Write an async function `process_payment(order_id: &str, amount_cents: u64, card_token: &str) -> Result<TransactionResult, String>` instrumented with `#[instrument]`.
 1. Instruct `#[instrument]` to skip logging `card_token` while recording `order_id` and `amount_cents`.
@@ -98,6 +112,9 @@ Write an async function `process_payment(order_id: &str, amount_cents: u64, card
 5. Include a comprehensive unit test suite with assertions (`assert_eq!`, `assert!`) validating both successful and failed payment processing flows.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use tracing::{instrument, info, error, Span, field};
 > 
@@ -164,7 +181,8 @@ Write an async function `process_payment(order_id: &str, amount_cents: u64, card
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Attribute-Based Instrumentation (`#[instrument]`)**: Automatically creates a diagnostic span whenever `process_payment` is called. The `name` parameter overrides the span name to `payment_processor`.
 > 2. **Secret Redaction (`skip(card_token)`)**: Prevents sensitive parameters (such as PCI tokens, passwords, or encryption keys) from being recorded in telemetry logs or exported to distributed tracing collectors.
 > 3. **Deferred Field Recording (`field::Empty` & `Span::current().record`)**: Fields like `payment_status` cannot be known when entering the function. Declaring `field::Empty` reserves a slot in the span context, allowing `current_span.record(...)` to populate it dynamically once business logic yields a result.
@@ -174,7 +192,7 @@ Write an async function `process_payment(order_id: &str, amount_cents: u64, card
 
 ### Exercise 2: Custom In-Memory Telemetry Layer for Unit Testing Log Events
 
-**Problem:** In mission-critical software, automated tests must verify that diagnostic warning and error events are correctly emitted when safety limits are exceeded. Because outputting to stdout via standard formatters (`tracing_subscriber::fmt`) is difficult to inspect in unit tests, you need a custom in-memory telemetry layer.
+**Scenario:** In mission-critical software, automated tests must verify that diagnostic warning and error events are correctly emitted when safety limits are exceeded. Because outputting to stdout via standard formatters (`tracing_subscriber::fmt`) is difficult to inspect in unit tests, you need a custom in-memory telemetry layer.
 
 Design an in-memory telemetry subscriber layer `EventCaptureLayer` that implements `tracing_subscriber::Layer`.
 1. Store captured log messages inside a thread-safe shared buffer `Arc<Mutex<Vec<String>>>`.
@@ -183,6 +201,9 @@ Design an in-memory telemetry subscriber layer `EventCaptureLayer` that implemen
 4. Write unit tests using `tracing_subscriber::Registry` and `tracing::subscriber::with_default` to execute `check_sensor_temperature` and assert (`assert_eq!`) that expected log entries are captured in memory.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::{Arc, Mutex};
 > use tracing::{info, warn, Event, Subscriber};
@@ -281,7 +302,8 @@ Design an in-memory telemetry subscriber layer `EventCaptureLayer` that implemen
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Custom Telemetry Layers (`tracing_subscriber::Layer`)**: By implementing `Layer`, you build composable subscriber pipeline components. `on_event` is called whenever a log event (`info!`, `warn!`, `error!`) is dispatched.
 > 2. **Field Visitor Pattern (`tracing::field::Visit`)**: Struct fields attached to tracing events are opaque. The visitor pattern inspects structured key-value payloads dynamically without allocating strings unless required.
 > 3. **Thread-Safe Log Capture (`Arc<Mutex<Vec<String>>>`)**: Shares an in-memory buffer across worker threads while preserving safety under concurrent telemetry events.
@@ -291,7 +313,7 @@ Design an in-memory telemetry subscriber layer `EventCaptureLayer` that implemen
 
 ### Exercise 3: Hierarchical Parent-Child Spans & Hardware Diagnostic Sweeps
 
-**Problem:** In an embedded edge gateway device, hardware diagnostics require running a multi-stage component sweep. Each sweep creates an overall root context (`hardware_sweep`) that encompasses individual child component diagnostic operations (`sensor_diagnostics`).
+**Scenario:** In an embedded edge gateway device, hardware diagnostics require running a multi-stage component sweep. Each sweep creates an overall root context (`hardware_sweep`) that encompasses individual child component diagnostic operations (`sensor_diagnostics`).
 
 Implement a structured diagnostic sweep function `perform_hardware_sweep(sweep_id: u64, sensors: &[SensorDevice]) -> SweepSummary`:
 1. Create a root span `hardware_sweep` with `Level::INFO`, capturing `sweep_id` and `component_count`.
@@ -302,6 +324,9 @@ Implement a structured diagnostic sweep function `perform_hardware_sweep(sweep_i
 6. Write unit tests with assertions (`assert_eq!`) verifying summary statistics under all-pass and mixed-failure sensor conditions.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use tracing::{span, Level, info, error};
 > 
@@ -404,7 +429,8 @@ Implement a structured diagnostic sweep function `perform_hardware_sweep(sweep_i
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Parent-Child Span Relationships**: When `child_span` is created while `_root_guard` is active, `tracing` automatically links `child_span` to `root_span` as its parent. Submitting logs inside `child_span` inherits parent metadata (`sweep_id`).
 > 2. **RAII Scope Management (`enter()`)**: `span.enter()` returns a guard (`Entered`). As long as `_root_guard` or `_child_guard` remains in scope, that span is active on the current thread. Dropping the guard exits the span.
 > 3. **Structured Field Formatting (`format_args!`)**: Key-value metadata on spans support dynamic formatting like `format_args!("0x{:02X}", address)` without needing allocation.

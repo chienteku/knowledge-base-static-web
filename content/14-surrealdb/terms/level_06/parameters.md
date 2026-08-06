@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (session & query parameter variables)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Parsed by the query compiler and SDK bindings. Parameters isolate raw values from executable AST nodes).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Constructing queries by dynamically concatenating user input strings into raw SQL strings creates severe security risks:
@@ -74,7 +73,7 @@ SELECT * FROM post WHERE author = $auth.id;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Concatenating strings in application code instead of using SDK parameter bindings
 
@@ -130,64 +129,92 @@ DEFINE PARAM $temp ON DATABASE VALUE 1; // ❌ Persists global schema parameter!
 LET $temp = 1; // Temporary script variable
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Parameter Assignment
+### Exercise 1: Using Built-in Session Parameters
 
-**Problem:** You are building an API endpoint to update product stock.
-Write the SurrealQL statements to:
-1. Declare a parameter `$item_id` set to `product:laptop`.
-2. Declare a parameter `$qty` set to `5`.
-3. Update the `product` record matching `$item_id`, adding `$qty` to its `stock` field using the addition assignment operator.
+**Scenario:**
+Inspect active session context parameters (`$session`, `$auth`, `$scope`) inside a client query.
 
-**Expected output:**
+**Requirements:**
+1. Select `$session.ns`, `$session.db`, and `$auth.id`.
+
 > [!check]- Answer
-> ```sql
-> LET $item_id = product:laptop;
-> LET $qty = 5;
-> 
-> UPDATE $item_id SET stock += $qty;
-> ```
-> - Define variables using the `LET` keyword and dollar sign prefix `$`.
-> - Target the parameter directly in the `UPDATE` clause.
-
----
-
-
-
-### Exercise 2: Defining Global Schema Parameter
-
-**Problem:** Define global database parameter `$APP_NAME` set to `"My Application"` using `DEFINE PARAM`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE PARAM $APP_NAME ON DATABASE VALUE "My Application";
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> DEFINE PARAM $APP_NAME ON DATABASE VALUE "My Application";
+> SELECT 
+>     $session.ns AS active_ns,
+>     $session.db AS active_db,
+>     $auth.id AS authenticated_user;
 > ```
 >
-> **Explanation:** `DEFINE PARAM $var ON DATABASE VALUE val` sets global database constants.
+> #### Technical Explanation
+>
+> 1. `$session` holds active connection session metadata (namespace, database, connection ID).
+> 2. `$auth` holds authenticated user record document context.
+> 3. Used inside table `PERMISSIONS` clauses to enforce row-level security.
 
 ---
 
-### Exercise 3: Parameterized SDK Query
+### Exercise 2: Defining Custom Script Parameters with `LET`
 
-**Problem:** Write JS SDK call executing `SELECT * FROM user WHERE role = $role` with parameter `{ role: "admin" }`.
+**Scenario:**
+Define custom parameters `$min_price` and `$max_price` to filter products dynamically.
 
-**Expected output:**
+**Requirements:**
+1. Define `LET $min_price = 10.00dec;`.
+2. Define `LET $max_price = 50.00dec;`.
+3. Filter `WHERE price >= $min_price AND price <= $max_price`.
+
 > [!check]- Answer
-> ```text
-> await db.query('SELECT * FROM user WHERE role = $role', { role: "admin" });
-> ```
-> ```javascript
-> await db.query('SELECT * FROM user WHERE role = $role', { role: "admin" });
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $min_price = 10.00dec;
+> LET $max_price = 50.00dec;
+> 
+> SELECT * FROM product 
+> WHERE price >= $min_price AND price <= $max_price;
 > ```
 >
-> **Explanation:** Parameterized SDK queries prevent SQL injection vulnerabilities.
+> #### Technical Explanation
+>
+> 1. Custom parameters (`$name`) store pre-evaluated expressions or literals.
+> 2. Prevents SQL injection risks by parameterizing query filters.
+> 3. Scoped to the current session or script execution context.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Modifying Session Scope with `USE` Parameters
+
+**Scenario:**
+Switch active session namespace and database context using `USE NS` and `USE DB`.
+
+**Requirements:**
+1. Switch to namespace `production` and database `main`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> USE NS production DB main;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `USE NS ... DB ...` updates active `$session.ns` and `$session.db` parameters.
+> 2. Targets subsequent queries to specified tenant scopes.
+> 3. Manages multi-tenant session contexts dynamically.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`LET` Statement](let_statement.md) — Defining query-scoped variables.
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
@@ -198,7 +225,7 @@ Write the SurrealQL statements to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Parameters in SurrealQL are identifiers prefixed with a dollar sign (`$param`).
 - Separates query execution logic from user-supplied raw values.
 - Prevents SurrealQL injection vulnerabilities across all client interfaces.

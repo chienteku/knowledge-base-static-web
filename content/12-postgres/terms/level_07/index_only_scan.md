@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Performance Concept**
+
+**Performance / Optimization** (Covered Index Scan): Index-Only Scan occurs when a query projects ONLY columns present in the index, retrieving data directly from the index without reading table heap pages.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Visible inside `EXPLAIN` outputs. Relies on the database's **Visibility Map** page status checks to ensure transaction visibility without reading physical heap pages).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In `seq_scan_vs_index_scan.md`, we learned that standard Index Scans suffer from a **Double Read Penalty**:
@@ -110,7 +111,7 @@ EXPLAIN SELECT email, username FROM staff WHERE email = 'bob@company.com';
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing Index-Only Scans will stay fast on tables with high write traffic without maintenance
 
@@ -156,67 +157,106 @@ SELECT id, email, bio FROM users WHERE email = 'a@ex.com'; -- ❌ Requires heap 
 SELECT id, email FROM users WHERE email = 'a@ex.com'; -- Covered Index Only Scan
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Covering Index Design
+### Exercise 1: Writing Queries Eligible for Index-Only Scans
 
-**Problem:** You have a `products` table (columns: `id` PRIMARY KEY, `sku_code` UNIQUE, `price` NUMERIC, `description` TEXT). Your homepage runs this query millions of times a day:
-`SELECT sku_code, price FROM products WHERE sku_code = 'XYZ-123';`
-Write the SQL query to build an optimized covering index that allows this search to run as an Index-Only Scan.
+**Scenario:**
+Create a composite index on `users(email, username)` and verify that selecting `username` where `email = 'alice@example.com'` executes an `Index-Only Scan`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE INDEX ON users(email, username)` and verify `EXPLAIN ANALYZE`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE UNIQUE INDEX idx_products_sku_covering 
-> ON products(sku_code) 
-> INCLUDE (price);
+> CREATE INDEX idx_users_email_username 
+> ON users (email, username);
+> 
+> EXPLAIN ANALYZE 
+> SELECT username 
+> FROM users 
+> WHERE email = 'alice@example.com';
 > ```
-> - The search column in the `WHERE` clause is `sku_code`. Put it in the primary index parameter.
-> - Use the `INCLUDE` clause to append the extra select column `price`.
+>
+> #### Technical Explanation
+>
+> 1. `Index-Only Scan` occurs when all projected columns in `SELECT` and filtered columns in `WHERE` exist within the index.
+> 2. PostgreSQL retrieves data directly from the B-tree index without reading table heap pages.
+> 3. Achieves maximum query execution speed and zero disk heap I/O.
+
+---
+
+### Exercise 2: Covering Queries with the INCLUDE Clause
+
+**Scenario:**
+Create a covering index on `orders(customer_id) INCLUDE (total_cents, status)` to support order summary dashboards via Index-Only Scans.
+
+**Requirements:**
+1. Execute `CREATE INDEX ON orders(customer_id) INCLUDE (total_cents, status)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE INDEX idx_orders_covering_customer 
+> ON orders (customer_id) 
+> INCLUDE (total_cents, status);
+> 
+> EXPLAIN ANALYZE 
+> SELECT total_cents, status 
+> FROM orders 
+> WHERE customer_id = 100;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INCLUDE` appends non-key payload attributes to the leaf nodes of the B-tree index.
+> 2. Enables Index-Only Scans without indexing payload columns for sorting or search boundaries.
+> 3. Modern covering index pattern.
+
+---
+
+### Exercise 3: Visibility Map Impact on Heap Fetches
+
+**Scenario:**
+Explain why `Index-Only Scan` output shows `Heap Fetches: 0` after running `VACUUM` on the table.
+
+**Requirements:**
+1. Explain PostgreSQL Visibility Map (VM) and MVCC row visibility checks.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Visibility Map & Index-Only Scan Relationship:
+> - PostgreSQL B-tree indexes do NOT store MVCC row visibility timestamps (xmin/xmax).
+> - To confirm a tuple is visible to the current transaction without checking the heap, PostgreSQL checks the Visibility Map (VM).
+> - If VM marks the table page as 'all-visible' (cleaned by VACUUM), Heap Fetches = 0!
+> - If VM page is not all-visible, PostgreSQL MUST fetch the heap page (Heap Fetches > 0).
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Visibility Map tracks whether all tuples on a table page are visible to all current and future transactions.
+> 2. Regular `VACUUM` maintenance keeps the Visibility Map updated, guaranteeing 0 heap fetches for Index-Only Scans.
+> 3. Core PostgreSQL architecture concept.
 
 ---
 
 
 
-### Exercise 2: Creating Covered Index with INCLUDE Clause
-
-**Problem:** Create covered index on `email` including `name` payload column using `INCLUDE (name)` in Postgres 11+.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE INDEX idx_users_email_inc ON users (email) INCLUDE (name);
-> ```
-> ```sql
-> CREATE INDEX idx_users_email_inc ON users (email) INCLUDE (name);
-> ```
->
-> **Explanation:** `INCLUDE (payload)` stores non-search payload attributes in index leaf nodes to enable Index Only Scans.
-
----
-
-### Exercise 3: Verifying Index Only Scan in Explain
-
-**Problem:** What node name in `EXPLAIN` indicates a fully covered index query? (`Index Only Scan`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Index Only Scan
-> ```
-> ```text
-> Index Only Scan
-> ```
->
-> **Explanation:** `Index Only Scan` proves that zero table heap pages were read from disk.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Sequential Scan vs. Index Scan](seq_scan_vs_index_scan.md) — The baseline scan options.
 - [`VACUUM` / `ANALYZE`](vacuum_analyze.md) — The maintenance tasks that clean visibility maps.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Index-Only Scan retrieves all selected data directly from the index file.
 - Bypasses disk read loops to the table heap, offering the fastest read speeds.
 - An index that contains all columns queried is called a Covering Index.

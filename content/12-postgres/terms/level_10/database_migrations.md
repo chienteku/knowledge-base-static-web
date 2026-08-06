@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Administration / Development Practice**
+
+**Administration / Operations** (Zero-Downtime Schema Migrations): Database Migrations manage version-controlled, zero-downtime schema evolution scripts across production environments.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported via programming frameworks like Knex, Prisma, Flyway, or Liquibase. Relies on a hidden tracking table inside the database schema to record deployment state history).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building a software application with a team of developers:
@@ -92,7 +93,7 @@ SELECT * FROM schema_migrations;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Editing a migration file that has already been committed and applied to production
 
@@ -140,70 +141,113 @@ ALTER TABLE users RENAME COLUMN username TO login_name; -- ❌ Breaks running ap
 Expand-contract migration pattern across zero-downtime releases
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Migration Script Design
+### Exercise 1: Version-Controlled Migration Scripts
 
-**Problem:** You need to add a required `bio` text column to the `users` table. Write the UP and DOWN SQL statements for the migration file.
+**Scenario:**
+Create a SQL migration script `V001__create_users_table.sql` with explicit transactional `UP` migration steps.
 
-**Expected output:**
+**Requirements:**
+1. Write DDL script inside transaction block.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> -- UP
-> ALTER TABLE users ADD COLUMN bio TEXT NOT NULL DEFAULT '';
+> -- V001__create_users_table.sql
+> BEGIN;
 > 
-> -- DOWN
-> ALTER TABLE users DROP COLUMN bio;
-> ```
-> - The UP statement alters the table to add the column.
-> - The DOWN statement must undo the change by dropping the same column.
-
----
-
-
-
-### Exercise 2: Migration Tracking Table Schema
-
-**Problem:** Create migration tracking table `schema_migrations` storing `version` string and `executed_at` timestamp.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TABLE schema_migrations ( version VARCHAR(255) PRIMARY KEY, executed_at TIMESTAMPTZ DEFAULT NOW() );
-> ```
-> ```sql
-> CREATE TABLE schema_migrations (
->   version VARCHAR(255) PRIMARY KEY,
->   executed_at TIMESTAMPTZ DEFAULT NOW()
+> CREATE TABLE users (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   username TEXT NOT NULL UNIQUE,
+>   email TEXT NOT NULL UNIQUE,
+>   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 > );
+> 
+> COMMIT;
 > ```
 >
-> **Explanation:** Migration tracking tables prevent re-applying completed database migrations.
+> #### Technical Explanation
+>
+> 1. Database migrations version-control DDL schema changes in code repositories.
+> 2. Wrapping DDL inside `BEGIN ... COMMIT` guarantees atomic schema migrations.
+> 3. If a migration step fails, `ROLLBACK` prevents partial broken schema states.
 
 ---
 
-### Exercise 3: Zero-Downtime Column Rename Pattern
+### Exercise 2: Automated Migrations using `node-pg-migrate` or Prisma/Drizzle
 
-**Problem:** State 3 phases of Expand-Contract zero-downtime column renames (1. Add new column; 2. Sync data & update app; 3. Drop old column).
+**Scenario:**
+Execute an online migration using TypeScript migration frameworks (`node-pg-migrate`).
 
-**Expected output:**
+**Requirements:**
+1. Write TypeScript `up()` and `down()` migration handlers.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { MigrationBuilder } from "node-pg-migrate";
+
+export async function up(pgm: MigrationBuilder): Promise<void> {
+  pgm.addColumn("users", {
+    is_verified: { type: "boolean", notNull: true, default: false }
+  });
+}
+
+export async function down(pgm: MigrationBuilder): Promise<void> {
+  pgm.dropColumn("users", "is_verified");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Migration tools track executed migration scripts in a `schema_migrations` catalog table.
+> 2. `up()` applies schema additions; `down()` provides automated rollback capabilities.
+> 3. Standardizes database versioning across deployment environments.
+
+---
+
+### Exercise 3: Zero-Downtime 4-Phase Schema Refactoring
+
+**Scenario:**
+Rename column `user_name` to `username` without application downtime using a 4-phase migration pattern.
+
+**Requirements:**
+1. Outline Phase 1 (Add column), Phase 2 (Dual write), Phase 3 (Backfill), Phase 4 (Drop old column).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. Add new column; 2. Sync data & update app; 3. Drop old column
-> ```
-> ```text
-> 1. Add new column; 2. Sync data & update app; 3. Drop old column
+> Zero-Downtime Column Rename Migration:
+> Phase 1: ADD COLUMN username TEXT; (No application code changes).
+> Phase 2: Deploy app updating dual-write to both user_name AND username.
+> Phase 3: Backfill old rows: UPDATE users SET username = user_name WHERE username IS NULL;
+> Phase 4: Deploy app reading from username only, then DROP COLUMN user_name;
 > ```
 >
-> **Explanation:** Expand-contract migration patterns eliminate application downtime during schema refactoring.
+> #### Technical Explanation
+>
+> 1. Renaming columns directly (`ALTER TABLE ... RENAME`) breaks active application servers using old column names.
+> 2. Dual-write phased migrations maintain backward and forward compatibility.
+> 3. Zero-downtime database deployment standard.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [`ALTER TABLE`](../level_06/alter_table.md) — The DDL queries.
 - [Managed PostgreSQL Services (Supabase, Neon, AWS RDS)](managed_services.md) — Related concept: Managed PostgreSQL Services (Supabase, Neon, AWS RDS).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Database Migrations version-control database structures using sequential files.
 - Ensures local, staging, and production databases share identical schemas.
 - `UP` migrations apply upgrades; `DOWN` migrations revert them.

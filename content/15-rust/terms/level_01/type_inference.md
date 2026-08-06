@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: Type inference is a feature found in many modern statically-typed languages (like Swift, Kotlin, and TypeScript) designed to give developers the safety of strict types with the clean, readable syntax of dynamic languages.
+
+
+**Rust Compiler Feature (Hindley-Milner type deduction)**: Type inference is a feature found in many modern statically-typed languages (like Swift, Kotlin, and TypeScript) designed to give developers the safety of strict types with the clean, readable syntax of dynamic languages.
 
 ---
 
@@ -144,7 +146,9 @@ thread::spawn(move || {
 **Scenario:**
 In a real-time financial exchange telemetry pipeline, incoming market trade execution logs are received as raw CSV string records in the format `"SYMBOL,PRICE,VOLUME"` (e.g., `"AAPL,150.25,100"`).
 
-**Problem:**
+**Scenario:** In production software engineering contexts, developers must handle complex system behaviors robustly.
+
+**Requirements:**
 Implement a robust log parser function `parse_trade_log(raw_records: &[&str]) -> Result<Vec<Trade>, TradeParseError>` that converts raw logs into structured `Trade` instances using iterator chains.
 Demonstrate how Rust's **bidirectional type inference** allows `str::parse()` calls inside closure transformations to automatically infer target scalar types (`f64` for price, `u64` for volume) based on struct field constraints, and how the turbofish operator `::<Result<Vec<_>, _>>()` guides collector allocation while short-circuiting on bad data.
 
@@ -248,9 +252,13 @@ Demonstrate how Rust's **bidirectional type inference** allows `str::parse()` ca
 **Scenario:**
 A microservice API gateway monitors request traffic latency (in microseconds) per endpoint and computes real-time summary statistics for health reporting.
 
-**Problem:**
-Build a `MetricAggregator` struct that tracks latency samples per endpoint in an internal map.
+**Scenario:** Build a `MetricAggregator` struct that tracks latency samples per endpoint in an internal map.
 Demonstrate how to leverage **partial type inference** using the wildcard `_` placeholder (e.g. `HashMap<String, Vec<_>>`), numeric literal suffixes (e.g. `0_u64`, `0.0_f64`), and iterator sum accumulator hints to aggregate streaming statistics (`total_samples`, `total_latency_us`, `average_latency_us`, `max_latency_us`) safely.
+
+**Requirements:**
+1. Implement the required data structures and logic.
+2. Ensure zero runtime panics and clean error handling.
+3. Include comprehensive unit tests.
 
 > [!check]- Answer
 >
@@ -363,7 +371,9 @@ Demonstrate how to leverage **partial type inference** using the wildcard `_` pl
 **Scenario:**
 An embedded rule evaluation engine parses Reverse Polish Notation (RPN) mathematical tokens into an evaluation stack to compute rule triggers dynamically.
 
-**Problem:**
+**Scenario:** In production software engineering contexts, developers must handle complex system behaviors robustly.
+
+**Requirements:**
 Implement a stack-based AST token evaluator `eval_postfix(tokens: &[Token]) -> Result<f64, EvalError>`.
 Demonstrate how initializing an empty local evaluation stack (`let mut stack = Vec::new()`) relies on **forward/backward type propagation** to deduce `Vec<f64>`, and contrast this local statement inference with Rust's strict **signature annotation boundary rule** requiring explicit types on function parameters and return types.
 

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Object / Abstraction Layer**
+
+**Advanced Feature** (Schema Stored Scalar/Table Functions): Stored Functions (`CREATE FUNCTION`) encapsulate reusable SQL or PL/pgSQL logic returning scalar values or table record sets.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Fully supported. Stored functions run inside the caller's active transaction block and **cannot** manage transactions natively (no `COMMIT` or `ROLLBACK` allowed inside the body)).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 SQL provides dozens of built-in functions like `LOWER()`, `ROUND()`, and `NOW()`.
@@ -106,7 +107,7 @@ SELECT name, get_discount_price(price, category) FROM products;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to run COMMIT or ROLLBACK statements inside a stored function
 
@@ -154,73 +155,115 @@ CREATE FUNCTION get_user(uid INT) RETURNS users AS $$ ... $$ LANGUAGE plpgsql ST
 Implement UI business logic in application code; use functions for heavy DB computations
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Initials Formatter Function
+### Exercise 1: Creating Scalar Stored Functions (`CREATE FUNCTION`)
 
-**Problem:** Write the SQL query to create a stored function named `get_initials` that accepts two text parameters (`first_name` and `last_name`) and returns a text containing their upper-case initials combined (e.g., input `'john'`, `'doe'` returns `'J.D.'`). Use the standard `sql` language.
+**Scenario:**
+Create a SQL stored function `calculate_tax(amount_cents NUMERIC)` returning 8% sales tax.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE OR REPLACE FUNCTION calculate_tax ...`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE FUNCTION get_initials(first_name TEXT, last_name TEXT)
-> RETURNS TEXT AS $$
->   SELECT UPPER(SUBSTRING(first_name FROM 1 FOR 1)) || '.' || UPPER(SUBSTRING(last_name FROM 1 FOR 1)) || '.';
-> $$ LANGUAGE sql;
+> CREATE OR REPLACE FUNCTION calculate_tax(p_amount_cents NUMERIC) 
+> RETURNS NUMERIC 
+> LANGUAGE SQL 
+> IMMUTABLE 
+> AS $$
+>   SELECT ROUND(p_amount_cents * 0.08, 2);
+> $$;
+> 
+> SELECT calculate_tax(1000); -- Returns 80.00
 > ```
-> - Use the `SUBSTRING` function to grab the first letter of each text string.
-> - Concatenate the strings using `||`.
-> - Wrap the output in `UPPER()`.
+>
+> #### Technical Explanation
+>
+> 1. `CREATE FUNCTION` encapsulates SQL calculations into a reusable schema function.
+> 2. `IMMUTABLE` informs the query planner that the function always returns the exact same result for given input arguments.
+> 3. Allows inline query optimization.
+
+---
+
+### Exercise 2: Creating Table-Valued Functions (`RETURNS TABLE`)
+
+**Scenario:**
+Create a stored function `get_active_orders_by_customer(cust_id INT)` returning a set of order records.
+
+**Requirements:**
+1. Use `RETURNS TABLE (order_id INT, total NUMERIC)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE OR REPLACE FUNCTION get_active_orders_by_customer(p_cust_id INTEGER) 
+> RETURNS TABLE (
+>   order_id INTEGER, 
+>   total_cents INTEGER, 
+>   created_at TIMESTAMPTZ
+> ) 
+> LANGUAGE SQL 
+> STABLE 
+> AS $$
+>   SELECT id, total_cents, created_at 
+>   FROM orders 
+>   WHERE customer_id = p_cust_id AND status = 'pending';
+> $$;
+> 
+> SELECT * FROM get_active_orders_by_customer(10);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `RETURNS TABLE (...)` defines a table-valued function returning multiple rows and columns.
+> 2. Invoked in SQL `FROM` clauses like a standard table relation.
+> 3. Encapsulates parameterized data retrieval.
+
+---
+
+### Exercise 3: Function Volatility Categories (`IMMUTABLE`, `STABLE`, `VOLATILE`)
+
+**Scenario:**
+Formulate a selection matrix explaining when to mark stored functions as `IMMUTABLE`, `STABLE`, or `VOLATILE`.
+
+**Requirements:**
+1. Contrast function volatility optimization impact.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Function Volatility Selection Matrix:
+> - IMMUTABLE: Pure math functions (e.g. 2 + 2, tax calculation). Never touches database tables! Can be used in Expression Indexes.
+> - STABLE: Reads database tables or configuration, but returns identical output within the SAME query (e.g. NOW(), table lookup).
+> - VOLATILE (Default): Modifies data (INSERT/UPDATE), uses random values (gen_random_uuid()), or side-effects. Cannot be in Expression Indexes!
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Correct volatility markings allow PostgreSQL to cache function evaluations within queries.
+> 2. `IMMUTABLE` functions can be used inside Expression Indexes.
+> 3. Crucial for function optimization.
 
 ---
 
 
 
-### Exercise 2: Function Volatility Categories
-
-**Problem:** List 3 function volatility categories in PostgreSQL (`VOLATILE`, `STABLE`, `IMMUTABLE`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> VOLATILE, STABLE, IMMUTABLE
-> ```
-> ```text
-> VOLATILE, STABLE, IMMUTABLE
-> ```
->
-> **Explanation:** Volatility categories inform the PostgreSQL query planner when function outputs can be cached.
-
----
-
-### Exercise 3: Table-Valued Stored Function
-
-**Problem:** Create stored function `get_active_users()` returning `TABLE (id INT, name TEXT)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE OR REPLACE FUNCTION get_active_users() RETURNS TABLE (id INT, name TEXT) AS $$ BEGIN RETURN QUERY SELECT u.id, u.name FROM users u WHERE u.active IS TRUE; END; $$ LANGUAGE plpgsql STABLE;
-> ```
-> ```sql
-> CREATE OR REPLACE FUNCTION get_active_users()
-> RETURNS TABLE (id INT, name TEXT) AS $$
-> BEGIN
->   RETURN QUERY SELECT u.id, u.name FROM users u WHERE u.active IS TRUE;
-> END;
-> $$ LANGUAGE plpgsql STABLE;
-> ```
->
-> **Explanation:** `RETURNS TABLE (...)` defines stored functions returning tabular row sets.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Stored Procedure (`CREATE PROCEDURE` / `CALL`)](stored_procedure.md) — The transaction-managing alternative.
 - [PL/pgSQL](plpgsql.md) — The procedural language layout.
 - [Trigger](trigger.md) — Related concept: Trigger.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Stored functions are reusable code blocks registered directly in the database.
 - Executable inline inside standard SELECT statements.
 - Can accept parameters and return single scalar values or tables.

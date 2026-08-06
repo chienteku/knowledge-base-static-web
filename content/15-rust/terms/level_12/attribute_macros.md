@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Syntax / Language Feature**: Attribute Macros are a specific flavor of procedural macros in Rust. Unlike derive macros (which can only generate *additional* code alongside structs, enums, or unions), attribute macros can attach to almost any item (functions, structs, modules, trait definitions, and statements), consume both the attribute arguments and the target item, and completely rewrite, wrap, or replace the item in place.
+
+
+**Rust Procedural Macro (custom item attribute code generator)**: Attribute Macros are a specific flavor of procedural macros in Rust. Unlike derive macros (which can only generate *additional* code alongside structs, enums, or unions), attribute macros can attach to almost any item (functions, structs, modules, trait definitions, and statements), consume both the attribute arguments and the target item, and completely rewrite, wrap, or replace the item in place.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust (Compile-time Execution)**: Attribute macros run on the host compiler during `rustc` compilation. They are extensively used across ecosystems, notably in web frameworks (e.g. `#[actix_web::get("/")]`), async runtimes (e.g. `#[tokio::main]`), test runners (e.g. `#[rstest]`), and WebAssembly bindings (`#[wasm_bindgen]`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -116,7 +114,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting Original Item Code to Persist when Not Returned in TokenStream
 
@@ -186,14 +184,17 @@ async fn main() {}
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Embedded Telemetry Execution Tracing Attribute Macro
 
-**Problem:** In an embedded IoT system monitoring industrial sensor telemetry, functions such as `read_sensor_adc` need automated execution timing, call counting, and metric tracking without cluttering core control logic with boilerplate code.
+**Scenario:** In an embedded IoT system monitoring industrial sensor telemetry, functions such as `read_sensor_adc` need automated execution timing, call counting, and metric tracking without cluttering core control logic with boilerplate code.
 Design an attribute macro pattern `#[trace_execution(target = "ADC_SENSOR")]` that intercepts function invocation, records execution tick duration, updates global telemetry metrics, and returns the original function result intact. Provide the macro parsing structure (using `syn`/`quote` token processing concepts) alongside the complete expanded, compilable Rust code and unit tests with assertions (`assert_eq!`, `assert!`) demonstrating correctness.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > // Proc-macro crate definition (proc_macro_crate/src/lib.rs):
 > /*
@@ -307,7 +308,8 @@ Design an attribute macro pattern `#[trace_execution(target = "ADC_SENSOR")]` th
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **TokenStream Arguments**: Attribute macros receive two input streams: `attr` (capturing attribute parameters like `target = "ADC_SENSOR"`) and `item` (capturing the AST of `fn read_sensor_adc(...)`).
 > 2. **AST Parsing via `syn`**: `syn::parse_macro_input!(item as ItemFn)` deconstructs the function into visibility (`vis`), signature (`sig`), identifier (`ident`), and body block (`block`).
 > 3. **Body Rewriting via `quote!`**: Unlike derive macros which can only append new `impl` blocks, attribute macros replace the target item completely. The macro synthesizes a wrapper function block that captures start ticks before invoking `#fn_body` and logs elapsed metrics to `GLOBAL_TELEMETRY` before returning `#result`.
@@ -317,11 +319,14 @@ Design an attribute macro pattern `#[trace_execution(target = "ADC_SENSOR")]` th
 
 ### Exercise 2: API Gateway Rate-Limiting Route Decorator
 
-**Problem:** In a web microservice, public API routes must enforce quota rate limiting (e.g., maximum 3 requests per IP key) to prevent denial-of-service or credential brute-forcing.
+**Scenario:** In a web microservice, public API routes must enforce quota rate limiting (e.g., maximum 3 requests per IP key) to prevent denial-of-service or credential brute-forcing.
 Design an attribute macro `#[rate_limit(max_requests = 3)]` that parses attribute quota configurations from `attr`, inspects route handler `item`, and wraps the function so that calling `fetch_user_profile(client_ip: &str, user_id: u64)` evaluates client quota against a thread-safe rate limiter before executing the handler. If quota is exceeded, the rewritten function returns `Err(ApiError::RateLimitExceeded)` immediately.
 Provide the procedural macro definition pattern, complete compilable Rust code, and unit tests with assertions (`assert_eq!`, `assert!`) verifying rate limiting enforcement.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > // Proc-macro crate definition (proc_macro_crate/src/lib.rs):
 > /*
@@ -424,7 +429,8 @@ Provide the procedural macro definition pattern, complete compilable Rust code, 
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Attribute Token Parsing**: Attribute arguments (`attr`) are parsed into custom macro configuration values (`max_requests = 3`), configuring security limits at compile time.
 > 2. **Short-Circuit Early Return Control Flow**: The attribute macro replaces the handler body with early-checking control flow (`if !LIMITER.check_and_consume(...) { return Err(...); }`). If quota checks fail, execution returns immediately without expending CPU resources on business logic.
 > 3. **Preserving Return Types**: The transformed function retains its exact parameter signature (`client_ip: &str`, `user_id: u64`) and error return types (`Result<String, ApiError>`), integrating seamlessly with web framework registries.
@@ -434,11 +440,14 @@ Provide the procedural macro definition pattern, complete compilable Rust code, 
 
 ### Exercise 3: Memory-Mapped Hardware Register Attribute Macro
 
-**Problem:** In `#![no_std]` microcontroller embedded driver development, hardware peripheral control registers reside at fixed physical memory addresses (e.g. USART control register at address `0x4000_1000`). Performing raw pointer arithmetic and bit shifts (`0x1 << 4`) manually is unsafe and error-prone.
+**Scenario:** In `#![no_std]` microcontroller embedded driver development, hardware peripheral control registers reside at fixed physical memory addresses (e.g. USART control register at address `0x4000_1000`). Performing raw pointer arithmetic and bit shifts (`0x1 << 4`) manually is unsafe and error-prone.
 Design an attribute macro `#[register_mapped(address = 0x4000_1000)]` attached to a struct `UsartControlReg` that consumes struct field definitions and generates atomic bitfield manipulation accessors (`set_enable()`, `set_baud_prescaler()`).
 Provide the macro AST generation design, full compilable Rust code simulating memory-mapped hardware access, and unit tests with assertions (`assert_eq!`, `assert!`) verifying bitmasking and register field operations.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > // Proc-macro crate definition (proc_macro_crate/src/lib.rs):
 > /*
@@ -540,7 +549,8 @@ Provide the macro AST generation design, full compilable Rust code simulating me
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Targeting Structs**: Attribute macros can be applied to structs (`syn::ItemStruct`) as well as functions. The macro parses struct fields to extract bitfield offsets and access properties.
 > 2. **Replacing Data Layouts**: The attribute macro replaces the original struct declaration with a hardware register pointer wrapper equipped with bit masking constants and accessor methods.
 > 3. **Encapsulating Unsafe Pointer Access**: Volatile memory reads and writes require `unsafe` blocks. Attribute macros encapsulate unsafe pointer dereferencing within safe, strongly-typed Rust helper methods (`set_enable`, `set_baud_prescaler`), preventing low-level safety bugs in user code.
@@ -548,7 +558,7 @@ Provide the macro AST generation design, full compilable Rust code simulating me
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Procedural Macros](procedural_macros.md) — The parent macro category encompassing attribute, derive, and function-like macros.
@@ -558,7 +568,7 @@ Provide the macro AST generation design, full compilable Rust code simulating me
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Attribute Macros are procedural macros defined with `#[proc_macro_attribute]`.
 - They are invoked as outer attributes `#[my_macro(...)]` directly on functions, structs, modules, or statements.

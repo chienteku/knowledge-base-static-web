@@ -160,9 +160,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Asynchronous Distributed Microservice Architecture Documentation
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 You are architecting a distributed microservice framework for real-world transaction streaming. At the crate root (`src/lib.rs`) and within subsystem modules (`mod telemetry`), you must author comprehensive module-level inner doc comments (`//!`) outlining architectural design decisions, concurrency guarantees, and usage examples.
 
+**Requirements:**
 Requirements:
 1. Write crate-level inner doc comments (`//!`) in `src/lib.rs` detailing module organization and async engine setup.
 2. Implement `TransactionPipeline` with `process_event` handling state mutation.
@@ -171,6 +172,9 @@ Requirements:
 5. In `#[cfg(test)] mod tests`, write unit tests verifying pipeline event processing, metric counters, and thread safety assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > //! # Distributed Microservice Event Pipeline Engine
 > //!
@@ -300,9 +304,10 @@ Requirements:
 
 ### Exercise 2: Embedded Hardware HAL Driver Module Documentation
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 You are developing an embedded hardware abstraction layer (HAL) driver for a memory-mapped serial peripheral (UART). Embedded drivers require top-level module documentation (`//!`) specifying peripheral register maps, clock speed requirements, and interrupt safety rules.
 
+**Requirements:**
 Requirements:
 1. Write module-level inner doc comments (`//!`) at the top of the file describing UART MMIO control registers and baud rate calculations.
 2. Define a `UartConfig` struct with `baud_rate: u32` and `parity: bool`.
@@ -311,6 +316,9 @@ Requirements:
 5. In `#[cfg(test)] mod tests`, write unit tests testing buffer overflow, baud rate initialization, and byte read/write assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > //! # Embedded UART MMIO Peripheral Driver
 > //!
@@ -422,9 +430,10 @@ Requirements:
 
 ### Exercise 3: Plug-in Architecture & Dynamic Extension Registry
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 You are constructing a modular plugin system for an extensible enterprise gateway. The core crate requires module-level inner doc comments (`//!`) describing how custom plugins implement standard traits and register themselves with the engine.
 
+**Requirements:**
 Requirements:
 1. Write top-level inner doc comments (`//!`) explaining plugin lifecycle hooks (`init`, `execute`, `shutdown`).
 2. Define a `Plugin` trait with `name(&self) -> &str`, `execute(&self, data: &str) -> String`.
@@ -433,6 +442,9 @@ Requirements:
 5. In `#[cfg(test)] mod tests`, write unit tests verifying plugin execution order, trait dynamic dispatch, and output assertions (`assert_eq!`, `assert!`, `assert_ne!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > //! # Dynamic Extension & Plugin Registry Engine
 > //!

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Function / Type**
+
+**SQL Command / Clause** (Temporal Manipulation Functions): Date/Time functions (`NOW()`, `CURRENT_TIMESTAMP`, `DATE_TRUNC()`, `AGE()`) manipulate and format calendar timestamps.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Calculations run on optimized database system clocks. Interval results are stored using specialized PostgreSQL internal interval binary layouts).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Timestamps are stored as binary counts. To make them useful, you need tools to calculate date ranges and extract information:
@@ -97,7 +98,7 @@ FROM students;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming NOW() updates its clock during long transactions
 
@@ -143,64 +144,103 @@ SELECT EXTRACT(YEAR FROM NOW()) + ' string'; -- ❌ Type mismatch double precisi
 SELECT EXTRACT(YEAR FROM NOW())::INT AS year_num;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Birthday Month Extraction
+### Exercise 1: Truncating Timestamps into Daily/Monthly Buckets with `DATE_TRUNC`
 
-**Problem:** You want to send marketing discount emails to users during their birthday month. Write a SQL query that retrieves the `username` and `email` of all users whose birthday month (`date_of_birth` column) matches the current calendar month.
+**Scenario:**
+Group sales orders into 1-month date buckets using `DATE_TRUNC('month', created_at)`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT DATE_TRUNC('month', created_at) AS month_bucket, SUM(total_cents) FROM orders GROUP BY month_bucket`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT username, email 
-> FROM users 
-> WHERE EXTRACT(MONTH FROM date_of_birth) = EXTRACT(MONTH FROM NOW());
+> SELECT 
+>   DATE_TRUNC('month', created_at) AS sales_month,
+>   COUNT(*) AS total_orders,
+>   SUM(total_cents) / 100.0 AS monthly_revenue 
+> FROM orders 
+> GROUP BY sales_month 
+> ORDER BY sales_month DESC;
 > ```
-> - Use the `EXTRACT` function on the birthday column and the current time `NOW()`.
-> - Compare the two numeric month outputs using the `=` operator.
+>
+> #### Technical Explanation
+>
+> 1. `DATE_TRUNC('unit', timestamp)` truncates a timestamp to the specified precision (e.g. `'day'`, `'month'`, `'year'`).
+> 2. Groups all orders occurring within the same calendar month into a single bucket.
+> 3. Standard date aggregation function for reporting.
+
+---
+
+### Exercise 2: Calculating Age Intervals with `AGE`
+
+**Scenario:**
+Calculate a user's exact age in years, months, and days based on `birth_date`.
+
+**Requirements:**
+1. Use `AGE(CURRENT_DATE, birth_date)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   id, 
+>   username, 
+>   birth_date, 
+>   AGE(CURRENT_DATE, birth_date) AS user_age 
+> FROM users;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `AGE(timestamp1, timestamp2)` calculates the exact difference between two dates as an `INTERVAL`.
+> 2. Accounts for leap years and variable calendar month lengths.
+> 3. Returns formatted interval objects (`"25 years 3 mons 12 days"`).
+
+---
+
+### Exercise 3: Timezone Formatting with `AT TIME ZONE`
+
+**Scenario:**
+Convert UTC timestamps stored in `created_at` to `'America/New_York'` local time for UI display.
+
+**Requirements:**
+1. Use `created_at AT TIME ZONE 'America/New_York'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   id, 
+>   created_at AS utc_time,
+>   created_at AT TIME ZONE 'America/New_York' AS ny_local_time 
+> FROM audit_logs;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `AT TIME ZONE 'tz_name'` shifts a `TIMESTAMPTZ` UTC timestamp to the target local timezone.
+> 2. Handles Daylight Saving Time (DST) adjustments automatically.
+> 3. Essential for localized client dashboard reporting.
 
 ---
 
 
 
-### Exercise 2: Date Truncation with `DATE_TRUNC`
-
-**Problem:** Truncate timestamp column `created_at` to the start of the month using `DATE_TRUNC('month', created_at)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT DATE_TRUNC('month', created_at) AS month_start FROM orders;
-> ```
-> ```sql
-> SELECT DATE_TRUNC('month', created_at) AS month_start FROM orders;
-> ```
->
-> **Explanation:** `DATE_TRUNC(unit, timestamp)` rounds timestamps down to specified interval boundaries.
-
----
-
-### Exercise 3: Interval Arithmetic for Date Expiry
-
-**Problem:** Calculate expiry timestamp 30 days into the future from `NOW()` using interval arithmetic.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT NOW() + INTERVAL '30 days' AS expires_at;
-> ```
-> ```sql
-> SELECT NOW() + INTERVAL '30 days' AS expires_at;
-> ```
->
-> **Explanation:** Adding `INTERVAL 'N unit'` performs exact date arithmetic operations.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`DATE` / `TIME` / `TIMESTAMP` / `TIMESTAMPTZ`](../level_02/date_time_types.md) — The parent temporal types.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Date/Time functions perform server-side calculations on temporal data.
 - `NOW()` returns the start timestamp of the current transaction block.
 - Use `INTERVAL` to easily add or subtract units of time (e.g. `- INTERVAL '30 days'`).

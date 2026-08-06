@@ -177,9 +177,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Tier Microservice Error Hierarchy & Transparent `From` Conversion
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In a high-throughput network gateway microservice, binary network packets are validated and written to a storage engine. Failures can occur at the protocol level (invalid header, checksum mismatch), the storage layer (record not found, capacity exceeded, underlying file I/O failure), or the gateway security layer (unauthorized client ID).
 
+**Requirements:**
 Design a hierarchical error handling architecture:
 1. Define a `StorageError` enum with variants: `NotFound { record_id: u64 }`, `CapacityExceeded { limit: usize, current: usize }`, and `Io(std::io::Error)`.
 2. Define a `ProtocolError` enum with variants: `InvalidHeader { byte: u8 }` and `ChecksumMismatch { expected: u32, actual: u32 }`.
@@ -426,9 +427,10 @@ Design a hierarchical error handling architecture:
 
 ### Exercise 2: Contextual Rich Error Struct with Source Chaining & Thread Safety
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In an algorithmic order execution engine, error reporting requires rich transaction metadata (such as order ID, failure category, retryability flags, and an optional underlying cause). Simple unit enums lack the capacity to attach dynamic metadata and nested cause chains across asynchronous execution boundaries.
 
+**Requirements:**
 Construct a production-ready struct-based error type:
 1. Define an `OrderErrorKind` enum with variants: `InsufficientLiquidity { symbol: String, requested: u64, available: u64 }`, `AccountFrozen { account_id: String }`, `ExecutionTimeout { elapsed_ms: u64 }`, and `InternalFault`.
 2. Define an `OrderError` struct containing `order_id: String`, `kind: OrderErrorKind`, `source: Option<Box<dyn Error + Send + Sync + 'static>>`, and `is_retryable: bool`.
@@ -627,9 +629,10 @@ Construct a production-ready struct-based error type:
 
 ### Exercise 3: Dynamic Config Loader with Parsing & Validation Error Diagnostics
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 Applications often parse dynamic key-value configuration inputs where failures stem from missing required parameters, malformed numeric string values, invalid operational thresholds, or system I/O errors.
 
+**Requirements:**
 Build a complete configuration parsing error domain:
 1. Define a `ConfigError` enum with variants: `Io(std::io::Error)`, `ParseInt { key: String, source: std::num::ParseIntError }`, `MissingKey(String)`, and `ValidationFailed { key: String, reason: String }`.
 2. Implement `std::fmt::Display` providing detailed context for each variant.

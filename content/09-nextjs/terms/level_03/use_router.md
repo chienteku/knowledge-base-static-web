@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing / Navigation Hook**
+
+**Routing & Layouts** (Client Navigation Router Hook): `useRouter()` provides programmatic client-side navigation methods (`push`, `replace`, `prefetch`, `back`) inside Client Components.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Component ONLY**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 The `<Link>` component is perfect when you have a piece of text or a button that the user *clicks* to go somewhere. 
@@ -59,7 +60,7 @@ export default function LoginForm() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Importing from `next/router`
 
@@ -118,84 +119,146 @@ export default async function Page() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Server-Side Redirection
+### Exercise 1: Programmatic Navigation with `useRouter()`
 
-**Problem:** You are inside a Server Component (`page.tsx`), not a Client Component. You check the database, realize the user is not logged in, and want to redirect them. You cannot use `useRouter()` because hooks don't work on the server. What do you do?
+**Scenario:**
+Perform programmatic navigation to `/dashboard` upon form submission using `useRouter().push()`.
 
-**Expected output:**
+**Requirements:**
+1. Import `useRouter` from `next/navigation` inside `"use client"` component.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> // You use the `redirect()` function provided by Next.js!
-> import { redirect } from 'next/navigation';
-> 
-> export default async function Dashboard() {
->   const user = await getUser();
->   if (!user) {
->     redirect('/login'); // This throws a special error that Next.js catches and turns into a 307 redirect HTTP response!
->   }
->   return <div>Welcome!</div>;
-> }
-> ```
-> - There is a specific server-side function for this, covered in Level 4!
+> "use client";
+
+import { useRouter } from "next/navigation";
+
+export default function LoginForm() {
+  const router = useRouter();
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    // Perform login API request...
+    router.push("/dashboard");
+  }
+
+  return (
+    <form onSubmit={handleLogin} className="p-4">
+      <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
+        Log In
+      </button>
+    </form>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `useRouter()` MUST be imported from `next/navigation` in App Router (NOT `next/router`).
+> 2. `router.push('/dashboard')` performs client-side SPA navigation to the target route.
+> 3. Must be used inside Client Components marked with `"use client"`.
 
 ---
 
-### Exercise 2: useRouter Navigation Methods Matrix
+### Exercise 2: Refreshing Server Component Data with `router.refresh()`
 
-**Problem:** Match `useRouter()` method to action:
-1. `router.push('/dashboard')` 
-2. `router.replace('/login')` 
-3. `router.refresh()` 
-4. `router.back()` 
+**Scenario:**
+Trigger a server data re-fetch after mutating data on the client using `router.refresh()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `router.refresh()` in event handler.
+
 > [!check]- Answer
-> ```text
-> 1. Navigates to target route adding new entry to browser history
-> 2. Navigates to target route replacing current entry in browser history
-> 3. Refreshes current route data by re-fetching Server Components from server
-> 4. Navigates back 1 step in browser history stack
-> ```
-> - `push()` -> Add history entry
-> - `replace()` -> Overwrite history entry
-> - `refresh()` -> Re-fetch server component data
-> - `back()` -> Step back in history
-> 
-> ```typescript
-> const router = useRouter();
-> router.push('/dashboard');
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { useRouter } from "next/navigation";
+
+export default function RefreshButton() {
+  const router = useRouter();
+
+  function handleRefresh() {
+    // Re-executes Server Component data fetches on the server
+    router.refresh();
+  }
+
+  return (
+    <button onClick={handleRefresh} className="px-3 py-1 bg-gray-200 rounded">
+      Refresh Live Data
+    </button>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `router.refresh()` requests updated Server Component flight data from the server without losing client React state.
+> 2. Re-renders Server Components on the server and merges results into the active view.
+> 3. Standard method for invalidating server-rendered UI from Client Components.
 
 ---
 
-### Exercise 3: router.refresh Data Preserving Feature
+### Exercise 3: Pre-Fetching Routes Programmatically
 
-**Problem:** What advantage does `router.refresh()` offer over `window.location.reload()`?
+**Scenario:**
+Pre-fetch the heavy `/admin` route on button hover using `router.prefetch()`.
 
-**Expected output:**
+**Requirements:**
+1. Call `router.prefetch("/admin")` inside `onMouseEnter` handler.
+
 > [!check]- Answer
-> ```text
-> router.refresh() re-fetches Server Component data from the server while preserving client React state (e.g. form inputs, scroll position).
-> ```
-> - `router.refresh()` updates server data without wiping client React state.
-> 
-> ```typescript
-> router.refresh(); // Soft server data re-fetch
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { useRouter } from "next/navigation";
+
+export default function HoverLink() {
+  const router = useRouter();
+
+  return (
+    <button
+      onMouseEnter={() => router.prefetch("/admin")}
+      onClick={() => router.push("/admin")}
+      className="px-4 py-2 bg-purple-600 text-white rounded"
+    >
+      Go to Admin Panel
+    </button>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `router.prefetch(path)` pre-loads target route JavaScript and Server Component chunks in the background.
+> 2. Speeds up subsequent `router.push()` navigation execution.
+> 3. Programmatic optimization pattern for custom button navigation.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`<Link>` Component](link.md) — The preferred way to navigate when no programmatic logic is required.
 - [`redirect()` & `permanentRedirect()`](../level_04/redirect.md) — The Server Component equivalent of `useRouter`.
 - [`usePathname` & `useSearchParams`](../level_04/use_pathname.md) — Related concept: `usePathname` & `useSearchParams`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`useRouter()`** allows you to navigate programmatically inside Client Components using `router.push()` or `router.replace()`.
 - It MUST be imported from `next/navigation` when working in the App Router.
 - It requires the `"use client"` directive.

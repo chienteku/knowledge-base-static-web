@@ -150,9 +150,10 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Frequency Financial Ledger Engine with Fail-Safe Arithmetic
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In high-frequency financial platforms or banking ledgers, arithmetic correctness is non-negotiable. A standard addition or subtraction with `+` or `-` on balances expressed in fixed-point cents (`u64`) could result in catastrophic overflow panics during debug testing or silent wraps in release deployments (e.g., spending $100 with a $50 balance wrapping to ~$18.4 quintillion dollars).
 
+**Requirements:**
 Design a production-grade `AccountLedger` system in Rust that handles:
 1. `deposit` and `withdraw` operations using `checked_add` and `checked_sub` returning a custom `Result<u64, LedgerError>` type (with variants `BalanceOverflow`, `InsufficientBalance`).
 2. A `calculate_loyalty_rewards` function using `saturating_mul` and `saturating_add`, guaranteeing that calculated rewards clamp at `u64::MAX` rather than causing runtime errors or wrapping.
@@ -286,9 +287,10 @@ Design a production-grade `AccountLedger` system in Rust that handles:
 
 ### Exercise 2: Network Protocol Sequence Framer & Internet Checksum Engine
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In network transport protocols (such as custom UDP streaming protocols or sliding window protocol implementations), 32-bit packet sequence numbers roll over deliberately upon reaching `0xFFFFFFFF` (`u32::MAX`). Standard addition using `+` panics in debug builds when wraparound occurs. Additionally, network packet checksum algorithms (like the Internet Checksum RFC 1071) accumulate 16-bit payload words and fold over 16-bit overflow carries.
 
+**Requirements:**
 Design a production-grade network stream component featuring:
 1. A `PacketSequenceTracker` that increments sequence numbers deterministically across wrap boundaries using `wrapping_add`, and calculates distance between sequence numbers using `wrapping_sub`.
 2. A `ChecksumCalculator` that processes byte slices and uses `overflowing_add` to detect 16-bit word addition overflows and perform carry fold-over.
@@ -428,11 +430,12 @@ Design a production-grade network stream component featuring:
 
 ### Exercise 3: Embedded IoT Telemetry Rate Limiter & Token Bucket Pipeline
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In embedded systems, microcontrollers operate continuously for long durations where timer ticks and byte counters hit fixed bit-width boundaries.
 1. A rate-limiting `TokenBucketRateLimiter` uses fixed-size token counters (`u32`). When refilling tokens based on elapsed millisecond ticks, token additions must use `saturating_add` to prevent overflowing the maximum capacity. Token consumption must use `saturating_sub` to clamp at 0 without underflowing.
 2. A hardware telemetry aggregator receives byte counts from sensor interrupts. It needs to compute total byte output and report overflow events using `overflowing_add` so telemetry systems track register roll-over counts while maintaining raw wrapped offsets.
 
+**Requirements:**
 Design a production-grade embedded rate limiter and telemetry tracking pipeline in Rust.
 
 > [!check]- Answer

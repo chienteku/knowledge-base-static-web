@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Performance / Operations (multi-column composite index definition)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the B-Tree index engine. Orders keys using a compound tuple structure `(val1, val2)` on disk).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In multi-tenant or multi-attribute applications, queries frequently filter by multiple fields simultaneously:
@@ -86,7 +85,7 @@ SELECT * FROM order WHERE status = "shipped"; -- Full table scan!
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing secondary or rare search columns first in the composite column list, breaking prefix optimization for primary searches
 
@@ -142,58 +141,95 @@ DEFINE INDEX idx2 ON TABLE user FIELDS status;
 DEFINE INDEX idx_composite ON TABLE user FIELDS tenant, status;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Composite Index Formulation
+### Exercise 1: Multi-Column Composite Index Definition
 
-**Problem:** You have a `posts` table. Your API runs this query thousands of times per minute:
-`SELECT * FROM posts WHERE author = $user_id AND published = true ORDER BY created_at DESC;`
-Write the SurrealQL statement to create the optimal composite index named `idx_author_published_date`.
+**Scenario:**
+An e-commerce query frequently filters product listings by `category` and `status` simultaneously. Create a composite index to accelerate multi-field queries.
 
-**Expected output:**
+**Requirements:**
+1. Define table `product` as `SCHEMAFULL`.
+2. Define composite index `idx_cat_status` covering columns `category` and `status`.
+3. Write a query filtering by both fields to leverage the index.
+
 > [!check]- Answer
-> ```sql
-> DEFINE INDEX idx_author_published_date ON posts COLUMNS author, published, created_at;
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE product SCHEMAFULL;
+> DEFINE FIELD category ON TABLE product TYPE string;
+> DEFINE FIELD status ON TABLE product TYPE string;
+> 
+> -- Define multi-column composite index
+> DEFINE INDEX idx_cat_status ON TABLE product COLUMNS category, status;
+> 
+> -- Query leveraging composite index
+> SELECT * FROM product WHERE category = "electronics" AND status = "available";
 > ```
-> - Order the columns matching the filter and sort query pattern: `author`, `published`, `created_at`.
+>
+> #### Technical Explanation
+>
+> 1. Composite indexes (`COLUMNS col1, col2`) index multi-field combinations together in a single B-tree index structure.
+> 2. Accelerates queries containing multi-field `WHERE` clause filters.
+> 3. Column order in index definition (`category, status`) determines index prefix matching rules.
+
+---
+
+### Exercise 2: Left-Prefix Matching Evaluation
+
+**Scenario:**
+Evaluate whether `idx_cat_status` (covering `category, status`) can optimize a query filtering ONLY on `category`.
+
+**Requirements:**
+1. Execute `SELECT * FROM product WHERE category = "electronics";`.
+2. State whether left-prefix index matching applies.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT * FROM product WHERE category = "electronics";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Composite B-tree indexes support left-prefix matching, optimizing queries on the leading column (`category`).
+> 2. Queries filtering ONLY on the secondary column (`status`) cannot utilize the composite index effectively.
+> 3. Reduces the need for separate single-column indexes on leading fields.
+
+---
+
+### Exercise 3: Composite Index Overwrites with `OVERWRITE`
+
+**Scenario:**
+Update `idx_cat_status` to include a third column `price` using `DEFINE INDEX OVERWRITE`.
+
+**Requirements:**
+1. Write `DEFINE INDEX OVERWRITE idx_cat_status ON TABLE product COLUMNS category, status, price`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE INDEX OVERWRITE idx_cat_status ON TABLE product 
+>     COLUMNS category, status, price;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `OVERWRITE` updates existing index definitions idempotently without prior `REMOVE INDEX` calls.
+> 2. Rebuilds index pages in the background.
+> 3. Facilitates schema index tuning in CI/CD migration scripts.
 
 ---
 
 
 
-### Exercise 2: Defining Composite Index
-
-**Problem:** Define composite index `order_tenant_date` on `order` table covering `tenant_id` and `created_at`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX order_tenant_date ON TABLE order FIELDS tenant_id, created_at;
-> ```
-> ```surrealql
-> DEFINE INDEX order_tenant_date ON TABLE order FIELDS tenant_id, created_at;
-> ```
->
-> **Explanation:** Composite indexes optimize multi-column filter and sort queries.
-
----
-
-### Exercise 3: Composite Unique Index Enforcement
-
-**Problem:** Define unique composite index on `organization_id` and `slug` fields of `project` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX project_org_slug ON TABLE project FIELDS organization_id, slug UNIQUE;
-> ```
-> ```surrealql
-> DEFINE INDEX project_org_slug ON TABLE project FIELDS organization_id, slug UNIQUE;
-> ```
->
-> **Explanation:** Composite unique indexes enforce uniqueness across multi-field combinations.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [Unique Index](unique_index.md) — Composite unique constraints.
@@ -201,7 +237,7 @@ Write the SurrealQL statement to create the optimal composite index named `idx_a
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Composite indexes combine multiple fields (`COLUMNS col1, col2, col3`).
 - Relational equivalent to PostgreSQL compound indexes; NoSQL equivalent to MongoDB compound indexes.
 - Left-to-right prefix rule: queries must include the leftmost column to use the index.

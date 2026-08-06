@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing / UI Architecture**
+
+**Routing & Layouts** (Instant Loading UI Component): `loading.tsx` wraps route segment pages in React `<Suspense>` boundaries to stream instant fallback loading skeletons during data fetching.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern Next.js, your `page.tsx` is usually an `async` Server Component. 
@@ -57,7 +58,7 @@ Because of this, the Layout (`layout.tsx`) remains fully interactive while the `
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting the `await` in the Layout instead of the Page
 
@@ -109,65 +110,115 @@ export default function Loading() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Nested Loading States
+### Exercise 1: Creating Route Loading Skeletons with `loading.tsx`
 
-**Problem:** You have `app/loading.tsx` (a generic spinner) and `app/dashboard/loading.tsx` (a dashboard skeleton). If the user navigates to `/dashboard`, which loading state is shown?
+**Scenario:**
+Create `app/dashboard/loading.tsx` to render a skeleton UI while dashboard data loads.
 
-**Expected output:**
+**Requirements:**
+1. Export default React component in `loading.tsx`.
+
 > [!check]- Answer
-> ```text
-> The `app/dashboard/loading.tsx` is shown.
-> Next.js always uses the closest, most specific `loading.tsx` file to the page being rendered. This allows you to have highly specific loading skeletons for different parts of your app.
-> ```
-> - React Suspense boundaries catch the closest thrown promise.
-
----
-
-### Exercise 2: loading.tsx Skeleton Pattern
-
-**Problem:** Write an App Router `loading.tsx` component rendering a pulse skeleton placeholder grid.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> export default function Loading() { return ( <div className="animate-pulse grid grid-cols-3 gap-4"> <div className="h-32 bg-gray-200 rounded" /> </div> ); }
-> ```
-> - `loading.tsx` renders fallback UI during route segment transitions.
-> 
-> ```tsx
-> export default function Loading() {
+> // app/dashboard/loading.tsx
+> export default function DashboardLoading() {
 >   return (
->     <div className="animate-pulse space-y-4">
->       <div className="h-8 bg-gray-200 rounded w-1/4" />
->       <div className="h-64 bg-gray-200 rounded" />
+>     <div className="p-6 animate-pulse space-y-4">
+>       <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+>       <div className="h-32 bg-gray-200 rounded"></div>
+>       <div className="h-32 bg-gray-200 rounded"></div>
 >     </div>
 >   );
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. `loading.tsx` automatically wraps `page.tsx` in a React `<Suspense>` boundary.
+> 2. Renders instant loading skeleton UI on the client while Server Component data resolves.
+> 3. Improves perceived performance and First Contentful Paint (FCP).
+
 ---
 
-### Exercise 3: Suspense Streaming Mechanism
+### Exercise 2: Implementing Granular Component Suspense Fallbacks
 
-**Problem:** Does `loading.tsx` block initial server response headers from reaching the client browser?
+**Scenario:**
+Use inline `<Suspense fallback={<Skeleton />}>` inside `page.tsx` for fine-grained section loading instead of whole-page `loading.tsx`.
 
-**Expected output:**
+**Requirements:**
+1. Wrap slow component in `<Suspense>`.
+
 > [!check]- Answer
-> ```text
-> No. Next.js streams the loading.tsx fallback HTML immediately to the browser in the first HTTP chunk.
+>
+> #### Implementation
+>
+> ```tsx
+> import { Suspense } from "react";
+> import AnalyticsCard from "./AnalyticsCard";
+
+export default function DashboardPage() {
+  return (
+    <main className="p-6">
+      <h1>Dashboard Overview</h1>
+      <Suspense fallback={<div className="h-24 bg-gray-100 animate-pulse" />}>
+        <AnalyticsCard />
+      </Suspense>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Inline `<Suspense>` allows static page content (heading, layout) to render instantly while slow widgets load.
+> 2. `loading.tsx` streams the whole page segment; inline `<Suspense>` streams individual widgets.
+> 3. Granular streaming UI design.
+
+---
+
+### Exercise 3: Preventing Layout Shift with Animated Skeleton Placeholders
+
+**Scenario:**
+Design skeleton loading shapes that exactly match the dimensions of the final loaded cards to prevent layout shifts.
+
+**Requirements:**
+1. Match layout dimensions in skeleton CSS.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> export default function CardSkeleton() {
+>   return (
+>     <div className="w-full h-48 bg-slate-200 animate-pulse rounded-lg p-4">
+>       <div className="h-6 bg-slate-300 w-1/2 rounded mb-4" />
+>       <div className="h-4 bg-slate-300 w-full rounded mb-2" />
+>       <div className="h-4 bg-slate-300 w-3/4 rounded" />
+>     </div>
+>   );
+> }
 > ```
-> - `loading.tsx` streams initial fallback HTML instantly.
-> 
-> ```text
-> Instant Fallback HTML Stream -> RSC Payload Stream -> Hydrated Component
-> ```
+
+> #### Technical Explanation
+>
+> 1. Skeletons with matching height/width prevent Cumulative Layout Shift (CLS) when final data arrives.
+> 2. Keeps browser layout stable during HTML stream insertion.
+> 3. Essential Core Web Vitals optimization technique.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`error.tsx` & `global-error.tsx`](error.md) — The sister file that handles when the `await` fails instead of succeeds.
 - [React Suspense](react_suspense.md) — Related concept: React Suspense.
 - [Streaming with `<Suspense>`](../level_05/streaming.md) — Related concept: Streaming with `<Suspense>`.
@@ -175,7 +226,7 @@ export default function Loading() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`loading.tsx`** defines the fallback UI shown while the route's Server Components are resolving their `async` operations.
 - It provides instant feedback to the user during navigation, preventing the app from feeling "frozen".
 - It automatically wraps the `page.tsx` in a `<Suspense>` boundary.

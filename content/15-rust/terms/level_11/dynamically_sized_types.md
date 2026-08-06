@@ -161,7 +161,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Custom Struct DSTs & Unsize Coercion (`Header + [T]`)
 
-**Problem:**
+**Scenario:**
 In low-level networking, binary packet formats often consist of a fixed-size header (e.g. 32-bit packet identifier) followed immediately by a dynamically sized payload byte sequence (`[u8]`). In Rust, custom structs can be Dynamically Sized Types (DSTs) if their **last field** is a DST.
 
 1. Define a generic struct `PacketHeader<T: ?Sized>` containing two fields: `packet_id: u32` and `payload: T`.
@@ -174,6 +174,9 @@ In low-level networking, binary packet formats often consist of a fixed-size hea
    - That `total_bytes()` returns 8 bytes (4 bytes for `u32` + 4 bytes for `[u8; 4]`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::mem::{size_of, size_of_val};
 > 
@@ -228,7 +231,8 @@ In low-level networking, binary packet formats often consist of a fixed-size hea
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Custom Struct DST Rule**: In Rust, a struct is unsized (a DST) if and only if its **last field** is unsized (such as `[T]`, `str`, or `dyn Trait`). All preceding fields must be `Sized`.
 > 2. **Unsize Coercion**: The compiler automatically permits converting a smart pointer to a fixed-size struct instance (like `Box<PacketHeader<[u8; 4]>>`) into a smart pointer to the unsized struct (`Box<PacketHeader<[u8]>>`).
 > 3. **Fat Pointer Composition**: On the stack, `Box<PacketHeader<[u8]>>` occupies 16 bytes on 64-bit systems — 8 bytes for the heap address pointer and 8 bytes for the length metadata of the slice `[u8]`.
@@ -237,7 +241,7 @@ In low-level networking, binary packet formats often consist of a fixed-size hea
 
 ### Exercise 2: Trait Objects as DSTs & Heterogeneous Middleware Pipelines
 
-**Problem:**
+**Scenario:**
 In HTTP web frameworks and RPC gateways, request processing pipelines invoke dynamic chains of middleware modules (logging, rate limiting, authentication). Because each concrete middleware struct has a different memory footprint, they cannot be stored directly by value in a contiguous stack vector `Vec<T>`. Instead, they live behind smart pointers as trait object DSTs (`dyn Middleware`).
 
 1. Define a trait `Middleware: Send + Sync` with `fn name(&self) -> &'static str` and `fn handle(&self, request_path: &str) -> Result<String, &'static str>`.
@@ -252,6 +256,9 @@ In HTTP web frameworks and RPC gateways, request processing pipelines invoke dyn
    - That `inspect_memory_footprints()` correctly reports the exact concrete byte sizes (0 bytes for `MetricsLogger`, 24 bytes for `ApiKeyValidator`, etc.).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::atomic::{AtomicU64, Ordering};
 > use std::sync::Arc;
@@ -382,7 +389,8 @@ In HTTP web frameworks and RPC gateways, request processing pipelines invoke dyn
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`dyn Trait` as a DST**: Trait objects (`dyn Middleware`) are dynamically sized because the concrete struct behind the trait object could be 0 bytes (`MetricsLogger`) or 24 bytes (`ApiKeyValidator`).
 > 2. **VTable Fat Pointer**: Because `dyn Middleware` is unsized, `Box<dyn Middleware>` stores a 16-byte fat pointer: 8 bytes pointing to the struct instance data on the heap and 8 bytes pointing to the virtual method table (vtable) containing function pointers (`name`, `handle`, `drop`).
 > 3. **Polymorphic Containers**: Using `Box<dyn Middleware>` allows heterogeneous concrete types to be stored inside a uniform `Vec<Box<dyn Middleware>>` container.
@@ -391,7 +399,7 @@ In HTTP web frameworks and RPC gateways, request processing pipelines invoke dyn
 
 ### Exercise 3: Generic Binary Encoder with `?Sized` Trait Bounds
 
-**Problem:**
+**Scenario:**
 By default, generic functions in Rust implicitly bound type parameters with `T: Sized`. This prohibits passing references to unsized types (DSTs like `str`, `[u8]`, or `[u32]`) into generic APIs as `&T`.
 
 1. Define a trait `ToBytes: ?Sized` with methods `fn write_bytes(&self, buffer: &mut Vec<u8>)` and `fn byte_length(&self) -> usize`.
@@ -403,6 +411,9 @@ By default, generic functions in Rust implicitly bound type parameters with `T: 
    - Stack size of fat pointers `size_of_val(&item)` vs raw DST payload sizes.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::mem::size_of_val;
 > 
@@ -515,7 +526,8 @@ By default, generic functions in Rust implicitly bound type parameters with `T: 
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Opting Out of `Sized`**: Generic parameter `<T>` implicitly injects `T: Sized`. Without appending `?Sized` (`T: ToBytes + ?Sized`), passing `&str` or `&[u8]` raises compiler error `E0277` because unsized types do not implement `Sized`.
 > 2. **Trait Implementation on DSTs**: Implementing `ToBytes` directly for `str` or `[u8]` (rather than `&str` or `&[u8]`) makes the trait applicable to any reference type pointing to that DST (`&str`, `Box<str>`, `Arc<str>`).
 > 3. **Fat Pointer Borrowing**: The method signature `append(&mut self, item: &T)` takes a reference `&T`. Even when `T` is unsized (`str`), `&T` is a fixed-size fat pointer (16 bytes), enabling safe stack pass-by-reference.

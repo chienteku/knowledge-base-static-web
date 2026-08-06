@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Advanced Feature** (ACID Cross-Collection Transactions): Multi-Document Transactions provide full multi-collection ACID transactional semantics across replica sets and sharded clusters using client sessions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Supported on Replica Sets since MongoDB 4.0 and Sharded Clusters since 4.2. Uses active document locks to manage concurrency, causing write operations to queue).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While single-document atomicity handles 90% of write operations in MongoDB, some business actions must modify multiple documents:
@@ -104,7 +105,7 @@ try {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Overusing multi-document transactions for simple document updates, causing severe database throughput issues
 
@@ -155,82 +156,121 @@ session.withTransaction(async () => { await db.createCollection("new_coll"); });
 Create collections and indexes before starting transaction blocks
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: SQL to Mongo Transaction Translation
+### Exercise 1: Multi-Collection ACID Transaction with Snapshot Read Concern
 
-**Problem:** You have a Postgres transaction:
-```sql
-BEGIN;
-INSERT INTO logs (msg) VALUES ('Transfer Started');
-UPDATE balances SET usd = usd - 50 WHERE user_id = 5;
-COMMIT;
-```
-Write the corresponding MongoDB transaction pseudocode using the `session` object variables.
+**Scenario:**
+Execute an ACID transaction transferring funds between `checking` and `savings` collections with `readConcern: "snapshot"` and `writeConcern: "majority"`.
 
-**Expected output:**
+**Requirements:**
+1. Configure transaction options and execute inside session.
+
 > [!check]- Answer
-> ```javascript
-> const session = db.getMongo().startSession();
-> session.startTransaction();
-> try {
->   db.logs.insertOne({ msg: "Transfer Started" }, { session });
->   db.balances.updateOne({ user_id: 5 }, { $inc: { usd: -50 } }, { session });
->   session.commitTransaction();
-> } catch (error) {
->   session.abortTransaction();
-> } finally {
->   session.endSession();
-> }
-> ```
-> - Initialize a session using `startSession()`.
-> - Pass the `{ session }` parameter object to every write query inside the try block.
-
----
-
-
-
-### Exercise 2: Executing Money Transfer Transaction
-
-**Problem:** Write `withTransaction()` block transferring $100 from `acc1` to `acc2` atomically.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> await session.withTransaction(async () => { await accounts.updateOne({ _id: 1 }, { $inc: { balance: -100 } }, { session }); await accounts.updateOne({ _id: 2 }, { $inc: { balance: 100 } }, { session }); });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > const session = client.startSession();
+> 
+> const txnOptions = {
+>   readConcern: { level: "snapshot" },
+>   writeConcern: { w: "majority" },
+>   readPreference: "primary"
+> };
+> 
 > try {
 >   await session.withTransaction(async () => {
->     await accounts.updateOne({ _id: 1 }, { $inc: { balance: -100 } }, { session });
->     await accounts.updateOne({ _id: 2 }, { $inc: { balance: 100 } }, { session });
->   });
+>     const checking = db.collection("checking");
+>     const savings = db.collection("savings");
+> 
+>     await checking.updateOne({ userId }, { $inc: { balance: -200 } }, { session });
+>     await savings.updateOne({ userId }, { $inc: { balance: 200 } }, { session });
+>   }, txnOptions);
+>   console.log("Transaction committed successfully.");
 > } finally {
 >   await session.endSession();
 > }
 > ```
 >
-> **Explanation:** `withTransaction()` handles automatic transaction start, commit, and retry logic.
+> #### Technical Explanation
+>
+> 1. `withTransaction()` manages starting, committing, aborting, and retrying transactions automatically.
+> 2. `readConcern: "snapshot"` provides consistent point-in-time isolation across both collections.
+> 3. `writeConcern: "majority"` guarantees durable multi-node replication before transaction commit returns.
 
 ---
 
-### Exercise 3: Transaction Execution Limit
+### Exercise 2: Transient Transaction Error Retry Handling
 
-**Problem:** What is MongoDB's default maximum transaction runtime limit? (60 seconds).
+**Scenario:**
+Handle `TransientTransactionError` labels automatically when network glitches disrupt an active transaction.
 
-**Expected output:**
+**Requirements:**
+1. Catch errors containing `hasErrorLabel("TransientTransactionError")`.
+
 > [!check]- Answer
-> ```text
-> 60 seconds
-> ```
-> ```text
-> 60 seconds
+>
+> #### Implementation
+>
+> ```javascript
+> async function executeTransactionWithRetry(txnFunc) {
+>   const session = client.startSession();
+>   while (true) {
+>     try {
+>       await session.withTransaction(txnFunc);
+>       break;
+>     } catch (err) {
+>       if (err.hasErrorLabel("TransientTransactionError")) {
+>         console.warn("Transient error encountered; retrying transaction...");
+>         continue;
+>       }
+>       throw err;
+>     } finally {
+>       await session.endSession();
+>     }
+>   }
+> }
 > ```
 >
-> **Explanation:** Transactions exceeding 60 seconds are automatically aborted by the server.
+> #### Technical Explanation
+>
+> 1. `TransientTransactionError` indicates a temporary network failure or primary election where retrying the transaction will succeed.
+> 2. Drivers automatically retry transient errors when using `withTransaction()`.
+> 3. Resilient transaction architecture.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Transaction Execution Time and Lock Bounding
+
+**Scenario:**
+Explain why multi-document transactions in MongoDB should execute in under 60 seconds.
+
+**Requirements:**
+1. Describe `transactionLifetimeLimitSeconds` (default 60s).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Transaction Bounds & Limits:
+> - Default max lifetime: 60 seconds (transactionLifetimeLimitSeconds).
+> - Prolonged transactions hold WiredTiger cache locks and pin the oplog timestamp window.
+> Best Practice: Keep transactions short, focused, and limited to essential writes.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Long-running transactions hold WiredTiger MVCC snapshot locks, increasing RAM cache pressure.
+> 2. Exceeding 60 seconds causes `mongod` to abort the transaction automatically.
+> 3. Keep transactional logic lightweight.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Atomicity in MongoDB](atomicity.md) — The parent write guarantee.
 - [`startSession()` / `session.withTransaction()`](session_transaction.md) — The driver implementation.
@@ -239,7 +279,7 @@ Write the corresponding MongoDB transaction pseudocode using the `session` objec
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Multi-document transactions guarantee ACID compliance across collections.
 - Direct NoSQL equivalent to SQL's `BEGIN`/`COMMIT`/`ROLLBACK` blocks.
 - Staged writes are written to disk only when `commitTransaction()` is called.

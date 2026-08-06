@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Administration / Monitoring**
+
+**Administration / Operations** (Database Health Telemetry): Monitoring utilizes system catalog views (`pg_stat_activity`, `pg_stat_database`, `pg_stat_statements`) to track performance metrics.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Requires adding `pg_stat_statements` to the `shared_preload_libraries` parameter in `postgresql.conf` and restarting the server because it allocates shared RAM buffers to track queries globally).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In production, you cannot wait for users to email support saying *"The website is slow"* before you look at query performance. 
@@ -107,7 +108,7 @@ LIMIT 5;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Enabling pg_stat_statements in SQL without adding it to postgresql.conf
 
@@ -158,75 +159,111 @@ Add 'pg_stat_statements' to shared_preload_libraries and CREATE EXTENSION pg_sta
 SET idle_in_transaction_session_timeout = '10s';
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Diagnostic Query Parsing
+### Exercise 1: Querying Active Backend Sessions and Lock Waiters
 
-**Problem:** You query `pg_stat_statements` and see this record:
--   `query`: `SELECT * FROM articles WHERE id = $1`
--   `calls`: `1,000,000`
--   `mean_exec_time` (average): `0.05 ms`
--   `total_exec_time` (total): `50,000 ms` (50 seconds)
-1.  Is this individual query slow?
-2.  Should you spend time optimizing it? Explain why.
+**Scenario:**
+Query `pg_stat_activity` to inspect active client queries running longer than 5 seconds.
 
-**Expected output:**
+**Requirements:**
+1. Query `pg_stat_activity` filtering `state = 'active'` and `now() - query_start > interval '5 seconds'`.
+
 > [!check]- Answer
-> ```text
-> 1. No, the query is extremely fast (average execution time is 0.05 ms, indicating it is using a primary key index scan).
-> 2. No, you should not spend time optimizing it. Although it is the highest consumer of total execution time (50 seconds), this is simply because it was called 1 million times. Because the average speed is already optimal, there is no way to make it faster. Focus your efforts instead on queries that have a high `mean_exec_time` (e.g. 500ms), even if they have fewer calls.
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   pid, 
+>   usename, 
+>   client_addr, 
+>   NOW() - query_start AS duration, 
+>   query 
+> FROM pg_stat_activity 
+> WHERE state = 'active' 
+>   AND NOW() - query_start > INTERVAL '5 seconds' 
+> ORDER BY duration DESC;
 > ```
-> - Differentiate the query's average speed (`mean_exec_time`) from its cumulative load (`total_exec_time`).
-> - Focus optimization efforts on queries with poor average performance.
+>
+> #### Technical Explanation
+>
+> 1. `pg_stat_activity` is the primary system catalog view tracking active server connection processes.
+> 2. `NOW() - query_start` identifies long-running queries causing backend bottlenecks.
+> 3. Essential DBA diagnostic query.
+
+---
+
+### Exercise 2: Calculating Database Cache Hit Ratios
+
+**Scenario:**
+Calculate the Shared Buffer RAM Cache Hit Ratio using `pg_stat_database`.
+
+**Requirements:**
+1. Calculate `blks_hit / (blks_hit + blks_read) * 100`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   datname, 
+>   blks_hit, 
+>   blks_read, 
+>   ROUND(blks_hit::NUMERIC / NULLIF(blks_hit + blks_read, 0) * 100, 2) AS cache_hit_ratio 
+> FROM pg_stat_database 
+> WHERE datname = current_database();
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `blks_hit`: Number of 8KB disk pages found directly in RAM (`shared_buffers`).
+> 2. `blks_read`: Number of 8KB disk pages fetched from operating system disk I/O.
+> 3. Production databases should maintain a Cache Hit Ratio > 99%.
+
+---
+
+### Exercise 3: Inspecting Table Dead Tuple Bloat Metrics
+
+**Scenario:**
+Query `pg_stat_user_tables` to monitor dead tuple accumulation (`n_dead_tup`) across all user tables.
+
+**Requirements:**
+1. Query `pg_stat_user_tables` sorting by `n_dead_tup DESC`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   relname AS table_name, 
+>   n_live_tup AS live_rows, 
+>   n_dead_tup AS dead_tuples, 
+>   ROUND(n_dead_tup::NUMERIC / NULLIF(n_live_tup + n_dead_tup, 0) * 100, 2) AS bloat_pct,
+>   last_autovacuum 
+> FROM pg_stat_user_tables 
+> ORDER BY n_dead_tup DESC;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `n_dead_tup` tracks dead MVCC row versions requiring `VACUUM` cleanup.
+> 2. High `bloat_pct` (> 20%) indicates autovacuum is falling behind write throughput.
+> 3. Core database health metric.
 
 ---
 
 
 
-### Exercise 2: Querying Top 5 Slowest Queries via pg_stat_statements
-
-**Problem:** Query top 5 queries by mean execution time from `pg_stat_statements`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT query, calls, total_exec_time, mean_exec_time FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 5;
-> ```
-> ```sql
-> SELECT query, calls, total_exec_time, mean_exec_time
-> FROM pg_stat_statements
-> ORDER BY mean_exec_time DESC LIMIT 5;
-> ```
->
-> **Explanation:** `pg_stat_statements` tracks aggregated query execution metrics across all client connections.
-
----
-
-### Exercise 3: Querying Active Long-Running Queries
-
-**Problem:** Query active queries running for longer than 5 seconds from `pg_stat_activity`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT pid, now() - query_start AS duration, query FROM pg_stat_activity WHERE state = 'active' AND now() - query_start > INTERVAL '5 seconds';
-> ```
-> ```sql
-> SELECT pid, now() - query_start AS duration, query
-> FROM pg_stat_activity
-> WHERE state = 'active'
->   AND now() - query_start > INTERVAL '5 seconds';
-> ```
->
-> **Explanation:** `pg_stat_activity` monitors real-time active backend connection queries.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Extensions (`CREATE EXTENSION`)](extensions.md) — The packaging system.
 - [`postgresql.conf` (Server Configuration)](postgresql_conf.md) — Setting preloads.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PostgreSQL monitoring views provide real-time metrics on server health.
 - `pg_stat_statements` tracks execution calls and times for all SQL queries.
 - `pg_stat_activity` monitors current active connection states and processes.

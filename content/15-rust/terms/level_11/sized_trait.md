@@ -173,7 +173,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Zero-Copy Telemetry Encoder for Unsized Payloads (`?Sized`)
 
-**Problem:**
+**Scenario:**
 You are building a high-performance network telemetry encoder. The system must accept both fixed-size primitive payloads (such as `u64` timestamps) and dynamically sized byte buffers or text strings (such as `[u8]` slices or `str` text) without incurring heap allocations or requiring separate function overloads.
 
 1. Define a trait `TelemetryPayload` with a method `fn write_bytes(&self, buf: &mut Vec<u8>)`.
@@ -183,6 +183,9 @@ You are building a high-performance network telemetry encoder. The system must a
 5. Write complete unit tests verifying encoding of `u64`, `str`, and `[u8]` payloads using assertions (`assert_eq!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::fmt::Display;
 > 
@@ -270,7 +273,8 @@ You are building a high-performance network telemetry encoder. The system must a
 > }
 > ```
 >
-> **Detailed Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Implicit `Sized` Bounds:** By default, Rust appends `T: Sized` to every generic parameter. If you declare `fn encode<T: TelemetryPayload>(data: &T)`, the compiler interprets `T` as requiring compile-time size knowledge. When passing `&str` or `&[u8]`, `T` resolves to `str` or `[u8]` respectively. Because `str` and `[u8]` are Dynamically Sized Types (DSTs), compilation fails with error `E0277` (`the size for values of type str cannot be known at compilation time`).
 > 2. **Relaxing with `?Sized`:** Specifying `T: ?Sized + TelemetryPayload` informs the compiler that `T` may or may not be sized. Because the function receives `payload: &T` (a reference), the argument itself is a fat pointer (containing pointer + length metadata), which has a fixed byte size on the stack regardless of whether `T` is sized or unsized.
 > 3. **Zero-Allocation Flexibility:** This pattern allows callers to pass references to stack integers (`&u64`), string slices (`&str`), or raw slice views (`&[u8]`) into a single uniform generic function without heap-allocating intermediate container objects.
@@ -279,7 +283,7 @@ You are building a high-performance network telemetry encoder. The system must a
 
 ### Exercise 2: Designing a Custom DST Packet Struct with Unsized Coercion
 
-**Problem:**
+**Scenario:**
 In binary protocol parsers, network packets often consist of a fixed-size header followed by a variable-sized payload trailing field. In Rust, a custom struct becomes a Dynamically Sized Type (DST) if its final field is unsized.
 
 1. Define a generic struct `Packet<T: ?Sized>` containing `header_id: u32`, `flags: u8`, and `payload: T`.
@@ -290,6 +294,9 @@ In binary protocol parsers, network packets often consist of a fixed-size header
 6. Write unit tests validating property getters, unsized coercion, fat pointer behavior, and `Box<Packet<[u8]>>` dynamic allocation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::mem::size_of_val;
 > 
@@ -386,7 +393,8 @@ In binary protocol parsers, network packets often consist of a fixed-size header
 > }
 > ```
 >
-> **Detailed Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Custom Dynamically Sized Types:** In Rust, if the last field of a struct has type `T` where `T: ?Sized`, the struct itself becomes unsized whenever `T` is an unsized type (e.g. `[u8]` or `str`). `Packet<[u8]>` cannot live directly on the stack because its byte layout depends on the length of the slice payload.
 > 2. **Unsized Coercion:** Rust's compiler supports unsized coercion for structs with trailing unsized fields. A reference to a concrete sized packet `&Packet<[u8; N]>` can be implicitly converted into `&Packet<[u8]>`. During this conversion, the compiler constructs a fat pointer containing both the base memory address of `Packet` and the slice metadata (length `N`).
 > 3. **Smart Pointer Support:** Unsized coercion applies to standard smart pointers such as `Box<T>`, `Rc<T>`, and `Arc<T>`. `Box::new(Packet { payload: [1, 2, 3], ... }) as Box<Packet<[u8]>>` allocates the payload on the heap and returns a fat pointer box.
@@ -395,7 +403,7 @@ In binary protocol parsers, network packets often consist of a fixed-size header
 
 ### Exercise 3: In-Memory Cache with `?Sized` Borrowed Query Keys
 
-**Problem:**
+**Scenario:**
 When implementing generic data structures like key-value caches or index tables storing owned keys (`String`, `Vec<u8>`), lookups should accept borrowed query slices (`&str`, `&[u8]`) to eliminate unnecessary heap allocations.
 
 1. Implement a `CacheEngine<K, V>` wrapping `HashMap<K, V>`.
@@ -405,6 +413,9 @@ When implementing generic data structures like key-value caches or index tables 
 5. Write unit tests using `assert_eq!`, `assert!`, and test assertions for owned key mutations and zero-allocation slice queries.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::borrow::Borrow;
 > use std::collections::HashMap;
@@ -522,7 +533,8 @@ When implementing generic data structures like key-value caches or index tables 
 > }
 > ```
 >
-> **Detailed Explanation:**
+> #### Technical Explanation
+>**
 > 1. **The `std::borrow::Borrow` Trait:** `Borrow<Q>` allows a type `K` (like `String`) to be borrowed as type `Q` (like `str`). The `Borrow` trait definition in `std` is `pub trait Borrow<Borrowed: ?Sized>`. The `Borrowed` type generic is explicitly annotated with `?Sized` because the borrowed form of an owned collection is almost always an unsized slice (`str` for `String`, `[T]` for `Vec<T>`).
 > 2. **Why `Q: ?Sized` is Essential:** If `Q` in `get<Q>` did not have `?Sized`, the compiler would secretly inject `Q: Sized`. Calling `cache.get("alpha")` passes `&str`, which sets `Q = str`. Since `str` does NOT implement `Sized`, the compiler would reject the call!
 > 3. **Performance Optimization:** Relaxing `Sized` on query types allows callers to query maps using slice references (`&str` or `&[u8]`) without allocating temporary heap objects (`String::from(...)` or `vec![...]`).

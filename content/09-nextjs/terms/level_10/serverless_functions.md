@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Infrastructure**
+
+**Build & Deployment** (Serverless Function Architecture): Serverless Functions compile dynamic Next.js route handlers into auto-scaling on-demand execution lambdas.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (Serverless execution environments are restricted strictly to backend cloud hosting platforms).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional web hosting, developers deploy applications to a server virtual machine (like AWS EC2) that runs continuously. This model has several drawbacks:
@@ -50,7 +51,7 @@ Serverless containers are ephemeral; they are destroyed when idle. This imposes 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Saving uploaded files to local disk folders inside a Server Action or Route Handler
 
@@ -105,66 +106,113 @@ await redis.incr('request_count'); // Persistent state in Redis
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Serverless Scaling Analysis
+### Exercise 1: Analyzing Serverless Execution Architecture
 
-**Problem:** Your Next.js app has a dynamic route `/api/reports` deployed to Vercel as a Serverless Function. On Monday morning at 9:00 AM, 500 users request that page simultaneously. Explain how many serverless containers boot up, and what happens to user variables.
+**Scenario:**
+Explain how Next.js App Router dynamic route handlers compile into auto-scaling Serverless Functions on Vercel/AWS Lambda.
 
-**Expected output:**
+**Requirements:**
+1. Detail stateless execution, cold starts, and scaling rules.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> The cloud provider will automatically detect the traffic spike and spin up approximately 500 individual, concurrent container instances. 
-> Each container runs in isolation; they do not share server memory or local files. 
-> Once the reports finish processing and traffic subsides, the provider scales down, destroying the containers.
+> Serverless Function Architecture:
+> - Stateless Execution: Each incoming request triggers an isolated container instance.
+> - Auto-Scaling: Scales automatically from 0 to thousands of concurrent requests.
+> - Cold Start: Initial request spins up a new Node.js container instance (adds ~100-300ms latency).
 > ```
-> - Think about concurrency and stateless scaling characteristics.
+
+> #### Technical Explanation
+>
+> 1. Serverless functions eliminate persistent server management and fixed monthly hosting costs.
+> 2. Containers spin down to 0 instances when idle to save resources.
+> 3. Core backend deployment model for modern cloud platforms.
 
 ---
 
-### Exercise 2: Serverless Route Config Timeout Setup
+### Exercise 2: Managing Global Database Connections in Serverless Environments
 
-**Problem:** Write segment config line setting maximum serverless execution duration to 60 seconds (Pro plan).
+**Scenario:**
+Reuse database connection pools across serverless function invocations using global connection caching.
 
-**Expected output:**
+**Requirements:**
+1. Cache DB connection on global scope.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> export const maxDuration = 60;
-> ```
-> - `export const maxDuration = N` configures serverless function timeout in seconds.
-> 
-> ```typescript
-> export const maxDuration = 60; // 60 seconds max duration
-> ```
+> import { Pool } from "pg";
+
+let cachedPool: Pool | null = null;
+
+export function getDbPool() {
+  if (!cachedPool) {
+    cachedPool = new Pool({
+      connectionString: process.env.DATABASE_URL
+    });
+  }
+  return cachedPool;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Serverless containers stay warm for subsequent requests, allowing global variables (`cachedPool`) to be reused.
+> 2. Reusing connection pools prevents exhausting database connection limits during traffic spikes.
+> 3. Mandatory pattern for database access in serverless environments.
 
 ---
 
-### Exercise 3: Serverless Concurrency Auto-Scaling
+### Exercise 3: Configuring Maximum Execution Duration (Timeout Settings)
 
-**Problem:** How do Serverless Functions handle 1,000 simultaneous concurrent HTTP requests?
+**Scenario:**
+Configure maximum execution duration for a long-running Server Action or Route Handler in `next.config.js` or route config.
 
-**Expected output:**
+**Requirements:**
+1. Export `export const maxDuration = 60`.
+
 > [!check]- Answer
-> ```text
-> The cloud platform automatically spawns 1,000 independent container instances in parallel to handle each request concurrently.
-> ```
-> - Auto-scales by spawning independent execution containers per request.
-> 
-> ```text
-> 1,000 Requests -> 1,000 Parallel Serverless Containers
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> // app/api/heavy-job/route.ts
+> export const maxDuration = 60; // Max execution timeout: 60 seconds
+
+export async function POST() {
+  // Heavy computation or AI processing job...
+  return Response.json({ status: "Completed" });
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `maxDuration` sets maximum serverless function execution timeout limits (in seconds).
+> 2. Prevents long-running AI or image generation jobs from timing out prematurely.
+> 3. Cloud platform configuration directive.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Edge Runtime vs Node.js Runtime](edge_runtime.md) — The edge-alternative to serverless computing.
 - [Deployment (Vercel)](vercel_deployment.md) — The platform that handles serverless deployments automatically.
 - [Content Delivery Network (CDN) & Edge Cache](cdn_edge.md) — Related concept: Content Delivery Network (CDN) & Edge Cache.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Serverless Functions run backend code on-demand without server management.
 - Containers scale automatically, charging only for active execution time.
 - Idle functions suffer from "cold start" boot latency on the first request.

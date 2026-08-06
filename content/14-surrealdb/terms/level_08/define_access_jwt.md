@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Integration**
+
+
+**Authentication & Permissions (JWT external access definition)**: - **Database Command / Integration**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core Engine** (Validates incoming HTTP Bearer headers or WebSocket connection headers against configured JWKS endpoints).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While SurrealDB supports built-in user registration with `TYPE RECORD`, production enterprise architectures frequently rely on external identity providers (Auth0, Clerk, Firebase, Okta, Supabase Auth) for single sign-on (SSO), multi-factor authentication (MFA), and OAuth social logins (Google, GitHub, Apple).
@@ -64,7 +63,7 @@ DEFINE TABLE document SCHEMAFULL
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Mismatched Token Algorithm
 
@@ -120,84 +119,97 @@ DEFINE ACCESS auth0 ON DATABASE TYPE JWT ALGORITHM RS256 URL "https://domain.aut
 
 
 
-### Mistake 4: Configuring JWT Access Without Specifying Verification Keys or Algorithms
 
-**The mistake:** Defining JWT access without setting `ALGORITHM` or `KEY` parameters.
 
-**Why it's wrong:** SurrealDB must verify external JWT signature tokens using declared algorithms (`HS256`, `RS256`) and verification secret keys.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-DEFINE ACCESS auth0 ON DATABASE TYPE JWT; // ❌ Missing ALGORITHM and KEY!
-```
+### Exercise 1: External JWT Provider Access Definition
 
-*Fix:*
-```surrealql
-DEFINE ACCESS auth0 ON DATABASE TYPE JWT ALGORITHM HS256 KEY "secret_key";
-```
+**Scenario:**
+Configure an external JWT access method `auth0_access` on database `app` to validate tokens issued by Auth0 using algorithm `HS256`.
 
-### Mistake 5: Mismatched Issuer or Audience Claims in External JWT Tokens
-
-**The mistake:** Passing external JWTs from Auth0 / Clerk without matching `URL` or `WITH ISSUER` configuration fields.
-
-**Why it's wrong:** SurrealDB rejects JWT tokens if issuer or audience claims do not match declared ACCESS definitions.
-
-*Incorrect:*
-```surrealql
--- Misconfigured JWT issuer validation
-```
-
-*Fix:*
-```surrealql
-DEFINE ACCESS auth0 ON DATABASE TYPE JWT ALGORITHM RS256 URL "https://domain.auth0.com/.well-known/jwks.json";
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Configure Secret Key JWT Access
-Write a `DEFINE ACCESS` statement named `custom_service` on the database level using `TYPE JWT` with symmetric algorithm `HS256` and secret key `"MySecretKey123"`.
+**Requirements:**
+1. Define access method `auth0_access` ON DATABASE TYPE JWT.
+2. Specify algorithm `HS256` and secret key `"Auth0SecretKey2026!"`.
 
 > [!check]- Answer
-> - Use `DEFINE ACCESS custom_service ON DATABASE TYPE JWT`.
-> - Specify `ALGORITHM HS256 KEY "MySecretKey123"`.
+>
+> #### Implementation
+>
+> ```surrealql
+> USE DB app;
+> 
+> -- Define external JWT access method
+> DEFINE ACCESS auth0_access ON DATABASE TYPE JWT
+>     ALGORITHM HS256
+>     KEY "Auth0SecretKey2026!";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DEFINE ACCESS ... TYPE JWT` configures SurrealDB to authenticate external JSON Web Tokens.
+> 2. `ALGORITHM` specifies the cryptographic signature algorithm (`HS256`, `RS256`).
+> 3. `KEY` stores the shared secret or public key used to verify token signatures.
+
+---
+
+### Exercise 2: Public Key RS256 JWT Verification
+
+**Scenario:**
+Configure JWT access method `clerk_access` using an RSA public key (`RS256`) for asymmetric token signature verification.
+
+**Requirements:**
+1. Define access method `clerk_access` using algorithm `RS256` and a public PEM key string.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE ACCESS clerk_access ON DATABASE TYPE JWT
+>     ALGORITHM RS256
+>     KEY "-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...
+-----END PUBLIC KEY-----";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Asymmetric `RS256` verification uses a public key to verify tokens signed by an external auth service's private key.
+> 2. Allows third-party identity providers (Clerk, Auth0, Firebase) to issue client tokens safely.
+> 3. Prevents storing private signing keys inside database configurations.
+
+---
+
+### Exercise 3: Accessing JWT Claims in `$token`
+
+**Scenario:**
+Inspect external claims (such as `$token.sub` and `$token.role`) contained within validated JWT tokens during a client session.
+
+**Requirements:**
+1. Select `$token.sub` and `$token.role`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT $token.sub AS user_id, $token.role AS user_role;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$token` contains decoded JSON Web Token payload claims (e.g. `sub`, `exp`, `iss`, custom claims).
+> 2. Can be used inside `PERMISSIONS` clauses (`PERMISSIONS FOR select WHERE id = type::thing("user", $token.sub)`).
+> 3. Integrates external identity claims directly with SurrealDB authorization rules.
 
 ---
 
 
 
-### Exercise 2: Defining HMAC HS256 JWT Access
 
-**Problem:** Define JWT access `app_jwt` on database using `HS256` algorithm and secret `"my_secret"`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE ACCESS app_jwt ON DATABASE TYPE JWT ALGORITHM HS256 KEY "my_secret";
-> ```
-> ```surrealql
-> DEFINE ACCESS app_jwt ON DATABASE TYPE JWT ALGORITHM HS256 KEY "my_secret";
-> ```
->
-> **Explanation:** `TYPE JWT ALGORITHM HS256 KEY ...` validates external HMAC-SHA256 tokens.
-
----
-
-### Exercise 3: JWKS Endpoint RS256 Integration
-
-**Problem:** Define JWT access for Auth0 using RS256 JWKS endpoint URL.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE ACCESS auth0 ON DATABASE TYPE JWT ALGORITHM RS256 URL "https://dev.auth0.com/.well-known/jwks.json";
-> ```
-> ```surrealql
-> DEFINE ACCESS auth0 ON DATABASE TYPE JWT ALGORITHM RS256 URL "https://dev.auth0.com/.well-known/jwks.json";
-> ```
->
-> **Explanation:** `URL` fetches public JWKS verification keys for validating asymmetric RS256 JWTs.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Built-in database user registration.
 - [JWT Token-Based Auth](jwt_auth.md) — JWT structure and verification details.
@@ -205,7 +217,7 @@ Write a `DEFINE ACCESS` statement named `custom_service` on the database level u
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE ACCESS ... TYPE JWT` connects SurrealDB directly to external OAuth/SSO identity providers.
 - Supports JWKS URLs (`URL '...'`) for automatic public key rotation.
 - Exposes incoming token claims through the `$token` variable in row-level permission logic.

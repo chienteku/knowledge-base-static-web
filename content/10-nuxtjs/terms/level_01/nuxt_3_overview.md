@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Framework Overview**
+
+**Framework Architecture** (Nuxt 3 Core Platform): Nuxt 3 is an open-source Vue framework offering hybrid rendering, auto-imports, full-stack server routes, and directory-based conventions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Vue is a fantastic library for building interactive user interfaces, but it is "just a view layer." If you want to build a full production application with Vue, you have to manually configure a router (Vue Router), a state manager (Pinia), a build tool (Vite), and figure out how to do Server-Side Rendering (SSR) for SEO. 
@@ -42,7 +43,7 @@ Nuxt 3 is composed of several underlying technologies:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating Nuxt 3 like a Single Page App (SPA) by default
 **The mistake:** Writing Vue code that heavily depends on the browser's `window` or `document` objects right inside the component body.
@@ -122,67 +123,109 @@ export default defineNuxtConfig({
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identifying the Nuxt Stack
-**Problem:** Which underlying technology in Nuxt 3 is responsible for serving API endpoints and performing Server-Side Rendering?
+### Exercise 1: Configuring Nuxt 3 Core Options in `nuxt.config.ts`
 
-**Expected output:**
+**Scenario:**
+Configure `nuxt.config.ts` with TypeScript strict mode, CSS framework styles, and runtime environment variables.
+
+**Requirements:**
+1. Define `defineNuxtConfig` with `typescript`, `css`, and `runtimeConfig`.
+
 > [!check]- Answer
-> ```text
-> Nitro
-> ```
-> - It's not Vite (that's the bundler).
-> - It's the engine built specifically for Nuxt 3.
-
----
-
-### Exercise 2: Nuxt 3 Stack Technology Matrix
-
-**Problem:** List the 4 core technology pillars that form the foundation of Nuxt 3.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Vue 3 (Composition API & Script Setup)
-> 2. Nitro Engine (Server runtime powered by H3 & Unimport)
-> 3. Vite (Lightning fast HMR build tool)
-> 4. Vue Router (File-based routing)
-> ```
-> - Vue 3 -> UI Framework
-> - Nitro Engine -> Server Runtime
-> - Vite -> Development Bundler
-> - Vue Router -> Routing Engine
-> 
-> ```text
-> Vue 3 + Nitro + Vite + Vue Router = Nuxt 3
-> ```
-
----
-
-### Exercise 3: defineNuxtConfig Helper Setup
-
-**Problem:** Write minimal `nuxt.config.ts` file enabling TypeScript strict mode.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> export default defineNuxtConfig({ typescript: { strict: true } });
-> ```
-> - `defineNuxtConfig` provides type hints for project settings.
-> 
-> ```typescript
+> // nuxt.config.ts
 > export default defineNuxtConfig({
+>   devtools: { enabled: true },
+>   css: ["~/assets/css/main.css"],
 >   typescript: {
 >     strict: true
+>   },
+>   runtimeConfig: {
+>     apiSecret: "", // Server-only secret key
+>     public: {
+>       apiBase: "/api" // Exposed to client and server
+>     }
 >   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `defineNuxtConfig` provides full type-checked configuration for Nuxt 3 applications.
+> 2. `runtimeConfig` separates server-only private keys from `public` client-accessible configuration.
+> 3. Central configuration file for build, tooling, and environment setup.
 
 ---
 
-## 7. Related Terms
+### Exercise 2: Defining Page Layouts and Root Application Shell
+
+**Scenario:**
+Structure `app.vue` to support directory-based pages and layout templates via `<NuxtLayout>` and `<NuxtPage>`.
+
+**Requirements:**
+1. Implement `<NuxtLayout>` and `<NuxtPage>` inside `app.vue`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <!-- app.vue -->
+> <template>
+>   <div>
+>     <NuxtLayout>
+>       <NuxtPage />
+>     </NuxtLayout>
+>   </div>
+> </template>
+> ```
+
+> #### Technical Explanation
+>
+> 1. `<NuxtPage />` renders active route components from the `pages/` directory.
+> 2. `<NuxtLayout>` wraps page content inside master layout templates from `layouts/`.
+> 3. Standard entrypoint structure for Nuxt 3 applications.
+
+---
+
+### Exercise 3: Inspecting Generated Nuxt Directory Artifacts
+
+**Scenario:**
+Explain the role of `.nuxt/` build directory during local development and compilation.
+
+**Requirements:**
+1. Describe `.nuxt/tsconfig.json` and `.nuxt/imports.d.ts` purposes.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Generated .nuxt/ Directory Inspection:
+> - .nuxt/imports.d.ts: Auto-generated TypeScript definitions for all composables and Vue APIs.
+> - .nuxt/components.d.ts: TypeScript definitions for auto-imported Vue components.
+> - .nuxt/tsconfig.json: Auto-generated TypeScript configuration extended by root tsconfig.json.
+> ```
+
+> #### Technical Explanation
+>
+> 1. `.nuxt/` is a build artifact directory dynamically updated during development.
+> 2. Provides IDE intelligence and type definitions without polluting source code repository commits.
+> 3. Root `tsconfig.json` extends `.nuxt/tsconfig.json` automatically.
+
+---
+
+
+
+
+---
+
+## 6. Related Terms
 - [Universal Rendering (SSR)](universal_rendering.md) — The process Nuxt uses to render Vue on the server.
 - [Nitro Engine](nitro_engine.md) — The backend engine powering Nuxt.
 - [Vue 3 Composition API Context](composition_api_context.md) — The core UI framework.
@@ -190,7 +233,7 @@ export default defineNuxtConfig({
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Nuxt 3 is a full-stack framework built around Vue 3.
 - It provides "Convention over Configuration" (e.g., file-based routing, auto-imports).
 - It runs on both the server (Node.js) and the client (Browser).

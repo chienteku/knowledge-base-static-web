@@ -15,17 +15,15 @@
 
 ## 2. Term Category
 
-**Embedded / Standards / Trait Interface**: `embedded-hal` is the unifying trait library for the Rust embedded ecosystem. It defines shared Rust traits for hardware peripherals without implementing any vendor-specific code. By building external sensor/display drivers (e.g. OLED screen drivers, accelerometer drivers, temperature sensors) against `embedded-hal` traits, a single driver crate works seamlessly across ARM, RISC-V, ESP32, and AVR microcontrollers!
+
+
+**Rust Embedded Abstraction (hardware abstraction layer traits)**: `embedded-hal` is the unifying trait library for the Rust embedded ecosystem. It defines shared Rust traits for hardware peripherals without implementing any vendor-specific code. By building external sensor/display drivers (e.g. OLED screen drivers, accelerometer drivers, temperature sensors) against `embedded-hal` traits, a single driver crate works seamlessly across ARM, RISC-V, ESP32, and AVR microcontrollers!
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Embedded Standard**: Used across all `#![no_std]` hardware drivers and vendor HALs.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -73,7 +71,23 @@ where
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Blocking the CPU in Busy-Spin Loops Instead of Using Non-Blocking Traits
+
+**The mistake:** Writing drivers that spin-lock on hardware status flags when async/non-blocking traits are available.
+
+**Why it's wrong:** Busy-spinning wastes microcontroller power and blocks concurrent event processing.
+
+*Fix:* Use `embedded-hal-async` or non-blocking futures for peripheral I/O.
+
+### Mistake 3: Hardcoding Bus Frequency Settings Directly Inside Generic Driver Implementations
+
+**The mistake:** Embedding fixed SPI or I2C clock speeds inside generic driver code.
+
+**Why it's wrong:** Different microcontroller platforms support different clock ranges. Hardcoding limits driver portability.
+
+*Fix:* Pass clock configuration settings via initialization arguments or HAL traits.
+
 
 ### Mistake 1: Coupling a Sensor Driver Crate to a Specific Vendor HAL
 
@@ -83,11 +97,11 @@ where
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Building a Platform-Agnostic LED Controller with Mock Pin Unit Testing
 
-**Problem:**
+**Scenario:**
 In embedded Rust, peripheral drivers must be decoupled from microcontroller hardware vendors so they can run on ARM Cortex-M, RISC-V, ESP32, or AVR chips.
 Design a portable LED status controller struct `StatusLed<P>` generic over any GPIO pin `P` implementing `embedded_hal::digital::OutputPin`.
 
@@ -100,6 +114,9 @@ The driver must support:
 To verify driver logic without embedded hardware, implement a `MockPin` type conforming to `embedded_hal::digital::OutputPin` and write host unit tests (`#[test]`) with assertions testing successful output toggling and hardware error propagation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -261,7 +278,8 @@ To verify driver logic without embedded hardware, implement a `MockPin` type con
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Generic Trait Bounds (`P: OutputPin`)**: The `StatusLed<P>` struct accepts any GPIO pin implementation without depending on a specific microcontroller crate (such as `stm32f4xx-hal` or `esp-hal`).
 > 2. **Associated Error Types (`P::Error`)**: `embedded-hal` 1.0 traits use the `ErrorType` trait to associate a hardware error type with each peripheral. The `?` operator allows hardware failures to bubble up cleanly.
 > 3. **Off-Target Mocking**: By implementing `OutputPin` on a synthetic `MockPin`, peripheral interaction logic can be thoroughly unit-tested on host platforms using standard `cargo test` without attaching physical microcontrollers.
@@ -270,7 +288,7 @@ To verify driver logic without embedded hardware, implement a `MockPin` type con
 
 ### Exercise 2: Implementing a Platform-Agnostic I2C Temperature Sensor Driver
 
-**Problem:**
+**Scenario:**
 Hardware sensor driver crates communicate with digital sensors over I2C buses using `embedded_hal::i2c::I2c`.
 Design a generic temperature sensor driver `Tmp102<I2C>` parameterized by `I2C: embedded_hal::i2c::I2c`.
 
@@ -282,6 +300,9 @@ The driver must implement:
 Implement a `MockI2c` peripheral simulator implementing `embedded_hal::i2c::I2c` that records register address reads and returns fake register bytes. Write unit tests verifying positive and negative temperature conversions as well as bus NACK error propagation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -440,7 +461,8 @@ Implement a `MockI2c` peripheral simulator implementing `embedded_hal::i2c::I2c`
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Portable Bus Abstraction (`I2C: embedded_hal::i2c::I2c`)**: The driver depends exclusively on the portable `I2c::write_read` trait method, meaning the driver crate compiles identically for any MCU.
 > 2. **Bitwise Arithmetic in `#![no_std]`**: Conversion operations like `u16::from_be_bytes`, bit shifts (`>> 4`), and sign extension (`| !0x0FFF`) run purely in `core` without requiring allocation or operating system assistance.
 > 3. **Simulating Hardware Transactions**: `MockI2c` verifies both register address transmission and raw byte parsing while allowing simulation of hardware NACK errors.
@@ -449,7 +471,7 @@ Implement a `MockI2c` peripheral simulator implementing `embedded_hal::i2c::I2c`
 
 ### Exercise 3: Software Pulse Generator Combining GPIO (`OutputPin`) and Delay (`DelayNs`)
 
-**Problem:**
+**Scenario:**
 Microcontroller applications often generate pulse sequences (e.g., ultrasonic trigger pulses or stepper motor step clocking) using GPIO output pins and microsecond delays.
 Design a generic pulse generator struct `PulseGenerator<PIN, DELAY>` parameterized by `PIN: embedded_hal::digital::OutputPin` and `DELAY: embedded_hal::delay::DelayNs`.
 
@@ -460,6 +482,9 @@ Implement:
 Implement `MockPin` and `MockDelay` test helpers, and write unit tests (`#[test]`) with assertions verifying pin transition history sequences and total delay microseconds.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -611,7 +636,8 @@ Implement `MockPin` and `MockDelay` test helpers, and write unit tests (`#[test]
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Trait Composition**: `PulseGenerator` demonstrates composing multiple `embedded-hal` peripheral interfaces (`OutputPin` for GPIO control and `DelayNs` for precise timing).
 > 2. **Provided Trait Methods**: `DelayNs::delay_us` automatically delegates to `delay_ns`, illustrating how trait default implementations reduce boilerplate for peripheral implementers.
 > 3. **Integrated Hardware Mock Testing**: Combining `MockPin` and `MockDelay` ensures signal patterns and duration accumulation are validated simultaneously before flashing code onto real target hardware.

@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (record filtering condition clause)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Evaluated by the query engine. Filters are optimized using matching indexes, like secondary indices, to avoid full table scans).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Without a filter clause, queries would always affect or return the entire table contents:
@@ -81,7 +80,7 @@ SELECT * FROM user WHERE permissions CONTAINS "admin";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to join multiple query conditions using commas ',' instead of logical operators like 'AND' or 'OR'
 
@@ -137,61 +136,101 @@ SELECT * FROM user WHERE role = "admin" OR role = "mod" AND active = true; // �
 SELECT * FROM user WHERE (role = "admin" OR role = "mod") AND active = true;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Filter Construction
+### Exercise 1: Multi-Condition Logical Filtering
 
-**Problem:** You are building an e-commerce dashboard. 
-Write the SurrealQL query to:
-1.  Retrieve all columns from the `products` table.
-2.  Filter for records where the `status` is `"instock"`.
-3.  Add an additional filter where the `price` is less than `100.00dec`.
+**Scenario:**
+An admin query selects active premium customers who registered within the last 30 days.
 
-**Expected output:**
+**Requirements:**
+1. Create user records with `tier`, `active`, and `registered_at` fields.
+2. Write a `SELECT` query filtering `tier = "premium" AND active = true AND registered_at > time::now() - 30d`.
+
 > [!check]- Answer
-> ```sql
-> SELECT * FROM products WHERE status = "instock" AND price < 100.00dec;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:u1 SET tier = "premium", active = true, registered_at = time::now() - 10d;
+> CREATE user:u2 SET tier = "free", active = true, registered_at = time::now() - 5d;
+> 
+> -- Multi-condition WHERE clause
+> SELECT * FROM user 
+> WHERE tier = "premium" 
+>   AND active = true 
+>   AND registered_at > time::now() - 30d;
 > ```
-> - The table target is `products`.
-> - Use the `AND` keyword to connect both checks.
+>
+> #### Technical Explanation
+>
+> 1. `WHERE` filters table records based on boolean logical evaluation (`AND`, `OR`, `NOT`).
+> 2. Short-circuit evaluation evaluates criteria in sequence, stopping early on failed `AND` branches.
+> 3. Uses B-tree or secondary indexes when available to optimize record selection speed.
+
+---
+
+### Exercise 2: Filtering on Nested Object Properties
+
+**Scenario:**
+Filter customer profiles where nested property `address.city` equals `"Austin"`.
+
+**Requirements:**
+1. Create profile `profile:p1` with nested `address = { city: "Austin", state: "TX" }`.
+2. Write a `SELECT` query filtering `WHERE address.city = "Austin"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE profile:p1 SET address = { city: "Austin", state: "TX" };
+> CREATE profile:p2 SET address = { city: "Dallas", state: "TX" };
+> 
+> -- Filter on nested object property path
+> SELECT * FROM profile WHERE address.city = "Austin";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Dot-notation (`address.city`) accesses nested object properties inside `WHERE` clauses natively.
+> 2. Eliminates SQL JSON extraction functions (`json_extract` / `->>`) or MongoDB `$elemMatch` blocks.
+> 3. Evaluates nested document properties seamlessly in table scans.
+
+---
+
+### Exercise 3: Containment Filtering with `INSIDE` and `CONTAINS`
+
+**Scenario:**
+Select all products whose `category` is `INSIDE` a target list `["electronics", "computers"]`.
+
+**Requirements:**
+1. Create products in different categories.
+2. Write a `SELECT` query applying `WHERE category INSIDE ["electronics", "computers"]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE product:p1 SET category = "electronics";
+> CREATE product:p2 SET category = "apparel";
+> 
+> -- Filter by set containment
+> SELECT * FROM product WHERE category INSIDE ["electronics", "computers"];
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INSIDE` checks if a record field value belongs to a target array or set collection.
+> 2. Equivalent to SQL `IN (...)` and MongoDB `$in [...]`.
+> 3. Provides clean set-based filtering syntax.
 
 ---
 
 
 
-### Exercise 2: Filtering Range Queries
-
-**Problem:** Query users with `age` between 18 and 65 inclusive using `WHERE` clause.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM user WHERE age >= 18 AND age <= 65;
-> ```
-> ```surrealql
-> SELECT * FROM user WHERE age >= 18 AND age <= 65;
-> ```
->
-> **Explanation:** `WHERE cond1 AND cond2` filters records by numeric range predicates.
-
----
-
-### Exercise 3: Checking Record Link Existence in WHERE
-
-**Problem:** Query articles where `author` record link is not `NONE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM article WHERE author IS NOT NONE;
-> ```
-> ```surrealql
-> SELECT * FROM article WHERE author IS NOT NONE;
-> ```
->
-> **Explanation:** `IS NOT NONE` filters records possessing valid assigned field keys.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`SELECT`](select.md) — The parent query statement.
 - [Operators in SurrealQL](operators.md) — The logical check symbols.
@@ -199,7 +238,7 @@ Write the SurrealQL query to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `WHERE` clause filters rows returned or modified by query statements.
 - Directly equivalent to PostgreSQL's `WHERE` and MongoDB's query filter syntax.
 - Evaluates logical expressions, matching records that return `true`.

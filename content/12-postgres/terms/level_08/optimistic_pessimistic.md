@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Core Concept** (Concurrency Control Strategies): Optimistic vs Pessimistic Concurrency Control compares version checking at commit time against explicit lock acquisition (`SELECT FOR UPDATE`) before modification.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Pessimistic locking relies on built-in database row locks. Optimistic locking is implemented at the application code layer using version columns).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building multi-user web applications (like e-commerce sites, wikis, or project managers), multiple users will inevitably try to edit the same record at the same time.
@@ -92,7 +93,7 @@ WHERE id = 12 AND version = 5; -- Checks if version is still 5!
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using pessimistic locking for human-input workflows
 
@@ -140,70 +141,113 @@ UPDATE products SET price = 100 WHERE id = 1; -- ❌ Missing version predicate c
 UPDATE products SET price = 100, version = version + 1 WHERE id = 1 AND version = 5;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Strategy Selection
+### Exercise 1: Implementing Optimistic Concurrency Control with Version Numbers
 
-**Problem:** Choose the correct locking strategy (**Optimistic** or **Pessimistic**) for the following application features:
-1.  A blog post edit screen where writers draft updates.
-2.  An inventory warehouse system where robots check out physical boxes from shelves.
-3.  A user settings page to change profile avatars.
+**Scenario:**
+Implement Optimistic Concurrency Control on table `products` using a `version` integer column.
 
-**Expected output:**
+**Requirements:**
+1. Execute `UPDATE products SET stock = stock - 1, version = version + 1 WHERE id = 1 AND version = $current_version`.
+
 > [!check]- Answer
-> ```text
-> 1. Optimistic Locking: Writing a blog post takes minutes. Locking the database during drafting would block other processes. If two editors write simultaneously, show a merge warning.
-> 2. Pessimistic Locking: Warehouse checkout is a high-conflict machine process. You must lock the shelf box immediately to prevent two robots from grabbing the same physical box.
-> 3. Optimistic Locking: Setting adjustments are low-conflict. Two users changing an avatar at the same millisecond is rare, so version validation at save is sufficient.
-> ```
-> - Identify if the task involves human editing delays.
-> - Evaluate the cost and frequency of concurrent conflicts.
-
----
-
-
-
-### Exercise 2: Optimistic Locking Update Pattern
-
-**Problem:** Write SQL statement implementing optimistic locking update on `products` checking `version = 3`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPDATE products SET price = 29.99, version = version + 1 WHERE id = 1 AND version = 3;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> UPDATE products
-> SET price = 29.99, version = version + 1
-> WHERE id = 1 AND version = 3;
+> -- Application fetches row + version (e.g. version = 3)
+> SELECT id, stock, version FROM products WHERE id = 1;
+> 
+> -- Application attempts write, checking version matches
+> UPDATE products 
+> SET stock = stock - 1, 
+>     version = version + 1 
+> WHERE id = 1 
+>   AND version = 3 
+> RETURNING id, version;
 > ```
 >
-> **Explanation:** Optimistic locking fails safely if `version` was mutated by another concurrent request.
+> #### Technical Explanation
+>
+> 1. Optimistic locking assumes concurrent conflicts are rare and avoids acquiring database locks during read phase.
+> 2. If another transaction modified the row concurrently (`version` became 4), `UPDATE` matches 0 rows.
+> 3. Application detects 0 updated rows and throws a concurrency conflict error.
 
 ---
 
-### Exercise 3: Optimistic vs Pessimistic Locking Choice
+### Exercise 2: Implementing Pessimistic Locking with `SELECT FOR UPDATE`
 
-**Problem:** Select locking strategy: 1. Low contention web applications (Optimistic Locking); 2. High contention automated financial queue processing (Pessimistic Locking `SELECT FOR UPDATE`).
+**Scenario:**
+Implement Pessimistic Concurrency Control using `SELECT FOR UPDATE` to lock a row before updating stock.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT ... FOR UPDATE` inside `BEGIN ... COMMIT`.
+
 > [!check]- Answer
-> ```text
-> 1. Optimistic Locking, 2. Pessimistic Locking
-> ```
-> ```text
-> 1. Optimistic Locking, 2. Pessimistic Locking
+>
+> #### Implementation
+>
+> ```sql
+> BEGIN;
+> 
+> -- Acquires explicit row lock immediately
+> SELECT id, stock 
+> FROM products 
+> WHERE id = 1 
+> FOR UPDATE;
+> 
+> UPDATE products 
+> SET stock = stock - 1 
+> WHERE id = 1;
+> 
+> COMMIT;
 > ```
 >
-> **Explanation:** Choose locking strategies based on collision frequency and transaction duration.
+> #### Technical Explanation
+>
+> 1. Pessimistic locking assumes concurrent conflicts are likely and acquires an exclusive row lock at read time.
+> 2. Other transactions attempting `SELECT FOR UPDATE` on the same row block until `COMMIT`.
+> 3. Prevents lost update anomalies completely.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Trade-Off Analysis: Optimistic vs Pessimistic Locking
+
+**Scenario:**
+Formulate a technical selection matrix comparing Optimistic vs Pessimistic concurrency control.
+
+**Requirements:**
+1. Contrast lock duration, contention scalability, and implementation complexity.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Concurrency Control Selection Matrix:
+> - Optimistic Control (Version Column): Zero DB lock duration, scales extremely well under high read/low update workloads (Web APIs), requires application retry logic.
+> - Pessimistic Control (SELECT FOR UPDATE): Holds DB row locks during user thought time/API processing, causes connection blocking under high write contention, simple logic.
+> Selection Rule: Use Optimistic for web APIs; use Pessimistic inside short database transactions for high-contention inventory.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Optimistic control is ideal for stateless web servers where database transactions cannot remain open across HTTP requests.
+> 2. Pessimistic control is ideal for short, high-contention backend transaction blocks (e.g. flash sales).
+> 3. Align locking strategy with application architecture.
+
+---
+
+
+
+## 6. Related Terms
 - [Locking (Row-level, Table-level)](locking.md) — The locking basics.
 - [`SELECT ... FOR UPDATE`](select_for_update.md) — - Pessimistic implementation.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Pessimistic locking prevents conflicts by locking data upfront before modifications.
 - Optimistic locking allows concurrent edits and validates versions at save time.
 - Pessimistic uses `SELECT ... FOR UPDATE`; locks rows and can block traffic.

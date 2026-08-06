@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Index Type**
+
+**Performance / Optimization** (Default B-Tree Index Structure): B-Tree Index is PostgreSQL's default self-balancing tree index optimizing equality (`=`) and range (`<`, `<=`, `>`, `>=`, `BETWEEN`) queries in $O(\log N)$ time.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (The default index type. If you run `CREATE INDEX` without specifying a `USING` clause, Postgres compiles a B-tree index by default).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational databases need a default index type that handles the most common types of SQL queries:
@@ -86,7 +87,7 @@ CREATE INDEX idx_inventory_name ON inventory USING btree(item_name);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting a B-tree index to speed up leading wildcard searches (`%suffix`)
 
@@ -133,65 +134,90 @@ CREATE INDEX idx_title_trgm ON posts USING GIN (title gin_trgm_ops);
 Drop duplicate indexes using DROP INDEX
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Match Audit
+### Exercise 1: Creating Default B-Tree Indexes for Range Lookups
 
-**Problem:** You have a B-tree index on the `price` column. Which of the following query filters will **successfully leverage** the B-tree index?
-1.  `WHERE price = 15.00`
-2.  `WHERE price BETWEEN 10.00 AND 50.00`
-3.  `WHERE price IS NULL`
-4.  `WHERE price != 100.00`
+**Scenario:**
+Create a B-tree index on `orders(created_at)` to accelerate date range queries.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE INDEX idx_orders_created_at ON orders(created_at)`.
+
 > [!check]- Answer
-> ```text
-> Queries 1, 2, and 3 will leverage the index!
-> 1. Equality checks are the primary use-case for B-trees.
-> 2. Range queries (BETWEEN) leverage the sorted node sequence.
-> 3. PostgreSQL B-trees index NULL values, so IS NULL queries can use them.
-> 4. Query 4 (inequality !=) usually does NOT use the index, because searching for "everything except 100" forces the database to read almost the entire table, making index scans slower than simple sequential table scans.
-> ```
-> - B-trees are optimized for sorting and ranges.
-> - Consider how much of the table is returned by the inequality filter.
-
----
-
-
-
-### Exercise 2: Creating Standard B-Tree Index
-
-**Problem:** Create B-Tree index on `email` column of `users` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE INDEX idx_users_email ON users (email);
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> CREATE INDEX idx_users_email ON users (email);
+> CREATE INDEX idx_orders_created_at 
+> ON orders (created_at);
+> 
+> SELECT id, customer_id, total_cents 
+> FROM orders 
+> WHERE created_at BETWEEN '2026-01-01' AND '2026-01-31';
 > ```
 >
-> **Explanation:** `CREATE INDEX` builds a standard B-Tree index by default in PostgreSQL.
+> #### Technical Explanation
+>
+> 1. B-tree (Balanced Tree) is PostgreSQL's default index type.
+> 2. Maintains keys in sorted order, providing $O(\log N)$ equality and range searches (`<`, `<=`, `>`, `>=`, `BETWEEN`).
+> 3. Accelerates `created_at` range scans.
 
 ---
 
-### Exercise 3: B-Tree Supported Comparison Operators
+### Exercise 2: Indexing Foreign Key Columns
 
-**Problem:** List comparison operators supported by B-Tree indexes (`<`, `<=`, `=`, `>=`, `>`, `BETWEEN`, `IN`).
+**Scenario:**
+Create a B-tree index on `orders(user_id)` to optimize join performance.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE INDEX idx_orders_user_id ON orders(user_id)`.
+
 > [!check]- Answer
-> ```text
-> <, <=, =, >=, >, BETWEEN, IN
-> ```
-> ```text
-> <, <=, =, >=, >, BETWEEN, IN
+>
+> #### Implementation
+>
+> ```sql
+> CREATE INDEX idx_orders_user_id 
+> ON orders (user_id);
 > ```
 >
-> **Explanation:** B-Tree balanced tree structures accelerate range and equality search predicates.
+> #### Technical Explanation
+>
+> 1. PostgreSQL foreign key constraints do NOT create secondary indexes automatically.
+> 2. Indexing foreign keys converts sequential scans into fast B-tree index lookups during `JOIN` queries.
+> 3. Mandatory schema optimization rule.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Inspecting B-Tree Index Execution with `EXPLAIN`
+
+**Scenario:**
+Verify that a query filtering `id = 42` uses `Index Scan` on the B-tree index.
+
+**Requirements:**
+1. Execute `EXPLAIN ANALYZE SELECT * FROM orders WHERE id = 42`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> EXPLAIN ANALYZE 
+> SELECT * FROM orders WHERE id = 42;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Displays `Index Scan using orders_pkey on orders`.
+> 2. `Execution Time` drops from 50ms (Seq Scan) to 0.05ms (Index Scan).
+> 3. Confirms B-tree index usage.
+
+---
+
+
+
+## 6. Related Terms
 - [Index (Concept)](index_concept.md) — The parent performance concept.
 - [`CREATE INDEX` / `DROP INDEX`](create_drop_index.md) — SQL commands.
 - [GIN Index](gin_index.md) — The index type for non-scalar types.
@@ -202,7 +228,7 @@ Drop duplicate indexes using DROP INDEX
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - B-tree is the default, self-balancing index type in PostgreSQL.
 - Organizes data keys in sorted order inside balanced hierarchy nodes.
 - Guarantees symmetrical node depths, making lookup times predictable.

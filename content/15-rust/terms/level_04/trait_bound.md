@@ -160,9 +160,10 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Performance Telemetry Stream Aggregator
 
-**Problem Scenario:**  
+**Scenario:** **Problem Scenario:**  
 You are designing an enterprise telemetry collection system for cloud infrastructure. The core engine requires a generic `TelemetryProcessor<T>` capable of ingesting high-volume metric events, filtering events that breach configured thresholds, and generating human-readable diagnostic reports.
 
+**Requirements:**
 **Requirements:**
 1. Define a trait `Measurable` with methods `fn metric_name(&self) -> &'static str` and `fn value(&self) -> f64`.
 2. Define a concrete metric struct `CpuMetric` holding `core_id: u32` and `usage_percent: f64`. Implement `Measurable`, `std::fmt::Display`, `PartialOrd`, and `PartialEq` for `CpuMetric`.
@@ -297,9 +298,10 @@ You are designing an enterprise telemetry collection system for cloud infrastruc
 
 ### Exercise 2: Key-Value In-Memory Cache Buffer with Sync Reconciliation
 
-**Problem Scenario:**  
+**Scenario:** **Problem Scenario:**  
 You are building an in-memory cache system for low-latency web services. The cache needs to store arbitrary key-value pairs, track cache metrics (hits vs. misses), and perform incremental synchronization updates from external batch sources.
 
+**Requirements:**
 **Requirements:**
 1. Define a generic struct `CacheBuffer<K, V>` using a `where` clause to declare trait bounds:
    - Key bound: `K: std::hash::Hash + Eq + Clone + std::fmt::Debug`
@@ -425,9 +427,10 @@ You are building an in-memory cache system for low-latency web services. The cac
 
 ### Exercise 3: Trait-Bound Plugin Transformation Pipeline
 
-**Problem Scenario:**  
+**Scenario:** **Problem Scenario:**  
 You are implementing an enterprise payload validation and transformation engine. The system processes financial transaction payloads by executing a sequential pipeline of modular plugins (such as sanitizers, hash signers, and auditors).
 
+**Requirements:**
 **Requirements:**
 1. Define a generic trait `Plugin<T>` with methods `fn name(&self) -> &'static str` and `fn process(&mut self, payload: &mut T) -> Result<(), String>`.
 2. Define struct `TransactionPayload` with fields `tx_id: u64`, `amount: f64`, `is_sanitized: bool`, and `hash_signature: Option<String>`.

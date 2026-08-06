@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Vue Paradigm**
+
+**Framework Architecture** (Vue 3 Composition API Integration): Composition API Context defines Nuxt 3's reliance on `<script setup>` syntax and reactive primitives (`ref`, `reactive`, `computed`) for modular application logic.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In Vue 2 (and early Nuxt 2), developers used the **Options API** (`data()`, `methods`, `computed`, `mounted`). As components grew larger, logic related to a single feature (e.g., search functionality) became scattered across the file. You'd have search state in `data()`, search logic in `methods`, and search caching in `computed`.
@@ -56,7 +57,7 @@ The true power of the Composition API is extracting logic into reusable function
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using the Options API in Nuxt 3
 **The mistake:** Falling back to familiar Vue 2 syntax.
@@ -142,80 +143,156 @@ console.log(route.path);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Reactive State
+### Exercise 1: Migrating Options API to Composition API `<script setup>`
 
-**Problem:** How do you declare a reactive integer in the Composition API that updates the UI when changed?
+**Scenario:**
+Migrate a legacy Options API Vue component to Nuxt 3 `<script setup>` TypeScript syntax.
 
-**Expected output:**
+**Requirements:**
+1. Refactor `data()`, `computed`, and `methods` into `<script setup>` primitives.
+
 > [!check]- Answer
-> ```typescript
-> const age = ref(25);
-> // To update it: age.value = 26;
-> ```
-> - Reactivity in Composition API is achieved by wrapping raw values in reactive containers like `ref()`.
-
----
-
-### Exercise 2: Nuxt Context Preservation Pattern
-
-**Problem:** Write a Vue 3 component capturing `useNuxtApp()` synchronously and calling `$fetch` inside an `onClick` async function.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
-> const { $fetch } = useNuxtApp();
-> async function handleSave() {
->   await $fetch('/api/save', { method: 'POST' });
-> }
-> </script>
-> ```
-> - Capture Nuxt context composables at the top level of `<script setup>`.
-> 
-> ```vue
-> <script setup>
-> const { $fetch } = useNuxtApp();
-> 
-> async function handleSave() {
->   await $fetch('/api/save', { method: 'POST' });
-> }
-> </script>
-> 
-> <template>
->   <button @click="handleSave">Save</button>
-> </template>
-> ```
+> <script setup lang="ts">
+> const search = ref("");
+> const items = ref(["Nuxt 3", "Vue 3", "Nitro"]);
+
+const filteredItems = computed(() => {
+  return items.value.filter(item => item.toLowerCase().includes(search.value.toLowerCase()));
+});
+
+function addItem(newItem: string) {
+  items.value.push(newItem);
+}
+</script>
+
+<template>
+  <div>
+    <input v-model="search" placeholder="Search..." />
+    <ul>
+      <li v-for="item in filteredItems" :key="item">{{ item }}</li>
+    </ul>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `<script setup>` is a compile-time syntactic sugar for using the Composition API inside Single File Components.
+> 2. Variables and functions declared at top level are directly exposed to the template without `return {}` blocks.
+> 3. Provides superior TypeScript inference compared to legacy Options API.
 
 ---
 
-### Exercise 3: callWithNuxt Context Wrapper
+### Exercise 2: Managing Reactive State with `ref()` and `reactive()`
 
-**Problem:** Which helper function manually restores Nuxt instance context when executing callbacks across async boundaries?
+**Scenario:**
+Demonstrate the difference between primitive state management using `ref()` vs object state using `reactive()`.
 
-**Expected output:**
+**Requirements:**
+1. Code `ref` and `reactive` primitives in `<script setup>`.
+
 > [!check]- Answer
-> ```text
-> callWithNuxt(app, callback)
-> ```
-> - `callWithNuxt` restores instance context for async functions.
-> 
-> ```typescript
-> const nuxtApp = useNuxtApp();
-> callWithNuxt(nuxtApp, () => useRoute());
-> ```
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> // ref for scalar primitive value
+> const count = ref<number>(0);
+
+// reactive for structured state object
+const formState = reactive({
+  username: "",
+  email: "",
+  isSubmitting: false
+});
+
+function resetForm() {
+  count.value = 0;
+  formState.username = "";
+  formState.email = "";
+  formState.isSubmitting = false;
+}
+</script>
+
+<template>
+  <button @click="count++">Count: {{ count }}</button>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `ref()` creates a reactive wrapper with a `.value` property for scalar or complex types.
+> 2. `reactive()` creates a Proxy wrapper around an object, requiring no `.value` dereferencing in script.
+> 3. Template automatically unwraps `ref()` objects without `.value`.
+
+---
+
+### Exercise 3: Component Props and Emits Declaration in `<script setup>`
+
+**Scenario:**
+Define typed component props and emits using `defineProps` and `defineEmits` macro primitives.
+
+**Requirements:**
+1. Define props `title: string` and emit `update:title`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const props = defineProps<{
+>   title: string;
+>   count?: number;
+> }>();
+
+const emit = defineEmits<{
+  (e: "update:title", newTitle: string): void;
+  (e: "close"): void;
+}>();
+
+function handleInput(event: Event) {
+  const target = event.target as HTMLInputElement;
+  emit("update:title", target.value);
+}
+</script>
+
+<template>
+  <div>
+    <h2>{{ props.title }}</h2>
+    <input :value="props.title" @input="handleInput" />
+    <button @click="emit('close')">Close</button>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `defineProps` and `defineEmits` are compiler macros available automatically inside `<script setup>`.
+> 2. Pure TypeScript type arguments enable strict prop validation without runtime helper functions.
+> 3. Standard Nuxt 3 component communication model.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Auto-imports](auto_imports.md) — Why you don't need to explicitly import `ref` or `computed`.
 - [Nuxt 3 Overview](nuxt_3_overview.md) — Related concept: Nuxt 3 Overview.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Nuxt 3 heavily relies on the Vue 3 Composition API.
 - Always use `<script setup lang="ts">` for component logic.
 - Variables and functions in `<script setup>` are automatically available in the template.

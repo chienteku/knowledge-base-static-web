@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Performance / Operations (EXPLAIN query execution plan analysis)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the query planner and execution engine. Logs execution telemetry and index search tree statistics during statement processing).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When an application query runs slowly in production:
@@ -79,7 +78,7 @@ SELECT id, title, price FROM product WHERE category = "electronics";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on 'SELECT *' in high-throughput API endpoints, inflating memory usage and slowing down JSON serialization
 
@@ -134,59 +133,84 @@ EXPLAIN SELECT * FROM user;
 EXPLAIN FULL SELECT * FROM user;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Optimization Diagnosis
+### Exercise 1: Query Execution Plan Inspection with `EXPLAIN`
 
-**Problem:** You have a `logs` table with 2,000,000 records.
-The query `SELECT * FROM logs WHERE severity = "ERROR" AND created_at >= d"2026-07-01T00:00:00Z";` takes 4.5 seconds to run.
-Write the SurrealQL command to create the single most effective composite index to optimize both filters.
+**Scenario:**
+A database administrator inspects a slow `SELECT` query execution plan using `EXPLAIN` to determine whether an index was used.
 
-**Expected output:**
+**Requirements:**
+1. Execute `EXPLAIN SELECT * FROM user WHERE email = "alice@example.com"`.
+
 > [!check]- Answer
-> ```sql
-> DEFINE INDEX idx_logs_severity_date ON logs COLUMNS severity, created_at;
-> ```
-> - Combine `severity` and `created_at` in a composite index.
-> - The leftmost column should match the exact match filter (`severity`).
-
----
-
-
-
-### Exercise 2: Running Query Explanation
-
-**Problem:** Run `EXPLAIN FULL` on query `SELECT * FROM user WHERE email = 'alice@example.com'`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> EXPLAIN FULL SELECT * FROM user WHERE email = 'alice@example.com';
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> EXPLAIN FULL SELECT * FROM user WHERE email = 'alice@example.com';
+> EXPLAIN SELECT * FROM user WHERE email = "alice@example.com";
 > ```
 >
-> **Explanation:** `EXPLAIN FULL` outputs the database query execution plan and index utilization details.
+> #### Technical Explanation
+>
+> 1. `EXPLAIN` returns query planner execution details without running full document fetches.
+> 2. Details whether the query executed a table scan (`FullScan`) or an index lookup (`IndexScan`).
+> 3. Essential tool for identifying missing secondary indexes.
 
 ---
 
-### Exercise 3: Identifying Full Table Scans in Query Plans
+### Exercise 2: Detailed Execution Metrics with `EXPLAIN FULL`
 
-**Problem:** What property in `EXPLAIN` output indicates an index was utilized? (`FETCH` / `INDEX` plan operator).
+**Scenario:**
+Inspect actual execution timings, records scanned, and index fetch counts by running `EXPLAIN FULL`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `EXPLAIN FULL SELECT * FROM user WHERE email = "alice@example.com"`.
+
 > [!check]- Answer
-> ```text
-> INDEX operator presence in execution plan steps
-> ```
-> ```text
-> INDEX operator presence in execution plan steps
+>
+> #### Implementation
+>
+> ```surrealql
+> EXPLAIN FULL SELECT * FROM user WHERE email = "alice@example.com";
 > ```
 >
-> **Explanation:** `EXPLAIN` plan steps display whether `INDEX` range scans or full table scans are used.
+> #### Technical Explanation
+>
+> 1. `EXPLAIN FULL` executes the query and returns empirical execution metrics (time taken, memory, rows evaluated).
+> 2. Highlights query bottlenecks in multi-join or graph-heavy operations.
+> 3. Guides query performance tuning and index optimization.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Comparing Table Scans vs Index Lookups
+
+**Scenario:**
+Compare `EXPLAIN` outputs before and after defining an index on `user(email)`.
+
+**Requirements:**
+1. Compare `FullScan` output vs `IndexScan` output.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Before Index: { detail: "FullScan", records_evaluated: 100000 }
+> After Index:  { detail: "IndexScan(idx_user_email)", records_evaluated: 1 }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `FullScan` indicates the engine scanned every record in the table sequentially ($O(N)$).
+> 2. `IndexScan` indicates the engine used a B-tree index to jump directly to target records ($O(\log N)$).
+> 3. Verifies index utilization before deploying production queries.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [Composite Index](composite_index.md) — Multi-column optimization.
@@ -194,7 +218,7 @@ Write the SurrealQL command to create the single most effective composite index 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Query explanation tools help identify full table scans and slow execution steps.
 - Always index fields referenced in `WHERE` filters to achieve $O(\log N)$ performance.
 - Index record link fields to accelerate reverse relationship queries.

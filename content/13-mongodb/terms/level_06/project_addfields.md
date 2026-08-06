@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Aggregation** (Document Reshaping Stages): The $project and $addFields stages reshape output documents by including, excluding, computing, or modifying fields.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executed on the database engine. Reshapes the BSON document structures in memory during pipeline steps).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 During data processing inside an aggregation pipeline, documents need to be reshaped for frontend rendering:
@@ -96,7 +97,7 @@ db.products.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using '$project' to append a single computed field, accidentally discarding all other document fields
 
@@ -144,68 +145,103 @@ db.users.aggregate([{ $project: { name: 1, age: 0 } }]); // ❌ Cannot mix 1 and
 db.users.aggregate([{ $project: { name: 1, _id: 0 } }]);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Pipeline Reshape selector
+### Exercise 1: Appending Derived Fields with `$addFields`
 
-**Problem:** You are building a pipeline. Select the correct stage (**$project** or **$addFields**) for these requirements:
-1.  You want to calculate a user's `fullname` by concatenating `first_name` and `last_name`, keeping all their settings, logs, and email fields intact.
-2.  You want to strip a heavy document down, returning only `_id` and the calculated `revenue` field to the frontend app.
+**Scenario:**
+Add a calculated `totalPrice` field (`price + shipping`) to product documents while retaining all original document fields.
 
-**Expected output:**
+**Requirements:**
+1. Use `$addFields: { totalPrice: { $add: ["$price", "$shipping"] } }`.
+
 > [!check]- Answer
-> ```text
-> 1. $addFields: Because you want to inject a new calculated field (`fullname`) while preserving the rest of the document structure (settings, logs, email).
-> 2. $project: Because you want to explicitly discard all other fields, whitelisting only `_id` and the new `revenue` field to minimize the network payload.
-> ```
-> - Determine if the operation requires discarding unspecified fields.
-> - Relate this to whitelisting vs. additive behaviors.
-
----
-
-
-
-### Exercise 2: Adding Computed Field with `$addFields`
-
-**Problem:** Add computed field `totalPrice` (`price * qty`) preserving all document fields using `$addFields`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.orders.aggregate([{ $addFields: { totalPrice: { $multiply: ["$price", "$qty"] } } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.orders.aggregate([
+> db.products.aggregate([
 >   {
 >     $addFields: {
->       totalPrice: { $multiply: ["$price", "$qty"] }
+>       totalPrice: { $add: ["$price", "$shipping"] }
 >     }
 >   }
 > ]);
 > ```
 >
-> **Explanation:** `$addFields` appends new computed fields without modifying existing document properties.
+> #### Technical Explanation
+>
+> 1. `$addFields` appends new calculated fields or modifies existing fields without removing unmentioned document keys.
+> 2. Replaces verbose `$project` stages when existing fields must be preserved.
+> 3. Simplifies pipeline syntax.
 
 ---
 
-### Exercise 3: Reshaping Output with `$project`
+### Exercise 2: Shaping Output Documents with `$project`
 
-**Problem:** Project document returning ONLY `user_email: "$email"` suppressing `_id`.
+**Scenario:**
+Project user documents returning ONLY `fullName` (concatenated `firstName` and `lastName`) and `email`, explicitly omitting `_id`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$project` with `$concat`.
+
 > [!check]- Answer
-> ```text
-> db.users.aggregate([{ $project: { _id: 0, user_email: "$email" } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.users.aggregate([
->   { $project: { _id: 0, user_email: "$email" } }
+>   {
+>     $project: {
+>       _id: 0,
+>       email: 1,
+>       fullName: { $concat: ["$firstName", " ", "$lastName"] }
+>     }
+>   }
 > ]);
 > ```
 >
-> **Explanation:** `$project` reshapes output documents and renames field paths.
+> #### Technical Explanation
+>
+> 1. `$project` explicitly specifies which fields to include, exclude, or compute in output streams.
+> 2. Unmentioned fields are omitted from output documents.
+> 3. Optimizes client response payload structures.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Overwriting Existing Fields with `$set`
+
+**Scenario:**
+Overwrite existing string field `status` with its uppercase equivalent using pipeline `$set`.
+
+**Requirements:**
+1. Use `$set: { status: { $toUpper: "$status" } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.aggregate([
+>   {
+>     $set: {
+>       status: { $toUpper: "$status" }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$set` is an alias for `$addFields`.
+> 2. Overwrites matching field names with computed expression values.
+> 3. Standard stage for field normalization.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [Projection](../level_03/projection.md) — The whitelisting rules.
@@ -215,7 +251,7 @@ db.users.aggregate([{ $project: { name: 1, _id: 0 } }]);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$project` and `$addFields` reshape documents inside aggregation pipelines.
 - `$project` operates on a whitelist system, discarding unlisted fields by default.
 - `$addFields` adds or modifies fields while preserving all other properties.

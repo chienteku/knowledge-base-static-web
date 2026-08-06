@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Syntax**
+
+**Advanced Feature** (Correlated Subquery Joins): `JOIN LATERAL` allows a subquery in the `FROM` clause to reference columns exposed by preceding tables in the join order.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in modern SQL engines. Extremely popular in PostgreSQL for parsing JSONB objects, expanding arrays, and executing Top-N category reports).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard SQL, you cannot pass variables between tables in a join. 
@@ -107,7 +108,7 @@ CROSS JOIN LATERAL (
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using LATERAL joins when standard joins are possible and faster
 
@@ -157,82 +158,117 @@ SELECT * FROM users u JOIN LATERAL (SELECT * FROM orders WHERE user_id = u.id LI
 Compare execution plans of LATERAL JOIN vs ROW_NUMBER() PARTITION BY
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: User Log Lateral Search
+### Exercise 1: Correlated Subquery Joins with `JOIN LATERAL`
 
-**Problem:** You have a `users` table and a `user_logs` table (columns: `user_id`, `event`, `logged_at` timestamp). Write the SQL query using a `LEFT JOIN LATERAL` to select:
-1.  Every user's `username` from `users`.
-2.  The `event` and `logged_at` timestamp of **only the single most recent log entry** made by that user.
+**Scenario:**
+Query each customer alongside their top 2 highest value orders using `JOIN LATERAL`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `JOIN LATERAL (SELECT * FROM orders WHERE customer_id = c.id ORDER BY total_cents DESC LIMIT 2) AS top_orders ON TRUE`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT u.username, log.event, log.logged_at
-> FROM users u
+> SELECT 
+>   c.id AS customer_id, 
+>   c.company_name, 
+>   o.id AS order_id, 
+>   o.total_cents 
+> FROM customers AS c 
+> CROSS JOIN LATERAL (
+>   SELECT id, total_cents 
+>   FROM orders 
+>   WHERE customer_id = c.id 
+>   ORDER BY total_cents DESC 
+>   LIMIT 2
+> ) AS o;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Standard subqueries in `FROM` clauses cannot reference outer table columns.
+> 2. `LATERAL` allows subqueries to reference columns exposed by preceding tables (`c.id`).
+> 3. Fetches top-N child items per parent row efficiently.
+
+---
+
+### Exercise 2: Unnesting Arrays alongside Table Attributes
+
+**Scenario:**
+Unnest a `tags` array column on `posts` using `JOIN LATERAL unnest(tags)`.
+
+**Requirements:**
+1. Execute `JOIN LATERAL unnest(p.tags) AS t(tag_name) ON TRUE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   p.id AS post_id, 
+>   p.title, 
+>   t.tag_name 
+> FROM posts AS p 
+> CROSS JOIN LATERAL UNNEST(p.tags) AS t(tag_name);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `LATERAL` allows set-returning functions like `UNNEST()` to reference array columns from the current row.
+> 2. Expands array elements into paired output rows.
+> 3. Idiomatic array expansion pattern.
+
+---
+
+### Exercise 3: Preserving Parents with Zero Matching Lateral Rows using `LEFT JOIN LATERAL`
+
+**Scenario:**
+Use `LEFT JOIN LATERAL ... ON TRUE` to preserve customers who have 0 orders.
+
+**Requirements:**
+1. Execute `LEFT JOIN LATERAL (...) AS o ON TRUE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   c.id AS customer_id, 
+>   c.company_name, 
+>   o.total_cents AS top_order_cents 
+> FROM customers AS c 
 > LEFT JOIN LATERAL (
->   SELECT event, logged_at
->   FROM user_logs
->   WHERE user_id = u.id
->   ORDER BY logged_at DESC
+>   SELECT total_cents 
+>   FROM orders 
+>   WHERE customer_id = c.id 
+>   ORDER BY total_cents DESC 
 >   LIMIT 1
-> ) log ON TRUE;
+> ) AS o ON TRUE;
 > ```
-> - Use the `LEFT JOIN LATERAL` syntax targeting the subquery.
-> - Order logs by `logged_at` descending and apply `LIMIT 1` inside the lateral block.
-> - Append `ON TRUE` at the end of the lateral join statement to satisfy syntax rules.
+>
+> #### Technical Explanation
+>
+> 1. `CROSS JOIN LATERAL` drops parent rows if the lateral subquery returns zero rows.
+> 2. `LEFT JOIN LATERAL ... ON TRUE` preserves parent rows, populating subquery columns as `NULL` if 0 rows match.
+> 3. Complete outer lateral join coverage.
 
 ---
 
 
 
-### Exercise 2: Top-N Per Group Query with LATERAL JOIN
-
-**Problem:** Query each user's top 2 latest orders using `LEFT JOIN LATERAL`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT u.name, o.id, o.created_at FROM users u LEFT JOIN LATERAL (SELECT id, created_at FROM orders WHERE user_id = u.id ORDER BY created_at DESC LIMIT 2) o ON true;
-> ```
-> ```sql
-> SELECT u.name, o.id, o.created_at
-> FROM users u
-> LEFT JOIN LATERAL (
->   SELECT id, created_at FROM orders
->   WHERE user_id = u.id
->   ORDER BY created_at DESC LIMIT 2
-> ) o ON true;
-> ```
->
-> **Explanation:** `LATERAL` subqueries execute per LHS row, supporting correlated top-N per group queries.
-
----
-
-### Exercise 3: Expanding JSONB Array Elements with LATERAL
-
-**Problem:** Unnest JSONB array column `items` for each `orders` row using `LEFT JOIN LATERAL jsonb_array_elements()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT o.id, item FROM orders o, LATERAL jsonb_array_elements(o.items) AS item;
-> ```
-> ```sql
-> SELECT o.id, item
-> FROM orders o,
-> LATERAL jsonb_array_elements(o.items) AS item;
-> ```
->
-> **Explanation:** `LATERAL` joins set-returning functions (`jsonb_array_elements`) directly to parent row attributes.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`JOIN` (Concept)](../level_05/join_concept.md) — Standard non-correlated joins.
 - [Common Table Expression (CTE / `WITH`)](cte.md) — Subquery structures.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `LATERAL` joins break scope barriers, allowing subqueries to reference parent columns.
 - Behaves like a procedural `foreach` loop (evaluates right subquery per left row).
 - Crucial for resolving "Top-N" categories queries (e.g. top 3 orders per user).

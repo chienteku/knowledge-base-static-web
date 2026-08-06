@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Namespace**
+
+**Core Concept** (Database Logical Namespace): A Database Context in MongoDB is a top-level logical container that groups collections, manages user security access, and isolates data on disk.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Managed in the server's storage directory. A single MongoDB server instance (`mongod`) can run multiple databases simultaneously).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When deploying a database server, you rarely host just one application. 
@@ -78,7 +79,7 @@ db.events.insertOne({ type: "click", page: "home" });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to run cross-database joins ($lookup queries)
 
@@ -126,60 +127,86 @@ const tenantDb = client.db(`tenant_${tenantId}`); // ❌ Database sprawl anti-pa
 const db = client.db("saas_app"); db.users.find({ tenantId: tenantId }); // Single shared database
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Namespace Creation Commands
+### Exercise 1: Switching Database Context in mongosh
 
-**Problem:** You connect to a fresh MongoDB server. You want to create a database namespace named `inventory_app` and seed a single document containing `{ item: "wrench", stock: 15 }` into a collection named `tools`. 
-Write the shell commands to execute this.
+**Scenario:**
+Switch active shell context from default `test` database to production `store_db`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `use store_db`.
+2. Verify active context with `db`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> use inventory_app
-> 
-> db.tools.insertOne({ item: "wrench", stock: 15 });
+> use store_db;
+> console.log("Active Database:", db.getName());
 > ```
-> - The database is created automatically upon document write.
-> - Switch context using the `use` keyword.
+>
+> #### Technical Explanation
+>
+> 1. `use <dbname>` switches the shell's active `db` parameter context.
+> 2. Databases are created lazily upon inserting the first document into a collection.
+> 3. Isolates collection namespaces on disk.
+
+---
+
+### Exercise 2: Listing Database Contexts and Sizes
+
+**Scenario:**
+List all database contexts present on a MongoDB instance along with their disk sizes.
+
+**Requirements:**
+1. Execute `show dbs` or `db.adminCommand({ listDatabases: 1 })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> show dbs;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `show dbs` returns database names and on-disk storage sizes.
+> 2. Databases with zero collections/documents are omitted until initial writes occur.
+> 3. Requires administrative cluster privileges to inspect all database contexts.
+
+---
+
+### Exercise 3: Dropping Database Contexts
+
+**Scenario:**
+Drop a test database context `staging_db` completely.
+
+**Requirements:**
+1. Switch to `staging_db` and execute `db.dropDatabase()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> use staging_db;
+> db.dropDatabase();
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `db.dropDatabase()` deletes all collections, documents, and index files in the current database context.
+> 2. Reclaims allocated storage pages.
+> 3. Operates within the active target database context.
 
 ---
 
 
 
-### Exercise 2: Switching Database Context in mongosh
-
-**Problem:** Command to switch active database context to `analytics` (`use analytics`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> use analytics
-> ```
-> ```javascript
-> use analytics
-> ```
->
-> **Explanation:** `use dbname` sets active database context in mongosh.
-
----
-
-### Exercise 3: Listing Databases
-
-**Problem:** Command to list all databases and disk usage in mongosh (`show dbs`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> show dbs
-> ```
-> ```javascript
-> show dbs
-> ```
->
-> **Explanation:** `show dbs` prints active non-empty databases and file sizes.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Collection](collection.md) — The child collections.
 - [mongosh (MongoDB Shell)](mongosh.md) — The command line interface.
@@ -189,7 +216,7 @@ Write the shell commands to execute this.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A database is the high-level logical container for collections in MongoDB.
 - Provides namespace isolation and application data separation.
 - Physical storage files are written separately on disk for each database.

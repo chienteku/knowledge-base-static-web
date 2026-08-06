@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Component**
+
+**Routing / Navigation** (Smart Client Navigation Link Component): `<NuxtLink>` is the core navigation component providing client-side SPA transitions, prefetching, and active route styling.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you use a standard HTML `<a>` tag (e.g., `<a href="/about">About</a>`), the browser performs a "hard navigation." It completely destroys the current web page, requests a brand new HTML file from the server, and rebuilds the entire UI from scratch. This defeats the purpose of building a Single Page Application (SPA).
@@ -53,7 +54,7 @@ When the user finally clicks the link, the page transition is truly instant, bec
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `<a>` tags for internal navigation
 **The mistake:** Writing `<a href="/dashboard">Dashboard</a>` instead of `<NuxtLink to="/dashboard">`.
@@ -100,68 +101,124 @@ When the user finally clicks the link, the page transition is truly instant, bec
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: External Links
+### Exercise 1: Internal and External Routing with `<NuxtLink>`
 
-**Problem:** Write a NuxtLink that redirects the user to `https://google.com`. Will Nuxt try to prefetch this link?
+**Scenario:**
+Create internal navigation links (`/about`) and external links (`https://nuxt.com`) using `<NuxtLink>`.
 
-**Expected output:**
+**Requirements:**
+1. Use `<NuxtLink to="/about">` and `<NuxtLink to="https://nuxt.com">`.
+
 > [!check]- Answer
-> ```vue
-> <NuxtLink to="https://google.com">Google</NuxtLink>
-> <!-- No, Nuxt is smart enough to detect it is external and disable prefetching. -->
-> ```
-> - Nuxt inspects the scheme/prefix of the link (like `http` or `https`) to classify if the destination is internal or external.
-
----
-
-### Exercise 2: NuxtLink Active Class Pattern
-
-**Problem:** Write `<NuxtLink>` component navigating to `/about` setting active class `'font-bold text-green-500'` when current route matches.
-
-**Expected output:**
-> [!check]- Answer
-> ```vue
-> <NuxtLink to="/about" active-class="font-bold text-green-500">About</NuxtLink>
-> ```
-> - `active-class` applies CSS styles to active link matching current route.
-> 
+>
+> #### Implementation
+>
 > ```vue
 > <template>
->   <NuxtLink to="/about" active-class="font-bold text-green-500">
->     About Us
->   </NuxtLink>
+>   <nav>
+>     <!-- Internal SPA Client Navigation -->
+>     <NuxtLink to="/about">About Us</NuxtLink>
+>     
+>     <!-- External URL Link (Renders standard <a> with rel="noopener") -->
+>     <NuxtLink to="https://nuxt.com" target="_blank">Nuxt Documentation</NuxtLink>
+>   </nav>
 > </template>
 > ```
 
+> #### Technical Explanation
+>
+> 1. `<NuxtLink>` automatically detects whether a URL is internal or external.
+> 2. Internal links execute fast SPA route transitions without full page refreshes.
+> 3. External links automatically render standard `<a>` tags with `rel="noopener noreferrer"`.
+
 ---
 
-### Exercise 3: NuxtLink Prefetching Behavior
+### Exercise 2: Controlling Viewport Route Prefetching
 
-**Problem:** When does `<NuxtLink>` automatically prefetch code payload for targeted routes?
+**Scenario:**
+Disable automatic route prefetching for a specific heavy dashboard link using `:prefetch="false"`.
 
-**Expected output:**
+**Requirements:**
+1. Use `<NuxtLink to="/heavy-dashboard" :prefetch="false">`.
+
 > [!check]- Answer
-> ```text
-> When the <NuxtLink> enters the browser viewport in production mode.
+>
+> #### Implementation
+>
+> ```vue
+> <template>
+>   <div>
+>     <!-- Prefetching disabled for memory-intensive route -->
+>     <NuxtLink to="/admin/analytics" :prefetch="false">
+>       Admin Analytics
+>     </NuxtLink>
+>   </div>
+> </template>
 > ```
-> - Prefetches route payload when link enters the browser viewport.
-> 
-> ```text
-> Intersection Observer -> Prefetch Route Payload in Background
-> ```
+
+> #### Technical Explanation
+>
+> 1. By default, `<NuxtLink>` prefetches code chunks for linked routes when they enter the browser viewport.
+> 2. `:prefetch="false"` disables prefetching, preventing background bandwidth consumption on heavy routes.
+> 3. Essential performance tuning prop.
+
+---
+
+### Exercise 3: Styling Active and Exact-Active Route Links
+
+**Scenario:**
+Style active navigation items using `active-class` and `exact-active-class` props.
+
+**Requirements:**
+1. Configure `active-class="text-blue-500 font-bold"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <template>
+>   <nav>
+>     <NuxtLink 
+>       to="/products" 
+>       active-class="active-nav-item" 
+>       exact-active-class="exact-active-nav-item"
+>     >
+>       Products List
+>     </NuxtLink>
+>   </nav>
+> </template>
+
+<style scoped>
+.active-nav-item {
+  color: #3b82f6;
+  font-weight: bold;
+}
+</style>
+```
+
+> #### Technical Explanation
+>
+> 1. `active-class` applies when the current route path starts with the link target path.
+> 2. `exact-active-class` applies ONLY when the current route path matches the target path exactly.
+> 3. Standard pattern for active navigation indicators.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`pages/` Directory](../level_02/pages_directory.md) — The destination of internal NuxtLinks.
 - [Lazy Components](lazy_components.md) — Related concept: Lazy Components.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<NuxtLink>` is the drop-in replacement for the `<a>` tag.
 - It enables smooth, instant client-side routing without full page reloads.
 - It automatically pre-fetches internal links when they enter the viewport.

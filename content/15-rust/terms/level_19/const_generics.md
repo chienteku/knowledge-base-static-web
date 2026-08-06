@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Type System**: Generic parameters over constant values (`struct Matrix<T, const N: usize>`).
+
+
+**Rust Advanced Type System (compile-time constant generic parameters)**: Generic parameters over constant values (`struct Matrix<T, const N: usize>`).
 
 ---
 
@@ -296,7 +298,7 @@ process(&[0; 5]); // Coerces array to slice!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`const fn`](const_fn.md) — Const functions.
 - [Const Evaluation Ctfe](const_evaluation_ctfe.md) — Compile-time evaluation.

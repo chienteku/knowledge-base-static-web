@@ -119,7 +119,7 @@ use foo::bar; // Now brings bar into scope!
 
 ### Exercise 1: The Cleanup Crew
 
-**Problem:** The following code compiles perfectly, but it is incredibly ugly. Add a `use` statement at the top of the code and rewrite the `main` function so it is clean and idiomatic.
+**Scenario:** The following code compiles perfectly, but it is incredibly ugly. Add a `use` statement at the top of the code and rewrite the `main` function so it is clean and idiomatic.
 
 ```rust
 fn main() {
@@ -131,6 +131,9 @@ fn main() {
 ```
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > // Grouping both structs into a single `use` statement!
 > use std::time::{Duration, Instant};
@@ -147,13 +150,16 @@ fn main() {
 
 ### Exercise 2: Aliasing Imports with `as`
 
-**Problem:** Import `std::fmt::Result as FmtResult` and `std::io::Result as IoResult` to avoid naming conflicts.
+**Scenario:** Import `std::fmt::Result as FmtResult` and `std::io::Result as IoResult` to avoid naming conflicts.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Import aliases resolved
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > use std::fmt::Result as FmtResult;
 > use std::io::Result as IoResult;
@@ -162,19 +168,23 @@ fn main() {
 > }
 > ```
 >
-> **Explanation:** `use path as Alias` resolves ambiguous import name collisions.
+> #### Technical Explanation
+> `use path as Alias` resolves ambiguous import name collisions.
 
 ---
 
 ### Exercise 3: Nested Import Braces Grouping
 
-**Problem:** Group imports from `std::collections` using nested braces: `use std::collections::{HashMap, HashSet};`.
+**Scenario:** Group imports from `std::collections` using nested braces: `use std::collections::{HashMap, HashSet};`.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Nested imports loaded
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::{HashMap, HashSet};
 > fn main() {
@@ -184,7 +194,8 @@ fn main() {
 > }
 > ```
 >
-> **Explanation:** Nested braces `{}` condense multiple imports from the same parent module path.
+> #### Technical Explanation
+> Nested braces `{}` condense multiple imports from the same parent module path.
 
 ---
 

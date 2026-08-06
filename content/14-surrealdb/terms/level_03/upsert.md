@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (conditional update-or-insert statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Executed by the query planner. Converts conditional read scans into write transactions if the target lookup returns empty).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database workflows, you often need to ensure a record exists with specific values:
@@ -93,7 +92,7 @@ UPSERT user SET active = true WHERE email = "alice@mail.com";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using 'UPDATE ... WHERE' expecting a fallback record to be created when no documents match the query filter
 
@@ -147,71 +146,101 @@ UPSERT SET name = "Alice"; // ❌ Syntax error!
 UPSERT user:alice SET name = "Alice";
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Write Action Analysis
+### Exercise 1: Conditional Update-or-Insert Execution
 
-**Problem:** You execute this query on an empty `settings` table:
-`UPSERT settings SET theme = "dark" WHERE user_id = user:john;`
-1.  State whether a new record is created.
-2.  List the fields and values of the resulting document written to disk.
+**Scenario:**
+An API integration syncs user setting records. If setting `setting:john` exists, update its `theme` value; if it does not exist, insert a new setting record.
 
-**Expected output:**
+**Requirements:**
+1. Write the `UPSERT setting:john` statement setting `theme = "dark"`.
+2. Execute the query twice to verify idempotent insert-or-update execution.
+
 > [!check]- Answer
-> ```text
-> 1. Yes, a new record is created because no records in the settings table match the filter 'user_id = user:john'.
-> 2. The written record will contain:
->    - `id`: An auto-generated Record ID (e.g. `settings:random_id`).
->    - `user_id`: `user:john` (copied from the WHERE filter condition).
->    - `theme`: `"dark"` (copied from the SET assignment).
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Upsert creates record if absent, or updates record if present
+> UPSERT setting:john SET theme = "dark";
+> 
+> -- Second execution safely updates existing setting:john record
+> UPSERT setting:john SET theme = "light";
 > ```
-> - An upsert statement copies values from the `WHERE` filters to populate missing fields in the new record.
-> - The table prefix for the generated ID is `settings`.
+>
+> #### Technical Explanation
+>
+> 1. `UPSERT table:id` checks primary key existence: creates record if absent, or updates record if present.
+> 2. Unlike `CREATE` (which fails on existing primary keys), `UPSERT` guarantees idempotent write execution.
+> 3. Eliminates preliminary `SELECT` check queries in application code.
+
+---
+
+### Exercise 2: Bulk Upserting Filtered Record Batches
+
+**Scenario:**
+A background synchronization job upserts user metrics records where `active = true`.
+
+**Requirements:**
+1. Write an `UPSERT user` query with a `WHERE` filter clause.
+2. Set `last_synced = time::now()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:u1 SET active = true;
+> CREATE user:u2 SET active = false;
+> 
+> -- Bulk upsert active users
+> UPSERT user SET last_synced = time::now() WHERE active = true;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `UPSERT table SET ... WHERE condition` updates matching existing records and creates non-existing target records.
+> 2. Operates within an atomic write transaction block.
+> 3. Ideal for state synchronization and cache warming tasks.
+
+---
+
+### Exercise 3: Upserting with `MERGE` Strategy
+
+**Scenario:**
+Upsert customer preferences using `UPSERT ... MERGE { notifications: true }` to avoid overwriting existing profile data if the customer record exists.
+
+**Requirements:**
+1. Execute `UPSERT customer:c1 MERGE { notifications: true }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Non-destructive upsert using MERGE strategy
+> UPSERT customer:c1 MERGE { notifications: true };
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combining `UPSERT` with `MERGE` creates new records or shallow-merges JSON properties into existing records.
+> 2. Preserves unmentioned properties on existing records while initializing new records cleanly.
+> 3. Essential for partial record synchronization workflows.
 
 ---
 
 
 
-### Exercise 2: Idempotent Record Upsert
-
-**Problem:** Upsert record `setting:theme` setting `value = "dark"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPSERT setting:theme SET value = "dark";
-> ```
-> ```surrealql
-> UPSERT setting:theme SET value = "dark";
-> ```
->
-> **Explanation:** `UPSERT` creates or updates target records idempotently.
-
----
-
-### Exercise 3: Bulk Table Upsert
-
-**Problem:** Upsert all records in `user` table setting `status = "active"` WHERE `verified = true`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPSERT user SET status = "active" WHERE verified = true;
-> ```
-> ```surrealql
-> UPSERT user SET status = "active" WHERE verified = true;
-> ```
->
-> **Explanation:** `UPSERT table SET ... WHERE condition` upserts records matching criteria.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`UPDATE`](update.md) — The update write statement.
 - [`INSERT ... ON DUPLICATE KEY UPDATE`](insert_on_duplicate.md) — The insert-based upsert alternative.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The standalone `UPSERT` statement guarantees a database write.
 - Updates existing matching records, or inserts a new record on a miss.
 - `UPDATE ... WHERE` does nothing on a miss; `UPSERT ... WHERE` inserts a record.

@@ -14,17 +14,15 @@
 
 ## 2. Term Category
 
-**Performance / Ecosystem / Tooling**: `perf` (the Linux kernel profiling subsystem) and `cargo-flamegraph` (the standard Rust Cargo extension) are non-invasive, sampling-based CPU profiling tools. Instead of adding manual benchmark timing statements to every function, profiling tools interrupt the CPU at high frequencies (e.g. 99 times per second), sample the active stack trace, and aggregate the samples into a visual **Flamegraph** (an interactive SVG chart where width corresponds to percentage of total CPU execution time spent in a function).
+
+
+**Rust Ecosystem Tooling (CPU profiling & performance flamegraphs)**: `perf` (the Linux kernel profiling subsystem) and `cargo-flamegraph` (the standard Rust Cargo extension) are non-invasive, sampling-based CPU profiling tools. Instead of adding manual benchmark timing statements to every function, profiling tools interrupt the CPU at high frequencies (e.g. 99 times per second), sample the active stack trace, and aggregate the samples into a visual **Flamegraph** (an interactive SVG chart where width corresponds to percentage of total CPU execution time spent in a function).
+
+
 
 ---
 
-## 3. Environment Context
-
-**CLI Tooling / Linux & macOS**: `perf` is built into Linux kernels. `cargo-flamegraph` is an open-source Rust cargo command (`cargo install flamegraph`) that wraps `perf` (on Linux) or `dtrace` (on macOS) to automatically compile, profile, and output `flamegraph.svg` for Rust binaries.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -138,7 +136,7 @@ google-chrome flamegraph.svg
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running `cargo flamegraph` without `debug = true` in Release Profile
 
@@ -180,11 +178,11 @@ sudo sysctl -w kernel.perf_event_paranoid=-1
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Diagnosing Heap Allocation Bottlenecks in Stream Data Processing
 
-**Problem:**
+**Scenario:**
 You are developing a high-throughput network log ingestion engine in Rust that processes log lines formatted as `TIMESTAMP LEVEL COMPONENT MESSAGE STATUS`. A CPU sample profile produced by `cargo flamegraph` reveals that `alloc::alloc::alloc` and `core::fmt::format` account for **72% of total CPU execution time** (visible as a wide, hot block near the top of the sampling stack).
 
 Inspection reveals the baseline parser allocates intermediate `String` objects for every token on every line:
@@ -209,6 +207,9 @@ Write a zero-copy, zero-allocation alternative `parse_log_line_zero_copy` return
 > [!check]- Answer
 > **Problem Analysis & Profiling Strategy:**
 > The `cargo flamegraph` profile highlights `alloc::alloc::alloc` as the primary CPU hotspot because `to_string()`, `collect::<Vec<_>>()`, and `.clone()` allocate dynamic memory on the heap for every single parsed line. Heap allocations involve OS kernel page checks and allocator synchronization locks, which swamp raw CPU string parsing logic. Optimizing this requires borrowing references (`&'a str`) directly from the original input string buffer without allocating heap memory.
+>
+>
+> #### Implementation
 >
 > ```rust
 > #[derive(Debug, PartialEq, Eq)]
@@ -281,7 +282,8 @@ Write a zero-copy, zero-allocation alternative `parse_log_line_zero_copy` return
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Flamegraph Signature Before Optimization:** In the original binary profiled with `cargo flamegraph`, the flamegraph shows a wide top bar representing `alloc::alloc::alloc` and `__rdl_alloc` sitting on top of `parse_log_line_alloc`. This indicates that the CPU spends most of its clock cycles managing heap metadata and memory allocation pointers rather than performing string parsing.
 > 2. **Flamegraph Signature After Optimization:** In `parse_log_line_zero_copy`, iterator traversal operates entirely over pointer offsets within the existing `&'a str` slice. `alloc::alloc` disappears entirely from the flamegraph, and the box width for `parse_log_line_zero_copy` shrinks dramatically (often by 10x–20x), allowing overall throughput to scale linearly with CPU memory bandwidth.
 > 3. **Symbol Resolution Requirement:** For `cargo flamegraph` to pinpoint `parse_log_line_alloc` versus standard library allocation routines, `Cargo.toml` must include `[profile.release] debug = true`. Without debug symbols, `perf` can only display raw memory addresses (`0x55a8f...`), rendering bottleneck identification impossible.
@@ -290,7 +292,7 @@ Write a zero-copy, zero-allocation alternative `parse_log_line_zero_copy` return
 
 ### Exercise 2: Identifying Algorithmic Hotspots in Telemetry Data Aggregation
 
-**Problem:**
+**Scenario:**
 An embedded sensor gateway reads values from 8 dedicated telemetry sensors (IDs `0` through `7`). A CPU profiling sample with `cargo flamegraph` shows that `std::collections::hash_map::RandomState::build_hasher` and SipHash hashing routines occupy **65% of total execution time** inside the telemetry collection loop:
 
 ```rust
@@ -319,6 +321,9 @@ Refactor this data structure into an optimized stack-allocated array implementat
 > [!check]- Answer
 > **Problem Analysis & Profiling Strategy:**
 > While `HashMap` provides $O(1)$ average time complexity, Rust's default `HashMap` uses `SipHash-1-3`, a cryptographically secure hashing algorithm designed to prevent Denial-of-Service attacks. For small, fixed integer keys (e.g. sensor IDs 0..7), computing a cryptographic hash on every lookup creates severe CPU overhead. Replacing `HashMap` with a direct array lookup (`[Option<f64>; 8]`) reduces lookup to a single array index offset operation.
+>
+>
+> #### Implementation
 >
 > ```rust
 > use std::collections::HashMap;
@@ -401,7 +406,8 @@ Refactor this data structure into an optimized stack-allocated array implementat
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Flamegraph Signature Shift:** In the unoptimized profile, `cargo flamegraph` depicts a tall stack hierarchy: `main` $\rightarrow$ `record` $\rightarrow$ `HashMap::insert` $\rightarrow$ `RandomState::build_hasher` $\rightarrow$ `SipHash::write_u8`. In the optimized version, array indexing compiles down to a single CPU instruction (`mov [rax + rbx*8], xmm0`). The stack depth collapses to 1, and the function box becomes virtually invisible in `flamegraph.svg`.
 > 2. **Cache Locality:** Array storage `[Option<f64>; 8]` occupies contiguous stack memory (64 bytes, exactly 1 CPU L1 cache line). `HashMap`, in contrast, allocates table buckets dynamically across separate heap memory addresses, causing potential CPU L1/L2 cache misses during high-frequency lookups.
 
@@ -409,7 +415,7 @@ Refactor this data structure into an optimized stack-allocated array implementat
 
 ### Exercise 3: Analyzing Flamegraph Call Stack Depth (Flame Towers) in Dynamic Programming
 
-**Problem:**
+**Scenario:**
 When profiling a fibonacci/cost-path calculation module with `cargo flamegraph`, the resulting `flamegraph.svg` displays an extremely tall, narrow pyramid (a "Flame Tower") where `fibonacci_recursive` stack frames stack vertically over 40 levels high, consuming **90% of overall CPU time** due to redundant branch recalculation and repeated function call overhead:
 
 ```rust
@@ -431,6 +437,9 @@ Implement an optimized iterative dynamic programming version `fibonacci_iterativ
 > - **X-Axis (Width):** Represents the relative percentage of CPU execution time spent in a function. Naive recursion evaluates $O(2^N)$ branches, expanding the X-axis box width to cover nearly the entire profiling sample.
 > - **Y-Axis (Height):** Represents the function call stack depth. Each recursive call pushes a new frame onto the stack, resulting in a tall vertical "flame tower".
 > Iterative processing replaces recursion with a simple `for` loop, reducing time complexity from $O(2^N)$ to $O(N)$ and stack depth from $O(N)$ to $O(1)$.
+>
+>
+> #### Implementation
 >
 > ```rust
 > /// Naive recursive implementation (exponential time complexity & deep stack frame depth)
@@ -487,13 +496,14 @@ Implement an optimized iterative dynamic programming version `fibonacci_iterativ
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Flamegraph Y-Axis Transformation:** In `fibonacci_recursive`, every invocation adds a frame to the call stack. For $N=40$, the flamegraph visualizes a 40-level-high vertical stack of `fibonacci_recursive` frames. In `fibonacci_iterative`, the stack depth is constant ($Y=1$ above `main`), completely flattening the flame tower.
 > 2. **Flamegraph X-Axis Transformation:** Because `fibonacci_recursive` has exponential time complexity $O(2^N)$, it monopolizes the CPU during sampling, appearing as a massive wide block occupying >90% of the horizontal chart width. `fibonacci_iterative` executes in sub-microsecond time ($O(N)$), so its horizontal width in `flamegraph.svg` collapses to effectively 0% of the total workload profile.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Release Profile](release_profile.md) — Cargo build profile configured with `debug = true` for profiling.
@@ -502,7 +512,7 @@ Implement an optimized iterative dynamic programming version `fibonacci_iterativ
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `perf` and `cargo-flamegraph` are non-invasive, sampling-based CPU profiling tools.
 - Flamegraphs display stack traces visually: horizontal width = % of CPU runtime spent in function (wide = hot bottleneck); vertical height = stack call depth.

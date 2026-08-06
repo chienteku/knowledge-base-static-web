@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Core Concept** (Transactional Integrity Model): ACID (Atomicity, Consistency, Isolation, Durability) defines the core transactional guarantees enforced by PostgreSQL to preserve data integrity under concurrent access and system crashes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (The defining framework for Relational Database Management Systems (RDBMS). Postgres enforces ACID by combining write-ahead logs (WAL), locking systems, and MVCC snapshot controls).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational databases are trusted to manage critical business records: banking ledger balances, ticket seat bookings, and medical histories. 
@@ -74,7 +75,7 @@ Once a transaction commits, its modifications are permanently written to non-vol
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing NoSQL database systems offer ACID transactions by default
 
@@ -124,72 +125,115 @@ COMMIT;
 Check status or use idempotent request keys before retrying failed commits
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: ACID Property Identification
+### Exercise 1: Demonstrating Transactional Atomicity with ROLLBACK
 
-**Problem:** Match the database failures below to the specific **ACID property letter** that was violated:
-1.  A server power failure occurred. Upon reboot, the last committed bank deposit was missing from the account balance.
-2.  A transaction crashed, but the database saved the first half of the queries on disk, leaving a user profile with no matching login credentials.
-3.  Two store clerks sold the same physical item to two different customers at the same millisecond because they read the same stock count value simultaneously.
+**Scenario:**
+Execute a multi-statement bank transfer where the second `UPDATE` fails, triggering an automatic `ROLLBACK` to protect data consistency.
 
-**Expected output:**
+**Requirements:**
+1. Execute `BEGIN`, 2 `UPDATE` statements, and `ROLLBACK`.
+
 > [!check]- Answer
-> ```text
-> 1. Durability (D) - Committed writes must survive system power crashes.
-> 2. Atomicity (A) - Partial writes are forbidden; the database should have rolled back.
-> 3. Isolation (I) - Concurrent transactions must run in isolation to prevent double-booking.
-> ```
-> - Differentiate write survival errors from concurrency execution anomalies.
-> - Consider which property rules the "all-or-nothing" boundary.
-
----
-
-
-
-### Exercise 2: ACID Acronym Definitions
-
-**Problem:** Define ACID properties: Atomicity (All-or-Nothing), Consistency (Valid states), Isolation (Concurrent safety), Durability (Persisted across crashes).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Atomicity (All-or-Nothing), Consistency (Valid states), Isolation (Concurrent safety), Durability (Persisted across crashes)
-> ```
-> ```text
-> Atomicity (All-or-Nothing), Consistency (Valid states), Isolation (Concurrent safety), Durability (Persisted across crashes)
-> ```
 >
-> **Explanation:** ACID guarantees structural data safety across concurrent transactions.
-
----
-
-### Exercise 3: Transactional Money Transfer
-
-**Problem:** Write ACID-compliant SQL transferring $50 from account 1 to account 2.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> BEGIN; UPDATE accounts SET balance = balance - 50 WHERE id = 1; UPDATE accounts SET balance = balance + 50 WHERE id = 2; COMMIT;
-> ```
+> #### Implementation
+>
 > ```sql
 > BEGIN;
-> UPDATE accounts SET balance = balance - 50 WHERE id = 1;
-> UPDATE accounts SET balance = balance + 50 WHERE id = 2;
-> COMMIT;
+> 
+> -- Deduct from Account A
+> UPDATE accounts SET balance_cents = balance_cents - 5000 WHERE id = 1;
+> 
+> -- Simulate error/cancellation -> Roll back entire work unit
+> ROLLBACK;
+> 
+> SELECT balance_cents FROM accounts WHERE id = 1; -- Balance remains unchanged!
 > ```
 >
-> **Explanation:** Enclosing updates in `BEGIN...COMMIT` guarantees atomic all-or-nothing execution.
+> #### Technical Explanation
+>
+> 1. Atomicity guarantees "all or nothing" execution across statements in a transaction block.
+> 2. `ROLLBACK` restores row state to the exact snapshot recorded at `BEGIN`.
+> 3. Prevents partial financial updates.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Verifying Transactional Durability via WAL Flushes
+
+**Scenario:**
+Verify that `synchronous_commit = on` is enabled to guarantee WAL disk flush durability.
+
+**Requirements:**
+1. Execute `SHOW synchronous_commit`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SHOW synchronous_commit;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Durability guarantees that committed transaction writes survive operating system crashes or power failure.
+> 2. `synchronous_commit = on` forces PostgreSQL to wait for the Write-Ahead Log (WAL) to flush to disk before returning success to clients.
+> 3. Essential for financial database durability.
+
+---
+
+### Exercise 3: Managing ACID Transactions in Node.js Applications
+
+**Scenario:**
+Wrap a database write sequence in a Node.js `pg` client transaction using `try/catch/finally`.
+
+**Requirements:**
+1. Code Node.js `BEGIN`, `COMMIT`, `ROLLBACK` transaction wrapper.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { pool } from "./db";
+
+export async function transferFunds(fromId: number, toId: number, amountCents: number) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    
+    await client.query("UPDATE accounts SET balance_cents = balance_cents - $1 WHERE id = $2", [amountCents, fromId]);
+    await client.query("UPDATE accounts SET balance_cents = balance_cents + $1 WHERE id = $2", [amountCents, toId]);
+    
+    await client.query("COMMIT");
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Node.js connection pools require acquiring a single dedicated `client` connection for transaction blocks.
+> 2. `catch` block issues `ROLLBACK` if any query inside `BEGIN` throws an error.
+> 3. `finally` releases the client back to the pool cleanly.
+
+---
+
+
+
+## 6. Related Terms
 - [Transaction](transaction.md) — - The parent unit of work.
 - [MVCC (Multi-Version Concurrency Control)](mvcc.md) — The mechanism enforcing Isolation in Postgres.
 - [WAL (Write-Ahead Log)](../level_10/wal.md) — Related concept: WAL (Write-Ahead Log).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - ACID represents the four core guarantees of transactional databases.
 - Atomicity guarantees "All-or-Nothing" transaction executions.
 - Consistency ensures the database only saves data that satisfies all schema rules.

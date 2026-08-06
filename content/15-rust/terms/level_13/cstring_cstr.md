@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**FFI / Systems**: Nul-terminated string types for safely passing text data across the C FFI boundary: `CString` (owned) and `CStr` (borrowed view).
+
+
+**Rust Standard Types (null-terminated C string abstractions)**: Nul-terminated string types for safely passing text data across the C FFI boundary: `CString` (owned) and `CStr` (borrowed view).
 
 ---
 

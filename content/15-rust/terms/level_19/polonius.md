@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Borrow Checker Engine**: Polonius, the next-generation origin-based borrow checker.
+
+
+**Rust Compiler Research (next-generation origin-based borrow checker)**: Polonius, the next-generation origin-based borrow checker.
 
 ---
 
@@ -236,7 +238,7 @@ Polonius is a compile-time static analysis engine!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Borrow Checker](../level_03/borrow_checker.md) — Borrow checker.
 - [Non-Lexical Lifetimes (NLL)](../level_05/non_lexical_lifetimes.md) — NLL lifetime model.

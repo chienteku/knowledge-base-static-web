@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Authentication & Permissions (auth scope & access definition)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the authentication manager. Generates encrypted JWT session keys and binds authenticated user records to the global `$auth` variable).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional web architectures:
@@ -87,7 +86,7 @@ DEFINE SCOPE user_scope
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing raw text passwords or using basic string comparisons in signin scripts, creating security vulnerabilities
 
@@ -141,73 +140,98 @@ DEFINE ACCESS user ... SIGNIN (SELECT * FROM user WHERE email = $email AND pass 
 DEFINE ACCESS user ... SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Scope Schema Design
+### Exercise 1: RECORD Access Method Definition (SurrealDB 2.x)
 
-**Problem:** Write the SurrealQL statement to define an auth scope named `admin_scope`.
--   Configure the token session duration to expire in `12h`.
--   Write a basic `SIGNIN` query that checks if the admin email matches `$email` and the password matches `$password` (use `crypto::argon2::compare`).
--   (Omit the `SIGNUP` block as admins are registered manually by root).
+**Scenario:**
+Define a scoped user access method `user_access` for web clients authenticating against table `user` using `DEFINE ACCESS`.
 
-**Expected output:**
+**Requirements:**
+1. Define access method `user_access` ON DATABASE TYPE RECORD.
+2. Specify `SIGNIN` query authenticating username and password.
+
 > [!check]- Answer
-> ```sql
-> DEFINE SCOPE admin_scope
->   SESSION 12h
->   SIGNIN (
->     SELECT * FROM admin WHERE email = $email AND crypto::argon2::compare(password, $password)
->   );
-> ```
-> - The scope configuration keyword is `DEFINE SCOPE`.
-> - Enclose the `SIGNIN` query block in parentheses.
-
----
-
-
-
-### Exercise 2: Record Access Scope Definition Syntax
-
-**Problem:** Define RECORD access `user_access` on database for `user` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE ACCESS user_access ON DATABASE TYPE RECORD ...
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
 > DEFINE ACCESS user_access ON DATABASE TYPE RECORD
->   SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass))
->   SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass));
+>     SIGNIN (
+>         SELECT * FROM user 
+>         WHERE username = $username AND crypto::argon2::compare(password, $pass)
+>     );
 > ```
 >
-> **Explanation:** `DEFINE ACCESS ... TYPE RECORD` configures user authentication handlers.
+> #### Technical Explanation
+>
+> 1. `DEFINE ACCESS ... TYPE RECORD` establishes client authentication scopes in SurrealDB 2.x (replacing legacy 1.x `DEFINE SCOPE`).
+> 2. `SIGNIN` executes a query validating user credentials and issuing a scoped JWT session token.
+> 3. Enables direct browser-to-database authentication without custom API backend middleware.
 
 ---
 
-### Exercise 3: Access Session Token Duration
+### Exercise 2: JWT Access Scope Definition
 
-**Problem:** Set DURATION on access scope to expire tokens after `1d` (1 day).
+**Scenario:**
+Configure external JWT authentication `jwt_access` allowing third-party auth providers (like Auth0 or Clerk) to issue valid access tokens.
 
-**Expected output:**
+**Requirements:**
+1. Define access method `jwt_access` ON DATABASE TYPE JWT.
+2. Specify algorithm `HS256` and secret key `"SuperSecretKey123!"`.
+
 > [!check]- Answer
-> ```text
-> DEFINE ACCESS user_access ON DATABASE TYPE RECORD DURATION FOR SESSION 1d ...
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> DEFINE ACCESS user_access ON DATABASE TYPE RECORD DURATION FOR SESSION 1d;
+> DEFINE ACCESS jwt_access ON DATABASE TYPE JWT
+>     ALGORITHM HS256
+>     KEY "SuperSecretKey123!";
 > ```
 >
-> **Explanation:** `DURATION FOR SESSION` specifies JWT token expiration times.
+> #### Technical Explanation
+>
+> 1. `TYPE JWT` allows SurrealDB to validate externally signed JSON Web Tokens.
+> 2. `KEY` specifies the cryptographic secret or public key used to verify token signatures.
+> 3. Integrates external OAuth/OIDC identity providers with SurrealDB row-level security.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Testing Access Token Session Variables
+
+**Scenario:**
+Inspect the `$auth` context variable available to scoped client sessions after successful authentication.
+
+**Requirements:**
+1. Write a SurrealQL query projecting `$auth.id` and `$auth.role`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT $auth.id AS current_user, $auth.role AS current_role;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$auth` holds the authenticated user record document context during active client sessions.
+> 2. Used inside table `PERMISSIONS` clauses (`PERMISSIONS FOR select WHERE id = $auth.id`).
+> 3. Enforces user-level security boundaries dynamically across queries.
+
+---
+
+
+
+## 6. Related Terms
 
 
 - [SurrealDB](../level_01/surrealdb.md)
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE SCOPE` configures native client authentication inside SurrealDB.
 - Bypasses the need for backend API servers for simple user signups and logins.
 - `SESSION` defines JWT token expiration intervals (e.g. `24h`, `30d`).

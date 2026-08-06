@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**CRUD Operation** (Full Document Replacement): replaceOne() replaces the entire content of a single matching document while preserving its original _id primary key.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executed inside `mongosh` or through drivers. Replaces the target document block on disk, preserving index pointer allocations by keeping the primary key `_id` immutable).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In application architectures, you occasionally need to reset or overwrite a record completely:
@@ -81,7 +82,7 @@ db.users.find({ _id: 200 });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Utilizing replaceOne() to modify a single field, leading to accidental deletion of other fields in the document
 
@@ -102,6 +103,8 @@ db.users.updateOne({ _id: 200 }, { $set: { status: "suspended" } });
 
 
 
+
+
 ### Mistake 2: Using Update Operators (`$set`, `$inc`) inside `replaceOne()` Arguments
 
 **The mistake:** Calling `db.users.replaceOne({ _id: id }, { $set: { name: "Alice" } })` (MongoInvalidArgumentError).
@@ -117,6 +120,8 @@ db.users.replaceOne({ _id: id }, { $set: { name: "Alice" } }); // ❌ Cannot use
 ```javascript
 db.users.replaceOne({ _id: id }, { name: "Alice", age: 30 }); // Whole document replacement
 ```
+
+
 
 ### Mistake 3: Forgetting that `replaceOne()` Replaces the Entire Document Object
 
@@ -136,105 +141,112 @@ db.users.updateOne({ _id: id }, { $set: { name: "Alice" } }); // Preserves exist
 
 
 
-### Mistake 4: Using Update Operators (`$set`, `$inc`) inside `replaceOne()` Arguments
+## 5. Practice Exercises
 
-**The mistake:** Calling `db.users.replaceOne({ _id: id }, { $set: { name: "Alice" } })` (MongoInvalidArgumentError).
+### Exercise 1: Entire Document Replacement with `replaceOne`
 
-**Why it's wrong:** `replaceOne()` expects a replacement DOCUMENT object `{ name: "Alice" }`, NOT update operators (`$set`). Use `updateOne()` when using update operators.
+**Scenario:**
+Replace an entire document in collection `users` with a sanitized new document structure while preserving its `_id`.
 
-*Incorrect:*
-```javascript
-db.users.replaceOne({ _id: id }, { $set: { name: "Alice" } }); // ❌ Cannot use $set in replaceOne!
-```
+**Requirements:**
+1. Execute `replaceOne({ _id: targetId }, newDocument)`.
 
-*Fix:*
-```javascript
-db.users.replaceOne({ _id: id }, { name: "Alice", age: 30 }); // Whole document replacement
-```
-
-### Mistake 5: Forgetting that `replaceOne()` Replaces the Entire Document Object
-
-**The mistake:** Calling `db.users.replaceOne({ _id: id }, { name: "Alice" })` expecting `email` field to remain.
-
-**Why it's wrong:** `replaceOne()` replaces the entire existing document object with the new object, wiping all omitted fields (except `_id`).
-
-*Incorrect:*
-```javascript
-db.users.replaceOne({ _id: id }, { name: "Alice" }); // ❌ Deletes all other fields!
-```
-
-*Fix:*
-```javascript
-db.users.updateOne({ _id: id }, { $set: { name: "Alice" } }); // Preserves existing fields
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Replace vs. Update Selector
-
-**Problem:** You are building a data sync script. You receive a full user object payload: `{ name: "Alice", email: "alice@new.com", role: "user" }`. You want to overwrite the old record matching `_id: 10` completely with this new payload.
-Write the correct MongoDB query using the appropriate method.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
+> const targetId = new ObjectId("60c72b2f9b1d8b2c88888880");
+> 
 > db.users.replaceOne(
->   { _id: 10 },
->   { name: "Alice", email: "alice@new.com", role: "user" }
+>   { _id: targetId },
+>   {
+>     name: "Alice Smith",
+>     email: "alice.smith@example.com",
+>     status: "verified",
+>     updatedAt: new Date()
+>   }
 > );
 > ```
-> - The task requires a complete document overwrite, not a partial update.
-> - Pass the new payload as a plain object without any update operators.
+>
+> #### Technical Explanation
+>
+> 1. `replaceOne()` completely replaces document content with the new replacement document object.
+> 2. The original `_id` primary key is automatically preserved.
+> 3. Any unmentioned fields in the original document are removed.
+
+---
+
+### Exercise 2: Upserting Replacement Documents
+
+**Scenario:**
+Replace a user setting document if it exists, or insert a default settings document if missing using `upsert: true`.
+
+**Requirements:**
+1. Execute `replaceOne()` with `{ upsert: true }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.user_settings.replaceOne(
+>   { userId: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   {
+>     userId: new ObjectId("60c72b2f9b1d8b2c88888880"),
+>     theme: "dark",
+>     notifications: true
+>   },
+>   { upsert: true }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `upsert: true` inserts the replacement document if no document matches the query filter.
+> 2. Ideal for state synchronization endpoints receiving full entity payloads.
+> 3. Atomic replace-or-insert operation.
+
+---
+
+### Exercise 3: Validating Replacement Document Constraints
+
+**Scenario:**
+Explain why replacement documents passed to `replaceOne()` CANNOT contain update operators like `$set`.
+
+**Requirements:**
+1. Describe replacement document restriction.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> // ❌ Invalid replaceOne syntax (throws error):
+> // db.users.replaceOne({ _id: id }, { $set: { name: "Alice" } });
+> 
+> // ✅ Correct replaceOne syntax (plain document):
+> db.users.replaceOne({ _id: id }, { name: "Alice", email: "alice@example.com" });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `replaceOne()` expects a plain BSON document representation without `$set` or `$inc` operators.
+> 2. Use `updateOne()` when applying targeted atomic update operators.
+> 3. Prevents ambiguous operation intent.
 
 ---
 
 
 
-### Exercise 2: Replacing Full Document with `replaceOne`
-
-**Problem:** Replace entire user document `_id: 1` with `{ name: "Bob", status: "active" }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.replaceOne({ _id: 1 }, { name: "Bob", status: "active" });
-> ```
-> ```javascript
-> db.users.replaceOne({
->   _id: 1
-> }, {
->   name: "Bob",
->   status: "active"
-> });
-> ```
->
-> **Explanation:** `replaceOne(filter, newDoc)` replaces the document content while preserving `_id`.
-
----
-
-### Exercise 3: Upserting with `replaceOne`
-
-**Problem:** Replace or insert document `_id: 2` using `{ upsert: true }` option.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.replaceOne({ _id: 2 }, { name: "Charlie" }, { upsert: true });
-> ```
-> ```javascript
-> db.users.replaceOne({ _id: 2 }, { name: "Charlie" }, { upsert: true });
-> ```
->
-> **Explanation:** `{ upsert: true }` inserts the replacement document if no matching document exists.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`updateOne()` / `updateMany()`](update.md) — Partial update methods.
 - [`$set` vs. Whole-Document Replacement](set_vs_replace.md) — Comparative rules.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `replaceOne()` completely overwrites a document's fields.
 - Preserves the original, immutable primary key `_id` of the document.
 - Expects a plain JSON document as the second argument; operators are forbidden.

@@ -16,7 +16,9 @@
 
 ## 2. Term Category
 
-**Reserved Lifetime & Trait Bound**: `'static` is a reserved lifetime keyword in Rust with two distinct meanings:
+
+
+**Rust Special Lifetime (entire program duration)**: `'static` is a reserved lifetime keyword in Rust with two distinct meanings:
 1. **As a Reference Lifetime (`&'static T`)**: Indicates data that resides in permanent memory (such as read-only binary data `.rodata` or heap allocations leaked via `Box::leak`) and remains valid for the entire runtime duration of the program.
 2. **As a Trait Bound (`T: 'static`)**: Indicates that the type `T` can be retained indefinitely because it contains **no non-`'static` borrowed references**. Owned types like `String`, `i32`, or `Vec<u8>` satisfy `T: 'static`.
 

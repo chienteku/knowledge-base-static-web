@@ -146,7 +146,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Compile-Time State Machine (Typestate Pattern) with Zero Memory Overhead
 
-**Problem:** You are building a high-reliability database driver where transaction state transitions (`Uninit` -> `Active` -> `Committed`) must be strictly checked at compile time to prevent invalid operations (such as executing queries on an uninitialized or committed transaction). 
+**Scenario:** You are building a high-reliability database driver where transaction state transitions (`Uninit` -> `Active` -> `Committed`) must be strictly checked at compile time to prevent invalid operations (such as executing queries on an uninitialized or committed transaction). 
 
 Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`Uninit`, `Active`, `Committed`) as marker types with `PhantomData<State>`.
 1. Define unit ZST markers `Uninit`, `Active`, and `Committed`.
@@ -159,6 +159,9 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 3. Include unit tests asserting that state markers take 0 bytes and that `size_of::<Transaction<State>>()` is identical across all states (equal to `size_of::<(u64, Vec<String>)>()`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::marker::PhantomData;
 > use std::mem::size_of;
@@ -242,7 +245,8 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 > }
 > ```
 >
-> **Step-by-Step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Zero-Sized Markers:** `Uninit`, `Active`, and `Committed` are empty unit structs. The Rust compiler optimizes them to 0 bytes of memory layout.
 > 2. **PhantomData Integration:** `PhantomData<State>` informs the compiler that `Transaction<State>` depends on generic parameter `State` without allocating memory for it.
 > 3. **Compile-Time State Safety:** Methods like `execute()` are only implemented in `impl Transaction<Active>`, making it impossible to run queries on uninitialized or committed transactions at compile time.
@@ -254,7 +258,7 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 
 ### Exercise 2: Static Event Pipeline & Zero-Allocation Collection Invariants
 
-**Problem:** You are designing a high-throughput telemetric event processing library. You need a pipeline that chains ZST event filters (`AuditFilter`, `MetricCounter`) via static dispatch without allocating closure objects or storing dynamic trait objects (`&dyn Trait`). Furthermore, you need to verify how Rust's `Vec<T>` behaves when `T` is a Zero-Sized Type.
+**Scenario:** You are designing a high-throughput telemetric event processing library. You need a pipeline that chains ZST event filters (`AuditFilter`, `MetricCounter`) via static dispatch without allocating closure objects or storing dynamic trait objects (`&dyn Trait`). Furthermore, you need to verify how Rust's `Vec<T>` behaves when `T` is a Zero-Sized Type.
 
 1. Implement trait `LogProcessor` with method `fn process(&self, log: &str) -> Option<String>`.
 2. Create ZST structs `AuditFilter`, `MetricCounter`, and `AlertTrigger` implementing `LogProcessor`.
@@ -262,6 +266,9 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 4. Write tests using `assert_eq!`, `assert!`, and `matches!` to verify pipeline processing output, 0-byte pipeline size, and `Vec<ZST>` capacity invariants (`capacity() == usize::MAX` without heap allocations).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::marker::PhantomData;
 > use std::mem::{size_of, size_of_val};
@@ -371,7 +378,8 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 > }
 > ```
 >
-> **Step-by-Step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Static Composition:** `Pipeline<P1, P2>` uses monomorphization to instantiate handlers at compile time via `Default::default()`. Because `P1` and `P2` are ZSTs, instantiating them costs zero machine instructions.
 > 2. **Zero-Size Pipeline:** `size_of::<Pipeline<AuditFilter, MetricCounter>>()` is 0 bytes because `PhantomData<(P1, P2)>` is a ZST containing ZSTs.
 > 3. **Pattern Matching with `matches!`:** The test demonstrates using `matches!(res1, Some(ref s) if ...)` to clean check option payload conditions.
@@ -381,7 +389,7 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 
 ### Exercise 3: Alignment Overrides, Struct Padding, and Raw ZST Pointers
 
-**Problem:** While ZSTs take 0 bytes of payload memory, custom memory alignment attributes (`#[repr(align(N))]`) can drastically alter the memory layout and padding of structs containing ZSTs. Additionally, unsafe code dealing with ZST raw pointers must obey non-null and alignment constraints.
+**Scenario:** While ZSTs take 0 bytes of payload memory, custom memory alignment attributes (`#[repr(align(N))]`) can drastically alter the memory layout and padding of structs containing ZSTs. Additionally, unsafe code dealing with ZST raw pointers must obey non-null and alignment constraints.
 
 1. Define an unaligned ZST `UnalignedMarker` and an aligned ZST `#[repr(align(64))] struct Align64Marker;`.
 2. Define container struct `TaggedBuffer<Tag>` holding `buffer_id: u32` and `PhantomData<Tag>`.
@@ -395,6 +403,9 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
    - Raw pointer arithmetic (`ptr.add(N)`) on ZST raw pointers is a pointer no-op.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::marker::PhantomData;
 > use std::mem::{align_of, size_of};
@@ -453,7 +464,8 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 > }
 > ```
 >
-> **Step-by-Step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **ZST Payload vs Alignment:** `Align64Marker` takes 0 bytes of payload (`size_of == 0`), but specifies an alignment of 64 bytes (`align_of == 64`).
 > 2. **Struct Padding Side Effect:** When embedded into `TaggedBuffer<Align64Marker>`, the struct's alignment requirement rises to `max(align_of::<u32>(), 64) = 64`. Rust pads the trailing struct space so array indexing maintains alignment, bumping total struct `size_of` from 4 bytes to 64 bytes.
 > 3. **`NonNull::dangling()` Guarantee:** `NonNull::dangling()` returns a sentinel pointer value equal to `align_of::<T>()`. For `Align64Marker`, this yields address `64`, ensuring it is non-null and perfectly aligned.

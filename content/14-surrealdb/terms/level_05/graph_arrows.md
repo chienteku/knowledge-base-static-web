@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Query Feature (graph traversal arrow operators)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Parsed by the query executor. Resolves path traversals in constant time by reading relation pointers directly, bypassing table scans).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Querying connected databases typically requires writing verbose query strings:
@@ -93,7 +92,7 @@ SELECT count(<-likes<-user) AS total_likes FROM post:first;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Reversing the arrow direction when writing queries, returning empty arrays because the database looks for non-existent connections
 
@@ -157,97 +156,95 @@ SELECT ->wrote->post FROM user:alice;
 
 
 
-### Mistake 4: Using Single Dashes `-` in Place of Double Hyphen Arrows `->` in Graph Syntax
 
-**The mistake:** Writing `SELECT -wrote-post FROM user:alice;` (SyntaxError).
 
-**Why it's wrong:** SurrealQL graph arrow syntax strictly requires `->`, `<-`, or `<->`.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-SELECT -wrote-post FROM user:alice; // ❌ Parse error!
-```
+### Exercise 1: Outgoing Graph Arrow Syntax (`->`)
 
-*Fix:*
-```surrealql
-SELECT ->wrote->post FROM user:alice; // Correct double-character arrow syntax
-```
+**Scenario:**
+Query all blog posts written by `user:alice` using outgoing graph arrow syntax (`->wrote->post`).
 
-### Mistake 5: Omitting the Intermediate Edge Table Name in Arrow Traversals
+**Requirements:**
+1. Create user `user:alice` and post `post:p1`.
+2. Relate `user:alice -> wrote -> post:p1`.
+3. Select `->wrote->post.title` from `user:alice`.
 
-**The mistake:** Writing `SELECT ->post FROM user:alice;` expecting to traverse `wrote` edge automatically.
-
-**Why it's wrong:** Arrow traversals require specifying both the edge table AND the target node table: `->edge_table->node_table`.
-
-*Incorrect:*
-```surrealql
-SELECT ->post FROM user:alice; // ❌ Missing edge table name!
-```
-
-*Fix:*
-```surrealql
-SELECT ->wrote->post FROM user:alice;
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Traversal Direction Selection
-
-**Problem:** You have a database tracking which users have bought products. 
-The relationship was created using: `RELATE user:alice -> bought -> product:shoes;`
-Write the SurrealQL queries to:
-1.  Find all products bought by `user:alice`.
-2.  Find all users who bought `product:shoes`.
-
-**Expected output:**
 > [!check]- Answer
-> ```sql
-> -- 1. Products bought by Alice (Outgoing)
-> SELECT ->bought->product FROM user:alice;
-> 
-> -- 2. Users who bought shoes (Incoming)
-> SELECT <-bought<-user FROM product:shoes;
-> ```
-> - The source node is `user` and the target is `product`.
-> - Outgoing arrows (`->`) start at the source; incoming arrows (`<-`) start at the target.
-
----
-
-
-
-### Exercise 2: Graph Arrow Directions Reference
-
-**Problem:** State meaning: `->` (Outgoing), `<-` (Incoming), `<->` (Bidirectional).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ->: Outgoing, <-: Incoming, <->: Bidirectional
-> ```
-> ```text
-> ->: Outgoing, <-: Incoming, <->: Bidirectional
-> ```
 >
-> **Explanation:** Arrow directions specify graph traversal orientation relative to source nodes.
-
----
-
-### Exercise 3: Filtering Traversed Target Nodes with Arrow Clauses
-
-**Problem:** Select posts written by `user:alice` published after `d"2026-01-01T00:00:00Z"` using arrow filter syntax.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT ->wrote->(post WHERE created_at > d"2026-01-01T00:00:00Z") AS posts FROM user:alice;
-> ```
+> #### Implementation
+>
 > ```surrealql
-> SELECT ->wrote->(post WHERE created_at > d"2026-01-01T00:00:00Z") AS posts FROM user:alice;
+> CREATE user:alice SET name = "Alice";
+> CREATE post:p1 SET title = "Graph Arrows in SurrealDB";
+> RELATE user:alice->wrote->post:p1;
+> 
+> -- Outgoing arrow traversal
+> SELECT ->wrote->post.title AS written_posts FROM user:alice;
 > ```
 >
-> **Explanation:** Parentheses inside arrow paths `->(table WHERE condition)` filter target graph nodes.
+> #### Technical Explanation
+>
+> 1. `->wrote->post` specifies outgoing edge direction from `user` to `post`.
+> 2. `->wrote` selects the edge table; `->post` selects the target vertex table.
+> 3. Replaces relational foreign key JOINs with direct arrow navigation.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Incoming Graph Arrow Syntax (`<-`)
+
+**Scenario:**
+Query all authors who wrote post `post:p1` using incoming graph arrow syntax (`<-wrote<-user`).
+
+**Requirements:**
+1. Write incoming traversal query `SELECT <-wrote<-user.name FROM post:p1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Incoming arrow traversal
+> SELECT <-wrote<-user.name AS authors FROM post:p1;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `<-wrote<-user` specifies incoming edge direction from `post` back to `user`.
+> 2. `<-wrote` targets incoming relation edge records where `out = post:p1`.
+> 3. Enables reverse graph navigation without secondary indexes.
+
+---
+
+### Exercise 3: Undirected Graph Arrow Syntax (`<->`)
+
+**Scenario:**
+Query all friends connected to `user:alice` regardless of whether the `knows` edge is incoming or outgoing using `<->knows<->user`.
+
+**Requirements:**
+1. Write bidirectional query `SELECT <->knows<->user.name FROM user:alice`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT <->knows<->user.name AS all_friends FROM user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `<->knows<->user` traverses both incoming and outgoing `knows` edges.
+> 2. Merges bidirectional graph neighbors into a single unified result list.
+> 3. Ideal for symmetric friendship and network connectivity queries.
+
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [`RELATE` Statement](relate.md) — The command creating the edges.
 - [Bidirectional Relationship Queries](bidirectional_queries.md) — Cross-referencing tables.
@@ -257,7 +254,7 @@ Write the SurrealQL queries to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Arrow operators (`->`, `<-`) traverse graph relationships in SurrealQL.
 - Outgoing arrows (`->`) traverse forward from `in` source to `out` target.
 - Incoming arrows (`<-`) traverse backward from `out` target to `in` source.

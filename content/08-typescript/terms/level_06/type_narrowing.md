@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Mechanic**
+
+**Type System Fundamental** (Control-Flow Type Narrowing Engine): Type narrowing is the process by which TypeScript's control-flow analysis refines broad union types into narrower, specific types based on guards.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time Analysis of Runtime Code**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you declare a variable as `number | string`, you cannot call `.toUpperCase()` on it, because it might be a number.
@@ -54,7 +55,7 @@ The actual JavaScript expressions used to trigger Type Narrowing are called **Ty
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on generic variables for narrowing
 
@@ -120,64 +121,105 @@ function printNum(n: number | null) {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Truthiness Narrowing
+### Exercise 1: Truthiness and Equality Type Narrowing
 
-**Problem:** You have `const user: User | null`. You write `if (!user) return;`. What is the narrowed type of `user` on the very next line after the `if` block?
+**Scenario:**
+Narrow a parameter `str: string | null | undefined` using truthiness checks and equality comparison.
 
-**Expected output:**
+**Requirements:**
+1. Perform truthiness check `if (str)`.
+
 > [!check]- Answer
-> ```text
-> The narrowed type is strictly `User`.
-> Because you used an early return (`return;`) when the user is falsy (`null`), the TypeScript compiler knows that any code executing *after* that `if` block is guaranteed to have a valid `User` object! This is a massive part of TS Control Flow Analysis.
-> ```
-> - Think about early returns!
-
----
-
-
-
-### Exercise 2: Control Flow Type Guard Traversal
-
-**Problem:** Trace narrowed types of `val: string | number | boolean` after `typeof` checks.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> if string -> else if number -> else boolean
-> ```
+>
+> #### Implementation
+>
 > ```typescript
-> function check(val: string | number | boolean) {
->   if (typeof val === "string") return "string";
->   if (typeof val === "number") return "number";
->   return "boolean";
+> function printUppercase(str: string | null | undefined) {
+>   if (str != null) {
+>     // Loose inequality != null removes BOTH null and undefined!
+>     console.log(str.toUpperCase()); // str is narrowed to string
+>   }
 > }
-> console.log("if string -> else if number -> else boolean");
 > ```
+
+> #### Technical Explanation
 >
-> **Explanation:** Control flow analysis narrows union types sequentially along execution paths.
+> 1. TypeScript control-flow analysis tracks runtime conditional branches to refine types.
+> 2. Loose inequality `str != null` narrows out both `null` and `undefined`.
+> 3. Ensures safe method invocation on primitive union types.
 
 ---
 
-### Exercise 3: Array Filtering Type Narrowing
+### Exercise 2: Narrowing via Assignment and Control Flow Re-assignment
 
-**Problem:** Filter `(string | null)[]` using `.filter((x): x is string => x !== null)`.
+**Scenario:**
+Demonstrate variable type narrowing across sequential assignment statements.
 
-**Expected output:**
+**Requirements:**
+1. Re-assign `let x: string | number`.
+
 > [!check]- Answer
-> ```text
-> Array narrowed to string[]
-> ```
-> ```typescript
-> const items: (string | null)[] = ["a", null, "b"];
-> const clean: string[] = items.filter((x): x is string => x !== null);
-> console.log(clean);
-> ```
 >
-> **Explanation:** Type predicate functions inside `.filter()` narrow array element union types.
+> #### Implementation
+>
+> ```typescript
+> let data: string | number;
 
-## 7. Related Terms
+data = "Hello";
+console.log(data.toUpperCase()); // Inferred as string!
+
+data = 42;
+console.log(data.toFixed(2));    // Inferred as number!
+```
+
+> #### Technical Explanation
+>
+> 1. Control-flow analysis tracks variable assignments in real time.
+> 2. Assigning `"Hello"` narrows `data` to `string`; re-assigning `42` narrows `data` to `number`.
+> 3. Dynamic type refinement based on local code execution order.
+
+---
+
+### Exercise 3: Narrowing Failure Auditing in Asynchronous Callbacks
+
+**Scenario:**
+Explain why type narrowing performed BEFORE an asynchronous callback does NOT persist inside the callback body.
+
+**Requirements:**
+1. Demonstrate closure narrowing invalidation inside `setTimeout()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function asyncNarrowing(val: string | null) {
+>   if (val !== null) {
+>     setTimeout(() => {
+>       // ❌ Compile error if val is mutable: val might have been modified by external code before timeout executes!
+>       // console.log(val.toUpperCase());
+>       
+>       // ✅ FIX: Capture narrowed value in a local const variable!
+>       const safeVal = val;
+>       console.log(safeVal.toUpperCase());
+>     }, 1000);
+>   }
+> }
+> ```
+
+> #### Technical Explanation
+>
+> 1. Mutable variables captured in closures can be modified asynchronously before the callback executes.
+> 2. TypeScript invalidates narrowing on mutable variables inside async callbacks.
+> 3. Assigning the narrowed value to a local `const` variable preserves type narrowing safely inside closures.
+
+---
+
+
+
+## 6. Related Terms
 - [`typeof` & `instanceof` Guards](typeof_instanceof.md) — The most common tools used to achieve narrowing.
 - [Union Types (`|`)](../level_05/union_types.md) — The types that require narrowing.
 - [`unknown`](../level_02/unknown.md) — Related concept: `unknown`.
@@ -192,7 +234,7 @@ function printNum(n: number | null) {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Type Narrowing** is the process where TypeScript refines a broad type into a specific type by analyzing your JavaScript logic.
 - It relies on **Control Flow Analysis** (reading your `if/else`, `switch`, and `return` paths).
 - It allows you to safely access type-specific methods on a Union Type or an `unknown` value.

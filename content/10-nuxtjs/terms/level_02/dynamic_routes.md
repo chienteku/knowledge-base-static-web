@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing**
+
+**Routing / Navigation** (Parameterized & Catch-All Routes): Dynamic Routes generate URL parameter matching (`[id].vue`, `[...slug].vue`) from filename conventions in the `pages/` directory.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you are building an e-commerce store, you don't create a separate physical file for every single product (e.g., `iphone.vue`, `macbook.vue`, `airpods.vue`). That would require millions of files. Instead, you create a single "Product Template" file that can dynamically render any product based on the URL (e.g., `/products/iphone`, `/products/macbook`).
@@ -65,7 +66,7 @@ If you want a route to match *everything* that comes after it (e.g., `/docs/gett
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on route params for secure operations without validation
 **The mistake:** Directly passing `route.params.id` to a database query without validating what the user actually typed.
@@ -129,70 +130,123 @@ const userId = computed(() => route.params.id); // Reactive computed property up
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: File Naming
+### Exercise 1: Extracting Named Route Parameters from Filenames
 
-**Problem:** You are building a blog. You want URLs to look like `/blog/2023/my-post`. What exact file and folder structure do you need to capture the year as `year` and the post name as `slug`?
+**Scenario:**
+Create a dynamic route `pages/posts/[slug].vue` and render parameter `slug` using `useRoute()`.
 
-**Expected output:**
+**Requirements:**
+1. Create `pages/posts/[slug].vue`.
+2. Extract `route.params.slug`.
+
 > [!check]- Answer
-> ```text
-> pages/
-> └── blog/
->     └── [year]/
->         └── [slug].vue
-> ```
-> - You can mix static folders (`blog/`) and dynamic parameter folders (`[year]/`) in your pages directory hierarchy.
-
----
-
-### Exercise 2: Dynamic Route Parameter Fetch Pattern
-
-**Problem:** Write `<script setup>` reading route parameter `id` from `useRoute()` and fetching product details via `useFetch()`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
+> <!-- pages/posts/[slug].vue -->
+> <script setup lang="ts">
 > const route = useRoute();
-> const { data: product } = await useFetch(`/api/products/${route.params.id}`);
+> const slug = computed(() => route.params.slug as string);
 > </script>
-> ```
-> - `useRoute().params` exposes dynamic route parameters.
-> 
-> ```vue
-> <script setup>
-> const route = useRoute();
-> const { data: product } = await useFetch(`/api/products/${route.params.id}`);
-> </script>
-> 
-> <template>
->   <div v-if="product"><h1>{{ product.name }}</h1></div>
-> </template>
-> ```
+
+<template>
+  <article>
+    <h1>Article Slug: {{ slug }}</h1>
+  </article>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Bracket filename notation `[slug].vue` generates a named dynamic URL route parameter `slug`.
+> 2. Matches paths like `/posts/hello-world` or `/posts/nuxt-3-guide`.
+> 3. `useRoute().params.slug` accesses current path parameter values reactively.
 
 ---
 
-### Exercise 3: Optional Catch-All Syntax
+### Exercise 2: Implementing Catch-All Routes for CMS Pages
 
-**Problem:** Which file naming convention defines an optional catch-all dynamic route in Nuxt 3?
+**Scenario:**
+Create a catch-all route `pages/[...slug].vue` to render dynamic multi-segment CMS pages (`/docs/guide/getting-started`).
 
-**Expected output:**
+**Requirements:**
+1. Create `pages/[...slug].vue`.
+2. Join `route.params.slug` array.
+
 > [!check]- Answer
-> ```text
-> [[...slug]].vue (Double square brackets)
-> ```
-> - `[[...slug]].vue` matches both root path `/` and nested paths `/a/b/c`.
-> 
-> ```text
-> pages/docs/[[...slug]].vue
-> ```
+>
+> #### Implementation
+>
+> ```vue
+> <!-- pages/[...slug].vue -->
+> <script setup lang="ts">
+> const route = useRoute();
+> // route.params.slug is an array of path segments e.g. ['docs', 'guide', 'getting-started']
+> const fullPath = computed(() => {
+>   const segments = route.params.slug;
+>   return Array.isArray(segments) ? segments.join("/") : segments;
+> });
+> </script>
+
+<template>
+  <main>
+    <h1>CMS Page Path: /{{ fullPath }}</h1>
+  </main>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Ellipsis syntax `[...slug].vue` generates a catch-all route matching single or multi-segment URL paths.
+> 2. `route.params.slug` parses path segments as a string array (`['docs', 'guide']`).
+> 3. Ideal for dynamic documentation portals and CMS content hierarchies.
+
+---
+
+### Exercise 3: Optional Catch-All Routes for Default Fallbacks
+
+**Scenario:**
+Create an optional catch-all route `pages/[[...slug]].vue` matching `/` as well as nested sub-paths.
+
+**Requirements:**
+1. Code `[[...slug]].vue` optional catch-all structure.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <!-- pages/[[...slug]].vue -->
+> <script setup lang="ts">
+> const route = useRoute();
+> const isHome = computed(() => !route.params.slug || route.params.slug.length === 0);
+> </script>
+
+<template>
+  <div>
+    <h1 v-if="isHome">Root Homepage Content</h1>
+    <h1 v-else>Nested Path: {{ route.params.slug }}</h1>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Double bracket ellipsis `[[...slug]].vue` makes the catch-all parameter optional.
+> 2. Matches `/` (where `slug` is undefined) and `/any/nested/path`.
+> 3. Flexible route structure for single-file CMS routing.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useFetch`](../level_05/use_fetch.md) — The standard way to fetch data based on the dynamic route parameter.
 - [File-based Routing](file_based_routing.md) — Related concept: File-based Routing.
 - [`pages/` Directory](pages_directory.md) — Related concept: `pages/` Directory.
@@ -200,7 +254,7 @@ const userId = computed(() => route.params.id); // Reactive computed property up
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Wrap filenames or foldernames in `[]` to make them dynamic (e.g., `[id].vue`).
 - Access the captured value using `useRoute().params.id`.
 - Use `[...slug].vue` to catch multi-segment URLs.

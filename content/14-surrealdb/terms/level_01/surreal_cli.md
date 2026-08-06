@@ -14,16 +14,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Integration / Ecosystem (command-line interface binary)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **Operating System Shell** (Run in the terminal command line. Connects as a client shell to the database instance over WebSockets or HTTP).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While visual IDEs (like Surrealist) are useful, developers need a fast, lightweight terminal-based client shell:
@@ -90,7 +89,7 @@ cat init_schema.surql | surreal sql --endpoint http://localhost:8000 -u root -p 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to connect using 'surreal sql' before launching the database server, expecting the CLI to start the database automatically
 
@@ -141,61 +140,87 @@ $ surreal sql -e http://localhost:8000 --ns main --db app # ❌ Auth error on se
 $ surreal sql -e http://localhost:8000 -u root -p root --ns main --db app
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Pipeline Script Construction
+### Exercise 1: Interactive SQL Shell Execution
 
-**Problem:** You are building a deployment script. 
-You have a schema file named `"db_setup.surql"`. 
-Write the terminal command to pipe this file into a local SurrealDB server listening on port `8000` under namespace `"app"` and database `"dev"`. 
-Admin credentials are `"admin"` / `"admin"`.
+**Scenario:**
+A database developer needs to connect to a local running SurrealDB server using the `surreal` CLI binary to inspect database schemas interactively.
 
-**Expected output:**
+**Requirements:**
+1. Formulate the `surreal sql` command targeting endpoint `http://localhost:8000`.
+2. Include root credentials `root` / `root`.
+3. Target namespace `dev` and database `app`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```bash
-> cat db_setup.surql | surreal sql --endpoint http://localhost:8000 --user admin --pass admin --ns app --db dev
+> surreal sql >   --endpoint http://localhost:8000 >   --user root >   --pass root >   --ns dev >   --db app
 > ```
-> - Use the Unix `cat` utility to read the setup file.
-> - Pipe the output using the `|` operator into the `surreal sql` client command with configuration arguments.
+>
+> #### Technical Explanation
+>
+> 1. `surreal sql` starts an interactive Read-Eval-Print Loop (REPL) shell for executing SurrealQL queries.
+> 2. Passing `--ns` and `--db` sets default session scoping flags automatically upon shell startup.
+> 3. Enables fast query prototyping and schema debugging from terminal environments.
+
+---
+
+### Exercise 2: Automated Database Backup Export
+
+**Scenario:**
+A DevOps engineer needs to export a nightly SurrealQL schema and data dump file `backup_prod.surql` from a production database.
+
+**Requirements:**
+1. Formulate the `surreal export` command targeting production namespace `production` and database `main`.
+2. Save the output dump to file `backup_prod.surql`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> surreal export >   --endpoint http://localhost:8000 >   --user root >   --pass SecretProdPass >   --ns production >   --db main >   backup_prod.surql
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `surreal export` streams valid SurrealQL DDL (`DEFINE`) and DML (`CREATE`) statements to a plain-text file.
+> 2. Generated script files can be inspected with version control tools or imported into alternative clusters.
+> 3. Provides clean backup and environment seeding capabilities for CI/CD pipelines.
+
+---
+
+### Exercise 3: Database Schema Import and Migration Execution
+
+**Scenario:**
+A developer needs to seed a fresh staging environment by importing the SurrealQL script `schema_v1.surql`.
+
+**Requirements:**
+1. Formulate the `surreal import` CLI command.
+2. Target namespace `staging` and database `main`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> surreal import >   --endpoint http://localhost:8000 >   --user root >   --pass StagingPass123 >   --ns staging >   --db main >   schema_v1.surql
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `surreal import` reads and executes SurrealQL script files sequentially against the target cluster.
+> 2. Handles multi-statement transactions and schema definitions defined in the imported file.
+> 3. Used in deployment pipelines to apply versioned database schema migrations automatically.
 
 ---
 
 
 
-### Exercise 2: CLI Export and Import Commands
-
-**Problem:** Write `surreal` CLI commands to export database to `dump.surql` and import it back.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> surreal export dump.surql & surreal import dump.surql
-> ```
-> ```text
-> surreal export --endpoint http://localhost:8000 -u root -p root --ns main --db app dump.surql
-> surreal import --endpoint http://localhost:8000 -u root -p root --ns main --db app dump.surql
-> ```
->
-> **Explanation:** `surreal export` and `import` manage database schema and record SQL backups.
-
----
-
-### Exercise 3: CLI Version Verification
-
-**Problem:** Command to print installed SurrealDB CLI version.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> surreal version
-> ```
-> ```text
-> surreal version
-> ```
->
-> **Explanation:** `surreal version` outputs installed binary engine version metadata.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [SurrealDB Server (`surreal start`)](surreal_start.md) — The server process target.
 - [Connection Credentials (`USE NS ... DB ...`)](connection_credentials.md) — Connection parameters.
@@ -207,7 +232,7 @@ Admin credentials are `"admin"` / `"admin"`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `surreal sql` opens the interactive CLI database shell.
 - Direct NoSQL equivalent to PostgreSQL's `psql` and MongoDB's `mongosh`.
 - Commands are run in OS shell consoles, not inside databases.

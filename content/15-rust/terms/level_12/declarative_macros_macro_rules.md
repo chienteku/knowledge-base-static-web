@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Syntax / Language Feature**: `macro_rules!` is Rust's system for declarative metaprogramming. Unlike functions that evaluate values at runtime, declarative macros operate on syntax (tokens) at compile time using pattern matching to expand into standard Rust code.
+
+
+**Rust Macro Primitive (pattern matching macro_rules! definition)**: `macro_rules!` is Rust's system for declarative metaprogramming. Unlike functions that evaluate values at runtime, declarative macros operate on syntax (tokens) at compile time using pattern matching to expand into standard Rust code.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: Declarative macros are built directly into the Rust language and compiler (`rustc`). They work in all environments, including `std`, `no_std`, embedded systems, and WebAssembly, without requiring any external dependencies or compiler plugins.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -114,7 +112,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Fragment Specifier Mismatch (e.g., using `expr` where `ident` or `ty` is expected)
 
@@ -217,7 +215,7 @@ fn main() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Type-Safe Embedded Bitfield Register Macro (`no_std`)
 
@@ -240,6 +238,9 @@ The macro should expand to:
 Include complete unit tests using `#[test]` and assertions (`assert!`, `assert_eq!`) verifying bit operations.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -335,7 +336,8 @@ Include complete unit tests using `#[test]` and assertions (`assert!`, `assert_e
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Fragment Specifiers:**
 >    - `$vis:vis`: Matches visibility modifiers like `pub` or `pub(crate)` (or empty for private).
 >    - `$name:ident`: Matches the struct name identifier (`UartStatus`).
@@ -378,6 +380,9 @@ The macro should expand to:
 Write comprehensive unit tests with `#[test]`, `std::thread`, `std::sync::Arc`, and assertions (`assert_eq!`) verifying thread-safe metric updates across concurrent threads.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::atomic::{AtomicU64, Ordering};
 > use std::sync::Arc;
@@ -483,7 +488,8 @@ Write comprehensive unit tests with `#[test]`, `std::thread`, `std::sync::Arc`, 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Ident Matchers (`$kind:ident`):**
 >    - The macro uses `$kind:ident` to match type names (`Counter`, `Gauge`). This allows `$kind::new()` to construct each field uniformly inside `impl $name`.
 > 2. **Macro Code Expansion:**
@@ -522,6 +528,9 @@ The macro should expand to:
 Write comprehensive unit tests with `#[test]` and `assert_eq!` verifying successful command routing, error propagation, and unknown opcode rejection.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Eq)]
 > pub enum DispatchError {
@@ -625,7 +634,8 @@ Write comprehensive unit tests with `#[test]` and `assert_eq!` verifying success
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Path Fragment Specifier (`$handler:path`):**
 >    - The macro uses `$handler:path` to match function names or full item paths (e.g. `handle_ping` or `crate::handlers::handle_ping`), enabling flexible handler dispatching.
 > 2. **Multi-Item Generation from a Single Invocation:**
@@ -637,7 +647,7 @@ Write comprehensive unit tests with `#[test]` and `assert_eq!` verifying success
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Procedural Macros](procedural_macros.md) — Function-like, derive, and attribute macros operating on raw `TokenStream`s via Rust code.
@@ -650,7 +660,7 @@ Write comprehensive unit tests with `#[test]` and `assert_eq!` verifying success
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `macro_rules!` enables declarative, pattern-matching metaprogramming evaluated entirely at compile time.
 - Macro arguments use **designators** (e.g. `$expr:expr`, `$id:ident`, `$t:ty`) to categorize AST syntax fragments.

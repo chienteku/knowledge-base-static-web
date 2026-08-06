@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Data Type**
+
+**Data Type** (Semi-Structured JSON Storage): `JSON` and `JSONB` store semi-structured JSON payloads, with `JSONB` storing decomposed binary format supporting GIN indexing.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Specific** (A highly popular database extension. Bypasses strict relational schemas, turning PostgreSQL into a hybrid SQL/NoSQL document database).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern web development, applications frequently deal with dynamic, semi-structured data:
@@ -93,7 +94,7 @@ FROM client_logs;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Comparing values extracted with `->` instead of `->>` in WHERE clauses
 
@@ -153,59 +154,106 @@ SELECT * FROM t WHERE data->'age' = 30; -- ❌ Comparing jsonb object to number!
 SELECT * FROM t WHERE (data->>'age')::INT = 30; -- Extract text and cast to int
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Metadata Filter Query
+### Exercise 1: Storing and Querying JSONB Documents
 
-**Problem:** You have a `devices` table with columns `serial_number` and `specs` (a `JSONB` column). The `specs` JSON contains a nested key structure: `{"hardware": {"ram_gb": 16}}`. Write a SQL query to select the `serial_number` of all devices that have exactly `'16'` GB of RAM.
+**Scenario:**
+Create an `events` table storing semi-structured metadata payloads using `JSONB`.
 
-**Expected output:**
+**Requirements:**
+1. Use `metadata JSONB NOT NULL DEFAULT '{}'`.
+2. Query using `->>` text extraction operator.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT serial_number 
-> FROM devices 
-> WHERE specs -> 'hardware' ->> 'ram_gb' = '16';
+> CREATE TABLE events (
+>   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   event_name TEXT NOT NULL,
+>   metadata JSONB NOT NULL DEFAULT '{}'
+> );
+> 
+> INSERT INTO events (event_name, metadata) 
+> VALUES ('user_signup', '{"user_id": 42, "source": "google_ad", "device": "mobile"}');
+> 
+> SELECT 
+>   id, 
+>   metadata->>'source' AS ad_source 
+> FROM events 
+> WHERE metadata->>'device' = 'mobile';
 > ```
-> - Chain the `->` operator to drill down into the `'hardware'` object.
-> - Use the final `->>` operator to extract the `'ram_gb'` value as a text string for comparison.
+>
+> #### Technical Explanation
+>
+> 1. `JSONB` parses JSON text into a decomposed binary format on insert.
+> 2. `->>` extracts JSON object values as raw `TEXT`.
+> 3. `->` extracts JSON object values as `JSONB` sub-objects.
+
+---
+
+### Exercise 2: Accelerating JSONB Key Queries with GIN Indexes
+
+**Scenario:**
+Create a GIN index on `events.metadata` to accelerate containment queries (`metadata @> '{"source": "google_ad"}'`).
+
+**Requirements:**
+1. Execute `CREATE INDEX idx_events_metadata ON events USING GIN (metadata)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE INDEX idx_events_metadata_gin 
+> ON events 
+> USING GIN (metadata);
+> 
+> SELECT id, event_name 
+> FROM events 
+> WHERE metadata @> '{"source": "google_ad"}';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. GIN (Generalized Inverted Index) indexes all keys and values inside `JSONB` documents.
+> 2. `@>` (contains operator) evaluates JSON path containment.
+> 3. Accelerates JSON queries across millions of rows to sub-millisecond execution.
+
+---
+
+### Exercise 3: Updating Nested Fields in JSONB Documents with `jsonb_set`
+
+**Scenario:**
+Update nested field `metadata.device` from `'mobile'` to `'desktop'` for event `id = 1`.
+
+**Requirements:**
+1. Execute `UPDATE events SET metadata = jsonb_set(metadata, '{device}', '"desktop"') WHERE id = 1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> UPDATE events 
+> SET metadata = jsonb_set(metadata, '{device}', '"desktop"') 
+> WHERE id = 1 
+> RETURNING id, metadata;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `jsonb_set(target, path, new_value)` updates or inserts nested JSON values at specified key paths.
+> 2. Allows mutating JSON sub-properties in SQL without replacing the entire JSON object.
+> 3. Atomic JSONB manipulation.
 
 ---
 
 
 
-### Exercise 2: Indexing JSONB Field with GIN Index
-
-**Problem:** Create GIN index on `payload` JSONB column of `events` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE INDEX idx_events_payload ON events USING GIN (payload);
-> ```
-> ```sql
-> CREATE INDEX idx_events_payload ON events USING GIN (payload);
-> ```
->
-> **Explanation:** GIN indexes on JSONB columns accelerate `@>` containment queries.
-
----
-
-### Exercise 3: JSONB Containment Query with `@>`
-
-**Problem:** Query users where `metadata` JSONB contains `{ "role": "admin" }` using `@>` operator.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users WHERE metadata @> '{"role": "admin"}';
-> ```
-> ```sql
-> SELECT * FROM users WHERE metadata @> '{"role": "admin"}';
-> ```
->
-> **Explanation:** `JSONB @> JSONB` tests if LHS JSONB document contains RHS JSONB structure.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Data Types (Overview)](../level_02/data_types.md) — The parent typing system.
 - [`ARRAY` Type](array_type.md) — Storing flat text arrays.
 - [Expression Index (Functional Index)](../level_07/expression_index.md) — Related concept: Expression Index (Functional Index).
@@ -213,7 +261,7 @@ SELECT * FROM t WHERE (data->>'age')::INT = 30; -- Extract text and cast to int
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `JSON` and `JSONB` store semi-structured JSON documents in SQL columns.
 - `JSON` stores exact text strings; `JSONB` stores parsed binary objects.
 - Always default to `JSONB` for performance and GIN search index compatibility.

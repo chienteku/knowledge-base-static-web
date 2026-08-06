@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Performance / Operations (full-text search index definition)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the full-text search engine. Parses search text and calculates relevance weights on the fly during query execution).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard B-Tree indexes are optimized for exact matches (`=`) or range lookups (`<`, `>`). 
@@ -87,7 +86,7 @@ ORDER BY relevance_score DESC;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to run search match queries using the '@' operator on fields that have not been configured with a 'SEARCH' index
 
@@ -142,68 +141,94 @@ DEFINE INDEX content_idx ON TABLE article FIELDS content SEARCH; // Basic defaul
 DEFINE INDEX content_idx ON TABLE article FIELDS content SEARCH BM25 HIGHLIGHTS ANALYZER blank, snowball(english);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Search Query Construction
+### Exercise 1: Defining Full-Text Search Indexes
 
-**Problem:** You are building a book catalog search. 
-Write the SurrealQL queries to:
-1.  Define a search analyzer named `simple_text` that tokenizes text and converts it to lowercase.
-2.  Define a search index named `book_search` on the `books` table, indexing the `summary` field using the `simple_text` analyzer.
-3.  Write a query to select books where the `summary` matches the search terms `"space travel"`.
+**Scenario:**
+Create a full-text search index `article_search` on table `article` covering fields `title` and `content`.
 
-**Expected output:**
+**Requirements:**
+1. Write `DEFINE INDEX article_search ON TABLE article COLUMNS title, content SEARCH ANALYZER blank BM25`.
+
 > [!check]- Answer
-> ```sql
-> -- 1. Define Analyzer
-> DEFINE ANALYZER simple_text TOKENIZERS class FILTERS lowercase;
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE article SCHEMAFULL;
+> DEFINE FIELD title ON TABLE article TYPE string;
+> DEFINE FIELD content ON TABLE article TYPE string;
 > 
-> -- 2. Define Index
-> DEFINE INDEX book_search ON books COLUMNS summary SEARCH ANALYZER simple_text;
-> 
-> -- 3. Query
-> SELECT * FROM books WHERE summary @1@ "space travel";
+> -- Define full-text search index with BM25 scoring
+> DEFINE INDEX article_search ON TABLE article COLUMNS title, content SEARCH ANALYZER blank BM25;
 > ```
-> - The analyzer creation keywords are `DEFINE ANALYZER`.
-> - The search index declaration requires appending the `SEARCH` keyword and specifying the analyzer name.
+>
+> #### Technical Explanation
+>
+> 1. `SEARCH ANALYZER` configures text tokenization and stemming for full-text search.
+> 2. `BM25` applies Okapi BM25 relevance scoring algorithms to query results.
+> 3. Enables fast text searching across large document collections.
+
+---
+
+### Exercise 2: Executing Full-Text Search Queries
+
+**Scenario:**
+Search for articles containing term `"SurrealDB"` using the `@@` search operator.
+
+**Requirements:**
+1. Write `SELECT * FROM article WHERE title @@ "SurrealDB"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE article:a1 SET title = "Learning SurrealDB Basics", content = "Full-text search engine...";
+> 
+> -- Execute full-text search query
+> SELECT * FROM article WHERE title @@ "SurrealDB";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `@@` executes full-text search matching using configured search indexes.
+> 2. Ranks results by BM25 relevance scores.
+> 3. Replaces external Elasticsearch clusters for text search workloads.
+
+---
+
+### Exercise 3: Highlights and Search Score Retrieval
+
+**Scenario:**
+Retrieve search relevance scores (`search::score()`) for matching articles.
+
+**Requirements:**
+1. Project `search::score(1)` in `SELECT`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT title, search::score(0) AS score 
+> FROM article 
+> WHERE title @@ "SurrealDB" 
+> ORDER BY score DESC;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `search::score(n)` returns numerical BM25 relevance scores.
+> 2. Sorts search results by term relevance.
+> 3. Provides native search engine capabilities.
 
 ---
 
 
 
-### Exercise 2: Defining Full-Text Search Index
-
-**Problem:** Define full-text search index `article_search` on `article` table for `title` and `body` fields.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX article_search ON TABLE article FIELDS title, body SEARCH BM25;
-> ```
-> ```surrealql
-> DEFINE INDEX article_search ON TABLE article FIELDS title, body SEARCH BM25;
-> ```
->
-> **Explanation:** `SEARCH BM25` configures full-text search indexing with BM25 relevance scoring.
-
----
-
-### Exercise 3: Full-Text Search Query with Relevance Scoring
-
-**Problem:** Query `article` table searching for `'surrealdb'` ordered by `search::score()` descending.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT *, search::score(0) AS score FROM article WHERE title SEARCH 'surrealdb' ORDER BY score DESC;
-> ```
-> ```surrealql
-> SELECT *, search::score(0) AS score FROM article WHERE title SEARCH 'surrealdb' ORDER BY score DESC;
-> ```
->
-> **Explanation:** `search::score(index_id)` extracts relevance scores for ordering search results.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`DEFINE INDEX` (Deep Dive)](../level_07/define_index.md) — The parent index context.
 - [Full-Text Search (`tsvector`, `tsquery`)](../../../12-postgres/terms/level_10/full_text_search.md) — Query operators.
@@ -212,7 +237,7 @@ Write the SurrealQL queries to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `SEARCH` indexes enable full-text search directly inside SurrealDB.
 - Replaces the need to spin up separate search servers like Elasticsearch.
 - Uses Analyzers to tokenize text, filter stopwords, and stem words to their roots.

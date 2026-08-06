@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **System Variables / Security**
+
+
+**Authentication & Permissions ($session and $token session context variables)**: - **System Variables / Security**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Query Engine** (Populated dynamically on every HTTP request or WebSocket session).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While `$auth` represents the database record of the logged-in user, security policies often depend on **connection metadata** (e.g. client IP address, origin header, connection protocol) or **JWT token claims** issued by external identity providers (Auth0, Clerk, Firebase).
@@ -76,7 +75,7 @@ DEFINE TABLE config SCHEMAFULL
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on $token Claims when Using TYPE RECORD without Custom Token Payload
 
@@ -136,85 +135,97 @@ SELECT * FROM article WHERE author = $auth.id; // $auth fetches active record st
 
 
 
-### Mistake 4: Expecting `$token` Variables to Be Available in Un-Authenticated Root Connections
 
-**The mistake:** Referencing `$token.exp` or `$token.id` in root administrator queries.
 
-**Why it's wrong:** `$token` is populated ONLY during authenticated JWT or RECORD access scope sessions. In unauthenticated root sessions, `$token` is `NONE`.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
--- Executed as Root admin:
-SELECT * FROM user WHERE id = $token.id; // ❌ $token is NONE!
-```
+### Exercise 1: Session Variables Context Inspection
 
-*Fix:*
-```surrealql
-SELECT * FROM user WHERE id = $auth.id; // Record scope authenticated queries
-```
+**Scenario:**
+Inspect all active session variables (`$session`, `$token`, `$auth`) inside an active database query.
 
-### Mistake 5: Confusing `$auth` (Authenticated Record Object) with `$token` (JWT Claim Object)
-
-**The mistake:** Expecting `$token` to contain table fields that were not embedded in the JWT payload claims.
-
-**Why it's wrong:** `$auth` is the full database user record object. `$token` contains claims decoded directly from the JWT header/payload.
-
-*Incorrect:*
-```surrealql
--- Expecting un-encoded field in $token
-SELECT * FROM article WHERE author_name = $token.name; // ❌ Field may not be in token claims!
-```
-
-*Fix:*
-```surrealql
-SELECT * FROM article WHERE author = $auth.id; // $auth fetches active record state
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: IP-Restricted Administrative Action
-Write a `PERMISSIONS` clause for a `system_settings` table allowing `update` only if `$auth.role = 'admin'` AND `$session.ip = '192.168.1.100'`.
+**Requirements:**
+1. Select `$session.ns`, `$session.db`, `$token.sub`, `$auth.id`.
 
 > [!check]- Answer
-> - Combine `$auth.role = 'admin'` and `$session.ip = '192.168.1.100'` using `AND`.
-
----
-
-
-
-### Exercise 2: Inspecting Token Expiration Claim
-
-**Problem:** Select `$token.exp` to inspect current JWT expiration timestamp.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> RETURN $token.exp;
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> RETURN $token.exp;
+> SELECT 
+>     $session.ns AS active_ns,
+>     $session.db AS active_db,
+>     $session.id AS session_connection_id,
+>     $token.sub AS token_subject,
+>     $auth.id AS user_id;
 > ```
 >
-> **Explanation:** `$token` exposes decoded JWT claim properties inside queries.
+> #### Technical Explanation
+>
+> 1. `$session` holds connection metadata (namespace, database, client IP, connection ID).
+> 2. `$token` holds decoded JWT claims from the client's auth header.
+> 3. `$auth` holds the authenticated user record document.
 
 ---
 
-### Exercise 3: Comparing `$auth` and `$token` Variables
+### Exercise 2: Client IP Auditing with `$session.origin`
 
-**Problem:** State difference between `$auth` (database record object) and `$token` (decoded JWT payload claims).
+**Scenario:**
+Record the client's IP address (`$session.origin`) inside an audit log record when a sensitive mutation occurs.
 
-**Expected output:**
+**Requirements:**
+1. Create `audit_log` setting `client_ip = $session.origin`.
+
 > [!check]- Answer
-> ```text
-> $auth holds the database user record; $token holds decoded JWT claims
-> ```
-> ```text
-> $auth holds the database user record; $token holds decoded JWT claims
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE audit_log SET 
+>     action = "sensitive_export",
+>     user = $auth.id,
+>     client_ip = $session.origin,
+>     timestamp = time::now();
 > ```
 >
-> **Explanation:** `$auth` provides database record state; `$token` provides JWT claim metadata.
+> #### Technical Explanation
+>
+> 1. `$session.origin` captures incoming client IP addresses or origin domains automatically.
+> 2. Provides security auditing metrics without requiring backend API header parsing.
+> 3. Records connection context at mutation execution time.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Distinguishing `$auth` vs `$token`
+
+**Scenario:**
+Explain the architectural difference between `$auth` (database user record) and `$token` (raw JWT payload).
+
+**Requirements:**
+1. Contrast `$auth` record properties with `$token` claim properties.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> $auth: Represents the full live database record (e.g. user:alice document with up-to-date fields).
+> $token: Represents static JSON Web Token claims passed by the client header (e.g. sub, exp, iss).
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$auth` fetches live record data from storage during query execution.
+> 2. `$token` reads pre-decoded JWT claim values directly from the request context.
+> 3. Use `$auth` for live record checks; use `$token` for fast claim inspections.
+
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [`$auth` Variable](auth_variable.md) — The authenticated record user object.
 - [JWT Token-Based Auth](jwt_auth.md) — JWT validation and claims parsing.
@@ -223,7 +234,7 @@ Write a `PERMISSIONS` clause for a `system_settings` table allowing `update` onl
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$session` provides transport-layer metadata (`$session.ip`, `$session.origin`, `$session.ns`, `$session.db`).
 - `$token` provides decoded JWT payload claims (`$token.sub`, `$token.iss`, `$token.exp`).
 - Essential for audit logging, geo/IP restrictions, and integrating external OAuth provider tokens.

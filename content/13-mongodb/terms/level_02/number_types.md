@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Data Type**
+
+**Core Concept** (Numeric BSON Types): Numeric Types in BSON encompass Int32 (32-bit integer), Int64 (64-bit long), Double (64-bit float), and Decimal128 (128-bit decimal).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (JavaScript/Node.js defaults to Double for all numbers; driver wrapper constructors are required to enforce Int32, Long, or Decimal128 in database writes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard **JSON** has only one generic `Number` type, which is interpreted as a double-precision floating-point number.
@@ -74,7 +75,7 @@ db.ledger.insertOne({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing money or financial transactions using default numbers (Double)
 
@@ -129,65 +130,96 @@ const id = 9007199254740993; // ❌ Precision loss in JS runtime!
 const { Long } = require('mongodb'); const id = Long.fromString("9007199254740993");
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Constructor Audit
+### Exercise 1: Explicit Integer Inserts with `NumberInt` and `NumberLong`
 
-**Problem:** You are inserting records for a library app. Write the MongoDB document object containing:
-1.  An integer field named `books_count` with the value `140` (saved as Int32).
-2.  A money field named `late_fee` with the value `2.50` (saved as Decimal128).
+**Scenario:**
+Insert a server metric document specifying `Int32` for `port` (27017) and `Int64` for `bytesTransferred` (9876543210).
 
-**Expected output:**
+**Requirements:**
+1. Use `NumberInt()` and `NumberLong()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> {
->   books_count: NumberInt(140),
->   late_fee: NumberDecimal("2.50")
-> }
-> ```
-> - Use the constructor wrappers `NumberInt` and `NumberDecimal`.
-> - Always wrap the decimal value inside a text string `"2.50"` inside the constructor to preserve accuracy.
-
----
-
-
-
-### Exercise 2: Constructing Integer Types in mongosh
-
-**Problem:** Insert document with 32-bit int `age` using `NumberInt()` and 64-bit long `views` using `NumberLong()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.insertOne({ age: NumberInt(30), views: NumberLong(100000) });
-> ```
-> ```javascript
-> db.users.insertOne({
->   age: NumberInt(30),
->   views: NumberLong(100000)
+> db.server_metrics.insertOne({
+>   server: "db-node-01",
+>   port: NumberInt(27017),
+>   bytesTransferred: NumberLong("9876543210"),
+>   recordedAt: new Date()
 > });
 > ```
 >
-> **Explanation:** `NumberInt()` and `NumberLong()` enforce explicit 32-bit and 64-bit integer BSON storage.
+> #### Technical Explanation
+>
+> 1. `NumberInt()` forces 32-bit BSON integer encoding (4 bytes).
+> 2. `NumberLong()` forces 64-bit BSON long integer encoding (8 bytes).
+> 3. Prevents JavaScript numbers from defaulting to 64-bit double precision floats.
 
 ---
 
-### Exercise 3: BSON Number Types Overview
+### Exercise 2: Atomic Incrementing with `$inc`
 
-**Problem:** List 3 numeric BSON types in MongoDB (`double`, `int` / 32-bit, `long` / 64-bit, `decimal` / 128-bit).
+**Scenario:**
+Increment a product's `views` count by 1 and decrement `stock` count by 1 atomically.
 
-**Expected output:**
+**Requirements:**
+1. Use `$inc: { views: NumberInt(1), stock: NumberInt(-1) }`.
+
 > [!check]- Answer
-> ```text
-> double, int, long, decimal
-> ```
-> ```text
-> double, int, long, decimal
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { $inc: { views: NumberInt(1), stock: NumberInt(-1) } }
+> );
 > ```
 >
-> **Explanation:** MongoDB provides double, 32-bit int, 64-bit long, and 128-bit decimal numeric primitives.
+> #### Technical Explanation
+>
+> 1. `$inc` performs atomic numeric addition and subtraction at the storage engine level.
+> 2. Prevents race conditions during concurrent write updates.
+> 3. Operates over integer, long, float, and decimal types.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Querying Numeric Ranges with `$gt` and `$lt`
+
+**Scenario:**
+Query products with price between 50.00 and 150.00.
+
+**Requirements:**
+1. Range filter `{ price: { $gte: 50.00, $lte: 150.00 } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.find({
+>   price: {
+>     $gte: 50.00,
+>     $lte: 150.00
+>   }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Range comparison operators evaluate numeric values according to BSON type comparison rules.
+> 2. Numeric types (Int32, Int64, Double, Decimal128) compare across type boundaries correctly.
+> 3. Efficiently utilizes numeric B-tree indexes.
+
+---
+
+
+
+## 6. Related Terms
 
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent types.
 - [`Decimal128`](decimal128.md) — Finer details on financial math.
@@ -195,7 +227,7 @@ const { Long } = require('mongodb'); const id = Long.fromString("900719925474099
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - BSON supports four distinct number types: Double, Int32, Int64, and Decimal128.
 - Default numbers in JavaScript/Node.js are stored as BSON Double (floats).
 - Use `NumberInt()` and `NumberLong()` to save disk space for integer counters.

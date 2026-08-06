@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Driver / Integration** (Automated Network Retry Mechanism): Retryable Reads and Retryable Writes automatically retry supported read/write commands once upon encountering transient network failures or primary node elections.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Enabled by default in modern MongoDB drivers. Configured via connection string parameters `retryWrites=true` and `retryReads=true`).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a distributed database cluster, servers occasionally reboot, network switches blip, and replica sets trigger elections to choose a new primary.
@@ -85,7 +86,7 @@ Operations that are automatically retried on transient errors:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting retryable writes to fix logical query failures or database constraint errors
 
@@ -135,71 +136,96 @@ mongodb+srv://user:pass@cluster.mongodb.net/db?retryWrites=true // Automatic sin
 Implement application retry loops with backoff for multi-document operations
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Retry Behavior Diagnostic
+### Exercise 1: Enabling Automatic Retryable Writes
 
-**Problem:** A replica set triggers an election because the Primary node lost power. 
-At that exact millisecond, your Node.js app runs an `insertOne` query with `retryWrites=true`. 
-The driver gets a `NotWritablePrimary` error.
-Describe the step-by-step actions the driver will execute to resolve this query.
+**Scenario:**
+Configure MongoDB client connection URI with `retryWrites=true` to handle transient network blips automatically.
 
-**Expected output:**
+**Requirements:**
+1. Append `retryWrites=true` to connection string.
+
 > [!check]- Answer
-> ```text
-> 1. The driver catches the transient `NotWritablePrimary` election error.
-> 2. The driver pauses and queries the replica set seeds to locate the newly elected Primary node.
-> 3. The driver establishes a connection to the new Primary node.
-> 4. The driver retries the `insertOne` command once on the new Primary, passing the original session and transaction numbers to guarantee idempotency.
-> 5. The query completes successfully, and the application execution continues without throwing errors.
+>
+> #### Implementation
+>
+> ```javascript
+> const uri = "mongodb+srv://user:pass@cluster0.abc.mongodb.net/app?retryWrites=true&w=majority";
+> const client = new MongoClient(uri);
 > ```
-> - The driver behaves as a smart cluster controller during elections.
-> - Explain how cluster clocks and transaction numbers guide the retry handshake.
+>
+> #### Technical Explanation
+>
+> 1. `retryWrites=true` instructs the driver to automatically retry supported write operations (`insertOne`, `updateOne`, `deleteOne`) once upon encountering network failures.
+> 2. Client assigns a unique statement ID (`txnNumber`) to each write command.
+> 3. Server checks statement ID to prevent executing the write twice if the first attempt succeeded server-side.
+
+---
+
+### Exercise 2: Enabling Automatic Retryable Reads
+
+**Scenario:**
+Configure client connection options with `retryReads=true` (enabled by default in modern drivers).
+
+**Requirements:**
+1. Pass `retryReads: true` in MongoClient options.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const client = new MongoClient(uri, {
+>   retryReads: true,
+>   retryWrites: true
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `retryReads=true` automatically retries supported read operations (`find`, `aggregate`, `countDocuments`) once if network errors occur.
+> 2. Re-routes read request to an alternate secondary node during failover.
+> 3. Eliminates transient read exception spikes in client applications.
+
+---
+
+### Exercise 3: Supported vs Unsupported Operations for Retryable Writes
+
+**Scenario:**
+Distinguish between write operations supported by `retryWrites` vs unsupported operations (e.g., `updateMany`, `deleteMany`).
+
+**Requirements:**
+1. List supported single-doc writes vs unsupported bulk commands.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Retryable Write Eligibility:
+> ✅ Supported: insertOne(), updateOne(), deleteOne(), findOneAndUpdate(), replaceOne().
+> ❌ Unsupported: updateMany(), deleteMany(), insertMany() (unless using bulkWrite with ordered: false).
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `updateMany()` and `deleteMany()` are not retryable because retrying multi-document writes could lead to partial duplicate modifications.
+> 2. Use single-document operations or transactions for full retry safety.
+> 3. Critical driver integration awareness.
 
 ---
 
 
 
-### Exercise 2: Enabling Retryable Writes and Reads in Connection String
-
-**Problem:** Construct URI enabling `retryWrites=true` and `retryReads=true`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> mongodb+srv://user:pass@cluster.mongodb.net/app?retryWrites=true&retryReads=true
-> ```
-> ```text
-> mongodb+srv://user:pass@cluster.mongodb.net/app?retryWrites=true&retryReads=true
-> ```
->
-> **Explanation:** Connection URI parameters enable automatic single-attempt retries for network glitches.
-
----
-
-### Exercise 3: Retryable Write Requirements
-
-**Problem:** What storage engine requirement exists for Retryable Writes? (WiredTiger storage engine with replica sets or sharded clusters).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> WiredTiger storage engine with replica sets or sharded clusters
-> ```
-> ```text
-> WiredTiger storage engine with replica sets or sharded clusters
-> ```
->
-> **Explanation:** Retryable writes utilize WiredTiger transaction logs to prevent duplicate executions.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`WriteConcernError` / `WriteError`](write_errors.md) — The error formats.
 - [Replica Set](../level_09/replica_set.md) — The distributed cluster.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Retryable operations automatically handle transient network and election errors.
 - Configured in the connection string via `retryWrites=true` and `retryReads=true`.
 - Retries the failed query exactly once on a new primary or secondary node.

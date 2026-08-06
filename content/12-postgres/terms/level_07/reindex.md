@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Command**
+
+**Performance / Optimization** (Index Maintenance & Rebuilding): `REINDEX` rebuilds corrupted, bloated, or fragmented index pages to restore optimal lookup speed and reclaim disk space.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Requires exclusive locks by default. PostgreSQL supports **`REINDEX CONCURRENTLY`** to rebuild indexes in the background without blocking database traffic).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Just like tables suffer from table bloat (dead tuples), **index files suffer from index bloat**.
@@ -85,7 +86,7 @@ REINDEX TABLE CONCURRENTLY staff;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running standard REINDEX queries on massive production databases during peak hours
 
@@ -136,63 +137,95 @@ REINDEX TABLE CONCURRENTLY heavy_table; -- Non-blocking concurrent reindex
 Monitor index bloat via pgstatindex before executing REINDEX CONCURRENTLY
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Bloat Recovery Script
+### Exercise 1: Concurrent Index Rebuilding with REINDEX CONCURRENTLY
 
-**Problem:** You have a high-volume database table `session_store` containing indexes `idx_sessions_token` and `idx_sessions_expiry`. The indexes have become bloated from daily session deletes. Write the SQL query to rebuild all indexes on the `session_store` table in the background without locking database traffic.
+**Scenario:**
+Rebuild a bloated index `idx_orders_customer_id` on a production table without blocking concurrent application writes.
 
-**Expected output:**
+**Requirements:**
+1. Execute `REINDEX INDEX CONCURRENTLY idx_orders_customer_id`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> REINDEX TABLE CONCURRENTLY session_store;
+> REINDEX INDEX CONCURRENTLY idx_orders_customer_id;
 > ```
-> - Specify the table target rather than individual index files.
-> - Append the concurrency modifier.
+>
+> #### Technical Explanation
+>
+> 1. `REINDEX` builds a fresh copy of the index structure and replaces the old fragmented pages.
+> 2. `CONCURRENTLY` performs the rebuild online without holding exclusive locks that block table writes.
+> 3. Reclaims bloated index disk space and restores $O(\log N)$ lookup performance.
+
+---
+
+### Exercise 2: Rebuilding All Indexes on a Table
+
+**Scenario:**
+Rebuild all secondary indexes on table `orders` concurrently after heavy update/delete churn.
+
+**Requirements:**
+1. Execute `REINDEX TABLE CONCURRENTLY orders`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> REINDEX TABLE CONCURRENTLY orders;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REINDEX TABLE` rebuilds all indexes associated with the specified table sequentially.
+> 2. Reclaims index bloat across primary key, foreign key, and unique indexes simultaneously.
+> 3. Standard database maintenance task.
+
+---
+
+### Exercise 3: Diagnosing Index Bloat in System Catalogs
+
+**Scenario:**
+Query `pg_relation_size()` to identify indexes whose byte size exceeds the size of their underlying table heap.
+
+**Requirements:**
+1. Compare index size to table size using `pg_relation_size()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   relname AS table_name, 
+>   indexrelname AS index_name, 
+>   pg_size_pretty(pg_relation_size(indexrelid)) AS index_size,
+>   pg_size_pretty(pg_relation_size(relid)) AS table_size 
+> FROM pg_stat_user_indexes 
+> WHERE pg_relation_size(indexrelid) > pg_relation_size(relid);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Under heavy `UPDATE` and `DELETE` workloads, B-tree index pages can become fragmented and bloated with empty space.
+> 2. Indexes larger than their underlying tables indicate severe page fragmentation.
+> 3. Identifies targets for `REINDEX CONCURRENTLY`.
 
 ---
 
 
 
-### Exercise 2: Concurrent Re-Indexing Command
-
-**Problem:** Reindex table `users` concurrently without blocking queries in Postgres 12+.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> REINDEX TABLE CONCURRENTLY users;
-> ```
-> ```sql
-> REINDEX TABLE CONCURRENTLY users;
-> ```
->
-> **Explanation:** `REINDEX TABLE CONCURRENTLY` rebuilds bloated indexes without acquiring write locks.
-
----
-
-### Exercise 3: Re-Indexing Specific Index
-
-**Problem:** Reindex specific bloated index `idx_orders_user_id` concurrently.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> REINDEX INDEX CONCURRENTLY idx_orders_user_id;
-> ```
-> ```sql
-> REINDEX INDEX CONCURRENTLY idx_orders_user_id;
-> ```
->
-> **Explanation:** `REINDEX INDEX` targets individual index objects for bloat repair.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`CREATE INDEX` / `DROP INDEX`](create_drop_index.md) — Sourcing indexes.
 - [`VACUUM` / `ANALYZE`](vacuum_analyze.md) — Table slot cleanup.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `REINDEX` rebuilds index files from scratch using current table data.
 - Reclaims disk storage space from bloated B-tree index nodes.
 - Repairs index corruption caused by system crashes or write failures.

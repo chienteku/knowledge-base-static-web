@@ -16,7 +16,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: Methods exist in almost all Object-Oriented programming languages (Java, Python, C++, etc.). They are simply functions that belong to a specific instance of an object (or in Rust's case, a struct or enum).
+
+
+**Rust Language Construct (self-binding functions)**: Methods exist in almost all Object-Oriented programming languages (Java, Python, C++, etc.). They are simply functions that belong to a specific instance of an object (or in Rust's case, a struct or enum).
 
 ---
 
@@ -164,9 +166,10 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Frequency Limit Order Book (`&self` vs `&mut self` Stateful Methods)
 
-**Problem Description:**
+**Scenario:** **Problem Description:**
 In electronic trading systems and exchange order matching engines, maintaining low-latency state changes without dynamic memory allocation overhead is critical. An order book maintains bid (buy) and ask (sell) limit orders sorted by price level.
 
+**Requirements:**
 Design and implement a matching engine `LimitOrderBook` using struct methods:
 1. **Associated Constructor**: `LimitOrderBook::new(symbol: impl Into<String>) -> Self`.
 2. **Inspect Methods (taking `&self`)**:
@@ -408,9 +411,10 @@ Write unit tests verifying `&self` queries, `&mut self` state mutations, cancell
 
 ### Exercise 2: Protocol Handshake State Machine (Consuming `self` Methods)
 
-**Problem Description:**
+**Scenario:** **Problem Description:**
 Network protocols (such as TLS handshakes, binary RPC framing, or IoT sensor protocols) enforce strict sequence transitions. For example, transmitting binary payloads before establishing authentication or reading metrics from a closed socket must be impossible.
 
+**Requirements:**
 By defining methods that take ownership of `self` by value, Rust's borrow checker enforces protocol transitions at compile-time: once a method taking `self` is called, the previous state variable is moved and destroyed, preventing illegal state reuse.
 
 Implement a type-safe connection lifecycle:
@@ -581,9 +585,10 @@ Write unit tests verifying fluent initialization, protocol state transitions, in
 
 ### Exercise 3: Dynamic AST Evaluator & Pipeline Transformer (`&mut Self` Chaining vs `self` Consumption)
 
-**Problem Description:**
+**Scenario:** **Problem Description:**
 In expression evaluation engines, rule processing frameworks, and compiler toolchains, Abstract Syntax Tree (AST) structures are constructed, transformed, and evaluated against execution contexts.
 
+**Requirements:**
 Implement an AST evaluation pipeline:
 1. `ExecutionContext`:
    - Associated constructor `ExecutionContext::new() -> Self`.

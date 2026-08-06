@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Type Annotation**
+
+**TypeScript Core Syntax** (Function Signature Annotations): Function types `(param: T) => R` describe function input parameters and return types as first-class values.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, functions are incredibly fragile.
@@ -58,7 +59,7 @@ function fetchData(onSuccess: (data: string) => void) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting Return Type Inference
 
@@ -104,68 +105,119 @@ function exec(cb: Function) { cb(1, 2, 3); } // Disables argument type checking
 function exec(cb: (a: number, b: number) => void) { cb(1, 2); }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Typing a Method inside an Interface
+### Exercise 1: Annotating Callback Function Parameters
 
-**Problem:** How do you define an interface `User` that has a property `greet`, which is a function that takes no arguments and returns a string?
+**Scenario:**
+Type a `filterArray` utility function taking an array `T[]` and a predicate callback `(item: T) => boolean`.
 
-**Expected output:**
+**Requirements:**
+1. Annotate predicate parameter type `(item: T) => boolean`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> interface User {
->   // Option 1: Method syntax
->   greet(): string;
->   
->   // Option 2: Property syntax with arrow function type
->   // greet: () => string;
+> type Predicate<T> = (item: T) => boolean;
+
+function filterArray<T>(items: T[], predicate: Predicate<T>): T[] {
+  const result: T[] = [];
+  for (const item of items) {
+    if (predicate(item)) {
+      result.push(item);
+    }
+  }
+  return result;
+}
+
+const evens = filterArray([1, 2, 3, 4], (num) => num % 2 === 0);
+```
+
+> #### Technical Explanation
+>
+> 1. Function types `(item: T) => boolean` describe input parameters and return types as first-class values.
+> 2. `filterArray` infers `num` as `number` inside the inline callback without manual annotations.
+> 3. Standard higher-order function typing pattern.
+
+---
+
+### Exercise 2: Defining Callable Object Interfaces (Call Signatures)
+
+**Scenario:**
+Create an interface for a callable function object that also has a static `version` property attached.
+
+**Requirements:**
+1. Define call signature `(input: string): string` and property `version: string`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Formatter {
+>   (input: string): string; // Call signature
+>   version: string;        // Property signature
 > }
-> ```
-> - Think about the callback syntax!
+
+const format: Formatter = Object.assign(
+  (input: string) => input.trim().toLowerCase(),
+  { version: "1.0.0" }
+);
+
+console.log(format("  Hello  ")); // "hello"
+console.log(format.version);      // "1.0.0"
+```
+
+> #### Technical Explanation
+>
+> 1. Interfaces with call signatures `(param: T): R` model callable JavaScript functions with attached static properties.
+> 2. Essential for modeling legacy JavaScript libraries like jQuery (`$`) or Axios.
+> 3. Advanced function object modeling pattern.
+
+---
+
+### Exercise 3: Construct Signatures (`new () => T`)
+
+**Scenario:**
+Type a factory function that instantiates new class instances using a construct signature `new (...args: any[]) => T`.
+
+**Requirements:**
+1. Define construct signature parameter `ctor: new () => T`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface Constructor<T> {
+>   new (...args: any[]): T;
+> }
+
+class Service {
+  execute() { return "Service Executed"; }
+}
+
+function createInstance<T>(ctor: Constructor<T>): T {
+  return new ctor();
+}
+
+const instance = createInstance(Service);
+console.log(instance.execute());
+```
+
+> #### Technical Explanation
+>
+> 1. Construct signatures `new (...args: any[]) => T` describe class constructors that produce instances of type `T`.
+> 2. `new` keyword indicates that the function MUST be invoked with `new`.
+> 3. Standard pattern for dependency injection containers and factory functions.
 
 ---
 
 
 
-### Exercise 2: Type Alias for High-Order Functions
-
-**Problem:** Define `type BinaryOp = (a: number, b: number) => number`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> BinaryOp type alias defined
-> ```
-> ```typescript
-> type BinaryOp = (a: number, b: number) => number;
-> const add: BinaryOp = (x, y) => x + y;
-> console.log(add(2, 3));
-> ```
->
-> **Explanation:** Function type aliases reusable function signature definitions.
-
----
-
-### Exercise 3: Callable Object Interfaces
-
-**Problem:** Define an interface for a function that also has property `version: string`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Callable interface created
-> ```
-> ```typescript
-> interface Calculator {
->   (x: number): number;
->   version: string;
-> }
-> console.log("Callable interface created");
-> ```
->
-> **Explanation:** Interfaces can combine callable function signatures with static properties.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`void` & `never`](../level_02/void_never.md) — What you return when a function doesn't return data.
 - [Type Inference](../level_01/type_inference.md) — Why you don't always need to explicitly write the return type.
 - [Function Overloads](function_overloads.md) — Related concept: Function Overloads.
@@ -176,7 +228,7 @@ function exec(cb: (a: number, b: number) => void) { cb(1, 2); }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Function Types** enforce exactly what data goes into a function and what comes out.
 - Syntax: `function name(arg1: type): returnType {}`.
 - If you pass a function as a callback, use the arrow syntax: `(arg: type) => returnType`.

@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: A fundamental concept in almost all programming languages, though Rust enforces a much stricter distinction between statements and expressions than languages like C or Python.
+
+
+**Rust Core Semantics (unit-evaluating instruction steps)**: A fundamental concept in almost all programming languages, though Rust enforces a much stricter distinction between statements and expressions than languages like C or Python.
 
 ---
 

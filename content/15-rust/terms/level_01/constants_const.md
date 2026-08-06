@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: Constants exist in almost all programming languages (like `final` in Java, or `const` in JavaScript/C++) to represent values that never change.
+
+
+**Rust Keyword (compile-time inlined constants)**: Constants exist in almost all programming languages (like `final` in Java, or `const` in JavaScript/C++) to represent values that never change.
 
 ---
 

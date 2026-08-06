@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Schema & Modeling (table field definition statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the schema level. Compiled constraints are checked in server memory during write transaction phases).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In SQL databases (PostgreSQL), columns are defined inside the `CREATE TABLE` statement. 
@@ -83,7 +82,7 @@ DEFINE FIELD ssn ON member TYPE string
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the 'ON' or 'ON TABLE' keywords in the field definition statement, triggering compiler syntax errors
 
@@ -141,63 +140,95 @@ DEFINE FIELD required_name ON TABLE user TYPE option<string>; // Allows NONE!
 DEFINE FIELD required_name ON TABLE user TYPE string; // Strictly required non-none field
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Field Definition Construction
+### Exercise 1: Defining Typed Fields with Default Values
 
-**Problem:** You are defining a schema for a `post` table. 
-Write the SurrealQL commands to:
-1.  Define the table `post` as `SCHEMAFULL`.
-2.  Define a field `title` of type `string`.
-3.  Define a field `ratings` as an array of decimals (`decimal`).
+**Scenario:**
+You are defining schema rules for a user table requiring a typed `email` string and a default `role` string.
 
-**Expected output:**
+**Requirements:**
+1. Define table `user` as `SCHEMAFULL`.
+2. Define field `email` as `string`.
+3. Define field `role` as `string` with `DEFAULT "customer"`.
+
 > [!check]- Answer
-> ```sql
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE FIELD email ON TABLE user TYPE string;
+> DEFINE FIELD role ON TABLE user TYPE string DEFAULT "customer";
+> 
+> CREATE user:u1 SET email = "u1@example.com";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DEFINE FIELD` establishes schema rules for individual table properties.
+> 2. `TYPE <type>` enforces strict data type validation at write time in `SCHEMAFULL` mode.
+> 3. `DEFAULT <val>` automatically populates field values if omitted during record creation.
+
+---
+
+### Exercise 2: Defining Readonly Timestamp Fields
+
+**Scenario:**
+Define an immutable `created_at` timestamp field on table `post` that cannot be altered after record creation.
+
+**Requirements:**
+1. Define field `created_at` on table `post` as `datetime`.
+2. Apply `DEFAULT time::now()` and `READONLY` attributes.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
 > DEFINE TABLE post SCHEMAFULL;
-> DEFINE FIELD title ON post TYPE string;
-> DEFINE FIELD ratings ON post TYPE array<decimal>;
+> DEFINE FIELD created_at ON TABLE post TYPE datetime 
+>     DEFAULT time::now() 
+>     READONLY;
 > ```
-> - Anchored field statements require the `ON` keyword pointing to the `post` table.
-> - Declare container arrays with type arguments: `array<T>`.
+>
+> #### Technical Explanation
+>
+> 1. `READONLY` prevents field modifications on subsequent `UPDATE` or `MERGE` queries.
+> 2. Guarantees audit timestamp immutability at the storage engine level.
+> 3. Rejects update operations attempting to alter readonly field values.
+
+---
+
+### Exercise 3: Idempotent Field Overwrites with `OVERWRITE`
+
+**Scenario:**
+Update an existing field definition `age` on table `user` to change its type to `int` using `DEFINE FIELD OVERWRITE`.
+
+**Requirements:**
+1. Write the `DEFINE FIELD OVERWRITE` statement for field `age`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE FIELD OVERWRITE age ON TABLE user TYPE int ASSERT $value >= 0;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `OVERWRITE` updates existing field definitions idempotently without requiring prior `REMOVE FIELD` calls.
+> 2. Modifies data type constraints and assertion expressions cleanly.
+> 3. Simplifies continuous deployment schema migration scripts.
 
 ---
 
 
 
-### Exercise 2: Defining Field with Default and Assertion
+## 6. Related Terms
 
-**Problem:** Define field `created_at` on `article` as `datetime` defaulting to `time::now()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD created_at ON TABLE article TYPE datetime DEFAULT time::now();
-> ```
-> ```surrealql
-> DEFINE FIELD created_at ON TABLE article TYPE datetime DEFAULT time::now();
-> ```
->
-> **Explanation:** `DEFAULT` sets initial values when fields are omitted during creation.
-
----
-
-### Exercise 3: Defining Record Link Field
-
-**Problem:** Define field `author` on `post` table as record link to `user` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD author ON TABLE post TYPE record<user>;
-> ```
-> ```surrealql
-> DEFINE FIELD author ON TABLE post TYPE record<user>;
-> ```
->
-> **Explanation:** `TYPE record<table>` enforces foreign record link pointers.
-
-## 7. Related Terms
+- [ Clause](assert_clause.md) — Field assertion clause.
 
 - [`DEFINE TABLE`](define_table.md) — The parent schema context.
 - [`option<T>` (Optional Fields)](option_type.md) — Optional fields wrapper.
@@ -209,7 +240,7 @@ Write the SurrealQL commands to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE FIELD` declares validation rules and types for record properties.
 - Relational equivalent to defining table columns; NoSQL equivalent to schema validation.
 - Fields are defined individually and anchored using the `ON` keyword.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Client / CLI**
+
+**Administration / Operations** (Interactive Terminal CLI): psql is the native command-line terminal interface for interactively querying and administering PostgreSQL databases.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Built-in Utility** (Bundled with every standard PostgreSQL installation. Executable from the operating system's command shell).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing applications, you often need to quickly test an SQL query, check a table's structure, list existing databases, or dump database backups.
@@ -78,7 +79,7 @@ postgres=# SELECT name, email FROM users;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the semicolon (`;`) at the end of SQL queries
 
@@ -133,58 +134,83 @@ SELECT * FROM users <Enter> -- Prompt changes to user-# waiting for semicolon!
 SELECT * FROM users; -- Terminate SQL statements with semicolon
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Schema Discovery
+### Exercise 1: Inspecting Table Structures with Meta-Commands
 
-**Problem:** You are hired to work on a legacy Postgres database. You connect using `psql`, but you have no idea what tables exist or what columns are in the `customers` table. Write the two `psql` backslash commands to discover this structure.
+**Scenario:**
+Inspect column definitions, data types, defaults, and indexes of table `users` in `psql`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `\d users`.
+
 > [!check]- Answer
-> ```text
-> 1. Type `\dt` and press Enter to list all tables in the database.
-> 2. Type `\d customers` and press Enter to describe the columns, types, and constraints of the `customers` table.
-> ```
-> - Use the backslash commands specifically built to inspect metadata inside `psql`.
-> - Do not write standard SQL `SELECT` queries for discovery.
-
----
-
-
-
-### Exercise 2: Essential `psql` Meta-Commands
-
-**Problem:** List `psql` meta-commands for: 1. List databases (`\l`), 2. Connect to database (`\c dbname`), 3. List tables (`\dt`), 4. Quit (`\q`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> \l, \c dbname, \dt, \q
-> ```
-> ```text
-> \l, \c dbname, \dt, \q
+>
+> #### Implementation
+>
+> ```sql
+> \d users
 > ```
 >
-> **Explanation:** Backslash meta-commands manage connections and inspect catalog schema objects in `psql`.
+> #### Technical Explanation
+>
+> 1. `\d tablename` is a psql meta-command inspecting table schema definitions.
+> 2. Displays column names, data types, constraints, foreign key links, and associated indexes.
+> 3. Fast CLI schema inspection tool.
 
 ---
 
-### Exercise 3: Executing SQL Script File via `psql` CLI
+### Exercise 2: Executing SQL Scripts from Files in psql
 
-**Problem:** CLI command to execute SQL script `schema.sql` against database `app` using `psql`.
+**Scenario:**
+Execute a database migration script file `schema.sql` against database `dev_db` using `psql`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `psql -d dev_db -f schema.sql`.
+
 > [!check]- Answer
-> ```text
-> psql -d app -f schema.sql
-> ```
+>
+> #### Implementation
+>
 > ```bash
-> psql -d app -f schema.sql
+> psql -h localhost -U app_user -d dev_db -f ./scripts/schema.sql
 > ```
 >
-> **Explanation:** `psql -f script.sql` executes file contents against specified databases.
+> #### Technical Explanation
+>
+> 1. `-f filename` executes SQL statements contained in a file sequentially.
+> 2. Standard command for executing database setup and seed scripts in CI/CD pipelines.
+> 3. Returns execution status for each SQL command.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Exporting Query Results to CSV Files
+
+**Scenario:**
+Export query output for `users` table directly to a CSV file using psql `\copy`.
+
+**Requirements:**
+1. Execute `\copy (SELECT * FROM users) TO 'users.csv' WITH CSV HEADER`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> \copy (SELECT id, username, email FROM users) TO 'users.csv' WITH CSV HEADER;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `\copy` is a psql client command streaming data between PostgreSQL and local client files.
+> 2. `WITH CSV HEADER` formats output as comma-separated values with column title headers.
+> 3. Export data without requiring server file permissions.
+
+---
+
+
+
+## 6. Related Terms
 - [Client-Server Model (in Databases)](client_server_model.md) — The underlying network architecture.
 - [pgAdmin & GUI Tools](pgadmin.md) — The graphical client alternative.
 - [Connection String / DSN](connection_string.md) — Related concept: Connection String / DSN.
@@ -192,7 +218,7 @@ SELECT * FROM users; -- Terminate SQL statements with semicolon
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `psql` is the official command-line interface client for PostgreSQL.
 - It executes standard SQL queries and local client helper commands.
 - All standard SQL queries inside `psql` must end with a semicolon (`;`).

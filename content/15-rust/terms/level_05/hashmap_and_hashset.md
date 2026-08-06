@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Collections**: `std::collections::HashMap` (key-value dictionary) and `std::collections::HashSet` (unique value collection) implement open-addressing hash tables backed by Robin Hood / SwissTable cache-optimized layout. By default, Rust uses SipHash 1-3 to offer cryptographic resistance against HashDoS attacks.
+
+
+**Rust Standard Collections (hash-based lookup containers)**: `std::collections::HashMap` (key-value dictionary) and `std::collections::HashSet` (unique value collection) implement open-addressing hash tables backed by Robin Hood / SwissTable cache-optimized layout. By default, Rust uses SipHash 1-3 to offer cryptographic resistance against HashDoS attacks.
 
 ---
 

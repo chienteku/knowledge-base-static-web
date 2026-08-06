@@ -15,17 +15,15 @@
 
 ## 2. Term Category
 
-**Attribute / Memory / Embedded**: `#[global_allocator]` is a compiler attribute placed on a static item implementing `std::alloc::GlobalAlloc` (or `core::alloc::GlobalAlloc`). It routes every dynamic memory request (`Box`, `Vec`, `String`) in the application through the designated allocator instance.
+
+
+**Rust Memory Subsystem (custom heap memory allocator specification)**: `#[global_allocator]` is a compiler attribute placed on a static item implementing `std::alloc::GlobalAlloc` (or `core::alloc::GlobalAlloc`). It routes every dynamic memory request (`Box`, `Vec`, `String`) in the application through the designated allocator instance.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Memory Systems**: Used to swap high-concurrency allocators (`jemalloc`/`mimalloc`) in production web servers, or to provide custom pool/bump allocators on `#![no_std]` embedded microcontrollers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -75,7 +73,23 @@ pub fn allocate_test() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Invoking Heap Allocation Functions Recursively Inside Custom Allocator Implementation
+
+**The mistake:** Calling `Vec::push` or `format!` inside the `alloc` or `dealloc` methods of a custom allocator.
+
+**Why it's wrong:** Triggers infinite recursion and stack overflow crashes because the memory allocation call re-invokes the allocator itself.
+
+*Fix:* Implement `GlobalAlloc` using raw static memory arrays or direct OS/hardware calls without heap allocations.
+
+### Mistake 3: Returning Unaligned Memory Pointers from `alloc` Violating `Layout::align()`
+
+**The mistake:** Ignoring the alignment constraint in `Layout::align()` during pointer calculation.
+
+**Why it's wrong:** Passing unaligned memory pointers to hardware instructions causes hardware alignment traps or undefined behavior.
+
+*Fix:* Align raw memory pointers using `(ptr + align - 1) & !(align - 1)` arithmetic.
+
 
 ### Mistake 1: Defining Multiple `#[global_allocator]` Statics in a Workspace
 
@@ -85,13 +99,16 @@ pub fn allocate_test() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Thread-Safe Fixed-Buffer Bump Allocator with Alignment Handling
 
-**Problem:** In bare-metal embedded microcontrollers without OS heap management, dynamic memory must be allocated from static RAM buffers. Implement a `#![no_std]` thread-safe Bump (Arena) Allocator `BumpAllocator<const SIZE: usize>` that implements `core::alloc::GlobalAlloc`. The allocator must guarantee proper memory alignment for requested types, track total allocated bytes and count via atomic operations, and handle out-of-memory situations gracefully by returning a null pointer. Include a unit test demonstrating heap allocation with `alloc::vec::Vec` and `alloc::boxed::Box`.
+**Scenario:** In bare-metal embedded microcontrollers without OS heap management, dynamic memory must be allocated from static RAM buffers. Implement a `#![no_std]` thread-safe Bump (Arena) Allocator `BumpAllocator<const SIZE: usize>` that implements `core::alloc::GlobalAlloc`. The allocator must guarantee proper memory alignment for requested types, track total allocated bytes and count via atomic operations, and handle out-of-memory situations gracefully by returning a null pointer. Include a unit test demonstrating heap allocation with `alloc::vec::Vec` and `alloc::boxed::Box`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > extern crate alloc;
@@ -193,7 +210,8 @@ pub fn allocate_test() {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`UnsafeCell` & `Sync` Implementation:** In Rust, static variables mutated across threads require interior mutability. Wrapping the raw heap array in `UnsafeCell` allows interior mutability, while `unsafe impl Sync` asserts that atomic lock-free operations protect concurrent access.
 > 2. **Alignment Calculation:** Memory allocations require addresses to be aligned to powers of two matching `layout.align()`. `(current_addr + align - 1) & !(align - 1)` rounds the pointer up to the required alignment boundary.
 > 3. **Lock-Free Bump Allocation:** `compare_exchange_weak` atomically updates `self.next` from `current` to `offset + size`. If another core or interrupt thread modified `next` concurrently, the loop retries with the updated offset.
@@ -203,7 +221,7 @@ pub fn allocate_test() {
  
 ### Exercise 2: Memory Profiling & Allocation Tracking Wrapper Allocator
 
-**Problem:** During systems debugging and software profiling, developers must monitor heap memory consumption, detect memory leaks, and identify peak usage. Implement a generic decorator allocator `TrackingAllocator<A: GlobalAlloc>` that wraps an inner allocator and tracks active memory usage, peak memory usage, and total allocation/deallocation call counts. Write a test function using `std::alloc::System` proving that dropping heap data correctly decrements active memory metrics.
+**Scenario:** During systems debugging and software profiling, developers must monitor heap memory consumption, detect memory leaks, and identify peak usage. Implement a generic decorator allocator `TrackingAllocator<A: GlobalAlloc>` that wraps an inner allocator and tracks active memory usage, peak memory usage, and total allocation/deallocation call counts. Write a test function using `std::alloc::System` proving that dropping heap data correctly decrements active memory metrics.
 
 > [!check]- Answer
 > ```rust
@@ -304,7 +322,8 @@ pub fn allocate_test() {
 > }
 > ```
 > >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Decorator Allocator Design Pattern:** `TrackingAllocator` wraps an existing `GlobalAlloc` implementation (such as system malloc `std::alloc::System` or custom OS heap allocator). It delegates actual raw byte allocation to `self.inner` while intercepting `alloc` and `dealloc` calls to maintain statistics.
 > 2. **Atomic Accounting:** `fetch_add` and `fetch_sub` provide thread-safe counter modifications without full mutex locking overhead.
 > 3. **Compare-And-Swap (CAS) Peak Tracking:** Updating `peak_memory` uses a `compare_exchange_weak` loop to ensure that concurrent allocations across multiple threads correctly update the maximum recorded high-water mark without race conditions.
@@ -314,9 +333,12 @@ pub fn allocate_test() {
 
 ### Exercise 3: Constant-Time Fixed-Size Block Pool Allocator for Real-Time Embedded Systems
  
-**Problem:** In mission-critical real-time embedded applications (such as flight controllers or automotive microcontrollers), memory allocation must take deterministic $O(1)$ constant time with zero heap fragmentation. Implement a `#![no_std]` fixed-size block pool allocator `FixedBlockAllocator<const BLOCK_SIZE: usize, const NUM_BLOCKS: usize>` managing a static memory pool using an embedded free-list index. Implement `GlobalAlloc` to return blocks when requests fit `BLOCK_SIZE` and handle block recycling on `dealloc`. Include unit tests validating block allocation, deallocation, block reuse, and out-of-memory behavior.
+**Scenario:** In mission-critical real-time embedded applications (such as flight controllers or automotive microcontrollers), memory allocation must take deterministic $O(1)$ constant time with zero heap fragmentation. Implement a `#![no_std]` fixed-size block pool allocator `FixedBlockAllocator<const BLOCK_SIZE: usize, const NUM_BLOCKS: usize>` managing a static memory pool using an embedded free-list index. Implement `GlobalAlloc` to return blocks when requests fit `BLOCK_SIZE` and handle block recycling on `dealloc`. Include unit tests validating block allocation, deallocation, block reuse, and out-of-memory behavior.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > extern crate alloc;
@@ -443,7 +465,8 @@ pub fn allocate_test() {
 > }
 > ```
 > >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **$O(1)$ Free-List Pool Strategy:** Instead of scanning heap metadata or splitting contiguous spans, `FixedBlockAllocator` links free blocks in a stack-like single-linked list indexed by `next_free`. `alloc` pops from `free_head` in $O(1)$ time, and `dealloc` pushes back onto `free_head` in $O(1)$ time.
 > 2. **Spinlock Synchronization:** `AtomicBool::swap(true, Acquire)` provides lightweight mutual exclusion in `#![no_std]` bare-metal environments where OS mutexes are unavailable. `core::hint::spin_loop()` notifies CPU execution hardware of busy waiting.
 > 3. **Pointer Arithmetic for Deallocation:** `dealloc` calculates the index of the freed block by finding `(ptr - pool_start) / BLOCK_SIZE`. This avoids searching through tables or maintaining per-block header metadata overhead.

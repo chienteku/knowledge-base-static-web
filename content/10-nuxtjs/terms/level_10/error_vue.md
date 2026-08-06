@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Error Handling**
+
+**Framework Architecture** (Global Application Error Boundary Page): `error.vue` is the root error boundary component in Nuxt 3, handling unhandled application crashes and 404/500 errors gracefully.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a user visits a URL that doesn't exist (`/this-is-fake`), or if a critical server-side database fetch fails, you cannot just show them a blank screen. You need to show a stylized "404 Page Not Found" or "500 Internal Server Error" page.
@@ -60,7 +61,7 @@ You **must** use the `clearError()` utility. This function wipes the fatal error
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting `error.vue` inside the `pages/` directory
 **The mistake:** Creating `pages/error.vue` instead of placing it at the root of the project.
@@ -109,90 +110,129 @@ You **must** use the `clearError()` utility. This function wipes the fatal error
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Handling 404s differently
+### Exercise 1: Authoring Master `error.vue` Custom Error Page
 
-**Problem:** Write the `<template>` block for an `error.vue` file that shows a picture of a lost dog if the `statusCode` is `404`, but shows a picture of a broken robot for any other error code.
+**Scenario:**
+Create root `error.vue` component displaying HTTP status code, message, and a reset button.
 
-**Expected output:**
+**Requirements:**
+1. Create `error.vue` at project root accepting `error` prop.
+
 > [!check]- Answer
-> ```vue
-> <template>
->   <div>
->     <img v-if="error.statusCode === 404" src="/lost-dog.jpg" alt="Not Found" />
->     <img v-else src="/broken-robot.jpg" alt="Server Error" />
->     
->     <button @click="clearError({ redirect: '/' })">Home</button>
->   </div>
-> </template>
-> ```
-> - Read the `statusCode` property on the `error` object inside a conditional template block.
-
----
-
-### Exercise 2: Global error.vue Setup Pattern
-
-**Problem:** Write root `error.vue` component accepting `error` prop and displaying `error.statusCode`, `error.message`, and a button invoking `clearError({ redirect: '/' })`.
-
-**Expected output:**
-> [!check]- Answer
-> ```vue
-> <script setup>
-> defineProps(['error']);
-> </script>
-> <template>
->   <div>
->     <h1>{{ error.statusCode }}</h1>
->     <p>{{ error.message }}</p>
->     <button @click="clearError({ redirect: '/' })">Clear Error</button>
->   </div>
-> </template>
-> ```
-> - `error.vue` is the top-level error boundary component.
-> 
+>
+> #### Implementation
+>
 > ```vue
 > <!-- error.vue -->
-> <script setup>
+> <script setup lang="ts">
 > const props = defineProps({
 >   error: Object
 > });
-> 
-> const handleClearError = () => clearError({ redirect: '/' });
-> </script>
-> 
-> <template>
->   <div class="flex flex-col items-center justify-center min-h-screen">
->     <h1 class="text-4xl font-bold">{{ error.statusCode }}</h1>
->     <p class="mt-2 text-gray-600">{{ error.message }}</p>
->     <button @click="handleClearError" class="mt-4 btn">
->       Back to Homepage
->     </button>
->   </div>
-> </template>
-> ```
+
+const is404 = computed(() => props.error?.statusCode === 404);
+
+function handleClear() {
+  clearError({ redirect: "/" });
+}
+</script>
+
+<template>
+  <div class="error-container">
+    <h1 v-if="is404">404 - Page Not Found</h1>
+    <h1 v-else>An Unexpected Error Occurred</h1>
+    <p class="error-msg">{{ props.error?.message }}</p>
+    <button @click="handleClear">Back to Home</button>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `error.vue` placed at the project root acts as Nuxt's top-level error boundary template.
+> 2. Automatically renders when unhandled exceptions occur during SSR or client navigation.
+> 3. `clearError()` resets error state and redirects to target route.
 
 ---
 
-### Exercise 3: clearError Options
+### Exercise 2: Differentiating 404 vs 500 Errors in `error.vue`
 
-**Problem:** Which option object property passed to `clearError({ redirect: '/url' })` redirects the user while clearing error state?
+**Scenario:**
+Render custom graphics for 404 Not Found vs 500 Internal Server Error in `error.vue`.
 
-**Expected output:**
+**Requirements:**
+1. Branch template rendering based on `props.error.statusCode`.
+
 > [!check]- Answer
-> ```text
-> redirect: '/url'
+>
+> #### Implementation
+>
+> ```vue
+> <!-- error.vue -->
+> <script setup lang="ts">
+> defineProps({ error: Object });
+> </script>
+
+<template>
+  <div>
+    <div v-if="error?.statusCode === 404">
+      <h2>404</h2>
+      <p>The page you requested does not exist.</p>
+    </div>
+    <div v-else-if="error?.statusCode === 500">
+      <h2>500</h2>
+      <p>Server error. Our engineers are investigating.</p>
+    </div>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `props.error` receives `NuxtError` containing `statusCode`, `statusMessage`, and `stack`.
+> 2. Conditional template branching displays user-friendly error UI based on status codes.
+> 3. Standard error UX pattern.
+
+---
+
+### Exercise 3: Testing Custom Error Page Triggers
+
+**Scenario:**
+Test `error.vue` by throwing an error from `pages/test-error.vue`.
+
+**Requirements:**
+1. Throw `createError({ statusCode: 500, fatal: true })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <!-- pages/test-error.vue -->
+> <script setup lang="ts">
+> throw createError({
+>   statusCode: 500,
+>   statusMessage: "Test Server Crash Error",
+>   fatal: true
+> });
+> </script>
 > ```
-> - `redirect` specifies the target URL after clearing error state.
-> 
-> ```typescript
-> clearError({ redirect: '/dashboard' });
-> ```
+
+> #### Technical Explanation
+>
+> 1. `fatal: true` forces Nuxt to clear the page layout and render `error.vue`.
+> 2. Works across both SSR server execution and client SPA execution.
+> 3. Diagnostic error testing technique.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`<NuxtErrorBoundary>` Component](nuxt_error_boundary.md) — How to handle non-fatal errors without destroying the whole page layout.
 - [Fetching Errors & `clearNuxtData`](../level_05/fetching_errors.md) — Related concept: Fetching Errors & `clearNuxtData`.
 - [`abortNavigation` Utility](../level_08/abort_navigation.md) — Related concept: `abortNavigation` Utility.
@@ -200,7 +240,7 @@ You **must** use the `clearError()` utility. This function wipes the fatal error
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `error.vue` is a root-level file that completely replaces `app.vue` when a fatal error occurs.
 - It is perfect for handling global 404s and 500s.
 - You access the error details using `useError()`.

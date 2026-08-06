@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: Structs (short for structures) exist in many languages like C, C++, and Go. In Rust, they are the primary way to define custom data types and serve as the replacement for "Classes" found in Object-Oriented languages like Java or Python.
+
+
+**Rust Data Type (named-field product type)**: Structs (short for structures) exist in many languages like C, C++, and Go. In Rust, they are the primary way to define custom data types and serve as the replacement for "Classes" found in Object-Oriented languages like Java or Python.
 
 ---
 
@@ -166,8 +168,9 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Performance Network Protocol Data Unit (PDU) Frame Assembler
 
-**Scenario**: In a high-throughput network service, incoming byte streams must be transformed into structured protocol frames (`Header` and `Packet`). You need to design named structs to capture frame headers and payload data, implement constructors using field initialization shorthand, perform frame validation against binary constraints, and create response acknowledgement frames using Rust's struct update syntax (`..`).
+**Scenario:** **Scenario**: In a high-throughput network service, incoming byte streams must be transformed into structured protocol frames (`Header` and `Packet`). You need to design named structs to capture frame headers and payload data, implement constructors using field initialization shorthand, perform frame validation against binary constraints, and create response acknowledgement frames using Rust's struct update syntax (`..`).
 
+**Requirements:**
 **Requirements**:
 1. Define a `Header` struct with fields:
    - `magic: [u8; 2]` (fixed magic bytes `[0xAA, 0x55]`)
@@ -298,8 +301,9 @@ thread::spawn(move || {
 
 ### Exercise 2: Financial Market Data Engine Order State Auditor
 
-**Scenario**: An order management system (OMS) processes high-frequency stock orders. Regulatory compliance requires generating immutable audit log snapshots whenever an order is partially or fully executed, or cloned for auditing. You must implement order creation, partial/full execution state transitions, and snapshot cloning while observing Rust ownership rules for heap-allocated string identifiers versus `Copy` numeric fields.
+**Scenario:** **Scenario**: An order management system (OMS) processes high-frequency stock orders. Regulatory compliance requires generating immutable audit log snapshots whenever an order is partially or fully executed, or cloned for auditing. You must implement order creation, partial/full execution state transitions, and snapshot cloning while observing Rust ownership rules for heap-allocated string identifiers versus `Copy` numeric fields.
 
+**Requirements:**
 **Requirements**:
 1. Define an `Order` struct:
    - `order_id: String`
@@ -435,8 +439,9 @@ thread::spawn(move || {
 
 ### Exercise 3: Embedded IoT Sensor Suite Component Aggregator & Destructuring Pipeline
 
-**Scenario**: An industrial IoT edge module collects environmental metrics and hardware diagnostics. To organize telemetry data clean and efficiently, metrics are composed into sub-structs (`SensorMetrics` and `SystemStatus`) inside a top-level `DeviceReport` container. You need to handle nested struct mutation, fault tracking thresholds, and full struct destructuring for data export pipelines.
+**Scenario:** **Scenario**: An industrial IoT edge module collects environmental metrics and hardware diagnostics. To organize telemetry data clean and efficiently, metrics are composed into sub-structs (`SensorMetrics` and `SystemStatus`) inside a top-level `DeviceReport` container. You need to handle nested struct mutation, fault tracking thresholds, and full struct destructuring for data export pipelines.
 
+**Requirements:**
 **Requirements**:
 1. Define `SensorMetrics`:
    - `temperature_celsius: f32`

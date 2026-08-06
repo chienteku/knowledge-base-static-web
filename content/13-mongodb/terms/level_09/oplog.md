@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Administration / Operations** (Replication Operations Log): The Oplog (`local.oplog.rs`) is a capped collection on replica set nodes recording a sequential log of write operations for secondary replication and point-in-time recovery.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Stored inside the system-reserved `local` database. Automatically created when initializing replica sets. Crucial for syncing nodes and driving Change Streams).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a replica set, secondary nodes must keep their data identical to the primary. 
@@ -95,7 +96,7 @@ db.getSiblingDB("local").oplog.rs.find().limit(1).pretty();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Configuring the Oplog size too small on high-write systems, causing secondaries to drop out of synchronization
 
@@ -144,64 +145,89 @@ Size Oplog to hold at least 24 to 72 hours of peak write volume
 MongoDB converts all oplog entries to idempotent $set operations automatically
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Idempotency Translation
+### Exercise 1: Inspecting Oplog Window and Size Metrics
 
-**Problem:** A client executes this update:
-`db.inventory.updateOne({ _id: "sku-01" }, { $push: { tags: "sale" } });`
-Before this write, the document was: `{ _id: "sku-01", tags: ["clearance"] }`.
-Write the idempotent update payload (`"o"` object) that MongoDB will write to the Oplog.
+**Scenario:**
+Inspect the current size, max size, and time window (hours of retained logs) of the replica set oplog using `db.printReplicationInfo()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `db.printReplicationInfo()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> {
->   "$set": {
->     "tags": [ "clearance", "sale" ]
->   }
-> }
+> db.printReplicationInfo();
 > ```
-> - Oplog updates must not use relative array operations like `$push`.
-> - Convert the array change into an absolute `$set` containing the final array elements.
+>
+> #### Technical Explanation
+>
+> 1. `db.printReplicationInfo()` displays oplog collection size (MB) and retained log time window.
+> 2. Oplog window indicates how long a secondary node can be offline before requiring a full initial sync.
+> 3. Vital metric for disaster recovery planning.
+
+---
+
+### Exercise 2: Querying Idempotent Operations in `local.oplog.rs`
+
+**Scenario:**
+Query `local.oplog.rs` for the 3 most recent update write operations recorded on the primary node.
+
+**Requirements:**
+1. Query `local.oplog.rs` where `op: "u"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> use local;
+> db.oplog.rs.find({ op: "u" })
+>   .sort({ $natural: -1 })
+>   .limit(3);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `local.oplog.rs` is a capped collection storing idempotent write opcodes (`i`=insert, `u`=update, `d`=delete).
+> 2. Updates are translated into explicit `$set` ops so re-applying the oplog entry yields identical data state.
+> 3. Enables secondary nodes to replicate writes asynchronously.
+
+---
+
+### Exercise 3: Resizing the Oplog Dynamically
+
+**Scenario:**
+Increase the oplog size on a primary node to 50,000MB (50GB) using `db.adminCommand()`.
+
+**Requirements:**
+1. Execute `db.adminCommand({ replSetResizeOplog: 1, size: 50000 })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.adminCommand({
+>   replSetResizeOplog: 1,
+>   size: 50000
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `replSetResizeOplog` resizes the oplog collection dynamically without restarting `mongod`.
+> 2. Expanding oplog size increases the replication safety window during high-write maintenance.
+> 3. Prevents secondary nodes from falling out of sync.
 
 ---
 
 
 
-### Exercise 2: Inspecting Oplog Window in mongosh
-
-**Problem:** Check Oplog window capacity hours using `rs.printReplicationInfo()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> rs.printReplicationInfo();
-> ```
-> ```javascript
-> rs.printReplicationInfo();
-> ```
->
-> **Explanation:** `rs.printReplicationInfo()` prints active Oplog size and buffer time window coverage.
-
----
-
-### Exercise 3: Resizing Oplog Dynamically
-
-**Problem:** Command to dynamically resize Oplog to 50,000 MB (50GB) using `replSetResizeOplog`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.adminCommand({ replSetResizeOplog: 1, size: 50000 });
-> ```
-> ```javascript
-> db.adminCommand({ replSetResizeOplog: 1, size: 50000 });
-> ```
->
-> **Explanation:** `replSetResizeOplog` dynamically resizes capped Oplog collections without server restarts.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Replica Set](replica_set.md) — The parent cluster context.
 - [Replication Lag](replication_lag.md) — The sync delay.
@@ -210,7 +236,7 @@ Write the idempotent update payload (`"o"` object) that MongoDB will write to th
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Oplog is a capped circular collection recording all write operations.
 - Direct NoSQL equivalent to PostgreSQL's Write-Ahead Log (WAL).
 - Secondaries tail the primary's Oplog to replicate writes in real-time.

@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Operator Overloading**: `Index` and `IndexMut` traits for subscript indexing syntax `container[index]`.
+
+
+**Rust Operator Overloading (container indexing traits)**: `Index` and `IndexMut` traits for subscript indexing syntax `container[index]`.
 
 ---
 

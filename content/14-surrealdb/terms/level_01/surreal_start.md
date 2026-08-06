@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Performance / Operations (database server startup command)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **Operating System Shell** (Run in the system command line console. Spawns the persistent `surreal` server process that listens for WebSocket and HTTP database traffic).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To query a database, the database engine server process must be running and listening for network requests.
@@ -81,7 +80,7 @@ surreal start --user admin --pass secretPass123 --log warn file://prod_db
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to supply the '--user' (-u) and '--pass' (-p) flags when starting the server, preventing clients from connecting
 
@@ -131,61 +130,88 @@ $ surreal start --bind 127.0.0.1:8000 # ❌ External containers cannot reach ser
 $ surreal start --bind 0.0.0.0:8000 # Binds to all network interfaces
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Server Start Script
+### Exercise 1: Single-Node Persistent Server Deployment
 
-**Problem:** You are creating a startup script for a local development team. 
-Write the terminal command to:
-1.  Launch SurrealDB on port `8080` (listening on all interfaces: `0.0.0.0`).
-2.  Set the admin credentials to `"devUser"` / `"devPass"`.
-3.  Configure it to store data persistently in a local path: `/home/user/db_data`.
+**Scenario:**
+You are writing a systemd service startup script for a production SurrealDB single-node instance storing data persistently on local SSD storage.
 
-**Expected output:**
+**Requirements:**
+1. Formulate the `surreal start` command binding to interface `0.0.0.0:8000`.
+2. Configure root user `admin` and secure password.
+3. Specify local file storage path `file:///var/lib/surrealdb/data.db`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```bash
-> surreal start --user devUser --pass devPass --bind 0.0.0.0:8080 file:///home/user/db_data
+> surreal start >   --bind 0.0.0.0:8000 >   --user admin >   --pass "ProductionSecretPass2026!" >   file:///var/lib/surrealdb/data.db
 > ```
-> - The binding parameter value is `0.0.0.0:8080`.
-> - Use the `file://` protocol prefix for the storage path argument.
+>
+> #### Technical Explanation
+>
+> 1. `surreal start` launches the SurrealDB database engine server process.
+> 2. `--bind 0.0.0.0:8000` allows the server to accept connections across all network interfaces on port 8000.
+> 3. `file://` enables local disk persistence using single-node Key-Value storage engines.
+
+---
+
+### Exercise 2: Local Ephemeral Server Startup with Debug Logs
+
+**Scenario:**
+A developer needs to launch an ephemeral in-memory SurrealDB instance for local automated test execution with verbose query logging enabled.
+
+**Requirements:**
+1. Formulate `surreal start` using in-memory engine `memory`.
+2. Set log level to `debug`.
+3. Set development credentials `root` / `root`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> surreal start >   --log debug >   --user root >   --pass root >   memory
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `memory` (or `mem://`) launches a zero-disk-I/O in-memory database instance in RAM.
+> 2. `--log debug` prints detailed query parsing, transaction locks, and client connection events to stdout.
+> 3. Ephemeral instances tear down completely when the process terminates, leaving no residual files.
+
+---
+
+### Exercise 3: Hardened Production Server Flags Configuration
+
+**Scenario:**
+A security administrator is hardening a production `surreal start` command flags configuration to restrict unauthenticated access and disable arbitrary script executions.
+
+**Requirements:**
+1. Pass flag `--deny-scripting` to disable embedded JavaScript functions.
+2. Omit `--allow-unauthenticated` to mandate valid credentials for all incoming connections.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> surreal start >   --bind 0.0.0.0:8000 >   --user root >   --pass "HardenedRootPass99!" >   --deny-scripting >   file:///var/data/surreal.db
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `--deny-scripting` disables execution of embedded JavaScript functions (`function() { ... }`), mitigating remote code execution risks.
+> 2. Requiring root or access credentials on all connection requests prevents unauthenticated database access.
+> 3. Hardened startup configurations protect production clusters against unauthorized network exploitation.
 
 ---
 
 
 
-### Exercise 2: Starting Local In-Memory Development Server
-
-**Problem:** Command to start a local development server on port `8000` in-memory with user `root` pass `root`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> surreal start --bind 0.0.0.0:8000 --user root --pass root mem://
-> ```
-> ```text
-> surreal start --bind 0.0.0.0:8000 --user root --pass root mem://
-> ```
->
-> **Explanation:** `mem://` creates fast ephemeral in-memory database instances for local development.
-
----
-
-### Exercise 3: Log Level Configuration Flag
-
-**Problem:** Flag to increase server logging verbosity to debug level (`--log debug` / `-l debug`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> surreal start --log debug rocksdb://data.db
-> ```
-> ```text
-> surreal start --log debug rocksdb://data.db
-> ```
->
-> **Explanation:** `--log debug` outputs detailed internal RPC, storage, and query execution logs.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](connection_uri.md) — Connect protocols.
 - [Storage Backends (Memory, RocksDB, TiKV)](storage_backends.md) — Pluggable storage engines.
@@ -196,7 +222,7 @@ Write the terminal command to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `surreal start` launches a SurrealDB database server instance.
 - Built-in server operations are managed in a single unified binary file (`surreal`).
 - Master admin credentials are set using `--user` (-u) and `--pass` (-p).

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Schema Design** (Many-to-Many Association Table): A Junction Table (or join table) resolves a Many-to-Many relationship by storing pairs of foreign keys referencing two parent entity tables.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all SQL databases. Serves as the standard structural bridge inside relational schemas).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `many_to_many.md`, databases cannot link multiple rows on both sides using simple columns inside parent tables. 
@@ -107,7 +108,7 @@ INSERT INTO enrollments (student_id, course_id) VALUES (1, 10);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to enforce uniqueness on the foreign key combinations
 
@@ -130,6 +131,8 @@ CREATE TABLE enrollments (
 
 
 
+
+
 ### Mistake 2: Omitting Composite Primary Key or Unique Constraints on Junction Tables
 
 **The mistake:** Creating `student_courses (student_id, course_id)` without a primary key.
@@ -145,6 +148,8 @@ CREATE TABLE student_courses ( student_id INT, course_id INT ); -- ❌ Allows du
 ```sql
 CREATE TABLE student_courses ( student_id INT, course_id INT, PRIMARY KEY (student_id, course_id) );
 ```
+
+
 
 ### Mistake 3: Forgetting Indexes on the Second Foreign Key Column in Junction Tables
 
@@ -164,106 +169,98 @@ CREATE INDEX idx_student_courses_course_id ON student_courses (course_id);
 
 
 
-### Mistake 4: Omitting Composite Primary Key or Unique Constraints on Junction Tables
+## 5. Practice Exercises
 
-**The mistake:** Creating `student_courses (student_id, course_id)` without a primary key.
+### Exercise 1: Designing N-to-N Junction Tables
 
-**Why it's wrong:** Omitting primary keys permits inserting duplicate pairs `(student 1, course 1)` multiple times. Create a composite primary key `PRIMARY KEY (student_id, course_id)`.
+**Scenario:**
+Design a `student_courses` junction table resolving a Many-to-Many relationship between `students` and `courses`.
 
-*Incorrect:*
-```sql
-CREATE TABLE student_courses ( student_id INT, course_id INT ); -- ❌ Allows duplicate links!
-```
+**Requirements:**
+1. Include composite primary key `(student_id, course_id)`.
+2. Include foreign key constraints to both parent tables.
 
-*Fix:*
-```sql
-CREATE TABLE student_courses ( student_id INT, course_id INT, PRIMARY KEY (student_id, course_id) );
-```
-
-### Mistake 5: Forgetting Indexes on the Second Foreign Key Column in Junction Tables
-
-**The mistake:** Creating composite primary key `PRIMARY KEY (student_id, course_id)` without an index on `course_id` alone.
-
-**Why it's wrong:** The composite primary key index covers queries filtering `student_id`. Queries looking up all students in a `course_id` cannot use the leading `student_id` index. Create an index on `course_id`.
-
-*Incorrect:*
-```sql
-// Missing separate index on course_id in junction table
-```
-
-*Fix:*
-```sql
-CREATE INDEX idx_student_courses_course_id ON student_courses (course_id);
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: E-commerce Order Items Setup
-
-**Problem:** You are building an e-commerce schema. You have a `products` table (`id` primary key) and an `orders` table (`id` primary key). An order can contain multiple products, and a product can appear on multiple orders. 
-
-Write the SQL query to create a junction table named `order_items` that links them. The table must:
-1.  Reference the two parent IDs.
-2.  Use a composite primary key.
-3.  Include an integer metadata column `quantity` (required, defaults to `1`).
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE order_items (
->   order_id INT REFERENCES orders(id),
->   product_id INT REFERENCES products(id),
->   quantity INT NOT NULL DEFAULT 1,
->   PRIMARY KEY (order_id, product_id)
+> CREATE TABLE student_courses (
+>   student_id INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+>   course_id INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+>   enrolled_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+>   grade TEXT,
+>   PRIMARY KEY (student_id, course_id)
 > );
 > ```
-> - Match the column data types of the foreign keys to the parent IDs.
-> - Declare the composite primary key at the bottom of the statement.
+>
+> #### Technical Explanation
+>
+> 1. Junction tables translate Many-to-Many relationships into two 1-to-Many relationships.
+> 2. `PRIMARY KEY (student_id, course_id)` prevents duplicate enrollments for the same student/course pair.
+> 3. Stores association payload attributes (`enrolled_at`, `grade`).
+
+---
+
+### Exercise 2: Querying N-to-N Relationships via Junction Tables
+
+**Scenario:**
+Query all courses enrolled by student `id = 10` by joining `students` -> `student_courses` -> `courses`.
+
+**Requirements:**
+1. Execute 2 `JOIN` statements over junction table.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   c.id AS course_id, 
+>   c.title, 
+>   sc.enrolled_at 
+> FROM students AS s 
+> JOIN student_courses AS sc ON s.id = sc.student_id 
+> JOIN courses AS c ON sc.course_id = c.id 
+> WHERE s.id = 10;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Traverses junction table foreign keys to resolve Many-to-Many relations.
+> 2. Returns course details enrolled by the target student.
+> 3. Standard relational N-to-N query pattern.
+
+---
+
+### Exercise 3: Indexing Junction Table Reversal Foreign Keys
+
+**Scenario:**
+Create a secondary index on `(course_id, student_id)` to optimize reverse lookups (finding all students in a course).
+
+**Requirements:**
+1. Execute `CREATE INDEX idx_student_courses_course_id ON student_courses (course_id)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE INDEX idx_student_courses_course_id 
+> ON student_courses (course_id);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Primary key `(student_id, course_id)` optimizes queries filtering by `student_id` first.
+> 2. Queries filtering by `course_id` first require a secondary index on `course_id`.
+> 3. Guarantees $O(\log N)$ performance in both lookup directions.
 
 ---
 
 
 
-### Exercise 2: Defining Junction Table Schema
-
-**Problem:** Create junction table `user_roles` linking `user_id` and `role_id` with composite primary key and foreign keys.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TABLE user_roles ( user_id INT REFERENCES users(id) ON DELETE CASCADE, role_id INT REFERENCES roles(id) ON DELETE CASCADE, PRIMARY KEY (user_id, role_id) );
-> ```
-> ```sql
-> CREATE TABLE user_roles (
->   user_id INT REFERENCES users(id) ON DELETE CASCADE,
->   role_id INT REFERENCES roles(id) ON DELETE CASCADE,
->   PRIMARY KEY (user_id, role_id)
-> );
-> ```
->
-> **Explanation:** Junction tables establish normalized Many-to-Many relationships between entities.
-
----
-
-### Exercise 3: Querying Many-to-Many via Junction Table
-
-**Problem:** Query all role names for user `user_id = 1` by joining `users`, `user_roles`, and `roles`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT r.name FROM roles r JOIN user_roles ur ON r.id = ur.role_id WHERE ur.user_id = 1;
-> ```
-> ```sql
-> SELECT r.name
-> FROM roles r
-> JOIN user_roles ur ON r.id = ur.role_id
-> WHERE ur.user_id = 1;
-> ```
->
-> **Explanation:** Joining entities through junction tables resolves Many-to-Many entity relationships.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Many-to-Many Relationship](many_to_many.md) — The parent logical relationship.
 - [Composite Key](../level_06/composite_key.md) — Forward reference: keys composed of multiple columns.
 - [Entity-Relationship Diagram (ERD)](../level_06/erd.md) — Related concept: Entity-Relationship Diagram (ERD).
@@ -271,7 +268,7 @@ Write the SQL query to create a junction table named `order_items` that links th
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A junction table connects two tables to resolve many-to-many relationships.
 - Contains at least two foreign key columns pointing to the parent tables.
 - Uses a composite primary key `PRIMARY KEY (col1, col2)` to prevent duplicates.

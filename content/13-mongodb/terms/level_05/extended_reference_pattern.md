@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Data Modeling** (Join Reduction Read-Optimization Pattern): The Extended Reference Pattern copies frequently read fields from a referenced entity directly into the parent document to eliminate $lookup joins.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported conceptually across all NoSQL architectures. Designed specifically to bypass the performance penalty of `$lookup` aggregate joins).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When modeling database relationships, you frequently choose **Referencing** to prevent document bloat and handle size limits:
@@ -91,7 +92,7 @@ db.orders.find().limit(10);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Extended-referencing fields that change constantly, causing high cascade write overhead
 
@@ -139,75 +140,111 @@ Denormalize static or point-in-time fields like customerName or orderDate
 Embed point-in-time address snapshot directly inside order document
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Reference Design Audit
+### Exercise 1: Denormalizing Frequently Read Customer Fields into Orders
 
-**Problem:** You are modeling a book catalog. A `books` document references an `authors` document. You decide to use the Extended Reference Pattern to embed the author's `display_name` inside the book document.
-1.  Explain why this design is appropriate.
-2.  If the author changes their biography text, do you need to update the books collection? Explain why.
+**Scenario:**
+Apply the Extended Reference Pattern to an `orders` collection by copying `customerName` and `email` alongside `customerId` to avoid `$lookup` joins on order listing pages.
 
-**Expected output:**
+**Requirements:**
+1. Store `customer: { id, name, email }` inside `order` document.
+
 > [!check]- Answer
-> ```text
-> 1. The design is appropriate because the author's name is always displayed on the book cover and search list page. Since author names change very rarely, copying this field inside the book document eliminates slow join queries without causing sync issues.
-> 2. No, because the author's full biography text is not copied inside the book document (only the name is). The biography is stored exclusively in the authors collection and queried only on the author's profile page, avoiding unnecessary data duplication and cascade write updates.
-> ```
-> - Assess the stability of author names.
-> - Identify which fields are copied versus which are kept normalized.
-
----
-
-
-
-### Exercise 2: Applying Extended Reference Pattern to Order Document
-
-**Problem:** Model `order` document embedding customer ID, `customerName`, and `customerEmail` alongside foreign key reference.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> customer: { id: ObjectId("..."), name: "Alice", email: "alice@ex.com" }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const order = {
->   _id: new ObjectId(),
+> db.orders.insertOne({
+>   orderId: "ORD-5001",
 >   customer: {
->     id: new ObjectId("60d5ecb8b5c9c22b9c8b4567"),
->     name: "Alice",
+>     id: new ObjectId("60c72b2f9b1d8b2c88888880"),
+>     name: "Alice Smith",
 >     email: "alice@example.com"
 >   },
->   total: 99.95
-> };
+>   total: 99.99,
+>   createdAt: new Date()
+> });
 > ```
 >
-> **Explanation:** Extended Reference Pattern copies frequently read fields to eliminate `$lookup` joins.
+> #### Technical Explanation
+>
+> 1. The Extended Reference Pattern denormalizes immutable or infrequently changed fields alongside foreign key references.
+> 2. Eliminates `$lookup` joins when rendering order summary lists.
+> 3. Trades slight data duplication for significant read performance gains.
 
 ---
 
-### Exercise 3: Point-in-Time Historic Data Copy
+### Exercise 2: Managing Change Propagation for Extended References
 
-**Problem:** Why should product price at purchase time be copied into order line items? (Preserves historic transaction audit integrity).
+**Scenario:**
+Handle customer name updates by updating both `users` collection and denormalized extended references in recent `orders`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `updateMany()` on `orders` when customer name changes.
+
 > [!check]- Answer
-> ```text
-> Preserves historic transaction price at purchase time even if product catalog prices change
-> ```
-> ```text
-> Preserves historic transaction price at purchase time even if product catalog prices change
+>
+> #### Implementation
+>
+> ```javascript
+> const customerId = new ObjectId("60c72b2f9b1d8b2c88888880");
+> const newName = "Alice Johnson";
+> 
+> // 1. Update primary user document
+> db.users.updateOne({ _id: customerId }, { $set: { name: newName } });
+> 
+> // 2. Update extended reference in recent open orders
+> db.orders.updateMany(
+>   { "customer.id": customerId, status: "pending" },
+>   { $set: { "customer.name": newName } }
+> );
 > ```
 >
-> **Explanation:** Point-in-time snapshots protect historic transaction data against catalog price mutations.
+> #### Technical Explanation
+>
+> 1. Extended reference values should only be copied for fields that rarely change or are historical snapshots.
+> 2. Historical records (e.g. completed invoices) should retain original snapshot values.
+> 3. Open active orders update references via asynchronous background jobs or multi-document updates.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Identifying Candidates for Extended Reference
+
+**Scenario:**
+Evaluate whether to duplicate `productName` and `price` inside an order's `items` array.
+
+**Requirements:**
+1. Explain why invoice line items MUST capture price snapshots.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Line Item Extended Reference:
+> Store 'priceAtPurchase' and 'productName' directly inside order line items.
+> Reason: Historical invoice accuracy requires capturing the exact price paid at order time, regardless of future catalog price changes.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Historical transaction records require immutable point-in-time data snapshots.
+> 2. Extended references provide both read speed and business domain snapshot accuracy.
+> 3. Core pattern in e-commerce schema design.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The parent modeling choices.
 - [Schema Design (Document Modeling)](schema_design.md) — Access pattern optimization.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Extended Reference Pattern embeds select fields from a linked document.
 - Designed specifically to prevent expensive `$lookup` (JOIN) queries.
 - Ideal for fields that are always displayed together (e.g. order ID + customer name).

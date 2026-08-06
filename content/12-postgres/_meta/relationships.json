@@ -2,7 +2,7 @@
   "$schema": "../../_meta/relationships.schema.json",
   "module": "12-postgres",
   "version": 1,
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-06",
   "terms": {
     "client_server_model": {
       "level": 1,
@@ -32,8 +32,8 @@
           "description": "Related concept: `psql` (Interactive Terminal)."
         },
         {
-          "module": "12-postgres",
           "term": "connection_pooling",
+          "module": "12-postgres",
           "description": "Related concept: Connection Pooling."
         }
       ]
@@ -213,8 +213,8 @@
           "description": "Understanding that visual tools are clients connecting to a background server."
         },
         {
-          "module": "12-postgres",
           "term": "postgresql",
+          "module": "12-postgres",
           "description": "PostgreSQL database server management tool."
         }
       ],
@@ -259,8 +259,8 @@
           "description": "Related concept: Client-Server Model (in Databases)."
         },
         {
-          "module": "12-postgres",
           "term": "psql",
+          "module": "12-postgres",
           "description": "Interactive terminal CLI."
         }
       ]
@@ -276,8 +276,8 @@
           "description": "Understanding that `psql` is a client connecting to a server process."
         },
         {
-          "module": "12-postgres",
           "term": "postgresql",
+          "module": "12-postgres",
           "description": "PostgreSQL interactive terminal CLI client."
         }
       ],
@@ -298,8 +298,8 @@
           "description": "Related concept: Connection String / DSN."
         },
         {
-          "module": "12-postgres",
           "term": "postgresql",
+          "module": "12-postgres",
           "description": "Related concept: PostgreSQL (Postgres)."
         }
       ]
@@ -342,8 +342,8 @@
           "description": "Related concept: PostgreSQL (Postgres)."
         },
         {
-          "module": "12-postgres",
           "term": "sql",
+          "module": "12-postgres",
           "description": "SQL query language."
         }
       ]
@@ -417,8 +417,8 @@
           "description": "Understanding the need for structured data storage."
         },
         {
-          "module": "12-postgres",
           "term": "relational_database",
+          "module": "12-postgres",
           "description": "Relational database querying language."
         }
       ],
@@ -434,8 +434,8 @@
           "description": "Core SQL DDL statements."
         },
         {
-          "module": "12-postgres",
           "term": "relational_database",
+          "module": "12-postgres",
           "description": "Related concept: Relational Database."
         }
       ]
@@ -857,8 +857,8 @@
           "description": "Related concept: Composite Key."
         },
         {
-          "module": "12-postgres",
           "term": "foreign_key",
+          "module": "12-postgres",
           "description": "Foreign key references."
         }
       ]
@@ -966,8 +966,8 @@
           "description": "The query filter used to target specific records."
         },
         {
-          "module": "12-postgres",
           "term": "table",
+          "module": "12-postgres",
           "description": "Deleting table rows."
         }
       ],
@@ -1073,8 +1073,8 @@
           "description": "The sorting clause required for stable pagination."
         },
         {
-          "module": "12-postgres",
           "term": "select",
+          "module": "12-postgres",
           "description": "Paginating SELECT query results with LIMIT and OFFSET."
         }
       ],
@@ -1325,8 +1325,8 @@
           "description": "The query filter used to target specific records."
         },
         {
-          "module": "12-postgres",
           "term": "table",
+          "module": "12-postgres",
           "description": "Updating table column values."
         }
       ],
@@ -1581,8 +1581,8 @@
           "description": "The query format evaluated by the operator."
         },
         {
-          "module": "12-postgres",
           "term": "select",
+          "module": "12-postgres",
           "description": "Testing subquery row existence using EXISTS."
         }
       ],
@@ -1668,8 +1668,8 @@
           "description": "The baseline query comparison symbols."
         },
         {
-          "module": "12-postgres",
           "term": "where",
+          "module": "12-postgres",
           "description": "Pattern matching text filtering with LIKE and ILIKE."
         }
       ],
@@ -1864,18 +1864,18 @@
           "description": "Related concept: One-to-One Relationship."
         },
         {
-          "module": "12-postgres",
           "term": "junction_table",
+          "module": "12-postgres",
           "description": "Junction tables."
         },
         {
-          "module": "12-postgres",
           "term": "primary_key",
+          "module": "12-postgres",
           "description": "Related concept: `PRIMARY KEY`."
         },
         {
-          "module": "12-postgres",
           "term": "inner_join",
+          "module": "12-postgres",
           "description": "Related concept: `INNER JOIN`."
         }
       ]
@@ -1908,8 +1908,8 @@
           "description": "Related concept: `RIGHT JOIN` / `FULL OUTER JOIN`."
         },
         {
-          "module": "12-postgres",
           "term": "foreign_key",
+          "module": "12-postgres",
           "description": "Joining on foreign key columns."
         }
       ]
@@ -1991,8 +1991,8 @@
           "description": "Related concept: Entity-Relationship Diagram (ERD)."
         },
         {
-          "module": "12-postgres",
           "term": "foreign_key",
+          "module": "12-postgres",
           "description": "Related concept: `FOREIGN KEY`."
         }
       ]
@@ -2388,8 +2388,8 @@
           "description": "Related concept: Materialized View."
         },
         {
-          "module": "12-postgres",
           "term": "normalization",
+          "module": "12-postgres",
           "description": "Related concept: Normalization."
         }
       ]
@@ -2572,18 +2572,18 @@
           "description": "Related concept: Entity-Relationship Diagram (ERD)."
         },
         {
-          "module": "12-postgres",
           "term": "second_normal_form",
+          "module": "12-postgres",
           "description": "2NF."
         },
         {
-          "module": "12-postgres",
           "term": "third_normal_form",
+          "module": "12-postgres",
           "description": "3NF."
         },
         {
-          "module": "12-postgres",
           "term": "denormalization",
+          "module": "12-postgres",
           "description": "Strategic denormalization."
         }
       ]
@@ -2621,8 +2621,8 @@
           "description": "Forward reference: multi-column keys."
         },
         {
-          "module": "12-postgres",
           "term": "normalization",
+          "module": "12-postgres",
           "description": "Related concept: Normalization."
         }
       ]
@@ -2650,8 +2650,8 @@
           "description": "Intentionally breaking 3NF for speed."
         },
         {
-          "module": "12-postgres",
           "term": "normalization",
+          "module": "12-postgres",
           "description": "Related concept: Normalization."
         }
       ]
@@ -2733,8 +2733,8 @@
           "description": "Related concept: Partial Index."
         },
         {
-          "module": "12-postgres",
           "term": "unique_index",
+          "module": "12-postgres",
           "description": "Unique index."
         }
       ]
@@ -2767,8 +2767,8 @@
           "description": "Slicing multi-column constraints."
         },
         {
-          "module": "12-postgres",
           "term": "index_concept",
+          "module": "12-postgres",
           "description": "Related concept: Index (Concept)."
         }
       ]
@@ -2830,8 +2830,8 @@
           "description": "The two scan behaviors."
         },
         {
-          "module": "12-postgres",
           "term": "index_concept",
+          "module": "12-postgres",
           "description": "Related concept: Index (Concept)."
         }
       ]
@@ -2952,13 +2952,13 @@
           "description": "Related concept: Table Partitioning."
         },
         {
-          "module": "12-postgres",
           "term": "composite_index",
+          "module": "12-postgres",
           "description": "Multi-column indexes."
         },
         {
-          "module": "12-postgres",
           "term": "explain_analyze",
+          "module": "12-postgres",
           "description": "Query execution plan analysis."
         }
       ]
@@ -3126,8 +3126,8 @@
           "description": "Indexes filtering subsets of rows."
         },
         {
-          "module": "12-postgres",
           "term": "btree_index",
+          "module": "12-postgres",
           "description": "Related concept: B-tree Index."
         }
       ]
@@ -3942,8 +3942,8 @@
           "description": "Setting connection thresholds."
         },
         {
-          "module": "12-postgres",
           "term": "client_server_model",
+          "module": "12-postgres",
           "description": "Client connections."
         }
       ]
@@ -4218,8 +4218,8 @@
           "description": "The login roles validated by pg_hba.conf."
         },
         {
-          "module": "12-postgres",
           "term": "postgresql_conf",
+          "module": "12-postgres",
           "description": "PostgreSQL server configuration files."
         }
       ],

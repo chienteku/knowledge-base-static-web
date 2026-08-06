@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Performance Concept**
+
+**Performance / Optimization** (Table Access Strategy Comparison): Sequential Scan vs Index Scan compares reading entire table heap pages sequentially against traversing B-tree index pointers.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Decided dynamically for every query by the query planner based on estimated disk I/O costs and table statistical distributions).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When executing a query, the database engine must choose how to read table blocks from the hard drive. 
@@ -78,7 +79,7 @@ EXPLAIN SELECT * FROM categories WHERE id = 2;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing a Sequential Scan is always an error that must be fixed with an index
 
@@ -124,67 +125,100 @@ SELECT * FROM users WHERE email = 'a@ex.com'; -- ❌ Seq Scan on 50M rows!
 CREATE INDEX idx_users_email ON users (email);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Scan Choice Diagnosis
+### Exercise 1: Comparing Access Methods: Seq Scan vs Index Scan
 
-**Problem:** You have a `logs` table with 10 million rows and an index on the `logged_at` timestamp.
-1.  Explain why a query filtering `WHERE logged_at > '2026-07-20'` (yesterday's logs, returning 500 rows) runs an **Index Scan**.
-2.  Explain why a query filtering `WHERE logged_at > '2020-01-01'` (all logs, returning 9.9 million rows) runs a **Seq Scan**, completely ignoring the index.
+**Scenario:**
+Compare execution plan behavior between a `Seq Scan` (filtering un-indexed column) vs `Index Scan` (filtering indexed column).
 
-**Expected output:**
+**Requirements:**
+1. Contrast sequential heap page reads against B-tree index traversal.
+
 > [!check]- Answer
-> ```text
-> 1. The first query returns a tiny fraction of the table (500 rows). An Index Scan is highly efficient because it jumps directly to those 500 records.
-> 2. The second query returns almost the entire table (99%). If Postgres used the index, it would have to read 9.9 million index entries, and then jump 9.9 million times to read the table heap. The "double read penalty" would make this extremely slow. A sequential scan reads the table file once from start to finish, which is much faster.
+>
+> #### Implementation
+>
+> ```sql
+> -- 1. Un-indexed query -> Seq Scan (reads 100% of table pages)
+> EXPLAIN ANALYZE SELECT * FROM users WHERE bio = 'developer';
+> 
+> -- 2. Indexed query -> Index Scan (reads B-tree index + target heap pages)
+> EXPLAIN ANALYZE SELECT * FROM users WHERE id = 42;
 > ```
-> - Evaluate the percentage of matching rows returned by each filter.
-> - Consider the disk read overhead of jumping between index and heap files.
+>
+> #### Technical Explanation
+>
+> 1. `Seq Scan` reads every table heap page sequentially from disk ($O(N)$). Fast for small tables (< 1,000 rows); slow for large tables.
+> 2. `Index Scan` traverses a B-tree index to find matching tuple pointers ($O(\log N)$) and fetches corresponding heap pages.
+> 3. Query planner selects access method based on expected selectivity and page costs.
+
+---
+
+### Exercise 2: Understanding Bitmap Index Scans for Multi-Row Result Sets
+
+**Scenario:**
+Analyze why PostgreSQL uses a `Bitmap Index Scan` + `Bitmap Heap Scan` when a query matches 5,000 rows.
+
+**Requirements:**
+1. Explain Bitmap Index Scan and Bitmap Heap Scan mechanics.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> EXPLAIN ANALYZE 
+> SELECT * FROM orders 
+> WHERE status = 'pending';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `Bitmap Index Scan` scans the index to build a memory bitmap of target table page locations.
+> 2. `Bitmap Heap Scan` sorts page locations in physical disk order and fetches heap pages sequentially.
+> 3. Prevents random I/O thrashing when retrieving thousands of rows.
+
+---
+
+### Exercise 3: Why Small Tables Prefer Sequential Scans
+
+**Scenario:**
+Explain why PostgreSQL deliberately chooses a `Seq Scan` over an `Index Scan` on a table containing only 50 rows.
+
+**Requirements:**
+1. Contrast total I/O page costs on small tables.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Small Table Access Optimization:
+> - A 50-row table fits inside a SINGLE 8KB disk page.
+> - Seq Scan reads 1 single disk page ($O(1)$ I/O).
+> - Index Scan reads 1 index page + 1 heap page (2 I/O operations!).
+> Conclusion: The query planner correctly chooses Seq Scan because reading 1 page is faster than reading 2 pages!
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Index lookups add pointer traversal overhead.
+> 2. For tiny tables, reading the entire table heap in a single I/O operation is faster than traversing an index.
+> 3. Demonstrates cost-based query optimizer intelligence.
 
 ---
 
 
 
-### Exercise 2: Seq Scan vs Index Scan Comparison
-
-**Problem:** Compare: `Seq Scan` (Scans all table pages sequentially); `Index Scan` (Navigates B-Tree index pointers to fetch matching heap pages).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Seq Scan: reads all table pages sequentially; Index Scan: navigates B-Tree pointers to fetch target heap pages
-> ```
-> ```text
-> Seq Scan: reads all table pages sequentially; Index Scan: navigates B-Tree pointers to fetch target heap pages
-> ```
->
-> **Explanation:** `Index Scan` accelerates selective queries matching small fractions of table rows.
-
----
-
-### Exercise 3: Selectivity Threshold for Index Scans
-
-**Problem:** At what result set threshold percentage does the query planner switch from `Index Scan` to `Seq Scan`? (When query matches > ~5-15% of table rows).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> When matching > ~5-15% of total table rows
-> ```
-> ```text
-> When matching > ~5-15% of total table rows
-> ```
->
-> **Explanation:** Scanning random disk heap pages via Index Scan becomes slower than sequential reads when matching large row fractions.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`EXPLAIN` / `EXPLAIN ANALYZE`](explain_analyze.md) — Measuring scan plans.
 - [Index-Only Scan (Covering Index)](index_only_scan.md) — The fastest possible read path.
 - [Index (Concept)](index_concept.md) — Related concept: Index (Concept).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Sequential Scan reads the entire table file on disk; Index Scan uses index pointers.
 - Seq Scan is faster for small tables and queries returning a large percentage of rows.
 - Index Scan is faster for locating small numbers of rows in large tables.

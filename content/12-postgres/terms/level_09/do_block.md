@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DDL / DML Statement**
+
+**Advanced Feature** (Anonymous Procedural Code Execution): `DO` blocks execute anonymous inline procedural PL/pgSQL code blocks without defining permanent schema functions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Runs immediately inside the session connection memory. Discarded immediately after execution completes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `plpgsql.md`, procedural code is typically compiled inside a Stored Function or Stored Procedure.
@@ -88,7 +89,7 @@ SELECT * FROM test_accounts;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to return query outputs or values from a DO block
 
@@ -145,90 +146,109 @@ DO $$ BEGIN ... END; $$;
 DO $$ BEGIN ... END; $$ LANGUAGE plpgsql;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: One-Off Data Migration
+### Exercise 1: Executing Anonymous Procedural Scripts with `DO` Blocks
 
-**Problem:** You have a `test_accounts` table. You want to write a one-off anonymous script using a `DO` block. 
+**Scenario:**
+Execute an anonymous `DO` block to seed 100 test user rows in a loop for local development testing.
 
-The script should check if the table `test_accounts` contains more than 10 rows. If it does, truncate the table; otherwise, print a warning notice saying `'No action required.'`.
+**Requirements:**
+1. Execute `DO $$ BEGIN FOR i IN 1..100 LOOP ... END LOOP; END $$;`.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> DO $$
-> DECLARE
->   row_count INT;
-> BEGIN
->   SELECT COUNT(*) INTO row_count FROM test_accounts;
->   
->   IF row_count > 10 THEN
->     TRUNCATE TABLE test_accounts;
->     RAISE NOTICE 'Table truncated.';
->   ELSE
->     RAISE WARNING 'No action required.';
+> DO $$ 
+> BEGIN 
+>   FOR i IN 1..100 LOOP 
+>     INSERT INTO users (username, email) 
+>     VALUES ('user_' || i, 'user_' || i || '@example.com');
+>   END LOOP;
+> END $$;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DO $$ ... $$` executes anonymous inline PL/pgSQL procedural code blocks.
+> 2. Supports `FOR` loops, `IF` conditionals, and local variable declarations.
+> 3. Does NOT create permanent schema objects or return query result sets.
+
+---
+
+### Exercise 2: Conditional Schema Migrations inside `DO` Blocks
+
+**Scenario:**
+Check if column `is_verified` exists on table `users`; if missing, execute `ALTER TABLE users ADD COLUMN is_verified BOOLEAN DEFAULT FALSE`.
+
+**Requirements:**
+1. Inspect `information_schema.columns` inside a `DO` block conditional.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> DO $$ 
+> BEGIN 
+>   IF NOT EXISTS (
+>     SELECT 1 
+>     FROM information_schema.columns 
+>     WHERE table_name = 'users' AND column_name = 'is_verified'
+>   ) THEN 
+>     ALTER TABLE users ADD COLUMN is_verified BOOLEAN NOT NULL DEFAULT FALSE;
 >   END IF;
 > END $$;
 > ```
-> - Declare a variable to hold the counts.
-> - Run the select count statement and save the output using `INTO row_count`.
-> - Wrap the if-else branch inside the `BEGIN/END` block.
+>
+> #### Technical Explanation
+>
+> 1. Executes dynamic DDL statements based on runtime schema conditions.
+> 2. Prevents script errors during automated migration pipelines.
+> 3. Idempotent schema migration pattern.
+
+---
+
+### Exercise 3: Exception Handling in Anonymous Procedural Blocks
+
+**Scenario:**
+Catch unique violation exceptions inside a `DO` block loop using `EXCEPTION WHEN unique_violation THEN`.
+
+**Requirements:**
+1. Code `EXCEPTION` handler block inside PL/pgSQL loop.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> DO $$ 
+> BEGIN 
+>   INSERT INTO users (username, email) VALUES ('alice', 'alice@example.com');
+> EXCEPTION 
+>   WHEN unique_violation THEN 
+>     RAISE NOTICE 'Skipping insert: User already exists!';
+> END $$;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `EXCEPTION WHEN ... THEN` intercepts PL/pgSQL runtime errors gracefully.
+> 2. `RAISE NOTICE` outputs informative log messages to the client console without aborting the block.
+> 3. Robust procedural scripting.
 
 ---
 
 
 
-### Exercise 2: Anonymous DO Block Logging with RAISE NOTICE
-
-**Problem:** Write `DO` block counting rows in `users` and printing result with `RAISE NOTICE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DO $$ DECLARE cnt INT; BEGIN SELECT COUNT(*) INTO cnt FROM users; RAISE NOTICE 'Total Users: %', cnt; END; $$ LANGUAGE plpgsql;
-> ```
-> ```sql
-> DO $$
-> DECLARE
->   cnt INT;
-> BEGIN
->   SELECT COUNT(*) INTO cnt FROM users;
->   RAISE NOTICE 'Total Users: %', cnt;
-> END;
-> $$ LANGUAGE plpgsql;
-> ```
->
-> **Explanation:** `DO` blocks execute one-off procedural scripts using `RAISE NOTICE` logging.
-
----
-
-### Exercise 3: Conditional DDL Execution inside DO Block
-
-**Problem:** Write `DO` block checking if index `idx_custom` exists in `pg_indexes`, creating it if missing.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_custom') THEN CREATE INDEX idx_custom ON users (email); END IF; END; $$ LANGUAGE plpgsql;
-> ```
-> ```sql
-> DO $$
-> BEGIN
->   IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_custom') THEN
->     CREATE INDEX idx_custom ON users (email);
->   END IF;
-> END;
-> $$ LANGUAGE plpgsql;
-> ```
->
-> **Explanation:** `DO` blocks permit procedural dynamic DDL execution inside database migration scripts.
-
-## 7. Related Terms
+## 6. Related Terms
 - [PL/pgSQL](plpgsql.md) — The parent procedural language.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A `DO` block executes anonymous procedural code blocks on-the-fly.
 - Excellent for data migrations, test seeding, and DBA maintenance tasks.
 - Discarded from memory immediately after execution; leaves no system catalog footprint.

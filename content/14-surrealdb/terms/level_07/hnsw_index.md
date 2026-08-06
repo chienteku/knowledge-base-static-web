@@ -14,16 +14,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Performance / Operations (hierarchical navigable small world vector index)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the HNSW graph engine. Constructs multi-layer proximity graphs in memory to route nearest-neighbor queries efficiently).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As vector databases grow from thousands to millions of records, calculating exact vector distances (`MTREE`) across all vectors becomes slow:
@@ -84,7 +83,7 @@ LIMIT 10;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using HNSW indexes for small datasets where RAM is restricted, wasting memory resources
 
@@ -138,59 +137,92 @@ DEFINE INDEX vec_idx ON TABLE doc FIELDS embedding HNSW DIMENSION 1536 DIST EUCL
 DEFINE INDEX vec_idx ON TABLE doc FIELDS embedding HNSW DIMENSION 1536 DIST COSINE;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Algorithm Trade-off Audit
+### Exercise 1: Defining HNSW Vector Search Indexes
 
-**Problem:** You are building an enterprise AI search system containing 5,000,000 document embeddings.
-Queries must respond in under 5 milliseconds.
-Write the SurrealQL statement to define an `HNSW` vector index named `idx_large_search` on table `docs`, field `vec`, using `1536` dimensions and `COSINE` distance.
+**Scenario:**
+An AI knowledge base configures an HNSW vector index `idx_doc_vector` for 4-dimensional vector embeddings using Cosine similarity.
 
-**Expected output:**
+**Requirements:**
+1. Define field `embedding` as `array<float>`.
+2. Define index `idx_doc_vector ON TABLE doc COLUMNS embedding HNSW DIMENSION 4 DIST COSINE`.
+
 > [!check]- Answer
-> ```sql
-> DEFINE INDEX idx_large_search ON docs COLUMNS vec HNSW DIMENSION 1536 DISTANCE COSINE;
-> ```
-> - Replace `MTREE` with `HNSW` in the definition.
-> - Specify dimensions (`1536`) and distance metric (`COSINE`).
-
----
-
-
-
-### Exercise 2: Defining HNSW Vector Index
-
-**Problem:** Define HNSW index `vector_idx` on `article` for 768-dim `embedding` field using `COSINE` distance.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX vector_idx ON TABLE article FIELDS embedding HNSW DIMENSION 768 DIST COSINE;
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> DEFINE INDEX vector_idx ON TABLE article FIELDS embedding HNSW DIMENSION 768 DIST COSINE;
+> DEFINE TABLE doc SCHEMAFULL;
+> DEFINE FIELD embedding ON TABLE doc TYPE array<float>;
+> 
+> -- Define HNSW vector index
+> DEFINE INDEX idx_doc_vector ON TABLE doc COLUMNS embedding 
+>     HNSW DIMENSION 4 DIST COSINE;
 > ```
 >
-> **Explanation:** `HNSW` vector indexing powers fast approximate k-nearest neighbor (k-NN) vector searches.
+> #### Technical Explanation
+>
+> 1. `HNSW` (Hierarchical Navigable Small World) builds multi-layer graph structures for fast vector similarity searches.
+> 2. `DIMENSION <n>` specifies vector embedding dimensionality.
+> 3. `DIST COSINE` configures Cosine distance for text embedding comparisons.
 
 ---
 
-### Exercise 3: HNSW Distance Metric Options
+### Exercise 2: Tuning HNSW Graph Search Parameters
 
-**Problem:** List 3 vector distance metrics supported in SurrealDB (`COSINE`, `EUCLIDEAN`, `MANHATTAN`).
+**Scenario:**
+Configure HNSW graph parameters `M` (max connections per node) and `EFC` (construction search depth) for higher search accuracy.
 
-**Expected output:**
+**Requirements:**
+1. Define HNSW index setting `M 16 EFC 100`.
+
 > [!check]- Answer
-> ```text
-> COSINE, EUCLIDEAN, MANHATTAN
-> ```
-> ```text
-> COSINE, EUCLIDEAN, MANHATTAN
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE INDEX idx_doc_vector ON TABLE doc COLUMNS embedding 
+>     HNSW DIMENSION 4 DIST COSINE M 16 EFC 100;
 > ```
 >
-> **Explanation:** Vector distance metrics specify similarity scoring algorithms.
+> #### Technical Explanation
+>
+> 1. `M` controls the maximum number of bi-directional link connections per HNSW graph node.
+> 2. `EFC` (efConstruction) controls candidate queue depth during index construction.
+> 3. Higher `M` and `EFC` values increase search recall accuracy at the cost of higher index build time.
 
-## 7. Related Terms
+---
+
+### Exercise 3: K-Nearest Neighbor Vector Queries
+
+**Scenario:**
+Query the top 3 documents most semantically similar to query vector `[0.1, 0.2, 0.3, 0.4]` using the KNN vector operator `<|3,COSINE|>`.
+
+**Requirements:**
+1. Execute `SELECT * FROM doc WHERE embedding <|3,COSINE|> [0.1, 0.2, 0.3, 0.4]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT *, vector::distance::knn() AS dist 
+> FROM doc 
+> WHERE embedding <|3,COSINE|> [0.1, 0.2, 0.3, 0.4];
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `<|k,DIST|>` executes fast K-Nearest Neighbor vector searches using HNSW graph indexes.
+> 2. `vector::distance::knn()` projects calculated similarity distance values.
+> 3. Enables RAG AI search applications directly inside SurrealDB.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Vector Search Index (ML/AI)](vector_search.md) — Vector search fundamentals.
 - [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
@@ -198,7 +230,7 @@ Write the SurrealQL statement to define an `HNSW` vector index named `idx_large_
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `HNSW` builds multi-layer navigable small world graphs for approximate vector search.
 - Designed for scaling vector similarity queries across millions of records.
 - Delivers sub-millisecond query latency by trading a tiny fraction of accuracy.

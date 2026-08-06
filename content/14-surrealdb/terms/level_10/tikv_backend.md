@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Distributed Systems & Storage**
+
+
+**Performance / Operations (distributed TiKV key-value storage engine)**: - **Distributed Systems & Storage**
+
+
 
 ---
 
-## 3. Environment Context
-- **Large-Scale Production Clusters** (Deployed across Kubernetes or multi-node cloud servers for high-concurrency workloads).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Single-node file-based storage engines (like RocksDB or SurrealKV) are fast and easy to set up for local development or small applications. However, single-node storage cannot scale beyond the physical disk capacity or CPU throughput of a single server. If that single server fails, the database goes offline.
@@ -67,7 +66,7 @@ surreal start --user root --pass root tikv://10.0.1.20:2379
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using TiKV Backend for Local Single-Developer Setups
 
@@ -125,83 +124,92 @@ $ surreal start tikv://10.0.0.1:2379,10.0.0.2:2379
 
 
 
-### Mistake 4: Using File Storage Backends (`rocksdb`) for Distributed Multi-Node High Availability Clusters
 
-**The mistake:** Attempting to point 5 SurrealDB nodes to a single shared file directory `rocksdb://shared_nfs`.
 
-**Why it's wrong:** Local file backends support single-node instances only. Multi-node distributed SurrealDB clusters strictly require the `tikv://` backend.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-$ surreal start rocksdb://shared_nfs/data.db # ❌ File locking errors in cluster!
-```
+### Exercise 1: Starting SurrealDB with a Distributed TiKV Backend
 
-*Fix:*
-```surrealql
-$ surreal start tikv://10.0.0.1:2379 # Distributed TiKV cluster storage
-```
+**Scenario:**
+A DevOps engineer launches a production SurrealDB node connected to an external distributed TiKV cluster at `10.0.0.1:2379`.
 
-### Mistake 5: Deploying Single-Node TiKV Cluster Without Placement Driver (PD) Endpoints
-
-**The mistake:** Starting SurrealDB with `tikv://` without specifying TiKV Placement Driver (PD) server addresses.
-
-**Why it's wrong:** SurrealDB communicates with TiKV clusters through PD endpoints (`tikv://pd1:2379,pd2:2379`).
-
-*Incorrect:*
-```surrealql
-$ surreal start tikv:// # ❌ Missing PD endpoint addresses!
-```
-
-*Fix:*
-```surrealql
-$ surreal start tikv://10.0.0.1:2379,10.0.0.2:2379
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Identify Distributed Storage Component
-What CNCF-graduated distributed key-value engine does SurrealDB use to achieve horizontal scaling and Raft consensus replication?
+**Requirements:**
+1. Formulate `surreal start` command specifying storage path `tikv://10.0.0.1:2379`.
 
 > [!check]- Answer
-> - Engine name: TiKV.
+>
+> #### Implementation
+>
+> ```bash
+> surreal start >   --bind 0.0.0.0:8000 >   --user root >   --pass "ProductionRootPass!" >   tikv://10.0.0.1:2379
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `tikv://` configures SurrealDB to use TiKV (CNCF distributed key-value store) as its storage engine backend.
+> 2. Decouples SurrealDB stateless compute nodes from physical key-value storage nodes.
+> 3. Scales horizontally to handle petabytes of data across distributed server clusters.
+
+---
+
+### Exercise 2: Stateless Compute Auto-Scaling over TiKV
+
+**Scenario:**
+Deploy multiple stateless SurrealDB compute instances connecting to the same underlying TiKV cluster.
+
+**Requirements:**
+1. Explain how stateless query nodes scale horizontally.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Architecture Setup:
+> - Compute Tier: 5 stateless SurrealDB nodes behind a load balancer (ws://lb.example.com).
+> - Storage Tier: 3 TiKV storage nodes managing distributed Raft consensus regions.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Stateless SurrealDB nodes execute query parsing, permissions, and graph logic.
+> 2. Multiple compute nodes read and write to the shared TiKV key-value cluster concurrently.
+> 3. Compute nodes can auto-scale up or down dynamically based on query traffic.
+
+---
+
+### Exercise 3: Distributed ACID Transaction Guarantees in TiKV
+
+**Scenario:**
+Explain how TiKV maintains ACID transaction guarantees across distributed nodes using 2-Phase Commit (2PC) and Raft consensus.
+
+**Requirements:**
+1. Describe distributed transaction consistency.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Distributed Transaction Protocol:
+> - TiKV uses 2-Phase Commit (2PC) with Percolator-style transaction isolation.
+> - Raft consensus protocol replicates data across 3+ storage nodes for fault tolerance.
+> - Guarantees linearizable ACID transaction safety across regions.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. TiKV provides distributed multi-master ACID transactions across cluster nodes.
+> 2. Replicates data ranges via Raft consensus groups.
+> 3. Guarantees zero data loss during node failures.
 
 ---
 
 
 
-### Exercise 2: Starting SurrealDB with TiKV Backend
 
-**Problem:** CLI command to start SurrealDB server connected to TiKV PD cluster at `10.0.0.1:2379`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> surreal start --bind 0.0.0.0:8000 tikv://10.0.0.1:2379
-> ```
-> ```text
-> surreal start --bind 0.0.0.0:8000 tikv://10.0.0.1:2379
-> ```
->
-> **Explanation:** `tikv://pd_address:2379` connects SurrealDB nodes to distributed TiKV storage clusters.
-
----
-
-### Exercise 3: Distributed Scaling Architecture
-
-**Problem:** Explain role of TiKV in SurrealDB multi-node deployments (Provides distributed horizontal key-value storage with Raft consensus).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Provides distributed ACID key-value storage and Raft consensus replication across nodes
-> ```
-> ```text
-> Provides distributed ACID key-value storage and Raft consensus replication across nodes
-> ```
->
-> **Explanation:** TiKV enables unlimited horizontal scale and high availability for SurrealDB clusters.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — Storage backend overview.
 - [SurrealDB Server (`surreal start`)](../level_01/surreal_start.md) — Server startup flags.
@@ -209,7 +217,7 @@ What CNCF-graduated distributed key-value engine does SurrealDB use to achieve h
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - TiKV is SurrealDB's distributed storage engine for multi-node production clusters.
 - Provides horizontal data scaling, automatic sharding, and Raft-based multi-region replication.
 - Decouples stateless compute (SurrealDB query nodes) from distributed state (TiKV storage nodes).

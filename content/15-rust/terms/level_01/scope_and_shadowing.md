@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Variable Lifetimes**: Lexical scope `{}` bounds and variable shadowing (`let x = x + 1`).
+
+
+**Rust Scope Mechanics (lexical lifetime boundaries)**: Lexical scope `{}` bounds and variable shadowing (`let x = x + 1`).
 
 ---
 

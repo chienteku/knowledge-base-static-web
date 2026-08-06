@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript OOP Modifier**
+
+**Object-Oriented Programming** (Encapsulation Visibility Modifiers): Access modifiers (`public`, `private`, `protected`) enforce compile-time visibility encapsulation for class members.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In Object-Oriented Programming, "Encapsulation" is a core principle. You don't want external code messing with the internal, delicate state of your class.
@@ -63,7 +64,7 @@ If you write `private balance` in TS, compile it to JS, and run it in a browser,
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing TS `private` with JS `#private`
 
@@ -74,6 +75,8 @@ If you write `private balance` in TS, compile it to JS, and run it in a browser,
 Use `private` for developer organization. Use `#private` for actual runtime security.
 
 ---
+
+
 
 
 
@@ -94,6 +97,8 @@ console.log((u as any).secret); // 💥 Outputs '123' at runtime!
 ```typescript
 class User { #secret = "123"; } // Hard ES2022 private field enforced at runtime
 ```
+
+
 
 ### Mistake 3: Attempting Outside Access to `protected` Class Members
 
@@ -116,128 +121,115 @@ class Child extends Base { getId() { return this.id; } } // Accessible inside su
 
 
 
-### Mistake 4: Assuming TypeScript `private` Modifiers Enforce Runtime Privacy
+## 5. Practice Exercises
 
-**The mistake:** Expecting `private secret: string` to prevent JavaScript property access at runtime.
+### Exercise 1: Enforcing Encapsulation with `private` and `protected`
 
-**Why it's wrong:** TypeScript `public`, `protected`, and `private` modifiers are erased during compilation! At runtime, `private` properties are standard enumerable JS properties. Use `#private` for hard runtime privacy.
+**Scenario:**
+Create a `BankAccount` class using `private` for balance and `protected` for account numbers.
 
-*Incorrect:*
-```typescript
-class User { private secret = "123"; }
-const u = new User();
-console.log((u as any).secret); // 💥 Outputs '123' at runtime!
-```
+**Requirements:**
+1. Use `private` and `protected` modifiers on class fields.
 
-*Fix:*
-```typescript
-class User { #secret = "123"; } // Hard ES2022 private field enforced at runtime
-```
-
-### Mistake 5: Attempting Outside Access to `protected` Class Members
-
-**The mistake:** Accessing `inst.protectedField` from outside the class or subclass hierarchies.
-
-**Why it's wrong:** `protected` members can be accessed ONLY inside the declaring class and its derived subclasses.
-
-*Incorrect:*
-```typescript
-class Base { protected id = 1; }
-const b = new Base();
-// console.log(b.id); // ❌ Property 'id' is protected and only accessible within class 'Base' and its subclasses
-```
-
-*Fix:*
-```typescript
-class Base { protected id = 1; }
-class Child extends Base { getId() { return this.id; } } // Accessible inside subclass
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Protected vs Private
-
-**Problem:** You have a `class Animal { private name: string; protected age: number; }`. You create `class Dog extends Animal`. Inside `Dog`, can you write `console.log(this.name)`? Can you write `console.log(this.age)`?
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> class BankAccount {
+>   private balance: number;
+>   protected accountNumber: string;
+
+  constructor(accountNumber: string, initialBalance: number) {
+    this.accountNumber = accountNumber;
+    this.balance = initialBalance;
+  }
+
+  public getBalance(): number {
+    return this.balance;
+  }
+}
+
+class SavingsAccount extends BankAccount {
+  public getAccountInfo(): string {
+    // Accessible! accountNumber is protected:
+    return `Account: ${this.accountNumber}`;
+    // ❌ Error: this.balance is private to BankAccount!
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `private` members are accessible ONLY within the declaring class body.
+> 2. `protected` members are accessible within the declaring class AND derived subclasses.
+> 3. `public` (default) members are accessible anywhere.
+
+---
+
+### Exercise 2: TypeScript `private` vs JavaScript `#private` Fields
+
+**Scenario:**
+Contrast TypeScript `private name` (compile-time) against native ES `#name` private fields (runtime).
+
+**Requirements:**
+1. Show native ES `#balance` private field.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> class SecureVault {
+>   #secretKey: string; // Native JS Private Field (Hard Runtime Isolation)
+>   private apiKey: string; // TS Access Modifier (Compile-time Check Only)
+
+  constructor(secret: string, api: string) {
+    this.#secretKey = secret;
+    this.apiKey = api;
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. TypeScript `private` is enforced ONLY at compile time; erased in JavaScript output and accessible via bracket inspection `(obj as any)["apiKey"]`.
+> 2. Native ES `#private` fields provide true runtime encapsulation enforced by the V8 JavaScript engine.
+> 3. Use `#private` for security-critical runtime secrets.
+
+---
+
+### Exercise 3: Access Modifier Inheritance Matrix
+
+**Scenario:**
+Formulate an encapsulation visibility matrix for `public`, `protected`, `private`, and `#private`.
+
+**Requirements:**
+1. Contrast visibility inside class, subclass, and external consumers.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> You CANNOT access `this.name` because it is `private`. Private means *strictly* the Animal class.
-> You CAN access `this.age` because it is `protected`. Protected allows subclasses to access the property.
+> Access Modifier Visibility Matrix:
+> - public: Class (YES), Subclass (YES), External (YES).
+> - protected: Class (YES), Subclass (YES), External (NO).
+> - private (TS): Class (YES), Subclass (NO), External (NO - Compile Time Only).
+> - #private (ES): Class (YES), Subclass (NO), External (NO - True Hard Runtime Isolation).
 > ```
-> - Think about inheritance!
+
+> #### Technical Explanation
+>
+> 1. Access modifiers enforce encapsulation boundaries in class architectures.
+> 2. TypeScript access modifiers add type safety without runtime performance overhead.
+> 3. Core object-oriented design principle.
 
 ---
 
 
 
-### Exercise 2: Access Modifier Hierarchy Matrix
-
-**Problem:** State visibility differences: `public` (everywhere), `protected` (class & subclasses), `private` (class only).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> public: everywhere, protected: subclasses, private: class only
-> ```
-> ```typescript
-> console.log("public: everywhere, protected: subclasses, private: class only");
-> ```
->
-> **Explanation:** Access modifiers restrict compile-time member visibility across class hierarchies.
-
----
-
-### Exercise 3: ES Private Fields `#` vs TS `private`
-
-**Problem:** Which syntax enforces true hard JavaScript runtime privacy? (ES `#field`)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ES #field syntax enforces runtime privacy
-> ```
-> ```typescript
-> console.log("ES #field syntax enforces runtime privacy");
-> ```
->
-> **Explanation:** ES `#field` private members use native JavaScript language-level private slots.
-
----
-
-### Exercise 4: Access Modifier Hierarchy Matrix
-
-**Problem:** State visibility differences: `public` (everywhere), `protected` (class & subclasses), `private` (class only).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> public: everywhere, protected: subclasses, private: class only
-> ```
-> ```typescript
-> console.log("public: everywhere, protected: subclasses, private: class only");
-> ```
->
-> **Explanation:** Access modifiers restrict compile-time member visibility across class hierarchies.
-
----
-
-### Exercise 5: ES Private Fields `#` vs TS `private`
-
-**Problem:** Which syntax enforces true hard JavaScript runtime privacy? (ES `#field`)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ES #field syntax enforces runtime privacy
-> ```
-> ```typescript
-> console.log("ES #field syntax enforces runtime privacy");
-> ```
->
-> **Explanation:** ES `#field` private members use native JavaScript language-level private slots.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Classes Overview](classes.md) — Where these modifiers live.
 - [Parameter Properties](parameter_properties.md) — A shorthand trick using these exact keywords.
 - [Decorators](decorators.md) — Related concept: Decorators.
@@ -245,7 +237,7 @@ class Child extends Base { getId() { return this.id; } } // Accessible inside su
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Access Modifiers** dictate who can read/write properties and methods in a Class.
 - `public`: Accessible anywhere (this is the default).
 - `private`: Accessible ONLY inside the class itself.

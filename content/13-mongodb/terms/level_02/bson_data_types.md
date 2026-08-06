@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Data Type**
+
+**Core Concept** (Type System Specification): BSON Data Types define the full set of binary-encoded types supported natively by MongoDB, expanding beyond basic JSON data types.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Fully enforced by the storage engine. Each value in a BSON document is prefixed by a single-byte type identifier that determines how the engine parses the following bytes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In PostgreSQL, column data types are strictly defined inside the table schema. 
@@ -82,7 +83,7 @@ db.products.find({ phone: { $type: "array" } });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing JavaScript data types with MongoDB BSON data types in your application code
 
@@ -130,64 +131,105 @@ db.users.find({ age: { $type: "int" } }); // Readable string BSON type alias
 Ensure field values are consistently typed using Schema Validation
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: BSON Type Matching
+### Exercise 1: Inserts with Explicit BSON Type Expressions
 
-**Problem:** Match the following data values to their correct **BSON Alias** strings (use the alias names from the comparison table):
-1.  `"active"`
-2.  `[1, 2, 3]`
-3.  `123.45` (stored as double-precision float)
-4.  `true`
+**Scenario:**
+Insert a customer document demonstrating explicit BSON types: `ObjectId`, `Date`, `Int32`, and `Decimal128`.
 
-**Expected output:**
+**Requirements:**
+1. Insert document using `NumberInt()` and `NumberDecimal()`.
+
 > [!check]- Answer
-> ```text
-> 1. "active" -> "string"
-> 2. [1, 2, 3] -> "array"
-> 3. 123.45 -> "double"
-> 4. true -> "bool"
-> ```
-> - The BSON aliases are standard strings used inside the `$type` operator queries.
-> - Double-precision decimals align with the generic floating-point alias.
-
----
-
-
-
-### Exercise 2: Filtering by BSON Type with `$type`
-
-**Problem:** Query all documents in `orders` where `total` is typed as `Decimal128` (`"decimal"`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.orders.find({ total: { $type: "decimal" } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.orders.find({ total: { $type: "decimal" } });
+> db.customers.insertOne({
+>   _id: new ObjectId(),
+>   name: "Acme Corp",
+>   accountCode: NumberInt(402),
+>   creditLimit: NumberDecimal("50000.00"),
+>   registeredAt: new Date()
+> });
 > ```
 >
-> **Explanation:** `{ field: { $type: "decimal" } }` filters documents by exact BSON data type.
+> #### Technical Explanation
+>
+> 1. `NumberInt()` forces BSON 32-bit integer encoding instead of default 64-bit double float.
+> 2. `NumberDecimal()` forces exact 128-bit IEEE decimal encoding.
+> 3. Prevents JavaScript driver type coercion implicit errors.
 
 ---
 
-### Exercise 3: BSON Type Aliases List
+### Exercise 2: Querying Fields by BSON Type with `$type`
 
-**Problem:** List 4 string BSON type aliases (`"string"`, `"int"`, `"double"`, `"objectId"`).
+**Scenario:**
+Find all documents in `orders` where field `total` was incorrectly stored as a `string` instead of a numeric type.
 
-**Expected output:**
+**Requirements:**
+1. Use `$type: "string"` operator.
+
 > [!check]- Answer
-> ```text
-> "string", "int", "double", "objectId"
-> ```
-> ```text
-> "string", "int", "double", "objectId"
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.find({
+>   total: { $type: "string" }
+> });
 > ```
 >
-> **Explanation:** BSON type aliases provide human-readable names for BSON type codes.
+> #### Technical Explanation
+>
+> 1. `$type` inspects the BSON binary type of document fields.
+> 2. Accepts type names (`"string"`, `"decimal"`, `"date"`) or numeric BSON type codes (2, 19, 9).
+> 3. Essential tool for auditing schema inconsistencies.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Aggregation BSON Type Conversions with `$convert`
+
+**Scenario:**
+Convert string price fields to BSON `Decimal128` inside an aggregation pipeline.
+
+**Requirements:**
+1. Use `$convert` to transform `priceString` to `decimal`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.aggregate([
+>   {
+>     $project: {
+>       name: 1,
+>       priceDecimal: {
+>         $convert: {
+>           input: "$priceString",
+>           to: "decimal",
+>           onError: NumberDecimal("0.00"),
+>           onNull: NumberDecimal("0.00")
+>         }
+>       }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$convert` performs explicit type conversions inside aggregation pipeline stages.
+> 2. `onError` handles unparseable string values gracefully without aborting the pipeline.
+> 3. `onNull` handles missing or null fields.
+
+---
+
+
+
+## 6. Related Terms
 
 - [BSON (Binary JSON)](../level_01/bson.md) — The binary serialization.
 - [String](string.md) — The text type.
@@ -201,7 +243,7 @@ Ensure field values are consistently typed using Schema Validation
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - BSON enforces a type system containing 19 distinct type identifiers.
 - Expands basic JSON types to include dates, decimal128, and object IDs.
 - Helps MongoDB parse and sort data fields efficiently on disk.

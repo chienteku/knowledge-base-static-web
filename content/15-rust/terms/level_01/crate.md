@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Rust-specific**
+
+
+**Rust Compilation Unit (the compilation & distribution atom)**
 
 While every language has some concept of a "compilation unit" (Java has JARs, Go has packages, C has translation units), the *crate* as Rust defines it — a single rooted tree of modules compiled as one atomic unit, with explicit visibility boundaries — is a Rust-specific design. The name itself, "crate," is unique to the Rust ecosystem.
 

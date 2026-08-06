@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Data Type**
+
+**Data Type** (Custom Enumerated Data Type): `CREATE TYPE ... AS ENUM` defines a custom static enumerated data type containing a fixed set of allowed string label values.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Specific** (A custom User-Defined Type (UDT). Standard SQL supports enums via CHECK constraints, but Postgres stores enums as highly optimized 4-byte internal binary keys).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database schemas, columns often represent a fixed set of options:
@@ -91,7 +92,7 @@ INSERT INTO orders VALUES (2, 20.00, 'SHIPPED');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using ENUMs for volatile datasets that change frequently
 
@@ -141,71 +142,104 @@ Use check constraints CHECK (status IN ('active', 'pending')) for dynamic status
 Use a lookup table with foreign key reference for dynamic category lists
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Role-Based Access Control Setup
+### Exercise 1: Creating Custom Enumerated Types (`CREATE TYPE ... AS ENUM`)
 
-**Problem:** You are building a company database. Employees can only hold one of three roles: `'admin'`, `'editor'`, or `'viewer'`. Write the SQL queries to:
-1.  Create a custom enum type named `user_role`.
-2.  Create a table `company_accounts` containing an integer primary key `id`, a username text column (required), and a role column of type `user_role` (defaults to `'viewer'`).
+**Scenario:**
+Create a custom enum type `order_status` with values `'pending'`, `'processing'`, `'shipped'`, `'delivered'`, `'cancelled'`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE TYPE order_status AS ENUM (...)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');
+> CREATE TYPE order_status AS ENUM (
+>   'pending', 
+>   'processing', 
+>   'shipped', 
+>   'delivered', 
+>   'cancelled'
+> );
 > 
-> CREATE TABLE company_accounts (
->   id INT PRIMARY KEY,
->   username VARCHAR(100) NOT NULL,
->   role user_role NOT NULL DEFAULT 'viewer'
+> CREATE TABLE orders (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   status order_status NOT NULL DEFAULT 'pending'
 > );
 > ```
-> - Define the custom UDT type first using the `CREATE TYPE ... AS ENUM` syntax.
-> - Reference the newly created type name inside the table declaration column slot.
+>
+> #### Technical Explanation
+>
+> 1. `CREATE TYPE ... AS ENUM` defines a strongly-typed static set of allowed string labels.
+> 2. Stores enum values internally as 4-byte OID integers, saving disk space compared to raw `TEXT`.
+> 3. Automatically rejects invalid status strings at the database boundary.
+
+---
+
+### Exercise 2: Altering ENUM Types to Add New Values
+
+**Scenario:**
+Add a new enum value `'refunded'` to `order_status` after `'delivered'`.
+
+**Requirements:**
+1. Execute `ALTER TYPE order_status ADD VALUE 'refunded' AFTER 'delivered'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TYPE order_status 
+> ADD VALUE 'refunded' AFTER 'delivered';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ALTER TYPE ... ADD VALUE` adds new labels to existing enum types online.
+> 2. Does NOT require rewriting underlying table heap pages.
+> 3. Fast schema alteration.
+
+---
+
+### Exercise 3: Trade-Off Analysis: ENUM Types vs Foreign Key Lookup Tables
+
+**Scenario:**
+Compare PostgreSQL `ENUM` types vs a lookup table `statuses` with a foreign key constraint.
+
+**Requirements:**
+1. Contrast flexibility, migration speed, and dynamic status addition.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Status Representation Selection Matrix:
+> - ENUM Type: High performance (4 bytes), type-safe, BUT removing/renaming values requires complex DDL.
+> - Lookup Table + FK: Highly flexible (add/remove statuses via simple INSERT/DELETE DML), BUT requires JOINs for queries.
+> Recommendation: Use ENUM for fixed domain states; use Lookup Tables for user-managed dynamic categories.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. ENUM types are ideal for static application constants (e.g. user roles: `'admin'`, `'user'`).
+> 2. Foreign key lookup tables are ideal for categories managed by application admins via UI dashboards.
+> 3. Match implementation to domain lifecycle.
 
 ---
 
 
 
-### Exercise 2: Creating Custom ENUM Type
-
-**Problem:** Create custom ENUM type `user_role` with values `'admin'`, `'editor'`, `'viewer'`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');
-> ```
-> ```sql
-> CREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');
-> ```
->
-> **Explanation:** `CREATE TYPE ... AS ENUM` defines static custom enumerated value types.
-
----
-
-### Exercise 3: Adding Value to Existing ENUM Type
-
-**Problem:** Add new value `'guest'` to existing `user_role` ENUM type.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ALTER TYPE user_role ADD VALUE 'guest';
-> ```
-> ```sql
-> ALTER TYPE user_role ADD VALUE 'guest';
-> ```
->
-> **Explanation:** `ALTER TYPE ... ADD VALUE` appends new values to existing custom ENUM types.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Data Types (Overview)](../level_02/data_types.md) — The parent typing system.
 - [`ALTER TABLE`](alter_table.md) — Editing schemas.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `ENUM` is a custom PostgreSQL data type containing a static list of text labels.
 - Enforces strict type validation, blocking database typos.
 - Stores values on disk as 4-byte keys, optimizing storage sizes.

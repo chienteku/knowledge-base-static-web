@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Utility Type**
+
+**TypeScript Utility Type** (Set Filtering & Non-Nullable Utilities): `Exclude<T, U>`, `Extract<T, U>`, and `NonNullable<T>` perform union type set filtering and null/undefined removal.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-time** (These utilities perform operations during compilation and are completely compiled away).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 TypeScript's primary utility types (like `Partial`, `Pick`, or `Omit`) are designed to operate on **Object** keys and structures. 
@@ -79,7 +80,7 @@ type PayloadAction = Extract<Action, { payload: any }>;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `Exclude` or `Extract` to filter properties from an Object
 
@@ -144,71 +145,100 @@ type Union = "a" | "b" | "c";
 type KeepA = Extract<Union, "a">; // Yields "a"
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Building a Custom Event Listener Filter
+### Exercise 1: Filtering Union Members with `Exclude<T, U>`
 
-**Problem:** You are writing an API handler. The application supports 5 HTTP methods. You want to create a new type called `SafeMethod` that excludes `'DELETE'` and `'PATCH'` from the `HttpMethod` union. Fill in the definition.
+**Scenario:**
+Exclude `"admin"` and `"superadmin"` roles from a `UserRole` union using `Exclude`.
 
-```typescript
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+**Requirements:**
+1. Use `Exclude<UserRole, "admin" | "superadmin">`.
 
-// Complete the definition using Exclude:
-type SafeMethod = Exclude<HttpMethod, 'DELETE' | 'PATCH'>;
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type UserRole = "admin" | "superadmin" | "editor" | "viewer";
 
-const getHandler = (method: SafeMethod) => { ... };
-// getHandler('DELETE'); // Should raise compiler warning!
+type StandardRole = Exclude<UserRole, "admin" | "superadmin">;
+// Inferred as: "editor" | "viewer"
+
+const role: StandardRole = "editor";
+// const invalid: StandardRole = "admin"; // ❌ Compile Error!
 ```
 
-**Expected output:**
+> #### Technical Explanation
+>
+> 1. `Exclude<T, U>` constructs a type by excluding from `T` all union members that are assignable to `U`.
+> 2. Operates distributively over union types.
+> 3. Standard utility for stripping unwanted values from union types.
+
+---
+
+### Exercise 2: Extracting Specific Union Members with `Extract<T, U>`
+
+**Scenario:**
+Extract matching string literal variants from an event name union using `Extract`.
+
+**Requirements:**
+1. Extract event names starting with `"click"` or `"hover"`.
+
 > [!check]- Answer
-> ```text
-> SafeMethod evaluates to 'GET' | 'POST' | 'PUT'.
-> ```
-> - The second argument of `Exclude` can be a union of multiple items you want to remove.
-> - Pass `'DELETE' | 'PATCH'` as the second argument.
+>
+> #### Implementation
+>
+> ```typescript
+> type EventName = "click" | "hover" | "submit" | "focus" | "scroll";
+
+type MouseEventName = Extract<EventName, "click" | "hover">;
+// Inferred as: "click" | "hover"
+
+const event: MouseEventName = "click";
+```
+
+> #### Technical Explanation
+>
+> 1. `Extract<T, U>` constructs a type by extracting from `T` all union members assignable to `U`.
+> 2. Acts as the set intersection counterpart to `Exclude`.
+> 3. Filters complex union types cleanly.
+
+---
+
+### Exercise 3: Stripping Null and Undefined with `NonNullable<T>`
+
+**Scenario:**
+Strip `null` and `undefined` types from a API payload response union using `NonNullable`.
+
+**Requirements:**
+1. Apply `NonNullable<T>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type NullableString = string | null | undefined;
+
+type CleanString = NonNullable<NullableString>;
+// Inferred as: string
+
+const text: CleanString = "Valid String";
+// const invalid: CleanString = null; // ❌ Compile Error!
+```
+
+> #### Technical Explanation
+>
+> 1. `NonNullable<T>` excludes `null` and `undefined` from type `T`.
+> 2. Defined internally as `type NonNullable<T> = T & {}` or using conditional type checks.
+> 3. Useful for sanitizing nullable union types.
 
 ---
 
 
 
-### Exercise 2: Filtering Nullish Types with `NonNullable`
-
-**Problem:** Filter `string | number | null | undefined` using `NonNullable<T>`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> string | number
-> ```
-> ```typescript
-> type Raw = string | number | null | undefined;
-> type Clean = NonNullable<Raw>;
-> console.log("string | number");
-> ```
->
-> **Explanation:** `NonNullable<T>` excludes `null` and `undefined` from union `T`.
-
----
-
-### Exercise 3: Extracting Action Types
-
-**Problem:** Extract actions ending with success from `"click" | "load_success" | "save_success"` using `Extract`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> "load_success" | "save_success"
-> ```
-> ```typescript
-> type Action = "click" | "load_success" | "save_success";
-> type SuccessActions = Extract<Action, `${string}_success`>;
-> console.log("\"load_success\" | \"save_success\"");
-> ```
->
-> **Explanation:** `Extract` retains union members assignable to pattern match types.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Union Types (`|`)](../level_05/union_types.md) — The target data structures.
 - [Utility Types Overview](utility_types.md) — The collection of standard helper definitions.
 - [Conditional Types](../level_09/conditional_types.md) — The type checking logic that powers union filtering.
@@ -216,7 +246,7 @@ const getHandler = (method: SafeMethod) => { ... };
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`Exclude`** removes matching members from a Union type.
 - **`Extract`** keeps only matching members from a Union type, acting as a set intersection tool.
 - **`NonNullable`** strips out `null` and `undefined` options.

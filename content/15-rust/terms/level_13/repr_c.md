@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Syntax / Memory / FFI**: `#[repr(C)]` (short for "representation C") is a data layout attribute in Rust. By default, Rust structs use the `#[repr(Rust)]` layout, where the compiler is free to reorder fields and insert padding bytes to minimize total struct size and optimize CPU alignment. Applying `#[repr(C)]` disables field reordering, placing fields in memory in the exact sequential order they are declared in code, matching standard C compiler struct padding and alignment rules.
+
+
+**Rust Layout Attribute (C-compatible struct and enum memory layout specifier)**: `#[repr(C)]` (short for "representation C") is a data layout attribute in Rust. By default, Rust structs use the `#[repr(Rust)]` layout, where the compiler is free to reorder fields and insert padding bytes to minimize total struct size and optimize CPU alignment. Applying `#[repr(C)]` disables field reordering, placing fields in memory in the exact sequential order they are declared in code, matching standard C compiler struct padding and alignment rules.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: `#[repr(C)]` is available in all Rust environments (`std`, `no_std`, WASM, embedded systems). It is essential when passing structs across FFI boundaries to C/C++ libraries, performing raw byte cast reinterpretation (`bytemuck`), parsing binary network packets, or interacting with hardware device registers.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -234,7 +232,7 @@ pub enum Status {
 
 ### Exercise 1: Binary Network Packet Header & Field Alignment Verification
 
-**Problem:** You are developing a telemetry packet decoder for an embedded IoT network interface. Hardware devices transmit fixed binary frames over UART. The binary protocol specification defines the C packet header as:
+**Scenario:** You are developing a telemetry packet decoder for an embedded IoT network interface. Hardware devices transmit fixed binary frames over UART. The binary protocol specification defines the C packet header as:
 
 ```c
 struct TelemetryHeader {
@@ -251,6 +249,9 @@ struct TelemetryHeader {
 3. Write unit tests with `assert_eq!` verifying field byte offsets (`offset_of!`), total struct size (`size_of`), struct alignment (`align_of`), and payload parsing correctness.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use core::mem::{align_of, offset_of, size_of};
 > 
@@ -333,7 +334,8 @@ struct TelemetryHeader {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Disabling Field Reordering:** In default `#[repr(Rust)]`, `rustc` might reorder `timestamp` (8 bytes) to offset 0 to optimize space. `#[repr(C)]` guarantees declaration order (`sync_word` at 0, `version` at 2, `sensor_id` at 3).
 > 2. **Alignment & Padding:** `payload_len` requires 4-byte alignment, placed directly at offset 4 after `sensor_id` (offset 3). `timestamp` requires 8-byte alignment, placed at offset 8.
 > 3. **Offset & Size Verification:** `core::mem::offset_of!` programmatically confirms byte offsets, ensuring cross-language ABI compatibility between C firmware generators and Rust parsers.
@@ -342,7 +344,7 @@ struct TelemetryHeader {
 
 ### Exercise 2: Embedded Hardware Peripheral Register Layout & Discriminant Enums
 
-**Problem:** In embedded systems development, hardware peripheral control registers are mapped directly to memory addresses. The semiconductor datasheet specifies a UART Peripheral Configuration Register block as:
+**Scenario:** In embedded systems development, hardware peripheral control registers are mapped directly to memory addresses. The semiconductor datasheet specifies a UART Peripheral Configuration Register block as:
 
 ```c
 typedef enum {
@@ -364,6 +366,9 @@ struct UARTConfig {
 4. Write unit tests with `assert_eq!` verifying enum size, struct offsets, total size (8 bytes), and byte representation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use core::mem::{align_of, offset_of, size_of};
 > 
@@ -442,7 +447,8 @@ struct UARTConfig {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`#[repr(u8)]` Enums:** By default, Rust enums without payloads are not guaranteed to fit in a C `uint8_t`. `#[repr(u8)]` guarantees a 1-byte storage size matching C `enum` definitions.
 > 2. **Register Packing:** `UARTConfig` has fields of size 1, 1, 2, and 4 bytes totaling exactly 8 bytes with zero internal padding.
 > 3. **DMA Memory View:** Because `#[repr(C)]` enforces strict layout and padding, `as_bytes()` can safely cast the struct address into a byte slice `&[u8]` for DMA transfers to hardware registers.
@@ -451,7 +457,7 @@ struct UARTConfig {
 
 ### Exercise 3: Cross-FFI Matrix Math & `#[repr(transparent)]` Newtype Wrappers
 
-**Problem:** You are interfacing Rust with a high-performance C linear algebra library (`struct CVector3 { float x, y, z; };`). In Rust, you want domain type safety by wrapping floating-point metrics inside a custom type `struct Meters(pub f32)`.
+**Scenario:** You are interfacing Rust with a high-performance C linear algebra library (`struct CVector3 { float x, y, z; };`). In Rust, you want domain type safety by wrapping floating-point metrics inside a custom type `struct Meters(pub f32)`.
 
 1. Define `CVector3` using `#[repr(C)]` to match the foreign C 3D vector struct.
 2. Define a newtype wrapper `Meters` using `#[repr(transparent)]` to guarantee it shares the exact ABI and memory layout of `f32`.
@@ -460,6 +466,9 @@ struct UARTConfig {
 5. Write unit tests with `assert_eq!` proving layout identity between `Position3D`, `CVector3`, and `[f32; 3]`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use core::mem::{align_of, offset_of, size_of};
 > 
@@ -541,14 +550,15 @@ struct UARTConfig {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`#[repr(transparent)]` Guarantee:** Informs `rustc` that `Meters` must be treated as identical to `f32` at the ABI level, allowing zero-cost passing in CPU registers.
 > 2. **Struct Composition:** Composing `Position3D` out of `Meters` with `#[repr(C)]` yields an identical memory layout to `CVector3` (three 32-bit floats in sequence).
 > 3. **Zero-Cost FFI Pointer Reinterpretation:** Because layouts match 100%, `as_c_vector` reinterprets pointers without memory copying or allocation.
 > 
 ---
 
-## 8. Related Terms
+## 6. Related Terms
 
 
 - [FFI (Foreign Function Interface)](ffi.md) — The cross-language interface requiring `#[repr(C)]` data layouts.
@@ -558,7 +568,7 @@ struct UARTConfig {
 
 ---
 
-## 9. Key Takeaways
+## 7. Key Takeaways
 
 - `#[repr(C)]` forces Rust structs and enums to adopt C compiler memory layout rules, preventing field reordering.
 - Always add `#[repr(C)]` to any struct or enum passed across an FFI boundary to C/C++ libraries.

@@ -14,17 +14,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Tooling**: `rustfmt` is the official, opinionated code formatter for the Rust programming language. Similar to `prettier` in JavaScript/TypeScript or `gofmt` in Go, `rustfmt` parses Rust AST tokens and re-formats source files to adhere strictly to the official Rust Style Guide, eliminating code style debates in code reviews.
+
+
+**Rust Ecosystem Tool (official code formatting tool)**: `rustfmt` is the official, opinionated code formatter for the Rust programming language. Similar to `prettier` in JavaScript/TypeScript or `gofmt` in Go, `rustfmt` parses Rust AST tokens and re-formats source files to adhere strictly to the official Rust Style Guide, eliminating code style debates in code reviews.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Tooling**: `rustfmt` formats all `.rs` files in a workspace via `cargo fmt`. It is integrated into IDEs (VS Code, rust-analyzer, CLion) and runs in CI pipelines (`cargo fmt --check`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -79,7 +77,23 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Overriding Default Formatting Rules with Non-Standard `.rustfmt.toml` Options
+
+**The mistake:** Using unstable `rustfmt` configuration options on stable Rust compilers.
+
+**Why it's wrong:** Unstable options are ignored on stable `rustfmt`, causing formatting inconsistencies between local developers and CI builds.
+
+*Fix:* Stick to stable `rustfmt` settings or run `cargo +nightly fmt`.
+
+### Mistake 3: Disabling Formatting Blanket-Wide (`#[rustfmt::skip]`) Over Large Codeblocks
+
+**The mistake:** Placing `#[rustfmt::skip]` on whole modules or large structs.
+
+**Why it's wrong:** Disabling formatting over large blocks leads to unreadable code style drift over time.
+
+*Fix:* Apply `#[rustfmt::skip]` only to small, specialized matrices or byte array tables.
+
 
 ### Mistake 1: Arguing over Code Formatting in Code Reviews
 
@@ -89,11 +103,11 @@ fn main() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Preserving Matrix Visual Alignment with `#[rustfmt::skip]` in Embedded Graphics
 
-**Problem:** In embedded graphics renderers and DSP control systems, 2D affine transformation matrices are written in code with 3x3 grid alignment so engineers can visually verify rotation, scaling, and translation offsets. Standard `rustfmt` collapses multi-line matrix arrays into flat single-line constructs, destroying visual spatial intuition.
+**Scenario:** In embedded graphics renderers and DSP control systems, 2D affine transformation matrices are written in code with 3x3 grid alignment so engineers can visually verify rotation, scaling, and translation offsets. Standard `rustfmt` collapses multi-line matrix arrays into flat single-line constructs, destroying visual spatial intuition.
 
 Write a `#![no_std]` compatible matrix transformation module containing:
 1. A 3x3 affine transformation matrix constant (`TRANSFORM_2D_SCALE_AND_TRANSLATE`) annotated with `#[rustfmt::skip]` to preserve 2D grid line breaks.
@@ -101,6 +115,9 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 3. Unit tests verifying matrix transformations with `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![cfg_attr(not(test), no_std)]
 > 
@@ -149,7 +166,8 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Formatting Preservation via Attribute**: The `#[rustfmt::skip]` attribute tells `rustfmt` to bypass formatting for the immediately following item (struct declaration, constant, function, or array literal). Without it, `rustfmt` compresses `[2.0, 0.0, 10.0, 0.0, 3.0, 20.0, 0.0, 0.0, 1.0]` onto one line, obscuring matrix structure.
 > 2. **`#![no_std]` Compatibility**: Utilizing `#![cfg_attr(not(test), no_std)]` ensures the code can compile on bare-metal embedded targets while retaining standard library test harnesses (`#[cfg(test)]`) during verification.
 > 3. **Mathematical Verification**: The test suite validates spatial matrix calculations against expected coordinate offsets using `assert_eq!`.
@@ -158,7 +176,7 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 
 ### Exercise 2: `rustfmt.toml` Project Configuration and Hardware Register Bitmask Formatting
 
-**Problem:** An embedded hardware abstraction layer (HAL) requires strict alignment for 32-bit peripheral register address maps and bitmasks so that hardware engineers can easily compare bitfield offsets side-by-side. Additionally, the team requires project-wide code style rules enforced by `rustfmt.toml`.
+**Scenario:** An embedded hardware abstraction layer (HAL) requires strict alignment for 32-bit peripheral register address maps and bitmasks so that hardware engineers can easily compare bitfield offsets side-by-side. Additionally, the team requires project-wide code style rules enforced by `rustfmt.toml`.
 
 1. Create a workspace `rustfmt.toml` configuration setting line length limits, import grouping, and edition rules.
 2. Implement a `#![no_std]` hardware control register module using `#[rustfmt::skip]` on bitfield constant blocks to align bit offsets cleanly.
@@ -178,6 +196,9 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 > ```
 > 
 > **Rust Code Implementation (`src/register_hal.rs`):**
+>
+> #### Implementation
+>
 > ```rust
 > #![cfg_attr(not(test), no_std)]
 > 
@@ -240,7 +261,8 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Workspace Configuration (`rustfmt.toml`)**: `max_width = 100` prevents overly tight line wrapping on modern displays; `group_imports = "StdExternalCrate"` organizes `use` directives logically (`std` first, third-party crates second, local modules third).
 > 2. **Inline Columnar Formatting**: Placing `#[rustfmt::skip]` before constant definitions prevents `rustfmt` from collapsing comments or collapsing unequal spacing between variable names and `=` operators, preserving aligned code columns.
 > 3. **Hardware Bit Manipulation Testing**: The test suite validates bitwise logical operations (`|`, `&`) using `assert_eq!` and `assert!`, guaranteeing register flags are bit-exact for target hardware controllers.
@@ -249,7 +271,7 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 
 ### Exercise 3: CI Formatting Enforcement and Code Generation Exclusion Patterns
 
-**Problem:** In a modern Rust continuous integration pipeline, unformatted code must fail the build before PR merge. However, micro-controller projects often contain auto-generated code files (e.g. from C bindings via `bindgen` or SVD-to-Rust tools) in `src/generated/` that should be excluded from formatting checks.
+**Scenario:** In a modern Rust continuous integration pipeline, unformatted code must fail the build before PR merge. However, micro-controller projects often contain auto-generated code files (e.g. from C bindings via `bindgen` or SVD-to-Rust tools) in `src/generated/` that should be excluded from formatting checks.
 
 1. Configure `rustfmt.toml` to ignore specific auto-generated code paths.
 2. Define the exact CI shell command sequence to run non-destructive style enforcement.
@@ -280,6 +302,9 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 > ```
 > 
 > **Rust Validator Implementation (`src/sensor_packet.rs`):**
+>
+> #### Implementation
+>
 > ```rust
 > #![cfg_attr(not(test), no_std)]
 > 
@@ -326,7 +351,8 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **The `ignore` Configuration Key**: Specifying glob patterns under `ignore` in `rustfmt.toml` stops `cargo fmt` from modifying auto-generated code, preventing unwanted diff noise or syntax error alerts on synthesized files.
 > 2. **CI Non-Destructive Enforcement**: `cargo fmt --check --all` inspects all workspace crates without touching files on disk. If any file violates formatting rules, `cargo fmt` returns a non-zero exit code (exit status 1), causing the CI job to fail cleanly.
 > 3. **Robust Unit Verification**: The Rust module demonstrates clean idiomatic layout formatted by `rustfmt`, validated with `assert_eq!` tests handling both success (`Ok(...)`) and error (`Err(...)`) pathways.

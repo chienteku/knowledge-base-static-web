@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Aggregation** (Pipeline Output Persistence Stages): The $out and $merge stages write the output documents of an aggregation pipeline into a target collection for materialization.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Must be placed as the **last stage** of the pipeline. `$merge` was introduced in MongoDB 4.2 to support large-scale incremental changes and cross-database writes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, running an aggregation pipeline is a read-only query that streams results to RAM. 
@@ -99,7 +100,7 @@ db.orders.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running '$out' on a collection containing active indexes or custom database settings, accidentally deleting them
 
@@ -147,80 +148,107 @@ db.orders.aggregate([..., { $out: "sharded_analytics" }]); // ❌ Fails on shard
 db.orders.aggregate([..., { $merge: { into: "sharded_analytics", on: "_id" } }]);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Pipeline Persistence Selector
+### Exercise 1: Materializing Pipeline Results with `$out`
 
-**Problem:** You are designing a data migration. Select the correct stage (**$out** or **$merge**) for these requirements:
-1.  You are running a delta update that aggregates today's clicks. You want to add them to a `monthly_totals` collection that carries unique indexes, updating existing days and inserting new ones.
-2.  You want to calculate a complete, cold backup table of your catalog into a fresh collection named `catalog_backup_July`, wiping any old backup collection of that name.
+**Scenario:**
+Export aggregated quarterly sales summary results to a new target collection `quarterly_sales_2026` using `$out`.
 
-**Expected output:**
+**Requirements:**
+1. Append `{ $out: "quarterly_sales_2026" }` as final pipeline stage.
+
 > [!check]- Answer
-> ```text
-> 1. $merge: Because you want to perform an incremental update (upsert) that preserves existing records and keeps custom collection indexes active.
-> 2. $out: Because you want a complete, fresh replacement of the backup collection, wiping any old database files cleanly.
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.aggregate([
+>   { $match: { status: "completed" } },
+>   { $group: { _id: "$category", total: { $sum: "$amount" } } },
+>   { $out: "quarterly_sales_2026" }
+> ]);
 > ```
-> - Determine if the collection writes must preserve historical indexes.
-> - Relate the task to incremental delta updates vs. complete resets.
+>
+> #### Technical Explanation
+>
+> 1. `$out` writes pipeline output documents into a target collection, replacing any existing collection data completely.
+> 2. Atomic collection swap on completion.
+> 3. Cannot output to sharded collections; use `$merge` for sharded output targets.
 
 ---
 
+### Exercise 2: Incremental Materialized Views with `$merge`
 
+**Scenario:**
+Upsert aggregated daily user activity totals into an existing materialized collection `user_daily_stats` using `$merge`.
 
-### Exercise 2: Merging Aggregation Results into Existing Collection
+**Requirements:**
+1. Append `$merge: { into: "user_daily_stats", on: "_id", whenMatched: "replace", whenNotMatched: "insert" }`.
 
-**Problem:** Merge aggregated daily totals into `daily_sales` collection on `_id` using `$merge`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> db.sales.aggregate([ ..., { $merge: { into: "daily_sales", on: "_id", whenMatched: "merge", whenNotMatched: "insert" } } ]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.sales.aggregate([
->   // aggregation stages ...
+> db.activity_logs.aggregate([
+>   { $match: { date: new Date("2026-08-05") } },
+>   { $group: { _id: "$userId", dailyActions: { $sum: 1 } } },
 >   {
 >     $merge: {
->       into: "daily_sales",
+>       into: "user_daily_stats",
 >       on: "_id",
->       whenMatched: "merge",
+>       whenMatched: "replace",
 >       whenNotMatched: "insert"
 >     }
 >   }
 > ]);
 > ```
 >
-> **Explanation:** `$merge` safely upserts or merges pipeline outputs into target collections.
+> #### Technical Explanation
+>
+> 1. `$merge` incrementally updates or inserts pipeline output documents into target collections.
+> 2. `whenMatched: "replace"` updates matching records; `whenNotMatched: "insert"` adds new entries.
+> 3. Supports output to sharded target collections across clusters.
 
 ---
 
-### Exercise 3: Replacing Collection with `$out`
+### Exercise 3: Comparing `$out` vs `$merge` Output Strategies
 
-**Problem:** Write aggregation results to new materialized view collection `active_users_mv` using `$out`.
+**Scenario:**
+Formulate a technical decision guide choosing between `$out` and `$merge`.
 
-**Expected output:**
+**Requirements:**
+1. Contrast destructive replacement (`$out`) vs incremental upsert (`$merge`).
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> db.users.aggregate([{ $match: { active: true } }, { $out: "active_users_mv" }]);
-> ```
-> ```javascript
-> db.users.aggregate([
->   { $match: { active: true } },
->   { $out: "active_users_mv" }
-> ]);
+> Target Materialization Selection Guide:
+> - $out: Use for periodic full snapshot rewrites (replaces entire target collection atomically).
+> - $merge: Use for continuous incremental ETL updates, sharded target collections, and fine-grained merge actions.
 > ```
 >
-> **Explanation:** `$out` writes pipeline outputs to a target collection, creating or replacing it.
+> #### Technical Explanation
+>
+> 1. `$out` provides simple atomic collection overwrites.
+> 2. `$merge` provides flexible, non-destructive incremental updates.
+> 3. Foundation for building background data warehouse pipelines.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [Upsert (`upsert: true`)](../level_03/upsert.md) — The write concept.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$out` and `$merge` write aggregation pipeline outputs directly to disk.
 - Must be declared as the final stage of the aggregation pipeline array.
 - `$out` completely replaces the target collection, dropping old data and indexes.

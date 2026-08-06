@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command-Line Tool**
+
+**Administration / Operations** (Interactive Shell CLI): mongosh is the modern Node.js-based interactive command-line shell used for administering MongoDB instances and executing ad-hoc queries.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executed in the terminal shell. Acts as a client process connecting to local or remote MongoDB instances via connection URI strings).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Once the MongoDB server daemon (`mongod`) is running in the background, you need a way to communicate with it:
@@ -90,7 +91,7 @@ store_db> db.products.find()
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Typing declarative SQL commands (like SELECT or INSERT INTO) inside mongosh
 
@@ -140,66 +141,92 @@ db.users.find(); // Un-bounded query
 db.users.find().limit(10); // Controlled limit
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Shell Navigation Test
+### Exercise 1: Executing Administrative Helper Commands
 
-**Problem:** You are connected to a database using `mongosh`. Write the exact sequence of commands to:
-1.  Verify the list of databases available on the server.
-2.  Switch your active terminal focus to the database named `analytics`.
-3.  List the names of all collections inside `analytics`.
+**Scenario:**
+A developer uses `mongosh` to inspect existing databases, switch context, and list collections.
 
-**Expected output:**
+**Requirements:**
+1. List databases (`show dbs`).
+2. Switch context (`use app`).
+3. List collections (`show collections`).
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> show dbs
-> 
-> use analytics
-> 
-> show collections
-> ```
-> - The command `show dbs` audits the server namespaces.
-> - The active database focus determines what `show collections` reads.
-
----
-
-
-
-### Exercise 2: Formatting Query Output with `pretty()`
-
-**Problem:** Format mongosh JSON output clearly using `db.coll.find().pretty()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find().pretty();
-> ```
-> ```javascript
-> db.users.find().pretty();
+> show dbs;
+> use app;
+> show collections;
 > ```
 >
-> **Explanation:** `pretty()` indents BSON documents for clear terminal viewing.
+> #### Technical Explanation
+>
+> 1. `mongosh` provides interactive terminal shell helper commands (`show dbs`, `show collections`).
+> 2. Built on top of modern Node.js REPL environment.
+> 3. Executes JavaScript statements natively.
 
 ---
 
-### Exercise 3: Evaluating JavaScript Code in mongosh
+### Exercise 2: Writing Scriptable JavaScript Iteration Loops in mongosh
 
-**Problem:** Run a JS loop inside `mongosh` inserting 3 documents into `test` collection.
+**Scenario:**
+Write a JavaScript `for` loop in `mongosh` to insert 10 test documents into collection `benchmark`.
 
-**Expected output:**
+**Requirements:**
+1. Loop 10 times and execute `insertOne()`.
+
 > [!check]- Answer
-> ```text
-> for (let i = 1; i <= 3; i++) { db.test.insertOne({ val: i }); }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> for (let i = 1; i <= 3; i++) {
->   db.test.insertOne({ val: i });
+> for (let i = 1; i <= 10; i++) {
+>   db.benchmark.insertOne({
+>     seq: i,
+>     timestamp: new Date()
+>   });
 > }
 > ```
 >
-> **Explanation:** `mongosh` is a full Node.js REPL supporting JavaScript loop logic.
+> #### Technical Explanation
+>
+> 1. `mongosh` supports full modern ECMAScript / JavaScript syntax.
+> 2. Loops and procedural control flow can be executed directly inside the shell.
+> 3. Enables fast database seeding and administrative scripting.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Formulating Non-Interactive Shell CLI Scripts
+
+**Scenario:**
+Execute a `mongosh` query script non-interactively from a Linux bash terminal using `--eval`.
+
+**Requirements:**
+1. Formulate `mongosh` command using `--eval`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> mongosh "mongodb://localhost:27017/store_db" >   --eval "console.log('Total Orders:', db.orders.countDocuments())"
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `--eval` executes JavaScript query strings non-interactively and exits.
+> 2. Useful in Linux bash scripts and CI/CD deployment pipelines.
+> 3. Returns query output directly to stdout.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`mongod` (MongoDB Server Daemon)](mongod.md) — The target server.
 - [MongoDB Compass](compass.md) — The graphical GUI alternative.
@@ -207,7 +234,7 @@ db.users.find().limit(10); // Controlled limit
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `mongosh` is the official interactive JavaScript terminal shell for MongoDB.
 - Serves as the MongoDB equivalent to PostgreSQL's `psql` utility.
 - Built on top of Node.js; supports writing loops, variables, and custom JS scripts.

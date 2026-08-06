@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Message-Passing Concurrency Primitives**: Multi-producer single-consumer (`mpsc`) and single-producer single-consumer oneshot (`oneshot`) channels for thread synchronization.
+
+
+**Rust Concurrency Pattern (message passing communication channels)**: Multi-producer single-consumer (`mpsc`) and single-producer single-consumer oneshot (`oneshot`) channels for thread synchronization.
 
 ---
 

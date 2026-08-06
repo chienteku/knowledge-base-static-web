@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (nested sub-query evaluation expressions)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed inline by the query planner. Evaluates nested subqueries prior to passing results to outer projection or filter stages).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In complex data systems, filtering or updating records often depends on the state of other records:
@@ -77,7 +76,7 @@ UPDATE summary:daily SET
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that a standard SELECT subquery returns an array of objects rather than a flat list, causing 'IN' or comparison checks to fail
 
@@ -131,59 +130,91 @@ SELECT * FROM post WHERE author = (SELECT VALUE id FROM user WHERE role = 'admin
 SELECT * FROM post WHERE author IN (SELECT VALUE id FROM user WHERE role = 'admin'); // Correct IN array comparison
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Subquery Formulation
+### Exercise 1: Scalar Subqueries in Projection Lists
 
-**Problem:** You have an `orders` table and a `customers` table.
-Write a SurrealQL query to retrieve all `orders` where the `customer` field (a `record<customers>` link) belongs to a customer located in `"Tokyo"`.
+**Scenario:**
+An order summary query projects each order's `total` alongside the average order price calculated via a scalar subquery `(SELECT VALUE math::mean(total) FROM order GROUP ALL)`.
 
-**Expected output:**
+**Requirements:**
+1. Write a `SELECT` query embedding a scalar subquery in the field projection list.
+
 > [!check]- Answer
-> ```sql
-> SELECT * FROM orders 
-> WHERE customer IN (SELECT VALUE id FROM customers WHERE address.city = 'Tokyo');
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE order:o1 SET total = 100.00dec;
+> CREATE order:o2 SET total = 200.00dec;
+> 
+> -- Scalar subquery in projection list
+> SELECT 
+>     total,
+>     (SELECT VALUE math::mean(total) FROM order GROUP ALL) AS avg_order_total
+> FROM order;
 > ```
-> - The inner subquery should select `VALUE id` from `customers`.
-> - Use the `IN` operator in the outer query's `WHERE` clause.
+>
+> #### Technical Explanation
+>
+> 1. Subqueries enclosed in parentheses `(...)` evaluate nested queries inline.
+> 2. `SELECT VALUE` unwraps the subquery result into a scalar value.
+> 3. Computes comparative metrics against global averages in a single query pass.
+
+---
+
+### Exercise 2: Subqueries in `WHERE` Filter Clauses
+
+**Scenario:**
+Query users whose `id` is `INSIDE` a subquery selecting active customer IDs `(SELECT VALUE customer FROM order WHERE active = true)`.
+
+**Requirements:**
+1. Write a `SELECT * FROM user WHERE id INSIDE (...)` subquery.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT * FROM user 
+> WHERE id INSIDE (SELECT VALUE customer FROM order WHERE total > 150.00dec);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Subqueries in `WHERE` clauses generate dynamic array filter criteria.
+> 2. `INSIDE (...)` checks if the record ID exists within the array returned by the subquery.
+> 3. Equivalent to SQL `WHERE id IN (SELECT ...)`.
+
+---
+
+### Exercise 3: Subqueries in `RELATE` Graph Edge Construction
+
+**Scenario:**
+Relate user `user:admin` to all active product IDs returned by a subquery in a single `RELATE` statement.
+
+**Requirements:**
+1. Execute `RELATE user:admin -> manages -> (SELECT VALUE id FROM product WHERE active = true)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> RELATE user:admin->manages->(SELECT VALUE id FROM product WHERE active = true);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `RELATE` accepts subqueries to bulk-create graph relation edges dynamically.
+> 2. Evaluates the subquery and connects edges to every returned target record ID.
+> 3. Enables batch graph edge generation without procedural loops.
 
 ---
 
 
 
-### Exercise 2: Correlated Subquery Projection
-
-**Problem:** Select user name and total article count using correlated subquery in projection.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT name, (SELECT VALUE count() FROM article WHERE author = $parent.id GROUP ALL)[0] AS article_count FROM user;
-> ```
-> ```surrealql
-> SELECT name, (SELECT VALUE count() FROM article WHERE author = $parent.id GROUP ALL)[0] AS article_count FROM user;
-> ```
->
-> **Explanation:** `$parent` accesses outer parent record fields from within nested subqueries.
-
----
-
-### Exercise 3: Subquery Predicate Filtering
-
-**Problem:** Select articles whose `author` is in active users list using `WHERE author IN (subquery)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM article WHERE author IN (SELECT VALUE id FROM user WHERE active = true);
-> ```
-> ```surrealql
-> SELECT * FROM article WHERE author IN (SELECT VALUE id FROM user WHERE active = true);
-> ```
->
-> **Explanation:** `WHERE field IN (subquery)` filters records matching subquery value sets.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`SELECT`](../level_03/select.md) — The query statement.
 - [`SELECT VALUE` (Single Field Extraction)](../level_03/select_value.md) — Extracting flat arrays.
@@ -192,7 +223,7 @@ Write a SurrealQL query to retrieve all `orders` where the `customer` field (a `
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Subqueries embed a `SELECT` expression inside another statement.
 - Use `SELECT VALUE` inside subqueries to return flat lists suitable for `IN` filters.
 - Scalar subqueries can compute dynamic threshold numbers (e.g. average price).

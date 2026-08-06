@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Constraint**
+
+**Constraint** (Duplicate Exclusion Constraint): A `UNIQUE` constraint prevents duplicate non-null values across specified column combinations, ensuring distinct key values.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Postgres automatically builds a unique **B-Tree Index** on unique columns to quickly verify uniqueness during inserts).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database design, you use a Primary Key to uniquely identify rows. 
@@ -94,7 +95,7 @@ INSERT INTO staff_accounts (id, username, work_email) VALUES (4, 'charlie', NULL
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on UNIQUE alone to prevent empty/blank records
 
@@ -140,64 +141,96 @@ CREATE TABLE users ( email TEXT UNIQUE ); -- Allows Alice@ex.com AND alice@ex.co
 CREATE UNIQUE INDEX idx_users_lower_email ON users (LOWER(email));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multi-column Uniqueness
+### Exercise 1: Enforcing Unique Key Constraints on Single Columns
 
-**Problem:** You are building a movie rating database. You have a table `reviews` with columns `user_id`, `movie_id`, and `rating`. You want to allow users to write reviews, but you must prevent a user from writing **more than one review for the same movie**. How do you enforce this constraint in SQL?
+**Scenario:**
+Add a `UNIQUE` constraint to column `email` on table `users`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `ALTER TABLE users ADD CONSTRAINT uq_users_email UNIQUE (email)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE reviews (
->   id INTEGER PRIMARY KEY,
->   user_id INTEGER,
->   movie_id INTEGER,
->   rating INTEGER,
->   -- Enforce unique combination
->   UNIQUE (user_id, movie_id)
+> ALTER TABLE users 
+> ADD CONSTRAINT uq_users_email UNIQUE (email);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `UNIQUE` constraints reject write attempts that introduce duplicate non-null values.
+> 2. Automatically creates an underlying unique B-tree index (`uq_users_email`).
+> 3. Enforces business uniqueness rules at the database engine level.
+
+---
+
+### Exercise 2: Multi-Column Composite Unique Constraints
+
+**Scenario:**
+Enforce that a user can only submit ONE review per product by creating a composite unique constraint on `(user_id, product_id)`.
+
+**Requirements:**
+1. Define `CONSTRAINT uq_reviews_user_product UNIQUE (user_id, product_id)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE product_reviews (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   user_id INTEGER NOT NULL REFERENCES users(id),
+>   product_id INTEGER NOT NULL REFERENCES products(id),
+>   rating SMALLINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+>   CONSTRAINT uq_reviews_user_product UNIQUE (user_id, product_id)
 > );
 > ```
-> - You can define a `UNIQUE` constraint at the bottom of the table definition that accepts a list of multiple columns.
-> - This prevents duplicate pairs, while still allowing the same `user_id` or `movie_id` to appear individually on multiple rows.
+>
+> #### Technical Explanation
+>
+> 1. Composite `UNIQUE` constraints enforce uniqueness across the COMBINATION of multiple columns.
+> 2. Allows a user to review multiple different products, but rejects duplicate reviews for the same product.
+> 3. Core pattern for relationship constraints.
+
+---
+
+### Exercise 3: Handling Duplicate Key Violations in Application Code
+
+**Scenario:**
+Catch PostgreSQL `unique_violation` (Error Code 23505) in Node.js backend controllers.
+
+**Requirements:**
+1. Handle Error Code `23505`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> try {
+>   await pool.query("INSERT INTO users (username, email) VALUES ($1, $2)", [username, email]);
+> } catch (err: any) {
+>   if (err.code === "23505") {
+>     console.error("Conflict Error: Email or username already exists!", err.detail);
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Unique constraint violations throw PostgreSQL Error Code `23505` (`unique_violation`).
+> 2. `err.detail` exposes the conflicting key value pair.
+> 3. Catching `23505` allows application servers to return HTTP 409 Conflict status codes cleanly.
 
 ---
 
 
 
-### Exercise 2: Adding Multi-Column Compound Unique Constraint
-
-**Problem:** Add UNIQUE constraint on `(user_id, project_id)` on `project_members` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ALTER TABLE project_members ADD CONSTRAINT uq_user_project UNIQUE (user_id, project_id);
-> ```
-> ```sql
-> ALTER TABLE project_members ADD CONSTRAINT uq_user_project UNIQUE (user_id, project_id);
-> ```
->
-> **Explanation:** Multi-column UNIQUE constraints enforce uniqueness across column tuples.
-
----
-
-### Exercise 3: Case-Insensitive Unique Expression Index
-
-**Problem:** Create unique index enforcing case-insensitive email uniqueness using `LOWER(email)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE UNIQUE INDEX idx_lower_email ON users (LOWER(email));
-> ```
-> ```sql
-> CREATE UNIQUE INDEX idx_lower_email ON users (LOWER(email));
-> ```
->
-> **Explanation:** Expression unique indexes evaluate functions (`LOWER()`) before enforcing uniqueness.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`PRIMARY KEY`](primary_key.md) — The main unique and required column anchor.
 - [`NULL`](null.md) — The values that escape uniqueness checks.
 - [`UPSERT` (`ON CONFLICT`)](../level_03/upsert.md) — Related concept: `UPSERT` (`ON CONFLICT`).
@@ -206,7 +239,7 @@ CREATE UNIQUE INDEX idx_users_lower_email ON users (LOWER(email));
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `UNIQUE` constraints prevent duplicate entries in non-primary key columns.
 - Like primary keys, they automatically generate a search index on disk.
 - Unlike primary keys, `UNIQUE` columns allow multiple `NULL` entries.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Configuration File**
+
+**Administration / Operations** (Host-Based Authentication Config): `pg_hba.conf` configures host-based client authentication rules, allowed IP ranges, and authentication methods (SCRAM-SHA-256, md5).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Server Configuration** (Stored in the database server's data directory. Changing this file requires reloading the PostgreSQL server configuration (`pg_ctl reload` or `SELECT pg_reload_conf()`) to take effect).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, PostgreSQL is configured to be highly secure on your local machine: it only allows connections from `localhost` (127.0.0.1).
@@ -90,7 +91,7 @@ host      all             all             0.0.0.0/0               reject
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting the METHOD to 'trust' for remote network connection IP ranges
 
@@ -138,65 +139,92 @@ host all all 0.0.0.0/0 scram-sha-256 -- Password authentication required
 Place restrictive specific IP rules at top; broad fallback rules at bottom
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Config Rule Design
+### Exercise 1: Configuring Host-Based Client Authentication Rules
 
-**Problem:** You are deploying a PostgreSQL server. Your web server resides at IP address `192.168.1.45`. The web server needs to connect to the database `store_db` using the role `store_app`. 
+**Scenario:**
+Configure `pg_hba.conf` to allow local IPv4 connections to database `store_db` for user `app_user` using `scram-sha-256`.
 
-Write the exact line that you must append to `pg_hba.conf` to authorize this connection securely using scram passwords.
+**Requirements:**
+1. Code `pg_hba.conf` entry line.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> host    store_db    store_app    192.168.1.45/32    scram-sha-256
-> ```
-> - A single IP address in CIDR notation uses the subnet mask `/32`.
-> - Order the columns correctly: Type, Database, User, Address, Method.
-
----
-
-
-
-### Exercise 2: Configuring Secure pg_hba.conf Entry
-
-**Problem:** Write `pg_hba.conf` line granting `app_user` access to `prod_db` from `10.0.1.0/24` subnet using `scram-sha-256`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> host prod_db app_user 10.0.1.0/24 scram-sha-256
-> ```
-> ```text
-> host prod_db app_user 10.0.1.0/24 scram-sha-256
+> # TYPE  DATABASE        USER            ADDRESS                 METHOD
+> host    store_db        app_user        192.168.1.0/24          scram-sha-256
 > ```
 >
-> **Explanation:** `pg_hba.conf` rules specify connection type, database, user, address subnet, and authentication method.
+> #### Technical Explanation
+>
+> 1. `pg_hba.conf` (Host-Based Authentication) defines network access security policies for the PostgreSQL server.
+> 2. `host`: TCP/IP network connection.
+> 3. `scram-sha-256`: Cryptographically strong salted password authentication method.
 
 ---
 
-### Exercise 3: Reloading pg_hba.conf Configuration
+### Exercise 2: Restricting Remote Admin Access to Localhost Only
 
-**Problem:** SQL command reloading `pg_hba.conf` without restarting PostgreSQL server (`SELECT pg_reload_conf();`).
+**Scenario:**
+Configure `pg_hba.conf` to restrict superuser `postgres` access exclusively to local Unix domain sockets (`local`).
 
-**Expected output:**
+**Requirements:**
+1. Code `local` superuser access entry.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> SELECT pg_reload_conf();
+> # TYPE  DATABASE        USER            ADDRESS                 METHOD
+> local   all             postgres                                peer
+> host    all             postgres        127.0.0.1/32            scram-sha-256
 > ```
+>
+> #### Technical Explanation
+>
+> 1. `local` uses Unix domain sockets local to the database server machine.
+> 2. Restricting superuser `postgres` remote TCP access prevents remote brute-force administrative attacks.
+> 3. Security hardening standard.
+
+---
+
+### Exercise 3: Reloading Authentication Configuration without Server Restart
+
+**Scenario:**
+Reload modified `pg_hba.conf` rules without restarting the PostgreSQL server daemon using `pg_reload_conf()`.
+
+**Requirements:**
+1. Execute `SELECT pg_reload_conf()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
 > SELECT pg_reload_conf();
 > ```
 >
-> **Explanation:** `pg_reload_conf()` reloads configuration files without interrupting active client connections.
+> #### Technical Explanation
+>
+> 1. `pg_reload_conf()` sends a `SIGHUP` signal to the main `postgres` process to re-parse configuration files.
+> 2. Applies new `pg_hba.conf` authentication rules online without interrupting active client connections.
+> 3. Zero-downtime security administration.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [Roles & Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`)](roles_permissions.md) — The login roles checked.
 - [`postgresql.conf` (Server Configuration)](postgresql_conf.md) — General connection settings.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `pg_hba.conf` manages network connection authentication in PostgreSQL.
 - Evaluates rules from top to bottom, applying the first matching configuration.
 - Columns list Type (local/host), Database, User, Client IP, and Auth Method.

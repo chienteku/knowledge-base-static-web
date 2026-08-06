@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Aggregation** (Document Root Subdocument Promotion Stage): The $replaceRoot stage (and $replaceWith) replaces the top-level document structure with a specified embedded subdocument object.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executed in memory. Alters the output BSON document stream structure before passing items to the client driver serializer).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 During complex pipeline calculations (such as running `$lookup` joins followed by `$unwind` arrays):
@@ -90,7 +91,7 @@ db.users.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to replace the root with a field that does not resolve to a valid BSON document object
 
@@ -139,74 +140,106 @@ db.users.aggregate([{ $replaceRoot: "$profile" }]); // ❌ Missing newRoot wrapp
 db.users.aggregate([{ $replaceWith: "$profile" }]); // Alias syntax
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Subdocument Promotion
+### Exercise 1: Promoting Embedded Subdocuments to Top-Level
 
-**Problem:** You have a `companies` collection. Each company contains a nested subdocument named `address`:
-`{ _id: 10, name: "DevCorp", address: { city: "Boston", zip: "02108" } }`
-Write the aggregation pipeline containing a single `$replaceWith` stage to promote the `address` fields to the top level.
+**Scenario:**
+Promote embedded `address` subdocument (`{ user: "Alice", address: { city: "Austin", state: "TX" } }`) to become the top-level document root.
 
-**Expected output:**
+**Requirements:**
+1. Use `$replaceRoot: { newRoot: "$address" }`.
+
 > [!check]- Answer
-> ```javascript
-> [
->   {
->     $replaceWith: "$address"
->   }
-> ]
-> ```
-> - Prefix the target subdocument field path with the dollar sign `$`.
-> - Use the `$replaceWith` stage operator to execute the promotion.
-
----
-
-
-
-### Exercise 2: Promoting Sub-Document to Top-Level Document
-
-**Problem:** Promote embedded sub-document `address` to become the top-level document using `$replaceRoot`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.aggregate([{ $replaceRoot: { newRoot: "$address" } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.users.aggregate([
+>   { $match: { "address.city": "Austin" } },
 >   { $replaceRoot: { newRoot: "$address" } }
 > ]);
 > ```
 >
-> **Explanation:** `$replaceRoot` replaces top-level documents with specified sub-document objects.
+> #### Technical Explanation
+>
+> 1. `$replaceRoot` replaces the existing root document structure with a target embedded subdocument object.
+> 2. All original top-level fields outside `address` are discarded.
+> 3. Re-shapes document outputs cleanly.
 
 ---
 
-### Exercise 3: Using Simplified `$replaceWith` Alias
+### Exercise 2: Merging Root Documents with Subdocuments using `$mergeObjects`
 
-**Problem:** Promote joined object `userInfo` using `$replaceWith: "$userInfo"`.
+**Scenario:**
+Merge document default settings with user-customized settings to produce a unified root document.
 
-**Expected output:**
+**Requirements:**
+1. Use `$replaceRoot` with `newRoot: { $mergeObjects: [defaultObj, "$customSettings"] }`.
+
 > [!check]- Answer
-> ```text
-> db.orders.aggregate([{ $replaceWith: "$userInfo" }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.orders.aggregate([
->   { $replaceWith: "$userInfo" }
+> db.user_configs.aggregate([
+>   {
+>     $replaceRoot: {
+>       newRoot: {
+>         $mergeObjects: [
+>           { theme: "light", notifications: true },
+>           "$customSettings"
+>         ]
+>       }
+>     }
+>   }
 > ]);
 > ```
 >
-> **Explanation:** `$replaceWith` is a convenient alias stage for `$replaceRoot: { newRoot: expr }`.
+> #### Technical Explanation
+>
+> 1. `$mergeObjects` combines key-value pairs from multiple objects, with rightmost objects overwriting duplicates.
+> 2. Replaces the document root with the merged object.
+> 3. Ideal for default-override settings inheritance patterns.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Simplifying Promotion with `$replaceWith`
+
+**Scenario:**
+Demonstrate using `$replaceWith` as a clean alias for `$replaceRoot`.
+
+**Requirements:**
+1. Use `$replaceWith: "$subdoc"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.documents.aggregate([
+>   { $replaceWith: "$metadata" }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$replaceWith` is a convenient syntactic alias for `$replaceRoot: { newRoot: ... }`.
+> 2. Promotes target subdocuments directly.
+> 3. Concise pipeline syntax.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [`$project` / `$addFields` Stages](project_addfields.md) — Reshaping alternatives.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$replaceRoot` and `$replaceWith` promote nested objects to root documents.
 - Discards all other fields in the parent document, including the original `_id`.
 - `$replaceWith` is a modern, simpler alias for `$replaceRoot: { newRoot: "..." }`.

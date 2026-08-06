@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Mechanic / JavaScript Operator**
+
+**TypeScript Type Operator** (Property Existence Type Guard): The `in` operator checks whether a specific property exists on an object, narrowing union types based on property presence.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Runtime (Analyzed at Compile-Time)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 You have a union of two simple Interfaces:
@@ -52,7 +53,7 @@ function move(animal: Bird | Fish) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The `in` operator with Optional Properties
 
@@ -109,72 +110,122 @@ function process(val: unknown) {
 }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Duck Typing
+### Exercise 1: Narrowing Object Unions with the `in` Operator
 
-**Problem:** TypeScript uses "Structural Typing" (Duck Typing). If an object walks like a duck and quacks like a duck, it is a duck. How does the `in` operator perfectly align with this philosophy?
+**Scenario:**
+Differentiate between an `AdminUser` (has `permissions: string[]`) and a `StandardUser` (has `email: string`) using `in`.
 
-**Expected output:**
+**Requirements:**
+1. Use `"permissions" in user` condition.
+
 > [!check]- Answer
-> ```text
-> The `in` operator checks the *structure* of an object at runtime. 
-> It doesn't ask "Were you created from the Duck class?" (which is what `instanceof` does). 
-> It simply asks "Do you have a 'quack' property?" (`"quack" in animal`). 
-> Because TS is structurally typed, proving the property exists is enough proof to narrow the type!
-> ```
-> - Does `in` check the prototype, or just the keys?
-
----
-
-
-
-### Exercise 2: Narrowing Interfaces with `in` Operator
-
-**Problem:** Narrow union `Fish { swim(): void } | Bird { fly(): void }` using `"swim" in animal`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Fish narrowed via swim in animal
-> ```
+>
+> #### Implementation
+>
 > ```typescript
-> type Fish = { swim: () => void };
-> type Bird = { fly: () => void };
-> function move(animal: Fish | Bird) {
->   if ("swim" in animal) animal.swim();
->   else animal.fly();
+> interface AdminUser {
+>   id: string;
+>   permissions: string[];
 > }
-> console.log("Fish narrowed via swim in animal");
-> ```
+
+interface StandardUser {
+  id: string;
+  email: string;
+}
+
+type User = AdminUser | StandardUser;
+
+function processUser(user: User) {
+  if ("permissions" in user) {
+    console.log("Admin permissions:", user.permissions.join(", "));
+  } else {
+    console.log("Standard user email:", user.email);
+  }
+}
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** `"prop" in obj` checks property existence to narrow union member types.
+> 1. `"property" in object` checks if a property exists on an object or its prototype chain.
+> 2. TypeScript automatically narrows `user` to `AdminUser` inside the `if` block.
+> 3. Effective for narrowing object unions that do not share a explicit discriminant tag.
 
 ---
 
-### Exercise 3: Optional Property Narrowing with `in`
+### Exercise 2: Checking Optional Property Existence with `in`
 
-**Problem:** Demonstrate `in` narrowing optional property `"admin" in user`.
+**Scenario:**
+Check for the presence of optional property `metadata` on a configuration object.
 
-**Expected output:**
+**Requirements:**
+1. Narrow optional property using `"metadata" in config`.
+
 > [!check]- Answer
-> ```text
-> Property check narrows optional field presence
-> ```
-> ```typescript
-> console.log("Property check narrows optional field presence");
-> ```
 >
-> **Explanation:** `in` checks confirm property presence regardless of whether property value is optional.
+> #### Implementation
+>
+> ```typescript
+> interface Config {
+>   title: string;
+>   metadata?: { author: string };
+> }
 
-## 7. Related Terms
+function logAuthor(config: Config) {
+  if ("metadata" in config && config.metadata) {
+    console.log("Author:", config.metadata.author);
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `"metadata" in config` verifies that the property key exists on the target object.
+> 2. Combined with truthiness checks, it safely narrows optional properties.
+> 3. Prevents property access errors on un-initialized optional keys.
+
+---
+
+### Exercise 3: Auditing Prototype Property Checks with `in`
+
+**Scenario:**
+Explain why `"toString" in obj` evaluates to `true` for all JavaScript objects due to prototype inheritance.
+
+**Requirements:**
+1. Detail prototype chain property inspection behavior of `in`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const obj = {};
+
+// Evaluates to true because toString exists on Object.prototype!
+if ("toString" in obj) {
+  console.log("toString exists!");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. The `in` operator checks both instance properties AND inherited prototype properties.
+> 2. Checking for common prototype methods (`toString`, `valueOf`) does not narrow custom domain object types effectively.
+> 3. Use `in` strictly with custom property names unique to target interface variants.
+
+---
+
+
+
+## 6. Related Terms
 - [`typeof` & `instanceof` Guards](typeof_instanceof.md) — The alternative guards for primitives and classes.
 - [Discriminated Unions](discriminated_unions.md) — A more powerful pattern that often replaces the `in` operator.
 - [Custom Type Guards (`is`)](custom_type_guards.md) — Related concept: Custom Type Guards (`is`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **`in` operator** (`"key" in object`) is used to narrow Object Unions based on whether a specific property exists.
 - It is the primary way to narrow between different `interface` or `type` alias objects, because `instanceof` cannot be used on interfaces.
 - It works perfectly with TypeScript's Structural (Duck) Typing system.

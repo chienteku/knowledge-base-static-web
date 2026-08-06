@@ -16,20 +16,15 @@
 
 ## 2. Term Category
 
-**Trait / Abstraction / Conversion**: `Borrow` (`std::borrow::Borrow<Borrowed>`) and `BorrowMut` (`std::borrow::BorrowMut<Borrowed>`) are reference borrowing traits in Rust. While superficially similar to `AsRef`, `Borrow` carries a mandatory **semantic invariant contract**: an implementation `impl Borrow<B> for A` guarantees that the borrowed form `B` produces the exact same `Hash`, `Eq`, and `Ord` results as the owned form `A`. This property allows associative collections like `HashMap<K, V>` to look up entries using a borrowed key `&Q` (e.g. searching a `HashMap<String, V>` using a string slice `&str`) without allocating a new owned key.
+
+
+**Rust Standard Traits (borrowed reference abstraction traits)**: `Borrow` (`std::borrow::Borrow<Borrowed>`) and `BorrowMut` (`std::borrow::BorrowMut<Borrowed>`) are reference borrowing traits in Rust. While superficially similar to `AsRef`, `Borrow` carries a mandatory **semantic invariant contract**: an implementation `impl Borrow<B> for A` guarantees that the borrowed form `B` produces the exact same `Hash`, `Eq`, and `Ord` results as the owned form `A`. This property allows associative collections like `HashMap<K, V>` to look up entries using a borrowed key `&Q` (e.g. searching a `HashMap<String, V>` using a string slice `&str`) without allocating a new owned key.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: `Borrow` and `BorrowMut` are available across all Rust targets (`std`, `no_std`, WASM, embedded). Every type `T` automatically implements `Borrow<T>` via a standard library blanket implementation (`impl<T> Borrow<T> for T`). Key implementations include:
-- `String` implements `Borrow<str>`.
-- `Vec<T>` implements `Borrow<[T]>`.
-- `PathBuf` implements `Borrow<Path>`.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -141,7 +136,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Violating the `Hash`/`Eq` Invariant in Custom `Borrow` Implementations
 
@@ -188,14 +183,17 @@ impl Borrow<str> for UserKey {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Zero-Allocation Threat Signature Lookup in Network Packets (`Borrow<[u8]>`)
 
-**Problem:** In an embedded network firewall, incoming network packets are stored in owned heap-allocated `PacketBuffer` structures (`struct PacketBuffer { payload: Vec<u8> }`). To detect malicious traffic in real time, known threat signatures are maintained inside a `HashSet<PacketBuffer>`. Searching the hash set using raw borrowed byte slices (`&[u8]`) must occur with zero heap allocation on the hot path.
+**Scenario:** In an embedded network firewall, incoming network packets are stored in owned heap-allocated `PacketBuffer` structures (`struct PacketBuffer { payload: Vec<u8> }`). To detect malicious traffic in real time, known threat signatures are maintained inside a `HashSet<PacketBuffer>`. Searching the hash set using raw borrowed byte slices (`&[u8]`) must occur with zero heap allocation on the hot path.
 Implement `Hash`, `PartialEq`, `Eq`, and `Borrow<[u8]>` for `PacketBuffer` such that `HashSet::contains` can accept raw `&[u8]` query slices. Include complete unit tests with assertions (`assert!`, `assert_eq!`) proving lookup correctness and demonstrating hash equality between `PacketBuffer` and `&[u8]`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::borrow::Borrow;
 > use std::collections::HashSet;
@@ -270,7 +268,8 @@ Implement `Hash`, `PartialEq`, `Eq`, and `Borrow<[u8]>` for `PacketBuffer` such 
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Trait Contract Invariant:** `HashSet<K>::contains<Q>` requires `K: Borrow<Q>` along with `Q: Hash + Eq`. To satisfy this contract safely, `PacketBuffer` delegates both `Hash` and `PartialEq` to `self.payload`.
 > 2. **Identical Hash Output:** `PacketBuffer` hashing calls `self.payload.hash(state)`, which executes standard slice hashing for `[u8]`. As proven by `compute_hash(&mal_packet) == compute_hash(raw_query_slice)`, both owned and borrowed forms yield identical bucket hashes in `DefaultHasher`.
 > 3. **Zero Allocation:** When calling `signature_db.contains(raw_query_slice)`, Rust passes `&[u8]` directly without needing to instantiate a temporary `PacketBuffer` or allocate memory on the heap.
@@ -279,10 +278,13 @@ Implement `Hash`, `PartialEq`, `Eq`, and `Borrow<[u8]>` for `PacketBuffer` such 
 
 ### Exercise 2: Strict `Hash` and `Eq` Equivalence Verification for Case-Normalized Keys (`Borrow<str>`)
 
-**Problem:** An API gateway normalizes header routing keys by storing strings in uppercase inside `struct CanonicalKey(String)`. To allow routing lookups in a `HashMap<CanonicalKey, String>` using standard string slices (`&str`), `CanonicalKey` implements `Borrow<str>`.
+**Scenario:** An API gateway normalizes header routing keys by storing strings in uppercase inside `struct CanonicalKey(String)`. To allow routing lookups in a `HashMap<CanonicalKey, String>` using standard string slices (`&str`), `CanonicalKey` implements `Borrow<str>`.
 Implement `CanonicalKey`, implement `Borrow<str>`, and write a generic lookup function `is_authorized<Q>(map: &HashMap<CanonicalKey, String>, key: &Q) -> bool`. Write unit tests with assertions validating that `hash(&key)` and `hash(key.borrow())` yield identical hash values, demonstrating strict compliance with the mandatory `Borrow` semantic invariant contract.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::borrow::Borrow;
 > use std::collections::HashMap;
@@ -361,7 +363,8 @@ Implement `CanonicalKey`, implement `Borrow<str>`, and write a generic lookup fu
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Why `Borrow<str>` requires Hash Equivalence:** `CanonicalKey` stores `"ADMIN_TOKEN"`. Its `Borrow<str>` implementation returns `&self.0` (`"ADMIN_TOKEN"`). Because `str` hashes its underlying bytes, `CanonicalKey` and `"ADMIN_TOKEN"` produce identical hashes ($owner\_hash == borrowed\_hash$).
 > 2. **Generic Query Flexibility:** `is_authorized<Q>` uses `CanonicalKey: Borrow<Q>` with bound `Q: Hash + Eq + ?Sized`. This allows callers to pass `&str` directly, matching `HashMap::contains_key` signature requirements.
 > 3. **The Trap of Invariant Breaking:** If `CanonicalKey` had stored `"ADMIN_TOKEN"` but tried to implement `Borrow<str>` by returning a lower-case slice created on-the-fly, it would violate Rust's borrow contract (returning a reference to a local temporary is impossible anyway) and break `HashMap` bucket indexing.
@@ -370,10 +373,13 @@ Implement `CanonicalKey`, implement `Borrow<str>`, and write a generic lookup fu
 
 ### Exercise 3: In-Place Embedded Sensor Payload Sanitization via `BorrowMut<[u8]>`
 
-**Problem:** In an embedded `no_std` telemetry driver, incoming sensor frames are buffered inside `struct SensorFrame { buffer: [u8; 32], len: usize }`. Encryption functions and checksum calculators must operate on active payload bytes (`&buffer[..len]`) without transferring ownership or reallocating memory.
+**Scenario:** In an embedded `no_std` telemetry driver, incoming sensor frames are buffered inside `struct SensorFrame { buffer: [u8; 32], len: usize }`. Encryption functions and checksum calculators must operate on active payload bytes (`&buffer[..len]`) without transferring ownership or reallocating memory.
 Implement `Borrow<[u8]>` and `BorrowMut<[u8]>` for `SensorFrame`. Write generic functions `sanitize_payload<B: BorrowMut<[u8]>>(buf: &mut B, xor_mask: u8)` and `calculate_checksum<B: Borrow<[u8]>>(buf: &B) -> u8`. Write unit tests with assertions verifying in-place byte mutation and checksum computation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::borrow::{Borrow, BorrowMut};
 > 
@@ -454,97 +460,16 @@ Implement `Borrow<[u8]>` and `BorrowMut<[u8]>` for `SensorFrame`. Write generic 
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`BorrowMut` Mechanics:** `BorrowMut<[u8]>` defines `fn borrow_mut(&mut self) -> &mut [u8]`. It allows generic algorithms to obtain a exclusive mutable slice reference to underlying data without needing to know the outer container type (`SensorFrame`).
 > 2. **Bounds Precision:** Both `borrow()` and `borrow_mut()` bound the slice to `&buffer[..len]`, ensuring unused buffer bytes beyond `len` are never exposed to calculations or mutations.
 > 3. **`no_std` Suitability:** This pattern is extensively used in embedded microcontrollers where dynamic allocations (`Vec`) are forbidden, but generic byte processing routines are needed for hardware buffers.
 > 
+
 ---
 
-### Exercise 4: Zero-Copy Serialization Views for Contiguous Frame Buffers (`Borrow<[u8]>` / `BorrowMut<[u8]>`)
-
-**Problem:** A high-frequency telemetry system formats binary messages with a 4-byte big-endian header followed by payload bytes inside `struct TelemetryRecord { raw_data: [u8; 64], active_len: usize }`. Hardware network cards and CRC validation units require viewing the combined header and payload as a single contiguous slice `&[u8]` or `&mut [u8]`.
-Implement `Borrow<[u8]>` and `BorrowMut<[u8]>` for `TelemetryRecord`. Implement `update_header_flag<B: BorrowMut<[u8]>>(record: &mut B, flag_bit: u8)` to mutate header flags in-place. Write unit tests with assertions verifying that borrowed slice views match total message wire length and update header bytes accurately.
-
-> [!check]- Answer
-> ```rust
-> use std::borrow::{Borrow, BorrowMut};
-> 
-> #[derive(Debug, Clone)]
-> pub struct TelemetryRecord {
->     raw_data: [u8; 64],
->     active_len: usize, // Header (4 bytes) + Payload length
-> }
-> 
-> impl TelemetryRecord {
->     pub fn new(msg_id: u32, payload: &[u8]) -> Self {
->         assert!(payload.len() <= 60, "Payload exceeds max space of 60 bytes");
->         let mut raw_data = [0u8; 64];
->         // Write 4-byte message ID header
->         raw_data[0..4].copy_from_slice(&msg_id.to_be_bytes());
->         // Write payload bytes
->         raw_data[4..4 + payload.len()].copy_from_slice(payload);
->         
->         Self {
->             raw_data,
->             active_len: 4 + payload.len(),
->         }
->     }
-> }
-> 
-> impl Borrow<[u8]> for TelemetryRecord {
->     fn borrow(&self) -> &[u8] {
->         &self.raw_data[..self.active_len]
->     }
-> }
-> 
-> impl BorrowMut<[u8]> for TelemetryRecord {
->     fn borrow_mut(&mut self) -> &mut [u8] {
->         &mut self.raw_data[..self.active_len]
->     }
-> }
-> 
-> // Modifies header flags in-place using BorrowMut
-> pub fn update_header_flag<B: BorrowMut<[u8]>>(record: &mut B, flag_bit: u8) {
->     let wire_bytes: &mut [u8] = record.borrow_mut();
->     if wire_bytes.len() >= 4 {
->         wire_bytes[3] |= flag_bit; // Apply bitwise OR to header flag byte
->     }
-> }
-> 
-> #[cfg(test)]
-> mod tests {
->     use super::*;
-> 
->     #[test]
->     fn test_telemetry_record_wire_views() {
->         let msg_id: u32 = 0x01020304;
->         let payload = &[0xAA, 0xBB];
->         let mut record = TelemetryRecord::new(msg_id, payload);
-> 
->         // 1. Assert total wire length equals 4 header bytes + 2 payload bytes
->         let borrowed_wire: &[u8] = record.borrow();
->         assert_eq!(borrowed_wire.len(), 6);
->         assert_eq!(borrowed_wire, &[0x01, 0x02, 0x03, 0x04, 0xAA, 0xBB]);
-> 
->         // 2. Update header flag in-place via BorrowMut
->         update_header_flag(&mut record, 0x80);
-> 
->         // 3. Verify modified wire slice
->         let updated_wire: &[u8] = record.borrow();
->         assert_eq!(updated_wire, &[0x01, 0x02, 0x03, 0x84, 0xAA, 0xBB]);
->     }
-> }
-> ```
->
-> **Explanation:**
-> 1. **Contiguous Layout Advantage:** Because `TelemetryRecord` stores header and payload in a single contiguous `[u8; 64]` buffer, `borrow()` and `borrow_mut()` can return direct slice references `&[u8]` spanning the full active wire message ($4 + \text{payload\_len}$).
-> 2. **Generic Wire Protocol Processing:** Functions like `update_header_flag` interact purely with `B: BorrowMut<[u8]>`. This decouples protocol modification algorithms from specific telemetry struct memory layouts, making the code reusable across different message container types.
-> 3. **Zero Copy Guarantee:** No dynamic memory allocation or byte copying takes place when creating or mutating the borrowed views.
-> 
----
-
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`AsRef` / `AsMut`](as_ref_as_mut.md) — Reference conversion traits without `Hash`/`Eq` equivalence requirements.
@@ -555,7 +480,7 @@ Implement `Borrow<[u8]>` and `BorrowMut<[u8]>` for `TelemetryRecord`. Implement 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `Borrow<Borrowed>` (`fn borrow(&self) -> &Borrowed`) and `BorrowMut` perform reference borrowing conversions.
 - Mandatory Semantic Contract: `Borrow` requires that the owned type and borrowed type produce **identical `Hash`, `Eq`, and `Ord` results**.

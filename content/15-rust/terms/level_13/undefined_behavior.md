@@ -14,17 +14,15 @@
 
 ## 2. Term Category
 
-**Core Concept / Memory / Unsafe**: Undefined Behavior (UB) is a fundamental concept in systems programming languages like Rust, C, and C++. In Rust, the compiler optimizes code under the strict assumption that UB *can never occur*. If an `unsafe` block executes code that triggers UB, the compiler's optimizations become invalid, leading to unpredictable program crashes, silent data corruption, time-travel compiler optimization bugs, or security vulnerabilities.
+
+
+**Rust Safety Boundary (compiler invariants & unsound code execution)**: Undefined Behavior (UB) is a fundamental concept in systems programming languages like Rust, C, and C++. In Rust, the compiler optimizes code under the strict assumption that UB *can never occur*. If an `unsafe` block executes code that triggers UB, the compiler's optimizations become invalid, leading to unpredictable program crashes, silent data corruption, time-travel compiler optimization bugs, or security vulnerabilities.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: The rules defining Undefined Behavior apply universally to all compiled Rust programs regardless of environment (`std`, `no_std`, WASM, embedded microcontrollers, operating system kernels).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -118,7 +116,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing UB Always Causes an Immediate Crash
 
@@ -194,11 +192,11 @@ let mut x: MaybeUninit<String> = MaybeUninit::uninitialized();
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Sound Safe Abstraction for Uninitialized Stack Buffers (`MaybeUninit`)
 
-**Problem:** In embedded network drivers and high-throughput packet processing engines, pre-allocating or zero-initializing large I/O buffers (e.g., 1024-byte packet RX buffers) before passing them to DMA (Direct Memory Access) hardware incurs unnecessary runtime performance overhead. However, creating uninitialized memory in Rust can easily lead to instant Undefined Behavior (UB) if uninitialized bytes are read as initialized types or if raw references are formed prematurely.
+**Scenario:** In embedded network drivers and high-throughput packet processing engines, pre-allocating or zero-initializing large I/O buffers (e.g., 1024-byte packet RX buffers) before passing them to DMA (Direct Memory Access) hardware incurs unnecessary runtime performance overhead. However, creating uninitialized memory in Rust can easily lead to instant Undefined Behavior (UB) if uninitialized bytes are read as initialized types or if raw references are formed prematurely.
 
 Implement a type-safe `#![no_std]` stack buffer structure `UninitPacketBuffer<const CAP: usize>` using `core::mem::MaybeUninit<u8>`. Provide methods:
 1. `new() -> Self` to construct an uninitialized buffer safely without UB.
@@ -209,6 +207,9 @@ Implement a type-safe `#![no_std]` stack buffer structure `UninitPacketBuffer<co
 Write unit tests with `assert_eq!` and `assert!` verifying buffer creation, partial writes, bounds validation, and safe slice retrieval without UB.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -339,7 +340,8 @@ Write unit tests with `assert_eq!` and `assert!` verifying buffer creation, part
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Avoiding UB from Uninitialized Bit Patterns**: In Rust, creating a raw byte buffer via `std::mem::uninitialized()` or transmute of uninitialized bytes triggers instant UB because compiler optimizations rely on byte initialization invariants. Using `MaybeUninit<T>` explicitly signals to LLVM that the underlying byte range is uninitialized and must not be assumed valid until `.assume_init()` or raw slice conversion.
 > 2. **Layout Equivalence (`MaybeUninit<T>` & `T`)**: `MaybeUninit<T>` is guaranteed by the compiler layout specification to have identical size, alignment, and ABI as `T`. This permits sound raw pointer casting between `*const MaybeUninit<u8>` and `*const u8`.
 > 3. **Safety Contracts (`core::slice::from_raw_parts`)**: Converting raw pointers to safe slice references (`&[u8]`) requires strictly enforcing three preconditions: non-null aligned pointer, lifetime validity, and actual byte initialization across `0..len`. Bound checks (`len > CAP`) prevent dangling pointer UB.
@@ -348,7 +350,7 @@ Write unit tests with `assert_eq!` and `assert!` verifying buffer creation, part
 
 ### Exercise 2: Sound Non-Overlapping In-Place Slice Mutation (Eliminating Aliasing UB)
 
-**Problem:** In real-time signal processing and cryptographic buffer transformation pipelines, developers often perform in-place byte XOR or audio gain scaling using raw pointers for speed. A naive implementation that takes two overlapping raw mutable pointers and constructs simultaneous `&mut [u8]` slices triggers severe **Aliasing Undefined Behavior (UB)** under LLVM's `noalias` optimization rules.
+**Scenario:** In real-time signal processing and cryptographic buffer transformation pipelines, developers often perform in-place byte XOR or audio gain scaling using raw pointers for speed. A naive implementation that takes two overlapping raw mutable pointers and constructs simultaneous `&mut [u8]` slices triggers severe **Aliasing Undefined Behavior (UB)** under LLVM's `noalias` optimization rules.
 
 Implement a sound, UB-free `#![no_std]` function `sound_in_place_xor(data: &mut [u8], key: &[u8])` and a raw pointer slice splitter `safe_split_mut<T>(slice: &mut [T], mid: usize) -> Option<(&mut [T], &mut [T])>`:
 1. `sound_in_place_xor` must mutate `data` in-place by XORing bytes with `key` cyclically using raw pointer arithmetic or safe iterators without creating aliased mutable references.
@@ -357,6 +359,9 @@ Implement a sound, UB-free `#![no_std]` function `sound_in_place_xor(data: &mut 
 Write comprehensive unit tests with `assert_eq!` verifying decryption round-trips, slice splitting, disjoint mutability, and edge cases.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -447,7 +452,8 @@ Write comprehensive unit tests with `assert_eq!` verifying decryption round-trip
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Rust's Aliasing Rule (Aliasing XOR Mutability)**: LLVM optimizes Rust code under the assumption that `&mut T` is exclusive—no other pointer (`&T` or `&mut T`) accesses the exact same memory location concurrently. Creating two overlapping `&mut` slices referencing the same byte causes instantaneous Aliasing UB.
 > 2. **Disjoint Memory Regions**: `safe_split_mut` proves how `unsafe` code can build sound safe abstractions. Because `mid <= len`, slice 1 (`0..mid`) and slice 2 (`mid..len`) never overlap in memory. Passing these disjoint regions to `from_raw_parts_mut` guarantees `&mut` uniqueness invariants.
 > 3. **Pointer Arithmetic via `.add(n)`**: `ptr.add(n)` performs pointer offset arithmetic scaled by `core::mem::size_of::<T>()`. Ensuring `mid <= len` guarantees the offset pointer does not exceed allocation boundaries.
@@ -456,7 +462,7 @@ Write comprehensive unit tests with `assert_eq!` verifying decryption round-trip
 
 ### Exercise 3: Preventing Volatile Memory & Interrupt Data Race UB (`UnsafeCell` & Volatile I/O)
 
-**Problem:** In bare-metal microcontrollers, Hardware I/O Registers (MMIO) and interrupt status flags are updated asynchronously by external hardware peripheral hardware (e.g., UART RX interrupt or Timer hardware). Standard Rust compiler optimizations assume that memory locations do not spontaneously change value between reads, leading to LLVM optimizing out read loops (e.g., collapsing `while reg.read() == 0 {}` into an infinite loop or deleting repeated reads). Furthermore, accessing shared memory from an Interrupt Service Routine (ISR) without volatile or atomic abstractions causes severe **Data Race UB**.
+**Scenario:** In bare-metal microcontrollers, Hardware I/O Registers (MMIO) and interrupt status flags are updated asynchronously by external hardware peripheral hardware (e.g., UART RX interrupt or Timer hardware). Standard Rust compiler optimizations assume that memory locations do not spontaneously change value between reads, leading to LLVM optimizing out read loops (e.g., collapsing `while reg.read() == 0 {}` into an infinite loop or deleting repeated reads). Furthermore, accessing shared memory from an Interrupt Service Routine (ISR) without volatile or atomic abstractions causes severe **Data Race UB**.
 
 Implement a `#![no_std]` hardware volatile register wrapper `VolatileRegister<T: Copy>`:
 1. Use `core::cell::UnsafeCell<T>` as the underlying storage to allow interior mutability behind shared references (`&VolatileRegister<T>`).
@@ -468,6 +474,9 @@ Implement a `#![no_std]` hardware volatile register wrapper `VolatileRegister<T:
 Include unit tests with `assert_eq!` verifying interior mutability, volatile reads and writes, and bit manipulation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -574,14 +583,15 @@ Include unit tests with `assert_eq!` verifying interior mutability, volatile rea
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Preventing LLVM Volatile Optimization Deletions**: In Rust, ordinary dereferences (`*ptr`) allow LLVM to assume memory does not change unless written by the current thread. For memory-mapped hardware registers or ISR status flags, the CPU hardware or interrupt handler alters memory asynchronously. `core::ptr::read_volatile` and `write_volatile` force compiler backends to generate exact hardware memory read/write instructions on every access without eliding or reordering them.
 > 2. **`UnsafeCell<T>` for Sound Interior Mutability**: Mutating data behind a shared reference `&T` without `UnsafeCell` is instant UB in Rust. `UnsafeCell<T>` is the core primitive in Rust that tells LLVM "data within this memory location can mutate even through shared references."
 > 3. **Data Races vs Synchronization**: Data races occur when two threads/interrupts access the same memory concurrently where at least one is a non-atomic write. Wrapping hardware MMIO cells with `UnsafeCell` and volatile access guarantees memory safety for single-core microcontrollers or synchronized MMIO memory.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`unsafe` Block](unsafe_block.md) — The language scope where developers assume responsibility for preventing UB.
@@ -594,7 +604,7 @@ Include unit tests with `assert_eq!` verifying interior mutability, volatile rea
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Undefined Behavior (UB) occurs when code violates core language memory and execution rules inside `unsafe` blocks.
 - Common causes of UB include dereferencing null/dangling pointers, aliasing `&mut T`, data races, and creating invalid type bit patterns.

@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Data Type (optional field type wrapper)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Evaluated by the query parser during write transactions. Governs whether a missing key is flagged as a schema violation).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard SQL databases (PostgreSQL), all columns exist on every row:
@@ -88,7 +87,7 @@ CREATE member:bob SET
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Defining fields that users frequently skip (like 'avatar_url' or 'bio') as standard types without the 'option<T>' wrapper, blocking account creation
 
@@ -142,65 +141,92 @@ CREATE user SET bio = 123; // ❌ Type error: Expected option<string>, got numbe
 CREATE user SET bio = "Dev bio"; // Valid string or omit field for NONE
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Optional Type Identification
+### Exercise 1: Defining Optional Fields with `option<T>`
 
-**Problem:** You have a `products` table configured as `SCHEMAFULL` with this schema:
-```sql
-DEFINE FIELD title ON products TYPE string;
-DEFINE FIELD discount_code ON products TYPE option<string>;
-```
-State whether each query will **Succeed** or **Fail**, and explain why:
-1.  `CREATE products:01 SET title = "Shoes";`
-2.  `CREATE products:02 SET discount_code = "SALE10";`
+**Scenario:**
+A user profile schema requires a mandatory `username` string and an optional `middle_name` string (`option<string>`).
 
-**Expected output:**
+**Requirements:**
+1. Define table `user` as `SCHEMAFULL`.
+2. Define field `username` as `string`.
+3. Define field `middle_name` as `option<string>`.
+
 > [!check]- Answer
-> ```text
-> 1. Succeeds: The required `title` field is supplied, and the optional `discount_code` is omitted (evaluates to `NONE`).
-> 2. Fails: The required `title` field is missing, so the schema validator blocks the insert.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE FIELD username ON TABLE user TYPE string;
+> DEFINE FIELD middle_name ON TABLE user TYPE option<string>;
+> 
+> CREATE user:u1 SET username = "jdoe";
 > ```
-> - Check which fields are marked optional using the `option` keyword wrapper.
-> - Required fields must always be present in the query write payload.
+>
+> #### Technical Explanation
+>
+> 1. `option<T>` designates a field as optional, permitting `NONE` or `NULL` values.
+> 2. In `SCHEMAFULL` mode, non-option fields require explicit values during creation.
+> 3. Replaces SQL `NULLABLE` column designations.
+
+---
+
+### Exercise 2: Optional Record Link Pointers
+
+**Scenario:**
+Define an optional manager link pointer `option<record<user>>` on table `employee`.
+
+**Requirements:**
+1. Define field `manager` on table `employee` as `option<record<user>>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE employee SCHEMAFULL;
+> DEFINE FIELD manager ON TABLE employee TYPE option<record<user>>;
+> 
+> CREATE employee:e1 SET name = "CEO"; -- Manager is NONE
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `option<record<table>>` allows optional foreign record link pointers.
+> 2. Permits top-level entities (like a CEO) to omit manager pointers cleanly.
+> 3. Enables flexible relational modeling.
+
+---
+
+### Exercise 3: Querying Optional Fields with `NONE` Checks
+
+**Scenario:**
+Query employees who do not have an assigned manager (`manager = NONE`).
+
+**Requirements:**
+1. Write a `SELECT` query filtering `WHERE manager = NONE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT * FROM employee WHERE manager = NONE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `WHERE field = NONE` checks for omitted optional fields.
+> 2. Distinguishes missing optional fields from set values.
+> 3. Evaluates optional field presence in table scans.
 
 ---
 
 
 
-### Exercise 2: Optional Field Schema Definition
-
-**Problem:** Define optional field `middle_name` on `user` table as `option<string>`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD middle_name ON TABLE user TYPE option<string>;
-> ```
-> ```surrealql
-> DEFINE FIELD middle_name ON TABLE user TYPE option<string>;
-> ```
->
-> **Explanation:** `TYPE option<T>` marks fields as optional, accepting `NONE` or type `T`.
-
----
-
-### Exercise 3: Optional Record Link Field
-
-**Problem:** Define optional record link `referrer` on `user` table as `option<record<user>>`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD referrer ON TABLE user TYPE option<record<user>>;
-> ```
-> ```surrealql
-> DEFINE FIELD referrer ON TABLE user TYPE option<record<user>>;
-> ```
->
-> **Explanation:** `option<record<table>>` permits optional foreign record pointers.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`DEFINE FIELD`](define_field.md) — The field declaration context.
 - [`null` vs `NONE`](../level_02/null_none.md) — The absent data states.
@@ -208,7 +234,7 @@ State whether each query will **Succeed** or **Fail**, and explain why:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `option<T>` marks a field as optional in `SCHEMAFULL` tables.
 - Equivalent to setting a column as nullable in SQL.
 - Allows fields to be omitted from write payloads, evaluating to `NONE`.

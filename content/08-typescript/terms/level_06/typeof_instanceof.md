@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Mechanic / JavaScript Operators**
+
+**Type System Fundamental** (Primitive & Prototype Guard Operators): `typeof` and `instanceof` act as runtime type guards, narrowing primitive types and class prototype instances respectively.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Runtime (Analyzed at Compile-Time)**
-
----
-
-## 4. Explanation
 
 ### (1) The `typeof` Type Guard (For Primitives)
 In standard JavaScript, `typeof` returns a string representing the primitive type (`"string"`, `"number"`, `"boolean"`, `"function"`, `"object"`, `"undefined"`).
@@ -56,7 +57,7 @@ function handleEvent(event: MouseEvent | KeyboardEvent) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `typeof` for `null` or Arrays
 
@@ -68,6 +69,8 @@ function handleEvent(event: MouseEvent | KeyboardEvent) {
 - To check for Arrays, use `if (Array.isArray(data))` (TypeScript recognizes this as a Type Guard too!).
 - Only use `typeof` for strings, numbers, booleans, and functions.
 
+
+
 ### Mistake 2: Using `instanceof` for Interfaces
 
 **The mistake:** A developer writes `if (user instanceof UserInterface)`.
@@ -75,6 +78,8 @@ function handleEvent(event: MouseEvent | KeyboardEvent) {
 **Why it's wrong:** Interfaces are erased at compile-time! They do not exist in JavaScript. `instanceof` is a runtime JavaScript operator, so it can only check against actual Classes (`class User {}`) that survive compilation. You cannot use `instanceof` with an Interface or a Type Alias.
 
 ---
+
+
 
 
 
@@ -96,88 +101,113 @@ class UserClass { name!: string }
 if (x instanceof UserClass) { /* Works at runtime */ }
 ```
 
-### Mistake 4: Expecting `typeof null` to Return `"null"`
 
-**The mistake:** Writing `if (typeof val === "null")` expecting it to check for null values.
 
-**Why it's wrong:** In JavaScript, `typeof null === "object"` (legacy JS bug). Check `val === null` directly.
+## 5. Practice Exercises
 
-*Incorrect:*
-```typescript
-// if (typeof val === "null") {} // ❌ Never evaluates to true!
-```
+### Exercise 1: Primitive Narrowing with `typeof`
 
-*Fix:*
-```typescript
-if (val === null) { /* Correct null check */ }
-```
+**Scenario:**
+Write a function `doubleValue` taking `input: number | string | boolean` and processing each primitive using `typeof`.
 
-## 6. Practice Exercises
+**Requirements:**
+1. Use `typeof input === "number"`, `"string"`, and `"boolean"`.
 
-### Exercise 1: Array Type Guard
-
-**Problem:** You have a parameter `data: string | string[]`. How do you safely narrow it so you can call `.join(",")` if it's an array?
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> if (Array.isArray(data)) {
->   console.log(data.join(","));
-> } else {
->   console.log(data); // Narrowed to string
+> function doubleValue(input: number | string | boolean): string | number {
+>   if (typeof input === "number") {
+>     return input * 2;
+>   } else if (typeof input === "string") {
+>     return input.repeat(2);
+>   }
+>   return input ? "TRUE_TRUE" : "FALSE_FALSE";
 > }
 > ```
-> - Remember, `typeof data === "object"` is dangerous!
+
+> #### Technical Explanation
+>
+> 1. `typeof` expressions return standard JS type strings (`"number"`, `"string"`, `"boolean"`, `"symbol"`, `"bigint"`, `"function"`, `"object"`).
+> 2. TypeScript uses `typeof` conditions to narrow primitive union parameters inside `if` branches.
+> 3. Standard primitive type guard mechanism.
+
+---
+
+### Exercise 2: Class Prototype Instance Narrowing with `instanceof`
+
+**Scenario:**
+Differentiate between `Date` and `RegExp` objects passed as `input: Date | RegExp` using `instanceof`.
+
+**Requirements:**
+1. Use `input instanceof Date`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function processObject(input: Date | RegExp): string {
+>   if (input instanceof Date) {
+>     return input.toISOString(); // input narrowed to Date
+>   }
+>   return input.source; // input narrowed to RegExp
+> }
+> ```
+
+> #### Technical Explanation
+>
+> 1. `instanceof` checks if a constructor's `prototype` property appears in an object's prototype chain.
+> 2. Narrows union parameters to specific class constructor types (`Date`, `RegExp`, custom classes).
+> 3. Reliable mechanism for object prototype instance narrowing.
+
+---
+
+### Exercise 3: Auditing `typeof null === "object"` Edge Case
+
+**Scenario:**
+Explain why `typeof val === "object"` is insufficient for checking non-null objects due to JavaScript's legacy `typeof null === "object"` bug.
+
+**Requirements:**
+1. Demonstrate how `typeof null` causes runtime crashes if `null` is not checked.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function processObjectUnsafe(val: object | null) {
+>   // ❌ DANGEROUS: typeof null returns "object"!
+>   // if (typeof val === "object") {
+>   //   console.log(val.toString()); // Crashes if val is null!
+>   // }
+
+// ✅ SAFE (Include explicit null check):
+if (typeof val === "object" && val !== null) {
+  console.log(val.toString());
+}
+```
+
+> #### Technical Explanation
+>
+> 1. In JavaScript, `typeof null` evaluates to `"object"` due to a legacy 1995 implementation quirk.
+> 2. `typeof val === "object"` alone does NOT exclude `null`.
+> 3. Always pair `typeof val === "object"` with `val !== null` checks.
 
 ---
 
 
 
-### Exercise 2: Class Narrowing with `instanceof`
-
-**Problem:** Narrow `err: Error | CustomError` using `if (err instanceof CustomError)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Narrowed to CustomError instance
-> ```
-> ```typescript
-> class CustomError extends Error { code = 400; }
-> function handle(err: Error) {
->   if (err instanceof CustomError) console.log(err.code);
-> }
-> handle(new CustomError());
-> console.log("Narrowed to CustomError instance");
-> ```
->
-> **Explanation:** `instanceof` checks prototype chain references to narrow object class instances.
-
----
-
-### Exercise 3: Typeof Guard Values List
-
-**Problem:** List 6 primitive string return values of JS `typeof` operator (`"string"`, `"number"`, `"boolean"`, `"bigint"`, `"symbol"`, `"undefined"`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> string, number, boolean, bigint, symbol, undefined
-> ```
-> ```typescript
-> console.log("string, number, boolean, bigint, symbol, undefined");
-> ```
->
-> **Explanation:** `typeof` returns standard primitive type name strings.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Type Narrowing](type_narrowing.md) — The goal of using these operators.
 - [Classes Overview](../level_10/classes.md) — The structures `instanceof` works with.
 - [`in` Operator Narrowing](in_operator.md) — Related concept: `in` Operator Narrowing.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`typeof`** is used to narrow Primitive types (`string`, `number`, `boolean`, `function`).
 - **`instanceof`** is used to narrow Class instances (`Date`, `MouseEvent`, custom Classes).
 - Beware of `typeof object` — it matches arrays, objects, and `null`.

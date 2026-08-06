@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Optimization**
+
+**Performance & Optimization** (Native HTML Image Comparison): Native `<img>` tags render standard browser image elements without automatic WebP conversion, responsive resizing, or layout shift prevention.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Parsed by the server to construct HTML tags and processed by the browser to fetch and render image data).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Images account for a large portion of a web page's total bundle size. While the native HTML `<img>` tag makes rendering images easy, using it in production without optimization causes significant performance issues:
@@ -57,7 +58,7 @@ Next.js replaces the standard `<img>` tag with the `<Image>` component from `nex
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving off the `alt` attribute or providing a generic placeholder name
 
@@ -115,75 +116,115 @@ import Image from 'next/image';
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Native Lazy Loading
+### Exercise 1: Refactoring Native `<img>` to `<Image>`
 
-**Problem:** Complete the HTML code below to render an image that pre-reserves an 800x600 space, decodes asynchronously, and defers loading until scrolled close to the viewport:
+**Scenario:**
+Refactor an unoptimized native `<img src="/banner.jpg" />` element into Next.js `<Image>`.
 
-```html
-<!-- Solution: -->
-<img 
-  src="/assets/gallery-pic.jpg" 
-  alt="Scenic mountain view with sunset"
-  width="800"
-  height="600"
-  loading="lazy"
-  decoding="async"
-/>
+**Requirements:**
+1. Import `Image` from `next/image`.
+2. Specify width, height, and alt attributes.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // ❌ UNOPTIMIZED NATIVE HTML:
+> // <img src="/banner.jpg" alt="Banner" width="1200" height="400" />
+
+// ✅ OPTIMIZED NEXT.JS IMAGE:
+import Image from "next/image";
+
+export default function Banner() {
+  return (
+    <Image
+      src="/banner.jpg"
+      alt="Hero Banner"
+      width={1200}
+      height={400}
+      priority
+      className="w-full h-auto"
+    />
+  );
+}
 ```
 
-> [!check]- Answer
-> - Use the `loading` and `decoding` attributes to optimize image loading natively.
+> #### Technical Explanation
+>
+> 1. Native `<img>` tags load original uncompressed image files, increasing bandwidth and page load times.
+> 2. Next.js `<Image>` converts images to modern WebP/AVIF formats on-the-fly and generates responsive srcsets.
+> 3. Prevents Cumulative Layout Shift (CLS) web vital penalties.
 
 ---
 
-### Exercise 2: Native img vs Next.js Image Comparison
+### Exercise 2: Comparative Performance Audit (Native vs `<Image>`)
 
-**Problem:** List 3 automated performance benefits provided by `next/image` over native `<img>`.
+**Scenario:**
+Formulate a comparative performance matrix contrasting native `<img>` against `<Image>`.
 
-**Expected output:**
+**Requirements:**
+1. Contrast format compression, CLS, LCP preloading, and lazy loading.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. Automatic WebP/AVIF format conversion
-> 2. Automatic resizing for different screen resolutions (responsive srcset)
-> 3. Layout shift protection via mandatory width/height or fill layout
+> Image Component Performance Matrix:
+> - Native <img>: No auto-format conversion (raw PNG/JPEG), manual srcset, causes CLS if dimensions are missing, no automatic blur placeholders.
+> - Next.js <Image>: Automatic WebP/AVIF conversion, automatic viewport srcset, zero CLS via aspect ratio reservation, automatic blur placeholders.
 > ```
-> - Automatic WebP/AVIF format conversion.
-> - Responsive `srcset` image generation per device size.
-> - Prevention of Cumulative Layout Shift (CLS).
-> 
-> ```text
-> WebP/AVIF Compression + Responsive Resizing + CLS Prevention
-> ```
+
+> #### Technical Explanation
+>
+> 1. Native images impact Web Core Vitals scores (LCP, CLS).
+> 2. `<Image>` optimizes image delivery automatically at the server/CDN edge.
+> 3. Mandatory performance optimization standard.
 
 ---
 
-### Exercise 3: Native img Migration Flag
+### Exercise 3: Auditing Exceptions for Native `<img>` Usage
 
-**Problem:** Which ESLint rule flags usage of native `<img>` tags in Next.js projects?
+**Scenario:**
+Identify valid edge-case scenarios where native `<img>` elements are preferred over `<Image>` (e.g. SVG icons or external user avatars).
 
-**Expected output:**
+**Requirements:**
+1. Use native `<img>` for raw inline SVG vectors.
+
 > [!check]- Answer
-> ```text
-> @next/next/no-img-element
+>
+> #### Implementation
+>
+> ```tsx
+> export default function SvgIcon() {
+>   // Vector SVGs do NOT benefit from raster WebP compression or image optimization servers
+>   return <img src="/icon.svg" alt="Vector Icon" width="24" height="24" />;
+> }
 > ```
-> - `@next/next/no-img-element` warns against using native `<img>` tags.
-> 
-> ```text
-> Warning: Do not use <img>. Use Image from 'next/image' instead.
-> ```
+
+> #### Technical Explanation
+>
+> 1. SVG images are XML vector graphics that cannot be compressed into WebP/AVIF raster formats.
+> 2. Passing SVGs to image optimization endpoints adds unnecessary server CPU processing.
+> 3. Native `<img>` is acceptable for small SVG vectors or micro-data URI images.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — The performance metrics that image loading directly impacts.
 - [`<Image>` Component](next_image.md) — Next.js's optimized wrapper.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The native HTML `<img>` tag embeds images on web pages.
 - Omitting image dimensions causes Cumulative Layout Shift (CLS) and hurts SEO rankings.
 - Use `loading="lazy"` to instruct the browser to defer fetching offscreen images.

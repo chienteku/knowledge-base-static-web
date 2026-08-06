@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Type System Fundamental**
+
+**TypeScript Core Syntax** (Interface & Namespace Merging): Declaration merging automatically combines multiple separate interface declarations sharing the same identifier into a single unified type.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-time** (Merging is a compile-time concept. During build, definitions are combined, compiling down to standard, plain JS objects).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, it is common practice to extend objects, modularize configurations across files, or mutate global namespaces (like adding a custom method to `Array.prototype` or appending properties to the global `window` object).
@@ -81,7 +82,7 @@ declare global {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to overwrite properties with different types
 
@@ -149,83 +150,116 @@ interface A { getId(): string; }
 interface A { getId(): number; } // Creates method overloads
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Extending Window
+### Exercise 1: Extending Global Third-Party Library Interfaces
 
-**Problem:** You are adding a custom Google Analytics tracker tracking object (`analytics`) to the browser's global `window` object. Complete the declaration block using interface merging to satisfy the compiler.
+**Scenario:**
+Use interface declaration merging to attach a custom `user` property to Express or Request interfaces globally.
 
-```typescript
-// Complete this block:
-interface Window {
-  analytics: { logEvent: (name: string) => void };
-}
+**Requirements:**
+1. Declare interface matching module interface name.
 
-// Target execution:
-window.analytics.logEvent('login_clicked');
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> The compiler compiles window.analytics.logEvent without errors.
-> ```
-> - The global `window` object is typed by the built-in `Window` interface.
-> - Redeclaring the `Window` interface adds properties to the existing global window definition.
-
----
-
-
-
-### Exercise 2: Augmenting Global Window Interface
-
-**Problem:** Use declaration merging to add `customProp: string` to global `Window` interface.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Global Window interface merged
-> ```
+>
+> #### Implementation
+>
 > ```typescript
+> // Augmenting global express Request interface:
 > declare global {
->   interface Window {
->     customProp: string;
+>   namespace Express {
+>     interface Request {
+>       currentUser?: { id: string; role: string };
+>     }
 >   }
 > }
-> console.log("Global Window interface merged");
-> ```
+
+export {};
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** Declaration merging allows extending existing global module and library interfaces.
+> 1. Interface declaration merging automatically merges multiple declarations with identical names in the same scope.
+> 2. Allows third-party library interfaces (`Express.Request`) to be augmented with custom domain properties (`currentUser`).
+> 3. Standard pattern for attaching session or auth data to HTTP request objects.
 
 ---
 
-### Exercise 3: Namespace and Function Merging
+### Exercise 2: Merging Multi-File Interface Declarations
 
-**Problem:** Merge a function `function log() {}` with a namespace `namespace log { pub const label = "LOGGER"; }`.
+**Scenario:**
+Demonstrate how two separate `Window` interface definitions merge into a unified shape.
 
-**Expected output:**
+**Requirements:**
+1. Declare `interface Window` twice with different properties.
+
 > [!check]- Answer
-> ```text
-> LOGGER
-> ```
-> ```typescript
-> function log() {}
-> namespace log {
->   export const label = "LOGGER";
-> }
-> console.log(log.label);
-> ```
 >
-> **Explanation:** Declaration merging attaches static properties from namespaces onto functions or classes.
+> #### Implementation
+>
+> ```typescript
+> interface Window {
+>   analytics: { track: (event: string) => void };
+> }
 
-## 7. Related Terms
+interface Window {
+  appVersion: string;
+}
+
+// Window now contains BOTH analytics and appVersion:
+window.analytics.track("page_view");
+console.log(window.appVersion);
+```
+
+> #### Technical Explanation
+>
+> 1. TypeScript merges interface fields across multiple declarations seamlessly.
+> 2. Does NOT apply to type aliases (`type`) which throw duplicate identifier errors.
+> 3. Key design motivation for why `interface` is preferred for public SDK contracts.
+
+---
+
+### Exercise 3: Declaration Merging Limitations Audit
+
+**Scenario:**
+Explain why property types cannot conflict across merged interface declarations.
+
+**Requirements:**
+1. Show compile error when merging conflicting property types.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface User {
+>   id: number;
+> }
+
+// ❌ Compile Error: Subsequent property declarations must have the same type!
+// interface User {
+//   id: string; 
+// }
+```
+
+> #### Technical Explanation
+>
+> 1. Merged interface fields must have identical types across all declaration sites.
+> 2. Conflicting field types trigger an immediate compilation error.
+> 3. Prevents ambiguous type resolution during interface merging.
+
+---
+
+
+
+## 6. Related Terms
 - [Interfaces](interfaces.md) — The extensible objects contract.
 - [Type Aliases (`type`)](../level_05/type_aliases.md) — Non-mergable type naming structures.
 - [Namespaces](../level_11/namespaces.md) — Extensible namespace scopes.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Declaration Merging** combines separate type declarations with the same name into a single definition.
 - Interfaces and namespaces can merge; type aliases cannot merge.
 - Merging interfaces combines fields (must match types) and overloads methods.

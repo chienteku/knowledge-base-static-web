@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**CRUD Operation** (Document Removal Methods): Delete operations (deleteOne(), deleteMany()) remove matching documents from a collection permanently.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executed inside `mongosh` or through drivers. Frees storage block allocations on disk, creating dead space marked as reusable by the storage engine).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To maintain database hygiene and comply with privacy regulations (like GDPR), applications must support deleting data:
@@ -90,7 +91,7 @@ db.logs.deleteMany({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running deleteMany() in production without verifying the query filter first using find()
 
@@ -103,6 +104,8 @@ If you make a logic error in your query filter, you can wipe out millions of act
 **Fix: Before running any `deleteMany()` command, copy the query filter and run it inside `db.collection.find()` first. Verify the matching documents list visually to confirm they are indeed the target documents you wish to delete, and then execute the delete command.**
 
 ---
+
+
 
 
 
@@ -122,6 +125,8 @@ db.users.deleteMany({}); // 💥 Wipes entire collection data!
 db.users.deleteOne({ _id: id }); // Targets single specific document ID
 ```
 
+
+
 ### Mistake 3: Confusing `deleteOne()` with `deleteMany()`
 
 **The mistake:** Using `deleteOne({ status: "inactive" })` expecting to delete all inactive users.
@@ -140,97 +145,94 @@ db.users.deleteMany({ status: "inactive" }); // Deletes all matching documents
 
 
 
-### Mistake 4: Executing `deleteMany({})` Without Filter Objects in Production
+## 5. Practice Exercises
 
-**The mistake:** Running `db.users.deleteMany({})` expecting to delete a single document.
+### Exercise 1: Single Document Deletion with `deleteOne`
 
-**Why it's wrong:** `deleteMany({})` with an empty filter object deletes EVERY document in the collection!
+**Scenario:**
+Delete a single order document from collection `orders` by its primary key `_id`.
 
-*Incorrect:*
-```javascript
-db.users.deleteMany({}); // 💥 Wipes entire collection data!
-```
+**Requirements:**
+1. Execute `db.orders.deleteOne({ _id: new ObjectId(...) })`.
 
-*Fix:*
-```javascript
-db.users.deleteOne({ _id: id }); // Targets single specific document ID
-```
-
-### Mistake 5: Confusing `deleteOne()` with `deleteMany()`
-
-**The mistake:** Using `deleteOne({ status: "inactive" })` expecting to delete all inactive users.
-
-**Why it's wrong:** `deleteOne()` deletes ONLY the first matching document. Use `deleteMany()` to delete all matching documents.
-
-*Incorrect:*
-```javascript
-db.users.deleteOne({ status: "inactive" }); // ❌ Deletes single matching document only!
-```
-
-*Fix:*
-```javascript
-db.users.deleteMany({ status: "inactive" }); // Deletes all matching documents
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Safe Purge Query
-
-**Problem:** You are running database maintenance. You want to delete all documents in a `sessions` collection where the `active` boolean field is exactly `false`. 
-1.  Write the pre-verification check query.
-2.  Write the actual delete query.
-
-**Expected output:**
 > [!check]- Answer
-> ```javascript
-> // 1. Pre-verification check
-> db.sessions.find({ active: false });
-> 
-> // 2. Actual delete command
-> db.sessions.deleteMany({ active: false });
-> ```
-> - The query filters used inside `find` and `deleteMany` must be identical.
-> - Use the bulk method `deleteMany` to clear all matching inactive records.
-
----
-
-
-
-### Exercise 2: Deleting Single Document by Primary Key
-
-**Problem:** Delete user document with `_id: ObjectId("60d5ecb8b5c9c22b9c8b4567")`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.deleteOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
-> ```
-> ```javascript
-> db.users.deleteOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
-> ```
 >
-> **Explanation:** `deleteOne({ _id })` deletes a single primary key document.
-
----
-
-### Exercise 3: Deleting Inactive Logs with `deleteMany`
-
-**Problem:** Delete all log documents created before `2026-01-01T00:00:00Z`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.logs.deleteMany({ createdAt: { $lt: new Date("2026-01-01T00:00:00Z") } });
-> ```
+> #### Implementation
+>
 > ```javascript
-> db.logs.deleteMany({
->   createdAt: { $lt: new Date("2026-01-01T00:00:00Z") }
+> const result = db.orders.deleteOne({
+>   _id: new ObjectId("60c72b2f9b1d8b2c88888880")
 > });
+> console.log("Deleted Count:", result.deletedCount);
 > ```
 >
-> **Explanation:** `deleteMany(filter)` deletes all documents satisfying filter criteria.
+> #### Technical Explanation
+>
+> 1. `deleteOne()` removes at most one matching document.
+> 2. Target `_id` primary key deletes execute in $O(1)$ constant time.
+> 3. Returns `deletedCount: 1` on success.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Batch Deletion with `deleteMany`
+
+**Scenario:**
+Delete all temporary log documents older than 30 days from collection `system_logs`.
+
+**Requirements:**
+1. Execute `db.system_logs.deleteMany({ createdAt: { $lt: thirtyDaysAgo } })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+> 
+> const result = db.system_logs.deleteMany({
+>   createdAt: { $lt: thirtyDaysAgo }
+> });
+> console.log("Total Expired Logs Deleted:", result.deletedCount);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `deleteMany()` removes all collection documents satisfying the filter condition.
+> 2. Fires atomic deletion events for each document.
+> 3. Utilizes `createdAt` secondary index for fast deletion targeting.
+
+---
+
+### Exercise 3: Verifying Deletion Acknowledgments
+
+**Scenario:**
+Inspect the returned result object of a deletion operation to confirm acknowledged status.
+
+**Requirements:**
+1. Check `result.acknowledged` and `result.deletedCount`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const result = db.users.deleteOne({ email: "temp@example.com" });
+> if (result.acknowledged && result.deletedCount > 0) {
+>   console.log("Successfully deleted user record.");
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `acknowledged: true` verifies the database write concern acknowledged the write.
+> 2. `deletedCount` reports how many documents were actually removed.
+> 3. Provides clean write result verification.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Query Filter (Filter Document)](query_filter.md) — The target filters.
 - [Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)](write_results.md) — The outputs containing deleted counts.
@@ -238,7 +240,7 @@ db.users.deleteMany({ status: "inactive" }); // Deletes all matching documents
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `deleteOne()` deletes the first matching document; `deleteMany()` deletes all matches.
 - Serves as the MongoDB equivalent to SQL's `DELETE` statement.
 - Passing an empty query filter `{}` to `deleteMany()` wipes the entire collection.

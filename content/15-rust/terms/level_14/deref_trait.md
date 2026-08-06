@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Smart Pointer Trait**: `std::ops::Deref` and `DerefMut` for customized dereferencing operator behavior (`*`).
+
+
+**Rust Standard Trait (immutable dereferencing operator overload)**: `std::ops::Deref` and `DerefMut` for customized dereferencing operator behavior (`*`).
 
 ---
 

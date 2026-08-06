@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Performance / Third-Party Integration**
+
+**Performance & Optimization** (Third-Party Script Loading Optimization): `<Script>` optimizes external third-party JavaScript loading using execution strategies (`beforeInteractive`, `afterInteractive`, `lazyOnload`, `worker`).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client & Server Components**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Modern websites are packed with third-party scripts: Google Analytics, Intercom Chatbots, Stripe Checkout, Facebook Pixel. 
@@ -67,7 +68,7 @@ Often, you need to run some code *after* a third-party script has successfully l
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing `beforeInteractive` scripts in the wrong place
 
@@ -116,84 +117,127 @@ Often, you need to run some code *after* a third-party script has successfully l
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Inline Scripts
+### Exercise 1: Loading Analytics Scripts After Page Interactivity
 
-**Problem:** You don't have a `src` URL. You just have a raw block of JavaScript you want to execute (like configuring Google Analytics tracking IDs). How do you use the `<Script>` component for inline code?
+**Scenario:**
+Load an external tracking script using `strategy="afterInteractive"`.
 
-**Expected output:**
+**Requirements:**
+1. Import `Script` from `next/script`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> {/* You pass the raw code as children, and you MUST provide an 'id' prop! */}
-> <Script id="google-analytics" strategy="afterInteractive">
->   {`
->     window.dataLayer = window.dataLayer || [];
->     function gtag(){dataLayer.push(arguments);}
->     gtag('js', new Date());
->     gtag('config', 'GA_MEASUREMENT_ID');
->   `}
-> </Script>
-> ```
-> - The `id` prop is strictly required so Next.js can track and deduplicate the inline script!
+> import Script from "next/script";
+
+export default function AnalyticsScript() {
+  return (
+    <Script
+      src="https://cdn.example.com/analytics.js"
+      strategy="afterInteractive"
+      onLoad={() => console.log("Analytics script loaded!")}
+    />
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `strategy="afterInteractive"` loads the script immediately after the page finishes initial hydration.
+> 2. Default loading strategy for third-party scripts.
+> 3. `onLoad` fires a callback function when script execution finishes.
 
 ---
 
-### Exercise 2: Inline Script Execution Pattern
+### Exercise 2: Preloading Critical Scripts with `beforeInteractive`
 
-**Problem:** Write `<Script id="gtm-script">` component executing inline JavaScript string using `dangerouslySetInnerHTML`.
+**Scenario:**
+Load a critical security or polyfill script before page hydration occurs using `strategy="beforeInteractive"`.
 
-**Expected output:**
+**Requirements:**
+1. Set `strategy="beforeInteractive"` in `app/layout.tsx`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> <Script id="gtm" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `console.log('GTM Init');` }} />
-> ```
-> - Inline scripts require unique `id` prop.
-> 
-> ```tsx
-> import Script from 'next/script';
-> 
-> export function AnalyticsScript() {
->   return (
->     <Script
->       id="gtm-init"
->       strategy="afterInteractive"
->       dangerouslySetInnerHTML={{
->         __html: `window.dataLayer = window.dataLayer || [];`,
->       }}
->     />
->   );
-> }
-> ```
+> // app/layout.tsx
+> import Script from "next/script";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <Script
+          src="https://cdn.example.com/polyfill.js"
+          strategy="beforeInteractive"
+        />
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `strategy="beforeInteractive"` injects the script tag into the server HTML `<head>` before page hydration scripts execute.
+> 2. Reserved for critical polyfills, security consent managers, or anti-bot detectors.
+> 3. Must be declared inside `app/layout.tsx`.
 
 ---
 
-### Exercise 3: next/script Mandatory id Prop Rule
+### Exercise 3: Lazy-Loading Non-Critical Scripts with `lazyOnload`
 
-**Problem:** Why does `<Script>` require an explicit `id` prop when executing inline scripts?
+**Scenario:**
+Defer loading a non-critical chat widget script until browser idle time using `strategy="lazyOnload"`.
 
-**Expected output:**
+**Requirements:**
+1. Set `strategy="lazyOnload"`.
+
 > [!check]- Answer
-> ```text
-> Next.js uses the id prop to track and deduplicate inline script execution across page navigation.
-> ```
-> - `id` enables script deduplication across SPA route transitions.
-> 
-> ```text
-> <Script id="unique-id"> ... </Script>
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> import Script from "next/script";
+
+export default function ChatWidget() {
+  return (
+    <Script
+      src="https://cdn.example.com/chat-widget.js"
+      strategy="lazyOnload"
+    />
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `strategy="lazyOnload"` defers script loading until all core page assets have finished downloading and the browser is idle.
+> 2. Ideal for low-priority widgets (chat bubbles, feedback widgets, social share buttons).
+> 3. Protects Web Core Vitals scores from third-party script bloat.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`<Image>` Component](next_image.md) — Optimization for visual assets.
 - [`next/font` Optimization](next_font.md) — Optimization for typography.
 - [HTML `<script>` Element](html_script.md) — Related concept: HTML `<script>` Element.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`next/script`** optimizes the loading of third-party JavaScript files.
 - The **`strategy`** prop is the core feature, offering three main modes:
   - `beforeInteractive`: Critical scripts (bot detection).

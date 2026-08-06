@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Architecture & Embedded Systems**
+
+
+**Embedded Mode (Rust and WASM in-memory database engine)**: - **Architecture & Embedded Systems**
+
+
 
 ---
 
-## 3. Environment Context
-- **Embedded Application Runtimes** (Rust desktop applications, CLI binaries, Edge devices, or WebAssembly browser applications).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Traditional databases (PostgreSQL, MongoDB) require running a separate client-server process. For desktop applications (Electron/Tauri), mobile apps, local CLI tools, offline-first WebAssembly web apps, or edge computing, running a separate database server process adds installation friction and system overhead. SQLite is traditionally used for embedded storage, but lacks document nesting, graph traversal, and real-time live queries.
@@ -85,7 +84,7 @@ async function initOfflineFirstApp() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting Embedded WASM Databases to Share Memory across Multiple Browser Tabs
 
@@ -136,92 +135,113 @@ let db = db.clone(); // Cheap thread-safe handle clone
 
 
 
-### Mistake 4: Attempting RPC Network Overhead Calls in Embedded Rust Instances
 
-**The mistake:** Connecting via `ws://` inside embedded Rust applications.
 
-**Why it's wrong:** Embedded SurrealDB runs directly inside the application process memory without network latency. Use `Surreal::new::<RocksDb>("path/to/db")` directly.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-// Unnecessary network call in embedded Rust app
-let db = Surreal::new::<Ws>("127.0.0.1:8000").await?;
-```
+### Exercise 1: Embedded In-Memory Engine in Rust
 
-*Fix:*
-```surrealql
-let db = Surreal::new::<RocksDb>("path/to/db").await?; // Zero network overhead embedded instance
-```
+**Scenario:**
+A Rust desktop application initializes SurrealDB directly as an embedded in-memory database engine without running a separate server process.
 
-### Mistake 5: Using Non-Thread-Safe Database Handles Across Concurrent Tokio Threads
-
-**The mistake:** Creating a new database instance on every async HTTP request in Rust.
-
-**Why it's wrong:** SurrealDB handles `Surreal<C>` are thread-safe and cheap to clone (`Arc` wrapper). Share a single `Surreal` handle across application worker threads.
-
-*Incorrect:*
-```surrealql
-// Creating database instance per request
-let db = Surreal::new::<Mem>(()).await?; // ❌ Expensive re-initialization!
-```
-
-*Fix:*
-```surrealql
-let db = db.clone(); // Cheap thread-safe handle clone
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Embedded Architecture Capability
-Name the 2 primary embedded runtimes supported by SurrealDB:
-1. Native desktop/CLI systems language runtime.
-2. In-browser client WebAssembly runtime.
+**Requirements:**
+1. Write Rust SDK connection initialization code using `surrealdb::engine::local::Mem`.
 
 > [!check]- Answer
-> - 1 = Rust crate (`surrealdb`).
-> - 2 = WebAssembly (`WASM` / IndexedDB).
-
----
-
-
-
-### Exercise 2: Rust Embedded In-Memory Instance Initialization
-
-**Problem:** Initialize embedded in-memory SurrealDB instance in Rust using `Surreal::new::<Mem>(())`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> let db = Surreal::new::<Mem>(()).await?;
-> ```
+>
+> #### Implementation
+>
 > ```rust
 > use surrealdb::engine::local::Mem;
 > use surrealdb::Surreal;
-> let db = Surreal::new::<Mem>(()).await?;
-> ```
+
+#[tokio::main]
+async fn main() -> surrealdb::Result<()> {
+    // Initialize embedded in-memory engine
+    let db = Surreal::new::<Mem>(()).await?;
+    db.use_ns("test").use_db("test").await?;
+    
+    println!("Embedded Rust database engine initialized!");
+    Ok(())
+}
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** Embedded Rust instances run SurrealDB in-process without network overhead.
+> 1. `Surreal::new::<Mem>(())` compiles the SurrealDB engine directly inside the Rust application binary.
+> 2. Zero-network latency for local database queries.
+> 3. Eliminates external database server installation requirements.
 
 ---
 
-### Exercise 3: Rust Embedded RocksDB Storage Initialization
+### Exercise 2: Embedded WebAssembly (WASM) in Browser Apps
 
-**Problem:** Initialize embedded persistent RocksDB instance in Rust.
+**Scenario:**
+An offline-first web application runs SurrealDB embedded inside the browser using WebAssembly (WASM) and IndexedDB persistence.
 
-**Expected output:**
+**Requirements:**
+1. Describe browser WASM initialization using `@surrealdb/surrealdb/wasm`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { Surreal } from "@surrealdb/surrealdb";
+> import { indb } from "@surrealdb/surrealdb/wasm";
+
+const db = new Surreal();
+
+// Initialize embedded WASM engine with browser IndexedDB storage
+await db.connect("indxdb://my_app_db");
+await db.use({ ns: "app", db: "main" });
+```
+
+> #### Technical Explanation
+>
+> 1. Compiles SurrealDB into WebAssembly (WASM) running inside browser client threads.
+> 2. `indxdb://` connects to browser IndexedDB for local offline persistence.
+> 3. Enables local-first desktop and web app architectures.
+
+---
+
+### Exercise 3: Comparing Embedded vs Client-Server Deployments
+
+**Scenario:**
+Compare embedded mode vs client-server WebSocket mode across latency, deployment complexity, and scalability dimensions.
+
+**Requirements:**
+1. Contrast latency and deployment overhead.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> let db = Surreal::new::<RocksDb>("path/to/db").await?;
-> ```
-> ```rust
-> use surrealdb::engine::local::RocksDb;
-> use surrealdb::Surreal;
-> let db = Surreal::new::<RocksDb>("path/to/db").await?;
+> Embedded Mode:
+> - Latency: Zero network latency (direct memory function calls).
+> - Deployment: Single self-contained application binary.
+> - Multi-Client: Restricted to process-local access.
+> 
+> Client-Server Mode:
+> - Latency: Network WebSocket roundtrip (~1-5ms).
+> - Deployment: Requires running separate database server cluster.
+> - Multi-Client: Scales across thousands of concurrent web clients.
 > ```
 >
-> **Explanation:** `RocksDb` provides embedded local disk storage in Rust.
+> #### Technical Explanation
+>
+> 1. Embedded mode excels in desktop apps, CLI tools, and offline-first browser apps.
+> 2. Client-server mode excels in multi-tenant cloud applications with central databases.
+> 3. Provides identical SurrealQL syntax across both deployment models.
 
-## 7. Related Terms
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — In-memory and local storage engines.
 - [JavaScript / TypeScript SDK](js_sdk.md) — Web client SDK.
@@ -229,7 +249,7 @@ Name the 2 primary embedded runtimes supported by SurrealDB:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SurrealDB can run embedded inside application processes without a separate server process.
 - Native Rust crate embedding provides zero-latency in-process database execution.
 - WebAssembly (WASM) embedding enables true offline-first local database storage inside web browsers.

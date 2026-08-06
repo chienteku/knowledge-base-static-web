@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Rust-specific**
+
+
+**Rust Ecosystem Core (the unified package manager)**
 
 While the *concept* of a build system or package manager exists in other languages (npm, pip, Maven, Go modules), Cargo is Rust-specific in how it was designed from day one as an inseparable part of the Rust experience — not bolted on after the fact, but woven into the language's identity.
 
@@ -191,9 +193,9 @@ serde = "1.0" // Semantic version range pin
 
 ### Exercise 1: Workspace Dependency DAG Resolver & Topological Compilation Scheduler
 
-**Problem:**
-In large-scale enterprise monorepos, Cargo must parse dependency trees across multiple workspace crates to calculate parallel build schedules. If cyclic dependencies exist between workspace crates (e.g., Crate A depends on Crate B, and Crate B depends on Crate A), compilation would deadlock. Furthermore, Cargo must perform feature flag unification (combining all optional feature requirements requested by different dependent crates into a single feature matrix for shared dependencies).
+**Scenario:** In large-scale enterprise monorepos, Cargo must parse dependency trees across multiple workspace crates to calculate parallel build schedules. If cyclic dependencies exist between workspace crates (e.g., Crate A depends on Crate B, and Crate B depends on Crate A), compilation would deadlock. Furthermore, Cargo must perform feature flag unification (combining all optional feature requirements requested by different dependent crates into a single feature matrix for shared dependencies).
 
+**Requirements:**
 Implement a robust `WorkspaceGraphResolver` system that:
 1. Stores workspace crate manifests (`CargoManifest`), including crate names (`PackageId`), dependency vectors, and default/optional features.
 2. Detects dependency cycles using a tri-state Depth-First Search (DFS) algorithm (`Unvisited`, `Visiting`, `Visited`) and returns a `WorkspaceError::Cycle` with the exact cycle path sequence.
@@ -479,10 +481,11 @@ Implement a robust `WorkspaceGraphResolver` system that:
 
 ### Exercise 2: `build.rs` Directive Generator & C-Header Macro CodeGen Parser
 
-**Problem:**
-When integrating low-level C libraries or native peripheral controllers into Rust applications via FFI, Cargo build scripts (`build.rs`) communicate build instructions to `rustc` through formatted stdout output directives (`cargo::rustc-link-lib`, `cargo::rerun-if-changed`, etc.). Additionally, build scripts frequently parse external C headers or hardware definition files to generate Rust constant bindings written into `OUT_DIR`.
+**Scenario:** When integrating low-level C libraries or native peripheral controllers into Rust applications via FFI, Cargo build scripts (`build.rs`) communicate build instructions to `rustc` through formatted stdout output directives (`cargo::rustc-link-lib`, `cargo::rerun-if-changed`, etc.). Additionally, build scripts frequently parse external C headers or hardware definition files to generate Rust constant bindings written into `OUT_DIR`.
 
 Construct a `BuildScriptGenerator` engine that:
+
+**Requirements:**
 1. Emits standard modern Cargo directives (`cargo::key=value`) for library linking (`LinkKind::Static`, `LinkKind::Dynamic`, `LinkKind::Framework`), search paths, rerun triggers, and custom target CFG attributes.
 2. Parses C header `#define MACRO_NAME literal_value` lines (decimal or hex numbers) and validates that macro names form valid Rust identifiers.
 3. Generates compilable Rust wrapper constant code string (e.g. `pub const MACRO_NAME: u64 = value;`) suitable for dynamic `include!` inclusion inside target crates.
@@ -720,9 +723,9 @@ Construct a `BuildScriptGenerator` engine that:
 
 ### Exercise 3: Cargo Profile Hardening & Dependency Compliance Auditor
 
-**Problem:**
-Continuous Delivery pipelines in production environments mandate strict compilation profile options in `Cargo.toml` to guarantee code optimization, minimal attack surfaces, and zero forbidden external dependencies. For instance, release profiles must mandate LTO (`lto = "fat"` or `"thin"`), panic strategy (`panic = "abort"`), cap `codegen-units = 1`, and prohibit insecure crates (such as unvetted crypto or outdated parsers).
+**Scenario:** Continuous Delivery pipelines in production environments mandate strict compilation profile options in `Cargo.toml` to guarantee code optimization, minimal attack surfaces, and zero forbidden external dependencies. For instance, release profiles must mandate LTO (`lto = "fat"` or `"thin"`), panic strategy (`panic = "abort"`), cap `codegen-units = 1`, and prohibit insecure crates (such as unvetted crypto or outdated parsers).
 
+**Requirements:**
 Implement a `CargoProfileAuditor` compliance engine that:
 1. Models `CargoProfile` settings (`opt_level`, `lto`, `codegen_units`, `panic_strategy`, `overflow_checks`, `strip`).
 2. Audits profiles against a configurable `SecurityPolicy` struct.

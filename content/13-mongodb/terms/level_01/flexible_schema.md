@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Data Modeling** (Dynamic Schema Structure): Flexible Schema refers to MongoDB's ability to store documents with varying field structures within the same collection without rigid DDL migrations.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (The defining philosophy of document NoSQL databases, contrasting with the Schema-on-Write model of relational databases like PostgreSQL).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In PostgreSQL, before you can save a single row of data, you must write DDL commands to define a table, declaring every column and data type:
@@ -88,7 +89,7 @@ Postgres would require adding a `socials` JSON column or child tables. MongoDB s
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing "Flexible Schema" means "No Schema at all" and ignoring data validation
 
@@ -138,38 +139,94 @@ Use JSON Schema Validation (validator) to enforce type consistency across collec
 Handle multi-schema versions using Polymorphic Schema Patterns in code
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Trade-off Analysis
+### Exercise 1: Heterogeneous Collection Document Storage
 
-**Problem:** You are building a banking ledger database that tracks money transactions. 
-1.  Which schema model (**Schema-on-Write** or **Schema-on-Read**) is safer for this project?
-2.  Explain why.
+**Scenario:**
+Store product documents with distinct field attributes (`laptop` vs `book`) in a single collection `products`.
 
-**Expected output:**
+**Requirements:**
+1. Insert laptop document with `cpu`, `ramGB`.
+2. Insert book document with `author`, `isbn`.
+
 > [!check]- Answer
-> ```text
-> 1. Schema-on-Write (PostgreSQL / SQL) is safer.
-> 2. In a financial system, data consistency is critical. You must guarantee that every transaction contains a valid account ID, matching currency codes, and positive balances. Having the database engine enforce these rules at write-time prevents bugs in application code from saving corrupted financial ledgers.
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.insertMany([
+>   {
+>     type: "laptop",
+>     name: "Pro Laptop",
+>     cpu: "M3 Pro",
+>     ramGB: 18
+>   },
+>   {
+>     type: "book",
+>     name: "Database Systems",
+>     author: "A. Silberschatz",
+>     isbn: "978-0133594140"
+>   }
+> ]);
 > ```
-> - Evaluate the cost of structural data mistakes.
-> - Consider which database engine enforces constraints at write-time.
+>
+> #### Technical Explanation
+>
+> 1. Flexible schema allows collections to store polymorphic documents with varying attributes.
+> 2. Eliminates sparse NULL columns typical in relational single-table inheritance models.
+> 3. Simplifies modeling product catalogs with diverse properties.
 
 ---
 
+### Exercise 2: Schema Evolution without DDL Migrations
 
+**Scenario:**
+Update application code to start writing a new `taxId` field on `customer` documents without executing `ALTER TABLE` DDL queries.
 
-### Exercise 2: Enforcing Collection JSON Schema Validation
+**Requirements:**
+1. Write new customer document with `taxId` field alongside older documents.
 
-**Problem:** Create collection `user` with `$jsonSchema` requiring string `email`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> db.createCollection("user", { validator: { $jsonSchema: { required: ["email"] } } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.createCollection("user", {
+> // New customer write includes taxId
+> db.customers.insertOne({
+>   name: "Acme Corp",
+>   taxId: "TX-998877"
+> });
+> 
+> // Query handles both old (missing taxId) and new documents
+> db.customers.find({
+>   taxId: { $exists: true }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. New application features can write new fields immediately without database migration downtime.
+> 2. Queries use `$exists` to handle missing fields gracefully across legacy documents.
+> 3. Accelerates agile continuous deployment pipelines.
+
+---
+
+### Exercise 3: Enforcing Boundaries with Schema Validation (`$jsonSchema`)
+
+**Scenario:**
+Add a `$jsonSchema` validation rule to collection `users` to require field `email` while permitting flexible optional fields.
+
+**Requirements:**
+1. Use `collMod` to enforce `$jsonSchema` requiring `email`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.runCommand({
+>   collMod: "users",
 >   validator: {
 >     $jsonSchema: {
 >       bsonType: "object",
@@ -182,26 +239,17 @@ Handle multi-schema versions using Polymorphic Schema Patterns in code
 > });
 > ```
 >
-> **Explanation:** `$jsonSchema` enforces data validation rules on flexible document collections.
+> #### Technical Explanation
+>
+> 1. Schema Validation (`$jsonSchema`) combines document flexibility with structural guardrails.
+> 2. Rejects write attempts violating mandatory field rules.
+> 3. Prevents low-quality corrupt data from entering flexible collections.
 
 ---
 
-### Exercise 3: Checking Field Existence with `$exists`
 
-**Problem:** Query documents possessing field `middleName` using `$exists: true`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ middleName: { $exists: true } });
-> ```
-> ```javascript
-> db.users.find({ middleName: { $exists: true } });
-> ```
->
-> **Explanation:** `$exists` filters documents containing specified field keys.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Collection](collection.md) — The schema-free container.
 - [Document vs. Relational Model](document_vs_relational.md) — Paradigm comparisons.
@@ -212,7 +260,7 @@ Handle multi-schema versions using Polymorphic Schema Patterns in code
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Flexible Schema allows documents in a collection to carry varying fields.
 - Schema-on-Read shifts data validation from database tables to application code.
 - Eliminates the need to run DDL migrations when updating document attributes.

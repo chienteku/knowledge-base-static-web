@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (eager record link resolution clause)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the query compiler resolver stage. Automatically executes sub-queries in parallel to fetch target documents from the database storage engine).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database systems (PostgreSQL), joining tables is normalized:
@@ -103,7 +102,7 @@ SELECT * FROM post FETCH author, author.company;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to use the 'FETCH' clause on a field storing a string representation of an ID, rather than a primitive Record ID type
 
@@ -161,68 +160,114 @@ SELECT * FROM post FETCH author, company; // ❌ 'company' is not a direct field
 SELECT * FROM post FETCH author, author.company; // Correct nested fetch path
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multi-Link Query Construction
+### Exercise 1: Resolving Multiple Foreign Record Links
 
-**Problem:** You are building a checkout dashboard. 
-You have an `orders` table containing these fields:
--   `customer` (of type `record<user>`)
--   `billing` (of type `record<invoice>`)
-Write the SurrealQL query to retrieve all orders, replacing the customer and billing pointers with their full record documents.
+**Scenario:**
+An e-commerce order dashboard retrieves order `orders:o1` and eagerly resolves both the `customer` (record link to `user`) and `billing` (record link to `invoice`) fields in a single query.
 
-**Expected output:**
+**Requirements:**
+1. Create user `user:alice` and invoice `invoice:inv1`.
+2. Create order `orders:o1` setting `customer = user:alice` and `billing = invoice:inv1`.
+3. Select `orders:o1` using `FETCH customer, billing`.
+
 > [!check]- Answer
-> ```sql
-> SELECT * FROM orders FETCH customer, billing;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET name = "Alice Smith";
+> CREATE invoice:inv1 SET total = 199.99dec;
+> 
+> CREATE orders:o1 SET customer = user:alice, billing = invoice:inv1;
+> 
+> -- Eagerly fetch customer and billing pointers inline
+> SELECT * FROM orders:o1 FETCH customer, billing;
 > ```
-> - The source table is `orders`.
-> - Specify both link fields in the `FETCH` clause, separated by a comma.
+>
+> #### Technical Explanation
+>
+> 1. `FETCH field1, field2` expands multiple comma-separated record link pointers in a single query.
+> 2. Replaces SQL `JOIN` syntax and MongoDB `$lookup` aggregation blocks.
+> 3. Returns a clean nested JSON payload containing resolved document objects.
+
+---
+
+### Exercise 2: Deep Nested Path Pointer Resolution
+
+**Scenario:**
+A blog post query retrieves post `post:p1`, fetches the `author` record link (`user:alice`), and fetches the nested `author.company` record link (`company:acme`).
+
+**Requirements:**
+1. Create company `company:acme`, user `user:alice` linked to `company:acme`, and post `post:p1` linked to `user:alice`.
+2. Execute `SELECT * FROM post:p1 FETCH author, author.company;`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE company:acme SET name = "Acme Corp";
+> CREATE user:alice SET name = "Alice", company = company:acme;
+> CREATE post:p1 SET title = "Deep Fetching in SurrealDB", author = user:alice;
+> 
+> -- Fetch nested pointer paths using dot notation
+> SELECT * FROM post:p1 FETCH author, author.company;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Dot-notation paths in `FETCH` (`author.company`) unwrap multi-level nested foreign record link pointers.
+> 2. Resolves deep relational trees without writing recursive CTE queries.
+> 3. Operates in a single database query execution pass.
+
+---
+
+### Exercise 3: Resolving Arrays of Record Links with `FETCH`
+
+**Scenario:**
+An article listing contains an array of tag record links `tags = [tag:rust, tag:db]`. Eagerly resolve the array of pointers into full tag documents.
+
+**Requirements:**
+1. Create tags `tag:rust` and `tag:db`.
+2. Create article `article:a1` with `tags = [tag:rust, tag:db]`.
+3. Select `article:a1` using `FETCH tags`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE tag:rust SET name = "Rust Language";
+> CREATE tag:db SET name = "Databases";
+> 
+> CREATE article:a1 SET title = "SurrealDB Overview", tags = [tag:rust, tag:db];
+> 
+> -- Fetch array of record link pointers
+> SELECT * FROM article:a1 FETCH tags;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `FETCH` seamlessly resolves single record links AND arrays of record links (`array<record>`).
+> 2. Replaces array pointer IDs with expanded tag document objects inline.
+> 3. Eliminates application-side N+1 query loops.
 
 ---
 
 
 
-### Exercise 2: Deep Nested Record Link Fetching
+## 6. Related Terms
 
-**Problem:** Select all `order` records and fetch `customer` and nested `customer.address`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM order FETCH customer, customer.address;
-> ```
-> ```surrealql
-> SELECT * FROM order FETCH customer, customer.address;
-> ```
->
-> **Explanation:** Specifying dot paths in `FETCH` unwraps nested foreign record pointers.
-
----
-
-### Exercise 3: Fetching Array of Record Links
-
-**Problem:** Fetch array of record links `tags` on `article` table (`FETCH tags`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM article FETCH tags;
-> ```
-> ```surrealql
-> SELECT * FROM article FETCH tags;
-> ```
->
-> **Explanation:** `FETCH` expands single record links and arrays of record links seamlessly.
-
-## 7. Related Terms
+- [Array of Record Links](../level_05/array_record_links.md) — Array record link collections.
 
 - [`SELECT`](select.md) — The parent query statement.
 - [`record` (Record Link Type)](../level_02/record_link_type.md) — The pointer fields targeted.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `FETCH` clause resolves Record Link pointers with actual document content.
 - Bypasses SQL `JOIN` syntax and MongoDB `$lookup` aggregation blocks.
 - Returns nested JSON trees directly, simplifying frontend client parsing.

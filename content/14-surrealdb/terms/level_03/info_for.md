@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (schema introspection INFO statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed directly by the system catalog manager. Queries internal configurations and returns structure schemas as standard JSON objects).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When developing database schemas or debugging query errors, you need a way to verify the active setup:
@@ -104,7 +103,7 @@ INFO FOR TABLE user;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running 'INFO FOR TABLE' queries on a new database session without executing the 'USE' command first, returning empty schemas
 
@@ -153,75 +152,98 @@ INFO FOR TABLE user; // ❌ Returns metadata object, not record rows!
 SELECT * FROM user; // Queries record data rows
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Introspection Scoping
+### Exercise 1: Introspecting Active Database Schema
 
-**Problem:** You are debugging an index conflict. 
-Write the SurrealQL commands to:
-1.  Target namespace `"firm_hq"` and database `"production"`.
-2.  Inspect all tables defined inside this database.
-3.  Inspect the index and field definitions of the `invoice` table.
+**Scenario:**
+A developer needs to audit all defined tables, custom functions, and access methods configured in the active database scope.
 
-**Expected output:**
+**Requirements:**
+1. Target namespace `production` and database `main`.
+2. Execute the `INFO FOR DB` statement.
+
 > [!check]- Answer
-> ```sql
-> -- 1. Set context
-> USE NS firm_hq DB production;
+>
+> #### Implementation
+>
+> ```surrealql
+> USE NS production DB main;
 > 
-> -- 2. Inspect database tables
+> -- Introspect active database definitions
 > INFO FOR DB;
-> 
-> -- 3. Inspect table fields and indexes
-> INFO FOR TABLE invoice;
 > ```
-> - The target scope is `NS firm_hq DB production`.
-> - Use `INFO FOR DB` to see tables, and `INFO FOR TABLE <name>` to describe columns and indexes.
+>
+> #### Technical Explanation
+>
+> 1. `INFO FOR DB` returns a structured JSON object containing all defined tables, functions, analyzers, parameters, and access scopes.
+> 2. Provides complete schema visibility for automated migration audits.
+> 3. Executes instantly by querying database metadata storage registers.
+
+---
+
+### Exercise 2: Introspecting Specific Table Definitions
+
+**Scenario:**
+Inspect all field types, assertions, indexes, events, and PERMISSIONS clauses defined for table `customer`.
+
+**Requirements:**
+1. Write the `INFO FOR TABLE` statement for table `customer`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> INFO FOR TABLE customer;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INFO FOR TABLE <table>` inspects specific table schema definitions.
+> 2. Outputs JSON objects detailing defined fields, field types, assertions, indexes, and event triggers.
+> 3. Used by visual IDE tools (like Surrealist) to render schema designer views.
+
+---
+
+### Exercise 3: Introspecting Namespace Scope Definitions
+
+**Scenario:**
+A system administrator audits multi-tenant databases and administrative user roles defined within namespace `tenant_acme`.
+
+**Requirements:**
+1. Target namespace `tenant_acme`.
+2. Execute `INFO FOR NS`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> USE NS tenant_acme;
+> 
+> -- Introspect namespace tenant scope
+> INFO FOR NS;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INFO FOR NS` returns all databases and administrative user accounts defined under the active namespace.
+> 2. Verifies multi-tenant isolation boundaries during security audits.
+> 3. Helps administrators monitor tenant resource allocation.
 
 ---
 
 
 
-### Exercise 2: Inspecting Table Schema Metadata
-
-**Problem:** Write command to inspect fields, indexes, and events configured on `article` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INFO FOR TABLE article;
-> ```
-> ```surrealql
-> INFO FOR TABLE article;
-> ```
->
-> **Explanation:** `INFO FOR TABLE` outputs detailed schema metadata objects.
-
----
-
-### Exercise 3: Inspecting Active Database Definitions
-
-**Problem:** Command to list all tables, scope accesses, and parameters defined in current database.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INFO FOR DB;
-> ```
-> ```surrealql
-> INFO FOR DB;
-> ```
->
-> **Explanation:** `INFO FOR DB` returns active database scope definition metadata.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Namespace & Database](../level_01/namespace_database.md) — The database structure context.
 - [`DEFINE TABLE`](../level_04/define_table.md) — Creating tables.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `INFO FOR` provides first-class introspection for SurrealDB configurations.
 - Equivalent to PostgreSQL's `\d` commands and MongoDB collection stats diagnostics.
 - Returns structured JSON data blocks, simplifying programmatic schema checks.

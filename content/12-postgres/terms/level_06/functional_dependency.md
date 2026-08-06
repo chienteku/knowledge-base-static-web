@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Core Concept** (Attribute Determination Relationship): Functional Dependency ($X ightarrow Y$) describes a relationship where the value of column set $X$ uniquely determines the value of column set $Y$.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (A fundamental mathematical concept in relational algebra used to define database normalization rules).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before you can apply the rules of database normalization (1NF, 2NF, 3NF), you need a precise mathematical language to describe how columns relate to each other.
@@ -80,7 +81,7 @@ The functional dependencies are:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing functional dependencies with database index settings
 
@@ -130,69 +131,113 @@ ightarrow city\_name$) violate 3NF, creating update anomalies when city names ch
 Move zip mapping to zip_codes table: zip_codes (zip_code, city_name)
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Dependency Identification
+### Exercise 1: Identifying Functional Dependencies in Schema Data
 
-**Problem:** You have an inventory table:
-`cars (vin_number, manufacturer, model, engine_serial_number)`
-Identify the functional dependencies for the following columns (use the $X \rightarrow Y$ notation):
-1.  Which column determines the manufacturer and model?
-2.  Does manufacturer determine the model?
+**Scenario:**
+Analyze functional dependencies ($X ightarrow Y$) in a `course_registrations` table: `student_id -> student_name`, `course_id -> course_title`.
 
-**Expected output:**
+**Requirements:**
+1. Identify primary key determinants and partial dependencies.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. A manufacturer (like 'Toyota') makes multiple models (like 'Corolla', 'Prius'), so it does not uniquely determine a single model.
-> 2. No.
+> Functional Dependency Analysis:
+> - Composite Primary Key: (student_id, course_id)
+> - Dependency 1: (student_id, course_id) -> grade (Full Dependency)
+> - Dependency 2: student_id -> student_name (Partial Dependency: depends ONLY on part of PK!)
+> - Dependency 3: course_id -> course_title (Partial Dependency: depends ONLY on part of PK!)
 > ```
-> - A functional dependency only exists if a value of X points to exactly one value of Y across all rows.
-> - Look for unique hardware identifiers.
+>
+> #### Technical Explanation
+>
+> 1. A Functional Dependency $X ightarrow Y$ means given value $X$, value $Y$ is uniquely determined.
+> 2. Partial dependencies (where non-key columns depend on part of a composite primary key) violate 2NF.
+> 3. Theoretical foundation for database normalization algorithms.
+
+---
+
+### Exercise 2: Resolving Partial Dependencies to Achieve 2NF
+
+**Scenario:**
+Decompose `course_registrations` to eliminate partial dependencies and achieve Second Normal Form (2NF).
+
+**Requirements:**
+1. Create `students`, `courses`, and `enrollments` tables.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE students (
+>   id INTEGER PRIMARY KEY,
+>   student_name TEXT NOT NULL
+> );
+> 
+> CREATE TABLE courses (
+>   id INTEGER PRIMARY KEY,
+>   course_title TEXT NOT NULL
+> );
+> 
+> CREATE TABLE enrollments (
+>   student_id INTEGER REFERENCES students(id),
+>   course_id INTEGER REFERENCES courses(id),
+>   grade TEXT,
+>   PRIMARY KEY (student_id, course_id)
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Decomposing tables separates independent functional dependencies into dedicated tables.
+> 2. Guarantees all non-key attributes in `enrollments` (`grade`) depend on the FULL composite primary key.
+> 3. Achieves 2NF compliance.
+
+---
+
+### Exercise 3: Identifying Transitive Dependencies for 3NF
+
+**Scenario:**
+Identify transitive dependency `zip_code -> city` in table `addresses(id, street, zip_code, city)`.
+
+**Requirements:**
+1. Explain transitive dependency $id ightarrow zip\_code ightarrow city$.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Transitive Dependency Analysis:
+> - Primary Key: id
+> - Dependency 1: id -> zip_code
+> - Dependency 2: zip_code -> city
+> - Transitive Link: id -> city via zip_code (Violates 3NF!)
+> Solution: Move (zip_code, city) into a separate 'zip_codes' lookup table.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Transitive dependencies occur when a non-key column depends on another non-key column.
+> 2. Violates 3NF and causes update anomalies if a city name changes.
+> 3. Core concept of 3NF schema decomposition.
 
 ---
 
 
 
-### Exercise 2: Identifying Functional Dependency Notation
-
-**Problem:** Express functional dependency 'Student ID determines Student Name' in standard notation (`student_id -> student_name`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> student_id -> student_name
-> ```
-> ```text
-> student_id -> student_name
-> ```
->
-> **Explanation:** $A 
-ightarrow B$ denotes that attribute A uniquely determines attribute B.
-
----
-
-### Exercise 3: Partial vs Transitive Dependency
-
-**Problem:** Compare: Partial Dependency (Attribute depends on part of composite key); Transitive Dependency (Non-key attribute depends on another non-key attribute).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Partial: depends on part of composite key; Transitive: non-key depends on non-key attribute
-> ```
-> ```text
-> Partial: depends on part of composite key; Transitive: non-key depends on non-key attribute
-> ```
->
-> **Explanation:** Identifying functional dependencies is required to achieve 2NF and 3NF normalization.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Normalization](normalization.md) — The parent organization process.
 - [First Normal Form (1NF)](first_normal_form.md) — The atomic standard.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Functional Dependency describes how column values determine other column values.
 - Written as $X \rightarrow Y$ (X uniquely determines the value in Y).
 - Primary keys functionally determine all other columns in their table.

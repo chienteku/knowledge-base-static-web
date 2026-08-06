@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Object / Abstraction Layer**
+
+**Advanced Feature** (Transactional Control Procedures): Stored Procedures (`CREATE PROCEDURE`) execute procedural code supporting explicit transaction control (`COMMIT`/`ROLLBACK`) inside the procedure body.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Introduced in PostgreSQL 11. Unlike stored functions, procedures do not return values and cannot be executed inside standard `SELECT` query lists).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In `stored_function.md`, we learned that custom functions cannot control transactions. 
@@ -93,7 +94,7 @@ CALL transfer_funds(1, 2, 20.00);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to call a stored procedure inside a SELECT query
 
@@ -141,81 +142,114 @@ SELECT my_procedure(); -- ❌ Error: procedure cannot be called with SELECT!
 CALL my_procedure(); -- Correct procedure invocation
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Bulk Status Update Procedure
+### Exercise 1: Creating Stored Procedures with Transaction Control
 
-**Problem:** You have a `tasks` table with a `status` column. Write the SQL queries to:
-1.  Create a stored procedure named `archive_tasks` that updates the `status` of all tasks where `created_at < '2026-01-01'` to `'archived'`, and commits the transaction immediately.
-2.  Write the SQL command to execute this procedure.
+**Scenario:**
+Create a Stored Procedure `process_batch_payouts()` that executes explicit `COMMIT` commands inside its procedural body.
 
-**Expected output:**
+**Requirements:**
+1. Use `CREATE PROCEDURE` and `COMMIT;` inside PL/pgSQL body.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE PROCEDURE archive_tasks()
-> LANGUAGE plpgsql AS $$
+> CREATE OR REPLACE PROCEDURE process_batch_payouts(p_limit INTEGER) 
+> LANGUAGE plpgsql 
+> AS $$
+> DECLARE
+>   r RECORD;
 > BEGIN
->   UPDATE tasks 
->   SET status = 'archived' 
->   WHERE created_at < '2026-01-01';
->   
->   COMMIT;
+>   FOR r IN SELECT id FROM pending_payouts LIMIT p_limit LOOP
+>     UPDATE pending_payouts SET status = 'processed' WHERE id = r.id;
+>     
+>     -- Commit transaction after processing each individual row!
+>     COMMIT;
+>   END LOOP;
 > END;
 > $$;
 > 
-> CALL archive_tasks();
+> CALL process_batch_payouts(50);
 > ```
-> - Define the procedure using `CREATE PROCEDURE` (no returns parameter is required).
-> - Use the `CALL` statement to run the procedure.
+>
+> #### Technical Explanation
+>
+> 1. Stored Procedures (`CREATE PROCEDURE`, introduced in PG 11) support explicit `COMMIT` and `ROLLBACK` commands inside the procedure body.
+> 2. Stored Functions (`CREATE FUNCTION`) CANNOT execute `COMMIT` or `ROLLBACK`.
+> 3. Invoked using `CALL procedure_name()`.
 
 ---
 
+### Exercise 2: Stored Procedures with INOUT Parameters
 
+**Scenario:**
+Create a procedure `increment_counter` accepting an `INOUT` integer parameter.
 
-### Exercise 2: Creating Stored Procedure with Internal Transaction Control
+**Requirements:**
+1. Execute `CALL increment_counter(val)`.
 
-**Problem:** Create stored procedure `batch_cleanup()` executing transaction commit inside procedure body.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> CREATE OR REPLACE PROCEDURE batch_cleanup() AS $$ BEGIN DELETE FROM logs WHERE created_at < NOW() - INTERVAL '30 days'; COMMIT; END; $$ LANGUAGE plpgsql;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> CREATE OR REPLACE PROCEDURE batch_cleanup() AS $$
+> CREATE OR REPLACE PROCEDURE increment_counter(INOUT p_val INTEGER) 
+> LANGUAGE plpgsql 
+> AS $$
 > BEGIN
->   DELETE FROM logs WHERE created_at < NOW() - INTERVAL '30 days';
->   COMMIT;
+>   p_val := p_val + 1;
 > END;
-> $$ LANGUAGE plpgsql;
+> $$;
+> 
+> CALL increment_counter(10); -- Returns 11
 > ```
 >
-> **Explanation:** `CREATE PROCEDURE` allows issuing `COMMIT` and `ROLLBACK` commands mid-execution.
+> #### Technical Explanation
+>
+> 1. `INOUT` parameters pass values into the procedure and return modified values back to the caller.
+> 2. Procedural parameter manipulation.
+> 3. Clean parameter pass-through.
 
 ---
 
-### Exercise 3: Calling Stored Procedure
+### Exercise 3: Trade-Off Analysis: Stored Functions vs Stored Procedures
 
-**Problem:** Execute stored procedure `batch_cleanup()` using `CALL`.
+**Scenario:**
+Formulate a technical decision matrix comparing PostgreSQL Stored Functions vs Stored Procedures.
 
-**Expected output:**
+**Requirements:**
+1. Contrast invocation syntax (`SELECT` vs `CALL`), return values, and transaction control.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> CALL batch_cleanup();
-> ```
-> ```sql
-> CALL batch_cleanup();
+> Procedure vs Function Selection Guide:
+> - Stored Function: Invoked via SELECT, returns scalar/table values, NO transaction control (cannot COMMIT). Use for query expressions!
+> - Stored Procedure: Invoked via CALL, optional INOUT params, FULL transaction control (can COMMIT/ROLLBACK). Use for batch ETL pipelines!
 > ```
 >
-> **Explanation:** `CALL procedure_name()` invokes stored procedures in PostgreSQL.
+> #### Technical Explanation
+>
+> 1. Functions integrate seamlessly into SQL query expressions.
+> 2. Procedures handle autonomous batch operations requiring transactional commits between loop iterations.
+> 3. Match tool selection to operational requirements.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [Stored Function (`CREATE FUNCTION`)](stored_function.md) — The transaction-locked inline alternative.
 - [PL/pgSQL](plpgsql.md) — The programming language block wrapper.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Stored procedures are server-side database code blocks that manage transactions.
 - Supports running `COMMIT` and `ROLLBACK` commands inside the logic body.
 - Invoked explicitly using the `CALL` keyword.

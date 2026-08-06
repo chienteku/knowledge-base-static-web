@@ -172,7 +172,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Cross-Type Zero-Allocation `PartialEq` for High-Performance Cache Keys
 
-**Problem:**
+**Scenario:**
 In high-throughput database caching layers, allocating a temporary `String` just to query a `HashMap<CacheKey, Value>` introduces significant garbage generation and memory overhead. To enable zero-allocation lookups, custom key types can implement `PartialEq` across heterogeneous types—such as allowing a `CacheKey` (which wraps an owned string or normalized buffer) to be compared directly against borrowed string slices (`&str` or `String`).
 
 Implement a `CacheKey` struct containing a normalized routing string and a numeric tenant identifier `tenant_id: u64`.
@@ -282,7 +282,7 @@ Implement a `CacheKey` struct containing a normalized routing string and a numer
 
 ### Exercise 2: Invariant-Guaranteed Total Equality (`Eq`) for Financial Ledger Amounts
 
-**Problem:**
+**Scenario:**
 In financial ledger microservices, amounts represented as floating-point numbers (`f64`) pose severe risks. IEEE-754 floats permit `NaN` (Not-a-Number), which violates reflexivity (`NaN == NaN` is false). Because of this edge case, Rust deliberately omits `Eq` for primitive floating-point types (`f32` and `f64`). Standard library collection types like `std::collections::BTreeMap` or `HashSet` require `Eq` to operate safely without missing keys or violating tree invariants.
 
 Create a financial domain type `LedgerAmount` that wraps an `f64`, ensuring invariants at construction time to safely implement total equality (`Eq`).
@@ -410,7 +410,7 @@ Create a financial domain type `LedgerAmount` that wraps an `f64`, ensuring inva
 
 ### Exercise 3: Dynamic Trait Object Downcasting & Equality (`Box<dyn FilterNode>`)
 
-**Problem:**
+**Scenario:**
 In rule engines, database query planners, and compiler ASTs, nodes are often stored as dynamic trait objects (such as `Box<dyn FilterNode>`). By default, Rust trait objects cannot be compared using `==` because trait objects erase the underlying concrete type size and layout in their virtual method table (vtable). Attempting to derive `PartialEq` for a trait object directly triggers compiler error `E0038` (object safety violation) if `Self: Sized` is required by `PartialEq::eq`.
 
 To enable dynamic equality checking across trait objects:

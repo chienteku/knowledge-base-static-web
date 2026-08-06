@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**File I/O**: `std::fs::File`, `BufReader`, and `BufWriter` for buffered disk I/O.
+
+
+**Rust Standard Library (buffered I/O streams)**: `std::fs::File`, `BufReader`, and `BufWriter` for buffered disk I/O.
 
 ---
 

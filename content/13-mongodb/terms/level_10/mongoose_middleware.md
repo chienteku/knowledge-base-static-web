@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Driver / Integration** (Mongoose Lifecycle Hooks & Interceptors): Mongoose Middleware (pre/post hooks) intercept schema execution calls (`validate`, `save`, `updateOne`, `find`) to automate password hashing, auditing, and cascading updates.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **JavaScript / Node.js** (Executed inside the Node.js application process thread during the Mongoose document lifecycle, preceding BSON compilation).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing applications, certain business rules must occur automatically on database changes:
@@ -103,7 +104,7 @@ userSchema.pre('save', async function(next) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using ES6 arrow functions (() => {}) to define Mongoose pre-save middleware, causing 'this' context bindings to fail
 
@@ -157,80 +158,106 @@ schema.pre("save", () => { this.updatedAt = new Date(); }); // ❌ this is undef
 schema.pre("save", function() { this.updatedAt = new Date(); }); // Correct function binding
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Slug Generation Middleware
+### Exercise 1: Pre-Save Password Hashing Middleware Hooks
 
-**Problem:** You have a `Article` schema. You want to generate a URL-friendly `slug` from the `title` field automatically before validation.
-Example title: `"My First Post"` should become slug: `"my-first-post"`.
-Write the `pre` middleware code block for the `articleSchema` using standard function syntax. Assume you have access to a helper function `slugify(text)` that performs the string conversion.
+**Scenario:**
+Implement a Mongoose `pre("save")` hook that automatically hashes user passwords using `bcrypt` before saving to MongoDB.
 
-**Expected output:**
+**Requirements:**
+1. Register `UserSchema.pre("save", async function() { ... })`.
+
 > [!check]- Answer
-> ```javascript
-> articleSchema.pre('validate', function(next) {
->   const article = this;
->   if (article.isModified('title') && article.title) {
->     article.slug = slugify(article.title);
->   }
->   next();
+>
+> #### Implementation
+>
+> ```typescript
+> import bcrypt from "bcrypt";
+
+UserSchema.pre("save", async function(next) {
+  if (!this.isModified("password")) return next();
+  
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+```
+
+> #### Technical Explanation
+>
+> 1. `pre("save")` hooks intercept `doc.save()` calls before write commands execute.
+> 2. `this.isModified("password")` checks if the password field was altered, preventing redundant re-hashing on profile updates.
+> 3. Encapsulates security logic inside schema definitions.
+
+---
+
+### Exercise 2: Post-Remove Cascading Cleanup Hooks
+
+**Scenario:**
+Implement a Mongoose `post("deleteOne")` middleware hook to automatically delete associated user posts when a user is removed.
+
+**Requirements:**
+1. Register `UserSchema.post("deleteOne", async function(doc) { ... })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> UserSchema.post("deleteOne", { document: true, query: false }, async function() {
+>   await Post.deleteMany({ userId: this._id });
+>   console.log(`Cascaded deletion of posts for user ${this._id}`);
 > });
 > ```
-> - Hook into the `'validate'` event (which runs before the validation check).
-> - Refer to the current document using the `this` keyword inside a standard function scope.
+>
+> #### Technical Explanation
+>
+> 1. `post()` hooks execute after target operations complete successfully.
+> 2. Automates cascading deletes across related collections.
+> 3. Maintains referential integrity at the application tier.
+
+---
+
+### Exercise 3: Query Middleware vs Document Middleware Contexts
+
+**Scenario:**
+Explain why `this` in `pre("updateOne")` refers to the Query object rather than the Document instance.
+
+**Requirements:**
+1. Contrast document middleware (`save`) vs query middleware (`updateOne`).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // Query Middleware Hook (this = Mongoose Query object)
+> UserSchema.pre("updateOne", function() {
+>   const update = this.getUpdate() as any;
+>   update.$set = update.$set || {};
+>   update.$set.updatedAt = new Date();
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Query middleware (`updateOne`, `find`) operates on the query filter without loading documents into Node.js memory (`this` = Query).
+> 2. Document middleware (`save`, `validate`) operates on instantiated document instances (`this` = Document).
+> 3. Critical distinction when authoring Mongoose hooks.
 
 ---
 
 
 
-### Exercise 2: Password Hashing Pre-Save Hook
-
-**Problem:** Write Mongoose `pre('save')` hook hashing `password` if modified using bcrypt.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> userSchema.pre('save', async function() { if (this.isModified('password')) { this.password = await bcrypt.hash(this.password, 10); } });
-> ```
-> ```javascript
-> userSchema.pre('save', async function() {
->   if (this.isModified('password')) {
->     this.password = await bcrypt.hash(this.password, 10);
->   }
-> });
-> ```
->
-> **Explanation:** `this.isModified('password')` checks if the password field was changed before hashing.
-
----
-
-### Exercise 3: Post-Remove Cleanup Hook
-
-**Problem:** Write `post('findOneAndDelete')` hook deleting user orders after user removal.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> userSchema.post('findOneAndDelete', async function(doc) { if (doc) { await Order.deleteMany({ userId: doc._id }); } });
-> ```
-> ```javascript
-> userSchema.post('findOneAndDelete', async function(doc) {
->   if (doc) {
->     await Order.deleteMany({ userId: doc._id });
->   }
-> });
-> ```
->
-> **Explanation:** Post hooks execute after query operations complete to handle cascading cleanups.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Mongoose Schema & Model](mongoose_schema_model.md) — The parent modeling blueprint.
 - [Mongoose (ODM)](mongoose.md) — Related concept: Mongoose (ODM).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Mongoose Middleware intercepts asynchronous operations during the lifecycle.
 - Direct application-layer equivalent to database SQL trigger constraints.
 - `pre` hooks run before operations; `post` hooks run after operations succeed.

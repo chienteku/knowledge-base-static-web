@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript OOP Architecture**
+
+**Object-Oriented Programming** (Abstract Class Base Contracts): Abstract classes (`abstract class`) define partial base class implementations with un-implemented abstract methods that subclasses must implement.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time (Compiles to standard JS Classes)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you are building a game. You create a `Character` class with health, speed, and a `move()` method.
@@ -74,7 +75,7 @@ class Enemy extends Character {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Abstract Classes instead of Interfaces
 
@@ -84,6 +85,8 @@ class Enemy extends Character {
 **Golden Rule:** If you only need to define a *shape*, use an `interface`. If you need to share *actual logic/code* (like the `takeDamage` method above) AND mandate specific shapes, use an `abstract class`.
 
 ---
+
+
 
 
 
@@ -106,6 +109,8 @@ class ConsoleLogger extends Logger { log(msg: string) { console.log(msg); } }
 const logger = new ConsoleLogger(); // Instantiate concrete subclass
 ```
 
+
+
 ### Mistake 3: Omitting Abstract Method Implementations in Concrete Subclasses
 
 **The mistake:** Extending an abstract class without implementing all declared abstract methods.
@@ -126,161 +131,120 @@ class Child extends Base { render() { /* Concrete implementation */ } }
 
 
 
-### Mistake 4: Attempting Direct Instantiation of Abstract Classes via `new`
+## 5. Practice Exercises
 
-**The mistake:** Writing `const instance = new AbstractClass();` (TS2511).
+### Exercise 1: Authoring Abstract Base Classes
 
-**Why it's wrong:** Abstract classes serve strictly as base contracts for derived subclasses. TypeScript forbids direct instantiation of abstract classes.
+**Scenario:**
+Define an `abstract class Logger` with a concrete `log(msg)` method and an `abstract write(msg)` method.
 
-*Incorrect:*
-```typescript
-abstract class Logger { abstract log(msg: string): void; }
-// const logger = new Logger(); // ❌ Cannot create an instance of an abstract class
-```
+**Requirements:**
+1. Declare `abstract class Logger`.
+2. Extend `Logger` in `ConsoleLogger`.
 
-*Fix:*
-```typescript
-abstract class Logger { abstract log(msg: string): void; }
-class ConsoleLogger extends Logger { log(msg: string) { console.log(msg); } }
-const logger = new ConsoleLogger(); // Instantiate concrete subclass
-```
-
-### Mistake 5: Omitting Abstract Method Implementations in Concrete Subclasses
-
-**The mistake:** Extending an abstract class without implementing all declared abstract methods.
-
-**Why it's wrong:** Concrete subclasses MUST implement every abstract method inherited from parent abstract classes.
-
-*Incorrect:*
-```typescript
-abstract class Base { abstract render(): void; }
-// class Child extends Base {} // ❌ Non-abstract class 'Child' does not implement inherited abstract member 'render'
-```
-
-*Fix:*
-```typescript
-abstract class Base { abstract render(): void; }
-class Child extends Base { render() { /* Concrete implementation */ } }
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Abstract Properties
-
-**Problem:** Can you mark a class *property* as abstract, forcing the child class to provide a value for it?
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> // Yes!
-> abstract class Component {
->   abstract templateName: string; // Forces children to declare this property
-> }
+> abstract class Logger {
+>   log(msg: string): void {
+>     const timestamp = new Date().toISOString();
+>     this.write(`[${timestamp}] ${msg}`);
+>   }
 > 
-> class Button extends Component {
->   templateName = "btn-template"; // Implemented!
+>   abstract write(formattedMsg: string): void;
 > }
+
+class ConsoleLogger extends Logger {
+  write(formattedMsg: string): void {
+    console.log(formattedMsg);
+  }
+}
+
+const logger = new ConsoleLogger();
+logger.log("System initialized");
+```
+
+> #### Technical Explanation
+>
+> 1. `abstract class` cannot be instantiated directly with `new Logger()`.
+> 2. `abstract write()` forces derived subclasses (`ConsoleLogger`) to supply concrete implementations.
+> 3. Shared method logic (`log`) is reused across all subclass implementations.
+
+---
+
+### Exercise 2: Auditing Direct Abstract Instantiation Errors
+
+**Scenario:**
+Demonstrate compile error when attempting to instantiate an abstract class with `new`.
+
+**Requirements:**
+1. Show compile error on `new AbstractClass()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> abstract class Animal {
+>   abstract makeSound(): void;
+> }
+
+// ❌ Compile Error: Cannot create an instance of an abstract class!
+// const a = new Animal();
+
+class Dog extends Animal {
+  makeSound(): void { console.log("Woof!"); }
+}
+
+const d = new Dog(); // Valid!
+```
+
+> #### Technical Explanation
+>
+> 1. Abstract classes serve strictly as architectural base blueprints.
+> 2. TypeScript prevents direct instantiation of un-implemented abstract classes at compile time.
+> 3. Enforces object inheritance hierarchy design.
+
+---
+
+### Exercise 3: Comparative Analysis: `abstract class` vs `interface`
+
+**Scenario:**
+Formulate an architectural selection matrix comparing `abstract class` against `interface`.
+
+**Requirements:**
+1. Contrast runtime JavaScript output, concrete code sharing, and inheritance limits.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Abstract Class vs Interface Selection Matrix:
+> - abstract class: Preserved in transpiled JS output as a class. Supports shared concrete code execution and constructor state. Class can extend ONLY ONE abstract class (single inheritance).
+> - interface: Erased completely in transpiled JS output (0 bytes). Pure type contract (zero executable code). Class can implement MULTIPLE interfaces (multiple inheritance).
 > ```
-> - The syntax is exactly the same as abstract methods.
+
+> #### Technical Explanation
+>
+> 1. Abstract classes are suitable when sharing reusable code logic across related subclasses.
+> 2. Interfaces are suitable for pure type contracts and multi-interface class capability composition.
+> 3. Fundamental OOP architectural choice.
 
 ---
 
 
 
-### Exercise 2: Abstract Class Template Method Pattern
-
-**Problem:** Create `abstract class Shape` with `abstract getArea(): number` and concrete `printArea()` method.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Abstract template method pattern implemented
-> ```
-> ```typescript
-> abstract class Shape {
->   abstract getArea(): number;
->   printArea() { console.log(`Area: ${this.getArea()}`); }
-> }
-> class Square extends Shape {
->   constructor(private size: number) { super(); }
->   getArea() { return this.size * this.size; }
-> }
-> new Square(5).printArea();
-> console.log("Abstract template method pattern implemented");
-> ```
->
-> **Explanation:** Abstract classes combine concrete shared methods with abstract subclass contract hooks.
-
----
-
-### Exercise 3: Abstract Constructor Type Annotation
-
-**Problem:** Type a factory parameter expecting abstract class constructor `type ShapeCtor = abstract new (...args: any[]) => Shape`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Abstract constructor type defined
-> ```
-> ```typescript
-> type ShapeCtor = abstract new (...args: any[]) => Shape;
-> console.log("Abstract constructor type defined");
-> ```
->
-> **Explanation:** `abstract new` syntax describes constructor function types of abstract classes.
-
----
-
-### Exercise 4: Abstract Class Template Method Pattern
-
-**Problem:** Create `abstract class Shape` with `abstract getArea(): number` and concrete `printArea()` method.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Abstract template method pattern implemented
-> ```
-> ```typescript
-> abstract class Shape {
->   abstract getArea(): number;
->   printArea() { console.log(`Area: ${this.getArea()}`); }
-> }
-> class Square extends Shape {
->   constructor(private size: number) { super(); }
->   getArea() { return this.size * this.size; }
-> }
-> new Square(5).printArea();
-> console.log("Abstract template method pattern implemented");
-> ```
->
-> **Explanation:** Abstract classes combine concrete shared methods with abstract subclass contract hooks.
-
----
-
-### Exercise 5: Abstract Constructor Type Annotation
-
-**Problem:** Type a factory parameter expecting abstract class constructor `type ShapeCtor = abstract new (...args: any[]) => Shape`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Abstract constructor type defined
-> ```
-> ```typescript
-> type ShapeCtor = abstract new (...args: any[]) => Shape;
-> console.log("Abstract constructor type defined");
-> ```
->
-> **Explanation:** `abstract new` syntax describes constructor function types of abstract classes.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Interfaces](../level_03/interfaces.md) — The zero-cost alternative for pure shape blueprinting.
 - [`implements` Keyword](implements.md) — How you apply an Interface to a class (similar to how you `extends` an abstract class).
 - [Classes Overview](classes.md) — Related concept: Classes Overview.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Abstract Classes** are base classes that cannot be instantiated directly (`new AbstractClass()` is illegal).
 - They exist solely to be extended by other classes.
 - They allow you to share concrete logic (standard methods) with subclasses.

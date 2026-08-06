@@ -150,7 +150,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Tenant Storage Sandbox & Path Traversal Guard
 
-**Problem Context:**
+**Scenario:**
 You are building the storage backend for a multi-tenant cloud application. Users can request files via relative paths (e.g., `user_123/documents/report.pdf`). However, untrusted inputs might attempt path traversal attacks using parent directory components (`../../etc/passwd`), absolute paths (`/etc/shadow`), or disallowed extensions (`script.sh`).
 
 Write a production-grade function `sanitize_and_resolve_path` that safely joins a `base_dir` and `user_path` while enforcing the following security guarantees:
@@ -289,7 +289,7 @@ Write a production-grade function `sanitize_and_resolve_path` that safely joins 
 
 ### Exercise 2: High-Performance Log Cleanup & Archive Relocation Pipeline
 
-**Problem Context:**
+**Scenario:**
 You are developing an automated log rotation daemon. The daemon scans log directories, identifies active log files, extracts their relative subdirectories, appends timestamp tags, and generates target archive destination paths inside a separate archive storage partition.
 
 Write a production-grade function `plan_log_archive_target` that constructs the target archive path given a `log_root`, an `archive_root`, an `entry_path`, and a `timestamp_tag`.
@@ -404,7 +404,7 @@ The function must:
 
 ### Exercise 3: Cross-Platform Compiler Build System Output Artifact Mapper
 
-**Problem Context:**
+**Scenario:**
 In a custom Rust compiler toolchain or code generator, source files inside `src/` must be mapped to corresponding output build artifacts inside `target/dist/` with transformed file extensions (e.g. `src/gfx/pipeline/render_pass.rs` -> `target/dist/gfx/pipeline/render_pass.o`).
 
 Write a production-grade function `map_source_to_build_artifact` that handles this path transformation cleanly and safely.

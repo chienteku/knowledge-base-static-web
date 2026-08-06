@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Attribute / Embedded / Language Feature**: `#![no_std]` is an attribute placed at the top of a crate root (`lib.rs` or `main.rs`). It tells `rustc` not to automatically link the Rust Standard Library (`std`). This removes dependencies on operating system services (like threads, files, network sockets, or OS process heaps), linking only against `core` (the target-independent, dependency-free subset of Rust).
+
+
+**Rust Compilation Environment (bare-metal standard library exclusion)**: `#![no_std]` is an attribute placed at the top of a crate root (`lib.rs` or `main.rs`). It tells `rustc` not to automatically link the Rust Standard Library (`std`). This removes dependencies on operating system services (like threads, files, network sockets, or OS process heaps), linking only against `core` (the target-independent, dependency-free subset of Rust).
+
+
 
 ---
 
-## 3. Environment Context
-
-**Bare-Metal & Embedded**: `#![no_std]` is mandatory for OS kernels, bootloaders, microcontrollers (ARM Cortex-M, RISC-V, AVR), high-performance hypervisors, and standalone WebAssembly modules.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -76,7 +74,23 @@ pub extern "C" fn _start() -> ! {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Importing Dependencies that Secretly Require `std`
+
+**The mistake:** Adding a crate to `Cargo.toml` without disabling default features.
+
+**Why it's wrong:** Many crates enable `std` support by default, triggering compilation failures in `#![no_std]` targets.
+
+*Fix:* Specify `default-features = false` in `Cargo.toml` dependencies.
+
+### Mistake 3: Forgetting `#[panic_handler]` in `#![no_std]` Binaries
+
+**The mistake:** Compiling a `#![no_std]` binary without defining a panic handler function.
+
+**Why it's wrong:** The compiler requires an explicit strategy to handle panics when `std` is disabled.
+
+*Fix:* Add a panic handler crate like `panic_halt` or define `#[panic_handler]`.
+
 
 ### Mistake 1: Trying to use `std::println!` or `std::vec::Vec` without `alloc` in `#![no_std]`
 
@@ -91,11 +105,11 @@ pub extern "C" fn _start() -> ! {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Embedded Fixed-Capacity Ring-Buffer Telemetry Logger
 
-**Problem:** In bare-metal embedded applications (such as ARM Cortex-M or RISC-V microcontrollers), logging telemetry messages without the standard library (`std`) or dynamic memory allocators (`alloc`) requires custom, fixed-size stack buffers. Implement a `#![no_std]` telemetry logger `RingBufferLogger<const CAP: usize>` that implements `core::fmt::Write`. The logger must:
+**Scenario:** In bare-metal embedded applications (such as ARM Cortex-M or RISC-V microcontrollers), logging telemetry messages without the standard library (`std`) or dynamic memory allocators (`alloc`) requires custom, fixed-size stack buffers. Implement a `#![no_std]` telemetry logger `RingBufferLogger<const CAP: usize>` that implements `core::fmt::Write`. The logger must:
 1. Store bytes in a fixed-size array `[u8; CAP]` using const generics (`const CAP: usize`).
 2. Support formatted string writing via the `core::fmt::Write` trait without heap allocation.
 3. Automatically wrap around (overwrite oldest data) when log contents exceed capacity, tracking both head write index and total bytes logged.
@@ -103,6 +117,9 @@ pub extern "C" fn _start() -> ! {
 5. Include comprehensive unit tests verifying single string formatting, buffer overflow wrap-around behavior, UTF-8 validity checks, and reset operations.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -250,7 +267,8 @@ pub extern "C" fn _start() -> ! {
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Zero-Allocation Stack Buffering via Const Generics**: Using `const CAP: usize`, memory storage is determined at compile time directly on the stack or static data segment without requiring dynamic heap allocation (`alloc`) or OS runtime support.
 > 2. **Formatting Strings with `core::fmt::Write`**: Implementing `core::fmt::Write::write_str` unlocks standard Rust string formatting macros (`write!`, `writeln!`) inside `#![no_std]` environments without depending on `std::println!`.
 > 3. **Circular Ring-Buffer Indexing**: Wrapping indices with `(write_pos + 1) % CAP` ensures continuous telemetry collection under fixed memory limits by automatically overwriting the oldest entries.
@@ -260,7 +278,7 @@ pub extern "C" fn _start() -> ! {
 > 
 > ### Exercise 2: Bare-Metal Hardware Register Bitfield Controller
 > 
-> **Problem:** In `#![no_std]` embedded device drivers, developers interact directly with memory-mapped I/O (MMIO) hardware control registers using integer bitmasks. Implement a type-safe control register wrapper `struct ControlRegister(u32)` with the following layout:
+> **Scenario:** In `#![no_std]` embedded device drivers, developers interact directly with memory-mapped I/O (MMIO) hardware control registers using integer bitmasks. Implement a type-safe control register wrapper `struct ControlRegister(u32)` with the following layout:
 > - **Bits 0–1 (Mode)**: 2-bit device operating mode (`enum DeviceMode { Standby = 0b00, Active = 0b01, Diagnostic = 0b10, PowerDown = 0b11 }`).
 > - **Bit 2 (Enable)**: Peripheral enable bit (`1` = Enabled, `0` = Disabled).
 > - **Bit 3 (Interrupt Enable)**: Enable interrupt generation.
@@ -462,7 +480,7 @@ pub extern "C" fn _start() -> ! {
 > 
 > ### Exercise 3: Bare-Metal Panic Diagnostic Recorder & Atomic Re-Entrancy Guard
 > 
-> **Problem:** In bare-metal embedded systems, when a panic occurs, the system cannot output diagnostic messages to standard stdout. Instead, a custom `#[panic_handler]` must log fault details (file location and line number) into a static, non-allocating structure, prevent recursive panic cascades using atomic operations, and transition execution into a safe spin loop. Implement a `#![no_std]` panic recorder `FaultRecord` and a thread-safe panic handler system that:
+> **Scenario:** In bare-metal embedded systems, when a panic occurs, the system cannot output diagnostic messages to standard stdout. Instead, a custom `#[panic_handler]` must log fault details (file location and line number) into a static, non-allocating structure, prevent recursive panic cascades using atomic operations, and transition execution into a safe spin loop. Implement a `#![no_std]` panic recorder `FaultRecord` and a thread-safe panic handler system that:
 > 1. Captures file paths (up to 48 bytes) and line numbers from `core::panic::PanicInfo` into a stack/static buffer without dynamic allocation.
 > 2. Uses `core::sync::atomic::AtomicBool` with `Ordering::SeqCst` memory ordering to guard against nested or recursive panics during diagnostic recording.
 > 3. Provides a `capture_fault_info(&PanicInfo) -> FaultRecord` helper function and a `#![no_std]` diverging `#[panic_handler]` function (`fn panic(...) -> !`).

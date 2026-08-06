@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Core Syntax**: Functions declared via `fn` keywords with explicit argument types and return signatures.
+
+
+**Rust Core Construct (first-class callable abstractions)**: Functions declared via `fn` keywords with explicit argument types and return signatures.
 
 ---
 

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Syntax / Abstraction**
+
+**Advanced Feature** (Hierarchical Graph Traversal CTEs): Recursive CTEs (`WITH RECURSIVE`) traverse hierarchical trees, org charts, and graph data structures until base cases resolve.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in modern SQL engines. Uses the **`RECURSIVE`** keyword after `WITH` to instruct the compiler to allocate temporary iteration buffers in memory).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational database tables frequently store hierarchical structures where rows reference other rows in the same table:
@@ -104,7 +105,7 @@ SELECT * FROM org_chart ORDER BY depth, name;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating infinite loops due to circular relationships in data
 
@@ -162,91 +163,117 @@ Add depth constraint WHERE depth < 50 or track array of visited IDs
 Use UNION in recursive CTE step to automatically discard duplicate tuples
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Category Path Generator
+### Exercise 1: Traversing Manager-Employee Hierarchies with Recursive CTEs
 
-**Problem:** You are building an e-commerce folder hierarchy. The `categories` table has columns `id`, `name`, and `parent_id` (referencing `categories(id)`). 
+**Scenario:**
+Traverse an org chart hierarchy in table `employees` starting from CEO `id = 1` down to all subordinate report levels.
 
-Write a recursive CTE named `category_tree` that starts at the root category `'Electronics'` (id=1, parent_id IS NULL) and builds a text breadcrumb trail path for all child categories (e.g. `'Electronics > Computers > Laptops'`).
+**Requirements:**
+1. Execute `WITH RECURSIVE org_chart AS (Anchor UNION ALL Recursive) SELECT * FROM org_chart`.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> WITH RECURSIVE category_tree AS (
->   -- Anchor
->   SELECT id, name, CAST(name AS TEXT) AS path_trail
->   FROM categories
+> WITH RECURSIVE org_chart AS (
+>   -- 1. Anchor Member (Top-level CEO)
+>   SELECT id, name, manager_id, 1 AS depth 
+>   FROM employees 
 >   WHERE id = 1
 >   
 >   UNION ALL
 >   
->   -- Recursive
->   SELECT c.id, c.name, t.path_trail || ' > ' || c.name
->   FROM categories c
->   JOIN category_tree t ON c.parent_id = t.id
+>   -- 2. Recursive Member (Subordinates joining back to CTE)
+>   SELECT e.id, e.name, e.manager_id, o.depth + 1 
+>   FROM employees AS e 
+>   JOIN org_chart AS o ON e.manager_id = o.id
 > )
-> SELECT * FROM category_tree;
-> ```
-> - The anchor query finds the root node where `id = 1`.
-> - Cast the initial path column to `TEXT` in the anchor to prevent data type mismatches during string concatenation (`||`) in the recursive step.
-
----
-
-
-
-### Exercise 2: Recursive CTE Hierarchical Tree Traversal
-
-**Problem:** Traverse organization hierarchy starting from manager `id = 1` selecting employee `id`, `name`, `manager_id`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> WITH RECURSIVE org_chart AS (SELECT id, name, manager_id FROM employees WHERE id = 1 UNION ALL SELECT e.id, e.name, e.manager_id FROM employees e JOIN org_chart o ON e.manager_id = o.id) SELECT * FROM org_chart;
-> ```
-> ```sql
-> WITH RECURSIVE org_chart AS (
->   -- Anchor member
->   SELECT id, name, manager_id FROM employees WHERE id = 1
->   UNION ALL
->   -- Recursive member
->   SELECT e.id, e.name, e.manager_id
->   FROM employees e
->   JOIN org_chart o ON e.manager_id = o.id
-> )
-> SELECT * FROM org_chart;
+> SELECT * FROM org_chart ORDER BY depth ASC;
 > ```
 >
-> **Explanation:** `WITH RECURSIVE` traverses hierarchical trees and graphs via anchor and recursive terms.
+> #### Technical Explanation
+>
+> 1. `WITH RECURSIVE` combines an Anchor query with a Recursive query via `UNION ALL`.
+> 2. The recursive member joins the source table to the CTE result set from the previous iteration step.
+> 3. Continues execution until the recursive member returns 0 new rows (base case).
 
 ---
 
-### Exercise 3: Generating Sequence Numbers with Recursive CTE
+### Exercise 2: Generating Number Sequences with Recursive CTEs
 
-**Problem:** Generate series from 1 to 5 using `WITH RECURSIVE`.
+**Scenario:**
+Generate a sequence of numbers from 1 to 10 using a Recursive CTE.
 
-**Expected output:**
+**Requirements:**
+1. Code recursive number counter.
+
 > [!check]- Answer
-> ```text
-> WITH RECURSIVE seq AS (SELECT 1 AS n UNION ALL SELECT n + 1 FROM seq WHERE n < 5) SELECT * FROM seq;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> WITH RECURSIVE seq AS (
+> WITH RECURSIVE numbers AS (
 >   SELECT 1 AS n
 >   UNION ALL
->   SELECT n + 1 FROM seq WHERE n < 5
+>   SELECT n + 1 FROM numbers WHERE n < 10
 > )
-> SELECT * FROM seq;
+> SELECT n FROM numbers;
 > ```
 >
-> **Explanation:** Recursive CTEs increment sequence values until termination conditions evaluate false.
+> #### Technical Explanation
+>
+> 1. Anchor member initializes counter `n = 1`.
+> 2. Recursive member increments `n + 1` while predicate condition `n < 10` remains `TRUE`.
+> 3. Generates sequential series.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Preventing Infinite Recursion Loops with CYCLE Clauses
+
+**Scenario:**
+Prevent infinite recursion loops caused by cyclic data references (`A -> B -> A`) using PostgreSQL `CYCLE` clause (PG 14+).
+
+**Requirements:**
+1. Append `CYCLE id SET is_cycle USING path`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> WITH RECURSIVE graph_nodes AS (
+>   SELECT id, parent_id 
+>   FROM nodes 
+>   WHERE id = 1
+>   
+>   UNION ALL
+>   
+>   SELECT n.id, n.parent_id 
+>   FROM nodes AS n 
+>   JOIN graph_nodes AS g ON n.parent_id = g.id
+> ) CYCLE id SET is_cycle USING path
+> SELECT * FROM graph_nodes WHERE NOT is_cycle;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Cyclic parent links (e.g. employee A manages B, B manages A) cause infinite recursion loops without cycle detection.
+> 2. `CYCLE id SET is_cycle USING path` tracks visited key paths and halts execution if a duplicate ID is encountered.
+> 3. Safe graph traversal feature in PostgreSQL 14+.
+
+---
+
+
+
+## 6. Related Terms
 - [Common Table Expression (CTE / `WITH`)](cte.md) — The parent query abstraction syntax.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Recursive CTEs allow SQL queries to reference themselves to traverse loops.
 - Indispensable for hierarchical data (org charts, folder trees, thread replies).
 - Requires the `WITH RECURSIVE` keyword to activate buffer memory.

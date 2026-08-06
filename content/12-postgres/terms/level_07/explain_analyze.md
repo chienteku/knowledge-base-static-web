@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Command**
+
+**Performance / Optimization** (Query Execution Plan Diagnostic): `EXPLAIN ANALYZE` executes queries and displays physical query plan nodes, row estimates, scan types, and exact millisecond execution times.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Evaluated directly inside the query execution engine. Essential for performance profiling and index validation).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When an application's database queries start slowing down, developers cannot guess why. They need to know:
@@ -90,7 +91,7 @@ EXPLAIN ANALYZE SELECT * FROM users WHERE id = 105;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running EXPLAIN ANALYZE on DML write statements without a rollback
 
@@ -138,76 +139,100 @@ EXPLAIN SELECT * FROM users; -- Returns cost estimates, NOT real execution milli
 EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM users; -- Real execution stats
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Plan Analysis
+### Exercise 1: Reading Physical Execution Plans with EXPLAIN ANALYZE
 
-**Problem:** You run an explain query and receive this output:
-```text
-Seq Scan on product_catalog  (cost=0.00..355.00 rows=10000 width=45)
-  Filter: (price > 100.00)
-```
-1.  What scan type did the database use?
-2.  Is there an index optimized for this query?
-3.  How many rows does the planner estimate will match?
+**Scenario:**
+Execute `EXPLAIN (ANALYZE, BUFFERS)` to inspect query planning time, execution time, scan types, and shared buffer hits.
 
-**Expected output:**
+**Requirements:**
+1. Execute `EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM users WHERE email = 'alice@example.com'`.
+
 > [!check]- Answer
-> ```text
-> 1. Scan Type: Sequential Scan (Seq Scan).
-> 2. Index Check: No. The database had to scan the table sequentially, indicating that there is no active B-tree index on the `price` column.
-> 3. Row Estimate: 10,000 rows.
-> ```
-> - Read the first line of the plan node.
-> - Look for keywords like "Seq Scan" or "Index Scan".
-
----
-
-
-
-### Exercise 2: Safe Execution Analysis of DML Query
-
-**Problem:** Safely run `EXPLAIN (ANALYZE, BUFFERS)` on `UPDATE` query inside a transaction block rolled back at the end.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> BEGIN; EXPLAIN (ANALYZE, BUFFERS) UPDATE users SET status = 'active' WHERE id = 1; ROLLBACK;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> BEGIN;
-> EXPLAIN (ANALYZE, BUFFERS)
-> UPDATE users SET status = 'active' WHERE id = 1;
-> ROLLBACK;
+> EXPLAIN (ANALYZE, BUFFERS) 
+> SELECT * FROM users 
+> WHERE email = 'alice@example.com';
 > ```
 >
-> **Explanation:** Wrapping `EXPLAIN ANALYZE` inside `BEGIN...ROLLBACK` safely measures runtime execution without committing data mutations.
+> #### Technical Explanation
+>
+> 1. `EXPLAIN` shows the estimated query plan; `ANALYZE` actually *executes* the query and records exact execution statistics.
+> 2. `BUFFERS` reports RAM cache hits (`shared hit`) vs disk page reads (`shared read`).
+> 3. Displays node types (`Index Scan`, `Seq Scan`, `Hash Join`) and exact millisecond timings.
 
 ---
 
-### Exercise 3: Key Metrics in EXPLAIN ANALYZE Output
+### Exercise 2: Diagnosing Table Scans (`Seq Scan`)
 
-**Problem:** List 3 essential metrics in `EXPLAIN ANALYZE` output (`actual time`, `rows`, `Buffers: shared hit/read`).
+**Scenario:**
+Identify a slow `Seq Scan` on table `orders` and verify that creating an index converts execution to `Index Scan`.
 
-**Expected output:**
+**Requirements:**
+1. Run `EXPLAIN ANALYZE`, create index, re-run `EXPLAIN ANALYZE`.
+
 > [!check]- Answer
-> ```text
-> actual time, rows, Buffers (shared hit/read)
-> ```
-> ```text
-> actual time, rows, Buffers (shared hit/read)
+>
+> #### Implementation
+>
+> ```sql
+> -- 1. Inspect un-indexed query (shows Seq Scan on orders)
+> EXPLAIN ANALYZE SELECT * FROM orders WHERE status = 'pending';
+> 
+> -- 2. Create index
+> CREATE INDEX idx_orders_status ON orders(status);
+> 
+> -- 3. Inspect indexed query (shows Bitmap Index Scan)
+> EXPLAIN ANALYZE SELECT * FROM orders WHERE status = 'pending';
 > ```
 >
-> **Explanation:** Actual time measures execution milliseconds; Buffers report RAM cache hit vs disk read metrics.
+> #### Technical Explanation
+>
+> 1. `Seq Scan` reads every 8KB table page sequentially from disk, resulting in $O(N)$ high execution times on large tables.
+> 2. `Bitmap Index Scan` uses the index to construct a tuple bitmap, jumping directly to target table pages.
+> 3. Empirical verification of index performance optimizations.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Identifying Estimation Skew (Row Count Discrepancy)
+
+**Scenario:**
+Spot an estimation discrepancy between `rows=1` (planner estimate) vs `actual rows=50000` in plan node outputs.
+
+**Requirements:**
+1. Explain causes of query planner row estimation skew and resolve with `ANALYZE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- Run ANALYZE to update stale table statistics catalog
+> ANALYZE orders;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Severe discrepancies between estimated `rows` and `actual rows` indicate stale catalog statistics in `pg_statistic`.
+> 2. Estimation skew causes the planner to choose sub-optimal join types (e.g. choosing Nested Loop instead of Hash Join).
+> 3. Running `ANALYZE` updates catalog statistics and restores accurate query planning.
+
+---
+
+
+
+## 6. Related Terms
 - [Query Planner / Optimizer](query_planner.md) — The engine generating the plans.
 - [Sequential Scan vs. Index Scan](seq_scan_vs_index_scan.md) — The two scan behaviors.
 - [Index (Concept)](index_concept.md) — Related concept: Index (Concept).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `EXPLAIN` displays query plans without running queries; safe for production.
 - `EXPLAIN ANALYZE` executes queries to measure actual timing and loop stats.
 - Reveals if query plans are using B-tree indexes or slow Sequential Scans.

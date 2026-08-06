@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Data Type**
+
+**Data Type** (Arbitrary Precision Financial Types): Numeric data types (`NUMERIC`, `DECIMAL`, `REAL`, `DOUBLE PRECISION`) handle high-precision monetary math or floating-point calculations.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Floating-point types map directly to standard IEEE 754 hardware registers on CPU chips. `NUMERIC` is processed via software base-10 math routines inside the Postgres executable process).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When storing numbers with decimal places (fractions like `10.99` or `0.00032`), computers face a mathematical hurdle:
@@ -82,7 +83,7 @@ SELECT SUM(val) FROM exact_test;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing product prices or user balances as `DOUBLE PRECISION` or `REAL`
 
@@ -128,68 +129,99 @@ amount MONEY -- Locale-dependent currency format
 amount NUMERIC(12, 2), currency VARCHAR(3) -- Explicit numeric amount and ISO currency code
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Type Selection Audit
+### Exercise 1: Exact Decimal Math vs Floating-Point Approximations
 
-**Problem:** You are designing a database for a scientific drone. Select the best decimal type (`NUMERIC` or `DOUBLE PRECISION`) for each of the following columns:
-1.  The drone's battery voltage sensor reading (updates 100 times per second, speed is critical).
-2.  The cost of renting the drone per hour in dollars (e.g. `$45.50`).
-3.  The drone's current GPS longitude coordinate (requires high precision decimal places).
+**Scenario:**
+Demonstrate the difference between exact `NUMERIC` math vs approximate `DOUBLE PRECISION` math.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT 0.1::NUMERIC + 0.2::NUMERIC` vs `SELECT 0.1::FLOAT + 0.2::FLOAT`.
+
 > [!check]- Answer
-> ```text
-> 1. Sensor Reading: DOUBLE PRECISION (Requires high-speed writes and hardware CPU calculations; tiny rounding errors are irrelevant for sensor logs).
-> 2. Hourly Cost: NUMERIC (This is a financial value; must be mathematically exact to prevent billing discrepancies).
-> 3. GPS Coordinate: DOUBLE PRECISION (Scientific coordinate tracking values require high precision floating point ranges).
-> ```
-> - Determine if the column handles financial transactions.
-> - Consider if processing speed and writing frequency take priority over exact representation.
-
----
-
-
-
-### Exercise 2: Exact vs Inexact Numeric Types Matrix
-
-**Problem:** Categorize as Exact or Inexact: 1. `NUMERIC` (Exact), 2. `DOUBLE PRECISION` (Inexact), 3. `INTEGER` (Exact).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Exact, 2. Inexact, 3. Exact
-> ```
-> ```text
-> 1. Exact, 2. Inexact, 3. Exact
-> ```
 >
-> **Explanation:** Fixed-point NUMERIC and INTEGER types guarantee exact decimal arithmetic.
-
----
-
-### Exercise 3: Floating-Point Calculation Inspection
-
-**Problem:** Inspect floating point calculation `SELECT 0.1::FLOAT8 + 0.2::FLOAT8;` in PostgreSQL.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 0.30000000000000004
-> ```
+> #### Implementation
+>
 > ```sql
-> SELECT 0.1::FLOAT8 + 0.2::FLOAT8;
+> -- Exact NUMERIC math
+> SELECT (0.1::NUMERIC + 0.2::NUMERIC) = 0.3::NUMERIC AS numeric_exact; -- Returns TRUE
+> 
+> -- Approximate DOUBLE PRECISION float math
+> SELECT (0.1::FLOAT + 0.2::FLOAT) = 0.3::FLOAT AS float_exact; -- Returns FALSE (0.30000000000000004)
 > ```
 >
-> **Explanation:** `FLOAT8` produces IEEE 754 floating-point rounding artifacts.
+> #### Technical Explanation
+>
+> 1. `NUMERIC` performs exact base-10 arithmetic, making it mandatory for accounting and prices.
+> 2. `FLOAT` (`REAL`, `DOUBLE PRECISION`) uses IEEE 754 binary floating-point representation, causing rounding artifacts.
+> 3. Use `FLOAT` only for scientific or sensor data where performance overrides exact decimal precision.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Aggregating Exact Monetary Sums with `SUM()`
+
+**Scenario:**
+Calculate the exact sum of all invoice amounts in table `invoices`.
+
+**Requirements:**
+1. Execute `SELECT SUM(amount_cents) FROM invoices`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   SUM(total_amount) AS total_revenue 
+> FROM invoices;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SUM()` over `NUMERIC` or `INTEGER` columns returns an exact total sum.
+> 2. Accumulates exact balances across millions of rows without floating-point drift.
+> 3. Returns `NUMERIC` type output.
+
+---
+
+### Exercise 3: Currency Storage Strategy: Cents Integer Pattern
+
+**Scenario:**
+Compare storing prices as `NUMERIC(10, 2)` vs storing price as integer cents (`INTEGER`).
+
+**Requirements:**
+1. Contrast `price_cents INTEGER` vs `price NUMERIC(10,2)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- Integer Cents Pattern (Fastest storage & arithmetic)
+> CREATE TABLE products_cents (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   price_cents INTEGER NOT NULL CHECK (price_cents >= 0)
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Storing monetary amounts as integer cents (`INTEGER` or `BIGINT`) avoids decimal overhead completely.
+> 2. Integer arithmetic operates faster in CPU hardware than `NUMERIC` software decimal math.
+> 3. Popular pattern in modern payment systems (e.g. Stripe API).
+
+---
+
+
+
+## 6. Related Terms
 - [Data Types (Overview)](data_types.md) — The parent typing framework.
 - [`NUMERIC` Precision & Scale](numeric_precision_scale.md) — Configuring exact decimal limits.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use `NUMERIC` (or `DECIMAL`) for exact decimal calculations (financial data).
 - Use `REAL` (4 bytes) or `DOUBLE PRECISION` (8 bytes) for fast approximate calculations.
 - Floating-point arithmetic suffers from rounding errors due to base-2 binary conversion limits.

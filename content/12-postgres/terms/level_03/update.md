@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DML Statement**
+
+**SQL Command / Clause** (Row Modification Command): `UPDATE` modifies existing column values across matching table rows.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (Postgres uses a storage architecture called MVCC (Multi-Version Concurrency Control). An update does not overwrite the old bytes on disk. Instead, Postgres marks the old row as deleted, writes a new version of the row elsewhere on disk, and relies on the Vacuum cleaner to purge the dead bytes later).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Data stored in a database is rarely static. Users edit their profiles, product stock quantities fluctuate as orders are placed, and invoice statuses shift from `'pending'` to `'paid'`.
@@ -81,7 +82,7 @@ WHERE id = 101;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the WHERE clause when writing update statements in production scripts
 
@@ -127,71 +128,100 @@ UPDATE users SET status = 'inactive' WHERE id = 123; -- Target specific row
 UPDATE users SET score = v.score FROM (VALUES (1, 10), (2, 20)) AS v(id, score) WHERE users.id = v.id;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Inventory Update
+### Exercise 1: Target Row Value Modification
 
-**Problem:** You are building a store management system. A shipment of 50 new keyboards arrives. You need to update the `stock_count` of item `'SKU-KEYBOARD'` in the `products` table. The new stock count should add 50 to the current stock. Write the SQL update statement.
+**Scenario:**
+Update user status to `'active'` and update `last_login` timestamp for user `id = 15`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `UPDATE users SET status = ..., last_login = ... WHERE id = 15`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> UPDATE users 
+> SET status = 'active',
+>     last_login = CURRENT_TIMESTAMP 
+> WHERE id = 15 
+> RETURNING id, username, status, last_login;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `UPDATE` sets new column values across rows matching the `WHERE` clause.
+> 2. `WHERE id = 15` restricts modification to a single target row.
+> 3. `RETURNING` verifies updated column state.
+
+---
+
+### Exercise 2: Multi-Row Conditional Batch Updates
+
+**Scenario:**
+Increase prices by 10% (`price_cents * 1.10`) for all products in category `'electronics'`.
+
+**Requirements:**
+1. Execute `UPDATE products SET price_cents = price_cents * 1.10 WHERE category = 'electronics'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
 > UPDATE products 
-> SET stock_count = stock_count + 50 
-> WHERE sku = 'SKU-KEYBOARD';
+> SET price_cents = ROUND(price_cents * 1.10) 
+> WHERE category = 'electronics' 
+> RETURNING id, name, price_cents;
 > ```
-> - You can reference a column's current value inside the `SET` equation (e.g. `SET col = col + 1`).
-> - Target the product specifically using the unique SKU code in the `WHERE` clause.
+>
+> #### Technical Explanation
+>
+> 1. Modifies all rows satisfying the `WHERE` filter.
+> 2. `ROUND()` ensures price integer cents remain whole numbers.
+> 3. Executes atomically as a single transaction.
+
+---
+
+### Exercise 3: Preventing Unbounded Table Wipes
+
+**Scenario:**
+Audit a buggy `UPDATE` query that accidentally omitted the `WHERE` clause.
+
+**Requirements:**
+1. Explain the consequences of `UPDATE table SET col = val` without `WHERE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- ❌ DANGEROUS: Omitting WHERE updates EVERY row in the table!
+> -- UPDATE users SET is_active = FALSE;
+> 
+> -- ✅ SAFE: Always specify target row filters
+> UPDATE users SET is_active = FALSE WHERE id = 100;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Omitting `WHERE` applies modifications to EVERY row in the table.
+> 2. Under MVCC, writes new versions for all rows, causing severe table bloat.
+> 3. Always write `WHERE` clauses first when authoring `UPDATE` queries.
 
 ---
 
 
 
-### Exercise 2: Updating Rows with RETURNING Clause
-
-**Problem:** Update user `status` to `'active'` for `id = 1` returning updated `updated_at` timestamp.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPDATE users SET status = 'active', updated_at = NOW() WHERE id = 1 RETURNING updated_at;
-> ```
-> ```sql
-> UPDATE users
-> SET status = 'active', updated_at = NOW()
-> WHERE id = 1
-> RETURNING updated_at;
-> ```
->
-> **Explanation:** `UPDATE ... RETURNING` returns updated column attributes directly.
-
----
-
-### Exercise 3: Batch UPDATE FROM Values Pattern
-
-**Problem:** Update scores for `id = 1` (score 50) and `id = 2` (score 80) in a single batch update using `UPDATE ... FROM (VALUES ...)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPDATE users SET score = v.score FROM (VALUES (1, 50), (2, 80)) AS v(id, score) WHERE users.id = v.id;
-> ```
-> ```sql
-> UPDATE users
-> SET score = v.score
-> FROM (VALUES (1, 50), (2, 80)) AS v(id, score)
-> WHERE users.id = v.id;
-> ```
->
-> **Explanation:** `UPDATE ... FROM (VALUES ...)` executes high-speed batch row mutations.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`WHERE` Clause](where.md) — The update filter anchor.
 - [`RETURNING` Clause](returning.md) — Returning updated values instantly.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `UPDATE` modifies column values inside existing table rows.
 - Use the `SET` keyword to assign new values to columns (separated by commas).
 - Always include a `WHERE` filter to target specific records for modification.

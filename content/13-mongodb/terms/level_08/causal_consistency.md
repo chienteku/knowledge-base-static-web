@@ -14,16 +14,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Paradigm**
+
+**Advanced Feature** (Causally Related Session Ordering): Causal Consistency guarantees that causally related read and write operations are observed in their exact causal order across all nodes in a client session.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Supported inside Client Sessions. Uses a logical clock system called **Cluster Time** (`$clusterTime`) passed between the driver and replica nodes to synchronize states).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `read_preference.md`, routing read queries to Secondary nodes (to offload the primary) introduces **Replication Lag**.
@@ -111,7 +112,7 @@ async function runSession() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Executing queries without passing the session parameter, assuming causal consistency is globally active for the client connection
 
@@ -161,69 +162,113 @@ client.startSession({ causalConsistency: false });
 Keep default causalConsistency: true on client sessions
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Causal Consistency Audit
+### Exercise 1: Read-Your-Own-Writes with Causally Consistent Sessions
 
-**Problem:** You have a 3-node replica set with a replication lag of `2 seconds`. 
-A user updates their status. 
-Explain how MongoDB handles a query sent to a secondary node 10 milliseconds later under these two scenarios:
-1.  The query is executed **outside** a session.
-2.  The query is executed **inside** a session configured with Causal Consistency.
+**Scenario:**
+Ensure a user immediately sees their updated profile data after writing to a secondary-preferred read replica cluster using a causally consistent session.
 
-**Expected output:**
+**Requirements:**
+1. Start session with `causalConsistency: true`.
+
 > [!check]- Answer
-> ```text
-> 1. Outside Session: The query executes immediately on the secondary node. Because the secondary lags by 2 seconds, the query reads and returns the user's old status.
-> 2. Inside Causal Session: The driver passes the write's cluster timestamp to the secondary. The secondary recognizes it has not replicated up to this timestamp yet, pauses the query, waits for the replication log to catch up, and then returns the correct new status.
-> ```
-> - Analyze the impact of replication lag on unlinked queries.
-> - Consider how the cluster clock blocks secondary reads until synchronization is complete.
-
----
-
-
-
-### Exercise 2: Causally Consistent Session Setup
-
-**Problem:** Start causally consistent client session in Node.js driver (`client.startSession({ causalConsistency: true })`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const session = client.startSession({ causalConsistency: true });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > const session = client.startSession({ causalConsistency: true });
+> const users = db.collection("users");
+> 
+> // 1. Write update to primary node
+> await users.updateOne(
+>   { _id: userId },
+>   { $set: { bio: "Updated Bio Text" } },
+>   { session }
+> );
+> 
+> // 2. Read immediately from secondary node (causally consistent session guarantees read-your-own-writes!)
+> const doc = await users.findOne({ _id: userId }, { session, readPreference: "secondaryPreferred" });
+> console.log("User Bio:", doc.bio);
+> 
+> session.endSession();
 > ```
 >
-> **Explanation:** Causally consistent sessions guarantee read-after-write operations across replica nodes.
+> #### Technical Explanation
+>
+> 1. Causally consistent sessions attach logical Operation Time (`operationTime`) and cluster time tokens to driver requests.
+> 2. Secondary read nodes wait for replication oplog to advance past the session's operation time before responding.
+> 3. Guarantees "Read Your Own Writes" and "Monotonic Reads" semantics.
 
 ---
 
-### Exercise 3: Causal Consistency Guarantees
+### Exercise 2: Monotonic Writes in Distributed Sessions
 
-**Problem:** List 2 causal consistency guarantees in MongoDB (Read-after-write, Monotonic reads).
+**Scenario:**
+Ensure sequential write commands executed in a session preserve exact causal sequence ordering across failover events.
 
-**Expected output:**
+**Requirements:**
+1. Execute sequential writes inside a causally consistent session.
+
 > [!check]- Answer
-> ```text
-> Read-after-write, Monotonic reads
-> ```
-> ```text
-> Read-after-write, Monotonic reads
+>
+> #### Implementation
+>
+> ```javascript
+> const session = client.startSession({ causalConsistency: true });
+> 
+> await db.collection("posts").insertOne({ _id: postId, title: "Post 1" }, { session });
+> await db.collection("comments").insertOne({ postId: postId, text: "Comment 1" }, { session });
+> 
+> session.endSession();
 > ```
 >
-> **Explanation:** Causal sessions track cluster operations to ensure operations observe preceding writes.
+> #### Technical Explanation
+>
+> 1. Monotonic Writes guarantee that write operations inside a session are applied in exact causal order on target cluster nodes.
+> 2. Prevents child comments from appearing before parent post creation during async replication.
+> 3. Essential for multi-node distributed data integrity.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Inspecting Operation Time Cluster Tokens
+
+**Scenario:**
+Inspect `operationTime` tokens returned in causally consistent session command responses.
+
+**Requirements:**
+1. Inspect `session.operationTime`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const session = client.startSession({ causalConsistency: true });
+> await db.collection("logs").insertOne({ event: "login" }, { session });
+
+console.log("Causal Operation Time:", session.operationTime);
+session.endSession();
+```
+
+> #### Technical Explanation
+>
+> 1. `operationTime` is a 64-bit BSON Timestamp identifying the exact cluster time of the write.
+> 2. Passed automatically in subsequent session read commands to enforce causal sequence bounds.
+> 3. Underpins MongoDB's distributed consistency model.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`startSession()` / `session.withTransaction()`](session_transaction.md) — The session containers.
 - [Read Preference](read_preference.md) — The routing of queries.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Causal Consistency guarantees that operations are executed in causal order.
 - Guarantees Read-Your-Own-Writes and Monotonic Reads in a session.
 - Solves the stale read problem when query routing is sent to secondary nodes.

@@ -15,17 +15,15 @@
 
 ## 2. Term Category
 
-**Core Concept / Trait / Module System**: The Orphan Rule is a foundational coherence constraint enforced by `rustc`. It dictates that an `impl Trait for Type` block is legal if and only if **at least one of `Trait` or `Type` is local to the crate compiling the `impl` block**. If both `Trait` and `Type` are foreign (defined in the standard library or an external dependency crate), the implementation is rejected with compiler error `E0117`.
+
+
+**Rust Trait System (crate isolation coherence boundary)**: The Orphan Rule is a foundational coherence constraint enforced by `rustc`. It dictates that an `impl Trait for Type` block is legal if and only if **at least one of `Trait` or `Type` is local to the crate compiling the `impl` block**. If both `Trait` and `Type` are foreign (defined in the standard library or an external dependency crate), the implementation is rejected with compiler error `E0117`.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: The Orphan Rule is enforced universally across all Rust compilation targets (`std`, `no_std`, WASM, embedded systems) to guarantee global trait coherence across the entire Cargo ecosystem.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -143,7 +141,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting `impl ForeignTrait for ForeignType` Directly
 
@@ -214,11 +212,11 @@ impl Display for MyVec { ... }
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Bypassing Foreign Trait on Foreign Tuple Type (`TelemetryReading`)
 
-**Problem:**
+**Scenario:**
 In an industrial IoT monitoring system, sensor nodes transmit telemetry payload tuples formatted as standard primitive pairs `(u64, f64)`, where the first element is a UNIX timestamp in milliseconds and the second is a temperature reading in Celsius. You need to format these readings using `std::fmt::Display` as `"Timestamp: <ts> ms | Temp: <temp> °C"`.
 
 Writing `impl std::fmt::Display for (u64, f64)` causes compiler error `E0117` because both `Display` and the tuple type `(u64, f64)` are foreign to your crate.
@@ -226,6 +224,9 @@ Writing `impl std::fmt::Display for (u64, f64)` causes compiler error `E0117` be
 Construct a local newtype wrapper `TelemetryReading(pub (u64, f64))`. Implement `std::fmt::Display` and `std::ops::Deref` for `TelemetryReading`. Include unit tests with assertions (`assert_eq!`) verifying string formatting and transparent field access via `Deref`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::fmt;
 > use std::ops::Deref;
@@ -271,7 +272,8 @@ Construct a local newtype wrapper `TelemetryReading(pub (u64, f64))`. Implement 
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Compiler Error E0117 Cause**: Primitive tuples such as `(u64, f64)` are defined by the Rust standard library language rules, and `std::fmt::Display` is defined in `std::fmt`. Because neither item is local to your compiling crate, Rust's Orphan Rule rejects direct implementation to prevent coherence ambiguity.
 > 2. **Newtype Wrapper Strategy**: `TelemetryReading` is a local tuple struct declared in your crate. Wrapping foreign data inside a local type satisfies the Orphan Rule constraint (`Foreign Trait + Local Type -> ALLOWED`).
 > 3. **Deref Ergonomics**: By implementing `std::ops::Deref<Target = (u64, f64)>`, callers can access `.0` and `.1` directly on `TelemetryReading` as if it were the inner tuple, preserving convenience without violating compiler guarantees.
@@ -281,7 +283,7 @@ Construct a local newtype wrapper `TelemetryReading(pub (u64, f64))`. Implement 
 
 ### Exercise 2: Embedded `#![no_std]` Hardware Status Register Wrapper & Custom Trait
 
-**Problem:**
+**Scenario:**
 In an embedded `#![no_std]` driver for a CAN-bus microcontroller, raw hardware status registers are returned as primitive `u16` values. You need to provide hexadecimal formatting via `core::fmt::LowerHex`, bitwise OR combination via `core::ops::BitOr`, and register state querying via a custom local trait `RegisterDiagnostics`.
 
 1. Create a `#![no_std]` compatible local newtype wrapper `StatusRegister(pub u16)`.
@@ -289,6 +291,9 @@ In an embedded `#![no_std]` driver for a CAN-bus microcontroller, raw hardware s
 3. Include unit tests with `assert!` and `assert_eq!` verifying bitwise operations, hex formatting, and diagnostic bit check logic.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > use core::fmt;
@@ -363,7 +368,8 @@ In an embedded `#![no_std]` driver for a CAN-bus microcontroller, raw hardware s
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Embedded Coherence Scope**: The Orphan Rule applies identically in `#![no_std]` targets. Attempting `impl core::fmt::LowerHex for u16` is forbidden because both `LowerHex` and `u16` are foreign to your driver crate.
 > 2. **Local Wrapper Bitwise Operations**: Wrapping `u16` in `StatusRegister` allows implementing standard operator traits like `core::ops::BitOr`, enabling clean syntactic sugar `reg_ready | reg_error`.
 > 3. **Local Trait vs Foreign Trait Rules**: Implementing local trait `RegisterDiagnostics` on local struct `StatusRegister` satisfies the `Local Trait + Local Type` allowed rule, while implementing `core::fmt::LowerHex` satisfies `Foreign Trait + Local Type`.
@@ -373,7 +379,7 @@ In an embedded `#![no_std]` driver for a CAN-bus microcontroller, raw hardware s
 
 ### Exercise 3: Dissecting Generic Covered Types (`impl<T> ForeignTrait for ForeignType<T>`)
 
-**Problem:**
+**Scenario:**
 An analytics microservice developer defines a local struct `MetricValue(pub f64)` and wants to implement `std::fmt::Display` for `Vec<MetricValue>` to print comma-separated metrics.
 
 They write `impl std::fmt::Display for Vec<MetricValue>`, but `rustc` rejects it with `E0117` despite `MetricValue` being a local type.
@@ -384,6 +390,9 @@ They write `impl std::fmt::Display for Vec<MetricValue>`, but `rustc` rejects it
 4. Write unit tests with `assert_eq!` verifying formatted series rendering and dereferencing behavior.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::fmt;
 > use std::ops::Deref;
@@ -451,88 +460,17 @@ They write `impl std::fmt::Display for Vec<MetricValue>`, but `rustc` rejects it
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Generic Covered Rules (RFC 2451)**: In `impl Display for Vec<MetricValue>`, `Display` is a foreign trait and `Vec<T>` is a foreign type constructor defined in `std`. Even though `MetricValue` is local, putting a local type inside a foreign generic container (`Vec<LocalType>`) does not make the outer container a local type. Rust considers `Vec<MetricValue>` foreign, triggering `E0117`.
 > 2. **Generic Local Container**: Creating `MetricSeries<T>(pub Vec<T>)` defines a local generic type constructor. Because `MetricSeries` is local to the current crate, `impl<T: Display> Display for MetricSeries<T>` is fully valid for all `T`.
 > 3. **Conversion & Ergonomics**: Implementing `From<Vec<T>>` allows effortless wrapping of existing vectors, while `Deref` delegates vector operations (`len()`, indexing) directly to the wrapped `Vec`.
 > 4. **Unit Verification**: `test_metric_series_display` asserts that floating-point formatting is correctly applied to each element during string formatting.
 > 
+
 ---
 
-### Exercise 4: Domain Adapter Pattern for External Crate Duration Formatting
-
-**Problem:**
-Your microservice imports `std::time::Duration` from the standard library. You need to output durations in floating-point seconds format (e.g. `"1.500s"`) for logging and diagnostic reporting.
-
-Directly attempting `impl std::fmt::Display for std::time::Duration` triggers compiler error `E0117` because both `Display` and `Duration` are defined in `std`.
-
-1. Create a local wrapper `DurationSeconds(pub std::time::Duration)`.
-2. Implement a helper method `as_secs_f64(&self) -> f64` that computes fractional seconds from whole seconds and nanoseconds.
-3. Implement `std::fmt::Display` and `From<std::time::Duration>` for `DurationSeconds`.
-4. Write unit tests with `assert_eq!` validating conversion precision and `Display` string output.
-
-> [!check]- Answer
-> ```rust
-> use std::fmt;
-> use std::time::Duration;
-> 
-> /// Local Newtype wrapping foreign std::time::Duration
-> #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-> pub struct DurationSeconds(pub Duration);
-> 
-> impl From<Duration> for DurationSeconds {
->     fn from(dur: Duration) -> Self {
->         DurationSeconds(dur)
->     }
-> }
-> 
-> impl DurationSeconds {
->     /// Helper method returning total duration as floating-point seconds
->     pub fn as_secs_f64(&self) -> f64 {
->         self.0.as_secs() as f64 + (self.0.subsec_nanos() as f64 / 1_000_000_000.0)
->     }
-> }
-> 
-> /// Foreign trait Display implemented for local type DurationSeconds
-> impl fmt::Display for DurationSeconds {
->     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
->         write!(f, "{:.3}s", self.as_secs_f64())
->     }
-> }
-> 
-> #[cfg(test)]
-> mod tests {
->     use super::*;
-> 
->     #[test]
->     fn test_duration_seconds_conversion() {
->         let dur = Duration::from_millis(1500);
->         let wrapper = DurationSeconds::from(dur);
-> 
->         assert_eq!(wrapper.as_secs_f64(), 1.5);
->         assert_eq!(format!("{}", wrapper), "1.500s");
->     }
-> 
->     #[test]
->     fn test_duration_seconds_subsecond_precision() {
->         let dur = Duration::new(2, 250_000_000); // 2.25 seconds
->         let wrapper = DurationSeconds(dur);
-> 
->         assert_eq!(wrapper.as_secs_f64(), 2.25);
->         assert_eq!(format!("{}", wrapper), "2.250s");
->     }
-> }
-> ```
->
-> **Explanation:**
-> 1. **Foreign Type Adapter Pattern**: When external libraries or `std` types lack necessary trait implementations, the Newtype pattern acts as an adapter layer without requiring upstream crate modifications or violating coherence.
-> 2. **Orphan Rule Compliance**: `DurationSeconds` is local, so implementing `fmt::Display` (foreign) is accepted by `rustc`.
-> 3. **Conversion Interoperability**: Implementing `From<Duration>` provides standard Rust idiomatic conversion semantics (`DurationSeconds::from(dur)`).
-> 4. **Unit Verification**: Tests use `assert_eq!` to verify subsecond arithmetic accuracy (`2.250s`) and formatting consistency.
-> 
----
-
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Coherence](coherence.md) — The global non-ambiguity guarantee enforced by the Orphan Rule.
@@ -542,7 +480,7 @@ Directly attempting `impl std::fmt::Display for std::time::Duration` triggers co
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - The Orphan Rule requires that at least one of `Trait` or `Type` must be local to the current crate in any `impl Trait for Type` block.
 - Foreign-trait-on-foreign-type implementations (e.g. `impl Display for Vec<i32>`) are rejected with compiler error `E0117`.

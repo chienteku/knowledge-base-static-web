@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Aggregation** (Key Reduction & Grouping Stage): The $group stage reduces document streams into distinct groups by a specified group key expression and computes accumulated metrics for each group.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executes in memory. Capped by a strict **100MB limit** per stage. If the grouped data footprint exceeds 100MB, you must enable the `{ allowDiskUse: true }` option to allow temporary files spillover).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Basic queries retrieve individual documents. 
@@ -92,7 +93,7 @@ db.products.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the '$' prefix on the grouping key field path inside the '_id' declaration
 
@@ -142,70 +143,108 @@ db.sales.aggregate([{ $group: { _id: "$category", name: "$name" } }]); // ❌ Mi
 db.sales.aggregate([{ $group: { _id: "$category", firstName: { $first: "$name" } } }]);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: SQL to Mongo Group Translation
+### Exercise 1: Basic Grouping and Document Counting
 
-**Problem:** Translate the following SQL query into a valid MongoDB aggregation pipeline array containing a single `$group` stage:
-`SELECT customer_id, AVG(price) FROM purchases GROUP BY customer_id;`
+**Scenario:**
+Group documents in collection `users` by `role` and calculate total user count per role.
 
-**Expected output:**
+**Requirements:**
+1. Use `$group: { _id: "$role", userCount: { $sum: 1 } }`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> [
+> db.users.aggregate([
 >   {
 >     $group: {
->       _id: "$customer_id",
->       avg_price: { $avg: "$price" }
+>       _id: "$role",
+>       userCount: { $sum: 1 }
 >     }
 >   }
-> ]
+> ]);
 > ```
-> - Map the SQL `GROUP BY` column `customer_id` to the mandatory `_id` field.
-> - Use the accumulator operator `$avg` to calculate average values.
-> - Remember to prefix both field references with `$` signs.
+>
+> #### Technical Explanation
+>
+> 1. `$group` collapses documents sharing the same `_id` group expression.
+> 2. `{ $sum: 1 }` increments the accumulator counter by 1 for each document in the group.
+> 3. Foundation stage for analytical summary reports.
+
+---
+
+### Exercise 2: Multi-Field Compound Group Keys
+
+**Scenario:**
+Group sales orders by BOTH `year` and `status` to analyze regional sales breakdowns.
+
+**Requirements:**
+1. Group by compound `_id: { year: { $year: "$createdAt" }, status: "$status" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.aggregate([
+>   {
+>     $group: {
+>       _id: {
+>         year: { $year: "$createdAt" },
+>         status: "$status"
+>       },
+>       totalRevenue: { $sum: "$totalAmount" }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Compound group keys (`_id: { k1: v1, k2: v2 }`) group document streams across multiple dimensions.
+> 2. Evaluates date extraction expressions directly inside the group key.
+> 3. Enables multi-dimensional pivot reporting.
+
+---
+
+### Exercise 3: Global Single-Document Aggregation
+
+**Scenario:**
+Calculate the total revenue (`$sum`) and average discount (`$avg`) across ALL orders in the collection without splitting by category.
+
+**Requirements:**
+1. Use `_id: null` in `$group`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.aggregate([
+>   {
+>     $group: {
+>       _id: null,
+>       grandTotalRevenue: { $sum: "$totalAmount" },
+>       averageDiscount: { $avg: "$discount" }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Setting `_id: null` collapses the ENTIRE document stream into a single global summary output document.
+> 2. Computes collection-wide KPI totals.
+> 3. Returns a single document response payload.
 
 ---
 
 
 
-### Exercise 2: Grouping by Category and Computing Averages
-
-**Problem:** Group products by `category` calculating average price using `$avg: "$price"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.products.aggregate([{ $group: { _id: "$category", avgPrice: { $avg: "$price" } } }]);
-> ```
-> ```javascript
-> db.products.aggregate([
->   { $group: { _id: "$category", avgPrice: { $avg: "$price" } } }
-> ]);
-> ```
->
-> **Explanation:** `$group` buckets documents by `_id` and calculates aggregate accumulator metrics.
-
----
-
-### Exercise 3: Compound Grouping Keys
-
-**Problem:** Group sales by both `year` and `month` using compound `_id` object.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.sales.aggregate([{ $group: { _id: { year: "$year", month: "$month" }, total: { $sum: "$amount" } } }]);
-> ```
-> ```javascript
-> db.sales.aggregate([
->   { $group: { _id: { year: "$year", month: "$month" }, total: { $sum: "$amount" } } }
-> ]);
-> ```
->
-> **Explanation:** Compound object `_id: { year, month }` groups documents across multiple dimension keys.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [Accumulator Operators (`$sum`, `$avg`, `$min`, `$max`, `$count`, `$push`, `$addToSet`)](accumulator_operators.md) — The calculation operators.
@@ -213,7 +252,7 @@ db.sales.aggregate([{ $group: { _id: "$category", firstName: { $first: "$name" }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$group` aggregates documents by a specified field key.
 - Direct NoSQL equivalent to SQL's `GROUP BY` statement.
 - The `_id` field is mandatory and defines the grouping key.

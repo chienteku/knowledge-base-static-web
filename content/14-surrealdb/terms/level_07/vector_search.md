@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Query Feature (K-nearest neighbors vector similarity search)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the vector similarity search engine. Executes spatial clustering calculations across high-dimensional float arrays).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Traditional keyword search cannot capture meaning or semantic context:
@@ -85,7 +84,7 @@ LIMIT 5;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Inserting embedding arrays whose dimension length does not match the index DIMENSION parameter
 
@@ -138,68 +137,97 @@ SELECT *, vector::similarity::dot(embedding, $q) FROM doc; // Un-normalized vect
 SELECT *, vector::similarity::cosine(embedding, $q) AS score FROM doc ORDER BY score DESC;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Vector Index & Distance Query
+### Exercise 1: HNSW Vector Index Creation
 
-**Problem:** Write the SurrealQL statements to:
-1. Define a vector index named `idx_item_vector` on table `items`, column `vec`, using `MTREE` algorithm with `384` dimensions and `EUCLIDEAN` distance.
-2. Write a query to select `title` and vector distance (`vector::distance::knn(vec, $query_vec)`) as `dist` from `items`, ordered by `dist ASC` with `LIMIT 3`.
+**Scenario:**
+An AI application configures an HNSW vector index `idx_embedding` on table `document` for 4-dimensional embeddings using Cosine distance.
 
-**Expected output:**
+**Requirements:**
+1. Define field `embedding` as `array<float>`.
+2. Define index `idx_embedding ON TABLE document COLUMNS embedding HNSW DIMENSION 4 DIST COSINE`.
+
 > [!check]- Answer
-> ```sql
-> -- 1. Define Vector Index
-> DEFINE INDEX idx_item_vector ON items COLUMNS vec MTREE DIMENSION 384 DISTANCE EUCLIDEAN;
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE document SCHEMAFULL;
+> DEFINE FIELD embedding ON TABLE document TYPE array<float>;
 > 
-> -- 2. Similarity Query
-> SELECT 
->   title, 
->   vector::distance::knn(vec, $query_vec) AS dist 
-> FROM items 
-> ORDER BY dist ASC 
-> LIMIT 3;
+> -- Define HNSW vector index
+> DEFINE INDEX idx_embedding ON TABLE document COLUMNS embedding 
+>     HNSW DIMENSION 4 DIST COSINE;
 > ```
-> - The distance helper function is `vector::distance::knn(field, query_vec)`.
-> - Order vector distances ascending (`ASC`) because smaller distances mean higher similarity.
+>
+> #### Technical Explanation
+>
+> 1. `HNSW` (Hierarchical Navigable Small World) builds multi-layer graph structures for fast vector similarity searches.
+> 2. `DIMENSION <n>` specifies vector embedding dimensionality.
+> 3. `DIST COSINE` configures Cosine distance for text embedding comparisons.
+
+---
+
+### Exercise 2: Executing KNN Vector Similarity Queries
+
+**Scenario:**
+Query the top 2 documents most semantically similar to query vector `[0.1, 0.2, 0.3, 0.4]` using vector search.
+
+**Requirements:**
+1. Execute `SELECT * FROM document WHERE embedding <|2,COSINE|> [0.1, 0.2, 0.3, 0.4]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE document:d1 SET embedding = [0.1, 0.2, 0.3, 0.4];
+> CREATE document:d2 SET embedding = [0.9, 0.8, 0.7, 0.6];
+> 
+> -- Vector K-Nearest Neighbor similarity search
+> SELECT *, vector::distance::knn() AS dist 
+> FROM document 
+> WHERE embedding <|2,COSINE|> [0.1, 0.2, 0.3, 0.4];
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `<|k,DIST|>` executes fast K-Nearest Neighbor vector searches using HNSW graph indexes.
+> 2. `vector::distance::knn()` projects calculated similarity distance values.
+> 3. Enables RAG AI search applications directly inside SurrealDB.
+
+---
+
+### Exercise 3: Filtering Vector Searches with Metadata Conditions
+
+**Scenario:**
+Combine vector similarity search with metadata filter `WHERE category = "tech"`.
+
+**Requirements:**
+1. Add `AND category = "tech"` to vector search query.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT * FROM document 
+> WHERE embedding <|2,COSINE|> [0.1, 0.2, 0.3, 0.4] 
+>   AND category = "tech";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combines HNSW vector graph searches with standard metadata column filters.
+> 2. Prunes vector search candidates failing metadata conditions.
+> 3. Provides hybrid AI search capabilities inside a single database query.
 
 ---
 
 
 
-### Exercise 2: Vector Cosine Similarity Ranking Query
-
-**Problem:** Query top 5 nearest neighbor documents for `$query_vector` using `vector::similarity::cosine()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT *, vector::similarity::cosine(embedding, $query_vector) AS score FROM doc ORDER BY score DESC LIMIT 5;
-> ```
-> ```surrealql
-> SELECT *, vector::similarity::cosine(embedding, $query_vector) AS score FROM doc ORDER BY score DESC LIMIT 5;
-> ```
->
-> **Explanation:** `vector::similarity::cosine()` ranks vector embeddings by similarity score.
-
----
-
-### Exercise 3: Vector Distance KNN Operator
-
-**Problem:** Query top 10 nearest vectors using `<~10,1536~>` KNN operator syntax.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM doc WHERE embedding <~10,1536~> $query_vec;
-> ```
-> ```surrealql
-> SELECT * FROM doc WHERE embedding <~10,1536~> $query_vec;
-> ```
->
-> **Explanation:** `<~K,DIM~>` operator executes fast k-nearest neighbor (k-NN) vector index lookups.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [`DEFINE INDEX ... HNSW` (Approximate Vector Search)](hnsw_index.md) — HNSW algorithm.
@@ -207,7 +235,7 @@ SELECT *, vector::similarity::cosine(embedding, $q) AS score FROM doc ORDER BY s
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Vector search index enables AI semantic search, recommendations, and RAG in SurrealDB.
 - Replaces dedicated vector databases (Pinecone, Weaviate) or PostgreSQL's `pgvector`.
 - Embeddings are stored in standard `array<float>` fields.

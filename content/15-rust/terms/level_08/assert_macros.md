@@ -166,9 +166,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Financial Order Book & Trade Matching Engine Verification
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 You are building an order matching engine for an electronic exchange. The engine processes limit orders and executes fills while maintaining audit trails. You need to implement the core `Order` state machine and write comprehensive unit tests using `assert!`, `assert_eq!`, and `assert_ne!` to verify state invariants, partial fill calculations, status transitions, and overfill bounds protection.
 
+**Requirements:**
 **Requirements:**
 1. Define `OrderStatus` enum (`Pending`, `PartiallyFilled`, `Filled`, `Cancelled`) deriving `Debug` and `PartialEq`.
 2. Create an `Order` struct holding `id: u64`, `symbol: String`, `price: u64` (in cents), `quantity: u32`, `filled_quantity: u32`, and `status: OrderStatus`. Implement `Order::new(...)` and `Order::fill(&mut self, qty: u32) -> Result<u32, &'static str>`.
@@ -179,6 +180,9 @@ You are building an order matching engine for an electronic exchange. The engine
    - Overfilling returns an `Err` and leaves state untouched (`assert!`, `assert_eq!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Clone)]
 > pub enum OrderStatus {
@@ -299,9 +303,10 @@ You are building an order matching engine for an electronic exchange. The engine
 
 ### Exercise 2: Token Bucket Rate Limiter & Internal Invariant Auditing
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 In an enterprise HTTP API Gateway, you are implementing a Token Bucket rate limiter. The rate limiter replenishes tokens over time based on elapsed seconds and enforces capacity limits. To ensure robustness, you must audit runtime rate-limiting responses (`QuotaResult`) and verify state invariants using `assert!`, `assert_eq!`, `assert_ne!`, `matches!`, and `debug_assert!`.
 
+**Requirements:**
 **Requirements:**
 1. Define `QuotaResult` enum with variants `Allowed { remaining: u32 }` and `RateLimited { retry_after_secs: u64 }`, deriving `Debug` and `PartialEq`.
 2. Define `TokenBucket` struct with `capacity: u32`, `tokens: u32`, `refill_rate_per_sec: u32`, and `last_update_secs: u64`.
@@ -310,6 +315,9 @@ In an enterprise HTTP API Gateway, you are implementing a Token Bucket rate limi
 5. Write unit tests in `#[cfg(test)] mod tests` verifying rate limit triggers, token refills over simulated time, and expected pattern matches.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Clone)]
 > pub enum QuotaResult {
@@ -429,9 +437,10 @@ In an enterprise HTTP API Gateway, you are implementing a Token Bucket rate limi
 
 ### Exercise 3: Network Packet Ring Buffer Invariants & Index Wraparound
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 You are developing a high-throughput telemetry ingestion service. Packet frames are buffered in a fixed-size ring buffer (`PacketRingBuffer<const CAP: usize>`) before processing. You must implement payload checksum verification and ring buffer indexing, and write unit tests asserting FIFO order, buffer capacity boundaries, and index wraparound behavior using `assert!`, `assert_eq!`, `assert_ne!`, and `debug_assert!`.
 
+**Requirements:**
 **Requirements:**
 1. Define `PacketFrame` containing `id: u32`, `payload: Vec<u8>`, and `checksum: u32`. Implement `PacketFrame::new(id, payload)` and `verify_checksum(&self) -> bool`. Derive `Debug` and `PartialEq`.
 2. Define generic struct `PacketRingBuffer<const CAP: usize>` holding fixed-size buffer `[Option<PacketFrame>; CAP]`, `head: usize`, `tail: usize`, and `len: usize`.
@@ -440,6 +449,9 @@ You are developing a high-throughput telemetry ingestion service. Packet frames 
 5. Write unit tests in `#[cfg(test)] mod tests` verifying FIFO queue order, boundary overflow errors, and index wraparound functionality.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Clone)]
 > pub struct PacketFrame {

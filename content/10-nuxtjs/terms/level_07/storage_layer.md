@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Server-Side Development**
+
+**Server & Nitro Engine** (Unstorage KV Data Layer): Unstorage in Nitro provides a unified key-value storage layer supporting Redis, filesystem, memory, and Vercel KV drivers seamlessly.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building a backend, you often need to cache API responses or store temporary sessions. In development, saving this to a `.json` file on your hard drive is easy. But in production (like Vercel or Cloudflare), you don't have a hard drive; you must use a database like Redis. 
@@ -73,7 +74,7 @@ Now, `storage.setItem` automatically talks to Redis, and your application code d
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on the default memory storage for critical production data
 **The mistake:** Building an authentication system that saves active session IDs into `useStorage()` without configuring a persistent driver like Redis.
@@ -120,90 +121,124 @@ await useStorage().setItem('cache:key', value); // Await storage operation
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multi-Environment Storage
+### Exercise 1: Storing and Retrieving Key-Value Data via `useStorage()`
 
-**Problem:** You want `useStorage('data')` to save to a local folder named `.data/` when running in development, but you want it to use Redis in production. How do you configure `nuxt.config.ts`? (Hint: Use `devStorage`).
+**Scenario:**
+Store and retrieve JSON cache items using Nitro's built-in `useStorage()` key-value layer.
 
-**Expected output:**
+**Requirements:**
+1. Execute `useStorage().setItem("db:key", value)` and `getItem()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // server/api/cache.ts
+> export default defineEventHandler(async (event) => {
+>   const storage = useStorage();
+>   
+>   // Store data in key-value storage
+>   await storage.setItem("db:user:101", { name: "Alice", role: "admin" });
+>   
+>   // Retrieve cached item
+>   const cachedUser = await storage.getItem("db:user:101");
+>   
+>   return { cachedUser };
+> });
+> ```
+
+> #### Technical Explanation
+>
+> 1. `useStorage()` provides access to Unstorage, Nitro's universal key-value storage abstraction.
+> 2. Storage keys use colon-delimited namespaces (`db:user:101`).
+> 3. Objects stored via `setItem()` are automatically JSON-serialized.
+
+---
+
+### Exercise 2: Configuring Persistent Storage Mounts in `nuxt.config.ts`
+
+**Scenario:**
+Configure a Redis storage driver mount `redis` in `nuxt.config.ts` using `nitro.storage`.
+
+**Requirements:**
+1. Configure `nitro.storage` driver options in `nuxt.config.ts`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // nuxt.config.ts
 > export default defineNuxtConfig({
 >   nitro: {
 >     storage: {
->       data: { driver: 'redis', url: process.env.REDIS_URL }
->     },
->     // Overrides the driver during `npm run dev`
->     devStorage: {
->       data: { driver: 'fs', base: './.data' }
+>       cache: {
+>         driver: "redis",
+>         host: "127.0.0.1",
+>         port: 6379
+>       }
 >     }
 >   }
-> })
+> });
 > ```
-> - You can configure a production-ready key-value driver inside `nitro.storage`, then override it for dev runs using the `devStorage` configuration block.
+
+> #### Technical Explanation
+>
+> 1. Unstorage supports swap-able storage drivers (memory, filesystem, Redis, Vercel KV, Cloudflare KV).
+> 2. Mounting `cache` to Redis routes `useStorage('cache')` calls to Redis without changing application handler code.
+> 3. Decouples storage implementation details from business logic.
 
 ---
 
-### Exercise 2: Nitro Storage Get/Set Item Pattern
+### Exercise 3: Listing and Removing Storage Keys
 
-**Problem:** Write Nitro server handler retrieving cached data with `useStorage().getItem('cache:item')` or setting item if null.
+**Scenario:**
+List all keys under a storage namespace and delete specific expired cache keys.
 
-**Expected output:**
+**Requirements:**
+1. Use `storage.getKeys("cache:")` and `storage.removeItem()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // server/api/clear-cache.ts
 > export default defineEventHandler(async (event) => {
->   const storage = useStorage();
->   let data = await storage.getItem('cache:item');
->   if (!data) {
->     data = { time: Date.now() };
->     await storage.setItem('cache:item', data);
->   }
->   return data;
-> });
-> ```
-> - `useStorage()` provides unified key-value storage across drivers.
-> 
-> ```typescript
-> export default defineEventHandler(async (event) => {
->   const storage = useStorage();
->   const cacheKey = 'data:stats';
+>   const storage = useStorage("cache");
 >   
->   let stats = await storage.getItem(cacheKey);
->   if (!stats) {
->     stats = { visits: 100, updated: Date.now() };
->     await storage.setItem(cacheKey, stats);
->   }
->   return stats;
+>   // Get all keys starting with namespace 'cache:'
+>   const keys = await storage.getKeys();
+>   
+>   // Remove specific item
+>   await storage.removeItem("cache:user-list");
+>   
+>   return { clearedKey: "cache:user-list", totalRemaining: keys.length - 1 };
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `getKeys()` returns an array of active keys matching the storage namespace.
+> 2. `removeItem(key)` deletes the specified key-value pair from storage.
+> 3. Essential storage maintenance and cache invalidation operations.
+
 ---
 
-### Exercise 3: Unstorage Driver Ecosystem
 
-**Problem:** Which underlying open-source library powers Nitro's unified storage layer?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> unstorage (by Unjs)
-> ```
-> - `unstorage` powers Nitro's multi-driver storage layer.
-> 
-> ```text
-> unstorage (Unjs ecosystem)
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`server/api/` Routes](server_api_routes.md) — Where `useStorage` is typically executed.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Nitro provides a unified key-value storage API via `useStorage()`.
 - It decouples your code from specific databases (Redis, Cloudflare KV, etc.).
 - You configure the underlying database "Drivers" in `nuxt.config.ts`.

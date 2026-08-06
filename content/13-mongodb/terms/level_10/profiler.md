@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Administration / Operations** (Slow Query Performance Diagnostic Profiler): The Database Profiler logs query execution metrics, lock wait times, and scan counts for queries exceeding a execution threshold into `system.profile`.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Configured per database. When enabled, operations are logged into the system-created `system.profile` capped collection).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While the `explain()` method is great for testing a single query you suspect is slow, it cannot monitor live production environments:
@@ -91,7 +92,7 @@ db.setProfilingLevel(0);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting the database profiling level to 2 (Log All Operations) in high-traffic production environments
 
@@ -139,69 +140,97 @@ db.setProfilingLevel(1, { slowms: 100 }); // Logs slow operations exceeding 100m
 Use MongoDB Database Profiler, Atlas Performance Advisor, or log aggregation tools
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Slow Query Audit Filter
+### Exercise 1: Enabling Database Profiler Level 2
 
-**Problem:** You have enabled Level 1 profiling. Write the MongoDB query to search the `system.profile` collection for any queries that:
-1.  Targeted the `"shop.orders"` namespace (the `ns` field).
-2.  Executed a Collection Scan (indicated by the `planSummary` string containing `"COLLSCAN"` or `docsExamined` being greater than 0 while `keysExamined` is 0).
+**Scenario:**
+Enable Database Profiler Level 2 (`profile: 2`, `slowms: 50`) to log all queries taking longer than 50ms into `system.profile`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `db.setProfilingLevel(2, { slowms: 50 })`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.setProfilingLevel(2, { slowms: 50 });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Profiler Level 1 logs slow operations exceeding `slowms`; Level 2 logs ALL database operations.
+> 2. Profiler entries are recorded in capped collection `system.profile`.
+> 3. Diagnostic tool for identifying performance bottlenecks.
+
+---
+
+### Exercise 2: Querying `system.profile` for Slow Collection Scans
+
+**Scenario:**
+Query `system.profile` for the top 5 slowest queries that executed collection scans (`execStats.stage: "COLLSCAN"`).
+
+**Requirements:**
+1. Query `system.profile` sorting by `millis: -1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
 > db.system.profile.find({
->   ns: "shop.orders",
->   planSummary: { $regex: /COLLSCAN/ }
-> });
+>   "execStats.stage": "COLLSCAN"
+> })
+> .sort({ millis: -1 })
+> .limit(5);
 > ```
-> - Search within the `system.profile` collection.
-> - Match the namespace `ns` and use a regex check on the `planSummary` field.
+>
+> #### Technical Explanation
+>
+> 1. `system.profile` stores detailed query execution stats (`millis`, `keysExamined`, `docsExamined`, `command`).
+> 2. Filtering for `execStats.stage: "COLLSCAN"` isolates queries missing secondary indexes.
+> 3. Directs index creation efforts to queries causing real performance impact.
+
+---
+
+### Exercise 3: Managing Profiler Overhead in Production
+
+**Scenario:**
+Explain why Profiler Level 2 should NOT be left enabled permanently in high-throughput production databases.
+
+**Requirements:**
+1. Explain profiler write overhead.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Profiler Overhead Warning:
+> - Profiler Level 2 writes an entry to system.profile for EVERY query operation!
+> - Generates heavy write amplification and locks system.profile.
+> Recommendation: Use Profiler Level 1 with slowms: 100 in production, or enable temporarily for active debugging.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Level 2 profiler logging degrades database write throughput under heavy query load.
+> 2. Level 1 with `slowms: 100` captures problematic queries with minimal overhead.
+> 3. Operational profiling guidelines.
 
 ---
 
 
 
-### Exercise 2: Enabling Database Profiler for Slow Queries
-
-**Problem:** Enable Profiler Level 1 logging queries taking longer than 200 milliseconds.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.setProfilingLevel(1, { slowms: 200 });
-> ```
-> ```javascript
-> db.setProfilingLevel(1, { slowms: 200 });
-> ```
->
-> **Explanation:** `setProfilingLevel(1, { slowms })` logs queries exceeding specified latency thresholds.
-
----
-
-### Exercise 3: Querying `system.profile` Collection
-
-**Problem:** Query top 5 slowest operations recorded in `system.profile` collection.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.system.profile.find().sort({ millis: -1 }).limit(5);
-> ```
-> ```javascript
-> db.system.profile.find().sort({ millis: -1 }).limit(5);
-> ```
->
-> **Explanation:** `system.profile` stores detailed execution stats for slow operations.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`explain()` Method](../level_07/explain.md) — The single query analyzer.
 - [`serverStatus` / `currentOp` / `db.stats()`](server_diagnostics.md) — The parent monitoring tools.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Profiler logs slow database operations to the `system.profile` collection.
 - Direct NoSQL equivalent to PostgreSQL's `log_min_duration_statement` configuration.
 - Level 0 is disabled (default); Level 1 logs slow queries; Level 2 logs all queries.

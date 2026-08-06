@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Administration / Operations** (Sharded Data Distribution): Chunks and Balancing manage the automatic partitioning of sharded collection data into 64MB chunks and their background migration across shard nodes via the balancer process.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Managed by the Config Server primary node. Migrations run asynchronously over the network, utilizing disk write I/O).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a sharded cluster, database documents are constantly inserted, updated, and deleted. 
@@ -97,7 +98,7 @@ db.getSiblingDB("config").settings.updateOne(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving the balancer active 24/7 on database clusters experiencing high write concurrency during peak traffic hours
 
@@ -145,67 +146,99 @@ sh.shardCollection("app.users", { country: 1, userId: 1 }); // High cardinality 
 sh.setBalancerWindow("01:00", "05:00"); // Restrict balancer to off-peak hours
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Chunk Split Logic
+### Exercise 1: Monitoring Shard Chunk Distribution with `sh.status()`
 
-**Problem:** You shard a collection on the `zip_code` field. One zip code `"90210"` receives a massive influx of inserts, causing the chunk range `[90000, 91000)` to grow past 64MB.
-1.  Explain what action MongoDB will execute.
-2.  Explain why this split does not involve moving physical documents on disk.
+**Scenario:**
+Inspect chunk distribution and balancer status across a sharded MongoDB cluster using `sh.status()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `sh.status()` in `mongosh`.
+
 > [!check]- Answer
-> ```text
-> 1. MongoDB will execute a Chunk Split, dividing the range `[90000, 91000)` into two smaller ranges, for example: `[90000, 90210)` and `[90210, 91000)`.
-> 2. A chunk split is a metadata-only operation. MongoDB simply updates the range boundary definitions stored on the Config Servers; the actual documents remain untouched on the same physical disks of the shard.
+>
+> #### Implementation
+>
+> ```javascript
+> sh.status();
 > ```
-> - Check how chunk limits trigger splits.
-> - Consider where chunk range boundary metadata is stored.
+>
+> #### Technical Explanation
+>
+> 1. `sh.status()` displays sharded cluster metadata, active shard nodes, collection chunk counts, and balancer status.
+> 2. Identifies chunk imbalances across shard nodes.
+> 3. Core command for sharded cluster administration.
+
+---
+
+### Exercise 2: Managing Balancer Window Schedules
+
+**Scenario:**
+Configure the MongoDB balancer to run ONLY during off-peak maintenance hours (2:00 AM to 6:00 AM) using `config.settings`.
+
+**Requirements:**
+1. Update `config.settings` for `balancer` window.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> use config;
+> db.settings.updateOne(
+>   { _id: "balancer" },
+>   {
+>     $set: {
+>       activeWindow: { start: "02:00", stop: "06:00" }
+>     }
+>   },
+>   { upsert: true }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `activeWindow` restricts background chunk balancing migrations to off-peak hours.
+> 2. Prevents chunk migration IOPS from competing with peak daytime application traffic.
+> 3. Essential production maintenance setting.
+
+---
+
+### Exercise 3: Manual Chunk Splitting with `sh.splitAt()`
+
+**Scenario:**
+Split an oversized 128MB chunk at a specific shard key split point using `sh.splitAt()`.
+
+**Requirements:**
+1. Execute `sh.splitAt("dbname.collection", { shardKey: "val" })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> sh.splitAt("store.orders", { zipCode: "78701" });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `sh.splitAt()` manually splits a chunk into two smaller chunks at a specified boundary value.
+> 2. Helps resolve jumbo chunks that exceed the default 64MB chunk size.
+> 3. Restores chunk migration capability.
 
 ---
 
 
 
-### Exercise 2: Configuring Balancer Active Window
-
-**Problem:** Configure chunk balancer active window between `02:00` and `06:00` UTC.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> sh.setBalancerWindow("02:00", "06:00");
-> ```
-> ```javascript
-> sh.setBalancerWindow("02:00", "06:00");
-> ```
->
-> **Explanation:** `sh.setBalancerWindow()` restricts chunk migration background traffic to off-peak hours.
-
----
-
-### Exercise 3: Inspecting Jumbo Chunks
-
-**Problem:** Command to inspect sharding status and jumbo chunk warnings (`sh.status()`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> sh.status();
-> ```
-> ```javascript
-> sh.status();
-> ```
->
-> **Explanation:** `sh.status()` reports shard distributions, chunk counts, and jumbo chunk warnings.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Shard Key](shard_key.md) — The partitioning index key.
 - [Config Servers & `mongos` Router](config_servers_mongos.md) — Cluster infrastructure.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Chunks are contiguous ranges of shard key values, capped at 64MB by default.
 - When a chunk grows past 64MB, MongoDB splits it (a metadata-only change).
 - The Balancer is a background thread that manages chunk distributions.

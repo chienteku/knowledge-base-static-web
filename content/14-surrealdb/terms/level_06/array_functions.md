@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (array manipulation builtin functions)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Executed in memory during query evaluation. Operates on arrays of primitives, nested objects, or record links).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Working with lists of data (tags, roles, permissions, IDs) is central to modern applications:
@@ -90,7 +89,7 @@ UPDATE post:first SET
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Passing a non-array value to an 'array::*' function, causing execution errors
 
@@ -146,59 +145,92 @@ LET $arr = [1, 2];
 LET $arr = array::add($arr, 3); // Reassign updated array
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Array Set Intersect
+### Exercise 1: Array Flattening and Deduplication
 
-**Problem:** You have two array variables:
-`LET $required_roles = ["admin", "editor"];`
-`LET $user_roles = ["user", "editor"];`
-Write the SurrealQL expression using `array::*` to check if `$user_roles` shares any roles with `$required_roles`, returning non-empty common items.
+**Scenario:**
+A social media service collects tag arrays from user posts `[["rust", "db"], ["db", "api"]]` and needs a clean, deduplicated list of all unique tags.
 
-**Expected output:**
+**Requirements:**
+1. Combine arrays using `array::flatten()`.
+2. Deduplicate tag elements using `array::distinct()`.
+
 > [!check]- Answer
-> ```sql
-> RETURN array::intersect($user_roles, $required_roles);
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $nested_tags = [["rust", "db"], ["db", "api"]];
+> 
+> -- Flatten and deduplicate tag array
+> SELECT array::distinct(array::flatten($nested_tags)) AS unique_tags;
 > ```
-> - The set overlap function is `array::intersect(arr1, arr2)`.
+>
+> #### Technical Explanation
+>
+> 1. `array::flatten()` unwraps multi-dimensional nested arrays into a single-dimensional list.
+> 2. `array::distinct()` removes duplicate values from the flattened array.
+> 3. Processes collection transformations natively within the database query engine.
+
+---
+
+### Exercise 2: Array Element Search with `array::find()`
+
+**Scenario:**
+An e-commerce order service searches a product's tag array to find the first tag starting with `"tech_"`.
+
+**Requirements:**
+1. Use `array::find()` with an inline evaluation clause.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $tags = ["promo", "tech_hardware", "tech_accessory"];
+> 
+> SELECT array::find($tags, |$val| string::starts_with($val, "tech_")) AS first_tech_tag;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `array::find(array, closure)` evaluates closure predicate expressions against array elements.
+> 2. Returns the first element matching the predicate or `NONE` if no match exists.
+> 3. Enables functional array searching inside SurrealQL queries.
+
+---
+
+### Exercise 3: Array Reversal and Slicing
+
+**Scenario:**
+An activity stream retrieves the 3 most recent notifications from a user's notification array ordered newest to oldest.
+
+**Requirements:**
+1. Reverse array order using `array::reverse()`.
+2. Slice the first 3 items.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $notifs = ["notif_1", "notif_2", "notif_3", "notif_4", "notif_5"];
+> 
+> SELECT array::reverse($notifs)[0..3] AS recent_notifications;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `array::reverse()` reverses array element order in-place.
+> 2. `[0..3]` applies range slicing to retrieve targeted element windows.
+> 3. Facilitates array manipulation without client-side processing loops.
 
 ---
 
 
 
-### Exercise 2: Array Filtering with `array::filter`
-
-**Problem:** Filter numbers greater than 10 from `[5, 12, 8, 20]` using `array::filter()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [12, 20]
-> ```
-> ```surrealql
-> RETURN array::filter([5, 12, 8, 20], |$v| $v > 10);
-> ```
->
-> **Explanation:** `array::filter(arr, closure)` filters array elements using predicate closure functions.
-
----
-
-### Exercise 3: Array Mapping with `array::map`
-
-**Problem:** Double all values in `[1, 2, 3]` using `array::map()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [2, 4, 6]
-> ```
-> ```surrealql
-> RETURN array::map([1, 2, 3], |$v| $v * 2);
-> ```
->
-> **Explanation:** `array::map(arr, closure)` transforms array elements into new values.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Built-in Functions Overview](builtin_functions.md) — The parent library.
 - [`array`](../level_02/array_type.md) — The ordered list container.
@@ -209,7 +241,7 @@ Write the SurrealQL expression using `array::*` to check if `$user_roles` shares
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `array::*` module offers functional tools for list manipulation.
 - Perform set theory math (`union`, `intersect`, `difference`) directly in queries.
 - `array::distinct()` strips duplicate elements from arrays.

@@ -149,7 +149,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Mitigating Monomorphization Binary Bloat via Inner Non-Generic Helpers
 
-**Problem:** In high-throughput packet processing engines, generic functions often handle common operations like header construction, sequence stamping, checksum calculation, and slice bounds checks. When `encode_packet<P: PacketPayload>(&mut self, payload: &P, out: &mut [u8])` is called for dozens of packet payload types, the Rust compiler monomorphizes the entire function body for every type `P`, creating duplicate machine instructions that inflate binary size and trigger CPU instruction cache (I-cache) misses.
+**Scenario:** In high-throughput packet processing engines, generic functions often handle common operations like header construction, sequence stamping, checksum calculation, and slice bounds checks. When `encode_packet<P: PacketPayload>(&mut self, payload: &P, out: &mut [u8])` is called for dozens of packet payload types, the Rust compiler monomorphizes the entire function body for every type `P`, creating duplicate machine instructions that inflate binary size and trigger CPU instruction cache (I-cache) misses.
 
 Refactor a generic packet encoder using the **outline pattern** (inner non-generic helper function pattern). Extract all payload-agnostic logic (common header formatting, checksum calculations, bounds checks) into private non-generic functions operating on byte slices `&mut [u8]`, while preserving a clean generic public interface for static dispatch and type safety.
 
@@ -364,7 +364,7 @@ Refactor a generic packet encoder using the **outline pattern** (inner non-gener
 
 ### Exercise 2: Type-Level Monomorphized Metric Aggregator vs Dynamic Dispatch
 
-**Problem:** Low-latency financial trading and storage engines rely on zero-allocation metrics collection. Using dynamic dispatch with trait objects (`dyn MetricValue`) incurs virtual function table (vtable) pointer lookups and indirect function calls (`call [rax]`), which disrupt CPU pipelining and prevent compiler inlining. Generic monomorphization replaces vtable lookups with direct, inlined static calls.
+**Scenario:** Low-latency financial trading and storage engines rely on zero-allocation metrics collection. Using dynamic dispatch with trait objects (`dyn MetricValue`) incurs virtual function table (vtable) pointer lookups and indirect function calls (`call [rax]`), which disrupt CPU pipelining and prevent compiler inlining. Generic monomorphization replaces vtable lookups with direct, inlined static calls.
 
 Implement a generic metric aggregator `MetricAggregator<M: MetricValue>` that monomorphizes specialized structures for concrete metrics (`CounterMetric`, `GaugeMetric`, `HistogramMetric`). Track sample counts, accumulated totals, `std::any::TypeId`, and type memory layout (`size_of` and `align_of`) without using dynamic trait objects (`dyn`). Write unit tests verifying type-level distinctness, static dispatch execution, and memory safety.
 
@@ -550,7 +550,7 @@ Implement a generic metric aggregator `MetricAggregator<M: MetricValue>` that mo
 
 ### Exercise 3: Const Generic & Monomorphized Zero-Copy Hardware Buffer Serializer
 
-**Problem:** In embedded microcontrollers and real-time network hardware, heap memory allocation is strictly prohibited. Hardware Direct Memory Access (DMA) channels demand zero-copy serialization into stack-allocated fixed-capacity buffer registers. Rust generic code monomorphizes not only over type parameters `T`, but also over **const generic parameters** (`const CAP: usize`).
+**Scenario:** In embedded microcontrollers and real-time network hardware, heap memory allocation is strictly prohibited. Hardware Direct Memory Access (DMA) channels demand zero-copy serialization into stack-allocated fixed-capacity buffer registers. Rust generic code monomorphizes not only over type parameters `T`, but also over **const generic parameters** (`const CAP: usize`).
 
 Design a zero-copy stack hardware serializer `FixedBufferSerializer<T: ZeroCopyEncode, const CAP: usize>` that serializes payloads into stack arrays `[u8; CAP]`. Demonstrate how combinations of type `T` and const buffer size `CAP` (e.g. `(u32, 16)`, `(u32, 64)`, `(u64, 64)`) produce distinct monomorphized structures and machine instructions. Implement strict capacity verification returning `SerializationError::CapacityExceeded` upon buffer exhaustions.
 

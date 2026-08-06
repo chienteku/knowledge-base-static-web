@@ -175,7 +175,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Tiered Database Connection Pool & Resiliency Options
 
-**Problem:**
+**Scenario:**
 You are building an enterprise-grade database driver. The client configuration requires nested settings for connection pool limits, retry backoff strategies, security options, and timeout thresholds.
 1. Define an enum `RetryStrategy` with variants:
    - `ExponentialBackoff { initial_delay_ms: u64, max_delay_ms: u64, factor: f64 }`
@@ -332,7 +332,7 @@ You are building an enterprise-grade database driver. The client configuration r
 
 ### Exercise 2: Recyclable Packet Buffer Manager with Const Generics & Default Reset
 
-**Problem:**
+**Scenario:**
 In high-performance networking pipelines, allocating new packet buffers for every incoming payload incurs memory fragmentation and allocator contention. Buffer pools pre-allocate storage and recycle dirty slots by resetting slot state using `T::default()`.
 1. Define a `PacketSlot` struct representing a network packet header:
    - `header_flags: u8`
@@ -495,7 +495,7 @@ In high-performance networking pipelines, allocating new packet buffers for ever
 
 ### Exercise 3: Distributed Tracing Context Extraction with Default Fallbacks & Context Propagation
 
-**Problem:**
+**Scenario:**
 Microservice API gateways inspect incoming HTTP headers to extract distributed tracing metadata (`SpanContext`). If incoming requests lack tracing headers, the system must fall back to safe default identifiers and sampling decisions using `Default::default()` or `Option::unwrap_or_default()`, while supporting parent-to-child span propagation.
 1. Define an enum `SamplingDecision`:
    - `#[default] Sampled`

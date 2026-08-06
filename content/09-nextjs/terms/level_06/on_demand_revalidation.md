@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Cache Management / Mutation**
+
+**Data Fetching & Caching** (Programmatic Cache Purging): On-Demand Revalidation (`revalidatePath`, `revalidateTag`) purges Data Cache entries instantly after data mutations occur.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 You have a Blog app. The homepage lists all posts and is heavily cached using `force-cache` for performance.
@@ -70,7 +71,7 @@ export async function createPost() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to `await` the database mutation
 
@@ -133,69 +134,112 @@ revalidateTag('comments'); // Targeted invalidation for comment feeds
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Revalidating a Layout
+### Exercise 1: Revalidating Specific Route Paths with `revalidatePath`
 
-**Problem:** You have a `layout.tsx` that fetches a user's notification count. The user clicks a "Mark all as read" Server Action. If you call `revalidatePath('/dashboard')`, does it refresh the layout's data too?
+**Scenario:**
+Purge cached data for `/products` after updating a product record inside a Server Action.
 
-**Expected output:**
+**Requirements:**
+1. Import `revalidatePath` from `next/cache`.
+
 > [!check]- Answer
-> ```text
-> Yes!
-> `revalidatePath` clears the Router Cache and the Data Cache for the entire specified path, including its layouts. The next time the page renders, the layout will fetch the fresh notification count (0).
-> ```
-> - Think about the scope of a URL path.
-
----
-
-### Exercise 2: revalidatePath vs revalidateTag Selection
-
-**Problem:** When should you prefer `revalidateTag()` over `revalidatePath()`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> When cached data is shared across multiple different page URLs (e.g. product details rendered on homepage, category page, and product detail page).
-> ```
-> - `revalidateTag()` purges tagged data across ALL page URLs simultaneously.
-> 
-> ```text
-> revalidatePath() = Single URL path;
-> revalidateTag() = Shared data across multiple URLs.
-> ```
-
----
-
-### Exercise 3: On-Demand Revalidation Webhook Pattern
-
-**Problem:** Write a Next.js Route Handler `app/api/revalidate/route.ts` validating a secret token and calling `revalidateTag('posts')`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import { revalidateTag } from 'next/cache'; import { NextRequest, NextResponse } from 'next/server'; export async function POST(req: NextRequest) { const secret = req.nextUrl.searchParams.get('secret'); if (secret !== process.env.MY_SECRET) return NextResponse.json({ message: 'Invalid token' }, { status: 401 }); revalidateTag('posts'); return NextResponse.json({ revalidated: true }); }
-> ```
-> - Secure webhook route handlers purge caches for headless CMS updates.
-> 
+> // app/actions/product.ts
+> "use server";
+
+import { revalidatePath } from "next/cache";
+
+export async function updateProductAction(id: string, name: string) {
+  // Update database...
+
+  // Purge static route cache for /products
+  revalidatePath("/products");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `revalidatePath('/products')` purges cached route HTML and Data Cache entries for the specified route.
+> 2. Subsequent HTTP requests fetch fresh data from the server.
+> 3. Instant UI updates for dynamic route mutations.
+
+---
+
+### Exercise 2: Revalidating Tagged Data Requests with `revalidateTag`
+
+**Scenario:**
+Purge all fetch requests tagged with `'user-profile'` across all application routes using `revalidateTag()`.
+
+**Requirements:**
+1. Execute `revalidateTag('user-profile')` in Server Action.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import { revalidateTag } from 'next/cache';
-> import { NextRequest, NextResponse } from 'next/server';
-> 
-> export async function POST(req: NextRequest) {
->   const secret = req.nextUrl.searchParams.get('secret');
->   if (secret !== process.env.MY_SECRET) {
->     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
->   }
->   revalidateTag('posts');
->   return NextResponse.json({ revalidated: true, now: Date.now() });
-> }
-> ```
+> "use server";
+
+import { revalidateTag } from "next/cache";
+
+export async function updateUserProfile(userId: string) {
+  // Update user in database...
+
+  // Purges all Data Cache entries tagged with 'user-profile'
+  revalidateTag("user-profile");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `revalidateTag('tag-name')` invalidates matching Data Cache entries globally, regardless of which page requested them.
+> 2. Superior to `revalidatePath` when the same data entity is rendered across multiple distinct URL routes.
+> 3. Targeted cache invalidation pattern.
+
+---
+
+### Exercise 3: Revalidating Layout vs Page Segments
+
+**Scenario:**
+Revalidate an entire layout segment (`/dashboard`) including all sub-pages using `revalidatePath('/dashboard', 'layout')`.
+
+**Requirements:**
+1. Pass `'layout'` as second argument to `revalidatePath()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> "use server";
+
+import { revalidatePath } from "next/cache";
+
+export async function globalDashboardReset() {
+  // Revalidates dashboard layout AND all nested sub-routes (/dashboard/analytics, /dashboard/users)
+  revalidatePath("/dashboard", "layout");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `revalidatePath(path, 'layout')` recursively purges the layout and all child route pages under the path.
+> 2. `revalidatePath(path, 'page')` purges ONLY the specific page segment.
+> 3. Granular route cache invalidation control.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Data Caching (`force-cache`, `no-store`)](../level_05/data_caching.md) — The system being manipulated.
 - [`redirect()` & `permanentRedirect()`](../level_04/redirect.md) — Often called immediately *after* `revalidatePath` in a Server Action.
 - [Time-based Revalidation (`next.revalidate`)](../level_05/revalidation.md) — Related concept: Time-based Revalidation (`next.revalidate`).
@@ -204,7 +248,7 @@ revalidateTag('comments'); // Targeted invalidation for comment feeds
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **On-Demand Revalidation** allows you to instantly purge cached data after a mutation.
 - **`revalidatePath('/route')`** clears the cache for a specific URL.
 - **`revalidateTag('tagName')`** clears the cache for any `fetch` request that was labeled with that specific tag, regardless of what URL it is on.

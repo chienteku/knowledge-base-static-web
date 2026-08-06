@@ -14,16 +14,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Data Modeling** (Application-Driven Schema Design): Schema Design in MongoDB structures documents based on application read/write query patterns rather than abstract mathematical normalization rules.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Applies conceptually to all document databases like MongoDB, DynamoDB, and Couchbase. Governs developer decisions during early architectural design phases).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database systems (like PostgreSQL), schema design follows mathematical rules called **Normalization** (typically 3rd Normal Form). 
@@ -106,7 +107,7 @@ Consolidating all dashboard data inside a single user document:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Designing MongoDB schemas like SQL tables, creating separate collections for every entity and relying on joins ($lookup)
 
@@ -154,59 +155,102 @@ Design schemas around application read and write access patterns
 Apply established MongoDB Schema Design Patterns (Subset, Extended Reference, Bucket)
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Access Pattern Analysis
+### Exercise 1: Query-Driven Schema Design Workflow
 
-**Problem:** You are designing a blog database. The homepage displays the 10 latest article titles, author names, and publication dates. Comments are only displayed when a user clicks on a specific article.
-1.  Should you embed the full text of all comments inside the article document? Explain why or why not based on the access patterns.
+**Scenario:**
+Design a MongoDB collection schema for an online news platform based on its top 3 query access patterns.
 
-**Expected output:**
+**Requirements:**
+1. Query 1: Fetch article with author name and top 5 comments.
+2. Design embedded schema addressing Query 1 in a single read.
+
 > [!check]- Answer
-> ```text
-> 1. No, you should not embed the full text of all comments inside the article document. 
-> The homepage access pattern only requires article titles, author names, and dates. If you embed comments (which can grow to thousands of entries), fetching the latest article titles will load megabytes of unused comment text into database RAM cache, slowing down the homepage. Furthermore, comments can grow infinitely, risking hitting the 16MB document size limit. Comments should be stored in a separate collection or managed using referencing patterns.
+>
+> #### Implementation
+>
+> ```javascript
+> db.articles.insertOne({
+>   title: "MongoDB Schema Design Best Practices",
+>   slug: "mongodb-schema-design",
+>   author: {
+>     id: new ObjectId(),
+>     name: "Jane Doe" // Extended reference for fast read
+>   },
+>   content: "Article text here...",
+>   recentComments: [ // Subset pattern: Top 5 recent comments embedded
+>     { author: "Alice", text: "Great article!", createdAt: new Date() }
+>   ],
+>   commentCount: 1,
+>   publishedAt: new Date()
+> });
 > ```
-> - Assess what data is needed for the homepage read pattern.
-> - Consider the risk of unbounded array growth.
+>
+> #### Technical Explanation
+>
+> 1. MongoDB schema design starts with identifying application query access patterns rather than abstract normalization.
+> 2. Extended references (`author.name`) and subset arrays (`recentComments`) satisfy primary queries in a single $O(1)$ read.
+> 3. Maximizes application rendering speed.
+
+---
+
+### Exercise 2: Balancing Read Velocity vs Write Amplification
+
+**Scenario:**
+Compare denormalized user name embedding across 10,000 post documents vs referencing user IDs.
+
+**Requirements:**
+1. Evaluate write amplification when user changes their name.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Denormalized Name: Reads are instant ($0ms$ joins), but updating name requires modifying 10,000 post documents.
+> Referenced User ID: Name updates require 1 single write to `users` collection, but reading posts requires $lookup join.
+> Decision Rule: If names change once per decade, denormalize for read speed. If names change hourly, reference.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Denormalization trades write amplification for read velocity.
+> 2. Data that rarely changes should be denormalized to accelerate high-frequency reads.
+> 3. High-frequency volatile data should be referenced to minimize write amplification.
+
+---
+
+### Exercise 3: Schema Design Audit & Refactoring Checklist
+
+**Scenario:**
+Audit an existing MongoDB collection for common schema design flaws (unbounded arrays, missing indexes, mixed types).
+
+**Requirements:**
+1. Formulate a 3-point schema audit checklist.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Schema Audit Checklist:
+> - Are any embedded arrays unbounded (>1,000 items)? -> Refactor to referenced collection.
+> - Do primary application queries require $lookup joins? -> Apply Extended Reference Pattern.
+> - Are all query filters and sort fields backed by secondary indexes? -> Create targeted compound indexes.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Regular schema audits identify performance bottlenecks before production scaling issues occur.
+> 2. Re-aligns document structures with evolving application query patterns.
+> 3. Maintains high query throughput.
 
 ---
 
 
 
-### Exercise 2: Golden Rule of MongoDB Schema Design
-
-**Problem:** State the golden rule of MongoDB schema design (Data that is accessed together should be stored together).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Data that is accessed together should be stored together
-> ```
-> ```text
-> Data that is accessed together should be stored together
-> ```
->
-> **Explanation:** Co-locating frequently queried fields eliminates `$lookup` joins and network roundtrips.
-
----
-
-### Exercise 3: Read/Write Ratio Schema Tradeoffs
-
-**Problem:** How does high read/write ratio (99% reads) influence schema design? (Favors embedding and denormalization).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Favors embedding and denormalization to optimize fast single-query reads
-> ```
-> ```text
-> Favors embedding and denormalization to optimize fast single-query reads
-> ```
->
-> **Explanation:** High read ratios justify embedding and denormalizing data to minimize read latency.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — Dynamic structures.
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The core design choice.
@@ -219,7 +263,7 @@ Apply established MongoDB Schema Design Patterns (Subset, Extended Reference, Bu
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Schema design in MongoDB is driven by application query access patterns.
 - Prioritizes high-speed reads and atomic writes over mathematical normalization.
 - The core rule: Data that is accessed together should be stored together.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Build Optimization**
+
+**Framework Architecture** (Automated Symbol Registration): Auto-imports in Nuxt 3 automatically make Vue composables, Nuxt helpers (`useFetch`, `useRoute`), and components globally available without manual import statements.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a typical Vue/React project, every single file begins with a massive block of boilerplate imports. You have to import `ref`, `computed`, `onMounted`, routing hooks, data fetching hooks, and every single UI component you use in the template.
@@ -53,7 +54,7 @@ const { data } = await useFetch('/api/users');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Manually importing Vue/Nuxt APIs
 **The mistake:** Writing manual imports out of habit.
@@ -122,68 +123,125 @@ const double = computed(() => count.value * 2);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Utilizing Auto-imports
+### Exercise 1: Leveraging Nuxt Auto-Imports in Vue Components
 
-**Problem:** You create a file at `composables/useFormat.ts` with the following code: `export const useFormat = () => { return "Formatted!"; }`. How do you use this in `app.vue`?
+**Scenario:**
+Refactor a Vue 3 component to rely on Nuxt 3's auto-import system without manual import statements for `ref`, `computed`, or `useRoute`.
 
-**Expected output:**
+**Requirements:**
+1. Remove manual imports for `ref`, `computed`, and `useRoute`.
+2. Access route parameter `id` and maintain reactive state.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
 > <script setup lang="ts">
-> // You just call it directly!
-> const formattedText = useFormat();
+> // No explicit imports needed for ref, computed, or useRoute!
+> const route = useRoute();
+> const count = ref(1);
+> const doubleCount = computed(() => count.value * 2);
+> const userId = computed(() => route.params.id);
 > </script>
-> ```
-> - In Nuxt, any files placed in the `composables/` directory are auto-scanned and their named exports are globally available without any import statements.
+
+<template>
+  <div>
+    <p>User ID: {{ userId }}</p>
+    <button @click="count++">Count: {{ count }} (Double: {{ doubleCount }})</button>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Nuxt 3 automatically scans component, composable, and Vue core APIs during development and build compilation.
+> 2. Automatically generates TypeScript declaration files (`.nuxt/imports.d.ts`) to provide full IDE auto-completion.
+> 3. Reduces boilerplate while maintaining strict type safety.
 
 ---
 
-### Exercise 2: Nuxt Auto-Import Directory Rules
+### Exercise 2: Auto-Importing Custom Composables
 
-**Problem:** List 3 directory paths in a Nuxt 3 project whose exports are automatically auto-imported application-wide.
+**Scenario:**
+Create a custom composable `composables/useUser.ts` and use it inside `app.vue` without explicit import statements.
 
-**Expected output:**
+**Requirements:**
+1. Define `export const useUser = () => { ... }` in `composables/useUser.ts`.
+2. Consume `useUser()` directly inside `<script setup>`.
+
 > [!check]- Answer
-> ```text
-> 1. composables/
-> 2. utils/
-> 3. components/ (components auto-imported for templates)
-> ```
-> - `composables/` -> Custom composable functions (`useCustom()`).
-> - `utils/` -> Helper functions (`formatDate()`).
-> - `components/` -> Vue components (`<MyButton />`).
-> 
-> ```text
-> composables/, utils/, components/
-> ```
-
----
-
-### Exercise 3: Disabling Specific Auto-Imports
-
-**Problem:** How can you disable specific auto-imports in `nuxt.config.ts` if naming collisions occur?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Via imports.transform.exclude or imports.imports array in nuxt.config.ts.
-> ```
-> - Configure `imports` option in `nuxt.config.ts`.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> export default defineNuxtConfig({
->   imports: {
->     autoImport: true
->   }
-> });
+> // composables/useUser.ts
+> export const useUser = () => {
+>   const user = ref({ name: "Alice", role: "admin" });
+>   const isLoggedIn = computed(() => !!user.value.name);
+>   return { user, isLoggedIn };
+> };
 > ```
+>
+> ```vue
+> <!-- app.vue -->
+> <script setup lang="ts">
+> // Automatically imported from composables/useUser.ts!
+> const { user, isLoggedIn } = useUser();
+> </script>
+
+<template>
+  <div>
+    <p v-if="isLoggedIn">Welcome, {{ user.name }} ({{ user.role }})</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Files exported from the `composables/` directory are auto-imported at compile time.
+> 2. Nuxt registers named and default exports globally across the Vue application layer.
+> 3. Eliminates deep relative path import statements (`../../composables/useUser`).
+
+---
+
+### Exercise 3: Disabling or Explicitly Importing Explicit Dependencies
+
+**Scenario:**
+Explain how to explicitly import functions from `#imports` when required by strict linting rules or external utilities.
+
+**Requirements:**
+1. Import `ref` and `useFetch` from `#imports`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> import { ref, useFetch } from "#imports";
+
+const { data } = await useFetch("/api/status");
+const isReady = ref(true);
+</script>
+```
+
+> #### Technical Explanation
+>
+> 1. `#imports` is Nuxt's virtual alias pointing to the generated auto-import repository.
+> 2. Useful when linter or external testing suites require explicit module resolution.
+> 3. Ensures interoperability with third-party toolchains.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`components/` Directory](../level_03/components_directory.md) — Where auto-imported components live.
 - [`composables/` Directory](../level_04/composables_directory.md) — Where your custom auto-imported logic lives.
 - [Vue 3 Composition API Context](composition_api_context.md) — Related concept: Vue 3 Composition API Context.
@@ -191,7 +249,7 @@ const double = computed(() => count.value * 2);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Nuxt automatically imports Vue APIs, Nuxt composables, components, and your custom composables.
 - It removes massive amounts of boilerplate code.
 - It happens at build-time (via Unplugin), so there is no runtime performance cost.

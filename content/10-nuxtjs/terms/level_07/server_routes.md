@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Server-Side Development**
+
+**Server & Nitro Engine** (Server-Side Endpoint Routes): Server Routes in `server/routes/` handle custom raw server responses (file downloads, RSS feeds, webhooks) un-prefixed by `/api/`.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In Nuxt, standard API logic (like fetching a user or posting a comment) belongs in `server/api/`. This keeps your backend cleanly separated under the `yoursite.com/api/...` namespace.
@@ -64,7 +65,7 @@ export default defineEventHandler((event) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting standard JSON APIs in `routes/`
 **The mistake:** Creating `server/routes/getProducts.ts` to fetch products for your frontend UI.
@@ -116,77 +117,123 @@ export default defineEventHandler((event) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Webhook URL
+### Exercise 1: Generating Custom RSS XML Feeds with Server Routes
 
-**Problem:** Stripe requires a webhook endpoint to be located exactly at `https://yoursite.com/webhooks/stripe`. What exact file and folder structure must you create in Nuxt to handle this POST request?
+**Scenario:**
+Create a server route `server/routes/feed.xml.ts` generating a dynamic RSS XML feed payload.
 
-**Expected output:**
+**Requirements:**
+1. Set `Content-Type: application/xml` and return XML string.
+
 > [!check]- Answer
-> ```text
-> server/
-> └── routes/
->     └── webhooks/
->         └── stripe.post.ts
-> ```
-> - Since the webhook is mapped directly to `/webhooks/stripe` without `/api`, place the directories inside the `routes` parent directory and name the file `stripe.post.ts`.
-
----
-
-### Exercise 2: Sitemap XML Server Route Pattern
-
-**Problem:** Write `server/routes/sitemap.xml.ts` returning XML string and setting `Content-Type: application/xml` header.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // server/routes/feed.xml.ts
 > export default defineEventHandler((event) => {
->   setHeader(event, 'Content-Type', 'application/xml');
->   return '<?xml version="1.0" encoding="UTF-8"?><urlset></urlset>';
-> });
-> ```
-> - `setHeader` configures custom response MIME types for non-JSON routes.
+>   const xmlFeed = `<?xml version="1.0" encoding="UTF-8" ?>
+> <rss version="2.0">
+>   <channel>
+>     <title>Enterprise Nuxt Blog</title>
+>     <link>https://example.com</link>
+>     <description>Latest Nuxt 3 News</description>
+>   </channel>
+> </rss>`;
 > 
-> ```typescript
-> // server/routes/sitemap.xml.ts
-> export default defineEventHandler((event) => {
->   setHeader(event, 'Content-Type', 'application/xml');
->   return `<?xml version="1.0" encoding="UTF-8"?>
->   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
->     <url><loc>https://example.com/</loc></url>
->   </urlset>`;
+>   setResponseHeader(event, "Content-Type", "application/xml");
+>   return xmlFeed;
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. Files in `server/routes/` are served at root path URLs un-prefixed by `/api/`.
+> 2. `server/routes/feed.xml.ts` generates endpoint `/feed.xml`.
+> 3. Ideal for custom non-JSON endpoints (sitemaps, RSS feeds, `robots.txt`).
+
 ---
 
-### Exercise 3: Wildcard Server Route Matching
+### Exercise 2: Implementing Webhook Receivers in `server/routes/webhooks/`
 
-**Problem:** Which file naming syntax in `server/routes/` captures all un-handled server routes as a fallback?
+**Scenario:**
+Create a Stripe webhook listener endpoint `server/routes/webhooks/stripe.post.ts` validating signatures.
 
-**Expected output:**
+**Requirements:**
+1. Export handler in `server/routes/webhooks/stripe.post.ts`.
+
 > [!check]- Answer
-> ```text
-> server/routes/[...slug].ts
+>
+> #### Implementation
+>
+> ```typescript
+> // server/routes/webhooks/stripe.post.ts
+> export default defineEventHandler(async (event) => {
+>   const rawBody = await readRawBody(event);
+>   const signature = getHeader(event, "stripe-signature");
+>   
+>   // Validate Stripe signature payload...
+>   console.log("Stripe Webhook Received!");
+>   
+>   return { received: true };
+> });
 > ```
-> - `[...slug].ts` matches catch-all server routes.
-> 
-> ```text
-> server/routes/[...slug].ts
+
+> #### Technical Explanation
+>
+> 1. `readRawBody(event)` reads the raw string payload buffer required for HMAC signature verification.
+> 2. Un-prefixed server routes provide clean URL paths (`/webhooks/stripe`) for third-party service callbacks.
+> 3. Standard webhook receiver pattern.
+
+---
+
+### Exercise 3: Serving Dynamic Raw File Downloads
+
+**Scenario:**
+Create a server route `server/routes/download/[file].ts` setting `Content-Disposition` headers for file downloads.
+
+**Requirements:**
+1. Set `Content-Disposition: attachment; filename="..."`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // server/routes/download/[file].ts
+> export default defineEventHandler((event) => {
+>   const fileName = getRouterParam(event, "file");
+>   
+>   setResponseHeader(event, "Content-Disposition", `attachment; filename="${fileName}"`);
+>   setResponseHeader(event, "Content-Type", "application/octet-stream");
+>   
+>   return `Dummy binary buffer content for ${fileName}`;
+> });
 > ```
+
+> #### Technical Explanation
+>
+> 1. `Content-Disposition: attachment` forces the user's browser to prompt a file download dialog.
+> 2. Dynamic path parameters allow serving custom generated files.
+> 3. Raw server route application.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`server/api/` Routes](server_api_routes.md) — The standard directory for JSON APIs.
 - [H3 Request Handlers (`defineEventHandler`)](h3_handlers.md) — The utilities used to parse incoming webhooks in these routes.
 - [Nitro Engine](../level_01/nitro_engine.md) — Related concept: Nitro Engine.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `server/routes/` maps files directly to the root URL (no `/api` prefix).
 - They use the exact same H3 engine and syntax as `server/api/`.
 - Use them strictly for Sitemaps, RSS feeds, OAuth callbacks, and Webhooks.

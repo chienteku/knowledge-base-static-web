@@ -161,10 +161,11 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Protocol Network Endpoint URI Parser with Custom Error Hierarchies
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In distributed microservices, network configuration parameters are frequently ingested from environment variables or remote config servers as raw strings (e.g., `"https://api.internal.v1:8443"`, `"grpc://10.0.0.1:50051"`, or `"ws://localhost:8080"`).
 Design and implement a zero-allocation-focused custom string parsing pipeline by implementing `FromStr` for a domain struct `NetworkEndpoint`.
 
+**Requirements:**
 **Requirements:**
 1. Define an enum `Protocol` with variants: `Http`, `Https`, `Grpc`, `Ws`, `Wss`. Implement `FromStr` for `Protocol` (case-insensitive).
 2. Define a struct `NetworkEndpoint` with fields: `protocol: Protocol`, `host: String`, `port: u16`.
@@ -350,10 +351,11 @@ Design and implement a zero-allocation-focused custom string parsing pipeline by
 
 ### Exercise 2: Generic Configuration Extraction with Rich Error Context
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 Production services read raw string key-value configurations (e.g., from `std::env::vars()` or `.env` files stored in a `HashMap<String, String>`).
 Implement a generic parsing pipeline function `parse_config_entry<T: FromStr>` that safely extracts and parses configuration keys into typed Rust domain values while producing detailed, contextual error reports when parsing fails.
 
+**Requirements:**
 **Requirements:**
 1. Define a domain enum `LogLevel` (`Debug`, `Info`, `Warn`, `Error`). Implement `FromStr` for `LogLevel`.
 2. Define a domain struct `DatabaseConfig` with fields `host: String`, `port: u16`, `max_connections: u32`, `log_level: LogLevel`.
@@ -517,10 +519,11 @@ Implement a generic parsing pipeline function `parse_config_entry<T: FromStr>` t
 
 ### Exercise 3: High-Precision Fixed-Point Financial Monetary Parser
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In financial ledger software, binary floating-point types (`f32` / `f64`) are forbidden because representation issues cause rounding errors (e.g. `0.1 + 0.2 != 0.3`). Monetary values are stored as fixed-point integers representing sub-units (e.g., cents or Yen).
 Implement `FromStr` for a `Money` type that parses strings like `"$1,234.56 USD"`, `"EUR 99.00"`, `"-¥500 JPY"`, or `"100.50 CAD"`.
 
+**Requirements:**
 **Requirements:**
 1. Define a `Currency` enum: `USD`, `EUR`, `GBP`, `JPY`, `CAD`. Implement `FromStr` for `Currency`.
    - `JPY` has 0 decimal sub-units.

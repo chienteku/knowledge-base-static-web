@@ -127,9 +127,12 @@ fn windows_only_ffi() { ... } // Completely stripped from Linux compilation!
 
 ### Exercise 1: The Opt-In Print
 
-**Problem:** You have a function called `print_debug_info()`. You only want this function to exist (and be compiled) if the user has activated a custom feature flag in their `Cargo.toml` called `"verbose_logging"`. What attribute should you place above the function?
+**Scenario:** You have a function called `print_debug_info()`. You only want this function to exist (and be compiled) if the user has activated a custom feature flag in their `Cargo.toml` called `"verbose_logging"`. What attribute should you place above the function?
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[cfg(feature = "verbose_logging")]
 > fn print_debug_info() {
@@ -141,13 +144,16 @@ fn windows_only_ffi() { ... } // Completely stripped from Linux compilation!
 
 ### Exercise 2: Conditional Target OS Compilation
 
-**Problem:** Annotate a function with `#[cfg(target_os = "linux")]`.
+**Scenario:** Annotate a function with `#[cfg(target_os = "linux")]`.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Linux function compiled
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > #[cfg(target_os = "linux")]
 > fn linux_only() { println!("Linux function compiled"); }
@@ -157,13 +163,14 @@ fn windows_only_ffi() { ... } // Completely stripped from Linux compilation!
 > }
 > ```
 >
-> **Explanation:** `#[cfg(...)]` conditionally includes items based on target OS/architecture.
+> #### Technical Explanation
+> `#[cfg(...)]` conditionally includes items based on target OS/architecture.
 
 ---
 
 ### Exercise 3: Composing `cfg` Predicates with `all`, `any`, and `not`
 
-**Problem:**
+**Scenario:**
 Real-world platform code often needs multi-condition compilation guards. `cfg` supports boolean combinators: `all(a, b)` (both must be true), `any(a, b)` (either must be true), and `not(a)` (must be false). These compose arbitrarily.
 
 Write a program that defines **three** platform-specific functions and calls the appropriate one based on the current platform:
@@ -186,6 +193,9 @@ Only one of the three must compile at a time (no duplicate function error).
 > - **Hint 2:** `not(unix)` covers Windows, WebAssembly (`wasm32`), and other non-Unix targets. Combining with `not(target_os = "android")` isn't needed here since Android implies Unix.
 > - **Hint 3:** The three conditions must be mutually exclusive and collectively exhaustive to avoid both "duplicate function" errors (two conditions true at once) and "function not found" errors (no condition true). Adding a final catch-all with `not(all(unix, ...))` covers this.
 >
+>
+> #### Implementation
+>
 > ```rust
 > // Compiled only on desktop Unix (Linux, macOS, BSD) — not Android.
 > #[cfg(all(unix, not(target_os = "android")))]
@@ -204,7 +214,8 @@ Only one of the three must compile at a time (no duplicate function error).
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > `cfg` predicates are evaluated at **compile time** using data Cargo passes to `rustc` (target triple, enabled features, etc.). The three conditions are mutually exclusive because:
 > - `all(unix, not(target_os = "android"))` — catches non-Android Unix.
 > - `target_os = "android"` — catches Android (a subset of Unix, handled before `not(unix)`).

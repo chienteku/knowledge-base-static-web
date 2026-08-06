@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Form State Hook**
+
+**Data Mutation & Actions** (Form Action State Hook): `useActionState` (formerly `useFormState`) manages form action return state, validation errors, and pending flags in React Client Components.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Component ONLY**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you use a basic Form Action `<form action={myAction}>`, the action runs on the server, but what if it fails? What if the user typed an invalid email address? 
@@ -79,7 +80,7 @@ export async function createAccountAction(prevState: any, formData: FormData) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `prevState` parameter
 
@@ -135,81 +136,145 @@ const [state, formAction] = useActionState(action, null);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Zod Validation
+### Exercise 1: Managing Form Action State with `useActionState`
 
-**Problem:** Why is `useFormState` particularly powerful when combined with a schema validation library like Zod?
+**Scenario:**
+Use React `useActionState` to track form return messages and validation errors in a Client Component.
 
-**Expected output:**
+**Requirements:**
+1. Import `useActionState` from `react`.
+2. Pass action function and initial state.
+
 > [!check]- Answer
-> ```text
-> Because Zod returns structured error objects (e.g., specifying that the 'password' field specifically failed the 'minimum length' test). 
-> You can return that exact Zod error object from the Server Action, and `useFormState` will instantly make it available on the client, allowing you to easily highlight the exact input field that failed validation in red!
-> ```
-> - Think about returning complex objects instead of just string messages.
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { useActionState } from "react";
+import { submitFormAction } from "@/app/actions/form";
+
+const initialState = { success: false, message: "" };
+
+export default function StateForm() {
+  const [state, formAction, isPending] = useActionState(submitFormAction, initialState);
+
+  return (
+    <form action={formAction} className="p-4 space-y-4">
+      <input name="username" required />
+      <button type="submit" disabled={isPending}>
+        {isPending ? "Submitting..." : "Register"}
+      </button>
+
+      {state.message && (
+        <p className={state.success ? "text-green-600" : "text-red-600"}>
+          {state.message}
+        </p>
+      )}
+    </form>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `useActionState(action, initialState)` manages state returned by Server Actions across form submissions.
+> 2. `formAction` is passed directly to `<form action={formAction}>`.
+> 3. `isPending` indicates whether the async Server Action is currently executing on the server.
 
 ---
 
-### Exercise 2: useActionState Form Validation Pattern
+### Exercise 2: Signature Requirements for Server Actions used in `useActionState`
 
-**Problem:** Write Client Component form using React 19 `useActionState` displaying error message returned from `formAction`.
+**Scenario:**
+Format a Server Action function signature to match `useActionState` expectations `(prevState, formData) => newState`.
 
-**Expected output:**
+**Requirements:**
+1. Accept `prevState` as the first argument in Server Action.
+
 > [!check]- Answer
-> ```tsx
-> 'use client'; import { useActionState } from 'react'; import { signupAction } from './actions'; export function SignupForm() { const [state, formAction, isPending] = useActionState(signupAction, null); return ( <form action={formAction}> <input name="email" /> {state?.error && <p>{state.error}</p>} <button disabled={isPending}>Sign Up</button> </form> ); }
-> ```
-> - `useActionState` binds server action responses to client form state.
-> 
-> ```tsx
-> 'use client';
-> import { useActionState } from 'react';
-> import { signupAction } from './actions';
-> 
-> export function SignupForm() {
->   const [state, formAction, isPending] = useActionState(signupAction, null);
->   
->   return (
->     <form action={formAction}>
->       <input name="email" type="email" required />
->       {state?.error && <p className="text-red-500">{state.error}</p>}
->       <button type="submit" disabled={isPending}>
->         {isPending ? 'Signing up...' : 'Sign Up'}
->       </button>
->     </form>
->   );
-> }
-> ```
-
----
-
-### Exercise 3: useFormState React Rename Notice
-
-**Problem:** What is the new standard React 19 hook name that replaces `useFormState` from `react-dom`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> useActionState (imported from 'react')
-> ```
-> - React 19 renamed `useFormState` to `useActionState` in `react` package.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> import { useActionState } from 'react';
-> ```
+> // app/actions/form.ts
+> "use server";
+
+export async function submitFormAction(
+  prevState: { success: boolean; message: string },
+  formData: FormData
+) {
+  const username = formData.get("username") as string;
+  if (username.length < 3) {
+    return { success: false, message: "Username must be at least 3 characters." };
+  }
+
+  return { success: true, message: `User ${username} registered successfully!` };
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Server Actions consumed via `useActionState` MUST accept `prevState` as their first parameter.
+> 2. `formData` is passed as the second parameter.
+> 3. Mandatory function signature alignment.
+
+---
+
+### Exercise 3: Preserving Previous Form Input Values on Validation Failure
+
+**Scenario:**
+Return entered form field values in `state` to repopulate input fields when validation fails.
+
+**Requirements:**
+1. Include `inputs` object in action return state.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> "use server";
+
+export async function validateForm(prevState: any, formData: FormData) {
+  const email = formData.get("email") as string;
+  const bio = formData.get("bio") as string;
+
+  if (!email.includes("@")) {
+    return {
+      error: "Invalid email address",
+      fields: { email, bio }
+    };
+  }
+
+  return { success: true };
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Returning submitted field values (`fields: { email, bio }`) inside error states prevents clearing user input.
+> 2. Client Component populates `defaultValue={state.fields?.email}` from returned state.
+> 3. Essential user experience pattern for form validation.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Server Actions Overview (`"use server"`)](server_actions.md) — The function providing the state.
 - [`useFormStatus` Hook](use_form_status.md) — The sister hook used for loading indicators.
 - [Zod (Schema Validation)](zod_validation.md) — Related concept: Zod (Schema Validation).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`useFormState`** is a React DOM hook used to capture the return value of a Server Action and display it in the UI.
 - It is essential for handling validation errors and success messages from form submissions.
 - It requires you to update your Server Action signature to accept `prevState` as the first argument.

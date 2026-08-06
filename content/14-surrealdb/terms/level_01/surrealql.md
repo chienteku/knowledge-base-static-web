@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (SQL-like multi-model query language)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Parsed and compiled by the database server. Executable via the Surreal CLI, Surrealist IDE, or application SDKs).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Learning a new database engine usually requires learning a completely new query format:
@@ -88,7 +87,7 @@ WHERE status = 'active' AND ->bought->order.amount > 100;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to write standard SQL 'JOIN' statements in SurrealQL queries
 
@@ -148,62 +147,108 @@ SELECT * FROM user WHERE status == "active";
 SELECT * FROM user WHERE status = "active";
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Translation
+### Exercise 1: Multi-Statement Script Transaction Execution
 
-**Problem:** You are migrating a MongoDB query to SurrealDB. 
-The MongoDB query is:
-`db.products.find({ "specifications.weight": { $lt: 50 }, status: "instock" })`
-Write the equivalent query in SurrealQL.
+**Scenario:**
+You are writing a SurrealQL database initialization script that defines a table, creates records, and returns the query result in a single multi-statement execution.
 
-**Expected output:**
+**Requirements:**
+1. Define a `SCHEMAFULL` table `product`.
+2. Define field `price` as `decimal`.
+3. Insert product `product:laptop` with `price = 1299.99dec`.
+4. Return the newly created record.
+
 > [!check]- Answer
-> ```sql
-> SELECT * FROM products WHERE specifications.weight < 50 AND status = 'instock';
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE product SCHEMAFULL;
+> DEFINE FIELD price ON TABLE product TYPE decimal ASSERT $value > 0.0dec;
+> 
+> CREATE product:laptop SET name = "Pro Laptop", price = 1299.99dec;
+> 
+> SELECT * FROM product:laptop;
 > ```
-> - Translate the document query to a standard `SELECT * FROM table` layout.
-> - Access the nested weight value using dot notation: `specifications.weight`.
+>
+> #### Technical Explanation
+>
+> 1. SurrealQL scripts execute multiple statements separated by semicolons sequentially.
+> 2. DDL statements (`DEFINE`) and DML statements (`CREATE`, `SELECT`) can be combined inside single script executions.
+> 3. Returns an array containing the results of each executed statement.
+
+---
+
+### Exercise 2: Advanced SurrealQL Expression Power
+
+**Scenario:**
+A developer wants to demonstrate SurrealQL's expression capabilities by performing string manipulation, mathematical calculations, and array operations inside a single `SELECT` query.
+
+**Requirements:**
+1. Convert string `"surrealql"` to uppercase using `string::uppercase()`.
+2. Add duration `1d` to current time `time::now()`.
+3. Filter an array `[1, 2, 3, 4, 5]` keeping numbers $> 2$.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT 
+>     string::uppercase("surrealql") AS lang,
+>     time::now() + 1d AS tomorrow,
+>     [1, 2, 3, 4, 5][WHERE item > 2] AS filtered_numbers;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. SurrealQL features rich builtin function namespaces (`string::*`, `time::*`, `math::*`, `array::*`).
+> 2. Inline array filter expressions `[WHERE item > 2]` process collection elements directly in query syntax.
+> 3. SurrealQL is an expression-based language where expressions evaluate directly to rich typed values.
+
+---
+
+### Exercise 3: Statement Return Control with `RETURN`
+
+**Scenario:**
+You are writing a complex SurrealQL block transaction and want to return a custom JSON object calculation rather than standard query arrays.
+
+**Requirements:**
+1. Begin a transaction block.
+2. Assign variable `$total` calculating sum of order prices.
+3. Use the `RETURN` statement to output a custom result object.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> BEGIN TRANSACTION;
+> 
+> LET $total = math::sum([100.00, 250.50, 49.99]);
+> 
+> RETURN {
+>     status: "success",
+>     calculated_total: $total,
+>     timestamp: time::now()
+> };
+> 
+> COMMIT TRANSACTION;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `LET $variable = ...` defines session parameter variables inside transaction blocks.
+> 2. `RETURN` explicitly specifies the final output payload returned from a transaction block.
+> 3. Enables building sophisticated server-side stored procedure logic directly in SurrealQL.
 
 ---
 
 
 
-### Exercise 2: Writing Multi-Statement SurrealQL Transaction Batch
-
-**Problem:** Write SurrealQL batch: 1. Set variable `$u`, 2. Create user, 3. Return user.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> LET $u = user:alice; CREATE $u SET name = "Alice"; RETURN $u;
-> ```
-> ```surrealql
-> LET $u = user:alice;
-> CREATE $u SET name = "Alice";
-> RETURN $u;
-> ```
->
-> **Explanation:** SurrealQL batch scripts execute statements sequentially, sharing `$var` parameter state.
-
----
-
-### Exercise 3: SurrealQL Future Values (`<future>`)
-
-**Problem:** What construct in SurrealQL computes field values dynamically upon every read query? (`<future> { ... }`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <future> { ... }
-> ```
-> ```surrealql
-> DEFINE FIELD total ON TABLE invoice VALUE <future> { count * price };
-> ```
->
-> **Explanation:** `<future>` expressions evaluate dynamic calculations on demand during query execution.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [SurrealDB](surrealdb.md) — The parent database engine.
 - [Record](record.md) — The fundamental data unit.
@@ -216,7 +261,7 @@ Write the equivalent query in SurrealQL.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SurrealQL is SurrealDB's unified, SQL-like query language.
 - Combines standard SQL commands with document and graph extensions.
 - Dot notation extracts deeply nested JSON values natively.

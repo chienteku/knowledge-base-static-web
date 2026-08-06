@@ -179,7 +179,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Production-Grade Security Masking Wrapper (`Sensitive<T>`)
 
-**Problem Context:**
+**Scenario:**
 In high-security enterprise systems (payment processing, OAuth authentication services), inadvertently emitting sensitive data (passwords, JWT tokens, private keys) into application logs introduces severe vulnerability risks (OWASP A09). Using `#[derive(Debug)]` prints all internal fields in plain text.
 
 **Task:**
@@ -317,7 +317,7 @@ In high-security enterprise systems (payment processing, OAuth authentication se
 
 ### Exercise 2: Zero-Copy Binary Buffer & Canonical HexDump Formatter (`HexDump<'a>`)
 
-**Problem Context:**
+**Scenario:**
 In high-performance networking stack development, binary deserializers, and hardware communication protocols, raw byte slices (`&[u8]`) must be inspected during troubleshooting. Default Rust slice formatting (`{:?}`) outputs comma-separated decimal integers (`[222, 173, 190, 239]`), which is unreadable, slow, and cannot be easily visually cross-referenced with Wireshark packet captures or hexadecimal memory views.
 
 **Task:**
@@ -457,7 +457,7 @@ In high-performance networking stack development, binary deserializers, and hard
 
 ### Exercise 3: Dynamic Dispatch Diagnostics for Trait Object Pipelines (`Box<dyn Plugin>`)
 
-**Problem Context:**
+**Scenario:**
 An extensible microservices backend processes telemetry events through dynamically registered plugin pipelines (`Vec<Box<dyn Plugin>>`). Because plugins are registered at runtime, the concrete plugin types cannot be resolved at compile time via generics and monomorphization. Diagnostic logging must dynamically inspect each stage in the pipeline without dynamic type casting or manual formatting boilerplate.
 
 **Task:**

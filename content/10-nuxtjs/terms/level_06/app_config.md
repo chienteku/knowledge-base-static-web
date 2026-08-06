@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Configuration**
+
+**Framework Architecture** (Build-Time UI App Configuration): `app.config.ts` defines build-time reactive configuration options (theme tokens, UI colors) accessible on both server and client.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time** (Exposed to both Client & Server).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a large application, you often have public configuration values that dictate how the UI looks or behaves. For example, a primary brand color, a toggle to enable/disable a specific UI feature, or the URL of your CDN.
@@ -68,7 +69,7 @@ A unique feature of `app.config.ts` is that the values returned by `useAppConfig
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing secrets in `app.config.ts`
 **The mistake:** Putting API keys, database passwords, or private tokens inside `app.config.ts`.
@@ -119,85 +120,118 @@ export default defineAppConfig({
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Updating the config at runtime
+### Exercise 1: Defining Application UI Tokens in `app.config.ts`
 
-**Problem:** You have an app config defining `{ ui: { compactMode: false } }`. Write the `<script setup>` logic for a button that toggles `compactMode` between true and false.
+**Scenario:**
+Define UI theme colors and navigation links in `app.config.ts`.
 
-**Expected output:**
+**Requirements:**
+1. Export `defineAppConfig({ theme: { ... } })`.
+
 > [!check]- Answer
-> ```vue
-> <script setup lang="ts">
-> const appConfig = useAppConfig();
-> 
-> function toggleCompact() {
->   appConfig.ui.compactMode = !appConfig.ui.compactMode;
-> }
-> </script>
-> ```
-> - Retrieve the reactive config object by executing `useAppConfig()` and modify its values within the function.
-
----
-
-### Exercise 2: defineAppConfig Setup Pattern
-
-**Problem:** Write `app.config.ts` defining UI theme colors and site title, and a Vue component consuming theme state via `useAppConfig()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> // app.config.ts
-> export default defineAppConfig({
->   theme: { primaryColor: '#3b82f6' }
-> });
-> // Component:
-> <script setup>
-> const appConfig = useAppConfig();
-> </script>
-> ```
-> - `useAppConfig()` exposes reactive UI configuration defined in `app.config.ts`.
-> 
+>
+> #### Implementation
+>
 > ```typescript
 > // app.config.ts
 > export default defineAppConfig({
 >   theme: {
->     primaryColor: '#10b981',
->     darkMode: true
->   },
->   siteTitle: 'My Nuxt 3 App'
+>     primaryColor: "#3b82f6",
+>     darkMode: true,
+>     brandName: "Enterprise Cloud"
+>   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `app.config.ts` manages non-sensitive, public UI theme tokens and component configurations.
+> 2. Values are bundled directly into the application JavaScript build.
+> 3. Accessible reactively via `useAppConfig()`.
+
 ---
 
-### Exercise 3: app.config.ts vs runtimeConfig Distinction
+### Exercise 2: Mutating App Config Reactively via `updateAppConfig()`
 
-**Problem:** Compare `app.config.ts` vs `runtimeConfig` in `nuxt.config.ts`.
+**Scenario:**
+Dynamically update primary theme color at runtime using `updateAppConfig()`.
 
-**Expected output:**
+**Requirements:**
+1. Call `updateAppConfig({ theme: { primaryColor: "#ef4444" } })`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const appConfig = useAppConfig();
+
+function setRedTheme() {
+  updateAppConfig({
+    theme: {
+      primaryColor: "#ef4444"
+    }
+  });
+}
+</script>
+
+<template>
+  <div>
+    <p>Current Color: {{ appConfig.theme.primaryColor }}</p>
+    <button @click="setRedTheme">Apply Red Theme</button>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useAppConfig()` exposes a reactive object populated from `app.config.ts`.
+> 2. `updateAppConfig()` mutates properties reactively at runtime across components.
+> 3. Ideal for runtime design system theme toggling.
+
+---
+
+### Exercise 3: Architectural Trade-Off: `appConfig` vs `runtimeConfig`
+
+**Scenario:**
+Formulate an architectural selection matrix explaining when to use `appConfig` vs `runtimeConfig`.
+
+**Requirements:**
+1. Contrast build-time bundling vs environment variable overrides.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> app.config.ts: Public build-time UI theme/styling config (bundled in client JS, reactive at runtime);
-> runtimeConfig: Server/Client environment configuration populated by .env variables.
+> Configuration Matrix:
+> - appConfig: Public build-time UI tokens (theme colors, icons). HMR enabled, NOT overridable by environment variables.
+> - runtimeConfig: Server API secrets, database credentials, public API base URLs. Overridable via process.env!
 > ```
-> - `app.config.ts` -> Public UI theme & styling settings.
-> - `runtimeConfig` -> Server & Client `.env` environment secrets.
-> 
-> ```text
-> app.config.ts = UI Theme & Styling; runtimeConfig = Environment Secrets & APIs.
-> ```
+
+> #### Technical Explanation
+>
+> 1. `appConfig` is bundled at compile time and cannot be overridden by environment variables after building.
+> 2. `runtimeConfig` is evaluated dynamically at runtime, allowing environment variables (`NUXT_API_SECRET`) to override values.
+> 3. Standard configuration separation rule.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Runtime Config (`useRuntimeConfig`)](runtime_config.md) — The secure alternative used for private API keys and `.env` variables.
 - [`nuxt.config.ts`](nuxt_config.md) — The build-time framework configuration file.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `app.config.ts` is for public, reactive, UI-focused application settings.
 - It is bundled entirely into the client payload.
 - It is accessed using `useAppConfig()`.

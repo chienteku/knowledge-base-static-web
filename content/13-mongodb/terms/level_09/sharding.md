@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Administration / Operations** (Horizontal Scale-Out Architecture): Sharding is MongoDB's horizontal scaling architecture that distributes collection dataset partitions (shards) across multiple machine nodes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Configured as a multi-component cluster. Sharding is used to scale datasets containing terabytes of data or experiencing write/read saturation).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Even with a Replica Set, you eventually hit a hardware ceiling:
@@ -72,7 +73,7 @@ Imagine managing a large paper customer archive:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Prematurely sharding a database collection during early startup phases before vertical scaling limits are reached
 
@@ -121,64 +122,89 @@ Scale vertically with Replica Sets until dataset size exceeds ~1TB
 Include shard key in query filter to enable Single-Shard Targeted routing
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Replication vs. Sharding Contrast
+### Exercise 1: Enabling Sharding on a Database with `sh.enableSharding()`
 
-**Problem:** You are explaining database architectures to a junior developer. 
-Complete the comparative analysis by stating whether **Replication** or **Sharding** is the correct solution for these scaling goals:
-1.  Our database disk space is running out; we need to store 5TB of data but our largest server holds only 3TB.
-2.  Our database goes offline when the primary server loses power; we need automatic failover.
-3.  We want to scale read queries geographically by routing them to local secondary nodes.
+**Scenario:**
+Enable sharding on database `store_db` and shard collection `orders` on key `{ customerId: 1 }`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `sh.enableSharding("store_db")`.
+2. Execute `sh.shardCollection("store_db.orders", { customerId: 1 })`.
+
 > [!check]- Answer
-> ```text
-> 1. Sharding: Splitting data across multiple shards allows you to bypass the storage limits of a single machine by distributing the disk footprint.
-> 2. Replication: Replica sets maintain identical copies of the database, enabling automatic failover when a node crashes.
-> 3. Replication: Replica sets allow you to configure Read Preferences to route reads to secondary nodes.
-> ```
-> - Determine if the issue is a physical storage limit or a high-availability backup requirement.
-> - Consider if data partitioning is necessary.
-
----
-
-
-
-### Exercise 2: Enabling Sharding on Database and Collection
-
-**Problem:** Enable sharding on database `saas_db` and shard `users` collection on `{ tenantId: 1, userId: 1 }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> sh.enableSharding("saas_db"); sh.shardCollection("saas_db.users", { tenantId: 1, userId: 1 });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> sh.enableSharding("saas_db");
-> sh.shardCollection("saas_db.users", { tenantId: 1, userId: 1 });
+> sh.enableSharding("store_db");
+> db.orders.createIndex({ customerId: 1 });
+> sh.shardCollection("store_db.orders", { customerId: 1 });
 > ```
 >
-> **Explanation:** Sharding requires enabling sharding on the parent database before sharding target collections.
+> #### Technical Explanation
+>
+> 1. `sh.enableSharding()` registers the target database for horizontal partitioning.
+> 2. `sh.shardCollection()` partitions collection data across shard nodes based on the chosen shard key.
+> 3. Enables horizontal scale-out write and storage capacity.
 
 ---
 
-### Exercise 3: Sharded Cluster Architecture Components
+### Exercise 2: Adding Shard Nodes to a Cluster with `sh.addShard()`
 
-**Problem:** List 3 core components of a MongoDB Sharded Cluster (`mongos` routers, `Config Servers` CSRS, `Shard` replica sets).
+**Scenario:**
+Add a new replica set shard `shard2/shard2-node1:27017` to an existing sharded cluster.
 
-**Expected output:**
+**Requirements:**
+1. Execute `sh.addShard("shard2/shard2-node1:27017")`.
+
 > [!check]- Answer
-> ```text
-> mongos routers, Config Servers (CSRS), Shard replica sets
-> ```
-> ```text
-> mongos routers, Config Servers (CSRS), Shard replica sets
+>
+> #### Implementation
+>
+> ```javascript
+> sh.addShard("shard2/shard2-node1:27017");
 > ```
 >
-> **Explanation:** `mongos` routes client requests using metadata from Config Servers to target Shards.
+> #### Technical Explanation
+>
+> 1. `sh.addShard()` registers a new shard node (replica set) with the Config Server.
+> 2. The balancer automatically begins migrating chunks to the new shard to balance storage.
+> 3. Expands cluster throughput seamlessly.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Sharded Cluster Architecture Component Analysis
+
+**Scenario:**
+Outline the core operational roles of `mongos`, Config Servers, and Shard Nodes in a sharded cluster topology.
+
+**Requirements:**
+1. Contrast `mongos` routing, Config Server metadata, and Shard data storage.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Sharded Cluster Architecture Roles:
+> - mongos: Stateless query router (routes client queries to appropriate shards).
+> - Config Servers (CSRS): Stores cluster chunk routing metadata and settings.
+> - Shards: Replica sets holding partitioned collection data subsets.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `mongos` abstracts cluster topology away from client applications.
+> 2. Config Servers maintain cluster-wide transactional consistency for chunk locations.
+> 3. Shards execute targeted query operations over partitioned data slices.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Replica Set](replica_set.md) — The replica node building blocks.
 - [Shard Key](shard_key.md) — The partitioning index key.
@@ -186,7 +212,7 @@ Complete the comparative analysis by stating whether **Replication** or **Shardi
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Sharding partitions collection data across multiple physical servers (shards).
 - Implements horizontal scaling to bypass single-machine CPU/disk ceilings.
 - Consists of three components: Shards, Config Servers, and `mongos` routers.

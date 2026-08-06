@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Constraint**
+
+**Constraint** (Automatic Fallback Value): A `DEFAULT` clause assigns a static value or dynamic expression to a column when an `INSERT` statement omits explicit column values.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Evaluated by the query parser during insert translation. Dynamic functions like `NOW()` resolve to the transaction time offset).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing software applications, you often want new records to start with standardized baseline details:
@@ -89,7 +90,7 @@ SELECT * FROM tickets;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting defaults to overwrite explicit NULL inserts
 
@@ -149,75 +150,100 @@ INSERT INTO users (name) VALUES ('Alice'); -- Omits column to trigger DEFAULT 'a
 id UUID PRIMARY KEY DEFAULT gen_random_uuid() -- Generates new UUID per row
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Schema Blueprint Defaults
+### Exercise 1: Assigning Static and Dynamic Defaults
 
-**Problem:** You are building a forum database. Write a SQL `CREATE TABLE` query for `posts` containing:
-1.  An auto-generated modern identity ID column.
-2.  A required text column `message`.
-3.  An integer column `likes_count` that starts at `0` by default and cannot be null.
-4.  A timezone-aware timestamp `posted_at` that defaults to the current database transaction time.
+**Scenario:**
+Create a `user_preferences` table with static default `theme = 'light'` and dynamic default `updated_at = CURRENT_TIMESTAMP`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE TABLE user_preferences (...)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE posts (
->   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
->   message TEXT NOT NULL,
->   likes_count INT DEFAULT 0 NOT NULL,
->   posted_at TIMESTAMPTZ DEFAULT NOW()
+> CREATE TABLE user_preferences (
+>   user_id INTEGER PRIMARY KEY,
+>   theme TEXT NOT NULL DEFAULT 'light',
+>   notifications_enabled BOOLEAN NOT NULL DEFAULT TRUE,
+>   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 > );
 > ```
-> - Combine constraints on the count column to enforce required zero fallbacks.
-> - Use the `NOW()` function on the timestamp default.
+>
+> #### Technical Explanation
+>
+> 1. Static defaults (`DEFAULT 'light'`) assign hardcoded fallback values when `INSERT` omits the column.
+> 2. Dynamic defaults (`DEFAULT CURRENT_TIMESTAMP`) evaluate runtime SQL functions during row creation.
+> 3. Ensures mandatory non-null fields are populated automatically.
+
+---
+
+### Exercise 2: Altering Default Column Values
+
+**Scenario:**
+Change the default theme preference from `'light'` to `'dark'` for future row insertions.
+
+**Requirements:**
+1. Execute `ALTER TABLE user_preferences ALTER COLUMN theme SET DEFAULT 'dark'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TABLE user_preferences 
+> ALTER COLUMN theme SET DEFAULT 'dark';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ALTER COLUMN ... SET DEFAULT` changes the default expression for future row inserts.
+> 2. Does NOT retroactively modify values in existing rows.
+> 3. Executes instantly without requiring table rewrites.
+
+---
+
+### Exercise 3: Overriding Column Defaults with Explicit Values
+
+**Scenario:**
+Demonstrate inserting a row relying on defaults vs providing explicit column values.
+
+**Requirements:**
+1. Code `INSERT` using `DEFAULT` keywords.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- Relying on defaults
+> INSERT INTO user_preferences (user_id) VALUES (101);
+> 
+> -- Overriding defaults explicitly
+> INSERT INTO user_preferences (user_id, theme, notifications_enabled) 
+> VALUES (102, 'custom_blue', FALSE);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Omitting a column in `INSERT INTO` causes PostgreSQL to apply its `DEFAULT` expression.
+> 2. Explicitly supplying values overrides default assignments.
+> 3. Provides clean fallback semantics for client API requests.
 
 ---
 
 
 
-### Exercise 2: Setting Default UUID and Timestamp
-
-**Problem:** Create table `tokens` with `id` defaulting to `gen_random_uuid()` and `created_at` defaulting to `NOW()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TABLE tokens ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), created_at TIMESTAMPTZ DEFAULT NOW() );
-> ```
-> ```sql
-> CREATE TABLE tokens (
->   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
->   created_at TIMESTAMPTZ DEFAULT NOW()
-> );
-> ```
->
-> **Explanation:** `DEFAULT` expressions compute dynamic default values for omitted column fields.
-
----
-
-### Exercise 3: Altering Column Default Value
-
-**Problem:** Set column default for `status` on `users` table to `'pending'`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ALTER TABLE users ALTER COLUMN status SET DEFAULT 'pending';
-> ```
-> ```sql
-> ALTER TABLE users ALTER COLUMN status SET DEFAULT 'pending';
-> ```
->
-> **Explanation:** `ALTER COLUMN ... SET DEFAULT` updates default value expressions for future insertions.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Data Types (Overview)](data_types.md) — The typing foundation.
 - [`NOT NULL` Constraint](not_null.md) — Often paired with defaults.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `DEFAULT` constraint automatically fills columns when they are omitted during inserts.
 - Supports static defaults (like `'pending'`, `0`) and dynamic defaults (like `NOW()`).
 - Storing default rules in the database guarantees consistency across different applications.

@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Data Modeling** (Heterogeneous Document Schema Pattern): The Polymorphic Pattern stores documents with varying attributes within the same collection using a common `type` discriminator field.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported natively by the flexible document design of all NoSQL platforms. Used by ORMs/ODMs like Mongoose to implement class inheritance mapping).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In object-oriented programming, classes use **Inheritance**:
@@ -98,7 +99,7 @@ db.assets.find({ owner_id: 101, type: "stock" });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Splitting polymorphic entities into separate collections when they are almost always queried together
 
@@ -144,66 +145,110 @@ Single events collection with discriminator field: { type: "click", ... }, { typ
 { type: "book", title: "Book", isbn: "123" } // Explicit type discriminator
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Polymorphic Query Construction
+### Exercise 1: Heterogeneous Order Processing with Discriminator Fields
 
-**Problem:** You have a polymorphic `content` collection containing blog posts (`type: "post"`) and video clips (`type: "video"`). 
-Write the query to find all video clips (hint: filter by the discriminator) that have more than `1000` views.
+**Scenario:**
+Model a single `payment_methods` collection storing Credit Card, PayPal, and Crypto payment methods using discriminator field `type`.
 
-**Expected output:**
+**Requirements:**
+1. Insert Credit Card document with `type: "credit_card"`, `cardNumber`, `expDate`.
+2. Insert PayPal document with `type: "paypal"`, `paypalEmail`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.content.find({ type: "video", views: { $gt: 1000 } });
+> db.payment_methods.insertMany([
+>   {
+>     userId: new ObjectId(),
+>     type: "credit_card",
+>     cardNumberMasked: "****-****-****-4242",
+>     expMonth: 12,
+>     expYear: 2028
+>   },
+>   {
+>     userId: new ObjectId(),
+>     type: "paypal",
+>     paypalEmail: "user@example.com"
+>   }
+> ]);
 > ```
-> - Identify the discriminator field key `type` and target value `"video"`.
-> - Apply standard comparison filters for the views count.
+>
+> #### Technical Explanation
+>
+> 1. The Polymorphic Pattern uses a discriminator field (`type`) to distinguish different document structures in a single collection.
+> 2. Replaces separate `credit_cards` and `paypals` SQL tables with a unified polymorphic collection.
+> 3. Simplifies payment processing queries.
+
+---
+
+### Exercise 2: Querying Specific Polymorphic Discriminator Subtypes
+
+**Scenario:**
+Query `payment_methods` for all `paypal` accounts belonging to a specific user.
+
+**Requirements:**
+1. Filter `{ userId: ..., type: "paypal" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.payment_methods.find({
+>   userId: new ObjectId("60c72b2f9b1d8b2c88888880"),
+>   type: "paypal"
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Filtering by discriminator field `type` isolates specific subtype schemas.
+> 2. Compound index `{ userId: 1, type: 1 }` speeds up type-filtered queries.
+> 3. Guarantees fast, typed document lookups.
+
+---
+
+### Exercise 3: Single-Collection Indexing for Polymorphic Models
+
+**Scenario:**
+Create a partial secondary index on `paypalEmail` applying ONLY to documents where `type: "paypal"`.
+
+**Requirements:**
+1. Create partial index with `partialFilterExpression: { type: "paypal" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.payment_methods.createIndex(
+>   { paypalEmail: 1 },
+>   { partialFilterExpression: { type: "paypal" } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Partial indexes (`partialFilterExpression`) index ONLY documents matching the discriminator subtype.
+> 2. Reduces index storage size by omitting non-matching polymorphic document types.
+> 3. Essential pattern for optimizing polymorphic collection indexes.
 
 ---
 
 
 
-### Exercise 2: Polymorphic Collection Schema Design
-
-**Problem:** Model single `content` collection storing both `article` and `video` documents using `type` discriminator.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> { type: "article", title: "...", text: "..." } and { type: "video", title: "...", url: "..." }
-> ```
-> ```javascript
-> const article = { type: "article", title: "News", text: "..." };
-> const video = { type: "video", title: "Tutorial", url: "http://..." };
-> ```
->
-> **Explanation:** Polymorphic Pattern stores distinct sub-type shapes in a single collection using `type` discriminators.
-
----
-
-### Exercise 3: Indexing Polymorphic Discriminator
-
-**Problem:** Create compound index supporting polymorphic queries on `type` and `createdAt`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.content.createIndex({ type: 1, createdAt: -1 });
-> ```
-> ```javascript
-> db.content.createIndex({ type: 1, createdAt: -1 });
-> ```
->
-> **Explanation:** Compound indexes on `type` and sort fields accelerate sub-type timeline queries.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The parent structure paradigm.
 - [Element Query Operators (`$exists`, `$type`)](../level_03/element_operators.md) — Evaluating structures.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Polymorphic Pattern stores different document structures in one collection.
 - Uses a discriminator field (e.g. `type` or `kind`) to define document classes.
 - Serves as NoSQL's implementation of object-oriented class inheritance.

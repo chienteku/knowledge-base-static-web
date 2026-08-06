@@ -15,16 +15,17 @@
 ---
 
 ## 2. Term Category
-- **Directory Structure**
+
+**Routing / Navigation** (Reusable Page Wrapper Templates): The `layouts/` directory houses reusable structural layouts (`default.vue`, `custom.vue`) that wrap page components.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Most web applications have a consistent visual "shell"—for example, a top navigation bar and a footer that appear on every page. If you manually import the `<Navbar />` and `<Footer />` components into every single page in your `pages/` directory, you duplicate massive amounts of code. Worse, every time the user navigates, the Navbar component is destroyed and re-created, wasting performance.
@@ -79,7 +80,7 @@ definePageMeta({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not including a single root element in the layout
 **The mistake:** Creating a layout that has multiple root HTML nodes alongside the `<slot />`.
@@ -166,74 +167,139 @@ definePageMeta({
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Bypassing the Default Layout
+### Exercise 1: Creating a Default Layout Template
 
-**Problem:** You have a `layouts/default.vue` file containing your site navigation. You are building a `pages/login.vue` page, and you want the screen to be completely blank except for the login form (no navbar). How do you configure the login page to skip the default layout?
+**Scenario:**
+Create `layouts/default.vue` containing a persistent header, footer, and `<slot />` insertion point.
 
-**Expected output:**
+**Requirements:**
+1. Include `<slot />` inside `layouts/default.vue`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup lang="ts">
-> definePageMeta({
->   layout: false // Disables the layout system for this specific page
-> });
-> </script>
-> ```
-> - You can set the layout property to a boolean `false` inside the metadata macro to instruct Nuxt to bypass layout containers.
-
----
-
-### Exercise 2: Custom Named Layout Setup Pattern
-
-**Problem:** Write custom layout `layouts/admin.vue` rendering an admin sidebar header, `<slot />`, and footer wrapper.
-
-**Expected output:**
-> [!check]- Answer
-> ```vue
+> <!-- layouts/default.vue -->
 > <template>
->   <div class="admin-layout">
->     <AdminSidebar />
->     <main><slot /></main>
->   </div>
-> </template>
-> ```
-> - Named layout files in `layouts/` are referenced via `definePageMeta({ layout: 'admin' })`.
-> 
-> ```vue
-> <!-- layouts/admin.vue -->
-> <template>
->   <div class="flex min-h-screen">
->     <aside class="w-64 bg-gray-800 text-white">Admin Sidebar</aside>
->     <main class="flex-1 p-6">
+>   <div class="app-layout">
+>     <header>
+>       <nav>
+>         <NuxtLink to="/">Home</NuxtLink> |
+>         <NuxtLink to="/about">About</NuxtLink>
+>       </nav>
+>     </header>
+>     <main>
 >       <slot />
 >     </main>
+>     <footer>
+>       <p>&copy; 2026 Enterprise App</p>
+>     </footer>
 >   </div>
 > </template>
 > ```
 
+> #### Technical Explanation
+>
+> 1. Layout components in `layouts/` must render a default `<slot />` where page components are inserted.
+> 2. `layouts/default.vue` is automatically applied to all pages unless overridden.
+> 3. Persistent layout wrapper pattern.
+
 ---
 
-### Exercise 3: Default Layout Naming Rule
+### Exercise 2: Creating and Applying Custom Layouts
 
-**Problem:** What filename MUST be used in `layouts/` to automatically apply a layout to all pages by default?
+**Scenario:**
+Create a custom layout `layouts/auth.vue` for login and registration screens without header navigation.
 
-**Expected output:**
+**Requirements:**
+1. Create `layouts/auth.vue`.
+2. Apply `layout: "auth"` via `definePageMeta()`.
+
 > [!check]- Answer
-> ```text
-> layouts/default.vue
+>
+> #### Implementation
+>
+> ```vue
+> <!-- layouts/auth.vue -->
+> <template>
+>   <div class="auth-centered-container">
+>     <div class="auth-card">
+>       <slot />
+>     </div>
+>   </div>
+> </template>
 > ```
-> - `layouts/default.vue` is applied automatically across all pages.
-> 
-> ```text
-> layouts/default.vue
-> ```
+
+> ```vue
+> <!-- pages/login.vue -->
+> <script setup lang="ts">
+> definePageMeta({
+>   layout: "auth"
+> });
+> </script>
+
+<template>
+  <form>
+    <h2>Login</h2>
+    <input type="email" placeholder="Email" />
+    <button type="submit">Submit</button>
+  </form>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Custom layout files in `layouts/name.vue` are referenced by string key (`"auth"`).
+> 2. Pages set `definePageMeta({ layout: "auth" })` to switch layout template wrappers.
+> 3. Separates application structural layouts from view components.
+
+---
+
+### Exercise 3: Dynamic Layout Switching at Runtime with `setPageLayout()`
+
+**Scenario:**
+Dynamically switch from `default` layout to `admin` layout based on user session role using `setPageLayout()`.
+
+**Requirements:**
+1. Call `setPageLayout("admin")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const { user } = useAuth();
+
+if (user.value?.role === "admin") {
+  setPageLayout("admin");
+}
+</script>
+
+<template>
+  <div>
+    <h1>Dynamic Role Dashboard</h1>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `setPageLayout()` is a Nuxt 3 composable that dynamically changes the active layout wrapper at runtime.
+> 2. Updates the active `<NuxtLayout>` template without forcing a full page browser reload.
+> 3. Powerful runtime UI adjustment mechanism.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`app.vue`](app_vue.md) — Where `<NuxtLayout>` is placed to activate the system.
 - [`<NuxtPage>` & `<NuxtLayout>` Components](nuxt_page_layout.md) — Related concept: `<NuxtPage>` & `<NuxtLayout>` Components.
 - [`pages/` Directory](pages_directory.md) — pages/ directory.
@@ -241,7 +307,7 @@ definePageMeta({
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Layouts are persistent UI wrappers around your pages.
 - They prevent expensive re-rendering of headers and sidebars during navigation.
 - The `default.vue` layout applies to all pages automatically.

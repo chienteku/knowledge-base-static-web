@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing / Error Handling**
+
+**Routing & Layouts** (Segment Not Found UI Component): `not-found.tsx` renders custom 404 UI when `notFound()` is invoked inside a route segment.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only (`notFound()`) / Server or Client (`not-found.tsx`)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If a user goes to `/blog/nextjs-tips`, and you query your database for that post, what happens if the post was deleted? 
@@ -68,7 +69,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on `error.tsx` for 404s
 
@@ -126,77 +127,135 @@ export default function NotFound() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Unmatched URLs
+### Exercise 1: Customizing 404 UI with `not-found.tsx`
 
-**Problem:** You have a `app/not-found.tsx` file at the root. A user types a completely random URL into their browser: `yoursite.com/asdf123`. You don't have a folder for `asdf123`. What happens?
+**Scenario:**
+Create `app/not-found.tsx` to display a custom styled 404 page for missing URL routes.
 
-**Expected output:**
+**Requirements:**
+1. Export default React component in `app/not-found.tsx`.
+
 > [!check]- Answer
-> ```text
-> Next.js automatically renders `app/not-found.tsx`!
-> The `not-found.tsx` file serves two purposes:
-> 1. It catches programmatic `notFound()` function calls.
-> 2. It automatically acts as the fallback UI for any URLs that do not match your folder structure.
-> ```
-> - Think about what happens when the router can't find a matching folder.
+>
+> #### Implementation
+>
+> ```tsx
+> // app/not-found.tsx
+> import Link from "next/link";
+
+export default function NotFound() {
+  return (
+    <main className="flex flex-col items-center justify-center min-h-screen p-6 text-center">
+      <h1 className="text-4xl font-bold text-red-600">404 - Page Not Found</h1>
+      <p className="mt-2 text-gray-600">The requested resource could not be found.</p>
+      <Link href="/" className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">
+        Return Home
+      </Link>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `not-found.tsx` automatically renders when an un-matched URL path is requested or `notFound()` is invoked.
+> 2. Replaces browser default 404 text pages with styled React UI components.
+> 3. Server-rendered for optimal search engine indexing.
 
 ---
 
-### Exercise 2: notFound Function Trigger Pattern
+### Exercise 2: Programmatically Triggering 404 with `notFound()`
 
-**Problem:** Write async Server Component `app/posts/[id]/page.tsx` fetching post and calling `notFound()` if post is null.
+**Scenario:**
+Invoke `notFound()` inside a dynamic product page when database lookup fails.
 
-**Expected output:**
+**Requirements:**
+1. Import `notFound` from `next/navigation`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> import { notFound } from 'next/navigation'; export default async function Page({ params }: { params: { id: string } }) { const post = await getPost(params.id); if (!post) notFound(); return <h1>{post.title}</h1>; }
-> ```
-> - `notFound()` throws a 404 rendering exception.
-> 
+> // app/products/[id]/page.tsx
+> import { notFound } from "next/navigation";
+
+async function getProduct(id: string) {
+  const res = await fetch(`https://api.example.com/products/${id}`);
+  if (!res.ok) return null;
+  return res.json();
+}
+
+export default async function ProductPage({
+  params
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const product = await getProduct(id);
+
+  if (!product) {
+    notFound(); // Immediately halts execution and renders not-found.tsx
+  }
+
+  return <h1>Product: {product.title}</h1>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `notFound()` throws a specialized error that Next.js catches to render `not-found.tsx`.
+> 2. Returns an HTTP 404 status code header to the browser and web crawlers.
+> 3. Standard data fetching guard pattern.
+
+---
+
+### Exercise 3: Scoping Segment-Specific `not-found.tsx`
+
+**Scenario:**
+Create a segment-specific `app/docs/not-found.tsx` for documentation 404 errors.
+
+**Requirements:**
+1. Place `not-found.tsx` in `app/docs/` directory.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> import { notFound } from 'next/navigation';
-> 
-> export default async function Page({
->   params
-> }: {
->   params: { id: string }
-> }) {
->   const post = await getPost(params.id);
->   if (!post) notFound();
->   
->   return <h1>{post.title}</h1>;
+> // app/docs/not-found.tsx
+> export default function DocsNotFound() {
+>   return (
+>     <div className="p-6 bg-slate-100 rounded">
+>       <h2>Documentation Article Not Found</h2>
+>       <p>Please check the doc URL path or search our index.</p>
+>     </div>
+>   );
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. `not-found.tsx` can be nested inside sub-folders (`app/docs/`) to render context-aware 404 UI.
+> 2. Preserves the outer `app/docs/layout.tsx` shell while displaying the 404 notice.
+> 3. Contextual error handling design.
+
 ---
 
-### Exercise 3: Root vs Local not-found.tsx Scope
 
-**Problem:** How does Next.js handle 404 UI when a sub-folder lacks a local `not-found.tsx` file?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Next.js bubbles up the directory tree until it finds the nearest parent not-found.tsx boundary (or root app/not-found.tsx).
-> ```
-> - 404 exceptions bubble up to the nearest parent `not-found.tsx` boundary.
-> 
-> ```text
-> Sub-route 404 -> Local not-found.tsx -> Root app/not-found.tsx
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`error.tsx` & `global-error.tsx`](../level_02/error.md) — Used for unexpected runtime crashes, not missing data.
 - [`redirect()` & `permanentRedirect()`](redirect.md) — Another server-side function that stops execution and manipulates routing.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`notFound()`** is a server-side function you call when a database query or API request returns nothing.
 - Calling it immediately halts execution and throws a specific Next.js error.
 - **`not-found.tsx`** catches that error and displays a custom UI, while returning an HTTP 404 status code to the browser.

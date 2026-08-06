@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing**
+
+**Routing / Navigation** (Route Location & Navigation Composables): `useRoute()` and `useRouter()` provide access to active route parameters, query state, and programmatic navigation methods.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client** (Both hooks are active during SSR compilation on the server and dynamic hydration updates in the browser).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Applications must interact with the browser's address bar:
@@ -78,7 +79,7 @@ function handleLogin() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `useRouter().push` inside Route Middleware
 
@@ -145,84 +146,128 @@ function navigate() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Read Query Parameters
+### Exercise 1: Accessing Route Parameters and Query State with `useRoute()`
 
-**Problem:** Complete the setup script block below to capture a search term parameter named `q` from the URL queries (e.g., `?q=javascript`) and store it in a constant:
+**Scenario:**
+Read route parameter `id` and query string `sort` in component `<script setup>` using `useRoute()`.
 
-```vue
-<script setup lang="ts">
-// Solution:
-const route = useRoute();
-const searchQuery = route.query.q;
+**Requirements:**
+1. Extract `route.params.id` and `route.query.sort`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const route = useRoute();
+
+const productId = computed(() => route.params.id);
+const sortOrder = computed(() => route.query.sort ?? "asc");
 </script>
+
+<template>
+  <div>
+    <p>Product ID: {{ productId }}</p>
+    <p>Sort Order: {{ sortOrder }}</p>
+  </div>
+</template>
 ```
 
-> [!check]- Answer
-> - Initialize `useRoute()` and inspect its `query` object property.
+> #### Technical Explanation
+>
+> 1. `useRoute()` returns a reactive route location object containing `params`, `query`, `path`, and `meta`.
+> 2. `route.params` contains dynamic URL path parameters.
+> 3. `route.query` contains parsed URL query string key-value pairs.
 
 ---
 
-### Exercise 2: useRoute and useRouter Setup Pattern
+### Exercise 2: Programmatic Navigation using `useRouter()`
 
-**Problem:** Write `<script setup>` reading query parameter `q` from `useRoute()` and a button navigating to `/search?q=new` using `useRouter()`.
+**Scenario:**
+Perform programmatic navigation to `/dashboard` after successful form submission using `useRouter()`.
 
-**Expected output:**
+**Requirements:**
+1. Call `router.push("/dashboard")`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
-> const route = useRoute();
+> <script setup lang="ts">
 > const router = useRouter();
-> const currentQuery = computed(() => route.query.q);
-> function updateQuery() {
->   router.push({ path: '/search', query: { q: 'new' } });
-> }
-> </script>
-> ```
-> - `useRoute()` reads state; `useRouter()` triggers navigation.
-> 
-> ```vue
-> <script setup>
-> const route = useRoute();
-> const router = useRouter();
-> 
-> const searchWord = computed(() => route.query.q);
-> 
-> function searchNew() {
->   router.push({ path: '/search', query: { q: 'nuxt3' } });
-> }
-> </script>
-> ```
+> const isSubmitting = ref(false);
+
+async function handleLogin() {
+  isSubmitting.value = true;
+  // Simulate API login authentication call
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  
+  // Programmatic navigation to dashboard
+  await router.push({ path: "/dashboard", query: { loggedIn: "true" } });
+}
+</script>
+
+<template>
+  <button @click="handleLogin" :disabled="isSubmitting">Log In</button>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useRouter()` returns the Vue Router instance controlling navigation methods (`push`, `replace`, `back`).
+> 2. `router.push()` pushes a new entry onto the browser history stack.
+> 3. Supports passing path strings or target location objects with params and query options.
 
 ---
 
-### Exercise 3: router.replace vs router.push
+### Exercise 3: Navigating with `navigateTo()` composable
 
-**Problem:** What is the difference between `router.push('/login')` and `router.replace('/login')`?
+**Scenario:**
+Use Nuxt 3's SSR-friendly `navigateTo()` composable inside event handlers or route middleware.
 
-**Expected output:**
+**Requirements:**
+1. Call `await navigateTo("/login")`.
+
 > [!check]- Answer
-> ```text
-> push() adds a new entry to browser history stack; replace() overwrites the current history entry without creating a new back-button step.
-> ```
-> - `push()` -> Adds entry to history stack.
-> - `replace()` -> Overwrites current history entry.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> router.replace('/login'); // Does not pollute back button history
+> // middleware/auth.ts
+> export default defineNuxtRouteMiddleware((to, from) => {
+>   const isLoggedIn = false;
+>   
+>   if (!isLoggedIn && to.path !== "/login") {
+>     // SSR and Client friendly redirect!
+>     return navigateTo("/login");
+>   }
+> });
 > ```
+
+> #### Technical Explanation
+>
+> 1. `navigateTo()` is Nuxt's universal navigation helper designed for server and client execution contexts.
+> 2. On the server during SSR, it performs HTTP 302 redirects.
+> 3. On the client browser, it performs SPA client-side route transitions.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Dynamic Routes](dynamic_routes.md) — The route types that produce parameters.
 - [Route Middleware](../level_08/route_middleware.md) — The routing interceptors where redirects occur.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useRoute` provides read-only details about the active route parameters, queries, and path.
 - `useRouter` provides helper methods to execute programmatic routing updates.
 - Access dynamic segments via `useRoute().params` and search queries via `useRoute().query`.

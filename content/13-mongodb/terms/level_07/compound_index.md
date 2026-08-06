@@ -14,16 +14,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Index / Performance** (Multi-Key Composite B-Tree Index): A Compound Index indexes multiple document fields in a specified field order, supporting multi-attribute filtering, sorting, and prefix matching.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Stored as a single B-Tree structure where index keys are packed sequentially. Up to 32 fields can be combined in a single compound index).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In real-world applications, search filters are rarely single-field:
@@ -108,7 +109,7 @@ db.products.find().sort({ category: 1, price: 1 });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing the most frequently queried fields at the end of the compound index keys list
 
@@ -119,6 +120,8 @@ db.products.find().sort({ category: 1, price: 1 });
 **Fix: Always place the fields that are queried most frequently at the beginning (left-hand side) of the compound index keys specification.**
 
 ---
+
+
 
 
 
@@ -139,6 +142,8 @@ db.users.find({ age: 25 }); // ❌ Skips leading status prefix!
 db.users.find({ status: "active", age: 25 }); // Matches index prefix
 ```
 
+
+
 ### Mistake 3: Attempting to Index Multiple Array Fields in a Single Compound Index
 
 **The mistake:** Creating compound index `{ tags: 1, categories: 1 }` where both `tags` and `categories` are array fields.
@@ -157,99 +162,86 @@ Ensure at most ONE field in a compound index contains array data
 
 
 
-### Mistake 4: Violating the Index Prefix Rule in Compound Index Queries
+## 5. Practice Exercises
 
-**The mistake:** Creating compound index `{ status: 1, age: 1 }` and querying `db.users.find({ age: 25 })`.
+### Exercise 1: Compound Index Creation for Multi-Field Filtering
 
-**Why it's wrong:** Compound B-Tree indexes support queries matching index PREFIX keys (`status` or `status + age`). Querying `age` alone skips the leading prefix, causing a `COLLSCAN`.
+**Scenario:**
+Create a compound index on `status` (ascending) and `createdAt` (descending) in collection `orders`.
 
-*Incorrect:*
-```javascript
-db.users.createIndex({ status: 1, age: 1 });
-db.users.find({ age: 25 }); // ❌ Skips leading status prefix!
-```
+**Requirements:**
+1. Execute `createIndex({ status: 1, createdAt: -1 })`.
 
-*Fix:*
-```javascript
-db.users.find({ status: "active", age: 25 }); // Matches index prefix
-```
-
-### Mistake 5: Attempting to Index Multiple Array Fields in a Single Compound Index
-
-**The mistake:** Creating compound index `{ tags: 1, categories: 1 }` where both `tags` and `categories` are array fields.
-
-**Why it's wrong:** MongoDB strictly PROHIBITS compound multikey indexes containing more than one array field! Creating index `{ array1: 1, array2: 1 }` throws error `cannot index parallel arrays`.
-
-*Incorrect:*
-```javascript
-db.posts.createIndex({ tags: 1, categories: 1 }); // ❌ Error: cannot index parallel arrays!
-```
-
-*Fix:*
-```javascript
-Ensure at most ONE field in a compound index contains array data
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Compound Index Validation
-
-**Problem:** You build a compound index: `db.users.createIndex({ country: 1, score: -1 });`
-Analyze if the index can optimize these queries (answer **Yes** or **No**):
-1.  `db.users.find({ country: "US" }).sort({ score: -1 })`
-2.  `db.users.find({ score: { $gt: 100 } })`
-3.  `db.users.find({ country: "CA" }).sort({ score: 1 })`
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Yes: The query filters on the prefix field `country` and sorts in the exact match direction `{ country: 1, score: -1 }`.
-> 2. No: The query filters on `score` only, missing the prefix field `country`.
-> 3. Yes: The sort request `{ country: 1, score: 1 }` is the exact opposite of the index keys `{ country: -1, score: 1 }` after negating both fields, allowing a backward index scan.
-> ```
-> - A reverse scan negates all field directions: `-( { country: 1, score: -1 } ) = { country: -1, score: 1 }`.
-> - Check if the prefix field is present in the query filters.
-
----
-
-
-
-### Exercise 2: Creating Compound Index
-
-**Problem:** Create compound index `status_createdAt_idx` on `status` ascending and `createdAt` descending.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.orders.createIndex({ status: 1, createdAt: -1 }, { name: "status_createdAt_idx" });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.orders.createIndex(
->   { status: 1, createdAt: -1 },
->   { name: "status_createdAt_idx" }
-> );
+> db.orders.createIndex({ status: 1, createdAt: -1 });
 > ```
 >
-> **Explanation:** Compound indexes support queries filtering and sorting on multiple fields.
+> #### Technical Explanation
+>
+> 1. Compound indexes evaluate multi-field query filters in a single B-tree structure.
+> 2. `{ status: 1, createdAt: -1 }` orders entries by status ascending, then by date descending.
+> 3. Accelerates queries matching both `status` and `createdAt`.
 
 ---
 
-### Exercise 3: Compound Index Prefix Matching
+### Exercise 2: Prefix Matching Rule Verification
 
-**Problem:** Given index `{ a: 1, b: 1, c: 1 }`, list 3 supported query field combinations (`{ a }`, `{ a, b }`, `{ a, b, c }`).
+**Scenario:**
+Verify which query filters can utilize compound index `{ status: 1, category: 1, price: 1 }`.
 
-**Expected output:**
+**Requirements:**
+1. Test query filters against index prefix rules.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> { a }, { a, b }, { a, b, c }
-> ```
-> ```text
-> { a }, { a, b }, { a, b, c }
+> Compound Index Prefix Utilization:
+> ✅ Match: { status: "active" } (Uses prefix: status)
+> ✅ Match: { status: "active", category: "tech" } (Uses prefix: status, category)
+> ❌ No Match: { category: "tech" } (Omits leading prefix key 'status' -> forces COLLSCAN)
 > ```
 >
-> **Explanation:** Compound indexes support queries matching leading field prefix subsets.
+> #### Technical Explanation
+>
+> 1. Compound indexes can satisfy queries on any left-hand prefix of the index key pattern.
+> 2. Queries omitting the leading key (`status`) cannot use the index.
+> 3. Design compound index key orders to match primary query prefixes.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Sorting with Compound Indexes
+
+**Scenario:**
+Query orders where `status: "completed"` sorted by `createdAt` descending, verifying zero in-memory sort buffer usage.
+
+**Requirements:**
+1. Execute `find({ status: "completed" }).sort({ createdAt: -1 })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.find({ status: "completed" }).sort({ createdAt: -1 });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Compound index `{ status: 1, createdAt: -1 }` matches equality on `status` and reads sorted `createdAt` B-tree keys directly.
+> 2. Eliminates in-memory sort stage (`SORT`) in `explain()` output.
+> 3. Prevents 100MB sort buffer memory exceptions.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Single-Field Index](single_field_index.md) — The parent index type.
 - [The ESR Rule (Equality, Sort, Range)](esr_rule.md) — Ordering compound keys.
@@ -260,7 +252,7 @@ Analyze if the index can optimize these queries (answer **Yes** or **No**):
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Compound indexes contain two or more document fields.
 - Direct equivalent to compound indexes in relational SQL databases.
 - The Prefix Rule requires filtering on keys from left-to-right (no skipping).

@@ -3,6 +3,46 @@
 > **Level 14 — Advanced Traits & Design Patterns**
 > Standard library traits (`core::convert::TryFrom` and `core::convert::TryInto`) for performing fallible type conversions that return a `Result<T, Error>`, guaranteeing safe and explicit type casting when a conversion could overflow, truncate, or violate domain invariants.
 
+
+
+### Mistake 2: Ignoring Numeric Truncation or Out-of-Bounds Values
+
+**The mistake:** Using unchecked `as` casting inside `TryFrom` implementations instead of bounds checking.
+
+**Why it's wrong:** The sole purpose of `TryFrom` is fallible conversion safety. Using `as` casting without checking limits silently truncates values (e.g. `256u16 as u8` becomes `0`), defeating the safety invariants of `TryFrom`.
+
+*Incorrect:*
+```rust
+impl TryFrom<u16> for SmallByte {
+    type Error = &'static str;
+    fn try_from(val: u16) -> Result<Self, Self::Error> {
+        Ok(SmallByte(val as u8)) // ❌ Silently truncates values > 255!
+    }
+}
+```
+
+*Fix:*
+```rust
+impl TryFrom<u16> for SmallByte {
+    type Error = &'static str;
+    fn try_from(val: u16) -> Result<Self, Self::Error> {
+        if val <= 255 {
+            Ok(SmallByte(val as u8))
+        } else {
+            Err("Value exceeds u8 maximum")
+        }
+    }
+}
+```
+
+### Mistake 3: Swallowing Error Context in `type Error`
+
+**The mistake:** Defining `type Error = ();` without providing domain-specific error details.
+
+**Why it's wrong:** Callers using `TryFrom` need structured error information to diagnose why conversion failed. Using `()` discards context and prevents error matching.
+
+*Fix:* Use custom enums or descriptive error types implementing `std::error::Error`.
+
 ---
 
 ## 1. Prerequisites
@@ -16,17 +56,15 @@
 
 ## 2. Term Category
 
-**Standard Library Trait / Type Conversion**: `TryFrom` and `TryInto` are standard conversion traits used when a conversion from type `T` to type `U` can fail. Unlike `From` and `Into` which guarantee success (infallible conversion), `TryFrom` returns a `Result<Target, Error>`. Implementing `TryFrom<T> for U` automatically provides the reciprocal `TryInto<U> for T` via a standard library blanket implementation.
+
+
+**Rust Conversion Traits (fallible type conversion traits)**: `TryFrom` and `TryInto` are standard conversion traits used when a conversion from type `T` to type `U` can fail. Unlike `From` and `Into` which guarantee success (infallible conversion), `TryFrom` returns a `Result<Target, Error>`. Implementing `TryFrom<T> for U` automatically provides the reciprocal `TryInto<U> for T` via a standard library blanket implementation.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: `TryFrom` and `TryInto` are defined in `core::convert` and are available in both `std` and `#![no_std]` environments.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -131,7 +169,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Implementing `TryInto` Manually Instead of `TryFrom`
 
@@ -155,11 +193,11 @@ If you implement `TryInto` directly, Rust's coherence rules will prevent you (or
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Hardware Register Byte Decoding for Embedded Sensor (`TryFrom<u8>`)
 
-**Problem:**
+**Scenario:**
 In an embedded driver for an I2C accelerometer, the device emits an 8-bit status byte representing the current operating mode:
 - `0x00`: `Standby`
 - `0x01`: `Measurement2G`
@@ -170,6 +208,9 @@ In an embedded driver for an I2C accelerometer, the device emits an 8-bit status
 Implement `TryFrom<u8>` for `SensorOpMode` returning a custom `InvalidRegisterMode(u8)` error struct. Write unit tests with `assert_eq!` verifying valid mode conversions, invalid mode rejections, and reciprocal `TryInto` usage.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![cfg_attr(not(test), no_std)]
 > 
@@ -225,7 +266,8 @@ Implement `TryFrom<u8>` for `SensorOpMode` returning a custom `InvalidRegisterMo
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Match Exhaustiveness**: The `match` block handles exact sensor register bit-patterns and captures out-of-range byte codes in the fallback arm `unknown`.
 > 2. **Custom Error Context**: `InvalidRegisterMode(u8)` preserves the invalid byte for diagnostic logging.
 > 3. **Blanket Reciprocity**: `TryInto` works seamlessly without custom code because of the std blanket implementation.
@@ -234,7 +276,7 @@ Implement `TryFrom<u8>` for `SensorOpMode` returning a custom `InvalidRegisterMo
 
 ### Exercise 2: Validated Domain Type — Motor PWM Duty Cycle (`TryFrom<u16>` & `TryFrom<f32>`)
 
-**Problem:**
+**Scenario:**
 An embedded motor controller takes duty cycle inputs from two sources:
 1. Discrete 16-bit timer counts (`u16`), where values `0..=100` map to percentage duty cycles, and anything $> 100$ is an out-of-bounds error.
 2. Normalized floating-point signals (`f32`), where `0.0..=1.0` maps to percentage duty cycle, and negative numbers, numbers $> 1.0$, or `f32::NAN` are invalid.
@@ -242,6 +284,9 @@ An embedded motor controller takes duty cycle inputs from two sources:
 Implement `TryFrom<u16>` and `TryFrom<f32>` for `PwmDutyCycle(u8)`. Write comprehensive unit tests verifying bounds, float rounding, and `f32::NAN` rejection.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 > pub struct PwmDutyCycle(u8);
@@ -311,7 +356,8 @@ Implement `TryFrom<u16>` and `TryFrom<f32>` for `PwmDutyCycle(u8)`. Write compre
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Multiple Conversion Sources**: A single domain type can implement `TryFrom` for multiple distinct input types (`u16` and `f32`).
 > 2. **NaN Guarding**: `f32::is_nan()` must be checked before range comparison because NaN comparisons always evaluate to `false`.
 > 3. **Domain Invariants**: By restricting constructor access and validating via `TryFrom`, `PwmDutyCycle` guarantees its internal value never exceeds 100%.
@@ -320,7 +366,7 @@ Implement `TryFrom<u16>` and `TryFrom<f32>` for `PwmDutyCycle(u8)`. Write compre
 
 ### Exercise 3: Network Packet Header Parsing — Byte Slice `&[u8]` to Fixed IPv4 Header Struct
 
-**Problem:**
+**Scenario:**
 A low-level network packet engine receives raw byte slices (`&[u8]`). It must extract a valid 20-byte IPv4 packet header struct:
 - Header length must be at least 20 bytes.
 - The IP version nibble (top 4 bits of byte 0) must equal `4`.
@@ -329,6 +375,9 @@ A low-level network packet engine receives raw byte slices (`&[u8]`). It must ex
 Implement `TryFrom<&[u8]>` for `Ipv4Header`. Use `<[u8; 4]>::try_from(...)` slice-to-array conversions. Write unit tests validating success, buffer underflow, and invalid IP version flags.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, Clone, PartialEq, Eq)]
 > pub struct Ipv4Header {
@@ -421,14 +470,15 @@ Implement `TryFrom<&[u8]>` for `Ipv4Header`. Use `<[u8; 4]>::try_from(...)` slic
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Slice-to-Array Conversion**: `bytes[12..16].try_into()` converts dynamically sized sub-slices `&[u8]` into fixed-size arrays `[u8; 4]`.
 > 2. **Nibble Extraction**: `(bytes[0] >> 4) & 0x0F` isolates the top 4 bits representing the IP version.
 > 3. **Panic Safety**: Checking slice bounds up-front prevents out-of-bounds panics at runtime.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`From` / `Into` Traits](../level_04/from_into_traits.md) — Infallible counterparts to `TryFrom` and `TryInto`.
@@ -439,7 +489,7 @@ Implement `TryFrom<&[u8]>` for `Ipv4Header`. Use `<[u8; 4]>::try_from(...)` slic
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Use `TryFrom` / `TryInto` whenever type conversion can fail (overflow, invalid enum tag, string parse failure).
 - **Always implement `TryFrom`**, never `TryInto` directly, to preserve std blanket implementations.

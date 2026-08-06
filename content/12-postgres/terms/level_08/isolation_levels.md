@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Performance Concept / Configuration**
+
+**Core Concept** (Transaction Isolation Specifications): Isolation Levels (`Read Committed`, `Repeatable Read`, `Serializable`) control how concurrent transactions view and isolate uncommitted data modifications.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Can be set globally, per database session, or for a single transaction block. Serializable isolation relies on SSI (Serializable Snapshot Isolation) locks inside the database engine).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database systems, there is a fundamental conflict between **performance** and **correctness**:
@@ -89,7 +90,7 @@ SET SESSION CHARACTERISTICS AS TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Setting isolation to SERIALIZABLE without writing transaction retry logic in your backend application code
 
@@ -139,66 +140,121 @@ PostgreSQL never permits dirty reads; READ COMMITTED is default
 Wrap SERIALIZABLE transactions in retry loops catching error code 40001
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Isolation Level Matching
+### Exercise 1: Setting Transaction Isolation Levels
 
-**Problem:** You are building an inventory stock count query. The script queries stock counts, waits 5 seconds, and queries them again to verify. You want to guarantee that other users' committed database edits during those 5 seconds do **not** change the numbers you see. 
-What is the lowest PostgreSQL isolation level that guarantees this?
+**Scenario:**
+Set transaction isolation level to `REPEATABLE READ` for a multi-statement financial report query.
 
-**Expected output:**
+**Requirements:**
+1. Execute `BEGIN; SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;`.
+
 > [!check]- Answer
-> ```text
-> REPEATABLE READ!
-> Under REPEATABLE READ, the database snapshot is frozen at the start of the transaction block, preventing any subsequent updates committed by other concurrent transactions from appearing.
-> ```
-> - Read the Anomaly Matrix to see which levels block Non-Repeatable Reads.
-> - Recall that PostgreSQL's default is Read Committed, which allows values to change mid-transaction.
-
----
-
-
-
-### Exercise 2: Setting Transaction Isolation Level
-
-**Problem:** Set isolation level to `SERIALIZABLE` for active transaction.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> BEGIN ISOLATION LEVEL SERIALIZABLE;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> BEGIN ISOLATION LEVEL SERIALIZABLE;
+> BEGIN;
+> SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+> 
+> SELECT SUM(balance_cents) AS total_assets FROM accounts;
+> SELECT COUNT(*) AS account_count FROM accounts;
+> 
+> COMMIT;
 > ```
 >
-> **Explanation:** `BEGIN ISOLATION LEVEL` configures transaction isolation semantics.
+> #### Technical Explanation
+>
+> 1. `REPEATABLE READ` freezes the transaction snapshot at the first query statement inside `BEGIN`.
+> 2. Subsequent queries in the same transaction read from the exact same snapshot, ignoring modifications committed by concurrent transactions.
+> 3. Guarantees repeatable reads across all reporting queries.
 
 ---
 
-### Exercise 3: Default Isolation Level in PostgreSQL
+### Exercise 2: Handling Serialization Failures (Error 40001)
 
-**Problem:** What is the default isolation level in PostgreSQL? (`READ COMMITTED`).
+**Scenario:**
+Catch PostgreSQL Error Code `40001` (`serialization_failure`) in Node.js retry loops when using `REPEATABLE READ` or `SERIALIZABLE`.
 
-**Expected output:**
+**Requirements:**
+1. Code Node.js transaction retry wrapper for Error `40001`.
+
 > [!check]- Answer
-> ```text
-> READ COMMITTED
-> ```
-> ```text
-> READ COMMITTED
+>
+> #### Implementation
+>
+> ```typescript
+> export async function executeSerializableTx<T>(fn: (client: any) => Promise<T>): Promise<T> {
+>   let retries = 5;
+>   while (retries > 0) {
+>     const client = await pool.connect();
+>     try {
+>       await client.query("BEGIN; SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;");
+>       const result = await fn(client);
+>       await client.query("COMMIT");
+>       return result;
+>     } catch (err: any) {
+>       await client.query("ROLLBACK");
+>       if (err.code === "40001" && retries > 1) {
+>         retries--;
+>         await new Promise(r => setTimeout(r, 100 * (5 - retries))); // Exponential backoff
+>         continue;
+>       }
+>       throw err;
+>     } finally {
+>       client.release();
+>     }
+>   }
+>   throw new Error("Transaction retries exhausted!");
+> }
 > ```
 >
-> **Explanation:** `READ COMMITTED` is the standard default isolation level in PostgreSQL.
+> #### Technical Explanation
+>
+> 1. High isolation levels (`Repeatable Read`, `Serializable`) abort concurrent conflicting transactions with Error `40001`.
+> 2. Applications using these isolation levels MUST implement automatic retry loops.
+> 3. Guarantees transactional correctness under heavy concurrency.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Comparing Isolation Level Trade-Offs
+
+**Scenario:**
+Formulate a technical selection matrix comparing `Read Committed`, `Repeatable Read`, and `Serializable`.
+
+**Requirements:**
+1. Contrast consistency guarantees vs transaction retry requirements.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Isolation Level Selection Matrix:
+> - Read Committed (Default): High throughput, zero retries, subject to non-repeatable reads. Ideal for 95% of OLTP APIs!
+> - Repeatable Read: Freeze snapshot, prevents phantom reads, requires retry logic for Error 40001 on concurrent updates.
+> - Serializable: 100% strict sequential execution guarantees, highest retry frequency under update contention.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Higher isolation levels trade concurrency throughput for strict snapshot consistency.
+> 2. Default `Read Committed` minimizes transaction aborts.
+> 3. Select isolation levels based on transactional domain requirements.
+
+---
+
+
+
+## 6. Related Terms
 - [Concurrency Anomalies (Dirty, Non-Repeatable, Phantom Reads)](concurrency_anomalies.md) — The target consistency errors.
 - [Locking (Row-level, Table-level)](locking.md) — The physical blocking mechanisms.
 - [MVCC (Multi-Version Concurrency Control)](mvcc.md) — Related concept: MVCC (Multi-Version Concurrency Control).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Isolation levels control transaction visibility and protect against anomalies.
 - `READ COMMITTED` is the PostgreSQL default (each query sees a fresh committed snapshot).
 - `REPEATABLE READ` freezes the snapshot at the transaction's beginning.

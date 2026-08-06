@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Architecture / Paradigm**
+
+**Core Concept** (Non-Relational Paradigm): NoSQL Databases represent a class of non-relational storage engines optimized for flexible schemas, horizontal partition scaling, and high write throughput.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (A conceptual categorization in computer science, contrasting with Relational Database Management Systems (RDBMS) like PostgreSQL).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 For decades, relational databases (SQL) dominated software development. 
@@ -65,7 +66,7 @@ Imagine organizing office supplies:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming NoSQL is "better" than SQL and should always be used for new projects
 
@@ -115,69 +116,99 @@ Select specific NoSQL database type based on query access patterns
 Use relational SQL databases when complex 3NF normalization is required
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: NoSQL Family Matching
+### Exercise 1: Categorizing NoSQL Database Types
 
-**Problem:** Match the application feature to the most appropriate **NoSQL database type** (Document, Key-Value, Column-Family, Graph):
-1.  Caching user session tokens in RAM for sub-millisecond retrieval on page reloads.
-2.  Mapping a social network showing who is "friends" with whom, and which posts they liked.
-3.  Storing a product catalog for an e-commerce store where shoes have sizes, laptops have RAM specs, and books have page counts.
+**Scenario:**
+Categorize the four primary NoSQL database architecture types and provide a representative technology for each.
 
-**Expected output:**
+**Requirements:**
+1. List Document, Key-Value, Column-Family, and Graph types.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. Key-Value (e.g. Redis) - Optimized for simple, ultra-fast key lookups.
-> 2. Graph (e.g. Neo4j) - Optimized for traversing relationships and network connections.
-> 3. Document (e.g. MongoDB) - Optimized for flexible schemas containing nested, variable fields.
+> NoSQL Architecture Types:
+> - Document Database: MongoDB, Couchbase (Stores hierarchical BSON/JSON documents)
+> - Key-Value Store: Redis, Memcached (High-speed in-memory key lookups)
+> - Wide-Column Store: Apache Cassandra, ScyllaDB (High write throughput column families)
+> - Graph Database: Neo4j, Amazon Neptune (Vertex and edge relationship networks)
 > ```
-> - Consider which database specializes in maps/connections.
-> - Think about where nested JSON arrays fit best.
+>
+> #### Technical Explanation
+>
+> 1. NoSQL databases trade off rigid SQL schemas for domain-specific performance optimizations.
+> 2. Document databases excel at complex object modeling and content applications.
+> 3. Polyglot persistence architectures combine multiple database types per service requirements.
+
+---
+
+### Exercise 2: BASE Consistency vs ACID Guarantees
+
+**Scenario:**
+Explain the BASE (Basically Available, Soft-state, Eventual consistency) model used by distributed NoSQL systems compared to traditional ACID.
+
+**Requirements:**
+1. Contrast BASE eventual consistency against ACID strict serializability.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Consistency Models:
+> - ACID: Strict immediate consistency across multi-table transactions (PostgreSQL).
+> - BASE: High availability and horizontal scaling via eventual consistency across distributed nodes (NoSQL).
+> ```
+>
+> #### Technical Explanation
+>
+> 1. BASE prioritizes horizontal availability and partition tolerance (CAP theorem).
+> 2. Modern MongoDB supports single-document ACID by default and multi-document ACID transactions when needed.
+> 3. Balances developer flexibility with transactional safety.
+
+---
+
+### Exercise 3: Evaluating Polyglot Persistence Architecture
+
+**Scenario:**
+Design a polyglot storage architecture for an e-commerce platform using MongoDB and Redis together.
+
+**Requirements:**
+1. Use MongoDB for primary product catalog and order history.
+2. Use Redis for volatile session token caching.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Storage Architecture:
+> - MongoDB: Primary persistent storage for rich product documents and user order histories.
+> - Redis: Volatile in-memory key-value cache for user session tokens and shopping cart TTLs.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combines the strengths of document databases (rich querying) and in-memory caches (sub-millisecond reads).
+> 2. Optimizes infrastructure cost and response latency.
+> 3. Standard architecture pattern for modern web applications.
 
 ---
 
 
 
-### Exercise 2: NoSQL Database Families Categorization
-
-**Problem:** List 4 primary families of NoSQL databases (Document, Key-Value, Wide-Column, Graph).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Document, Key-Value, Wide-Column, Graph
-> ```
-> ```text
-> Document, Key-Value, Wide-Column, Graph
-> ```
->
-> **Explanation:** NoSQL databases fall into document, key-value, wide-column, and graph paradigms.
-
----
-
-### Exercise 3: BASE vs ACID Guarantees
-
-**Problem:** What does BASE stand for in distributed NoSQL systems? (Basically Available, Soft-state, Eventual consistency).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Basically Available, Soft-state, Eventual consistency
-> ```
-> ```text
-> Basically Available, Soft-state, Eventual consistency
-> ```
->
-> **Explanation:** BASE describes high-availability eventual consistency models in distributed databases.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [MongoDB](mongodb.md) — The document database implementation.
 - [Document vs. Relational Model](document_vs_relational.md) — Comparing SQL and NoSQL paradigms.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - NoSQL databases store data in formats other than strict relational tables.
 - Designed to support horizontal scaling, high write speeds, and flexible schemas.
 - Document, Key-Value, Column-Family, and Graph are the four main families.

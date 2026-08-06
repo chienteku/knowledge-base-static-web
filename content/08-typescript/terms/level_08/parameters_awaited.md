@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Utility Type**
+
+**TypeScript Utility Type** (Function Parameter & Async Promise Unwrapping): `Parameters<T>` and `Awaited<T>` extract function argument tuple types and recursively unwrap Promise return types.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-time** (These operations run inside the compiler to infer arguments and Promise boundaries, leaving no footprint in the runtime JS bundle).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building utility functions, API wrappers, decorator patterns, or middleware, you often need to forward or duplicate the arguments of a function or class. 
@@ -81,7 +82,7 @@ function loggedFetch(...args: Parameters<typeof fetchUser>): Promise<{ id: strin
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Passing a function value directly instead of using `typeof`
 
@@ -144,81 +145,109 @@ type Deep = Promise<Promise<string>>;
 type Clean = Awaited<Deep>; // Unwraps recursively to 'string'
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Extracting Async API Payloads
+### Exercise 1: Extracting Function Parameter Tuples with `Parameters<T>`
 
-**Problem:** You have a function that loads database configurations asynchronously. Write a type called `ConfigData` that extracts the resolved, unwrapped payload type from the function's return promise.
+**Scenario:**
+Extract the parameter tuple type of a third-party function `fetchUser(id: string, options?: Config)` using `Parameters`.
 
-```typescript
-async function loadConfig() {
-  return {
-    databaseUrl: 'mysql://localhost:3306',
-    poolSize: 10
-  };
-}
+**Requirements:**
+1. Apply `Parameters<typeof fetchUser>`.
 
-// Complete the definition using ReturnType and Awaited:
-type PromiseReturn = ReturnType<typeof loadConfig>; // Type: Promise<{...}>
-type ConfigData = Awaited<PromiseReturn>;
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function fetchUser(id: string, options?: { verbose: boolean }) {
+>   return { id, name: "Alice" };
+> }
+
+type FetchUserParams = Parameters<typeof fetchUser>;
+// Inferred as: [id: string, options?: { verbose: boolean } | undefined]
+
+const args: FetchUserParams = ["usr_100", { verbose: true }];
 ```
 
-**Expected output:**
+> #### Technical Explanation
+>
+> 1. `Parameters<T>` extracts the parameter tuple type of a function type `T`.
+> 2. Obtains exact argument signatures without manually re-declaring parameter types.
+> 3. Ideal for wrapping external library functions.
+
+---
+
+### Exercise 2: Recursively Unwrapping Promises with `Awaited<T>`
+
+**Scenario:**
+Unwrap nested `Promise<Promise<string[]>>` return types using `Awaited<T>`.
+
+**Requirements:**
+1. Apply `Awaited<T>`.
+
 > [!check]- Answer
-> ```text
-> ConfigData evaluates to the object type: { databaseUrl: string; poolSize: number; }
+>
+> #### Implementation
+>
+> ```typescript
+> async function getItems(): Promise<string[]> {
+>   return ["item1", "item2"];
+> }
+
+type ItemsResult = Awaited<ReturnType<typeof getItems>>;
+// Inferred as: string[]
+
+const items: ItemsResult = ["a", "b"];
+```
+
+> #### Technical Explanation
+>
+> 1. `Awaited<T>` recursively unwraps Promises, resolving nested `Promise<Promise<T>>` types to concrete `T`.
+> 2. Models the exact runtime behavior of `await` expressions in async functions.
+> 3. Introduced in TypeScript 4.5 for accurate async return typing.
+
+---
+
+### Exercise 3: Combining `Parameters<T>` and `ReturnType<T>` in Wrappers
+
+**Scenario:**
+Create a higher-order logger function wrapper preserving exact parameter and return types.
+
+**Requirements:**
+1. Use `Parameters<T>` and `ReturnType<T>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function withLogging<T extends (...args: any[]) => any>(fn: T) {
+>   return function (...args: Parameters<T>): ReturnType<T> {
+>     console.log("Invoking function with args:", args);
+>     return fn(...args);
+>   };
+> }
 > ```
-> - First get the return type of `loadConfig` (which is a Promise) using `ReturnType<typeof loadConfig>`.
-> - Wrap that result in `Awaited<...>` to peel away the Promise envelope.
+
+> #### Technical Explanation
+>
+> 1. `Parameters<T>` captures arguments while `ReturnType<T>` captures function output.
+> 2. Wraps arbitrary functions while preserving exact type safety for callers.
+> 3. Standard higher-order decorator and proxy pattern.
 
 ---
 
 
 
-### Exercise 2: Extracting First Parameter Type
-
-**Problem:** Extract type of first parameter from `function fetchUser(id: number, opts?: object)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> number
-> ```
-> ```typescript
-> function fetchUser(id: number, opts?: object) {}
-> type FirstParam = Parameters<typeof fetchUser>[0];
-> console.log("number");
-> ```
->
-> **Explanation:** `Parameters<typeof fn>[0]` indexes the tuple type returned by `Parameters`.
-
----
-
-### Exercise 3: Unwrapping Async Return Types with `Awaited`
-
-**Problem:** Unwrap return type of `async function getData(): Promise<{ a: number }>`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> { a: number }
-> ```
-> ```typescript
-> async function getData() { return { a: 1 }; }
-> type Unwrapped = Awaited<ReturnType<typeof getData>>;
-> console.log("{ a: number }");
-> ```
->
-> **Explanation:** Combining `Awaited` and `ReturnType` unwraps promised async return types.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`ReturnType<T>`](returntype.md) — Extracting outputs of functions.
 - [The `infer` Keyword](../level_09/infer.md) — The mechanism enabling parameter capture.
 - [Conditional Types](../level_09/conditional_types.md) — The underlying type branching logic.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`Parameters`** extracts function arguments as a tuple type.
 - **`ConstructorParameters`** extracts class constructor arguments as a tuple type.
 - **`Awaited`** unwraps Promise layers recursively to get the raw return type of async actions.

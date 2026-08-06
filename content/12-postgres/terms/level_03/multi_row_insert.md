@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DML Statement**
+
+**SQL Command / Clause** (Batch Insertion Command): Multi-row `INSERT` adds multiple tuple rows in a single atomic SQL statement for high write throughput.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (Significantly reduces network overhead and transaction logging costs. Postgres executes bulk inserts inside a single database transaction block by default).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you need to add 1,000 new records to a database (for example, importing an inventory list), you could write a loop in your application that runs 1,000 individual `INSERT INTO` statements.
@@ -103,7 +104,7 @@ WHERE stock = 0;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on SELECT * in INSERT ... SELECT statements
 
@@ -160,74 +161,105 @@ INSERT INTO t (a) VALUES (1) (2); -- ❌ Missing syntax comma!
 INSERT INTO t (a) VALUES (1), (2);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: User Copy Query
+### Exercise 1: Batch Inserting Multiple Tuple Rows
 
-**Problem:** You have a table `registrations` and want to populate a new `newsletter_subscribers` table. The `newsletter_subscribers` table has columns `sub_email` and `subscribed_at`. Write the SQL query to copy the emails of all users who consented (`marketing_consent = TRUE`) from `registrations` into `newsletter_subscribers`. Set `subscribed_at` to the registration timestamp `registered_at`.
+**Scenario:**
+Insert 3 new category rows into `categories` table in a single atomic SQL statement.
 
-```sql
--- Source Table columns: id, name, email, marketing_consent, registered_at
+**Requirements:**
+1. Execute `INSERT INTO categories (name) VALUES ('Tech'), ('Books'), ('Home')`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> INSERT INTO categories (name, slug) 
+> VALUES 
+>   ('Electronics', 'electronics'),
+>   ('Books', 'books'),
+>   ('Home & Garden', 'home-garden')
+> RETURNING id, name;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Multi-row `INSERT` bundles multiple row value tuples into a single statement.
+> 2. Reduces network roundtrip latency significantly compared to multiple single-row inserts.
+> 3. Executes atomically as a single transaction block.
+
+---
+
+### Exercise 2: Batch Inserting Rows in Node.js Applications
+
+**Scenario:**
+Construct a batch `INSERT` statement in Node.js using `pg-format` or unrolled parameter markers (`$1`, `$2`, `$3`, `$4`).
+
+**Requirements:**
+1. Use parameterized multi-row insert.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { pool } from "./db";
+
+export async function insertBatchLogs(logs: { event: string; userId: number }[]) {
+  const valueClauses = logs.map((_, i) => `($${i * 2 + 1}, $${i * 2 + 2})`).join(", ");
+  const values = logs.flatMap(l => [l.event, l.userId]);
+  
+  const queryText = `INSERT INTO audit_logs (event, user_id) VALUES ${valueClauses} RETURNING id`;
+  return pool.query(queryText, values);
+}
 ```
 
-**Expected output:**
+> #### Technical Explanation
+>
+> 1. Dynamically constructs `$1`, `$2` parameter placeholders for batch values.
+> 2. Prevents SQL Injection while maintaining single-statement batch performance.
+> 3. High throughput ingestion pattern.
+
+---
+
+### Exercise 3: Inserting Results from SELECT Queries
+
+**Scenario:**
+Copy all high-value customers from `customers` into `vip_customers` using `INSERT INTO ... SELECT`.
+
+**Requirements:**
+1. Execute `INSERT INTO vip_customers (customer_id) SELECT id FROM customers WHERE total_spent > 10000`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> INSERT INTO newsletter_subscribers (sub_email, subscribed_at)
-> SELECT email, registered_at 
-> FROM registrations 
-> WHERE marketing_consent;
+> INSERT INTO vip_customers (customer_id, assigned_at)
+> SELECT id, CURRENT_TIMESTAMP 
+> FROM customers 
+> WHERE total_spent >= 1000000;
 > ```
-> - Map source `email` to target `sub_email`.
-> - Apply the boolean `WHERE` filter.
+>
+> #### Technical Explanation
+>
+> 1. `INSERT INTO ... SELECT` bulk-inserts query output rows into a target table entirely on the database server.
+> 2. Eliminates client-side data streaming overhead.
+> 3. Fast server-side data migration.
 
 ---
 
 
 
-### Exercise 2: Multi-Row Insert with RETURNING Clause
-
-**Problem:** Insert 3 tags (`'web'`, `'db'`, `'sql'`) in a single statement returning generated `id`s.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INSERT INTO tags (name) VALUES ('web'), ('db'), ('sql') RETURNING id;
-> ```
-> ```sql
-> INSERT INTO tags (name)
-> VALUES ('web'), ('db'), ('sql')
-> RETURNING id;
-> ```
->
-> **Explanation:** Multi-row `INSERT ... RETURNING` returns generated primary keys for all inserted tuples.
-
----
-
-### Exercise 3: Multi-Row Upsert Handling
-
-**Problem:** Insert multi-row batch using `ON CONFLICT (email) DO NOTHING`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INSERT INTO users (email) VALUES ('a@ex.com'), ('b@ex.com') ON CONFLICT (email) DO NOTHING;
-> ```
-> ```sql
-> INSERT INTO users (email)
-> VALUES ('a@ex.com'), ('b@ex.com')
-> ON CONFLICT (email) DO NOTHING;
-> ```
->
-> **Explanation:** Multi-row upserts handle batch primary/unique key conflicts idempotently.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`INSERT INTO`](insert_into.md) — The parent write statement.
 - [`SELECT`](select.md) — The query statement sourcing copy operations.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Chaining values with commas executes bulk writes in a single statement.
 - `INSERT ... SELECT` copies data rows between tables directly in the database server.
 - Bulk operations reduce network latency, query parsing overhead, and log writing costs.

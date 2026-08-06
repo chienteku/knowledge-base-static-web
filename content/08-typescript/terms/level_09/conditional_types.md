@@ -12,51 +12,23 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Advanced Mechanics**
+
+**TypeScript Advanced Type** (Ternary Type Evaluation Engine): Conditional types (`T extends U ? X : Y`) evaluate type relationships at compile time using ternary branching logic.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
 
----
 
-## 4. Explanation
-
-### (1) Design Motivation — "Why did we design this?"
-Sometimes, the return type of a function drastically changes depending on the input type. 
-For example, if you pass a string into a function, it returns an Array of strings. If you pass a number, it returns a boolean.
-You cannot type this cleanly with basic Generics. You need a way to tell the compiler: *"IF the generic `T` is a string, THEN the type is `string[]`. ELSE, the type is `boolean`."*
-**Conditional Types** provide this logic.
-
-### (2) The Syntax
-It looks exactly like a standard JavaScript Ternary Operator (`condition ? trueResult : falseResult`), but it uses the `extends` keyword for the condition.
-
-```typescript
-// "If T matches the shape of string, resolve to string[]. Else resolve to boolean."
-type DynamicOutput<T> = T extends string ? string[] : boolean;
-
-// Resolves to: string[]
-type A = DynamicOutput<"Hello">;
-
-// Resolves to: boolean
-type B = DynamicOutput<100>;
-```
-
-### (3) Inferring within Conditions (`infer` keyword)
-The most advanced use of Conditional Types is the `infer` keyword. It allows you to create a new temporary generic variable *during* the evaluation process.
-This is exactly how the `ReturnType<T>` utility works!
-
-```typescript
-// The source code for `ReturnType<T>`!
-// "If T is a function that returns ANY type (infer R)..."
-// "...then resolve to R. Else, resolve to any."
-type MyReturnType<T> = T extends (...args: any[]) => infer R ? R : any;
-```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Distributive Conditional Types confusion
 
@@ -102,65 +74,94 @@ type IsStringNonDist<T> = [T] extends [string] ? true : false; // Wrap in tuple 
 type AbsNumber<T> = T extends number ? number : T; // Type-level conditional evaluation
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Exclude Utility
+### Exercise 1: Authoring Ternary Conditional Types
 
-**Problem:** The built-in Utility Type `Exclude<T, U>` removes elements from a Union. For example, `Exclude<"A" | "B" | "C", "A">` resolves to `"B" | "C"`. How do you write this using a Distributive Conditional Type?
+**Scenario:**
+Create a conditional type `IsString<T>` that evaluates to `true` if `T` extends `string` and `false` otherwise.
 
-**Expected output:**
+**Requirements:**
+1. Define `type IsString<T> = T extends string ? true : false`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> type MyExclude<T, U> = T extends U ? never : T;
-> 
-> // How it works under the hood for `Exclude<"A" | "B", "A">`:
-> // 1. "A" extends "A"? Yes -> resolve to `never`
-> // 2. "B" extends "A"? No -> resolve to "B"
-> // 3. Union the results: `never | "B"` === `"B"`!
-> ```
-> - What type represents "nothing" in a Union? (`never`)
+> type IsString<T> = T extends string ? true : false;
+
+type T1 = IsString<string>;  // true
+type T2 = IsString<number>;  // false
+type T3 = IsString<"hello">; // true (literal string extends string)
+```
+
+> #### Technical Explanation
+>
+> 1. Conditional types (`T extends U ? X : Y`) evaluate type relationships at compile time using ternary branching logic.
+> 2. Tests whether type `T` is assignable to candidate type `U`.
+> 3. Fundamental building block for type-level computation.
+
+---
+
+### Exercise 2: Distributive Conditional Types over Unions
+
+**Scenario:**
+Demonstrate how conditional types distribute automatically over union inputs (`ToArray<string | number>`).
+
+**Requirements:**
+1. Define `type ToArray<T> = T extends any ? T[] : never`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type ToArray<T> = T extends any ? T[] : never;
+
+type UnionResult = ToArray<string | number>;
+// Distributes as: ToArray<string> | ToArray<number>
+// Evaluates to: string[] | number[]
+```
+
+> #### Technical Explanation
+>
+> 1. When checked type parameter `T` is a naked type variable, conditional types distribute automatically across union members.
+> 2. `ToArray<string | number>` is evaluated as `ToArray<string> | ToArray<number>`.
+> 3. Enables powerful union type filtering and transformation.
+
+---
+
+### Exercise 3: Preventing Distributive Behavior with Tuple Wrapping
+
+**Scenario:**
+Prevent distributive union behavior in conditional types by wrapping generic parameters in tuples `[T] extends [any]`.
+
+**Requirements:**
+1. Contrast `ToArray<T>` vs `NonDistributiveToArray<T>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type NonDistributiveToArray<T> = [T] extends [any] ? T[] : never;
+
+type SingleResult = NonDistributiveToArray<string | number>;
+// Evaluates to: (string | number)[]
+```
+
+> #### Technical Explanation
+>
+> 1. Wrapping `[T]` in a tuple prevents automatic union distribution over conditional type branches.
+> 2. `NonDistributiveToArray<string | number>` treats `string | number` as a single unified type, outputting `(string | number)[]`.
+> 3. Crucial technique when union distribution is undesirable.
 
 ---
 
 
 
-### Exercise 2: TypeName Extract Utility
-
-**Problem:** Create conditional type `TypeName<T>` returning `"string"` | `"number"` | `"boolean"` | `"object"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> TypeName utility created
-> ```
-> ```typescript
-> type TypeName<T> =
->   T extends string ? "string" :
->   T extends number ? "number" :
->   T extends boolean ? "boolean" : "object";
-> console.log("TypeName utility created");
-> ```
->
-> **Explanation:** Chained conditional types inspect type identity at compile time.
-
----
-
-### Exercise 3: Disabling Distributive Conditional Behavior
-
-**Problem:** How to disable distributive evaluation in generic conditional types? (Wrap `[T]` in tuple brackets).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Wrap generic parameter in tuple brackets [T]
-> ```
-> ```typescript
-> console.log("Wrap generic parameter in tuple brackets [T]");
-> ```
->
-> **Explanation:** Tuple brackets `[T] extends [U]` prevent conditional distribution over union members.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Utility Types Overview](../level_08/utility_types.md) — Many advanced utilities (`Exclude`, `Extract`, `ReturnType`) are built entirely on Conditional Types.
 - [Generics Overview (`<T>`)](../level_07/generics.md) — The inputs to a Conditional Type.
 - [The `infer` Keyword](infer.md) — Capturing dynamic types inside conditional statements.
@@ -171,7 +172,7 @@ type AbsNumber<T> = T extends number ? number : T; // Type-level conditional eva
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Conditional Types** are the `if / else` statements of the Type system.
 - Syntax: `T extends Condition ? TrueType : FalseType`.
 - They are used to dynamically resolve complex types based on Generic inputs.

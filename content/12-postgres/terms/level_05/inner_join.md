@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DML Statement**
+
+**SQL Command / Clause** (Matching Intersection Join): `INNER JOIN` returns only rows that have matching values in both joined tables based on the join predicate.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (The default join type. If you write the `JOIN` keyword without prefixing it with a type, Postgres evaluates it as an `INNER JOIN` automatically).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When combining tables, you often want to see only complete relationships. 
@@ -92,7 +93,7 @@ INNER JOIN books ON authors.id = books.author_id;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using INNER JOIN when you need to retain unmatched records
 
@@ -103,6 +104,8 @@ INNER JOIN books ON authors.id = books.author_id;
 **Fix: If you want to return all records from one table, regardless of whether a match exists in the second table, you must use a `LEFT JOIN` instead of an `INNER JOIN`.**
 
 ---
+
+
 
 
 
@@ -122,6 +125,8 @@ SELECT * FROM users INNER JOIN orders; -- ❌ Syntax error: missing ON predicate
 SELECT * FROM users u INNER JOIN orders o ON u.id = o.user_id;
 ```
 
+
+
 ### Mistake 3: Using Low Selectivity Non-Indexed Columns in JOIN Predicates
 
 **The mistake:** Joining `SELECT * FROM users u JOIN orders o ON u.status = o.status;` on low-cardinality status string columns.
@@ -140,94 +145,101 @@ Join on indexed primary and foreign key columns: ON u.id = o.user_id
 
 
 
-### Mistake 4: Omitting Join ON Predicates Creating Accidental Cartesian Products
+## 5. Practice Exercises
 
-**The mistake:** Writing `SELECT * FROM users INNER JOIN orders;` without `ON` condition.
+### Exercise 1: Joining Two Tables with INNER JOIN
 
-**Why it's wrong:** In SQL, an `INNER JOIN` requires an explicit `ON` join predicate (e.g. `ON users.id = orders.user_id`). Omitting `ON` causes syntax error.
+**Scenario:**
+Query `orders` joined with `users` returning order `id`, `created_at`, `username`, and `email`.
 
-*Incorrect:*
-```sql
-SELECT * FROM users INNER JOIN orders; -- ❌ Syntax error: missing ON predicate!
-```
+**Requirements:**
+1. Execute `SELECT o.id, u.username FROM orders o INNER JOIN users u ON o.user_id = u.id`.
 
-*Fix:*
-```sql
-SELECT * FROM users u INNER JOIN orders o ON u.id = o.user_id;
-```
-
-### Mistake 5: Using Low Selectivity Non-Indexed Columns in JOIN Predicates
-
-**The mistake:** Joining `SELECT * FROM users u JOIN orders o ON u.status = o.status;` on low-cardinality status string columns.
-
-**Why it's wrong:** Joining on non-primary/foreign key fields without indexes forces expensive `Hash Join` or `Nested Loop` full table scans.
-
-*Incorrect:*
-```sql
-// Joining on un-indexed low cardinality text columns
-```
-
-*Fix:*
-```sql
-Join on indexed primary and foreign key columns: ON u.id = o.user_id
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Active Product Catalog
-
-**Problem:** You have a `products` table (columns: `product_name`, `manufacturer_id`) and a `manufacturers` table (columns: `id`, `company_name`). Write the SQL query to select the `product_name` and `company_name` columns. Only return records where the product has a matching manufacturer registered.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT products.product_name, manufacturers.company_name 
-> FROM products
-> INNER JOIN manufacturers ON products.manufacturer_id = manufacturers.id;
+> SELECT 
+>   o.id AS order_id, 
+>   o.total_cents, 
+>   u.username, 
+>   u.email 
+> FROM orders AS o 
+> INNER JOIN users AS u ON o.user_id = u.id 
+> ORDER BY o.id DESC;
 > ```
-> - The default `JOIN` acts as an `INNER JOIN`.
-> - Align the child's foreign key (`manufacturer_id`) to the parent's primary key (`id`).
+>
+> #### Technical Explanation
+>
+> 1. `INNER JOIN` matches rows where `o.user_id = u.id` evaluates to `TRUE`.
+> 2. Excludes orders with no matching user and users with no matching orders.
+> 3. Standard relational join statement.
+
+---
+
+### Exercise 2: Multi-Table INNER JOIN Across 3 Tables
+
+**Scenario:**
+Query order line items joining `orders`, `order_items`, and `products`.
+
+**Requirements:**
+1. Execute 2 `INNER JOIN` clauses linking `orders` -> `order_items` -> `products`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   o.id AS order_id, 
+>   p.name AS product_name, 
+>   oi.quantity, 
+>   oi.unit_price_cents 
+> FROM orders AS o 
+> INNER JOIN order_items AS oi ON o.id = oi.order_id 
+> INNER JOIN products AS p ON oi.product_id = p.id 
+> WHERE o.id = 101;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Chains multiple `INNER JOIN` clauses sequentially.
+> 2. Resolves relationships across 3 normalized tables.
+> 3. Relational data assembly.
+
+---
+
+### Exercise 3: Join Execution Plan Inspection with `EXPLAIN`
+
+**Scenario:**
+Inspect whether PostgreSQL executes a `Hash Join`, `Nested Loop`, or `Merge Join` for an `INNER JOIN`.
+
+**Requirements:**
+1. Execute `EXPLAIN ANALYZE SELECT * FROM orders JOIN users ON orders.user_id = users.id`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> EXPLAIN ANALYZE 
+> SELECT o.id, u.username 
+> FROM orders AS o 
+> JOIN users AS u ON o.user_id = u.id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. PostgreSQL query planner chooses between `Hash Join` (large un-sorted sets), `Nested Loop` (small indexed lookups), or `Merge Join` (pre-sorted sets).
+> 2. Utilizes indexes on foreign keys (`orders.user_id`).
+> 3. Diagnostic tool for join performance tuning.
 
 ---
 
 
 
-### Exercise 2: Multi-Table INNER JOIN
-
-**Problem:** Join `orders` (o), `users` (u), and `products` (p) selecting `u.name`, `p.title`, `o.created_at`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT u.name, p.title, o.created_at FROM orders o JOIN users u ON o.user_id = u.id JOIN products p ON o.product_id = p.id;
-> ```
-> ```sql
-> SELECT u.name, p.title, o.created_at
-> FROM orders o
-> JOIN users u ON o.user_id = u.id
-> JOIN products p ON o.product_id = p.id;
-> ```
->
-> **Explanation:** `INNER JOIN` matches rows present in both LHS and RHS tables.
-
----
-
-### Exercise 3: USING Clause Join Shorthand
-
-**Problem:** Rewrite `JOIN orders ON users.user_id = orders.user_id` using `USING (user_id)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users JOIN orders USING (user_id);
-> ```
-> ```sql
-> SELECT * FROM users JOIN orders USING (user_id);
-> ```
->
-> **Explanation:** `USING (column_name)` simplifies join predicates when column names are identical in both tables.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`JOIN` (Concept)](join_concept.md) — The parent operation.
 - [`LEFT JOIN` (`LEFT OUTER JOIN`)](left_join.md) — Sourcing unmatched left-side elements.
 - [`RIGHT JOIN` / `FULL OUTER JOIN`](right_full_join.md) — Related concept: `RIGHT JOIN` / `FULL OUTER JOIN`.
@@ -235,7 +247,7 @@ Join on indexed primary and foreign key columns: ON u.id = o.user_id
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `INNER JOIN` returns combined rows only when a key matches in both tables.
 - Unmatched rows from either the left or right table are silently excluded.
 - The `INNER` keyword is optional; `JOIN` defaults to `INNER JOIN` in SQL.

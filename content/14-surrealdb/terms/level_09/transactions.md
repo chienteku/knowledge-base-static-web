@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Transactions & Concurrency**
+
+
+**SurrealQL Command (BEGIN and COMMIT transaction block control)**: - **Transactions & Concurrency**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Storage & Transaction Engine** (Executes statements within an isolated transaction block).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In multi-step business operations (e.g. transferring money from Account A to Account B, or checking out an e-commerce shopping cart), multiple records across multiple tables must be modified together. If the system crashes midway after deducting money from Account A but before crediting Account B, the data becomes corrupt.
@@ -69,7 +68,7 @@ BEGIN TRANSACTION;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving Uncommitted Transactions Open in Interactive Sessions
 
@@ -137,98 +136,109 @@ COMMIT TRANSACTION;
 
 
 
-### Mistake 4: Forgetting `COMMIT TRANSACTION` or `CANCEL TRANSACTION` at the End of Transaction Blocks
 
-**The mistake:** Writing `BEGIN TRANSACTION; UPDATE user:1 ...;` without `COMMIT TRANSACTION;`.
 
-**Why it's wrong:** Un-committed transaction blocks roll back automatically or leave pending state un-persisted.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-BEGIN TRANSACTION;
-UPDATE user:1 SET balance += 100; // ❌ Un-committed transaction!
-```
+### Exercise 1: Multi-Statement Atomic Bank Transfer
 
-*Fix:*
-```surrealql
-BEGIN TRANSACTION;
-UPDATE user:1 SET balance += 100;
-COMMIT TRANSACTION; // Persists mutations atomically
-```
+**Scenario:**
+Perform an atomic fund transfer of `$50.00dec` from `account:alice` to `account:bob` inside a transaction block.
 
-### Mistake 5: Nesting `BEGIN TRANSACTION` Blocks inside Active Transactions
-
-**The mistake:** Writing nested `BEGIN TRANSACTION;` inside an already open transaction block.
-
-**Why it's wrong:** SurrealDB does not support nested `BEGIN TRANSACTION` blocks within a single connection session.
-
-*Incorrect:*
-```surrealql
-BEGIN TRANSACTION;
-  BEGIN TRANSACTION; // ❌ Nested transaction error!
-COMMIT TRANSACTION;
-```
-
-*Fix:*
-```surrealql
-BEGIN TRANSACTION;
-  UPDATE user:1 SET a = 1;
-  UPDATE account:1 SET b = 2;
-COMMIT TRANSACTION;
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Rollback Transaction Syntax
-Write a SurrealQL block that starts a transaction, deletes record `product:old`, and explicitly rolls back the operation using `CANCEL TRANSACTION;`.
+**Requirements:**
+1. Begin transaction using `BEGIN TRANSACTION;`.
+2. Deduct `$50.00dec` from `account:alice`.
+3. Add `$50.00dec` to `account:bob`.
+4. Commit using `COMMIT TRANSACTION;`.
 
 > [!check]- Answer
-> - Start with `BEGIN TRANSACTION;`.
-> - Write `DELETE product:old;`.
-> - End with `CANCEL TRANSACTION;`.
-
----
-
-
-
-### Exercise 2: Atomic Account Transfer Transaction
-
-**Problem:** Write ACID transaction transferring $50 from `account:1` to `account:2`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> BEGIN TRANSACTION; UPDATE account:1 SET balance -= 50; UPDATE account:2 SET balance += 50; COMMIT TRANSACTION;
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
 > BEGIN TRANSACTION;
->   UPDATE account:1 SET balance -= 50;
->   UPDATE account:2 SET balance += 50;
+> 
+> UPDATE account:alice SET balance -= 50.00dec;
+> UPDATE account:bob SET balance += 50.00dec;
+> 
 > COMMIT TRANSACTION;
 > ```
 >
-> **Explanation:** `BEGIN TRANSACTION ... COMMIT TRANSACTION` executes atomic multi-record mutations.
+> #### Technical Explanation
+>
+> 1. Encloses multiple DML statements in an atomic transaction block.
+> 2. `COMMIT TRANSACTION` writes all changes to persistent storage atomically.
+> 3. Protects multi-account transfers against system crashes.
 
 ---
 
-### Exercise 3: Cancelling Transaction on Guard Failure
+### Exercise 2: Explicit Transaction Cancellation with `CANCEL TRANSACTION`
 
-**Problem:** Roll back transaction using `CANCEL TRANSACTION` when conditions fail.
+**Scenario:**
+Cancel a transaction block explicitly using `CANCEL TRANSACTION` when a validation check fails.
 
-**Expected output:**
+**Requirements:**
+1. Begin transaction, perform an update, and execute `CANCEL TRANSACTION;`.
+
 > [!check]- Answer
-> ```text
-> BEGIN TRANSACTION; UPDATE account:1 SET balance -= 500; CANCEL TRANSACTION;
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
 > BEGIN TRANSACTION;
->   UPDATE account:1 SET balance -= 500;
->   CANCEL TRANSACTION;
+> 
+> UPDATE product:p1 SET stock -= 10;
+> CANCEL TRANSACTION;
 > ```
 >
-> **Explanation:** `CANCEL TRANSACTION` rolls back all mutations executed within the transaction block.
+> #### Technical Explanation
+>
+> 1. `CANCEL TRANSACTION` (or `ABORT TRANSACTION`) discards all uncommitted mutations in the active block.
+> 2. Restores database state to pre-transaction values.
+> 3. Allows programmatic transaction aborts.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Nesting DDL and DML in Single Transactions
+
+**Scenario:**
+Demonstrate defining a table schema and creating initial records inside a single transaction block.
+
+**Requirements:**
+1. Begin transaction.
+2. Define table `category` as `SCHEMAFULL`.
+3. Create category records.
+4. Commit transaction.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> BEGIN TRANSACTION;
+> 
+> DEFINE TABLE category SCHEMAFULL;
+> DEFINE FIELD name ON TABLE category TYPE string;
+> 
+> CREATE category:c1 SET name = "Electronics";
+> CREATE category:c2 SET name = "Books";
+> 
+> COMMIT TRANSACTION;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. SurrealDB permits mixing DDL statements (`DEFINE TABLE`, `DEFINE FIELD`) and DML statements (`CREATE`) inside single transaction blocks.
+> 2. Applies schema definitions and initial records atomically.
+> 3. Essential for transactional database migration scripts.
+
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [Transaction Isolation & Atomicity Semantics](transaction_isolation.md) — Snapshot isolation & concurrency.
 - [`THROW` Expression](../level_06/throw_expression.md) — Raising errors in transactions.
@@ -237,7 +247,7 @@ Write a SurrealQL block that starts a transaction, deletes record `product:old`,
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Transactions group multiple operations into an atomic unit (`BEGIN` ... `COMMIT`).
 - `CANCEL TRANSACTION` rolls back all changes made within the transaction block.
 - Ensures ACID compliance across multi-table writes.

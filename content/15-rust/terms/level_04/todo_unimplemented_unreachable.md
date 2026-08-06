@@ -165,12 +165,13 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Version Telemetry Protocol Engine (`todo!` vs `unimplemented!`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 You are architecture lead for a network telemetry pipeline processing sensor metric payloads. The system defines a generic codec trait `ProtocolCodec<T>` designed to support three protocol generations:
 1. `encode_v2`: Standard production encoding format. Serializes `TelemetryPayload` (`sensor_id: u32`, `temperature: f64`) into a formatted byte string (`SENSOR:<id>:TEMP:<val>`).
 2. `encode_v1`: Legacy v1 binary format has been retired and is permanently unsupported in modern builds. Invoking it must panic using `unimplemented!()` with a descriptive deprecation message.
 3. `encode_v3`: Next-gen binary format for QUIC protocol transport, scheduled for a future release. Invoking it must panic using `todo!()` with a roadmap message.
 
+**Requirements:**
 Implement the types, trait, and `TelemetryCodec` struct. Write unit tests using `#[cfg(test)] mod tests` that verify successful `v2` encoding with explicit assertions (`assert!`, `assert_eq!`, `assert_ne!`) and verify `v1` and `v3` panic behavior using `std::panic::catch_unwind` with `matches!`.
 
 > [!check]- Answer
@@ -299,7 +300,7 @@ Implement the types, trait, and `TelemetryCodec` struct. Write unit tests using 
 
 ### Exercise 2: Financial Matching Engine & Invariant Enforcement (`unreachable!`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In an enterprise high-frequency trading matching engine, incoming order commands (`NewOrder`, `CancelOrder`, `Heartbeat`) are dispatched to an execution handler `OrderProcessor::process_active_order`.
 - State invariant: `process_active_order` requires that the trading session is in `SessionState::Active`. An upstream validator gates execution so non-active states never enter this path.
 - Implementation requirement: If non-active states (`Connecting`, `Authenticated`, `Terminated`) ever bypass the gatekeeper due to a logic bug, the engine must immediately panic via `unreachable!("Session state invariant broken: process_active_order called with non-active state {:?}", session)` rather than returning dummy error codes or silently continuing.
@@ -308,6 +309,7 @@ In an enterprise high-frequency trading matching engine, incoming order commands
   - `CancelOrder { order_id }`: Returns `Ok("CANCELLED:<order_id>")`.
   - `Heartbeat`: Returns `Err("Heartbeat ignored in execution engine")`.
 
+**Requirements:**
 Implement `OrderProcessor` and unit tests in `#[cfg(test)] mod tests` verifying valid order execution with `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`, and verifying that invariant breaches trigger an `unreachable!` panic caught via `catch_unwind`.
 
 > [!check]- Answer
@@ -430,12 +432,13 @@ Implement `OrderProcessor` and unit tests in `#[cfg(test)] mod tests` verifying 
 
 ### Exercise 3: Storage Engine Pipeline with Dynamic Driver Fallbacks (`unimplemented!`, `todo!`, `unreachable!`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 You are building a storage engine trait `StorageBackend` with read, write, and sync capabilities:
 - `fn read(&self, key: &str) -> Result<Option<String>, String>;`
 - `fn write(&mut self, key: &str, value: &str) -> Result<(), String>;`
 - `fn sync(&mut self) -> Result<(), String>;`
 
+**Requirements:**
 Implement three backends:
 1. `MemoryBackend`: In-memory key-value store using `HashMap<String, String>`. All methods (`read`, `write`, `sync`) are fully supported.
 2. `ReadOnlyBackend`: Wraps an existing hash map. `read` operates normally, but `write` and `sync` panic via `unimplemented!("ReadOnlyBackend does not support mutation or write operations")`.

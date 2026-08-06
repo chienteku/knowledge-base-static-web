@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Functional Error Handling**: Combinator methods (`.map()`, `.and_then()`, `.unwrap_or()`, `.ok_or()`) for `Result` and `Option`.
+
+
+**Rust Functional Idiom (monadic value transformers)**: Combinator methods (`.map()`, `.and_then()`, `.unwrap_or()`, `.ok_or()`) for `Result` and `Option`.
 
 ---
 

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Management System (RDBMS)**
+
+**Core Concept** (Object-Relational DBMS): PostgreSQL is an advanced, open-source object-relational database management system (ORDBMS) emphasizing extensible SQL compliance, data integrity, and concurrency.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Cross-Platform Standard** (Runs as a background daemon process (`postgres` or `pg_ctl`) listening on port `5432` by default. Can run locally, in Docker containers, or inside cloud clusters).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In 1986, a database pioneer named Michael Stonebraker started the POSTGRES project at UC Berkeley to solve limitations in early relational databases. 
@@ -62,7 +63,7 @@ SELECT version();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming Postgres is an embedded in-memory system
 
@@ -108,57 +109,85 @@ Install PostgreSQL service and verify daemon status before running app code
 Check server engine version via SELECT version();
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: DB Choice Analysis
+### Exercise 1: Querying Server Version Telemetry
 
-**Problem:** You are building a banking application where users can transfer money between checking and savings accounts. If the database crashes mid-transfer (after subtracting money from checking, but before adding it to savings), what database standard prevents this money from vanishing, and why is Postgres a great choice?
+**Scenario:**
+Query the running PostgreSQL server version and build configuration using `SELECT version()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT version()`.
+
 > [!check]- Answer
-> ```text
-> The database standard is ACID compliance (specifically Atomicity and Consistency). This guarantees that a transaction is "all-or-nothing" — if any part of the transfer fails, the entire transaction is rolled back as if it never happened. Postgres is a great choice because it has spent over 35 years refining its ACID engine and transactional write-ahead logging (WAL), making it one of the safest databases in the industry for financial data.
-> ```
-> - Search for the definition of database "ACID compliance".
-> - Think about what database traits are critical when data errors lead to financial loss.
-
----
-
-
-
-### Exercise 2: Inspecting Server Version
-
-**Problem:** SQL statement inspecting PostgreSQL server version details (`SELECT version();`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT version();
-> ```
+>
+> #### Implementation
+>
 > ```sql
 > SELECT version();
 > ```
 >
-> **Explanation:** `version()` outputs engine version, architecture, and compiler details.
+> #### Technical Explanation
+>
+> 1. `version()` returns the full PostgreSQL version string, OS compilation target, and compiler details.
+> 2. Verifies whether server features (e.g. PG 15+ `MERGE` or PG 16+ `json_table`) are supported.
+> 3. Initial diagnostic step during environment setup.
 
 ---
 
-### Exercise 3: PostgreSQL Original Design Project
+### Exercise 2: Checking Transactional ACID Compliance Settings
 
-**Problem:** What project at UC Berkeley preceded PostgreSQL? (POSTGRES / Ingres project by Michael Stonebraker).
+**Scenario:**
+Verify that `synchronous_commit` is enabled on the server to guarantee ACID write durability.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SHOW synchronous_commit`.
+
 > [!check]- Answer
-> ```text
-> Ingres / POSTGRES project at UC Berkeley
-> ```
-> ```text
-> Ingres / POSTGRES project at UC Berkeley
+>
+> #### Implementation
+>
+> ```sql
+> SHOW synchronous_commit;
 > ```
 >
-> **Explanation:** PostgreSQL originated from Michael Stonebraker's POSTGRES research project.
+> #### Technical Explanation
+>
+> 1. `synchronous_commit = on` guarantees that write transactions wait for WAL disk flush before returning success to clients.
+> 2. Enforces strict ACID Durability guarantees.
+> 3. Prevents data loss during unexpected power loss.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Inspecting Server Uptime Telemetry
+
+**Scenario:**
+Query server start time and uptime duration using system statistics.
+
+**Requirements:**
+1. Query `pg_postmaster_start_time()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   pg_postmaster_start_time() AS server_started_at,
+>   CURRENT_TIMESTAMP - pg_postmaster_start_time() AS uptime_duration;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `pg_postmaster_start_time()` returns the timestamp when the main server daemon (`postgres`) was started.
+> 2. Subtracting from `CURRENT_TIMESTAMP` calculates total server uptime.
+> 3. Monitors server stability and restart cycles.
+
+---
+
+
+
+## 6. Related Terms
 - [Database](database.md) — The parent technology class.
 - [Relational Database](relational_database.md) — The relational data structure model.
 - [Client-Server Model (in Databases)](client_server_model.md) — Related concept: Client-Server Model (in Databases).
@@ -166,7 +195,7 @@ Check server engine version via SELECT version();
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PostgreSQL (commonly called Postgres) is an open-source, enterprise-grade relational database.
 - It prioritizes data safety, transaction reliability, and ANSI-SQL standard compliance above all else.
 - It is highly extensible, supporting custom types (like JSONB, GIS coordinates, vectors).

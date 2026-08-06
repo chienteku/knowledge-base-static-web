@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Query Feature (multi-hop deep graph path traversal)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the graph resolver. Sequentially walks pointer chains in memory, resolving multiple table records in a single read transaction pass).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In social networks, e-commerce recommendation engines, and logistics systems, relationships are deep:
@@ -89,7 +88,7 @@ SELECT ->follows->user->likes->post->tagged->tag.name AS tag_names FROM user:ali
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Skipping intermediate node tables when chaining arrow operators, triggering query compilation errors
 
@@ -151,94 +150,98 @@ SELECT array::distinct(->knows->user->knows->user) AS fof FROM user:alice; // De
 
 
 
-### Mistake 4: Un-Aliasing Deep Multi-Hop Arrow Traversal Projections
 
-**The mistake:** Selecting `SELECT ->knows->user->knows->user FROM user:alice;` without aliasing.
 
-**Why it's wrong:** Un-aliased deep arrow traversals produce complex nested key names in query result objects. Use `AS alias` (e.g. `AS friends_of_friends`).
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-SELECT ->knows->user->knows->user FROM user:alice; // Un-friendly output keys
-```
+### Exercise 1: Multi-Hop 3-Tier Graph Traversal
 
-*Fix:*
-```surrealql
-SELECT ->knows->user->knows->user AS fof FROM user:alice; // Clean aliased projection
-```
+**Scenario:**
+A social recommendation engine queries the cities where friends of `user:alice` currently live using a 3-hop graph arrow path (`->knows->user->lives_in->city`).
 
-### Mistake 5: Creating Cyclic Infinite Loops in Unbounded Graph Traversals
+**Requirements:**
+1. Create nodes `user:alice`, `user:bob`, `city:austin`.
+2. Relate `user:alice -> knows -> user:bob` and `user:bob -> lives_in -> city:austin`.
+3. Execute the 3-hop traversal query from `user:alice`.
 
-**The mistake:** Traversing recursive cyclic friend relationships without filtering or depth limits.
-
-**Why it's wrong:** Cyclic graph connections (A -> B -> A) can create redundant nested object trees during multi-hop traversals.
-
-*Incorrect:*
-```surrealql
--- Unbounded multi-hop lookup on cyclic graph
-SELECT ->knows->user->knows->user->knows->user FROM user:alice;
-```
-
-*Fix:*
-```surrealql
-SELECT array::distinct(->knows->user->knows->user) AS fof FROM user:alice; // Deduplicate visited nodes
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Deep Path Construction
-
-**Problem:** You are building a movie recommendation database.
--   Users follow other users (`->follows->user`).
--   Users watch movies, storing ratings on the edge (`->watched->movie`).
--   Movies are classified in genres (`->genre->genre`).
-Write the SurrealQL query starting from `user:john` to retrieve all genre names of movies watched by users that John follows.
-
-**Expected output:**
 > [!check]- Answer
-> ```sql
-> SELECT ->follows->user->watched->movie->genre->genre.name AS genres FROM user:john;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET name = "Alice";
+> CREATE user:bob SET name = "Bob";
+> CREATE city:austin SET name = "Austin";
+> 
+> RELATE user:alice->knows->user:bob;
+> RELATE user:bob->lives_in->city:austin;
+> 
+> -- Multi-hop 3-tier graph traversal
+> SELECT ->knows->user->lives_in->city.name AS friend_cities FROM user:alice;
 > ```
-> - Follow the node-edge-node alternation pattern strictly.
-> - Chain the path: `user:john` $\rightarrow$ `follows` $\rightarrow$ `user` $\rightarrow$ `watched` $\rightarrow$ `movie` $\rightarrow$ `genre` $\rightarrow$ `genre`.
+>
+> #### Technical Explanation
+>
+> 1. Arrow operators (`->edge->vertex->edge->vertex`) chain multi-hop graph paths in a single query expression.
+> 2. Traverses graph pointers in $O(1)$ constant time per edge step without SQL `JOIN` tables.
+> 3. Returns nested array results containing target city names.
+
+---
+
+### Exercise 2: Multi-Hop Filtered Graph Paths
+
+**Scenario:**
+Traverse from `user:alice` through `knows` edges to find friends who are active (`WHERE active = true`) and extract their written posts.
+
+**Requirements:**
+1. Write `SELECT ->knows->user[WHERE active = true]->wrote->post.title FROM user:alice`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT ->knows->user[WHERE active = true]->wrote->post.title AS friend_posts 
+> FROM user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Inline filter brackets `[WHERE active = true]` filter intermediate vertex nodes during path traversal.
+> 2. Filters out inactive users before advancing to subsequent `wrote->post` edge hops.
+> 3. Reduces unnecessary pointer traversals during graph execution.
+
+---
+
+### Exercise 3: Deep Traversal Projection and Flattening
+
+**Scenario:**
+Flatten deep multi-hop traversal results into a clean 1D array of post titles.
+
+**Requirements:**
+1. Wrap the deep traversal query in `array::flatten()` or `SELECT VALUE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT array::flatten(->knows->user->wrote->post.title) AS all_titles FROM user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Deep traversals return nested arrays (`[[ "Post 1", "Post 2" ]]`).
+> 2. `array::flatten()` flattens multi-level nested arrays into a clean single-dimensional list.
+> 3. Simplifies payload consumption in application UI components.
 
 ---
 
 
 
-### Exercise 2: 2-Hop Friends-of-Friends Traversal
 
-**Problem:** Query 2-hop friends-of-friends from `user:alice` deduplicating result IDs.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT array::distinct(->knows->user->knows->user) AS fof FROM user:alice;
-> ```
-> ```surrealql
-> SELECT array::distinct(->knows->user->knows->user) AS fof FROM user:alice;
-> ```
->
-> **Explanation:** Chaining arrow paths `->edge->table->edge->table` traverses multi-hop graph networks.
-
----
-
-### Exercise 3: 3-Hop Supply Chain Traversal
-
-**Problem:** Query suppliers 3 hops away: `product:1 -> ->supplied_by->vendor -> ->sourced_from->factory -> ->owned_by->company`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT ->supplied_by->vendor->sourced_from->factory->owned_by->company AS owner FROM product:1;
-> ```
-> ```surrealql
-> SELECT ->supplied_by->vendor->sourced_from->factory->owned_by->company AS owner FROM product:1;
-> ```
->
-> **Explanation:** SurrealDB executes multi-hop graph traversals in constant pointer time.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
 - [Graph Traversal vs. Relational JOINs](graph_vs_joins.md) — The performance mechanics.
@@ -246,7 +249,7 @@ Write the SurrealQL query starting from `user:john` to retrieve all genre names 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Deep graph traversal chains multiple arrow operators in a single path.
 - Replaces complex multi-table SQL JOIN queries with a clean, visual syntax.
 - Path syntax must alternate: Node $\rightarrow$ Edge $\rightarrow$ Node $\rightarrow$ Edge $\rightarrow$ Node.

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Syntax / Abstraction**
+
+**Advanced Feature** (Common Table Expressions): Common Table Expressions (`WITH ... AS`) define transient named query result sets that simplify complex nested queries and subqueries.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all modern SQL databases. Modern PostgreSQL (12+) automatically inline-merges standard CTEs to optimize physical plans, unless overridden by the `NOT MATERIALIZED` clause).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing complex SQL reports, you often need to perform calculations on top of other calculations. 
@@ -90,7 +91,7 @@ WHERE total_spent > 500.00;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Overusing CTEs for basic filters that could be written as simple WHERE joins
 
@@ -144,89 +145,122 @@ WITH b AS (SELECT * FROM a), a AS (SELECT 1) SELECT * FROM b; -- ❌ Relation 'a
 WITH a AS (SELECT 1), b AS (SELECT * FROM a) SELECT * FROM b;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Subquery Refactor
+### Exercise 1: Modularizing Complex Queries with CTEs
 
-**Problem:** You have a query containing a nested subquery:
-```sql
-SELECT product_id, avg_price 
-FROM (
-  SELECT product_id, AVG(unit_price) AS avg_price 
-  FROM order_items 
-  GROUP BY product_id
-) AS prices 
-WHERE avg_price > 100.00;
-```
-Rewrite this query using a clean `WITH` CTE block named `product_averages`.
+**Scenario:**
+Refactor a nested query using a CTE (`WITH high_value_users AS (...)`) to isolate active users spending over $500.
 
-**Expected output:**
+**Requirements:**
+1. Execute `WITH ... AS (SELECT ...) SELECT ...`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> WITH product_averages AS (
->   SELECT product_id, AVG(unit_price) AS avg_price
->   FROM order_items
->   GROUP BY product_id
+> WITH high_value_users AS (
+>   SELECT customer_id, SUM(total_cents) AS total_spent 
+>   FROM orders 
+>   GROUP BY customer_id 
+>   HAVING SUM(total_cents) >= 50000
 > )
-> SELECT product_id, avg_price
-> FROM product_averages
-> WHERE avg_price > 100.00;
+> SELECT 
+>   c.id, 
+>   c.company_name, 
+>   h.total_spent / 100.0 AS total_spent_dollars 
+> FROM customers AS c 
+> JOIN high_value_users AS h ON c.id = h.customer_id 
+> ORDER BY h.total_spent DESC;
 > ```
-> - Start the script with the `WITH` keyword followed by the CTE name `product_averages`.
-> - Write the inner aggregation query inside the parentheses.
+>
+> #### Technical Explanation
+>
+> 1. `WITH cte_name AS (...)` defines a temporary named query result set.
+> 2. Improves SQL readability by breaking complex subqueries into modular named blocks.
+> 3. Modern PostgreSQL (PG 12+) automatically inlines non-recursive CTEs for query optimization.
+
+---
+
+### Exercise 2: Multi-Stage Data Pipelines using Chained CTEs
+
+**Scenario:**
+Chain two CTEs (`WITH monthly_sales AS (...), top_stores AS (...)`) to compute regional store performance metrics.
+
+**Requirements:**
+1. Code chained CTE statements.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> WITH monthly_sales AS (
+>   SELECT store_id, DATE_TRUNC('month', created_at) AS sales_month, SUM(total_cents) AS revenue 
+>   FROM orders 
+>   GROUP BY store_id, sales_month
+> ),
+> top_stores AS (
+>   SELECT store_id, SUM(revenue) AS annual_revenue 
+>   FROM monthly_sales 
+>   GROUP BY store_id 
+>   HAVING SUM(revenue) >= 10000000
+> )
+> SELECT s.id, s.name, ts.annual_revenue / 100.0 AS annual_revenue_dollars 
+> FROM stores AS s 
+> JOIN top_stores AS ts ON s.id = ts.store_id;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Chained CTEs pass intermediate query result sets to subsequent CTE blocks sequentially.
+> 2. Simplifies multi-stage analytical queries.
+> 3. Clean pipeline architecture.
+
+---
+
+### Exercise 3: Data Mutation CTEs with `RETURNING`
+
+**Scenario:**
+Archive soft-deleted users in a single atomic SQL statement using `WITH deleted_users AS (DELETE ... RETURNING *) INSERT INTO archived_users SELECT * FROM deleted_users`.
+
+**Requirements:**
+1. Code mutation CTE using `DELETE` with `RETURNING`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> WITH moved_users AS (
+>   DELETE FROM users 
+>   WHERE is_active = FALSE 
+>   RETURNING id, username, email, created_at
+> )
+> INSERT INTO archived_users (id, username, email, archived_at) 
+> SELECT id, username, email, CURRENT_TIMESTAMP 
+> FROM moved_users;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Data-modifying CTEs (`INSERT`, `UPDATE`, `DELETE` with `RETURNING`) perform writes inside CTE blocks.
+> 2. Moves deleted rows directly into archive tables in a single atomic SQL statement.
+> 3. Advanced PostgreSQL feature.
 
 ---
 
 
 
-### Exercise 2: Constructing Multi-Stage CTE
-
-**Problem:** Write CTE `regional_sales` summarizing total sales per region, then main query selecting regions with `total > 10000`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> WITH regional_sales AS (SELECT region, SUM(amount) AS total FROM sales GROUP BY region) SELECT * FROM regional_sales WHERE total > 10000;
-> ```
-> ```sql
-> WITH regional_sales AS (
->   SELECT region, SUM(amount) AS total
->   FROM sales
->   GROUP BY region
-> )
-> SELECT * FROM regional_sales WHERE total > 10000;
-> ```
->
-> **Explanation:** Common Table Expressions (CTEs) modularize complex SQL query pipelines.
-
----
-
-### Exercise 3: Data-Modifying CTE with RETURNING
-
-**Problem:** Move deleted inactive users into `archived_users` in a single query using data-modifying CTE.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> WITH deleted AS (DELETE FROM users WHERE active IS FALSE RETURNING *) INSERT INTO archived_users SELECT * FROM deleted;
-> ```
-> ```sql
-> WITH deleted AS (
->   DELETE FROM users WHERE active IS FALSE RETURNING *
-> )
-> INSERT INTO archived_users SELECT * FROM deleted;
-> ```
->
-> **Explanation:** PostgreSQL supports data-modifying CTEs (`DELETE ... RETURNING`) used inside `INSERT` statements.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Recursive CTE](recursive_cte.md) — Self-referencing loops.
 - [View](view.md) — Persistent saved database queries.
 - [`LATERAL` Join](lateral_join.md) — Related concept: `LATERAL` Join.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - CTEs define temporary named query result sets using the `WITH` keyword.
 - Exists strictly during the execution scope of a single query.
 - Eliminates hard-to-read "inside-out" nested subqueries.

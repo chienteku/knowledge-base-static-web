@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Administration / Operations** (Database Server Metrics & Telemetry): Server Diagnostics collects server health metrics (`serverStatus`, `dbStats`, `collStats`, `top`) to monitor CPU, RAM, lock latency, and WiredTiger cache efficiency.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executed inside `mongosh`. Analyzing outputs requires administrative or diagnostic role permissions).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When running database clusters in production, you must monitor performance to prevent outages:
@@ -91,7 +92,7 @@ db.stats();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running db.currentOp() as a standard non-admin database user, getting empty results
 
@@ -139,75 +140,99 @@ Run mongostat and mongotop CLI tools to inspect collection read/write lock laten
 Monitor db.serverStatus().wiredTiger.cache for dirty data page eviction thresholds
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Runtime Emergency Resolution
+### Exercise 1: Inspecting WiredTiger Memory Cache Usage with `serverStatus()`
 
-**Problem:** Your production server CPU spikes to 100%. Web requests are failing due to timeouts. 
-Write the sequential mongosh commands to:
-1.  Locate any active query running on the `reports.sales` collection for more than `10` seconds.
-2.  Terminate that query using its operation ID (assume the operation ID returned is `99088`).
+**Scenario:**
+Query `db.serverStatus()` to inspect current WiredTiger cache memory consumption and dirty byte percentages.
 
-**Expected output:**
+**Requirements:**
+1. Check `serverStatus().wiredTiger.cache`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> // 1. Locate the query
-> db.currentOp({
->   "active": true,
->   "ns": "reports.sales",
->   "secs_running": { $gt: 10 }
-> });
+> const status = db.serverStatus();
+> const cache = status.wiredTiger.cache;
 > 
-> // 2. Terminate the query
-> db.killOp(99088);
-> ```
-> - Add search filter criteria inside `db.currentOp()` targeting the namespace `ns` and `secs_running`.
-> - Use the `db.killOp()` helper method to cancel the operation.
-
----
-
-
-
-### Exercise 2: Inspecting Real-Time Collection Read/Write Time with `mongotop`
-
-**Problem:** CLI command to monitor time spent reading and writing per collection every 2 seconds (`mongotop 2`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> mongotop 2
-> ```
-> ```bash
-> mongotop 2
+> console.log("Cache Bytes in Use (MB):", (cache["bytes currently in the cache"] / (1024 * 1024)).toFixed(2));
+> console.log("Max Cache Size (MB):", (cache["maximum bytes configured"] / (1024 * 1024)).toFixed(2));
+> console.log("Dirty Bytes in Cache (MB):", (cache["tracked dirty bytes in the cache"] / (1024 * 1024)).toFixed(2));
 > ```
 >
-> **Explanation:** `mongotop [interval]` outputs real-time read and write time metrics per collection.
+> #### Technical Explanation
+>
+> 1. `serverStatus()` returns comprehensive server telemetry metrics.
+> 2. `wiredTiger.cache` tracks RAM memory utilization and dirty page eviction queues.
+> 3. Helps prevent WiredTiger cache eviction stalls.
 
 ---
 
-### Exercise 3: Inspecting Server Status Metrics
+### Exercise 2: Monitoring Database Lock Latencies with `top`
 
-**Problem:** Command in `mongosh` to return detailed server status metrics (`db.serverStatus()`).
+**Scenario:**
+Execute `db.adminCommand({ top: 1 })` to inspect read/write lock time latencies per collection.
 
-**Expected output:**
+**Requirements:**
+1. Execute `db.adminCommand({ top: 1 })`.
+
 > [!check]- Answer
-> ```text
-> db.serverStatus();
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.serverStatus();
+> const topStats = db.adminCommand({ top: 1 });
+> console.log("Collection Lock Latencies:", topStats.totals);
 > ```
 >
-> **Explanation:** `db.serverStatus()` outputs memory, connection pool, locks, and WiredTiger metrics.
+> #### Technical Explanation
+>
+> 1. `top` command measures cumulative time (microseconds) spent executing reads and writes on each collection.
+> 2. Identifies specific collections causing lock contention.
+> 3. Useful for pinpointing hot-spot collections.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Checking Collection Data and Index Sizes with `dbStats`
+
+**Scenario:**
+Inspect total document counts, data size, and index sizes for database `store_db` using `db.stats()`.
+
+**Requirements:**
+1. Execute `db.stats()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const stats = db.stats();
+> console.log("Database Name:", stats.db);
+> console.log("Data Size (MB):", (stats.dataSize / (1024 * 1024)).toFixed(2));
+> console.log("Index Size (MB):", (stats.indexSize / (1024 * 1024)).toFixed(2));
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `db.stats()` aggregates collection and index storage sizes across the active database.
+> 2. Monitors database growth trends and disk capacity planning.
+> 3. Standard diagnostic command.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Database (MongoDB Context)](../level_01/database_context.md) — The target server.
 - [MongoDB Profiler (`db.setProfilingLevel()`)](profiler.md) — Slow query logging.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `db.serverStatus()` monitors server connections, RAM cache, and CPU counters.
 - `db.currentOp()` lists active, running queries in real-time.
 - `db.stats()` measures storage footprint, index sizes, and collection counts.

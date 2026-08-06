@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Aggregation** (Categorical & Numeric Histogram Stages): Bucket Stages ($bucket, $bucketAuto) group incoming documents into discrete numeric ranges or categorical buckets for histogram analysis.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executed in the aggregation processing engine. Evaluates numeric ranges in memory to generate histograms and distribution tables).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When analyzing financial data or catalog inventory:
@@ -92,7 +93,7 @@ db.products.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Declaring boundaries in a non-ascending sequence, causing query execution crashes
 
@@ -140,85 +141,120 @@ boundaries: [0, 100] // Throws error if value is 150!
 boundaries: [0, 100], default: "Other"
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Age Bucket Construction
+### Exercise 1: Categorical Histogram Bucketing with `$bucket`
 
-**Problem:** You have a `users` collection. Write the aggregation pipeline stage to group users into three age buckets:
--   Young: `[0, 18)` (under 18)
--   Adult: `[18, 65)` (18 to 64)
--   Senior: `[65, 120)` (65 and older)
--   Assign users outside this range to the default category `"Invalid Age"`.
+**Scenario:**
+Categorize products into 3 explicit price buckets: `"Budget"` (`0-50`), `"Mid-Range"` (`50-200`), and `"Premium"` (`200+`).
 
-**Expected output:**
+**Requirements:**
+1. Use `$bucket` specifying `boundaries: [0, 50, 200, Infinity]`.
+
 > [!check]- Answer
-> ```javascript
-> {
->   $bucket: {
->     groupBy: "$age",
->     boundaries: [ 0, 18, 65, 120 ],
->     default: "Invalid Age"
->   }
-> }
-> ```
-> - The grouping target is the `$age` field.
-> - Arrange the boundaries list in ascending order: `[0, 18, 65, 120]`.
-
----
-
-
-
-### Exercise 2: Categorizing Prices into Price Buckets
-
-**Problem:** Bucket products by `price` into ranges `[0, 50, 100, 200]` counting items per bucket using `$bucket`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.products.aggregate([{ $bucket: { groupBy: "$price", boundaries: [0, 50, 100, 200], default: "200+", output: { count: { $sum: 1 } } } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.products.aggregate([
 >   {
 >     $bucket: {
 >       groupBy: "$price",
->       boundaries: [0, 50, 100, 200],
->       default: "200+",
->       output: { count: { $sum: 1 } }
+>       boundaries: [0, 50, 200, Infinity],
+>       default: "Other",
+>       output: {
+>         count: { $sum: 1 },
+>         products: { $push: "$name" }
+>       }
 >     }
 >   }
 > ]);
 > ```
 >
-> **Explanation:** `$bucket` categorizes incoming documents into defined numerical range buckets.
+> #### Technical Explanation
+>
+> 1. `$bucket` groups documents into explicit user-defined numeric boundaries.
+> 2. `boundaries` array defines bucket cut-offs (`[min, max)`).
+> 3. Computes histograms for pricing and analytics.
 
 ---
 
-### Exercise 3: Automatic Histogram Bucket Generation with `$bucketAuto`
+### Exercise 2: Automated Equi-Populated Bucketing with `$bucketAuto`
 
-**Problem:** Automatically divide products into 5 equal-sized price buckets using `$bucketAuto`.
+**Scenario:**
+Automatically divide customer documents into 4 evenly-distributed quantile buckets based on `totalSpent`.
 
-**Expected output:**
+**Requirements:**
+1. Use `$bucketAuto: { groupBy: "$totalSpent", buckets: 4 }`.
+
 > [!check]- Answer
-> ```text
-> db.products.aggregate([{ $bucketAuto: { groupBy: "$price", buckets: 5 } }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.aggregate([
->   { $bucketAuto: { groupBy: "$price", buckets: 5 } }
+> db.customers.aggregate([
+>   {
+>     $bucketAuto: {
+>       groupBy: "$totalSpent",
+>       buckets: 4
+>     }
+>   }
 > ]);
 > ```
 >
-> **Explanation:** `$bucketAuto` automatically calculates bucket range boundaries to distribute documents evenly.
+> #### Technical Explanation
+>
+> 1. `$bucketAuto` automatically calculates bucket boundaries to distribute documents evenly across `n` buckets.
+> 2. Eliminates manual boundary guesswork.
+> 3. Ideal for statistical quartile and percentile segmentations.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Bucket Summary Accumulators
+
+**Scenario:**
+Compute average order processing time (`$avg`) for each price bucket in collection `orders`.
+
+**Requirements:**
+1. Use `output` accumulators inside `$bucket`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.aggregate([
+>   {
+>     $bucket: {
+>       groupBy: "$amount",
+>       boundaries: [0, 100, 500, 1000],
+>       output: {
+>         orderCount: { $sum: 1 },
+>         avgFulfillmentHours: { $avg: "$fulfillmentHours" }
+>       }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. The `output` field defines custom accumulators computed for each bucket.
+> 2. Calculates metrics across bucket partitions in parallel.
+> 3. Streamlines business analytics reporting.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [The Bucket Pattern](../level_05/bucket_pattern.md) — The schema design equivalent.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$bucket` and `$bucketAuto` classify numeric data into range bins.
 - Direct NoSQL equivalent to using complex nested SQL `CASE` check statements.
 - `$bucket` uses user-defined boundaries; ranges are left-closed, right-open `[left, right)`.

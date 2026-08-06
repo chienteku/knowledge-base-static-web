@@ -2,7 +2,7 @@
   "$schema": "../../_meta/relationships.schema.json",
   "module": "09-nextjs",
   "version": 1,
-  "updated_at": "2026-08-04",
+  "updated_at": "2026-08-06",
   "terms": {
     "app_router_vs_pages": {
       "level": 1,
@@ -113,8 +113,8 @@
           "description": "The framework designed to solve CSR performance limitations."
         },
         {
-          "module": "09-nextjs",
           "term": "react_components",
+          "module": "09-nextjs",
           "description": "React client-side rendering components."
         }
       ],
@@ -271,8 +271,8 @@
           "description": "Related concept: `next.config.mjs`."
         },
         {
-          "module": "09-nextjs",
           "term": "rsc",
+          "module": "09-nextjs",
           "description": "React Server Components architecture."
         }
       ]
@@ -446,18 +446,18 @@
           "description": "Related concept: ORM (Object-Relational Mapping) & Prisma."
         },
         {
-          "module": "09-nextjs",
           "term": "rsc_payload",
+          "module": "09-nextjs",
           "description": "RSC Payload."
         },
         {
-          "module": "09-nextjs",
           "term": "nextjs",
+          "module": "09-nextjs",
           "description": "Related concept: Next.js Overview."
         },
         {
-          "module": "09-nextjs",
           "term": "ppr",
+          "module": "09-nextjs",
           "description": "Related concept: Partial Prerendering (PPR)."
         }
       ]
@@ -485,8 +485,8 @@
           "description": "The server-rendering strategy that makes SEO possible."
         },
         {
-          "module": "09-nextjs",
           "term": "metadata_api",
+          "module": "09-nextjs",
           "description": "Related concept: Metadata API (`metadata`)."
         }
       ]
@@ -607,8 +607,8 @@
           "description": "Related concept: `loading.tsx`."
         },
         {
-          "module": "09-nextjs",
           "term": "page",
+          "module": "09-nextjs",
           "description": "Page component."
         }
       ]
@@ -709,11 +709,6 @@
       ],
       "related": [
         {
-          "term": "suspense",
-          "module": "06-react",
-          "description": "The underlying React technology."
-        },
-        {
           "term": "error",
           "module": "09-nextjs",
           "description": "The sister file that handles when the `await` fails instead of succeeds."
@@ -729,9 +724,14 @@
           "description": "Related concept: Streaming with `<Suspense>`."
         },
         {
-          "module": "09-nextjs",
           "term": "page",
+          "module": "09-nextjs",
           "description": "Page component."
+        },
+        {
+          "term": "suspense",
+          "module": "06-react",
+          "description": "The underlying React technology."
         }
       ]
     },
@@ -753,8 +753,8 @@
           "description": "The framework itself."
         },
         {
-          "module": "09-nextjs",
           "term": "turbopack",
+          "module": "09-nextjs",
           "description": "Related concept: Turbopack."
         }
       ]
@@ -782,11 +782,6 @@
           "description": "The UI wrapper that wraps around `page.tsx`."
         },
         {
-          "term": "dynamic_routes",
-          "module": "09-nextjs",
-          "description": "How the `params` prop gets populated."
-        },
-        {
           "term": "app_router_vs_pages",
           "module": "09-nextjs",
           "description": "Related concept: App Router vs Pages Router."
@@ -807,14 +802,19 @@
           "description": "Related concept: `usePathname` & `useSearchParams`."
         },
         {
-          "module": "09-nextjs",
           "term": "loading",
+          "module": "09-nextjs",
           "description": "Loading UI."
         },
         {
-          "module": "09-nextjs",
           "term": "error",
+          "module": "09-nextjs",
           "description": "Related concept: `error.tsx` & `global-error.tsx`."
+        },
+        {
+          "term": "dynamic_routes",
+          "module": "09-nextjs",
+          "description": "How the `params` prop gets populated."
         }
       ]
     },
@@ -851,8 +851,8 @@
           "description": "Related concept: Streaming with `<Suspense>`."
         },
         {
-          "module": "09-nextjs",
           "term": "ppr",
+          "module": "09-nextjs",
           "description": "Related concept: Partial Prerendering (PPR)."
         }
       ]
@@ -933,8 +933,8 @@
           "description": "Another special folder naming convention that modifies routing behavior."
         },
         {
-          "module": "09-nextjs",
           "term": "rest_parameters",
+          "module": "09-nextjs",
           "description": "Related concept: JavaScript Rest Parameters (`...`)."
         },
         {
@@ -967,24 +967,24 @@
           "description": "The file that receives the `params`."
         },
         {
-          "module": "09-nextjs",
-          "term": "catch_all_segments",
-          "description": "Catch-all route segments."
-        },
-        {
-          "module": "09-nextjs",
           "term": "generate_static_params",
+          "module": "09-nextjs",
           "description": "generateStaticParams for SSG."
         },
         {
-          "module": "09-nextjs",
           "term": "rest_parameters",
+          "module": "09-nextjs",
           "description": "Related concept: JavaScript Rest Parameters (`...`)."
         },
         {
-          "module": "09-nextjs",
           "term": "intercepting_routes",
+          "module": "09-nextjs",
           "description": "Related concept: Intercepting Routes (`(..)folder`)."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "catch_all_segments",
+          "description": "Catch-all route segments."
         },
         {
           "module": "09-nextjs",
@@ -1237,8 +1237,8 @@
           "description": "The environment that hosts this module."
         },
         {
-          "module": "09-nextjs",
           "term": "file_system_routing",
+          "module": "09-nextjs",
           "description": "Path string manipulation for file-system routing."
         }
       ],
@@ -1300,8 +1300,8 @@
           "description": "Required to use these hooks."
         },
         {
-          "module": "09-nextjs",
           "term": "file_system_routing",
+          "module": "09-nextjs",
           "description": "Reading current URL pathname in App Router."
         }
       ],
@@ -1439,8 +1439,8 @@
           "description": "Related concept: The Next.js Cache (The Four Caches)."
         },
         {
-          "module": "09-nextjs",
           "term": "react_cache",
+          "module": "09-nextjs",
           "description": "React cache memoization."
         }
       ]
@@ -1505,8 +1505,8 @@
           "description": "The parent framework that extends this native API."
         },
         {
-          "module": "09-nextjs",
           "term": "rsc",
+          "module": "09-nextjs",
           "description": "Server-side data fetching inside React Server Components."
         }
       ],
@@ -1580,8 +1580,8 @@
           "description": "The queries commonly optimized by `React.cache()`."
         },
         {
-          "module": "09-nextjs",
           "term": "data_caching",
+          "module": "09-nextjs",
           "description": "Related concept: Data Caching (`force-cache`, `no-store`)."
         }
       ]
@@ -1682,8 +1682,8 @@
           "description": "How to show a loading spinner while the action is running."
         },
         {
-          "module": "09-nextjs",
           "term": "zod_validation",
+          "module": "09-nextjs",
           "description": "Zod schema validation."
         }
       ]
@@ -1770,8 +1770,8 @@
           "description": "Related concept: Zod (Schema Validation)."
         },
         {
-          "module": "09-nextjs",
           "term": "use_form_status",
+          "module": "09-nextjs",
           "description": "useFormStatus hook."
         }
       ]
@@ -1843,8 +1843,8 @@
           "description": "The trigger for the pending state."
         },
         {
-          "module": "09-nextjs",
           "term": "server_actions",
+          "module": "09-nextjs",
           "description": "Related concept: Server Actions Overview (`\"use server\"`)."
         }
       ]
@@ -1872,8 +1872,8 @@
           "description": "How validation errors are displayed."
         },
         {
-          "module": "09-nextjs",
           "term": "form_actions",
+          "module": "09-nextjs",
           "description": "Related concept: Form Actions."
         }
       ]
@@ -1906,8 +1906,8 @@
           "description": "Routes that are automatically dynamic by default."
         },
         {
-          "module": "09-nextjs",
           "term": "route_handlers",
+          "module": "09-nextjs",
           "description": "Related concept: Route Handlers (`route.ts`)."
         }
       ]
@@ -2086,13 +2086,13 @@
           "description": "Related concept: Edge Runtime vs Node.js Runtime."
         },
         {
-          "module": "09-nextjs",
           "term": "caching_route_handlers",
+          "module": "09-nextjs",
           "description": "Caching Route Handlers."
         },
         {
-          "module": "09-nextjs",
           "term": "middleware",
+          "module": "09-nextjs",
           "description": "Related concept: Middleware (`middleware.ts`)."
         }
       ]
@@ -2101,13 +2101,7 @@
       "level": 8,
       "file": "terms/level_08/generate_static_params.md",
       "display_name": "`generateStaticParams` Function",
-      "prerequisites": [
-        {
-          "module": "09-nextjs",
-          "term": "dynamic_routes",
-          "description": "Dynamic route segments [id] in App Router."
-        }
-      ],
+      "prerequisites": [],
       "related": [
         {
           "term": "ssg",
@@ -2115,14 +2109,14 @@
           "description": "The output target."
         },
         {
+          "term": "isr",
           "module": "09-nextjs",
-          "term": "dynamic_routes",
-          "description": "Related concept: Dynamic Routes (`[slug]`)."
+          "description": "Related concept: Incremental Static Regeneration (ISR)."
         },
         {
           "module": "09-nextjs",
-          "term": "isr",
-          "description": "Related concept: Incremental Static Regeneration (ISR)."
+          "term": "dynamic_routes",
+          "description": "Related concept: Dynamic Routes (`[slug]`)."
         }
       ]
     },
@@ -2169,8 +2163,8 @@
           "description": "Related concept: Docker & Standalone Build."
         },
         {
-          "module": "09-nextjs",
           "term": "generate_static_params",
+          "module": "09-nextjs",
           "description": "generateStaticParams."
         },
         {
@@ -2191,8 +2185,8 @@
           "description": "Another layer of this cache."
         },
         {
-          "module": "09-nextjs",
           "term": "rsc",
+          "module": "09-nextjs",
           "description": "Caching data fetches in React Server Components."
         }
       ],
@@ -2257,13 +2251,13 @@
           "description": "The strategy used for the \"shell.\""
         },
         {
-          "module": "09-nextjs",
           "term": "rsc",
+          "module": "09-nextjs",
           "description": "React Server Components."
         },
         {
-          "module": "09-nextjs",
           "term": "react_suspense",
+          "module": "09-nextjs",
           "description": "Partial Prerendering suspense boundaries."
         }
       ]
@@ -2296,8 +2290,8 @@
           "description": "The interface mapped by this format."
         },
         {
-          "module": "09-nextjs",
           "term": "rsc",
+          "module": "09-nextjs",
           "description": "Related concept: React Server Components (RSC)."
         }
       ]
@@ -2466,8 +2460,8 @@
           "description": "The best place to establish your base metadata templates."
         },
         {
-          "module": "09-nextjs",
           "term": "seo",
+          "module": "09-nextjs",
           "description": "SEO optimizations."
         }
       ]
@@ -2483,8 +2477,8 @@
           "description": "Specifically Cumulative Layout Shift (CLS)."
         },
         {
-          "module": "09-nextjs",
           "term": "nextjs",
+          "module": "09-nextjs",
           "description": "Automatic font optimization in Next.js."
         }
       ],
@@ -2595,8 +2589,8 @@
           "description": "The search engine indexing context that relies on these vitals."
         },
         {
-          "module": "09-nextjs",
           "term": "nextjs",
+          "module": "09-nextjs",
           "description": "Web performance metrics in Next.js applications."
         }
       ],
@@ -2855,8 +2849,8 @@
           "description": "Related concept: Internationalization (i18n)."
         },
         {
-          "module": "09-nextjs",
           "term": "route_handlers",
+          "module": "09-nextjs",
           "description": "Route Handlers."
         }
       ]
@@ -3005,8 +2999,8 @@
           "description": "The execution host."
         },
         {
-          "module": "09-nextjs",
           "term": "next_config",
+          "module": "09-nextjs",
           "description": "next.config.js."
         }
       ]

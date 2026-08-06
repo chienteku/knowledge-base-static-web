@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Data Modeling** (Nested Subdocument Structure): An Embedded Document is a nested BSON object stored directly inside a parent document field, representing 1-to-1 or bounded 1-to-many relationships without relational JOINs.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (The core modeling pattern of document databases. Stored physically adjacent to the parent data in the same disk block, optimizing read performance).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational databases, every table row must be flat. 
@@ -85,7 +86,7 @@ db.customers.find({ "address.city": "London" });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Embedding child data that can grow infinitely in size over time
 
@@ -148,58 +149,89 @@ db.users.updateOne({ _id: id }, { $set: { address: { city: "Boston" } } }); // �
 db.users.updateOne({ _id: id }, { $set: { "address.city": "Boston" } }); // Updates specific field
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Nested Query Syntax
+### Exercise 1: Updating Fields Inside Embedded Documents
 
-**Problem:** You have a `companies` collection. Each company document contains a nested `contact` subdocument (containing fields: `email` and `phone`). 
-Write the MongoDB query to find all companies where the nested contact email is `'sales@startup.co'`.
+**Scenario:**
+Update the `zip` code inside a user's embedded `address` subdocument (`address: { city, state, zip }`).
 
-**Expected output:**
+**Requirements:**
+1. Use dot-notation `"address.zip"` with `$set`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.companies.find({ "contact.email": "sales@startup.co" });
+> db.users.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { $set: { "address.zip": "78701" } }
+> );
 > ```
-> - Construct the key using dot notation: `contact.email`.
-> - Always wrap dot-notation keys in quotes (`""`) inside the query filter.
+>
+> #### Technical Explanation
+>
+> 1. Dot-notation (`"address.zip"`) targets subdocument properties directly.
+> 2. Updates only the specified subfield without replacing the entire `address` object.
+> 3. Atomic single-document write operation.
+
+---
+
+### Exercise 2: Projecting Specific Embedded Subfields
+
+**Scenario:**
+Query user documents but return ONLY the embedded `address.city` and `name` fields.
+
+**Requirements:**
+1. Projection filter `{ name: 1, "address.city": 1 }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find(
+>   { status: "active" },
+>   { name: 1, "address.city": 1, _id: 0 }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Subfield projection (`"address.city": 1`) extracts targeted subdocument keys.
+> 2. Reduces network payload size by omitting unneeded subdocument properties.
+> 3. BSON binary reader skips unprojected subfields during scan.
+
+---
+
+### Exercise 3: Indexing Embedded Document Subfields
+
+**Scenario:**
+Create a single-field secondary index on embedded field `address.state` to speed up location queries.
+
+**Requirements:**
+1. Execute `createIndex({ "address.state": 1 })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.createIndex({ "address.state": 1 });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Secondary indexes can be created on subdocument dot-notation paths (`"address.state"`).
+> 2. B-tree index indexes nested string values directly.
+> 3. Converts $O(N)$ collection scans into fast $O(\log N)$ index lookups.
 
 ---
 
 
 
-### Exercise 2: Dot-Notation Sub-Document Update
-
-**Problem:** Update `zip` code inside `address` sub-document for `user:1` using dot-notation.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.updateOne({ _id: 1 }, { $set: { "address.zip": "90210" } });
-> ```
-> ```javascript
-> db.users.updateOne({ _id: 1 }, { $set: { "address.zip": "90210" } });
-> ```
->
-> **Explanation:** `"parent.child"` dot-notation updates sub-document fields without overwriting siblings.
-
----
-
-### Exercise 3: Querying Deeply Embedded Fields
-
-**Problem:** Query users where `company.location.country` equals `"Canada"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ "company.location.country": "Canada" });
-> ```
-> ```javascript
-> db.users.find({ "company.location.country": "Canada" });
-> ```
->
-> **Explanation:** Dot-notation traverses arbitrary sub-document nesting levels.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Array](array_type.md) — Ordered lists of embedded documents.
 - [`ObjectId` as a Manual Reference](objectid_reference.md) — The reference alternative.
@@ -209,7 +241,7 @@ Write the MongoDB query to find all companies where the nested contact email is 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Embedded Documents nest objects inside parent fields.
 - Eliminates the need for relational joins, speeding up database reads.
 - Stored physically in the same sector on disk for localized read speeds.

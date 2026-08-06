@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Syntax / Language Feature**: Function-like Macros are a specialized kind of procedural macro in Rust. While they look superficially identical to declarative macros when called (`my_macro!(...)`), they are implemented as procedural Rust functions taking a single `TokenStream` input and returning a transformed `TokenStream` output. This allows them to execute arbitrary Rust code, parse complex Domain-Specific Languages (DSLs), query compile-time environment resources, and execute custom AST logic.
+
+
+**Rust Procedural Macro (expression-style custom macro generator)**: Function-like Macros are a specialized kind of procedural macro in Rust. While they look superficially identical to declarative macros when called (`my_macro!(...)`), they are implemented as procedural Rust functions taking a single `TokenStream` input and returning a transformed `TokenStream` output. This allows them to execute arbitrary Rust code, parse complex Domain-Specific Languages (DSLs), query compile-time environment resources, and execute custom AST logic.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust (Compile-time Execution)**: Function-like macros execute on the host compiler machine during `rustc` compilation. Popular ecosystem examples include SQL compile-time query verification (`sqlx::query!("SELECT * FROM users")`), HTML/JSX compile-time templating (`maud::html!`, `leptos::view!`), and inline assembly (`core::arch::asm!`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -93,7 +91,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing Declarative and Function-like Proc Macro Declarations
 
@@ -186,11 +184,11 @@ pub fn parse_pair(input: TokenStream) -> TokenStream {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Embedded MMIO Register Bitfield Mask DSL Engine
 
-**Problem:** In embedded microcontroller development (e.g., ARM Cortex-M or RISC-V peripherals), hardware drivers rely on memory-mapped IO register configurations. Function-like procedural macros (such as `register_bitfield!`) parse custom hardware DSL tokens matching the pattern `FIELD_NAME: bit_width` (e.g., `ENABLE: 1, MODE: 3, PRIORITY: 4`) to generate zero-cost bitfield masks, bit shifts, and boundary validations at compile time.
+**Scenario:** In embedded microcontroller development (e.g., ARM Cortex-M or RISC-V peripherals), hardware drivers rely on memory-mapped IO register configurations. Function-like procedural macros (such as `register_bitfield!`) parse custom hardware DSL tokens matching the pattern `FIELD_NAME: bit_width` (e.g., `ENABLE: 1, MODE: 3, PRIORITY: 4`) to generate zero-cost bitfield masks, bit shifts, and boundary validations at compile time.
 
 Implement a complete, `#![no_std]`-compatible Rust bitfield specifier parser and register layout builder that simulates the code generation backend of a function-like procedural macro. The system must:
 1. Parse raw field specifications (`FIELD_NAME: bit_width`).
@@ -200,6 +198,9 @@ Implement a complete, `#![no_std]`-compatible Rust bitfield specifier parser and
 5. Include comprehensive unit tests with `assert_eq!` and `assert!` verifying mask generation, bitwise field insertion, field extraction, and bit overflow error handling.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -375,7 +376,8 @@ Implement a complete, `#![no_std]`-compatible Rust bitfield specifier parser and
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Compile-Time Bitfield Calculation**: Procedural function-like macros analyze input DSL tokens during compilation to calculate bitwise masks (`mask = max_value << shift`) ahead of time, avoiding dynamic calculations during hardware runtime.
 > 2. **Const Generics & Array Layouts**: Using const generics (`RegisterLayout<N>`) and `const fn` guarantees that register layouts are computed during `rustc` compilation, meeting strict `#![no_std]` embedded requirements without dynamic heap memory allocation.
 > 3. **Static Boundary Validation**: Checking total register bit widths (e.g. `<= 32` bits) inside the compilation step allows procedural macros to reject invalid hardware register configurations with clear compile-time error diagnostics before microcontrollers flash corrupted register settings.
@@ -384,7 +386,7 @@ Implement a complete, `#![no_std]`-compatible Rust bitfield specifier parser and
 
 ### Exercise 2: Static DSL Tokenizer, AST Query Parser & Compile-Time Error Diagnostic Generator
 
-**Problem:** Function-like procedural macros such as `sqlx::query!` or `maud::html!` process custom non-Rust token streams inside macro invocation delimiters. A fundamental design pattern in proc macros is converting DSL syntax or semantic errors into `compile_error!` tokens (or `syn::Error::into_compile_error()`) so `rustc` reports exact, column-located diagnostic messages rather than panicking with opaque macro expansion panics.
+**Scenario:** Function-like procedural macros such as `sqlx::query!` or `maud::html!` process custom non-Rust token streams inside macro invocation delimiters. A fundamental design pattern in proc macros is converting DSL syntax or semantic errors into `compile_error!` tokens (or `syn::Error::into_compile_error()`) so `rustc` reports exact, column-located diagnostic messages rather than panicking with opaque macro expansion panics.
 
 Implement a complete compile-time DSL query tokenizer, AST parser, and compiler error transformer simulating a function-like macro engine (e.g., `query!("SELECT id, name FROM users WHERE status = ?")`). The implementation must:
 1. Tokenize a custom SQL/query string into discrete tokens (`KeywordSelect`, `KeywordFrom`, `KeywordWhere`, `Identifier`, `Comma`, `Equals`, `Placeholder`).
@@ -394,6 +396,9 @@ Implement a complete compile-time DSL query tokenizer, AST parser, and compiler 
 5. Provide unit tests using `assert_eq!` and `assert!` verifying valid query AST construction, parameter binding count, syntax error diagnosis, and `compile_error!` code string generation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::fmt;
 > 
@@ -633,7 +638,8 @@ Implement a complete compile-time DSL query tokenizer, AST parser, and compiler 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Custom Tokenization**: Function-like procedural macros accept arbitrary input token streams within `(...)`, `[...]`, or `{...}`. By tokenizing text characters into domain tokens (`TokenKind`), proc macros break free from Rust's native expression constraints.
 > 2. **AST Transformation**: The engine maps flat token streams into structured Abstract Syntax Trees (`QueryAst`). At compile time, this AST enables procedural macros to generate strongly typed Rust structs or functions tailored to the query's schema.
 > 3. **Error Reporting via `compile_error!`**: Panicking inside procedural macros produces unhelpful `proc macro panicked` errors. By capturing position context (`column`) and formatting errors into `compile_error!("...")` macro output tokens, errors are passed directly to `rustc` to highlight the exact line and position of invalid input code.
@@ -642,7 +648,7 @@ Implement a complete compile-time DSL query tokenizer, AST parser, and compiler 
 
 ### Exercise 3: Embedded Telemetry Packet Frame DSL Generator (`no_std`)
 
-**Problem:** In automotive (CAN bus) and IoT sensor platforms, telemetry packet formats are specified via custom binary DSL definitions. A function-like proc macro `packet_spec!` parses field layouts, header signatures, and CRC requirements, generating zero-copy packet builder and parser routines with byte packing and validation checks.
+**Scenario:** In automotive (CAN bus) and IoT sensor platforms, telemetry packet formats are specified via custom binary DSL definitions. A function-like proc macro `packet_spec!` parses field layouts, header signatures, and CRC requirements, generating zero-copy packet builder and parser routines with byte packing and validation checks.
 
 Implement a complete, `#![no_std]` Rust binary telemetry packet framing generator and validation engine demonstrating how a function-like macro's generated code operates. The implementation must:
 1. Define fixed-size binary telemetry packet layouts with magic headers, payload fields, sequence numbers, and CRC checksums.
@@ -652,6 +658,9 @@ Implement a complete, `#![no_std]` Rust binary telemetry packet framing generato
 5. Provide comprehensive unit tests with `assert_eq!` and `assert!` verifying serialization round-trips, frame integrity checks, and error detection on corrupted buffers.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -804,14 +813,15 @@ Implement a complete, `#![no_std]` Rust binary telemetry packet framing generato
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Zero-Copy Binary Protocol Generation**: Function-like procedural macros parse custom binary packet layout specifications at compile time, outputting strongly-typed structs with fixed byte offset serialization (`copy_from_slice`) for real-time `#![no_std]` embedded networks.
 > 2. **Embedded Integrity Guarantees**: Generated `deserialize` functions check fixed frame signatures (`TELEMETRY_MAGIC`) and compute CCITT-FALSE CRC16 checksums over byte slices before instantiating target Rust structs.
 > 3. **Testing Zero-Allocation Drivers**: Unit assertions (`assert_eq!`, `matches!`) verify frame packing round-trips, checksum validation failures on corrupted network noise bytes, and header safety checks.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Procedural Macros](procedural_macros.md) — The parent procedural macro system.
@@ -821,7 +831,7 @@ Implement a complete, `#![no_std]` Rust binary telemetry packet framing generato
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Function-like Procedural Macros (`#[proc_macro]`) are invoked using bang syntax (`custom_macro!(...)`).
 - They receive a single `TokenStream` containing the tokens inside invocation delimiters `()`, `[]`, or `{}` (with outer delimiters stripped).

@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Library / Database**: `sqlx` is an asynchronous SQL library for Rust that connects directly to relational databases. Unlike traditional Object-Relational Mappers (ORMs) that hide SQL behind custom query builder methods, `sqlx` lets you write raw SQL statements while using the Rust compiler to validate SQL syntax, table schemas, and column types **at compile time**.
+
+
+**Rust Ecosystem Crate (compile-time SQL query validator & async ORM)**: `sqlx` is an asynchronous SQL library for Rust that connects directly to relational databases. Unlike traditional Object-Relational Mappers (ORMs) that hide SQL behind custom query builder methods, `sqlx` lets you write raw SQL statements while using the Rust compiler to validate SQL syntax, table schemas, and column types **at compile time**.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Database Ecosystem**: Supports PostgreSQL, MySQL, SQLite, and MSSQL with non-blocking async I/O.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -91,7 +89,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Forgetting Transaction Commitment (`tx.commit().await`) Before Out of Scope Drop
+
+**The mistake:** Executing queries inside `pool.begin().await` without calling `tx.commit().await`.
+
+**Why it's wrong:** Dropping an uncommitted transaction automatically triggers a SQL `ROLLBACK`, discarding all database mutations silently.
+
+*Fix:* Always end database transaction blocks with `tx.commit().await?`.
+
+### Mistake 3: Querying Nullable Database Columns Without Wrapping Rust Struct Fields in `Option<T>`
+
+**The mistake:** Mapping a nullable SQL column (e.g. `TEXT NULL`) to a non-optional Rust field `String`.
+
+**Why it's wrong:** When a `NULL` row is fetched, `sqlx` raises a runtime decoding error (`DecodeError`).
+
+*Fix:* Wrap nullable SQL column fields in `Option<T>` (e.g., `Option<String>`).
+
 
 ### Mistake 1: Forgetting `DATABASE_URL` during Compile-Time Build
 
@@ -108,11 +122,11 @@ cargo build
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Transactional Financial Ledger & Programmatic Schema Migrations
 
-**Problem:**
+**Scenario:**
 In financial backend services, balance transfers between user accounts must be atomic, isolated, and safe against partial runtime failures. Furthermore, applications need programmatic database migrations to set up schemas dynamically.
 
 Implement an async Rust module using `sqlx` and SQLite (`SqlitePool`) that:
@@ -122,6 +136,9 @@ Implement an async Rust module using `sqlx` and SQLite (`SqlitePool`) that:
 4. Includes complete `#[tokio::test]` unit tests verifying successful transfers, updated balances, and transactional rollback on insufficient funds.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use sqlx::{sqlite::SqlitePoolOptions, FromRow, SqlitePool, Transaction, Sqlite};
 > use std::error::Error;
@@ -308,7 +325,8 @@ Implement an async Rust module using `sqlx` and SQLite (`SqlitePool`) that:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Connection Pooling & Migrations (`SqlitePool`):** `SqlitePoolOptions` manages a pool of non-blocking database connections. Executing `CREATE TABLE` queries programmatically on initialization guarantees schema presence.
 > 2. **Transaction Scoping (`pool.begin()`):** `pool.begin().await` starts an isolated SQL transaction. By passing `&mut *tx` as an executor to `fetch_optional` or `execute`, queries execute strictly within that transaction boundary.
 > 3. **Automatic RAII Rollback:** If an error occurs (such as insufficient balance) and `tx.commit()` is never called, Rust's `Drop` implementation on `Transaction` automatically issues an SQL `ROLLBACK` when `tx` goes out of scope.
@@ -318,7 +336,7 @@ Implement an async Rust module using `sqlx` and SQLite (`SqlitePool`) that:
 
 ### Exercise 2: Custom Domain Enums and Serde JSON Payload Columns
 
-**Problem:**
+**Scenario:**
 Modern web backends store state machine enums as string columns and nested payload data (e.g., shopping cart items) as JSON/JSONB text columns. Manual conversion between raw strings/JSON text and strongly typed Rust data structures creates boilerplate and risks parsing errors.
 
 Implement an order management repository in Rust using `sqlx` and SQLite that:
@@ -328,6 +346,9 @@ Implement an order management repository in Rust using `sqlx` and SQLite that:
 4. Writes unit tests using `#[tokio::test]` asserting that complex Rust types serialize into SQLite TEXT columns and deserialize back into strongly typed Rust models.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use serde::{Deserialize, Serialize};
 > use sqlx::{sqlite::SqlitePoolOptions, types::Json, FromRow, SqlitePool};
@@ -463,7 +484,8 @@ Implement an order management repository in Rust using `sqlx` and SQLite that:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Custom Enum Type Mapping (`#[derive(sqlx::Type)]`):** Automatically maps the Rust `OrderStatus` enum to string representations in the database (`"pending"`, `"processing"`, etc.), allowing direct binding in SQL queries without manual `.to_string()` or `match` blocks.
 > 2. **JSON Column Wrapper (`sqlx::types::Json<T>`):** Wraps any Serde-serializable type (`Vec<OrderItem>`) to serialize it directly to JSON text when writing to the database, and automatically parse JSON text back into Rust structs when reading query results.
 > 3. **Type Safety:** Ensures that invalid enum values or corrupted JSON strings trigger type decoding errors during database fetch operations instead of silently corrupting domain data.
@@ -472,7 +494,7 @@ Implement an order management repository in Rust using `sqlx` and SQLite that:
 
 ### Exercise 3: Dynamic SQL Query Construction using `sqlx::QueryBuilder`
 
-**Problem:**
+**Scenario:**
 While `sqlx::query!` macro enforces compile-time SQL validation, real-world REST search APIs require building dynamic SQL queries based on optional user filters (`role`, `is_active`, substring pattern, and `LIMIT`/`OFFSET` pagination). String concatenation leads to SQL injection security flaws.
 
 Implement an async user search service using `sqlx::QueryBuilder` in Rust for SQLite that:
@@ -482,6 +504,9 @@ Implement an async user search service using `sqlx::QueryBuilder` in Rust for SQ
 4. Writes unit tests verifying multi-condition filtering and pagination with `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use sqlx::{sqlite::SqlitePoolOptions, FromRow, QueryBuilder, Sqlite, SqlitePool};
 >
@@ -606,7 +631,8 @@ Implement an async user search service using `sqlx::QueryBuilder` in Rust for SQ
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Safe Dynamic SQL (`QueryBuilder`):** Allows appending dynamic SQL clauses while preserving binding parameter placeholders (`push_bind`). This ensures that user inputs are safely escaped and separated from the SQL execution plan, preventing SQL injection vulnerabilities.
 > 2. **Type-Safe Dynamic Mapping (`build_query_as::<User>()`):** Automatically maps dynamically generated SQL result columns into the target `User` struct using `sqlx::FromRow`.
 > 3. **Dynamic Pagination & Filtering:** Demonstrates how production APIs handle optional URL parameters seamlessly without requiring complex ORM query DSLs.

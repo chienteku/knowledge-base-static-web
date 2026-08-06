@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Module System**
+
+**TypeScript Module System** (Compile-Time Type Import Optimization): Type-only imports (`import type { T }`) guarantee that imported types are erased completely during compilation.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-time** (These imports are completely stripped during compilation. The final JavaScript bundle contains no reference to type-only imports or exports).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 TypeScript works using **Type Erasure**. When code compiles, all interfaces, type aliases, and type annotations are deleted, leaving behind plain JavaScript.
@@ -74,7 +75,7 @@ export function renderUserCard(user: User) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to instantiate or check type-only imports at runtime
 
@@ -138,75 +139,109 @@ import type { UserClass } from './user';
 import { UserClass } from './user'; // Standard import for runtime values
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Resolving isolatedModules
+### Exercise 1: Using Type-Only Imports with `import type`
 
-**Problem:** You are using Vite. Your file fails to build, throwing this error:
-`Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.`
-Resolve the error by converting the export block to type-only.
+**Scenario:**
+Import interface `User` and class `UserService` using explicit type-only import syntax to optimize build output.
 
-```typescript
-// src/index.ts
-import { AppUser } from './types';
+**Requirements:**
+1. Use `import type { User }` for interfaces.
 
-// Fix this export statement:
-export type { AppUser };
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // Importing type interface only (Erased completely in JS output):
+> import type { User } from "./types.js";
+
+// Importing runtime value class:
+import { UserService } from "./services.js";
+
+function handleUser(user: User) {
+  const service = new UserService();
+  return service.process(user);
+}
 ```
 
-**Expected output:**
+> #### Technical Explanation
+>
+> 1. `import type { T }` guarantees that the import statement is used ONLY for type checking.
+> 2. Stripped 100% from transpiled JavaScript output files.
+> 3. Prevents importing unused JavaScript module files at runtime.
+
+---
+
+### Exercise 2: Inline Type-Only Imports
+
+**Scenario:**
+Combine value imports and type imports in a single import statement using inline `type` specifiers.
+
+**Requirements:**
+1. Use `import { value, type Type } from "./module.js"`.
+
 > [!check]- Answer
-> ```text
-> Vite successfully compiles src/index.ts without throwing isolatedModules errors.
+>
+> #### Implementation
+>
+> ```typescript
+> import { createUser, type User, type Role } from "./userModule.js";
+
+const newUser: User = createUser("Alice", "admin");
+```
+
+> #### Technical Explanation
+>
+> 1. Inline type-only imports (`import { value, type Type }`) allow mixing runtime value imports and compile-time type imports in a single statement.
+> 2. `tsc` and bundlers strip only the specifiers marked with `type`.
+> 3. Clean syntax introduced in TypeScript 4.5.
+
+---
+
+### Exercise 3: Enforcing Type-Only Imports with `verbatimModuleSyntax`
+
+**Scenario:**
+Configure `"verbatimModuleSyntax": true` in `tsconfig.json` to enforce strict explicit `import type` usage.
+
+**Requirements:**
+1. Configure `"verbatimModuleSyntax": true` in `tsconfig.json`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```json
+> {
+>   "compilerOptions": {
+>     "verbatimModuleSyntax": true
+>   }
+> }
 > ```
-> - Add the `type` keyword between the `export` keyword and the curly braces.
+
+> #### Technical Explanation
+>
+> 1. `"verbatimModuleSyntax": true` forces developers to explicitly prefix all non-value type imports with `type`.
+> 2. Eliminates bundler ambiguity regarding whether an import is a runtime dependency or a compile-time type.
+> 3. Mandatory compiler flag when using modern isolated transpilers (Vite, SWC, Babel, ESBuild).
 
 ---
 
 
 
-### Exercise 2: Inline Type-Only Imports Syntax
-
-**Problem:** Import value `createUser` and type `type User` in a single line using `import { createUser, type User } from './user'`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Inline type-only import created
-> ```
-> ```typescript
-> import { createUser, type User } from './user';
-> console.log("Inline type-only import created");
-> ```
->
-> **Explanation:** Inline `type` modifiers selectively mark type-only imports within mixed import lists.
-
 ---
 
-### Exercise 3: Type-Only Export Syntax
 
-**Problem:** Write type-only re-export `export type { User } from './user'`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Type-only re-export created
-> ```
-> ```typescript
-> export type { User } from './user';
-> console.log("Type-only re-export created");
-> ```
->
-> **Explanation:** `export type` ensures exported type contracts emit zero runtime JavaScript export code.
-
-## 7. Related Terms
+## 6. Related Terms
 - [ES Modules in TypeScript](modules.md) — The baseline module loading specification.
 - [Declaration Files (`.d.ts`)](declaration_files.md) — The type files that circular imports are often fetched from.
 - [Strict Mode](strict_mode.md) — Configuring compiler constraints.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Type-Only Imports/Exports** explicitly mark imported symbols as compile-time types, ensuring they are erased from compiled JavaScript.
 - Essential when using isolated file transpilers (like SWC, ESBuild, or Babel) with `"isolatedModules": true` active.
 - Helps avoid runtime circular dependency crashes.

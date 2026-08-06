@@ -164,7 +164,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Enterprise Data Pipeline Error Aggregator and Source Chain Traversal
 
-**Problem:**
+**Scenario:**
 In a multi-stage enterprise data processing pipeline, each processing stage can raise different errors: configuration parsing errors (`ParseIntError`), database mapping errors (`DatabaseConfigError`), or pipeline-level errors (`PipelineError`).
 
 Design a nested error architecture where:
@@ -295,7 +295,7 @@ Design a nested error architecture where:
 
 ### Exercise 2: Multi-Threaded Middleware Task Execution with `Box<dyn Error + Send + Sync + 'static>`
 
-**Problem:**
+**Scenario:**
 In a concurrent task engine, tasks are dispatched across OS threads and return type-erased errors represented as `Box<dyn Error + Send + Sync + 'static>`.
 
 Implement a `TaskScheduler` system where:
@@ -429,7 +429,7 @@ Implement a `TaskScheduler` system where:
 
 ### Exercise 3: Telemetry Context Decorator and Extension Trait for Boxed Error Enrichment
 
-**Problem:**
+**Scenario:**
 When low-level subsystem operations (e.g. file system I/O, database queries) fail, raw error objects lack runtime diagnostic context like timestamp or operation names.
 
 Build a telemetry error decorator system featuring:

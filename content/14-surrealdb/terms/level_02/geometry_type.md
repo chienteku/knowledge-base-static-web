@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Data Type (GeoJSON spatial coordinate data types)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Supports standard GeoJSON syntax. Spatial calculations are evaluated at the engine layer, utilizing earth curvature trigonometry).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Many applications require geographical calculations:
@@ -100,7 +99,7 @@ CREATE delivery_zone:manhattan SET
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Reversing coordinate pairs by placing Latitude first and Longitude second, placing your data in the wrong hemisphere
 
@@ -154,68 +153,115 @@ DEFINE INDEX store_location_idx ON TABLE store FIELDS location MTREE;
 SELECT * FROM store WHERE location <inside> $polygon;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Geometry Syntax Audit
+### Exercise 1: GeoJSON Point Creation & Spatial Storage
 
-**Problem:** You are reviewing a delivery boundary configuration script. 
-Explain why the following Polygon coordinate insert query will fail to compile or throw errors:
-`area = { type: "Polygon", coordinates: [[ [-74.0, 40.0], [-73.5, 40.0], [-73.5, 40.5], [-74.0, 40.5] ]] }`
+**Scenario:**
+A food delivery platform stores restaurant location coordinates using GeoJSON `Point` geometry objects.
 
-**Expected output:**
+**Requirements:**
+1. Define table `restaurant` in `SCHEMAFULL` mode.
+2. Define field `location` as `geometry<point>`.
+3. Create restaurant `restaurant:r1` at longitude `-73.9851` and latitude `40.7589` (Times Square, NYC).
+
 > [!check]- Answer
-> ```text
-> The query will fail because the Polygon ring coordinates list is not closed. 
-> Under GeoJSON rules, the final coordinate pair in a Polygon path must match the starting coordinate pair exactly to close the boundary loop. 
-> To fix it, append the starting coordinate `[-74.0, 40.0]` to the end of the array.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE restaurant SCHEMAFULL;
+> DEFINE FIELD location ON TABLE restaurant TYPE geometry<point>;
+> 
+> CREATE restaurant:r1 SET 
+>     name = "Central Diner",
+>     location = { type: "Point", coordinates: [-73.9851, 40.7589] };
 > ```
-> - Check the start and end coordinates of the inner array.
-> - A polygon requires an enclosed loop to calculate space boundaries.
+>
+> #### Technical Explanation
+>
+> 1. `geometry<point>` enforces valid GeoJSON Point structure (`{ type: "Point", coordinates: [lng, lat] }`).
+> 2. Coordinates must follow `[longitude, latitude]` order according to the GeoJSON spec.
+> 3. Spatial types enable spatial indexing and geographic boundary queries.
+
+---
+
+### Exercise 2: Spatial Proximity Distance Querying
+
+**Scenario:**
+A mobile app finds restaurants located within 5 kilometers of a user's current GPS position using `geo::distance()`.
+
+**Requirements:**
+1. Calculate geographic distance between restaurant `restaurant:r1` and user position `[-73.9800, 40.7500]`.
+2. Filter restaurants where distance is $\le 5000$ meters.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- User location: [-73.9800, 40.7500]
+> SELECT 
+>     name, 
+>     geo::distance(location, { type: "Point", coordinates: [-73.9800, 40.7500] }) AS distance_meters
+> FROM restaurant
+> WHERE geo::distance(location, { type: "Point", coordinates: [-73.9800, 40.7500] }) <= 5000;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `geo::distance(point1, point2)` calculates Great Circle spherical distance in meters between two geometries.
+> 2. Works natively with GeoJSON Point fields stored in SurrealDB.
+> 3. Can be combined with spatial R-tree indexes (`DEFINE INDEX ... MTREE`) for fast spatial lookups.
+
+---
+
+### Exercise 3: GeoJSON Polygon Boundary Containment
+
+**Scenario:**
+A delivery zone system checks whether a customer's address point lies inside a delivery zone GeoJSON `Polygon`.
+
+**Requirements:**
+1. Define a delivery zone polygon.
+2. Query whether point `[-73.9851, 40.7589]` is inside the polygon using `inside` or `geo::intersects()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $zone = {
+>     type: "Polygon",
+>     coordinates: [[
+>         [-74.00, 40.70],
+>         [-73.95, 40.70],
+>         [-73.95, 40.80],
+>         [-74.00, 40.80],
+>         [-74.00, 40.70]
+>     ]]
+> };
+> 
+> SELECT { type: "Point", coordinates: [-73.9851, 40.7589] } INSIDE $zone AS is_deliverable;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. GeoJSON Polygons represent enclosed geographic areas defined by coordinate ring arrays.
+> 2. The `INSIDE` operator evaluates point-in-polygon containment natively in SurrealQL.
+> 3. Enables automated delivery coverage checks directly inside database queries.
 
 ---
 
 
 
-### Exercise 2: Defining GeoJSON Point Field
-
-**Problem:** Define field `location` on `store` table as geometry point `TYPE geometry<feature>` or `TYPE geometry<point>`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD location ON TABLE store TYPE geometry<point>;
-> ```
-> ```surrealql
-> DEFINE FIELD location ON TABLE store TYPE geometry<point>;
-> ```
->
-> **Explanation:** `TYPE geometry<point>` restricts spatial fields to GeoJSON points.
-
----
-
-### Exercise 3: Checking Spatial Containment with `<inside>` Operator
-
-**Problem:** Check if `$point` is inside `$polygon` using `<inside>` spatial operator.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM store WHERE location <inside> $polygon;
-> ```
-> ```surrealql
-> SELECT * FROM store WHERE location <inside> $polygon;
-> ```
->
-> **Explanation:** `<inside>` tests if geometry points fall within polygon boundaries.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [Geospatial Index](../level_07/geospatial_index.md) — Indexing spatial data.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `geometry` type stores geographic shapes (Points, LineStrings, Polygons).
 - Natively compliant with standard GeoJSON schemas without requiring extensions.
 - Coordinates must be written as `[Longitude, Latitude]` (Longitude first!).

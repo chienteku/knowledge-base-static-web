@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Trait / API Design / Abstraction**: The Sealed Trait Pattern is an API architecture idiom in Rust. By defining a private, unreachable supertrait inside a private module (`mod private { pub trait Sealed {} }`) and making your public trait depend on it (`pub trait PublicTrait: private::Sealed {}`), downstream crates can *use* `PublicTrait` as a trait bound, but *cannot implement* `PublicTrait` for their own custom types.
+
+
+**Rust Design Pattern (downstream trait implementation boundary)**: The Sealed Trait Pattern is an API architecture idiom in Rust. By defining a private, unreachable supertrait inside a private module (`mod private { pub trait Sealed {} }`) and making your public trait depend on it (`pub trait PublicTrait: private::Sealed {}`), downstream crates can *use* `PublicTrait` as a trait bound, but *cannot implement* `PublicTrait` for their own custom types.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: The Sealed Trait Pattern is used extensively throughout the Rust Standard Library (e.g. `byteorder`, `futures`, `tokio`, `serde`, and `std::simd`) to freeze public trait implementation lists.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -130,7 +128,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Exposing `mod private` as `pub mod private`
 
@@ -185,13 +183,14 @@ pub trait MyTrait: private::Sealed {}
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Embedded Hardware Register Access Control (no_std)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In embedded driver development (e.g. ARM Cortex-M or RISC-V MMIO peripherals), hardware register access structures require generic memory access over valid register primitive types (`u8`, `u16`, `u32`). To prevent downstream users from instantiating generic register blocks with invalid or non-hardware-aligned types (such as `u64`, `usize`, or custom structs) which would violate memory-aligned MMIO safety assumptions, the HAL crate seals the `RegisterWidth` trait.
 
+**Requirements:**
 Write a `#![no_std]` hardware register access abstraction crate with a sealed `RegisterWidth` trait:
 1. Create a private module `mod private { pub trait Sealed {} }`.
 2. Define a public trait `pub trait RegisterWidth: private::Sealed + Copy` with methods `mask(self, mask_bits: Self) -> Self` and `is_flag_set(self, bit: u8) -> bool`.
@@ -200,6 +199,9 @@ Write a `#![no_std]` hardware register access abstraction crate with a sealed `R
 5. Include unit tests with assertions (`assert_eq!`, `assert!`) demonstrating register bit manipulation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -317,7 +319,8 @@ Write a `#![no_std]` hardware register access abstraction crate with a sealed `R
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Un-exported Supertrait Constraint:** `RegisterWidth: private::Sealed` mandates that any type `T` implementing `RegisterWidth` MUST also implement `private::Sealed`. Because `mod private` is private to the crate, downstream crates cannot write `impl private::Sealed for MyStruct`, preventing downstream users from implementing `RegisterWidth` for unsupported types like `u64` or custom structs.
 > 2. **Embedded `#![no_std]` Safety:** Embedded microcontrollers rely on strict hardware bus alignment (e.g., ARM Cortex-M 8-bit, 16-bit, and 32-bit MMIO accesses). Sealing `RegisterWidth` guarantees that `Register<T>` can only ever be instantiated with valid, hardware-supported primitive types.
 > 3. **Trait Bounds & Zero-Cost Abstraction:** Downstream code can use `Register<T>` generically without performance penalty, as Rust monomorphizes `Register<u8>`, `Register<u16>`, and `Register<u32>` into direct inline bitwise hardware instructions.
@@ -326,9 +329,10 @@ Write a `#![no_std]` hardware register access abstraction crate with a sealed `R
 
 ### Exercise 2: SemVer-Safe Network Protocol Frame Pipeline
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 When authoring a public networking or serialization crate, library maintainers need the ability to update trait definitions in minor crate updates (e.g., SemVer `1.0.0` -> `1.1.0`) without causing breaking changes for downstream consumers. If a public trait `ProtocolFrame` is open to downstream implementation, adding a new method (e.g., `compute_crc32(&self) -> u32`) to the trait breaks every downstream crate that implemented `ProtocolFrame`.
 
+**Requirements:**
 Design an API-stable network protocol frame processor using the Sealed Trait Pattern:
 1. Define a public crate module `protocol`.
 2. Inside `protocol`, define `mod private { pub trait Sealed {} }`.
@@ -338,6 +342,9 @@ Design an API-stable network protocol frame processor using the Sealed Trait Pat
 6. Write comprehensive unit tests verifying frame serialization and checksum verification using `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > pub mod protocol {
 >     mod private {
@@ -449,7 +456,8 @@ Design an API-stable network protocol frame processor using the Sealed Trait Pat
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **SemVer Breaking Changes in Open Traits:** In Rust, if a public trait `pub trait ProtocolFrame` is open to external implementation, adding any new non-defaulted method (or even defaulted internal hooks) to `ProtocolFrame` in a crate update `v1.1.0` is a **major breaking change** because external `impl ProtocolFrame for ExternalStruct` blocks will fail to compile.
 > 2. **Preventing API Fragmentation via Sealing:** By sealing `ProtocolFrame`, crate maintainers retain exclusive ownership of trait implementation. As a result, adding new trait methods (like `compute_crc32`), optimizing buffer layouts, or adding new protocol methods in minor version updates guarantees full backwards compatibility.
 > 3. **Pipeline Generic Bounds:** Downstream callers can consume `serialize_frame<F: ProtocolFrame>(frame: &F)` with total type safety, leveraging static dispatch without runtime vtable overhead.
@@ -458,9 +466,10 @@ Design an API-stable network protocol frame processor using the Sealed Trait Pat
 
 ### Exercise 3: Sealed Typestate Machine for Hardware Peripherals
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 The **Typestate Pattern** uses Rust's type system to represent state machine states as static types (e.g. `BusController<Uninitialized>`, `BusController<Idle>`, `BusController<Active>`). To ensure that third-party code cannot declare unauthorized custom state types (e.g., `impl BusState for BypassState`), which could bypass state machine transition invariants and place hardware in an illegal operating mode, the marker trait `BusState` must be sealed.
 
+**Requirements:**
 Design a sealed typestate state machine for a SPI/I2C peripheral bus controller:
 1. Define a private module `mod private { pub trait Sealed {} }`.
 2. Define a public sealed trait `pub trait BusState: private::Sealed { fn name() -> &'static str; }`.
@@ -475,6 +484,9 @@ Design a sealed typestate state machine for a SPI/I2C peripheral bus controller:
 6. Write unit tests checking that state transitions succeed, frequency configuration is preserved, and state names report correctly using `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > pub mod bus {
 >     mod private {
@@ -594,166 +606,17 @@ Design a sealed typestate state machine for a SPI/I2C peripheral bus controller:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Typestate Pattern Safety:** The Typestate pattern converts runtime state checks into compile-time invariants. Attempting to call `transfer()` on a `BusController<Uninitialized>` or `BusController<Idle>` causes a compile error rather than a runtime panic or hardware fault.
 > 2. **Preventing State Invariant Bypass via Sealing:** If `BusState` were an open trait, external code could implement `impl BusState for BypassState` and instantiate `BusController<BypassState>` with arbitrary struct fields, breaking driver invariants. Sealing `BusState` guarantees that the compiler checks an exhaustive, closed set of state types (`Uninitialized`, `Idle`, `Active`).
 > 3. **Zero Runtime Cost (`PhantomData`):** The `PhantomData<S>` marker type uses 0 bytes of memory at runtime, meaning state machine static type checks compile down to zero machine instruction overhead.
 > 
----
 
-### Exercise 4: Internal Token Sealing for Zero-Copy DMA Buffers
-
-**Problem Statement:**
-In low-level crates (such as zero-copy DMA memory management or high-performance networking engines), sealing a trait is sometimes combined with secret internal token methods inside `mod private`. This ensures that downstream users cannot invoke private engine hooks or fabricate internal memory descriptors even if they interact with sealed trait instances generically.
-
-Implement an internal token sealed trait pattern for a Zero-Copy DMA Memory Buffer engine:
-1. Create module `dma`.
-2. Inside `dma`, define `mod private`:
-   - Declare a private token struct `pub struct InternalDmaToken;` (`InternalDmaToken` is `pub` inside `mod private`, making it un-instantiable outside `dma`).
-   - Declare `pub trait Sealed { fn token(&self) -> InternalDmaToken; }`.
-3. Create public sealed trait `pub trait DmaBuffer: private::Sealed`:
-   - Methods: `physical_address(&self) -> usize`, `len(&self) -> usize`.
-4. Implement `private::Sealed` and `DmaBuffer` for internal structs `RingBuffer` and `DirectBuffer`.
-5. Implement engine function `pub fn execute_dma_transfer<B: DmaBuffer>(buffer: &B) -> Result<usize, &'static str>` which validates the internal token and performs transfer simulation.
-6. Write unit tests verifying physical memory addresses, slice lengths, and execution results using `assert_eq!`, `assert!`.
-
-> [!check]- Answer
-> ```rust
-> pub mod dma {
->     mod private {
->         /// Crate-internal secret token proving authorization
->         pub struct InternalDmaToken;
-> 
->         pub trait Sealed {
->             fn token(&self) -> InternalDmaToken;
->         }
->     }
-> 
->     /// Sealed trait representing zero-copy memory buffers eligible for DMA transfers.
->     ///
->     /// # Security & Safety
->     /// This trait is **sealed**. External types cannot forge DMA authorization tokens
->     /// or implement custom memory buffers that violate physical alignment guarantees.
->     pub trait DmaBuffer: private::Sealed {
->         fn physical_address(&self) -> usize;
->         fn len(&self) -> usize;
->     }
-> 
->     /// Internal contiguous Ring Buffer hardware descriptor
->     pub struct RingBuffer {
->         base_addr: usize,
->         size: usize,
->     }
-> 
->     impl RingBuffer {
->         pub fn new(base_addr: usize, size: usize) -> Self {
->             Self { base_addr, size }
->         }
->     }
-> 
->     impl private::Sealed for RingBuffer {
->         fn token(&self) -> private::InternalDmaToken {
->             private::InternalDmaToken
->         }
->     }
-> 
->     impl DmaBuffer for RingBuffer {
->         fn physical_address(&self) -> usize {
->             self.base_addr
->         }
->         fn len(&self) -> usize {
->             self.size
->         }
->     }
-> 
->     /// Direct Stack/Heap DMA buffer segment
->     pub struct DirectBuffer<'a> {
->         slice: &'a [u8],
->     }
-> 
->     impl<'a> DirectBuffer<'a> {
->         pub fn new(slice: &'a [u8]) -> Self {
->             Self { slice }
->         }
->     }
-> 
->     impl<'a> private::Sealed for DirectBuffer<'a> {
->         fn token(&self) -> private::InternalDmaToken {
->             private::InternalDmaToken
->         }
->     }
-> 
->     impl<'a> DmaBuffer for DirectBuffer<'a> {
->         fn physical_address(&self) -> usize {
->             self.slice.as_ptr() as usize
->         }
->         fn len(&self) -> usize {
->             self.slice.len()
->         }
->     }
-> 
->     /// Safe public entrypoint for executing DMA engine transfers
->     pub fn execute_dma_transfer<B: DmaBuffer>(buffer: &B) -> Result<usize, &'static str> {
->         // Access internal token inside the crate to verify engine alignment
->         let _token = buffer.token();
-> 
->         if buffer.physical_address() == 0 {
->             return Err("Null physical address");
->         }
->         if buffer.len() == 0 {
->             return Err("Zero-length DMA buffer");
->         }
-> 
->         // Simulate DMA transfer completion
->         Ok(buffer.len())
->     }
-> }
-> 
-> #[cfg(test)]
-> mod tests {
->     use super::dma::*;
-> 
->     #[test]
->     fn test_ring_buffer_dma_transfer() {
->         let ring = RingBuffer::new(0x4000_0000, 1024);
->         assert_eq!(ring.physical_address(), 0x4000_0000);
->         assert_eq!(ring.len(), 1024);
-> 
->         let transferred = execute_dma_transfer(&ring).unwrap();
->         assert_eq!(transferred, 1024);
->     }
-> 
->     #[test]
->     fn test_direct_buffer_dma_transfer() {
->         let data = [1u8, 2, 3, 4, 5];
->         let direct = DirectBuffer::new(&data);
-> 
->         assert!(direct.physical_address() != 0);
->         assert_eq!(direct.len(), 5);
-> 
->         let result = execute_dma_transfer(&direct);
->         assert_eq!(result, Ok(5));
->     }
-> 
->     #[test]
->     fn test_invalid_zero_len_buffer() {
->         let empty_data: [u8; 0] = [];
->         let direct = DirectBuffer::new(&empty_data);
-> 
->         let result = execute_dma_transfer(&direct);
->         assert_eq!(result, Err("Zero-length DMA buffer"));
->     }
-> }
-> ```
-> 
-> **Explanation:**
-> 1. **Two-Layer Privacy Sealing:** In addition to keeping `mod private` non-public, `private::Sealed` mandates a method `fn token(&self) -> InternalDmaToken`. Because `InternalDmaToken` is defined inside `mod private`, downstream crates cannot construct or name this return type, creating a hard compiler boundary.
-> 2. **Preventing Direct Method Calls from External Code:** External code that receives `&impl DmaBuffer` cannot manually call `buffer.token()` because the method signature uses `private::InternalDmaToken`, which is unreachable outside the crate.
-> 3. **Safety & Zero-Copy Alignment Invariants:** High-performance hardware drivers and zero-copy parsers rely on sealed private tokens to guarantee that only trusted internal buffer types can trigger raw pointer manipulations or memory-mapped hardware transfers.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Supertraits](supertraits.md) — The trait prerequisite mechanism used to enforce sealing.
@@ -764,7 +627,7 @@ Implement an internal token sealed trait pattern for a Zero-Copy DMA Memory Buff
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - The Sealed Trait Pattern prevents external crates from implementing a public trait by requiring an un-exported private supertrait (`pub trait MyTrait: private::Sealed`).
 - It allows library authors to add new trait methods in minor versions without breaking downstream code (SemVer stability).

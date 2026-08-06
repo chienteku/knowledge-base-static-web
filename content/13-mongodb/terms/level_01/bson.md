@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Serialization / Data Format**
+
+**Core Concept** (Binary JSON Serialization): BSON (Binary JSON) is the underlying binary-encoded serialization format used by MongoDB to store documents and execute high-performance traversals.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Used natively for storage on disk (WiredTiger) and transmission over network wire sockets. Humans write JSON, but MongoDB translates it to BSON automatically).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In web development, **JSON** (JavaScript Object Notation) is the standard format for exchanging data because it is human-readable and matches code objects.
@@ -68,7 +69,7 @@ hello\x00                  <- Field name (null-terminated string)
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing BSON is a human-readable text file format that can be edited in a text editor
 
@@ -83,6 +84,8 @@ Editing the file directly will corrupt the database catalog, crashing the server
 **Fix: Always use the MongoDB Shell (`mongosh`) or a GUI client (like Compass) to query and modify documents. These tools automatically translate the binary BSON into readable JSON for you, and compile your JSON edits back to safe BSON.**
 
 ---
+
+
 
 
 
@@ -104,6 +107,8 @@ import { EJSON } from 'bson';
 const ejson = EJSON.stringify({ id: new ObjectId(), date: new Date() }); // Extended JSON preserves types
 ```
 
+
+
 ### Mistake 3: Ignoring BSON 16MB Maximum Document Size Limit
 
 **The mistake:** Storing large array logs or raw media file buffers inside a single BSON document.
@@ -122,94 +127,103 @@ db.logs.insertOne({ userId: id, payload: largeLogPayload }); // Store logs in se
 
 
 
-### Mistake 4: Assuming BSON and JSON Have Identical Data Type Support
+## 5. Practice Exercises
 
-**The mistake:** Expecting plain JSON to natively support 64-bit integers (`Long`), Date objects, Decimal128, and ObjectId primitives.
+### Exercise 1: Inspecting BSON Type Sizes
 
-**Why it's wrong:** JSON supports only basic numbers, strings, booleans, arrays, objects, and null. BSON extends JSON with rich binary types like `Date`, `ObjectId`, `Decimal128`, and `BinData`.
+**Scenario:**
+A data platform engineer inspects the byte storage efficiency of BSON data types compared to plain JSON text strings.
 
-*Incorrect:*
-```javascript
-// Expecting JSON.stringify to preserve BSON types
-const json = JSON.stringify({ id: new ObjectId(), date: new Date() }); // ❌ Loss of BSON type metadata!
-```
+**Requirements:**
+1. Insert a document containing `Date`, `ObjectId`, and `Decimal128` types.
+2. Use `Object.bsonsize()` in `mongosh` to evaluate total byte size.
 
-*Fix:*
-```javascript
-import { EJSON } from 'bson';
-const ejson = EJSON.stringify({ id: new ObjectId(), date: new Date() }); // Extended JSON preserves types
-```
-
-### Mistake 5: Ignoring BSON 16MB Maximum Document Size Limit
-
-**The mistake:** Storing large array logs or raw media file buffers inside a single BSON document.
-
-**Why it's wrong:** MongoDB enforces a strict 16MB maximum BSON document size limit. Exceeding 16MB throws document size validation errors.
-
-*Incorrect:*
-```javascript
-db.users.updateOne({ _id: id }, { $push: { logs: largeLogPayload } }); // ❌ Document grows past 16MB!
-```
-
-*Fix:*
-```javascript
-db.logs.insertOne({ userId: id, payload: largeLogPayload }); // Store logs in separate collection
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: BSON Type Audit
-
-**Problem:** Explain why BSON is better suited than standard JSON for storing financial transactions (hint: think about precision decimals).
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Standard JSON has only a single generic "Number" type, which is parsed as a double-precision floating-point number. Floating-point numbers suffer from binary rounding errors (e.g. `0.1 + 0.2 = 0.30000000000000004`), which can cause financial discrepancies. 
-> BSON introduces specialized numeric types, specifically `Decimal128`, which stores high-precision decimals using exact arithmetic, guaranteeing correct currency balance tracking.
+>
+> #### Implementation
+>
+> ```javascript
+> const doc = {
+>   _id: new ObjectId(),
+>   createdAt: new Date(),
+>   balance: NumberDecimal("149.99")
+> };
+> 
+> db.test_bson.insertOne(doc);
+> 
+> // Measure BSON binary size in bytes
+> console.log("BSON Byte Size:", Object.bsonsize(doc));
 > ```
-> - Floating-point conversions introduce arithmetic noise.
-> - Consider which BSON type maps to SQL's exact `NUMERIC` columns.
+>
+> #### Technical Explanation
+>
+> 1. `Object.bsonsize(doc)` calculates exact binary byte footprints including type headers and field length prefixes.
+> 2. BSON stores dates as 64-bit integers and decimals as 128-bit IEEE 754-2008 structures.
+> 3. Fast binary parsing enables direct field index traversal without parsing entire text buffers.
+
+---
+
+### Exercise 2: Native BSON Date Queries
+
+**Scenario:**
+Query order documents created within the last 24 hours using native BSON Date objects.
+
+**Requirements:**
+1. Use `new Date()` BSON objects inside query filters.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+> 
+> db.orders.find({
+>   createdAt: { $gte: yesterday }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. BSON represents dates as 64-bit UTC integers since epoch milliseconds.
+> 2. Enables direct numeric comparisons (`$gte`) without string parsing overhead.
+> 3. Preserves microsecond precision across client drivers.
+
+---
+
+### Exercise 3: Precise Financial Math with BSON Decimal128
+
+**Scenario:**
+Store product prices using `NumberDecimal` to avoid floating-point rounding errors.
+
+**Requirements:**
+1. Insert product with `price: NumberDecimal("19.99")`.
+2. Query products with price equal to `NumberDecimal("19.99")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.insertOne({
+>   name: "Pro Mouse",
+>   price: NumberDecimal("19.99")
+> });
+> 
+> db.products.find({ price: NumberDecimal("19.99") });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `NumberDecimal` stores 34 decimal digits of precision using BSON 128-bit IEEE format.
+> 2. Eliminates binary floating-point representation errors inherent in double precision floats.
+> 3. Standard choice for monetary and financial data fields.
 
 ---
 
 
 
-### Exercise 2: Extended JSON Serialization
-
-**Problem:** Serialize document `{ date: new Date(), id: new ObjectId() }` using BSON Extended JSON (`EJSON.stringify`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Extended JSON stringified preserving $date and $oid keys
-> ```
-> ```javascript
-> const { EJSON } = require('bson');
-> const doc = { date: new Date(), id: new ObjectId() };
-> console.log(EJSON.stringify(doc));
-> ```
->
-> **Explanation:** `EJSON` preserves BSON type annotations (`$date`, `$oid`) in JSON strings.
-
----
-
-### Exercise 3: BSON Type Inspection in mongosh
-
-**Problem:** Inspect BSON type of `db.coll.findOne()._id` using `typeof` or `bsontype`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> "object" (ObjectId instance in JS driver)
-> ```
-> ```javascript
-> typeof db.coll.findOne()._id;
-> ```
->
-> **Explanation:** `ObjectId` values are BSON object primitives in driver APIs.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`_id` Field & ObjectId](objectid.md) — BSON primary keys.
 - [JSON vs. BSON](json_vs_bson.md) — The differences in use cases.
@@ -219,7 +233,7 @@ db.logs.insertOne({ userId: id, payload: largeLogPayload }); // Store logs in se
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - BSON is the binary serialization format of MongoDB.
 - Translates JSON into machine-optimized bytes for storage and network transfer.
 - Adds rich data types: Date, ObjectId, Decimal128, Binary, and Regex.

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Core Storage Unit**
+
+**Core Concept** (Tuple Record Instance): A Row (or tuple) represents a single, distinct record entry storing field values matching the table's column definitions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal standard** (Commonly called a **Record** in software development and a **Tuple** in mathematical database theory).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A table defines the blueprint of what data we want to collect. But to actually store data, we need a unit that represents a single, complete entity.
@@ -66,7 +67,7 @@ SELECT * FROM users WHERE id = 105;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on the default database output sequence of rows
 
@@ -117,67 +118,97 @@ SELECT ctid, * FROM users WHERE ctid = '(0,1)'; -- ❌ Physical tuple location c
 SELECT * FROM users WHERE id = 1; -- Permanent primary key lookup
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Output Math
+### Exercise 1: Inserting Tuple Records with `INSERT INTO`
 
-**Problem:** You have a database table `products` containing 50 rows. You delete 5 rows and update the price of 10 rows. If you run a query to select all items:
-`SELECT * FROM products;`
-How many rows will the query return?
+**Scenario:**
+Insert 2 new user tuple rows into `users` table and return their auto-generated `id` values.
 
-**Expected output:**
+**Requirements:**
+1. Execute `INSERT INTO users (username, email) VALUES (...) RETURNING id`.
+
 > [!check]- Answer
-> ```text
-> 45 rows! 
-> Deleting 5 rows reduces the count from 50 to 45. Updating the price of 10 rows modifies the values *inside* those existing rows, but does not change the total row count of the table.
+>
+> #### Implementation
+>
+> ```sql
+> INSERT INTO users (username, email) 
+> VALUES 
+>   ('alice', 'alice@example.com'),
+>   ('bob', 'bob@example.com')
+> RETURNING id, created_at;
 > ```
-> - Differentiate between modifying columns inside a row and deleting the row entirely.
-> - Calculate total rows remaining.
+>
+> #### Technical Explanation
+>
+> 1. `INSERT INTO` adds new record rows to a relational table.
+> 2. Each inserted row must supply valid values matching target column data types.
+> 3. `RETURNING` clause returns newly generated column values instantly without requiring a second `SELECT` query.
+
+---
+
+### Exercise 2: Updating Specific Row Field Values
+
+**Scenario:**
+Update the `email` column value for a single target row identified by `id = 1`.
+
+**Requirements:**
+1. Execute `UPDATE users SET email = ... WHERE id = 1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> UPDATE users 
+> SET email = 'alice_new@example.com' 
+> WHERE id = 1;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `UPDATE` modifies existing column values across rows matching the `WHERE` clause.
+> 2. `WHERE id = 1` restricts modification to a single target row instance.
+> 3. Always include `WHERE` clauses to prevent accidental multi-row mass updates.
+
+---
+
+### Exercise 3: Deleting Targeted Tuple Rows
+
+**Scenario:**
+Delete a specific user record row from table `users` where `id = 2`.
+
+**Requirements:**
+1. Execute `DELETE FROM users WHERE id = 2`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> DELETE FROM users 
+> WHERE id = 2;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DELETE FROM` removes matching tuple rows permanently from the table.
+> 2. Under MVCC, deleted row versions are marked dead and reclaimed by `VACUUM`.
+> 3. Returns total deleted row count.
 
 ---
 
 
 
-### Exercise 2: Inspecting Row Count with `COUNT(*)`
-
-**Problem:** Count total rows in `users` table (`SELECT COUNT(*) FROM users;`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT COUNT(*) FROM users;
-> ```
-> ```sql
-> SELECT COUNT(*) FROM users;
-> ```
->
-> **Explanation:** `COUNT(*)` counts total matching tuple rows in target tables.
-
----
-
-### Exercise 3: Row Construction Constructor in SQL
-
-**Problem:** Construct Row Constructor tuple literal comparing two columns `(a, b) = (1, 2)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM t WHERE (a, b) = (1, 2);
-> ```
-> ```sql
-> SELECT * FROM t WHERE (a, b) = (1, 2);
-> ```
->
-> **Explanation:** Row Constructor syntax `(col1, col2)` performs multi-column tuple comparisons.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Table (Relation)](table.md) — The parent container.
 - [Column (Field / Attribute)](column.md) — The vertical data parameters.
 - [Relational Database](relational_database.md) — Related concept: Relational Database.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A row represents a single complete record or instance of an entity in a table.
 - Also called a "Record" in coding or a "Tuple" in formal relational database theory.
 - Rows group related data properties horizontally.

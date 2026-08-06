@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Rust-specific**
+
+
+**Rust Organization Construct (encapsulation & namespace hierarchy)**
 
 While many languages have modules, Rust’s explicit module system (`mod`), file mapping rules, and strict privacy boundaries are uniquely designed to tame large codebases.
 
@@ -206,7 +208,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Telemetry Pipeline with Encapsulated Storage and Fine-Grained Module Visibility
 
-**Problem:** In high-throughput cloud microservices, telemetry engines process log entries, apply severity filters, and aggregate statistics before flushing. You are tasked with architecting a `telemetry` module with the following privacy boundaries:
+**Scenario:** In high-throughput cloud microservices, telemetry engines process log entries, apply severity filters, and aggregate statistics before flushing. You are tasked with architecting a `telemetry` module with the following privacy boundaries:
+
+**Requirements:**
 1. Inner submodule `telemetry::ingest`: Exposes `LogEntry`, `LogLevel`, and `LogIngestor`. Struct fields inside `LogEntry` (`level`, `message`, `timestamp_ms`) must remain private so callers cannot fabricate timestamps or create unvalidated empty messages.
 2. Inner submodule `telemetry::storage`: Handles internal buffer accumulation (`LogBuffer`). `LogBuffer` must be hidden from external callers using `pub(super)` visibility so that code outside `telemetry` cannot touch internal storage directly.
 3. Top-level `telemetry` module: Provides a public facade by re-exporting essential API types (`pub use ingest::{LogEntry, LogLevel, LogIngestor};` and `pub use storage::AggregatedStats;`).
@@ -417,8 +421,10 @@ Implement the full `telemetry` pipeline with validation rules and unit tests.
 
 ### Exercise 2: High-Frequency Trading (HFT) Order Gateway & Encapsulated Risk Engine
 
-**Problem:** Financial trading platforms require strict security boundaries to prevent illegal order modifications or bypassing pre-trade risk checks.
+**Scenario:** Financial trading platforms require strict security boundaries to prevent illegal order modifications or bypassing pre-trade risk checks.
 Architect a modular financial order matching and risk engine inside a top-level `trading` module:
+
+**Requirements:**
 1. `trading::order`: Defines `OrderSide` (`Buy`, `Sell`) and `Order`. Struct fields in `Order` (`id`, `symbol`, `side`, `price_cents`, `quantity`, `filled_qty`) must remain private so price or executed quantities cannot be mutated directly by external code. Expose explicit getter and mutation methods (`fill(&mut self, qty)`).
 2. `trading::risk`: Defines `RiskEngine` with configurable limits (`max_quantity`, `max_order_value_cents`). Exposes `validate_order(&self, order: &Order) -> Result<(), RiskViolation>`.
 3. `trading::matching`: Defines `MatchingEngine` containing order books for matching buy and sell orders.
@@ -686,8 +692,10 @@ Implement the complete `trading` architecture and unit tests.
 
 ### Exercise 3: Compiler AST Transpiler & Constant-Folding Pipeline with Nested Module Privacy (`pub(super)`)
 
-**Problem:** Language compilers and query optimizers transform source inputs into executable forms across distinct phases: Tokenization $\rightarrow$ Parsing $\rightarrow$ AST Optimization $\rightarrow$ Evaluation.
+**Scenario:** Language compilers and query optimizers transform source inputs into executable forms across distinct phases: Tokenization $\rightarrow$ Parsing $\rightarrow$ AST Optimization $\rightarrow$ Evaluation.
 To maintain internal modular encapsulation:
+
+**Requirements:**
 1. Intermediate tokens (`lexer::Token`) and AST nodes (`parser::Expr`) must be marked with `pub(super)` so that submodules inside `compiler` can pass them to each other, but callers outside the `compiler` module cannot depend on internal compiler representations.
 2. Submodule `compiler::lexer`: Tokenizes raw mathematical string expressions (`+`, `-`, `*`, `/`, integers).
 3. Submodule `compiler::parser`: Builds binary operator expression trees (`Expr::BinaryOp`).

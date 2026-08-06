@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (record mutation statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Executed by the write planner engine. Triggers index re-evaluations and updates cached query subscriptions dynamically).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Data changes constantly: users update emails, product prices shift, and metrics accumulate.
@@ -80,7 +79,7 @@ UPDATE product:laptop SET views += 1;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running an 'UPDATE <table> SET ...' command without specifying a Record ID or a 'WHERE' clause, accidentally modifying all records in the table
 
@@ -140,59 +139,93 @@ UPDATE user SET active = false; // 💥 Updates ALL users!
 UPDATE user:alice SET active = false; // Targets specific Record ID
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Update Statement Translation
+### Exercise 1: Single Record Mutation by Primary Key
 
-**Problem:** You are migrating a SQL server command:
-`UPDATE products SET stock = stock - 5 WHERE id = 'product:101';`
-Write the equivalent, optimized query in SurrealQL.
+**Scenario:**
+A user updates their display name. Mutate user record `user:john` setting `name = "Johnathan Doe"`.
 
-**Expected output:**
+**Requirements:**
+1. Create user `user:john` with `name = "John"`.
+2. Update `user:john` using `UPDATE user:john SET name = "Johnathan Doe"`.
+
 > [!check]- Answer
-> ```sql
-> UPDATE product:101 SET stock -= 5;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:john SET name = "John";
+> 
+> -- Update single record by primary key
+> UPDATE user:john SET name = "Johnathan Doe";
 > ```
-> - Bypasses index scans by targeting the Record ID directly in the `UPDATE` target.
-> - Use the subtraction assignment shortcut operator `-=`.
+>
+> #### Technical Explanation
+>
+> 1. `UPDATE table:id` mutates a single targeted record directly in $O(1)$ constant time complexity.
+> 2. `SET key = val` updates specified fields while leaving unmentioned fields untouched.
+> 3. Returns the updated record document payload (`RETURN AFTER` by default).
+
+---
+
+### Exercise 2: Filtered Bulk Record Mutation
+
+**Scenario:**
+A batch job deactivates all user accounts that have been inactive for more than 365 days (`last_active < time::now() - 365d`).
+
+**Requirements:**
+1. Write an `UPDATE user` query with a `WHERE` filter clause.
+2. Set `status = "deactivated"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:u1 SET last_active = time::now() - 400d, status = "active";
+> CREATE user:u2 SET last_active = time::now() - 10d, status = "active";
+> 
+> -- Bulk update inactive users
+> UPDATE user SET status = "deactivated" WHERE last_active < time::now() - 365d;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `UPDATE table SET ... WHERE condition` evaluates filters across table records and mutates matching records.
+> 2. Executes atomically within a database transaction block.
+> 3. Unmatched records (`user:u2`) remain unmodified.
+
+---
+
+### Exercise 3: Shallow Document Modification with `MERGE`
+
+**Scenario:**
+Update user `user:john`'s preferences using `MERGE` to add a new property `theme = "dark"` without erasing existing record properties.
+
+**Requirements:**
+1. Update `user:john` using `UPDATE user:john MERGE { theme: "dark" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Non-destructive shallow merge update
+> UPDATE user:john MERGE { theme: "dark" };
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `MERGE` performs a shallow merge, updating specified JSON keys while preserving unmentioned fields.
+> 2. Prevents accidental document truncation caused by `CONTENT` replacements.
+> 3. Provides safe partial document updates for JSON payloads.
 
 ---
 
 
 
-### Exercise 2: Updating Fields with Arithmetic Increments
-
-**Problem:** Increment `view_count` on `article:1` by 1 using `+=` operator in `UPDATE` statement.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPDATE article:1 SET view_count += 1;
-> ```
-> ```surrealql
-> UPDATE article:1 SET view_count += 1;
-> ```
->
-> **Explanation:** `+=` operator increments numeric field values inline.
-
----
-
-### Exercise 3: Conditional Update
-
-**Problem:** Update status to `"dormant"` for all users whose `last_login` was over 30 days ago.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPDATE user SET status = "dormant" WHERE last_login < time::now() - 30d;
-> ```
-> ```surrealql
-> UPDATE user SET status = "dormant" WHERE last_login < time::now() - 30d;
-> ```
->
-> **Explanation:** `UPDATE table SET ... WHERE condition` updates records matching predicate criteria.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`CREATE`](create.md) — The parent write statement.
 - [`UPDATE` Strategies (`SET` / `CONTENT` / `MERGE` / `PATCH`)](update_strategies.md) — Update payload options.
@@ -203,7 +236,7 @@ Write the equivalent, optimized query in SurrealQL.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `UPDATE` statement modifies existing records in SurrealDB tables.
 - Directly targets table names (`UPDATE user`), IDs (`UPDATE user:john`), or filters.
 - **Key behavior:** If a targeted Record ID does not exist, SurrealDB creates it.

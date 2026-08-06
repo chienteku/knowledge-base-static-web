@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Conversion Trait**: `std::convert::AsRef` for cheap reference-to-reference conversions.
+
+
+**Rust Standard Trait (cheap reference-to-reference conversion)**: `std::convert::AsRef` for cheap reference-to-reference conversions.
 
 ---
 

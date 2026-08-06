@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Aggregation** (Ordering & Pagination Pipeline Stages): The $sort, $limit, and $skip pipeline stages order, truncate, and paginate document streams during aggregation processing.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Evaluated by the pipeline execution engine. The query optimizer can automatically coalesce adjacent `$sort` and `$limit` stages to perform memory-optimized top-N sorting).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When analyzing aggregated data, you frequently need to sort and paginate the results:
@@ -90,7 +91,7 @@ db.products.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing the $limit or $skip stages before the $sort stage when calculating top-N records
 
@@ -136,74 +137,103 @@ db.posts.aggregate([{ $unwind: "$comments" }, { $sort: { createdAt: -1 } }]); //
 db.posts.aggregate([{ $sort: { createdAt: -1 } }, { $unwind: "$comments" }]);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Pipeline Pagination Construction
+### Exercise 1: Pipeline Sorting and Truncation
 
-**Problem:** You have an `orders` collection. Write the aggregation pipeline array containing three stages to return Page 2 of the highest-revenue orders:
--   Sort by `total_revenue` in descending order.
--   Skip the first `10` orders (Page 1).
--   Limit the output to `10` orders (Page 2).
+**Scenario:**
+Sort orders by `totalAmount` descending and return top 5 highest-value orders.
 
-**Expected output:**
+**Requirements:**
+1. Stage 1: `{ $sort: { totalAmount: -1 } }`.
+2. Stage 2: `{ $limit: 5 }`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> [
->   { $sort: { total_revenue: -1 } },
->   { $skip: 10 },
->   { $limit: 10 }
-> ]
+> db.orders.aggregate([
+>   { $match: { status: "completed" } },
+>   { $sort: { totalAmount: -1 } },
+>   { $limit: 5 }
+> ]);
 > ```
-> - The sequence of stages in aggregation is executed from first index to last.
-> - Order the stages: Sort first, then Skip, then Limit.
+>
+> #### Technical Explanation
+>
+> 1. `$sort` orders documents in the stream (1 for ascending, -1 for descending).
+> 2. `$limit` caps the stream at a maximum document count.
+> 3. When `$sort` precedes `$limit`, MongoDB optimizes execution by maintaining a top-N sort buffer in RAM.
 
 ---
 
+### Exercise 2: Aggregation Pipeline Pagination with `$skip` and `$limit`
 
+**Scenario:**
+Implement Page 3 pagination (10 items per page) for an aggregation pipeline.
 
-### Exercise 2: Pipeline Sorting and Limiting
+**Requirements:**
+1. Add `{ $skip: 20 }` and `{ $limit: 10 }`.
 
-**Problem:** Sort products by `salesCount` descending and return top 10 items using `$sort` and `$limit`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> db.products.aggregate([{ $sort: { salesCount: -1 } }, { $limit: 10 }]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.products.aggregate([
->   { $sort: { salesCount: -1 } },
+>   { $sort: { price: 1 } },
+>   { $skip: 20 },
 >   { $limit: 10 }
 > ]);
 > ```
 >
-> **Explanation:** `$sort: { field: -1 }` sorts descending; `$limit: N` caps result output.
+> #### Technical Explanation
+>
+> 1. `$skip` skips the specified number of incoming pipeline documents.
+> 2. `$limit` restricts the output stream size.
+> 3. Combines to provide standard page-based aggregation output pagination.
 
 ---
 
-### Exercise 3: Optimization Rule for `$sort` and `$limit`
+### Exercise 3: Leveraging Indexes for Pipeline `$sort`
 
-**Problem:** How does MongoDB optimize `$sort` followed immediately by `$limit: N`? (Maintains top-N items in memory without sorting full collection).
+**Scenario:**
+Ensure `$sort` stage in aggregation uses an index scan (`IXSCAN`) rather than an in-memory sort.
 
-**Expected output:**
+**Requirements:**
+1. Place `$sort` immediately after an index-backed `$match` stage.
+
 > [!check]- Answer
-> ```text
-> Maintains top-N items in memory during scan without sorting the full dataset
-> ```
-> ```text
-> Maintains top-N items in memory during scan without sorting the full dataset
+>
+> #### Implementation
+>
+> ```javascript
+> // Requires compound index on { category: 1, price: -1 }
+> db.products.aggregate([
+>   { $match: { category: "electronics" } },
+>   { $sort: { price: -1 } }
+> ]);
 > ```
 >
-> **Explanation:** Top-N sort optimization limits memory consumption during sort operations.
+> #### Technical Explanation
+>
+> 1. When `$sort` immediately follows `$match` and aligns with a compound index, WiredTiger reads documents in pre-sorted B-tree order.
+> 2. Eliminates in-memory sort buffer allocation.
+> 3. Prevents `SortExceededMemoryLimit` exceptions.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [`sort()` / `limit()` / `skip()`](../level_03/sort_limit_skip.md) — The cursor pagination.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$sort`, `$limit`, and `$skip` perform pagination in aggregation pipelines.
 - Direct equivalents to SQL's `ORDER BY`, `LIMIT`, and `OFFSET` clauses.
 - Stages are executed in the exact sequential order they appear in the array.

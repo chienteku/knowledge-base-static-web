@@ -145,8 +145,9 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Performance Telemetry Audit Logger Macro (`audit_event!`)
 
-**Problem:** In distributed microservices, logging structured audit events with key-value pairs (`"user_id" => 42`, `"action" => "login"`) often causes code repetition and inefficient vector reallocations. 
+**Scenario:** In distributed microservices, logging structured audit events with key-value pairs (`"user_id" => 42`, `"action" => "login"`) often causes code repetition and inefficient vector reallocations.
 
+**Requirements:**
 Implement a macro `audit_event!` that constructs an `AuditEvent` instance taking a `Severity` level (`Info`, `Warn`, `Error`), a target service name (`&str`), and arbitrary key-value metadata tags (`key => value`). The macro must:
 1. Use an internal macro count rule (`@count`) to count key-value pairs at expansion time and allocate `Vec::with_capacity(cap)` precisely.
 2. Support optional trailing commas after key-value pairs.
@@ -262,10 +263,12 @@ Implement a macro `audit_event!` that constructs an `AuditEvent` instance taking
 
 ### Exercise 2: Declarative HTTP Route Dispatcher DSL Macro (`dispatch_route!`)
 
-**Problem:** Writing manual `if-else` branches to match HTTP methods, endpoint paths, and mandatory HTTP request headers in low-overhead embedded API services is verbose and prone to routing bugs.
+**Scenario:** Writing manual `if-else` branches to match HTTP methods, endpoint paths, and mandatory HTTP request headers in low-overhead embedded API services is verbose and prone to routing bugs.
 
 Construct a macro `dispatch_route!` that evaluates an `HttpRequest` against a series of declared endpoint arms and returns a `RouteResult` (`Handled(String)`, `MethodNotAllowed`, `NotFound`).
 The macro must:
+
+**Requirements:**
 1. Support matching HTTP methods (`GET`, `POST`, `PUT`, `DELETE`), path literal expressions, and optional header requirements (`[ header "key" == "value" ]`).
 2. Evaluate branches sequentially without non-local returns (so the macro expression resolves directly to a `RouteResult`).
 3. Return `RouteResult::MethodNotAllowed` if the path matches an endpoint but the HTTP method or required header conditions fail across all branches.
@@ -436,10 +439,12 @@ The macro must:
 
 ### Exercise 3: Zero-Cost Type-Safe Bitfield Generator Macro (`define_bitflags!`)
 
-**Problem:** Low-level systems, driver programming, and binary packet parsers often rely on raw integer bitmasks (`u8`, `u16`, `u32`). Performing unchecked bitwise operations (`|`, `&`) using raw numbers leads to subtle bugs and lacks type safety.
+**Scenario:** Low-level systems, driver programming, and binary packet parsers often rely on raw integer bitmasks (`u8`, `u16`, `u32`). Performing unchecked bitwise operations (`|`, `&`) using raw numbers leads to subtle bugs and lacks type safety.
 
 Design a macro `define_bitflags!` that autogenerates a strongly-typed bitfield wrapper struct over an integer primitive type.
 The macro must:
+
+**Requirements:**
 1. Accept struct attributes, visibility modifier (`pub`), struct identifier, underlying integer type, and named constant flag definitions with bit shift expressions.
 2. Autogenerate associated constants (`ALL_BITS`, flag names), constructors (`empty()`, `all()`, `from_bits(bits)`), and mutation helper methods (`contains`, `insert`, `remove`, `toggle`, `is_empty`).
 3. Implement `BitOr`, `BitAnd`, and `BitXor` standard library ops traits for the generated struct.

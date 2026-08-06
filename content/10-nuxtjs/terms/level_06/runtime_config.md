@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Configuration**
+
+**Security & Middleware** (Environment & Server Secret Configuration): `runtimeConfig` manages environment variables, keeping private API secret keys isolated to the server while exposing public variables to the client.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a Node.js app, you read environment variables using `process.env.MY_SECRET`. 
@@ -74,7 +75,7 @@ console.log(config.stripeSecretKey);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trusting `.env` files blindly without defining them in `nuxt.config.ts`
 **The mistake:** Adding `MY_API_KEY=123` to a `.env` file and trying to access it using `process.env.MY_API_KEY` inside a Vue component.
@@ -140,90 +141,117 @@ console.log(config.public.apiBase); // Access public runtimeConfig properties on
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Public vs Private
+### Exercise 1: Configuring Server-Private vs Public Runtime Config
 
-**Problem:** You have a Stripe Publishable Key (`STRIPE_PUB_KEY`) that is safe for the browser, and a Stripe Secret Key (`STRIPE_SEC_KEY`) that must never leave the server. Write the `runtimeConfig` block in `nuxt.config.ts` to accommodate both.
+**Scenario:**
+Define a server-only private API secret and a public API base URL in `nuxt.config.ts`.
 
-**Expected output:**
+**Requirements:**
+1. Define `runtimeConfig` with `apiSecret` and `public.apiBase`.
+
 > [!check]- Answer
-> ```typescript
-> export default defineNuxtConfig({
->   runtimeConfig: {
->     stripeSecKey: process.env.STRIPE_SEC_KEY,
->     public: {
->       stripePubKey: process.env.STRIPE_PUB_KEY
->     }
->   }
-> })
-> ```
-> - Define private variables directly under `runtimeConfig` and public ones under `runtimeConfig.public` using process env references.
-
----
-
-### Exercise 2: runtimeConfig Server & Client Setup Pattern
-
-**Problem:** Write `nuxt.config.ts` `runtimeConfig` defining private `stripeSecretKey` and public `apiBaseUrl`, and a Server API handler reading `stripeSecretKey`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
 > // nuxt.config.ts
 > export default defineNuxtConfig({
 >   runtimeConfig: {
->     stripeSecretKey: '',
->     public: { apiBaseUrl: '/api' }
+>     apiSecret: "default_server_secret_key", // Server-only secret
+>     public: {
+>       apiBase: "https://api.example.com"    // Exposed to client and server
+>     }
 >   }
 > });
-> // Server handler:
+> ```
+
+> #### Technical Explanation
+>
+> 1. Properties at the top level of `runtimeConfig` (`apiSecret`) are strictly isolated to the server and stripped from client bundles.
+> 2. Properties inside `public` (`public.apiBase`) are exposed to both browser client and server runtime environments.
+> 3. Critical security isolation mechanism.
+
+---
+
+### Exercise 2: Overriding Runtime Config with Environment Variables
+
+**Scenario:**
+Override `apiSecret` and `public.apiBase` in production using system environment variables.
+
+**Requirements:**
+1. Set `NUXT_API_SECRET` and `NUXT_PUBLIC_API_BASE` env vars.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> # Production Environment Variables (.env or Cloud Platform Config)
+> NUXT_API_SECRET="prod_sec_999888777666"
+> NUXT_PUBLIC_API_BASE="https://prod-api.example.com"
+> ```
+
+> #### Technical Explanation
+>
+> 1. Nuxt 3 automatically maps environment variables prefixed with `NUXT_` to matching `runtimeConfig` keys.
+> 2. `NUXT_API_SECRET` overrides `runtimeConfig.apiSecret`.
+> 3. `NUXT_PUBLIC_API_BASE` overrides `runtimeConfig.public.apiBase`.
+
+---
+
+### Exercise 3: Consuming Runtime Config via `useRuntimeConfig()`
+
+**Scenario:**
+Access public API base URL in a component and private secret in a Nitro server route.
+
+**Requirements:**
+1. Call `useRuntimeConfig()` in Vue component and Nitro handler.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <!-- Inside Vue Component: -->
+> <script setup lang="ts">
+> const config = useRuntimeConfig();
+> // Access public config in client or server code:
+> console.log("API Base URL:", config.public.apiBase);
+> </script>
+> ```
+
+> ```typescript
+> // server/api/private.ts
 > export default defineEventHandler((event) => {
 >   const config = useRuntimeConfig(event);
->   return config.stripeSecretKey;
+>   // Access server-only secret safely:
+>   return { secret: config.apiSecret };
 > });
 > ```
-> - `useRuntimeConfig()` accesses server and client environment variables.
-> 
-> ```typescript
-> // nuxt.config.ts
-> export default defineNuxtConfig({
->   runtimeConfig: {
->     stripeSecret: process.env.STRIPE_SECRET_KEY,
->     public: {
->       apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api'
->     }
->   }
-> });
-> ```
+
+> #### Technical Explanation
+>
+> 1. `useRuntimeConfig()` returns the active runtime configuration object.
+> 2. Attempting to access `config.apiSecret` on the client returns `undefined`.
+> 3. Guarantees environment variable safety across SSR boundaries.
 
 ---
 
-### Exercise 3: NUXT_ Environment Variable Override Rule
 
-**Problem:** How can environment variable `NUXT_STRIPE_SECRET` override `runtimeConfig.stripeSecret` at runtime without re-building?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Nitro automatically overrides matching runtimeConfig keys using NUXT_ pre-fixed environment variables at application startup.
-> ```
-> - `NUXT_KEY` environment variables override `runtimeConfig.key` dynamically.
-> 
-> ```bash
-> NUXT_STRIPE_SECRET="sk_test_123" node .output/server/index.mjs
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`app.config.ts`](app_config.md) — The alternative config meant for non-secret, UI-related theme variables.
 - [`nuxt.config.ts`](nuxt_config.md) — Related concept: `nuxt.config.ts`.
 - [Environment Variables (`.env`)](../level_10/env_variables.md) — Related concept: Environment Variables (`.env`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useRuntimeConfig()` is the only safe way to access environment variables in Nuxt 3.
 - The schema MUST be defined in `nuxt.config.ts`.
 - Top-level variables in `runtimeConfig` are strictly private (Server-only).

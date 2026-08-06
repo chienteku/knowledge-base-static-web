@@ -148,14 +148,19 @@ thread::spawn(move || {
 
 ### Exercise 1: Implementing `ToOwned` and `Borrow` for a Custom Unsized Type (`PacketSlice`)
 
-**Problem:** In zero-copy network telemetry parsers, binary payloads are represented by custom unsized slice types (Dynamically Sized Types). Create a custom unsized struct `PacketSlice([u8])` with `repr(transparent)` and an owned payload container `OwnedPacket`. Implement `std::borrow::Borrow<PacketSlice>` for `OwnedPacket` and `ToOwned` for `PacketSlice`. Additionally, override `ToOwned::clone_into(&self, target: &mut Self::Owned)` to reuse `target`'s existing vector allocation capacity without triggering heap re-allocation. Write unit tests verifying conversion, `Cow<'a, PacketSlice>` usage, and allocation reuse.
+**Scenario:** In zero-copy network telemetry parsers, binary payloads are represented by custom unsized slice types (Dynamically Sized Types). Create a custom unsized struct `PacketSlice([u8])` with `repr(transparent)` and an owned payload container `OwnedPacket`. Implement `std::borrow::Borrow<PacketSlice>` for `OwnedPacket` and `ToOwned` for `PacketSlice`. Additionally, override `ToOwned::clone_into(&self, target: &mut Self::Owned)` to reuse `target`'s existing vector allocation capacity without triggering heap re-allocation. Write unit tests verifying conversion, `Cow<'a, PacketSlice>` usage, and allocation reuse.
 
 > [!check]- Answer
+> #### Technical Explanation
+>
 > To implement `ToOwned` for a custom unsized DST:
 > 1. Mark `PacketSlice` as `repr(transparent)` around `[u8]` so pointer casts from `&[u8]` to `&PacketSlice` are valid.
 > 2. Implement `Borrow<PacketSlice> for OwnedPacket` returning `&PacketSlice` created from the internal `Vec<u8>`.
 > 3. Implement `ToOwned for PacketSlice` setting `type Owned = OwnedPacket` and returning a new `OwnedPacket` in `to_owned(&self)`.
 > 4. Override `clone_into(&self, target: &mut Self::Owned)` to call `target.payload.clear()` followed by `extend_from_slice`, preserving existing heap capacity.
+>
+>
+> #### Implementation
 >
 > ```rust
 > use std::borrow::{Borrow, Cow, ToOwned};
@@ -275,10 +280,12 @@ thread::spawn(move || {
 > 
 > ### Exercise 2: Zero-Copy Path Normalization using `Path`, `PathBuf`, and `Cow<'a, Path>`
 > 
-> **Problem:** Standard library filesystem paths (`std::path::Path`) are Dynamically Sized Types (`DST`) that cannot implement `Clone`. Consequently, zero-copy functions returning `Cow<'a, Path>` rely on `Path::to_owned(&self) -> PathBuf` provided by `ToOwned`. Write a function `normalize_request_path<'a>(path: &'a Path) -> Cow<'a, Path>` that returns `Cow::Borrowed(path)` if no relative `.` segments exist, or `Cow::Owned(PathBuf)` if path cleanup is required. Demonstrate mutating a `Cow<'a, Path>` via `to_mut()` and write unit tests checking allocation behavior and assertions.
+> **Scenario:** Standard library filesystem paths (`std::path::Path`) are Dynamically Sized Types (`DST`) that cannot implement `Clone`. Consequently, zero-copy functions returning `Cow<'a, Path>` rely on `Path::to_owned(&self) -> PathBuf` provided by `ToOwned`. Write a function `normalize_request_path<'a>(path: &'a Path) -> Cow<'a, Path>` that returns `Cow::Borrowed(path)` if no relative `.` segments exist, or `Cow::Owned(PathBuf)` if path cleanup is required. Demonstrate mutating a `Cow<'a, Path>` via `to_mut()` and write unit tests checking allocation behavior and assertions.
 > 
 > > [!check]- Answer
-> > Because `Path` is unsized, `Cow<'a, Path>` leverages `<Path as ToOwned>::Owned = PathBuf`.
+> > #### Technical Explanation
+>
+> Because `Path` is unsized, `Cow<'a, Path>` leverages `<Path as ToOwned>::Owned = PathBuf`.
 > > 1. Scan `path.components()`: if no `Component::CurDir` (`.`) is found, return `Cow::Borrowed(path)` with zero allocations.
 > > 2. If relative components exist, construct a normalized `PathBuf` and wrap it in `Cow::Owned`.
 > > 3. Calling `.to_mut()` on a `Cow<'a, Path>` invokes `ToOwned::to_owned(&self)` under the hood to clone `&Path` into a mutable `PathBuf`.
@@ -362,10 +369,12 @@ thread::spawn(move || {
 > 
 > ### Exercise 3: Zero-Copy HTTP Query Decoder and String Buffer Reuse via `ToOwned::clone_into`
 > 
-> **Problem:** High-throughput HTTP web servers parse query string parameters zero-copy (`Cow<'a, str>`) unless percent-encoding (`%XX`) requires decoding into an owned `String`. Furthermore, cached worker threads can reuse existing heap allocations across requests by utilizing `ToOwned::clone_into`. Write `decode_query_param<'a>(input: &'a str) -> Cow<'a, str>` and a `ParamCache` struct that uses `input.clone_into(&mut self.buffer)` to update cached parameter values without re-allocating memory capacity. Include unit tests with `assert_eq!`, `assert!`, and `matches!`.
+> **Scenario:** High-throughput HTTP web servers parse query string parameters zero-copy (`Cow<'a, str>`) unless percent-encoding (`%XX`) requires decoding into an owned `String`. Furthermore, cached worker threads can reuse existing heap allocations across requests by utilizing `ToOwned::clone_into`. Write `decode_query_param<'a>(input: &'a str) -> Cow<'a, str>` and a `ParamCache` struct that uses `input.clone_into(&mut self.buffer)` to update cached parameter values without re-allocating memory capacity. Include unit tests with `assert_eq!`, `assert!`, and `matches!`.
 > 
 > > [!check]- Answer
-> > `ToOwned` enables both zero-copy string slice borrowing and in-place buffer recycling:
+> > #### Technical Explanation
+>
+> `ToOwned` enables both zero-copy string slice borrowing and in-place buffer recycling:
 > > 1. `decode_query_param` checks for `%`. If absent, `Cow::Borrowed(input)` is returned with zero allocations. If present, `%XX` sequences are hex-decoded into a newly allocated `Cow::Owned(String)`.
 > > 2. `ParamCache` maintains a long-lived `String` buffer. Calling `input.clone_into(&mut self.buffer)` invokes `str::clone_into`, which reuses `self.buffer`'s allocated memory capacity instead of deallocating and reallocating a new `String`.
 > >

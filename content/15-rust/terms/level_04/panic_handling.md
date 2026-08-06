@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Error Recovery**: Panic mechanism (`panic!`), stack unwinding, and `catch_unwind` recovery boundary.
+
+
+**Rust Safety Paradigm (unwind & abort panic strategies)**: Panic mechanism (`panic!`), stack unwinding, and `catch_unwind` recovery boundary.
 
 ---
 

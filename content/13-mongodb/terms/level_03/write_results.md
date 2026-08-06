@@ -14,16 +14,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**CRUD Operation** (Mutation Response Status Payload): Write Results are response payloads returned by MongoDB write commands indicating acknowledged count, inserted ID, modified count, and match count.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Returned by database drivers to the application server runtime. Standardized across all language drivers to track network write receipts).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing backend code that updates a database (like charging a credit card or upgrading a user's subscription tier):
@@ -100,7 +101,7 @@ if (result.modifiedCount === 0) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Checking only 'matchedCount' instead of 'modifiedCount' to verify if data was rewritten on disk
 
@@ -114,6 +115,8 @@ If your application depends on triggering email scripts only when data is altere
 **Fix: Always check `modifiedCount` if your application needs to confirm that a document's values were physically altered.**
 
 ---
+
+
 
 
 
@@ -134,6 +137,8 @@ if (res.modifiedCount === 0) throw new Error("User not found!"); // ❌ False er
 if (res.matchedCount === 0) throw new Error("User not found!"); // Correct existence check
 ```
 
+
+
 ### Mistake 3: Ignoring `acknowledged` Flag in Write Concern Response Objects
 
 **The mistake:** Assuming write operations were committed to server disk without checking `res.acknowledged`.
@@ -152,95 +157,105 @@ if (res.acknowledged) { console.log('Write acknowledged by cluster'); }
 
 
 
-### Mistake 4: Assuming `matchedCount > 0` Means Document Field Values Were Modified
+## 5. Practice Exercises
 
-**The mistake:** Checking `if (res.modifiedCount > 0)` expecting it to equal `matchedCount` when updating identical values.
+### Exercise 1: Inspecting Write Concern Acknowledgments
 
-**Why it's wrong:** If an update assigns values identical to existing document fields, `matchedCount` is `1` but `modifiedCount` is `0`! Check `matchedCount` to verify document existence.
+**Scenario:**
+Inspect the `acknowledged` status and `insertedId` returned by an `insertOne()` write operation.
 
-*Incorrect:*
-```javascript
-const res = await db.users.updateOne({ _id: 1 }, { $set: { name: "Alice" } });
-if (res.modifiedCount === 0) throw new Error("User not found!"); // ❌ False error if name was already Alice!
-```
+**Requirements:**
+1. Log `result.acknowledged` and `result.insertedId`.
 
-*Fix:*
-```javascript
-if (res.matchedCount === 0) throw new Error("User not found!"); // Correct existence check
-```
-
-### Mistake 5: Ignoring `acknowledged` Flag in Write Concern Response Objects
-
-**The mistake:** Assuming write operations were committed to server disk without checking `res.acknowledged`.
-
-**Why it's wrong:** If writes are executed with un-acknowledged write concern `{ w: 0 }`, `res.acknowledged` is `false` and mutation details are unavailable.
-
-*Incorrect:*
-```javascript
-// Un-acknowledged write check
-```
-
-*Fix:*
-```javascript
-if (res.acknowledged) { console.log('Write acknowledged by cluster'); }
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Result Analysis
-
-**Problem:** You execute a `deleteMany()` query and get this write result object:
-`{ acknowledged: true, deletedCount: 0 }`
-1.  Did the query fail with an error?
-2.  What does this output tell you about the database state?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. No, the query did not fail (the `acknowledged: true` flag indicates the database server successfully parsed and executed the command).
-> 2. The output indicates that no documents matched the query filter you provided. Therefore, zero documents were deleted from the collection.
-> ```
-> - Differentiate network execution safety from matching filters counts.
-> - Relate the metrics back to the delete filters.
-
----
-
-
-
-### Exercise 2: Write Result Object Properties
-
-**Problem:** List 3 standard properties on MongoDB driver `UpdateResult` objects (`acknowledged`, `matchedCount`, `modifiedCount`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> acknowledged, matchedCount, modifiedCount
-> ```
-> ```text
-> acknowledged, matchedCount, modifiedCount
-> ```
 >
-> **Explanation:** Write result objects detail acknowledgement status and affected document metrics.
-
----
-
-### Exercise 3: Delete Result Inspection
-
-**Problem:** Inspect number of deleted documents on `DeleteResult` object (`res.deletedCount`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> res.deletedCount
-> ```
+> #### Implementation
+>
 > ```javascript
-> const res = await db.users.deleteMany({ active: false });
-> console.log(res.deletedCount);
+> const result = db.logs.insertOne({
+>   event: "user_login",
+>   timestamp: new Date()
+> });
+> 
+> console.log("Acknowledged:", result.acknowledged);
+> console.log("New Document ID:", result.insertedId);
 > ```
 >
-> **Explanation:** `res.deletedCount` reports the total number of documents deleted.
+> #### Technical Explanation
+>
+> 1. Write Result payloads confirm server receipt and storage status.
+> 2. `acknowledged: true` verifies the write satisfied configured Write Concern (`w: 1` or `w: "majority"`).
+> 3. `insertedId` returns the primary key ObjectId.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Differentiating Matched vs Modified Counts in Update Results
+
+**Scenario:**
+Inspect `matchedCount`, `modifiedCount`, and `upsertedCount` in `UpdateResult` objects.
+
+**Requirements:**
+1. Execute `updateOne()` and log response metrics.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const res = db.users.updateOne(
+>   { email: "alice@example.com" },
+>   { $set: { status: "active" } }
+> );
+> 
+> console.log("Matched Count:", res.matchedCount);
+> console.log("Modified Count:", res.modifiedCount);
+> console.log("Upserted Count:", res.upsertedCount);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `matchedCount`: Number of documents matching query filter.
+> 2. `modifiedCount`: Number of documents whose content was actually altered.
+> 3. `upsertedCount`: 1 if upsert triggered document creation, else 0.
+
+---
+
+### Exercise 3: Handling Write Concern Errors in SDK Results
+
+**Scenario:**
+Handle Write Concern timeout errors (`WriteConcernError`) when writing to a multi-region cluster.
+
+**Requirements:**
+1. Catch write concern exceptions in driver code.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> try {
+>   db.orders.insertOne(
+>     { orderId: "ORD-100", amount: 99.99 },
+>     { writeConcern: { w: "majority", wtimeout: 5000 } }
+>   );
+> } catch (err) {
+>   if (err.hasWriteConcernError()) {
+>     console.error("Write failed to replicate to majority within 5000ms!");
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Write concern errors occur when primary node writes succeed but replication acknowledgment to secondaries times out.
+> 2. `hasWriteConcernError()` checks for replication acknowledgment failures.
+> 3. Guarantees data durability awareness in multi-node clusters.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`insertOne()` / `insertMany()`](insert.md) — The insert operations.
 - [`updateOne()` / `updateMany()`](update.md) — The modify operations.
@@ -250,7 +265,7 @@ if (res.acknowledged) { console.log('Write acknowledged by cluster'); }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Write Result Objects contain operational metrics for every database write.
 - Allows application servers to verify if transactions succeeded.
 - `acknowledged` confirms the database server processed the query.

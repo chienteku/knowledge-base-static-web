@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Type Annotation**
+
+**TypeScript Core Syntax** (Object Shape Definitions): Object types describe the properties, methods, and structure of JavaScript objects using type aliases or inline type literal syntax.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, objects are completely fluid. You can create an object `const user = { name: "Alice" }`, and then later do `user.age = 28` or `delete user.name`. This fluidity causes endless bugs when a function expects a specific property that no longer exists.
@@ -50,7 +51,7 @@ Because of this, we almost always abstract Object Types out into [Interfaces](..
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Typing `Object` with a capital 'O'
 
@@ -98,68 +99,113 @@ const user: { readonly name: string } = { name: "Alice" };
 // user.name = "Bob"; // ❌ Cannot assign to 'name' because it is a read-only property
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Nested Object Types
+### Exercise 1: Annotating Inline Object Types
 
-**Problem:** Write an inline Object Type for a `car` parameter that contains a `brand` (string) and an `engine` (an object containing `cylinders` (number)).
+**Scenario:**
+Annotate a function receiving an inline object type parameter representing a user session.
 
-**Expected output:**
+**Requirements:**
+1. Define inline object parameter type `{ user: string; token: string }`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> function start(car: { brand: string; engine: { cylinders: number } }) {
->   // ...
+> function authenticate(session: { user: string; token: string }): boolean {
+>   return session.token.length > 0;
 > }
+
+authenticate({ user: "alice", token: "tok_abc123" });
+```
+
+> #### Technical Explanation
+>
+> 1. Inline object types `{ key: Type }` define property requirements directly in function parameter lists.
+> 2. Useful for quick one-off function parameters.
+> 3. Structural typing rules apply identically to inline object types and named interfaces.
+
+---
+
+### Exercise 2: Reusing Object Shapes with Type Aliases
+
+**Scenario:**
+Extract an inline object shape into a reusable `type` alias `Product`.
+
+**Requirements:**
+1. Define `type Product = { id: string; name: string; price: number }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type Product = {
+>   id: string;
+>   name: string;
+>   price: number;
+> };
+
+function formatProduct(product: Product): string {
+  return `${product.name} - $${product.price.toFixed(2)}`;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `type Product = { ... }` names an object shape for reuse across multiple function signatures.
+> 2. Promotes DRY (Don't Repeat Yourself) type declarations across a codebase.
+> 3. Clean object shape abstraction.
+
+---
+
+### Exercise 3: Nested Object Shape Annotations
+
+**Scenario:**
+Annotate a complex nested object shape containing address data.
+
+**Requirements:**
+1. Define nested object type structure.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type UserWithAddress = {
+>   id: number;
+>   profile: {
+>     firstName: string;
+>     lastName: string;
+>   };
+>   address: {
+>     street: string;
+>     city: string;
+>     zipCode: string;
+>   };
+> };
 > ```
-> - Object Types can be nested infinitely, just like JS objects!
+
+> #### Technical Explanation
+>
+> 1. Object types can nest child object definitions arbitrarily deep.
+> 2. All nested fields are strictly verified during property access.
+> 3. Provides precise shape guarantees for complex JSON API payloads.
 
 ---
 
 
 
-### Exercise 2: Inline Object Type Annotations
-
-**Problem:** Annotate function parameter `user: { id: number; name: string }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Inline object type verified
-> ```
-> ```typescript
-> function printUser(user: { id: number; name: string }) {
->   console.log(`${user.id}: ${user.name}`);
-> }
-> printUser({ id: 1, name: "Alice" });
-> ```
->
-> **Explanation:** Inline object types specify required property shapes directly.
-
----
-
-### Exercise 3: Primitive Exclusion with `object`
-
-**Problem:** Does `const val: object = "hello"` compile? (No)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> No, primitive strings are not assignable to object
-> ```
-> ```typescript
-> console.log("No, primitive strings are not assignable to object");
-> ```
->
-> **Explanation:** Type `object` represents non-primitive values (objects, arrays, functions).
-
-## 7. Related Terms
+## 6. Related Terms
 - [Interfaces](interfaces.md) — The best way to abstract and reuse Object Types.
 - [Optional Properties (`?`)](optional_properties.md) — How to make object properties non-mandatory.
 - [Excess Property Checks](excess_property_checks.md) — Related concept: Excess Property Checks.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Object Types** define the strict shape of a JavaScript object, listing its properties and their corresponding types.
 - TypeScript strictly enforces that an object perfectly matches its Type—no missing properties, and no extra/unknown properties allowed during literal assignment.
 - Inline Object Types are hard to read and reuse; they should usually be extracted into Interfaces or Type Aliases.

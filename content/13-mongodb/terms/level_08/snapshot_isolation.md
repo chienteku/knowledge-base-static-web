@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Paradigm**
+
+**Advanced Feature** (WiredTiger Multi-Version Concurrency Control): Snapshot Isolation uses WiredTiger Multi-Version Concurrency Control (MVCC) to provide consistent point-in-time database views without locking concurrent writers.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Managed by the WiredTiger storage engine's MVCC concurrency manager. Maintains historical document state changes in memory cache to satisfy active transaction snapshots).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In high-traffic applications, thousands of clients read and write data simultaneously. 
@@ -78,7 +79,7 @@ Imagine working off a shared meeting room whiteboard:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Failing to write client-side retry logic to handle write conflicts in MongoDB transactions
 
@@ -126,68 +127,111 @@ Wrap multi-query snapshot reads inside a transaction session
 Use session.withTransaction() which automatically retries on TransientTransactionError
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Concurrency Diagnostic
+### Exercise 1: Point-in-Time Multi-Collection Snapshot Reads
 
-**Problem:** Transaction A starts under Snapshot Isolation at `10:00:00`. At `10:00:05`, Transaction B updates a user's address and commits. 
-At `10:00:10`, Transaction A reads that user's address.
-1.  State which address (the old address or the new address) Transaction A will see.
-2.  Explain why.
+**Scenario:**
+Execute a multi-collection financial audit query using `readConcern: "snapshot"` inside a session to guarantee point-in-time isolation.
 
-**Expected output:**
+**Requirements:**
+1. Execute `find()` across 2 collections inside snapshot session.
+
 > [!check]- Answer
-> ```text
-> 1. Transaction A will see the old address.
-> 2. Under Snapshot Isolation, Transaction A reads from a consistent snapshot frozen at its start time (`10:00:00`). Any updates committed by other queries after this start time are invisible to the transaction until it terminates.
+>
+> #### Implementation
+>
+> ```javascript
+> const session = client.startSession();
+> try {
+>   const opts = { session, readConcern: { level: "snapshot" } };
+>   
+>   const totalChecking = await db.collection("checking").aggregate([{ $group: { _id: null, sum: { $sum: "$balance" } } }], opts).toArray();
+>   const totalSavings = await db.collection("savings").aggregate([{ $group: { _id: null, sum: { $sum: "$balance" } } }], opts).toArray();
+>   
+>   console.log("Audit Total:", (totalChecking[0]?.sum || 0) + (totalSavings[0]?.sum || 0));
+> } finally {
+>   await session.endSession();
+> }
 > ```
-> - Apply the snapshot freezing rule relative to transaction start times.
-> - Consider if concurrent commits can bleed into active snapshots.
+>
+> #### Technical Explanation
+>
+> 1. `readConcern: "snapshot"` reads data from a single WiredTiger MVCC snapshot timestamp.
+> 2. Guarantees `totalSavings` and `totalChecking` reflect the exact same database point-in-time state.
+> 3. Prevents dirty reads and phantom reads during concurrent account transfers.
+
+---
+
+### Exercise 2: WiredTiger MVCC Multi-Version Concurrency Mechanics
+
+**Scenario:**
+Explain how WiredTiger MVCC allows concurrent readers to inspect un-modified snapshot versions while a writer modifies a document.
+
+**Requirements:**
+1. Describe MVCC non-blocking reader mechanics.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> WiredTiger MVCC Snapshot Mechanics:
+> - Writers modify new document versions in WiredTiger cache.
+> - Concurrent readers read historical document versions matching their snapshot timestamp.
+> Result: Readers NEVER block writers, and writers NEVER block readers!
+> ```
+>
+> #### Technical Explanation
+>
+> 1. WiredTiger MVCC maintains multiple historical versions of document bytes in RAM cache.
+> 2. Snapshot reads inspect historical versions without acquiring shared read locks.
+> 3. Enables high-concurrency read/write workloads.
+
+---
+
+### Exercise 3: Handling Write Conflicts in Snapshot Transactions
+
+**Scenario:**
+Handle a `WriteConflict` exception when 2 concurrent snapshot transactions attempt to modify the same document.
+
+**Requirements:**
+1. Catch `WriteConflict` error and retry transaction.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> try {
+>   await session.withTransaction(async () => {
+>     await db.collection("inventory").updateOne({ _id: "item1" }, { $inc: { qty: -1 } }, { session });
+>   });
+> } catch (err) {
+>   if (err.message.includes("WriteConflict")) {
+>     console.warn("Concurrent write conflict detected; transaction automatically retried.");
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. If transaction B attempts to write to a document already modified by active transaction A, transaction B throws a `WriteConflict` error.
+> 2. `withTransaction()` catches write conflicts and retries the transaction automatically.
+> 3. Preserves isolation integrity.
 
 ---
 
 
 
-### Exercise 2: Snapshot Isolation in Transactions
-
-**Problem:** Explain what Snapshot Isolation guarantees during a transaction (All reads reflect a consistent point-in-time snapshot of the database).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> All reads within the transaction reflect a single point-in-time database snapshot
-> ```
-> ```text
-> All reads within the transaction reflect a single point-in-time database snapshot
-> ```
->
-> **Explanation:** Snapshot isolation prevents dirty reads, non-repeatable reads, and phantom reads.
-
----
-
-### Exercise 3: Transient Transaction Error Retries
-
-**Problem:** Why does `withTransaction()` automatically retry transactions on `TransientTransactionError`? (Retries transient write conflict aborts under concurrency).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Automatically retries transactions aborting due to concurrent write conflicts
-> ```
-> ```text
-> Automatically retries transactions aborting due to concurrent write conflicts
-> ```
->
-> **Explanation:** `withTransaction()` includes built-in retry handlers for OCC write conflicts.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Multi-Document Transaction](multi_document_transaction.md) — The transaction context.
 - [Transaction Isolation Levels](../../../12-postgres/terms/level_08/isolation_levels.md) — Relational isolation levels.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Snapshot Isolation provides a consistent, frozen view of data for a transaction.
 - Direct NoSQL equivalent to PostgreSQL's `REPEATABLE READ` isolation level.
 - Prevents Dirty Reads and Non-Repeatable Reads anomalies.

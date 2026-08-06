@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Programming Language**
+
+**Advanced Feature** (Procedural Language Extension): PL/pgSQL is PostgreSQL's native procedural programming language adding control structures (`IF`, `LOOP`, `EXCEPTION`) and variable bindings to SQL.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Specific** (PostgreSQL's built-in PL compiler. Competes with Oracle's PL/SQL and SQL Server's Transact-SQL (T-SQL)).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard SQL is **declarative**. 
@@ -102,7 +103,7 @@ SELECT compute_factorial(5); -- Returns 120
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using PL/pgSQL loops to process data that could be updated using simple SQL set-based queries
 
@@ -162,73 +163,117 @@ SELECT pg_advisory_xact_lock(1); -- ❌ Query has no destination!
 PERFORM pg_advisory_xact_lock(1); -- Correct PL/pgSQL void execution
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Safe Division Function
+### Exercise 1: Authoring Procedural Control Logic in PL/pgSQL
 
-**Problem:** Write a PL/pgSQL stored function named `safe_divide` that accepts two numeric parameters (`numerator` and `denominator`) and returns a numeric result. 
+**Scenario:**
+Write a PL/pgSQL function `get_user_discount(user_id INT)` returning `0.20` for VIPs, `0.10` for active users, and `0.00` for default users.
 
-If the `denominator` is `0`, catch the exception using the PL/pgSQL `EXCEPTION WHEN division_by_zero` block, log a warning message, and return `0.00`.
+**Requirements:**
+1. Use `IF ... ELSIF ... ELSE ... END IF;` inside PL/pgSQL block.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE FUNCTION safe_divide(numerator NUMERIC, denominator NUMERIC)
+> CREATE OR REPLACE FUNCTION get_user_discount(p_user_id INTEGER) 
+> RETURNS NUMERIC AS $$
+> DECLARE
+>   v_total_spent NUMERIC;
+> BEGIN
+>   SELECT COALESCE(SUM(total_cents) / 100.0, 0) INTO v_total_spent 
+>   FROM orders 
+>   WHERE customer_id = p_user_id;
+>   
+>   IF v_total_spent >= 1000 THEN
+>     RETURN 0.20;
+>   ELSIF v_total_spent >= 500 THEN
+>     RETURN 0.10;
+>   ELSE
+>     RETURN 0.00;
+>   END IF;
+> END;
+> $$ LANGUAGE plpgsql;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. PL/pgSQL adds procedural language capabilities (`DECLARE`, `IF/ELSIF/ELSE`, `INTO variable`).
+> 2. `SELECT ... INTO v_total_spent` assigns query scalar outputs to local variables.
+> 3. Encapsulates business logic directly inside the database server.
+
+---
+
+### Exercise 2: Looping over Query Cursor Record Sets
+
+**Scenario:**
+Write a PL/pgSQL loop iterating over inactive users (`FOR r IN SELECT ... LOOP`) to output audit log notices.
+
+**Requirements:**
+1. Execute `FOR r IN SELECT ... LOOP ... END LOOP;`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE OR REPLACE FUNCTION audit_inactive_users() 
+> RETURNS VOID AS $$
+> DECLARE
+>   r RECORD;
+> BEGIN
+>   FOR r IN SELECT id, username FROM users WHERE is_active = FALSE LOOP
+>     RAISE NOTICE 'Inactive User Found: ID = %, Name = %', r.id, r.username;
+>   END LOOP;
+> END;
+> $$ LANGUAGE plpgsql;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `FOR record_var IN query LOOP` iterates over result set rows sequentially.
+> 2. `record_var.field` accesses individual column values of the current iteration row.
+> 3. Procedural batch processing.
+
+---
+
+### Exercise 3: Trapping Errors with Exception Blocks
+
+**Scenario:**
+Catch `division_by_zero` exceptions inside a PL/pgSQL function, returning `NULL` on error.
+
+**Requirements:**
+1. Use `EXCEPTION WHEN division_by_zero THEN RETURN NULL;`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE OR REPLACE FUNCTION safe_ratio(val1 NUMERIC, val2 NUMERIC) 
 > RETURNS NUMERIC AS $$
 > BEGIN
->   RETURN numerator / denominator;
-> EXCEPTION
->   WHEN division_by_zero THEN
->     RAISE WARNING 'Attempted to divide by zero.';
->     RETURN 0.00;
+>   RETURN val1 / val2;
+> EXCEPTION 
+>   WHEN division_by_zero THEN 
+>     RETURN NULL;
 > END;
 > $$ LANGUAGE plpgsql;
 > ```
-> - Write the division calculation inside the main `BEGIN/END` block.
-> - Append the `EXCEPTION` block at the bottom before the closing `END;` statement.
+>
+> #### Technical Explanation
+>
+> 1. `EXCEPTION WHEN error_condition THEN` intercepts runtime errors.
+> 2. Prevents unexpected exceptions from aborting the parent transaction.
+> 3. Robust procedural error handling.
 
 ---
 
 
 
-### Exercise 2: Writing Basic PL/pgSQL Function
-
-**Problem:** Create PL/pgSQL function `add_numbers(a INT, b INT)` returning integer sum `a + b`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE OR REPLACE FUNCTION add_numbers(a INT, b INT) RETURNS INT AS $$ BEGIN RETURN a + b; END; $$ LANGUAGE plpgsql;
-> ```
-> ```sql
-> CREATE OR REPLACE FUNCTION add_numbers(a INT, b INT)
-> RETURNS INT AS $$
-> BEGIN
->   RETURN a + b;
-> END;
-> $$ LANGUAGE plpgsql;
-> ```
->
-> **Explanation:** PL/pgSQL functions define procedural logic executing inside the PostgreSQL engine.
-
----
-
-### Exercise 3: SELECT INTO Variable Assignment
-
-**Problem:** Assign user `email` to variable `v_email` inside PL/pgSQL block.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT email INTO v_email FROM users WHERE id = p_user_id;
-> ```
-> ```sql
-> SELECT email INTO v_email FROM users WHERE id = p_user_id;
-> ```
->
-> **Explanation:** `SELECT col INTO var` assigns query result attributes to declared PL/pgSQL variables.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Stored Function (`CREATE FUNCTION`)](stored_function.md) — The compiling wrapper.
 - [`DO` Block (Anonymous Code Block)](do_block.md) — Running script loops on-the-fly.
 - [Stored Procedure (`CREATE PROCEDURE` / `CALL`)](stored_procedure.md) — Related concept: Stored Procedure (`CREATE PROCEDURE` / `CALL`).
@@ -236,7 +281,7 @@ If the `denominator` is `0`, catch the exception using the PL/pgSQL `EXCEPTION W
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PL/pgSQL extends SQL with variables, loops, conditionals, and catch blocks.
 - Compiles and executes entirely on the database server to save network lag.
 - Follows a structured layout: `DECLARE` (variables), `BEGIN/END` (execution).

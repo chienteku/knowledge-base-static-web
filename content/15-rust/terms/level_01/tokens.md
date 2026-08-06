@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Compiler Fundamentals**: Lexical tokens (identifiers, keywords, literals, punctuation) produced by the compiler lexer.
+
+
+**Compiler Primitive (lexical analysis building blocks)**: Lexical tokens (identifiers, keywords, literals, punctuation) produced by the compiler lexer.
 
 ---
 

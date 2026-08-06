@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Query Syntax**
+
+**Query Operator** (Array Update Filter Matching): arrayFilters specifies conditions determining which array elements to modify during update operations on embedded array fields.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Passed inside the options argument (the third parameter) of update queries. Compiled on the server to lock modifications to specific array indexes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 We have learned how to update arrays:
@@ -93,7 +94,7 @@ db.users.find({ _id: 1 });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Misaligning the variable name used in the update path with the identifier defined in arrayFilters
 
@@ -152,87 +153,100 @@ db.users.updateOne({ _id: 1 }, { $set: { "grades.$[elem].score": 90 } }); // ❌
 db.users.updateOne({ _id: 1 }, { $set: { "grades.$[elem].score": 90 } }, { arrayFilters: [{ "elem.score": { $lt: 60 } }] });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Shopping Cart Discount
+### Exercise 1: Filtering Specific Array Elements During Updates
 
-**Problem:** You have a `carts` collection containing nested items. 
-```json
-{
-  "_id": 105,
-  "items": [
-    { "name": "shirt", "price": 20 },
-    { "name": "jacket", "price": 120 }
-  ]
-}
-```
-Write the update query to locate cart `105` and reduce the `price` of all cart items costing **more than 100** by `10` (hint: use the identifier `premiumItem`).
+**Scenario:**
+Update the `score` to `100` ONLY for grades >= 90 inside a student's `grades` array.
 
-**Expected output:**
+**Requirements:**
+1. Use `arrayFilters: [{ "elem.grade": { $gte: 90 } }]` with positional `$[elem]`.
+
 > [!check]- Answer
-> ```javascript
-> db.carts.updateOne(
->   { _id: 105 },
->   { $inc: { "items.$[premiumItem].price": -10 } },
->   {
->     arrayFilters: [ { "premiumItem.price": { $gt: 100 } } ]
->   }
-> );
-> ```
-> - The identifier `premiumItem` must be placed inside the update path: `items.$[premiumItem].price`.
-> - Write the condition mapping `premiumItem.price > 100` inside `arrayFilters`.
-
----
-
-
-
-### Exercise 2: Filtered Array Sub-Document Update
-
-**Problem:** Update score to 100 for all grade sub-documents where `grade.score < 60` using `arrayFilters`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.students.updateOne({ _id: 1 }, { $set: { "grades.$[elem].score": 100 } }, { arrayFilters: [{ "elem.score": { $lt: 60 } }] });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.students.updateOne(
->   { _id: 1 },
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
 >   { $set: { "grades.$[elem].score": 100 } },
->   { arrayFilters: [{ "elem.score": { $lt: 60 } }] }
+>   { arrayFilters: [{ "elem.grade": { $gte: 90 } }] }
 > );
 > ```
 >
-> **Explanation:** `arrayFilters` identifies specific array element sub-documents matching criteria for updates.
+> #### Technical Explanation
+>
+> 1. `$[elem]` acts as an array element placeholder in the update path (`"grades.$[elem].score"`).
+> 2. `arrayFilters` specifies condition matching rules for the `elem` placeholder.
+> 3. Modifies matching array items selectively in a single atomic update.
 
 ---
 
-### Exercise 3: All Array Elements Update Operator `$[ ]`
+### Exercise 2: Updating Multiple Filtered Array Subdocuments
 
-**Problem:** Increment score by 5 for ALL items in `grades` array using `$[ ]` operator.
+**Scenario:**
+Set `status: "processed"` for all items in an order's `items` array where `qty > 5`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `arrayFilters` matching `qty > 5`.
+
 > [!check]- Answer
-> ```text
-> db.students.updateOne({ _id: 1 }, { $inc: { "grades.$[].score": 5 } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.students.updateOne({
->   _id: 1
-> }, {
->   $inc: { "grades.$[].score": 5 }
-> });
+> db.orders.updateMany(
+>   { "items.qty": { $gt: 5 } },
+>   { $set: { "items.$[item].status": "processed" } },
+>   { arrayFilters: [{ "item.qty": { $gt: 5 } }] }
+> );
 > ```
 >
-> **Explanation:** `"array.$[].field"` updates every element in the targeted array.
+> #### Technical Explanation
+>
+> 1. Target positional identifier (`$[item]`) correlates directly with array filter conditions.
+> 2. Updates multiple array elements matching criteria simultaneously.
+> 3. Eliminates whole-array replacement operations.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Updating All Array Elements with `$[]`
+
+**Scenario:**
+Increment all items' `retryCount` by 1 across all array elements in `tasks` array using global `$%5B%5D`.
+
+**Requirements:**
+1. Use `$inc: { "tasks.$[].retryCount": 1 }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.jobs.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { $inc: { "tasks.$[].retryCount": 1 } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$[]` applies the update operator unconditionally to EVERY element in the array.
+> 2. Increments subfields across all array items in a single pass.
+> 3. Fast atomic array transformation.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Update Operators (`$set`, `$unset`, `$inc`, `$rename`, `$currentDate`)](../level_03/update_operators.md) — Array update operators.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `arrayFilters` defines conditions for the filtered positional operator `$[id]`.
 - Enables conditional, bulk updates of multiple array elements.
 - The placeholder identifier (e.g., `$[item]`) acts as a dynamic index variable.

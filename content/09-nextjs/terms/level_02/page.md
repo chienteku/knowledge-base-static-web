@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing / UI Architecture**
+
+**Routing & Layouts** (Unique Route UI Component): `page.tsx` defines the UI unique to a URL route segment in the App Router directory structure.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Component (Default) or Client Component**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard React, if you want a URL like `/about` to show an About page, you have to download a third-party library like React Router, set up a massive `<Routes>` configuration file, and map the string `"/about"` to an `<About />` component.
@@ -64,7 +65,7 @@ export default function SearchPage({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `default` export
 
@@ -129,66 +130,126 @@ export default async function Page({
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Co-location
+### Exercise 1: Authoring App Router Page Components
 
-**Problem:** You have a `app/dashboard/page.tsx` file. You want to extract the complicated header into a separate component. Where is the best place to put `DashboardHeader.tsx`?
+**Scenario:**
+Create `app/dashboard/page.tsx` rendering a user dashboard overview.
 
-**Expected output:**
+**Requirements:**
+1. Export default React Server Component in `app/dashboard/page.tsx`.
+
 > [!check]- Answer
-> ```text
-> Right next to it! `app/dashboard/DashboardHeader.tsx`.
-> Because only `page.tsx` files are publicly routable, you can safely co-locate your components, styles, and tests directly inside the route folders without worrying about them becoming public URLs.
-> ```
-> - Think about what makes a folder publicly accessible.
-
----
-
-### Exercise 2: Page Props Typing Pattern
-
-**Problem:** Write TypeScript interface for `PageProps` matching dynamic route `params: { slug: string }` and optional `searchParams: { query?: string }`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> interface PageProps { params: { slug: string }; searchParams: { query?: string }; } export default async function Page({ params, searchParams }: PageProps) { return <div>{params.slug}</div>; }
-> ```
-> - `params` contains dynamic URL route segments.
-> - `searchParams` contains URL query string key-values.
-> 
-> ```tsx
-> interface PageProps {
->   params: { slug: string };
->   searchParams: { query?: string };
-> }
-> 
-> export default async function Page({ params, searchParams }: PageProps) {
->   return <div>Slug: {params.slug}, Query: {searchParams.query}</div>;
+> // app/dashboard/page.tsx
+> export default function DashboardPage() {
+>   return (
+>     <main className="p-6">
+>       <h1 className="text-3xl font-bold">Dashboard Overview</h1>
+>       <p>Welcome back to your account.</p>
+>     </main>
+>   );
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. `page.tsx` makes a folder segment in `app/` publicly accessible as a URL route (`/dashboard`).
+> 2. Must export a default React component.
+> 3. Executed as a React Server Component by default.
+
 ---
 
-### Exercise 3: searchParams Dynamic Opt-In
+### Exercise 2: Async Data Fetching inside `page.tsx`
 
-**Problem:** Why does accessing the `searchParams` prop in an App Router `page.tsx` automatically opt that page into dynamic SSR rendering?
+**Scenario:**
+Fetch data directly inside an async `page.tsx` Server Component.
 
-**Expected output:**
+**Requirements:**
+1. Declare `export default async function Page()`.
+
 > [!check]- Answer
-> ```text
-> URL query search parameters change on every HTTP request and cannot be known at static build time.
-> ```
-> - Query parameters are request-time dynamic data.
-> 
-> ```text
-> Accessing searchParams = Request-time dynamic rendering.
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> // app/users/page.tsx
+> async function getUsers() {
+>   const res = await fetch("https://api.example.com/users");
+>   return res.json();
+> }
+
+export default async function UsersPage() {
+  const users = await getUsers();
+
+  return (
+    <main className="p-6">
+      <h1 className="text-2xl font-bold">Users List</h1>
+      <ul>
+        {users.map((u: any) => (
+          <li key={u.id}>{u.name}</li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Server Component pages can be declared as `async` functions.
+> 2. Allows using `await` directly in component body to fetch data before rendering.
+> 3. Zero client JavaScript bundle overhead.
+
+---
+
+### Exercise 3: Accessing URL Query Parameters in `page.tsx`
+
+**Scenario:**
+Read search query parameter `?q=searchterm` in `app/search/page.tsx`.
+
+**Requirements:**
+1. Access `searchParams` prop in `page.tsx`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // app/search/page.tsx
+> export default async function SearchPage({
+>   searchParams
+> }: {
+>   searchParams: Promise<{ q?: string }>;
+> }) {
+>   const { q } = await searchParams;
+
+  return (
+    <main className="p-6">
+      <h1>Search Results for: {q ?? "All"}</h1>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Next.js passes `searchParams` as a Promise prop to `page.tsx` components.
+> 2. Accesses query string parameters directly on the server.
+> 3. Enables server-rendered search and pagination workflows.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`layout.tsx`](layout.md) — The UI wrapper that wraps around `page.tsx`.
 - [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — Related concept: App Router vs Pages Router.
 - [`template.tsx`](template.md) — Related concept: `template.tsx`.
@@ -199,7 +260,7 @@ export default async function Page({
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`page.tsx`** is the unique file that defines the UI for a route and makes that route publicly accessible.
 - Without a `page.tsx`, a folder is just a normal folder, not a URL path.
 - Pages are React Server Components by default, but can be Client Components if you add `"use client"`.

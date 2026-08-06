@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Tooling / FFI**: `bindgen` is the standard code-generation tool in the Rust FFI ecosystem. Instead of forcing developers to manually write hundreds of error-prone `extern "C"` blocks and `#[repr(C)]` struct translations for external C/C++ libraries (like `OpenSSL`, `SQLite`, or `Vulkan`), `bindgen` parses C headers directly via LLVM/Clang and outputs 100% accurate Rust FFI binding code (`bindings.rs`).
+
+
+**Rust FFI Tooling (automatic C header to Rust binding generator)**: `bindgen` is the standard code-generation tool in the Rust FFI ecosystem. Instead of forcing developers to manually write hundreds of error-prone `extern "C"` blocks and `#[repr(C)]` struct translations for external C/C++ libraries (like `OpenSSL`, `SQLite`, or `Vulkan`), `bindgen` parses C headers directly via LLVM/Clang and outputs 100% accurate Rust FFI binding code (`bindings.rs`).
+
+
 
 ---
 
-## 3. Environment Context
-
-**Cargo Build Script / CLI Tool**: `bindgen` is used either as a command-line tool (`bindgen header.h -o bindings.rs`) or as a `[build-dependencies]` library in Cargo projects inside `build.rs`. It runs on the host build system during `cargo build` and requires Clang installed on the system.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -152,7 +150,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Missing System Clang Dependency
 
@@ -221,16 +219,20 @@ fn main() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Safe Rust Abstraction over `bindgen`-Generated Telemetry FFI
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In an industrial IoT monitoring gateway, a C legacy SDK (`sensor_sdk.h`) provides sensor telemetry. `bindgen` translates the header into a `#[repr(C)]` struct `SensorRawData` and an `extern "C"` function signature `read_sensor_raw`. The raw C function returns integer status codes: `0` for success, `-1` for hardware disconnection, and `-2` for out-of-range sensor readings.
 
+**Requirements:**
 Write a complete, safe Rust wrapper `SensorDevice` that isolates unsafe FFI calls and converts raw C data into an idiomatic `Result<SensorMeasurement, SensorError>`. Include unit tests with `assert_eq!` and `assert!` verifying both successful telemetry processing and error propagation using a mock C ABI function implementation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::ffi::c_int;
 > 
@@ -347,7 +349,8 @@ Write a complete, safe Rust wrapper `SensorDevice` that isolates unsafe FFI call
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 
 > 1. **FFI Type Alignment**: `bindgen` converts C scalar types (`int`, `float`, `uint64_t`) to their Rust ABI equivalents (`c_int`, `f32`, `u64`) with `#[repr(C)]` layout guarantees.
 > 2. **Unsafe Isolation**: Raw FFI functions declared inside `extern "C"` are inherently `unsafe` because the Rust compiler cannot prove C pointer validity or absence of data races. We limit `unsafe` strictly to the function invocation inside `read_telemetry()`.
@@ -358,12 +361,16 @@ Write a complete, safe Rust wrapper `SensorDevice` that isolates unsafe FFI call
 
 ### Exercise 2: `bindgen::Builder` Configuration with Opaque Handles & RAII Resource Management
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In a high-performance network security engine, you are integrating `packet_filter.h`. The C header references internal OS header definitions that pollute bindings if parsed globally. Furthermore, the filter engine uses an internal state structure `filter_context_t` that should be treated as opaque to callers.
 
+**Requirements:**
 Configure the `build.rs` `bindgen::Builder` pipeline to filter symbols and mark opaque handles. Then implement a safe Rust `PacketFilterEngine` wrapper that implements `Drop` to automatically call `filter_cleanup()` when the handle leaves scope, verified via unit tests with `assert_eq!` and `assert!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::ffi::c_int;
 > 
@@ -520,7 +527,8 @@ Configure the `build.rs` `bindgen::Builder` pipeline to filter symbols and mark 
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 
 > 1. **`build.rs` Builder Customization**: The `bindgen::Builder` in `build.rs` uses `.allowlist_function("filter_.*")` and `.allowlist_type("filter_.*")` to restrict parsing exclusively to matching public symbols. `.opaque_type("filter_context_t")` forces `bindgen` to hide internal C fields and replace them with a correctly aligned array blob (`_bindgen_opaque_blob`).
 > 2. **RAII Resource Management**: C libraries require explicit destruction functions (e.g. `filter_cleanup`). By implementing the `Drop` trait on `PacketFilterEngine`, Rust guarantees automatic call of the foreign cleanup function when the handle goes out of scope, preventing C memory leaks.
@@ -530,15 +538,19 @@ Configure the `build.rs` `bindgen::Builder` pipeline to filter symbols and mark 
 
 ### Exercise 3: Packed Memory Alignment Verification & `#![no_std]` CAN Bus Protocol Frame
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In an embedded aerospace telemetry controller (`#![no_std]`), `bindgen` generates Rust FFI bindings for packed C structures (`__attribute__((packed))`) representing Controller Area Network (CAN) frames. Mismatches in memory layout or struct padding between target architectures (e.g. ARM Cortex-M microcontrollers vs x86 build hosts) cause silent memory corruptions.
 
+**Requirements:**
 Write a `#![no_std]` compatible Rust module that:
 1. Defines a `#[repr(C, packed)]` `CanFrame` struct matching C packing requirements (`can_id: u32`, `dlc: u8`, `payload: [u8; 8]`, `timestamp_us: u16`, `flags: u8`).
 2. Implements `bindgen`-style memory layout verification tests using `core::mem::size_of` and `core::mem::align_of` with `assert_eq!`.
 3. Demonstrates safe zero-copy deserialization from a raw binary buffer with endianness conversion.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -655,7 +667,8 @@ Write a `#![no_std]` compatible Rust module that:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 
 > 1. **Packed Memory Attribute**: `#[repr(C, packed)]` instructs the Rust compiler to match GCC/Clang `__attribute__((packed))`. It removes padding bytes between struct members, reducing total struct size to exactly 16 bytes and setting alignment to 1 byte.
 > 2. **Unaligned Memory Safety**: Direct references to fields in `#[repr(packed)]` structs can cause Undefined Behavior on architectures requiring word alignment (like ARM Cortex-M). We use `core::ptr::copy_nonoverlapping` to copy raw bytes safely into a stack variable.
@@ -664,7 +677,7 @@ Write a `#![no_std]` compatible Rust module that:
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`cbindgen`](cbindgen.md) — The inverse tool (generates C headers from Rust code).
@@ -674,7 +687,7 @@ Write a `#![no_std]` compatible Rust module that:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `bindgen` parses C/C++ header files using Clang to automatically generate Rust FFI bindings.
 - It converts C structs into `#[repr(C)]` Rust structs and C functions into `extern "C"` declarations.

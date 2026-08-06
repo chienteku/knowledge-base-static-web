@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Data Type (SurrealDB native type system overview)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Enforced during query parsing on write operations. Prevents data corruption by validating types before writing BSON key blocks to disk).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational databases (like PostgreSQL) have rigid type systems. 
@@ -106,7 +105,7 @@ DEFINE FIELD manager ON user TYPE record<user>; // Link pointing to another user
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming SurrealDB does not validate types in 'SCHEMALESS' tables
 
@@ -157,66 +156,106 @@ SELECT * FROM user WHERE bio = NULL; // Misses records where bio is NONE!
 SELECT * FROM user WHERE bio = NONE OR bio = NULL;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Relational & Document Type Mapping
+### Exercise 1: Native Type Enforcement Schema
 
-**Problem:** You are planning data mappings. 
-Map these SurrealDB type declarations to their closest equivalent in **PostgreSQL** and **MongoDB**:
-1.  `TYPE string`
-2.  `TYPE record<company>`
-3.  `TYPE array<string>`
+**Scenario:**
+You are building an e-commerce inventory product schema requiring strong data type definitions for text, currency decimals, integer stock, and ISO datetimes.
 
-**Expected output:**
+**Requirements:**
+1. Define table `inventory` in `SCHEMAFULL` mode.
+2. Define field `sku` as `string`.
+3. Define field `unit_cost` as `decimal`.
+4. Define field `quantity` as `int`.
+5. Define field `last_restocked` as `datetime`.
+
 > [!check]- Answer
-> ```text
-> 1. - PostgreSQL: TEXT (or VARCHAR)
->    - MongoDB: String
-> 2. - PostgreSQL: FOREIGN KEY referencing table 'company'
->    - MongoDB: ObjectId reference string linking to 'company' collection
-> 3. - PostgreSQL: TEXT[] (Array of TEXT)
->    - MongoDB: Array of Strings
-> ```
-> - A record type represents a direct pointer reference.
-> - Consider how arrays are handled in SQL columns vs NoSQL documents.
-
----
-
-
-
-### Exercise 2: SurrealDB Native Types Overview
-
-**Problem:** List 4 native data types supported in SurrealDB (datetime, duration, geometry, record link).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> datetime, duration, geometry, record link
-> ```
-> ```text
-> datetime, duration, geometry, record link
-> ```
 >
-> **Explanation:** SurrealDB extends standard JSON data types with rich native primitives.
-
----
-
-### Exercise 3: Inspecting Field Value Type with `type::of()`
-
-**Problem:** Inspect data type of `d"2026-01-01T00:00:00Z"` using `type::of()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> "datetime"
-> ```
+> #### Implementation
+>
 > ```surrealql
-> RETURN type::of(d"2026-01-01T00:00:00Z");
+> DEFINE TABLE inventory SCHEMAFULL;
+> DEFINE FIELD sku ON TABLE inventory TYPE string;
+> DEFINE FIELD unit_cost ON TABLE inventory TYPE decimal;
+> DEFINE FIELD quantity ON TABLE inventory TYPE int;
+> DEFINE FIELD last_restocked ON TABLE inventory TYPE datetime;
+> 
+> CREATE inventory:inv1 SET 
+>     sku = "KEY-MECH-01",
+>     unit_cost = 89.99dec,
+>     quantity = 150,
+>     last_restocked = time::now();
 > ```
 >
-> **Explanation:** `type::of()` returns the SurrealDB data type string of any value.
+> #### Technical Explanation
+>
+> 1. SurrealDB features a rich native type system (`string`, `decimal`, `int`, `datetime`, `record`, `geometry`).
+> 2. `decimal` avoids binary floating-point rounding errors inherent to currency calculations.
+> 3. Strict field types prevent schema corruption during application write operations.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Type Coercion Error Handling
+
+**Scenario:**
+Test SurrealDB's type enforcement by attempting to write a string `"one hundred"` into an integer `int` field.
+
+**Requirements:**
+1. Create table `test_type` in `SCHEMAFULL` mode with field `val` of type `int`.
+2. Show the invalid creation query and verify that SurrealDB throws a type mismatch error.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE test_type SCHEMAFULL;
+> DEFINE FIELD val ON TABLE test_type TYPE int;
+> 
+> -- This query will FAIL with a type mismatch error:
+> -- "Expected a int but found 'one hundred'"
+> CREATE test_type:1 SET val = "one hundred";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. In `SCHEMAFULL` mode, SurrealDB validates field data types at write time before committing transactions.
+> 2. Unconvertible data types are rejected immediately, protecting database integrity.
+> 3. Valid numeric strings (e.g. `"100"`) may be auto-coerced depending on strictness settings.
+
+---
+
+### Exercise 3: Inspecting Field Types via `INFO FOR TABLE`
+
+**Scenario:**
+A database developer needs to introspect the schema of an existing table to audit field type definitions.
+
+**Requirements:**
+1. Run the `INFO FOR TABLE` statement for table `inventory`.
+2. Inspect the output object to verify defined field data types.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> INFO FOR TABLE inventory;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `INFO FOR TABLE` outputs an object listing all defined fields, types, assertions, and default values.
+> 2. Facilitates automated schema inspection and type auditing in CI/CD pipelines.
+> 3. Helps developers verify type definitions before running data migration scripts.
+
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [Record ID (`table:id`)](../level_01/record_id.md) — The composite identifier.
 - [Type Casting & Coercion](type_casting.md) — Converting between types.
@@ -232,7 +271,7 @@ Map these SurrealDB type declarations to their closest equivalent in **PostgreSQ
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SurrealDB's type system combines relational structure with NoSQL flexibility.
 - Supports primitives, temporal data, containers, references, and null states.
 - Type definitions are declared using the `TYPE` clause in `DEFINE FIELD`.

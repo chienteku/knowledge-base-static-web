@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Data Mutation / UI**
+
+**Data Mutation & Actions** (HTML Form Action Handler): Form Actions integrate native HTML `<form action>` attributes directly with async Server Actions for progressive form enhancement.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Component or Client Component**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional React, form submission requires capturing the `onSubmit` event, calling `e.preventDefault()`, tracking the state of every input using `useState` or `useRef`, and manually building a JSON object to send to the server.
@@ -62,7 +63,7 @@ Because Form Actions are built on top of native HTML forms, they feature **Progr
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting the `name` attribute
 
@@ -112,77 +113,143 @@ console.log(age + 5); // 30
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multiple Submit Buttons
+### Exercise 1: Native Form Enhancement with Server Actions
 
-**Problem:** You have a form with a "Save as Draft" button and a "Publish" button. How can you trigger different Server Actions depending on which button is clicked?
+**Scenario:**
+Create an HTML `<form action={handleSubmit}>` invoking an inline Server Action for progressive enhancement.
 
-**Expected output:**
+**Requirements:**
+1. Pass Server Action directly to `<form action>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> <form action={defaultAction}>
->   <input name="title" />
->   
->   {/* The formAction prop overrides the form's action! */}
->   <button formAction={saveDraftAction}>Save as Draft</button>
->   <button formAction={publishAction}>Publish</button>
-> </form>
-> ```
-> - Native HTML buttons have a specific attribute that overrides the form's action.
+> // app/subscribe/page.tsx
+> export default function SubscribePage() {
+>   async function handleSubmit(formData: FormData) {
+>     "use server";
+>     const email = formData.get("email");
+>     console.log(`Subscribed: ${email}`);
+>   }
+
+  return (
+    <form action={handleSubmit} className="p-4 space-y-4">
+      <input name="email" type="email" placeholder="Enter email" required />
+      <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
+        Subscribe
+      </button>
+    </form>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `<form action={handleSubmit}>` binds form submissions directly to server-side execution.
+> 2. Works natively without client JavaScript enabled (progressive enhancement).
+> 3. Automatically serializes form input data into a `FormData` object.
 
 ---
 
-### Exercise 2: Native Form Action Progressive Enhancement
+### Exercise 2: Programmatically Resetting Form Inputs Post-Submission
 
-**Problem:** Why do Next.js `<form action={serverAction}>` forms function even if JavaScript is disabled in the browser?
+**Scenario:**
+Reset form input fields after successful Server Action execution using `useRef()`.
 
-**Expected output:**
+**Requirements:**
+1. Call `formRef.current?.reset()` in Client Component handler.
+
 > [!check]- Answer
-> ```text
-> Next.js server actions leverage standard HTML native form POST submission mechanisms, enabling progressive enhancement when JS is disabled.
-> ```
-> - Native HTML `<form action>` submits POST requests without browser JS.
-> 
-> ```text
-> JS Enabled: Client fetch action submission;
-> JS Disabled: Native HTML POST submission.
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { useRef } from "react";
+
+export default function ClientForm({
+  action
+}: {
+  action: (formData: FormData) => Promise<void>;
+}) {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  async function handleAction(formData: FormData) {
+    await action(formData);
+    formRef.current?.reset(); // Resets form fields after action resolves
+  }
+
+  return (
+    <form ref={formRef} action={handleAction}>
+      <input name="title" required />
+      <button type="submit">Add Item</button>
+    </form>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `formRef.current.reset()` clears input values after the async action completes.
+> 2. Wrapping the action call in a client handler allows orchestrating client-side UI resets.
+> 3. Standard interactive form submission pattern.
 
 ---
 
-### Exercise 3: FormData Extraction Pattern
+### Exercise 3: Binding Extra Arguments to Form Actions with `.bind()`
 
-**Problem:** Write Server Action `createUser(formData: FormData)` extracting string `email` and `name`.
+**Scenario:**
+Pass additional static parameters (e.g. `itemId`) to a Server Action using `action.bind(null, itemId)`.
 
-**Expected output:**
+**Requirements:**
+1. Bind extra argument to Server Action in `<form action>`.
+
 > [!check]- Answer
-> ```typescript
-> 'use server'; export async function createUser(formData: FormData) { const email = formData.get('email') as string; const name = formData.get('name') as string; await db.user.create({ data: { email, name } }); }
-> ```
-> - `formData.get('key')` extracts submitted form input fields.
-> 
-> ```typescript
-> 'use server';
-> 
-> export async function createUser(formData: FormData) {
->   const email = formData.get('email') as string;
->   const name = formData.get('name') as string;
->   await db.user.create({ data: { email, name } });
-> }
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> // app/items/page.tsx
+> import { updateItemAction } from "@/app/actions/items";
+
+export default function ItemCard({ itemId }: { itemId: string }) {
+  const updateWithId = updateItemAction.bind(null, itemId);
+
+  return (
+    <form action={updateWithId}>
+      <input name="name" defaultValue="Updated Item" />
+      <button type="submit">Update #{itemId}</button>
+    </form>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `Function.prototype.bind()` prepends arguments to Server Actions without using hidden form input fields.
+> 2. The server receives `itemId` as the first function argument and `formData` as the second.
+> 3. Secure method for passing contextual IDs to form mutations.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Server Actions Overview (`"use server"`)](server_actions.md) — The target of the Form Action.
 - [`useFormStatus` Hook](use_form_status.md) — How to show a loading spinner while the action is running.
 - [Zod (Schema Validation)](zod_validation.md) — Zod schema validation.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Form Actions** allow you to pass a Server Action directly into the `<form action={...}>` prop.
 - The Server Action automatically receives a native **`FormData`** object containing the form's data.
 - Inputs must have a `name` attribute to be included in the `FormData`.

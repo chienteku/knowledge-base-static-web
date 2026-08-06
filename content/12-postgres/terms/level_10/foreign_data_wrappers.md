@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Feature / Abstraction Layer**
+
+**Advanced Feature** (Federated Cross-Database Queries): Foreign Data Wrappers (`postgres_fdw`) query remote external PostgreSQL or foreign databases as local tables.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Standardized by SQL/MED (Management of External Data). The built-in **`postgres_fdw`** extension handles connections between separate PostgreSQL instances over standard network ports).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In large companies, databases are split across separate servers:
@@ -93,7 +94,7 @@ SELECT * FROM foreign_invoices WHERE amount > 500.00;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Executing complex joins and aggregates on foreign tables without checking network bandwidth costs
 
@@ -141,69 +142,109 @@ Filter remote tables explicitly or use materialized views
 Restrict pg_user_mappings catalog permissions or use SSL certificates
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Connection Script Setup
+### Exercise 1: Querying Remote PostgreSQL Databases with `postgres_fdw`
 
-**Problem:** You are linking a remote database named `user_directory` located on host `10.0.0.50` to your local PostgreSQL server. 
-Write the SQL DDL command to create the foreign server object named `remote_user_server` utilizing the standard `postgres_fdw` wrapper.
+**Scenario:**
+Configure `postgres_fdw` to connect local database `analytics` to remote database `production_db`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE EXTENSION postgres_fdw`, `CREATE SERVER`, `CREATE USER MAPPING`, `IMPORT FOREIGN SCHEMA`.
+
 > [!check]- Answer
-> ```sql
-> CREATE SERVER remote_user_server
-> FOREIGN DATA WRAPPER postgres_fdw
-> OPTIONS (host '10.0.0.50', port '5432', dbname 'user_directory');
-> ```
-> - Use the `CREATE SERVER` statement targeting the IP address.
-> - Specify `postgres_fdw` as the foreign data wrapper type.
-
----
-
-
-
-### Exercise 2: Postgres FDW Setup Sequence
-
-**Problem:** List 4 DDL steps to query remote PostgreSQL server via FDW (1. `CREATE EXTENSION postgres_fdw`; 2. `CREATE SERVER`; 3. `CREATE USER MAPPING`; 4. `IMPORT FOREIGN SCHEMA` / `CREATE FOREIGN TABLE`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. CREATE EXTENSION postgres_fdw; 2. CREATE SERVER; 3. CREATE USER MAPPING; 4. IMPORT FOREIGN SCHEMA
-> ```
+>
+> #### Implementation
+>
 > ```sql
 > CREATE EXTENSION IF NOT EXISTS postgres_fdw;
-> CREATE SERVER remote_server FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host 'remote.com', dbname 'prod');
-> CREATE USER MAPPING FOR current_user SERVER remote_server OPTIONS (user 'app', password 'secret');
-> IMPORT FOREIGN SCHEMA public FROM SERVER remote_server INTO remote_schema;
+> 
+> CREATE SERVER prod_server 
+> FOREIGN DATA WRAPPER postgres_fdw 
+> OPTIONS (host 'db.prod.example.com', port '5432', dbname 'production_db');
+> 
+> CREATE USER MAPPING FOR CURRENT_USER 
+> SERVER prod_server 
+> OPTIONS (user 'app_reader', password 'SecretPass123!');
+> 
+> IMPORT FOREIGN SCHEMA public 
+> FROM SERVER prod_server 
+> INTO public;
 > ```
 >
-> **Explanation:** `postgres_fdw` connects local PostgreSQL instances to remote foreign databases.
+> #### Technical Explanation
+>
+> 1. Foreign Data Wrappers (FDW) implement ANSI SQL/MED (Management of External Data) specifications.
+> 2. `postgres_fdw` allows local queries to read and join tables residing on remote PostgreSQL servers transparently.
+> 3. Enables federated multi-database querying.
 
 ---
 
-### Exercise 3: FDW Predicate Pushdown Concept
+### Exercise 2: Querying Remote Foreign Tables in SQL
 
-**Problem:** What is FDW Predicate Pushdown? (Pushes WHERE filters and joins to remote server for execution).
+**Scenario:**
+Execute a local `SELECT` query joining local table `reports` with remote foreign table `orders`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT * FROM orders` over foreign table.
+
 > [!check]- Answer
-> ```text
-> Pushes WHERE filters and joins to remote server for remote execution
-> ```
-> ```text
-> Pushes WHERE filters and joins to remote server for remote execution
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   r.report_name, 
+>   o.id AS remote_order_id, 
+>   o.total_cents 
+> FROM local_reports AS r 
+> JOIN orders AS o ON r.order_id = o.id;
 > ```
 >
-> **Explanation:** Predicate pushdown minimizes network bandwidth by evaluating filters on remote database servers.
+> #### Technical Explanation
+>
+> 1. Foreign tables behave like standard local tables in SQL queries.
+> 2. `postgres_fdw` pushes filtering predicates (`WHERE`) and projections down to the remote server automatically (`Predicate Pushdown`).
+> 3. Reduces network data transfer overhead.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Cross-Database Querying Limits and Performance
+
+**Scenario:**
+Explain why heavy multi-table joins across foreign tables can suffer from network latency compared to local joins.
+
+**Requirements:**
+1. Contrast local memory heap scans vs TCP network socket latency.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> FDW Performance Analysis:
+> - Local Joins: Read from shared_buffers RAM in nanoseconds.
+> - FDW Remote Joins: Fetch data over TCP network sockets in milliseconds.
+> Optimization: Use 'IMPORT FOREIGN SCHEMA' selectively; use Materialized Views to cache remote FDW data locally for analytics!
+> ```
+>
+> #### Technical Explanation
+>
+> 1. FDW queries depend on remote server CPU and network link throughput.
+> 2. Materializing FDW query results into a local Materialized View eliminates network latency for reporting dashboards.
+> 3. Federated database architecture pattern.
+
+---
+
+
+
+## 6. Related Terms
 - [Extensions (`CREATE EXTENSION`)](extensions.md) — The packaging system.
 - [Table (Relation)](../level_01/table.md) — The base data grid.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Foreign Data Wrappers (FDW) allow querying remote data sources in SQL.
 - Mounts external databases, CSV files, or APIs as local tables.
 - `postgres_fdw` is the built-in extension used to link separate Postgres servers.

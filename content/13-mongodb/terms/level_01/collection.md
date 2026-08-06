@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Core Concept** (Document Grouping Structure): A Collection is a logical grouping of MongoDB BSON documents, serving as the document-oriented equivalent of a relational database table.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported conceptually by all document databases. Stored physically as separate logical files on disk managed by the storage engine).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational databases, rows are stored inside **Tables**. 
@@ -74,7 +75,7 @@ Database
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating a separate collection for every single category variation of a document type
 
@@ -87,6 +88,8 @@ By creating separate collections, you make it impossible to run a single search 
 **Fix: Create a single, unified `products` collection. Let MongoDB's flexible schema handle the differing shoe sizes or book page counts inside the individual documents.**
 
 ---
+
+
 
 
 
@@ -105,6 +108,8 @@ db.createCollection(`user_logs_${userId}`); // ❌ Collection sprawl anti-patter
 ```javascript
 db.user_logs.insertOne({ userId: userId, logData: data }); // Single shared collection with userId field
 ```
+
+
 
 ### Mistake 3: Assuming Collections Require Explicit Creation Before Data Insertion
 
@@ -125,97 +130,90 @@ await db.users.insertOne({ name: "Alice" }); // Collection implicitly created on
 
 
 
-### Mistake 4: Creating Hundreds of Thousands of Small Collections (Collection Explosion)
+## 5. Practice Exercises
 
-**The mistake:** Creating a separate collection for every single user (e.g. `user_logs_user1`, `user_logs_user2`).
+### Exercise 1: Collection Creation with Capped Limits
 
-**Why it's wrong:** Each collection incurs index metadata overhead and wiredTiger cache tracking costs. Hundreds of thousands of collections degrade cluster performance.
+**Scenario:**
+An application logging service creates a capped collection `system_logs` to maintain a fixed 50MB log buffer.
 
-*Incorrect:*
-```javascript
-db.createCollection(`user_logs_${userId}`); // ❌ Collection sprawl anti-pattern!
-```
+**Requirements:**
+1. Create collection `system_logs` with `capped: true`, `size: 52428800`.
 
-*Fix:*
-```javascript
-db.user_logs.insertOne({ userId: userId, logData: data }); // Single shared collection with userId field
-```
-
-### Mistake 5: Assuming Collections Require Explicit Creation Before Data Insertion
-
-**The mistake:** Calling `db.createCollection('users')` before executing `db.users.insertOne()`.
-
-**Why it's wrong:** MongoDB automatically creates collections on first document insertion or index creation.
-
-*Incorrect:*
-```javascript
-await db.createCollection("users");
-await db.users.insertOne({ name: "Alice" }); // Redundant createCollection call
-```
-
-*Fix:*
-```javascript
-await db.users.insertOne({ name: "Alice" }); // Collection implicitly created on insert
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Analogy Mapping
-
-**Problem:** Match the MongoDB concepts to their closest PostgreSQL relational database analogies:
-1.  Collection
-2.  Document
-3.  Field
-4.  Database
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Collection -> Table
-> 2. Document -> Row
-> 3. Field -> Column
-> 4. Database -> Database
+>
+> #### Implementation
+>
+> ```javascript
+> db.createCollection("system_logs", {
+>   capped: true,
+>   size: 52428800, // 50 MB
+>   max: 100000     // Max 100,000 documents
+> });
 > ```
-> - Identify which object acts as the parent container on disk.
-> - Relate single record entries to their grid counterparts.
+>
+> #### Technical Explanation
+>
+> 1. Capped collections maintain fixed allocation sizes on disk.
+> 2. Automatically overwrites oldest documents when max size or document count limits are reached.
+> 3. Guarantees natural insertion order without index maintenance overhead.
+
+---
+
+### Exercise 2: Inspecting Collection Storage Statistics
+
+**Scenario:**
+Analyze storage metrics for collection `orders` to evaluate disk space utilization and index size.
+
+**Requirements:**
+1. Execute `db.orders.stats()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const stats = db.orders.stats();
+> console.log("Document Count:", stats.count);
+> console.log("Storage Size (Bytes):", stats.storageSize);
+> console.log("Total Index Size (Bytes):", stats.totalIndexSize);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `db.collection.stats()` extracts storage engine statistics (WiredTiger page sizes, index footprints).
+> 2. Identifies bloated indexes and uncompressed collection storage.
+> 3. Guides index pruning and disk capacity planning.
+
+---
+
+### Exercise 3: Dropping Collections Cleanly
+
+**Scenario:**
+Drop temporary collection `temp_imports` to free database storage space.
+
+**Requirements:**
+1. Execute `db.temp_imports.drop()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.temp_imports.drop();
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `drop()` removes collection metadata and frees allocated storage pages.
+> 2. Automatically drops all associated secondary indexes.
+> 3. Reclaims WiredTiger disk space allocation.
 
 ---
 
 
 
-### Exercise 2: Capped Collection Creation
-
-**Problem:** Create a capped collection `system_logs` capped at 5MB (5242880 bytes).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.createCollection("system_logs", { capped: true, size: 5242880 });
-> ```
-> ```javascript
-> db.createCollection("system_logs", { capped: true, size: 5242880 });
-> ```
->
-> **Explanation:** Capped collections maintain fixed-size circular buffers that overwrite oldest documents automatically.
-
----
-
-### Exercise 3: Dropping Collection Safely
-
-**Problem:** Drop collection `temp_data` from database.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.temp_data.drop();
-> ```
-> ```javascript
-> db.temp_data.drop();
-> ```
->
-> **Explanation:** `db.collection.drop()` deletes the collection and all its associated indexes.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Document](document.md) — The core data record.
 - [Database (MongoDB Context)](database_context.md) — The parent namespace.
@@ -226,7 +224,7 @@ await db.users.insertOne({ name: "Alice" }); // Collection implicitly created on
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Collection is a logical container for documents in MongoDB.
 - Analogous to a table in PostgreSQL, but schema-less by default.
 - Does not enforce identical fields across documents in the collection.

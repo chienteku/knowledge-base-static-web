@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Configuration / Tooling**
+
+**Compiler Configuration** (Master TypeScript Compiler Config): `tsconfig.json` configures compiler options (`strict`, `target`, `module`, `paths`) controlling type-checking strictness and JavaScript transpilation output.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Project Root / Build-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you run `tsc app.ts`, the compiler will just use its default, somewhat lenient settings. But what if you are writing code for an old Internet Explorer browser and need the JS output to be ES5? What if you want the compiler to be incredibly strict? What if you want to include `.ts` files in the `/src` folder but completely ignore the `/tests` folder?
@@ -52,7 +53,7 @@ This is the single most important setting in TypeScript. By default, TypeScript 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not reading the default `tsconfig`
 
@@ -99,63 +100,113 @@ This is the single most important setting in TypeScript. By default, TypeScript 
 { "compilerOptions": { "moduleResolution": "bundler" } }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Base URL
+### Exercise 1: Authoring Strict `tsconfig.json` Compiler Configurations
 
-**Problem:** You hate writing `import Button from '../../../components/Button'`. You want to write `import Button from '@/components/Button'`. What `compilerOptions` in `tsconfig.json` make this possible?
+**Scenario:**
+Configure a production-ready `tsconfig.json` file enforcing strict mode, ESNext module resolution, and path aliases.
 
-**Expected output:**
+**Requirements:**
+1. Set `"strict": true`, `"moduleResolution": "node"`, and `"paths"`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```json
 > {
 >   "compilerOptions": {
+>     "target": "ES2022",
+>     "module": "NodeNext",
+>     "moduleResolution": "NodeNext",
+>     "strict": true,
+>     "noImplicitAny": true,
+>     "strictNullChecks": true,
+>     "outDir": "./dist",
 >     "baseUrl": ".",
 >     "paths": {
 >       "@/*": ["src/*"]
 >     }
->   }
+>   },
+>   "include": ["src/**/*"]
 > }
 > ```
-> - Look up `baseUrl` and `paths`.
+
+> #### Technical Explanation
+>
+> 1. `"strict": true` enables a suite of strict type-checking behavior (including `noImplicitAny` and `strictNullChecks`).
+> 2. `"paths"` configures import aliases (`@/components/Button`) relative to `"baseUrl"`.
+> 3. `"outDir"` specifies where transpiled `.js` and `.d.ts` output files are placed.
+
+---
+
+### Exercise 2: Preventing Null and Undefined Runtime Crashes with `strictNullChecks`
+
+**Scenario:**
+Demonstrate how enabling `"strictNullChecks": true` in `tsconfig.json` prevents accessing properties on possibly `null` variables.
+
+**Requirements:**
+1. Show compile error when accessing property on `string | null`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function processName(name: string | null) {
+>   // ❌ Compile error under strictNullChecks: Object is possibly 'null'.
+>   // return name.toUpperCase();
+> 
+>   // ✅ CORRECT (Narrow null type first):
+>   if (name !== null) {
+>     return name.toUpperCase();
+>   }
+>   return "GUEST";
+> }
+> ```
+
+> #### Technical Explanation
+>
+> 1. When `strictNullChecks` is `false`, `null` and `undefined` are assignable to all types, masking potential `TypeError` crashes.
+> 2. When `strictNullChecks` is `true`, `null` and `undefined` must be explicitly handled or narrowed.
+> 3. Single most important security option in `tsconfig.json`.
+
+---
+
+### Exercise 3: Extending Common Configurations with `extends`
+
+**Scenario:**
+Extend a base `tsconfig.json` configuration file inside a monorepo package using `"extends"`.
+
+**Requirements:**
+1. Configure `"extends": "@repo/tsconfig/base.json"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```json
+> {
+>   "extends": "@repo/tsconfig/base.json",
+>   "compilerOptions": {
+>     "outDir": "./dist"
+>   },
+>   "include": ["src/**/*"]
+> }
+> ```
+
+> #### Technical Explanation
+>
+> 1. `"extends"` inherits compiler options from shared base configuration packages.
+> 2. Overrides specific properties (`outDir`) for package-specific needs.
+> 3. Standard monorepo configuration management pattern.
 
 ---
 
 
 
-### Exercise 2: Inspecting Critical Compiler Flags
-
-**Problem:** Name 2 critical strictness flags enabled by `"strict": true` (`strictNullChecks`, `noImplicitAny`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> strictNullChecks, noImplicitAny
-> ```
-> ```typescript
-> console.log("strictNullChecks, noImplicitAny");
-> ```
->
-> **Explanation:** `strict: true` activates family of safety enforcement compiler flags.
-
----
-
-### Exercise 3: Configuring Output Directories
-
-**Problem:** Specify compiler option key to redirect compiled JS files into `./dist` directory (`outDir`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> outDir: "./dist"
-> ```
-> ```typescript
-> console.log('outDir: "./dist"');
-> ```
->
-> **Explanation:** `outDir` specifies target folder location for compiled JavaScript artifacts.
-
-## 7. Related Terms
+## 6. Related Terms
 - [The TypeScript Compiler (`tsc`)](tsc.md) — The tool that reads this file.
 - [Strict Mode](../level_11/strict_mode.md) — The specific flag that determines the quality of your entire project.
 - [Declaration Files (`.d.ts`)](../level_11/declaration_files.md) — Related concept: Declaration Files (`.d.ts`).
@@ -164,7 +215,7 @@ This is the single most important setting in TypeScript. By default, TypeScript 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`tsconfig.json`** is the root configuration file that defines a TypeScript project.
 - It tells `tsc` which files to compile (`include`/`exclude`) and what rules to follow (`compilerOptions`).
 - `"target"` defines the specific version of JavaScript you want the compiler to emit (e.g., `es5`, `es6`, `es2022`).

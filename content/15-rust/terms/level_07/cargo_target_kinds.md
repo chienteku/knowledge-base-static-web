@@ -117,7 +117,7 @@ cargo run --bin tool # Specify target explicitly!
 
 ### Exercise 1: Predict How Many Crates Get Compiled
 
-**Problem:** A package has `src/lib.rs`, `src/main.rs`, two files in `examples/` (`demo1.rs`, `demo2.rs`), and one file in `tests/` (`api_tests.rs`). Running `cargo build --all-targets` compiles how many separate crates, and what kind is each?
+**Scenario:** A package has `src/lib.rs`, `src/main.rs`, two files in `examples/` (`demo1.rs`, `demo2.rs`), and one file in `tests/` (`api_tests.rs`). Running `cargo build --all-targets` compiles how many separate crates, and what kind is each?
 
 > [!check]- Answer
 > **5 separate crates**: 1 library (`src/lib.rs`), 1 binary (`src/main.rs`), 2 examples (`demo1.rs`, `demo2.rs`, each its own crate), and 1 integration-test crate (`api_tests.rs`). Each is compiled and linked independently — for instance, both example crates and the test crate would each separately link against the library crate as an external dependency, exactly as an outside consumer of the library would.
@@ -126,7 +126,7 @@ cargo run --bin tool # Specify target explicitly!
 
 ### Exercise 2: Configuring Multiple Binary Targets
 
-**Problem:**
+**Scenario:**
 A package can expose multiple binary executables from a single `Cargo.toml`. The auto-discovery rule is: every `.rs` file directly inside `src/bin/` becomes a binary named after the file (no path required). You use `[[bin]]` to customize names or use non-standard paths.
 
 You are building a dev-tools package with three executables:
@@ -160,7 +160,7 @@ Write the `Cargo.toml` fragment covering all three, then answer: if you run `car
 
 ### Exercise 3: The `examples/` Target Kind — Workflow and Purpose
 
-**Problem:**
+**Scenario:**
 The `examples/` directory is a distinct target kind from `src/bin/`. Both produce runnable binaries, but they serve different purposes and have different behaviours.
 
 Answer the following:
@@ -191,7 +191,8 @@ Answer the following:
 > | Appears in `cargo doc` | No | No |
 > | Convention | Ship it to users | Show users how to use your library |
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > `examples/` is the Rust equivalent of a "getting started" code snippet that actually compiles and runs. Many popular crates (`tokio`, `axum`, `serde`) ship dozens of examples that serve as living documentation — they are guaranteed correct because they compile against the real library.
 
 ---

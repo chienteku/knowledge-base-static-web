@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Schema & Modeling (table schema and mode definition)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Executed by the database administrator. Updates database system configuration catalog tables instantly on the server).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational databases (PostgreSQL), creating a table requires defining a fixed layout of columns and constraints inside a `CREATE TABLE` query. 
@@ -84,7 +83,7 @@ DEFINE TABLE likes TYPE RELATION FROM user TO post;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to relate records using 'RELATE' in schema-full mode before explicitly defining the relation table, causing query failures
 
@@ -138,60 +137,87 @@ DEFINE TABLE user PERMISSIONS FULL; // ❌ Public access!
 DEFINE TABLE user PERMISSIONS FOR select WHERE id = $auth.id OR $auth.role = 'admin';
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Table Definition Assembly
+### Exercise 1: Defining SCHEMAFULL vs SCHEMALESS Tables
 
-**Problem:** Write the SurrealQL statements to:
-1.  Define a table named `comments` in `SCHEMAFULL` mode.
-2.  Define a relation table named `wrote` that connects only `user` records to `comments` records.
+**Scenario:**
+Create a strict `SCHEMAFULL` user table and a flexible `SCHEMALESS` log table in SurrealDB.
 
-**Expected output:**
+**Requirements:**
+1. Define table `user` as `SCHEMAFULL`.
+2. Define table `event_log` as `SCHEMALESS`.
+
 > [!check]- Answer
-> ```sql
-> DEFINE TABLE comments SCHEMAFULL;
-> DEFINE TABLE wrote TYPE RELATION FROM user TO comments;
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE TABLE event_log SCHEMALESS;
 > ```
-> - The graph connection table requires `TYPE RELATION` configurations.
-> - Specify the source (`FROM`) and target (`TO`) boundaries.
+>
+> #### Technical Explanation
+>
+> 1. `SCHEMAFULL` mode rejects writes containing fields not explicitly defined with `DEFINE FIELD`.
+> 2. `SCHEMALESS` mode (default) accepts any arbitrary JSON fields dynamically.
+> 3. Allows developers to mix strict relational entities and dynamic document stores in the same database.
+
+---
+
+### Exercise 2: Defining Graph Relation Tables with `TYPE RELATION`
+
+**Scenario:**
+Define a graph relation table `purchased` connecting `user` records to `product` records.
+
+**Requirements:**
+1. Write `DEFINE TABLE purchased TYPE RELATION IN user OUT product`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE purchased TYPE RELATION IN user OUT product;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `TYPE RELATION` designates the table as a graph edge table.
+> 2. `IN user OUT product` constrains relation endpoints strictly to valid `user` and `product` record IDs.
+> 3. Enables native graph arrow traversals (`user:1->purchased->product`).
+
+---
+
+### Exercise 3: Dropping Table Definitions with `REMOVE TABLE`
+
+**Scenario:**
+Drop an obsolete table `legacy_data` and all its stored records from the database.
+
+**Requirements:**
+1. Write the `REMOVE TABLE` DDL statement.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> REMOVE TABLE legacy_data;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `REMOVE TABLE` drops the table schema definition, fields, indexes, and stored records.
+> 2. Frees storage allocation on disk completely.
+> 3. Equivalent to SQL `DROP TABLE`.
 
 ---
 
 
 
-### Exercise 2: Defining Strict Relation Table
+## 6. Related Terms
 
-**Problem:** Define graph relation table `likes` enforcing `IN user` and `OUT article`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE TABLE likes TYPE RELATION IN user OUT article;
-> ```
-> ```surrealql
-> DEFINE TABLE likes TYPE RELATION IN user OUT article;
-> ```
->
-> **Explanation:** `TYPE RELATION IN in_table OUT out_table` constrains graph edge targets.
-
----
-
-### Exercise 3: Table Drop Removal
-
-**Problem:** Command to drop table definition `old_table` from database.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> REMOVE TABLE old_table;
-> ```
-> ```surrealql
-> REMOVE TABLE old_table;
-> ```
->
-> **Explanation:** `REMOVE TABLE` drops specified table definitions and schema metadata.
-
-## 7. Related Terms
+- [ Keyword](overwrite_keyword.md) — Overwriting table definitions.
 
 - [Table](../level_01/table.md) — The basic collection container.
 - [`SCHEMAFULL` vs `SCHEMALESS`](../level_01/schemafull_schemaless.md) — The validation modes.
@@ -202,7 +228,7 @@ DEFINE TABLE user PERMISSIONS FOR select WHERE id = $auth.id OR $auth.role = 'ad
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE TABLE` explicitly configures table schemas and properties.
 - Relational equivalent to `CREATE TABLE`; NoSQL equivalent to validation rules.
 - Supports RLS (Row-Level Security) using the `PERMISSIONS` query clause.

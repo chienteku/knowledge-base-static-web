@@ -161,9 +161,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Financial Trading Risk Engine Invariant Enforcement
 
-**Problem Requirements:**
+**Scenario:** **Problem Requirements:**
 You are developing an algorithmic crypto-trading engine risk module (`AccountRiskProfile`). The system must enforce non-negotiable risk invariants at runtime before orders reach the matching engine. If invalid parameters or margin overflow occurs, the system must panic immediately to prevent illegal order execution.
 
+**Requirements:**
 Implement:
 1. A `Position` struct holding `symbol: String`, `size: f64`, `entry_price: f64`, and `leverage: u32`.
 2. An `AccountRiskProfile` struct with fields `total_equity: f64`, `used_margin: f64`, and `max_leverage_limit: u32`.
@@ -181,6 +182,9 @@ Implement:
    - Leverage and margin overflow panics using `#[should_panic(expected = "...")]`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq)]
 > pub struct Position {
@@ -287,9 +291,10 @@ Implement:
 
 ### Exercise 2: Multithreaded Shared State Lock Guard Invariant & Lock Poisoning Panic Test
 
-**Problem Requirements:**
+**Scenario:** **Problem Requirements:**
 You are engineering a thread-safe bounded in-memory cache component (`SharedCache`) protected by an `Arc<Mutex<BoundedCache>>`. You need to ensure capacity contracts are enforced, and test that thread panics holding shared lock guards properly trigger lock poisoning panic assertions.
 
+**Requirements:**
 Implement:
 1. `BoundedCache` storing `entries: HashMap<String, String>` and `capacity: usize`.
    - `BoundedCache::new(capacity: usize) -> Self`: panics with `"InvalidCapacity: capacity must be greater than zero"` if `capacity == 0`.
@@ -307,6 +312,9 @@ Implement:
    - Lock poisoning panic propagation across thread boundaries using `#[should_panic(expected = "LockPoisoned: mutex lock poisoned")]`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > use std::sync::{Arc, Mutex};
@@ -425,9 +433,10 @@ Implement:
 
 ### Exercise 3: Zero-Copy Binary Telemetry Packet Parser & Boundary Validation
 
-**Problem Requirements:**
+**Scenario:** **Problem Requirements:**
 You are constructing a high-throughput IoT binary telemetry parser (`TelemetryFrame`). High-speed network stack parsers validate header invariant markers, payload byte alignment, and CRC checksums. If binary corruption or length mismatch occurs, the parser panics with explicit diagnostic messages.
 
+**Requirements:**
 Implement:
 1. `TelemetryFrame` struct with `version: u8` and `payload: Vec<u8>`.
 2. Binary Frame Layout (Header total 8 bytes):
@@ -449,6 +458,9 @@ Implement:
    - Test cases for short buffer, corrupt magic byte, payload length mismatch, and checksum mismatch using `#[should_panic(expected = "...")]`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Eq)]
 > pub struct TelemetryFrame {

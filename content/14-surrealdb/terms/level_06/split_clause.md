@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (array record flattening SPLIT clause)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Executed during the query result transformation phase. Duplicates parent record contexts in memory for each element in the target array).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In document databases (MongoDB) and multi-model databases, records often store arrays of items (e.g. a blog post storing `tags: ["rust", "tech", "database"]`).
@@ -83,7 +82,7 @@ SELECT name, hobbies FROM user SPLIT hobbies;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to use SPLIT on a non-array field, expecting array transformation behavior
 
@@ -129,58 +128,100 @@ SELECT * FROM user SPLIT bio; // ❌ Does not tokenize string!
 RETURN string::split("a,b,c", ","); // Tokenizes string into array
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Array Unwinding & Grouping
+### Exercise 1: Unnesting Array Fields into Separate Records
 
-**Problem:** You have a `products` table containing a `categories` array field (`categories: ["electronics", "gadgets"]`).
-Write the SurrealQL query to:
-1. Deconstruct the `categories` array using `SPLIT`.
-2. Group by `categories` (aliased as `category`).
-3. Calculate the count of products in each category as `total_products`.
+**Scenario:**
+An analytics query takes records containing an array of tags `tags = ["rust", "db"]` and unnests them into separate result records using `SPLIT ON`.
 
-**Expected output:**
+**Requirements:**
+1. Create `article:a1` with `tags = ["rust", "db"]`.
+2. Execute `SELECT title, tags FROM article SPLIT ON tags`.
+
 > [!check]- Answer
-> ```sql
-> SELECT 
->   categories AS category, 
->   count() AS total_products 
-> FROM products 
-> SPLIT categories 
-> GROUP BY category;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE article:a1 SET title = "SurrealQL Basics", tags = ["rust", "db"];
+> 
+> -- Unnest array field into separate result records
+> SELECT title, tags FROM article SPLIT ON tags;
+> 
+> -- Output:
+> -- [ { title: "SurrealQL Basics", tags: "rust" }, { title: "SurrealQL Basics", tags: "db" } ]
 > ```
-> - Apply `SPLIT categories` before the `GROUP BY` clause.
-> - Group by the split category field.
+>
+> #### Technical Explanation
+>
+> 1. `SPLIT ON field` expands array elements, outputting a separate result document for each array item.
+> 2. Replaces SQL `UNNEST()` and MongoDB `$unwind` aggregation pipeline stages.
+> 3. Facilitates per-item aggregation and reporting queries.
 
 ---
 
-### Exercise 2: Un-Nesting Array Elements with SPLIT AT
+### Exercise 2: Grouping After Array Unnesting
 
-**Problem:** Un-nest `tags` array on `article` table so each tag element returns as an independent record row.
+**Scenario:**
+Unnest `tags` arrays across all articles using `SPLIT ON`, then group by individual tag to count occurrences.
 
-**Expected output:**
+**Requirements:**
+1. Unnest `SPLIT ON tags`.
+2. Group by `tags` and calculate `count()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```surrealql
-> SELECT * FROM article SPLIT tags;
+> CREATE article:a1 SET tags = ["rust", "db"];
+> CREATE article:a2 SET tags = ["rust", "web"];
+> 
+> SELECT tags AS tag, count() AS total 
+> FROM article 
+> SPLIT ON tags 
+> GROUP BY tag;
 > ```
 >
-> **Explanation:** `SPLIT ON field` expands array elements into separate distinct output rows.
+> #### Technical Explanation
+>
+> 1. Combining `SPLIT ON` with `GROUP BY` aggregates individual array items across records.
+> 2. Counts how many documents contain each distinct array tag item.
+> 3. Simplifies tag cloud and category count reporting queries.
 
 ---
 
-### Exercise 3: Combining SPLIT and GROUP BY
+### Exercise 3: Multi-Array Unnesting Considerations
 
-**Problem:** Split `tags` array on `article` table and group by `tags` to count occurrences per tag.
+**Scenario:**
+Explain the behavior of applying `SPLIT ON` across multiple array fields simultaneously.
 
-**Expected output:**
+**Requirements:**
+1. Describe how `SPLIT ON field1, field2` expands cartesian product combinations.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```surrealql
-> SELECT tags AS tag, count() FROM article SPLIT tags GROUP BY tag;
+> CREATE post:p1 SET categories = ["tech", "news"], authors = ["Alice", "Bob"];
+> 
+> -- Cartesian product unnesting
+> SELECT * FROM post SPLIT ON categories, authors;
 > ```
 >
-> **Explanation:** Combining `SPLIT` and `GROUP BY` aggregates tag frequencies across records.
+> #### Technical Explanation
+>
+> 1. Splitting on multiple array fields generates a cartesian product expansion of all array combinations.
+> 2. Outputs $M 	imes N$ result records for array lengths $M$ and $N$.
+> 3. Use carefully on large arrays to prevent result set explosion.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [`SELECT`](../level_03/select.md) — The query statement.
 - [Array Functions (`array::*`)](array_functions.md) — Manipulating arrays.
@@ -188,7 +229,7 @@ Write the SurrealQL query to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `SPLIT` clause expands array elements into separate output records.
 - Direct equivalent to MongoDB's `$unwind` and PostgreSQL's `UNNEST()`.
 - Essential step before running `GROUP BY` aggregations on individual array items.

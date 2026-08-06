@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Feature**
+
+**SQL Command / Clause** (Mutation Result Projection Clause): `RETURNING` returns modified or generated column values directly from `INSERT`, `UPDATE`, or `DELETE` statements.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Specific** (A highly popular extension to standard SQL. Supported natively in PostgreSQL and CockroachDB, but absent or implemented differently in other database systems like MySQL or SQL Server).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database operations, write queries often generate values dynamically on the server:
@@ -105,7 +106,7 @@ RETURNING balance;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming RETURNING works identically in all SQL databases
 
@@ -152,66 +153,97 @@ INSERT INTO users (name) VALUES ('Alice') RETURNING id; -- Atomic key return
 const res = await client.query('UPDATE users SET active = true RETURNING *'); console.log(res.rows);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Register and Redirect
+### Exercise 1: Returning Auto-Generated Primary Keys on Insert
 
-**Problem:** You are building a user registration API in Node.js. When a user registers, you insert their email. The database generates a unique ID. You must redirect the user to `/users/` followed by their new ID. Write the SQL insert statement that yields the ID in a single query.
+**Scenario:**
+Insert a new customer and return generated `id` and `created_at` values instantly.
 
-**Expected output:**
+**Requirements:**
+1. Append `RETURNING id, created_at` to `INSERT INTO`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> INSERT INTO users (email) 
-> VALUES ('new_user@example.com') 
-> RETURNING id;
+> INSERT INTO customers (company_name) 
+> VALUES ('Acme Corp') 
+> RETURNING id, created_at;
 > ```
-> - Start with a standard `INSERT INTO` parameters syntax.
-> - Append the PostgreSQL target returning command specifying the ID column.
+>
+> #### Technical Explanation
+>
+> 1. `RETURNING` projects modified or generated row attributes directly from the write statement.
+> 2. Eliminates issuing a secondary `SELECT` query to fetch sequence values.
+> 3. Single network roundtrip optimization.
+
+---
+
+### Exercise 2: Capturing Pre-Update State in UPDATE Statements
+
+**Scenario:**
+Deactivate a user and return their previous `email` address in the response payload.
+
+**Requirements:**
+1. Execute `UPDATE users SET is_active = FALSE WHERE id = 10 RETURNING email`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> UPDATE users 
+> SET is_active = FALSE 
+> WHERE id = 10 
+> RETURNING id, username, email, is_active;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `RETURNING` on `UPDATE` returns the newly updated column values.
+> 2. Confirms row mutation succeeded.
+> 3. Useful for returning updated entity objects to client APIs.
+
+---
+
+### Exercise 3: Returning Deleted Rows for Audit Logging
+
+**Scenario:**
+Delete expired sessions and return the deleted session tokens for audit archiving.
+
+**Requirements:**
+1. Append `RETURNING token, user_id` to `DELETE FROM`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> DELETE FROM user_sessions 
+> WHERE expires_at < CURRENT_TIMESTAMP 
+> RETURNING token, user_id, expires_at;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `RETURNING` on `DELETE` projects the data content of deleted rows before they are purged.
+> 2. Allows application code to log or archive deleted row payloads.
+> 3. Powerful PostgreSQL extension.
 
 ---
 
 
 
-### Exercise 2: Returning Computed Attributes on Insert
-
-**Problem:** Insert order document returning generated `id` and computed `created_at` timestamp.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INSERT INTO orders (total) VALUES (99.95) RETURNING id, created_at;
-> ```
-> ```sql
-> INSERT INTO orders (total) VALUES (99.95) RETURNING id, created_at;
-> ```
->
-> **Explanation:** `RETURNING col1, col2` projects generated defaults immediately upon insertion.
-
----
-
-### Exercise 3: Capturing Deleted Rows with RETURNING
-
-**Problem:** Delete expired tokens returning deleted `token_str` values.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DELETE FROM tokens WHERE expires_at < NOW() RETURNING token_str;
-> ```
-> ```sql
-> DELETE FROM tokens WHERE expires_at < NOW() RETURNING token_str;
-> ```
->
-> **Explanation:** `DELETE ... RETURNING` returns deleted tuple attributes to the client.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`INSERT INTO`](insert_into.md) — The parent write statement.
 - [`UPDATE`](update.md) — The parent edit statement.
 - [`DELETE`](delete.md) — The parent delete statement.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `RETURNING` is a PostgreSQL clause that returns values from modified rows.
 - Eliminates the need to run a secondary `SELECT` query, reducing network latency.
 - Supported on `INSERT`, `UPDATE`, and `DELETE` queries.

@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Tooling**: The `syn` crate (short for "syntax") is the parsing pillar of the Rust procedural macro ecosystem. It takes raw token streams (`TokenStream`) from the compiler and parses them into rich, strongly-typed Rust data structures (Abstract Syntax Trees) like `syn::DeriveInput`, `syn::ItemFn`, `syn::Expr`, and `syn::Type`.
+
+
+**Rust Ecosystem Library (TokenStream-to-AST parsing crate)**: The `syn` crate (short for "syntax") is the parsing pillar of the Rust procedural macro ecosystem. It takes raw token streams (`TokenStream`) from the compiler and parses them into rich, strongly-typed Rust data structures (Abstract Syntax Trees) like `syn::DeriveInput`, `syn::ItemFn`, `syn::Expr`, and `syn::Type`.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Cargo Dependency (Host Compile-Time)**: `syn` is used as a `[dependencies]` entry inside procedural macro crates (or code-generation tooling). It operates on the build host during compilation to inspect and analyze Rust source code structure.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -115,7 +113,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Enabling Heavy `syn` Feature Flags Unnecessarily
 
@@ -192,11 +190,11 @@ match ast.data {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Helper Attribute Parsing and Struct Field Metadata Extraction
 
-**Problem:** In custom serialization and RPC protocol procedural macros (such as custom `Protobuf` or `Bincode` derive macros), developers annotate struct fields with helper attributes to customize wire-format field names or exclude private fields.
+**Scenario:** In custom serialization and RPC protocol procedural macros (such as custom `Protobuf` or `Bincode` derive macros), developers annotate struct fields with helper attributes to customize wire-format field names or exclude private fields.
 
 Write a metadata parser function `parse_struct_field_schema(input_code: &str) -> Result<Vec<FieldSchema>, String>` using `syn` that parses a struct definition string into a `syn::DeriveInput`. For each named field:
 1. Parse the field's identifier name and its type string representation.
@@ -207,6 +205,9 @@ Write a metadata parser function `parse_struct_field_schema(input_code: &str) ->
 Include unit tests using `#[test]` assertions (`assert_eq!`, `assert!`, etc.) verifying both successful metadata extraction and error handling for unknown attributes.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use syn::{parse_str, Attribute, Data, DeriveInput, Fields, LitStr};
 > 
@@ -320,7 +321,8 @@ Include unit tests using `#[test]` assertions (`assert_eq!`, `assert!`, etc.) ve
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`syn::DeriveInput` AST Traversal**: `syn::parse_str::<DeriveInput>(input_code)` parses Rust syntax strings into structured ASTs. We inspect `ast.data` matching `Data::Struct` and `Fields::Named` to access all named struct fields.
 > 2. **Attribute Inspection with `parse_nested_meta`**: In `syn` 2.0, `attr.parse_nested_meta` simplifies parsing comma-separated key-value pairs (`rename = "..."`) or flag identifiers (`skip`) inside attribute parentheses `#[codec(...)]`.
 > 3. **Error Propagation**: `meta.error(...)` returns a `syn::Error` configured with exact token span information, preventing macro panics and converting errors to clear string messages.
@@ -329,7 +331,7 @@ Include unit tests using `#[test]` assertions (`assert_eq!`, `assert!`, etc.) ve
 
 ### Exercise 2: Implementing a Custom DSL Parser for Hardware MMIO Registers
 
-**Problem:** Embedded Rust frameworks often define custom DSLs for memory-mapped I/O (MMIO) hardware registers. Suppose you are designing a register declaration macro syntax:
+**Scenario:** Embedded Rust frameworks often define custom DSLs for memory-mapped I/O (MMIO) hardware registers. Suppose you are designing a register declaration macro syntax:
 `reg CONTROL_REG @ 0x4000_1000 { RW enable: bool, WO trigger: u8 }`
 
 Implement `syn::parse::Parse` for custom AST types `AccessMode`, `RegisterField`, and `RegisterDefinition`.
@@ -340,6 +342,9 @@ Implement `syn::parse::Parse` for custom AST types `AccessMode`, `RegisterField`
 Provide complete tests using `syn::parse_str::<RegisterDefinition>(...)` with `assert_eq!` assertions validating register name, address hex parsing, access modes, and field types.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use syn::parse::{Parse, ParseStream};
 > use syn::punctuated::Punctuated;
@@ -453,7 +458,8 @@ Provide complete tests using `syn::parse_str::<RegisterDefinition>(...)` with `a
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`syn::parse::ParseStream` & Custom Grammars**: Implementing `syn::parse::Parse` for custom types enables parsing domain-specific tokens using recursive predictive descent parsing (`input.parse()?`).
 > 2. **Token Delimiters & Macro Helper Macros**: `syn::Token![@]` matches literal `@` punctuation, while `braced!(content in input)` extracts content delimited by `{}` braces into a child `ParseStream`.
 > 3. **`Punctuated` Collections**: `content.parse_terminated` handles lists of items separated by delimiters (e.g. commas `,`), abstracting trailing comma handling.
@@ -462,7 +468,7 @@ Provide complete tests using `syn::parse_str::<RegisterDefinition>(...)` with `a
 
 ### Exercise 3: Static Function Signature Safety Guard Validator for RTOS Interrupt Handlers
 
-**Problem:** In safe Rust real-time kernel frameworks, functions designated as Interrupt Service Routines (ISRs) via macro attributes (e.g. `#[interrupt]`) must adhere to strict compile-time signature constraints before code generation proceeds:
+**Scenario:** In safe Rust real-time kernel frameworks, functions designated as Interrupt Service Routines (ISRs) via macro attributes (e.g. `#[interrupt]`) must adhere to strict compile-time signature constraints before code generation proceeds:
 1. Cannot be `async` (`sig.asyncness`).
 2. Cannot be `const` (`sig.constness`).
 3. Must return default unit type `()` (`sig.output`).
@@ -474,6 +480,9 @@ Write a signature validator `validate_isr_signature(func: &syn::ItemFn) -> Resul
 Provide comprehensive unit tests parsing function definitions with `syn::parse_str::<syn::ItemFn>(...)` and asserting success for compliant handlers and failure for non-compliant handlers.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use syn::{parse_str, ItemFn, ReturnType, Type};
 > 
@@ -600,14 +609,15 @@ Provide comprehensive unit tests parsing function definitions with `syn::parse_s
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`syn::ItemFn` Decomposition**: Function ASTs decompose into attributes (`func.attrs`), visibility, and signature (`func.sig`). The signature contains qualifiers like `asyncness`, `constness`, inputs vector, and return type (`output`).
 > 2. **Spanned Error Reporting (`syn::Error::new_spanned`)**: Binding errors to specific AST elements (e.g. `async_kw` or `func.sig.output`) allows the Rust compiler to underline the exact syntax error location in the IDE rather than pointing vaguely to the macro invocation line.
 > 3. **Attribute Verification**: Inspecting `func.attrs` allows procedural macros to enforce essential attributes like `#[no_mangle]` or `#[export_name = "..."]` before code generation.
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`quote` Crate](quote_crate.md) — The complementary crate used to convert parsed AST structs back into `TokenStream` code.
@@ -617,7 +627,7 @@ Provide comprehensive unit tests parsing function definitions with `syn::parse_s
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `syn` parses raw Rust token streams into strongly-typed Abstract Syntax Tree (AST) structs.
 - Key AST types include `DeriveInput` (for derives), `ItemFn` (for functions), `ItemStruct` (for structs), and `Expr` (for expressions).

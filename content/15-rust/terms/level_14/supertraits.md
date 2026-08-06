@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Trait / Abstraction**: Supertraits define a prerequisite dependency relationship between traits in Rust. Declaring `pub trait Person: Display` does NOT mean `Person` inherits code or state from `Display` in an object-oriented sense; rather, it specifies a **trait bound prerequisite**: any type `T` that wants to implement `Person` is required to also implement `Display`.
+
+
+**Rust Trait System (trait inheritance & prerequisite bounds)**: Supertraits define a prerequisite dependency relationship between traits in Rust. Declaring `pub trait Person: Display` does NOT mean `Person` inherits code or state from `Display` in an object-oriented sense; rather, it specifies a **trait bound prerequisite**: any type `T` that wants to implement `Person` is required to also implement `Display`.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: Supertraits are used throughout the Rust Standard Library (e.g. `pub trait Copy: Clone`, `pub trait Eq: PartialEq`, `pub trait Ord: Eq + PartialOrd`) and across ecosystem crates.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -131,7 +129,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing Supertraits with Class Inheritance
 
@@ -208,11 +206,11 @@ trait ResetSub: ResetBase { fn reset(&self); } // ❌ Ambiguous method name!
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Multi-Tier Embedded Telemetry Trait Hierarchy
 
-**Problem:** In an embedded IoT firmware system, sensor devices must follow a strict trait hierarchy to guarantee identity, calibration safety, and formatted telemetry report generation before data transmission.
+**Scenario:** In an embedded IoT firmware system, sensor devices must follow a strict trait hierarchy to guarantee identity, calibration safety, and formatted telemetry report generation before data transmission.
 
 Define the following multi-tier supertrait hierarchy:
 1. Base supertrait `Identifiable`: requires `fn device_id(&self) -> &'static str`.
@@ -224,6 +222,9 @@ Define the following multi-tier supertrait hierarchy:
 Implement this hierarchy for `ThermalSensor` with fields `id: &'static str`, `calibrated: bool`, and `raw_temp_adc: u32`. Write unit tests with assertions (`assert_eq!`, `assert!`) testing calibration enforcement and report formatting.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::fmt;
 > 
@@ -328,7 +329,8 @@ Implement this hierarchy for `ThermalSensor` with fields `id: &'static str`, `ca
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Transitive Supertrait Hierarchy**: The declaration `pub trait TelemetrySensor: Calibratable` combined with `pub trait Calibratable: Identifiable` creates a multi-tier dependency chain. Any struct implementing `TelemetrySensor` must fulfill all prerequisite traits in the hierarchy.
 > 2. **Cross-Trait Default Invocation**: Subtrait default method `generate_report` invokes `self.is_calibrated()` (from supertrait `Calibratable`) and `self.device_id()` (from supertrait `Identifiable`). Rust allows this because supertrait bounds guarantee these methods exist for any implementor.
 > 3. **Explicit Trait Implementations**: Each trait in the hierarchy requires its own distinct `impl Trait for Struct` block, enforcing modularity and separation of concerns.
@@ -337,7 +339,7 @@ Implement this hierarchy for `ThermalSensor` with fields `id: &'static str`, `ca
 
 ### Exercise 2: Secure Cryptographic Key Operations & Trait Prerequisite Chains
 
-**Problem:** In a hardware security module (HSM), signing operations must guarantee that cryptographic key objects carry handle metadata, reside in hardware memory, and satisfy PIN authentication before raw signatures are emitted.
+**Scenario:** In a hardware security module (HSM), signing operations must guarantee that cryptographic key objects carry handle metadata, reside in hardware memory, and satisfy PIN authentication before raw signatures are emitted.
 
 Design the following security trait hierarchy:
 1. Base marker trait `HardwareKey`: empty marker trait asserting key material resides in a secure enclave.
@@ -350,6 +352,9 @@ Design the following security trait hierarchy:
 Implement this hierarchy for `HsmToken` with fields `handle: u64`, `secret_pin: u32`, and `authenticated: bool`. Write unit tests with assertions (`assert_eq!`, `assert!`) verifying authentication enforcement and payload signing.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > /// Base marker trait guaranteeing hardware enclave storage.
 > pub trait HardwareKey {}
@@ -461,7 +466,8 @@ Implement this hierarchy for `HsmToken` with fields `handle: u64`, `secret_pin: 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Security Supertrait Invariants**: By enforcing `CryptoSigner: AuthenticatedKey`, Rust's type system guarantees at compile-time that any signing type cannot bypass authentication mechanisms.
 > 2. **Marker Trait Integration**: `HardwareKey` serves as an empty marker trait bound. Marker supertraits allow architectural constraints (e.g. enclave storage guarantees) to be encoded directly into trait boundaries.
 > 3. **Encapsulated Workflow in Default Methods**: Default subtrait methods like `safe_sign` act as stateful guards, calling supertrait authentication methods before permitting access to lower-level operations (`raw_sign`).
@@ -470,7 +476,7 @@ Implement this hierarchy for `HsmToken` with fields `handle: u64`, `secret_pin: 
 
 ### Exercise 3: Standard Library Trait Chain (`Ord: Eq + PartialOrd`, `Copy: Clone`)
 
-**Problem:** In high-throughput task scheduling engines, execution queue items must maintain strict total ordering semantics (`Ord`) and bitwise copy semantics (`Copy`).
+**Scenario:** In high-throughput task scheduling engines, execution queue items must maintain strict total ordering semantics (`Ord`) and bitwise copy semantics (`Copy`).
 
 Build a struct `ScheduledTask`:
 - Fields: `priority: u8` and `task_id: u64`.
@@ -484,6 +490,9 @@ Build a struct `ScheduledTask`:
 Write unit tests with assertions (`assert!`, `assert_eq!`) testing manual trait ordering logic, priority comparison, and `Copy` semantics.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::cmp::Ordering;
 > 
@@ -599,7 +608,8 @@ Write unit tests with assertions (`assert!`, `assert_eq!`) testing manual trait 
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Standard Library Supertrait Dependencies**:
 >    - `Copy: Clone`: Bitwise duplication (`Copy`) logically requires value cloning capability (`Clone`).
 >    - `Eq: PartialEq`: Total equality requires partial equality reflexivity.
@@ -609,7 +619,7 @@ Write unit tests with assertions (`assert!`, `assert_eq!`) testing manual trait 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Trait](../level_04/trait.md) — Fundamental trait abstraction concept.
@@ -619,7 +629,7 @@ Write unit tests with assertions (`assert!`, `assert_eq!`) testing manual trait 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Supertraits (`pub trait Sub: Super`) specify that any type implementing `Sub` MUST also implement `Super`.
 - Supertraits declare prerequisite trait bounds; they do NOT provide class-style code inheritance.

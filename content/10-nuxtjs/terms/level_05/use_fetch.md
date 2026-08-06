@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Data Fetching**
+
+**Data Fetching** (High-Level Reactive Fetch Composable): `useFetch()` is Nuxt 3's primary reactive data fetching composable combining `$fetch` and `useAsyncData()` into a single wrapper.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you use a standard `$fetch` (or Axios) call directly inside a Vue component, the code executes twice: the Node server fetches the data to render the HTML, and then the browser fetches the exact same data to hydrate the page. This is inefficient and causes visual tearing.
@@ -71,7 +72,7 @@ const { data } = await useFetch('/api/articles', {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not awaiting `useFetch` when you need the data for SEO
 **The mistake:** Calling `useFetch` without the `await` keyword.
@@ -138,76 +139,129 @@ const { data } = await useFetch('/api/items', { query: { page }, watch: [page] }
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Refreshing Data
+### Exercise 1: Basic Reactive Data Fetching with `useFetch()`
 
-**Problem:** You have a `useFetch` call getting a list of products. The user clicks a "Refresh" button. How do you trigger the `useFetch` to fire again without reloading the page?
+**Scenario:**
+Fetch a product item using `useFetch("/api/products/1")` and display title, price, and loading state.
 
-**Expected output:**
+**Requirements:**
+1. Use `useFetch()` to extract `data`, `pending`, and `error`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
 > <script setup lang="ts">
-> // Extract the refresh function
-> const { data: products, refresh } = await useFetch('/api/products');
+> const { data: product, pending, error } = await useFetch("/api/products/1");
 > </script>
-> 
-> <template>
->   <!-- Call the function on click -->
->   <button @click="refresh()">Refresh Products</button>
-> </template>
-> ```
-> - You can destructure the `refresh` method returned by `useFetch()` and trigger it inside a click listener.
+
+<template>
+  <div>
+    <div v-if="pending">Loading product details...</div>
+    <div v-else-if="error">Error: {{ error.message }}</div>
+    <div v-else-if="product">
+      <h1>{{ product.title }}</h1>
+      <p>Price: ${{ product.price }}</p>
+    </div>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useFetch()` is Nuxt 3's primary composable combining `$fetch` and `useAsyncData()` auto-key generation into a single wrapper.
+> 2. `await useFetch()` blocks server HTML rendering until data resolves, ensuring full SSR content generation.
+> 3. Automatically handles payload caching and payload hydration.
 
 ---
 
-### Exercise 2: Reactive useFetch Query Pattern
+### Exercise 2: Reactive URL Refetching with Computed Watchers
 
-**Problem:** Write `useFetch` call querying `/api/search` with reactive `searchQuery` ref, setting `watch: [searchQuery]` and `pick: ['results']`.
+**Scenario:**
+Re-fetch user profile data automatically whenever a reactive search parameter `searchId` changes.
 
-**Expected output:**
+**Requirements:**
+1. Pass reactive computed URL string to `useFetch()`.
+
 > [!check]- Answer
-> ```typescript
-> const searchQuery = ref('');
-> const { data } = await useFetch('/api/search', {
->   query: { q: searchQuery },
->   watch: [searchQuery],
->   pick: ['results']
-> });
-> ```
-> - `query`, `watch`, and `pick` options optimize reactive fetching.
-> 
-> ```typescript
-> const searchQuery = ref('');
-> 
-> const { data: results, pending } = await useFetch('/api/search', {
->   query: { q: searchQuery },
->   watch: [searchQuery],
->   pick: ['results']
-> });
-> ```
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const userId = ref(1);
+
+// Passing a computed URL automatically re-fetches when userId changes!
+const { data: user, pending } = await useFetch(() => `/api/users/${userId.value}`);
+</script>
+
+<template>
+  <div>
+    <button @click="userId++">Next User (ID: {{ userId }})</button>
+    <p v-if="pending">Loading user {{ userId }}...</p>
+    <p v-else-if="user">User Name: {{ user.name }}</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Passing a getter function (`() => \`/api/users/\${userId.value}\``) to `useFetch()` instructs Nuxt to watch reactive dependencies.
+> 2. Mutating `userId.value` automatically triggers a network re-fetch for the new URL.
+> 3. Declarative reactive data fetching model.
 
 ---
 
-### Exercise 3: useFetch pick Option Benefit
+### Exercise 3: Passing Headers and Query String Params to `useFetch()`
 
-**Problem:** How does `pick: ['id', 'title']` improve Nuxt 3 performance?
+**Scenario:**
+Pass reactive query parameters (`page`, `search`) and custom headers to `useFetch()`.
 
-**Expected output:**
+**Requirements:**
+1. Configure `query` and `headers` options in `useFetch()`.
+
 > [!check]- Answer
-> ```text
-> It extracts ONLY specified properties from API responses, reducing payload serialization size and client memory overhead.
-> ```
-> - `pick` reduces payload serialization network size.
-> 
-> ```typescript
-> useFetch('/api/user', { pick: ['id', 'name'] });
-> ```
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const page = ref(1);
+> const searchQuery = ref("");
+
+const { data: items } = await useFetch("/api/search", {
+  query: { page, q: searchQuery },
+  headers: {
+    "X-Custom-Client": "Nuxt3-Frontend"
+  }
+});
+</script>
+
+<template>
+  <div>
+    <input v-model="searchQuery" placeholder="Search items..." />
+    <button @click="page++">Next Page ({{ page }})</button>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Reactive refs passed inside the `query` object are automatically watched by `useFetch()`.
+> 2. Updating `page` or `searchQuery` triggers a new query fetch with updated URL query strings (`/api/search?page=2&q=...`).
+> 3. Idiomatic Nuxt 3 search and pagination model.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useAsyncData`](use_async_data.md) — The lower-level composable that powers `useFetch`.
 - [Caching Data](caching_data.md) — How `useFetch` avoids refetching when navigating back and forth between pages.
 - [Dynamic Routes](../level_02/dynamic_routes.md) — Related concept: Dynamic Routes.
@@ -217,7 +271,7 @@ const { data } = await useFetch('/api/items', { query: { page }, watch: [page] }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useFetch` prevents SSR double-fetching by transferring server data to the client.
 - It returns reactive properties: `data`, `pending`, `error`, and `refresh`.
 - Passing reactive variables (refs) into the query/URL automatically triggers a refetch.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SEO**
+
+**SEO & Meta Management** (Type-Safe Social & Search Meta Composable): `useSeoMeta()` provides a flat, strongly typed interface for setting OpenGraph, Twitter card, and search engine metadata.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Writing meta tags manually using `useHead` is extremely tedious and prone to typos. 
@@ -73,7 +74,7 @@ useSeoMeta({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use `useSeoMeta` for scripts or stylesheets
 **The mistake:** Searching the `useSeoMeta` autocomplete for a way to inject a `<script src="...">` tag.
@@ -120,86 +121,134 @@ useSeoMeta({ ogTitle: 'Title', ogDescription: 'Description' }); // Strongly type
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Open Graph Images
+### Exercise 1: Setting Social Share Metadata with `useSeoMeta()`
 
-**Problem:** Write a `useSeoMeta` block that sets the Open Graph Image (`og:image`) to `https://mysite.com/banner.jpg` and the Twitter Card type (`twitter:card`) to `summary_large_image`.
+**Scenario:**
+Set OpenGraph and Twitter card share preview metadata for a blog post.
 
-**Expected output:**
+**Requirements:**
+1. Call `useSeoMeta()` with title, description, ogImage, twitterCard.
+
 > [!check]- Answer
-> ```typescript
-> useSeoMeta({
->   ogImage: 'https://mysite.com/banner.jpg',
->   twitterCard: 'summary_large_image'
-> });
-> ```
-> - Set flat keys like `ogImage` and `twitterCard` directly on the metadata object.
-
----
-
-### Exercise 2: useSeoMeta Full Social Card Pattern
-
-**Problem:** Write `<script setup>` using `useSeoMeta()` configuring `title`, `description`, `ogTitle`, `ogDescription`, `ogImage`, and `twitterCard: 'summary_large_image'`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
+> <script setup lang="ts">
 > useSeoMeta({
->   title: 'Blog Post',
->   description: 'Post summary',
->   ogTitle: 'Blog Post',
->   ogDescription: 'Post summary',
->   ogImage: 'https://example.com/og.jpg',
->   twitterCard: 'summary_large_image'
+>   title: "Nuxt 3 Hybrid Rendering Architecture",
+>   description: "Learn how hybrid rendering optimizes web performance and SEO.",
+>   ogTitle: "Nuxt 3 Hybrid Rendering Architecture",
+>   ogDescription: "Learn how hybrid rendering optimizes web performance and SEO.",
+>   ogImage: "https://example.com/images/og-hybrid.png",
+>   twitterCard: "summary_large_image",
+>   twitterSite: "@nuxt_js"
 > });
 > </script>
-> ```
-> - `useSeoMeta()` configures comprehensive social preview cards.
-> 
+
+<template>
+  <article>
+    <h1>Nuxt 3 Hybrid Rendering Architecture</h1>
+  </article>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useSeoMeta()` provides a flat, strongly-typed interface for setting 100+ standard SEO and social meta tags.
+> 2. Prevents property name typos (`ogTitle` vs `og:title`).
+> 3. Renders static HTML meta tags during server SSR for social media web crawlers.
+
+---
+
+### Exercise 2: Dynamic Reactive Metadata from Async Fetch
+
+**Scenario:**
+Set SEO metadata dynamically using getters resolved from async `useFetch()`.
+
+**Requirements:**
+1. Pass getter functions `() => data.value?.title` to `useSeoMeta()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
+> <script setup lang="ts">
+> const route = useRoute();
+> const { data: product } = await useFetch(`/api/products/${route.params.id}`);
+
+useSeoMeta({
+  title: () => product.value?.name ?? "Product",
+  description: () => product.value?.description ?? "Default description",
+  ogImage: () => product.value?.imageUrl
+});
+</script>
+
+<template>
+  <div v-if="product">
+    <h1>{{ product.name }}</h1>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Passing getter functions ensures metadata updates reactively once async fetch promises resolve.
+> 2. Server-renders exact dynamic product meta tags into initial HTML responses.
+> 3. Essential dynamic SEO pattern for e-commerce and CMS pages.
+
+---
+
+### Exercise 3: Canonical URLs and Robots Meta Directives
+
+**Scenario:**
+Configure page canonical URL and `noindex` directives for staging environments.
+
+**Requirements:**
+1. Set `canonical` and `robots` in `useSeoMeta()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
 > useSeoMeta({
->   title: 'Nuxt 3 SEO Guide',
->   description: 'Master SEO in Nuxt 3 with useSeoMeta composable.',
->   ogTitle: 'Nuxt 3 SEO Guide',
->   ogDescription: 'Master SEO in Nuxt 3 with useSeoMeta composable.',
->   ogImage: 'https://example.com/social-card.png',
->   twitterCard: 'summary_large_image'
+>   title: "Staging Admin Panel",
+>   robots: "noindex, nofollow"
 > });
 > </script>
-> ```
+
+<template>
+  <div>
+    <h1>Staging Panel</h1>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `robots: 'noindex, nofollow'` instructs search engine crawlers not to index the page.
+> 2. Protects staging or private admin environments from appearing in public search results.
+> 3. Production search security directive.
 
 ---
 
-### Exercise 3: useSeoMeta Getter Function Reactivity
 
-**Problem:** How do you make `ogTitle` reactive to a `post.value.title` ref inside `useSeoMeta()`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> By passing a getter function: ogTitle: () => post.value?.title
-> ```
-> - Pass a getter function for dynamic reactivity.
-> 
-> ```typescript
-> useSeoMeta({
->   ogTitle: () => post.value?.title ?? 'Default Title'
-> });
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useHead`](use_head.md) — The tool used for scripts and stylesheets.
 - [Search Engine Optimization (SEO)](../level_01/seo.md) — SEO fundamentals.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useSeoMeta` is a syntactic sugar over `useHead` specifically for SEO tags.
 - It provides perfect TypeScript autocomplete for over 100 meta tags.
 - It flattens the complex array syntax into a simple key-value object.

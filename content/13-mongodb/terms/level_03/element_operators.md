@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Query Operator** (Field Existence & Type Operators): Element Operators ($exists, $type) filter documents based on field presence or BSON data type classification.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Evaluated directly by the query execution planner. Checking field existence can use sparse indexes to optimize lookups).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In PostgreSQL, you never need to query the database saying: *"Find rows where the column `phone` exists."* 
@@ -84,7 +85,7 @@ db.users.find({ phone: { $type: "number" } });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on '{ field: null }' to find only documents that are missing a field
 
@@ -105,6 +106,8 @@ db.users.find({ phone: { $exists: false } });
 
 
 
+
+
 ### Mistake 2: Confusing `{ field: null }` Queries with `{ field: { $exists: false } }`
 
 **The mistake:** Querying `{ bio: null }` expecting to exclude explicit `null` values.
@@ -120,6 +123,8 @@ db.users.find({ bio: null }); // Returns explicit null AND missing field docs
 ```javascript
 db.users.find({ bio: { $exists: false } }); // Matches ONLY missing field docs
 ```
+
+
 
 ### Mistake 3: Using Number Codes for `$type` Queries Instead of Human-Readable String Aliases
 
@@ -139,90 +144,89 @@ db.users.find({ age: { $type: "int" } }); // Readable BSON type alias
 
 
 
-### Mistake 4: Confusing `{ field: null }` Queries with `{ field: { $exists: false } }`
+## 5. Practice Exercises
 
-**The mistake:** Querying `{ bio: null }` expecting to exclude explicit `null` values.
+### Exercise 1: Querying Optional Field Existence with `$exists`
 
-**Why it's wrong:** `{ bio: null }` matches both documents where `bio` is explicitly assigned `null` AND documents where `bio` is missing (`$exists: false`).
+**Scenario:**
+Find all customer documents where optional field `taxId` exists and is present.
 
-*Incorrect:*
-```javascript
-db.users.find({ bio: null }); // Returns explicit null AND missing field docs
-```
+**Requirements:**
+1. Use `{ taxId: { $exists: true } }`.
 
-*Fix:*
-```javascript
-db.users.find({ bio: { $exists: false } }); // Matches ONLY missing field docs
-```
-
-### Mistake 5: Using Number Codes for `$type` Queries Instead of Human-Readable String Aliases
-
-**The mistake:** Querying `{ age: { $type: 16 } }`.
-
-**Why it's wrong:** Number BSON type codes are difficult to read and maintain. Use string aliases like `{ age: { $type: "int" } }`.
-
-*Incorrect:*
-```javascript
-db.users.find({ age: { $type: 16 } });
-```
-
-*Fix:*
-```javascript
-db.users.find({ age: { $type: "int" } }); // Readable BSON type alias
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Structural Audit
-
-**Problem:** You have a `products` collection. Over time, some developers stored the `price` field as a `string` (e.g. `"19.99"`), while others stored it as a `decimal` or `double`. 
-Write the query to locate all products where the `price` field is stored as the incorrect BSON `string` type.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.find({ price: { $type: "string" } });
+> db.customers.find({
+>   taxId: { $exists: true }
+> });
 > ```
-> - Choose the element operator `$type`.
-> - Pass the target type alias `"string"` inside the operator subdocument.
+>
+> #### Technical Explanation
+>
+> 1. `$exists: true` matches documents containing the specified field key (even if value is `null`).
+> 2. `$exists: false` matches documents where the key is missing.
+> 3. Enables filtering flexible schema documents.
+
+---
+
+### Exercise 2: Auditing Field Data Types with `$type`
+
+**Scenario:**
+Find all documents in `orders` where field `phone` was stored as BSON `Int32` instead of `String`.
+
+**Requirements:**
+1. Use `{ phone: { $type: "int" } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.find({
+>   phone: { $type: "int" }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$type` matches documents where field values conform to specified BSON data types.
+> 2. Accepts string type names (`"int"`, `"string"`, `"decimal"`) or BSON type numbers.
+> 3. Identifies data type corruption across collection records.
+
+---
+
+### Exercise 3: Combining `$exists` and `$ne` Null Checks
+
+**Scenario:**
+Query documents where `middleName` exists AND is not equal to `null`.
+
+**Requirements:**
+1. Combine `{ middleName: { $exists: true, $ne: null } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   middleName: { $exists: true, $ne: null }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combining `$exists: true` with `$ne: null` filters out both missing fields and explicit null values.
+> 2. Ensures only valid, populated string values are matched.
+> 3. Standard pattern for mandatory value checks in flexible schemas.
 
 ---
 
 
 
-### Exercise 2: Checking Field Existence with `$exists`
-
-**Problem:** Query documents in `users` possessing optional field `middleName`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ middleName: { $exists: true } });
-> ```
-> ```javascript
-> db.users.find({ middleName: { $exists: true } });
-> ```
->
-> **Explanation:** `{ $exists: true }` matches documents containing the specified field key.
-
----
-
-### Exercise 3: Filtering Array BSON Types with `$type`
-
-**Problem:** Query documents where `tags` field is typed as BSON array (`"array"`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.find({ tags: { $type: "array" } });
-> ```
-> ```javascript
-> db.posts.find({ tags: { $type: "array" } });
-> ```
->
-> **Explanation:** `$type: "array"` checks if a field contains BSON array data.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The paradigm.
 - [`null`](../level_02/null_type.md) — The null indicator difference.
@@ -231,7 +235,7 @@ Write the query to locate all products where the `price` field is stored as the 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Element operators query document structures and metadata types.
 - Essential for managing and auditing flexible schema databases.
 - `$exists` checks if a field key is present (`true`) or absent (`false`) on disk.

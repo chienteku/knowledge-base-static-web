@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Schema & Modeling (field constraint assertion expressions)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Evaluated by the database validator. Runs inside a write transaction; violations automatically rollback the write attempt, throwing error logs to the client).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Type checking (like `TYPE string` or `TYPE int`) only guarantees data shapes:
@@ -90,7 +89,7 @@ CREATE user:bob SET age = 15, email = "bob@example.com", password = "superSecret
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Referencing the field by its name inside the 'ASSERT' block instead of using the mandatory '$value' system variable, causing evaluation errors
 
@@ -146,61 +145,98 @@ DEFINE FIELD email ON TABLE user TYPE string ASSERT $email != NONE; // ❌ $emai
 DEFINE FIELD email ON TABLE user TYPE string ASSERT $value != NONE AND is::email($value);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Assertion Configuration
+### Exercise 1: Numeric Range Assertions
 
-**Problem:** You are defining a schema for a `products` table. 
-Write the SurrealQL commands to:
-1.  Define a field named `sku` on `products` of type `string`.
-2.  Add an assertion ensuring that the length of `sku` is exactly `8` characters. (Hint: Use `string::len()`).
+**Scenario:**
+Enforce that an employee's `salary` field on table `employee` must be a decimal greater than or equal to `30000.00dec`.
 
-**Expected output:**
+**Requirements:**
+1. Define table `employee` as `SCHEMAFULL`.
+2. Define field `salary` as `decimal` asserting `$value >= 30000.00dec`.
+
 > [!check]- Answer
-> ```sql
-> DEFINE FIELD sku ON products TYPE string
->   ASSERT string::len($value) = 8;
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE employee SCHEMAFULL;
+> DEFINE FIELD salary ON TABLE employee TYPE decimal 
+>     ASSERT $value >= 30000.00dec;
+> 
+> CREATE employee:e1 SET salary = 45000.00dec;
 > ```
-> - Anchor the field to the `products` table using the `ON` keyword.
-> - Reference the input string length using the `$value` variable inside the helper function: `string::len($value)`.
+>
+> #### Technical Explanation
+>
+> 1. `ASSERT` validates field conditions during `CREATE` and `UPDATE` mutations.
+> 2. Rejects write attempts violating the minimum salary constraint.
+> 3. Enforces domain invariants directly at the database tier.
+
+---
+
+### Exercise 2: String Format Assertions with Built-in Functions
+
+**Scenario:**
+Validate that a user's `website` field is a valid URL using `string::is::url($value)`.
+
+**Requirements:**
+1. Define field `website` on table `user` as `string`.
+2. Apply `ASSERT string::is::url($value)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE FIELD website ON TABLE user TYPE string 
+>     ASSERT string::is::url($value);
+> 
+> CREATE user:u1 SET website = "https://surrealdb.com";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Built-in validator functions (`string::is::url`, `string::is::email`) simplify assertion rules.
+> 2. Ensures stored text strings conform to valid URL syntax.
+> 3. Protects downstream web clients from malformed input data.
+
+---
+
+### Exercise 3: Array Length Assertions
+
+**Scenario:**
+Ensure a blog post's `tags` array contains at least 1 tag and no more than 5 tags.
+
+**Requirements:**
+1. Define field `tags` on table `post` as `array<string>`.
+2. Apply `ASSERT array::len($value) >= 1 AND array::len($value) <= 5`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE post SCHEMAFULL;
+> DEFINE FIELD tags ON TABLE post TYPE array<string> 
+>     ASSERT array::len($value) >= 1 AND array::len($value) <= 5;
+> 
+> CREATE post:p1 SET tags = ["rust", "surrealdb"];
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `array::len($value)` returns element counts for array fields.
+> 2. Validates array collection sizes prior to transaction commits.
+> 3. Prevents empty or oversized tag arrays.
 
 ---
 
 
 
-### Exercise 2: Range Value Assertion
-
-**Problem:** Define field `age` on `user` table as integer asserting `$value >= 18 AND $value <= 100`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD age ON TABLE user TYPE int ASSERT $value >= 18 AND $value <= 100;
-> ```
-> ```surrealql
-> DEFINE FIELD age ON TABLE user TYPE int ASSERT $value >= 18 AND $value <= 100;
-> ```
->
-> **Explanation:** `ASSERT $value ...` validates numeric range boundaries on field assignments.
-
----
-
-### Exercise 3: URL Format Assertion
-
-**Problem:** Assert field `website` on `company` is a valid URL using `is::url()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD website ON TABLE company TYPE string ASSERT is::url($value);
-> ```
-> ```surrealql
-> DEFINE FIELD website ON TABLE company TYPE string ASSERT is::url($value);
-> ```
->
-> **Explanation:** `is::url($value)` validates URL string formats.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`DEFINE FIELD`](define_field.md) — The parent schema context.
 - [`VALUE` / `DEFAULT` / `READONLY` Clause](field_attributes.md) — Value modification attributes.
@@ -208,7 +244,7 @@ Write the SurrealQL commands to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `ASSERT` clause enforces custom data validation constraints at the schema layer.
 - Relational equivalent to `CHECK` constraints; NoSQL equivalent to JSON Schema rules.
 - Reference the incoming data using the system variable `$value` inside assertions.

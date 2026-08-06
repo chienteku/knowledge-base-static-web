@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Security**
+
+**Security & Middleware** (Environment Variable Management): Environment Variables configure server secrets and runtime parameters using `.env` files and `runtimeConfig` mappings.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server / Build-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you deploy an application to production, you must connect to a production database (e.g., MongoDB). When you run the app locally, you want to connect to a local development database. 
@@ -69,7 +70,7 @@ Nuxt automatically converts the uppercase snake_case to camelCase!
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Prefixing secrets with `VITE_`
 **The mistake:** Writing `VITE_DATABASE_PASSWORD=123` in the `.env` file and expecting it to be secure.
@@ -118,81 +119,129 @@ NUXT_DB_PASS=secret // Private server-only environment variable
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Mapping deeply nested configs
+### Exercise 1: Loading `.env` Variables into `runtimeConfig`
 
-**Problem:** You have a `runtimeConfig` object that looks like this:
-```typescript
-runtimeConfig: {
-  redis: {
-    password: ''
-  }
-}
-```
-What is the exact name of the environment variable you must place in your `.env` file to auto-populate this value?
+**Scenario:**
+Define environment variables in `.env` and map them into `nuxt.config.ts`.
 
-**Expected output:**
+**Requirements:**
+1. Set `DATABASE_URL` and `NUXT_PUBLIC_SITE_URL` in `.env`.
+
 > [!check]- Answer
-> ```text
-> NUXT_REDIS_PASSWORD="my_password"
+>
+> #### Implementation
+>
+> ```ini
+> # .env
+> DATABASE_URL="postgresql://user:pass@localhost:5432/mydb"
+> NUXT_PUBLIC_SITE_URL="https://example.com"
 > ```
-> - Uppercase snake_case prefix with double underscores `NUXT_REDIS_PASSWORD` maps to `runtimeConfig.redis.password` using uppercase-to-camelcase conversion.
 
----
-
-### Exercise 2: runtimeConfig NUXT_ Env Prefix Pattern
-
-**Problem:** Write `runtimeConfig` in `nuxt.config.ts` matching `.env` variable `NUXT_API_SECRET=123`.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> export default defineNuxtConfig({
->   runtimeConfig: {
->     apiSecret: ''
->   }
-> });
-> ```
-> - `NUXT_API_SECRET` automatically overrides `runtimeConfig.apiSecret`.
-> 
 > ```typescript
 > // nuxt.config.ts
 > export default defineNuxtConfig({
 >   runtimeConfig: {
->     apiSecret: '' // Overridden by NUXT_API_SECRET in .env
+>     databaseUrl: "", // Overridden by DATABASE_URL or NUXT_DATABASE_URL
+>     public: {
+>       siteUrl: "" // Overridden by NUXT_PUBLIC_SITE_URL
+>     }
 >   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. Nuxt 3 automatically loads `.env` key-value pairs during development and build runtime.
+> 2. `NUXT_PUBLIC_SITE_URL` automatically populates `runtimeConfig.public.siteUrl`.
+> 3. Standard environment variable loading workflow.
+
 ---
 
-### Exercise 3: useRuntimeConfig Access Rule
+### Exercise 2: Accessing Environment Variables Safely on Server vs Client
 
-**Problem:** Which property scope on `useRuntimeConfig()` can be safely accessed inside client Vue components?
+**Scenario:**
+Demonstrate accessing public variables on client and private variables on server.
 
-**Expected output:**
+**Requirements:**
+1. Use `useRuntimeConfig()` in client and server code.
+
 > [!check]- Answer
-> ```text
-> useRuntimeConfig().public
-> ```
-> - `useRuntimeConfig().public` is accessible on both server and client.
-> 
-> ```typescript
+>
+> #### Implementation
+>
+> ```vue
+> <!-- Client Component -->
+> <script setup lang="ts">
 > const config = useRuntimeConfig();
-> console.log(config.public.apiBase);
+> // Safe: Public site URL is accessible in client browser
+> const siteUrl = config.public.siteUrl;
+> </script>
 > ```
+
+> ```typescript
+> // Server Endpoint (server/api/db.ts)
+> export default defineEventHandler((event) => {
+>   const config = useRuntimeConfig(event);
+>   // Safe: Database URL is accessible on Node.js server ONLY
+>   return { dbUrl: config.databaseUrl };
+> });
+> ```
+
+> #### Technical Explanation
+>
+> 1. `config.public` properties are embedded into client JavaScript bundles.
+> 2. Top-level `runtimeConfig` properties are stripped from client bundles, preventing credential leaks.
+> 3. Secure environment variable access model.
+
+---
+
+### Exercise 3: Validating Required Environment Variables at Startup
+
+**Scenario:**
+Throw an immediate build error if critical environment variables are missing during startup.
+
+**Requirements:**
+1. Check `process.env` in `nuxt.config.ts`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // nuxt.config.ts
+> if (process.env.NODE_ENV === "production" && !process.env.DATABASE_URL) {
+>   throw new Error("FATAL: DATABASE_URL environment variable is missing!");
+> }
+
+export default defineNuxtConfig({
+  runtimeConfig: {
+    databaseUrl: process.env.DATABASE_URL
+  }
+});
+```
+
+> #### Technical Explanation
+>
+> 1. Validating environment variables at application startup prevents runtime 500 errors later.
+> 2. Halts deployment pipelines immediately if required secrets are absent.
+> 3. Production deployment sanity check.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Runtime Config (`useRuntimeConfig`)](../level_06/runtime_config.md) — The feature that consumes the `.env` file.
 - [Standalone Build (Node server)](standalone_build.md) — Related concept: Standalone Build (Node server).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `.env` is a git-ignored file used to store private keys and environment-specific URLs.
 - Never prefix secret keys with `VITE_`.
 - Nuxt automatically maps `.env` variables starting with `NUXT_` to the `runtimeConfig` object.

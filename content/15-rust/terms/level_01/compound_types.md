@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: Grouping multiple values together is a fundamental concept in almost all programming languages.
+
+
+**Rust Language Core (composite data structures)**: Grouping multiple values together is a fundamental concept in almost all programming languages.
 
 ---
 
@@ -139,7 +141,7 @@ let val = t.0; // Correct dot indexing
 
 ### Exercise 1: IoT Sensor Packet Header Parser & Checksum Engine
 
-**Problem Context:**
+**Scenario:**
 In embedded IoT systems and binary network protocols, data frames are received as fixed-size byte buffers on the stack. A telemetry sensor frame is structured as a fixed 10-byte raw frame `[u8; 10]` with the following layout:
 - Bytes `[0..2]`: Magic sync bytes (`[0xAA, 0x55]`)
 - Bytes `[2..4]`: 16-bit Big-Endian Device ID (`u16`)
@@ -271,7 +273,7 @@ Implement a function `parse_sensor_packet(raw_frame: [u8; 10]) -> Result<((u16, 
 
 ### Exercise 2: Zero-Allocation Quantitative Trading Rolling Metrics Window
 
-**Problem Context:**
+**Scenario:**
 Ultra-low-latency financial trading algorithms cannot allocate memory dynamically (e.g., `Vec::push`) during market execution because memory allocator calls introduce non-deterministic CPU pause times. Instead, trade prices are ingested into fixed-capacity const generic arrays `[f64; N]` acting as a circular buffer on the stack.
 
 Implement a stack-based rolling price statistics buffer `RollingMetrics<const N: usize>` that tracks trade ticks and calculates real-time metrics:
@@ -392,7 +394,7 @@ Implement a stack-based rolling price statistics buffer `RollingMetrics<const N:
 
 ### Exercise 3: Autonomous Mobile Robot Spatial Occupancy Grid Analyzer
 
-**Problem Context:**
+**Scenario:**
 An autonomous mobile robot constructs a local 2D spatial grid map stored as a 4x4 nested array `[[u8; 4]; 4]` representing obstacle density per grid cell (0 = empty, 255 = impenetrable obstacle). Grid positions and bounding region coordinates are represented using 2D tuples `(usize, usize)`.
 
 Implement position translation and regional safety risk evaluation:

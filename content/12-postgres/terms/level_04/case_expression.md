@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Expression**
+
+**SQL Command / Clause** (Conditional Evaluation): `CASE WHEN ... THEN ... ELSE ... END` evaluates conditional logic within SQL projection and filtering expressions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported natively in all SQL databases. Evaluated on-the-fly for every row during the projection or filtering stage).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When displaying data in an application dashboard, you often need to translate raw database values into human-readable text labels:
@@ -98,7 +99,7 @@ FROM inventory;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to return mismatched data types across different THEN branches
 
@@ -165,83 +166,106 @@ CASE WHEN status = 'active' THEN 1 END -- Returns NULL if status is 'pending'!
 CASE WHEN status = 'active' THEN 1 ELSE 0 END -- Fallback 0
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Score Translator
+### Exercise 1: Categorizing Rows with Searched CASE Expressions
 
-**Problem:** You have a `students` table with columns `name` and `exam_score` (integers from 0 to 100). Write a SQL query that retrieves the student's name, their score, and a third column named `grade` that evaluates:
--   `A` if score is 90 or above.
--   `B` if score is 80 or above.
--   `Pass` if score is 50 or above.
--   `Fail` if score is below 50.
+**Scenario:**
+Categorize orders by total amount: `'High'` (>= $100), `'Medium'` (>= $50), `'Low'` (< $50).
 
-**Expected output:**
+**Requirements:**
+1. Execute `CASE WHEN total_cents >= 10000 THEN 'High' ... END`.
+
 > [!check]- Answer
-> ```sql
-> SELECT name, exam_score,
->   CASE
->     WHEN exam_score >= 90 THEN 'A'
->     WHEN exam_score >= 80 THEN 'B'
->     WHEN exam_score >= 50 THEN 'Pass'
->     ELSE 'Fail'
->   END AS grade
-> FROM students;
-> ```
-> - Order your `WHEN` conditions from highest to lowest. SQL evaluates conditions from top to bottom and exits at the first match.
-> - Append the `END AS grade` clause to close the block and alias the column.
-
----
-
-
-
-### Exercise 2: Conditional Category Labeling with `CASE`
-
-**Problem:** Label product prices: price < 20 -> `'Budget'`, price BETWEEN 20 AND 100 -> `'Standard'`, else -> `'Premium'`. 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT name, CASE WHEN price < 20 THEN 'Budget' WHEN price BETWEEN 20 AND 100 THEN 'Standard' ELSE 'Premium' END AS price_category FROM products;
-> ```
-> ```sql
-> SELECT name,
->   CASE
->     WHEN price < 20 THEN 'Budget'
->     WHEN price BETWEEN 20 AND 100 THEN 'Standard'
->     ELSE 'Premium'
->   END AS price_category
-> FROM products;
-> ```
 >
-> **Explanation:** `CASE WHEN ... THEN ... ELSE ... END` evaluates conditional branches in SQL queries.
-
----
-
-### Exercise 3: Conditional Aggregation with `CASE`
-
-**Problem:** Sum `total` amount for `'completed'` orders vs `'pending'` orders in a single row using `SUM(CASE WHEN ...)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT SUM(CASE WHEN status = 'completed' THEN total ELSE 0 END) AS completed_sum FROM orders;
-> ```
+> #### Implementation
+>
 > ```sql
-> SELECT
->   SUM(CASE WHEN status = 'completed' THEN total ELSE 0 END) AS completed_sum,
->   SUM(CASE WHEN status = 'pending' THEN total ELSE 0 END) AS pending_sum
+> SELECT 
+>   id, 
+>   total_cents,
+>   CASE 
+>     WHEN total_cents >= 10000 THEN 'High Value'
+>     WHEN total_cents >= 5000 THEN 'Medium Value'
+>     ELSE 'Low Value'
+>   END AS order_tier 
 > FROM orders;
 > ```
 >
-> **Explanation:** Embedding `CASE` inside aggregate functions provides conditional summary metrics.
+> #### Technical Explanation
+>
+> 1. `CASE` expressions evaluate conditions sequentially until a `WHEN` condition matches `TRUE`.
+> 2. If no condition matches, returns the `ELSE` fallback value.
+> 3. Performs server-side conditional logic.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Conditional Aggregations using CASE inside SUM/COUNT
+
+**Scenario:**
+Count total pending vs completed orders in a single aggregation pass using `SUM(CASE WHEN ...)`.
+
+**Requirements:**
+1. Use `COUNT(CASE WHEN status = 'pending' THEN 1 END)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   COUNT(CASE WHEN status = 'pending' THEN 1 END) AS pending_count,
+>   COUNT(CASE WHEN status = 'completed' THEN 1 END) AS completed_count,
+>   COUNT(CASE WHEN status = 'cancelled' THEN 1 END) AS cancelled_count 
+> FROM orders;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `COUNT()` ignores `NULL` results returned by `CASE` when conditions evaluate to false.
+> 2. Computes pivot metrics in a single table scan pass.
+> 3. High performance reporting pattern.
+
+---
+
+### Exercise 3: Dynamic Updates with CASE Expressions
+
+**Scenario:**
+Update employee salaries giving a 10% raise to role `'Engineer'` and 5% raise to role `'Support'`.
+
+**Requirements:**
+1. Execute `UPDATE employees SET salary = CASE WHEN role = 'Engineer' ... END`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> UPDATE employees 
+> SET salary_cents = CASE 
+>   WHEN role = 'Engineer' THEN ROUND(salary_cents * 1.10)
+>   WHEN role = 'Support' THEN ROUND(salary_cents * 1.05)
+>   ELSE salary_cents 
+> END;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Uses `CASE` inside `UPDATE` statements to apply different modification logic per row.
+> 2. Executes conditional bulk updates in a single atomic SQL statement.
+> 3. Efficient data manipulation.
+
+---
+
+
+
+## 6. Related Terms
 - [`SELECT`](../level_03/select.md) — The parent query command.
 - [Type Casting (`CAST` / `::`)](type_casting.md) — Converting data types in branches.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `CASE` expressions execute conditional logic (if/else) row-by-row inside queries.
 - Simple `CASE` matches exact values; Searched `CASE` evaluates custom boolean expressions.
 - Every `CASE` block must end with the `END` keyword.

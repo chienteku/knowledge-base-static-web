@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Routing**
+
+**Routing & Layouts** (Directory-Based Route Resolution): File-system routing automatically maps directory paths in `app/` to publicly accessible URL routes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time** (The routing tree is determined by the project structure when Next.js builds the app).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional single-page apps (like standard React with React Router), developers must write a central, JavaScript routing configuration file. This requires manually importing every page component, mapping them to paths, and nesting them inside layout wrappers:
@@ -65,7 +66,7 @@ Next.js automatically matches nested routes. When a user visits `/dashboard/sett
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Naming a route file arbitrarily instead of using `page.tsx`
 
@@ -120,79 +121,129 @@ app/
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Map Route Paths
+### Exercise 1: Structuring App Router Directories
 
-**Problem:** You need to build a website that maps routes for the homepage (`/`), the blog list (`/blog`), and a specific blog archive page (`/blog/archive`). Map out the directory and file tree using the Next.js App Router layout:
+**Scenario:**
+Structure an App Router route for a user dashboard `/dashboard/analytics` with nested layouts and pages.
 
-```text
-// Solution:
-app/
-├── page.tsx           (Maps to /)
-└── blog/
-    ├── page.tsx       (Maps to /blog)
-    └── archive/
-        └── page.tsx   (Maps to /blog/archive)
-```
+**Requirements:**
+1. Define folder hierarchy under `app/`.
+2. Place `layout.tsx` and `page.tsx` in correct paths.
 
 > [!check]- Answer
-> - Create nested directories for subpaths and make sure each directory contains a `page.tsx` file.
+>
+> #### Implementation
+>
+> ```text
+> Directory Structure:
+> - app/
+>   - layout.tsx (Root Layout)
+>   - page.tsx (Homepage /)
+>   - dashboard/
+>     - layout.tsx (Dashboard Layout)
+>     - analytics/
+>       - page.tsx (URL: /dashboard/analytics)
+> ```
+
+> #### Technical Explanation
+>
+> 1. App Router maps directory hierarchies directly to URL route segments.
+> 2. `page.tsx` makes a route segment publicly accessible in the browser.
+> 3. `layout.tsx` wraps child route segments in nested persistent UI shells.
 
 ---
 
-### Exercise 2: Reserved File Names Mapping
+### Exercise 2: Implementing Nested App Router Layouts
 
-**Problem:** Match the Next.js App Router special file name to its purpose:
-1. `layout.tsx` 
-2. `loading.tsx` 
-3. `error.tsx` 
-4. `route.ts` 
+**Scenario:**
+Create `app/dashboard/layout.tsx` wrapping dashboard pages with a sidebar navigation shell.
 
-**Expected output:**
+**Requirements:**
+1. Export default React Server Component accepting `{ children }: { children: React.ReactNode }`.
+
 > [!check]- Answer
-> ```text
-> 1. Shared persistent UI layout shell across sub-routes
-> 2. Instant loading fallback UI powered by React Suspense
-> 3. Error boundary catch component for sub-tree runtime exceptions
-> 4. Server-side API endpoint handler (GET, POST, etc.)
+>
+> #### Implementation
+>
+> ```tsx
+> // app/dashboard/layout.tsx
+> export default function DashboardLayout({
+>   children
+> }: {
+>   children: React.ReactNode;
+> }) {
+>   return (
+>     <div className="flex h-screen">
+>       <aside className="w-64 bg-slate-900 text-white p-4">
+>         <nav>
+>           <a href="/dashboard">Overview</a>
+>           <a href="/dashboard/analytics">Analytics</a>
+>         </nav>
+>       </aside>
+>       <main className="flex-1 p-6">{children}</main>
+>     </div>
+>   );
+> }
 > ```
-> - `layout.tsx` -> Persistent wrapper layout
-> - `loading.tsx` -> Suspense fallback skeleton
-> - `error.tsx` -> Error boundary component
-> - `route.ts` -> Backend API Route Handler
-> 
-> ```text
-> Reserved filenames build the App Router convention architecture.
-> ```
+
+> #### Technical Explanation
+>
+> 1. Dashboard layout wraps all sub-routes (`/dashboard`, `/dashboard/analytics`) automatically.
+> 2. Layouts preserve component state and avoid re-rendering common UI elements during sub-route navigation.
+> 3. React Server Component layout structure.
 
 ---
 
-### Exercise 3: Private Folder Naming Convention
+### Exercise 3: Defining Dynamic Route Segments in App Router
 
-**Problem:** How do you create a private utility folder inside `app/` that is excluded from public URL routing?
+**Scenario:**
+Create a dynamic route segment `app/products/[id]/page.tsx` and render route parameters.
 
-**Expected output:**
+**Requirements:**
+1. Access `params.id` in Server Component props.
+
 > [!check]- Answer
-> ```text
-> By prefixing the folder name with an underscore (e.g. `app/_components/` or `app/_lib/`).
+>
+> #### Implementation
+>
+> ```tsx
+> // app/products/[id]/page.tsx
+> export default async function ProductPage({
+>   params
+> }: {
+>   params: Promise<{ id: string }>;
+> }) {
+>   const { id } = await params;
+>   return (
+>     <main className="p-8">
+>       <h1 className="text-2xl font-bold">Product Details: {id}</h1>
+>     </main>
+>   );
+> }
 > ```
-> - Underscore prefix `_folder` creates private non-routable code folders.
-> 
-> ```text
-> app/_components/Button.tsx -> Not accessible at /_components/Button
-> ```
+
+> #### Technical Explanation
+>
+> 1. Bracket folder naming `[id]` creates a dynamic URL parameter segment.
+> 2. In Next.js 15 App Router, `params` is a Promise that resolves dynamic route parameters.
+> 3. Server Component fetches data directly on the server.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [App Router vs Pages Router](app_router_vs_pages.md) — The shift from page-based routing to folder-based routing.
 - [Next.js Overview](nextjs.md) — The parent framework.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Next.js uses folders inside the `app/` directory to define URL routes.
 - Special files inside folders define layout, pages, errors, and loading status.
 - Naming a file `page.tsx` registers that path as a public route.

@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-specific**: While `for` loops exist everywhere, Rust completely removes the traditional, error-prone C-style loop (`for (int i=0; i<10; i++)`) in favor of exclusively using safe, iterator-based `for ... in` loops.
+
+
+**Rust Control Flow (iterator loop construct)**: While `for` loops exist everywhere, Rust completely removes the traditional, error-prone C-style loop (`for (int i=0; i<10; i++)`) in favor of exclusively using safe, iterator-based `for ... in` loops.
 
 ---
 

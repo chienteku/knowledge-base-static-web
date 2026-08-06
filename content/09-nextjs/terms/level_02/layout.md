@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing / UI Architecture**
+
+**Routing & Layouts** (Persistent Subtree Shell Component): `layout.tsx` creates shared persistent UI shells (headers, sidebars) across nested routes without losing state or re-rendering on navigation.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Component (Default) or Client Component**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Almost every web app has shared UI. You have a Top Navbar and a Footer that appear on every page.
@@ -70,7 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to access URL Search Params in a Layout
 
@@ -123,69 +124,145 @@ const [search, setSearch] = useState(''); // ❌ State persists across all sub-r
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Nested Layouts
+### Exercise 1: Defining Root App Layouts (`app/layout.tsx`)
 
-**Problem:** You have `app/layout.tsx` and `app/dashboard/layout.tsx`. If the user navigates to `/dashboard`, how does the UI assemble itself?
+**Scenario:**
+Define `app/layout.tsx` with global metadata, fonts, and HTML document tags.
 
-**Expected output:**
+**Requirements:**
+1. Include `<html>` and `<body>` tags.
+2. Export `metadata` object.
+
 > [!check]- Answer
-> ```text
-> Layouts nest perfectly!
-> Next.js takes the Root Layout, injects the Dashboard Layout into the Root's `children`, and then injects the Dashboard Page into the Dashboard Layout's `children`.
-> Result: <RootLayout> <DashboardLayout> <DashboardPage /> </DashboardLayout> </RootLayout>
-> ```
-> - Think of Russian nesting dolls.
-
----
-
-### Exercise 2: Root Layout Mandatory Elements
-
-**Problem:** Which 2 HTML tags MUST be present in the top-most `app/layout.tsx` file?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <html> and <body>
-> ```
-> - Root layout MUST render top-level `<html>` and `<body>` elements.
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> export default function RootLayout({ children }) {
->   return (
->     <html lang="en">
->       <body>{children}</body>
->     </html>
->   );
-> }
-> ```
+> // app/layout.tsx
+> import "@/app/globals.css";
+> import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My Next.js Application",
+  description: "Built with Next.js App Router"
+};
+
+export default function RootLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className="antialiased bg-gray-50 text-gray-900">
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `app/layout.tsx` is required at the root of `app/` and wraps all application routes.
+> 2. Must render `<html>` and `<body>` tags.
+> 3. Preserves global CSS imports and document metadata.
 
 ---
 
-### Exercise 3: Nested Layout Composition
+### Exercise 2: Implementing Nested Segment Layouts
 
-**Problem:** Trace how Next.js composes `app/layout.tsx`, `app/dashboard/layout.tsx`, and `app/dashboard/page.tsx`.
+**Scenario:**
+Create a nested layout `app/settings/layout.tsx` providing a tabbed navigation header for settings sub-pages.
 
-**Expected output:**
+**Requirements:**
+1. Create persistent navigation header in `app/settings/layout.tsx`.
+
 > [!check]- Answer
-> ```text
-> app/layout.tsx wraps app/dashboard/layout.tsx, which wraps app/dashboard/page.tsx.
-> ```
-> - Layouts nest recursively down the folder hierarchy.
-> 
-> ```text
-> <RootLayout>
->   <DashboardLayout>
->     <DashboardPage />
->   </DashboardLayout>
-> </RootLayout>
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> // app/settings/layout.tsx
+> import Link from "next/link";
+
+export default function SettingsLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Account Settings</h1>
+      <nav className="flex gap-4 border-b pb-2 mb-6">
+        <Link href="/settings/profile">Profile</Link>
+        <Link href="/settings/billing">Billing</Link>
+        <Link href="/settings/security">Security</Link>
+      </nav>
+      <div>{children}</div>
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Nested layouts wrap sub-routes (`/settings/profile`, `/settings/billing`) automatically.
+> 2. Tab navigation header remains mounted while user switches between settings tabs.
+> 3. Avoids re-fetching or re-rendering common header components.
+
+---
+
+### Exercise 3: Fetching Data inside Async Server Layouts
+
+**Scenario:**
+Fetch user profile data directly inside an async `layout.tsx` Server Component.
+
+**Requirements:**
+1. Declare `export default async function Layout()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // app/dashboard/layout.tsx
+> import { getUser } from "@/lib/auth";
+
+export default async function AsyncDashboardLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
+  const user = await getUser();
+
+  return (
+    <div>
+      <header className="p-4 bg-slate-800 text-white">
+        Logged in as: {user.email}
+      </header>
+      <main>{children}</main>
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Layouts can be declared as `async` React Server Components.
+> 2. Fetches user auth data once when entering the dashboard route segment.
+> 3. Data fetched in layouts is shared across sub-routes without duplicate API calls.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`page.tsx`](page.md) — The file injected into the layout's `children`.
 - [`template.tsx`](template.md) — A layout that *does* remount on navigation.
 - [React Children Prop](children_prop.md) — Related concept: React Children Prop.
@@ -196,7 +273,7 @@ const [search, setSearch] = useState(''); // ❌ State persists across all sub-r
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`layout.tsx`** defines shared UI that wraps around pages or nested layouts.
 - It MUST accept and render a `children` prop.
 - Layouts **do not re-render** during navigation. They preserve their state perfectly.

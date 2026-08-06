@@ -12,56 +12,23 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Type Operator**
+
+**TypeScript Type Operator** (Property Name Union Operator): The `keyof` operator produces a string or numeric literal union of all known public property keys of an object type.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
 
----
 
-## 4. Explanation
-
-### (1) Design Motivation — "Why did we design this?"
-You have a `User` interface with 20 properties. You write a function `getProperty(user, key)`. 
-How do you type the `key` parameter? You could write `key: "id" | "name" | "email" ...`, but you'd have to type all 20 keys manually. If you add a new property to `User` later, you have to remember to update this union!
-The **`keyof`** operator mathematically derives the union of keys for you automatically.
-
-### (2) The Syntax
-You place `keyof` directly in front of a Type.
-
-```typescript
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-// TS automatically generates: "id" | "name" | "email"
-type UserKeys = keyof User; 
-
-function getProperty(user: User, key: UserKeys) {
-  return user[key];
-}
-
-getProperty(user, "name"); // ✅ Valid
-getProperty(user, "password"); // ❌ Error: Argument of type '"password"' is not assignable to type '"id" | "name" | "email"'.
-```
-
-### (3) Using `keyof` with Generics
-The most powerful use of `keyof` is inside Generic Constraints, allowing you to write highly dynamic, strictly typed helper functions.
-
-```typescript
-// K MUST be a valid key of whatever Object T is passed in!
-function getProp<T, K extends keyof T>(obj: T, key: K) {
-  return obj[key];
-}
-```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `keyof` on a value instead of a Type
 
@@ -113,62 +80,100 @@ type Keys = keyof any; // Yields string | number | symbol, not just string!
 type StringKeysOnly<T> = Extract<keyof T, string>;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: `keyof` with Index Signatures
+### Exercise 1: Extracting Interface Property Keys with `keyof`
 
-**Problem:** You have an interface with an Index Signature: `interface Dictionary { [key: string]: number; }`. What is the result of `type DictKeys = keyof Dictionary;`?
+**Scenario:**
+Extract the key union type of a `User` interface using `keyof User`.
 
-**Expected output:**
+**Requirements:**
+1. Define `type UserKeys = keyof User`.
+
 > [!check]- Answer
-> ```text
-> The result is `string | number`.
-> Because the object can accept ANY string as a key, `keyof` simply returns `string`. (It also returns `number` because JS allows you to access object properties via numbers, like `arr[0]`, which are coerced to strings).
-> ```
-> - If the keys are infinite, the result must represent infinity!
-
----
-
-
-
-### Exercise 2: Extracting Interface Keys with `keyof`
-
-**Problem:** Extract key union from `interface User { id: number; name: string }` using `keyof User`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> "id" | "name"
-> ```
-> ```typescript
-> interface User { id: number; name: string }
-> type UserKeys = keyof User;
-> console.log("\"id\" | \"name\"");
-> ```
 >
-> **Explanation:** `keyof T` returns a union of string/number/symbol key literal types.
+> #### Implementation
+>
+> ```typescript
+> interface User {
+>   id: number;
+>   name: string;
+>   email: string;
+> }
+
+type UserKeys = keyof User; // "id" | "name" | "email"
+
+const validKey: UserKeys = "email";
+// const invalidKey: UserKeys = "password"; // ❌ Compile Error!
+```
+
+> #### Technical Explanation
+>
+> 1. `keyof T` produces a string or numeric literal union of all public property keys of type `T`.
+> 2. Keeps key unions synchronized if new properties are added to `User` in the future.
+> 3. Essential operator for type-safe object property iteration and lookups.
 
 ---
 
-### Exercise 3: Safely Accessing Property Values with `keyof`
+### Exercise 2: Type-Safe Property Access Utility Functions
 
-**Problem:** Write `function getProp<T>(obj: T, key: keyof T)`.
+**Scenario:**
+Create a type-safe `getValue<T, K extends keyof T>(obj: T, key: K)` utility.
 
-**Expected output:**
+**Requirements:**
+1. Constrain `key` using `keyof T`.
+
 > [!check]- Answer
-> ```text
-> Type-safe property access verified
-> ```
+>
+> #### Implementation
+>
 > ```typescript
-> function getProp<T>(obj: T, key: keyof T) {
+> function getValue<T, K extends keyof T>(obj: T, key: K): T[K] {
 >   return obj[key];
 > }
-> console.log("Type-safe property access verified");
-> ```
->
-> **Explanation:** `keyof T` constrains parameter keys to valid property names of object `T`.
 
-## 7. Related Terms
+const car = { make: "Toyota", year: 2022, isElectric: false };
+
+const year = getValue(car, "year"); // Inferred as number
+const make = getValue(car, "make"); // Inferred as string
+```
+
+> #### Technical Explanation
+>
+> 1. `K extends keyof T` ensures callers can pass ONLY valid property keys existing on `obj`.
+> 2. `T[K]` returns the exact property return type corresponding to key `K`.
+> 3. Prevents accessing non-existent keys at compile time.
+
+---
+
+### Exercise 3: Auditing `keyof` Behavior on Index Signatures
+
+**Scenario:**
+Explain why `keyof Record<string, number>` evaluates to `string | number` while `keyof any[]` includes array methods (`"length" | "push" | ...`).
+
+**Requirements:**
+1. Detail `keyof` evaluation on index signatures and arrays.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type DictKeys = keyof Record<string, number>; // string | number (JS coerces obj[1] to obj["1"])
+> type ArrayKeys = keyof string[];             // number | "length" | "push" | "map" | ...
+> ```
+
+> #### Technical Explanation
+>
+> 1. For string index signatures (`Record<string, V>`), `keyof` returns `string | number` because JavaScript coerces numeric object keys to strings at runtime.
+> 2. For arrays, `keyof` produces a union of numeric indices (`number`) AND prototype array method names.
+> 3. Foundational rule of `keyof` type operations.
+
+---
+
+
+
+## 6. Related Terms
 - [Mapped Types](mapped_types.md) — The advanced feature that relies entirely on `keyof`.
 - [Multiple Generics](../level_07/multiple_generics.md) — Related concept: Multiple Generics.
 - [Indexed Access Types](indexed_access.md) — Related concept: Indexed Access Types.
@@ -178,7 +183,7 @@ type StringKeysOnly<T> = Extract<keyof T, string>;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`keyof`** is a Compile-Time operator that extracts the keys from an Object Type.
 - It returns a Union of String Literal Types (e.g., `"name" | "age"`).
 - It is incredibly useful for typing dynamic property accessors (`obj[key]`).

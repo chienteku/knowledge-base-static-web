@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Clause**
+
+**SQL Command / Clause** (Result Grouping Clause): `GROUP BY` collapses rows sharing the same values into summary group rows for aggregation.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (Evaluated after `FROM` and `WHERE` filters. Postgres uses either Hash Aggregation (building a hash table in memory) or Group Aggregation (sorting data first) to build group categories).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Aggregate functions calculate summaries across rows. 
@@ -91,7 +92,7 @@ GROUP BY category, manufacturer;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Leaving a selected attribute out of the GROUP BY clause
 
@@ -145,70 +146,110 @@ SELECT id, COUNT(*) FROM logs GROUP BY id; -- ❌ 10M distinct groups!
 Group by category or dimensional status columns
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Department Payroll Analysis
+### Exercise 1: Single Column Grouping with Aggregations
 
-**Problem:** You have an `employees` table with columns `department`, `name`, and `salary`. Write a SQL query that returns the name of each `department` along with the sum of all salaries paid in that department. Label the sum as `total_payroll`.
+**Scenario:**
+Group orders by `status` and calculate total order count and revenue per status.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT status, COUNT(*), SUM(total_cents) FROM orders GROUP BY status`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT department, SUM(salary) AS total_payroll 
-> FROM employees 
-> GROUP BY department;
+> SELECT 
+>   status, 
+>   COUNT(*) AS order_count,
+>   SUM(total_cents) / 100.0 AS total_revenue 
+> FROM orders 
+> GROUP BY status;
 > ```
-> - The output needs to show values per department; make `department` your grouping column.
-> - Apply the `SUM()` aggregate to the salary column.
+>
+> #### Technical Explanation
+>
+> 1. `GROUP BY status` collapses all rows sharing the same status value into a single summary row.
+> 2. Aggregate functions (`COUNT`, `SUM`) calculate metrics for each distinct group.
+> 3. Un-aggregated columns in `SELECT` MUST appear in the `GROUP BY` clause.
+
+---
+
+### Exercise 2: Multi-Column Hierarchical Grouping
+
+**Scenario:**
+Group sales by `year` and `category` to calculate yearly sales metrics per product category.
+
+**Requirements:**
+1. Execute `GROUP BY sales_year, category`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   EXTRACT(YEAR FROM o.created_at) AS sales_year,
+>   p.category,
+>   SUM(oi.unit_price_cents * oi.quantity) / 100.0 AS category_revenue 
+> FROM orders AS o 
+> JOIN order_items AS oi ON o.id = oi.order_id 
+> JOIN products AS p ON oi.product_id = p.id 
+> GROUP BY sales_year, p.category 
+> ORDER BY sales_year DESC, category_revenue DESC;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Multi-column `GROUP BY` creates aggregate groups for each unique COMBINATION of column values.
+> 2. Produces multi-dimensional analytics reports.
+> 3. Sorts groups using `ORDER BY`.
+
+---
+
+### Exercise 3: Resolving SQL `must appear in the GROUP BY clause` Errors
+
+**Scenario:**
+Fix a invalid SQL query attempting to select `username` without including it in `GROUP BY`.
+
+**Requirements:**
+1. Explain rule requiring non-aggregated select columns to be included in `GROUP BY`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- ❌ Invalid Query (throws Error 42803)
+> -- SELECT user_id, username, COUNT(*) FROM orders GROUP BY user_id;
+> 
+> -- ✅ Valid Query (includes username in GROUP BY or primary key functional dependency)
+> SELECT user_id, username, COUNT(*) AS total_orders 
+> FROM orders AS o 
+> JOIN users AS u ON o.user_id = u.id 
+> GROUP BY user_id, username;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. SQL standards require all non-aggregated `SELECT` columns to be specified in `GROUP BY`.
+> 2. Prevents ambiguous row values when multiple rows in a group contain different column values.
+> 3. Core SQL grouping rule.
 
 ---
 
 
 
-### Exercise 2: Multi-Column Grouping and Aggregation
-
-**Problem:** Group sales by `year` and `region` selecting total sales `SUM(amount)` and count `COUNT(*)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT year, region, SUM(amount) AS total_sales, COUNT(*) AS order_cnt FROM sales GROUP BY year, region;
-> ```
-> ```sql
-> SELECT year, region, SUM(amount) AS total_sales, COUNT(*)
-> FROM sales
-> GROUP BY year, region;
-> ```
->
-> **Explanation:** `GROUP BY col1, col2` aggregates metrics across multi-dimensional group keys.
-
----
-
-### Exercise 3: Grouping Expression Columns
-
-**Problem:** Group users by signup year extracted using `EXTRACT(YEAR FROM created_at)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT EXTRACT(YEAR FROM created_at)::INT AS signup_year, COUNT(*) FROM users GROUP BY EXTRACT(YEAR FROM created_at);
-> ```
-> ```sql
-> SELECT EXTRACT(YEAR FROM created_at)::INT AS signup_year, COUNT(*)
-> FROM users
-> GROUP BY EXTRACT(YEAR FROM created_at);
-> ```
->
-> **Explanation:** Expressions used in `SELECT` must be specified identically in `GROUP BY`.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Aggregate Functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`)](aggregate_functions.md) — The math engines inside groups.
 - [`HAVING`](having.md) — Filtering grouped outputs.
 - [`DISTINCT`](distinct.md) — Related concept: `DISTINCT`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `GROUP BY` partitions table rows into categories based on column values.
 - Runs aggregate functions inside each group bucket independently.
 - Every selected column must be aggregated or declared in the `GROUP BY` clause.

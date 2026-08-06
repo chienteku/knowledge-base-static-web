@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Optimization**
+
+**Performance & Optimization** (Web Core Vitals Telemetry): Web Core Vitals telemetry monitors LCP, INP, and CLS performance metrics using `useReportWebVitals()` hooks and server reporting.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Only** (Vitals represent real-world user metrics captured and measured inside the client's browser window).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Historically, developers measured website speed using subjective criteria like "how fast it loads on my desktop computer." This ignored users accessing websites on low-powered mobile devices or unstable networks.
@@ -53,7 +54,7 @@ Next.js features map directly to these Core Vitals:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying solely on local Lighthouse reports instead of real-user data (CrUX)
 
@@ -102,77 +103,130 @@ Next.js features map directly to these Core Vitals:
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identify the Broken Metric
+### Exercise 1: Measuring Web Core Vitals with `useReportWebVitals()`
 
-**Problem:** Match each user complaint to the broken Web Core Vital metric:
-1. "Every time I try to click the accept button, a late-loading advertisement pops in, pushes the button down, and I accidentally click the wrong item!"
-2. "I clicked the submit button on the signup form, but the page just hung there for a second before showing the spinner."
-3. "The page structure loaded instantly, but the large hero banner image took 8 seconds to transition from grey to full color."
+**Scenario:**
+Report client-side Web Core Vitals performance metrics (`LCP`, `INP`, `CLS`) to an analytics endpoint.
 
-**Expected output:**
+**Requirements:**
+1. Import `useReportWebVitals` from `next/navigation` inside a Client Component.
+
 > [!check]- Answer
-> ```text
-> 1. CLS (Layout shift caused by lack of reserved dimensions).
-> 2. INP / FID (Latency between action input and browser thread reaction).
-> 3. LCP (Slow rendering of the primary layout element).
-> ```
-> - CLS is always related to elements moving unexpectedly.
-
----
-
-### Exercise 2: Core Vitals Metrics Matrix
-
-**Problem:** Match Core Vital metric to technical measurement:
-1. LCP (Largest Contentful Paint)
-2. INP (Interaction to Next Paint)
-3. CLS (Cumulative Layout Shift)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Render time of largest image/text block visible in viewport (Loading speed)
-> 2. Latency of user interaction feedback to next painted frame (Interactivity)
-> 3. Visual stability score measuring unexpected layout movements (Visual stability)
-> ```
-> - LCP -> Loading Performance (Target < 2.5s)
-> - INP -> Interactivity & Responsiveness (Target < 200ms)
-> - CLS -> Visual Stability (Target < 0.1)
-> 
-> ```text
-> LCP < 2.5s | INP < 200ms | CLS < 0.1
-> ```
-
----
-
-### Exercise 3: useReportWebVitals Hook Setup
-
-**Problem:** Write `useReportWebVitals` hook function logging metric name and value inside `app/providers.tsx`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> 'use client'; import { useReportWebVitals } from 'next/navigation'; export function WebVitals() { useReportWebVitals((metric) => { console.log(metric.name, metric.value); }); return null; }
-> ```
-> - `useReportWebVitals()` captures real-user Core Vitals metrics.
-> 
+> "use client";
+
+import { useReportWebVitals } from "next/navigation";
+
+export default function WebVitalsReporter() {
+  useReportWebVitals((metric) => {
+    console.log(`[Web Vital] ${metric.name}:`, metric.value);
+    
+    // Send telemetry to analytics server:
+    fetch("/api/telemetry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(metric)
+    });
+  });
+
+  return null;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `useReportWebVitals()` measures real-user performance metrics (RUM) in client browsers.
+> 2. `metric.name` identifies the Web Vital metric (`LCP`, `INP`, `CLS`, `FCP`, `TTFB`).
+> 3. Allows tracking real user performance metrics across production deployments.
+
+---
+
+### Exercise 2: Optimizing Largest Contentful Paint (LCP)
+
+**Scenario:**
+Optimize a slow LCP score caused by a hero banner image.
+
+**Requirements:**
+1. Add `priority` prop to hero image component.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> 'use client';
-> import { useReportWebVitals } from 'next/navigation';
-> 
-> export function WebVitals() {
->   useReportWebVitals((metric) => {
->     console.log(`[Web Vital] ${metric.name}: ${metric.value}`);
->   });
->   return null;
-> }
-> ```
+> import Image from "next/image";
+
+export default function Hero() {
+  return (
+    <section>
+      <Image
+        src="/hero-banner.jpg"
+        alt="Hero Banner"
+        width={1200}
+        height={600}
+        priority // Instructs browser to preload LCP image immediately!
+      />
+    </section>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Largest Contentful Paint (LCP) measures the time taken to render the largest visible UI element.
+> 2. `priority` prop injects `<link rel="preload">` tag into HTML head for hero images.
+> 3. Directly improves LCP speed score.
+
+---
+
+### Exercise 3: Optimizing Interaction to Next Paint (INP)
+
+**Scenario:**
+Improve a poor INP (Interaction to Next Paint) score caused by synchronous CPU blocking tasks in event handlers.
+
+**Requirements:**
+1. Wrap CPU task in `startTransition()` or `setTimeout()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { startTransition } from "react";
+
+export default function NonBlockingButton() {
+  function handleClick() {
+    // Yield main thread to allow browser UI paint before heavy task:
+    startTransition(() => {
+      // Heavy CPU task...
+    });
+  }
+
+  return <button onClick={handleClick}>Process Data</button>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Interaction to Next Paint (INP) measures page responsiveness to user clicks and keypresses.
+> 2. Synchronous JavaScript blocking main thread prevents browser UI repaints.
+> 3. `startTransition` yields main thread control, maintaining low INP response times.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`<Image>` Component](next_image.md) — The optimization tool for LCP and CLS.
 - [`next/font` Optimization](next_font.md) — The optimization tool for CLS.
 - [HTML `<img>` Element](html_img.md) — Related concept: HTML `<img>` Element.
@@ -180,7 +234,7 @@ Next.js features map directly to these Core Vitals:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Web Core Vitals are Google's standardized performance indicators for SEO ranking.
 - LCP tracks loading speed of the primary content block; CLS tracks layout visual stability.
 - INP/FID tracks interactivity delays; TTFB tracks server response time.

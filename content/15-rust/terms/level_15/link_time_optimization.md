@@ -14,17 +14,15 @@
 
 ## 2. Term Category
 
-**Performance / Tooling / Compiler Configuration**: Link-Time Optimization (LTO) is a compilation technique provided by LLVM. Normally, `rustc` compiles each crate (and each codegen unit within a crate) independently into machine code object files (`.o` / `.rlib`), preventing optimizations from spanning across crate boundaries unless `#[inline]` is explicitly marked. LTO defers code generation optimization until the linker stage, giving the LLVM linker a **whole-program view** of all crates in the dependency graph.
+
+
+**Rust Compiler Optimization (cross-codegen-unit LTO link optimizations)**: Link-Time Optimization (LTO) is a compilation technique provided by LLVM. Normally, `rustc` compiles each crate (and each codegen unit within a crate) independently into machine code object files (`.o` / `.rlib`), preventing optimizations from spanning across crate boundaries unless `#[inline]` is explicitly marked. LTO defers code generation optimization until the linker stage, giving the LLVM linker a **whole-program view** of all crates in the dependency graph.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Cargo Build Configuration (`Cargo.toml`)**: LTO is configured inside Cargo release profiles (`[profile.release]`). It operates during host compilation and dramatically impacts final binary execution speed and binary size across all targets (`std`, `no_std`, WASM, embedded).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -112,7 +110,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Enabling Fat LTO (`lto = true`) on Debug Profile (`[profile.dev]`)
 
@@ -162,13 +160,17 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: High-Throughput Packet Processor with Thin LTO
 
-**Problem Statement:** You are building a high-throughput network packet processing pipeline for a microservice. Packet header verification, payload obfuscation, and checksum calculations are split across crate boundaries. External helper functions do NOT specify explicit `#[inline]` attributes. Configure Cargo for Thin LTO (`lto = "thin"`), implement a complete packet processor with payload masking and validation routines, and write unit tests with assertions proving packet transformation correctness.
+**Scenario:** **Problem Statement:** You are building a high-throughput network packet processing pipeline for a microservice. Packet header verification, payload obfuscation, and checksum calculations are split across crate boundaries. External helper functions do NOT specify explicit `#[inline]` attributes. Configure Cargo for Thin LTO (`lto = "thin"`), implement a complete packet processor with payload masking and validation routines, and write unit tests with assertions proving packet transformation correctness.
 
+**Requirements:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > // Cargo.toml configuration required for this exercise:
 > // [profile.release]
@@ -336,7 +338,8 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Cross-Crate Inlining without `#[inline]`**: Without LTO, calling `external_crypto_crate::compute_checksum` requires generating dynamic cross-crate function call instructions. With `lto = "thin"`, LLVM emits module summaries and performs cross-crate function inlining directly into `process_frame`.
 > 2. **SIMD & Loop Unrolling**: The `apply_mask` function operates on fixed 8-byte payload arrays. When inlined across crate boundaries via Thin LTO, LLVM detects the fixed iteration bounds and unrolls/vectorizes the operation into fast SIMD or 64-bit register operations.
 > 3. **Thin LTO vs Fat LTO Balance**: Thin LTO compiles codegen units in parallel, maintaining fast compile and link times while delivering 80-90% of the optimization benefits of Fat LTO.
@@ -345,9 +348,13 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 
 ### Exercise 2: Embedded Telemetry Packer with Fat LTO Dead-Code Elimination
 
-**Problem Statement:** In a `#![no_std]` embedded environment (such as an ARM Cortex-M microcontroller), SRAM and Flash memory are severely constrained. You are building a sensor telemetry serializer. External dependency crates often contain diagnostic string formatting utilities that are unused in production. Configure Cargo for Fat LTO (`lto = true`, `codegen-units = 1`, `opt-level = "z"`), write a `#![no_std]` compatible telemetry frame serializer with bit-packing and CRC-8 validation, and include unit tests validating serialization accuracy.
+**Scenario:** **Problem Statement:** In a `#![no_std]` embedded environment (such as an ARM Cortex-M microcontroller), SRAM and Flash memory are severely constrained. You are building a sensor telemetry serializer. External dependency crates often contain diagnostic string formatting utilities that are unused in production. Configure Cargo for Fat LTO (`lto = true`, `codegen-units = 1`, `opt-level = "z"`), write a `#![no_std]` compatible telemetry frame serializer with bit-packing and CRC-8 validation, and include unit tests validating serialization accuracy.
 
+**Requirements:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > // Cargo.toml configuration for embedded binary size minimization:
 > // [profile.release]
@@ -497,7 +504,8 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Whole-Program Bitcode Analysis**: When `lto = true` and `codegen-units = 1` are configured, LLVM merges bitcode from all dependency crates into a single translation unit during linking.
 > 2. **Global Dead-Code Elimination (DCE)**: Unreferenced functions, such as `format_verbose_json_debug`, along with associated static string literals and metadata, are purged completely from the final binary, preventing Flash memory bloat.
 > 3. **`#![no_std]` and Panic Abort**: Combining Fat LTO with `panic = "abort"` strips complex Rust stack unwinding tables (`.eh_frame`), generating ultra-compact firmware binaries ideal for microcontrollers and WebAssembly modules.
@@ -506,9 +514,13 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 
 ### Exercise 3: Cross-Crate Trait Monomorphization & Devirtualization
 
-**Problem Statement:** In a real-time financial order matching engine, incoming orders are processed through fee tier strategies defined by trait implementations. In multi-crate software architectures, strategy execution across crate boundaries can introduce dispatch overhead. Configure Cargo for LTO to enable whole-program trait devirtualization, implement an order processing engine with traits and strategy implementations, and write unit tests using `assert_eq!` verifying fee calculations.
+**Scenario:** **Problem Statement:** In a real-time financial order matching engine, incoming orders are processed through fee tier strategies defined by trait implementations. In multi-crate software architectures, strategy execution across crate boundaries can introduce dispatch overhead. Configure Cargo for LTO to enable whole-program trait devirtualization, implement an order processing engine with traits and strategy implementations, and write unit tests using `assert_eq!` verifying fee calculations.
 
+**Requirements:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > // Cargo.toml configuration:
 > // [profile.release]
@@ -646,14 +658,15 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Monomorphization & Trait Devirtualization**: Monomorphization creates specialized instances of generic structs and methods (`MatchingEngine<TieredFeeStrategy>`). When combined with LTO across crates, LLVM devirtualizes and inlines `calculate_fee` directly into `execute_order`.
 > 2. **Branch Analysis & Constant Propagation**: Inlining allows LLVM to evaluate branching logic (`total_cost_cents >= vip_threshold_cents`) in conjunction with caller context, optimizing conditional branches and register allocations across crate boundaries.
 > 3. **Thin LTO Benefits for Large Systems**: Thin LTO allows large, highly modular Rust projects to achieve direct-call execution speed without incurring the extreme compilation time penalties of Fat LTO.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Release Profile](release_profile.md) — Cargo build profile where LTO is configured.
@@ -663,7 +676,7 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Link-Time Optimization (LTO) defers LLVM optimization passes until the linking step, giving the compiler a whole-program view of all crates.
 - It enables cross-crate inlining (even without `#[inline]`), global dead-code elimination, and whole-program loop vectorization.

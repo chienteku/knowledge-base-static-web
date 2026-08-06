@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Tooling / FFI**: `cbindgen` is the inverse counterpart to `bindgen`. When developing a Rust crate intended to be compiled into a static (`.a`) or dynamic (`.so` / `.dylib` / `.dll`) native library for consumption by C, C++, Swift, or C# projects, `cbindgen` parses your Rust code AST and outputs 100% accurate C/C++ header files (`my_library.h`).
+
+
+**Rust FFI Tooling (automatic Rust crate to C header generator)**: `cbindgen` is the inverse counterpart to `bindgen`. When developing a Rust crate intended to be compiled into a static (`.a`) or dynamic (`.so` / `.dylib` / `.dll`) native library for consumption by C, C++, Swift, or C# projects, `cbindgen` parses your Rust code AST and outputs 100% accurate C/C++ header files (`my_library.h`).
+
+
 
 ---
 
-## 3. Environment Context
-
-**Cargo Build Script / CLI Tool**: `cbindgen` can be executed as a command-line tool (`cbindgen --config cbindgen.toml --crate my_crate --output my_crate.h`) or as a `[build-dependencies]` library inside `build.rs` to generate headers automatically during compilation.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -143,7 +141,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting `#[no_mangle]` or `pub extern "C"`
 
@@ -211,14 +209,15 @@ crate-type = ["cdylib", "staticlib"]
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Opaque Pointer Handles & Safe Lifecycle Management in Embedded C FFI
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 You are developing an Exponential Moving Average (EMA) signal filter module in Rust to be integrated into an embedded C system (e.g., an industrial sensor gateway). The legacy C runtime needs to create a filter instance, feed raw sensor samples, read filtered results, and destroy the instance when finished.
 To protect internal state from direct C mutation and prevent struct binary layout mismatches across cross-compilers, Rust must export the filter instance via an **opaque pointer handle** (`*mut EmaFilter`). All exported functions must return a C-compatible status enum (`#[repr(C)] pub enum FilterResult`).
 
+**Requirements:**
 Write the complete Rust code that:
 1. Defines `FilterResult` (`#[repr(C)]`) with variants `Ok = 0`, `NullPointer = -1`, and `InvalidParameter = -2`.
 2. Defines `EmaFilter` containing `alpha: f32`, `current_value: f32`, and `sample_count: u64`.
@@ -227,6 +226,9 @@ Write the complete Rust code that:
 
 > [!check]- Answer
 > **Rust Implementation (`src/lib.rs`):**
+>
+> #### Implementation
+>
 > ```rust
 > use std::ptr;
 > 
@@ -403,10 +405,11 @@ Write the complete Rust code that:
 
 ### Exercise 2: Telemetry Batch Processing & `#[repr(C)]` Fixed Array Layouts
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 An automotive diagnostic system written in C streams telemetry batches into a Rust processing module. Each telemetry packet consists of a timestamp (`u64`), sensor ID (`u32`), 4 floating-point signal values (`[f32; 4]`), and a checksum (`u32`).
 To ensure `cbindgen` outputs exact field layout and offset alignment matching C struct definitions without compiler padding discrepancies, Rust structs must use `#[repr(C)]`.
 
+**Requirements:**
 Write the complete Rust code that:
 1. Defines `TelemetryPacket` (`#[repr(C)]`) with fixed-size payload array `[f32; 4]`.
 2. Defines `BatchResult` (`#[repr(C)]`) containing summary metrics: `total_processed: u32`, `valid_packets: u32`, and `average_signal: f32`.
@@ -416,6 +419,9 @@ Write the complete Rust code that:
 
 > [!check]- Answer
 > **Rust Implementation (`src/lib.rs`):**
+>
+> #### Implementation
+>
 > ```rust
 > use std::slice;
 > 
@@ -599,9 +605,10 @@ Write the complete Rust code that:
 
 ### Exercise 3: Cross-Language Heap Allocation & C-String Ownership Transfer
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 A C network service requires a Rust cryptographic backend to compute formatted hex digest strings for arbitrary byte buffers. Because C strings are null-terminated (`const char*`) while Rust `String` / `&str` objects are length-prefixed UTF-8 byte buffers without trailing nulls, Rust must convert its output into a null-terminated `CString`, relinquish heap ownership to C via `CString::into_raw()`, and provide an explicit destructor function (`rust_string_free`) to prevent memory leaks.
 
+**Requirements:**
 Write the complete Rust code that:
 1. Implements `crypto_compute_hex_hash(data: *const u8, len: usize, out_str: *mut *mut c_char) -> i32`.
 2. Formats a mock hash string `HASH-<HEX_SUM>` into a `CString` and writes the raw pointer to `out_str`.
@@ -610,6 +617,9 @@ Write the complete Rust code that:
 
 > [!check]- Answer
 > **Rust Implementation (`src/lib.rs`):**
+>
+> #### Implementation
+>
 > ```rust
 > use std::ffi::{CStr, CString};
 > use std::os::raw::c_char;
@@ -737,7 +747,7 @@ Write the complete Rust code that:
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`bindgen`](bindgen.md) — The counterpart tool (parsing C headers to generate Rust code).
@@ -746,7 +756,7 @@ Write the complete Rust code that:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - `cbindgen` parses Rust source code to automatically generate C and C++ header files (`.h` / `.hpp`).
 - It scans for `#[no_mangle] pub extern "C" fn` exported functions and `#[repr(C)]` structs.

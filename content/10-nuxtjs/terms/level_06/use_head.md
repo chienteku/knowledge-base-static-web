@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SEO**
+
+**SEO & Meta Management** (Reactive Document Head Composition): `useHead()` modifies the HTML `<head>` element (title, meta tags, external scripts, link tags) reactively across server and client renders.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a traditional Single Page Application, the `index.html` file has a static `<title>` and `<meta>` tags. If you navigate to the "About" page, the title in the browser tab doesn't change unless you manually write JavaScript to mutate `document.title`. This is terrible for SEO, as search engines rely heavily on dynamic titles and descriptions.
@@ -68,7 +69,7 @@ useHead({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not making `useHead` reactive
 **The mistake:** Passing static strings into `useHead` when the data actually depends on an API response that might change.
@@ -141,86 +142,129 @@ useHead({ script: [{ key: 'my-script', children: 'console.log(1)' }] }); // Key 
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Adding an external CSS file
+### Exercise 1: Configuring Document Head Meta and Script Tags
 
-**Problem:** Write the `useHead` block required to inject an external stylesheet (`https://example.com/styles.css`) into the document head.
+**Scenario:**
+Add a third-party analytics script tag and custom CSS stylesheet link using `useHead()`.
 
-**Expected output:**
+**Requirements:**
+1. Pass `script` and `link` arrays to `useHead()`.
+
 > [!check]- Answer
-> ```typescript
-> useHead({
->   link: [
->     { rel: 'stylesheet', href: 'https://example.com/styles.css' }
->   ]
-> });
-> ```
-> - Link elements inside `useHead` are passed as an array of objects inside the `link` key.
-
----
-
-### Exercise 2: useHead Dynamic Canonical URL Pattern
-
-**Problem:** Write `<script setup>` using `useHead()` setting reactive `<title>`, `<meta name="description">`, and `<link rel="canonical">`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
-> const route = useRoute();
+> <script setup lang="ts">
 > useHead({
->   title: 'Dynamic Page',
->   meta: [{ name: 'description', content: 'Page description' }],
->   link: [{ rel: 'canonical', href: () => `https://example.com${route.path}` }]
-> });
-> </script>
-> ```
-> - `useHead()` manages reactive HTML head elements.
-> 
-> ```vue
-> <script setup>
-> const route = useRoute();
-> 
-> useHead({
->   title: () => `Product Page | Store`,
->   meta: [{ name: 'description', content: 'Shop our top quality products.' }],
+>   title: "Dashboard Overview",
 >   link: [
->     { rel: 'canonical', href: () => `https://example.com${route.path}` }
+>     { rel: "stylesheet", href: "https://cdn.example.com/styles.css" }
+>   ],
+>   script: [
+>     { src: "https://cdn.example.com/analytics.js", defer: true }
 >   ]
 > });
 > </script>
-> ```
+
+<template>
+  <div>
+    <h1>Analytics Overview</h1>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useHead()` modifies the HTML `<head>` section during SSR rendering and dynamic client navigation.
+> 2. `script` and `link` arrays append `<script>` and `<link>` tags to the rendered document head.
+> 3. Integrates with `@unhead/vue` under the hood.
 
 ---
 
-### Exercise 3: useHead titleTemplate Feature
+### Exercise 2: Reactive Head Options with Computed Refs
 
-**Problem:** Write `useHead()` line setting `titleTemplate` so page title `'About'` formats as `'About - My Store'`.
+**Scenario:**
+Update document title reactively whenever a unread notifications counter changes.
 
-**Expected output:**
+**Requirements:**
+1. Pass computed title to `useHead()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const unreadCount = ref(3);
+
+useHead({
+  title: computed(() => `(${unreadCount.value}) Inbox Messages`)
+});
+</script>
+
+<template>
+  <div>
+    <button @click="unreadCount++">Receive Message</button>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Passing computed refs to `useHead()` maintains reactive DOM updates in `document.title`.
+> 2. Updates browser tab title immediately when reactive state changes in the client.
+> 3. Declarative head management model.
+
+---
+
+### Exercise 3: Setting Global Default Head Tags in `nuxt.config.ts`
+
+**Scenario:**
+Configure global fallback document title template and charset tags in `nuxt.config.ts`.
+
+**Requirements:**
+1. Configure `app.head` in `nuxt.config.ts`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> useHead({ titleTemplate: '%s - My Store' });
-> ```
-> - `titleTemplate` applies a global string format template to titles.
-> 
-> ```typescript
-> useHead({
->   titleTemplate: '%s - My Store'
+> // nuxt.config.ts
+> export default defineNuxtConfig({
+>   app: {
+>     head: {
+>       titleTemplate: "%s - Enterprise SaaS",
+>       charset: "utf-8",
+>       viewport: "width=device-width, initial-scale=1"
+>     }
+>   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `app.head` sets global fallback document head properties across all pages.
+> 2. `titleTemplate: '%s - Enterprise SaaS'` automatically appends the suffix to page titles set by `useHead({ title: 'Pricing' })` ("Pricing - Enterprise SaaS").
+> 3. Standard global SEO configuration option.
 
 ---
 
-## 7. Related Terms
+
+
+
+---
+
+## 6. Related Terms
 - [`useSeoMeta`](use_seo_meta.md) — A specialized version of `useHead` strictly for Open Graph and Twitter meta tags.
 - [Search Engine Optimization (SEO)](../level_01/seo.md) — Related concept: Search Engine Optimization (SEO).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useHead` allows you to manage the `<head>` of your HTML document.
 - It works flawlessly with SSR to ensure search engines see the correct tags.
 - You can inject titles, meta tags, scripts, and stylesheets.

@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Data Modeling** (Time-Series & Telemetry Grouping Pattern): The Bucket Pattern groups time-series datapoints or log events into discrete time-bounded bucket documents to optimize index footprint and IOPS.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Crucial for high-ingestion time-series platforms. Standard practice in IoT, stock tickers, and system performance monitoring engines).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In IoT systems or server monitors, devices stream data constantly:
@@ -101,7 +102,7 @@ db.sensor_buckets.updateOne(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Failing to cap the bucket size, allowing the nested measurements array to grow infinitely
 
@@ -149,80 +150,114 @@ db.sensor_buckets.updateOne({ deviceId, count: { $lt: 1000000 } }, ...);
 db.sensor_buckets.updateOne({ deviceId, count: { $lt: 1000 } }, { $push: { readings }, $inc: { count: 1 } }, { upsert: true });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Ingestion Query Formulation
+### Exercise 1: Bucketing IoT Sensor Readings by Hour
 
-**Problem:** A solar panel sensor (`panel_id: 44`) logs `watts_generated: 15.2` every minute. You decide to bucket data by **day** (`date_bucket: "2026-07-21"`), capping each document at **1440** readings (1 day of minutes).
-Write the MongoDB upsert query to log a reading.
+**Scenario:**
+Group incoming IoT temperature sensor readings into 1-hour bucket documents in collection `sensor_buckets`.
 
-**Expected output:**
+**Requirements:**
+1. Store `deviceId`, `bucketStart`, `count`, and `readings: [{ t, val }]`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.solar_buckets.updateOne(
+> const now = new Date();
+> const hourStart = new Date(now.setMinutes(0, 0, 0));
+> 
+> db.sensor_buckets.updateOne(
 >   {
->     panel_id: 44,
->     date_bucket: "2026-07-21",
->     count: { $lt: 1440 }
+>     deviceId: "DEV-101",
+>     bucketStart: hourStart,
+>     count: { $lt: 60 }
 >   },
 >   {
->     $push: { readings: { watts: 15.2, time: new Date() } },
->     $inc: { count: 1 }
+>     $push: { readings: { t: new Date(), val: 22.4 } },
+>     $inc: { count: 1, sumVal: 22.4 },
+>     $setOnInsert: { deviceId: "DEV-101", bucketStart: hourStart }
 >   },
 >   { upsert: true }
 > );
 > ```
-> - Match the panel ID, the current date bucket, and check that the count is strictly less than 1440.
-> - Append the new reading to the array using `$push` and increment the count using `$inc`.
-> - Enable the upsert option.
+>
+> #### Technical Explanation
+>
+> 1. The Bucket Pattern groups time-series datapoints into pre-allocated time bucket documents.
+> 2. Reduces total collection document count by 60x to 1000x compared to 1-doc-per-reading models.
+> 3. Dramatically reduces index memory footprint and IOPS.
+
+---
+
+### Exercise 2: Computing Pre-Aggregated Bucket Metrics
+
+**Scenario:**
+Maintain pre-calculated `minVal` and `maxVal` summary fields inside sensor bucket documents during upserts.
+
+**Requirements:**
+1. Use `$min` and `$max` operators during bucket updates.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.sensor_buckets.updateOne(
+>   { deviceId: "DEV-101", bucketStart: hourStart },
+>   {
+>     $push: { readings: { t: new Date(), val: 24.8 } },
+>     $inc: { count: 1 },
+>     $min: { minVal: 24.8 },
+>     $max: { maxVal: 24.8 }
+>   },
+>   { upsert: true }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$min` and `$max` calculate running summary bounds inside bucket documents atomically.
+> 2. Allows dashboards to query pre-computed min/max values without scanning individual array items.
+> 3. Accelerates analytical reporting queries.
+
+---
+
+### Exercise 3: Evaluating Native Time-Series Collections vs Manual Bucketing
+
+**Scenario:**
+Compare manual Bucket Pattern schemas against MongoDB 5.0+ native Time-Series collections.
+
+**Requirements:**
+1. Contrast manual bucketing vs native `timeseries` collection features.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> // MongoDB 5.0+ Native Time-Series Collection Creation
+> db.createCollection("weather_metrics", {
+>   timeseries: {
+>     timeField: "timestamp",
+>     metaField: "metadata",
+>     granularity: "hours"
+>   }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Native Time-Series collections handle bucketing, columnar compression, and lifecycle management automatically.
+> 2. Manual bucketing is useful when custom bucket limits or pre-aggregations are required.
+> 3. Both models significantly reduce disk and memory overhead.
 
 ---
 
 
 
-### Exercise 2: Bucket Pattern Document Structure
-
-**Problem:** Model IoT sensor bucket document for `sensor:100` storing hourly readings and summary metrics.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> { sensorId: 100, day: ISODate("2026-01-01"), count: 60, readings: [...] }
-> ```
-> ```javascript
-> const bucket = {
->   sensorId: 100,
->   day: new Date("2026-01-01T00:00:00Z"),
->   count: 60,
->   sum: 1200,
->   readings: [ { t: 0, val: 20 }, { t: 1, val: 22 } ]
-> };
-> ```
->
-> **Explanation:** Bucket Pattern aggregates time-series data streams into bounded group documents.
-
----
-
-### Exercise 3: Upserting into Bounded Bucket Document
-
-**Problem:** Upsert reading into bucket `sensorId: 100` where `count < 100` using `$inc` and `$push`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.buckets.updateOne({ sensorId: 100, count: { $lt: 100 } }, { $push: { readings: reading }, $inc: { count: 1, sum: reading.val } }, { upsert: true });
-> ```
-> ```javascript
-> db.buckets.updateOne(
->   { sensorId: 100, count: { $lt: 100 } },
->   { $push: { readings: reading }, $inc: { count: 1, sum: reading.val } },
->   { upsert: true }
-> );
-> ```
->
-> **Explanation:** `{ count: { $lt: N } }` with `upsert: true` automatically rolls over to new buckets when caps are reached.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
 - [Upsert (`upsert: true`)](../level_03/upsert.md) — The ingestion operator.
@@ -230,7 +265,7 @@ Write the MongoDB upsert query to log a reading.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Bucket Pattern groups time-series event data into fixed-size documents.
 - Drastically reduces database index sizes and document counts.
 - Speeds up range queries by reading sequential logs in a single read.

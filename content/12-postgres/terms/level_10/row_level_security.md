@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Feature / Security**
+
+**Constraint** (Row-Level Security Policies): Row-Level Security (RLS) enforces row access policies (`CREATE POLICY`) restricting row visibility based on user session attributes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Fully supported natively. Handled at the query compiler layer, injecting security filters into incoming SELECT/DML queries before execution).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern Software-as-a-Service (SaaS) web applications, multiple companies (tenants) share the same database tables to save hosting costs:
@@ -106,7 +107,7 @@ SELECT * FROM tasks;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Testing RLS policies using the database owner role or superuser account
 
@@ -158,73 +159,100 @@ CREATE POLICY user_policy ON documents FOR SELECT USING (user_id = current_setti
 ALTER TABLE documents FORCE ROW LEVEL SECURITY; -- Enforces RLS on table owners
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Personal Profile Policy
+### Exercise 1: Enabling Row-Level Security (RLS) on Tables
 
-**Problem:** You have a `user_profiles` table (columns: `id`, `username`, `phone_number`). You want to ensure users can only select and edit their own profiles. 
+**Scenario:**
+Enable Row-Level Security on `tenant_data` table and define a security policy restricting users to reading ONLY rows matching `tenant_id = current_setting('app.current_tenant_id')`.
 
-Write the SQL DDL queries to:
-1.  Enable Row-Level Security on the `user_profiles` table.
-2.  Create a policy named `user_profile_policy` that permits access only if the `username` column matches the active `current_user` name.
+**Requirements:**
+1. Execute `ALTER TABLE tenant_data ENABLE ROW LEVEL SECURITY`.
+2. Create policy using `USING (tenant_id = current_setting('app.current_tenant_id'))`.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
+> ALTER TABLE tenant_data ENABLE ROW LEVEL SECURITY;
 > 
-> CREATE POLICY user_profile_policy ON user_profiles
-> USING (username = current_user);
+> CREATE POLICY tenant_isolation_policy ON tenant_data 
+> FOR ALL 
+> USING (tenant_id = current_setting('app.current_tenant_id'));
 > ```
-> - Use the `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` syntax.
-> - Reference the built-in PostgreSQL function `current_user` in the `USING` clause.
+>
+> #### Technical Explanation
+>
+> 1. `ENABLE ROW LEVEL SECURITY` activates row-level security filtering on target tables.
+> 2. `CREATE POLICY` defines row access expressions evaluated automatically on every query.
+> 3. Guarantees multi-tenant data isolation at the storage engine tier.
 
 ---
 
+### Exercise 2: Setting Session Context Variables for RLS Policies
 
+**Scenario:**
+Set session configuration variable `app.current_tenant_id = 'tenant_100'` in application queries before reading `tenant_data`.
 
-### Exercise 2: Tenant Isolation RLS Policy
+**Requirements:**
+1. Execute `SET LOCAL app.current_tenant_id = 'tenant_100'`.
 
-**Problem:** Enable RLS on `documents` table and create policy isolating rows where `tenant_id = current_setting('app.current_tenant_id')::INT`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> ALTER TABLE documents ENABLE ROW LEVEL SECURITY; CREATE POLICY tenant_isolation_policy ON documents FOR ALL USING (tenant_id = current_setting('app.current_tenant_id')::INT);
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
-> CREATE POLICY tenant_isolation_policy ON documents
-> FOR ALL
-> USING (tenant_id = current_setting('app.current_tenant_id')::INT);
+> BEGIN;
+> 
+> SET LOCAL app.current_tenant_id = 'tenant_100';
+> 
+> SELECT * FROM tenant_data; -- Returns ONLY tenant_100 rows!
+> 
+> COMMIT;
 > ```
 >
-> **Explanation:** RLS policies filter table rows dynamically based on session settings (`current_setting()`).
+> #### Technical Explanation
+>
+> 1. `SET LOCAL var_name = value` sets a session variable scoped exclusively to the current transaction.
+> 2. RLS policy evaluates `current_setting('app.current_tenant_id')` to filter query rows dynamically.
+> 3. Secure multi-tenant architecture pattern (used heavily by Supabase and multi-tenant SaaS backends).
 
 ---
 
-### Exercise 3: Bypassing RLS Attribute
+### Exercise 3: Testing RLS Bypassing for Superusers
 
-**Problem:** What role attribute allows superusers to bypass RLS policies? (`BYPASSRLS`).
+**Scenario:**
+Explain why table owners and superusers bypass RLS policies by default, and enforce RLS for table owners using `FORCE ROW LEVEL SECURITY`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `ALTER TABLE tenant_data FORCE ROW LEVEL SECURITY`.
+
 > [!check]- Answer
-> ```text
-> BYPASSRLS attribute
-> ```
-> ```text
-> BYPASSRLS attribute
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TABLE tenant_data FORCE ROW LEVEL SECURITY;
 > ```
 >
-> **Explanation:** Superuser roles possess the `BYPASSRLS` attribute by default.
+> #### Technical Explanation
+>
+> 1. Table owners and superusers bypass RLS policies by default.
+> 2. `FORCE ROW LEVEL SECURITY` forces table owners to obey RLS policies during testing and production operations.
+> 3. Security hardening standard.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [Roles & Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`)](roles_permissions.md) — The roles bound.
 - [View](../level_09/view.md) — Creating simple logical column masks.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - RLS restricts table row visibility based on the database role executing the query.
 - Prevents multi-tenant data leaks by moving security filters to the DB engine.
 - Must be explicitly activated using `ALTER TABLE ... ENABLE ROW LEVEL SECURITY`.

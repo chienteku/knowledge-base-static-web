@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Index / Performance** (Rolling & Background Index Creation): Index Builds manage asynchronous, non-blocking secondary index construction across active production collections and replica set nodes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Since MongoDB 4.2+, all index builds use a hybrid build system that behaves as a background process by default. Building indexes still consumes high CPU and disk write I/O).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Building an index on a collection containing 50 million documents is a heavy task. 
@@ -78,7 +79,7 @@ Imagine painting new lane markers on a busy city highway:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Running createIndex() on a massive production database during peak business hours, assuming background builds have "zero performance impact"
 
@@ -91,6 +92,8 @@ This slows down all other active queries, causing API timeouts and connection po
 **Fix: Always schedule index builds during low-traffic windows (e.g. 2 AM), or use the rolling index build strategy on replica sets.**
 
 ---
+
+
 
 
 
@@ -110,6 +113,8 @@ This slows down all other active queries, causing API timeouts and connection po
 Monitor active index builds using db.currentOp() or cancel via db.killOp()
 ```
 
+
+
 ### Mistake 3: Canceling Active Index Builds via `killOp` Improperly
 
 **The mistake:** Killing index builds abruptly without checking build progress.
@@ -128,105 +133,97 @@ db.collection.dropIndex("index_name"); // Cleanly aborts active index build
 
 
 
-### Mistake 4: Running Foreground Index Builds in Legacy MongoDB Servers During Peak Hours
+## 5. Practice Exercises
 
-**The mistake:** Building large indexes on 50M document production collections in foreground mode.
+### Exercise 1: Monitoring Active Index Build Progress
 
-**Why it's wrong:** In modern MongoDB (4.2+), all index builds use an optimized hybrid background build protocol. In older versions, foreground builds locked databases.
+**Scenario:**
+Inspect active index build progress on collection `large_orders` in `mongosh` using `currentOp()`.
 
-*Incorrect:*
-```javascript
-// Building 50M index without monitoring build impact
-```
+**Requirements:**
+1. Query `db.currentOp({ "command.createIndexes": { $exists: true } })`.
 
-*Fix:*
-```javascript
-Monitor active index builds using db.currentOp() or cancel via db.killOp()
-```
-
-### Mistake 5: Canceling Active Index Builds via `killOp` Improperly
-
-**The mistake:** Killing index builds abruptly without checking build progress.
-
-**Why it's wrong:** Modern index builds can be dropped safely using `db.collection.dropIndex()`, which cleanly aborts in-progress builds.
-
-*Incorrect:*
-```javascript
-db.killOp(opId); // May leave build state un-cleaned
-```
-
-*Fix:*
-```javascript
-db.collection.dropIndex("index_name"); // Cleanly aborts active index build
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Rolling Build Sequence
-
-**Problem:** You are managing a 3-node MongoDB Replica Set (1 Primary, 2 Secondaries). You need to build a heavy compound index.
-List the correct sequential steps to execute a rolling index build.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Disconnect Secondary A from the replica set.
-> 2. Build the index locally on Secondary A while it is standalone.
-> 3. Reconnect Secondary A to the replica set and let it catch up.
-> 4. Disconnect Secondary B from the replica set.
-> 5. Build the index locally on Secondary B and reconnect it.
-> 6. Step down the Primary server to convert it to a secondary.
-> 7. Build the index on the old primary server.
-> ```
-> - The primary server must always stay online with the index built on secondaries first.
-> - Relate this back to the step-down command sequence.
-
----
-
-
-
-### Exercise 2: Checking Active Index Build Status
-
-**Problem:** Inspect in-progress index builds using `db.currentOp()` in mongosh.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.currentOp({ "command.createIndexes": { $exists: true } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.currentOp({
+> const ops = db.currentOp({
 >   "command.createIndexes": { $exists: true }
 > });
+> console.log("Active Index Builds:", ops.inprog);
 > ```
 >
-> **Explanation:** `db.currentOp()` details active background index build progress.
+> #### Technical Explanation
+>
+> 1. `db.currentOp()` tracks ongoing background operations including index builds.
+> 2. Reports progress percentage, target collection, and build phase.
+> 3. Essential tool for DBA database operations.
 
 ---
 
-### Exercise 3: Aborting In-Progress Index Build
+### Exercise 2: Rolling Index Build Process on Replica Sets
 
-**Problem:** Command to cleanly abort an in-progress index build `building_idx`.
+**Scenario:**
+Formulate a zero-downtime rolling index creation procedure across a 3-node MongoDB replica set.
 
-**Expected output:**
+**Requirements:**
+1. Outline rolling index build steps on secondary nodes before primary failover.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> db.collection.dropIndex("building_idx");
-> ```
-> ```javascript
-> db.collection.dropIndex("building_idx");
+> Rolling Index Build Procedure:
+> - Step 1: Stop secondary node A; restart in standalone mode on maintenance port.
+> - Step 2: Create index directly on standalone node A; restart node A in replica set mode.
+> - Step 3: Repeat step 1 & 2 for secondary node B.
+> - Step 4: Step down primary node C; repeat procedure for node C once demoted.
 > ```
 >
-> **Explanation:** `dropIndex()` cleanly aborts active index builds on modern MongoDB clusters.
+> #### Technical Explanation
+>
+> 1. Rolling index builds prevent production cluster performance degradation during heavy index construction.
+> 2. Constructs indexes on secondary nodes independently before primary stepdown.
+> 3. Zero downtime production deployment strategy.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Aborting Running Index Builds
+
+**Scenario:**
+Abort a runaway background index build on collection `logs` using `dropIndexes()`.
+
+**Requirements:**
+1. Execute `db.logs.dropIndex("idx_runaway")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.logs.dropIndex("idx_runaway");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Calling `dropIndex()` on an in-progress index build sends an abort signal to the build thread.
+> 2. Safely halts index construction and cleans up temporary build files.
+> 3. Restores database CPU and IOPS capacity.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [Replication (Streaming / Logical)](../../../12-postgres/terms/level_10/replication.md) — Cluster architecture.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Foreground index builds lock collections, blocking all read and write queries.
 - Modern MongoDB builds indexes in the background (hybrid build) by default.
 - Background builds allow queries to run but still consume high disk I/O and CPU.

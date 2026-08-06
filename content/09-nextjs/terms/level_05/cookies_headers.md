@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Data Fetching**
+
+**Server & Edge API** (Server Request Cookies & Headers): `cookies()` and `headers()` from `next/headers` read incoming HTTP request metadata inside Server Components and Server Actions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (HTTP headers and cookies are read exclusively on the server prior to HTML serialization).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 During build time, Next.js attempts to compile as many pages as possible into static HTML files to ensure fast delivery. However, websites frequently need to respond to request-specific data, such as:
@@ -75,7 +76,7 @@ If you need to **write** a cookie (e.g. log a user out or set a theme selection)
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to write cookies inside a Server Component render loop
 
@@ -145,78 +146,127 @@ import { cookies, headers } from 'next/headers'; // Correct import
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Read Theme Configuration
+### Exercise 1: Reading Request Cookies in Server Components
 
-**Problem:** Complete the Server Component below to read a `'site-theme'` selection cookie, defaulting to `'light'` if the cookie is not set:
+**Scenario:**
+Read session token cookies inside an async Server Component using `cookies()`.
 
-```typescript
-// app/settings/page.tsx (Server Component)
-import { cookies } from 'next/headers';
-import React from 'react';
+**Requirements:**
+1. Import `cookies` from `next/headers`.
 
-// Solution:
-export default function SettingsPage() {
-  const theme = cookies().get('site-theme')?.value || 'light';
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // app/dashboard/page.tsx
+> import { cookies } from "next/headers";
+
+export default async function Dashboard() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session_id");
 
   return (
-    <div className={`page-container theme-${theme}`}>
-      <h1>Theme Settings</h1>
-      <p>Current Theme: {theme}</p>
-    </div>
+    <main className="p-6">
+      <p>Session Cookie: {token?.value ?? "Not Logged In"}</p>
+    </main>
   );
 }
 ```
 
-> [!check]- Answer
-> - Use the `cookies()` API and retrieve the `'site-theme'` key, reading its `.value` safely.
+> #### Technical Explanation
+>
+> 1. `cookies()` reads incoming request HTTP cookie headers on the Node.js server.
+> 2. In Next.js 15, `cookies()` returns a Promise that is resolved via `await cookies()`.
+> 3. Invoking `cookies()` opts the route segment into dynamic SSR rendering.
 
 ---
 
-### Exercise 2: Server Component Cookie Reading Pattern
+### Exercise 2: Setting Cookies inside Server Actions
 
-**Problem:** Write async Server Component reading cookie `'session'` using `cookies()` and displaying user status.
+**Scenario:**
+Set a secure HTTP-only session cookie inside a login Server Action using `cookies().set()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `cookies().set(name, value, options)` in Server Action.
+
 > [!check]- Answer
-> ```tsx
-> import { cookies } from 'next/headers'; export default async function Page() { const cookieStore = cookies(); const session = cookieStore.get('session')?.value; return <div>Session: {session ?? 'Guest'}</div>; }
-> ```
-> - `cookies()` from `next/headers` accesses incoming request cookies.
-> 
-> ```tsx
-> import { cookies } from 'next/headers';
-> 
-> export default async function Page() {
->   const cookieStore = cookies();
->   const token = cookieStore.get('token')?.value;
->   
->   return <div>Status: {token ? 'Logged In' : 'Guest'}</div>;
-> }
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> // app/actions/auth.ts
+> "use server";
+
+import { cookies } from "next/headers";
+
+export async function loginAction(formData: FormData) {
+  const email = formData.get("email");
+  // Validate credentials...
+
+  const cookieStore = await cookies();
+  cookieStore.set("session_token", "sec_token_999", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/"
+  });
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `cookies().set()` appends `Set-Cookie` response headers to HTTP responses.
+> 2. `httpOnly: true` prevents browser client-side JavaScript access to sensitive cookies.
+> 3. Can ONLY be called inside Server Actions or Route Handlers (read-only inside Server Components).
 
 ---
 
-### Exercise 3: Dynamic Opt-In Behavior of cookies()
+### Exercise 3: Inspecting Request Headers in Route Handlers
 
-**Problem:** What effect does calling `cookies()` or `headers()` have on a static route segment?
+**Scenario:**
+Inspect `Authorization` and `User-Agent` headers inside an API Route Handler using `headers()`.
 
-**Expected output:**
+**Requirements:**
+1. Import `headers` from `next/headers`.
+
 > [!check]- Answer
-> ```text
-> It automatically opts the route segment out of static caching, switching rendering to dynamic request-time SSR.
-> ```
-> - `cookies()` and `headers()` trigger dynamic SSR rendering.
-> 
-> ```text
-> Accessing request headers = Dynamic Request-Time Rendering
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> // app/api/secure-data/route.ts
+> import { headers } from "next/headers";
+
+export async function GET() {
+  const headersList = await headers();
+  const authHeader = headersList.get("authorization");
+  const userAgent = headersList.get("user-agent");
+
+  if (!authHeader?.startsWith("Bearer ")) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  return Response.json({ userAgent, status: "Authorized" });
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `headers()` from `next/headers` exposes read-only incoming HTTP request headers.
+> 2. `headersList.get('header-name')` performs case-insensitive header lookup.
+> 3. Standard method for validating authorization tokens in Route Handlers.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Dynamic Rendering (SSR)](../level_08/ssr.md) — The dynamic rendering strategy triggered by these APIs.
 - [Middleware (`middleware.ts`)](../level_10/middleware.md) — The router proxy where cookies and headers can be written.
 - [JavaScript Fetch API](js_fetch.md) — Related concept: JavaScript Fetch API.
@@ -224,7 +274,7 @@ export default function SettingsPage() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `cookies()` and `headers()` let Server Components inspect request-specific metadata.
 - Calling them dynamically opts the route out of Static rendering (SSG) and into SSR.
 - During rendering, cookies and headers are read-only.

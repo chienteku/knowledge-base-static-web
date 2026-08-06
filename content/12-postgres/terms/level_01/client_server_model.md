@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Network Architecture**
+
+**Core Concept** (System Architecture): The Client-Server Model divides database operations into client applications issuing SQL requests and daemon background processes serving storage, concurrency, and WAL management.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Universal database system architecture. Separation of database engines from application runtime scripts).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In simple file-based databases (like MS Access or SQLite), the database engine is compiled directly into the application code. The application reads and writes directly to the database file on disk. 
@@ -72,7 +73,7 @@ This keeps the kitchen clean, organized, and running at maximum speed.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing a database connection stays alive forever without management
 
@@ -123,65 +124,111 @@ const pool = new Pool(); // Global connection pool
 app.get('/users', async (req, res) => { const client = await pool.connect(); try { ... } finally { client.release(); } });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Connection Troubleshooting
+### Exercise 1: Configuring Node.js Driver Connection Pools
 
-**Problem:** You boot up your Node.js server and try to query your local database. The server crashes with the error:
-`Error: connect ECONNREFUSED 127.0.0.1:5432`
-Explain what this error means in terms of the client-server model, and what you must do to fix it.
+**Scenario:**
+Configure a backend Node.js application using `pg` (node-postgres) to connect to PostgreSQL over TCP port `5432` with a connection pool.
 
-**Expected output:**
+**Requirements:**
+1. Instantiate `new Pool()` with host, port, database, user, password, and pool limits.
+
 > [!check]- Answer
-> ```text
-> The error `ECONNREFUSED` means that your Node.js application (the client) tried to connect to port 5432 on your local machine, but no background service was listening on that port. 
-> To fix this, you need to verify if the PostgreSQL server process is installed and start it (e.g. running `brew services start postgresql` or starting your Postgres Docker container).
-> ```
-> - Differentiate between client code errors and server running states.
-> - Identify what service listens on port 5432.
+>
+> #### Implementation
+>
+> ```typescript
+> import { Pool } from "pg";
+
+const pool = new Pool({
+  host: "localhost",
+  port: 5432,
+  database: "store_db",
+  user: "app_user",
+  password: "SecurePassword123!",
+  max: 20,
+  idleTimeoutMillis: 30000
+});
+
+export async function query(text: string, params?: any[]) {
+  return pool.query(text, params);
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Client applications connect to the PostgreSQL server process (`postgres`) via TCP/IP sockets.
+> 2. Connection pooling reuses established TCP sockets across incoming HTTP requests.
+> 3. Avoids opening and closing process connections per query, optimizing server RAM usage.
 
 ---
 
+### Exercise 2: Monitoring Active Server Backend Processes
 
+**Scenario:**
+Inspect active client backend connection processes on the PostgreSQL server using `pg_stat_activity`.
 
-### Exercise 2: Connection Pool Setup in Node.js
+**Requirements:**
+1. Query `pg_stat_activity` filtering active client queries.
 
-**Problem:** Initialize PostgreSQL connection pool in Node.js `pg` module connecting to `localhost:5432`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> const { Pool } = require('pg'); const pool = new Pool({ host: 'localhost', port: 5432, database: 'main' });
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   pid, 
+>   usename, 
+>   client_addr, 
+>   state, 
+>   query 
+> FROM pg_stat_activity 
+> WHERE state = 'active';
 > ```
-> ```javascript
-> const { Pool } = require('pg');
+>
+> #### Technical Explanation
+>
+> 1. PostgreSQL spawns a dedicated backend process (`pid`) for each active client connection.
+> 2. `pg_stat_activity` exposes real-time telemetry on active client query execution states.
+> 3. Essential for identifying long-running or hanging client processes.
+
+---
+
+### Exercise 3: Setting Client Socket Connection Timeouts
+
+**Scenario:**
+Configure connection timeout parameters to prevent client applications from hanging indefinitely when the database server is unreachable.
+
+**Requirements:**
+1. Pass `connectionTimeoutMillis` in `pg` pool options.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
 > const pool = new Pool({
->   host: 'localhost',
+>   host: "db.example.com",
 >   port: 5432,
->   database: 'main'
+>   database: "prod_db",
+>   user: "app_user",
+>   password: "SecretPassword123!",
+>   connectionTimeoutMillis: 5000 // 5 seconds
 > });
 > ```
 >
-> **Explanation:** Connection pools manage reusable TCP client sockets efficiently.
+> #### Technical Explanation
+>
+> 1. `connectionTimeoutMillis` caps socket handshake wait time during connection establishment.
+> 2. Prevents application threads from blocking endlessly during database outages.
+> 3. Resilient backend system design.
 
 ---
 
-### Exercise 3: Default PostgreSQL Port
 
-**Problem:** What is the default TCP listening port for PostgreSQL server daemons? (`5432`).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 5432
-> ```
-> ```text
-> 5432
-> ```
->
-> **Explanation:** PostgreSQL server daemons listen on TCP port 5432 by default.
-
-## 7. Related Terms
+## 6. Related Terms
 - [PostgreSQL (Postgres)](postgresql.md) — The server engine.
 - [Connection String / DSN](connection_string.md) — The client connection guide.
 - [`psql` (Interactive Terminal)](psql.md) — Related concept: `psql` (Interactive Terminal).
@@ -189,7 +236,7 @@ Explain what this error means in terms of the client-server model, and what you 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PostgreSQL uses a Client-Server model to separate data storage from app code.
 - The server process manages disk storage and caches, listening on default port `5432`.
 - Clients (app code, CLI, GUI) connect over the network and send SQL queries.

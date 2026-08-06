@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: A general programming concept (Variables).
+
+
+**Rust Language Core (immutable-by-default value bindings)**: A general programming concept (Variables).
 
 ---
 

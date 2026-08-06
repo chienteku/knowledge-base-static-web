@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Component**
+
+**Rendering Strategy** (Client-Side Rendering Wrapper): `<ClientOnly>` is a built-in Nuxt 3 component that defers rendering of its contents until client-side hydration completes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Only** (Bypasses server execution completely, rendering markup solely inside the browser).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Nuxt 3 uses Universal Rendering, meaning your Vue components are executed twice: once on the Node.js server to generate HTML, and once in the browser to become interactive.
@@ -56,7 +57,7 @@ If you have a component that should *never* be server-rendered anywhere in your 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Overusing `<ClientOnly>` to fix Hydration Mismatches
 **The mistake:** Encountering a Hydration Mismatch error and immediately wrapping the offending component in `<ClientOnly>` to make the error go away.
@@ -119,79 +120,127 @@ If you have a component that should *never* be server-rendered anywhere in your 
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: File Naming
+### Exercise 1: Deferring Non-SSR Components with `<ClientOnly>`
 
-**Problem:** You created a third-party charting component. It throws a 500 server error because the library relies on `window.innerWidth`. Instead of using the `<ClientOnly>` tag in your templates, how can you rename the component file `Chart.vue` to force Nuxt to always render it on the client?
+**Scenario:**
+Wrap a non-SSR compatible browser canvas signature pad inside `<ClientOnly>`.
 
-**Expected output:**
+**Requirements:**
+1. Wrap browser component in `<ClientOnly>`.
+
 > [!check]- Answer
-> ```text
-> Chart.client.vue
-> ```
-> - You can append a suffix before the file extension to mark the component as client-only.
-
----
-
-### Exercise 2: ClientOnly Component Fallback Pattern
-
-**Problem:** Write Vue template wrapping browser-only canvas component `<CanvasEditor />` inside `<ClientOnly>` with a fallback skeleton element.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
 > <template>
->   <ClientOnly>
->     <CanvasEditor />
->     <template #fallback>
->       <div class="h-64 bg-gray-100 animate-pulse" />
->     </template>
->   </ClientOnly>
-> </template>
-> ```
-> - `<template #fallback>` provides smooth skeleton rendering during SSR.
-> 
-> ```vue
-> <template>
->   <ClientOnly>
->     <CanvasEditor />
->     <template #fallback>
->       <div class="h-64 bg-gray-100 animate-pulse">
->         Loading canvas editor...
->       </div>
->     </template>
->   </ClientOnly>
+>   <div>
+>     <h3>E-Signature Pad</h3>
+>     <ClientOnly>
+>       <SignatureCanvasWidget />
+>     </ClientOnly>
+>   </div>
 > </template>
 > ```
 
+> #### Technical Explanation
+>
+> 1. `<ClientOnly>` prevents Vue from evaluating child components during Node.js server-side rendering.
+> 2. Child components are instantiated exclusively in the browser post-hydration.
+> 3. Prevents SSR crashes caused by missing `window` or `document` objects.
+
 ---
 
-### Exercise 3: .client.vue File Suffix Alternative
+### Exercise 2: Providing Custom Fallback Slots for Skeleton Loaders
 
-**Problem:** Which file naming suffix automatically restricts a component in `components/` to client-side execution without requiring `<ClientOnly>` tags?
+**Scenario:**
+Provide a customized loading skeleton fallback slot `#fallback` inside `<ClientOnly>`.
 
-**Expected output:**
+**Requirements:**
+1. Use `<template #fallback>` inside `<ClientOnly>`.
+
 > [!check]- Answer
-> ```text
-> Component.client.vue (e.g. Chart.client.vue)
+>
+> #### Implementation
+>
+> ```vue
+> <template>
+>   <div>
+>     <ClientOnly>
+>       <ComplexChartWidget />
+>       <template #fallback>
+>         <div class="chart-skeleton-loader">
+>           <p>Loading interactive chart data...</p>
+>         </div>
+>       </template>
+>     </ClientOnly>
+>   </div>
+> </template>
 > ```
-> - `.client.vue` suffix restricts component rendering to the browser.
-> 
-> ```text
-> components/Chart.client.vue
+
+> #### Technical Explanation
+>
+> 1. The `#fallback` slot renders on the server during initial SSR HTML generation.
+> 2. Prevents layout shifts by preserving component layout dimensions while client JavaScript hydrates.
+> 3. Fallback content is unmounted once the client component initializes.
+
+---
+
+### Exercise 3: Using `.client.vue` Naming Conventions
+
+**Scenario:**
+Create a component `components/Comments.client.vue` that automatically acts as a client-only component without wrapping in `<ClientOnly>`.
+
+**Requirements:**
+1. Create `components/Comments.client.vue`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <!-- components/Comments.client.vue -->
+> <template>
+>   <div class="comments-section">
+>     <h4>Live Discussion</h4>
+>     <!-- Browser-only comments widget -->
+>   </div>
+> </template>
 > ```
+
+> ```vue
+> <!-- pages/article.vue -->
+> <template>
+>   <article>
+>     <h1>Article Title</h1>
+>     <!-- Automatically treated as ClientOnly by Nuxt 3! -->
+>     <Comments />
+>   </article>
+> </template>
+> ```
+
+> #### Technical Explanation
+>
+> 1. Appending `.client.vue` to component filenames instructs Nuxt to register them automatically as client-only components.
+> 2. Nuxt automatically wraps `.client.vue` components in `<ClientOnly>` under the hood.
+> 3. Cleaner syntax for browser-only component files.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process this component skips.
 - [Hydration](../level_01/hydration.md) — Related concept: Hydration.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<ClientOnly>` is a built-in wrapper that prevents Server-Side Rendering.
 - Use it for components that rely on browser-only APIs (`window`, `localStorage`).
 - It supports a `#fallback` slot to show a loading state during the server phase.

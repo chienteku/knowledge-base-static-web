@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Query Operator** (Array Mutation Operators): Array Update Operators ($push, $pull, $addToSet, $pop, $position) modify embedded array fields within MongoDB documents atomically.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported across NoSQL document platforms. Executes atomic modifications directly on the server to prevent race conditions during concurrent list updates).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `array_type.md`, MongoDB documents natively support Array (list) fields. 
@@ -105,7 +106,7 @@ db.products.updateOne(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Utilizing '$push' for unique items, leading to duplicate values in array fields
 
@@ -118,6 +119,8 @@ This causes array bloat and introduces logic bugs in authorization checks.
 **Fix: If an array must contain unique values only, always use `$addToSet` instead of `$push`.**
 
 ---
+
+
 
 
 
@@ -137,6 +140,8 @@ db.users.updateOne({ _id: id }, { $set: { tags: ["new_tag"] } }); // ❌ Overwri
 db.users.updateOne({ _id: id }, { $addToSet: { tags: "new_tag" } }); // Appends unique element
 ```
 
+
+
 ### Mistake 3: Pushing Arrays of Items Without Using `$each` Operator
 
 **The mistake:** Executing `db.users.updateOne({ _id: id }, { $push: { tags: ["tag1", "tag2"] } })`.
@@ -155,107 +160,107 @@ db.users.updateOne({ _id: id }, { $push: { tags: { $each: ["tag1", "tag2"] } } }
 
 
 
-### Mistake 4: Using Direct Field Replacement Instead of `$push` or `$addToSet` to Modify Array Fields
+## 5. Practice Exercises
 
-**The mistake:** Executing `db.users.updateOne({ _id: id }, { $set: { tags: ["new_tag"] } })` expecting to append an item.
+### Exercise 1: Appending Array Items with `$push` and `$slice`
 
-**Why it's wrong:** Using `$set` on an array field overwrites the entire array object with the new single-element array! Use `$push` (append) or `$addToSet` (append unique).
+**Scenario:**
+Append a new log entry to a user's `recentActivity` array while capping the maximum array length to the 5 most recent entries.
 
-*Incorrect:*
-```javascript
-db.users.updateOne({ _id: id }, { $set: { tags: ["new_tag"] } }); // ❌ Overwrites existing array!
-```
+**Requirements:**
+1. Use `$push` with `$each`, `$sort`, and `$slice: -5`.
 
-*Fix:*
-```javascript
-db.users.updateOne({ _id: id }, { $addToSet: { tags: "new_tag" } }); // Appends unique element
-```
-
-### Mistake 5: Pushing Arrays of Items Without Using `$each` Operator
-
-**The mistake:** Executing `db.users.updateOne({ _id: id }, { $push: { tags: ["tag1", "tag2"] } })`.
-
-**Why it's wrong:** Without `$push: { field: { $each: [...] } }`, MongoDB pushes the ENTIRE array as a single nested array element `[["tag1", "tag2"]]`.
-
-*Incorrect:*
-```javascript
-db.users.updateOne({ _id: id }, { $push: { tags: ["tag1", "tag2"] } }); // Pushes nested array!
-```
-
-*Fix:*
-```javascript
-db.users.updateOne({ _id: id }, { $push: { tags: { $each: ["tag1", "tag2"] } } });
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Array Mutation Query
-
-**Problem:** You have a `users` collection. Each user has an array field named `favorite_colors`. 
-Write the MongoDB query to update a single user where the `username` is `"designer_1"`. The update must:
-1.  Add the string `"purple"` and `"yellow"` to the `favorite_colors` array, ensuring no duplicates are created.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
 > db.users.updateOne(
->   { username: "designer_1" },
->   { $addToSet: { favorite_colors: { $each: ["purple", "yellow"] } } }
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   {
+>     $push: {
+>       recentActivity: {
+>         $each: [{ action: "login", timestamp: new Date() }],
+>         $sort: { timestamp: -1 },
+>         $slice: -5
+>       }
+>     }
+>   }
 > );
 > ```
-> - Choose the unique insert operator `$addToSet`.
-> - Combine it with the `$each` modifier to process multiple items in the list parameter.
+>
+> #### Technical Explanation
+>
+> 1. `$push` appends elements to array fields atomically.
+> 2. `$slice: -5` caps the array length, keeping only the 5 newest elements.
+> 3. Maintains array size bounds directly at the storage engine tier.
+
+---
+
+### Exercise 2: Removing Specific Array Items with `$pull`
+
+**Scenario:**
+Remove tag `"deprecated"` from all product `tags` arrays across the entire collection.
+
+**Requirements:**
+1. Use `updateMany()` with `$pull: { tags: "deprecated" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.updateMany(
+>   { tags: "deprecated" },
+>   { $pull: { tags: "deprecated" } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$pull` removes all instances of a matching value from array fields.
+> 2. Operates across single values or complex object filter criteria.
+> 3. Eliminates client-side array manipulation.
+
+---
+
+### Exercise 3: Deduplicated Insertion with `$addToSet`
+
+**Scenario:**
+Add category `"electronics"` to a product's `categories` array without creating duplicate entries.
+
+**Requirements:**
+1. Use `$addToSet`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { $addToSet: { categories: "electronics" } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$addToSet` treats arrays as sets, ignoring duplicates.
+> 2. Guarantees unique array elements without client-side checking.
+> 3. Fast atomic array updates.
 
 ---
 
 
 
-### Exercise 2: Pushing Unique Elements with `$addToSet`
-
-**Problem:** Add `"admin"` to `roles` array of `user:1` ensuring no duplicate role is added.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.updateOne({ _id: 1 }, { $addToSet: { roles: "admin" } });
-> ```
-> ```javascript
-> db.users.updateOne({
->   _id: 1
-> }, {
->   $addToSet: { roles: "admin" }
-> });
-> ```
->
-> **Explanation:** `$addToSet` appends elements to array fields only if they do not already exist.
-
----
-
-### Exercise 3: Removing Array Items with `$pull`
-
-**Problem:** Remove tag `"deprecated"` from `tags` array across all documents.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.posts.updateMany({}, { $pull: { tags: "deprecated" } });
-> ```
-> ```javascript
-> db.posts.updateMany({}, {
->   $pull: { tags: "deprecated" }
-> });
-> ```
->
-> **Explanation:** `$pull` removes all instances of specified elements from array fields.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Array](../level_02/array_type.md) — The data structure.
 - [Update Operators (`$set`, `$unset`, `$inc`, `$rename`, `$currentDate`)](update_operators.md) — The parent update operators.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Array update operators modify list fields atomically on the database server.
 - Prevents concurrent overwrite conflicts when editing arrays.
 - `$push` appends elements to arrays; permits duplicate values.

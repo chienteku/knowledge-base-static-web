@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (record deletion statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Executed by the write planner engine. Removes records from storage and updates related database indexes and cache subscriptions dynamically).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Data cleanup is essential: deleting expired sessions, removing test records, or closing cancelled accounts.
@@ -71,7 +70,7 @@ DELETE user;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Executing a global 'DELETE <table>' query without a 'WHERE' clause, accidentally wiping out all data in the table
 
@@ -135,60 +134,100 @@ DELETE user; // Table schema remains!
 REMOVE TABLE user; // Drops table schema and definitions
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Delete Query Construction
+### Exercise 1: Deleting a Single Record by Primary Key
 
-**Problem:** You are building a cleanup script for a shopping cart. 
-Write the SurrealQL query to:
-1.  Target the `cart` table.
-2.  Delete all records where the `updated_at` field is older than `24h` (relative to the current database time).
+**Scenario:**
+A user requests account deletion. Delete user record `user:john` directly by primary key.
 
-**Expected output:**
+**Requirements:**
+1. Create user `user:john`.
+2. Execute `DELETE user:john`.
+3. Verify that `user:john` no longer exists.
+
 > [!check]- Answer
-> ```sql
-> DELETE cart WHERE updated_at < time::now() - 24h;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:john SET name = "John";
+> 
+> -- Delete single record by primary key
+> DELETE user:john;
+> 
+> -- Verification query returns empty result
+> SELECT * FROM user:john;
 > ```
-> - The table target is `cart`.
-> - Use duration arithmetic with the `time::now()` function to calculate the time boundary.
+>
+> #### Technical Explanation
+>
+> 1. `DELETE table:id` deletes the target record directly in $O(1)$ constant time complexity.
+> 2. Bypasses table scanning by jumping directly to the primary key storage location.
+> 3. Returns an empty payload or deleted record context depending on `RETURN` clause flags.
+
+---
+
+### Exercise 2: Filtered Bulk Record Deletion
+
+**Scenario:**
+A temporary session cleanup job deletes all expired user sessions where `expires_at < time::now()`.
+
+**Requirements:**
+1. Create active and expired session records in table `session`.
+2. Execute `DELETE session WHERE expires_at < time::now()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE session:s1 SET expires_at = time::now() - 1h;
+> CREATE session:s2 SET expires_at = time::now() + 1h;
+> 
+> -- Delete expired sessions
+> DELETE session WHERE expires_at < time::now();
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DELETE table WHERE condition` evaluates filters across table records and deletes matching records.
+> 2. Executes in an atomic transaction block.
+> 3. Non-matching records (`session:s2`) remain untouched in the table.
+
+---
+
+### Exercise 3: Inspecting Deleted Payloads with `RETURN BEFORE`
+
+**Scenario:**
+An audit logger needs to capture the state of a deleted record before it is permanently removed from the database using `RETURN BEFORE`.
+
+**Requirements:**
+1. Create `product:p1` with `name = "Deprecated Item"`.
+2. Execute `DELETE product:p1 RETURN BEFORE` and capture the returned payload.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE product:p1 SET name = "Deprecated Item", price = 10.00dec;
+> 
+> -- Delete and return original record state prior to deletion
+> DELETE product:p1 RETURN BEFORE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `RETURN BEFORE` returns the record document state as it existed immediately prior to deletion.
+> 2. Enables application audit logs to capture deleted record payloads without issuing a prior `SELECT` query.
+> 3. `RETURN NONE` suppresses deletion result output completely for maximum performance.
 
 ---
 
 
 
-### Exercise 2: Deleting Single Record by ID
-
-**Problem:** Delete record `session:123` directly.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DELETE session:123;
-> ```
-> ```surrealql
-> DELETE session:123;
-> ```
->
-> **Explanation:** `DELETE table:id` deletes specific primary key records in $O(1)$ time.
-
----
-
-### Exercise 3: Deleting Records Returning Deleted Data
-
-**Problem:** Delete all inactive logs returning the deleted records using `RETURN BEFORE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DELETE log WHERE active = false RETURN BEFORE;
-> ```
-> ```surrealql
-> DELETE log WHERE active = false RETURN BEFORE;
-> ```
->
-> **Explanation:** `RETURN BEFORE` returns record contents prior to deletion.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`RETURN` Clause (`RETURN NONE / BEFORE / AFTER / DIFF`)](return_clause.md) — Customizing delete outputs.
 - [`UPDATE`](update.md) — Modifying records.
@@ -196,7 +235,7 @@ Write the SurrealQL query to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `DELETE` statement permanently removes records from the database.
 - Bypasses the SQL requirement of the `FROM` keyword (e.g. write `DELETE user:john`).
 - **Key behavior:** Returns the deleted record data to the client by default.

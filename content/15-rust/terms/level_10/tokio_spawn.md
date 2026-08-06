@@ -173,8 +173,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Bounded Concurrent Telemetry Ingestion Pool with Task Cancellation Safety
 
-**Scenario**: You are developing a high-throughput telemetry ingestion service. Incoming raw packet payloads must be processed concurrently in background tasks. To prevent memory exhaustion under load spikes, the system must enforce a concurrency limit using `Arc<tokio::sync::Semaphore>`. Furthermore, if an ingestion batch is cancelled, pending `JoinHandle` instances must be abortable via `handle.abort()` with explicit status verification.
+**Scenario:** You are developing a high-throughput telemetry ingestion service. Incoming raw packet payloads must be processed concurrently in background tasks. To prevent memory exhaustion under load spikes, the system must enforce a concurrency limit using `Arc<tokio::sync::Semaphore>`. Furthermore, if an ingestion batch is cancelled, pending `JoinHandle` instances must be abortable via `handle.abort()` with explicit status verification.
 
+**Requirements:**
 Construct a task spawning pool that limits active concurrent tasks and supports graceful task aborts.
 
 **Requirements**:
@@ -184,6 +185,9 @@ Construct a task spawning pool that limits active concurrent tasks and supports 
 4. Add unit tests asserting permit throttling, successful task execution, and task abort behavior via `handle.abort()` (verifying `join_err.is_cancelled()`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::Arc;
 > use std::time::Duration;
@@ -254,7 +258,8 @@ Construct a task spawning pool that limits active concurrent tasks and supports 
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **`tokio::spawn` Requirements**: `tokio::spawn` requires the passed async block/future to satisfy `Send + 'static`. Moving `task` and `semaphore` (`Arc<Semaphore>`) into `async move` ensures ownership is transferred cleanly.
 > 2. **Permit Rate Limiting**: Calling `semaphore.acquire_owned().await` inside the spawned task ensures that at most $N$ tasks execute their critical sections concurrently. Excess tasks wait asynchronously without consuming OS threads.
 > 3. **Cancellation via `abort()`**: Calling `.abort()` on a `JoinHandle` sends a cancellation signal to the Tokio executor. When `.await`ed, the handle returns a `JoinError` where `err.is_cancelled()` evaluates to `true`.

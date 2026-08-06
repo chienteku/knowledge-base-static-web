@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Performance Optimization**
+
+**Performance & Optimization** (On-Demand Asynchronous Component Loading): Lazy components (`LazyMyComponent`) dynamically import component code chunks asynchronously on-demand when rendered.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Only** (Code-splitting and async fetching happens exclusively in the browser context).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you have a massive, heavy component, like a rich-text editor or an interactive 3D map. If you place this component on a page but hide it inside a modal that the user *might never open*, the user is still forced to download that heavy JavaScript bundle on initial page load. This drastically hurts performance and Web Core Vitals.
@@ -54,7 +55,7 @@ Do not make *everything* lazy. If a component is visible immediately on the scre
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Lazy components with `v-show`
 **The mistake:** Trying to lazy-load a component but hiding it with CSS via `v-show`.
@@ -111,78 +112,126 @@ Do not make *everything* lazy. If a component is visible immediately on the scre
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Finding the Lazy Prefix
+### Exercise 1: On-Demand Dynamic Component Loading with `Lazy` Prefix
 
-**Problem:** You have a component located at `components/admin/UserTable.vue`. You want to render it only when the user clicks a "Load Data" button. What is the exact HTML tag you should use in your template?
+**Scenario:**
+Dynamically load a heavy modal component `components/UserModal.vue` ONLY when a button is clicked.
 
-**Expected output:**
+**Requirements:**
+1. Consume `<LazyUserModal v-if="isOpen" />`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <LazyAdminUserTable v-if="showData" />
-> ```
-> - Prepend the PascalCase component name path with `Lazy` and pair it with a conditional display directive.
-
----
-
-### Exercise 2: Lazy Modal Code-Splitting Pattern
-
-**Problem:** Write Vue template rendering `<LazyAuthModal />` conditionally when `showModal` boolean ref is true.
-
-**Expected output:**
-> [!check]- Answer
-> ```vue
-> <template>
->   <div>
->     <button @click="showModal = true">Login</button>
->     <LazyAuthModal v-if="showModal" @close="showModal = false" />
->   </div>
-> </template>
-> ```
-> - `Lazy` prefix code-splits components until `v-if` evaluates to true.
-> 
-> ```vue
-> <script setup>
-> const showModal = ref(false);
+> <script setup lang="ts">
+> const isModalOpen = ref(false);
 > </script>
-> 
+
+<template>
+  <div>
+    <button @click="isModalOpen = true">Open User Modal</button>
+    
+    <!-- Code chunk is fetched asynchronously ONLY when isModalOpen becomes true! -->
+    <LazyUserModal v-if="isModalOpen" @close="isModalOpen = false" />
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Prepending `Lazy` to any auto-imported component name (`LazyUserModal`) converts it into an asynchronous component.
+> 2. Vite creates a separate JavaScript bundle chunk for the lazy component.
+> 3. Defers network fetching of the component JavaScript until `v-if` evaluates to `true`.
+
+---
+
+### Exercise 2: Awaiting Lazy Component Hydration with `hydrateOnVisible`
+
+**Scenario:**
+Hydrate a lazy component when it enters the user's browser viewport using `hydrateOnVisible`.
+
+**Requirements:**
+1. Use `hydrateOnVisible()` or lazy component viewport trigger.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> // Trigger lazy chunk fetch when component enters viewport
+> </script>
+
+<template>
+  <main>
+    <div class="hero-section">Top Hero Content</div>
+    
+    <!-- Deferred loading until user scrolls down! -->
+    <LazyHeavyFooterWidget />
+  </main>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Lazy components reduce initial page bundle size and improve Time-To-Interactive (TTI).
+> 2. Non-critical below-the-fold UI components can be lazy-loaded on scroll.
+> 3. Core bundle optimization pattern.
+
+---
+
+### Exercise 3: Handling Async Loading States for Lazy Components
+
+**Scenario:**
+Handle async loading delays when rendering a Lazy component using Vue `<Suspense>`.
+
+**Requirements:**
+1. Wrap lazy component in `<Suspense>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
 > <template>
 >   <div>
->     <button @click="showModal = true">Open Login Modal</button>
->     <LazyAuthModal v-if="showModal" @close="showModal = false" />
+>     <Suspense>
+>       <template #default>
+>         <LazyHeavyDataGrid />
+>       </template>
+>       <template #fallback>
+>         <div>Fetching Data Grid Bundle...</div>
+>       </template>
+>     </Suspense>
 >   </div>
 > </template>
 > ```
 
+> #### Technical Explanation
+>
+> 1. Vue `<Suspense>` manages pending async loading states while lazy components download over the network.
+> 2. Renders `#fallback` template until the JavaScript chunk resolves.
+> 3. Prevents UI pop-in artifacts.
+
 ---
 
-### Exercise 3: Lazy Component Bundle Impact
 
-**Problem:** How does using `<LazyHeavyChart v-if="showChart" />` impact initial page JS bundle size?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> It strips HeavyChart JS code from the initial page bundle, moving it into an on-demand async JS chunk fetched when showChart becomes true.
-> ```
-> - Reduces initial page JS bundle size by splitting code into async chunks.
-> 
-> ```text
-> Initial Page Bundle Size Reduced -> Dynamic Chunk Fetch on User Interaction
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`components/` Directory](components_directory.md) — The directory that auto-generates these Lazy versions.
 - [Nuxt Server Components (Islands)](../level_09/nuxt_server_components.md) — Related concept: Nuxt Server Components (Islands).
 - [NuxtLink Component](nuxtlink_component.md) — NuxtLink prefetching.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Nuxt automatically generates a `Lazy` prefixed version of every auto-imported component.
 - The JavaScript for a Lazy component is only downloaded when it is rendered into the DOM.
 - Use this strictly for components hidden behind `v-if` (like modals, tabs, or heavy elements below the fold).

@@ -160,7 +160,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Single-Threaded Reactive GUI Event Observer System
 
-**Problem:**
+**Scenario:**
 In single-threaded GUI frameworks (such as GTK or custom desktop event loops), multiple UI component callbacks need to inspect and mutate shared application metrics (render count, dirty flag, and active tab index) without exclusive `&mut self` borrowing privileges or runtime reference-counter panic risks.
 
 Implement a `WidgetTracker` system managing a `DisplayMetrics` state structure using `Cell<T>`.
@@ -291,7 +291,7 @@ Implement a `WidgetTracker` system managing a `DisplayMetrics` state structure u
 
 ### Exercise 2: Graph Cycle Detection with Reentrant State Traversal Markers
 
-**Problem:**
+**Scenario:**
 When performing Depth-First Search (DFS) or Topological Sorting over graph nodes shared via reference-counted pointers (`Rc<GraphNode>`), algorithm state markers (`Unvisited`, `Visiting`, `Visited`) must be updated during graph walks. Using `RefCell<NodeState>` introduces dynamic borrow checks that overhead performance and risk runtime panic crashes during cyclic reentrancy.
 
 Implement a graph cycle detection engine using `Cell<NodeState>` for state tracking and `RefCell<Vec<Rc<GraphNode>>>` for node adjacency lists.
@@ -417,7 +417,7 @@ Implement a graph cycle detection engine using `Cell<NodeState>` for state track
 
 ### Exercise 3: Arena Memory Allocator Metrics & High-Watermark Tracker
 
-**Problem:**
+**Scenario:**
 In high-throughput memory allocators or zero-allocation pool managers, allocator telemetry (total bytes allocated, active allocation count, peak high-water mark, failed allocation attempts) must be updated inside immutable `&self` allocation calls (`fn record_allocation(&self, size: usize)`).
 
 Implement an `ArenaMetrics` telemetry system using `Cell<usize>` and `Cell<AllocatorTelemetry>`.

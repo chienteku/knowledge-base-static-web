@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Rendering Strategies**
+
+**Rendering Strategy** (Non-Hydrated Server Components): Nuxt Server Components (`.server.vue`) render exclusively on the server, sending static HTML to the client without hydrating JS code.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (Executed strictly on the backend Nitro server; the browser receives raw HTML output without hydrating Vue reactivity).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard Vue, every component is isomorphic—it runs on the server to output HTML, and then sends its JavaScript payload to the client so it can hydrate and become interactive.
@@ -78,7 +79,7 @@ Because Server Components do not hydrate on the client, they have strict runtime
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing interactive form buttons inside a Server Component
 
@@ -107,6 +108,8 @@ const subscribe = () => {
 
 ---
 
+
+
 ### Mistake 2: Passing Client Event Listeners (`@click`) to Nuxt Server Components
 
 **The mistake:** Writing `<ServerWidget @click="handleClick" />` on a `.server.vue` component.
@@ -125,6 +128,8 @@ const subscribe = () => {
 ```
 
 ---
+
+
 
 ### Mistake 3: Using Vue Client Hooks (`useState`, `onMounted`, `useCookie`) inside `.server.vue` Components
 
@@ -148,149 +153,62 @@ onMounted(() => { ... }); // ❌ Never executes in .server.vue components!
 
 ---
 
-### Mistake 4: Passing Client Event Listeners (`@click`) to Nuxt Server Components
 
-**The mistake:** Writing `<ServerWidget @click="handleClick" />` on a `.server.vue` component.
-
-**Why it's wrong:** Nuxt Server Components (`.server.vue`) execute exclusively on the server and transmit zero JavaScript to the browser. Client event listeners like `@click` cannot execute on server components.
-
-*Incorrect:*
-```vue
-<!-- pages/index.vue -->
-<ServerWidget @click="handleClick" /> <!-- ❌ Cannot pass event listeners to .server.vue! -->
-```
-
-*Fix:*
-```vue
-<!-- Keep event listeners inside Client components; render Server components for static data -->
-```
-
----
-
-### Mistake 5: Using Vue Client Hooks (`useState`, `onMounted`, `useCookie`) inside `.server.vue` Components
-
-**The mistake:** Adding `onMounted()` or client state hooks inside `components/Widget.server.vue`.
-
-**Why it's wrong:** Server components render on the server and skip client hydration entirely. `onMounted` will never execute inside `.server.vue` files.
-
-*Incorrect:*
-```vue
-<!-- components/Widget.server.vue -->
-<script setup>
-onMounted(() => { ... }); // ❌ Never executes in .server.vue components!
-</script>
-```
-
-*Fix:*
-```vue
-<!-- Use server-side data fetching directly in <script setup> of .server.vue -->
-```
 
 
 ---
 
-### Mistake 6: Passing Client Event Listeners (`@click`) to Nuxt Server Components
+## 5. Practice Exercises
 
-**The mistake:** Writing `<ServerWidget @click="handleClick" />` on a `.server.vue` component.
+### Exercise 1: Creating Non-Hydrated Nuxt Server Components (`.server.vue`)
 
-**Why it's wrong:** Nuxt Server Components (`.server.vue`) execute exclusively on the server and transmit zero JavaScript to the browser. Client event listeners like `@click` cannot execute on server components.
+**Scenario:**
+Create a server component `components/MarkdownViewer.server.vue` that parses Markdown on the server using heavy libraries without sending JS to the client.
 
-*Incorrect:*
-```vue
-<!-- pages/index.vue -->
-<ServerWidget @click="handleClick" /> <!-- ❌ Cannot pass event listeners to .server.vue! -->
-```
+**Requirements:**
+1. Create `components/*.server.vue`.
 
-*Fix:*
-```vue
-<!-- Keep event listeners inside Client components; render Server components for static data -->
-```
-
----
-
-### Mistake 7: Using Vue Client Hooks (`useState`, `onMounted`, `useCookie`) inside `.server.vue` Components
-
-**The mistake:** Adding `onMounted()` or client state hooks inside `components/Widget.server.vue`.
-
-**Why it's wrong:** Server components render on the server and skip client hydration entirely. `onMounted` will never execute inside `.server.vue` files.
-
-*Incorrect:*
-```vue
-<!-- components/Widget.server.vue -->
-<script setup>
-onMounted(() => { ... }); // ❌ Never executes in .server.vue components!
-</script>
-```
-
-*Fix:*
-```vue
-<!-- Use server-side data fetching directly in <script setup> of .server.vue -->
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: JS Payload Comparison
-
-**Problem:** You implement a static component displaying table information. Compare what the client browser receives when this component is defined as `InfoTable.vue` vs `InfoTable.server.vue`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> With InfoTable.vue, the client receives the HTML markup AND the JavaScript bundle code required to load and hydrate the table component in memory.
-> With InfoTable.server.vue, the client receives ONLY the static HTML markup; zero JavaScript code for the component is sent to the browser.
-> ```
-> - Think about the hydration process and how client-side JS bundling differs.
-
----
-
-### Exercise 2: Nuxt Server Component Setup Pattern
-
-**Problem:** Write Nuxt Server Component `components/Highlight.server.vue` parsing heavy Markdown on the server without sending parser JS to browser.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <!-- components/Highlight.server.vue -->
-> <script setup>
-> const props = defineProps<{ code: string }>();
-> const html = await highlightCode(props.code);
-> </script>
-> <template>
->   <div v-html="html" />
-> </template>
-> ```
-> - `.server.vue` suffix restricts component execution to server, keeping heavy JS libraries out of browser bundles.
-> 
-> ```vue
-> <!-- components/Highlight.server.vue -->
-> <script setup>
-> import { marked } from 'marked'; // Heavy parser library stays on server!
-> const props = defineProps<{ markdown: string }>();
-> const html = marked(props.markdown);
-> </script>
-> 
-> <template>
->   <div class="prose" v-html="html" />
-> </template>
-> ```
+> <!-- components/MarkdownViewer.server.vue -->
+> <script setup lang="ts">
+> // Heavy Markdown parser library imported ONCE on the server!
+> import { parseMarkdown } from "heavy-markdown-parser";
+
+const props = defineProps<{ content: string }>();
+const parsedHtml = parseMarkdown(props.content);
+</script>
+
+<template>
+  <div class="markdown-body" v-html="parsedHtml"></div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Components ending in `.server.vue` execute exclusively on the server during SSR.
+> 2. The component's JavaScript code and dependencies (`heavy-markdown-parser`) are NOT included in client JavaScript bundles.
+> 3. Sends pure static HTML to the client browser, reducing client JavaScript bundle size to zero bytes for that component.
 
 ---
 
-### Exercise 3: Server Components Experimental Flag
+### Exercise 2: Enabling Component Islands in `nuxt.config.ts`
 
-**Problem:** Which configuration flag in `nuxt.config.ts` enables Nuxt Island Server Components?
+**Scenario:**
+Enable experimental component islands support in `nuxt.config.ts`.
 
-**Expected output:**
+**Requirements:**
+1. Enable `experimental.componentIslands` in `nuxt.config.ts`.
+
 > [!check]- Answer
-> ```text
-> experimental: { componentIslands: true }
-> ```
-> - `experimental.componentIslands` enables `.server.vue` component islands.
-> 
+>
+> #### Implementation
+>
 > ```typescript
+> // nuxt.config.ts
 > export default defineNuxtConfig({
 >   experimental: {
 >     componentIslands: true
@@ -298,16 +216,61 @@ onMounted(() => { ... }); // ❌ Never executes in .server.vue components!
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `componentIslands: true` activates Nuxt Server Components and `<NuxtIsland>` rendering features.
+> 2. Allows embedding server-rendered HTML islands inside interactive client Vue component trees.
+> 3. Advanced zero-bundle-size component rendering strategy.
 
 ---
 
-## 7. Related Terms
+### Exercise 3: Passing Props and Slots to Nuxt Island Components
+
+**Scenario:**
+Render a `<NuxtIsland name="MarkdownViewer" :props="{ content: text }" />` dynamically inside a page.
+
+**Requirements:**
+1. Use `<NuxtIsland>` component tag.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const markdownText = ref("# Nuxt 3 Server Components
+
+Zero client JS!");
+> </script>
+
+<template>
+  <div>
+    <!-- Renders Server Component Island dynamically -->
+    <NuxtIsland name="MarkdownViewer" :props="{ content: markdownText }" />
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `<NuxtIsland>` fetches server component HTML over a dedicated Nitro endpoint (`/__nuxt_island/...`).
+> 2. Dynamically re-fetches server component HTML when reactive `:props` change.
+> 3. Zero-JS server island component integration.
+
+---
+
+
+
+
+---
+
+## 6. Related Terms
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process that compiles server components.
 - [Lazy Components](../level_03/lazy_components.md) — Dynamic code-splitting for interactive components.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Nuxt Server Components (Islands) compile entirely to static HTML on the server.
 - They send zero JavaScript to the browser, significantly reducing bundle size.
 - Enable them by naming the component file with a `.server.vue` suffix.

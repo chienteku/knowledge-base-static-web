@@ -14,16 +14,15 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Paradigm**
+
+
+**Core Concept (relational vs document vs multi-model comparison)**: - **Database Theory / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (Core system design comparison matrix. Used by software engineers to select database technologies during project planning).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 No single database is perfect for every project. 
@@ -77,7 +76,7 @@ By analyzing the data structure, relationship mechanics, scaling capabilities, a
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Migrating a mature, enterprise PostgreSQL billing application to SurrealDB simply because "SurrealDB is new and cool," ignoring ecosystem maturity
 
@@ -131,69 +130,115 @@ SELECT * FROM post; // Followed by separate manual queries
 SELECT * FROM post FETCH author;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Technology Matchmaker
+### Exercise 1: Comprehensive Database Feature Comparison
 
-**Problem:** Recommend the optimal database (**PostgreSQL**, **MongoDB**, or **SurrealDB**) for these application scenarios:
-1.  A medical records SaaS where clinics need to define custom fields dynamically per clinic, and patients need to subscribe to real-time doctor location updates.
-2.  A government tax database processing millions of financial records containing strict tax-bracket calculation checks.
-3.  A static logging database storing 50 million server request logs per day for archival purposes.
+**Scenario:**
+You are preparing a technical decision record comparing PostgreSQL, MongoDB, and SurrealDB across key database architectural dimensions.
 
-**Expected output:**
+**Requirements:**
+1. Compare relationship handling across PostgreSQL (Foreign Keys), MongoDB (ObjectId references / embedding), and SurrealDB (Record Links & Graph Edges).
+2. Compare real-time event capability across PostgreSQL (`LISTEN`/`NOTIFY`), MongoDB (Change Streams), and SurrealDB (`LIVE SELECT`).
+3. Compare client architecture across PostgreSQL/MongoDB (Backend API required) and SurrealDB (Direct Browser WebSocket with RLS).
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. SurrealDB: Toggles between SCHEMALESS and SCHEMAFULL schema modes dynamically, and natively supports real-time Live Queries (WebSockets) for doctor locations.
-> 2. PostgreSQL: Enforces strict data constraints and transactional integrity natively, which is critical for government tax audits.
-> 3. MongoDB: A mature document database with robust indexing and compression for large log archives.
+> Dimensional Architectural Matrix:
+> 
+> - Relationships:
+>    - PostgreSQL: Foreign Key constraints + JOIN query tables.
+>    - MongoDB: Manual ObjectId references + $lookup aggregations or document embedding.
+>    - SurrealDB: Direct Record Links (record<table>) + Graph Edges (RELATE a->edge->b).
+> 
+> - Real-Time Streaming:
+>    - PostgreSQL: LISTEN / NOTIFY (requires custom trigger payloads).
+>    - MongoDB: Change Streams (requires replica set oplog).
+>    - SurrealDB: LIVE SELECT (built-in live WebSocket query subscriptions).
+> 
+> - Application Architecture:
+>    - PostgreSQL & MongoDB: Require intermediate backend API servers (Express, FastAPI) for client queries.
+>    - SurrealDB: Web clients can query database directly over WebSockets using built-in DEFINE ACCESS & PERMISSIONS.
 > ```
-> - Match real-time updates and schema flexibility to the target engine strengths.
-> - Consider which database has the most mature transactional auditing tools.
+>
+> #### Technical Explanation
+>
+> 1. Record links eliminate foreign key indexes and join table maintenance overhead.
+> 2. Built-in `LIVE SELECT` turns SurrealDB into a real-time reactive database engine out of the box.
+> 3. Row-level security permissions allow direct web-to-database connections, reducing backend boilerplate code.
+
+---
+
+### Exercise 2: Selecting the Right Database for the Job
+
+**Scenario:**
+Evaluate 3 different software project scenarios and recommend whether to use PostgreSQL, MongoDB, or SurrealDB based on technical requirements.
+
+**Requirements:**
+1. Project A: A legacy enterprise ERP system requiring 25 years of strict SQL compliance and heavy reporting ORM ecosystem support.
+2. Project B: A simple content management system storing unstructured blog posts with no graph connections or real-time requirements.
+3. Project C: A real-time collaborative Figma-like web app needing instant live updates, user social graphs, document state, and direct browser connections.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Project A Recommendation: PostgreSQL (Battle-tested legacy SQL compliance, mature ORM tools).
+> Project B Recommendation: MongoDB or PostgreSQL (Simple document store with minimal relational complexity).
+> Project C Recommendation: SurrealDB (Native live queries, graph arrows, document payloads, direct browser RLS).
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Single-model legacy workloads benefit from PostgreSQL's 30+ years of ecosystem stability.
+> 2. Simple document workloads are well-supported by established document databases like MongoDB.
+> 3. Complex multi-model real-time web applications gain massive architectural velocity from SurrealDB's unified model.
+
+---
+
+### Exercise 3: Performance & Scalability Trade-offs
+
+**Scenario:**
+Compare the scalability mechanisms of PostgreSQL, MongoDB, and SurrealDB for high-throughput scaling.
+
+**Requirements:**
+1. Describe how PostgreSQL scales (vertical scaling, read replicas, sharding extensions like Citus).
+2. Describe how MongoDB scales (native sharded clusters with mongos routers).
+3. Describe how SurrealDB scales (stateless compute nodes scaling over distributed TiKV key-value storage).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Scalability Comparison:
+> - PostgreSQL: Primarily vertical scaling; horizontal write sharding requires complex extensions (Citus).
+> - MongoDB: Native horizontal sharding via mongos query routers and shard replica sets.
+> - SurrealDB: Decouples compute from storage; stateless query nodes scale horizontally over distributed TiKV.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Decoupling compute and storage allows SurrealDB to scale query execution nodes independently from physical storage nodes.
+> 2. Pluggable storage engines enable SurrealDB to run embedded in RAM or scale horizontally over TiKV.
+> 3. Provides modern cloud-native scalability without sacrificing multi-model query features.
 
 ---
 
 
 
-### Exercise 2: Database Engine Comparison Matrix
-
-**Problem:** Identify database engine supporting: 1. Native Graph Arrows (SurrealDB), 2. Traditional Relational JOINs (Postgres), 3. BSON Documents ($lookup) (MongoDB).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. SurrealDB, 2. PostgreSQL, 3. MongoDB
-> ```
-> ```text
-> 1. SurrealDB, 2. PostgreSQL, 3. MongoDB
-> ```
->
-> **Explanation:** SurrealDB merges relational and document models with native graph arrows.
-
----
-
-### Exercise 3: Real-Time Query Comparison
-
-**Problem:** How does SurrealDB `LIVE SELECT` differ from MongoDB Change Streams or Postgres LISTEN/NOTIFY?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> LIVE SELECT pushes live record diff updates directly over WebSockets filtered by SurrealQL WHERE clauses
-> ```
-> ```text
-> LIVE SELECT pushes live record diff updates directly over WebSockets filtered by SurrealQL WHERE clauses
-> ```
->
-> **Explanation:** `LIVE SELECT` provides query-level real-time subscription push events.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [SurrealDB](surrealdb.md) — The parent database engine.
 - [Multi-Model Database](multi_model_database.md) — The parent paradigm concept.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PostgreSQL represents the relational standard; MongoDB represents the document standard.
 - SurrealDB integrates relational, document, and graph paradigms into one engine.
 - SurrealQL uses arrow paths (`->`) to traverse relationships, avoiding SQL JOINs.

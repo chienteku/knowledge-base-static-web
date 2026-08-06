@@ -165,8 +165,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Manual `Stream` Trait Implementation — Async Rate-Limited Telemetry Ticker
 
-**Scenario**: Low-level networking frameworks often require custom stream types implemented directly against `futures_core::stream::Stream`. A rate-limited telemetry ticker produces sequential readings up to a maximum count, pausing asynchronously between ticks and waking the task via `cx.waker().wake_by_ref()` when pending.
+**Scenario:** Low-level networking frameworks often require custom stream types implemented directly against `futures_core::stream::Stream`. A rate-limited telemetry ticker produces sequential readings up to a maximum count, pausing asynchronously between ticks and waking the task via `cx.waker().wake_by_ref()` when pending.
 
+**Requirements:**
 Implement a custom `TelemetryTicker` struct manually implementing `Stream`.
 
 **Requirements**:
@@ -176,6 +177,9 @@ Implement a custom `TelemetryTicker` struct manually implementing `Stream`.
 4. Add unit tests asserting item sequence and stream termination.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use futures_core::stream::Stream;
 > use std::pin::Pin;
@@ -236,7 +240,8 @@ Implement a custom `TelemetryTicker` struct manually implementing `Stream`.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Manual `Stream` Trait Implementation**: `futures_core::stream::Stream` requires `poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>>`.
 > 2. **Waker Notification**: Returning `Poll::Pending` requires registering/notifying a `Waker` (`cx.waker().wake_by_ref()`) so the executor reschedules `poll_next`.
 > 
@@ -310,7 +315,8 @@ Build an async stream pipeline for log parsing and chunking.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Stream Combinators**: `.filter()` filters items asynchronously, while `.chunks(batch_size)` groups items into `Vec<T>` chunks.
 > 2. **`StreamExt::collect`**: `.collect().await` asynchronously waits for stream completion, gathering batches into `Vec<Vec<LogEntry>>`.
 > 
@@ -394,7 +400,8 @@ Construct a custom stream combinator adapter implementing `Stream`.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Stream Adapter Pattern**: `DeduplicateStream` wraps inner stream `St` and intercepts `poll_next` calls.
 > 2. **Stateful Filtering**: Maintaining `last_item: Option<T>` enables comparing incoming values and looping to poll the next item when duplicates occur.
 > 

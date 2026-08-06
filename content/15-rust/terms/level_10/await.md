@@ -178,8 +178,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Resilient Async Pipeline with Per-Attempt Timeout & Exponential Backoff
 
-**Scenario**: You are developing an asynchronous API client for a cloud telemetry ingestion service. Remote HTTP calls can experience transient packet loss or server throttling. When calling remote endpoints, each attempt must be bounded by a per-attempt deadline using `tokio::time::timeout`. If an attempt fails or times out, the client must apply exponential backoff before `.await`ing the next attempt.
+**Scenario:** You are developing an asynchronous API client for a cloud telemetry ingestion service. Remote HTTP calls can experience transient packet loss or server throttling. When calling remote endpoints, each attempt must be bounded by a per-attempt deadline using `tokio::time::timeout`. If an attempt fails or times out, the client must apply exponential backoff before `.await`ing the next attempt.
 
+**Requirements:**
 Construct a resilient retry function using `.await` and deadline timeouts.
 
 **Requirements**:
@@ -190,6 +191,9 @@ Construct a resilient retry function using `.await` and deadline timeouts.
 5. Add unit tests asserting success on retry, failure on timeout, and exponential backoff calculations.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::time::Duration;
 > use tokio::time::{sleep, timeout};
@@ -270,7 +274,8 @@ Construct a resilient retry function using `.await` and deadline timeouts.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Postfix `.await` Composition**: Calling `mock_remote_fetch(...).await` suspends `retry_with_timeout` until the remote fetch future completes. Wrapping it inside `timeout(duration, fut).await` composes timer futures seamlessly.
 > 2. **Non-Blocking Backoff**: `sleep(backoff).await` suspends the async task without blocking Tokio worker threads.
 > 
@@ -443,7 +448,8 @@ Construct a resilient retry function using `.await` and deadline timeouts.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **`tokio::select!` & `.await`**: `rx.recv()` returns a future. `.await`ing it inside `tokio::select!` yields control back to Tokio while awaiting messages.
 > 
 > ---

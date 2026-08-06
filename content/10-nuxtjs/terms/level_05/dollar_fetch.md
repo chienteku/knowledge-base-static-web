@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Data Fetching**
+
+**Data Fetching** (Direct HTTP Fetch Utility): `$fetch` is Nuxt 3's built-in HTTP client (powered by ofetch) for imperative client-side or server-side API requests.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern web development, the native `fetch()` API has largely replaced older libraries like XMLHttpRequest or Axios. However, native `fetch()` has annoyances: you always have to manually call `.json()` on the response, and error handling requires manually checking `res.ok`.
@@ -55,7 +56,7 @@ To fetch data inside a Vue component safely, you must wrap `$fetch` in `useAsync
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using `$fetch` for initial component data
 **The mistake:** Calling `$fetch` directly in `<script setup>` to load the data required to render the page.
@@ -129,84 +130,131 @@ await $fetch('/api/save', {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Form Submission
+### Exercise 1: Executing Direct HTTP Requests with `$fetch`
 
-**Problem:** You have a login form. When the user clicks "Submit", you want to send a POST request to `/api/login` with their `email` and `password`. Should you use `$fetch` or `useFetch` for this specific action?
+**Scenario:**
+Execute an imperative POST request using `$fetch()` inside an event handler method.
 
-**Expected output:**
+**Requirements:**
+1. Call `$fetch("/api/orders", { method: "POST", body: ... })`.
+
 > [!check]- Answer
-> ```text
-> $fetch. 
-> Because the form submission happens exclusively on the client (triggered by a user click), there is no SSR double-fetching issue.
-> ```
-> - Actions triggered by user clicks or form submissions in browser memory only happen in client environments and do not require SSR serialization.
-
----
-
-### Exercise 2: Event Handler $fetch Usage Pattern
-
-**Problem:** Write Vue `<script setup>` method `submitForm(formData)` calling `$fetch('/api/submit', { method: 'POST', body: formData })`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
-> async function submitForm(payload) {
->   const res = await $fetch('/api/submit', {
->     method: 'POST',
->     body: payload
->   });
-> }
-> </script>
-> ```
-> - `$fetch` is the recommended fetch helper inside event handlers and user actions.
-> 
-> ```vue
-> <script setup>
-> async function submitForm(formData) {
->   try {
->     const response = await $fetch('/api/submit', {
->       method: 'POST',
->       body: formData
->     });
->     console.log('Submitted successfully:', response);
->   } catch (err) {
->     console.error('Submission failed:', err);
->   }
-> }
-> </script>
-> ```
+> <script setup lang="ts">
+> const isSubmitting = ref(false);
+
+async function submitOrder() {
+  isSubmitting.value = true;
+  try {
+    const response = await $fetch("/api/orders", {
+      method: "POST",
+      body: { productId: 42, quantity: 2 }
+    });
+    alert(`Order created! ID: ${response.id}`);
+  } catch (err: any) {
+    alert(`Order failed: ${err.message}`);
+  } finally {
+    isSubmitting.value = false;
+  }
+}
+</script>
+
+<template>
+  <button @click="submitOrder" :disabled="isSubmitting">Submit Order</button>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `$fetch` is a low-level HTTP client designed for user-driven event handlers (button clicks, form submits).
+> 2. Automatically parses JSON response bodies and handles HTTP status codes.
+> 3. Does NOT generate SSR payload cache entries like `useFetch()`.
 
 ---
 
-### Exercise 3: $fetch vs useFetch Selection Rule
+### Exercise 2: Understanding SSR Internal Direct Calls with `$fetch`
 
-**Problem:** State the rule for when to use `useFetch` vs `$fetch` in Nuxt 3.
+**Scenario:**
+Explain why calling `$fetch("/api/status")` during SSR on the server executes a direct H3 event call without initiating a loopback TCP HTTP network request.
 
-**Expected output:**
+**Requirements:**
+1. Detail Nitro's direct event execution behavior.
+
 > [!check]- Answer
-> ```text
-> Use useFetch in top-level <script setup> component initialization (SSR safe); Use $fetch inside event handlers, user submit functions, or server routes.
-> ```
-> - `useFetch` -> Component setup initialization (prevents double fetch).
-> - `$fetch` -> Event handlers, user button clicks, server API handlers.
-> 
-> ```text
-> Component Setup = useFetch; Event Handlers / Actions = $fetch
-> ```
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> // Executed on server: Nitro invokes /api/status handler directly in Node.js memory!
+> const status = await $fetch("/api/status");
+> </script>
+
+<template>
+  <div>
+    <p>Internal Server Status: {{ status }}</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. On the server during SSR, `$fetch` intercepts calls to local `/api/` endpoints and invokes Nitro H3 event handlers directly in RAM.
+> 2. Eliminates loopback TCP network latency and socket overhead.
+> 3. Fast internal server execution architecture.
+
+---
+
+### Exercise 3: Handling Custom HTTP Headers and Interceptors
+
+**Scenario:**
+Add a Bearer token Authorization header to a `$fetch` request using `onRequest` interceptor hooks.
+
+**Requirements:**
+1. Pass `headers` or `onRequest` hook to `$fetch`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const token = useCookie("auth_token");
+
+const response = await $fetch("/api/user/profile", {
+  headers: {
+    Authorization: `Bearer ${token.value}`
+  },
+  onRequestError({ error }) {
+    console.error("Network request failed:", error);
+  }
+});
+```
+
+> #### Technical Explanation
+>
+> 1. `$fetch` accepts standard Fetch API options (`headers`, `query`, `method`, `body`).
+> 2. `onRequestError` and `onResponseError` lifecycle interceptors handle custom network error processing.
+> 3. Extensible HTTP request client.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useFetch`](use_fetch.md) — The SSR-safe wrapper around `$fetch`.
 - [`useAsyncData`](use_async_data.md) — The underlying composable that handles SSR serialization.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `$fetch` (powered by ofetch) is Nuxt's global HTTP client.
 - It automatically parses JSON and throws on HTTP errors.
 - It is perfect for form submissions and Nitro server routes.

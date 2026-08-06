@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DML Statement**
+
+**SQL Command / Clause** (Preserved Left Table Join): `LEFT JOIN` (or `LEFT OUTER JOIN`) returns all rows from the left table alongside matching rows from the right table, populating `NULL` for un-matched right rows.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (The standard outer join method. `LEFT OUTER JOIN` is the verbose ANSI standard; PostgreSQL treats `LEFT JOIN` as identical).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `inner_join.md`, an inner join hides records that do not have a match in both tables.
@@ -92,7 +93,7 @@ LEFT JOIN books ON authors.id = books.author_id;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Accidentally converting a LEFT JOIN into an INNER JOIN using WHERE filters
 
@@ -127,6 +128,8 @@ LEFT JOIN orders ON users.id = orders.user_id AND orders.status = 'shipped';
 
 
 
+
+
 ### Mistake 2: Filtering Left Joined Table Attributes in `WHERE` Clauses (Silent Conversion to INNER JOIN)
 
 **The mistake:** Writing `SELECT * FROM users u LEFT JOIN orders o ON u.id = o.user_id WHERE o.status = 'completed';`.
@@ -142,6 +145,8 @@ SELECT * FROM u LEFT JOIN o ON u.id = o.user_id WHERE o.status = 'completed'; --
 ```sql
 SELECT * FROM u LEFT JOIN o ON u.id = o.user_id AND o.status = 'completed'; -- Preserves zero-order users
 ```
+
+
 
 ### Mistake 3: Confusing `LEFT JOIN` with `RIGHT JOIN` Query Table Positioning
 
@@ -161,104 +166,109 @@ Keep primary entity table on LHS of LEFT JOIN: FROM users u LEFT JOIN orders o
 
 
 
-### Mistake 4: Filtering Left Joined Table Attributes in `WHERE` Clauses (Silent Conversion to INNER JOIN)
+## 5. Practice Exercises
 
-**The mistake:** Writing `SELECT * FROM users u LEFT JOIN orders o ON u.id = o.user_id WHERE o.status = 'completed';`.
+### Exercise 1: Preserving Un-Matched Left Rows with LEFT JOIN
 
-**Why it's wrong:** Filtering `o.status = 'completed'` in `WHERE` discards rows where `o.status` is NULL (users with 0 orders), converting `LEFT JOIN` into `INNER JOIN`. Put conditions in `ON` clause.
+**Scenario:**
+Query all `users` alongside their `orders`, preserving users who have 0 orders.
 
-*Incorrect:*
-```sql
-SELECT * FROM u LEFT JOIN o ON u.id = o.user_id WHERE o.status = 'completed'; -- ❌ Drops users without orders!
-```
+**Requirements:**
+1. Execute `SELECT u.username, o.id FROM users u LEFT JOIN orders o ON u.id = o.user_id`.
 
-*Fix:*
-```sql
-SELECT * FROM u LEFT JOIN o ON u.id = o.user_id AND o.status = 'completed'; -- Preserves zero-order users
-```
-
-### Mistake 5: Confusing `LEFT JOIN` with `RIGHT JOIN` Query Table Positioning
-
-**The mistake:** Swapping table positions expecting identical `LEFT JOIN` output.
-
-**Why it's wrong:** `LEFT JOIN` preserves ALL rows from the FIRST (left) table. Swapping table positions alters which table's rows are fully preserved.
-
-*Incorrect:*
-```sql
-// Swapping left and right tables expecting identical output
-```
-
-*Fix:*
-```sql
-Keep primary entity table on LHS of LEFT JOIN: FROM users u LEFT JOIN orders o
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Customer Activity Audit
-
-**Problem:** You have a `customers` table (columns: `id`, `name`) and an `orders` table (columns: `id`, `customer_id`, `amount`). Write a SQL query to list the name of **every** customer in the system, along with the total `amount` they spent. If they have never made a purchase, display `NULL` (or handle it using aggregates).
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT customers.name, orders.amount 
-> FROM customers
-> LEFT JOIN orders ON customers.id = orders.customer_id;
+> SELECT 
+>   u.id AS user_id, 
+>   u.username, 
+>   o.id AS order_id, 
+>   o.total_cents 
+> FROM users AS u 
+> LEFT JOIN orders AS o ON u.id = o.user_id 
+> ORDER BY u.id ASC;
 > ```
-> - The master table containing the complete registry is `customers`. Place it in the `FROM` clause.
-> - Link `orders` using a `LEFT JOIN` on the matching customer ID keys.
+>
+> #### Technical Explanation
+>
+> 1. `LEFT JOIN` returns ALL rows from the left table (`users`).
+> 2. If a user has no matching orders, `o.id` and `o.total_cents` populate as `NULL`.
+> 3. Prevents dropping users without purchase history.
 
 ---
 
+### Exercise 2: Finding Orphan/Un-Associated Rows with IS NULL Filtering
 
+**Scenario:**
+Find all users who have NEVER placed an order using `LEFT JOIN ... WHERE o.id IS NULL`.
 
-### Exercise 2: Finding Orphaned Rows with LEFT JOIN and IS NULL
+**Requirements:**
+1. Execute `WHERE o.id IS NULL`.
 
-**Problem:** Query users who have placed 0 orders using `LEFT JOIN ... WHERE o.id IS NULL`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> SELECT u.* FROM users u LEFT JOIN orders o ON u.id = o.user_id WHERE o.id IS NULL;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> SELECT u.*
-> FROM users u
-> LEFT JOIN orders o ON u.id = o.user_id
+> SELECT 
+>   u.id, 
+>   u.username, 
+>   u.email 
+> FROM users AS u 
+> LEFT JOIN orders AS o ON u.id = o.user_id 
 > WHERE o.id IS NULL;
 > ```
 >
-> **Explanation:** `LEFT JOIN` paired with `WHERE right_id IS NULL` identifies unmatched left rows.
+> #### Technical Explanation
+>
+> 1. `LEFT JOIN` populates right table columns as `NULL` when no match exists.
+> 2. `WHERE o.id IS NULL` filters for ONLY un-matched left rows.
+> 3. Idiomatic anti-join pattern.
 
 ---
 
-### Exercise 3: Preserving Unmatched Left Rows with Aggregation
+### Exercise 3: Aggregating Over LEFT JOIN Result Sets
 
-**Problem:** Query user names and total order counts including users with 0 orders using `LEFT JOIN` and `COUNT(o.id)`.
+**Scenario:**
+Calculate order count per user including users with 0 orders using `COUNT(o.id)`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT u.username, COUNT(o.id) FROM users u LEFT JOIN orders o ON u.id = o.user_id GROUP BY u.id, u.username`.
+
 > [!check]- Answer
-> ```text
-> SELECT u.name, COUNT(o.id) AS order_cnt FROM users u LEFT JOIN orders o ON u.id = o.user_id GROUP BY u.id, u.name;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> SELECT u.name, COUNT(o.id) AS order_cnt
-> FROM users u
-> LEFT JOIN orders o ON u.id = o.user_id
-> GROUP BY u.id, u.name;
+> SELECT 
+>   u.id, 
+>   u.username, 
+>   COUNT(o.id) AS total_orders 
+> FROM users AS u 
+> LEFT JOIN orders AS o ON u.id = o.user_id 
+> GROUP BY u.id, u.username;
 > ```
 >
-> **Explanation:** `COUNT(o.id)` evaluates to 0 for users with no matching order rows.
+> #### Technical Explanation
+>
+> 1. `COUNT(o.id)` counts non-null order IDs (returns `0` for users with no orders).
+> 2. Using `COUNT(*)` would incorrectly return `1` for un-matched users because a row with `NULL` right columns was returned.
+> 3. Crucial distinction when aggregating outer joins.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [`INNER JOIN`](inner_join.md) — The matching-only join.
 - [`RIGHT JOIN` / `FULL OUTER JOIN`](right_full_join.md) — Reversing sides or joining everything.
 - [`JOIN` (Concept)](join_concept.md) — Related concept: `JOIN` (Concept).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `LEFT JOIN` guarantees that every row from the left table remains in the output.
 - Unmatched right-side column values are populated with `NULL` pads.
 - The `LEFT OUTER JOIN` keyword is syntactically identical to `LEFT JOIN`.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Server-Side Development**
+
+**Server & Nitro Engine** (Express Middleware Interoperability): Express.js middleware compatibility in Nuxt 3 allows wrapping legacy Connect/Express HTTP middleware inside H3 handlers using `fromNodeMiddleware()`.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (Express runs strictly in a Node.js process runtime).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why do we study this?"
 Historically, building a backend in Node.js meant writing raw HTTP handlers using Node's built-in `http` module. This module provides a raw incoming stream (`req` or `IncomingMessage`) and an outgoing response stream (`res` or `ServerResponse`). 
@@ -65,7 +66,7 @@ Nuxt 3 uses **H3** (via Nitro) instead of Express. H3 abstracts requests and res
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use Express middlewares directly in Nuxt server routes
 
@@ -125,75 +126,120 @@ export default defineEventHandler((event) => { return 'OK'; }); // Correct H3 ev
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Extraction Comparison
+### Exercise 1: Adapting Legacy Express Middleware with `fromNodeMiddleware()`
 
-**Problem:** How does reading a URL query parameter named `id` differ between an Express route handler and a Nuxt H3 handler? Write both code blocks side by side.
+**Scenario:**
+Integrate legacy Connect/Express CORS or body parser middleware into a Nitro server handler using `fromNodeMiddleware()`.
 
-**Expected output:**
+**Requirements:**
+1. Import `fromNodeMiddleware` from `h3`.
+2. Wrap legacy middleware function.
+
 > [!check]- Answer
-> ```javascript
-> // Express.js
-> app.get('/api', (req, res) => {
->   const id = req.query.id;
-> });
-> 
-> // Nuxt H3
-> export default defineEventHandler((event) => {
->   const query = getQuery(event);
->   const id = query.id;
-> });
-> ```
-> - Express attaches parsed queries directly to `req.query`. H3 uses the auto-imported helper `getQuery(event)`.
-
----
-
-### Exercise 2: fromNodeMiddleware Express Bridge Pattern
-
-**Problem:** Which H3 helper function adapts legacy Express middleware functions for use in Nitro server handlers?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> fromNodeMiddleware(expressMiddleware)
-> ```
-> - `fromNodeMiddleware` bridges Node.js Express middleware into Nitro handlers.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> import { fromNodeMiddleware } from 'h3';
-> import expressMiddleware from 'legacy-express-plugin';
-> 
-> export default fromNodeMiddleware(expressMiddleware);
-> ```
+> // server/middleware/cors.ts
+> import cors from "cors";
+> import { fromNodeMiddleware } from "h3";
+
+const corsMiddleware = cors({
+  origin: ["https://example.com"],
+  methods: ["GET", "POST"]
+});
+
+export default fromNodeMiddleware(corsMiddleware);
+```
+
+> #### Technical Explanation
+>
+> 1. `fromNodeMiddleware()` translates standard Node.js `(req, res, next)` Express middleware signatures into H3 event handlers.
+> 2. Enables seamless integration of existing Express ecosystem packages inside Nitro.
+> 3. Bridges Node.js HTTP ecosystem with modern H3 event architecture.
 
 ---
 
-### Exercise 3: Nitro vs Express Performance
+### Exercise 2: Migrating Express Route Handlers to H3 Event Handlers
 
-**Problem:** Why are H3/Nitro server handlers faster and lighter than Express.js?
+**Scenario:**
+Refactor an Express route handler `app.post('/api/user', (req, res) => ...)` to a Nitro `defineEventHandler`.
 
-**Expected output:**
+**Requirements:**
+1. Use `readBody(event)` and return object.
+
 > [!check]- Answer
-> ```text
-> H3 is a minimal, composable web server framework designed for zero-dependency execution across Node.js, Edge, and Serverless environments.
+>
+> #### Implementation
+>
+> ```typescript
+> // server/api/user.post.ts
+> export default defineEventHandler(async (event) => {
+>   const body = await readBody(event);
+>   const query = getQuery(event);
+>   
+>   return {
+>     status: "success",
+>     user: body,
+>     page: query.page
+>   };
+> });
 > ```
-> - H3 is zero-dependency and optimized for Edge and Serverless runtimes.
-> 
-> ```text
-> H3 = Lightweight, Multi-Runtime, Zero-Dependency Server Framework
-> ```
+
+> #### Technical Explanation
+>
+> 1. H3 event handlers use `readBody()` and `getQuery()` helpers instead of reading mutating properties on `req`.
+> 2. Returning objects directly serializes JSON without requiring explicit `res.json()` calls.
+> 3. Idiomatic Nitro server development pattern.
+
+---
+
+### Exercise 3: Handling Node.js Streams in Nitro Handlers
+
+**Scenario:**
+Pipe a Node.js file read stream to the HTTP response using `sendStream()`.
+
+**Requirements:**
+1. Use `sendStream(event, stream)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import fs from "node:fs";
+
+export default defineEventHandler((event) => {
+  const filePath = "./public/large-dataset.csv";
+  const stream = fs.createReadStream(filePath);
+  
+  setResponseHeader(event, "Content-Type", "text/csv");
+  return sendStream(event, stream);
+});
+```
+
+> #### Technical Explanation
+>
+> 1. `sendStream()` streams large file payloads without loading the entire buffer into RAM.
+> 2. Works with Node.js `Readable` streams and web Streams API.
+> 3. Prevents memory spikes during large file downloads.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Nitro Engine](../level_01/nitro_engine.md) — The modern server compiler powering Nuxt.
 - [H3 Request Handlers (`defineEventHandler`)](h3_handlers.md) — The modern event-driven API engine replacing Express routes in Nuxt.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Express.js is the legacy Node.js framework that popularized request/response middleware chains.
 - It is heavily coupled to Node.js runtime globals, making it unsuitable for modern serverless edge hosting.
 - Nuxt 3 replaces Express with H3 to achieve lightweight, platform-agnostic server execution.

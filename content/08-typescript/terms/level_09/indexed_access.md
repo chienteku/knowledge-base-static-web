@@ -12,174 +12,184 @@
 ---
 
 ## 2. Term Category
-TypeScript Advanced Type Feature
+
+**TypeScript Type Operator** (Object Property Lookup Types): Indexed access types (`T[K]`) look up the exact type of a specific property or element from an object or array type.
 
 ---
 
-## 3. Core Definition
-An **Indexed Access Type** (also known as a "Lookup Type") allows you to retrieve the type of a specific property from an interface or type alias. You do this using bracket notation: `MyType['property']`.
+## 3. Explanation
 
-This is incredibly useful for keeping your types DRY. If you have a massive `User` interface and you need a function that just takes the user's `address` object, you can look up the address type directly from the `User` interface instead of copying and pasting the address type definition.
 
----
-
-## 4. Key Characteristics / Rules
-- **Bracket Notation Only:** You cannot use dot notation (`User.address`). You must use brackets (`User['address']`).
-- **Union Lookups:** You can pass a union type into the brackets to extract multiple property types at once (e.g., `User['name' | 'age']`).
 
 ---
 
-## 5. Typical Usage / Common Patterns
 
-### Looking up a Nested Property
+
+## 4. Common Mistakes & Pitfalls
+
+### Mistake 1: Passing Value Variables Instead of Types to Index Brackets
+
+```typescript
+const keyName = "role";
+// ❌ INCORRECT: type UserRole = User[keyName];
+
+// ✅ CORRECT:
+type UserRole = User[typeof keyName];
+```
+
+**Why it's wrong:** Indexed access types accept ONLY type parameters or literal types inside `T[K]`. Runtime variables must be converted to types via `typeof` first.
+
+**Golden Rule:** Always pass type parameters or `typeof variable` into indexed access brackets `T[K]`.
+
+---
+
+### Mistake 2: Assuming Index Access Removes `undefined` from Optional Keys
+
 ```typescript
 interface User {
-  id: number;
-  name: string;
-  address: {
-    street: string;
-    city: string;
-    zipCode: number;
-  };
+  bio?: string;
 }
 
-// Extract the type of the 'address' property
-type AddressType = User['address'];
+// ❌ INCORRECT: Assuming User["bio"] is strictly 'string'
+// const bio: User["bio"] = "developer";
 
-// AddressType is now { street: string; city: string; zipCode: number; }
-const myAddress: AddressType = {
-  street: "123 Main St",
-  city: "New York",
-  zipCode: 10001
-};
+// ✅ CORRECT: User["bio"] is 'string | undefined'
+const bio: User["bio"] = undefined;
 ```
+
+**Why it's wrong:** Optional properties (`bio?: string`) implicitly union their declared type with `undefined`. Indexed access `User["bio"]` evaluates to `string | undefined`.
+
+**Golden Rule:** Remember that indexing optional properties returns `Type | undefined`.
 
 ---
 
-## 6. Common Pitfalls
-- **Using Values instead of Types:** You cannot use an Indexed Access Type to look up a property on a JavaScript *variable*. It only works on TypeScript *types* or *interfaces*.
+### Mistake 3: Indexing Private or Non-Existent Interface Keys
 
----
-
-## 5. Common Mistakes & Pitfalls
-
-
-
-### Mistake 1: Using Dot Notation in Indexed Access Types instead of Square Brackets
-
-**The mistake:** Writing `type Age = User.age;`.
-
-**Why it's wrong:** Type-level indexed access REQUIRES square bracket syntax (`User["age"]`). Dot notation is for runtime JavaScript object property lookups.
-
-*Incorrect:*
 ```typescript
-interface User { age: number }
-// type Age = User.age; // ❌ Cannot use dot notation in type lookup
+interface Account {
+  id: string;
+}
+
+// ❌ INCORRECT: Indexing a non-existent property key
+// type Secret = Account["secret"]; // Compile Error: Property 'secret' does not exist!
 ```
 
-*Fix:*
-```typescript
-interface User { age: number }
-type Age = User["age"]; // Correct square bracket indexed access
-```
+**Why it's wrong:** Indexed access types require the index key to be assignable to `keyof T`.
 
-### Mistake 2: Indexing Object Types with Non-Existent Key Strings
-
-**The mistake:** Writing `User["invalid_key"]`.
-
-**Why it's wrong:** Indexed access type keys MUST be assignable to `keyof T`.
-
-*Incorrect:*
-```typescript
-interface User { id: number }
-// type Bad = User["missing"]; // ❌ Property 'missing' does not exist on type 'User'
-```
-
-*Fix:*
-```typescript
-interface User { id: number }
-type Good = User["id"]; // Valid key lookup
-```
-
-### Mistake 3: Indexing Arrays with Hardcoded Numeric Indices for General Element Extraction
-
-**The mistake:** Writing `type Element = MyArray[0]` expecting it to differ from `MyArray[number]`.
-
-**Why it's wrong:** In tuple types, `Tuple[0]` accesses element at index 0. For general arrays `T[]`, `T[number]` extracts the array element type.
-
-*Incorrect:*
-```typescript
-type StrArray = string[];
-type Element = StrArray[0]; // Works, but StrArray[number] is idiomatic
-```
-
-*Fix:*
-```typescript
-type StrArray = string[];
-type Element = StrArray[number]; // Idiomatic array element extraction
-```
-
-## 6. Practice Exercises
+**Golden Rule:** Ensure index keys satisfy `K extends keyof T`.
 
 
 
-### Exercise 1: Extracting Nested Property Types
 
-**Problem:** Extract `City` type from `interface Person { address: { city: string } }`.
 
-**Expected output:**
+## 5. Practice Exercises
+
+### Exercise 1: Extracting Property Types with `T[K]`
+
+**Scenario:**
+Extract property types from a `User` interface using indexed access notation (`User["role"]`, `User["address"]["city"]`).
+
+**Requirements:**
+1. Extract property types using indexed access.
+
 > [!check]- Answer
-> ```text
-> string
-> ```
-> ```typescript
-> interface Person { address: { city: string } }
-> type City = Person["address"]["city"];
-> console.log("string");
-> ```
 >
-> **Explanation:** Chained indexed access `Type["k1"]["k2"]` unwraps deeply nested object properties.
+> #### Implementation
+>
+> ```typescript
+> interface User {
+>   id: number;
+>   role: "admin" | "user";
+>   address: {
+>     city: string;
+>     zip: number;
+>   };
+> }
+
+type UserRole = User["role"];       // "admin" | "user"
+type UserCity = User["address"]["city"]; // string
+```
+
+> #### Technical Explanation
+>
+> 1. Indexed access types `T[K]` look up the exact type of property `K` on type `T`.
+> 2. Keeps extracted types synchronized if `User["role"]` changes in the interface definition later.
+> 3. Supports nested property lookups (`User["address"]["city"]`).
 
 ---
 
-### Exercise 2: Tuple Element Extraction with Indexed Access
+### Exercise 2: Inferring Array Element Types with `number` Indexing
 
-**Problem:** Extract first item type from tuple `type Pair = [boolean, number]` using `Pair[0]`.
+**Scenario:**
+Extract the element type of an array using `ArrayType[number]`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `MyArray[number]`.
+
 > [!check]- Answer
-> ```text
-> boolean
-> ```
-> ```typescript
-> type Pair = [boolean, number];
-> type First = Pair[0];
-> console.log("boolean");
-> ```
 >
-> **Explanation:** Indexing tuples with numeric literal types (`0`, `1`) extracts exact positional types.
+> #### Implementation
+>
+> ```typescript
+> const AppLanguages = ["en", "fr", "es", "de"] as const;
+
+type LanguageList = typeof AppLanguages; // readonly ["en", "fr", "es", "de"]
+type Language = LanguageList[number];     // "en" | "fr" | "es" | "de"
+
+const activeLang: Language = "en";
+```
+
+> #### Technical Explanation
+>
+> 1. Indexing an array type with `[number]` returns the union of all array element types.
+> 2. Combined with `as const`, `ArrayType[number]` extracts a string literal union from a tuple array.
+> 3. Standard technique for generating union types from runtime constant arrays.
 
 ---
 
-### Exercise 3: Union Property Type Extraction
+### Exercise 3: Auditing Invalid Dynamic Property Lookups
 
-**Problem:** Extract return values for `User["id" | "name"]` from `{ id: number; name: string }`.
+**Scenario:**
+Explain why passing a variable identifier instead of a type literal to indexed access types causes a compile error (`User[key]` vs `User[typeof key]`).
 
-**Expected output:**
+**Requirements:**
+1. Show compile error when using value variable in indexed access type.
+
 > [!check]- Answer
-> ```text
-> number | string
-> ```
-> ```typescript
-> interface User { id: number; name: string }
-> type Values = User["id" | "name"];
-> console.log("number | string");
-> ```
 >
-> **Explanation:** Indexing with a union of keys produces a union of corresponding property value types.
+> #### Implementation
+>
+> ```typescript
+> interface User { name: string; age: number; }
+> const propKey = "name";
 
-## 7. Related Terms
+// ❌ Compile Error: 'propKey' refers to a value, but is being used as a type here!
+// type Wrong = User[propKey];
+
+// ✅ CORRECT (Use typeof or literal type):
+type Correct = User[typeof propKey]; // string
+```
+
+> #### Technical Explanation
+>
+> 1. Indexed access types accept ONLY type parameters or literal types inside brackets `T[K]`.
+> 2. Value variables (`propKey`) must be converted to types using `typeof propKey` first.
+> 3. Key distinction between value-space and type-space syntax.
+
+---
+
+
+
+## 6. Related Terms
 - [`keyof` Operator](keyof.md) — Often used inside the brackets of an Indexed Access Type to dynamically grab all property types (e.g., `User[keyof User]`).
 
 ---
 
+---
+
+## 7. Key Takeaways
+
+- Indexed access types (`T[K]`) look up specific property or element types dynamically.
+- `T[keyof T]` yields the union of all property value types on type `T`.
+- Array element types can be extracted using `ArrayType[number]`.
+- Always pass types or `typeof variable` into bracket index expressions.

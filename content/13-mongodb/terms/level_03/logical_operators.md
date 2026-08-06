@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Query Operator** (Boolean Logic Operators): Logical Operators ($and, $or, $not, $nor) join multiple query filter expressions using Boolean logic.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported conceptually by all database query engines. Controls the query executor's logical branching during collection scans).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database development, you combine filters using logical operators:
@@ -90,7 +91,7 @@ db.products.find({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing explicit '$and' operators for simple queries that can be combined implicitly
 
@@ -121,6 +122,8 @@ db.users.find({ status: "active", age: { $gte: 21 } });
 
 
 
+
+
 ### Mistake 2: Overusing Explicit `$and` Operators for Simple Field Equality Checks
 
 **The mistake:** Writing `db.users.find({ $and: [{ a: 1 }, { b: 2 }] })`.
@@ -136,6 +139,8 @@ db.users.find({ $and: [{ a: 1 }, { b: 2 }] });
 ```javascript
 db.users.find({ a: 1, b: 2 }); // Idiomatic implicit AND syntax
 ```
+
+
 
 ### Mistake 3: Confusing `$nor` with `$not` Operator Evaluation Scope
 
@@ -157,102 +162,95 @@ db.users.find({ $nor: [{ status: "active" }] });
 
 
 
-### Mistake 4: Overusing Explicit `$and` Operators for Simple Field Equality Checks
+## 5. Practice Exercises
 
-**The mistake:** Writing `db.users.find({ $and: [{ a: 1 }, { b: 2 }] })`.
+### Exercise 1: Combining Alternatives with `$or`
 
-**Why it's wrong:** MongoDB implicitly combines top-level fields with AND logic! Use `{ a: 1, b: 2 }` for cleaner queries.
+**Scenario:**
+Query collection `orders` for documents where `status: "urgent"` OR `totalAmount: { $gte: 1000.00 }`.
 
-*Incorrect:*
-```javascript
-db.users.find({ $and: [{ a: 1 }, { b: 2 }] });
-```
+**Requirements:**
+1. Use `$or: [{ status: "urgent" }, { totalAmount: { $gte: 1000.00 } }]`.
 
-*Fix:*
-```javascript
-db.users.find({ a: 1, b: 2 }); // Idiomatic implicit AND syntax
-```
-
-### Mistake 5: Confusing `$nor` with `$not` Operator Evaluation Scope
-
-**The mistake:** Using `$not` on top-level query objects `{ $not: { status: "active" } }`.
-
-**Why it's wrong:** `$not` applies to specific field expressions `{ status: { $not: { $eq: "active" } } }`. For multi-field negation, use `$nor`.
-
-*Incorrect:*
-```javascript
-db.users.find({ $not: { status: "active" } }); // ❌ Invalid $not syntax!
-```
-
-*Fix:*
-```javascript
-db.users.find({ status: { $ne: "active" } });
--- Or:
-db.users.find({ $nor: [{ status: "active" }] });
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Logical Query Translation
-
-**Problem:** Translate this SQL query into a valid MongoDB query filter:
-`SELECT * FROM tickets WHERE status = 'open' AND (urgency = 'high' OR customer = 'VIP');`
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.tickets.find({
->   status: "open",
+> db.orders.find({
 >   $or: [
->     { urgency: "high" },
->     { customer: "VIP" }
+>     { status: "urgent" },
+>     { totalAmount: { $gte: 1000.00 } }
 >   ]
 > });
 > ```
-> - The top-level status condition is combined implicitly with the `$or` block.
-> - The `$or` operator expects an array of filter objects.
+>
+> #### Technical Explanation
+>
+> 1. `$or` matches documents satisfying at least one condition in the specified array.
+> 2. Evaluates indexes on individual `$or` branches independently.
+> 3. Combines index scans across different collection fields.
+
+---
+
+### Exercise 2: Inverting Match Criteria with `$not`
+
+**Scenario:**
+Query collection `products` for items where `price` is NOT greater than `$50.00`.
+
+**Requirements:**
+1. Use `{ price: { $not: { $gt: 50.00 } } }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.find({
+>   price: { $not: { $gt: 50.00 } }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$not` inverts the result of a specified operator expression.
+> 2. Matches documents where the field value is <= 50.00 OR where the field is missing.
+> 3. Operates at the field-level context.
+
+---
+
+### Exercise 3: Excluding Multiple Conditions with `$nor`
+
+**Scenario:**
+Query collection `users` for documents where `status` is NOT `"suspended"` AND `role` is NOT `"guest"`.
+
+**Requirements:**
+1. Use `$nor: [{ status: "suspended" }, { role: "guest" }]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   $nor: [
+>     { status: "suspended" },
+>     { role: "guest" }
+>   ]
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$nor` matches documents that fail ALL clauses in the specified array.
+> 2. Combines negative filtering across multiple document fields.
+> 3. Equivalent to `NOT (clause1 OR clause2)`.
 
 ---
 
 
 
-### Exercise 2: Multi-Branch Disjunction Query with `$or`
-
-**Problem:** Query users where `role` is `"admin"` OR `permissions` contains `"all"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ $or: [{ role: "admin" }, { permissions: "all" }] });
-> ```
-> ```javascript
-> db.users.find({
->   $or: [{ role: "admin" }, { permissions: "all" }]
-> });
-> ```
->
-> **Explanation:** `$or: [ { cond1 }, { cond2 } ]` matches documents satisfying any condition branch.
-
----
-
-### Exercise 3: Negation Query with `$nor`
-
-**Problem:** Query users who are neither `inactive` nor `banned` using `$nor`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ $nor: [{ status: "inactive" }, { status: "banned" }] });
-> ```
-> ```javascript
-> db.users.find({
->   $nor: [{ status: "inactive" }, { status: "banned" }]
-> });
-> ```
->
-> **Explanation:** `$nor: [ ... ]` matches documents failing all specified clause conditions.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter layout.
 - [Implicit `$eq` & Combining Conditions](implicit_eq_combining.md) — Shorthand logic.
@@ -260,7 +258,7 @@ db.users.find({ $nor: [{ status: "active" }] });
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Logical query operators join multiple filter clauses.
 - Direct equivalents of SQL's `AND`, `OR`, `NOT` logic controls.
 - `$and`, `$or`, and `$nor` take a JavaScript array `[]` of filter objects.

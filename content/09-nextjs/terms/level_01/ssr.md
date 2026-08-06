@@ -14,16 +14,17 @@
 ---
 
 ## 2. Term Category
-- **Rendering Strategy**
+
+**Rendering Strategy** (Server-Side Rendering): Server-Side Rendering (SSR) generates full HTML on the server for each HTTP request before delivering static mark-up to browsers.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a standard React App (Client-Side Rendering or CSR), the server sends an empty HTML file: `<div id="root"></div>`. The browser must then download React, execute it, fetch data, and *then* paint the UI.
@@ -54,7 +55,7 @@ SSR only generates static HTML. The browser displays it instantly, but it is "fr
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Hydration Mismatch
 
@@ -111,72 +112,138 @@ fetch('https://api.com/terms', { next: { revalidate: 86400 } }); // Revalidate d
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: SSR vs SSG
+### Exercise 1: Enforcing Dynamic Server-Side Rendering
 
-**Problem:** SSR generates the HTML on *every single request*. If you have a marketing landing page that never changes, why is SSR a bad choice?
+**Scenario:**
+Force a route to execute dynamic Server-Side Rendering (SSR) on every request using `export const dynamic = 'force-dynamic'`.
 
-**Expected output:**
+**Requirements:**
+1. Export `dynamic = "force-dynamic"` in `page.tsx`.
+
 > [!check]- Answer
-> ```text
-> Because it is a waste of server resources! Generating the exact same HTML 10,000 times for 10,000 users is slow and expensive.
-> For pages that don't change, you should use Static Site Generation (SSG), where the HTML is generated exactly once at Build Time, and then cached/served instantly to all users.
-> ```
-> - Think about server CPU cost vs caching.
-
----
-
-### Exercise 2: Dynamic Functions Triggering SSR
-
-**Problem:** List 3 dynamic functions in Next.js App Router that opt a route segment out of static caching and force dynamic SSR rendering.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. cookies()
-> 2. headers()
-> 3. searchParams (accessing searchParams prop in page)
-> ```
-> - `cookies()`, `headers()`, and `searchParams` opt routes into dynamic SSR.
-> 
-> ```typescript
-> import { cookies } from 'next/headers';
-> 
-> export default async function Page() {
->   const cookieStore = cookies(); // Forces dynamic request-time SSR
-> }
-> ```
-
----
-
-### Exercise 3: SSR Response Streaming
-
-**Problem:** Which React feature allows Next.js SSR to stream HTML chunks progressively to the browser while async data fetches resolve?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> React Suspense (and loading.tsx)
-> ```
-> - React Suspense streams HTML chunks to the browser progressively.
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> <Suspense fallback={<LoadingSkeleton />}>
->   <AsyncServerComponent />
-> </Suspense>
-> ```
+> // app/dashboard/page.tsx
+> export const dynamic = "force-dynamic";
+
+export default async function RealtimeDashboard() {
+  const res = await fetch("https://api.example.com/live", {
+    cache: "no-store"
+  });
+  const data = await res.json();
+
+  return (
+    <main className="p-6">
+      <h1>Realtime Metrics</h1>
+      <p>Live Users: {data.activeUsers}</p>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Server-Side Rendering (SSR) generates fresh HTML on Node.js servers for every incoming HTTP request.
+> 2. `export const dynamic = 'force-dynamic'` opts out of static build caching for the route segment.
+> 3. Essential for user-specific or real-time data dashboards.
+
+---
+
+### Exercise 2: Accessing Server Cookies and Headers during SSR
+
+**Scenario:**
+Read incoming request HTTP headers and session cookies on the server during SSR rendering.
+
+**Requirements:**
+1. Import `cookies` and `headers` from `next/headers`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> import { cookies, headers } from "next/headers";
+
+export default async function ProfilePage() {
+  const cookieStore = await cookies();
+  const headersList = await headers();
+  
+  const token = cookieStore.get("session_token");
+  const userAgent = headersList.get("user-agent");
+
+  return (
+    <main className="p-6">
+      <p>Session Active: {token ? "Yes" : "No"}</p>
+      <p>Browser User Agent: {userAgent}</p>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `cookies()` and `headers()` from `next/headers` provide access to incoming HTTP request metadata during SSR.
+> 2. Invoking `cookies()` or `headers()` automatically switches the page segment from static to dynamic SSR rendering.
+> 3. Secure server-side request inspection.
+
+---
+
+### Exercise 3: Streamlining SSR Content with React `<Suspense>`
+
+**Scenario:**
+Stream heavy server-rendered components using React `<Suspense>` boundaries to improve Time To First Byte (TTFB).
+
+**Requirements:**
+1. Wrap slow Server Component in `<Suspense fallback={...}>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> import { Suspense } from "react";
+
+async function SlowFeed() {
+  const data = await fetch("https://api.example.com/slow", { cache: "no-store" }).then(r => r.json());
+  return <div>Feed Loaded: {data.items.length} items</div>;
+}
+
+export default function FeedPage() {
+  return (
+    <main className="p-6">
+      <h1>Live User Feed</h1>
+      <Suspense fallback={<div>Loading Feed...</div>}>
+        <SlowFeed />
+      </Suspense>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Next.js App Router uses HTML Streaming to deliver fast initial shell HTML while slow server components render in background streams.
+> 2. `<Suspense>` streams fallback HTML first, then streams final component HTML over the open HTTP connection when data resolves.
+> 3. Reduces TTFB (Time-To-First-Byte) latency significantly.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [React Server Components (RSC)](../level_01/rsc.md) — RSCs generate the payload that fuels the SSR process.
 - [Static Rendering (SSG)](../level_08/ssg.md) — The alternative to dynamic SSR.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Server-Side Rendering (SSR)** means executing React on the server to generate a fully populated HTML string *dynamically upon request*.
 - It solves the primary issues of pure React: bad SEO and slow initial loading screens.
 - **Hydration** is the process where React attaches JavaScript event listeners to the server-generated HTML to make it interactive in the browser.

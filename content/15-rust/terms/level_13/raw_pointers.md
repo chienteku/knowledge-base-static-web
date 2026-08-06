@@ -15,17 +15,15 @@
 
 ## 2. Term Category
 
-**Memory / Performance / Unsafe**: Raw Pointers are low-level memory primitives in Rust. Represented as `*const T` (immutable raw pointer) and `*mut T` (mutable raw pointer), they store raw numeric memory addresses directly (like C pointers). Unlike safe references (`&T` / `&mut T`), raw pointers ignore lifetimes, can be null, can be dangling, ignore alignment checks, and allow simultaneous mutable aliasing.
+
+
+**Rust Memory Primitives (unrestricted raw memory pointers *const T / *mut T)**: Raw Pointers are low-level memory primitives in Rust. Represented as `*const T` (immutable raw pointer) and `*mut T` (mutable raw pointer), they store raw numeric memory addresses directly (like C pointers). Unlike safe references (`&T` / `&mut T`), raw pointers ignore lifetimes, can be null, can be dangling, ignore alignment checks, and allow simultaneous mutable aliasing.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: Raw pointers are available across all Rust targets (`std`, `no_std`, WASM, embedded). They are fundamental when building custom data structures (`Vec`, `LinkedList`), implementing hardware drivers, calling C functions over FFI, or optimizing memory allocations.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -126,7 +124,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Dereferencing a Null Raw Pointer
 
@@ -218,15 +216,18 @@ unsafe {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Zero-Copy Slice Splitting via Raw Pointer Arithmetic
 
-**Problem:** In high-throughput network stream processing, you need to partition a contiguous mutable slice `&mut [T]` into two disjoint mutable sub-slices `(&mut [T], &mut [T])` at a designated boundary `mid`. Standard Rust safe indexing (`&mut slice[..mid]` and `&mut slice[mid..]`) is rejected by the borrow checker because it attempts to borrow two mutable references from the same slice simultaneously.
+**Scenario:** In high-throughput network stream processing, you need to partition a contiguous mutable slice `&mut [T]` into two disjoint mutable sub-slices `(&mut [T], &mut [T])` at a designated boundary `mid`. Standard Rust safe indexing (`&mut slice[..mid]` and `&mut slice[mid..]`) is rejected by the borrow checker because it attempts to borrow two mutable references from the same slice simultaneously.
 
 Implement `split_at_mut_raw<T>(slice: &mut [T], mid: usize) -> Result<(&mut [T], &mut [T]), &'static str>` using raw pointers. Validate bounds, derive raw pointers using `.as_mut_ptr()`, offset using `ptr.add(mid)`, and reconstruct sub-slices with `std::slice::from_raw_parts_mut`. Write unit tests with assertions (`assert_eq!`) demonstrating independent parallel mutations.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > /// Splits a mutable slice into two disjoint sub-slices at index `mid` using raw pointers.
 > ///
@@ -304,7 +305,8 @@ Implement `split_at_mut_raw<T>(slice: &mut [T], mid: usize) -> Result<(&mut [T],
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Borrow Checker Constraint:** Safe Rust prevents creating `&mut buffer[..mid]` and `&mut buffer[mid..]` directly because both expressions attempt to borrow `buffer` mutably at the same time, violating the aliasing XOR mutability rule.
 > 2. **Raw Pointer Dereferencing Bypass:** Calling `.as_mut_ptr()` yields a raw mutable pointer `*mut T` to the first element, stripping borrow checker tracking.
 > 3. **Pointer Arithmetic (`add`):** `ptr.add(mid)` computes `ptr + mid * size_of::<T>()`. Rust ensures that `mid` is scaled by element byte size automatically.
@@ -314,7 +316,7 @@ Implement `split_at_mut_raw<T>(slice: &mut [T], mid: usize) -> Result<(&mut [T],
 
 ### Exercise 2: Embedded Hardware DMA Buffer Ingestion & Alignment Verification
 
-**Problem:** In embedded driver development, a microcontroller DMA peripheral writes raw binary packet data to a hardware address. Before ingesting this raw pointer into typed Rust data structures, the driver must verify safety invariants:
+**Scenario:** In embedded driver development, a microcontroller DMA peripheral writes raw binary packet data to a hardware address. Before ingesting this raw pointer into typed Rust data structures, the driver must verify safety invariants:
 1. The raw pointer must not be null.
 2. The raw memory address must be aligned according to `align_of::<T>()` (`address % align_of::<T>() == 0`).
 3. The count must be non-zero.
@@ -322,6 +324,9 @@ Implement `split_at_mut_raw<T>(slice: &mut [T], mid: usize) -> Result<(&mut [T],
 Implement `unsafe fn safe_ingest_dma_buffer<T: Copy>(raw_ptr: *const T, count: usize) -> Result<Vec<T>, IngestError>` using `std::ptr::copy_nonoverlapping`. Return an `IngestError` enum (`NullPointer`, `MisalignedPointer`, `ZeroCount`). Write unit tests with assertions validating successful ingestion, null pointer rejection, zero-count rejection, and misalignment detection.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Eq)]
 > pub enum IngestError {
@@ -436,7 +441,8 @@ Implement `unsafe fn safe_ingest_dma_buffer<T: Copy>(raw_ptr: *const T, count: u
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Hardware Memory Alignment:** Microcontrollers and CPUs mandate that data types like `u32` (4-byte aligned) or `u64` (8-byte aligned) reside at memory addresses that are multiples of their alignment. Dereferencing an unaligned raw pointer causes hardware fault traps on embedded platforms or Undefined Behavior in Rust.
 > 2. **Null Checks (`is_null`):** Raw pointers lack compiler non-null guarantees. Checking `ptr.is_null()` protects against null dereference crashes.
 > 3. **High-Speed Copying (`copy_nonoverlapping`):** Equivalent to C's `memcpy`, `std::ptr::copy_nonoverlapping` performs bulk memory transfers without per-element looping overhead.
@@ -446,7 +452,7 @@ Implement `unsafe fn safe_ingest_dma_buffer<T: Copy>(raw_ptr: *const T, count: u
 
 ### Exercise 3: Intrusive Doubly-Linked Node Pointer Linking & Swapping
 
-**Problem:** Intrusive doubly-linked lists in kernels and memory allocators require nodes to store pointers to each other (`prev` and `next`). Standard safe references `&mut Node` cannot form cyclic graphs because multiple mutable references to the same node violate unique aliasing rules.
+**Scenario:** Intrusive doubly-linked lists in kernels and memory allocators require nodes to store pointers to each other (`prev` and `next`). Standard safe references `&mut Node` cannot form cyclic graphs because multiple mutable references to the same node violate unique aliasing rules.
 
 Define an intrusive `Node<T>` struct containing `val: T`, `prev: *mut Node<T>`, and `next: *mut Node<T>`. Implement:
 1. `Node::new(val: T) -> Self` with null pointer initialization.
@@ -456,6 +462,9 @@ Define an intrusive `Node<T>` struct containing `val: T`, `prev: *mut Node<T>`, 
 Write unit tests verifying pointer linkage, payload swapping, and structural integrity.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::ptr;
 > 
@@ -550,14 +559,15 @@ Write unit tests verifying pointer linkage, payload swapping, and structural int
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Cyclic Structures via `*mut T`:** Standard Rust references `&mut T` cannot model doubly-linked lists because `node1` borrowing `node2` mutably while `node2` borrows `node1` mutably breaks ownership rules. Raw pointers `*mut Node<T>` allow arbitrary pointer graphs without borrow checking constraints.
 > 2. **Avoiding Aliasing Violations with `addr_of_mut!`:** `ptr::addr_of_mut!((*node_a).val)` creates a raw pointer directly to a struct field without taking an intermediate `&mut (*node_a).val` reference, which could trigger undefined behavior if other raw pointers alias the memory.
 > 3. **In-Place Bitwise Swap (`ptr::swap`):** `ptr::swap(ptr_a, ptr_b)` exchanges the contents of two memory addresses byte-by-byte. This works safely even for non-`Copy` types like `String`, preserving ownership and avoiding double-free memory bugs.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`unsafe` Block](unsafe_block.md) — Required block scope to dereference raw pointers.
@@ -570,7 +580,7 @@ Write unit tests verifying pointer linkage, payload swapping, and structural int
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Raw pointers (`*const T` for immutable, `*mut T` for mutable) represent unchecked memory addresses.
 - Creating raw pointers is completely **SAFE**; dereferencing them (`*ptr`) requires an **`unsafe` block**.

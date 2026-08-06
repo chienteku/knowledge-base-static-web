@@ -11,16 +11,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Performance / Operations (unique value constraint index)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Enforced at the storage engine layer. Checks for unique key collisions in index trees before committing write transactions).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Certain data points in an application must be globally unique within the system:
@@ -80,7 +79,7 @@ CREATE user:bob SET email = "alice@example.com";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to create a unique index on a table that already contains duplicate values, causing the index generation to fail and abort
 
@@ -130,70 +129,96 @@ INSERT INTO user [ { email: "a@b.com" }, { email: "a@b.com" } ]; // ❌ Aborts b
 INSERT INTO user [ { email: "a@b.com" } ] ON DUPLICATE KEY UPDATE email = $input.email;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Unique Conflict Diagnosis
+### Exercise 1: Defining Single-Column Unique Indexes
 
-**Problem:** You configure a composite index:
-`DEFINE INDEX unique_product_store ON stock COLUMNS product_id, store_id UNIQUE;`
-State whether the following sequence of insert writes will **Succeed** or **Fail**:
-1.  `CREATE stock SET product_id = product:01, store_id = store:A;` (First run)
-2.  `CREATE stock SET product_id = product:01, store_id = store:B;` (Second run)
-3.  `CREATE stock SET product_id = product:01, store_id = store:A;` (Third run)
+**Scenario:**
+Ensure no two users can register with the same `username` in table `user`.
 
-**Expected output:**
+**Requirements:**
+1. Write `DEFINE INDEX user_username ON TABLE user COLUMNS username UNIQUE`.
+
 > [!check]- Answer
-> ```text
-> 1. Succeeds: First entry is unique.
-> 2. Succeeds: The store_id is different ("store:B"), so the combination is unique.
-> 3. Fails: The combination of "product:01" and "store:A" already exists, violating the unique composite index.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE user SCHEMAFULL;
+> DEFINE FIELD username ON TABLE user TYPE string;
+> 
+> DEFINE INDEX user_username ON TABLE user COLUMNS username UNIQUE;
 > ```
-> - Composite unique indexes validate the combination of values, not single columns.
-> - Identify if any write matches an existing product-store combination.
+>
+> #### Technical Explanation
+>
+> 1. `UNIQUE` index constraints enforce uniqueness at write time.
+> 2. Aborts write transactions attempting to insert duplicate indexed values.
+> 3. Accelerates single-record lookups.
+
+---
+
+### Exercise 2: Defining Multi-Column Unique Indexes
+
+**Scenario:**
+Enforce that a product SKU is unique within each `vendor` in table `product`.
+
+**Requirements:**
+1. Write `DEFINE INDEX product_vendor_sku ON TABLE product COLUMNS vendor, sku UNIQUE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE INDEX product_vendor_sku ON TABLE product COLUMNS vendor, sku UNIQUE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Multi-column unique indexes enforce uniqueness across field combinations.
+> 2. Permits duplicate SKUs across different vendors, but blocks duplicates for the same vendor.
+> 3. Implements complex uniqueness invariants declaratively.
+
+---
+
+### Exercise 3: Handling Unique Constraint Violations
+
+**Scenario:**
+Attempt to insert a duplicate username and capture the unique index violation error.
+
+**Requirements:**
+1. Insert `user:u1` with `username = "alice"`.
+2. Attempt inserting `user:u2` with `username = "alice"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:u1 SET username = "alice";
+> 
+> -- Fails with unique index conflict error!
+> CREATE user:u2 SET username = "alice";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Rejects duplicate insertion attempts with an index conflict exception.
+> 2. Guarantees data integrity under high-concurrency writes.
+> 3. Eliminates race conditions in registration endpoints.
 
 ---
 
 
 
-### Exercise 2: Defining Unique Field Index
-
-**Problem:** Define unique index `user_email_unique` on `user` table for `email` field.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX user_email_unique ON TABLE user FIELDS email UNIQUE;
-> ```
-> ```surrealql
-> DEFINE INDEX user_email_unique ON TABLE user FIELDS email UNIQUE;
-> ```
->
-> **Explanation:** `UNIQUE` enforces that no two records share identical indexed field values.
-
----
-
-### Exercise 3: Composite Unique Index
-
-**Problem:** Define composite unique index on `tenant_id` and `user_code` fields of `account` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX account_tenant_code ON TABLE account FIELDS tenant_id, user_code UNIQUE;
-> ```
-> ```surrealql
-> DEFINE INDEX account_tenant_code ON TABLE account FIELDS tenant_id, user_code UNIQUE;
-> ```
->
-> **Explanation:** Composite unique indexes enforce unique combinations across multiple fields.
-
-## 7. Related Terms
+## 6. Related Terms
 - [DEFINE INDEX](define_index.md) — The parent index context.
 - [Idempotent Migration Scripts](idempotent_migrations.md) — Defining schemas safely.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A `UNIQUE` index blocks duplicate values from being written to a table.
 - Relational equivalent to unique constraints; NoSQL equivalent to unique indexes.
 - Prevents database collisions and data duplication at the storage layer.

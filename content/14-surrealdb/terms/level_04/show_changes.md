@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (schema change tracking statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the storage transaction journal. Reconstructs record state histories from physical change logs saved on disk).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern application architecture, tracking data changes is critical:
@@ -94,7 +93,7 @@ SHOW CHANGES FOR TABLE product SINCE d"2026-07-21T00:00:00Z" LIMIT 10;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to run 'SHOW CHANGES FOR TABLE' on a table that does not have change feeds configured, returning empty logs or errors
 
@@ -149,71 +148,89 @@ SHOW CHANGES FOR TABLE user SINCE d"2026-01-01T00:00:00Z"; // ❌ Pruned if olde
 DEFINE TABLE user CHANGEFEED 30d; // Extend retention window for long historical syncs
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Change Feed Configuration
+### Exercise 1: Enabling Table Changefeeds
 
-**Problem:** You are building a collaborative workspace app. 
-Write the SurrealQL commands to:
-1.  Define a table named `documents` as `SCHEMAFULL`.
-2.  Enable a change feed on this table that retains history for exactly `30` days.
-3.  Write the query to fetch the first `50` changes that occurred on `documents` since `2026-07-21T12:00:00Z`.
+**Scenario:**
+Enable a table changefeed stream on table `order` with a 7-day change retention window.
 
-**Expected output:**
+**Requirements:**
+1. Define table `order` with `CHANGEFEED 7d`.
+
 > [!check]- Answer
-> ```sql
-> -- 1 & 2: Define Table and Change Feed
-> DEFINE TABLE documents SCHEMAFULL CHANGEFEED 30d;
-> 
-> -- 3: Query Changes
-> SHOW CHANGES FOR TABLE documents SINCE d"2026-07-21T12:00:00Z" LIMIT 50;
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE order SCHEMAFULL CHANGEFEED 7d;
 > ```
-> - The change feed duration unit for days is `d` (e.g. `30d`).
-> - Target the datetime literal inside the `SINCE` parameter using the `d` prefix.
+>
+> #### Technical Explanation
+>
+> 1. `CHANGEFEED <duration>` enables change tracking for table mutations.
+> 2. Retains change history for the specified duration (e.g. `7d`).
+> 3. Underpins real-time streaming and sync architectures.
+
+---
+
+### Exercise 2: Inspecting Historical Changes with `SHOW CHANGES`
+
+**Scenario:**
+Inspect changefeed entries for table `order` starting from a specific timestamp.
+
+**Requirements:**
+1. Write `SHOW CHANGES FOR TABLE order SINCE d"2026-08-01T00:00:00Z"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SHOW CHANGES FOR TABLE order SINCE d"2026-08-01T00:00:00Z";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SHOW CHANGES FOR TABLE` streams historical mutation deltas.
+> 2. `SINCE` filters changes recorded after a target timestamp or version sequence.
+> 3. Enables event sourcing and external CDC integration.
+
+---
+
+### Exercise 3: Inspecting Changefeed Version Sequences
+
+**Scenario:**
+Query changes using a numeric changefeed version sequence number.
+
+**Requirements:**
+1. Write `SHOW CHANGES FOR TABLE order SINCE 100`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SHOW CHANGES FOR TABLE order SINCE 100;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Sequence numbers allow client sync engines to resume streaming from precise change offsets.
+> 2. Guarantees exactly-once delta processing.
+> 3. Powers real-time offline sync protocols.
 
 ---
 
 
 
-### Exercise 2: Configuring Table Changefeed
-
-**Problem:** Define table `order` with 7-day changefeed retention window.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE TABLE order CHANGEFEED 7d;
-> ```
-> ```surrealql
-> DEFINE TABLE order CHANGEFEED 7d;
-> ```
->
-> **Explanation:** `CHANGEFEED duration` maintains historical record delta feeds for replication/sync.
-
----
-
-### Exercise 3: Querying Changefeed Delta Stream
-
-**Problem:** Query changefeed for `order` table since timestamp `$last_sync`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SHOW CHANGES FOR TABLE order SINCE $last_sync;
-> ```
-> ```surrealql
-> SHOW CHANGES FOR TABLE order SINCE $last_sync;
-> ```
->
-> **Explanation:** `SHOW CHANGES FOR TABLE ... SINCE` streams record mutation deltas.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`DEFINE TABLE`](define_table.md) — The parent schema context.
 - [`LIVE SELECT`](../level_09/live_select.md) — Real-time event streams.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `SHOW CHANGES FOR TABLE` queries the table's Change Data Capture (CDC) log.
 - Relational equivalent to logical replication slots; NoSQL equivalent to Change Streams.
 - Returns a chronological JSON list of mutations (action types, timestamps, data).

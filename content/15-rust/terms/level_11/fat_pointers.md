@@ -149,7 +149,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Zero-Copy Slice Fat Pointer Parser & Memory Layout Inspection
 
-**Problem:**
+**Scenario:**
 In high-performance networking services, binary packet buffers (`&[u8]`) are parsed without heap allocations. In Rust, a slice reference `&[u8]` is stored as a 16-byte fat pointer (on 64-bit systems) consisting of two words: a raw data pointer (`*const u8`) and a length (`usize`).
 
 Your task is to build a low-level packet buffer viewer `PacketBuffer`:
@@ -163,6 +163,9 @@ Your task is to build a low-level packet buffer viewer `PacketBuffer`:
    - Sub-slice pointer arithmetic showing that taking a slice offset advances `data_ptr` by the byte offset while reducing `length` metadata accordingly.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::mem::size_of;
 > use std::slice;
@@ -259,7 +262,8 @@ Your task is to build a low-level packet buffer viewer `PacketBuffer`:
 > }
 > ```
 >
-> **Step-by-Step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Slice Memory Layout:** In Rust, a slice reference `&[T]` does not point to a struct containing data; it is a two-word fat pointer stored directly on the stack containing `(*const T, usize)`.
 > 2. **Transmutation:** `std::mem::transmute::<&[u8], SliceRawParts>` safely converts the fat pointer reference into a C-compatible raw struct representation, proving that the second word is literally the length of the slice.
 > 3. **Sub-slicing Mechanics:** When you take a slice subset `&buffer[4..12]`, Rust does not copy data or allocate memory. It simply constructs a new fat pointer on the stack whose `data_ptr` is offset by 4 bytes (`ptr + 4`) and whose `length` metadata is updated to `8`.
@@ -268,7 +272,7 @@ Your task is to build a low-level packet buffer viewer `PacketBuffer`:
 
 ### Exercise 2: Trait Object Vtable Inspection & Dynamic Plugin Dispatch
 
-**Problem:**
+**Scenario:**
 In dynamic plugin engines or extensible microservices, polymorphism is achieved via trait objects (`&dyn Plugin`). A trait object reference is a fat pointer consisting of:
 1. A data pointer (`*const ()`) pointing to the concrete instance in memory.
 2. A vtable pointer (`*const ()`) pointing to the compiler-generated virtual method table containing function pointers and drop glue.
@@ -284,6 +288,9 @@ Your task is to demonstrate the internal mechanics of `dyn Trait` fat pointers:
    - Dynamic dispatch execution over a collection of heterogenous plugin pointers (`Vec<&dyn Plugin>`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::mem::size_of;
 >
@@ -395,7 +402,8 @@ Your task is to demonstrate the internal mechanics of `dyn Trait` fat pointers:
 > }
 > ```
 >
-> **Step-by-Step Explanation:**
+> #### Technical Explanation
+>**
 > 1. **Vtable Pointer vs Length:** Unlike slice fat pointers whose second word is a numerical length (`usize`), a trait object fat pointer's second word is a memory pointer (`*const ()`) pointing to a read-only vtable created by the compiler for that `(Type, Trait)` pair.
 > 2. **Vtable Sharing:** Every instance of `AudioProcessor` coerced to `&dyn Plugin` shares the exact same static vtable in memory. This is why `raw1.vtable_ptr == raw2.vtable_ptr`.
 > 3. **Dynamic Dispatch Cost:** When `plugins[0].process(10)` is called at runtime, Rust dereferences `raw1.vtable_ptr`, looks up the function pointer corresponding to `Plugin::process`, passes `raw1.data_ptr` as `&self`, and executes the function. This single indirection enables runtime polymorphism.
@@ -404,7 +412,7 @@ Your task is to demonstrate the internal mechanics of `dyn Trait` fat pointers:
 > 
 > ### Exercise 3: Custom Dynamically Sized Type (Custom DST with Trailing Payload Slice)
 > 
-> **Problem:**
+> **Scenario:**
 > In high-performance kernel modules or binary messaging systems, custom DSTs are defined where a fixed-size header precedes an unsized payload slice (`[u8]`). References to such structs (e.g. `&HeaderPayloadBuffer` or `Box<HeaderPayloadBuffer>`) are also **fat pointers** carrying the length of the trailing payload slice.
 > 
 > Your task is to implement and inspect a custom DST struct:

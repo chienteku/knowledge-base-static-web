@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Database Feature**
+
+**Advanced Feature** (Pub/Sub Event Notifications): `LISTEN` and `NOTIFY` provide native real-time publish-subscribe event messaging across PostgreSQL client connections.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Managed in the server's shared memory. Works asynchronously over active TCP connections).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern web development, applications need to respond to events in real-time:
@@ -109,7 +110,7 @@ INSERT INTO tasks VALUES (105, 'Setup Firewall');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on LISTEN/NOTIFY for persistent, mission-critical job queuing
 
@@ -161,71 +162,113 @@ NOTIFY channel, '10MB JSON payload...'; -- ❌ Error: payload string too long!
 NOTIFY channel, '{"entity_id": 123}'; -- Send small ID payload
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Real-Time Alert System
+### Exercise 1: Publishing Event Notifications with `NOTIFY`
 
-**Problem:** Write the SQL statements to:
-1.  Subscribe the current session to a channel named `security_alerts`.
-2.  Write the query to publish the message `'Unusual login detected'` to that channel.
+**Scenario:**
+Publish a real-time JSON event notification to channel `'order_events'` using `pg_notify()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT pg_notify('order_events', '{"order_id": 101, "status": "paid"}')`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> LISTEN security_alerts;
-> 
-> NOTIFY security_alerts, 'Unusual login detected';
+> SELECT pg_notify(
+>   'order_events', 
+>   '{"order_id": 101, "status": "paid"}'
+> );
 > ```
-> - The listen statement does not require a payload parameter.
-> - The notify statement accepts the channel name followed by a comma and the text payload string.
+>
+> #### Technical Explanation
+>
+> 1. `pg_notify(channel, payload)` broadcasts a real-time event message to all active client connections listening on `channel`.
+> 2. Max payload size is 8,000 bytes.
+> 3. Native Pub/Sub messaging mechanism inside PostgreSQL.
 
 ---
 
+### Exercise 2: Subscribing to Real-Time Notifications in Node.js
 
+**Scenario:**
+Subscribe to channel `'order_events'` in a Node.js backend server using `client.on('notification')`.
 
-### Exercise 2: Trigger Firing LISTEN / NOTIFY
+**Requirements:**
+1. Code Node.js `LISTEN order_events` subscriber loop.
 
-**Problem:** Create trigger function issuing `NOTIFY order_events, payload` with inserted order ID as JSON payload.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> CREATE FUNCTION notify_order() RETURNS TRIGGER AS $$ BEGIN PERFORM pg_notify('order_events', json_build_object('id', NEW.id)::text); RETURN NEW; END; $$ LANGUAGE plpgsql;
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> import { Client } from "pg";
+
+const client = new Client({ connectionString: process.env.DATABASE_URL });
+await client.connect();
+
+await client.query("LISTEN order_events");
+
+client.on("notification", (msg) => {
+  console.log("Real-Time Event Received on Channel:", msg.channel);
+  const payload = JSON.parse(msg.payload || "{}");
+  console.log("Payload:", payload);
+});
+```
+
+> #### Technical Explanation
+>
+> 1. `LISTEN channel_name` registers the client socket connection as a listener.
+> 2. `client.on('notification')` receives async push events from the PostgreSQL server immediately upon commit.
+> 3. Powers real-time WebSockets, SSE, and GraphQL subscriptions without polling loops.
+
+---
+
+### Exercise 3: Automating Real-Time Notifications via Database Triggers
+
+**Scenario:**
+Create a trigger that automatically publishes a `NOTIFY` event whenever a new row is inserted into `orders`.
+
+**Requirements:**
+1. Write trigger function issuing `pg_notify()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE FUNCTION notify_order() RETURNS TRIGGER AS $$
+> CREATE OR REPLACE FUNCTION notify_new_order() 
+> RETURNS TRIGGER AS $$
 > BEGIN
->   PERFORM pg_notify('order_events', json_build_object('id', NEW.id)::text);
+>   PERFORM pg_notify('order_events', json_build_object('order_id', NEW.id, 'total', NEW.total_cents)::text);
 >   RETURN NEW;
 > END;
 > $$ LANGUAGE plpgsql;
+> 
+> CREATE TRIGGER trg_notify_orders 
+> AFTER INSERT ON orders 
+> FOR EACH ROW 
+> EXECUTE FUNCTION notify_new_order();
 > ```
 >
-> **Explanation:** `pg_notify(channel, payload)` sends asynchronous real-time notifications to listening client connections.
+> #### Technical Explanation
+>
+> 1. Database triggers automate real-time event broadcasting on data mutations.
+> 2. Notifications are sent ONLY after the enclosing transaction successfully executes `COMMIT`.
+> 3. Event-driven architecture pattern.
 
 ---
 
-### Exercise 3: Listening to Channel in psql
 
-**Problem:** Command in `psql` to subscribe to notification channel `order_events` (`LISTEN order_events;`).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> LISTEN order_events;
-> ```
-> ```sql
-> LISTEN order_events;
-> ```
->
-> **Explanation:** `LISTEN channel_name` registers TCP connection sockets to receive asynchronous events.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Trigger](../level_09/trigger.md) — Automating notifications.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `LISTEN` and `NOTIFY` provide asynchronous Pub/Sub messaging in PostgreSQL.
 - Eliminates resource-heavy polling query loops from application backends.
 - Commonly executed inside database triggers to alert apps on table updates.

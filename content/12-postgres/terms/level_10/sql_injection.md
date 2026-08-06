@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Security Vulnerability**
+
+**Administration / Operations** (Security Vulnerability Prevention): SQL Injection occurs when un-sanitized user input alters SQL query structure, mitigated by parameterized queries.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (A risk in all applications connecting to SQL databases. Consistently ranked near the top of the OWASP Top 10 vulnerabilities list).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 SQL Injection (SQLi) is not a feature; it is an **architectural security flaw** that occurs when application developers make a fundamental mistake: **mixing database command logic with raw user data.**
@@ -85,7 +86,7 @@ const query = `SELECT * FROM articles WHERE title LIKE '%${userInput}%'`;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing "input sanitization" (like stripping quotes or searching for keywords) is a reliable defense against SQL Injection
 
@@ -135,68 +136,111 @@ EXECUTE 'SELECT * FROM ' || tbl || ' WHERE id = ' || uid; -- ❌ Dynamic SQL inj
 EXECUTE format('SELECT * FROM %I WHERE id = $1', tbl) USING uid;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Exploit Identification
+### Exercise 1: Auditing SQL Injection Vectors in Backend Code
 
-**Problem:** You have a login validation query:
-`SELECT * FROM users WHERE email = 'USER_INPUT' AND password = 'PASSWORD_INPUT';`
-An attacker types this string into the email input box:
-`admin@company.com' --`
-Write the final SQL query compiled by the database, and explain why the password check was bypassed.
+**Scenario:**
+Audit a vulnerable Express API handler concatenating raw user input strings into a SQL query string.
 
-**Expected output:**
+**Requirements:**
+1. Demonstrate malicious payload execution (`' OR '1'='1`) and refactor to parameterized query.
+
 > [!check]- Answer
-> ```sql
-> SELECT * FROM users WHERE email = 'admin@company.com' --' AND password = 'PASSWORD_INPUT';
+>
+> #### Implementation
+>
+> ```typescript
+> // ❌ VULNERABLE TO SQL INJECTION
+> // req.body.username = "admin' --"
+> // const query = `SELECT * FROM users WHERE username = '${req.body.username}' AND password = '${req.body.password}'`;
+> 
+> // ✅ SECURE PARAMETERIZED REFACTOR
+> const text = "SELECT id, username, email FROM users WHERE username = $1 AND password_hash = $2";
+> const values = [req.body.username, req.body.passwordHash];
+> const res = await pool.query(text, values);
 > ```
-> - Insert the user's input string directly into the `USER_INPUT` slot.
-> - Replace the trailing text following the SQL comment syntax `--` with standard comment layouts.
+>
+> #### Technical Explanation
+>
+> 1. String concatenation allows malicious input strings containing `'` or `--` to alter the SQL query syntax tree.
+> 2. Parameterized queries send SQL text and input values in separate binary protocol frames.
+> 3. Completely eliminates SQL injection attacks.
+
+---
+
+### Exercise 2: Sanitizing Dynamic Identifiers (`TABLE` or `COLUMN` Names)
+
+**Scenario:**
+Safely sanitize dynamic column names in `ORDER BY` queries using `pg-format` or strict whitelisting.
+
+**Requirements:**
+1. Code column name whitelisting validation.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const allowedSortColumns = new Set(["id", "username", "created_at"]);
+
+export async function getUsersSorted(sortBy: string) {
+  if (!allowedSortColumns.has(sortBy)) {
+    throw new Error("Invalid sort column parameter!");
+  }
+  
+  // Safe to interpolate AFTER strict whitelist validation!
+  const query = `SELECT id, username FROM users ORDER BY ${sortBy} DESC`;
+  return pool.query(query);
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Parameterized placeholders (`$1`) CANNOT be used for table or column names in SQL syntax.
+> 2. Dynamic identifiers MUST be validated against strict in-memory whitelists or escaped with identifier quotation (`quote_ident()`).
+> 3. Essential dynamic SQL security pattern.
+
+---
+
+### Exercise 3: Preventing Second-Order SQL Injection
+
+**Scenario:**
+Explain how un-sanitized data read from a database table can trigger Second-Order SQL Injection if concatenated into a subsequent dynamic query.
+
+**Requirements:**
+1. Explain second-order SQL injection mechanics and defense.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Second-Order SQL Injection Attack Flow:
+> - Step 1: Attacker inserts malicious payload ("admin' --") into a database field (e.g. user bio).
+> - Step 2: Later, a background cron job reads the bio from the DB and concatenates it into a raw dynamic SQL query string!
+> - Step 3: The payload executes, compromising the database!
+> Defense: ALWAYS use parameterized queries when constructing SQL statements, even for data retrieved from your own database tables!
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Second-order injection occurs when stored malicious data is re-used in dynamic SQL strings later in the application pipeline.
+> 2. Parameterizing all database queries neutralizes second-order attacks.
+> 3. Enterprise security hygiene guideline.
 
 ---
 
 
 
-### Exercise 2: Remediating SQL Injection Code
-
-**Problem:** Fix vulnerable query `db.query("SELECT * FROM products WHERE category = '" + cat + "'")` using parameterized placeholder.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.query('SELECT * FROM products WHERE category = $1', [cat])
-> ```
-> ```javascript
-> db.query('SELECT * FROM products WHERE category = $1', [cat]);
-> ```
->
-> **Explanation:** Parameterized placeholders delegate string escaping to the database client driver.
-
----
-
-### Exercise 3: Escaping Identifiers in Dynamic PL/pgSQL
-
-**Problem:** Use `format()` with `%I` to safely escape table identifier variable `tbl_name` in dynamic PL/pgSQL statement.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> EXECUTE format('SELECT COUNT(*) FROM %I', tbl_name) INTO cnt;
-> ```
-> ```sql
-> EXECUTE format('SELECT COUNT(*) FROM %I', tbl_name) INTO cnt;
-> ```
->
-> **Explanation:** `format('%I', identifier)` safely quotes SQL identifiers to prevent injection.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Parameterized Queries / Prepared Statements](parameterized_queries.md) — The defense standard.
 - [Roles & Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`)](roles_permissions.md) — - Securing role limits.
 - [ORM vs. Query Builder vs. Raw SQL](orm_vs_raw.md) — Related concept: ORM vs. Query Builder vs. Raw SQL.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SQL Injection occurs when raw user inputs are concatenated into SQL queries.
 - Allows attackers to manipulate SQL command structures.
 - Can lead to database takeover, data theft, or data destruction.

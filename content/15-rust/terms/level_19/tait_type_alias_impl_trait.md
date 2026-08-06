@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Type System**: Type Alias Impl Trait (TAIT) for naming `impl Trait` return types.
+
+
+**Rust Experimental Feature (type alias impl trait TAIT syntax)**: Type Alias Impl Trait (TAIT) for naming `impl Trait` return types.
 
 ---
 
@@ -252,7 +254,7 @@ Use Box<dyn Trait> for heterogeneous runtime collections!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [`impl Trait`](../level_04/impl_trait.md) — Opaque return types.
 

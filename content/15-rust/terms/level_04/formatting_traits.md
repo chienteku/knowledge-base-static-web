@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Formatting System**: `Display` (user-facing `{}`) and `Debug` (developer-facing `{:?}`) formatting traits.
+
+
+**Rust Standard Library (custom print formatting traits)**: `Display` (user-facing `{}`) and `Debug` (developer-facing `{:?}`) formatting traits.
 
 ---
 

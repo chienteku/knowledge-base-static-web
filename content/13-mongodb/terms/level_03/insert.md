@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**CRUD Operation** (Document Insertion Methods): Insert operations (insertOne(), insertMany()) add new BSON documents to a MongoDB collection.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Executed inside `mongosh` or through application database drivers. Automatically validates document size constraints before saving).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To build any application, you need a way to save new data: registering users, creating order logs, or posting blog comments.
@@ -90,7 +91,7 @@ db.products.insertMany([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Passing a single document object directly to insertMany() instead of wrapping it in an array
 
@@ -111,6 +112,8 @@ db.users.insertMany([ { name: "Bob" } ]);
 
 
 
+
+
 ### Mistake 2: Using Deprecated `insert()` Shell Method in Modern Applications
 
 **The mistake:** Calling `db.collection.insert({ name: 'Alice' })`.
@@ -126,6 +129,8 @@ await db.users.insert({ name: "Alice" }); // ❌ Legacy deprecated method!
 ```javascript
 await db.users.insertOne({ name: "Alice" }); // Modern insertOne method
 ```
+
+
 
 ### Mistake 3: Passing Single Objects to `insertMany()` instead of Arrays
 
@@ -145,100 +150,101 @@ await db.users.insertMany([{ name: "Alice" }]); // Correct array input
 
 
 
-### Mistake 4: Using Deprecated `insert()` Shell Method in Modern Applications
+## 5. Practice Exercises
 
-**The mistake:** Calling `db.collection.insert({ name: 'Alice' })`.
+### Exercise 1: Single Document Insertion with `insertOne`
 
-**Why it's wrong:** Legacy `insert()` returns inconsistent result objects across drivers. Use `insertOne()` for single documents or `insertMany()` for arrays.
+**Scenario:**
+Insert a new user document into collection `users` and retrieve its auto-generated `_id` ObjectId.
 
-*Incorrect:*
-```javascript
-await db.users.insert({ name: "Alice" }); // ❌ Legacy deprecated method!
-```
+**Requirements:**
+1. Execute `db.users.insertOne({ name: "Alice", email: "alice@example.com" })`.
 
-*Fix:*
-```javascript
-await db.users.insertOne({ name: "Alice" }); // Modern insertOne method
-```
-
-### Mistake 5: Passing Single Objects to `insertMany()` instead of Arrays
-
-**The mistake:** Calling `db.users.insertMany({ name: 'Alice' })` (TypeError).
-
-**Why it's wrong:** `insertMany()` strictly expects an array of document objects `[{ name: 'Alice' }]`.
-
-*Incorrect:*
-```javascript
-await db.users.insertMany({ name: "Alice" }); // ❌ Expected array!
-```
-
-*Fix:*
-```javascript
-await db.users.insertMany([{ name: "Alice" }]); // Correct array input
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Seeding Query
-
-**Problem:** You are initializing a test environment. Write the MongoDB query to bulk-insert two documents into a collection named `inventory`:
--   Document 1: `{ item: "notebook", qty: NumberInt(5) }`
--   Document 2: `{ item: "pen", qty: NumberInt(20) }`
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.inventory.insertMany([
->   { item: "notebook", qty: NumberInt(5) },
->   { item: "pen", qty: NumberInt(20) }
-> ]);
-> ```
-> - Choose the multi-insertion method `insertMany`.
-> - Wrap the two documents inside a parent JavaScript array `[ ]`.
-
----
-
-
-
-### Exercise 2: Inserting Single Document with `insertOne`
-
-**Problem:** Insert user document `{ name: "Bob", email: "bob@example.com" }` using `insertOne()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.insertOne({ name: "Bob", email: "bob@example.com" });
-> ```
-> ```javascript
-> db.users.insertOne({
->   name: "Bob",
->   email: "bob@example.com"
+> const result = db.users.insertOne({
+>   name: "Alice Smith",
+>   email: "alice@example.com",
+>   createdAt: new Date()
 > });
+> console.log("Inserted ObjectId:", result.insertedId);
 > ```
 >
-> **Explanation:** `insertOne()` inserts a single document into the target collection.
+> #### Technical Explanation
+>
+> 1. `insertOne()` adds a single BSON document to the target collection.
+> 2. Automatically generates an `_id` ObjectId if omitted from the document.
+> 3. Returns `insertedId` in the write result payload.
 
 ---
 
-### Exercise 3: Bulk Insert with `insertMany`
+### Exercise 2: Batch Document Insertion with `insertMany`
 
-**Problem:** Insert array of 2 documents into `tags` collection using `insertMany()`.
+**Scenario:**
+Insert 3 product documents into collection `products` in a single batch write call.
 
-**Expected output:**
+**Requirements:**
+1. Execute `db.products.insertMany([...])`.
+
 > [!check]- Answer
-> ```text
-> db.tags.insertMany([ { name: "web" }, { name: "db" } ]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.tags.insertMany([
->   { name: "web" },
->   { name: "db" }
+> const result = db.products.insertMany([
+>   { name: "Mouse", price: 29.99 },
+>   { name: "Keyboard", price: 89.99 },
+>   { name: "Monitor", price: 249.99 }
 > ]);
+> console.log("Inserted IDs:", result.insertedIds);
 > ```
 >
-> **Explanation:** `insertMany([ docs ])` performs bulk document insertions.
+> #### Technical Explanation
+>
+> 1. `insertMany()` inserts an array of documents in a single network batch payload.
+> 2. Reduces network roundtrip latency significantly compared to multiple `insertOne()` calls.
+> 3. Returns a map of array indexes to inserted ObjectIds.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Ordered vs Unordered Inserts
+
+**Scenario:**
+Configure `insertMany()` with `{ ordered: false }` so that if one document fails validation, remaining documents continue inserting.
+
+**Requirements:**
+1. Pass `{ ordered: false }` option.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> try {
+>   db.users.insertMany([
+>     { _id: 1, name: "Alice" },
+>     { _id: 1, name: "Bob" }, // Duplicate key error!
+>     { _id: 2, name: "Carol" }
+>   ], { ordered: false });
+> } catch (err) {
+>   console.warn("Batch completed with some errors:", err.message);
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Default `ordered: true` stops processing remaining documents upon encountering a write error.
+> 2. `ordered: false` attempts to insert all documents regardless of individual write errors.
+> 3. Maximizes write throughput for bulk data imports.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Collection](../level_01/collection.md) — The parent data container.
 - [Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)](write_results.md) — Understanding the insert outputs.
@@ -246,7 +252,7 @@ await db.users.insertMany([{ name: "Alice" }]); // Correct array input
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `insertOne()` writes a single document; `insertMany()` writes a list.
 - Serves as the MongoDB equivalent to PostgreSQL's `INSERT INTO` statements.
 - Expects standard JSON objects/arrays directly from application code.

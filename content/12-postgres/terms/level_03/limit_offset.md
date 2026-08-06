@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Clause**
+
+**SQL Command / Clause** (Result Pagination Clauses): `LIMIT` and `OFFSET` cap and skip returned query rows to implement page-based pagination.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DML** (Postgres-specific limit shorthand. Limits help the query optimizer stop disk scanning loops early once the target row count threshold is reached).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If your website has 1 million products, and a user clicks on the "Browse Products" page, you cannot fetch all 1 million items in one query:
@@ -88,7 +89,7 @@ LIMIT 10 OFFSET 20;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using massive OFFSET values for deep pagination in production databases
 
@@ -134,67 +135,99 @@ SELECT * FROM users LIMIT 10; -- ❌ Non-deterministic row selection!
 SELECT * FROM users ORDER BY id ASC LIMIT 10;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Pagination Parameters Calculation
+### Exercise 1: Page-Based Pagination with LIMIT and OFFSET
 
-**Problem:** You are building a blog feed showing 5 articles per page. The user clicks on **Page 4**.
-Calculate the correct SQL `LIMIT` and `OFFSET` parameters to query the database.
+**Scenario:**
+Implement page 2 of a product catalog API (10 items per page) sorted by `id` ascending.
 
-**Expected output:**
+**Requirements:**
+1. Calculate `LIMIT 10 OFFSET 10`.
+
 > [!check]- Answer
-> ```text
-> LIMIT = 5
-> OFFSET = 15
-> Calculation: (4 - 1) * 5 = 15. The query skips the first 15 articles and returns the next 5 (articles 16 through 20).
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, name, price_cents 
+> FROM products 
+> ORDER BY id ASC 
+> LIMIT 10 OFFSET 10;
 > ```
-> - Apply the standard pagination equation using page count 4 and size 5.
-> - Calculate skipped row count first.
+>
+> #### Technical Explanation
+>
+> 1. `LIMIT 10` caps returned rows to 10.
+> 2. `OFFSET 10` skips the first 10 rows ((Page 2 - 1) * 10).
+> 3. `ORDER BY id ASC` guarantees deterministic row ordering across pages.
+
+---
+
+### Exercise 2: High-Performance Keyset (Cursor-Based) Seeking
+
+**Scenario:**
+Replace slow deep `OFFSET 10000` pagination with fast keyset seeking using `WHERE id > last_seen_id`.
+
+**Requirements:**
+1. Query `WHERE id > 10000 ORDER BY id ASC LIMIT 10`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, name, price_cents 
+> FROM products 
+> WHERE id > 10000 
+> ORDER BY id ASC 
+> LIMIT 10;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Large `OFFSET` values force PostgreSQL to scan and discard thousands of index entries ($O(N)$).
+> 2. Keyset seeking (`WHERE id > last_seen_id`) jumps directly to the next page using index bounds in $O(\log N)$ time.
+> 3. Industry standard infinite scroll pagination pattern.
+
+---
+
+### Exercise 3: Top-N Query Rankings
+
+**Scenario:**
+Query the top 5 highest spending customers using `ORDER BY total_spent DESC LIMIT 5`.
+
+**Requirements:**
+1. Combine `ORDER BY` and `LIMIT`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT customer_id, SUM(amount_cents) AS total_spent 
+> FROM invoices 
+> GROUP BY customer_id 
+> ORDER BY total_spent DESC 
+> LIMIT 5;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ORDER BY total_spent DESC LIMIT 5` calculates top-N rankings.
+> 2. PostgreSQL uses a top-N sort buffer in RAM to optimize memory usage.
+> 3. Efficient top-N report generation.
 
 ---
 
 
 
-### Exercise 2: Basic Sorting and Pagination
-
-**Problem:** Query top 5 highest priced products sorted by `price` descending using `ORDER BY` and `LIMIT`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM products ORDER BY price DESC LIMIT 5;
-> ```
-> ```sql
-> SELECT * FROM products ORDER BY price DESC LIMIT 5;
-> ```
->
-> **Explanation:** `ORDER BY col DESC LIMIT N` returns the top N largest values.
-
----
-
-### Exercise 3: Keyset (Cursor-Based) Pagination Pattern
-
-**Problem:** Query next 10 posts created after `last_created_at` timestamp using keyset pagination.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM posts WHERE created_at > '2026-01-01 00:00:00+00' ORDER BY created_at ASC LIMIT 10;
-> ```
-> ```sql
-> SELECT * FROM posts
-> WHERE created_at > '2026-01-01 00:00:00+00'
-> ORDER BY created_at ASC LIMIT 10;
-> ```
->
-> **Explanation:** Keyset pagination uses index range predicates instead of high OFFSET scans.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`ORDER BY`](order_by.md) — The sorting anchor for pagination stability.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `LIMIT` restricts the maximum count of returned rows.
 - `OFFSET` skips a specified number of rows before returning results.
 - `LIMIT` and `OFFSET` form the foundation of website page navigation (pagination).

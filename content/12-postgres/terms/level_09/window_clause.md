@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Syntax**
+
+**Advanced Feature** (Window Specification Definition): The `WINDOW` clause defines reusable named window specifications (`WINDOW w AS (PARTITION BY ... ORDER BY ...)`) for multiple window functions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all modern SQL engines. Evaluated late in the query execution pipeline, after `WHERE`, `GROUP BY`, and `HAVING` filters have processed).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Before you can run advanced analytical calculations (like calculating a cumulative running total of bank deposits, or ranking products inside their category):
@@ -114,7 +115,7 @@ FROM sales;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing PARTITION BY with GROUP BY
 
@@ -160,82 +161,106 @@ SELECT ROW_NUMBER() OVER w, AVG(t) OVER w FROM s WINDOW w AS (PARTITION BY r ORD
 SELECT ... FROM ... WHERE ... GROUP BY ... HAVING ... WINDOW w AS (...) ORDER BY ...
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Window Alias Clean Up
+### Exercise 1: Defining Reusable Named Windows with the `WINDOW` Clause
 
-**Problem:** You have a repetitive window query:
-```sql
-SELECT 
-  name, 
-  price,
-  AVG(price) OVER (PARTITION BY category ORDER BY price DESC) AS avg_cat,
-  SUM(price) OVER (PARTITION BY category ORDER BY price DESC) AS sum_cat
-FROM products;
-```
-Rewrite this query using the `WINDOW` alias keyword to keep the SQL DRY.
+**Scenario:**
+Refactor a query using multiple window functions over the exact same window specification using a named `WINDOW` clause.
 
-**Expected output:**
+**Requirements:**
+1. Use `WINDOW w AS (PARTITION BY department_id ORDER BY salary DESC)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
 > SELECT 
 >   name, 
->   price,
->   AVG(price) OVER w AS avg_cat,
->   SUM(price) OVER w AS sum_cat
-> FROM products
-> WINDOW w AS (PARTITION BY category ORDER BY price DESC);
+>   department_id, 
+>   salary, 
+>   ROW_NUMBER() OVER w AS row_num,
+>   RANK() OVER w AS rank_num,
+>   AVG(salary) OVER w AS dept_avg 
+> FROM employees 
+> WINDOW w AS (PARTITION BY department_id ORDER BY salary DESC);
 > ```
-> - Define the window alias label `w` at the bottom of the query using the `WINDOW` keyword.
-> - Replace the repetitive `OVER (...)` blocks with `OVER w`.
+>
+> #### Technical Explanation
+>
+> 1. The `WINDOW` clause defines a reusable named window specification at the end of the query.
+> 2. Eliminates repeating identical `OVER (PARTITION BY ... ORDER BY ...)` clauses across multiple window functions.
+> 3. Improves query readability and maintainability.
 
 ---
 
+### Exercise 2: Extending Named Windows with Additional Ordering
 
+**Scenario:**
+Extend a base named window specification inside individual `OVER` clauses.
 
-### Exercise 2: Using Named WINDOW Clause
+**Requirements:**
+1. Code named window extension `OVER (w ORDER BY created_at DESC)`.
 
-**Problem:** Define named window `w AS (PARTITION BY department ORDER BY salary DESC)` and compute `ROW_NUMBER() OVER w` and `AVG(salary) OVER w`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> SELECT name, ROW_NUMBER() OVER w, AVG(salary) OVER w FROM employees WINDOW w AS (PARTITION BY department ORDER BY salary DESC);
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> SELECT name,
->   ROW_NUMBER() OVER w,
->   AVG(salary) OVER w
-> FROM employees
-> WINDOW w AS (PARTITION BY department ORDER BY salary DESC);
+> SELECT 
+>   customer_id, 
+>   total_cents, 
+>   created_at, 
+>   ROW_NUMBER() OVER (w ORDER BY created_at DESC) AS seq_num 
+> FROM orders 
+> WINDOW w AS (PARTITION BY customer_id);
 > ```
 >
-> **Explanation:** Named `WINDOW` clauses eliminate duplicate window specification code.
+> #### Technical Explanation
+>
+> 1. Named windows defined in `WINDOW` can specify base partitioning (`PARTITION BY customer_id`).
+> 2. Individual `OVER (w ORDER BY ...)` clauses extend the base window by adding specific sort ordering rules.
+> 3. Reusable SQL window architecture.
 
 ---
 
-### Exercise 3: Re-Using Window Definitions in Queries
+### Exercise 3: Performance Optimization of Named Windows
 
-**Problem:** Why use named `WINDOW` clauses? (Reduces code duplication and clarifies window frame specifications).
+**Scenario:**
+Explain why using a single `WINDOW` specification reduces sorting passes compared to multiple distinct window definitions.
 
-**Expected output:**
+**Requirements:**
+1. Contrast window sort execution passes in `EXPLAIN ANALYZE`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Reduces code duplication and clarifies window frame specifications
-> ```
-> ```text
-> Reduces code duplication and clarifies window frame specifications
+> Named Window Performance Analysis:
+> - Multiple different window definitions require PostgreSQL to perform separate sort passes for each distinct OVER clause.
+> - Reusing a single named WINDOW specification allows the query planner to sort the input dataset ONCE in RAM.
+> Result: Significantly reduced execution time and RAM consumption.
 > ```
 >
-> **Explanation:** Named windows centralize partition and order rules across window functions.
+> #### Technical Explanation
+>
+> 1. The query planner sorts partition data for each unique window ordering rule.
+> 2. Consolidating window definitions into a single `WINDOW` clause minimizes sort buffer operations.
+> 3. High performance window query pattern.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [Window Function](window_function.md) — The calculations applied.
 - [`ROW_NUMBER()` / `RANK()` / `DENSE_RANK()`](row_number_rank.md) — Window position calculations.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Window Clause defines the subset of rows a window function calculates across.
 - Activated using the `OVER()` keyword.
 - Keeps row details intact; never collapses rows like `GROUP BY`.

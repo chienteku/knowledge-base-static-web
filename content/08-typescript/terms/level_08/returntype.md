@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Standard Library**
+
+**TypeScript Utility Type** (Function Return Type Extraction): `ReturnType<T>` extracts the return type of a function type `T` using conditional type inference.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine you are using a third-party library. It exports a function `createComplexGraph()`. This function returns a massive, heavily nested configuration object.
@@ -52,7 +53,7 @@ Notice the `typeof` keyword. `ReturnType` expects a Type. `createGraph` is a Jav
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Passing the function call instead of the type
 
@@ -101,61 +102,101 @@ async function getData() { return 42; }
 type Unwrapped = Awaited<ReturnType<typeof getData>>; // Yields number
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Parameters Utility
+### Exercise 1: Extracting Function Return Types with `ReturnType<T>`
 
-**Problem:** If `ReturnType<T>` extracts the output of a function, what is the name of the built-in Utility Type that extracts the input (arguments) of a function into a Tuple?
+**Scenario:**
+Extract the return type of a factory function `createUser()` using `ReturnType`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `ReturnType<typeof createUser>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> // Parameters<T>
-> type GraphArgs = Parameters<typeof createGraph>;
-> // If the function was `(a: string, b: number) => void`
-> // GraphArgs would resolve to the tuple: `[string, number]`
+> function createUser() {
+>   return {
+>     id: 101,
+>     username: "coder_bob",
+>     settings: { theme: "dark" }
+>   };
+> }
+
+type UserObject = ReturnType<typeof createUser>;
+// Inferred as: { id: number; username: string; settings: { theme: string; } }
+
+const user: UserObject = createUser();
+```
+
+> #### Technical Explanation
+>
+> 1. `ReturnType<T>` extracts the return type of function type `T`.
+> 2. Uses `typeof functionName` to query the function type first.
+> 3. Obtains exact return types without manually duplicating interface definitions.
+
+---
+
+### Exercise 2: Inferring Return Types of Generic Functions
+
+**Scenario:**
+Extract the return type of a generic function using `ReturnType` and explicit type binding.
+
+**Requirements:**
+1. Extract return type of generic function.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function makeArray<T>(item: T): T[] {
+>   return [item];
+> }
+
+type StringArray = ReturnType<typeof makeArray<string>>;
+// Inferred as: string[]
+```
+
+> #### Technical Explanation
+>
+> 1. `typeof makeArray<string>` instantiates generic parameter `T` to `string` before passing to `ReturnType`.
+> 2. Extracts concrete generic return types cleanly.
+> 3. Supported in modern TypeScript syntax.
+
+---
+
+### Exercise 3: Auditing `ReturnType` Conditional Implementation Mechanics
+
+**Scenario:**
+Explain the internal conditional type definition of `ReturnType<T>`.
+
+**Requirements:**
+1. Detail `type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // Internal TypeScript standard library definition:
+> type CustomReturnType<T extends (...args: any) => any> = 
+>   T extends (...args: any) => infer R ? R : any;
 > ```
-> - What is the common word for function inputs?
+
+> #### Technical Explanation
+>
+> 1. `ReturnType` uses conditional types (`T extends ...`) and the `infer` keyword.
+> 2. `infer R` instructs the compiler to introduce a new type variable `R` capturing the function's return type.
+> 3. Fundamental demonstration of conditional type inference in TypeScript.
 
 ---
 
 
 
-### Exercise 2: Extracting Factory Function Return Types
-
-**Problem:** Extract return type of `function createStore() { return { state: 1, dispatch: () => {} }; }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> { state: number; dispatch: () => void }
-> ```
-> ```typescript
-> function createStore() { return { state: 1, dispatch: () => {} }; }
-> type Store = ReturnType<typeof createStore>;
-> console.log("{ state: number; dispatch: () => void }");
-> ```
->
-> **Explanation:** `ReturnType<typeof fn>` captures inferred function return object shapes.
-
----
-
-### Exercise 3: Non-Function Argument Errors in `ReturnType`
-
-**Problem:** What error occurs if `ReturnType<string>` is evaluated?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Type 'string' does not satisfy constraint '(...args: any) => any'
-> ```
-> ```typescript
-> console.log("Type 'string' does not satisfy constraint '(...args: any) => any'");
-> ```
->
-> **Explanation:** `ReturnType<T>` constrains generic argument `T` to callable function types.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Function Types](../level_04/function_types.md) — What `ReturnType` analyzes.
 - [Type Inference](../level_01/type_inference.md) — The engine powering this utility. `ReturnType` extracts whatever the engine inferred.
 - [The `infer` Keyword](../level_09/infer.md) — The underlying syntax used to build `ReturnType`.
@@ -164,7 +205,7 @@ type Unwrapped = Awaited<ReturnType<typeof getData>>; // Yields number
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`ReturnType<T>`** extracts the specific return type out of a function.
 - It is incredibly useful for typing variables when a third-party library exports a function, but forgets to export the interface for the object that function returns.
 - You must pass a *Function Type* into the generic.

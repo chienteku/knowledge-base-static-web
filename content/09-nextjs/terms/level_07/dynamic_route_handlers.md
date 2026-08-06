@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **API Endpoint / Routing**
+
+**Server & Edge API** (Dynamic Request Endpoint Processing): Dynamic Route Handlers execute dynamically on every HTTP request when reading cookies, headers, or query parameters.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you are building a REST API for your Next.js application, you need to be able to target specific resources. You don't just want `GET /api/users`. You need `GET /api/users/1`, `GET /api/users/2`, etc.
@@ -61,7 +62,7 @@ export async function GET(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to access `params` as the first argument
 
@@ -120,76 +121,124 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: The Request parameter
+### Exercise 1: Parsing Dynamic URL Path Parameters in Route Handlers
 
-**Problem:** You are building `app/api/posts/[slug]/route.ts`. You don't need to read any headers or query strings, you ONLY need the `slug`. Can you just omit the `request` parameter?
+**Scenario:**
+Extract dynamic path parameter `id` inside `app/api/users/[id]/route.ts`.
 
-**Expected output:**
+**Requirements:**
+1. Access `params.id` in `GET(req, { params })`.
+
 > [!check]- Answer
-> ```ts
-> // You must still accept the request parameter, even if you don't use it!
-> // Or, use an underscore convention to mark it as ignored.
-> export async function GET(_request: Request, { params }: { params: { slug: string } }) {
->   const post = await fetchPost(params.slug);
->   return Response.json(post);
-> }
-> ```
-> - JavaScript function parameters are positional. If you skip the first one, the second one shifts into the first position!
-
----
-
-### Exercise 2: Dynamic Route Handler GET Request Pattern
-
-**Problem:** Write dynamic Route Handler `app/api/products/[id]/route.ts` handling `GET` request and returning JSON `{ id, product }`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import { NextResponse } from 'next/server'; export async function GET(req: Request, { params }: { params: { id: string } }) { return NextResponse.json({ id: params.id, name: 'Sample Product' }); }
-> ```
-> - Dynamic Route Handlers receive route segment parameters via `{ params }`.
-> 
-> ```typescript
-> import { NextResponse } from 'next/server';
-> 
+> // app/api/users/[id]/route.ts
 > export async function GET(
 >   request: Request,
->   { params }: { params: { id: string } }
+>   { params }: { params: Promise<{ id: string }> }
 > ) {
->   const productId = params.id;
->   return NextResponse.json({ id: productId, status: 'Active' });
+>   const { id } = await params;
+>   return Response.json({ userId: id, status: "Active" });
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. Dynamic Route Handlers receive `params` as a Promise in the second argument context.
+> 2. Accessing `params` automatically turns the Route Handler into a dynamic execution endpoint.
+> 3. Standard REST API dynamic parameter handling pattern.
+
 ---
 
-### Exercise 3: Route Handler 404 Response
+### Exercise 2: Reading Request Cookies and Headers in Dynamic Handlers
 
-**Problem:** Write `NextResponse.json()` line returning 404 Not Found error payload.
+**Scenario:**
+Read `NextRequest` cookies and URL search parameters dynamically inside a `GET` Route Handler.
 
-**Expected output:**
+**Requirements:**
+1. Use `req.nextUrl.searchParams` and `req.cookies`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> return NextResponse.json({ error: 'Product Not Found' }, { status: 404 });
-> ```
-> - Pass options object `{ status: 404 }` to set HTTP response status.
-> 
+> // app/api/search/route.ts
+> import { NextRequest } from "next/server";
+
+export async function GET(req: NextRequest) {
+  const query = req.nextUrl.searchParams.get("q");
+  const token = req.cookies.get("auth_token")?.value;
+
+  if (!token) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  return Response.json({ query, tokenPresent: true });
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Accessing `req.nextUrl.searchParams` or `req.cookies` opts the Route Handler into dynamic execution.
+> 2. Runs on Node.js/edge servers for every incoming request.
+> 3. Enables authenticated API endpoint workflows.
+
+---
+
+### Exercise 3: Setting Custom Response Headers and Status Codes
+
+**Scenario:**
+Return custom HTTP status `201 Created` and `Location` header upon successful resource creation.
+
+**Requirements:**
+1. Construct `Response.json(body, { status: 201, headers: ... })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> return NextResponse.json({ error: 'Not Found' }, { status: 404 });
-> ```
+> export async function POST(req: Request) {
+>   const body = await req.json();
+
+  return Response.json(
+    { success: true, item: body },
+    {
+      status: 201,
+      headers: {
+        "Location": `/api/items/${body.id}`,
+        "X-Custom-Header": "Processed"
+      }
+    }
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `Response.json()` accepts a standard ResponseInit configuration object as its second argument.
+> 2. `status: 201` sets the HTTP response status code.
+> 3. Standard REST API response construction.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Route Handlers (`route.ts`)](route_handlers.md) — The file utilizing the parameters.
 - [Caching Route Handlers](caching_route_handlers.md) — Related concept: Caching Route Handlers.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Dynamic Route Handlers** use bracket folder syntax (e.g., `[id]`) to create flexible API endpoints.
 - The route handler function receives the extracted parameters via the `params` property on the **second** argument (the `context` object).
 - The first argument is always the Web `Request` object.

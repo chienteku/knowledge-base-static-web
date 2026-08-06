@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Optimization**
+
+**Data Fetching & Caching** (Next.js Cache Management API): `next/cache` utilities (`revalidatePath`, `revalidateTag`, `unstable_cache`) manage Data Cache and Full Route Cache invalidation.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Next.js is designed to be fast by default. To achieve this, it aggressively caches almost everything it can. However, understanding *what* is cached, *where* it is cached, and *how* to clear it is the #1 source of confusion for new Next.js developers.
@@ -55,7 +56,7 @@ The Next.js Cache is actually composed of **four distinct layers**.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: The "Why isn't my data updating!?" panic
 
@@ -65,6 +66,8 @@ The Next.js Cache is actually composed of **four distinct layers**.
 **Golden Rule:** When dealing with mutations (Server Actions), always call `revalidatePath()` on the server. This explicitly tells Next.js to not only clear the Server Caches (Layers 2 & 3), but it also sends an instruction down to the browser to clear the Client Cache (Layer 4) so the user sees the new data!
 
 ---
+
+
 
 ### Mistake 2: Confusing Next.js Cache Architecture Layers (Data Cache vs Full Route Cache)
 
@@ -83,6 +86,8 @@ The Next.js Cache is actually composed of **four distinct layers**.
 ```
 
 ---
+
+
 
 ### Mistake 3: Disabling Data Cache Globally in Next.js Production Deployments
 
@@ -104,149 +109,116 @@ export const dynamic = 'force-dynamic'; // ❌ Disables caching globally for ent
 
 ---
 
-### Mistake 4: Confusing Next.js Cache Architecture Layers (Data Cache vs Full Route Cache)
 
-**The mistake:** Expecting `revalidateTag()` to purge browser-side Router Cache instances immediately.
-
-**Why it's wrong:** Next.js maintains 4 distinct cache layers: Client Router Cache, Full Route Cache (Server HTML), Data Cache (fetch data), and Request Memoization. `revalidateTag()` purges Data Cache & Full Route Cache, but browser Router Cache persists for 30s.
-
-*Incorrect:*
-```tsx
-/* Expecting revalidateTag() to clear client browser Router Cache instantly */
-```
-
-*Fix:*
-```tsx
-/* Call router.refresh() on client to refresh client-side Router Cache alongside revalidateTag() */
-```
-
----
-
-### Mistake 5: Disabling Data Cache Globally in Next.js Production Deployments
-
-**The mistake:** Adding `export const dynamic = 'force-dynamic'` to root layout component.
-
-**Why it's wrong:** Force-dynamic on root layout disables static caching across the ENTIRE web application, causing every request to execute dynamic server rendering.
-
-*Incorrect:*
-```typescript
-// app/layout.tsx
-export const dynamic = 'force-dynamic'; // ❌ Disables caching globally for entire app!
-```
-
-*Fix:*
-```tsx
-// Keep root layout static; set force-dynamic only on specific dynamic pages
-```
 
 
 ---
 
-### Mistake 6: Confusing Next.js Cache Architecture Layers (Data Cache vs Full Route Cache)
+## 5. Practice Exercises
 
-**The mistake:** Expecting `revalidateTag()` to purge browser-side Router Cache instances immediately.
+### Exercise 1: Caching Custom Database Queries with `unstable_cache`
 
-**Why it's wrong:** Next.js maintains 4 distinct cache layers: Client Router Cache, Full Route Cache (Server HTML), Data Cache (fetch data), and Request Memoization. `revalidateTag()` purges Data Cache & Full Route Cache, but browser Router Cache persists for 30s.
+**Scenario:**
+Wrap an expensive database ORM query in `unstable_cache()` with custom cache tags and revalidation timers.
 
-*Incorrect:*
-```tsx
-/* Expecting revalidateTag() to clear client browser Router Cache instantly */
-```
+**Requirements:**
+1. Import `unstable_cache` from `next/cache`.
 
-*Fix:*
-```tsx
-/* Call router.refresh() on client to refresh client-side Router Cache alongside revalidateTag() */
-```
-
----
-
-### Mistake 7: Disabling Data Cache Globally in Next.js Production Deployments
-
-**The mistake:** Adding `export const dynamic = 'force-dynamic'` to root layout component.
-
-**Why it's wrong:** Force-dynamic on root layout disables static caching across the ENTIRE web application, causing every request to execute dynamic server rendering.
-
-*Incorrect:*
-```typescript
-// app/layout.tsx
-export const dynamic = 'force-dynamic'; // ❌ Disables caching globally for entire app!
-```
-
-*Fix:*
-```tsx
-// Keep root layout static; set force-dynamic only on specific dynamic pages
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: The Hard Refresh
-
-**Problem:** A user is navigating around your app. They see stale data on a page because of the Client Router Cache. They press `Cmd+R` (hard refresh the browser window). What happens to the Router Cache?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> It is completely wiped!
-> The Router Cache only exists in the browser's JavaScript memory. A hard refresh resets the memory state, forcing the browser to request fresh HTML and RSC Payloads from the server.
-> (However, if the server's Data Cache is still holding stale data, the user will still see stale data!).
-> ```
-> - Think about what happens to React state when you refresh a page.
+>
+> #### Implementation
+>
+> ```typescript
+> import { unstable_cache } from "next/cache";
+> import { db } from "@/lib/db";
+
+export const getCachedUsers = unstable_cache(
+  async (role: string) => {
+    return db.user.findMany({ where: { role } });
+  },
+  ["users-by-role"], // Key parts
+  {
+    revalidate: 3600, // Cache for 1 hour
+    tags: ["users"]   # Tag for on-demand invalidation
+  }
+);
+```
+
+> #### Technical Explanation
+>
+> 1. `unstable_cache()` extends Data Cache functionality to arbitrary async functions (database queries, ORM calls, computations).
+> 2. `tags` allow purging cached database query results on demand via `revalidateTag('users')`.
+> 3. Crucial for caching database calls that do NOT use the `fetch()` API.
 
 ---
 
-### Exercise 2: Next.js 4 Cache Layers Matrix
+### Exercise 2: Purging Data Cache Entries with `revalidateTag`
 
-**Problem:** Identify the location (Server vs Client) for the 4 Next.js cache layers:
-1. Request Memoization
-2. Data Cache
-3. Full Route Cache
-4. Router Cache
+**Scenario:**
+Purge all cached data associated with tag `'inventory'` inside a Server Action.
 
-**Expected output:**
+**Requirements:**
+1. Call `revalidateTag('inventory')` in Server Action.
+
 > [!check]- Answer
-> ```text
-> 1. Server (Single request scope)
-> 2. Server (Persistent across requests)
-> 3. Server (HTML & RSC payload)
-> 4. Client (Browser memory)
-> ```
-> - Request Memoization -> Server (Single request)
-> - Data Cache -> Server (Persistent data store)
-> - Full Route Cache -> Server (HTML & RSC payload)
-> - Router Cache -> Client (Browser memory)
-> 
-> ```text
-> 3 Server Caches + 1 Client Router Cache
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> "use server";
+
+import { revalidateTag } from "next/cache";
+
+export async function updateStockLevel(productId: string) {
+  // Update DB...
+  revalidateTag("inventory");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `revalidateTag('tag-name')` invalidates matching Data Cache entries globally across all pages.
+> 2. Affects both `fetch()` requests and `unstable_cache()` queries tagged with the same string.
+> 3. Targeted cache invalidation pattern.
 
 ---
 
-### Exercise 3: Router Cache Stale Time Config (Next.js 14.2+)
+### Exercise 3: Purging Route Segment Cache with `revalidatePath`
 
-**Problem:** Which `next.config.js` property configures client Router Cache stale times in Next.js 14.2+?
+**Scenario:**
+Purge all cached route pages under `/shop` using `revalidatePath('/shop', 'page')`.
 
-**Expected output:**
+**Requirements:**
+1. Call `revalidatePath('/shop', 'page')`.
+
 > [!check]- Answer
-> ```text
-> experimental.staleTimes (e.g. staleTimes: { dynamic: 30, static: 180 })
-> ```
-> - `experimental.staleTimes` configures client Router Cache durations.
-> 
-> ```javascript
-> module.exports = {
->   experimental: {
->     staleTimes: { dynamic: 30, static: 180 }
->   }
-> };
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> "use server";
+
+import { revalidatePath } from "next/cache";
+
+export async function updateCatalog() {
+  revalidatePath("/shop", "page");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `revalidatePath()` purges static Full Route Cache HTML and associated Data Cache entries for specified URL paths.
+> 2. Passing `'page'` limits invalidation to the specific page component.
+> 3. Core cache management API usage.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [On-Demand Revalidation (`revalidatePath`, `revalidateTag`)](../level_06/on_demand_revalidation.md) — The primary tool for clearing Layers 2, 3, and 4.
 - [Static Site Generation (SSG)](ssg.md) — Essentially Layer 3.
 - [React Server Component Payload (RSC Payload)](rsc_payload.md) — Related concept: React Server Component Payload (RSC Payload).
@@ -254,7 +226,7 @@ export const dynamic = 'force-dynamic'; // ❌ Disables caching globally for ent
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Next.js Cache is made of four layers: Request Memoization, Data Cache, Full Route Cache, and Router Cache.
 - **Request Memoization** deduplicates identical `fetch` calls during a single page render.
 - **Data Cache** stores persistent data across multiple visitors on the server.

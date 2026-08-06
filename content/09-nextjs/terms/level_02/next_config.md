@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture**
+
+**Framework Architecture** (Master Configuration File): `next.config.js` configures build settings, image optimization hosts, environment variables, headers, and redirects for Next.js.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time** (Configuration is loaded once by Next.js during compilation and dev server initialization).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 While Next.js works out of the box with zero configuration, large-scale production applications often require fine-tuning. For example:
@@ -77,7 +78,7 @@ Config settings fall into two execution scopes:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting next.config.mjs edits to apply without restarting the dev server
 
@@ -134,86 +135,128 @@ module.exports = {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Authorize Remote Domain
+### Exercise 1: Configuring Environment Variables in `next.config.js`
 
-**Problem:** Construct a `next.config.mjs` configuration that authorises loading images securely from `https://assets.example.com` under any folder subpath:
+**Scenario:**
+Configure custom build environment variables and redirects in `next.config.js`.
 
-```javascript
-// next.config.mjs
-// Solution:
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'assets.example.com',
-        pathname: '/**', // Match all subpaths
-      }
-    ]
-  }
-};
-
-export default nextConfig;
-```
+**Requirements:**
+1. Export `nextConfig` object in `next.config.js`.
 
 > [!check]- Answer
-> - Use the `images.remotePatterns` array structure and assign `/**` as the wildcard pathname pattern.
+>
+> #### Implementation
+>
+> ```javascript
+> /** @type {import('next').NextConfig} */
+> const nextConfig = {
+>   env: {
+>     CUSTOM_APP_VERSION: "v2.5.0"
+>   },
+>   async redirects() {
+>     return [
+>       {
+>         source: "/legacy-docs",
+>         destination: "/docs",
+>         permanent: true
+>       }
+>     ];
+>   }
+> };
+
+module.exports = nextConfig;
+```
+
+> #### Technical Explanation
+>
+> 1. `next.config.js` configures compilation, bundling, and server routing behavior.
+> 2. `redirects()` executes HTTP redirects on the server before hitting React routing logic.
+> 3. Central configuration file for Next.js applications.
 
 ---
 
-### Exercise 2: Redirect Configuration Syntax
+### Exercise 2: Configuring Webpack and Vite Bundler Overrides
 
-**Problem:** Write `next.config.js` `redirects()` async function permanently redirecting `/old-about` to `/about` (HTTP 301).
+**Scenario:**
+Add custom SVG loader rules using `webpack` property inside `next.config.js`.
 
-**Expected output:**
+**Requirements:**
+1. Override `webpack(config, options)` in configuration.
+
 > [!check]- Answer
-> ```javascript
-> module.exports = { async redirects() { return [{ source: '/old-about', destination: '/about', permanent: true }]; } };
-> ```
-> - `redirects()` configures server-level URL redirection rules.
-> 
+>
+> #### Implementation
+>
 > ```javascript
 > module.exports = {
->   async redirects() {
+>   webpack: (config, { isServer }) => {
+>     config.module.rules.push({
+>       test: /\.svg$/,
+>       use: ["@svgr/webpack"]
+>     });
+>     return config;
+>   }
+> };
+> ```
+
+> #### Technical Explanation
+>
+> 1. `webpack` hook allows customizing underlying build bundler rules.
+> 2. `isServer` flag identifies whether the current build pass is targeting Node.js server or client bundles.
+> 3. Extensible bundler configuration interface.
+
+---
+
+### Exercise 3: Setting Custom HTTP Response Headers
+
+**Scenario:**
+Attach security headers (`X-Frame-Options`, `Content-Security-Policy`) to all incoming requests via `headers()`.
+
+**Requirements:**
+1. Configure `async headers()` in `next.config.js`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> module.exports = {
+>   async headers() {
 >     return [
->       { source: '/old-about', destination: '/about', permanent: true }
+>       {
+>         source: "/:path*",
+>         headers: [
+>           { key: "X-Frame-Options", value: "DENY" },
+>           { key: "X-Content-Type-Options", value: "nosniff" }
+>         ]
+>       }
 >     ];
 >   }
 > };
 > ```
 
+> #### Technical Explanation
+>
+> 1. `headers()` appends custom HTTP response headers to matching route paths automatically.
+> 2. Enforces security policies at the Node.js / edge server level.
+> 3. Standard production security header setup.
+
 ---
 
-### Exercise 3: next.config.mjs Module Support
 
-**Problem:** Can `next.config.js` be written using ES Module syntax as `next.config.mjs`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Yes. Next.js natively supports ESM configuration files named next.config.mjs.
-> ```
-> - `next.config.mjs` allows using `export default defineConfig({...})`.
-> 
-> ```javascript
-> /** @type {import('next').NextConfig} */
-> const nextConfig = {};
-> export default nextConfig;
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Next.js Overview](../level_01/nextjs.md) — The framework itself.
 - [Turbopack](../level_10/turbopack.md) — Related concept: Turbopack.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `next.config.mjs` is the configuration entry point for Next.js build and runtime settings.
 - Changes require restarting the Next.js server to take effect.
 - Use `images.remotePatterns` to define external image domain safety rules.

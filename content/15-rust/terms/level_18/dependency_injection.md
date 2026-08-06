@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Architecture Pattern**: Dependency Injection via generics and trait bounds.
+
+
+**Rust Architecture Pattern (trait-based dependency inversion)**: Dependency Injection via generics and trait bounds.
 
 ---
 
@@ -299,7 +301,7 @@ Decouple shared state into a third shared repository or event channel!
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Trait Bound](../level_04/trait_bound.md) — Trait bound constraints.
 

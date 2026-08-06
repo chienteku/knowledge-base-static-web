@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Database Feature**
+
+**Advanced Feature** (Native Lexical Full-Text Search): Full-Text Search (`tsvector`, `tsquery`, `to_tsvector()`) performs linguistic stemming, ranking, and search indexing natively.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Fully supported. Includes built-in search parser dictionaries for over 15 languages, managing word stemming and stop-word filtering natively).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard SQL uses wildcard searches to find text:
@@ -102,7 +103,7 @@ WHERE to_tsvector('english', body) @@ to_tsquery('english', 'database & !crash')
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Querying with 'to_tsvector' in WHERE filters without compiling an expression index first
 
@@ -148,71 +149,107 @@ SELECT * FROM articles WHERE to_tsvector('english', content) @@ to_tsquery('engl
 CREATE INDEX idx_fts ON articles USING GIN (to_tsvector('english', body));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Search Query Compiler
+### Exercise 1: Parsing Text into `tsvector` and Matching with `tsquery`
 
-**Problem:** You are building a blog search bar. The `articles` table has a `body` text column and a GIN index on `to_tsvector('english', body)`. 
-Write the SQL query to search for and select the `title` of all articles where the body contains both the word `'tutorial'` and the word `'postgres'`.
+**Scenario:**
+Perform a full-text search over `articles(body)` for terms `'postgresql & index'` using `to_tsvector()` and `to_tsquery()`.
 
-**Expected output:**
+**Requirements:**
+1. Use `to_tsvector('english', body) @@ to_tsquery('english', 'postgresql & index')`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT title 
+> SELECT id, title 
 > FROM articles 
-> WHERE to_tsvector('english', body) @@ to_tsquery('english', 'tutorial & postgres');
+> WHERE to_tsvector('english', body) @@ to_tsquery('english', 'postgresql & index');
 > ```
-> - Use the match operator `@@`.
-> - Format the `tsquery` search terms using the logical AND operator `&`.
+>
+> #### Technical Explanation
+>
+> 1. `to_tsvector()` parses text into lexemes, removing stop words (`the`, `a`) and applying linguistic stemming (`indexing` -> `index`).
+> 2. `@@` is the full-text search match operator.
+> 3. `to_tsquery()` evaluates Boolean search expressions (`&` AND, `|` OR, `!` NOT).
+
+---
+
+### Exercise 2: Accelerating Full-Text Search with Generated `tsvector` Columns and GIN Indexes
+
+**Scenario:**
+Add a stored generated column `search_vector` to `articles` and index it with a GIN index.
+
+**Requirements:**
+1. Add `search_vector tsvector GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TABLE articles 
+> ADD COLUMN search_vector tsvector 
+> GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED;
+> 
+> CREATE INDEX idx_articles_search_gin 
+> ON articles 
+> USING GIN (search_vector);
+> 
+> SELECT id, title 
+> FROM articles 
+> WHERE search_vector @@ to_tsquery('english', 'database');
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Stored generated `tsvector` columns pre-calculate lexemes during inserts/updates.
+> 2. GIN index over `search_vector` enables sub-millisecond full-text search across millions of documents.
+> 3. Eliminates managing external Elasticsearch sync infrastructure for basic text search.
+
+---
+
+### Exercise 3: Relevance Ranking with `ts_rank()`
+
+**Scenario:**
+Order full-text search results by relevance score using `ts_rank()`.
+
+**Requirements:**
+1. Execute `ORDER BY ts_rank(search_vector, query) DESC`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   id, 
+>   title, 
+>   ts_rank(search_vector, to_tsquery('english', 'postgresql & performance')) AS relevance_score 
+> FROM articles 
+> WHERE search_vector @@ to_tsquery('english', 'postgresql & performance') 
+> ORDER BY relevance_score DESC;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ts_rank()` calculates a relevance score based on term frequency and document density.
+> 2. Orders output results by search relevance descending.
+> 3. Production search feature.
 
 ---
 
 
 
-### Exercise 2: Creating Generated TSVECTOR Column and GIN Index
-
-**Problem:** Add `tsv` column as `TSVECTOR GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED` and create GIN index.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ALTER TABLE articles ADD COLUMN tsv TSVECTOR GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED; CREATE INDEX idx_articles_tsv ON articles USING GIN (tsv);
-> ```
-> ```sql
-> ALTER TABLE articles ADD COLUMN tsv TSVECTOR
->   GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED;
-> CREATE INDEX idx_articles_tsv ON articles USING GIN (tsv);
-> ```
->
-> **Explanation:** Stored `TSVECTOR` columns with GIN indexes accelerate multi-column full-text document searches.
-
----
-
-### Exercise 3: Full-Text Search Ranking with `TS_RANK`
-
-**Problem:** Query articles matching `'postgres & search'` ranked by relevancy score using `ts_rank(tsv, query)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT title, ts_rank(tsv, q) AS rank FROM articles, to_tsquery('english', 'postgres & search') q WHERE tsv @@ q ORDER BY rank DESC;
-> ```
-> ```sql
-> SELECT title, ts_rank(tsv, q) AS rank
-> FROM articles, to_tsquery('english', 'postgres & search') q
-> WHERE tsv @@ q
-> ORDER BY rank DESC;
-> ```
->
-> **Explanation:** `ts_rank()` computes relevancy scores based on search term word frequency.
-
-## 7. Related Terms
+## 6. Related Terms
 - [GIN Index](../level_07/gin_index.md) — The parent performance index.
 - [Expression Index (Functional Index)](../level_07/expression_index.md) — Indexing function calculations.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Full-Text Search parses natural language text for optimized indexing.
 - `tsvector` parses text documents into normalized root words (lexemes).
 - `tsquery` defines the logical search terms using `&` (AND) and `|` (OR).

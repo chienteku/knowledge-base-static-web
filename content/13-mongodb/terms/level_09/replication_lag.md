@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Administration / Operations** (Secondary Sync Latency Metric): Replication Lag measures the time delay between a write operation committing on the primary node and replicating to secondary nodes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Monitored by database administrator alert dashboards. High replication lag risks secondary nodes falling off the Oplog history tail).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In distributed databases, network speed and disk writes are not infinite:
@@ -77,7 +78,7 @@ rs.printSecondaryReplicationInfo();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Ignoring replication lag when using 'secondaryPreferred' read preference for user dashboard views
 
@@ -125,70 +126,101 @@ Use maxStalenessSeconds in ReadPreference to prevent reading from lagging second
 Provision identical hardware and storage IOPS across all primary and secondary nodes
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Lag Calculation
+### Exercise 1: Monitoring Secondary Replication Lag in Seconds
 
-**Problem:** You run `rs.status()` and parse these timestamps:
--   `optime` of Primary: `"ts": Timestamp(1784931000, 1)` (corresponds to `15:30:00`)
--   `optime` of Secondary: `"ts": Timestamp(1784930985, 1)` (corresponds to `15:29:45`)
-1.  Calculate the replication lag in seconds.
-2.  State whether a client query using `readPreference: "secondary"` at `15:30:01` will see a write that was committed on the primary at `15:29:55`.
+**Scenario:**
+Query `rs.status()` to calculate the exact replication lag in seconds for secondary node `node2`.
 
-**Expected output:**
+**Requirements:**
+1. Subtract `node2.optimeDate` from `primary.optimeDate`.
+
 > [!check]- Answer
-> ```text
-> 1. Replication Lag: 15:30:00 - 15:29:45 = 15 seconds.
-> 2. No: The write was committed on the primary at `15:29:55`. Because the secondary has only synced up to `15:29:45` (representing a 15-second lag), the write has not reached it yet, and the query will read stale data.
+>
+> #### Implementation
+>
+> ```javascript
+> const status = rs.status();
+> const primary = status.members.find(m => m.state === 1);
+> const secondary = status.members.find(m => m.name.includes("node2"));
+> 
+> const lagSeconds = (primary.optimeDate - secondary.optimeDate) / 1000;
+> console.log(`Secondary Node2 Replication Lag: ${lagSeconds} seconds`);
 > ```
-> - Subtract the secondary optime timestamp from the primary optime timestamp.
-> - Compare the write commit time with the secondary's current synchronization mark.
+>
+> #### Technical Explanation
+>
+> 1. Replication lag measures the time difference between primary oplog write timestamps and secondary applied oplog timestamps.
+> 2. Lag > 0 indicates secondary is falling behind primary write throughput.
+> 3. High lag risks stale reads when using `readPreference: "secondary"`.
+
+---
+
+### Exercise 2: Mitigating Replication Lag with Flow Control
+
+**Scenario:**
+Enable Flow Control (`flowControlTargetLagSeconds`) to prevent primary write bursts from overwhelming secondary replication speed.
+
+**Requirements:**
+1. Configure `flowControlTargetLagSeconds: 10`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.adminCommand({
+>   setParameter: 1,
+>   flowControlTargetLagSeconds: 10
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Flow Control dynamically throttles primary write rate if secondary replication lag exceeds the target threshold (e.g. 10s).
+> 2. Prevents secondary nodes from falling out of the oplog window during heavy write spikes.
+> 3. Maintains stable cluster replication bounds.
+
+---
+
+### Exercise 3: Preventing Stale Reads from Lagging Secondaries
+
+**Scenario:**
+Configure maximum acceptable replication lag (`maxStalenessSeconds`) on client driver read preferences.
+
+**Requirements:**
+1. Pass `maxStalenessSeconds: 90` in ReadPreference settings.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const client = new MongoClient(uri, {
+>   readPreference: ReadPreference.SECONDARY_PREFERRED,
+>   maxStalenessSeconds: 90
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `maxStalenessSeconds` stops the driver from routing reads to secondaries whose replication lag exceeds 90 seconds.
+> 2. Prevents application users from viewing severely outdated data.
+> 3. Hardens distributed read query accuracy.
 
 ---
 
 
 
-### Exercise 2: Configuring `maxStalenessSeconds` in Driver
-
-**Problem:** Configure ReadPreference with `maxStalenessSeconds: 90` to block reading from secondaries lagging > 90 seconds.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> new ReadPreference("secondaryPreferred", [], { maxStalenessSeconds: 90 })
-> ```
-> ```javascript
-> const { ReadPreference } = require('mongodb');
-> const rp = new ReadPreference("secondaryPreferred", [], { maxStalenessSeconds: 90 });
-> ```
->
-> **Explanation:** `maxStalenessSeconds` prevents read operations from executing against severely lagging secondaries.
-
----
-
-### Exercise 3: Monitoring Replication Lag metric
-
-**Problem:** What command inspects secondary lag metrics in mongosh? (`rs.printSecondaryReplicationInfo()`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> rs.printSecondaryReplicationInfo();
-> ```
-> ```javascript
-> rs.printSecondaryReplicationInfo();
-> ```
->
-> **Explanation:** Displays replication time offsets between primary and secondary members.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Oplog (Operations Log)](oplog.md) — The log replicated.
 - [Read Preference](../level_08/read_preference.md) — The query routing hazard.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Replication Lag is the delay in applying write logs from primary to secondaries.
 - Caused by disk bottlenecks, network latency, or high write loads.
 - Creates stale data reads when queries are routed to secondaries.

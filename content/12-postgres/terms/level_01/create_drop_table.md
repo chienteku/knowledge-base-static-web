@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DDL Statement**
+
+**SQL Command / Clause** (Table DDL Commands): `CREATE TABLE` and `DROP TABLE` define or remove relational table structures, column definitions, and integrity constraints.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DDL** (Standard commands. Interacts with the system catalog to write schema updates to internal tables like `pg_class`).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Inside an isolated database, you need to set up individual structures to hold your data records (like profiles, invoices, or comments). 
@@ -71,7 +72,7 @@ DROP TABLE IF EXISTS employees;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Accidentally dropping a table containing critical data
 
@@ -122,69 +123,94 @@ CREATE TABLE users ( id INT PRIMARY KEY ); -- Fails on second deployment run
 CREATE TABLE IF NOT EXISTS users ( id INT PRIMARY KEY ); -- Safe idempotent creation
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Table Blueprint Lifecycle
+### Exercise 1: Creating Tables with Constraints and Identity Primary Keys
 
-**Problem:** You are building a blog database. Write the SQL DDL statements to:
-1.  Safely drop a table named `comments` if it already exists.
-2.  Create the `comments` table with three columns: `id` (integer primary key), `author_name` (text, cannot be empty), and `body_text` (text).
+**Scenario:**
+Create a `users` table with identity primary key `id`, unique `email`, and `created_at` default timestamp.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE TABLE users (...)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> DROP TABLE IF EXISTS comments;
-> 
-> CREATE TABLE comments (
->   id INTEGER PRIMARY KEY,
->   author_name VARCHAR(100) NOT NULL,
->   body_text TEXT
+> CREATE TABLE users (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   username TEXT NOT NULL,
+>   email TEXT NOT NULL CONSTRAINT uq_users_email UNIQUE,
+>   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 > );
 > ```
-> - Execute the safe drop operation first to clean any leftovers.
-> - Declare columns with their matching type mappings and constraint rules.
+>
+> #### Technical Explanation
+>
+> 1. `GENERATED ALWAYS AS IDENTITY` creates an auto-incrementing integer primary key compliant with SQL standards.
+> 2. `CONSTRAINT uq_users_email UNIQUE` enforces unique email addresses across all rows.
+> 3. `TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP` records row creation times in UTC.
+
+---
+
+### Exercise 2: Creating Tables with Foreign Key Constraints
+
+**Scenario:**
+Create an `orders` table referencing `users(id)` with explicit foreign key constraint naming.
+
+**Requirements:**
+1. Include `CONSTRAINT fk_orders_user_id FOREIGN KEY (user_id) REFERENCES users(id)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE orders (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   user_id INTEGER NOT NULL,
+>   total_cents INTEGER NOT NULL CHECK (total_cents >= 0),
+>   order_date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+>   CONSTRAINT fk_orders_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Foreign key constraints enforce referential integrity between tables.
+> 2. `ON DELETE CASCADE` automatically removes child order records if the parent user row is deleted.
+> 3. Explicit constraint names simplify debugging and schema migration management.
+
+---
+
+### Exercise 3: Dropping Tables with Cascade Dependencies
+
+**Scenario:**
+Drop table `users` and all dependent tables (such as `orders`) using `CASCADE`.
+
+**Requirements:**
+1. Execute `DROP TABLE IF EXISTS users CASCADE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> DROP TABLE IF EXISTS users CASCADE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DROP TABLE` removes table structures and all contained data rows.
+> 2. `CASCADE` automatically drops foreign key constraints and dependent objects in child tables.
+> 3. Use caution when dropping tables in production.
 
 ---
 
 
 
-### Exercise 2: Creating Table with Primary Key and Default Timestamp
-
-**Problem:** Create table `logs` with auto-incrementing `id`, string `message`, and `created_at` defaulting to `NOW()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TABLE IF NOT EXISTS logs ( id SERIAL PRIMARY KEY, message TEXT NOT NULL, created_at TIMESTAMPTZ DEFAULT NOW() );
-> ```
-> ```sql
-> CREATE TABLE IF NOT EXISTS logs (
->   id SERIAL PRIMARY KEY,
->   message TEXT NOT NULL,
->   created_at TIMESTAMPTZ DEFAULT NOW()
-> );
-> ```
->
-> **Explanation:** `CREATE TABLE IF NOT EXISTS` defines primary key constraints and column defaults safely.
-
----
-
-### Exercise 3: Dropping Table Safely
-
-**Problem:** Drop table `temp_records` if it exists.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DROP TABLE IF EXISTS temp_records;
-> ```
-> ```sql
-> DROP TABLE IF EXISTS temp_records;
-> ```
->
-> **Explanation:** `DROP TABLE IF EXISTS` avoids syntax errors if target tables do not exist.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Table (Relation)](table.md) — The resulting storage structure.
 - [`CREATE DATABASE` / `DROP DATABASE`](create_drop_database.md) — Managing the parent database containers.
 - [SQL (Structured Query Language)](sql.md) — Related concept: SQL (Structured Query Language).
@@ -193,7 +219,7 @@ CREATE TABLE IF NOT EXISTS users ( id INT PRIMARY KEY ); -- Safe idempotent crea
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `CREATE TABLE` defines columns, data types, and validation rules for new tables.
 - `DROP TABLE` permanently destroys the table structure and all stored rows of data.
 - Dropping tables is blocked by the engine if other tables depend on them (foreign keys).

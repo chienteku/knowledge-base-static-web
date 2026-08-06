@@ -183,7 +183,7 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Frequency Trading Order Book Matching Engine (`Price-Time Priority`)
 
-**Problem:** In an order book for a high-frequency financial exchange, limit orders are prioritized according to **Price-Time Priority**:
+**Scenario:** In an order book for a high-frequency financial exchange, limit orders are prioritized according to **Price-Time Priority**:
 1. For **Buy Orders (Bids)**: Orders with higher prices take precedence (descending price order). If prices are identical, orders placed earlier (smaller nanosecond timestamp) take precedence. If timestamps match, the order with the smaller unique sequence ID takes precedence.
 2. For **Sell Orders (Asks)**: Orders with lower prices take precedence (ascending price order). If prices match, earlier nanosecond timestamps take precedence, followed by smaller sequence IDs.
 
@@ -367,7 +367,7 @@ Implement `Ord`, `PartialOrd`, `Eq`, and `PartialEq` for `LimitOrder` such that 
 
 ### Exercise 2: Multiversion Microservice Semantic Versioning & Cluster Router
 
-**Problem:** Microservice capabilities in a distributed cloud gateway are selected based on Semantic Versioning precedence (SemVer 2.0.0):
+**Scenario:** Microservice capabilities in a distributed cloud gateway are selected based on Semantic Versioning precedence (SemVer 2.0.0):
 1. Version precedence is checked in order: `major`, `minor`, `patch`.
 2. Pre-release tags have *lower precedence* than normal releases (`1.0.0-alpha < 1.0.0-beta < 1.0.0`). If a version lacks a pre-release tag (`None`), it is considered a full release and takes precedence over any `Some(prerelease)`.
 3. Build metadata (e.g. `+build20260731`) is explicitly ignored during ordering precedence comparison according to the SemVer specification.
@@ -547,7 +547,7 @@ Implement custom `Ord`, `PartialOrd`, `Eq`, and `PartialEq` for a custom `SemVer
 
 ### Exercise 3: Real-Time IoT Telemetry Stream Processing & Quantile Sliding Window (`PartialOrd` Fallback vs `total_cmp` Ord Wrappers)
 
-**Problem:** In high-throughput industrial IoT monitoring, sensor streams return floating-point metrics (`f64` latency in milliseconds). Because `f64` values can contain `NaN` (Not-a-Number), standard floating-point types in Rust only implement `PartialOrd`, preventing direct usage in `Vec::sort()` or ordered tree collections.
+**Scenario:** In high-throughput industrial IoT monitoring, sensor streams return floating-point metrics (`f64` latency in milliseconds). Because `f64` values can contain `NaN` (Not-a-Number), standard floating-point types in Rust only implement `PartialOrd`, preventing direct usage in `Vec::sort()` or ordered tree collections.
 
 Design a wrapper type `OrderedMetric` around `f64` that provides strict `Ord` and `Eq` implementation using IEEE-754 total ordering (`f64::total_cmp`). Implement a generic stream trait `StreamProcessor<T>` and a bounded sliding window `QuantileWindow` struct that ingests raw telemetry samples, filters out `NaN` values by returning a custom `MetricError`, keeps the internal buffer sorted, and computes specified percentiles (`p50`, `p90`, `p99`). Write unit tests validating `NaN` error handling, IEEE total ordering (`-0.0 < +0.0`), sliding-window capacity eviction, percentile calculation, and assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 

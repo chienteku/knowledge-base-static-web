@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture**
+
+**Data Fetching & Caching** (Native Web Fetch API): The native Web Fetch API provides promise-based HTTP network request functionality in modern JavaScript environments.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Available natively inside modern browser runtime engines and standard Node.js v18+ server environments).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In early JavaScript development, making network requests to APIs was complex. Developers had to use the verbose `XMLHttpRequest` API or load heavy third-party wrapper libraries like jQuery or Axios to handle async transactions. 
@@ -81,7 +82,7 @@ export async function createPost(title: string, content: string) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming `fetch` throws an error on HTTP status failures (like 404 or 500)
 
@@ -156,82 +157,138 @@ fetch('/api/upload', {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Fetch and Error Check
+### Exercise 1: Executing Web Fetch Requests with Async/Await
 
-**Problem:** Complete the fetch utility below to request user details from `https://api.example.com/users/:id`, checking for HTTP errors before returning the JSON object:
+**Scenario:**
+Execute an imperative POST request using native Web `fetch()` inside a Client Component event handler.
 
-```typescript
-// utils/api.ts
-// Solution:
-export async function fetchUser(userId: string) {
-  const res = await fetch(`https://api.example.com/users/${userId}`);
-  
-  if (!res.ok) {
-    throw new Error(`Failed to fetch user metadata: ${res.status}`);
+**Requirements:**
+1. Execute `await fetch(url, { method: "POST", body: ... })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { useState } from "react";
+
+export default function PostForm() {
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: "Hello World" })
+      });
+      const json = await res.json();
+      alert(`Response: ${json.status}`);
+    } finally {
+      setLoading(false);
+    }
   }
-  
-  return res.json();
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <button disabled={loading} type="submit">
+        {loading ? "Sending..." : "Submit Message"}
+      </button>
+    </form>
+  );
 }
 ```
 
-> [!check]- Answer
-> - Check the value of the `res.ok` boolean property and throw a new `Error` containing `res.status` if it is false.
+> #### Technical Explanation
+>
+> 1. Native Web `fetch()` provides standard HTTP client capabilities inside browser Client Components.
+> 2. Requires setting `Content-Type: application/json` headers when sending JSON body payloads.
+> 3. Does NOT hook into Next.js server Data Cache when executed in the browser.
 
 ---
 
-### Exercise 2: AbortController Timeout Pattern
+### Exercise 2: Parsing Response Types (JSON vs Blob vs Text)
 
-**Problem:** Write `fetch()` call using `AbortController` signal to abort requests taking longer than 5000ms.
+**Scenario:**
+Handle non-JSON responses (e.g. image Blob or CSV text) using native `fetch()` response methods.
 
-**Expected output:**
+**Requirements:**
+1. Call `res.blob()` or `res.text()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> const controller = new AbortController(); const id = setTimeout(() => controller.abort(), 5000); const res = await fetch(url, { signal: controller.signal }); clearTimeout(id);
-> ```
-> - `AbortController` cancels pending fetch HTTP requests.
-> 
-> ```typescript
-> const controller = new AbortController();
-> const timeoutId = setTimeout(() => controller.abort(), 5000);
-> 
-> try {
->   const res = await fetch(url, { signal: controller.signal });
->   clearTimeout(timeoutId);
->   return await res.json();
-> } catch (err) {
->   if (err.name === 'AbortError') console.error('Fetch timed out');
+> async function downloadReport() {
+>   const res = await fetch("/api/export-csv");
+>   const csvText = await res.text(); // Parses raw text string instead of JSON
+>   console.log("CSV Content:", csvText);
 > }
 > ```
 
+> #### Technical Explanation
+>
+> 1. Web `fetch()` body streaming methods (`json()`, `text()`, `blob()`, `arrayBuffer()`) consume response stream buffers.
+> 2. A response stream can ONLY be consumed once; calling `json()` then `text()` throws a TypeError.
+> 3. Flexible data parsing interface for diverse HTTP payload formats.
+
 ---
 
-### Exercise 3: credentials: 'include' Flag
+### Exercise 3: Canceling In-Flight Fetch Requests with `AbortController`
 
-**Problem:** Which `fetch()` option parameter ensures cross-origin HTTP requests send HttpOnly session cookies?
+**Scenario:**
+Cancel an ongoing `fetch()` request if the user navigates away before completion.
 
-**Expected output:**
+**Requirements:**
+1. Pass `signal` to `fetch()` options.
+
 > [!check]- Answer
-> ```text
-> credentials: 'include'
-> ```
-> - `credentials: 'include'` forwards cookies on cross-origin requests.
-> 
+>
+> #### Implementation
+>
 > ```typescript
-> fetch('https://api.example.com', { credentials: 'include' });
-> ```
+> const controller = new AbortController();
+
+fetch("/api/long-running", { signal: controller.signal })
+  .then((res) => res.json())
+  .catch((err) => {
+    if (err.name === "AbortError") {
+      console.log("Request successfully cancelled!");
+    }
+  });
+
+// Cancel request when needed:
+controller.abort();
+```
+
+> #### Technical Explanation
+>
+> 1. `AbortController` provides a standard Web API mechanism to cancel HTTP network requests in-flight.
+> 2. Prevents memory leaks and unnecessary network socket usage on unmounted components.
+> 3. Standard Web network control pattern.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Server-side Fetching (Extended `fetch`)](fetch.md) — How Next.js builds on this native API.
 - [`cookies()` and `headers()` from `next/headers`](cookies_headers.md) — Accessing HTTP headers.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The native `fetch()` API performs asynchronous HTTP operations using Promises.
 - `fetch()` returns a `Response` object that must be parsed using `.json()` or `.text()`.
 - The `fetch` Promise only rejects on true network failures.

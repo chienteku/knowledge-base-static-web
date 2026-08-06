@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Performance / Memory / System**: The Allocator API is Rust's memory management abstraction layer. It defines how Rust requests, resizes, and frees dynamic heap memory blocks. By implementing the `GlobalAlloc` trait (`#[global_allocator]`), developers can swap out the default system allocator (e.g. system `malloc`/`free` or `HeapAlloc`) for high-performance multithreaded allocators like `jemalloc` or `mimalloc`, or implement custom arena/bump allocators for embedded `#![no_std]` environments.
+
+
+**Rust Memory Subsystem (custom heap allocator API)**: The Allocator API is Rust's memory management abstraction layer. It defines how Rust requests, resizes, and frees dynamic heap memory blocks. By implementing the `GlobalAlloc` trait (`#[global_allocator]`), developers can swap out the default system allocator (e.g. system `malloc`/`free` or `HeapAlloc`) for high-performance multithreaded allocators like `jemalloc` or `mimalloc`, or implement custom arena/bump allocators for embedded `#![no_std]` environments.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: Global allocators (`GlobalAlloc`) can be configured across all Rust environments (`std` and `#![no_std]`). In `#![no_std]` embedded microcontrollers, defining a custom `#[global_allocator]` is mandatory if heap collections (`Vec`, `Box`) are enabled via the `alloc` crate.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -131,7 +129,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Memory Alignment Violations in Custom `alloc` Implementations
 
@@ -184,11 +182,11 @@ unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Building a `#![no_std]` Fixed-Capacity Bump Arena Allocator
 
-**Problem:** In real-time embedded systems (such as a UAV flight controller or high-speed telemetry sampler operating in a `#![no_std]` environment), dynamic OS memory allocation via standard `malloc` is unavailable or prohibited due to non-deterministic latencies and memory fragmentation risks.
+**Scenario:** In real-time embedded systems (such as a UAV flight controller or high-speed telemetry sampler operating in a `#![no_std]` environment), dynamic OS memory allocation via standard `malloc` is unavailable or prohibited due to non-deterministic latencies and memory fragmentation risks.
 
 Implement a `#![no_std]` fixed-capacity Bump Arena Allocator (`BumpArena<const N: usize>`) that allocates contiguous bytes from an internal byte buffer. Your allocator must:
 1. Correctly align memory pointers according to requested `Layout::align()`.
@@ -197,6 +195,9 @@ Implement a `#![no_std]` fixed-capacity Bump Arena Allocator (`BumpArena<const N
 4. Include test assertions proving alignment, bounds checks, and arena resetting.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -328,7 +329,8 @@ Implement a `#![no_std]` fixed-capacity Bump Arena Allocator (`BumpArena<const N
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Alignment Calculation (`(addr + align - 1) & !(align - 1)`):** Memory allocations must start at an address divisible by `layout.align()`. Bitwise ANDing with the bit-inverted mask `!(align - 1)` rounds up the address to the next aligned multiple.
 > 2. **Atomic Bump Pointer (`compare_exchange_weak`):** By updating `self.offset` atomically, multiple tasks can allocate from the arena without coarse OS mutex locks.
 > 3. **$O(1)$ Deallocation via `reset()`:** Individual allocations do not have destructor calls in bump arenas; setting `offset = 0` reclaims all memory instantaneously.
@@ -337,7 +339,7 @@ Implement a `#![no_std]` fixed-capacity Bump Arena Allocator (`BumpArena<const N
 
 ### Exercise 2: High-Performance Fixed-Size Block Pool Allocator (Free-List)
 
-**Problem:** High-Frequency Trading (HFT) order routers and network packet parsers process fixed-size message structures (e.g., 64-byte packet headers). Dynamic general-purpose allocators introduce unacceptable latency variance (jitter) and heap fragmentation.
+**Scenario:** High-Frequency Trading (HFT) order routers and network packet parsers process fixed-size message structures (e.g., 64-byte packet headers). Dynamic general-purpose allocators introduce unacceptable latency variance (jitter) and heap fragmentation.
 
 Implement a fixed-size block pool allocator (`FixedBlockPool<const BLOCK_SIZE: usize, const CAPACITY: usize>`) that:
 1. Pre-allocates a contiguous storage array of size `BLOCK_SIZE * CAPACITY`.
@@ -346,6 +348,9 @@ Implement a fixed-size block pool allocator (`FixedBlockPool<const BLOCK_SIZE: u
 4. Includes unit tests demonstrating block allocation, exhaustion, and block index recycling.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use core::ptr::null_mut;
 > 
@@ -457,7 +462,8 @@ Implement a fixed-size block pool allocator (`FixedBlockPool<const BLOCK_SIZE: u
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Zero Heap Fragmentation:** All allocations take place inside a pre-allocated array (`storage`). No operating system `malloc` calls occur during steady-state processing.
 > 2. **Deterministic $O(1)$ Performance:** Pushing/popping from `free_stack` takes fixed CPU instruction cycles, eliminating unpredictable latency spikes.
 > 3. **Intrusive/Stack Index Management:** Storing block indices in `free_stack` avoids allocating dynamic tracking overhead while guaranteeing memory safety checks during deallocation.
@@ -466,7 +472,7 @@ Implement a fixed-size block pool allocator (`FixedBlockPool<const BLOCK_SIZE: u
 
 ### Exercise 3: Hard-Limited Global Tracking Allocator with Metrics Auditing
 
-**Problem:** Cloud edge microservices operating under container resource limits (e.g., Docker cgroups memory limits) need real-time memory telemetry and hard budget enforcement to avoid ungraceful OS `SIGKILL` termination.
+**Scenario:** Cloud edge microservices operating under container resource limits (e.g., Docker cgroups memory limits) need real-time memory telemetry and hard budget enforcement to avoid ungraceful OS `SIGKILL` termination.
 
 Implement a custom `GlobalAlloc` wrapper struct (`BudgetedAllocator`) that:
 1. Wraps `std::alloc::System` to delegate physical raw allocations.
@@ -475,6 +481,9 @@ Implement a custom `GlobalAlloc` wrapper struct (`BudgetedAllocator`) that:
 4. Includes unit tests verifying metric tracking and quota limit enforcement.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::alloc::{GlobalAlloc, Layout, System};
 > use std::sync::atomic::{AtomicUsize, Ordering};
@@ -587,14 +596,15 @@ Implement a custom `GlobalAlloc` wrapper struct (`BudgetedAllocator`) that:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`GlobalAlloc` Trait Contracts:** `alloc()` and `dealloc()` receive the exact `Layout` (size and alignment) requested. Returning `null_mut()` cleanly notifies heap consumers of allocation failure without panicking.
 > 2. **Avoiding Heap Recursion:** Custom allocators must NEVER invoke heap allocation primitives (such as `println!`, `Vec`, or `format!`) inside `alloc()` or `dealloc()`, as this triggers recursive infinite loops resulting in stack overflow crashes.
 > 3. **Atomic CAS Loop (`compare_exchange_weak`):** Updating `PEAK_BYTES` using Compare-And-Swap ensures accurate high-water mark metrics across multiple concurrent threads without raw lock contention.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Stack vs Heap](stack_vs_heap.md) — Heap memory region managed by the Allocator API.
@@ -604,7 +614,7 @@ Implement a custom `GlobalAlloc` wrapper struct (`BudgetedAllocator`) that:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - The Allocator API (`GlobalAlloc`, `#[global_allocator]`, `Layout`) defines how Rust allocates and frees heap memory.
 - You can swap the global memory allocator to `jemalloc` or `mimalloc` to eliminate OS allocator thread lock contention in web servers and databases.

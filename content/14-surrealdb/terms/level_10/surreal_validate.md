@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **CLI Commands & Tooling**
+
+
+**Performance / Operations (surreal validate CLI schema checker)**: - **CLI Commands & Tooling**
+
+
 
 ---
 
-## 3. Environment Context
-- **CI/CD Build Pipelines & Pre-commit Hooks** (Executed during automated build tests to validate migration scripts before deploying).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building CI/CD deployment pipelines, schema migrations and query script files (`.surql`) must be checked for syntax errors before being deployed to production databases. Running invalid SurrealQL syntax in production migration scripts causes deployment failures mid-pipeline.
@@ -69,7 +68,7 @@ jobs:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting `surreal validate` to Catch Runtime Database Constraint Violations
 
@@ -121,88 +120,88 @@ Use surreal validate for static syntax checks in CI/CD build steps
 
 
 
-### Mistake 4: Deploying Invalid Syntax `.surql` Migration Files to Production Without Pre-Validation
 
-**The mistake:** Running database migration scripts in production without running `surreal validate` first.
 
-**Why it's wrong:** Syntax errors in migration files abort deployment pipelines halfway through execution. Run `surreal validate script.surql` in CI/CD before applying migrations.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
--- Applying un-validated script directly to production
-$ surreal import prod.surql // ❌ Fails halfway on syntax error!
-```
+### Exercise 1: Validating Schema File Syntax via CLI
 
-*Fix:*
-```surrealql
-$ surreal validate script.surql # 1. Validate syntax in CI/CD
-$ surreal import script.surql # 2. Apply verified script
-```
+**Scenario:**
+A CI/CD pipeline validates SurrealQL schema script files (such as `schema.surql`) for syntax errors before deploying migrations.
 
-### Mistake 5: Confusing `surreal validate` (Syntax Check) with Dry-Run Execution
-
-**The mistake:** Expecting `surreal validate` to test database permissions or runtime data constraints.
-
-**Why it's wrong:** `surreal validate` checks SurrealQL static syntax correctness. It does NOT evaluate runtime permissions or database state constraints.
-
-*Incorrect:*
-```surrealql
--- Expecting validate to check runtime database records
-```
-
-*Fix:*
-```surrealql
-Use surreal validate for static syntax checks in CI/CD build steps
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Command Purpose
-What is the primary benefit of running `surreal validate` in CI/CD pipelines?
-a. It backs up database data.
-b. It catches SurrealQL syntax errors before deploying without requiring a running database server.
-c. It benchmarks query execution speed.
+**Requirements:**
+1. Formulate `surreal validate` CLI command for `schema.surql`.
 
 > [!check]- Answer
-> - `surreal validate` performs static syntax checking without needing a database connection. (b).
+>
+> #### Implementation
+>
+> ```bash
+> surreal validate schema.surql
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `surreal validate <file>` parses SurrealQL script files locally to verify syntax correctness.
+> 2. Returns exit code `0` on valid syntax; non-zero exit code on parser syntax errors.
+> 3. Catches syntax errors in pull requests before deploying schema changes.
+
+---
+
+### Exercise 2: Validating Multiple Schema Script Files
+
+**Scenario:**
+Validate all SurrealQL script files in directory `migrations/*.surql` in a single validation run.
+
+**Requirements:**
+1. Execute `surreal validate migrations/*.surql`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> surreal validate migrations/*.surql
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Validates multiple script files in batch mode.
+> 2. Ensures all versioned migration files pass syntax checks.
+> 3. Integrates with pre-commit git hooks and GitHub Actions.
+
+---
+
+### Exercise 3: Offline Local Syntax Checking
+
+**Scenario:**
+Explain why `surreal validate` can run locally in CI/CD without connecting to a running SurrealDB server instance.
+
+**Requirements:**
+1. Describe offline parser validation architecture.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Offline Validation Architecture:
+> 'surreal validate' uses SurrealDB's embedded Rust query parser locally to validate syntax trees without opening network connections to database servers.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Parses SurrealQL AST syntax trees offline locally in the CLI binary.
+> 2. Requires zero network connections, database credentials, or active server instances.
+> 3. Fast syntax validation for CI build pipelines.
 
 ---
 
 
 
-### Exercise 2: Validating SurrealQL File in CLI
 
-**Problem:** CLI command to validate syntax of `schema.surql` file.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> surreal validate schema.surql
-> ```
-> ```text
-> surreal validate schema.surql
-> ```
->
-> **Explanation:** `surreal validate file.surql` checks SurrealQL static syntax correctness.
-
----
-
-### Exercise 3: CI/CD Pre-Deployment Validation Step
-
-**Problem:** Why should `surreal validate` be included in CI/CD pipelines? (Catches syntax errors before executing production migrations).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Catches SurrealQL syntax errors before executing production database migrations
-> ```
-> ```text
-> Catches SurrealQL syntax errors before executing production database migrations
-> ```
->
-> **Explanation:** Static validation prevents partial migration failures caused by syntax typos.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — CLI binary tools.
 - [`surreal export` / `surreal import` (Backups)](export_import.md) — Export and import utilities.
@@ -211,7 +210,7 @@ c. It benchmarks query execution speed.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `surreal validate <file.surql>` checks SurrealQL files for syntax errors without connecting to a server.
 - Essential tool for pre-commit hooks and CI/CD automated test pipelines.
 - Ensures migration scripts and schema definitions contain valid syntax before production deployment.

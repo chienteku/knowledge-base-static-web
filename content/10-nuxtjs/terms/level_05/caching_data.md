@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Performance Optimization**
+
+**Data Fetching** (SSR & Client Cache Deduplication): Data caching in Nuxt 3 prevents duplicate HTTP network requests across SSR server rendering and client hydration via payload cache keys.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Only** (During SPA navigations inside browser memory).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Imagine a user starts on the Home page, clicks a link to the About page, and then clicks the "Back" button to return to the Home page. 
@@ -59,7 +60,7 @@ const { data } = await useFetch('/api/stats', {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on component-level state for cache invalidation
 **The mistake:** Assuming that because a component was destroyed (`unmounted`), its cached data is also destroyed.
@@ -116,73 +117,131 @@ const { data } = await useFetch(() => `/api/user?id=${id.value}`); // Dynamic fu
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Cache Keys
+### Exercise 1: Customizing Data Cache Keys in `useAsyncData()`
 
-**Problem:** You write `const { data } = await useAsyncData('user-123', fetchUser);`. You navigate away, and then a totally different component runs `const { data } = await useAsyncData('user-123', fetchAdmin)`. Which function is actually executed the second time?
+**Scenario:**
+Specify a custom unique cache key for `useAsyncData()` fetching user dashboard preferences.
 
-**Expected output:**
+**Requirements:**
+1. Pass unique string key `"user-dashboard-prefs"` as first argument.
+
 > [!check]- Answer
-> ```text
-> Neither! 
-> Because the key 'user-123' already exists in the cache, Nuxt immediately returns the data from the first fetch. `fetchAdmin` is never called. This is why unique keys are critical!
-> ```
-> - Nuxt searches the memory cache for any matching string key first before attempting to execute custom query callbacks.
-
----
-
-### Exercise 2: useFetch Deduplication & Key Caching
-
-**Problem:** Write `useFetch` call retrieving product list with custom cache key `'products-key'` and 60-second client cache.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> const { data: products } = await useFetch('/api/products', { key: 'products-key' });
-> ```
-> - `key` option specifies explicit cache key for `useFetch`.
-> 
-> ```typescript
-> const { data: products, refresh } = await useFetch('/api/products', {
->   key: 'products-list-key'
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const { data: prefs } = await useAsyncData("user-dashboard-prefs", () => {
+>   return $fetch("/api/user/preferences");
 > });
-> ```
+> </script>
+
+<template>
+  <div v-if="prefs">
+    <p>Theme Preference: {{ prefs.theme }}</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useAsyncData()` uses the provided string key to store and retrieve data from `NuxtPayload`.
+> 2. Prevents duplicate network fetching during client hydration by re-using payload data under `"user-dashboard-prefs"`.
+> 3. Guarantees consistent data caching across server and client renders.
 
 ---
 
-### Exercise 3: getCachedData Option Function
+### Exercise 2: Clearing Data Caches via `clearNuxtData()`
 
-**Problem:** Which `useAsyncData` option function allows defining custom cache hit validation logic?
+**Scenario:**
+Invalidate and re-fetch cached user data when a user updates their profile using `clearNuxtData()`.
 
-**Expected output:**
+**Requirements:**
+1. Call `clearNuxtData("user-dashboard-prefs")` upon profile update.
+
 > [!check]- Answer
-> ```text
-> getCachedData: (key) => nuxtApp.payload.data[key] || nuxtApp.static.data[key]
-> ```
-> - `getCachedData` customizes cache retrieval behavior.
-> 
-> ```typescript
-> const { data } = await useAsyncData('key', () => fetcher(), {
->   getCachedData(key) {
->     const data = nuxtApp.payload.data[key];
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> async function handleRefresh() {
+>   // Invalidates payload cache for the specified key!
+>   clearNuxtData("user-dashboard-prefs");
+>   // Force re-fetch fresh data from the server
+>   await refreshNuxtData("user-dashboard-prefs");
+> }
+> </script>
+
+<template>
+  <button @click="handleRefresh">Refresh Preferences</button>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `clearNuxtData(key)` deletes cached data entries from Nuxt's payload cache repository.
+> 2. `refreshNuxtData(key)` triggers active `useAsyncData()` or `useFetch()` listeners to re-execute network calls.
+> 3. Standard cache invalidation pattern.
+
+---
+
+### Exercise 3: Setting Cache Time-To-Live (TTL) with Custom Deduplication
+
+**Scenario:**
+Configure data caching options to deduplicate duplicate component data requests within a 5-second window.
+
+**Requirements:**
+1. Set `dedupe: "defer"` or configure `getCachedData`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const { data: stats } = await useFetch("/api/stats", {
+>   key: "live-stats",
+>   getCachedData: (key, nuxtApp) => {
+>     const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
 >     if (!data) return;
->     return data;
+>     // Re-fetch if cached entry is older than 5000ms
+>     const isExpired = Date.now() - data.fetchedAt > 5000;
+>     return isExpired ? undefined : data;
 >   }
 > });
-> ```
+> </script>
+
+<template>
+  <div>
+    <p>Stats: {{ stats }}</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `getCachedData` allows defining custom cache expiration logic based on timestamps or cache invalidation conditions.
+> 2. Returning `undefined` forces Nuxt to issue a fresh HTTP network request.
+> 3. Granular cache freshness control mechanism.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Fetching Errors & `clearNuxtData`](fetching_errors.md) — How to manually delete items from this cache.
 - [`useAsyncData`](use_async_data.md) — Related concept: `useAsyncData`.
 - [`useFetch`](use_fetch.md) — Related concept: `useFetch`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Nuxt caches data fetching results in memory using a unique string key.
 - `useFetch` automatically uses its URL as the key.
 - Caching makes SPA navigation instant but can result in stale data.

@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Tooling**: The `quote` crate is the code-generation pillar of Rust metaprogramming. It provides the `quote!` macro (and `quote_spanned!`), allowing developers to write quasi-quoted Rust code templates that interpolate AST variables (`#var`, `#(#repeated)*`) directly into a strongly-typed `TokenStream`.
+
+
+**Rust Ecosystem Library (tokens-to-TokenStream templating crate)**: The `quote` crate is the code-generation pillar of Rust metaprogramming. It provides the `quote!` macro (and `quote_spanned!`), allowing developers to write quasi-quoted Rust code templates that interpolate AST variables (`#var`, `#(#repeated)*`) directly into a strongly-typed `TokenStream`.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Cargo Dependency (Host Compile-Time)**: `quote` is used as a `[dependencies]` entry in procedural macro crates or code generator tooling. It runs on the build host during compilation to synthesize Rust source code.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -122,7 +120,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Mismatched Vector Lengths in Multi-Variable Repetitions
 
@@ -208,15 +206,18 @@ let check = quote_spanned! { field_span =>
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Embedded Peripheral Bitfield Accessor Generator
 
-**Problem:** In embedded systems drivers (such as memory-mapped peripheral hardware registers on ARM Cortex-M or RISC-V microcontrollers), registers are represented as numeric primitive integers (e.g., `u32`). Specific bit slices govern peripheral states like baud rate dividers, hardware enable flags, or interrupt masks. Writing bitwise shift (`>>`, `<<`) and bitmask (`&`) boilerplate for every bitfield is tedious and error-prone.
+**Scenario:** In embedded systems drivers (such as memory-mapped peripheral hardware registers on ARM Cortex-M or RISC-V microcontrollers), registers are represented as numeric primitive integers (e.g., `u32`). Specific bit slices govern peripheral states like baud rate dividers, hardware enable flags, or interrupt masks. Writing bitwise shift (`>>`, `<<`) and bitmask (`&`) boilerplate for every bitfield is tedious and error-prone.
 
 Write a function `generate_register_accessors` that accepts a struct identifier and a slice of bitfield specifications `(name, mask, shift)`. Using `quote!` repetition syntax `#(#var)*` and `quote::format_ident!`, generate an `impl` block containing getter (`get_<field>`) and setter (`set_<field>`) methods for each bitfield. Write a complete test function with assertions verifying output validity.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use proc_macro2::{Span, TokenStream};
 > use quote::{format_ident, quote};
@@ -302,7 +303,8 @@ Write a function `generate_register_accessors` that accepts a struct identifier 
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Parallel Vector Repetition (`#(#getters ... #setters ... #shifts ... #masks)*`):** `quote!` iterates through multiple vectors in lockstep within a single `#(...)*` repetition block. All parallel vectors (`getters`, `setters`, `masks`, `shifts`) must have identical lengths, otherwise `quote!` will panic at macro expansion time.
 > 2. **Identifier Synthesis with `format_ident!`:** The `format_ident!` macro from the `quote` crate enables dynamic identifier construction (e.g., prefixing `"set_"` to `"baud_rate"` to produce `set_baud_rate`) while retaining proper `Span` context.
 > 3. **Numeric Literal Interpolation:** Primitive integers like `u32` automatically implement `quote::ToTokens`, allowing numeric expressions (`#shifts`, `#masks`) to be seamlessly quasi-quoted into generated expressions.
@@ -312,11 +314,14 @@ Write a function `generate_register_accessors` that accepts a struct identifier 
 
 ### Exercise 2: Implementing `ToTokens` for Microservice Telemetry Endpoint Config
 
-**Problem:** In distributed microservices, API route configurations (path, rate limit RPS, authentication requirement) are parsed from schema definitions into custom AST structs during macro expansion. To emit a `pub static REGISTRY: EndpointConfig = #endpoint;` item in generated Rust code using `quote!`, the custom `TelemetryEndpoint` AST struct must implement the `quote::ToTokens` trait.
+**Scenario:** In distributed microservices, API route configurations (path, rate limit RPS, authentication requirement) are parsed from schema definitions into custom AST structs during macro expansion. To emit a `pub static REGISTRY: EndpointConfig = #endpoint;` item in generated Rust code using `quote!`, the custom `TelemetryEndpoint` AST struct must implement the `quote::ToTokens` trait.
 
 Implement `ToTokens` for `TelemetryEndpoint` so that interpolating `#endpoint` produces a Rust struct literal `EndpointConfig { path: "...", rate_limit_rps: ..., requires_auth: ... }`. Create a static registry code generator function and write unit tests asserting token stream correctness.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use proc_macro2::TokenStream;
 > use quote::{quote, ToTokens, TokenStreamExt};
@@ -388,7 +393,8 @@ Implement `ToTokens` for `TelemetryEndpoint` so that interpolating `#endpoint` p
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **The `ToTokens` Trait Contract:** `quote!` relies on `ToTokens::to_tokens(&self, tokens: &mut TokenStream)` to convert any interpolated `#variable` into tokens. Standard types (`String`, `u32`, `bool`, `syn::Ident`) implement `ToTokens`, but user-defined AST structs require explicit implementation.
 > 2. **Token Stream Extension (`tokens.extend(...)`):** Inside `to_tokens`, quasi-quoted tokens created via `quote! { EndpointConfig { ... } }` are appended to the caller's target `&mut TokenStream` using `tokens.extend()`.
 > 3. **Compositional Quasi-Quoting:** By implementing `ToTokens` on `TelemetryEndpoint`, higher-level code generators can cleanly write `#endpoint` without manually decomposing fields every time an endpoint is generated.
@@ -397,11 +403,14 @@ Implement `ToTokens` for `TelemetryEndpoint` so that interpolating `#endpoint` p
 
 ### Exercise 3: Precise Diagnostic Squiggles using `quote_spanned!` in Deterministic Safety Macros
 
-**Problem:** In safety-critical embedded software (such as motor control loops or aerospace avionics), floating-point arithmetic (`f32`, `f64`) is prohibited due to non-deterministic hardware timing and potential floating-point exception handling latency. When developing a procedural macro `#[derive(DeterministicState)]`, if a user includes a floating-point field in their struct, the macro must generate a `compile_error!` targeted **directly to the offending field line** rather than squiggly-underlining the entire `#[derive(...)]` attribute on the struct.
+**Scenario:** In safety-critical embedded software (such as motor control loops or aerospace avionics), floating-point arithmetic (`f32`, `f64`) is prohibited due to non-deterministic hardware timing and potential floating-point exception handling latency. When developing a procedural macro `#[derive(DeterministicState)]`, if a user includes a floating-point field in their struct, the macro must generate a `compile_error!` targeted **directly to the offending field line** rather than squiggly-underlining the entire `#[derive(...)]` attribute on the struct.
 
 Implement `generate_deterministic_state_impl` using `syn::spanned::Spanned` and `quote_spanned!`. If any struct field is of type `f32` or `f64`, emit a `compile_error!` bound to that field's exact `Span`. Otherwise, generate an `impl` block containing a `pub fn field_count() -> usize` method. Write unit tests confirming correct error stream generation and valid struct expansion.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use proc_macro2::TokenStream;
 > use quote::{quote, quote_spanned};
@@ -495,14 +504,15 @@ Implement `generate_deterministic_state_impl` using `syn::spanned::Spanned` and 
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Diagnostic Precision with `quote_spanned!`:** Standard `quote!` assigns `Span::call_site()` to synthesized tokens. If a macro returns `compile_error!`, IDEs and `rustc` will highlight the macro invocation site (e.g. `#[derive(...)]`). By passing `field.span()` to `quote_spanned! { field_span => ... }`, compiler errors directly underline the specific problematic field definition line (`raw_voltage: f32`).
 > 2. **`syn::spanned::Spanned` Trait:** Bringing `syn::spanned::Spanned` into scope grants the `.span()` method on all `syn` AST nodes (`Field`, `Ident`, `Type`, `DeriveInput`), allowing macro authors to extract precise source coordinate metadata.
 > 3. **Early Exit Error Patterns:** In procedural macros, returning early with `quote_spanned!` containing `compile_error!(...)` is the standard, safe way to report compile-time domain validation failures without panicking the compiler driver process.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`syn` Crate](syn_crate.md) — The complementary parsing library producing AST inputs for `quote!`.
@@ -513,7 +523,7 @@ Implement `generate_deterministic_state_impl` using `syn::spanned::Spanned` and 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - The `quote` crate provides `quote!` for generating `TokenStream` instances via quasi-quoted template code.
 - Variables are interpolated using single-item `#var` syntax or repeated `#(#iter)*` collection syntax.

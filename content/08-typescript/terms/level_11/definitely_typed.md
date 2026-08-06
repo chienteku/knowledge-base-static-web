@@ -12,152 +12,177 @@
 ---
 
 ## 2. Term Category
-TypeScript Open Source Ecosystem
+
+**TypeScript Ecosystem & Tooling** (Community Type Repository): DefinitelyTyped (`@types/*`) is a community-maintained repository hosting high-quality TypeScript declaration packages.
 
 ---
 
-## 3. Core Definition
-When you `npm install` a library written purely in JavaScript (like `lodash` or `express`), the TypeScript Compiler throws errors because it doesn't know the shapes of the functions in that library.
+## 3. Explanation
 
-**DefinitelyTyped** solves this. It is a giant repository maintained by the community where developers have manually written the type definitions for thousands of JavaScript libraries. These definitions are published to NPM under the `@types/` organization.
 
----
-
-## 4. Key Characteristics / Rules
-- **Installation:** You install the types using `npm install --save-dev @types/library-name`.
-- **Automatic Resolution:** Once installed, TypeScript automatically finds the `@types` folder in your `node_modules` and applies the types, without you needing to change any code.
 
 ---
 
-## 5. Typical Usage / Common Patterns
+## 4. Common Mistakes & Pitfalls
 
-### Adding Types to a Vanilla JS Library
-If you install the popular `uuid` library:
+### Mistake 1: Installing `@types/*` Packages as Runtime Dependencies
+
+```json
+{
+  "dependencies": {
+    "express": "^4.18.2",
+    "@types/express": "^4.17.21"
+  }
+}
+```
+
+**Why it's wrong:** `@types/*` packages contain compile-time type declarations only; including them in `dependencies` bloats production runtime dependencies.
+
+**Golden Rule:** Always install `@types/*` packages under `devDependencies`.
+
+---
+
+### Mistake 2: Version Mismatches Between Runtime Package and `@types/*`
+
+```json
+{
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "^3.10.0"
+  }
+}
+```
+
+**Why it's wrong:** Installing mismatched major versions between library packages and type definition packages causes missing API method types or compilation errors.
+
+**Golden Rule:** Align `@types/*` package major and minor versions with the installed runtime library version.
+
+---
+
+### Mistake 3: Installing Duplicate `@types` for Libraries Containing Built-in Types
+
 ```bash
-npm install uuid
-```
-TypeScript will throw an error when you try to import it: `Could not find a declaration file for module 'uuid'`.
-
-To fix this, you install the DefinitelyTyped package:
-```bash
-npm install -D @types/uuid
-```
-Now, TypeScript instantly knows the type signatures for all functions inside the `uuid` library.
-
----
-
-## 6. Common Pitfalls
-- **Installing Types for TypeScript Libraries:** If a library is written in TypeScript natively, it will ship with its own `.d.ts` files included. You do not need to (and cannot) install `@types/` for it. Check the NPM page—if it has a blue `DT` badge, you need `@types`. If it has a blue `TS` badge, it provides its own types.
-
----
-
-## 5. Common Mistakes & Pitfalls
-
-
-
-### Mistake 1: Installing `@types/pkg` for Libraries that Already Ship Built-In Types
-
-**The mistake:** Running `npm install @types/axios` when Axios already includes native type definitions.
-
-**Why it's wrong:** Installing redundant `@types` packages for libraries with native types causes version mismatch conflicts and duplicate declaration errors.
-
-*Incorrect:*
-```typescript
-$ npm install @types/axios # ❌ Unnecessary: Axios includes native ts definitions
+# ❌ UNNECESSARY: Axios includes native .d.ts files!
+npm install --save-dev @types/axios
 ```
 
-*Fix:*
-```typescript
-$ npm install axios # Axio ships native types automatically!
-```
+**Why it's wrong:** Modern libraries (Axios, RxJS, Prisma) ship with native `.d.ts` declaration files built-in. Installing obsolete `@types` packages creates type declaration conflicts.
 
-### Mistake 2: Installing `@types/pkg` as `dependencies` instead of `devDependencies`
-
-**The mistake:** Running `npm install @types/node --save`.
-
-**Why it's wrong:** Type declarations are development compile-time artifacts. They should be saved in `devDependencies` (`-D`).
-
-*Incorrect:*
-```typescript
-$ npm install @types/node --save # ❌ Installed as production dependency
-```
-
-*Fix:*
-```typescript
-$ npm install @types/node -D # Correct: Saved in devDependencies
-```
-
-### Mistake 3: Ignoring `@types` Version Alignment with Installed Library Versions
-
-**The mistake:** Installing `@types/lodash@4` while using runtime `lodash@3`.
-
-**Why it's wrong:** Type declaration packages on `@types` match major library versions. Mismatched versions lead to compile-time signature errors.
-
-*Incorrect:*
-```typescript
-$ npm install lodash@3 @types/lodash@4 # ❌ Version mismatch!
-```
-
-*Fix:*
-```typescript
-$ npm install lodash@4 @types/lodash@4 # Matching major versions
-```
-
-## 6. Practice Exercises
+**Golden Rule:** Check if a library includes native type definitions before installing `@types/*`.
 
 
 
-### Exercise 1: DefinitelyTyped Repository Namespace Format
 
-**Problem:** What npm organization scope prefix hosts community DefinitelyTyped definitions?
 
-**Expected output:**
+## 5. Practice Exercises
+
+### Exercise 1: Installing Community Type Definitions (`@types/*`)
+
+**Scenario:**
+Install type definitions for `lodash` and `express` using npm.
+
+**Requirements:**
+1. Run `npm install --save-dev @types/lodash @types/express`.
+
 > [!check]- Answer
-> ```text
-> @types/
-> ```
-> ```typescript
-> console.log("@types/");
-> ```
 >
-> **Explanation:** DefinitelyTyped packages are published under the `@types/` npm scope.
+> #### Implementation
+>
+> ```bash
+> # Install runtime packages
+> npm install lodash express
+> 
+> # Install matching DefinitelyTyped type definition packages as devDependencies
+> npm install --save-dev @types/lodash @types/express
+> ```
+
+> #### Technical Explanation
+>
+> 1. DefinitelyTyped is a community-maintained GitHub repository hosting TypeScript type declarations for untyped npm packages.
+> 2. Published to npm under the `@types` scope (e.g. `@types/lodash`).
+> 3. Should be installed as `devDependencies` since type declarations are required only during development compilation.
 
 ---
 
-### Exercise 2: Inspecting `types` Field in `package.json`
+### Exercise 2: Managing `@types` Version Alignment
 
-**Problem:** Which field in a library `package.json` points to built-in type declarations?
+**Scenario:**
+Explain why `@types/package` major and minor version numbers must match the installed runtime `package` version.
 
-**Expected output:**
+**Requirements:**
+1. Detail version matching rules between runtime dependencies and `@types/*`.
+
 > [!check]- Answer
-> ```text
-> types (or typings)
-> ```
-> ```typescript
-> console.log("types (or typings)");
-> ```
 >
-> **Explanation:** The `types` field points module resolvers to `.d.ts` declaration entry files.
+> #### Implementation
+>
+> ```json
+> {
+>   "dependencies": {
+>     "express": "^4.18.2"
+>   },
+>   "devDependencies": {
+>     "@types/express": "^4.17.21"
+>   }
+> }
+> ```
+
+> #### Technical Explanation
+>
+> 1. `@types` packages follow the semantic versioning of the underlying JavaScript library.
+> 2. Installing mismatched major versions (e.g. `express@5` with `@types/express@4`) results in missing API method types or compilation errors.
+> 3. Always align `@types` major versions with runtime dependency versions.
 
 ---
 
-### Exercise 3: Type Declaration Search Path
+### Exercise 3: Auditing `typeRoots` and `types` in `tsconfig.json`
 
-**Problem:** Where does TS look for types when importing `import _ from 'lodash'`? (`node_modules/@types/lodash` or `node_modules/lodash/package.json`).
+**Scenario:**
+Configure `compilerOptions.types` in `tsconfig.json` to include only specific global types (`node`, `jest`).
 
-**Expected output:**
+**Requirements:**
+1. Set `"types": ["node", "jest"]` in `tsconfig.json`.
+
 > [!check]- Answer
-> ```text
-> node_modules/@types/lodash or native package.json types field
-> ```
-> ```typescript
-> console.log("node_modules/@types/lodash or native package.json types field");
-> ```
 >
-> **Explanation:** TS checks package `types` field first, falling back to `@types/pkg`.
+> #### Implementation
+>
+> ```json
+> {
+>   "compilerOptions": {
+>     "types": ["node", "jest"]
+>   }
+> }
+> ```
 
-## 7. Related Terms
+> #### Technical Explanation
+>
+> 1. By default, `tsc` includes all packages found under `node_modules/@types`.
+> 2. Configuring `"types": ["node", "jest"]` restricts global type inclusion to explicitly listed packages.
+> 3. Prevents namespace collisions between competing global type packages (e.g. Jest vs Mocha `test` functions).
+
+---
+
+
+
+
+
+---
+
+
+
+## 6. Related Terms
 - [`tsconfig.json`](../level_01/tsconfig.md) — The `typeRoots` and `types` compiler options control how TypeScript searches for these `@types` packages.
 
 ---
 
+---
+
+## 7. Key Takeaways
+
+- DefinitelyTyped (`@types/*`) provides community-maintained type definitions for untyped npm packages.
+- Always install `@types/*` packages as `devDependencies`.
+- Align `@types/*` major versions with runtime dependency versions.
+- Check if packages include native `.d.ts` definitions before installing `@types/*`.

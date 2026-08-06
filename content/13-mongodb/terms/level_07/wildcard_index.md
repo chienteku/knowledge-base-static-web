@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Index / Performance** (Dynamic Attribute Subdocument Indexing): A Wildcard Index ($**) indexes arbitrary, unpredictable key-value paths inside embedded subdocuments or arrays.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Introduced in MongoDB 4.2. Automatically monitors updates inside the target path, writing index keys for newly added nested fields at runtime).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `attribute_pattern.md`, e-commerce catalogs carry highly variable, sparse specifications (e.g. a shirt has size/color; a laptop has CPU/RAM). 
@@ -96,7 +97,7 @@ db.products.find({ "specs.color": "red" });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Building a collection-wide wildcard index ({ "$**": 1 }) on a database collection that experiences high-volume write traffic
 
@@ -109,6 +110,8 @@ This creates a massive index file on disk, consumes all available server RAM cac
 **Fix: Only build wildcard indexes on specific, nested subdocument namespaces (e.g. `{ "specs.$**": 1 }`) where fields are highly variable and write volumes are moderate.**
 
 ---
+
+
 
 
 
@@ -128,6 +131,8 @@ db.products.createIndex({ "$**": 1 }); // ❌ Heavy write overhead across all fi
 Target specific dynamic sub-document paths: db.products.createIndex({ "attributes.$**": 1 });
 ```
 
+
+
 ### Mistake 3: Expecting Wildcard Indexes to Support Compound ESR Sort Operations
 
 **The mistake:** Expecting Wildcard Index `{ "$**": 1 }` to cover compound sorts `.sort({ category: 1, price: -1 })`.
@@ -146,97 +151,100 @@ Use explicit compound indexes for multi-field sort queries
 
 
 
-### Mistake 4: Creating Wildcard Indexes `"$**"` on All Fields in High-Throughput Write Collections
+## 5. Practice Exercises
 
-**The mistake:** Creating `db.products.createIndex({ "$**": 1 })` on a 50M document write-heavy collection.
+### Exercise 1: Indexing Dynamic Subdocument Properties with Wildcard Index
 
-**Why it's wrong:** Indexing `$**` indexes EVERY field key and value in every document, severely degrading write performance and consuming massive RAM.
+**Scenario:**
+Create a wildcard index on embedded subdocument `userAttributes.$**` in collection `users` to index all arbitrary key-value paths.
 
-*Incorrect:*
-```javascript
-db.products.createIndex({ "$**": 1 }); // ❌ Heavy write overhead across all fields!
-```
+**Requirements:**
+1. Execute `createIndex({ "userAttributes.$**": 1 })`.
 
-*Fix:*
-```javascript
-Target specific dynamic sub-document paths: db.products.createIndex({ "attributes.$**": 1 });
-```
-
-### Mistake 5: Expecting Wildcard Indexes to Support Compound ESR Sort Operations
-
-**The mistake:** Expecting Wildcard Index `{ "$**": 1 }` to cover compound sorts `.sort({ category: 1, price: -1 })`.
-
-**Why it's wrong:** Wildcard indexes index single field paths individually. They cannot satisfy compound multi-field sort orders.
-
-*Incorrect:*
-```javascript
-// Expecting wildcard index to cover multi-field compound sort
-```
-
-*Fix:*
-```javascript
-Use explicit compound indexes for multi-field sort queries
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Wildcard Index Construction
-
-**Problem:** You have a `sensors` collection. Each document contains a nested subdocument named `metrics` holding variable telemetry logs (e.g., `metrics.temp`, `metrics.voltage`).
-Write the MongoDB command to create a wildcard index on the `metrics` subdocument.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.sensors.createIndex({ "metrics.$**": 1 });
+> db.users.createIndex({ "userAttributes.$**": 1 });
 > ```
-> - The target namespace is the `metrics` field.
-> - Append the wildcard suffix `.$**` to the index key path string.
+>
+> #### Technical Explanation
+>
+> 1. Wildcard indexes (`$**`) automatically index all dynamic scalar fields inside embedded subdocuments.
+> 2. Eliminates creating hundreds of individual secondary indexes for arbitrary key-value properties.
+> 3. Accelerates queries on unpredictable user-defined attributes.
+
+---
+
+### Exercise 2: Querying Wildcard Indexed Subfields
+
+**Scenario:**
+Query collection `users` filtering by dynamic path `userAttributes.customColor: "Blue"`.
+
+**Requirements:**
+1. Filter `{ "userAttributes.customColor": "Blue" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   "userAttributes.customColor": "Blue"
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Queries targeting any subfield inside `userAttributes` utilize the `$**` wildcard index (`IXSCAN`).
+> 2. Evaluates equality and range queries on dynamic keys.
+> 3. Flexible schema indexing solution.
+
+---
+
+### Exercise 3: Restricting Wildcard Index Scope with `wildcardProjection`
+
+**Scenario:**
+Create a collection-wide wildcard index excluding sensitive fields `internalNotes` and `salary` from index key creation.
+
+**Requirements:**
+1. Use `$**` with `wildcardProjection`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.createIndex(
+>   { "$**": 1 },
+>   {
+>     wildcardProjection: {
+>       internalNotes: 0,
+>       salary: 0
+>     }
+>   }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `wildcardProjection` specifies field inclusion or exclusion rules for collection-wide wildcard indexes.
+> 2. Prevents indexing unneeded or large fields, conserving RAM cache.
+> 3. Bounds wildcard index memory growth.
 
 ---
 
 
 
-### Exercise 2: Creating Sub-Document Wildcard Index
-
-**Problem:** Create wildcard index on dynamic sub-document `customFields` path `"customFields.$**"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.products.createIndex({ "customFields.$**": 1 });
-> ```
-> ```javascript
-> db.products.createIndex({ "customFields.$**": 1 });
-> ```
->
-> **Explanation:** Wildcard index `"subdoc.$**"` indexes all dynamic scalar fields inside `customFields`.
-
----
-
-### Exercise 3: Wildcard Indexing Use Case
-
-**Problem:** Describe ideal use case for Wildcard Indexes (Arbitrary user-defined custom attributes or polymorphic dynamic fields).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Arbitrary user-defined custom attributes or dynamic key-value sub-documents
-> ```
-> ```text
-> Arbitrary user-defined custom attributes or dynamic key-value sub-documents
-> ```
->
-> **Explanation:** Wildcard indexes efficiently index arbitrary user-defined custom document attributes.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [The Attribute Pattern](../level_05/attribute_pattern.md) — The schema design alternative.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Wildcard indexes cover all fields nested inside a target path namespace.
 - Declared using the `$**` path suffix (e.g., `{ "specs.$**": 1 }`).
 - Eliminates the need for database migrations when adding new nested fields.

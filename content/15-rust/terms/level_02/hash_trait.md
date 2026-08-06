@@ -162,7 +162,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Symmetric Network Flow Table with Field Exclusions
 
-**Problem:** In network middleboxes, firewalls, and packet analyzers, packets belonging to the same connection must map to the exact same state table entry regardless of flow direction. For example, a packet from `192.168.1.10:443` to `10.0.0.1:52100` and a reply packet from `10.0.0.1:52100` to `192.168.1.10:443` must hash to the same bucket and evaluate equal (`PartialEq`). Additionally, transient per-packet framing data such as `vlan_tag` must be excluded from flow identity hashing.
+**Scenario:** In network middleboxes, firewalls, and packet analyzers, packets belonging to the same connection must map to the exact same state table entry regardless of flow direction. For example, a packet from `192.168.1.10:443` to `10.0.0.1:52100` and a reply packet from `10.0.0.1:52100` to `192.168.1.10:443` must hash to the same bucket and evaluate equal (`PartialEq`). Additionally, transient per-packet framing data such as `vlan_tag` must be excluded from flow identity hashing.
 
 Implement `PartialEq`, `Eq`, and `Hash` manually for `FlowKey` to achieve canonical endpoint ordering and selective field hashing.
 
@@ -284,7 +284,7 @@ Implement `PartialEq`, `Eq`, and `Hash` manually for `FlowKey` to achieve canoni
 
 ### Exercise 2: Quantized Financial Order Book Price Key
 
-**Problem:** In automated trading systems, price levels in an order book are aggregated in a `HashMap`. Primitive `f64` values cannot be directly used as map keys because `f64` does not implement `Eq` or `Hash` (`f64::NAN != f64::NAN` violates total equivalence). Furthermore, slight floating-point representations (such as `100.004` vs `100.001` under a `0.01` tick size) and signed zeroes (`-0.0` vs `+0.0`) must be normalized to identical price ticks.
+**Scenario:** In automated trading systems, price levels in an order book are aggregated in a `HashMap`. Primitive `f64` values cannot be directly used as map keys because `f64` does not implement `Eq` or `Hash` (`f64::NAN != f64::NAN` violates total equivalence). Furthermore, slight floating-point representations (such as `100.004` vs `100.001` under a `0.01` tick size) and signed zeroes (`-0.0` vs `+0.0`) must be normalized to identical price ticks.
 
 Implement a wrapper struct `CanonicalPrice` that quantizes prices into integer ticks, handles signed zero normalization, and implements `PartialEq`, `Eq`, and `Hash`.
 
@@ -388,7 +388,7 @@ Implement a wrapper struct `CanonicalPrice` that quantizes prices into integer t
 
 ### Exercise 3: Zero-Allocation Case-Insensitive AST Symbol Key
 
-**Problem:** Compilers, interpreters, and SQL parsers frequently perform symbol lookups in case-insensitive identifier namespaces. Diagnostic span metadata (`span_start: usize`) stored inside a `SymbolKey` struct must be ignored during symbol table matching. Furthermore, to maximize throughput during compilation, custom hashing must convert string characters to lowercase on the fly without allocating intermediate `String` objects on the heap.
+**Scenario:** Compilers, interpreters, and SQL parsers frequently perform symbol lookups in case-insensitive identifier namespaces. Diagnostic span metadata (`span_start: usize`) stored inside a `SymbolKey` struct must be ignored during symbol table matching. Furthermore, to maximize throughput during compilation, custom hashing must convert string characters to lowercase on the fly without allocating intermediate `String` objects on the heap.
 
 Implement `SymbolKey` with custom `PartialEq`, `Eq`, and `Hash` to perform case-insensitive, scope-aware matching with field-selective hashing.
 

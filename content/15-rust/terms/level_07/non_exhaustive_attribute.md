@@ -120,7 +120,7 @@ let config = external_crate::Config::new("127.0.0.1", 8080); // Use public const
 
 ### Exercise 1: Predict the Breaking-Change Impact
 
-**Problem:** A library has `pub enum Status { Active, Inactive }` (no `#[non_exhaustive]`), used with exhaustive `match` statements by many downstream crates. The library wants to add a `Status::Pending` variant in its next release. Is this a breaking change? What if `#[non_exhaustive]` had been applied from the start?
+**Scenario:** A library has `pub enum Status { Active, Inactive }` (no `#[non_exhaustive]`), used with exhaustive `match` statements by many downstream crates. The library wants to add a `Status::Pending` variant in its next release. Is this a breaking change? What if `#[non_exhaustive]` had been applied from the start?
 
 > [!check]- Answer
 > **Without `#[non_exhaustive]`**: Yes, this **is** a breaking change. Every downstream crate that exhaustively matched on `Status` (without a `_` arm, since none was needed before) will fail to compile the moment they upgrade, because their `match` is no longer exhaustive against the new three-variant enum.
@@ -131,13 +131,16 @@ let config = external_crate::Config::new("127.0.0.1", 8080); // Use public const
 
 ### Exercise 2: Exhaustive Match Handling for Non-Exhaustive Enums
 
-**Problem:** Match an external `#[non_exhaustive] enum Status { Active, Inactive }` using `_ => ...` wildcard fallback.
+**Scenario:** Match an external `#[non_exhaustive] enum Status { Active, Inactive }` using `_ => ...` wildcard fallback.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Matched active
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > #[non_exhaustive]
 > enum Status { Active, Inactive }
@@ -150,13 +153,14 @@ let config = external_crate::Config::new("127.0.0.1", 8080); // Use public const
 > }
 > ```
 >
-> **Explanation:** `#[non_exhaustive]` enforces wildcard `_` fallback arms outside the defining crate.
+> #### Technical Explanation
+> `#[non_exhaustive]` enforces wildcard `_` fallback arms outside the defining crate.
 
 ---
 
 ### Exercise 3: `#[non_exhaustive]` Structs — Construction Outside the Crate
 
-**Problem:**
+**Scenario:**
 When `#[non_exhaustive]` is applied to a struct, downstream crates cannot construct it with a struct literal (`Config { host: "localhost".into() }`) because the compiler treats the struct as having hidden fields. The library must provide a constructor.
 
 Write the following (as if it were `src/lib.rs` of a library crate called `my_server`):
@@ -176,6 +180,9 @@ Then answer: **can the `my_server` library's own `src/lib.rs` use struct literal
 > - **Hint 1:** `#[non_exhaustive]` on a struct blocks *external* crate struct literals. Code inside the defining crate (same `src/lib.rs`) still has full access and CAN use struct literal syntax — the restriction is only for downstream consumers.
 > - **Hint 2:** The standard workaround for downstream construction is a constructor (`new`) or a builder pattern. A `Default` implementation is also common when sensible defaults exist.
 > - **Hint 3:** Even if the struct currently has only two fields, `#[non_exhaustive]` signals "we may add more fields without a semver bump." The constructor absorbs new fields transparently — downstream code calling `Config::new("localhost", 8080)` doesn't break when a third field is added with a default.
+>
+>
+> #### Implementation
 >
 > ```rust
 > // src/lib.rs  (inside the my_server crate)

@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (query return value modifier)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the final query projection phase. Evaluates differences between the memory state buffer and the storage layer to compile output arrays).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, database write operations have fixed return behaviors:
@@ -82,7 +81,7 @@ DELETE user:john RETURN BEFORE; // Same as default delete
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to use 'RETURN NONE' in high-frequency background worker writes, causing network bandwidth bloat
 
@@ -135,64 +134,94 @@ DELETE user WHERE active = false RETURN NONE; // Returns [] explicitly
 DELETE user WHERE active = false RETURN BEFORE; // Returns array of deleted records
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Return Strategy Selection
+### Exercise 1: Suppressing Mutation Payloads with `RETURN NONE`
 
-**Problem:** Select the optimal `RETURN` clause keyword (**NONE**, **BEFORE**, **AFTER**, or **DIFF**) for these application operations:
-1.  A synchronization script that needs to know exactly which array indexes were updated to push a sync patch list to a mobile client.
-2.  A password update query where you need to check if the user's password hash changed, but you don't want the new hash sent back to the admin logs.
-3.  An analytics logging API that writes 1,000 metrics per second and discards return payloads.
-4.  A profile edit form that needs to display the updated profile data on screen immediately.
+**Scenario:**
+A high-throughput telemetry ingestion batch inserts thousands of records per second into table `metric`. Suppress return payloads using `RETURN NONE` to save network bandwidth.
 
-**Expected output:**
+**Requirements:**
+1. Write a `CREATE` query inserting `metric:m1`.
+2. Add `RETURN NONE` to suppress output.
+
 > [!check]- Answer
-> ```text
-> 1. RETURN DIFF (returns the exact changes in JSON Patch format)
-> 2. RETURN BEFORE (returns the old state, ensuring the new password is not exposed in the result)
-> 3. RETURN NONE (prevents network payload bloat)
-> 4. RETURN AFTER (returns the updated document state to display on the UI)
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE metric:m1 SET temp = 22.5, timestamp = time::now() RETURN NONE;
 > ```
-> - Determine if the application needs the old state, the new state, or just the list of changes.
-> - Consider which option minimizes network overhead.
+>
+> #### Technical Explanation
+>
+> 1. `RETURN NONE` suppresses mutation result payloads, returning an empty result array `[]`.
+> 2. Saves serialization CPU cycles and network bandwidth in high-volume write pipelines.
+> 3. Ideal for background ingestion tasks where confirmation of execution suffices.
+
+---
+
+### Exercise 2: Inspecting Mutations with `RETURN DIFF`
+
+**Scenario:**
+An audit service updates user permissions and requests a JSON Patch delta (`RETURN DIFF`) showing exactly which fields were changed during the update.
+
+**Requirements:**
+1. Update `user:alice` setting `role = "super_admin"`.
+2. Add `RETURN DIFF` to output JSON Patch operations.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET role = "admin", active = true;
+> 
+> -- Update and return JSON Patch delta
+> UPDATE user:alice SET role = "super_admin" RETURN DIFF;
+> 
+> -- Output payload contains JSON Patch ops:
+> -- [ { op: "replace", path: "/role", value: "super_admin" } ]
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `RETURN DIFF` outputs standard RFC 6902 JSON Patch operations detailing exact document modifications.
+> 2. Allows client applications to react to precise field changes without diffing full objects.
+> 3. Used in collaborative editing and version-tracking applications.
+
+---
+
+### Exercise 3: Single Field Projection with `RETURN <field>`
+
+**Scenario:**
+An authentication endpoint registers a new user `user:carol` and requests only the generated JWT token string or ID using `RETURN id`.
+
+**Requirements:**
+1. Write a `CREATE` query for `user:carol`.
+2. Add `RETURN id` to output only the record ID value.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:carol SET name = "Carol", email = "carol@example.com" RETURN id;
+> 
+> -- Output: [ { id: user:carol } ]
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `RETURN <field_name>` projects specific fields from the mutated record payload.
+> 2. `RETURN AFTER` (default for `CREATE`/`UPDATE`) returns the complete updated record object.
+> 3. `RETURN BEFORE` returns the original record document state prior to mutation.
 
 ---
 
 
 
-### Exercise 2: Inspecting Record Differences with `RETURN DIFF`
-
-**Problem:** Update `user:alice` setting `status = "active"` returning JSON Patch differences using `RETURN DIFF`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPDATE user:alice SET status = "active" RETURN DIFF;
-> ```
-> ```surrealql
-> UPDATE user:alice SET status = "active" RETURN DIFF;
-> ```
->
-> **Explanation:** `RETURN DIFF` returns JSON Patch operations detailing changes made during updates.
-
----
-
-### Exercise 3: Returning Specific Field Projection
-
-**Problem:** Create user returning ONLY the generated `id` field using `RETURN id`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE user SET name = "Alice" RETURN id;
-> ```
-> ```surrealql
-> CREATE user SET name = "Alice" RETURN id;
-> ```
->
-> **Explanation:** `RETURN field` projects specific fields from created or updated records.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`UPDATE`](update.md) — The write context.
 - [`DELETE`](delete.md) — The delete context.
@@ -200,7 +229,7 @@ DELETE user WHERE active = false RETURN BEFORE; // Returns array of deleted reco
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `RETURN` clause controls the output returned by database write statements.
 - `RETURN NONE` returns an empty array, saving network bandwidth.
 - `RETURN BEFORE` returns the record document before the write occurred.

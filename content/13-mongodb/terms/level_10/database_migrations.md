@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Administration / Operations** (Schema Evolution & Data Migration): Database Migrations manage zero-downtime schema evolution, field renames, and type transformations across large-scale production collections.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Managed using migration utility frameworks like `migrate-mongo` or custom Node.js scripts. Run as deployment pipeline tasks preceding application updates).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A common NoSQL pitfall is believing that because MongoDB is "schema-less," you never have to run database migrations.
@@ -94,7 +95,7 @@ module.exports = {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying on NoSQL flexibility to skip migrations entirely, leaving legacy schemas active on disk indefinitely
 
@@ -143,71 +144,111 @@ db.users.updateMany({}, { $unset: { legacyField: "" } });
 Use Lazy Migration pattern: migrate documents on-the-fly as they are read/written
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Migration Strategy Analysis
+### Exercise 1: Zero-Downtime Field Renaming with `updateMany`
 
-**Problem:** You are managing a `logs` collection containing `500,000,000` documents. 
-You must combine the fields `first_name` and `last_name` into a single field `full_name`. 
-The collection is write-heavy and must not experience query degradation.
-1.  Explain why an **Eager Migration** might be dangerous in this scenario.
-2.  Explain how a **Lazy Migration** can be implemented inside your application model logic.
+**Scenario:**
+Rename legacy field `user_name` to `username` across collection `users` using `$rename`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `updateMany({}, { $rename: { user_name: "username" } })`.
+
 > [!check]- Answer
-> ```text
-> 1. Eager Migration Danger: Running an upfront bulk migration over 500 million documents will trigger massive disk I/O and CPU load, locking the database and causing service timeouts during peak hours.
-> 2. Lazy Migration Implementation: In your Node.js application (e.g. using a Mongoose pre-save hook or getter), check if the `full_name` field exists when loading a document. If it is missing, combine `first_name` and `last_name` on the fly, delete the old keys, and write the updated document back to the database.
-> ```
-> - Assess the scale of 500 million documents on query capacity.
-> - Consider where lazy defaults are intercepted in ODMs.
-
----
-
-
-
-### Exercise 2: Idempotent Schema Field Renaming Script
-
-**Problem:** Rename field `uname` to `username` across all documents using `$rename`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.updateMany({ uname: { $exists: true } }, { $rename: { uname: "username" } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > db.users.updateMany(
->   { uname: { $exists: true } },
->   { $rename: { uname: "username" } }
+>   { user_name: { $exists: true } },
+>   { $rename: { user_name: "username" } }
 > );
 > ```
 >
-> **Explanation:** `$rename` renames document field keys across collection documents.
+> #### Technical Explanation
+>
+> 1. `$rename` renames field keys across documents atomically without re-writing entire documents.
+> 2. `$exists: true` filter ensures only documents requiring migration are updated.
+> 3. Simple single-stage schema migration.
 
 ---
 
-### Exercise 3: Lazy Schema Migration Pattern
+### Exercise 2: Dual-Write Schema Migration Strategy
 
-**Problem:** Describe Lazy Schema Migration pattern (Migrates document schema format on-the-fly as documents are read and updated in application code).
+**Scenario:**
+Implement a 4-phase dual-write schema migration strategy for changing data format without application downtime.
 
-**Expected output:**
+**Requirements:**
+1. Outline Phase 1 (Dual Write), Phase 2 (Backfill), Phase 3 (Read Switch), Phase 4 (Cleanup).
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Migrates document schema format on-the-fly as documents are read and updated in application code
-> ```
-> ```text
-> Migrates document schema format on-the-fly as documents are read and updated in application code
+> 4-Phase Zero-Downtime Migration Pattern:
+> Phase 1: Update application code to write to BOTH old and new schema fields (Dual-Write).
+> Phase 2: Run background script backfilling old documents to new schema format.
+> Phase 3: Update application code to read exclusively from new schema fields.
+> Phase 4: Deprecate and $unset old schema fields.
 > ```
 >
-> **Explanation:** Lazy Migration avoids downtime and locks by migrating document schemas incrementally.
+> #### Technical Explanation
+>
+> 1. Dual-write patterns guarantee zero downtime during major schema structure overhauls.
+> 2. Backward and forward compatibility is maintained across deployment steps.
+> 3. Industry standard enterprise migration workflow.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Automated Migration Scripts with `migrate-mongo`
+
+**Scenario:**
+Write a Node.js up/down migration script using `migrate-mongo` to transform string prices to `Decimal128`.
+
+**Requirements:**
+1. Write `up()` and `down()` migration handlers.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> module.exports = {
+>   async up(db, client) {
+>     const products = db.collection("products");
+>     const docs = await products.find({ price: { $type: "string" } }).toArray();
+>     
+>     for (const doc of docs) {
+>       await products.updateOne(
+>         { _id: doc._id },
+>         { $set: { price: Decimal128.fromString(doc.price) } }
+>       );
+>     }
+>   },
+>   async down(db, client) {
+>     // Revert Decimal128 to string if rollback needed
+>   }
+> };
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `migrate-mongo` tracks executed migration scripts in a `changelog` collection.
+> 2. `up()` executes schema transformations; `down()` provides automated rollback capabilities.
+> 3. Standardizes database version control.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Schema Validation (`$jsonSchema`)](../level_05/schema_validation.md) — Enforcing consistency limits.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - NoSQL databases require schema migrations to prevent inconsistent states.
 - Skipping migrations clogs application code with messy legacy checks.
 - Eager migrations run bulk script updates before code deployment.

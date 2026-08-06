@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Standard Library**
+
+**TypeScript Utility Type** (Built-in Generic Type Transformations): Utility types are built-in global generic helpers that transform and manipulate existing TypeScript object and union types.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a large application, you often have a massive core interface (e.g., `interface User`). 
@@ -55,7 +56,7 @@ TypeScript provides dozens of built-in Utility Types. The most heavily used in m
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not realizing Utility Types are just Type Aliases under the hood
 
@@ -102,60 +103,108 @@ interface User { id: number; name: string }
 type Good = Required<Pick<User, "id">>; // id is explicitly required
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Readability over Complexity
+### Exercise 1: Composing Multiple Utility Types
 
-**Problem:** You can nest Utility Types indefinitely. `type X = Readonly<Partial<Pick<User, "name" | "age">>>`. Why might a Senior developer reject this in a code review?
+**Scenario:**
+Create a type that makes all properties optional EXCEPT `id` using a combination of `Partial`, `Pick`, and `Omit`.
 
-**Expected output:**
+**Requirements:**
+1. Combine `Pick<User, "id"> & Partial<Omit<User, "id">>`.
+
 > [!check]- Answer
-> ```text
-> Because it is almost impossible to read at a glance!
-> While Utility Types are great, chaining 3 or 4 of them together creates a massive cognitive load for the next developer reading the code. If your derived type is that complex, it is often better to just explicitly write out a new interface, even if it slightly violates DRY principles.
-> ```
-> - Just because you *can* do math, doesn't mean you *should*.
+>
+> #### Implementation
+>
+> ```typescript
+> interface User {
+>   id: string;
+>   name: string;
+>   email: string;
+>   age: number;
+> }
+
+type UpdateUserPayload = Pick<User, "id"> & Partial<Omit<User, "id">>;
+
+const update: UpdateUserPayload = {
+  id: "usr_100", // Required!
+  email: "newemail@example.com" // Optional!
+};
+```
+
+> #### Technical Explanation
+>
+> 1. Combining utility types with intersections (`&`) allows building custom type transformations.
+> 2. `Pick<User, "id">` keeps `id` required.
+> 3. `Partial<Omit<User, "id">>` makes all remaining fields optional.
+
+---
+
+### Exercise 2: Making Specific Properties Readonly with `Readonly<T>`
+
+**Scenario:**
+Freeze an entire state object using `Readonly<T>`.
+
+**Requirements:**
+1. Apply `Readonly<AppState>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface AppState {
+>   theme: string;
+>   sidebarOpen: boolean;
+> }
+
+const state: Readonly<AppState> = {
+  theme: "dark",
+  sidebarOpen: true
+};
+
+// state.theme = "light"; // ❌ Compile Error: Cannot assign to 'theme' because it is a read-only property.
+```
+
+> #### Technical Explanation
+>
+> 1. `Readonly<T>` constructs a type with all properties set to `readonly`.
+> 2. Prevents property mutation at compile time.
+> 3. Ideal for freezing state objects in Redux or Zustand stores.
+
+---
+
+### Exercise 3: Built-In String Manipulation Utilities
+
+**Scenario:**
+Demonstrate built-in string manipulation utility types (`Uppercase<T>`, `Lowercase<T>`, `Capitalize<T>`).
+
+**Requirements:**
+1. Apply string utility types.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type Event = "click" | "hover";
+
+type UpperEvent = Uppercase<Event>; // "CLICK" | "HOVER"
+type CapEvent = Capitalize<Event>;   // "Click" | "Hover"
+```
+
+> #### Technical Explanation
+>
+> 1. Compiler intrinsic utility types (`Uppercase`, `Lowercase`, `Capitalize`, `Uncapitalize`) manipulate template literal string types.
+> 2. Executed directly within the TypeScript compiler engine.
+> 3. Essential for building string-based event names and action types.
 
 ---
 
 
 
-### Exercise 2: Utility Types Combination Challenge
-
-**Problem:** Create `UpdateUserDTO` making `id` required and all other `User` fields optional.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UpdateUserDTO created
-> ```
-> ```typescript
-> interface User { id: number; name: string; age: number }
-> type UpdateUserDTO = Pick<User, "id"> & Partial<Omit<User, "id">>;
-> const u: UpdateUserDTO = { id: 1, age: 26 }; // Valid!
-> console.log("UpdateUserDTO created");
-> ```
->
-> **Explanation:** Combining `Pick`, `Omit`, and `Partial` models precise update payload DTOs.
-
----
-
-### Exercise 3: Built-In Utility Types Categorization
-
-**Problem:** List 3 object manipulation utility types (`Partial`, `Required`, `Readonly`, `Pick`, `Omit`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Partial, Pick, Omit
-> ```
-> ```typescript
-> console.log("Partial, Pick, Omit");
-> ```
->
-> **Explanation:** Built-in utilities transform object shapes, unions, and function signatures.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`Partial<T>` & `Required<T>`](partial_required.md) — Modifying optional flags.
 - [`Pick<T>` & `Omit<T>`](pick_omit.md) — Slicing object shapes.
 - [Index Signatures](../level_03/index_signatures.md) — Related concept: Index Signatures.
@@ -167,7 +216,7 @@ type Good = Required<Pick<User, "id">>; // id is explicitly required
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Utility Types** are globally available, built-in types that transform an existing type into a new type.
 - They are used to prevent duplicating interfaces across your codebase (DRY principle).
 - They use the `<T>` Generic syntax to accept the "input" type.

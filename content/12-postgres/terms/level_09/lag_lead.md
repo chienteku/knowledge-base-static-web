@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Syntax**
+
+**Advanced Feature** (Window Positional Navigation Functions): `LAG()` and `LEAD()` window functions access column values from preceding or following rows relative to the current row without issuing self-joins.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all modern SQL engines. Highly optimized for sequential timeseries scans).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In data analytics, you frequently need to compare current values against past or future trends:
@@ -90,7 +91,7 @@ FROM monthly_revenue;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the ORDER BY clause inside the window definition of a LAG/LEAD function
 
@@ -143,71 +144,107 @@ SELECT price, LEAD(price) OVER (ORDER BY date ASC) FROM prices; -- Accesses NEXT
 SELECT price, LAG(price) OVER (ORDER BY date ASC) FROM prices; -- Accesses PREVIOUS row price
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Session Duration Calculation
+### Exercise 1: Comparing Consecutive Row Values with `LAG()`
 
-**Problem:** You have a `page_views` table tracking a user's clicks (columns: `user_id`, `page_name`, `clicked_at` timestamp). Write the SQL query to select:
-1.  The `user_id` and `page_name`.
-2.  The timestamp of the **subsequent** click made by the same user (use the alias `next_click_time`).
+**Scenario:**
+Calculate the difference in sales revenue between the current month and the previous month (`revenue - LAG(revenue)`).
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT month, revenue, LAG(revenue) OVER (ORDER BY month) FROM monthly_sales`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
 > SELECT 
->   user_id,
->   page_name,
->   LEAD(clicked_at, 1) OVER (PARTITION BY user_id ORDER BY clicked_at ASC) AS next_click_time
-> FROM page_views;
+>   sales_month, 
+>   revenue_cents, 
+>   LAG(revenue_cents, 1, 0) OVER (ORDER BY sales_month ASC) AS prev_month_revenue,
+>   revenue_cents - LAG(revenue_cents, 1, 0) OVER (ORDER BY sales_month ASC) AS month_over_month_diff 
+> FROM monthly_sales;
 > ```
-> - Use the `LEAD` function to fetch the next timestamp forward.
-> - Partition the window by `user_id` so you don't read other users' click times, and sort by `clicked_at` ascending.
+>
+> #### Technical Explanation
+>
+> 1. `LAG(column, offset, default)` fetches column values from `offset` rows preceding the current row within the window partition.
+> 2. `offset=1` looks at the previous row; `default=0` provides a fallback when no preceding row exists.
+> 3. Eliminates issuing expensive self-joins for month-over-month comparisons.
+
+---
+
+### Exercise 2: Looking Ahead to Next Rows with `LEAD()`
+
+**Scenario:**
+Calculate the time interval between a user's current audit log event and their NEXT event using `LEAD(created_at)`.
+
+**Requirements:**
+1. Use `LEAD(created_at) OVER (PARTITION BY user_id ORDER BY created_at)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   user_id, 
+>   event_name, 
+>   created_at AS event_time,
+>   LEAD(created_at) OVER (PARTITION BY user_id ORDER BY created_at ASC) AS next_event_time,
+>   LEAD(created_at) OVER (PARTITION BY user_id ORDER BY created_at ASC) - created_at AS time_to_next_event 
+> FROM audit_logs;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `LEAD(column, offset)` accesses values from future rows following the current row.
+> 2. `PARTITION BY user_id` isolates calculation boundaries per user.
+> 3. Calculates time intervals between consecutive user actions.
+
+---
+
+### Exercise 3: Detecting Trend Changes across Ordered Sequences
+
+**Scenario:**
+Identify instances where a stock price dropped compared to the previous day's closing price.
+
+**Requirements:**
+1. Compare `price` against `LAG(price)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> SELECT 
+>   trade_date, 
+>   closing_price,
+>   CASE 
+>     WHEN closing_price > LAG(closing_price) OVER (ORDER BY trade_date ASC) THEN 'UP'
+>     WHEN closing_price < LAG(closing_price) OVER (ORDER BY trade_date ASC) THEN 'DOWN'
+>     ELSE 'SAME'
+>   END AS trend 
+> FROM stock_prices;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combines `LAG()` positional window functions with `CASE` expressions.
+> 2. Classifies sequential row trends.
+> 3. Financial analytics pattern.
 
 ---
 
 
 
-### Exercise 2: Calculating Row-over-Row Price Difference
-
-**Problem:** Calculate price change from previous day using `price - LAG(price) OVER (ORDER BY date ASC)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT date, price, price - LAG(price, 1, price) OVER (ORDER BY date ASC) AS price_diff FROM daily_stocks;
-> ```
-> ```sql
-> SELECT date, price,
->   price - LAG(price, 1, price) OVER (ORDER BY date ASC) AS price_diff
-> FROM daily_stocks;
-> ```
->
-> **Explanation:** `LAG(col, offset, default)` fetches previous row attributes for delta calculations.
-
----
-
-### Exercise 3: Default Fallback Value in LAG Function
-
-**Problem:** Set default fallback value of `0` for first row of `LAG(amount, 1, 0)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT LAG(amount, 1, 0) OVER (ORDER BY id ASC) FROM sales;
-> ```
-> ```sql
-> SELECT LAG(amount, 1, 0) OVER (ORDER BY id ASC) FROM sales;
-> ```
->
-> **Explanation:** Specifying a 3rd argument in `LAG(col, offset, fallback)` replaces initial NULL offsets.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Window Function](window_function.md) — The parent calculation engine.
 - [`ROW_NUMBER()` / `RANK()` / `DENSE_RANK()`](row_number_rank.md) — Positional window functions.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `LAG()` reads data from a previous row in a partition sequence.
 - `LEAD()` reads data from a subsequent row in a partition sequence.
 - Prevents expensive, complex self-joins for neighboring row calculations.

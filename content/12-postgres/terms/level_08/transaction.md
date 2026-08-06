@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Core Database Concept**
+
+**Core Concept** (Atomic Work Unit): A Transaction is an atomic sequence of SQL statements executed as a single logical unit of work adhering to ACID rules.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all relational databases. Managed by the transaction manager block using Write-Ahead Logging (WAL) files to support rollbacks).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In real-world applications, business operations require running multiple SQL queries in sequence. 
@@ -77,7 +78,7 @@ COMMIT; -- Save both writes permanently to disk
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Bundling unrelated, long-running processes inside a single transaction block
 
@@ -133,71 +134,107 @@ BEGIN; BEGIN; -- ❌ Nested BEGIN unsupported!
 BEGIN; SAVEPOINT sp1; -- Use SAVEPOINT for sub-transactions
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Boundary Assessment
+### Exercise 1: Multi-Table Atomic Transaction Execution
 
-**Problem:** You run a transaction containing three queries:
--   Query 1: Inserts a new user. (Succeeds)
--   Query 2: Updates a setting. (Succeeds)
--   Query 3: Tries to write a duplicate value to a unique column. (Crashes)
+**Scenario:**
+Execute an atomic order processing transaction creating an order record, inserting line items, and updating account balance inside a single transaction block.
 
-Describe the state of the database after Query 3 fails, assuming no savepoints are used.
+**Requirements:**
+1. Execute `BEGIN`, 3 DML operations, `COMMIT`.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> The database will roll back the entire transaction! 
-> Even though Queries 1 and 2 completed successfully, the failure of Query 3 aborts the transaction. 
-> The new user insert and the setting update are completely undone, leaving the database exactly as it was before the `BEGIN` command was run.
-> ```
-> - Transactions enforce an "all-or-nothing" rule.
-> - Consider whether partial commits are allowed in standard transactions.
-
----
-
-
-
-### Exercise 2: Transaction Control Flow Best Practice
-
-**Problem:** State golden rule regarding network calls and transactions (Perform external HTTP network calls OUTSIDE active database transaction blocks).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Perform external HTTP network calls OUTSIDE active database transaction blocks
-> ```
-> ```text
-> Perform external HTTP network calls OUTSIDE active database transaction blocks
-> ```
 >
-> **Explanation:** Keeping transaction duration minimal prevents lock contention and connection pool exhaustion.
-
----
-
-### Exercise 3: Transaction Idle Timeout Configuration
-
-**Problem:** Configure `idle_in_transaction_session_timeout` to 5 seconds to automatically terminate abandoned transactions.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SET idle_in_transaction_session_timeout = '5s';
-> ```
+> #### Implementation
+>
 > ```sql
-> SET idle_in_transaction_session_timeout = '5s';
+> BEGIN;
+> 
+> INSERT INTO orders (customer_id, total_cents) VALUES (10, 5000) RETURNING id; -- Returns 101
+> INSERT INTO order_items (order_id, product_id, quantity) VALUES (101, 2, 1);
+> UPDATE customer_balances SET balance_cents = balance_cents - 5000 WHERE customer_id = 10;
+> 
+> COMMIT;
 > ```
 >
-> **Explanation:** `idle_in_transaction_session_timeout` aborts abandoned transactions holding database connections.
+> #### Technical Explanation
+>
+> 1. A transaction groups multiple SQL operations into a single logical unit of work.
+> 2. If any statement fails, calling `ROLLBACK` reverts all three statements.
+> 3. Preserves multi-table referential consistency.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Checking Current Transaction Status and ID
+
+**Scenario:**
+Query current transaction ID and transaction status using system functions.
+
+**Requirements:**
+1. Query `pg_current_xact_id()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> BEGIN;
+> 
+> SELECT 
+>   pg_current_xact_id() AS current_txid,
+>   pg_is_in_recovery() AS is_replica;
+> 
+> COMMIT;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `pg_current_xact_id()` returns the active 64-bit transaction identifier allocated by PostgreSQL.
+> 2. Assigns transaction IDs to write transactions for MVCC visibility tracking.
+> 3. Diagnostic transaction inspection.
+
+---
+
+### Exercise 3: Read-Only Transaction Optimizations
+
+**Scenario:**
+Mark a reporting transaction as `READ ONLY` to optimize performance and prevent accidental write mutations.
+
+**Requirements:**
+1. Execute `BEGIN READ ONLY;`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> BEGIN READ ONLY;
+> 
+> SELECT COUNT(*) FROM users;
+> SELECT SUM(total_cents) FROM orders;
+> 
+> COMMIT;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `BEGIN READ ONLY` marks the transaction block as strictly read-only.
+> 2. Any attempt to execute `INSERT`, `UPDATE`, or `DELETE` throws Error `25006` (`read_only_sql_transaction`).
+> 3. Allows PostgreSQL to optimize lock management and route queries to read-replicas safely.
+
+---
+
+
+
+## 6. Related Terms
 - [`BEGIN` / `COMMIT` / `ROLLBACK`](begin_commit_rollback.md) — The control statements.
 - [ACID Properties](acid.md) — - The transactional guarantees.
 - [MVCC (Multi-Version Concurrency Control)](mvcc.md) — Related concept: MVCC (Multi-Version Concurrency Control).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A transaction groups multiple SQL operations into a single indivisible block.
 - Enforces the "All-or-Nothing" rule to prevent data corruption.
 - Committing saves all changes; Rolling back undoes all modifications.

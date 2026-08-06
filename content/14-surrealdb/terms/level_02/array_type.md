@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Data Type (ordered sequence collection type)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Stored sequentially on disk. Array elements can be indexed individually or modified using built-in array functions).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database design (PostgreSQL), storing multiple items in a single column violates normal forms. 
@@ -82,7 +81,7 @@ SELECT * FROM post WHERE tags CONTAINS "rust";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using 'array' when you require unique items, leading to duplicate values and verbose database checks
 
@@ -134,60 +133,106 @@ LET $arr = [1, 2];
 RETURN array::add($arr, 3); // Correct array element addition
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Array Schema Definition
+### Exercise 1: Multi-Tag Filtering & Containment
 
-**Problem:** Write the SurrealQL statements to:
-1.  Define a table named `course` as `SCHEMAFULL`.
-2.  Define a field named `scores` on the `course` table as an array that can only store integers.
+**Scenario:**
+You are building an article categorization module for a developer blog. Each article stores an array of topic tags `tags = ["rust", "surrealdb", "backend"]`.
 
-**Expected output:**
+**Requirements:**
+1. Define table `article` in `SCHEMAFULL` mode with field `tags` of type `array<string>`.
+2. Write a query to create an article `article:a1` with tags `["rust", "database", "async"]`.
+3. Write a `SELECT` query to find all articles where `tags` contains `"database"`.
+
 > [!check]- Answer
-> ```sql
-> DEFINE TABLE course SCHEMAFULL;
-> DEFINE FIELD scores ON course TYPE array<int>;
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE article SCHEMAFULL;
+> DEFINE FIELD tags ON TABLE article TYPE array<string>;
+> 
+> CREATE article:a1 SET title = "Async Rust Databases", tags = ["rust", "database", "async"];
+> 
+> -- Query articles containing the tag 'database'
+> SELECT * FROM article WHERE tags CONTAINS "database";
 > ```
-> - The table configuration keyword is `SCHEMAFULL`.
-> - Use angle brackets to specify the element type inside the array declaration: `array<T>`.
+>
+> #### Technical Explanation
+>
+> 1. `array<string>` defines a typed container array for string elements.
+> 2. The `CONTAINS` operator checks set membership within array fields directly at query execution time.
+> 3. Eliminates the need for separate tag junction tables or manual array regex matching.
+
+---
+
+### Exercise 2: Array Slice and Element Mutation
+
+**Scenario:**
+A shopping cart application stores item record links in an array `items`. You need to add a new item to the array and retrieve the first item using zero-indexed array slicing.
+
+**Requirements:**
+1. Create a cart `cart:c1` with initial items `[product:p1, product:p2]`.
+2. Append `product:p3` to `items` using the `+=` array assignment operator.
+3. Select the first product link using `items[0]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE cart:c1 SET items = [product:p1, product:p2];
+> 
+> -- Append new element to array
+> UPDATE cart:c1 SET items += product:p3;
+> 
+> -- Retrieve first element via zero-indexed array access
+> SELECT items[0] AS first_item FROM cart:c1;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. The `+=` operator appends new elements to array fields atomically without overwriting the entire array.
+> 2. Array elements are accessed using zero-indexed bracket syntax (`items[0]`).
+> 3. Arrays preserve insertion order across reads and mutations.
+
+---
+
+### Exercise 3: Array Subset Validation with `CONTAINSALL`
+
+**Scenario:**
+A security system verifies user permissions by checking whether a user's assigned permission array `perms` contains all required access scopes `["read", "write"]`.
+
+**Requirements:**
+1. Create user `user:alice` with permissions `["read", "write", "execute"]`.
+2. Query users who hold both `"read"` AND `"write"` permissions simultaneously using `CONTAINSALL`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET perms = ["read", "write", "execute"];
+> CREATE user:bob SET perms = ["read"];
+> 
+> -- Filter users holding both 'read' and 'write' permissions
+> SELECT * FROM user WHERE perms CONTAINSALL ["read", "write"];
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `CONTAINSALL` evaluates whether an array field contains every element in a target array set.
+> 2. Avoids chaining multiple `CONTAINS` AND clauses together.
+> 3. Evaluates set logic natively inside SurrealDB's query processor.
 
 ---
 
 
 
-### Exercise 2: Typed Array Field Definition
 
-**Problem:** Define field `tags` on `article` as an array of strings using `DEFINE FIELD`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE FIELD tags ON TABLE article TYPE array<string>;
-> ```
-> ```surrealql
-> DEFINE FIELD tags ON TABLE article TYPE array<string>;
-> ```
->
-> **Explanation:** `TYPE array<type>` restricts array elements to specific inner data types.
-
----
-
-### Exercise 3: Array Deduplication with `array::distinct`
-
-**Problem:** Deduplicate `[1, 2, 2, 3]` using built-in array function `array::distinct()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [1, 2, 3]
-> ```
-> ```surrealql
-> RETURN array::distinct([1, 2, 2, 3]);
-> ```
->
-> **Explanation:** `array::distinct()` removes duplicate values from SurrealQL arrays.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [`set`](set_type.md) — Unique list container.
@@ -196,7 +241,7 @@ RETURN array::add($arr, 3); // Correct array element addition
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `array` type stores ordered lists of values, permitting duplicate elements.
 - Direct NoSQL equivalent to PostgreSQL's array columns and MongoDB's BSON Arrays.
 - Preserves the chronological order of elements as they were inserted.

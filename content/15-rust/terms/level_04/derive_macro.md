@@ -169,7 +169,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Generic Struct Trait Bounds & Custom Overrides for Smart Pointers
 
-**Problem:** 
+**Scenario:** 
 In high-throughput async telemetry systems, data batches are wrapped inside `TelemetryBatch<T>` containing a batch ID and a reference-counted payload `Arc<T>`. When using Rust's standard `#[derive(Clone, Debug, PartialEq)]` macro on generic structs:
 
 ```rust
@@ -308,7 +308,7 @@ Implement an `UnclonableResource` struct (which intentionally does NOT implement
 
 ### Exercise 2: Multi-Field Derive Precedence & Priority Inversion for Event Queues
 
-**Problem:**
+**Scenario:**
 In distributed query engine indexing, `AuditEvent` records must be prioritized based on:
 1. Event severity rank (`Critical` > `Error` > `Warning` > `Info`).
 2. Timestamp ascending (older events processed before newer ones).
@@ -424,7 +424,7 @@ Construct an `AuditEvent` system where `Severity` uses standard derives, and `Au
 
 ### Exercise 3: Simulated Procedural Derive Macro Mechanics & Structural Schema Generator
 
-**Problem:**
+**Scenario:**
 Procedural derive macros (such as `#[derive(Serialize)]` in `serde` or custom derive macros in framework libraries) parse Rust AST syntax trees at compile time using `syn` and generate `impl` blocks via `quote`. 
 
 Simulate the architectural output of a procedural derive macro for hierarchical system configuration structs (`DatabaseConfig` and `AppConfig`). Implement standard derived traits (`Debug, Clone, PartialEq, Default`) alongside a custom `ConfigSchema` trait with field flattening, key prefixing, `Option<T>` field formatting, and recursive nested struct serialization. Write unit tests with `assert!`, `assert_eq!`, `assert_ne!`, and `matches!` to verify metadata generation and derived trait behavior.

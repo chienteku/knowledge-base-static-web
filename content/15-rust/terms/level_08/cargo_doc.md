@@ -153,7 +153,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Distributed Cache API with Rustdoc Intra-Doc Hyperlinks & Code Hiding
 
-**Problem:**
+**Scenario:**
 You are building an in-memory distributed caching library (`DistributedCache`). To make your library documentation clear and easily navigable via `cargo doc`, you must write crate-level and item-level doc comments that link related types using rustdoc intra-doc link syntax (`[`CacheConfig`]`, `[`CacheError`]`, `[`CacheBackend`]`).
 
 Requirements:
@@ -164,6 +164,9 @@ Requirements:
 5. Write complete unit tests (`#[cfg(test)] mod tests`) verifying cache hit/miss tracking and capacity eviction with `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > 
@@ -328,7 +331,7 @@ Requirements:
 
 ### Exercise 2: API Gateway Middleware with Hidden Types (`#[doc(hidden)]`) & Feature Gates
 
-**Problem:**
+**Scenario:**
 In an enterprise API Gateway middleware, external public documentation built by `cargo doc` should focus strictly on public types while omitting internal helpers, raw byte manipulators, and legacy methods.
 
 Requirements:
@@ -339,6 +342,9 @@ Requirements:
 5. Write complete unit tests (`#[cfg(test)] mod tests`) testing valid/invalid tokens, trait dispatch, hidden internal method execution, and panic triggers using `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashSet;
 > 
@@ -484,7 +490,7 @@ Requirements:
 
 ### Exercise 3: Event Microservice Bus with Inline Re-exports (`#[doc(inline)]`)
 
-**Problem:**
+**Scenario:**
 When structuring large crates with nested sub-modules (`mod internal`), users navigating through `cargo doc` can get lost in multi-level module trees. You must flatten the documentation presentation by re-exporting internal types at the crate root using `#[doc(inline)] pub use ...`.
 
 Requirements:
@@ -495,6 +501,9 @@ Requirements:
 5. Write complete unit tests (`#[cfg(test)] mod tests`) verifying multi-subscriber delivery, empty payload filtering, and total published message tracking using `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > pub mod internal {
 >     use std::sync::{Arc, Mutex};

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Core Concept** (Foreign Key Consistency Guarantee): Referential Integrity guarantees that foreign key values always reference valid existing primary key rows in parent tables.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all relational SQL engines. Enforced at transaction commit boundaries to block corrupt data commits).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational database systems, we divide data into separate tables to eliminate duplication. For example:
@@ -100,7 +101,7 @@ DELETE FROM customers WHERE id = 1;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming table relationships automatically enforce referential integrity without constraints
 
@@ -122,6 +123,8 @@ CREATE TABLE orders (
 
 
 
+
+
 ### Mistake 2: Disabling Foreign Key Constraints in Production Databases
 
 **The mistake:** Disabling foreign key constraint checks permanently in production databases to speed up inserts.
@@ -137,6 +140,8 @@ ALTER TABLE orders DISABLE TRIGGER ALL; -- ❌ Bypasses referential integrity!
 ```sql
 Maintain active foreign key constraints for data integrity guarantees
 ```
+
+
 
 ### Mistake 3: Inserting Child Rows Referencing Non-Existent Parent IDs
 
@@ -156,106 +161,99 @@ Ensure parent user record exists before inserting child orders
 
 
 
-### Mistake 4: Disabling Foreign Key Constraints in Production Databases
+## 5. Practice Exercises
 
-**The mistake:** Disabling foreign key constraint checks permanently in production databases to speed up inserts.
+### Exercise 1: Verifying Database-Level Foreign Key Enforcement
 
-**Why it's wrong:** Disabling referential constraints permits orphaned child records, corrupted relationships, and invalid data states.
+**Scenario:**
+Demonstrate that PostgreSQL blocks inserting an order with an invalid `customer_id` that does not exist in `customers`.
 
-*Incorrect:*
-```sql
-ALTER TABLE orders DISABLE TRIGGER ALL; -- ❌ Bypasses referential integrity!
-```
+**Requirements:**
+1. Execute `INSERT INTO orders (customer_id) VALUES (9999)` and inspect error.
 
-*Fix:*
-```sql
-Maintain active foreign key constraints for data integrity guarantees
-```
-
-### Mistake 5: Inserting Child Rows Referencing Non-Existent Parent IDs
-
-**The mistake:** Executing `INSERT INTO orders (user_id) VALUES (9999);` when `user 9999` does not exist.
-
-**Why it's wrong:** Foreign keys enforce referential integrity, throwing error `insert or update on table "orders" violates foreign key constraint`.
-
-*Incorrect:*
-```sql
-INSERT INTO orders (user_id) VALUES (9999); -- ❌ Foreign key violation!
-```
-
-*Fix:*
-```sql
-Ensure parent user record exists before inserting child orders
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Integrity Breach Analysis
-
-**Problem:** You have a blog database with a `users` table and a `posts` table (`author_id` references `users(id)`). The current data states are:
--   `users` table: IDs `[1, 2, 3]`
--   `posts` table: `author_id` values `[1, 2, 2, 3, 1]`
-
-You attempt to execute this statement:
-`UPDATE posts SET author_id = 5 WHERE id = 2;`
-What will happen, and why?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> The UPDATE statement will fail with a foreign key violation error!
-> Because the `posts` table has a referential integrity constraint pointing to `users`, any value written to `author_id` must match an active primary key in the `users` table. 
-> Since ID 5 does not exist in the `users` table, the database blocks the query to prevent an orphaned post.
-> ```
-> - Inspect the list of active user IDs.
-> - Verify if the target update ID is a member of that set.
-
----
-
-
-
-### Exercise 2: Deferrable Foreign Key Constraints
-
-**Problem:** Define foreign key constraint as `DEFERRABLE INITIALLY DEFERRED` to validate integrity at commit time.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ALTER TABLE child ADD CONSTRAINT fk_parent FOREIGN KEY (p_id) REFERENCES parent(id) DEFERRABLE INITIALLY DEFERRED;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> ALTER TABLE child
-> ADD CONSTRAINT fk_parent
-> FOREIGN KEY (p_id) REFERENCES parent(id)
-> DEFERRABLE INITIALLY DEFERRED;
+> -- Throws Error 23503: insert or update on table "orders" violates foreign key constraint
+> INSERT INTO orders (customer_id, total_cents) 
+> VALUES (9999, 5000);
 > ```
 >
-> **Explanation:** Deferred constraints validate referential integrity at transaction commit time instead of per-statement.
+> #### Technical Explanation
+>
+> 1. PostgreSQL checks foreign key indexes on every write operation.
+> 2. Rejects un-matched foreign key inserts with Error Code `23503`.
+> 3. Guarantees 100% database referential integrity regardless of application bugs.
 
 ---
 
-### Exercise 3: Referential Integrity Definition
+### Exercise 2: Deferred Foreign Key Constraint Validation
 
-**Problem:** Define Referential Integrity in relational databases (Ensures relationship links between tables remain valid and child rows never reference non-existent parents).
+**Scenario:**
+Configure a foreign key constraint as `DEFERRABLE INITIALLY DEFERRED` to allow temporary out-of-order writes within a transaction.
 
-**Expected output:**
+**Requirements:**
+1. Add `DEFERRABLE INITIALLY DEFERRED` to foreign key definition.
+
 > [!check]- Answer
-> ```text
-> Ensures relationship links between tables remain valid and child rows never reference non-existent parents
-> ```
-> ```text
-> Ensures relationship links between tables remain valid and child rows never reference non-existent parents
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE node_links (
+>   id INTEGER PRIMARY KEY,
+>   target_id INTEGER REFERENCES node_links(id) DEFERRABLE INITIALLY DEFERRED
+> );
 > ```
 >
-> **Explanation:** Referential integrity rules preserve entity relationship graph validity.
+> #### Technical Explanation
+>
+> 1. `DEFERRABLE INITIALLY DEFERRED` postpones foreign key constraint validation until the transaction `COMMIT` step.
+> 2. Allows inserting interdependent circular references within a single transaction block.
+> 3. Validates transactional integrity before final commit.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Auditing Orphaned Foreign Key References
+
+**Scenario:**
+Find all orphaned records in legacy table `order_items` where `product_id` does NOT exist in `products`.
+
+**Requirements:**
+1. Use `LEFT JOIN ... WHERE products.id IS NULL`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   oi.id AS orphan_item_id, 
+>   oi.product_id 
+> FROM order_items AS oi 
+> LEFT JOIN products AS p ON oi.product_id = p.id 
+> WHERE p.id IS NULL;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Orphaned rows occur in un-constrained legacy databases when parent rows are deleted without cascading logic.
+> 2. `LEFT JOIN ... WHERE parent.id IS NULL` isolates broken orphan records.
+> 3. Initial diagnostic query before adding foreign key constraints.
+
+---
+
+
+
+## 6. Related Terms
 - [`FOREIGN KEY`](foreign_key.md) — The physical constraint that enforces integrity.
 - [`ON DELETE` / `ON UPDATE` Actions (`CASCADE`, `SET NULL`, `RESTRICT`)](on_delete_update.md) — Automating cascades to preserve integrity.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Referential Integrity guarantees that all database pointers link to valid, active records.
 - Prevents the creation of orphaned records in child tables.
 - Blocks writes (inserts/updates) that reference non-existent records.

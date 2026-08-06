@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (type checking & conversion builtin functions)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Executed by the query parser and type validator. Analyzes metadata tags attached to binary values in memory).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Dynamic applications frequently need to inspect or construct data structures at runtime:
@@ -91,7 +90,7 @@ FROM post;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Concatenating strings to construct Record IDs instead of using 'type::thing()', resulting in string types rather than record tokens
 
@@ -145,61 +144,93 @@ IF type::of($val) = "String" { ... }; // ❌ Case mismatch!
 IF type::of($val) = "string" { ... }; // Lowercase type string
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Dynamic Record ID Construction
+### Exercise 1: Inspecting Value Types with `type::of()`
 
-**Problem:** You have two string parameters:
-`LET $collection = "customer";`
-`LET $code = "99401";`
-Write the SurrealQL expression using `type::*` to dynamically construct a Record ID and select that record.
+**Scenario:**
+Inspect the native SurrealDB data type of various literals (`"text"`, `100.00dec`, `d"2026-08-06"`, `user:alice`) using `type::of()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `type::of()` over string, decimal, datetime, and record link values.
+
 > [!check]- Answer
-> ```sql
-> LET $target = type::thing($collection, $code);
-> SELECT * FROM $target;
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT 
+>     type::of("text") AS str_t,
+>     type::of(100.00dec) AS dec_t,
+>     type::of(d"2026-08-06T00:00:00Z") AS dt_t,
+>     type::of(user:alice) AS rec_t;
 > ```
-> - Construct the ID using `type::thing(table, id)`.
-> - Select from the resulting variable.
+>
+> #### Technical Explanation
+>
+> 1. `type::of(value)` returns a string identifying the native SurrealDB data type.
+> 2. Returns `"string"`, `"decimal"`, `"datetime"`, `"record"`, `"array"`, `"object"`, etc.
+> 3. Used for type introspection in dynamic query scripts.
+
+---
+
+### Exercise 2: Type Validation Checks with `type::is::*`
+
+**Scenario:**
+Validate whether an incoming parameter `$val` is a valid `decimal` type using `type::is::decimal()`.
+
+**Requirements:**
+1. Check `IF type::is::decimal($val) THEN ...`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> LET $val = 49.99dec;
+> 
+> IF type::is::decimal($val) THEN (
+>     RETURN "Valid decimal currency value"
+> ) END;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `type::is::<type>(val)` evaluates whether a value matches a target data type.
+> 2. Returns boolean `true` or `false`.
+> 3. Validates inputs before applying numeric calculations.
+
+---
+
+### Exercise 3: Coercing Values with Type Conversion Functions
+
+**Scenario:**
+Convert string `"150"` to integer using `type::int()` and string `"true"` to boolean using `type::bool()`.
+
+**Requirements:**
+1. Select `type::int("150")` and `type::bool("true")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT 
+>     type::int("150") AS int_val,
+>     type::bool("true") AS bool_val;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `type::int()`, `type::bool()`, `type::string()`, `type::datetime()` explicitly coerce values to target types.
+> 2. Provides function-style alternative to casting syntax (`<int> "150"`).
+> 3. Ensures payload type alignment prior to write commits.
 
 ---
 
 
 
-### Exercise 2: Inspecting Value Type with `type::of`
-
-**Problem:** Inspect type of Record ID `user:alice` using `type::of(user:alice)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> "record"
-> ```
-> ```surrealql
-> RETURN type::of(user:alice);
-> ```
->
-> **Explanation:** `type::of(val)` returns the SurrealDB data type string of any value.
-
----
-
-### Exercise 3: Type Validation Functions
-
-**Problem:** Validate if `$val` is a valid email using `type::is::email($val)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> type::is::email($val)
-> ```
-> ```surrealql
-> RETURN type::is::email($val);
-> ```
->
-> **Explanation:** `type::is::*` functions inspect and validate value formats.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Built-in Functions Overview](builtin_functions.md) — The parent library.
 - [Type Casting & Coercion](../level_02/type_casting.md) — Explicit casting.
@@ -207,7 +238,7 @@ Write the SurrealQL expression using `type::*` to dynamically construct a Record
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `type::*` module handles dynamic type inspection, conversion, and construction.
 - `type::thing(table, id)` constructs native Record ID tokens safely from strings.
 - `type::table(id)` and `type::id(id)` extract component strings from Record IDs.

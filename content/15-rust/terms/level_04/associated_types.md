@@ -174,7 +174,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Telemetry Data Ingestion Stream Pipeline
 
-**Problem:** You are building an enterprise-grade telemetry ingestion pipeline for high-frequency server logs. The system must support decoupled input data formats, custom target domain entities, and explicit error handling across different stream adapters.
+**Scenario:** You are building an enterprise-grade telemetry ingestion pipeline for high-frequency server logs. The system must support decoupled input data formats, custom target domain entities, and explicit error handling across different stream adapters.
 
 1. Define a `StreamProcessor` trait with three associated types: `Input`, `Output`, and `Error` (where `Error: std::fmt::Debug`).
 2. Include a required method `fn process(&mut self, input: Self::Input) -> Result<Self::Output, Self::Error>;` and a default method `fn process_batch(&mut self, inputs: Vec<Self::Input>) -> Result<Vec<Self::Output>, Self::Error>;`.
@@ -345,7 +345,7 @@ thread::spawn(move || {
 
 ### Exercise 2: Key-Value Database Storage Engine Transaction API
 
-**Problem:** You are designing a core transaction API for an embedded database engine. Different storage backends may use different identifier types (e.g. `u64` vs `UUID`), key formats (e.g. `String` vs `[u8; 16]`), and value buffers.
+**Scenario:** You are designing a core transaction API for an embedded database engine. Different storage backends may use different identifier types (e.g. `u64` vs `UUID`), key formats (e.g. `String` vs `[u8; 16]`), and value buffers.
 
 1. Define a `TransactionEngine` trait with associated types: `TxId`, `Key`, `Value`, and `Error`. Apply trait bounds on these associated types:
    - `TxId: Copy + Eq + std::hash::Hash + std::fmt::Debug`
@@ -547,7 +547,7 @@ thread::spawn(move || {
 
 ### Exercise 3: Strongly Typed Event Codec & Reactive Message Dispatcher
 
-**Problem:** In a microservices event-driven framework, hardware telemetry events arrive as binary byte streams that must be decoded into domain event enums and processed by high-throughput event dispatchers.
+**Scenario:** In a microservices event-driven framework, hardware telemetry events arrive as binary byte streams that must be decoded into domain event enums and processed by high-throughput event dispatchers.
 
 1. Define an `EventCodec` trait with associated types: `RawPayload`, `Event: std::fmt::Debug + PartialEq + Clone`, and `DecodeError: std::fmt::Debug`.
 2. Provide signatures for `fn encode(&self, event: &Self::Event) -> Self::RawPayload;` and `fn decode(&self, raw: &Self::RawPayload) -> Result<Self::Event, Self::DecodeError>;`.

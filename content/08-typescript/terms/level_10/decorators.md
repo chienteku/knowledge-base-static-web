@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **OOP**
+
+**TypeScript Core Syntax** (Meta-Programming Decorators): Decorators (`@decorator`) provide meta-programming annotations that intercept and modify class, method, property, or parameter declarations.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Both** (Requires enabling compiler configuration flags at build-time, and executes wrapper functions at runtime when class definitions load).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In large-scale enterprise frameworks (such as Angular, NestJS, or database ORMs like TypeORM), classes often require cross-cutting metadata or shared behavior:
@@ -102,7 +103,7 @@ calc.add(5, 7); // Logs: "[Log] Calling method "add" with args: [5, 7]"
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming decorators execute when class instances are instantiated
 
@@ -130,6 +131,8 @@ class RequestLogs {
 
 
 
+
+
 ### Mistake 2: Forgetting to Enable `experimentalDecorators: true` in `tsconfig.json` for Legacy Decorators
 
 **The mistake:** Using Stage 2 legacy `@decorator` syntax without enabling `experimentalDecorators` flag.
@@ -147,6 +150,8 @@ class RequestLogs {
 // tsconfig.json
 { "compilerOptions": { "experimentalDecorators": true } }
 ```
+
+
 
 ### Mistake 3: Confusing Stage 3 Modern Decorators with Legacy Stage 2 Decorators
 
@@ -166,159 +171,118 @@ function modernDec(target: Input, context: ClassMethodDecoratorContext) {} // St
 
 
 
-### Mistake 4: Forgetting to Enable `experimentalDecorators: true` in `tsconfig.json` for Legacy Decorators
+## 5. Practice Exercises
 
-**The mistake:** Using Stage 2 legacy `@decorator` syntax without enabling `experimentalDecorators` flag.
+### Exercise 1: Authoring Method Logging Decorators
 
-**Why it's wrong:** TypeScript requires explicit compiler flag `experimentalDecorators: true` when using legacy Stage 2 decorators.
+**Scenario:**
+Create a method decorator `@log` that logs execution timing and parameters when a method is invoked.
 
-*Incorrect:*
-```typescript
-// tsconfig.json
-// "experimentalDecorators": false // ❌ Experimental support for decorators is a feature that is subject to change
-```
+**Requirements:**
+1. Define Stage 3 method decorator function.
 
-*Fix:*
-```typescript
-// tsconfig.json
-{ "compilerOptions": { "experimentalDecorators": true } }
-```
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function log(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+>   const originalMethod = descriptor.value;
 
-### Mistake 5: Confusing Stage 3 Modern Decorators with Legacy Stage 2 Decorators
+  descriptor.value = function (...args: any[]) {
+    console.log(`[LOG] Calling ${propertyKey} with args:`, args);
+    const result = originalMethod.apply(this, args);
+    console.log(`[LOG] Result:`, result);
+    return result;
+  };
 
-**The mistake:** Applying legacy decorator signature parameter arguments to Stage 3 decorators.
+  return descriptor;
+}
 
-**Why it's wrong:** Stage 3 decorators (TS 5.0+) use a standardized `(target, context)` signature, differing from legacy 3-argument metadata signatures.
-
-*Incorrect:*
-```typescript
-function legacyDec(target: any, propertyKey: string, descriptor: PropertyDescriptor) {}
-```
-
-*Fix:*
-```typescript
-function modernDec(target: Input, context: ClassMethodDecoratorContext) {} // Stage 3 standard
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Experimental Setup
-
-**Problem:** You are starting a NestJS backend project. The compiler is throwing the following warning:
-`Experimental support for decorators is a feature that is subject to change in a future release.`
-Modify this `tsconfig.json` block to resolve the compiler warning.
-
-```json
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "NodeNext",
-    // Complete this:
-    "experimentalDecorators": true
+class Calculator {
+  @log
+  add(a: number, b: number): number {
+    return a + b;
   }
 }
 ```
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> The compiler compiles files containing decorators without throwing experimental warnings.
-> ```
-> - NestJS relies on experimental legacy decorators.
-> - Add `"experimentalDecorators": true` to the `compilerOptions` field.
+> #### Technical Explanation
+>
+> 1. Decorators (`@decorator`) wrap class methods, modifying or replacing their `PropertyDescriptor`.
+> 2. Intercepts method execution dynamically for logging, caching, or security validation.
+> 3. Core meta-programming feature in Angular, NestJS, and TypeORM.
 
 ---
 
+### Exercise 2: Class Decorators for Meta-Data Injection
 
+**Scenario:**
+Create a class decorator `@sealed` that seals the class constructor and prototype.
 
-### Exercise 2: Class Method Decorator Signature
+**Requirements:**
+1. Apply `@sealed` to class.
 
-**Problem:** Write method decorator `log(target: any, key: string, descriptor: PropertyDescriptor)`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Method decorator created
-> ```
+>
+> #### Implementation
+>
 > ```typescript
-> function log(target: any, key: string, descriptor: PropertyDescriptor) {
->   const orig = descriptor.value;
->   descriptor.value = function(...args: any[]) {
->     console.log(`Calling ${key}`);
->     return orig.apply(this, args);
->   };
+> function sealed(constructor: Function) {
+>   Object.seal(constructor);
+>   Object.seal(constructor.prototype);
 > }
-> console.log("Method decorator created");
-> ```
+
+@sealed
+class BankVault {
+  open() { console.log("Vault opened"); }
+}
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** Method decorators intercept and wrap target function executions.
+> 1. Class decorators execute at class declaration time, receiving the constructor function as their argument.
+> 2. `Object.seal()` prevents adding new properties to the class prototype.
+> 3. Used for meta-data injection, aspect-oriented programming, and dependency injection registration.
 
 ---
 
-### Exercise 3: Decorator Evaluation Order
+### Exercise 3: Auditing `experimentalDecorators` vs Stage 3 Decorators
 
-**Problem:** State evaluation order when multiple decorators `@g @f x` are applied to a single target (Right to left / Bottom to top).
+**Scenario:**
+Explain the configuration difference between legacy `"experimentalDecorators": true` and modern ECMAScript Stage 3 Decorators in `tsconfig.json`.
 
-**Expected output:**
+**Requirements:**
+1. Contrast legacy vs Stage 3 decorator configs.
+
 > [!check]- Answer
-> ```text
-> Evaluated right-to-left (f then g)
-> ```
-> ```typescript
-> console.log("Evaluated right-to-left (f then g)");
-> ```
 >
-> **Explanation:** Decorators compose in right-to-left mathematical function composition order.
+> #### Implementation
+>
+> ```text
+> Decorator Specification Comparison:
+> - Legacy Decorators ("experimentalDecorators": true): Experimental 2014 proposal. Uses metadata reflection (reflect-metadata). Required for NestJS / Angular.
+> - Stage 3 Decorators (TS 5.0+): Official TC39 ECMAScript standard. Built-in natively without experimental flags. Distinct signature parameter types.
+> ```
+
+> #### Technical Explanation
+>
+> 1. TypeScript 5.0 introduced native support for TC39 Stage 3 Decorators.
+> 2. Legacy frameworks (NestJS, TypeORM) still require `"experimentalDecorators": true` in `tsconfig.json`.
+> 3. Critical compiler configuration awareness.
 
 ---
 
-### Exercise 4: Class Method Decorator Signature
 
-**Problem:** Write method decorator `log(target: any, key: string, descriptor: PropertyDescriptor)`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Method decorator created
-> ```
-> ```typescript
-> function log(target: any, key: string, descriptor: PropertyDescriptor) {
->   const orig = descriptor.value;
->   descriptor.value = function(...args: any[]) {
->     console.log(`Calling ${key}`);
->     return orig.apply(this, args);
->   };
-> }
-> console.log("Method decorator created");
-> ```
->
-> **Explanation:** Method decorators intercept and wrap target function executions.
-
----
-
-### Exercise 5: Decorator Evaluation Order
-
-**Problem:** State evaluation order when multiple decorators `@g @f x` are applied to a single target (Right to left / Bottom to top).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Evaluated right-to-left (f then g)
-> ```
-> ```typescript
-> console.log("Evaluated right-to-left (f then g)");
-> ```
->
-> **Explanation:** Decorators compose in right-to-left mathematical function composition order.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Classes Overview](classes.md) — The structures decorated.
 - [Access Modifiers (`public`, `private`, `protected`)](access_modifiers.md) — Visibility bounds of fields.
 - [Static Members](static_members.md) — Class-level properties.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Decorators** are functions prefixed with `@` used to modify classes, methods, accessors, properties, or parameters.
 - They execute once at runtime when class definitions are parsed by the JS engine, not when class instances are instantiated.
 - Legacy/NestJS decorator support requires enabling `"experimentalDecorators": true` in `tsconfig.json`.

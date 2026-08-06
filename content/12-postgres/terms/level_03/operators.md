@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Syntax**
+
+**SQL Command / Clause** (Comparison & Logical Operators): SQL Operators (`=`, `<>`, `>`, `<`, `AND`, `OR`, `LIKE`, `IN`) evaluate filtering logic within `WHERE` clauses.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all SQL engines. Operators evaluate values to `TRUE`, `FALSE`, or `UNKNOWN`).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A `WHERE` clause needs to know how to filter data. 
@@ -86,7 +87,7 @@ WHERE item_name LIKE 'S%';
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing `=` with `LIKE` when using wildcard percentages
 
@@ -137,71 +138,96 @@ SELECT * FROM t WHERE val = ANY(array_col);
 SELECT * FROM t WHERE val = ANY(COALESCE(array_col, ARRAY[]::INT[]));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Construction
+### Exercise 1: Value Comparison Filtering with Range Operators
 
-**Problem:** You are building an e-commerce dashboard. Write a SQL query to select `item_name` from the `inventory` table for all items that meet **all** of the following conditions:
-1.  The price is strictly greater than `100`.
-2.  The item is NOT marked as `'discontinued'`.
-3.  The item name starts with the word `'Smart'` (e.g. 'Smartphone', 'Smartwatch').
+**Scenario:**
+Query products with price between 1000 and 5000 cents (`price_cents BETWEEN 1000 AND 5000`).
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT` with `BETWEEN ... AND ...`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT item_name 
-> FROM inventory 
-> WHERE price > 100 
->   AND status <> 'discontinued' 
->   AND item_name LIKE 'Smart%';
+> SELECT id, name, price_cents 
+> FROM products 
+> WHERE price_cents BETWEEN 1000 AND 5000;
 > ```
-> - Combine the conditions using `AND` operators.
-> - Use `<>` or `!=` for inequality and `LIKE 'Smart%'` for the prefix text match.
+>
+> #### Technical Explanation
+>
+> 1. `BETWEEN a AND b` is inclusive (`price >= a AND price <= b`).
+> 2. Hits B-tree indexes efficiently.
+> 3. Clean range filtering syntax.
+
+---
+
+### Exercise 2: Discrete Value Set Matching with `IN`
+
+**Scenario:**
+Query orders where `status` is in set `('pending', 'processing', 'shipped')`.
+
+**Requirements:**
+1. Execute `WHERE status IN ('pending', 'processing', 'shipped')`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, customer_id, status 
+> FROM orders 
+> WHERE status IN ('pending', 'processing', 'shipped');
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `IN (...)` checks if a column value matches any element in a list.
+> 2. Replaces multiple `OR` conditions.
+> 3. Utilizes indexes on `status`.
+
+---
+
+### Exercise 3: Pattern Matching with LIKE and ILIKE
+
+**Scenario:**
+Find all users whose email ends with `@example.com` (case-insensitive).
+
+**Requirements:**
+1. Use `WHERE email ILIKE '%@example.com'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, username, email 
+> FROM users 
+> WHERE email ILIKE '%@example.com';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `%` matches zero or more characters; `_` matches a single character.
+> 2. `ILIKE` performs case-insensitive pattern matching (PostgreSQL extension).
+> 3. Note: Leading wildcards (`'%text'`) force sequential table scans unless trigram indexes exist.
 
 ---
 
 
 
-### Exercise 2: Case-Insensitive Substring Match with `ILIKE`
-
-**Problem:** Query users whose `email` ends with `'@gmail.com'` case-insensitively using `ILIKE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users WHERE email ILIKE '%@gmail.com';
-> ```
-> ```sql
-> SELECT * FROM users WHERE email ILIKE '%@gmail.com';
-> ```
->
-> **Explanation:** `ILIKE` performs case-insensitive wildcard string pattern matching.
-
----
-
-### Exercise 3: Array Member Comparison with `ANY`
-
-**Problem:** Query rows where `role` matches any array item in `ARRAY['admin', 'mod']` using `= ANY()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users WHERE role = ANY(ARRAY['admin', 'mod']);
-> ```
-> ```sql
-> SELECT * FROM users WHERE role = ANY(ARRAY['admin', 'mod']);
-> ```
->
-> **Explanation:** `= ANY(array)` evaluates true if the LHS scalar equals any array element.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`WHERE` Clause](where.md) — The parent filter context.
 - [`IS NULL` / `IS NOT NULL`](is_null.md) — The only way to compare missing values.
 - [`LIKE` / `ILIKE` Pattern Matching](../level_04/like_ilike.md) — Related concept: `LIKE` / `ILIKE` Pattern Matching.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Comparison operators compare values; logical operators combine filters.
 - `BETWEEN` performs inclusive range filtering.
 - `IN` checks for matching values inside a specified list.

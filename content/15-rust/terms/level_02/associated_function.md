@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: In Object-Oriented languages like Java, C#, or C++, this concept is known as a **Static Method** or **Class Method**. It is a function that belongs to a Type/Class as a whole, rather than belonging to a specific instance/object of that class.
+
+
+**Rust Language Feature (type-scoped constructors)**: In Object-Oriented languages like Java, C#, or C++, this concept is known as a **Static Method** or **Class Method**. It is a function that belongs to a Type/Class as a whole, rather than belonging to a specific instance/object of that class.
 
 ---
 
@@ -166,11 +168,12 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Pattern Associated Function Factory for Database Pool Configuration
 
-**Scenario**: You are architecting an infrastructure library for microservices that manages database connection pools. Rather than permitting external modules to instantiate unvalidated `DbPoolConfig` structs directly, you must supply a suite of associated factory functions:
+**Scenario:** **Scenario**: You are architecting an infrastructure library for microservices that manages database connection pools. Rather than permitting external modules to instantiate unvalidated `DbPoolConfig` structs directly, you must supply a suite of associated factory functions:
 1. `DbPoolConfig::default_postgres()` for standard local PostgreSQL defaults.
 2. `DbPoolConfig::from_url(url: &str)` to parse and validate connection strings formatted as `postgres://<host>:<port>/<database>`.
 3. `DbPoolConfig::validate_limits(max_conn: u32, timeout_ms: u64)` as an associated namespace helper to validate runtime operational parameters.
 
+**Requirements:**
 **Task**: Implement `DbPoolConfig`, the associated error enum `ConfigError`, all three associated functions, and write unit tests covering default creation, string parsing, error variants, and resource bounds validation.
 
 > [!check]- Answer
@@ -325,8 +328,9 @@ thread::spawn(move || {
 
 ### Exercise 2: Financial Trading Pair Normalizer and Spread Calculator
 
-**Scenario**: A financial matching engine requires strict domain objects for trading pairs (`TradingPair`) and price ticks (`PriceTick`). You must enforce ticker normalization, prevent invalid state (such as identical base/quote currencies or zero/negative prices), and compute ask-bid spreads using static associated functions.
+**Scenario:** **Scenario**: A financial matching engine requires strict domain objects for trading pairs (`TradingPair`) and price ticks (`PriceTick`). You must enforce ticker normalization, prevent invalid state (such as identical base/quote currencies or zero/negative prices), and compute ask-bid spreads using static associated functions.
 
+**Requirements:**
 **Task**: Implement enums `Currency` and `TradeError`, struct `TradingPair` with associated functions `new`, `normalize_symbol`, and `parse_pair`, and struct `PriceTick` with associated functions `new` and `calculate_spread`. Provide a complete unit test module using explicit assertions.
 
 > [!check]- Answer
@@ -519,8 +523,9 @@ thread::spawn(move || {
 
 ### Exercise 3: Network Telemetry Binary Frame Synthesizer and Checksum Validator
 
-**Scenario**: In high-throughput network applications, binary telemetry frames are packed, checksummed, and parsed over wire slices. You must implement `NetworkFrame` with associated functions that act as wire frame parsers (`NetworkFrame::parse_bytes`), message constructors (`NetworkFrame::new_ping`, `NetworkFrame::new_data`), and bitwise checksum utility calculators (`NetworkFrame::calculate_checksum`).
+**Scenario:** **Scenario**: In high-throughput network applications, binary telemetry frames are packed, checksummed, and parsed over wire slices. You must implement `NetworkFrame` with associated functions that act as wire frame parsers (`NetworkFrame::parse_bytes`), message constructors (`NetworkFrame::new_ping`, `NetworkFrame::new_data`), and bitwise checksum utility calculators (`NetworkFrame::calculate_checksum`).
 
+**Requirements:**
 **Task**: Implement `FrameType`, `FrameError`, and `NetworkFrame`. Define associated functions `calculate_checksum`, `new_ping`, `new_data`, and `parse_bytes`. Write unit tests covering frame creation, wire parsing, and corrupted packet rejection.
 
 > [!check]- Answer

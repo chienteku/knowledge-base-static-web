@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Core Concept / Trait / Type System**: Coherence is the overarching design principle of Rust's trait system. It ensures that trait resolution is always **unambiguous** and **deterministic**. Under coherence, there can never exist two conflicting implementations of `impl Trait for TargetType` in a compiled binary, eliminating ambiguity for the compiler, IDEs, and developers.
+
+
+**Rust Trait System (single implementation coherence rule)**: Coherence is the overarching design principle of Rust's trait system. It ensures that trait resolution is always **unambiguous** and **deterministic**. Under coherence, there can never exist two conflicting implementations of `impl Trait for TargetType` in a compiled binary, eliminating ambiguity for the compiler, IDEs, and developers.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: Coherence rules are enforced statically by `rustc` at compile time across all Rust targets (`std`, `no_std`, WASM, embedded).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -119,7 +117,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting Trait Method Overriding / Specialization on Stable Rust
 
@@ -188,13 +186,16 @@ pub trait DebugSummary { fn summarize_debug(&self); }
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Telemetry System — Bypassing Blanket Impl Overlap via Newtype Wrapper
 
-**Problem:** In an embedded telemetry system, a logging framework provides a blanket implementation of `TelemetrySerializer` for all types implementing `std::fmt::Display`. You have a `SensorReadings` struct that implements `Display` for human-readable output, but requires a custom compact format for network transmission. Directly writing `impl TelemetrySerializer for SensorReadings` results in compiler error `E0119` due to coherence rules. Refactor the code using the Newtype pattern to allow custom serialization while respecting coherence.
+**Scenario:** In an embedded telemetry system, a logging framework provides a blanket implementation of `TelemetrySerializer` for all types implementing `std::fmt::Display`. You have a `SensorReadings` struct that implements `Display` for human-readable output, but requires a custom compact format for network transmission. Directly writing `impl TelemetrySerializer for SensorReadings` results in compiler error `E0119` due to coherence rules. Refactor the code using the Newtype pattern to allow custom serialization while respecting coherence.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::fmt;
 > 
@@ -292,7 +293,8 @@ pub trait DebugSummary { fn summarize_debug(&self); }
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Coherence & Blanket Impls (`E0119`):** Rust enforces that for any pair `(Trait, Type)`, there is strictly one implementation across the program. The blanket `impl<T: Display> TelemetrySerializer for T` claims an implementation for *every* type implementing `Display`. Adding `impl TelemetrySerializer for SensorReadings` creates two overlapping implementations for `SensorReadings`, triggering error `E0119`.
 > 2. **Lack of Specialization in Stable Rust:** Unlike C++ template specialization, stable Rust does not permit specialized `impl` blocks to override generic blanket `impl` blocks.
 > 3. **Newtype Pattern Solution:** Wrapping `&SensorReadings` inside `CompactTelemetry<'a>` introduces a novel nominal type in the local crate. Because `CompactTelemetry` does not implement `Display`, it does not trigger the blanket implementation. Implementing `TelemetrySerializer` for `CompactTelemetry` is completely coherent and unambiguous.
@@ -301,9 +303,12 @@ pub trait DebugSummary { fn summarize_debug(&self); }
 
 ### Exercise 2: Financial Engine — Resolving Overlapping Generic Blanket Bounds
 
-**Problem:** In a financial risk engine, you define a `RiskEvaluator` trait. You wish to calculate risk scores based on either audit history (`AuditLog` trait) or compliance status (`ComplianceCheck` trait). Writing two blanket implementations (`impl<T: AuditLog> RiskEvaluator for T` and `impl<T: ComplianceCheck> RiskEvaluator for T`) fails with compiler error `E0119` because a single transaction type could implement both traits. Refactor the architecture using dedicated adapter wrappers to resolve the overlap.
+**Scenario:** In a financial risk engine, you define a `RiskEvaluator` trait. You wish to calculate risk scores based on either audit history (`AuditLog` trait) or compliance status (`ComplianceCheck` trait). Writing two blanket implementations (`impl<T: AuditLog> RiskEvaluator for T` and `impl<T: ComplianceCheck> RiskEvaluator for T`) fails with compiler error `E0119` because a single transaction type could implement both traits. Refactor the architecture using dedicated adapter wrappers to resolve the overlap.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > pub trait RiskEvaluator {
 >     fn calculate_risk_score(&self) -> u32;
@@ -425,7 +430,8 @@ pub trait DebugSummary { fn summarize_debug(&self); }
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Overlapping Generic Bounds (`E0119`):** Rust's coherence checker checks for potential overlaps across generic bounds. Even if no struct currently implements both `AuditLog` and `ComplianceCheck`, Rust forbids two blanket `impl` blocks if a type *could* implement both traits in the future.
 > 2. **Explicit Adapter Pattern:** By wrapping `&WireTransfer` inside `AuditRiskAdapter<'a, T>` or `ComplianceRiskAdapter<'a, T>`, we transform the target type of `impl RiskEvaluator` from `T` to `AuditRiskAdapter<T>` and `ComplianceRiskAdapter<T>`.
 > 3. **Zero-Cost Disambiguation:** These adapter structs are non-allocating reference wrappers (`pub struct Adapter<'a, T>(&'a T)`). They compile down to direct function calls without runtime performance penalty while providing absolute coherence.
@@ -434,9 +440,12 @@ pub trait DebugSummary { fn summarize_debug(&self); }
 
 ### Exercise 3: Embedded `no_std` Peripheral Driver — Disjoint Parameterized Generic Implementations
 
-**Problem:** In an embedded `#![no_std]` environment, you are designing a hardware peripheral driver interface `SensorDevice`. Devices can operate in synchronous polling mode (`SyncMode`) or DMA asynchronous mode (`AsyncMode`). Writing separate `impl` blocks for generic parameters without distinct marker types leads to trait overlap errors. Implement a `#![no_std]` compatible driver architecture using phantom type parameters (`PhantomData`) to guarantee disjoint `impl` blocks and coherent trait resolution.
+**Scenario:** In an embedded `#![no_std]` environment, you are designing a hardware peripheral driver interface `SensorDevice`. Devices can operate in synchronous polling mode (`SyncMode`) or DMA asynchronous mode (`AsyncMode`). Writing separate `impl` blocks for generic parameters without distinct marker types leads to trait overlap errors. Implement a `#![no_std]` compatible driver architecture using phantom type parameters (`PhantomData`) to guarantee disjoint `impl` blocks and coherent trait resolution.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -541,14 +550,15 @@ pub trait DebugSummary { fn summarize_debug(&self); }
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Disjoint Types via Phantom Type Parameters:** By parameterizing `SensorDevice<B, Mode>` with `Mode`, `SensorDevice<MockI2cBus, SyncMode>` and `SensorDevice<MockI2cBus, AsyncMode>` become distinct, non-overlapping types in Rust's type system.
 > 2. **Coherence Preservation:** Because the types are distinct, `impl<B: RawBus> SensorDevice<B, SyncMode>` and `impl<B: RawBus> SensorDevice<B, AsyncMode>` do not overlap, completely eliminating coherence errors (`E0119`).
 > 3. **`no_std` Zero-Cost Abstraction:** Using `PhantomData<Mode>` ensures no runtime memory footprint or heap allocation is introduced, making this pattern ideal for resource-constrained embedded microcontrollers.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Orphan Rule](orphan_rule.md) — The crate-boundary policy enforcing global coherence across Cargo dependencies.
@@ -559,7 +569,7 @@ pub trait DebugSummary { fn summarize_debug(&self); }
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Coherence guarantees that there is at most ONE valid implementation of `impl Trait for Type` across an entire compiled program.
 - Conflicting or overlapping implementations trigger compiler error `E0119`.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Type System Fundamental**
+
+**Type System Fundamental** (Literal Type Widening Mechanics): Type widening automatically expands narrow literal types (`"GET"`, `42`) to broader primitive types (`string`, `number`) during mutable `let` declarations.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-time** (Inference and widening are compile-time operations used to generate warnings before transpilation).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, variables are declared as either mutable (`let`, `var`) or immutable (`const`). 
@@ -82,7 +83,7 @@ let activeTheme = 'dark'; // Type: string
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Declaring a literal variable with `let` and passing it to a strict type config
 
@@ -150,68 +151,105 @@ let x: number;
 x = 10; // Enforces number type
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identifying Widening
+### Exercise 1: Understanding Mutable `let` Type Widening
 
-**Problem:** What are the inferred types of `x`, `y`, and `z` in the script below?
+**Scenario:**
+Demonstrate literal type widening when assigning string literals to `let` vs `const` variables.
 
-```typescript
-const x = 'Hello';
-let y = 'Hello';
-const z = { greeting: 'Hello' };
+**Requirements:**
+1. Compare `let x = "GET"` vs `const y = "GET"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> let methodLet = "GET"; // Inferred as type 'string' (Widened!)
+> const methodConst = "GET"; // Inferred as literal type '"GET"' (Not Widened!)
+> 
+> methodLet = "POST"; // Valid! Re-assignable to any string.
+> // methodConst = "POST"; // ❌ Compile Error: Cannot assign to 'methodConst' because it is a constant.
+> ```
+
+> #### Technical Explanation
+>
+> 1. Variables declared with `let` undergo type widening from literal types (`"GET"`) to primitive types (`string`).
+> 2. Widening occurs because `let` variables can be re-assigned to different string values later.
+> 3. Variables declared with `const` preserve narrow literal types because their values cannot mutate.
+
+---
+
+### Exercise 2: Preventing Type Widening with `as const` Assertions
+
+**Scenario:**
+Prevent object property type widening using `as const` (const assertions).
+
+**Requirements:**
+1. Apply `as const` to configuration object literal.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // Without 'as const': method is inferred as type 'string'
+> const configMutable = {
+>   endpoint: "/api/users",
+>   method: "GET"
+> };
+> 
+> // With 'as const': properties become readonly literal types!
+> const configReadonly = {
+>   endpoint: "/api/users",
+>   method: "GET"
+> } as const;
+> 
+> // configReadonly.method is typed strictly as '"GET"' (readonly)!
+> ```
+
+> #### Technical Explanation
+>
+> 1. `as const` locks object properties into deeply `readonly` literal types.
+> 2. Prevents TypeScript from widening property types (`"GET"` -> `string`).
+> 3. Essential technique for passing configuration objects into functions expecting strict literal union types.
+
+---
+
+### Exercise 3: Controlling Explicit Union Type Narrowing
+
+**Scenario:**
+Prevent widening of a mutable variable by providing an explicit union type annotation.
+
+**Requirements:**
+1. Annotate variable with `HTTPMethod` union type (`'GET' | 'POST'`).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE";
+
+// Explicit type annotation prevents widening to general 'string':
+let activeMethod: HTTPMethod = "GET";
+
+activeMethod = "POST"; // Valid!
+// activeMethod = "INVALID"; // ❌ Compile Error: Type '"INVALID"' is not assignable to type 'HTTPMethod'.
 ```
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Inferred Types:
-> - x: "Hello" (Literal type)
-> - y: string (Widened primitive)
-> - z: { greeting: string } (Object property widened)
-> ```
-> - `x` is a constant string, so its value cannot change.
-> - `y` is a variable string, meaning it can change.
-> - The property of `z` can be reassigned (e.g. `z.greeting = 'Hi'`), even though `z` is a constant reference.
+> #### Technical Explanation
+>
+> 1. Providing an explicit type annotation (`: HTTPMethod`) overrides default variable type widening.
+> 2. Constrains variable re-assignment to valid union members only.
+> 3. Idiomatic method for maintaining strict state flags.
 
 ---
 
 
 
-### Exercise 2: Widening Prevention with `as const`
-
-**Problem:** Prevent type widening on array `const colors = ["red", "green"] as const`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> readonly ["red", "green"]
-> ```
-> ```typescript
-> const colors = ["red", "green"] as const;
-> console.log("readonly [\"red\", \"green\"]");
-> ```
->
-> **Explanation:** `as const` creates immutable literal tuple/object types.
-
----
-
-### Exercise 3: Const vs Let Widening Behavior
-
-**Problem:** State inferred types for `const x = 10` vs `let y = 10`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> x: 10 (literal), y: number (widened)
-> ```
-> ```typescript
-> console.log("x: 10 (literal), y: number (widened)");
-> ```
->
-> **Explanation:** `const` primitive bindings preserve literal types; `let` widens to base primitive types.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Type Inference](type_inference.md) — The mechanism that triggers widening.
 - [Literal Types](../level_05/literal_types.md) — The specific types that are widened.
 - [Const Assertions (`as const`)](../level_11/const_assertions.md) — The syntax used to opt-out of widening on objects and arrays.
@@ -219,7 +257,7 @@ const z = { greeting: 'Hello' };
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Type Widening** is the automatic conversion of a literal type to its general primitive type.
 - It prevents type-checking errors when mutable variables (`let`) are updated with new values.
 - Immutable variables (`const`) do not trigger widening for primitive values.

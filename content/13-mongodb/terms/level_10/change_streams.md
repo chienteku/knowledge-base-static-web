@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Advanced Feature** (Real-Time Change Data Capture): Change Streams allow applications to subscribe to real-time data modifications (`insert`, `update`, `delete`, `replace`) across collections, databases, or clusters via oplog tailing.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Requires replica set or sharded cluster configuration. Events are streamed asynchronously to client drivers using cursors).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In modern web applications, your backend must react to database changes in real-time:
@@ -106,7 +107,7 @@ watchOrders().catch(console.error);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to launch Change Streams on standalone MongoDB instances, causing query crashes
 
@@ -155,79 +156,116 @@ const stream = collection.watch(); // ❌ Misses events if worker crashes!
 const stream = collection.watch([], { resumeAfter: savedResumeToken });
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Listener Script Construction
+### Exercise 1: Real-Time Document Change Subscriptions
 
-**Problem:** You have a `notifications` collection. Write the Node.js code block to:
-1.  Initialize a change stream on that collection.
-2.  Listen to the `'change'` event.
-3.  If the `operationType` is `"delete"`, log the deleted document identifier (`documentKey._id`) to the console.
+**Scenario:**
+Subscribe to real-time `insert` and `update` events on collection `orders` using `watch()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `db.orders.watch([{ $match: { operationType: { $in: ["insert", "update"] } } }])`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> const changeStream = notifications.watch();
-> changeStream.on('change', (event) => {
->   if (event.operationType === 'delete') {
->     console.log("Deleted notification ID:", event.documentKey._id);
+> const changeStream = db.orders.watch([
+>   {
+>     $match: {
+>       operationType: { $in: ["insert", "update"] }
+>     }
 >   }
-> });
-> ```
-> - Call the `.watch()` method to initialize the event stream.
-> - Access the deleted document ID using the `event.documentKey._id` property path.
-
----
-
-
-
-### Exercise 2: Opening Collection Change Stream in Node.js
-
-**Problem:** Open change stream filtering for `operationType: "insert"` on `orders` collection.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const stream = db.orders.watch([{ $match: { operationType: "insert" } }]); stream.on("change", change => console.log(change));
-> ```
-> ```javascript
-> const stream = db.orders.watch([
->   { $match: { operationType: "insert" } }
 > ]);
-> stream.on("change", (change) => {
->   console.log("New order inserted:", change.fullDocument);
+> 
+> changeStream.on("change", (change) => {
+>   console.log("Real-time Mutation Event:", change.operationType, change.documentKey._id);
 > });
 > ```
 >
-> **Explanation:** `.watch([ pipeline ])` streams real-time database write mutations over WebSockets/RPC.
+> #### Technical Explanation
+>
+> 1. Change Streams tail the replica set oplog to emit real-time event notifications.
+> 2. Supports aggregation pipeline filtering (`$match`) server-side.
+> 3. Powers real-time notification feeds and webhooks.
 
 ---
 
-### Exercise 3: Full Document Lookup Option
+### Exercise 2: Including Full Document Snapshots in Update Events
 
-**Problem:** Configure Change Stream to include full updated document on `update` events (`fullDocument: 'updateLookup'`).
+**Scenario:**
+Configure change stream options with `fullDocument: "updateLookup"` to receive the complete post-update document payload.
 
-**Expected output:**
+**Requirements:**
+1. Pass `fullDocument: "updateLookup"` in `watch()` options.
+
 > [!check]- Answer
-> ```text
-> const stream = db.orders.watch([], { fullDocument: "updateLookup" });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const stream = db.orders.watch([], {
+> const changeStream = db.orders.watch([], {
 >   fullDocument: "updateLookup"
 > });
+> 
+> changeStream.on("change", (change) => {
+>   console.log("Full Updated Document Payload:", change.fullDocument);
+> });
 > ```
 >
-> **Explanation:** `fullDocument: 'updateLookup'` fetches the current post-update document snapshot.
+> #### Technical Explanation
+>
+> 1. Standard update change events contain only modified delta fields (`updateDescription`).
+> 2. `fullDocument: "updateLookup"` performs a instant lookup to return the complete document payload.
+> 3. Simplifies client-side event processing.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Resuming Interrupted Change Streams with Resume Tokens
+
+**Scenario:**
+Resume a disconnected change stream from its exact point of failure using `resumeAfter: token`.
+
+**Requirements:**
+1. Save `change._id` resume token and pass `resumeAfter`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> let lastResumeToken = null;
+> 
+> const changeStream = db.orders.watch();
+> changeStream.on("change", (change) => {
+>   lastResumeToken = change._id; // Save resume token
+> });
+> 
+> // Reconnect stream after crash
+> const resumedStream = db.orders.watch([], {
+>   resumeAfter: lastResumeToken
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Change stream events include a unique BSON `_id` resume token representing oplog position.
+> 2. `resumeAfter` resumes event processing seamlessly without dropping or duplicating events.
+> 3. Guarantees fault-tolerant event processing.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Replica Set](../level_09/replica_set.md) — The cluster context.
 - [Oplog (Operations Log)](../level_09/oplog.md) — The event source.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Change Streams push real-time database modifications directly to applications.
 - Direct NoSQL equivalent to PostgreSQL's `LISTEN` and `NOTIFY` signals.
 - Taps directly into the replica set Oplog file to stream events.

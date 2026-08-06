@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Constraint**
+
+**Constraint** (Mandatory Presence Constraint): A `NOT NULL` constraint prevents a column from storing `NULL` values, ensuring mandatory field presence for all table rows.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Checked natively at the transaction barrier. Prevents data storage files from committing blank byte records).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, columns in a SQL database are "nullable." This means that if you insert a row but omit a column, Postgres automatically inserts `NULL`.
@@ -77,7 +78,7 @@ VALUES (2, 'error@example.com');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Adding NOT NULL to an existing column that already contains NULL rows
 
@@ -138,73 +139,108 @@ email TEXT -- Allows NULL email addresses
 email TEXT NOT NULL -- Guarantees presence of value
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Table Constraints Mapping
+### Exercise 1: Enforcing Mandatory Field Presence
 
-**Problem:** You are building a table `products`. Every product must have an ID, a title, and a price. The description field is optional. Write the complete `CREATE TABLE` SQL query enforcing these rules.
+**Scenario:**
+Create a `contacts` table requiring `first_name`, `last_name`, and `email` using `NOT NULL`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE TABLE contacts (...)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE products (
->   id INTEGER PRIMARY KEY,
->   title VARCHAR(100) NOT NULL,
->   price NUMERIC(10,2) NOT NULL,
->   description TEXT
+> CREATE TABLE contacts (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   first_name TEXT NOT NULL,
+>   last_name TEXT NOT NULL,
+>   email TEXT NOT NULL,
+>   phone TEXT -- Optional field allowing NULL
 > );
 > ```
-> - The `PRIMARY KEY` constraint inherently includes `NOT NULL` properties, so you don't need to specify both on the ID column.
-> - Apply `NOT NULL` to required fields.
+>
+> #### Technical Explanation
+>
+> 1. `NOT NULL` prevents writing rows with unassigned or missing values in target columns.
+> 2. Attempting to insert `NULL` into a `NOT NULL` column throws a null value constraint violation.
+> 3. Guarantees mandatory data presence at the database tier.
+
+---
+
+### Exercise 2: Adding NOT NULL Constraints to Existing Columns
+
+**Scenario:**
+Add a `NOT NULL` constraint to column `status` on existing table `tasks` after backfilling missing values.
+
+**Requirements:**
+1. Update existing nulls with default value.
+2. Execute `ALTER TABLE tasks ALTER COLUMN status SET NOT NULL`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- 1. Backfill existing NULL rows
+> UPDATE tasks SET status = 'pending' WHERE status IS NULL;
+> 
+> -- 2. Apply NOT NULL constraint
+> ALTER TABLE tasks 
+> ALTER COLUMN status SET NOT NULL;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Applying `SET NOT NULL` fails if existing table rows contain `NULL` values.
+> 2. Backfilling missing values with `UPDATE` ensures constraint validation succeeds.
+> 3. Hardens table integrity.
+
+---
+
+### Exercise 3: Handling NOT NULL Constraint Exceptions
+
+**Scenario:**
+Catch `not_null_violation` (Error Code 23502) in PostgreSQL driver scripts.
+
+**Requirements:**
+1. Describe error code `23502` handling.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> try {
+>   await pool.query("INSERT INTO contacts (first_name) VALUES ($1)", ["Alice"]);
+> } catch (err: any) {
+>   if (err.code === "23502") {
+>     console.error("Constraint Error: Mandatory field missing!", err.column);
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. PostgreSQL returns Error Code `23502` (`not_null_violation`) when a `NOT NULL` constraint is violated.
+> 2. Driver exposes `err.column` identifying the missing field name.
+> 3. Maps to HTTP 400 Bad Request error responses in application APIs.
 
 ---
 
 
 
-### Exercise 2: Setting Column NOT NULL in DDL
-
-**Problem:** Create table `accounts` requiring `username` and `password_hash` to be NOT NULL.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TABLE accounts ( id SERIAL PRIMARY KEY, username TEXT NOT NULL, password_hash TEXT NOT NULL );
-> ```
-> ```sql
-> CREATE TABLE accounts (
->   id SERIAL PRIMARY KEY,
->   username TEXT NOT NULL,
->   password_hash TEXT NOT NULL
-> );
-> ```
->
-> **Explanation:** `NOT NULL` constraints guarantee columns cannot store NULL missing values.
-
----
-
-### Exercise 3: Removing NOT NULL Constraint
-
-**Problem:** Remove `NOT NULL` constraint from `phone` column on `users` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ALTER TABLE users ALTER COLUMN phone DROP NOT NULL;
-> ```
-> ```sql
-> ALTER TABLE users ALTER COLUMN phone DROP NOT NULL;
-> ```
->
-> **Explanation:** `DROP NOT NULL` allows target columns to store NULL values.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`NULL`](null.md) — The unset state.
 - [`DEFAULT` Value](default_value.md) — Providing fallbacks for required columns.
 - [`CHECK` Constraint](check_constraint.md) — Related concept: `CHECK` Constraint.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `NOT NULL` makes a column mandatory, preventing it from storing `NULL` markers.
 - Helps avoid backend runtime crashes caused by missing parameter values.
 - Rejects inserts and updates if required fields are omitted or set to `NULL`.

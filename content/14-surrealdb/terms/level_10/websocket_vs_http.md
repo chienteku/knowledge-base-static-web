@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Protocol & Architecture**
+
+
+**Integration / Ecosystem (WebSocket vs HTTP connection protocol comparison)**: - **Protocol & Architecture**
+
+
 
 ---
 
-## 3. Environment Context
-- **Network Architecture & Deployment** (Selecting the right protocol based on client environment: browser apps, serverless functions, mobile apps, or microservices).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 SurrealDB supports two client connection protocols:
@@ -57,7 +56,7 @@ await db.connect('https://db.example.com');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using WebSockets in Short-Lived Serverless Functions (Vercel / AWS Lambda)
 
@@ -125,87 +124,97 @@ await db.connect("http://..."); // Fast stateless HTTP request for serverless
 
 
 
-### Mistake 4: Choosing HTTP Protocol for Real-Time `LIVE SELECT` Applications
 
-**The mistake:** Connecting SDK over HTTP protocol when building real-time messaging apps.
 
-**Why it's wrong:** HTTP request-response is stateless and cannot receive real-time server push events. Use WebSockets (`ws://` / `wss://`).
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-await db.connect("http://127.0.0.1:8000/rpc"); // ❌ Live queries fail!
-```
+### Exercise 1: Protocol Feature Comparison Matrix
 
-*Fix:*
-```surrealql
-await db.connect("ws://127.0.0.1:8000/rpc"); // Real-time WebSockets
-```
+**Scenario:**
+Compare WebSocket (`wss://`) vs HTTP (`https://`) connection endpoints in SurrealDB across key database capabilities.
 
-### Mistake 5: Using WebSockets for Simple Ephemeral Serverless Lambda Functions
-
-**The mistake:** Establishing persistent WebSocket connections in short-lived serverless AWS Lambda execution environments.
-
-**Why it's wrong:** Serverless functions spin up and shut down in milliseconds. Opening persistent WebSockets adds unnecessary handshake latency. Use HTTP REST/RPC endpoints for serverless functions.
-
-*Incorrect:*
-```surrealql
-// Inside AWS Lambda handler:
-const db = new Surreal(); await db.connect("ws://..."); // Handshake overhead per execution!
-```
-
-*Fix:*
-```surrealql
-await db.connect("http://..."); // Fast stateless HTTP request for serverless
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Choose the Protocol
-Select the best protocol (WebSocket or HTTP) for each scenario:
-1. A real-time collaborative Figma-like whiteboard application.
-2. An AWS Lambda webhook endpoint processing Stripe checkout payments.
+**Requirements:**
+1. Compare real-time live queries, session state persistence, and request latency.
 
 > [!check]- Answer
-> 1. Collaborative UI = WebSocket (`wss://`).
-> 2. AWS Lambda Webhook = HTTP (`https://`).
+>
+> #### Implementation
+>
+> ```text
+> Feature Comparison Matrix:
+> +-----------------------+-----------------------+-----------------------+
+> | Feature               | WebSocket (wss://)    | HTTP REST (https://)  |
+> +-----------------------+-----------------------+-----------------------+
+> | Connection Model      | Persistent Binary     | Stateless Request/Resp|
+> | Real-Time Live Queries| Supported (LIVE)      | Not Supported         |
+> | Session Auth Token    | Stored in WS Channel  | Required per Request  |
+> | Best For              | Interactive Web Apps  | Serverless REST APIs  |
+> +-----------------------+-----------------------+-----------------------+
+> ```
+>
+> #### Technical Explanation
+>
+> 1. WebSockets maintain persistent bi-directional binary channels required for `LIVE SELECT` real-time subscriptions.
+> 2. HTTP endpoints process stateless REST requests, ideal for serverless functions (AWS Lambda, Cloudflare Workers).
+> 3. WebSocket connections eliminate HTTP connection handshake overhead per query.
+
+---
+
+### Exercise 2: Executing HTTP REST API Queries
+
+**Scenario:**
+Execute a SurrealQL query via HTTP POST request targeting SurrealDB's `/sql` REST endpoint using `curl`.
+
+**Requirements:**
+1. Formulate `curl` request passing authentication headers and SurrealQL query string.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> curl -X POST http://localhost:8000/sql >   -H "NS: main" >   -H "DB: app" >   -u "root:root" >   -d "SELECT * FROM user WHERE active = true;"
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `/sql` REST endpoint accepts raw SurrealQL query scripts via HTTP POST.
+> 2. Headers (`NS`, `DB`) specify active target namespace and database scopes.
+> 3. Enables HTTP client integrations without requiring SDK libraries.
+
+---
+
+### Exercise 3: Selecting Protocols for Application Use Cases
+
+**Scenario:**
+Select WebSockets vs HTTP REST for a real-time chat application vs a stateless webhook listener endpoint.
+
+**Requirements:**
+1. Recommend protocol for Real-Time Chat App.
+2. Recommend protocol for Stateless Webhook Receiver.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Real-Time Chat App: WebSockets (wss://) for instant bi-directional push notifications.
+> Stateless Webhook Receiver: HTTP REST (https://) for single-request stateless event ingestion.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Real-time collaborative web apps require WebSockets for server push notifications.
+> 2. Stateless serverless lambdas require HTTP REST to avoid holding open socket handles.
+> 3. SurrealDB supports both protocols concurrently over the same server port.
 
 ---
 
 
 
-### Exercise 2: Protocol Selection Decision Matrix
 
-**Problem:** Match protocol with use case: 1. Real-time web browser apps (`WebSockets`), 2. Stateless serverless lambdas (`HTTP`).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. WebSockets, 2. HTTP
-> ```
-> ```text
-> 1. WebSockets, 2. HTTP
-> ```
->
-> **Explanation:** WebSockets provide real-time bi-directional streaming; HTTP provides stateless request-response execution.
-
----
-
-### Exercise 3: WebSocket Scheme Options
-
-**Problem:** List URI schemes for local un-encrypted and production encrypted WebSockets (`ws://`, `wss://`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ws:// (local un-encrypted), wss:// (production TLS-encrypted)
-> ```
-> ```text
-> ws:// (local un-encrypted), wss:// (production TLS-encrypted)
-> ```
->
-> **Explanation:** `wss://` encrypts WebSocket frames using TLS/SSL in production.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](../level_01/connection_uri.md) — Connection strings.
 - [`LIVE SELECT` (Live Queries)](../level_09/live_select.md) — Live queries.
@@ -215,7 +224,7 @@ Select the best protocol (WebSocket or HTTP) for each scenario:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Use **WebSocket (`wss://`)** for interactive apps requiring live queries (`LIVE SELECT`) and low latency.
 - Use **HTTP (`https://`)** for serverless functions, edge microservices, and one-off batch scripts.
 - WebSockets preserve auth state; HTTP requires sending authentication headers on each request.

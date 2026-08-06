@@ -17,17 +17,15 @@
 
 ## 2. Term Category
 
-**Trait / Abstraction**: A Marker Trait is a trait definition that contains no methods, associated constants, or associated types (`pub trait Marker {}`). Instead of defining executable behavior, marker traits act as type-level metadata flags. They allow the compiler and library authors to categorize types into semantic groups (e.g. "thread-safe", "copyable", "compile-time sized", "unencrypted payload") and enforce these constraints statically at compile time with zero runtime overhead.
+
+
+**Rust Type System (compile-time marker traits)**: A Marker Trait is a trait definition that contains no methods, associated constants, or associated types (`pub trait Marker {}`). Instead of defining executable behavior, marker traits act as type-level metadata flags. They allow the compiler and library authors to categorize types into semantic groups (e.g. "thread-safe", "copyable", "compile-time sized", "unencrypted payload") and enforce these constraints statically at compile time with zero runtime overhead.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: Marker traits are foundational across all Rust environments (`std`, `no_std`, WASM, embedded). Standard library marker traits include `Copy`, `Send`, `Sync`, `Sized`, and `Unpin`.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -139,7 +137,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Implementing `Copy` on Types with Destructors (`Drop`)
 
@@ -195,13 +193,14 @@ struct SecureData<S: Sanitized> {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Marker Trait & Typestate Pattern for Microcontroller UART Driver
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 In embedded Rust applications (`#![no_std]`), microcontroller hardware peripherals (such as a UART interface) must be initialized in a strict operational sequence. The peripheral must remain in a `Disabled` state while configuring baud rates or frame parameters, and transition to an `Enabled` state before transmitting data over hardware pins.
 
+**Requirements:**
 Build a compile-time safe UART driver using Zero-Sized Types (ZSTs) and custom marker traits:
 1. Define zero-sized marker types `Disabled` and `Enabled`.
 2. Define a custom marker trait `pub trait PeripheralState {}` implemented for both states.
@@ -213,6 +212,9 @@ Build a compile-time safe UART driver using Zero-Sized Types (ZSTs) and custom m
 8. Include unit tests with `assert_eq!` verifying state transitions, data byte counts, and asserting zero memory footprint (`std::mem::size_of`) for marker state transitions.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::marker::PhantomData;
 > 
@@ -315,7 +317,8 @@ Build a compile-time safe UART driver using Zero-Sized Types (ZSTs) and custom m
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Marker Traits as Typestate Flags**: `PeripheralState` and `ReadyToTransmit` contain no methods (`trait Marker {}`). They exist exclusively to categorize state types at compile time.
 > 2. **Compile-Time Protocol Enforcement**: The `transmit` method is implemented only for `UartDriver<State>` where `State: ReadyToTransmit`. Calling `disabled_uart.transmit(...)` triggers compile error `E0599`, preventing invalid hardware operation without any runtime boolean checks.
 > 3. **Zero-Cost Abstraction**: `PhantomData<State>` acts as a zero-sized marker type (ZST). Both `size_of::<Disabled>()` and `size_of::<Enabled>()` are 0 bytes, ensuring the struct memory size equals `usize + u32` exactly.
@@ -324,11 +327,12 @@ Build a compile-time safe UART driver using Zero-Sized Types (ZSTs) and custom m
 
 ### Exercise 2: Multithreaded Worker Pool with `Send` and `Sync` Marker Enforcements
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 High-concurrency Rust network services delegate CPU-bound background processing to thread pools. Rust guarantees thread safety at compile time using standard library marker traits:
 - `Send`: Indicates ownership of a type can be transferred across OS thread boundaries.
 - `Sync`: Indicates references (`&T`) to a type can be safely shared across OS threads.
 
+**Requirements:**
 Construct a multithreaded task dispatcher and verify marker trait bounds:
 1. Define a task wrapper `TaskJob<T>` holding data `payload: T` and a function pointer `handler: fn(T) -> u64`.
 2. Implement `WorkerPool::execute_tasks<T>(worker_count: usize, jobs: Vec<TaskJob<T>>, results: Arc<Mutex<Vec<u64>>>) -> Self` constrained by `T: Send + 'static`.
@@ -337,6 +341,9 @@ Construct a multithreaded task dispatcher and verify marker trait bounds:
 5. Write unit tests with assertions (`assert_eq!`) demonstrating concurrent execution, result aggregation, and verifying `Send`/`Sync` trait bounds for standard library types (`u64`, `String`, `Arc<Mutex<Vec<u64>>>`) while documenting why non-`Send` types like `Rc<T>` fail compile-time checks.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::{mpsc, Arc, Mutex};
 > use std::thread;
@@ -452,7 +459,8 @@ Construct a multithreaded task dispatcher and verify marker trait bounds:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Auto Marker Traits**: `Send` and `Sync` are built-in auto traits implemented automatically by the Rust compiler when all composite struct fields satisfy them.
 > 2. **Static Data Race Prevention**: Spawning an OS thread via `std::thread::spawn` requires the moved closure and its captured environment to satisfy `Send`. The generic constraint `where T: Send + 'static` guarantees that task data transferred through `mpsc` channels cannot cause data races.
 > 3. **Non-`Send` Types**: Types like `std::rc::Rc<T>` update non-atomic reference counts. Transferring an `Rc` to another thread would cause unsynchronized memory mutations. The compiler enforces safety by withholding `Send` and `Sync` marker implementations for `Rc`.
@@ -461,9 +469,10 @@ Construct a multithreaded task dispatcher and verify marker trait bounds:
 
 ### Exercise 3: Zero-Copy DMA Memory Buffer Marker Trait (`Pod`)
 
-**Problem Statement:**
+**Scenario:** **Problem Statement:**
 Low-level networking devices, operating system kernels, and hardware DMA controllers read and write memory buffers directly as raw byte arrays (`&[u8]`). Transmuting or reinterpreting a Rust data structure into a byte slice can lead to Undefined Behavior if the type contains uninitialized memory (struct padding bytes), invalid bit representation enums, or heap reference pointers.
 
+**Requirements:**
 Design a custom `unsafe` marker trait `Pod` (Plain Old Data) to enforce zero-copy byte casting safety:
 1. Define an unsafe marker trait `pub unsafe trait Pod: Copy + 'static {}`.
 2. Document the safety invariants required for types implementing `Pod`.
@@ -473,6 +482,9 @@ Design a custom `unsafe` marker trait `Pod` (Plain Old Data) to enforce zero-cop
 6. Write unit tests with assertions (`assert_eq!`) validating byte buffer lengths, byte value reconstitution, and struct size alignment calculations.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::mem::size_of;
 > use std::slice;
@@ -547,134 +559,17 @@ Design a custom `unsafe` marker trait `Pod` (Plain Old Data) to enforce zero-cop
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Unsafe Marker Traits**: Declaring a marker trait as `unsafe trait Marker {}` signals that the compiler cannot automatically verify its contract. Implementing it requires an explicit `unsafe impl` declaring human verification of safety invariants.
 > 2. **Zero-Copy Efficiency**: The `as_byte_slice` function performs an $O(1)$ memory reinterpretation pointer cast without heap allocation or buffer copying.
 > 3. **Memory Safety Bounds**: Restricting `as_byte_slice` to `T: Pod` prevents passing non-POD types (e.g. `String`, `Box<T>`, or types with alignment padding), ruling out memory leaks, wild pointer dereferences, and security data exposure.
 > 
----
 
-### Exercise 4: Capability-Based Access Control via Marker Trait Supertraits
-
-**Problem Statement:**
-Enterprise database applications require Role-Based Access Control (RBAC) to restrict sensitive database operations. Traditional systems perform runtime checks (`if user.has_permission(...)`), which incur runtime overhead and carry risks of accidental missing authorization checks.
-
-Using Rust's type system, design compile-time capability authorization using marker trait composition:
-1. Define marker traits `pub trait ReadPermission {}` and `pub trait WritePermission {}`.
-2. Define `pub trait AdminPermission: ReadPermission + WritePermission {}` using marker supertraits.
-3. Define role marker types `GuestRole`, `OperatorRole`, and `AdminRole`.
-4. Implement capability marker traits for each role according to their permission level.
-5. Implement `DatabaseHandle<Role>` with methods:
-   - `read_record(&self, id: u64)` constrained by `where Role: ReadPermission`
-   - `write_record(&self, id: u64, content: &str)` constrained by `where Role: WritePermission`
-   - `erase_database(&self)` constrained by `where Role: AdminPermission`
-6. Write unit tests with assertions (`assert!`, `assert_eq!`) demonstrating allowed operations per role and documenting compile-time rejection of unauthorized operations.
-
-> [!check]- Answer
-> ```rust
-> use std::marker::PhantomData;
-> 
-> // Marker trait capability definitions
-> pub trait ReadPermission {}
-> pub trait WritePermission {}
-> 
-> /// Admin capability inherits both Read and Write permissions as supertraits
-> pub trait AdminPermission: ReadPermission + WritePermission {}
-> 
-> // Zero-sized role types
-> pub struct GuestRole;
-> pub struct OperatorRole;
-> pub struct AdminRole;
-> 
-> // Implement capability marker traits for specific role types
-> impl ReadPermission for GuestRole {}
-> 
-> impl ReadPermission for OperatorRole {}
-> impl WritePermission for OperatorRole {}
-> 
-> impl ReadPermission for AdminRole {}
-> impl WritePermission for AdminRole {}
-> impl AdminPermission for AdminRole {}
-> 
-> /// Database access handle parameterized by user permission role marker
-> pub struct DatabaseHandle<Role> {
->     db_name: String,
->     _role: PhantomData<Role>,
-> }
-> 
-> impl<Role> DatabaseHandle<Role> {
->     pub fn new(db_name: impl Into<String>) -> Self {
->         Self {
->             db_name: db_name.into(),
->             _role: PhantomData,
->         }
->     }
-> }
-> 
-> // Read operation available to any Role implementing `ReadPermission`
-> impl<Role: ReadPermission> DatabaseHandle<Role> {
->     pub fn read_record(&self, id: u64) -> String {
->         format!("Record #{} from {}", id, self.db_name)
->     }
-> }
-> 
-> // Write operation available to any Role implementing `WritePermission`
-> impl<Role: WritePermission> DatabaseHandle<Role> {
->     pub fn write_record(&self, id: u64, content: &str) -> bool {
->         // Simulated record write
->         !content.is_empty()
->     }
-> }
-> 
-> // Erase operation available ONLY to Roles implementing `AdminPermission`
-> impl<Role: AdminPermission> DatabaseHandle<Role> {
->     pub fn erase_database(&self) -> bool {
->         // Simulated administrative purge
->         true
->     }
-> }
-> 
-> #[cfg(test)]
-> mod tests {
->     use super::*;
-> 
->     #[test]
->     fn test_guest_role_permissions() {
->         let guest_db = DatabaseHandle::<GuestRole>::new("production_db");
->         let data = guest_db.read_record(42);
->         assert_eq!(data, "Record #42 from production_db");
-> 
->         // guest_db.write_record(42, "new"); // ❌ Compile Error: WritePermission not satisfied
->         // guest_db.erase_database();       // ❌ Compile Error: AdminPermission not satisfied
->     }
-> 
->     #[test]
->     fn test_operator_role_permissions() {
->         let op_db = DatabaseHandle::<OperatorRole>::new("production_db");
->         assert_eq!(op_db.read_record(1), "Record #1 from production_db");
->         assert!(op_db.write_record(1, "updated content"));
-> 
->         // op_db.erase_database();          // ❌ Compile Error: AdminPermission not satisfied
->     }
-> 
->     #[test]
->     fn test_admin_role_permissions() {
->         let admin_db = DatabaseHandle::<AdminRole>::new("production_db");
->         assert_eq!(admin_db.read_record(99), "Record #99 from production_db");
->         assert!(admin_db.write_record(99, "admin entry"));
->         assert!(admin_db.erase_database());
->     }
-> }
-> ```
-> 
-> **Explanation:**
-> 1. **Supertrait Composition**: `trait AdminPermission: ReadPermission + WritePermission {}` ensures that any type marked with `AdminPermission` automatically satisfies read and write permission bounds as well.
-> 2. **Compile-Time Authorization**: Privileged operations like `erase_database` are physically uncallable on handles lacking `AdminPermission` (`DatabaseHandle<GuestRole>`). Security checks occur during compilation, removing runtime overhead and eliminating authorization bypass bugs.
-> 3. **Zero Runtime Footprint**: Role markers (`GuestRole`, `OperatorRole`, `AdminRole`) are zero-sized types. `PhantomData<Role>` optimizes to 0 bytes, ensuring zero memory expansion and zero CPU clock cycle overhead.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`Send` Trait](../level_09/send_trait.md)
@@ -687,7 +582,7 @@ Using Rust's type system, design compile-time capability authorization using mar
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Marker Traits are traits with empty bodies (`pub trait Marker {}`) used to flag semantic type properties.
 - Standard library marker traits include `Copy`, `Send`, `Sync`, `Sized`, and `Unpin`.

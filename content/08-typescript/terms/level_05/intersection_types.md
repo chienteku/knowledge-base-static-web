@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Syntax**
+
+**TypeScript Core Syntax** (Type Intersection Operator): Intersection types (`T & U`) combine multiple object or contract types into a single unified type containing all merged properties.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes you have two completely separate Object Types, but you need a new object that contains all the properties from *both* of them combined.
@@ -56,7 +57,7 @@ However, Intersections are usually used with `type` aliases, and they handle con
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Intersecting Primitives
 
@@ -106,71 +107,113 @@ type B = { id: string; extra: number };
 type AB = A & B; // Compatible property types merge safely
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Identifying the Operator
+### Exercise 1: Merging Multiple Object Types with `&`
 
-**Problem:** Read the following code. Is `User` allowed to be an object that ONLY has `name`?
-`type User = { name: string } & { age: number }`
+**Scenario:**
+Combine a base `Timestamps` object type with a `User` type using an intersection `User & Timestamps`.
 
-**Expected output:**
+**Requirements:**
+1. Create `Timestamps` type (`createdAt`, `updatedAt`).
+2. Create `UserWithTimestamps` using `&`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type Timestamps = {
+>   createdAt: Date;
+>   updatedAt: Date;
+> };
+
+type User = {
+  id: string;
+  name: string;
+};
+
+type UserRecord = User & Timestamps;
+
+const record: UserRecord = {
+  id: "usr_100",
+  name: "Alice",
+  createdAt: new Date(),
+  updatedAt: new Date()
+};
+```
+
+> #### Technical Explanation
+>
+> 1. Intersection types (`T & U`) construct a type containing ALL properties from both constituent types.
+> 2. `UserRecord` requires all properties from `User` AND `Timestamps`.
+> 3. Idiomatic method for composing object shapes without interface inheritance.
+
+---
+
+### Exercise 2: Auditing Impossible Primitive Intersections
+
+**Scenario:**
+Demonstrate what happens when intersecting incompatible primitive types like `string & number`.
+
+**Requirements:**
+1. Show why `string & number` evaluates to `never`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type Impossible = string & number; // Evaluates to 'never'
+
+// ❌ Compile Error: Type 'string' is not assignable to type 'never'.
+// const val: Impossible = "test";
+```
+
+> #### Technical Explanation
+>
+> 1. Primitive types are disjoint sets; no single value can be simultaneously a `string` AND a `number`.
+> 2. Intersecting disjoint primitive types evaluates automatically to `never`.
+> 3. Signals an impossible type contract to the compiler.
+
+---
+
+### Exercise 3: Comparative Analysis: Intersections (`&`) vs Unions (`|`)
+
+**Scenario:**
+Formulate an architectural comparison matrix contrasting Type Intersections (`&`) against Type Unions (`|`).
+
+**Requirements:**
+1. Contrast logical operations (AND vs OR), property accessibility, and assignability rules.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> No!
-> Because it uses the Intersection (`&`) operator, the object MUST satisfy BOTH sides simultaneously. 
-> It must look like: `{ name: "Alice", age: 28 }`. 
-> (If it used `|`, it could be just `{ name: "Alice" }`).
+> Intersection (&) vs Union (|) Matrix:
+> - Intersection (T & U): Logical AND. Object must possess ALL properties of T AND U. Accessing any property from T or U is allowed.
+> - Union (T | U): Logical OR. Object can be of type T OR U. Only properties COMMON to both T and U can be accessed without type narrowing.
 > ```
-> - Does `&` mean AND or OR?
+
+> #### Technical Explanation
+>
+> 1. Intersections combine properties, broadening property accessibility.
+> 2. Unions combine candidate types, restricting direct property access to common members.
+> 3. Core set theory operations in TypeScript's type system.
 
 ---
 
 
 
-### Exercise 2: Merging Object Types with Intersection
-
-**Problem:** Create type `UserWithRole` by intersecting `User` (`name: string`) and `Role` (`role: string`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UserWithRole merged
-> ```
-> ```typescript
-> type User = { name: string };
-> type Role = { role: string };
-> type UserWithRole = User & Role;
-> const u: UserWithRole = { name: "Alice", role: "admin" };
-> console.log("UserWithRole merged");
-> ```
->
-> **Explanation:** Intersection `A & B` combines properties from all member object types.
-
----
-
-### Exercise 3: Function Overload Intersections
-
-**Problem:** Intersect two function signature types `((x: string) => void) & ((x: number) => void)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Creates overloaded function signature
-> ```
-> ```typescript
-> console.log("Creates overloaded function signature");
-> ```
->
-> **Explanation:** Intersecting function types creates an overloaded function signature.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Union Types (`|`)](union_types.md) — The OR operator.
 - [Interfaces](../level_03/interfaces.md) — The alternative way to combine object shapes (using `extends`).
 - [Branded / Nominal Types](../level_09/branded_nominal_types.md) — Related concept: Branded / Nominal Types.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Intersection Types** use the `&` (ampersand) operator to combine multiple types together (Type A AND Type B).
 - The resulting type must possess all properties from all intersected types.
 - It is primarily used to merge Object Types or Interfaces together.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Configuration**
+
+**Framework Architecture** (Master Platform Configuration): `nuxt.config.ts` is the central configuration file for Nuxt 3 applications, controlling modules, Nitro settings, build targets, and TypeScript configuration.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Nuxt is heavily opinionated and relies on "Convention over Configuration." Most of the time, you don't need to configure Vite, Nitro, or the Vue router—they just work.
@@ -67,7 +68,7 @@ If a page does not call `useHead`, it falls back to whatever is defined in `app.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to import Vue code into `nuxt.config.ts`
 **The mistake:** Importing a Vue component, a Pinia store, or a Composable directly into `nuxt.config.ts` to use its logic.
@@ -124,74 +125,111 @@ export default defineNuxtConfig({
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Registering Global CSS
+### Exercise 1: Configuring Environment Modules and Extensions
 
-**Problem:** You have written a CSS reset file located at `assets/css/reset.css`. How do you configure Nuxt to include this CSS file on every single page of your app?
+**Scenario:**
+Configure `@pinia/nuxt` and `@nuxtjs/tailwindcss` modules inside `nuxt.config.ts`.
 
-**Expected output:**
+**Requirements:**
+1. Add modules to `modules` array in `defineNuxtConfig`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // nuxt.config.ts
 > export default defineNuxtConfig({
->   css: [
->     '~/assets/css/reset.css'
->   ]
-> })
-> ```
-> - Place the asset alias path `'~/assets/css/reset.css'` inside the `css` array property of the configuration object.
-
----
-
-### Exercise 2: nuxt.config.ts Production Configuration Pattern
-
-**Problem:** Write `nuxt.config.ts` configuring TypeScript strict mode, CSS file `'~/assets/css/main.css'`, and modules `'@pinia/nuxt'`.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> export default defineNuxtConfig({
->   typescript: { strict: true },
->   css: ['~/assets/css/main.css'],
->   modules: ['@pinia/nuxt']
-> });
-> ```
-> - `defineNuxtConfig` configures global project settings.
-> 
-> ```typescript
-> export default defineNuxtConfig({
->   devtools: { enabled: true },
->   typescript: { strict: true },
->   css: ['~/assets/css/main.css'],
->   modules: ['@pinia/nuxt']
+>   modules: [
+>     "@pinia/nuxt",
+>     "@nuxtjs/tailwindcss"
+>   ],
+>   devtools: { enabled: true }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `modules` array registers official and third-party Nuxt modules.
+> 2. Modules extend Nuxt's build process, auto-import composables, and register plugins automatically.
+> 3. Central extension point in Nuxt 3.
+
 ---
 
-### Exercise 3: routeRules Configuration Option
+### Exercise 2: Setting Route-Level Rendering Rules with `routeRules`
 
-**Problem:** Which property in `nuxt.config.ts` enables hybrid rendering rules per route path?
+**Scenario:**
+Configure SWR (Stale-While-Revalidate) caching for `/blog/**` and static prerendering for `/about`.
 
-**Expected output:**
+**Requirements:**
+1. Configure `routeRules` in `nuxt.config.ts`.
+
 > [!check]- Answer
-> ```text
-> routeRules (e.g. routeRules: { '/admin/**': { ssr: false } })
-> ```
-> - `routeRules` configures per-route hybrid rendering strategies.
-> 
+>
+> #### Implementation
+>
 > ```typescript
+> // nuxt.config.ts
 > export default defineNuxtConfig({
 >   routeRules: {
->     '/admin/**': { ssr: false }
+>     "/about": { prerender: true },           // Prerendered static HTML at build time
+>     "/blog/**": { swr: 3600 },               // Cached for 1 hour with background revalidation
+>     "/api/uncached/**": { cache: false }     // Never cached
 >   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `routeRules` powers Nuxt 3's Hybrid Rendering architecture.
+> 2. `prerender: true` generates static HTML files during `nuxt build`.
+> 3. `swr: 3600` caches Nitro responses at the edge/server for 3600 seconds.
 
 ---
 
-## 7. Related Terms
+### Exercise 3: Configuring Custom Vite and Server Options
+
+**Scenario:**
+Pass custom Vite plugin configurations and server port options inside `nuxt.config.ts`.
+
+**Requirements:**
+1. Configure `vite` and `devServer` sections.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // nuxt.config.ts
+> export default defineNuxtConfig({
+>   devServer: {
+>     port: 3000,
+>     host: "0.0.0.0"
+>   },
+>   vite: {
+>     optimizeDeps: {
+>       include: ["lodash-es"]
+>     }
+>   }
+> });
+> ```
+
+> #### Technical Explanation
+>
+> 1. `vite` property exposes underlying Vite bundler configuration options.
+> 2. `devServer` configures local development HTTP host and port settings.
+> 3. Low-level bundler and server customization interface.
+
+---
+
+
+
+
+---
+
+## 6. Related Terms
 - [`app.config.ts`](app_config.md) — The configuration file meant for reactive, client-side UI state.
 - [Runtime Config (`useRuntimeConfig`)](runtime_config.md) — How you pass `.env` variables through `nuxt.config.ts`.
 - [`assets/` vs `public/`](../level_03/assets_vs_public.md) — Related concept: `assets/` vs `public/`.
@@ -201,7 +239,7 @@ export default defineNuxtConfig({
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `nuxt.config.ts` configures the Nuxt framework and its underlying tools (Vite, Nitro).
 - It runs entirely at build time.
 - It is where you register third-party Nuxt Modules (like Pinia or Tailwind).

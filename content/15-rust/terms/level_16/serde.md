@@ -14,17 +14,15 @@
 
 ## 2. Term Category
 
-**Ecosystem / Library / Serialization**: `serde` (short for **SER**ialization / **DE**serialization) is Rust's premier data serialization library. Unlike Java or JavaScript (which rely on heavy runtime reflection or `JSON.parse` parsing overhead), `serde` generates specialized, zero-cost monomorphized serialization code at compile time.
+
+
+**Rust Ecosystem Crate (serialization and deserialization framework)**: `serde` (short for **SER**ialization / **DE**serialization) is Rust's premier data serialization library. Unlike Java or JavaScript (which rely on heavy runtime reflection or `JSON.parse` parsing overhead), `serde` generates specialized, zero-cost monomorphized serialization code at compile time.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Ecosystem**: `serde` supports `#![no_std]` environments (using `serde` without `std` for binary formats like Bincode or Postcard) as well as all web services and network protocols.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -103,7 +101,23 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Deserializing Untrusted Data Without Bounds Checking or Depth Limits
+
+**The mistake:** Deserializing arbitrary JSON/BSON payloads into unbounded collections (`Vec<T>`).
+
+**Why it's wrong:** Malicious payloads with millions of nested arrays can trigger stack overflow or out-of-memory crashes (OOM denial of service).
+
+*Fix:* Validate payload sizes and use `serde_json::Deserializer::disable_recursion_limit` controls when appropriate.
+
+### Mistake 3: Using Derived `Serialize` / `Deserialize` on Types Holding Borrowed References Without Lifetime Bounds
+
+**The mistake:** Deriving `Deserialize` on borrowed structs without specifying `'de` lifetime bounds.
+
+**Why it's wrong:** Rust's zero-copy deserialization requires tying reference fields to the input payload lifetime `'de`.
+
+*Fix:* Use `struct MyData<'a> { field: &'a str }` with `#[derive(Deserialize)]`.
+
 
 ### Mistake 1: Forgetting `features = ["derive"]` in `Cargo.toml`
 
@@ -119,17 +133,20 @@ serde_json = "1.0"
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Custom Serializer & Deserializer for Network Telemetry Payload
 
-**Problem:** In a network IoT telemetry microservice, sensor readings arrive as JSON strings. However, external wire formats differ from internal domain representations:
+**Scenario:** In a network IoT telemetry microservice, sensor readings arrive as JSON strings. However, external wire formats differ from internal domain representations:
 1. `device_mac`: Stored internally as `[u8; 6]`, but represented in JSON as a colon-separated uppercase hexadecimal string (e.g., `"00:1A:2B:3C:4D:5E"`).
 2. `status`: Stored internally as an enum `DeviceStatus` (`Ok`, `Warning`, `Error`), but incoming JSON may use case-insensitive strings like `"ok"`, `"WARNING"`, or `"Error"`.
 
 Implement custom Serde helper modules `mac_format` and `status_format` using Serde's `Serializer`, `Deserializer`, and `de::Visitor` traits. Apply them to `SensorTelemetry` with `#[serde(with = "...")]`, and write unit tests with assertions verifying serialization output, case-insensitive string parsing, and invalid MAC address error handling.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 > use std::fmt;
@@ -294,7 +311,8 @@ Implement custom Serde helper modules `mac_format` and `status_format` using Ser
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`#[serde(with = "module")]` Attribute:** Tells Serde to look inside `mac_format` and `status_format` for `serialize` and `deserialize` functions matching standard signatures (`fn serialize<S>(&T, S) -> Result<S::Ok, S::Error>` and `fn deserialize<'de, D>(D) -> Result<T, D::Error>`).
 > 2. **Visitor Pattern (`de::Visitor`):** Serde uses stack-allocated visitor structs to consume token streams from the deserializer without heap allocation overhead. The `visit_str` callback inspects string values and parses them into domain types (`[u8; 6]` or `DeviceStatus`).
 > 3. **Custom Error Generation (`de::Error::custom`):** Maps domain conversion errors (such as invalid hexadecimal string length or digits) into format-agnostic Serde errors during deserialization.
@@ -303,11 +321,14 @@ Implement custom Serde helper modules `mac_format` and `status_format` using Ser
 
 ### Exercise 2: Zero-Copy Deserialization with `&'a str` & `Cow<'a, str>`
 
-**Problem:** High-performance network proxies and embedded telemetry processors cannot afford heap allocation overhead (`String` allocation) for every string field during payload deserialization. Serde supports zero-copy deserialization by borrowing string slices directly from the input buffer slice (`&'a str` or `std::borrow::Cow<'a, str>`).
+**Scenario:** High-performance network proxies and embedded telemetry processors cannot afford heap allocation overhead (`String` allocation) for every string field during payload deserialization. Serde supports zero-copy deserialization by borrowing string slices directly from the input buffer slice (`&'a str` or `std::borrow::Cow<'a, str>`).
 
 Implement a `PacketHeader<'a>` struct borrowing `source_ip: &'a str` and `endpoint: Cow<'a, str>` with `#[serde(borrow)]`. Write unit tests utilizing memory pointer comparison (`as_ptr()`) to prove that unescaped JSON text fields borrow directly from the input buffer slice without allocating memory, and demonstrate how string escape sequences force fallback to `Cow::Owned`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use serde::Deserialize;
 > use std::borrow::Cow;
@@ -370,7 +391,8 @@ Implement a `PacketHeader<'a>` struct borrowing `source_ip: &'a str` and `endpoi
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Lifetime Binding (`'a`):** Tying `PacketHeader<'a>` to the input string lifetime allows Serde to deserialize `&'a str` by returning a slice (`&json_data[start..end]`) directly from the input buffer.
 > 2. **`#[serde(borrow)]` Attribute:** Explicitly signals to Serde that `Cow<'a, str>` should attempt borrowing from the deserializer's input string buffer (`Deserializer<'de>`) whenever possible.
 > 3. **`Cow<'a, str>` Allocation Fallback:** When JSON strings contain escape sequences (e.g. `\n`, `\"`, `\uXXXX`), Serde cannot borrow a contiguous slice from the raw input and automatically switches from `Cow::Borrowed` to `Cow::Owned(String)`.
@@ -379,12 +401,15 @@ Implement a `PacketHeader<'a>` struct borrowing `source_ip: &'a str` and `endpoi
 
 ### Exercise 3: Polymorphic API Payload Parsing via Tagged Enums & Defaults
 
-**Problem:** Message bus consumers (e.g. Kafka or RabbitMQ event handlers) receive heterogeneous event envelopes containing static metadata headers (`event_id`, `timestamp`) alongside dynamic, polymorphic payloads depending on an `event_type` field.
+**Scenario:** Message bus consumers (e.g. Kafka or RabbitMQ event handlers) receive heterogeneous event envelopes containing static metadata headers (`event_id`, `timestamp`) alongside dynamic, polymorphic payloads depending on an `event_type` field.
 1. Design an `EventEnvelope` containing `event_id: String`, `timestamp: u64`, and a flattened `payload: EventPayload`.
 2. `EventPayload` is an enum using adjacent tagging (`#[serde(tag = "event_type", content = "data")]`) supporting variants: `Telemetry` (`temperature: f64`, `humidity: f64`), `UserAction` (`user_id: u64`, `action: String`), and `SystemAlert` (`severity: String`, `message: String`, `retries_count: u32`).
 3. Apply `#[serde(default)]` to `SystemAlert` so missing payload fields fall back to `Default` trait values without failing deserialization. Write comprehensive unit tests verifying polymorphic round-trip serialization and default fallback behavior.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use serde::{Deserialize, Serialize};
 > 
@@ -507,7 +532,8 @@ Implement a `PacketHeader<'a>` struct borrowing `source_ip: &'a str` and `endpoi
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Adjacent Enum Tagging (`#[serde(tag = "...", content = "...")]`):** Encodes enum variants into structured JSON objects with a discriminator tag field (e.g. `"event_type": "telemetry"`) and a separate content key (`"data": { ... }`).
 > 2. **`#[serde(flatten)]`:** Inlines fields of nested structs or enums into the outer JSON object, allowing `event_type` and `data` to reside at the top-level of `EventEnvelope`.
 > 3. **`#[serde(default)]` Fallback:** When deserializing a struct with missing fields, Serde invokes the struct's `Default::default()` implementation to fill missing values without aborting deserialization with missing key errors.

@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Security & Best Practices**
+
+
+**Authentication & Permissions (SurrealQL query injection defense)**: - **Security & Best Practices**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Parser & Client SDKs** (Evaluated when queries are parsed into Abstract Syntax Trees before execution).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational SQL databases (PostgreSQL), concatenated string inputs like `SELECT * FROM user WHERE email = '` + `userInput` + `'` open up **SQL Injection** vulnerabilities, allowing attackers to inject malicious clauses like `' OR '1'='1`. In MongoDB, unsafe JSON input can trigger **NoSQL Injection** via operator objects (`{ $gt: "" }`).
@@ -68,7 +67,7 @@ const safeResult = await db.query(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Template Literals to Build SurrealQL Queries in Node.js
 
@@ -130,87 +129,94 @@ await db.query('SELECT * FROM user WHERE name = $name', { name: userInput });
 
 
 
-### Mistake 4: Concatenating User Input Strings into Dynamic SurrealQL Queries
 
-**The mistake:** Constructing SurrealQL queries with string concatenation `` `SELECT * FROM user WHERE email = '${input}'` ``.
 
-**Why it's wrong:** String concatenation permits SQL injection attacks (e.g. input `' OR 1=1 --`). Always use parameterized queries (`$email`).
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-// Vulnerable string concatenation
-await db.query(`SELECT * FROM user WHERE email = '${userInput}'`); // ❌ SQL Injection risk!
-```
+### Exercise 1: Parameterized Queries vs String Concatenation
 
-*Fix:*
-```surrealql
-// Safe parameterized query
-await db.query('SELECT * FROM user WHERE email = $email', { email: userInput });
-```
+**Scenario:**
+Demonstrate rewriting a vulnerable string-concatenated query into a safe parameterized query using SurrealQL parameters.
 
-### Mistake 5: Sanitizing Inputs Manually with Custom Regex Instead of Using Parameterized Bindings
-
-**The mistake:** Attempting custom string escaping regex functions before string concatenation.
-
-**Why it's wrong:** Custom escaping functions often have edge-case bypasses. Database parameter binding (`$param`) guarantees complete protection at the protocol layer.
-
-*Incorrect:*
-```surrealql
-const cleanInput = userInput.replace(/'/g, "''"); // ❌ Fragile manual escaping!
-```
-
-*Fix:*
-```surrealql
-await db.query('SELECT * FROM user WHERE name = $name', { name: userInput });
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Refactor Unsafe Query
-Refactor the following unsafe query string to use safe SurrealQL parameter bindings:
-`SELECT * FROM product WHERE category = '` + `userCat` + `' AND price <= ` + `maxPrice`
+**Requirements:**
+1. Contrast vulnerable string concatenation with parameterized SDK variables.
 
 > [!check]- Answer
-> - Replace values with `$cat` and `$max_price`.
-> - Pass `{ cat: userCat, max_price: maxPrice }` in the SDK parameter map.
+>
+> #### Implementation
+>
+> ```typescript
+> // ❌ VULNERABLE to SurrealQL Injection:
+> // const query = `SELECT * FROM user WHERE username = '${userInput}'`;
+> 
+> // ✅ SAFE Parameterized Query:
+> const result = await db.query(
+>   "SELECT * FROM user WHERE username = $username",
+>   { username: userInput }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Parameterized queries (`$username`) send query structure and parameter values separately to the database engine.
+> 2. Prevents malicious user input from altering SurrealQL syntax trees.
+> 3. Eliminates SurrealQL injection vulnerabilities completely.
+
+---
+
+### Exercise 2: Disabling Arbitrary Script Execution CLI Flags
+
+**Scenario:**
+Harden a production SurrealDB instance by passing startup flags to disable embedded JavaScript functions.
+
+**Requirements:**
+1. Formulate `surreal start` command passing `--deny-scripting`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> surreal start >   --bind 0.0.0.0:8000 >   --user root >   --pass "HardenedPass2026!" >   --deny-scripting >   file:///var/data/surreal.db
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `--deny-scripting` disables execution of embedded JavaScript functions (`function() { ... }`).
+> 2. Mitigates remote code execution risks from arbitrary guest queries.
+> 3. Hardens server instance security profiles.
+
+---
+
+### Exercise 3: Input Type Coercion Sanitization
+
+**Scenario:**
+Sanitize user input parameters by enforcing type coercion using `<record>` or `<int>` casts.
+
+**Requirements:**
+1. Cast `$user_input` to `<record<user>>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT * FROM user WHERE id = <record<user>> $user_input;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Explicit type coercion (`<record<user>>`) rejects inputs failing target data type rules.
+> 2. Prevents type confusion attacks.
+> 3. Sanitizes dynamic parameters before query execution.
 
 ---
 
 
 
-### Exercise 2: Converting Vulnerable Query to Parameterized Call
 
-**Problem:** Convert vulnerable query `` `SELECT * FROM article WHERE id = ${id}` `` to safe parameterized SDK invocation.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> await db.query('SELECT * FROM article WHERE id = $id', { id: id });
-> ```
-> ```javascript
-> await db.query('SELECT * FROM article WHERE id = $id', { id: id });
-> ```
->
-> **Explanation:** Passing parameters via query variables prevents query syntax injection.
-
----
-
-### Exercise 3: Parameter Binding Protocol Layer
-
-**Problem:** Why are parameterized queries secure against injection? (Variables are transmitted as separated typed binary data payloads outside query syntax parsers).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Query variables are transmitted as isolated binary parameters outside text query parsing engines
-> ```
-> ```text
-> Query variables are transmitted as isolated binary parameters outside text query parsing engines
-> ```
->
-> **Explanation:** Parameter bindings separate SQL execution code from untrusted data payloads.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Parameters (`$param`)](../level_06/parameters.md) — SurrealQL query variables.
 - [JavaScript / TypeScript SDK](../level_10/js_sdk.md) — SDK query methods.
@@ -220,7 +226,7 @@ Refactor the following unsafe query string to use safe SurrealQL parameter bindi
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Never concatenate untrusted user input directly into SurrealQL query strings.
 - Always use parameterized query bindings (`$param`) in SDK `.query()` calls.
 - Parameterization guarantees user inputs are treated as literal values, preventing SurrealQL Injection.

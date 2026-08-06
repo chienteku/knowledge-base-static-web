@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Administration / Infrastructure**
+
+**Administration / Operations** (Database Server Process): mongod is the primary background daemon process that manages database storage, client connections, write logs, and query execution.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Server Configuration** (Executed as an operating system service or background command-line process. By default, it listens on TCP port `27017` for incoming connections).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When developers start learning databases, they often run into connection errors:
@@ -85,7 +86,7 @@ mongod --dbpath /data/db --port 27017
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Typing database query commands (like db.users.find()) directly into the terminal window where the 'mongod' process was launched
 
@@ -135,60 +136,87 @@ $ mongod --bind_ip 0.0.0.0 # Exposes port 27017 to public internet
 Bind to private IP subnets and enforce TLS + firewall rules
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Connection Troubleshooting
+### Exercise 1: Inspecting `mongod` Server Status
 
-**Problem:** You are deploying a Node.js server. When the server boots, it crashes with the error:
-`MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017`
-1.  Explain the most likely cause of this error.
-2.  Write the terminal command to fix it on a standard Linux development server.
+**Scenario:**
+A systems administrator connects to a `mongod` server process to inspect active connections and uptime metrics.
 
-**Expected output:**
+**Requirements:**
+1. Execute `db.serverStatus()`.
+
 > [!check]- Answer
-> ```text
-> 1. The error occurs because the MongoDB server engine process (`mongod`) is not running in the background, or is listening on a different port/IP address.
+>
+> #### Implementation
+>
+> ```javascript
+> const status = db.serverStatus();
+> console.log("Uptime (seconds):", status.uptime);
+> console.log("Current Connections:", status.connections.current);
+> console.log("Storage Engine:", status.storageEngine.name);
 > ```
-> - "Connection refused" indicates no listener process is active on that socket.
-> - Use standard service managers (`systemctl`) to start daemons.
+>
+> #### Technical Explanation
+>
+> 1. `db.serverStatus()` returns operational metrics from the active `mongod` process.
+> 2. Monitors connection pool limits, memory utilization, and WiredTiger cache metrics.
+> 3. Essential diagnostic command for server health monitoring.
+
+---
+
+### Exercise 2: Formulating Startup Parameters for `mongod`
+
+**Scenario:**
+Formulate a `mongod` startup command configuring port `27017`, dbpath `/data/db`, and fork background execution.
+
+**Requirements:**
+1. Specify `--dbpath`, `--port`, and `--logpath`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```bash
+> mongod >   --dbpath /var/lib/mongodb >   --logpath /var/log/mongodb/mongod.log >   --port 27017 >   --fork
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `--dbpath` specifies the physical directory storing WiredTiger data and index files.
+> 2. `--logpath` routes process output logs to a persistent log file.
+> 3. `--fork` runs the `mongod` process as a background daemon on Linux servers.
+
+---
+
+### Exercise 3: Shutting Down `mongod` Cleanly
+
+**Scenario:**
+Shut down a `mongod` process cleanly to flush WiredTiger journal buffers to disk before server maintenance.
+
+**Requirements:**
+1. Execute `db.shutdownServer()` from the `admin` database context.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> use admin;
+> db.shutdownServer();
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `db.shutdownServer()` flushes pending writes and journal entries to physical storage before terminating.
+> 2. Prevents data corruption and lengthy crash recovery steps on reboot.
+> 3. Requires administrative privileges on the `admin` database context.
 
 ---
 
 
 
-### Exercise 2: Starting mongod with Custom Configuration File
-
-**Problem:** CLI command to start `mongod` daemon using config file `/etc/mongod.conf`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> mongod --config /etc/mongod.conf
-> ```
-> ```text
-> mongod --config /etc/mongod.conf
-> ```
->
-> **Explanation:** `--config` loads server settings from YAML configuration files.
-
----
-
-### Exercise 3: Default MongoDB Port
-
-**Problem:** What is the default TCP listening port for `mongod`? (`27017`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 27017
-> ```
-> ```text
-> 27017
-> ```
->
-> **Explanation:** `mongod` listens on TCP port 27017 by default.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [mongosh (MongoDB Shell)](mongosh.md) — The terminal query client.
 - [MongoDB Atlas](atlas.md) — The cloud hosted alternative to local daemons.
@@ -196,7 +224,7 @@ Bind to private IP subnets and enforce TLS + firewall rules
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `mongod` is the core background server daemon process of MongoDB.
 - Manages memory allocations, indexes, WiredTiger files, and query tasks.
 - Listens for network connection inputs on TCP port `27017` by default.

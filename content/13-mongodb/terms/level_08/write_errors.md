@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Driver / Integration** (Write Command Failure Handling): Write Errors classify write command failures into top-level execution errors, individual document write errors, and write concern replication timeouts.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Returned by database write commands. Structured as JSON error properties in driver exceptions to guide application error recovery logic).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In high-scale database programming, handling errors correctly is critical to prevent data duplication. 
@@ -100,7 +101,7 @@ Here are the JSON structures returned by the MongoDB driver during write failure
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating 'WriteConcernError' as a standard write failure and blindly resending the insert query, causing duplicate entries
 
@@ -146,74 +147,118 @@ const res = await db.coll.bulkWrite(ops, { ordered: false }); // ❌ Ignores ind
 const res = await db.coll.bulkWrite(ops, { ordered: false }); if (res.hasWriteErrors()) console.error(res.writeErrors);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Error Response Diagnostic
+### Exercise 1: Handling Duplicate Key Write Errors (Code 11000)
 
-**Problem:** You receive the following error object from the MongoDB driver:
-`{ "writeErrors": [], "writeConcernErrors": [{ "code": 64, "errmsg": "waiting for replication timed out" }] }`
-1.  State whether the document was successfully written to the Primary server.
-2.  State whether your application should immediately resend the exact same write command.
+**Scenario:**
+Catch and handle `E11000 duplicate key error` during account registration in Node.js.
 
-**Expected output:**
+**Requirements:**
+1. Inspect `err.code === 11000`.
+
 > [!check]- Answer
-> ```text
-> 1. Yes: The document was successfully written to the Primary server. The error indicates only that the secondary replica nodes failed to acknowledge replication within the timeout.
-> 2. No: Resending the insert query can cause duplicate document writes because the record already exists on the Primary.
-> ```
-> - Check which array payload contains the error inside the object structure.
-> - Consider the disk status of the Primary node during write concern errors.
-
----
-
-
-
-### Exercise 2: Handling Duplicate Key Error E11000
-
-**Problem:** Catch error code `11000` in JS async function and log custom user error message.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> try { await db.users.insertOne(doc); } catch (err) { if (err.code === 11000) console.log("User exists"); }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > try {
->   await db.users.insertOne(doc);
+>   await db.collection("users").insertOne({ email: "alice@example.com" });
 > } catch (err) {
 >   if (err.code === 11000) {
->     console.error("User email already exists in database!");
+>     console.error("Write Error: Email address is already registered.");
+>   } else {
+>     throw err;
 >   }
 > }
 > ```
 >
-> **Explanation:** Checking `err.code === 11000` identifies unique index primary key collisions.
+> #### Technical Explanation
+>
+> 1. Unique index violations return `MongoServerError` with error code `11000`.
+> 2. Catching `11000` allows applications to return HTTP 409 Conflict status codes cleanly.
+> 3. Prevents unhandled application server crashes.
 
 ---
 
-### Exercise 3: Schema Validation Error Code
+### Exercise 2: Inspecting Bulk Write Partial Error Arrays
 
-**Problem:** What error code is returned when document writes violate `$jsonSchema` validation rules? (`121` or `DocumentValidationFailure`).
+**Scenario:**
+Inspect `writeErrors` array returned when an unordered `bulkWrite()` encounters individual document write failures.
 
-**Expected output:**
+**Requirements:**
+1. Catch `MongoBulkWriteError` and inspect `err.writeErrors`.
+
 > [!check]- Answer
-> ```text
-> 121 (DocumentValidationFailure)
-> ```
-> ```text
-> 121 (DocumentValidationFailure)
+>
+> #### Implementation
+>
+> ```javascript
+> try {
+>   await db.collection("products").bulkWrite([
+>     { insertOne: { document: { _id: 1, name: "A" } } },
+>     { insertOne: { document: { _id: 1, name: "B" } } }, // Duplicate!
+>     { insertOne: { document: { _id: 2, name: "C" } } }
+>   ], { ordered: false });
+> } catch (err) {
+>   if (err.name === "MongoBulkWriteError") {
+>     console.log("Successful Inserts:", err.result.nInserted);
+>     console.log("Individual Write Errors:", err.writeErrors);
+>   }
+> }
 > ```
 >
-> **Explanation:** Error code 121 signals that inserted documents failed `$jsonSchema` validator rules.
+> #### Technical Explanation
+>
+> 1. In unordered bulk writes (`ordered: false`), failed items generate entries in `writeErrors` while valid items succeed.
+> 2. `err.writeErrors` contains details on exact document index positions and error codes.
+> 3. Enables fine-grained batch error recovery.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Handling Write Concern Timeout Errors
+
+**Scenario:**
+Catch `WriteConcernError` when a majority write fails to replicate within specified `wtimeout`.
+
+**Requirements:**
+1. Check `err.hasWriteConcernError()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> try {
+>   await db.collection("orders").insertOne(
+>     { orderId: "ORD-900" },
+>     { writeConcern: { w: "majority", wtimeout: 2000 } }
+>   );
+> } catch (err) {
+>   if (err.hasWriteConcernError && err.hasWriteConcernError()) {
+>     console.warn("Write succeeded on primary, but secondary replication timed out!");
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `WriteConcernError` indicates the write completed on the primary node, but secondary replication acknowledgment exceeded `wtimeout`.
+> 2. The write was NOT rolled back, but durability acknowledgment failed within the timeout.
+> 3. Crucial distinction for distributed system error handling.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Write Concern](write_concern.md) — The write acknowledgment parameters.
 - [Retryable Writes / Retryable Reads](retryable_operations.md) — Network recovery.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `WriteError` indicates logical document failures (e.g. duplicate keys).
 - `WriteConcernError` indicates replication timeouts across secondaries.
 - Under a `WriteError`, the write failed and no changes were saved.

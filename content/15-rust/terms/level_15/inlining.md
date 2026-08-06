@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Performance / Optimization / Compiler Attribute**: Function Inlining is an LLVM compiler optimization technique. When a function is inlined, `rustc` replaces the CPU `call` instruction and stack frame setup with the literal body code of the target function directly at the caller site. The `#[inline]` attribute serves two purposes in Rust: it acts as a strong optimization hint to LLVM, and critically, **makes a function's intermediate representation (MIR/LLVM IR) available across crate boundaries** for generic or cross-crate inlining.
+
+
+**Rust Compiler Optimization (function expansion & inlining directives)**: Function Inlining is an LLVM compiler optimization technique. When a function is inlined, `rustc` replaces the CPU `call` instruction and stack frame setup with the literal body code of the target function directly at the caller site. The `#[inline]` attribute serves two purposes in Rust: it acts as a strong optimization hint to LLVM, and critically, **makes a function's intermediate representation (MIR/LLVM IR) available across crate boundaries** for generic or cross-crate inlining.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: `#[inline]` attributes work across all Rust compilation targets (`std`, `no_std`, WASM, embedded microcontrollers).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -147,7 +145,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Overusing `#[inline(always)]` Everywhere
 
@@ -196,11 +194,11 @@ pub fn get_id(&self) -> u64 { self.id }
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Cross-Crate Embedded Telemetry & Data Scaling (`#[inline]`)
 
-**Problem:**
+**Scenario:**
 You are developing a `#![no_std]` telemetry library crate for embedded microcontrollers. The library exports sensor calibration functions that convert raw 12-bit Analog-to-Digital Converter (ADC) values into normalized floating-point ratios and scaled millivolt integers inside high-frequency Interrupt Service Routines (ISRs). 
 
 Without explicit annotations, `rustc` compiles functions in library crates into separate binary compilation units, discarding their intermediate representations (MIR/LLVM IR). Consequently, consumer application crates calling your library cannot inline these micro-conversions across crate boundaries, introducing unnecessary function call overhead (stack frame allocation and jump instructions) in time-critical ISR loops.
@@ -211,6 +209,9 @@ Implement a `#![no_std]` sensor processing module with:
 3. Unit tests using `assert_eq!` verifying boundary behavior (0, max 4095, bitwise masking of out-of-range bits).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -259,7 +260,8 @@ Implement a `#![no_std]` sensor processing module with:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Cross-Crate IR Export**: In Rust's compilation model, library functions are compiled independently into `.rlib` binary artifacts. Without `#[inline]`, the LLVM IR for non-generic public functions is discarded after compilation. Decorating functions with `#[inline]` instructs `rustc` to emit the function's MIR/LLVM IR into crate metadata, permitting consumer crates to expand `normalize_adc_12bit` directly into caller code during compilation.
 > 2. **ISR Call Overhead Elimination**: In embedded microcontrollers (such as ARM Cortex-M), executing a function call requires pushing registers onto the MSP/PSP stack frame and calling `BL` (Branch with Link). Inlining substitutes these instructions with direct multiplication and bitwise AND (`AND`, `MUL`, `SDIV`), preserving precious clock cycles inside real-time Interrupt Service Routines.
 > 3. **Bit-Masking (`0x0FFF`)**: The masking operation `raw & 0x0FFF` limits the input to 12 bits. Because the function is inlined, if a caller passes a constant like `scale_to_millivolts(4095, 3300)`, LLVM performs constant folding at compile time, reducing the entire operation to the static constant integer `3300`.
@@ -268,7 +270,7 @@ Implement a `#![no_std]` sensor processing module with:
 
 ### Exercise 2: Real-Time CAN Bus Header Parsing (`#[inline(always)]`)
 
-**Problem:**
+**Scenario:**
 In an Automotive CAN bus (Controller Area Network) gateway driver, millions of 32-bit hardware register frames are received every second. Each frame header packages multiple bit-fields:
 - **Priority**: Bits `0..=2` (3 bits, values `0..=7`).
 - **Message ID**: Bits `3..=13` (11 bits, values `0..=2047`).
@@ -277,6 +279,9 @@ In an Automotive CAN bus (Controller Area Network) gateway driver, millions of 3
 To guarantee zero latency budget and force LLVM to eliminate function call boundaries even in non-optimized debug builds or complex callers, write a `#![no_std]` bit-field extraction struct `CanHeader(pub u32)` with accessor methods `priority()`, `message_id()`, and `is_extended()` marked `#[inline(always)]`. Add unit tests using `assert_eq!` and `assert!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -331,7 +336,8 @@ To guarantee zero latency budget and force LLVM to eliminate function call bound
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Force-Inlining Semantics (`#[inline(always)]`)**: While `#[inline]` is a strong suggestion to LLVM, `#[inline(always)]` overrides internal optimization cost heuristics, forcing the compiler to expand the function body inline everywhere. This is particularly useful for single-instruction micro-accessors where the overhead of a function call (`push`, `mov`, `pop`, `ret`) vastly exceeds the cost of bitwise operations (`UBFX` or `LSR` + `AND`).
 > 2. **Bitwise Extraction Mechanics**:
 >    - `self.0 & 0b111`: Masks off everything except the lowest 3 bits.
@@ -343,7 +349,7 @@ To guarantee zero latency budget and force LLVM to eliminate function call bound
 
 ### Exercise 3: Hot/Cold Path Splitting for I-Cache Efficiency (`#[inline(never)]`)
 
-**Problem:**
+**Scenario:**
 High-throughput network stack drivers process millions of packets per second. In 99.9% of cases, incoming packet headers are valid (the "hot path"), requiring only a tiny magic byte check and length validation. However, when an invalid header or truncated packet arrives (the "cold path"), the driver constructs a detailed error enum containing diagnostic metadata.
 
 If the complex, cold error-construction logic is allowed to inline into the hot packet loop, it inflates the compiled function size, causing CPU Instruction Cache (I-Cache) thrashing. 
@@ -354,6 +360,9 @@ Design a packet parsing driver that:
 3. Includes unit tests with `assert_eq!` verifying successful slice parsing and precise error variant returns.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, PartialEq, Eq)]
 > pub enum PacketError {
@@ -426,14 +435,15 @@ Design a packet parsing driver that:
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **I-Cache Optimization via Hot/Cold Splitting**: High-performance CPUs rely on L1 Instruction Caches (I-Cache) to execute instructions at full clock speed. If a function contains large string formatting or complex error handling branches, inlining the entire body fills the I-Cache lines with assembly code that is rarely executed. Using `#[inline(never)]` forces the compiler to keep error handling code in a remote memory section.
 > 2. **Assembly Compactness**: With the cold path offloaded, the assembly for `process_packet_header` reduces to a few comparison and conditional branch instructions (`CMP`, `JNE`). This allows LLVM to comfortably inline `process_packet_header` into the main processing loop while keeping the loop tight enough to fit inside a single 64-byte I-Cache line.
 > 3. **Preventing Code Bloat**: If `log_and_build_magic_error` were inlined into every caller of `process_packet_header`, the error reporting logic would be duplicated dozens of times across the compiled binary. `#[inline(never)]` ensures a single shared instance of the error function exists in the binary.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Zero-Cost Abstractions](zero_cost_abstractions.md) — Inlining is a core mechanism enabling zero-cost abstractions.
@@ -442,7 +452,7 @@ Design a packet parsing driver that:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Inlining replaces a CPU function `call` with the literal function body, eliminating call overhead and unlocking downstream LLVM optimizations.
 - `#[inline]` hints to LLVM to inline the function AND exports its code representation across crate boundaries.

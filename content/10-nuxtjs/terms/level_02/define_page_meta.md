@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing**
+
+**Routing / Navigation** (Page-Level Route Metadata): `definePageMeta()` is a compiler macro used to configure route metadata, layout selection, page transitions, and middleware for specific page components.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only** (Extracted and compiled during build-time on the server; the configuration is stripped from the client's component runtime script).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Pages require route-specific behaviors:
@@ -73,7 +74,7 @@ As a consequence of this separation, **you cannot access variables declared insi
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Referencing runtime component variables inside `definePageMeta`
 
@@ -147,87 +148,131 @@ definePageMeta({
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Configure Route Validation
+### Exercise 1: Assigning Custom Layouts via `definePageMeta()`
 
-**Problem:** You are building an account settings route `pages/account/[username].vue`. Write the `definePageMeta` config block that attaches the `user-auth` middleware and validates that the `username` path parameter does not contain spaces.
+**Scenario:**
+Assign a custom layout `layouts/admin.vue` to page `pages/admin/index.vue` using `definePageMeta()`.
 
-```vue
-<!-- Solution: -->
-<script setup lang="ts">
-definePageMeta({
-  middleware: 'user-auth',
-  validate: async (route) => {
-    const username = route.params.username as string;
-    return !username.includes(' ');
-  }
-});
-</script>
+**Requirements:**
+1. Execute `definePageMeta({ layout: "admin" })`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <!-- pages/admin/index.vue -->
+> <script setup lang="ts">
+> definePageMeta({
+>   layout: "admin"
+> });
+> </script>
+
+<template>
+  <div>
+    <h1>Admin Control Panel</h1>
+  </div>
+</template>
 ```
 
-> [!check]- Answer
-> - The `validate` option takes a function receiving `route` and returning a boolean.
+> #### Technical Explanation
+>
+> 1. `definePageMeta()` is a compiler macro that sets route configuration metadata at component compile time.
+> 2. `layout: "admin"` overrides the default layout (`layouts/default.vue`), rendering `layouts/admin.vue` instead.
+> 3. Enables page-level layout customization.
 
 ---
 
-### Exercise 2: definePageMeta Guard & Layout Configuration Pattern
+### Exercise 2: Attaching Route Middleware and Custom Roles
 
-**Problem:** Write `definePageMeta()` block configuring layout `'auth'`, middleware `'auth'`, and custom meta `requiresAdmin: true`.
+**Scenario:**
+Attach authentication middleware and custom role metadata (`auth`, `roles: ["admin"]`) to a dashboard route.
 
-**Expected output:**
+**Requirements:**
+1. Configure `middleware` array and custom properties in `definePageMeta()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
+> <!-- pages/dashboard.vue -->
+> <script setup lang="ts">
 > definePageMeta({
->   layout: 'auth',
->   middleware: ['auth'],
->   requiresAdmin: true
+>   middleware: ["auth"],
+>   roles: ["admin", "editor"],
+>   keepalive: true
 > });
 > </script>
-> ```
-> - `definePageMeta` configures page layouts, middleware, and route meta.
-> 
+
+<template>
+  <div>
+    <h1>Protected Dashboard</h1>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `middleware: ['auth']` executes named route middleware located in `middleware/auth.ts` before entering the route.
+> 2. Custom metadata attributes (`roles`) are accessible via `useRoute().meta.roles`.
+> 3. `keepalive: true` caches component DOM state across client navigation.
+
+---
+
+### Exercise 3: Dynamic Route Validation with `validate`
+
+**Scenario:**
+Validate that dynamic parameter `id` in `pages/users/[id].vue` is strictly a numeric integer string, returning 404 if invalid.
+
+**Requirements:**
+1. Use `validate: async (route) => ...` in `definePageMeta()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
+> <!-- pages/users/[id].vue -->
+> <script setup lang="ts">
 > definePageMeta({
->   layout: 'auth',
->   middleware: ['auth'],
->   requiresAdmin: true
+>   validate: async (route) => {
+>     // Check if id parameter contains numeric digits only
+>     return typeof route.params.id === "string" && /^\d+$/.test(route.params.id);
+>   }
 > });
 > </script>
-> ```
+
+<template>
+  <div>
+    <h1>User Profile ID: {{ $route.params.id }}</h1>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `validate` function receives the target `route` object before route entry.
+> 2. Returning `false` or throwing an HTTP error triggers Nuxt's 404 Not Found error page automatically.
+> 3. Prevents execution of invalid database queries for malformed URL parameters.
 
 ---
 
-### Exercise 3: Disabling Layout via definePageMeta
 
-**Problem:** Write `definePageMeta()` setting disabling layout wrapping for a specific page.
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> definePageMeta({ layout: false });
-> ```
-> - `layout: false` disables layout wrapping.
-> 
-> ```typescript
-> definePageMeta({
->   layout: false
-> });
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`pages/` Directory](pages_directory.md) — The folder where pages containing this macro reside.
 - [Route Middleware](../level_08/route_middleware.md) — The middleware handlers attached via this macro.
 - [`layouts/` Directory](layouts_directory.md) — Custom layout selection.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `definePageMeta` is a compiler macro used inside page files to configure routes.
 - It enables configuring page layouts, registering middleware, and validating parameters.
 - If parameter validation returns `false`, Nuxt automatically renders a 404 page.

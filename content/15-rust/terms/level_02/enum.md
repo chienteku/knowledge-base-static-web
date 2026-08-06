@@ -157,7 +157,7 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Performance Network Telemetry Packet Decoder
 
-**Problem:**
+**Scenario:**
 You are building an ingester for a high-throughput network telemetry daemon. Binary network packets are parsed into an event stream where each packet variant carries payload data tailored to its protocol function:
 1. `Ping`: Represents a heartbeat packet holding a microsecond timestamp (`u64`).
 2. `Subscribe`: Represents a topic subscription holding a topic (`String`) and a Quality of Service (QoS) level (`u8`).
@@ -292,7 +292,7 @@ Implement the `DisconnectReason` and `Packet` enums along with the following met
 
 ### Exercise 2: Algorithmic Trading Order Lifecycle State Machine
 
-**Problem:**
+**Scenario:**
 In high-frequency trading platforms, financial orders must pass through explicit lifecycle state transitions. Invalid transitions (such as executing an order that has already been cancelled) must be caught as type-safe errors.
 
 Define the following enums:
@@ -587,7 +587,7 @@ Implement state machine methods on `OrderState`:
 
 ### Exercise 3: Recursive Abstract Syntax Tree (AST) Expression Evaluator
 
-**Problem:**
+**Scenario:**
 Domain-specific language (DSL) interpreters and arithmetic calculation engines rely on recursive Abstract Syntax Trees (ASTs). Because enums in Rust must have a known size at compile time, recursive data structures require pointer indirection (`Box<T>`).
 
 Define the following enums:

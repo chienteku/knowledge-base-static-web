@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Performance / Optimization** (Declarative Table Partitioning): Declarative Partitioning (`PARTITION BY RANGE/LIST/HASH`) splits massive master tables into smaller physical partition tables.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Postgres supports Declarative Partitioning natively. Partition bounds are evaluated during parsing, allowing the query planner to bypass irrelevant files).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a table grows extremely large (e.g., a `logs` table containing 500 million rows or a `transactions` table storing 10 years of sales):
@@ -101,7 +102,7 @@ INSERT INTO transaction_logs VALUES (10, 50.00, '2026-01-15');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Partitioning tables that are too small
 
@@ -149,74 +150,102 @@ INSERT INTO logs VALUES (1, '2027-01-01'); -- ❌ Error: no partition found!
 CREATE TABLE logs_default PARTITION OF logs DEFAULT;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Partition Pruning Diagnosis
+### Exercise 1: Creating Range-Partitioned Tables
 
-**Problem:** You have a `sales_history` table partitioned by year ranges: `sales_2024`, `sales_2025`, `sales_2026`. You run this query:
-`SELECT * FROM sales_history WHERE amount > 1000.00;`
-1.  Explain why **Partition Pruning** fails for this query.
-2.  How would you rewrite the query to enable pruning?
+**Scenario:**
+Create a master `audit_logs` table range-partitioned by `created_at` (`PARTITION BY RANGE (created_at)`), alongside monthly partition tables for 2026.
 
-**Expected output:**
+**Requirements:**
+1. Create master table with `PARTITION BY RANGE (created_at)`.
+2. Create partition tables `FOR VALUES FROM ('2026-01-01') TO ('2026-02-01')`.
+
 > [!check]- Answer
-> ```text
-> 1. Partition Pruning fails because the query filter (`WHERE amount > 1000.00`) does not include the partitioning key column (`logged_date` / year). Because the planner doesn't know what years are requested, it is forced to scan every single partition on disk, losing all pruning benefits.
-> ```
-> - The database must know which partition boundaries contain the target rows.
-> - Always include the partition key in your query filters.
-
----
-
-
-
-### Exercise 2: Declarative Range Partitioning Setup
-
-**Problem:** Create range-partitioned table `metrics` partitioned by `created_at` and create partition `metrics_2026_01` for Jan 2026.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE TABLE metrics ( id INT, created_at TIMESTAMPTZ NOT NULL, val NUMERIC, PRIMARY KEY (id, created_at) ) PARTITION BY RANGE (created_at); CREATE TABLE metrics_2026_01 PARTITION OF metrics FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> CREATE TABLE metrics (
->   id INT,
->   created_at TIMESTAMPTZ NOT NULL,
->   val NUMERIC,
->   PRIMARY KEY (id, created_at)
+> CREATE TABLE audit_logs (
+>   id BIGINT GENERATED ALWAYS AS IDENTITY,
+>   event_name TEXT NOT NULL,
+>   created_at TIMESTAMPTZ NOT NULL
 > ) PARTITION BY RANGE (created_at);
->
-> CREATE TABLE metrics_2026_01 PARTITION OF metrics
->   FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');
+> 
+> CREATE TABLE audit_logs_2026_01 PARTITION OF audit_logs 
+> FOR VALUES FROM ('2026-01-01 00:00:00+00') TO ('2026-02-01 00:00:00+00');
+> 
+> CREATE TABLE audit_logs_2026_02 PARTITION OF audit_logs 
+> FOR VALUES FROM ('2026-02-01 00:00:00+00') TO ('2026-03-01 00:00:00+00');
 > ```
 >
-> **Explanation:** Declarative Range Partitioning splits large tables into manageable time-based child partitions.
+> #### Technical Explanation
+>
+> 1. Declarative Range Partitioning splits a massive logical table into distinct physical partition tables.
+> 2. `PARTITION BY RANGE` routes inserts and queries automatically based on range boundaries.
+> 3. Essential architecture for multi-terabyte log tables.
 
 ---
 
-### Exercise 3: Partition Pruning Verification
+### Exercise 2: Verifying Partition Pruning via EXPLAIN
 
-**Problem:** What query planner optimization skips un-needed child partitions during query execution? (`Partition Pruning`).
+**Scenario:**
+Verify that querying `audit_logs` for January 2026 queries ONLY `audit_logs_2026_01` (Partition Pruning).
 
-**Expected output:**
+**Requirements:**
+1. Execute `EXPLAIN ANALYZE SELECT * FROM audit_logs WHERE created_at = '2026-01-15'`.
+
 > [!check]- Answer
-> ```text
-> Partition Pruning
-> ```
-> ```text
-> Partition Pruning
+>
+> #### Implementation
+>
+> ```sql
+> EXPLAIN ANALYZE 
+> SELECT * FROM audit_logs 
+> WHERE created_at = '2026-01-15 10:00:00+00';
 > ```
 >
-> **Explanation:** Partition Pruning eliminates un-matched child partition tables from execution scan plans.
+> #### Technical Explanation
+>
+> 1. Partition Pruning allows the query planner to bypass scanning partition tables whose range bounds do not match the `WHERE` filter.
+> 2. `EXPLAIN` shows query execution occurring ONLY on `audit_logs_2026_01`.
+> 3. Dramatically reduces disk I/O scan costs on multi-billion row tables.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Dropping Historical Partitions Instantly
+
+**Scenario:**
+Drop all audit logs for January 2026 instantly without executing individual row deletions.
+
+**Requirements:**
+1. Execute `DROP TABLE audit_logs_2026_01`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> DROP TABLE audit_logs_2026_01;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DROP TABLE partition_name` de-allocates millions of historical log rows instantly by dropping the physical partition file from disk.
+> 2. Avoids issuing expensive `DELETE FROM` statements that generate heavy MVCC WAL bloat.
+> 3. Instant data retention lifecycle management.
+
+---
+
+
+
+## 6. Related Terms
 - [`ALTER TABLE`](../level_06/alter_table.md) — Managing table states.
 - [Index (Concept)](../level_07/index_concept.md) — Balancing indexing scales.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Table Partitioning splits a logical table into separate physical files on disk.
 - Optimizes query speed and database maintenance on massive tables.
 - Range, List, and Hash partitioning are the three primary methods.

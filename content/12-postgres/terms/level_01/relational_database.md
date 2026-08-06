@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Core Architecture Concept**
+
+**Core Concept** (Relational Data Model): A Relational Database organizes data into structured tables (relations) of rows and columns with enforced foreign key links and ACID transactional guarantees.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal standard** (The dominant database model for the last 40 years. Relational algebra rules govern how storage engines combine tables).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In 1970, an IBM computer scientist named Edgar F. Codd published a revolutionary paper proposing the **Relational Model**. Before this, databases were structured as nested trees or networks, which were slow to search and hard to modify.
@@ -84,7 +85,7 @@ JOIN users ON orders.user_id = users.id;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Simulating relationships using comma-separated text strings
 
@@ -136,58 +137,109 @@ CREATE TABLE users ( name TEXT ); -- ❌ Missing primary key!
 CREATE TABLE users ( id SERIAL PRIMARY KEY, name TEXT );
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Redundancy Audit
+### Exercise 1: Modeling Relational 1-to-Many Associations
 
-**Problem:** You are designing a database for a blog. The blog has "Articles" and "Authors". If you store the author's bio inside the `articles` table next to every article title, what two problems will happen when the author updates their bio?
+**Scenario:**
+Model a 1-to-Many relationship between `customers` and `invoices` using primary and foreign keys.
 
-**Expected output:**
+**Requirements:**
+1. Create `customers` table.
+2. Create `invoices` table referencing `customers(id)`.
+
 > [!check]- Answer
-> ```text
-> 1. Data Inconsistency (Out-of-sync bios): If you fail to update the bio on every single article row the author wrote (or if the server crashes mid-update), some articles will show the old bio and others will show the new bio.
-> 2. Wasted Disk Storage: You are storing the exact same paragraph of text multiple times across your database disk drive, which increases storage costs.
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE customers (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   company_name TEXT NOT NULL
+> );
+> 
+> CREATE TABLE invoices (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   customer_id INTEGER NOT NULL,
+>   amount_cents INTEGER NOT NULL,
+>   CONSTRAINT fk_invoices_customer_id FOREIGN KEY (customer_id) REFERENCES customers(id)
+> );
 > ```
-> - Think about what happens if an author writes 500 articles and updates their bio text.
-> - Consider the physical disk space utilized when text blocks are copied repeatedly.
+>
+> #### Technical Explanation
+>
+> 1. Relational database modeling links entities via explicit primary key to foreign key relationships.
+> 2. `invoices.customer_id` establishes referential association to parent `customers.id`.
+> 3. Foreign key constraints reject orphan invoice inserts with invalid `customer_id` values.
+
+---
+
+### Exercise 2: Enforcing Referential Integrity on Deletes
+
+**Scenario:**
+Configure foreign key constraint behavior to prevent deleting a `customer` row if active `invoices` exist (`ON DELETE RESTRICT`).
+
+**Requirements:**
+1. Add `CONSTRAINT fk_invoices_customer_id FOREIGN KEY ... ON DELETE RESTRICT`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TABLE invoices 
+> DROP CONSTRAINT fk_invoices_customer_id;
+> 
+> ALTER TABLE invoices 
+> ADD CONSTRAINT fk_invoices_customer_id 
+> FOREIGN KEY (customer_id) REFERENCES customers(id) 
+> ON DELETE RESTRICT;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ON DELETE RESTRICT` raises a SQL error if an application attempts to delete a parent customer row that has child invoices.
+> 2. Protects historical accounting data from accidental orphan deletion.
+> 3. Enforces business domain integrity.
+
+---
+
+### Exercise 3: Eliminating Data Redundancy through Normalization
+
+**Scenario:**
+Demonstrate normalized relational design by separating duplicated customer address data into a distinct `addresses` table.
+
+**Requirements:**
+1. Create normalized `addresses` table.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE addresses (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   street TEXT NOT NULL,
+>   city TEXT NOT NULL,
+>   state TEXT NOT NULL,
+>   postal_code TEXT NOT NULL
+> );
+> 
+> ALTER TABLE customers 
+> ADD COLUMN address_id INTEGER REFERENCES addresses(id);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Normalization eliminates duplicate data entries across rows.
+> 2. Shared address records update in a single location, maintaining database consistency.
+> 3. Core principle of relational database architecture.
 
 ---
 
 
 
-### Exercise 2: Relational Data Model Core Components
-
-**Problem:** List 3 core structural components of Relational Database systems (Tables, Columns, Rows/Tuples).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Tables, Columns, Rows/Tuples
-> ```
-> ```text
-> Tables, Columns, Rows/Tuples
-> ```
->
-> **Explanation:** Relational databases structure data into tabular relations of columns and rows.
-
----
-
-### Exercise 3: Referential Integrity Definition
-
-**Problem:** What mechanism enforces valid relationships between relational tables? (Foreign Key constraints).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Foreign Key constraints
-> ```
-> ```text
-> Foreign Key constraints
-> ```
->
-> **Explanation:** Foreign keys guarantee referential integrity between parent and child table records.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Table (Relation)](table.md) — The core storage grid.
 - [Row (Record / Tuple)](row.md) — The horizontal database entry.
 - [Column (Field / Attribute)](column.md) — The vertical data category.
@@ -197,7 +249,7 @@ CREATE TABLE users ( id SERIAL PRIMARY KEY, name TEXT );
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Relational databases organize data into separate tables to eliminate redundancy.
 - They link tables together using matching key attributes (IDs).
 - Links are validated by the database engine (preventing broken references).

@@ -152,7 +152,7 @@ pub enum Status {
 
 ### Exercise 1: The Secret Age
 
-**Problem:** The following code fails to compile with the error: `field 'age' of struct 'Employee' is private`. Fix the code by adding a single word to the struct definition.
+**Scenario:** The following code fails to compile with the error: `field 'age' of struct 'Employee' is private`. Fix the code by adding a single word to the struct definition.
 
 ```rust
 mod hr_department {
@@ -173,6 +173,9 @@ fn main() {
 ```
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > mod hr_department {
 >     pub struct Employee {
@@ -186,13 +189,16 @@ fn main() {
 
 ### Exercise 2: Selective Field Visibility in Structs
 
-**Problem:** Define `pub struct User { pub name: String, age: u32 }` where `age` remains private.
+**Scenario:** Define `pub struct User { pub name: String, age: u32 }` where `age` remains private.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Name: Alice
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > pub struct User {
 >     pub name: String,
@@ -207,19 +213,23 @@ fn main() {
 > }
 > ```
 >
-> **Explanation:** Struct fields can have granular visibility independent of container struct visibility.
+> #### Technical Explanation
+> Struct fields can have granular visibility independent of container struct visibility.
 
 ---
 
 ### Exercise 3: Restricting Visibility to Ancestors with `pub(in path)`
 
-**Problem:** Use `pub(in crate::outer)` to restrict a function's visibility to an ancestor module.
+**Scenario:** Use `pub(in crate::outer)` to restrict a function's visibility to an ancestor module.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Restricted ancestor function called
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > mod outer {
 >     pub mod inner {
@@ -230,7 +240,8 @@ fn main() {
 > fn main() { outer::call(); }
 > ```
 >
-> **Explanation:** `pub(in path)` restricts visibility to designated ancestor module paths.
+> #### Technical Explanation
+> `pub(in path)` restricts visibility to designated ancestor module paths.
 
 ---
 

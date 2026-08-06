@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Core Concept / Memory / Performance**: Zero-Cost Abstractions is Rust's primary performance promise, originally coined by Bjarne Stroustrup for C++: *"What you don't use, you don't pay for. And further: What you do use, you couldn't hand code any better."* In Rust, using high-level abstractions like `.map()`, `.filter()`, generic trait bounds, or type-state builders costs zero runtime CPU cycles or memory overhead compared to hand-written `while` loops or raw pointer manipulations.
+
+
+**Rust Architectural Principle (compile-time zero-cost abstractions)**: Zero-Cost Abstractions is Rust's primary performance promise, originally coined by Bjarne Stroustrup for C++: *"What you don't use, you don't pay for. And further: What you do use, you couldn't hand code any better."* In Rust, using high-level abstractions like `.map()`, `.filter()`, generic trait bounds, or type-state builders costs zero runtime CPU cycles or memory overhead compared to hand-written `while` loops or raw pointer manipulations.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: Zero-Cost Abstractions apply across all compilation targets (`std`, `no_std`, WASM, embedded microcontrollers, operating system kernels).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -152,7 +150,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Benchmarking in Debug Mode (`cargo run`) instead of Release Mode (`cargo run --release`)
 
@@ -186,16 +184,19 @@ cargo run --release
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Real-Time Aerospace Telemetry Signal Processing Pipeline
 
-**Problem:**
+**Scenario:**
 In a real-time embedded aerospace telemetry system, high-frequency sensor streams emit raw 16-bit temperature readings (`i16`). The telemetry module must filter valid thermal samples within the standard operating envelope (`-40°C` to `125°C`), calibrate each valid reading using a linear scaling formula `calibrated = (raw * 2) + 10`, and aggregate the total thermal energy sum as an `i64`.
 To meet strict real-time execution deadlines on embedded hardware, the pipeline must not incur dynamic memory allocation or dynamic dispatch overhead.
 Write a zero-cost functional pipeline function `process_telemetry_functional(data: &[i16]) -> i64` using high-level iterator adapters (`.iter()`, `.copied()`, `.filter()`, `.map()`, `.fold()`) and compare its correctness with a manual low-level imperative loop function `process_telemetry_imperative(data: &[i16]) -> i64`. Implement unit tests using assertions (`assert_eq!`, `assert`) verifying identical results across nominal datasets, out-of-range noise frames, and empty buffers.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![cfg_attr(not(feature = "std"), no_std)]
 > 
@@ -267,7 +268,8 @@ Write a zero-cost functional pipeline function `process_telemetry_functional(dat
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Iterator Fusion & Inlining:** In Release mode (`cargo build --release`), `rustc` inlines closure definitions directly into the loop body. The high-level pipeline (`.filter().map().fold()`) is fused into a single machine loop without heap allocation, intermediate vectors, or closure object overhead (`Box<dyn Fn>`).
 > 2. **Bounds-Check Elimination (BCE):** Safe slice iteration (`data.iter()`) guarantees memory safety internally. LLVM proves slice indices remain strictly within bounds, completely eliminating per-iteration array boundary check instructions (`cmp`/`jae`) from compiled assembly.
 > 3. **Auto-Vectorization (SIMD):** The LLVM backend vectorizes the combined iterator operations into native SIMD instructions (such as AVX2 or ARM NEON), executing calculations across multiple elements in parallel per clock cycle.
@@ -276,7 +278,7 @@ Write a zero-cost functional pipeline function `process_telemetry_functional(dat
 
 ### Exercise 2: Compile-Time Type-State Hardware Peripheral Controller (ZST Erasure)
 
-**Problem:**
+**Scenario:**
 In embedded microcontroller development (`no_std`), memory-mapped hardware peripherals (e.g. an SPI communication controller) must follow a strict setup sequence: `Unconfigured` -> `Configured` -> `ActiveTx`. Runtime state tracking (`if self.state != State::ActiveTx`) wastes precious clock cycles and CPU flash memory.
 Design a generic peripheral wrapper `SpiDriver<State>` that tracks state transitions purely at compile time using Zero-Sized Types (`Unconfigured`, `Configured`, `ActiveTx`) and `PhantomData<State>`.
 Write complete Rust code and unit tests with assertions (`assert_eq!`, `assert`) proving that:
@@ -285,6 +287,9 @@ Write complete Rust code and unit tests with assertions (`assert_eq!`, `assert`)
 3. Ownership transfer (`self` by value) guarantees compile-time state machine transitions without runtime lock checks or dynamic state flags.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use core::marker::PhantomData;
 > use core::mem::{size_of, size_of_val};
@@ -381,7 +386,8 @@ Write complete Rust code and unit tests with assertions (`assert_eq!`, `assert`)
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Zero-Sized Type Erasure:** Struct markers (`Unconfigured`, `Configured`, `ActiveTx`) and `PhantomData<State>` are Zero-Sized Types (ZSTs). Compiler layout algorithms assign them 0 bytes. `SpiDriver<State>` compiles down to a single raw memory address value (`usize`) in physical binary instructions.
 > 2. **Compile-Time Type Safety:** Attempting to call `.transmit()` on `SpiDriver<Unconfigured>` triggers a compile-time type mismatch error. Invalid hardware operations are caught at build time without requiring runtime state flags (`if self.is_configured`).
 > 3. **Linear Move Semantics:** Transition methods consume `self` by value. This prevents double-initialization or concurrent multi-state alias bugs without requiring dynamic locks, mutexes, or atomic flags.
@@ -390,12 +396,15 @@ Write complete Rust code and unit tests with assertions (`assert_eq!`, `assert`)
 
 ### Exercise 3: Monomorphized Static Dispatch vs Dynamic Trait Object Serialization (Zero-Cost Generics)
 
-**Problem:**
+**Scenario:**
 In high-frequency trading platforms, trade execution payloads must be serialized rapidly into binary formats before transmission across low-latency networks. Serialization components implement a common `PacketSerializer` trait.
 Architects must decide between monomorphized static dispatch (`serialize_batch_static<S: PacketSerializer>`) and trait object dynamic dispatch (`serialize_batch_dynamic(serializer: &dyn PacketSerializer)`).
 Implement the `PacketSerializer` trait alongside two serializer implementations (`FixBinarySerializer` and `CompactJsonSerializer`). Write static generic and dynamic trait object batch serialization functions. Create complete unit tests with assertions (`assert_eq!`, `assert`) verifying identical serialization output, while proving through pointer size checks and inlining rules why static dispatch delivers zero-cost execution.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use core::mem::size_of;
 > 
@@ -524,14 +533,15 @@ Implement the `PacketSerializer` trait alongside two serializer implementations 
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Static Monomorphization:** Calling `serialize_batch_static` triggers generic instantiation. `rustc` duplicates and specializes `serialize_batch_static` for `FixBinarySerializer` and `CompactJsonSerializer` at compile time, eliminating dynamic function call dispatch.
 > 2. **Function Inlining:** Static dispatch enables LLVM to inline `serialize_u32` directly into the batch processing loop. The generated machine assembly contains direct byte write operations without function call stack frame overhead or parameter passing registers.
 > 3. **Fat Pointer & Vtable Cost:** Dynamic dispatch (`&dyn PacketSerializer`) passes a 2-word fat pointer (data pointer + vtable pointer). Calling `.serialize_u32()` requires dereferencing the vtable at runtime (indirect call `call rax`), which prevents function inlining and risks CPU branch prediction stalls.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Monomorphization](../level_04/monomorphization.md) — The compile-time generic specialization mechanism.
@@ -545,7 +555,7 @@ Implement the `PacketSerializer` trait alongside two serializer implementations 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Zero-Cost Abstractions mean high-level code compiles down to machine code as fast and compact as hand-written low-level C.
 - "What you don't use, you don't pay for; what you do use, you couldn't hand code any better."

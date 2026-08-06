@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Infrastructure / Runtime**
+
+**Server & Edge API** (Lightweight Edge Isolate Engine): The Edge Runtime executes middleware and route handlers on V8 isolate engines deployed to global CDN edge networks.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server (Edge)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 A standard Node.js server is powerful. It has access to the computer's file system (`fs`), operating system (`os`), and heavy database drivers. But booting up a Node.js process takes time (Cold Starts), and deploying Node servers to hundreds of data centers around the world is expensive.
@@ -53,7 +54,7 @@ The speed comes at a massive cost:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Deploying a database connection to the Edge
 
@@ -102,69 +103,96 @@ import fs from 'fs'; // ❌ Build Error: Node.js module 'fs' not supported in Ed
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: JWT Verification
+### Exercise 1: Specifying Edge Runtime in Route Handlers
 
-**Problem:** You need to verify a JSON Web Token in your `middleware.ts`. You normally use the `jsonwebtoken` npm package, but it relies on the Node.js `crypto` module. What do you do?
+**Scenario:**
+Configure an API Route Handler to execute on the Edge Runtime using `export const runtime = 'edge'`.
 
-**Expected output:**
+**Requirements:**
+1. Export `runtime = "edge"` in `route.ts`.
+
 > [!check]- Answer
-> ```text
-> You cannot use `jsonwebtoken`. 
-> Instead, you must use a library specifically built for the Edge Runtime that utilizes the standard Web `crypto.subtle` API, such as the `jose` npm package.
-> ```
-> - The Edge only has access to browser-like Web APIs.
-
----
-
-### Exercise 2: Edge Web Standard Crypto Usage
-
-**Problem:** Write Edge Route Handler using Web Standard `crypto.subtle` or `crypto.randomUUID()`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> export const runtime = 'edge'; export async function GET() { const id = crypto.randomUUID(); return Response.json({ id }); }
-> ```
-> - Edge Runtime relies on Web Standard APIs (`crypto`, `fetch`, `Headers`).
-> 
-> ```typescript
-> export const runtime = 'edge';
-> 
-> export async function GET() {
->   const uuid = crypto.randomUUID();
->   return Response.json({ uuid });
-> }
-> ```
+> // app/api/geo/route.ts
+> export const runtime = "edge";
+
+export async function GET(req: Request) {
+  const country = req.headers.get("x-vercel-ip-country") || "Unknown";
+  return Response.json({ country, engine: "V8 Edge Isolate" });
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `export const runtime = 'edge'` compiles the route handler for execution on lightweight V8 edge isolates.
+> 2. Deploys handlers globally near end users, reducing latency and cold starts.
+> 3. Restricted to Web-standard APIs (`fetch`, `Request`, `Response`, `Crypto`).
 
 ---
 
-### Exercise 3: Edge vs Node.js Runtime Matrix
+### Exercise 2: Auditing Edge Runtime Node.js Module Restrictions
 
-**Problem:** Compare Edge Runtime vs Node.js Runtime across:
-1. Cold start latency
-2. Node.js API compatibility
-3. Maximum execution time
+**Scenario:**
+Explain why importing Node.js built-in modules (`fs`, `child_process`, `net`) in Edge Runtime handlers throws a compilation error.
 
-**Expected output:**
+**Requirements:**
+1. Detail V8 edge isolate runtime limitations.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. Edge: Near-zero (sub-5ms); Node.js: 100-500ms cold starts
-> 2. Edge: Web Standards only; Node.js: Full C++ API modules (fs, net)
-> 3. Edge: Short (30s max); Node.js: Up to 15 minutes
+> Edge Runtime Limitation:
+> ❌ import fs from 'node:fs'; // FAILS: Native C++ Node.js modules do not exist on Edge V8 isolates.
+> ✅ Use Web-standard APIs: fetch(), TransformStream, crypto.subtle, TextEncoder.
 > ```
-> - Edge -> Zero cold start, Web APIs only, short execution.
-> - Node.js -> Cold start latency, full Node C++ modules, long execution.
-> 
+
+> #### Technical Explanation
+>
+> 1. Edge runtimes run on stripped-down V8 JavaScript engines without Node.js C++ bindings.
+> 2. Standard Web APIs guarantee cross-platform compatibility across Cloudflare Workers, Vercel Edge, and browsers.
+> 3. Core rule for edge-native Next.js development.
+
+---
+
+### Exercise 3: Comparative Analysis: Node.js Runtime vs Edge Runtime
+
+**Scenario:**
+Formulate an architectural selection decision matrix comparing Node.js Runtime vs Edge Runtime.
+
+**Requirements:**
+1. Contrast npm package support, cold start speed, latency, and ORM compatibility.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Edge = Fast cold-start routing; Node.js = Heavy backend computation.
+> Runtime Selection Matrix:
+> - Node.js Runtime (Default): Full Node.js API & npm compatibility (Prisma, fs, native C packages), slightly higher cold starts. Use for DB operations & heavy server logic.
+> - Edge Runtime (runtime = 'edge'): Ultra-low latency, zero cold starts, Web-standard APIs ONLY (no fs/native C ORMs). Use for geo-routing, A/B testing, lightweight proxying.
 > ```
+
+> #### Technical Explanation
+>
+> 1. Node.js runtime is preferred for database access and heavy server computations.
+> 2. Edge runtime is preferred for ultra-fast global request routing and light API proxies.
+> 3. Fundamental platform runtime choice.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Middleware (`middleware.ts`)](middleware.md) — The primary consumer of the Edge Runtime.
 - [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — Can optionally be opted into the Edge.
 - [Serverless Functions](serverless_functions.md) — Related concept: Serverless Functions.
@@ -172,7 +200,7 @@ import fs from 'fs'; // ❌ Build Error: Node.js module 'fs' not supported in Ed
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The **Edge Runtime** is an ultra-fast, lightweight JavaScript environment based on standard Web APIs rather than Node.js APIs.
 - Next.js Middleware is forced to run on the Edge to ensure fast interception of requests.
 - You can manually opt pages or API routes into the Edge by exporting `const runtime = 'edge'`.

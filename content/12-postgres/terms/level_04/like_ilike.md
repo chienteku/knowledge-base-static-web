@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Operator**
+
+**SQL Command / Clause** (Pattern Matching Predicates): `LIKE` and `ILIKE` perform case-sensitive and case-insensitive string pattern matching using `%` and `_` wildcards.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (`ILIKE` is a PostgreSQL-specific extension. Standard SQL requires using `LOWER(column) LIKE LOWER(pattern)` for case-insensitive matches).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard database equal comparison (`=`) checks for character-for-character exact matches. 
@@ -89,7 +90,7 @@ SELECT title FROM products WHERE title ILIKE '%apple%';
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing standard B-Tree indexes speed up leading wildcard searches (`%search%`)
 
@@ -135,65 +136,101 @@ SELECT * FROM posts WHERE title ILIKE '%postgres%'; -- ❌ Seq Scan on 10M rows!
 CREATE INDEX idx_trgm_title ON posts USING GIN (title gin_trgm_ops);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: User Directory Search
+### Exercise 1: Case-Insensitive Prefix Searching with `ILIKE`
 
-**Problem:** You are building a search endpoint for a company directory. The user searches for a name keyword. The query must return employees whose `full_name` contains the search keyword, ignoring capitalization. Write the SQL statement to locate employees matching keyword `'smith'`.
+**Scenario:**
+Search for users whose `username` starts with `'alex'` (case-insensitive) using `ILIKE 'alex%'`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `WHERE username ILIKE 'alex%'`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT full_name 
-> FROM employees 
-> WHERE full_name ILIKE '%smith%';
+> SELECT id, username, email 
+> FROM users 
+> WHERE username ILIKE 'alex%';
 > ```
-> - Add wildcard percentages on both sides of the search parameter to find the substring anywhere in the text.
-> - Use the PostgreSQL-specific case-insensitive operator.
+>
+> #### Technical Explanation
+>
+> 1. `ILIKE` is PostgreSQL's case-insensitive pattern matching operator.
+> 2. `'alex%'` matches `"Alex"`, `"alexander"`, `"ALEXIS"`.
+> 3. Prefix patterns (`'text%'`) can hit B-tree indexes using `varchar_pattern_ops`.
+
+---
+
+### Exercise 2: Single Character Wildcards with `_`
+
+**Scenario:**
+Find product codes matching pattern `'SKU-___-2026'` (exactly 3 variable characters in middle).
+
+**Requirements:**
+1. Use `WHERE sku LIKE 'SKU-___-2026'`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, sku, name 
+> FROM products 
+> WHERE sku LIKE 'SKU-___-2026';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `_` matches exactly one character; `%` matches zero or more characters.
+> 2. Enforces exact character string length boundaries in pattern matching.
+> 3. Precise string pattern filtering.
+
+---
+
+### Exercise 3: Accelerating Wildcard Searches with Trigram Indexes (`pg_trgm`)
+
+**Scenario:**
+Enable `pg_trgm` extension and create a GIN trigram index to accelerate substring searches (`ILIKE '%search%'`).
+
+**Requirements:**
+1. Execute `CREATE EXTENSION pg_trgm` and `CREATE INDEX ... USING GIN (name gin_trgm_ops)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE EXTENSION IF NOT EXISTS pg_trgm;
+> 
+> CREATE INDEX idx_products_name_trgm 
+> ON products 
+> USING GIN (name gin_trgm_ops);
+> 
+> SELECT id, name 
+> FROM products 
+> WHERE name ILIKE '%phone%';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Standard B-tree indexes cannot accelerate leading wildcard patterns (`'%text%'`).
+> 2. `pg_trgm` breaks text into 3-character trigrams and indexes them in a GIN index.
+> 3. Enables sub-millisecond wildcard searching across millions of text rows.
 
 ---
 
 
 
-### Exercise 2: Anchored Wildcard Prefix Match
-
-**Problem:** Query users whose `username` starts with `'admin'` case-insensitively using `ILIKE`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users WHERE username ILIKE 'admin%';
-> ```
-> ```sql
-> SELECT * FROM users WHERE username ILIKE 'admin%';
-> ```
->
-> **Explanation:** `ILIKE 'prefix%'` performs case-insensitive prefix pattern matching.
-
----
-
-### Exercise 3: Trigram Index for Wildcard Searching
-
-**Problem:** Create GIN trigram index on `title` to accelerate `ILIKE '%query%'` substring searches.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE INDEX idx_posts_title_trgm ON posts USING GIN (title gin_trgm_ops);
-> ```
-> ```sql
-> CREATE INDEX idx_posts_title_trgm ON posts USING GIN (title gin_trgm_ops);
-> ```
->
-> **Explanation:** `pg_trgm` GIN indexes accelerate un-anchored `%substring%` wildcard searches.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Comparison & Logical Operators](../level_03/operators.md) — The parent comparison standard.
 - [String Functions (`CONCAT`, `LENGTH`, `UPPER`, `LOWER`, `TRIM`, `SUBSTRING`, `REPLACE`)](string_functions.md) — Text manipulation utilities.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `LIKE` performs case-sensitive text pattern matching with wildcards.
 - `ILIKE` is a PostgreSQL extension that performs case-insensitive matching.
 - Use `%` to match zero or more characters; use `_` to match exactly one character.

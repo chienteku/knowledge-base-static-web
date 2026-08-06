@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Type Modifier**
+
+**TypeScript Core Syntax** (Readonly Property Modifiers): The `readonly` modifier marks object properties or array elements as immutable, preventing property re-assignment after object construction.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, even if you declare an object using `const`, the properties *inside* the object can still be mutated!
@@ -54,7 +55,7 @@ numbers.push(4); // ❌ Error: Property 'push' does not exist on type 'readonly 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming `readonly` protects deep objects
 
@@ -104,65 +105,117 @@ const ro: ReadonlyArray<number> = [1, 2];
 const arr: number[] = [...ro]; // Create a mutable shallow copy
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Compile-Time vs Runtime
+### Exercise 1: Protecting Object Properties with `readonly`
 
-**Problem:** You use `readonly id: number` in your TypeScript interface. You compile the code and run it in the browser. In your browser's DevTools console, you manually execute `myUser.id = 999`. Will the browser throw an error?
+**Scenario:**
+Define a `Configuration` interface where `apiKey` and `environment` properties cannot be modified after initialization.
 
-**Expected output:**
+**Requirements:**
+1. Mark properties as `readonly`.
+
 > [!check]- Answer
-> ```text
-> No! The browser will NOT throw an error, and the ID will change to 999.
-> `readonly` is purely a Compile-Time TypeScript feature. It is completely erased during compilation. It does not compile into `Object.freeze()`. It only protects you from writing mutating code in your IDE.
+>
+> #### Implementation
+>
+> ```typescript
+> interface Configuration {
+>   readonly apiKey: string;
+>   readonly environment: string;
+>   port: number;
+> }
+
+const config: Configuration = {
+  apiKey: "secret_123",
+  environment: "production",
+  port: 8080
+};
+
+config.port = 9090; // Valid!
+// config.apiKey = "new_key"; // ❌ Compile Error: Cannot assign to 'apiKey' because it is a read-only property.
+```
+
+> #### Technical Explanation
+>
+> 1. `readonly` prevents property re-assignment after initial object creation.
+> 2. Enforces immutability at compile time.
+> 3. Protects sensitive settings from unintended mutation.
+
+---
+
+### Exercise 2: Creating Immutable Arrays with `ReadonlyArray<T>`
+
+**Scenario:**
+Pass an array into a function guaranteeing that the function will not mutate the array using `ReadonlyArray<T>` or `readonly T[]`.
+
+**Requirements:**
+1. Annotate array parameter as `readonly number[]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function calculateSum(numbers: readonly number[]): number {
+>   // numbers.push(10); // ❌ Compile Error: Property 'push' does not exist on type 'readonly number[]'.
+>   // numbers[0] = 99;  // ❌ Compile Error: Index signature in type 'readonly number[]' only permits reading.
+>   
+>   return numbers.reduce((acc, curr) => acc + curr, 0);
+> }
 > ```
-> - Remember the Erasure Concept from Level 1.
+
+> #### Technical Explanation
+>
+> 1. `readonly T[]` strips array mutation methods (`push`, `pop`, `splice`, `sort`).
+> 2. Guarantees pure, side-effect-free function execution.
+> 3. Standard functional programming pattern in TypeScript.
+
+---
+
+### Exercise 3: Auditing `readonly` Compile-Time Shallow Protection
+
+**Scenario:**
+Explain why `readonly` provides SHALLOW immutability rather than deep immutability for nested objects.
+
+**Requirements:**
+1. Show how nested object properties can still be mutated inside a `readonly` outer object.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> interface State {
+>   readonly user: {
+>     name: string;
+>   };
+> }
+
+const state: State = { user: { name: "Alice" } };
+
+// state.user = { name: "Bob" }; // ❌ Compile Error: 'user' is readonly!
+state.user.name = "Bob";        // ⚠️ SUCCEEDS! Readonly is SHALLOW!
+```
+
+> #### Technical Explanation
+>
+> 1. `readonly` modifier applies ONLY to the immediate property reference.
+> 2. Nested objects (`state.user.name`) remain mutable unless nested properties are also marked `readonly`.
+> 3. Use `Readonly<T>` utility type or `as const` for deep immutability needs.
 
 ---
 
 
 
-### Exercise 2: Deep Readonly Utility vs Shallow Readonly
-
-**Problem:** Explain why `readonly` modifier on `{ readonly a: { b: number } }` allows mutating `obj.a.b = 2`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> readonly modifier is shallow by default
-> ```
-> ```typescript
-> console.log("readonly modifier is shallow by default");
-> ```
->
-> **Explanation:** Standard `readonly` modifiers prevent reassigning top-level properties only.
-
----
-
-### Exercise 3: Readonly Tuple Declaration
-
-**Problem:** Declare a readonly tuple of `[number, string]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> readonly [number, string]
-> ```
-> ```typescript
-> const tuple: readonly [number, string] = [1, "a"];
-> console.log("readonly [number, string]");
-> ```
->
-> **Explanation:** `readonly` prefix creates immutable tuple structures.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Interfaces](interfaces.md) — The main place `readonly` is used.
 - [Utility Types Overview](../level_08/utility_types.md) — Where the `Readonly<T>` global helper lives.
 - [Arrays & Tuples](../level_02/arrays_tuples.md) — Related concept: Arrays & Tuples.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`readonly`** is a modifier that prevents a property from being reassigned after its initial creation.
 - It is the property-level equivalent of the variable-level `const` keyword.
 - It is **shallow**; it does not automatically make nested objects immutable.

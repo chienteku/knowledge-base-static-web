@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture / Routing**
+
+**Security & Middleware** (Global Server Request Interceptor): Middleware (`middleware.ts`) intercepts incoming server HTTP requests before routing, enforcing authentication, redirects, and headers.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Edge Runtime ONLY**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you want to support internationalization (`/en/about` vs `/fr/about`), you need to check the user's `Accept-Language` browser header and redirect them to the correct subfolder. 
@@ -66,7 +67,7 @@ export const config = {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use Node.js Modules
 
@@ -116,76 +117,114 @@ export const config = {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: URL Rewrites
+### Exercise 1: Authoring Centralized Server Middleware
 
-**Problem:** You are migrating your blog. The old URL was `/post/123`. The new URL is `/blog/123`. Instead of redirecting the user (which changes the URL in their browser), you want to "Rewrite" the request. How?
+**Scenario:**
+Create `middleware.ts` to log incoming request paths and attach a custom response header `X-Request-Time`.
 
-**Expected output:**
+**Requirements:**
+1. Export `middleware(req: NextRequest)` in project root `middleware.ts`.
+
 > [!check]- Answer
-> ```ts
-> export function middleware(request: NextRequest) {
->   if (request.nextUrl.pathname.startsWith('/post/')) {
->     const slug = request.nextUrl.pathname.replace('/post/', '');
->     // A rewrite serves the content of /blog/[slug], but the user's browser 
->     // STILL SHOWS /post/[slug] in the URL bar!
->     return NextResponse.rewrite(new URL(`/blog/${slug}`, request.url));
->   }
-> }
-> ```
-> - `NextResponse` has a `.rewrite()` method that acts as a proxy, hiding the true destination from the user.
-
----
-
-### Exercise 2: Authentication Middleware Redirect Pattern
-
-**Problem:** Write `middleware.ts` checking cookie `'token'` and executing `NextResponse.redirect(new URL('/login', req.url))` if missing on protected `/dashboard` paths.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import { NextResponse, NextRequest } from 'next/server'; export function middleware(req: NextRequest) { const token = req.cookies.get('token')?.value; if (!token && req.nextUrl.pathname.startswith('/dashboard')) { return NextResponse.redirect(new URL('/login', req.url)); } }
-> ```
-> - `middleware.ts` intercepts requests before route resolution.
-> 
-> ```typescript
-> import { NextResponse } from 'next/server';
-> import type { NextRequest } from 'next/server';
-> 
-> export function middleware(request: NextRequest) {
->   const token = request.cookies.get('token')?.value;
->   if (!token && request.nextUrl.pathname.startsWith('/dashboard')) {
->     return NextResponse.redirect(new URL('/login', request.url));
->   }
-> }
-> 
-> export const config = {
->   matcher: ['/dashboard/:path*']
-> };
-> ```
+> // middleware.ts
+> import { NextResponse } from "next/server";
+> import type { NextRequest } from "next/server";
+
+export function middleware(req: NextRequest) {
+  const res = NextResponse.next();
+  res.headers.set("X-Request-Time", Date.now().toString());
+
+  console.log(`[Middleware] ${req.method} ${req.nextUrl.pathname}`);
+  return res;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `middleware.ts` placed at the project root executes on every incoming server request before page/route resolution.
+> 2. `NextResponse.next()` allows the request to continue to downstream page handlers while attaching custom response headers.
+> 3. Central entry point for server request interception.
 
 ---
 
-### Exercise 3: Middleware Edge Runtime Restriction
+### Exercise 2: Filtering Middleware Execution with `config.matcher`
 
-**Problem:** Can Next.js `middleware.ts` run in the standard Node.js runtime?
+**Scenario:**
+Restrict `middleware.ts` execution strictly to `/dashboard/**` and `/api/protected/**` paths using `config.matcher`.
 
-**Expected output:**
+**Requirements:**
+1. Export `const config = { matcher: [...] }`.
+
 > [!check]- Answer
-> ```text
-> No. Middleware executes EXCLUSIVELY in the Edge Runtime environment.
-> ```
-> - `middleware.ts` runs strictly in the Edge Runtime.
-> 
-> ```text
-> Middleware = Edge Runtime Exclusive
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> import { NextResponse } from "next/server";
+> import type { NextRequest } from "next/server";
+
+export function middleware(req: NextRequest) {
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ["/dashboard/:path*", "/api/protected/:path*"]
+};
+```
+
+> #### Technical Explanation
+>
+> 1. `config.matcher` filters which URL paths trigger middleware execution.
+> 2. Bypasses middleware execution for static assets (`/_next/static`, images, favicons).
+> 3. Essential performance optimization to avoid unnecessary middleware runs on static files.
+
+---
+
+### Exercise 3: Performing Conditional Redirects in Middleware
+
+**Scenario:**
+Redirect users attempting to access `/admin` without a `role=admin` cookie to `/unauthorized`.
+
+**Requirements:**
+1. Check `req.cookies.get('role')` and call `NextResponse.redirect()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> import { NextResponse } from "next/server";
+> import type { NextRequest } from "next/server";
+
+export function middleware(req: NextRequest) {
+  const role = req.cookies.get("role")?.value;
+
+  if (req.nextUrl.pathname.startsWith("/admin") && role !== "admin") {
+    return NextResponse.redirect(new URL("/unauthorized", req.url));
+  }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `NextResponse.redirect()` issues an immediate HTTP 307 temporary redirect response.
+> 2. Intercepts unauthorized requests before server rendering or database querying begins.
+> 3. High performance server security guard.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Edge Runtime vs Node.js Runtime](edge_runtime.md) — The restricted environment where Middleware runs.
 - [`NextRequest` & `NextResponse`](../level_07/next_request_response.md) — The object used to trigger the redirects and rewrites.
 - [`cookies()` and `headers()` from `next/headers`](../level_05/cookies_headers.md) — Related concept: `cookies()` and `headers()` from `next/headers`.
@@ -196,7 +235,7 @@ export const config = {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Middleware** (`middleware.ts`) is a single, global interceptor for incoming HTTP requests.
 - It is primarily used for Authentication checks, Internationalization routing, Redirects, and Rewrites.
 - It runs on the **Edge Runtime**, meaning it is ultra-fast but CANNOT use Node.js modules or databases.

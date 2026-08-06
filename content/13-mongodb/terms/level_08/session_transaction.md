@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Driver / Integration** (Client Session Lifetime & Transaction Management): Client Sessions (`ClientSession`) track client state, causal consistency sequences, and multi-document transaction lifecycles in MongoDB drivers.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Managed by the client driver. Coordinates session state tracking IDs with the database cluster nodes on every command payload).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Writing multi-document transaction code manually is hard:
@@ -105,7 +106,7 @@ async function executeTransfer() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omit the '{ session }' option parameter in one of the queries inside a 'withTransaction' block
 
@@ -166,83 +167,110 @@ await db.users.updateOne({ _id: id }, { $set: { a: 1 } }); // ❌ Executed OUTSI
 await db.users.updateOne({ _id: id }, { $set: { a: 1 } }, { session }); // Pass session option
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Session Parameter Audit
+### Exercise 1: Session Lifecycle Management with `ClientSession`
 
-**Problem:** You are reviewing a transaction code block. Identify why the following code is broken:
-```javascript
-await session.withTransaction(async () => {
-  const user = await db.collection('users').findOne({ _id: 10 });
-  if (user.status === "active") {
-    await db.collection('logs').insertOne({ msg: "User checked" }, { session });
-  }
-});
-```
-State how to fix the code.
+**Scenario:**
+Create, use, and explicitly close a MongoDB driver `ClientSession` using try-finally.
 
-**Expected output:**
+**Requirements:**
+1. Start session, execute operation with `{ session }`, end session in `finally`.
+
 > [!check]- Answer
-> ```text
-> The code is broken because the `findOne` query does not receive the `{ session }` parameter. 
-> This means it reads the user outside the transaction snapshot, risking a dirty read of stale user data. 
-> To fix it, add the session parameter to `findOne`:
-> `const user = await db.collection('users').findOne({ _id: 10 }, { session });`
+>
+> #### Implementation
+>
+> ```javascript
+> const session = client.startSession();
+> try {
+>   const users = db.collection("users");
+>   await users.updateOne(
+>     { _id: userId },
+>     { $set: { lastLogin: new Date() } },
+>     { session }
+>   );
+> } finally {
+>   await session.endSession();
+> }
 > ```
-> - Check all database read and write commands in the block.
-> - Look for the presence of the `{ session }` parameter.
+>
+> #### Technical Explanation
+>
+> 1. `startSession()` creates a stateful client session tracking cluster time and transaction context.
+> 2. Passing `{ session }` in options associates the write command with the session lifecycle.
+> 3. `session.endSession()` in `finally` frees server-side session resources.
 
 ---
 
+### Exercise 2: Session-Scoped Transaction Commitment
 
+**Scenario:**
+Execute `withTransaction()` on a session to execute 2 updates atomically.
 
-### Exercise 2: Idiomatic Transaction Session Pattern
+**Requirements:**
+1. Use `session.withTransaction()`.
 
-**Problem:** Write safe session creation pattern using `try ... finally` and `session.endSession()`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> const session = client.startSession(); try { await session.withTransaction(fn); } finally { await session.endSession(); }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
 > const session = client.startSession();
 > try {
 >   await session.withTransaction(async () => {
->     // Transactional operations ...
+>     await db.collection("accounts").updateOne({ _id: "A" }, { $inc: { balance: -50 } }, { session });
+>     await db.collection("accounts").updateOne({ _id: "B" }, { $inc: { balance: 50 } }, { session });
 >   });
 > } finally {
 >   await session.endSession();
 > }
 > ```
 >
-> **Explanation:** `finally { session.endSession(); }` guarantees session resource cleanup.
+> #### Technical Explanation
+>
+> 1. `withTransaction()` binds transactional operations to the active `ClientSession`.
+> 2. Handles commit, abort, and transient error retries automatically.
+> 3. Prevents orphaned transactions.
 
 ---
 
-### Exercise 3: Passing Session Option to Driver Operations
+### Exercise 3: Handling Session Timeout Expirations
 
-**Problem:** Pass `session` option to `insertOne` call inside transaction.
+**Scenario:**
+Explain what happens when an idle session exceeds the server `localLogicalSessionTimeoutMinutes` (default 30 mins).
 
-**Expected output:**
+**Requirements:**
+1. Describe server session cleanup after 30 minutes of inactivity.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> await db.users.insertOne({ name: "Alice" }, { session });
-> ```
-> ```javascript
-> await db.users.insertOne({ name: "Alice" }, { session });
+> Session Expiration Rules:
+> Server purges idle sessions after 30 minutes of inactivity (localLogicalSessionTimeoutMinutes).
+> Any active transaction bound to an expired session is aborted automatically by mongod.
 > ```
 >
-> **Explanation:** Operations MUST pass `{ session }` to be bound within transaction boundaries.
+> #### Technical Explanation
+>
+> 1. MongoDB background thread purges inactive sessions after 30 minutes.
+> 2. Aborts uncommitted transactions to free server memory.
+> 3. Do not leave sessions idle for prolonged periods in application code.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [Multi-Document Transaction](multi_document_transaction.md) — The parent transaction concept.
 - [Causal Consistency](causal_consistency.md) — Session-level read guarantees.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `startSession()` creates a client session context for queries.
 - `session.withTransaction()` executes transactions with automatic retry logic.
 - Automatically retries transient network errors and write conflicts.

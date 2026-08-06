@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Data Type**
+
+**Data Type** (Exact Whole-Number Types): Integer data types (`SMALLINT`, `INTEGER`, `BIGINT`) store 2-byte, 4-byte, and 8-byte signed whole numbers.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Standard SQL types mapped to C binary signed integers under the hood).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database design, every byte counts. If you are storing whole numbers, you must choose a type that can fit your maximum expected value without wasting disk storage. 
@@ -73,7 +74,7 @@ INSERT INTO rating_log (stars) VALUES (99999);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using standard INTEGER for auto-incrementing IDs on high-traffic log tables
 
@@ -119,69 +120,101 @@ id SMALLINT PRIMARY KEY -- ❌ Max 32,767 records!
 id INT PRIMARY KEY or BIGINT PRIMARY KEY
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Sizing Assessment
+### Exercise 1: Sizing Integer Types Based on Expected Bounds
 
-**Problem:** You are designing a table for a library database. Select the best integer type (`SMALLINT`, `INTEGER`, or `BIGINT`) for each of the following properties to optimize space:
-1.  The year a book was published (e.g. `2026`).
-2.  The global international book index barcode number (ISBN) (e.g. `9780123456789`).
-3.  The quantity of a book copy currently in stock (typically ranges from `0` to `500`).
+**Scenario:**
+Create an `inventory_items` table selecting `SMALLINT` for status codes, `INTEGER` for quantity, and `BIGINT` for total serial numbers.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE TABLE inventory_items (...)`.
+
 > [!check]- Answer
-> ```text
-> 1. Publication Year: SMALLINT (Year numbers are around 2000, easily fitting inside 32,767).
-> 2. ISBN Barcode: BIGINT (ISBN codes are 13 digits long, which far exceeds the 2.14 billion limit of a standard INTEGER).
-> 3. Stock Quantity: SMALLINT (Stock numbers easily fit inside 32,767).
+>
+> #### Implementation
+>
+> ```sql
+> CREATE TABLE inventory_items (
+>   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   status_code SMALLINT NOT NULL,
+>   quantity INTEGER NOT NULL CHECK (quantity >= 0),
+>   serial_number BIGINT NOT NULL UNIQUE
+> );
 > ```
-> - Match maximum possible value numbers with range tables.
-> - Barcodes are long number strings; verify if they fit in 2 billion limits.
+>
+> #### Technical Explanation
+>
+> 1. `SMALLINT` (2 bytes) handles values -32,768 to 32,767 (ideal for status codes).
+> 2. `INTEGER` (4 bytes) handles values up to 2.1 billion.
+> 3. `BIGINT` (8 bytes) handles values up to 9 quintillion (essential for high-volume primary keys and serial numbers).
+
+---
+
+### Exercise 2: Preventing Integer Overflow Exceptions
+
+**Scenario:**
+Audit a table storing transaction counters to upgrade `INTEGER` to `BIGINT` before overflow errors occur.
+
+**Requirements:**
+1. Execute `ALTER TABLE metrics ALTER COLUMN counter TYPE BIGINT`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TABLE metrics 
+> ALTER COLUMN counter TYPE BIGINT;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Exceeding 2,147,483,647 on an `INTEGER` column throws `integer out of range` error (Code 22003).
+> 2. Altering type to `BIGINT` expands capacity to 9.22 × 10^18.
+> 3. Protects production databases from counter exhaustion.
+
+---
+
+### Exercise 3: Atomic Integer Incrementing
+
+**Scenario:**
+Atomically increment a page view counter by 1 and decrement stock quantity by 1.
+
+**Requirements:**
+1. Execute `UPDATE` with `stock = stock - 1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> UPDATE products 
+> SET stock = stock - 1,
+>     views = views + 1 
+> WHERE id = 10 
+>   AND stock > 0 
+> RETURNING stock, views;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Arithmetic operators (`+`, `-`) operate over integer data types atomically.
+> 2. `WHERE stock > 0` prevents stock count from dropping below zero during concurrent writes.
+> 3. Safe thread-safe integer updating.
 
 ---
 
 
 
-### Exercise 2: Integer Type Size Breakdown
-
-**Problem:** List 3 integer types in PostgreSQL and byte sizes (`SMALLINT`: 2 bytes, `INTEGER`: 4 bytes, `BIGINT`: 8 bytes).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SMALLINT (2 bytes), INTEGER (4 bytes), BIGINT (8 bytes)
-> ```
-> ```text
-> SMALLINT (2 bytes), INTEGER (4 bytes), BIGINT (8 bytes)
-> ```
->
-> **Explanation:** Integer types provide 16-bit, 32-bit, and 64-bit signed integer storage.
-
----
-
-### Exercise 3: Maximum Value of 32-Bit Integer
-
-**Problem:** What is the maximum positive signed value for a 32-bit `INTEGER` in PostgreSQL? (`2,147,483,647`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 2,147,483,647 (2.14 billion)
-> ```
-> ```text
-> 2,147,483,647 (2.14 billion)
-> ```
->
-> **Explanation:** Exceeding $2^{31}-1$ causes integer overflow errors.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Data Types (Overview)](data_types.md) — The parent typing framework.
 - [`SERIAL` / `GENERATED ALWAYS AS IDENTITY`](serial_identity.md) — Auto-incrementing integers.
 - [`TEXT` / `VARCHAR` / `CHAR`](text_types.md) — Related concept: `TEXT` / `VARCHAR` / `CHAR`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PostgreSQL provides three primary integer sizes: `SMALLINT`, `INTEGER`, and `BIGINT`.
 - `SMALLINT` uses 2 bytes (up to 32k); `INTEGER` uses 4 bytes (up to 2.1 billion).
 - `BIGINT` uses 8 bytes and is essential for high-volume logs and IDs.

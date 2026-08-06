@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Advanced Feature** (Large Binary Blob Chunk Storage): GridFS is a specification for storing files exceeding 16MB by automatically splitting files into 255KB chunks across `fs.files` and `fs.chunks` collections.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Implemented inside client drivers. Interacts with the database by dividing file binary streams into multiple standard documents).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 MongoDB documents are capped at a strict physical limit of **16 Megabytes** to protect server memory performance.
@@ -101,7 +102,7 @@ uploadVideo();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using GridFS to store small images or document thumbnails (under 1MB), adding query roundtrip overhead
 
@@ -151,69 +152,106 @@ db.fs.chunks.find({ files_id: id }); // Manual chunk assembly anti-pattern
 const downloadStream = bucket.openDownloadStream(fileId);
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: GridFS Math
+### Exercise 1: Uploading Large Files using GridFS Bucket
 
-**Problem:** You upload a **10 Megabyte** (10,485,760 bytes) PDF file to a default GridFS bucket.
-1.  Calculate the total number of documents that will be created in the `fs.chunks` collection (assume a default chunk size of 255 Kilobytes (261,120 bytes)).
-2.  State the number of documents that will be created in the `fs.files` collection.
+**Scenario:**
+Upload a 50MB video file to MongoDB GridFS using Node.js `GridFSBucket`.
 
-**Expected output:**
+**Requirements:**
+1. Instantiate `new GridFSBucket(db, { bucketName: "videos" })`.
+2. Open upload stream and pipe file buffer.
+
 > [!check]- Answer
-> ```text
-> 1. Total Chunks Documents: ceil(10,485,760 / 261,120) = ceil(40.15) = 41 documents. (40 chunks of 255KB and 1 remaining chunk of 40KB).
-> 2. Total Files Documents: 1 document. (The master metadata manifest index file).
-> ```
-> - Divide the total file bytes by the default chunk size of 261,120 bytes.
-> - Round up to the nearest whole integer to account for the trailing chunk.
+>
+> #### Implementation
+>
+> ```typescript
+> import { MongoClient, GridFSBucket } from "mongodb";
+> import fs from "fs";
+
+const client = new MongoClient("mongodb://localhost:27017");
+const db = client.db("media_db");
+const bucket = new GridFSBucket(db, { bucketName: "videos" });
+
+fs.createReadStream("movie.mp4")
+  .pipe(bucket.openUploadStream("movie.mp4"))
+  .on("finish", () => console.log("File uploaded successfully to GridFS!"));
+```
+
+> #### Technical Explanation
+>
+> 1. `GridFSBucket` automatically splits files larger than 16MB into 255KB chunk documents stored in `videos.chunks`.
+> 2. `videos.files` stores parent metadata documents (`filename`, `length`, `chunkSize`, `uploadDate`).
+> 3. Streams large files seamlessly without memory overflow.
 
 ---
 
+### Exercise 2: Streaming GridFS Files to HTTP Client Responses
 
+**Scenario:**
+Download and stream a GridFS file directly to an Express.js HTTP response stream by filename.
 
-### Exercise 2: Uploading File with GridFSBucket in Node.js
+**Requirements:**
+1. Execute `bucket.openDownloadStreamByName("movie.mp4")`.
 
-**Problem:** Create GridFSBucket upload stream for file `video.mp4`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> const bucket = new GridFSBucket(db); fs.createReadStream('video.mp4').pipe(bucket.openUploadStream('video.mp4'));
+>
+> #### Implementation
+>
+> ```typescript
+> app.get("/video/:filename", (req, res) => {
+>   const bucket = new GridFSBucket(db, { bucketName: "videos" });
+>   
+>   res.setHeader("Content-Type", "video/mp4");
+>   bucket.openDownloadStreamByName(req.params.filename)
+>     .pipe(res);
+> });
 > ```
+>
+> #### Technical Explanation
+>
+> 1. `openDownloadStreamByName()` fetches and reassembles binary chunks from `fs.chunks` sequentially.
+> 2. Piping directly to HTTP `res` streams audio/video data to clients without buffering 50MB into RAM.
+> 3. Efficient binary media streaming.
+
+---
+
+### Exercise 3: Deleting GridFS Files and Chunks
+
+**Scenario:**
+Delete a GridFS file and its corresponding binary chunk documents by file `_id`.
+
+**Requirements:**
+1. Execute `bucket.delete(fileId)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> const { GridFSBucket } = require('mongodb');
-> const bucket = new GridFSBucket(db);
-> fs.createReadStream('video.mp4')
->   .pipe(bucket.openUploadStream('video.mp4'));
+> const bucket = new GridFSBucket(db, { bucketName: "videos" });
+> await bucket.delete(new ObjectId("60c72b2f9b1d8b2c88888880"));
 > ```
 >
-> **Explanation:** `GridFSBucket` streams large binary files into 255KB chunk documents.
+> #### Technical Explanation
+>
+> 1. `bucket.delete(fileId)` removes the parent file document from `fs.files` AND deletes all associated 255KB chunks from `fs.chunks`.
+> 2. Prevents orphaned binary chunks in the database.
+> 3. Clean binary asset management.
 
 ---
 
-### Exercise 3: GridFS Collections List
 
-**Problem:** List 2 standard collections created by GridFS (`fs.files`, `fs.chunks`).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> fs.files, fs.chunks
-> ```
-> ```text
-> fs.files, fs.chunks
-> ```
->
-> **Explanation:** `fs.files` stores file metadata; `fs.chunks` stores binary chunk payloads.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Document Size Limit (16 MB)](../level_05/document_size_limit.md) — The 16MB ceiling constraint.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - GridFS stores and retrieves files that exceed the 16MB BSON document limit.
 - Splits files into binary chunks, saving each chunk as a separate document.
 - Divides files into two collections: `fs.chunks` (binary data) and `fs.files` (metadata).

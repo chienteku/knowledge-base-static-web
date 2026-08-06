@@ -100,7 +100,7 @@ let map = HashMap::<String, i32>::new();
 
 ### Exercise 1: Explain a Compile Error
 
-**Problem:** This code fails with `cannot find type HashSet in this scope`. Explain why, given what you now know about the prelude, and provide the fix.
+**Scenario:** This code fails with `cannot find type HashSet in this scope`. Explain why, given what you now know about the prelude, and provide the fix.
 ```rust
 fn main() {
     let s: HashSet<i32> = HashSet::new();
@@ -109,6 +109,9 @@ fn main() {
 
 > [!check]- Answer
 > `HashSet` is **not** part of the standard prelude — only a small set of extremely universal names (`Option`, `Result`, `Vec`, `String`, `Box`, and a handful of traits) are implicitly imported. `HashSet` lives in `std::collections` and must be explicitly brought into scope:
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashSet;
 >
@@ -121,13 +124,16 @@ fn main() {
 
 ### Exercise 2: Building a Custom Library Prelude
 
-**Problem:** Create a `pub mod prelude` re-exporting common library traits and types `pub use crate::core::*;`.
+**Scenario:** Create a `pub mod prelude` re-exporting common library traits and types `pub use crate::core::*;`.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Custom prelude imported
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > mod my_crate {
 >     pub mod core { pub fn run() { println!("Custom prelude imported"); } }
@@ -139,13 +145,14 @@ fn main() {
 > }
 > ```
 >
-> **Explanation:** Library preludes group common types and traits into single wildcard import modules.
+> #### Technical Explanation
+> Library preludes group common types and traits into single wildcard import modules.
 
 ---
 
 ### Exercise 3: What Needs `use` and What Doesn't?
 
-**Problem:**
+**Scenario:**
 The prelude makes a small curated set of items automatically available in every Rust file. Everything else in `std` requires an explicit `use`. A common beginner mistake is assuming "it's in std, so I can use it without importing it."
 
 For each item below, predict: **does it require a `use` statement, or is it in the prelude?**
@@ -184,6 +191,9 @@ Then write a program that uses all of the following **without any `use` statemen
 > | `Write` trait (`std::io::Write`) | ✅ Yes — needed to call `.write_all()` etc. |
 > | `ToString` trait | ❌ No — prelude (`.to_string()` works without importing it) |
 >
+>
+> #### Implementation
+>
 > ```rust
 > // No `use` statement needed for Vec, String, Box, Option, ToString.
 > // All of these compile purely on the prelude.
@@ -203,7 +213,8 @@ Then write a program that uses all of the following **without any `use` statemen
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > The prelude contains only the most universally needed items — the ones that would be tedious and noisy to import in virtually every Rust file. `HashMap` is very common but not *universal* (many programs don't need it), so it's in `std::collections` and requires explicit import. The design choice is deliberate: items in the prelude must justify their namespace pollution across every single Rust file that ever gets written.
 
 ---

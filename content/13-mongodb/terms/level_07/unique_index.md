@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Constraint**
+
+**Index / Performance** (Constraint Enforcing Index): A Unique Index enforces uniqueness constraints on indexed field values across all collection documents, rejecting duplicate writes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Checked during the write pipeline. Rejects duplicates with database error code `11000` and rolls back write transactions).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In application development, keeping data unique is a core requirement:
@@ -83,7 +84,7 @@ db.users.insertOne({ username: "bob" });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating a unique index on an optional field without adding a sparse or partial constraint
 
@@ -105,6 +106,8 @@ db.users.createIndex(
 
 
 
+
+
 ### Mistake 2: Creating Unique Indexes on Collections Containing Duplicate Field Values
 
 **The mistake:** Executing `db.users.createIndex({ email: 1 }, { unique: true })` when duplicate `email` records exist.
@@ -120,6 +123,8 @@ db.users.createIndex({ email: 1 }, { unique: true }); // ❌ Fails with E11000 d
 ```javascript
 Remove or resolve duplicate email records before creating unique index
 ```
+
+
 
 ### Mistake 3: Forgetting that Missing Fields Cause Unique Key Collisions on Standard Unique Indexes
 
@@ -139,98 +144,95 @@ db.users.createIndex({ passportNumber: 1 }, { unique: true, sparse: true }); // 
 
 
 
-### Mistake 4: Creating Unique Indexes on Collections Containing Duplicate Field Values
+## 5. Practice Exercises
 
-**The mistake:** Executing `db.users.createIndex({ email: 1 }, { unique: true })` when duplicate `email` records exist.
+### Exercise 1: Enforcing Unique Field Constraints
 
-**Why it's wrong:** If duplicate values exist in the target field, `createIndex()` aborts with duplicate key error `E11000`. Clean duplicate documents before building unique indexes.
+**Scenario:**
+Create a unique index on `email` in collection `users` to prevent duplicate account registration.
 
-*Incorrect:*
-```javascript
-db.users.createIndex({ email: 1 }, { unique: true }); // ❌ Fails with E11000 duplicate key error!
-```
+**Requirements:**
+1. Execute `createIndex({ email: 1 }, { unique: true })`.
 
-*Fix:*
-```javascript
-Remove or resolve duplicate email records before creating unique index
-```
-
-### Mistake 5: Forgetting that Missing Fields Cause Unique Key Collisions on Standard Unique Indexes
-
-**The mistake:** Creating unique index `{ passportNumber: 1 }, { unique: true }` when multiple documents lack `passportNumber`.
-
-**Why it's wrong:** MongoDB treats missing fields as `null`. Multiple documents lacking `passportNumber` result in duplicate `null` keys, throwing `E11000`. Use `sparse: true` or `partialFilterExpression`.
-
-*Incorrect:*
-```javascript
-db.users.createIndex({ passportNumber: 1 }, { unique: true }); // ❌ Collides on multiple missing fields!
-```
-
-*Fix:*
-```javascript
-db.users.createIndex({ passportNumber: 1 }, { unique: true, sparse: true }); // Ignores missing fields
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Unique Index Construction
-
-**Problem:** You want to build a unique index on the `username` field of a `users` collection. 
-1.  Write the MongoDB command to create the index.
-2.  State the error code returned if your application tries to write a duplicate username.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> // 1. Index command
-> db.users.createIndex({ username: 1 }, { unique: true });
-> ```
-> - The unique parameter is passed inside the options block.
-> - Identify the standard duplicate key code.
-
----
-
-
-
-### Exercise 2: Creating Unique Index
-
-**Problem:** Create unique index on `email` field in `users` collection.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.createIndex({ email: 1 }, { unique: true });
-> ```
-> ```javascript
-> db.users.createIndex({ email: 1 }, { unique: true });
+> db.users.createIndex(
+>   { email: 1 },
+>   { unique: true }
+> );
 > ```
 >
-> **Explanation:** `unique: true` prevents duplicate key insertions across collection documents.
+> #### Technical Explanation
+>
+> 1. Unique indexes reject write operations attempting to insert duplicate key values.
+> 2. Enforces data integrity at the database storage engine tier.
+> 3. Throws `MongoServerError: E11000 duplicate key error` on violation.
 
 ---
 
-### Exercise 3: Handling E11000 Duplicate Key Error in Node.js
+### Exercise 2: Compound Unique Indexes
 
-**Problem:** Catch MongoDB duplicate key error code in Node.js (`err.code === 11000`).
+**Scenario:**
+Enforce unique product SKUs per store location by creating a compound unique index on `{ storeId: 1, sku: 1 }`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `createIndex({ storeId: 1, sku: 1 }, { unique: true })`.
+
 > [!check]- Answer
-> ```text
-> if (err.code === 11000) console.error("Duplicate key error");
+>
+> #### Implementation
+>
+> ```javascript
+> db.inventory.createIndex(
+>   { storeId: 1, sku: 1 },
+>   { unique: true }
+> );
 > ```
+>
+> #### Technical Explanation
+>
+> 1. Compound unique indexes enforce uniqueness across the COMBINATION of specified field values.
+> 2. Allows duplicate `sku` values across different `storeId` values, but rejects duplicate combinations.
+> 3. Multi-column primary key equivalent.
+
+---
+
+### Exercise 3: Handling Duplicate Key Errors in Driver Code
+
+**Scenario:**
+Catch and handle `E11000` duplicate key write exception in application driver code.
+
+**Requirements:**
+1. Handle Error Code `11000`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
 > try {
->   await db.users.insertOne({ email: "dup@ex.com" });
+>   db.users.insertOne({ email: "alice@example.com" });
 > } catch (err) {
 >   if (err.code === 11000) {
->     console.error("Email already exists!");
+>     console.error("Account registration failed: Email address already registered.");
 >   }
 > }
 > ```
 >
-> **Explanation:** Error code 11000 flags unique index primary key constraint violations.
+> #### Technical Explanation
+>
+> 1. Unique index violations throw Error Code 11000 (`E11000 duplicate key error`).
+> 2. Application code catches 11000 exceptions to return clean HTTP 409 Conflict user messages.
+> 3. Protects application consistency.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [Sparse Index](sparse_index.md) — The duplicate null fix.
@@ -238,7 +240,7 @@ db.users.createIndex({ passportNumber: 1 }, { unique: true, sparse: true }); // 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Unique Index prevents duplicate values in the indexed field.
 - Direct NoSQL equivalent to SQL's `UNIQUE` key column constraint.
 - Returns error code `11000` (duplicate key error) if a write violates the rule.

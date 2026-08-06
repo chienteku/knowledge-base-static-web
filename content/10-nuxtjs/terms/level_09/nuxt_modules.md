@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Extensibility**
+
+**Extensibility & Modules** (Build-Time Module Ecosystem): Nuxt Modules extend the build process, register components and composables, and integrate third-party tools during `nuxt dev` and `nuxt build`.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you want to add TailwindCSS to a standard Vue app, you have to:
@@ -61,7 +62,7 @@ Because Modules are heavily integrated with Nuxt, installing `@pinia/nuxt` autom
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Building a Module when you only needed a Plugin
 **The mistake:** Spending days writing a complex Nuxt Module just to inject a simple analytics script into the Vue app.
@@ -70,6 +71,8 @@ Because Modules are heavily integrated with Nuxt, installing `@pinia/nuxt` autom
 **Golden Rule:** If your code just needs to run when the Vue app starts, write a Plugin (`plugins/`). If your code needs to modify the build process, configure Vite, or generate dynamic files on disk, write a Module.
 
 ---
+
+
 
 ### Mistake 2: Attempting to Call Nuxt Runtime Composables inside Nuxt Module Definition Functions
 
@@ -98,6 +101,8 @@ export default defineNuxtModule({
 
 ---
 
+
+
 ### Mistake 3: Adding Un-Published Local Modules Without `modules` Path Registration
 
 **The mistake:** Creating `modules/my-module.ts` and expecting Nuxt to auto-import it without adding it to `modules` in `nuxt.config.ts`.
@@ -117,171 +122,138 @@ export default defineNuxtModule({
 
 ---
 
-### Mistake 4: Attempting to Call Nuxt Runtime Composables inside Nuxt Module Definition Functions
 
-**The mistake:** Calling `useFetch()` or `useRoute()` inside `defineNuxtModule()`.
-
-**Why it's wrong:** Nuxt modules execute during BUILD TIME when configuring Nitro, Vite, and build hooks. Runtime composables (`useFetch`) exist ONLY during application execution.
-
-*Incorrect:*
-```typescript
-export default defineNuxtModule({
-  setup(options, nuxt) {
-    const route = useRoute(); // ❌ Runtime composable called during build time!
-  }
-});
-```
-
-*Fix:*
-```vue
-export default defineNuxtModule({
-  setup(options, nuxt) {
-    // Use build-time module container hooks:
-    nuxt.hook('components:extend', (components) => { ... });
-  }
-});
-```
-
----
-
-### Mistake 5: Adding Un-Published Local Modules Without `modules` Path Registration
-
-**The mistake:** Creating `modules/my-module.ts` and expecting Nuxt to auto-import it without adding it to `modules` in `nuxt.config.ts`.
-
-**Why it's wrong:** Modules in `modules/` are auto-detected by Nuxt 3, but local modules outside `modules/` must be registered explicitly in `nuxt.config.ts`.
-
-*Incorrect:*
-```vue
-/* Expecting custom module outside modules/ directory to auto-load */
-```
-
-*Fix:*
-```vue
-/* Place in modules/my-module.ts OR register in nuxt.config.ts modules array */
-```
 
 
 ---
 
-### Mistake 6: Attempting to Call Nuxt Runtime Composables inside Nuxt Module Definition Functions
+## 5. Practice Exercises
 
-**The mistake:** Calling `useFetch()` or `useRoute()` inside `defineNuxtModule()`.
+### Exercise 1: Authoring Custom Local Nuxt Modules with `defineNuxtModule`
 
-**Why it's wrong:** Nuxt modules execute during BUILD TIME when configuring Nitro, Vite, and build hooks. Runtime composables (`useFetch`) exist ONLY during application execution.
+**Scenario:**
+Create a custom inline module `modules/my-module.ts` that automatically logs build configuration and injects a plugin.
 
-*Incorrect:*
-```typescript
-export default defineNuxtModule({
-  setup(options, nuxt) {
-    const route = useRoute(); // ❌ Runtime composable called during build time!
-  }
-});
-```
+**Requirements:**
+1. Use `defineNuxtModule` with `meta` and `setup(options, nuxt)`.
 
-*Fix:*
-```vue
-export default defineNuxtModule({
-  setup(options, nuxt) {
-    // Use build-time module container hooks:
-    nuxt.hook('components:extend', (components) => { ... });
-  }
-});
-```
-
----
-
-### Mistake 7: Adding Un-Published Local Modules Without `modules` Path Registration
-
-**The mistake:** Creating `modules/my-module.ts` and expecting Nuxt to auto-import it without adding it to `modules` in `nuxt.config.ts`.
-
-**Why it's wrong:** Modules in `modules/` are auto-detected by Nuxt 3, but local modules outside `modules/` must be registered explicitly in `nuxt.config.ts`.
-
-*Incorrect:*
-```vue
-/* Expecting custom module outside modules/ directory to auto-load */
-```
-
-*Fix:*
-```vue
-/* Place in modules/my-module.ts OR register in nuxt.config.ts modules array */
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: Finding Modules
-
-**Problem:** You want to add image optimization (resizing, WebP conversion) to your Nuxt app. Where is the official directory to search for trusted, community-built Nuxt modules?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> The official Nuxt Modules directory: https://nuxt.com/modules
-> ```
-> - Nuxt aggregates all community modules in a dedicated directory registry on their main site.
+>
+> #### Implementation
+>
+> ```typescript
+> // modules/my-module.ts
+> import { defineNuxtModule, addPlugin, createResolver } from "@nuxt/kit";
+
+export default defineNuxtModule({
+  meta: {
+    name: "my-custom-module",
+    configKey: "myModule"
+  },
+  setup(options, nuxt) {
+    const resolver = createResolver(import.meta.url);
+    console.log("Custom Nuxt Module initialized!");
+    
+    // Inject plugin automatically into Nuxt application
+    addPlugin(resolver.resolve("./runtime/plugin"));
+  }
+});
+```
+
+> #### Technical Explanation
+>
+> 1. `defineNuxtModule` provides the entry point for custom Nuxt build modules.
+> 2. `setup(options, nuxt)` hook grants access to Nuxt compiler hooks and configuration instances.
+> 3. `@nuxt/kit` provides utility helpers (`addPlugin`, `addImports`, `createResolver`) for module authoring.
 
 ---
 
-### Exercise 2: defineNuxtModule Setup Pattern
+### Exercise 2: Auto-Registering Components and Composables inside Modules
 
-**Problem:** Write custom Nuxt module `modules/analytics.ts` adding a plugin `plugins/analytics.client.ts` via `addPlugin()`.
+**Scenario:**
+Use `@nuxt/kit` helpers `addComponent` and `addImports` inside a custom module setup function.
 
-**Expected output:**
+**Requirements:**
+1. Call `addComponent` and `addImports`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit';
-> export default defineNuxtModule({
->   meta: { name: 'my-analytics' },
->   setup(options, nuxt) {
->     const resolver = createResolver(import.meta.url);
->     addPlugin(resolver.resolve('./runtime/plugin.client'));
->   }
-> });
-> ```
-> - `@nuxt/kit` provides helpers (`addPlugin`, `addImports`) for module development.
-> 
+> import { defineNuxtModule, addComponent, addImports, createResolver } from "@nuxt/kit";
+
+export default defineNuxtModule({
+  setup(options, nuxt) {
+    const resolver = createResolver(import.meta.url);
+    
+    // Auto-register custom component
+    addComponent({
+      name: "CustomWidget",
+      filePath: resolver.resolve("./runtime/components/Widget.vue")
+    });
+    
+    // Auto-register custom composable
+    addImports({
+      name: "useCustomHelper",
+      as: "useCustomHelper",
+      from: resolver.resolve("./runtime/composables/useCustomHelper")
+    });
+  }
+});
+```
+
+> #### Technical Explanation
+>
+> 1. `addComponent` registers Vue components globally across user applications.
+> 2. `addImports` adds composables to Nuxt's global auto-import system.
+> 3. Allows modules to distribute full component and composable libraries seamlessly.
+
+---
+
+### Exercise 3: Hooking into Nuxt Build Lifecycle Hooks (`nuxt:config`, `build:before`)
+
+**Scenario:**
+Subscribe to Nuxt build lifecycle hooks inside a module to modify Vite options dynamically.
+
+**Requirements:**
+1. Call `nuxt.hook("vite:extendConfig", ...)` in module setup.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit';
-> 
 > export default defineNuxtModule({
->   meta: { name: 'custom-analytics' },
 >   setup(options, nuxt) {
->     const resolver = createResolver(import.meta.url);
->     addPlugin(resolver.resolve('./runtime/plugin.client'));
+>     nuxt.hook("vite:extendConfig", (viteInlineConfig, env) => {
+>       console.log("Extending Vite config from Nuxt module");
+>     });
 >   }
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `nuxt.hook()` allows modules to intercept and modify build steps (`vite:extendConfig`, `nitro:config`).
+> 2. Enables deep integration with underlying bundlers and server compilers.
+> 3. Advanced module extensibility pattern.
+
 ---
 
-### Exercise 3: @nuxt/kit Helper Package
 
-**Problem:** Which official npm package contains composable helpers (`addPlugin`, `addServerHandler`, `addComponentsDir`) for building Nuxt modules?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> @nuxt/kit
-> ```
-> - `@nuxt/kit` provides utility APIs for module authors.
-> 
-> ```typescript
-> import { defineNuxtModule, addPlugin } from '@nuxt/kit';
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — Where modules are registered.
 - [Pinia State Management](../level_04/pinia.md) — An example of a tool that is installed via a Nuxt Module.
 - [`plugins/` Directory](../level_08/plugins_directory.md) — Plugin registration.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Nuxt Modules are massive extensions that modify the framework at build time.
 - They completely automate the setup of complex tools like Tailwind, Pinia, and Supabase.
 - They are registered in the `modules` array inside `nuxt.config.ts`.

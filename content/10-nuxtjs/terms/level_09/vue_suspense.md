@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Rendering Strategies**
+
+**Framework Architecture** (Asynchronous Component Tree Orchestration): Vue `<Suspense>` manages nested async data dependencies across component trees before rendering final hydrated views.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In Vue 2, if a component needed to fetch data before rendering, you had to manually track a `isLoading` boolean. If a parent component had 3 children that all needed to fetch data, coordinating those loading states was a nightmare. 
@@ -63,7 +64,7 @@ const { data, pending } = useLazyFetch('/api/slow-data');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Blocking page transitions with slow APIs
 **The mistake:** Using standard `await useFetch()` to load a non-critical sidebar widget that takes 3 seconds to resolve from a slow API.
@@ -72,6 +73,8 @@ const { data, pending } = useLazyFetch('/api/slow-data');
 **Golden Rule:** Only use `await useFetch()` for data that is absolutely critical for the page's primary layout or SEO. For non-critical data (like a sidebar or comments section), use `useLazyFetch` so it doesn't block Suspense.
 
 ---
+
+
 
 ### Mistake 2: Placing `<Suspense>` Boundaries Below Async Components in Component Hierarchy
 
@@ -101,6 +104,8 @@ const { data, pending } = useLazyFetch('/api/slow-data');
 
 ---
 
+
+
 ### Mistake 3: Confusing Nuxt Page `<NuxtPage />` Suspense Handling with Manual Vue Suspense
 
 **The mistake:** Wrapping `<NuxtPage />` inside a manual `<Suspense>` tag in `app.vue`.
@@ -126,196 +131,134 @@ const { data, pending } = useLazyFetch('/api/slow-data');
 
 ---
 
-### Mistake 4: Placing `<Suspense>` Boundaries Below Async Components in Component Hierarchy
 
-**The mistake:** Wrapping `<Suspense>` INSIDE an async component body.
-
-**Why it's wrong:** A `<Suspense>` boundary MUST wrap **above** async components in the template tree. Placing it inside the async component prevents fallback rendering.
-
-*Incorrect:*
-```vue
-<template>
-  <div>
-    {{ await fetchData() }} <!-- ❌ Await executes before inner Suspense! -->
-    <Suspense><AsyncChild /></Suspense>
-  </div>
-</template>
-```
-
-*Fix:*
-```vue
-<template>
-  <Suspense>
-    <template #default><AsyncChild /></template>
-    <template #fallback>Loading...</template>
-  </Suspense>
-</template>
-```
-
----
-
-### Mistake 5: Confusing Nuxt Page `<NuxtPage />` Suspense Handling with Manual Vue Suspense
-
-**The mistake:** Wrapping `<NuxtPage />` inside a manual `<Suspense>` tag in `app.vue`.
-
-**Why it's wrong:** `<NuxtPage />` and `<NuxtLayout>` include built-in Suspense boundaries out of the box. Nesting an extra `<Suspense>` boundary can cause page transition hydration glitches.
-
-*Incorrect:*
-```vue
-<!-- app.vue -->
-<Suspense>
-  <NuxtPage /> <!-- ❌ Redundant manual Suspense wrapper around NuxtPage! -->
-</Suspense>
-```
-
-*Fix:*
-```vue
-<!-- app.vue -->
-<NuxtLayout>
-  <NuxtPage /> <!-- Built-in Suspense support -->
-</NuxtLayout>
-```
 
 
 ---
 
-### Mistake 6: Placing `<Suspense>` Boundaries Below Async Components in Component Hierarchy
+## 5. Practice Exercises
 
-**The mistake:** Wrapping `<Suspense>` INSIDE an async component body.
+### Exercise 1: Managing Async Component Boundaries with `<Suspense>`
 
-**Why it's wrong:** A `<Suspense>` boundary MUST wrap **above** async components in the template tree. Placing it inside the async component prevents fallback rendering.
+**Scenario:**
+Wrap an async data-fetching component inside Vue `<Suspense>` with a `#fallback` slot.
 
-*Incorrect:*
-```vue
-<template>
-  <div>
-    {{ await fetchData() }} <!-- ❌ Await executes before inner Suspense! -->
-    <Suspense><AsyncChild /></Suspense>
-  </div>
-</template>
-```
+**Requirements:**
+1. Use `<Suspense>` with `#default` and `#fallback` slots.
 
-*Fix:*
-```vue
-<template>
-  <Suspense>
-    <template #default><AsyncChild /></template>
-    <template #fallback>Loading...</template>
-  </Suspense>
-</template>
-```
-
----
-
-### Mistake 7: Confusing Nuxt Page `<NuxtPage />` Suspense Handling with Manual Vue Suspense
-
-**The mistake:** Wrapping `<NuxtPage />` inside a manual `<Suspense>` tag in `app.vue`.
-
-**Why it's wrong:** `<NuxtPage />` and `<NuxtLayout>` include built-in Suspense boundaries out of the box. Nesting an extra `<Suspense>` boundary can cause page transition hydration glitches.
-
-*Incorrect:*
-```vue
-<!-- app.vue -->
-<Suspense>
-  <NuxtPage /> <!-- ❌ Redundant manual Suspense wrapper around NuxtPage! -->
-</Suspense>
-```
-
-*Fix:*
-```vue
-<!-- app.vue -->
-<NuxtLayout>
-  <NuxtPage /> <!-- Built-in Suspense support -->
-</NuxtLayout>
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: Identifying Suspense Triggers
-
-**Problem:** Look at the following code:
-```vue
-<script setup>
-const req1 = await useFetch('/api/fast');
-const req2 = useLazyFetch('/api/slow');
-</script>
-```
-Which of these two requests actually causes the Nuxt Suspense boundary to pause the page rendering?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> req1.
-> Because it uses `await useFetch`, it registers as an asynchronous dependency that Suspense must wait for. `useLazyFetch` intentionally tells Suspense to ignore it.
-> ```
-> - Only functions prefixed with `await` halt execution synchronous compiler flows inside setup blocks.
-
----
-
-### Exercise 2: Vue Suspense Component Pattern
-
-**Problem:** Write Vue template wrapping async component `<AsyncUserCard />` in `<Suspense>` with `<template #fallback>` spinner.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
 > <template>
->   <Suspense>
->     <template #default>
->       <AsyncUserCard />
->     </template>
->     <template #fallback>
->       <div>Loading user...</div>
->     </template>
->   </Suspense>
-> </template>
-> ```
-> - `<Suspense>` handles async top-level `<script setup>` dependencies.
-> 
-> ```vue
-> <template>
->   <Suspense>
->     <template #default>
->       <AsyncUserCard />
->     </template>
->     <template #fallback>
->       <div class="animate-pulse">Loading user profile...</div>
->     </template>
->   </Suspense>
+>   <div>
+>     <Suspense>
+>       <template #default>
+>         <AsyncUserProfileWidget />
+>       </template>
+>       <template #fallback>
+>         <div class="loading-spinner">Loading Profile...</div>
+>       </template>
+>     </Suspense>
+>   </div>
 > </template>
 > ```
 
+> #### Technical Explanation
+>
+> 1. Vue `<Suspense>` is a built-in feature orchestrating async component dependencies in component trees.
+> 2. Renders `#fallback` content until top-level `await` calls in child components resolve.
+> 3. Nuxt 3 integrates `<Suspense>` internally inside `<NuxtPage>` and `<NuxtLayout>`.
+
 ---
 
-### Exercise 3: Top-Level Await Requirement
+### Exercise 2: Top-Level `await` in `<script setup>`
 
-**Problem:** What triggers a component to activate a parent `<Suspense>` boundary in Vue 3?
+**Scenario:**
+Use top-level `await` inside `<script setup>` of a child component managed by `<Suspense>`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `await $fetch()` directly at script setup top level.
+
 > [!check]- Answer
-> ```text
-> Having a top-level await statement inside <script setup> or returning a Promise from setup().
-> ```
-> - Top-level `await` inside `<script setup>` activates `<Suspense>`.
-> 
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
-> const data = await fetchAsyncData(); // Activates parent <Suspense>
+> <!-- AsyncUserProfileWidget.vue -->
+> <script setup lang="ts">
+> // Top-level await implicitly turns component setup into an async Promise!
+> const user = await $fetch("/api/user/profile");
 > </script>
-> ```
+
+<template>
+  <div v-if="user">
+    <h2>User Profile: {{ user.name }}</h2>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Top-level `await` converts the component's `setup()` function into an asynchronous Promise.
+> 2. Parent `<Suspense>` boundaries intercept the pending Promise and display loading fallbacks automatically.
+> 3. Standard async component architecture in Vue 3 and Nuxt 3.
+
+---
+
+### Exercise 3: Handling Errors in Suspended Async Component Trees
+
+**Scenario:**
+Intercept async setup errors inside suspended component trees using `onErrorCaptured()`.
+
+**Requirements:**
+1. Register `onErrorCaptured((err) => ...)` in parent component.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const hasError = ref(false);
+
+onErrorCaptured((error) => {
+  console.error("Async Component Tree Error Captured:", error);
+  hasError.value = true;
+  return false; // Prevents error from propagating higher
+});
+</script>
+
+<template>
+  <div>
+    <div v-if="hasError" class="error-msg">Failed to load async components.</div>
+    <Suspense v-else>
+      <AsyncUserProfileWidget />
+    </Suspense>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `onErrorCaptured()` intercepts unhandled exceptions thrown during async setup execution.
+> 2. Returning `false` prevents the error from bubbling up to global error handlers.
+> 3. Provides robust error boundary protection for suspended component trees.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useFetch`](../level_05/use_fetch.md) — The tool used to interact with the Suspense boundary.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `<Suspense>` is a Vue 3 feature that orchestrates asynchronous component loading.
 - Nuxt automatically wraps your pages in a Suspense boundary.
 - Top-level `await` inside `<script setup>` pauses Suspense until the promise resolves.

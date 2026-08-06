@@ -111,7 +111,7 @@ if let Err(e) = std::fs::remove_file("config.json") {
 
 ### Exercise 1: Predict Whether a Warning Fires
 
-**Problem:** Does the following code trigger a `#[must_use]` warning? Why or why not?
+**Scenario:** Does the following code trigger a `#[must_use]` warning? Why or why not?
 ```rust
 fn get_value() -> Option<i32> { Some(42) }
 
@@ -129,13 +129,16 @@ fn main() {
 
 ### Exercise 2: Annotating Custom Functions with `#[must_use]`
 
-**Problem:** Annotate `#[must_use = "calculating area returns a value that should be used"] fn area(r: f64) -> f64`.
+**Scenario:** Annotate `#[must_use = "calculating area returns a value that should be used"] fn area(r: f64) -> f64`.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Area: 78.53981633974483
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > #[must_use = "calculating area returns a value that should be used"]
 > fn area(r: f64) -> f64 { std::f64::consts::PI * r * r }
@@ -145,19 +148,23 @@ fn main() {
 > }
 > ```
 >
-> **Explanation:** `#[must_use]` triggers compiler warnings if returned values are unused.
+> #### Technical Explanation
+> `#[must_use]` triggers compiler warnings if returned values are unused.
 
 ---
 
 ### Exercise 3: Annotating Custom Struct Types with `#[must_use]`
 
-**Problem:** Annotate `#[must_use] struct Guard;` so any unassigned instance generation triggers compiler warnings.
+**Scenario:** Annotate `#[must_use] struct Guard;` so any unassigned instance generation triggers compiler warnings.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Guard assigned
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > #[must_use]
 > struct Guard;
@@ -167,7 +174,8 @@ fn main() {
 > }
 > ```
 >
-> **Explanation:** Annotating types with `#[must_use]` applies warnings to all functions returning instances of that type.
+> #### Technical Explanation
+> Annotating types with `#[must_use]` applies warnings to all functions returning instances of that type.
 
 ---
 

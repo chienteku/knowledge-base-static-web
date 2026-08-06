@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Syntax / Security**
+
+
+**Authentication & Permissions (record access SIGNUP and SIGNIN statements)**: - **Database Syntax / Security**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core Engine** (Invoked when a client SDK executes `.signup()` or `.signin()` calls over network protocols).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building application authentication, signup and signin require different queries:
@@ -67,7 +66,7 @@ DEFINE ACCESS user_auth ON DATABASE TYPE RECORD
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to Return a Record in SIGNIN
 
@@ -125,84 +124,108 @@ SIGNUP (CREATE user SET pass = crypto::argon2::generate($pass));
 
 
 
-### Mistake 4: Returning Boolean Expressions instead of User Records in `SIGNIN` Scopes
 
-**The mistake:** Writing `SIGNIN (SELECT * FROM user WHERE ...) != NONE` returning a boolean `true`.
 
-**Why it's wrong:** `SIGNIN` query handlers MUST return the user record object (e.g. `SELECT * FROM user WHERE ...`). Returning a boolean causes authentication failure.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-DEFINE ACCESS user ... SIGNIN (count() > 0); // ❌ Returns boolean instead of record!
-```
+### Exercise 1: User Registration with `SIGNUP`
 
-*Fix:*
-```surrealql
-DEFINE ACCESS user ... SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass));
-```
+**Scenario:**
+Configure a `SIGNUP` query block inside `DEFINE ACCESS user_access` that hashes passwords using Argon2 and initializes default user roles.
 
-### Mistake 5: Omitting Password Hashing in `SIGNUP` Handlers
-
-**The mistake:** Creating users in `SIGNUP` without hashing `$pass`.
-
-**Why it's wrong:** Failing to hash passwords exposes raw user passwords in database tables. Always use `crypto::argon2::generate($pass)`.
-
-*Incorrect:*
-```surrealql
-SIGNUP (CREATE user SET pass = $pass); // ❌ Un-hashed password!
-```
-
-*Fix:*
-```surrealql
-SIGNUP (CREATE user SET pass = crypto::argon2::generate($pass));
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Write a Username-based SIGNIN
-Write a `SIGNIN` clause that authenticates users by `username` instead of `email`, checking the password hash with `crypto::argon2::compare`.
+**Requirements:**
+1. Write `SIGNUP` query inserting a user record into table `user`.
 
 > [!check]- Answer
-> - Filter by `username = $username`.
-> - Compare password using `crypto::argon2::compare(password, $pass)`.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE ACCESS user_access ON DATABASE TYPE RECORD
+>     SIGNUP (
+>         CREATE user SET 
+>             username = $username,
+>             email = $email,
+>             password = crypto::argon2::generate($pass),
+>             role = "customer",
+>             created_at = time::now()
+>     );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SIGNUP` executes registration logic when a client calls `db.signup()`.
+> 2. Hashes plaintext passwords securely using `crypto::argon2::generate()`.
+> 3. Returns the newly created user record and issues an authenticated session token.
+
+---
+
+### Exercise 2: User Authentication with `SIGNIN`
+
+**Scenario:**
+Configure a `SIGNIN` query block inside `DEFINE ACCESS user_access` that validates usernames and Argon2 password hashes.
+
+**Requirements:**
+1. Write `SIGNIN` query selecting matching user record using `crypto::argon2::compare()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE ACCESS user_access ON DATABASE TYPE RECORD
+>     SIGNIN (
+>         SELECT * FROM user 
+>         WHERE username = $username AND crypto::argon2::compare(password, $pass)
+>     );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SIGNIN` executes authentication checks when a client calls `db.signin()`.
+> 2. `crypto::argon2::compare()` verifies plaintext password inputs against stored hashes.
+> 3. Issues an authenticated session token if a matching record is returned.
+
+---
+
+### Exercise 3: Testing SDK `db.signup()` Integration
+
+**Scenario:**
+Write the JavaScript SDK client call for registering a new user against the `user_access` RECORD access method.
+
+**Requirements:**
+1. Formulate the `db.signup()` JavaScript call.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> const token = await db.signup({
+>   access: "user_access",
+>   ns: "main",
+>   db: "app",
+>   username: "alice",
+>   email: "alice@example.com",
+>   pass: "UserPass123!"
+> });
+> 
+> console.log("Registered and received auth token:", token);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `db.signup()` passes parameter payload variables (`$username`, `$email`, `$pass`) to the server `SIGNUP` block.
+> 2. Receives a signed JWT authentication token on success.
+> 3. Automatically authenticates the active SDK connection context.
 
 ---
 
 
 
-### Exercise 2: SDK Signin Call Syntax
 
-**Problem:** Write JS SDK call signing in to access scope `user_access` with username and password.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> await db.signin({ access: "user_access", ns: "main", db: "app", username: "alice", pass: "secret" });
-> ```
-> ```javascript
-> await db.signin({ access: "user_access", ns: "main", db: "app", username: "alice", pass: "secret" });
-> ```
->
-> **Explanation:** `db.signin()` authenticates clients against defined RECORD access scopes.
-
----
-
-### Exercise 3: SDK Signup Call Syntax
-
-**Problem:** Write JS SDK call signing up a new user via access scope `user_access`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> await db.signup({ access: "user_access", ns: "main", db: "app", email: "a@b.com", pass: "secret" });
-> ```
-> ```javascript
-> await db.signup({ access: "user_access", ns: "main", db: "app", email: "a@b.com", pass: "secret" });
-> ```
->
-> **Explanation:** `db.signup()` invokes the RECORD access `SIGNUP` query block.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Parent access setup.
 - [JWT Token-Based Auth](jwt_auth.md) — Token generated after `SIGNUP` / `SIGNIN`.
@@ -210,7 +233,7 @@ Write a `SIGNIN` clause that authenticates users by `username` instead of `email
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `SIGNUP` executes `CREATE` statements to register new user records.
 - `SIGNIN` executes `SELECT` queries to locate and verify credentials.
 - Both clauses must evaluate to a valid record for SurrealDB to issue an authentication JWT.

@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Syntax**
+
+**TypeScript Core Syntax** (Explicit This Context Annotations): Explicit `this` parameter typing annotates expected runtime `this` contexts inside functions to prevent un-anchored `this` bugs.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In JavaScript, the `this` keyword is dynamic. Its value depends entirely on *how* a function is called, not where it is written.
@@ -60,7 +61,7 @@ Because `this` is a fake TypeScript parameter, it is completely erased during co
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using Arrow Functions
 
@@ -111,66 +112,126 @@ function log(this: Context) {
 function log(this: Context) {} // Use standard function declaration
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: DOM Event Listeners
+### Exercise 1: Explicit `this` Parameter Annotations in Functions
 
-**Problem:** In pure JavaScript, when you attach an event listener to a button (`button.addEventListener('click', function() { ... })`), what does `this` refer to inside the function? How does TypeScript handle this?
+**Scenario:**
+Annotate explicit `this` parameter in an event listener function to enforce proper invocation binding.
 
-**Expected output:**
+**Requirements:**
+1. Declare `this: HTMLButtonElement` as the first parameter.
+
 > [!check]- Answer
-> ```text
-> In JS, `this` inside a standard event listener function refers to the HTML Element that fired the event (the button).
-> TypeScript automatically types `this` for you in standard DOM events! But if you extract the function out, you might need to manually type `this: HTMLButtonElement`.
-> ```
-> - Think about how `this` behaves in DOM manipulation.
-
----
-
-
-
-### Exercise 2: Typing `this` in Event Handlers
-
-**Problem:** Annotate `this: HTMLButtonElement` in a click event callback.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Type-safe this in button handler
-> ```
+>
+> #### Implementation
+>
 > ```typescript
-> function handleClick(this: HTMLButtonElement, ev: MouseEvent) {
->   console.log(this.disabled);
+> function handleClick(this: HTMLButtonElement, event: MouseEvent) {
+>   console.log(`Button clicked: ${this.id}`);
 > }
-> console.log("Type-safe this in button handler");
-> ```
+
+const button = document.createElement("button");
+button.id = "submit-btn";
+
+// Valid event listener assignment:
+button.addEventListener("click", handleClick);
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** Explicit `this` parameters instruct TS on expected method receiver contexts.
+> 1. Declaring `this: HTMLButtonElement` as the first function parameter specifies the expected `this` execution context.
+> 2. The `this` parameter is erased completely during `tsc` compilation; it emits zero JavaScript code.
+> 3. Prevents calling the function with an invalid or un-anchored `this` context.
 
 ---
 
-### Exercise 3: Stripping `this` Parameter from Compiled JS
+### Exercise 2: Typing `this` Context in Object Method Libraries
 
-**Problem:** State what happens to the fake `this: Context` parameter after `tsc` compilation.
+**Scenario:**
+Create a builder pattern class where methods return `this` for fluent chaining.
 
-**Expected output:**
+**Requirements:**
+1. Return `this` type in builder methods.
+
 > [!check]- Answer
-> ```text
-> Completely erased during JS compilation
-> ```
-> ```typescript
-> console.log("Completely erased during JS compilation");
-> ```
 >
-> **Explanation:** The `this` parameter is a compile-time directive and emits zero JS parameters.
+> #### Implementation
+>
+> ```typescript
+> class RequestBuilder {
+>   private url = "";
+>   private method = "GET";
 
-## 7. Related Terms
+  setUrl(url: string): this {
+    this.url = url;
+    return this;
+  }
+
+  setMethod(method: string): this {
+    this.method = method;
+    return this;
+  }
+}
+
+const req = new RequestBuilder()
+  .setUrl("https://api.example.com")
+  .setMethod("POST");
+```
+
+> #### Technical Explanation
+>
+> 1. Returning `this` in class methods enables fluent method chaining.
+> 2. Polymorphic `this` type automatically represents subclass instances in derived classes.
+> 3. Standard object-oriented builder pattern in TypeScript.
+
+---
+
+### Exercise 3: Preventing Un-Anchored Method Detachment Bugs
+
+**Scenario:**
+Demonstrate how `noImplicitThis` flags detached method calls that lose their object context.
+
+**Requirements:**
+1. Show compile error under `"noImplicitThis": true` when method loses `this` binding.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> class Counter {
+>   count = 0;
+
+  // Arrow functions automatically capture lexical 'this':
+  increment = () => {
+    this.count++;
+  };
+}
+
+const counter = new Counter();
+const detachedIncrement = counter.increment;
+
+detachedIncrement(); // Safely updates counter.count!
+```
+
+> #### Technical Explanation
+>
+> 1. Standard JavaScript class methods lose `this` binding when assigned to standalone variables (`const fn = obj.method`).
+> 2. `"noImplicitThis": true` in `tsconfig.json` flags un-annotated `this` references.
+> 3. Using arrow function class properties captures lexical `this` safely.
+
+---
+
+
+
+## 6. Related Terms
 - [Function Types](function_types.md) — Standard function typing.
 - [Interfaces](../level_03/interfaces.md) — What you usually bind `this` to.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`this` Typing** allows you to strictly define the expected context of a function.
 - It is declared as a fake, first parameter in the function signature: `function doWork(this: MyType, arg1: string)`.
 - It is completely erased at compile time; you do not pass a value for `this` when calling the function.

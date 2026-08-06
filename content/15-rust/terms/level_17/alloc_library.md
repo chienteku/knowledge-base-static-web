@@ -14,17 +14,15 @@
 
 ## 2. Term Category
 
-**Standard Library / Memory / Embedded**: `alloc` is the heap-allocation crate in the Rust compiler distribution. Situated between `core` (no heap, no OS) and `std` (heap + OS), `alloc` enables dynamic collections (`Vec<T>`, `Box<T>`, `String`) in `#![no_std]` applications as long as a global allocator (`#[global_allocator]`) is defined.
+
+
+**Rust Embedded Standard Library (heap-allocating no_std library)**: `alloc` is the heap-allocation crate in the Rust compiler distribution. Situated between `core` (no heap, no OS) and `std` (heap + OS), `alloc` enables dynamic collections (`Vec<T>`, `Box<T>`, `String`) in `#![no_std]` applications as long as a global allocator (`#[global_allocator]`) is defined.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Embedded & OS Kernel Environments**: Used in microcontrollers with external RAM, operating system kernel development, and WebAssembly modules.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -69,7 +67,23 @@ pub fn create_boxed_data(val: u32) -> Box<u32> {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Calling Heap Allocation Methods Without Registering a `#[global_allocator]`
+
+**The mistake:** Using `alloc::vec::Vec` in `#![no_std]` without defining a global heap allocator.
+
+**Why it's wrong:** The `alloc` crate provides heap types, but delegates actual pointer allocation to a registered `#[global_allocator]`. Missing an allocator triggers link errors.
+
+*Fix:* Register a global allocator (such as `embedded_alloc::Heap`) using `#[global_allocator]`.
+
+### Mistake 3: Assuming `alloc` Types are Available Automatically in `#![no_std]`
+
+**The mistake:** Calling `Vec::new()` in `#![no_std]` without `extern crate alloc;` and `use alloc::vec::Vec;`.
+
+**Why it's wrong:** `#![no_std]` disables standard prelude imports. Heap types must be explicitly imported from the `alloc` crate.
+
+*Fix:* Add `extern crate alloc;` at crate root and import `use alloc::vec::Vec;`.
+
 
 ### Mistake 1: Importing `alloc` without Defining a `#[global_allocator]`
 
@@ -79,11 +93,11 @@ pub fn create_boxed_data(val: u32) -> Box<u32> {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Dynamic Sensor Telemetry Aggregator & Heap String Formatting
 
-**Problem:** In an embedded telemetry logging system running on bare-metal hardware without an operating system, raw sensor measurements arrive over a serial bus. Write a `#![no_std]` function `pub fn summarize_telemetry(readings: &[(u32, f32)]) -> alloc::string::String` that:
+**Scenario:** In an embedded telemetry logging system running on bare-metal hardware without an operating system, raw sensor measurements arrive over a serial bus. Write a `#![no_std]` function `pub fn summarize_telemetry(readings: &[(u32, f32)]) -> alloc::string::String` that:
 1. Filters out invalid temperatures outside `[0.0, 100.0]` °C.
 2. Collects valid timestamp-reading pairs into a heap-allocated `alloc::vec::Vec<(u32, f32)>` sorted by timestamp.
 3. Computes the average temperature, minimum temperature, and maximum temperature across all valid samples.
@@ -92,6 +106,9 @@ pub fn create_boxed_data(val: u32) -> Box<u32> {
 Include a test function `pub fn test_telemetry_summarizer()` with assertions verifying filtering logic, mathematical calculations, and string formatting.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > extern crate alloc;
@@ -155,7 +172,8 @@ Include a test function `pub fn test_telemetry_summarizer()` with assertions ver
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Crate Enabling (`extern crate alloc;`)**: In `#![no_std]` targets, the compiler provides access to heap allocation primitives (`Vec`, `String`, `format!`) via `alloc`, without depending on standard library operating system wrappers (`std`).
 > 2. **Heap Collection (`alloc::vec::Vec`)**: The `filter` and `collect` iterator pipeline allocates memory dynamically via the registered `#[global_allocator]` to store an arbitrary number of valid sensor pairs.
 > 3. **Dynamic Text Generation (`alloc::format!`)**: Generates owned dynamic strings in heap memory on bare-metal systems where standard console output or OS file descriptors are unavailable.
@@ -164,7 +182,7 @@ Include a test function `pub fn test_telemetry_summarizer()` with assertions ver
 
 ### Exercise 2: Polymorphic Dynamic Command Dispatcher (`alloc::boxed::Box`)
 
-**Problem:** Embedded microcontrollers receiving commands over UART or CAN bus need to process heterogeneous actions dynamically. Standard Rust slices or arrays cannot store dynamic trait objects directly because their size is unknown at compile time.
+**Scenario:** Embedded microcontrollers receiving commands over UART or CAN bus need to process heterogeneous actions dynamically. Standard Rust slices or arrays cannot store dynamic trait objects directly because their size is unknown at compile time.
 
 Implement a `#![no_std]` command processing system using dynamic trait objects boxed on the heap (`alloc::boxed::Box<dyn Command>`):
 1. Define a `SystemState` struct tracking `led_enabled: bool`, `telemetry_rate_hz: u16`, and `error_count: u32`.
@@ -174,6 +192,9 @@ Implement a `#![no_std]` command processing system using dynamic trait objects b
 5. Write a test function `pub fn test_command_dispatcher()` using assertions to verify command registration, heap dispatch execution, state mutation, and queue draining.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > extern crate alloc;
@@ -276,7 +297,8 @@ Implement a `#![no_std]` command processing system using dynamic trait objects b
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Polymorphic Heap Allocation (`Box<dyn Trait>`)**: Unsized trait objects (`dyn Command`) cannot be stored directly inside contiguous arrays. Placing them inside `alloc::boxed::Box` creates a heap pointer paired with a vtable (fat pointer), enabling heterogeneous collections in `#![no_std]`.
 > 2. **Decoupled Architecture**: Heterogeneous command payloads can be queued and processed uniformly through `Vec<Box<dyn Command>>` without requiring large enums or monolithic switch statements.
 > 3. **Resource Cleanup (`drain(..)`)**: Using `Vec::drain(..)` transfers ownership of boxed objects out of the queue during iteration. As each `Box` goes out of scope after execution, its allocated memory is automatically reclaimed by the global allocator.
@@ -285,7 +307,7 @@ Implement a `#![no_std]` command processing system using dynamic trait objects b
 
 ### Exercise 3: Bare-Metal Device Registry & Map Lookup (`alloc::collections::BTreeMap`)
 
-**Problem:** Standard `std::collections::HashMap` is unavailable in `#![no_std]` crates because hash tables depend on cryptographically secure random number generators provided by operating system kernels. `alloc::collections::BTreeMap` offers an ordered key-value map powered entirely by heap allocation without OS dependencies.
+**Scenario:** Standard `std::collections::HashMap` is unavailable in `#![no_std]` crates because hash tables depend on cryptographically secure random number generators provided by operating system kernels. `alloc::collections::BTreeMap` offers an ordered key-value map powered entirely by heap allocation without OS dependencies.
 
 Implement a bare-metal peripheral device manager `struct DeviceRegistry` that routes message payloads to registered bus addresses (`u8`):
 1. Wrap `devices: alloc::collections::BTreeMap<u8, alloc::string::String>`.
@@ -294,6 +316,9 @@ Implement a bare-metal peripheral device manager `struct DeviceRegistry` that ro
 4. Write a test function `pub fn test_device_registry()` with assertions verifying insertion, search lookup, missing address handling, and key-sorted report generation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > extern crate alloc;
@@ -356,7 +381,8 @@ Implement a bare-metal peripheral device manager `struct DeviceRegistry` that ro
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **No-OS Key-Value Map (`BTreeMap`)**: While `HashMap` requires OS entropy for hash seeds, `BTreeMap` relies only on key comparison (`Ord`), making it the standard dynamic dictionary structure in `alloc` for `#![no_std]` targets.
 > 2. **Deterministic Ordering**: `BTreeMap` automatically sorts keys in memory ($O(\log N)$ operations). Iterating over `BTreeMap` yields keys in natural ascending order, guaranteeing deterministic serial output for embedded hardware inspection.
 > 3. **Heap Storage Management**: Dynamically resizes internally as devices are added or removed, utilizing allocator pages without fixed array size limits.

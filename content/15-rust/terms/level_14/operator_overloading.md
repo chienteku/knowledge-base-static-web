@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Syntax / Trait / Language Feature**: Operator Overloading in Rust allows custom types (like 2D vectors, complex numbers, matrices, or custom collections) to define custom behaviors for standard language operators (`+`, `-`, `*`, `/`, `%`, `==`, `[]`, `+=`). In Rust, operator overloading is strictly type-safe and syntactic sugar for trait method calls declared in the `std::ops` module (e.g. `a + b` is syntactic sugar for `std::ops::Add::add(a, b)`).
+
+
+**Rust Language Feature (custom operator overload traits)**: Operator Overloading in Rust allows custom types (like 2D vectors, complex numbers, matrices, or custom collections) to define custom behaviors for standard language operators (`+`, `-`, `*`, `/`, `%`, `==`, `[]`, `+=`). In Rust, operator overloading is strictly type-safe and syntactic sugar for trait method calls declared in the `std::ops` module (e.g. `a + b` is syntactic sugar for `std::ops::Add::add(a, b)`).
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: Operator overloading via `std::ops` is supported across all Rust targets (`std`, `no_std`, WASM, embedded). It is heavily used in math libraries (`cgmath`, `nalgebra`), matrix operations, domain-specific types (e.g. `Duration + Duration`), and container indexing (`Index`).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -163,7 +161,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Move vs Borrow Ownership Loss during Operator Use
 
@@ -228,13 +226,16 @@ p += Point2D { x: 2, y: 2 }; // Works!
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Embedded Fixed-Point Arithmetic & Saturating Operators (`Add`, `Sub`, `Mul`, `Neg`, `AddAssign`, References)
 
-**Problem:** In embedded systems (e.g., motor controllers, digital signal processors) operating without a Hardware Floating Point Unit (FPU), fractional numbers are calculated using Fixed-Point arithmetic (`Q16.16`). Implement a fixed-point struct `Q16_16(pub i32)` with integer scaling ($1.0 = 65536$). Overload `Add`, `Sub`, `Mul`, `Neg`, `AddAssign`, and reference addition `&Q16_16 + &Q16_16`. Verify correctness with unit tests and assertions.
+**Scenario:** In embedded systems (e.g., motor controllers, digital signal processors) operating without a Hardware Floating Point Unit (FPU), fractional numbers are calculated using Fixed-Point arithmetic (`Q16.16`). Implement a fixed-point struct `Q16_16(pub i32)` with integer scaling ($1.0 = 65536$). Overload `Add`, `Sub`, `Mul`, `Neg`, `AddAssign`, and reference addition `&Q16_16 + &Q16_16`. Verify correctness with unit tests and assertions.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::ops::{Add, AddAssign, Mul, Neg, Sub};
 > 
@@ -368,9 +369,12 @@ p += Point2D { x: 2, y: 2 }; // Works!
 
 ### Exercise 2: Physical Unit Safety with Heterogeneous Binary Operators (`Mul`, `Div`, `AddAssign`)
 
-**Problem:** In robotics and sensor fusion systems, multiplying velocity by time must produce distance, while dividing distance by time must produce velocity. Attempting to add seconds to meters must fail at compile time. Define type-safe wrappers `Meters(pub f64)`, `Seconds(pub f64)`, and `MetersPerSecond(pub f64)`. Implement heterogeneous `Mul` and `Div` traits to enforce dimensional analysis at compile-time. Include complete unit tests and assertions.
+**Scenario:** In robotics and sensor fusion systems, multiplying velocity by time must produce distance, while dividing distance by time must produce velocity. Attempting to add seconds to meters must fail at compile time. Define type-safe wrappers `Meters(pub f64)`, `Seconds(pub f64)`, and `MetersPerSecond(pub f64)`. Implement heterogeneous `Mul` and `Div` traits to enforce dimensional analysis at compile-time. Include complete unit tests and assertions.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::ops::{Add, AddAssign, Div, Mul, Sub};
 > 
@@ -494,9 +498,12 @@ p += Point2D { x: 2, y: 2 }; // Works!
 
 ### Exercise 3: Dynamic 2D Matrix Indexing & Mutable Slice Views (`Index`, `IndexMut`)
 
-**Problem:** High-performance machine learning frameworks store multidimensional matrices in flat 1D vectors for cache locality. Implement a generic struct `Matrix2D<T>` that supports tuple indexing `matrix[(row, col)]` for read/write access, as well as row slice extraction `&matrix[row]`. Include full unit tests with `assert_eq!` and `#[should_panic]` testing out-of-bounds access.
+**Scenario:** High-performance machine learning frameworks store multidimensional matrices in flat 1D vectors for cache locality. Implement a generic struct `Matrix2D<T>` that supports tuple indexing `matrix[(row, col)]` for read/write access, as well as row slice extraction `&matrix[row]`. Include full unit tests with `assert_eq!` and `#[should_panic]` testing out-of-bounds access.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::ops::{Index, IndexMut};
 > 
@@ -627,151 +634,11 @@ p += Point2D { x: 2, y: 2 }; // Works!
 > 3. **Custom Index Types**: The generic parameter `Idx` in `Index<Idx>` can be any type—such as tuples `(usize, usize)`, ranges `Range<usize>`, or standard `usize`. Here, implementing `Index<(usize, usize)>` provides multi-dimensional subscripting syntax `grid[(r, c)]`.
 > 4. **Returning Dynamically Sized Types (DSTs)**: By implementing `Index<usize>` with `type Output = [T]`, indexing a matrix by row number (`&matrix[1]`) yields a borrowed slice view (`&[T]`) directly into the flat buffer without allocating memory.
 > 
----
 
-### Exercise 4: Bitwise Hardware MMIO Register Manipulation (`BitAnd`, `BitOr`, `BitXor`, `Not`, `BitOrAssign`)
-
-**Problem:** Low-level microcontroller drivers use Memory-Mapped I/O (MMIO) register bitmasks to toggle control flags (`ENABLE`, `INTERRUPT`, `DMA_MODE`). Create a struct `ControlRegister(pub u32)` and overload bitwise operators (`BitAnd`, `BitOr`, `BitXor`, `Not`, `BitOrAssign`) to enable clean bitwise syntax without raw integer conversions. Include test assertions for setting, clearing, and toggling register flags.
-
-> [!check]- Answer
-> ```rust
-> use std::ops::{BitAnd, BitOr, BitOrAssign, BitXor, Not};
-> 
-> /// MMIO Peripheral Control Register wrapper
-> #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-> pub struct ControlRegister(pub u32);
-> 
-> impl ControlRegister {
->     // Hardware Flag Bitmasks
->     pub const NONE: u32 = 0;
->     pub const ENABLE: u32 = 1 << 0;       // Bit 0: 0x01
->     pub const INTERRUPT: u32 = 1 << 1;    // Bit 1: 0x02
->     pub const DMA_MODE: u32 = 1 << 2;     // Bit 2: 0x04
->     pub const ERROR_RESET: u32 = 1 << 3;  // Bit 3: 0x08
-> 
->     pub fn new(val: u32) -> Self {
->         ControlRegister(val)
->     }
-> 
->     pub fn is_set(&self, mask: u32) -> bool {
->         (self.0 & mask) == mask
->     }
-> }
-> 
-> // 1. Bitwise OR with raw bitmask: `reg | MASK`
-> impl BitOr<u32> for ControlRegister {
->     type Output = Self;
-> 
->     fn bitor(self, rhs: u32) -> Self::Output {
->         ControlRegister(self.0 | rhs)
->     }
-> }
-> 
-> // Bitwise OR between registers: `reg1 | reg2`
-> impl BitOr for ControlRegister {
->     type Output = Self;
-> 
->     fn bitor(self, rhs: Self) -> Self::Output {
->         ControlRegister(self.0 | rhs.0)
->     }
-> }
-> 
-> // 2. Bitwise AND: `reg & mask`
-> impl BitAnd<u32> for ControlRegister {
->     type Output = Self;
-> 
->     fn bitand(self, rhs: u32) -> Self::Output {
->         ControlRegister(self.0 & rhs)
->     }
-> }
-> 
-> impl BitAnd for ControlRegister {
->     type Output = Self;
-> 
->     fn bitand(self, rhs: Self) -> Self::Output {
->         ControlRegister(self.0 & rhs.0)
->     }
-> }
-> 
-> // 3. Bitwise XOR: `reg ^ mask` (Toggle bits)
-> impl BitXor<u32> for ControlRegister {
->     type Output = Self;
-> 
->     fn bitxor(self, rhs: u32) -> Self::Output {
->         ControlRegister(self.0 ^ rhs)
->     }
-> }
-> 
-> // 4. Bitwise NOT: `!reg` (Invert bits)
-> impl Not for ControlRegister {
->     type Output = Self;
-> 
->     fn not(self) -> Self::Output {
->         ControlRegister(!self.0)
->     }
-> }
-> 
-> // 5. Bitwise OR Assign: `reg |= mask`
-> impl BitOrAssign<u32> for ControlRegister {
->     fn bitor_assign(&mut self, rhs: u32) {
->         self.0 |= rhs;
->     }
-> }
-> 
-> #[cfg(test)]
-> mod tests {
->     use super::*;
-> 
->     #[test]
->     fn test_register_bitops() {
->         let mut reg = ControlRegister::new(ControlRegister::NONE);
-> 
->         // 1. Set ENABLE flag via BitOrAssign (`|=`)
->         reg |= ControlRegister::ENABLE;
->         assert!(reg.is_set(ControlRegister::ENABLE));
->         assert_eq!(reg.0, 0x01);
-> 
->         // 2. Combine flags via BitOr (`|`)
->         let reg_with_dma = reg | ControlRegister::DMA_MODE;
->         assert_eq!(reg_with_dma.0, 0x05); // 0x01 | 0x04 = 0x05
->         assert!(reg_with_dma.is_set(ControlRegister::ENABLE));
->         assert!(reg_with_dma.is_set(ControlRegister::DMA_MODE));
-> 
->         // 3. Clear flag using BitAnd (`&`) and Bitwise NOT (`!`)
->         // Mask out ENABLE flag from 0x05
->         let cleared = reg_with_dma & (!ControlRegister::ENABLE);
->         assert_eq!(cleared.0, 0x04);
->         assert!(!cleared.is_set(ControlRegister::ENABLE));
->         assert!(cleared.is_set(ControlRegister::DMA_MODE));
-> 
->         // 4. Toggle flag using BitXor (`^`)
->         let toggled = reg_with_dma ^ ControlRegister::INTERRUPT;
->         assert_eq!(toggled.0, 0x07); // 0x05 ^ 0x02 = 0x07
->         assert!(toggled.is_set(ControlRegister::INTERRUPT));
-> 
->         let untoggled = toggled ^ ControlRegister::INTERRUPT;
->         assert_eq!(untoggled.0, 0x05);
->         assert!(!untoggled.is_set(ControlRegister::INTERRUPT));
->     }
-> }
-> 
-> fn main() {
->     let mut ctrl = ControlRegister::new(ControlRegister::NONE);
->     ctrl |= ControlRegister::ENABLE | ControlRegister::INTERRUPT;
->     println!("Control Register Value: {:#010b}", ctrl.0);
->     assert_eq!(ctrl.0, 0b0011);
-> }
-> ```
-> 
-> **Step-by-Step Technical Explanation:**
-> 1. **Bitwise Trait Desugaring**: Operator expressions desugar directly to `std::ops` bitwise traits: `a | b` -> `BitOr::bitor(a, b)`, `a & b` -> `BitAnd::bitand(a, b)`, `a ^ b` -> `BitXor::bitxor(a, b)`, `!a` -> `Not::not(a)`, and `a |= b` -> `BitOrAssign::bitor_assign(&mut a, b)`.
-> 2. **Mask Inversion with Bitwise NOT**: Bitwise NOT (`!MASK`) flips all 0s to 1s and 1s to 0s. Combining bitwise AND with inverted mask (`reg & !ENABLE`) clears specific bitfield flags while leaving all other active control bits intact.
-> 3. **Bit Toggling with XOR**: Bitwise XOR (`reg ^ INTERRUPT`) flips target bits—if the bit was 0 it becomes 1, and if 1 it becomes 0.
-> 4. **Embedded `#![no_std]` Compatibility**: All bitwise traits live in `core::ops` as well as `std::ops`. Overloading bitwise operators compiles down to single CPU bitwise assembly instructions (`or`, `and`, `xor`, `not`) with zero runtime overhead.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [`Deref` / `DerefMut` Traits](deref_deref_mut_traits.md) — Overloading the `*` dereference operator.
@@ -782,7 +649,7 @@ p += Point2D { x: 2, y: 2 }; // Works!
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - Operator Overloading allows custom types to define behaviors for operators (`+`, `-`, `*`, `[]`, `+=`) by implementing `std::ops` traits.
 - Expressions like `a + b` are syntactic sugar for `std::ops::Add::add(a, b)`.

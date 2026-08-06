@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Error Handling**
+
+**Data Fetching** (HTTP Error Handling & Recovery): Data fetching error handling captures, handles, and clears HTTP 4xx/5xx errors returned by `useFetch()` and `useAsyncData()`.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When an API request fails (e.g., a 500 server error or a 404 not found), `useFetch` does not throw an immediate JavaScript exception that crashes your app. Instead, it captures the error and exposes it via the reactive `error` object. This allows you to render a beautiful fallback UI (like "Oops, we couldn't load the users") instead of a white screen of death.
@@ -73,7 +74,7 @@ const retryFetch = async () => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting that `clearNuxtData` does not trigger a re-fetch
 **The mistake:** Calling `clearNuxtData('my-key')` and expecting the UI to instantly update with fresh data from the server.
@@ -133,71 +134,143 @@ if (error.value) {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Wiping the entire cache
+### Exercise 1: Handling Fetch Errors Returned by `useFetch()`
 
-**Problem:** The user just successfully logged out. You want to ensure absolutely no cached data from their session remains in memory. How do you clear the ENTIRE Nuxt data cache at once?
+**Scenario:**
+Display an error banner when `useFetch()` receives an HTTP 500 or 404 response.
 
-**Expected output:**
+**Requirements:**
+1. Extract `error` property from `useFetch()`.
+
 > [!check]- Answer
-> ```typescript
-> // Calling clearNuxtData with no arguments clears everything!
-> clearNuxtData();
-> ```
-> - The `clearNuxtData()` utility clears all cached keys globally when invoked without arguments.
-
----
-
-### Exercise 2: Fatal Error Boundary Trigger Pattern
-
-**Problem:** Write `useFetch` call setting `fatal: true` option so HTTP 404 response triggers Nuxt error page (`error.vue`).
-
-**Expected output:**
-> [!check]- Answer
-> ```typescript
-> const { data } = await useFetch('/api/item', { fatal: true });
-> ```
-> - `fatal: true` forces `useFetch` errors to trigger Nuxt full-page error boundaries.
-> 
+>
+> #### Implementation
+>
 > ```vue
-> <script setup>
-> const { data, error } = await useFetch('/api/item', {
->   fatal: true // Triggers error.vue on failure
-> });
+> <script setup lang="ts">
+> const { data: user, error } = await useFetch("/api/user/9999");
 > </script>
-> ```
+
+<template>
+  <div>
+    <div v-if="error" class="error-banner">
+      <p>Failed to load user profile: {{ error.statusMessage || error.message }}</p>
+      <p>HTTP Code: {{ error.statusCode }}</p>
+    </div>
+    <div v-else-if="user">
+      <h1>User: {{ user.name }}</h1>
+    </div>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useFetch()` returns an `error` reactive ref containing a Nuxt `FetchError` object when request execution fails.
+> 2. `error.statusCode` exposes HTTP status codes (e.g. 404, 500).
+> 3. Prevents application crashes by capturing data fetching errors gracefully.
 
 ---
 
-### Exercise 3: error Ref Properties
+### Exercise 2: Triggering Full Nuxt Error Pages with `fatal: true`
 
-**Problem:** List 2 properties available on the `error.value` object returned by `useFetch`.
+**Scenario:**
+Configure `useFetch()` to trigger Nuxt's full-screen `error.vue` page when fetching critical route data fails.
 
-**Expected output:**
+**Requirements:**
+1. Pass `fatal: true` to `createError()` or handle in watch block.
+
 > [!check]- Answer
-> ```text
-> 1. statusCode (e.g. 404, 500)
-> 2. statusMessage / message
-> ```
-> - `statusCode` -> HTTP status code
-> - `statusMessage` -> Status message string
-> 
-> ```typescript
-> console.log(error.value.statusCode, error.value.statusMessage);
-> ```
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const route = useRoute();
+> const { data: post, error } = await useFetch(`/api/posts/${route.params.id}`);
+
+if (error.value) {
+  // Triggers full Nuxt error boundary page (error.vue)
+  throw createError({
+    statusCode: error.value.statusCode || 404,
+    statusMessage: "Post Not Found",
+    fatal: true
+  });
+}
+</script>
+
+<template>
+  <article v-if="post">
+    <h1>{{ post.title }}</h1>
+  </article>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Throwing `createError({ fatal: true })` forces Nuxt to render the root `error.vue` error boundary template.
+> 2. Works consistently on both server SSR and client browser environments.
+> 3. Standard method for handling non-recoverable 404/500 route errors.
+
+---
+
+### Exercise 3: Retrying Failed Fetch Operations with `refresh()`
+
+**Scenario:**
+Provide a retry button for users to clear fetch errors and retry network data fetching.
+
+**Requirements:**
+1. Call `refresh()` returned by `useFetch()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const { data: feed, error, refresh, pending } = await useFetch("/api/live-feed");
+> </script>
+
+<template>
+  <div>
+    <div v-if="error">
+      <p>Error loading feed.</p>
+      <button @click="() => refresh()" :disabled="pending">
+        {{ pending ? "Retrying..." : "Retry Fetch" }}
+      </button>
+    </div>
+    <div v-else-if="feed">
+      <ul>
+        <li v-for="item in feed" :key="item.id">{{ item.text }}</li>
+      </ul>
+    </div>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `refresh()` re-executes the data fetching function associated with `useFetch()`.
+> 2. Clears previous error states and updates `pending` indicators automatically during retry execution.
+> 3. Standard user error recovery pattern.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`error.vue` & `useError`](../level_10/error_vue.md) — How to trigger a full-page error instead of an inline component error.
 - [`useAsyncData`](use_async_data.md) — Works exactly the same way with `error` and `clearNuxtData`.
 - [Caching Data](caching_data.md) — Related concept: Caching Data.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useFetch` captures API failures in a reactive `error` object instead of throwing a hard exception.
 - You should use `v-else-if="error"` to render graceful fallback UIs.
 - `clearNuxtData(key)` deletes data from the Nuxt memory cache.

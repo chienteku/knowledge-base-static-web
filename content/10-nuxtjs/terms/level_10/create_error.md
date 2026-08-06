@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Error Handling**
+
+**Security & Middleware** (Structured HTTP Exception Creation): `createError()` creates structured HTTP error objects containing status codes and messages, triggerable in server routes, composables, or pages.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you are writing a standard JavaScript function and something goes wrong, you write `throw new Error("Bad data")`. 
@@ -82,7 +83,7 @@ clearError({ redirect: '/' });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Throwing standard JavaScript errors in API routes
 **The mistake:** Writing `throw new Error("Missing ID")` inside a `server/api/` route.
@@ -137,86 +138,137 @@ if (!data.value) throw createError({ statusCode: 404, statusMessage: 'Not Found'
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Middleware Auth Guard
+### Exercise 1: Throwing HTTP 404 Errors in Dynamic Route Loaders
 
-**Problem:** Write a Route Middleware (`middleware/admin.ts`). If the user is not an admin, you want to immediately trigger the `error.vue` page with a 401 status code and the message "Unauthorized Access".
+**Scenario:**
+Throw a 404 Not Found error when dynamic article ID parameters do not exist in the database.
 
-**Expected output:**
+**Requirements:**
+1. Execute `throw createError({ statusCode: 404, statusMessage: "Article Not Found" })`.
+
 > [!check]- Answer
-> ```typescript
-> export default defineNuxtRouteMiddleware((to, from) => {
->   const isAdmin = false; // Logic here
->   
->   if (!isAdmin) {
->     // In middleware, abortNavigation paired with createError triggers the error page!
->     return abortNavigation(createError({ 
->       statusCode: 401, 
->       message: 'Unauthorized Access' 
->     }));
->   }
-> });
-> ```
-> - Inside the middleware transition guard, return `abortNavigation(createError({ ... }))` to halt and trigger the error UI.
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const route = useRoute();
+> const { data: article, error } = await useFetch(`/api/articles/${route.params.id}`);
+
+if (error.value || !article.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: `Article ${route.params.id} does not exist.`,
+    fatal: true
+  });
+}
+</script>
+
+<template>
+  <article v-if="article">
+    <h1>{{ article.title }}</h1>
+  </article>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `createError()` constructs a standardized Nuxt HTTP error object.
+> 2. `fatal: true` forces Nuxt to clear the current component tree and render the root `error.vue` error page.
+> 3. Guarantees consistent 404 error rendering across server SSR and client navigation.
 
 ---
 
-### Exercise 2: createError Helper Setup Pattern
+### Exercise 2: Returning Formatted API Error Responses in Nitro Handlers
 
-**Problem:** Write Nitro API handler throwing 403 Forbidden error using `createError()` when `event.context.user` is null.
+**Scenario:**
+Validate authorization tokens in a Nitro endpoint and return HTTP 401 Unauthorized using `createError()`.
 
-**Expected output:**
+**Requirements:**
+1. Throw `createError({ statusCode: 401, message: "Unauthorized" })`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // server/api/protected.ts
 > export default defineEventHandler((event) => {
->   if (!event.context.user) {
->     throw createError({ statusCode: 403, statusMessage: 'Forbidden Access' });
->   }
-> });
-> ```
-> - `createError()` creates structured H3 and Nuxt error instances.
-> 
-> ```typescript
-> export default defineEventHandler((event) => {
->   if (!event.context.user) {
+>   const authHeader = getHeader(event, "authorization");
+>   
+>   if (!authHeader || !authHeader.startsWith("Bearer ")) {
 >     throw createError({
->       statusCode: 403,
->       statusMessage: 'Forbidden Access Required'
+>       statusCode: 401,
+>       statusMessage: "Unauthorized: Missing or invalid authentication token."
 >     });
 >   }
+>   
+>   return { data: "Protected sensitive server response" };
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. In Nitro server handlers, throwing `createError()` halts request processing and returns a formatted JSON error payload.
+> 2. `statusCode` sets the HTTP response status code header.
+> 3. Standard REST API server error pattern.
+
 ---
 
-### Exercise 3: createError Data Property
+### Exercise 3: Clearing Errors with `clearError()`
 
-**Problem:** Which property on `createError({ data: { ... } })` allows passing custom JSON payload details to error boundary templates?
+**Scenario:**
+Clear an active error state and navigate back to the home page using `clearError()`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `clearError({ redirect: "/" })`.
+
 > [!check]- Answer
-> ```text
-> data (accessible via error.data in error.vue)
-> ```
-> - `data` property passes custom context to `error.vue`.
-> 
-> ```typescript
-> throw createError({
->   statusCode: 400,
->   data: { field: 'email', reason: 'Invalid format' }
+>
+> #### Implementation
+>
+> ```vue
+> <!-- error.vue -->
+> <script setup lang="ts">
+> const props = defineProps({
+>   error: Object
 > });
-> ```
+
+function handleReset() {
+  clearError({ redirect: "/" });
+}
+</script>
+
+<template>
+  <div>
+    <h1>Error: {{ props.error?.statusCode }}</h1>
+    <p>{{ props.error?.message }}</p>
+    <button @click="handleReset">Return to Homepage</button>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `clearError()` resets Nuxt's internal global error state ref.
+> 2. `{ redirect: '/' }` option redirects the user to the target path after clearing error state.
+> 3. Standard error recovery mechanism.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`error.vue` & `useError`](error_vue.md) — What the user sees when these functions are executed.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `createError` generates an SSR-safe `H3Error` with HTTP status codes.
 - Throw `createError` inside API routes to return correct HTTP failures.
 - Call `showError` on the frontend to instantly trigger the `error.vue` page.

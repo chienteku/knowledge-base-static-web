@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Data Type**
+
+**Data Type** (Logical Truth Type): The `BOOLEAN` data type stores 1-byte logical state values (`TRUE`, `FALSE`, or `NULL`).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Occupies exactly 1 byte of disk storage. Implements true SQL boolean logic, unlike databases that convert boolean states to numeric integers).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Applications are filled with binary flags:
@@ -87,7 +88,7 @@ SELECT * FROM user_accounts WHERE NOT is_verified;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Writing redundant comparison checks in WHERE clauses
 
@@ -133,71 +134,97 @@ CREATE TABLE users ( active BOOLEAN ); -- Allows NULL values!
 CREATE TABLE users ( active BOOLEAN NOT NULL DEFAULT FALSE );
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Boolean Logic Clean-up
+### Exercise 1: Filtering Rows with Boolean Flags
 
-**Problem:** Clean up the following redundant SQL query to make it clean and idiomatic.
+**Scenario:**
+Query table `users` for active verified user accounts where `is_active = TRUE` and `is_verified = TRUE`.
 
-```sql
-SELECT username 
-FROM user_accounts 
-WHERE is_verified = TRUE AND marketing_consent = FALSE;
-```
+**Requirements:**
+1. Execute `SELECT` with boolean equality conditions.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT username 
-> FROM user_accounts 
-> WHERE is_verified AND NOT marketing_consent;
+> SELECT id, username, email 
+> FROM users 
+> WHERE is_active IS TRUE 
+>   AND is_verified IS TRUE;
 > ```
-> - A boolean column is already a logical expression; it does not need `= TRUE`.
-> - Use the `NOT` operator to invert the truth check.
+>
+> #### Technical Explanation
+>
+> 1. `BOOLEAN` columns consume 1 byte of storage per row.
+> 2. `WHERE is_active IS TRUE` evaluates 3-valued logic, correctly handling `NULL` boolean states.
+> 3. Can be indexed with partial indexes for filtering active flags.
+
+---
+
+### Exercise 2: Toggling Boolean State Flags
+
+**Scenario:**
+Toggle a user's `is_active` status flag to `FALSE` upon account suspension.
+
+**Requirements:**
+1. Execute `UPDATE users SET is_active = FALSE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> UPDATE users 
+> SET is_active = FALSE 
+> WHERE id = 42 
+> RETURNING id, username, is_active;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `UPDATE` sets the boolean column value to `FALSE` atomically.
+> 2. `RETURNING` confirms the updated row state.
+> 3. Triggers audit events or downstream notification cascades.
+
+---
+
+### Exercise 3: Handling 3-Valued Logic in Boolean Expressions
+
+**Scenario:**
+Query documents where `is_archived` is `FALSE` OR `NULL` using `IS NOT TRUE`.
+
+**Requirements:**
+1. Use `WHERE is_archived IS NOT TRUE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, title 
+> FROM documents 
+> WHERE is_archived IS NOT TRUE;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. In SQL 3-valued logic, `NULL = FALSE` evaluates to `UNKNOWN` (not `TRUE`).
+> 2. `IS NOT TRUE` evaluates to true for both `FALSE` and `NULL` values.
+> 3. Prevents accidental row exclusion when boolean columns permit `NULL`.
 
 ---
 
 
 
-### Exercise 2: Querying Boolean Predicates
-
-**Problem:** Query active users using `IS TRUE` syntax.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users WHERE is_active IS TRUE;
-> ```
-> ```sql
-> SELECT * FROM users WHERE is_active IS TRUE;
-> ```
->
-> **Explanation:** `IS TRUE` matches boolean true values while explicitly excluding NULLs.
-
----
-
-### Exercise 3: Boolean 3-Valued Logic Comparison
-
-**Problem:** List 3 possible states for unconstrained boolean columns (`TRUE`, `FALSE`, `NULL`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> TRUE, FALSE, NULL
-> ```
-> ```text
-> TRUE, FALSE, NULL
-> ```
->
-> **Explanation:** SQL boolean logic supports 3-valued logic: True, False, and Unknown (NULL).
-
-## 7. Related Terms
+## 6. Related Terms
 - [Data Types (Overview)](data_types.md) — The parent typing framework.
 - [`NULL`](null.md) — The unset boolean state.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PostgreSQL `BOOLEAN` stores logical truth values: `TRUE`, `FALSE`, or `NULL`.
 - Takes up exactly 1 byte of disk storage.
 - Accepts standard text synonyms (like `'yes'`, `'no'`, `'1'`, `'0'`) on insert.

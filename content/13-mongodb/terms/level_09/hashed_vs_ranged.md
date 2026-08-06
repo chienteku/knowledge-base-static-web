@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Administration / Operations** (Shard Key Distribution Strategy): Hashed vs Ranged Sharding compares uniform hash-based data distribution against contiguous range-based data partitioning across shard nodes.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Configured during collection sharding initialization. Determines how MongoDB calculates range boundaries and partitions chunks).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As learned in `shard_key.md`, selecting a shard key requires balancing write distribution (preventing hotspots) and query isolation (targeted queries).
@@ -98,7 +99,7 @@ sh.shardCollection("ecom.logs", { created_at: "hashed" });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Choosing Hashed Sharding on a field that your application frequently queries using range filters ($gt, $lt)
 
@@ -146,68 +147,95 @@ sh.shardCollection("app.products", { price: "hashed" }); // Forces scatter-gathe
 Use Ranged Sharding or compound shard keys when range queries dominate
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Strategy Selection
+### Exercise 1: Enabling Hashed Sharding for Uniform Data Distribution
 
-**Problem:** You are architecting two collections in a high-traffic sharded cluster. 
-Select the optimal sharding strategy (**Ranged** or **Hashed**) for each scenario:
-1.  A `sensor_readings` collection sharded on `{ timestamp: 1 }`, receiving 50,000 metrics per second.
-2.  A `customers` collection sharded on `{ last_name: 1 }`, where the application constantly displays alphabetical directories (e.g., listing names from "M" to "P").
+**Scenario:**
+Configure hashed sharding on `userId` field for collection `orders` to ensure even data distribution across shards.
 
-**Expected output:**
+**Requirements:**
+1. Create hashed index `{ userId: "hashed" }`.
+2. Execute `sh.shardCollection("store.orders", { userId: "hashed" })`.
+
 > [!check]- Answer
-> ```text
-> 1. Hashed: The timestamp is a monotonically increasing field. Under 50,000 writes/sec, ranged sharding will write-saturate a single primary shard. Hashed sharding distributes the writes evenly across all shards.
-> 2. Ranged: The application frequently queries ranges on the shard key (alphabetical slices). Ranged sharding keeps these folders contiguous on the same shard, avoiding slow scatter-gather broadcasts.
-> ```
-> - Assess the write volume and if the key grows sequentially.
-> - Check if queries filter ranges or single equality keys.
-
----
-
-
-
-### Exercise 2: Creating Hashed Shard Key Index
-
-**Problem:** Enable Hashed Sharding on `_id` field for `orders` collection.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> sh.shardCollection("app.orders", { _id: "hashed" });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> sh.shardCollection("app.orders", { _id: "hashed" });
+> db.orders.createIndex({ userId: "hashed" });
+> sh.shardCollection("store.orders", { userId: "hashed" });
 > ```
 >
-> **Explanation:** `{ field: "hashed" }` hashes key values to distribute inserts evenly across cluster shards.
+> #### Technical Explanation
+>
+> 1. Hashed sharding calculates an MD5 hash of the shard key field (`userId`) to partition data.
+> 2. Distributes monotonically increasing values (e.g. auto-increment IDs or timestamps) evenly across all shards.
+> 3. Prevents hot-spotting on a single shard node.
 
 ---
 
-### Exercise 3: Hashed vs Ranged Tradeoff Matrix
+### Exercise 2: Configuring Ranged Sharding for Range-Query Optimization
 
-**Problem:** State tradeoff: Hashed Sharding (Even write distribution; scatters range queries), Ranged Sharding (Co-locates ranges; risk of monotonic write hotspots).
+**Scenario:**
+Configure ranged sharding on compound key `{ country: 1, zipCode: 1 }` to optimize spatial range queries.
 
-**Expected output:**
+**Requirements:**
+1. Create compound index and execute `sh.shardCollection()`.
+
 > [!check]- Answer
-> ```text
-> Hashed: even write distribution; Ranged: fast localized range queries
-> ```
-> ```text
-> Hashed: even write distribution; Ranged: fast localized range queries
+>
+> #### Implementation
+>
+> ```javascript
+> db.customers.createIndex({ country: 1, zipCode: 1 });
+> sh.shardCollection("store.customers", { country: 1, zipCode: 1 });
 > ```
 >
-> **Explanation:** Sharding strategy balances insertion distribution against range query targeting.
+> #### Technical Explanation
+>
+> 1. Ranged sharding partitions data into contiguous ranges based on raw shard key values.
+> 2. Allows queries matching ranges (e.g. `country: "US"`) to target specific shard nodes directly.
+> 3. Ideal for location and regional data partitioning.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Trade-Off Analysis: Hashed vs Ranged Sharding
+
+**Scenario:**
+Formulate a technical trade-off matrix comparing Hashed vs Ranged Sharding for write distribution vs range query efficiency.
+
+**Requirements:**
+1. Contrast write hot-spot prevention vs scatter-gather queries.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Sharding Strategy Selection Matrix:
+> - Hashed Sharding: Perfect write distribution (prevents hot spots), BUT range queries must scatter-gather across all shards.
+> - Ranged Sharding: Efficient targeted range queries, BUT risks write hot-spotting on monotonically increasing keys.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Hashed sharding trades range query targeting for uniform write load balancing.
+> 2. Ranged sharding trades write load balancing for targeted range query execution.
+> 3. Base choice on primary query access patterns.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Shard Key](shard_key.md) — The partitioning index key.
 - [Targeted vs. Scatter-Gather Queries](targeted_vs_scatter.md) — Query routing modes.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Ranged sharding partitions data by contiguous value ranges of the shard key.
 - Hashed sharding partitions data by MD5 hash values of the shard key.
 - Ranged sharding optimizes range queries on the shard key.

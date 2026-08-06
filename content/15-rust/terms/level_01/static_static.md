@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: Static variables exist in languages like C, C++, and Java (as static fields) to represent data that lives for the entire duration of a program.
+
+
+**Rust Keyword (fixed global memory allocation)**: Static variables exist in languages like C, C++, and Java (as static fields) to represent data that lives for the entire duration of a program.
 
 ---
 

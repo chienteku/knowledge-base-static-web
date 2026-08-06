@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Data Type**
+
+**Data Type** (Character Sequence Types): Text data types (`TEXT`, `VARCHAR(n)`, `CHAR(n)`) store UTF-8 character string sequences within table columns.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Stored internally using the same storage format. Strings longer than 2KB are automatically compressed and moved out of main table memory via PostgreSQL TOAST storage).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational databases must support text of varying lengths—from short country codes (`"US"`) to medium usernames (`"john_doe"`) to massive blog articles.
@@ -82,7 +83,7 @@ VALUES ('US', 'this_is_an_extremely_long_username_that_exceeds_fifty', 'Short bi
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Believing `VARCHAR(50)` is faster to query than `TEXT` in PostgreSQL
 
@@ -128,68 +129,100 @@ bio VARCHAR(255) -- Arbitrary length cap
 bio TEXT -- Unconstrained text storage
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: String Type Audit
+### Exercise 1: Evaluating `TEXT` vs `VARCHAR(n)` Performance
 
-**Problem:** You are defining columns for a weather station database. Choose the best string type (`CHAR(n)`, `VARCHAR(n)`, or `TEXT`) for the following fields:
-1.  State wind direction abbreviation (e.g. `'N'`, `'S'`, `'NE'`, `'SW'`).
-2.  Weather station name (e.g., `'Rocky Mountains Summit Station'`).
-3.  Hourly weather summary comments (e.g., `'Clear sky, high humidity, temperature drops expected...'`).
+**Scenario:**
+Create a `posts` table choosing between `TEXT` and `VARCHAR(255)`.
 
-**Expected output:**
+**Requirements:**
+1. Contrast `TEXT` vs `VARCHAR(n)` storage and performance in PostgreSQL.
+
 > [!check]- Answer
-> ```text
-> 1. Wind Direction: VARCHAR(2) (Length varies between 1 and 2 characters. Using CHAR(2) would pad single character inputs like 'N' with an extra space, e.g. 'N ', which makes queries annoying).
-> 2. Station Name: VARCHAR(100) (Names vary in length, but we want to cap it to prevent developers from accidentally dumping paragraphs in name boxes).
-> 3. Summary Comments: TEXT (Comments can be long and have no strict business length limit).
-> ```
-> - Identify if the field has a variable length and if trailing spaces would complicate string comparisons.
-> - Consider if a strict length constraint is required for validation.
-
----
-
-
-
-### Exercise 2: Text Type Selection Rule
-
-**Problem:** What is the idiomatic PostgreSQL text data type for unconstrained string fields? (`TEXT`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> TEXT
-> ```
-> ```text
-> TEXT
-> ```
 >
-> **Explanation:** `TEXT` is the recommended, fully performant string data type in PostgreSQL.
-
----
-
-### Exercise 3: Inspecting Character Length with `LENGTH()`
-
-**Problem:** Query users where character length of `username` is less than 5 using `LENGTH()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM users WHERE LENGTH(username) < 5;
-> ```
+> #### Implementation
+>
 > ```sql
-> SELECT * FROM users WHERE LENGTH(username) < 5;
+> CREATE TABLE posts (
+>   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   slug TEXT NOT NULL UNIQUE,
+>   title TEXT NOT NULL,
+>   body TEXT NOT NULL
+> );
 > ```
 >
-> **Explanation:** `LENGTH(string)` returns character counts for text columns.
+> #### Technical Explanation
+>
+> 1. In PostgreSQL, `TEXT` and `VARCHAR(n)` use the exact same underlying storage layout (`varlena`) and have zero performance difference.
+> 2. `VARCHAR(n)` enforces an arbitrary character length check on every insert/update; `TEXT` allows unbounded text.
+> 3. PostgreSQL best practice: Use `TEXT` by default, adding `CHECK (length(col) <= N)` if length validation is required.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Case-Insensitive String Filtering with `LOWER()`
+
+**Scenario:**
+Query table `users` for email address `"ALICE@EXAMPLE.COM"` using case-insensitive matching.
+
+**Requirements:**
+1. Use `WHERE LOWER(email) = LOWER('ALICE@EXAMPLE.COM')` or `ILIKE`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT id, username, email 
+> FROM users 
+> WHERE LOWER(email) = LOWER('ALICE@EXAMPLE.COM');
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `LOWER(string)` normalizes text characters to lowercase for case-insensitive comparison.
+> 2. `ILIKE` is PostgreSQL's case-insensitive pattern matching operator (`email ILIKE 'alice@%'`).
+> 3. Can be accelerated using functional expression indexes (`CREATE INDEX ON users (LOWER(email))`).
+
+---
+
+### Exercise 3: String Trimming and Substring Extraction
+
+**Scenario:**
+Sanitize text input by removing whitespace (`TRIM()`) and extracting the first 50 characters (`LEFT()`).
+
+**Requirements:**
+1. Use `TRIM()` and `LEFT()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   id, 
+>   TRIM(title) AS clean_title,
+>   LEFT(TRIM(body), 50) || '...' AS excerpt 
+> FROM articles;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `TRIM(text)` removes leading and trailing space characters.
+> 2. `LEFT(text, n)` extracts the first `n` characters from a string.
+> 3. `||` is the standard SQL string concatenation operator.
+
+---
+
+
+
+## 6. Related Terms
 - [Data Types (Overview)](data_types.md) — The parent typing framework.
 - [`INTEGER` / `BIGINT` / `SMALLINT`](integer_types.md) — Numeric integer types.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PostgreSQL string types include `TEXT`, `VARCHAR(n)`, and `CHAR(n)`.
 - `TEXT` and `VARCHAR` use the same underlying storage engine and perform identically.
 - `VARCHAR(n)` enforces a maximum character limit check, rejecting longer strings.

@@ -13,7 +13,9 @@
 
 ## 2. Term Category
 
-**Ownership Model**: References (`&T` shared, `&mut T` exclusive) and borrowing rules preventing data races at compile time.
+
+
+**Rust Core Feature (non-owning memory pointer views)**: References (`&T` shared, `&mut T` exclusive) and borrowing rules preventing data races at compile time.
 
 ---
 

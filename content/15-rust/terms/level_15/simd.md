@@ -16,17 +16,15 @@
 
 ## 2. Term Category
 
-**Performance / Hardware Acceleration / Optimization**: SIMD (Single Instruction, Multiple Data) is a hardware feature built into modern CPU architectures (x86_64 SSE/AVX, ARM NEON). Instead of processing one 32-bit number per CPU instruction (Scalar execution), SIMD vector registers (128-bit, 256-bit, or 512-bit wide) load multiple numbers (e.g. four 32-bit floats or eight 16-bit integers) and process them all in a **single CPU clock cycle**. In Rust, SIMD is accessible either automatically via LLVM Auto-Vectorization or explicitly using `std::simd` (portable SIMD) and `core::arch` hardware intrinsics.
+
+
+**Rust Hardware Acceleration (explicit SIMD vector instructions)**: SIMD (Single Instruction, Multiple Data) is a hardware feature built into modern CPU architectures (x86_64 SSE/AVX, ARM NEON). Instead of processing one 32-bit number per CPU instruction (Scalar execution), SIMD vector registers (128-bit, 256-bit, or 512-bit wide) load multiple numbers (e.g. four 32-bit floats or eight 16-bit integers) and process them all in a **single CPU clock cycle**. In Rust, SIMD is accessible either automatically via LLVM Auto-Vectorization or explicitly using `std::simd` (portable SIMD) and `core::arch` hardware intrinsics.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Rust**: SIMD hardware support depends on the target CPU architecture. Auto-vectorization happens across all targets in release mode (`cargo build --release`). Portable SIMD (`std::simd`) provides target-agnostic vector types (`Simd<T, N>`) that compile down to native vector instructions on x86, ARM, and WebAssembly targets.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -134,7 +132,7 @@ fn main() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting Auto-Vectorization in Debug Mode (`cargo run`)
 
@@ -185,13 +183,16 @@ for x in slice.iter_mut() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Audio DSP Gain Scaling with Portable SIMD & Tail Handling
 
-**Problem:** In a Digital Audio Workstation (DAW) or embedded DSP pipeline, audio buffers are represented as contiguous 32-bit floating-point PCM samples (`&[f32]`). You need to scale the audio amplitude by multiplying every sample by a gain factor. Because audio buffer sizes (e.g., 514 samples) are not always exact multiples of the 256-bit SIMD register width (8 `f32` lanes), implement a portable SIMD function `scale_audio_gain` using Rust's `std::simd::f32x8` that processes data in 8-element SIMD vector chunks and handles any remaining unaligned tail samples using a scalar fallback loop. Include comprehensive unit tests to verify correctness for both aligned and non-aligned buffer sizes.
+**Scenario:** In a Digital Audio Workstation (DAW) or embedded DSP pipeline, audio buffers are represented as contiguous 32-bit floating-point PCM samples (`&[f32]`). You need to scale the audio amplitude by multiplying every sample by a gain factor. Because audio buffer sizes (e.g., 514 samples) are not always exact multiples of the 256-bit SIMD register width (8 `f32` lanes), implement a portable SIMD function `scale_audio_gain` using Rust's `std::simd::f32x8` that processes data in 8-element SIMD vector chunks and handles any remaining unaligned tail samples using a scalar fallback loop. Include comprehensive unit tests to verify correctness for both aligned and non-aligned buffer sizes.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![feature(portable_simd)]
 > use std::simd::prelude::*;
@@ -246,7 +247,8 @@ for x in slice.iter_mut() {
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`f32x8::splat(gain)`**: Broadcasts the scalar `gain` value across all 8 SIMD lanes simultaneously inside a 256-bit vector register (`[gain, gain, gain, gain, gain, gain, gain, gain]`).
 > 2. **`from_slice` & `copy_to_slice`**: Efficiently loads 8 contiguous `f32` floats from slice memory into CPU SIMD registers, performs element-wise vector multiplication `simd_chunk * gain_vec` in a single CPU instruction cycle, and stores the results back to the buffer.
 > 3. **Tail Handling Strategy**: Because slice lengths are arbitrarily dynamic, SIMD loops only iterate up to `simd_end` (a multiple of the lane width 8). A secondary scalar loop processes any remaining elements (`&mut samples[simd_end..]`) to prevent out-of-bounds access or silent truncation.
@@ -256,9 +258,12 @@ for x in slice.iter_mut() {
 
 ### Exercise 2: Accelerated Image RGB-to-Grayscale Luminance Conversion
 
-**Problem:** In image processing pipelines, converting color images to grayscale relies on the standard weighted luminance formula: $Y = 0.299R + 0.587G + 0.114B$. Standard scalar loops perform 3 floating-point multiplications and 2 additions per pixel sequentially. Write a high-throughput image filter function `convert_rgb_to_grayscale_simd` that processes 4 pixels concurrently using 128-bit portable SIMD (`f32x4`). Include unit tests proving mathematical equivalence between SIMD and standard scalar calculations.
+**Scenario:** In image processing pipelines, converting color images to grayscale relies on the standard weighted luminance formula: $Y = 0.299R + 0.587G + 0.114B$. Standard scalar loops perform 3 floating-point multiplications and 2 additions per pixel sequentially. Write a high-throughput image filter function `convert_rgb_to_grayscale_simd` that processes 4 pixels concurrently using 128-bit portable SIMD (`f32x4`). Include unit tests proving mathematical equivalence between SIMD and standard scalar calculations.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![feature(portable_simd)]
 > use std::simd::prelude::*;
@@ -328,7 +333,8 @@ for x in slice.iter_mut() {
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Data Parallelism in Graphics**: Standard RGB frame buffers store component values across contiguous memory arrays. By partitioning computation into `f32x4` SIMD vectors, 4 full pixels are converted per CPU loop iteration.
 > 2. **Fused Vector Operations**: Vectorized expressions like `(r_vec * w_r) + (g_vec * w_g) + (b_vec * w_b)` compile into hardware-accelerated multiply-add instructions (e.g. FMA3 on x86 or ARM NEON `vmla`), calculating results in fewer total instruction issue cycles.
 > 3. **Mathematical Equivalence & Float Assertions**: Unit test uses epsilon floating-point comparisons (`(output[i] - expected).abs() < 1e-4`) to ensure accuracy while allowing for minimal SIMD vs scalar floating-point rounding variations.
@@ -337,9 +343,12 @@ for x in slice.iter_mut() {
 
 ### Exercise 3: Runtime Target Feature Detection vs Architecture Intrinsics
 
-**Problem:** Standard portable SIMD relies on compiler abstractions, but legacy or specialized systems often require target-specific architecture intrinsics (`core::arch::x86_64`) for maximum hardware control. When deploying binaries across heterogenous x86_64 servers, hardcoding AVX2 instructions without feature detection can trigger `SIGILL` (Illegal Instruction) crashes on older CPUs. Write a safe function `apply_xor_mask` that uses `is_x86_feature_detected!("avx2")` at runtime to safely dispatch to an unsafe AVX2 intrinsic function (`#[target_feature(enable = "avx2")]`), while gracefully falling back to a scalar XOR implementation on older CPUs.
+**Scenario:** Standard portable SIMD relies on compiler abstractions, but legacy or specialized systems often require target-specific architecture intrinsics (`core::arch::x86_64`) for maximum hardware control. When deploying binaries across heterogenous x86_64 servers, hardcoding AVX2 instructions without feature detection can trigger `SIGILL` (Illegal Instruction) crashes on older CPUs. Write a safe function `apply_xor_mask` that uses `is_x86_feature_detected!("avx2")` at runtime to safely dispatch to an unsafe AVX2 intrinsic function (`#[target_feature(enable = "avx2")]`), while gracefully falling back to a scalar XOR implementation on older CPUs.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[cfg(target_arch = "x86_64")]
 > use core::arch::x86_64::*;
@@ -429,92 +438,17 @@ for x in slice.iter_mut() {
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Runtime Target Feature Detection (`is_x86_feature_detected!`)**: Checks CPUID bits dynamically at application startup. This allows distributing a single binary that uses 256-bit AVX2 on modern hardware without crashing older machines lacking AVX2 instructions.
 > 2. **Target Feature Function Attribute (`#[target_feature(enable = "avx2")]`)**: Informs LLVM that inside `apply_xor_mask_avx2`, it can freely emit AVX2 assembly (`_mm256_xor_si256`) regardless of global `-C target-cpu` flags. Calling this function without runtime CPU checks is `unsafe` because executing AVX2 instructions on non-supporting hardware raises hardware processor exceptions.
 > 3. **Architecture Intrinsics vs Portable SIMD**: While `std::simd` targets cross-platform portability, `core::arch::x86_64` intrinsics provide direct, 1:1 access to specific CPU instructions (`_mm256_loadu_si256`, `_mm256_xor_si256`) for low-level protocol drivers or cryptographic primitives.
 
----
 
-### Exercise 4: IoT Sensor Telemetry Anomaly Masking & Vector Reduction
-
-**Problem:** High-frequency vibration sensors in industrial IoT monitoring generate continuous streams of 32-bit signed integer readings (`&[i32]`). You are tasked with analyzing real-time sensor streams to detect vibration spikes above an anomaly threshold (e.g., threshold = `100`). For each buffer, you must count how many readings exceeded the threshold and calculate the total amplitude sum of those anomaly spikes. Implement `simd_threshold_count_and_sum` using `std::simd::i32x8` and vector selection masks (`Mask<i32, 8>`) to perform branchless filtering and parallel sum reduction (`reduce_sum`).
-
-> [!check]- Answer
-> ```rust
-> #![feature(portable_simd)]
-> use std::simd::prelude::*;
-> 
-> /// Filters sensor readings, returning (anomaly_count, total_anomaly_amplitude_sum).
-> /// Employs 8-lane SIMD vector comparisons and branchless lane masking.
-> pub fn simd_threshold_count_and_sum(readings: &[i32], threshold: i32) -> (usize, i32) {
->     let thresh_vec = i32x8::splat(threshold);
->     let zero_vec = i32x8::splat(0);
->     let one_vec = i32x8::splat(1);
-> 
->     let chunk_size = 8;
->     let chunks = readings.len() / chunk_size;
->     let simd_end = chunks * chunk_size;
-> 
->     let mut total_count: usize = 0;
->     let mut total_sum: i32 = 0;
-> 
->     // 1. Vectorized branchless processing loop
->     for i in (0..simd_end).step_by(chunk_size) {
->         let data_vec = i32x8::from_slice(&readings[i..i + chunk_size]);
->         
->         // Vector lane comparison: Returns Mask<i32, 8> where lane is true if reading > threshold
->         let mask: Mask<i32, 8> = data_vec.simd_gt(thresh_vec);
-> 
->         // Branchless selection: replace non-anomaly elements with 0
->         let anomaly_values = mask.select(data_vec, zero_vec);
->         let anomaly_counts = mask.select(one_vec, zero_vec);
-> 
->         // Parallel horizontal sum reduction across 8 SIMD vector lanes
->         total_sum += anomaly_values.reduce_sum();
->         total_count += anomaly_counts.reduce_sum() as usize;
->     }
-> 
->     // 2. Scalar fallback loop for remaining tail elements
->     for &reading in &readings[simd_end..] {
->         if reading > threshold {
->             total_count += 1;
->             total_sum += reading;
->         }
->     }
-> 
->     (total_count, total_sum)
-> }
-> 
-> #[cfg(test)]
-> mod tests {
->     use super::*;
-> 
->     #[test]
->     fn test_sensor_anomaly_masking() {
->         let readings = vec![
->             15, 120, 45, 200, 80, 95, 300, 10,   // Chunk 1: 120, 200, 300 (> 100) -> count=3, sum=620
->             150, 20, 50, 400, 30, 60, 70, 80,    // Chunk 2: 150, 400 (> 100)      -> count=2, sum=550
->             110, 5, 10                           // Tail:    110 (> 100)           -> count=1, sum=110
->         ];
->         let threshold = 100;
-> 
->         let (count, sum) = simd_threshold_count_and_sum(&readings, threshold);
-> 
->         assert_eq!(count, 6);
->         assert_eq!(sum, 1280);
->     }
-> }
-> ```
-> 
-> **Explanation:**
-> 1. **Vector Comparison Mask (`Mask<T, N>`)**: `data_vec.simd_gt(thresh_vec)` evaluates comparisons across all 8 vector lanes in parallel in 1 CPU cycle, producing a SIMD mask without executing conditional `if` branches.
-> 2. **Branchless Execution (`mask.select`)**: Standard `if reading > threshold` conditionals inside hot scalar loops cause CPU branch mispredictions when sensor noise fluctuates unpredictably. SIMD `select` uses bitwise mask multiplexing (e.g. x86 `vpblendvb`) to retain values or zero them out without branching.
-> 3. **Horizontal Vector Reduction (`reduce_sum()`)**: Accumulates values across all 8 lanes of a single vector register into a scalar sum efficiently, eliminating sequential scalar additions.
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 
 
 - [Zero-Cost Abstractions](zero_cost_abstractions.md) — How auto-vectorization transforms high-level iterators into SIMD.
@@ -523,7 +457,7 @@ for x in slice.iter_mut() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 
 - SIMD (Single Instruction, Multiple Data) processes multiple data elements simultaneously using wide CPU vector registers (128-bit, 256-bit, 512-bit).
 - LLVM performs Auto-Vectorization on clean, contiguous slice loops when compiled in Release mode (`--release`).

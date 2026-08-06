@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture**
+
+**Routing & Layouts** (Optional Catch-All Route Segments): Optional catch-all segments (`[[...slug]]`) match zero or more nested URL path segments, making parent routes optional.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Runs on both server-side routing engines and client-side code).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In early JavaScript versions, writing functions that accepted a variable number of arguments (like a function that sums any amount of numbers) was difficult. Developers had to use the built-in, array-like `arguments` object, which lacked standard array methods (like `.map` or `.reduce`) and made signatures hard to read:
@@ -86,7 +87,7 @@ export default function ShopPage({ params }: PageProps) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Declaring other parameters after the rest parameter
 
@@ -146,68 +147,122 @@ function log(...tags: string[]) {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Argument Filtering
+### Exercise 1: Optional Catch-All Route Segments `[[...slug]]`
 
-**Problem:** Complete the function below to accept a threshold number followed by a dynamic list of scores, returning only scores that exceed the threshold:
+**Scenario:**
+Create an optional catch-all route `app/shop/[[...slug]]/page.tsx` matching both `/shop` and `/shop/shoes/nike`.
 
-```typescript
-// Solution:
-export function filterScores(threshold: number, ...scores: number[]): number[] {
-  return scores.filter((score) => score > threshold);
+**Requirements:**
+1. Use double bracket folder syntax `[[...slug]]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // app/shop/[[...slug]]/page.tsx
+> export default async function ShopPage({
+>   params
+> }: {
+>   params: Promise<{ slug?: string[] }>;
+> }) {
+>   const { slug } = await params;
+
+  return (
+    <main className="p-6">
+      <h1>Shop Catalog</h1>
+      <p>Active Category: {slug ? slug.join(" > ") : "All Products"}</p>
+    </main>
+  );
 }
 ```
 
-> [!check]- Answer
-> - Prefix the `scores` parameter with the rest parameter triple dots to capture arguments.
+> #### Technical Explanation
+>
+> 1. Double bracket syntax `[[...slug]]` makes the catch-all parameter optional.
+> 2. Matches base URL path `/shop` (`params.slug` is undefined) AND nested paths `/shop/a/b` (`params.slug` is `['a', 'b']`).
+> 3. Consolidates catalog index pages and sub-category pages into a single `page.tsx` component.
 
 ---
 
-### Exercise 2: TypeScript Rest Parameter Function Typing
+### Exercise 2: Optional Catch-All Params Guard
 
-**Problem:** Write TypeScript function `combinePaths(base: string, ...segments: string[])` returning concatenated path string.
+**Scenario:**
+Handle undefined `slug` parameters gracefully when accessing base route paths.
 
-**Expected output:**
+**Requirements:**
+1. Provide fallback default state when `slug` is undefined.
+
 > [!check]- Answer
-> ```typescript
-> function combinePaths(base: string, ...segments: string[]): string { return [base, ...segments].join('/'); }
-> ```
-> - Rest parameters capture variable arguments as typed arrays.
-> 
-> ```typescript
-> function combinePaths(base: string, ...segments: string[]): string {
->   return [base, ...segments].join('/');
-> }
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> export default async function OptionalGuard({
+>   params
+> }: {
+>   params: Promise<{ slug?: string[] }>;
+> }) {
+>   const { slug } = await params;
+>   const category = slug?.[0] ?? "featured";
+>   const subCategory = slug?.[1] ?? "all";
+
+  return (
+    <div>
+      <p>Category: {category}</p>
+      <p>Sub-Category: {subCategory}</p>
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Optional chaining `slug?.[0]` guards against `TypeError` exceptions when accessing base `/shop` route paths.
+> 2. Nullish coalescing operator `??` sets sensible default values for base paths.
+> 3. Defensive programming pattern for optional catch-all routes.
 
 ---
 
-### Exercise 3: Spread vs Rest Parameter Distinction
+### Exercise 3: Architectural Trade-Off: `[...slug]` vs `[[...slug]]`
 
-**Problem:** Distinguish between ES6 Rest parameters vs Spread operator.
+**Scenario:**
+Formulate an architectural selection decision matrix comparing `[...slug]` vs `[[...slug]]`.
 
-**Expected output:**
+**Requirements:**
+1. Contrast required catch-all vs optional catch-all route matching.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Rest parameters collect multiple function arguments into a single array (...args); Spread operator expands an array or object into individual elements (...arr).
+> Catch-All Selection Matrix:
+> - Required Catch-All ([...slug]): Requires at least 1 path segment (/docs/a). Visiting base path (/docs) targets a separate app/docs/page.tsx file.
+> - Optional Catch-All ([[...slug]]): Matches 0 or more path segments. Visiting base path (/shop) AND nested path (/shop/a) BOTH target app/shop/[[...slug]]/page.tsx.
 > ```
-> - Rest collects arguments: `function(...args)`
-> - Spread expands arrays: `[...items]`
-> 
-> ```text
-> Rest = Collect into array; Spread = Expand into items.
-> ```
+
+> #### Technical Explanation
+>
+> 1. `[...slug]` is chosen when the root path has a distinct layout/page from child paths.
+> 2. `[[...slug]]` is chosen when root and child paths share identical layout and rendering logic.
+> 3. Key routing directory design decision.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - None!
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Rest parameters (`...`) collect multiple arguments into a true JavaScript array.
 - The rest parameter must be the last parameter in a function signature.
 - Next.js uses this syntax for `[...slug]` catch-all directory names.

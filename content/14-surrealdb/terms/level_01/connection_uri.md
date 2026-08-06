@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Integration / Ecosystem (connection endpoint URI scheme)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **Universal Standard** (Network protocol adapters. Configured in client application configuration environments before initiating SDK connections).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Traditional databases communicate using custom, low-level binary protocols over TCP sockets (like PostgreSQL on port 5432 and MongoDB on 27017). 
@@ -94,7 +93,7 @@ const httpUri = "http://localhost:8000";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to subscribe to Live Queries (real-time push updates) while connected via an HTTP connection URI protocol
 
@@ -146,63 +145,103 @@ await db.connect("ws://127.0.0.1:8000/rpc"); // WebSocket scheme enables live qu
 await db.connect("ws://127.0.0.1:8000/rpc"); // Correct RPC WebSocket URI
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Connection Protocol Matcher
+### Exercise 1: Multi-Environment Endpoint Matrix
 
-**Problem:** You are building three different services. 
-Select the optimal connection protocol (**ws://**, **wss://**, or **http://**) for each environment context:
-1.  A local development script running in a Docker container that listens for real-time chat updates.
-2.  A serverless Cloudflare Worker function that checks user keys on API requests.
-3.  A production web dashboard deployed to Vercel that displays real-time system metrics charts.
+**Scenario:**
+You are configuring environment-specific connection URIs for a full-stack application connecting to SurrealDB across development, staging, production, and embedded test environments.
 
-**Expected output:**
+**Requirements:**
+1. Formulate connection URIs for in-memory embedded testing (`mem://`).
+2. Formulate connection URIs for local file-backed persistence (`file://`).
+3. Formulate connection URIs for local WebSocket connections (`ws://`).
+4. Formulate connection URIs for production TLS-encrypted WebSocket clusters (`wss://`).
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> 1. ws:// : Stateful WebSocket is required for real-time updates, and since it is local dev, unencrypted 'ws' is sufficient.
-> 2. http:// (or https://) : Stateless HTTP is ideal for serverless edge workers where persistent socket pools are not supported.
-> 3. wss:// : Secure WebSocket is required to support real-time metrics push notifications securely in a production browser environment.
+> - Embedded In-Memory: mem://
+> - Embedded Disk (SurrealKV): file://data/app.db
+> - Local Development: ws://localhost:8000/rpc
+> - Production WebSockets: wss://db.example.com:443/rpc
 > ```
-> - Determine if the environment requires real-time push alerts.
-> - Consider if the deployment is serverless (stateless) or a persistent browser view.
+>
+> #### Technical Explanation
+>
+> 1. `mem://` spins up an ephemeral in-memory database engine inside the SDK process for ultra-fast unit testing.
+> 2. `file://` opens a single-node persistent database engine directly from disk using local storage engines.
+> 3. `ws://` connects over unencrypted WebSockets for local CLI or development server connections.
+> 4. `wss://` establishes encrypted TLS WebSocket streams necessary for production web client real-time subscriptions.
+
+---
+
+### Exercise 2: Protocol Selection for Real-Time Subscriptions
+
+**Scenario:**
+A frontend engineer is evaluating whether to connect a web application using HTTP (`https://`) or WebSockets (`wss://`) connection URIs for a live collaborative dashboard.
+
+**Requirements:**
+1. Specify which connection URI scheme enables `LIVE SELECT` real-time push notifications.
+2. Explain the fundamental architectural difference between HTTP and WebSocket connection URIs in SurrealDB.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Recommended URI Scheme: wss://db.example.com/rpc
+> Protocol Choice: WebSockets (wss://)
+> ```
+>
+> #### Technical Explanation
+>
+> 1. WebSocket URIs (`ws://`, `wss://`) establish persistent bi-directional binary channels required for SurrealDB live queries.
+> 2. HTTP URIs (`http://`, `https://`) are request-response stateless protocols suitable for serverless REST requests, but cannot receive real-time server push events.
+> 3. WebSocket connections maintain connection state, allowing client SDKs to maintain active authentication tokens across query executions.
+
+---
+
+### Exercise 3: Embedded Rust Driver URI Configuration
+
+**Scenario:**
+A Rust backend developer is initializing SurrealDB embedded directly inside a microservice process using the official Rust SDK.
+
+**Requirements:**
+1. Write the Rust SDK connection initialization code for an embedded RocksDB storage engine at path `rocksdb://./my_data`.
+2. Include error handling for connection initialization.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use surrealdb::engine::local::RocksDb;
+> use surrealdb::Surreal;
+> 
+> #[tokio::main]
+> async fn main() -> surrealdb::Result<()> {
+>     // Connect to an embedded RocksDB engine using local storage path
+>     let db = Surreal::new::<RocksDb>("./my_data").await?;
+>     
+>     println!("Embedded SurrealDB engine initialized cleanly!");
+>     Ok(())
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Embedded storage URIs allow SurrealDB to run inside application binaries without running a separate server process.
+> 2. Embedded mode provides zero-network latency for high-throughput local applications.
+> 3. Eliminates database client-server deployment overhead for desktop or microservice workloads.
 
 ---
 
 
 
-### Exercise 2: Production Secure URI Construction
-
-**Problem:** Construct secure production connection URI using SSL WebSocket protocol for `db.example.com`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> wss://db.example.com/rpc
-> ```
-> ```text
-> wss://db.example.com/rpc
-> ```
->
-> **Explanation:** `wss://` establishes encrypted TLS WebSocket channels to SurrealDB RPC endpoints.
-
----
-
-### Exercise 3: Memory Storage URI Scheme
-
-**Problem:** What URI scheme is used to run an in-memory embedded SurrealDB instance in Rust or JS SDK? (`mem://`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> mem://
-> ```
-> ```text
-> mem://
-> ```
->
-> **Explanation:** `mem://` creates volatile in-memory database instances for fast unit testing.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [SurrealDB Server (`surreal start`)](surreal_start.md) — The server process listening.
 - [`LIVE SELECT` (Live Queries)](../level_09/live_select.md) — The real-time queries.
@@ -212,7 +251,7 @@ Select the optimal connection protocol (**ws://**, **wss://**, or **http://**) f
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Connection URIs use WebSockets (`ws://`/`wss://`) or HTTP (`http://`/`https://`) protocols.
 - WebSockets provide persistent, stateful, bidirectional connections.
 - Stateful WebSockets are mandatory to run real-time Live Queries.

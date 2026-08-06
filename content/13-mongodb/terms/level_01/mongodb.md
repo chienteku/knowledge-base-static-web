@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Engine / Software**
+
+**Core Concept** (Document Database Engine): MongoDB is a leading document-oriented NoSQL database designed for high availability, horizontal scalability, and developer velocity.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (The core server database engine. Communicates using the MongoDB Wire Protocol over TCP port `27017` by default).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional software development, programmers write code using object-oriented classes:
@@ -59,7 +60,7 @@ Imagine a doctor's office patient archive room:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Treating MongoDB as a simple file storage system (like Dropbox or AWS S3) for storing raw media files
 
@@ -107,60 +108,97 @@ db.users.insertOne({ name: "Alice", photoUrl: "https://s3.amazonaws.com/img.jpg"
 Embed closely-bound data into single documents
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Mapping Code to DB
+### Exercise 1: Database CRUD Operation Execution
 
-**Problem:** You have a JavaScript object representing a user:
-`const admin = { username: "super_admin", permissions: ["read", "write", "delete"] };`
-Explain how this object is saved in MongoDB compared to a relational database.
+**Scenario:**
+Connect to a MongoDB instance, switch to database `inventory`, and perform an `insertOne()` operation on collection `items`.
 
-**Expected output:**
+**Requirements:**
+1. Switch to `inventory` database context.
+2. Insert document into `items` collection.
+
 > [!check]- Answer
-> ```text
-> - MongoDB: The object is saved exactly as it is written. MongoDB accepts the nested array `permissions` directly inside the user's document in a single collection.
-> - Relational Database: The object must be split. The username goes to a `users` table, and the three permissions must be inserted as three separate rows inside a child `permissions` table, linked via a foreign key.
+>
+> #### Implementation
+>
+> ```javascript
+> use inventory;
+> 
+> db.items.insertOne({
+>   item: "journal",
+>   qty: 25,
+>   size: { h: 14, w: 21, uom: "cm" },
+>   status: "A"
+> });
 > ```
-> - Think about whether MongoDB requires splitting nested structures.
-> - Consider how SQL handles array columns under normalization.
+>
+> #### Technical Explanation
+>
+> 1. `use inventory` targets the specified database namespace.
+> 2. `insertOne()` generates an `_id` ObjectId automatically if omitted.
+> 3. Persists document directly into WiredTiger collection pages.
+
+---
+
+### Exercise 2: Querying Documents with Equality and Comparison Operators
+
+**Scenario:**
+Query collection `items` for documents where `qty` is greater than 20 and `status` is `"A"`.
+
+**Requirements:**
+1. Combine `$gt` and equality filters.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.items.find({
+>   qty: { $gt: 20 },
+>   status: "A"
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Query filter object specifies match conditions declarative in JSON/BSON format.
+> 2. `$gt` specifies greater-than comparison operations.
+> 3. Leverages collection indexes when available.
+
+---
+
+### Exercise 3: Summarizing MongoDB Architecture Pillars
+
+**Scenario:**
+Summarize MongoDB's three core architectural pillars: Document Model, High Availability (Replica Sets), and Horizontal Scaling (Sharding).
+
+**Requirements:**
+1. Explain Document Model, Replica Sets, and Sharding.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Architecture Pillars:
+> - Document Model: Flexible BSON documents mapping directly to application code objects.
+> - Replica Sets: Automated multi-node primary/secondary failover for high availability.
+> - Sharding: Horizontal database partitioning across clusters for petabyte-scale data distribution.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Document model maximizes developer velocity and read efficiency.
+> 2. Replica sets guarantee zero data loss and automated failovers.
+> 3. Sharding enables transparent horizontal cluster expansion.
 
 ---
 
 
 
-### Exercise 2: Document DB vs Relational DB Comparison
-
-**Problem:** State how MongoDB stores user permissions vs PostgreSQL (MongoDB embeds array; Postgres splits into child junction table).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> MongoDB embeds permissions array in single document; Postgres splits into child table rows
-> ```
-> ```text
-> MongoDB embeds permissions array in single document; Postgres splits into child table rows
-> ```
->
-> **Explanation:** Document stores preserve object structures natively without relational joins.
-
----
-
-### Exercise 3: Maximum Document Size Limit
-
-**Problem:** What is MongoDB's maximum single BSON document size limit? (`16MB`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 16MB
-> ```
-> ```text
-> 16MB
-> ```
->
-> **Explanation:** MongoDB enforces a hard 16MB document size limit for BSON storage safety.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Document](document.md) — The core database unit.
 - [Collection](collection.md) — Groupings of documents.
@@ -171,7 +209,7 @@ Explain how this object is saved in MongoDB compared to a relational database.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - MongoDB is a document-oriented NoSQL database.
 - Stores data as flexible JSON-like documents.
 - Resolves the translation gap between backend code objects and table columns.

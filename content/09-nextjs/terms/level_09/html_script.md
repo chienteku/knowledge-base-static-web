@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Optimization**
+
+**Performance & Optimization** (Native HTML Script Comparison): Native `<script>` tags render standard external browser scripts without Next.js script loading strategy optimization or execution ordering.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Included by the server in HTML structures and executed by client browser engines).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Modern websites rely on third-party JavaScript scripts for services like Google Analytics, Stripe payments, customer support chats, or social media tracking pixels.
@@ -43,7 +44,7 @@ Next.js abstracts these behaviors into the `<Script>` component (`next/script`).
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing standard script tags in layouts without loading strategies
 
@@ -100,80 +101,124 @@ import Script from 'next/script';
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Standard Defer Script
+### Exercise 1: Refactoring Native `<script>` to Next.js `<Script>`
 
-**Problem:** Complete the HTML code below to load an external library without blocking HTML rendering, ensuring it executes only after parsing is complete:
+**Scenario:**
+Refactor a blocking native `<script src="https://cdn.example.com/analytics.js"></script>` into Next.js `<Script>`.
 
-```html
-<!-- Solution: -->
-<script 
-  src="https://example.com/library.js"
-  defer
-></script>
+**Requirements:**
+1. Import `Script` from `next/script`.
+2. Configure `strategy="afterInteractive"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> import Script from "next/script";
+
+export default function Analytics() {
+  return (
+    <Script
+      src="https://cdn.example.com/analytics.js"
+      strategy="afterInteractive"
+    />
+  );
+}
 ```
 
-> [!check]- Answer
-> - Add the boolean attribute `defer` to the script tag.
+> #### Technical Explanation
+>
+> 1. Native `<script>` tags block HTML parser execution, delaying page rendering and worsening FCP/LCP metrics.
+> 2. `strategy="afterInteractive"` loads the script in the background after the page becomes interactive.
+> 3. Prevents third-party scripts from blocking core page hydration.
 
 ---
 
-### Exercise 2: next/script Loading Strategy Matrix
+### Exercise 2: Inlining Third-Party Initialization Scripts
 
-**Problem:** Match `<Script />` loading strategy to behavior:
-1. `strategy="beforeInteractive"` 
-2. `strategy="afterInteractive"` 
-3. `strategy="lazyOnload"` 
-4. `strategy="worker"` 
+**Scenario:**
+Inline a third-party analytics configuration script using `<Script id="analytics-init">`.
 
-**Expected output:**
+**Requirements:**
+1. Provide unique `id` prop for inline script.
+
 > [!check]- Answer
-> ```text
-> 1. Loads in server head before initial hydration script executes
-> 2. Loads immediately after page hydration completes (Default)
-> 3. Loads during browser idle time after all assets finish
-> 4. Offloads script execution to a Web Worker (partytown)
-> ```
-> - `beforeInteractive` -> Critical scripts (e.g. polyfills, security consent)
-> - `afterInteractive` -> Analytics, tag managers (Default)
-> - `lazyOnload` -> Non-critical chat widgets, social widgets
-> - `worker` -> Offload to Web Worker via Partytown
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> <Script src="/chat.js" strategy="lazyOnload" />
-> ```
+> import Script from "next/script";
+
+export default function InlineAnalytics() {
+  return (
+    <Script id="gtm-init" strategy="afterInteractive">
+      {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-12345678-1');
+      `}
+    </Script>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Inline `<Script>` components require a unique `id` prop to prevent duplicate script execution across route navigations.
+> 2. Executes inline JavaScript safely without breaking React hydration.
+> 3. Standard method for Google Tag Manager or tracking pixel initialization.
 
 ---
 
-### Exercise 3: Script onLoad Event Handler
+### Exercise 3: Offloading Heavy Scripts to Web Workers (`strategy="worker"`)
 
-**Problem:** Write `<Script />` component executing callback function `initMap()` when script finishes loading via `onLoad` prop.
+**Scenario:**
+Offload a heavy third-party tracking library to a background Web Worker using Partytown (`strategy="worker"`).
 
-**Expected output:**
+**Requirements:**
+1. Set `strategy="worker"`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> <Script src="/map.js" onLoad={() => initMap()} />
-> ```
-> - `onLoad` fires callback function after script finishes loading.
-> 
-> ```tsx
-> <Script
->   src="https://maps.example.com/api.js"
->   onLoad={() => initGoogleMaps()}
-> />
-> ```
+> import Script from "next/script";
+
+export default function WorkerScript() {
+  return (
+    <Script
+      src="https://cdn.example.com/heavy-tracker.js"
+      strategy="worker"
+    />
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `strategy="worker"` offloads script execution to a background Web Worker via Partytown.
+> 2. Frees up the main browser UI thread for smooth 60fps rendering and input responsiveness.
+> 3. Dramatically improves Interaction to Next Paint (INP) web vital scores.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — The performance metrics impacted by script execution.
 - [`<Script>` Component](next_script.md) — The Next.js wrapper.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The HTML `<script>` tag embeds executable JavaScript on web pages.
 - Standard script tags block the browser rendering engine by default.
 - `async` downloads in parallel but executes immediately, potentially blocking layout paints.

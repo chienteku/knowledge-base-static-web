@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Core Engine**
+
+**Advanced Feature** (Module Extension Ecosystem): Extensions (`CREATE EXTENSION`) add modular capabilities (PostGIS, `pg_trgm`, `uuid-ossp`, `pg_stat_statements`) to PostgreSQL.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Requires superuser privileges (`SUPERUSER`) to install because extensions run compiled C-code modules directly inside the host operating system server memory space).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational database engines are often bloated because developers demand hundreds of specialized features:
@@ -88,7 +89,7 @@ DROP EXTENSION pg_trgm;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to install extensions on a managed cloud database using a standard non-superuser role
 
@@ -138,65 +139,112 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm;
 Audit extension security and superuser permissions before deployment
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Stat Monitoring Activation
+### Exercise 1: Enabling Extensions with `CREATE EXTENSION`
 
-**Problem:** You are diagnosing a slow production database. You want to install the standard queries stats collector extension named `pg_stat_statements`. Write the SQL query to install this module.
+**Scenario:**
+Enable `pg_trgm` and `uuid-ossp` extensions in database `store_db`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE EXTENSION IF NOT EXISTS "pg_trgm"`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE EXTENSION pg_stat_statements;
+> CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+> CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+> 
+> SELECT extname, extversion FROM pg_extension;
 > ```
-> - Use the `CREATE EXTENSION` keyword.
-> - Specify the exact extension name `pg_stat_statements`.
+>
+> #### Technical Explanation
+>
+> 1. `CREATE EXTENSION` loads modular C/SQL extensions into the active database catalog.
+> 2. `pg_trgm` adds trigram string matching algorithms; `uuid-ossp` adds legacy UUID generation functions.
+> 3. Extends PostgreSQL core features cleanly.
+
+---
+
+### Exercise 2: Monitoring Query Performance with `pg_stat_statements`
+
+**Scenario:**
+Enable `pg_stat_statements` to track slow queries, execution counts, and buffer hits across the database server.
+
+**Requirements:**
+1. Query `pg_stat_statements` ordered by `total_exec_time DESC`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT 
+>   query, 
+>   calls, 
+>   total_exec_time / 1000.0 AS total_sec, 
+>   mean_exec_time AS avg_ms, 
+>   rows 
+> FROM pg_stat_statements 
+> ORDER BY total_exec_time DESC 
+> LIMIT 5;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `pg_stat_statements` records execution statistics for all SQL statements executed on the server.
+> 2. Identifies top query bottlenecks, high execution counts, and cache miss rates.
+> 3. Essential DBA performance monitoring extension.
+
+---
+
+### Exercise 3: Vector Similarity Search with `pgvector`
+
+**Scenario:**
+Enable `vector` extension (`pgvector`) to store 1536-dimensional AI embeddings and query nearest neighbors (`<->`).
+
+**Requirements:**
+1. Create table with `embedding vector(1536)` and query with `<->`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE EXTENSION IF NOT EXISTS vector;
+> 
+> CREATE TABLE document_embeddings (
+>   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   content TEXT NOT NULL,
+>   embedding vector(1536) NOT NULL
+> );
+> 
+> SELECT content 
+> FROM document_embeddings 
+> ORDER BY embedding <-> '[0.012, 0.045, ...]'::vector 
+> LIMIT 5;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `pgvector` adds native vector data types and L2/Cosine distance search operators to PostgreSQL.
+> 2. `<->` calculates Euclidean distance between high-dimensional vector embeddings.
+> 3. Powers RAG (Retrieval-Augmented Generation) AI search applications.
 
 ---
 
 
 
-### Exercise 2: Installing Extensions Safely
-
-**Problem:** Install `pg_trgm` and `uuid-ossp` extensions safely using `CREATE EXTENSION IF NOT EXISTS`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE EXTENSION IF NOT EXISTS pg_trgm; CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-> ```
-> ```sql
-> CREATE EXTENSION IF NOT EXISTS pg_trgm;
-> CREATE EXTENSION IF NOT EXISTS 'uuid-ossp';
-> ```
->
-> **Explanation:** `CREATE EXTENSION IF NOT EXISTS` installs extensions idempotently.
-
----
-
-### Exercise 3: Inspecting Installed Extensions
-
-**Problem:** Query installed database extensions from `pg_extension` system catalog.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT extname, extversion FROM pg_extension;
-> ```
-> ```sql
-> SELECT extname, extversion FROM pg_extension;
-> ```
->
-> **Explanation:** `pg_extension` catalog lists active database extension names and installed versions.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`pg_stat_statements` / Monitoring](monitoring.md) — The monitoring metrics extension.
 - [`UUID` Type](../level_06/uuid_type.md) — Custom types historically enabled by extensions.
 - [Foreign Data Wrappers (`postgres_fdw`)](foreign_data_wrappers.md) — Related concept: Foreign Data Wrappers (`postgres_fdw`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - PostgreSQL extensions add custom functions, types, and indexes to the engine.
 - Keeps the database core lightweight and modular.
 - Shipped with over 40 official pre-compiled "contrib" modules.

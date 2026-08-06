@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Server-Side Logic & Programmability**
+
+
+**Advanced Feature (custom SurrealQL user-defined function)**: - **Server-Side Logic & Programmability**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Engine** (Stored in database schema metadata and executed in memory when invoked in queries).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In application development, complex calculation rules, formatting operations, or data transformations are often repeated across multiple queries or backend services. In PostgreSQL, developers write PL/pgSQL functions (`CREATE FUNCTION`). In MongoDB, developers write server-side JavaScript functions.
@@ -64,7 +63,7 @@ SELECT fn::format_user_title(first_name, last_name, role) AS display_title FROM 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Omitting the `fn::` Namespace Prefix
 
@@ -120,86 +119,102 @@ DEFINE FUNCTION fn::add($a: number, $b: number) { RETURN $a + $b; };
 
 
 
-### Mistake 4: Omitting `fn::` Namespace Prefix in Custom Function Declarations
 
-**The mistake:** Writing `DEFINE FUNCTION custom_calc($a: number) { ... }` (SyntaxError).
 
-**Why it's wrong:** Custom user functions in SurrealQL MUST be prefixed with `fn::` (e.g. `DEFINE FUNCTION fn::custom_calc`).
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-DEFINE FUNCTION custom_calc($a: number) { RETURN $a * 2; }; // ❌ Missing fn:: prefix!
-```
+### Exercise 1: Custom Math User-Defined Function
 
-*Fix:*
-```surrealql
-DEFINE FUNCTION fn::custom_calc($a: number) { RETURN $a * 2; }; // Correct fn:: prefix
-```
+**Scenario:**
+Define a custom SurrealQL function `fn::discount_price($price, $discount)` that calculates discounted prices for an e-commerce platform.
 
-### Mistake 5: Omitting Type Annotations on Custom Function Parameters
-
-**The mistake:** Declaring `DEFINE FUNCTION fn::add($a, $b) { RETURN $a + $b; }` without parameter types.
-
-**Why it's wrong:** Custom function parameters strictly require type annotations (e.g. `$a: number, $b: number`).
-
-*Incorrect:*
-```surrealql
-DEFINE FUNCTION fn::add($a, $b) { RETURN $a + $b; }; // ❌ Missing parameter types!
-```
-
-*Fix:*
-```surrealql
-DEFINE FUNCTION fn::add($a: number, $b: number) { RETURN $a + $b; };
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Write Custom Function
-Write a `DEFINE FUNCTION` statement named `fn::is_adult` that accepts an `$age: number` parameter and returns `true` if `$age >= 18`, otherwise `false`.
+**Requirements:**
+1. Define function `fn::discount_price` accepting parameters `$price` (`decimal`) and `$discount` (`decimal`).
+2. Calculate and return `$price * (1.0dec - $discount)`.
 
 > [!check]- Answer
-> - Name: `fn::is_adult($age: number)`.
-> - Body: `RETURN $age >= 18;`.
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE FUNCTION fn::discount_price($price: decimal, $discount: decimal) {
+>     RETURN $price * (1.0dec - $discount);
+> };
+> 
+> -- Invoke custom function in query
+> SELECT fn::discount_price(100.00dec, 0.15dec) AS sale_price;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DEFINE FUNCTION fn::name($param: type)` defines custom reusable SurrealQL functions.
+> 2. Enforces type validation on parameter inputs (`decimal`).
+> 3. Encapsulates business logic directly inside the database tier.
 
 ---
 
+### Exercise 2: Multi-Statement Custom Logic Functions
 
+**Scenario:**
+Define a custom function `fn::get_user_summary($user_id)` that fetches a user's record, counts their orders, and returns a summary JSON object.
 
-### Exercise 2: Defining Custom Helper Function
+**Requirements:**
+1. Fetch user record and order count inside function body.
+2. Return a summary object `{ user: $user, order_count: $count }`.
 
-**Problem:** Define function `fn::greet($name: string)` returning `"Hello, " + $name`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> DEFINE FUNCTION fn::greet($name: string) { RETURN string::concat("Hello, ", $name); };
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> DEFINE FUNCTION fn::greet($name: string) {
->   RETURN string::concat("Hello, ", $name);
+> DEFINE FUNCTION fn::get_user_summary($user_id: record<user>) {
+>     LET $u = (SELECT * FROM ONLY $user_id);
+>     LET $c = (SELECT count() FROM order WHERE customer = $user_id GROUP ALL);
+>     
+>     RETURN {
+>         user: $u,
+>         total_orders: $c[0].count OR 0
+>     };
 > };
 > ```
 >
-> **Explanation:** `DEFINE FUNCTION fn::name($param: type)` declares reusable custom functions.
+> #### Technical Explanation
+>
+> 1. Custom functions support multi-statement script blocks enclosed in `{ ... }`.
+> 2. Subqueries and parameter variables can be used inside function bodies.
+> 3. Replaces SQL stored procedures with clean SurrealQL function syntax.
 
 ---
 
-### Exercise 3: Invoking Custom Function
+### Exercise 3: Dropping Custom Functions with `REMOVE FUNCTION`
 
-**Problem:** Invoke custom function `fn::greet("Alice")` in SurrealQL query.
+**Scenario:**
+Drop custom function `fn::discount_price` from the database.
 
-**Expected output:**
+**Requirements:**
+1. Write `REMOVE FUNCTION fn::discount_price`.
+
 > [!check]- Answer
-> ```text
-> RETURN fn::greet("Alice");
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> RETURN fn::greet("Alice");
+> REMOVE FUNCTION fn::discount_price;
 > ```
 >
-> **Explanation:** Custom functions are called using `fn::func_name(args)` syntax.
+> #### Technical Explanation
+>
+> 1. `REMOVE FUNCTION` drops custom user-defined functions from database metadata registers.
+> 2. Blocks subsequent invocations of the function.
+> 3. Maintains database function clean-up hygiene.
 
-## 7. Related Terms
+---
+
+
+
+
+
+## 6. Related Terms
 
 - [`RETURN` Statement (in Functions / Blocks)](../level_06/return_statement.md) — Flow-control return.
 - [`DEFINE EVENT`](define_event.md) — Event triggers calling custom functions.
@@ -208,7 +223,7 @@ Write a `DEFINE FUNCTION` statement named `fn::is_adult` that accepts an `$age: 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE FUNCTION` creates server-side reusable SurrealQL functions.
 - All custom user functions must use the `fn::` prefix (e.g., `fn::my_func()`).
 - Supports strict parameter typing (`$param: type`) and `RETURN` expressions.

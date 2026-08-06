@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+
+**Core Concept (document-like data record unit)**: - **Database Structure / Paradigm**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (The BSON/JSON-like data container stored on the persistent disk engine and processed in server memory).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In relational databases, data is split across tables using flat **Rows**:
@@ -86,7 +85,7 @@ This is how a typical user record is written and stored in SurrealDB:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Normalizing every array field into separate tables because you assume SurrealDB records must be flat like SQL rows
 
@@ -136,62 +135,101 @@ CREATE user:alice CONTENT { name: "Alice" }; // ❌ Error: Record user:alice alr
 UPSERT user:alice CONTENT { name: "Alice" }; // Safely creates or updates record
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Structural Mapping
+### Exercise 1: Multi-Model Record Construction
 
-**Problem:** Complete the vocabulary mapping by matching the SQL/NoSQL terms with the correct SurrealDB equivalent:
-1.  A row in PostgreSQL $\rightarrow$ *?*
-2.  A document in MongoDB $\rightarrow$ *?*
-3.  An ObjectId (`_id`) in MongoDB $\rightarrow$ *?*
+**Scenario:**
+You are modeling a user profile record in SurrealDB that demonstrates its multi-model capabilities: tabular scalar fields, a nested document object, an array of tags, and a record link pointer to another table.
 
-**Expected output:**
+**Requirements:**
+1. Target table `user` with ID `user:john`.
+2. Include scalar fields `name` and `email`.
+3. Include a nested document object `settings` containing `theme` and `notifications`.
+4. Include a record link field `role` pointing to `role:admin`.
+
 > [!check]- Answer
-> ```text
-> 1. Record
-> 2. Record
-> 3. Record ID (table:id)
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:john CONTENT {
+>     name: "John Doe",
+>     email: "john@example.com",
+>     role: role:admin,
+>     tags: ["developer", "administrator"],
+>     settings: {
+>         theme: "dark",
+>         notifications: true
+>     }
+> };
 > ```
-> - SurrealDB unifies both rows and documents under a single term name.
-> - The unique identifier contains both the table namespace and the unique ID key.
+>
+> #### Technical Explanation
+>
+> 1. SurrealDB records are JSON-like documents containing scalar values, nested objects, arrays, and record links.
+> 2. `role:role:admin` stores a direct typed record link pointer rather than a raw foreign key string.
+> 3. Nested document fields (`settings.theme`) can be queried directly using dot-notation without unnesting.
+
+---
+
+### Exercise 2: Record Mutation Strategies (`MERGE` vs `CONTENT`)
+
+**Scenario:**
+You need to update `user:john`'s email address without overwriting or erasing the existing `settings` object or `tags` array.
+
+**Requirements:**
+1. Write the SurrealQL statement using `MERGE` or `SET` to perform a non-destructive partial update.
+2. Explain why using `CONTENT` for partial updates is dangerous.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Non-destructive partial update
+> UPDATE user:john MERGE {
+>     email: "john.updated@example.com"
+> };
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `MERGE` performs a shallow merge, updating specified fields while preserving existing document properties.
+> 2. Using `CONTENT` replaces the entire record payload, accidentally deleting any fields omitted from the payload.
+> 3. `UPDATE ... SET email = ...` is also safe for single-field mutations.
+
+---
+
+### Exercise 3: Record Identifier Access Patterns
+
+**Scenario:**
+A backend service needs to fetch a single user record by its primary key `user:john` with maximum efficiency.
+
+**Requirements:**
+1. Write the direct record selection query targeting `user:john`.
+2. Contrast the performance of direct record selection vs a filtered table scan (`SELECT * FROM user WHERE id = user:john`).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Direct primary key lookup (O(1) index jump)
+> SELECT * FROM user:john;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SELECT * FROM table:id` performs a direct primary key index lookup in $O(1)$ constant time.
+> 2. Avoid using `WHERE id = ...` filters, as `user:john` acts directly as the record pointer address in SurrealDB.
+> 3. Direct record targeting bypasses table scanning algorithms completely.
 
 ---
 
 
 
-### Exercise 2: Direct Record Key Lookup
-
-**Problem:** Query single record `user:john` directly in $O(1)$ time without `WHERE` clauses.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM user:john;
-> ```
-> ```surrealql
-> SELECT * FROM user:john;
-> ```
->
-> **Explanation:** Specifying `table:id` directly in `FROM` performs constant-time primary key lookups.
-
----
-
-### Exercise 3: Record Content Insertion
-
-**Problem:** Insert a new record into `article` table with custom string ID `article:first`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE article:first SET title = "Hello World";
-> ```
-> ```surrealql
-> CREATE article:first SET title = "Hello World";
-> ```
->
-> **Explanation:** `CREATE table:id` explicitly assigns primary key Record IDs.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Table](table.md) — The parent records collection.
 - [Record ID (`table:id`)](record_id.md) — The unique identifier.
@@ -199,7 +237,7 @@ UPSERT user:alice CONTENT { name: "Alice" }; // Safely creates or updates record
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Record is the fundamental unit of data storage in SurrealDB.
 - Directly equivalent to a PostgreSQL row or a MongoDB document.
 - Stored as a hierarchical JSON-like object, supporting nested arrays and structures.

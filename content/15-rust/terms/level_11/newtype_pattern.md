@@ -166,7 +166,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Domain-Driven Security & Type-Safe Identifiers
 
-**Problem:**
+**Scenario:**
 In a multi-tenant web backend, passing raw `u64` primitive types for database IDs (such as `UserId` vs `TenantId`) creates serious security risks if IDs are accidentally swapped in query parameters. Furthermore, accepting raw string user input without type-safe sanitization can lead to Cross-Site Scripting (XSS) vulnerabilities when rendered into HTML.
 
 Create a domain-safe system using the Newtype pattern:
@@ -176,6 +176,9 @@ Create a domain-safe system using the Newtype pattern:
 4. Include comprehensive unit tests (`#[test]`) verifying type separation, validation logic, and sanitization correctness using `assert_eq!`, `assert!`, and error assertions.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 > pub struct UserId(pub u64);
@@ -251,7 +254,8 @@ Create a domain-safe system using the Newtype pattern:
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Compile-Time Domain Safety:** By wrapping raw `u64` in `UserId` and `TenantId`, the Rust compiler prevents accidentally swapping arguments (e.g., passing a `TenantId` where a `UserId` is expected).
 > 2. **State Transition & Invariant Enforcement:** `UnsanitizedHtml` cannot be rendered directly into HTML components. The only way to obtain a `SanitizedHtml` instance is by consuming the `UnsanitizedHtml` through `.sanitize()`.
 > 3. **Zero-Cost Abstraction:** Rust optimizes single-element tuple structs to have the exact memory layout as the underlying primitive, incurring zero runtime performance penalty.
@@ -260,7 +264,7 @@ Create a domain-safe system using the Newtype pattern:
 
 ### Exercise 2: Physical Unit Safety & Operator Overloading
 
-**Problem:**
+**Scenario:**
 In scientific computing and physics engines, mixing unit types (such as adding distance to time or dividing time by distance instead of distance by time) causes catastrophic errors.
 
 Implement a dimensional unit calculation system using Newtypes and operator overloading:
@@ -272,6 +276,9 @@ Implement a dimensional unit calculation system using Newtypes and operator over
 6. Write unit tests (`#[test]`) using assertions (`assert_eq!`, `assert!`, precision tolerances) testing arithmetic operations, velocity calculation, distance reconstruction, and string formatting.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::fmt;
 > use std::ops::{Add, Div, Mul, Sub};
@@ -372,7 +379,8 @@ Implement a dimensional unit calculation system using Newtypes and operator over
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Dimensional Analysis in Type System:** Operator trait implementations (`Div<Seconds>` for `Meters`, `Mul<Seconds>` for `MetersPerSecond`) codify physical equations directly into Rust's type system. Attempting `Meters + Seconds` fails at compile time because `Add<Seconds>` is not implemented for `Meters`.
 > 2. **Memory Layout Guarantees:** Using `#[repr(transparent)]` guarantees that each newtype wrapper matches ABI layout and alignment of `f64` precisely, allowing seamless pass-by-value efficiency across function boundaries.
 
@@ -380,7 +388,7 @@ Implement a dimensional unit calculation system using Newtypes and operator over
 
 ### Exercise 3: Bypassing the Orphan Rule & Smart Pointer Dereferencing
 
-**Problem:**
+**Scenario:**
 Rust's Orphan Rule prevents implementing external traits on external types. When integrating third-party libraries (e.g. an external `ExternalConfig` struct), you cannot directly implement your application crate's traits on `ExternalConfig`. Additionally, manually delegating every method or field access on wrapped types is verbose.
 
 Solve this problem using the Newtype pattern combined with smart pointer dereferencing:
@@ -393,6 +401,9 @@ Solve this problem using the Newtype pattern combined with smart pointer derefer
 7. Write unit tests (`#[test]`) with `assert_eq!`, `assert!`, and `matches!` validating constructor checks, field dereferencing, in-place field mutation, and audit log generation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::ops::{Deref, DerefMut};
 > 
@@ -527,7 +538,8 @@ Solve this problem using the Newtype pattern combined with smart pointer derefer
 > }
 > ```
 > 
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Bypassing Orphan Rule:** `AuditConfig` is defined in the local crate, allowing `impl Auditable for AuditConfig` even though `ExternalConfig` originates from an external crate.
 > 2. **Ergonomic Deref Coercion:** Implementing `Deref` and `DerefMut` allows `AuditConfig` to automatically coercion-dereference into `ExternalConfig`. Field access (`audit_cfg.endpoint`) and field mutations transparently pass through to the inner type without boiler-plate getter/setter forwarding methods.
 > 3. **Encapsulated Invariant Check:** Constructor `AuditConfig::new` acts as a validation gate, ensuring that any instance of `AuditConfig` in the system adheres to operational constraints.

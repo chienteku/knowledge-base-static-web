@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Paradigm**
+
+**Core Concept** (Transactional Consistency Paradigm): ACID vs BASE contrasts strict relational transaction guarantees (Atomicity, Consistency, Isolation, Durability) against distributed NoSQL eventual consistency principles (Basically Available, Soft State, Eventual Consistency).
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Core distributed systems science. Governs structural design trade-offs between relational database systems (like PostgreSQL) and NoSQL cluster architectures).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database science, you cannot build a system that has infinite speed, infinite scale, and perfect consistency simultaneously (known as the **CAP Theorem**). 
@@ -92,7 +93,7 @@ MongoDB is unique because **it does not force you to choose between ACID and BAS
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming MongoDB cannot be used for financial or transactional systems because NoSQL databases are "eventually consistent"
 
@@ -140,62 +141,115 @@ const session = client.startSession(); session.startTransaction(); await db.user
 await db.users.updateOne(...); // Single-document updates are natively atomic
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Paradigm Classification
+### Exercise 1: Multi-Document ACID Transactions for Financial Transfers
 
-**Problem:** Classify the following application features as requiring either **ACID** or **BASE** models:
-1.  A global user billing ledger that transfers balances between accounts.
-2.  A social media page tracking "views" and "likes" metrics on video clips.
-3.  A flight ticket booking checkout system where seats are reserved.
+**Scenario:**
+Execute a multi-document ACID transaction transferring `$100.00` from account A to account B, ensuring atomicity.
 
-**Expected output:**
+**Requirements:**
+1. Start session, execute `withTransaction()`, decrement A, increment B.
+
 > [!check]- Answer
-> ```text
-> 1. ACID: Balance transfers require strict all-or-nothing atomicity and immediate consistency to prevent double-spending or money loss.
-> 2. BASE: Views and likes counters can drift (soft state) and sync later (eventual consistency) without impacting user experience, prioritizing write throughput over strict balance.
-> 3. ACID: Reservation checkouts require immediate consistency to prevent double-booking the same physical seat.
+>
+> #### Implementation
+>
+> ```javascript
+> const session = db.getMongo().startSession();
+> session.startTransaction({
+>   readConcern: { level: "snapshot" },
+>   writeConcern: { w: "majority" }
+> });
+> 
+> try {
+>   db.accounts.updateOne(
+>     { _id: "accountA" },
+>     { $inc: { balance: -100 } },
+>     { session }
+>   );
+>   db.accounts.updateOne(
+>     { _id: "accountB" },
+>     { $inc: { balance: 100 } },
+>     { session }
+>   );
+>   session.commitTransaction();
+> } catch (err) {
+>   session.abortTransaction();
+>   throw err;
+> } finally {
+>   session.endSession();
+> }
 > ```
-> - Determine if temporary data drift has negative financial or business consequences.
-> - Relate double-booking risks to strict isolation needs.
+>
+> #### Technical Explanation
+>
+> 1. `startTransaction()` initiates an ACID transaction boundary over a client session.
+> 2. Guarantees that both account balance updates succeed together or abort with zero side effects.
+> 3. Enforces strict ACID compliance in document databases.
+
+---
+
+### Exercise 2: Single-Document Atomic Updates vs BASE Patterns
+
+**Scenario:**
+Refactor a multi-document payment status update into a single atomic document update using embedded subdocuments.
+
+**Requirements:**
+1. Update order status and audit log atomically in 1 document.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   {
+>     $set: { status: "completed" },
+>     $push: { history: { status: "completed", timestamp: new Date() } }
+>   }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Single-document updates are inherently atomic in MongoDB without initiating multi-document transactions.
+> 2. Embedding related status history inside the parent document avoids transaction overhead.
+> 3. Preferred design pattern when ACID scope fits inside 1 document.
+
+---
+
+### Exercise 3: Balancing ACID Rigor vs BASE Scalability
+
+**Scenario:**
+Evaluate when to use strict ACID transactions vs BASE eventual consistency.
+
+**Requirements:**
+1. Formulate architecture selection guide for ACID vs BASE.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Transaction Model Decision Guide:
+> - Single-Document Operations: Inherently ACID (fastest, maximum throughput).
+> - Multi-Document Transactions: Strict ACID for financial ledger writes (higher latency, lock overhead).
+> - Distributed Eventual Consistency (BASE): Async background sync, analytics counters, and logs.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Single-document atomic writes provide high-speed ACID guarantees by default.
+> 2. Reserve multi-document transactions for critical cross-collection financial operations.
+> 3. Maximizes system throughput and cluster scalability.
 
 ---
 
 
 
-### Exercise 2: ACID vs BASE Guarantees Comparison
-
-**Problem:** State difference: ACID (Atomicity, Consistency, Isolation, Durability for transactions); BASE (Basically Available, Soft-state, Eventual consistency for distributed scaling).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ACID guarantees strict transactional isolation; BASE favors distributed availability and eventual consistency
-> ```
-> ```text
-> ACID guarantees strict transactional isolation; BASE favors distributed availability and eventual consistency
-> ```
->
-> **Explanation:** MongoDB provides ACID transactions within sessions while supporting BASE replica availability.
-
----
-
-### Exercise 3: Single-Document Atomicity Guarantee
-
-**Problem:** Are updates modifying multiple array elements in a single document atomic? (Yes, single-document updates are strictly atomic).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Yes, single-document updates are strictly atomic
-> ```
-> ```text
-> Yes, single-document updates are strictly atomic
-> ```
->
-> **Explanation:** All field and array modifications within a single BSON document execute atomically.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Multi-Document Transaction](multi_document_transaction.md) — MongoDB's ACID engine.
 - [Replica Set](../level_09/replica_set.md) — The distributed nodes.
@@ -203,7 +257,7 @@ await db.users.updateOne(...); // Single-document updates are natively atomic
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - ACID enforces immediate consistency; BASE accepts eventual consistency.
 - ACID is relational standard; BASE is distributed NoSQL standard.
 - Basically Available (BA) guarantees database response uptime.

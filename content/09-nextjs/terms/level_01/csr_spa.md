@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture**
+
+**Rendering Strategy** (Client-Side Single Page Application Rendering): Client-Side Rendering (CSR) executes component rendering and routing inside the browser DOM after fetching minimal initial HTML.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Only** (All rendering execution occurs inside the client's web browser).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional multi-page web applications, every click on a link triggers a full page reload. The browser destroys the old page, requests a new HTML document from the server, and renders it from scratch. This causes a slow "white flash" screen transition.
@@ -55,7 +56,7 @@ While SPAs provide fast transitions after the initial load, they introduce major
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting CSR apps to have good initial loading speeds on slow devices
 
@@ -114,65 +115,135 @@ export default async function Page() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: CSR HTML Inspection
+### Exercise 1: Client-Side SPA Navigation and Rendering
 
-**Problem:** Why do Search Engine Optimization (SEO) crawler bots struggle to read and rank typical Client-Side Rendered (CSR) websites?
+**Scenario:**
+Configure a Client Component performing client-side data fetching using `useEffect()`.
 
-**Expected output:**
+**Requirements:**
+1. Use `useEffect()` and `fetch()` inside `"use client"` component.
+
 > [!check]- Answer
-> ```text
-> SEO bots fetch the initial HTML file returned directly from the web server. In a CSR app, this initial HTML is empty (containing only a root div and a script tag). Because the crawler does not execute the JavaScript, it sees a blank page and cannot parse the textual content or links of the site.
-> ```
-> - Think about what HTML is returned from the server *before* JavaScript runs.
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { useState, useEffect } from "react";
+
+export default function ClientFeed() {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/feed")
+      .then((res) => res.json())
+      .then((json) => {
+        setData(json);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <div>Loading Feed...</div>;
+
+  return (
+    <ul>
+      {data.map((item) => (
+        <li key={item.id}>{item.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Client-Side Rendering executes rendering and data fetching inside the browser DOM after hydration.
+> 2. Minimal initial HTML is delivered to the browser; `useEffect` triggers post-mount network calls.
+> 3. Useful for private client dashboards requiring client-side interactivity.
 
 ---
 
-### Exercise 2: CSR vs RSC Data Flow
+### Exercise 2: Opting Out of Server Component SSR Rendering
 
-**Problem:** Trace network round-trips for CSR data fetching vs RSC (React Server Components) data fetching.
+**Scenario:**
+Use dynamic imports with `{ ssr: false }` to execute a heavy charting component strictly on the client browser.
 
-**Expected output:**
+**Requirements:**
+1. Code `dynamic(() => import(...), { ssr: false })`.
+
 > [!check]- Answer
-> ```text
-> CSR: HTML download -> JS bundle download -> Execution -> API fetch request -> Re-render (2+ network round trips).
-> RSC: Server fetches data + renders HTML -> Browser receives fully populated HTML/RSC payload (1 network round trip).
-> ```
-> - RSC reduces waterfall round-trips by performing data fetching directly on the server.
-> 
-> ```text
-> CSR: Browser -> Server -> Browser (JS) -> Server (API) -> Browser
-> RSC: Browser -> Server (Data + Render) -> Browser
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> import dynamic from "next/dynamic";
+
+const DynamicChart = dynamic(() => import("@/app/components/HeavyChart"), {
+  ssr: false,
+  loading: () => <p>Loading Interactive Chart...</p>
+});
+
+export default function Dashboard() {
+  return (
+    <div>
+      <h1>Analytics</h1>
+      <DynamicChart />
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `dynamic(..., { ssr: false })` opts out of server-side HTML pre-rendering for the specified component.
+> 2. Prevents server evaluation of browser-dependent window or canvas libraries.
+> 3. Renders the fallback component until the client bundle hydrates in the browser.
 
 ---
 
-### Exercise 3: CSR Use Cases in Next.js
+### Exercise 3: Trade-Off Analysis: CSR vs SSR
 
-**Problem:** State 1 scenario where Client-Side Rendering (CSR) is appropriate inside a Next.js application.
+**Scenario:**
+Formulate an architectural selection matrix comparing Client-Side Rendering (CSR) against Server-Side Rendering (SSR).
 
-**Expected output:**
+**Requirements:**
+1. Contrast SEO, server CPU cost, initial load speed, and browser requirements.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Authenticated user dashboard widgets with user-specific real-time polling (e.g. live chat or stock tickers).
+> CSR vs SSR Architecture Comparison:
+> - CSR (Client-Side Rendering): Zero server Node.js rendering CPU cost, poor SEO indexing, slower initial content display (TTFB to FCP delay).
+> - SSR (Server-Side Rendering): Excellent SEO, instant initial HTML display, higher Node.js server RAM/CPU costs.
+> Recommendation: Use SSR for public marketing/e-commerce; use CSR for internal admin tools behind login walls.
 > ```
-> - Real-time interactive components benefit from client state and browser WebSockets.
-> 
-> ```text
-> Highly interactive, authenticated client-only tools (e.g., canvas editor, live chat).
-> ```
+
+> #### Technical Explanation
+>
+> 1. CSR relies on client CPU power to build DOM elements.
+> 2. SSR pre-computes HTML on Node.js servers for web crawlers and instant initial page paints.
+> 3. Core architectural selection model.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Next.js Overview](nextjs.md) — The full-stack solution to CSR limitations.
 - [Dynamic Rendering (SSR)](../level_08/ssr.md) — A rendering strategy where HTML is pre-assembled on the server.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - CSR/SPA apps load a single empty HTML page and populate it using client-side JavaScript.
 - CSR provides fast navigation transitions without full-page reloads.
 - The initial page load is slow because the browser must download and compile all JavaScript.

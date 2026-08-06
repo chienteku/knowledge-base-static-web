@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL Query Syntax**
+
+**Advanced Feature** (Window Ranking Functions): `ROW_NUMBER()`, `RANK()`, and `DENSE_RANK()` compute row sequence numbers and ordinal rankings across window partitions.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported in all relational SQL engines. Requires the `ORDER BY` clause inside the window definition to calculate rankings).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In report writing, developers frequently need to assign orders or positions to rows:
@@ -100,7 +101,7 @@ FROM test_scores;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using RANK() instead of ROW_NUMBER() for pagination or row limits
 
@@ -150,81 +151,107 @@ SELECT name, ROW_NUMBER() OVER (ORDER BY score DESC) AS rk FROM users WHERE rk <
 WITH ranked AS (SELECT name, ROW_NUMBER() OVER (ORDER BY score DESC) AS rk FROM users) SELECT * FROM ranked WHERE rk <= 3;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Top Department Salaries
+### Exercise 1: Sequencing Rows with `ROW_NUMBER()`
 
-**Problem:** You have an `employees` table (columns: `name`, `dept`, `salary`). Write the SQL query to find the single highest-paid employee in each department. 
+**Scenario:**
+Assign a sequential row number (`1, 2, 3...`) to orders for each customer sorted by `created_at DESC`.
 
-If there is a tie for the highest salary in a department, return **both** tied employees. (Use `DENSE_RANK()` and a CTE).
+**Requirements:**
+1. Execute `ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY created_at DESC)`.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> WITH ranked_salaries AS (
+> SELECT 
+>   id AS order_id, 
+>   customer_id, 
+>   total_cents, 
+>   created_at,
+>   ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY created_at DESC) AS order_seq 
+> FROM orders;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ROW_NUMBER()` assigns unique sequential integers starting at 1 for each row within a partition.
+> 2. `PARTITION BY customer_id` resets the sequence counter to 1 for each distinct customer.
+> 3. `ORDER BY created_at DESC` orders sequence values descending by order date.
+
+---
+
+### Exercise 2: Selecting Top-1 Item Per Group using `ROW_NUMBER()` Subqueries
+
+**Scenario:**
+Select ONLY the most recent order for every customer using `ROW_NUMBER()` in a CTE filter.
+
+**Requirements:**
+1. Filter `WHERE order_seq = 1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> WITH ranked_orders AS (
 >   SELECT 
->     name, 
->     dept, 
->     salary,
->     DENSE_RANK() OVER (PARTITION BY dept ORDER BY salary DESC) as salary_rank
->   FROM employees
+>     id, customer_id, total_cents, created_at,
+>     ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY created_at DESC) AS rn 
+>   FROM orders
 > )
-> SELECT name, dept, salary
-> FROM ranked_salaries
-> WHERE salary_rank = 1;
+> SELECT id, customer_id, total_cents, created_at 
+> FROM ranked_orders 
+> WHERE rn = 1;
 > ```
-> - Set up a CTE to calculate the ranks using `DENSE_RANK() OVER (PARTITION BY dept ORDER BY salary DESC)`.
-> - In the outer query, filter for `salary_rank = 1`.
+>
+> #### Technical Explanation
+>
+> 1. Window function outputs cannot be filtered directly in `WHERE` clauses of the same query level.
+> 2. Wrapping `ROW_NUMBER()` inside a CTE or subquery enables outer `WHERE rn = 1` filtering.
+> 3. Industry standard pattern for Top-N per group selection.
+
+---
+
+### Exercise 3: Ranking Ties: `RANK()` vs `DENSE_RANK()` vs `ROW_NUMBER()`
+
+**Scenario:**
+Compare rank outputs when 2 employees tie for 2nd place ($100, $90, $90, $80).
+
+**Requirements:**
+1. Contrast `ROW_NUMBER()`, `RANK()`, and `DENSE_RANK()` tie handling.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Window Ranking Tie Behavior (Scores: 100, 90, 90, 80):
+> - ROW_NUMBER(): Assigns 1, 2, 3, 4 (Arbitrary tie-breaking, no duplicate ranks).
+> - RANK(): Assigns 1, 2, 2, 4 (Duplicate ranks for ties, skips rank 3!).
+> - DENSE_RANK(): Assigns 1, 2, 2, 3 (Duplicate ranks for ties, NO skipped ranks!).
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ROW_NUMBER()` forces distinct sequential numbers regardless of ties.
+> 2. `RANK()` leaves gaps in rank sequences following ties.
+> 3. `DENSE_RANK()` leaves zero gaps in rank sequences following ties.
 
 ---
 
 
 
-### Exercise 2: Top 1 Item Per Partition with ROW_NUMBER
-
-**Problem:** Query highest price product per category using `ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC)` in CTE.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> WITH ranked AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) AS rn FROM products) SELECT * FROM ranked WHERE rn = 1;
-> ```
-> ```sql
-> WITH ranked AS (
->   SELECT *,
->     ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) AS rn
->   FROM products
-> )
-> SELECT * FROM ranked WHERE rn = 1;
-> ```
->
-> **Explanation:** Partitioning window functions by category isolates ranking subsets.
-
----
-
-### Exercise 3: RANK vs DENSE_RANK Sequence Output
-
-**Problem:** Given tied scores `[100, 100, 90]`, list outputs for `RANK()` (`1, 1, 3`) and `DENSE_RANK()` (`1, 1, 2`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> RANK: 1, 1, 3; DENSE_RANK: 1, 1, 2
-> ```
-> ```text
-> RANK: 1, 1, 3; DENSE_RANK: 1, 1, 2
-> ```
->
-> **Explanation:** `RANK()` leaves sequence gaps after ties; `DENSE_RANK()` preserves dense sequential integers.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Window Function](window_function.md) — The parent calculation engine.
 - [`LAG()` / `LEAD()`](lag_lead.md) — Offset window functions.
 - [`OVER()` / `PARTITION BY` / `ORDER BY` (Window Clause)](window_clause.md) — Related concept: `OVER()` / `PARTITION BY` / `ORDER BY` (Window Clause).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `ROW_NUMBER()` assigns a unique, sequential number to every row.
 - `RANK()` assigns identical ranks to ties and skips subsequent numbers.
 - `DENSE_RANK()` assigns identical ranks to ties but never skips numbers.

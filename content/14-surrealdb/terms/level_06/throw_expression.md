@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (transaction error abort expression)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the transaction manager. Interrupts query execution and triggers an automatic transaction rollback).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In business applications, certain database conditions represent illegal states:
@@ -86,7 +85,7 @@ COMMIT TRANSACTION;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting queries AFTER a THROW expression to execute, unaware that THROW terminates the script
 
@@ -132,64 +131,95 @@ THROW "Error"; // Aborts script unconditionally!
 IF $age < 18 { THROW "User must be at least 18 years old"; };
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Exception Guard Implementation
+### Exercise 1: Throwing Custom Exception Messages
 
-**Problem:** You are writing an order creation script.
-- Parameter `$stock` is `0`.
-- Parameter `$item` is `"product:laptop"`.
-Write an `IF` statement checking if `$stock = 0`. If true, execute a `THROW` with the message `"Product is out of stock"`.
+**Scenario:**
+Validate user input inside a transaction script. If `$age < 18`, abort transaction execution and throw a custom error message using `THROW`.
 
-**Expected output:**
+**Requirements:**
+1. Declare `LET $age = 15;`.
+2. Check `IF $age < 18 THEN THROW "User must be at least 18 years old!" END;`.
+
 > [!check]- Answer
-> ```sql
-> IF $stock = 0 {
->   THROW "Product is out of stock";
-> };
-> ```
-> - Use the `IF condition { ... }` block syntax.
-> - Raise the error using `THROW "message"`.
-
----
-
-
-
-### Exercise 2: Conditional Validation Throw
-
-**Problem:** Write `IF` guard that throws `"Unauthorized access"` if `$user.role != "admin"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> IF $user.role != "admin" { THROW "Unauthorized access"; };
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> IF $user.role != "admin" {
->   THROW "Unauthorized access";
-> };
+> LET $age = 15;
+> 
+> IF $age < 18 THEN (
+>     THROW "User must be at least 18 years old!"
+> ) END;
 > ```
 >
-> **Explanation:** `THROW` aborts query execution and rolls back transaction mutations.
+> #### Technical Explanation
+>
+> 1. `THROW "message"` aborts transaction execution immediately and returns a custom error exception to the client.
+> 2. Rolls back all uncommitted mutations inside the active transaction block.
+> 3. Enables custom business logic validation at the database tier.
 
 ---
 
-### Exercise 3: Field Assertion Custom Error
+### Exercise 2: Throwing Exceptions in Field Assertion Rules
 
-**Problem:** How does `THROW` behave inside custom functions (`fn::`) when validation fails? (Aborts function and returns error).
+**Scenario:**
+Use `THROW` inside a table field `ASSERT` expression to return a specific validation error string when an assertion fails.
 
-**Expected output:**
+**Requirements:**
+1. Define field `credit_score` on table `applicant` asserting `$value >= 600 OR THROW "Credit score too low!"`.
+
 > [!check]- Answer
-> ```text
-> Aborts function execution and returns custom error string to caller
-> ```
-> ```text
-> Aborts function execution and returns custom error string to caller
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE TABLE applicant SCHEMAFULL;
+> DEFINE FIELD credit_score ON TABLE applicant TYPE int 
+>     ASSERT $value >= 600 OR THROW "Credit score too low!";
 > ```
 >
-> **Explanation:** `THROW` bubbles up custom error messages through function execution stacks.
+> #### Technical Explanation
+>
+> 1. Combining `ASSERT` with `OR THROW` customize write rejection error messages.
+> 2. Returns descriptive domain error messages to SDK client callers.
+> 3. Improves API error handling clarity.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Transaction Abort Behavior on `THROW`
+
+**Scenario:**
+Demonstrate that throwing an exception rolls back preceding `CREATE` mutations within a transaction block.
+
+**Requirements:**
+1. Begin transaction, create a record, throw exception, commit transaction.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> BEGIN TRANSACTION;
+> 
+> CREATE temp_log:1 SET data = "test";
+> THROW "Aborting transaction intentionally!";
+> 
+> COMMIT TRANSACTION;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Throwing an exception inside a transaction block triggers an immediate transaction rollback.
+> 2. `temp_log:1` is never committed to persistent storage.
+> 3. Guarantees ACID transactional atomicity during error conditions.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`IF` / `ELSE` Expressions](if_else.md) — Conditional control flow.
 - [`RETURN` Statement (in Functions / Blocks)](return_statement.md) — Early returns.
@@ -197,7 +227,7 @@ Write an `IF` statement checking if `$stock = 0`. If true, execute a `THROW` wit
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `THROW "message"` raises a runtime exception in SurrealQL.
 - Immediately halts query script processing.
 - Automatically rolls back any active uncommitted transaction.

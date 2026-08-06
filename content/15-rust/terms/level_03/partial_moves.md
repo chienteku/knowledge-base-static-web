@@ -153,7 +153,7 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Performance Concurrent Task Pipeline Worker (Partial Moves & Field-Level Mutability Disjointness)
 
-**Problem:**
+**Scenario:**
 In a high-throughput stream processing pipeline, worker nodes ingest structured batches (`TaskBatch`) containing heavy payload buffers (`Vec<u8>`), batch metadata (`BatchHeader`), and execution metrics (`TelemetryStats`).
 When dispatching payload data to a processing queue, we must move out the heavy payload vector to prevent expensive deep copies. At the same time, the worker must retain and update its telemetry stats and header info. Furthermore, helper methods updating telemetry stats must operate concurrently with reference-based reads of the batch header without triggering borrow checker conflicts (`E0502` / `E0499`).
 
@@ -285,7 +285,7 @@ Implement a task dispatching stage that:
 
 ### Exercise 2: Zero-Copy Protocol Frame Decoder & Handling `Drop` Constraints
 
-**Problem:**
+**Scenario:**
 In network microservices, high-performance packet framing requires parsing protocol frames (`NetworkFrame`) consisting of a `FrameHeader`, a `PayloadBuffer`, and dynamic trace metadata.
 However, `NetworkFrame` implements `Drop` to release network resources or telemetry span registration on teardown.
 When decomposing `NetworkFrame` into header metadata and payload data for stream routing, direct partial moves fail with compiler error `E0509` because types implementing `Drop` cannot be partially moved from.
@@ -426,7 +426,7 @@ Implement a zero-copy protocol frame decoder that:
 
 ### Exercise 3: Arena Memory Recycler & Graph Node Splitting (Disjoint Field Borrows & Partial Deallocation)
 
-**Problem:**
+**Scenario:**
 In graph algorithms, Quadtrees, or spatial indexing structures, graph nodes (`ArenaNode`) manage dynamic memory slots containing node payload (`NodeData`), incoming/outgoing edges (`EdgeList`), and freelist memory recycling markers (`RecycleHeader`).
 When performing node splitting or graph edge re-linking:
 - We need to mutably update `EdgeList` while reading properties from `NodeData`.

@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **State Management**
+
+**State Management** (SSR-Friendly Shared State Composable): `useState()` creates SSR-friendly, component-cross-cutting reactive state keys preserved across server rendering and client hydration.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In a standard Vue 3 SPA, if you want a reactive variable, you use `ref()`. 
@@ -56,7 +57,7 @@ Because `useState` is tied to the unique string key, it acts as a lightweight gl
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Defining global `ref()` outside a composable
 **The mistake:** Creating a cross-request state leak by defining a Vue `ref()` outside of a component or composable function block.
@@ -118,69 +119,124 @@ export const useUserState = () => useState('user-state', () => null);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: SSR-friendly state
+### Exercise 1: Shared SSR-Friendly State with `useState()`
 
-**Problem:** You want to store a user's chosen language code (e.g., `'en'` or `'fr'`). Write the `useState` declaration using the key `'lang'` and a default value of `'en'`.
+**Scenario:**
+Create a counter state using `useState('counter', () => 0)` shared across multiple components without Pinia.
 
-**Expected output:**
+**Requirements:**
+1. Execute `useState("counter", () => 0)` in two sibling components.
+
 > [!check]- Answer
-> ```typescript
-> const language = useState('lang', () => 'en');
-> ```
-> - Use the `useState` function, pass the unique string key `'lang'` as the first parameter, and a factory function returning `'en'` as the second parameter.
+>
+> #### Implementation
+>
+> ```vue
+> <!-- components/CounterA.vue -->
+> <script setup lang="ts">
+> const counter = useState<number>("counter", () => 0);
+> </script>
+
+<template>
+  <div>
+    <button @click="counter++">Component A Increment: {{ counter }}</button>
+  </div>
+</template>
+```
+
+> ```vue
+> <!-- components/CounterB.vue -->
+> <script setup lang="ts">
+> const counter = useState<number>("counter");
+> </script>
+
+<template>
+  <div>
+    <p>Component B Counter Value: {{ counter }}</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. `useState(key, init)` creates a key-based reactive reference shared across the entire Vue application tree.
+> 2. On the server, state is serialized into `NuxtPayload` and hydrated on the client without state resetting.
+> 3. Lightweight alternative to Pinia for simple global state.
 
 ---
 
-### Exercise 2: useState Global Shared Counter Composable
+### Exercise 2: Preventing Cross-Request State Pollution in SSR
 
-**Problem:** Write composable `useCounter()` using `useState('counter', () => 0)` exporting `count`, `inc()`, and `dec()`.
+**Scenario:**
+Explain why using `const globalCount = ref(0)` at top-level module scope causes data leaks between different users in SSR, and fix it using `useState()`.
 
-**Expected output:**
+**Requirements:**
+1. Contrast module-scoped `ref()` vs `useState()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> export const useCounter = () => {
->   const count = useState('counter', () => 0);
->   const inc = () => count.value++;
->   const dec = () => count.value--;
->   return { count, inc, dec };
-> };
-> ```
-> - `useState` preserves reactive state between SSR server render and client hydration.
-> 
-> ```typescript
-> export const useCounter = () => {
->   const count = useState<number>('global-counter', () => 0);
->   
->   const inc = () => count.value++;
->   const dec = () => count.value--;
->   
->   return { count, inc, dec };
-> };
-> ```
+> // ❌ DANGEROUS: Leaks state across requests in Node.js server!
+> // const sharedUser = ref(null);
+
+// ✅ SAFE SSR STATE: Scoped per request and hydrated per client!
+export const useSharedUser = () => {
+  return useState("user-state", () => null);
+};
+```
+
+> #### Technical Explanation
+>
+> 1. Module-scoped variables (`const state = ref()`) persist in Node.js server memory across multiple incoming HTTP requests, leaking User A's data to User B.
+> 2. `useState()` creates state instances bound exclusively to the current request lifecycle.
+> 3. Essential SSR security rule.
 
 ---
 
-### Exercise 3: useState Payload Serialization
+### Exercise 3: Initializing State from Async Functions
 
-**Problem:** Does state initialized via `useState()` automatically get serialized into `window.__NUXT__` payload during SSR?
+**Scenario:**
+Initialize `useState("user-data")` asynchronously inside an async setup function.
 
-**Expected output:**
+**Requirements:**
+1. Code async initializer inside `useState()`.
+
 > [!check]- Answer
-> ```text
-> Yes. useState automatically serializes its value into the server HTML payload, hydrating client state seamlessly.
-> ```
-> - `useState` values are serialized into server HTML payload automatically.
-> 
-> ```text
-> Server useState -> HTML Payload -> Client Hydrates useState Ref
-> ```
+>
+> #### Implementation
+>
+> ```vue
+> <script setup lang="ts">
+> const user = await useState("user-profile", async () => {
+>   return await $fetch("/api/me");
+> });
+> </script>
+
+<template>
+  <div v-if="user">
+    <p>User Profile: {{ user.name }}</p>
+  </div>
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. The factory function passed to `useState(key, init)` can return a Promise.
+> 2. Executes ONLY if the key is not already present in the active state payload.
+> 3. Seamless async state initialization.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Pinia State Management](pinia.md) — The heavy-duty alternative to `useState` for complex global state.
 - [`useCookie` Hook](use_cookie.md) — Similar to `useState`, but persists the data in the browser cookies.
 - [`composables/` Directory](composables_directory.md) — Related concept: `composables/` Directory.
@@ -188,7 +244,7 @@ export const useUserState = () => useState('user-state', () => null);
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `useState` is an SSR-friendly alternative to `ref()`.
 - It preserves state from the Server and hands it to the Client, preventing Hydration Mismatches and double-fetching.
 - It can be used as a lightweight global state manager by sharing the unique string key.

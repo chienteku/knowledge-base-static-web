@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing Hooks**
+
+**Routing & Layouts** (Client Pathname Hook): `usePathname()` reads the current URL's pathname string inside Client Components.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Component ONLY**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Inside a Server Component (`page.tsx`), you can easily read the URL query string because it is passed directly as the `searchParams` prop.
@@ -68,7 +69,7 @@ export default function SearchResults() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to read `searchParams` in a Server `layout.tsx`
 
@@ -126,99 +127,129 @@ const searchParams = useSearchParams(); // searchParams.get('q')
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Updating the Query String
+### Exercise 1: Highlighting Active Navigation Links with `usePathname()`
 
-**Problem:** `useSearchParams` is read-only. If you have a button that changes the sort order to "desc", how do you actually update the URL in the browser to `?sort=desc`?
+**Scenario:**
+Create an active navigation link component that highlights when its `href` matches `usePathname()`.
 
-**Expected output:**
+**Requirements:**
+1. Import `usePathname` from `next/navigation` in `"use client"` component.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-> 
-> export default function SortButton() {
->   const router = useRouter();
->   const pathname = usePathname();
->   const searchParams = useSearchParams();
-> 
->   const handleSort = () => {
->     // 1. Create a fresh URLSearchParams object using the current ones
->     const params = new URLSearchParams(searchParams);
->     // 2. Mutate it
->     params.set('sort', 'desc');
->     // 3. Push the new URL!
->     router.push(`${pathname}?${params.toString()}`);
->   }
-> 
->   return <button onClick={handleSort}>Sort Descending</button>;
-> }
-> ```
-> - You need the `useRouter` hook from Level 3 to push the new URL!
+> "use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+export default function NavLink({ href, label }: { href: string; label: string }) {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
+  return (
+    <Link
+      href={href}
+      className={`px-3 py-2 rounded ${
+        isActive ? "bg-blue-600 text-white font-bold" : "text-gray-700 hover:bg-gray-100"
+      }`}
+    >
+      {label}
+    </Link>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `usePathname()` returns the current URL pathname string (e.g. `/dashboard`).
+> 2. Automatically re-evaluates when client-side route transitions occur.
+> 3. Must be used inside Client Components marked with `"use client"`.
 
 ---
 
-### Exercise 2: Navigation Active Link Pattern with usePathname
+### Exercise 2: Sub-Route Prefix Active State Detection
 
-**Problem:** Write `NavLink` Client Component using `usePathname()` to append class `'active'` when `pathname === href`.
+**Scenario:**
+Check if the current pathname starts with a parent route prefix (`pathname.startsWith('/docs')`).
 
-**Expected output:**
+**Requirements:**
+1. Use `pathname.startsWith(prefix)` logic.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> 'use client'; import { usePathname } from 'next/navigation'; import Link from 'next/link'; export function NavLink({ href, children }: { href: string; children: React.ReactNode }) { const pathname = usePathname(); const isActive = pathname === href; return <Link href={href} className={isActive ? 'active' : ''}>{children}</Link>; }
-> ```
-> - `usePathname()` enables active navigation styling in Client Components.
-> 
-> ```tsx
-> 'use client';
-> import { usePathname } from 'next/navigation';
-> import Link from 'next/link';
-> 
-> export function NavLink({
->   href,
->   children
-> }: {
->   href: string;
->   children: React.ReactNode;
-> }) {
->   const pathname = usePathname();
->   const isActive = pathname === href;
->   
->   return (
->     <Link href={href} className={isActive ? 'font-bold text-blue-600' : 'text-gray-600'}>
->       {children}
->     </Link>
->   );
-> }
-> ```
+> "use client";
+
+import { usePathname } from "next/navigation";
+
+export default function DocsSidebarSection() {
+  const pathname = usePathname();
+  const isDocsActive = pathname.startsWith("/docs");
+
+  return (
+    <div className={isDocsActive ? "border-l-4 border-blue-500 pl-4" : "pl-4"}>
+      <h3>Docs Section</h3>
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `pathname.startsWith()` allows highlighting parent navigation items when viewing child sub-routes (`/docs/v2/installation`).
+> 2. Maintains hierarchical visual indicators in sidebar navigation menus.
+> 3. Standard navigation UI pattern.
 
 ---
 
-### Exercise 3: usePathname Dynamic Route Parameter Masking
+### Exercise 3: Auditing Client Re-Render Bounds with `usePathname()`
 
-**Problem:** If URL is `/users/123`, does `usePathname()` return `/users/123` or `/users/[id]`?
+**Scenario:**
+Isolate `usePathname()` to atomic link items to prevent re-rendering full layout trees on navigation.
 
-**Expected output:**
+**Requirements:**
+1. Isolate `"use client"` hook to leaf components.
+
 > [!check]- Answer
-> ```text
-> It returns the actual resolved URL path: /users/123.
-> ```
-> - `usePathname()` returns the current browser URL pathname.
-> 
-> ```text
-> /users/123
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> // ❌ INCORRECT (Marks whole header layout as Client Component):
+> // "use client";
+> // export default function Header() { const pathname = usePathname(); ... }
+
+// ✅ CORRECT (Isolate hook to child NavItem component):
+// Header.tsx remains a Server Component; NavItem.tsx consumes usePathname().
+```
+
+> #### Technical Explanation
+>
+> 1. Consuming `usePathname()` forces the component to be marked as `"use client"`.
+> 2. Moving the hook down to atomic leaf components leaves header containers as zero-bundle-size Server Components.
+> 3. Optimizes client bundle size and rendering performance.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useRouter` Hook](../level_03/use_router.md) — Used in conjunction with these hooks to update the URL.
 - [`page.tsx`](../level_02/page.md) — The server-side equivalent that receives `searchParams` as a prop.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`usePathname()`** returns the current URL path string (e.g., `/dashboard`). It is perfect for styling active navigation links.
 - **`useSearchParams()`** returns a read-only Web API `URLSearchParams` object to read query strings (e.g., `?q=hello`).
 - Both hooks MUST be used inside a Client Component (`"use client"`).

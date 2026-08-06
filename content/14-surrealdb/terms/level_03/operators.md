@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (comparison, logical, and containment operators)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Evaluated by the query executor compiler. Triggers specific optimization checks inside index tables depending on the operator type).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In standard SQL (PostgreSQL), checking string matches and array membership requires verbose and varying operators:
@@ -92,7 +91,7 @@ SELECT * FROM post WHERE tags CONTAINSAND ["rust", "tech"];
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using 'CONTAINS' to search for substrings in case-insensitive text, instead of the fuzzy matcher '~' or regex expressions
 
@@ -149,64 +148,98 @@ SELECT * FROM article WHERE title CONTAINS "rust"; // ❌ Expects array collecti
 SELECT * FROM article WHERE title ~ "rust"; // Fuzzy string/regex match operator
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Operator Selection
+### Exercise 1: String Regex & Fuzzy Matching Operators
 
-**Problem:** Select the correct SurrealQL operator (**=**, **~**, **CONTAINS**, or **INSIDE**) for these logical check scripts:
-1.  Checking if a user's role array field contains `"editor"`.
-2.  Checking if the input variable `$user_choice` is either `"pizza"`, `"burger"`, or `"pasta"`.
-3.  Checking if a user's email matches `"ADMIN@MAIL.COM"` regardless of case.
-4.  Checking if a serial key matches exactly `"KEY-5599-XX"`.
+**Scenario:**
+A search query filters user accounts where `email` matches a domain pattern (`@example.com`) using string operators.
 
-**Expected output:**
+**Requirements:**
+1. Create users `user:u1` (`email = "alice@example.com"`) and `user:u2` (`email = "bob@other.com"`).
+2. Query users where `email` matches regex `@example\.com$` using the `=~` (regex match) operator.
+
 > [!check]- Answer
-> ```text
-> 1. CONTAINS (checks if array holds the item)
-> 2. INSIDE (checks if variable value exists in the options list)
-> 3. ~ (fuzzy match checks case-insensitive strings)
-> 4. = (exact equality checks cases and characters strictly)
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:u1 SET email = "alice@example.com";
+> CREATE user:u2 SET email = "bob@other.com";
+> 
+> -- Regex match query
+> SELECT * FROM user WHERE email =~ "@example\.com$";
 > ```
-> - Determine if the check scans list values or single properties.
-> - Consider if casing matches must be strict or loose.
+>
+> #### Technical Explanation
+>
+> 1. `=~` performs case-insensitive regex pattern matching on string fields (`!~` performs negated regex match).
+> 2. `CONTAINS` checks substring or array element containment.
+> 3. Enables advanced text filtering without full-text search index overhead.
+
+---
+
+### Exercise 2: Array Containment Operators (`INSIDE` vs `CONTAINS`)
+
+**Scenario:**
+A permission system checks whether user role `"admin"` is contained `INSIDE` an allowed roles array `["admin", "manager"]`.
+
+**Requirements:**
+1. Demonstrate `INSIDE` operator checking if `"admin" INSIDE ["admin", "manager"]`.
+2. Demonstrate `CONTAINS` operator checking if `["admin", "manager"] CONTAINS "admin"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- 1. Value INSIDE Array
+> SELECT "admin" INSIDE ["admin", "manager"] AS is_allowed;
+> 
+> -- 2. Array CONTAINS Value
+> SELECT ["admin", "manager"] CONTAINS "admin" AS is_allowed;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `val INSIDE array` evaluates whether a single scalar value exists within a target collection.
+> 2. `array CONTAINS val` evaluates whether an array collection contains a target scalar value.
+> 3. Both expressions evaluate to boolean `true` or `false`.
+
+---
+
+### Exercise 3: Record Link Equality Operators
+
+**Scenario:**
+Filter blog posts where the `author` record link pointer equals `user:alice`.
+
+**Requirements:**
+1. Create post `post:p1` with `author = user:alice`.
+2. Query posts using record ID equality `WHERE author = user:alice`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET name = "Alice";
+> CREATE post:p1 SET title = "SurrealQL Operators", author = user:alice;
+> 
+> -- Query posts by typed record link equality
+> SELECT * FROM post WHERE author = user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `=` performs typed equality comparison between record link pointers.
+> 2. `user:alice` represents a typed record ID pointer, not a raw string literal `"user:alice"`.
+> 3. Executes direct $O(1)$ pointer comparison in SurrealDB's query engine.
 
 ---
 
 
 
-### Exercise 2: SurrealQL Operator Mapping
-
-**Problem:** Match operators: 1. Contains element (`CONTAINS` / `?=`), 2. Fuzzy string match (`~`), 3. Record link arrow (`->`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. CONTAINS, 2. ~, 3. ->
-> ```
-> ```text
-> 1. CONTAINS, 2. ~, 3. ->
-> ```
->
-> **Explanation:** SurrealQL features collection, string matching, and graph traversal operators.
-
----
-
-### Exercise 3: Inside Spatial Operator
-
-**Problem:** Operator to test if point is contained within polygon geometry (`<inside>`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <inside>
-> ```
-> ```text
-> <inside>
-> ```
->
-> **Explanation:** `<inside>` tests geospatial point containment inside polygon boundaries.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`WHERE` Clause](where.md) — The conditional context.
 - [Array Functions (`array::*`)](../level_06/array_functions.md) — Manipulating lists.
@@ -215,7 +248,7 @@ SELECT * FROM article WHERE title ~ "rust"; // Fuzzy string/regex match operator
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SurrealQL expands standard SQL comparison operators with collection syntax.
 - `=` is exact case-sensitive; `~` is fuzzy case-insensitive.
 - `CONTAINS` checks if a container field holds a target item.

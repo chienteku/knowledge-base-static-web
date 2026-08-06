@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Rendering Strategies**
+
+**Rendering Strategy** (Single Page Application Rendering): SPA mode (`ssr: false`) disables server-side HTML generation, executing full view rendering and navigation inside the client browser.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Only**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Nuxt uses Universal Rendering (SSR) by default because it is excellent for SEO and initial page load speed. However, SSR is expensive. The server must compute the Vue components for every single incoming request. 
@@ -56,7 +57,7 @@ export default defineNuxtConfig({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting good SEO in an SPA
 **The mistake:** Disabling SSR because "it makes deployment easier", and then wondering why Google isn't indexing your blog posts.
@@ -65,6 +66,8 @@ export default defineNuxtConfig({
 **Golden Rule:** If the page must be discoverable on Google or shared nicely on social media, you MUST NOT use SPA mode. Use SSR or SSG instead.
 
 ---
+
+
 
 ### Mistake 2: Expecting SPA Mode (`ssr: false`) Pages to Render HTML for Search Engine Crawlers
 
@@ -83,6 +86,8 @@ export default defineNuxtConfig({ ssr: true }); // Universal SSR for public page
 ```
 
 ---
+
+
 
 ### Mistake 3: Calling Node.js Core Modules in Client SPA Mode
 
@@ -103,147 +108,108 @@ export default defineNuxtConfig({ ssr: true }); // Universal SSR for public page
 
 ---
 
-### Mistake 4: Expecting SPA Mode (`ssr: false`) Pages to Render HTML for Search Engine Crawlers
 
-**The mistake:** Configuring `ssr: false` on public marketing landing pages.
-
-**Why it's wrong:** SPA mode serves an empty `<div id="__nuxt"></div>` HTML shell initially. Search engine crawlers receive empty HTML, severely damaging SEO rankings.
-
-*Incorrect:*
-```vue
-export default defineNuxtConfig({ ssr: false }); // ❌ Empty initial HTML shell for all pages!
-```
-
-*Fix:*
-```vue
-export default defineNuxtConfig({ ssr: true }); // Universal SSR for public pages
-```
-
----
-
-### Mistake 5: Calling Node.js Core Modules in Client SPA Mode
-
-**The mistake:** Importing `fs` or `net` in a SPA mode application.
-
-**Why it's wrong:** SPA mode executes ENTIRELY inside the browser client environment. Node.js server modules do NOT exist in the browser runtime.
-
-*Incorrect:*
-```vue
-/* Importing Node.js fs module in SPA mode application */
-```
-
-*Fix:*
-```vue
-/* Use Web standard APIs or fetch data from backend Nitro API routes */
-```
 
 
 ---
 
-### Mistake 6: Expecting SPA Mode (`ssr: false`) Pages to Render HTML for Search Engine Crawlers
+## 5. Practice Exercises
 
-**The mistake:** Configuring `ssr: false` on public marketing landing pages.
+### Exercise 1: Disabling SSR Globally for Single Page Applications
 
-**Why it's wrong:** SPA mode serves an empty `<div id="__nuxt"></div>` HTML shell initially. Search engine crawlers receive empty HTML, severely damaging SEO rankings.
+**Scenario:**
+Configure `nuxt.config.ts` to run the entire Nuxt 3 application as a pure SPA (`ssr: false`).
 
-*Incorrect:*
-```vue
-export default defineNuxtConfig({ ssr: false }); // ❌ Empty initial HTML shell for all pages!
-```
+**Requirements:**
+1. Set `ssr: false` in `nuxt.config.ts`.
 
-*Fix:*
-```vue
-export default defineNuxtConfig({ ssr: true }); // Universal SSR for public pages
-```
-
----
-
-### Mistake 7: Calling Node.js Core Modules in Client SPA Mode
-
-**The mistake:** Importing `fs` or `net` in a SPA mode application.
-
-**Why it's wrong:** SPA mode executes ENTIRELY inside the browser client environment. Node.js server modules do NOT exist in the browser runtime.
-
-*Incorrect:*
-```vue
-/* Importing Node.js fs module in SPA mode application */
-```
-
-*Fix:*
-```vue
-/* Use Web standard APIs or fetch data from backend Nitro API routes */
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: Identifying the Use Case
-
-**Problem:** You are building a secure web application for a bank. Users must log in before seeing any content. The UI is highly interactive and relies heavily on browser APIs like `window.localStorage` and WebCrypto. Does this app benefit from SSR, or should you configure `{ ssr: false }`?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Configure { ssr: false } (SPA mode).
-> Because the content is behind a login, SEO is irrelevant. Because it heavily relies on browser-only APIs, SSR will cause hydration errors. SPA is the perfect choice here.
-> ```
-> - Secure dashboards behind a login wall do not require search crawler discoverability but do require browser-only storage access.
-
----
-
-### Exercise 2: SPA Mode Route Rule Configuration
-
-**Problem:** Write `nuxt.config.ts` `routeRules` disabling SSR for `/admin/**` routes while keeping public pages SSR.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
+> // nuxt.config.ts
 > export default defineNuxtConfig({
->   routeRules: {
->     '/admin/**': { ssr: false }
->   }
-> });
-> ```
-> - Setting `ssr: false` in `routeRules` applies SPA mode to targeted sub-routes.
-> 
-> ```typescript
-> export default defineNuxtConfig({
->   routeRules: {
->     '/admin/**': { ssr: false }
->   }
+>   ssr: false // Disables Server-Side Rendering globally
 > });
 > ```
 
+> #### Technical Explanation
+>
+> 1. `ssr: false` disables server HTML rendering completely across all routes.
+> 2. Server sends a minimal HTML wrapper file (`<div id="__nuxt"></div>`) containing script tags.
+> 3. Vue application initializes, fetches data, and builds the DOM entirely in the user's browser client.
+
 ---
 
-### Exercise 3: SPA Fallback HTML File
+### Exercise 2: Managing Client-Side Loading Skeletons in SPA Mode
 
-**Problem:** Which static HTML fallback file is generated when building a Nuxt SPA application?
+**Scenario:**
+Configure a custom SPA loading indicator in `nuxt.config.ts` displayed while JavaScript bundles download.
 
-**Expected output:**
+**Requirements:**
+1. Set `spaLoadingTemplate` or custom SPA loader.
+
 > [!check]- Answer
-> ```text
-> 200.html (or 404.html)
+>
+> #### Implementation
+>
+> ```typescript
+> // nuxt.config.ts
+> export default defineNuxtConfig({
+>   ssr: false,
+>   spaLoadingTemplate: "spa-loading-template.html"
+> });
 > ```
-> - `200.html` serves as the entry point for SPA static hosts.
-> 
+
+> #### Technical Explanation
+>
+> 1. In SPA mode, users see a blank screen while initial JavaScript bundles download and execute.
+> 2. `spaLoadingTemplate` renders an HTML/CSS loading spinner directly inside the initial HTML file.
+> 3. Improves perceived loading speed for SPA mode applications.
+
+---
+
+### Exercise 3: Trade-Off Analysis: SPA vs Universal SSR
+
+**Scenario:**
+Formulate an architectural decision matrix comparing SPA mode against Universal SSR.
+
+**Requirements:**
+1. Contrast SEO, server CPU cost, initial load speed, and browser requirements.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> dist/200.html
+> SPA vs SSR Architecture Comparison:
+> - SPA Mode (ssr: false): Zero server Node.js CPU rendering overhead, cheap static file hosting, poor SEO, slower initial content paint.
+> - Universal SSR (ssr: true): Excellent SEO, fast initial content paint, higher server Node.js CPU & RAM costs.
+> Recommendation: Use SPA mode for internal enterprise back-office tools; use SSR for public web applications.
 > ```
+
+> #### Technical Explanation
+>
+> 1. SPA mode eliminates Node.js server rendering costs, allowing static CDN hosting.
+> 2. Universal SSR is required for search engines and social media crawler indexing.
+> 3. Core architectural selection choice.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Route Rules Configuration](../level_08/route_rules.md) — How to enable SPA mode for only *specific* URLs instead of the whole app.
 - [Static Site Generation (SSG)](ssg.md) — Another non-Node.js deployment strategy, but with perfect SEO.
 - [Hybrid Rendering](hybrid_rendering.md) — Related concept: Hybrid Rendering.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SPA mode disables Server-Side Rendering (`ssr: false`).
 - The browser downloads an empty HTML file and renders the UI via JavaScript.
 - SPA mode is incredibly cheap to host and requires no Node.js server.

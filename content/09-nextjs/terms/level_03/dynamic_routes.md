@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Routing**
+
+**Routing & Layouts** (Dynamic Parameter Route Resolution): Dynamic Routes (`[id]`) create parameterized URL paths, resolving dynamic parameter values inside pages and layouts.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you are building a blog, you want URLs like `/blog/hello-world` and `/blog/nextjs-tips`.
@@ -63,7 +64,7 @@ export default async function BlogPost({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Prop drilling `params` instead of using `useParams` in Client Components
 
@@ -122,72 +123,125 @@ export default async function Page({
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Nested Dynamic Routes
+### Exercise 1: Defining Dynamic Parameter Route Segments
 
-**Problem:** You have a file structure: `app/shop/[category]/[productId]/page.tsx`. If a user visits `/shop/shoes/nike-air-123`, what does the `params` object look like when it reaches `page.tsx`?
+**Scenario:**
+Create `app/users/[id]/page.tsx` rendering dynamic user profile details.
 
-**Expected output:**
+**Requirements:**
+1. Read `params.id` in async Server Component.
+
 > [!check]- Answer
-> ```json
-> {
->   "category": "shoes",
->   "productId": "nike-air-123"
-> }
-> ```
-> - The folder names dictate the keys in the object!
+>
+> #### Implementation
+>
+> ```tsx
+> // app/users/[id]/page.tsx
+> export default async function UserProfilePage({
+>   params
+> }: {
+>   params: Promise<{ id: string }>;
+> }) {
+>   const { id } = await params;
+
+  return (
+    <main className="p-6">
+      <h1 className="text-2xl font-bold">User Profile: {id}</h1>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Folder naming `[id]` defines a dynamic route parameter segment matching any single URL string.
+> 2. `params` prop contains dynamic segment values parsed directly on the server.
+> 3. In Next.js 15 App Router, `params` is resolved asynchronously via `await params`.
 
 ---
 
-### Exercise 2: Dynamic Parameter Destructuring Pattern
+### Exercise 2: Constraining Dynamic Parameter Types
 
-**Problem:** Write dynamic route component `app/users/[userId]/posts/[postId]/page.tsx` destructuring both parameter IDs.
+**Scenario:**
+Validate dynamic parameter `id` and throw a 404 error using `notFound()` if `id` is not numeric.
 
-**Expected output:**
+**Requirements:**
+1. Import `notFound` from `next/navigation`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> export default async function Page({ params }: { params: { userId: string; postId: string } }) { return <div>User: {params.userId}, Post: {params.postId}</div>; }
-> ```
-> - Multiple dynamic folders populate `params` object properties.
-> 
-> ```tsx
-> interface PageProps {
->   params: { userId: string; postId: string };
-> }
-> 
-> export default async function Page({ params }: PageProps) {
->   return (
->     <div>
->       User ID: {params.userId} | Post ID: {params.postId}
->     </div>
->   );
-> }
-> ```
+> import { notFound } from "next/navigation";
+
+export default async function NumericUserPage({
+  params
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  
+  if (isNaN(Number(id))) {
+    notFound(); // Triggers app/not-found.tsx UI
+  }
+
+  return <div>Numeric User ID: {id}</div>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Calling `notFound()` immediately halts component rendering and triggers the nearest `not-found.tsx` view.
+> 2. Prevents processing invalid or non-numeric dynamic parameter values.
+> 3. Standard parameter validation guard pattern.
 
 ---
 
-### Exercise 3: generateStaticParams for Dynamic Routes
+### Exercise 3: Prerendering Dynamic Parameter Routes
 
-**Problem:** Which exported function pre-renders dynamic routes (e.g. `/posts/[id]`) statically at build time?
+**Scenario:**
+Prerender popular product IDs (`1`, `2`, `3`) at build time using `generateStaticParams()`.
 
-**Expected output:**
+**Requirements:**
+1. Export `generateStaticParams()` returning array of objects.
+
 > [!check]- Answer
-> ```text
-> export async function generateStaticParams() { return [{ id: '1' }, { id: '2' }]; }
-> ```
-> - `generateStaticParams()` returns array of parameter objects for SSG.
-> 
-> ```typescript
+>
+> #### Implementation
+>
+> ```tsx
+> // app/products/[id]/page.tsx
 > export async function generateStaticParams() {
->   return [{ id: '1' }, { id: '2' }];
+>   return [{ id: "1" }, { id: "2" }, { id: "3" }];
 > }
-> ```
+
+export default async function Product({
+  params
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  return <h1>Product #{id}</h1>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `generateStaticParams()` compiles specified dynamic route parameter values into static HTML at build time.
+> 2. Speeds up page response times by serving pre-built HTML from CDN edge nodes.
+> 3. Unrendered dynamic IDs fall back to dynamic SSR on demand.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`page.tsx`](../level_02/page.md) — The file that receives the `params`.
 - [`generateStaticParams` Function](../level_08/generate_static_params.md) — generateStaticParams for SSG.
 - [JavaScript Rest Parameters (`...`)](rest_parameters.md) — Related concept: JavaScript Rest Parameters (`...`).
@@ -195,7 +249,7 @@ export default async function Page({
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Dynamic Routes** allow you to match variable URL segments using square brackets in the folder name (e.g., `[id]`).
 - Next.js extracts the matched string from the URL and passes it to your `page.tsx` via the `params` prop.
 - You can nest multiple dynamic routes (e.g., `[category]/[id]`).

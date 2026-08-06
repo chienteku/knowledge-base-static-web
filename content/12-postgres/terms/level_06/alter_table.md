@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DDL Statement**
+
+**SQL Command / Clause** (Table Schema Modification DDL): `ALTER TABLE` modifies existing table structure definitions, including adding columns, dropping constraints, and altering column data types.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DDL** (Requires an `ACCESS EXCLUSIVE` lock on the table. On large tables, some type conversion operations force the engine to physically rewrite every row on disk, locking out reads and writes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Software applications are constantly changing:
@@ -93,7 +94,7 @@ DROP COLUMN old_legacy_field;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Adding a NOT NULL constraint to an existing column without verifying it contains NULL rows
 
@@ -148,64 +149,91 @@ ALTER TABLE heavy_table ADD COLUMN new_col INT DEFAULT 0;
 Upgrade to PostgreSQL 11+ or add column without default first, then populate in batches
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Schema Migration Script
+### Exercise 1: Adding Columns with Non-Volatile Defaults
 
-**Problem:** You have a `products` table. Write the SQL queries to perform the following structural upgrades in order:
-1.  Add a required text column named `sku_code` that defaults to `'GENERIC-SKU'`.
-2.  Add a check constraint named `chk_price_positive` ensuring `price` is greater than or equal to `0`.
+**Scenario:**
+Add a new column `status` (`TEXT NOT NULL DEFAULT 'active'`) to a 10,000,000 row table `users`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'active'`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> ALTER TABLE products 
-> ADD COLUMN sku_code VARCHAR(50) NOT NULL DEFAULT 'GENERIC-SKU';
+> ALTER TABLE users 
+> ADD COLUMN status TEXT NOT NULL DEFAULT 'active';
+> ```
+>
+> #### Technical Explanation
+>
+> 1. In PostgreSQL 11+, adding columns with non-volatile default expressions (`DEFAULT 'active'`) executes instantly without rewriting the table heap pages.
+> 2. Updates catalog metadata only.
+> 3. Zero-downtime schema evolution.
+
+---
+
+### Exercise 2: Altering Column Data Types with Explicit Conversion
+
+**Scenario:**
+Alter column `zip_code` from `INTEGER` to `TEXT` on table `addresses`.
+
+**Requirements:**
+1. Execute `ALTER TABLE addresses ALTER COLUMN zip_code TYPE TEXT USING zip_code::TEXT`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TABLE addresses 
+> ALTER COLUMN zip_code TYPE TEXT 
+> USING zip_code::TEXT;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `ALTER COLUMN ... TYPE` converts stored column values to target data types.
+> 2. `USING` clause specifies explicit conversion logic when automatic cast rules do not exist.
+> 3. Re-writes table rows under an AccessExclusive lock.
+
+---
+
+### Exercise 3: Adding Constraints Non-Destructively with NOT VALID
+
+**Scenario:**
+Add a `CHECK` constraint to table `orders` non-destructively using `NOT VALID` and `VALIDATE CONSTRAINT`.
+
+**Requirements:**
+1. Execute `ALTER TABLE orders ADD CONSTRAINT ... NOT VALID` followed by `VALIDATE CONSTRAINT`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> ALTER TABLE orders 
+> ADD CONSTRAINT chk_orders_total_positive 
+> CHECK (total_cents >= 0) NOT VALID;
 > 
-> ALTER TABLE products 
-> ADD CONSTRAINT chk_price_positive CHECK (price >= 0);
+> ALTER TABLE orders 
+> VALIDATE CONSTRAINT chk_orders_total_positive;
 > ```
-> - Run the alterations using separate `ALTER TABLE` statements or chain them using commas.
-> - Match the syntax for adding columns vs adding constraints.
+>
+> #### Technical Explanation
+>
+> 1. `NOT VALID` enforces the constraint for new writes immediately without holding a table-lock to scan existing rows.
+> 2. `VALIDATE CONSTRAINT` scans existing rows concurrently without blocking concurrent table writes.
+> 3. Safe zero-downtime migration strategy for large tables.
 
 ---
 
 
 
-### Exercise 2: Safe DDL with Lock Timeout
-
-**Problem:** Configure `lock_timeout` to 2 seconds and add `status` column to `orders` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SET lock_timeout = '2s'; ALTER TABLE orders ADD COLUMN status VARCHAR(20) DEFAULT 'pending';
-> ```
-> ```sql
-> SET lock_timeout = '2s';
-> ALTER TABLE orders ADD COLUMN status VARCHAR(20) DEFAULT 'pending';
-> ```
->
-> **Explanation:** Setting `lock_timeout` prevents DDL operations from waiting indefinitely for exclusive locks.
-
----
-
-### Exercise 3: Changing Column Data Type
-
-**Problem:** Alter column `code` type from `INT` to `VARCHAR(50)` using `USING` clause.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ALTER TABLE products ALTER COLUMN code TYPE VARCHAR(50) USING code::VARCHAR;
-> ```
-> ```sql
-> ALTER TABLE products ALTER COLUMN code TYPE VARCHAR(50) USING code::VARCHAR;
-> ```
->
-> **Explanation:** `USING expression` specifies explicit type conversion logic during column type alters.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`CREATE TABLE` / `DROP TABLE`](../level_01/create_drop_table.md) — Managing table lifecycles.
 - [`ENUM` Type](enum_type.md) — Related concept: `ENUM` Type.
 - [Database Migrations](../level_10/database_migrations.md) — Related concept: Database Migrations.
@@ -213,7 +241,7 @@ Upgrade to PostgreSQL 11+ or add column without default first, then populate in 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `ALTER TABLE` modifies existing table structures without destroying stored data.
 - Supports adding/dropping columns, changing data types, and attaching constraints.
 - Requires exclusive table locks, which can block traffic on large database tables.

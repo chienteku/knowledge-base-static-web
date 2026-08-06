@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Design Pattern**: The Builder pattern for constructing complex objects step-by-step.
+
+
+**Rust Design Pattern (fluent step-by-step object construction)**: The Builder pattern for constructing complex objects step-by-step.
 
 ---
 
@@ -372,7 +374,7 @@ struct Client { a: i32 } struct ClientBuilder { a: i32 }
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Type-State Pattern](../level_14/type_state_pattern.md) — Type-state builder pattern variant.
 - [`Default` Trait](../level_04/default_trait.md) — Default values.

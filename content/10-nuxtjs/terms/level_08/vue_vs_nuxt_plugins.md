@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Extensibility**
+
+**Extensibility & Modules** (Plugin Paradigm Comparison): Vue plugins hook into Vue 3 `app.use()`, whereas Nuxt plugins wrap Vue plugins with access to `useNuxtApp()`, SSR payload helpers, and helper injection.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server & Client**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If you read the documentation for a standard Vue 3 library (like `vue-toastification`), the installation instructions will always say:
@@ -73,7 +74,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to return `app.use()`
 **The mistake:** Returning the result of `nuxtApp.vueApp.use()` from the Nuxt plugin.
@@ -139,78 +140,115 @@ export default defineNuxtPlugin((nuxtApp) => {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Registering a Global Component
+### Exercise 1: Wrapping Vue 3 Plugins inside Nuxt Plugins
 
-**Problem:** You have a third-party Vue component `SuperSlider`. The documentation says to run `app.component('SuperSlider', SuperSlider)`. Write the Nuxt plugin code to accomplish this.
+**Scenario:**
+Register a third-party Vue 3 plugin (e.g. Vue Toastification or I18n) inside a Nuxt 3 plugin using `vueApp.use()`.
 
-**Expected output:**
+**Requirements:**
+1. Access `nuxtApp.vueApp.use(VuePlugin)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import SuperSlider from 'super-slider-library';
-> 
-> export default defineNuxtPlugin((nuxtApp) => {
->   nuxtApp.vueApp.component('SuperSlider', SuperSlider);
-> });
-> ```
-> - Inside the plugin function, access `nuxtApp.vueApp.component()` to register the component globally.
+> // plugins/vue-component-lib.ts
+> import CustomVueLib from "custom-vue-library";
+
+export default defineNuxtPlugin((nuxtApp) => {
+  // Registers Vue 3 plugin on root Vue app instance
+  nuxtApp.vueApp.use(CustomVueLib, {
+    defaultColor: "blue"
+  });
+});
+```
+
+> #### Technical Explanation
+>
+> 1. `nuxtApp.vueApp` grants access to the root Vue 3 application instance created by Nuxt.
+> 2. `vueApp.use()` registers standard Vue 3 plugins, directives, and global components.
+> 3. Integrates existing Vue 3 ecosystem packages into Nuxt 3 applications.
 
 ---
 
-### Exercise 2: Vue Plugin Registration in Nuxt 3 Pattern
+### Exercise 2: Accessing Nuxt Composables inside Nuxt Plugins
 
-**Problem:** Write Nuxt plugin `plugins/vue-toastification.client.ts` registering third-party Vue plugin `Toast` on `nuxtApp.vueApp`.
+**Scenario:**
+Access `useRuntimeConfig()` and `useCookie()` inside a Nuxt plugin setup function.
 
-**Expected output:**
+**Requirements:**
+1. Call `useRuntimeConfig()` inside `defineNuxtPlugin`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import Toast from 'vue-toastification';
+> // plugins/api-client.ts
 > export default defineNuxtPlugin((nuxtApp) => {
->   nuxtApp.vueApp.use(Toast);
+>   const config = useRuntimeConfig();
+>   const authToken = useCookie("auth_token");
+>   
+>   const apiClient = {
+>     baseUrl: config.public.apiBase,
+>     token: authToken.value
+>   };
+>   
+>   return {
+>     provide: { apiClient }
+>   };
 > });
 > ```
-> - `nuxtApp.vueApp.use()` registers third-party Vue plugins.
-> 
-> ```typescript
-> // plugins/vue-toastification.client.ts
-> import Toast from 'vue-toastification';
-> import 'vue-toastification/dist/index.css';
-> 
-> export default defineNuxtPlugin((nuxtApp) => {
->   nuxtApp.vueApp.use(Toast);
-> });
-> ```
+
+> #### Technical Explanation
+>
+> 1. Nuxt plugins operate within the Nuxt runtime environment context.
+> 2. Can freely invoke Nuxt composables (`useRuntimeConfig()`, `useCookie()`, `useRoute()`).
+> 3. Superior capabilities compared to standalone Vue 3 plugins.
 
 ---
 
-### Exercise 3: Vue vs Nuxt Plugin Distinction
+### Exercise 3: Comparing Vue 3 Plugin vs Nuxt 3 Plugin Capabilities
 
-**Problem:** Compare Vue Plugins vs Nuxt Plugins.
+**Scenario:**
+Formulate a selection matrix comparing Vue 3 plugins vs Nuxt 3 plugins.
 
-**Expected output:**
+**Requirements:**
+1. Contrast `app.use()` vs `defineNuxtPlugin` features.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Vue Plugins: Extend Vue app instance (components, directives);
-> Nuxt Plugins: Extend full Nuxt lifecycle (SSR context, Nitro hooks, universal payload, provide helpers).
+> Plugin Paradigm Comparison:
+> - Vue 3 Plugin: Function receiving vueApp instance. No built-in SSR payload helper or Nitro integration.
+> - Nuxt 3 Plugin: Function receiving nuxtApp context. Provides helper injection ($helper), SSR payload hooks, and auto-registration from plugins/ directory.
 > ```
-> - Vue Plugins -> Extend Vue component instance.
-> - Nuxt Plugins -> Extend full Nuxt universal lifecycle & Nitro server.
-> 
-> ```text
-> Vue Plugins = Component Scope; Nuxt Plugins = Full Universal Application Scope.
-> ```
+
+> #### Technical Explanation
+>
+> 1. Vue plugins manage client component trees.
+> 2. Nuxt plugins orchestrate isomorphic server and client initialization across the full stack.
+> 3. Fundamental platform architectural distinction.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`plugins/` Directory](plugins_directory.md) — The folder where these files must be placed.
 - [`useNuxtApp` Context](../level_04/use_nuxt_app.md) — The parent object that holds `.vueApp`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Standard Vue documentation assumes you have a `main.ts` file with `createApp()`.
 - In Nuxt, you access `createApp()` via `nuxtApp.vueApp` inside a Nuxt plugin.
 - Use `nuxtApp.vueApp.use()` to install standard Vue plugins.

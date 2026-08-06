@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (upsert key collision clause)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Evaluated during the write phase. Intercepts key violation exceptions at the indexing layer and converts them to update transactions).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When importing bulk data or logging transactions, you often run into duplicate keys:
@@ -79,7 +78,7 @@ INSERT INTO user_logs {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to use PostgreSQL's 'ON CONFLICT' syntax inside SurrealQL 'INSERT' statements, causing compiler crashes
 
@@ -135,68 +134,103 @@ INSERT INTO user { id: user:1, name: "New" } ON DUPLICATE KEY UPDATE name = name
 INSERT INTO user { id: user:1, name: "New" } ON DUPLICATE KEY UPDATE name = $input.name;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Upsert Query Construction
+### Exercise 1: Upserting Key Collisions with `ON DUPLICATE KEY UPDATE`
 
-**Problem:** You are syncing a product inventory list. Write the SurrealQL query to:
-1.  Insert a record into the `store` table.
-2.  Record ID is `store:item_05`.
-3.  Set `quantity` to `100`.
-4.  If the record already exists, add `50` to the existing `quantity` value.
+**Scenario:**
+An analytics counter tracks page view counts in table `page_metric`. When inserting a page metric for `page:home`, if the key already exists, increment `views` by 1 instead of failing.
 
-**Expected output:**
+**Requirements:**
+1. Write an `INSERT INTO page_metric` statement for `id: page_metric:home`.
+2. Add `ON DUPLICATE KEY UPDATE views += 1`.
+
 > [!check]- Answer
-> ```sql
-> INSERT INTO store { id: store:item_05, quantity: 100 } ON DUPLICATE KEY UPDATE quantity += 50;
-> ```
-> - The table target is `store`.
-> - Use `ON DUPLICATE KEY UPDATE` followed by the increment operator `+=`.
-
----
-
-
-
-### Exercise 2: Upserting Records on Key Collision
-
-**Problem:** Write `INSERT INTO user:alice` that updates `login_count = login_count + 1` on duplicate key.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> INSERT INTO user:alice { name: "Alice", login_count: 1 } ON DUPLICATE KEY UPDATE login_count += 1;
-> ```
+>
+> #### Implementation
+>
 > ```surrealql
-> INSERT INTO user:alice { name: "Alice", login_count: 1 } ON DUPLICATE KEY UPDATE login_count += 1;
+> INSERT INTO page_metric [
+>     { id: page_metric:home, page: "home", views: 1 }
+> ]
+> ON DUPLICATE KEY UPDATE views += 1;
 > ```
 >
-> **Explanation:** `ON DUPLICATE KEY UPDATE` modifies existing fields upon primary key collision.
+> #### Technical Explanation
+>
+> 1. `ON DUPLICATE KEY UPDATE` converts key collision failures into atomic record updates.
+> 2. `views += 1` increments the existing counter field when a primary key collision occurs.
+> 3. Equivalent to PostgreSQL `ON CONFLICT (id) DO UPDATE`.
 
 ---
 
-### Exercise 3: $input Variable Usage
+### Exercise 2: Overwriting Specific Fields on Key Collision
 
-**Problem:** Explain what `$input` represents inside `ON DUPLICATE KEY UPDATE` clauses.
+**Scenario:**
+A user synchronization job receives user profile updates. If a user record `user:alice` already exists, update `last_login = time::now()` while preserving original creation dates.
 
-**Expected output:**
+**Requirements:**
+1. Insert `user:alice` with `last_login = time::now()`.
+2. Use `ON DUPLICATE KEY UPDATE last_login = time::now()`.
+
 > [!check]- Answer
-> ```text
-> $input represents the incoming record data payload attempted in the INSERT statement
-> ```
-> ```text
-> $input represents the incoming record data payload attempted in the INSERT statement
+>
+> #### Implementation
+>
+> ```surrealql
+> INSERT INTO user [
+>     { id: user:alice, name: "Alice", last_login: time::now() }
+> ]
+> ON DUPLICATE KEY UPDATE last_login = time::now();
 > ```
 >
-> **Explanation:** `$input` binds incoming insert values during duplicate key resolution.
+> #### Technical Explanation
+>
+> 1. Updates specified fields (`last_login`) on conflict without overwriting unmentioned fields (`created_at`).
+> 2. Eliminates the need for separate read-then-update application logic.
+> 3. Operates within an atomic write transaction.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Bulk Upserting Key Array Batches
+
+**Scenario:**
+A sync job processes a batch of product records where some products exist and others are new. Bulk-insert the batch and update prices on duplicate keys.
+
+**Requirements:**
+1. Bulk-insert products `product:p1` and `product:p2`.
+2. Add `ON DUPLICATE KEY UPDATE price = $input.price`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> INSERT INTO product [
+>     { id: product:p1, name: "Widget A", price: 19.99dec },
+>     { id: product:p2, name: "Widget B", price: 29.99dec }
+> ]
+> ON DUPLICATE KEY UPDATE price = $input.price;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$input.price` references the incoming value from the insertion payload.
+> 2. Bulk upserts process mixed batches of new insertions and existing updates in a single roundtrip.
+> 3. Maximizes data ingestion throughput for synchronization jobs.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`INSERT`](insert.md) — The parent write statement.
 - [`UPSERT`](upsert.md) — The native standalone upsert statement.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `ON DUPLICATE KEY UPDATE` handles key conflicts during `INSERT` queries.
 - Prevents database write crashes by converting duplicate errors into updates.
 - Uses MySQL-style upsert syntax; does not support PostgreSQL's `ON CONFLICT`.

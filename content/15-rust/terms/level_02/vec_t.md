@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: Vectors (also called dynamic arrays) are a fundamental data structure in computer science. They exist in almost every language under different names: `ArrayList` in Java, `list` in Python, `Array` in JavaScript, and `std::vector` in C++.
+
+
+**Rust Standard Collection (heap-allocated dynamic array)**: Vectors (also called dynamic arrays) are a fundamental data structure in computer science. They exist in almost every language under different names: `ArrayList` in Java, `list` in Python, `Array` in JavaScript, and `std::vector` in C++.
 
 ---
 
@@ -154,7 +156,7 @@ thread::spawn(move || {
 
 ### Exercise 1: High-Frequency Trading Order Buffer Engine (`Vec<T>` Capacity & Batch Ingestion)
 
-**Problem:** In a low-latency financial trading system, market orders arrive in dense bursts. Frequently allocating and reallocating heap memory inside critical trading loops causes memory fragmentation and unpredictable latency spikes. You must implement an order batch buffer `OrderBatchProcessor` that manages an internal `Vec<Order>`.
+**Scenario:** In a low-latency financial trading system, market orders arrive in dense bursts. Frequently allocating and reallocating heap memory inside critical trading loops causes memory fragmentation and unpredictable latency spikes. You must implement an order batch buffer `OrderBatchProcessor` that manages an internal `Vec<Order>`.
 
 Requirements:
 1. Define an `Order` struct containing fields: `id: u64`, `symbol: String`, `price: u64`, `quantity: u32`, `is_buy: bool`.
@@ -280,7 +282,7 @@ Requirements:
 
 ### Exercise 2: Binary Protocol Streaming Frame Decoder (`Vec<u8>` Byte Manipulation)
 
-**Problem:** In network server development, raw TCP streams yield fragmented byte chunks. A custom binary RPC protocol defines frames with the following structure:
+**Scenario:** In network server development, raw TCP streams yield fragmented byte chunks. A custom binary RPC protocol defines frames with the following structure:
 - **Magic Byte**: `0xAA` (1 byte)
 - **Payload Length**: 2 bytes (Big-Endian `u16`)
 - **Payload Data**: $N$ bytes (where $N = \text{length}$)
@@ -413,7 +415,7 @@ Requirements:
 
 ### Exercise 3: Time-Series Sensor Aggregator & Sliding Window (`Vec<T>` Partitioning & Slicing)
 
-**Problem:** Edge telemetry compute nodes aggregate high-frequency sensor readings. You need to implement `TimeSeriesAggregator` to manage timestamped metric samples (`timestamp: u64`, `sensor_id: u32`, `value: f64`).
+**Scenario:** Edge telemetry compute nodes aggregate high-frequency sensor readings. You need to implement `TimeSeriesAggregator` to manage timestamped metric samples (`timestamp: u64`, `sensor_id: u32`, `value: f64`).
 
 Requirements:
 1. Define struct `MetricPoint { pub timestamp: u64, pub sensor_id: u32, pub value: f64 }`.

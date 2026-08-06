@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Infrastructure**
+
+**Build & Deployment** (Global Edge CDN Network): Global Edge CDNs cache static HTML and assets across worldwide edge nodes to deliver low-latency page loads.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Content is cached and distributed across edge servers globally, while origin logic resides on centralized servers).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If your application server is physically located in a data center in Virginia, USA, a user visiting your site from Tokyo, Japan, faces a physical limitation. Data signals must travel across undersea cables, introducing speed-of-light propagation delays. This round-trip network latency makes the page load slowly.
@@ -47,7 +48,7 @@ To prevent visitors from seeing outdated data, Next.js uses On-Demand Revalidati
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting a CDN cache to update immediately after database mutations without revalidation
 
@@ -96,65 +97,110 @@ res.headers.set('Cache-Control', 'private, no-store'); // Prevents public CDN ca
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Edge Redirection Flow
+### Exercise 1: Configuring Edge Cache Headers for Static Assets
 
-**Problem:** A user visits a page `/dashboard` that is cached at a CDN edge in London. However, the request passes through your `middleware.ts` first. Explain why redirecting the user to `/login` from middleware is faster than redirecting from a Server Component:
+**Scenario:**
+Configure Cache-Control headers (`public, max-age=31536000, immutable`) for static public assets.
 
-**Expected output:**
+**Requirements:**
+1. Configure `headers()` array in `next.config.js`.
+
 > [!check]- Answer
-> ```text
-> Middleware runs directly on the Edge server in London. 
-> Because the middleware intercepts the request at the edge, it can read the cookies and trigger the redirect to /login immediately without sending the request across the network to the central origin server. 
-> Redirecting from a Server Component requires routing the request to the origin server, compiling the component, and returning the response, wasting time and network resources.
+>
+> #### Implementation
+>
+> ```javascript
+> // next.config.js
+> module.exports = {
+>   async headers() {
+>     return [
+>       {
+>         source: "/static/:path*",
+>         headers: [
+>           { key: "Cache-Control", value: "public, max-age=31536000, immutable" }
+>         ]
+>       }
+>     ];
+>   }
+> };
 > ```
-> - Think about the physical travel path of the network request.
+
+> #### Technical Explanation
+>
+> 1. Edge CDNs cache immutable static assets across worldwide edge POPs (Points of Presence).
+> 2. `max-age=31536000, immutable` instructs CDN edge servers and browsers to cache files permanently.
+> 3. Reduces origin server bandwidth and TTFB latency.
 
 ---
 
-### Exercise 2: Vercel Edge Network Dynamic Purge
+### Exercise 2: Purging Global CDN Edge Cache Entries
 
-**Problem:** Which HTTP response header allows Next.js static pages to be cached on global Vercel Edge CDN nodes with background revalidation?
+**Scenario:**
+Explain how `revalidatePath` and `revalidateTag` invalidate edge CDN cache layers.
 
-**Expected output:**
+**Requirements:**
+1. Detail CDN cache purging workflow.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> s-maxage (e.g. Cache-Control: s-maxage=60, stale-while-revalidate)
+> Edge CDN Purge Workflow:
+> - Step: Server Action calls revalidateTag('products').
+> - Step: Next.js server sends invalidation signal to global CDN Edge network.
+> - Step: Edge CDN purges matching cached HTML files across all global edge nodes instantly!
 > ```
-> - `s-maxage` directs shared CDN edge caches.
-> 
-> ```http
-> Cache-Control: s-maxage=60, stale-while-revalidate=3600
-> ```
+
+> #### Technical Explanation
+>
+> 1. Next.js integrates Data Cache invalidation directly with deployment CDN edge networks.
+> 2. On-demand revalidation purges global CDN edge caches without site rebuilds.
+> 3. Global cache synchronization mechanism.
 
 ---
 
-### Exercise 3: Edge vs Origin Latency Advantage
+### Exercise 3: Auditing Edge CDN Response Headers
 
-**Problem:** How does executing Edge Functions at CDN edge nodes reduce TTFB latency for international users?
+**Scenario:**
+Inspect `x-vercel-cache` or `cf-cache-status` headers to verify global CDN edge cache hits.
 
-**Expected output:**
+**Requirements:**
+1. Detail CDN cache header status strings.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```text
-> Edge functions execute in PoP data centers physically closest to the user, eliminating round-trip latency to a distant central origin server.
+> Edge CDN Header Status:
+> - x-vercel-cache: HIT        -> Response served directly from nearest Edge CDN node.
+> - x-vercel-cache: MISS       -> Edge node fetched fresh response from origin server.
+> - x-vercel-cache: BYPASS     -> Response bypassed CDN cache due to dynamic headers/cookies.
 > ```
-> - Executes in CDN PoP data centers closest to the user.
-> 
-> ```text
-> Reduces physical network round-trip distance.
-> ```
+
+> #### Technical Explanation
+>
+> 1. Edge CDN response headers confirm whether requests are served from edge cache or origin servers.
+> 2. `HIT` responses achieve ultra-low TTFB (< 20ms).
+> 3. Empirical CDN performance audit step.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Incremental Static Regeneration (ISR)](../level_08/isr.md) — The hybrid cache strategy managed by CDNs.
 - [Serverless Functions](serverless_functions.md) — The centralized handlers that compile dynamic pages.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - CDNs store cached files on globally distributed proxy servers.
 - Serving content from a local CDN edge minimizes round-trip latency.
 - Static assets and pre-rendered SSG HTML are cached globally at the edge.

@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Data Type**
+
+**Core Concept** (Raw Bytes BSON Type): Binary Data (BinData) is the BSON data type used to store raw unparsed byte arrays, such as UUIDs, cryptographic hashes, or small file blobs.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Stored directly as binary payload bytes. Enforced in client drivers using `BinData` wrappers or native language Buffer classes).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Applications frequently require storing raw, non-text data:
@@ -82,7 +83,7 @@ db.devices.find({
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing large media files (like 5MB photos or PDF files) directly inside a document's binary field
 
@@ -132,66 +133,99 @@ new Binary(uuidBuffer, 0); // Generic binary subtype
 new Binary(uuidBuffer, Binary.SUBTYPE_UUID); // Explicit UUID Subtype 4
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: UUID Query Syntax
+### Exercise 1: Storing Standard UUIDs as BSON BinData
 
-**Problem:** You are querying a device registry. Write the MongoDB query to select all documents where the `gateway_uuid` field matches the standard UUID `'9f3e4567-e89b-12d3-a456-426614174000'`.
+**Scenario:**
+Store user sessions where the session token is formatted as a 16-byte binary UUID using BSON BinData type 4.
 
-**Expected output:**
+**Requirements:**
+1. Insert document with `token: UUID("550e8400-e29b-41d4-a716-446655440000")`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.devices.find({ gateway_uuid: UUID("9f3e4567-e89b-12d3-a456-426614174000") });
+> db.sessions.insertOne({
+>   _id: UUID("550e8400-e29b-41d4-a716-446655440000"),
+>   userId: new ObjectId(),
+>   createdAt: new Date()
+> });
 > ```
-> - Wrap the hex string inside the built-in shell helper constructor `UUID()`.
-> - Specify the exact field name target in the match filter.
+>
+> #### Technical Explanation
+>
+> 1. `UUID()` converts 36-character string UUIDs into 16-byte BSON BinData subtype 4.
+> 2. Reduces index storage space by 55% compared to storing raw UUID strings.
+> 3. Accelerates index comparisons and memory caching.
+
+---
+
+### Exercise 2: Querying Binary Data Fields
+
+**Scenario:**
+Query session collection by exact binary UUID match.
+
+**Requirements:**
+1. Query `_id: UUID("550e8400-e29b-41d4-a716-446655440000")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.sessions.find({
+>   _id: UUID("550e8400-e29b-41d4-a716-446655440000")
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Binary comparisons evaluate raw byte arrays directly in $O(1)$ time.
+> 2. Ensures driver-level UUID subtype alignment (Subtype 4 standard).
+> 3. Leverages primary key index lookups.
+
+---
+
+### Exercise 3: Storing Small File Binary Blobs
+
+**Scenario:**
+Store a user profile thumbnail image (under 1MB) as a raw binary buffer using BSON `BinData`.
+
+**Requirements:**
+1. Insert document with `avatar: BinData(0, "aW1hZ2VfYnl0ZXNfaGVyZQ==")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { $set: { avatar: BinData(0, "aW1hZ2VfYnl0ZXNfaGVyZQ==") } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `BinData(0, base64)` stores raw unformatted binary byte buffers.
+> 2. Suitable for small files under 1MB; use GridFS for files exceeding 16MB.
+> 3. Keeps binary payloads embedded alongside document metadata.
 
 ---
 
 
 
-### Exercise 2: Creating BSON Binary Buffer in Node.js
-
-**Problem:** Create BSON `Binary` instance from Node.js `Buffer.from('hello')`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> new Binary(Buffer.from('hello'))
-> ```
-> ```javascript
-> const { Binary } = require('mongodb');
-> const bin = new Binary(Buffer.from('hello'));
-> console.log(bin.buffer);
-> ```
->
-> **Explanation:** `Binary` wraps Node.js buffers into BSON BinData objects.
-
----
-
-### Exercise 3: GridFS vs BinData Threshold
-
-**Problem:** What is the recommended size threshold for using GridFS instead of `BinData` in documents? (16MB or >16MB).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 16MB threshold (use GridFS for files exceeding 16MB)
-> ```
-> ```text
-> 16MB threshold (use GridFS for files exceeding 16MB)
-> ```
->
-> **Explanation:** GridFS chunks large files into 255KB pieces for storage across collections.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent types.
 - [`UUID` Type](../../../12-postgres/terms/level_06/uuid_type.md) — Relational equivalents.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - BSON Binary stores raw, unformatted byte payloads.
 - Serves as the MongoDB equivalent to PostgreSQL's `BYTEA` type.
 - Prevents the storage overhead of base64 text strings (saves 33% space).

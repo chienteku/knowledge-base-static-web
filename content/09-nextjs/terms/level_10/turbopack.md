@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Build Tooling**
+
+**Build & Deployment** (Rust-Powered Incremental Bundler): Turbopack is a Rust-based incremental bundler optimized for high-speed local development in `next dev --turbo`.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time (Development Server)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 During local development, developers save changes to their code and expect to see the results update instantly in the browser. This process is called **Hot Module Replacement (HMR)**.
@@ -46,7 +47,7 @@ It is important to understand the difference between **SWC** and **Turbopack**:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing compile-time compiler plugins with Webpack configuration rules
 
@@ -95,73 +96,110 @@ next dev --turbo # Fast development server powered by Turbopack
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Run Turbopack
+### Exercise 1: Running Local Development with Turbopack (`next dev --turbo`)
 
-**Problem:** How do you launch the Next.js development server with Turbopack enabled?
+**Scenario:**
+Execute local development server using Turbopack in Next.js.
 
-**Expected output:**
+**Requirements:**
+1. Run `next dev --turbo` CLI command.
+
 > [!check]- Answer
-> ```json
-> // Inside package.json scripts:
-> {
->   "scripts": {
->     "dev": "next dev --turbo"
+>
+> #### Implementation
+>
+> ```bash
+> # Start local development server with Turbopack bundler
+> npx next dev --turbo
+> ```
+
+> #### Technical Explanation
+>
+> 1. Turbopack is an incremental bundler written in Rust designed as the successor to Webpack.
+> 2. `next dev --turbo` delivers up to 10x faster initial startup times and instant HMR updates.
+> 3. Re-evaluates ONLY modified functions using an internal function call graph.
+
+---
+
+### Exercise 2: Configuring Webpack Loaders in Turbopack (`experimental.turbo`)
+
+**Scenario:**
+Configure custom SVG loaders inside `next.config.js` under `experimental.turbo`.
+
+**Requirements:**
+1. Configure `experimental.turbo.rules` in `next.config.js`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> // next.config.js
+> module.exports = {
+>   experimental: {
+>     turbo: {
+>       rules: {
+>         "*.svg": {
+>           loaders: ["@svgr/webpack"],
+>           as: "*.js"
+>         }
+>       }
+>     }
 >   }
-> }
+> };
 > ```
-> - Add the `--turbo` option flag to the standard `next dev` command.
+
+> #### Technical Explanation
+>
+> 1. `experimental.turbo` configures custom asset loading rules for Turbopack.
+> 2. Replaces traditional Webpack module rules when running `next dev --turbo`.
+> 3. Maintains custom asset loader compatibility.
 
 ---
 
-### Exercise 2: Turbopack Dev Command
+### Exercise 3: Incremental Computation Architecture in Turbopack
 
-**Problem:** Write `package.json` script command launching Next.js dev server with Turbopack acceleration.
+**Scenario:**
+Explain how Turbopack's Turbo Engine architecture caches function results in memory for instant HMR updates.
 
-**Expected output:**
+**Requirements:**
+1. Detail function memoization graph mechanics.
+
 > [!check]- Answer
-> ```json
-> "dev": "next dev --turbo"
+>
+> #### Implementation
+>
+> ```text
+> Turbopack Incremental Engine Architecture:
+> - Step: Turbopack models entire compilation process as a graph of pure functions.
+> - Step: When a file changes, Turbopack re-executes ONLY the exact functions dependent on that file.
+> - Step: Unchanged components and modules return cached memory results instantly!
+> Result: HMR update times stay constant regardless of application size!
 > ```
-> - `--turbo` flag enables Turbopack in development.
-> 
-> ```json
-> {
->   "scripts": {
->     "dev": "next dev --turbo"
->   }
-> }
-> ```
+
+> #### Technical Explanation
+>
+> 1. Webpack re-bundles large module trees on file changes; Turbopack re-evaluates individual functions.
+> 2. Ensures HMR speed remains fast even in massive enterprise monorepos.
+> 3. Core architectural innovation of Turbopack.
 
 ---
 
-### Exercise 3: Turbopack Architecture Engine
 
-**Problem:** Which programming language powers Turbopack, and which bundler is it designed to replace?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Written in Rust; designed to replace Webpack (up to 700x faster updates).
-> ```
-> - Rust-based incremental bundler replacing Webpack.
-> 
-> ```text
-> Turbopack (Rust) -> Webpack Replacement
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [The Next.js Compiler (SWC)](swc.md) — The file compilation system.
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The execution host.
 - [`next.config.mjs`](../level_02/next_config.md) — next.config.js.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Turbopack is an incremental Rust-based bundler designed to replace Webpack.
 - It operates using incremental computations to compile only modified modules.
 - Turbopack delivers near-instant starts and Hot Module Replacement (HMR) times.

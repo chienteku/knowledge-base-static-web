@@ -139,7 +139,7 @@ reqwest = { version = "0.11", default-features = false, features = ["json"] } # 
 
 ### Exercise 1: The Bare Minimum
 
-**Problem:** Write the `Cargo.toml` line to import `reqwest` version `0.11`. You want to disable all default features to keep the compile time low, but you DO want to enable the `json` feature.
+**Scenario:** Write the `Cargo.toml` line to import `reqwest` version `0.11`. You want to disable all default features to keep the compile time low, but you DO want to enable the `json` feature.
 
 > [!check]- Answer
 > ```toml
@@ -151,7 +151,7 @@ reqwest = { version = "0.11", default-features = false, features = ["json"] } # 
 
 ### Exercise 2: Designing a `[features]` Section
 
-**Problem:**
+**Scenario:**
 You are building a crate called `http_client` with three optional capabilities: `json` (JSON body support via `serde_json`), `tls` (HTTPS via `rustls`), and `cookies` (cookie jar). You want `json` and `tls` to be on by default (most users need them), but `cookies` must be explicitly opted in.
 
 Write the complete `[features]` section in `Cargo.toml` for this crate, then answer:
@@ -187,20 +187,24 @@ Write the complete `[features]` section in `Cargo.toml` for this crate, then ans
 > **3. `dep:serde_json` vs just `serde_json`:**
 > In older Cargo (before 1.60), writing `serde_json` in a feature list implicitly created a *feature* named `serde_json` in addition to activating the dependency. This caused crate API leakage \u2014 users could accidentally enable `serde_json` by activating a feature named `serde_json`. The `dep:` prefix (Cargo 1.60+) explicitly says "activate the *dependency* named `serde_json`" without creating an implicit feature by the same name. Always prefer `dep:` for new crates.
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > Feature design is a core library authorship skill. The `default` feature controls the out-of-the-box experience; `dep:` keeps the feature namespace clean; and `default-features = false` gives downstream users the escape hatch to build a minimal version.
 
 ---
 
 ### Exercise 3: Conditional Feature Code Gating
 
-**Problem:** Gate a function with `#[cfg(feature = "extra")]`.
+**Scenario:** Gate a function with `#[cfg(feature = "extra")]`.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Extra feature code compiled
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > #[cfg(feature = "extra")]
 > fn extra() { println!("Extra feature code compiled"); }
@@ -210,7 +214,8 @@ Write the complete `[features]` section in `Cargo.toml` for this crate, then ans
 > }
 > ```
 >
-> **Explanation:** Feature flags map directly to `#[cfg(feature = "...")]` conditional compilation gates.
+> #### Technical Explanation
+> Feature flags map directly to `#[cfg(feature = "...")]` conditional compilation gates.
 
 ---
 

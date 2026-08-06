@@ -151,9 +151,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Component Service Integration & Shared Fixture Test Harness
 
-**Problem Requirements:**
+**Scenario:** **Problem Requirements:**
 In production microservices built with Rust, integration testing requires validating multi-component workflows (such as an in-memory transactional Event Bus interacting with a User Account Service) strictly through public interfaces while sharing fixture setup patterns (mimicking `tests/common/mod.rs`).
 
+**Requirements:**
 1. Define an `Event` enum representing domain events: `UserCreated { id: u64, email: String }` and `UserDeleted { id: u64 }`.
 2. Define a thread-safe `EventListener` trait with `fn on_event(&self, event: &Event) -> Result<(), String>`.
 3. Implement an `EventBus` struct that maintains registered listeners using `Arc<Mutex<Vec<Box<dyn EventListener>>>>` and dispatches published events to listeners.
@@ -166,6 +167,9 @@ In production microservices built with Rust, integration testing requires valida
 7. Use rigorous assertions (`assert_eq!`, `assert!`).
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > use std::sync::{Arc, Mutex, RwLock};
@@ -360,9 +364,10 @@ In production microservices built with Rust, integration testing requires valida
 
 ### Exercise 2: Black-Box Integration Testing of HTTP API Middleware & Rate Limiting
 
-**Problem Requirements:**
+**Scenario:** **Problem Requirements:**
 Web services require black-box integration testing to ensure that middleware layers (such as Authentication and Rate Limiting) execute correctly before request handlers are reached.
 
+**Requirements:**
 1. Define a public `Request` struct with `path: String`, `token: Option<String>`, and `client_ip: String`.
 2. Define a public `Response` struct with `status_code: u16` and `body: String`.
 3. Define a `Middleware` trait with `fn handle(&self, req: &Request) -> Result<(), Response>`.
@@ -375,6 +380,9 @@ Web services require black-box integration testing to ensure that middleware lay
    - Valid requests to unknown paths return HTTP 404.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > use std::sync::Mutex;
@@ -557,9 +565,10 @@ Web services require black-box integration testing to ensure that middleware lay
 
 ### Exercise 3: Asynchronous Workflow Pipeline Integration & Fault Injection Testing
 
-**Problem Requirements:**
+**Scenario:** **Problem Requirements:**
 Integration tests often need to verify transaction boundaries and fault tolerance when coordinating multiple external service traits (e.g. Payment Gateways and Notification Systems).
 
+**Requirements:**
 1. Define a `PaymentResult` enum with variants `Success { tx_id: String }` and `Failed { reason: String }`.
 2. Define a trait `PaymentGateway: Send + Sync` with `fn charge(&self, account_id: &str, amount_cents: u64) -> PaymentResult`.
 3. Define a trait `NotificationService: Send + Sync` with `fn notify(&self, account_id: &str, message: &str) -> Result<(), String>`.
@@ -572,6 +581,9 @@ Integration tests often need to verify transaction boundaries and fault toleranc
 7. Write a unit/integration test suite (`#[cfg(test)] mod tests`) using `assert_eq!`, `assert!`, and string matching to test successful processing, payment failure rollbacks, and notification fault injection.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::{Arc, Mutex};
 > 

@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Rust-nonspecific**: Similar concepts exist in many languages, such as array methods in JavaScript (`array.map().filter()`) or the Streams API in Java. However, Rust's adapters are famous for being strictly lazy and compiling down to hyper-optimized machine code.
+
+
+**Rust Abstraction (lazy iterator transformers)**: Similar concepts exist in many languages, such as array methods in JavaScript (`array.map().filter()`) or the Streams API in Java. However, Rust's adapters are famous for being strictly lazy and compiling down to hyper-optimized machine code.
 
 ---
 

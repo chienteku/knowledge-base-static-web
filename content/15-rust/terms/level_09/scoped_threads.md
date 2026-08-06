@@ -158,11 +158,14 @@ thread::spawn(move || {
 
 ### Exercise 1: In-Place Parallel Image Brightness Processing with Stack Chunking
 
-**Problem:** A real-time image processing subsystem receives a raw mutable pixel buffer (`&mut [u8]`) residing on the caller's stack frame. To minimize latency and avoid heap allocations (such as `Vec` allocations or `Arc` reference counting), write a thread-safe function `parallel_adjust_brightness(pixels: &mut [u8], factor: i16, num_threads: usize) -> Vec<ChunkStats>` that partitions the mutable slice into non-overlapping chunks using `chunks_mut` and processes each chunk concurrently inside a `std::thread::scope`. 
+**Scenario:** A real-time image processing subsystem receives a raw mutable pixel buffer (`&mut [u8]`) residing on the caller's stack frame. To minimize latency and avoid heap allocations (such as `Vec` allocations or `Arc` reference counting), write a thread-safe function `parallel_adjust_brightness(pixels: &mut [u8], factor: i16, num_threads: usize) -> Vec<ChunkStats>` that partitions the mutable slice into non-overlapping chunks using `chunks_mut` and processes each chunk concurrently inside a `std::thread::scope`. 
 
 Each scoped thread must iterate over its assigned chunk, apply the brightness offset to each pixel with saturation clamping (`0..=255`), and collect per-chunk statistics (`ChunkStats { min_val, max_val, pixels_processed }`). Return the collected statistics from all join handles.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::thread;
 > 
@@ -270,7 +273,8 @@ Each scoped thread must iterate over its assigned chunk, apply the brightness of
 >     }
 > }
 > ```
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Zero-Allocation Stack Borrowing:** Unscoped `std::thread::spawn` requires `'static` lifetimes, forcing caller data to be copied or wrapped in `Arc`. `std::thread::scope` guarantees that all worker threads join before the function exits, enabling scoped threads to borrow `&mut [u8]` directly from the stack.
 > 2. **Aliasing XOR Mutability:** Rust's borrow checker prohibits multiple threads from borrowing the same `&mut [u8]`. By partitioning the slice into disjoint sub-slices via `chunks_mut`, each worker receives exclusive ownership of a distinct memory region, satisfying Rust's safety rules without locks or atomics.
 > 3. **Thread Return Values:** Thread join handles in `std::thread::scope` return values directly from worker closures (`s.spawn(move || ...)`). Calling `handle.join().unwrap()` collects per-thread `ChunkStats` deterministically without atomic synchronization.
@@ -280,11 +284,14 @@ Each scoped thread must iterate over its assigned chunk, apply the brightness of
 
 ### Exercise 2: Concurrent Log Audit Pipeline with Scoped Panic & Error Propagation
 
-**Problem:** A log monitoring daemon audits large slice collections of log strings (`&[&str]`) stored on the orchestrator's stack frame. Implement `audit_logs_parallel(logs: &[&str], num_workers: usize) -> Result<AuditReport, LogParseError>` using `std::thread::scope`.
+**Scenario:** A log monitoring daemon audits large slice collections of log strings (`&[&str]`) stored on the orchestrator's stack frame. Implement `audit_logs_parallel(logs: &[&str], num_workers: usize) -> Result<AuditReport, LogParseError>` using `std::thread::scope`.
 
 The function must split the log slice among worker threads. Workers parse log lines to aggregate log level counts (`total_logs`, `error_count`, `warn_count`, `info_count`). If any thread encounters a log entry containing `"CORRUPTED"`, it immediately returns `Err(LogParseError::CorruptedPayload(String))`. The orchestrator must collect worker results, aggregate reports on success, or short-circuit and return the parsing error.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::thread;
 > 
@@ -401,7 +408,8 @@ The function must split the log slice among worker threads. Workers parse log li
 >     }
 > }
 > ```
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Scoped Lifetime Propagation:** The log slice `&[&str]` consists of string slices tied to stack lifetimes. Using `std::thread::scope` allows worker threads to capture `chunk: &[&str]` via `move` closures without allocating `Arc<Vec<String>>`.
 > 2. **Panic and Error Safety:** `std::thread::scope` automatically joins all unjoined threads when the scope block exits (even during panics). Handling `Result` returns inside join handles allows graceful error propagation back to the caller function.
 > 3. **Deterministic Aggregation:** Thread join handle results are processed sequentially by the parent thread, producing deterministic aggregate metrics without mutex contention.
@@ -411,7 +419,7 @@ The function must split the log slice among worker threads. Workers parse log li
 
 ### Exercise 3: Scoped Multi-Stage Streaming ETL Pipeline with Zero-Copy Stack Borrowing
 
-**Problem:** In a multi-stage streaming data engine, incoming `DataPoint` structs flow through a pipeline across concurrent stages:
+**Scenario:** In a multi-stage streaming data engine, incoming `DataPoint` structs flow through a pipeline across concurrent stages:
 1. **Stage 1 (Filter):** Borrows `data: &[DataPoint]` and `config: &PipelineConfig` from the caller stack frame, filtering data points meeting `min_threshold` and sending them over a channel.
 2. **Stage 2 (Transform):** Receives data from Stage 1, looks up category weights in a stack-allocated lookup table `&HashMap<String, u64>`, computes `score = raw_value * weight * config.multiplier`, and sends scores over a second channel.
 3. **Stage 3 (Aggregate):** Receives transformed scores and aggregates them into `PipelineSummary { processed_count, total_weighted_score }`.
@@ -419,6 +427,9 @@ The function must split the log slice among worker threads. Workers parse log li
 Implement `run_scoped_pipeline(data: &[DataPoint], lookup: &HashMap<String, u64>, config: &PipelineConfig) -> PipelineSummary` using `std::thread::scope` and `std::sync::mpsc::channel`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
 > use std::sync::mpsc;
@@ -539,7 +550,8 @@ Implement `run_scoped_pipeline(data: &[DataPoint], lookup: &HashMap<String, u64>
 >     }
 > }
 > ```
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Zero-Copy Multi-Thread Sharing:** Scoped threads allow Stage 1 and Stage 2 to concurrently borrow `config` and `lookup` from the caller's stack frame. No `Arc`, `RwLock`, or deep cloning of lookup tables is required.
 > 2. **Automatic Channel Shutdown:** Senders (`tx1`, `tx2`) are moved into stage closures inside `std::thread::scope`. When Stage 1 finishes iterating over `data`, `tx1` is dropped, causing `rx1` iteration in Stage 2 to terminate cleanly. Likewise, `tx2` drops when Stage 2 finishes, terminating Stage 3 naturally.
 > 3. **Compiler Lifetime Guarantees:** Because `thread::scope` blocks until Stage 1, Stage 2, and Stage 3 complete, the Rust compiler guarantees that `data`, `lookup`, and `config` outlive all three threads.

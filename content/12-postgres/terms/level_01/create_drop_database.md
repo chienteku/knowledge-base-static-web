@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **SQL DDL Statement**
+
+**SQL Command / Clause** (Database DDL Commands): `CREATE DATABASE` and `DROP DATABASE` allocate or destroy isolated PostgreSQL database clusters.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core DDL** (Standard commands. In Postgres, you cannot execute these statements inside active transaction blocks).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When you start a new software project (like a blogging app, or a billing service), you need a completely fresh, isolated sandbox to store all your data tables. 
@@ -76,7 +77,7 @@ DROP DATABASE IF EXISTS test_sandbox;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to drop a database while you are actively connected to it
 
@@ -136,64 +137,97 @@ CREATE DATABASE app; -- Fails if app exists
 SELECT 'CREATE DATABASE app' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'app');
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Sandbox Lifecycle Script
+### Exercise 1: Allocating Isolated Application Databases
 
-**Problem:** You are writing an automated testing script. Before running tests, the script must ensure a clean database named `test_db` is created. If `test_db` already exists from a previous failed run, it should be wiped first. Write the sequence of SQL commands to achieve this.
+**Scenario:**
+Create a new isolated PostgreSQL database `ecommerce_prod` owned by database role `app_admin`.
 
-**Expected output:**
+**Requirements:**
+1. Execute `CREATE DATABASE ecommerce_prod OWNER app_admin`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> DROP DATABASE IF EXISTS test_db;
-> CREATE DATABASE test_db;
+> CREATE DATABASE ecommerce_prod 
+> WITH 
+>   OWNER = app_admin
+>   ENCODING = 'UTF8';
 > ```
-> - Use the `IF EXISTS` clause to prevent the script from crashing if it is the first time running.
-> - Execute the create command after the drop command.
+>
+> #### Technical Explanation
+>
+> 1. `CREATE DATABASE` allocates a new isolated database namespace inside the PostgreSQL cluster.
+> 2. `OWNER = app_admin` sets primary administrative ownership.
+> 3. `ENCODING = 'UTF8'` ensures full multi-byte character encoding support.
+
+---
+
+### Exercise 2: Safely Destroying Development Databases
+
+**Scenario:**
+Safely drop test database `ecommerce_test` using `IF EXISTS` to prevent script execution errors.
+
+**Requirements:**
+1. Execute `DROP DATABASE IF EXISTS ecommerce_test`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> DROP DATABASE IF EXISTS ecommerce_test;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `DROP DATABASE` completely deletes target database files from disk storage.
+> 2. `IF EXISTS` prevents SQL errors if the database does not exist.
+> 3. Cannot be executed while active client connections are connected to the target database.
+
+---
+
+### Exercise 3: Force Disconnecting Active Sessions Before Drop
+
+**Scenario:**
+Terminate all active client sessions connected to `ecommerce_staging` prior to dropping the database.
+
+**Requirements:**
+1. Query `pg_terminate_backend` on `pg_stat_activity`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT pg_terminate_backend(pid) 
+> FROM pg_stat_activity 
+> WHERE datname = 'ecommerce_staging' 
+>   AND pid <> pg_backend_pid();
+> 
+> DROP DATABASE ecommerce_staging;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. PostgreSQL blocks `DROP DATABASE` if any active client session is connected.
+> 2. `pg_terminate_backend(pid)` forcefully closes connected client sockets.
+> 3. `pid <> pg_backend_pid()` avoids terminating the current admin session.
 
 ---
 
 
 
-### Exercise 2: Idempotent Database Creation Check
-
-**Problem:** Check if database `analytics` exists in `pg_database` catalog table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT EXISTS(SELECT 1 FROM pg_database WHERE datname = 'analytics');
-> ```
-> ```sql
-> SELECT EXISTS(SELECT 1 FROM pg_database WHERE datname = 'analytics');
-> ```
->
-> **Explanation:** Querying `pg_database` system catalog verifies database existence safely.
-
----
-
-### Exercise 3: Dropping Database Forcefully
-
-**Problem:** Drop database `temp_db` with `WITH (FORCE)` in PostgreSQL 13+ to terminate active connections.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DROP DATABASE IF EXISTS temp_db WITH (FORCE);
-> ```
-> ```sql
-> DROP DATABASE IF EXISTS temp_db WITH (FORCE);
-> ```
->
-> **Explanation:** `WITH (FORCE)` terminates active client connections before dropping target databases.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Database](database.md) — The target logical container.
 - [`CREATE TABLE` / `DROP TABLE`](create_drop_table.md) — Managing structures inside the database.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `CREATE DATABASE` builds a new isolated database container on the Postgres server.
 - `DROP DATABASE` permanently destroys a database and all its contents.
 - Dropping a database is **irreversible**; there is no trash recovery box.

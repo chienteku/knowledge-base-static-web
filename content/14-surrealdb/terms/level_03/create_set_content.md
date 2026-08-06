@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (SET vs CONTENT creation strategies)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Evaluated by the database query parser. Bypasses intermediate translations when compiling raw `CONTENT` JSON arrays directly to binary format).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When writing database queries, the shape of your input data varies:
@@ -85,7 +84,7 @@ CREATE user:tobie CONTENT {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using SQL-style equals '=' operators instead of JSON-style colons ':' inside the 'CONTENT' block object
 
@@ -145,72 +144,101 @@ UPDATE user:alice CONTENT { age: 31 }; // ❌ Name field is lost!
 UPDATE user:alice MERGE { age: 31 }; // Merges new fields without overwriting
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Query Translation
+### Exercise 1: `SET` vs `CONTENT` Statement Syntax
 
-**Problem:** You have a `SET` query:
-`CREATE product:pro SET title = "Phone", specs = { color: "black", memory: "128GB" };`
-Write the equivalent query using the `CONTENT` syntax style.
+**Scenario:**
+Compare `CREATE ... SET` vs `CREATE ... CONTENT` syntax when creating user profile records in SurrealDB.
 
-**Expected output:**
+**Requirements:**
+1. Create `user:u1` using `SET` field assignments.
+2. Create `user:u2` using a `CONTENT` JSON object.
+
 > [!check]- Answer
-> ```sql
-> CREATE product:pro CONTENT {
->   title: "Phone",
->   specs: {
->     color: "black",
->     memory: "128GB"
->   }
-> };
-> ```
-> - Replace the `SET` keyword with `CONTENT`.
-> - Convert the key-value sequence into a single enclosed JSON object block using colons (`:`).
-
----
-
-
-
-### Exercise 2: Using `SET` vs `CONTENT` vs `MERGE`
-
-**Problem:** Match clauses: 1. Assign individual fields (`SET`), 2. Replace entire record (`CONTENT`), 3. Shallow merge object (`MERGE`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. SET, 2. CONTENT, 3. MERGE
-> ```
-> ```text
-> 1. SET, 2. CONTENT, 3. MERGE
-> ```
 >
-> **Explanation:** `SET` modifies individual fields; `CONTENT` replaces records; `MERGE` updates nested fields.
-
----
-
-### Exercise 3: Patch Updates with `PATCH`
-
-**Problem:** Update `user:alice` using JSON Patch syntax `PATCH [{ op: "replace", path: "/age", value: 31 }]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> UPDATE user:alice PATCH [{ op: "replace", path: "/age", value: 31 }];
-> ```
+> #### Implementation
+>
 > ```surrealql
-> UPDATE user:alice PATCH [{ op: "replace", path: "/age", value: 31 }];
+> -- 1. Using SET clause
+> CREATE user:u1 SET name = "Alice", role = "admin";
+> 
+> -- 2. Using CONTENT clause
+> CREATE user:u2 CONTENT { name: "Bob", role: "developer" };
 > ```
 >
-> **Explanation:** `PATCH` executes standard RFC 6902 JSON Patch operations.
+> #### Technical Explanation
+>
+> 1. `SET` explicitly assigns individual key-value expressions (`SET name = "Alice"`).
+> 2. `CONTENT` accepts a full JSON document object (`CONTENT { ... }`).
+> 3. Both strategies enforce `SCHEMAFULL` validation rules when configured on the target table.
 
-## 7. Related Terms
+---
+
+### Exercise 2: Shallow Merge Modifications with `MERGE`
+
+**Scenario:**
+Update an existing customer profile `customer:c1` using `MERGE` to add a new `phone` field without overwriting existing `name` and `email` properties.
+
+**Requirements:**
+1. Create `customer:c1` with `name` and `email`.
+2. Update `customer:c1` using `MERGE { phone: "555-0199" }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE customer:c1 SET name = "Carol", email = "carol@example.com";
+> 
+> -- Shallow merge update
+> UPDATE customer:c1 MERGE { phone: "555-0199" };
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `MERGE` performs a non-destructive shallow merge, updating specified keys while preserving unmentioned fields.
+> 2. `CONTENT` replaces the entire record document payload, accidentally erasing unmentioned fields.
+> 3. `MERGE` provides safe document field addition without full-document replacements.
+
+---
+
+### Exercise 3: Dynamic Parameter Expressions in `SET` Statements
+
+**Scenario:**
+Demonstrate that `SET` clauses accept dynamic expressions (like `time::now()` and `math::fixed()`), whereas static `CONTENT` payloads require pre-evaluated values.
+
+**Requirements:**
+1. Create `log:1` using `SET timestamp = time::now(), count = 5 + 10`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE log:1 SET 
+>     timestamp = time::now(),
+>     count = 5 + 10;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SET` clauses evaluate SurrealQL functions (`time::now()`) and arithmetic expressions (`5 + 10`) at write time.
+> 2. `CONTENT` treats raw unquoted expressions as static literals or requires pre-bound variables.
+> 3. Use `SET` when creating records containing dynamic calculated fields.
+
+---
+
+
+
+## 6. Related Terms
 
 - [`CREATE`](create.md) — The parent write statement.
 - [`UPDATE` Strategies (`SET` / `CONTENT` / `MERGE` / `PATCH`)](update_strategies.md) — Updating records content.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `SET` uses SQL assignments (`=`); `CONTENT` uses JSON objects (`:`).
 - Both styles insert identical record structures into SurrealDB tables.
 - Use `SET` for simple updates or operations requiring arithmetic (`+=`).

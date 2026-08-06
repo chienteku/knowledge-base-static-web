@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (datetime parsing & arithmetic builtin functions)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Evaluated using UTC nanosecond precision. Manages timezone offsets and formatting rules during query execution).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Date and time operations are essential for building analytics and tracking software:
@@ -88,7 +87,7 @@ FROM post;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using SQL function names like 'NOW()' or 'DATE_TRUNC()' instead of 'time::now()' and 'time::floor()'
 
@@ -142,65 +141,94 @@ DEFINE FIELD created_at ON TABLE user TYPE datetime DEFAULT d"2026-01-01T00:00:0
 DEFINE FIELD created_at ON TABLE user TYPE datetime DEFAULT time::now(); // Dynamic current time
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Daily Metric Aggregation
+### Exercise 1: Current Time and Temporal Arithmetic
 
-**Problem:** You have an `analytics` table with a `timestamp` field.
-Write the SurrealQL query to:
-1. Truncate `timestamp` to 1-day boundaries (`1d`) using `time::floor()`, aliased as `day`.
-2. Count total records as `event_count`.
-3. Group by `day`.
+**Scenario:**
+Query the current UTC timestamp using `time::now()`, calculate tomorrow (`time::now() + 1d`), and format as an ISO date string.
 
-**Expected output:**
+**Requirements:**
+1. Select `time::now()` and `time::now() + 1d`.
+
 > [!check]- Answer
-> ```sql
+>
+> #### Implementation
+>
+> ```surrealql
 > SELECT 
->   time::floor(timestamp, 1d) AS day, 
->   count() AS event_count 
-> FROM analytics 
-> GROUP BY day;
+>     time::now() AS current_utc,
+>     time::now() + 1d AS tomorrow_utc;
 > ```
-> - The duration argument for 1 day is `1d`.
-> - Truncate using `time::floor(timestamp, 1d)`.
+>
+> #### Technical Explanation
+>
+> 1. `time::now()` returns the current UTC timestamp with microsecond precision (`datetime`).
+> 2. Duration arithmetic (`+ 1d`) adds time intervals natively.
+> 3. Computes relative timestamps server-side.
+
+---
+
+### Exercise 2: Time Grouping with `time::floor()`
+
+**Scenario:**
+An analytics query groups audit logs into 1-hour time buckets using `time::floor()`.
+
+**Requirements:**
+1. Group logs by `time::floor(timestamp, 1h)`.
+2. Count logs per hour bucket.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT 
+>     time::floor(timestamp, 1h) AS hour_bucket,
+>     count() AS total_events
+> FROM audit_log
+> GROUP BY hour_bucket;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `time::floor(datetime, duration)` truncates timestamps down to specified interval boundaries (`1h`, `1d`, `15m`).
+> 2. Groups temporal events into uniform time series buckets.
+> 3. Underpins time-series analytics and metrics dashboards.
+
+---
+
+### Exercise 3: Extracting Date Components
+
+**Scenario:**
+Extract the year, month, and day components from a stored `datetime` field using `time::year()`, `time::month()`, and `time::day()`.
+
+**Requirements:**
+1. Project `time::year(created_at)`, `time::month(created_at)`, `time::day(created_at)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT 
+>     time::year(created_at) AS yr,
+>     time::month(created_at) AS mo,
+>     time::day(created_at) AS dy
+> FROM user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `time::year()`, `time::month()`, `time::day()` extract integer date components.
+> 2. Facilitates calendar reporting and date partitioning.
+> 3. Operates natively over `datetime` fields.
 
 ---
 
 
 
-### Exercise 2: Extracting Date Components
-
-**Problem:** Extract year, month, and day from `time::now()` using `time::year()`, `time::month()`, `time::day()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> time::year(time::now()), time::month(time::now()), time::day(time::now())
-> ```
-> ```surrealql
-> RETURN [time::year(time::now()), time::month(time::now()), time::day(time::now())];
-> ```
->
-> **Explanation:** `time::` component functions extract date parts from `datetime` primitives.
-
----
-
-### Exercise 3: Time Difference Calculation
-
-**Problem:** Calculate time duration difference between `$start` and `$end` using `time::from::unix()` or arithmetic subtraction.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> RETURN $end - $start;
-> ```
-> ```surrealql
-> RETURN $end - $start;
-> ```
->
-> **Explanation:** Subtracting two `datetime` primitives returns a `duration` value.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Built-in Functions Overview](builtin_functions.md) — The parent library.
 - [`datetime` / `duration`](../level_02/datetime_duration.md) — Temporal types.
@@ -208,7 +236,7 @@ Write the SurrealQL query to:
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `time::*` module handles timestamps, truncations, and formatting.
 - `time::now()` returns the current UTC timestamp.
 - `time::floor(dt, duration)` rounds timestamps down to duration buckets (e.g. `1h`, `1d`).

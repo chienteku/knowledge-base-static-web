@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **API Helpers**
+
+**SEO & Metadata** (Headless CMS Draft Mode Preview): Draft Mode (`draftMode().enable()`) bypasses static site caching to render unpublished CMS draft content live.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server Only (Server Components & Route Handlers)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Static rendering (SSG) compiles React components into raw HTML at build time for speed. However, this creates a major obstacle for content creators using a Headless Content Management System (CMS) like Sanity or Contentful. 
@@ -92,7 +93,7 @@ export default async function BlogPostPage({ params }) {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to build a Disable endpoint
 
@@ -142,86 +143,141 @@ draftMode().enable(); // Correct App Router Draft Mode API
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Disable Route Handler
+### Exercise 1: Enabling Headless CMS Draft Mode
 
-**Problem:** Write a Route Handler `/api/disable-draft/route.ts` that disables Draft Mode and redirects the user back to the homepage:
+**Scenario:**
+Create a Route Handler `app/api/draft/route.ts` that enables Next.js Draft Mode and redirects to a CMS draft preview URL.
 
-```typescript
-// app/api/disable-draft/route.ts
-import { draftMode } from 'next/headers';
-import { redirect } from 'next/navigation';
+**Requirements:**
+1. Import `draftMode` from `next/headers` and call `draftMode().enable()`.
 
-// Solution:
-export async function GET() {
-  draftMode().disable();
-  redirect('/');
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // app/api/draft/route.ts
+> import { draftMode } from "next/headers";
+> import { redirect } from "next/navigation";
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const secret = searchParams.get("secret");
+  const slug = searchParams.get("slug");
+
+  if (secret !== process.env.DRAFT_SECRET_TOKEN || !slug) {
+    return new Response("Invalid token", { status: 401 });
+  }
+
+  const draft = await draftMode();
+  draft.enable(); // Sets __prerender_bypass cookie!
+
+  redirect(`/blog/${slug}`);
 }
 ```
 
-> [!check]- Answer
-> - Call `draftMode().disable()` to clear the bypass cookie.
+> #### Technical Explanation
+>
+> 1. `draftMode().enable()` sets a secure `__prerender_bypass` HTTP cookie in the user's browser.
+> 2. Subsequent page visits bypass static site generation (SSG) and Data Cache layers.
+> 3. Renders unpublished draft content dynamically for CMS content creators.
 
 ---
 
-### Exercise 2: Draft Mode Route Handler Pattern
+### Exercise 2: Fetching Unpublished CMS Draft Content inside Server Components
 
-**Problem:** Write App Router Route Handler `app/api/draft/route.ts` checking secret and calling `draftMode().enable()`.
+**Scenario:**
+Inspect `draftMode().isEnabled` inside a Server Component and fetch unpublished CMS draft data if active.
 
-**Expected output:**
+**Requirements:**
+1. Check `draftMode().isEnabled` in Server Component.
+
 > [!check]- Answer
-> ```typescript
-> import { draftMode } from 'next/headers'; import { redirect } from 'next/navigation'; export async function GET(request: Request) { draftMode().enable(); redirect('/posts/slug'); }
-> ```
-> - `draftMode().enable()` sets a cookie bypassing static page cache.
-> 
-> ```typescript
-> import { draftMode } from 'next/headers';
-> import { redirect } from 'next/navigation';
-> 
-> export async function GET(request: Request) {
->   const { searchParams } = new URL(request.url);
->   const secret = searchParams.get('secret');
->   const slug = searchParams.get('slug');
->   
->   if (secret !== process.env.DRAFT_SECRET) {
->     return new Response('Invalid token', { status: 401 });
->   }
->   
->   draftMode().enable();
->   redirect(`/posts/${slug}`);
-> }
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> // app/blog/[slug]/page.tsx
+> import { draftMode } from "next/headers";
+
+export default async function BlogPostPage({
+  params
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const draft = await draftMode();
+  const isDraft = draft.isEnabled;
+
+  const res = await fetch(`https://cms.example.com/posts/${slug}?preview=${isDraft}`, {
+    cache: isDraft ? "no-store" : "force-cache"
+  });
+  const post = await res.json();
+
+  return (
+    <article className="p-6">
+      {isDraft && <div className="p-2 bg-amber-200 text-amber-900 mb-4">Draft Preview Mode</div>}
+      <h1>{post.title}</h1>
+    </article>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `draftMode().isEnabled` returns `true` when the user has the draft mode preview cookie active.
+> 2. Disables fetch caching (`cache: 'no-store'`) during draft preview sessions.
+> 3. Displays live unpublished draft changes instantly.
 
 ---
 
-### Exercise 3: Checking Draft Mode State in Server Components
+### Exercise 3: Disabling Draft Mode with `draftMode().disable()`
 
-**Problem:** Write line in Server Component checking if Draft Mode is currently enabled.
+**Scenario:**
+Create a Route Handler `app/api/disable-draft/route.ts` that disables Draft Mode and redirects back to standard view.
 
-**Expected output:**
+**Requirements:**
+1. Call `draftMode().disable()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> import { draftMode } from 'next/headers'; const { isEnabled } = draftMode();
-> ```
-> - `draftMode().isEnabled` indicates active draft mode status.
-> 
-> ```typescript
-> import { draftMode } from 'next/headers';
-> const { isEnabled } = draftMode();
-> ```
+> // app/api/disable-draft/route.ts
+> import { draftMode } from "next/headers";
+> import { redirect } from "next/navigation";
+
+export async function GET() {
+  const draft = await draftMode();
+  draft.disable(); // Clears __prerender_bypass cookie!
+
+  redirect("/");
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `draftMode().disable()` clears the `__prerender_bypass` cookie.
+> 2. Restores standard static caching behavior for subsequent page visits.
+> 3. Allows users to exit draft preview mode cleanly.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — The endpoints used to toggle Draft Mode.
 - [Static Site Generation (SSG)](../level_08/ssg.md) — The static caching layer being bypassed.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Draft Mode temporarily bypasses Next.js's static HTML cache.
 - It is designed for real-time visual previews of draft CMS contents.
 - It operates using a signed browser cookie (`__prerender_bypass`).

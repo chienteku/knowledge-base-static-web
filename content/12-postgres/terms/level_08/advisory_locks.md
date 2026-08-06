@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Performance Concept**
+
+**Advanced Feature** (Application-Defined Locks): Advisory Locks allow applications to acquire custom 64-bit or paired 32-bit integer locks managed by PostgreSQL lock managers without locking database rows or tables.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Managed in database server RAM. Advisory locks do not write to transaction logs (WAL) or generate dead tuples, making them extremely fast).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Standard database locks are bound to physical data: rows, tables, or indexes.
@@ -86,7 +87,7 @@ COMMIT; -- Lock 99999 is automatically released by Postgres here!
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to unlock session-level advisory locks in connection pools
 
@@ -136,63 +137,100 @@ SELECT pg_advisory_xact_lock(1); -- ❌ Collides with other features using key 1
 SELECT pg_advisory_xact_lock(hashtext('billing_job_123'));
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Cron Lock Selection
+### Exercise 1: Application-Level Distributed Locking with `pg_advisory_lock`
 
-**Problem:** You are writing a database cleanup script that runs once an hour. You want to ensure that if a previous run is still active, the new run aborts immediately instead of waiting in line. Write the SQL query to accomplish this using lock key `77777`.
+**Scenario:**
+Acquire an exclusive advisory lock using a custom 64-bit integer ID (`12345`) to prevent concurrent cron jobs from executing the same background task simultaneously.
 
-**Expected output:**
+**Requirements:**
+1. Execute `SELECT pg_advisory_lock(12345)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> SELECT pg_try_advisory_lock(77777);
+> -- 1. Acquire blocking advisory lock
+> SELECT pg_advisory_lock(12345);
+> 
+> -- Execute critical application background processing...
+> 
+> -- 2. Release advisory lock
+> SELECT pg_advisory_unlock(12345);
 > ```
-> - The term "abort immediately instead of waiting" indicates a non-blocking check is required.
-> - Look for the prefix `try` in the advisory lock functions.
+>
+> #### Technical Explanation
+>
+> 1. Advisory locks allow applications to define custom locks using 64-bit integers managed by PostgreSQL's in-memory lock manager.
+> 2. Does NOT lock database rows or tables.
+> 3. Provides lightweight distributed locking across microservice nodes without requiring Redis.
+
+---
+
+### Exercise 2: Non-Blocking Lock Attempts with `pg_try_advisory_lock`
+
+**Scenario:**
+Attempt to acquire an advisory lock non-blockingly using `pg_try_advisory_lock()`, returning `FALSE` immediately if locked by another process.
+
+**Requirements:**
+1. Execute `SELECT pg_try_advisory_lock(12345)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> SELECT pg_try_advisory_lock(12345) AS lock_acquired;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `pg_try_advisory_lock()` returns `TRUE` if the lock was acquired immediately; returns `FALSE` if another session holds the lock.
+> 2. Prevents application threads from blocking or hanging while waiting for long-running cron tasks.
+> 3. Non-blocking distributed lock acquisition.
+
+---
+
+### Exercise 3: Transaction-Scoped Advisory Locks with `pg_advisory_xact_lock`
+
+**Scenario:**
+Acquire an advisory lock automatically released at transaction `COMMIT` or `ROLLBACK`.
+
+**Requirements:**
+1. Execute `SELECT pg_advisory_xact_lock(12345)` inside `BEGIN ... COMMIT`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> BEGIN;
+> SELECT pg_advisory_xact_lock(12345);
+> 
+> UPDATE inventory SET stock = stock - 1 WHERE id = 10;
+> 
+> COMMIT; -- Lock is automatically released at COMMIT!
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `pg_advisory_xact_lock()` binds the advisory lock to the current transaction lifecycle.
+> 2. Automatically releases the lock when the transaction ends (`COMMIT` or `ROLLBACK`).
+> 3. Eliminates lock leak bugs caused by missing `pg_advisory_unlock()` calls.
 
 ---
 
 
 
-### Exercise 2: Transaction-Level Advisory Lock with Hash
-
-**Problem:** Acquire transaction-level advisory lock using `hashtext('cron_job')`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT pg_advisory_xact_lock(hashtext('cron_job'));
-> ```
-> ```sql
-> SELECT pg_advisory_xact_lock(hashtext('cron_job'));
-> ```
->
-> **Explanation:** `pg_advisory_xact_lock` acquires application locks released automatically upon transaction commit.
-
----
-
-### Exercise 3: Try Advisory Lock Non-Blocking Check
-
-**Problem:** Attempt non-blocking lock acquisition using `pg_try_advisory_xact_lock(key)` returning boolean success.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT pg_try_advisory_xact_lock(100);
-> ```
-> ```sql
-> SELECT pg_try_advisory_xact_lock(100);
-> ```
->
-> **Explanation:** `pg_try_advisory_xact_lock` returns `FALSE` immediately if the lock is held by another process.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Locking (Row-level, Table-level)](locking.md) — The parent lock concept.
 - [`SELECT ... FOR UPDATE`](select_for_update.md) — Row-level read locks.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Advisory locks are application-level logical locks managed in server RAM.
 - Identified using arbitrary 64-bit integer keys chosen by the developer.
 - Lock no physical rows or tables, generating zero disk writes or dead tuples.

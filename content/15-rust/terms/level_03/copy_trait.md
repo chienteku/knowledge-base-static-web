@@ -156,7 +156,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Zero-Copy Network Packet Header & Multi-Stage Telemetry Pipeline
 
-**Problem:** In high-throughput network telemetry engines processing millions of packets per second, heap allocations per packet introduce unacceptably high allocation overhead and garbage collection delays. Packet metadata headers must reside entirely on the stack as fixed-size structures that implement `Copy`, allowing them to be passed by value across multi-stage telemetry pipelines (e.g. validation, enrichment, routing) without transferring or invalidating caller ownership.
+**Scenario:** In high-throughput network telemetry engines processing millions of packets per second, heap allocations per packet introduce unacceptably high allocation overhead and garbage collection delays. Packet metadata headers must reside entirely on the stack as fixed-size structures that implement `Copy`, allowing them to be passed by value across multi-stage telemetry pipelines (e.g. validation, enrichment, routing) without transferring or invalidating caller ownership.
 
 Implement a `PacketHeader` struct representing IPv4 network telemetry:
 - Fields: `src_ip: [u8; 4]`, `dst_ip: [u8; 4]`, `src_port: u16`, `dst_port: u16`, `protocol: u8`, `flags: u8`, `seq_num: u32`.
@@ -327,7 +327,7 @@ Implement a `PacketHeader` struct representing IPv4 network telemetry:
 
 ### Exercise 2: Lock-Free Shared Ring Buffer Descriptor & `Drop` Incompatibility
 
-**Problem:** In lock-free shared-memory ring buffers and inter-process communication (IPC) queues, descriptor structures track slot allocation IDs, buffer byte offsets, segment lengths, sequence numbers, and state flags. Because ring buffer entries are copied across atomic slots or memory-mapped regions via raw byte copies, descriptors must implement `Copy`. However, Rust strictly prohibits types implementing `Copy` from also implementing `std::ops::Drop` (compiler error `E0184`), because bitwise stack copying duplicates data without tracking individual object drop lifecycles.
+**Scenario:** In lock-free shared-memory ring buffers and inter-process communication (IPC) queues, descriptor structures track slot allocation IDs, buffer byte offsets, segment lengths, sequence numbers, and state flags. Because ring buffer entries are copied across atomic slots or memory-mapped regions via raw byte copies, descriptors must implement `Copy`. However, Rust strictly prohibits types implementing `Copy` from also implementing `std::ops::Drop` (compiler error `E0184`), because bitwise stack copying duplicates data without tracking individual object drop lifecycles.
 
 Implement a lock-free ring buffer descriptor system:
 - Define `RingDescriptor` struct:
@@ -510,7 +510,7 @@ Implement a lock-free ring buffer descriptor system:
 
 ### Exercise 3: Real-Time Audio Quadraphonic Frame & Fixed-Point DSP Matrix
 
-**Problem:** Real-time Digital Signal Processing (DSP) applications process multichannel PCM audio sample frames at 48kHz or 96kHz. To prevent frame drops and jitter caused by heap allocations or dynamic reference counting overhead, sample frames must live strictly on the stack and implement `Copy`.
+**Scenario:** Real-time Digital Signal Processing (DSP) applications process multichannel PCM audio sample frames at 48kHz or 96kHz. To prevent frame drops and jitter caused by heap allocations or dynamic reference counting overhead, sample frames must live strictly on the stack and implement `Copy`.
 
 Implement a quadraphonic fixed-point audio frame system:
 - Struct `AudioFrame`:

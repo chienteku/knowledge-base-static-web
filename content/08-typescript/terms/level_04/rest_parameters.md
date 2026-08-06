@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Syntax**
+
+**TypeScript Core Syntax** (Variadic Rest Parameter Typing): Rest parameters (`...args: T[]`) capture variable numbers of trailing function arguments into a type-safe array or tuple.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Sometimes you want a function to take an arbitrary number of arguments. For example, `Math.max(1, 5, 10, 2)` can take four numbers, or it can take four hundred numbers.
@@ -59,7 +60,7 @@ buildTeam("Alice", "Bob", "Charlie", "Dave");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Not typing it as an Array
 
@@ -104,69 +105,107 @@ function sum(...nums: number[]) {} // Correct array annotation
 function log(msg: string, ...tags: string[]) {} // Correct position
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Spreading an Array into a Rest Parameter
+### Exercise 1: Typing Variadic Functions with Rest Parameters
 
-**Problem:** You have a function `function add(...nums: number[])`. You also have an array `const myNums = [1, 2, 3]`. How do you pass `myNums` into the `add` function?
+**Scenario:**
+Create a `sumNumbers` utility function accepting a variable number of numeric arguments.
 
-**Expected output:**
+**Requirements:**
+1. Annotate rest parameter `...numbers: number[]`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> // You use the Spread operator!
-> add(...myNums);
-> ```
-> - The Spread operator is the exact opposite of the Rest operator, but it uses the exact same `...` syntax!
-
----
-
-
-
-### Exercise 2: Tuple Rest Parameters
-
-**Problem:** Define rest parameter using tuple type `...args: [name: string, age: number]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Tuple rest parameters verified
-> ```
-> ```typescript
-> function createUser(...args: [name: string, age: number]) {
->   console.log(`${args[0]}, ${args[1]}`);
+> function sumNumbers(...numbers: number[]): number {
+>   return numbers.reduce((acc, curr) => acc + curr, 0);
 > }
-> createUser("Alice", 30);
-> console.log("Tuple rest parameters verified");
-> ```
+
+const total1 = sumNumbers(10, 20, 30);       // 60
+const total2 = sumNumbers(5, 15, 25, 35, 45); // 125
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** Rest tuple parameters enforce strong positional argument validation.
+> 1. Rest parameters (`...numbers: number[]`) gather all remaining call arguments into a type-safe array.
+> 2. Must be the last parameter in the function declaration.
+> 3. Enforces element type consistency across variable argument lists.
 
 ---
 
-### Exercise 3: Rest Parameters in Function Type Aliases
+### Exercise 2: Tuple Rest Parameters for Leading Parameter Typing
 
-**Problem:** Define type `type Handler = (...args: unknown[]) => void`.
+**Scenario:**
+Use tuple rest parameters to require a string action name followed by a variable tuple of payload parameters.
 
-**Expected output:**
+**Requirements:**
+1. Annotate tuple rest parameters `...args: [action: string, ...data: number[]]`.
+
 > [!check]- Answer
-> ```text
-> Handler type created
-> ```
-> ```typescript
-> type Handler = (...args: unknown[]) => void;
-> const h: Handler = (a, b) => {};
-> console.log("Handler type created");
-> ```
 >
-> **Explanation:** `...args: unknown[]` permits functions taking arbitrary parameter lengths.
+> #### Implementation
+>
+> ```typescript
+> type ActionTuple = [action: string, ...payload: number[]];
 
-## 7. Related Terms
+function dispatchAction(...[action, ...data]: ActionTuple) {
+  console.log(`Action: ${action}, Data Count: ${data.length}`);
+}
+
+dispatchAction("ADD", 10, 20, 30);
+```
+
+> #### Technical Explanation
+>
+> 1. Rest elements in tuples (`[string, ...number[]]`) allow defining exact leading argument types followed by dynamic trailing arguments.
+> 2. Enables type-safe tuple destructuring in variadic function signatures.
+> 3. Advanced parameter typing pattern.
+
+---
+
+### Exercise 3: Spreading Readonly Tuples into Rest Parameters
+
+**Scenario:**
+Spread a `const` tuple into a function expecting rest parameters using `as const`.
+
+**Requirements:**
+1. Pass `[10, 20]` tuple into function using spread operator `...args`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> function multiply(a: number, b: number): number {
+>   return a * b;
+> }
+
+const tuple = [5, 4] as const; // Inferred as readonly [5, 4] tuple
+
+// Valid spread invocation:
+const result = multiply(...tuple);
+```
+
+> #### Technical Explanation
+>
+> 1. Spreading a mutable array (`number[]`) into positional arguments fails because array length is unbounded.
+> 2. Marking the tuple `as const` informs TypeScript of its exact fixed length (2 elements).
+> 3. Allows type-safe parameter spreading into positional arguments.
+
+---
+
+
+
+## 6. Related Terms
 - [Arrays & Tuples](../level_02/arrays_tuples.md) — The type required for Rest parameters.
 - [Function Types](function_types.md) — The parent topic.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Rest Parameters** (`...args`) allow a function to accept an infinite number of positional arguments.
 - Under the hood, JS gathers these arguments into an Array.
 - Therefore, in TypeScript, you MUST type the Rest parameter as an array (e.g., `...args: string[]`).

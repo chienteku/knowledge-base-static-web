@@ -172,7 +172,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Dynamic Data Pipeline & Transformation Plugin Engine
 
-**Problem:** In high-throughput data processing engines, payloads pass through a sequential chain of transformers before being committed or routed. Because transformation plugins are registered dynamically at runtime based on configuration files or feature flags, static generic monomorphization (`T: DataTransformer`) cannot store multiple distinct plugin types within a single pipeline sequence (`Vec<T>`).
+**Scenario:** In high-throughput data processing engines, payloads pass through a sequential chain of transformers before being committed or routed. Because transformation plugins are registered dynamically at runtime based on configuration files or feature flags, static generic monomorphization (`T: DataTransformer`) cannot store multiple distinct plugin types within a single pipeline sequence (`Vec<T>`).
 
 Implement a dynamic telemetry processing pipeline using trait objects (`Box<dyn DataTransformer>`):
 1. Define an `EventPayload` struct containing fields: `id: u64`, `body: String`, `metadata: std::collections::HashMap<String, String>`, and `sanitized: bool`.
@@ -358,7 +358,7 @@ Implement a dynamic telemetry processing pipeline using trait objects (`Box<dyn 
 
 ### Exercise 2: Dynamic Multi-Threaded Event Router & Task Dispatcher
 
-**Problem:** In distributed backend services, asynchronous message brokers route incoming domain events to registered handlers. Handlers are dynamically attached per topic and executed across worker threads. Because handlers are shared across threads, trait objects must explicitly mandate `Send + Sync` auto-trait bounds (`Arc<dyn TaskHandler + Send + Sync>`).
+**Scenario:** In distributed backend services, asynchronous message brokers route incoming domain events to registered handlers. Handlers are dynamically attached per topic and executed across worker threads. Because handlers are shared across threads, trait objects must explicitly mandate `Send + Sync` auto-trait bounds (`Arc<dyn TaskHandler + Send + Sync>`).
 
 Implement a multi-threaded `EventDispatcher`:
 1. Define `DomainEvent` with `topic: String` and `payload: String`.
@@ -540,7 +540,7 @@ Implement a multi-threaded `EventDispatcher`:
 
 ### Exercise 3: Dynamic Storage Abstraction & Type Inspection via Downcasting
 
-**Problem:** High-performance database layers require dynamic runtime polymorphism (`Vec<Box<dyn StorageBackend>>`) to manage heterogeneous key-value backends (e.g., `InMemoryBackend`, `EncryptedBackend`). However, system monitors and admin diagnostics occasionally need to inspect type-specific internal properties (such as cache item counts or encryption key bytes) that are not part of the standard `StorageBackend` interface.
+**Scenario:** High-performance database layers require dynamic runtime polymorphism (`Vec<Box<dyn StorageBackend>>`) to manage heterogeneous key-value backends (e.g., `InMemoryBackend`, `EncryptedBackend`). However, system monitors and admin diagnostics occasionally need to inspect type-specific internal properties (such as cache item counts or encryption key bytes) that are not part of the standard `StorageBackend` interface.
 
 Design an object-safe storage backend system with dynamic type reflection downcasting:
 1. Define error enum `StorageError` with variants `KeyNotFound(String)` and `StorageFull`.

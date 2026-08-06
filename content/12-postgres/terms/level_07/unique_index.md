@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **PostgreSQL Index Type / Constraint**
+
+**Performance / Optimization** (Unique Constraint Index): Unique Indexes enforce column value uniqueness at the storage layer while optimizing equality lookups.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Postgres automatically builds a unique B-tree index under the hood whenever you declare a `PRIMARY KEY` or `UNIQUE` constraint).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Relational databases enforce data integrity. 
@@ -90,7 +91,7 @@ INSERT INTO company_accounts VALUES (2, 'acme');
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating both a UNIQUE constraint and a UNIQUE INDEX on the exact same column
 
@@ -146,68 +147,95 @@ Clean duplicate rows before building unique indexes
 CREATE UNIQUE INDEX idx_phone ON users (phone) NULLS NOT DISTINCT; -- Postgres 15+
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Partial Uniqueness Setup
+### Exercise 1: Enforcing Unique Key Constraints via Unique Indexes
 
-**Problem:** You have a `listings` table for an apartment rental website. A landlord can deactivate listing posts. Multiple landlords want to use the same listing code for draft templates, but active listing codes must be completely unique to prevent duplicate catalog pages. The table has columns `id`, `listing_code`, and `is_active` (boolean). 
+**Scenario:**
+Create a unique index on `users(email)` to enforce email uniqueness and accelerate equality lookups.
 
-Write the SQL query to enforce that `listing_code` must be unique **only** for active listings (`is_active = TRUE`).
+**Requirements:**
+1. Execute `CREATE UNIQUE INDEX idx_users_unique_email ON users(email)`.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE UNIQUE INDEX idx_unique_active_listing 
-> ON listings(listing_code) 
-> WHERE is_active = TRUE;
+> CREATE UNIQUE INDEX idx_users_unique_email 
+> ON users (email);
 > ```
-> - Use the `CREATE UNIQUE INDEX` syntax targeting the `listing_code` column.
-> - Append the filtering `WHERE` clause at the bottom of the index statement.
+>
+> #### Technical Explanation
+>
+> 1. `CREATE UNIQUE INDEX` creates a B-tree index that rejects duplicate non-null entries.
+> 2. Provides both unique data constraint enforcement and $O(\log N)$ index lookup acceleration.
+> 3. Equivalent to `ALTER TABLE ... ADD CONSTRAINT ... UNIQUE`.
+
+---
+
+### Exercise 2: Multi-Column Composite Unique Indexes
+
+**Scenario:**
+Create a composite unique index on `user_roles(user_id, role_name)` to prevent assigning duplicate roles to the same user.
+
+**Requirements:**
+1. Execute `CREATE UNIQUE INDEX uq_user_roles ON user_roles(user_id, role_name)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE UNIQUE INDEX uq_user_roles 
+> ON user_roles (user_id, role_name);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Composite unique indexes enforce uniqueness across the COMBINATION of multiple columns.
+> 2. Allows a user to have multiple roles, but prevents assigning the same `role_name` twice to the same `user_id`.
+> 3. Relationship uniqueness pattern.
+
+---
+
+### Exercise 3: Handling Null Values in Unique Indexes
+
+**Scenario:**
+Demonstrate how unique indexes handle multiple `NULL` values by default vs using `NULLS NOT DISTINCT` (PG 15+).
+
+**Requirements:**
+1. Contrast default `NULLS DISTINCT` vs `NULLS NOT DISTINCT`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> -- PostgreSQL 15+ NULLS NOT DISTINCT (Treats NULL as equal to NULL, allowing only 1 NULL!)
+> CREATE UNIQUE INDEX uq_users_ssn 
+> ON users (ssn) 
+> NULLS NOT DISTINCT;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. By default (`NULLS DISTINCT`), SQL standards permit multiple `NULL` values in a unique index because `NULL <> NULL`.
+> 2. PostgreSQL 15 introduced `NULLS NOT DISTINCT`, treating `NULL` values as duplicate matches (permitting at most ONE `NULL` entry).
+> 3. Modern PostgreSQL constraint feature.
 
 ---
 
 
 
-### Exercise 2: Creating Unique Index Concurrently
-
-**Problem:** Create unique index on `username` concurrently without write locking.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> CREATE UNIQUE INDEX CONCURRENTLY idx_users_username ON users (username);
-> ```
-> ```sql
-> CREATE UNIQUE INDEX CONCURRENTLY idx_users_username ON users (username);
-> ```
->
-> **Explanation:** `CREATE UNIQUE INDEX CONCURRENTLY` enforces uniqueness without locking writes.
-
----
-
-### Exercise 3: Unique Constraint vs Unique Index Relationship
-
-**Problem:** Does creating a `UNIQUE` table constraint automatically create a unique index behind the scenes? (Yes, PostgreSQL creates a supporting unique B-Tree index).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Yes, PostgreSQL automatically creates a supporting unique B-Tree index
-> ```
-> ```text
-> Yes, PostgreSQL automatically creates a supporting unique B-Tree index
-> ```
->
-> **Explanation:** Unique constraints rely on unique B-Tree indexes for enforcement.
-
-## 7. Related Terms
+## 6. Related Terms
 - [`UNIQUE` Constraint](../level_02/unique_constraint.md) — The logical database rule.
 - [Partial Index](partial_index.md) — Indexes filtering subsets of rows.
 - [B-tree Index](btree_index.md) — Related concept: B-tree Index.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Unique Index enforces column uniqueness at the physical database layer.
 - Automatically compiled by Postgres to power `PRIMARY KEY` and `UNIQUE` constraints.
 - Rejects inserts and updates containing duplicate values in microseconds.

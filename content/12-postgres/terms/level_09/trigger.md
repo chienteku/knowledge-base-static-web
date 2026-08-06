@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Object / Automations**
+
+**Advanced Feature** (Automated Event Interceptors): Triggers (`CREATE TRIGGER`) execute PL/pgSQL functions automatically before or after DML events (`INSERT`, `UPDATE`, `DELETE`) on target tables.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Requires two SQL statements: `CREATE FUNCTION ... RETURNS TRIGGER` to define the logic, followed by `CREATE TRIGGER` to bind the function to a target table).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Data integrity must be protected at all times. 
@@ -98,7 +99,7 @@ EXECUTE FUNCTION log_price_change();
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating infinite recursive trigger loop cascades
 
@@ -150,88 +151,126 @@ BEGIN NEW.updated_at = NOW(); RETURN NEW; END;
 Modify NEW.score directly inside BEFORE UPDATE trigger
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Lowercase Username Trigger
+### Exercise 1: Automated Audit Trail Triggers with `BEFORE UPDATE`
 
-**Problem:** You have a `users` table with a `username` text column. You want to ensure that usernames are always saved in clean, lower-case format to prevent duplicate login handles. 
+**Scenario:**
+Create a trigger function that automatically updates the `updated_at` column to `CURRENT_TIMESTAMP` on every row update.
 
-Write the SQL queries to:
-1.  Create a trigger function named `clean_username` returning a trigger that sets `NEW.username := LOWER(NEW.username);`.
-2.  Create a `BEFORE INSERT OR UPDATE` trigger named `trg_clean_username` on the `users` table to enforce this logic.
+**Requirements:**
+1. Create trigger function returning `TRIGGER`.
+2. Create `BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION ...`.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```sql
-> CREATE FUNCTION clean_username()
+> CREATE OR REPLACE FUNCTION update_timestamp_column() 
 > RETURNS TRIGGER AS $$
 > BEGIN
->   NEW.username := LOWER(NEW.username);
+>   NEW.updated_at = CURRENT_TIMESTAMP;
 >   RETURN NEW;
 > END;
 > $$ LANGUAGE plpgsql;
 > 
-> CREATE TRIGGER trg_clean_username
-> BEFORE INSERT OR UPDATE ON users
-> FOR EACH ROW
-> EXECUTE FUNCTION clean_username();
+> CREATE TRIGGER trg_users_updated_at 
+> BEFORE UPDATE ON users 
+> FOR EACH ROW 
+> EXECUTE FUNCTION update_timestamp_column();
 > ```
-> - In BEFORE triggers, returning `NEW` is required to proceed with the insert.
-> - Chain the trigger events using `INSERT OR UPDATE` in the trigger binding statement.
+>
+> #### Technical Explanation
+>
+> 1. `BEFORE UPDATE` triggers intercept row update commands before bytes are written to disk heap.
+> 2. `NEW.updated_at` modifies the pending row tuple payload.
+> 3. Automates system audit timestamps seamlessly.
 
 ---
 
+### Exercise 2: Statement-Level Audit Logging Triggers
 
+**Scenario:**
+Create a statement-level `AFTER DELETE` trigger logging table deletion events to an `audit_log` table once per SQL command.
 
-### Exercise 2: Auto-Updating `updated_at` Timestamp Trigger
+**Requirements:**
+1. Create `AFTER DELETE ON orders FOR EACH STATEMENT EXECUTE FUNCTION ...`.
 
-**Problem:** Create `BEFORE UPDATE` trigger function `set_updated_at()` assigning `NEW.updated_at = NOW()` and attach to `users` table.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> CREATE FUNCTION set_updated_at() RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$ LANGUAGE plpgsql; CREATE TRIGGER trg_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> CREATE FUNCTION set_updated_at() RETURNS TRIGGER AS $$
+> CREATE OR REPLACE FUNCTION log_order_deletions() 
+> RETURNS TRIGGER AS $$
 > BEGIN
->   NEW.updated_at = NOW();
+>   INSERT INTO audit_logs (event) VALUES ('Bulk deletion executed on orders table');
+>   RETURN NULL;
+> END;
+> $$ LANGUAGE plpgsql;
+> 
+> CREATE TRIGGER trg_log_deletions 
+> AFTER DELETE ON orders 
+> FOR EACH STATEMENT 
+> EXECUTE FUNCTION log_order_deletions();
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `FOR EACH STATEMENT` triggers execute ONCE per SQL statement regardless of how many rows were affected.
+> 2. Reduces logging overhead for bulk DML operations.
+> 3. Statement-level event logging pattern.
+
+---
+
+### Exercise 3: Preventing Updates via Triggers
+
+**Scenario:**
+Create a `BEFORE UPDATE` trigger on `invoices` that raises an exception if an application attempts to modify a paid invoice (`status = 'paid'`).
+
+**Requirements:**
+1. Use `IF OLD.status = 'paid' THEN RAISE EXCEPTION ...`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```sql
+> CREATE OR REPLACE FUNCTION protect_paid_invoices() 
+> RETURNS TRIGGER AS $$
+> BEGIN
+>   IF OLD.status = 'paid' THEN
+>     RAISE EXCEPTION 'Immutability Error: Paid invoices cannot be modified!';
+>   END IF;
 >   RETURN NEW;
 > END;
 > $$ LANGUAGE plpgsql;
->
-> CREATE TRIGGER trg_users_updated_at
-> BEFORE UPDATE ON users
-> FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+> 
+> CREATE TRIGGER trg_protect_paid_invoices 
+> BEFORE UPDATE ON invoices 
+> FOR EACH ROW 
+> EXECUTE FUNCTION protect_paid_invoices();
 > ```
 >
-> **Explanation:** `BEFORE UPDATE` triggers modify row attributes on `NEW` before disk write.
+> #### Technical Explanation
+>
+> 1. `OLD` pseudo-table accesses pre-update row state attributes.
+> 2. `RAISE EXCEPTION` aborts the transaction immediately.
+> 3. Enforces business immutability constraints at the database tier.
 
 ---
 
-### Exercise 3: Trigger Timing Types
 
-**Problem:** List 3 trigger execution timing modes in PostgreSQL (`BEFORE`, `AFTER`, `INSTEAD OF`).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> BEFORE, AFTER, INSTEAD OF
-> ```
-> ```text
-> BEFORE, AFTER, INSTEAD OF
-> ```
->
-> **Explanation:** Timing modes determine whether trigger logic executes before, after, or in place of row operations.
-
-## 7. Related Terms
+## 6. Related Terms
 - [PL/pgSQL](plpgsql.md) — The parent procedural language.
 - [Stored Function (`CREATE FUNCTION`)](stored_function.md) — The compiling wrapper.
 - [`LISTEN` / `NOTIFY`](../level_10/listen_notify.md) — Related concept: `LISTEN` / `NOTIFY`.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - A Trigger automatically executes functions in response to table modifications.
 - Guarantees audit compliance by locking automated logic inside the database.
 - Enforces validations on `INSERT`, `UPDATE`, `DELETE`, or `TRUNCATE` actions.

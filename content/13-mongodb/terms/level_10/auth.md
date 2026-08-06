@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+**Administration / Operations** (Authentication & Role-Based Access Control): Authentication & Authorization enforce user identity verification (SCRAM-SHA-256, x.509, LDAP) and Role-Based Access Control (RBAC) privilege management across MongoDB databases.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Managed at the server engine level. Enforced only when the `mongod` process is launched with the security authentication flag enabled).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 By default, a clean local installation of MongoDB has security **disabled**. 
@@ -101,7 +102,7 @@ Now, any client connecting must provide credentials to query data.
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Creating database users but launching the 'mongod' process without the '--auth' flag enabled in production configs
 
@@ -155,73 +156,107 @@ Create targeted user with readWrite role on app database only: { role: "readWrit
 Use SCRAM-SHA-256 as default authentication mechanism
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Read/Write User Creation
+### Exercise 1: Creating Administrative Database Users with Roles
 
-**Problem:** You have a database named `ecom`. Write the mongosh command to create a user named `"appWorker"` with password `"workerPass"` who has full read and write access strictly to the `ecom` database.
+**Scenario:**
+Create an admin user `dbAdminUser` with `userAdminAnyDatabase` and `readWriteAnyDatabase` privileges.
 
-**Expected output:**
+**Requirements:**
+1. Execute `db.createUser()`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> use ecom;
+> use admin;
 > db.createUser({
->   user: "appWorker",
->   pwd: "workerPass",
->   roles: [ { role: "readWrite", db: "ecom" } ]
+>   user: "dbAdminUser",
+>   pwd: "SecurePassword123!",
+>   roles: [
+>     { role: "userAdminAnyDatabase", db: "admin" },
+>     { role: "readWriteAnyDatabase", db: "admin" }
+>   ]
 > });
 > ```
-> - Switch to the target database context before running the command.
-> - The role name for read/write access is `"readWrite"`.
+>
+> #### Technical Explanation
+>
+> 1. `db.createUser()` registers database authentication credentials.
+> 2. `userAdminAnyDatabase` grants permission to manage users and roles across all databases.
+> 3. Credentials are hashed using SCRAM-SHA-256.
+
+---
+
+### Exercise 2: Creating Application-Scoped ReadWrite Roles
+
+**Scenario:**
+Create an application service account `appService` restricted to `readWrite` access on database `store_db`.
+
+**Requirements:**
+1. Execute `db.createUser()` on `store_db`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> use store_db;
+> db.createUser({
+>   user: "appService",
+>   pwd: "AppServiceSecretPass456!",
+>   roles: [
+>     { role: "readWrite", db: "store_db" }
+>   ]
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Restricting roles to specific database targets enforces the Principle of Least Privilege.
+> 2. `appService` cannot read or write to other databases or execute cluster administration commands.
+> 3. Security best practice.
+
+---
+
+### Exercise 3: Enabling Authentication in `mongod.conf`
+
+**Scenario:**
+Configure `mongod.conf` to enforce mandatory client authentication across all database connections.
+
+**Requirements:**
+1. Enable `security.authorization: "enabled"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```yaml
+> # /etc/mongod.conf
+> security:
+>   authorization: enabled
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Setting `security.authorization: enabled` enforces RBAC checks for all client connections.
+> 2. Rejects unauthenticated connections immediately.
+> 3. Essential production database hardening setting.
 
 ---
 
 
 
-### Exercise 2: Creating ReadWrite User in mongosh
-
-**Problem:** Create user `appUser` with password `secret` and `readWrite` role on `production` database.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.createUser({ user: "appUser", pwd: "secret", roles: [{ role: "readWrite", db: "production" }] });
-> ```
-> ```javascript
-> db.createUser({
->   user: "appUser",
->   pwd: "secret",
->   roles: [{ role: "readWrite", db: "production" }]
-> });
-> ```
->
-> **Explanation:** `db.createUser()` creates database users with RBAC role privileges.
-
----
-
-### Exercise 3: MongoDB Built-In Security Roles List
-
-**Problem:** List 3 built-in MongoDB roles (`read`, `readWrite`, `dbAdmin`, `userAdmin`, `root`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> read, readWrite, dbAdmin, userAdmin, root
-> ```
-> ```text
-> read, readWrite, dbAdmin, userAdmin, root
-> ```
->
-> **Explanation:** Built-in roles enforce Role-Based Access Control (RBAC) security boundaries.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Connection String URI](connection_string.md) — Authentication connection strings.
 - [NoSQL Injection](nosql_injection.md) — Input validation security.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - SCRAM verifies client passwords cryptographically without sending raw text.
 - RBAC grants database access privileges using structured roles.
 - Built-in roles include `read`, `readWrite`, `dbAdmin`, and `root`.

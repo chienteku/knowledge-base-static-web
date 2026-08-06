@@ -14,16 +14,15 @@
 ---
 
 ## 2. Term Category
-- **Architecture & System Design**
+
+
+**Integration / Ecosystem (direct browser-to-database connection pattern)**: - **Architecture & System Design**
+
+
 
 ---
 
-## 3. Environment Context
-- **Full-Stack Application Architecture** (Applies when designing web apps with React, Vue, Next.js, or mobile frameworks connecting to SurrealDB).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional 3-tier web architecture:
@@ -74,7 +73,7 @@ DEFINE FIELD published ON post TYPE bool DEFAULT false;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Expecting Direct Browser Architecture to Replace Complex Server Logic
 
@@ -124,87 +123,115 @@ const db = new Surreal(); db.signin({ access: "user", username: inputUser, pass:
 
 
 
-### Mistake 4: Bypassing Database Table `PERMISSIONS` When Connecting Web Browsers Directly to Database
 
-**The mistake:** Enabling browser connections while leaving table `PERMISSIONS` unconfigured or set to `PERMISSIONS FULL`.
 
-**Why it's wrong:** Browser connections bypass backend servers. If table `PERMISSIONS` are unconfigured, browser clients can execute malicious `DELETE` or `UPDATE` queries on any record.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
-DEFINE TABLE user PERMISSIONS FULL; // ❌ Exposes all records to browser clients!
-```
+### Exercise 1: Direct WebSocket Client Connection Setup
 
-*Fix:*
-```surrealql
-DEFINE TABLE user PERMISSIONS FOR select WHERE id = $auth.id, FOR update WHERE id = $auth.id;
-```
+**Scenario:**
+Configure a full-stack React frontend connecting directly to SurrealDB over WebSockets using the official `@surrealdb/surrealdb` JavaScript SDK.
 
-### Mistake 5: Exposing Root Credentials in Web Browser JavaScript Bundles
-
-**The mistake:** Hardcoding `user: 'root', pass: 'secret'` inside frontend React/Vue client code.
-
-**Why it's wrong:** Frontend code is readable by any web user. Exposing root credentials compromises the database.
-
-*Incorrect:*
-```surrealql
-const db = new Surreal(); db.signin({ user: "root", pass: "secret" }); // ❌ Disastrous security leak!
-```
-
-*Fix:*
-```surrealql
-const db = new Surreal(); db.signin({ access: "user", username: inputUser, pass: inputPass });
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Trade-off Evaluation
-Determine whether the following application features should connect **Directly to SurrealDB from Browser** or route through a **Serverless/Backend Service**:
-1. User fetching their personal bookmarked articles list.
-2. Charging a customer's credit card via Stripe API.
-3. Subscribing to live updates on a collaborative whiteboard canvas.
+**Requirements:**
+1. Connect to endpoint `wss://db.example.com/rpc`.
+2. Authenticate using `db.signin()`.
+3. Perform a query safely under row-level security.
 
 > [!check]- Answer
-> - Standard CRUD and real-time live queries work great directly to DB.
-> - Third-party API calls requiring secret keys require backend services.
+>
+> #### Implementation
+>
+> ```typescript
+> import Surreal from "surrealdb";
+
+const db = new Surreal();
+
+async function initDB() {
+  await db.connect("wss://db.example.com/rpc");
+
+  // Sign in as scoped user
+  await db.signin({
+    access: "user_access",
+    ns: "main",
+    db: "app",
+    username: "alice",
+    pass: "UserPass123!"
+  });
+
+  // Query records directly safely governed by RLS PERMISSIONS!
+  const posts = await db.select("post");
+  console.log("User posts:", posts);
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Direct browser-to-database connections bypass intermediate REST API web servers.
+> 2. WebSockets maintain a bi-directional binary connection channel for queries and live subscriptions.
+> 3. Row-level security (`PERMISSIONS`) inside SurrealDB prevents unauthorized client data access.
+
+---
+
+### Exercise 2: Real-Time Live Queries from Web Browsers
+
+**Scenario:**
+Subscribe to real-time `post` creation events directly from a browser web application using `db.live()`.
+
+**Requirements:**
+1. Subscribe to `post` table live events using `db.live("post", callback)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> await db.live("post", (action, result) => {
+>   console.log(`Live Event [${action}]:`, result);
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `db.live()` opens a real-time `LIVE SELECT` subscription over the active WebSocket channel.
+> 2. Server pushes mutation events (`CREATE`, `UPDATE`, `DELETE`) to the browser instantly.
+> 3. Eliminates polling loops and external message queue infrastructure (Socket.io, Redis).
+
+---
+
+### Exercise 3: Comparing Direct Browser-to-DB vs Traditional Backend API
+
+**Scenario:**
+Summarize the architecture and latency benefits of direct browser-to-SurrealDB connections vs traditional 3-tier REST API backends.
+
+**Requirements:**
+1. Highlight reductions in backend API code.
+2. Highlight network latency improvements.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Traditional 3-Tier Architecture:
+> Browser -> HTTP -> Express API -> Database (2 network hops, duplicate auth logic)
+> 
+> SurrealDB Direct Architecture:
+> Browser -> WebSocket -> SurrealDB Engine with RLS (1 network hop, unified database security)
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Cuts network roundtrip latency by half by connecting clients directly to the database.
+> 2. Eliminates duplicate data models and authentication code between backend APIs and databases.
+> 3. Enforces security centrally at the database tier.
 
 ---
 
 
 
-### Exercise 2: Browser Direct SDK Architecture Flow
 
-**Problem:** List 3 steps of Browser-to-Database flow (1. Browser connects via WSS, 2. Signin to RECORD access, 3. SurrealDB enforces PERMISSIONS).
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. WSS Connection, 2. Scoped Signin, 3. Row-level PERMISSIONS evaluation
-> ```
-> ```text
-> 1. WSS Connection, 2. Scoped Signin, 3. Row-level PERMISSIONS evaluation
-> ```
->
-> **Explanation:** Direct browser-to-database connections rely on WSS and scoped row-level security.
-
----
-
-### Exercise 3: Browser Live Query Subscriptions
-
-**Problem:** Subscribe to real-time `LIVE SELECT` events directly from web browser SDK.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const query = await db.live('article', (action, result) => console.log(action, result));
-> ```
-> ```javascript
-> const query = await db.live('article', (action, result) => console.log(action, result));
-> ```
->
-> **Explanation:** Web browser clients subscribe to real-time WebSocket push updates directly from SurrealDB.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — The 4-tier security hierarchy.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Built-in end-user authentication.
@@ -214,7 +241,7 @@ Determine whether the following application features should connect **Directly t
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Direct Browser-to-Database Architecture connects clients directly to SurrealDB via WebSocket.
 - Eliminates middle-tier REST/GraphQL CRUD API boilerplate.
 - Secured by Record Access authentication, Row-Level Security (`PERMISSIONS`), and field `ASSERT` rules.

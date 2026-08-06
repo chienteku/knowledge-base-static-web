@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Data Format**
+
+**Core Concept** (Data Format Comparison): JSON vs BSON contrasts human-readable text serialization against MongoDB's typed, binary-encoded storage format supporting dates and ObjectIds.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (JSON is the web standard format for data exchange; BSON is the internal format used on MongoDB servers. Drivers automatically convert between the two at the application boundary).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In web development, we often refer to MongoDB as a "JSON Database." 
@@ -79,7 +80,7 @@ Imagine voice messages:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to send raw BSON binary blocks over a standard REST API endpoint to a web browser frontend
 
@@ -127,68 +128,105 @@ Use BSON EJSON or native BSON drivers to preserve rich data type primitives
 WiredTiger stores documents as optimized binary BSON structures
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Boundary Mapping
+### Exercise 1: BSON Type Extensions in Extended JSON
 
-**Problem:** A JavaScript application reads a user document containing a date field. Explain what format the data is in at each step of the pipeline:
-1.  Stored on the MongoDB hard drive.
-2.  Transmitted over the TCP socket network.
-3.  Loaded inside the backend Node.js application memory.
+**Scenario:**
+Export BSON documents to Canonical Extended JSON format (`$oid`, `$date`) for transmission over HTTP APIs.
 
-**Expected output:**
+**Requirements:**
+1. Convert document with `ObjectId` and `Date` to Extended JSON string.
+
 > [!check]- Answer
-> ```text
-> 1. Stored on disk: BSON (Binary bytes, specifically the BSON Date type representing a 64-bit UTC integer).
-> 2. Transmitted over network: BSON (Serialized binary packets).
-> 3. Loaded in Node.js application: JSON / JavaScript Object (A native JavaScript `Date` object translated by the MongoDB driver).
+>
+> #### Implementation
+>
+> ```javascript
+> const bsonDoc = {
+>   _id: new ObjectId("60c72b2f9b1d8b2c88888880"),
+>   createdAt: new Date("2026-08-06T00:00:00Z")
+> };
+> 
+> // Extended JSON format
+> const extJson = JSON.stringify({
+>   _id: { "$oid": "60c72b2f9b1d8b2c88888880" },
+>   createdAt: { "$date": "2026-08-06T00:00:00.000Z" }
+> });
+> 
+> console.log(extJson);
 > ```
-> - The database engine and network transfer operate on binary representations.
-> - The application layer converts binary types to standard programming language objects.
+>
+> #### Technical Explanation
+>
+> 1. Extended JSON preserves rich BSON data types across standard text-only JSON APIs.
+> 2. `$oid` represents 12-byte ObjectIds; `$date` represents 64-bit UTC timestamps.
+> 3. Prevents type loss during REST API serialization.
+
+---
+
+### Exercise 2: Binary Traversal Efficiency Comparison
+
+**Scenario:**
+Explain why MongoDB parses BSON field headers faster than parsing text JSON strings.
+
+**Requirements:**
+1. Compare BSON length prefixes with JSON character scanning.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Binary Traversal:
+> - BSON: Binary length prefixes allow parser to jump over unneeded fields directly.
+> - JSON: Text scanner must evaluate character-by-character searching for quotes and brackets.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. BSON embeds byte length prefixes for documents and nested sub-elements.
+> 2. Query engine skips unrequested fields in $O(1)$ constant time.
+> 3. Accelerates projection and query evaluation.
+
+---
+
+### Exercise 3: BSON Data Type Support Matrix
+
+**Scenario:**
+List 3 native data types supported in BSON that do not exist natively in standard JSON specification.
+
+**Requirements:**
+1. List 3 BSON native types.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> BSON Native Data Types:
+> - Date (64-bit UTC integer)
+> - ObjectId (12-byte globally unique identifier)
+> - Decimal128 (128-bit high precision decimal)
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Standard JSON only supports strings, numbers, booleans, arrays, objects, and null.
+> 2. BSON adds native binary types for dates, decimals, object IDs, and raw binary data (`BinData`).
+> 3. Provides rich data typing for application developers.
 
 ---
 
 
 
-### Exercise 2: JSON vs BSON Comparison Matrix
-
-**Problem:** Compare JSON vs BSON: 1. Format (JSON: Text, BSON: Binary), 2. Types (BSON adds Date, ObjectId, BinData, Decimal128).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> JSON: Text string, BSON: Binary format with rich data types
-> ```
-> ```text
-> JSON: Text string, BSON: Binary format with rich data types
-> ```
->
-> **Explanation:** BSON extends JSON with binary encoding, fast traversal headers, and extra data types.
-
----
-
-### Exercise 3: BSON Parsing Performance Advantage
-
-**Problem:** Why is BSON faster to traverse than JSON text? (BSON embeds length prefixes allowing elements to be skipped without scanning text).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> BSON includes length prefixes to skip elements without string parsing
-> ```
-> ```text
-> BSON includes length prefixes to skip elements without string parsing
-> ```
->
-> **Explanation:** Length prefixes allow database engines to jump directly to target fields.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [BSON (Binary JSON)](bson.md) — The parent binary structure.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - JSON is human-readable text; BSON is machine-optimized database binary.
 - MongoDB uses BSON internally for disk storage and network wire packets.
 - Developers write queries in JSON; MongoDB drivers translate them to BSON.

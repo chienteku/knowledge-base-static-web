@@ -182,8 +182,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Custom Minimal Executor Runtime with Custom Waker Dispatching
 
-**Scenario**: To understand low-level async execution mechanics in Rust, systems engineers build custom task schedulers. An Executor works by polling pinned `Future` instances. When a future returns `Poll::Pending`, it registers its `Waker`. When notified, the waker pushes the task ID back into the executor's ready queue so it can be polled again.
+**Scenario:** To understand low-level async execution mechanics in Rust, systems engineers build custom task schedulers. An Executor works by polling pinned `Future` instances. When a future returns `Poll::Pending`, it registers its `Waker`. When notified, the waker pushes the task ID back into the executor's ready queue so it can be polled again.
 
+**Requirements:**
 Implement a custom minimal single-threaded executor `MiniExecutor` and a custom `YieldOnce` future to demonstrate waker notifications and poll loops.
 
 **Requirements**:
@@ -193,6 +194,9 @@ Implement a custom minimal single-threaded executor `MiniExecutor` and a custom 
 4. Add unit tests asserting poll cycle counts and execution result output.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::collections::VecDeque;
 > use std::future::Future;
@@ -300,7 +304,8 @@ Implement a custom minimal single-threaded executor `MiniExecutor` and a custom 
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **`std::task::Wake` Trait**: Implementing `Wake` for `MiniTask` creates a thread-safe `Waker`. When `.wake_by_ref()` is called, the task pushes itself back into the executor's `ready_queue`.
 > 2. **Polling Cycle**: The executor loop pops tasks from `ready_queue`, constructs a `Context`, and calls `.poll()`. If `Poll::Pending` is returned, the task remains out of the queue until its waker is triggered.
 > 

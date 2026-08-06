@@ -14,16 +14,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (inline edge and node filter conditions)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the query execution planner. Resolves path filters in memory during traversal sweeps to prune unmatched nodes early).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When traversing graph networks, you rarely want to retrieve all connected items:
@@ -90,7 +89,7 @@ WHERE ->bought.quantity > 1 AND ->bought->product.price < 1500.00dec;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Placing edge property filters on the target node path, resulting in 'NONE' mismatches that filter out all results
 
@@ -151,102 +150,109 @@ SELECT ->wrote->(post WHERE published = true) FROM user:alice;
 
 
 
-### Mistake 4: Filtering Edge Properties in Node `WHERE` Clauses instead of Arrow Bracket Clauses
 
-**The mistake:** Writing `SELECT ->wrote->post WHERE rating = 5 FROM user:alice;` when `rating` is stored on `wrote` edge.
 
-**Why it's wrong:** Filtering edge properties requires bracket syntax inside the arrow path: `->wrote[WHERE rating = 5]->post`.
+## 5. Practice Exercises
 
-*Incorrect:*
-```surrealql
--- Trying to filter edge property in top-level WHERE
-SELECT ->wrote->post FROM user:alice WHERE rating = 5; // ❌ Top-level WHERE filters user:alice!
-```
+### Exercise 1: Edge-Level Property Filtering
 
-*Fix:*
-```surrealql
-SELECT ->wrote[WHERE rating = 5]->post FROM user:alice; // Filters edge property inside arrow
-```
+**Scenario:**
+Query products purchased by `user:alice` via relation edge `purchased` where the purchase price `price_paid` was $> 500dec$.
 
-### Mistake 5: Filtering Target Node Properties Without Parenthesis Clauses
+**Requirements:**
+1. Relate `user:alice -> purchased -> product:p1 SET price_paid = 1200dec`.
+2. Select `->purchased[WHERE price_paid > 500dec]->product.name` from `user:alice`.
 
-**The mistake:** Writing `SELECT ->wrote->post WHERE published = true FROM user:alice;`.
-
-**Why it's wrong:** Top-level `WHERE` filters the source record (`user:alice`). To filter target `post` nodes, use `->wrote->(post WHERE published = true)`.
-
-*Incorrect:*
-```surrealql
-SELECT ->wrote->post FROM user:alice WHERE published = true; // Filters user:alice, not post!
-```
-
-*Fix:*
-```surrealql
-SELECT ->wrote->(post WHERE published = true) FROM user:alice;
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Filter Path Design
-
-**Problem:** You have a `user` table. 
-Users connect to other users via a `follows` edge. The edge stores `closeness_score`. 
-Write the SurrealQL query to:
-1.  Select the user record `user:alice`.
-2.  Retrieve the usernames of people Alice follows.
-3.  Filter only connections where the `closeness_score` on the `follows` edge is greater than `5`.
-
-**Expected output:**
 > [!check]- Answer
-> ```sql
-> SELECT ->follows->user.username FROM user:alice WHERE ->follows.closeness_score > 5;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET name = "Alice";
+> CREATE product:p1 SET name = "High-End Laptop";
+> RELATE user:alice->purchased->product:p1 SET price_paid = 1200dec;
+> 
+> -- Filter traversal by edge property
+> SELECT ->purchased[WHERE price_paid > 500dec]->product.name AS expensive_purchases 
+> FROM user:alice;
 > ```
-> - The source node is `user:alice`.
-> - Check if `closeness_score` lives on the `follows` edge or the target `user` record, and format your `WHERE` path accordingly.
+>
+> #### Technical Explanation
+>
+> 1. `[WHERE price_paid > 500dec]` attaches filter conditions directly to the `purchased` edge table step.
+> 2. Filters out relation edges failing the condition before resolving target vertex nodes.
+> 3. Optimizes graph traversal performance by pruning invalid paths early.
+
+---
+
+### Exercise 2: Target Vertex Property Filtering
+
+**Scenario:**
+Query users followed by `user:alice` via edge `follows` where the target user's `verified` status is `true`.
+
+**Requirements:**
+1. Select `->follows->user[WHERE verified = true].name` from `user:alice`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:bob SET name = "Bob", verified = true;
+> CREATE user:carol SET name = "Carol", verified = false;
+> RELATE user:alice->follows->user:bob;
+> RELATE user:alice->follows->user:carol;
+> 
+> -- Filter traversal by target vertex property
+> SELECT ->follows->user[WHERE verified = true].name AS verified_following 
+> FROM user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `->user[WHERE verified = true]` applies filter conditions to the target `user` vertex nodes.
+> 2. Excludes unverified user records from the final projection array.
+> 3. Enables target node filtering during graph navigation.
+
+---
+
+### Exercise 3: Combined Edge and Vertex Dual Filtering
+
+**Scenario:**
+Query posts written by `user:alice` where the relation edge `wrote` has `role = "author"` AND the target post `published` status is `true`.
+
+**Requirements:**
+1. Apply edge filter `[WHERE role = "author"]` and vertex filter `[WHERE published = true]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT ->wrote[WHERE role = "author"]->post[WHERE published = true].title AS authored_posts 
+> FROM user:alice;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combines inline edge filtering and vertex filtering in a single graph path expression.
+> 2. Both edge conditions AND target vertex conditions must evaluate to `true` to include the path.
+> 3. Expresses complex graph queries declaratively without multi-stage subqueries.
 
 ---
 
 
 
-### Exercise 2: Filtering Graph Traversals by Edge Property
 
-**Problem:** Select posts liked by `user:alice` where edge property `weight >= 8` using `->like[WHERE weight >= 8]->post`.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT ->like[WHERE weight >= 8]->post AS top_likes FROM user:alice;
-> ```
-> ```surrealql
-> SELECT ->like[WHERE weight >= 8]->post AS top_likes FROM user:alice;
-> ```
->
-> **Explanation:** `->edge[WHERE condition]->node` filters graph traversals by edge properties.
-
----
-
-### Exercise 3: Filtering Graph Traversals by Target Node Property
-
-**Problem:** Select products purchased by `user:alice` where `price > 100` using `->purchased->(product WHERE price > 100)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT ->purchased->(product WHERE price > 100) AS expensive_purchases FROM user:alice;
-> ```
-> ```surrealql
-> SELECT ->purchased->(product WHERE price > 100) AS expensive_purchases FROM user:alice;
-> ```
->
-> **Explanation:** `->(node WHERE condition)` filters graph traversals by target node properties.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Edge Properties](edge_properties.md) — The metadata on edges.
 - [`WHERE` Clause](../level_03/where.md) — The query filter context.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Graph traversals can be filtered using properties of edges or target nodes.
 - Relational equivalent to writing checks inside SQL JOIN ON/WHERE clauses.
 - Edge filters stop at the edge name (e.g. `WHERE ->bought.quantity`).

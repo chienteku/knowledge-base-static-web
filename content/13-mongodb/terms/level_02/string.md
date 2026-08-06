@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Data Type**
+
+**Core Concept** (UTF-8 Text BSON Type): The String BSON data type stores UTF-8 encoded text sequences within MongoDB documents.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Strings are UTF-8 encoded and null-terminated inside the compiled binary BSON format, matching string types in all modern programming languages).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Text is the most common data type in application development: usernames, email addresses, blog posts, and shipping addresses are all text.
@@ -78,7 +79,7 @@ db.users.find({ bio: /software/i });
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing numbers or date values as strings in your documents
 
@@ -129,68 +130,108 @@ db.users.find({ email: "ALICE@EXAMPLE.COM" }); // ❌ Fails case-sensitive match
 db.users.find({ email: "alice@example.com" }); // Normalize inputs to lowercase
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Regex String Query
+### Exercise 1: Case-Insensitive String Queries with Regex
 
-**Problem:** You have a `products` collection containing a string field named `sku`. 
-Write the MongoDB query using a regular expression to find all products where the `sku` starts with the uppercase prefix `"BIKE-"`.
+**Scenario:**
+Query collection `users` for email addresses matching `"ALICE@EXAMPLE.COM"` regardless of letter casing.
 
-**Expected output:**
+**Requirements:**
+1. Use `$regex` with `"i"` case-insensitive flag.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.find({ sku: /^BIKE-/ });
-> ```
-> - The regex symbol `^` asserts the start of a string.
-> - Wrap the pattern inside forward slashes `/pattern/` to define a regular expression literal in `mongosh`.
-
----
-
-
-
-### Exercise 2: Case-Insensitive Collation Query
-
-**Problem:** Query user email `"Alice@Example.com"` case-insensitively using collation `{ locale: "en", strength: 2 }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.find({ email: "Alice@Example.com" }).collation({ locale: "en", strength: 2 });
-> ```
-> ```javascript
-> db.users.find({ email: "Alice@Example.com" }).collation({
->   locale: "en",
->   strength: 2
+> db.users.find({
+>   email: { $regex: "^alice@example\.com$", $options: "i" }
 > });
 > ```
 >
-> **Explanation:** Collation `strength: 2` performs case-insensitive string matching.
+> #### Technical Explanation
+>
+> 1. `$regex` evaluates regular expression pattern matching on string fields.
+> 2. `$options: "i"` enables case-insensitive matching.
+> 3. Note: Case-insensitive regex without prefix indexes forces collection scans; consider collation indexes for production.
 
 ---
 
-### Exercise 3: String Regex Substring Matching
+### Exercise 2: Case-Insensitive Indexing with Collation
 
-**Problem:** Query users whose `name` starts with `"A"` using regex `^A`.
+**Scenario:**
+Create a case-insensitive unique index on `email` in collection `users` using a strength-2 Collation.
 
-**Expected output:**
+**Requirements:**
+1. Create index with `collation: { locale: "en", strength: 2 }`.
+
 > [!check]- Answer
-> ```text
-> db.users.find({ name: { $regex: "^A" } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.users.find({ name: { $regex: "^A" } });
+> db.users.createIndex(
+>   { email: 1 },
+>   {
+>     unique: true,
+>     collation: { locale: "en", strength: 2 }
+>   }
+> );
 > ```
 >
-> **Explanation:** `$regex` performs pattern matching on string fields.
+> #### Technical Explanation
+>
+> 1. Collation `strength: 2` performs case-insensitive character comparison.
+> 2. Enforces unique constraints ignoring uppercase vs lowercase differences (`Alice@` vs `alice@`).
+> 3. Allows index-accelerated case-insensitive queries without un-indexed `$regex`.
 
-## 7. Related Terms
+---
+
+### Exercise 3: String Trimming and Lowercasing in Aggregation
+
+**Scenario:**
+Sanitize string inputs in an aggregation pipeline by trimming whitespace and converting to lowercase.
+
+**Requirements:**
+1. Use `$trim` and `$toLower` operators.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.aggregate([
+>   {
+>     $project: {
+>       cleanEmail: {
+>         $toLower: {
+>           $trim: { input: "$rawEmail" }
+>         }
+>       }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$trim` removes leading and trailing whitespace characters.
+> 2. `$toLower` normalizes string characters to lowercase UTF-8.
+> 3. Standardizes string data during ETL aggregation pipelines.
+
+---
+
+
+
+## 6. Related Terms
 
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent types.
 - [Number Types (`Int32`, `Int64` / `Long`, `Double`, `Decimal128`)](number_types.md) — Non-text alternatives.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The BSON String stores UTF-8 character sequences.
 - Serves as the MongoDB equivalent to SQL `VARCHAR` and `TEXT`.
 - MongoDB has no length limit checks on text fields besides the 16MB document cap.

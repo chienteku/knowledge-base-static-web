@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Performance / Operations (full-text search text analyzer configuration)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the full-text search engine. Tokenizes, filters, and stems text streams before building inverted index tables on disk).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Searching human language text requires more than exact character matching:
@@ -92,7 +91,7 @@ CREATE article SET title = "Database Systems", content = "Running databases with
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to define an analyzer before referencing it in a 'DEFINE INDEX ... SEARCH' statement
 
@@ -144,60 +143,89 @@ DEFINE INDEX search_idx ON TABLE doc FIELDS body SEARCH BM25 ANALYZER blank, sno
 DEFINE ANALYZER custom_analyzer TOKENIZERS blank FILTERS lowercase, ascii;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Search Pipeline Configuration
+### Exercise 1: Custom Text Analyzer Definition
 
-**Problem:** Write the SurrealQL statements to:
-1. Create an analyzer named `tech_analyzer` that uses `class` tokenizing, `lowercase` filtering, and `snowball(english)` stemming.
-2. Create a search index named `idx_kb_search` on the `knowledge_base` table covering the `title` and `body` fields using `tech_analyzer` and `BM25`.
+**Scenario:**
+Define a custom text analyzer `snowball_en` using lowercase tokenization, English stemming, and snowball filtering.
 
-**Expected output:**
+**Requirements:**
+1. Write `DEFINE ANALYZER snowball_en TOKENIZERS blank, class FILTERS lowercase, snowball(english)`.
+
 > [!check]- Answer
-> ```sql
-> DEFINE ANALYZER tech_analyzer TOKENIZERS class FILTERS lowercase, snowball(english);
-> DEFINE INDEX idx_kb_search ON knowledge_base COLUMNS title, body SEARCH ANALYZER tech_analyzer BM25;
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Define custom full-text search analyzer
+> DEFINE ANALYZER snowball_en 
+>     TOKENIZERS blank, class 
+>     FILTERS lowercase, snowball(english);
 > ```
-> - Define the analyzer first with `DEFINE ANALYZER`.
-> - Include `SEARCH ANALYZER tech_analyzer BM25` inside `DEFINE INDEX`.
+>
+> #### Technical Explanation
+>
+> 1. `DEFINE ANALYZER` configures text processing pipelines for full-text search indexes.
+> 2. `TOKENIZERS` breaks raw text into individual term tokens (e.g. `blank` splits on whitespace).
+> 3. `FILTERS` normalizes tokens (e.g. `lowercase`, `snowball(english)` stemming).
+
+---
+
+### Exercise 2: Attaching Custom Analyzers to Search Indexes
+
+**Scenario:**
+Create a full-text search index `idx_article_content` on table `article` using custom analyzer `snowball_en`.
+
+**Requirements:**
+1. Write `DEFINE INDEX idx_article_content ON TABLE article COLUMNS content SEARCH ANALYZER snowball_en BM25`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> DEFINE INDEX idx_article_content ON TABLE article 
+>     COLUMNS content 
+>     SEARCH ANALYZER snowball_en BM25;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `SEARCH ANALYZER <name>` binds custom text analyzers to search index definitions.
+> 2. Processes document text through configured tokenizers and filters before storing search tokens.
+> 3. Enables stemmed search matching (e.g. searching "running" matches "run").
+
+---
+
+### Exercise 3: Testing Analyzer Tokenization Output
+
+**Scenario:**
+Test how custom analyzer `snowball_en` tokenizes raw string `"Running Databases Quickly"`.
+
+**Requirements:**
+1. Execute `SELECT * FROM parse::analyzer("snowball_en", "Running Databases Quickly")`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT * FROM parse::analyzer("snowball_en", "Running Databases Quickly");
+> -- Output token array: ["run", "databas", "quickli"]
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `parse::analyzer(analyzer_name, text)` tests analyzer tokenization rules directly.
+> 2. Displays generated search tokens after applying stemming and lowercase filters.
+> 3. Helps developers debug full-text search tokenization pipelines.
 
 ---
 
 
 
-### Exercise 2: Defining Custom Search Analyzer
-
-**Problem:** Define custom analyzer `my_analyzer` with `blank` tokenizer and `lowercase`, `ascii` filters.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE ANALYZER my_analyzer TOKENIZERS blank FILTERS lowercase, ascii;
-> ```
-> ```surrealql
-> DEFINE ANALYZER my_analyzer TOKENIZERS blank FILTERS lowercase, ascii;
-> ```
->
-> **Explanation:** `DEFINE ANALYZER` configures custom tokenizers and filters for text indexing.
-
----
-
-### Exercise 3: Using Custom Analyzer in Search Index
-
-**Problem:** Attach custom analyzer `my_analyzer` to search index `doc_search` on `doc` table.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> DEFINE INDEX doc_search ON TABLE doc FIELDS content SEARCH BM25 ANALYZER my_analyzer;
-> ```
-> ```surrealql
-> DEFINE INDEX doc_search ON TABLE doc FIELDS content SEARCH BM25 ANALYZER my_analyzer;
-> ```
->
-> **Explanation:** Custom analyzers normalize text tokens before inserting into BM25 search indexes.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [`search::*` Functions & `@@` Operator](search_functions.md) — Querying full-text search.
@@ -205,7 +233,7 @@ DEFINE ANALYZER custom_analyzer TOKENIZERS blank FILTERS lowercase, ascii;
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `DEFINE ANALYZER` configures tokenizers and filters for text processing.
 - `DEFINE INDEX ... SEARCH ANALYZER` builds inverted indexes for full-text search.
 - Tokenizers (`class`, `blank`, `camel`) split text strings into word tokens.

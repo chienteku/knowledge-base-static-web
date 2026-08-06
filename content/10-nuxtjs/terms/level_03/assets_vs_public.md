@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Directory Structure**
+
+**Framework Architecture** (Static Asset & Build Asset Directories): `assets/` holds compiled, bundled asset files (SCSS, images optimized by Vite), whereas `public/` serves uncompiled static files directly at the domain root.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Build-Time vs. Server**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building a website, you have two types of static files:
@@ -59,7 +60,7 @@ Use `assets/` for: SCSS/CSS files, fonts, and images used within your UI compone
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Using the `~/assets/` alias in dynamic bindings
 **The mistake:** Trying to use string interpolation with the `~/assets/` alias inside a dynamic `v-bind:src` attribute.
@@ -130,71 +131,112 @@ const currentImage = 'hero.jpg';
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Choosing the correct directory
+### Exercise 1: Referencing Assets in `assets/` vs `public/`
 
-**Problem:** You have a `sitemap.xml` file that Google uses to crawl your site. It must be accessible exactly at `yoursite.com/sitemap.xml`. Which directory should you put it in?
+**Scenario:**
+Reference a Vite-processed asset image from `assets/images/logo.png` and a raw static asset file from `public/favicon.ico`.
 
-**Expected output:**
+**Requirements:**
+1. Reference asset file via `~/assets/images/logo.png`.
+2. Reference static public file via `/favicon.ico`.
+
 > [!check]- Answer
-> ```text
-> public/
-> ```
-> - If a file needs to be accessible by name exactly at the root URL path of your site, it must not be compiled by Vite.
-
----
-
-### Exercise 2: assets vs public Selection Matrix
-
-**Problem:** Match the file asset to its correct directory (`assets/` vs `public/`):
-1. `favicon.ico` 
-2. `robots.txt` 
-3. `global.scss` 
-4. SVG icons processed by Vite inline loader
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. public/
-> 2. public/
-> 3. assets/
-> 4. assets/
-> ```
-> - `public/` -> Static un-processed root files (`favicon.ico`, `robots.txt`).
-> - `assets/` -> Bundled/compiled source files (`global.scss`, inline SVGs).
-> 
-> ```text
-> public/ = Un-processed root static files;
-> assets/ = Bundled build source assets.
-> ```
-
----
-
-### Exercise 3: Public Directory Root Path Reference
-
-**Problem:** Given image file `public/images/banner.jpg`, write `<img />` tag referencing its URL path.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <img src="/images/banner.jpg" alt="Banner" />
+> <template>
+>   <header>
+>     <!-- Processed and hashed by Vite at build time -->
+>     <img src="~/assets/images/logo.png" alt="Company Logo" />
+>     
+>     <!-- Served directly as uncompiled raw static file from public/ -->
+>     <link rel="icon" href="/favicon.ico" />
+>   </header>
+> </template>
 > ```
-> - `public/` contents map directly to root URL `/`.
-> 
+
+> #### Technical Explanation
+>
+> 1. `~/assets/` files are processed by Vite, enabling image optimization, hash caching, and CSS preprocessor compilation.
+> 2. `public/` files are copied directly to the build root without modification and served at `/filename`.
+> 3. Use `assets/` for application stylesheets and graphics; use `public/` for `robots.txt`, `favicon.ico`, and raw static downloads.
+
+---
+
+### Exercise 2: Importing SCSS Stylesheets from `assets/`
+
+**Scenario:**
+Import a global SCSS variable file `assets/scss/variables.scss` across the entire application in `nuxt.config.ts`.
+
+**Requirements:**
+1. Configure `css` array in `nuxt.config.ts`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // nuxt.config.ts
+> export default defineNuxtConfig({
+>   css: ["~/assets/scss/main.scss"]
+> });
+> ```
+
+> #### Technical Explanation
+>
+> 1. `css` configuration registers stylesheets in `assets/` as global application styles.
+> 2. Vite processes and bundles SCSS/CSS into optimized production stylesheet assets.
+> 3. Standard method for registering design systems and custom Tailwind/SCSS stylesheets.
+
+---
+
+### Exercise 3: Dynamic Image Asset Path Binding
+
+**Scenario:**
+Dynamically import image assets from `assets/images/` using Vite `import.meta.glob` or dynamic asset URL helpers.
+
+**Requirements:**
+1. Resolve dynamic asset path in `<script setup>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
 > ```vue
-> <img src="/images/banner.jpg" alt="Banner" />
-> ```
+> <script setup lang="ts">
+> // Resolve dynamic image URL using Vite URL constructor
+> const getImageUrl = (name: string) => {
+>   return new URL(`../assets/images/${name}.png`, import.meta.url).href;
+> };
+> </script>
+
+<template>
+  <img :src="getImageUrl('hero')" alt="Hero Banner" />
+</template>
+```
+
+> #### Technical Explanation
+>
+> 1. Dynamic string interpolation in template `:src` attributes cannot be static-analyzed by Vite compilers.
+> 2. Using `new URL(path, import.meta.url)` allows Vite to resolve dynamic asset URLs during production compilation.
+> 3. Standard pattern for dynamic asset resolution in Vite/Nuxt.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — Where you can configure global SCSS stylesheets from the `assets/` directory.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `public/` is for files that should not be compiled. They are mapped to the root URL `/`.
 - `assets/` is for files that Vite should optimize, minify, and hash. Accessed via `~/assets/`.
 - Dynamic image paths must use the `public/` directory.

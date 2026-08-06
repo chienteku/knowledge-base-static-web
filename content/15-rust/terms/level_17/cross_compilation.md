@@ -15,17 +15,15 @@
 
 ## 2. Term Category
 
-**Systems / Tooling / Compiler Configuration**: Cross-Compilation is a core capability of `rustc` and `LLVM`. Unlike compilers that require setting up complex chroot environments or separate cross-gcc toolchains, Rust uses standardized **Target Triples** (`architecture-vendor-sys-abi`) to generate machine code for any supported target architecture from a single host machine.
+
+
+**Rust Compilation Tooling (multi-architecture target compilation)**: Cross-Compilation is a core capability of `rustc` and `LLVM`. Unlike compilers that require setting up complex chroot environments or separate cross-gcc toolchains, Rust uses standardized **Target Triples** (`architecture-vendor-sys-abi`) to generate machine code for any supported target architecture from a single host machine.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Universal Tooling**: Used daily for embedded firmware compilation, WebAssembly builds, mobile development (iOS/Android), and cross-OS server deployment.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -77,7 +75,23 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Omitting Target Linker Configurations in `.cargo/config.toml`
+
+**The mistake:** Running `cargo build --target <arch>` without specifying the cross-linker binary path.
+
+**Why it's wrong:** Cargo falls back to host system `cc`, failing with relocation or architecture mismatch errors during linking.
+
+*Fix:* Configure `[target.<arch>] linker = "target-gcc"` in `.cargo/config.toml`.
+
+### Mistake 3: Using Native Host C Libraries in Cross-Compiled FFI Builds
+
+**The mistake:** Linking against host `/usr/lib` C libraries during cross-compilation.
+
+**Why it's wrong:** Foreign architectures cannot execute host CPU machine code instructions.
+
+*Fix:* Install and point your cross-compiler to the target architecture sysroot.
+
 
 ### Mistake 1: Missing C Cross-Linker when Building C-Dependencies
 
@@ -89,13 +103,16 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Target Triple Parser and Cross-Compilation Attribute Analyzer
 
-**Problem:** When configuring automated cross-compilation CI pipelines or cargo build scripts (`build.rs`), developers must analyze target triple strings (`architecture-vendor-system-abi`) to determine compiler flags, linker scripts, and hardware acceleration options. Implement a `#![no_std]` target triple parser struct `TargetTriple<'a>` capable of parsing 3-component and 4-component target triples (e.g. `"thumbv7em-none-eabihf"`, `"wasm32-unknown-unknown"`, `"x86_64-unknown-linux-gnu"`). Add methods to query cross-compilation properties: `is_bare_metal()`, `has_hardware_fpu()`, `pointer_width_bits()`, and `requires_custom_linker()`. Include unit tests with assertions verifying correctness across embedded, WebAssembly, and host targets.
+**Scenario:** When configuring automated cross-compilation CI pipelines or cargo build scripts (`build.rs`), developers must analyze target triple strings (`architecture-vendor-system-abi`) to determine compiler flags, linker scripts, and hardware acceleration options. Implement a `#![no_std]` target triple parser struct `TargetTriple<'a>` capable of parsing 3-component and 4-component target triples (e.g. `"thumbv7em-none-eabihf"`, `"wasm32-unknown-unknown"`, `"x86_64-unknown-linux-gnu"`). Add methods to query cross-compilation properties: `is_bare_metal()`, `has_hardware_fpu()`, `pointer_width_bits()`, and `requires_custom_linker()`. Include unit tests with assertions verifying correctness across embedded, WebAssembly, and host targets.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -214,7 +231,8 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Target Triple Format (`arch-vendor-sys-abi`)**: Target triples encode hardware architecture, vendor, operating system, and ABI conventions. When cross-compiling for bare-metal ARM microcontrollers (`thumbv7em-none-eabihf`), `sys` is `"none"` (indicating no OS), and `eabihf` designates Hard-Float ABI.
 > 2. **Zero-Allocation Parsing (`#![no_std]`)**: By leveraging slice iteration (`triple.split('-')`) and `&'a str` borrowing, string analysis executes efficiently without requiring `std` or heap memory allocation (`alloc`).
 > 3. **Cargo Integration**: Custom build scripts (`build.rs`) inspect target components to pass architecture-specific flags (e.g. `-C link-arg=-Tlink.x`) to `rustc` during cross-compilation.
@@ -223,9 +241,12 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 
 ### Exercise 2: Endianness-Aware Serializer for Cross-Architecture Data Transfer
 
-**Problem:** When cross-compiling software that communicates across heterogeneous architectures (e.g. Little-Endian `x86_64` or `thumbv7em` devices sending telemetry to Big-Endian network hardware or protocol parsers), byte ordering of multi-byte numbers differs. Implement a `#![no_std]` network frame serializer and deserializer `TelemetryFrame` using explicit Big-Endian conversion (`to_be_bytes()` / `from_be_bytes()`). Include unit tests proving deterministic serialization independent of host CPU architecture.
+**Scenario:** When cross-compiling software that communicates across heterogeneous architectures (e.g. Little-Endian `x86_64` or `thumbv7em` devices sending telemetry to Big-Endian network hardware or protocol parsers), byte ordering of multi-byte numbers differs. Implement a `#![no_std]` network frame serializer and deserializer `TelemetryFrame` using explicit Big-Endian conversion (`to_be_bytes()` / `from_be_bytes()`). Include unit tests proving deterministic serialization independent of host CPU architecture.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -311,7 +332,8 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Cross-Architecture Endian Safety**: Native byte layout (`to_ne_bytes`) varies across targets. Using explicit `to_be_bytes()` and `from_be_bytes()` guarantees identical byte representation on Little-Endian (`x86_64`, ARM Cortex-M) and Big-Endian targets.
 > 2. **Bit Reinterpretation for Floating Point**: `f32::to_bits()` converts single-precision floating point numbers into bit patterns (`u32`), preventing platform floating-point representation differences or soft-float compiler discrepancies from corrupting binary payloads.
 > 3. **Fixed-Buffer Allocation**: Stack-allocated arrays `[u8; 16]` allow cross-compiled embedded binaries to execute without heap requirements.
@@ -320,9 +342,12 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 
 ### Exercise 3: Dual-Target Driver Abstraction via Conditional Compilation (`#[cfg]`)
 
-**Problem:** Embedded drivers should compile for bare-metal targets (`#[cfg(target_os = "none")]`) accessing actual volatile peripheral MMIO registers, while providing host simulation implementations (`#[cfg(not(target_os = "none"))]`) so unit tests can run locally via `cargo test` on developer host workstations. Implement a `#![no_std]` status register abstraction `StatusRegister` that uses MMIO raw pointers on bare metal and simulated register memory on host targets. Write tests proving register state mutation on host architectures.
+**Scenario:** Embedded drivers should compile for bare-metal targets (`#[cfg(target_os = "none")]`) accessing actual volatile peripheral MMIO registers, while providing host simulation implementations (`#[cfg(not(target_os = "none"))]`) so unit tests can run locally via `cargo test` on developer host workstations. Implement a `#![no_std]` status register abstraction `StatusRegister` that uses MMIO raw pointers on bare metal and simulated register memory on host targets. Write tests proving register state mutation on host architectures.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -409,7 +434,8 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Conditional Compilation (`#[cfg(...)]`)**: Rust allows conditional compilation based on target properties such as `target_os = "none"` (bare metal), `target_arch = "x86_64"`, or `target_env = "gnu"`.
 > 2. **Hardware MMIO vs Host Mocking**: On real microcontrollers (`target_os = "none"`), registers are controlled via `core::ptr::write_volatile` and `core::ptr::read_volatile`. On host developer workstations, `#[cfg(not(target_os = "none"))]` stubs out MMIO using host memory, enabling `cargo test` execution without physical hardware.
 > 3. **Portable Drivers**: This pattern enables developing peripheral drivers that compile cleanly both when cross-compiled for ARM/RISC-V targets and when tested on x86_64 host machines.

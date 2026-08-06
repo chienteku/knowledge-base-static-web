@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Form State Hook**
+
+**Data Mutation & Actions** (Form Pending Status Hook): `useFormStatus()` exposes parent `<form>` submission pending status to child input or button components without prop drilling.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Client Component ONLY**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When a user clicks "Submit", the Server Action might take 2 seconds to run. You absolutely must disable the Submit button so they don't click it 5 times, and you should show a loading spinner.
@@ -68,7 +69,7 @@ Besides `pending`, it also returns:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Calling it in the same component as the form
 
@@ -129,81 +130,136 @@ import { useFormStatus } from 'react-dom'; // Correct import module
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Disabling Inputs
+### Exercise 1: Accessing Form Pending Status in Child Submit Buttons
 
-**Problem:** You disable the Submit button while `pending` is true. Should you also disable the text `<input>` fields?
+**Scenario:**
+Create a reusable `<SubmitButton />` component that disables itself and renders a loading spinner when parent form is pending.
 
-**Expected output:**
+**Requirements:**
+1. Import `useFormStatus` from `react-dom` inside a child component of `<form>`.
+
 > [!check]- Answer
-> ```text
-> Yes, absolutely!
-> If a user submits a form, and the Server Action takes 3 seconds, the user could rapidly type new text into the input field during those 3 seconds. The data sent to the server would be the old data, but the UI would show the new data.
-> Always pass `disabled={pending}` to your `<input>` and `<select>` elements using `useFormStatus` as well.
-> ```
-> - Think about what happens if a user keeps typing during a slow network request.
-
----
-
-### Exercise 2: SubmitButton Component Pattern
-
-**Problem:** Write child `SubmitButton` Client Component using `useFormStatus()` disabling button and displaying `'Loading...'` while pending.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> 'use client'; import { useFormStatus } from 'react-dom'; export function SubmitButton() { const { pending } = useFormStatus(); return <button type="submit" disabled={pending}>{pending ? 'Loading...' : 'Submit'}</button>; }
-> ```
-> - `useFormStatus()` exposes `pending`, `data`, `method`, and `action` of parent form.
-> 
-> ```tsx
-> 'use client';
-> import { useFormStatus } from 'react-dom';
-> 
-> export function SubmitButton() {
->   const { pending } = useFormStatus();
->   
->   return (
->     <button type="submit" disabled={pending} className="btn">
->       {pending ? 'Submitting...' : 'Submit'}
->     </button>
->   );
-> }
-> ```
+> "use client";
+
+import { useFormStatus } from "react-dom";
+
+export default function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className={`px-4 py-2 text-white rounded ${
+        pending ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+      }`}
+    >
+      {pending ? "Saving Changes..." : "Save Changes"}
+    </button>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `useFormStatus()` hook reads the pending submission status of the parent `<form>`.
+> 2. Must be called inside a component rendered AS A CHILD of the `<form>` element.
+> 3. Eliminates passing `isPending` state down via props.
 
 ---
 
-### Exercise 3: useFormStatus Return Properties
+### Exercise 2: Accessing Form Submission Data via `useFormStatus()`
 
-**Problem:** List 3 properties returned by the `useFormStatus()` hook object.
+**Scenario:**
+Read `data` (FormData instance) from `useFormStatus()` to display optimism previews during submission.
 
-**Expected output:**
+**Requirements:**
+1. Extract `data` from `useFormStatus()`.
+
 > [!check]- Answer
-> ```text
-> 1. pending (boolean)
-> 2. data (FormData submitted)
-> 3. method (HTTP method string)
-> ```
-> - `pending` -> Form submission active boolean
-> - `data` -> Submitted FormData object
-> - `method` -> HTTP verb ('get' or 'post')
-> 
-> ```typescript
-> const { pending, data, method, action } = useFormStatus();
-> ```
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { useFormStatus } from "react-dom";
+
+export default function FormStatusIndicator() {
+  const { pending, data } = useFormStatus();
+
+  if (!pending) return null;
+
+  const title = data?.get("title") as string;
+
+  return (
+    <div className="p-2 bg-blue-50 text-blue-800 rounded text-sm">
+      Submitting post: "{title}"...
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `useFormStatus().data` contains the `FormData` object currently being transmitted to the server.
+> 2. Allows child components to inspect field values during submission.
+> 3. Enables clean submission progress feedback UI.
+
+---
+
+### Exercise 3: Auditing `useFormStatus()` Context Bounds
+
+**Scenario:**
+Explain why calling `useFormStatus()` in the SAME component that renders the `<form>` tag returns `pending: false`.
+
+**Requirements:**
+1. Detail React Context parent-child boundary requirement.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> // ❌ INCORRECT (Hook is in the SAME component as <form>):
+> // export default function Form() {
+> //   const { pending } = useFormStatus(); // Returns false always!
+> //   return <form><button disabled={pending}>Submit</button></form>;
+> // }
+
+// ✅ CORRECT (Hook is inside a CHILD component):
+// export default function Form() {
+> //   return <form><SubmitButton /></form>;
+> // }
+```
+
+> #### Technical Explanation
+>
+> 1. `useFormStatus()` acts as a React Context consumer expecting `<form>` to act as its Context Provider.
+> 2. A component cannot consume Context provided by an element rendered in its own return statement.
+> 3. Must extract submit buttons or indicators into separate child components.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`useFormState` Hook](use_form_state.md) — The hook for tracking the *result* of the form, while this tracks the *status* of the form.
 - [Form Actions](form_actions.md) — The trigger for the pending state.
 - [Server Actions Overview (`"use server"`)](server_actions.md) — Related concept: Server Actions Overview (`"use server"`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **`useFormStatus`** is a React DOM hook that tells you if the parent form is currently `pending` (submitting).
 - It is primarily used to disable submit buttons and show loading spinners.
 - It completely eliminates the need for `isLoading` state variables.

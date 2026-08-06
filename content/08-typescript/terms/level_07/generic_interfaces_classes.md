@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Architecture**
+
+**TypeScript Advanced Type** (Generic Object & Class Contracts): Generic interfaces and classes instantiate parametric type parameters across methods, properties, and instance state.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Generic Interfaces
 Imagine building a standard API Response wrapper. Every single API response returns `{ status: 200, data: ??? }`. 
@@ -64,7 +65,7 @@ numberStore.addItem("Hello"); // ❌ Error: Argument of type 'string' is not ass
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Forgetting to pass the Generic Argument
 
@@ -116,79 +117,138 @@ interface Repository<T> { find(): T }
 class UserRepo implements Repository<string> { find() { return "user"; } }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Redux State
+### Exercise 1: Authoring Generic Repository Interfaces
 
-**Problem:** How would you write a Generic Interface for a Redux/Vuex application state wrapper that tracks `loading` (boolean), `error` (string | null), and `data` (which is the Generic part)?
+**Scenario:**
+Define a generic `Repository<T>` interface for database CRUD operations.
 
-**Expected output:**
+**Requirements:**
+1. Declare generic interface `Repository<T>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> interface StateWrapper<T> {
->   isLoading: boolean;
->   error: string | null;
->   data: T | null; // Nullable because it might not be loaded yet!
+> interface Repository<T> {
+>   findById(id: string): Promise<T | null>;
+>   save(entity: T): Promise<void>;
+>   findAll(): Promise<T[]>;
 > }
-> ```
-> - Just structure it exactly like the API response example.
+
+interface Product { id: string; title: string; price: number; }
+
+class ProductRepository implements Repository<Product> {
+  async findById(id: string): Promise<Product | null> {
+    return { id, title: "Laptop", price: 999 };
+  }
+  async save(entity: Product): Promise<void> {}
+  async findAll(): Promise<Product[]> { return []; }
+}
+```
+
+> #### Technical Explanation
+>
+> 1. `interface Repository<T>` parameterizes CRUD method signatures over arbitrary domain entities.
+> 2. Implementing `Repository<Product>` locks `T` to `Product` across all class methods.
+> 3. Standard enterprise data access layer architecture.
 
 ---
 
+### Exercise 2: Implementing Generic Stack Data Structures
 
+**Scenario:**
+Create a generic `Stack<T>` class supporting `push`, `pop`, and `peek` operations.
 
-### Exercise 2: Generic Stack Class Implementation
+**Requirements:**
+1. Define class `Stack<T>`.
 
-**Problem:** Create `class Stack<T>` with methods `push(item: T)` and `pop(): T | undefined`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Stack class created
-> ```
+>
+> #### Implementation
+>
 > ```typescript
 > class Stack<T> {
 >   private items: T[] = [];
->   push(item: T) { this.items.push(item); }
->   pop(): T | undefined { return this.items.pop(); }
-> }
-> const s = new Stack<number>();
-> s.push(10);
-> console.log(s.pop());
-> ```
+
+  push(item: T): void {
+    this.items.push(item);
+  }
+
+  pop(): T | undefined {
+    return this.items.pop();
+  }
+
+  peek(): T | undefined {
+    return this.items[this.items.length - 1];
+  }
+}
+
+const numberStack = new Stack<number>();
+numberStack.push(10);
+numberStack.push(20);
+console.log(numberStack.pop()); // 20
+```
+
+> #### Technical Explanation
 >
-> **Explanation:** Generic classes store and manipulate type-safe internal collections.
+> 1. `class Stack<T>` manages internal state (`items: T[]`) of type `T`.
+> 2. Instantiating `new Stack<number>()` enforces number element types across all stack operations.
+> 3. High performance, type-safe data structure implementation.
 
 ---
 
-### Exercise 3: Generic Data Key-Value Pair Interface
+### Exercise 3: Generic Interface Method Inheritance
 
-**Problem:** Define `interface KeyValuePair<K, V> { key: K; value: V }`.
+**Scenario:**
+Extend a generic parent interface into a generic child interface (`interface PaginatedResponse<T> extends ApiResponse<T[]>`).
 
-**Expected output:**
+**Requirements:**
+1. Extend generic interface.
+
 > [!check]- Answer
-> ```text
-> KeyValuePair interface created
-> ```
-> ```typescript
-> interface KeyValuePair<K, V> {
->   key: K;
->   value: V;
-> }
-> const pair: KeyValuePair<string, number> = { key: "age", value: 30 };
-> console.log("KeyValuePair interface created");
-> ```
 >
-> **Explanation:** Generic interfaces parametrize key and value data contracts.
+> #### Implementation
+>
+> ```typescript
+> interface ApiResponse<T> {
+>   data: T;
+>   status: number;
+> }
 
-## 7. Related Terms
+interface PaginatedResponse<T> extends ApiResponse<T[]> {
+  page: number;
+  totalPages: number;
+}
+
+const response: PaginatedResponse<string> = {
+  data: ["item1", "item2"],
+  status: 200,
+  page: 1,
+  totalPages: 5
+};
+```
+
+> #### Technical Explanation
+>
+> 1. Generic interfaces can extend other generic interfaces (`extends ApiResponse<T[]>`).
+> 2. Substitutes type parameter `T[]` into parent interface definitions cleanly.
+> 3. Reusable API response design.
+
+---
+
+
+
+## 6. Related Terms
 - [Type Aliases (`type`)](../level_05/type_aliases.md) — Can also be Generic (`type MyType<T> = ...`).
 - [Classes Overview](../level_10/classes.md) — The OOP structures being made generic.
 - [Generics Overview (`<T>`)](generics.md) — Related concept: Generics Overview (`<T>`).
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Generic Interfaces and Classes** allow you to create reusable data structures where the internal data payload can be anything.
 - The `<T>` is declared immediately after the interface or class name.
 - It is the standard architectural pattern for API Responses, State Management Wrappers, and Data Collections (like Stacks, Queues, Maps).

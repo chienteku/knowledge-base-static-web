@@ -157,7 +157,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Threaded Task Channel & Worker Pool with `Send` Closure Bounds
 
-**Problem:**
+**Scenario:**
 In high-throughput service architectures, worker thread pools consume executable job closures sent across thread boundaries via channel message queues (`std::sync::mpsc`). Because jobs are dispatched to background OS threads, closures captured by the pipeline must strictly satisfy `Send + 'static`.
 
 Implement a `WorkerPool` struct that:
@@ -168,6 +168,9 @@ Implement a `WorkerPool` struct that:
 5. Includes a comprehensive unit test suite inside `#[cfg(test)] mod tests` that asserts parallel task execution, atomic state updates, result reception via `assert_eq!`, and pool termination.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::mpsc::{channel, Receiver, Sender};
 > use std::sync::{Arc, Mutex};
@@ -287,7 +290,8 @@ Implement a `WorkerPool` struct that:
 > }
 > ```
 > 
-> **Explanation & Key Takeaways:**
+> #### Technical Explanation
+>
 > 1. **Closure Trait Bounds (`F: Send + 'static`)**: `thread::spawn` requires closures to capture only thread-safe ownership (`Send`) and live for the `'static` lifetime. Standard functions or closures capturing non-`Send` types like `Rc` or `RefCell` fail compilation.
 > 2. **Result Synchronization**: Enqueueing a wrapper closure that calls `f()` and sends output over a separate `mpsc::channel` allows asynchronous task dispatch and synchronous response collection.
 > 3. **Teardown Mechanics**: When `WorkerPool` drops, clearing the `sender` closes the channel. Worker loops receiving `Err(_)` exit cleanly, enabling `handle.join()` to clean up background OS threads.
@@ -296,7 +300,7 @@ Implement a `WorkerPool` struct that:
 
 ### Exercise 2: Off-Heap Raw Pointer Memory Buffer with Sound `unsafe impl Send`
 
-**Problem:**
+**Scenario:**
 Low-latency systems allocate raw heap blocks (`*mut u8`) off the standard Rust stack for zero-copy binary serialization. Because raw pointers (`*mut T` / `*const T`) do not implement `Send` (`!Send`) by default, Rust prevents transferring pointer ownership across thread boundaries.
 
 Implement an `OffHeapBuffer` container that:
@@ -307,6 +311,9 @@ Implement an `OffHeapBuffer` container that:
 5. Includes a comprehensive unit test suite in `#[cfg(test)] mod tests` asserting buffer allocation, thread-moving across `std::thread::spawn`, out-of-bounds safety, and returned thread output verification via `assert_eq!`.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::alloc::{alloc, dealloc, Layout};
 > use std::ptr::NonNull;
@@ -409,7 +416,7 @@ Implement an `OffHeapBuffer` container that:
 
 ### Exercise 3: Auto-Trait Propagation & Conditional `Send` Bounds on Generic Pipeline State
 
-**Problem:**
+**Scenario:**
 In multi-threaded event routers, wrapper structures store generic state `StateContainer<T>`. In Rust, `Send` is an **auto-trait**—a composite struct automatically implements `Send` if and only if all contained fields implement `Send`.
 
 Construct a generic state wrapper and worker dispatcher that:
@@ -421,6 +428,9 @@ Construct a generic state wrapper and worker dispatcher that:
    - Dispatching thread-safe wrapped payloads to background threads correctly mutates shared state, returning updated structures to the main thread with `assert_eq!` and `assert!` verification.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::sync::{Arc, Mutex};
 > use std::thread::{self, JoinHandle};

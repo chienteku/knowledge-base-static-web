@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **React Client Component**
+
+**React Server Component** (Interactive Client Component Boundaries): Client Components (`"use client"`) render on the server initially and hydrate on the client, enabling state, effects, and browser event listeners.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Server (Pre-render) & Client (Hydration)**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If Server Components are so great for performance, why do we need Client Components?
@@ -55,7 +56,7 @@ When you declare `"use client"` in a file, you are telling the Next.js bundler: 
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Putting `"use client"` at the top of the App
 
@@ -105,76 +106,125 @@ import { prisma } from '@/lib/db'; // ❌ Browser compilation error!
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Server Components inside Client Components
+### Exercise 1: Adding Interactivity with Client Components
 
-**Problem:** Can you import a Server Component directly into a Client Component?
-```tsx
-"use client"
-import ServerComponent from './ServerComponent'; // Will this work?
+**Scenario:**
+Create an interactive counter component using `"use client"` directive and `useState()`.
+
+**Requirements:**
+1. Add `"use client"` directive at the top of the file.
+2. Implement reactive increment button.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> "use client";
+
+import { useState } from "react";
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button
+      onClick={() => setCount(count + 1)}
+      className="px-4 py-2 bg-blue-600 text-white rounded"
+    >
+      Count: {count}
+    </button>
+  );
+}
 ```
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> No!
-> Because `"use client"` forces all imported dependencies to become part of the client bundle, the `ServerComponent` will silently be converted into a Client Component! If it had database code inside it, it would crash.
-> (Note: You CAN pass a Server Component as a `children` prop to a Client Component, but you cannot import it directly).
-> ```
-> - Think about the "Network Boundary" cascading effect.
+> #### Technical Explanation
+>
+> 1. `"use client"` marks the boundary where server execution transitions to client JavaScript hydration.
+> 2. Client Components can consume React hooks (`useState`, `useEffect`, `useContext`) and DOM event handlers (`onClick`).
+> 3. Still pre-renders initial static HTML on the server during initial page request.
 
 ---
 
-### Exercise 2: Client Component Boundary Selection
+### Exercise 2: Passing Server Components as Children into Client Components
 
-**Problem:** Which of the following components MUST be marked with `'use client'`?
-1. Static blog post text block
-2. Interactive Like button with `useState` and `onClick`
-3. Database user query page
+**Scenario:**
+Pass a Server Component containing direct database access as a `children` prop into an interactive Client Component drawer.
 
-**Expected output:**
+**Requirements:**
+1. Accept `children: React.ReactNode` in Client Component.
+
 > [!check]- Answer
-> ```text
-> Component 2 (Interactive Like button using useState and onClick requires 'use client').
-> ```
-> - React state (`useState`), effects (`useEffect`), and event listeners (`onClick`) require `'use client'`.
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> 'use client';
-> import { useState } from 'react';
-> 
-> export function LikeButton() {
->   const [likes, setLikes] = useState(0);
->   return <button onClick={() => setLikes(likes + 1)}>Likes: {likes}</button>;
-> }
-> ```
+> // app/components/Drawer.tsx
+> "use client";
+
+import { useState } from "react";
+
+export default function Drawer({ children }: { children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setIsOpen(!isOpen)}>Toggle Drawer</button>
+      {isOpen && <aside className="drawer-content">{children}</aside>}
+    </div>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Client Components cannot directly `import` Server Components into their files.
+> 2. Passing Server Components via the `children` prop allows Server Components to execute on the server while living inside Client Component UI wrappers.
+> 3. Preserves server-side execution for data fetching components.
 
 ---
 
-### Exercise 3: Passing Server Components as Children to Client Components
+### Exercise 3: Minimizing Client Component Boundaries
 
-**Problem:** How can a Client Component wrap a Server Component without converting the Server Component into a Client Component?
+**Scenario:**
+Refactor a large product detail page so that ONLY the "Add to Cart" button is marked as a Client Component, keeping header and details as Server Components.
 
-**Expected output:**
+**Requirements:**
+1. Isolate `"use client"` to atomic button component.
+
 > [!check]- Answer
-> ```text
-> By passing the Server Component as the `children` prop to the Client Component.
-> ```
-> - Passing Server Components as `children` preserves server-side execution for the children.
-> 
+>
+> #### Implementation
+>
 > ```tsx
-> // ClientWrapper.tsx
-> 'use client';
-> export function ClientWrapper({ children }: { children: React.ReactNode }) {
->   return <div className="modal">{children}</div>;
-> }
-> ```
+> // app/components/AddToCartButton.tsx
+> "use client";
+
+export default function AddToCartButton({ productId }: { productId: string }) {
+  return (
+    <button onClick={() => alert(`Added ${productId} to cart!`)}>
+      Add to Cart
+    </button>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Moving `"use client"` down to atomic leaves minimizes client JavaScript bundle sizes.
+> 2. Main product details page remains a zero-bundle-size Server Component.
+> 3. Core Next.js performance optimization pattern.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [React Server Components (RSC)](rsc.md) — The default component type.
 - [App Router vs Pages Router](app_router_vs_pages.md) — The architecture where this distinction matters.
 - [Hydration](hydration.md) — Related concept: Hydration.
@@ -185,7 +235,7 @@ import ServerComponent from './ServerComponent'; // Will this work?
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Client Components** are required for interactivity (`onClick`), state (`useState`), lifecycle hooks (`useEffect`), and browser APIs (`window`).
 - You opt-in by placing `"use client"` at the top of the file.
 - The directive creates a boundary; the file and all its imported dependencies are bundled and sent to the browser.

@@ -15,7 +15,9 @@
 
 ## 2. Term Category
 
-**Functional Language Feature**: Closures (`|args| expr`) are anonymous functions that capture state from their surrounding lexical scope. Rust closures automatically infer parameter and return types, implement one or more closure marker traits (`Fn`, `FnMut`, `FnOnce`), and compile into zero-cost, stack-allocated anonymous struct types created by `rustc`.
+
+
+**Rust Language Feature (anonymous environment-capturing functions)**: Closures (`|args| expr`) are anonymous functions that capture state from their surrounding lexical scope. Rust closures automatically infer parameter and return types, implement one or more closure marker traits (`Fn`, `FnMut`, `FnOnce`), and compile into zero-cost, stack-allocated anonymous struct types created by `rustc`.
 
 ---
 

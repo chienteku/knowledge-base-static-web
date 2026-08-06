@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Design Pattern**
+
+**Data Modeling** (Heavy Tail Document Handling Pattern): The Outlier Pattern handles exceptional documents with massive relationship counts (e.g., celebrity social media followers) without blowing up standard document limits.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported conceptually across NoSQL platforms. Designed to handle extreme data skew (Power Law / Pareto distributions) in social networks and e-commerce catalogs).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In high-scale applications, data distributions often follow a Power Law (a tiny percentage of records hold a massive percentage of the data):
@@ -99,7 +100,7 @@ The book document has an embedded reviews array and an overflow indicator:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Prematurely normalizing the entire database schema to reference all data, strictly to avoid outlier scenarios
 
@@ -147,74 +148,112 @@ const followers = user.followers; // ❌ Misses overflow records if hasOutlier i
 if (user.hasOutlier) { const extra = await db.followers_overflow.find({ userId }); }
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Read Path Logic
+### Exercise 1: Handling Heavy-Tail Outlier Accounts
 
-**Problem:** You are writing the backend API controller to load a book's review page. The book document uses the Outlier Pattern.
-Write the pseudo-code logic steps (using `if/else` checks) to describe how your controller will retrieve the full list of reviews for a given `bookId`.
+**Scenario:**
+Model a social network where standard users have ~100 followers (embedded in document), but celebrity accounts have 10,000,000 followers using the Outlier Pattern.
 
-**Expected output:**
+**Requirements:**
+1. Add boolean flag `hasOutlier: true` on celebrity user documents.
+2. Store overflow followers in a separate `followers` collection.
+
 > [!check]- Answer
-> ```text
-> 1. Fetch the book document matching bookId:
->    `const book = db.books.findOne({ _id: bookId });`
-> 2. Initialize the final reviews list with the embedded reviews:
->    `let allReviews = book.reviews;`
-> 3. Check if the overflow flag is active:
->    `if (book.has_overflow === true) {`
-> 4. Fetch the remaining reviews from the overflow collection:
->    `const overflowReviews = db.reviews_overflow.find({ book_id: bookId }).toArray();`
-> 5. Merge the results:
->    `allReviews = allReviews.concat(overflowReviews);`
->    `}`
-> 6. Return `allReviews` to the client.
-> ```
-> - The first database read gets the parent document and checks the overflow boolean.
-> - Execute a second read to the overflow collection only if the flag evaluates to true.
-
----
-
-
-
-### Exercise 2: Outlier Pattern Flag Schema
-
-**Problem:** Model celebrity user document holding top 1,000 followers and `hasOutlier: true` flag.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> { name: "Celebrity", hasOutlier: true, followers: [ ... 1000 items ] }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const user = {
->   _id: new ObjectId(),
->   name: "Celebrity",
+> // Standard User Document (Embedded Followers)
+> db.users.insertOne({
+>   username: "standard_user",
+>   hasOutlier: false,
+>   followers: [new ObjectId(), new ObjectId()]
+> });
+> 
+> // Outlier Celebrity User Document (Flagged + Overflow Collection)
+> db.users.insertOne({
+>   _id: new ObjectId("60c72b2f9b1d8b2c88888899"),
+>   username: "celebrity_user",
 >   hasOutlier: true,
->   followers: [ /* top 1,000 follower ObjectIds */ ]
-> };
+>   followers: [ /* Top 1,000 followers embedded */ ]
+> });
+> 
+> // Overflow followers stored in separate collection
+> db.followers.insertOne({
+>   userId: new ObjectId("60c72b2f9b1d8b2c88888899"),
+>   followerId: new ObjectId()
+> });
 > ```
 >
-> **Explanation:** Outlier Pattern embeds standard items in primary document and offloads overflow to separate records.
+> #### Technical Explanation
+>
+> 1. The Outlier Pattern optimizes schema design for 99.9% of normal documents while handling 0.1% extreme outliers gracefully.
+> 2. Flags outlier documents with `hasOutlier: true` to divert overflow relationships to a secondary collection.
+> 3. Prevents 16MB document size limit crashes while preserving embedded read speed for normal users.
 
 ---
 
-### Exercise 3: Outlier Pattern Use Case
+### Exercise 2: Querying Outlier Relationships
 
-**Problem:** Describe ideal use case for Outlier Pattern (Social network accounts with extreme follower count distributions).
+**Scenario:**
+Write an application query fetching followers for a user, checking `hasOutlier` to determine whether to query `followers` collection.
 
-**Expected output:**
+**Requirements:**
+1. Check `hasOutlier` flag to route queries.
+
 > [!check]- Answer
-> ```text
-> Power-law data distributions where a few outlier documents exceed standard array thresholds
-> ```
-> ```text
-> Power-law data distributions where a few outlier documents exceed standard array thresholds
+>
+> #### Implementation
+>
+> ```javascript
+> const user = db.users.findOne({ username: "celebrity_user" });
+> let followersList = user.followers;
+> 
+> if (user.hasOutlier) {
+>   // Fetch overflow followers from separate collection
+>   const overflow = db.followers.find({ userId: user._id }).toArray();
+>   followersList = followersList.concat(overflow.map(f => f.followerId));
+> }
 > ```
 >
-> **Explanation:** Outlier Pattern maintains fast embedded reads for 99.9% of documents while handling rare outliers.
+> #### Technical Explanation
+>
+> 1. Application checks `hasOutlier` boolean flag to handle outlier data fetching dynamically.
+> 2. Standard users enjoy $O(1)$ single-document embedded read performance.
+> 3. Outlier users execute secondary collection queries smoothly.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Identifying Outliers with Aggregation Thresholds
+
+**Scenario:**
+Identify documents in `users` whose `followers` array length exceeds 1,000 items to flag them as outliers.
+
+**Requirements:**
+1. Aggregate using `$where` or `$expr` with `$size`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.users.find({
+>   $expr: { $gt: [{ $size: "$followers" }, 1000] }
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$expr` with `$size` detects documents approaching embedded array capacity thresholds.
+> 2. Automates outlier identification during background schema maintenance jobs.
+> 3. Flags documents for outlier migration before 16MB limits are breached.
+
+---
+
+
+
+## 6. Related Terms
 
 
 - [MongoDB](../level_01/mongodb.md)
@@ -223,7 +262,7 @@ Write the pseudo-code logic steps (using `if/else` checks) to describe how your 
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Outlier Pattern keeps 99% of documents fast while protecting against the 1% edge cases.
 - Embeds arrays by default for standard users.
 - Caps the embedded array size and sets an overflow flag (e.g. `has_overflow: true`).

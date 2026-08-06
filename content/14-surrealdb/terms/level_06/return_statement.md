@@ -13,16 +13,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**SurrealQL Command (block transaction return statement)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed by the procedural interpreter. Halts execution of the current code block and pops the return payload to the caller stack).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In multi-statement procedural scripts and custom server-side functions:
@@ -87,7 +86,7 @@ RETURN { status: 200, data: $user };
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing the CRUD 'RETURN' clause (RETURN NONE/AFTER) with the standalone procedural 'RETURN' statement
 
@@ -149,68 +148,102 @@ FOR $x IN [1, 2, 3] { IF $x = 2 { RETURN $x; }; }; // Collects iteration result
 Use predicate filters or `array::find()` for early value extraction
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Procedural Script Output
+### Exercise 1: Returning Custom Transaction Payload Objects
 
-**Problem:** Write a SurrealQL script that:
-1. Calculates the count of active users (`SELECT VALUE count() FROM user WHERE active = true GROUP ALL`)[0] and assigns it to `$active_count`.
-2. Calculates the count of inactive users (`SELECT VALUE count() FROM user WHERE active = false GROUP ALL`)[0] and assigns it to `$inactive_count`.
-3. Explicitly returns an object using `RETURN`: `{ active: $active_count, inactive: $inactive_count }`.
+**Scenario:**
+A database script performs multiple updates and uses `RETURN` to output a custom summary JSON object.
 
-**Expected output:**
+**Requirements:**
+1. Begin a transaction block.
+2. Calculate `$total` order count.
+3. Return `{ status: "success", total_orders: $total }`.
+
 > [!check]- Answer
-> ```sql
-> LET $active_count = (SELECT VALUE count() FROM user WHERE active = true GROUP ALL)[0];
-> LET $inactive_count = (SELECT VALUE count() FROM user WHERE active = false GROUP ALL)[0];
+>
+> #### Implementation
+>
+> ```surrealql
+> BEGIN TRANSACTION;
+> 
+> LET $total = (SELECT count() FROM order GROUP ALL);
 > 
 > RETURN {
->   active: $active_count,
->   inactive: $inactive_count
+>     status: "success",
+>     total_orders: $total,
+>     timestamp: time::now()
 > };
+> 
+> COMMIT TRANSACTION;
 > ```
-> - Index subqueries `[0]` to assign scalar counts to variables.
-> - Terminate the script with `RETURN { ... };`.
+>
+> #### Technical Explanation
+>
+> 1. `RETURN expression;` specifies the final output payload returned by a script block.
+> 2. Overrides default statement return payloads.
+> 3. Constructs custom response objects directly inside database transactions.
+
+---
+
+### Exercise 2: Early Return from Conditional Blocks
+
+**Scenario:**
+If a requested account `account:a1` is frozen, return an early error summary object immediately.
+
+**Requirements:**
+1. Check `IF account:a1.frozen THEN RETURN { error: "Account frozen" } END;`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE account:a1 SET frozen = true;
+> 
+> IF account:a1.frozen THEN (
+>     RETURN { status: "error", message: "Account is frozen" }
+> ) END;
+> 
+> UPDATE account:a1 SET balance -= 10.0dec;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `RETURN` terminates script execution early when encountered inside conditional blocks.
+> 2. Prevents subsequent update statements from executing.
+> 3. Enables procedural guard clauses in SurrealQL scripts.
+
+---
+
+### Exercise 3: Returning Evaluated Calculation Values
+
+**Scenario:**
+Calculate and return the result of a mathematical expression `math::sqrt(144)` directly.
+
+**Requirements:**
+1. Execute `RETURN math::sqrt(144);`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> RETURN math::sqrt(144);
+> -- Output: 12
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `RETURN` can evaluate and return scalar expressions directly without a `SELECT` statement.
+> 2. Simplifies stored procedure function return statements.
+> 3. Returns unboxed calculation results directly to the caller.
 
 ---
 
 
 
-### Exercise 2: Returning Explicit Transaction Output
-
-**Problem:** Write batch query that creates a user, logs audit entry, and returns final user record.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> LET $u = (CREATE user SET name = "Alice"); CREATE log SET user = $u.id; RETURN $u;
-> ```
-> ```surrealql
-> LET $u = (CREATE user SET name = "Alice");
-> CREATE log SET user = $u.id;
-> RETURN $u;
-> ```
->
-> **Explanation:** `RETURN $var` outputs specified transaction results from batch scripts.
-
----
-
-### Exercise 3: Returning Object Expressions
-
-**Problem:** Return custom summary object `{ status: "ok", count: 42 }` using `RETURN`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> RETURN { status: "ok", count: 42 };
-> ```
-> ```surrealql
-> RETURN { status: "ok", count: 42 };
-> ```
->
-> **Explanation:** `RETURN expression` returns formatted JSON objects or primitive values.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`RETURN` Clause (`RETURN NONE / BEFORE / AFTER / DIFF`)](../level_03/return_clause.md) — The CRUD projection clause.
 - [`LET` Statement](let_statement.md) — Script variables.
@@ -220,7 +253,7 @@ Use predicate filters or `array::find()` for early value extraction
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The `RETURN` statement is a standalone control-flow command (`RETURN $val;`).
 - Explicitly halts execution and outputs a specific value to the caller.
 - Used in multi-statement scripts, custom functions (`DEFINE FUNCTION`), and blocks.

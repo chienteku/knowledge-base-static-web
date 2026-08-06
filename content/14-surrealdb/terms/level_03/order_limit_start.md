@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Query Feature (sorting and pagination clauses)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Processed at the post-filtering pipeline stage. Relies on indexed fields inside `ORDER BY` to bypass sorting in-memory buffers).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building frontend web interfaces, you cannot retrieve and display the entire database at once:
@@ -88,7 +87,7 @@ SELECT name FROM user ORDER BY name.last ASC, name.first ASC;
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to use the SQL keyword 'OFFSET' instead of 'START' to skip records, leading to syntax errors
 
@@ -145,70 +144,109 @@ SELECT * FROM user LIMIT 10 OFFSET 20; // ❌ Parse error!
 SELECT * FROM user ORDER BY id LIMIT 10 START 20;
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Pagination Math Formulation
+### Exercise 1: Multi-Column Sorting with `ORDER BY`
 
-**Problem:** You are writing an API in Node.js to fetch paginated products. 
-Your server receives two variables:
--   `pageNumber` (1-indexed: Page 1, Page 2, Page 3, etc.)
--   `pageSize` (number of items per page)
-Write the math formulas to calculate the values for the SurrealQL query parameters:
-1.  `$limit = ?`
-2.  `$start = ?`
+**Scenario:**
+A product listing page sorts products primarily by `category` ascending, and secondarily by `price` descending.
 
-**Expected output:**
+**Requirements:**
+1. Create product records across multiple categories and prices.
+2. Write a `SELECT` query applying `ORDER BY category ASC, price DESC`.
+
 > [!check]- Answer
-> ```javascript
-> 1. $limit = pageSize;
-> 2. $start = (pageNumber - 1) * pageSize;
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE product:p1 SET category = "books", price = 15.00dec;
+> CREATE product:p2 SET category = "books", price = 45.00dec;
+> CREATE product:p3 SET category = "electronics", price = 299.00dec;
+> 
+> -- Multi-column ordering query
+> SELECT * FROM product ORDER BY category ASC, price DESC;
 > ```
-> - The limit value matches the page size directly.
-> - For Page 1, start offset must evaluate to `0`. For Page 2, start offset skips the first page's worth of items.
+>
+> #### Technical Explanation
+>
+> 1. `ORDER BY` sorts query result records by one or more field criteria.
+> 2. `ASC` sorts low-to-high; `DESC` sorts high-to-low.
+> 3. Multi-column ordering evaluates secondary sort fields when primary sort values match.
+
+---
+
+### Exercise 2: Pagination with `LIMIT` and `START`
+
+**Scenario:**
+An API endpoint implements page-based pagination returning 10 items per page. Query page 2 (skipping the first 10 items).
+
+**Requirements:**
+1. Formulate a `SELECT` query targeting table `article`.
+2. Apply `LIMIT 10` and `START 10` for page 2 offset pagination.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- Page 2 offset pagination query (items 11 through 20)
+> SELECT * FROM article 
+> ORDER BY created_at DESC 
+> LIMIT 10 
+> START 10;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `LIMIT n` restricts the maximum number of records returned in the result set payload.
+> 2. `START n` (SurrealDB's equivalent of SQL `OFFSET`) skips the first `n` matching records.
+> 3. Always pair pagination queries with explicit `ORDER BY` clauses to guarantee stable page sorting.
+
+---
+
+### Exercise 3: Top-N Leaderboard Retrieval
+
+**Scenario:**
+A gaming leaderboard query retrieves the top 3 highest-scoring players from table `player_score`.
+
+**Requirements:**
+1. Order scores by `score DESC`.
+2. Restrict output to the top 3 records using `LIMIT 3`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE player_score:1 SET player = "Alice", score = 9500;
+> CREATE player_score:2 SET player = "Bob", score = 12000;
+> CREATE player_score:3 SET player = "Carol", score = 8100;
+> CREATE player_score:4 SET player = "Dave", score = 10500;
+> 
+> -- Query Top 3 leaderboard
+> SELECT player, score FROM player_score 
+> ORDER BY score DESC 
+> LIMIT 3;
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Combining `ORDER BY score DESC` with `LIMIT 3` constructs efficient Top-N leaderboard queries.
+> 2. Stops query evaluation early once the top `N` records are collected.
+> 3. Optimizes memory usage by avoiding full result set buffers.
 
 ---
 
 
 
-### Exercise 2: Stable Paginated Query
-
-**Problem:** Query page 2 (items 11-20) from `product` table ordered by `price` ascending.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM product ORDER BY price ASC LIMIT 10 START 10;
-> ```
-> ```surrealql
-> SELECT * FROM product ORDER BY price ASC LIMIT 10 START 10;
-> ```
->
-> **Explanation:** `ORDER BY` + `LIMIT` + `START` provides deterministic paginated query results.
-
----
-
-### Exercise 3: Multi-Column Ordering
-
-**Problem:** Order users by `role` ascending, then `created_at` descending.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> SELECT * FROM user ORDER BY role ASC, created_at DESC;
-> ```
-> ```surrealql
-> SELECT * FROM user ORDER BY role ASC, created_at DESC;
-> ```
->
-> **Explanation:** `ORDER BY col1 ASC, col2 DESC` sorts results across multiple field criteria.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`SELECT`](select.md) — The parent query statement.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `ORDER BY` sorts queries; `LIMIT` defines size; `START` defines offset.
 - Directly equivalent to SQL's `ORDER BY`/`LIMIT`/`OFFSET` and NoSQL equivalents.
 - SurrealQL uses the keyword `START` instead of SQL's standard `OFFSET`.

@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Architecture**
+
+**Security & Middleware** (App Router Auth Patterns): Authentication in Next.js App Router combines middleware token validation, session cookies, and Server Action guards.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Authentication credentials are submitted by the client browser, while session validation occurs on the server).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 HTTP is a **stateless** protocol. The server treats every incoming page request as completely independent. If a user logs in on `/login` and then clicks a link to visit `/dashboard`, the server has no memory of the previous login transaction.
@@ -50,7 +51,7 @@ To secure session tokens in production, cookies must be configured with specific
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Storing session tokens inside browser `localStorage`
 
@@ -105,94 +106,133 @@ cookies().set('session', token, { httpOnly: true, secure: true, sameSite: 'stric
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Session Cookie Validation
+### Exercise 1: Protecting Private Routes in Middleware
 
-**Problem:** Complete the Server Component below to read a session cookie named `'session-token'` and conditionally display dashboard content or redirect to login:
+**Scenario:**
+Create `middleware.ts` to redirect unauthenticated requests to `/login` when accessing `/dashboard/**`.
 
-```typescript
-// app/dashboard/page.tsx
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import React from 'react';
+**Requirements:**
+1. Check session cookie and call `NextResponse.redirect()`.
 
-// Solution:
-export default function DashboardPage() {
-  const token = cookies().get('session-token')?.value;
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> // middleware.ts
+> import { NextResponse } from "next/server";
+> import type { NextRequest } from "next/server";
 
-  if (!token) {
-    redirect('/login');
+export function middleware(req: NextRequest) {
+  const token = req.cookies.get("session_token")?.value;
+
+  if (!token && req.nextUrl.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  return (
-    <div>
-      <h1>Protected Dashboard</h1>
-      <p>Welcome to your administration space.</p>
-    </div>
-  );
+  return NextResponse.next();
 }
 ```
 
-> [!check]- Answer
-> - Check if the cookie exists using `cookies().get('session-token')` and redirect using `redirect()` if it is undefined.
+> #### Technical Explanation
+>
+> 1. `middleware.ts` executes on every request before routing logic or page rendering begins.
+> 2. Inspecting session cookies in middleware prevents unauthorized users from downloading dynamic route code chunks.
+> 3. Centralized authentication guard pattern.
 
 ---
 
-### Exercise 2: NextAuth / Auth.js Session Check Pattern
+### Exercise 2: Validating Auth State in Server Components
 
-**Problem:** Write async Server Component checking `auth()` session and rendering user avatar or `redirect('/login')`.
+**Scenario:**
+Verify user session state inside a Server Component and redirect if session token is expired.
 
-**Expected output:**
+**Requirements:**
+1. Import `cookies` from `next/headers` and `redirect` from `next/navigation`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> import { auth } from '@/auth'; import { redirect } from 'next/navigation'; export default async function Profile() { const session = await auth(); if (!session) redirect('/login'); return <div>Welcome {session.user.name}</div>; }
-> ```
-> - `auth()` retrieves session state in Server Components.
-> 
-> ```tsx
-> import { auth } from '@/auth';
-> import { redirect } from 'next/navigation';
-> 
-> export default async function Profile() {
->   const session = await auth();
->   if (!session?.user) {
->     redirect('/login');
->   }
->   
->   return <div>Hello, {session.user.name}</div>;
-> }
-> ```
+> import { cookies } from "next/headers";
+> import { redirect } from "next/navigation";
+> import { verifySession } from "@/lib/auth";
+
+export default async function ProtectedPage() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session_token")?.value;
+  const user = token ? await verifySession(token) : null;
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  return <h1>Welcome back, {user.name}</h1>;
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Server Components inspect session cookies and database user roles on the Node.js server.
+> 2. `redirect()` halts execution immediately if session validation fails.
+> 3. Double-layer defense in depth security strategy.
 
 ---
 
-### Exercise 3: Session Strategy Matrix
+### Exercise 3: Handling Auth Tokens in Server Actions
 
-**Problem:** Compare Database Sessions vs JWT Token Sessions in Next.js authentication.
+**Scenario:**
+Verify user authentication and authorization roles before executing a database mutation inside a Server Action.
 
-**Expected output:**
+**Requirements:**
+1. Validate auth token inside Server Action before mutation.
+
 > [!check]- Answer
-> ```text
-> Database Sessions: Stored server-side in DB/Redis (instant revocation, higher DB load);
-> JWT Sessions: Stateless encrypted tokens stored in HttpOnly cookies (zero DB load, harder instant revocation).
-> ```
-> - Database Sessions -> Server-side DB lookup, instant revocation.
-> - JWT Sessions -> Stateless token in cookie, zero DB lookup.
-> 
-> ```text
-> Database Sessions = Instant Revocation; JWT = Stateless & High Performance.
-> ```
+>
+> #### Implementation
+>
+> ```typescript
+> "use server";
+
+import { cookies } from "next/headers";
+import { verifySession } from "@/lib/auth";
+
+export async function deletePostAction(postId: string) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session_token")?.value;
+  const user = token ? await verifySession(token) : null;
+
+  if (!user || user.role !== "ADMIN") {
+    throw new Error("Unauthorized: Admin privileges required.");
+  }
+
+  // Delete post from database...
+}
+```
+
+> #### Technical Explanation
+>
+> 1. Server Actions are public HTTP endpoints; ALWAYS validate authentication and authorization roles inside action bodies.
+> 2. Never trust client-sent parameters without server-side validation.
+> 3. Essential secure action mutation pattern.
+
+---
+
+
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`cookies()` and `headers()` from `next/headers`](../level_05/cookies_headers.md) — The server-side cookies reader API.
 - [Middleware (`middleware.ts`)](middleware.md) — The global routing checkpoint.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Session Management bridges the stateless gap of HTTP communication.
 - Authentication verifies credentials; Session Management maintains logged-in state.
 - Stateful sessions store session metadata on the database; Stateless JWTs sign and store data in the cookie.

@@ -12,16 +12,15 @@
 ---
 
 ## 2. Term Category
-- **Database Command / Tool**
+
+
+**Data Type (explicit type coercion operators)**: - **Database Command / Tool**
+
+
 
 ---
 
-## 3. Environment Context
-- **SurrealDB Core** (Executed by the query parser engine. Coercion rules run in memory during database write transactions before disk serialization).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database applications, data inputs frequently arrive in different shapes:
@@ -97,7 +96,7 @@ CREATE member:alice SET points = "10";
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Attempting to use PostgreSQL-style double-colon '::' syntax for type casting in SurrealQL queries, triggering compiler errors
 
@@ -154,60 +153,93 @@ RETURN cast("123", "number");
 RETURN <number> "123"; // Correct angle bracket type casting
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Cast Syntax Translation
+### Exercise 1: Explicit Number and Date Casting
 
-**Problem:** You are migrating a PostgreSQL query containing casts:
-`SELECT CAST(price AS NUMERIC) FROM products;`
-Write the equivalent query in SurrealQL, casting `price` to a `decimal` type.
+**Scenario:**
+An API integration receives raw string inputs from web form payloads (e.g. `"150"`, `"2026-08-06T00:00:00Z"`) and casts them to native `int` and `datetime` types.
 
-**Expected output:**
+**Requirements:**
+1. Cast string `"150"` to `<int>`.
+2. Cast string `"2026-08-06T00:00:00Z"` to `<datetime>`.
+3. Return the cast values in a `SELECT` expression.
+
 > [!check]- Answer
-> ```sql
-> SELECT <decimal> price FROM products;
+>
+> #### Implementation
+>
+> ```surrealql
+> SELECT 
+>     <int> "150" AS quantity,
+>     <datetime> "2026-08-06T00:00:00Z" AS created_at;
 > ```
-> - The casting operator in SurrealQL uses angle brackets `<type>`.
-> - Prefix the casting block directly before the target field name.
+>
+> #### Technical Explanation
+>
+> 1. `<type> value` explicitly coerces values into target SurrealDB data types.
+> 2. Coerces raw string inputs into typed integer and datetime representations.
+> 3. Ensures data payload type alignment before database insertion.
+
+---
+
+### Exercise 2: Casting Record ID Strings to Record Links
+
+**Scenario:**
+An incoming HTTP JSON payload contains a raw string `"user:alice"`. You need to cast it to a typed `<record>` link pointer when creating a `post` record.
+
+**Requirements:**
+1. Cast string `"user:alice"` to `<record<user>>` inside a `CREATE` statement.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> CREATE user:alice SET name = "Alice";
+> 
+> -- Cast string ID to typed record pointer
+> CREATE post:p1 SET title = "Type Casting in SurrealDB", author = <record<user>> "user:alice";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `<record<table>> "table:id"` converts raw string representations into typed record link pointers.
+> 2. Enables pointer resolution and graph traversals for raw string API inputs.
+> 3. Bridges external REST payload inputs with internal record link architectures.
+
+---
+
+### Exercise 3: Coercion Error Handling with Safe Casting
+
+**Scenario:**
+Demonstrate what happens when an invalid string `"abc"` is cast to `<int>`.
+
+**Requirements:**
+1. Attempt to execute `SELECT <int> "abc";`.
+2. Observe the conversion error returned by SurrealDB.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```surrealql
+> -- This query will FAIL with a type conversion error:
+> -- "Could not convert 'abc' to int"
+> SELECT <int> "abc";
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Explicit casting fails gracefully with a query error if the source value cannot be converted.
+> 2. Protects database fields from receiving corrupted or invalid data types.
+> 3. Use `type::is::int()` to check conversion safety prior to casting when handling untrusted user input.
 
 ---
 
 
 
-### Exercise 2: Angle Bracket Type Casting Examples
-
-**Problem:** Cast string `"100"` to int, string `"2026-01-01T00:00:00Z"` to datetime.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <int> "100", <datetime> "2026-01-01T00:00:00Z"
-> ```
-> ```surrealql
-> RETURN <int> "100";
-> RETURN <datetime> "2026-01-01T00:00:00Z";
-> ```
->
-> **Explanation:** `<type>` explicitly converts values into specified primitive data types.
-
----
-
-### Exercise 3: Record ID Casting Syntax
-
-**Problem:** Cast string `"user:alice"` to Record ID primitive using `<record>` or `r'user:alice'`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <record> "user:alice"
-> ```
-> ```surrealql
-> RETURN <record> "user:alice";
-> ```
->
-> **Explanation:** `<record>` converts record ID string representations into structured Record IDs.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [Type Functions (`type::*`)](../level_06/type_functions.md) — Introspection library.
@@ -217,7 +249,7 @@ Write the equivalent query in SurrealQL, casting `price` to a `decimal` type.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Explicit casting uses prefixed angle brackets (e.g. `<type> value`).
 - Does not support PostgreSQL's double-colon (`::`) type-cast syntax.
 - Coercion automatically converts compatible values to schema-defined types.

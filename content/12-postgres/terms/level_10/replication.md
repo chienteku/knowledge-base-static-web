@@ -11,16 +11,17 @@
 ---
 
 ## 2. Term Category
-- **Database Architecture / Scaling**
+
+**Administration / Operations** (Cluster High Availability Replication): Streaming & Logical Replication streams WAL byte logs to standby replica servers for high availability and read scaling.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **PostgreSQL Core** (Fully supported. Requires configuring replication roles, replication slots, and network firewall rules inside `pg_hba.conf`).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 If your application relies on a single database server:
@@ -78,7 +79,7 @@ Publisher DB (Read/Write)               Subscriber DB (Read/Write)
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Directing write queries (INSERT/UPDATE/DELETE) to a streaming physical standby replica
 
@@ -126,73 +127,103 @@ Use Logical Replication: CREATE PUBLICATION my_pub FOR TABLE my_table;
 Route write-after-read queries to Primary database node
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Scaling Architecture Selection
+### Exercise 1: Configuring Streaming Replication Standby Nodes
 
-**Problem:** You are the Lead Database Architect. Select the correct replication type (**Streaming** or **Logical**) for these scenarios:
-1.  You want a high-availability backup database that can take over instantly if the main database hardware dies.
-2.  You want to sync only 3 specific analytics tables from your main production database to a separate data warehouse database running on a different server version.
+**Scenario:**
+Configure a Streaming Replication standby node to stream WAL bytes continuously from primary server `primary.example.com`.
 
-**Expected output:**
+**Requirements:**
+1. Code `primary_conninfo` standby configuration.
+
 > [!check]- Answer
-> ```text
-> 1. Streaming Replication: Perfect for high availability. It copies the entire cluster block-by-block with minimal latency, providing a ready standby clone for failovers.
-> 2. Logical Replication: Perfect for table-specific synchronization. It allows you to publish only the 3 target tables and sync them to a different database layout and version.
+>
+> #### Implementation
+>
+> ```ini
+> # postgresql.conf on Standby Node
+> primary_conninfo = 'host=primary.example.com port=5432 user=rep_user password=SecretPass sslmode=require'
+> hot_standby = on
 > ```
-> - Determine if the backup must contain the entire database cluster or a subset.
-> - Consider version compatibility constraints.
+>
+> #### Technical Explanation
+>
+> 1. Streaming Replication streams physical WAL log byte streams from primary to standby replica nodes over TCP connections.
+> 2. `hot_standby = on` allows read-only SELECT queries to run on the standby replica node.
+> 3. Enables high availability cluster failover and read scaling.
 
 ---
 
+### Exercise 2: Configuring Logical Replication Publications and Subscriptions
 
+**Scenario:**
+Configure Logical Replication to stream table `orders` from database `db1` to database `analytics_db`.
 
-### Exercise 2: Logical Replication Setup Sequence
+**Requirements:**
+1. Execute `CREATE PUBLICATION` on publisher, and `CREATE SUBSCRIPTION` on subscriber.
 
-**Problem:** Write DDL creating publication `pub_orders` on Primary and subscription `sub_orders` on Replica.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Primary: CREATE PUBLICATION pub_orders FOR TABLE orders; Replica: CREATE SUBSCRIPTION sub_orders CONNECTION 'host=primary_host dbname=prod' PUBLICATION pub_orders;
-> ```
-> ```sql
-> -- On Primary:
-> CREATE PUBLICATION pub_orders FOR TABLE orders;
 >
-> -- On Replica:
-> CREATE SUBSCRIPTION sub_orders
-> CONNECTION 'host=primary_host dbname=prod user=rep_user'
+> #### Implementation
+>
+> ```sql
+> -- 1. On Publisher DB (db1):
+> CREATE PUBLICATION pub_orders FOR TABLE orders;
+> 
+> -- 2. On Subscriber DB (analytics_db):
+> CREATE SUBSCRIPTION sub_orders 
+> CONNECTION 'host=db1.example.com port=5432 dbname=db1 user=rep_user password=SecretPass' 
 > PUBLICATION pub_orders;
 > ```
 >
-> **Explanation:** Logical replication uses Publications and Subscriptions for selective table data streaming.
+> #### Technical Explanation
+>
+> 1. Logical Replication decodes logical DML modifications (`INSERT`, `UPDATE`, `DELETE`) from the WAL log.
+> 2. Allows selective table replication across different PostgreSQL major versions or different database clusters.
+> 3. Enables cross-database data streaming pipelines.
 
 ---
 
-### Exercise 3: Monitoring Replication Lag Query
+### Exercise 3: Monitoring Replication Lag in Bytes and Seconds
 
-**Problem:** Query replication lag bytes from `pg_stat_replication` on Primary node.
+**Scenario:**
+Query `pg_stat_replication` on the primary node to monitor replica connection health and byte lag.
 
-**Expected output:**
+**Requirements:**
+1. Query `pg_stat_replication`.
+
 > [!check]- Answer
-> ```text
-> SELECT client_addr, pg_wal_lsn_diff(sent_lsn, replay_lsn) AS lag_bytes FROM pg_stat_replication;
-> ```
+>
+> #### Implementation
+>
 > ```sql
-> SELECT client_addr, pg_wal_lsn_diff(sent_lsn, replay_lsn) AS lag_bytes
+> SELECT 
+>   client_addr, 
+>   application_name, 
+>   state, 
+>   sync_state, 
+>   pg_wal_lsn_diff(pg_current_wal_lsn(), replay_lsn) AS replay_lag_bytes 
 > FROM pg_stat_replication;
 > ```
 >
-> **Explanation:** `pg_stat_replication` tracks streaming replica LSN replay byte positions.
+> #### Technical Explanation
+>
+> 1. `pg_stat_replication` displays connected standby replicas, sync states (`async`, `sync`), and LSN positions.
+> 2. `pg_wal_lsn_diff()` calculates byte lag between primary writes and secondary applied replay positions.
+> 3. Essential command for replica cluster health monitoring.
 
-## 7. Related Terms
+---
+
+
+
+## 6. Related Terms
 - [WAL (Write-Ahead Log)](wal.md) — The sync fuel.
 - [Point-in-Time Recovery (PITR)](pitr.md) — - Offline WAL replaying.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Replication duplicates data across multiple standby servers in real-time.
 - Solves single points of failure (high availability) and read bottlenecks (read scaling).
 - Streaming Replication copies raw WAL bytes; replica is a strict read-only clone.

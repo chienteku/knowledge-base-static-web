@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Paradigm**
+
+**Core Concept** (Single and Multi-Document Write Boundaries): Atomicity guarantees that operations within a transaction boundary complete entirely or abort with zero partial side effects.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (A core component of ACID consistency across SQL and NoSQL engines. Determines whether partial data writes can pollute database storage).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In database architecture, **Atomicity** guarantees that a set of updates either all complete successfully or all fail and roll back together. 
@@ -89,7 +90,7 @@ db.users.updateMany(
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Assuming that 'updateMany()' or bulk writes are atomic across all matched documents by default
 
@@ -138,84 +139,117 @@ await db.users.updateOne({ _id: id }, { $inc: { count: 1 } }); // Atomic server-
 Wrap multi-document updates in a transaction session for batch isolation
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Atomicity Diagnostic
+### Exercise 1: Single-Document Atomic Field Mutex
 
-**Problem:** You execute the following command:
-```javascript
-db.products.updateOne(
-  { _id: 202 },
-  {
-    $set: { price: 49.99 },
-    $inc: { stock: -1 }
-  }
-);
-```
-During execution, the database server loses power. 
-Analyze which of the following states can exist on disk when the server boots back up (answer **Yes** or **No**):
-1.  The price is `49.99` and stock is decremented.
-2.  The price is the old value and stock is unchanged.
-3.  The price is `49.99` but stock is unchanged.
+**Scenario:**
+Atomically decrement inventory stock count ONLY IF available stock is >= requested quantity (preventing negative inventory).
 
-**Expected output:**
+**Requirements:**
+1. Query `{ _id: productId, stock: { $gte: 2 } }`.
+2. Update `$inc: { stock: -2 }`.
+
 > [!check]- Answer
-> ```text
-> 1. Yes: The update completed successfully before the crash.
-> 2. Yes: The crash occurred before the update was applied, rolling back the entire write.
-> 3. No: Single-document updates are strictly atomic. The price change and the stock decrement cannot be split; it is "all-or-nothing."
-> ```
-> - Single-document writes are protected by engine-level atomicity.
-> - Partial modifications of single documents are impossible in MongoDB.
-
----
-
-
-
-### Exercise 2: Atomic Counter Increment
-
-**Problem:** Increment `downloads` counter atomically for `file:1` using `$inc`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.files.updateOne({ _id: 1 }, { $inc: { downloads: 1 } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.files.updateOne({ _id: 1 }, { $inc: { downloads: 1 } });
+> const result = db.products.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880"), stock: { $gte: 2 } },
+>   { $inc: { stock: -2 } }
+> );
+> 
+> if (result.modifiedCount === 0) {
+>   throw new Error("Out of stock or concurrent purchase race condition!");
+> }
 > ```
 >
-> **Explanation:** `$inc` executes atomic server-side numeric increments without race conditions.
+> #### Technical Explanation
+>
+> 1. Single-document write operations are completely atomic at the storage engine level.
+> 2. Including condition `stock: { $gte: 2 }` in the query filter acts as an atomic optimistic lock.
+> 3. Prevents race conditions without heavy transaction locks.
 
 ---
 
-### Exercise 3: Atomic Find and Update
+### Exercise 2: Atomic Array Element Manipulation
 
-**Problem:** Atomically update order status to `"processing"` returning updated document using `findOneAndUpdate()`.
+**Scenario:**
+Push a new item to an order's `items` array and update `totalAmount` in a single atomic `updateOne()` call.
 
-**Expected output:**
+**Requirements:**
+1. Combine `$push` and `$inc` in `updateOne()`.
+
 > [!check]- Answer
-> ```text
-> db.orders.findOneAndUpdate({ status: "pending" }, { $set: { status: "processing" } }, { returnDocument: "after" });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.orders.findOneAndUpdate(
->   { status: "pending" },
->   { $set: { status: "processing" } },
->   { returnDocument: "after" }
+> db.orders.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   {
+>     $push: { items: { name: "Mouse", price: 29.99 } },
+>     $inc: { totalAmount: 29.99 }
+>   }
 > );
 > ```
 >
-> **Explanation:** `findOneAndUpdate()` atomically claims and updates queue documents.
+> #### Technical Explanation
+>
+> 1. Multiple update operators (`$push`, `$inc`) inside a single `updateOne()` execute atomically as a single unit of work.
+> 2. Either both array push and total increment succeed, or neither succeeds.
+> 3. Guarantees single-document internal consistency.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Evaluating Multi-Document Transaction Abort Behavior
+
+**Scenario:**
+Demonstrate transaction abort rollback when an error occurs during a 2-step transfer.
+
+**Requirements:**
+1. Call `session.abortTransaction()` on exception.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> const session = db.getMongo().startSession();
+> session.startTransaction();
+> 
+> try {
+>   db.wallets.updateOne({ _id: "w1" }, { $inc: { balance: -50 } }, { session });
+>   throw new Error("Simulated payment gateway timeout!");
+>   db.wallets.updateOne({ _id: "w2" }, { $inc: { balance: 50 } }, { session });
+>   session.commitTransaction();
+> } catch (err) {
+>   session.abortTransaction();
+>   console.warn("Transaction aborted; w1 balance update rolled back completely.");
+> } finally {
+>   session.endSession();
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `session.abortTransaction()` discards all pending uncommitted writes in the transaction buffer.
+> 2. Reverts database state to pre-transaction snapshot.
+> 3. Enforces strict multi-document atomicity.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Multi-Document Transaction](multi_document_transaction.md) — Multi-collection ACID blocks.
 - [ACID vs BASE](acid_vs_base.md) — The consistency models.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Atomicity ensures that database modifications are "all-or-nothing" operations.
 - MongoDB guarantees single-document write atomicity by default.
 - Any updates to nested fields or arrays inside one document are atomic.

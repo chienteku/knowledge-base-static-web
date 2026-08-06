@@ -151,7 +151,7 @@ thread::spawn(move || {
 
 ### Exercise 1: Financial Trade Stream VWAP & Risk Circuit Breaker Engine
 
-**Problem:** In a high-frequency trading (HFT) matching engine, trade fills arrive continuously as an iterator of `TradeFill` structures containing `price_cents: u64`, `quantity: u64`, and `trader_id: u32`. Implement an analytics module that processes a stream of trade fills without allocating intermediate collections using iterator consumers:
+**Scenario:** In a high-frequency trading (HFT) matching engine, trade fills arrive continuously as an iterator of `TradeFill` structures containing `price_cents: u64`, `quantity: u64`, and `trader_id: u32`. Implement an analytics module that processes a stream of trade fills without allocating intermediate collections using iterator consumers:
 1. Calculate the **Volume-Weighted Average Price (VWAP)** in cents floating point using `.fold()`, while also computing total volume.
 2. Check if **any** single fill exceeds a risk threshold quantity (`max_qty`) using `.any()`.
 3. Check if **all** fills belong to authenticated non-zero trader IDs using `.all()`.
@@ -313,7 +313,7 @@ thread::spawn(move || {
 
 ### Exercise 2: Distributed Log Telemetry Parser & Security Audit Analyzer
 
-**Problem:** A cloud security agent processes streaming log records formatted as `LogEntry { timestamp: u64, service: &'static str, level: LogLevel, message: &'static str }`.
+**Scenario:** A cloud security agent processes streaming log records formatted as `LogEntry { timestamp: u64, service: &'static str, level: LogLevel, message: &'static str }`.
 Implement a stream analyzer that:
 1. Searches for the **first occurrence** of a critical security threat message containing `"SECURITY_VIOLATION"` using `.find()`.
 2. Computes error rate statistics across log levels by aggregating counts using `.fold()`.
@@ -479,7 +479,7 @@ Implement a stream analyzer that:
 
 ### Exercise 3: Embedded Network Frame De-framing & CRC Polynomial Checksum Pipeline
 
-**Problem:** In an embedded network protocol layer, incoming raw telemetry data packets are transmitted as byte buffers containing a preamble frame header (`0xAA`), payload bytes, and a final 8-bit CRC checksum. Implement a frame decoder that:
+**Scenario:** In an embedded network protocol layer, incoming raw telemetry data packets are transmitted as byte buffers containing a preamble frame header (`0xAA`), payload bytes, and a final 8-bit CRC checksum. Implement a frame decoder that:
 1. Verifies if **any** frame contains corrupted bytes marked with an invalid hardware flag `0xFF` using `.any()`.
 2. Verifies if **all** bytes in a frame payload fall within allowed ASCII printable bounds using `.all()`.
 3. Locates the **position** of the preamble sequence start marker (`0xAA`) using `.position()`.

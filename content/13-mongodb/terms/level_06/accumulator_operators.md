@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**Aggregation** (Group Reduction Accumulators): Accumulator Operators ($sum, $avg, $min, $max, $first, $last, $push, $addToSet) compute aggregate summary metrics across grouped document streams inside $group and $setWindowFields stages.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (Supported across all document database platforms. Processes data sequentially in the database memory engine).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 Grouping documents is only the first step. 
@@ -88,7 +89,7 @@ db.orders.aggregate([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Trying to use accumulator operators inside standard find() query projections
 
@@ -136,79 +137,112 @@ db.sales.aggregate([{ $group: { _id: "$category", totalSales: { $sum: "$price" }
 { $group: { _id: "$status", count: { $sum: 1 } } }; // Correct count
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multi-Accumulator Query
+### Exercise 1: Computing Category Totals with `$sum` and `$avg`
 
-**Problem:** You have a `students` collection containing `class_name` and `score` fields. 
-Write the aggregation pipeline containing a single `$group` stage that groups students by `class_name`, returning:
-1.  The average score under the field name `average_score`.
-2.  An array of all student scores in that class under the field name `all_scores` (duplicates allowed).
+**Scenario:**
+Group sales orders by `category` and compute total revenue (`$sum`) and average order value (`$avg`).
 
-**Expected output:**
+**Requirements:**
+1. Use `$group` with `_id: "$category"`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> [
+> db.orders.aggregate([
 >   {
 >     $group: {
->       _id: "$class_name",
->       average_score: { $avg: "$score" },
->       all_scores: { $push: "$score" }
+>       _id: "$category",
+>       totalRevenue: { $sum: "$total" },
+>       avgOrderValue: { $avg: "$total" }
 >     }
 >   }
-> ]
+> ]);
 > ```
-> - The grouping key is `"class_name"`.
-> - Use `$avg` for the average math score.
-> - Use `$push` to compile all scores into the array field `all_scores`.
+>
+> #### Technical Explanation
+>
+> 1. `$group` collapses documents sharing the same `_id` group key into a single summary document.
+> 2. `$sum: "$total"` calculates cumulative revenue across all orders in each category.
+> 3. `$avg: "$total"` calculates mean order amounts dynamically.
+
+---
+
+### Exercise 2: Building Unique Value Lists with `$addToSet`
+
+**Scenario:**
+Group customer orders by `customerId` and collect a deduplicated array of all distinct `productCategories` purchased.
+
+**Requirements:**
+1. Use `$addToSet: "$category"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.aggregate([
+>   {
+>     $group: {
+>       _id: "$customerId",
+>       categoriesPurchased: { $addToSet: "$category" }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$addToSet` collects field values into an array, ignoring duplicate entries.
+> 2. Contrast with `$push` which preserves all array items including duplicates.
+> 3. Constructs deduplicated user preference lists server-side.
+
+---
+
+### Exercise 3: Retrieving Boundary Documents with `$first` and `$last`
+
+**Scenario:**
+Find the most recent order date (`$max`) and the first order date (`$min`) for each customer.
+
+**Requirements:**
+1. Group by `$customerId` computing `$min: "$createdAt"` and `$max: "$createdAt"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.aggregate([
+>   {
+>     $group: {
+>       _id: "$customerId",
+>       firstOrder: { $min: "$createdAt" },
+>       lastOrder: { $max: "$createdAt" }
+>     }
+>   }
+> ]);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `$min` and `$max` compute lower and upper bounds for numeric, string, or date fields.
+> 2. Analyzes customer lifecycle dates directly inside the aggregation engine.
+> 3. Highly efficient stream accumulator processing.
 
 ---
 
 
 
-### Exercise 2: Grouping and Summing Totals
-
-**Problem:** Group sales by `category` and calculate total revenue sum using `$sum: "$amount"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.sales.aggregate([{ $group: { _id: "$category", totalRevenue: { $sum: "$amount" } } }]);
-> ```
-> ```javascript
-> db.sales.aggregate([
->   { $group: { _id: "$category", totalRevenue: { $sum: "$amount" } } }
-> ]);
-> ```
->
-> **Explanation:** `{ $sum: "$field" }` accumulates total field values within group buckets.
-
----
-
-### Exercise 3: Collecting Unique Values with `$addToSet`
-
-**Problem:** Group users by `country` collecting array of unique `roles` using `$addToSet`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.users.aggregate([{ $group: { _id: "$country", roles: { $addToSet: "$role" } } }]);
-> ```
-> ```javascript
-> db.users.aggregate([
->   { $group: { _id: "$country", roles: { $addToSet: "$role" } } }
-> ]);
-> ```
->
-> **Explanation:** `$addToSet` collects unique field values into an array within each group.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`$group` Stage](group_stage.md) — The parent pipeline stage.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Accumulators perform calculations across grouped document streams.
 - Direct equivalents to SQL aggregate functions (`SUM`, `AVG`, `MIN`, `MAX`, `COUNT`).
 - `{ $sum: 1 }` counts documents; equivalent to the BSON `$count` stage.

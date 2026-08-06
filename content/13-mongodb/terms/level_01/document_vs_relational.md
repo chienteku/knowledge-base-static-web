@@ -13,16 +13,17 @@
 ---
 
 ## 2. Term Category
-- **Database Theory / Paradigm**
+
+**Core Concept** (Paradigm Comparison): Document vs Relational compares schema-flexible hierarchical document storage against normalized tabular structures governed by strict SQL schemas.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal Standard** (The core architectural choice when designing application backends. Compares SQL database modeling vs NoSQL document database modeling).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 As a developer transitioning from PostgreSQL to MongoDB, the single most important task is changing **how you think about data.**
@@ -89,7 +90,7 @@ Stores the post and its comments together inside a single document:
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Normalizing documents in MongoDB by creating separate collections for everything and linking them using ID references
 
@@ -137,60 +138,97 @@ db.orders.aggregate([{ $lookup: { from: "users", localField: "userId", foreignFi
 Denormalize essential user details (e.g. userName) directly into order documents
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Model Strategy Selection
+### Exercise 1: Mapping Relational Tables to Embedded Document Schemas
 
-**Problem:** You are designing a database. Select the best database model (**Relational** or **Document**) for these developer scenarios:
-1.  You are building a complex social media platform where users post, like, comment, tag, and message. Data shapes change rapidly, and you want to scale the database across 50 database nodes to handle global traffic.
-2.  You are building a stock exchange platform where account balance safety is critical. You must ensure that if User A buys stock from User B, the balance deduction on A and addition on B happen immediately and atomically with zero risk of inconsistent data.
+**Scenario:**
+Refactor a relational 3-table schema (`orders`, `order_items`, `products`) into a single denormalized MongoDB `orders` collection document.
 
-**Expected output:**
+**Requirements:**
+1. Model `order` document embedding array of items `items: [{ productId, name, price, qty }]`.
+
 > [!check]- Answer
-> ```text
-> 1. Document Model (MongoDB): Ideal for dynamic schemas and horizontal scaling (sharding). It allows nesting posts and comments inside documents, and scales writes across nodes easily.
-> 2. Relational Model (PostgreSQL): Ideal for strict transaction security (ACID). It guarantees immediate consistency across accounts, ensuring balance updates are safe and consistent.
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.insertOne({
+>   _id: new ObjectId(),
+>   customerName: "Alice Smith",
+>   status: "completed",
+>   items: [
+>     { productId: new ObjectId("60c72b2f9b1d8b2c88888881"), name: "Keyboard", price: 79.99, qty: 1 },
+>     { productId: new ObjectId("60c72b2f9b1d8b2c88888882"), name: "Mouse", price: 29.99, qty: 2 }
+>   ],
+>   totalAmount: 139.97,
+>   orderedAt: new Date()
+> });
 > ```
-> - Balance horizontal write scaling priorities against strict transaction consistency needs.
-> - Consider which model maps best to dynamic JSON objects.
+>
+> #### Technical Explanation
+>
+> 1. Replaces relational SQL foreign key JOINs with embedded document arrays.
+> 2. Fetches entire order details in a single atomic $O(1)$ disk read.
+> 3. Eliminates multi-table transaction coordination for order lookups.
+
+---
+
+### Exercise 2: Evaluating Read-Heavy vs Write-Heavy Modeling Trade-offs
+
+**Scenario:**
+Compare denormalized embedded documents vs normalized referenced collections for a high-volume blogging platform.
+
+**Requirements:**
+1. Compare embedding comments in post documents vs referencing comments in a separate collection.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Embedded Comments: Fast reads for post page load, but runs risk of hitting 16MB limit if comments grow infinitely.
+> Referenced Comments: Unlimited scaling for viral posts, but requires $lookup aggregation pipeline to fetch comments.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Embedded schema optimizes read performance for bounded arrays (<100 items).
+> 2. Referenced schema prevents 16MB document size limit issues for unbounded 1-to-many relationships.
+> 3. Driven by application read/write query access patterns.
+
+---
+
+### Exercise 3: Multi-Document ACID Transactions vs Single-Document Atomicity
+
+**Scenario:**
+Explain why updating an embedded document in MongoDB is atomic by default without multi-table transactions.
+
+**Requirements:**
+1. Contrast single-document atomic updates with SQL multi-table `BEGIN TRANSACTION`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.orders.updateOne(
+>   { _id: new ObjectId("60c72b2f9b1d8b2c88888880") },
+>   { $set: { status: "shipped", "items.0.qty": 2 } }
+> );
+> ```
+>
+> #### Technical Explanation
+>
+> 1. All modifications to a single MongoDB document are 100% atomic by default.
+> 2. Updates embedded items and status in a single lock execution.
+> 3. Eliminates 2-phase commit overhead required by normalized relational tables.
 
 ---
 
 
 
-### Exercise 2: Embedding vs Joining Strategy
-
-**Problem:** When should data be embedded vs referenced in MongoDB? (Embed data accessed together; reference large or unbounded data).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Embed data queried together; reference large, unbounded, or independently accessed data
-> ```
-> ```text
-> Embed data queried together; reference large, unbounded, or independently accessed data
-> ```
->
-> **Explanation:** Embedding optimizes read performance for co-located data.
-
----
-
-### Exercise 3: Impedance Mismatch Resolution
-
-**Problem:** How does document storage solve Object-Relational Impedance Mismatch? (Matches application object structure natively without splitting rows).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Stores nested objects directly matching backend programming language data models
-> ```
-> ```text
-> Stores nested objects directly matching backend programming language data models
-> ```
->
-> **Explanation:** Document databases eliminate ORM translation layers between code and tables.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [Document](document.md) — The basic unit of data.
 - [Collection](collection.md) — The logical container.
@@ -199,7 +237,7 @@ Denormalize essential user details (e.g. userName) directly into order documents
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - Relational normalizes data into tables; Document embeds data inside records.
 - SQL reduces data duplication; MongoDB optimizes data retrieval speeds.
 - SQL tables are defined by entity relationships; MongoDB by access patterns.

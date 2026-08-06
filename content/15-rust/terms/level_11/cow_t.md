@@ -166,10 +166,11 @@ thread::spawn(move || {
 
 ### Exercise 1: Zero-Copy SQL Parameter Sanitizer
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 You are building a high-performance database proxy layer. To prevent SQL injection, incoming string parameter values must be sanitized by escaping single quotes (`' -> ''`) and redacting comment indicators (`-- -> [REDACTED]`).
 Since over 95% of incoming SQL queries are already sanitized and clean, allocating a new `String` on the heap for every single request creates unnecessary memory pressure and garbage allocation.
 
+**Requirements:**
 Implement a function `pub fn sanitize_sql_param<'a>(input: &'a str) -> Cow<'a, str>` that:
 1. Returns `Cow::Borrowed(input)` directly if no single quotes or comment markers exist (zero allocations).
 2. Upgrades to `Cow::Owned` via `cow.to_mut()` and performs string sanitization if dangerous characters are present.
@@ -177,6 +178,9 @@ Implement a function `pub fn sanitize_sql_param<'a>(input: &'a str) -> Cow<'a, s
 Write unit tests using `#[test]` and `matches!` to verify both the zero-allocation borrowed path (verifying pointer identity with `assert_eq!(result.as_ptr(), input.as_ptr())`) and the lazily owned mutated path.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::borrow::Cow;
 > 
@@ -227,7 +231,8 @@ Write unit tests using `#[test]` and `matches!` to verify both the zero-allocati
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Zero-Allocation Fast Path**: By checking `!input.contains('\'') && !input.contains("--")` upfront, clean strings bypass heap allocation entirely and return `Cow::Borrowed`.
 > 2. **Lazy Heap Upgrade (`.to_mut()`)**: When sanitization is necessary, `.to_mut()` allocates a new heap `String` containing a copy of the input, morphing the `Cow` enum from `Borrowed` to `Owned`.
 > 3. **Pointer Verification**: In unit tests, `assert_eq!(result.as_ptr(), clean_input.as_ptr())` proves that `Cow::Borrowed` points to the original slice in memory without duplicating bytes.
@@ -236,9 +241,10 @@ Write unit tests using `#[test]` and `matches!` to verify both the zero-allocati
 
 ### Exercise 2: Lazily Expanded Environment Variable Template Processor
 
-**Problem Scenario:**
+**Scenario:** **Problem Scenario:**
 Microservice configuration engines render template configurations containing `${KEY}` variables (e.g. `http://${HOST}:${PORT}/api`). The vast majority of static configuration entries do not contain placeholders.
 
+**Requirements:**
 Implement `pub fn expand_templates<'a>(template: &'a str, env: &std::collections::HashMap<&str, &str>) -> Cow<'a, str>`:
 1. Returns `Cow::Borrowed(template)` if the string contains no `${` delimiter.
 2. If placeholders exist, lazily promotes the `Cow` to `Owned` using `to_mut()` and replaces `${KEY}` with matching values from `env` (or `"UNSET"` if missing).
@@ -246,6 +252,9 @@ Implement `pub fn expand_templates<'a>(template: &'a str, env: &std::collections
 Write comprehensive unit tests asserting zero allocation on static strings and correct substitution on templated strings.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::borrow::Cow;
 > use std::collections::HashMap;
@@ -314,7 +323,8 @@ Write comprehensive unit tests asserting zero allocation on static strings and c
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Idempotent `.to_mut()`**: The first call to `.to_mut()` converts `Cow::Borrowed` to `Cow::Owned(String)` by cloning the string to the heap. Subsequent calls to `.to_mut()` on an already owned `Cow` return a mutable reference `&mut String` to the existing heap buffer without reallocating.
 > 2. **Delimiter Search**: Scans slice indices safely with `find("${")` and `find('}')`. Unmatched or static templates immediately return borrowed references.
 > 3. **Assertion Strategy**: Tests verify both memory slice identity (`as_ptr()`) and structural contents across missing and present environment values.
@@ -323,12 +333,13 @@ Write comprehensive unit tests asserting zero allocation on static strings and c
 
 ### Exercise 3: Network Packet Unescaping for Binary Slices (`Cow<'a, [u8]>`)
 
-**Scenario / Problem Statement:**
+**Scenario:** **Scenario / Problem Statement:**
 In embedded device networking and serial protocol handling (such as SLIP framing), byte escaping is used to protect control characters inside payload packets.
 Control byte `0xDC` is used as an escape prefix:
 - `[0xDC, 0xDD]` unescapes to `0xDC`.
 - `[0xDC, 0xDE]` unescapes to `0xC0`.
 
+**Requirements:**
 Because 90% of binary packets pass through without containing escape sequences (`0xDC`), cloning every packet payload into a new `Vec<u8>` causes severe memory churn.
 
 Implement `pub fn decode_slip_frame<'a>(frame: &'a [u8]) -> Cow<'a, [u8]>` using `Cow<'a, [u8]>`:
@@ -338,6 +349,9 @@ Implement `pub fn decode_slip_frame<'a>(frame: &'a [u8]) -> Cow<'a, [u8]>` using
 Write unit tests verifying both clean packet borrowing and escaped packet in-place transformation.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::borrow::Cow;
 > 
@@ -414,7 +428,8 @@ Write unit tests verifying both clean packet borrowing and escaped packet in-pla
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Slice `Cow` Handling**: `Cow<'a, [u8]>` works seamlessly with byte slices `[u8]`. Its owned counterpart is `Vec<u8>`.
 > 2. **In-Place Modification**: Calling `.to_mut()` on `Cow<'a, [u8]>` creates a `Vec<u8>` containing the copied bytes. We perform two-pointer unescaping (`read_idx` and `write_idx`) directly on the vector buffer and `truncate` to the unescaped size, minimizing allocations.
 > 3. **Binary Data Assertions**: Unit tests compare byte slices using `&result[..]` and verify pointer identity (`as_ptr()`) for unescaped borrowed frames.

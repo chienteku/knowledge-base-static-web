@@ -14,16 +14,17 @@
 ---
 
 ## 2. Term Category
-- **Database Command / DML Operator**
+
+**CRUD Operation** (Batch Execution API): bulkWrite() executes multiple write operations (inserts, updates, deletes) in a single network batch payload for optimal write throughput.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Optimizes disk storage writes by grouping bulk operations into single batch transactions at the WiredTiger storage engine layer).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 When building data synchronization workers or running nightly migration scripts:
@@ -86,7 +87,7 @@ db.products.bulkWrite([
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Confusing the deeply nested object syntax of bulkWrite operations
 
@@ -100,6 +101,8 @@ Omitting these sub-keys will trigger immediate query validation crashes.
 **Fix: Always double-check your nesting layers when constructing bulk arrays.**
 
 ---
+
+
 
 
 
@@ -119,6 +122,8 @@ for (const item of items) { await db.coll.updateOne({ _id: item.id }, { $set: { 
 const ops = items.map(item => ({ updateOne: { filter: { _id: item.id }, update: { $set: { val: item.val } } } })); await db.coll.bulkWrite(ops);
 ```
 
+
+
 ### Mistake 3: Assuming `bulkWrite()` Operations Execute In Parallel Across Nodes
 
 **The mistake:** Expecting `{ ordered: false }` bulk operations to automatically execute in parallel worker threads.
@@ -137,105 +142,107 @@ Use ordered: false to allow non-blocking continuation on write errors
 
 
 
-### Mistake 4: Executing Multiple Individual Write Network Requests in Loops Instead of `bulkWrite()`
+## 5. Practice Exercises
 
-**The mistake:** Running a 5,000-iteration `for` loop executing `await db.collection.updateOne()` on every iteration.
+### Exercise 1: High-Throughput Batch Operations with `bulkWrite`
 
-**Why it's wrong:** 5,000 individual write calls create 5,000 network RPC roundtrips, taking minutes to execute. `bulkWrite()` sends all operations in a single network batch request.
+**Scenario:**
+Execute a batch insertion and update operation across collection `inventory` in a single network request using `bulkWrite()`.
 
-*Incorrect:*
-```javascript
-for (const item of items) { await db.coll.updateOne({ _id: item.id }, { $set: { val: item.val } }); } // ❌ 5,000 RPC roundtrips!
-```
+**Requirements:**
+1. Combine `insertOne` and `updateOne` inside `bulkWrite()`.
 
-*Fix:*
-```javascript
-const ops = items.map(item => ({ updateOne: { filter: { _id: item.id }, update: { $set: { val: item.val } } } })); await db.coll.bulkWrite(ops);
-```
-
-### Mistake 5: Assuming `bulkWrite()` Operations Execute In Parallel Across Nodes
-
-**The mistake:** Expecting `{ ordered: false }` bulk operations to automatically execute in parallel worker threads.
-
-**Why it's wrong:** `{ ordered: false }` allows MongoDB to re-order and continue execution past individual write errors. It does NOT spawn multi-threaded parallel executions.
-
-*Incorrect:*
-```javascript
-// Expecting ordered: false to create multi-threaded parallel writes
-```
-
-*Fix:*
-```javascript
-Use ordered: false to allow non-blocking continuation on write errors
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Bulk Script Construction
-
-**Problem:** You are importing store inventory edits. Write the `bulkWrite` array payload to:
-1.  Insert a product document: `{ _id: 50, name: "Laser Pen" }`.
-2.  Delete all product documents where the `stock` is exactly `-1`.
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> db.products.bulkWrite([
+> db.inventory.bulkWrite([
 >   {
 >     insertOne: {
->       document: { _id: 50, name: "Laser Pen" }
+>       document: { item: "itemA", qty: 100, status: "A" }
 >     }
 >   },
 >   {
->     deleteOne: {
->       filter: { stock: -1 }
+>     updateOne: {
+>       filter: { item: "itemB" },
+>       update: { $inc: { qty: 50 } }
 >     }
 >   }
 > ]);
 > ```
-> - Construct the operations inside a single array.
-> - Match the required nested sub-keys `document` and `filter`.
+>
+> #### Technical Explanation
+>
+> 1. `bulkWrite()` bundles multiple CRUD commands into a single binary payload sent to `mongod`.
+> 2. Reduces network roundtrip latency significantly compared to sequential writes.
+> 3. Returns a unified `BulkWriteResult` object summarizing operations.
 
 ---
 
+### Exercise 2: Unordered Bulk Writes for High Write Availability
 
+**Scenario:**
+Execute an unordered bulk write batch so that if one write operation fails, remaining write operations continue executing.
 
-### Exercise 2: Constructing `bulkWrite()` Operation Payload
+**Requirements:**
+1. Pass `{ ordered: false }` option to `bulkWrite()`.
 
-**Problem:** Construct `bulkWrite()` array containing an `insertOne` and an `updateOne` operation.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> db.coll.bulkWrite([ { insertOne: { document: { _id: 1 } } }, { updateOne: { filter: { _id: 2 }, update: { $set: { a: 1 } } } } ]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.coll.bulkWrite([
->   { insertOne: { document: { _id: 1, name: "Alice" } } },
->   { updateOne: { filter: { _id: 2 }, update: { $set: { status: "active" } } } }
+> db.inventory.bulkWrite([
+>   { insertOne: { document: { _id: 1, item: "A" } } },
+>   { insertOne: { document: { _id: 1, item: "B" } } }, // Duplicate key error!
+>   { insertOne: { document: { _id: 2, item: "C" } } }
+> ], { ordered: false });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `{ ordered: false }` allows MongoDB to execute operations in parallel and continue processing upon errors.
+> 2. Duplicate key errors on individual items do not abort remaining writes in the batch.
+> 3. Maximizes write throughput in multi-node clusters.
+
+---
+
+### Exercise 3: Bulk Upsert Operations
+
+**Scenario:**
+Perform batch upserts updating existing records or inserting missing records based on product SKU.
+
+**Requirements:**
+1. Use `updateOne` with `upsert: true` inside `bulkWrite()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> db.products.bulkWrite([
+>   {
+>     updateOne: {
+>       filter: { sku: "SKU-001" },
+>       update: { $set: { price: 29.99 } },
+>       upsert: true
+>     }
+>   }
 > ]);
 > ```
 >
-> **Explanation:** `bulkWrite([ ops ])` executes heterogeneous insert/update/delete operations in a single network batch.
+> #### Technical Explanation
+>
+> 1. `upsert: true` creates missing records when filters fail to match existing documents.
+> 2. Standard pattern for synchronization and ETL data ingestion scripts.
+> 3. Executes batch upserts atomically.
 
 ---
 
-### Exercise 3: Unordered Bulk Write Flag
 
-**Problem:** Execute `bulkWrite()` with `{ ordered: false }` so individual errors do not stop remaining operations.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.coll.bulkWrite(ops, { ordered: false });
-> ```
-> ```javascript
-> db.coll.bulkWrite(ops, { ordered: false });
-> ```
->
-> **Explanation:** `{ ordered: false }` continues executing remaining write operations even if an earlier write fails.
-
-## 7. Related Terms
+## 6. Related Terms
 
 - [`insertOne()` / `insertMany()`](insert.md) — Standard inserts.
 - [`updateOne()` / `updateMany()`](update.md) — Standard updates.
@@ -243,7 +250,7 @@ Use ordered: false to allow non-blocking continuation on write errors
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - `bulkWrite()` batch-executes mixed writes in a single network roundtrip.
 - Greatly optimizes execution speed for migrations, seeds, and API sync scripts.
 - Supports combining inserts, updates, replaces, and deletes in one array.

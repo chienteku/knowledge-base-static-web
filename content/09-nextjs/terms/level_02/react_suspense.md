@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **React Component Pattern**
+
+**Framework Architecture** (Asynchronous UI Streaming Boundary): React `<Suspense>` manages async component data loading states, enabling HTML streaming over open HTTP connections.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Universal** (Runs on the server to structure HTML streaming, and operates on the client to manage dynamic views).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 In traditional React applications, loading states are managed imperatively. Developers have to declare a boolean flag `const [isLoading, setIsLoading] = useState(true)` in every stateful component, fetch the data, update the flag, and render conditionally:
@@ -70,7 +71,7 @@ In Next.js, Suspense boundaries determine where the page layout can be split. Th
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Wrapping the entire page in a single, top-level Suspense boundary
 
@@ -148,86 +149,122 @@ export default function Page() {
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Nesting Suspense Blocks
+### Exercise 1: Managing Async Component Boundaries with `<Suspense>`
 
-**Problem:** You have a dashboard displaying a `<QuickStats />` list (fast query) and a `<RecentOrders />` table (slow query). Structure the page using Suspense so that stats render immediately while the orders table displays a spinner:
+**Scenario:**
+Wrap an async data-fetching component inside React `<Suspense>` with a fallback loading card.
 
-```typescript
-// app/dashboard/page.tsx
-import React, { Suspense } from 'react';
-import QuickStats from '@/components/QuickStats';
-import RecentOrders from '@/components/RecentOrders';
+**Requirements:**
+1. Use `<Suspense fallback={<Fallback />}>`.
 
-// Solution:
-export default function Page() {
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> import { Suspense } from "react";
+> import SlowProfileWidget from "./SlowProfileWidget";
+
+export default function ProfilePage() {
   return (
-    <div>
-      <QuickStats />
-      
-      <Suspense fallback={<p>Fetching orders...</p>}>
-        <RecentOrders />
+    <main className="p-6">
+      <h1>User Profile</h1>
+      <Suspense fallback={<div>Loading Profile Widget...</div>}>
+        <SlowProfileWidget />
+      </Suspense>
+    </main>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. React `<Suspense>` intercepts asynchronous Promises thrown during component rendering.
+> 2. Displays fallback UI until child async components resolve.
+> 3. Enables HTML streaming over HTTP connections in Next.js App Router.
+
+---
+
+### Exercise 2: Nesting Parallel Suspense Boundaries
+
+**Scenario:**
+Render two slow widgets (`<WeatherWidget />` and `<NewsWidget />`) inside parallel independent `<Suspense>` boundaries.
+
+**Requirements:**
+1. Wrap widgets in separate `<Suspense>` blocks.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```tsx
+> import { Suspense } from "react";
+
+export default function Portal() {
+  return (
+    <div className="grid grid-cols-2 gap-4 p-6">
+      <Suspense fallback={<p>Loading Weather...</p>}>
+        <WeatherWidget />
+      </Suspense>
+      <Suspense fallback={<p>Loading News...</p>}>
+        <NewsWidget />
       </Suspense>
     </div>
   );
 }
 ```
 
-> [!check]- Answer
-> - Only wrap the component that triggers the slow database fetch in `<Suspense>`.
+> #### Technical Explanation
+>
+> 1. Parallel `<Suspense>` boundaries resolve independently as data becomes available.
+> 2. Fast widgets render immediately without waiting for slower sibling widgets to finish.
+> 3. Maximizes UI responsiveness and visual streaming.
 
 ---
 
-### Exercise 2: Parallel Suspense Streaming Pattern
+### Exercise 3: Handling Errors inside Suspended Async Trees
 
-**Problem:** Write JSX layout streaming 2 independent async server components (`HeaderData` and `FeedData`) in parallel using 2 separate `<Suspense>` boundaries.
+**Scenario:**
+Combine `<Suspense>` with `error.tsx` or `<ErrorBoundary>` to catch async component rendering failures.
 
-**Expected output:**
+**Requirements:**
+1. Wrap `<Suspense>` inside Error Boundary.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```tsx
-> <div> <Suspense fallback={<HeaderSkeleton />}><HeaderData /></Suspense> <Suspense fallback={<FeedSkeleton />}><FeedData /></Suspense> </div>
-> ```
-> - Multiple `<Suspense>` boundaries stream independently in parallel.
-> 
-> ```tsx
-> export default function Page() {
->   return (
->     <div className="space-y-6">
->       <Suspense fallback={<HeaderSkeleton />}>
->         <HeaderData />
->       </Suspense>
->       <Suspense fallback={<FeedSkeleton />}>
->         <FeedData />
->       </Suspense>
->     </div>
->   );
-> }
-> ```
+> import { Suspense } from "react";
+> import { CustomErrorBoundary } from "./CustomErrorBoundary";
+
+export default function SafeView() {
+  return (
+    <CustomErrorBoundary>
+      <Suspense fallback={<div>Loading Async Feed...</div>}>
+        <AsyncFeed />
+      </Suspense>
+    </CustomErrorBoundary>
+  );
+}
+```
+
+> #### Technical Explanation
+>
+> 1. If an async component inside `<Suspense>` throws an unhandled rejection, it bubbles to the nearest Error Boundary.
+> 2. Combining Error Boundaries and `<Suspense>` handles both loading states and error states cleanly.
+> 3. Standard pattern for resilient async UI components.
 
 ---
 
-### Exercise 3: Suspense vs loading.tsx
 
-**Problem:** How does Next.js `loading.tsx` relate to React Suspense?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Next.js automatically wraps the page.tsx component tree in a React Suspense boundary using loading.tsx as the fallback prop.
-> ```
-> - `loading.tsx` is an automated file-convention wrapper for `<Suspense>`.
-> 
-> ```text
-> <Suspense fallback={<Loading />}>
->   <Page />
-> </Suspense>
-> ```
 
 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
 - [`loading.tsx`](loading.md) — The special Next.js file that wraps routes in Suspense boundaries automatically.
 - [React Server Components (RSC)](../level_01/rsc.md) — The async components caught by Suspense.
 - [Streaming with `<Suspense>`](../level_05/streaming.md) — Related concept: Streaming with `<Suspense>`.
@@ -235,7 +272,7 @@ export default function Page() {
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - React Suspense provides a declarative fallback mechanism for pending asynchronous operations.
 - It catches pending Promises thrown by child components during render.
 - Next.js uses Suspense to stream HTML fragments to the client as they finish rendering.

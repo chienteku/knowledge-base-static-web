@@ -14,17 +14,15 @@
 
 ## 2. Term Category
 
-**Systems / Embedded / Tooling**: A Linker Script is a plain text file written in linker command language. While desktop operating systems place binaries into arbitrary virtual memory spaces, bare-metal microcontrollers have rigid physical memory addresses (e.g. Flash memory starting at `0x0800_0000` and RAM starting at `0x2000_0000`). The linker script tells `rust-lld` exactly how to arrange compiled binary sections across physical memory banks.
+
+
+**Rust Low-Level Build Tooling (binary memory section layout script)**: A Linker Script is a plain text file written in linker command language. While desktop operating systems place binaries into arbitrary virtual memory spaces, bare-metal microcontrollers have rigid physical memory addresses (e.g. Flash memory starting at `0x0800_0000` and RAM starting at `0x2000_0000`). The linker script tells `rust-lld` exactly how to arrange compiled binary sections across physical memory banks.
+
+
 
 ---
 
-## 3. Environment Context
-
-**Bare-Metal & Firmware**: Required for microcontrollers (ARM Cortex-M, RISC-V, ESP32) and OS kernel development.
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 
@@ -57,7 +55,23 @@ ENTRY(Reset_Handler);
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
+### Mistake 2: Overlapping RAM or FLASH Memory Regions in Memory Definitions (`memory.x`)
+
+**The mistake:** Setting start addresses of RAM sections to overlap with FLASH or stack regions.
+
+**Why it's wrong:** Writing to variables in RAM corrupts code or stack frames, causing hardware hard faults.
+
+*Fix:* Double-check physical microcontroller memory maps when writing `memory.x`.
+
+### Mistake 3: Forgetting `KEEP(*(.vector_table))` Causing Linker Garbage Collection
+
+**The mistake:** Omitting the `KEEP()` directive on the interrupt vector table in linker scripts.
+
+**Why it's wrong:** The linker garbage collector (`--gc-sections`) drops unreferenced vector tables, leaving microcontrollers unbootable.
+
+*Fix:* Enclose interrupt vector sections in `KEEP(*(.vector_table))`.
+
 
 ### Mistake 1: Memory Overflow Errors during Linking
 
@@ -67,11 +81,11 @@ ENTRY(Reset_Handler);
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
 ### Exercise 1: Bare-Metal `.data` and `.bss` RAM Initialization Routine
 
-**Problem:**
+**Scenario:**
 On a bare-metal microcontroller (e.g., ARM Cortex-M or RISC-V), non-volatile Flash ROM retains executable instructions (`.text`) and read-only data (`.rodata`), but initialized global variables (`.data`) and uninitialized zero-allocated variables (`.bss`) must reside in volatile SRAM. Upon power-on, SRAM contains random garbage values.
 Write a `#![no_std]` Rust initialization function `rtt_init_ram()` that uses linker script exported symbols (`_sidata`, `_sdata`, `_edata`, `_sbss`, `_ebss`) to:
 1. Copy initial `.data` section values from Flash ROM (`_sidata`) into SRAM (`_sdata` through `_edata`).
@@ -79,6 +93,9 @@ Write a `#![no_std]` Rust initialization function `rtt_init_ram()` that uses lin
 3. Include unit tests that simulate Flash and RAM memory regions using arrays to verify that data is correctly copied and zeroed out with assertions.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -172,7 +189,8 @@ Write a `#![no_std]` Rust initialization function `rtt_init_ram()` that uses lin
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Linker Script Symbol Syntax**: In Rust, `extern "C" { static _sdata: u8; }` declares a symbol whose **address** (not value) is provided by the linker script (`link.ld` / `memory.x`).
 > 2. **Address vs Value**: Accessing `&_sdata as *const u8 as usize` yields the memory location where `.data` begins in RAM. Dereferencing `_sdata` directly would read the byte stored at that address, which is a classic bug when calculating section boundaries.
 > 3. **`copy_nonoverlapping` & `write_bytes`**: Core intrinsic functions `core::ptr::copy_nonoverlapping` (equivalent to C `memcpy`) and `core::ptr::write_bytes` (equivalent to C `memset`) provide high-speed memory block operations required during microsecond boot sequences.
@@ -181,13 +199,16 @@ Write a `#![no_std]` Rust initialization function `rtt_init_ram()` that uses lin
 
 ### Exercise 2: Custom Linker Sections for DMA Buffers and Flash Configuration Header
 
-**Problem:**
+**Scenario:**
 Certain hardware peripherals (such as Ethernet controllers or SPI DMA) require memory buffers placed in dedicated uncacheable RAM regions aligned to 64-byte boundaries. Additionally, target hardware metadata and version flags must be pinned to a fixed location in Flash ROM (`.config_flash`) so external bootloaders can read them without parsing complex ELF symbol tables.
 1. Write a linker script section rule snippet defining `.dma_buffer` in `RAM_DMA` and `.config_flash` in `FLASH_CFG`.
 2. Write Rust structs using `#[link_section = "..."]` and `#[repr(C, align(64))]` to place static buffers into these sections.
 3. Write unit tests with assertions verifying struct sizes, field offsets, and alignment constraints.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -276,7 +297,8 @@ Certain hardware peripherals (such as Ethernet controllers or SPI DMA) require m
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **`#[link_section = "..."]`**: Directs `rustc` and `LLVM` to place static symbols under custom ELF section names. The linker script matches these names (`*(.dma_buffer)`) and routes them to specific physical memory regions like `RAM_DMA`.
 > 2. **`KEEP(*(.config_flash))`**: In linker scripts, `KEEP()` prevents `rust-lld` link-time garbage collection (`--gc-sections`) from stripping static structs that are not explicitly called by application functions.
 > 3. **`#[repr(C, align(64))]`**: Ensures memory alignment complies with hardware DMA controller requirements, eliminating cache invalidation errors on high-performance microcontrollers.
@@ -285,11 +307,14 @@ Certain hardware peripherals (such as Ethernet controllers or SPI DMA) require m
 
 ### Exercise 3: Stack Guard and Memory Boundary Overflow Inspector
 
-**Problem:**
+**Scenario:**
 On microcontrollers without a Hardware Memory Protection Unit (MPU), stack memory grows downward from the top of RAM toward the end of `.bss`. If nested function calls or deep recursion push the Stack Pointer (`SP`) beyond the stack region, it overwrites static variables, leading to silent memory corruption and hard faults.
 Using linker script symbols `_stack_start` (top of stack) and `_stack_end` (bottom limit of stack region), implement a Rust stack safety utility that computes remaining stack headroom and detects stack overflow conditions. Provide unit tests with assertions proving correctness.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > #![no_std]
 > 
@@ -392,7 +417,8 @@ Using linker script symbols `_stack_start` (top of stack) and `_stack_end` (bott
 > }
 > ```
 >
-> **Explanation:**
+> #### Technical Explanation
+>
 > 1. **Stack Growth Direction**: On ARM Cortex-M and x86 architectures, stack memory grows downward from high addresses (`_stack_start`) to lower addresses (`_stack_end`).
 > 2. **Headroom Calculation**: Remaining headroom is `current_sp - _stack_end`. If `current_sp < _stack_end`, the stack pointer has overflowed past the allowed region.
 > 3. **Decoupled Testing Architecture**: By isolating pointer bounds into `StackGuard::new(start_addr, end_addr)` alongside `StackGuard::from_linker()`, unit tests can run cleanly on host architectures while maintaining exact bare-metal compatibility.

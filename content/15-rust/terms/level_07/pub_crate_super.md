@@ -165,7 +165,7 @@ pub(crate) fn get_data() -> InternalData { InternalData } // Match visibility sc
 
 ### Exercise 1: The Narrowest Shield
 
-**Problem:** You have a `mod engine` which contains a `mod cylinders`. Inside `cylinders`, there is a function `fn ignite()`. You want `engine` to be able to call `ignite()`, but you DO NOT want `main.rs` to be able to call it. Which keyword should you put in front of `fn ignite()`?
+**Scenario:** You have a `mod engine` which contains a `mod cylinders`. Inside `cylinders`, there is a function `fn ignite()`. You want `engine` to be able to call `ignite()`, but you DO NOT want `main.rs` to be able to call it. Which keyword should you put in front of `fn ignite()`?
 
 1. `pub`
 2. `pub(crate)`
@@ -183,13 +183,16 @@ pub(crate) fn get_data() -> InternalData { InternalData } // Match visibility sc
 
 ### Exercise 2: Restricting Visibility with `pub(crate)`
 
-**Problem:** Declare `pub(crate) fn internal_helper()` and call it within the same crate.
+**Scenario:** Declare `pub(crate) fn internal_helper()` and call it within the same crate.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Internal helper called
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > pub(crate) fn internal_helper() { println!("Internal helper called"); }
 > fn main() {
@@ -197,19 +200,23 @@ pub(crate) fn get_data() -> InternalData { InternalData } // Match visibility sc
 > }
 > ```
 >
-> **Explanation:** `pub(crate)` restricts item visibility strictly to modules within the containing crate.
+> #### Technical Explanation
+> `pub(crate)` restricts item visibility strictly to modules within the containing crate.
 
 ---
 
 ### Exercise 3: Accessing Parent Scope with `super`
 
-**Problem:** Access a parent module function `super::parent_fn()` from an inner nested submodule.
+**Scenario:** Access a parent module function `super::parent_fn()` from an inner nested submodule.
 
 **Expected output:**
 > [!check]- Answer
 > ```
 > Parent function called
 > ```
+>
+> #### Implementation
+>
 > ```rust
 > fn parent_fn() { println!("Parent function called"); }
 > mod child {
@@ -218,7 +225,8 @@ pub(crate) fn get_data() -> InternalData { InternalData } // Match visibility sc
 > fn main() { child::call_parent(); }
 > ```
 >
-> **Explanation:** `super` refers to the immediate parent module in relative path lookups.
+> #### Technical Explanation
+> `super` refers to the immediate parent module in relative path lookups.
 
 ---
 

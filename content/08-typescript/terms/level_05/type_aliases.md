@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **TypeScript Core Syntax**
+
+**TypeScript Core Syntax** (Custom Type Naming & Computation): Type aliases (`type Name = ...`) assign names to custom primitives, unions, tuples, intersections, or object shape types.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **Compile-Time**
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 You are typing an ID parameter as `string | number`. You have to write `string | number` in 50 different function signatures. 
@@ -51,7 +52,7 @@ This is the most common debate in TypeScript. Which one should you use for objec
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Relying too heavily on `type` for public library APIs
 
@@ -98,62 +99,116 @@ interface Point { y: number; } // Merges successfully
 type Node = { children: Node[] }; // Safe container recursive type
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Naming a Tuple
+### Exercise 1: Defining Complex Union and Intersection Type Aliases
 
-**Problem:** How would you use a Type Alias to give a name to a Tuple that holds an X and Y coordinate (`[number, number]`)? Can you do this with an interface?
+**Scenario:**
+Create type aliases for user IDs (`type UserId = string | number`) and user records.
 
-**Expected output:**
+**Requirements:**
+1. Declare primitive union type alias `UserId`.
+2. Declare object shape type alias `User`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```typescript
-> type Coordinate = [number, number];
+> type UserId = string | number;
+
+type UserRole = "admin" | "editor" | "viewer";
+
+type User = {
+  id: UserId;
+  username: string;
+  role: UserRole;
+};
+
+const user: User = { id: 101, username: "dev_alex", role: "admin" };
+```
+
+> #### Technical Explanation
+>
+> 1. Type aliases (`type Name = ...`) assign reusable names to any valid TypeScript type expression.
+> 2. Capable of representing primitive unions (`string | number`), literal unions (`"admin" | "editor"`), and object shapes.
+> 3. Promotes readable, self-documenting code.
+
+---
+
+### Exercise 2: Defining Generic Type Aliases
+
+**Scenario:**
+Create a generic API response wrapper type alias `ApiResponse<T>`.
+
+**Requirements:**
+1. Define `type ApiResponse<T> = { data: T; status: number; message: string }`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type ApiResponse<T> = {
+>   data: T;
+>   status: number;
+>   message: string;
+> };
+
+type UserData = { id: number; name: string };
+
+const response: ApiResponse<UserData> = {
+  data: { id: 1, name: "Alice" },
+  status: 200,
+  message: "Success"
+};
+```
+
+> #### Technical Explanation
+>
+> 1. Type aliases accept generic type parameters (`<T>`) to create reusable parametric type templates.
+> 2. `ApiResponse<UserData>` substitutes `T` with `UserData` during type resolution.
+> 3. Essential pattern for wrapping asynchronous API responses.
+
+---
+
+### Exercise 3: Recursive Type Aliases for JSON Structures
+
+**Scenario:**
+Define a recursive `JSONValue` type alias representing arbitrary valid JSON data.
+
+**Requirements:**
+1. Define recursive union `JSONValue`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```typescript
+> type JSONPrimitive = string | number | boolean | null;
+> type JSONObject = { [key: string]: JSONValue };
+> type JSONArray = JSONValue[];
 > 
-> // No, you cannot cleanly do this with an interface! 
-> // Interfaces are for Objects. Tuples are Arrays. You must use `type` for this!
-> ```
-> - Tuples are just strict arrays, not standard objects.
+> type JSONValue = JSONPrimitive | JSONObject | JSONArray;
+
+const data: JSONValue = {
+  title: "Settings",
+  tags: ["json", "typescript"],
+  nested: { count: 42 }
+};
+```
+
+> #### Technical Explanation
+>
+> 1. Type aliases can reference themselves recursively inside object shapes or array definitions.
+> 2. Perfect for modeling recursive data structures like JSON trees or AST nodes.
+> 3. Advanced type modeling capability.
 
 ---
 
 
 
-### Exercise 2: Complex Union & Intersection Aliases
-
-**Problem:** Define `type ID = string | number` and `type Admin = User & { permissions: string[] }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Type aliases defined
-> ```
-> ```typescript
-> type ID = string | number;
-> type User = { name: string };
-> type Admin = User & { permissions: string[] };
-> console.log("Type aliases defined");
-> ```
->
-> **Explanation:** Type aliases can model arbitrary complex unions, intersections, primitives, and tuples.
-
----
-
-### Exercise 3: Type Alias vs Interface Summary
-
-**Problem:** Which construct can model primitive unions `type Status = "a" | "b"`? (Type Alias)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Type Alias
-> ```
-> ```typescript
-> console.log("Type Alias");
-> ```
->
-> **Explanation:** Type aliases can represent any valid TypeScript type including primitive unions.
-
-## 7. Related Terms
+## 6. Related Terms
 - [Interfaces](../level_03/interfaces.md) — The alternative naming syntax for objects.
 - [Union Types (`|`)](union_types.md) — The primary reason you need `type` aliases.
 - [Declaration Merging](../level_03/declaration_merging.md) — Related concept: Declaration Merging.
@@ -162,7 +217,7 @@ type Node = { children: Node[] }; // Safe container recursive type
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - **Type Aliases** (`type Name = ...`) allow you to assign a custom name to *any* TypeScript type.
 - Unlike `interface`, Type Aliases can name Primitives, Unions, Tuples, and Functions.
 - Type Aliases do not support Declaration Merging (you cannot declare the same type twice to merge properties).

@@ -14,7 +14,9 @@
 
 ## 2. Term Category
 
-**Design Pattern**: Extension traits for augmenting external standard types.
+
+
+**Rust Trait Design Pattern (external type API extension)**: Extension traits for augmenting external standard types.
 
 ---
 
@@ -247,7 +249,7 @@ Choose explicit, non-overlapping extension method names (e.g. `fn word_count(&se
 
 ---
 
-## 5. Related Terms
+## 6. Related Terms
 
 - [Blanket Implementation](../level_14/blanket_implementation.md) — Blanket trait implementations.
 

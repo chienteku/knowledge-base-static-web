@@ -159,9 +159,10 @@ thread::spawn(move || {
 
 ### Exercise 1: Zero-Copy Network Telemetry Pipeline with Dead-Letter Queue Ownership Routing
 
-**Problem Description**:
+**Scenario:** **Problem Description**:
 In high-throughput network service architectures, passing large data frames between processing stages by copying byte vectors incurs substantial allocation overhead and memory bandwidth degradation. To achieve zero-copy throughput, frames must be transferred by value (moving ownership) through the pipeline stages.
 
+**Requirements:**
 Design a telemetry pipeline where:
 1. `NetworkFrame` owns a `FrameHeader` (stream ID, sequence number, expected 8-bit checksum) and a heap-allocated `payload: Vec<u8>`.
 2. `FrameIngest::process(frame: NetworkFrame)` takes ownership of the frame, computes an 8-bit XOR checksum across the payload bytes, and evaluates it against `expected_checksum`.
@@ -337,9 +338,10 @@ Write a complete compilable module with unit tests in `#[cfg(test)] mod tests` v
 
 ### Exercise 2: Fixed-Capacity Memory Slot Pool with RAII Release Guard
 
-**Problem Description**:
+**Scenario:** **Problem Description**:
 In low-latency systems (e.g. game engines, embedded drivers, packet processing), dynamic heap allocations during runtime loops introduce non-deterministic allocator delays and memory fragmentation. Fixed-capacity slot pools pre-allocate memory chunks and issue exclusive ownership handles (`BufferSlotHandle`) to callers.
 
+**Requirements:**
 Design a memory pool system where:
 1. `BufferPool` manages a fixed set of pre-allocated buffers (`Vec<Vec<u8>>`) and tracks their allocation status (`SlotState::Free` vs `SlotState::Occupied`) using shared state (`Rc<RefCell<InnerPool>>`).
 2. Calling `pool.acquire()` searches for an available free slot, marks it occupied, and returns `Some(BufferSlotHandle)` owning the slot index. If all slots are full, it returns `None`.
@@ -525,9 +527,10 @@ Write a complete compilable module with unit tests in `#[cfg(test)] mod tests` v
 
 ### Exercise 3: Consuming Artifact Transformation Pipeline with DAG Node Execution
 
-**Problem Description**:
+**Scenario:** **Problem Description**:
 In build orchestrators (such as Cargo or Bazel) and data processing DAGs, pipeline tasks process build artifacts through a sequence of steps. To prevent stale state access and guarantee data isolation, execution steps take *exclusive consuming ownership* of intermediate artifacts, mutate or replace their payload data, and yield a new owned output artifact.
 
+**Requirements:**
 Design a task execution pipeline where:
 1. `TaskArtifact` owns a string label (`label: String`), payload byte vector (`payload: Vec<u8>`), and a step execution counter (`metadata_count: usize`).
 2. `PipelineStep` is an enum with step transformations:

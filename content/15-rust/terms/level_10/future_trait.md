@@ -183,8 +183,9 @@ thread::spawn(move || {
 
 ### Exercise 1: Polled Exponential Backoff Retry `Future` (`RetryFuture`)
 
-**Scenario**: Low-level networking crates often implement custom `Future` state machines to handle retries without allocating extra futures on the heap. Implement a custom `RetryFuture<F>` struct that wraps a fallible closure/operation, tracks remaining attempts, registers wakers when pending, and executes backoff retries manually inside `poll()`.
+**Scenario:** Low-level networking crates often implement custom `Future` state machines to handle retries without allocating extra futures on the heap. Implement a custom `RetryFuture<F>` struct that wraps a fallible closure/operation, tracks remaining attempts, registers wakers when pending, and executes backoff retries manually inside `poll()`.
 
+**Requirements:**
 Build a manual `Future` implementation for retry logic.
 
 **Requirements**:
@@ -194,6 +195,9 @@ Build a manual `Future` implementation for retry logic.
 4. Add unit tests verifying instant success, success after $K$ attempts, and error return upon retry exhaustion.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
 > use std::future::Future;
 > use std::pin::Pin;
@@ -266,7 +270,8 @@ Build a manual `Future` implementation for retry logic.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Manual `Future` Mechanics**: Implementing `Future` directly requires defining `type Output` and writing the `poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>` state machine loop.
 > 2. **Waker Notification**: When returning `Poll::Pending`, calling `cx.waker().wake_by_ref()` informs Tokio's executor to reschedule the future for polling again.
 > 
@@ -366,7 +371,8 @@ Construct a shared single-execution cell using manual `Future` waker registratio
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Multi-Waiter Waker Tracking**: `CellState` maintains `wakers: Vec<Waker>`. Concurrent callers polling `OnceCellFuture` push their wakers into the list when data is pending.
 > 2. **Fan-Out Waker Notification**: Calling `cell.set(val)` pops all stored wakers via `guard.wakers.drain(..)` and invokes `.wake()` on each, unblocking all `.await`ing tasks simultaneously.
 > 
@@ -454,7 +460,8 @@ Construct a manual `Select2` combinator with pinned projection.
 > }
 > ```
 > 
-> **Step-by-Step Explanation**:
+> #### Technical Explanation
+>
 > 1. **Structural Pin Projection**: `Select2` projects `Pin<&mut Select2<F1, F2>>` into `Pin<&mut F1>` and `Pin<&mut F2>`.
 > 2. **First-Completion Resolution**: Polling both projected futures inside `poll` returns `Poll::Ready(Either::Left)` or `Poll::Ready(Either::Right)` for whichever future completes first.
 > 

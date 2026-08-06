@@ -12,16 +12,17 @@
 ---
 
 ## 2. Term Category
-- **Database Structure / Paradigm**
+
+**Administration / Operations** (Replica Set Node Roles): Primary, Secondary, and Arbiter define the operational roles of nodes within a replica set cluster.
+
+
 
 ---
 
-## 3. Environment Context
+## 3. Explanation
+
+### Environment Context
 - **MongoDB Core** (Configured during replica set initialization. Arbiters require very little RAM and CPU because they do not participate in database storage pipelines).
-
----
-
-## 4. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
 To elect a new primary node when a crash occurs, a replica set must hold an **election vote**. 
@@ -89,7 +90,7 @@ rs.addArb("arbiter-node.example.com:27017");
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Deploying the Arbiter on the same physical server (or Virtual Machine) as the primary or secondary node
 
@@ -137,72 +138,97 @@ Deploy Arbiters on lightweight minimal VMs since they store zero data
 Deploy at most 1 Arbiter per replica set cluster
 ```
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Majority Vote Calculator
+### Exercise 1: Configuring a Replica Set Member as Hidden
 
-**Problem:** Fill out the table below to calculate the number of votes required to achieve a majority and elect a Primary:
+**Scenario:**
+Configure secondary node `node3.example.com` as hidden (`hidden: true`, `priority: 0`) for dedicated analytical backups.
 
-| Configured Replica Nodes | Active Data Nodes | Arbiter Nodes | Majority Votes Needed |
-| :--- | :--- | :--- | :--- |
-| **3** | 3 | 0 | *?* |
-| **3** | 2 | 1 | *?* |
-| **5** | 5 | 0 | *?* |
+**Requirements:**
+1. Update `rs.conf()` member configuration.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> - Rows 1: 2 votes (Majority of 3 is 2).
-> - Row 2: 2 votes (Majority of 3 is 2. The arbiter breaks the tie if one data node crashes).
-> - Row 3: 3 votes (Majority of 5 is 3).
-> ```
-> - A majority is calculated as: `floor(N / 2) + 1` where `N` is the total configured nodes (including arbiters).
-> - Active data status does not change the total configured node count.
-
----
-
-
-
-### Exercise 2: Adding Arbiter to Replica Set
-
-**Problem:** Command to add an Arbiter node `arbiter1:27017` to active replica set in `mongosh`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> rs.addArb("arbiter1:27017");
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> rs.addArb("arbiter1:27017");
+> const cfg = rs.conf();
+> cfg.members[2].priority = 0;
+> cfg.members[2].hidden = true;
+> 
+> rs.reconfig(cfg);
 > ```
 >
-> **Explanation:** `rs.addArb()` registers a non-data voting Arbiter in the replica set.
+> #### Technical Explanation
+>
+> 1. `hidden: true` hides the node from driver routing tables so applications never query it directly.
+> 2. `priority: 0` prevents the node from ever seeking election as primary.
+> 3. Ideal for dedicated reporting, ETL, and backup tasks.
 
 ---
 
-### Exercise 3: Replica Set Node Roles Comparison
+### Exercise 2: Deploying an Arbiter Node for Tie-Breaking Votes
 
-**Problem:** Compare 3 node roles: Primary (Handles all writes), Secondary (Replicates data, handles reads), Arbiter (Holds no data, votes in elections).
+**Scenario:**
+Add an Arbiter node (`arbiterOnly: true`) to a 2-data-node cluster to achieve an odd vote count (3 votes) for primary elections.
 
-**Expected output:**
+**Requirements:**
+1. Execute `rs.addArb("arbiter1.example.com:27017")`.
+
 > [!check]- Answer
-> ```text
-> Primary: writes/reads; Secondary: data copy reads; Arbiter: zero data, election vote only
-> ```
-> ```text
-> Primary: writes/reads; Secondary: data copy reads; Arbiter: zero data, election vote only
+>
+> #### Implementation
+>
+> ```javascript
+> rs.addArb("arbiter1.example.com:27017");
 > ```
 >
-> **Explanation:** Node roles define data replication responsibilities and election voting rights.
+> #### Technical Explanation
+>
+> 1. Arbiters hold election voting rights (`votes: 1`) but store NO database data (`arbiterOnly: true`).
+> 2. Provides tie-breaking votes for primary elections in 2-node clusters without requiring full data storage hardware.
+> 3. Note: Arbiters do not contribute to data redundancy or read scaling.
 
-## 7. Related Terms
+---
+
+### Exercise 3: Node Architecture Comparison
+
+**Scenario:**
+Compare hardware and functional differences between Primary, Secondary, and Arbiter nodes.
+
+**Requirements:**
+1. Contrast read/write capabilities, data storage, and voting rights.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```text
+> Replica Set Member Role Matrix:
+> - Primary: Receives all writes (w:1+), holds full data, holds 1 vote.
+> - Secondary: Replicates oplog, serves reads (optional), holds full data, holds 1 vote.
+> - Arbiter: Stores zero data, serves zero reads/writes, holds 1 election vote.
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Primary nodes handle cluster write authority.
+> 2. Secondary nodes provide data redundancy and read scaling.
+> 3. Arbiters provide low-cost election quorum voting.
+
+---
+
+
+
+## 6. Related Terms
 
 - [Replica Set](replica_set.md) — The parent cluster architecture.
 - [Automatic Failover & Elections](failover_elections.md) — The election process.
 
 ---
 
-## 8. Key Takeaways
+## 7. Key Takeaways
 - The Primary handles all write traffic; only one can exist at a time.
 - Secondaries copy data from the primary and can become primary during elections.
 - Arbiters do not store data or handle writes; they only participate in elections.
