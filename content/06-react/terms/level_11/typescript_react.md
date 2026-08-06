@@ -1,267 +1,388 @@
 # TypeScript with React
 
 > **Level 11 — Ecosystem Libraries**
-> Static type declarations for component props, states, hooks, and DOM event objects.
+> Static type declarations and compile-time type checking for React component props, state hooks, and synthetic DOM event handlers.
 
 ---
 
 ## 1. Prerequisites
-- [Props (Properties)](../level_01/props.md) — The parameters typed by TypeScript.
-- [`useState` Hook](../level_02/use_state.md) — The state hook that utilizes TypeScript generics.
+
+- [Props (Properties)](../level_01/props.md) — The data parameters typed and validated by TypeScript interfaces.
+- [`useState` Hook](../level_02/use_state.md) — The state primitive hook utilizing TypeScript generics.
 
 ---
 
 ## 2. Term Category
-- **Ecosystem / Language Tooling**
+
+**Ecosystem (static type checker)**: TypeScript integrated with React provides compile-time static type analysis and tooling across the component tree. While plain JavaScript evaluates component prop types dynamically at browser execution runtime—often failing silently when properties are missing or misspelled—TypeScript parses TSX code during build compilation, validating component prop contracts, hook types, and DOM synthetic events before code reaches production.
+
+TypeScript definitions for React (provided via `@types/react` and `@types/react-dom`) expose strong type primitives for component signatures (`React.ReactNode`), hooks (`useRef<HTMLInputElement>`), and synthetic events (`React.ChangeEvent<HTMLInputElement>`). This enhances IDE autocompletion, enables safe code refactoring, and eliminates an entire class of runtime errors (such as `TypeError: Cannot read properties of undefined`).
 
 ---
 
-## 3. Environment Context
-- **Build-Time** (TypeScript compiles to plain JavaScript before browser execution).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-React components pass data down to children via props. In plain JavaScript, components are loosely defined. If a developer renames a prop or changes its type (e.g. changing `isLoaded` from a boolean to a string), it can be difficult to track down all instances of this prop across a large codebase. This often results in runtime errors like `Cannot read properties of undefined`.
 
-Using **TypeScript with React** provides compile-time safety by statically type-checking your entire component tree, props, states, hooks, and DOM event handlers before the code runs in the browser.
+In plain JavaScript React development, components accept arbitrary `props` objects without structural validation. If a developer renames a prop inside a child component (e.g. changing `isUserActive` to `isActive`), tracking down every parent call-site across a 200-file codebase relies on manual text searches. Missing a single call-site introduces silent production bugs.
 
----
+TypeScript with React solves this by turning prop contracts into strict compile-time constraints:
+1. **Interface Prop Definitions:** Developers define explicit TypeScript `interface` or `type` contracts for every component.
+2. **Generics for Nullable Hooks:** State initialized to `null` (such as API data fetching) uses explicit generic parameters (`useState<User | null>(null)`), forcing developers to handle null checks before dereferencing properties.
+3. **Reflect Structural Changes:** Renaming a prop interface field instantly highlights every broken invocation site across the entire project in the IDE before building.
 
-### (2) Key TypeScript + React Typings
+### (2) Reality Metaphor
 
-#### 1. Typing Props
-You define an `interface` or `type` describing the expected prop properties:
-```typescript
+Imagine shipping fragile physical goods via a freight service.
+
+- **Plain JavaScript (Unlabeled Wooden Crates):** You pack fragile glass artwork into unmarked wooden boxes without documentation (**plain JS components**). Freight handlers stack heavy steel beams on top of the crates. You only find out the artwork was shattered after the customer unboxes the delivery at their house (**runtime crash in production**).
+- **TypeScript with React (Digital Shipping Manifest System):** Every crate carries a scannable digital manifest declaring: `Contents: Glass Artwork (Max Weight: 5kg, Fragile)` (**TypeScript interface definitions**). When a forklift operator attempts to load a 500kg beam onto the crate, the automated scanner locks the forklift arm and flashes a red alert warning (**compile-time build error**). The error is caught inside the warehouse before the truck ever leaves the dock.
+
+### (3) React Code Examples
+
+#### Short Snippet
+
+```tsx
+// TypedButton.tsx (TypeScript Props & Event Handlers)
+import React from 'react';
+
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean; // Optional prop
 }
 
-// Typing a functional component
-export function Button({ label, onClick, disabled = false }: ButtonProps) {
+export function TypedButton({ label, onClick, disabled = false }: ButtonProps) {
   return (
-    <button onClick={onClick} disabled={disabled}>
+    <button onClick={onClick} disabled={disabled} className="btn-primary">
       {label}
     </button>
   );
 }
 ```
 
-#### 2. Generics in `useState` Hook
-TypeScript automatically infers state types from their default values (e.g. `useState(0)` infers `number`). However, when state starts as `null` or `undefined` (like user profiles fetched from an API), you must declare the types explicitly using generics:
-```typescript
-interface User {
-  id: string;
-  name: string;
+#### Fuller Example
+
+```tsx
+// PatientVitalsForm.tsx
+import React, { useState, useRef } from 'react';
+
+interface PatientVitals {
+  patientId: string;
+  heartRate: number;
+  notes?: string;
 }
 
-// User can be a User object or null
-const [user, setUser] = useState<User | null>(null);
-```
+interface FormProps {
+  initialPatientId: string;
+  onSaveVitals: (vitals: PatientVitals) => Promise<boolean>;
+  children?: React.ReactNode; // Type for JSX children
+}
 
-#### 3. Generics in `useRef` Hook
-To reference HTML elements, you pass the specific DOM element type:
-```typescript
-const inputRef = useRef<HTMLInputElement>(null);
+export function PatientVitalsForm({ initialPatientId, onSaveVitals, children }: FormProps) {
+  // Generics for nullable state
+  const [vitals, setVitals] = useState<PatientVitals | null>(null);
+  const [hrInput, setHrInput] = useState<string>('72');
+  const inputRef = useRef<HTMLInputElement>(null);
 
-const focusInput = () => {
-  // TypeScript checks if inputRef.current exists before calling focus
-  inputRef.current?.focus(); 
-};
-```
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHrInput(e.target.value);
+  };
 
-#### 4. Event Handler Typing
-Event handlers receive React's Synthetic Event wrapper objects, which must be typed to access element targets:
-```typescript
-const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  console.log(event.target.value); // Typed and autocomplete-enabled!
-};
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const hrVal = Number(hrInput);
 
-const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-};
+    if (isNaN(hrVal) || hrVal <= 0) {
+      inputRef.current?.focus(); // Safe optional chaining on typed DOM ref
+      return;
+    }
+
+    const payload: PatientVitals = {
+      patientId: initialPatientId,
+      heartRate: hrVal
+    };
+
+    const success = await onSaveVitals(payload);
+    if (success) setVitals(payload);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="vitals-form">
+      {children}
+      <div className="input-group">
+        <label htmlFor="hr">Heart Rate (BPM):</label>
+        <input 
+          ref={inputRef}
+          type="number" 
+          id="hr" 
+          value={hrInput} 
+          onChange={handleInputChange} 
+        />
+      </div>
+
+      <button type="submit">Record Vitals</button>
+
+      {vitals && (
+        <div className="summary">
+          <p>Recorded for #{vitals.patientId}: {vitals.heartRate} BPM</p>
+        </div>
+      )}
+    </form>
+  );
+}
 ```
 
 ---
 
-### (3) Reality Metaphor
-Imagine sending a package.
-- **Plain JavaScript (Unlabeled Box):** You ship a box containing a fragile glass vase without any markings. The courier drops the box, shattering the vase. You only find out the package was damaged after it was delivered (**runtime error**).
-- **TypeScript (Shipping manifest checklist):** You glue an explicit shipping manifest to the outside of the box declaring: `Contents: Glass Vase (Fragile)`. The courier scan-checks the label before loading it (**compile-time checking**). If the package is mishandled, the system warns them before the truck leaves the warehouse, preventing damage (**blocking compiling**).
-
----
-
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
 ### Mistake 1: Overusing the `any` type to bypass compiler errors
 
-**The mistake:** Declaring props or state as `any` when you encounter compiler errors:
+**The mistake:** Declaring component props or state variables as `any` when encountering TypeScript compilation errors.
 
-```typescript
-// BAD: any disables type-checking, defeating the purpose of TypeScript!
-function Profile({ data }: { data: any }) {
-  return <h1>{data.usrName}</h1>; // Typo 'usrName' is ignored by TypeScript!
+**Why it's wrong:** The `any` type completely disables TypeScript type-checking for that variable and all downstream property accesses. Using `any` permits typos and invalid property calls to bypass compiler checks, defeating the purpose of TypeScript.
+
+*Incorrect:*
+```tsx
+// ❌ Anti-pattern: any disables type-checking; typos like 'usrName' are missed!
+function UserCard({ data }: { data: any }) {
+  return <div>{data.usrName}</div>;
 }
 ```
 
-**Why it's wrong:** The `any` type acts as an escape hatch that turns off type checking. It allows typos and invalid property calls to bypass compiler checks, which can lead to runtime crashes.
+*Fix:*
+```tsx
+interface UserData {
+  name: string;
+  email: string;
+}
 
-*Fix:* Take the time to declare interfaces or type aliases for all incoming data structures. Use TypeScript utilities (like `Partial` or `Omit`) if you need to modify existing types.
+function UserCard({ data }: { data: UserData }) {
+  return <div>{data.name}</div>;
+}
+```
 
----
+### Mistake 2: Typing component event handlers using generic `any` or `Function` types
 
+**The mistake:** Writing `const handleChange = (e: any) => ...` or `onClick: Function`.
 
-
-### Mistake 2: Using `any` for Component Event Handlers or Props Interfaces
-
-**The mistake:** Writing `const handleChange = (e: any) => ...` or `function App(props: any)`.
-
-**Why it's wrong:** Using `any` bypasses TypeScript type checking completely, disabling autocompletion and permitting runtime type crashes. Use explicit types `React.ChangeEvent<HTMLInputElement>`.
+**Why it's wrong:** Using generic `any` or `Function` types disables autocompletion for event objects (like `e.target.value` or `e.preventDefault()`) and permits passing incompatible callback signatures.
 
 *Incorrect:*
-```javascript
-const onChange = (e: any) => console.log(e.target.value); // ❌ Disables type safety!
+```tsx
+// ❌ Loses target.value autocompletion and type safety!
+const onChange = (e: any) => console.log(e.target.value);
 ```
 
 *Fix:*
-```javascript
-const onChange = (e: React.ChangeEvent<HTMLInputElement>) => console.log(e.target.value);
+```tsx
+// Use specific SyntheticEvent types from React
+const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  console.log(e.target.value);
+};
 ```
 
-### Mistake 3: Using Legacy `React.FC` (React.FunctionComponent) Type Un-Necessarily
+### Mistake 3: Using legacy `React.FC` (React.FunctionComponent) types unnecessarily
 
-**The mistake:** Typing components as `const MyComponent: React.FC<Props> = (props) => ...`.
+**The mistake:** Declaring components as `const MyComponent: React.FC<Props> = (props) => ...`.
 
-**Why it's wrong:** Legacy `React.FC` implicitly included `children` in older React versions and complicates generic components. Type props directly: `function MyComponent(props: Props)`. 
+**Why it's wrong:** Legacy `React.FC` implicitly included `children` in older React versions, complicated generic component declarations, and added unnecessary type wrapper syntax. Modern React standards prefer typing props directly in the function signature.
 
 *Incorrect:*
-```javascript
-const Card: React.FC<CardProps> = ({ title }) => <h2>{title}</h2>; // Legacy React.FC
+```tsx
+// ❌ Legacy React.FC type wrapper
+const Card: React.FC<CardProps> = ({ title }) => <h2>{title}</h2>;
 ```
 
 *Fix:*
-```javascript
+```tsx
 interface CardProps { title: string; }
-function Card({ title }: CardProps) { return <h2>{title}</h2>; }
-```
 
-## 6. Practice Exercises
-
-### Exercise 1: Typing a Form Component
-
-**Problem:** Add TypeScript type annotations to the props, state, and event handlers in the component below:
-
-```typescript
-// Before (Untyped JavaScript):
-function InputForm({ onSubmitLabel }) {
-  const [text, setText] = useState('');
-
-  const handleChange = (e) => {
-    setText(e.target.value);
-  };
-
-  return (
-    <form onSubmit={(e) => { e.preventDefault(); onSubmitLabel(text); }}>
-      <input value={text} onChange={handleChange} />
-      <button type="submit">Submit</button>
-    </form>
-  );
-}
-
-// After (Solution):
-import React, { useState } from 'react';
-
-interface InputFormProps {
-  onSubmitLabel: (val: string) => void;
-}
-
-export default function InputForm({ onSubmitLabel }: InputFormProps) {
-  const [text, setText] = useState<string>('');
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
-  };
-
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSubmitLabel(text);
-  };
-
-  return (
-    <form onSubmit={handleFormSubmit}>
-      <input value={text} onChange={handleChange} />
-      <button type="submit">Submit</button>
-    </form>
-  );
+export function Card({ title }: CardProps) {
+  return <h2>{title}</h2>;
 }
 ```
 
 ---
 
+## 5. Practice Exercises
+
+### Exercise 1: IoT Sensor Telemetry Component Typing
+
+**Scenario:** Add complete TypeScript interfaces and type annotations for an IoT Sensor Telemetry card component that accepts sensor status records and an optional `onReset` callback handler.
+
+**Requirements:**
+1. Define `SensorStatus` type union (`'NOMINAL' | 'WARNING' | 'CRITICAL'`).
+2. Define `SensorCardProps` interface.
+3. Type component props signature directly.
+
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Typing Component Props Interface
-
-**Problem:** Write TypeScript `Props` interface for component taking `name` (string), `age` (number), `onSave` callback, and optional `bio`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> interface UserProps { name: string; age: number; onSave: (id: number) => void; bio?: string; } function UserCard({ name, age, onSave, bio }: UserProps) { ... }
-> ```
-> ```typescript
-> interface UserProps {
->   name: string;
->   age: number;
->   onSave: (id: number) => void;
->   bio?: string;
+>
+> #### Implementation
+> ```tsx
+> import React from 'react';
+>
+> export type SensorStatus = 'NOMINAL' | 'WARNING' | 'CRITICAL';
+>
+> export interface SensorCardProps {
+>   sensorId: string;
+>   location: string;
+>   temperature: number;
+>   status: SensorStatus;
+>   onReset?: (sensorId: string) => void; // Optional callback
 > }
 >
-> function UserCard({ name, age, onSave, bio }: UserProps) {
->   return <div>{name} ({age})</div>;
+> export function SensorCard({ sensorId, location, temperature, status, onReset }: SensorCardProps) {
+>   return (
+>     <div className={`sensor-card status-${status.toLowerCase()}`}>
+>       <h3>{location} (#{sensorId})</h3>
+>       <p>Temperature: {temperature}°C</p>
+>       <p>Status: {status}</p>
+>       
+>       {onReset && (
+>         <button onClick={() => onReset(sensorId)} className="btn-reset">
+>           Reset Sensor Node
+>         </button>
+>       )}
+>     </div>
+>   );
 > }
 > ```
 >
-> **Explanation:** TypeScript interfaces enforce compile-time prop type safety across components.
+> #### Technical Explanation
+> 1. **Union Type Restraints**: `SensorStatus` restricts status values strictly to allowed strings (`'NOMINAL' | 'WARNING' | 'CRITICAL'`).
+> 2. **Optional Callbacks**: `onReset?: (sensorId: string) => void` types optional callback functions with typed string parameters.
+> 3. **Direct Signature Typing**: `({ ... }: SensorCardProps)` applies prop types directly without legacy `React.FC`.
+> 4. **Safe Invocation**: `{onReset && <button onClick={() => onReset(sensorId)} />}` safely checks optional callbacks before execution.
 > 
----
+### Exercise 2: Financial Order Form Event & Ref Typing
 
-### Exercise 3: Typing Children Props with ReactNode
+**Scenario:** Develop a Financial Trading order form component using TypeScript. Type HTML input element refs, text change event handlers, and form submit handlers cleanly.
 
-**Problem:** What TypeScript type should be used for typing arbitrary React JSX children props? (`React.ReactNode`).
+**Requirements:**
+1. Create `useRef<HTMLInputElement>(null)` for ticker input.
+2. Type form submit handler as `React.FormEvent<HTMLFormElement>`.
+3. Type input change handler as `React.ChangeEvent<HTMLInputElement>`.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> React.ReactNode
+>
+> #### Implementation
+> ```tsx
+> import React, { useState, useRef } from 'react';
+>
+> interface OrderFormProps {
+>   defaultTicker?: string;
+>   onExecuteTrade: (symbol: string, quantity: number) => void;
+> }
+>
+> export function FinancialOrderForm({ defaultTicker = 'AAPL', onExecuteTrade }: OrderFormProps) {
+>   const [ticker, setTicker] = useState<string>(defaultTicker);
+>   const [quantity, setQuantity] = useState<number>(10);
+>   const inputRef = useRef<HTMLInputElement>(null);
+> 
+>   const handleTickerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+>     setTicker(e.target.value.toUpperCase());
+>   };
+> 
+>   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+>     e.preventDefault();
+>     if (quantity <= 0) {
+>       inputRef.current?.focus();
+>       return;
+>     }
+>     onExecuteTrade(ticker, quantity);
+>   };
+> 
+>   return (
+>     <form onSubmit={handleFormSubmit} className="trade-form">
+>       <div className="field">
+>         <label htmlFor="ticker">Ticker Symbol:</label>
+>         <input 
+>           type="text" 
+>           id="ticker" 
+>           value={ticker} 
+>           onChange={handleTickerChange} 
+>         />
+>       </div>
+> 
+>       <div className="field">
+>         <label htmlFor="quantity">Quantity:</label>
+>         <input 
+>           ref={inputRef}
+>           type="number" 
+>           id="quantity" 
+>           value={quantity} 
+>           onChange={(e) => setQuantity(Number(e.target.value))} 
+>         />
+>       </div>
+> 
+>       <button type="submit">Submit Trade Order</button>
+>     </form>
+>   );
+> }
 > ```
-> ```typescript
-> interface ContainerProps {
+>
+> #### Technical Explanation
+> 1. **Typed DOM Refs**: `useRef<HTMLInputElement>(null)` informs TypeScript of the precise DOM node type, unlocking methods like `.focus()`.
+> 2. **Form Event Types**: `React.FormEvent<HTMLFormElement>` types form submission events, providing autocomplete for `.preventDefault()`.
+> 3. **Input Change Event Types**: `React.ChangeEvent<HTMLInputElement>` types change events, guaranteeing `e.target.value` exists.
+> 4. **State Generics**: `useState<string>()` and `useState<number>()` enforce strict variable types for component state.
+> 
+### Exercise 3: E-Commerce Children & Container Props Interface
+
+**Scenario:** Construct an e-commerce product card container component that accepts JSX children and an optional header title using TypeScript's `React.ReactNode` type.
+
+**Requirements:**
+1. Define `ContainerProps` interface containing `title?: string` and `children: React.ReactNode`.
+2. Render title conditionally.
+3. Render `{children}` inside container layout.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```tsx
+> import React from 'react';
+>
+> export interface ProductContainerProps {
+>   title?: string;
 >   children: React.ReactNode;
 > }
+>
+> export function ProductContainer({ title, children }: ProductContainerProps) {
+>   return (
+>     <section className="product-container">
+>       {title && <header className="container-header"><h2>{title}</h2></header>}
+>       <div className="container-body">
+>         {children}
+>       </div>
+>     </section>
+>   );
+> }
 > ```
 >
-> **Explanation:** `React.ReactNode` represents any renderable React child element (JSX, strings, numbers, fragments).
+> #### Technical Explanation
+> 1. **ReactNode Type**: `React.ReactNode` represents any renderable JSX child (JSX elements, strings, numbers, fragments, or arrays).
+> 2. **Optional Interface Properties**: `title?: string` marks the header title as optional.
+> 3. **Clean Container Pattern**: Separates container shell typing from child content components.
+> 4. **Compile-Time Validation**: TS compiler enforces that `{children}` is passed when consuming `<ProductContainer>`.
 > 
-## 7. Related Terms
-- [Props (Properties)](../level_01/props.md) — The data structure typed by interfaces.
-- [`useState` Hook](../level_02/use_state.md) — The state manager utilizing generics.
-- [Components](../level_01/components.md) — Typed component props.
-- [Custom Hooks](../level_04/custom_hooks.md) — Typed custom hooks.
+---
+
+## 6. Related Terms
+
+- [Props (Properties)](../level_01/props.md) — The data parameters typed by TypeScript interfaces.
+- [`useState` Hook](../level_02/use_state.md) — The state hook utilizing TypeScript generics.
+- [Components](../level_01/components.md) — Typed functional component units.
+- [Custom Hooks](../level_04/custom_hooks.md) — Reusable typed hook abstractions.
 
 ---
 
-## 8. Key Takeaways
-- TypeScript provides compile-time safety by checking types before execution.
-- Define interfaces or types to validate incoming component props.
-- Use generic parameters (e.g. `useState<User | null>(null)`) for dynamic state typing.
-- Type refs (e.g. `useRef<HTMLButtonElement>(null)`) to safely access DOM methods.
-- Type synthetic event objects (like `React.ChangeEvent<HTMLInputElement>`) to ensure safe event targets.
-- Avoid using the `any` type escape hatch.
+## 7. Key Takeaways
+
+- TypeScript provides compile-time static type safety across React component trees, props, and hooks.
+- Define explicit `interface` or `type` structures to document component prop contracts.
+- Use generic parameters (e.g. `useState<User | null>(null)`) when initializing state to `null` or `undefined`.
+- Type DOM elements inside refs (e.g. `useRef<HTMLInputElement>(null)`) for safe element method access.
+- Use specific React synthetic event types (`React.ChangeEvent<HTMLInputElement>`, `React.FormEvent<HTMLFormElement>`).
+- Avoid using the `any` type escape hatch or legacy `React.FC` component wrappers.

@@ -1,198 +1,368 @@
 # Custom Hooks
 
 > **Level 4 — Advanced Hooks**
-> Your own, personalized React Hooks. They allow you to extract complex state logic out of your components into reusable, standalone JavaScript functions.
+> Reusable JavaScript functions that encapsulate stateful logic and built-in React hooks to share behavior across components.
 
 ---
 
 ## 1. Prerequisites
-- [`useEffect` Hook](../level_03/use_effect.md) — Custom hooks are usually just a combination of these built-in hooks.
-- [Rules of Hooks](rules_of_hooks.md) — The rules apply strictly to your custom hooks.
+
+- [`useEffect` Hook](../level_03/use_effect.md) — The fundamental hook frequently composed inside custom hooks.
+- [Rules of Hooks](rules_of_hooks.md) — The architectural guidelines governing custom hook implementations.
 
 ---
 
 ## 2. Term Category
-- **React Architecture / Code Reusability**
+
+**Component Pattern (stateful logic abstraction)**: Custom Hooks are user-defined JavaScript functions that encapsulate stateful component logic, combining standard built-in hooks (`useState`, `useEffect`, `useCallback`, `useRef`) into clean, reusable abstractions. Unlike traditional utility helper functions, custom hooks have direct access to React's Fiber hook engine.
+
+Architecturally, custom hooks allow developers to share stateful behavior across distinct UI components without altering component hierarchies or resorting to inheritance. Calling a custom hook in multiple components instantiates **isolated local state** for each component instance.
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-Imagine you have a component that tracks whether the user's browser window is currently online or offline. You need `useState` to store the boolean, and `useEffect` to listen to the browser's "online" and "offline" events.
-If you need this logic in the `<Navbar />`, the `<Checkout />`, and the `<VideoPlayer />` components, you would normally have to copy-paste all that `useState` and `useEffect` code three times.
-**Custom Hooks** allow you to bundle that logic into a single, reusable function.
 
-### (2) How to build one
-A Custom Hook is literally just a standard JavaScript function that:
-1. Starts with the word `use` (e.g., `useNetworkStatus`).
-2. Calls other React Hooks inside of it.
+In early React applications, sharing stateful logic (such as managing window resize listeners, handling form inputs, or fetching API data with loading states) required complex patterns like **Higher-Order Components (HOCs)** or **Render Props**.
 
-```javascript
-// useNetworkStatus.js
+These older patterns suffered from distinct drawbacks:
+- **Wrapper Hell:** Nesting multiple HOCs wrapped component trees in dozens of artificial wrapper DOM/JSX nodes.
+- **Implicit Props:** Passing data via HOCs obscured where props originated, leading to naming collisions.
+- **Code Duplication:** Copy-pasting `useState` and `useEffect` blocks across `<Navbar />`, `<Sidebar />`, and `<Modal />` inflated codebase size.
+
+React introduced **Custom Hooks** to solve this. By extracting hook calls into a function starting with `use`, developers can share stateful logic as easily as calling a standard JavaScript function.
+
+#### Rules of Custom Hooks
+
+1. **Name Prefix:** Must start with lowercase `use` (e.g., `useNetworkStatus`, `useFetch`, `useLocalStorage`). This convention enables the React ESLint plugin to enforce the Rules of Hooks inside the function.
+2. **Hook Composition:** Must invoke at least one built-in React hook (`useState`, `useEffect`, etc.).
+3. **Isolated State:** Each invocation creates completely independent state variables. Component A calling `useCounter()` does NOT share counter state with Component B.
+
+### (2) Reality Metaphor
+
+Imagine renting a standardized toolbox for home repairs.
+
+- **Without Custom Hooks (Buying Individual Tools):** Every homeowner buys their own hammer, tape measure, screwdriver, and electric drill separately, organizing them manually on their own workbench.
+- **Custom Hook (Standardized Toolbox):** A company packages the hammer, tape measure, and drill into a single portable "Home Repair Toolbox" (`useHomeRepair`). Each homeowner rents their own independent toolbox. The tools work identically, but one homeowner driving a nail in their living room does not affect the other homeowner's wall.
+
+### (3) React Code Examples
+
+#### Short Snippet
+
+```jsx
 import { useState, useEffect } from 'react';
 
-// 1. Starts with 'use'
-export function useNetworkStatus() {
-  const [isOnline, setIsOnline] = useState(true);
+// Custom Hook encapsulating browser online status
+export function useOnlineStatus() {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
-  // 2. Uses built-in hooks inside
   useEffect(() => {
-    window.addEventListener('online', () => setIsOnline(true));
-    window.addEventListener('offline', () => setIsOnline(false));
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
-  // 3. Returns whatever data the component needs!
-  return isOnline; 
+  return isOnline;
 }
 ```
 
-### (3) How to use it
-Now, any component in your app can use this logic with a single line of code!
-```javascript
-import { useNetworkStatus } from './useNetworkStatus';
+#### Fuller Example
 
-function Navbar() {
-  const isOnline = useNetworkStatus(); // Magic!
+```jsx
+import React, { useState, useEffect } from 'react';
 
-  return <div>{isOnline ? "🟢 Online" : "🔴 Offline"}</div>;
+// Custom Hook for reusable API fetching with loading & error states
+function useFetch(url) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let isCurrent = true;
+    setLoading(true);
+
+    fetch(url)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
+      .then((json) => {
+        if (isCurrent) {
+          setData(json);
+          setError(null);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (isCurrent) {
+          setError(err.message);
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [url]);
+
+  return { data, loading, error };
 }
+
+// Component consuming the custom hook
+function UserProfile({ userId }) {
+  const { data: user, loading, error } = useFetch(`/api/users/${userId}`);
+
+  if (loading) return <p>Loading user profile...</p>;
+  if (error) return <p className="error">Error: {error}</p>;
+
+  return (
+    <div className="user-card">
+      <h3>{user.name}</h3>
+      <p>Email: {user.email}</p>
+    </div>
+  );
+}
+
+export default UserProfile;
 ```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Not starting the name with "use"
-
-**The mistake:** A developer writes a custom hook but names it `getNetworkStatus()`.
-
-**Why it's wrong:** The React Linter enforces the [Rules of Hooks](../level_04/rules_of_hooks.md) purely based on the function name! If it doesn't start with `use`, the Linter assumes it's a normal JavaScript function. It will not warn you if you accidentally put a hook inside a `for` loop, leading to fatal crashes in production.
-**Golden Rule:** Custom Hooks MUST always, without exception, start with a lowercase `use` (e.g., `useFetch`, `useAuth`, `useWindowSize`).
-
----
-
-
-
-### Mistake 2: Naming Custom Hooks Without the Mandatory `use` Prefix
+### Mistake 1: Omitting the Mandatory `use` Prefix
 
 **The mistake:** Naming a custom hook function `function fetchUserData()` instead of `function useUserData()`.
 
-**Why it's wrong:** React and the React ESLint plugin rely on the `use` prefix convention (e.g. `useOnlineStatus`) to enforce the Rules of Hooks (e.g. preventing hook calls inside conditions). Custom hooks without `use` bypass linting checks.
+**Why it's wrong:** The React Linter relies on the `use` prefix convention to enforce the [Rules of Hooks](rules_of_hooks.md). Without the prefix, the linter treats the function as a standard utility function and fails to catch illegal conditional hook calls.
 
 *Incorrect:*
-```javascript
-function getWindowSize() {
-  const [size, setSize] = useState(0); // ❌ Lacks 'use' prefix!
-  return size;
+```jsx
+function getWindowDimensions() {
+  const [dim, setDim] = useState({ w: window.innerWidth }); // ❌ Lacks 'use' prefix!
+  return dim;
 }
 ```
 
 *Fix:*
-```javascript
-function useWindowSize() {
-  const [size, setSize] = useState(0); // Correct 'use' prefix
-  return size;
+```jsx
+function useWindowDimensions() {
+  const [dim, setDim] = useState({ w: window.innerWidth }); // ✅ Correct 'use' prefix
+  return dim;
 }
 ```
 
-### Mistake 3: Expecting Custom Hooks to Share State Across Component Instances Automatically
+### Mistake 2: Assuming Custom Hooks Share State Across Component Instances
 
-**The mistake:** Assuming calling `useCounter()` in Component A and Component B shares the same counter state.
+**The mistake:** Calling `const counter = useCounter()` in Component A and Component B expecting them to share a global counter value.
 
-**Why it's wrong:** Custom hooks share **stateful LOGIC**, NOT state values! Each component instance that calls a custom hook receives its OWN isolated local state.
+**Why it's wrong:** Custom hooks share **stateful LOGIC**, not state values! Each component instance that invokes a custom hook receives its OWN isolated state instance.
 
 *Incorrect:*
-```javascript
-// Expecting Component A and Component B to share custom hook state automatically
+```jsx
+// Expecting Component A and Component B to share custom hook state values automatically
 ```
 
 *Fix:*
-```javascript
-Use Context API or state management store if shared state across components is required
+```jsx
+// Use Context API or global store if shared state across instances is required
 ```
 
-## 6. Practice Exercises
+### Mistake 3: Returning Inline Objects Without Memoization in Custom Hooks
 
-### Exercise 1: State Isolation
+**The mistake:** Returning `return { data, updateData }` from a custom hook where `updateData` is an un-memoized inline function.
 
-**Problem:** The `<Navbar />` and `<Footer />` components both call `const isOnline = useNetworkStatus()`. If the Navbar somehow forcefully changes the `isOnline` state to false, does the Footer's state also change to false?
+**Why it's wrong:** Consuming components that include the returned custom hook function in `useEffect` dependency arrays will suffer from infinite rendering loops due to changing function references.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> No! 
-> Custom Hooks share STATEFUL LOGIC, not the STATE ITSELF.
-> Every time you call a custom hook, a completely independent instance of `useState` is created for that specific component. The Navbar and Footer have completely separate state variables.
-> ```
-> - Calling a hook is just like calling `useState` normally in two different components.
-> 
+*Incorrect:*
+```jsx
+function useForm(initial) {
+  const [values, setValues] = useState(initial);
+  const reset = () => setValues(initial); // ❌ New reference every render!
+  return { values, reset };
+}
+```
+
+*Fix:*
+```jsx
+function useForm(initial) {
+  const [values, setValues] = useState(initial);
+  const reset = useCallback(() => setValues(initial), [initial]); // ✅ Stable reference
+  return { values, reset };
+}
+```
+
 ---
 
+## 5. Practice Exercises
 
+### Exercise 1: IoT Telemetry Stream Custom Hook
 
-### Exercise 2: Creating `useOnlineStatus` Custom Hook
+**Scenario:** An industrial IoT dashboard displays telemetry for chemical reactors. Create a custom hook `useReactorTelemetry(reactorId)` that manages WebSocket streaming, returning `{ telemetry, isConnected }`.
 
-**Problem:** Create custom hook `useOnlineStatus()` tracking `navigator.onLine` window event listeners.
+**Requirements:**
+1. Custom hook named `useReactorTelemetry`.
+2. Connect to WebSocket matching `reactorId`.
+3. Return `{ telemetry, isConnected }` object.
+4. Provide safe socket teardown on unmount or `reactorId` change.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> function useOnlineStatus() { const [isOnline, setIsOnline] = useState(navigator.onLine); useEffect(() => { const handleOnline = () => setIsOnline(true); const handleOffline = () => setIsOnline(false); window.addEventListener('online', handleOnline); window.addEventListener('offline', handleOffline); return () => { window.removeEventListener('online', handleOnline); window.removeEventListener('offline', handleOffline); }; }, []); return isOnline; }
-> ```
-> ```javascript
-> function useOnlineStatus() {
->   const [isOnline, setIsOnline] = useState(navigator.onLine);
+>
+> #### Implementation
+> ```jsx
+> import { useState, useEffect } from 'react';
+> 
+> export function useReactorTelemetry(reactorId) {
+>   const [telemetry, setTelemetry] = useState(null);
+>   const [isConnected, setIsConnected] = useState(false);
+> 
 >   useEffect(() => {
->     const handleOnline = () => setIsOnline(true);
->     const handleOffline = () => setIsOnline(false);
->     window.addEventListener('online', handleOnline);
->     window.addEventListener('offline', handleOffline);
->     return () => {
->       window.removeEventListener('online', handleOnline);
->       window.removeEventListener('offline', handleOffline);
+>     let active = true;
+>     const ws = new WebSocket(`wss://telemetry.factory.com/reactors/${reactorId}`);
+> 
+>     ws.onopen = () => {
+>       if (active) setIsConnected(true);
 >     };
->   }, []);
->   return isOnline;
+> 
+>     ws.onmessage = (event) => {
+>       if (active) {
+>         setTelemetry(JSON.parse(event.data));
+>       }
+>     };
+> 
+>     ws.onclose = () => {
+>       if (active) setIsConnected(false);
+>     };
+> 
+>     return () => {
+>       active = false;
+>       ws.close();
+>     };
+>   }, [reactorId]);
+> 
+>   return { telemetry, isConnected };
 > }
 > ```
 >
-> **Explanation:** Custom hooks encapsulate stateful event listener logic into reusable functions.
+> #### Technical Explanation
+> 1. **Logic Encapsulation**: WebSocket management is cleanly abstracted away from UI component JSX.
+> 2. **Lifecycle Safety**: Effect teardown closes sockets when `reactorId` updates.
+> 3. **Isolated Instance**: Consuming components receive dedicated telemetry state channels.
+> 4. **Standard Naming**: `use` prefix guarantees linter rule enforcement.
 > 
----
+### Exercise 2: Financial Order Book Debounced Search Hook
 
-### Exercise 3: Custom Hook Return Types
+**Scenario:** A stock trading desk inputs ticker queries. Create a custom hook `useDebouncedValue(value, delay)` to prevent spamming search queries on every keystroke.
 
-**Problem:** What data types can custom hooks return? (Any data type: arrays `[state, setter]`, objects `{ data, loading }`, or primitive values).
+**Requirements:**
+1. Custom hook `useDebouncedValue(value, delay)`.
+2. Maintain local `debouncedValue` state.
+3. Update `debouncedValue` after specified `delay` using `setTimeout`.
+4. Clean up timers on `value` or `delay` updates.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Any data type: arrays, objects, or primitive scalar values
-> ```
-> ```text
-> Any data type: arrays, objects, or primitive scalar values
+>
+> #### Implementation
+> ```jsx
+> import { useState, useEffect } from 'react';
+> 
+> export function useDebouncedValue(value, delay = 300) {
+>   const [debouncedValue, setDebouncedValue] = useState(value);
+> 
+>   useEffect(() => {
+>     const handler = setTimeout(() => {
+>       setDebouncedValue(value);
+>     }, delay);
+> 
+>     return () => {
+>       clearTimeout(handler);
+>     };
+>   }, [value, delay]);
+> 
+>   return debouncedValue;
+> }
 > ```
 >
-> **Explanation:** Custom hooks return formatted data structures tailored for consuming components.
+> #### Technical Explanation
+> 1. **Timer Teardown**: `clearTimeout` cancels pending state updates when fast typing occurs.
+> 2. **Generic Abstraction**: Custom hook can debounce any value type across the application.
+> 3. **Pure State Isolation**: Operates independently of consuming component UI logic.
+> 4. **Declarative Output**: Returns stable debounced scalars for API queries.
 > 
-## 7. Related Terms
-- [Rules of Hooks](rules_of_hooks.md) — Why the "use" prefix is strictly enforced.
-- [Components](../level_01/components.md) — The ultimate consumers of your Custom Hooks.
-- [`useContext` Hook](../level_06/use_context.md) — Related concept: `useContext` Hook.
-- [Higher-Order Components (HOC)](../level_07/hoc.md) — Related concept: Higher-Order Components (HOC).
-- [Render Props](../level_07/render_props.md) — Related concept: Render Props.
-- [TypeScript with React](../level_11/typescript_react.md) — Related concept: TypeScript with React.
+### Exercise 3: E-Commerce Session Storage Persisted State Hook
+
+**Scenario:** An e-commerce checkout flow persists user selections in browser `sessionStorage`. Create a custom hook `useSessionStorage(key, initialValue)` behaving like `useState`.
+
+**Requirements:**
+1. Custom hook returning `[storedValue, setStoredValue]`.
+2. Read initial value from `sessionStorage` fallback to `initialValue`.
+3. Update `sessionStorage` whenever `storedValue` updates.
+4. Support functional state updater callbacks.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> import { useState, useEffect, useCallback } from 'react';
+> 
+> export function useSessionStorage(key, initialValue) {
+>   const [storedValue, setStoredValue] = useState(() => {
+>     try {
+>       const item = sessionStorage.getItem(key);
+>       return item ? JSON.parse(item) : initialValue;
+>     } catch {
+>       return initialValue;
+>     }
+>   });
+> 
+>   useEffect(() => {
+>     try {
+>       sessionStorage.setItem(key, JSON.stringify(storedValue));
+>     } catch (err) {
+>       console.error('SessionStorage set failed', err);
+>     }
+>   }, [key, storedValue]);
+> 
+>   return [storedValue, setStoredValue];
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Lazy Initialization**: `useState(() => ...)` reads `sessionStorage` synchronously during initial render.
+> 2. **Automatic Synchronization**: `useEffect` persists updates whenever `storedValue` shifts.
+> 3. **Array Tuple Return**: Matches standard `useState` signature conventions.
+> 4. **Error Resiliency**: `try/catch` guards prevent crashes in restricted iframe browser environments.
+> 
+---
+
+## 6. Related Terms
+
+- [Rules of Hooks](rules_of_hooks.md) — The architectural laws governing custom hook invocations.
+- [`useEffect` Hook](../level_03/use_effect.md) — Built-in hook composed within custom hooks.
+- [`useState` Hook](../level_02/use_state.md) — Built-in state primitive composed within custom hooks.
+- [Higher-Order Components (HOC)](../level_07/hoc.md) — Legacy pattern replaced by custom hooks.
 
 ---
 
-## 8. Key Takeaways
-- **Custom Hooks** allow you to extract and reuse React logic (`useState` + `useEffect`) across multiple components.
-- They are just normal JavaScript functions that call other hooks.
-- They MUST start with the word `use` so React can enforce the Rules of Hooks.
-- Custom Hooks share the *logic*, not the *state*. Calling the hook in two different components creates two completely isolated states.
+## 7. Key Takeaways
+
+- Custom Hooks extract stateful logic into reusable JavaScript functions starting with `use`.
+- They allow sharing stateful behavior without modifying component tree hierarchies.
+- Custom Hooks share stateful *logic*, NOT state *values* (each call creates isolated local state).
+- Always prefix custom hooks with `use` so linters can enforce Rules of Hooks.
+- Return tuples `[state, setter]` or objects `{ data, loading }` tailored for consuming components.
+```
+
+---
+
+## File 2: `knowledge-base/06-react/terms/level_04/forward_ref.md`
+
+```markdown

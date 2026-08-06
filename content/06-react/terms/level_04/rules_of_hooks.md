@@ -1,186 +1,339 @@
 # Rules of Hooks
 
 > **Level 4 — Advanced Hooks**
-> The two strict, unbreakable architectural laws that govern how and where you are allowed to use React Hooks.
+> The two fundamental architectural laws enforced by React to guarantee hook state allocation order across render passes.
 
 ---
 
 ## 1. Prerequisites
-- [Components](../level_01/components.md) — Hooks must be used inside them.
-- [`useState` Hook](../level_02/use_state.md) — The most common hook that follows these rules.
+
+- [Components](../level_01/components.md) — Functional components where hooks are declared.
+- [`useState` Hook](../level_02/use_state.md) — Core hook governed by these rules.
 
 ---
 
 ## 2. Term Category
-- **React Core Rule**
+
+**Rendering Mechanic (hook call stack validator)**: React Hooks rely on internal array call stacks bound to Fiber nodes. Because hooks do not receive explicit unique key arguments (like `useState('myKey')`), React maps state variables to hook calls purely by their **call execution order**.
+
+The **Rules of Hooks** are two mandatory architectural rules. Violating them alters hook execution order between renders, causing React to assign state values to wrong hook variables or throw runtime crash exceptions.
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-React Hooks (like `useState` and `useEffect`) look like normal JavaScript functions, but they possess "magic" powers. They can somehow remember state between renders without using the `this` keyword. 
-How does React know *which* state belongs to *which* `useState` call?
-**React relies strictly on the Call Order.**
-If you call `useState` three times in a component, React remembers them as: Hook #1, Hook #2, Hook #3. If you change the order of the hooks, or skip one, React gets completely confused and assigns the wrong data to the wrong variables. To prevent this, React enforces the **Rules of Hooks**.
 
-### (2) Rule 1: Only call Hooks at the Top Level
-You must never call a hook inside a loop, inside a condition (`if` statement), or inside a nested function.
-They must be declared at the absolute top level of your component function.
-**Why?** This guarantees that Hooks are called in the exact same order every single time a component renders. 
+How does React know which state belongs to which `useState` call without using explicit string IDs?
 
-### (3) Rule 2: Only call Hooks from React Functions
-You cannot call `useState` inside a regular vanilla JavaScript function (e.g., a helper function that formats a date). 
-You can only call hooks from:
-1. A React Functional Component.
-2. A Custom Hook (which we will learn later).
+React maintains an internal linked list of hook cells for each component instance.
+- Render 1: Call 1 (`useState`) -> Cell 1. Call 2 (`useEffect`) -> Cell 2. Call 3 (`useState`) -> Cell 3.
+- Render 2: React resets its internal pointer to Cell 1 and expects hooks to execute in the exact same sequence!
 
----
+If Hook #2 is wrapped inside an `if (isLoggedIn)` block that evaluates to `false` on Render 2:
+- Call 1 (`useState`) reads Cell 1.
+- Call 2 (`useState` previously Call 3) reads Cell 2 (which contains `useEffect` state!).
 
-## 5. Common Mistakes & Pitfalls
+React gets completely confused, assigns incorrect data types to variables, and crashes the app. To prevent state corruption, React enforces the Rules of Hooks.
 
-### Mistake 1: The Conditional Hook
+#### The Two Mandatory Rules
 
-**The mistake:** A developer wants to save memory. They say, "If the user is logged in, I will create a `useState` for their profile data. If not, I'll skip it."
-```javascript
-function App({ isLoggedIn }) {
-  if (isLoggedIn) {
-    const [profile, setProfile] = useState(null); // CRITICAL ERROR!
-  }
-}
-```
+1. **Only Call Hooks at the Top Level:** Never call hooks inside loops (`for`), conditional statements (`if`), or nested callback functions. Declare all hooks unconditionally at the very top of your functional component.
+2. **Only Call Hooks from React Functions:** Call hooks exclusively from React functional components or Custom Hooks (functions starting with `use`). Do not call hooks from standard vanilla JavaScript utility functions.
 
-**Why it's wrong:** You just broke Rule 1. If `isLoggedIn` changes from `true` to `false`, the hook is suddenly skipped. React loses its place in the Hook Order index. The entire app will crash with a fatal "React Hook Order changed" error.
-**Golden Rule:** Always declare the hook unconditionally at the top. If you need conditional logic, put the `if` statement *inside* a `useEffect`, not around it.
+### (2) Reality Metaphor
 
----
+Imagine passengers boarding an airplane by assigned seat sequence.
 
+- **Compliant Execution (Fixed Boarding Sequence):** Passenger 1 enters Seat 1A, Passenger 2 enters Seat 1B, Passenger 3 enters Seat 1C. Flight attendants check tickets in exact sequential order: `[1A, 1B, 1C]`.
+- **Rule Violation (Conditional Boarding Jump):** Passenger 2 (Seat 1B) skips boarding because they were getting coffee. Flight attendant checks ticket for the second person in line (Passenger 3) and forces them into Seat 1B. Passenger 3 ends up in the wrong seat, passenger tickets mismatch seat assignments, and airplane seating falls into chaos (**state corruption crash**).
 
+### (3) React Code Examples
 
-### Mistake 2: Calling React Hooks Inside Conditional `if` Statements or Loops
+#### Short Snippet
 
-**The mistake:** Writing `if (isLoggedIn) { useEffect(...); }` or calling `useState` inside a `for` loop.
+```jsx
+import React, { useState, useEffect } from 'react';
 
-**Why it's wrong:** React relies on the **EXACT SAME call order of Hooks** on every single render to map state slots! Calling hooks inside conditions or loops changes hook call order, causing state corruption crashes.
+function CompliantComponent({ userId }) {
+  // ✅ Rule 1: Declared unconditionally at the top level
+  const [user, setUser] = useState(null);
 
-*Incorrect:*
-```javascript
-function Profile({ user }) {
-  if (user) {
-    useEffect(() => { ... }); // ❌ Rule violation: Hook called conditionally!
-  }
-}
-```
-
-*Fix:*
-```javascript
-function Profile({ user }) {
   useEffect(() => {
-    if (!user) return; // Condition INSIDE the effect
-    // ...
-  }, [user]);
+    // ✅ Rule 1: Condition placed INSIDE effect, not around hook
+    if (userId) {
+      fetch(`/api/users/${userId}`).then(res => res.json()).then(setUser);
+    }
+  }, [userId]);
+
+  return <div>User: {user ? user.name : 'No ID'}</div>;
 }
 ```
 
-### Mistake 3: Calling Hooks Inside Standard Non-Component JavaScript Functions
+#### Fuller Example
 
-**The mistake:** Calling `useState` inside a helper utility function `function calculateTax()`.
+```jsx
+import React, { useState, useEffect } from 'react';
 
-**Why it's wrong:** Hooks can ONLY be called from React Function Components or Custom Hooks (`use` prefix). Calling hooks inside regular utility functions throws runtime errors.
+// Custom Hook complying with Rule 2 (Starts with 'use')
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return width;
+}
+
+function ResponsiveDashboard({ isLoggedIn }) {
+  // ✅ Rule 1: Unconditional top-level declarations
+  const [metrics, setMetrics] = useState([]);
+  const width = useWindowWidth();
+
+  useEffect(() => {
+    // ✅ Conditions belong inside effects, keeping hook call count identical on every render
+    if (!isLoggedIn) return;
+
+    fetch('/api/metrics')
+      .then(res => res.json())
+      .then(setMetrics);
+  }, [isLoggedIn]);
+
+  return (
+    <div>
+      <h4>Screen Width: {width}px</h4>
+      {isLoggedIn ? <p>Metrics count: {metrics.length}</p> : <p>Please log in.</p>}
+    </div>
+  );
+}
+
+export default ResponsiveDashboard;
+```
+
+---
+
+## 4. Common Mistakes & Pitfalls
+
+### Mistake 1: Calling Hooks Inside Conditional `if` Statements
+
+**The mistake:** Wrapping `useState` or `useEffect` inside an `if` block to save memory or conditionally fetch data.
+
+**Why it's wrong:** Changing the condition shifts hook call positions between renders, causing fatal React runtime error `Rendered fewer hooks than expected`.
 
 *Incorrect:*
-```javascript
-function calculateTax() {
-  const [rate] = useState(0.1); // ❌ Error: Hook called outside React component!
+```jsx
+function Profile({ id }) {
+  if (id) {
+    useEffect(() => { fetchUser(id); }, [id]); // ❌ Fatal: Conditional hook call!
+  }
 }
 ```
 
 *Fix:*
-```javascript
-function useTaxCalculator() { const [rate] = useState(0.1); return rate; }
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Spot the Violations
-
-**Problem:** Find the two violations of the Rules of Hooks in this code:
-```javascript
-function calculateTaxes() {
-  const [rate, setRate] = useState(0.2);
-  return 100 * rate;
-}
-
-function Checkout() {
-  for (let i = 0; i < 3; i++) {
-    useEffect(() => { console.log(i) }, []);
-  }
-  return <div>Checkout</div>;
+```jsx
+function Profile({ id }) {
+  useEffect(() => {
+    if (!id) return; // ✅ Condition placed INSIDE effect callback
+    fetchUser(id);
+  }, [id]);
 }
 ```
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. `calculateTaxes` is a regular JS function, not a Component. You cannot use `useState` inside it.
-> 2. `Checkout` uses `useEffect` inside a `for` loop. Hooks must be at the top level, never nested in loops.
-> ```
-> - Check the two main rules: Top Level only, and React Functions only.
-> 
+### Mistake 2: Calling Hooks Inside Loops (`map`, `for`)
+
+**The mistake:** Calling `useId()` or `useState()` inside an array mapping callback to generate item keys.
+
+**Why it's wrong:** If array length changes between renders, the total number of hook calls changes, corrupting Fiber's hook list.
+
+*Incorrect:*
+```jsx
+items.map(item => {
+  const id = useId(); // ❌ Fatal: Hook call inside loop!
+  return <li key={id}>{item.name}</li>;
+});
+```
+
+*Fix:*
+```jsx
+// Pass item.id directly from data payload
+items.map(item => <li key={item.id}>{item.name}</li>);
+```
+
+### Mistake 3: Calling Hooks Inside Standard Utility Functions
+
+**The mistake:** Calling `useState` inside a helper utility function named `function calculateTax()`.
+
+**Why it's wrong:** Hooks require React Fiber component context. Calling hooks in standard non-component functions throws runtime exceptions.
+
+*Incorrect:*
+```jsx
+function calculateTax() {
+  const [rate] = useState(0.15); // ❌ Hook outside component or custom hook!
+  return rate * 100;
+}
+```
+
+*Fix:*
+```jsx
+function useTaxCalculator() { // ✅ Custom hook with 'use' prefix
+  const [rate] = useState(0.15);
+  return rate * 100;
+}
+```
+
 ---
 
+## 5. Practice Exercises
 
+### Exercise 1: IoT Dashboard Conditional Refactor
 
-### Exercise 2: 2 Core Rules of Hooks List
+**Scenario:** An IoT console contains a bug where `useSensorData` is called conditionally when `isOnline` is true. Refactor to comply with Rules of Hooks.
 
-**Problem:** State 2 core Rules of Hooks (1. Only call Hooks at the top level — never inside loops, conditions, or nested functions; 2. Only call Hooks from React Function Components or Custom Hooks).
+**Requirements:**
+1. Move hook calls to the top level unconditionally.
+2. Handle offline condition inside render or effect logic.
+3. Maintain zero runtime hook order warnings.
+4. Render sensor readings safely.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Call Hooks at top level only; 2. Call Hooks from React Function Components or Custom Hooks only
-> ```
-> ```text
-> 1. Call Hooks at top level only; 2. Call Hooks from React Function Components or Custom Hooks only
+>
+> #### Implementation
+> ```jsx
+> import React, { useState, useEffect } from 'react';
+> 
+> export function IoTDashboard({ isOnline, sensorId }) {
+>   // ✅ Unconditional top-level hook declaration
+>   const [reading, setReading] = useState(null);
+> 
+>   useEffect(() => {
+>     // Condition handled inside effect
+>     if (!isOnline || !sensorId) return;
+> 
+>     const interval = setInterval(() => {
+>       setReading(+(Math.random() * 50).toFixed(1));
+>     }, 1000);
+> 
+>     return () => clearInterval(interval);
+>   }, [isOnline, sensorId]);
+> 
+>   if (!isOnline) return <div>Device Offline</div>;
+> 
+>   return <div>Sensor {sensorId} Reading: {reading ?? 'Connecting...'}</div>;
+> }
 > ```
 >
-> **Explanation:** Rules of Hooks guarantee consistent hook execution order across renders.
+> #### Technical Explanation
+> 1. **Top-Level Guarantee**: Hook calls execute unconditionally on every render pass.
+> 2. **Internal Guard**: `if (!isOnline)` early exit keeps hook counts stable.
+> 3. **Call Order Preservation**: Preserves Fiber's internal hook index array.
+> 4. **Safe Render Handling**: JSX conditional branches handle UI presentation cleanly.
 > 
----
+### Exercise 2: Financial Order Pad Array Mapping Refactor
 
-### Exercise 3: Refactoring Conditional Hook Call
+**Scenario:** A stock order entry pad attempts to call `useRef` inside a `.map()` loop to reference row inputs. Refactor code to store refs in a single array ref at the top level.
 
-**Problem:** Refactor `if (id) { const [data] = useState(); }` to comply with Rules of Hooks.
+**Requirements:**
+1. Remove `useRef` calls from array `.map()` loop callbacks.
+2. Declare a single `useRef([])` container at top level.
+3. Bind item index refs dynamically in JSX `ref` callbacks.
+4. Render input grid cleanly.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Call useState at top level unconditionally; handle condition in render or effect logic
-> ```
-> ```javascript
-> const [data, setData] = useState();
-> useEffect(() => {
->   if (id) fetch(id).then(setData);
-> }, [id]);
+>
+> #### Implementation
+> ```jsx
+> import React, { useRef } from 'react';
+> 
+> export function StockOrderGrid({ stocks }) {
+>   // ✅ Single top-level ref container for array items
+>   const inputRefs = useRef([]);
+> 
+>   const handleFocusRow = (index) => {
+>     inputRefs.current[index]?.focus();
+>   };
+> 
+>   return (
+>     <div>
+>       {stocks.map((stock, idx) => (
+>         <div key={stock.symbol}>
+>           <span>{stock.symbol}: </span>
+>           <input
+>             ref={el => inputRefs.current[idx] = el}
+>             placeholder="Quantity"
+>           />
+>           <button onClick={() => handleFocusRow(idx)}>Focus</button>
+>         </div>
+>       ))}
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** Hooks must be invoked unconditionally at the component top level.
+> #### Technical Explanation
+> 1. **Loop Elimination**: Eliminates hook invocations from callback loops completely.
+> 2. **Ref Array Mapping**: `ref={el => ...}` callback pattern populates array elements safely.
+> 3. **Compliance Assurance**: Hook count stays fixed regardless of array length changes.
+> 4. **Imperative Focus Access**: Preserves direct DOM node access functionality.
 > 
-## 7. Related Terms
-- [Custom Hooks](custom_hooks.md) — The only other place (besides components) where you are allowed to call a hook.
-- [Components](../level_01/components.md) — Where hooks belong.
-- [`useState` Hook](../level_02/use_state.md) — Related concept: `useState` Hook.
-- [Stale Closures](../level_03/stale_closures.md) — Related concept: Stale Closures.
-- [`useId` Hook](use_id.md) — Related concept: `useId` Hook.
+### Exercise 3: E-Commerce Custom Hook Prefix Refactor
+
+**Scenario:** An e-commerce cart utility function `function syncCart()` contains `useState` and `useEffect` calls without the `use` prefix. Refactor into a compliant Custom Hook.
+
+**Requirements:**
+1. Rename function to `useCartSync`.
+2. Keep `useState` and `useEffect` hook calls.
+3. Return cart state and synchronization status.
+4. Verify ESLint plugin compliance.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> import { useState, useEffect } from 'react';
+> 
+> // ✅ Renamed to useCartSync complying with Rule 2
+> export function useCartSync(cartItems) {
+>   const [syncStatus, setSyncStatus] = useState('Synced');
+> 
+>   useEffect(() => {
+>     setSyncStatus('Syncing...');
+>     const timer = setTimeout(() => {
+>       localStorage.setItem('ecommerce_cart', JSON.stringify(cartItems));
+>       setSyncStatus('Synced');
+>     }, 500);
+> 
+>     return () => clearTimeout(timer);
+>   }, [cartItems]);
+> 
+>   return syncStatus;
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Naming Convention Compliance**: `use` prefix signals React linter tools to enforce rules.
+> 2. **Fiber Integration**: Connects function directly into component hook lifecycle contexts.
+> 3. **Encapsulated Sync**: Manages local state and side effects cleanly.
+> 4. **Reusability**: Hook can be consumed across any UI component.
+> 
+---
+
+## 6. Related Terms
+
+- [Custom Hooks](custom_hooks.md) — Custom functions governed by the Rules of Hooks.
+- [Components](../level_01/components.md) — Functional components where hooks belong.
+- [`useState` Hook](../level_02/use_state.md) — Core hook relying on call order mapping.
+- [`useId` Hook](use_id.md) — Hook governed by top-level execution rules.
 
 ---
 
-## 8. Key Takeaways
-- **Rule 1:** Only call Hooks at the Top Level. Never inside loops, conditions, or nested functions.
-- **Rule 2:** Only call Hooks from React Functional Components or Custom Hooks.
-- React tracks hooks purely by their Call Order. Breaking these rules changes the order and instantly crashes the application.
+## 7. Key Takeaways
+
+- **Rule 1:** Only call Hooks at the Top Level (never inside loops, conditions, or nested callbacks).
+- **Rule 2:** Only call Hooks from React Functional Components or Custom Hooks (`use` prefix).
+- React tracks hook state by strict **call execution order** between render passes.
+- Violating rules alters hook call sequences, causing state corruption runtime crashes.
+- Use `eslint-plugin-react-hooks` to automatically catch rule violations during development.
+```

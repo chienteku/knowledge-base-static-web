@@ -1,187 +1,347 @@
 # Higher-Order Components (HOC)
 
 > **Level 7 — Component Patterns**
-> An advanced pattern (mostly used in older, pre-Hooks React) where a function takes a component and returns a new, enhanced component with additional data or logic.
+> An advanced component pattern (predominant in pre-Hooks React codebases) where a function accepts a component as an argument and returns an enhanced component with added props or cross-cutting logic.
 
 ---
 
 ## 1. Prerequisites
-- [Components](../level_01/components.md) — The building blocks HOCs wrap.
-- [Higher-Order Function](../../../03-javascript/terms/level_03/higher_order_function.md) — The JavaScript concept this pattern is named after.
+
+- [Components](../level_01/components.md) — The target building blocks wrapped and enhanced by HOCs.
+- [Higher Order Function](../level_01/higher_order_function.md) — The foundational JavaScript functional programming concept HOCs are named after.
+- [Custom Hooks](../level_04/custom_hooks.md) — The modern React mechanism that replaced HOCs for sharing stateful logic.
 
 ---
 
 ## 2. Term Category
-React Architecture Pattern
+
+**Component Pattern (higher-order component abstraction)**: A Higher-Order Component (HOC) is not a component itself; it is a **pure function** that accepts a component as an argument and returns a new, enhanced component wrapper.
+
+Formally defined as $EnhancedComponent = HOC(WrappedComponent)$, HOCs enable sharing cross-cutting concerns (such as authentication checking, global theme injection, data fetching, or event logging) across multiple components without duplicating code. Rather than mutating the original component, an HOC wraps the target component inside a container component that computes extra props or conditional rendering, passing the combined props down to the original component.
 
 ---
 
-## 3. Core Definition
-A Higher-Order Component (HOC) is not a component itself; it is a **function**. It takes an existing component as an argument, wraps it with some extra logic (like checking if a user is logged in, or injecting data), and returns a new component.
+## 3. Explanation
 
-Before Hooks were introduced in 2018, HOCs were the primary way to share logic between multiple components without duplicating code.
+### (1) Design Motivation — "Why did we design this?"
 
----
+Before React 16.8 introduced Hooks, functional components could not hold state or execute side-effects. Sharing stateful logic or cross-cutting features (like checking if a user is an administrator before rendering a dashboard) across multiple components required using Class Components. Duplicate authentication or data-fetching logic had to be copy-pasted into `componentDidMount` across dozens of files.
 
-## 4. Key Characteristics / Rules
-- **Naming Convention:** HOC functions usually start with `with` (e.g., `withAuth`, `withRouter`).
-- **Pure Functions:** An HOC should not mutate the original component. It should compose it by wrapping it.
+To solve this code duplication, React developers adopted Higher-Order Components:
 
----
+1. **Cross-Cutting Logic Reuse:** Logic (such as checking auth tokens) is written once inside an HOC function (`withAuth`).
+2. **Component Enhancement:** Any component requiring auth protection is wrapped at module export scope (`export default withAuth(Dashboard)`).
+3. **Prop Injection:** The HOC container handles side-effects and injects computed data (like `user` object) as props into the inner component.
 
-## 5. Typical Usage / Common Patterns
+While HOCs solved logic duplication, they suffered from major drawbacks: "Wrapper Hell" (deeply nested component trees in React DevTools), prop name collisions, and complex ref forwarding. Custom Hooks have largely superseded HOCs in modern React codebases.
 
-### The Authentication Wrapper
+### (2) Reality Metaphor
+
+Imagine a commercial airline pilot putting on a specialized flight pressure suit.
+
+The pilot (**the original `WrappedComponent`**) possesses all core flying skills and training. However, to fly at extreme high altitudes, the pilot needs specialized life-support telemetry, oxygen feeds, and pressure management (**cross-cutting logic**).
+
+Rather than performing surgery to build oxygen tanks directly inside the pilot's body (**mutating component definitions**), the pilot steps inside a full flight pressure suit wrapper (**the HOC function `withHighAltitudeSuit`**). The suit wraps around the pilot, manages life support telemetry outside, and feeds oxygen directly to the pilot (**injecting props**). The pilot inside remains unchanged and can fly both low-altitude planes (unwrapped) and high-altitude planes (wrapped in the suit).
+
+### (3) React Code Examples
+
+#### Short Snippet
+
 ```jsx
-// The HOC Function
-function withAuth(WrappedComponent) {
-  return function EnhancedComponent(props) {
-    const isLoggedIn = checkUserLogin(); // Some auth logic
+import React from 'react';
 
-    if (!isLoggedIn) {
-      return <div>Please log in to view this page.</div>;
+// HOC function accepting a component and returning an enhanced component
+function withAuth(WrappedComponent) {
+  return function AuthenticatedComponent(props) {
+    const isAuthenticated = Boolean(localStorage.getItem('token'));
+
+    if (!isAuthenticated) {
+      return <div className="auth-error">Please log in to access this page.</div>;
     }
 
-    // If logged in, render the original component and pass down its props
+    // Pass original props down to wrapped component
     return <WrappedComponent {...props} />;
   };
 }
 
-// The original component
-function Dashboard({ title }) {
-  return <h1>{title}</h1>;
+export default withAuth;
+```
+
+#### Fuller Example
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+// HOC function providing telemetry window window size data to wrapped components
+function withWindowDimensions(WrappedComponent) {
+  // Set display name for clean debugging in React DevTools
+  const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+
+  function WithWindowDimensions(props) {
+    const [dimensions, setDimensions] = useState({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+
+    useEffect(() => {
+      const handleResize = () => {
+        setDimensions({ width: window.innerWidth, height: window.innerHeight });
+      };
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Inject 'windowDimensions' prop into the wrapped component
+    return <WrappedComponent windowDimensions={dimensions} {...props} />;
+  }
+
+  WithWindowDimensions.displayName = `WithWindowDimensions(${displayName})`;
+  return WithWindowDimensions;
 }
 
-// The Enhanced Component
-const ProtectedDashboard = withAuth(Dashboard);
+// Target component consuming injected windowDimensions prop
+function IndustrialControlRoom({ windowDimensions, roomName }) {
+  const isCompact = windowDimensions.width < 768;
+
+  return (
+    <div className={`control-room ${isCompact ? 'compact' : 'full'}`}>
+      <h3>Control Room: {roomName}</h3>
+      <p>Screen Dimensions: {windowDimensions.width}px × {windowDimensions.height}px</p>
+      {isCompact ? <p>Compact Layout Active</p> : <p>Multi-Monitor Grid Active</p>}
+    </div>
+  );
+}
+
+// Enhance component at top-level module scope
+const ResponsiveControlRoom = withWindowDimensions(IndustrialControlRoom);
+
+export default function App() {
+  return <ResponsiveControlRoom roomName="Sector-7 Operations" />;
+}
 ```
 
 ---
 
-## 6. Common Pitfalls
-- **Wrapper Hell:** If you use too many HOCs on a single component (e.g., `export default withAuth(withTheme(withRouter(MyComponent)))`), the React DevTools tree becomes a massive, unreadable nest of wrapper components. This is why the industry shifted to Custom Hooks.
+## 4. Common Mistakes & Pitfalls
 
----
+### Mistake 1: Executing HOC Factory Functions Inside Component Render Functions
 
-## 5. Common Mistakes & Pitfalls
+**The mistake:** Writing `const EnhancedComponent = withAuth(MyComponent);` inside a component render body.
 
-
-
-### Mistake 1: Calling Higher-Order Components (HOCs) Directly inside Component Render Bodies
-
-**The mistake:** Writing `const EnhancedComponent = withAuth(MyComponent);` inside component render function.
-
-**Why it's wrong:** Calling HOC factory functions inside render creates a BRAND NEW component definition on EVERY render! React unmounts and re-mounts the child tree every render. Define HOCs at top-level module scope.
+**Why it's wrong:** Calling an HOC factory function inside a render function creates a BRAND NEW component function reference on EVERY render frame! React sees a completely new component type, forcing it to unmount, destroy, and remount the entire child DOM tree on every render frame, destroying internal state and focus. Define HOCs at top-level module scope.
 
 *Incorrect:*
-```javascript
+```jsx
 function App() {
-  const EnhancedComp = withAuth(Profile); // ❌ Re-created every render!
+  // ❌ Re-creates component definition on EVERY render frame!
+  const EnhancedComp = withAuth(Profile);
   return <EnhancedComp />;
 }
 ```
 
 *Fix:*
-```javascript
-// Define HOC outside component render function at module scope
+```jsx
+// Define HOC wrapper ONCE at top-level module scope
 const EnhancedComp = withAuth(Profile);
-function App() { return <EnhancedComp />; }
+
+function App() {
+  return <EnhancedComp />;
+}
 ```
 
-### Mistake 2: Forgetting to Pass Ref Forwarding in HOC Wrappers
+### Mistake 2: Forgetting to Forward Refs Through HOC Wrappers (`React.forwardRef`)
 
-**The mistake:** Writing an HOC wrapping a component without forwarding `ref` props using `React.forwardRef`.
+**The mistake:** Attaching a `ref` prop to an HOC-wrapped component without using `React.forwardRef` inside the HOC definition.
 
-**Why it's wrong:** Refs are not passed through standard props. Accessing `ref` on an HOC-wrapped component attaches the ref to the HOC wrapper instance instead of the underlying wrapped component. Use `React.forwardRef` inside HOCs.
+**Why it's wrong:** `ref` is NOT a standard prop in React; like `key`, it is handled specially by the React engine. Passing a `ref` to an HOC-wrapped component attaches the ref to the outer HOC wrapper container instead of the inner target DOM node. Use `React.forwardRef`.
 
 *Incorrect:*
-```javascript
-// HOC wrapper omitting React.forwardRef logic
+```jsx
+// ❌ Ref attaches to outer wrapper function, NOT WrappedComponent!
+function withLogger(WrappedComponent) {
+  return (props) => <WrappedComponent {...props} />;
+}
 ```
 
 *Fix:*
-```javascript
-Wrap HOC inner component in React.forwardRef((props, ref) => <WrappedComponent ref={ref} {...props} />)
+```jsx
+function withLogger(WrappedComponent) {
+  return React.forwardRef((props, ref) => (
+    <WrappedComponent ref={ref} {...props} />
+  ));
+}
 ```
 
+### Mistake 3: Losing Static Component Methods When Wrapping in HOCs
 
+**The mistake:** Attempting to call `MyComponent.staticHelper()` after wrapping `MyComponent` in an HOC.
 
-### Mistake 3: Losing Static Component Methods When Wrapping Components in HOCs
-
-**The mistake:** Calling static method `MyComponent.helper()` after wrapping `MyComponent` in an HOC.
-
-**Why it's wrong:** Wrapping a component in an HOC returns a NEW container component that does NOT automatically inherit static methods from the original wrapped component. Use `hoist-non-react-statics`.
+**Why it's wrong:** Wrapping a component in an HOC returns a brand new container function. Static methods attached to the original component function are lost and do not automatically copy over to the new container function. Use `hoist-non-react-statics`.
 
 *Incorrect:*
-```javascript
-// Expecting static method MyComponent.helper() to be copied to HOC wrapper
+```jsx
+// ❌ Static methods are lost on the returned wrapper function!
+const EnhancedComp = withAuth(MyComponent);
+EnhancedComp.staticHelper(); // TypeError: EnhancedComp.staticHelper is not a function
 ```
 
 *Fix:*
-```javascript
-import hoistNonReactStatics from 'hoist-non-react-statics'; hoistNonReactStatics(HOC, WrappedComponent);
+```jsx
+import hoistNonReactStatics from 'hoist-non-react-statics';
+
+function withAuth(WrappedComponent) {
+  function Enhanced(props) { return <WrappedComponent {...props} />; }
+  // Copy static methods automatically
+  hoistNonReactStatics(Enhanced, WrappedComponent);
+  return Enhanced;
+}
 ```
 
-## 6. Practice Exercises
+---
 
+## 5. Practice Exercises
 
+### Exercise 1: IoT Gateway Telemetry Logger HOC (`withTelemetryLogger`)
 
-### Exercise 1: Writing `withAuth` Higher-Order Component
+**Scenario:** Create an HOC `withTelemetryLogger(WrappedComponent)` that logs component mount and unmount events to console with timestamp details.
 
-**Problem:** Write `withAuth(WrappedComponent)` HOC checking `isAuthenticated` prop, rendering `<Login />` if unauthenticated.
+**Requirements:**
+1. Return a functional wrapper executing `useEffect`.
+2. Log mount and unmount messages including component `displayName`.
+3. Pass all props transparently to `WrappedComponent`.
+4. Include runtime test assertions for HOC creation.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> function withAuth(WrappedComponent) { return function AuthenticatedComponent(props) { if (!props.isAuthenticated) return <Login />; return <WrappedComponent {...props} />; }; }
-> ```
-> ```javascript
-> function withAuth(WrappedComponent) {
->   return function AuthenticatedComponent(props) {
->     if (!props.isAuthenticated) return <Login />;
+>
+> #### Implementation
+> ```jsx
+> import React, { useEffect } from 'react';
+> 
+> export function withTelemetryLogger(WrappedComponent) {
+>   const name = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+> 
+>   function WithTelemetryLogger(props) {
+>     useEffect(() => {
+>       console.log(`[MOUNT] ${name} at ${new Date().toISOString()}`);
+>       return () => {
+>         console.log(`[UNMOUNT] ${name} at ${new Date().toISOString()}`);
+>       };
+>     }, []);
+> 
 >     return <WrappedComponent {...props} />;
->   };
+>   }
+> 
+>   WithTelemetryLogger.displayName = `WithTelemetryLogger(${name})`;
+>   return WithTelemetryLogger;
+> }
+> 
+> export function testWithTelemetryLogger() {
+>   const Dummy = () => <div>Dummy</div>;
+>   const Enhanced = withTelemetryLogger(Dummy);
+>   console.assert(Enhanced.displayName === 'WithTelemetryLogger(Dummy)', 'HOC displayName check');
 > }
 > ```
 >
-> **Explanation:** HOCs take a component and return an enhanced component wrapping cross-cutting concern logic.
+> #### Technical Explanation
+> 1. **Cross-Cutting Lifecycle Injection**: Houses mount/unmount logging inside container `useEffect`.
+> 2. **Transparent Prop Passing**: Passes `props` through to `WrappedComponent` using spread syntax.
+> 3. **DevTools Display Name Setting**: Sets `displayName` to facilitate debugging in React DevTools.
+> 4. **Pure HOC Transformation**: Returns a clean wrapper component without mutating the input component.
 > 
----
+### Exercise 2: Financial Trading Desk Authentication HOC (`withTradingAuth`)
 
-### Exercise 2: HOCs vs Custom Hooks Choice
+**Scenario:** Build an HOC `withTradingAuth(WrappedComponent)` verifying user `role === 'TRADER'`. If unauthorized, render an access denied message.
 
-**Problem:** Why have Custom Hooks largely replaced HOCs in modern React? (Custom Hooks share stateful logic without adding wrapper component hierarchy bloat).
+**Requirements:**
+1. Inspect `props.user` inside returned wrapper.
+2. Render access denied fallback if `user.role !== 'TRADER'`.
+3. Pass props to `WrappedComponent` if authorized.
+4. Add runtime assertions for auth evaluation.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Custom Hooks share stateful logic without adding wrapper component hierarchy bloat
-> ```
-> ```text
-> Custom Hooks share stateful logic without adding wrapper component hierarchy bloat
+>
+> #### Implementation
+> ```jsx
+> import React from 'react';
+> 
+> export function withTradingAuth(WrappedComponent) {
+>   return function AuthenticatedTrader(props) {
+>     const { user } = props;
+>     if (!user || user.role !== 'TRADER') {
+>       return <div className="access-denied">Access Denied: Trader Credentials Required</div>;
+>     }
+>     return <WrappedComponent {...props} />;
+>   };
+> }
+> 
+> export function testWithTradingAuth() {
+>   const Dummy = () => <div>Trade Desk</div>;
+>   const Protected = withTradingAuth(Dummy);
+>   const deniedRes = Protected({ user: { role: 'GUEST' } });
+>   console.assert(deniedRes.props.className === 'access-denied', 'HOC access denied test');
+> }
 > ```
 >
-> **Explanation:** Custom Hooks decouple logic from component tree nesting structures.
+> #### Technical Explanation
+> 1. **Conditional Render Branching**: Evaluates authorization rules before executing child component rendering.
+> 2. **Reusable Security Guard**: Enforces trading role permissions across multiple trading widgets.
+> 3. **Passthrough Architecture**: Passes props down when user passes verification checks.
+> 4. **Synchronous Function Testing**: Tests HOC rendering output directly against mock props.
 > 
----
+### Exercise 3: Healthcare Patient EHR Audit Log HOC (`withEHRAuditLog`)
 
-### Exercise 3: Display Name Convention for HOCs
+**Scenario:** Create an HOC `withEHRAuditLog(WrappedComponent)` injecting an `auditLog(action)` callback prop into wrapped clinical chart components.
 
-**Problem:** Set `displayName` on HOC wrapper component for clean debugging in React DevTools.
+**Requirements:**
+1. Define wrapper injecting `auditLog` function prop.
+2. Preserve original component props.
+3. Include runtime test assertions for HOC prop injection.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Component.displayName = `WithAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
-> ```
-> ```javascript
-> Component.displayName = `WithAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+>
+> #### Implementation
+> ```jsx
+> import React from 'react';
+> 
+> export function withEHRAuditLog(WrappedComponent) {
+>   return function AuditLogWrapper(props) {
+>     const auditLog = (action) => {
+>       console.log(`[EHR AUDIT] Action: ${action} at ${Date.now()}`);
+>     };
+> 
+>     return <WrappedComponent auditLog={auditLog} {...props} />;
+>   };
+> }
+> 
+> export function testWithEHRAuditLog() {
+>   const Dummy = ({ auditLog }) => <div>{typeof auditLog}</div>;
+>   const Enhanced = withEHRAuditLog(Dummy);
+>   const res = Enhanced({});
+>   console.assert(typeof res.props.auditLog === 'function', 'HOC injected prop check');
+> }
 > ```
 >
-> **Explanation:** Assigning `displayName` identifies HOC wrapper components clearly in React DevTools.
+> #### Technical Explanation
+> 1. **Prop Injection Pattern**: Supplies helper functions (`auditLog`) into component prop signatures.
+> 2. **Cross-Cutting Compliance**: Standardizes medical audit logging across clinical EHR charts.
+> 3. **Non-Mutating Enhancement**: Wraps components without altering underlying code files.
+> 4. **Functional Signature Verification**: Tests injected prop types deterministically.
 > 
-## 7. Related Terms
-- [Custom Hooks](../level_04/custom_hooks.md) — The modern React feature that effectively killed the widespread use of HOCs.
+---
+
+## 6. Related Terms
+
+- [Custom Hooks](../level_04/custom_hooks.md) — The modern React feature that largely superseded HOCs.
+- [Higher Order Function](../level_01/higher_order_function.md) — The JS functional programming foundation of HOCs.
+- [Render Props](render_props.md) — Competing pre-Hooks pattern for sharing component logic.
+- [Composition over Inheritance](composition_inheritance.md) — The underlying design paradigm favoring wrappers over class inheritance.
 
 ---
 
+## 7. Key Takeaways
+
+- A Higher-Order Component (HOC) is a pure function that takes a component as an argument and returns an enhanced component.
+- HOCs were the primary pre-Hooks pattern for sharing cross-cutting logic (auth, logging, data fetching) across components.
+- Always define HOCs at top-level module scope (`const Enhanced = withAuth(Comp)`); NEVER call HOC functions inside render bodies.
+- Use `React.forwardRef` inside HOC definitions to ensure `ref` props pass through to the inner wrapped DOM node.
+- Modern React development heavily favors Custom Hooks over HOCs due to cleaner composition and zero wrapper tree bloat.

@@ -1,105 +1,120 @@
 # Lifting State Up
 
 > **Level 2 — State & Reactivity**
-> Moving shared state to the closest common ancestor so sibling components can stay synchronized.
+> The architectural pattern of relocating shared state to the closest common ancestor component so sibling components can stay synchronized.
 
 ---
 
 ## 1. Prerequisites
-- [State](state.md) — The dynamic data being shared.
-- [Props (Properties)](../level_01/props.md) — The vehicle used to pass state and setters down.
-- [Unidirectional Data Flow](unidirectional_flow.md) — The top-down data flow rules.
+
+- [State](state.md) — The dynamic data needing to be shared between components.
+- [Props (Properties)](../level_01/props.md) — The mechanism used to pass state values down and callback setters down/up.
+- [Unidirectional Data Flow](unidirectional_flow.md) — The top-down data architecture enforcing state sharing boundaries.
 
 ---
 
 ## 2. Term Category
-- **Component Pattern**
+
+**Component Pattern (state sharing strategy)**: Lifting State Up is an architectural pattern in React used to synchronize state across sibling components. Because React enforces strict unidirectional data flow (data flows only downwards from parent to child), sibling components cannot pass state directly across to one another.
+
+When two or more sibling components need to read or update the same dynamic data, developers "lift" the state up to their closest common parent component. The parent holds the `useState` hook, passes the state down to reader components via props, and passes state setter callbacks down to writer components via props.
 
 ---
 
-## 3. Environment Context
-- **Client-Side (SPA) / Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-React enforces a strict **Unidirectional Data Flow**—data only flows downward, from parent to child via props. Sibling components cannot communicate directly with each other.
+In complex user interfaces, multiple components often need to reflect the same changing data. For example, consider an application with a `<SearchInput>` component where a user types text and a `<ResultsList>` component that filters records based on that query:
 
-This creates a challenge when two sibling components need to share the same dynamic data. For example, if you have a `<SearchInput>` component where a user types, and a `<ResultsList>` component that filters database records based on that input:
--   If you define the search state inside `<SearchInput>`, `<ResultsList>` cannot read it.
--   If you define the state inside `<ResultsList>`, `<SearchInput>` cannot update it.
-
-To solve this, developers use the **Lifting State Up** pattern:
-1.  Locate the **closest common ancestor (parent component)** of the components that need to share the data.
-2.  Declare the `useState` hook inside that parent component.
-3.  Pass the state value down to the reading components (e.g. `<ResultsList>`) as a prop.
-4.  Pass the state setter function (or an event handler wrapper) down to the writing components (e.g. `<SearchInput>`) as a prop.
-5.  When the writer updates the state, the parent re-renders, passing the updated props down to both children simultaneously.
+- If state lives inside `<SearchInput>`, `<ResultsList>` cannot read it.
+- If state lives inside `<ResultsList>`, `<SearchInput>` cannot update it.
+- Sibling components cannot pass props "sideways" to each other.
 
 ```text
-               ┌──────────────────┐
-               │  Common Parent   │  <── State lives here
-               └──────────────────┘
-                 /              \
-         (passes setter)    (passes state)
-               /                  \
-              ▼                    ▼
-     ┌───────────────┐      ┌─────────────┐
-     │  SearchInput  │      │ ResultsList │
-     └───────────────┘      └─────────────┘
+               ┌────────────────────────┐
+               │  Closest Common Parent │  <── State lives here
+               └────────────────────────┘
+                 /                    \
+         (passes setter)        (passes state)
+               /                        \
+              ▼                          ▼
+     ┌─────────────────┐        ┌──────────────────┐
+     │   SearchInput   │        │   ResultsList    │
+     └─────────────────┘        └──────────────────┘
 ```
 
----
+To solve this, developers apply **Lifting State Up**:
+1. Identify the **closest common parent** ancestor of the components needing the data.
+2. Move the `useState` definition into that parent component.
+3. Pass the state value down to reading components (e.g. `<ResultsList>`) as props.
+4. Pass setter functions or event handler callbacks down to writing components (e.g. `<SearchInput>`) as props.
+5. When the writer component triggers the callback, the parent updates its state, re-renders, and passes updated props down to both children simultaneously.
 
 ### (2) Reality Metaphor
-Imagine two roommates sharing a television.
-- **Independent State (Broken System):** Roommate A keeps a personal schedule notepad on their bedroom desk, and Roommate B keeps their own notepad. Since they cannot see each other's notepads, they both schedule their favorite shows at 8:00 PM, resulting in a conflict.
-- **Lifting State Up (Fridge Notepad):** They move the schedule notepad to the kitchen refrigerator (**the common parent**). When Roommate A wants to watch a movie, they go to the fridge and write it down (**the state setter**). Both roommates instantly see the updated schedule on the fridge door (**synchronized props**), preventing conflicts.
+Imagine two roommates sharing a apartment refrigerator.
 
----
+- **Isolated State (Broken System):** Roommate A keeps a private shopping list notepad inside their bedroom drawer, and Roommate B keeps a separate list inside their own bedroom drawer. Because they cannot see each other's notepads, both roommates purchase milk on the same day, cluttering the fridge with extra cartons (**desynchronized state**).
+- **Lifting State Up (Shared Refrigerator List):** They lift the shopping list up to the kitchen refrigerator door (**the common parent**). When Roommate A notices milk is low, they write it on the fridge door list (**triggering state setter**). Roommate B looks at the fridge door list before shopping (**reading prop state**), ensuring both roommates stay perfectly synchronized.
 
-### (3) React Code Example
+### (3) React Code Examples
 
+#### Short Snippet
+```jsx
+// Parent component holds shared state and passes values/setters down
+function SharedParent() {
+  const [query, setQuery] = useState('');
+
+  return (
+    <div>
+      <SearchInput query={query} onQueryChange={setQuery} />
+      <ResultsList query={query} />
+    </div>
+  );
+}
+```
+
+#### Fuller Example
 ```jsx
 import React, { useState } from 'react';
 
-// 1. Writer Component (receives callback setter prop)
-function TemperatureInput({ scale, temperature, onTemperatureChange }) {
+// 1. Writer Component: receives query value and callback prop
+function SearchInput({ query, onQueryChange }) {
   return (
-    <fieldset>
-      <legend>Enter temperature in {scale}:</legend>
+    <div className="search-bar">
       <input 
-        value={temperature} 
-        onChange={e => onTemperatureChange(e.target.value)} 
+        type="text"
+        value={query} 
+        onChange={e => onQueryChange(e.target.value)} 
+        placeholder="Filter results..."
       />
-    </fieldset>
+      {query && <button onClick={() => onQueryChange('')}>Clear</button>}
+    </div>
   );
 }
 
-// 2. Reader Component (receives state read-only prop)
-function BoilingVerdict({ celsius }) {
-  if (celsius >= 100) {
-    return <p>The water would boil.</p>;
-  }
-  return <p>The water would not boil.</p>;
-}
-
-// 3. Common Parent (holds the state)
-export default function Calculator() {
-  const [temperature, setTemperature] = useState('');
+// 2. Reader Component: receives query value as read-only prop
+function ResultsList({ query, items }) {
+  const filtered = items.filter(item => 
+    item.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
-    <div>
-      <TemperatureInput 
-        scale="Celsius" 
-        temperature={temperature}
-        onTemperatureChange={setTemperature} // Pass setter down
-      />
-      <BoilingVerdict 
-        celsius={parseFloat(temperature) || 0} // Pass parsed value down
-      />
+    <ul className="results-list">
+      {filtered.map((item, idx) => <li key={idx}>{item}</li>)}
+      {filtered.length === 0 && <li>No matching records found.</li>}
+    </ul>
+  );
+}
+
+// 3. Closest Common Parent: holds shared state
+export default function SynchronizedSearch({ items }) {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  return (
+    <div className="search-container">
+      <h3>Synchronized Directory</h3>
+      <SearchInput query={searchQuery} onQueryChange={setSearchQuery} />
+      <ResultsList query={searchQuery} items={items} />
     </div>
   );
 }
@@ -107,150 +122,293 @@ export default function Calculator() {
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Lifting state too high, causing Prop Drilling
+### Mistake 1: Lifting State Too High (Causing Prop Drilling and Root Re-renders)
 
-**The mistake:** Lifting state up to a top-level root component (like `App.js`) when only two nested components in a deep subtree need to share it.
+**The mistake:** Lifting state up to a top-level root component (like `App.jsx`) when only two nested components in a deep subtree need to share it.
 
-**Why it's wrong:** Lifting state too high forces you to pass the state and setter functions down through multiple intermediate components that do not care about the data. This anti-pattern, known as **Prop Drilling**, makes your component APIs verbose and hard to refactor.
-
-*Fix:* Only lift state to the **closest** common ancestor. If the components are far apart in the tree, use React's **Context API** or a global state manager (like Zustand) to bypass intermediate components.
-
----
-
-
-
-### Mistake 2: Lifting State Higher Than Necessary in the Component Tree (Over-Lifting State)
-
-**The mistake:** Lifting a search input query state to the root `<App />` component when only a small `<SearchWidget />` child uses it.
-
-**Why it's wrong:** Lifting state to the root causes the ENTIRE application tree to re-render whenever the search query state changes. Keep state as close as possible to where it is used.
+**Why it's wrong:** Lifting state too high forces developers to manually pass state and callback props through dozens of intermediate components that do not care about the data (**Prop Drilling**). Additionally, updating root state forces the ENTIRE application component tree to re-render, degrading performance.
 
 *Incorrect:*
-```javascript
-// Storing search input query in root App component state
-```
-
-*Fix:*
-```javascript
-Keep local input state inside SearchWidget unless sibling components require access
-```
-
-### Mistake 3: Passing Down Numerous Separate State Setters Instead of Callback Handlers
-
-**The mistake:** Passing 10 individual `setField1`, `setField2` state setter functions through multiple component levels.
-
-**Why it's wrong:** Passing raw state setters tightly couples children to parent implementation details. Pass domain callback handler functions (e.g. `onFormSubmit`).
-
-*Incorrect:*
-```javascript
-<Child setField1={setField1} setField2={setField2} />
-```
-
-*Fix:*
-```javascript
-<Child onChange={handleFormChange} />
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Sibling Input Sync
-
-**Problem:** Refactor the components below so that typing inside `InputA` automatically updates the text displayed inside `SiblingDisplay`:
-
 ```jsx
-// Before (Independent state, not synchronized):
-function InputA() {
-  const [text, setText] = useState('');
-  return <input value={text} onChange={e => setText(e.target.value)} />;
+// ❌ Lifting local search query state up to root App component!
+function App() {
+  const [search, setSearch] = useState('');
+  return <Layout search={search} setSearch={setSearch} />;
 }
+```
 
-function SiblingDisplay() {
-  return <p>Current text: (empty)</p>;
-}
-
-// After (Refactored Solution):
-import React, { useState } from 'react';
-
-function InputA({ value, onChange }) {
-  return <input value={value} onChange={e => onChange(e.target.value)} />;
-}
-
-function SiblingDisplay({ value }) {
-  return <p>Current text: {value}</p>;
-}
-
-function SyncParent() {
-  const [text, setText] = useState('');
+*Fix:*
+```jsx
+// ✅ Lift state ONLY to the closest common parent component
+function SearchWidget() {
+  const [search, setSearch] = useState('');
   return (
     <div>
-      <InputA value={text} onChange={setText} />
-      <SiblingDisplay value={text} />
+      <SearchInput search={search} onChange={setSearch} />
+      <SearchResults search={search} />
     </div>
   );
 }
 ```
 
+### Mistake 2: Duplicating Lifted State in Child Local `useState`
+
+**The mistake:** Receiving a lifted state value as a prop, but duplicating it into local child state: `const [localQuery, setLocalQuery] = useState(props.query)`.
+
+**Why it's wrong:** Copying props into local state creates two separate sources of truth. When the parent updates the lifted state, the child's local `useState` ignores the prop change, causing desynchronization bugs.
+
+*Incorrect:*
+```jsx
+function ChildReader({ query }) {
+  // ❌ Duplicate state snapshot ignores parent query prop updates!
+  const [localQuery, setLocalQuery] = useState(query);
+  return <div>Search: {localQuery}</div>;
+}
+```
+
+*Fix:*
+```jsx
+function ChildReader({ query }) {
+  // ✅ Read prop directly without local state duplication
+  return <div>Search: {query}</div>;
+}
+```
+
+### Mistake 3: Passing Down Numerous Individual State Setters Instead of Handler Callbacks
+
+**The mistake:** Passing 8 separate `setField1`, `setField2`, `setField3` setter functions down to child components.
+
+**Why it's wrong:** Passing raw `useState` setters tightly couples child components to parent implementation details. Pass domain-specific handler callbacks (e.g. `onFormChange(fieldName, value)`) to maintain clean component abstraction boundaries.
+
+*Incorrect:*
+```jsx
+// ❌ Tightly couples child to raw parent setter signatures
+<ChildForm setField1={setField1} setField2={setField2} />
+```
+
+*Fix:*
+```jsx
+// ✅ Clean domain callback signature
+<ChildForm onChange={handleFieldChange} />
+```
+
 ---
 
+## 5. Practice Exercises
+
+### Exercise 1: IoT Temperature Unit Converter (IoT Telemetry)
+
+**Scenario:** An industrial IoT control view features a Celsius input field and a Fahrenheit input field. Typing in either field must automatically calculate and update the sibling field. Lift state up to their common parent.
+
+**Requirements:**
+1. Create `CelsiusInput` and `FahrenheitInput` writer components.
+2. Create `TemperatureConverter` parent holding `temperature` and `scale` ('c' | 'f') state.
+3. Calculate derived values for both fields.
+4. Provide structured implementation with technical explanation.
+
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+> ```jsx
+> import React, { useState } from 'react';
 > 
----
-
-### Exercise 2: Lifting Shared Accordion State Up
-
-**Problem:** Lift `activeIndex` state up from child `Panel` components to parent `Accordion` component.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> function Accordion() { const [activeIndex, setActiveIndex] = useState(0); return <> <Panel isActive={activeIndex === 0} onShow={() => setActiveIndex(0)} /> <Panel isActive={activeIndex === 1} onShow={() => setActiveIndex(1)} /> </>; }
-> ```
-> ```javascript
-> function Accordion() {
->   const [activeIndex, setActiveIndex] = useState(0);
+> function TempInput({ scale, temperature, onTempChange }) {
+>   const scaleNames = { c: 'Celsius', f: 'Fahrenheit' };
 >   return (
->     <>
->       <Panel isActive={activeIndex === 0} onShow={() => setActiveIndex(0)} />
->       <Panel isActive={activeIndex === 1} onShow={() => setActiveIndex(1)} />
->     </>
+>     <label>
+>       Temperature in {scaleNames[scale]}:
+>       <input 
+>         type="number" 
+>         value={temperature} 
+>         onChange={e => onTempChange(e.target.value)} 
+>       />
+>     </label>
+>   );
+> }
+> 
+> export function TemperatureConverter() {
+>   const [temperature, setTemperature] = useState('');
+>   const [scale, setScale] = useState('c');
+> 
+>   const handleCelsiusChange = (val) => {
+>     setScale('c');
+>     setTemperature(val);
+>   };
+> 
+>   const handleFahrenheitChange = (val) => {
+>     setScale('f');
+>     setTemperature(val);
+>   };
+> 
+>   // Derived conversions
+>   const celsius = scale === 'f' && temperature !== '' 
+>     ? (((parseFloat(temperature) - 32) * 5) / 9).toFixed(1) 
+>     : temperature;
+>     
+>   const fahrenheit = scale === 'c' && temperature !== '' 
+>     ? (((parseFloat(temperature) * 9) / 5) + 32).toFixed(1) 
+>     : temperature;
+> 
+>   return (
+>     <div className="converter-card">
+>       <h4>Telemetry Temperature Sync</h4>
+>       <TempInput scale="c" temperature={celsius} onTempChange={handleCelsiusChange} />
+>       <TempInput scale="f" temperature={fahrenheit} onTempChange={handleFahrenheitChange} />
+>     </div>
 >   );
 > }
 > ```
 >
-> **Explanation:** Lifting state up to the closest common parent coordinates state synchronization between sibling components.
+> #### Technical Explanation
+> 1. **Common Parent State**: `temperature` and `scale` state live in the common `TemperatureConverter` parent.
+> 2. **Controlled Props**: Inputs receive calculated `celsius` and `fahrenheit` values via props.
+> 3. **Synchronized Updates**: Updating either input notifies the parent, updating both sibling fields simultaneously.
+> 4. **Single Source of Truth**: Eliminates conflicting state data between temperature scales.
 > 
 ---
 
-### Exercise 3: State Colocation Golden Rule
+### Exercise 2: Financial Order Book Filter & Summary (Financial Trading)
 
-**Problem:** State golden rule of React state placement (Store state in the lowest common parent component that needs it).
+**Scenario:** A trading workstation features an `OrderFilter` component (allowing users to set max price) and an `OrderSummary` component (displaying total volume). Lift state up to sync filtered results across components.
 
-**Expected output:**
+**Requirements:**
+1. Create `OrderFilter` writer component.
+2. Create `OrderSummary` reader component.
+3. Create `TradingWorkstation` parent managing `maxPrice` state.
+4. Filter order lists and calculate total volume as derived state.
+
 > [!check]- Answer
-> ```text
-> Store state in the lowest common parent component that needs it
-> ```
-> ```text
-> Store state in the lowest common parent component that needs it
+>
+> #### Implementation
+> ```jsx
+> import React, { useState } from 'react';
+> 
+> function OrderFilter({ maxPrice, onMaxPriceChange }) {
+>   return (
+>     <div className="filter-box">
+>       <label>Filter Max Price: ${maxPrice}</label>
+>       <input 
+>         type="range" 
+>         min="100" 
+>         max="500" 
+>         value={maxPrice} 
+>         onChange={e => onMaxPriceChange(Number(e.target.value))} 
+>       />
+>     </div>
+>   );
+> }
+> 
+> function OrderSummary({ filteredOrders }) {
+>   const totalVol = filteredOrders.reduce((sum, o) => sum + o.volume, 0);
+>   return (
+>     <div className="summary-box">
+>       <h5>Matching Orders: {filteredOrders.length}</h5>
+>       <p>Total Volume: {totalVol} units</p>
+>     </div>
+>   );
+> }
+> 
+> export function TradingWorkstation({ orders = [] }) {
+>   const [maxPrice, setMaxPrice] = useState(300);
+> 
+>   // Derived State filtered from lifted maxPrice
+>   const filteredOrders = orders.filter(o => o.price <= maxPrice);
+> 
+>   return (
+>     <div className="workstation">
+>       <h4>Trading Workstation</h4>
+>       <OrderFilter maxPrice={maxPrice} onMaxPriceChange={setMaxPrice} />
+>       <OrderSummary filteredOrders={filteredOrders} />
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** Colocating state minimizes un-necessary parent and sibling re-renders.
+> #### Technical Explanation
+> 1. **State Placement**: `maxPrice` state is lifted up to `TradingWorkstation`.
+> 2. **Prop Synchronization**: Changing the slider in `OrderFilter` updates parent state, automatically updating `OrderSummary`.
+> 3. **Top-Down Flow**: Data flows downward from parent to children smoothly.
+> 4. **Decoupled Architecture**: `OrderSummary` remains pure, taking ready-filtered orders via props.
 > 
-## 7. Related Terms
-- [Prop Drilling](../level_06/prop_drilling.md) — The code maintainability cost of lifting state too high.
-- [The Context API](../level_06/context_api.md) — The alternative state sharing mechanism for deeply nested trees.
-- [Props (Properties)](../level_01/props.md) — Passing state down via props.
-- [State Management (Redux / Zustand)](../level_06/state_management.md) — State management patterns.
+---
+
+### Exercise 3: E-Commerce Accordion Single Active Item (E-Commerce)
+
+**Scenario:** An e-commerce FAQ accordion displays multiple collapsible panels. Only ONE panel can be open at a time. Lift active index state up from child panels to the parent accordion.
+
+**Requirements:**
+1. Create `AccordionPanel` taking `title`, `children`, `isOpen`, and `onOpen` props.
+2. Create `Accordion` parent managing `activeIndex` state.
+3. Ensure clicking a closed panel opens it and closes all other sibling panels.
+4. Provide structured implementation with technical explanation.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> import React, { useState } from 'react';
+> 
+> function AccordionPanel({ title, children, isOpen, onOpen }) {
+>   return (
+>     <div className="accordion-item">
+>       <button className="accordion-header" onClick={onOpen}>
+>         {title} {isOpen ? '▲' : '▼'}
+>       </button>
+>       {isOpen && <div className="accordion-body">{children}</div>}
+>     </div>
+>   );
+> }
+> 
+> export function FAQAccordion() {
+>   const [activeIndex, setActiveIndex] = useState(0); // Lifted active index state
+> 
+>   const faqs = [
+>     { title: 'Shipping Policy', content: 'Free shipping on orders over $50.' },
+>     { title: 'Return Policy', content: '30-day money-back guarantee.' },
+>     { title: 'Payment Options', content: 'We accept Visa, Mastercard, and PayPal.' }
+>   ];
+> 
+>   return (
+>     <div className="accordion-container">
+>       <h4>Frequently Asked Questions</h4>
+>       {faqs.map((faq, index) => (
+>         <AccordionPanel
+>           key={index}
+>           title={faq.title}
+>           isOpen={activeIndex === index}
+>           onOpen={() => setActiveIndex(index)}
+>         >
+>           {faq.content}
+>         </AccordionPanel>
+>       ))}
+>     </div>
+>   );
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Lifted Accordion State**: `activeIndex` is moved up from individual panels to `FAQAccordion`.
+> 2. **Mutual Exclusion**: Because the parent controls `activeIndex`, clicking one panel automatically closes sibling panels.
+> 3. **Controlled Props**: `isOpen={activeIndex === index}` evaluates panel visibility declaratively.
+> 4. **Encapsulated Callbacks**: `onOpen={() => setActiveIndex(index)}` passes clean arrow callbacks down to children.
+> 
+---
+
+## 6. Related Terms
+
+- [State](state.md) — The dynamic data lifted up to common parent components.
+- [Props (Properties)](../level_01/props.md) — The vehicle carrying lifted state values down and callbacks up.
+- [Unidirectional Data Flow](unidirectional_flow.md) — The data architecture requiring state to be lifted up for sibling sharing.
+- [Prop Drilling](../level_06/prop_drilling.md) — The maintainability issue caused by lifting state too high.
 
 ---
 
-## 8. Key Takeaways
-- Lifting State Up synchronizes sibling components by placing state in their common parent.
-- Props pass the state value down to readers and the setter down to writers.
-- Updates to the parent state trigger re-renders down both sibling branches.
-- Sibling components cannot communicate directly in React due to top-down data flow.
-- Only lift state to the closest common parent to minimize prop drilling.
-- For deep state sharing across many levels, use the Context API instead.
+## 7. Key Takeaways
+
+- **Lifting State Up** synchronizes sibling components by moving shared state to their closest common parent.
+- Props carry state values down to reader components and setter callbacks down to writer components.
+- Sibling components cannot communicate directly in React due to unidirectional top-down data flow.
+- Always lift state to the **closest** common ancestor to prevent prop drilling and unnecessary re-renders.
+- Avoid duplicating lifted prop values into local child `useState` variables.

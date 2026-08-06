@@ -1,189 +1,446 @@
 # Lists & Keys
 
 > **Level 5 — DOM & Event Handling**
-> The technique of transforming an array of JavaScript data into an array of JSX elements, and the strict requirement to provide a unique "Key" to each element for performance tracking.
+> The technique of transforming arrays of data into collections of JSX elements using `.map()`, and assigning stable unique `key` props to enable efficient Virtual DOM reconciliation.
 
 ---
 
 ## 1. Prerequisites
-- [JSX (JavaScript XML)](../level_01/jsx.md) — Understanding that JSX elements can be stored in arrays.
-- [Virtual DOM](../level_01/virtual_dom.md) — How React diffs arrays of elements to find changes.
+
+- [JSX (JavaScript XML)](../level_01/jsx.md) — Rendering arrays of JSX elements inside templates.
+- [Virtual DOM](../level_01/virtual_dom.md) — Understanding element diffing and DOM node reuse.
+- [Reconciliation](../level_01/reconciliation.md) — The engine algorithm relying on keys to track element movements.
 
 ---
 
 ## 2. Term Category
-- **React Syntax / List Rendering**
+
+**Rendering Mechanic (reconciliation tracking)**: Lists & Keys in React represent the primary pattern for rendering collections of similar UI components from data arrays. Developers use standard JavaScript array iteration methods—primarily `Array.prototype.map()`—to convert raw data objects into arrays of React elements.
+
+To optimize DOM updates during re-renders, React strictly requires each rendered list item to have a special string or numeric `key` prop. The `key` attribute acts as an internal unique identity tag for the Virtual DOM reconciliation engine. Rather than mutating DOM nodes indiscriminately by array position, React uses keys to match previous Virtual DOM nodes with new ones, preserving component state, DOM focus, and CSS transitions when items are inserted, deleted, or re-ordered.
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-Web apps are built on lists: a list of tweets, a list of shopping cart items, a list of users.
-In React, you don't write a `for` loop to append HTML elements to the page. Instead, you use the functional JavaScript array method: **`.map()`**.
-`.map()` takes an array of data (like strings or objects) and transforms it into an array of JSX elements. React is smart enough to take an array of JSX and render it directly to the screen!
 
-```javascript
-function TodoList() {
-  const todos = ['Eat', 'Sleep', 'Code'];
+In imperative DOM manipulation, rendering a list of items required writing `for` loops, creating element nodes manually via `document.createElement()`, and appending them into parent containers. Updating or re-ordering a list meant manually finding the target row and updating text nodes or clearing and repopulating the entire container, which destroyed input cursor focus and performance.
+
+React automates list rendering by mapping data arrays straight to JSX. However, when list order changes (e.g. sorting a table or inserting an item at the top), React needs to know which specific items moved, were added, or were removed. Without unique keys, React falls back to comparing elements strictly by array index position. This "naive" matching leads to severe state bugs—such as text input contents staying on row index 0 when the data item moves to row index 1. Stable, unique keys solve this by giving every list element a persistent identity across render cycles.
+
+### (2) Reality Metaphor
+
+Imagine a coat check room at a theatre where patrons store their coats.
+
+If the coat check attendant tags coats using simple sequential seat numbers (1, 2, 3), and patron #1 leaves early, shifting patron #2's coat to hanger #1 causes absolute chaos when retrieving coats later. The coat check attendant has lost track of *which coat belongs to whom* because the identifier was tied to the hanger's physical position.
+
+If the attendant instead attaches a unique brass claim ticket (**the React `key`**) directly to each coat itself, coats can be moved to different hangers, re-sorted, or reorganized freely. The attendant inspects the claim ticket brass tag to identify each exact coat instantly, regardless of which hanger position it occupies.
+
+### (3) React Code Examples
+
+#### Short Snippet
+
+```jsx
+import React from 'react';
+
+function SimpleUserList({ users }) {
+  // Rendering an array of objects to JSX using .map with persistent ID keys
+  return (
+    <ul className="user-list">
+      {users.map((user) => (
+        <li key={user.id} className="user-item">
+          <span className="user-name">{user.name}</span> — <span>{user.role}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export default SimpleUserList;
+```
+
+#### Fuller Example
+
+```jsx
+import React, { useState } from 'react';
+
+function DynamicTaskBoard() {
+  const [tasks, setTasks] = useState([
+    { id: 'task-1', text: 'Calibrate IoT Gateway', priority: 'High' },
+    { id: 'task-2', text: 'Verify Financial Audit Log', priority: 'Medium' },
+    { id: 'task-3', text: 'Update Patient EHR Database', priority: 'Low' }
+  ]);
+
+  const addTaskAtTop = () => {
+    const newTask = {
+      id: `task-${Date.now()}`,
+      text: `Emergency Maintenance #${tasks.length + 1}`,
+      priority: 'High'
+    };
+    // Prepend task to array to test reconciliation stability
+    setTasks((prev) => [newTask, ...prev]);
+  };
+
+  const removeTask = (id) => {
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+  };
 
   return (
+    <div className="task-board">
+      <button onClick={addTaskAtTop} className="btn-add">
+        + Prepend Emergency Task
+      </button>
+
+      <ul className="task-list">
+        {tasks.map((task) => (
+          // key prop MUST be on the outermost element returned inside map
+          <li key={task.id} className={`task-card ${task.priority.toLowerCase()}`}>
+            <span className="task-text">{task.text}</span>
+            <input type="text" placeholder="Add notes..." className="task-notes" />
+            <button onClick={() => removeTask(task.id)} className="btn-delete">
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default DynamicTaskBoard;
+```
+
+---
+
+## 4. Common Mistakes & Pitfalls
+
+### Mistake 1: Using Array Index as the `key` Prop for Dynamic or Sortable Lists
+
+**The mistake:** Writing `items.map((item, index) => <li key={index}>{item.name}</li>)`.
+
+**Why it's wrong:** Array indices change when items are prepended, removed, or re-ordered. If an item is prepended at index 0, the item previously at index 0 becomes index 1. React matches keys from the previous render frame and assumes index 0's component identity did not change, transferring internal state (like input focus, checkbox selections, or CSS animations) to the wrong data item!
+
+*Incorrect:*
+```jsx
+function ItemList({ items }) {
+  // ❌ Index key causes state corruption on re-ordering or prepending!
+  return (
     <ul>
-      {todos.map((todo) => (
-        <li>{todo}</li>
+      {items.map((item, index) => (
+        <TodoItem key={index} todo={item} />
       ))}
     </ul>
   );
 }
 ```
 
-### (2) The "Key" Warning
-If you run the code above, the UI will work, but the console will scream a bright red warning: *"Warning: Each child in a list should have a unique 'key' prop."*
-**Why?** The Virtual DOM. 
-Imagine you have a list of 1,000 items. You delete the item at index `2`. 
-React looks at the old array and the new array. Without keys, React doesn't know you *deleted* item 2. It thinks you changed the text of item 2 to item 3, changed 3 to 4, changed 4 to 5, all the way down to 1,000! It will re-render 998 items.
-By providing a unique `key` (like a database ID), React can instantly track elements. It says, "Oh, the element with `key='104'` is missing. I will just delete that one node from the DOM and leave the other 999 alone."
-
-### (3) How to use Keys
-You attach the `key` prop to the outermost element returned by the `.map()` function. It must be a string or number that uniquely identifies that item (usually a database ID).
-```javascript
-{users.map((user) => (
-  <li key={user.id}>{user.name}</li>
-))}
+*Fix:*
+```jsx
+function ItemList({ items }) {
+  // Use stable persistent unique data IDs
+  return (
+    <ul>
+      {items.map((item) => (
+        <TodoItem key={item.id} todo={item} />
+      ))}
+    </ul>
+  );
+}
 ```
 
----
+### Mistake 2: Generating Dynamic Keys During Render via `Math.random()` or `uuid()`
 
-## 5. Common Mistakes & Pitfalls
+**The mistake:** Writing `items.map(item => <li key={Math.random()}>{item.name}</li>)`.
 
-### Mistake 1: Using the Array Index as a Key
-
-**The mistake:** A developer doesn't have an ID, so they use the `.map()` index parameter: `<li key={index}>`.
-
-**Why it's wrong:** An index is NOT tied to the data; it's tied to the position. If you have `['A', 'B']`, `A` is index `0`. If you insert `Z` at the beginning (`['Z', 'A', 'B']`), `A` is now index `1`!
-React sees that the element at `key=0` changed from 'A' to 'Z', so it forces a massive re-render, completely breaking component state and animations.
-**Golden Rule:** Only use `index` as a last resort for lists that will NEVER be reordered, sorted, added to, or deleted from.
-
----
-
-
-
-### Mistake 2: Using Array Indices as Component `key` Props for Dynamic Re-Orderable Lists
-
-**The mistake:** Writing `items.map((item, index) => <Todo key={index} todo={item} />)` for a list that can be deleted or re-ordered.
-
-**Why it's wrong:** Using array indices as keys breaks component state identity when items are added, deleted, or sorted. React associates internal state (like input text or accordion collapse state) by key, causing state misplacement bugs.
+**Why it's wrong:** Generating a new key on every render cycle causes React's reconciliation engine to treat *every single list item* as a completely new component. React will completely unmount, destroy, and recreate all DOM nodes on every render frame, destroying input focus, scroll position, and causing massive UI lag.
 
 *Incorrect:*
-```javascript
-items.map((item, index) => <Todo key={index} todo={item} />); // ❌ State bugs on item re-order!
-```
-
-*Fix:*
-```javascript
-items.map(item => <Todo key={item.id} todo={item} />); // Stable item ID key
-```
-
-### Mistake 3: Generating Dynamic Keys During Render via `Math.random()` or `uuid()`
-
-**The mistake:** Writing `items.map(item => <Todo key={Math.random()} todo={item} />)`.
-
-**Why it's wrong:** Generating new keys during render forces React to unmount and re-create EVERY DOM element on EVERY single re-render, destroying component state and input focus.
-
-*Incorrect:*
-```javascript
-items.map(item => <Todo key={Math.random()} todo={item} />); // ❌ Destroys DOM nodes every render!
-```
-
-*Fix:*
-```javascript
-Use persistent unique item data IDs: key={item.id}
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: The Wrapper Key
-
-**Problem:** Look at this `.map()`. Where exactly should the `key` prop be placed?
-```javascript
-{posts.map(post => {
+```jsx
+function ProductList({ products }) {
+  // ❌ Re-creates all DOM nodes on EVERY re-render!
   return (
     <div>
-      <h2>{post.title}</h2>
-      <p>{post.content}</p>
+      {products.map((p) => (
+        <ProductCard key={Math.random()} product={p} />
+      ))}
     </div>
-  )
-})}
+  );
+}
 ```
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> The `key` belongs on the `<div>`.
-> It must ALWAYS be attached to the outermost element returned inside the map function.
-> `<div key={post.id}>`
-> ```
-> - React needs to track the entire "block" returned by the map.
-> 
+*Fix:*
+```jsx
+function ProductList({ products }) {
+  // Use existing persistent database ID
+  return (
+    <div>
+      {products.map((p) => (
+        <ProductCard key={p.id} product={p} />
+      ))}
+    </div>
+  );
+}
+```
+
+### Mistake 3: Placing the `key` Prop on Child Elements Inside Extracted Components Instead of the Root Component
+
+**The mistake:** Placing `key` on the internal `<div>` inside `<CustomCard>` instead of on `<CustomCard>` itself in `.map()`.
+
+**Why it's wrong:** React expects the `key` prop to be specified directly on the element returned in the top-level callback of `.map()`. If you extract list items into a custom sub-component, the `key` MUST be attached to the custom component tag itself, not inside the child component's internal markup.
+
+*Incorrect:*
+```jsx
+function List({ items }) {
+  return items.map((item) => <CustomCard item={item} />); // ❌ Missing key on wrapper tag!
+}
+
+function CustomCard({ item }) {
+  return <div key={item.id}>{item.name}</div>; // Key placed inside component
+}
+```
+
+*Fix:*
+```jsx
+function List({ items }) {
+  // Attach key directly to outermost component returned in map
+  return items.map((item) => <CustomCard key={item.id} item={item} />);
+}
+
+function CustomCard({ item }) {
+  return <div>{item.name}</div>;
+}
+```
+
 ---
 
+## 5. Practice Exercises
 
+### Exercise 1: IoT Sensor Device Status Telemetry Grid
 
-### Exercise 2: Mapping Array to List Component with Key
+**Scenario:** You are building an industrial IoT dashboard that renders a list of connected sensors. Sensors can be sorted by temperature or filtered by status. Ensure component state (like accordion collapse toggles) stays attached to the correct sensor during re-sorting.
 
-**Problem:** Map array `products` returning `<li>` tags showing `name` and `price` with `key={product.id}`.
+**Requirements:**
+1. Render list of sensors using `.map()` with stable unique `id` keys.
+2. Provide interactive sorting by temperature.
+3. Include an inline collapsible detail view to verify state preservation during sorting.
+4. Add verification assertions checking key assignment and sorting stability.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> function ProductList({ products }) { return <ul>{products.map(p => <li key={p.id}>{p.name} - ${p.price}</li>)}</ul>; }
-> ```
-> ```javascript
-> function ProductList({ products }) {
+>
+> #### Implementation
+> ```jsx
+> import React, { useState } from 'react';
+> 
+> function SensorGrid({ initialSensors }) {
+>   const [sensors, setSensors] = useState(initialSensors);
+>   const [expandedId, setExpandedId] = useState(null);
+> 
+>   const sortByTempDesc = () => {
+>     setSensors((prev) => [...prev].sort((a, b) => b.temp - a.temp));
+>   };
+> 
+>   const toggleExpand = (id) => {
+>     setExpandedId((prev) => (prev === id ? null : id));
+>   };
+> 
 >   return (
->     <ul>
->       {products.map(p => (
->         <li key={p.id}>{p.name} - ${p.price}</li>
->       ))}
->     </ul>
+>     <div className="sensor-grid">
+>       <button onClick={sortByTempDesc} className="btn-sort">
+>         Sort by Temperature (High → Low)
+>       </button>
+> 
+>       <div className="grid-container">
+>         {sensors.map((sensor) => (
+>           <div key={sensor.id} className="sensor-card" data-testid={`sensor-${sensor.id}`}>
+>             <h4>{sensor.name}</h4>
+>             <p>Temp: {sensor.temp}°C</p>
+>             <button onClick={() => toggleExpand(sensor.id)}>
+>               {expandedId === sensor.id ? 'Hide Details' : 'Show Details'}
+>             </button>
+>             {expandedId === sensor.id && (
+>               <div className="details-pane">
+>                 Firmware: v{sensor.firmware} | Location: Zone-{sensor.zone}
+>               </div>
+>             )}
+>           </div>
+>         ))}
+>       </div>
+>     </div>
 >   );
+> }
+> 
+> export function testSensorGrid() {
+>   const data = [
+>     { id: 's-1', name: 'Pressure Sensor', temp: 30, firmware: '1.2', zone: 'A' },
+>     { id: 's-2', name: 'Thermal Sensor', temp: 85, firmware: '2.0', zone: 'B' }
+>   ];
+>   const element = SensorGrid({ initialSensors: data });
+>   const keys = element.props.children[1].props.children.map((child) => child.key);
+>   console.assert(keys[0] === 's-1' && keys[1] === 's-2', 'Sensor key assignment mismatch');
 > }
 > ```
 >
-> **Explanation:** Stable item keys allow React reconciliation to track item insertions and re-orders.
+> #### Technical Explanation
+> 1. **Persistent Key Binding**: Uses unique string identifiers (`s-1`, `s-2`) as keys, ensuring component state persists through re-sorting.
+> 2. **Immutability Array Sorting**: Copies array (`[...prev]`) before calling `.sort()` to prevent direct mutation of state arrays.
+> 3. **Stable Reconciliation**: Allows React to re-order physical DOM nodes efficiently without unmounting child elements.
+> 4. **Selective Expansion**: Controls active detail panels using explicit sensor ID matches.
 > 
----
+### Exercise 2: Financial Stock Watchlist Order Book
 
-### Exercise 3: Where Key Props Must Be Placed
+**Scenario:** Implement a financial market trading watchlist. Users can add new ticker watch items, delete items, or move items up and down in rank.
 
-**Problem:** Where must `key` props be specified when extracting list items into custom child components? (Directly on the custom child component tag inside the `.map()` callback).
+**Requirements:**
+1. Render watchlist items using `.map()` with ticker symbol or database ID keys.
+2. Implement move up/down array swapping functions.
+3. Render user notes input fields inside list rows to prove state identity stability.
+4. Include runtime test assertions for key ordering.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Directly on the custom child component tag inside the .map() callback
-> ```
-> ```javascript
-> // Correct:
-> items.map(item => <ListItem key={item.id} item={item} />)
+>
+> #### Implementation
+> ```jsx
+> import React, { useState } from 'react';
+> 
+> function StockWatchlist() {
+>   const [list, setList] = useState([
+>     { id: 'sec-aapl', symbol: 'AAPL', price: 185.2 },
+>     { id: 'sec-nvda', symbol: 'NVDA', price: 720.5 },
+>     { id: 'sec-msft', symbol: 'MSFT', price: 405.1 }
+>   ]);
+> 
+>   const moveUp = (index) => {
+>     if (index === 0) return;
+>     setList((prev) => {
+>       const next = [...prev];
+>       const temp = next[index - 1];
+>       next[index - 1] = next[index];
+>       next[index] = temp;
+>       return next;
+>     });
+>   };
+> 
+>   return (
+>     <div className="watchlist">
+>       <h3>Trading Watchlist</h3>
+>       <ul>
+>         {list.map((item, idx) => (
+>           <li key={item.id} className="row-item">
+>             <strong>{item.symbol}</strong> — ${item.price}
+>             <input type="text" placeholder="Trader note..." className="note-input" />
+>             <button onClick={() => moveUp(idx)} disabled={idx === 0}>
+>               ↑ Move Up
+>             </button>
+>           </li>
+>         ))}
+>       </ul>
+>     </div>
+>   );
+> }
+> 
+> export function testStockWatchlist() {
+>   const list = [{ id: '1', symbol: 'A' }, { id: '2', symbol: 'B' }];
+>   console.assert(list[0].id === '1', 'Initial watchlist ID validation');
+> }
 > ```
 >
-> **Explanation:** Keys belong on the immediate outer element returned inside the array map callback.
+> #### Technical Explanation
+> 1. **State Preservation Across Swap**: Stable `item.id` keys allow input field note values to move seamlessly with the swapped row.
+> 2. **Immutable Array Swapping**: Uses array copying and index swapping to update row positions cleanly.
+> 3. **DOM Element Reuse**: Prevents input unmounting when list rows swap screen locations.
+> 4. **Key Location**: Places `key={item.id}` directly on the root `<li>` element returned inside the `.map()` loop.
 > 
-## 7. Related Terms
-- [Virtual DOM](../level_01/virtual_dom.md) — The system that requires the Keys to perform efficient diffing.
-- [Fragments](../level_01/fragments.md) — Related concept: Fragments.
-- [Reconciliation](../level_01/reconciliation.md) — Related concept: Reconciliation.
+### Exercise 3: Healthcare Patient EHR Treatment Schedule List
+
+**Scenario:** Build a hospital patient medication schedule component. Nurses can add new dosage entries or check off completed doses.
+
+**Requirements:**
+1. Render dosage schedule items using `.map()` with unique ID keys.
+2. Include checkbox controls for marking medication as administered.
+3. Allow filtering between All and Completed doses without losing checked state.
+4. Include runtime assertions for schedule rendering.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> import React, { useState } from 'react';
+> 
+> function MedicationSchedule({ initialDoses }) {
+>   const [doses, setDoses] = useState(initialDoses);
+>   const [filterCompleted, setFilterCompleted] = useState(false);
+> 
+>   const toggleAdministered = (id) => {
+>     setDoses((prev) =>
+>       prev.map((d) => (d.id === id ? { ...d, administered: !d.administered } : d))
+>     );
+>   };
+> 
+>   const visibleDoses = filterCompleted
+>     ? doses.filter((d) => d.administered)
+>     : doses;
+> 
+>   return (
+>     <div className="med-schedule">
+>       <h3>Patient Dosage Schedule</h3>
+>       <label>
+>         <input
+>           type="checkbox"
+>           checked={filterCompleted}
+>           onChange={(e) => setFilterCompleted(e.target.checked)}
+>         />
+>         Show Administered Only
+>       </label>
+> 
+>       <ul>
+>         {visibleDoses.map((dose) => (
+>           <li key={dose.id} className={dose.administered ? 'done' : 'pending'}>
+>             <input
+>               type="checkbox"
+>               checked={dose.administered}
+>               onChange={() => toggleAdministered(dose.id)}
+>             />
+>             <span>
+>               {dose.medication} — {dose.time} ({dose.dosage})
+>             </span>
+>           </li>
+>         ))}
+>       </ul>
+>     </div>
+>   );
+> }
+> 
+> export function testMedicationSchedule() {
+>   const data = [
+>     { id: 'm-1', medication: 'Insulin', time: '08:00', dosage: '10U', administered: false }
+>   ];
+>   const res = MedicationSchedule({ initialDoses: data });
+>   console.assert(res.props.children[2].props.children[0].key === 'm-1', 'Medication schedule key verification');
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Filtered View Key Consistency**: Maintains key identity (`m-1`) when switching between filtered and unfiltered list views.
+> 2. **State Updates via Map**: Uses immutable `prev.map()` to target specific medication records by ID.
+> 3. **Controlled Checkbox Integration**: Pairs controlled checked states with persistent unique list keys.
+> 4. **Declarative List Projection**: Derives `visibleDoses` during render without duplicating list state.
+> 
+---
+
+## 6. Related Terms
+
+- [Virtual DOM](../level_01/virtual_dom.md) — The virtual representation of UI diffed using keys.
+- [Reconciliation](../level_01/reconciliation.md) — The core engine algorithm relying on keys for item matching.
+- [JSX (JavaScript XML)](../level_01/jsx.md) — The template syntax used for `.map()` list expressions.
+- [Fragments](../level_01/fragments.md) — Using `<React.Fragment key={id}>` when mapping sibling lists.
 
 ---
 
-## 8. Key Takeaways
-- Use the `.map()` function to render lists of data in React.
-- Every item returned by a `.map()` MUST have a unique `key` prop attached to its outermost element.
-- React uses these Keys to efficiently track additions, deletions, and re-orderings in the Virtual DOM.
-- Never use the array `index` as a key if the list can be reordered or modified; use a stable, unique ID (like a database ID).
+## 7. Key Takeaways
+
+- Use `.map()` to convert data arrays into collections of JSX elements.
+- Always provide a unique, persistent `key` prop on the outermost element returned inside `.map()`.
+- Never use array indices as keys for dynamic, sortable, or filterable lists.
+- Do not generate dynamic keys during render via `Math.random()` or timestamp generators.
+- Stable keys preserve DOM state, text cursor focus, CSS transitions, and unmounting efficiency during reconciliation.

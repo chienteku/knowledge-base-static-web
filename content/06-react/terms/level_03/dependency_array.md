@@ -1,174 +1,338 @@
 # Dependency Array
 
 > **Level 3 — Component Lifecycle & Effects**
-> The second argument passed to `useEffect` (and other hooks) that acts as a "watch list". It tells React exactly when the effect should be allowed to run.
+> The second argument passed to `useEffect`, `useCallback`, or `useMemo` that serves as a watchlist controlling when the hook re-executes.
 
 ---
 
 ## 1. Prerequisites
-- [`useEffect` Hook](use_effect.md) — Where the Dependency Array is used.
-- [Component Lifecycle](component_lifecycle.md) — The array directly controls the Mounting and Updating phases.
+
+- [`useEffect` Hook](use_effect.md) — The hook whose execution schedule is controlled by the dependency array.
+- [Component Lifecycle](component_lifecycle.md) — Understanding how updates and re-renders trigger dependency checks.
 
 ---
 
 ## 2. Term Category
-- **React Mechanic / Hook Configuration**
+
+**Rendering Mechanic (memoization & execution engine)**: The dependency array is a core configuration mechanism in React's hook engine. When a component re-renders, React inspects the elements in the dependency array using shallow equality comparison (`Object.is`). If every element in the array is identical to its previous render value, React skips running the effect callback or returning a newly recalculated memoized value.
+
+Architecturally, the dependency array bridges React's declarative render cycle with imperative side effects and optimizations, enforcing predictable synchronization between reactive component variables and external systems.
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-If an effect runs after every single render, it ruins performance. 
-We need a way to tell React: *"Please only run this effect if the `userId` changes. If the user just types in a search bar, don't run the `userId` effect!"*
-React uses the **Dependency Array** for this. You give React an array of variables. React watches those variables. If any of them change between renders, the effect runs. If they stay the same, the effect is skipped.
 
-### (2) The Three Configurations
-The behavior of `useEffect` completely changes based on what you put in the array:
+Without a dependency array, an effect inside a component would execute after **every single render**. If an effect fetches data and updates state, that state update triggers a re-render, which fires the effect again—resulting in an infinite rendering loop.
 
-**1. No Array (The Danger Zone)**
-Runs on Mount + After EVERY Update. (Rarely used, prone to infinite loops).
-```javascript
-useEffect(() => { ... }); 
+React needed a way for developers to specify exact triggers:
+- *"Run this API fetch ONLY when the `userId` prop changes."*
+- *"Run this setup code ONLY ONCE when the component first mounts."*
+
+By providing an array of dependencies, developers tell React which reactive values the effect depends on. React watches those values between renders, skipping execution when dependencies remain unchanged.
+
+#### Three Array Configurations
+
+1. **Omitted Array (`useEffect(fn)`):** Runs after initial mount AND after EVERY re-render. Prone to infinite loops if state setters are called inside.
+2. **Empty Array `[]` (`useEffect(fn, [])`):** Runs ONLY ONCE after initial mount. Never re-runs during updates.
+3. **Populated Array `[a, b]` (`useEffect(fn, [a, b])`):** Runs after initial mount AND whenever `a` or `b` changes reference between renders.
+
+### (2) Reality Metaphor
+
+Imagine a smart home security camera system.
+
+- **No Dependency Array (Continuous Trigger):** The camera sends an alert to your phone every millisecond continuously, regardless of whether anything moves. Your phone memory fills up instantly (**infinite re-renders**).
+- **Empty Array `[]` (Power-on Trigger):** The camera sends one alert when installed, then turns off permanently. It ignores motion for the rest of its lifespan (**mount-only execution**).
+- **Populated Array `[motionSensor, doorSensor]` (Smart Watchlist):** The camera monitors two sensors. If motion is detected or the door opens, it records a video clip. If neither sensor changes, it stays quiet (**selective execution**).
+
+### (3) React Code Examples
+
+#### Short Snippet
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+function CounterWatcher({ count }) {
+  useEffect(() => {
+    document.title = `Count: ${count}`;
+  }, [count]); // Re-runs strictly when `count` updates
+
+  return <div>Current Count: {count}</div>;
+}
 ```
 
-**2. The Empty Array `[]` (The Mount-Only)**
-Runs ONLY on Mount (Birth). It never runs again, no matter what changes. Perfect for initial API fetches.
-```javascript
-useEffect(() => { ... }, []); 
-```
+#### Fuller Example
 
-**3. The Populated Array `[varA, varB]` (The Watcher)**
-Runs on Mount + ONLY when `varA` or `varB` changes.
-```javascript
-useEffect(() => { ... }, [userId, category]); 
-```
+```jsx
+import React, { useState, useEffect, useMemo } from 'react';
 
-### (3) The Linter Rule
-The React team created a strict ESLint rule called `eslint-plugin-react-hooks`. It enforces that **any variable used inside the effect MUST be included in the dependency array**. If you use `userId` inside the effect, but don't put `userId` in the array, your app will have severe "stale data" bugs.
+function ProductCatalog({ category, searchFilter }) {
+  const [products, setProducts] = useState([]);
+  const [lastUpdated, setLastUpdated] = useState(null);
+
+  // Effect 1: Runs when `category` changes
+  useEffect(() => {
+    let isCurrent = true;
+    fetch(`/api/products?category=${category}`)
+      .then(res => res.json())
+      .then(data => {
+        if (isCurrent) {
+          setProducts(data);
+          setLastUpdated(new Date().toLocaleTimeString());
+        }
+      });
+    return () => { isCurrent = false; };
+  }, [category]); // Category watcher
+
+  // Memoized Filter: Recalculates when `products` or `searchFilter` changes
+  const filteredProducts = useMemo(() => {
+    return products.filter(p => p.name.toLowerCase().includes(searchFilter.toLowerCase()));
+  }, [products, searchFilter]); // Watchlist for heavy calculations
+
+  return (
+    <div>
+      <h3>Category: {category}</h3>
+      <small>Last Refreshed: {lastUpdated}</small>
+      <ul>
+        {filteredProducts.map(p => <li key={p.id}>{p.name}</li>)}
+      </ul>
+    </div>
+  );
+}
+
+export default ProductCatalog;
+```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Objects and Arrays in the Dependency Array
+### Mistake 1: Omitting Reactive Dependencies (Lying to the Dependency Array)
 
-**The mistake:** A developer puts an object into the dependency array: `useEffect(() => {...}, [userObject])`.
+**The mistake:** Reading state or prop variables inside an effect callback while passing an empty array `[]` to force "run once" behavior.
 
-**Why it's wrong:** React compares dependencies using `Object.is()` (reference equality). If the parent component re-renders, it might create a *new* object in memory that looks identical `{ name: "Bob" }`. React compares the memory addresses, sees they are different, and unnecessarily runs the effect! 
-**Golden Rule:** Avoid putting Objects or Arrays in the dependency array. Instead, destructure the primitive values you actually need: `useEffect(() => {...}, [userObject.id])`.
-
----
-
-
-
-### Mistake 2: Lying to the Dependency Array by Omitting Used Reactive Values
-
-**The mistake:** Using `count` inside `useEffect` while supplying an empty dependency array `[]` to force run-once.
-
-**Why it's wrong:** Omitting reactive state or prop variables creates **stale closures**. The effect callback captures the initial state value (`0`) forever and never reads updated state values. Include all reactive values or use functional state updaters.
+**Why it's wrong:** Omitting reactive values creates **stale closure bugs**. The effect captures initial state snapshots forever, ignoring subsequent updates.
 
 *Incorrect:*
-```javascript
+```jsx
+const [count, setCount] = useState(0);
 useEffect(() => {
-  const id = setInterval(() => { setCount(count + 1); }, 1000); // ❌ count is stale!
+  const id = setInterval(() => {
+    setCount(count + 1); // ❌ count is trapped at 0!
+  }, 1000);
   return () => clearInterval(id);
 }, []); // Lying to dependency array!
 ```
 
 *Fix:*
-```javascript
+```jsx
+const [count, setCount] = useState(0);
 useEffect(() => {
-  const id = setInterval(() => { setCount(c => c + 1); }, 1000); // Functional update
+  const id = setInterval(() => {
+    setCount(prev => prev + 1); // ✅ Functional state updater avoids dependency
+  }, 1000);
   return () => clearInterval(id);
-}, []); // Safe empty dependency array
+}, []);
 ```
 
-### Mistake 3: Passing Newly Created Objects or Arrays directly into Dependency Arrays (Infinite Re-Render Loop)
+### Mistake 2: Passing Un-memoized Objects or Arrays into Dependencies
 
-**The mistake:** Writing `useEffect(() => { ... }, [{ id: 1 }])` or referencing an un-memoized object prop.
+**The mistake:** Passing object or array literals declared directly inside component render bodies into dependency arrays.
 
-**Why it's wrong:** React uses `Object.is` to compare dependencies across renders. Passing an un-memoized object literal `{}` creates a new object reference on EVERY render, causing `useEffect` to fire infinitely!
+**Why it's wrong:** React compares dependencies using `Object.is` (reference equality). Objects declared in component render bodies receive new memory addresses on every render frame, causing the effect to re-run infinitely.
 
 *Incorrect:*
-```javascript
-const options = { theme: 'dark' };
-useEffect(() => { ... }, [options]); // ❌ Infinite effect loop!
+```jsx
+function UserCard() {
+  const options = { theme: 'dark' }; // ❌ New reference every render!
+  useEffect(() => {
+    applyTheme(options);
+  }, [options]); // Infinite effect trigger loop!
+}
 ```
 
 *Fix:*
-```javascript
-const options = useMemo(() => ({ theme: 'dark' }), []);
-useEffect(() => { ... }, [options]);
+```jsx
+function UserCard() {
+  // Option A: Move static objects outside component
+  // Option B: Destructure primitive values
+  const theme = 'dark';
+  useEffect(() => {
+    applyTheme({ theme });
+  }, [theme]); // ✅ Primitive string dependency
+}
 ```
 
-## 6. Practice Exercises
+### Mistake 3: Modifying State Tracked by the Dependency Array Without Safeguards
 
-### Exercise 1: The Search Bar
+**The mistake:** Calling `setItems([...items, newItem])` inside an effect that includes `[items]` in its dependency array.
 
-**Problem:** You have a component with a `searchQuery` state and a `theme` state (dark/light). You have a `useEffect` that fetches search results from an API. How do you configure the dependency array so it fetches when they type, but DOES NOT fetch when they toggle the dark mode theme?
+**Why it's wrong:** Updating `items` triggers a re-render. The re-render sees that `items` changed reference, re-triggering the effect, causing an infinite loop.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> You use a populated array: `[searchQuery]`
-> When `theme` changes, React will see `searchQuery` hasn't changed, and will skip the fetch effect!
-> ```
-> - Only put the variables the effect *actually cares about* in the array.
-> 
+*Incorrect:*
+```jsx
+useEffect(() => {
+  setItems(prev => [...prev, 'auto-generated']); // ❌ Triggers infinite effect loop!
+}, [items]);
+```
+
+*Fix:*
+```jsx
+// Trigger state updates in response to explicit user actions or event handlers
+```
+
 ---
 
+## 5. Practice Exercises
 
+### Exercise 1: IoT Telemetry Threshold Alert Watcher
 
-### Exercise 2: Dependency Array Behavior Types
+**Scenario:** An industrial IoT console monitors reactor temperature metrics. You must configure an effect to send an alert when `temperature` exceeds `maxThreshold`, without triggering alerts when unrelated UI state updates.
 
-**Problem:** Match behaviors: 1. No dependency array (`useEffect(fn)` -> Runs after every render); 2. Empty array `[]` (`useEffect(fn, [])` -> Runs once on mount); 3. `[val]` (`useEffect(fn, [val])` -> Runs on mount and when `val` changes).
+**Requirements:**
+1. Monitor `temperature` and `maxThreshold` props.
+2. Trigger `sendAlert()` when `temperature > maxThreshold`.
+3. Include only reactive values in the dependency array.
+4. Prevent duplicate alerts when `theme` state updates.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Runs after every render, 2. Runs once on mount, 3. Runs when val changes
-> ```
-> ```text
-> 1. Runs after every render, 2. Runs once on mount, 3. Runs when val changes
+>
+> #### Implementation
+> ```jsx
+> import React, { useEffect } from 'react';
+> 
+> export function TemperatureAlert({ temperature, maxThreshold, onAlert }) {
+>   useEffect(() => {
+>     if (temperature > maxThreshold) {
+>       onAlert(`WARNING: Temperature ${temperature}°C exceeds limit ${maxThreshold}°C`);
+>     }
+>   }, [temperature, maxThreshold, onAlert]);
+> 
+>   return (
+>     <div>
+>       <span>Current: {temperature}°C</span> | <span>Limit: {maxThreshold}°C</span>
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** The dependency array controls effect execution frequency.
+> #### Technical Explanation
+> 1. **Targeted Watchlist**: `[temperature, maxThreshold, onAlert]` ensures the effect fires strictly when metrics change.
+> 2. **Unrelated Render Isolation**: Toggling dark mode or search inputs does not re-run alert checks.
+> 3. **Render Safety**: Conditionals remain inside the effect callback.
+> 4. **ESLint Compliance**: All referenced reactive variables are explicitly specified.
 > 
----
+### Exercise 2: Financial Stock Portfolio Refresh
 
-### Exercise 3: Primitive vs Object Dependencies
+**Scenario:** A stock portfolio updates market valuations when `selectedPortfolioId` changes or when the user clicks "Manual Refresh" (`refreshKey`). Ensure effect dependencies trigger data fetches for both cases.
 
-**Problem:** Why is `[options.id]` safer in dependency arrays than `[options]`? (`options.id` is a primitive scalar compared by value rather than object reference).
+**Requirements:**
+1. Fetch portfolio metrics when `selectedPortfolioId` or `refreshKey` changes.
+2. Clean up pending fetches on dependency changes using `AbortController`.
+3. Exclude non-reactive static configurations from dependencies.
+4. Render current portfolio balances.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> options.id is a primitive scalar compared by value rather than object reference
-> ```
-> ```text
-> options.id is a primitive scalar compared by value rather than object reference
+>
+> #### Implementation
+> ```jsx
+> import React, { useState, useEffect } from 'react';
+> 
+> export function PortfolioViewer({ selectedPortfolioId, refreshKey }) {
+>   const [portfolio, setPortfolio] = useState(null);
+> 
+>   useEffect(() => {
+>     const controller = new AbortController();
+> 
+>     async function loadPortfolio() {
+>       try {
+>         const res = await fetch(`/api/portfolios/${selectedPortfolioId}`, { signal: controller.signal });
+>         const data = await res.json();
+>         setPortfolio(data);
+>       } catch (err) {
+>         if (err.name !== 'AbortError') console.error(err);
+>       }
+>     }
+> 
+>     loadPortfolio();
+> 
+>     return () => controller.abort();
+>   }, [selectedPortfolioId, refreshKey]);
+> 
+>   return (
+>     <div>
+>       <h4>Portfolio: {selectedPortfolioId}</h4>
+>       <p>Balance: ${portfolio ? portfolio.balance : 'Loading...'}</p>
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** Primitive dependencies avoid false positive effect triggers caused by new object references.
+> #### Technical Explanation
+> 1. **Multi-Dependency Watch**: `[selectedPortfolioId, refreshKey]` handles both dropdown shifts and manual button clicks.
+> 2. **Teardown Binding**: Changing dependencies triggers `controller.abort()` before running the next fetch.
+> 3. **Closure Freshness**: Captures current `selectedPortfolioId` on every execution.
+> 4. **Predictable Lifecycle**: Ensures backend data stays synchronized with UI selections.
 > 
-## 7. Related Terms
-- [`useCallback` Hook](../level_04/use_callback.md) — Another hook that relies heavily on the Dependency Array.
-- [Immutability](../level_02/immutability.md) — Why React uses memory addresses to compare items in the dependency array.
-- [`useEffect` Hook](use_effect.md) — Related concept: `useEffect` Hook.
-- [Stale Closures](stale_closures.md) — Stale closure bugs.
+### Exercise 3: E-Commerce Shopping Cart Price Recalculator
+
+**Scenario:** An e-commerce checkout page recalculates order subtotal using `useMemo`. Ensure the dependency array includes cart items and discount codes without recalculating on unrelated page scroll events.
+
+**Requirements:**
+1. Recalculate subtotal using `useMemo`.
+2. Include `cartItems` and `discountPercent` in dependencies.
+3. Compute total accurately.
+4. Skip re-computations when user scroll state shifts.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> import React, { useMemo } from 'react';
+> 
+> export function OrderSummary({ cartItems, discountPercent }) {
+>   const subtotal = useMemo(() => {
+>     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+>   }, [cartItems]);
+> 
+>   const finalTotal = useMemo(() => {
+>     return subtotal * (1 - discountPercent / 100);
+>   }, [subtotal, discountPercent]);
+> 
+>   return (
+>     <div>
+>       <p>Subtotal: ${subtotal.toFixed(2)}</p>
+>       <p>Discount: {discountPercent}%</p>
+>       <h4>Total: ${finalTotal.toFixed(2)}</h4>
+>     </div>
+>   );
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Chained Dependency Array**: `finalTotal` depends cleanly on `subtotal` and `discountPercent`.
+> 2. **Performance Caching**: Array reduction math runs only when `cartItems` array updates.
+> 3. **Shallow Equality**: React skips recalculation if references are identical.
+> 4. **Pure Derived State**: Avoids redundant state setters by deriving values during render.
+> 
+---
+
+## 6. Related Terms
+
+- [`useEffect` Hook](use_effect.md) — The hook whose timing is controlled by dependency arrays.
+- [Stale Closures](stale_closures.md) — Bugs caused by omitting referenced values from dependency arrays.
+- [Immutability](../level_02/immutability.md) — The requirement for array objects to change references on updates.
+- [`useCallback` Hook](../level_04/use_callback.md) — Performance hook using dependency arrays to cache functions.
 
 ---
 
-## 8. Key Takeaways
-- The **Dependency Array** controls when an effect runs.
-- **No Array:** Runs after every render.
-- **`[]` (Empty):** Runs exactly once, on Mount.
-- **`[data]`:** Runs on Mount, and whenever `data` changes.
-- Never lie to React: if a variable is used inside the effect, it MUST be listed in the array.
-- Pass primitive values (strings, numbers, booleans) into the array whenever possible, not Objects/Arrays.
+## 7. Key Takeaways
+
+- The dependency array controls when `useEffect`, `useCallback`, and `useMemo` execute.
+- React compares dependencies using shallow equality (`Object.is`).
+- **No Array:** Runs on mount and after every re-render.
+- **Empty Array `[]`:** Runs once on mount.
+- **Populated Array `[a, b]`:** Runs on mount and when `a` or `b` references change.
+- Always include all reactive variables used inside the effect callback.
+```
