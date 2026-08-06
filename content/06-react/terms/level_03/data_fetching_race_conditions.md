@@ -1,65 +1,56 @@
 # Data Fetching & Race Conditions
 
 > **Level 3 — Component Lifecycle & Effects**
-> Why two in-flight fetches can resolve out of order, and cleaning up with a flag/`AbortController`.
+> Handling out-of-order asynchronous API responses when rapid state updates trigger multiple in-flight network requests.
 
 ---
 
 ## 1. Prerequisites
-- [`useEffect` Hook](use_effect.md) — The hook containing asynchronous data fetches.
-- [Cleanup Functions](cleanup_functions.md) — The function used to discard out-of-date responses.
+
+- [`useEffect` Hook](use_effect.md) — The hook encapsulating asynchronous data fetching queries.
+- [Cleanup Functions](cleanup_functions.md) — The mechanism used to cancel or ignore out-of-date HTTP requests.
 
 ---
 
 ## 2. Term Category
-- **Core Hook**
+
+**Rendering Mechanic (async synchronization)**: In single-page applications, a race condition occurs when multiple asynchronous network requests execute concurrently and complete in an order different from their invocation order. In React's render-and-commit pipeline, unmanaged race conditions lead to inconsistent UI states where outdated API responses overwrite active data choices.
+
+Architecturally, React components must ensure that state updates derived from asynchronous network promises reflect only the most recent user intent. Managing race conditions requires clean synchronization patterns such as boolean cancellation flags or the Web API `AbortController` bound to effect cleanup returns.
 
 ---
 
-## 3. Environment Context
-- **Client-Side (SPA) / Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-Fetching data inside a `useEffect` hook is a common pattern in React. However, simple implementations often suffer from a performance and correctness bug: **Race Conditions**.
 
-A race condition occurs when multiple asynchronous operations run concurrently, and their completion order differs from the order in which they were started. 
+Data fetching inside `useEffect` is a widespread pattern. However, naive implementations suffer from network timing vulnerabilities.
 
-Imagine a user clicks on a category menu to view products:
-1.  The user clicks **"Apples"** (Request 1 is sent).
-2.  The user immediately clicks **"Bananas"** (Request 2 is sent).
+Consider a search interface or user selection menu:
+1. User clicks **"User A"** (Request 1 sent to network).
+2. User quickly clicks **"User B"** (Request 2 sent to network).
 
-Because network speeds are unpredictable, Request 2 (Bananas) might resolve in 100ms, while Request 1 (Apples) is delayed and takes 2 seconds to resolve.
--   Request 2 resolves first: the UI displays Bananas.
--   Request 1 resolves second: the UI overwrites the display with Apples.
+Network latency is inherently unpredictable. If Request 2 resolves in 50ms while Request 1 takes 800ms due to server delay:
+- Request 2 finishes first: UI displays data for User B.
+- Request 1 finishes second: UI overwrites active state with stale data for User A.
 
-The user selected Bananas, but the screen displays Apples. This is a race condition.
+The user selected User B, but the screen displays User A. This inconsistency degrades application reliability.
 
-To prevent out-of-order updates, you must use a **Cleanup Function** inside the `useEffect` hook. There are two primary techniques to handle this:
-
-#### 1. The Boolean Flag Technique (Recommended)
-Declare a boolean variable (e.g. `let active = true`) inside the effect function body. The promise checks this variable before updating state. The cleanup function sets `active = false`. 
-
-When the component re-renders because the category changed, the old effect's cleanup runs first, setting the old `active` flag to `false`. When the slow Request 1 finally resolves, it sees `active === false` and discards the result.
-
-#### 2. The AbortController Technique
-Use the browser's native `AbortController` API to cancel the HTTP request. The cleanup function calls `controller.abort()`, terminating the network request immediately.
-
----
+To solve this, React developers use two main techniques within `useEffect`:
+1. **The Active Flag Pattern:** A local boolean scoped inside the effect function (`let active = true`). The cleanup function sets `active = false`, causing late-arriving promises to ignore state updates.
+2. **The `AbortController` Pattern:** Passing an `AbortSignal` to `fetch` calls. The cleanup function calls `controller.abort()`, terminating network processing at the browser engine level.
 
 ### (2) Reality Metaphor
-Imagine ordering items from a catalog.
-- **Race Condition (No Cleanups):** You mail an order form for Item A. You change your mind and mail an order form for Item B. The vendor receives and ships Item B first. Later, the vendor processes the delayed order form for Item A and ships it. You receive Item A last, even though you wanted Item B.
-- **Boolean Flag (Rejection List):** Before mailing the order form for Item B, you write a note on your door: *"Ignore any deliveries containing Item A."* When Item A arrives on your porch, you inspect the note, see it is no longer wanted, and return it to the sender.
 
----
+Imagine mailing catalog order forms to a supplier.
+
+- **Race Condition (No Cancellation):** You mail an order form for Product A. Five minutes later, you change your mind and mail an order form for Product B. The postal service delivers Form B first, and the supplier ships Product B. Later, delayed Form A arrives, and the supplier ships Product A. You end up with Product A, even though you wanted Product B.
+- **Active Flag Strategy (Door Notice):** Before mailing Form B, you post a notice on your door: *"Accept deliveries for Product B only; reject Product A."* When delayed Product A arrives, the delivery driver reads the notice and returns the package.
 
 ### (3) React Code Examples
 
-#### 1. The Boolean Flag Solution (Clean and Reliable)
+#### Short Snippet
+
 ```jsx
 import React, { useState, useEffect } from 'react';
 
@@ -67,212 +58,355 @@ function UserProfile({ userId }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    let active = true; // Flag scoped to this specific effect run
+    let active = true;
 
     fetch(`/api/users/${userId}`)
       .then(res => res.json())
       .then(data => {
-        if (active) {
-          setUser(data); // Only update state if this effect run is still active
-        }
+        if (active) setUser(data);
       });
 
-    // Cleanup function executes when userId changes or component unmounts
     return () => {
-      active = false; // Disables the state update for this effect run
+      active = false; // Invalidates state updates for stale fetch
     };
   }, [userId]);
 
-  if (!user) return <p>Loading...</p>;
-  return <div>{user.name}</div>;
+  return <div>{user ? user.name : 'Loading...'}</div>;
 }
 ```
 
-#### 2. The AbortController Solution
-```jsx
-useEffect(() => {
-  const controller = new AbortController();
-  const { signal } = controller;
-
-  fetch(`/api/data`, { signal })
-    .then(res => res.json())
-    .then(data => {
-      setData(data);
-    })
-    .catch(err => {
-      if (err.name === 'AbortError') {
-        console.log('Fetch aborted cleanly');
-      } else {
-        setError(err);
-      }
-    });
-
-  return () => {
-    controller.abort(); // Cancel the request immediately
-  };
-}, [query]);
-```
-
----
-
-## 5. Common Mistakes & Pitfalls
-
-### Mistake 1: Ignoring promise results inside cleanup loops
-
-**The mistake:** Fetching data inside `useEffect` without returning any cleanup function to handle race conditions:
-
-```javascript
-// BAD: Vulnerable to race conditions and memory leaks!
-useEffect(() => {
-  fetch(`/api/user/${id}`)
-    .then(res => res.json())
-    .then(data => setUser(data));
-}, [id]);
-```
-
-**Why it's wrong:** If the component unmounts or the query ID changes before the fetch completes, the promise callback will still execute. This can result in out-of-order UI updates or trigger memory leak warnings if the component is no longer mounted.
-
----
-
-
-
-### Mistake 2: Ignoring Network Latency Ordering in `useEffect` Data Fetching (Race Condition Trap)
-
-**The mistake:** User switches tabs from `User 1` to `User 2`. Request for `User 1` completes AFTER `User 2`, overwriting `User 2` data.
-
-**Why it's wrong:** Fast network responses can resolve out of order! If Request 1 finishes after Request 2, stale data overwrites active state. Use a boolean `ignore` flag or `AbortController` in cleanup.
-
-*Incorrect:*
-```javascript
-useEffect(() => {
-  fetchData(userId).then(data => setData(data)); // ❌ Race condition!
-}, [userId]);
-```
-
-*Fix:*
-```javascript
-useEffect(() => {
-  let ignore = false;
-  fetchData(userId).then(data => { if (!ignore) setData(data); });
-  return () => { ignore = true; }; // Ignore out-of-order responses
-}, [userId]);
-```
-
-### Mistake 3: Failing to Handle `AbortError` Rejections when Using `AbortController`
-
-**The mistake:** Using `AbortController` without catching `AbortError` in `.catch()`.
-
-**Why it's wrong:** Calling `controller.abort()` causes `fetch()` to reject with an `AbortError`. If unhandled, this error logs as an unhandled promise rejection in console.
-
-*Incorrect:*
-```javascript
-fetch(url, { signal }).catch(err => setError(err)); // ❌ Logs AbortError as real error!
-```
-
-*Fix:*
-```javascript
-fetch(url, { signal }).catch(err => { if (err.name !== 'AbortError') setError(err); });
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Search Auto-complete Cleanup
-
-**Problem:** Complete the search input component below to prevent race conditions during fast typing using an active boolean flag:
+#### Fuller Example
 
 ```jsx
 import React, { useState, useEffect } from 'react';
 
-function SearchAutoComplete() {
-  const [query, setQuery] = useState('');
+function SearchResults({ query }) {
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!query) return;
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
 
-    // Solution:
-    let isCurrent = true;
+    setLoading(true);
+    const controller = new AbortController();
 
-    fetch(`/api/search?q=${query}`)
-      .then(res => res.json())
+    fetch(`/api/search?q=${encodeURIComponent(query)}`, { signal: controller.signal })
+      .then(res => {
+        if (!res.ok) throw new Error('Search failed');
+        return res.json();
+      })
       .then(data => {
-        if (isCurrent) {
-          setResults(data);
+        setResults(data);
+        setError(null);
+        setLoading(false);
+      })
+      .catch(err => {
+        if (err.name === 'AbortError') {
+          console.log(`Fetch for "${query}" cancelled cleanly`);
+        } else {
+          setError(err.message);
+          setLoading(false);
         }
       });
 
     return () => {
-      isCurrent = false;
+      controller.abort(); // Cancel HTTP request on query update or unmount
     };
   }, [query]);
 
   return (
     <div>
-      <input value={query} onChange={e => setQuery(e.target.value)} />
-      <ul>{results.map(r => <li key={r.id}>{r.title}</li>)}</ul>
+      {loading && <p>Searching...</p>}
+      {error && <p className="error">{error}</p>}
+      <ul>
+        {results.map(item => (
+          <li key={item.id}>{item.title}</li>
+        ))}
+      </ul>
     </div>
   );
+}
+
+export default SearchResults;
+```
+
+---
+
+## 4. Common Mistakes & Pitfalls
+
+### Mistake 1: Omitting Teardown Logic in Un-cached Data Fetches
+
+**The mistake:** Initiating data fetches inside `useEffect` without returning a boolean flag reset or an `AbortController` cancellation.
+
+**Why it's wrong:** Out-of-order network responses overwrite state updates from newer user selections, displaying stale data to users.
+
+*Incorrect:*
+```jsx
+useEffect(() => {
+  fetchData(selectedCategory).then(data => setData(data));
+}, [selectedCategory]); // ❌ Vulnerable to race conditions!
+```
+
+*Fix:*
+```jsx
+useEffect(() => {
+  let active = true;
+  fetchData(selectedCategory).then(data => {
+    if (active) setData(data);
+  });
+  return () => { active = false; }; // ✅ Safe active flag
+}, [selectedCategory]);
+```
+
+### Mistake 2: Logging `AbortError` as an Application Failure
+
+**The mistake:** Catching all errors in a `fetch` `.catch()` block without checking `err.name === 'AbortError'`.
+
+**Why it's wrong:** Canceling a request with `AbortController` causes `fetch` to reject with an `AbortError`. Treating this intentional cancellation as a network error displays false error banners to users.
+
+*Incorrect:*
+```jsx
+fetch(url, { signal })
+  .then(res => res.json())
+  .catch(err => setError(err.message)); // ❌ Treats AbortError as real crash!
+```
+
+*Fix:*
+```jsx
+fetch(url, { signal })
+  .then(res => res.json())
+  .catch(err => {
+    if (err.name !== 'AbortError') setError(err.message);
+  });
+```
+
+### Mistake 3: Creating Abort Controllers Outside the `useEffect` Hook
+
+**The mistake:** Declaring `const controller = new AbortController()` outside `useEffect` or as a top-level component variable.
+
+**Why it's wrong:** Instantiating `AbortController` outside the effect shares a single signal instance across multiple renders. Calling `.abort()` cancels all future fetch requests globally instead of scoping cancellation to individual effect updates.
+
+*Incorrect:*
+```jsx
+const controller = new AbortController(); // ❌ Shared outer controller
+function DataViewer({ id }) {
+  useEffect(() => {
+    fetch(`/api/${id}`, { signal: controller.signal });
+  }, [id]);
+}
+```
+
+*Fix:*
+```jsx
+function DataViewer({ id }) {
+  useEffect(() => {
+    const controller = new AbortController(); // ✅ Fresh instance per effect run
+    fetch(`/api/${id}`, { signal: controller.signal });
+    return () => controller.abort();
+  }, [id]);
 }
 ```
 
 ---
 
+## 5. Practice Exercises
+
+### Exercise 1: IoT Device Sensor Telemetry Fetching
+
+**Scenario:** An IoT monitoring console switches between sensor devices (`DEV-101`, `DEV-102`). Because device connections vary in latency, fast switching can display `DEV-101` telemetry under `DEV-102`'s card. Implement the boolean flag pattern to ensure only the active device's telemetry renders.
+
+**Requirements:**
+1. Fetch sensor metrics when `deviceId` updates.
+2. Maintain an `active` boolean flag inside the effect.
+3. Set `active = false` in the effect cleanup function.
+4. Render telemetry only when `active` is true.
+
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+> ```jsx
+> import React, { useState, useEffect } from 'react';
 > 
----
-
-### Exercise 2: Ignore Flag Race Condition Cleanup Pattern
-
-**Problem:** Write data fetching `useEffect` using `let ignore = false` to prevent race conditions when `id` changes.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> useEffect(() => { let ignore = false; fetchUser(id).then(res => { if (!ignore) setUser(res); }); return () => { ignore = true; }; }, [id]);
-> ```
-> ```javascript
-> useEffect(() => {
->   let ignore = false;
->   fetchUser(id).then(res => {
->     if (!ignore) setUser(res);
->   });
->   return () => {
->     ignore = true;
->   };
-> }, [id]);
+> export function IoTSensorCard({ deviceId }) {
+>   const [telemetry, setTelemetry] = useState(null);
+> 
+>   useEffect(() => {
+>     let active = true;
+> 
+>     async function fetchTelemetry() {
+>       const response = await fetch(`/api/sensors/${deviceId}`);
+>       const data = await response.json();
+>       if (active) {
+>         setTelemetry(data);
+>       }
+>     }
+> 
+>     fetchTelemetry();
+> 
+>     return () => {
+>       active = false;
+>     };
+>   }, [deviceId]);
+> 
+>   return (
+>     <div>
+>       <h4>Device: {deviceId}</h4>
+>       <pre>{telemetry ? JSON.stringify(telemetry) : 'Loading...'}</pre>
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** The `ignore` boolean flag invalidates stale async callbacks if `id` changes before fetch resolves.
+> #### Technical Explanation
+> 1. **Scoped State Variable**: `let active = true` is bound uniquely to each effect execution closure frame.
+> 2. **Teardown Execution**: Changing `deviceId` executes cleanup, setting `active = false` for the previous request.
+> 3. **State Guard**: Checking `if (active)` prevents stale async promise completions from triggering state updates.
+> 4. **Render Consistency**: Guarantees displayed telemetry matches the latest `deviceId` prop.
 > 
----
+### Exercise 2: Financial Stock Ticker Search
 
-### Exercise 3: Why Manual Data Fetching is Discouraged
+**Scenario:** A stock trading portal features a search bar for ticker symbols. Fast typing triggers multiple concurrent queries. Use `AbortController` to abort pending network queries as the user types.
 
-**Problem:** Why use libraries like React Query or SWR instead of writing manual `useEffect` data fetching? (Handles race conditions, caching, revalidation, and loading states out of the box).
+**Requirements:**
+1. Instantiate `AbortController` in `useEffect` on `tickerQuery` updates.
+2. Bind `signal` to `fetch`.
+3. Call `controller.abort()` in cleanup.
+4. Filter out `AbortError` from UI error displays.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Handles race conditions, caching, revalidation, and deduplication out of the box
-> ```
-> ```text
-> Handles race conditions, caching, revalidation, and deduplication out of the box
+>
+> #### Implementation
+> ```jsx
+> import React, { useState, useEffect } from 'react';
+> 
+> export function StockTickerSearch() {
+>   const [query, setQuery] = useState('');
+>   const [stocks, setStocks] = useState([]);
+>   const [error, setError] = useState(null);
+> 
+>   useEffect(() => {
+>     if (!query) {
+>       setStocks([]);
+>       return;
+>     }
+> 
+>     const controller = new AbortController();
+> 
+>     fetch(`/api/stocks?query=${query}`, { signal: controller.signal })
+>       .then(res => res.json())
+>       .then(data => {
+>         setStocks(data);
+>         setError(null);
+>       })
+>       .catch(err => {
+>         if (err.name !== 'AbortError') {
+>           setError('Failed to fetch stock prices');
+>         }
+>       });
+> 
+>     return () => {
+>       controller.abort();
+>     };
+>   }, [query]);
+> 
+>   return (
+>     <div>
+>       <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Ticker symbol..." />
+>       {error && <p>{error}</p>}
+>       <ul>
+>         {stocks.map(s => <li key={s.symbol}>{s.symbol}: ${s.price}</li>)}
+>       </ul>
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** Data fetching libraries automate race condition handling, caching, and state management.
+> #### Technical Explanation
+> 1. **Engine Level Cancellation**: `controller.abort()` instructs the browser network stack to close HTTP connections.
+> 2. **Signal Propagation**: Passing `controller.signal` links fetch promise resolution to controller signals.
+> 3. **Error Isolation**: Checking `err.name !== 'AbortError'` ignores intentional cancellations.
+> 4. **Memory Hygiene**: Eliminates dangling promise handlers in high-frequency input contexts.
 > 
-## 7. Related Terms
-- [Cleanup Functions](cleanup_functions.md) — The lifecycle hooks used to execute fetch cancelations.
-- [`useState` Hook](../level_02/use_state.md) — The state variables updated by fetch results.
+### Exercise 3: E-Commerce Category Filter
+
+**Scenario:** An e-commerce store filters products by category tabs ("Electronics", "Clothing"). Ensure rapid tab clicking never leaves the catalog showing products from a previously selected tab.
+
+**Requirements:**
+1. Fetch category products when `category` state updates.
+2. Use active flag validation inside async resolution handlers.
+3. Render loading placeholders during category switches.
+4. Clean up state flags on category transitions.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> import React, { useState, useEffect } from 'react';
+> 
+> export function CategoryCatalog({ category }) {
+>   const [products, setProducts] = useState([]);
+>   const [loading, setLoading] = useState(true);
+> 
+>   useEffect(() => {
+>     let isCurrent = true;
+>     setLoading(true);
+> 
+>     fetch(`/api/categories/${category}/products`)
+>       .then(res => res.json())
+>       .then(data => {
+>         if (isCurrent) {
+>           setProducts(data);
+>           setLoading(false);
+>         }
+>       });
+> 
+>     return () => {
+>       isCurrent = false;
+>     };
+>   }, [category]);
+> 
+>   if (loading) return <div>Loading {category}...</div>;
+> 
+>   return (
+>     <ul>
+>       {products.map(p => <li key={p.id}>{p.name}</li>)}
+>     </ul>
+>   );
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Sync Flag Protection**: `isCurrent` invalidates state resolution if category changes mid-fetch.
+> 2. **Loading State Sync**: `setLoading(true)` fires synchronously when category updates, giving immediate user feedback.
+> 3. **Out-of-Order Safety**: Late resolving responses from previous categories are safely ignored.
+> 4. **Declarative Cleanups**: Teardown logic relies purely on standard React effect returns.
+> 
+---
+
+## 6. Related Terms
+
+- [Cleanup Functions](cleanup_functions.md) — The effect return callback mechanism executing fetch cancellations.
+- [`useEffect` Hook](use_effect.md) — The parent hook encapsulating asynchronous data fetching routines.
+- [`useState` Hook](../level_02/use_state.md) — The state primitives updated by API fetch resolutions.
+- [Side Effects](side_effects.md) — External network requests managed within React components.
 
 ---
 
-## 8. Key Takeaways
-- Race conditions occur when asynchronous requests resolve out of order.
-- Predictable network response sequences are not guaranteed.
-- Simple fetches inside `useEffect` without cleanups will cause display bugs.
-- Use a boolean flag (`active = true`) inside your effect to ignore stale promise results.
-- Set the flag to `false` inside the returned cleanup function.
-- Alternatively, use `AbortController` to cancel pending HTTP requests.
-- Use third-party libraries (like React Query or SWR) in large applications to handle caching and race conditions automatically.
+## 7. Key Takeaways
+
+- Data fetching race conditions occur when asynchronous requests resolve out of order due to network latency.
+- Unmanaged race conditions allow stale API responses to overwrite active user state.
+- Resolve race conditions using the **Active Flag pattern** (`let active = true; return () => { active = false; };`).
+- Alternatively, use **`AbortController`** to cancel HTTP requests directly at the browser level.
+- Always check `err.name !== 'AbortError'` to avoid displaying false error alerts on aborted fetches.
+```
+
+---
+
+## File 4: `knowledge-base/06-react/terms/level_03/dependency_array.md`
+
+```markdown

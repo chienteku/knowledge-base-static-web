@@ -1,85 +1,153 @@
 # Components
 
-> **Level 4 — Components & Props**
-> Reusable, self-contained building blocks of a Vue application that encapsulate their own HTML template, JavaScript logic, and CSS styling.
+> **Level 4 — Components & Lifecycle**
+> Reusable, isolated, self-contained building blocks of a Vue application that encapsulate their own HTML template structure, JavaScript logic, and CSS styling.
 
 ---
 
 ## 1. Prerequisites
-- [Vue Instance](../level_01/vue_instance.md) — The root that holds all components.
-- [Declarative Rendering](../level_01/declarative_rendering.md) — The logic components use internally.
+
+- [Vue Instance](../level_01/vue_instance.md) — The root instance that mounts the component tree.
+- [Declarative Rendering](../level_01/declarative_rendering.md) — The core reactivity paradigm components use internally.
 
 ---
 
 ## 2. Term Category
-- **Vue Core Concept / Architecture**
+
+**Core Component Architecture (Encapsulated UI Tree Nodes)**: Components are the primary structural building blocks of Vue applications. Functioning as custom HTML elements (e.g. `<AppHeader>`, `<UserCard>`, `<DataTable>`), components encapsulate template markup, reactive state logic, and scoped styles into reusable isolated units. Arranged in a hierarchical Component Tree (Root -> Parent -> Child), components enforce encapsulated scope—state inside one component instance remains completely isolated from parallel instances—while communicating via explicit channels (Props Down, Events Up, Slots, Provide/Inject). Executed across client-side rendering and SSR contexts, components match traditional web modularity mental models.
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In traditional web development, if you had a "User Profile Card" that appeared on 5 different pages, you had to copy and paste the HTML 5 times. If the design changed, you had to hunt down all 5 files and update them manually. 
-Vue solves this with **Components**. You define the User Profile Card once. You give it a custom HTML tag name (like `<UserProfile>`). Then, you just use that custom tag anywhere in your app. It's the ultimate form of code reuse.
 
-### (2) The Component Tree
-A Vue application is not just one file; it is a **Tree of Components**.
-- `<App>` (The Root Component)
-  - `<Navbar>`
-    - `<SearchBar>`
-    - `<UserProfileIcon>`
-  - `<MainContent>`
-    - `<Sidebar>`
-    - `<Feed>`
-      - `<Post>` (Reused 10 times)
+In traditional web development, if a web application needed a "User Profile Card" on five different pages, developers had to copy and paste identical HTML structure onto five separate HTML files. If the card design changed (e.g., adding a status badge), developers had to hunt down all five HTML files and update them manually.
 
-### (3) Isolation
-The most important rule of a component is that it is **isolated**. 
-If you use the `<Post>` component 10 times, Vue creates 10 separate, independent instances in memory. If you click a "Like" button inside the 3rd post, only the 3rd post's internal state changes. The other 9 posts are completely unaffected.
+Furthermore, managing global JavaScript scope meant that event listeners or state variables for one card frequently interfered with other cards on the same page.
+
+Vue introduced **Components** to solve UI duplication and state pollution. You define the User Profile Card once as a component. You give it a custom HTML tag name (like `<UserProfileCard>`). Then, you drop that tag anywhere in your application. It encapsulates its own HTML markup, JavaScript reactivity, and CSS rules into a single isolated unit.
+
+### (2) Reality Metaphor
+
+Imagine a lego brick factory manufacturing custom specialized toy modules—like a cockpit block, a wheel assembly, or a solar panel array.
+
+Instead of hand-carving plastic from scratch every time you want to build a spaceship toy, you manufacture the `<CockpitModule>` brick once. You can insert ten `<CockpitModule>` bricks into ten different toy models. Each cockpit brick operates independently: opening the canopy on spaceship #3 does not open the canopy on spaceship #4. The Lego builder arranges these modular bricks into a unified, hierarchical **Component Tree**.
+
+### (3) Vue Code Examples
+
+#### Short Snippet
+```vue
+<!-- BaseButton.vue (Child Component) -->
+<script setup>
+defineProps({
+  label: String
+})
+</script>
+
+<template>
+  <button class="custom-btn">{{ label }}</button>
+</template>
+
+<style scoped>
+.custom-btn { padding: 8px 16px; border-radius: 4px; background: #1890ff; color: white; border: none; }
+</style>
+```
+
+#### Fuller Example
+```vue
+<!-- App.vue (Parent Component assembling Component Tree) -->
+<script setup>
+import { ref } from 'vue'
+import BaseButton from './BaseButton.vue' // Import child component
+
+const userList = ref([
+  { id: 1, name: 'Alice Specialist', role: 'Frontend Architect' },
+  { id: 2, name: 'Bob Lead', role: 'DevOps Engineer' }
+])
+
+function handleAction(userName) {
+  console.log(`Action triggered for user: ${userName}`)
+}
+</script>
+
+<template>
+  <main class="dashboard">
+    <h2>Team Directory</h2>
+    
+    <div class="user-grid">
+      <!-- Reusing components in a loop; each instance maintains isolated state -->
+      <div v-for="user in userList" :key="user.id" class="user-card">
+        <h3>{{ user.name }}</h3>
+        <p>{{ user.role }}</p>
+        
+        <!-- Custom component tag usage -->
+        <BaseButton 
+          :label="`Contact ${user.name}`" 
+          @click="handleAction(user.name)" 
+        />
+      </div>
+    </div>
+  </main>
+</template>
+
+<style scoped>
+.user-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.user-card { padding: 16px; border: 1px solid #e8e8e8; border-radius: 8px; }
+</style>
+```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Creating "God Components"
+### Mistake 1: Creating "God Components" (Violating Single Responsibility Principle)
 
-**The mistake:** A developer builds an entire page (Navigation, Sidebar, Feed, Footer) inside a single component file that is 3,000 lines long.
+**The mistake:** Building an entire page layout (Navigation bar, Sidebar, Feed, Modals, Footer) inside a single 3,000-line `.vue` component file.
 
-**Why it's wrong:** It completely defeats the purpose of components! It is impossible to test, impossible to reuse parts of the page elsewhere, and a nightmare to read.
-**Golden Rule:** If a component is larger than 300 lines of code, or if a specific piece of UI (like a button or a card) appears in more than one place, extract it into its own smaller Component.
+**Why it's wrong:** It completely defeats the architectural purpose of components. Long monolithic components are impossible to unit test, impossible to reuse elsewhere, and extremely difficult to maintain.
+
+*Incorrect:*
+```vue
+<!-- App.vue containing 3,000 lines of navbar, sidebar, analytics charts, and footers -->
+```
+
+*Fix:* Extract reusable sub-views into separate focused components (`Navbar.vue`, `Sidebar.vue`, `AnalyticsChart.vue`).
+```vue
+<template>
+  <Navbar />
+  <main><AnalyticsChart /></main>
+  <Footer />
+</template>
+```
 
 ---
 
-### Mistake 2: Using Single-Word Component Names (Naming Collisions)
+### Mistake 2: Single-Word Component Names (Colliding with Native HTML5 Tags)
 
-**The mistake:** Naming a custom component `Header.vue` or `Item.vue`.
+**The mistake:** Naming a custom Vue component file `Header.vue` or `Item.vue`.
 
-**Why it's wrong:** HTML5 standards introduce new tags over time. Single-word component names risk collision with standard HTML tags. Use multi-word component names (`AppHeader.vue`, `TodoItem.vue`).
+**Why it's wrong:** HTML5 standards continuously introduce new native tags over time (`<header>`, `<item>`, `<article>`). Single-word custom component names risk colliding with standard HTML tags. Use multi-word component names (`AppHeader.vue`, `TodoItem.vue`).
 
 *Incorrect:*
 ```javascript
-// Component file named Header.vue
-app.component('Header', Header); // ❌ Conflicts with HTML5 <header> tag!
+// Component named Header.vue
+app.component('Header', Header); // ❌ Collides with HTML5 <header> tag!
 ```
 
 *Fix:*
 ```javascript
-// Multi-word component name
-app.component('AppHeader', AppHeader); // Safe multi-word naming
+// Multi-word component naming convention
+app.component('AppHeader', AppHeader); // Safe multi-word name
 ```
 
 ---
 
-### Mistake 3: Importing Components in `<script setup>` Without Registering Them (Vue 2 Habit)
+### Mistake 3: Explicitly registering imported components inside `<script setup>` (Vue 2 Habit)
 
-**The mistake:** Adding `components: { ChildComponent }` options block inside `<script setup>`.
+**The mistake:** Adding `components: { ChildComponent }` options blocks inside Vue 3 `<script setup>`.
 
-**Why it's wrong:** In `<script setup>`, imported components are automatically registered and made available to template syntax. Specifying a `components` object is unnecessary.
+**Why it's wrong:** In `<script setup>`, any imported component variable is automatically registered and made available to template syntax immediately. Specifying a `components` registration block is redundant.
 
 *Incorrect:*
 ```vue
@@ -92,90 +160,194 @@ export default { components: { Child } }; // ❌ Redundant Options API block in 
 *Fix:*
 ```vue
 <script setup>
-import Child from './Child.vue'; // Automatically registered and ready to use in <template>
+import Child from './Child.vue'; // Automatically registered and ready in <template>
 </script>
 ```
 
-
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Component Registration
+### Exercise 1: IoT Smart Home Dashboard Component Tree (IoT)
 
-**Problem:** You created a new file `Button.vue`. In your `App.vue`, you try to write `<Button />` in the template, but Vue throws an error: "Failed to resolve component". What did you forget to do?
+**Scenario:** A smart home dashboard displays multiple environment sensors (Temperature, Humidity, Motion). You must construct a reusable component `<SensorTile>` that accepts sensor parameters and renders isolated tile states.
 
-**Expected output:**
+**Requirements:**
+1. Create `SensorTile.vue` accepting props `title`, `value`, `unit`, and `isAlert`.
+2. Display alert styling when `isAlert` is true.
+3. Import and render multiple `<SensorTile>` components inside `SmartHomeApp.vue`.
+
 > [!check]- Answer
-> ```text
-> You forgot to import it!
-> In modern Vue (`<script setup>`), you simply need to import the component into the file where you want to use it:
-> `import Button from './Button.vue'`
-> Once imported, Vue automatically makes the `<Button>` tag available in the template.
-> ```
-> - Vue doesn't magically know where your files are.
-> 
----
-
-### Exercise 2: SFC Component Import and Usage
-
-**Problem:** Write Vue 3 `<script setup>` importing `BaseCard.vue` and rendering it with title prop `'News'` inside `<template>`.
-
-**Expected output:**
-> [!check]- Answer
+>
+> #### Implementation
 > ```vue
-> <script setup> import BaseCard from './BaseCard.vue'; </script> <template> <BaseCard title="News" /> </template>
-> ```
-> - Imported SFC components inside `<script setup>` are available directly in template.
-> 
-> ```vue
+> <!-- SensorTile.vue (Child) -->
 > <script setup>
-> import BaseCard from './BaseCard.vue';
+> defineProps({
+>   title: String,
+>   value: Number,
+>   unit: String,
+>   isAlert: Boolean
+> })
 > </script>
 > 
 > <template>
->   <BaseCard title="News" />
+>   <div :class="['tile', { alert: isAlert }]">
+>     <h4>{{ title }}</h4>
+>     <p class="reading">{{ value }} {{ unit }}</p>
+>   </div>
+> </template>
+> 
+> <style scoped>
+> .tile { padding: 12px; border: 1px solid #ccc; border-radius: 6px; }
+> .alert { border-color: #ff4d4f; background: #fff1f0; }
+> .reading { font-size: 20px; font-weight: bold; }
+> </style>
+> ```
+> 
+> ```vue
+> <!-- SmartHomeApp.vue (Parent) -->
+> <script setup>
+> import { ref } from 'vue'
+> import SensorTile from './SensorTile.vue'
+> 
+> const sensors = ref([
+>   { id: 1, title: 'Living Room Temp', value: 22, unit: '°C', isAlert: false },
+>   { id: 2, title: 'Server Rack Temp', value: 88, unit: '°C', isAlert: true }
+> ])
+> </script>
+> 
+> <template>
+>   <div class="dashboard">
+>     <h2>Smart Home Sensors</h2>
+>     <div class="grid">
+>       <SensorTile 
+>         v-for="s in sensors" 
+>         :key="s.id" 
+>         v-bind="s" 
+>       />
+>     </div>
+>   </div>
 > </template>
 > ```
+>
+> #### Technical Explanation
+> 1. **Concept**: Components abstract UI markup into reusable, self-contained elements (`<SensorTile>`).
+> 2. **Concept**: Props (`v-bind="s"`) configure component instances independently.
+> 3. **Concept**: Scoped styles prevent tile CSS rules from leaking to parent containers.
+> 4. **Concept**: Multiple instances maintain isolated memory scopes.
 > 
 ---
 
-### Exercise 3: PascalCase vs kebab-case Component Naming
+### Exercise 2: Financial Stock Watchlist Component Modularization (Finance)
 
-**Problem:** Why is PascalCase (`<UserCard />`) recommended for component tags inside Vue Single File Components (SFCs)?
+**Scenario:** A stock trading application requires modularizing a stock watchlist table into clean reusable `<StockRow>` components.
 
-**Expected output:**
+**Requirements:**
+1. Build `StockRow.vue` component displaying ticker, price, and price change percentage.
+2. Implement click handler emitting selected ticker to parent.
+3. Render list of `<StockRow>` instances inside `Watchlist.vue`.
+
 > [!check]- Answer
-> ```text
-> PascalCase tags visually distinguish custom Vue components from native lowercase HTML elements (`<div>`, `<span>`).
-> ```
-> - PascalCase `<MyComponent />` distinguishes Vue components from native HTML elements.
+>
+> #### Implementation
+> ```vue
+> <!-- StockRow.vue -->
+> <script setup>
+> defineProps({
+>   symbol: String,
+>   price: Number,
+>   changePercent: Number
+> })
 > 
-> ```html
-> <AppHeader />
-> ```
+> const emit = defineEmits(['select'])
+> </script>
 > 
+> <template>
+>   <div class="stock-row" @click="emit('select', symbol)">
+>     <span class="sym">{{ symbol }}</span>
+>     <span class="price">${{ price.toFixed(2) }}</span>
+>     <span :class="['change', changePercent >= 0 ? 'up' : 'down']">
+>       {{ changePercent >= 0 ? '+' : '' }}{{ changePercent }}%
+>     </span>
+>   </div>
+> </template>
+> 
+> <style scoped>
+> .stock-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
+> .up { color: #52c41a; }
+> .down { color: #ff4d4f; }
+> </style>
+> ```
+>
+> #### Technical Explanation
+> 1. **Concept**: `defineProps` declares explicit input interfaces for components.
+> 2. **Concept**: `defineEmits` declares upward event channels back to parent scopes.
+> 3. **Concept**: Clicking rows triggers component emits without mutating props directly.
+> 4. **Concept**: Decouples UI table rendering from parent state logic.
 > 
 ---
 
-## 7. Related Terms
-- [Single-File Components (SFCs)](sfc.md) — The physical file format used to write components.
-- [Props](props.md) — How you pass data into a component.
-- [Vue Instance](../level_01/vue_instance.md) — Related concept: Vue Instance.
-- [Dynamic Components (`<component :is>`)](dynamic_components.md) — Related concept: Dynamic Components (`<component :is>`).
-- [Fallthrough Attributes (`$attrs`)](fallthrough_attributes.md) — Related concept: Fallthrough Attributes (`$attrs`).
-- [Teleport](../level_05/teleport.md) — Related concept: Teleport.
-- [Transitions & Animations](../level_10/transition.md) — Related concept: Transitions & Animations.
-- [Vue DevTools](../level_10/vue_devtools.md) — Related concept: Vue DevTools.
-- [Vue Test Utils](../level_10/vue_test_utils.md) — Related concept: Vue Test Utils.
-- [Slots](../level_05/slots.md) — Related concept: Slots.
-- [Provide / Inject](../level_05/provide_inject.md) — Related concept: Provide / Inject.
+### Exercise 3: Real-Time Network Health Indicator Component (Networking)
+
+**Scenario:** A network monitoring tool displays router health badges using PascalCase component tags `<HealthBadge>` with custom status prop inputs.
+
+**Requirements:**
+1. Create `HealthBadge.vue` accepting string prop `status` ('HEALTHY', 'DEGRADED', 'CRITICAL').
+2. Render status text with corresponding color theme.
+3. Demonstrate PascalCase component usage inside parent template.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```vue
+> <!-- HealthBadge.vue -->
+> <script setup>
+> defineProps({
+>   status: {
+>     type: String,
+>     default: 'HEALTHY'
+>   }
+> })
+> </script>
+> 
+> <template>
+>   <span :class="['badge', status.toLowerCase()]">
+>     ● {{ status }}
+>   </span>
+> </template>
+> 
+> <style scoped>
+> .badge { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+> .healthy { background: #e6f7ff; color: #1890ff; }
+> .degraded { background: #fffbe6; color: #faad14; }
+> .critical { background: #fff1f0; color: #ff4d4f; }
+> </style>
+> ```
+>
+> #### Technical Explanation
+> 1. **Concept**: PascalCase tags (`<HealthBadge />`) visually distinguish custom Vue components from native HTML elements.
+> 2. **Concept**: Component props provide default fallback values when un-specified.
+> 3. **Concept**: Class binding maps props to scoped CSS styles cleanly.
+> 4. **Concept**: Encapsulates badge styling into a single reusable unit.
+> 
+---
+
+## 6. Related Terms
+
+- [Single-File Components (SFCs)](sfc.md) — Physical `.vue` file structure.
+- [Props](props.md) — Passing data down into components.
+- [Emitting Events (`defineEmits`)](emit.md) — Sending event messages up from components.
+- [Dynamic Components (`<component :is>`)](dynamic_components.md) — Runtime component swapping.
+- [Fallthrough Attributes (`$attrs`)](fallthrough_attributes.md) — Undeclared attribute forwarding.
+- [Slots](../level_05/slots.md) — Content distribution outlets.
 
 ---
 
-## 8. Key Takeaways
-- **Components** are reusable, isolated blocks of UI.
-- They allow you to define custom HTML tags (like `<MyButton>`).
+## 7. Key Takeaways
+
+- **Components** are reusable, isolated building blocks encapsulating HTML, JS, and CSS.
 - Every Vue application is structured as a hierarchical **Component Tree**.
-- Every time you use a component, a brand new, isolated instance is created in memory.
-- Keep components small and focused on a single responsibility.
+- Multi-word component names (`AppHeader.vue`) prevent collisions with native HTML5 tags.
+- In `<script setup>`, imported components are registered automatically.
+- Keep components small, focused on a single responsibility, and under 300 lines of code.

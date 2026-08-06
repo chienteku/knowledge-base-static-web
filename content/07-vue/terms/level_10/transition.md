@@ -1,67 +1,43 @@
 # Transitions & Animations
 
-> **Level 10 — Ecosystem & Tooling**
-> Built-in Vue components (`<Transition>` and `<TransitionGroup>`) that automatically coordinate CSS transition/animation classes or JavaScript hooks on elements when they enter or leave the DOM.
+> **Level 10 — Tooling & Ecosystem**
+> Built-in Vue components (`<Transition>` and `<TransitionGroup>`) that coordinate CSS transitions, animations, and JavaScript hooks automatically when DOM nodes enter, leave, or reorder within the component tree.
 
 ---
 
 ## 1. Prerequisites
-- [Components](../level_04/components.md) — Base template layouts.
-- [`v-if` / `v-show`](../level_03/v_if_show.md) — Conditional rendering triggers.
-- [Dynamic Components (`<component :is>`)](../level_04/dynamic_components.md) — Dynamic swapping layouts.
+
+- [Components](../level_04/components.md) — Custom template structures wrapped by transition components.
+- [`v-if` / `v-show`](../level_03/v_if_show.md) — Visibility directives triggering element insertion and removal transitions.
+- [Dynamic Components (`<component :is>`)](../level_04/dynamic_components.md) — Dynamic component swapping animated via transition modes.
 
 ---
 
 ## 2. Term Category
-- **Component Pattern**
+
+**Built-In Component (Animation Orchestrator)**: `<Transition>` and `<TransitionGroup>` are built-in Vue wrapper components designed to orchestrate entry, exit, and list reordering animations. Instead of requiring manual DOM class manipulation and timer management, Vue monitors target node lifecycle states and applies predefined CSS class suffixes (`-enter-from`, `-enter-active`, `-enter-to`, `-leave-from`, `-leave-active`, `-leave-to`) or JavaScript hooks (`onEnter`, `onLeave`) automatically.
+
+Unlike React CSSTransition (which requires third-party libraries like `react-transition-group`) or Angular's DSL animations engine, Vue integrates transition lifecycle hooks directly into its core Virtual DOM patch engine, supporting seamless CSS transitions, keyframe animations, and FLIP list reordering out of the box.
 
 ---
 
-## 3. Environment Context
-- **Client-Side (Browser)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In web design, sudden changes feel unpolished. If a modal pop-up snaps into existence instantly, it is jarring. If a list item vanishes without trace, it is easy to miss.
+In modern web applications, sudden UI element appearances or instant removals feel unpolished and disruptive. Modals snapping open without fade-ins, alert banners disappearing abruptly, or list items shifting without movement animations create jarring user experiences.
 
-However, adding transitions manually using raw CSS and JavaScript is tedious. You have to manually append classes, wait for animation timers, and physically remove DOM nodes only *after* their fade-out finishes.
+However, coordinating entry and exit animations manually in raw JavaScript requires complex timing coordination: adding enter CSS classes, waiting for animation frame callbacks, attaching `transitionend` event listeners, and physically removing DOM nodes only *after* exit animations complete. Vue designed `<Transition>` and `<TransitionGroup>` to automate DOM lifecycle class injection, allowing developers to describe animation aesthetics purely in CSS while Vue manages timing and node mounting.
 
-Vue designed **`<Transition>`** and **`<TransitionGroup>`** to automate this. Instead of manually coordinating timers, you wrap the target elements in Vue's helper components. Vue monitors their mount states and hooks into the browser's render loop, applying specific class suffixes exactly when the element enters, remains, or leaves the view.
+### (2) Reality Metaphor
+Imagine a theatrical stage stage manager coordinating actors entering and leaving a play performance. 
 
-### (2) How it works under the hood
+When an actor enters the stage, the stage manager dims the lights, cues the entry music, and signals the actor to walk onto stage (enter transition phase). When an actor leaves, the manager allows the actor to finish their exit monologue and bow before closing the curtain and guiding them offstage (leave transition phase). The stage manager never cancels the actor's exit scene halfway through.
 
-#### `<Transition>` (Single Element)
-`<Transition>` manages a single element or a set of mutually exclusive elements (using `v-if` / `v-else`). As the element changes state:
-1. **Enter (Mount/Show):** Vue applies classes to control the start, animation duration, and end of the transition.
-2. **Leave (Unmount/Hide):** Vue applies classes to control the exit animation, and physically deletes the element from the DOM only *after* the exit transition completes.
+Vue's `<Transition>` component acts as the digital stage manager—it handles the entry cues, applies CSS costumes (`v-enter-active`), and delays removing the DOM node until the curtain call animation completes.
 
-By default, classes use a `v-` prefix. If you name your transition (e.g. `<Transition name="fade">`), the prefix changes to `fade-`.
-
-```mermaid
-graph TD
-    subgraph Enter Phase
-        A[v-enter-from] --> B[v-enter-active]
-        B --> C[v-enter-to]
-    end
-    subgraph Leave Phase
-        D[v-leave-from] --> E[v-leave-active]
-        E --> F[v-leave-to]
-    end
-```
-
-#### `<TransitionGroup>` (Lists)
-Used when animating items rendered via `v-for`. Unlike `<Transition>`:
-- It renders an actual wrapper tag in the DOM (defaults to `<span>`, customizable via the `tag` prop).
-- It requires every child item to have a unique, stable `:key`.
-- It supports the **`-move`** class, which Vue applies to elements that are changing positions (e.g., when a list is sorted), utilizing the FLIP animation technique under the hood to ensure smooth movement.
-
-### (3) Code Examples
+### (3) Vue Code Examples
 
 #### Short Snippet
-A simple fade toggle:
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -69,17 +45,16 @@ const show = ref(true)
 </script>
 
 <template>
-  <button @click="show = !show">Toggle</button>
+  <button @click="show = !show">Toggle Modal</button>
   
   <Transition name="fade">
-    <div v-if="show" class="box">Hello Vue</div>
+    <div v-if="show" class="modal-box">Modal Dialog Content</div>
   </Transition>
 </template>
 
-<style>
-/* CSS class definitions matched to the transition name */
+<style scoped>
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
@@ -88,235 +63,383 @@ const show = ref(true)
 ```
 
 #### Fuller Example
-An animated todo list using `<TransitionGroup>` to animate additions, deletions, and moves.
-
 ```vue
-<!-- App.vue -->
+<!-- AnimatedTodoList.vue -->
 <script setup>
 import { ref } from 'vue'
 
 const items = ref([
-  { id: 1, text: 'Buy groceries' },
-  { id: 2, text: 'Clean room' }
+  { id: 101, text: 'Calibrate Industrial Sensors' },
+  { id: 102, text: 'Audit Telemetry Logs' }
 ])
-let nextId = 3
+let nextId = 103
 
 function addItem() {
-  items.value.push({ id: nextId++, text: `Task ${nextId}` })
+  items.value.unshift({ id: nextId++, text: `New Task #${nextId}` })
 }
-function remove(id) {
+
+function removeItem(id) {
   items.value = items.value.filter(item => item.id !== id)
 }
 </script>
 
 <template>
-  <div>
-    <button @click="addItem">Add Task</button>
-    
-    <!-- TransitionGroup rendering a <ul> tag -->
-    <TransitionGroup name="list" tag="ul" class="todo-list">
-      <li v-for="item in items" :key="item.id">
-        {{ item.text }}
-        <button @click="remove(item.id)">Delete</button>
+  <div class="todo-panel">
+    <button @click="addItem">Add Priority Task</button>
+
+    <!-- TransitionGroup handles v-for list animations and FLIP reordering -->
+    <TransitionGroup name="list" tag="ul" class="task-list">
+      <li v-for="item in items" :key="item.id" class="task-item">
+        <span>{{ item.text }}</span>
+        <button @click="removeItem(item.id)">Complete</button>
       </li>
     </TransitionGroup>
   </div>
 </template>
 
-<style>
-/* Transitions for adding/deleting */
+<style scoped>
+.task-list {
+  position: relative;
+  list-style: none;
+  padding: 0;
+}
+
+/* Enter and Leave Animations */
 .list-enter-active, .list-leave-active {
-  transition: all 0.5s ease;
+  transition: all 0.4s cubic-bezier(0.55, 0, 0.1, 1);
 }
 .list-enter-from, .list-leave-to {
   opacity: 0;
-  transform: translateX(30px);
+  transform: translateX(-30px);
 }
 
-/* 
-  .list-move applies transition classes when elements shift positions.
-  We make sure leaving elements are positioned absolutely so moving 
-  elements animate smoothly!
-*/
+/* Smooth FLIP position reordering animation for remaining list items */
 .list-move {
-  transition: transform 0.5s ease;
+  transition: transform 0.4s ease;
 }
 .list-leave-active {
   position: absolute;
+  width: 100%;
 }
 </style>
 ```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Elements overlapping during transition switches
+### Mistake 1: Transitioning Mutually Exclusive Elements Without `mode="out-in"`
 
-**The mistake:** Transitioning between two elements using `v-if`/`v-else` and seeing them stack vertically or jump during the transition.
+**The mistake:** Transitioning between two elements using `v-if` / `v-else` without setting the transition mode attribute.
 
-**Why it's wrong:** By default, Vue initiates the entrance transition of the incoming element and the exit transition of the outgoing element **at the exact same time**. For a brief moment, both elements are in the DOM, disrupting the layout flow.
+**Why it's wrong:** By default, Vue triggers the entrance animation of the new incoming element and the exit animation of the outgoing element simultaneously. For a brief moment, both elements exist in the DOM layout flow together, causing elements to stack vertically or jump erratically.
 
 *Incorrect:*
 ```vue
-<!-- Elements will overlap during animation -->
+<!-- ❌ Both buttons render simultaneously during transition, jumping layout! -->
 <Transition name="fade">
-  <button v-if="isEditing" key="save">Save</button>
-  <button v-else key="edit">Edit</button>
-</Transition>
-```
-
-*Fix:* Add the `mode` attribute to control the sequence.
-```vue
-<!-- Wait for the old button to disappear completely before mounting the new one -->
-<Transition name="fade" mode="out-in">
-  <button v-if="isEditing" key="save">Save</button>
-  <button v-else key="edit">Edit</button>
-</Transition>
-```
-
-**Golden Rule:** When animating transitions between mutually exclusive elements, always use `mode="out-in"` to prevent layout overlapping.
-
----
-
-### Mistake 2: Applying `<Transition>` to Multi-Root Component Elements Without a Single Root Node
-
-**The mistake:** Wrapping a multi-root element component inside `<Transition>`.
-
-**Why it's wrong:** `<Transition>` works by applying CSS transition classes to a single target DOM root node. Multi-root elements trigger a runtime warning and fail to animate.
-
-*Incorrect:*
-```vue
-<Transition>
-  <!-- 2 root elements inside Transition -->
-  <h1>Title</h1>
-  <p>Text</p> <!-- ❌ Warning: Transition expects a single root node! -->
+  <button v-if="isEditing" key="save">Save Changes</button>
+  <button v-else key="edit">Edit Profile</button>
 </Transition>
 ```
 
 *Fix:*
 ```vue
-<Transition>
+<!-- ✅ mode="out-in" waits for outgoing element to exit before mounting incoming element -->
+<Transition name="fade" mode="out-in">
+  <button v-if="isEditing" key="save">Save Changes</button>
+  <button v-else key="edit">Edit Profile</button>
+</Transition>
+```
+
+---
+
+### Mistake 2: Wrapping Multiple Root Nodes in `<Transition>`
+
+**The mistake:** Placing multiple top-level child elements inside a `<Transition>` component.
+
+**Why it's wrong:** `<Transition>` works by applying CSS animation classes to a single target DOM node. Multi-root children inside `<Transition>` trigger runtime warnings and fail to animate. (Use `<TransitionGroup>` for multi-node lists).
+
+*Incorrect:*
+```vue
+<Transition name="slide">
+  <!-- ❌ Error: Transition expects a single root DOM element! -->
+  <h1>Title</h1>
+  <p>Description text</p>
+</Transition>
+```
+
+*Fix:*
+```vue
+<Transition name="slide">
+  <!-- ✅ Single container root wrapper node -->
   <div>
     <h1>Title</h1>
-    <p>Text</p> <!-- Wrapped in single root container -->
+    <p>Description text</p>
   </div>
 </Transition>
 ```
 
 ---
 
-### Mistake 3: Confusing `<Transition>` (Single Element) with `<TransitionGroup>` (Lists)
+### Mistake 3: Using `<Transition>` Instead of `<TransitionGroup>` for `v-for` List Rendering
 
-**The mistake:** Wrapping a `v-for` list of items in `<Transition>` instead of `<TransitionGroup>`.
+**The mistake:** Wrapping a `v-for` list iteration in a `<Transition>` tag.
 
-**Why it's wrong:** `<Transition>` animates ONLY single elements or toggled `v-if/v-else` targets. Animating `v-for` element arrays requires `<TransitionGroup tag="ul">`.
+**Why it's wrong:** `<Transition>` only handles single element toggles or `v-if`/`v-else` swaps. Animating dynamic list arrays rendered with `v-for` requires `<TransitionGroup>`.
 
 *Incorrect:*
 ```vue
-<Transition>
-  <li v-for="item in list" :key="item.id">{{ item.name }}</li> <!-- ❌ Fails on lists! -->
+<!-- ❌ Fails to animate list items correctly! -->
+<Transition name="list">
+  <li v-for="item in list" :key="item.id">{{ item.name }}</li>
 </Transition>
 ```
 
 *Fix:*
 ```vue
-<TransitionGroup tag="ul">
+<!-- ✅ TransitionGroup manages dynamic node lists and FLIP reordering -->
+<TransitionGroup tag="ul" name="list">
   <li v-for="item in list" :key="item.id">{{ item.name }}</li>
 </TransitionGroup>
 ```
 
-
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Build a Slide Transition
+### Exercise 1: IoT Sensor Alarm Banner Transition
 
-**Problem:** You are building a notification toast. Create the CSS definitions for a slide-fade transition named `slide`. The banner should slide in from the right (`transform: translateX(100px)`) and fade in.
+**Scenario:** An industrial IoT control panel displays emergency alert banners. When a temperature threshold is exceeded, an alert banner must slide in smoothly from the top of the screen (`transform: translateY(-100%)`) and fade in.
 
-```vue
-<template>
-  <Transition name="slide">
-    <div v-if="active" class="toast">Saved Successfully!</div>
-  </Transition>
-</template>
+**Requirements:**
+1. Maintain reactive `hasAlert` boolean state.
+2. Wrap alert banner in `<Transition name="slide-down">`.
+3. Write CSS transitions for `-enter-from`, `-enter-active`, and `-leave-to` classes.
+4. Include a test assertion validating alert state toggling.
 
-<style>
-/* Complete the CSS transitions below */
-</style>
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```css
-> .slide-enter-active, .slide-leave-active {
+>
+> #### Implementation
+> ```vue
+> <script setup>
+> import { ref, onMounted } from 'vue'
+> 
+> const hasAlert = ref(false)
+> const alertMessage = ref('CRITICAL: High Sensor Temperature!')
+> 
+> function toggleAlert() {
+>   hasAlert.value = !hasAlert.value
+> }
+> 
+> onMounted(() => {
+>   testIotAlertTransition()
+> })
+> 
+> function testIotAlertTransition() {
+>   toggleAlert()
+>   console.assert(hasAlert.value === true, 'Test Failed: Alert toggle failed')
+>   console.log('IoT Alert Transition Test Passed')
+> }
+> </script>
+> 
+> <template>
+>   <div class="alarm-panel">
+>     <button @click="toggleAlert">Simulate Sensor Alarm</button>
+>     
+>     <Transition name="slide-down">
+>       <div v-if="hasAlert" class="alert-banner">
+>         ⚠️ {{ alertMessage }}
+>       </div>
+>     </Transition>
+>   </div>
+> </template>
+> 
+> <style scoped>
+> .alert-banner {
+>   background: #ff4d4f;
+>   color: white;
+>   padding: 12px;
+>   border-radius: 4px;
+>   margin-top: 10px;
+> }
+> .slide-down-enter-active, .slide-down-leave-active {
 >   transition: all 0.3s ease-out;
 > }
-> .slide-enter-from, .slide-leave-to {
->   transform: translateX(100px);
+> .slide-down-enter-from, .slide-down-leave-to {
+>   opacity: 0;
+>   transform: translateY(-20px);
+> }
+> </style>
+> ```
+>
+> #### Technical Explanation
+> 1. **Concept**: Vue automatically attaches `.slide-down-enter-active` classes when `hasAlert` becomes `true`.
+> 2. **Concept**: `transform: translateY(-20px)` and `opacity: 0` create smooth sliding fade entrances.
+> 3. **Concept**: The DOM element is removed from the layout only after `.slide-down-leave-active` finishes.
+> 4. **Concept**: Unit tests verify reactive boolean state toggling.
+> 
+---
+
+### Exercise 2: Real-Time Financial Stock Watchlist Reordering Animation
+
+**Scenario:** A stock trading application displays a watchlist sorted by percentage gain. As live prices update, stock rows change positions, requiring smooth FLIP animations via `<TransitionGroup>`.
+
+**Requirements:**
+1. Render watchlist array using `<TransitionGroup tag="tbody">`.
+2. Provide a function to sort stocks by gain percentage.
+3. Apply `.watchlist-move` CSS transition for FLIP reordering.
+4. Verify via inline test assertions that sorting mutates array ordering correctly.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```vue
+> <script setup>
+> import { ref, onMounted } from 'vue'
+> 
+> const watchlist = ref([
+>   { ticker: 'AAPL', gain: 1.2 },
+>   { ticker: 'NVDA', gain: 5.8 },
+>   { ticker: 'TSLA', gain: -0.5 }
+> ])
+> 
+> function sortByGain() {
+>   watchlist.value.sort((a, b) => b.gain - a.gain)
+> }
+> 
+> onMounted(() => {
+>   sortByGain()
+>   testFinancialWatchlistSort()
+> })
+> 
+> function testFinancialWatchlistSort() {
+>   console.assert(watchlist.value[0].ticker === 'NVDA', 'Test Failed: Sorting by gain failed')
+>   console.log('Financial Watchlist Transition Test Passed')
+> }
+> </script>
+> 
+> <template>
+>   <div class="watchlist-widget">
+>     <h4>Watchlist (FLIP Reorder Animation)</h4>
+>     <button @click="sortByGain">Sort by Top Gainers</button>
+>     
+>     <table>
+>       <TransitionGroup tag="tbody" name="watchlist">
+>         <tr v-for="stock in watchlist" :key="stock.ticker">
+>           <td>{{ stock.ticker }}</td>
+>           <td :class="stock.gain >= 0 ? 'green' : 'red'">
+>             {{ stock.gain > 0 ? '+' : '' }}{{ stock.gain }}%
+>           </td>
+>         </tr>
+>       </TransitionGroup>
+>     </table>
+>   </div>
+> </template>
+> 
+> <style scoped>
+> .watchlist-move {
+>   transition: transform 0.5s ease;
+> }
+> .green { color: #52c41a; }
+> .red { color: #ff4d4f; }
+> </style>
+> ```
+>
+> #### Technical Explanation
+> 1. **Concept**: `<TransitionGroup>` applies FLIP (First, Last, Invert, Play) calculations to translate elements smoothly during array reorders.
+> 2. **Concept**: Unique `:key="stock.ticker"` keys allow Vue to identify moving DOM nodes across sorts.
+> 3. **Concept**: `.watchlist-move` CSS property binds transition durations to position shifts.
+> 4. **Concept**: Unit tests verify array sorting logic.
+> 
+---
+
+### Exercise 3: E-Commerce Product Image Gallery Cross-Fade
+
+**Scenario:** An e-commerce product detail page allows shoppers to view different color variants. Swapping variant images must use `<Transition mode="out-in">` to cross-fade images without breaking gallery layout bounds.
+
+**Requirements:**
+1. Maintain selected variant image state.
+2. Wrap variant `<img>` in `<Transition name="crossfade" mode="out-in">`.
+3. Provide color selector buttons.
+4. Include a test assertion validating variant image swapping.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```vue
+> <script setup>
+> import { ref, onMounted } from 'vue'
+> 
+> const variants = ref([
+>   { color: 'Midnight Black', image: '/img/black.jpg' },
+>   { color: 'Silver White', image: '/img/silver.jpg' }
+> ])
+> const selectedVariant = ref(variants.value[0])
+> 
+> function selectVariant(v) {
+>   selectedVariant.value = v
+> }
+> 
+> onMounted(() => {
+>   testEcommerceGalleryTransition()
+> })
+> 
+> function testEcommerceGalleryTransition() {
+>   selectVariant(variants.value[1])
+>   console.assert(selectedVariant.value.color === 'Silver White', 'Test Failed: Variant selection failed')
+>   console.log('E-Commerce Gallery Transition Test Passed')
+> }
+> </script>
+> 
+> <template>
+>   <div class="gallery-card">
+>     <div class="image-wrapper">
+>       <Transition name="crossfade" mode="out-in">
+>         <div :key="selectedVariant.color" class="variant-display">
+>           <p>{{ selectedVariant.color }}</p>
+>         </div>
+>       </Transition>
+>     </div>
+>     
+>     <div class="controls">
+>       <button v-for="v in variants" :key="v.color" @click="selectVariant(v)">
+>         {{ v.color }}
+>       </button>
+>     </div>
+>   </div>
+> </template>
+> 
+> <style scoped>
+> .crossfade-enter-active, .crossfade-leave-active {
+>   transition: opacity 0.25s ease-in-out;
+> }
+> .crossfade-enter-from, .crossfade-leave-to {
 >   opacity: 0;
 > }
+> </style>
 > ```
-> - Match the class names: `.slide-enter-active`, `.slide-leave-active`, `.slide-enter-from`, and `.slide-leave-to`.
-> - Use standard CSS properties: `transition`, `transform`, and `opacity`.
+>
+> #### Technical Explanation
+> 1. **Concept**: `mode="out-in"` ensures the outgoing image fades out completely before the incoming variant fades in.
+> 2. **Concept**: Binding `:key="selectedVariant.color"` forces Vue to treat variant swaps as element replacement transitions.
+> 3. **Concept**: Scoped CSS transition rules apply opacity fades cleanly across image changes.
+> 4. **Concept**: Inline assertions verify variant selection updates.
 > 
 ---
 
-### Exercise 2: Vue Transition CSS Classes Matrix
+## 6. Related Terms
 
-**Problem:** List the 6 auto-generated CSS classes provided by `<Transition name="fade">` during enter and leave phases.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Enter: fade-enter-from, fade-enter-active, fade-enter-to
-> Leave: fade-leave-from, fade-leave-active, fade-leave-to
-> ```
-> - Enter phase: `fade-enter-from`, `fade-enter-active`, `fade-enter-to`
-> - Leave phase: `fade-leave-from`, `fade-leave-active`, `fade-leave-to`
-> 
-> ```css
-> .fade-enter-active, .fade-leave-active {
->   transition: opacity 0.5s ease;
-> }
-> .fade-enter-from, .fade-leave-to {
->   opacity: 0;
-> }
-> ```
-> 
----
-
-### Exercise 3: Transition mode Prop
-
-**Problem:** Which `mode` prop setting on `<Transition>` waits for the leaving element to finish animating out before entering the new element (`mode="out-in"`)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> mode="out-in"
-> ```
-> - `mode="out-in"` -> Outgoing element animates out first, then incoming element enters.
-> 
-> ```html
-> <Transition name="fade" mode="out-in">
->   <component :is="activeTab" />
-> </Transition>
-> ```
-> 
-> 
----
-
-## 7. Related Terms
-- [Dynamic Components (`<component :is>`)](../level_04/dynamic_components.md) — Swapping active nodes.
-- [`v-if` / `v-show`](../level_03/v_if_show.md) — The visibility attributes that trigger transitions.
-- [Components](../level_04/components.md) — Custom templates.
+- [Dynamic Components (`<component :is>`)](../level_04/dynamic_components.md) — Swapping dynamic component layouts animated by transitions.
+- [`v-if` / `v-show`](../level_03/v_if_show.md) — Visibility directives triggering element insertion and removal transitions.
+- [Components](../level_04/components.md) — Template building blocks animated by transition wrappers.
 
 ---
 
-## 8. Key Takeaways
-- **`<Transition>`** is a built-in wrapper component that adds entry/exit CSS classes to a single target element.
-- Custom animation class names are defined via the `name` prop (e.g. `<Transition name="slide">`).
-- Entry stages are tracked via `-enter-from`, `-enter-active`, and `-enter-to` classes.
-- Use **`mode="out-in"`** when transitioning between multiple nodes to prevent them from rendering simultaneously.
-- **`<TransitionGroup>`** manages list rendering animations (`v-for`) and supports the `-move` class for sorting reorders.
+## 7. Key Takeaways
+
+- **`<Transition>`** coordinates entry and exit animations for a single element or toggled `v-if`/`v-else` targets.
+- **`<TransitionGroup>`** manages list rendering animations (`v-for`) and supports FLIP position reordering via `-move` CSS classes.
+- Use **`mode="out-in"`** when animating between mutually exclusive nodes to prevent elements from rendering simultaneously.
+- Vue automatically injects CSS class suffixes (`-enter-from`, `-enter-active`, `-enter-to`, `-leave-from`, `-leave-active`, `-leave-to`) matching the `name` prop.
+- Ensure every child item inside `<TransitionGroup>` has a stable, unique `:key` attribute.

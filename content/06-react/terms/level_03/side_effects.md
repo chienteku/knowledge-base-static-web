@@ -1,162 +1,339 @@
 # Side Effects
 
 > **Level 3 — Component Lifecycle & Effects**
-> Anything a component does that reaches outside of itself and interacts with the outside world (e.g., fetching data from a server, manually changing the DOM, or setting a timer).
+> Operations executed by a component that interact with systems outside its scope, such as DOM mutations, network requests, or timers.
 
 ---
 
 ## 1. Prerequisites
-- [State](../level_02/state.md) — The internal data that should NOT be modified by a side effect directly during a render.
-- [Declarative Programming](../level_01/declarative_programming.md) — Side effects are the imperative actions that must be carefully managed.
+
+- [Render Purity](../level_01/render_purity.md) — The rule that rendering functions must be pure and free of side effects.
+- [Declarative Programming](../level_01/declarative_programming.md) — Isolating imperative side-effects from declarative component markup.
 
 ---
 
 ## 2. Term Category
-- **React Concept / Functional Programming**
+
+**Rendering Mechanic (effect execution model)**: In functional programming, a pure function takes inputs and returns an output without mutating external state or interacting with the external world. React components are designed to behave as pure functions during the rendering phase.
+
+A **Side Effect** (or "effect") is any operation that reaches outside the component's render execution context: writing to `localStorage`, fetching API data, establishing WebSocket connections, setting browser timers, or manually modifying DOM nodes. Architecturally, React requires side effects to be explicitly isolated within event handlers or effect hooks (`useEffect`, `useLayoutEffect`).
 
 ---
 
-## 3. Environment Context
-- **Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In functional programming, a "Pure Function" is a function that always returns the exact same output for the exact same input, and it does absolutely nothing else. 
-React components are supposed to be Pure Functions! If you pass `name="Alice"`, it should return `<div>Alice</div>`. 
-However, real web apps need to do "impure" things: they need to talk to databases, set `setTimeout`, and subscribe to WebSockets. Because these actions "affect the outside world," they are called **Side Effects**.
 
-### (2) Why Side Effects are Dangerous
-If you put a Side Effect directly in the main body of a component, you will break your app. 
-React can re-render a component 10 times in one second. If you have `fetch('/api')` sitting in the middle of your component, React will blast the server with 10 API requests in one second. 
-You must separate the "Pure Render" from the "Impure Side Effect".
+If a developer places a side effect (such as `fetch('/api/logs')` or `document.title = 'New'`) directly inside the body of a component function, the effect runs during the rendering phase.
 
-### (3) The Two Types of Effects
-1. **Effects without Cleanup:** Sending an analytics event, making a one-time API call, or changing the `document.title`. Once it runs, it's done.
-2. **Effects with Cleanup:** Opening a WebSocket connection, or setting a `setInterval`. If the component disappears from the screen, you MUST close the connection, otherwise it will run forever in the background and cause a memory leak.
+Because React can re-render components dozens of times per second (and may execute render functions multiple times under StrictMode or Concurrent Mode), executing side effects during render causes severe bugs:
+- Bombarding network servers with duplicate HTTP requests.
+- Writing corrupted logs into local browser storage.
+- Causing visual layout thrashing and freezing the browser UI.
 
----
+To preserve stability, React enforces a strict separation: **Rendering must remain pure; side effects must execute after render commitment (via `useEffect`) or in response to explicit user actions (via event handlers).**
 
-## 5. Common Mistakes & Pitfalls
+### (2) Reality Metaphor
 
-### Mistake 1: Executing Side Effects during Rendering
+Imagine blueprint drawing versus constructing a building.
 
-**The mistake:** A developer wants to change the title of the browser tab. They write `document.title = "Hello"` right above the `return` statement in their component.
+- **Pure Render (Blueprint Drafter):** An architect draws architectural plans on paper. Drawing a window on paper does not install glass, cut wood, or emit noise. The architect can erase and redraw the plan 50 times without altering physical reality.
+- **Side Effect (Construction Crew):** Operating heavy machinery, pouring concrete, and installing electrical wiring alter the physical world permanently.
+- **Rule of Isolation:** You would never allow a construction crew to start pouring concrete while the architect is still sketching preliminary blueprint drafts. React ensures blueprint drafting (rendering) completes before construction crews (side effects) operate.
 
-**Why it's wrong:** While this *might* work, it violates React's core rule: Rendering must be pure. Changing the document title is reaching outside the component (an effect). If React decides to pause or cancel that render (which happens in advanced React features like Concurrent Mode), your title will be corrupted.
-**Golden Rule:** Side effects MUST be placed inside the `useEffect` hook or inside an Event Handler (like `onClick`).
+### (3) React Code Examples
 
----
+#### Short Snippet
 
+```jsx
+import React, { useEffect, useState } from 'react';
 
-
-### Mistake 2: Placing Side-Effects (e.g. `localStorage.setItem` or HTTP requests) inside Component Render Bodies
-
-**The mistake:** Writing `localStorage.setItem('theme', theme)` directly inside component render code.
-
-**Why it's wrong:** Component render code MUST be pure. Executing side-effects during render causes unexpected duplicate executions under StrictMode or Concurrent rendering. Move side-effects to `useEffect` or event handlers.
-
-*Incorrect:*
-```javascript
-function App({ theme }) {
-  localStorage.setItem('theme', theme); // ❌ Impure side-effect during render!
-  return <div>App</div>;
-}
-```
-
-*Fix:*
-```javascript
-function App({ theme }) {
+function DocumentTitleUpdater({ title }) {
+  // ✅ Safe side-effect executed post-render
   useEffect(() => {
-    localStorage.setItem('theme', theme);
-  }, [theme]); // Safe side-effect in useEffect
-  return <div>App</div>;
+    document.title = title;
+  }, [title]);
+
+  return <h3>Current Page: {title}</h3>;
 }
 ```
 
-### Mistake 3: Using `useEffect` for User Event Responses That Belong in Event Handlers
+#### Fuller Example
 
-**The mistake:** Setting state `setIsSubmitted(true)` in button `onClick`, then triggering form POST request inside `useEffect` watching `isSubmitted`.
+```jsx
+import React, { useState, useEffect } from 'react';
 
-**Why it's wrong:** Effects are for **synchronization with external systems**, NOT user intent event handling! Trigger form submit API requests directly inside the button `onSubmit` / `onClick` event handler.
+function AnalyticsTracker({ pageId }) {
+  const [clickCount, setClickCount] = useState(0);
+
+  // Side Effect Type A: Synchronizing external system on prop update
+  useEffect(() => {
+    let active = true;
+    console.log(`Logging page view for: ${pageId}`);
+
+    fetch('/api/analytics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pageId, timestamp: Date.now() })
+    }).catch(err => console.error('Analytics log failed', err));
+
+    return () => {
+      active = false;
+    };
+  }, [pageId]);
+
+  // Side Effect Type B: User event handler side-effect
+  const handleButtonClick = () => {
+    setClickCount(prev => prev + 1);
+    // Directly trigger user-intent side effect in event handler
+    localStorage.setItem(`clicks_${pageId}`, String(clickCount + 1));
+  };
+
+  return (
+    <div className="analytics-box">
+      <h4>Page: {pageId}</h4>
+      <p>Interactions: {clickCount}</p>
+      <button onClick={handleButtonClick}>Track Interaction</button>
+    </div>
+  );
+}
+
+export default AnalyticsTracker;
+```
+
+---
+
+## 4. Common Mistakes & Pitfalls
+
+### Mistake 1: Executing Side Effects Directly in Component Render Bodies
+
+**The mistake:** Calling `fetch()`, writing to `localStorage`, or setting timers directly inside the body of a component.
+
+**Why it's wrong:** Component render bodies must remain pure. Executing side effects during render leads to duplicate calls under StrictMode and causes unexpected rendering loops.
 
 *Incorrect:*
-```javascript
-// Triggering API call in useEffect watching isSubmitted boolean
+```jsx
+function UserSettings({ theme }) {
+  localStorage.setItem('theme', theme); // ❌ Impure side-effect during render!
+  return <div>Theme: {theme}</div>;
+}
 ```
 
 *Fix:*
-```javascript
-const handleSubmit = async () => { await postFormData(); }; // Trigger in event handler
+```jsx
+function UserSettings({ theme }) {
+  useEffect(() => {
+    localStorage.setItem('theme', theme); // ✅ Isolated in useEffect
+  }, [theme]);
+  return <div>Theme: {theme}</div>;
+}
 ```
 
-## 6. Practice Exercises
+### Mistake 2: Using Effects for User Event Responses That Belong in Event Handlers
 
-### Exercise 1: Pure vs Impure
+**The mistake:** Setting state `setIsSubmitted(true)` in a button click handler, then using `useEffect` watching `isSubmitted` to trigger a form submit POST request.
 
-**Problem:** Which of the following operations are considered "Side Effects" in React?
-1. Formatting a user's name to uppercase.
-2. Saving data to `localStorage`.
-3. Calculating `2 + 2`.
-4. Subscribing to a chat room WebSocket.
+**Why it's wrong:** Effects are designed for **synchronizing component state with external systems**, not handling user intent. Form submission belongs directly inside the form's `onSubmit` or button's `onClick` handler.
 
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 2 and 4 are Side Effects. They reach outside the component (talking to the browser's storage and talking to a network server).
-> 1 and 3 are Pure operations. They only rely on local data and math.
-> ```
-> - If it touches the network, the DOM, or the Browser APIs, it's a side effect.
-> 
+*Incorrect:*
+```jsx
+const [submitted, setSubmitted] = useState(false);
+useEffect(() => {
+  if (submitted) postData(); // ❌ Misusing effect for user event response
+}, [submitted]);
+```
+
+*Fix:*
+```jsx
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  await postData(); // ✅ Direct imperative handler for user intent
+};
+```
+
+### Mistake 3: Deriving State in `useEffect` Instead of During Render
+
+**The mistake:** Updating a `fullName` state variable inside `useEffect` whenever `firstName` or `lastName` changes.
+
+**Why it's wrong:** Triggering state updates inside effects forces an unnecessary extra re-render pass. Calculate derived state directly during rendering.
+
+*Incorrect:*
+```jsx
+useEffect(() => {
+  setFullName(`${firstName} ${lastName}`); // ❌ Extra re-render!
+}, [firstName, lastName]);
+```
+
+*Fix:*
+```jsx
+const fullName = `${firstName} ${lastName}`; // ✅ Calculated during render
+```
+
 ---
 
+## 5. Practice Exercises
 
+### Exercise 1: Industrial IoT Telemetry Logger
 
-### Exercise 2: Categorizing Code: Render vs Side-Effect
+**Scenario:** An IoT sensor card displays pressure readings. When pressure exceeds safety limits, write a warning to an external audit log via HTTP POST without interfering with render performance.
 
-**Problem:** Categorize as Render or Side-Effect: 1. `document.title = 'New'` (Side-Effect); 2. `const double = count * 2` (Render); 3. `fetch('/api/data')` (Side-Effect).
+**Requirements:**
+1. Monitor `pressure` prop.
+2. If `pressure > 100`, post a warning log via `fetch`.
+3. Wrap side-effect logic inside `useEffect`.
+4. Render current pressure value.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Side-Effect, 2. Render, 3. Side-Effect
-> ```
-> ```text
-> 1. Side-Effect, 2. Render, 3. Side-Effect
+>
+> #### Implementation
+> ```jsx
+> import React, { useEffect } from 'react';
+> 
+> export function PressureMonitor({ sensorId, pressure }) {
+>   useEffect(() => {
+>     if (pressure > 100) {
+>       fetch('/api/alerts', {
+>         method: 'POST',
+>         headers: { 'Content-Type': 'application/json' },
+>         body: JSON.stringify({ sensorId, pressure, time: Date.now() })
+>       }).catch(console.error);
+>     }
+>   }, [sensorId, pressure]);
+> 
+>   return (
+>     <div>
+>       <h4>Sensor: {sensorId}</h4>
+>       <p>Pressure: {pressure} PSI</p>
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** Side-effects touch systems outside React (DOM, storage, network).
+> #### Technical Explanation
+> 1. **Render Isolation**: HTTP POST requests execute post-paint, preserving render purity.
+> 2. **Dependency Sync**: `[sensorId, pressure]` ensures alerts fire strictly on value shifts.
+> 3. **Non-Blocking UI**: Asynchronous logging runs without freezing UI updates.
+> 4. **StrictMode Compatibility**: Isolated side effects execute predictably across dev renders.
 > 
----
+### Exercise 2: Financial Order Submission Handler
 
-### Exercise 3: Event Handler vs Effect Placement Rule
+**Scenario:** A stock trading form processes order submissions. Ensure the trade execution API call runs inside the submit event handler rather than inside a `useEffect`.
 
-**Problem:** Should user-triggered actions (like clicking a Buy button) be handled in event handlers or `useEffect`? (Event handlers).
+**Requirements:**
+1. Capture order form submission event.
+2. Prevent default browser submission behavior (`e.preventDefault()`).
+3. Execute POST trade request directly inside `handleSubmit`.
+4. Render order submission status.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Event handlers
-> ```
-> ```text
-> Event handlers
+>
+> #### Implementation
+> ```jsx
+> import React, { useState } from 'react';
+> 
+> export function TradeOrderForm({ symbol }) {
+>   const [amount, setAmount] = useState(10);
+>   const [status, setStatus] = useState('Idle');
+> 
+>   const handleSubmit = async (e) => {
+>     e.preventDefault();
+>     setStatus('Submitting...');
+>     try {
+>       const res = await fetch('/api/trades', {
+>         method: 'POST',
+>         headers: { 'Content-Type': 'application/json' },
+>         body: JSON.stringify({ symbol, amount })
+>       });
+>       if (res.ok) setStatus('Executed');
+>       else setStatus('Failed');
+>     } catch {
+>       setStatus('Failed');
+>     }
+>   };
+> 
+>   return (
+>     <form onSubmit={handleSubmit}>
+>       <h4>Order: {symbol}</h4>
+>       <input type="number" value={amount} onChange={e => setAmount(+e.target.value)} />
+>       <button type="submit">Submit Trade</button>
+>       <p>Status: {status}</p>
+>     </form>
+>   );
+> }
 > ```
 >
-> **Explanation:** User event intentions should trigger imperative side-effects directly inside event handlers.
+> #### Technical Explanation
+> 1. **User Intent Placement**: Action side effects belong in event handlers.
+> 2. **No Redundant Effects**: Avoids artificial boolean states (`isSubmitting`) to trigger effects.
+> 3. **Synchronous Interception**: `e.preventDefault()` prevents browser page reloads.
+> 4. **Clean Feedback**: Updates UI state directly before and after API operations.
 > 
-## 7. Related Terms
-- [`useEffect` Hook](use_effect.md) — The official tool React gives you to safely execute Side Effects.
-- [Cleanup Functions](cleanup_functions.md) — How you manage Side Effects that need to be turned off.
-- [Render Purity](../level_01/render_purity.md) — Related concept: Render Purity.
-- [Strict Mode](../level_08/strict_mode.md) — Related concept: Strict Mode.
-- [`useNavigate` Hook](../level_09/use_navigate.md) — Related concept: `useNavigate` Hook.
+### Exercise 3: E-Commerce Scroll Position Restorer
+
+**Scenario:** An e-commerce catalog remembers window scroll positions when navigating between categories using browser session storage.
+
+**Requirements:**
+1. Save `window.scrollY` to `sessionStorage` on window scroll.
+2. Attach window event listener inside `useEffect`.
+3. Provide teardown cleanup removing scroll listener.
+4. Restore scroll position on initial mount.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> import React, { useEffect } from 'react';
+> 
+> export function ScrollRestorer({ pageKey }) {
+>   useEffect(() => {
+>     const savedY = sessionStorage.getItem(`scroll_${pageKey}`);
+>     if (savedY) {
+>       window.scrollTo(0, parseInt(savedY, 10));
+>     }
+> 
+>     const handleScroll = () => {
+>       sessionStorage.setItem(`scroll_${pageKey}`, String(window.scrollY));
+>     };
+> 
+>     window.addEventListener('scroll', handleScroll);
+> 
+>     return () => {
+>       window.removeEventListener('scroll', handleScroll);
+>     };
+>   }, [pageKey]);
+> 
+>   return <div className="page-content">Restoring Scroll Position...</div>;
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **External Sync**: `sessionStorage` and `window.scrollTo` reach outside React state cleanly.
+> 2. **Teardown Isolation**: Cleaning up `removeEventListener` prevents memory leaks.
+> 3. **Page Key Binding**: Dependencies re-bind listeners cleanly on route shifts.
+> 4. **Render Purity**: Component render remains self-contained.
+> 
+---
+
+## 6. Related Terms
+
+- [Render Purity](../level_01/render_purity.md) — The core principle forbidding side effects during render.
+- [`useEffect` Hook](use_effect.md) — The hook designed to encapsulate side effects.
+- [Cleanup Functions](cleanup_functions.md) — Teardown callbacks for side effects.
+- [Component Lifecycle](component_lifecycle.md) — Lifecycle timing governing effect execution.
 
 ---
 
-## 8. Key Takeaways
-- A **Side Effect** is any operation that interacts with the outside world (Network, DOM, Timers, Subscriptions).
-- React components must be pure during the rendering phase.
-- You can NEVER place a side effect directly in the main body of a component.
-- Side effects must be relegated to Event Handlers or the `useEffect` hook.
+## 7. Key Takeaways
+
+- Side effects are operations that reach outside a component (DOM, storage, network, timers).
+- React components must remain pure during the rendering phase.
+- Never place side effects directly inside the component render function body.
+- Put synchronization side effects inside `useEffect` or `useLayoutEffect`.
+- Put user-intent side effects (form submission, button clicks) directly inside event handlers.
+```
+
+---
+
+## File 6: `knowledge-base/06-react/terms/level_03/stale_closures.md`
+
+```markdown

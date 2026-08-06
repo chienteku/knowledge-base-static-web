@@ -1,270 +1,344 @@
 # Derived State
 
 > **Level 2 — State & Reactivity**
-> Computing values on-the-fly during render execution instead of storing redundant state in `useState`.
+> Computing values dynamically on-the-fly during render execution instead of storing redundant duplicate state in `useState`.
 
 ---
 
 ## 1. Prerequisites
-- [State](state.md) — The source variables from which data is derived.
-- [Re-rendering](re_rendering.md) — The render execution loop that recalculates variables.
+
+- [State](state.md) — The primary source state variables from which derived values are calculated.
+- [Re-rendering](re_rendering.md) — The component execution loop that re-calculates local variables on every render pass.
 
 ---
 
 ## 2. Term Category
-- **Rendering Mechanic**
+
+**Component Pattern (state computation pattern)**: Derived State is an architectural pattern in React where values are calculated on-the-fly directly inside the component body during render execution. Rather than storing calculated or transformed data inside redundant `useState` hooks and attempting to keep them synchronized using `useEffect`, derived values are computed dynamically from existing props or state snapshots.
+
+This pattern enforces a single source of truth, eliminates out-of-sync state bugs, and prevents unnecessary extra re-render cycles.
 
 ---
 
-## 3. Environment Context
-- **Client-Side (SPA) / Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In React applications, components often need to display calculations based on existing state or props. For example, if you display a list of items, you might want to show:
--   The total number of items.
--   A subset of items filtered by a search query.
--   Whether the list is empty.
+A common beginner anti-pattern in React is storing redundant calculated data in state. For example, if a component displays a list of items and a search query, developers often create three separate state variables and use `useEffect` to sync them:
 
-A common beginner mistake is to store these calculated values in their own independent `useState` variables, and use `useEffect` hooks to synchronize them:
-```javascript
-// ANTI-PATTERN: Redundant state and extra sync effects!
+```jsx
+// ❌ ANTI-PATTERN: Redundant state and extra sync effect!
 const [items, setItems] = useState([]);
-const [itemCount, setItemCount] = useState(0);
+const [query, setQuery] = useState('');
+const [filteredItems, setFilteredItems] = useState([]);
 
 useEffect(() => {
-  setItemCount(items.length);
-}, [items]);
+  setFilteredItems(items.filter(i => i.name.includes(query)));
+}, [items, query]);
 ```
 
-This is a major anti-pattern because it:
-1.  **Causes Redundancy:** You are storing the same data twice in state (`items` and `itemCount`).
-2.  **Triggers Double Renders:** Updating `items` triggers Render #1, which fires the `useEffect`, calling `setItemCount`, which triggers Render #2.
-3.  **Introduces Sync Bugs:** If a developer updates `items` but forgets to run the sync function, the UI state becomes inconsistent.
+This anti-pattern introduces severe issues:
+1. **State Redundancy:** Storing `filteredItems` duplicates data already present in `items` and `query`.
+2. **Double Renders:** Updating `query` triggers Render #1, which fires the `useEffect`, calling `setFilteredItems`, which triggers an unnecessary Render #2.
+3. **Out-of-Sync Bugs:** If a developer updates `items` without running the sync effect, the UI displays stale filtered data.
 
-The solution is to use **Derived State**:
--   **Derived State:** Any value that can be computed directly from existing state or props during the render pass.
--   Because React executes the component function on every render, standard JavaScript variables defined inside the component automatically recalculate on every update. No `useState` or `useEffect` is needed.
--   If the derivation calculation is CPU-heavy (like sorting 5,000 items), you can wrap it in `useMemo` to cache the output unless its dependencies change.
-
----
+React solves this through **Derived State**:
+- Any value that can be computed from existing props or state should be computed directly inside the component body during render.
+- Because React executes the component function on every render, local variables automatically recalculate with zero extra hooks.
+- If a derivation is computationally expensive (e.g. sorting 10,000 items), wrap it in `useMemo` to cache the calculation.
 
 ### (2) Reality Metaphor
-Imagine tracking your age on a card.
-- **Redundant State (Manual Sync):** You write your birthday and your "Current Age" on a sticky note. Every year on your birthday, you must remember to cross out the age and write the new number. If you forget, your written age becomes out of sync with your actual age.
-- **Derived State (On-the-fly math):** You write down only your "Birth Date" on the card. Whenever anyone asks: *"How old are you?"*, you check the current year, subtract your birth year, and state the answer. It is mathematically impossible for your age to get out of sync with your birth date because you calculate it dynamically when requested.
+Imagine tracking your age on an identity card.
 
----
+- **Redundant State (Manual Sync):** You write down your birth date AND your "Current Age" on a sticky note. Every year on your birthday, you must remember to cross out your age and write a new number. If you forget, your written age gets out of sync with your actual birth date.
+- **Derived State (Dynamic Calculation):** You write down ONLY your "Birth Date" on the card. Whenever anyone asks: *"How old are you?"*, you check the current date, subtract your birth date, and state the answer. It is mathematically impossible for your age to get out of sync with your birth date because you calculate it dynamically on demand.
 
 ### (3) React Code Examples
 
-#### 1. The Redundant State Anti-Pattern (Slow and Verbose)
+#### Short Snippet
 ```jsx
-import React, { useState, useEffect } from 'react';
-
-function BadCart({ items }) {
-  const [totalPrice, setTotalPrice] = useState(0);
-
-  // Triggering extra renders and sync loops!
-  useEffect(() => {
-    const total = items.reduce((sum, item) => sum + item.price, 0);
-    setTotalPrice(total);
-  }, [items]);
-
-  return <div>Total Price: ${totalPrice}</div>;
-}
-```
-
-#### 2. The Clean Derived State Pattern (Recommended)
-```jsx
-import React from 'react';
-
-function GoodCart({ items }) {
-  // Calculated on the fly during render execution. Zero hooks required!
+// GOOD: Derived state computed dynamically during render. Zero hooks required!
+function CartSummary({ items }) {
+  const itemCount = items.length;
   const totalPrice = items.reduce((sum, item) => sum + item.price, 0);
 
-  return <div>Total Price: ${totalPrice}</div>;
+  return <div>Total ({itemCount} items): ${totalPrice.toFixed(2)}</div>;
+}
+```
+
+#### Fuller Example
+```jsx
+import React, { useState, useMemo } from 'react';
+
+export default function DerivedStateFilter({ userList }) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedRole, setSelectedRole] = useState('ALL');
+
+  // Derived State: Filtered list is computed dynamically during render frame
+  // Wrapped in useMemo to cache expensive array filtering
+  const filteredUsers = useMemo(() => {
+    return userList.filter(user => {
+      const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesRole = selectedRole === 'ALL' || user.role === selectedRole;
+      return matchesSearch && matchesRole;
+    });
+  }, [userList, searchQuery, selectedRole]);
+
+  // Derived State: Simple primitive calculations require NO useMemo
+  const totalCount = userList.length;
+  const matchCount = filteredUsers.length;
+
+  return (
+    <div className="filter-panel">
+      <h3>User Directory ({matchCount} of {totalCount} shown)</h3>
+
+      <input 
+        value={searchQuery} 
+        onChange={e => setSearchQuery(e.target.value)} 
+        placeholder="Search names..." 
+      />
+
+      <select value={selectedRole} onChange={e => setSelectedRole(e.target.value)}>
+        <option value="ALL">All Roles</option>
+        <option value="Admin">Admin</option>
+        <option value="Developer">Developer</option>
+      </select>
+
+      <ul>
+        {filteredUsers.map(user => (
+          <li key={user.id}>{user.name} — {user.role}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 ```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Copying props into state snapshots
+### Mistake 1: Copying Props into Initial State Variables (`useState(props.val)`)
 
-**The mistake:** Storing an incoming prop inside a local state variable to display or use it:
+**The mistake:** Initializing local state with an incoming prop: `const [userName, setUserName] = useState(user.name)`.
+
+**Why it's wrong:** The `useState` initializer function evaluates ONLY when the component mounts. If the parent component updates and passes a new `user` prop later, the local `userName` state ignores the prop change, causing stale, out-of-sync UI data.
+
+*Incorrect:*
 ```jsx
-// BAD: Name snapshot will not update if parent passes a new user object!
-function Profile({ user }) {
+// ❌ Stale data bug: userName will NOT update when parent user prop changes!
+function ProfileCard({ user }) {
   const [userName, setUserName] = useState(user.name);
-  
-  return <h1>Profile: {userName}</h1>;
-}
-```
-
-**Why it's wrong:** The `useState(user.name)` initializer only runs once when the component is mounted. If the parent component updates and passes a new `user` prop, the local `userName` state remains unchanged, leaving the component displays outdated data.
-
-*Fix:* Use the prop values directly in your JSX, or derive local variables from them:
-```jsx
-// GOOD: Always displays the latest prop values dynamically
-function Profile({ user }) {
-  return <h1>Profile: {user.name}</h1>;
-}
-```
-
----
-
-
-
-### Mistake 2: Duplicating Calculated Values into Separate `useState` Hooks (Derived State Anti-Pattern)
-
-**The mistake:** Storing `firstName`, `lastName`, AND `fullName` in 3 separate state variables, manually updating `fullName` via `useEffect`.
-
-**Why it's wrong:** Duplicating derived state leads to out-of-sync state bugs and triggers unnecessary extra re-renders. Calculate derived values on-the-fly during render: `const fullName = `${firstName} ${lastName}`;`.
-
-*Incorrect:*
-```javascript
-const [firstName, setFirstName] = useState('');
-const [fullName, setFullName] = useState('');
-useEffect(() => { setFullName(firstName + ' ' + lastName); }, [firstName, lastName]); // ❌ Extra re-render!
-```
-
-*Fix:*
-```javascript
-const [firstName, setFirstName] = useState('');
-const [lastName, setLastName] = useState('');
-const fullName = `${firstName} ${lastName}`; // Calculated during render!
-```
-
-### Mistake 3: Using `useState` to Copy Props into State Without Resetting on Prop Changes
-
-**The mistake:** Initializing `const [email, setEmail] = useState(user.email);` and expecting `email` state to update automatically when parent passes a new `user` prop.
-
-**Why it's wrong:** `useState(initialValue)` evaluates initial state ONLY on initial component mount! When parent `user` prop changes, local state remains stuck on old initial values. Reset via key prop (`key={user.id}`) or compute during render.
-
-*Incorrect:*
-```javascript
-function Form({ user }) {
-  const [email, setEmail] = useState(user.email); // ❌ Stale when user prop changes!
+  return <h3>{userName}</h3>;
 }
 ```
 
 *Fix:*
-```javascript
-// Pass key={user.id} from parent to reset component state on user prop changes
-<Form key={user.id} user={user} />
+```jsx
+// ✅ Derived State: Always displays the latest prop value dynamically
+function ProfileCard({ user }) {
+  const userName = user.name; // Computed during render!
+  return <h3>{userName}</h3>;
+}
 ```
 
-## 6. Practice Exercises
+### Mistake 2: Using `useEffect` to Synchronize State Variables
 
-### Exercise 1: Eliminating Synchronization Effects
+**The mistake:** Storing `firstName`, `lastName`, AND `fullName` in three state variables, using `useEffect` to sync `fullName`.
 
-**Problem:** Refactor the search filter component below to eliminate all redundant state and `useEffect` updates using derived state:
+**Why it's wrong:** Updating state inside `useEffect` causes a double-render pass (Render #1 with old state -> Effect -> Render #2 with new state), degrading performance and creating potential infinite update loops.
 
+*Incorrect:*
 ```jsx
-// Before (Redundant & Buggy):
-import React, { useState, useEffect } from 'react';
+const [first, setFirst] = useState('Alice');
+const [last, setLast] = useState('Smith');
+const [full, setFull] = useState('');
 
-function SearchList({ users }) {
-  const [search, setSearch] = useState('');
-  const [filteredUsers, setFilteredUsers] = useState([]);
+// ❌ Double render anti-pattern!
+useEffect(() => {
+  setFull(`${first} ${last}`);
+}, [first, last]);
+```
 
-  useEffect(() => {
-    const filtered = users.filter(user => user.name.includes(search));
-    setFilteredUsers(filtered);
-  }, [search, users]);
+*Fix:*
+```jsx
+const [first, setFirst] = useState('Alice');
+const [last, setLast] = useState('Smith');
 
-  return (
-    <div>
-      <input value={search} onChange={e => setSearch(e.target.value)} />
-      <ul>
-        {filteredUsers.map(u => <li key={u.id}>{u.name}</li>)}
-      </ul>
-    </div>
-  );
-}
+// ✅ Derived State: Computed on-the-fly during render pass
+const full = `${first} ${last}`;
+```
 
-// After (Refactored Solution):
-import React, { useState } from 'react';
+### Mistake 3: Over-using `useMemo` for Cheap Primitive Calculations
 
-function SearchList({ users }) {
-  const [search, setSearch] = useState('');
+**The mistake:** Wrapping simple string concatenations or basic array lengths in `useMemo`: `const count = useMemo(() => items.length, [items])`.
 
-  // Solution: Derive the filtered list directly during render!
-  const filteredUsers = users.filter(user => user.name.includes(search));
+**Why it's wrong:** `useMemo` carries memory and dependency array comparison overhead. Calling `useMemo` for cheap primitive math is slower than simply recalculating the value on every render. Save `useMemo` for expensive operations (like filtering/sorting thousands of array items).
 
-  return (
-    <div>
-      <input value={search} onChange={e => setSearch(e.target.value)} />
-      <ul>
-        {filteredUsers.map(u => <li key={u.id}>{u.name}</li>)}
-      </ul>
-    </div>
-  );
-}
+*Incorrect:*
+```jsx
+// ❌ Unnecessary useMemo overhead for basic property access!
+const isListEmpty = useMemo(() => items.length === 0, [items]);
+```
+
+*Fix:*
+```jsx
+// ✅ Calculate basic primitives directly in render body
+const isListEmpty = items.length === 0;
 ```
 
 ---
+
+## 5. Practice Exercises
+
+### Exercise 1: IoT Telemetry Threshold Alert Summary (IoT Telemetry)
+
+**Scenario:** An industrial IoT monitoring dashboard receives an array of sensor telemetry objects. Compute critical alert counts and average system voltage as derived state during render.
+
+**Requirements:**
+1. Create `TelemetrySummary` accepting a `sensors` array prop (`id`, `voltage`, `temp`, `isCritical`).
+2. Calculate `criticalCount` and `avgVoltage` directly inside the component body without `useState` or `useEffect`.
+3. Render summary indicators cleanly.
+4. Provide structured implementation with technical explanation.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+> ```jsx
+> import React from 'react';
 > 
----
-
-### Exercise 2: Calculating Filtered Items as Derived State
-
-**Problem:** Calculate `filteredItems` on-the-fly during render using `items.filter()` without storing in `useState`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> function ItemList({ items, query }) { const filteredItems = items.filter(item => item.name.includes(query)); return <ul>{filteredItems.map(i => <li key={i.id}>{i.name}</li>)}</ul>; }
-> ```
-> ```javascript
-> function ItemList({ items, query }) {
->   const filteredItems = items.filter(item => item.name.includes(query));
+> export function TelemetrySummary({ sensors = [] }) {
+>   // Derived State: Computed dynamically on every render pass
+>   const criticalCount = sensors.filter(s => s.isCritical).length;
+>   const totalVoltage = sensors.reduce((sum, s) => sum + s.voltage, 0);
+>   const avgVoltage = sensors.length > 0 ? (totalVoltage / sensors.length).toFixed(1) : '0.0';
+> 
 >   return (
->     <ul>
->       {filteredItems.map(i => <li key={i.id}>{i.name}</li>)}
->     </ul>
+>     <div className="summary-card">
+>       <h4>System Status Summary</h4>
+>       <p>Total Active Sensors: {sensors.length}</p>
+>       <p className={criticalCount > 0 ? 'text-danger' : 'text-success'}>
+>         Critical Alerts: {criticalCount}
+>       </p>
+>       <p>Average Voltage: {avgVoltage} V</p>
+>     </div>
 >   );
 > }
 > ```
 >
-> **Explanation:** Computing values directly during render eliminates redundant state and extra render cycles.
+> #### Technical Explanation
+> 1. **Single Source of Truth**: All metrics derive directly from the primary `sensors` prop array.
+> 2. **Zero Extra Hooks**: Computes totals and averages without `useState` or sync `useEffect` blocks.
+> 3. **Eliminates Sync Bugs**: Impossible for `criticalCount` to desynchronize from `sensors` data updates.
+> 4. **Render Performance**: Recalculating primitives during render executes in microsecond intervals.
 > 
 ---
 
-### Exercise 3: When to Memoize Derived State
+### Exercise 2: Financial Order Book Spread Calculation (Financial Trading)
 
-**Problem:** When should derived calculations during render be wrapped in `useMemo`? (Only when calculations are expensive like filtering 10,000 items).
+**Scenario:** A trading terminal receives lists of bids and asks. Calculate bid/ask spread and order book imbalance ratios as derived state.
 
-**Expected output:**
+**Requirements:**
+1. Create `OrderBookSpread` taking `bids` array and `asks` array.
+2. Derive `highestBid`, `lowestAsk`, and `spread` (`lowestAsk - highestBid`).
+3. Compute `spreadPercentage`.
+4. Provide structured implementation with technical explanation.
+
 > [!check]- Answer
-> ```text
-> Only when calculations are computationally expensive (e.g. filtering thousands of items)
-> ```
-> ```text
-> Only when calculations are computationally expensive (e.g. filtering thousands of items)
+>
+> #### Implementation
+> ```jsx
+> import React from 'react';
+> 
+> export function OrderBookSpread({ bids = [], asks = [] }) {
+>   // Derived State calculations
+>   const highestBid = bids.length > 0 ? Math.max(...bids.map(b => b.price)) : 0;
+>   const lowestAsk = asks.length > 0 ? Math.min(...asks.map(a => a.price)) : 0;
+>   const spread = lowestAsk > 0 && highestBid > 0 ? lowestAsk - highestBid : 0;
+>   const spreadPercent = highestBid > 0 ? ((spread / highestBid) * 100).toFixed(3) : '0.000';
+> 
+>   return (
+>     <div className="spread-panel">
+>       <div className="spread-metric">
+>         <span>Top Bid: ${highestBid.toFixed(2)}</span>
+>         <span>Top Ask: ${lowestAsk.toFixed(2)}</span>
+>       </div>
+>       <div className="spread-value">
+>         Spread: ${spread.toFixed(2)} ({spreadPercent}%)
+>       </div>
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** Simple derived state calculations (string concatenations, array maps of small lists) require zero memoization overhead.
+> #### Technical Explanation
+> 1. **Pure Data Derivation**: Spread metrics calculate dynamically whenever new `bids` or `asks` props arrive.
+> 2. **No Double Renders**: Avoids triggering extra render cycles caused by setter invocations inside effects.
+> 3. **Math Safety Checks**: Guard clauses prevent division-by-zero errors during render execution.
+> 4. **Declarative Output**: Component focuses purely on returning UI snapshots derived from market data.
 > 
-## 7. Related Terms
-- [`useMemo` Hook](../level_04/use_memo.md) — Optimization hook used to cache heavy derived state calculations.
-- [Render Purity](../level_01/render_purity.md) — The rule that calculations during render must remain self-contained.
-- [State](state.md) — Related concept: State.
+---
+
+### Exercise 3: E-Commerce Shopping Cart Subtotal & Shipping (E-Commerce)
+
+**Scenario:** An e-commerce checkout view calculates item subtotals, tax rates, free shipping thresholds, and grand total dynamically from cart items state.
+
+**Requirements:**
+1. Create `CartCheckout` taking `cartItems` array (`id`, `price`, `qty`) and `promoDiscount` (number).
+2. Derive `subtotal`, `shippingCost` (free if subtotal > $50), `tax`, and `grandTotal`.
+3. Render checkout breakdown list.
+4. Provide structured implementation with technical explanation.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> import React from 'react';
+> 
+> export function CartCheckout({ cartItems = [], promoDiscount = 0 }) {
+>   // Derived State Calculations
+>   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.qty), 0);
+>   const discountAmount = subtotal * (promoDiscount / 100);
+>   const discountedSubtotal = subtotal - discountAmount;
+>   const shippingCost = discountedSubtotal >= 50 || discountedSubtotal === 0 ? 0 : 9.99;
+>   const tax = discountedSubtotal * 0.08;
+>   const grandTotal = discountedSubtotal + shippingCost + tax;
+> 
+>   return (
+>     <div className="checkout-summary">
+>       <h4>Order Breakdown</h4>
+>       <p>Subtotal: ${subtotal.toFixed(2)}</p>
+>       {promoDiscount > 0 && <p>Discount ({promoDiscount}%): -${discountAmount.toFixed(2)}</p>}
+>       <p>Shipping: {shippingCost === 0 ? 'FREE' : `$${shippingCost.toFixed(2)}`}</p>
+>       <p>Estimated Tax (8%): ${tax.toFixed(2)}</p>
+>       <hr />
+>       <h3>Grand Total: ${grandTotal.toFixed(2)}</h3>
+>     </div>
+>   );
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Multi-Step Derivation**: Calculates complex chained values (`subtotal` -> `discount` -> `shipping` -> `tax` -> `grandTotal`) in one pure render pass.
+> 2. **Guaranteed Consistency**: Impossible for `grandTotal` to be calculated using an outdated `shippingCost`.
+> 3. **Clean Code Structure**: Keeps state storage minimal (`cartItems` and `promoDiscount`) while deriving presentation logic.
+> 4. **Reactivity**: Any quantity change automatically updates all downstream financial calculations instantly.
+> 
+---
+
+## 6. Related Terms
+
+- [State](state.md) — Primary source data variables managed in component memory.
+- [Re-rendering](re_rendering.md) — The component re-evaluation loop where derived variables update.
+- [Render Purity](../level_01/render_purity.md) — The functional rule requiring derived calculations to remain self-contained.
+- [`useMemo` Hook](../level_04/use_memo.md) — Optimization hook used to cache expensive derived state calculations.
 
 ---
 
-## 8. Key Takeaways
-- Derived state is computed dynamically from state or props during rendering.
-- Storing derived data in state creates redundancy and synchronization bugs.
-- Do not use `useEffect` hooks to synchronize secondary state variables.
-- Recalculating variables on render is fast and prevents double-render cycles.
-- Do not initialize state snapshots using props that need to stay in sync.
-- Use `useMemo` to optimize expensive derived state calculations.
+## 7. Key Takeaways
+
+- **Derived State** is computed dynamically from props or state during render execution.
+- Storing derived data in `useState` creates redundant state, out-of-sync bugs, and extra render cycles.
+- Never use `useEffect` to synchronize secondary state variables based on primary state changes.
+- Computing variables inside component render bodies is fast and maintains a single source of truth.
+- Do not copy props into `useState(props.val)` initializers if the value must stay in sync with parent props.
+- Wrap heavy, expensive array derivations (filtering thousands of items) in `useMemo`.

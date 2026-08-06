@@ -6,201 +6,354 @@
 ---
 
 ## 1. Prerequisites
+
 - [Composition API](../level_01/composition_api.md) — The foundation that makes Composables possible.
 - [Reactive State](../level_02/reactive_state.md) — What is being encapsulated inside the Composable.
 
 ---
 
 ## 2. Term Category
-- **Vue Architecture / Code Reuse Pattern**
+
+**Vue Architecture (Code Reuse Pattern)**: Composables are functions that leverage Vue 3's Composition API to encapsulate and share stateful logic across components. By combining reactivity primitives (`ref`, `reactive`, `computed`) and lifecycle hooks (`onMounted`, `onUnmounted`) inside modular JavaScript/TypeScript functions, composables isolate business logic, device APIs, and async side effects from component UI templates.
+
+Unlike React custom hooks—which execute on every render cycle and require explicit dependency arrays (`useEffect`, `useCallback`) to avoid stale closures—Vue composables run exactly once during component setup. Vue's Proxy-based reactivity system ensures that refs and reactive objects returned from a composable remain reactive without manual memoization hooks.
 
 ---
 
-## 3. Environment Context
-- **Composition API (`<script setup>`)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In Vue 2 (Options API), if you had logic that tracked the mouse position (`x` and `y` coordinates), and you wanted to reuse that logic in 5 different components, you had to use "Mixins". Mixins were terrible. They caused naming collisions and hid where data came from.
-Because Vue 3's **Composition API** uses raw JavaScript functions (`ref`, `onMounted`), you can simply extract your Vue logic out of the `.vue` file and put it into a standard `.js` file! 
-These reusable JavaScript files are called **Composables**. (They are identical to React "Custom Hooks").
+In Vue 2 (Options API), sharing stateful logic across components relied on patterns like Mixins, Renderless Components, or Higher-Order Components. Mixins suffered from critical architectural flaws: implicit property origins (where did `this.x` come from?), namespace collisions when multiple mixins defined identical property names, and tightly coupled lifecycle dependencies.
 
-### (2) Creating a Composable
-A composable is just a function (conventionally starting with `use...`) that returns reactive state.
-```javascript
-// useMouse.js
-import { ref, onMounted, onUnmounted } from 'vue'
+The Composition API solved this by decoupling Vue's reactivity and lifecycle engine from the component instance rendering layer. Developers can now invoke reactivity functions (`ref`, `reactive`, `computed`) and lifecycle hooks (`onMounted`, `onUnmounted`) inside pure JavaScript/TypeScript functions. Composables provide explicit data sourcing through destructured variable names, zero namespace collisions, and full TypeScript type inference.
 
-export function useMouse() {
-  // 1. Encapsulate state
-  const x = ref(0)
-  const y = ref(0)
+### (2) Reality Metaphor
+Think of a Composable like a modular telemetry package for an aircraft or industrial vehicle. Instead of welding a speedometer, altitude sensor, and fuel gauge directly into the physical dashboard frame (the component), you assemble them into a self-contained instrument pod (the composable module). When a vehicle needs telemetry, you plug in the pod; it initializes its own sensors (state and lifecycle events) and streams reactive readings (`x`, `y`, `data`) directly to whatever screen chooses to display them. Multiple vehicles can install the exact same telemetry pod design, but each vehicle gets its own isolated set of physical sensors.
 
-  // 2. Encapsulate lifecycle logic
-  function update(event) {
-    x.value = event.pageX
-    y.value = event.pageY
-  }
+### (3) Vue Code Examples
 
-  onMounted(() => window.addEventListener('mousemove', update))
-  onUnmounted(() => window.removeEventListener('mousemove', update))
-
-  // 3. Return the reactive state
-  return { x, y }
-}
-```
-
-### (3) Using the Composable
-Any component can now import and use this logic instantly!
+#### Short Snippet
 ```vue
-<!-- AnyComponent.vue -->
 <script setup>
 import { useMouse } from './useMouse'
 
-// Boom! We have reusable, stateful mouse tracking in one line of code!
+// Import and unpack stateful logic in a single line
 const { x, y } = useMouse()
 </script>
 
 <template>
-  <p>Mouse is at {{ x }}, {{ y }}</p>
+  <p>Coordinates: {{ x }}, {{ y }}</p>
+</template>
+```
+
+#### Fuller Example
+```vue
+<!-- TelemetryMonitor.vue -->
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
+// Custom composable defined inline for illustration (typically in useTelemetry.js)
+function useTelemetry(sensorId) {
+  const status = ref('Initializing...')
+  const payload = ref(0)
+
+  let timer = null
+
+  function pollSensor() {
+    payload.value = Math.floor(Math.random() * 100)
+    status.value = 'Active'
+  }
+
+  onMounted(() => {
+    timer = setInterval(pollSensor, 1000)
+  })
+
+  onUnmounted(() => {
+    if (timer) clearInterval(timer)
+  })
+
+  return { status, payload }
+}
+
+const { status, payload } = useTelemetry('SENSOR_ALPHA')
+</script>
+
+<template>
+  <div class="telemetry-panel">
+    <h3>Sensor Alpha Telemetry</h3>
+    <p>Status: <strong>{{ status }}</strong></p>
+    <p>Payload Reading: <strong>{{ payload }} Hz</strong></p>
+  </div>
 </template>
 ```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Forgetting to return `ref`s
+### Mistake 1: Forgetting to Return Reactive References from a Composable
 
-**The mistake:** A developer creates a `useFetch(url)` composable. They resolve the data, assign it to a standard JS variable `let data = {}`, and return it.
+**The mistake:** Returning plain, primitive JavaScript values or snapshot objects rather than reactive `ref` or `computed` objects from a composable function.
 
-**Why it's wrong:** The whole point of a Composable is that it is *stateful* and *reactive*. If you return a static Javascript object, the component using the composable will not re-render when the API finishes fetching.
-**Golden Rule:** Always use Vue's reactivity system (`ref`, `computed`, etc.) *inside* the `.js` Composable file, and return those reactive objects so the consuming component can track them.
-
----
-
-### Mistake 2: Calling Composables Outside the Synchronous Execution Scope of Component Setup
-
-**The mistake:** Calling a composable `const { x, y } = useMouse()` inside an async button click handler.
-
-**Why it's wrong:** Composables rely on Vue's active component instance context (for lifecycle hook binding like `onMounted`). Calling composables inside async callbacks or external helper functions breaks lifecycle binding. Call composables synchronously at the top level of `<script setup>`.
+**Why it's wrong:** When a composable returns a plain primitive value like `let data = 10`, caller components receive a static value copied at setup time. Subsequent updates inside the composable will not trigger UI updates in the consuming component.
 
 *Incorrect:*
 ```javascript
-async function handleLoad() {
-  const { data } = useFetch('/api/user'); // ❌ Called inside async handler!
+export function useCounter() {
+  let count = 0;
+  function increment() { count++; }
+  return { count, increment }; // ❌ Plain number severed from reactivity
 }
 ```
 
 *Fix:*
 ```javascript
-// Call composables synchronously at top level of setup scope:
-const { data } = useFetch('/api/user');
+import { ref } from 'vue';
+
+export function useCounter() {
+  const count = ref(0);
+  function increment() { count.value++; }
+  return { count, increment }; // Return ref to preserve reactive tracking
+}
 ```
 
 ---
 
-### Mistake 3: Returning Plain Objects from Composables Without `toRefs()` (Broken Destructuring)
+### Mistake 2: Invoking Composables Outside Synchronous Component Setup
 
-**The mistake:** Returning `reactive({ count, name })` directly from a composable function.
+**The mistake:** Calling a composable function inside an asynchronous callback, event handler, or setTimeout function.
 
-**Why it's wrong:** If a composable returns a plain reactive object, consumers destructuring properties (`const { count } = useMyComposable()`) sever reactivity. Return individual `ref` objects or `toRefs(state)`.
+**Why it's wrong:** Composables often register lifecycle hooks (`onMounted`, `onUnmounted`) or inject dependencies (`inject()`). Vue relies on an active global component instance context during synchronous `<script setup>` execution. Calling composables asynchronously executes after the setup context is torn down, throwing runtime warnings or failing to register hooks.
 
 *Incorrect:*
 ```javascript
-function useCounter() {
-  const state = reactive({ count: 0 });
-  return state; // ❌ Destructuring breaks reactivity for callers!
+async function handleButtonClick() {
+  // ❌ Called inside async handler - active component instance context lost!
+  const { data } = useFetch('/api/data');
 }
 ```
 
 *Fix:*
 ```javascript
-function useCounter() {
-  const state = reactive({ count: 0 });
-  return toRefs(state); // Preserves reactivity upon caller destructuring
+// Call composables synchronously at the top level of <script setup>
+const { data, execute } = useFetch('/api/data', { immediate: false });
+
+async function handleButtonClick() {
+  await execute();
 }
 ```
 
+---
+
+### Mistake 3: Returning Plain `reactive` Objects Directly (Broken Destructuring)
+
+**The mistake:** Returning a `reactive` object directly from a composable without converting its properties to refs using `toRefs()`.
+
+**Why it's wrong:** When the consuming component destructures properties from a reactive object (`const { count } = useMyComposable()`), ES6 destructuring extracts primitive copies and severs Vue's reactive proxy tracking link.
+
+*Incorrect:*
+```javascript
+export function useForm() {
+  const state = reactive({ username: '', email: '' });
+  return state; // ❌ Caller destructuring destroys reactivity!
+}
+```
+
+*Fix:*
+```javascript
+import { reactive, toRefs } from 'vue';
+
+export function useForm() {
+  const state = reactive({ username: '', email: '' });
+  return toRefs(state); // Preserves ref wrappers upon destructuring
+}
+```
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: State Isolation
+### Exercise 1: IoT Sensor Stream Manager
 
-**Problem:** You import `const { x, y } = useMouse()` in Component A, and you import it again in Component B. Are Component A and B sharing the exact same `x` variable in memory?
+**Scenario:** You are building an industrial IoT dashboard monitoring smart factory sensors. You need a composable `useSensorStream(sensorId)` that connects to an MQTT stream, updates real-time telemetry values, and cleans up event listeners when components unmount.
 
-**Expected output:**
+**Requirements:**
+1. Maintain reactive `telemetry` (object with `temperature`, `vibration`, `pressure`) and `isConnected` state.
+2. Simulate socket data updates on a 500ms interval.
+3. Automatically clear interval timers on component unmount using `onUnmounted`.
+4. Provide a manual `reconnect()` action method.
+
 > [!check]- Answer
-> ```text
-> No!
-> Every time a component calls `useMouse()`, the function executes from scratch, creating brand new `ref` instances. 
-> Composables reuse LOGIC, they do not share global STATE. 
-> (If you want to share global state, you need Pinia, or you must define the `ref` OUTSIDE the composable function).
-> ```
-> - What happens every time you invoke a JavaScript function?
-> 
----
-
-### Exercise 2: Composable Naming Convention
-
-**Problem:** What naming prefix convention MUST all Vue composables follow by standard community guidelines?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Composables must start with the camelCase 'use' prefix (e.g. useMouse, useFetch, useAuth).
-> ```
-> - Prefix composables with `use` (e.g. `useEventListener`).
-> 
+>
+> #### Implementation
 > ```javascript
-> export function useFetch(url) {
->   const data = ref(null);
->   // ...
->   return { data };
-> }
-> ```
+> import { ref, reactive, onMounted, onUnmounted } from 'vue';
 > 
----
-
-### Exercise 3: useMouse Composable Implementation
-
-**Problem:** Write a clean `useMouse()` composable returning reactive `x` and `y` coordinates updated on `window.mousemove` with `onUnmounted` cleanup.
-
-**Expected output:**
-> [!check]- Answer
-> ```javascript
-> export function useMouse() { const x = ref(0); const y = ref(0); function update(e) { x.value = e.pageX; y.value = e.pageY; } onMounted(() => window.addEventListener('mousemove', update)); onUnmounted(() => window.removeEventListener('mousemove', update)); return { x, y }; }
-> ```
-> - Encapsulate state and lifecycle hooks inside composable functions.
+> export function useSensorStream(sensorId) {
+>   const isConnected = ref(false);
+>   const telemetry = reactive({
+>     temperature: 0,
+>     vibration: 0,
+>     pressure: 0
+>   });
 > 
-> ```javascript
-> import { ref, onMounted, onUnmounted } from 'vue';
+>   let intervalId = null;
 > 
-> export function useMouse() {
->   const x = ref(0);
->   const y = ref(0);
->   
->   function update(e) {
->     x.value = e.pageX;
->     y.value = e.pageY;
+>   function connect() {
+>     isConnected.value = true;
+>     intervalId = setInterval(() => {
+>       telemetry.temperature = Number((20 + Math.random() * 10).toFixed(2));
+>       telemetry.vibration = Number((0.1 + Math.random() * 0.5).toFixed(3));
+>       telemetry.pressure = Number((100 + Math.random() * 5).toFixed(1));
+>     }, 500);
 >   }
->   
->   onMounted(() => window.addEventListener('mousemove', update));
->   onUnmounted(() => window.removeEventListener('mousemove', update));
->   
->   return { x, y };
-> }
-> ```
 > 
+>   function disconnect() {
+>     if (intervalId) {
+>       clearInterval(intervalId);
+>       intervalId = null;
+>     }
+>     isConnected.value = false;
+>   }
+> 
+>   function reconnect() {
+>     disconnect();
+>     connect();
+>   }
+> 
+>   onMounted(() => connect());
+>   onUnmounted(() => disconnect());
+> 
+>   return { isConnected, telemetry, reconnect };
+> }
+> 
+> // Technical Test Assertion (Node / Vitest environment simulation)
+> const { isConnected, telemetry, reconnect } = useSensorStream('SENSOR-01');
+> console.assert(isConnected.value === false, 'Should start disconnected prior to mount');
+> ```
+>
+> #### Technical Explanation
+> 1. **Encapsulated State**: `ref` and `reactive` wrap connection status and numerical metrics in isolated reactive primitives.
+> 2. **Lifecycle Cleanups**: `onUnmounted` guarantees timer tear-down, preventing memory leaks when factory floor view panels unmount.
+> 3. **Method Exposure**: Exposes `reconnect` without leaking internal interval handle variables.
+> 4. **Instance Scope**: Each component calling `useSensorStream` gets a dedicated timer and unique state instance.
 > 
 ---
 
-## 7. Related Terms
+### Exercise 2: Financial Exchange Order Book Aggregator
+
+**Scenario:** A crypto exchange dashboard requires real-time calculation of order book depth. Create a composable `useOrderBook()` that accepts raw order tuples and computes live aggregate bid and ask depth.
+
+**Requirements:**
+1. Accept dynamic order inputs via an `addOrder(type, price, amount)` function.
+2. Maintain reactive arrays for `bids` and `asks`.
+3. Provide computed properties `totalBidVolume` and `totalAskVolume`.
+4. Ensure order arrays are capped at 5 items max for performance.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```javascript
+> import { ref, computed } from 'vue';
+> 
+> export function useOrderBook() {
+>   const bids = ref([]);
+>   const asks = ref([]);
+> 
+>   function addOrder(type, price, amount) {
+>     const target = type === 'bid' ? bids : asks;
+>     target.value.unshift({ id: Date.now(), price, amount });
+>     if (target.value.length > 5) {
+>       target.value.pop();
+>     }
+>   }
+> 
+>   const totalBidVolume = computed(() => {
+>     return bids.value.reduce((acc, order) => acc + order.amount, 0);
+>   });
+> 
+>   const totalAskVolume = computed(() => {
+>     return asks.value.reduce((acc, order) => acc + order.amount, 0);
+>   });
+> 
+>   return { bids, asks, addOrder, totalBidVolume, totalAskVolume };
+> }
+> 
+> // Test verification
+> const { addOrder, totalBidVolume } = useOrderBook();
+> addOrder('bid', 50000, 1.5);
+> addOrder('bid', 49900, 2.0);
+> console.assert(totalBidVolume.value === 3.5, 'Total bid volume should compute correctly');
+> ```
+>
+> #### Technical Explanation
+> 1. **Reactive Collections**: Array state changes via `.unshift()` and `.pop()` trigger dependency notifications.
+> 2. **Computed Derivation**: `totalBidVolume` dynamically recalculates only when `bids` array elements mutate.
+> 3. **Array Mutation Rules**: Uses ref value assignment to trigger reactive array reactivity correctly.
+> 4. **Encapsulation**: Keeps internal capped-array manipulation logic hidden behind the clean `addOrder` interface.
+> 
+---
+
+### Exercise 3: E-Commerce Shopping Cart & Tax Engine
+
+**Scenario:** An e-commerce platform requires client-side price calculation across different regional tax rules. Create a composable `useCartCalculator(taxRate)` that handles item additions, item removals, subtotal calculations, and tax computation.
+
+**Requirements:**
+1. State must include an `items` ref array of `{ id, name, price, quantity }`.
+2. Compute reactive `subtotal`, `taxAmount`, and `grandTotal`.
+3. Provide `addItem(product)` and `removeItem(id)` methods.
+4. Export reactive state and helper functions.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```javascript
+> import { ref, computed } from 'vue';
+> 
+> export function useCartCalculator(taxRate = 0.08) {
+>   const items = ref([]);
+> 
+>   function addItem(product) {
+>     const existing = items.value.find(i => i.id === product.id);
+>     if (existing) {
+>       existing.quantity += product.quantity || 1;
+>     } else {
+>       items.value.push({ ...product, quantity: product.quantity || 1 });
+>     }
+>   }
+> 
+>   function removeItem(id) {
+>     items.value = items.value.filter(i => i.id !== id);
+>   }
+> 
+>   const subtotal = computed(() => {
+>     return items.value.reduce((sum, item) => sum + item.price * item.quantity, 0);
+>   });
+> 
+>   const taxAmount = computed(() => subtotal.value * taxRate);
+>   const grandTotal = computed(() => subtotal.value + taxAmount.value);
+> 
+>   return { items, addItem, removeItem, subtotal, taxAmount, grandTotal };
+> }
+> 
+> // Test assertion
+> const cart = useCartCalculator(0.10);
+> cart.addItem({ id: 101, name: 'Widget', price: 100, quantity: 2 });
+> console.assert(cart.subtotal.value === 200, 'Subtotal should be 200');
+> console.assert(cart.taxAmount.value === 20, 'Tax amount should be 20');
+> console.assert(cart.grandTotal.value === 220, 'Grand total should be 220');
+> ```
+>
+> #### Technical Explanation
+> 1. **Chained Computeds**: `grandTotal` consumes `subtotal` and `taxAmount` computed getters, leveraging Vue's dependency tree graph.
+> 2. **Flexible Parameters**: Accepts initial configuration arguments like `taxRate` upon setup invocation.
+> 3. **Array Update Strategy**: Safe item mutation updates maintain reactive array purity.
+> 4. **Declarative API**: Exposes clean interface functions that components can call from event handlers.
+> 
+---
+
+## 6. Related Terms
+
 - [Composition API](../level_01/composition_api.md) — The paradigm that enables this.
 - [Pinia](../level_07/pinia.md) — Used for sharing global State, whereas Composables share local Logic.
 - [VueUse](../level_10/vueuse.md) — The library containing hundreds of pre-written, open-source composables.
@@ -211,8 +364,10 @@ function useCounter() {
 
 ---
 
-## 8. Key Takeaways
-- **Composables** are reusable JavaScript functions that encapsulate stateful Vue logic.
-- They are the Vue 3 equivalent of React Custom Hooks, conventionally named starting with `use` (e.g., `useFetch`, `useMouse`).
-- They completely replace Vue 2 Mixins, offering perfect type inference and explicit data sources.
-- Invoking a composable creates a *new*, isolated instance of its internal state. They reuse logic, not global data.
+## 7. Key Takeaways
+
+- **Composables** are reusable JavaScript functions that encapsulate stateful Vue logic, replacing legacy Vue 2 Mixins.
+- Conventionally named starting with `use` (e.g., `useMouse`, `useFetch`, `useCartCalculator`).
+- Executed synchronously during component setup, creating an isolated instance of internal reactive state per caller.
+- Always return reactive objects (`ref`, `computed`, `toRefs(state)`) so caller destructuring preserves Vue's Proxy reactivity.
+- Keep composables focused on logic and side effects, leaving HTML templates to Single-File Components.

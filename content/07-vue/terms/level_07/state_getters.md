@@ -1,93 +1,169 @@
 # State & Getters (Pinia)
 
-> **Level 7 — State Management (Pinia)**
-> The two fundamental data pillars of a Pinia Store. **State** is the raw data, and **Getters** are calculated, derived data based on the State.
+> **Level 7 — State Management & Pinia**
+> The two fundamental data pillars of a Pinia store: **State** holds raw reactive data, while **Getters** hold memoized derived data calculated from State.
 
 ---
 
 ## 1. Prerequisites
-- [Store (Pinia)](store.md) — The container where State and Getters live.
-- [Computed Properties](../level_02/computed_properties.md) — Getters are literally just Computed Properties!
+
+- [Store (Pinia)](store.md) — The modular container where State and Getters are defined.
+- [Computed Properties](../level_02/computed_properties.md) — The reactivity mechanism that powers Pinia Getters under the hood.
 
 ---
 
 ## 2. Term Category
-- **Vue Ecosystem / Pinia Concepts**
+
+**Vue Ecosystem Construct (Pinia Data Definition & Caching Layer)**: State and Getters constitute the reactive data layer of a Pinia store. State represents the single source of truth for raw domain values, while Getters represent computed, read-only slices of derived state.
+
+Operating universally across browser rendering engines and SSR environments, State and Getters leverage Vue's ES6 Proxy reactivity. When reactive state properties mutate, dependent Getters evaluate once lazily upon access and cache their results. Subsequent component reads retrieve the cached evaluation instantly without re-executing derivation logic until underlying state dependencies mutate again.
 
 ---
 
-## 3. Environment Context
-- **Pinia Setup Stores**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-If a store is a mini-database, it needs to hold raw data. That is the **State**. 
-But often, the raw data isn't enough. If your State is `items: [{ price: 10 }, { price: 20 }]`, five different components might need to know the `totalPrice`. You don't want to copy-paste the math `items.reduce(...)` into all five components.
-Instead, you create a **Getter** directly inside the Store. The Getter calculates the total once, caches the result, and provides it to any component that asks.
+In complex applications, components rarely consume raw state in isolation. An order management screen needs to render calculated subtotals, tax estimates, filtered pending items, and customer status badges. If every component duplicates this calculation math in local methods, performance degrades and business rules diverge across views.
 
-### (2) Defining State
-In a modern Pinia Setup Store, State is simply defined using standard Vue [`ref()`](../level_02/ref.md) or [`reactive()`](../level_02/reactive.md) functions.
-```javascript
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+By pairing raw **State** with memoized **Getters** directly inside the store, Pinia centralizes domain logic. Getters behave identically to component `computed()` properties: they track dependencies automatically, cache calculation outputs, and update reactively across all listening components when underlying state variables change. This design prevents duplicate computations and ensures UI components consume a consistent, unified representation of domain state.
 
-export const useCartStore = defineStore('cart', () => {
-  // This is STATE! (Raw data)
-  const items = ref([])
-  const discountCode = ref('')
+### (2) Reality Metaphor
+Think of **State** as a raw SQL database table containing raw transaction rows (date, item, amount). 
 
-  return { items, discountCode }
-})
-```
+**Getters** are indexed SQL Views or Materialized Views created on top of that database table. Instead of querying and summing 100,000 raw transaction rows inside every mobile app endpoint or web dashboard view, the database calculates `monthly_total_revenue` in the Materialized View once. When a user requests the total, the system instantly hands over the pre-calculated cached number. If a new transaction row is inserted into raw State, the Materialized View updates automatically.
 
-### (3) Defining Getters
-In a Setup Store, Getters are simply defined using standard Vue [`computed()`](../level_02/computed_properties.md) functions.
-```javascript
+### (3) Vue Code Examples
+
+#### Short Snippet
+```vue
+<script setup>
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-export const useCartStore = defineStore('cart', () => {
-  const items = ref([{ price: 10 }, { price: 20 }]) // State
+export const useStore = defineStore('numbers', () => {
+  // STATE: Raw reactive data
+  const list = ref([10, 20, 30])
 
-  // This is a GETTER! (Derived data)
-  const totalCost = computed(() => {
-    return items.value.reduce((sum, item) => sum + item.price, 0)
+  // GETTER: Derived memoized computation
+  const sum = computed(() => list.value.reduce((a, b) => a + b, 0))
+
+  return { list, sum }
+})
+</script>
+```
+
+#### Fuller Example
+```vue
+<script setup>
+import { defineStore, storeToRefs } from 'pinia'
+import { ref, computed } from 'vue'
+
+// Setup Store defining State and Getters
+export const useInventoryStore = defineStore('inventory', () => {
+  // STATE
+  const products = ref([
+    { id: 1, name: 'Laptop', price: 1200, inStock: true, category: 'tech' },
+    { id: 2, name: 'Desk Chair', price: 250, inStock: false, category: 'furniture' },
+    { id: 3, name: 'Monitor', price: 400, inStock: true, category: 'tech' }
+  ])
+  const activeCategory = ref('tech')
+
+  // GETTER 1: Filtered product list based on activeCategory state
+  const filteredProducts = computed(() => {
+    return products.value.filter(p => p.category === activeCategory.value)
   })
 
-  // A Getter can even depend on another Getter!
-  const hasItems = computed(() => totalCost.value > 0)
+  // GETTER 2: Dependent on GETTER 1 (Total value of in-stock filtered products)
+  const categoryTotalValue = computed(() => {
+    return filteredProducts.value
+      .filter(p => p.inStock)
+      .reduce((sum, p) => sum + p.price, 0)
+  })
 
-  return { items, totalCost, hasItems }
+  function setCategory(cat) {
+    activeCategory.value = cat
+  }
+
+  return { products, activeCategory, filteredProducts, categoryTotalValue, setCategory }
 })
+
+// Component Consumption
+const store = useInventoryStore()
+const { activeCategory, filteredProducts, categoryTotalValue } = storeToRefs(store)
+</script>
+
+<template>
+  <div class="inventory">
+    <div class="filter-bar">
+      <button @click="store.setCategory('tech')">Tech</button>
+      <button @click="store.setCategory('furniture')">Furniture</button>
+    </div>
+
+    <h3>Category: {{ activeCategory.toUpperCase() }}</h3>
+    <p>Total Stock Value: ${{ categoryTotalValue }}</p>
+
+    <ul>
+      <li v-for="item in filteredProducts" :key="item.id">
+        {{ item.name }} - ${{ item.price }} ({{ item.inStock ? 'In Stock' : 'Out of Stock' }})
+      </li>
+    </ul>
+  </div>
+</template>
 ```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Mutating state inside a Getter
+### Mistake 1: Mutating State directly inside a Getter function
+**The mistake:** Performing mutating operations like array `.sort()`, `.splice()`, or assigning properties inside a getter definition.
 
-**The mistake:** A developer writes a Getter that accidentally changes the array it is trying to read.
+**Why it's wrong:** Getters must be pure functions. Array mutators like `Array.prototype.sort()` mutate the target array in place. Sorting state inside a getter triggers dependency updates, causing an infinite update loop and crashing the browser tab. Always create a shallow copy before sorting (`[...state.items].sort()`).
+
+*Incorrect:*
 ```javascript
 const sortedItems = computed(() => {
-  // .sort() mutates the original array in JavaScript!
-  return items.value.sort((a,b) => a.price - b.price) 
+  return items.value.sort((a, b) => a.price - b.price) // ❌ Mutates raw state array!
 })
 ```
 
-**Why it's wrong:** Getters must be **Pure Functions**. If a Getter modifies the State, it will trigger the Getter to run again, which modifies the State again, causing an Infinite Loop that crashes the browser.
-**Golden Rule:** Getters must *only* read data and return a new value. If you need to sort an array in a Getter, copy it first! (`[...items.value].sort()`).
+*Fix:*
+```javascript
+const sortedItems = computed(() => {
+  return [...items.value].sort((a, b) => a.price - b.price) // Copy array before sorting
+})
+```
 
 ---
 
-### Mistake 2: Accessing Other Getters Using `this` inside Arrow Function Getters
+### Mistake 2: Expecting Function-Returning Getters to Cache Results
+**The mistake:** Writing a getter that returns a lookup function `getById: (state) => (id) => state.items.find(i => i.id === id)` and assuming its output is memoized across invocations.
 
-**The mistake:** Writing `doubleCount: (state) => this.otherGetter` inside Options store getters.
+**Why it's wrong:** Getters that return a function are **not cached**! The getter caches the returned inner function reference, but invoking `getById(5)` executes the inner search loop fresh every single time. For high-frequency rendering, create a computed dictionary or map instead.
 
-**Why it's wrong:** Arrow function getters bind `this` to the outer lexical context, not the store instance. Access state via the `state` argument or use standard function syntax for `this`.
+*Incorrect:*
+```javascript
+// Function-returning getter runs loop on every render call
+const getById = computed(() => (id) => items.value.find(i => i.id === id))
+```
+
+*Fix:*
+```javascript
+// Map-based getter caches O(1) lookup dictionary
+const itemMap = computed(() => {
+  return items.value.reduce((map, item) => {
+    map[item.id] = item
+    return map
+  }, {})
+})
+```
+
+---
+
+### Mistake 3: Accessing `this` inside Arrow Function Options Getters
+**The mistake:** Writing `doubleCount: (state) => this.count * 2` inside an Options Store getters configuration block.
+
+**Why it's wrong:** Arrow functions capture outer lexical scope `this` (`undefined`). In Options stores, arrow getters receive `state` as the first argument, but `this` is not bound to the store instance.
 
 *Incorrect:*
 ```javascript
@@ -98,107 +174,180 @@ getters: {
 
 *Fix:*
 ```javascript
-// Use state parameter:
 getters: {
-  doubleCount: (state) => state.count * 2
-}
-// Or standard function syntax for 'this' access:
-getters: {
-  doubleCount() { return this.count * 2; }
+  doubleCount: (state) => state.count * 2, // Use explicit state parameter
+  tripleCount() { return this.count * 3 } // Standard function binds 'this'
 }
 ```
 
 ---
 
-### Mistake 3: Returning Un-Cached Results from Function-Returning Getters
+## 5. Practice Exercises
 
-**The mistake:** Assuming a getter returning a function `getById: (state) => (id) => state.items.find(i => i.id === id)` caches query results.
+### Exercise 1: Financial Portfolio Risk Exposure Getters
+**Scenario:** A stock trading application requires a Pinia store tracking asset positions. The store must maintain raw position state and calculate portfolio metrics like total market value, un-hedged risk exposure percentage, and top-performing ticker.
 
-**Why it's wrong:** Getters that return a function are NOT cached! The returned function is executed fresh every single time it is called. Cache results manually inside component computed properties if needed.
+**Requirements:**
+1. Define state `positions` array of `{ ticker, shares, purchasePrice, currentPrice, sector }`.
+2. Provide getter `totalPortfolioValue` summing current market value of all positions.
+3. Provide getter `techSectorExposurePercent` computing percentage of portfolio held in `'Technology'` sector.
+4. Ensure all calculations remain pure without mutating raw positions array.
 
-*Incorrect:*
-```vue
-/* Expecting function-returning getters to cache evaluation results */
-```
-
-*Fix:*
-```vue
-/* Function-returning getters execute fresh on every call; awareness required for large arrays */
-```
-
-
----
-
-## 6. Practice Exercises
-
-### Exercise 1: Caching Power
-
-**Problem:** Component A reads `cartStore.totalCost`. Component B reads `cartStore.totalCost`. The calculation involves looping over 10,000 items. How many times does the math actually run?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Exactly once!
-> Because Getters are built on Vue's `computed()` properties, they cache their result. 
-> When Component A asks, it does the math and caches it. When Component B asks a millisecond later, Pinia instantly returns the cached value without doing the math again.
+>
+> #### Implementation
+> ```javascript
+> import { defineStore } from 'pinia'
+> import { ref, computed } from 'vue'
+> 
+> export const usePortfolioStore = defineStore('portfolioMetrics', () => {
+>   const positions = ref([
+>     { ticker: 'AAPL', shares: 50, purchasePrice: 150, currentPrice: 180, sector: 'Technology' },
+>     { ticker: 'JNJ', shares: 100, purchasePrice: 160, currentPrice: 155, sector: 'Healthcare' },
+>     { ticker: 'NVDA', shares: 20, purchasePrice: 400, currentPrice: 700, sector: 'Technology' }
+>   ])
+> 
+>   const totalPortfolioValue = computed(() => {
+>     return positions.value.reduce((total, pos) => total + (pos.shares * pos.currentPrice), 0)
+>   })
+> 
+>   const techSectorExposurePercent = computed(() => {
+>     if (totalPortfolioValue.value === 0) return 0
+>     const techValue = positions.value
+>       .filter(pos => pos.sector === 'Technology')
+>       .reduce((total, pos) => total + (pos.shares * pos.currentPrice), 0)
+>     return Number(((techValue / totalPortfolioValue.value) * 100).toFixed(2))
+>   })
+> 
+>   return { positions, totalPortfolioValue, techSectorExposurePercent }
+> })
 > ```
-> - Think about how Computed Properties work.
+>
+> #### Technical Explanation
+> 1. **State Independence**: `positions` holds primitive numbers and strings as single source of truth.
+> 2. **Getter Chain Dependencies**: `techSectorExposurePercent` depends directly on `totalPortfolioValue` computed getter, demonstrating getter composition.
+> 3. **Pure Function Calculations**: Array `.reduce()` and `.filter()` operations create new primitive values without mutating array order or element properties.
+> 4. **Memoization Benefit**: Component re-renders do not recalculate exposure percentages unless position prices or share counts update.
 > 
 ---
 
-### Exercise 2: Parameterized Getter Pattern
+### Exercise 2: Healthcare Patient Vitals Alert System
+**Scenario:** A hospital intensive care unit monitor requires a Pinia store tracking patient vital signs and triggering prioritized alert getters for nursing staff.
 
-**Problem:** Write a Pinia getter `getUserById` returning a function that accepts user ID number and finds user in `state.users` array.
+**Requirements:**
+1. Maintain state `patients` array holding `{ id, room, heartRate, oxygenSat, status }`.
+2. Create getter `criticalPatients` returning patients with `heartRate > 120` or `oxygenSat < 90`.
+3. Create getter `criticalCount` returning length of critical patients list.
+4. Provide action `updateVitals(patientId, newVitals)` to mutate patient readings.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
 > ```javascript
-> getters: { getUserById: (state) => (id) => state.users.find(u => u.id === id) }
-> ```
-> - Return a function from getters to accept dynamic arguments.
+> import { defineStore } from 'pinia'
+> import { ref, computed } from 'vue'
 > 
-> ```javascript
-> getters: {
->   getUserById: (state) => {
->     return (userId) => state.users.find(user => user.id === userId);
+> export const useIcuStore = defineStore('icu', () => {
+>   const patients = ref([
+>     { id: 'P-101', room: '304-A', heartRate: 75, oxygenSat: 98, status: 'stable' },
+>     { id: 'P-102', room: '305-B', heartRate: 135, oxygenSat: 88, status: 'warning' }
+>   ])
+> 
+>   const criticalPatients = computed(() => {
+>     return patients.value.filter(p => p.heartRate > 120 || p.oxygenSat < 90)
+>   })
+> 
+>   const criticalCount = computed(() => criticalPatients.value.length)
+> 
+>   function updateVitals(patientId, vitals) {
+>     const patient = patients.value.find(p => p.id === patientId)
+>     if (patient) {
+>       Object.assign(patient, vitals)
+>     }
 >   }
-> }
+> 
+>   return { patients, criticalPatients, criticalCount, updateVitals }
+> })
 > ```
+>
+> #### Technical Explanation
+> 1. **Reactive Array Filtering**: `criticalPatients` filters reactive patient proxy objects, auto-updating when vitals mutate.
+> 2. **Derived Count Getter**: `criticalCount` reads `criticalPatients.value`, ensuring reactive propagation across badge indicators.
+> 3. **In-Place Proxy Updates**: `Object.assign(patient, vitals)` mutates reactive proxy properties directly inside action handler.
+> 4. **Zero Rendering Overhead**: Dashboard tables rendering non-critical patients do not execute filtering loops unnecessarily.
 > 
 ---
 
-### Exercise 3: Cross-Store Getter Usage
+### Exercise 3: Network Data Pipeline Throughput Metrics
+**Scenario:** A cloud networking monitoring tool needs a store tracking network interface packet counters and deriving bandwidth utilization metrics.
 
-**Problem:** How do you access a getter from another store `useAuthStore()` inside a Pinia getter?
+**Requirements:**
+1. State `interfaces` object indexed by interface name `{ eth0: { rxBytes, txBytes, speedMbps } }`.
+2. Getter `totalBandwidthUsageMbps` calculating combined throughput across all interfaces.
+3. Getter `saturatedInterfaces` returning array of interface names operating above 80% capacity.
+4. Action `recordPacketDelta(iface, rxDelta, txDelta)` updating byte totals.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> By instantiating the other store inside the getter function: const authStore = useAuthStore(); return state.user && authStore.isLoggedIn;.
-> ```
-> - Instantiate other stores directly inside getter functions.
-> 
+>
+> #### Implementation
 > ```javascript
-> getters: {
->   userCart(state) {
->     const authStore = useAuthStore();
->     return state.carts[authStore.userId];
+> import { defineStore } from 'pinia'
+> import { ref, computed } from 'vue'
+> 
+> export const useNetworkStore = defineStore('network', () => {
+>   const interfaces = ref({
+>     eth0: { rxMbps: 450, txMbps: 350, capacityMbps: 1000 },
+>     eth1: { rxMbps: 890, txMbps: 50, capacityMbps: 1000 }
+>   })
+> 
+>   const totalBandwidthUsageMbps = computed(() => {
+>     return Object.values(interfaces.value).reduce((sum, iface) => {
+>       return sum + iface.rxMbps + iface.txMbps
+>     }, 0)
+>   })
+> 
+>   const saturatedInterfaces = computed(() => {
+>     return Object.entries(interfaces.value)
+>       .filter(([_, iface]) => {
+>         const load = (iface.rxMbps + iface.txMbps) / iface.capacityMbps
+>         return load >= 0.8
+>       })
+>       .map(([name]) => name)
+>   })
+> 
+>   function recordMetrics(ifaceName, rxMbps, txMbps) {
+>     if (interfaces.value[ifaceName]) {
+>       interfaces.value[ifaceName].rxMbps = rxMbps
+>       interfaces.value[ifaceName].txMbps = txMbps
+>     }
 >   }
-> }
+> 
+>   return { interfaces, totalBandwidthUsageMbps, saturatedInterfaces, recordMetrics }
+> })
 > ```
-> 
+>
+> #### Technical Explanation
+> 1. **Object State Iteration**: `Object.values` and `Object.entries` allow computed getters to process dynamic key-value store objects.
+> 2. **Threshold Aggregation**: `saturatedInterfaces` returns filtered string array of high-load interface keys for alert components.
+> 3. **Direct Dictionary Assignment**: Mutating `rxMbps` on targeted interface key updates dependent bandwidth calculations automatically.
+> 4. **Selective Component Re-rendering**: Components subscribing only to `saturatedInterfaces` ignore metric updates on unsaturated links.
 > 
 ---
 
-## 7. Related Terms
-- [Computed Properties](../level_02/computed_properties.md) — The underlying technology of Getters.
-- [Actions (Pinia)](actions.md) — The tool used to actually mutate the State.
-- [Store (Pinia)](store.md) — Related concept: Store (Pinia).
+## 6. Related Terms
+
+- [Store (Pinia)](store.md) — The Pinia container where State and Getters are defined.
+- [Computed Properties](../level_02/computed_properties.md) — The underlying Vue Composition API primitive powering Getters.
+- [Actions (Pinia)](actions.md) — The imperative store functions used to mutate State.
+- [Pinia](pinia.md) — The parent state management library.
+- [`ref`](../level_02/ref.md) — The primary reactivity wrapper used to define State variables in setup stores.
 
 ---
 
-## 8. Key Takeaways
-- **State** is the raw reactive data in a Pinia store, defined using `ref()`.
-- **Getters** are derived values based on the state, defined using `computed()`.
-- Getters cache their results for maximum performance.
-- Getters must be Pure Functions; they should never mutate state or perform asynchronous side effects (like API calls).
+## 7. Key Takeaways
+
+- **State** is the raw, single source of reactive truth in a Pinia store created via `ref()` or `reactive()`.
+- **Getters** are derived values calculated from state created using `computed()`.
+- Getters are memoized: they evaluate lazily and cache results until underlying state dependencies mutate.
+- Getters must be pure functions; never perform state mutations (`.sort()` in-place) inside a getter.
+- Getters returning parameterized lookup functions are NOT cached; use map/dictionary getters for high-performance lookups.

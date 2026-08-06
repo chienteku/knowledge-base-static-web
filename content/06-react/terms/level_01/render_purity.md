@@ -1,295 +1,312 @@
 # Render Purity
 
 > **Level 1 — Core Concepts**
-> The rule that a component must be a pure function of its props and state, returning the same JSX without modifying external state during render.
+> The rule that a component's render function must act as a pure function of its props and state, returning identical JSX without mutating external variables or causing side effects during execution.
 
 ---
 
 ## 1. Prerequisites
-- [Components](components.md) — The functional units that must remain pure.
-- [Props (Properties)](props.md) — The read-only inputs passed to components.
+
+- [Components](components.md) — The functional units that must remain pure during render.
+- [Props (Properties)](props.md) — The read-only input parameters passed to components.
 
 ---
 
 ## 2. Term Category
-- **Rendering Mechanic**
+
+**Rendering Mechanic (functional contract)**: Render Purity is a core contract enforced by React's rendering pipeline. Borrowed from functional programming, a pure function is one that:
+1. Returns the exact same output given the exact same input parameters.
+2. Causes zero side effects (it does not modify variables, objects, or systems outside its local function scope).
+
+In React, component render execution must remain strictly pure. Given identical props and state snapshot values, a component function must evaluate to identical JSX output without mutating outer-scope objects or executing side effects.
 
 ---
 
-## 3. Environment Context
-- **Client-Side (SPA) / Universal**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-To optimize application rendering speeds, React makes several assumptions about component execution. It may execute components in parallel, pre-render components in the background, or skip rendering a component entirely if its props and state have not changed since the last render.
+To optimize rendering performance, React relies on key assumptions about component execution. React's Fiber engine may execute components in parallel, pre-render components in background threads, or discard incomplete renders mid-execution to respond to user interactions.
 
-If a component performs a side effect during its execution cycle (such as modifying a global variable, writing to a file, or fetching network data directly in the function body), it is **impure**.
+If a component performs a side effect during render (such as mutating a global variable, issuing an HTTP `fetch` request, writing to local storage, or calling `Math.random()`), it is **impure**.
 
-Impure components can cause unpredictable bugs:
--   **Visual Glitches:** UI elements showing different values across renders.
--   **Memory Leaks:** Subscriptions or event listeners being created repeatedly.
--   **Broken Optimizations:** React skipping a render and leaving the UI out of sync.
+Impure components cause severe bugs under modern React engines:
+- **Visual Glitches:** Rendered values desynchronize across re-render cycles.
+- **Memory Leaks:** Impure event listeners or subscriptions duplicate repeatedly.
+- **Concurrent Failures:** Incomplete or discarded renders leave global application state corrupted.
 
-To prevent these issues, React requires **Render Purity** (functional components must act as pure functions):
-1.  **Same Input, Same Output:** Given the same props and state, a component must return the exact same JSX tree.
-2.  **No Side Effects:** The component must not mutate any variables or objects that existed before the component was rendered. It must be read-only with respect to its surroundings.
-
----
+React enforces **Render Purity** so component rendering remains predictable, testable, and compatible with Fiber, Concurrent Mode, and Strict Mode double-rendering.
 
 ### (2) Reality Metaphor
-Imagine baking a cake using a recipe card.
-- **Impure Recipe (Writing on walls):** The recipe says: *"To bake this cake, check the number written on the kitchen wall, add 1 to it, and write it back on the wall."* If two chefs try to bake cakes simultaneously, they will overwrite each other's numbers, resulting in burnt cakes and ruined calculations.
-- **Pure Recipe (Self-contained):** The recipe says: *"Mix 2 cups of flour, 3 eggs, and 1 cup of sugar to yield a cake."* The recipe does not depend on or modify anything outside the mixing bowl. You can bake 10 cakes in parallel or skip steps if you already have the ingredients prepared; the result is consistent.
+Imagine baking a cake using a printed recipe card.
 
----
+- **Impure Recipe (Modifying the Kitchen Wall):** The recipe reads: *"To bake this cake, check the number written on the kitchen wall, add 1 to it, write the new number back on the wall, and add that many cups of sugar."* If two bakers attempt to bake cakes simultaneously using this recipe, they continuously overwrite each other's numbers on the wall, ruining both cakes (**corrupting state**).
+- **Pure Recipe (Self-Contained Function):** The recipe reads: *"Combine 2 cups of flour, 3 eggs, and 1 cup of sugar to yield a cake."* The recipe depends solely on specified input ingredients and alters nothing outside the mixing bowl. Ten bakers can follow this recipe simultaneously in separate kitchens; every cake will turn out identical (**pure rendering**).
 
-### (3) Code Examples
+### (3) React Code Examples
 
-#### 1. The Impure Mutation Leak (Vulnerable Code)
-```javascript
-// BAD: Mutates a global variable during render execution!
-let guestCount = 0;
+#### Short Snippet
+```jsx
+// GOOD: Pure component deriving output strictly from props
+function TemperatureBadge({ celsius }) {
+  const fahrenheit = (celsius * 9/5) + 32;
+  return <span className="badge">{celsius}°C ({fahrenheit.toFixed(1)}°F)</span>;
+}
+```
 
-function Cup() {
-  guestCount = guestCount + 1; // Side Effect!
-  return <h2>Cup for guest #{guestCount}</h2>;
+#### Fuller Example
+```jsx
+import React, { useState } from 'react';
+
+// BAD (Impure): Mutates outer variable during render!
+let globalGuestCounter = 0;
+function ImpureCup() {
+  globalGuestCounter += 1; // ❌ Side effect in render body!
+  return <div>Cup for guest #{globalGuestCounter}</div>;
 }
 
-function Table() {
+// GOOD (Pure): Receives guest number as a prop
+function PureCup({ guestNumber }) {
+  return <div>Cup for guest #{guestNumber}</div>;
+}
+
+export default function GuestTable() {
   return (
-    <>
-      <Cup /> {/* Renders: Cup for guest #1 */}
-      <Cup /> {/* Renders: Cup for guest #2 */}
-      <Cup /> {/* Renders: Cup for guest #3 */}
-    </>
+    <div className="table-card">
+      <h3>Impure vs Pure Rendering</h3>
+      
+      {/* Pure components evaluate predictably regardless of re-render frequency */}
+      <PureCup guestNumber={1} />
+      <PureCup guestNumber={2} />
+      <PureCup guestNumber={3} />
+    </div>
   );
-}
-```
-*Why this fails:* If the browser window resizing triggers a re-render of `Table`, `guestCount` will keep incrementing (showing 4, 5, 6), creating unpredictable values.
-
-#### 2. The Pure Refactored Solution
-```javascript
-// GOOD: Passes variables as props; component maintains zero external state
-function Cup({ guestNumber }) {
-  return <h2>Cup for guest #{guestNumber}</h2>;
-}
-
-function Table() {
-  return (
-    <>
-      <Cup guestNumber={1} />
-      <Cup guestNumber={2} />
-      <Cup guestNumber={3} />
-    </>
-  );
-}
-```
-
----
-
-## 5. Common Mistakes & Pitfalls
-
-### Mistake 1: Mutating incoming props directly
-
-**The mistake:** Modifying properties of an object passed as a prop inside the component body:
-
-```javascript
-// BAD: Mutating props directly!
-function ProfileCard({ user }) {
-  user.lastActive = new Date(); // Side effect! Modifies parent state object.
-  
-  return <div>{user.name}</div>;
-}
-```
-
-**Why it's wrong:** Props are read-only snapshot objects. Mutating a property of an incoming object bypassed React's state management, meaning React will not detect the change and will skip necessary re-renders. It also modifies the data source for other components that share the same user object.
-
-*Fix:* Treat all props as immutable. If you need to log or modify data, do it inside an event handler or `useEffect`:
-
-```javascript
-// GOOD: Modifying state using event handlers
-function ProfileCard({ user, onUpdateStatus }) {
-  const handleVerify = () => {
-    onUpdateStatus(user.id, new Date());
-  };
-  return <button onClick={handleVerify}>Verify</button>;
 }
 ```
 
 ---
 
+## 4. Common Mistakes & Pitfalls
 
+### Mistake 1: Mutating Existing Props, State, or Array Inputs in Place
 
-### Mistake 2: Mutating Existing Objects or Arrays Passed as Props or State during Render
+**The mistake:** Calling `.sort()` or `.push()` directly on an array passed as a prop during render.
 
-**The mistake:** Calling `props.items.push(newItem)` or `user.score += 1` inside a render function.
-
-**Why it's wrong:** Mutating render input objects causes side-effects that break Pure Component memoization and Concurrent rendering. Always create copy mutations (`[...items, newItem]`).
+**Why it's wrong:** Array methods like `.sort()`, `.push()`, and `.splice()` mutate the original array object in-place. Because `items` is an object reference passed from a parent component, mutating it alters parent state during render, violating purity and breaking memoization.
 
 *Incorrect:*
-```javascript
-function List({ items }) {
-  items.push('new'); // ❌ Mutating input prop array directly!
-  return <ul>{items.map(i => <li key={i}>{i}</li>)}</ul>;
+```jsx
+function SortedList({ items }) {
+  // ❌ Impure! .sort() mutates the array prop in-place!
+  const sorted = items.sort(); 
+  return <ul>{sorted.map(i => <li key={i.id}>{i.name}</li>)}</ul>;
+}
+```
+
+**Why it's wrong:** Array methods like `.sort()`, `.push()`, and `.splice()` mutate the original array object in-place. Because `items` is an object reference passed from a parent component, mutating it alters parent state during render, violating purity and breaking memoization.
+
+*Fix:* Shallow-copy the array using spread syntax `[...items]` before performing mutations:
+```jsx
+function SortedList({ items }) {
+  // ✅ Pure: Creates a new array copy before sorting
+  const sorted = [...items].sort((a, b) => a.name.localeCompare(b.name));
+  return <ul>{sorted.map(i => <li key={i.id}>{i.name}</li>)}</ul>;
+}
+```
+
+### Mistake 2: Generating Non-Deterministic Values (`Math.random()`, `Date.now()`) During Render
+
+**The mistake:** Generating element keys or form element IDs using `id={`field-${Math.random()}`}` inside a render function.
+
+**Why it's wrong:** Pure functions must return identical outputs for identical inputs. Calling `Math.random()` or `new Date()` inside render generates different values on every render cycle, breaking Server-Side Rendering (SSR) hydration matching and causing unnecessary DOM rebuilds.
+
+*Incorrect:*
+```jsx
+function FormField({ label }) {
+  // ❌ Impure! Different ID generated on every single render cycle.
+  const id = `input-${Math.random()}`;
+  return <div><label htmlFor={id}>{label}</label><input id={id} /></div>;
 }
 ```
 
 *Fix:*
-```javascript
-function List({ items }) {
-  const formatted = [...items, 'new']; // Pure copy calculation
-  return <ul>{formatted.map(i => <li key={i}>{i}</li>)}</ul>;
+```jsx
+import { useId } from 'react';
+
+function FormField({ label }) {
+  // ✅ Pure: React's useId hook generates deterministic identifiers
+  const id = useId();
+  return <div><label htmlFor={id}>{label}</label><input id={id} /></div>;
 }
 ```
 
-### Mistake 3: Calling `Math.random()` or `Date.now()` Directly inside Render Functions
+### Mistake 3: Executing Network Requests or State Updates Directly in Render
 
-**The mistake:** Generating component element IDs using `id={Math.random()}` during render.
+**The mistake:** Calling `fetch()` or state setters (`setCount(...)`) unconditionally inside the main body of a component function.
 
-**Why it's wrong:** Pure functions MUST return identical outputs for identical inputs. Calling `Math.random()` produces different outputs on every render, breaking SSR hydration and DOM matching. Use `useId()` or generate IDs in event handlers.
+**Why it's wrong:** Render functions evaluate whenever props or state change. Initiating side effects directly in render causes infinite re-render loops or duplicate network traffic. Side effects belong inside event handlers (`onClick`) or `useEffect`.
 
 *Incorrect:*
-```javascript
-function Field() {
-  const id = Math.random(); // ❌ Impure non-deterministic calculation!
-  return <input id={id} />;
+```jsx
+function UserProfile({ userId }) {
+  const [data, setData] = useState(null);
+  // ❌ Side-effect directly in render body causes infinite re-render loop!
+  fetch(`/api/user/${userId}`).then(res => res.json()).then(d => setData(d));
+  return <div>{data?.name}</div>;
 }
 ```
 
 *Fix:*
-```javascript
-function Field() {
-  const id = useId(); // Deterministic React hook ID
-  return <input id={id} />;
+```jsx
+function UserProfile({ userId }) {
+  const [data, setData] = useState(null);
+  // ✅ Encapsulate side effects in useEffect
+  useEffect(() => {
+    fetch(`/api/user/${userId}`).then(res => res.json()).then(d => setData(d));
+  }, [userId]);
+  return <div>{data?.name}</div>;
 }
 ```
 
+---
 
+## 5. Practice Exercises
 
-### Mistake 4: Mutating Existing Objects or Arrays Passed as Props or State during Render
+### Exercise 1: Telemetry Data Smoother (IoT Telemetry)
 
-**The mistake:** Calling `props.items.push(newItem)` or `user.score += 1` inside a render function.
+**Scenario:** An IoT sensor dashboard receives raw noise readings. The `SmoothTelemetry` component must compute a moving average without mutating the incoming historical reading array prop.
 
-**Why it's wrong:** Mutating render input objects causes side-effects that break Pure Component memoization and Concurrent rendering. Always create copy mutations (`[...items, newItem]`).
+**Requirements:**
+1. Create `SmoothTelemetry` accepting a `readings` array prop (numbers).
+2. Compute the average of the last 5 readings.
+3. Use non-mutating array operations (`slice`, `reduce`).
+4. Ensure the original `readings` array remains completely unchanged.
 
-*Incorrect:*
-```javascript
-function List({ items }) {
-  items.push('new'); // ❌ Mutating input prop array directly!
-  return <ul>{items.map(i => <li key={i}>{i}</li>)}</ul>;
-}
-```
-
-*Fix:*
-```javascript
-function List({ items }) {
-  const formatted = [...items, 'new']; // Pure copy calculation
-  return <ul>{formatted.map(i => <li key={i}>{i}</li>)}</ul>;
-}
-```
-
-### Mistake 5: Calling `Math.random()` or `Date.now()` Directly inside Render Functions
-
-**The mistake:** Generating component element IDs using `id={Math.random()}` during render.
-
-**Why it's wrong:** Pure functions MUST return identical outputs for identical inputs. Calling `Math.random()` produces different outputs on every render, breaking SSR hydration and DOM matching. Use `useId()` or generate IDs in event handlers.
-
-*Incorrect:*
-```javascript
-function Field() {
-  const id = Math.random(); // ❌ Impure non-deterministic calculation!
-  return <input id={id} />;
-}
-```
-
-*Fix:*
-```javascript
-function Field() {
-  const id = useId(); // Deterministic React hook ID
-  return <input id={id} />;
-}
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Render Purity Refactoring
-
-**Problem:** The component below is impure because it mutates an array in-place during render. Refactor it to be pure:
-
-```javascript
-// Before (Impure - mutates incoming array):
-function SortedList({ numbers }) {
-  const sorted = numbers.sort(); // Mutates the array in-place!
-  return (
-    <ul>
-      {sorted.map(num => <li key={num}>{num}</li>)}
-    </ul>
-  );
-}
-
-// After (Pure - creates a copy before sorting):
-function SortedList({ numbers }) {
-  // Solution: create a shallow copy first using spread operator
-  const sorted = [...numbers].sort(); 
-  return (
-    <ul>
-      {sorted.map(num => <li key={num}>{num}</li>)}
-    </ul>
-  );
-}
-```
-
-**Expected output:**
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+> ```jsx
+> import React from 'react';
 > 
----
-
-### Exercise 2: Refactoring Impure Component to Pure Component
-
-**Problem:** Refactor impure component `function Clock() { const time = new Date().toLocaleTimeString(); return <div>{time}</div>; }` to receive `time` as a prop.
-
-**Expected output:**
-> [!check]- Answer
-> ```javascript
-> function Clock({ time }) {
->   return <div>{time}</div>;
+> export function SmoothTelemetry({ readings = [] }) {
+>   // Pure derivation: slice returns a new array copy without mutating readings
+>   const recentReadings = readings.slice(-5);
+>   const average = recentReadings.length > 0
+>     ? recentReadings.reduce((sum, r) => sum + r, 0) / recentReadings.length
+>     : 0;
+> 
+>   return (
+>     <div className="telemetry-card">
+>       <h4>5-Point Moving Average</h4>
+>       <div className="metric-display">{average.toFixed(2)} units</div>
+>       <small>Total Raw Samples: {readings.length}</small>
+>     </div>
+>   );
 > }
 > ```
 >
-> **Explanation:** Pure components derive UI strictly from input props without reading dynamic external state.
+> #### Technical Explanation
+> 1. **Non-Mutating Slicing**: `.slice(-5)` creates a shallow copy of array slices without altering the input `readings` prop array.
+> 2. **Pure Reduction**: `.reduce()` calculates sums over local variables without mutating outer-scope data.
+> 3. **Deterministic Output**: Given the same `readings` array input, the component returns identical JSX markup every time.
+> 4. **Zero Side Effects**: Contains no global mutations, timers, or network calls inside the render pass.
 > 
 ---
 
-### Exercise 3: Strict Mode Double Rendering
+### Exercise 2: Financial Order Book Sorting (Financial Trading)
 
-**Problem:** Why does React `StrictMode` intentionally execute component render functions twice in development? (To detect and surface impure render side-effects early).
+**Scenario:** A trading application receives an array of market orders. Create a `SortedOrderBook` component that sorts orders by price (descending for bids) without mutating parent data.
 
-**Expected output:**
+**Requirements:**
+1. Create `SortedOrderBook` taking an `orders` prop array (`id`, `price`, `volume`, `type`).
+2. Shallow-copy `orders` before calling `.sort()`.
+3. Filter bids vs asks cleanly during render.
+4. Provide structured implementation with technical explanation.
+
 > [!check]- Answer
-> ```text
-> To detect and surface impure render side-effects early
+>
+> #### Implementation
+> ```jsx
+> import React from 'react';
+> 
+> export function SortedOrderBook({ orders = [] }) {
+>   // Pure copy before sorting prevents mutating parent orders state array
+>   const sortedBids = [...orders]
+>     .filter(o => o.type === 'BID')
+>     .sort((a, b) => b.price - a.price);
+> 
+>   return (
+>     <div className="order-book-list">
+>       <h4>Top Bids</h4>
+>       <ul>
+>         {sortedBids.map(bid => (
+>           <li key={bid.id}>
+>             ${bid.price.toFixed(2)} — {bid.volume} units
+>           </li>
+>         ))}
+>       </ul>
+>     </div>
+>   );
+> }
 > ```
 >
-> **Explanation:** Double rendering in development exposes mutations and side-effects executed during render.
+> #### Technical Explanation
+> 1. **Array Spread Copying**: `[...orders]` creates a fresh array container, allowing `.sort()` to execute purely.
+> 2. **Chained Pure Methods**: `.filter()` returns a new array, keeping operations isolated within render scope.
+> 3. **State Integrity**: Protects parent state arrays from unintended sorting mutations across render updates.
+> 4. **Strict Mode Safety**: Functions predictably when React Strict Mode executes renders twice in development.
 > 
-## 7. Related Terms
-- [Side Effects](../level_03/side_effects.md) — The operations that must be isolated from render execution.
-- [Strict Mode](../level_08/strict_mode.md) — A React utility that runs components twice in development to catch purity bugs.
-- [`useEffect` Hook](../level_03/use_effect.md) — The React hook used to execute side effects safely.
-- [Components](components.md) — Related concept: Components.
-- [Props (Properties)](props.md) — Related concept: Props (Properties).
-- [Derived State](../level_02/derived_state.md) — Related concept: Derived State.
+---
+
+### Exercise 3: E-Commerce Price Currency Converter (E-Commerce)
+
+**Scenario:** An international store component converts product catalog prices dynamically based on currency exchange rates without modifying product object props.
+
+**Requirements:**
+1. Create `ConvertedPrice` taking `product` object (`id`, `priceUSD`) and `exchangeRate` (number).
+2. Calculate target currency value purely during render.
+3. Avoid mutating `product.priceUSD` or attaching calculated properties to `product`.
+4. Provide structured implementation with technical explanation.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> import React from 'react';
+> 
+> export function ConvertedPrice({ product, exchangeRate, currencySymbol = '€' }) {
+>   // Pure local calculation without mutating product object properties
+>   const convertedAmount = (product.priceUSD * exchangeRate).toFixed(2);
+> 
+>   return (
+>     <span className="price-tag">
+>       {currencySymbol}{convertedAmount}
+>     </span>
+>   );
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Read-Only Props**: Treats `product` as an immutable object snapshot; reads `priceUSD` without property mutation.
+> 2. **Local Variable Derivation**: `convertedAmount` computes on-the-fly without requiring local state or effects.
+> 3. **Referential Stability**: Avoids altering underlying object memory references shared across components.
+> 4. **Testability**: Pure component logic allows effortless unit testing with static prop inputs.
+> 
+---
+
+## 6. Related Terms
+
+- [Components](components.md) — The functional units required to comply with render purity contracts.
+- [Props (Properties)](props.md) — Read-only input parameters passed into pure component functions.
+- [Side Effects](../level_03/side_effects.md) — Operations (fetching, subscriptions) that must be isolated from render execution.
+- [`useEffect` Hook](../level_03/use_effect.md) — React hook used to execute side effects safely outside render passes.
+- [Strict Mode](../level_08/strict_mode.md) — Development tool that double-invokes renders to catch purity violations.
 
 ---
 
-## 8. Key Takeaways
-- Components must be pure functions of props and state.
-- Render functions should behave like a formula: same inputs must yield the same output.
-- Rendering must not modify any global or outer-scope variables.
-- Treat props as read-onlySnapshots; never mutate props directly.
-- Use `Strict Mode` during development to identify render purity issues early.
-- Keep side effects (like data fetches, timeouts, and state updates) out of the render body.
+## 7. Key Takeaways
+
+- Render Purity mandates that components act as pure functions of props and state.
+- Given identical inputs, a component must always return identical JSX markup.
+- Render functions must NEVER modify global variables, outer-scope objects, or incoming props.
+- Never call mutating array methods (`.sort()`, `.push()`) directly on props; shallow-copy first (`[...items]`).
+- Keep side effects (API calls, DOM updates, timers) out of render bodies; place them in event handlers or `useEffect`.

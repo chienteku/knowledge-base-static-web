@@ -6,249 +6,459 @@
 ---
 
 ## 1. Prerequisites
-- [React Server Components (RSC)](rsc.md) — The server-only architecture that serves as the default.
-- [Hydration](hydration.md) — The process that client components undergo to become interactive.
+
+- [React Server Components (RSC)](rsc.md) — The server-only component architecture that serves as the default model.
+- [Hydration](hydration.md) — The process through which server HTML becomes interactive on the client.
 
 ---
 
 ## 2. Term Category
-- **Rendering Mechanic / Component Pattern**
+
+**Rendering Mechanic (server-client boundary directive)**: Client and Server Components constitute React's modern split-runtime architecture. Server Components execute exclusively on the server during render, generating lightweight HTML and serializable React node graphs without sending executable component JavaScript to the client browser. Client Components, designated via the `"use client"` boundary directive, are packaged into the browser JavaScript bundle and hydrated to support DOM event handlers, state hooks, and client-side web APIs.
+
+This dual-runtime paradigm fundamentally replaces traditional client-heavy single page application (SPA) architectures. By establishing strict boundaries at the file module level, React enables server-side database access and heavy library execution while ensuring client bundles contain only the interactive dynamic elements required for user interaction.
 
 ---
 
-## 3. Environment Context
-- **Universal** (Runs on the server for initial HTML rendering, and in the browser for hydration and interaction).
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In modern React frameworks (like Next.js), components are divided into two categories based on where they render and execute:
 
-#### 1. Server Components (The Default)
-These components run **only on the server**. They can directly query databases, read file systems, and execute backend tasks. Because their code never leaves the server, they do not add to the JavaScript bundle size sent to the browser.
--   **Limitations:** Since they do not run in the browser, they **cannot** use browser APIs, add event listeners (like `onClick`), or use hooks that track lifecycle or state (such as `useState` or `useEffect`).
+In traditional Client-Side Rendering (CSR), every component in the React tree is bundled and sent to the client browser. As applications grow, JavaScript bundle sizes bloat, leading to slow page loads, poor core web vitals, and delayed Time-To-Interactive (TTI). Conversely, Server-Side Rendering (SSR) sends HTML rendered on the server, but still requires the entire React component tree to be downloaded and hydrated in the browser.
 
-#### 2. Client Components
-These are standard React components. They render initial HTML on the server (for SEO and fast loading) and then download their JavaScript files to the browser to execute and enable interactivity (**hydration**).
--   **Capabilities:** They can use all React hooks (`useState`, `useEffect`, `useContext`), add event listeners, and access browser APIs (like `window` or `localStorage`).
+React Server Components and the `"use client"` boundary directive solve this by creating an explicit separation of concerns between server execution and client interactivity. Server Components (the default in modern React frameworks like Next.js App Router) execute purely on the server. They can directly fetch data, query databases, read local files, and consume heavy dependencies without adding a single byte to the client JavaScript payload.
 
-#### The `"use client"` Directive
-To separate these two rendering environments, React uses the `"use client"` directive.
+The `"use client"` directive acts as a module-level boundary declaration. Placed at the top of a file, it signals to the bundler (such as Webpack or Turbopack) that this component and all of its nested imports belong in the client bundle. This allows developers to isolate stateful, interactive UI elements (like buttons, forms, and accordions) while keeping the majority of the application logic on the server.
 
-When you add `"use client"` as a string at the very top of a file (above any imports), you define a **Client Boundary**. This tells the bundler (e.g. Webpack, turbopack) to include this file and all of its imported child modules in the JavaScript bundle sent to the browser.
+### (2) Reality Metaphor
 
----
+Imagine a commercial restaurant operation.
 
-### (2) Component Relationship Rules
--   **Rule 1: Server Components can import Client Components.**
--   **Rule 2: Client Components CANNOT import Server Components.** Because Client Components execute in the browser, importing a Server Component directly would pull server-only code (like database queries) into the browser bundle, causing errors.
--   **Rule 3: Client Components can accept Server Components as children.** If a Client Component needs to wrap a Server Component, pass the Server Component down as a prop (usually `{children}`) from a parent Server Component.
+- **Server Components (The Kitchen):** The kitchen staff prepare dishes using heavy commercial equipment, secret sauce recipes, and direct access to cold-storage inventory (databases and file systems). Customers never enter the kitchen, and the heavy cooking equipment never leaves the building. The output is a cleanly plated meal (rendered HTML / JSON stream).
+- **Client Components (The Waitstaff):** The waiters operate on the dining floor. They talk directly to customers (listen for DOM events), take requests (update local state), and bring appetizers or drinks immediately. The waiter needs orders prepared by the kitchen (props passed from Server Components) to serve diners, but diners do not need access to the secret kitchen recipes (server code is hidden from browser bundles).
 
----
+### (3) React Code Examples
 
-### (3) Reality Metaphor
-Imagine a restaurant operation.
-- **Server Components (The Kitchen - Back Office):** The chefs cook the food, read recipes, and access the pantry (**querying databases**). They operate in a secure area. They do not talk directly to customers (**no event listeners**).
-- **Client Components (The Waiter - Front Desk):** The waiters talk to customers (**event listeners**), write orders on pads (**state updates**), and coordinate the dining room. They need food from the kitchen (**props from Server Components**) to serve customers, but customers are not allowed into the kitchen directly (**cannot import server-side code into browser bundles**).
+#### Short Snippet
 
----
-
-### (4) React Code Example: Combining Server and Client
-
-#### 1. The Client Component (State & Interactivity)
 ```jsx
-// CounterButton.js
-'use client'; // Marks this file and its dependencies as Client Components
+// CounterButton.jsx
+'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-export default function CounterButton() {
-  const [count, setCount] = useState(0);
+export function CounterButton({ initialCount = 0 }) {
+  const [count, setCount] = useState(initialCount);
 
   return (
-    <button onClick={() => setCount(count + 1)}>
-      Clicked {count} times
+    <button className="btn-primary" onClick={() => setCount(prev => prev + 1)}>
+      Count: {count}
     </button>
   );
 }
 ```
 
-#### 2. The Server Component (Database Access, Imports Client Component)
-```jsx
-// UserProfile.js (No directive = default Server Component)
-import React from 'react';
-import CounterButton from './CounterButton'; // Allowed: Server imports Client
+#### Fuller Example
 
-export default async function UserProfile() {
-  // Directly access database server-side
-  const user = await db.users.find({ id: 1 });
+```jsx
+// UserDashboard.jsx (Server Component - Default)
+import { CounterButton } from './CounterButton';
+
+// Server-side data fetching helper (executed on server only)
+async function fetchUserData(userId) {
+  // Simulated DB query or API call
+  return { id: userId, name: 'Alex Rivera', role: 'Architect', loginCount: 42 };
+}
+
+export default async function UserDashboard({ userId }) {
+  const user = await fetchUserData(userId);
 
   return (
-    <div className="profile-card">
-      <h1>User: {user.name}</h1>
-      <p>Log your interactions below:</p>
-      
-      {/* Compose the interactive client component */}
-      <CounterButton />
-    </div>
+    <section className="dashboard-card">
+      <header className="card-header">
+        <h2>User Profile: {user.name}</h2>
+        <span className="badge">{user.role}</span>
+      </header>
+
+      <div className="card-body">
+        <p>Welcome back! You have logged in {user.loginCount} times.</p>
+        
+        {/* Render interactive Client Component inside Server Component */}
+        <div className="action-row">
+          <CounterButton initialCount={user.loginCount} />
+        </div>
+      </div>
+    </section>
   );
 }
 ```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Placing `"use client"` at the top of every single file
+### Mistake 1: Adding `"use client"` to top-level layout files
 
-**The mistake:** Adding the `"use client"` directive to every component file out of precaution:
+**The mistake:** Placing `"use client"` at line 1 of a root layout file (`layout.jsx` or `App.jsx`) to resolve client API or hook errors.
 
-**Why it's wrong:** Adding `"use client"` everywhere forces React to include all components in the browser bundle, bypassing the benefits of Server Components. This results in larger bundle sizes and slower page load times.
-
-*Fix:* Keep components as Server Components by default. Only add `"use client"` when you need browser-specific features:
-1.  Using interactive hooks (e.g. `useState`, `useEffect`).
-2.  Adding DOM event listeners (e.g. `onClick`, `onSubmit`).
-3.  Accessing browser-only APIs (e.g. `window`, `document`, `localStorage`).
-
----
-
-
-
-### Mistake 2: Attempting to Pass Non-Serializable Props (e.g. Callback Functions) from Server to Client Components
-
-**The mistake:** Passing `<ClientChild onClick={() => console.log('hi')} />` from a React Server Component (RSC).
-
-**Why it's wrong:** Server Component props MUST be serializable over the wire (JSON-serializable primitives, objects, arrays). Callback functions cannot be serialized across the server-client boundary! Move interactive event handlers into Client Components.
+**Why it's wrong:** Applying `"use client"` at the root layout turns that entire file and every component imported beneath it into Client Components. This completely opts out of Server Component benefits across the application, inflating bundle sizes and ruining initial load performance.
 
 *Incorrect:*
-```javascript
-// Inside Server Component:
-<ClientButton onClick={() => alert('click')} /> // ❌ Functions cannot be serialized!
+```jsx
+// layout.jsx
+'use client'; // ❌ Forces the entire application tree into the client bundle!
+
+import { Header } from './Header';
+import { Footer } from './Footer';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <Header />
+        {children}
+        <Footer />
+      </body>
+    </html>
+  );
+}
 ```
 
 *Fix:*
-```javascript
-// Define event handler inside Client Component
-'use client';
-function ClientButton() { return <button onClick={() => alert('click')}>Click</button>; }
+```jsx
+// layout.jsx (Kept as Server Component)
+import { Header } from './Header'; // Kept as Server Component
+import { InteractiveNav } from './InteractiveNav'; // 'use client' declared inside this file only
+import { Footer } from './Footer';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <Header />
+        <InteractiveNav />
+        {children}
+        <Footer />
+      </body>
+    </html>
+  );
+}
 ```
 
-### Mistake 3: Adding `'use client'` Directives to Top-Level Layout Components Un-Necessarily
+### Mistake 2: Importing Server Components directly inside Client Components
 
-**The mistake:** Adding `'use client'` at line 1 of root `layout.tsx` component.
+**The mistake:** Attempting to import and render a Server Component directly inside a file marked with `"use client"`.
 
-**Why it's wrong:** Adding `'use client'` to a top-level parent component converts THAT component AND ALL OF ITS CHILDREN into Client Components, opting out of Server Component benefits across the whole app. Add `'use client'` only to small leaf components requiring interactivity.
+**Why it's wrong:** Client Components execute in the browser. When a Client Component imports a Server Component file, the bundler is forced to compile the Server Component into the client bundle. If that Server Component references server-only modules (like `fs` or `database`), the build fails or leaks secrets.
 
 *Incorrect:*
-```javascript
-// 'use client' at top of root layout.tsx
+```jsx
+// InteractiveWidget.jsx
+'use client';
+
+import { ServerDataCard } from './ServerDataCard'; // ❌ Direct import breaks server isolation!
+
+export function InteractiveWidget() {
+  return (
+    <div className="widget">
+      <ServerDataCard />
+    </div>
+  );
+}
 ```
 
 *Fix:*
-```javascript
-Keep layout.tsx as Server Component; add 'use client' only to interactive leaf widgets
-```
-
-## 6. Practice Exercises
-
-### Exercise 1: Structural Composition
-
-**Problem:** You are building a landing page. You have a `<ClientCarousel />` (needs state for slides) and a `<ServerProductCard />` (reads from database). Compose the components so that the server-rendered cards are displayed inside the client carousel:
-
 ```jsx
-// CarouselWrapper.js ('use client' container)
+// InteractiveWidget.jsx
 'use client';
-import React, { useState } from 'react';
 
-export default function ClientCarousel({ children }) {
-  const [activeSlide, setActiveIndex] = useState(0);
+export function InteractiveWidget({ children }) {
   return (
-    <div className="carousel">
-      {/* Render the server-rendered items passed as children */}
-      <div className="track">{children}</div>
+    <div className="widget">
+      {/* Accept Server Component as children prop from parent Server Component */}
+      {children}
     </div>
   );
 }
 
-// Page.js (Server Component)
-import React from 'react';
-import ClientCarousel from './CarouselWrapper';
-import ServerProductCard from './ServerProductCard';
+// Page.jsx (Server Component)
+// <InteractiveWidget><ServerDataCard /></InteractiveWidget>
+```
 
-export default async function Page() {
-  const products = await getProductsFromDB();
+### Mistake 3: Passing non-serializable props across the server-client boundary
 
-  return (
-    <div>
-      <h1>Featured Catalog</h1>
-      
-      {/* Solution: Pass server components as children to the client wrapper */}
-      <ClientCarousel>
-        {products.map(p => (
-          <ServerProductCard key={p.id} product={p} />
-        ))}
-      </ClientCarousel>
-    </div>
-  );
+**The mistake:** Passing callback functions, class instances, or Symbol objects as props from a Server Component to a Client Component.
+
+**Why it's wrong:** Props passed from Server Components to Client Components must be serializable over the wire via JSON/RSC stream protocol. Functions cannot be serialized across network or render boundaries.
+
+*Incorrect:*
+```jsx
+// ServerContainer.jsx (Server Component)
+import { ClientButton } from './ClientButton';
+
+export default function ServerContainer() {
+  const handleClick = () => console.log('Clicked'); // ❌ Function cannot be serialized!
+
+  return <ClientButton onClick={handleClick} />;
+}
+```
+
+*Fix:*
+```jsx
+// ClientButton.jsx
+'use client';
+
+export function ClientButton() {
+  // Define event handler logic directly inside the Client Component
+  const handleClick = () => console.log('Clicked');
+
+  return <button onClick={handleClick}>Click Me</button>;
 }
 ```
 
 ---
 
+## 5. Practice Exercises
+
+### Exercise 1: E-Commerce Product Catalog Layout
+
+**Scenario:** Build an e-commerce catalog page where product data is fetched directly from a backend database on the server, but individual product items can be added to an interactive shopping cart managed by client state.
+
+**Requirements:**
+1. Create a server component `ProductCatalog` that simulates fetching products asynchronously.
+2. Create a client component `AddToCartButton` using `"use client"` and `useState`.
+3. Pass product IDs and initial inventory numbers as serializable props to `AddToCartButton`.
+4. Ensure `AddToCartButton` updates local item count using `setCount(prev => prev + 1)`.
+
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Server vs Client Component Placement Rule
-
-**Problem:** Categorize component type: 1. Database query component (`Server Component`); 2. Interactive modal toggle button (`Client Component`); 3. Static footer layout (`Server Component`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Server Component, 2. Client Component, 3. Server Component
-> ```
-> ```text
-> 1. Server Component, 2. Client Component, 3. Server Component
-> ```
 >
-> **Explanation:** Default to Server Components; use Client Components (`'use client'`) for interactive state/hooks.
-> 
----
-
-### Exercise 3: Passing Server Component as Children to Client Component
-
-**Problem:** Can a Client Component render a Server Component passed as `children` prop? (Yes, children slots allow rendering Server Components inside Client Component layouts).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Yes, children slots allow rendering Server Components inside Client Component layouts
-> ```
-> ```javascript
-> // ClientWrapper.tsx ('use client')
-> function ClientWrapper({ children }) {
->   const [open, setOpen] = useState(true);
->   return <div>{open && children}</div>;
+> #### Implementation
+> ```jsx
+> // AddToCartButton.jsx
+> 'use client';
+>
+> import { useState } from 'react';
+>
+> export function AddToCartButton({ productId, stock }) {
+>   const [cartQuantity, setCartQuantity] = useState(0);
+>
+>   const handleAdd = () => {
+>     if (cartQuantity < stock) {
+>       setCartQuantity(prev => prev + 1);
+>     }
+>   };
+>
+>   return (
+>     <div className="cart-controls">
+>       <button 
+>         className="btn-add" 
+>         onClick={handleAdd}
+>         disabled={cartQuantity >= stock}
+>       >
+>         {cartQuantity >= stock ? 'Out of Stock' : `Add to Cart (${cartQuantity})`}
+>       </button>
+>     </div>
+>   );
+> }
+>
+> // ProductCatalog.jsx (Server Component)
+> async function getProducts() {
+>   return [
+>     { id: 'p1', name: 'Mechanical Keyboard', price: 129.99, stock: 5 },
+>     { id: 'p2', name: 'Ergonomic Mouse', price: 79.99, stock: 12 }
+>   ];
+> }
+>
+> export default async function ProductCatalog() {
+>   const products = await getProducts();
+>
+>   return (
+>     <section className="catalog">
+>       <h1>Product Catalog</h1>
+>       <div className="grid">
+>         {products.map(product => (
+>           <article key={product.id} className="card">
+>             <h3>{product.name}</h3>
+>             <p>${product.price}</p>
+>             <AddToCartButton productId={product.id} stock={product.stock} />
+>           </article>
+>         ))}
+>       </div>
+>     </section>
+>   );
 > }
 > ```
 >
-> **Explanation:** Children composition props allow nesting Server Components inside Client Component boundaries.
+> #### Technical Explanation
+> 1. **Server Data Fetching**: `ProductCatalog` executes on the server, fetching database records without bundling database client code into the browser.
+> 2. **Client Boundary**: `AddToCartButton` marks its file with `"use client"`, allowing the use of state (`useState`) and DOM click events (`onClick`).
+> 3. **Serializable Props**: Primitive values (`productId`, `stock`) are passed across the RSC boundary cleanly.
+> 4. **State Updater Pattern**: Local quantity updates use `setCartQuantity(prev => prev + 1)` to prevent race conditions during rapid clicks.
 > 
-## 7. Related Terms
-- [React Server Components (RSC)](rsc.md) — The default server-side rendering architecture.
-- [Server Actions & `"use server"`](server_actions.md) — Calling server-side database handlers from client-side buttons.
+### Exercise 2: IoT Telemetry Dashboard Wrapper
+
+**Scenario:** Design an IoT Telemetry dashboard where a parent Server Component fetches sensor telemetry data, while a Client Component `ModalWrapper` manages an open/close toggle state and accepts server-rendered sensor cards via the `children` prop.
+
+**Requirements:**
+1. Implement `ModalWrapper` with `"use client"`, managing `isOpen` state with a button to toggle visibility.
+2. Render `{children}` inside `ModalWrapper` when `isOpen` is `true`.
+3. Create a server component `TelemetryDashboard` that fetches telemetry records and passes server-rendered card elements as children into `ModalWrapper`.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> // ModalWrapper.jsx
+> 'use client';
+>
+> import { useState } from 'react';
+>
+> export function ModalWrapper({ title, children }) {
+>   const [isOpen, setIsOpen] = useState(false);
+>
+>   return (
+>     <div className="modal-container">
+>       <button onClick={() => setIsOpen(prev => !prev)}>
+>         {isOpen ? 'Close Telemetry View' : `Open ${title}`}
+>       </button>
+>       {isOpen && (
+>         <div className="modal-dialog">
+>           <h3>{title}</h3>
+>           <div className="modal-content">{children}</div>
+>         </div>
+>       )}
+>     </div>
+>   );
+> }
+>
+> // TelemetryDashboard.jsx (Server Component)
+> async function fetchSensorData() {
+>   return [
+>     { id: 's1', location: 'Server Room A', temp: 21.4, status: 'NOMINAL' },
+>     { id: 's2', location: 'HVAC Unit 4', temp: 34.8, status: 'WARNING' }
+>   ];
+> }
+>
+> export default async function TelemetryDashboard() {
+>   const sensors = await fetchSensorData();
+>
+>   return (
+>     <main className="telemetry-page">
+>       <h2>IoT Live Telemetry</h2>
+>       <ModalWrapper title="Detailed Sensor Metrics">
+>         {sensors.map(sensor => (
+>           <div key={sensor.id} className={`sensor-card ${sensor.status.toLowerCase()}`}>
+>             <h4>{sensor.location}</h4>
+>             <p>Temperature: {sensor.temp}°C</p>
+>             <p>Status: {sensor.status}</p>
+>           </div>
+>         ))}
+>       </ModalWrapper>
+>     </main>
+>   );
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Children Hole Pattern**: Server-rendered sensor cards are evaluated on the server and passed into `ModalWrapper` via the `children` prop.
+> 2. **Client State Control**: `ModalWrapper` controls visibility using `useState` without requiring sensor rendering logic to run on the client.
+> 3. **Bundle Optimization**: Sensor data formatting and styling logic remains server-rendered, minimizing client JavaScript size.
+> 4. **Encapsulated Interactivity**: Toggle UI logic is contained exclusively inside the `"use client"` module boundary.
+> 
+### Exercise 3: Financial Trading Order Desk Boundary
+
+**Scenario:** Develop a Financial Trading Order Desk where live stock quotes are displayed via server rendering, while order execution input fields handle user validation on the client before triggering actions.
+
+**Requirements:**
+1. Implement `OrderForm` as a Client Component managing `quantity` and `price` input state.
+2. Validate inputs locally on the client before submission.
+3. Combine `OrderForm` with a Server Component `MarketSummary` that renders static market indices.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> // OrderForm.jsx
+> 'use client';
+>
+> import { useState } from 'react';
+>
+> export function OrderForm({ ticker, currentPrice }) {
+>   const [quantity, setQuantity] = useState(10);
+>   const [statusMessage, setStatusMessage] = useState('');
+>
+>   const handleSubmit = (e) => {
+>     e.preventDefault();
+>     if (quantity <= 0) {
+>       setStatusMessage('Quantity must be greater than zero.');
+>       return;
+>     }
+>     const totalCost = (quantity * currentPrice).toFixed(2);
+>     setStatusMessage(`Order placed: ${quantity} shares of ${ticker} for $${totalCost}`);
+>   };
+>
+>   return (
+>     <form onSubmit={handleSubmit} className="order-form">
+>       <h4>Trade {ticker}</h4>
+>       <label>
+>         Quantity:
+>         <input 
+>           type="number" 
+>           value={quantity} 
+>           onChange={(e) => setQuantity(Number(e.target.value))}
+>         />
+>       </label>
+>       <p>Estimated Cost: ${(quantity * currentPrice).toFixed(2)}</p>
+>       <button type="submit">Submit Order</button>
+>       {statusMessage && <p className="status">{statusMessage}</p>}
+>     </form>
+>   );
+> }
+>
+> // TradingDesk.jsx (Server Component)
+> async function getMarketIndices() {
+>   return { S_P500: 5120.45, NASDAQ: 16240.10, AAPL: 185.50 };
+> }
+>
+> export default async function TradingDesk() {
+>   const market = await getMarketIndices();
+>
+>   return (
+>     <div className="trading-desk">
+>       <header className="ticker-bar">
+>         <span>S&P 500: {market.S_P500}</span> | <span>NASDAQ: {market.NASDAQ}</span>
+>       </header>
+>       
+>       <section className="desk-body">
+>         <h3>Active Order Ticket</h3>
+>         <OrderForm ticker="AAPL" currentPrice={market.AAPL} />
+>       </section>
+>     </div>
+>   );
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Client Form Handling**: `OrderForm` uses `"use client"` to manage interactive form fields, handling `onChange` and `onSubmit` events.
+> 2. **Server Data Preloading**: Market prices are fetched securely on the server and passed as primitive serializable props to `OrderForm`.
+> 3. **Input Validation**: Interactive validation happens immediately on the client without round-tripping to the server.
+> 4. **Clean Boundary Split**: Market index bar remains zero-JS server HTML, while the order ticket remains fully interactive.
+> 
+---
+
+## 6. Related Terms
+
+- [React Server Components (RSC)](rsc.md) — The core architecture that defaults all components to server-only rendering.
+- [Hydration](hydration.md) — The process of attaching client DOM event listeners to server-rendered HTML.
+- [Server Actions & `"use server"`](server_actions.md) — Asynchronous functions defined on the server that can be invoked from client components.
+- [Next.js](nextjs.md) — The modern React framework implementing Client and Server component boundaries via the App Router.
 
 ---
 
-## 8. Key Takeaways
-- Server Components execute only on the server, sending zero JavaScript to the browser.
-- Client Components execute on the server for SSR and hydrate in the browser.
-- Use `"use client"` at the top of a file to declare a Client Component boundary.
-- Server Components can import Client Components.
-- Client Components cannot import Server Components directly.
-- Pass Server Components as `{children}` props to render them inside Client Components.
-- Use `"use client"` only when interactive hooks, event listeners, or browser APIs are required.
+## 7. Key Takeaways
+
+- Components are Server Components by default in modern React architectures, running exclusively on the server.
+- Use `"use client"` at the top of a file to declare a Client Component boundary for interactivity, hooks, and event handlers.
+- Server Components can import Client Components, but Client Components cannot directly import Server Components.
+- Pass Server Components as `{children}` props into Client Components to nest server-rendered trees inside client wrappers.
+- All props passed across the Server-to-Client boundary must be serializable (no callback functions or non-serializable objects).

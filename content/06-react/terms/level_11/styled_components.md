@@ -1,186 +1,343 @@
 # Styled Components / Emotion (CSS-in-JS)
 
 > **Level 11 — Ecosystem Libraries**
-> A popular paradigm (and set of libraries) that allows you to write actual CSS code directly inside your JavaScript files, binding the styles tightly to individual React components.
+> A component styling paradigm that writes actual CSS code directly inside JavaScript files using tagged template literals, binding styles tightly to React components.
 
 ---
 
 ## 1. Prerequisites
-- [Components](../level_01/components.md) — What you are styling.
-- [Props (Properties)](../level_01/props.md) — How CSS-in-JS conditionally changes styles.
+
+- [Components](../level_01/components.md) — The visual UI components styled by CSS-in-JS libraries.
+- [Props (Properties)](../level_01/props.md) — How styled components evaluate dynamic JavaScript variables to compute CSS styles.
 
 ---
 
 ## 2. Term Category
-- **React Ecosystem / Styling Library**
+
+**Ecosystem (css-in-js styling library)**: Styled Components and Emotion are CSS-in-JS component styling libraries for React. Utilizing JavaScript's ES6 Tagged Template Literals feature (`styled.button`...``), CSS-in-JS libraries generate React components with scoped, auto-generated CSS class names permanently attached to them.
+
+Rather than maintaining separate global `.css` stylesheet files and manually assigning string class names (`className="btn-primary"`), CSS-in-JS components encapsulate styling logic directly within JavaScript modules. When a component unmounts or is deleted from the codebase, its associated CSS rules are automatically garbage-collected and eliminated from the build payload.
 
 ---
 
-## 3. Environment Context
-- **Client-Side (React DOM)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-In traditional web development, you have an `index.html` file and a massive `styles.css` file. 
-If you delete a `<button>` from your HTML, you often forget to delete the `.btn-primary` class from your CSS file. Over time, your CSS file becomes bloated with thousands of lines of "dead code" that nobody is brave enough to delete.
-Also, dealing with global class name collisions is a nightmare (two developers both naming a class `.container`).
-**CSS-in-JS** (like Styled Components or Emotion) solves this. It scopes the CSS strictly to the component. If you delete the component, the CSS is automatically deleted with it!
 
-### (2) How to use Styled Components
-You use a special JavaScript syntax called "Tagged Template Literals" (backticks) to write standard CSS. It returns a fully functioning React Component with the CSS permanently attached to it!
+In traditional web development, HTML markup and CSS stylesheets are physically separated into different files (`index.html` and `styles.css`). As applications grow to hundreds of components, this separation introduces significant production issues:
+1. **Global Class Collisions:** Two developers working on separate components both create a `.card` or `.container` CSS selector, causing unexpected global style overrides across the app.
+2. **Dead Code Accumulation:** Deleting a React component file from the project rarely results in deleting its corresponding CSS classes from `styles.css`. Over time, stylesheets bloat with thousands of lines of orphaned "dead CSS" that no engineer dares to remove.
+3. **Static Styling Limitations:** Changing a CSS property based on dynamic component state required writing conditional string concatenations: `className={`btn ${isActive ? 'active' : ''}`}`.
 
-```javascript
+Styled Components and Emotion resolve these issues. CSS rules are scoped strictly to individual component instances using unique hashed class names (e.g. `sc-bdVaJa eKzOev`). When a component file is deleted, 100% of its associated CSS is deleted with it. Furthermore, because CSS rules are defined inside JavaScript template literals, styles can directly evaluate component **Props** at runtime.
+
+### (2) Reality Metaphor
+
+Imagine custom-tailoring clothing for a theatrical performance.
+
+- **Traditional CSS (Universal Costume Wardrobe Racks):** All costumes are stored on giant global racks in a central warehouse (**a 10,000-line global `styles.css` file**). If an actor needs red pants, they search the global rack for tag `#red-pants-item-42`. If two actors need red pants, one might accidentally take the wrong pair, causing costume collisions (**CSS specificity & class collision bugs**). When a character is cut from the script, their red pants remain on the global rack forever (**dead CSS accumulation**).
+- **Styled Components (Custom Fitted Suits with Attached Tag):** Every actor wears a custom-tailored suit that has its fabric specifications, measurements, and color rules permanently stitched into the lining of the jacket (**CSS bundled inside the JS component**). If the character is removed from the play, taking the actor out of the cast automatically removes their suit from the building (**100% dead code elimination**). If the script calls for the suit to turn blue when the character becomes king (**dynamic prop logic**), the fabric changes color automatically on demand.
+
+### (3) React Code Examples
+
+#### Short Snippet
+
+```jsx
+// PrimaryButton.jsx (Styled Components)
 import styled from 'styled-components';
 
-// 1. Create a styled component
-const PrimaryButton = styled.button`
-  background-color: blue;
-  color: white;
+// Creates a React component with scoped CSS attached
+export const PrimaryButton = styled.button`
+  background-color: #007AFF;
+  color: #FFFFFF;
   padding: 10px 20px;
-  border-radius: 5px;
-  
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+
   &:hover {
-    background-color: darkblue;
+    background-color: #0056B3;
   }
 `;
-
-function App() {
-  // 2. Use it just like a normal React component!
-  return <PrimaryButton>Click Me!</PrimaryButton>;
-}
 ```
 
-### (3) Dynamic Styling via Props
-Because the CSS is inside JavaScript, it can read React Props! You can change the CSS dynamically based on the component's state.
+#### Fuller Example
 
-```javascript
-// If the `isWarning` prop is true, it's red. Otherwise, it's green.
-const StatusBadge = styled.div`
-  background-color: ${props => props.isWarning ? 'red' : 'green'};
-  padding: 5px;
+```jsx
+// StatusBadge.jsx
+'use client';
+
+import styled from 'styled-components';
+
+// Dynamic styling reading transient props ($status)
+const BadgeContainer = styled.div`
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+
+  /* Dynamic CSS evaluation based on $status prop */
+  background-color: ${props => {
+    switch (props.$status) {
+      case 'CRITICAL': return '#FFD2D2';
+      case 'WARNING': return '#FFF0C2';
+      default: return '#D2F5D3';
+    }
+  }};
+
+  color: ${props => {
+    switch (props.$status) {
+      case 'CRITICAL': return '#D8000C';
+      case 'WARNING': return '#9F6000';
+      default: return '#4F8A10';
+    }
+  }};
 `;
 
-<StatusBadge isWarning={true}>Error!</StatusBadge>
+export function StatusBadge({ status = 'NOMINAL', label }) {
+  return (
+    // Transient prop $status is consumed by styled-components and omitted from DOM
+    <BadgeContainer $status={status}>
+      <span className="dot">● </span>
+      {label || status}
+    </BadgeContainer>
+  );
+}
 ```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Defining Styled Components inside the Render method
+### Mistake 1: Defining Styled Components inside component render function bodies
 
-**The mistake:** A developer writes `const MyButton = styled.button...` *inside* the `function App() { ... }` body.
+**The mistake:** Declaring `const MyStyledDiv = styled.div...` *inside* a parent component function body.
 
-**Why it's wrong:** Every time `<App>` re-renders, it will create a brand new Styled Component from scratch, generating a new CSS class name, forcing the browser to recalculate all styles, and destroying any CSS animations that were playing.
-**Golden Rule:** ALWAYS define your Styled Components *outside* and *above* your React component function.
-
----
-
-
-
-### Mistake 2: Defining Styled Components Inside Other Component Function Bodies
-
-**The mistake:** Writing `const StyledButton = styled.button`color: red`;` inside a parent component function body.
-
-**Why it's wrong:** Defining a styled component inside a function body re-creates the component type and generates new CSS class names on EVERY single render! This causes complete DOM element unmounting, state loss, and focus flickering.
+**Why it's wrong:** Every time the parent component re-renders, JavaScript re-executes the function body, creating a brand new Styled Component type and generating new CSS class names. This forces the browser to unmount and remount the DOM element tree, destroying input focus, state, and active CSS animations.
 
 *Incorrect:*
-```javascript
+```jsx
+// ❌ Anti-pattern: Re-created on every render! Destroys DOM focus and performance!
 function App() {
-  const StyledDiv = styled.div`color: red;`; // ❌ Re-created every render!
-  return <StyledDiv />;
+  const StyledCard = styled.div`padding: 20px;`;
+  return <StyledCard>Content</StyledCard>;
 }
 ```
 
 *Fix:*
-```javascript
+```jsx
 // Define styled components outside function components at module scope
-const StyledDiv = styled.div`color: red;`;
-function App() { return <StyledDiv />; }
+const StyledCard = styled.div`padding: 20px;`;
+
+function App() {
+  return <StyledCard>Content</StyledCard>;
+}
 ```
 
-### Mistake 3: Passing Custom Non-Standard Props to Underlying HTML DOM Elements Without Filtering
+### Mistake 2: Passing custom non-standard props to DOM elements without transient `$` prefixes
 
-**The mistake:** Writing `<StyledButton isActive={true}>` where `isActive` is passed directly to the native `<button>` DOM element.
+**The mistake:** Passing `<StyledButton isActive={true}>` where `isActive` is forwarded to a native `<button>` HTML DOM element.
 
-**Why it's wrong:** Passing custom props to native DOM elements logs React dev warnings `React does not recognize the 'isActive' prop on a DOM element`. Use transient props with `$` prefix (`$isActive={true}`).
+**Why it's wrong:** React logs dev environment warnings when unrecognized custom props are forwarded to native HTML DOM nodes: `React does not recognize the 'isActive' prop on a DOM element`. Use transient props with a `$` prefix (`$isActive={true}`) to instruct styled-components to filter the prop out before rendering the HTML DOM element.
+
+*Incorrect:*
+```jsx
+// ❌ Forwards 'isActive' to native <button> DOM node, logging warnings!
+const Btn = styled.button`
+  color: ${props => props.isActive ? 'red' : 'blue'};
+`;
+```
+
+*Fix:*
+```jsx
+// Transient $ prop is consumed strictly by styled-components and filtered from DOM
+const Btn = styled.button`
+  color: ${props => props.$isActive ? 'red' : 'blue'};
+`;
+```
+
+### Mistake 3: Overusing dynamic CSS functions inside styled templates for static styles
+
+**The mistake:** Wrapping static CSS declarations inside unnecessary string interpolation arrow functions.
+
+**Why it's wrong:** Unnecessary interpolation functions slow down CSS parsing and template evaluation. Keep static CSS properties raw within the template string.
 
 *Incorrect:*
 ```javascript
-const Btn = styled.button`color: ${props => props.isActive ? 'red' : 'blue'};`; // ❌ Passes isActive to DOM!
+// ❌ Unnecessary function wrapper for static style!
+const Card = styled.div`
+  margin: ${() => '20px'};
+`;
 ```
 
 *Fix:*
 ```javascript
-const Btn = styled.button`color: ${props => props.$isActive ? 'red' : 'blue'};`; // Transient $ prop
+const Card = styled.div`
+  margin: 20px;
+`;
 ```
 
-## 6. Practice Exercises
-
-### Exercise 1: Dead Code Elimination
-
-**Problem:** You have a file `Sidebar.js` that contains a `const SidebarContainer = styled.nav...`. You delete `Sidebar.js` from your project. What happens to the CSS that was styling the Sidebar?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> It is perfectly deleted!
-> Because the CSS was inside the JavaScript file, deleting the JS file guarantees that 100% of the associated CSS is also removed from your application's final build. Zero dead CSS code!
-> ```
-> - Think about where the CSS lives physically.
-> 
 ---
 
+## 5. Practice Exercises
 
+### Exercise 1: IoT Telemetry Alarm Box (Dynamic Status Styling)
 
-### Exercise 2: Creating Dynamic Styled Component with Props
+**Scenario:** Build an IoT Telemetry alarm card component using Styled Components where the background border color dynamically changes based on a `$severity` prop (`'CRITICAL'`, `'WARNING'`, or `'NOMINAL'`).
 
-**Problem:** Create `Button` styled component setting background color to `'green'` if `$primary` prop is true.
+**Requirements:**
+1. Create `AlarmCard` styled component.
+2. Evaluate `$severity` transient prop inside CSS template literal.
+3. Apply border colors: Critical (`#FF3B30`), Warning (`#FF9500`), Nominal (`#34C759`).
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> import styled from 'styled-components'; const Button = styled.button` background-color: ${props => props.$primary ? 'green' : 'gray'}; color: white; padding: 10px; `;
-> ```
-> ```javascript
+>
+> #### Implementation
+> ```jsx
+> 'use client';
+>
 > import styled from 'styled-components';
 >
-> const Button = styled.button`
->   background-color: ${props => (props.$primary ? 'green' : 'gray')};
->   color: white;
->   padding: 10px;
+> const AlarmCardContainer = styled.article`
+>   padding: 16px;
+>   border-radius: 8px;
+>   background-color: #FFFFFF;
+>   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+>   
+>   /* Dynamic border color evaluation */
+>   border-left: 6px solid ${props => {
+>     if (props.$severity === 'CRITICAL') return '#FF3B30';
+>     if (props.$severity === 'WARNING') return '#FF9500';
+>     return '#34C759';
+>   }};
+>
+>   h4 {
+>     margin: 0 0 6px 0;
+>     color: #1C1C1E;
+>   }
+> `;
+>
+> export function TelemetryAlarmCard({ sensorName, severity, metric }) {
+>   return (
+>     <AlarmCardContainer $severity={severity}>
+>       <h4>Sensor: {sensorName}</h4>
+>       <p>Reading: {metric}</p>
+>     </AlarmCardContainer>
+>   );
+> }
+> ```
+>
+> #### Technical Explanation
+> 1. **Transient Prop Filtering**: `$severity` uses the `$` prefix to prevent passing non-standard attributes to the HTML `<article>` DOM element.
+> 2. **Dynamic Prop Evaluation**: Arrow function `${props => ...}` computes CSS left-border colors dynamically during render.
+> 3. **Nested Selector Support**: `h4 { ... }` nests CSS rules cleanly inside the component scope.
+> 4. **Module Level Declaration**: `AlarmCardContainer` is defined outside `TelemetryAlarmCard` to prevent re-creation on render.
+> 
+### Exercise 2: Financial Trading Action Button Theme Matrix
+
+**Scenario:** Develop a Financial Trading action button styled component that supports primary/secondary variants and an `$isBuy` boolean prop (Green for Buy, Red for Sell).
+
+**Requirements:**
+1. Create `ActionButton` styled `button`.
+2. Evaluate `$isBuy` transient boolean prop for background color.
+3. Include `:disabled` pseudo-selector states.
+
+> [!check]- Answer
+>
+> #### Implementation
+> ```jsx
+> 'use client';
+>
+> import styled from 'styled-components';
+>
+> export const TradeActionButton = styled.button`
+>   padding: 10px 18px;
+>   border-radius: 6px;
+>   font-weight: 700;
+>   font-size: 14px;
+>   border: none;
+>   cursor: pointer;
+>   transition: background-color 0.2s ease, opacity 0.2s ease;
+>
+>   /* Green for Buy, Red for Sell */
+>   background-color: ${props => props.$isBuy ? '#34C759' : '#FF3B30'};
+>   color: #FFFFFF;
+>
+>   &:hover {
+>     background-color: ${props => props.$isBuy ? '#28A745' : '#DC3545'};
+>   }
+>
+>   &:disabled {
+>     opacity: 0.5;
+>     cursor: not-allowed;
+>   }
 > `;
 > ```
 >
-> **Explanation:** CSS-in-JS styled components evaluate dynamic JavaScript props to generate CSS styles.
+> #### Technical Explanation
+> 1. **Boolean Prop Logic**: `${props => props.$isBuy ? ...}` toggles button color schemes declaratively.
+> 2. **Pseudo-Class Scoping**: `&:hover` and `&:disabled` nest standard CSS pseudo-class state rules within the component scope.
+> 3. **Reusable Primitive**: Exports a fully functioning styled button component for application-wide order ticket use.
+> 4. **Clean DOM Markup**: Output HTML renders clean native `<button>` tags with auto-generated CSS class hashes.
 > 
----
+### Exercise 3: E-Commerce Product Card Responsive Layout
 
-### Exercise 3: Transient Props Prefix
+**Scenario:** Construct an e-commerce product card grid container using Styled Components with media queries for responsive grid column layouts.
 
-**Problem:** What prefix prevents custom styled-components props from being passed down to HTML DOM elements? (`$` dollar sign prefix e.g. `$primary`).
+**Requirements:**
+1. Create `ProductGrid` styled `div`.
+2. Apply CSS Grid layout (`grid-template-columns`).
+3. Add media queries for desktop screens (`@media (min-width: 768px)`).
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> $ (dollar sign) prefix e.g. $primary
-> ```
-> ```text
-> $ (dollar sign) prefix e.g. $primary
+>
+> #### Implementation
+> ```jsx
+> 'use client';
+>
+> import styled from 'styled-components';
+>
+> export const ProductGrid = styled.div`
+>   display: grid;
+>   grid-template-columns: 1fr;
+>   gap: 16px;
+>   padding: 16px;
+> 
+>   /* Desktop Responsive Media Query */
+>   @media (min-width: 768px) {
+>     grid-template-columns: repeat(3, 1fr);
+>     gap: 24px;
+>   }
+> 
+>   @media (min-width: 1200px) {
+>     grid-template-columns: repeat(4, 1fr);
+>   }
+> `;
 > ```
 >
-> **Explanation:** Transient props (`$prop`) are consumed strictly by styled-components and omitted from HTML DOM nodes.
+> #### Technical Explanation
+> 1. **Media Query Nesting**: Media queries are embedded directly within the styled component template string.
+> 2. **Scoped Grid Layout**: Layout rules are encapsulated without leaking global CSS selector rules across the application.
+> 3. **Mobile-First Design**: Defaults to 1-column mobile layout, scaling to 3 and 4 columns on larger viewports.
+> 4. **Zero Class Collisions**: Generated class hashes ensure grid styles do not collide with external layout CSS.
 > 
-## 7. Related Terms
-- [Components](../level_01/components.md) — Styled Components are just React Components that render a specific HTML tag with injected CSS.
+---
+
+## 6. Related Terms
+
+- [Components](../level_01/components.md) — The React components styled by CSS-in-JS primitives.
+- [Props (Properties)](../level_01/props.md) — The data properties evaluated inside styled templates.
 
 ---
 
-## 8. Key Takeaways
-- **CSS-in-JS** (Styled Components / Emotion) allows you to write real CSS directly inside your JavaScript files.
-- It scopes the CSS strictly to the component, eliminating global class name collisions and "dead" CSS code.
-- It allows you to dynamically change CSS properties based on React **Props**.
-- Never define a styled component inside a React render function; always define them outside.
+## 7. Key Takeaways
+
+- Styled Components and Emotion allow developers to write actual CSS directly inside JavaScript files using Tagged Template Literals.
+- Scopes CSS rules to individual components using auto-generated unique class hashes, eliminating global collisions.
+- Deleting a component file automatically removes 100% of its associated CSS code from application builds.
+- Evaluates component **Props** dynamically to compute runtime CSS values.
+- Always define styled components **outside** component render function bodies to prevent DOM re-creation bugs.
+- Use transient `$` prefixes (`$prop`) for custom styled props to prevent forwarding unrecognized attributes to native DOM nodes.

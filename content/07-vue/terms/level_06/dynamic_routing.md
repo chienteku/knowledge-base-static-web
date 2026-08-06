@@ -6,191 +6,356 @@
 ---
 
 ## 1. Prerequisites
+
 - [Vue Router](vue_router.md) — The system that parses the URLs.
 
 ---
 
 ## 2. Term Category
-- **Vue Ecosystem / Routing**
+
+**Vue Ecosystem (Routing Strategy / Dynamic Pattern Matching)**: Dynamic Routing is a URL matching technique in Vue Router where variable segments of a path are defined using colon syntax (e.g. `/user/:username` or `/order/:id`). This allows a single route configuration to match an infinite number of dynamic URLs, instantiating the target view component while exposing parameter values via `route.params`.
+
+Unlike static route definitions—which require explicit path mappings for every page—dynamic routing relies on path-to-regexp pattern matching. In React Router v6+, dynamic parameters are declared similarly (`/user/:id`) and extracted via `useParams()`. Vue Router integrates dynamic parameters directly into Vue 3's Proxy reactivity system via `useRoute()`, allowing watchers and computed properties to reactively track URL parameter changes.
 
 ---
 
-## 3. Environment Context
-- **Vue Router Configuration**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-Imagine you are building Twitter. Users have profile pages: `twitter.com/alice` and `twitter.com/bob`.
-If you hardcoded your routes, your configuration file would be infinite:
-`{ path: '/alice', component: Profile }`
-`{ path: '/bob', component: Profile }`
-Instead, you need a way to tell the router: "If the URL matches `/ANYTHING`, load the Profile component, and pass the 'ANYTHING' string into the component so it knows whose data to fetch." This is **Dynamic Routing**.
+Consider building an enterprise platform like GitHub or Twitter. Users have profile pages (`/alice`, `/bob`, `/charlie`), and repositories have issue pages (`/vuejs/core/issues/101`). If routing required hardcoding static paths for every user or issue, configuration files would be infinitely long and impossible to maintain.
 
-### (2) Route Parameters (`:`)
-In your route configuration, you define a dynamic segment by prefixing a word with a colon `:`.
+Dynamic Routing solves this by introducing wildcard parameter variables into route paths (`{ path: '/user/:username', component: UserProfile }`). Vue Router matches incoming request URLs against these patterns, extracts dynamic path values, and injects them into a reactive `route.params` dictionary available to component scripts.
 
+### (2) Reality Metaphor
+Think of Dynamic Routing like a Post Office PO Box sorting wall. Instead of building a custom physical building for every resident in a city, the post office installs a standardized wall of numbered PO Box slots (`/pobox/:boxNumber`). When mail arrives addressed to "PO Box 402," the sorting clerk does not construct a new room; they drop the envelope into slot #402. The underlying box structure (the view component) remains identical, but the internal contents (the box ID parameter) adapt dynamically to whoever opens the door.
+
+### (3) Vue Code Examples
+
+#### Short Snippet
 ```javascript
-// router.js
-const routes = [
-  // The `:username` is a dynamic parameter!
-  { path: '/user/:username', component: UserProfile }
-]
-```
-If the user navigates to `/user/alice`, Vue Router will load the `UserProfile` component.
+// router.js - Route configuration with dynamic parameter :id
+import { createRouter, createWebHistory } from 'vue-router'
+import UserProfile from './UserProfile.vue'
 
-### (3) Accessing the Parameter
-Inside the `UserProfile.vue` component, you use the `useRoute()` composable to extract the variable from the URL.
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    { path: '/user/:id', component: UserProfile }
+  ]
+})
+```
 
 ```vue
-<!-- UserProfile.vue -->
+<!-- UserProfile.vue - Extracting dynamic parameter -->
 <script setup>
 import { useRoute } from 'vue-router'
 
-// 1. Get the current route object
 const route = useRoute()
-
-// 2. Access the dynamic parameter we named `:username`
-const currentUsername = route.params.username
-
-// Now we can use `currentUsername` to fetch data from our API!
-console.log(`Fetching data for ${currentUsername}...`)
+console.log('Active User ID:', route.params.id)
 </script>
 
 <template>
-  <h1>Profile: {{ route.params.username }}</h1>
+  <h2>User Profile ID: {{ route.params.id }}</h2>
+</template>
+```
+
+#### Fuller Example
+```vue
+<!-- ProductDetail.vue (Handling parameter updates on component reuse) -->
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const product = ref(null)
+const isLoading = ref(true)
+
+async function fetchProductDetails(sku) {
+  isLoading.value = true
+  // Simulate API fetch based on dynamic SKU parameter
+  setTimeout(() => {
+    product.value = {
+      sku,
+      name: `Enterprise Server ${sku.toUpperCase()}`,
+      price: 2499.99
+    }
+    isLoading.value = false
+  }, 400)
+}
+
+// Initial fetch on component mount
+onMounted(() => {
+  fetchProductDetails(route.params.sku)
+})
+
+// CRITICAL: Watch route.params.sku for changes when navigating /product/sku-01 -> /product/sku-02
+watch(
+  () => route.params.sku,
+  (newSku) => {
+    if (newSku) {
+      fetchProductDetails(newSku)
+    }
+  }
+)
+</script>
+
+<template>
+  <div class="product-view">
+    <div v-if="isLoading" class="spinner">Loading SKU details...</div>
+    <div v-else-if="product" class="details-card">
+      <h3>{{ product.name }}</h3>
+      <p>SKU: {{ product.sku }}</p>
+      <p>Price: ${{ product.price }}</p>
+    </div>
+  </div>
 </template>
 ```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Component Re-use Data Stagnation
+### Mistake 1: Component Reuse Data Stagnation (Failing to Watch `route.params`)
 
-**The mistake:** A user is on `/user/alice`. They click a link to go to `/user/bob`. The URL changes, but the page still shows Alice's data!
+**The mistake:** Navigating from `/user/alice` to `/user/bob` and expecting `onMounted()` to re-fire to fetch Bob's data.
 
-**Why it's wrong:** Vue is incredibly efficient. Because the component `<UserProfile>` is already mounted on the screen, Vue *re-uses* it. It does not destroy it and recreate it. Therefore, the `onMounted` lifecycle hook does NOT run again, so your API fetch for "bob" never happens!
-**Golden Rule:** If a component is reacting to URL parameter changes, you must `watch` the parameter, OR you must add a `:key` to the `<RouterView>` to force Vue to destroy and rebuild the component.
-`watch(() => route.params.username, (newUsername) => fetchProfile(newUsername))`
-
----
-
-### Mistake 2: Assuming Component Lifecycle Hooks Re-Run When Navigating Between Same Dynamic Routes
-
-**The mistake:** Navigating from `/user/1` to `/user/2` and expecting `onMounted()` to re-fire.
-
-**Why it's wrong:** Vue Router reuses the same component instance when navigating between routes matching the same dynamic path pattern (`/user/:id`). `onMounted()` does NOT re-fire. Watch `route.params.id` or use `onBeforeRouteUpdate()`.
+**Why it's wrong:** Vue Router optimizes performance by reusing the mounted component instance when navigating between routes matching the exact same dynamic path pattern. Because the component is not destroyed and recreated, `onMounted()` does NOT re-fire.
 
 *Incorrect:*
 ```javascript
+// ❌ Does NOT execute when navigating /user/alice -> /user/bob!
 onMounted(() => {
-  fetchUserData(route.params.id); // ❌ Does NOT re-run when navigating /user/1 -> /user/2!
+  fetchUserData(route.params.username);
 });
 ```
 
-*Fix:*
+*Fix:* Use `watch()` or `onBeforeRouteUpdate()` to detect parameter changes on reused components:
 ```javascript
+import { watch } from 'vue';
+import { useRoute, onBeforeRouteUpdate } from 'vue-router';
+
+const route = useRoute();
+
 watch(
-  () => route.params.id,
-  (newId) => { fetchUserData(newId); },
+  () => route.params.username,
+  (newUsername) => { fetchUserData(newUsername); },
   { immediate: true }
 );
 ```
 
 ---
 
-### Mistake 3: Forgetting Catch-All Wildcard Route Syntax for 404 Pages in Vue Router 4
+### Mistake 2: Assuming Dynamic Parameters Are Numeric Data Types
 
-**The mistake:** Using Vue Router 3 syntax `{ path: '*' }` for 404 Page Not Found routes in Vue Router 4.
+**The mistake:** Writing `if (route.params.id === 101)` without casting parameter strings to numbers.
 
-**Why it's wrong:** Vue Router 4 dropped regex wildcards. Custom catch-all routes require explicit parameter regex syntax: `{ path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }`.
+**Why it's wrong:** Vue Router extracts all path parameters as JavaScript string values (`"101"`). Strict equality comparison (`===`) against a number fails.
 
 *Incorrect:*
 ```javascript
-const routes = [
-  { path: '*', component: NotFound } // ❌ Deprecated syntax in Vue Router 4!
-];
+if (route.params.id === 101) { /* ❌ Always false because "101" !== 101 */ }
 ```
 
 *Fix:*
 ```javascript
-const routes = [
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
-];
+if (Number(route.params.id) === 101) { /* Cast string parameter explicitly */ }
 ```
 
+---
+
+### Mistake 3: Confusing Path Params (`/user/:id`) with Query Parameters (`/user?id=101`)
+
+**The mistake:** Accessing `route.params.id` when the URL structure is defined using URL query parameters (`/user?id=101`).
+
+**Why it's wrong:** Path parameters live in `route.params`, whereas URL query string parameters live in `route.query`.
+
+*Incorrect:*
+```javascript
+// Request URL: /search?term=vue
+const term = route.params.term; // ❌ undefined!
+```
+
+*Fix:*
+```javascript
+// Request URL: /search?term=vue
+const term = route.query.term; // Access query parameters via route.query
+```
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Multiple Parameters
+### Exercise 1: E-Commerce Product Catalog Dynamic SKU Resolver
 
-**Problem:** You are building an e-commerce site. You want a route that looks like this: `/category/shoes/item/nike-air`. How do you define this in the `router.js`?
+**Scenario:** An e-commerce platform uses dynamic route path `/catalog/:category/:sku`. Create a component script using `<script setup>` that extracts `category` and `sku`, watching parameter changes to reload item inventory.
 
-**Expected output:**
+**Requirements:**
+1. Extract `category` and `sku` using `useRoute()`.
+2. Watch `() => route.params.sku` to trigger `loadInventory()`.
+3. Cast SKU string to uppercase.
+4. Include test assertions for parameter updates.
+
 > [!check]- Answer
-> ```javascript
-> const routes = [
->   { path: '/category/:categoryId/item/:itemId', component: ItemView }
-> ]
-> // Inside the component, you access them via:
-> // route.params.categoryId (evaluates to 'shoes')
-> // route.params.itemId (evaluates to 'nike-air')
+>
+> #### Implementation
+> ```vue
+> <!-- CatalogItem.vue -->
+> <script setup>
+> import { ref, watch, onMounted } from 'vue';
+> import { useRoute } from 'vue-router';
+> 
+> const route = useRoute();
+> const activeSku = ref('');
+> const category = ref('');
+> 
+> function loadInventory(skuVal, catVal) {
+>   activeSku.value = String(skuVal).toUpperCase();
+>   category.value = String(catVal);
+> }
+> 
+> onMounted(() => {
+>   loadInventory(route.params.sku, route.params.category);
+> });
+> 
+> watch(
+>   () => route.params.sku,
+>   (newSku) => {
+>     if (newSku) loadInventory(newSku, route.params.category);
+>   }
+> );
+> </script>
+> 
+> <template>
+>   <div class="catalog-view">
+>     <h2>Category: {{ category }}</h2>
+>     <p>SKU: {{ activeSku }}</p>
+>   </div>
+> </template>
 > ```
-> - You can have as many colons as you want in a single path.
+>
+> #### Technical Explanation
+> 1. **Multi-Param Access**: `route.params` extracts both `:category` and `:sku` parameters.
+> 2. **Watcher Guard**: `watch()` ensures catalog data updates when users switch SKUs directly via navigation links.
+> 3. **Type Normalization**: Casts parameter values safely to upper-case string representations.
+> 4. **Mounted Initialization**: Guarantees initial data load when component first renders.
 > 
 ---
 
-### Exercise 2: Dynamic Route Parameter Definition
+### Exercise 2: Financial Banking Multi-Parameter Ledger
 
-**Problem:** Write Vue Router route definition object matching path `/users/:id` to component `UserProfile` with named route `'user-profile'`.
+**Scenario:** A commercial banking application routes account transactions using `/account/:accId/ledger/:txId`. Extract dynamic parameters and validate numeric formatting.
 
-**Expected output:**
+**Requirements:**
+1. Extract `accId` and `txId` parameters.
+2. Validate that `accId` matches regex `^ACC-\d+` and `txId` is numeric.
+3. Handle invalid parameter values with fallback error state.
+
 > [!check]- Answer
-> ```javascript
-> { path: '/users/:id', name: 'user-profile', component: UserProfile }
-> ```
-> - `:id` defines dynamic route parameter segments.
+>
+> #### Implementation
+> ```vue
+> <!-- LedgerDetail.vue -->
+> <script setup>
+> import { computed } from 'vue';
+> import { useRoute } from 'vue-router';
 > 
-> ```javascript
-> const routes = [
->   { path: '/users/:id', name: 'user-profile', component: UserProfile }
-> ];
+> const route = useRoute();
+> 
+> const isValidRoute = computed(() => {
+>   const accId = String(route.params.accId || '');
+>   const txId = Number(route.params.txId);
+>   return /^ACC-\d+$/.test(accId) && !isNaN(txId);
+> });
+> 
+> const accountId = computed(() => route.params.accId);
+> const transactionId = computed(() => Number(route.params.txId));
+> </script>
+> 
+> <template>
+>   <div class="ledger-container">
+>     <div v-if="!isValidRoute" class="error-box">
+>       Invalid Account or Transaction Parameter in URL!
+>     </div>
+>     <div v-else class="ledger-box">
+>       <h3>Account: {{ accountId }}</h3>
+>       <p>Transaction Reference #: {{ transactionId }}</p>
+>     </div>
+>   </div>
+> </template>
 > ```
+>
+> #### Technical Explanation
+> 1. **Computed Parameter Validation**: `isValidRoute` validates regex and numerical properties dynamically.
+> 2. **Numeric Casting**: `Number(route.params.txId)` converts string parameter to native number.
+> 3. **Route Safety Guard**: Protects against illegal or corrupted URL parameter inputs.
+> 4. **Declarative Rendering**: Conditionally renders error feedback based on route validity.
 > 
 ---
 
-### Exercise 3: Optional Route Parameters
+### Exercise 3: Healthcare Patient Telehealth Routing (`onBeforeRouteUpdate`)
 
-**Problem:** How do you define an optional dynamic route parameter segment in Vue Router 4?
+**Scenario:** A hospital EHR platform uses dynamic route `/telehealth/patient/:patientId`. Use Vue Router's in-component navigation hook `onBeforeRouteUpdate` to save unsaved clinical notes before switching patient records.
 
-**Expected output:**
+**Requirements:**
+1. Maintain reactive string `clinicalNotes` and boolean `hasUnsavedChanges`.
+2. Implement `onBeforeRouteUpdate((to, from) => ...)` hook.
+3. Prompt confirmation if unsaved changes exist before allowing navigation.
+
 > [!check]- Answer
-> ```text
-> By appending a question mark `?` to the parameter name (e.g. `/users/:id?`).
-> ```
-> - `:param?` specifies optional route parameters.
+>
+> #### Implementation
+> ```vue
+> <!-- PatientTelehealth.vue -->
+> <script setup>
+> import { ref } from 'vue';
+> import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 > 
-> ```javascript
-> { path: '/users/:id?', component: UserList }
-> ```
+> const route = useRoute();
+> const clinicalNotes = ref('');
+> const hasUnsavedChanges = ref(false);
 > 
+> function handleInput() {
+>   hasUnsavedChanges.value = true;
+> }
+> 
+> onBeforeRouteUpdate((to, from) => {
+>   if (hasUnsavedChanges.value) {
+>     const answer = window.confirm('You have unsaved clinical notes. Discard changes?');
+>     if (!answer) return false; // Cancel route navigation
+>   }
+>   hasUnsavedChanges.value = false;
+> });
+> </script>
+> 
+> <template>
+>   <div class="telehealth-view">
+>     <h2>Patient ID: {{ route.params.patientId }}</h2>
+>     <textarea v-model="clinicalNotes" @input="handleInput" placeholder="Enter clinical notes..."></textarea>
+>   </div>
+> </template>
+> ```
+>
+> #### Technical Explanation
+> 1. **In-Component Hook**: `onBeforeRouteUpdate` intercepts parameter transitions on reused component instances.
+> 2. **Navigation Cancellation**: Returning `false` from `onBeforeRouteUpdate` aborts URL navigation.
+> 3. **Dirty State Guard**: Tracks unsaved user input state to prevent data loss.
+> 4. **Instance Preservation**: Reuses existing DOM node while switching active patient context.
 > 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
+
 - [Vue Router](vue_router.md) — The parent library.
 - [Watchers](../level_02/watchers.md) — The tool needed to detect when dynamic parameters change.
 - [Route Params, Query & Meta](route_params_query_meta.md) — Related concept: Route Params, Query & Meta.
+- [Nested Routes](nested_routes.md) — Related concept: Nested Routes.
 
 ---
 
-## 8. Key Takeaways
-- **Dynamic Routing** uses a colon (`:paramName`) to treat a segment of the URL as a variable.
-- It allows a single component to handle an infinite number of URLs.
-- You extract the variable inside the component using `useRoute().params.paramName`.
-- Because Vue reuses components when only the parameter changes, lifecycle hooks (`onMounted`) will not re-fire. You must watch the route parameters for changes to trigger new data fetches.
+## 7. Key Takeaways
+
+- **Dynamic Routing** maps variable path segments (e.g. `/user/:id`) to a single view component using regex matching.
+- Access dynamic parameters inside components using **`route.params.paramName`** via `useRoute()`.
+- Component instances are **reused** when navigating between URLs matching the same dynamic pattern—`onMounted()` will NOT re-fire!
+- Use **`watch(() => route.params.id)`** or **`onBeforeRouteUpdate`** to react to parameter updates on reused components.
+- All dynamic path parameters are extracted as **strings**—cast explicitly to numbers when performing strict comparisons.
