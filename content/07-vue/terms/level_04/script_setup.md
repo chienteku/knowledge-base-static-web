@@ -1,196 +1,169 @@
 # `<script setup>` & Compiler Macros
 
-> **Level 4 — Components & Props**
-> A compile-time syntactic sugar for using the Composition API in Single-File Components (SFCs), paired with global helper functions (compiler macros) to declare component options without runtime import overhead.
+> **Level 4 — Components & Lifecycle**
+> A compile-time syntactic sugar transformation for using the Composition API inside Single-File Components (SFCs), paired with compiler macros to declare component options without runtime imports.
 
 ---
 
 ## 1. Prerequisites
-- [Composition API](../level_01/composition_api.md) — The functional state-management model.
-- [Components](components.md) — The visual units of a Vue application.
-- [Single-File Components (SFCs)](sfc.md) — Single-File Components (`.vue` files).
+
+- [Composition API](../level_01/composition_api.md) — The functional reactivity model powering `<script setup>`.
+- [Components](components.md) — The modular building blocks of a Vue application.
+- [Single-File Components (SFCs)](sfc.md) — Vue's `.vue` single-file component format.
 
 ---
 
 ## 2. Term Category
-- **Vue Core Concept**
+
+**Build-Time Syntactic Sugar (SFC Compiler Macro Engine)**: `<script setup>` is a specialized compile-time transformation executed by `@vue/compiler-sfc`. Rather than running as a standard runtime script tag, `<script setup>` instructs Vue's compiler to wrap all top-level script statements inside an optimized `setup()` function. Top-level variables, imports, and functions are automatically exposed to the `<template>` view without requiring explicit `return {}` statements. Integrated with globally available **Compiler Macros** (`defineProps`, `defineEmits`, `defineExpose`, `defineModel`, `defineOptions`), `<script setup>` minimizes boilerplate while improving IDE type inference and build compilation speeds.
 
 ---
 
-## 3. Environment Context
-- **Composition API (`<script setup>`)**
-
----
-
-## 4. Explanation
+## 3. Explanation
 
 ### (1) Design Motivation — "Why did we design this?"
-When Vue 3 first launched, the Composition API was written inside a standard component configuration object using a `setup()` function:
 
+When Vue 3 first introduced the Composition API, developers wrote logic inside a standard component object using a `setup()` method:
 ```javascript
 // Classic Vue 3 Composition API setup (verbose)
 export default {
-  setup() {
+  props: ['title'],
+  emits: ['close'],
+  setup(props, { emit }) {
     const count = ref(0)
     const increment = () => count.value++
     
-    // Boilerplate: Everything must be explicitly returned to be used in template!
+    // Boilerplate: Everything must be explicitly returned to template!
     return { count, increment }
   }
 }
 ```
-This approach suffered from two major drawbacks:
-1. **Redundancy:** You had to declare variables, write functions, and then duplicate their names inside a large `return {}` block at the bottom of the script.
-2. **Import Overhead:** Common component features (like defining props or emits) required importing heavy helper functions or mixing the Options API with the Composition API.
+This initial design suffered from two major developer experience drawbacks:
+1. **Redundant Returns:** Developers had to declare variables, write functions, and then duplicate their names inside a large `return {}` object block at the bottom of `setup()`.
+2. **Import Overhead & Mixing:** Declaring props, emits, or component names required mixing Options API syntax blocks with Composition API functions or importing helper methods.
 
-To fix these problems, Vue introduced **`<script setup>`**. It is a compiler-level upgrade. Instead of writing a function that returns an object, you write normal JavaScript. The compiler handles the mapping, making all top-level variables and functions automatically visible to the HTML template.
+To solve this, Vue created **`<script setup>`**. It is a compiler-level upgrade. Instead of writing a function that returns an object, developers write standard JavaScript at the top level of the script. The Vue compiler handles the scope mapping, automatically exposing all top-level variables, functions, and imports directly to the `<template>` block.
 
-To go alongside this, Vue introduced **Compiler Macros**. These are special global helper functions that provide declarations for props, events, model bindings, and exposures directly to Vue's compiler, bypassing JavaScript runtime imports.
+Pairing with this, Vue introduced **Compiler Macros** (`defineProps`, `defineEmits`, `defineExpose`, `defineModel`). These are special global compiler helper directives processed during build compilation—they generate underlying component options and are removed from the final runtime bundle.
 
-### (2) How it works under the hood
-When Vue compiles a `.vue` file containing `<script setup>`:
-1. It parses the script content and identifies all top-level imports, variable declarations, and function declarations.
-2. It generates a standard `setup()` function wrapper.
-3. Any variable or import referenced inside the `<template>` is automatically returned in the compiled `setup()` return object.
-4. **Compiler Macros** (`defineProps`, `defineEmits`, `defineExpose`, `defineModel`) are intercepted during compile time. The compiler extracts the options, creates the appropriate underlying configuration definitions (like the runtime `props` array), and removes the macro call from the final runtime javascript bundle.
+### (2) Reality Metaphor
 
-Because they are processed entirely by the compiler, **you do not need to import compiler macros from `'vue'`**.
+Imagine a commercial television studio broadcasting a live news program.
 
-### (3) Code Examples
+Writing the old `setup()` function with a `return {}` block is like having news anchors deliver their reports behind closed soundproof booth doors, requiring a stage manager to manually carry written transcripts out of the booth and hand them to camera operators outside before anything can be broadcast onto screen monitors.
+
+**`<script setup>`** is like tearing down the soundproof booth walls entirely. The news anchors deliver their reports directly on the open studio stage floor. Everything created on the open floor (top-level variables, functions, imported components) is immediately visible to the cameras (`<template>`) without needing a stage manager to hand-carry transcript objects out of a booth.
+
+### (3) Vue Code Examples
 
 #### Short Snippet
-A simple child component declaring props and emitting events without any manual setup returns or imports:
 ```vue
 <script setup>
-// Compiler Macros are globally available - NO imports needed!
-const props = defineProps({
-  title: String
-})
+import { ref } from 'vue'
 
-const emit = defineEmits(['close'])
+// Top-level variables and functions are automatically exposed to <template>
+const count = ref(0)
+
+// Compiler macros are globally available - NO IMPORTS NEEDED!
+const props = defineProps({ title: String })
+const emit = defineEmits(['update'])
 </script>
 
 <template>
-  <div class="card">
-    <h3>{{ title }}</h3>
-    <button @click="emit('close')">X</button>
+  <div>
+    <h3>{{ title }}: {{ count }}</h3>
+    <button @click="count++">Increment</button>
   </div>
 </template>
 ```
 
 #### Fuller Example
-In this parent-child interaction, the child component exposes specific functions to the parent via `defineExpose`, and the child handles two-way data binding using `defineModel` (available in Vue 3.4+).
-
 ```vue
-<!-- Child: Modal.vue -->
+<!-- Modal.vue (Child Component utilizing Compiler Macros) -->
 <script setup>
 import { ref } from 'vue'
 
-// 1. defineModel: Auto-coordinates v-model binding with the parent
+// 1. defineModel (Vue 3.4+): Auto-coordinates two-way v-model with parent
 const isOpen = defineModel({ type: Boolean, default: false })
 
-function openModal() { isOpen.value = true }
-function closeModal() { isOpen.value = false }
+// 2. defineProps: Declares component input props
+const props = defineProps({
+  title: { type: String, default: 'Modal Dialog' }
+})
 
-// 2. defineExpose: Explicitly expose methods to parent refs
+// 3. defineEmits: Declares custom event emits
+const emit = defineEmits(['confirm', 'cancel'])
+
+const internalCounter = ref(0)
+
+function handleConfirm() {
+  emit('confirm', { count: internalCounter.value })
+  isOpen.value = false
+}
+
+// 4. defineExpose: Explicitly expose methods to parent template refs
 defineExpose({
-  openModal,
-  closeModal
+  resetCounter: () => { internalCounter.value = 0 }
 })
 </script>
 
 <template>
-  <div v-if="isOpen" class="modal">
-    <p>Modal Content</p>
-    <button @click="closeModal">Close</button>
+  <div v-if="isOpen" class="modal-overlay">
+    <div class="modal-card">
+      <h3>{{ title }}</h3>
+      <p>Internal Counter: {{ internalCounter }}</p>
+      <button @click="internalCounter++">Increment Inner State</button>
+      
+      <div class="actions">
+        <button @click="handleConfirm">Confirm</button>
+        <button @click="isOpen = false">Close</button>
+      </div>
+    </div>
   </div>
 </template>
-```
 
-```vue
-<!-- Parent: App.vue -->
-<script setup>
-import { ref } from 'vue'
-import Modal from './Modal.vue'
-
-// Reference to child component instance
-const modalRef = ref(null)
-
-function triggerOpen() {
-  // Accessing the exposed method on the child component
-  modalRef.value.openModal()
-}
-</script>
-
-<template>
-  <div>
-    <button @click="triggerOpen">Open Modal Instance</button>
-    <Modal ref="modalRef" />
-  </div>
-</template>
+<style scoped>
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: grid; place-items: center; }
+.modal-card { background: white; padding: 20px; border-radius: 8px; }
+</style>
 ```
 
 ---
 
-## 5. Common Mistakes & Pitfalls
+## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Importing `defineProps` or `defineEmits` from `'vue'`
+### Mistake 1: Explicitly importing compiler macros from `'vue'`
 
-**The mistake:** A developer writes `import { defineProps } from 'vue'` at the top of their component.
+**The mistake:** Writing `import { defineProps, defineEmits } from 'vue'` at the top of a `<script setup>` block.
 
-**Why it's wrong:** Compiler macros are compile-time directives, not runtime libraries. Importing them will result in warning alerts in local dev tools, and can fail depending on compiler strictness.
-
-*Incorrect:*
-```vue
-<script setup>
-import { defineProps } from 'vue' // Wrong: Do not import!
-defineProps(['label'])
-</script>
-```
-
-*Fix:* Use them directly as global functions.
-```vue
-<script setup>
-defineProps(['label']) // Correct: Globally available
-</script>
-```
-
-**Golden Rule:** Never write imports for `defineProps`, `defineEmits`, `defineExpose`, or `defineModel`. They are compiler-only macros.
-
----
-
-### Mistake 2: Attempting to Import `defineProps` or `defineEmits` (Compiler Macro Warning)
-
-**The mistake:** Writing `import { defineProps, defineEmits } from 'vue'` inside `<script setup>`.
-
-**Why it's wrong:** `defineProps`, `defineEmits`, `defineExpose`, `defineOptions`, and `defineModel` are **compiler macros** automatically processed at build time. Importing them explicitly causes a compile warning.
+**Why it's wrong:** Compiler macros (`defineProps`, `defineEmits`, `defineExpose`, `defineOptions`, `defineModel`) are build-time directives processed by `@vue/compiler-sfc`. Explicitly importing them triggers compiler warnings or build alerts.
 
 *Incorrect:*
 ```vue
 <script setup>
-import { defineProps } from 'vue'; // ❌ Unnecessary import warning!
+import { defineProps } from 'vue'; // ❌ Unnecessary macro import warning!
+defineProps(['title']);
 </script>
 ```
 
-*Fix:*
+*Fix:* Use compiler macros directly as global functions without importing from `'vue'`.
 ```vue
 <script setup>
-// Use compiler macros directly without importing from 'vue':
-const props = defineProps(['title']);
+defineProps(['title']); // Correct global macro usage
 </script>
 ```
 
 ---
 
-### Mistake 3: Expecting Child Component Private Variables to Be Accessible via Parent Template Ref Without `defineExpose()`
+### Mistake 2: Expecting `<script setup>` private variables to be visible on parent template refs without `defineExpose()`
 
-**The mistake:** Attempting to call `childRef.value.secretMethod()` on a `<script setup>` child component.
+**The mistake:** Attempting to call `childRef.value.secretMethod()` on a child component using `<script setup>`.
 
-**Why it's wrong:** Components using `<script setup>` are **closed by default**. Parent components accessing template refs cannot see internal variables unless explicitly exposed using `defineExpose({ secretMethod })`.
+**Why it's wrong:** Components using `<script setup>` are **closed by default**. Parent components accessing template refs cannot see internal variables or functions unless explicitly exposed using `defineExpose({ secretMethod })`.
 
 *Incorrect:*
 ```vue
-// Child.vue
+<!-- Child.vue -->
 <script setup>
 const count = ref(0);
 // ❌ Parent calling childRef.value.count gets undefined!
@@ -199,121 +172,228 @@ const count = ref(0);
 
 *Fix:*
 ```vue
-// Child.vue
+<!-- Child.vue -->
 <script setup>
 const count = ref(0);
 defineExpose({ count }); // Explicitly expose properties to parent template refs
 </script>
 ```
 
+---
+
+### Mistake 3: Trying to export default objects inside `<script setup>`
+
+**The mistake:** Writing `export default { name: 'MyComponent' }` inside a `<script setup>` block.
+
+**Why it's wrong:** `<script setup>` represents the body of the setup function itself. `export default` statements are forbidden inside `<script setup>`. To declare component options (like `name` or `inheritAttrs`), use the `defineOptions()` compiler macro.
+
+*Incorrect:*
+```vue
+<script setup>
+export default { name: 'MyCard' }; // ❌ Syntax error inside <script setup>!
+</script>
+```
+
+*Fix:*
+```vue
+<script setup>
+defineOptions({ name: 'MyCard' }); // Valid macro for declaring component options
+</script>
+```
 
 ---
 
-## 6. Practice Exercises
+## 5. Practice Exercises
 
-### Exercise 1: Migrating setup() code to `<script setup>`
+### Exercise 1: Migrating Options API / Setup to `<script setup>` (IoT)
 
-**Problem:** Convert this legacy-style Composition API component to modern `<script setup>` syntax.
+**Scenario:** An industrial IoT sensor tile was originally written in legacy Vue setup format. You must migrate the script block to modern `<script setup>` utilizing `defineProps` and `defineEmits`.
 
 ```vue
+<!-- Legacy Format -->
 <script>
 import { ref } from 'vue'
-
 export default {
-  props: {
-    message: String
-  },
-  emits: ['acknowledge'],
+  props: { sensorName: String },
+  emits: ['calibrate'],
   setup(props, { emit }) {
-    const isSeen = ref(false)
-    
-    function clickHandler() {
-      isSeen.value = true
-      emit('acknowledge')
-    }
-    
-    return {
-      isSeen,
-      clickHandler
-    }
+    const reading = ref(42)
+    function runCalibration() { emit('calibrate', props.sensorName) }
+    return { reading, runCalibration }
   }
 }
 </script>
-
-<template>
-  <div>
-    <p>{{ message }} (Seen: {{ isSeen }})</p>
-    <button @click="clickHandler">Got it</button>
-  </div>
-</template>
 ```
 
-**Expected output:**
+**Requirements:**
+1. Convert to `<script setup>`.
+2. Use `defineProps` for `sensorName`.
+3. Use `defineEmits` for `calibrate`.
+4. Eliminate `export default` and `return {}` blocks.
+
 > [!check]- Answer
-> ```text
-> The script block rewritten in under 15 lines of clean, modern <script setup> code, omitting any 'return' or 'export default' blocks.
+>
+> #### Implementation
+> ```vue
+> <!-- Modern <script setup> Migration -->
+> <script setup>
+> import { ref } from 'vue'
+> 
+> const props = defineProps({
+>   sensorName: String
+> })
+> 
+> const emit = defineEmits(['calibrate'])
+> 
+> const reading = ref(42)
+> 
+> function runCalibration() {
+>   emit('calibrate', props.sensorName)
+> }
+> </script>
+> 
+> <template>
+>   <div class="sensor-card">
+>     <h3>{{ sensorName }}: {{ reading }}</h3>
+>     <button @click="runCalibration">Calibrate Sensor</button>
+>   </div>
+> </template>
 > ```
-> - Start your script block with `<script setup>`.
-> - Replace `props` declaration with `const props = defineProps(...)`.
-> - Replace `emit` extraction with `const emit = defineEmits(...)`.
-> - Remove the `setup()` function structure and the `return` statement entirely.
+>
+> #### Technical Explanation
+> 1. **Concept**: `<script setup>` eliminates verbose `setup()` methods and `return {}` object blocks.
+> 2. **Concept**: `defineProps` declares input contracts globally without imports.
+> 3. **Concept**: `defineEmits` declares event channels cleanly.
+> 4. **Concept**: Reduces component boilerplate code by over 50%.
 > 
 ---
 
-### Exercise 2: defineExpose Pattern
+### Exercise 2: Financial Trading Order Form with `defineExpose` (Finance)
 
-**Problem:** Write child component `<script setup>` exposing method `resetForm()` to parent template refs using `defineExpose()`.
+**Scenario:** A stock order form component `<OrderForm>` contains internal reset methods. The parent order desktop needs to call `orderFormRef.value.resetForm()` when resetting workspace views.
 
-**Expected output:**
+**Requirements:**
+1. Build `<OrderForm>` with internal `resetForm()` function.
+2. Expose `resetForm` using `defineExpose({ resetForm })`.
+3. Parent invokes exposed method via template ref.
+
 > [!check]- Answer
+>
+> #### Implementation
 > ```vue
-> <script setup> function resetForm() { /* reset */ } defineExpose({ resetForm }); </script>
-> ```
-> - `<script setup>` components are closed by default.
-> - `defineExpose()` exposes public instance methods.
-> 
-> ```vue
+> <!-- OrderForm.vue (Child) -->
 > <script setup>
+> import { ref } from 'vue'
+> 
+> const orderSymbol = ref('AAPL')
+> const orderQty = ref(100)
+> 
 > function resetForm() {
->   // Form reset logic
+>   orderSymbol.value = ''
+>   orderQty.value = 0
+>   console.log('Order form reset to defaults.')
 > }
 > 
-> defineExpose({ resetForm });
+> // Explicitly expose resetForm method to parent template refs
+> defineExpose({
+>   resetForm
+> })
 > </script>
+> 
+> <template>
+>   <div class="form-box">
+>     <input v-model="orderSymbol" placeholder="Symbol" />
+>     <input v-model.number="orderQty" type="number" />
+>   </div>
+> </template>
 > ```
+> 
+> ```vue
+> <!-- ParentDesk.vue -->
+> <script setup>
+> import { ref } from 'vue'
+> import OrderForm from './OrderForm.vue'
+> 
+> const orderFormRef = ref(null)
+> 
+> function clearWorkspace() {
+>   if (orderFormRef.value) {
+>     orderFormRef.value.resetForm() // Call exposed child method
+>   }
+> }
+> </script>
+> 
+> <template>
+>   <div>
+>     <button @click="clearWorkspace">Clear Workspace</button>
+>     <OrderForm ref="orderFormRef" />
+>   </div>
+> </template>
+> ```
+>
+> #### Technical Explanation
+> 1. **Concept**: `<script setup>` components are closed by default.
+> 2. **Concept**: `defineExpose()` opens an explicit public interface for template ref consumers.
+> 3. **Concept**: Un-exposed internal variables (`orderSymbol`) remain private and un-accessible to parent refs.
+> 4. **Concept**: Preserves component encapsulation boundaries.
 > 
 ---
 
-### Exercise 3: defineOptions Macro Purpose
+### Exercise 3: Real-Time Network Router Component with `defineOptions` & `defineModel` (Networking)
 
-**Problem:** Which compiler macro allows declaring Options API options (like `name` or `inheritAttrs`) directly inside `<script setup>`?
+**Scenario:** A router interface tile component requires setting component name `RouterTile` and disabling attribute inheritance using `defineOptions`, while handling two-way status binding using `defineModel`.
 
-**Expected output:**
+**Requirements:**
+1. Declare `defineOptions({ name: 'RouterTile', inheritAttrs: false })`.
+2. Declare `const isOnline = defineModel({ type: Boolean })`.
+3. Toggle `isOnline.value` on button click.
+
 > [!check]- Answer
-> ```text
-> defineOptions({ name: 'CustomName', inheritAttrs: false })
-> ```
-> ```javascript
+>
+> #### Implementation
+> ```vue
+> <!-- RouterTile.vue -->
+> <script setup>
+> // 1. defineOptions macro for component options
 > defineOptions({
-> name: 'CustomButton',
-> inheritAttrs: false
-> });
+>   name: 'RouterTile',
+>   inheritAttrs: false
+> })
+> 
+> // 2. defineModel macro for 2-way binding (Vue 3.4+)
+> const isOnline = defineModel({ type: Boolean, default: false })
+> </script>
+> 
+> <template>
+>   <div class="router-tile">
+>     <span>Status: {{ isOnline ? 'Online' : 'Offline' }}</span>
+>     <button @click="isOnline = !isOnline">Toggle Interface</button>
+>   </div>
+> </template>
 > ```
-> - **Explanation:** `defineOptions()` declares component-level options in `<script setup>`.
+>
+> #### Technical Explanation
+> 1. **Concept**: `defineOptions()` replaces classic Options API blocks for declaring `name` or `inheritAttrs`.
+> 2. **Concept**: `defineModel()` simplifies component two-way `v-model` binding configurations.
+> 3. **Concept**: Compiler macros require zero imports from `'vue'`.
+> 4. **Concept**: Streamlines modern Vue 3 SFC component development.
+> 
 ---
 
-## 7. Related Terms
+## 6. Related Terms
+
 - [Composition API](../level_01/composition_api.md) — The underlying reactivity paradigm.
-- [Props](props.md) — Custom configuration values passed into components.
-- [Emitting Events (`defineEmits`)](emit.md) — Raising custom DOM and application triggers.
-- [TypeScript with Vue](../level_10/typescript_vue.md) — Related concept: TypeScript with Vue.
-- [Single-File Components (SFCs)](sfc.md) — Related concept: Single-File Components (SFCs).
+- [Props](props.md) — `defineProps` compiler macro.
+- [Emitting Events (`defineEmits`)](emit.md) — `defineEmits` compiler macro.
+- [Single-File Components (SFCs)](sfc.md) — `.vue` single-file component format.
+- [TypeScript with Vue](../level_10/typescript_vue.md) — Using `<script setup lang="ts">`.
 
 ---
 
-## 8. Key Takeaways
-- **`<script setup>`** is compile-time syntactic sugar that eliminates the return statements and registration blocks of standard setup.
-- All top-level imports, constants, and functions are automatically bound to the template view.
-- **Compiler Macros** (like `defineProps` and `defineEmits`) are processed during build compilation and require no imports from `'vue'`.
-- **`defineExpose`** controls what methods or references are exposed to parent component refs, keeping components closed by default.
-- **`defineModel`** simplifies two-way parent-child binding configurations.
+## 7. Key Takeaways
+
+- **`<script setup>`** is compile-time syntactic sugar that wraps script statements inside an optimized `setup()` function.
+- All top-level imports, variables, and functions are exposed to `<template>` automatically.
+- **Compiler Macros** (`defineProps`, `defineEmits`, `defineExpose`, `defineModel`, `defineOptions`) require NO imports from `'vue'`.
+- `<script setup>` components are **closed by default**—use `defineExpose()` to expose methods to parent template refs.
+- Use `defineOptions()` to declare component-level options like `name` or `inheritAttrs`.
