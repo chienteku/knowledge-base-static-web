@@ -127,59 +127,95 @@ span { display: block; margin: 0 auto; width: 200px; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: Margin vs Padding
+### Exercise 1: Centering Fixed-Width Containers with margin-inline auto
 
-**Problem:** You have a button with a blue background. You want the blue background to be larger. Should you increase the margin or the padding?
+**Scenario:** An author centers a main layout container horizontally using modern logical `margin-inline: auto`.
 
-**Expected output:**
+**Requirements:**
+1. Set `max-width: 70rem`.
+2. Apply `margin-inline: auto` to center container horizontally.
+
 > [!check]- Answer
-> ```text
-> Padding! Margin is *outside* the border, meaning it is completely transparent. The background color never bleeds into the margin. If you increase the margin, the button will just push other things away.
-> ```
-> - Think about the property line vs the inside of the house.
-> 
----
-
-
-
-### Exercise 2: Centering Fixed Width Block Element
-
-**Problem:** Write CSS centering a `<div>` with `width: 800px` horizontally inside parent page.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> div { width: 800px; margin-left: auto; margin-right: auto; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> div {
->   width: 800px;
->   margin-left: auto;
->   margin-right: auto;
+> .main-container {
+>   max-width: 70rem;             /* ~1120px max layout width */
+>   margin-inline: auto;          /* Centers container horizontally (LTR and RTL) */
+>   padding-inline: 1rem;         /* Mobile edge gutter padding */
 > }
 > ```
 >
-> **Explanation:** `margin: 0 auto` splits remaining horizontal space equally to center block elements.
+> #### Technical Explanation
+>
+> 1. **The `margin` Property**: Creates whitespace OUTSIDE the element's border, separating it from adjacent elements.
+> 2. **`margin-inline: auto`**: Modern logical property equivalent to `margin-left: auto; margin-right: auto;`, automatically centering block containers.
+> 3. **Responsive Layout Boundaries**: Combining `max-width` with `margin-inline: auto` creates responsive centered page layouts.
 > 
 ---
 
-### Exercise 3: Margin Auto in Flexbox Containers
+### Exercise 2: Vertical Rhythm and Flow Component Spacing using Logical Margins
 
-**Problem:** How does `margin-left: auto` behave on a flex item inside a flex container?
+**Scenario:** Establishes a consistent vertical typography rhythm using `margin-block-end`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `margin-block-end: 1.5rem` to headings and paragraphs.
+
 > [!check]- Answer
-> ```text
-> Pushes the flex item all the way to the right edge of the flex container.
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .flex-item-right {
->   margin-left: auto;
+> h1, h2, h3 {
+>   margin-block-end: 1rem;       /* Logical bottom margin */
+>   color: #0f172a;
+> }
+>
+> p {
+>   margin-block-end: 1.5rem;     /* Vertical paragraph spacing */
+>   line-height: 1.6;
 > }
 > ```
 >
-> **Explanation:** `margin: auto` inside Flexbox absorbs available free space along main/cross axes.
+> #### Technical Explanation
+>
+> 1. **Logical Margins (`margin-block-end`)**: Replaces `margin-bottom`, supporting writing mode variations seamlessly.
+> 2. **Vertical Rhythm**: Consistent bottom margins on flow elements build a harmonious reading cadence.
+> 3. **Single-Direction Spacing**: Applying margins in one direction (e.g. bottom-only) prevents margin collapse confusion.
 > 
+---
+
+### Exercise 3: Negative Margins for Decorative Image Bleed Effects
+
+**Scenario:** Uses negative margins to pull a hero image past its parent container's padding.
+
+**Requirements:**
+1. Apply `margin-inline: -1.5rem` to pull image edge-to-edge.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .card {
+>   padding: 1.5rem;
+>   background-color: #ffffff;
+> }
+>
+> .card-hero-image {
+>   margin-inline: -1.5rem;       /* Negative margin cancels parent padding */
+>   margin-block-start: -1.5rem;
+>   width: calc(100% + 3rem);
+>   display: block;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Negative Margin Effect**: Negative margin values pull elements in the opposite direction, overlapping or expanding past container bounds.
+> 2. **Full-Bleed Images**: Extends card hero images edge-to-edge without needing separate HTML wrapper containers.
+> 3. **Precise Layout Offset**: Must be calculated to match exact parent padding offsets (`-1.5rem`).
 ## 6. Related Terms
 - [Padding](padding.md) — The inner spacing (inside the border).
 - [Border](border.md) — The wall separating margin from padding.

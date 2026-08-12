@@ -99,57 +99,177 @@ export const b = a + 1;
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Parent and Child
+### Exercise 1: Circular Dependency Graph Detector
 
-**Problem:** You have a `Parent.js` file and a `Child.js` file. The `Parent` needs to create new `Child` instances. The `Child` needs access to a utility function called `formatName()` that currently lives inside `Parent.js`. 
-If `Child` imports `Parent` to get `formatName()`, you will cause a Circular Dependency. How do you fix this architecture?
+**Scenario:** A build static analysis tool inspects CommonJS module dependency graphs to detect circular dependencies before deployment.
 
-**Expected output:**
+**Requirements:**
+1. Write detectCircularDependency(moduleGraphMap).
+2. Perform Depth-First Search (DFS) traversal.
+3. Detect back-edges in call graph.
+
 > [!check]- Answer
-> ```text
-> Extract `formatName()` out of `Parent.js` and put it into a new file named `utils.js`.
-> Now, `Parent.js` imports `Child.js`. 
-> `Child.js` imports `utils.js`.
-> The circle is broken, and data flows strictly in one direction!
+>
+> #### Implementation
+>
+> ```javascript
+> function detectCircularDependency(moduleGraphMap = {}) {
+>   const visited = new Set();
+>   const recursionStack = new Set();
+>   const cycles = [];
+>
+>   function dfs(node, path = []) {
+>     visited.add(node);
+>     recursionStack.add(node);
+>     path.push(node);
+>
+>     const neighbors = moduleGraphMap[node] || [];
+>     for (const neighbor of neighbors) {
+>       if (!visited.has(neighbor)) {
+>         dfs(neighbor, [...path]);
+>       } else if (recursionStack.has(neighbor)) {
+>         const cyclePath = path.slice(path.indexOf(neighbor));
+>         cyclePath.push(neighbor);
+>         cycles.push(cyclePath.join(" -> "));
+>       }
+>     }
+>
+>     recursionStack.delete(node);
+>   }
+>
+>   for (const node of Object.keys(moduleGraphMap)) {
+>     if (!visited.has(node)) {
+>       dfs(node, []);
+>     }
+>   }
+>
+>   return {
+>     hasCircularDependency: cycles.length > 0,
+>     cycles
+>   };
+> }
+>
+> // Verification tests
+> const graph = {
+>   "user.js": ["order.js"],
+>   "order.js": ["payment.js"],
+>   "payment.js": ["user.js"] // Cycle!
+> };
+>
+> const result = detectCircularDependency(graph);
+> console.assert(result.hasCircularDependency === true, "Test 1 Failed");
+> console.assert(result.cycles[0] === "user.js -> order.js -> payment.js -> user.js", "Test 2 Failed");
 > ```
-> - Remember the "Third File" trick.
+>
+> #### Technical Explanation
+>
+> 1. **Circular Dependency Definition**: Occurs when Module A requires Module B, and Module B requires Module A directly or indirectly.
+> 2. **CommonJS Partial Exports**: In CommonJS, circular dependencies return incomplete/empty `{}` module.exports objects during evaluation.
+> 3. **DFS Cycle Detection**: Uses Depth-First Search with a recursion stack to identify back-edges indicating circular references.
 > 
 ---
 
+### Exercise 2: Dependency Injection Refactoring for Circular Modules
 
+**Scenario:** Refactors two tightly coupled modules (`UserService` and `OrderService`) by injecting dependencies at instantiation time to eliminate circular `require()` calls.
 
-### Exercise 2: Breaking Circular Dependency Cycle
+**Requirements:**
+1. Write createUserService(getOrderServiceFn).
+2. Write createOrderService(getUserServiceFn).
+3. Resolve dependencies lazily without top-level circular requires.
 
-**Problem:** What architectural refactoring pattern breaks a circular dependency between Module A and Module B?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Extract the shared logic/state into a third independent module (Module C) imported by both A and B.
-> ```
-> ```text
-> Extract the shared logic/state into a third independent module (Module C) imported by both A and B.
+>
+> #### Implementation
+>
+> ```javascript
+> function createUserService(getOrderServiceFn) {
+>   return {
+>     getUser(id) {
+>       return { id, name: "Alice" };
+>     },
+>     getUserOrders(userId) {
+>       const orderService = getOrderServiceFn();
+>       return orderService.getOrdersByUserId(userId);
+>     }
+>   };
+> }
+>
+> function createOrderService(getUserServiceFn) {
+>   return {
+>     getOrdersByUserId(userId) {
+>       const userService = getUserServiceFn();
+>       const user = userService.getUser(userId);
+>       return [{ orderId: 101, user: user.name }];
+>     }
+>   };
+> }
+>
+> // Verification tests
+> let userService, orderService;
+>
+> userService = createUserService(() => orderService);
+> orderService = createOrderService(() => userService);
+>
+> const orders = userService.getUserOrders("u1");
+> console.assert(orders.length === 1 && orders[0].user === "Alice", "Test 1 Failed");
 > ```
 >
-> **Explanation:** Introducing a shared helper module removes direct mutual dependencies between A and B.
+> #### Technical Explanation
+>
+> 1. **Dependency Injection (DI)**: Passes service instances or factory getters rather than importing dependent modules at file top-level.
+> 2. **Lazy Evaluation**: Defers accessing dependent module until method execution time when both modules are fully evaluated.
+> 3. **Architectural Decoupled Design**: Eliminates circular dependency bugs by decoupling component instantiation from usage.
 > 
 ---
 
-### Exercise 3: CommonJS vs ESM Circular Handling
+### Exercise 3: Lazy-Loading Function Getter Pattern
 
-**Problem:** Compare how CommonJS vs ES Modules handle circular dependencies.
+**Scenario:** Implements a lazy module getter helper function that defers `require()` invocation until runtime to bypass top-level circular dependencies.
 
-**Expected output:**
+**Requirements:**
+1. Write createLazyModuleGetter(modulePath, requireMock).
+2. Cache required module instance upon first invocation.
+3. Return cached export.
+
 > [!check]- Answer
-> ```text
-> CommonJS returns an incomplete exports object snapshot; ES Modules use live bindings that throw TDZ ReferenceError if evaluated before initialization.
-> ```
-> ```text
-> CommonJS returns an incomplete exports object snapshot; ES Modules use live bindings that throw TDZ ReferenceError if evaluated before initialization.
+>
+> #### Implementation
+>
+> ```javascript
+> function createLazyModuleGetter(modulePath, requireMock) {
+>   const req = requireMock || require;
+>   let cachedModule = null;
+>
+>   return function getModule() {
+>     if (!cachedModule) {
+>       cachedModule = req(modulePath);
+>     }
+>     return cachedModule;
+>   };
+> }
+>
+> // Verification tests
+> let requireCount = 0;
+> const mockRequire = (path) => {
+>   requireCount++;
+>   return { name: `Module_${path}` };
+> };
+>
+> const getUserModule = createLazyModuleGetter("./user.js", mockRequire);
+> console.assert(requireCount === 0, "Test 1 Failed: Must not require at creation time");
+>
+> const mod1 = getUserModule();
+> const mod2 = getUserModule();
+> console.assert(requireCount === 1, "Test 2 Failed: Require executed exactly once");
+> console.assert(mod1 === mod2, "Test 3 Failed: Returns cached instance");
 > ```
 >
-> **Explanation:** CommonJS exposes partial export objects; ESM enforces strict static TDZ live bindings.
-> 
+> #### Technical Explanation
+>
+> 1. **Lazy Loading Strategy**: Defers module loading until runtime execution, avoiding top-level import evaluation deadlocks.
+> 2. **Module Caching**: Caches module reference after first invocation to eliminate repeated `require()` overhead.
+> 3. **ESM Live Bindings Contrast**: ESM supports live bindings but top-level circular imports can evaluate variables as `undefined` before initialization.
 ## 6. Related Terms
 - [Module Resolution](module_resolution.md) — The process that gets trapped in the infinite loop.
 

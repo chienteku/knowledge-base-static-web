@@ -86,60 +86,161 @@ res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' })
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Forgery
+### Exercise 1: JWT HMAC-SHA256 Signer & Verifier Engine
 
-**Problem:** You are an evil hacker. You steal a regular user's JWT. You decode the Base64 payload, change `"isAdmin": false` to `"isAdmin": true`, and re-encode it. You send it to the server. What happens, and why?
+**Scenario:** Signs and verifies JSON Web Tokens (JWT) using `crypto.createHmac` for Base64URL encoded `Header.Payload.Signature` strings.
 
-**Expected output:**
+**Requirements:**
+1. Write signJwt(payload, secretKey).
+2. Write verifyJwt(token, secretKey).
+3. Enforce expiration check.
+
 > [!check]- Answer
-> ```text
-> The server will throw a "Signature Verification Failed" error and reject the request.
-> Because you changed the payload, the original signature no longer matches the data. You cannot generate a new, matching signature because you don't know the server's secret `.env` key.
-> ```
-> - What is the 3rd part of the JWT used for?
-> 
----
-
-
-
-### Exercise 2: Signing JWT Token with Expiration
-
-**Problem:** Sign JWT token containing `{ userId: 101 }` with secret `'secretKey'` expiring in 1 hour.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const token = jwt.sign({ userId: 101 }, 'secretKey', { expiresIn: '1h' });
-> ```
-> ```javascript
-> const jwt = require('jsonwebtoken');
-> const token = jwt.sign({ userId: 101 }, 'secretKey', { expiresIn: '1h' });
-> ```
 >
-> **Explanation:** `jwt.sign` signs payloads with secret keys and sets expiration claims (`exp`).
-> 
----
-
-### Exercise 3: Verifying JWT Token
-
-**Problem:** Verify incoming token string `req.headers.authorization` using `jwt.verify`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const decoded = jwt.verify(token, 'secretKey');
-> ```
+> #### Implementation
+>
 > ```javascript
+> function base64UrlEncode(str) {
+>   return Buffer.from(str).toString("base64url");
+> }
+>
+> function signJwt(payload, secretKey) {
+>   const cryptoLib = require("crypto");
+>   const header = { alg: "HS256", typ: "JWT" };
+>
+>   const encodedHeader = base64UrlEncode(JSON.stringify(header));
+>   const encodedPayload = base64UrlEncode(JSON.stringify(payload));
+>
+>   const signature = cryptoLib
+>     .createHmac("sha256", secretKey)
+>     .update(`${encodedHeader}.${encodedPayload}`)
+>     .digest("base64url");
+>
+>   return `${encodedHeader}.${encodedPayload}.${signature}`;
+> }
+>
+> function verifyJwt(token, secretKey) {
+>   const cryptoLib = require("crypto");
+>   const parts = token.split(".");
+>   if (parts.length !== 3) throw new Error("INVALID_JWT_FORMAT");
+>
+>   const [encodedHeader, encodedPayload, signature] = parts;
+>   const expectedSig = cryptoLib
+>     .createHmac("sha256", secretKey)
+>     .update(`${encodedHeader}.${encodedPayload}`)
+>     .digest("base64url");
+>
+>   if (signature !== expectedSig) {
+>     throw new Error("INVALID_JWT_SIGNATURE");
+>   }
+>
+>   const payloadStr = Buffer.from(encodedPayload, "base64url").toString("utf-8");
+>   return JSON.parse(payloadStr);
+> }
+>
+> // Verification tests
+> const token = signJwt({ sub: "user123", role: "admin" }, "my_secret_key");
+> const payload = verifyJwt(token, "my_secret_key");
+>
+> console.assert(payload.sub === "user123", "Test 1 Failed: Decoded valid JWT payload");
 > try {
->   const decoded = jwt.verify(token, 'secretKey');
->   req.user = decoded;
+>   verifyJwt(token, "wrong_secret");
+>   console.assert(false, "Test 2 Failed");
 > } catch (err) {
->   return res.status(401).send('Invalid token');
+>   console.assert(err.message === "INVALID_JWT_SIGNATURE", "Test 2 Passed: Rejected invalid signature");
 > }
 > ```
 >
-> **Explanation:** `jwt.verify` checks signature validity and expiration before returning decoded payload.
+> #### Technical Explanation
+>
+> 1. **JWT Structure**: 3 Base64URL parts separated by dots: `Header.Payload.Signature`.
+> 2. **HMAC-SHA256 Algorithm**: Generates cryptographic signature using secret key to prevent payload tampering.
+> 3. **Stateless Authentication**: JWTs allow servers to authenticate requests without performing session lookup queries in Redis/DB.
 > 
+---
+
+### Exercise 2: JWT Refresh Token Rotation System
+
+**Scenario:** Implements JWT refresh token rotation where consuming a refresh token issues a new short-lived Access Token and new Refresh Token.
+
+**Requirements:**
+1. Write rotateJwtRefreshToken(refreshToken, secretKey, refreshTokenStore).
+2. Verify refresh token.
+3. Issue new access & refresh tokens.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function rotateJwtRefreshToken(refreshToken, secretKey, refreshTokenStore = new Set()) {
+>   if (!refreshTokenStore.has(refreshToken)) {
+>     throw new Error("REFRESH_TOKEN_REUSE_OR_REVOKED");
+>   }
+>
+>   const cryptoLib = require("crypto");
+>   // Revoke old refresh token (Single-use token rotation!)
+>   refreshTokenStore.delete(refreshToken);
+>
+>   const newAccessToken = "access_" + cryptoLib.randomBytes(8).toString("hex");
+>   const newRefreshToken = "refresh_" + cryptoLib.randomBytes(8).toString("hex");
+>
+>   refreshTokenStore.add(newRefreshToken);
+>
+>   return {
+>     accessToken: newAccessToken,
+>     refreshToken: newRefreshToken
+>   };
+> }
+>
+> // Verification tests
+> const store = new Set(["old_refresh_123"]);
+> const result = rotateJwtRefreshToken("old_refresh_123", "secret", store);
+>
+> console.assert(store.has("old_refresh_123") === false, "Test 1 Failed: Old refresh token revoked");
+> console.assert(store.has(result.refreshToken) === true, "Test 2 Failed: New refresh token stored");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Refresh Token Rotation**: Each refresh token can be used exactly ONCE to issue a new access token; old token is immediately invalidated.
+> 2. **Re-use Detection Defense**: If an already-used refresh token is presented again, invalidate ALL tokens in family to stop token theft attacks.
+> 3. **Short-Lived Access Tokens**: Access tokens expire quickly (15 min) while Refresh tokens remain valid longer (7 days).
+> 
+---
+
+### Exercise 3: JWT Revocation Blacklist Store
+
+**Scenario:** Checks incoming JWT unique identifiers (`jti` claim) against a Redis/memory revocation blacklist to support immediate token logout.
+
+**Requirements:**
+1. Write isJwtRevoked(jwtPayload, blacklistStore).
+2. Extract `jti` claim.
+3. Check if `jti` exists in blacklist.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function isJwtRevoked(jwtPayload = {}, blacklistStore = new Set()) {
+>   const jti = jwtPayload.jti;
+>   if (!jti) return false;
+>
+>   return blacklistStore.has(jti);
+> }
+>
+> // Verification tests
+> const blacklist = new Set(["revoked_token_999"]);
+> console.assert(isJwtRevoked({ jti: "revoked_token_999" }, blacklist) === true, "Test 1 Failed: Token is revoked");
+> console.assert(isJwtRevoked({ jti: "valid_token_111" }, blacklist) === false, "Test 2 Failed: Token is valid");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **JWT `jti` (JWT ID) Claim**: Unique string identifier assigned to each issued JWT to support individual token tracking.
+> 2. **Token Blacklisting**: Allows revoking specific stateless JWTs prior to their natural expiration time (e.g. on user logout).
+> 3. **TTL Auto-Expiry in Redis**: Blacklist entries in Redis should be stored with a TTL matching the token's remaining lifespan.
 ## 6. Related Terms
 - [Environment Variables (dotenv)](env_vars.md) — Where you store the Secret Password used to sign the JWTs.
 - [Bcrypt (Password Hashing)](bcrypt.md) — The tool used to check the user's password *before* giving them the JWT.

@@ -87,55 +87,160 @@ npm install --save-dev jest # --save-dev (development dependency)
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Dev Dependency
+### Exercise 1: Custom npm run Script Pipeline Runner
 
-**Problem:** You are building an API. You need `express` to run the actual web server. You also want to install `eslint`, a tool that checks your code for typos while you are typing on your laptop. 
-What is the difference in how you install them?
+**Scenario:** A build automation tool parses `scripts` defined in `package.json` to execute pre and post script hooks (`prebuild` -> `build` -> `postbuild`).
 
-**Expected output:**
+**Requirements:**
+1. Write resolveNpmScriptPipeline(scriptsMap, targetScript).
+2. Check for `pre${targetScript}`.
+3. Check for `post${targetScript}`.
+4. Return ordered execution array.
+
 > [!check]- Answer
-> ```bash
-> npm install express
-> npm install --save-dev eslint
+>
+> #### Implementation
+>
+> ```javascript
+> function resolveNpmScriptPipeline(scriptsMap = {}, targetScript = "build") {
+>   const pipeline = [];
+>
+>   const preScript = `pre${targetScript}`;
+>   if (scriptsMap[preScript]) {
+>     pipeline.push({ name: preScript, command: scriptsMap[preScript] });
+>   }
+>
+>   if (scriptsMap[targetScript]) {
+>     pipeline.push({ name: targetScript, command: scriptsMap[targetScript] });
+>   } else {
+>     throw new Error(`npm error! Missing script: "${targetScript}"`);
+>   }
+>
+>   const postScript = `post${targetScript}`;
+>   if (scriptsMap[postScript]) {
+>     pipeline.push({ name: postScript, command: scriptsMap[postScript] });
+>   }
+>
+>   return pipeline;
+> }
+>
+> // Verification tests
+> const scripts = {
+>   prebuild: "rimraf dist",
+>   build: "tsc",
+>   postbuild: "echo Done"
+> };
+>
+> const pipeline = resolveNpmScriptPipeline(scripts, "build");
+> console.assert(pipeline.length === 3, "Test 1 Failed");
+> console.assert(pipeline[0].name === "prebuild", "Test 2 Failed: prebuild executes first");
+> console.assert(pipeline[2].name === "postbuild", "Test 3 Failed: postbuild executes last");
 > ```
-> - Which package is required for the server to literally turn on and accept traffic?
+>
+> #### Technical Explanation
+>
+> 1. **npm Lifecycle Hooks**: npm automatically runs `pre<script>` before and `post<script>` after executing `npm run <script>`.
+> 2. **Built-in Lifecycle Events**: Standard npm events include `preinstall`, `postinstall`, `pretest`, `test`, `posttest`.
+> 3. **Task Automation**: Eliminates custom shell scripts by chaining task pipelines directly inside `package.json` scripts.
 > 
 ---
 
+### Exercise 2: npm Security Vulnerability Audit Parser
 
+**Scenario:** A CI security scanner parses JSON output from `npm audit --json` to fail builds if high or critical vulnerabilities exist.
 
-### Exercise 2: npm Run Scripts Execution
+**Requirements:**
+1. Write parseNpmAuditReport(auditJsonObj).
+2. Count vulnerabilities by severity (critical, high, moderate, low).
+3. Return flag if critical/high vulnerabilities exist.
 
-**Problem:** How do you run custom script `"build": "tsc"` declared in `package.json` using npm CLI?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> npm run build
-> ```
-> ```bash
-> npm run build
+>
+> #### Implementation
+>
+> ```javascript
+> function parseNpmAuditReport(auditJsonObj = {}) {
+>   const vulnerabilities = auditJsonObj.vulnerabilities || {};
+>
+>   const counts = { critical: 0, high: 0, moderate: 0, low: 0, info: 0 };
+>
+>   for (const [name, info] of Object.entries(vulnerabilities)) {
+>     const severity = (info.severity || "low").toLowerCase();
+>     if (severity in counts) {
+>       counts[severity]++;
+>     }
+>   }
+>
+>   const isBuildBlocked = counts.critical > 0 || counts.high > 0;
+>
+>   return {
+>     counts,
+>     isBuildBlocked,
+>     summary: `Audit found ${counts.critical} critical, ${counts.high} high vulnerabilities.`
+>   };
+> }
+>
+> // Verification tests
+> const report = {
+>   vulnerabilities: {
+>     "axios": { severity: "high" },
+>     "lodash": { severity: "critical" },
+>     "minimist": { severity: "low" }
+>   }
+> };
+>
+> const parsed = parseNpmAuditReport(report);
+> console.assert(parsed.isBuildBlocked === true, "Test 1 Failed: Critical/High must block build");
+> console.assert(parsed.counts.critical === 1 && parsed.counts.high === 1, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `npm run <script-name>` executes script commands defined in `package.json` `scripts` object.
+> #### Technical Explanation
+>
+> 1. **npm audit Tool**: Scans project dependency tree against the GitHub Advisory Database for known security vulnerabilities.
+> 2. **npm audit fix**: Automatically updates vulnerable dependencies to non-breaking patched versions.
+> 3. **CI/CD Security Gates**: Enforcing `npm audit --audit-level=high` blocks compromised packages from reaching production.
 > 
 ---
 
-### Exercise 3: Auditing Vulnerable Dependencies
+### Exercise 3: Private npm Registry Auth Token Configurator
 
-**Problem:** Which npm CLI command scans project dependencies for security vulnerabilities?
+**Scenario:** An enterprise deployment tool generates `.npmrc` configuration strings to authenticate against private corporate npm registries.
 
-**Expected output:**
+**Requirements:**
+1. Write generateNpmRcConfig(registryUrl, authToken).
+2. Format `//registryUrl:_authToken=authToken`.
+3. Return .npmrc content string.
+
 > [!check]- Answer
-> ```text
-> npm audit (and npm audit fix to resolve)
-> ```
-> ```bash
-> npm audit
+>
+> #### Implementation
+>
+> ```javascript
+> function generateNpmRcConfig(registryUrl = "registry.company.com", authToken = "") {
+>   if (!authToken) {
+>     throw new Error("Auth token is required for private npm registry configuration");
+>   }
+>
+>   const cleanUrl = registryUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+>
+>   const npmrcContent = `registry=https://${cleanUrl}/
+> //${cleanUrl}/:_authToken=${authToken}
+> always-auth=true`;
+>
+>   return npmrcContent;
+> }
+>
+> // Verification tests
+> const npmrc = generateNpmRcConfig("registry.corp.com/", "npm_secret_123");
+> console.assert(npmrc.includes("registry=https://registry.corp.com/"), "Test 1 Failed");
+> console.assert(npmrc.includes("//registry.corp.com/:_authToken=npm_secret_123"), "Test 2 Failed");
 > ```
 >
-> **Explanation:** `npm audit` checks dependency versions against known CVE vulnerability databases.
-> 
+> #### Technical Explanation
+>
+> 1. **.npmrc Configuration File**: Configures npm registry settings, authentication tokens, and scoped package registries (`@company:registry`).
+> 2. **Environment Token Injection**: Best practice uses environment variable interpolation (`_authToken=${NPM_TOKEN}`) in `.npmrc` to prevent checking secret keys into Git.
+> 3. **Scoped Registries**: Allows fetching internal private packages (`@mycorp/sdk`) from private registries while public packages come from npmjs.org.
 ## 6. Related Terms
 - [package.json](package_json.md) — The configuration file that NPM reads and writes to.
 - [node_modules](node_modules.md) — Where NPM physically places the downloaded code.

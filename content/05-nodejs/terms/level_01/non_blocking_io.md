@@ -93,68 +93,156 @@ await setTimeout(2000); // Non-blocking timer pause
 
 ## 5. Practice Exercises
 
-### Exercise 1: Predict the Order
+### Exercise 1: Non-Blocking Asynchronous File Reader Pipeline
 
-**Problem:** In what order will these three `console.log` statements print to the terminal?
+**Scenario:** A log analyzer reads multiple log files asynchronously using non-blocking `fs.promises.readFile()`, allowing the Event Loop to handle concurrent requests.
 
-```javascript
-console.log("1. Starting...");
+**Requirements:**
+1. Write readFilesNonBlocking(filePathsArray, mockFs).
+2. Read files concurrently using Promise.all.
+3. Return contents map.
 
-fs.readFile('huge-file.txt', () => {
-  console.log("2. File finished reading!");
-});
-
-console.log("3. Done.");
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Starting...
-> 3. Done.
-> 2. File finished reading!
-> 
-> Because `fs.readFile` is Non-Blocking, Node.js hands the task to the C++ background workers and immediately jumps to line 3. Only after the file is completely read does the callback function on line 2 execute.
-> ```
-> - Does Node.js stop and wait on the `readFile` line?
-> 
----
-
-
-
-### Exercise 2: Non-Blocking Async File Reading Pattern
-
-**Problem:** Convert synchronous code `const text = fs.readFileSync('file.txt', 'utf-8'); console.log(text);` to non-blocking async syntax using `fs.promises`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const text = await fs.promises.readFile('file.txt', 'utf-8'); console.log(text);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const text = await fs.promises.readFile('file.txt', 'utf-8');
-> console.log(text);
+> async function readFilesNonBlocking(filePathsArray = [], mockFs) {
+>   const fsLib = mockFs || require("fs").promises;
+>
+>   const readPromises = filePathsArray.map(async (filePath) => {
+>     const content = await fsLib.readFile(filePath, "utf-8");
+>     return { filePath, content };
+>   });
+>
+>   const results = await Promise.all(readPromises);
+>
+>   const fileMap = {};
+>   results.forEach(res => {
+>     fileMap[res.filePath] = res.content;
+>   });
+>
+>   return fileMap;
+> }
+>
+> // Verification tests
+> const mockFs = {
+>   readFile: async (path) => `Content for ${path}`
+> };
+>
+> readFilesNonBlocking(["/log1.txt", "/log2.txt"], mockFs).then(map => {
+>   console.assert(map["/log1.txt"] === "Content for /log1.txt", "Test 1 Failed");
+>   console.assert(map["/log2.txt"] === "Content for /log2.txt", "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** `fs.promises` delegates file operations to thread pool without blocking the main event loop.
+> #### Technical Explanation
+>
+> 1. **Non-Blocking I/O Principle**: Operations return immediately without waiting for disk/network I/O to finish; callbacks/promises fire when data is ready.
+> 2. **fs.readFileSync vs fs.promises.readFile**: readFileSync freezes the thread while disk spins; promises.readFile delegates I/O to libuv thread pool.
+> 3. **High Concurrency Advantage**: Enables Node.js to initiate hundreds of concurrent file/network operations simultaneously.
 > 
 ---
 
-### Exercise 3: Understanding Non-Blocking Concurrency
+### Exercise 2: Non-Blocking Socket Stream Buffer Reader
 
-**Problem:** If 100 HTTP requests request a database query taking 50ms each, approximately how long does Node.js take to process all 100 requests concurrently?
+**Scenario:** A real-time data ingestion server reads non-blocking TCP socket streams using event listeners (`data`, `end`) without thread blocking.
 
-**Expected output:**
+**Requirements:**
+1. Write readSocketStream(socketMock).
+2. Listen for 'data' events.
+3. Buffer incoming chunks non-blocking.
+4. Resolve on 'end'.
+
 > [!check]- Answer
-> ```text
-> Slightly over 50ms (around 50-60ms total) because non-blocking I/O queries execute concurrently on database sockets.
-> ```
-> ```text
-> ~50-60ms total
+>
+> #### Implementation
+>
+> ```javascript
+> function readSocketStream(socketMock) {
+>   return new Promise((resolve, reject) => {
+>     const chunks = [];
+>
+>     socketMock.on("data", (chunk) => {
+>       chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+>     });
+>
+>     socketMock.on("end", () => {
+>       resolve(Buffer.concat(chunks).toString("utf-8"));
+>     });
+>
+>     socketMock.on("error", (err) => {
+>       reject(err);
+>     });
+>   });
+> }
+>
+> // Verification tests
+> const mockSocket = {
+>   handlers: {},
+>   on(evt, fn) { this.handlers[evt] = fn; }
+> };
+>
+> const promise = readSocketStream(mockSocket);
+> mockSocket.handlers["data"]("Hello ");
+> mockSocket.handlers["data"]("World!");
+> mockSocket.handlers["end"]();
+>
+> promise.then(text => {
+>   console.assert(text === "Hello World!", "Test 1 Failed: Stream text mismatch");
+> });
 > ```
 >
-> **Explanation:** Non-blocking I/O fires all 100 socket queries concurrently without waiting sequentially for each query to finish.
+> #### Technical Explanation
+>
+> 1. **Stream Event-Driven Model**: Readable streams emit 'data' events as chunks arrive without blocking the main thread.
+> 2. **Buffer Concatenation**: Buffer.concat(chunks) efficiently joins binary chunk buffers into a single Buffer.
+> 3. **Backpressure Handling**: Non-blocking streams support pause() and resume() to manage backpressure when consumer is slower than producer.
 > 
+---
+
+### Exercise 3: Non-Blocking vs Blocking Performance Evaluator
+
+**Scenario:** Measures the execution time difference between non-blocking asynchronous operations and blocking synchronous operations.
+
+**Requirements:**
+1. Write evaluateIoStrategy(taskCount, mockAsyncFn, mockSyncFn).
+2. Measure total duration for async vs sync execution.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function evaluateIoStrategy(taskCount = 50, mockAsyncFn) {
+>   const startAsync = Date.now();
+>   const asyncTasks = [];
+>   for (let i = 0; i < taskCount; i++) {
+>     asyncTasks.push(mockAsyncFn(i));
+>   }
+>   await Promise.all(asyncTasks);
+>   const asyncDurationMs = Date.now() - startAsync;
+>
+>   return {
+>     taskCount,
+>     asyncDurationMs,
+>     isNonBlockingFast: asyncDurationMs < 100
+>   };
+> }
+>
+> // Verification tests
+> const mockAsync = (id) => new Promise(r => setTimeout(r, 10)); // 10ms I/O latency
+>
+> evaluateIoStrategy(50, mockAsync).then(res => {
+>   console.assert(res.isNonBlockingFast === true, "Test 1 Failed: 50 async tasks take ~10ms total");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Concurrent Asynchronous Execution**: 50 non-blocking 10ms tasks execute in ~10ms concurrently; 50 synchronous tasks take 500ms sequentially.
+> 2. **Event-Driven Architecture**: Kernel epoll/kqueue notifies libuv when socket I/O is ready, triggering JS callbacks.
+> 3. **Scalability Advantage**: Non-blocking I/O allows Node.js to achieve extreme C10K concurrency with minimal resource usage.
 ## 6. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The mechanism that acts as the "buzzer", telling the main thread that the background I/O task is finished.
 - [Callbacks & Callback Hell](../level_05/callbacks.md) — The functions you provide to handle the data once the Non-Blocking I/O is done.

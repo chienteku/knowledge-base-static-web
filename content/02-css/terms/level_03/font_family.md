@@ -106,63 +106,85 @@ body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Fallback Order
+### Exercise 1: Defining Robust System Font Stacks
 
-**Problem:** You write `font-family: "Comic Sans MS", "Arial", sans-serif;`. The user is on an Apple Mac that has "Arial" installed, but does *not* have "Comic Sans" installed. What font will the user see?
+**Scenario:** An author configures a fast, responsive system font stack using `font-family` on the `body` element.
 
-**Expected output:**
+**Requirements:**
+1. Define native system font stack `system-ui, -apple-system, sans-serif`.
+2. Specify generic `sans-serif` fallback.
+3. Quote multi-word font names.
+
 > [!check]- Answer
-> ```text
-> Arial! The browser reads from left to right. It looks for Comic Sans, fails to find it, moves to Arial, finds it, and stops.
-> ```
-> - The browser reads the list from left to right.
-> 
----
-
-
-
-### Exercise 2: Writing Robust Font Stack
-
-**Problem:** Write CSS `font-family` declaration using `'Roboto'`, falling back to `Arial`, and generic `sans-serif`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> font-family: 'Roboto', Arial, sans-serif;
-> ```
+>
+> #### Implementation
+>
 > ```css
 > body {
->   font-family: 'Roboto', Arial, sans-serif;
+>   /* System Font Stack: Native OS fonts (Zero network download latency!) */
+>   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+>   font-size: 1rem;
+>   line-height: 1.5;
+>   color: #1e293b;
 > }
 > ```
 >
-> **Explanation:** Font stacks list preferred fonts first, falling back to system and generic font families.
+> #### Technical Explanation
+>
+> 1. **The `font-family` Property**: Specifies a prioritized list of font family names for the browser to render text.
+> 2. **System Font Stack Benefits**: Using `system-ui` renders OS-native fonts instantly with zero network download delay or layout shift.
+> 3. **Generic Fallback Family**: ALWAYS specify a generic fallback family (`sans-serif`, `serif`, `monospace`) as the last item in the list.
 > 
 ---
 
-### Exercise 3: 5 Generic Font Families
+### Exercise 2: Quoting Multi-Word Font Names
 
-**Problem:** List 5 standard CSS generic fallback font family keywords.
+**Scenario:** Demonstrates proper syntax rules for multi-word font family strings.
 
-**Expected output:**
+**Requirements:**
+1. Wrap multi-word font names in double quotes (`"Segoe UI"`).
+
 > [!check]- Answer
-> ```text
-> 1. sans-serif
-> 2. serif
-> 3. monospace
-> 4. cursive
-> 5. fantasy (or system-ui)
-> ```
-> ```text
-> 1. sans-serif
-> 2. serif
-> 3. monospace
-> 4. cursive
-> 5. system-ui / fantasy
+>
+> #### Implementation
+>
+> ```css
+> .heading-special {
+>   font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+> }
 > ```
 >
-> **Explanation:** Generic font keywords direct browser font engines to default system font categories.
+> #### Technical Explanation
+>
+> 1. **Quoting Multi-Word Fonts**: Font names containing spaces (like `"Segoe UI"` or `"Times New Roman"`) MUST be enclosed in quotes.
+> 2. **Unquoted Single-Word Fonts**: Single-word fonts (like `Arial` or `Georgia`) do not require quotes.
+> 3. **Generic Keyword Rule**: Generic family keywords (`sans-serif`, `serif`, `monospace`) MUST NOT be quoted.
 > 
+---
+
+### Exercise 3: Monospace Code Block Font Stacks
+
+**Scenario:** Configures a clean monospace font stack for code blocks and `<pre>` elements.
+
+**Requirements:**
+1. Apply `font-family: ui-monospace, SFMono-Regular, Menlo, monospace`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> code, pre, kbd {
+>   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+>   font-size: 0.875em;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Monospace Font Stacks**: Monospace fonts give every character equal width, essential for code indentation and tabular data.
+> 2. **Relative Font Size (`0.875em`)**: Monospace fonts often look visually larger; scaling down slightly via `em` balances line height.
+> 3. **Cross-Platform Monospace Fallbacks**: Includes Mac (`Menlo`), Windows (`Consolas`), and Linux fallbacks.
 ## 6. Related Terms
 - [`font-size` & `font-weight`](font_size_weight.md) — Properties used to adjust the size and thickness of the chosen font family.
 - [`@font-face` & Web Fonts (Google Fonts)](web_fonts.md) — Loading custom external typefaces.

@@ -94,65 +94,175 @@ app.get('/data', async (req, res, next) => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Spot the Environment
+### Exercise 1: Node.js Environment Capability & Runtime Inspector
 
-**Problem:** Look at the following two lines of code. Which one can only run in the Browser, and which one can only run in Node.js?
-1. `const data = fs.readFileSync('passwords.txt');`
-2. `alert("Welcome to the website!");`
+**Scenario:** A cross-platform library checks runtime capabilities to confirm code is executing in Node.js rather than browser environments.
 
-**Expected output:**
+**Requirements:**
+1. Write inspectNodeRuntime().
+2. Check process.versions.node.
+3. Check global vs window.
+4. Return runtime environment metadata.
+
 > [!check]- Answer
-> ```text
-> 1. Node.js only. The Browser cannot read text files directly from the hard drive (huge security risk).
-> 2. Browser only. Node.js doesn't have a screen to show popup alerts.
-> ```
-> 
----
-
-
-
-### Exercise 2: Distinguishing Node.js vs Browser Environment APIs
-
-**Problem:** Identify whether each API is available in Browser only, Node.js only, or Both:
-1. `fetch()`
-2. `process.env`
-3. `document.cookie`
-4. `Buffer`
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Both (Node 18+ & Browser)
-> 2. Node.js only
-> 3. Browser only
-> 4. Node.js only
-> ```
-> ```text
-> 1. Both (Node 18+ native fetch & Browser)
-> 2. Node.js only
-> 3. Browser only
-> 4. Node.js only
-> ```
 >
-> **Explanation:** `process.env` and `Buffer` are Node.js core globals; `document` is browser DOM; `fetch` is standardized web spec available in modern Node.
-> 
----
-
-### Exercise 3: Reading Environment Variables in Node.js
-
-**Problem:** Write code to read port from `process.env.PORT` defaulting to `3000`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const PORT = process.env.PORT || 3000;
-> ```
+> #### Implementation
+>
 > ```javascript
-> const PORT = process.env.PORT || 3000;
+> function inspectNodeRuntime() {
+>   const isNode = typeof process !== "undefined" && 
+>                  process.versions !== undefined && 
+>                  process.versions.node !== undefined;
+>
+>   if (!isNode) {
+>     return { isNode: false, environment: "BROWSER_OR_OTHER" };
+>   }
+>
+>   return {
+>     isNode: true,
+>     nodeVersion: process.versions.node,
+>     v8Version: process.versions.v8,
+>     platform: process.platform,
+>     arch: process.arch,
+>     pid: process.pid
+>   };
+> }
+>
+> // Verification tests
+> const info = inspectNodeRuntime();
+> console.assert(info.isNode === true, "Test 1 Failed: Must detect Node.js runtime");
+> console.assert(typeof info.nodeVersion === "string", "Test 2 Failed: Must return Node.js version string");
 > ```
 >
-> **Explanation:** `process.env` stores runtime environment configuration keys.
+> #### Technical Explanation
+>
+> 1. **Node.js Runtime Architecture**: Node.js is an open-source, cross-platform JavaScript runtime environment built on Chrome's V8 engine and libuv.
+> 2. **Server vs Browser Globals**: Node.js provides global, process, Buffer, and require/import; Browser provides window, document, and navigator.
+> 3. **Native OS Access**: Node.js grants full access to file system (fs), networking (net/http), and system processes (child_process).
 > 
+---
+
+### Exercise 2: Graceful Shutdown Process Signal Handler
+
+**Scenario:** An API server registers process signal handlers (`SIGTERM`, `SIGINT`) to close HTTP servers, database pools, and Redis connections before exiting.
+
+**Requirements:**
+1. Write setupGracefulShutdown(serverMock, dbPoolMock, processMock).
+2. Listen for SIGTERM / SIGINT.
+3. Close HTTP server, close DB pool, exit process.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function setupGracefulShutdown(serverMock, dbPoolMock, processMock) {
+>   const proc = processMock || process;
+>   let isShuttingDown = false;
+>
+>   async function shutdown(signal) {
+>     if (isShuttingDown) return;
+>     isShuttingDown = true;
+>
+>     try {
+>       if (serverMock && typeof serverMock.close === "function") {
+>         await new Promise(r => serverMock.close(r));
+>       }
+>       if (dbPoolMock && typeof dbPoolMock.end === "function") {
+>         await dbPoolMock.end();
+>       }
+>       proc.exit(0);
+>     } catch (err) {
+>       proc.exit(1);
+>     }
+>   }
+>
+>   proc.on("SIGTERM", () => shutdown("SIGTERM"));
+>   proc.on("SIGINT", () => shutdown("SIGINT"));
+>
+>   return { isShuttingDown: () => isShuttingDown, trigger: shutdown };
+> }
+>
+> // Verification tests
+> let serverClosed = false;
+> let dbClosed = false;
+> let exitCode = null;
+>
+> const mockServer = { close: (cb) => { serverClosed = true; cb(); } };
+> const mockDb = { end: async () => { dbClosed = true; } };
+> const mockProc = { on: () => {}, exit: (code) => { exitCode = code; } };
+>
+> const handler = setupGracefulShutdown(mockServer, mockDb, mockProc);
+> handler.trigger("SIGTERM").then(() => {
+>   console.assert(serverClosed === true && dbClosed === true, "Test 1 Failed: Server and DB must close");
+>   console.assert(exitCode === 0, "Test 2 Failed: Exit code 0");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **SIGTERM vs SIGINT**: SIGTERM is sent by Kubernetes/Docker to request graceful termination; SIGINT is sent by Ctrl+C in terminal.
+> 2. **Graceful Shutdown Sequence**: Stop accepting new HTTP connections -> Finish in-flight requests -> Close DB connection pools -> Exit process.
+> 3. **Kubernetes Termination Grace Period**: K8s gives containers ~30s to shut down gracefully before sending SIGKILL (force kill).
+> 
+---
+
+### Exercise 3: Memory Usage Inspector & Heap Allocation Guard
+
+**Scenario:** An APM monitor inspects Node.js memory metrics via `process.memoryUsage()`, alerting when heap memory usage approaches V8 limits.
+
+**Requirements:**
+1. Write inspectMemoryUsage(processMock, maxHeapMb).
+2. Extract rss, heapTotal, heapUsed.
+3. Flag warning if heapUsed exceeds maxHeapMb.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function inspectMemoryUsage(processMock, maxHeapMb = 1400) {
+>   const proc = processMock || process;
+>   const mem = proc.memoryUsage();
+>
+>   const toMb = (bytes) => Number((bytes / (1024 * 1024)).toFixed(2));
+>
+>   const rssMb = toMb(mem.rss);
+>   const heapTotalMb = toMb(mem.heapTotal);
+>   const heapUsedMb = toMb(mem.heapUsed);
+>   const externalMb = toMb(mem.external || 0);
+>
+>   const isWarning = heapUsedMb >= maxHeapMb;
+>
+>   return {
+>     rssMb,
+>     heapTotalMb,
+>     heapUsedMb,
+>     externalMb,
+>     isWarning
+>   };
+> }
+>
+> // Verification tests
+> const mockProc = {
+>   memoryUsage: () => ({
+>     rss: 200 * 1024 * 1024,
+>     heapTotal: 150 * 1024 * 1024,
+>     heapUsed: 100 * 1024 * 1024,
+>     external: 10 * 1024 * 1024
+>   })
+> };
+>
+> const metrics = inspectMemoryUsage(mockProc, 80);
+> console.assert(metrics.heapUsedMb === 100, "Test 1 Failed");
+> console.assert(metrics.isWarning === true, "Test 2 Failed: Must flag warning when 100MB > 80MB limit");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **process.memoryUsage() Metrics**: rss (Resident Set Size), heapTotal (V8 allocated memory), heapUsed (actual memory consumed by JS objects).
+> 2. **RSS (Resident Set Size)**: Total physical memory occupied by the Node.js process (includes V8 heap, C++ objects, code segment).
+> 3. **V8 Default Memory Limit**: By default V8 caps max memory (~1.4GB - 4GB depending on Node version); configurable via `--max-old-space-size`.
 ## 6. Related Terms
 - [V8 JavaScript Engine](v8_engine.md) — The actual engine beating inside the heart of Node.js.
 - [NPM (Node Package Manager)](../level_04/npm.md) — The package manager that made the Node.js ecosystem the largest in the world.

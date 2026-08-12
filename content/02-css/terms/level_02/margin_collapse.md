@@ -178,64 +178,98 @@ p.second { margin-top: 30px; } /* Collapses to 30px gap! */
 
 ## 5. Practice Exercises
 
-### Exercise 1: Margin Calculator
+### Exercise 1: Identifying and Preventing Vertical Margin Collapse between Adjacent Paragraphs
 
-**Problem:** Calculate the total visual vertical gap in pixels between the elements in each scenario:
-1.  Element A has `margin-bottom: 50px;`. Element B below it has `margin-top: 30px;`.
-2.  Element A has `margin-bottom: 40px;`. Element B below it has `margin-top: -15px;`.
-3.  Element A has `margin-bottom: 25px;`. Element B below it is an empty div with `margin-top: 10px; margin-bottom: 10px;` and no border/padding/height. Element C below B has `margin-top: 20px;`.
+**Scenario:** An engineer analyzes vertical margin collapse between two adjacent paragraph blocks.
 
-**Expected output:**
+**Requirements:**
+1. Write two paragraph rulesets with `margin-bottom: 2rem` and `margin-top: 1.5rem`.
+2. Explain why total distance is `2rem` (not `3.5rem`).
+
 > [!check]- Answer
-> ```text
-> 1. 50px (The browser takes the maximum: 50 meets 30).
-> 2. 25px (The negative margin is added: 40 + (-15) = 25).
-> 3. 25px (All vertical margins collapse into one. The maximum value among 25, 10, 10, and 20 is 25).
-> ```
-> - For positive margins, pick the largest number.
-> - Add negative numbers to positive numbers.
-> - Empty block margins merge with both siblings.
-> 
----
-
-
-
-### Exercise 2: Calculating Collapsed Margin Height
-
-**Problem:** If Element A has `margin-bottom: 40px` and adjacent Element B has `margin-top: 25px`, what is actual vertical space between them?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 40px (the larger margin wins).
-> ```
-> ```text
-> 40px (the larger margin wins).
+>
+> #### Implementation
+>
+> ```css
+> /* Adjacent Paragraph Vertical Margin Collapse Demonstration */
+> p.first-paragraph {
+>   margin-bottom: 2rem;          /* 32px bottom margin */
+> }
+>
+> p.second-paragraph {
+>   margin-top: 1.5rem;           /* 24px top margin */
+> }
+> /* Total space between paragraphs = 2rem (32px), NOT 3.5rem! 
+>    The larger margin absorbs the smaller margin. */
 > ```
 >
-> **Explanation:** Vertical margin collapse resolves to `Math.max(marginA, marginB)`.
+> #### Technical Explanation
+>
+> 1. **Vertical Margin Collapse**: When two vertical block margins touch, they collapse into a single margin equal to the LARGEST of the individual margins.
+> 2. **Adjacent Siblings**: Margin collapse ONLY occurs on vertical (`top`/`bottom`) margins of in-flow block elements; horizontal margins NEVER collapse.
+> 3. **Design Intent**: Prevents double spacing when consecutive elements (like paragraphs and headings) meet.
 > 
 ---
 
-### Exercise 3: 3 Ways to Prevent Parent-Child Margin Collapse
+### Exercise 2: Parent-Child Margin Collapse Prevention using Padding or BFC
 
-**Problem:** List 3 CSS techniques to prevent parent-child margin collapse.
+**Scenario:** Fixes an unwanted parent-child margin collapse using `display: flow-root`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: flow-root` to parent container to establish Block Formatting Context.
+
 > [!check]- Answer
-> ```text
-> 1. Add padding-top/bottom to parent
-> 2. Add border-top/bottom to parent
-> 3. Add display: flow-root (or overflow: auto) to parent
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .parent {
->   display: flow-root; /* Modern BFC creation prevents collapse */
+> /* Parent container whose child margin was escaping out to page body */
+> .parent-card {
+>   display: flow-root;           /* Establishes BFC, preventing parent-child margin collapse */
+>   background-color: #f1f5f9;
+> }
+>
+> .parent-card > h2 {
+>   margin-top: 2rem;             /* Top margin stays INSIDE parent card! */
 > }
 > ```
 >
-> **Explanation:** Creating a Block Formatting Context (BFC) prevents internal margins from collapsing outside parent.
+> #### Technical Explanation
+>
+> 1. **Parent-Child Collapse Bug**: Top margin on an unpadded first-child element escapes and pushes down the parent container instead.
+> 2. **`display: flow-root` Fix**: Creating a Block Formatting Context (`display: flow-root`) contains child margins inside the parent cleanly.
+> 3. **Alternative Fixes**: Adding `padding: 1px` or `border: 1px solid transparent` also prevents parent-child collapse.
 > 
+---
+
+### Exercise 3: Flexbox and Grid Gap Spacing vs Collapsible Vertical Margins
+
+**Scenario:** Refactors margin collapse dependency by using Flexbox/Grid `gap` spacing.
+
+**Requirements:**
+1. Use `display: flex; flex-direction: column; gap: 1.5rem;` on container.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .stack-container {
+>   display: flex;
+>   flex-direction: column;
+>   gap: 1.5rem;                  /* Explicit non-collapsible gap spacing */
+> }
+>
+> .stack-container > * {
+>   margin: 0;                    /* Reset margins; let gap handle spacing */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Modern Flex/Grid `gap`**: `gap` provides explicit, non-collapsible spacing between items in Flexbox and Grid containers.
+> 2. **Predictable Component Stacking**: Eliminates margin collapse complexity completely in component stacks.
+> 3. **Clean Component Design**: Keeps individual components margin-free for higher reusability.
 ## 6. Related Terms
 - [Margin](margin.md) — The parent spacing property.
 - [Padding](padding.md) — The inner spacing used to block margin leakage.

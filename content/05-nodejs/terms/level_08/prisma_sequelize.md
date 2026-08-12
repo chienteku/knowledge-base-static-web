@@ -152,67 +152,155 @@ npx prisma generate // Regenerates Prisma Client types and code
 
 ## 5. Practice Exercises
 
-### Exercise 1: Query Optimization
+### Exercise 1: Prisma Client Query Middleware Logger
 
-**Problem:** Review this Sequelize loop. Optimize it to run a single query using eager loading:
+**Scenario:** Attaches a custom middleware logger to Prisma Client (`prisma.$use()`) to log query performance and flag slow queries >100ms.
 
-```javascript
-// Before (N+1 Query Issue):
-const products = await Product.findAll();
-for (const product of products) {
-  product.reviews = await Review.findAll({ where: { productId: product.id } });
-}
-
-// After (Optimized via Eager Loading):
-const productsWithReviews = await Product.findAll({
-  include: [Review] // Sequelize executes a single JOIN query under the hood!
-});
-```
-
----
+**Requirements:**
+1. Write attachPrismaQueryLogger(prismaClientMock, loggerMock, slowThresholdMs).
+2. Intercept query parameters.
+3. Log duration.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Prisma CRUD Query Syntax
-
-**Problem:** Write Prisma code to create a new `User` record with `email: 'a@b.com'` and `name: 'Alice'`. 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> await prisma.user.create({ data: { email: 'a@b.com', name: 'Alice' } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> await prisma.user.create({
->   data: {
->     email: 'a@b.com',
->     name: 'Alice'
->   }
+> function attachPrismaQueryLogger(prismaClientMock, loggerMock, slowThresholdMs = 100) {
+>   prismaClientMock.$use(async (params, next) => {
+>     const start = Date.now();
+>     const result = await next(params);
+>     const duration = Date.now() - start;
+>
+>     const logPayload = {
+>       model: params.model,
+>       action: params.action,
+>       durationMs: duration,
+>       isSlow: duration >= slowThresholdMs
+>     };
+>
+>     if (logPayload.isSlow && loggerMock && typeof loggerMock.warn === "function") {
+>       loggerMock.warn(`Slow Prisma Query [${params.model}.${params.action}]: ${duration}ms`);
+>     }
+>
+>     return result;
+>   });
+> }
+>
+> // Verification tests
+> let warnLogged = false;
+> const middlewares = [];
+> const mockPrisma = {
+>   $use: (fn) => { middlewares.push(fn); }
+> };
+>
+> attachPrismaQueryLogger(mockPrisma, { warn: () => { warnLogged = true; } }, 10);
+>
+> const nextMock = async (params) => new Promise(r => setTimeout(() => r([{ id: 1 }]), 20));
+> middlewares[0]({ model: "User", action: "findMany" }, nextMock).then(res => {
+>   console.assert(warnLogged === true, "Test 1 Failed: Logged slow query warning");
 > });
 > ```
 >
-> **Explanation:** `prisma.model.create({ data: { ... } })` performs type-safe database insertions.
+> #### Technical Explanation
+>
+> 1. **Prisma Middleware Engine**: Allows intercepting and modifying Prisma queries, parameters, and results (similar to Express middleware).
+> 2. **Query Performance Monitoring**: Tracking query durations flags missing database indexes before production deployment.
+> 3. **Type-Safe Prisma Schema**: Prisma generates type-safe TypeScript query clients based on `schema.prisma`.
 > 
 ---
 
-### Exercise 3: Prisma vs Sequelize Architecture
+### Exercise 2: Sequelize Transaction Manager with Auto Rollback
 
-**Problem:** Compare schema definition approach in Prisma vs Sequelize.
+**Scenario:** Uses Sequelize managed transactions (`sequelize.transaction(async (t) => {})`) to automatically commit or rollback on error.
 
-**Expected output:**
+**Requirements:**
+1. Write executeSequelizeManagedTx(sequelizeMock, txCallback).
+2. Pass transaction object to callback.
+3. Auto-commit/rollback.
+
 > [!check]- Answer
-> ```text
-> Prisma uses declarative schema file (`schema.prisma`) generating type-safe client; Sequelize uses JS/TS model class definitions.
-> ```
-> ```text
-> Prisma uses declarative schema file (schema.prisma) generating type-safe client; Sequelize uses JS/TS model class definitions.
+>
+> #### Implementation
+>
+> ```javascript
+> async function executeSequelizeManagedTx(sequelizeMock, txCallback) {
+>   return sequelizeMock.transaction(async (t) => {
+>     return await txCallback(t);
+>   });
+> }
+>
+> // Verification tests
+> let committed = false;
+> let rolledBack = false;
+>
+> const mockSequelize = {
+>   transaction: async (fn) => {
+>     const t = { commit: () => { committed = true; }, rollback: () => { rolledBack = true; } };
+>     try {
+>       const res = await fn(t);
+>       t.commit();
+>       return res;
+>     } catch (err) {
+>       t.rollback();
+>       throw err;
+>     }
+>   }
+> };
+>
+> executeSequelizeManagedTx(mockSequelize, async (t) => "TX_DONE").then(res => {
+>   console.assert(res === "TX_DONE", "Test 1 Failed");
+>   console.assert(committed === true, "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** Prisma generates client code from `.prisma` schemas; Sequelize uses object models.
+> #### Technical Explanation
+>
+> 1. **Sequelize Managed Transactions**: Sequelize automatically passes transaction handles and commits on function return or rolls back on thrown errors.
+> 2. **Sequelize vs Prisma ORM Approaches**: Sequelize uses Active Record pattern; Prisma uses Data Mapper / Auto-Generated Client pattern.
+> 3. **Concurrency Isolation Levels**: Sequelize allows setting transaction isolation levels (`READ COMMITTED`, `SERIALIZABLE`).
 > 
+---
+
+### Exercise 3: Prisma vs Sequelize Relation Feature Evaluator
+
+**Scenario:** Evaluates relational model definitions comparing Prisma implicit M:N join tables vs Sequelize `belongsToMany` explicit join tables.
+
+**Requirements:**
+1. Write evaluateOrmRelationType(ormName, relationType).
+2. Return configuration recommendations.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function evaluateOrmRelationType(ormName = "prisma", relationType = "many-to-many") {
+>   const isPrisma = ormName.toLowerCase() === "prisma";
+>
+>   return {
+>     orm: ormName,
+>     relationType,
+>     supportsImplicitJoinTable: isPrisma,
+>     recommendation: isPrisma
+>       ? "Prisma automatically creates and manages underlying _RelationTable in schema"
+>       : "Sequelize requires explicit 'through' model table for belongsToMany relations"
+>   };
+> }
+>
+> // Verification tests
+> const pRes = evaluateOrmRelationType("prisma", "many-to-many");
+> console.assert(pRes.supportsImplicitJoinTable === true, "Test 1 Failed");
+>
+> const sRes = evaluateOrmRelationType("sequelize", "many-to-many");
+> console.assert(sRes.supportsImplicitJoinTable === false, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Implicit M:N Join Tables**: Prisma automatically manages join tables for `[]` array fields without manual model declarations.
+> 2. **Sequelize `through` Option**: Sequelize requires explicitly declaring `User.belongsToMany(Role, { through: 'UserRoles' })`.
+> 3. **Schema Source of Truth**: Prisma uses `schema.prisma` file; Sequelize uses JavaScript/TypeScript class definitions.
 ## 6. Related Terms
 - [ORMs & ODMs](orms_odms.md) — The design categories for SQL and NoSQL databases.
 - [Migrations](migrations.md) — Schema updates managed through SQL ORMs.

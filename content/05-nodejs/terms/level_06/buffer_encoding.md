@@ -144,64 +144,132 @@ stream.on('data', (chunk) => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Decoder Script
+### Exercise 1: UTF-8 vs Base64 vs Hex Buffer Transcoder
 
-**Problem:** You are given a file containing a hex-encoded string payload. Write a script to read the file, decode the hex string into a standard UTF-8 string, and output the result:
+**Scenario:** A data transformation service converts incoming payload strings between binary encodings (`utf-8`, `base64`, `hex`, `ascii`).
 
-```javascript
-const fs = require('fs');
-
-function decodeHexFile(filePath) {
-  // Read hex file content as standard string
-  const hexStr = fs.readFileSync(filePath, 'utf8').trim();
-  
-  // Convert hex string into a binary Buffer
-  const buf = Buffer.from(hexStr, 'hex');
-  
-  // Decode buffer to readable UTF-8 string
-  return buf.toString('utf8');
-}
-```
-
----
+**Requirements:**
+1. Write transcodeBuffer(inputStr, fromEncoding, toEncoding).
+2. Convert inputStr to Buffer using fromEncoding.
+3. Encode Buffer to target string using toEncoding.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Converting Hex to Base64 via Buffer
-
-**Problem:** Convert hex string `'68656c6c6f'` to Base64 string using Node.js `Buffer`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Buffer.from('68656c6c6f', 'hex').toString('base64');
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const base64 = Buffer.from('68656c6c6f', 'hex').toString('base64');
+> function transcodeBuffer(inputStr, fromEncoding = "utf-8", toEncoding = "base64") {
+>   if (typeof inputStr !== "string") {
+>     throw new TypeError("Input must be a string");
+>   }
+>
+>   const buf = Buffer.from(inputStr, fromEncoding);
+>   return {
+>     original: inputStr,
+>     byteLength: buf.length,
+>     transcoded: buf.toString(toEncoding)
+>   };
+> }
+>
+> // Verification tests
+> const res1 = transcodeBuffer("Hello World", "utf-8", "base64");
+> console.assert(res1.transcoded === "SGVsbG8gV29ybGQ=", "Test 1 Failed: Base64 encoding mismatch");
+>
+> const res2 = transcodeBuffer("SGVsbG8gV29ybGQ=", "base64", "hex");
+> console.assert(res2.transcoded === "48656c6c6f20576f726c64", "Test 2 Failed: Hex encoding mismatch");
 > ```
 >
-> **Explanation:** `Buffer.from(str, encoding)` parses encoded binary representations.
+> #### Technical Explanation
+>
+> 1. **Supported Node.js Encodings**: `utf-8`, `base64`, `base64url`, `hex`, `ascii`, `binary` (`latin1`), `utf16le`.
+> 2. **Buffer.from(string, encoding)**: Parses encoded string representation into raw binary bytes.
+> 3. **buffer.toString(encoding)**: Formats raw binary bytes into encoded string representations.
 > 
 ---
 
-### Exercise 3: StringDecoder Utility Role
+### Exercise 2: Multi-Byte Character Chunking Safe Decoder
 
-**Problem:** Why use `StringDecoder` instead of `buffer.toString()` when reading text streams?
+**Scenario:** Uses Node.js `string_decoder` core module to safely decode multi-byte UTF-8 chunks split across stream chunk boundaries.
 
-**Expected output:**
+**Requirements:**
+1. Write decodeMultiByteChunks(bufferChunksArray, mockStringDecoder).
+2. Decode chunks sequentially.
+3. Prevent corrupted UTF-8 replacement characters.
+
 > [!check]- Answer
-> ```text
-> It preserves incomplete multi-byte UTF-8 characters across chunk boundaries until the next chunk arrives.
-> ```
-> ```text
-> It preserves incomplete multi-byte UTF-8 characters across chunk boundaries until the next chunk arrives.
+>
+> #### Implementation
+>
+> ```javascript
+> function decodeMultiByteChunks(bufferChunksArray = [], mockStringDecoder) {
+>   const StringDecoder = mockStringDecoder || require("string_decoder").StringDecoder;
+>   const decoder = new StringDecoder("utf-8");
+>
+>   let result = "";
+>   for (const chunk of bufferChunksArray) {
+>     result += decoder.write(chunk);
+>   }
+>   result += decoder.end();
+>
+>   return result;
+> }
+>
+> // Verification tests
+> const chunk1 = Buffer.from([0xF0, 0x9F]);
+> const chunk2 = Buffer.from([0x98, 0x86]);
+>
+> const decoded = decodeMultiByteChunks([chunk1, chunk2]);
+> console.assert(decoded === "😀", "Test 1 Failed: Multi-byte character must be reconstructed without corruption");
 > ```
 >
-> **Explanation:** `StringDecoder` buffers partial multi-byte UTF-8 bytes to prevent text corruption.
+> #### Technical Explanation
+>
+> 1. **Multi-Byte Character Splitting**: UTF-8 characters take 1 to 4 bytes; stream chunks can split multi-byte characters in half.
+> 2. **Buffer.toString() Limitation**: Calling `chunk.toString('utf-8')` on partial bytes returns replacement character.
+> 3. **string_decoder Module**: Buffers incomplete multi-byte sequences until remaining bytes arrive in subsequent chunks.
 > 
+---
+
+### Exercise 3: Binary Buffer Size vs String Character Length Evaluator
+
+**Scenario:** Compares JavaScript string length (`str.length`) with actual byte size (`Buffer.byteLength(str)`) for multi-byte Unicode strings.
+
+**Requirements:**
+1. Write evaluateStringByteSize(unicodeStr).
+2. Calculate `str.length`.
+3. Calculate `Buffer.byteLength(str, 'utf-8')`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function evaluateStringByteSize(unicodeStr = "") {
+>   const charLength = unicodeStr.length;
+>   const byteLength = Buffer.byteLength(unicodeStr, "utf-8");
+>
+>   return {
+>     charLength,
+>     byteLength,
+>     isMultiByte: byteLength > charLength,
+>     bytesPerCharRatio: Number((byteLength / (charLength || 1)).toFixed(2))
+>   };
+> }
+>
+> // Verification tests
+> const ascii = evaluateStringByteSize("hello");
+> console.assert(ascii.charLength === 5 && ascii.byteLength === 5, "Test 1 Failed: ASCII is 1 byte per char");
+>
+> const emoji = evaluateStringByteSize("🚀🚀");
+> console.assert(emoji.byteLength === 8, "Test 2 Failed: Each 🚀 emoji is 4 bytes in UTF-8");
+> console.assert(emoji.isMultiByte === true, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **String Length vs Byte Length**: JavaScript `str.length` counts 16-bit code units; `Buffer.byteLength()` calculates UTF-8 bytes.
+> 2. **Content-Length Header Bug**: Passing `str.length` to HTTP `Content-Length` header truncates multi-byte responses.
+> 3. **Memory Footprint**: Always calculate `Buffer.byteLength()` when allocating buffers or setting network payload headers.
 ## 6. Related Terms
 - [Buffers](buffers.md) — The raw byte structure translated by encodings.
 - [Data Chunks](chunks.md) — The chunk payloads that risk character boundary corruption.

@@ -94,68 +94,165 @@ const b = require('lib'); // Resolves to same cached instance
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Hunt
+### Exercise 1: Node.js node_modules Lookup Path Generator
 
-**Problem:** You are running a script located at `/Users/bob/projects/app/src/server.js`. The script says `require('lodash')`.
-List the exact directory paths Node.js will check in order, looking for `lodash`.
+**Scenario:** Simulates Node.js module resolution algorithm generating the directory search paths for non-relative module specifiers (e.g. `require('lodash')`).
 
-**Expected output:**
+**Requirements:**
+1. Write generateNodeModulesPaths(startDir, mockPathLib).
+2. Walk up directory tree to filesystem root.
+3. Append `/node_modules` at each level.
+
 > [!check]- Answer
-> ```text
-> 1. Node checks if `lodash` is a core module (It's not).
-> 2. It checks `/Users/bob/projects/app/src/node_modules/lodash`
-> 3. It climbs up: `/Users/bob/projects/app/node_modules/lodash` (This is usually where it finds it!)
-> 4. It climbs up: `/Users/bob/projects/node_modules/lodash`
-> 5. It climbs up: `/Users/bob/node_modules/lodash`
-> 6. It climbs up: `/Users/node_modules/lodash`
-> 7. It climbs up: `/node_modules/lodash`
-> If it fails at the root `/`, it throws an Error.
+>
+> #### Implementation
+>
+> ```javascript
+> function generateNodeModulesPaths(startDir = "/app/services/user", mockPathLib) {
+>   const pathLib = mockPathLib || require("path");
+>   let current = pathLib.resolve(startDir);
+>   const paths = [];
+>
+>   while (true) {
+>     paths.push(pathLib.join(current, "node_modules"));
+>     const parent = pathLib.dirname(current);
+>     if (parent === current) {
+>       break; // Reached filesystem root!
+>     }
+>     current = parent;
+>   }
+>
+>   return paths;
+> }
+>
+> // Verification tests
+> const path = require("path");
+> const searchPaths = generateNodeModulesPaths("/app/src/controllers", path);
+>
+> console.assert(searchPaths[0].endsWith("app/src/controllers/node_modules"), "Test 1 Failed");
+> console.assert(searchPaths[1].endsWith("app/src/node_modules"), "Test 2 Failed");
+> console.assert(searchPaths[2].endsWith("app/node_modules"), "Test 3 Failed");
 > ```
-> - Remember the rule: if it's not a core module and not a relative path, it hunts for a `node_modules` folder, climbing up the tree.
+>
+> #### Technical Explanation
+>
+> 1. **Node.js Module Resolution Algorithm**: When requiring non-relative packages (`express`), Node.js searches `node_modules` in current directory and parent directories up to root.
+> 2. **Relative vs Absolute Specifiers**: Relative specifiers (`./foo`, `../bar`) look relative to current file path; absolute specifiers search `node_modules`.
+> 3. **NODE_PATH Environment Variable**: Additional lookup paths can be configured via `NODE_PATH` environment variable.
 > 
 ---
 
+### Exercise 2: Package entry point resolver via package.json exports field
 
+**Scenario:** Parses `package.json` to resolve entry points based on module type (ESM vs CommonJS) using 'exports' conditional mappings.
 
-### Exercise 2: Tracing Node.js node_modules Lookup Path
+**Requirements:**
+1. Write resolvePackageEntryPoint(packageJsonObj, isEsm).
+2. Check `exports` object.
+3. Check `main` fallback.
 
-**Problem:** If file `/app/src/utils/math.js` calls `require('lodash')`, list the first 3 directories Node searches.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. /app/src/utils/node_modules/lodash
-> 2. /app/src/node_modules/lodash
-> 3. /app/node_modules/lodash
-> ```
-> ```text
-> 1. /app/src/utils/node_modules/lodash
-> 2. /app/src/node_modules/lodash
-> 3. /app/node_modules/lodash
+>
+> #### Implementation
+>
+> ```javascript
+> function resolvePackageEntryPoint(packageJsonObj = {}, isEsm = false) {
+>   const exportsField = packageJsonObj.exports;
+>
+>   if (exportsField) {
+>     if (typeof exportsField === "string") return exportsField;
+>
+>     const rootMapping = exportsField["."] || exportsField;
+>     if (typeof rootMapping === "object") {
+>       if (isEsm && rootMapping.import) return rootMapping.import;
+>       if (!isEsm && rootMapping.require) return rootMapping.require;
+>       if (rootMapping.default) return rootMapping.default;
+>     }
+>   }
+>
+>   return packageJsonObj.main || "index.js";
+> }
+>
+> // Verification tests
+> const pkg = {
+>   name: "my-lib",
+>   main: "dist/cjs/index.js",
+>   exports: {
+>     ".": {
+>       import: "./dist/esm/index.mjs",
+>       require: "./dist/cjs/index.cjs"
+>     }
+>   }
+> };
+>
+> console.assert(resolvePackageEntryPoint(pkg, true) === "./dist/esm/index.mjs", "Test 1 Failed: ESM import path");
+> console.assert(resolvePackageEntryPoint(pkg, false) === "./dist/cjs/index.cjs", "Test 2 Failed: CJS require path");
 > ```
 >
-> **Explanation:** Node traverses parent directories recursively looking for `node_modules` until reaching filesystem root.
+> #### Technical Explanation
+>
+> 1. **package.json exports Field**: Modern Node.js package.json field defining package entry points and encapsulation rules.
+> 2. **Conditional Exports Mappings**: Maps import specifiers based on environment conditions (`import`, `require`, `node`, `default`).
+> 3. **Subpath Encapsulation**: If `exports` is defined, internal files not explicitly exported CANNOT be imported by consumers.
 > 
 ---
 
-### Exercise 3: Index File Resolution Order
+### Exercise 3: File Extension Auto-Completion Resolution
 
-**Problem:** When resolving `require('./models')`, what file names does Node attempt if `./models` is a directory?
+**Scenario:** Simulates Node.js extension lookup algorithm for relative imports missing extensions (`./utils` -> `./utils.js`, `./utils.json`, `./utils/index.js`).
 
-**Expected output:**
+**Requirements:**
+1. Write resolveFileWithExtensions(basePath, mockFs).
+2. Check exact match.
+3. Test `.js`, `.json`, `.node` extensions.
+4. Test `/index.js`.
+
 > [!check]- Answer
-> ```text
-> ./models/index.js, ./models/index.json, ./models/index.node (or package.json main entry).
-> ```
-> ```text
-> 1. ./models/package.json (main field)
-> 2. ./models/index.js
-> 3. ./models/index.json
-> 4. ./models/index.node
+>
+> #### Implementation
+>
+> ```javascript
+> async function resolveFileWithExtensions(basePath, mockFs) {
+>   const fsLib = mockFs || require("fs").promises;
+>   const candidates = [
+>     basePath,
+>     `${basePath}.js`,
+>     `${basePath}.json`,
+>     `${basePath}.node`,
+>     `${basePath}/index.js`,
+>     `${basePath}/index.json`
+>   ];
+>
+>   for (const candidate of candidates) {
+>     try {
+>       const stat = await fsLib.stat(candidate);
+>       if (stat.isFile()) {
+>         return candidate;
+>       }
+>     } catch (_) {}
+>   }
+>
+>   throw new Error(`Cannot find module '${basePath}'`);
+> }
+>
+> // Verification tests
+> const mockFs = {
+>   stat: async (p) => {
+>     if (p === "/app/utils.js") return { isFile: () => true };
+>     throw new Error("File not found");
+>   }
+> };
+>
+> resolveFileWithExtensions("/app/utils", mockFs).then(resolved => {
+>   console.assert(resolved === "/app/utils.js", "Test 1 Failed: Resolved .js extension automatically");
+> });
 > ```
 >
-> **Explanation:** Folder module resolution checks `package.json` main field before falling back to `index` files.
-> 
+> #### Technical Explanation
+>
+> 1. **CommonJS Automatic Extensions**: CommonJS automatically attempts appending `.js`, `.json`, and `.node` to path specifiers.
+> 2. **ESM Mandatory Extensions**: ES Modules in Node.js REQUIRE explicit file extensions in relative import specifiers (`import './utils.js'`).
+> 3. **Directory Index Resolution**: If path is a directory, Node.js searches for `index.js` or `index.json` inside the directory.
 ## 6. Related Terms
 - [node_modules](../level_04/node_modules.md) — The folder the algorithm is desperately searching for.
 - [ES Modules (import, export)](es_modules.md) — ESM resolution is slightly stricter (e.g., forcing you to include the `.js` extension).

@@ -104,65 +104,97 @@ div { background-color: #222; color: #fff; } /* High contrast ratio */
 
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Bug
+### Exercise 1: Distinguishing Foreground Text Color from Container Background
 
-**Problem:** You want a black button with white text. What is wrong with this code?
-```css
-.btn {
-  background-color: white;
-  color: black;
-}
-```
+**Scenario:** An author styles a notification alert card explicitly separating text `color` from container `background-color`.
 
-**Expected output:**
+**Requirements:**
+1. Set `color: #1e293b` for foreground text.
+2. Set `background-color: #f1f5f9` for surface background.
+3. Set `border-color`.
+
 > [!check]- Answer
-> ```text
-> The colors are swapped! This will create a white button with black text. It should be `background-color: black;` and `color: white;`.
-> ```
-> - Which property represents the Sharpie marker, and which represents the cardboard?
-> 
----
-
-
-
-### Exercise 2: Dark Mode Toggle Card Styling
-
-**Problem:** Write CSS for `.card-dark` with dark gray background (`#1e1e1e`), white text (`#ffffff`), and subtle gray border (`#333333`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .card-dark { background-color: #1e1e1e; color: #ffffff; border: 1px solid #333333; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .card-dark {
->   background-color: #1e1e1e;
->   color: #ffffff;
->   border: 1px solid #333333;
+> .alert-card {
+>   /* Foreground Properties */
+>   color: #0f172a;               /* Controls text, icons, and text decorations */
+>
+>   /* Surface / Background Properties */
+>   background-color: #f8fafc;    /* Controls container background fill */
+>   border: 1px solid #cbd5e1;
+>   padding: 1.25rem;
+>   border-radius: 0.5rem;
 > }
 > ```
 >
-> **Explanation:** Card containers combine background color, text color, and border styling.
+> #### Technical Explanation
+>
+> 1. **`color` Property Role**: Controls foreground text color, vector SVGs, and inline text decoration elements.
+> 2. **`background-color` Property Role**: Controls the background fill color of the element's box model content and padding layers.
+> 3. **Inheritance Difference**: `color` inherits naturally to child elements; `background-color` does NOT inherit (defaults to `transparent`).
 > 
 ---
 
-### Exercise 3: Transparent Background Reset
+### Exercise 2: Dark Mode Theme Switching with High-Contrast Color Overrides
 
-**Problem:** Which keyword value resets an element's `background-color` to completely see-through?
+**Scenario:** Applies dark theme overrides swapping `color` and `background-color`.
 
-**Expected output:**
+**Requirements:**
+1. Create `[data-theme="dark"]` theme ruleset.
+
 > [!check]- Answer
-> ```text
-> background-color: transparent;
-> ```
+>
+> #### Implementation
+>
 > ```css
-> button {
->   background-color: transparent;
+> /* Light Theme Baseline */
+> .app-surface {
+>   background-color: #ffffff;
+>   color: #1e293b;
+> }
+>
+> /* Dark Theme Overrides */
+> [data-theme="dark"] .app-surface {
+>   background-color: #0f172a;
+>   color: #f8fafc;
 > }
 > ```
 >
-> **Explanation:** `transparent` removes solid background fills.
+> #### Technical Explanation
+>
+> 1. **Theme Swapping Pattern**: Inverting `background-color` and `color` establishes seamless light/dark mode transitions.
+> 2. **Data Attribute Selector**: Using `[data-theme="dark"]` applies theme rules globally without altering HTML component structure.
+> 3. **WCAG Contrast Parity**: Ensure dark mode color pairs meet 4.5:1 contrast rules as strictly as light mode.
 > 
+---
+
+### Exercise 3: Transparent Background Overlay Cards with Explicit Contrast
+
+**Scenario:** Styles a card with semi-transparent background while keeping text fully opaque.
+
+**Requirements:**
+1. Apply `background-color: rgba(255, 255, 255, 0.9)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .overlay-card {
+>   background-color: rgb(255 255 255 / 0.9);   /* Opaque card surface */
+>   color: #0f172a;                               /* 100% opaque dark text */
+>   padding: 1.5rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Background Alpha vs Opacity**: Using alpha `background-color` keeps text fully opaque; setting CSS `opacity` on container makes text transparent too!
+> 2. **Legibility Safeguard**: Prevents text content from becoming faint or unreadable over background imagery.
+> 3. **Clean UI Layering**: Maintains sharp typography readability over dynamic backdrops.
 ## 6. Related Terms
 - [Color Values (hex, rgb, rgba, hsl, named)](color_values.md) — Color notation formats.
 - [`background` Shorthand & `background-image`](background_shorthand.md) — Advanced background styling.

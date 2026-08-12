@@ -81,148 +81,161 @@ const server = app.listen(3000);
 server.keepAliveTimeout = 65000; // Exceed proxy 60s timeout
 ```
 
-
-
-### Mistake 4: Confusing HTTP Request Headers (`req.headers`) Case Sensitivity
-
-**The mistake:** Accessing `req.headers['Content-Type']` expecting exact uppercase key matching.
-
-**Why it's wrong:** Node.js automatically lowercases ALL incoming HTTP request header keys (`req.headers['content-type']`) per HTTP standards.
-
-*Incorrect:*
-```javascript
-const type = req.headers['Content-Type']; // ❌ undefined! Key is lowercased!
-```
-
-*Fix:*
-```javascript
-const type = req.headers['content-type']; // Access using lowercase key
-```
-
-### Mistake 5: Failing to Handle HTTP Keep-Alive Connection Timeouts
-
-**The mistake:** Setting server keep-alive timeouts lower than reverse proxy (Nginx / ALB) timeouts.
-
-**Why it's wrong:** If Node.js closes a keep-alive connection right as Nginx sends a request, Nginx receives a 502 Bad Gateway error (`ECONNRESET`). Node's `keepAliveTimeout` must exceed upstream proxy timeouts.
-
-*Incorrect:*
-```javascript
-// Server keepAliveTimeout default (5s) lower than AWS ALB timeout (60s)
-```
-
-*Fix:*
-```javascript
-const server = app.listen(3000);
-server.keepAliveTimeout = 65000; // Exceed proxy 60s timeout
-```
-
-
-
-### Mistake 6: Confusing HTTP Request Headers (`req.headers`) Case Sensitivity
-
-**The mistake:** Accessing `req.headers['Content-Type']` expecting exact uppercase key matching.
-
-**Why it's wrong:** Node.js automatically lowercases ALL incoming HTTP request header keys (`req.headers['content-type']`) per HTTP standards.
-
-*Incorrect:*
-```javascript
-const type = req.headers['Content-Type']; // ❌ undefined! Key is lowercased!
-```
-
-*Fix:*
-```javascript
-const type = req.headers['content-type']; // Access using lowercase key
-```
-
-### Mistake 7: Failing to Handle HTTP Keep-Alive Connection Timeouts
-
-**The mistake:** Setting server keep-alive timeouts lower than reverse proxy (Nginx / ALB) timeouts.
-
-**Why it's wrong:** If Node.js closes a keep-alive connection right as Nginx sends a request, Nginx receives a 502 Bad Gateway error (`ECONNRESET`). Node's `keepAliveTimeout` must exceed upstream proxy timeouts.
-
-*Incorrect:*
-```javascript
-// Server keepAliveTimeout default (5s) lower than AWS ALB timeout (60s)
-```
-
-*Fix:*
-```javascript
-const server = app.listen(3000);
-server.keepAliveTimeout = 65000; // Exceed proxy 60s timeout
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: The Raw Router
+### Exercise 1: Raw Node.js HTTP/1.1 Connection Keep-Alive Inspector
 
-**Problem:** Using only the raw `http` module, how do you send different text depending on if the user visits `/` versus `/about`?
+**Scenario:** Inspects HTTP/1.1 request headers to determine whether TCP socket connections should be kept alive (`Connection: keep-alive`) or closed (`Connection: close`).
 
-**Expected output:**
+**Requirements:**
+1. Write evaluateKeepAlive(reqHeaders, httpVersion).
+2. Check `Connection` header value.
+3. Default to keep-alive for HTTP/1.1; default to close for HTTP/1.0.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> const http = require('http');
-> 
-> const server = http.createServer((req, res) => {
->   if (req.url === '/') {
->     res.end('Home Page');
->   } else if (req.url === '/about') {
->     res.end('About Page');
->   } else {
->     res.statusCode = 404;
->     res.end('Not Found');
+> function evaluateKeepAlive(reqHeaders = {}, httpVersion = "1.1") {
+>   const connectionHeader = (reqHeaders["connection"] || reqHeaders["Connection"] || "").toLowerCase();
+>
+>   if (connectionHeader === "close") {
+>     return { shouldKeepAlive: false, header: "close" };
 >   }
-> });
-> 
-> server.listen(3000);
-> ```
-> - You need an `if` statement checking `req.url`.
-> 
----
-
-
-
-### Exercise 2: Identifying HTTP Status Code Ranges
-
-**Problem:** Match status code range to HTTP category:
-1. 2xx
-2. 3xx
-3. 4xx
-4. 5xx
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. 2xx: Success
-> 2. 3xx: Redirection
-> 3. 4xx: Client Error
-> 4. 5xx: Server Error
-> ```
-> ```text
-> 1. 2xx -> Success (e.g. 200 OK, 201 Created)
-> 2. 3xx -> Redirection (e.g. 301 Moved, 304 Not Modified)
-> 3. 4xx -> Client Error (e.g. 400 Bad Request, 404 Not Found)
-> 4. 5xx -> Server Error (e.g. 500 Internal Error, 502 Bad Gateway)
+>
+>   if (connectionHeader === "keep-alive") {
+>     return { shouldKeepAlive: true, header: "keep-alive" };
+>   }
+>
+>   const isHttp11 = httpVersion.startsWith("1.1");
+>   return {
+>     shouldKeepAlive: isHttp11,
+>     header: isHttp11 ? "keep-alive" : "close"
+>   };
+> }
+>
+> // Verification tests
+> console.assert(evaluateKeepAlive({}, "1.1").shouldKeepAlive === true, "Test 1 Failed: HTTP/1.1 defaults to keep-alive");
+> console.assert(evaluateKeepAlive({}, "1.0").shouldKeepAlive === false, "Test 2 Failed: HTTP/1.0 defaults to close");
+> console.assert(evaluateKeepAlive({ "Connection": "close" }, "1.1").shouldKeepAlive === false, "Test 3 Failed: Explicit close");
 > ```
 >
-> **Explanation:** Standard HTTP status categories designate response outcome states.
+> #### Technical Explanation
+>
+> 1. **HTTP Persistent Connections (Keep-Alive)**: Reuses single TCP socket connection for multiple HTTP requests, eliminating TCP 3-way handshake overhead.
+> 2. **HTTP/1.1 Defaults**: HTTP/1.1 defaults to persistent connections unless `Connection: close` is specified.
+> 3. **Socket Pooling**: Node.js HTTP client uses `http.Agent` to manage persistent socket pools.
 > 
 ---
 
-### Exercise 3: Setting HTTP Response Status & Headers
+### Exercise 2: Chunked Transfer Encoding Stream Writer
 
-**Problem:** Write native Node HTTP response lines setting status 201 Created and JSON content-type header.
+**Scenario:** Constructs a raw HTTP response emitting `Transfer-Encoding: chunked` headers to stream dynamic content without declaring `Content-Length`.
 
-**Expected output:**
+**Requirements:**
+1. Write setupChunkedHttpResponse(resMock).
+2. Set Transfer-Encoding: chunked.
+3. Stream chunks asynchronously.
+
 > [!check]- Answer
-> ```text
-> res.writeHead(201, { 'Content-Type': 'application/json' });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> res.writeHead(201, { 'Content-Type': 'application/json' });
+> function setupChunkedHttpResponse(resMock) {
+>   resMock.setHeader("Transfer-Encoding", "chunked");
+>   resMock.setHeader("Content-Type", "text/plain");
+>
+>   return {
+>     writeChunk(dataStr) {
+>       resMock.write(dataStr);
+>     },
+>     finish() {
+>       resMock.end();
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const headers = {};
+> let body = "";
+> const mockRes = {
+>   setHeader: (k, v) => { headers[k] = v; },
+>   write: (chunk) => { body += chunk; },
+>   end: () => {}
+> };
+>
+> const writer = setupChunkedHttpResponse(mockRes);
+> writer.writeChunk("Chunk 1
+> ");
+> writer.writeChunk("Chunk 2
+> ");
+> writer.finish();
+>
+> console.assert(headers["Transfer-Encoding"] === "chunked", "Test 1 Failed");
+> console.assert(body === "Chunk 1
+> Chunk 2
+> ", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `writeHead()` sets HTTP status code and response header key-values in a single call.
+> #### Technical Explanation
+>
+> 1. **Transfer-Encoding: chunked**: Allows streaming responses when total payload size is unknown at response start time.
+> 2. **Dynamic Streaming**: Useful for Server-Sent Events (SSE), video streaming, and dynamic DB queries.
+> 3. **Content-Length Mutual Exclusivity**: HTTP spec forbids sending `Content-Length` header alongside `Transfer-Encoding: chunked`.
 > 
+---
+
+### Exercise 3: Custom HTTP Method Router & Status Code Mapping
+
+**Scenario:** A lightweight Node.js HTTP server router handles OPTIONS preflight requests and method routing.
+
+**Requirements:**
+1. Write routeHttpMethod(reqMethod, reqPath, handlersMap).
+2. Support OPTIONS CORS preflight.
+3. Return 405 Method Not Allowed if route exists but method mismatches.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function routeHttpMethod(reqMethod, reqPath, handlersMap = {}) {
+>   const method = (reqMethod || "GET").toUpperCase();
+>
+>   if (method === "OPTIONS") {
+>     return { status: 204, body: null, isPreflight: true };
+>   }
+>
+>   const pathRoutes = handlersMap[reqPath];
+>   if (!pathRoutes) {
+>     return { status: 404, body: { error: "NOT_FOUND" } };
+>   }
+>
+>   const handler = pathRoutes[method];
+>   if (!handler) {
+>     return { status: 405, body: { error: "METHOD_NOT_ALLOWED" } };
+>   }
+>
+>   return { status: 200, body: handler() };
+> }
+>
+> // Verification tests
+> const routes = {
+>   "/users": { GET: () => [{ id: 1 }] }
+> };
+>
+> console.assert(routeHttpMethod("OPTIONS", "/users").status === 204, "Test 1 Failed: CORS Preflight 204");
+> console.assert(routeHttpMethod("POST", "/users", routes).status === 405, "Test 2 Failed: POST not allowed on /users");
+> console.assert(routeHttpMethod("GET", "/users", routes).status === 200, "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **HTTP Options Method**: Browsers send OPTIONS preflight requests to check CORS permission before sending complex cross-origin requests.
+> 2. **405 Method Not Allowed**: HTTP status code indicating requested endpoint exists but doesn't support target HTTP method.
+> 3. **REST Semantics**: RESTful APIs map GET (read), POST (create), PUT (update), DELETE (remove).
 ## 6. Related Terms
 - [Express.js](express_js.md) — The framework that hides the ugly parts of the `http` module.
 - [The req & res Objects](req_res.md) — What the `http` module passes into your callback.

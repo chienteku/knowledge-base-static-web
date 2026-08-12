@@ -108,136 +108,118 @@ span { display: inline-block; transform: rotate(45deg); }
 .box:hover { transform: translate(-50%, -50%) scale(1.1); } /* Include translate offset */
 ```
 
-
-
-### Mistake 5: Attempting to Apply `transform` to Inline Elements (`display: inline`)
-
-**The mistake:** Writing `span { transform: scale(1.2); }` on inline spans.
-
-**Why it's wrong:** CSS `transform` operations function ONLY on block-level, inline-block, or flex/grid items. `transform` properties are IGNORED on inline elements (`display: inline`).
-
-*Incorrect:*
-```css
-span { transform: rotate(45deg); } /* ❌ Transform ignored on inline elements! */
-```
-
-*Fix:*
-```css
-span { display: inline-block; transform: rotate(45deg); }
-```
-
-### Mistake 6: Overwriting Multiple `transform` Functions in Subsequent Rulesets
-
-**The mistake:** Setting `transform: translate(-50%, -50%);` on base class and `transform: scale(1.1);` on `:hover`.
-
-**Why it's wrong:** Declaring `transform` in `:hover` REPLACES all previous transform functions completely! The hover state loses its `translate` offset, jumping position.
-
-*Incorrect:*
-```css
-.box { transform: translate(-50%, -50%); }
-.box:hover { transform: scale(1.1); } /* ❌ Overwrites translate offset! */
-```
-
-*Fix:*
-```css
-.box:hover { transform: translate(-50%, -50%) scale(1.1); } /* Include translate offset */
-```
-
-
-
-### Mistake 7: Attempting to Apply `transform` to Inline Elements (`display: inline`)
-
-**The mistake:** Writing `span { transform: scale(1.2); }` on inline spans.
-
-**Why it's wrong:** CSS `transform` operations function ONLY on block-level, inline-block, or flex/grid items. `transform` properties are IGNORED on inline elements (`display: inline`).
-
-*Incorrect:*
-```css
-span { transform: rotate(45deg); } /* ❌ Transform ignored on inline elements! */
-```
-
-*Fix:*
-```css
-span { display: inline-block; transform: rotate(45deg); }
-```
-
-### Mistake 8: Overwriting Multiple `transform` Functions in Subsequent Rulesets
-
-**The mistake:** Setting `transform: translate(-50%, -50%);` on base class and `transform: scale(1.1);` on `:hover`.
-
-**Why it's wrong:** Declaring `transform` in `:hover` REPLACES all previous transform functions completely! The hover state loses its `translate` offset, jumping position.
-
-*Incorrect:*
-```css
-.box { transform: translate(-50%, -50%); }
-.box:hover { transform: scale(1.1); } /* ❌ Overwrites translate offset! */
-```
-
-*Fix:*
-```css
-.box:hover { transform: translate(-50%, -50%) scale(1.1); } /* Include translate offset */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Performance Test
+### Exercise 1: Hardware-Accelerated 2D Card Hover Elevation
 
-**Problem:** You want to animate a modal popup sliding down from the top of the screen. 
-Option A: You animate `top: -100px;` to `top: 50%;`. 
-Option B: You animate `transform: translateY(-100vh);` to `transform: translateY(0);`. 
-Which option will look perfectly smooth on a cheap 5-year-old smartphone?
+**Scenario:** An author elevates an interactive UI card on mouse hover using hardware-accelerated 2D transforms (`translateY` and `scale`).
 
-**Expected output:**
+**Requirements:**
+1. Apply `transform: translateY(-0.25rem) scale(1.02)` on hover.
+2. Set `transition: transform 0.2s ease`.
+
 > [!check]- Answer
-> ```text
-> Option B (`transform`)! 
-> Animating properties like `top`, `margin`, or `width` forces the CPU to recalculate the page layout 60 times a second, causing lag. Animating `transform` is handled by the GPU and is incredibly smooth.
+>
+> #### Implementation
+>
+> ```css
+> .card-elevated {
+>   background-color: #ffffff;
+>   border-radius: 0.5rem;
+>   padding: 1.5rem;
+>   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+>   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+>   will-change: transform;       /* Hints to GPU engine to optimize transform composite layer */
+> }
+>
+> .card-elevated:hover {
+>   /* Hardware-Accelerated 2D Composite Transformations */
+>   transform: translateY(-0.25rem) scale(1.02);
+> }
 > ```
-> - Which one uses the Graphics Card instead of the CPU?
+>
+> #### Technical Explanation
+>
+> 1. **The `transform` Property**: Applies 2D or 3D spatial transformations (translate, scale, rotate, skew) to an element box.
+> 2. **GPU Hardware Acceleration**: `transform` functions (`translateY`, `scale`) bypass layout reflows and paint phases, executing directly on the GPU compositor thread for 60fps performance.
+> 3. **Multiple Function Chaining**: Multiple transform functions are declared space-separated in a single line (e.g. `translateY(-0.25rem) scale(1.02)`).
 > 
 ---
 
+### Exercise 2: Perfect 2D Center Offset Positioning with translate
 
+**Scenario:** Centers a modal overlay element perfectly in 2D space using 50% offsets and `transform: translate(-50%, -50%)`.
 
-### Exercise 2: Perfect 2D Center with Transform
+**Requirements:**
+1. Apply `top: 50%; left: 50%; transform: translate(-50%, -50%);`.
 
-**Problem:** Write CSS centering `.modal` absolutely using `top: 50%`, `left: 50%`, and `transform: translate(-50%, -50%)`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> .modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .modal {
->   position: absolute;
+> .centered-dialog {
+>   position: fixed;
 >   top: 50%;
 >   left: 50%;
+>   /* Translate (-50%, -50%) shifts card back by half of its OWN width and height */
 >   transform: translate(-50%, -50%);
+>   background-color: #ffffff;
+>   padding: 2rem;
+>   border-radius: 0.5rem;
+>   z-index: 1000;
 > }
 > ```
 >
-> **Explanation:** `translate(-50%, -50%)` offsets element by half its own width and height for exact centering.
+> #### Technical Explanation
+>
+> 1. **Percentage Reference Difference**: Setting `top: 50%; left: 50%;` references parent container dimensions; `translate(-50%, -50%)` references the ELEMENT'S OWN dimensions!
+> 2. **Dynamic Centering**: Achieves true visual center positioning even when the element's width or height updates dynamically.
+> 3. **Replaces Fixed Margin Hacks**: Eliminates negative margin hacks (`margin-left: -200px`) that broke when content expanded.
 > 
 ---
 
-### Exercise 3: Hardware Accelerated GPU Layer Trigger
+### Exercise 3: Interactive 3D Card Flip Transformation
 
-**Problem:** Which `transform` function forces GPU hardware acceleration layer creation (`transform: translateZ(0)` or `will-change`)?
+**Scenario:** Builds a 3D flipping flashcard component using `transform-style: preserve-3d` and `rotateY(180deg)`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `perspective: 1000px` to parent container.
+2. Apply `transform-style: preserve-3d` to card inner.
+3. Apply `rotateY(180deg)` on hover/active.
+
 > [!check]- Answer
-> ```text
-> transform: translateZ(0) (or transform: translate3d(0,0,0)).
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .gpu-layer {
->   transform: translateZ(0);
+> .card-3d-scene {
+>   perspective: 60rem;           /* Establishes 3D depth perspective viewing distance */
+> }
+>
+> .card-3d-inner {
+>   position: relative;
+>   width: 100%;
+>   height: 15rem;
+>   transform-style: preserve-3d;/* Preserves 3D spatial rendering for child faces */
+>   transition: transform 0.6s ease;
+> }
+>
+> .card-3d-scene:hover .card-3d-inner {
+>   transform: rotateY(180deg);   /* Flips card around vertical Y axis */
+> }
+>
+> .card-face-back {
+>   transform: rotateY(180deg);
+>   backface-visibility: hidden;  /* Hides reverse side of card when facing away */
 > }
 > ```
 >
-> **Explanation:** 3D transforms promote elements to dedicated GPU compositor layers for 60fps animations.
-> 
+> #### Technical Explanation
+>
+> 1. **3D Perspective (`perspective: 60rem`)**: Defines the viewing distance to the 3D scene, creating realistic vanishing-point perspective depth.
+> 2. **`preserve-3d` Matrix**: `transform-style: preserve-3d` forces child elements to exist in true 3D space rather than flattening into a 2D plane.
+> 3. **`backface-visibility: hidden`**: Hides the reverse side of 3D transformed elements when turned away from the user.
 ## 6. Related Terms
 - [`transition`](transition.md) — Without a transition, a transform just instantly snaps to its new shape/position.
 - [`@keyframes` & `animation`](animation.md) — Complex animations that often chain multiple transforms together.

@@ -88,66 +88,155 @@ Use NoSQL document database (MongoDB) or JSONB columns in PostgreSQL for flexibl
 
 ## 5. Practice Exercises
 
-### Exercise 1: Pick the Database
+### Exercise 1: Relational SQL vs NoSQL Architecture Decision Engine
 
-**Problem:** You are building two different applications. Which database paradigm (SQL or NoSQL) is best for each?
-App A: A banking application where financial transactions, account balances, and user identities must be strictly validated and linked.
-App B: A web scraper that collects arbitrary, constantly changing JSON metadata from 10,000 different websites every minute.
+**Scenario:** Analyzes application requirements to recommend a relational SQL (PostgreSQL/MySQL) or Document NoSQL (MongoDB/DynamoDB) database architecture.
 
-**Expected output:**
+**Requirements:**
+1. Write recommendDatabaseArchitecture(requirementsObj).
+2. Evaluate schema flexibility, ACID transactions, join complexity.
+3. Return recommended database engine.
+
 > [!check]- Answer
-> ```text
-> App A: SQL (Relational). The data is strict, highly structured, and cannot afford errors or missing columns.
-> App B: NoSQL. The data is unstructured (every website's JSON looks different), and we need to just dump it into storage quickly.
+>
+> #### Implementation
+>
+> ```javascript
+> function recommendDatabaseArchitecture(requirementsObj = {}) {
+>   const {
+>     requiresStrictAcidTransactions = false,
+>     complexRelationalJoins = false,
+>     rapidSchemaEvolution = false,
+>     highWriteThroughputHorizontalScaling = false
+>   } = requirementsObj;
+>
+>   let sqlScore = 0;
+>   let noSqlScore = 0;
+>
+>   if (requiresStrictAcidTransactions) sqlScore += 3;
+>   if (complexRelationalJoins) sqlScore += 3;
+>   if (rapidSchemaEvolution) noSqlScore += 3;
+>   if (highWriteThroughputHorizontalScaling) noSqlScore += 3;
+>
+>   const recommendation = sqlScore >= noSqlScore ? "RELATIONAL_SQL" : "NOSQL_DOCUMENT";
+>
+>   return {
+>     recommendation,
+>     primaryChoice: recommendation === "RELATIONAL_SQL" ? "PostgreSQL" : "MongoDB",
+>     scores: { sqlScore, noSqlScore }
+>   };
+> }
+>
+> // Verification tests
+> const req1 = recommendDatabaseArchitecture({ requiresStrictAcidTransactions: true, complexRelationalJoins: true });
+> console.assert(req1.recommendation === "RELATIONAL_SQL", "Test 1 Failed: Financial system recommends SQL");
+>
+> const req2 = recommendDatabaseArchitecture({ rapidSchemaEvolution: true, highWriteThroughputHorizontalScaling: true });
+> console.assert(req2.recommendation === "NOSQL_DOCUMENT", "Test 2 Failed: Analytics system recommends NoSQL");
 > ```
-> - Which app has strict rules, and which app needs flexibility?
+>
+> #### Technical Explanation
+>
+> 1. **Relational SQL Strengths**: Structured tables, strict foreign key constraints, ACID compliance, complex JOIN capabilities.
+> 2. **NoSQL Document Strengths**: Flexible schema-less JSON documents, easy horizontal sharding, rapid prototyping.
+> 3. **Trade-offs**: NoSQL sacrifices complex multi-document joins for high-throughput write scalability; SQL sacrifices schema flexibility for strict data integrity.
 > 
 ---
 
+### Exercise 2: SQL JOIN Query vs MongoDB Aggregation Pipeline Evaluator
 
+**Scenario:** Compares data modeling structures between SQL relational `JOIN` queries and MongoDB `$lookup` aggregation pipelines.
 
-### Exercise 2: Comparing Database Characteristics
+**Requirements:**
+1. Write simulateDataAggregation(dbType, queryConfig).
+2. Format query structure based on dbType.
 
-**Problem:** Match characteristic to SQL or NoSQL:
-1. Fixed tabular schemas with Foreign Keys
-2. Flexible JSON document structures
-3. Scaled vertically (bigger server CPU/RAM)
-4. Scaled horizontally across clusters easily
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. SQL
-> 2. NoSQL
-> 3. SQL
-> 4. NoSQL
-> ```
-> ```text
-> 1. SQL
-> 2. NoSQL
-> 3. SQL
-> 4. NoSQL
+>
+> #### Implementation
+>
+> ```javascript
+> function simulateDataAggregation(dbType = "sql", queryConfig = {}) {
+>   const { parentTable, childTable, foreignKey } = queryConfig;
+>
+>   if (dbType.toLowerCase() === "sql") {
+>     return {
+>       dbType: "SQL",
+>       query: `SELECT * FROM ${parentTable} p INNER JOIN ${childTable} c ON p.id = c.${foreignKey}`
+>     };
+>   }
+>
+>   return {
+>     dbType: "MONGODB",
+>     pipeline: [
+>       {
+>         $lookup: {
+>           from: childTable,
+>           localField: "_id",
+>           foreignField: foreignKey,
+>           as: childTable
+>         }
+>       }
+>     ]
+>   };
+> }
+>
+> // Verification tests
+> const sql = simulateDataAggregation("sql", { parentTable: "users", childTable: "orders", foreignKey: "user_id" });
+> console.assert(sql.query.includes("INNER JOIN orders"), "Test 1 Failed");
+>
+> const mongo = simulateDataAggregation("mongodb", { parentTable: "users", childTable: "orders", foreignKey: "user_id" });
+> console.assert(mongo.pipeline[0].$lookup.from === "orders", "Test 2 Failed");
 > ```
 >
-> **Explanation:** SQL databases prioritize relational integrity; NoSQL databases prioritize horizontal scalability and flexible schemas.
+> #### Technical Explanation
+>
+> 1. **Relational JOINs**: Normalizes data into separate tables, combining records dynamically at query runtime using index joins.
+> 2. **MongoDB `$lookup` Stage**: Performs left outer joins between un-sharded collections in aggregation pipelines.
+> 3. **Embedded Documents Pattern**: NoSQL models often embed child arrays directly in parent documents (`user.orders = [...]`) to avoid join overhead.
 > 
 ---
 
-### Exercise 3: Selecting Database for E-Commerce Catalog
+### Exercise 3: Polyglot Persistence Workload Router
 
-**Problem:** Which database type is better for an e-commerce catalog with thousands of diverse product categories each having unique dynamic attributes?
+**Scenario:** Routes application database requests to PostgreSQL for financial ledger operations and Redis/MongoDB for session caching & analytics logging.
 
-**Expected output:**
+**Requirements:**
+1. Write routeStorageWorkload(operationType).
+2. Map transactional ops to SQL.
+3. Map session/event ops to NoSQL/Redis.
+
 > [!check]- Answer
-> ```text
-> NoSQL (Document database like MongoDB) or PostgreSQL JSONB.
-> ```
-> ```text
-> NoSQL (Document database like MongoDB) or PostgreSQL JSONB.
+>
+> #### Implementation
+>
+> ```javascript
+> function routeStorageWorkload(operationType = "USER_LOGIN") {
+>   switch (operationType.toUpperCase()) {
+>     case "ACCOUNT_TRANSFER":
+>     case "INVOICE_GENERATION":
+>       return { targetDb: "PostgreSQL", storeType: "RELATIONAL_ACID" };
+>     case "SESSION_CACHE":
+>       return { targetDb: "Redis", storeType: "KEY_VALUE_IN_MEMORY" };
+>     case "ACTIVITY_LOG":
+>     case "PRODUCT_CATALOG":
+>       return { targetDb: "MongoDB", storeType: "DOCUMENT_NOSQL" };
+>     default:
+>       return { targetDb: "PostgreSQL", storeType: "DEFAULT" };
+>   }
+> }
+>
+> // Verification tests
+> console.assert(routeStorageWorkload("ACCOUNT_TRANSFER").targetDb === "PostgreSQL", "Test 1 Failed");
+> console.assert(routeStorageWorkload("SESSION_CACHE").targetDb === "Redis", "Test 2 Failed");
+> console.assert(routeStorageWorkload("ACTIVITY_LOG").targetDb === "MongoDB", "Test 3 Failed");
 > ```
 >
-> **Explanation:** Document schemas naturally accommodate varied product attribute structures per item.
-> 
+> #### Technical Explanation
+>
+> 1. **Polyglot Persistence Concept**: Using multiple database technologies in a single architecture tailored to specific workload needs.
+> 2. **In-Memory Caching (Redis)**: Provides sub-millisecond key-value reads for ephemeral session data.
+> 3. **System Architecture Balance**: Combines SQL durability for core entities with NoSQL speed for logging and caching.
 ## 6. Related Terms
 - [ORMs & ODMs](orms_odms.md) — The tools Node.js uses to talk to these databases.
 - [Migrations](migrations.md) — A concept that exists in SQL, but rarely in NoSQL.

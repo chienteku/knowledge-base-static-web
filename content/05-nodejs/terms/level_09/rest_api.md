@@ -90,144 +90,161 @@ app.delete('/users/:id', ...); // DELETE removes resource
 app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 ```
 
-
-
-### Mistake 4: Using Verb Verbs in REST Resource URIs (`GET /getUsers`, `POST /deleteUser/1`)
-
-**The mistake:** Designing REST URIs like `/getUsers` or `/updateProduct`.
-
-**Why it's wrong:** REST architecture dictates URIs should represent **Nouns** (resources), while **HTTP Verbs** (`GET`, `POST`, `PUT`, `DELETE`) specify actions.
-
-*Incorrect:*
-```javascript
-app.get('/getUsers', ...); // ❌ Anti-pattern verb in URI!
-app.post('/deleteUser/:id', ...);
-```
-
-*Fix:*
-```javascript
-app.get('/users', ...); // GET fetches resource
-app.delete('/users/:id', ...); // DELETE removes resource
-```
-
-### Mistake 5: Using `PUT` Instead of `PATCH` for Partial Resource Updates
-
-**The mistake:** Using `PUT /users/1` to update only the user's `email` field.
-
-**Why it's wrong:** HTTP `PUT` implies FULL replacement of the target resource object. HTTP `PATCH` is designated for PARTIAL resource updates.
-
-*Incorrect:*
-```javascript
-// Updating single field via PUT endpoint
-```
-
-*Fix:*
-```javascript
-app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
-```
-
-
-
-### Mistake 6: Using Verb Verbs in REST Resource URIs (`GET /getUsers`, `POST /deleteUser/1`)
-
-**The mistake:** Designing REST URIs like `/getUsers` or `/updateProduct`.
-
-**Why it's wrong:** REST architecture dictates URIs should represent **Nouns** (resources), while **HTTP Verbs** (`GET`, `POST`, `PUT`, `DELETE`) specify actions.
-
-*Incorrect:*
-```javascript
-app.get('/getUsers', ...); // ❌ Anti-pattern verb in URI!
-app.post('/deleteUser/:id', ...);
-```
-
-*Fix:*
-```javascript
-app.get('/users', ...); // GET fetches resource
-app.delete('/users/:id', ...); // DELETE removes resource
-```
-
-### Mistake 7: Using `PUT` Instead of `PATCH` for Partial Resource Updates
-
-**The mistake:** Using `PUT /users/1` to update only the user's `email` field.
-
-**Why it's wrong:** HTTP `PUT` implies FULL replacement of the target resource object. HTTP `PATCH` is designated for PARTIAL resource updates.
-
-*Incorrect:*
-```javascript
-// Updating single field via PUT endpoint
-```
-
-*Fix:*
-```javascript
-app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: RESTful Refactoring
+### Exercise 1: RESTful Resource Endpoint Dispatcher
 
-**Problem:** Refactor these three terrible, non-RESTful routes into standard REST APIs:
-1. `app.post('/get-books')`
-2. `app.post('/books/5/update-title')`
-3. `app.get('/delete-all-books')`
+**Scenario:** Implements a RESTful resource dispatcher executing CRUD actions based on standard HTTP verbs.
 
-**Expected output:**
+**Requirements:**
+1. Write dispatchRestResource(method, resourceId, payload, serviceMock).
+2. GET (read), POST (create), PUT (update), DELETE (remove).
+
 > [!check]- Answer
-> ```text
-> 1. app.get('/books')        // Use GET to read. Noun is plural.
-> 2. app.patch('/books/5')    // Use PATCH for partial updates. 
-> 3. app.delete('/books')     // Use DELETE to destroy.
+>
+> #### Implementation
+>
+> ```javascript
+> async function dispatchRestResource(method, resourceId, payload, serviceMock) {
+>   const verb = (method || "GET").toUpperCase();
+>
+>   switch (verb) {
+>     case "GET":
+>       if (resourceId) {
+>         const item = await serviceMock.getById(resourceId);
+>         return item ? { status: 200, body: item } : { status: 404, body: { error: "NOT_FOUND" } };
+>       }
+>       return { status: 200, body: await serviceMock.list() };
+>
+>     case "POST":
+>       const created = await serviceMock.create(payload);
+>       return { status: 201, body: created };
+>
+>     case "PUT":
+>       const updated = await serviceMock.update(resourceId, payload);
+>       return updated ? { status: 200, body: updated } : { status: 404, body: { error: "NOT_FOUND" } };
+>
+>     case "DELETE":
+>       const deleted = await serviceMock.remove(resourceId);
+>       return deleted ? { status: 204, body: null } : { status: 404, body: { error: "NOT_FOUND" } };
+>
+>     default:
+>       return { status: 405, body: { error: "METHOD_NOT_ALLOWED" } };
+>   }
+> }
+>
+> // Verification tests
+> const mockService = {
+>   getById: async (id) => id === "1" ? { id: 1 } : null,
+>   create: async (data) => ({ id: 2, ...data }),
+>   remove: async (id) => id === "1"
+> };
+>
+> dispatchRestResource("POST", null, { name: "New" }, mockService).then(res => {
+>   console.assert(res.status === 201, "Test 1 Failed: POST returned 201 Created");
+> });
+>
+> dispatchRestResource("DELETE", "1", null, mockService).then(res => {
+>   console.assert(res.status === 204, "Test 2 Failed: DELETE returned 204 No Content");
+> });
 > ```
-> - Match the HTTP Method (GET, POST, PATCH, DELETE) to the action.
-> - Remove all verbs from the URL.
+>
+> #### Technical Explanation
+>
+> 1. **RESTful Resource Naming**: Plural nouns identify resources (`/users`), not verbs (`/getUsers`).
+> 2. **HTTP Verbs Semantics**: GET (retrieve), POST (create), PUT (replace), PATCH (partial update), DELETE (remove).
+> 3. **Stateless Architecture**: REST requests contain all necessary authentication and context data without relying on server-side session state.
 > 
 ---
 
+### Exercise 2: Idempotent HTTP PUT vs Non-Idempotent POST Handler
 
+**Scenario:** Demonstrates idempotency guarantees by comparing idempotent PUT (full replacement) vs non-idempotent POST (new entity creation).
 
-### Exercise 2: Designing RESTful Endpoint Paths
+**Requirements:**
+1. Write handlePutRequest(recordId, payload, storeMap).
+2. Write handlePostRequest(payload, storeMap).
+3. Verify idempotency.
 
-**Problem:** Design standard RESTful URI paths and HTTP methods for:
-1. Get all articles
-2. Create new article
-3. Update single article
-4. Delete single article
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. GET /articles
-> 2. POST /articles
-> 3. PUT (or PATCH) /articles/:id
-> 4. DELETE /articles/:id
-> ```
-> ```text
-> 1. GET /articles
-> 2. POST /articles
-> 3. PUT or PATCH /articles/:id
-> 4. DELETE /articles/:id
+>
+> #### Implementation
+>
+> ```javascript
+> function handlePutRequest(recordId, payload, storeMap = new Map()) {
+>   // Idempotent: Executing 1 time or 100 times results in the EXACT SAME state!
+>   const record = { id: recordId, ...payload, updatedAt: "STATIC_TIMESTAMP" };
+>   storeMap.set(recordId, record);
+>   return { status: 200, record };
+> }
+>
+> function handlePostRequest(payload, storeMap = new Map()) {
+>   // Non-Idempotent: Executing 100 times creates 100 distinct entities!
+>   const newId = storeMap.size + 1;
+>   const record = { id: newId, ...payload };
+>   storeMap.set(newId, record);
+>   return { status: 201, record };
+> }
+>
+> // Verification tests
+> const store = new Map();
+> handlePutRequest(42, { name: "Alice" }, store);
+> handlePutRequest(42, { name: "Alice" }, store);
+> console.assert(store.size === 1, "Test 1 Failed: PUT is idempotent (size stays 1)");
+>
+> handlePostRequest({ name: "Bob" }, store);
+> handlePostRequest({ name: "Bob" }, store);
+> console.assert(store.size === 3, "Test 2 Failed: POST is non-idempotent (created 2 new records)");
 > ```
 >
-> **Explanation:** REST APIs map standard HTTP CRUD methods to noun resource paths.
+> #### Technical Explanation
+>
+> 1. **HTTP Method Idempotency**: An HTTP method is idempotent if executing it multiple times yields the same server state as a single execution.
+> 2. **Idempotent Verbs**: GET, PUT, DELETE, HEAD, OPTIONS are idempotent; POST is NOT idempotent.
+> 3. **Network Safety**: Idempotent requests can be safely retried automatically by network clients on connection drops.
 > 
 ---
 
-### Exercise 3: Idempotent HTTP Methods
+### Exercise 3: HATEOAS Hypermedia Link Generator
 
-**Problem:** Which of these HTTP methods are Idempotent?
-`GET`, `POST`, `PUT`, `DELETE`
+**Scenario:** Attaches HATEOAS (Hypermedia As The Engine Of Application State) `_links` metadata to REST API response objects.
 
-**Expected output:**
+**Requirements:**
+1. Write attachHateoasLinks(userRecord, baseUrl).
+2. Generate self, update, delete, orders links.
+
 > [!check]- Answer
-> ```text
-> GET, PUT, DELETE are Idempotent (POST is NOT idempotent).
-> ```
-> ```text
-> GET, PUT, DELETE are Idempotent. POST is NOT idempotent.
+>
+> #### Implementation
+>
+> ```javascript
+> function attachHateoasLinks(userRecord, baseUrl = "https://api.company.com") {
+>   const id = userRecord.id;
+>
+>   return {
+>     ...userRecord,
+>     _links: {
+>       self: { href: `${baseUrl}/users/${id}`, method: "GET" },
+>       update: { href: `${baseUrl}/users/${id}`, method: "PUT" },
+>       delete: { href: `${baseUrl}/users/${id}`, method: "DELETE" },
+>       orders: { href: `${baseUrl}/users/${id}/orders`, method: "GET" }
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const user = { id: 42, name: "Alice" };
+> const enriched = attachHateoasLinks(user);
+>
+> console.assert(enriched._links.self.href === "https://api.company.com/users/42", "Test 1 Failed");
+> console.assert(enriched._links.orders.method === "GET", "Test 2 Failed");
 > ```
 >
-> **Explanation:** Idempotent methods produce identical system state results regardless of how many times they are repeated.
-> 
+> #### Technical Explanation
+>
+> 1. **HATEOAS Level 3 REST Maturity**: Richardson Maturity Model Level 3 where responses provide self-describing navigation links.
+> 2. **Client Decoupling**: Clients discover available actions dynamically without hardcoding URL structures.
+> 3. **HAL JSON Specification**: Standard format (`_links`) for embedding hypermedia controls in JSON APIs.
 ## 6. Related Terms
 - [Routing](../level_07/routing.md) — How you physically implement REST in Express.
 - [HTTP Status Codes](status_codes.md) — REST APIs must return standard status codes to indicate success or failure.

@@ -196,67 +196,97 @@ img { object-fit: cover; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: Video Banner
+### Exercise 1: Card Aspect Ratio Image Sizing with object-fit: cover
 
-**Problem:** You are building a background video banner. The video (`<video>`) must occupy 100% width and 400px height, filling the entire space like a background banner without distorting the video stream. Write the CSS.
+**Scenario:** An author scales variable-sized user product upload photos inside a fixed 16:9 card image container using `object-fit: cover`.
 
-**Expected output:**
+**Requirements:**
+1. Set fixed container height or aspect-ratio.
+2. Apply `width: 100%; height: 100%; object-fit: cover;` to `<img>`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .video-banner {
+> .card-media-wrapper {
 >   width: 100%;
->   height: 400px;
->   object-fit: cover;
->   object-position: center;
+>   aspect-ratio: 16 / 9;
+>   overflow: hidden;
+>   border-radius: 0.5rem 0.5rem 0 0;
 > }
-> ```
-> - Set width and height explicitly.
-> - Apply the property that scales media tags to fill containers.
-> 
----
-
-
-
-### Exercise 2: Responsive Avatar Aspect Ratio Pattern
-
-**Problem:** Write CSS for `img.avatar` making it 80x80px square, rounded 50%, with crop covering `object-fit`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> img.avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
-> ```
-> ```css
-> img.avatar {
->   width: 80px;
->   height: 80px;
->   border-radius: 50%;
->   object-fit: cover;
+>
+> .card-media-wrapper img {
+>   width: 100%;
+>   height: 100%;
+>   object-fit: cover;            /* Fits image into 16:9 box without stretching! */
+>   object-position: center;      /* Centers image focal point */
 > }
 > ```
 >
-> **Explanation:** `object-fit: cover` prevents image stretching inside fixed aspect ratio boxes.
+> #### Technical Explanation
+>
+> 1. **The `object-fit` Property**: Controls how replaced content (like `<img>` or `<video>`) scales to fit its containing box.
+> 2. **`cover` Keyword Mechanics**: Scales the image proportionally to fill the entire container box, cropping edges if aspect ratios differ.
+> 3. **Replaces Background Image Hacks**: Allows using semantic HTML `<img>` tags with alt text instead of CSS `background-image` wrappers!
 > 
 ---
 
-### Exercise 3: Object Position Focal Point
+### Exercise 2: Logo Grid Branding Containment with object-fit: contain
 
-**Problem:** Which property adjusts focal point alignment when `object-fit: cover` crops an image?
+**Scenario:** Fits client brand logos into uniform grid cells without cropping or stretching using `object-fit: contain`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `object-fit: contain` to brand logo grid images.
+
 > [!check]- Answer
-> ```text
-> object-position (e.g. object-position: top center;)
-> ```
+>
+> #### Implementation
+>
 > ```css
-> img {
->   object-fit: cover;
->   object-position: top center;
+> .logo-grid-item img {
+>   width: 100%;
+>   height: 4rem;
+>   object-fit: contain;          /* Fits logo ENTIRELY inside 4rem box without cropping */
 > }
 > ```
 >
-> **Explanation:** `object-position` shifts the alignment origin for cropped image content.
+> #### Technical Explanation
+>
+> 1. **`contain` Keyword Mechanics**: Scales image so the ENTIRE graphic is visible inside the box, adding letterboxing if needed.
+> 2. **Brand Protection**: Guarantees partner brand logos are never cropped, distorted, or stretched.
+> 3. **Uniform Grid Cells**: Simplifies multi-logo partner grid displays.
 > 
+---
+
+### Exercise 3: Preventing Media Aspect Ratio Distortion in Responsive Layouts
+
+**Scenario:** Demonstrates why raw `width: 100%; height: 200px;` distorts images without `object-fit`.
+
+**Requirements:**
+1. Refactor distorted image to use `object-fit: cover`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* ❌ Distorted Image: Fixed height without object-fit squishes photos! */
+> /* .bad-img { width: 100%; height: 200px; } */
+>
+> /* ✅ Preserved Photo Aspect Ratio: */
+> .good-img {
+>   width: 100%;
+>   height: 12.5rem;              /* 200px fixed height */
+>   object-fit: cover;            /* Preserves photo proportions cleanly */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Squishing Distortion Pitfall**: Setting both `width` and `height` explicitly on `<img>` distorts intrinsic image ratios unless `object-fit` is declared.
+> 2. **`object-position` Adjustment**: Use `object-position: top` if important image details (like human faces) get cropped at the bottom.
+> 3. **Modern Image Standard**: Essential CSS property for dynamic CMS media galleries.
 ## 6. Related Terms
 - [`background-size` (cover / contain)](background_size.md) — The background equivalent.
 - [`border-radius` (Rounded Corners)](border_radius.md) — Cropping visual profiles.

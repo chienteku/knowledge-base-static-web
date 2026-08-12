@@ -167,135 +167,91 @@ grid-template-columns: repeat(auto-fill, 1fr 2fr);
 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 ```
 
-
-
-### Mistake 4: Nesting `repeat()` Functions Inside Another `repeat()` Function
-
-**The mistake:** Writing `grid-template-columns: repeat(2, repeat(3, 1fr));`.
-
-**Why it's wrong:** CSS Grid specifications forbid nesting `repeat()` functions inside another `repeat()` call.
-
-*Incorrect:*
-```css
-/* ❌ Illegal nested repeat functions! */
-grid-template-columns: repeat(2, repeat(3, 1fr));
-```
-
-*Fix:*
-```css
-grid-template-columns: repeat(6, 1fr);
-```
-
-### Mistake 5: Using `auto-fill` with Fixed Track Lists Containing Multiple `fr` Units
-
-**The mistake:** Writing `grid-template-columns: repeat(auto-fill, 1fr 2fr);`.
-
-**Why it's wrong:** `auto-fill` and `auto-fit` require at least one track dimension to be a fixed length (`px`, `rem`) or `minmax()` with fixed minimums. Pure `fr` units cause calculation failure.
-
-*Incorrect:*
-```css
-/* ❌ Cannot calculate auto-fill track count with pure fr units! */
-grid-template-columns: repeat(auto-fill, 1fr 2fr);
-```
-
-*Fix:*
-```css
-grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-```
-
-
-
-### Mistake 6: Nesting `repeat()` Functions Inside Another `repeat()` Function
-
-**The mistake:** Writing `grid-template-columns: repeat(2, repeat(3, 1fr));`.
-
-**Why it's wrong:** CSS Grid specifications forbid nesting `repeat()` functions inside another `repeat()` call.
-
-*Incorrect:*
-```css
-/* ❌ Illegal nested repeat functions! */
-grid-template-columns: repeat(2, repeat(3, 1fr));
-```
-
-*Fix:*
-```css
-grid-template-columns: repeat(6, 1fr);
-```
-
-### Mistake 7: Using `auto-fill` with Fixed Track Lists Containing Multiple `fr` Units
-
-**The mistake:** Writing `grid-template-columns: repeat(auto-fill, 1fr 2fr);`.
-
-**Why it's wrong:** `auto-fill` and `auto-fit` require at least one track dimension to be a fixed length (`px`, `rem`) or `minmax()` with fixed minimums. Pure `fr` units cause calculation failure.
-
-*Incorrect:*
-```css
-/* ❌ Cannot calculate auto-fill track count with pure fr units! */
-grid-template-columns: repeat(auto-fill, 1fr 2fr);
-```
-
-*Fix:*
-```css
-grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Clean Up Layout Code
+### Exercise 1: Simplifying Uniform Multi-Column Definitions with repeat
 
-**Problem:** You have a design with 8 columns. The columns alternate between `100px` (fixed) and `1fr` (fluid):
-`grid-template-columns: 100px 1fr 100px 1fr 100px 1fr 100px 1fr;`
-Simplify this layout blueprint line using the `repeat()` function.
+**Scenario:** An author defines a 12-column grid layout cleanly using the `repeat()` notation.
 
-**Expected output:**
+**Requirements:**
+1. Apply `grid-template-columns: repeat(12, 1fr)`.
+2. Add `gap: 1rem`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> grid-template-columns: repeat(4, 100px 1fr);
-> ```
-> - Identify the repeating pattern. Here, the pattern consists of two track sizes: `100px 1fr`.
-> - Count how many times this two-column pattern is repeated.
-> 
----
-
-
-
-### Exercise 2: 12-Column Grid Repeat Syntax
-
-**Problem:** Write `grid-template-columns` using `repeat()` to create standard 12-column equal `1fr` grid.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> grid-template-columns: repeat(12, 1fr);
-> ```
-> ```css
-> .grid-12 {
+> .grid-12-col {
 >   display: grid;
->   grid-template-columns: repeat(12, 1fr);
+>   grid-template-columns: repeat(12, 1fr); /* Expands to 12 equal 1fr columns! */
+>   gap: 1rem;
 > }
+>
+> .span-8 { grid-column: span 8; }
+> .span-4 { grid-column: span 4; }
 > ```
 >
-> **Explanation:** `repeat(12, 1fr)` defines 12 equal-width column tracks.
+> #### Technical Explanation
+>
+> 1. **The `repeat()` Function**: Shorthand syntax for defining repetitive grid track patterns without writing out identical values.
+> 2. **12-Column Grid System**: `repeat(12, 1fr)` creates a standard 12-column responsive layout system.
+> 3. **DRY CSS Architecture**: Replaces writing `1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr` manually.
 > 
 ---
 
-### Exercise 3: Mixed Track Pattern Repeat
+### Exercise 2: Combining Fixed Pattern Repeats
 
-**Problem:** Write `grid-template-columns` repeating pattern of 1 fixed 100px column and 1 fluid 1fr column 3 times.
+**Scenario:** Defines a repeating pattern of alternating column widths using `repeat(3, 1fr 2fr)`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `grid-template-columns: repeat(3, 1fr 2fr)`.
+
 > [!check]- Answer
-> ```text
-> grid-template-columns: repeat(3, 100px 1fr);
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .grid {
->   grid-template-columns: repeat(3, 100px 1fr);
+> .pattern-grid {
+>   display: grid;
+>   /* Pattern expands to: 1fr 2fr 1fr 2fr 1fr 2fr (6 total columns) */
+>   grid-template-columns: repeat(3, 1fr 2fr);
+>   gap: 1rem;
 > }
 > ```
 >
-> **Explanation:** `repeat(3, 100px 1fr)` repeats multi-track patterns 3 times (6 columns total).
+> #### Technical Explanation
+>
+> 1. **Multi-Value Repeat Patterns**: `repeat(COUNT, PATTERN)` accepts multi-track patterns (e.g. `repeat(3, 1fr 2fr)`).
+> 2. **Complex Layout Grids**: Ideal for complex magazine or dashboard layout grids.
+> 3. **Code Legibility**: Keeps complex grid track declarations readable.
 > 
+---
+
+### Exercise 3: Responsive Auto-Repeats with repeat(auto-fit, minmax(20rem, 1fr))
+
+**Scenario:** Combines `repeat()`, `auto-fit`, and `minmax()` for fluid responsive grid galleries.
+
+**Requirements:**
+1. Apply `grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr))`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .gallery-grid {
+>   display: grid;
+>   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+>   gap: 1.5rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The Responsive Trifecta**: Combining `repeat()`, `auto-fit`, and `minmax()` is the most powerful responsive layout pattern in modern CSS.
+> 2. **No Breakpoint Maintenance**: Calculates optimal column counts dynamically based on container width.
+> 3. **Production Standard**: The gold standard pattern for component card galleries.
 ## 6. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent coordinate blueprint.
 - [`auto-fill` / `auto-fit`](grid_auto_fill_fit.md) — Keywords used inside `repeat()` to automate responsive grid counts.

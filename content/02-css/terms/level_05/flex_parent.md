@@ -106,65 +106,97 @@ Applying `display: flex;` turns that cardboard box into a high-tech robotic orga
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Parent Trap
+### Exercise 1: Structuring Master Navigation Headers with Flex Parent Container Properties
 
-**Problem:** You have a `<section>` containing two `<article>` tags. You want the articles to sit side-by-side. Which tag do you target in CSS to write `display: flex;`?
+**Scenario:** An engineer configures a global header container using parent flex properties for spacing and alignment.
 
-**Expected output:**
+**Requirements:**
+1. Set `display: flex` on parent container.
+2. Set `justify-content: space-between` and `align-items: center`.
+3. Add `gap: 1rem`.
+
 > [!check]- Answer
-> ```text
-> The `<section>`! You must target the Parent container to control the Children.
-> ```
-> - Flexbox is a robotic organizer. Do you put the robot inside the toys, or do you make the toybox the robot?
-> 
----
-
-
-
-### Exercise 2: Flex Parent vs Item Property Categorization
-
-**Problem:** Categorize property as Flex Parent or Flex Item:
-1. `justify-content` 
-2. `flex-grow` 
-3. `align-items` 
-4. `align-self` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Flex Parent
-> 2. Flex Item
-> 3. Flex Parent
-> 4. Flex Item
-> ```
-> ```text
-> 1. justify-content -> Flex Parent
-> 2. flex-grow -> Flex Item
-> 3. align-items -> Flex Parent
-> 4. align-self -> Flex Item
-> ```
 >
-> **Explanation:** Parent properties control container layout; item properties control individual item sizing.
-> 
----
-
-### Exercise 3: Inline Flex Parent Syntax
-
-**Problem:** Which `display` value creates an inline-level container with flexbox inner layout formatting?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> display: inline-flex;
-> ```
+> #### Implementation
+>
 > ```css
-> .badge-container {
->   display: inline-flex;
+> /* Master Navigation Flex Parent Container */
+> .main-nav-parent {
+>   display: flex;                /* Flex Parent Trigger */
+>   flex-direction: row;          /* Main Axis = Horizontal */
+>   flex-wrap: nowrap;            /* Single-line constraint */
+>   justify-content: space-between;/* Main-Axis Item Distribution */
+>   align-items: center;          /* Cross-Axis Item Alignment */
+>   gap: 1.5rem;                  /* Flex Item Spacing */
+>   padding: 1rem 2rem;
+>   background-color: #ffffff;
 > }
 > ```
 >
-> **Explanation:** `display: inline-flex` combines inline outer layout flow with inner flex formatting.
+> #### Technical Explanation
+>
+> 1. **Flex Parent Container Role**: The parent element where `display: flex` is declared controls the layout rules for all immediate child flex items.
+> 2. **Parent Property Suite**: Parent properties include `flex-direction`, `flex-wrap`, `justify-content`, `align-items`, `align-content`, and `gap`.
+> 3. **Child Scope Boundary**: Parent flex properties apply ONLY to direct immediate children; sub-nested grandchildren revert to normal flow unless given `display: flex`.
 > 
+---
+
+### Exercise 2: Multi-Row Card Gallery Container with flex-wrap and gap
+
+**Scenario:** Configures a card gallery parent container that wraps into multiple rows cleanly.
+
+**Requirements:**
+1. Apply `display: flex; flex-wrap: wrap; gap: 1.5rem;` to parent.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .card-gallery-parent {
+>   display: flex;
+>   flex-wrap: wrap;              /* Allows items to wrap onto new lines */
+>   gap: 1.5rem;                  /* Spacing across both rows and columns */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`flex-wrap: wrap`**: Allows flex items to break into new rows when available container width is exhausted.
+> 2. **Uniform Multi-Row Gaps**: The `gap` property applies equal spacing between wrapped rows AND adjacent columns.
+> 3. **Fluid Responsiveness**: Cards wrap smoothly as screen width shrinks without media queries.
+> 
+---
+
+### Exercise 3: Establishing Nesting Boundaries for Parent and Child Flex Containers
+
+**Scenario:** Nests a flex container inside another flex container for complex UI layouts.
+
+**Requirements:**
+1. Apply `display: flex` to outer container AND inner child card.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .outer-flex-parent {
+>   display: flex;
+>   gap: 2rem;
+> }
+>
+> .inner-flex-card {
+>   display: flex;                /* Acts as flex item to outer, and flex parent to inner! */
+>   flex-direction: column;
+>   justify-content: space-between;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Nested Flex Contexts**: An element can simultaneously act as a flex ITEM to its parent and a flex PARENT to its children.
+> 2. **Complex Layout Power**: Enables building multi-column page layouts where individual cards contain vertically aligned footers.
+> 3. **Clean Architecture**: Separates overall page layout from internal component layout.
 ## 6. Related Terms
 - [`flex-direction`](flex_direction.md) — Rotating the main layout axis.
 - [`justify-content`](justify_content.md) — Aligns children along the main axis.

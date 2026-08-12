@@ -189,62 +189,94 @@ div { order: 1; } /* ❌ Ignored on normal document flow elements! */
 
 ## 5. Practice Exercises
 
-### Exercise 1: Visual Sort
+### Exercise 1: Reordering Mobile Call-to-Action Buttons for Screen Layouts
 
-**Problem:** You have a horizontal Flex row containing three boxes.
-- Box A: no order property declared.
-- Box B: `order: 5;`
-- Box C: `order: -2;`
-In what visual order (from left to right) will they render on the screen?
+**Scenario:** An author changes the visual display sequence of mobile action buttons using the CSS `order` property.
 
-**Expected output:**
+**Requirements:**
+1. Set `.btn-secondary { order: 2; }`.
+2. Set `.btn-primary { order: 1; }`.
+3. Verify visual reordering.
+
 > [!check]- Answer
-> ```text
-> Box C, Box A, Box B!
-> - Box C has the lowest score (-2) and goes first.
-> - Box A has no declaration, defaulting to 0, and goes second.
-> - Box B has the highest score (5) and goes last.
-> ```
-> - Sort the values from lowest to highest: `-2`, `0`, `5`.
-> 
----
-
-
-
-### Exercise 2: First Item Re-Ordering Pattern
-
-**Problem:** Write CSS property moving `.featured-card` flex item to the very first visual position regardless of DOM order.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .featured-card { order: -1; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .featured-card {
->   order: -1;
+> .action-group {
+>   display: flex;
+>   gap: 1rem;
+> }
+>
+> /* Move primary CTA to render FIRST visually, secondary to render SECOND */
+> .btn-primary {
+>   order: 1;
+> }
+>
+> .btn-secondary {
+>   order: 2;
 > }
 > ```
 >
-> **Explanation:** Default `order` is 0. Setting `order: -1` places item before default items.
+> #### Technical Explanation
+>
+> 1. **The `order` Property**: Controls the visual order of a flex item within its parent flex container (default `0`).
+> 2. **Numerical Sequence**: Flex items render in ascending `order` value sequence (`-1` renders before `0`, which renders before `1`).
+> 3. **Visual vs Source Order**: `order` changes ONLY the visual rendering sequence without modifying HTML DOM source structure.
 > 
 ---
 
-### Exercise 3: Order Property Default Value
+### Exercise 2: Accessible Reading Order Warning: Preventing Keyboard Disconnects
 
-**Problem:** What is default `order` value for all flex items?
+**Scenario:** Explains the accessibility danger of using `order` to rearrange interactive form elements.
 
-**Expected output:**
+**Requirements:**
+1. Demonstrate accessibility warning regarding `order` and keyboard Tab flow.
+
 > [!check]- Answer
-> ```text
-> order: 0;
-> ```
-> ```text
-> order: 0;
+>
+> #### Implementation
+>
+> ```html
+> <!-- Accessibility Danger: Visual order (via CSS order property) differs from DOM source order! -->
+> <!-- Keyboard Tab key follows DOM source order, NOT visual CSS order! -->
+> <form class="flex-form">
+>   <input type="text" id="input-first" style="order: 2;">
+>   <input type="text" id="input-second" style="order: 1;">
+> </form>
 > ```
 >
-> **Explanation:** All flex items default to `order: 0` and display in HTML source order.
+> #### Technical Explanation
+>
+> 1. **Accessibility Disconnect Hazard**: Using `order` alters visual rendering BUT DOES NOT change keyboard Tab focus order or screen reader reading sequence!
+> 2. **WCAG 2.1 SC 1.3.2 (Meaningful Sequence)**: Visual order MUST match DOM reading order for screen readers and keyboard users.
+> 3. **Best Practice Limit**: Do NOT use `order` for interactive form controls or navigation links; update the underlying HTML source order instead.
 > 
+---
+
+### Exercise 3: Moving Featured Product Cards to First Position dynamically
+
+**Scenario:** Uses `order: -1` to push a featured product card to the beginning of a flex row.
+
+**Requirements:**
+1. Apply `order: -1` to `.card-featured`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .card-featured {
+>   order: -1;                    /* Negative value pushes item to very start of flex row */
+>   border: 2px solid #2563eb;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Negative `order` Values**: Setting `order: -1` moves an item ahead of all default `order: 0` siblings.
+> 2. **Featured Item Highlighting**: Useful for dynamically promoting featured products or sticky notifications to the front.
+> 3. **DOM Source Preservation**: Promotes items visually while keeping semantic HTML structure intact.
 ## 6. Related Terms
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — The parent layout engine.
 - [`flex-direction`](flex_direction.md) — Dictates whether visual ordering flows vertically or horizontally.

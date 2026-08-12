@@ -191,58 +191,94 @@ div { background: url('img1.png'), url('img2.png') red; } /* Color on last layer
 
 ## 5. Practice Exercises
 
-### Exercise 1: Shorthand Builder
+### Exercise 1: Styling Hero Section Banner with background Shorthand
 
-**Problem:** Construct the single-line shorthand `background` rule for a banner. The banner needs a fallback color `#222`, loads `url('stars.png')`, centers the position, scales to `contain`, and does not repeat.
+**Scenario:** An author styles a full-width hero section banner using the CSS `background` shorthand property.
 
-**Expected output:**
+**Requirements:**
+1. Apply `background: url('hero.jpg') no-repeat center / cover #0f172a;`.
+2. Include fallback solid color `#0f172a`.
+3. Ensure background covers container bounds.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> background: #222 url('stars.png') center/contain no-repeat;
-> ```
-> - Follow the standard shorthand sequence.
-> - Remember to separate the position (`center`) and the size (`contain`) with a `/`.
-> 
----
-
-
-
-### Exercise 2: Complete Background Shorthand Syntax
-
-**Problem:** Write `background` shorthand setting `url('hero.jpg')`, no-repeat, centered horizontally and vertically, covering the box, with `#333` fallback color.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> background: #333 url('hero.jpg') no-repeat center / cover;
-> ```
-> ```css
-> .hero {
->   background: #333 url('hero.jpg') no-repeat center / cover;
+> .hero-banner {
+>   box-sizing: border-box;
+>   min-height: 25rem;
+>   padding: 4rem 2rem;
+>   color: #ffffff;
+>
+>   /* Background Shorthand: color image repeat position / size */
+>   background: #0f172a url("../images/hero.jpg") no-repeat center / cover;
 > }
 > ```
 >
-> **Explanation:** Shorthand combines fallback color, image URL, repeat behavior, position, and size.
+> #### Technical Explanation
+>
+> 1. **The `background` Shorthand Syntax**: Combines `background-color`, `background-image`, `background-repeat`, `background-position`, and `background-size` into a single declaration.
+> 2. **Background Size Forward-Slash Requirement**: The `background-size` value (`cover`) MUST be written directly after `background-position` (`center`) separated by a forward slash `/`.
+> 3. **Fallback Color Mandate**: Always specify a solid fallback background color (`#0f172a`) in case image assets fail to load on slow networks.
 > 
 ---
 
-### Exercise 3: Multiple Background Image Layers
+### Exercise 2: Layering Linear Gradient Overlay on Background Image
 
-**Problem:** Write CSS layering `top-layer.png` over `bottom-layer.png` using comma-separated `background-image` syntax.
+**Scenario:** Layers a semi-transparent dark gradient overlay on top of a background image for text legibility.
 
-**Expected output:**
+**Requirements:**
+1. Combine `linear-gradient` and `url(...)` in `background` shorthand.
+
 > [!check]- Answer
-> ```text
-> background-image: url('top-layer.png'), url('bottom-layer.png');
-> ```
+>
+> #### Implementation
+>
 > ```css
-> div {
->   background-image: url('top-layer.png'), url('bottom-layer.png');
+> .card-header {
+>   min-height: 15rem;
+>   color: #ffffff;
+>
+>   /* Layered Backgrounds: Gradient (top) over Image (bottom) */
+>   background: 
+>     linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)),
+>     url("../images/card-bg.jpg") no-repeat center / cover;
 > }
 > ```
 >
-> **Explanation:** First listed background image renders on top of subsequent layers.
+> #### Technical Explanation
+>
+> 1. **Multiple Background Layering**: CSS renders multiple background layers listed top-to-bottom in comma-separated order (the first layer renders on top).
+> 2. **Contrast Ratio Enhancement**: Overlaying a 75% dark RGBA gradient guarantees WCAG 4.5:1 text contrast over bright imagery.
+> 3. **No Extra DOM Elements**: Achieves dark image overlays cleanly without needing extra HTML overlay `<div>` containers.
 > 
+---
+
+### Exercise 3: Responsive Background Positioning with background-attachment
+
+**Scenario:** Styles a responsive callout box with fixed background scrolling behavior.
+
+**Requirements:**
+1. Set `background-attachment: scroll` for mobile performance.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .callout-box {
+>   background-image: url("../images/texture.png");
+>   background-repeat: repeat;
+>   background-attachment: scroll; /* Mobile friendly scroll attachment */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`background-attachment: scroll` vs `fixed`**: `scroll` scrolls background along with element content; `fixed` locks background relative to viewport.
+> 2. **Mobile Performance Caution**: `background-attachment: fixed` causes heavy repaint lag on mobile GPUs; use `scroll` for mobile views.
+> 3. **Texture Repeating**: `background-repeat: repeat` tiles small seamless textures cleanly.
 ## 6. Related Terms
 - [`color` vs `background-color`](color_vs_background.md) — The color properties.
 - [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — The syntax concept.

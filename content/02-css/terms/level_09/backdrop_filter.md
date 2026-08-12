@@ -189,66 +189,101 @@ Comparing `filter` vs `backdrop-filter`:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Glass Navigation Bar
+### Exercise 1: Glassmorphism Card Overlay using backdrop-filter blur
 
-**Problem:** You are building a fixed navigation bar that sits at the top of the screen as the user scrolls. You want the navigation bar to look glassy: have a semi-transparent black background (`rgba(0,0,0,0.5)`) and blur the page content scrolling behind it. Write the CSS layout ruleset.
+**Scenario:** An author styles a frosted glass card overlay using `backdrop-filter: blur(12px)` over a colorful background gradient.
 
-**Expected output:**
+**Requirements:**
+1. Apply `background-color: rgb(255 255 255 / 0.7)`.
+2. Apply `backdrop-filter: blur(12px)`.
+3. Set border and border-radius.
+
 > [!check]- Answer
-> ```css
-> .glass-nav {
->   position: fixed;
->   top: 0;
->   left: 0;
->   width: 100%;
->   background: rgba(0, 0, 0, 0.5);
->   backdrop-filter: blur(10px);
-> }
-> ```
-> - Position the bar statically at the top.
-> - Blend transparency and backdrop filters.
-> 
----
-
-
-
-### Exercise 2: Glassmorphism Card Pattern
-
-**Problem:** Write CSS for `.glass-card` with semi-transparent dark background (`rgb(0 0 0 / 50%)`), 12px blur backdrop filter, and subtle white border.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .glass-card { background: rgb(0 0 0 / 50%); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgb(255 255 255 / 20%); }
-> ```
+>
+> #### Implementation
+>
 > ```css
 > .glass-card {
->   background: rgb(0 0 0 / 50%);
->   -webkit-backdrop-filter: blur(12px);
->   backdrop-filter: blur(12px);
->   border: 1px solid rgb(255 255 255 / 20%);
+>   background-color: rgb(255 255 255 / 0.7);   /* Semi-transparent white surface fill */
+>   backdrop-filter: blur(12px);                 /* Blurs content BEHIND the element box */
+>   -webkit-backdrop-filter: blur(12px);        /* Safari support prefix */
+>   border: 1px solid rgb(255 255 255 / 0.3);
+>   border-radius: 0.75rem;
+>   padding: 2rem;
 > }
 > ```
 >
-> **Explanation:** Glassmorphism combines semi-transparent background color, backdrop blur, and subtle border highlights.
+> #### Technical Explanation
+>
+> 1. **The `backdrop-filter` Property**: Applies graphical filter effects (like blur or color shift) to the content rendering DIRECTLY BEHIND the element's box model.
+> 2. **Semi-Transparent Alpha Prerequisite**: `backdrop-filter` REQUIRES a semi-transparent background color (`rgb(255 255 255 / 0.7)`); opaque background fills block the blur effect!
+> 3. **Safari `-webkit-` Prefix Mandate**: ALWAYS include `-webkit-backdrop-filter` alongside standard `backdrop-filter` for full iOS and macOS Safari browser compatibility.
 > 
 ---
 
-### Exercise 3: filter vs backdrop-filter Difference
+### Exercise 2: Modal Navigation Header Blur with Saturate
 
-**Problem:** Distinguish `filter` vs `backdrop-filter`.
+**Scenario:** Styles a fixed sticky site header with background blur and color saturation.
 
-**Expected output:**
+**Requirements:**
+1. Apply `backdrop-filter: blur(8px) saturate(180%)`.
+
 > [!check]- Answer
-> ```text
-> filter applies visual effects to the element ITSELF and its children; backdrop-filter applies visual effects to content BEHIND the element.
-> ```
-> ```text
-> filter applies visual effects to the element ITSELF and its children; backdrop-filter applies visual effects to content BEHIND the element.
+>
+> #### Implementation
+>
+> ```css
+> .blur-header {
+>   position: sticky;
+>   top: 0;
+>   background-color: rgb(15 23 42 / 0.8);
+>   backdrop-filter: blur(8px) saturate(180%);
+>   -webkit-backdrop-filter: blur(8px) saturate(180%);
+>   z-index: 100;
+> }
 > ```
 >
-> **Explanation:** `backdrop-filter` targets backdrop layers behind semi-transparent containers.
+> #### Technical Explanation
+>
+> 1. **Combining Filter Functions**: Multiple backdrop filters can be chained together (e.g. `blur(8px) saturate(180%)`).
+> 2. **Saturation Enhancement**: `saturate(180%)` keeps colors vibrant through the frosted glass backdrop.
+> 3. **Modern Header Aesthetic**: Standard design pattern for macOS and iOS native application navigation bars.
 > 
+---
+
+### Exercise 3: Graceful Fallbacks for Browsers without backdrop-filter Support
+
+**Scenario:** Provides a solid background fallback for legacy browsers that do not support `backdrop-filter` using `@supports`.
+
+**Requirements:**
+1. Define fallback opaque background.
+2. Wrap `backdrop-filter` inside `@supports (backdrop-filter: blur(1px))`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Fallback for legacy browsers */
+> .fallback-header {
+>   background-color: #0f172a;    /* Solid opaque dark slate fallback */
+> }
+>
+> /* Modern Browsers with Backdrop Filter Support */
+> @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+>   .fallback-header {
+>     background-color: rgb(15 23 42 / 0.8);
+>     backdrop-filter: blur(8px);
+>     -webkit-backdrop-filter: blur(8px);
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Feature Query Protection (`@supports`)**: Wraps experimental or modern CSS properties inside `@supports` queries to protect legacy browsers.
+> 2. **Progressive Enhancement**: Guarantees text readability on older devices while delivering premium blurred visuals on modern browsers.
+> 3. **Defensive UI Architecture**: Prevents unreadable transparent text boxes when backdrop blur fails to render.
 ## 6. Related Terms
 - [`filter`](filter.md) — Applying filters to the element itself.
 - [`opacity`](opacity.md) — Sizing transparency values.

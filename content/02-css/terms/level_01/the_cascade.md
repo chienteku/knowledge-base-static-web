@@ -112,64 +112,113 @@ p.text { color: red; } /* Equal/higher specificity rule placed later wins */
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Winner
+### Exercise 1: Understanding Order of Appearance Resolution in CSS Cascade Rules
 
-**Problem:** Look at the following code. What color will the `<h1>` be?
-```css
-h1 { color: purple; }
-h1 { color: orange; }
-h1 { color: pink; }
-```
+**Scenario:** An author demonstrates how the CSS Cascade resolves matching selectors of equal specificity based on order of appearance.
 
-**Expected output:**
+**Requirements:**
+1. Create two matching class selectors with equal specificity (`0,1,0`).
+2. Demonstrate that the rule listed last in the CSS file wins.
+
 > [!check]- Answer
-> ```text
-> Pink! Because all three rules have the exact same selector, the cascade relies entirely on source order. The last rule wins.
-> ```
-> - Which rule does the browser read last?
-> 
----
-
-
-
-### Exercise 2: 3 Steps of Cascade Resolution
-
-**Problem:** List the 3 criteria CSS uses in order to resolve conflicts between competing declarations.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Importance & Origin (User-Agent, Author, !important)
-> 2. Specificity (Inline, ID, Class, Type)
-> 3. Source Order (Last declared wins)
-> ```
-> ```text
-> 1. Importance & Origin (User-Agent, Author, !important)
-> 2. Specificity (Inline, ID, Class, Type)
-> 3. Source Order (Last declared wins)
-> ```
 >
-> **Explanation:** The Cascade algorithm evaluates origin, specificity, and order to determine winning styles.
-> 
----
-
-### Exercise 3: Cascade Layers (@layer) Purpose
-
-**Problem:** How do modern CSS Cascade Layers (`@layer`) control style precedence independent of selector specificity?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Styles in later declared @layer blocks take precedence over earlier layers regardless of selector specificity.
-> ```
+> #### Implementation
+>
 > ```css
-> @layer base, components;
-> @layer base { #hero { color: red; } }
-> @layer components { .title { color: blue; } } /* Components layer wins! */
+> /* Equal Specificity Rule 1 (0,1,0) */
+> .alert-box {
+>   background-color: #fef3c7;
+>   color: #92400e;
+>   padding: 1rem;
+>   border-radius: 0.375rem;
+> }
+>
+> /* Equal Specificity Rule 2 (0,1,0) - Listed LAST in file -> WINS THE CASCADE! */
+> .alert-box {
+>   background-color: #fee2e2;
+>   color: #991b1b;
+> }
 > ```
 >
-> **Explanation:** `@layer` grants explicit architecture control over cascade precedence.
+> #### Technical Explanation
+>
+> 1. **The CSS Cascade Algorithm**: The fundamental engine in CSS that combines Origin, Importance, Specificity, and Order of Appearance to determine final property values.
+> 2. **Order of Appearance Rule**: When two rules have identical origin and equal specificity, the rule that appears LAST in the stylesheet wins.
+> 3. **Stylesheet Import Sequence**: The order of `<link>` tags in HTML matters; downstream stylesheets override upstream rules of equal weight.
 > 
+---
+
+### Exercise 2: Managing Author Stylesheet Cascade Layers with @layer
+
+**Scenario:** Organizes stylesheet cascade precedence using modern CSS `@layer` rules.
+
+**Requirements:**
+1. Declare `@layer base, components, utilities;` in stylesheet header.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Establish explicit Cascade Layer Precedence (left to right) */
+> @layer base, components, utilities;
+>
+> @layer base {
+>   button {
+>     padding: 0.5rem 1rem;
+>     background-color: #94a3b8;
+>   }
+> }
+>
+> @layer components {
+>   .btn-primary {
+>     background-color: #2563eb;
+>     color: #ffffff;
+>   }
+> }
+>
+> @layer utilities {
+>   .u-bg-dark {
+>     background-color: #0f172a;
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **CSS Cascade Layers (`@layer`)**: Modern CSS feature that allows developers to control cascade priority explicitly regardless of selector specificity or file order.
+> 2. **Layer Precedence**: Layers declared later (`utilities`) ALWAYS override earlier layers (`base`), even if the base selector has higher specificity!
+> 3. **Solving Specificity Wars**: Eliminates third-party CSS library specificity conflicts cleanly without `!important` hacks.
+> 
+---
+
+### Exercise 3: User Agent Stylesheet Overrides with Modern Base Resets
+
+**Scenario:** Demonstrates how author CSS rules override browser User Agent default styles in the cascade.
+
+**Requirements:**
+1. Override browser user-agent margins and button fonts.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Author Style Override of User-Agent Defaults */
+> body {
+>   margin: 0;                   /* Overrides browser 8px default margin */
+> }
+>
+> button {
+>   font-family: inherit;        /* Overrides browser default button font */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Cascade Origins**: The Cascade evaluates Origin priority: User-Agent Styles < User Styles < Author Styles < Author !important < User !important.
+> 2. **Author Origin Dominance**: Normal author styles written by web developers automatically override default browser User-Agent stylesheets.
+> 3. **Cross-Browser Consistency**: CSS Resets harmonize User-Agent differences across Chrome, Firefox, and Safari.
 ## 6. Related Terms
 - [Specificity](specificity.md) — The only thing that can override the Rule of Source Order. If a rule is more "specific", it wins even if it comes first in the file!
 - [`!important` Declaration](important.md) — The global cascading priority flag.

@@ -111,66 +111,165 @@ writable.on('finish', () => console.log('Write complete'));
 
 ## 5. Practice Exercises
 
-### Exercise 1: Identify the Stream
+### Exercise 1: Custom Readable Array Stream Generator
 
-**Problem:** In a standard Node.js Express server, you have `req` (the incoming request) and `res` (the outgoing response). Which one is the Readable Stream, and which one is the Writable Stream?
+**Scenario:** Creates a custom `Readable` stream instance that yields array elements sequentially.
 
-**Expected output:**
+**Requirements:**
+1. Write createArrayReadableStream(itemsArray, ReadableClass).
+2. Implement `_read()`.
+3. Push array items to stream buffer.
+
 > [!check]- Answer
-> ```text
-> - `req` is a Readable Stream. (Data is coming FROM the user TO your server).
-> - `res` is a Writable Stream. (Data is going FROM your server TO the user).
-> ```
-> - Where is the data originating, and where is it landing?
-> 
----
-
-
-
-### Exercise 2: Matching Stream Types to Concrete Examples
-
-**Problem:** Match concrete object to Readable or Writable:
-1. `process.stdin`
-2. `process.stdout`
-3. `http.IncomingMessage` (`req`)
-4. `http.ServerResponse` (`res`)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Readable
-> 2. Writable
-> 3. Readable
-> 4. Writable
-> ```
-> ```text
-> 1. process.stdin -> Readable
-> 2. process.stdout -> Writable
-> 3. req -> Readable
-> 4. res -> Writable
-> ```
 >
-> **Explanation:** Requests and stdin are readable inputs; responses and stdout are writable outputs.
-> 
----
-
-### Exercise 3: Writing Data to Writable Stream
-
-**Problem:** Write string `'Log'` to writable file stream and close it.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> writer.write('Log'); writer.end();
-> ```
+> #### Implementation
+>
 > ```javascript
-> const writer = fs.createWriteStream('log.txt');
-> writer.write('Log');
-> writer.end();
+> function createArrayReadableStream(itemsArray = [], ReadableClass) {
+>   const Readable = ReadableClass || require("stream").Readable;
+>
+>   let index = 0;
+>   return new Readable({
+>     read() {
+>       if (index < itemsArray.length) {
+>         this.push(Buffer.from(String(itemsArray[index])));
+>         index++;
+>       } else {
+>         this.push(null); // EOF (End Of File) signal!
+>       }
+>     }
+>   });
+> }
+>
+> // Verification tests
+> const Readable = require("stream").Readable;
+> const stream = createArrayReadableStream(["A", "B", "C"], Readable);
+>
+> let result = "";
+> stream.on("data", (chunk) => { result += chunk.toString(); });
+>
+> setImmediate(() => {
+>   console.assert(result === "ABC", "Test 1 Failed: Array readable stream output mismatch");
+> });
 > ```
 >
-> **Explanation:** `.write()` pushes data to the writable buffer; `.end()` flushes and closes the stream.
+> #### Technical Explanation
+>
+> 1. **Custom Readable Streams**: Implemented by overriding `_read(size)` method and calling `this.push(chunk)`.
+> 2. **EOF Signal (`null`)**: Pushing `null` signals End-Of-File / stream completion to downstream consumers.
+> 3. **On-Demand Data Generation**: `_read()` is called automatically by Node.js when downstream consumers are ready for more data.
 > 
+---
+
+### Exercise 2: Custom Writable Batch Log Stream
+
+**Scenario:** Creates a custom `Writable` stream that buffers incoming log objects in RAM and flushes in batches of 3 to disk/database.
+
+**Requirements:**
+1. Write createBatchWritableStream(WritableClass, batchSize).
+2. Override `_write(chunk, encoding, callback)`.
+3. Flush batch when batchSize is reached.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createBatchWritableStream(WritableClass, batchSize = 3) {
+>   const Writable = WritableClass || require("stream").Writable;
+>
+>   const batch = [];
+>   const flushedBatches = [];
+>
+>   class BatchWritable extends Writable {
+>     _write(chunk, encoding, callback) {
+>       batch.push(chunk.toString("utf-8"));
+>       if (batch.length >= batchSize) {
+>         flushedBatches.push([...batch]);
+>         batch.length = 0;
+>       }
+>       callback();
+>     }
+>   }
+>
+>   return {
+>     writable: new BatchWritable(),
+>     flushedBatches,
+>     pendingBatch: batch
+>   };
+> }
+>
+> // Verification tests
+> const Writable = require("stream").Writable;
+> const service = createBatchWritableStream(Writable, 2);
+>
+> service.writable.write("item1");
+> service.writable.write("item2");
+> service.writable.write("item3");
+>
+> setImmediate(() => {
+>   console.assert(service.flushedBatches.length === 1, "Test 1 Failed: 1 batch flushed");
+>   console.assert(service.flushedBatches[0].length === 2, "Test 2 Failed");
+>   console.assert(service.pendingBatch.length === 1, "Test 3 Failed: 1 pending item");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Custom Writable Streams**: Implemented by overriding `_write(chunk, encoding, callback)` method.
+> 2. **Batch Processing**: Buffering stream writes reduces database query overhead by executing bulk inserts.
+> 3. **Callback Signaling**: Calling `callback()` signals Node.js that the write operation completed and stream is ready for next chunk.
+> 
+---
+
+### Exercise 3: Readable Stream Pause and Resume Flow Controller
+
+**Scenario:** Manages stream execution states using `readable.pause()`, `readable.resume()`, and `readable.isPaused()`.
+
+**Requirements:**
+1. Write createPauseResumeController(readableStream).
+2. Toggle pause and resume states.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createPauseResumeController(readableStream) {
+>   return {
+>     pause() {
+>       readableStream.pause();
+>       return readableStream.isPaused();
+>     },
+>     resume() {
+>       readableStream.resume();
+>       return readableStream.isPaused();
+>     },
+>     getStatus() {
+>       return readableStream.isPaused() ? "PAUSED" : "FLOWING";
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const mockReadable = {
+>   pausedState: false,
+>   pause() { this.pausedState = true; },
+>   resume() { this.pausedState = false; },
+>   isPaused() { return this.pausedState; }
+> };
+>
+> const ctrl = createPauseResumeController(mockReadable);
+> console.assert(ctrl.getStatus() === "FLOWING", "Test 1 Failed");
+> ctrl.pause();
+> console.assert(ctrl.getStatus() === "PAUSED", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Flowing vs Paused Modes**: Readable streams operate in Flowing (emitting 'data' events) or Paused (manual `.read()` calls) modes.
+> 2. **Automatic Mode Switching**: Attaching a `'data'` event listener switches readable stream to Flowing mode.
+> 3. **Manual Flow Control**: `pause()` and `resume()` give applications fine-grained control over data arrival.
 ## 6. Related Terms
 - [Piping (.pipe())](piping.md) — The magical method used to connect a Readable Stream directly to a Writable Stream.
 - [Backpressure](backpressure.md) — Related concept: Backpressure.

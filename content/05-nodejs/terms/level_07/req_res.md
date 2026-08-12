@@ -98,140 +98,166 @@ res.send('Done'); // ❌ ERR_HTTP_HEADERS_SENT!
 return res.json({ user: 'Alice' }); // Single response call
 ```
 
-
-
-### Mistake 4: Confusing `req.query` with `req.params` in Express Routes
-
-**The mistake:** Accessing `req.params.sort` for URL `http://api.com/users?sort=asc`.
-
-**Why it's wrong:** `req.params` extracts route path placeholders (`/users/:id`). `req.query` extracts URL query parameters (`?sort=asc`).
-
-*Incorrect:*
-```javascript
-// URL: /users?sort=asc
-const sort = req.params.sort; // ❌ undefined!
-```
-
-*Fix:*
-```javascript
-// URL: /users?sort=asc
-const sort = req.query.sort; // 'asc'
-```
-
-### Mistake 5: Using `res.json()` Followed by `res.send()` in Same Handler
-
-**The mistake:** Calling `res.json(data)` and `res.send('done')` sequentially.
-
-**Why it's wrong:** Both `res.json()` and `res.send()` end the HTTP response stream. Calling both throws `ERR_HTTP_HEADERS_SENT`.
-
-*Incorrect:*
-```javascript
-res.json({ user: 'Alice' });
-res.send('Done'); // ❌ ERR_HTTP_HEADERS_SENT!
-```
-
-*Fix:*
-```javascript
-return res.json({ user: 'Alice' }); // Single response call
-```
-
-
-
-### Mistake 6: Confusing `req.query` with `req.params` in Express Routes
-
-**The mistake:** Accessing `req.params.sort` for URL `http://api.com/users?sort=asc`.
-
-**Why it's wrong:** `req.params` extracts route path placeholders (`/users/:id`). `req.query` extracts URL query parameters (`?sort=asc`).
-
-*Incorrect:*
-```javascript
-// URL: /users?sort=asc
-const sort = req.params.sort; // ❌ undefined!
-```
-
-*Fix:*
-```javascript
-// URL: /users?sort=asc
-const sort = req.query.sort; // 'asc'
-```
-
-### Mistake 7: Using `res.json()` Followed by `res.send()` in Same Handler
-
-**The mistake:** Calling `res.json(data)` and `res.send('done')` sequentially.
-
-**Why it's wrong:** Both `res.json()` and `res.send()` end the HTTP response stream. Calling both throws `ERR_HTTP_HEADERS_SENT`.
-
-*Incorrect:*
-```javascript
-res.json({ user: 'Alice' });
-res.send('Done'); // ❌ ERR_HTTP_HEADERS_SENT!
-```
-
-*Fix:*
-```javascript
-return res.json({ user: 'Alice' }); // Single response call
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Extracting the Data
+### Exercise 1: Express req and res Helper Extender Decorator
 
-**Problem:** A user submits a POST request to `http://localhost:3000/api/users/99/update?force=true`.
-The body of their request contains a JSON object: `{ "email": "bob@bob.com" }`.
-Inside your route `app.post('/api/users/:id/update')`, how do you extract the `99`, the `true`, and the `email`?
+**Scenario:** Extends Node.js native `http.IncomingMessage` and `http.ServerResponse` objects with Express-style convenience helper methods (`res.json()`, `res.status()`).
 
-**Expected output:**
+**Requirements:**
+1. Write decorateReqRes(reqMock, resMock).
+2. Implement `res.status(code)` chaining.
+3. Implement `res.json(obj)`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> app.post('/api/users/:id/update', (req, res) => {
->   const userId = req.params.id;         // 99 (From the dynamic path)
->   const isForce = req.query.force;      // "true" (From the URL query string)
->   const userEmail = req.body.email;     // "bob@bob.com" (From the JSON body)
->   
->   res.json({ success: true });
-> });
+> function decorateReqRes(reqMock, resMock) {
+>   resMock.status = function (code) {
+>     this.statusCode = code;
+>     return this; // Enable method chaining!
+>   };
+>
+>   resMock.json = function (bodyObj) {
+>     this.setHeader("Content-Type", "application/json");
+>     this.end(JSON.stringify(bodyObj));
+>   };
+>
+>   reqMock.get = function (headerName) {
+>     const key = String(headerName).toLowerCase();
+>     return this.headers?.[key];
+>   };
+>
+>   return { req: reqMock, res: resMock };
+> }
+>
+> // Verification tests
+> let jsonEnded = "";
+> const mockRes = {
+>   statusCode: 200,
+>   setHeader: () => {},
+>   end: (data) => { jsonEnded = data; }
+> };
+> const mockReq = { headers: { "user-agent": "Mozilla/5.0" } };
+>
+> const { req, res } = decorateReqRes(mockReq, mockRes);
+> console.assert(req.get("User-Agent") === "Mozilla/5.0", "Test 1 Failed");
+>
+> res.status(201).json({ created: true });
+> console.assert(mockRes.statusCode === 201, "Test 2 Failed: Method chaining status");
+> console.assert(JSON.parse(jsonEnded).created === true, "Test 3 Failed: res.json sent payload");
 > ```
-> - `params` = Path variables
-> - `query` = Question mark variables
-> - `body` = JSON payload
+>
+> #### Technical Explanation
+>
+> 1. **Express Object Prototype Extension**: Express extends HTTP prototypes (`http.IncomingMessage.prototype`, `http.ServerResponse.prototype`) to add helper methods.
+> 2. **Method Chaining Syntax**: Returning `this` from helper methods allows expressive chaining (`res.status(201).json(...)`).
+> 3. **Case-Insensitive Header Lookup**: `req.get('Content-Type')` converts input keys to lowercase to match HTTP header normalization rules.
 > 
 ---
 
+### Exercise 2: Request Metadata & Client IP Extractor
 
+**Scenario:** Extracts client IP addresses, user agents, and query parameters safely from HTTP request objects behind proxies.
 
-### Exercise 2: Setting HTTP Response Status and JSON Body
+**Requirements:**
+1. Write extractClientMetadata(reqMock).
+2. Extract client IP from `X-Forwarded-For` or `socket.remoteAddress`.
+3. Extract user agent.
 
-**Problem:** Write Express line setting HTTP 201 Created and JSON body `{ id: 1 }`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> res.status(201).json({ id: 1 });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> res.status(201).json({ id: 1 });
+> function extractClientMetadata(reqMock) {
+>   const headers = reqMock.headers || {};
+>   const forwardedFor = headers["x-forwarded-for"] || headers["X-Forwarded-For"];
+>
+>   let clientIp = "127.0.0.1";
+>   if (forwardedFor) {
+>     clientIp = forwardedFor.split(",")[0].trim();
+>   } else if (reqMock.socket?.remoteAddress) {
+>     clientIp = reqMock.socket.remoteAddress;
+>   }
+>
+>   return {
+>     clientIp,
+>     userAgent: headers["user-agent"] || headers["User-Agent"] || "UNKNOWN",
+>     method: (reqMock.method || "GET").toUpperCase(),
+>     url: reqMock.url || "/"
+>   };
+> }
+>
+> // Verification tests
+> const mockReq = {
+>   method: "POST",
+>   url: "/api/login",
+>   headers: {
+>     "x-forwarded-for": "203.0.113.195, 70.41.3.18",
+>     "user-agent": "NodeJS/20.0"
+>   }
+> };
+>
+> const meta = extractClientMetadata(mockReq);
+> console.assert(meta.clientIp === "203.0.113.195", "Test 1 Failed: First IP in X-Forwarded-For");
+> console.assert(meta.userAgent === "NodeJS/20.0", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `res.status().json()` chains HTTP status and JSON response body formatting.
+> #### Technical Explanation
+>
+> 1. **Proxy Headers (X-Forwarded-For)**: When Node.js is behind reverse proxies (Nginx, Cloudflare), `req.socket.remoteAddress` is proxy IP; real client IP is in `X-Forwarded-For`.
+> 2. **app.set('trust proxy')**: Express requires `app.set('trust proxy', true)` to enable automatic `req.ip` proxy resolution.
+> 3. **Security Spoofing Alert**: Only trust `X-Forwarded-For` headers if Node.js sits behind a trusted reverse proxy that strips forged client headers.
 > 
 ---
 
-### Exercise 3: Extracting Request IP and User-Agent
+### Exercise 3: Response Cookie & Header Mutator
 
-**Problem:** Extract client IP address and User-Agent header from Express `req` object.
+**Scenario:** Attaches HTTP cookies to response objects by appending `Set-Cookie` headers with attributes (`HttpOnly`, `Secure`, `SameSite`).
 
-**Expected output:**
+**Requirements:**
+1. Write setResponseCookie(resMock, name, value, options).
+2. Format `Set-Cookie` string.
+3. Attach to response headers.
+
 > [!check]- Answer
-> ```text
-> const ip = req.ip; const agent = req.get('User-Agent');
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const ip = req.ip;
-> const agent = req.get('User-Agent');
+> function setResponseCookie(resMock, name, value, options = {}) {
+>   const parts = [`${encodeURIComponent(name)}=${encodeURIComponent(value)}`];
+>
+>   if (options.maxAge) parts.push(`Max-Age=${options.maxAge}`);
+>   if (options.domain) parts.push(`Domain=${options.domain}`);
+>   if (options.path) parts.push(`Path=${options.path || "/"}`);
+>   if (options.httpOnly) parts.push("HttpOnly");
+>   if (options.secure) parts.push("Secure");
+>   if (options.sameSite) parts.push(`SameSite=${options.sameSite}`);
+>
+>   const cookieString = parts.join("; ");
+>   resMock.setHeader("Set-Cookie", cookieString);
+>
+>   return cookieString;
+> }
+>
+> // Verification tests
+> let setHeaderValue = "";
+> const mockRes = { setHeader: (k, v) => { setHeaderValue = v; } };
+>
+> setResponseCookie(mockRes, "session_id", "xyz123", { httpOnly: true, secure: true, sameSite: "Strict" });
+> console.assert(setHeaderValue.includes("session_id=xyz123"), "Test 1 Failed");
+> console.assert(setHeaderValue.includes("HttpOnly; Secure; SameSite=Strict"), "Test 2 Failed");
 > ```
 >
-> **Explanation:** `req.ip` returns client IP; `req.get(headerName)` gets request header values.
-> 
+> #### Technical Explanation
+>
+> 1. **Set-Cookie HTTP Header**: HTTP response header used by server to store cookies in client browser.
+> 2. **HttpOnly & Secure Flags**: `HttpOnly` prevents client-side JS access to block XSS attacks; `Secure` enforces HTTPS-only transmission.
+> 3. **res.cookie() in Express**: Express provides `res.cookie(name, val, options)` wrapping `Set-Cookie` string construction.
 ## 6. Related Terms
 - [Routing](routing.md) — The system that passes these objects to your function.
 - [HTTP Status Codes](../level_09/status_codes.md) — What you inject into `res.status()`.

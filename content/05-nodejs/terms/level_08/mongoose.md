@@ -143,73 +143,166 @@ const users = await User.find().lean(); // Fast plain JS objects
 
 ## 5. Practice Exercises
 
-### Exercise 1: Schema Construction
+### Exercise 1: Mongoose Schema Definition & Virtual Field Decorator
 
-**Problem:** Complete the product schema below to require a name, a description, and a price that cannot be negative:
+**Scenario:** Defines a MongoDB Mongoose document schema with field validation rules, default timestamps, and virtual property getters.
 
-```javascript
-const mongoose = require('mongoose');
-
-// Solution Schema:
-const ProductSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  description: String,
-  price: {
-    type: Number,
-    required: true,
-    min: [0, 'Price cannot be negative']
-  }
-});
-
-const Product = mongoose.model('Product', ProductSchema);
-```
-
----
+**Requirements:**
+1. Write createProductSchema(SchemaClass).
+2. Define name, price, stock fields.
+3. Attach virtual `isAvailable` getter.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+>
+> ```javascript
+> function createProductSchema(SchemaClass) {
+>   const Schema = SchemaClass || require("mongoose").Schema;
+>
+>   const productSchema = new Schema(
+>     {
+>       name: { type: String, required: true, trim: true },
+>       price: { type: Number, required: true, min: 0 },
+>       stock: { type: Number, default: 0, min: 0 }
+>     },
+>     { timestamps: true }
+>   );
+>
+>   productSchema.virtual("isAvailable").get(function () {
+>     return this.stock > 0;
+>   });
+>
+>   return productSchema;
+> }
+>
+> // Verification tests
+> const SchemaMock = function (def, opts) {
+>   this.def = def;
+>   this.opts = opts;
+>   this.virtuals = {};
+>   this.virtual = (name) => ({
+>     get: (fn) => { this.virtuals[name] = fn; }
+>   });
+> };
+>
+> const schema = createProductSchema(SchemaMock);
+> console.assert(schema.def.name.required === true, "Test 1 Failed");
+> console.assert(typeof schema.virtuals["isAvailable"] === "function", "Test 2 Failed: Registered virtual property getter");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Mongoose Schema Validation**: Provides strict schema enforcement (types, min/max, required, regex) over schemaless MongoDB collections.
+> 2. **Mongoose Virtual Properties**: Computed fields (`fullName`, `isAvailable`) evaluated dynamically at runtime without taking up database storage space.
+> 3. **Automatic Timestamps**: `{ timestamps: true }` automatically manages `createdAt` and `updatedAt` Date fields.
 > 
 ---
 
-### Exercise 2: Defining Mongoose Schema and Model
+### Exercise 2: Mongoose Query Population & Lean Execution
 
-**Problem:** Define Mongoose schema for `User` with required string `email` and default boolean `isActive: true`.
+**Scenario:** Executes Mongoose populate queries (`User.find().populate('orders')`) with `.lean()` optimization for read-heavy JSON APIs.
 
-**Expected output:**
+**Requirements:**
+1. Write fetchUserOrdersPopulated(userModelMock, userId).
+2. Call `find({ _id: userId })`.
+3. Chain `.populate('orders')` and `.lean()`.
+
 > [!check]- Answer
-> ```text
-> const userSchema = new mongoose.Schema({ email: { type: String, required: true }, isActive: { type: Boolean, default: true } }); const User = mongoose.model('User', userSchema);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const userSchema = new mongoose.Schema({
->   email: { type: String, required: true },
->   isActive: { type: Boolean, default: true }
+> async function fetchUserOrdersPopulated(userModelMock, userId) {
+>   const query = userModelMock.findOne({ _id: userId });
+>   query.populate("orders");
+>   query.lean();
+>
+>   const user = await query.exec();
+>   return {
+>     isPlainObject: user ? user.constructor.name === "Object" : false,
+>     user
+>   };
+> }
+>
+> // Verification tests
+> const mockUser = { id: 42, orders: [{ id: 101 }] };
+> const userModelMock = {
+>   findOne: () => ({
+>     populate() { return this; },
+>     lean() { return this; },
+>     exec: async () => mockUser
+>   })
+> };
+>
+> fetchUserOrdersPopulated(userModelMock, 42).then(res => {
+>   console.assert(res.isPlainObject === true, "Test 1 Failed: .lean() returned plain JS object");
+>   console.assert(res.user.orders.length === 1, "Test 2 Failed");
 > });
-> const User = mongoose.model('User', userSchema);
 > ```
 >
-> **Explanation:** Mongoose schemas define MongoDB document structures, validations, and default values.
+> #### Technical Explanation
+>
+> 1. **Mongoose `.populate()`**: Performs automatic document join operations between MongoDB collections based on `ref` ObjectIds.
+> 2. **Mongoose `.lean()` Performance Optimization**: Bypasses instantiating heavy Mongoose Document class wrappers, returning high-performance plain JavaScript objects.
+> 3. **Read-Only Query Best Practice**: Always use `.lean()` on read-only REST API query endpoints to reduce RAM usage and CPU overhead.
 > 
 ---
 
-### Exercise 3: Populating Mongoose References
+### Exercise 3: Mongoose Pre-Save Document Hook for Hashing
 
-**Problem:** Use Mongoose `.populate()` to load `author` reference on `Post.find()` query.
+**Scenario:** Attaches a `pre('save')` document middleware hook to a Mongoose user schema to hash passwords prior to database insertion.
 
-**Expected output:**
+**Requirements:**
+1. Write attachPreSaveHook(schemaMock, hashFn).
+2. Check if `isModified('password')`.
+3. Hash password and call `next()`.
+
 > [!check]- Answer
-> ```text
-> const posts = await Post.find().populate('author');
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const posts = await Post.find().populate('author');
+> function attachPreSaveHook(schemaMock, hashFn) {
+>   schemaMock.pre("save", async function (next) {
+>     if (!this.isModified("password")) {
+>       return next();
+>     }
+>
+>     try {
+>       this.password = await hashFn(this.password);
+>       next();
+>     } catch (err) {
+>       next(err);
+>     }
+>   });
+> }
+>
+> // Verification tests
+> let preFn = null;
+> const mockSchema = {
+>   pre: (event, fn) => { preFn = fn; }
+> };
+>
+> const mockDoc = {
+>   password: "raw_secret_pass",
+>   isModified: () => true
+> };
+>
+> attachPreSaveHook(mockSchema, async (pwd) => `hashed_${pwd}`);
+>
+> let nextCalled = false;
+> preFn.call(mockDoc, () => { nextCalled = true; }).then(() => {
+>   console.assert(mockDoc.password === "hashed_raw_secret_pass", "Test 1 Failed: Password hashed");
+>   console.assert(nextCalled === true, "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** `.populate()` replaces ObjectId references with actual referenced document data.
-> 
+> #### Technical Explanation
+>
+> 1. **Mongoose Document Hooks**: Middleware functions executed during document lifecycle (`save`, `validate`, `remove`).
+> 2. **`this.isModified()` Guard**: Prevents re-hashing already hashed passwords when updating unrelated fields (e.g. `email`).
+> 3. **Asynchronous Hook Errors**: Passing errors to `next(err)` inside pre hooks aborts document save operation.
 ## 6. Related Terms
 - [ORMs & ODMs](orms_odms.md) — The general concept of bridging databases to object logic.
 - [SQL vs NoSQL](sql_vs_nosql.md) — The database engines mapped by Mongoose.

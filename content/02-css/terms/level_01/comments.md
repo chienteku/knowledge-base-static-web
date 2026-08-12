@@ -171,73 +171,113 @@ button { color: red; } /* Valid CSS comment */
 
 ## 5. Practice Exercises
 
-### Exercise 1: Comment Cleanup
+### Exercise 1: Documenting CSS Design Tokens & Theme Variables with Block Comments
 
-**Problem:** Fix the comment syntax errors in the following CSS block so that `color: blue;` is active and the other items are properly commented out:
+**Scenario:** An engineer organizes a production CSS stylesheet using structured block comments to delineate design tokens, layout rules, and component styles.
 
-```css
-.profile {
-  // border: 1px solid black;
-  color: blue;
-  /* padding: 10px; /* inner comment */ */
-}
-```
+**Requirements:**
+1. Create structured section header block comments using `/* === ... === */`.
+2. Document CSS custom properties (variables).
+3. Include inline comments explaining `rem` relative scaling.
 
-**Expected output:**
 > [!check]- Answer
-> ```css
-> .profile {
->   /* border: 1px solid black; */
->   color: blue;
->   /* padding: 10px; inner comment */
-> }
-> ```
-> - Replace `//` with `/* ... */`.
-> - Remove the nested `/*` inside the padding comment.
-> 
----
-
-
-
-### Exercise 2: Writing Valid CSS Comments
-
-**Problem:** Write multi-line CSS comment describing section header styles.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> /* 
->  * Header Navigation Styles
->  */
-> ```
-> ```css
-> /* 
->  * Header Navigation Styles
->  */
-> ```
 >
-> **Explanation:** CSS comments begin with `/*` and end with `*/`.
-> 
----
-
-### Exercise 3: Commenting Out CSS Rules
-
-**Problem:** Comment out `background: red;` property declaration inside `.box { background: red; color: white; }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .box { /* background: red; */ color: white; }
-> ```
+> #### Implementation
+>
 > ```css
-> .box {
->   /* background: red; */
->   color: white;
+> /* ==========================================================================
+>    DESIGN TOKENS & CORE SYSTEM VARIABLES
+>    ========================================================================== */
+>
+> :root {
+>   /* Brand Palette */
+>   --color-primary: #2563eb;       /* Primary interactive blue */
+>   --color-surface: #ffffff;       /* Main card background */
+>
+>   /* Typography Scale (using rem for a11y accessibility scaling) */
+>   --font-size-base: 1rem;         /* 16px default browser baseline */
+>   --font-size-heading: 1.75rem;   /* ~28px relative heading */
+> }
+>
+> /* ==========================================================================
+>    CARD COMPONENT STYLES
+>    ========================================================================== */
+>
+> .card {
+>   background-color: var(--color-surface);
+>   padding: 1.5rem;                /* Scales proportionally with root font size */
+>   border-radius: 0.5rem;
 > }
 > ```
 >
-> **Explanation:** Wrapping CSS properties in `/* */` disables them without deleting code.
+> #### Technical Explanation
+>
+> 1. **CSS Comment Syntax**: CSS comments use multi-line syntax `/* comment */`; unlike JavaScript, single-line `//` comments are INVALID in standard CSS.
+> 2. **Architectural Section Banners**: Using visually prominent banner comments establishes clean file navigation for large engineering teams.
+> 3. **Documenting Design Rationale**: Use inline comments to explain *why* specific choices were made (e.g. why `rem` units were chosen over fixed `px`).
 > 
+---
+
+### Exercise 2: Explaining Non-Obvious Specificity Hacks or Workarounds
+
+**Scenario:** Adds explanatory inline comments above complex CSS selectors to explain specificity workarounds.
+
+**Requirements:**
+1. Add inline comments explaining complex selector specificity.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Note: Using double-class selector (.btn.btn) to match third-party library 
+>    specificity without resorting to harmful !important declarations. */
+> .btn.btn-custom {
+>   background-color: var(--color-primary);
+>   color: #ffffff;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Preventing Code Removal**: Comments prevent future developers from accidentally deleting seemingly redundant selector chains.
+> 2. **Specificity Rationale**: Explains why specific selector weighting was necessary without resorting to `!important`.
+> 3. **Maintainability Best Practice**: Clear explanations improve long-term codebase maintainability.
+> 
+---
+
+### Exercise 3: Structuring Modular Stylesheet Sections using Standard Comment Banners
+
+**Scenario:** Divides a global stylesheet into modular architecture sections.
+
+**Requirements:**
+1. Use clean comment dividers between CSS resets, utilities, and components.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* --------------------------------------------------------------------------
+>    1. RESET & BASE
+>    -------------------------------------------------------------------------- */
+> *, *::before, *::after {
+>   box-sizing: border-box;
+> }
+>
+> /* --------------------------------------------------------------------------
+>    2. UTILITIES
+>    -------------------------------------------------------------------------- */
+> .u-text-center {
+>   text-align: center;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Stylesheet Modularization**: Separates stylesheet concerns logically into Reset, Layout, Components, and Utilities.
+> 2. **Minification Safety**: Production CSS minifiers strip standard comments automatically during build steps.
+> 3. **Codebase Navigation**: Enables quick searching across major stylesheet sections via Ctrl+F banner keywords.
 ## 6. Related Terms
 - [CSS (Cascading Style Sheets)](css.md) — The parent language.
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The container syntax holding comments.

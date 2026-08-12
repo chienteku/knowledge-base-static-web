@@ -99,135 +99,101 @@ html, body { height: 100%; }
 .parent { height: 100%; } /* Parent explicitly defined */
 ```
 
-
-
-### Mistake 4: Expecting `padding-top: 50%` to Calculate Based on Container Height
-
-**The mistake:** Setting `padding-top: 50%` expecting padding to equal 50% of the container's height.
-
-**Why it's wrong:** In CSS box-model specifications, percentage values for `padding` and `margin` (both vertical AND horizontal) calculate relative to the container's **WIDTH**, NOT height!
-
-*Incorrect:*
-```css
-/* Expecting vertical padding to be 50% of parent height */
-div { padding-top: 50%; } /* ❌ Calculates 50% of parent WIDTH! */
-```
-
-*Fix:*
-```css
-/* Understand vertical padding percentages calculate against parent width (Aspect Ratio pattern) */
-```
-
-### Mistake 5: Using `height: 100%` on Child Elements When Parent Has No Explicit Height Set
-
-**The mistake:** Setting `height: 100%` on a child `<div>` inside a parent with `height: auto`.
-
-**Why it's wrong:** Percentage heights require parent containers to have an explicitly defined height. If parent height is `auto`, `height: 100%` resolves to `auto`.
-
-*Incorrect:*
-```css
-.child { height: 100%; } /* ❌ Fails because parent height is un-defined */
-```
-
-*Fix:*
-```css
-html, body { height: 100%; }
-.parent { height: 100%; } /* Parent explicitly defined */
-```
-
-
-
-### Mistake 6: Expecting `padding-top: 50%` to Calculate Based on Container Height
-
-**The mistake:** Setting `padding-top: 50%` expecting padding to equal 50% of the container's height.
-
-**Why it's wrong:** In CSS box-model specifications, percentage values for `padding` and `margin` (both vertical AND horizontal) calculate relative to the container's **WIDTH**, NOT height!
-
-*Incorrect:*
-```css
-/* Expecting vertical padding to be 50% of parent height */
-div { padding-top: 50%; } /* ❌ Calculates 50% of parent WIDTH! */
-```
-
-*Fix:*
-```css
-/* Understand vertical padding percentages calculate against parent width (Aspect Ratio pattern) */
-```
-
-### Mistake 7: Using `height: 100%` on Child Elements When Parent Has No Explicit Height Set
-
-**The mistake:** Setting `height: 100%` on a child `<div>` inside a parent with `height: auto`.
-
-**Why it's wrong:** Percentage heights require parent containers to have an explicitly defined height. If parent height is `auto`, `height: 100%` resolves to `auto`.
-
-*Incorrect:*
-```css
-.child { height: 100%; } /* ❌ Fails because parent height is un-defined */
-```
-
-*Fix:*
-```css
-html, body { height: 100%; }
-.parent { height: 100%; } /* Parent explicitly defined */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: The Russian Nesting Dolls
+### Exercise 1: Fluid Relative Column Sizing with Percentage Widths
 
-**Problem:** 
-- The Grandparent is `800px` wide.
-- The Parent is `width: 50%;`.
-- The Child is `width: 50%;`.
-How many pixels wide is the Child on the screen?
+**Scenario:** An author builds a 2-column layout using percentage widths (`width: 48%`) and flex distribution.
 
-**Expected output:**
+**Requirements:**
+1. Apply `width: 48%` to grid columns.
+2. Set `box-sizing: border-box`.
+
 > [!check]- Answer
-> ```text
-> 200px!
-> The Parent calculates 50% of 800px = 400px.
-> The Child calculates 50% of its Parent (400px) = 200px.
-> ```
-> - Do the math one layer at a time.
-> 
----
-
-
-
-### Exercise 2: Percentage Padding Aspect Ratio Calculation
-
-**Problem:** If parent container width is 500px, what is the computed pixel size of `padding-top: 20%`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 100px (20% of 500px parent width).
-> ```
-> ```text
-> 100px (20% of 500px parent width).
-> ```
 >
-> **Explanation:** All padding percentages (vertical and horizontal) calculate against parent width.
-> 
----
-
-### Exercise 3: Percentage Width in Flexbox
-
-**Problem:** Why use `flex-basis: 50%` instead of `width: 50%` on flex items?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> flex-basis integrates directly with Flexbox flex-grow and flex-shrink distribution algorithms.
-> ```
+> #### Implementation
+>
 > ```css
-> .flex-item {
->   flex: 0 0 50%; /* flex-basis 50% */
+> .two-column-wrapper {
+>   display: flex;
+>   justify-content: space-between;
+>   width: 100%;
+> }
+>
+> .column-half {
+>   box-sizing: border-box;
+>   width: 48%;                   /* 48% width allows 4% remaining space for middle gap */
+>   padding: 1.5rem;
+>   background-color: #ffffff;
 > }
 > ```
 >
-> **Explanation:** `flex-basis` defines initial main-axis item dimensions within Flexbox layout engines.
+> #### Technical Explanation
+>
+> 1. **The Percentage Unit (`%`)**: Calculates dimensions as a relative percentage of the parent element's containing block dimensions.
+> 2. **`border-box` Prerequisite**: Percentage widths require `box-sizing: border-box` so padding and borders do not expand columns beyond 100%.
+> 3. **Fluid Multi-Column Scaling**: Percentage columns shrink and grow fluidly as the parent container resizes.
 > 
+---
+
+### Exercise 2: Relative Percentage Padding Calculation Rules
+
+**Scenario:** Explains why vertical percentage padding is calculated relative to parent container WIDTH (not height).
+
+**Requirements:**
+1. Demonstrate `padding-top: 56.25%` video aspect ratio box.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .aspect-ratio-box {
+>   width: 100%;
+>   /* Percentage padding (top/bottom) is calculated relative to parent WIDTH! */
+>   padding-top: 56.25%;          /* 16:9 Aspect Ratio (9 / 16 = 0.5625) */
+>   position: relative;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Percentage Padding Rule**: Both horizontal AND vertical percentage padding are calculated relative to the parent container's WIDTH!
+> 2. **Historical Aspect Ratio Hack**: Used historically to maintain 16:9 aspect ratios before modern CSS `aspect-ratio` property was introduced.
+> 3. **Unexpected Layout Math**: Understanding this calculation prevents accidental container height explosions.
+> 
+---
+
+### Exercise 3: Percentage Heights Requirement in Parent Containers
+
+**Scenario:** Fixes a bug where `height: 100%` failed because parent container height was not explicitly defined.
+
+**Requirements:**
+1. Set `html, body { height: 100%; }` to enable child percentage height.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Fix: Explicit height on root containers enables child % heights! */
+> html, body {
+>   height: 100%;
+>   margin: 0;
+> }
+>
+> .full-height-app {
+>   height: 100%;                 /* Now expands to fill 100% of body height! */
+>   display: flex;
+>   flex-direction: column;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Percentage Height Fallback**: Percentage heights (`height: 50%`) fail and evaluate to `auto` if the parent container has no explicit height!
+> 2. **Root Container Chain**: To use `height: 100%` on page components, every parent up to `html` and `body` MUST specify `height: 100%`.
+> 3. **Viewport Unit Alternative**: Modern CSS prefers `min-height: 100dvh` over percentage height chains.
 ## 6. Related Terms
 - [`vw` / `vh` (Viewport Units)](viewport_units.md) — Sizing relative to the viewport instead of the parent container.
 - [`rem` vs `em`](rem_em.md) — Relative typography units.

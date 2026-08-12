@@ -176,68 +176,98 @@ span { font-variant: small-caps; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: Shorthand Compiler
+### Exercise 1: Styling Italics and Oblique Text using font-style
 
-**Problem:** Compile these distinct typography declarations into a single, clean declaration using the `font` shorthand:
+**Scenario:** An author styles publication citations and emphasis using `font-style: italic`.
 
-```css
-.card-header {
-  font-style: italic;
-  font-variant: small-caps;
-  font-weight: bold;
-  font-size: 1.5rem;
-  line-height: 1.2;
-  font-family: sans-serif;
-}
-```
+**Requirements:**
+1. Apply `font-style: italic` to `<cite>` and `.caption`.
+2. Reset `font-style: normal` on `<em>` when nested.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .card-header {
->   font: italic small-caps bold 1.5rem/1.2 sans-serif;
+> cite, .publication-title {
+>   font-style: italic;           /* Renders true italic font glyphs */
 > }
-> ```
-> - Follow the sequence: style -> variant -> weight -> size/line-height -> family.
-> 
----
-
-
-
-### Exercise 2: Small-Caps Heading Styling
-
-**Problem:** Write CSS rule applying small-caps variant to `.section-subtitle`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .section-subtitle { font-variant: small-caps; }
-> ```
-> ```css
-> .section-subtitle {
->   font-variant: small-caps;
+>
+> .caption {
+>   font-style: italic;
+>   font-size: 0.875rem;
+>   color: #64748b;
+> }
+>
+> /* Reset font-style on nested elements */
+> cite em {
+>   font-style: normal;           /* Reverts to upright text for contrast */
 > }
 > ```
 >
-> **Explanation:** `font-variant: small-caps` renders lowercase letters as smaller uppercase glyphs.
+> #### Technical Explanation
+>
+> 1. **The `font-style` Property**: Controls italic vs upright text rendering (`normal`, `italic`, `oblique`).
+> 2. **Italic vs Oblique**: `italic` uses designed cursive italic font glyphs; `oblique` mechanically slants upright glyphs.
+> 3. **Semantic Tag Styling**: HTML `<cite>` and `<em>` default to `font-style: italic` in user-agent stylesheets.
 > 
 ---
 
-### Exercise 3: Italic vs Oblique Font Style
+### Exercise 2: OpenType Tabular Numbers and Small Caps via font-variant
 
-**Problem:** What is the typographic difference between `font-style: italic` and `font-style: oblique`?
+**Scenario:** Uses `font-variant-numeric: tabular-nums` to align data numbers in financial tables.
 
-**Expected output:**
+**Requirements:**
+1. Apply `font-variant-numeric: tabular-nums` to financial data table cells.
+
 > [!check]- Answer
-> ```text
-> italic uses specially designed cursive italic glyph shapes; oblique mechanically slants standard normal font glyphs.
-> ```
-> ```text
-> italic uses specially designed cursive italic glyph shapes; oblique mechanically slants standard normal font glyphs.
+>
+> #### Implementation
+>
+> ```css
+> .financial-table td {
+>   /* Enforces monospaced numeric digits for vertical column alignment */
+>   font-variant-numeric: tabular-nums;
+> }
+>
+> .acronym-text {
+>   /* Renders lowercase letters as small capital glyphs */
+>   font-variant-caps: small-caps;
+> }
 > ```
 >
-> **Explanation:** Italic is a distinct font design; Oblique is a slanting angle transformation.
+> #### Technical Explanation
+>
+> 1. **OpenType `font-variant-numeric`**: `tabular-nums` forces all numeric digits (0-9) to have identical character widths.
+> 2. **Financial Table Alignment**: Prevents financial figures from jittering horizontally when numbers update dynamically.
+> 3. **`font-variant-caps`**: Unlocks native OpenType small caps glyphs without altering underlying HTML string data.
 > 
+---
+
+### Exercise 3: Resetting Font Styles on UI Indicators
+
+**Scenario:** Resets `font-style: normal` on `<i>` icon font tags.
+
+**Requirements:**
+1. Set `font-style: normal` on `.icon`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .icon {
+>   font-style: normal;           /* Prevents icon fonts from tilting sideways */
+>   line-height: 1;
+>   display: inline-block;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Icon Font Reset**: Prevents legacy `<i>` icon tags from inheriting unwanted italic slants.
+> 2. **Display Inline Block**: Ensures vector icon spans transform predictably.
+> 3. **Clean Utility Styling**: Maintains upright icon rendering across browsers.
 ## 6. Related Terms
 - [`font-size` & `font-weight`](font_size_weight.md) — The parent typography properties.
 - [`text-transform`](../level_07/text_transform.md) — Uppercase/lowercase formatting overrides (different from small-caps).

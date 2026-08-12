@@ -147,148 +147,157 @@ app.post('/user', async (req, res) => {
 app.post('/user', validate(userSchema), userController.create);
 ```
 
-
-
-### Mistake 4: Trusting Client Input Without Server-Side Schema Validation (Security Vulnerability)
-
-**The mistake:** Passing `req.body` directly to database models without schema validation.
-
-**Why it's wrong:** Attackers can inject malicious parameters (mass assignment vulnerabilities, prototype pollution, script tags). Always validate input payload schemas on the server using Zod or Joi.
-
-*Incorrect:*
-```javascript
-app.post('/user', async (req, res) => {
-  await User.create(req.body); // ❌ Mass assignment security vulnerability!
-});
-```
-
-*Fix:*
-```javascript
-const userSchema = z.object({ email: z.string().email(), name: z.string() });
-app.post('/user', async (req, res) => {
-  const cleanData = userSchema.parse(req.body); // Validates and strips un-allowed fields
-  await User.create(cleanData);
-});
-```
-
-### Mistake 5: Performing Input Validation Handlers Inside Controller Business Logic Functions
-
-**The mistake:** Writing 50 lines of manual `if (!req.body.email) ...` checks inside every controller.
-
-**Why it's wrong:** Manual validation boilerplate litters controller functions. Use reusable validation middleware (e.g. `validate(schema)`) executed before controllers.
-
-*Incorrect:*
-```javascript
-// 50 lines of manual if/else checks inside controller function
-```
-
-*Fix:*
-```javascript
-app.post('/user', validate(userSchema), userController.create);
-```
-
-
-
-### Mistake 6: Trusting Client Input Without Server-Side Schema Validation (Security Vulnerability)
-
-**The mistake:** Passing `req.body` directly to database models without schema validation.
-
-**Why it's wrong:** Attackers can inject malicious parameters (mass assignment vulnerabilities, prototype pollution, script tags). Always validate input payload schemas on the server using Zod or Joi.
-
-*Incorrect:*
-```javascript
-app.post('/user', async (req, res) => {
-  await User.create(req.body); // ❌ Mass assignment security vulnerability!
-});
-```
-
-*Fix:*
-```javascript
-const userSchema = z.object({ email: z.string().email(), name: z.string() });
-app.post('/user', async (req, res) => {
-  const cleanData = userSchema.parse(req.body); // Validates and strips un-allowed fields
-  await User.create(cleanData);
-});
-```
-
-### Mistake 7: Performing Input Validation Handlers Inside Controller Business Logic Functions
-
-**The mistake:** Writing 50 lines of manual `if (!req.body.email) ...` checks inside every controller.
-
-**Why it's wrong:** Manual validation boilerplate litters controller functions. Use reusable validation middleware (e.g. `validate(schema)`) executed before controllers.
-
-*Incorrect:*
-```javascript
-// 50 lines of manual if/else checks inside controller function
-```
-
-*Fix:*
-```javascript
-app.post('/user', validate(userSchema), userController.create);
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Zod Schema Configuration
+### Exercise 1: Schema-Based Request Body Validator Middleware
 
-**Problem:** Complete the Zod validation schema for a new blog post. The post requires a `title` (string, minimum 3 characters) and a `category` (must be one of: 'news', 'tutorials', or 'reviews'):
+**Scenario:** Constructs a declarative schema validation middleware that validates `req.body` against required fields and data types.
 
-```javascript
-const { z } = require('zod');
-
-// Solution Schema:
-const postSchema = z.object({
-  title: z.string().min(3, { message: "Title must be at least 3 characters" }),
-  content: z.string().optional(),
-  category: z.enum(['news', 'tutorials', 'reviews'], {
-    errorMap: () => ({ message: "Category must be news, tutorials, or reviews" })
-  })
-});
-```
-
----
+**Requirements:**
+1. Write validateSchema(schemaObj).
+2. Validate fields.
+3. Return 400 with details if validation fails.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Validating Input with Zod
-
-**Problem:** Define Zod schema for `loginSchema` requiring valid `email` string and `password` string of min length 8.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const loginSchema = z.object({ email: z.string().email(), password: z.string().min(8) });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const { z } = require('zod');
-> const loginSchema = z.object({
->   email: z.string().email(),
->   password: z.string().min(8)
-> });
+> function validateSchema(schemaObj = {}) {
+>   return function schemaValidationMiddleware(req, res, next) {
+>     const body = req.body || {};
+>     const errors = [];
+>
+>     for (const [field, rules] of Object.entries(schemaObj)) {
+>       const val = body[field];
+>
+>       if (rules.required && (val === undefined || val === null || val === "")) {
+>         errors.push({ field, message: `'${field}' is required` });
+>         continue;
+>       }
+>
+>       if (val !== undefined && rules.type && typeof val !== rules.type) {
+>         errors.push({ field, message: `'${field}' must be of type ${rules.type}` });
+>       }
+>     }
+>
+>     if (errors.length > 0) {
+>       res.statusCode = 400;
+>       res.setHeader("Content-Type", "application/json");
+>       return res.end(JSON.stringify({ success: false, error: "VALIDATION_FAILED", details: errors }));
+>     }
+>
+>     next();
+>   };
+> }
+>
+> // Verification tests
+> const schema = {
+>   name: { required: true, type: "string" },
+>   age: { required: true, type: "number" }
+> };
+>
+> const middleware = validateSchema(schema);
+> let status = 0;
+> const mockRes = { set statusCode(c) { status = c; }, setHeader: () => {}, end: () => {} };
+>
+> middleware({ body: { name: "Alice", age: "invalid" } }, mockRes, () => {});
+> console.assert(status === 400, "Test 1 Failed: Returned 400 Bad Request");
 > ```
 >
-> **Explanation:** Zod schemas validate input types and constraints at runtime.
+> #### Technical Explanation
+>
+> 1. **Declarative Schema Validation**: Validates request payload structure prior to executing controller business logic (e.g. Zod, Joi, Ajv).
+> 2. **Detailed Error Reports**: Returns array of specific field validation errors to help API consumers correct request payloads.
+> 3. **HTTP 400 Bad Request**: Standard HTTP status code for client payload validation failures.
 > 
 ---
 
-### Exercise 3: Sanitizing HTML Input
+### Exercise 2: Sanitization & XSS Input Cleaning Middleware
 
-**Problem:** Which attack type is prevented by sanitizing user input against embedded `<script>` tags? (Cross-Site Scripting / XSS).
+**Scenario:** Sanitizes string inputs in `req.body` by stripping HTML scripts and dangerous control characters to prevent Cross-Site Scripting (XSS).
 
-**Expected output:**
+**Requirements:**
+1. Write sanitizeInputMiddleware(req, res, next).
+2. Recursively clean string values.
+3. Sanitize HTML tags.
+
 > [!check]- Answer
-> ```text
-> Cross-Site Scripting (XSS)
-> ```
-> ```text
-> Cross-Site Scripting (XSS)
+>
+> #### Implementation
+>
+> ```javascript
+> function sanitizeString(str) {
+>   if (typeof str !== "string") return str;
+>   return str.replace(/<script[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+>             .replace(/<[^>]+>/g, ""); // Strip HTML tags
+> }
+>
+> function sanitizeInputMiddleware(req, res, next) {
+>   if (req.body && typeof req.body === "object") {
+>     for (const key of Object.keys(req.body)) {
+>       if (typeof req.body[key] === "string") {
+>         req.body[key] = sanitizeString(req.body[key]);
+>       }
+>     }
+>   }
+>   next();
+> }
+>
+> // Verification tests
+> const mockReq = { body: { comment: "<script>alert('xss')</script>Hello <b>World</b>" } };
+> sanitizeInputMiddleware(mockReq, {}, () => {});
+>
+> console.assert(mockReq.body.comment === "Hello World", "Test 1 Failed: Stripped HTML tags and script");
 > ```
 >
-> **Explanation:** Sanitizing HTML tags prevents malicious client-side script execution.
+> #### Technical Explanation
+>
+> 1. **Cross-Site Scripting (XSS) Defense**: Prevents attackers from storing executable JavaScript code inside database fields.
+> 2. **Input Sanitization vs Validation**: Validation rejects invalid input; Sanitization cleans and normalizes acceptable input.
+> 3. **DOMPurify / sanitize-html**: Enterprise applications use specialized HTML sanitizer packages for rich text content.
 > 
+---
+
+### Exercise 3: Query Parameter Type Casting & Range Validator
+
+**Scenario:** Validates and casts URL query parameters (`?page=2&limit=50`) enforcing default fallback values and maximum boundary limits.
+
+**Requirements:**
+1. Write parsePaginationQueryParams(queryObj, maxLimit).
+2. Cast page and limit to integers.
+3. Enforce maxLimit cap.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function parsePaginationQueryParams(queryObj = {}, maxLimit = 100) {
+>   let page = parseInt(queryObj.page, 10);
+>   let limit = parseInt(queryObj.limit, 10);
+>
+>   if (isNaN(page) || page < 1) page = 1;
+>   if (isNaN(limit) || limit < 1) limit = 20;
+>   if (limit > maxLimit) limit = maxLimit;
+>
+>   return {
+>     page,
+>     limit,
+>     offset: (page - 1) * limit
+>   };
+> }
+>
+> // Verification tests
+> console.assert(parsePaginationQueryParams({ page: "3", limit: "50" }).offset === 100, "Test 1 Failed: Offset (3-1)*50 = 100");
+> console.assert(parsePaginationQueryParams({ limit: "500" }, 100).limit === 100, "Test 2 Failed: Capped limit at maxLimit 100");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Type Casting Query Strings**: HTTP URL query parameters arrive as raw strings; explicit parsing to numbers prevents NaN SQL query bugs.
+> 2. **Resource Protection Boundaries**: Capping maximum `limit` values (e.g. max 100 records) prevents clients from requesting 100,000 records at once.
+> 3. **Calculated Offset**: Calculates SQL offset formula `(page - 1) * limit` automatically.
 ## 6. Related Terms
 - [Body Parsing (express.json())](../level_07/body_parsing.md) — The parser feeding data to the validation schemas.
 - [SQL Injection](../level_08/sql_injection.md) — Database query vulnerabilities prevented by parameterized inputs and edge validation.

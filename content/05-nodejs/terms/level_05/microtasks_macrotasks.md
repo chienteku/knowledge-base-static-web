@@ -95,97 +95,139 @@ loop();
 
 ## 5. Practice Exercises
 
-### Exercise 1: Predict the Output Priority
+### Exercise 1: Microtask vs Macrotask Execution Order Profiler
 
-**Problem:** In what exact order will these console logs print to the terminal?
+**Scenario:** A queue profiler records the exact execution sequence between Microtasks (`queueMicrotask`, `Promise`) and Macrotasks (`setTimeout`, `setImmediate`).
 
-```javascript
-console.log("1. Sync Code");
+**Requirements:**
+1. Write profileQueueOrder(logArray).
+2. Schedule Macrotasks and Microtasks.
+3. Assert Microtasks execute BEFORE Macrotasks.
 
-setTimeout(() => {
-  console.log("2. Macrotask (Timeout)");
-}, 0);
-
-Promise.resolve().then(() => {
-  console.log("3. Microtask (Promise)");
-});
-
-console.log("4. Sync Code End");
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Sync Code
-> 4. Sync Code End
-> 3. Microtask (Promise)
-> 2. Macrotask (Timeout)
-> 
-> Explanation: 
-> - Synchronous code always runs first (1, 4).
-> - The Event Loop checks the VIP Microtask line (Promises) and runs them (3).
-> - Finally, it checks the normal Macrotask line (Timeout) and runs it (2).
+>
+> #### Implementation
+>
+> ```javascript
+> function profileQueueOrder(logArray = []) {
+>   logArray.push("1_SYNC");
+>
+>   setTimeout(() => {
+>     logArray.push("4_MACRO_TIMEOUT");
+>   }, 0);
+>
+>   Promise.resolve().then(() => {
+>     logArray.push("2_MICRO_PROMISE");
+>   });
+>
+>   queueMicrotask(() => {
+>     logArray.push("3_MICRO_QUEUE");
+>   });
+> }
+>
+> // Verification tests
+> const order = [];
+> profileQueueOrder(order);
+>
+> setTimeout(() => {
+>   console.assert(order[0] === "1_SYNC", "Test 1 Failed");
+>   console.assert(order[1] === "2_MICRO_PROMISE", "Test 2 Failed");
+>   console.assert(order[2] === "3_MICRO_QUEUE", "Test 3 Failed");
+>   console.assert(order[3] === "4_MACRO_TIMEOUT", "Test 4 Failed: Macrotask runs after all microtasks");
+> }, 20);
 > ```
-> - Sync first. VIPs second. Regulars last.
+>
+> #### Technical Explanation
+>
+> 1. **Microtask Queue Execution**: Microtasks (Promise callbacks, queueMicrotask) execute immediately after current Call Stack empties, BEFORE any Macrotask.
+> 2. **Macrotask Phase Transitions**: Macrotasks (setTimeout, setImmediate, I/O) run during specific Event Loop phases.
+> 3. **Event Loop Draining Rule**: Node.js drains the ENTIRE Microtask queue before picking up the next Macrotask.
 > 
 ---
 
+### Exercise 2: Preventing Macrotask Delay Spikes via Microtask Batches
 
+**Scenario:** A task scheduler limits microtask queue depth to prevent starving the Event Loop macrotask phases.
 
-### Exercise 2: Classifying Microtasks vs Macrotasks
+**Requirements:**
+1. Write scheduleMicrotaskBatch(tasksArray, maxBatchSize).
+2. Process maxBatchSize microtasks.
+3. Yield to setImmediate if more remain.
 
-**Problem:** Classify as Microtask or Macrotask:
-1. `Promise.then()`
-2. `setTimeout()`
-3. `setImmediate()`
-4. `queueMicrotask()`
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Microtask
-> 2. Macrotask
-> 3. Macrotask
-> 4. Microtask
-> ```
-> ```text
-> 1. Microtask
-> 2. Macrotask
-> 3. Macrotask
-> 4. Microtask
+>
+> #### Implementation
+>
+> ```javascript
+> function scheduleMicrotaskBatch(tasksArray = [], maxBatchSize = 10, processTaskFn) {
+>   let index = 0;
+>
+>   function runBatch() {
+>     const end = Math.min(index + maxBatchSize, tasksArray.length);
+>     for (; index < end; index++) {
+>       queueMicrotask(() => processTaskFn(tasksArray[index]));
+>     }
+>
+>     if (index < tasksArray.length) {
+>       setImmediate(runBatch); // Yield to Macrotask phase!
+>     }
+>   }
+>
+>   runBatch();
+> }
+>
+> // Verification tests
+> const items = [1, 2, 3, 4, 5];
+> let processed = 0;
+> scheduleMicrotaskBatch(items, 2, (item) => { processed++; });
+>
+> setImmediate(() => {
+>   console.assert(processed > 0, "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** Promises and `queueMicrotask` are Microtasks; timers and `setImmediate` are Macrotasks.
+> #### Technical Explanation
+>
+> 1. **Microtask Queue Depth**: Overloading the microtask queue delays macrotask execution (timers, socket I/O).
+> 2. **Yielding via setImmediate**: Using setImmediate between microtask batches allows the Event Loop to process I/O events.
+> 3. **Starvation Mitigation**: Keeps server response times consistent under heavy async loads.
 > 
 ---
 
-### Exercise 3: Tracing Mixed Task Execution Order
+### Exercise 3: queueMicrotask Batch State Scheduler
 
-**Problem:** Predict console output:
-```javascript
-console.log('1');
-setTimeout(() => console.log('2'), 0);
-Promise.resolve().then(() => console.log('3'));
-console.log('4');
-```
+**Scenario:** Enqueues state reconciliation callbacks using native `queueMicrotask()`.
 
-**Expected output:**
+**Requirements:**
+1. Write queueMicrotaskStateUpdate(stateObj, updatesObj).
+2. Defer state merge to microtask queue.
+
 > [!check]- Answer
-> ```text
-> 1
-> 4
-> 3
-> 2
-> ```
-> ```text
-> 1
-> 4
-> 3
-> 2
+>
+> #### Implementation
+>
+> ```javascript
+> function queueMicrotaskStateUpdate(stateObj, updatesObj) {
+>   return new Promise((resolve) => {
+>     queueMicrotask(() => {
+>       Object.assign(stateObj, updatesObj);
+>       resolve(stateObj);
+>     });
+>   });
+> }
+>
+> // Verification tests
+> const state = { count: 0 };
+> queueMicrotaskStateUpdate(state, { count: 1, name: "updated" }).then(res => {
+>   console.assert(res.count === 1 && res.name === "updated", "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** Sync logs (1, 4) execute first on Call Stack, followed by Microtask Promise (3), then Macrotask timer (2).
-> 
+> #### Technical Explanation
+>
+> 1. **queueMicrotask Standard API**: Standard HTML/Node.js API for scheduling microtasks without instantiating Promise objects.
+> 2. **State Batching**: Defers state mutation to the end of current JavaScript execution frame.
+> 3. **Lightweight Scheduling**: Lower memory overhead compared to `Promise.resolve().then()`.
 ## 6. Related Terms
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The manager of these two queues.
 - [process.nextTick() vs setImmediate()](nexttick_setimmediate.md) — Related concept: process.nextTick() vs setImmediate().

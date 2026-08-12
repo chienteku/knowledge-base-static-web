@@ -183,68 +183,99 @@ html { --color: red; } /* (0-0-1) LOSES to :root (0-1-0) */
 
 ## 5. Practice Exercises
 
-### Exercise 1: CSS Theme Switch
+### Exercise 1: Defining Application Global Design System Tokens inside :root
 
-**Problem:** Declare a global primary theme color `--primary: #ff007f;` inside `:root`. Write a ruleset for a card title `.title` that uses this primary color, but override the primary color to `--primary: #00f0ff;` inside any card with the class `.dark-theme`.
+**Scenario:** An author defines global color, typography, and spacing tokens inside the `:root` pseudo-class.
 
-**Expected output:**
+**Requirements:**
+1. Define `:root` tokens.
+2. Apply `--spacing-unit: 1rem`.
+3. Apply tokens to component classes.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
+> /* Global Design System Tokens */
 > :root {
->   --primary: #ff007f;
+>   --color-primary: #2563eb;
+>   --color-primary-hover: #1d4ed8;
+>   --color-text-main: #0f172a;
+>   --color-surface-bg: #ffffff;
+>
+>   --font-family-sans: system-ui, -apple-system, sans-serif;
+>   --spacing-base: 1rem;
+>   --radius-card: 0.5rem;
 > }
-> 
-> .title {
->   color: var(--primary);
-> }
-> 
-> .dark-theme {
->   --primary: #00f0ff;
-> }
-> ```
-> - Define the default global color inside the `:root` scope.
-> - Override the custom property variable locally inside the `.dark-theme` selector.
-> 
----
-
-
-
-### Exercise 2: Global Design Tokens on :root
-
-**Problem:** Write `:root` block defining global CSS design tokens for `--color-primary: #005fcc`, `--spacing-md: 16px`, `--font-sans: 'Inter', sans-serif`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> :root { --color-primary: #005fcc; --spacing-md: 16px; --font-sans: 'Inter', sans-serif; }
-> ```
-> ```css
-> :root {
->   --color-primary: #005fcc;
->   --spacing-md: 16px;
->   --font-sans: 'Inter', sans-serif;
+>
+> body {
+>   font-family: var(--font-family-sans);
+>   color: var(--color-text-main);
+>   background-color: var(--color-surface-bg);
 > }
 > ```
 >
-> **Explanation:** `:root` is the designated container for global CSS design tokens.
+> #### Technical Explanation
+>
+> 1. **The `:root` Pseudo-Class**: Selects the highest-level element in the document tree (the `<html>` element in HTML documents).
+> 2. **Global CSS Custom Properties**: The standard location to define global CSS design tokens (`--color-primary`) accessible throughout the entire document.
+> 3. **Specificity Supremacy**: `:root` has pseudo-class specificity `(0,1,0)`, which is higher than the `html` element selector `(0,0,1)`.
 > 
 ---
 
-### Exercise 3: :root Specificity Value
+### Exercise 2: Specificity Hierarchy: :root vs html Selector
 
-**Problem:** What is the CSS specificity tuple value of the `:root` pseudo-class selector?
+**Scenario:** Demonstrates why `:root` overrides `html` selector declarations.
 
-**Expected output:**
+**Requirements:**
+1. Compare `:root` specificity `(0,1,0)` vs `html` `(0,0,1)`.
+
 > [!check]- Answer
-> ```text
-> (0, 0, 1, 0) - Equal to a CSS class selector.
-> ```
-> ```text
-> (0, 0, 1, 0) - Equal to a CSS class selector.
+>
+> #### Implementation
+>
+> ```css
+> /* Specificity (0,0,1) */
+> html {
+>   --theme-color: red;
+> }
+>
+> /* Specificity (0,1,0) - WINS THE CASCADE! */
+> :root {
+>   --theme-color: blue;
+> }
 > ```
 >
-> **Explanation:** `:root` is a pseudo-class selector with (0,0,1,0) specificity rank.
+> #### Technical Explanation
+>
+> 1. **Pseudo-Class Specificity**: `:root` is a pseudo-class, giving it a specificity score of `(0,1,0)`.
+> 2. **Element Specificity**: `html` is an element tag selector with a specificity score of `(0,0,1)`.
+> 3. **Cascading Precedence**: Tokens defined in `:root` override tokens defined in `html` regardless of declaration order.
 > 
+---
+
+### Exercise 3: Dynamic Runtime Theme Token Swapping via JavaScript
+
+**Scenario:** Updates `:root` custom properties dynamically using `document.documentElement.style.setProperty()`.
+
+**Requirements:**
+1. Demonstrate JS runtime variable modification.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> // Dynamically update primary brand color token at runtime!
+> document.documentElement.style.setProperty('--color-primary', '#10b981');
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Runtime JavaScript Mutation**: CSS variables in `:root` can be read and mutated dynamically in real time via JavaScript.
+> 2. **Instant Global Theme Updates**: Changing a single `:root` variable instantly updates every component using `var(--color-primary)` across the entire page.
+> 3. **Zero Repaint Overhead**: Highly efficient for user theme customizers and brand color pickers.
 ## 6. Related Terms
 - [`var()` (CSS Custom Properties)](var.md) — The variables stored inside `:root`.
 - [Dark Mode (`prefers-color-scheme`)](dark_mode.md) — Overwriting `:root` values.

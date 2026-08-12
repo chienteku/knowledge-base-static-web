@@ -117,140 +117,112 @@ With `transition: 1s`, it's a dimmer switch. The browser slowly turns the dial, 
 .card { transition: transform 0.3s ease, opacity 0.3s ease; }
 ```
 
-
-
-### Mistake 5: Placing `transition` Property in `:hover` State Selector Instead of Base Class
-
-**The mistake:** Writing `.btn:hover { transition: all 0.3s; background: blue; }`.
-
-**Why it's wrong:** Placing `transition` inside `:hover` animates on hover enter, but SNAPS INSTANTLY back without animation when mouse leaves. Place `transition` on base `.btn` class.
-
-*Incorrect:*
-```css
-.btn:hover { transition: background 0.3s; background: blue; } /* ❌ Snaps on hover exit! */
-```
-
-*Fix:*
-```css
-.btn {
-  transition: background-color 0.3s ease; /* Transition on base class */
-}
-.btn:hover {
-  background-color: blue;
-}
-```
-
-### Mistake 6: Using `transition: all` Indiscriminately (Performance and Unintended Property Bug)
-
-**The mistake:** Writing `transition: all 0.3s ease;` across all component classes.
-
-**Why it's wrong:** `transition: all` forces the browser to monitor EVERY property change (including layout properties like `height` or `margin`). Explicitly specify target properties (`transition: transform 0.3s, opacity 0.3s`).
-
-*Incorrect:*
-```css
-.card { transition: all 0.3s; } /* ❌ Unneeded performance monitoring! */
-```
-
-*Fix:*
-```css
-.card { transition: transform 0.3s ease, opacity 0.3s ease; }
-```
-
-
-
-### Mistake 7: Placing `transition` Property in `:hover` State Selector Instead of Base Class
-
-**The mistake:** Writing `.btn:hover { transition: all 0.3s; background: blue; }`.
-
-**Why it's wrong:** Placing `transition` inside `:hover` animates on hover enter, but SNAPS INSTANTLY back without animation when mouse leaves. Place `transition` on base `.btn` class.
-
-*Incorrect:*
-```css
-.btn:hover { transition: background 0.3s; background: blue; } /* ❌ Snaps on hover exit! */
-```
-
-*Fix:*
-```css
-.btn {
-  transition: background-color 0.3s ease; /* Transition on base class */
-}
-.btn:hover {
-  background-color: blue;
-}
-```
-
-### Mistake 8: Using `transition: all` Indiscriminately (Performance and Unintended Property Bug)
-
-**The mistake:** Writing `transition: all 0.3s ease;` across all component classes.
-
-**Why it's wrong:** `transition: all` forces the browser to monitor EVERY property change (including layout properties like `height` or `margin`). Explicitly specify target properties (`transition: transform 0.3s, opacity 0.3s`).
-
-*Incorrect:*
-```css
-.card { transition: all 0.3s; } /* ❌ Unneeded performance monitoring! */
-```
-
-*Fix:*
-```css
-.card { transition: transform 0.3s ease, opacity 0.3s ease; }
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Targeting Specific Properties
+### Exercise 1: Smooth Interactive Button Hover and Active States with transition Shorthand
 
-**Problem:** You have a button that changes both `background-color` and `color` (text color) on hover. You want the background to animate, but you want the text color to snap instantly. How do you write the transition?
+**Scenario:** An author animates hover and active button state changes smoothly using the `transition` shorthand property.
 
-**Expected output:**
+**Requirements:**
+1. Apply `transition: background-color 0.2s ease, transform 0.15s ease`.
+2. Set `:hover` and `:active` styles.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> /* Instead of using 'all', specifically target the background! */
-> transition: background-color 0.3s ease;
-> ```
-> - The first value in the shorthand is the specific property name.
-> 
----
-
-
-
-### Exercise 2: Button Hover Elevation Transition Pattern
-
-**Problem:** Write CSS transitioning `transform` and `box-shadow` over 0.2s ease on `.btn` hover.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .btn { transition: transform 0.2s ease, box-shadow 0.2s ease; } .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-> ```
-> ```css
-> .btn {
->   transition: transform 0.2s ease, box-shadow 0.2s ease;
+> .btn-interactive {
+>   display: inline-flex;
+>   align-items: center;
+>   padding: 0.75rem 1.5rem;
+>   background-color: #2563eb;
+>   color: #ffffff;
+>   border-radius: 0.375rem;
+>   /* Transition Shorthand: property duration timing-function */
+>   transition: background-color 0.2s ease, transform 0.15s ease;
 > }
-> .btn:hover {
->   transform: translateY(-2px);
->   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+>
+> .btn-interactive:hover {
+>   background-color: #1d4ed8;
+>   transform: translateY(-1px);
+> }
+>
+> .btn-interactive:active {
+>   transform: translateY(0);    /* Tactile press feedback */
 > }
 > ```
 >
-> **Explanation:** Explicitly listed transition properties animate hardware-accelerated transforms and shadows cleanly.
+> #### Technical Explanation
+>
+> 1. **The `transition` Shorthand Property**: Specifies how CSS property changes animate smoothly between states (`property`, `duration`, `timing-function`, `delay`).
+> 2. **Explicit Property Listing**: ALWAYS list explicit properties (`transition: background-color 0.2s, transform 0.15s`) instead of `transition: all` to optimize browser rendering performance!
+> 3. **Tactile Hover/Active States**: Providing 150-200ms transitions creates responsive, tactile UI micro-interactions.
 > 
 ---
 
-### Exercise 3: Non-Animatable CSS Properties
+### Exercise 2: Accordion Drawer Expansion Transitioning grid-template-rows
 
-**Problem:** Can `display` (e.g. `display: none` to `display: block`) be animated smoothly with CSS `transition`? (Yes/No).
+**Scenario:** Animates smooth accordion drawer height expansion using CSS Grid `grid-template-rows` transitions.
 
-**Expected output:**
+**Requirements:**
+1. Set default `grid-template-rows: 0fr`.
+2. Transition to `grid-template-rows: 1fr` on open state.
+
 > [!check]- Answer
-> ```text
-> No. display is a discrete property and cannot interpolate smooth frame steps.
-> ```
-> ```text
-> No. display is a discrete property and cannot interpolate smooth frame steps.
+>
+> #### Implementation
+>
+> ```css
+> .accordion-wrapper {
+>   display: grid;
+>   grid-template-rows: 0fr;       /* Collapsed state: 0fr row height */
+>   transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+> }
+>
+> .accordion-wrapper.is-open {
+>   grid-template-rows: 1fr;       /* Expanded state: 1fr auto row height */
+> }
+>
+> .accordion-inner {
+>   overflow: hidden;             /* Required for zero-height clipping */
+> }
 > ```
 >
-> **Explanation:** Discrete properties (`display`, `visibility`) cannot interpolate intermediate animation frames without `@starting-style`.
+> #### Technical Explanation
+>
+> 1. **The `0fr` to `1fr` Grid Transition Trick**: Modern CSS enables animating accordion drawers from height 0 to `auto` by transitioning `grid-template-rows` from `0fr` to `1fr`!
+> 2. **Replaces JavaScript Height Math**: Eliminates legacy JavaScript element height calculations (`element.scrollHeight`).
+> 3. **Smooth Performance**: Runs smoothly in modern browsers without layout thrashing.
 > 
+---
+
+### Exercise 3: Optimizing GPU Composited Transition Properties
+
+**Scenario:** Explains why transitioning `transform` and `opacity` runs on the GPU while `width` and `height` trigger heavy CPU repaints.
+
+**Requirements:**
+1. Compare GPU-accelerated transitions (`transform`) vs CPU layout thrashing (`width`).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* ❌ Heavy CPU Layout Thrashing: Transitioning width/height triggers Reflow -> Repaint on every frame! */
+> /* .bad-card { transition: width 0.3s, height 0.3s; } */
+>
+> /* ✅ GPU Accelerated Compositor Thread: Smooth 60fps transitions! */
+> .good-card {
+>   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The 4 Pipeline Stages**: CSS animations run through Recalculate Style -> Layout (Reflow) -> Paint -> Composite.
+> 2. **Compositor-Only Properties**: Only `transform` and `opacity` bypass Layout and Paint stages, executing strictly on the GPU compositor thread.
+> 3. **60fps Performance Rule**: Always restrict UI animations to `transform` and `opacity` for smooth 60fps mobile performance.
 ## 6. Related Terms
 - [`transform` (Scale, Translate, Rotate)](transform.md) — The most common property to animate (e.g., smoothly scaling a button up to be 10% larger on hover).
 - [`@keyframes` & `animation`](animation.md) — The multi-step alternative for complex, non-interactive animation loops.

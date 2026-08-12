@@ -189,136 +189,97 @@ grid-template-columns: repeat(auto-fit, 250px); /* ❌ Non-fluid fixed columns *
 ```css
 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive fluid grid */
 ```
-
-
-
-### Mistake 4: Confusing `auto-fill` with `auto-fit` in Responsive Grids
-
-**The mistake:** Using `auto-fill` when you want a few items to stretch and fill the remaining row width on wide screens.
-
-**Why it's wrong:** `auto-fill` creates empty virtual column tracks on wide screens when item count is small. `auto-fit` collapses empty tracks to 0px, allowing existing items to stretch across the full row.
-
-*Incorrect:*
-```css
-/* With 2 items on wide screen: auto-fill leaves empty blank column tracks */
-grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-```
-
-*Fix:*
-```css
-/* auto-fit collapses empty tracks, stretching items to fill full row width: */
-grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-```
-
-### Mistake 5: Using `auto-fill`/`auto-fit` Without `minmax()` Function
-
-**The mistake:** Writing `grid-template-columns: repeat(auto-fit, 250px);`.
-
-**Why it's wrong:** Using fixed `250px` without `minmax()` creates fixed columns that fail to stretch fluidly across remaining free space.
-
-*Incorrect:*
-```css
-grid-template-columns: repeat(auto-fit, 250px); /* ❌ Non-fluid fixed columns */
-```
-
-*Fix:*
-```css
-grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive fluid grid */
-```
-
-
-
-### Mistake 6: Confusing `auto-fill` with `auto-fit` in Responsive Grids
-
-**The mistake:** Using `auto-fill` when you want a few items to stretch and fill the remaining row width on wide screens.
-
-**Why it's wrong:** `auto-fill` creates empty virtual column tracks on wide screens when item count is small. `auto-fit` collapses empty tracks to 0px, allowing existing items to stretch across the full row.
-
-*Incorrect:*
-```css
-/* With 2 items on wide screen: auto-fill leaves empty blank column tracks */
-grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-```
-
-*Fix:*
-```css
-/* auto-fit collapses empty tracks, stretching items to fill full row width: */
-grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-```
-
-### Mistake 7: Using `auto-fill`/`auto-fit` Without `minmax()` Function
-
-**The mistake:** Writing `grid-template-columns: repeat(auto-fit, 250px);`.
-
-**Why it's wrong:** Using fixed `250px` without `minmax()` creates fixed columns that fail to stretch fluidly across remaining free space.
-
-*Incorrect:*
-```css
-grid-template-columns: repeat(auto-fit, 250px); /* ❌ Non-fluid fixed columns */
-```
-
-*Fix:*
-```css
-grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive fluid grid */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Fill vs Fit Selection
+### Exercise 1: Zero-Media-Query Fluid Responsive Grid Cards with auto-fit
 
-**Problem:** You are building a search results page. The items are card blocks. If a user searches for something rare and only gets 1 card result on a wide desktop screen:
-- Option A: You want the card to stay its normal size and sit on the left.
-- Option B: You want the card to stretch and take up the entire width of the page.
-Which keyword (`auto-fill` or `auto-fit`) do you use for Option A, and which for Option B?
+**Scenario:** An author builds a responsive fluid product card grid that wraps and expands automatically without writing media queries.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: grid`.
+2. Use `grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr))`.
+3. Set `gap: 1.5rem`.
+
 > [!check]- Answer
-> ```text
-> - Option A: Use `auto-fill` (leaves the remaining column slots open).
-> - Option B: Use `auto-fit` (collapses the empty slots, stretching the single card).
-> ```
-> - Which keyword "fills" the layout row with empty spaces, and which "fits" the active items?
-> 
----
-
-
-
-### Exercise 2: Responsive Media-Query-Less Grid Template
-
-**Problem:** Write classic single-line CSS Grid rule for responsive card grid (min 280px cards, fluid expansion, auto-stretching).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .grid {
+> .fluid-card-grid {
 >   display: grid;
->   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
->   gap: 20px;
+>   /* Auto-fit: Fills available space, expanding columns to fill empty row space */
+>   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+>   gap: 1.5rem;
+>   padding: 1.5rem;
 > }
 > ```
 >
-> **Explanation:** The `repeat(auto-fit, minmax(280px, 1fr))` pattern builds responsive grids with zero media queries.
+> #### Technical Explanation
+>
+> 1. **The `auto-fit` Keyword**: Creates as many grid tracks as can fit in the container, and EXPANDS existing columns to stretch across any leftover empty space.
+> 2. **Zero-Media-Query Responsiveness**: `repeat(auto-fit, minmax(18rem, 1fr))` creates a fully responsive multi-column layout without writing a single `@media` breakpoint!
+> 3. **`minmax(18rem, 1fr)` Minimum Guard**: Guarantees cards never shrink below `18rem` (288px) before wrapping to the next line.
 > 
 ---
 
-### Exercise 3: auto-fill vs auto-fit Trait Difference
+### Exercise 2: Comparing auto-fill vs auto-fit Column Expansion Behaviors
 
-**Problem:** What happens when 2 items of min width 200px are placed in a 1000px wide grid using `auto-fill` vs `auto-fit`?
+**Scenario:** Demonstrates the key behavioral difference between `auto-fill` and `auto-fit` when only a few items exist.
 
-**Expected output:**
+**Requirements:**
+1. Apply `auto-fill` to `.grid-fill`.
+2. Apply `auto-fit` to `.grid-fit`.
+
 > [!check]- Answer
-> ```text
-> auto-fill keeps 5 track slots (2 items + 3 empty tracks); auto-fit collapses empty tracks so the 2 items stretch to 500px each.
-> ```
-> ```text
-> auto-fill keeps 5 track slots (2 items + 3 empty tracks); auto-fit collapses empty tracks so the 2 items stretch to 500px each.
+>
+> #### Implementation
+>
+> ```css
+> /* auto-fill: Creates empty ghost tracks if space permits; items stay at 18rem */
+> .grid-fill {
+>   display: grid;
+>   grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+> }
+>
+> /* auto-fit: Collapses empty tracks; 1 item stretches 100% across container width */
+> .grid-fit {
+>   display: grid;
+>   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+> }
 > ```
 >
-> **Explanation:** `auto-fit` stretches items across full width; `auto-fill` preserves empty track slots.
+> #### Technical Explanation
+>
+> 1. **`auto-fill` Behavior**: Reserves empty grid tracks for future items; existing items maintain their `minmax` minimum size rather than stretching.
+> 2. **`auto-fit` Behavior**: Collapses empty grid tracks to 0px and stretches existing items to fill 100% of the row width.
+> 3. **Card Grid Best Practice**: Use `auto-fit` for product galleries where single items should fill the top row nicely.
 > 
+---
+
+### Exercise 3: Creating Empty Placeholder Tracks with auto-fill in Dashboards
+
+**Scenario:** Uses `auto-fill` in dashboard grids to maintain fixed column grid alignments.
+
+**Requirements:**
+1. Apply `auto-fill` for strict column alignment.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .dashboard-metrics {
+>   display: grid;
+>   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+>   gap: 1rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Dashboard Alignment**: `auto-fill` maintains consistent metric card widths even when only 1 or 2 widgets are active.
+> 2. **Grid Structure Stability**: Prevents a single metric card from stretching awkwardly across the entire screen.
+> 3. **Fluid Responsiveness**: Wraps naturally when screen width drops below `14rem` per card.
 ## 6. Related Terms
 - [`repeat()` Function](grid_repeat.md) — The loop container.
 - [`minmax()` Function](grid_minmax.md) — The required track bounds function.

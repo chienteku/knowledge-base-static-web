@@ -157,77 +157,113 @@ Created by Jonathan Snook, SMACSS categorizes CSS rules into 5 distinct categori
 
 ## 5. Practice Exercises
 
-### Exercise 1: BEM Refactor
+### Exercise 1: Structuring BEM Components with Block, Element, Modifier Naming
 
-**Problem:** Refactor the following nested CSS ruleset into BEM classes. Assume the component block name is `navbar`.
+**Scenario:** An author structures a product card component using BEM (Block, Element, Modifier) CSS naming conventions.
 
-```css
-.navbar { background-color: #333; }
-.navbar ul li { display: inline-block; }
-.navbar ul li a { color: white; }
-.navbar ul li a.active { color: yellow; }
-```
+**Requirements:**
+1. Define Block `.product-card`.
+2. Define Element `.product-card__title`.
+3. Define Modifier `.product-card--featured`.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .navbar { background-color: #333; }
-> .navbar__item { display: inline-block; }
-> .navbar__link { color: white; }
-> .navbar__link--active { color: yellow; }
+> /* BEM Block: Standalone entity */
+> .product-card {
+>   background-color: #ffffff;
+>   border: 1px solid #e2e8f0;
+>   border-radius: 0.5rem;
+>   padding: 1.5rem;
+> }
+>
+> /* BEM Element: Child component dependent on Block (__) */
+> .product-card__title {
+>   font-size: 1.25rem;
+>   font-weight: 700;
+>   color: #0f172a;
+> }
+>
+> .product-card__button {
+>   padding: 0.5rem 1rem;
+>   background-color: #2563eb;
+>   color: #ffffff;
+> }
+>
+> /* BEM Modifier: Variant or state flag (--) */
+> .product-card--featured {
+>   border-color: #2563eb;
+>   box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.1);
+> }
 > ```
-> - The Block name is `navbar`.
-> - Identify sub-elements (`item`, `link`) and modifiers (`active`).
-> - Use BEM delimiters (`__` for elements, `--` for modifiers) to write classes with single specificity weights.
+>
+> #### Technical Explanation
+>
+> 1. **BEM Methodology**: Block, Element, Modifier naming methodology for creating modular, reusable CSS components.
+> 2. **Block (`.product-card`)**: Represents the top-level independent component container.
+> 3. **Element (`__title`)**: Represents a child part inside the block, denoted by double underscores `__`.
+> 4. **Modifier (`--featured`)**: Represents a variant or state change, denoted by double hyphens `--`.
+> 5. **Flat Specificity**: Guarantees low specificity (single class name `0,1,0`), eliminating CSS override wars.
 > 
 ---
 
+### Exercise 2: Preventing Specificity Bloat with BEM Naming Conventions
 
+**Scenario:** Refactors deep nested CSS selectors into single-class BEM rules.
 
-### Exercise 2: BEM Component Deconstruction
+**Requirements:**
+1. Replace `.nav ul li a` with `.nav__link`.
 
-**Problem:** Write BEM class names for: Button block (`btn`), Icon element inside button (`btn__icon`), Disabled modifier (`btn--disabled`).
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Block: .btn
-> Element: .btn__icon
-> Modifier: .btn--disabled
-> ```
-> ```html
-> <button class="btn btn--disabled">
->   <svg class="btn__icon"></svg>
->   Submit
-> </button>
+>
+> #### Implementation
+>
+> ```css
+> /* ❌ High Specificity Nesting (Anti-Pattern):
+> .main-nav ul li a.active { color: blue; } 
+> */
+>
+> /* ✅ Flat BEM Specificity (0,1,0): */
+> .main-nav__link--active {
+>   color: #2563eb;
+> }
 > ```
 >
-> **Explanation:** BEM constructs modular, self-documenting CSS class names.
+> #### Technical Explanation
+>
+> 1. **Flat Specificity Architecture**: BEM keeps all selectors at single-class specificity `(0,1,0)`.
+> 2. **No Cascade Lock-in**: Prevents deeply nested selector chains from breaking component reusability.
+> 3. **Easy Code Maintenance**: Developers can update component styles without fearing unintended side effects.
 > 
 ---
 
-### Exercise 3: CSS Methodologies Overview
+### Exercise 3: Comparing BEM, OOCSS, and Utility-First CSS Architectures
 
-**Problem:** Match CSS methodology acronym to full name:
-1. BEM
-2. OOCSS
-3. SMACSS
+**Scenario:** Compares component-based BEM with Utility-First CSS approaches.
 
-**Expected output:**
+**Requirements:**
+1. Explain architectural trade-offs.
+
 > [!check]- Answer
-> ```text
-> 1. Block Element Modifier
-> 2. Object-Oriented CSS
-> 3. Scalable and Modular Architecture for CSS
-> ```
-> ```text
-> 1. BEM -> Block Element Modifier
-> 2. OOCSS -> Object-Oriented CSS
-> 3. SMACSS -> Scalable and Modular Architecture for CSS
+>
+> #### Implementation
+>
+> ```css
+> /* BEM Component: Encapsulated semantic component */
+> .btn-primary { padding: 0.75rem 1.5rem; background: #2563eb; color: #fff; }
+>
+> /* Utility-First: Single-purpose atomic utilities */
+> .p-4 { padding: 1rem; }
+> .bg-blue { background-color: #2563eb; }
 > ```
 >
-> **Explanation:** CSS methodologies establish naming and architectural conventions.
-> 
+> #### Technical Explanation
+>
+> 1. **BEM Strengths**: Provides clean semantic HTML markup and encapsulated component boundaries.
+> 2. **Utility-First Strengths**: Rapid prototyping and minimal stylesheet growth over time.
+> 3. **Architectural Decision**: Senior CSS Architects choose the methodology best suited for team scale.
 ## 6. Related Terms
 - [CSS Preprocessors (Sass & SCSS)](preprocessors.md) — Tools that help organize BEM naming modules.
 - [CSS Reset vs. Normalize](reset_normalize.md) — Base architecture configs.

@@ -175,79 +175,108 @@ $primary-color: #ff007f;
 
 ## 5. Practice Exercises
 
-### Exercise 1: SCSS BEM Nesting
+### Exercise 1: Refactoring Sass/SCSS Variables and Nesting to Native Modern CSS
 
-**Problem:** Rewrite the following plain CSS block into nested SCSS format using the parent reference operator (`&`).
+**Scenario:** An author refactors legacy Sass `$variables` and SCSS nested syntax into native CSS variables and native CSS nesting.
 
-```css
-.card { padding: 20px; }
-.card__header { font-weight: bold; }
-.card__header:hover { color: red; }
-```
+**Requirements:**
+1. Replace `$color` with `var(--color)`.
+2. Use native CSS nesting syntax.
 
-**Expected output:**
 > [!check]- Answer
-> ```scss
+>
+> #### Implementation
+>
+> ```css
+> /* Native Modern CSS (Zero Preprocessor Required!) */
+> :root {
+>   --color-primary: #2563eb;
+>   --color-surface: #ffffff;
+> }
+>
 > .card {
->   padding: 20px;
-> 
->   &__header {
->     font-weight: bold;
-> 
->     &:hover {
->       color: red;
->     }
+>   background-color: var(--color-surface);
+>   padding: 1.5rem;
+>
+>   /* Native CSS Nesting (&) supported in all modern browsers! */
+>   & .card__title {
+>     color: var(--color-primary);
+>     font-size: 1.25rem;
+>   }
+>
+>   &:hover {
+>     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 >   }
 > }
 > ```
-> - Nest the `__header` class inside `.card`.
-> - Use the parent reference operator `&` to join the strings together.
-> - Nest the `:hover` rule inside `__header`.
+>
+> #### Technical Explanation
+>
+> 1. **Native CSS Nesting**: Modern CSS natively supports element nesting using `&`, replacing the primary reason teams used Sass/SCSS preprocessors.
+> 2. **Native CSS Variables vs Sass `$variables`**: Native `--custom-properties` live dynamically in the DOM and respond to runtime media queries, whereas Sass `$vars` compile to static text!
+> 3. **Reduced Tooling Overhead**: Eliminates heavy Ruby/Node Sass compilation build steps for standard projects.
 > 
 ---
 
+### Exercise 2: Sass Mixin vs Modern CSS Custom Properties
 
+**Scenario:** Replaces heavy Sass `@mixin` duplication with native CSS custom properties.
 
-### Exercise 2: Sass Parent Selector & BEM Pattern
+**Requirements:**
+1. Refactor `@include button-style` to CSS variables.
 
-**Problem:** Write SCSS using parent selector `&` to generate `.btn` and `.btn--active` modifier.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> .btn { color: red; &--active { color: blue; } }
-> ```
-> ```scss
+>
+> #### Implementation
+>
+> ```css
 > .btn {
->   color: red;
->   &--active {
->     color: blue;
+>   --btn-bg: #2563eb;
+>   background-color: var(--btn-bg);
+>   padding: 0.75rem 1.5rem;
+> }
+>
+> .btn-secondary {
+>   --btn-bg: #64748b;            /* Swaps background color cleanly via variable override! */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Eliminating Code Duplication**: Sass `@mixin` duplicates CSS declarations across every instance; native CSS variables change values dynamically with 0 code duplication.
+> 2. **DOM Inspection**: CSS variables can be inspected and updated live in browser DevTools.
+> 3. **Dynamic Theming**: Supports runtime JavaScript variable updates.
+> 
+---
+
+### Exercise 3: Modern Native CSS Nesting (&) Best Practices
+
+**Scenario:** Demonstrates proper syntax rules for native CSS nesting.
+
+**Requirements:**
+1. Apply `&` nesting selector.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .alert {
+>   padding: 1rem;
+>   background-color: #f8fafc;
+>
+>   &.alert--success {
+>     background-color: #dcfce7;
+>     color: #166534;
 >   }
 > }
 > ```
 >
-> **Explanation:** Parent selector `&` concatenates parent BEM class prefixes in SCSS.
-> 
----
-
-### Exercise 3: Sass vs Native CSS Features
-
-**Problem:** List 2 features historically requiring Sass preprocessors that are now natively supported in modern CSS.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Native CSS Variables (var())
-> 2. Native CSS Nesting (& selector)
-> (or calc(), color functions)
-> ```
-> ```text
-> 1. Native CSS Variables (var())
-> 2. Native CSS Nesting (& selector)
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** Modern CSS specifications natively adopt core preprocessor capabilities.
-> 
+> 1. **The `&` Nesting Selector**: Refers directly to the parent selector box.
+> 2. **BEM Compatibility**: Supports nested modifier classes cleanly (`&.alert--success`).
+> 3. **Browser Support**: Supported natively across all modern evergreen browsers.
 ## 6. Related Terms
 - [`@import`](import.md) — Bundling modular styles.
 - [CSS Methodologies (BEM, OOCSS, SMACSS)](methodologies.md) — Component naming schemes.

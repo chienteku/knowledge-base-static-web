@@ -113,59 +113,94 @@ img.avatar { width: 100px; height: 100px; border-radius: 50%; /* Perfect circle 
 
 ## 5. Practice Exercises
 
-### Exercise 1: Targeting specific corners
+### Exercise 1: Rounded Card Components and Pill Badges with border-radius
 
-**Problem:** You are building a chat bubble. You want the top-left, top-right, and bottom-right corners to be heavily rounded, but you want the bottom-left corner to be perfectly sharp (pointy) to show that the person on the left is speaking. How do you do this?
+**Scenario:** An author styles rounded UI card components (`0.75rem`) and pill-shaped status badges (`9999px`).
 
-**Expected output:**
+**Requirements:**
+1. Set `border-radius: 0.75rem` on `.card`.
+2. Set `border-radius: 9999px` on `.pill-badge`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> /* border-radius starts at top-left, and goes clockwise! */
-> /* top-left | top-right | bottom-right | bottom-left */
-> border-radius: 20px 20px 20px 0;
-> ```
-> - Like margin and padding, `border-radius` is a shorthand property that can take 4 values!
-> 
----
-
-
-
-### Exercise 2: Pill Button Border Radius Pattern
-
-**Problem:** Write CSS `border-radius` setting pill shape on button of height 40px.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .btn-pill { border-radius: 9999px; }
-> ```
-> ```css
-> .btn-pill {
->   border-radius: 9999px;
+> .ui-card {
+>   background-color: #ffffff;
+>   border-radius: 0.75rem;        /* 12px relative rounded corners */
+>   padding: 1.5rem;
+> }
+>
+> .pill-badge {
+>   display: inline-block;
+>   padding: 0.25rem 0.75rem;
+>   border-radius: 9999px;        /* Creates a perfect rounded pill shape */
+>   background-color: #dbeafe;
+>   color: #1e40af;
 > }
 > ```
 >
-> **Explanation:** Large pixel values (`9999px`) render perfect pill-shaped rounded ends.
+> #### Technical Explanation
+>
+> 1. **The `border-radius` Property**: Rounds the outer corners of an element's border box.
+> 2. **Pill Shape Technique (`9999px`)**: Setting a huge pixel radius (`9999px`) creates perfectly semi-circular ends on rectangular badges regardless of width.
+> 3. **Relative `rem` Scaling**: Using `rem` units for corner radii ensures rounded corners scale smoothly when font sizes change.
 > 
 ---
 
-### Exercise 3: Asymmetric Corner Radius Syntax
+### Exercise 2: Circular Avatar Images using border-radius: 50%
 
-**Problem:** Write `border-radius` shorthand setting top-left 10px, top-right 20px, bottom-right 30px, bottom-left 40px.
+**Scenario:** Creates a perfect circular user avatar image from a square media container.
 
-**Expected output:**
+**Requirements:**
+1. Apply `width: 4rem; height: 4rem; border-radius: 50%;`.
+
 > [!check]- Answer
-> ```text
-> border-radius: 10px 20px 30px 40px;
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .custom-box {
->   border-radius: 10px 20px 30px 40px;
+> .user-avatar-circle {
+>   width: 4rem;
+>   height: 4rem;
+>   border-radius: 50%;           /* Converts square element box into a perfect circle */
+>   object-fit: cover;
 > }
 > ```
 >
-> **Explanation:** 4-value `border-radius` sets Top-Left, Top-Right, Bottom-Right, Bottom-Left corners in clockwise order.
+> #### Technical Explanation
+>
+> 1. **`50%` Circle Prerequisite**: `border-radius: 50%` creates a perfect circle ONLY if the element has equal width and height (`width == height`).
+> 2. **Elliptical Distortion Warning**: If width and height are unequal, `border-radius: 50%` renders an oval/ellipse shape!
+> 3. **Image Media Integration**: Pair with `object-fit: cover` so profile photos don't distort inside circular bounds.
 > 
+---
+
+### Exercise 3: Asymmetric Organic Shapes using 8-Value Elliptical border-radius
+
+**Scenario:** Styles an organic asymmetric decorative card shape using 8-value syntax.
+
+**Requirements:**
+1. Apply `border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .organic-shape-card {
+>   /* 8-value syntax: horizontal radii / vertical radii */
+>   border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+>   background: linear-gradient(135deg, #2563eb, #1e1b4b);
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **8-Value Syntax**: The slash `/` separates horizontal radii from vertical radii (`top-left top-right bottom-right bottom-left / ...`).
+> 2. **Organic Design Trends**: Enables creating fluid, asymmetrical blob shapes without SVG graphics.
+> 3. **CSS Animation Potential**: Asymmetric radii can be animated smoothly on hover.
 ## 6. Related Terms
 - [Border](../level_02/border.md) — The physical border boundaries.
 - [`box-shadow` (Card Shadows)](box_shadow.md) — Shadow rings which follow the border radius boundaries.

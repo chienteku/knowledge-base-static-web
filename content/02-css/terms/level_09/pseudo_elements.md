@@ -186,64 +186,103 @@ img::after { content: "Caption"; } /* ❌ Void elements cannot have pseudo-eleme
 
 ## 5. Practice Exercises
 
-### Exercise 1: Bullet Customization
+### Exercise 1: Custom Decorative Icon Accents using ::before and ::after
 
-**Problem:** You want to add a green bullet character (`•`) in front of every paragraph having the class `.intro`. Write the CSS rule.
+**Scenario:** An author adds a decorative bullet icon before list items using `::before` and `content: ""`.
 
-**Expected output:**
+**Requirements:**
+1. Target `.custom-list li::before`.
+2. Set `content: ""`.
+3. Set `display: inline-block` and dimensions.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .intro::before {
->   content: "• ";
->   color: green;
->   font-weight: bold;
+> .custom-list {
+>   list-style: none;
+>   padding: 0;
 > }
-> ```
-> - Target the content inserted *before* paragraph text.
-> - Declare the character inside the mandatory property.
-> 
----
-
-
-
-### Exercise 2: Custom Tooltip Pseudo-Element Pattern
-
-**Problem:** Write CSS `::after` pseudo-element for `[data-tooltip]` displaying `attr(data-tooltip)` on hover.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> [data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; }
-> ```
-> ```css
-> [data-tooltip]:hover::after {
->   content: attr(data-tooltip);
+>
+> .custom-list li {
+>   position: relative;
+>   padding-left: 1.5rem;
+>   margin-bottom: 0.5rem;
+> }
+>
+> /* Decorative Custom Bullet Accent */
+> .custom-list li::before {
+>   content: "";                  /* MANDATORY: Creates pseudo-element box */
 >   position: absolute;
->   background: #000;
->   color: #fff;
->   padding: 4px 8px;
+>   left: 0;
+>   top: 0.5rem;
+>   width: 0.5rem;
+>   height: 0.5rem;
+>   border-radius: 50%;
+>   background-color: #2563eb;
 > }
 > ```
 >
-> **Explanation:** `content: attr(data-attribute)` dynamically displays HTML data attribute values.
+> #### Technical Explanation
+>
+> 1. **The `::before` & `::after` Pseudo-Elements**: Insert decorative inline box elements into the DOM before or after an element's actual content.
+> 2. **Mandatory `content` Property**: Pseudo-elements WILL NOT RENDER unless `content: ""` is explicitly declared (even if empty string).
+> 3. **Decorative HTML Cleanup**: Keeps decorative visual accents (bullets, badges, lines) strictly in CSS, keeping HTML clean and semantic.
 > 
 ---
 
-### Exercise 3: Single vs Double Colon Pseudo-Element Syntax
+### Exercise 2: Custom Text Selection Highlights with ::selection
 
-**Problem:** Why does modern CSS specification use double colons (`::before`) for pseudo-elements and single colons (`:hover`) for pseudo-classes?
+**Scenario:** Customizes visual text highlight colors when users select text on page using `::selection`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `::selection` background and text color.
+
 > [!check]- Answer
-> ```text
-> To distinguish pseudo-elements (generated sub-nodes) from pseudo-classes (element states).
-> ```
-> ```text
-> To distinguish pseudo-elements (generated sub-nodes) from pseudo-classes (element states).
+>
+> #### Implementation
+>
+> ```css
+> /* Global Text Selection Style */
+> ::selection {
+>   background-color: #2563eb;    /* Primary brand blue background fill */
+>   color: #ffffff;               /* Crisp white text color */
+> }
 > ```
 >
-> **Explanation:** Double colons (`::`) specify generated DOM sub-elements.
+> #### Technical Explanation
+>
+> 1. **The `::selection` Pseudo-Element**: Applies styles to the portion of an element that is highlighted/selected by the user's cursor.
+> 2. **Brand Polish**: Replaces default blue browser selection colors with custom brand colors.
+> 3. **Property Restrictions**: Only supports `color`, `background-color`, and `text-shadow` for security and performance.
 > 
+---
+
+### Exercise 3: Styling Input Placeholders with ::placeholder
+
+**Scenario:** Styles muted input placeholder text using `::placeholder`.
+
+**Requirements:**
+1. Apply `color: #94a3b8` and `font-style: italic` to `::placeholder`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .form-input::placeholder {
+>   color: #94a3b8;               /* Muted slate text color */
+>   font-style: italic;
+>   opacity: 1;                   /* Fixes Firefox default placeholder opacity reduction */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `::placeholder` Pseudo-Element**: Targets placeholder text rendered inside `<input>` or `<textarea>` elements.
+> 2. **Firefox Opacity Fix**: Firefox defaults `::placeholder` to `opacity: 0.54`; always add `opacity: 1` when setting custom placeholder colors.
+> 3. **WCAG Contrast Requirement**: Ensure placeholder text color maintains sufficient contrast while remaining visually distinct from typed input text.
 ## 6. Related Terms
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Interactive state selectors.
 - [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — Overriding default inline display constraints.

@@ -110,67 +110,139 @@ function get() {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Manual Promisification
+### Exercise 1: Custom Promisify Converter with util.promisify.custom Symbol
 
-**Problem:** How does `util.promisify` actually work under the hood? Write a function that takes an old callback function `getUser(id, callback)` and manually wraps it in a Promise.
+**Scenario:** Converts error-first callback APIs into Promise-returning functions, supporting custom promisified implementations via `util.promisify.custom`.
 
-**Expected output:**
+**Requirements:**
+1. Write promisifyCustom(originalFn).
+2. Check for custom symbol override.
+3. Return Promise-wrapped function.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> function getUserPromise(id) {
->   // 1. Return a new Promise
->   return new Promise((resolve, reject) => {
->     // 2. Call the old function
->     getUser(id, (err, data) => {
->       // 3. Reject if error, Resolve if success
->       if (err) return reject(err);
->       resolve(data);
+> const CUSTOM_PROMISIFY_SYMBOL = Symbol.for("util.promisify.custom");
+>
+> function promisifyCustom(originalFn) {
+>   if (originalFn[CUSTOM_PROMISIFY_SYMBOL]) {
+>     return originalFn[CUSTOM_PROMISIFY_SYMBOL];
+>   }
+>
+>   return function (...args) {
+>     return new Promise((resolve, reject) => {
+>       originalFn(...args, (err, result) => {
+>         if (err) return reject(err);
+>         resolve(result);
+>       });
 >     });
->   });
+>   };
 > }
+>
+> // Verification tests
+> const legacyFn = (cb) => cb(null, "LEGACY_DATA");
+> const customFn = () => Promise.resolve("CUSTOM_OVERRIDE");
+> legacyFn[CUSTOM_PROMISIFY_SYMBOL] = customFn;
+>
+> const promisified = promisifyCustom(legacyFn);
+> promisified().then(res => {
+>   console.assert(res === "CUSTOM_OVERRIDE", "Test 1 Failed: Custom symbol took precedence");
+> });
 > ```
-> - You need to return `new Promise(...)`.
-> - If `err` exists, what do you call? `resolve` or `reject`?
+>
+> #### Technical Explanation
+>
+> 1. **util.promisify Core Function**: Built-in Node.js utility converting error-first callback functions into Promise-returning functions.
+> 2. **Custom Promisify Symbol**: Functions can attach `[util.promisify.custom]` to supply optimized Promise implementations.
+> 3. **Modernizing Legacy Libraries**: Eliminates writing raw Promise wrappers around Node.js `fs`, `child_process`, and `zlib` callback functions.
 > 
 ---
 
+### Exercise 2: Multi-Argument Callback Promisification
 
+**Scenario:** Promisifies legacy callbacks returning multiple result arguments `(err, res1, res2)` into an array/object Promise resolution.
 
-### Exercise 2: Promisifying Legacy Callback Function
+**Requirements:**
+1. Write promisifyMultiArg(legacyFn).
+2. Resolve Promise with array of result arguments.
 
-**Problem:** Promisify `fs.readFile` using `util.promisify`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> const readFileAsync = util.promisify(fs.readFile); const data = await readFileAsync('file.txt', 'utf-8');
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const util = require('util');
-> const fs = require('fs');
-> const readFileAsync = util.promisify(fs.readFile);
-> const data = await readFileAsync('file.txt', 'utf-8');
+> function promisifyMultiArg(legacyFn) {
+>   return function (...args) {
+>     return new Promise((resolve, reject) => {
+>       legacyFn(...args, (err, ...results) => {
+>         if (err) return reject(err);
+>         resolve(results.length === 1 ? results[0] : results);
+>       });
+>     });
+>   };
+> }
+>
+> // Verification tests
+> const multiArgFn = (a, b, cb) => cb(null, a * 2, b * 2);
+> const asyncMulti = promisifyMultiArg(multiArgFn);
+>
+> asyncMulti(5, 10).then(([r1, r2]) => {
+>   console.assert(r1 === 10 && r2 === 20, "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** `util.promisify` converts standard Node error-first callback functions into Promise functions.
+> #### Technical Explanation
+>
+> 1. **Multi-Argument Callback Challenge**: Standard util.promisify only returns the first success argument unless custom promisify is used.
+> 2. **Array Result Packaging**: Packaging multiple callback parameters into a result array preserves all output values.
+> 3. **Flexible Resolution**: Returns scalar for single output, array for multi-parameter output.
 > 
 ---
 
-### Exercise 3: Native Promise Alternatives in Node.js Core
+### Exercise 3: Promisifying Core fs Legacy Callback APIs
 
-**Problem:** Which built-in Node.js module namespace provides pre-promisified file system methods?
+**Scenario:** Wraps legacy `fs.readFile` callback signatures into Promise-based functions.
 
-**Expected output:**
+**Requirements:**
+1. Write promisifyFsReadFile(mockFs).
+2. Return async function reading file.
+
 > [!check]- Answer
-> ```text
-> node:fs/promises (or fs.promises)
-> ```
-> ```text
-> node:fs/promises
+>
+> #### Implementation
+>
+> ```javascript
+> function promisifyFsReadFile(mockFs) {
+>   const fsLib = mockFs || require("fs");
+>
+>   return function (filePath, encoding) {
+>     return new Promise((resolve, reject) => {
+>       fsLib.readFile(filePath, encoding, (err, data) => {
+>         if (err) return reject(err);
+>         resolve(data);
+>       });
+>     });
+>   };
+> }
+>
+> // Verification tests
+> const mockFs = {
+>   readFile: (p, enc, cb) => cb(null, "MOCK_FILE_CONTENT")
+> };
+>
+> const readFileAsync = promisifyFsReadFile(mockFs);
+> readFileAsync("/test.txt", "utf-8").then(content => {
+>   console.assert(content === "MOCK_FILE_CONTENT", "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** Modern Node.js core modules (`fs/promises`, `dns/promises`, `timers/promises`) provide native promises out-of-the-box.
-> 
+> #### Technical Explanation
+>
+> 1. **Legacy fs Module Wrapping**: Legacy Node.js fs codebases relied heavily on `(err, data)` callbacks.
+> 2. **fs.promises Alternative**: Modern Node.js provides `require('fs').promises` natively.
+> 3. **Backwards Compatibility**: Promisifying legacy APIs allows upgrading codebases incrementally.
 ## 6. Related Terms
 - [Callbacks & Callback Hell](callbacks.md) — The problem this tool solves.
 - [The fs Module (File System)](../level_02/fs_module.md) — The most common module that was historically Promisified.

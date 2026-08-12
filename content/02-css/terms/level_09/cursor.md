@@ -110,65 +110,93 @@ button:disabled {
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Text Cursor
+### Exercise 1: Customizing Pointer Affordance on Interactive Buttons
 
-**Problem:** When you hover over a normal paragraph of text (`<p>`), the mouse changes from an arrow into a vertical line that looks like a capital "I". What is the name of this cursor value?
+**Scenario:** An author explicitly enforces interactive pointer cursors (`cursor: pointer`) on custom button components.
 
-**Expected output:**
+**Requirements:**
+1. Apply `cursor: pointer` to interactive buttons.
+2. Set `user-select: none`.
+
 > [!check]- Answer
-> ```text
-> It's called `text`. You can apply `cursor: text;` to inputs or custom elements to signal to the user that they can click and start typing!
-> ```
-> - What do you call letters and words?
-> 
----
-
-
-
-### Exercise 2: Cursor Property Keyword Matrix
-
-**Problem:** Match task to CSS `cursor` keyword:
-1. Clickable button (`pointer`)
-2. Text editing selection (`text`)
-3. Dragging handle (`grab`)
-4. Disabled element (`not-allowed`)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. pointer
-> 2. text
-> 3. grab
-> 4. not-allowed
-> ```
-> ```text
-> 1. pointer
-> 2. text
-> 3. grab
-> 4. not-allowed
-> ```
 >
-> **Explanation:** `cursor` values provide affordance cues for mouse interactions.
-> 
----
-
-### Exercise 3: Custom Image Cursor Syntax
-
-**Problem:** Write CSS `cursor` property using custom image `pointer.png` with `auto` fallback.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> cursor: url('pointer.png'), auto;
-> ```
+> #### Implementation
+>
 > ```css
-> .custom-cursor {
->   cursor: url('pointer.png'), auto;
+> .interactive-btn {
+>   display: inline-flex;
+>   align-items: center;
+>   padding: 0.75rem 1.5rem;
+>   background-color: #2563eb;
+>   color: #ffffff;
+>   cursor: pointer;              /* Changes cursor to pointing hand icon */
+>   user-select: none;
 > }
 > ```
 >
-> **Explanation:** Custom cursor images require fallback generic keywords (e.g. `auto`).
+> #### Technical Explanation
+>
+> 1. **The `cursor` Property**: Specifies the mouse cursor visual indicator shown when hovering over an element.
+> 2. **Interactive Affordance (`pointer`)**: Renders a pointing hand icon (`pointer`), signaling to desktop users that an element is clickable.
+> 3. **Default Element Behavior**: Native `<button>` and `<a>` elements display pointer cursors, but custom `<div role="button">` elements require explicit `cursor: pointer`.
 > 
+---
+
+### Exercise 2: Indicating Disabled UI Controls with cursor: not-allowed
+
+**Scenario:** Styles disabled buttons and input fields using `cursor: not-allowed`.
+
+**Requirements:**
+1. Apply `cursor: not-allowed` and `opacity: 0.5` to `:disabled` controls.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .interactive-btn:disabled,
+> .interactive-btn[aria-disabled="true"] {
+>   opacity: 0.5;
+>   cursor: not-allowed;          /* Renders circle-with-slash prohibition icon */
+>   pointer-events: none;         /* Blocks click interactions */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`cursor: not-allowed`**: Displays a circle-with-slash icon, providing immediate visual feedback that an action is disabled.
+> 2. **`pointer-events: none` Integration**: Pairing with `pointer-events: none` prevents JavaScript click handlers from firing on disabled buttons.
+> 3. **Accessible Disabled States**: Supports both native `:disabled` and ARIA `[aria-disabled="true"]` attributes.
+> 
+---
+
+### Exercise 3: Draggable Container Handles with cursor: grab and grabbing
+
+**Scenario:** Styles drag-and-drop handles using `cursor: grab` and `cursor: grabbing`.
+
+**Requirements:**
+1. Apply `cursor: grab` on rest state.
+2. Apply `cursor: grabbing` on `:active` state.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .drag-handle {
+>   cursor: grab;                 /* Open hand icon indicating element can be dragged */
+> }
+>
+> .drag-handle:active {
+>   cursor: grabbing;             /* Closed fist icon indicating active dragging */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`cursor: grab` Mechanics**: Displays an open hand icon for drag-and-drop items (kanban cards, reorderable list items).
+> 2. **`:active` State Flip (`grabbing`)**: Flipping to `cursor: grabbing` on mouse click (`:active`) provides tactile drag feedback.
+> 3. **Enhanced Desktop UX**: Significantly improves usability for interactive dashboard widgets.
 ## 6. Related Terms
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Changing the cursor is almost always paired with changing the styling properties on `:hover`.
 - [`outline`](outline.md) — Visual ring for keyboard selection focuses.

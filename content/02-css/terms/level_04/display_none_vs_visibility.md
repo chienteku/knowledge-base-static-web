@@ -208,163 +208,101 @@ Comparing declarations:
 }
 ```
 
-
-
-### Mistake 4: Using `display: none` Expecting the Element to Keep Its Space in Page Layout
-
-**The mistake:** Hiding an element using `display: none` expecting lower content to remain in place.
-
-**Why it's wrong:** `display: none` removes the element COMPLETELY from the DOM layout render tree, collapsing its space and causing surrounding content to shift up. Use `visibility: hidden` to preserve layout space.
-
-*Incorrect:*
-```css
-.card { display: none; } /* ❌ Collapses box space, causing layout shift! */
-```
-
-*Fix:*
-```css
-.card { visibility: hidden; } /* Hides visual content but preserves layout box space */
-```
-
-### Mistake 5: Using `visibility: hidden` Expecting Screen Readers to Read the Hidden Content
-
-**The mistake:** Hiding text visually via `visibility: hidden` intended for screen reader accessibility.
-
-**Why it's wrong:** Both `display: none` and `visibility: hidden` hide elements from screen readers. To hide content visually while keeping it accessible to screen readers, use `.sr-only` clip patterns.
-
-*Incorrect:*
-```css
-.accessible-text { visibility: hidden; } /* ❌ Screen readers ignore visibility: hidden! */
-```
-
-*Fix:*
-```css
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-```
-
-
-
-### Mistake 6: Using `display: none` Expecting the Element to Keep Its Space in Page Layout
-
-**The mistake:** Hiding an element using `display: none` expecting lower content to remain in place.
-
-**Why it's wrong:** `display: none` removes the element COMPLETELY from the DOM layout render tree, collapsing its space and causing surrounding content to shift up. Use `visibility: hidden` to preserve layout space.
-
-*Incorrect:*
-```css
-.card { display: none; } /* ❌ Collapses box space, causing layout shift! */
-```
-
-*Fix:*
-```css
-.card { visibility: hidden; } /* Hides visual content but preserves layout box space */
-```
-
-### Mistake 7: Using `visibility: hidden` Expecting Screen Readers to Read the Hidden Content
-
-**The mistake:** Hiding text visually via `visibility: hidden` intended for screen reader accessibility.
-
-**Why it's wrong:** Both `display: none` and `visibility: hidden` hide elements from screen readers. To hide content visually while keeping it accessible to screen readers, use `.sr-only` clip patterns.
-
-*Incorrect:*
-```css
-.accessible-text { visibility: hidden; } /* ❌ Screen readers ignore visibility: hidden! */
-```
-
-*Fix:*
-```css
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Layout Analysis
+### Exercise 1: Hiding Elements from DOM Layout and Accessibility Tree using display none
 
-**Problem:** Look at the following styling declaration applied to a banner header:
+**Scenario:** An author completely removes a modal dialog from visual layout and audio accessibility trees using `display: none`.
 
-```css
-.banner-alert {
-  visibility: hidden;
-}
-```
+**Requirements:**
+1. Apply `display: none` to hidden state class `.is-hidden`.
+2. Verify layout space is completely collapsed.
+3. Verify screen readers ignore hidden element.
 
-If this alert box sits between a heading (`<h1>`) and a paragraph (`<p>`), what happens to the spacing between the heading and paragraph?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> The spacing remains exactly the same! Because `visibility: hidden` does not collapse the box, the empty space occupied by the alert banner is preserved. Sighted users will see a large blank gap between the heading and the paragraph.
-> ```
-> - Does visibility hidden remove elements from the layout flow?
-> 
----
-
-
-
-### Exercise 2: Display None vs Visibility Hidden Comparison
-
-**Problem:** Compare `display: none` vs `visibility: hidden` across:
-1. Layout space preservation
-2. DOM event listening
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. display: none collapses layout space; visibility: hidden preserves layout space
-> 2. Both prevent click interactions on hidden elements
-> ```
-> ```text
-> 1. display: none collapses layout space; visibility: hidden preserves layout space
-> 2. Both prevent click interactions on hidden elements
-> ```
 >
-> **Explanation:** `display: none` alters render tree layout; `visibility: hidden` toggles visual rendering only.
-> 
----
-
-### Exercise 3: CSS Transitioning Visibility
-
-**Problem:** Can `display` be animated smoothly with CSS transitions? Can `opacity` + `visibility` be transitioned?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> display CANNOT be transitioned smoothly. opacity + visibility CAN be transitioned together.
-> ```
+> #### Implementation
+>
 > ```css
-> .modal {
->   opacity: 0;
->   visibility: hidden;
->   transition: opacity 0.3s, visibility 0.3s;
-> }
-> .modal.open {
->   opacity: 1;
->   visibility: visible;
+> /* Completely collapses element from visual layout AND accessibility tree */
+> .modal-overlay.is-hidden {
+>   display: none;
 > }
 > ```
 >
-> **Explanation:** Combining `opacity` and `visibility` allows smooth fade transitions.
+> #### Technical Explanation
+>
+> 1. **`display: none` Mechanism**: Completely removes the element from visual document flow; takes up 0px width/height and causes surrounding elements to collapse into its space.
+> 2. **Accessibility Tree Removal**: Elements with `display: none` are completely REMOVED from the accessibility tree; screen readers will NOT read them.
+> 3. **No DOM Destruction**: The element remains in the HTML DOM tree and can be toggled back on via JavaScript (`element.classList.remove('is-hidden')`).
 > 
+---
+
+### Exercise 2: Preserving Layout Space while Hiding Visually using visibility hidden
+
+**Scenario:** Hides an interactive loading indicator visually while preserving its layout dimensions using `visibility: hidden`.
+
+**Requirements:**
+1. Apply `visibility: hidden` to `.spinner-hidden`.
+2. Verify element's 40x40px layout footprint remains reserved.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .spinner-container {
+>   width: 2.5rem;
+>   height: 2.5rem;
+> }
+>
+> /* Hides spinner visually while preserving its 2.5rem layout footprint */
+> .spinner-container.is-loading-complete {
+>   visibility: hidden;
+>   opacity: 0;
+>   transition: opacity 0.2s ease, visibility 0.2s ease;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`visibility: hidden` Mechanism**: Hides the element visually, BUT preserves its exact width, height, and layout footprint in the document flow.
+> 2. **Layout Shift (CLS) Prevention**: Preserves container dimensions so surrounding layout elements do NOT jump or shift position when hidden.
+> 3. **CSS Transition Support**: Unlike `display: none`, `visibility` can be transitioned smoothly when paired with `opacity` (using `visibility 0.2s`).
+> 
+---
+
+### Exercise 3: Accessible Screen Reader Only Utility Class (.sr-only)
+
+**Scenario:** Constructs a visually hidden `.sr-only` class that keeps text accessible to audio screen readers.
+
+**Requirements:**
+1. Build `.sr-only` utility class using clip path and absolute positioning.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Accessible Visually-Hidden Utility Class (Screen Reader Only) */
+> .sr-only {
+>   position: absolute;
+>   width: 1px;
+>   height: 1px;
+>   padding: 0;
+>   margin: -1px;
+>   overflow: hidden;
+>   clip: rect(0, 0, 0, 0);
+>   white-space: nowrap;
+>   border: 0;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Visual-Only Hiding**: Hides text visually from the screen while KEEPING it 100% accessible to screen reader audio output.
+> 2. **Why NOT `display: none`**: Never use `display: none` or `visibility: hidden` for screen-reader-only labels, as screen readers skip them!
+> 3. **WCAG Conformance**: Essential for providing accessible labels on icon-only buttons (`<button><svg></svg><span class="sr-only">Close Menu</span></button>`).
 ## 6. Related Terms
 - [`display: block` vs `inline` vs `inline-block`](display.md) — The parent display rules.
 - [`opacity`](../level_09/opacity.md) — The styling property that adjusts visibility percentage from 0 to 100.

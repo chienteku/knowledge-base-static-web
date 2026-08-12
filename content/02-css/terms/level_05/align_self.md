@@ -180,62 +180,107 @@ If you want to push a single child item to the far-right, use the margin trick: 
 
 ## 5. Practice Exercises
 
-### Exercise 1: Layout Overrides
+### Exercise 1: Overriding Container Cross-Axis Alignment for Individual Action Buttons
 
-**Problem:** You have a horizontal navbar. The parent is styled with `display: flex; align-items: stretch;`. You have a logo item that needs to keep its natural height instead of stretching to match the navbar height. What property and value do you apply to the logo?
+**Scenario:** An author overrides the container's `align-items: center` rule on a single CTA button using `align-self: flex-end`.
 
-**Expected output:**
+**Requirements:**
+1. Set container `align-items: center`.
+2. Set `align-self: flex-end` on `.btn-featured` to push it to the bottom.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .logo {
->   align-self: center; /* Or flex-start, depending on alignment design */
-> }
-> ```
-> - The parent forces stretching using `stretch`.
-> - Override this behavior on the child ruleset.
-> 
----
-
-
-
-### Exercise 2: Single Item Override Pattern
-
-**Problem:** Write CSS where `.container` has `align-items: flex-start`, but `.special-item` aligns to `flex-end`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .container { display: flex; align-items: flex-start; } .special-item { align-self: flex-end; }
-> ```
-> ```css
-> .container {
+> .hero-card {
 >   display: flex;
->   align-items: flex-start;
+>   align-items: center;          /* Default vertical centering for most items */
+>   gap: 1.5rem;
+>   padding: 2rem;
+>   background-color: #ffffff;
 > }
-> .special-item {
->   align-self: flex-end;
+>
+> .hero-cta {
+>   align-self: flex-end;         /* Individual Override: Pushes ONLY this button to bottom! */
+>   background-color: #2563eb;
+>   color: #ffffff;
+>   padding: 0.75rem 1.5rem;
+>   border-radius: 0.375rem;
 > }
 > ```
 >
-> **Explanation:** `align-self` overrides parent container `align-items` rules for specific items.
+> #### Technical Explanation
+>
+> 1. **The `align-self` Property**: Allows an INDIVIDUAL flex item to override the cross-axis alignment (`align-items`) set by its parent flex container.
+> 2. **Granular Layout Control**: Values match `align-items` (`auto`, `flex-start`, `flex-end`, `center`, `baseline`, `stretch`).
+> 3. **`auto` Default**: `align-self: auto` inherits the parent container's `align-items` value.
 > 
 ---
 
-### Exercise 3: align-self Default Value
+### Exercise 2: Centering Featured Product Badges Individually inside Stretched Cards
 
-**Problem:** What is the default value of `align-self` on flex items?
+**Scenario:** Centers a tag badge horizontally inside a stretched card layout.
 
-**Expected output:**
+**Requirements:**
+1. Apply `align-self: center` to badge tag.
+
 > [!check]- Answer
-> ```text
-> align-self: auto (inherits parent align-items value).
-> ```
-> ```text
-> align-self: auto (inherits parent align-items value).
+>
+> #### Implementation
+>
+> ```css
+> .product-card {
+>   display: flex;
+>   flex-direction: column;
+>   align-items: stretch;
+> }
+>
+> .featured-badge {
+>   align-self: center;           /* Individual Override: Centers badge horizontally in column flex */
+>   background-color: #fef3c7;
+>   color: #92400e;
+>   padding: 0.25rem 0.75rem;
+>   border-radius: 9999px;
+> }
 > ```
 >
-> **Explanation:** `auto` inherits the parent container's `align-items` rule.
+> #### Technical Explanation
+>
+> 1. **Column Flex Cross-Axis Switch**: In `flex-direction: column`, the cross-axis is HORIZONTAL; `align-self: center` centers the item horizontally.
+> 2. **No Extra Wrapper Needed**: Allows centering small badges without wrapping them in extra layout `<div>` containers.
+> 3. **Clean Modular CSS**: Keeps card component rulesets lightweight.
 > 
+---
+
+### Exercise 3: Pinning Card Footer Buttons to Bottom of Variable Height Cards
+
+**Scenario:** Uses `margin-top: auto` alongside `align-self` to pin card footers.
+
+**Requirements:**
+1. Apply `margin-top: auto` to card footer button.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .card-body {
+>   display: flex;
+>   flex-direction: column;
+> }
+>
+> .card-footer-btn {
+>   margin-top: auto;             /* Pushes footer button to bottom of equal-height card */
+>   align-self: stretch;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Auto Margins in Flexbox**: Setting `margin-top: auto` on a flex item absorbs all remaining vertical space, pushing the item to the bottom.
+> 2. **Equal Height Alignment**: Guarantees action buttons align across adjacent cards of varying text length.
+> 3. **Standard Card Pattern**: Industry standard pattern for modern responsive card UI components.
 ## 6. Related Terms
 - [`align-items`](align_items.md) — The parent alignment controller.
 - [`justify-content`](justify_content.md) — The main axis spacing controller.

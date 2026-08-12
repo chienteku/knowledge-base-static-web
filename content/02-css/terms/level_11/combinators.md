@@ -177,68 +177,92 @@ h2 ~ p { color: blue; } /* Targets ALL subsequent sibling paragraphs */
 
 ## 5. Practice Exercises
 
-### Exercise 1: Clean Spacing
+### Exercise 1: Direct Child Selector vs Descendant Selector
 
-**Problem:** You have a blog post container `.post`. You want to select any paragraph (`p`) that is a direct child of `.post`, but only if it immediately follows a heading `h3` inside the container. Write the CSS selector.
+**Scenario:** An author targets ONLY immediate child paragraph headings using the child combinator (`>`).
 
-**Expected output:**
+**Requirements:**
+1. Apply `.card > h2` selector.
+2. Compare with descendant selector `.card h2`.
+
 > [!check]- Answer
-> ```css
-> .post > h3 + p {
->   /* target paragraph style rules go here */
-> }
-> ```
-> - The `h3` must be a direct child of `.post` (`.post > h3`).
-> - The paragraph must immediately follow the heading (`+ p`).
-> 
----
-
-
-
-### Exercise 2: CSS Combinators Matrix
-
-**Problem:** Match combinator symbol to selection behavior:
-1. Space ` ` 
-2. Child `>` 
-3. Adjacent Sibling `+` 
-4. General Sibling `~` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. All descendant elements at any depth
-> 2. Direct 1st-level child elements only
-> 3. Immediately adjacent following sibling
-> 4. All subsequent following siblings
-> ```
-> ```text
-> 1. Space -> Descendant at any depth
-> 2. > -> Direct child only
-> 3. + -> Immediately adjacent following sibling
-> 4. ~ -> All subsequent following siblings
-> ```
 >
-> **Explanation:** Combinators define structural relationships between CSS selectors.
-> 
----
-
-### Exercise 3: Lobed Form Element Sibling Pattern
-
-**Problem:** Write CSS `+` adjacent sibling rule highlighting error message `<span class="err">` immediately following invalid `<input class="invalid">`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> input.invalid + span.err { color: red; }
-> ```
+> #### Implementation
+>
 > ```css
-> input.invalid + span.err {
->   color: red;
+> /* Direct Child Combinator (>): Targets ONLY immediate <h2> children of .card */
+> .card > h2 {
+>   font-size: 1.5rem;
+>   color: #0f172a;
+>   margin-bottom: 0.75rem;
+> }
+>
+> /* Descendant Combinator (space): Targets ALL <h2> elements anywhere inside .card */
+> .card h2 {
+>   font-family: system-ui, sans-serif;
 > }
 > ```
 >
-> **Explanation:** `+` targets immediately adjacent sibling elements.
+> #### Technical Explanation
+>
+> 1. **Child Combinator (`>`)**: Selects elements that are DIRECT, immediate children of the parent element.
+> 2. **Descendant Combinator (` `)**: Selects elements that are nested anywhere inside the ancestor element regardless of depth.
+> 3. **Scoped Style Protection**: Using `>` prevents component styles from accidentally leaking into sub-nested widgets.
 > 
+---
+
+### Exercise 2: Adjacent Sibling Selector for Editorial Flow Spacing
+
+**Scenario:** Applies top margin ONLY to paragraphs that directly follow an `<h2>` heading using `h2 + p`.
+
+**Requirements:**
+1. Apply `h2 + p` selector.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Adjacent Sibling Combinator (+): Targets <p> immediately following <h2> */
+> h2 + p {
+>   font-size: 1.125rem;
+>   font-weight: 500;
+>   color: #334155;
+>   margin-top: 0.5rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Adjacent Sibling Combinator (`+`)**: Selects an element that IMMEDIATELY follows another specified element at the same DOM tree level.
+> 2. **Lead Paragraph Styling**: Ideal for styling lead intro paragraphs following section titles.
+> 3. **Contextual Typography Spacing**: Applies targeted margins without needing extra HTML classes.
+> 
+---
+
+### Exercise 3: General Sibling Selector for Pure CSS Accordion Controls
+
+**Scenario:** Toggles collapsible content visibility using `input:checked ~ .accordion-content`.
+
+**Requirements:**
+1. Apply `input:checked ~ .accordion-content`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* General Sibling Combinator (~): Targets .accordion-content following checked input */
+> .accordion-toggle:checked ~ .accordion-content {
+>   display: block;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **General Sibling Combinator (`~`)**: Selects ALL sibling elements that follow the specified element, even if not immediately adjacent.
+> 2. **Pure CSS Interactivity**: Enables building pure CSS accordions and tabs without writing JavaScript.
+> 3. **DOM Structure Requirement**: Target elements MUST share the same parent container.
 ## 6. Related Terms
 - [Attribute Selectors](attribute_selectors.md) — Selective attribute matching.
 - [Advanced Pseudo-classes](../level_09/pseudo_classes_advanced.md) — Positional structural styling hooks.

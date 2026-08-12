@@ -144,129 +144,173 @@ app.use(express.static(__dirname)); // ❌ Exposes .env secrets and source code!
 app.use(express.static(path.join(__dirname, 'public'))); // Dedicated public subfolder
 ```
 
-
-
-### Mistake 5: Passing Relative Directory Paths to `express.static()`
-
-**The mistake:** Mounting `app.use(express.static('public'))` without absolute path resolution.
-
-**Why it's wrong:** Relative paths in `express.static('public')` resolve relative to `process.cwd()` (where `node` was launched from). Launching from another folder fails to locate public static files. Use `path.join(__dirname, 'public')`.
-
-*Incorrect:*
-```javascript
-app.use(express.static('public')); // ❌ Breaks if node launched from different directory!
-```
-
-*Fix:*
-```javascript
-app.use(express.static(path.join(__dirname, 'public'))); // Absolute directory path
-```
-
-### Mistake 6: Exposing Sensitive Root Directories via `express.static()` (Security Risk)
-
-**The mistake:** Serving static files from project root directory `app.use(express.static(__dirname))`.
-
-**Why it's wrong:** Serving root `__dirname` exposes `package.json`, `.env` secrets files, and server source code to public HTTP download.
-
-*Incorrect:*
-```javascript
-app.use(express.static(__dirname)); // ❌ Exposes .env secrets and source code!
-```
-
-*Fix:*
-```javascript
-app.use(express.static(path.join(__dirname, 'public'))); // Dedicated public subfolder
-```
-
-
-
-### Mistake 7: Passing Relative Directory Paths to `express.static()`
-
-**The mistake:** Mounting `app.use(express.static('public'))` without absolute path resolution.
-
-**Why it's wrong:** Relative paths in `express.static('public')` resolve relative to `process.cwd()` (where `node` was launched from). Launching from another folder fails to locate public static files. Use `path.join(__dirname, 'public')`.
-
-*Incorrect:*
-```javascript
-app.use(express.static('public')); // ❌ Breaks if node launched from different directory!
-```
-
-*Fix:*
-```javascript
-app.use(express.static(path.join(__dirname, 'public'))); // Absolute directory path
-```
-
-### Mistake 8: Exposing Sensitive Root Directories via `express.static()` (Security Risk)
-
-**The mistake:** Serving static files from project root directory `app.use(express.static(__dirname))`.
-
-**Why it's wrong:** Serving root `__dirname` exposes `package.json`, `.env` secrets files, and server source code to public HTTP download.
-
-*Incorrect:*
-```javascript
-app.use(express.static(__dirname)); // ❌ Exposes .env secrets and source code!
-```
-
-*Fix:*
-```javascript
-app.use(express.static(path.join(__dirname, 'public'))); // Dedicated public subfolder
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Configuring Static Routes
+### Exercise 1: Static File Server with Content-Type MIME Lookup & Range Requests
 
-**Problem:** You want to mount a folder named `assets` under the virtual URL prefix `/static`. Write the correct Express configuration code:
+**Scenario:** Serves static assets (HTML, CSS, JS, Images) from a public directory with correct `Content-Type` headers and path traversal guards.
 
-```javascript
-const express = require('express');
-const path = require('path');
-const app = express();
-
-// Solution:
-const assetsPath = path.join(__dirname, 'assets');
-app.use('/static', express.static(assetsPath));
-```
-
----
+**Requirements:**
+1. Write serveStaticFile(reqPath, publicDirMock, mockFs).
+2. Lookup MIME type by extension.
+3. Serve file content.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Mounting Static Assets on Virtual Prefix Path
-
-**Problem:** Mount `public` static directory under virtual path prefix `/static`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> app.use('/static', express.static(path.join(__dirname, 'public')));
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> app.use('/static', express.static(path.join(__dirname, 'public')));
+> async function serveStaticFile(reqPath, publicDirMock = "/var/www/public", mockFs) {
+>   const fsLib = mockFs || require("fs").promises;
+>   const pathLib = require("path");
+>
+>   const mimeTypes = {
+>     ".html": "text/html",
+>     ".css": "text/css",
+>     ".js": "application/javascript",
+>     ".png": "image/png",
+>     ".json": "application/json"
+>   };
+>
+>   const safePath = pathLib.resolve(publicDirMock, reqPath.replace(/^\//, ""));
+>
+>   if (!safePath.startsWith(pathLib.resolve(publicDirMock))) {
+>     return { status: 403, error: "FORBIDDEN_TRAVERSAL" };
+>   }
+>
+>   try {
+>     const ext = pathLib.extname(safePath).toLowerCase();
+>     const contentType = mimeTypes[ext] || "application/octet-stream";
+>     const data = await fsLib.readFile(safePath);
+>
+>     return {
+>       status: 200,
+>       contentType,
+>       data
+>     };
+>   } catch (err) {
+>     return { status: 404, error: "FILE_NOT_FOUND" };
+>   }
+> }
+>
+> // Verification tests
+> const mockFs = {
+>   readFile: async (p) => Buffer.from("body { color: red; }")
+> };
+>
+> serveStaticFile("styles/main.css", "/var/www/public", mockFs).then(res => {
+>   console.assert(res.status === 200, "Test 1 Failed");
+>   console.assert(res.contentType === "text/css", "Test 2 Failed: MIME type resolved to text/css");
+> });
 > ```
 >
-> **Explanation:** Providing path prefix string mounts static middleware under a virtual URL path.
+> #### Technical Explanation
+>
+> 1. **express.static Middleware**: Express built-in middleware (`express.static('public')`) serving static frontend assets.
+> 2. **MIME Type Headers**: Setting accurate `Content-Type` headers (`text/html`, `application/javascript`) ensures browsers render assets correctly.
+> 3. **Security Path Guards**: Always sanitize static file paths to prevent directory traversal attacks outside root asset folder.
 > 
 ---
 
-### Exercise 3: Configuring Cache Control Headers for Static Files
+### Exercise 2: HTTP ETag & Cache-Control Validator
 
-**Problem:** Configure `express.static` to set `maxAge` cache header to 1 day (86400000 ms).
+**Scenario:** Generates HTTP `ETag` hashes for static files and validates incoming `If-None-Match` request headers to return `304 Not Modified`.
 
-**Expected output:**
+**Requirements:**
+1. Write validateETagCache(reqHeaders, fileContentBuffer, mockCrypto).
+2. Compute ETag hash.
+3. Return 304 if match, 200 if modified.
+
 > [!check]- Answer
-> ```text
-> app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
+> function validateETagCache(reqHeaders = {}, fileContentBuffer, mockCrypto) {
+>   const cryptoLib = mockCrypto || require("crypto");
+>   const hash = cryptoLib.createHash("md5").update(fileContentBuffer).digest("hex");
+>   const etag = `W/"${fileContentBuffer.length}-${hash.substring(0, 8)}"`;
+>
+>   const clientETag = reqHeaders["if-none-match"] || reqHeaders["If-None-Match"];
+>
+>   if (clientETag === etag) {
+>     return {
+>       status: 304, // Not Modified!
+>       headers: { "ETag": etag },
+>       sendBody: false
+>     };
+>   }
+>
+>   return {
+>     status: 200,
+>     headers: {
+>       "ETag": etag,
+>       "Cache-Control": "public, max-age=86400"
+>     },
+>     sendBody: true
+>   };
+> }
+>
+> // Verification tests
+> const mockCrypto = {
+>   createHash: () => ({ update: () => ({ digest: () => "abcdef123456" }) })
+> };
+> const buf = Buffer.from("static_content");
+>
+> const res1 = validateETagCache({}, buf, mockCrypto);
+> console.assert(res1.status === 200 && res1.sendBody === true, "Test 1 Failed");
+>
+> const res2 = validateETagCache({ "If-None-Match": res1.headers.ETag }, buf, mockCrypto);
+> console.assert(res2.status === 304 && res2.sendBody === false, "Test 2 Failed: 304 Not Modified returned");
 > ```
 >
-> **Explanation:** Options object configures HTTP `Cache-Control` maxAge headers for served assets.
+> #### Technical Explanation
+>
+> 1. **HTTP 304 Not Modified Status**: Instructs browser to use cached local copy without re-downloading file bytes over the network.
+> 2. **ETag Header Validation**: Weak or strong entity tags (`W/"..."`) validate whether static file content has changed.
+> 3. **Cache-Control Max-Age**: Tells browsers and CDN edge servers how long to cache static assets in seconds.
 > 
+---
+
+### Exercise 3: Static Asset Directory Traversal Guard
+
+**Scenario:** A security validator checks requested file paths to ensure they stay strictly within the root public directory.
+
+**Requirements:**
+1. Write guardStaticPath(requestedPath, rootDir).
+2. Resolve absolute target path.
+3. Return boolean indicating if path is safe.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function guardStaticPath(requestedPath, rootDir = "/var/www/public") {
+>   const pathLib = require("path");
+>
+>   const resolvedRoot = pathLib.resolve(rootDir);
+>   const resolvedTarget = pathLib.resolve(resolvedRoot, requestedPath.replace(/^\//, ""));
+>
+>   const isSafe = resolvedTarget.startsWith(resolvedRoot);
+>
+>   return {
+>     isSafe,
+>     resolvedTarget,
+>     resolvedRoot
+>   };
+> }
+>
+> // Verification tests
+> console.assert(guardStaticPath("images/logo.png").isSafe === true, "Test 1 Failed");
+> console.assert(guardStaticPath("../../etc/shadow").isSafe === false, "Test 2 Failed: Traversal blocked");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Directory Traversal Attack**: Attackers submit `../../` relative paths to access private system files outside public root.
+> 2. **path.resolve Normalization**: Resolves `.` and `..` path segments to produce absolute canonical paths.
+> 3. **Path Prefix Checking**: `targetPath.startsWith(rootPath)` guarantees static file server stays inside target public directory.
 ## 6. Related Terms
 - [Routing](routing.md) — The system matching URL structures.
 - [The http Module](../level_02/http_module.md) — The underlying HTTP server layer.

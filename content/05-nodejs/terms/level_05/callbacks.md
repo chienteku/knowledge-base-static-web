@@ -115,67 +115,147 @@ fs.readFile('file.txt', (err, data) => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Spot the Pattern
+### Exercise 1: Node.js Error-First Callback Handler
 
-**Problem:** You are creating your own asynchronous function that fetches data from a fake API. According to the "Error-First" Node.js convention, how should you call the `callback` function if the API fails?
+**Scenario:** Implements a standard Node.js error-first callback function `(err, result) => {}` for processing filesystem data.
 
-```javascript
-function fetchUser(callback) {
-  const success = false;
-  if (!success) {
-    // How do you trigger the callback here?
-  }
-}
-```
+**Requirements:**
+1. Write executeCallbackTask(inputValue, callback).
+2. If inputValue is invalid, invoke `callback(new Error(...))`.
+3. Otherwise invoke `callback(null, result)`.
 
-**Expected output:**
 > [!check]- Answer
-> ```javascript
-> callback(new Error("API Failed"), null);
-> ```
-> - Remember the "Error-First" rule! What is argument 1? What is argument 2?
-> 
----
-
-
-
-### Exercise 2: Refactoring Callback Pyramid of Doom to Promises
-
-**Problem:** Refactor nested callback `step1((err, a) => { step2(a, (err, b) => { step3(b, cb); }); });` to `async/await`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const a = await step1(); const b = await step2(a); const result = await step3(b);
-> ```
-> ```javascript
-> const a = await step1();
-> const b = await step2(a);
-> const result = await step3(b);
-> ```
 >
-> **Explanation:** `async/await` flattens nested callback pyramids into clean sequential code.
-> 
----
-
-### Exercise 3: Error-First Callback Check
-
-**Problem:** Write error check guard for callback `(err, result) => {}`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> if (err) { console.error(err); return; }
-> ```
+> #### Implementation
+>
 > ```javascript
-> if (err) {
->   console.error('Operation failed:', err);
->   return;
+> function executeCallbackTask(inputValue, callback) {
+>   if (typeof callback !== "function") {
+>     throw new TypeError("Callback must be a function");
+>   }
+>
+>   process.nextTick(() => {
+>     if (inputValue === null || inputValue === undefined) {
+>       return callback(new Error("Input value cannot be null or undefined"));
+>     }
+>
+>     if (typeof inputValue === "string" && inputValue.trim() === "") {
+>       return callback(new Error("Input string cannot be empty"));
+>     }
+>
+>     callback(null, { processed: String(inputValue).toUpperCase() });
+>   });
 > }
+>
+> // Verification tests
+> executeCallbackTask("hello", (err, res) => {
+>   console.assert(err === null, "Test 1 Failed");
+>   console.assert(res.processed === "HELLO", "Test 2 Failed");
+> });
+>
+> executeCallbackTask("", (err, res) => {
+>   console.assert(err !== null && err.message.includes("empty"), "Test 3 Failed");
+> });
 > ```
 >
-> **Explanation:** Checking `if (err)` first enforces Node.js error-first safety checks.
+> #### Technical Explanation
+>
+> 1. **Error-First Callback Convention**: Node.js standard callback signature: first parameter `err` (null on success), second parameter `data`.
+> 2. **Mandatory Early Return**: Always use `return callback(err)` to prevent executing subsequent success code after an error.
+> 3. **Consistent Async Execution**: Always execute callbacks asynchronously (via `process.nextTick` or `setImmediate`) to avoid Zalgo bugs.
 > 
+---
+
+### Exercise 2: Callback Hell Refactoring to Promises
+
+**Scenario:** Refactors nested callback code (Callback Hell / Pyramid of Doom) into a flattened Promise-based pipeline.
+
+**Requirements:**
+1. Write step1Callback(cb)
+2. Write step2Callback(val, cb)
+3. Convert steps to Promises and chain with `.then()` or `await`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function step1Async(val) {
+>   return new Promise((resolve, reject) => {
+>     if (!val) return reject(new Error("Invalid val"));
+>     setTimeout(() => resolve(val * 2), 10);
+>   });
+> }
+>
+> function step2Async(val) {
+>   return new Promise((resolve) => {
+>     setTimeout(() => resolve(val + 10), 10);
+>   });
+> }
+>
+> async function executeRefactoredPipeline(initialVal) {
+>   const res1 = await step1Async(initialVal);
+>   const res2 = await step2Async(res1);
+>   return res2;
+> }
+>
+> // Verification tests
+> executeRefactoredPipeline(5).then(finalRes => {
+>   console.assert(finalRes === 20, "Test 1 Failed: (5 * 2) + 10 = 20");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Callback Hell (Pyramid of Doom)**: Deeply nested asynchronous callbacks make code unreadable and error handling fragile.
+> 2. **Promisification Solution**: Wrapping legacy callbacks in Promises flattens nested callbacks into clean async/await pipelines.
+> 3. **Centralized Error Catching**: Promises allow catching errors across all steps with a single `.catch()` or `try/catch` block.
+> 
+---
+
+### Exercise 3: Callback Race Condition Guard (Ensure Single Execution)
+
+**Scenario:** A protective wrapper decorator ensures legacy callback functions are invoked at most once, preventing double-invocation bugs.
+
+**Requirements:**
+1. Write onceCallback(callbackFn).
+2. Track invocation state.
+3. Ignore subsequent calls to prevent duplicate executions.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function onceCallback(callbackFn) {
+>   let called = false;
+>
+>   return function (err, result) {
+>     if (called) {
+>       return;
+>     }
+>     called = true;
+>     callbackFn(err, result);
+>   };
+> }
+>
+> // Verification tests
+> let callCount = 0;
+> const safeCb = onceCallback((err, res) => {
+>   callCount++;
+> });
+>
+> safeCb(null, "First Call");
+> safeCb(null, "Duplicate Call");
+>
+> console.assert(callCount === 1, "Test 1 Failed: Callback must execute exactly once");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Double Callback Invocation Bug**: Calling a callback twice in legacy Node.js code can cause double HTTP response header errors or corrupted state.
+> 2. **State Guard Decorator**: Wrapping callbacks in a boolean closure prevents duplicate execution.
+> 3. **Legacy Library Compatibility**: Useful when interfacing with older third-party callback libraries that lack strict single-call guarantees.
 ## 6. Related Terms
 - [Promisification (util.promisify)](promisification.md) — How you convert old callback code into modern Promise code.
 - [The Event Loop & Libuv](../level_01/event_loop.md) — Related concept: The Event Loop & Libuv.

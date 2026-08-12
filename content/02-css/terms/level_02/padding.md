@@ -114,55 +114,90 @@ span {
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Background Color Test
+### Exercise 1: Enlarging Touch Hit Targets on Interactive Buttons using Padding
 
-**Problem:** You have a `<div>` with a yellow background. You apply `margin: 50px;` and `padding: 50px;`. Will the yellow background fill the margin area, the padding area, both, or neither?
+**Scenario:** An author increases touch target size on mobile buttons using generous `padding` to meet WCAG 2.1 touch target rules.
 
-**Expected output:**
+**Requirements:**
+1. Set `padding: 0.75rem 1.5rem`.
+2. Verify minimum 44x44px touch hit area.
+
 > [!check]- Answer
-> ```text
-> It will fill the padding area ONLY! Padding is inside the element, so backgrounds apply to it. Margin is outside the element and is completely transparent.
-> ```
-> - Does the background color stretch outside the border?
-> 
----
-
-
-
-### Exercise 2: Clickable Button Touch Target Padding
-
-**Problem:** Write CSS for `.btn` applying 12px vertical padding and 24px horizontal padding.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .btn { padding: 12px 24px; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .btn {
->   padding: 12px 24px;
+> .btn-touch {
+>   display: inline-block;
+>   padding: 0.75rem 1.5rem;      /* 12px top/bottom, 24px left/right */
+>   min-height: 2.75rem;          /* ~44px minimum touch target height */
+>   background-color: #2563eb;
+>   color: #ffffff;
+>   border-radius: 0.375rem;
+>   text-decoration: none;
 > }
 > ```
 >
-> **Explanation:** 2-value padding shorthand sets `Top/Bottom` (12px) and `Left/Right` (24px).
+> #### Technical Explanation
+>
+> 1. **The `padding` Property**: Creates whitespace INSIDE the element's border, pushing content inward away from edges.
+> 2. **Mobile Touch Target Accessibility (WCAG 2.1 SC 2.5.5)**: Generous padding ensures buttons meet the minimum 44x44px interactive touch target requirement for mobile users.
+> 3. **Background & Click Area Expansion**: Padding expands both the visual background color and the interactive clickable/tappable surface area.
 > 
 ---
 
-### Exercise 3: Padding vs Margin Selection Rule
+### Exercise 2: Inner Container Content Spacing using Logical Padding
 
-**Problem:** Explain when to use `padding` vs `margin` when styling a card component.
+**Scenario:** Applies logical padding (`padding-inline`, `padding-block`) for responsive card content.
 
-**Expected output:**
+**Requirements:**
+1. Apply `padding-inline: 1.5rem` and `padding-block: 1rem`.
+
 > [!check]- Answer
-> ```text
-> Use padding for internal space inside the card border; use margin for external space between adjacent card components.
-> ```
-> ```text
-> Use padding for internal space inside the card border; use margin for external space between adjacent card components.
+>
+> #### Implementation
+>
+> ```css
+> .card-body {
+>   padding-block: 1.25rem;       /* Top and bottom inner padding */
+>   padding-inline: 1.5rem;       /* Left and right inner padding */
+>   background-color: #ffffff;
+> }
 > ```
 >
-> **Explanation:** Padding expands inner content space; margin pushes outside boundaries.
+> #### Technical Explanation
+>
+> 1. **Logical Padding Properties**: `padding-inline` (left/right) and `padding-block` (top/bottom) adapt automatically to document writing direction.
+> 2. **Inner Content Breathing Room**: Padding prevents text and images from touching container borders.
+> 3. **Clean Responsive Spacing**: Scales gracefully when using relative `rem` units.
 > 
+---
+
+### Exercise 3: Aspect Ratio Box Padding Hacks vs Modern CSS aspect-ratio
+
+**Scenario:** Replaces legacy `padding-top: 56.25%` video aspect ratio hacks with modern CSS `aspect-ratio`.
+
+**Requirements:**
+1. Apply `aspect-ratio: 16 / 9` to video container.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Modern CSS 16:9 Aspect Ratio Container */
+> .video-container {
+>   width: 100%;
+>   aspect-ratio: 16 / 9;         /* Replaces legacy padding-top: 56.25% hack! */
+>   background-color: #0f172a;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Legacy Aspect Ratio Hack**: Historically, `padding-top: 56.25%` was used because percentage padding is calculated relative to element width.
+> 2. **Modern `aspect-ratio` Property**: CSS `aspect-ratio: 16 / 9` enforces aspect ratios natively without padding hacks.
+> 3. **Layout Shift (CLS) Prevention**: Reserves video layout space before media loads, preventing Cumulative Layout Shift.
 ## 6. Related Terms
 - [Margin](margin.md) — The outer spacing (outside the border).
 - [`box-sizing: border-box`](box_sizing.md) — The layout sizing model.

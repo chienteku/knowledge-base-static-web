@@ -166,135 +166,93 @@ grid-template-columns: repeat(3, minmax(200px, 1fr)); /* Min: 200px, Max: 1fr */
 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 ```
 
-
-
-### Mistake 4: Reversing Min and Max Arguments in `minmax(max, min)`
-
-**The mistake:** Writing `grid-template-columns: repeat(3, minmax(1fr, 200px));`.
-
-**Why it's wrong:** The 1st argument of `minmax()` is the MINIMUM bound, and the 2nd argument is the MAXIMUM bound. If min > max, the rule is invalidated.
-
-*Incorrect:*
-```css
-/* ❌ Min 1fr > Max 200px! Invalid minmax declaration! */
-grid-template-columns: repeat(3, minmax(1fr, 200px));
-```
-
-*Fix:*
-```css
-grid-template-columns: repeat(3, minmax(200px, 1fr)); /* Min: 200px, Max: 1fr */
-```
-
-### Mistake 5: Using `minmax()` Without responsive `auto-fit` or `auto-fill`
-
-**The mistake:** Writing `grid-template-columns: minmax(300px, 1fr);` without `repeat()`.
-
-**Why it's wrong:** Using `minmax()` on a single column track simply sets a minimum bound for that column. Combine `repeat(auto-fit, minmax(...))` for responsive multi-column wrapping.
-
-*Incorrect:*
-```css
-/* Single column minmax without repeat wrapping */
-```
-
-*Fix:*
-```css
-grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-```
-
-
-
-### Mistake 6: Reversing Min and Max Arguments in `minmax(max, min)`
-
-**The mistake:** Writing `grid-template-columns: repeat(3, minmax(1fr, 200px));`.
-
-**Why it's wrong:** The 1st argument of `minmax()` is the MINIMUM bound, and the 2nd argument is the MAXIMUM bound. If min > max, the rule is invalidated.
-
-*Incorrect:*
-```css
-/* ❌ Min 1fr > Max 200px! Invalid minmax declaration! */
-grid-template-columns: repeat(3, minmax(1fr, 200px));
-```
-
-*Fix:*
-```css
-grid-template-columns: repeat(3, minmax(200px, 1fr)); /* Min: 200px, Max: 1fr */
-```
-
-### Mistake 7: Using `minmax()` Without responsive `auto-fit` or `auto-fill`
-
-**The mistake:** Writing `grid-template-columns: minmax(300px, 1fr);` without `repeat()`.
-
-**Why it's wrong:** Using `minmax()` on a single column track simply sets a minimum bound for that column. Combine `repeat(auto-fit, minmax(...))` for responsive multi-column wrapping.
-
-*Incorrect:*
-```css
-/* Single column minmax without repeat wrapping */
-```
-
-*Fix:*
-```css
-grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Flexible Constraints
+### Exercise 1: Constraining Responsive Column Bounds with minmax
 
-**Problem:** Write the CSS rule for a 3-column grid where:
-- The first column is a fixed `200px`.
-- The second column has a minimum of `250px` and a maximum of `500px`.
-- The third column takes up all remaining available space.
+**Scenario:** An author constrains responsive grid columns to a minimum width of `16rem` and maximum of `1fr` using `minmax()`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr))`.
+2. Verify min/max boundary enforcement.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .custom-grid {
+> .constrained-grid {
 >   display: grid;
->   grid-template-columns: 200px minmax(250px, 500px) 1fr;
-> }
-> ```
-> - Define three space-separated track widths.
-> - Use the `minmax()` helper for the second column constraint.
-> 
----
-
-
-
-### Exercise 2: Sidebar and Main Content Responsive Template
-
-**Problem:** Write `grid-template-columns` with fixed 250px sidebar and fluid main content scaling between 500px and 1fr.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> grid-template-columns: 250px minmax(500px, 1fr);
-> ```
-> ```css
-> .app-layout {
->   display: grid;
->   grid-template-columns: 250px minmax(500px, 1fr);
+>   /* minmax(MIN, MAX): Min 16rem (~256px), Max 1fr (fractional share) */
+>   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+>   gap: 1.5rem;
 > }
 > ```
 >
-> **Explanation:** `250px minmax(500px, 1fr)` defines fixed sidebar and fluid main area.
+> #### Technical Explanation
+>
+> 1. **The `minmax()` Function**: Defines a size range for grid tracks with a minimum bound (`16rem`) and maximum bound (`1fr`).
+> 2. **Preventing Squishing**: Guarantees columns never shrink below `16rem`, ensuring content readability on mobile devices.
+> 3. **Fluid Stretch**: Allows columns to stretch up to `1fr` when extra screen width is available.
 > 
 ---
 
-### Exercise 3: minmax Min Content Keyword
+### Exercise 2: Dynamic Content Sizing with minmax(max-content, 1fr)
 
-**Problem:** What does `minmax(min-content, 1fr)` enforce as the minimum column width boundary?
+**Scenario:** Configures a sidebar column that scales dynamically between its content width and 1fr.
 
-**Expected output:**
+**Requirements:**
+1. Apply `grid-template-columns: minmax(max-content, 20rem) 1fr`.
+
 > [!check]- Answer
-> ```text
-> Minimum width equals the width of the longest un-wrapped word/content inside the column.
-> ```
-> ```text
-> Minimum width equals the width of the longest un-wrapped word/content inside the column.
+>
+> #### Implementation
+>
+> ```css
+> .sidebar-layout {
+>   display: grid;
+>   grid-template-columns: minmax(max-content, 20rem) 1fr;
+>   gap: 2rem;
+> }
 > ```
 >
-> **Explanation:** `min-content` clamps column width to minimum content requirements.
+> #### Technical Explanation
+>
+> 1. **`max-content` Keyword**: Sizes the track to fit the largest text content inside without line wrapping.
+> 2. **Content-Driven Boundaries**: `minmax(max-content, 20rem)` ensures the sidebar expands to fit content up to a max cap of `20rem`.
+> 3. **Flexible Layout Adaptation**: Ideal for navigation sidebars with variable text length links.
 > 
+---
+
+### Exercise 3: Preventing Text Ellipsis Truncation Failures inside Grid Track Boundaries
+
+**Scenario:** Fixes broken `text-overflow: ellipsis` truncation inside grid cells using `minmax(0, 1fr)`.
+
+**Requirements:**
+1. Apply `grid-template-columns: minmax(0, 1fr)` to unblock truncation.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .truncation-grid {
+>   display: grid;
+>   grid-template-columns: minmax(0, 1fr); /* Forces grid cell to respect 0px min width */
+> }
+>
+> .truncation-grid .title {
+>   white-space: nowrap;
+>   overflow: hidden;
+>   text-overflow: ellipsis;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Grid Track Minimum Default Trap**: Grid tracks default to `minmax(auto, 1fr)`, which calculates minimum width based on content size, preventing text truncation!
+> 2. **The `minmax(0, 1fr)` Fix**: Replacing `auto` with `0` allows the grid track to shrink below content size, enabling `text-overflow: ellipsis`.
+> 3. **Essential Data Grid Rule**: Mandatory pattern when building table-like data grids with long text strings.
 ## 6. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint.
 - [`auto-fill` / `auto-fit`](grid_auto_fill_fit.md) — The responsive counts keywords often paired with `minmax()`.

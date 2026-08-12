@@ -105,55 +105,184 @@ try {
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Logger
+### Exercise 1: Atomic File Writer with Temporary Swap
 
-**Problem:** You want to write a function that records every time a user logs in by adding a new line to `log.txt`. Should you use `writeFile` or `appendFile`?
+**Scenario:** A configuration service writes application state atomically by writing to a temporary file (`config.tmp`) before renaming to `config.json` to prevent partial file corruption.
 
-**Expected output:**
+**Requirements:**
+1. Write writeAtomicFile(filePath, dataStr, mockFs).
+2. Write to `${filePath}.tmp`.
+3. Rename temporary file to target `filePath`.
+
 > [!check]- Answer
-> ```text
-> `fs.appendFile`. 
-> If you use `writeFile`, it will instantly erase all previous logs in the file and replace it with just the newest login event. `appendFile` preserves the existing file and safely adds the new data to the bottom.
+>
+> #### Implementation
+>
+> ```javascript
+> async function writeAtomicFile(filePath, dataStr, mockFs) {
+>   const fsLib = mockFs || require("fs").promises;
+>   const tempPath = `${filePath}.tmp_${Date.now()}`;
+>
+>   try {
+>     await fsLib.writeFile(tempPath, dataStr, "utf-8");
+>     await fsLib.rename(tempPath, filePath);
+>     return { success: true, filePath };
+>   } catch (err) {
+>     try { await fsLib.unlink(tempPath); } catch (_) {}
+>     throw err;
+>   }
+> }
+>
+> // Verification tests
+> const written = {};
+> const mockFs = {
+>   writeFile: async (p, d) => { written[p] = d; },
+>   rename: async (src, dest) => {
+>     written[dest] = written[src];
+>     delete written[src];
+>   }
+> };
+>
+> writeAtomicFile("/app/config.json", '{"theme":"dark"}', mockFs).then(res => {
+>   console.assert(written["/app/config.json"] === '{"theme":"dark"}', "Test 1 Failed");
+> });
 > ```
-> - Which one overwrites? Which one adds?
+>
+> #### Technical Explanation
+>
+> 1. **Atomic File Writes**: Prevents readers from reading partially written files if application crashes mid-write.
+> 2. **fs.rename Atomicity**: POSIX `rename` system call is atomic on same file system partition.
+> 3. **Corruption Defense**: Essential strategy for database engines, cache stores, and critical system configurations.
 > 
 ---
 
+### Exercise 2: Recursive Directory Traverser & File Finder
 
+**Scenario:** A log analyzer recursively scans nested directories to collect all `.log` file paths.
 
-### Exercise 2: Appending Text to File Asynchronously
+**Requirements:**
+1. Write findFilesInDir(dirPath, extension, mockFs).
+2. Recursively read directory entries.
+3. Return array of matching file paths.
 
-**Problem:** Append string `'Log entry\n'` to file `app.log` using `fs.promises`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> await fs.promises.appendFile('app.log', 'Log entry\n');
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> await fs.promises.appendFile('app.log', 'Log entry\n');
+> async function findFilesInDir(dirPath, extension = ".log", mockFs) {
+>   const fsLib = mockFs || require("fs").promises;
+>   const matches = [];
+>
+>   async function traverse(currentDir) {
+>     const entries = await fsLib.readdir(currentDir, { withFileTypes: true });
+>
+>     for (const entry of entries) {
+>       const fullPath = `${currentDir}/${entry.name}`;
+>       if (entry.isDirectory()) {
+>         await traverse(fullPath);
+>       } else if (entry.isFile() && entry.name.endsWith(extension)) {
+>         matches.push(fullPath);
+>       }
+>     }
+>   }
+>
+>   await traverse(dirPath);
+>   return matches;
+> }
+>
+> // Verification tests
+> const mockFs = {
+>   readdir: async (dir) => {
+>     if (dir === "/logs") {
+>       return [
+>         { name: "app.log", isDirectory: () => false, isFile: () => true },
+>         { name: "sub", isDirectory: () => true, isFile: () => false }
+>       ];
+>     }
+>     if (dir === "/logs/sub") {
+>       return [
+>         { name: "db.log", isDirectory: () => false, isFile: () => true }
+>       ];
+>     }
+>     return [];
+>   }
+> };
+>
+> findFilesInDir("/logs", ".log", mockFs).then(files => {
+>   console.assert(files.length === 2, "Test 1 Failed");
+>   console.assert(files.includes("/logs/app.log"), "Test 2 Failed");
+>   console.assert(files.includes("/logs/sub/db.log"), "Test 3 Failed");
+> });
 > ```
 >
-> **Explanation:** `appendFile` appends data to a file, creating the file if it does not exist.
+> #### Technical Explanation
+>
+> 1. **fs.readdir withFileTypes**: Passing `{ withFileTypes: true }` returns `Dirent` objects, avoiding separate `fs.stat` system calls per file.
+> 2. **Recursive File System Traversal**: Recurses through directory trees while filtering by extension or stat metadata.
+> 3. **Performance Optimization**: Reducing file stat calls dramatically speeds up directory scanning over large file trees.
 > 
 ---
 
-### Exercise 3: Checking File Stats
+### Exercise 3: File Access & Permissions Checker
 
-**Problem:** Get size in bytes of `data.txt` using `fs.promises.stat`.
+**Scenario:** An API startup check verifies that required config files exist and are readable/writable using `fs.promises.access()`.
 
-**Expected output:**
+**Requirements:**
+1. Write checkFilePermissions(filePath, mockFs).
+2. Check read and write permissions.
+3. Return { exists, canRead, canWrite }.
+
 > [!check]- Answer
-> ```text
-> const stats = await fs.promises.stat('data.txt'); console.log(stats.size);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const stats = await fs.promises.stat('data.txt');
-> console.log(stats.size);
+> async function checkFilePermissions(filePath, mockFs) {
+>   const fsLib = mockFs || require("fs").promises;
+>   const fsConstants = (mockFs && mockFs.constants) || require("fs").constants;
+>
+>   let canRead = false;
+>   let canWrite = false;
+>
+>   try {
+>     await fsLib.access(filePath, fsConstants.R_OK);
+>     canRead = true;
+>   } catch (_) {}
+>
+>   try {
+>     await fsLib.access(filePath, fsConstants.W_OK);
+>     canWrite = true;
+>   } catch (_) {}
+>
+>   return {
+>     filePath,
+>     exists: canRead || canWrite,
+>     canRead,
+>     canWrite
+>   };
+> }
+>
+> // Verification tests
+> const mockFs = {
+>   constants: { R_OK: 4, W_OK: 2 },
+>   access: async (p, mode) => {
+>     if (mode === 4) return;
+>     throw new Error("Permission denied");
+>   }
+> };
+>
+> checkFilePermissions("/etc/config.json", mockFs).then(res => {
+>   console.assert(res.exists === true && res.canRead === true, "Test 1 Failed");
+>   console.assert(res.canWrite === false, "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** `fs.promises.stat` returns metadata objects containing `size`, `mtime`, `isFile()`, etc.
-> 
+> #### Technical Explanation
+>
+> 1. **fs.access vs fs.exists**: `fs.exists` is deprecated; `fs.access` checks existence and specific file mode permissions (R_OK, W_OK, X_OK).
+> 2. **Race Condition Warning**: Checking permissions before `fs.open()` can cause TOCTOU (Time-of-check to time-of-use) race conditions.
+> 3. **Best Practice Pattern**: Handle file operation errors directly inside try/catch rather than checking `fs.access` first whenever possible.
 ## 6. Related Terms
 - [Buffers](../level_06/buffers.md) — What the `fs` module returns if you forget to specify `utf8`.
 - [Streams (General Concept)](../level_06/streams.md) — If a file is 10 Gigabytes, `fs.readFile` will crash your RAM. You must use `fs.createReadStream` instead.

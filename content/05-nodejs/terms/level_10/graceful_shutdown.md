@@ -150,72 +150,169 @@ process.on('SIGTERM', () => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Signal Registration
+### Exercise 1: Production Graceful Shutdown Coordinator
 
-**Problem:** Complete the script to register a graceful shutdown trigger when receiving a manual interruption `Ctrl+C` signal:
+**Scenario:** Coordinates application teardown by stopping HTTP server listeners, draining DB connection pools, and flushing loggers within a 10s deadline.
 
-```javascript
-const db = {
-  closePool: () => Promise.resolve(console.log('DB pool closed'))
-};
-
-// Solution:
-process.on('SIGINT', async () => {
-  console.log('Shutting down...');
-  
-  // Close DB pool cleanly
-  await db.closePool();
-  
-  // Exit process
-  process.exit(0);
-});
-```
-
----
+**Requirements:**
+1. Write executeGracefulShutdown(serverMock, dbPoolMock, timeoutMs).
+2. Close server.
+3. Close DB pool.
+4. Enforce maximum timeout.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Writing Complete Graceful Shutdown Handler
-
-**Problem:** Write a `SIGINT` listener that stops `server`, closes `dbPool`, and exits with status 0.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> process.on('SIGINT', async () => { server.close(async () => { await dbPool.end(); process.exit(0); }); });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> process.on('SIGINT', () => {
->   server.close(async () => {
->     await dbPool.end();
->     console.log('Server and database pool closed cleanly.');
->     process.exit(0);
+> async function executeGracefulShutdown(serverMock, dbPoolMock, timeoutMs = 10000) {
+>   const steps = [];
+>
+>   const shutdownPromise = (async () => {
+>     if (serverMock && typeof serverMock.close === "function") {
+>       await new Promise(resolve => serverMock.close(resolve));
+>       steps.push("SERVER_CLOSED");
+>     }
+>
+>     if (dbPoolMock && typeof dbPoolMock.end === "function") {
+>       await dbPoolMock.end();
+>       steps.push("DB_DRAINED");
+>     }
+>
+>     return { success: true, steps };
+>   })();
+>
+>   const timeoutPromise = new Promise((_, reject) => {
+>     setTimeout(() => reject(new Error("GRACEFUL_SHUTDOWN_TIMEOUT")), timeoutMs);
 >   });
+>
+>   return Promise.race([shutdownPromise, timeoutPromise]);
+> }
+>
+> // Verification tests
+> const mockServer = { close: (cb) => cb() };
+> const mockPool = { end: async () => {} };
+>
+> executeGracefulShutdown(mockServer, mockPool, 1000).then(res => {
+>   console.assert(res.success === true, "Test 1 Failed");
+>   console.assert(res.steps.includes("SERVER_CLOSED") && res.steps.includes("DB_DRAINED"), "Test 2 Failed");
 > });
 > ```
 >
-> **Explanation:** Graceful shutdown closes web listeners, drains DB connection pools, and exits.
+> #### Technical Explanation
+>
+> 1. **Graceful Shutdown Sequence**: Stop accepting new requests -> Finish active in-flight requests -> Drain DB pools -> Close loggers -> Exit process.
+> 2. **Timeout Safety Net**: Enforces a hard deadline (e.g. 10s) using `Promise.race()` to prevent hanging processes indefinitely.
+> 3. **Zero Dropped Requests**: Ensures zero in-flight HTTP requests are dropped during deployments.
 > 
 ---
 
-### Exercise 3: Kubernetes SIGTERM PreStop Sequence
+### Exercise 2: Active HTTP Request Draining Guard
 
-**Problem:** Which OS signal does Kubernetes send to container processes when terminating a pod?
+**Scenario:** Tracks active HTTP socket connections to ensure all in-flight requests finish before server process exits.
 
-**Expected output:**
+**Requirements:**
+1. Write createConnectionTracker(serverMock).
+2. Track open sockets on `connection` event.
+3. Destroy remaining idle sockets on shutdown.
+
 > [!check]- Answer
-> ```text
-> SIGTERM (followed by SIGKILL after termination Grace Period).
-> ```
-> ```text
-> SIGTERM (followed by SIGKILL after termination Grace Period).
+>
+> #### Implementation
+>
+> ```javascript
+> function createConnectionTracker(serverMock) {
+>   const openSockets = new Set();
+>
+>   if (serverMock && typeof serverMock.on === "function") {
+>     serverMock.on("connection", (socket) => {
+>       openSockets.add(socket);
+>       socket.on("close", () => openSockets.delete(socket));
+>     });
+>   }
+>
+>   return {
+>     getActiveCount: () => openSockets.size,
+>     destroyAllSockets() {
+>       for (const socket of openSockets) {
+>         if (typeof socket.destroy === "function") socket.destroy();
+>       }
+>       openSockets.clear();
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const events = {};
+> const mockServer = { on: (e, fn) => { events[e] = fn; } };
+> const tracker = createConnectionTracker(mockServer);
+>
+> let destroyed = false;
+> const mockSocket = { on: () => {}, destroy: () => { destroyed = true; } };
+>
+> events["connection"](mockSocket);
+> console.assert(tracker.getActiveCount() === 1, "Test 1 Failed: Tracked 1 active socket");
+>
+> tracker.destroyAllSockets();
+> console.assert(destroyed === true, "Test 2 Failed: Destroyed socket on force shutdown");
 > ```
 >
-> **Explanation:** Kubernetes sends `SIGTERM` to initiate graceful shutdown, giving processes time to finish active requests.
+> #### Technical Explanation
+>
+> 1. **Socket Connection Tracking**: Tracking active TCP sockets allows identifying long-lived HTTP Keep-Alive connections during shutdown.
+> 2. **`server.close()` Behavior**: `server.close()` stops listening for new connections but keeps existing open HTTP sockets alive.
+> 3. **`server.closeIdleConnections()`**: Node.js v18.2.0+ provides native `.closeIdleConnections()` method to close non-active Keep-Alive sockets.
 > 
+---
+
+### Exercise 3: Emergency Forced Exit Timeout Safety Net
+
+**Scenario:** Schedules an un-refed emergency timer that forces `process.exit(1)` if graceful shutdown steps exceed maximum time limit.
+
+**Requirements:**
+1. Write setupEmergencyExitTimer(maxWaitMs, processMock).
+2. Schedule timer.
+3. Un-ref timer to avoid delaying clean exit.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function setupEmergencyExitTimer(maxWaitMs = 10000, processMock) {
+>   const proc = processMock || process;
+>
+>   const timer = setTimeout(() => {
+>     if (proc && typeof proc.exit === "function") {
+>       proc.exit(1);
+>     }
+>   }, maxWaitMs);
+>
+>   if (timer && typeof timer.unref === "function") {
+>     timer.unref(); // Don't hold event loop open if shutdown completes early!
+>   }
+>
+>   return {
+>     timer,
+>     cancel: () => clearTimeout(timer)
+>   };
+> }
+>
+> // Verification tests
+> let exited = false;
+> const mockProc = { exit: (code) => { exited = true; } };
+>
+> const safety = setupEmergencyExitTimer(10, mockProc);
+> setTimeout(() => {
+>   console.assert(exited === true, "Test 1 Failed: Emergency timer triggered process.exit(1)");
+> }, 20);
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Un-refed Timers (`timer.unref()`)**: Allows the timer to run without keeping the Node.js event loop active if all async tasks finish.
+> 2. **Non-Zero Exit Code**: Exiting with code 1 signals orchestrators (K8s/Docker) that process shutdown failed to complete gracefully.
+> 3. **Failsafe Guarantee**: Guarantees container process will terminate even if database client pool drain deadlocks.
 ## 6. Related Terms
 - [PM2 (Process Manager)](pm2.md) — Automatically sends SIGINT and awaits graceful shutdowns during updates.
 - [Docker](docker.md) — Relies on SIGTERM handling to shut down containers cleanly.

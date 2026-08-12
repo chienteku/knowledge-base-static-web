@@ -105,62 +105,171 @@ res.end();
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Port
+### Exercise 1: Raw HTTP Server with JSON Router
 
-**Problem:** In the example code above, we ran `server.listen(3000)`. What is a Port, and why do we need it?
+**Scenario:** A lightweight HTTP API server parses request paths and HTTP methods to route requests without external frameworks like Express.
 
-**Expected output:**
+**Requirements:**
+1. Write handleHttpRequest(req, res, routesMap).
+2. Extract method and path.
+3. Return JSON response with status codes.
+
 > [!check]- Answer
-> ```text
-> A Port is like an "apartment number" for an IP address. 
-> If your server's IP address (the street address) receives network traffic, the computer needs to know *which program* should handle it. Because Node.js is listening on Port 3000, any traffic directed to `123.45.67.89:3000` is routed directly to your Node.js application.
-> ```
-> - Does a computer run more than one program at a time? How does it differentiate traffic meant for an email server vs a web server?
-> 
----
-
-
-
-### Exercise 2: Creating Basic HTTP Server
-
-**Problem:** Create an HTTP server using `http.createServer()` returning status 200 and text `'OK'` on port 8080.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> http.createServer((req, res) => { res.writeHead(200, {'Content-Type': 'text/plain'}); res.end('OK'); }).listen(8080);
-> ```
-> ```javascript
-> const http = require('http');
-> const server = http.createServer((req, res) => {
->   res.writeHead(200, { 'Content-Type': 'text/plain' });
->   res.end('OK');
-> });
-> server.listen(8080);
-> ```
 >
-> **Explanation:** `http.createServer` instantiates a basic native HTTP web server listening on specified port.
-> 
----
-
-### Exercise 3: Reading HTTP Request Method & URL
-
-**Problem:** Write code inside request handler to return 404 if `req.method !== 'GET'` or `req.url !== '/api'`. 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> if (req.method !== 'GET' || req.url !== '/api') { res.statusCode = 404; res.end('Not Found'); }
-> ```
+> #### Implementation
+>
 > ```javascript
-> if (req.method !== 'GET' || req.url !== '/api') {
->   res.statusCode = 404;
->   return res.end('Not Found');
+> function handleHttpRequest(req, res, routesMap = {}) {
+>   const method = (req.method || "GET").toUpperCase();
+>   const urlPath = req.url || "/";
+>   const routeKey = `${method}:${urlPath}`;
+>
+>   res.setHeader("Content-Type", "application/json");
+>
+>   if (routesMap[routeKey]) {
+>     const handler = routesMap[routeKey];
+>     const data = handler(req);
+>     res.statusCode = 200;
+>     res.end(JSON.stringify({ success: true, data }));
+>   } else {
+>     res.statusCode = 404;
+>     res.end(JSON.stringify({ success: false, error: "NOT_FOUND" }));
+>   }
 > }
+>
+> // Verification tests
+> let responseCode = 0;
+> let responseBody = "";
+>
+> const mockReq = { method: "GET", url: "/health" };
+> const mockRes = {
+>   setHeader: () => {},
+>   set statusCode(code) { responseCode = code; },
+>   end: (body) => { responseBody = body; }
+> };
+>
+> const routes = {
+>   "GET:/health": () => ({ status: "UP" })
+> };
+>
+> handleHttpRequest(mockReq, mockRes, routes);
+> console.assert(responseCode === 200, "Test 1 Failed");
+> console.assert(JSON.parse(responseBody).data.status === "UP", "Test 2 Failed");
 > ```
 >
-> **Explanation:** `req.method` and `req.url` inspect incoming HTTP request route properties.
+> #### Technical Explanation
+>
+> 1. **Node.js `http` Core Module**: Provides `http.createServer((req, res) => {})` handling low-level TCP connection parsing.
+> 2. **IncomingMessage & ServerResponse**: `req` is readable stream (`http.IncomingMessage`); `res` is writable stream (`http.ServerResponse`).
+> 3. **Framework Foundations**: Express, Fastify, and Koa wrap the native `http` module under the hood.
 > 
+---
+
+### Exercise 2: HTTP Client Request Agent with Timeout
+
+**Scenario:** An outbound HTTP client wraps `http.request()` with custom timeouts and error handling.
+
+**Requirements:**
+1. Write makeHttpRequest(options, postData, mockHttp).
+2. Construct request.
+3. Resolve response payload string on completion.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function makeHttpRequest(options, postData, mockHttp) {
+>   const httpLib = mockHttp || require("http");
+>
+>   return new Promise((resolve, reject) => {
+>     const req = httpLib.request(options, (res) => {
+>       let data = "";
+>       res.on("data", (chunk) => { data += chunk; });
+>       res.on("end", () => {
+>         resolve({ statusCode: res.statusCode, body: data });
+>       });
+>     });
+>
+>     req.on("error", (err) => reject(err));
+>
+>     if (postData) {
+>       req.write(typeof postData === "object" ? JSON.stringify(postData) : postData);
+>     }
+>     req.end();
+>   });
+> }
+>
+> // Verification tests
+> const mockHttp = {
+>   request: (opts, cb) => {
+>     const resMock = {
+>       statusCode: 201,
+>       on: (evt, fn) => {
+>         if (evt === "data") fn('{"id":42}');
+>         if (evt === "end") fn();
+>       }
+>     };
+>     cb(resMock);
+>     return { on: () => {}, write: () => {}, end: () => {} };
+>   }
+> };
+>
+> makeHttpRequest({ method: "POST", host: "api.com" }, { name: "test" }, mockHttp).then(res => {
+>   console.assert(res.statusCode === 201, "Test 1 Failed");
+>   console.assert(JSON.parse(res.body).id === 42, "Test 2 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Outbound HTTP Requests**: `http.request` creates outbound HTTP requests to external microservices.
+> 2. **Stream Chunk Buffering**: HTTP response bodies arrive as multiple data chunks that must be buffered.
+> 3. **End Signal Required**: `req.end()` MUST be called to flush buffers and complete TCP connection setup.
+> 
+---
+
+### Exercise 3: Security Headers HTTP Middleware Decorator
+
+**Scenario:** Attaches essential HTTP security headers (`X-Content-Type-Options`, `X-Frame-Options`) to outbound `http.ServerResponse` objects.
+
+**Requirements:**
+1. Write attachSecurityHeaders(res).
+2. Set security headers.
+3. Set CORS headers.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function attachSecurityHeaders(res) {
+>   if (!res || typeof res.setHeader !== "function") {
+>     throw new TypeError("Invalid ServerResponse object");
+>   }
+>
+>   res.setHeader("X-Content-Type-Options", "nosniff");
+>   res.setHeader("X-Frame-Options", "DENY");
+>   res.setHeader("X-XSS-Protection", "1; mode=block");
+>   res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+>
+>   return res;
+> }
+>
+> // Verification tests
+> const headers = {};
+> const mockRes = { setHeader: (k, v) => { headers[k] = v; } };
+>
+> attachSecurityHeaders(mockRes);
+> console.assert(headers["X-Content-Type-Options"] === "nosniff", "Test 1 Failed");
+> console.assert(headers["X-Frame-Options"] === "DENY", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **HTTP Response Headers**: `res.setHeader(name, value)` configures HTTP response headers before `res.writeHead()` or `res.end()`.
+> 2. **Security Header Protections**: Prevents MIME-sniffing attacks, clickjacking (X-Frame-Options), and enforces HTTPS (HSTS).
+> 3. **Header Modification Order**: Headers cannot be modified after response headers have been sent to the client (`res.headersSent`).
 ## 6. Related Terms
 - [Express.js](../level_07/express_js.md) — The famous third-party framework that abstracts the native `http` module to make web development significantly easier.
 - [Event Emitter](../level_05/event_emitter.md) — Related concept: Event Emitter.

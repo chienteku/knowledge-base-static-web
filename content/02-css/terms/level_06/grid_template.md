@@ -186,138 +186,90 @@ A standard 3-column card grid:
 .grid { grid-template: 100px 1fr / 200px 1fr; } /* rows / columns */
 ```
 
-
-
-### Mistake 4: Mismatching Column Counts Between `grid-template-columns` and `grid-template-rows`
-
-**The mistake:** Confusing `grid-template-columns` with `grid-template-rows`.
-
-**Why it's wrong:** `grid-template-columns` defines HORIZONTAL column tracks; `grid-template-rows` defines VERTICAL row track heights.
-
-*Incorrect:*
-```css
-/* Trying to create 3 horizontal columns using grid-template-rows */
-.grid { grid-template-rows: 1fr 1fr 1fr; } /* ❌ Creates 3 vertical rows instead! */
-```
-
-*Fix:*
-```css
-.grid { grid-template-columns: 1fr 1fr 1fr; } /* 3 horizontal columns */
-```
-
-### Mistake 5: Forgetting the Forward Slash `/` Separator in `grid-template` Shorthand
-
-**The mistake:** Writing `grid-template: 100px 1fr 200px 1fr;` without slash.
-
-**Why it's wrong:** In `grid-template` shorthand, row tracks are defined BEFORE the slash `/`, and column tracks AFTER the slash (`grid-template: rows / columns`).
-
-*Incorrect:*
-```css
-/* Missing slash separator in grid-template shorthand */
-.grid { grid-template: 100px 1fr 200px 1fr; }
-```
-
-*Fix:*
-```css
-.grid { grid-template: 100px 1fr / 200px 1fr; } /* rows / columns */
-```
-
-
-
-### Mistake 6: Mismatching Column Counts Between `grid-template-columns` and `grid-template-rows`
-
-**The mistake:** Confusing `grid-template-columns` with `grid-template-rows`.
-
-**Why it's wrong:** `grid-template-columns` defines HORIZONTAL column tracks; `grid-template-rows` defines VERTICAL row track heights.
-
-*Incorrect:*
-```css
-/* Trying to create 3 horizontal columns using grid-template-rows */
-.grid { grid-template-rows: 1fr 1fr 1fr; } /* ❌ Creates 3 vertical rows instead! */
-```
-
-*Fix:*
-```css
-.grid { grid-template-columns: 1fr 1fr 1fr; } /* 3 horizontal columns */
-```
-
-### Mistake 7: Forgetting the Forward Slash `/` Separator in `grid-template` Shorthand
-
-**The mistake:** Writing `grid-template: 100px 1fr 200px 1fr;` without slash.
-
-**Why it's wrong:** In `grid-template` shorthand, row tracks are defined BEFORE the slash `/`, and column tracks AFTER the slash (`grid-template: rows / columns`).
-
-*Incorrect:*
-```css
-/* Missing slash separator in grid-template shorthand */
-.grid { grid-template: 100px 1fr 200px 1fr; }
-```
-
-*Fix:*
-```css
-.grid { grid-template: 100px 1fr / 200px 1fr; } /* rows / columns */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Standard Dashboard Blueprint
+### Exercise 1: Defining Explicit Column and Row Tracks with grid-template
 
-**Problem:** Build the CSS rule for a grid container that has a fixed sidebar on the left (`250px`), a fluid center content column, and a fixed details pane on the right (`300px`).
+**Scenario:** An author defines explicit column and row tracks for a main application grid using `grid-template-columns` and `grid-template-rows`.
 
-**Expected output:**
+**Requirements:**
+1. Set `grid-template-columns: 20rem 1fr`.
+2. Set `grid-template-rows: 5rem 1fr 4rem`.
+3. Add `gap: 1.5rem`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .dashboard-grid {
+> .app-container {
 >   display: grid;
->   grid-template-columns: 250px 1fr 300px;
-> }
-> ```
-> - Define three space-separated track widths.
-> - Use pixels for fixed columns, and fractional units for fluid columns.
-> 
----
-
-
-
-### Exercise 2: Explicit Grid Template Layout
-
-**Problem:** Write CSS for `.app` grid defining 3 rows (`60px`, `1fr`, `40px`) and 2 columns (`250px`, `1fr`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .app { display: grid; grid-template-rows: 60px 1fr 40px; grid-template-columns: 250px 1fr; }
-> ```
-> ```css
-> .app {
->   display: grid;
->   grid-template-rows: 60px 1fr 40px;
->   grid-template-columns: 250px 1fr;
+>   grid-template-columns: 20rem 1fr;     /* 2 Columns: Sidebar & Main */
+>   grid-template-rows: 5rem 1fr 4rem;   /* 3 Rows: Header, Main Content, Footer */
+>   gap: 1.5rem;
+>   min-height: 100vh;
 > }
 > ```
 >
-> **Explanation:** `grid-template-rows` and `grid-template-columns` define explicit grid structures.
+> #### Technical Explanation
+>
+> 1. **The `grid-template` Properties**: Define the explicit row and column track sizes of a grid container.
+> 2. **Track Definition Syntax**: `grid-template-columns` sets horizontal tracks; `grid-template-rows` sets vertical tracks.
+> 3. **Explicit Grid Matrix**: Constructs a strict coordinate grid line framework for child element placement.
 > 
 ---
 
-### Exercise 3: grid-template Shorthand Syntax
+### Exercise 2: Defining Fixed Sidebar + Fluid Content Layouts
 
-**Problem:** Combine rows (`60px 1fr`) and columns (`200px 1fr`) into single `grid-template` shorthand rule.
+**Scenario:** Creates a classic application layout with a fixed sidebar and fluid main content area.
 
-**Expected output:**
+**Requirements:**
+1. Apply `grid-template-columns: 18rem 1fr`.
+
 > [!check]- Answer
-> ```text
-> grid-template: 60px 1fr / 200px 1fr;
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .layout {
+> .admin-layout {
 >   display: grid;
->   grid-template: 60px 1fr / 200px 1fr;
+>   grid-template-columns: 18rem 1fr;
+>   min-height: 100vh;
 > }
 > ```
 >
-> **Explanation:** `grid-template` shorthand combines `rows / columns`.
+> #### Technical Explanation
+>
+> 1. **Fixed + Fluid Columns**: `18rem` locks sidebar width; `1fr` allows main content to consume remaining viewport width.
+> 2. **Full-Height Stretch**: Setting `min-height: 100vh` on container stretches sidebar and main content to full screen height.
+> 3. **Clean App Shell**: Standard layout foundation for modern web applications.
 > 
+---
+
+### Exercise 3: Shorthand grid-template Property Syntax
+
+**Scenario:** Uses the `grid-template` shorthand property to combine rows, columns, and areas in one declaration.
+
+**Requirements:**
+1. Apply `grid-template: 5rem 1fr 4rem / 20rem 1fr` shorthand.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .app-shorthand {
+>   display: grid;
+>   /* Shorthand: ROWS / COLUMNS */
+>   grid-template: 5rem 1fr 4rem / 20rem 1fr;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`grid-template` Shorthand Syntax**: Combines `grid-template-rows` and `grid-template-columns` separated by a slash `/` (`ROWS / COLUMNS`).
+> 2. **Conciseness**: Reduces repetitive stylesheet declarations into a single readable line.
+> 3. **Resets Implicit Properties**: Shorthand resets implicit grid properties (`grid-auto-columns`, `grid-auto-rows`) back to initial defaults.
 ## 6. Related Terms
 - [CSS Grid (Concept) & `display: grid`](grid_concept.md) — The parent trigger.
 - [`fr` Unit (Fractional Unit)](fr_unit.md) — The flexible track sizing unit.

@@ -246,73 +246,105 @@ Container-relative unit values:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Article Layout Toggle
+### Exercise 1: Defining Container Query Contexts with container-type
 
-**Problem:** You are styling an article preview list. You have a container `.article-wrapper` and a child title heading `.article-title`. The title should have a font size of `1.2rem` by default, but if the `.article-wrapper` is at least `500px` wide, scale the title font size to `1.8rem`. Write the CSS ruleset.
+**Scenario:** An author establishes a container query context on a card wrapper component using `container-type: inline-size`.
 
-**Expected output:**
+**Requirements:**
+1. Set `container-type: inline-size` on `.card-container`.
+2. Set `container-name: sidebar-card`.
+
 > [!check]- Answer
-> ```css
-> .article-wrapper {
->   container-type: inline-size;
-> }
-> 
-> .article-title {
->   font-size: 1.2rem;
-> }
-> 
-> @container (min-width: 500px) {
->   .article-title {
->     font-size: 1.8rem;
->   }
-> }
-> ```
-> - Remember to set the container context wrapper first.
-> - Target the child element inside the `@container` conditional query block.
-> 
----
-
-
-
-### Exercise 2: Card Component Container Query Pattern
-
-**Problem:** Write Container Query for `.card-wrapper` (`container-type: inline-size`) switching `.card` to `flex-direction: row` when wrapper exceeds `450px` width.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .card-wrapper { container-type: inline-size; } @container (min-width: 450px) { .card { flex-direction: row; } }
-> ```
+>
+> #### Implementation
+>
 > ```css
 > .card-wrapper {
+>   /* Establish inline-size Container Query Context */
 >   container-type: inline-size;
+>   container-name: product-card;
 > }
-> @container (min-width: 450px) {
+>
+> /* Micro-Responsive Component Query (based on CONTAINER width, NOT viewport!) */
+> @container product-card (min-width: 25rem) {
 >   .card {
+>     display: flex;
 >     flex-direction: row;
+>     align-items: center;
 >   }
 > }
 > ```
 >
-> **Explanation:** Container queries allow components to adapt based on parent container width rather than viewport width.
+> #### Technical Explanation
+>
+> 1. **The `@container` Query**: Evaluates media queries relative to the width of the COMPONENT'S PARENT CONTAINER rather than the browser viewport!
+> 2. **`container-type: inline-size`**: Tells browser layout engine to track the horizontal width of the container.
+> 3. **True Modular Components**: Enables building reusable UI components that adapt layout automatically whether placed in a narrow sidebar or a wide main content area.
 > 
 ---
 
-### Exercise 3: Container Queries vs Media Queries Difference
+### Exercise 2: Building Micro-Responsive Components for Variable Width Layouts
 
-**Problem:** Why are Container Queries superior to Media Queries for reusable component libraries?
+**Scenario:** Styles a user profile widget that turns into a horizontal card when its container exceeds `30rem`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `@container (min-width: 30rem)`.
+
 > [!check]- Answer
-> ```text
-> Container Queries allow components to respond to their local parent box width wherever placed, independent of global browser viewport width.
-> ```
-> ```text
-> Container Queries allow components to respond to their local parent box width wherever placed, independent of global browser viewport width.
+>
+> #### Implementation
+>
+> ```css
+> .profile-widget-container {
+>   container-type: inline-size;
+> }
+>
+> .profile-card {
+>   display: flex;
+>   flex-direction: column;
+> }
+>
+> @container (min-width: 30rem) {
+>   .profile-card {
+>     flex-direction: row;
+>     gap: 1.5rem;
+>   }
+> }
 > ```
 >
-> **Explanation:** Container queries enable true modular component responsiveness.
+> #### Technical Explanation
+>
+> 1. **Viewport vs Container Query Difference**: Viewport queries (`@media`) fail when placing cards in sidebars; `@container` queries adapt perfectly everywhere.
+> 2. **Component Self-Awareness**: Components become truly self-contained and modular.
+> 3. **Modern CSS Breakthrough**: The biggest paradigm shift in responsive web design since media queries.
 > 
+---
+
+### Exercise 3: Container Query Length Units (cqw, cqh)
+
+**Scenario:** Scales font sizes relative to container width using container query units (`cqw`).
+
+**Requirements:**
+1. Apply `font-size: clamp(1rem, 5cqw, 2rem)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> @container (min-width: 20rem) {
+>   .container-title {
+>     /* 5cqw = 5% of the container's inline width */
+>     font-size: clamp(1rem, 5cqw, 2rem);
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Container Query Units (`cqw`)**: `1cqw` equals 1% of the query container's width.
+> 2. **Proportional Component Text**: Text scales relative to the COMPONENT width rather than the screen width.
+> 3. **Fluid Modular Design**: Ensures text stays balanced inside resized widget containers.
 ## 6. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Viewport-based responsive queries.
 - [`@supports` (Feature Queries)](supports.md) — Browser feature detection at-rules.

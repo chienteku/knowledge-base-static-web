@@ -147,70 +147,194 @@ await pipeline(readable, transform, writable); // Automatically manages errors &
 
 ## 5. Practice Exercises
 
-### Exercise 1: Stream Analysis
+### Exercise 1: Custom Writable Stream HighWaterMark Backpressure Controller
 
-**Problem:** You are building an Express endpoint that pipes video downloads to users. Under heavy loads, the server's RAM usage spikes and crashes. 
-Review the two route implementations below. Explain which route is causing the crash and why:
+**Scenario:** A high-throughput file upload service manages stream backpressure by checking `writable.write()` return boolean values to pause reading when the internal buffer fills up.
 
-```javascript
-// Route A
-app.get('/download-bad', (req, res) => {
-  const fileStream = fs.createReadStream('movie.mp4');
-  fileStream.on('data', (chunk) => {
-    res.write(chunk); 
-  });
-  fileStream.on('end', () => res.end());
-});
-
-// Route B
-app.get('/download-good', (req, res) => {
-  const fileStream = fs.createReadStream('movie.mp4');
-  fileStream.pipe(res); // Handles backpressure
-});
-```
+**Requirements:**
+1. Write writeWithBackpressure(chunksArray, mockWritable).
+2. Call `mockWritable.write(chunk)`.
+3. If `write()` returns false, pause pushing until `drain` event fires.
 
 > [!check]- Answer
-> - **Route A** causes the crash. It reads the movie file at disk speed and writes it to the response object without checking for backpressure. If the user has a slow connection, the unwritten movie data will accumulate in Node's RAM. **Route B** is correct because `.pipe(res)` automatically manages backpressure, pausing the file reader when the network connection slows down.
-> 
+>
+> #### Implementation
+>
+> ```javascript
+> async function writeWithBackpressure(chunksArray = [], mockWritable) {
+>   let writtenCount = 0;
+>
+>   for (const chunk of chunksArray) {
+>     const canAcceptMore = mockWritable.write(chunk);
+>     writtenCount++;
+>
+>     if (!canAcceptMore) {
+>       await new Promise((resolve) => mockWritable.once("drain", resolve));
+>     }
+>   }
+>
+>   return { writtenCount, complete: true };
+> }
+>
+> // Verification tests
+> let drainListeners = [];
+> const mockWritable = {
+>   internalBuffer: 0,
+>   write(chunk) {
+>     this.internalBuffer += chunk.length;
+>     if (this.internalBuffer >= 10) {
+>       return false;
+>     }
+>     return true;
+>   },
+>   once(evt, fn) {
+>     if (evt === "drain") drainListeners.push(fn);
+>   },
+>   triggerDrain() {
+>     this.internalBuffer = 0;
+>     const fns = drainListeners;
+>     drainListeners = [];
+>     fns.forEach(fn => fn());
+>   }
+> };
+>
+> const chunks = ["12345", "6789012345", "extra"];
+> const promise = writeWithBackpressure(chunks, mockWritable);
+>
+> setTimeout(() => {
+>   mockWritable.triggerDrain();
+> }, 10);
+>
+> promise.then(res => {
+>   console.assert(res.writtenCount === 3, "Test 1 Failed: All 3 chunks written");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Backpressure Concept**: Occurs when data is read/produced faster than the downstream consumer can write or process it.
+> 2. **highWaterMark Threshold**: The byte limit of internal stream buffers. `stream.write()` returns `false` when internal buffer exceeds `highWaterMark`.
+> 3. **`drain` Event Handling**: When internal buffer empties, writable streams emit `drain`, signaling the producer to resume sending data.
 > 
 ---
 
+### Exercise 2: Drain Event Listener with Flow Control
 
+**Scenario:** Implements a readable-to-writable stream flow controller that pauses the readable stream on backpressure and resumes on `drain`.
 
-### Exercise 2: Drain Event Listener Usage
+**Requirements:**
+1. Write createDrainFlowHandler(readableMock, writableMock).
+2. Pause readable on `write() === false`.
+3. Resume readable on `writable.on('drain')`.
 
-**Problem:** Which stream event notifies code that a Writable stream's buffer has emptied after returning `false` from `write()`?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 'drain' event
-> ```
-> ```text
-> 'drain' event
+>
+> #### Implementation
+>
+> ```javascript
+> function createDrainFlowHandler(readableMock, writableMock) {
+>   let isPaused = false;
+>
+>   readableMock.on("data", (chunk) => {
+>     const ok = writableMock.write(chunk);
+>     if (!ok && !isPaused) {
+>       isPaused = true;
+>       readableMock.pause();
+>     }
+>   });
+>
+>   writableMock.on("drain", () => {
+>     if (isPaused) {
+>       isPaused = false;
+>       readableMock.resume();
+>     }
+>   });
+>
+>   return {
+>     isPaused: () => isPaused
+>   };
+> }
+>
+> // Verification tests
+> const eventsR = {};
+> const eventsW = {};
+>
+> const mockR = {
+>   on: (e, fn) => { eventsR[e] = fn; },
+>   pause: () => { mockR.paused = true; },
+>   resume: () => { mockR.paused = false; },
+>   paused: false
+> };
+>
+> const mockW = {
+>   on: (e, fn) => { eventsW[e] = fn; },
+>   write: (chunk) => false
+> };
+>
+> const handler = createDrainFlowHandler(mockR, mockW);
+> eventsR["data"]("chunk1");
+>
+> console.assert(handler.isPaused() === true, "Test 1 Failed: Readable paused on backpressure");
+> console.assert(mockR.paused === true, "Test 2 Failed");
+>
+> eventsW["drain"]();
+> console.assert(handler.isPaused() === false, "Test 3 Failed: Resumed on drain");
 > ```
 >
-> **Explanation:** The `'drain'` event signals that a Writable stream is ready to receive more data.
+> #### Technical Explanation
+>
+> 1. **Stream Flow Control**: Connecting readable stream `pause()` and `resume()` to writable stream backpressure prevents Memory Leaks.
+> 2. **Memory Leak Prevention**: Without backpressure handling, unbuffered stream data accumulates infinitely in RAM, triggering Heap OOM crashes.
+> 3. **Automatic Handling via `pipe()`**: Standard `readable.pipe(writable)` automatically handles backpressure and `drain` events internally.
 > 
 ---
 
-### Exercise 3: pipeline Utility Benefit
+### Exercise 3: Stream Pipeline Backpressure Monitor
 
-**Problem:** List 2 primary advantages of using `stream.pipeline` over `.pipe()`.
+**Scenario:** An APM monitor measures internal buffer usage across readable and writable streams to flag backpressure bottlenecks.
 
-**Expected output:**
+**Requirements:**
+1. Write auditStreamBackpressure(streamInstance).
+2. Extract `writableHighWaterMark` and `writableLength`.
+3. Calculate buffer fill percentage.
+
 > [!check]- Answer
-> ```text
-> 1. Automatic error handling and cleanup across all streams
-> 2. Automatic backpressure management
-> ```
-> ```text
-> 1. Automatic error handling and cleanup across all streams
-> 2. Automatic backpressure management
+>
+> #### Implementation
+>
+> ```javascript
+> function auditStreamBackpressure(streamInstance) {
+>   const hwm = streamInstance.writableHighWaterMark || 16384;
+>   const length = streamInstance.writableLength || 0;
+>
+>   const fillPercentage = Number(((length / hwm) * 100).toFixed(2));
+>   const isBackpressureActive = length >= hwm || streamInstance.writableNeedDrain === true;
+>
+>   return {
+>     highWaterMark: hwm,
+>     bufferedLength: length,
+>     fillPercentage,
+>     isBackpressureActive
+>   };
+> }
+>
+> // Verification tests
+> const mockStream = {
+>   writableHighWaterMark: 16384,
+>   writableLength: 16384,
+>   writableNeedDrain: true
+> };
+>
+> const audit = auditStreamBackpressure(mockStream);
+> console.assert(audit.fillPercentage === 100.0, "Test 1 Failed");
+> console.assert(audit.isBackpressureActive === true, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `pipeline` manages stream lifecycle and closes open streams when errors occur.
-> 
+> #### Technical Explanation
+>
+> 1. **writableLength Property**: Indicates the current number of bytes waiting in the internal writable queue.
+> 2. **writableNeedDrain Flag**: Boolean set to true when internal buffer exceeds highWaterMark and requires a drain event.
+> 3. **Tuning highWaterMark**: Adjusting highWaterMark (`{ highWaterMark: 64 * 1024 }`) increases throughput for gigabyte file operations.
 ## 6. Related Terms
 - [Piping (.pipe())](piping.md) — The abstraction layer that automates backpressure handling.
 - [Readable & Writable Streams](readable_writable.md) — The components that exchange flow-control signals.

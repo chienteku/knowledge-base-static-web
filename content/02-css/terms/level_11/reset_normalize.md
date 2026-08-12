@@ -162,71 +162,118 @@ HTML structure index file loading order:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Reset Audit
+### Exercise 1: Modern Defensive CSS Reset Architecture
 
-**Problem:** You are starting a fresh project and want to write a basic CSS Reset that sets `box-sizing: border-box` on all elements, removes margins and paddings from all elements, and makes sure image tags (`<img>`) are displayed as block elements with a maximum width of 100% to prevent overflow. Write the CSS.
+**Scenario:** An author constructs a modern defensive CSS reset for new projects.
 
-**Expected output:**
+**Requirements:**
+1. Apply `box-sizing: border-box` to `*, *::before, *::after`.
+2. Apply `margin: 0`.
+3. Set responsive media defaults.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
+> /* Modern Defensive CSS Reset Baseline */
 > *, *::before, *::after {
 >   box-sizing: border-box;
->   margin: 0;
->   padding: 0;
 > }
-> 
-> img {
+>
+> * {
+>   margin: 0;
+> }
+>
+> html {
+>   font-size: 100%;
+>   -webkit-text-size-adjust: 100%;
+> }
+>
+> body {
+>   min-height: 100vh;
+>   line-height: 1.5;
+>   font-family: system-ui, -apple-system, sans-serif;
+>   color: #1e293b;
+>   background-color: #ffffff;
+> }
+>
+> img, picture, video, canvas, svg {
 >   display: block;
 >   max-width: 100%;
 > }
+>
+> input, button, textarea, select {
+>   font: inherit;
+> }
 > ```
-> - Use the universal selector `*` to target all boxes.
-> - Select the image tag specifically to assign block and max-width layout limits.
+>
+> #### Technical Explanation
+>
+> 1. **Modern CSS Reset Goals**: Eliminates browser user-agent stylesheet inconsistencies (like default 8px body margin and button font discrepancies).
+> 2. **Universal `border-box`**: Ensures all elements include padding and border inside width calculations.
+> 3. **Fluid Media Reset**: `img { display: block; max-width: 100%; }` eliminates unwanted bottom inline baseline gaps and prevents image overflow.
+> 4. **Form Font Inheritance**: `font: inherit` forces inputs and buttons to use the site's primary font family instead of browser default OS fonts.
 > 
 ---
 
+### Exercise 2: Comparing Global Reset vs Normalize.css
 
+**Scenario:** Compares aggressive zero-margin resets (`* { margin: 0; }`) with Normalize.css element preservation.
 
-### Exercise 2: Modern Minimal CSS Reset Template
+**Requirements:**
+1. Explain reset vs normalize philosophies.
 
-**Problem:** Write minimal modern CSS reset covering `border-box`, margin/padding reset, and responsive media handling.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; } img, picture, video { max-width: 100%; display: block; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> *, *::before, *::after {
->   box-sizing: border-box;
->   margin: 0;
->   padding: 0;
-> }
-> img, picture, video {
->   max-width: 100%;
->   display: block;
-> }
+> /* Aggressive Reset: Strips ALL margins and paddings indiscriminately */
+> * { margin: 0; padding: 0; }
+>
+> /* Normalize Philosophy: Preserves useful browser defaults (h1 size, list bullets) while fixing bugs */
 > ```
 >
-> **Explanation:** Modern CSS resets provide clean baseline defaults for modern web apps.
+> #### Technical Explanation
+>
+> 1. **Reset Philosophy**: Strips all default browser styles to a completely blank canvas.
+> 2. **Normalize Philosophy**: Preserves useful browser defaults while harmonizing cross-browser bugs.
+> 3. **Modern Consensus**: Modern web applications prefer lightweight custom resets (like Andy Bell's or Josh Comeau's reset).
 > 
 ---
 
-### Exercise 3: Normalize.css Core Strategy
+### Exercise 3: Form Element Font and Margin Reset Policies
 
-**Problem:** What is the primary architectural goal of Normalize.css?
+**Scenario:** Resets default button and input styles for custom UI library components.
 
-**Expected output:**
+**Requirements:**
+1. Apply `font: inherit`, `background: none`, `border: none`.
+
 > [!check]- Answer
-> ```text
-> To normalize cross-browser default styles while preserving useful browser defaults (like heading sizes and list markers).
-> ```
-> ```text
-> To normalize cross-browser default styles while preserving useful browser defaults (like heading sizes and list markers).
+>
+> #### Implementation
+>
+> ```css
+> button, input, select, textarea {
+>   font: inherit;
+>   color: inherit;
+>   letter-spacing: inherit;
+> }
+>
+> button {
+>   background-color: transparent;
+>   border: none;
+>   padding: 0;
+>   cursor: pointer;
+> }
 > ```
 >
-> **Explanation:** Normalize.css fixes browser inconsistencies without stripping all typography.
-> 
+> #### Technical Explanation
+>
+> 1. **Form Style Inheritance**: By default, browsers do NOT inherit `font-family` or `color` on `<button>` and `<input>` elements!
+> 2. **Explicit Inheritance Rule**: Declaring `font: inherit` and `color: inherit` harmonizes form typography.
+> 3. **Base Button Cleaning**: Cleans native OS button bevels and backgrounds for custom design systems.
 ## 6. Related Terms
 - [`@import`](import.md) — Loading modular sheets.
 - [`box-sizing: border-box`](../level_02/box_sizing.md) — Sizing layouts easily.

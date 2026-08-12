@@ -194,62 +194,99 @@ To center elements inside a single row vertically, you must use **`align-items: 
 
 ## 5. Practice Exercises
 
-### Exercise 1: Spacing Rows
+### Exercise 1: Vertical Multi-Row Spacing in Multi-Line Wrapping Flex Containers
 
-**Problem:** You are building a responsive image gallery. The images wrap onto three rows inside a container that has a fixed height of `600px`. You want the first row at the top edge, the third row at the bottom edge, and the middle row centered. What property and value do you declare?
+**Scenario:** An author controls vertical line spacing across multiple wrapped rows in a tag gallery using `align-content`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: flex; flex-wrap: wrap;`.
+2. Set `min-height: 20rem`.
+3. Apply `align-content: space-between` to distribute wrapped rows.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .gallery-container {
+> .tag-gallery {
 >   display: flex;
->   flex-wrap: wrap;
->   height: 600px;
->   align-content: space-between;
+>   flex-wrap: wrap;              /* Enables multi-line row wrapping */
+>   min-height: 20rem;            /* Vertical container height threshold */
+>   align-content: space-between; /* Distributes vertical space between wrapped rows */
+>   padding: 1.5rem;
+>   background-color: #ffffff;
+>   border-radius: 0.5rem;
 > }
-> ```
-> - Check which property handles rows distribution, and which value pins elements to the outer edges.
-> 
----
-
-
-
-### Exercise 2: Multi-Line Flex Alignment Setup
-
-**Problem:** Write CSS for multi-line flex container distributing flex lines with equal space between them.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .container { display: flex; flex-wrap: wrap; align-content: space-between; }
-> ```
-> ```css
-> .container {
->   display: flex;
->   flex-wrap: wrap;
->   align-content: space-between;
+>
+> .tag-item {
+>   padding: 0.5rem 1rem;
+>   background-color: #f1f5f9;
+>   border-radius: 9999px;
 > }
 > ```
 >
-> **Explanation:** `align-content: space-between` distributes extra vertical space between wrapped flex lines.
+> #### Technical Explanation
+>
+> 1. **The `align-content` Property**: Aligns multiple rows of flex items along the cross-axis when extra space exists in a multi-line flex container (`flex-wrap: wrap`).
+> 2. **Multi-Line Prerequisite**: `align-content` has NO effect on single-line flex containers (`flex-wrap: nowrap`); it strictly targets multi-row wrapped flex lines.
+> 3. **`space-between` Distribution**: Pushes the first flex row to the top edge and the last flex row to the bottom edge, distributing remaining vertical space between intermediate rows.
 > 
 ---
 
-### Exercise 3: align-content Default Value
+### Exercise 2: Centering Wrapped Badge Tags Vertically
 
-**Problem:** What is default value of `align-content` in CSS Flexbox?
+**Scenario:** Centers multiple rows of wrapped badge tags in the middle of a modal drawer using `align-content: center`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `align-content: center` to multi-line tag container.
+
 > [!check]- Answer
-> ```text
-> align-content: normal (or stretch).
-> ```
-> ```text
-> align-content: normal (or stretch).
+>
+> #### Implementation
+>
+> ```css
+> .badge-drawer {
+>   display: flex;
+>   flex-wrap: wrap;
+>   align-content: center;        /* Bundles wrapped flex rows together in vertical center */
+>   gap: 0.75rem;
+>   min-height: 15rem;
+> }
 > ```
 >
-> **Explanation:** Default `normal`/`stretch` expands flex lines to fill container height.
+> #### Technical Explanation
+>
+> 1. **`align-content: center` Behavior**: Packs wrapped flex rows together tightly and positions the bundled group in the vertical center of the container.
+> 2. **Differs from `align-items`**: `align-items` aligns individual items WITHIN each row; `align-content` aligns the ENTIRE multi-row group as a whole.
+> 3. **Clean Drawer Layout**: Prevents unwanted empty whitespace gaps between wrapped badge rows.
 > 
+---
+
+### Exercise 3: Comparing align-items vs align-content in Flexbox
+
+**Scenario:** Demonstrates single-row vs multi-row cross-axis alignment behaviors.
+
+**Requirements:**
+1. Apply `align-items: center` for single-row item alignment.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .single-line-bar {
+>   display: flex;
+>   flex-wrap: nowrap;
+>   align-items: center;          /* Aligns items vertically in a single row */
+>   gap: 1rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Single-Row Alignment (`align-items`)**: Use `align-items` for single-line flex rows to center buttons, icons, and text.
+> 2. **Multi-Row Alignment (`align-content`)**: Use `align-content` only when `flex-wrap: wrap` creates multiple flex line rows.
+> 3. **Flexbox Cross-Axis Control**: Mastering both properties guarantees full control over cross-axis layout geometry.
 ## 6. Related Terms
 - [`flex-wrap`](flex_wrap.md) — The required prerequisite.
 - [`align-items`](align_items.md) — Single-line vertical alignment.

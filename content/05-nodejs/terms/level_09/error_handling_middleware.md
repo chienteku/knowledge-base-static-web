@@ -145,166 +145,152 @@ app.use((err, req, res, next) => {
 });
 ```
 
-
-
-### Mistake 4: Declaring Error Handling Middleware with Fewer Than 4 Parameters
-
-**The mistake:** Writing `app.use((err, req, res) => ...)` with only 3 parameters.
-
-**Why it's wrong:** Express identifies error-handling middleware strictly by checking `function.length === 4` (`(err, req, res, next)`). With 3 parameters, Express treats it as standard middleware.
-
-*Incorrect:*
-```javascript
-app.use((err, req, res) => {
-  res.status(500).send(err.message); // ❌ Express treats this as regular 3-param middleware!
-});
-```
-
-*Fix:*
-```javascript
-app.use((err, req, res, next) => {
-  res.status(500).send(err.message); // Must include all 4 parameters (err, req, res, next)
-});
-```
-
-### Mistake 5: Leaking Raw Internal Server Error Stack Traces to Clients in Production
-
-**The mistake:** Returning `res.status(500).json({ error: err.stack })` in production environments.
-
-**Why it's wrong:** Exposing internal stack traces to public clients leaks database schema details, file system paths, and library versions to attackers. Return clean error messages in production.
-
-*Incorrect:*
-```javascript
-app.use((err, req, res, next) => {
-  res.status(500).json({ error: err.stack }); // ❌ Leaks sensitive internal paths in prod!
-});
-```
-
-*Fix:*
-```javascript
-app.use((err, req, res, next) => {
-  const isProd = process.env.NODE_ENV === 'production';
-  res.status(err.status || 500).json({
-    error: isProd ? 'Internal Server Error' : err.message
-  });
-});
-```
-
-
-
-### Mistake 6: Declaring Error Handling Middleware with Fewer Than 4 Parameters
-
-**The mistake:** Writing `app.use((err, req, res) => ...)` with only 3 parameters.
-
-**Why it's wrong:** Express identifies error-handling middleware strictly by checking `function.length === 4` (`(err, req, res, next)`). With 3 parameters, Express treats it as standard middleware.
-
-*Incorrect:*
-```javascript
-app.use((err, req, res) => {
-  res.status(500).send(err.message); // ❌ Express treats this as regular 3-param middleware!
-});
-```
-
-*Fix:*
-```javascript
-app.use((err, req, res, next) => {
-  res.status(500).send(err.message); // Must include all 4 parameters (err, req, res, next)
-});
-```
-
-### Mistake 7: Leaking Raw Internal Server Error Stack Traces to Clients in Production
-
-**The mistake:** Returning `res.status(500).json({ error: err.stack })` in production environments.
-
-**Why it's wrong:** Exposing internal stack traces to public clients leaks database schema details, file system paths, and library versions to attackers. Return clean error messages in production.
-
-*Incorrect:*
-```javascript
-app.use((err, req, res, next) => {
-  res.status(500).json({ error: err.stack }); // ❌ Leaks sensitive internal paths in prod!
-});
-```
-
-*Fix:*
-```javascript
-app.use((err, req, res, next) => {
-  const isProd = process.env.NODE_ENV === 'production';
-  res.status(err.status || 500).json({
-    error: isProd ? 'Internal Server Error' : err.message
-  });
-});
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Custom Error Handler
+### Exercise 1: Global Express Operational vs System Error Middleware
 
-**Problem:** Complete the error-handling middleware below to return a `400` status if the error name is `'ValidationError'`, and a `500` status for other errors:
+**Scenario:** An Express 4-parameter error middleware filters operational errors (4xx validation) from programmer bugs (500 internal errors) to sanitize client outputs.
 
-```javascript
-app.use((err, req, res, next) => {
-  // Solution:
-  const isValidation = err.name === 'ValidationError' || err.message.includes('validation');
-  const statusCode = isValidation ? 400 : 500;
-
-  res.status(statusCode).json({
-    error: {
-      type: err.name,
-      message: err.message
-    }
-  });
-});
-```
-
----
+**Requirements:**
+1. Write centralizedErrorHandler(err, req, res, next).
+2. Extract status code.
+3. Sanitize 500 error responses.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+>
+> ```javascript
+> function centralizedErrorHandler(err, req, res, next) {
+>   const isOperational = err.isOperational === true;
+>   const statusCode = err.statusCode || (isOperational ? 400 : 500);
+>
+>   res.statusCode = statusCode;
+>   res.setHeader("Content-Type", "application/json");
+>
+>   const responseBody = {
+>     success: false,
+>     error: {
+>       code: err.code || (statusCode === 500 ? "INTERNAL_SERVER_ERROR" : "BAD_REQUEST"),
+>       message: statusCode === 500 ? "An unexpected server error occurred." : err.message
+>     }
+>   };
+>
+>   res.end(JSON.stringify(responseBody));
+> }
+>
+> // Verification tests
+> let status = 0;
+> let jsonOut = "";
+> const mockRes = {
+>   set statusCode(c) { status = c; },
+>   setHeader: () => {},
+>   end: (d) => { jsonOut = d; }
+> };
+>
+> const sysErr = new TypeError("Cannot read property 'id' of undefined");
+> centralizedErrorHandler(sysErr, {}, mockRes, () => {});
+>
+> console.assert(status === 500, "Test 1 Failed");
+> console.assert(JSON.parse(jsonOut).error.message === "An unexpected server error occurred.", "Test 2 Failed: Sanitized system stack trace");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Express Error Middleware Signature**: Express identifies error middleware by its 4 parameters: `(err, req, res, next)`.
+> 2. **Operational vs System Errors**: Operational errors (4xx) display user-friendly messages; programmer errors (500) hide internal stack traces.
+> 3. **Centralized Error Reporting**: Centralizes error formatting and integration with APM monitors (Sentry, Datadog).
 > 
 ---
 
-### Exercise 2: Writing Central Express Error Handler
+### Exercise 2: Custom Application Error Hierarchy
 
-**Problem:** Write 4-parameter Express error handling middleware logging error and returning status 500 JSON payload.
+**Scenario:** Constructs custom `AppError`, `NotFoundError`, and `ValidationError` error classes for enterprise API error classification.
 
-**Expected output:**
+**Requirements:**
+1. Write AppError, NotFoundError, ValidationError classes.
+2. Attach HTTP status codes and operational flags.
+
 > [!check]- Answer
-> ```text
-> app.use((err, req, res, next) => { console.error(err); res.status(err.status || 500).json({ error: err.message }); });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> app.use((err, req, res, next) => {
->   console.error(err.stack);
->   res.status(err.statusCode || 500).json({
->     error: err.message || 'Internal Server Error'
->   });
+> class AppError extends Error {
+>   constructor(message, statusCode = 500, code = "INTERNAL_ERROR") {
+>     super(message);
+>     this.statusCode = statusCode;
+>     this.code = code;
+>     this.isOperational = true;
+>     Error.captureStackTrace(this, this.constructor);
+>   }
+> }
+>
+> class NotFoundError extends AppError {
+>   constructor(message = "Resource not found") {
+>     super(message, 404, "NOT_FOUND");
+>   }
+> }
+>
+> class ValidationError extends AppError {
+>   constructor(message = "Invalid request payload", details = []) {
+>     super(message, 400, "VALIDATION_ERROR");
+>     this.details = details;
+>   }
+> }
+>
+> // Verification tests
+> const notFound = new NotFoundError("User 42 missing");
+> console.assert(notFound.statusCode === 404 && notFound.isOperational === true, "Test 1 Failed");
+>
+> const valErr = new ValidationError("Invalid email", [{ field: "email" }]);
+> console.assert(valErr.statusCode === 400 && valErr.details.length === 1, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Custom Error Hierarchy**: Extending `Error` standardizes error codes and status codes across the application.
+> 2. **`Error.captureStackTrace()`**: Excludes custom error constructor frames from V8 stack trace output for cleaner logging.
+> 3. **Operational Error Flag**: `isOperational = true` identifies expected runtime failures.
+> 
+---
+
+### Exercise 3: Express 5 Async Route Error Trap
+
+**Scenario:** Simulates Express 5 native async route rejection handling without requiring custom `asyncHandler` wrappers.
+
+**Requirements:**
+1. Write executeAsyncRoute(routeFn, req, res, next).
+2. Wrap route execution in Promise.resolve().
+3. Forward rejections to `next(err)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function executeAsyncRoute(routeFn, req, res, next) {
+>   Promise.resolve(routeFn(req, res, next)).catch(next);
+> }
+>
+> // Verification tests
+> let caughtErr = null;
+> const mockNext = (err) => { caughtErr = err; };
+> const brokenAsyncRoute = async () => { throw new Error("Database query timeout"); };
+>
+> executeAsyncRoute(brokenAsyncRoute, {}, {}, mockNext);
+>
+> setImmediate(() => {
+>   console.assert(caughtErr !== null, "Test 1 Failed");
+>   console.assert(caughtErr.message === "Database query timeout", "Test 2 Failed");
 > });
 > ```
 >
-> **Explanation:** 4-parameter error middleware catches errors passed via `next(err)`.
-> 
----
-
-### Exercise 3: Custom AppError Class Pattern
-
-**Problem:** Create custom `AppError` class extending `Error` adding `statusCode` property.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> class AppError extends Error { constructor(message, statusCode) { super(message); this.statusCode = statusCode; } }
-> ```
-> ```javascript
-> class AppError extends Error {
->   constructor(message, statusCode) {
->     super(message);
->     this.statusCode = statusCode;
->   }
-> }
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** Custom `AppError` classes attach HTTP status codes to thrown errors.
-> 
+> 1. **Express 4 Async Trap**: In Express 4, unhandled promise rejections inside async routes crash Node.js or hang requests.
+> 2. **Express 5 Native Async Catch**: Express 5 automatically catches rejected promises returned by async handlers and forwards them to `next(err)`.
+> 3. **Promise.resolve Wrapper Pattern**: Standard pattern used by `express-async-errors` package for Express 4 compatibility.
 ## 6. Related Terms
 - [The Middleware Chain & next()](../level_07/middleware_chain.md) — The middleware queue structure.
 - [Async Error Handling (try/catch + .catch)](../level_05/async_error_handling.md) — Catching async errors to pass them to `next(err)`.

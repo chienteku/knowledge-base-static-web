@@ -106,136 +106,157 @@ res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
 // User logged in as 'member' accessing /admin -> Return 403 Forbidden
 ```
 
-
-
-### Mistake 4: Returning `HTTP 200 OK` for Error Responses with Error Payloads (200 OK Anti-Pattern)
-
-**The mistake:** Returning `HTTP 200 OK` with payload `{ status: 'error', message: 'Unauthorized' }`.
-
-**Why it's wrong:** Returning 200 OK for errors breaks HTTP specifications, client caching, and automated API monitoring tools. Return proper 4xx/5xx HTTP status codes.
-
-*Incorrect:*
-```javascript
-res.status(200).json({ success: false, error: 'Unauthorized' }); // ❌ 200 OK error anti-pattern!
-```
-
-*Fix:*
-```javascript
-res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
-```
-
-### Mistake 5: Confusing `401 Unauthorized` with `403 Forbidden` Status Codes
-
-**The mistake:** Returning `401 Unauthorized` when a logged-in user tries to access an admin page without admin permissions.
-
-**Why it's wrong:** `401 Unauthorized` means **Unauthenticated** (user is not logged in). `403 Forbidden` means **Unauthorized** (user is authenticated but lacks required access permissions).
-
-*Incorrect:*
-```javascript
-// User logged in as 'member' accessing /admin -> Returning 401
-```
-
-*Fix:*
-```javascript
-// User logged in as 'member' accessing /admin -> Return 403 Forbidden
-```
-
-
-
-### Mistake 6: Returning `HTTP 200 OK` for Error Responses with Error Payloads (200 OK Anti-Pattern)
-
-**The mistake:** Returning `HTTP 200 OK` with payload `{ status: 'error', message: 'Unauthorized' }`.
-
-**Why it's wrong:** Returning 200 OK for errors breaks HTTP specifications, client caching, and automated API monitoring tools. Return proper 4xx/5xx HTTP status codes.
-
-*Incorrect:*
-```javascript
-res.status(200).json({ success: false, error: 'Unauthorized' }); // ❌ 200 OK error anti-pattern!
-```
-
-*Fix:*
-```javascript
-res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
-```
-
-### Mistake 7: Confusing `401 Unauthorized` with `403 Forbidden` Status Codes
-
-**The mistake:** Returning `401 Unauthorized` when a logged-in user tries to access an admin page without admin permissions.
-
-**Why it's wrong:** `401 Unauthorized` means **Unauthenticated** (user is not logged in). `403 Forbidden` means **Unauthorized** (user is authenticated but lacks required access permissions).
-
-*Incorrect:*
-```javascript
-// User logged in as 'member' accessing /admin -> Returning 401
-```
-
-*Fix:*
-```javascript
-// User logged in as 'member' accessing /admin -> Return 403 Forbidden
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: The Detective
+### Exercise 1: HTTP Status Code Semantic Mapper
 
-**Problem:** You are building a frontend app. You send a request to a backend API you don't control, and the server returns a `500 Internal Server Error`. Your boss yells at you to fix your frontend code. How do you defend yourself using your knowledge of Status Codes?
+**Scenario:** Maps application domain error types to standardized HTTP status codes (200, 201, 204, 400, 401, 403, 404, 409, 422, 500).
 
-**Expected output:**
+**Requirements:**
+1. Write mapErrorToStatusCode(errorType).
+2. Return appropriate HTTP status code.
+
 > [!check]- Answer
-> ```text
-> "Boss, a 500-level error explicitly means the SERVER crashed. It is a Backend bug, not a Frontend bug! If I had sent bad data from the frontend, the server would have returned a 400-level error."
-> ```
-> - 4xx = Client's fault. 5xx = Server's fault.
-> 
----
-
-
-
-### Exercise 2: Selecting Correct HTTP Status Codes
-
-**Problem:** Select status code for:
-1. Resource created successfully (201)
-2. Invalid input validation failed (400)
-3. Resource not found (404)
-4. Unhandled server database crash (500)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. 201 Created
-> 2. 400 Bad Request
-> 3. 404 Not Found
-> 4. 500 Internal Server Error
-> ```
-> ```text
-> 1. 201 Created
-> 2. 400 Bad Request
-> 3. 404 Not Found
-> 4. 500 Internal Server Error
-> ```
 >
-> **Explanation:** Standard status codes communicate exact request processing outcomes.
-> 
----
-
-### Exercise 3: 204 No Content Usage
-
-**Problem:** When should `HTTP 204 No Content` be returned? (When a request succeeds, e.g. DELETE, and requires no response body payload).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> When a request succeeds (e.g. DELETE or UPDATE) and requires no response body payload.
-> ```
+> #### Implementation
+>
 > ```javascript
-> app.delete('/items/:id', async (req, res) => {
->   await Item.delete(req.params.id);
->   res.status(204).end(); // 204 No Content
-> });
+> function mapErrorToStatusCode(errorType = "") {
+>   switch (errorType.toUpperCase()) {
+>     case "INVALID_PAYLOAD":
+>     case "MALFORMED_JSON":
+>       return 400; // Bad Request
+>     case "UNAUTHENTICATED":
+>     case "TOKEN_EXPIRED":
+>       return 401; // Unauthorized
+>     case "FORBIDDEN_SCOPE":
+>     case "PERMISSION_DENIED":
+>       return 403; // Forbidden
+>     case "ENTITY_NOT_FOUND":
+>       return 404; // Not Found
+>     case "DUPLICATE_ENTRY":
+>     case "VERSION_CONFLICT":
+>       return 409; // Conflict
+>     case "SCHEMA_VALIDATION_FAILED":
+>       return 422; // Unprocessable Entity
+>     default:
+>       return 500; // Internal Server Error
+>   }
+> }
+>
+> // Verification tests
+> console.assert(mapErrorToStatusCode("UNAUTHENTICATED") === 401, "Test 1 Failed");
+> console.assert(mapErrorToStatusCode("DUPLICATE_ENTRY") === 409, "Test 2 Failed");
+> console.assert(mapErrorToStatusCode("SCHEMA_VALIDATION_FAILED") === 422, "Test 3 Failed");
 > ```
 >
-> **Explanation:** Status 204 indicates successful processing without sending response body bytes.
+> #### Technical Explanation
+>
+> 1. **Status Code Categories**: 2xx (Success), 3xx (Redirection), 4xx (Client Errors), 5xx (Server Errors).
+> 2. **401 vs 403 Distinction**: 401 Unauthorized means missing/invalid authentication; 403 Forbidden means authenticated but lacking permissions.
+> 3. **409 Conflict vs 422 Unprocessable**: 409 signals state conflicts (duplicate unique keys); 422 signals semantically invalid payloads.
 > 
+---
+
+### Exercise 2: RESTful Creation and Modification Status Responder
+
+**Scenario:** Selects semantic HTTP response codes (201 Created with Location header, 204 No Content for deletion, 200 OK for queries).
+
+**Requirements:**
+1. Write createHttpResponse(actionType, data, resourceUrl).
+2. Return status code and headers.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createHttpResponse(actionType, data = null, resourceUrl = null) {
+>   switch (actionType.toUpperCase()) {
+>     case "CREATE":
+>       return {
+>         status: 201, // Created
+>         headers: resourceUrl ? { "Location": resourceUrl } : {},
+>         body: data
+>       };
+>     case "DELETE":
+>       return {
+>         status: 204, // No Content
+>         headers: {},
+>         body: null
+>       };
+>     case "UPDATE":
+>     case "READ":
+>       return {
+>         status: 200, // OK
+>         headers: {},
+>         body: data
+>       };
+>     default:
+>       return { status: 200, headers: {}, body: data };
+>   }
+> }
+>
+> // Verification tests
+> const res1 = createHttpResponse("CREATE", { id: 1 }, "https://api.com/users/1");
+> console.assert(res1.status === 201 && res1.headers.Location === "https://api.com/users/1", "Test 1 Failed");
+>
+> const res2 = createHttpResponse("DELETE");
+> console.assert(res2.status === 204 && res2.body === null, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **201 Created + Location Header**: 201 responses MUST include a `Location` header pointing to the newly created resource URI.
+> 2. **204 No Content**: Returned for successful DELETE operations or updates that return no body content.
+> 3. **HTTP Spec Adherence**: Prevents returning `200 OK` for error states (anti-pattern).
+> 
+---
+
+### Exercise 3: Idempotent 409 Conflict vs 422 Unprocessable Evaluator
+
+**Scenario:** Evaluates user registration errors to distinguish between 409 Conflict (email taken) vs 422 Unprocessable Entity (invalid password format).
+
+**Requirements:**
+1. Write evaluateRegistrationError(errorReason).
+2. Return 409 for duplicate email.
+3. Return 422 for weak password.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function evaluateRegistrationError(errorReason) {
+>   if (errorReason === "EMAIL_ALREADY_EXISTS") {
+>     return {
+>       status: 409,
+>       code: "CONFLICT_EMAIL_TAKEN",
+>       message: "The specified email address is already registered."
+>     };
+>   }
+>
+>   if (errorReason === "WEAK_PASSWORD_FORMAT") {
+>     return {
+>       status: 422,
+>       code: "UNPROCESSABLE_PASSWORD",
+>       message: "Password does not satisfy complexity requirements."
+>     };
+>   }
+>
+>   return { status: 400, code: "BAD_REQUEST", message: "Invalid request payload" };
+> }
+>
+> // Verification tests
+> console.assert(evaluateRegistrationError("EMAIL_ALREADY_EXISTS").status === 409, "Test 1 Failed");
+> console.assert(evaluateRegistrationError("WEAK_PASSWORD_FORMAT").status === 422, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **409 Conflict**: Returned when a request conflicts with current target resource state (e.g., unique key violation).
+> 2. **422 Unprocessable Entity**: Returned when server understands payload content type and syntax, but payload fails semantic validation rules.
+> 3. **API Clarity**: Distinct status codes allow frontend clients to display accurate UI error notifications.
 ## 6. Related Terms
 - [REST API Design](rest_api.md) — The architecture that relies on these codes.
 - [Unhandled Promise Rejections](../level_05/unhandled_rejections.md) — When this happens, the server usually fails to even send a 500 error!

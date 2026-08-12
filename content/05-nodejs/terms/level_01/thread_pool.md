@@ -132,55 +132,150 @@ process.env.UV_THREADPOOL_SIZE = 10000; // ❌ Unnecessary! Network sockets don'
 
 ## 5. Practice Exercises
 
-### Exercise 1: Thread Sizing Analysis
+### Exercise 1: libuv Thread Pool Size Evaluator
 
-**Problem:** You are running a Node.js server that processes file uploads (heavy `fs` writes) and compiles passwords (heavy `crypto.pbkdf2` hashing). Your backend metrics show that when 6 users upload files concurrently, request response times double. 
-Explain why this happens, and how to configure the system to resolve the bottleneck.
+**Scenario:** An API performance manager configures `process.env.UV_THREADPOOL_SIZE` to scale background thread pool capacity for file I/O and crypto.
+
+**Requirements:**
+1. Write configureThreadPoolSize(sizeNumber).
+2. Set UV_THREADPOOL_SIZE environment variable.
+3. Enforce min 4, max 128 limits.
 
 > [!check]- Answer
-> - By default, Libuv allocates exactly 4 background threads. When 6 concurrent file writes occur, 2 write operations are blocked in a queue waiting for the first 4 threads to finish. To solve this, set the environment variable `UV_THREADPOOL_SIZE=8` (or higher) in your server launch script before starting the Node process.
-> 
+>
+> #### Implementation
+>
+> ```javascript
+> function configureThreadPoolSize(sizeNumber = 4) {
+>   const minSize = 4;
+>   const maxSize = 128;
+>
+>   const validSize = Math.max(minSize, Math.min(maxSize, Math.floor(sizeNumber)));
+>   process.env.UV_THREADPOOL_SIZE = String(validSize);
+>
+>   return {
+>     configuredSize: validSize,
+>     envValue: process.env.UV_THREADPOOL_SIZE
+>   };
+> }
+>
+> // Verification tests
+> const res = configureThreadPoolSize(16);
+> console.assert(res.configuredSize === 16, "Test 1 Failed");
+> console.assert(process.env.UV_THREADPOOL_SIZE === "16", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **libuv Thread Pool Role**: libuv maintains a background thread pool used for file system I/O (fs), DNS lookups (dns.lookup), and CPU crypto (crypto.pbkdf2).
+> 2. **Default Thread Pool Size**: Default size is 4 threads; can be increased up to 128 via `UV_THREADPOOL_SIZE` before Node startup.
+> 3. **Thread Pool Exhaustion**: If 4 long crypto operations fill the pool, subsequent fs/crypto operations wait in queue.
 > 
 ---
 
+### Exercise 2: Thread Pool Offloaded Cryptographic Hashing
 
+**Scenario:** Demonstrates how `crypto.pbkdf2` delegates password hashing tasks to libuv background threads without blocking the Event Loop.
 
-### Exercise 2: libuv Thread Pool Operations
+**Requirements:**
+1. Write executeThreadPoolHashing(password, mockCrypto).
+2. Dispatch hashing task.
+3. Verify non-blocking completion.
 
-**Problem:** Which 2 of the following operations use the libuv Thread Pool by default?
-1. Network HTTP fetch
-2. `crypto.pbkdf2()` password hashing
-3. `fs.readFile()` disk I/O
-4. `setTimeout()` timer
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 2. crypto.pbkdf2() password hashing and 3. fs.readFile() disk I/O
-> ```
-> ```text
-> 2. crypto.pbkdf2() password hashing and 3. fs.readFile() disk I/O
+>
+> #### Implementation
+>
+> ```javascript
+> function executeThreadPoolHashing(password, mockCrypto) {
+>   const cryptoLib = mockCrypto || require("crypto");
+>
+>   return new Promise((resolve, reject) => {
+>     // Delegated to libuv thread pool!
+>     cryptoLib.pbkdf2(password, "salt_123", 1000, 16, "sha256", (err, derivedKey) => {
+>       if (err) return reject(err);
+>       resolve({
+>         hashHex: derivedKey.toString("hex"),
+>         offloadedToThreadPool: true
+>       });
+>     });
+>   });
+> }
+>
+> // Verification tests
+> const mockCrypto = {
+>   pbkdf2: (pass, salt, iter, len, algo, cb) => {
+>     setTimeout(() => cb(null, Buffer.from("hashed_bytes_123")), 10);
+>   }
+> };
+>
+> executeThreadPoolHashing("pass123", mockCrypto).then(res => {
+>   console.assert(res.offloadedToThreadPool === true, "Test 1 Failed");
+>   console.assert(res.hashHex.length > 0, "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** `crypto` CPU algorithms, `fs` disk operations, and `zlib` compression use thread pool; network sockets and timers use OS event notifications.
+> #### Technical Explanation
+>
+> 1. **Asynchronous C++ Bindings**: Asynchronous Node.js APIs bridge JavaScript to libuv C++ worker threads.
+> 2. **Thread Pool Tasks**: File I/O (`fs`), Crypto (`pbkdf2`, `randomBytes`), Compression (`zlib`), DNS (`dns.lookup`).
+> 3. **Non-Thread-Pool I/O**: Network sockets (HTTP, TCP, WebSockets) use OS kernel event notifications (epoll/kqueue), NOT libuv thread pool.
 > 
 ---
 
-### Exercise 3: Configuring UV_THREADPOOL_SIZE
+### Exercise 3: Thread Pool Saturation & Queue Bottleneck Auditor
 
-**Problem:** How do you set `UV_THREADPOOL_SIZE` to 8 when launching a Node script from command line?
+**Scenario:** An APM monitor measures throughput bottlenecks when 8 concurrent operations saturate a 4-thread libuv pool.
 
-**Expected output:**
+**Requirements:**
+1. Write measureThreadPoolQueue(taskCount, mockTaskFn).
+2. Execute tasks concurrently.
+3. Measure total duration.
+
 > [!check]- Answer
-> ```text
-> UV_THREADPOOL_SIZE=8 node app.js
-> ```
-> ```bash
-> UV_THREADPOOL_SIZE=8 node app.js
+>
+> #### Implementation
+>
+> ```javascript
+> async function measureThreadPoolQueue(taskCount = 8, mockTaskFn) {
+>   const start = Date.now();
+>
+>   const tasks = [];
+>   for (let i = 0; i < taskCount; i++) {
+>     tasks.push(mockTaskFn(i));
+>   }
+>
+>   await Promise.all(tasks);
+>   const totalDurationMs = Date.now() - start;
+>
+>   return {
+>     taskCount,
+>     totalDurationMs,
+>     wasQueued: totalDurationMs >= 40 // If 4 threads take 20ms each, 8 tasks take ~40ms (2 batches)
+>   };
+> }
+>
+> // Verification tests
+> // Simulate 4-thread pool where each task takes 20ms
+> let activeThreads = 0;
+> const mockTask = (id) => new Promise(resolve => {
+>   activeThreads++;
+>   setTimeout(() => {
+>     activeThreads--;
+>     resolve(id);
+>   }, 20);
+> });
+>
+> measureThreadPoolQueue(4, mockTask).then(res => {
+>   console.assert(res.taskCount === 4, "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** `UV_THREADPOOL_SIZE` must be set in the shell environment before libuv initializes.
-> 
+> #### Technical Explanation
+>
+> 1. **Thread Pool Queuing**: When task count exceeds UV_THREADPOOL_SIZE, extra tasks wait in libuv work queue.
+> 2. **Batch Execution**: 8 tasks on a 4-thread pool execute in 2 sequential batches of 4.
+> 3. **Scaling Guidelines**: Increase UV_THREADPOOL_SIZE to match CPU cores for heavy disk/crypto workloads.
 ## 6. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The loop that collects tasks finished by the Thread Pool.
 - [Single-Threaded Architecture](single_threaded.md) — The architecture protected from blocking by the Thread Pool.

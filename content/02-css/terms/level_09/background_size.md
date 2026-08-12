@@ -183,65 +183,92 @@ div { background-size: cover; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: Hero Setup
+### Exercise 1: Hero Section Banner Image Sizing with background-size: cover
 
-**Problem:** You are styling a homepage header section. You want to place a background image on it. The header should show the background image scaled to fill the entire space, centered vertically and horizontally, and the image should never duplicate. Write the CSS declaration block.
+**Scenario:** An author styles a responsive hero section banner using `background-size: cover` to ensure full image coverage without distortion.
 
-**Expected output:**
+**Requirements:**
+1. Apply `background-size: cover`.
+2. Set `background-position: center`.
+3. Set `background-repeat: no-repeat`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .hero-header {
->   background-image: url('banner.jpg');
->   background-size: cover;
->   background-position: center;
->   background-repeat: no-repeat;
-> }
-> ```
-> - Use the three classic background properties to lock cover scaling, centering, and no repeat.
-> 
----
-
-
-
-### Exercise 2: Cover Image Centering Pattern
-
-**Problem:** Write CSS ruleset for `.bg-hero` setting background image `hero.jpg`, centered, covering full container without repeating.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .bg-hero { background-image: url('hero.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover; }
-> ```
-> ```css
-> .bg-hero {
->   background-image: url('hero.jpg');
+> .hero-cover-banner {
+>   min-height: 25rem;
+>   background-image: url("../images/hero-bg.jpg");
 >   background-repeat: no-repeat;
 >   background-position: center;
->   background-size: cover;
+>   background-size: cover;       /* Scales image to COVER container bounds completely */
 > }
 > ```
 >
-> **Explanation:** Combining `no-repeat`, `center`, and `cover` ensures optimal responsive background rendering.
+> #### Technical Explanation
+>
+> 1. **The `background-size` Property**: Controls the rendered display dimensions of an element's background image.
+> 2. **`cover` Keyword Mechanics**: Scales the image proportionally so its width and height completely cover the container area, clipping excess image edges if aspect ratios differ.
+> 3. **No Image Distortion**: `cover` preserves the image's original aspect ratio, preventing stretched or squished photography.
 > 
 ---
 
-### Exercise 3: Background Size Shorthand Syntax
+### Exercise 2: Icon Pattern Tiling with background-size: contain and Explicit Units
 
-**Problem:** Write `background` shorthand specifying `center / cover` size.
+**Scenario:** Styles a tiled background texture using explicit dimensions (`background-size: 2rem 2rem`).
 
-**Expected output:**
+**Requirements:**
+1. Apply `background-size: 2rem 2rem`.
+2. Set `background-repeat: repeat`.
+
 > [!check]- Answer
-> ```text
-> background: url('hero.jpg') center / cover no-repeat;
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .hero {
->   background: url('hero.jpg') center / cover no-repeat;
+> .texture-pattern {
+>   background-image: url("../images/tile-pattern.png");
+>   background-repeat: repeat;
+>   background-size: 2rem 2rem;   /* Scales tile pattern to exact 32x32px dimensions */
 > }
 > ```
 >
-> **Explanation:** `position / size` syntax defines background size in shorthand rules.
+> #### Technical Explanation
+>
+> 1. **Explicit Dimensional Sizing**: `background-size: 2rem 2rem` sets exact width and height for repeating pattern tiles.
+> 2. **`contain` Keyword Mechanics**: `contain` scales the image so it fits ENTIRELY inside the container bounds without clipping.
+> 3. **Pattern Texture Control**: Ensures high-DPI retina screens render background textures sharply.
 > 
+---
+
+### Exercise 3: Preventing Image Distortion in Background Containers
+
+**Scenario:** Compares `background-size: 100% 100%` (distorted) vs `cover` (aspect ratio preserved).
+
+**Requirements:**
+1. Refactor distorted `100% 100%` sizing to `cover`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* ❌ Distorted Image: 100% 100% stretches image non-proportionally! */
+> /* .bad-hero { background-size: 100% 100%; } */
+>
+> /* ✅ Preserved Aspect Ratio: */
+> .good-hero {
+>   background-size: cover;
+>   background-position: center;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Avoid `100% 100%`**: Using two 100% values stretches width and height independently, distorting people and product photos.
+> 2. **Aspect Ratio Preservation**: Use `cover` or `contain` to maintain natural aspect ratios.
+> 3. **Center Alignment**: Pair `cover` with `background-position: center` to keep core image focal points visible.
 ## 6. Related Terms
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — Base background settings.
 - [`object-fit` & `object-position`](object_fit.md) — Sizing content media tags.

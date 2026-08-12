@@ -155,173 +155,195 @@ await UserService.createUser(req, res); // ❌ Couples service to Express HTTP!
 await UserService.createUser(req.body); // Pass plain JS payload data
 ```
 
-
-
-### Mistake 4: Writing Heavy Business Logic and Database Queries Directly Inside Controller Route Functions ('Fat Controllers')
-
-**The mistake:** Writing 300 lines of database queries, email sending, and payment processing directly in Express controller functions.
-
-**Why it's wrong:** Fat controllers violate Single Responsibility Principle. They are impossible to unit test without mocking Express `req`/`res` objects. Move business logic into reusable Service classes.
-
-*Incorrect:*
-```javascript
-exports.register = async (req, res) => {
-  // 300 lines of validation, db insert, payment processing, email sending... ❌
-};
-```
-
-*Fix:*
-```javascript
-exports.register = async (req, res, next) => {
-  try {
-    const user = await UserService.registerUser(req.body); // Service handles business logic
-    res.status(201).json(user);
-  } catch (err) { next(err); }
-};
-```
-
-### Mistake 5: Passing Express `req` and `res` Objects Down into Service Layer Functions
-
-**The mistake:** Passing `UserService.createUser(req, res)` down to business service layers.
-
-**Why it's wrong:** Service layers should be pure, framework-agnostic JavaScript. Passing Express `req`/`res` tightly couples business logic to Express HTTP frameworks, preventing reuse in CLI or queue workers.
-
-*Incorrect:*
-```javascript
-await UserService.createUser(req, res); // ❌ Couples service to Express HTTP!
-```
-
-*Fix:*
-```javascript
-await UserService.createUser(req.body); // Pass plain JS payload data
-```
-
-
-
-### Mistake 6: Writing Heavy Business Logic and Database Queries Directly Inside Controller Route Functions ('Fat Controllers')
-
-**The mistake:** Writing 300 lines of database queries, email sending, and payment processing directly in Express controller functions.
-
-**Why it's wrong:** Fat controllers violate Single Responsibility Principle. They are impossible to unit test without mocking Express `req`/`res` objects. Move business logic into reusable Service classes.
-
-*Incorrect:*
-```javascript
-exports.register = async (req, res) => {
-  // 300 lines of validation, db insert, payment processing, email sending... ❌
-};
-```
-
-*Fix:*
-```javascript
-exports.register = async (req, res, next) => {
-  try {
-    const user = await UserService.registerUser(req.body); // Service handles business logic
-    res.status(201).json(user);
-  } catch (err) { next(err); }
-};
-```
-
-### Mistake 7: Passing Express `req` and `res` Objects Down into Service Layer Functions
-
-**The mistake:** Passing `UserService.createUser(req, res)` down to business service layers.
-
-**Why it's wrong:** Service layers should be pure, framework-agnostic JavaScript. Passing Express `req`/`res` tightly couples business logic to Express HTTP frameworks, preventing reuse in CLI or queue workers.
-
-*Incorrect:*
-```javascript
-await UserService.createUser(req, res); // ❌ Couples service to Express HTTP!
-```
-
-*Fix:*
-```javascript
-await UserService.createUser(req.body); // Pass plain JS payload data
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Controller Refactoring
+### Exercise 1: Controller-Service-Repository Layer Architecture Separator
 
-**Problem:** Refactor the coupled route handler below, separating it into a `postService.js` and a `postController.js`:
+**Scenario:** Separates HTTP request handling (Controller), business logic (Service), and database access (Repository) into distinct decoupled layers.
 
-```javascript
-// Before (Coupled Controller):
-app.post('/api/posts', async (req, res) => {
-  const { title, content } = req.body;
-  if (!title) return res.status(400).send('Title required');
-  const post = await db.query('INSERT INTO posts (title, content) VALUES ($1, $2) RETURNING *', [title, content]);
-  res.status(201).json(post);
-});
-
-// After (Refactored):
-// 1. services/postService.js
-exports.createPostRecord = async (title, content) => {
-  return await db.query('INSERT INTO posts (title, content) VALUES ($1, $2) RETURNING *', [title, content]);
-};
-
-// 2. controllers/postController.js
-exports.createPost = async (req, res, next) => {
-  try {
-    const { title, content } = req.body;
-    if (!title) {
-      return res.status(400).send('Title required');
-    }
-    const post = await postService.createPostRecord(title, content);
-    return res.status(201).json(post);
-  } catch (err) {
-    next(err);
-  }
-};
-```
-
----
+**Requirements:**
+1. Write createUserRepository(dbMock).
+2. Write createUserService(userRepo).
+3. Write createUserController(userService).
+4. Verify strict separation of concerns.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Separating Controller and Service Responsibilities
-
-**Problem:** Categorize task as Controller or Service responsibility:
-1. Extracting `req.params.id` (Controller)
-2. Calculating order tax and applying discount code (Service)
-3. Returning HTTP 200 JSON response (Controller)
-4. Querying database and saving transaction (Service)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Controller
-> 2. Service
-> 3. Controller
-> 4. Service
-> ```
-> ```text
-> 1. Controller
-> 2. Service
-> 3. Controller
-> 4. Service
+>
+> #### Implementation
+>
+> ```javascript
+> function createUserRepository(dbMock) {
+>   return {
+>     save: async (user) => dbMock.insert("users", user),
+>     findByEmail: async (email) => dbMock.find("users", { email })
+>   };
+> }
+>
+> function createUserService(userRepo) {
+>   return {
+>     async registerUser(name, email) {
+>       const existing = await userRepo.findByEmail(email);
+>       if (existing) {
+>         throw new Error("EMAIL_ALREADY_EXISTS");
+>       }
+>       const newUser = { id: Date.now(), name, email: email.toLowerCase() };
+>       return await userRepo.save(newUser);
+>     }
+>   };
+> }
+>
+> function createUserController(userService) {
+>   return {
+>     async handleRegister(req, res) {
+>       try {
+>         const { name, email } = req.body || {};
+>         const user = await userService.registerUser(name, email);
+>         res.statusCode = 201;
+>         res.end(JSON.stringify({ success: true, user }));
+>       } catch (err) {
+>         res.statusCode = err.message === "EMAIL_ALREADY_EXISTS" ? 409 : 400;
+>         res.end(JSON.stringify({ success: false, error: err.message }));
+>       }
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const dbStore = [];
+> const mockDb = {
+>   insert: async (t, d) => { dbStore.push(d); return d; },
+>   find: async (t, q) => dbStore.find(u => u.email === q.email) || null
+> };
+>
+> const repo = createUserRepository(mockDb);
+> const service = createUserService(repo);
+> const controller = createUserController(service);
+>
+> let status = 0;
+> const mockRes = { set statusCode(c) { status = c; }, end: () => {} };
+>
+> controller.handleRegister({ body: { name: "Alice", email: "ALICE@TEST.COM" } }, mockRes).then(() => {
+>   console.assert(status === 201, "Test 1 Failed: HTTP status 201 Created");
+>   console.assert(dbStore[0].email === "alice@test.com", "Test 2 Failed: Service sanitized email");
+> });
 > ```
 >
-> **Explanation:** Controllers handle HTTP transport layer (req/res); Services handle core business domain logic.
+> #### Technical Explanation
+>
+> 1. **3-Tier Layered Architecture**: Separates concerns into Presentation (Controller), Domain (Service), and Persistence (Repository).
+> 2. **Controller Responsibility**: Controllers only parse HTTP requests (`req.body`), invoke service methods, and set HTTP status codes (`res.status(201)`).
+> 3. **Service Responsibility**: Services execute core domain logic without knowing if the caller is an Express HTTP request, CLI script, or gRPC stream.
 > 
 ---
 
-### Exercise 3: Service Layer Unit Testing Advantage
+### Exercise 2: Asynchronous Business Logic Error Delegation
 
-**Problem:** Why is testing a Service function easier than testing a Controller function?
+**Scenario:** Ensures business rule failures in services throw custom operational errors caught cleanly by HTTP controllers.
 
-**Expected output:**
+**Requirements:**
+1. Write createOrderService(inventoryRepo, orderRepo).
+2. Check inventory in service.
+3. Throw OperationalError on business constraint violation.
+
 > [!check]- Answer
-> ```text
-> Service functions take plain parameters and return data directly without requiring HTTP request/response mocks.
-> ```
-> ```text
-> Service functions take plain parameters and return data directly without requiring HTTP request/response mocks.
+>
+> #### Implementation
+>
+> ```javascript
+> class BusinessRuleError extends Error {
+>   constructor(message, code = "BUSINESS_RULE_VIOLATION") {
+>     super(message);
+>     this.code = code;
+>     this.isOperational = true;
+>   }
+> }
+>
+> function createOrderService(inventoryRepo, orderRepo) {
+>   return {
+>     async checkoutOrder(userId, productId, quantity) {
+>       const stock = await inventoryRepo.getStock(productId);
+>       if (stock < quantity) {
+>         throw new BusinessRuleError("Insufficient inventory for order", "INSUFFICIENT_STOCK");
+>       }
+>
+>       await inventoryRepo.deductStock(productId, quantity);
+>       return await orderRepo.createOrder({ userId, productId, quantity });
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const inv = { getStock: async () => 2, deductStock: async () => {} };
+> const ord = { createOrder: async () => ({ id: 101 }) };
+>
+> const orderService = createOrderService(inv, ord);
+> orderService.checkoutOrder(1, 10, 5).catch(err => {
+>   console.assert(err.isOperational === true, "Test 1 Failed");
+>   console.assert(err.code === "INSUFFICIENT_STOCK", "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** Framework-agnostic service layer functions can be unit-tested with standard input values.
+> #### Technical Explanation
+>
+> 1. **Decoupled Error Classification**: Services throw domain-specific operational errors instead of HTTP-specific errors.
+> 2. **Reusability**: Service methods can be called by background worker queues without depending on Express HTTP objects.
+> 3. **Testability**: Services are unit tested without mocking HTTP request/response objects.
 > 
+---
+
+### Exercise 3: Lightweight Dependency Injection Container
+
+**Scenario:** Constructs a dependency injection container that instantiates and wires repositories, services, and controllers automatically.
+
+**Requirements:**
+1. Write createContainer().
+2. Register factories.
+3. Resolve dependencies.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createContainer() {
+>   const factories = new Map();
+>   const instances = new Map();
+>
+>   return {
+>     register(name, factoryFn) {
+>       factories.set(name, factoryFn);
+>     },
+>     resolve(name) {
+>       if (instances.has(name)) {
+>         return instances.get(name);
+>       }
+>
+>       const factory = factories.get(name);
+>       if (!factory) {
+>         throw new Error(`Service '${name}' not registered in DI container`);
+>       }
+>
+>       const instance = factory(this);
+>       instances.set(name, instance);
+>       return instance;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const container = createContainer();
+> container.register("db", () => ({ connect: () => "DB_CONNECTED" }));
+> container.register("userRepo", (c) => ({ db: c.resolve("db") }));
+>
+> const repo = container.resolve("userRepo");
+> console.assert(repo.db.connect() === "DB_CONNECTED", "Test 1 Failed: Resolved dependency tree");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Dependency Injection (DI)**: Passes dependencies into constructors/factories rather than hardcoding `require()` calls inside modules.
+> 2. **Inversion of Control (IoC)**: Centralizes object instantiation and lifecycle management.
+> 3. **Mocking in Unit Tests**: Allows injecting mock repositories during unit testing without monkey-patching `require()`.
 ## 6. Related Terms
 - [MVC Pattern (Model–View–Controller)](mvc_pattern.md) — The parent application layout pattern.
 - [Error Handling Middleware](error_handling_middleware.md) — Receives errors bubble-passed by controllers and services.

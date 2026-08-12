@@ -93,56 +93,144 @@ res.send(buf);
 
 ## 5. Practice Exercises
 
-### Exercise 1: Creating a Buffer
+### Exercise 1: Zero-Copy Binary Buffer Allocator
 
-**Problem:** How do you manually create a Buffer containing the word "Node"?
+**Scenario:** A network protocol parser compares `Buffer.alloc()` (safe, zero-filled) vs `Buffer.allocUnsafe()` (fast, uninitialized) memory allocation.
 
-**Expected output:**
+**Requirements:**
+1. Write allocateBuffers(sizeBytes).
+2. Allocate zeroed buffer via Buffer.alloc.
+3. Allocate unsafe buffer via Buffer.allocUnsafe and fill zero.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> const buf = Buffer.from("Node", "utf8");
-> console.log(buf); 
-> // Output: <Buffer 4e 6f 64 65>
+> function allocateBuffers(sizeBytes = 1024) {
+>   const safeBuf = Buffer.alloc(sizeBytes);
+>   const unsafeBuf = Buffer.allocUnsafe(sizeBytes);
+>   unsafeBuf.fill(0);
+>
+>   return {
+>     safeBuf,
+>     unsafeBuf,
+>     isEqualLength: safeBuf.length === unsafeBuf.length
+>   };
+> }
+>
+> // Verification tests
+> const res = allocateBuffers(64);
+> console.assert(res.safeBuf.length === 64, "Test 1 Failed");
+> console.assert(res.unsafeBuf[0] === 0, "Test 2 Failed: Unsafe buffer must be zero-filled");
 > ```
-> - Use the `Buffer.from()` method.
+>
+> #### Technical Explanation
+>
+> 1. **Buffer.alloc()**: Allocates new Buffer and fills all bytes with zero; safe but slightly slower.
+> 2. **Buffer.allocUnsafe()**: Allocates buffer from V8 pre-allocated memory pool without zero-filling; faster but contains old uninitialized memory.
+> 3. **Security Risk of allocUnsafe**: Failing to fill/overwrite `allocUnsafe` memory can leak sensitive passwords/tokens stored previously in RAM.
 > 
 ---
 
+### Exercise 2: Binary Packet Header Reader & Parser
 
+**Scenario:** Parses binary network protocol packets (e.g., 2-byte magic header + 4-byte payload length + payload bytes) using DataView/Buffer methods.
 
-### Exercise 2: Allocating and Writing Buffers
+**Requirements:**
+1. Write parseBinaryHeader(buffer).
+2. Read 16-bit unsigned integer magic header.
+3. Read 32-bit unsigned integer payload length.
 
-**Problem:** Create a zero-filled Buffer of size 8 and write string `'Node'` into it.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> const buf = Buffer.alloc(8); buf.write('Node');
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const buf = Buffer.alloc(8);
-> buf.write('Node');
+> function parseBinaryHeader(buffer) {
+>   if (!Buffer.isBuffer(buffer) || buffer.length < 6) {
+>     throw new Error("Buffer too short to parse binary header");
+>   }
+>
+>   // Read 16-bit Magic Header (Big Endian)
+>   const magicNumber = buffer.readUInt16BE(0);
+>   // Read 32-bit Payload Length (Big Endian)
+>   const payloadLength = buffer.readUInt32BE(2);
+>
+>   const payload = buffer.subarray(6, 6 + payloadLength);
+>
+>   return {
+>     magicNumber,
+>     payloadLength,
+>     isValidHeader: magicNumber === 0x4150, // 'AP' magic bytes
+>     payloadText: payload.toString("utf-8")
+>   };
+> }
+>
+> // Verification tests
+> const buf = Buffer.alloc(11);
+> buf.writeUInt16BE(0x4150, 0); // Magic 'AP'
+> buf.writeUInt32BE(5, 2);      // Length 5
+> buf.write("hello", 6);
+>
+> const parsed = parseBinaryHeader(buf);
+> console.assert(parsed.isValidHeader === true, "Test 1 Failed");
+> console.assert(parsed.payloadLength === 5, "Test 2 Failed");
+> console.assert(parsed.payloadText === "hello", "Test 3 Failed");
 > ```
 >
-> **Explanation:** `Buffer.alloc(size)` creates zero-initialized binary memory space.
+> #### Technical Explanation
+>
+> 1. **Buffer Read Methods**: `readUInt16BE`, `readUInt32BE`, `readInt8`, `readFloatBE` read binary primitives directly from memory.
+> 2. **Big Endian vs Little Endian**: Network protocols use Big Endian byte order (`BE`); x86 CPUs use Little Endian (`LE`).
+> 3. **Subarray Memory Slicing**: `buffer.subarray(start, end)` returns a view over the existing Buffer without copying bytes.
 > 
 ---
 
-### Exercise 3: Buffer Concatenation
+### Exercise 3: Buffer Slicing vs Copying Memory Inspector
 
-**Problem:** Concatenate array of 2 buffers `[buf1, buf2]` into a single Buffer.
+**Scenario:** Demonstrates memory shared behavior in `buffer.subarray()` vs independent memory in `Buffer.from()` / `buffer.copy()`.
 
-**Expected output:**
+**Requirements:**
+1. Write inspectBufferMemorySharing().
+2. Modify subarray slice.
+3. Verify original buffer is modified.
+
 > [!check]- Answer
-> ```text
-> const total = Buffer.concat([buf1, buf2]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const total = Buffer.concat([buf1, buf2]);
+> function inspectBufferMemorySharing() {
+>   const original = Buffer.from([10, 20, 30, 40, 50]);
+>
+>   // Subarray shares memory pool with original buffer!
+>   const sliced = original.subarray(1, 4);
+>   sliced[0] = 99; // Modifies original[1]!
+>
+>   // Copy creates independent memory buffer
+>   const copied = Buffer.alloc(3);
+>   original.copy(copied, 0, 1, 4);
+>   copied[0] = 77; // Does NOT modify original!
+>
+>   return {
+>     originalByte1: original[1],
+>     slicedByte0: sliced[0],
+>     copiedByte0: copied[0]
+>   };
+> }
+>
+> // Verification tests
+> const result = inspectBufferMemorySharing();
+> console.assert(result.originalByte1 === 99, "Test 1 Failed: Subarray mutates original buffer");
+> console.assert(result.copiedByte0 === 77, "Test 2 Failed: Copy does not mutate original");
 > ```
 >
-> **Explanation:** `Buffer.concat()` combines multiple buffer segments into a single contiguous buffer.
-> 
+> #### Technical Explanation
+>
+> 1. **Zero-Copy Subarray**: `buffer.subarray()` creates a new view pointing to the same underlying ArrayBuffer without memory copying.
+> 2. **buffer.copy()**: Copies bytes from source buffer to target buffer, allocating independent memory.
+> 3. **Performance Optimization**: Using zero-copy subarrays saves CPU cycles when slicing large binary buffers.
 ## 6. Related Terms
 - [Streams (General Concept)](streams.md) — Streams are literally just continuous flows of Buffers!
 - [The crypto Module](../level_02/crypto_module.md) — Related concept: The crypto Module.

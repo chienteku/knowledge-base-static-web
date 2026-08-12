@@ -220,60 +220,100 @@ p:nth-of-type(2) { color: red; } /* Matches <p>Para 2</p> (2nd paragraph element
 
 ## 5. Practice Exercises
 
-### Exercise 1: Menu Item Spacing
+### Exercise 1: Structural Table Row Striping using :nth-child
 
-**Problem:** You have a horizontal navbar menu where list items (`<li>`) have a `margin-right: 20px;`. However, the last list item shifts the right side of the navbar, breaking alignments. Write the CSS selector to remove the margin from only the last item.
+**Scenario:** An author styles alternating data table row backgrounds using `:nth-child(even)` and `:nth-child(odd)`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `:nth-child(even)` background color.
+2. Apply `:nth-child(odd)` background color.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .nav-item:last-child {
->   margin-right: 0;
+> .data-table tbody tr:nth-child(even) {
+>   background-color: #f8fafc;    /* Zebra striping for even rows */
 > }
-> ```
-> - Target the last sibling matching the navigation category class.
-> - Reset the margin parameter value.
-> 
----
-
-
-
-### Exercise 2: Zebra Striping Table Rows with nth-child
-
-**Problem:** Write CSS targeting even `<tr>` rows inside `<tbody>`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> tbody tr:nth-child(even) { background-color: #f9f9f9; }
-> ```
-> ```css
-> tbody tr:nth-child(even) {
->   background-color: #f9f9f9;
+>
+> .data-table tbody tr:nth-child(odd) {
+>   background-color: #ffffff;    /* White background for odd rows */
+> }
+>
+> .data-table tbody tr:hover {
+>   background-color: #f1f5f9;    /* Hover row highlight */
 > }
 > ```
 >
-> **Explanation:** `:nth-child(even)` targets alternating even table rows.
+> #### Technical Explanation
+>
+> 1. **The `:nth-child()` Pseudo-Class**: Selects elements based on their numeric index position among siblings (`even`, `odd`, `an+b`).
+> 2. **Zebra Striping Readability**: Alternating table row colors makes scanning wide financial or analytics tables much easier for human eyes.
+> 3. **Formula Flexibility (`:nth-child(3n+1)`)**: Supports functional formulas to target specific column or row patterns.
 > 
 ---
 
-### Exercise 3: :is() vs :where() Pseudo-Class Specificity
+### Exercise 2: Eliminating Unwanted Margin Spacing on First and Last Children
 
-**Problem:** Which pseudo-class helper has zero (0-0-0) specificity: `:is()` or `:where()`?
+**Scenario:** Uses `:first-child` and `:last-child` to remove unwanted margins inside card containers.
 
-**Expected output:**
+**Requirements:**
+1. Apply `:first-child { margin-top: 0; }`.
+2. Apply `:last-child { margin-bottom: 0; }`.
+
 > [!check]- Answer
-> ```text
-> :where() always has 0 specificity.
-> ```
+>
+> #### Implementation
+>
 > ```css
-> :where(h1, h2, h3) {
->   margin: 0; /* Zero specificity reset */
+> .card-content > *:first-child {
+>   margin-top: 0;                /* Prevents first heading from pushing down card top */
+> }
+>
+> .card-content > *:last-child {
+>   margin-bottom: 0;             /* Prevents last paragraph from expanding card bottom */
 > }
 > ```
 >
-> **Explanation:** `:where()` simplifies CSS resets by applying 0 specificity.
+> #### Technical Explanation
+>
+> 1. **`first-child` & `last-child`**: Target the absolute first or last child element inside a parent container.
+> 2. **Clean Layout Spacing**: Eliminates unwanted extra padding/margin gaps at container edges.
+> 3. **Modern `:not()` Alternative**: Can also be written using `.card > :not(:last-child) { margin-bottom: 1rem; }`
 > 
+---
+
+### Exercise 3: Form State Validation Pseudo-Classes
+
+**Scenario:** Styles input validation states dynamically using `:valid`, `:invalid`, and `:required`.
+
+**Requirements:**
+1. Apply border colors on `:valid` and `:invalid`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .form-field:required {
+>   border-left: 3px solid #3b82f6;
+> }
+>
+> .form-field:invalid:not(:placeholder-shown) {
+>   border-color: #ef4444;        /* Red border for invalid inputs */
+> }
+>
+> .form-field:valid:not(:placeholder-shown) {
+>   border-color: #22c55e;        /* Green border for valid inputs */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Dynamic Form Pseudo-Classes**: Browsers evaluate HTML5 form inputs natively (`:valid`, `:invalid`, `:required`, `:disabled`).
+> 2. **`:placeholder-shown` Guard**: Combining `:invalid:not(:placeholder-shown)` prevents empty form fields from displaying error borders before users type!
+> 3. **Native UX Feedback**: Delivers instant visual input validation without writing custom JavaScript.
 ## 6. Related Terms
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Base active selector states.
 - [`::before` & `::after` (Pseudo-elements)](pseudo_elements.md) — Virtual node generators.

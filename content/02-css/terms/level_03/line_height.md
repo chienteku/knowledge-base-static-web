@@ -102,60 +102,92 @@ div { display: flex; align-items: center; min-height: 100px; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: Calculating the Box
+### Exercise 1: Unitless line-height for Proportional Multi-Line Paragraph Readability
 
-**Problem:** A paragraph has `font-size: 20px` and `line-height: 2`. The paragraph wraps into 3 lines of text. Not including any padding or margins, how tall is the physical box of this paragraph?
+**Scenario:** An author sets unitless `line-height: 1.5` on body text for optimal proportional readability.
 
-**Expected output:**
+**Requirements:**
+1. Set `line-height: 1.5` on `body` element.
+2. Set `line-height: 1.2` on headings.
+3. Explain unitless inheritance.
+
 > [!check]- Answer
-> ```text
-> 120px! 
-> The line-height multiplier (2) * font-size (20) = 40px per line.
-> 40px * 3 lines = 120px total height.
-> ```
-> - Calculate the height of a single line first.
-> 
----
-
-
-
-### Exercise 2: Unitless Line-Height Rule
-
-**Problem:** Write CSS rule applying unitless line-height of `1.6` to body paragraph text.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> p { line-height: 1.6; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> p {
->   line-height: 1.6;
+> body {
+>   font-size: 1rem;
+>   line-height: 1.5;            /* Unitless 1.5 multiplier (16px * 1.5 = 24px line height) */
+>   color: #1e293b;
+> }
+>
+> h1 {
+>   font-size: 2.25rem;
+>   line-height: 1.2;            /* Tighter unitless 1.2 multiplier (~43px line height) */
 > }
 > ```
 >
-> **Explanation:** Unitless numbers (e.g. `1.6`) multiply font size dynamically across all child elements.
+> #### Technical Explanation
+>
+> 1. **The `line-height` Property**: Controls the vertical space allocated to lines of text above and below the font baseline.
+> 2. **Unitless Line-Height Rule**: ALWAYS use unitless numbers (`1.5`, `1.2`) instead of fixed units (`px`, `em`). Unitless values inherit as a multiplier of each child's own font size!
+> 3. **Inheritance Bug with Units**: Setting `line-height: 1.5em` on `body` computes a fixed pixel height on body (24px) which inherits to `h1`, causing overlapping heading text!
 > 
 ---
 
-### Exercise 3: Single-Line Button Vertical Centering
+### Exercise 2: Centering Single-Line Buttons with Unitless Line Height vs Padding
 
-**Problem:** Write single-line button CSS setting height 40px and line-height 40px for vertical text centering.
+**Scenario:** Styles button text centering using vertical padding instead of hardcoded line-height.
 
-**Expected output:**
+**Requirements:**
+1. Use `padding-block` for vertical button text alignment.
+
 > [!check]- Answer
-> ```text
-> .btn { height: 40px; line-height: 40px; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .btn {
->   height: 40px;
->   line-height: 40px;
+> .btn-centered {
+>   display: inline-flex;
+>   align-items: center;
+>   padding: 0.75rem 1.5rem;
+>   line-height: 1;               /* Compact line-height for button labels */
 > }
 > ```
 >
-> **Explanation:** Matching line-height to explicit element height vertically centers single-line text.
+> #### Technical Explanation
+>
+> 1. **Padding Centering Superiority**: Use vertical padding (`padding-block`) for button text centering; hardcoded `line-height` breaks when button text wraps to two lines!
+> 2. **Compact Label Height**: `line-height: 1` removes extra vertical font leading inside button boxes.
+> 3. **Flex Alignment**: `display: inline-flex; align-items: center;` handles icon-text alignment perfectly.
 > 
+---
+
+### Exercise 3: Avoiding Fixed Pixel line-height Traps in Responsive Headings
+
+**Scenario:** Demonstrates why fixed pixel `line-height: 30px` breaks when text wraps.
+
+**Requirements:**
+1. Refactor fixed pixel line-height to unitless `1.2`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Refactored: Replaced hardcoded line-height: 30px with unitless multiplier */
+> .responsive-heading {
+>   font-size: clamp(1.5rem, 3vw, 2.5rem);
+>   line-height: 1.2;             /* Scales line-height dynamically with font-size */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Dynamic Line-Height Scaling**: Unitless `1.2` scales line height automatically as `clamp()` font sizes adapt to screen width.
+> 2. **Preventing Text Collisions**: Eliminates multi-line heading text collision bugs on mobile screens.
+> 3. **WCAG Readability**: Satisfies WCAG 1.4.12 Text Spacing guidelines.
 ## 6. Related Terms
 - [`font-size` & `font-weight`](font_size_weight.md) — The property that `line-height` multiplies against.
 - [`font-style` & `font-variant`](font_style_variant.md) — Text formatting variants.

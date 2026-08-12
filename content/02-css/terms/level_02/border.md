@@ -116,61 +116,101 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Size Math
+### Exercise 1: Styling Card Component Borders with Rounded Corners
 
-**Problem:** You have a `<div>` with `width: 100px;`. You add `border: 10px solid black;`. What is the total visible width of the element on the screen? (Assuming default Box Sizing).
+**Scenario:** An author styles a UI card component with subtle borders and rounded corners using `border` and `border-radius`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `border: 1px solid #e2e8f0`.
+2. Set `border-radius: 0.5rem`.
+3. Add hover state border color change.
+
 > [!check]- Answer
-> ```text
-> 120px! The border is a physical wall added to *both* sides (left and right). 
-> 100px (Content) + 10px (Left Border) + 10px (Right Border) = 120px.
-> ```
-> - Remember, a box has two sides (left and right).
-> 
----
-
-
-
-### Exercise 2: Independent Border Side Styling
-
-**Problem:** Write CSS applying 3px solid red border ONLY to bottom edge of `.heading`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .heading { border-bottom: 3px solid red; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .heading {
->   border-bottom: 3px solid red;
+> .card {
+>   background-color: #ffffff;
+>   border: 1px solid #e2e8f0;    /* Width, Style, and Color shorthand */
+>   border-radius: 0.5rem;        /* 8px relative rounded corners */
+>   padding: 1.5rem;
+>   transition: border-color 0.2s ease;
+> }
+>
+> .card:hover {
+>   border-color: #2563eb;        /* Interactive hover accent border */
 > }
 > ```
 >
-> **Explanation:** Longhand side properties (`border-bottom`, `border-top`) target individual edges.
+> #### Technical Explanation
+>
+> 1. **The `border` Shorthand**: Combines `border-width`, `border-style`, and `border-color` into a single declaration.
+> 2. **`border-radius` Relative Units**: Using `rem` units (`0.5rem`) ensures border corner curvature scales proportionally with root font size.
+> 3. **Layout Space Allocation**: Borders occupy physical pixel space in the box model, unlike `box-shadow` or `outline`.
 > 
 ---
 
-### Exercise 3: Transparent Border Placeholder Technique
+### Exercise 2: Focus Ring High-Contrast Borders vs Outlines
 
-**Problem:** Why set `border: 2px solid transparent` on an unfocused button before adding a colored border on focus?
+**Scenario:** Provides an accessible high-contrast focus indicator using `outline` without altering component border dimensions.
 
-**Expected output:**
+**Requirements:**
+1. Apply `:focus-visible` outline styles with `outline-offset: 2px`.
+
 > [!check]- Answer
-> ```text
-> To pre-allocate border space in the box-model so adding a colored border on focus causes ZERO layout shift.
-> ```
+>
+> #### Implementation
+>
 > ```css
-> button {
->   border: 2px solid transparent; /* Pre-allocate border layout space */
+> .btn-action {
+>   border: 2px solid transparent;
+>   background-color: #2563eb;
+>   color: #ffffff;
+>   padding: 0.75rem 1.5rem;
+>   border-radius: 0.375rem;
 > }
-> button:focus {
->   border-color: blue;
+>
+> /* High-contrast focus outline that does NOT trigger layout shift */
+> .btn-action:focus-visible {
+>   outline: 3px solid #93c5fd;
+>   outline-offset: 2px;
 > }
 > ```
 >
-> **Explanation:** Pre-allocating transparent borders prevents dynamic layout shifts.
+> #### Technical Explanation
+>
+> 1. **`outline` vs `border`**: Outlines are drawn OUTSIDE the element's box model and do NOT trigger layout reflows or resizing.
+> 2. **`outline-offset` Spacing**: Adds whitespace separation between the element border and the focus indicator ring.
+> 3. **Accessibility Compliance**: Provides mandatory high-contrast visual focus feedback for keyboard users.
 > 
+---
+
+### Exercise 3: Decorative Section Dividers using Logical Border Properties
+
+**Scenario:** Uses CSS logical properties (`border-block-end`) to create a bottom section divider that adapts to writing directions.
+
+**Requirements:**
+1. Apply `border-block-end: 2px solid #cbd5e1`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .section-header {
+>   /* Logical property: applies to bottom in LTR/RTL, right in vertical text */
+>   border-block-end: 2px solid #cbd5e1;
+>   padding-block-end: 0.75rem;
+>   margin-block-end: 1.5rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **CSS Logical Properties**: `border-block-end` replaces `border-bottom`, adapting automatically to horizontal and vertical writing modes.
+> 2. **Internationalization Ready**: Guarantees consistent layout boundaries across international RTL (right-to-left) and vertical scripts.
+> 3. **Semantic Section Separation**: Provides clean visual boundaries between document chapters.
 ## 6. Related Terms
 - [Padding](padding.md) — The space directly inside the border.
 - [Margin](margin.md) — The space directly outside the border.

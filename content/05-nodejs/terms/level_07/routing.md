@@ -104,157 +104,151 @@ module.exports = router;
 app.use('/users', userRouter);
 ```
 
-
-
-### Mistake 4: Placing Catch-All 404 Route Handlers Above Specific API Routes
-
-**The mistake:** Mounting `app.use('*', notFoundHandler)` at top of script file.
-
-**Why it's wrong:** Express evaluates routes top-to-bottom. Placing a wildcard 404 handler at the top intercepts all incoming HTTP requests before specific API handlers are evaluated.
-
-*Incorrect:*
-```javascript
-app.use('*', (req, res) => res.status(404).send('Not Found')); // ❌ Intercepts all routes!
-app.get('/api/users', ...);
-```
-
-*Fix:*
-```javascript
-app.get('/api/users', ...); // Specific routes first
-app.use('*', (req, res) => res.status(404).send('Not Found')); // 404 fallback LAST
-```
-
-### Mistake 5: Failing to Modularize Routes via `express.Router()` in Large Apps
-
-**The mistake:** Writing 500 route handlers directly on a single global `app` object inside `server.js`.
-
-**Why it's wrong:** Monolithic route files become unmaintainable. Group related resource routes using `express.Router()` into modular controller files.
-
-*Incorrect:*
-```javascript
-// 500 lines of app.get(), app.post() in server.js
-```
-
-*Fix:*
-```javascript
-// routes/users.js:
-const router = express.Router();
-router.get('/', getUsers);
-module.exports = router;
-// server.js:
-app.use('/users', userRouter);
-```
-
-
-
-### Mistake 6: Placing Catch-All 404 Route Handlers Above Specific API Routes
-
-**The mistake:** Mounting `app.use('*', notFoundHandler)` at top of script file.
-
-**Why it's wrong:** Express evaluates routes top-to-bottom. Placing a wildcard 404 handler at the top intercepts all incoming HTTP requests before specific API handlers are evaluated.
-
-*Incorrect:*
-```javascript
-app.use('*', (req, res) => res.status(404).send('Not Found')); // ❌ Intercepts all routes!
-app.get('/api/users', ...);
-```
-
-*Fix:*
-```javascript
-app.get('/api/users', ...); // Specific routes first
-app.use('*', (req, res) => res.status(404).send('Not Found')); // 404 fallback LAST
-```
-
-### Mistake 7: Failing to Modularize Routes via `express.Router()` in Large Apps
-
-**The mistake:** Writing 500 route handlers directly on a single global `app` object inside `server.js`.
-
-**Why it's wrong:** Monolithic route files become unmaintainable. Group related resource routes using `express.Router()` into modular controller files.
-
-*Incorrect:*
-```javascript
-// 500 lines of app.get(), app.post() in server.js
-```
-
-*Fix:*
-```javascript
-// routes/users.js:
-const router = express.Router();
-router.get('/', getUsers);
-module.exports = router;
-// server.js:
-app.use('/users', userRouter);
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: The Express Router
+### Exercise 1: Express Router Modular Factory
 
-**Problem:** You want to move all your Product routes into a separate file called `productRoutes.js` so they all automatically start with `/products`. How do you export the router from the file, and how do you connect it in `server.js`?
+**Scenario:** Constructs a modular RESTful resource router for `/users` containing CRUD route handlers.
 
-**Expected output:**
+**Requirements:**
+1. Write createResourceRouter(controllerObj).
+2. Bind GET, POST, PUT, DELETE endpoints.
+3. Return routing table.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> // --- productRoutes.js ---
-> const express = require('express');
-> const router = express.Router();
-> 
-> // This automatically becomes /products/list
-> router.get('/list', (req, res) => res.send("List of products")); 
-> 
-> module.exports = router;
-> 
-> // --- server.js ---
-> const productRoutes = require('./productRoutes');
-> 
-> // Mount the router! Any request starting with /products goes to that file.
-> app.use('/products', productRoutes); 
+> function createResourceRouter(controllerObj = {}) {
+>   const routes = [];
+>
+>   const register = (method, path, handlerName) => {
+>     if (typeof controllerObj[handlerName] === "function") {
+>       routes.push({ method, path, handler: controllerObj[handlerName] });
+>     }
+>   };
+>
+>   register("GET", "/", "list");
+>   register("POST", "/", "create");
+>   register("GET", "/:id", "getById");
+>   register("PUT", "/:id", "update");
+>   register("DELETE", "/:id", "delete");
+>
+>   return {
+>     routes,
+>     routeCount: routes.length
+>   };
+> }
+>
+> // Verification tests
+> const controller = {
+>   list: () => {},
+>   create: () => {},
+>   getById: () => {},
+>   update: () => {},
+>   delete: () => {}
+> };
+>
+> const router = createResourceRouter(controller);
+> console.assert(router.routeCount === 5, "Test 1 Failed: All 5 CRUD routes registered");
 > ```
-> - Create `express.Router()`. 
-> - Use `app.use()` to mount it to a specific base path.
+>
+> #### Technical Explanation
+>
+> 1. **RESTful Routing Conventions**: Maps standard HTTP verbs (GET, POST, PUT, DELETE) to resource actions.
+> 2. **Separation of Concerns**: Separates URL routing declarations from business logic controller implementations.
+> 3. **Modular Router Export**: Modular routers are exported as standalone CommonJS/ESM modules.
 > 
 ---
 
+### Exercise 2: Regex & Wildcard Route Matcher
 
+**Scenario:** Simulates Express wildcard (`/files/*`) and regex route matching algorithm.
 
-### Exercise 2: Creating Modular Router File
+**Requirements:**
+1. Write matchWildcardRoute(routePattern, reqPath).
+2. Support `*` wildcard matching.
+3. Return match result.
 
-**Problem:** Create modular `express.Router()` instance for `/products` export.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> const router = express.Router(); router.get('/', getProducts); module.exports = router;
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const express = require('express');
-> const router = express.Router();
-> router.get('/', (req, res) => res.send('Products list'));
-> module.exports = router;
+> function matchWildcardRoute(routePattern, reqPath) {
+>   if (routePattern === "*") {
+>     return { matched: true, wildcardValue: reqPath };
+>   }
+>
+>   const regexPattern = routePattern.replace(/\*/g, "(.*)");
+>   const regex = new RegExp(`^${regexPattern}$`);
+>   const match = reqPath.match(regex);
+>
+>   if (!match) {
+>     return { matched: false, wildcardValue: null };
+>   }
+>
+>   return {
+>     matched: true,
+>     wildcardValue: match[1] || ""
+>   };
+> }
+>
+> // Verification tests
+> const r1 = matchWildcardRoute("/static/*", "/static/images/logo.png");
+> console.assert(r1.matched === true, "Test 1 Failed");
+> console.assert(r1.wildcardValue === "images/logo.png", "Test 2 Failed: Captured wildcard subpath");
 > ```
 >
-> **Explanation:** `express.Router()` creates isolated modular route handler modules.
+> #### Technical Explanation
+>
+> 1. **Wildcard Routes**: Asterisks (`*`) match arbitrary path segments in route definitions.
+> 2. **Catch-All Fallback Routes**: Wildcard `app.use('*')` routes registered at the end of the stack handle 404 pages.
+> 3. **Regex Route Support**: Express accepts JavaScript Regular Expressions directly as route path arguments.
 > 
 ---
 
-### Exercise 3: Chaining HTTP Route Methods
+### Exercise 3: RESTful Resource Routing Table
 
-**Problem:** Chain `get`, `post`, `delete` handlers on path `'/api/items'` using `app.route()`.
+**Scenario:** Executes matching route handlers from a pre-compiled routing table for incoming HTTP requests.
 
-**Expected output:**
+**Requirements:**
+1. Write dispatchRoutingTable(method, path, routingTable).
+2. Match method and path.
+3. Execute handler.
+
 > [!check]- Answer
-> ```text
-> app.route('/api/items').get(getItems).post(createItem).delete(deleteItem);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> app.route('/api/items')
->   .get((req, res) => res.send('Get'))
->   .post((req, res) => res.send('Post'))
->   .delete((req, res) => res.send('Delete'));
+> function dispatchRoutingTable(method, path, routingTable = []) {
+>   const targetMethod = method.toUpperCase();
+>
+>   for (const route of routingTable) {
+>     if (route.method === targetMethod && route.path === path) {
+>       return { matched: true, response: route.handler() };
+>     }
+>   }
+>
+>   return { matched: false, response: null };
+> }
+>
+> // Verification tests
+> const table = [
+>   { method: "GET", path: "/health", handler: () => "OK" }
+> ];
+>
+> const res = dispatchRoutingTable("GET", "/health", table);
+> console.assert(res.matched === true && res.response === "OK", "Test 1 Failed");
 > ```
 >
-> **Explanation:** `app.route()` avoids duplicate path definitions for multi-method endpoints.
-> 
+> #### Technical Explanation
+>
+> 1. **Routing Table Execution**: Internal data structure mapping HTTP method and path combinations to handler functions.
+> 2. **Routing Priority**: Routes are evaluated in top-to-bottom registration order; first matching route executes.
+> 3. **Overlapping Route Ordering**: Specific routes (`/users/active`) MUST be defined before parameter routes (`/users/:id`).
 ## 6. Related Terms
 - [Middleware](middleware.md) — Middleware executes right before the Router triggers your code.
 - [REST API Design](../level_09/rest_api.md) — The strict rules for naming your routes properly.

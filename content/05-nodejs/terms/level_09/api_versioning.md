@@ -116,141 +116,153 @@ Keep /api/v1/users payload intact; create /api/v2/users with new payload schema
 Standardize on URL Path versioning (/api/v1/...) across all service endpoints
 ```
 
-
-
-### Mistake 4: Breaking Existing API Consumers by Modifying API Response Payloads In-Place Without Versioning
-
-**The mistake:** Removing a property `user.name` or changing data types in an existing `/api/users` endpoint.
-
-**Why it's wrong:** Existing mobile apps and frontend clients relying on old API payload contracts will break or crash. Introduce new API versions (`/api/v2/users`) for breaking API changes.
-
-*Incorrect:*
-```javascript
-// Removing user.name property in place on /api/users endpoint
-```
-
-*Fix:*
-```javascript
-Keep /api/v1/users payload intact; create /api/v2/users with new payload schema
-```
-
-### Mistake 5: Mixing Multiple Versioning Strategies (URL Path, Query Params, Headers) Inconsistently
-
-**The mistake:** Using `/api/v1/users` for some endpoints while using `Accept: application/vnd.api.v2+json` headers for others.
-
-**Why it's wrong:** Mixing versioning strategies confuses API consumers and complicates proxy cache configurations. Standardize on a single versioning strategy across the organization.
-
-*Incorrect:*
-```javascript
-// Using URL path for users API, but header versioning for products API
-```
-
-*Fix:*
-```javascript
-Standardize on URL Path versioning (/api/v1/...) across all service endpoints
-```
-
-
-
-### Mistake 6: Breaking Existing API Consumers by Modifying API Response Payloads In-Place Without Versioning
-
-**The mistake:** Removing a property `user.name` or changing data types in an existing `/api/users` endpoint.
-
-**Why it's wrong:** Existing mobile apps and frontend clients relying on old API payload contracts will break or crash. Introduce new API versions (`/api/v2/users`) for breaking API changes.
-
-*Incorrect:*
-```javascript
-// Removing user.name property in place on /api/users endpoint
-```
-
-*Fix:*
-```javascript
-Keep /api/v1/users payload intact; create /api/v2/users with new payload schema
-```
-
-### Mistake 7: Mixing Multiple Versioning Strategies (URL Path, Query Params, Headers) Inconsistently
-
-**The mistake:** Using `/api/v1/users` for some endpoints while using `Accept: application/vnd.api.v2+json` headers for others.
-
-**Why it's wrong:** Mixing versioning strategies confuses API consumers and complicates proxy cache configurations. Standardize on a single versioning strategy across the organization.
-
-*Incorrect:*
-```javascript
-// Using URL path for users API, but header versioning for products API
-```
-
-*Fix:*
-```javascript
-Standardize on URL Path versioning (/api/v1/...) across all service endpoints
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Version Fallback Router
+### Exercise 1: URL Path API Version Router
 
-**Problem:** You are deprecating v1. Configure Express to forward requests to the v2 router, but keep a legacy `/api/v1/user` endpoint returning the old field format for backward compatibility:
+**Scenario:** An API gateway inspects URL prefixes (`/v1/users`, `/v2/users`) to dispatch incoming requests to the appropriate versioned controller.
 
-```javascript
-const express = require('express');
-const app = express();
-
-const v2Router = express.Router();
-v2Router.get('/user', (req, res) => res.json({ id: 42, username: "dev" }));
-
-// Mount V2
-app.use('/api/v2', v2Router);
-
-// Legacy V1 compatibility route:
-app.get('/api/v1/user', (req, res) => {
-  // Translate V2 properties back to the V1 format manually:
-  res.json({ userId: "42", name: "dev" });
-});
-```
-
----
+**Requirements:**
+1. Write routeByUrlVersion(req, res, v1Controller, v2Controller).
+2. Extract version prefix `/v1` or `/v2`.
+3. Dispatch to target version handler or return 404.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Express URL Path Versioning Router
-
-**Problem:** Mount `v1Router` and `v2Router` on `/api/v1` and `/api/v2` in Express.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> app.use('/api/v1', v1Router); app.use('/api/v2', v2Router);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> app.use('/api/v1', v1Router);
-> app.use('/api/v2', v2Router);
+> function routeByUrlVersion(req, res, v1Controller, v2Controller) {
+>   const url = req.url || "/";
+>
+>   if (url.startsWith("/v1/")) {
+>     const subUrl = url.replace("/v1", "");
+>     return v1Controller.handle({ ...req, url: subUrl }, res);
+>   }
+>
+>   if (url.startsWith("/v2/")) {
+>     const subUrl = url.replace("/v2", "");
+>     return v2Controller.handle({ ...req, url: subUrl }, res);
+>   }
+>
+>   res.statusCode = 404;
+>   res.end(JSON.stringify({ error: "UNSUPPORTED_API_VERSION" }));
+> }
+>
+> // Verification tests
+> let v1Called = false;
+> let v2Called = false;
+>
+> const v1 = { handle: (req, res) => { v1Called = req.url === "/users"; } };
+> const v2 = { handle: (req, res) => { v2Called = req.url === "/users"; } };
+>
+> routeByUrlVersion({ url: "/v1/users" }, {}, v1, v2);
+> console.assert(v1Called === true, "Test 1 Failed: Routed to v1");
+>
+> routeByUrlVersion({ url: "/v2/users" }, {}, v1, v2);
+> console.assert(v2Called === true, "Test 2 Failed: Routed to v2");
 > ```
 >
-> **Explanation:** URL path versioning mounts versioned Express routers on distinct sub-path prefixes.
+> #### Technical Explanation
+>
+> 1. **URL Path Versioning Strategy**: Most common versioning strategy (`/api/v1/resource`), highly visible and easily cached by CDNs.
+> 2. **Prefix Stripping**: Gateway strips version prefixes (`/v1`) before forwarding requests to internal microservice routers.
+> 3. **Version Support Matrix**: Allows running legacy v1 routes alongside modern v2 routes during migration periods.
 > 
 ---
 
-### Exercise 3: 3 Common API Versioning Strategies
+### Exercise 2: Accept Header API Version Negotiator
 
-**Problem:** List 3 common API versioning strategies.
+**Scenario:** An enterprise API negotiates API versions via custom vendor `Accept` headers (`Accept: application/vnd.company.v2+json`).
 
-**Expected output:**
+**Requirements:**
+1. Write negotiateHeaderVersion(reqHeaders, versionMap).
+2. Parse `Accept` header version token.
+3. Execute matching version handler.
+
 > [!check]- Answer
-> ```text
-> 1. URI Path (/api/v1/users)
-> 2. Query Parameter (/api/users?version=1)
-> 3. Custom Header (Accept: application/json; version=1)
-> ```
-> ```text
-> 1. URI Path (/api/v1/users)
-> 2. Query Parameter (/api/users?version=1)
-> 3. Custom Header / Accept Header
+>
+> #### Implementation
+>
+> ```javascript
+> function negotiateHeaderVersion(reqHeaders = {}, versionMap = {}) {
+>   const acceptHeader = reqHeaders["accept"] || reqHeaders["Accept"] || "";
+>   const match = acceptHeader.match(/application\/vnd\.company\.v(\d+)\+json/i);
+>
+>   const version = match ? `v${match[1]}` : "v1";
+>   const handler = versionMap[version];
+>
+>   if (!handler) {
+>     return { status: 406, error: `API version '${version}' not acceptable` };
+>   }
+>
+>   return { status: 200, version, data: handler() };
+> }
+>
+> // Verification tests
+> const handlers = {
+>   v1: () => ({ name: "Alice" }),
+>   v2: () => ({ id: 42, fullName: "Alice Smith" })
+> };
+>
+> const res1 = negotiateHeaderVersion({ Accept: "application/vnd.company.v2+json" }, handlers);
+> console.assert(res1.version === "v2" && res1.data.fullName === "Alice Smith", "Test 1 Failed: v2 header parsed");
+>
+> const res2 = negotiateHeaderVersion({}, handlers);
+> console.assert(res2.version === "v1", "Test 2 Failed: Defaulted to v1");
 > ```
 >
-> **Explanation:** URI path is most explicit; headers keep URLs clean; query params are easy to test.
+> #### Technical Explanation
+>
+> 1. **Header Content Negotiation**: Keeps URLs clean (`/users`) while negotiating versions using standard HTTP `Accept` headers.
+> 2. **HTTP 406 Not Acceptable**: Returns 406 status if requested API version format is unsupported.
+> 3. **REST Pureness**: Adheres to REST principles by treating versioning as resource representation negotiation.
 > 
+---
+
+### Exercise 3: API Version Sunset & Deprecation Header Injector
+
+**Scenario:** A middleware injects standard HTTP `Deprecation` and `Sunset` response headers to alert API consumers of upcoming v1 version retirement.
+
+**Requirements:**
+1. Write versionSunsetMiddleware(sunsetDateISO, successorUrl).
+2. Attach `Deprecation: true` header.
+3. Attach `Sunset: <date>` header.
+4. Attach `Link: <url>; rel="successor-version"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createSunsetMiddleware(sunsetDateISO, successorUrl) {
+>   return function versionSunsetMiddleware(req, res, next) {
+>     res.setHeader("Deprecation", "true");
+>     res.setHeader("Sunset", new Date(sunsetDateISO).toUTCString());
+>     if (successorUrl) {
+>       res.setHeader("Link", `<${successorUrl}>; rel="successor-version"`);
+>     }
+>     next();
+>   };
+> }
+>
+> // Verification tests
+> const headers = {};
+> const mockRes = { setHeader: (k, v) => { headers[k] = v; } };
+>
+> const middleware = createSunsetMiddleware("2026-12-31T23:59:59Z", "https://api.company.com/v2/users");
+> middleware({}, mockRes, () => {});
+>
+> console.assert(headers["Deprecation"] === "true", "Test 1 Failed");
+> console.assert(headers["Sunset"].includes("2026"), "Test 2 Failed");
+> console.assert(headers["Link"].includes("rel="successor-version""), "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **IETF Deprecation & Sunset Headers**: Standardized HTTP headers informing clients of API deprecation timelines.
+> 2. **Successor Link Header**: Directs developers to successor API endpoints (`rel="successor-version"`).
+> 3. **Proactive Developer Communication**: Prevents breaking client applications by providing programmatic deprecation notices in API responses.
 ## 6. Related Terms
 - [REST API Design](rest_api.md) — The structuring rules governing endpoints.
 

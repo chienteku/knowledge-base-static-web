@@ -179,64 +179,95 @@ a[href$=".pdf" i] { ... } /* Case-insensitive attribute matching */
 
 ## 5. Practice Exercises
 
-### Exercise 1: Form Validation Highlight
+### Exercise 1: Styling External Links Automatically with Attribute Selectors
 
-**Problem:** You are building a form. You want to highlight all input elements that are marked as `required` AND currently contain an invalid email format (`type="email"`), drawing a red border around them. Write the CSS selector.
+**Scenario:** An author automatically styles external links starting with `https://` using `a[href^="https://"]`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `a[href^="https://"]` selector.
+2. Add external link icon indicator via `::after`.
+
 > [!check]- Answer
-> ```css
-> input[type="email"][required] {
->   /* target styles go here */
-> }
-> ```
-> - You can chain attribute selectors together without spaces to target elements matching both criteria simultaneously!
-> 
----
-
-
-
-### Exercise 2: Targeting Secure HTTPS and PDF Links
-
-**Problem:** Write CSS attribute selectors for:
-1. All links starting with `https://` (`[href^="https://"]`)
-2. All links ending with `.pdf` case-insensitive (`[href$=".pdf" i]`)
-3. Required input fields (`[required]`)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. a[href^="https://"]
-> 2. a[href$=".pdf" i]
-> 3. input[required]
-> ```
-> ```css
-> a[href^="https://"] { color: green; }
-> a[href$=".pdf" i]::after { content: " (PDF)"; }
-> input[required] { border-left: 3px solid red; }
-> ```
 >
-> **Explanation:** Attribute selectors target elements by presence, prefix (`^=`), or suffix (`$=`).
-> 
----
-
-### Exercise 3: Space-Separated List Matcher
-
-**Problem:** Which attribute selector operator (`~=` or `|=`) matches a word in a space-separated list of values?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> ~= (matches word in space-separated list).
-> ```
+> #### Implementation
+>
 > ```css
-> [class~="btn"] {
->   display: inline-block;
+> /* Target links starting with https:// */
+> a[href^="https://"]:not([href*="mywebsite.com"]) {
+>   color: #2563eb;
+>   padding-right: 1.25rem;
+>   background: url("../icons/external-link.svg") no-repeat right center;
+>   background-size: 1rem 1rem;
 > }
 > ```
 >
-> **Explanation:** `~=` matches whole words within space-separated attribute lists.
+> #### Technical Explanation
+>
+> 1. **The Attribute Prefix Selector (`^=`)**: `[attr^="val"]` matches elements whose attribute value STARTS WITH the specified string.
+> 2. **Automated UI Enhancements**: Automatically appends external link icons without requiring manual class additions in HTML.
+> 3. **Negation Pseudo-Class (`:not()`)**: Excludes internal domain links using `:not([href*="mywebsite.com"])`.
 > 
+---
+
+### Exercise 2: Targeting Download File Types with Substring Match Selector
+
+**Scenario:** Styles PDF download links using `a[href$=".pdf"]`.
+
+**Requirements:**
+1. Apply `a[href$=".pdf"]` selector.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Target links ending with .pdf */
+> a[href$=".pdf"] {
+>   font-weight: 600;
+>   color: #dc2626;
+> }
+>
+> a[href$=".pdf"]::before {
+>   content: "[PDF] ";
+>   font-size: 0.75em;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The Attribute Suffix Selector (`$=`)**: `[attr$="val"]` matches elements whose attribute value ENDS WITH the specified string.
+> 2. **File Type Indicator**: Warns users when clicking a link will trigger a PDF file download.
+> 3. **Enhanced UX**: Improves accessibility and transparency for document links.
+> 
+---
+
+### Exercise 3: ARIA Accessibility Attribute Targeting for State Controls
+
+**Scenario:** Styles expanded dropdown menus using `[aria-expanded="true"]`.
+
+**Requirements:**
+1. Apply `[aria-expanded="true"]` selector.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .dropdown-trigger[aria-expanded="true"] {
+>   background-color: #1e293b;
+>   color: #ffffff;
+> }
+>
+> .dropdown-trigger[aria-expanded="true"] .arrow-icon {
+>   transform: rotate(180deg);
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **ARIA Attribute Selector**: Styles UI components directly based on accessibility ARIA attributes (`aria-expanded`, `aria-selected`, `aria-disabled`).
+> 2. **Single Source of Truth**: Ensures CSS visual state remains 100% in sync with accessibility screen reader state.
+> 3. **Eliminates Extra State Classes**: Avoids toggling redundant `.is-active` classes in JavaScript.
 ## 6. Related Terms
 - [Combinator Selectors](combinators.md) — Target elements relative to parent-child tree layouts.
 - [Selectors (Element, Class, ID)](../level_01/selectors.md) — Related concept: Selectors (Element, Class, ID).

@@ -106,58 +106,110 @@ input { box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); } /* Inner inset shadow */
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Inner Shadow
+### Exercise 1: Layered Soft Elevation Shadows for UI Cards
 
-**Problem:** A normal `box-shadow` drops a shadow *outside* the box. How do you create an effect where the shadow is cast *inside* the box, making it look like the box is a deep hole cut into the screen (often used for form inputs)?
+**Scenario:** An author builds a modern layered drop shadow for UI cards using comma-separated `box-shadow` values.
 
-**Expected output:**
+**Requirements:**
+1. Apply layered `box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);`.
+2. Add hover lift state.
+
 > [!check]- Answer
-> ```text
-> Add the `inset` keyword to the very beginning or end of the rule!
-> `box-shadow: inset 0px 4px 8px rgba(0,0,0,0.2);`
-> ```
-> - It's a special keyword you place right before the math values.
-> 
----
-
-
-
-### Exercise 2: Card Elevation Shadow Pattern
-
-**Problem:** Write CSS `box-shadow` for `.card` creating 0px X-offset, 8px Y-offset, 24px blur, and 12% black opacity.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .card { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .card {
->   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+> .elevation-card {
+>   background-color: #ffffff;
+>   border-radius: 0.5rem;
+>   padding: 1.5rem;
+>   /* Dual-Layer Shadow: Soft Ambient Blur + Sharp Key Blur */
+>   box-shadow: 
+>     0 4px 6px -1px rgba(0, 0, 0, 0.1),
+>     0 2px 4px -1px rgba(0, 0, 0, 0.06);
+>   transition: box-shadow 0.2s ease, transform 0.2s ease;
+> }
+>
+> .elevation-card:hover {
+>   transform: translateY(-2px);
+>   box-shadow: 
+>     0 10px 15px -3px rgba(0, 0, 0, 0.1),
+>     0 4px 6px -2px rgba(0, 0, 0, 0.05);
 > }
 > ```
 >
-> **Explanation:** `box-shadow` syntax: `offset-x offset-y blur-radius spread-radius color`.
+> #### Technical Explanation
+>
+> 1. **The `box-shadow` Property**: Applies drop shadows to an element box (`offset-x`, `offset-y`, `blur-radius`, `spread-radius`, `color`).
+> 2. **Layered Elevation Design**: Combining a soft ambient shadow with a sharp key shadow creates realistic natural depth.
+> 3. **Negative Spread Radius**: Negative spread values (`-1px`, `-3px`) pull shadow edges inward, preventing muddy shadow halos.
 > 
 ---
 
-### Exercise 3: Multiple Box Shadow Layering
+### Exercise 2: Inset Input Box Shadows
 
-**Problem:** Write CSS applying double layered box shadow for material design elevation.
+**Scenario:** Styles an inset form input field shadow using `box-shadow: inset`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05)`.
+
 > [!check]- Answer
-> ```text
-> box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .elevation-2 {
->   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+> .form-input-inset {
+>   border: 1px solid #cbd5e1;
+>   border-radius: 0.375rem;
+>   padding: 0.75rem 1rem;
+>   /* Inset Keyword: Draws shadow INSIDE the input frame */
+>   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 > }
 > ```
 >
-> **Explanation:** Layering multiple box shadows creates realistic lighting depth.
+> #### Technical Explanation
+>
+> 1. **The `inset` Keyword**: Changes the shadow from an outer drop shadow to an inner shadow drawn INSIDE the element's border box.
+> 2. **Sunken Input Effect**: Creates a subtle carved or sunken visual depth for text fields and search inputs.
+> 3. **Focus State Transitions**: Replace inset shadow with a crisp focus ring on `:focus-visible`.
 > 
+---
+
+### Exercise 3: High-Performance GPU Animated Shadows
+
+**Scenario:** Optimizes shadow hover animations using pseudo-elements to avoid repaints.
+
+**Requirements:**
+1. Animate `opacity` on `::after` pseudo-element shadow.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .perf-shadow-card {
+>   position: relative;
+> }
+>
+> .perf-shadow-card::after {
+>   content: "";
+>   position: absolute;
+>   inset: 0;
+>   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+>   opacity: 0;
+>   transition: opacity 0.3s ease;
+> }
+>
+> .perf-shadow-card:hover::after {
+>   opacity: 1;                   /* Animates GPU opacity instead of repainting heavy box-shadow! */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **GPU Animation Optimization**: Animating `box-shadow` directly triggers CPU repaints on every frame; animating `opacity` on a `::after` shadow layer runs on the GPU!
+> 2. **60fps Performance Guarantee**: Prevents animation stuttering on complex dashboard pages.
+> 3. **Professional CSS Pattern**: Industry standard for performance-critical web applications.
 ## 6. Related Terms
 - [Border](../level_02/border.md) — Sizing layouts with structural boundaries.
 - [`border-radius` (Rounded Corners)](border_radius.md) — Card rounding properties which crop shadow layouts.

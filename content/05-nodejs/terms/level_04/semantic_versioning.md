@@ -84,69 +84,155 @@ Use exact version string '1.2.3' (no prefix) or package-lock.json for absolute l
 
 ## 5. Practice Exercises
 
-### Exercise 1: Safe or Dangerous?
+### Exercise 1: SemVer Caret vs Tilde Range Matcher
 
-**Problem:** You are currently using version `2.4.1` of a charting library. The author releases three new versions over the next year. Based on SemVer, which of these updates requires you to rewrite your code?
-1. Update to `2.4.2`
-2. Update to `2.5.0`
-3. Update to `3.0.0`
+**Scenario:** Parses Semantic Versioning range specifiers (Caret `^1.2.3`, Tilde `~1.2.3`, Exact `1.2.3`) to check if target version satisfies range.
 
-**Expected output:**
+**Requirements:**
+1. Write satisfiesSemverRange(rangeStr, targetVersionStr).
+2. Parse Caret ^ (allows MINOR/PATCH updates).
+3. Parse Tilde ~ (allows PATCH updates).
+4. Parse Exact version.
+
 > [!check]- Answer
-> ```text
-> 1. Safe (Patch): Only bug fixes.
-> 2. Safe (Minor): Only new features added.
-> 3. Dangerous (Major): Code you rely on was deleted or changed! You must rewrite your code.
+>
+> #### Implementation
+>
+> ```javascript
+> function satisfiesSemverRange(rangeStr, targetVersionStr) {
+>   const parse = (v) => v.replace(/^[^\d]*/, "").split(".").map(n => parseInt(n, 10));
+>
+>   const [tMajor, tMinor, tPatch] = parse(targetVersionStr);
+>   const [rMajor, rMinor, rPatch] = parse(rangeStr);
+>
+>   if (rangeStr.startsWith("^")) {
+>     // Caret ^: Same MAJOR version, target >= range version
+>     if (tMajor !== rMajor) return false;
+>     if (tMinor < rMinor) return false;
+>     if (tMinor === rMinor && tPatch < rPatch) return false;
+>     return true;
+>   }
+>
+>   if (rangeStr.startsWith("~")) {
+>     // Tilde ~: Same MAJOR and MINOR version, target PATCH >= range PATCH
+>     if (tMajor !== rMajor || tMinor !== rMinor) return false;
+>     return tPatch >= rPatch;
+>   }
+>
+>   // Exact Match
+>   return targetVersionStr === rangeStr;
+> }
+>
+> // Verification tests
+> console.assert(satisfiesSemverRange("^1.2.0", "1.5.2") === true, "Test 1 Failed: Caret allows MINOR update");
+> console.assert(satisfiesSemverRange("^1.2.0", "2.0.0") === false, "Test 2 Failed: Caret blocks MAJOR update");
+> console.assert(satisfiesSemverRange("~1.2.0", "1.2.5") === true, "Test 3 Failed: Tilde allows PATCH update");
+> console.assert(satisfiesSemverRange("~1.2.0", "1.3.0") === false, "Test 4 Failed: Tilde blocks MINOR update");
 > ```
-> - Which number represents "Breaking Changes"?
+>
+> #### Technical Explanation
+>
+> 1. **Semantic Versioning Syntax**: `MAJOR.MINOR.PATCH` (e.g. `2.4.1`).
+> 2. **Caret `^` Prefix**: Allows backward-compatible updates (new MINOR and PATCH versions) without bumping MAJOR (e.g. `^1.2.0` matches `1.9.9` but NOT `2.0.0`).
+> 3. **Tilde `~` Prefix**: Allows PATCH bug fixes only within the same MINOR version (e.g. `~1.2.0` matches `1.2.9` but NOT `1.3.0`).
 > 
 ---
 
+### Exercise 2: Automated SemVer Version Bumper
 
+**Scenario:** A release automation utility increments version strings based on bump type (`major`, `minor`, `patch`).
 
-### Exercise 2: Decoding SemVer Version Numbers
+**Requirements:**
+1. Write bumpSemverVersion(currentVersionStr, bumpType).
+2. Increment MAJOR, MINOR, or PATCH segment.
+3. Reset lower segments to 0.
 
-**Problem:** Given version `2.4.1`, identify:
-- MAJOR version
-- MINOR version
-- PATCH version
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> MAJOR: 2
-> MINOR: 4
-> PATCH: 1
-> ```
-> ```text
-> MAJOR: 2
-> MINOR: 4
-> PATCH: 1
+>
+> #### Implementation
+>
+> ```javascript
+> function bumpSemverVersion(currentVersionStr = "1.0.0", bumpType = "patch") {
+>   const parts = currentVersionStr.split(".").map(n => parseInt(n, 10));
+>   let [major, minor, patch] = parts;
+>
+>   switch (bumpType.toLowerCase()) {
+>     case "major":
+>       major += 1;
+>       minor = 0;
+>       patch = 0;
+>       break;
+>     case "minor":
+>       minor += 1;
+>       patch = 0;
+>       break;
+>     case "patch":
+>       patch += 1;
+>       break;
+>     default:
+>       throw new Error(`Invalid bump type: ${bumpType}`);
+>   }
+>
+>   return `${major}.${minor}.${patch}`;
+> }
+>
+> // Verification tests
+> console.assert(bumpSemverVersion("1.2.3", "patch") === "1.2.4", "Test 1 Failed");
+> console.assert(bumpSemverVersion("1.2.3", "minor") === "1.3.0", "Test 2 Failed");
+> console.assert(bumpSemverVersion("1.2.3", "major") === "2.0.0", "Test 3 Failed");
 > ```
 >
-> **Explanation:** SemVer format is `MAJOR.MINOR.PATCH` (Breaking.Feature.Fix).
+> #### Technical Explanation
+>
+> 1. **MAJOR Version Increment**: Bumped when introducing breaking, incompatible API changes.
+> 2. **MINOR Version Increment**: Bumped when adding backward-compatible new functionality.
+> 3. **PATCH Version Increment**: Bumped when making backward-compatible bug fixes.
 > 
 ---
 
-### Exercise 3: Matching SemVer Range Specs
+### Exercise 3: Breaking Change Safety Guard
 
-**Problem:** Determine highest allowed version for:
-1. `~1.4.2`
-2. `^1.4.2`
+**Scenario:** An API dependency updater flags potential breaking changes before upgrading packages.
 
-**Expected output:**
+**Requirements:**
+1. Write checkUpgradeSafety(currentVer, targetVer).
+2. Identify if MAJOR version changes.
+3. Return warning flag.
+
 > [!check]- Answer
-> ```text
-> 1. 1.4.x (up to 1.4.99...)
-> 2. 1.x.x (up to 1.99.99...)
-> ```
-> ```text
-> 1. ~1.4.2 permits up to <1.5.0
-> 2. ^1.4.2 permits up to <2.0.0
+>
+> #### Implementation
+>
+> ```javascript
+> function checkUpgradeSafety(currentVer, targetVer) {
+>   const cMajor = parseInt(currentVer.split(".")[0], 10);
+>   const tMajor = parseInt(targetVer.split(".")[0], 10);
+>
+>   const isBreakingChange = tMajor > cMajor;
+>
+>   return {
+>     isBreakingChange,
+>     currentVer,
+>     targetVer,
+>     action: isBreakingChange 
+>       ? "REQUIRES_MANUAL_MIGRATION_AUDIT" 
+>       : "SAFE_AUTO_UPGRADE"
+>   };
+> }
+>
+> // Verification tests
+> const res1 = checkUpgradeSafety("4.17.21", "4.18.0");
+> console.assert(res1.isBreakingChange === false, "Test 1 Failed: Minor upgrade safe");
+>
+> const res2 = checkUpgradeSafety("4.17.21", "5.0.0");
+> console.assert(res2.isBreakingChange === true, "Test 2 Failed: Major upgrade breaking");
 > ```
 >
-> **Explanation:** Tilde `~` locks MINOR version; Caret `^` locks MAJOR version.
-> 
+> #### Technical Explanation
+>
+> 1. **SemVer Zero Version Special Case**: In `0.y.z` pre-release versions, MINOR bumps (`0.1.0` -> `0.2.0`) can contain breaking changes.
+> 2. **Automated Dependency Upgrades**: Tools like Dependabot or Renovate automate minor/patch PR creation while flagging major version breaking upgrades.
+> 3. **API Contract Protection**: Adhering strictly to SemVer prevents breaking consumer integrations. 
 ## 6. Related Terms
 - [package.json](package_json.md) — Where the SemVer ranges (using `^` and `~`) are stored.
 

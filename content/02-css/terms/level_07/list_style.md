@@ -105,31 +105,92 @@ ul { list-style: none; padding: 0; margin: 0; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: Custom Icons
+### Exercise 1: Customizing Bullet Navigation Lists with list-style: none and Custom SVG Markers
 
-**Problem:** You want to use a tiny picture of a star (`star.png`) as your bullet point. Can you do this with `list-style`?
+**Scenario:** An author removes browser default list bullets using `list-style: none` and implements custom inline SVG bullet icons.
 
-**Expected output:**
+**Requirements:**
+1. Apply `list-style: none` to `<ul>`.
+2. Remove default browser `padding-left`.
+3. Add custom bullet icons.
+
 > [!check]- Answer
-> ```text
-> Yes! You can use the `list-style-image` property: `list-style-image: url('star.png');`. 
-> (Though in modern CSS, developers often use the `::before` pseudo-element for better alignment control).
+>
+> #### Implementation
+>
+> ```css
+> .custom-feature-list {
+>   list-style: none;             /* Removes browser default bullet points */
+>   padding: 0;
+>   margin: 0;
+>   display: flex;
+>   flex-direction: column;
+>   gap: 0.75rem;
+> }
+>
+> .custom-feature-list li {
+>   display: flex;
+>   align-items: center;
+>   gap: 0.75rem;
+> }
 > ```
-> - Is there a property specifically for images?
+>
+> #### Technical Explanation
+>
+> 1. **The `list-style` Shorthand**: Combines `list-style-type`, `list-style-position`, and `list-style-image` into a single declaration.
+> 2. **`list-style: none` Reset**: Standard reset property for building custom UI navigation bars, feature lists, and card lists.
+> 3. **Padding Reset Prerequisite**: Browsers apply ~40px default left padding (`padding-inline-start`) to `<ul>` and `<ol>`; always reset `padding: 0` when removing bullets.
 > 
 ---
 
+### Exercise 2: Styling Ordered Procedure Steps with Decimal Leading Zeroes
 
+**Scenario:** Styles an ordered procedure list using `list-style-type: decimal-leading-zero` and `list-style-position: inside`.
 
-### Exercise 2: Navigation List Style Reset
+**Requirements:**
+1. Apply `list-style-type: decimal-leading-zero`.
+2. Set `list-style-position: inside`.
 
-**Problem:** Write CSS ruleset resetting `list-style`, `padding`, and `margin` to 0 on `.nav-list`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> .nav-list { list-style: none; padding: 0; margin: 0; }
+>
+> #### Implementation
+>
+> ```css
+> .procedure-steps {
+>   list-style-type: decimal-leading-zero; /* Formats numbers as 01, 02, 03... */
+>   list-style-position: inside;            /* Draws numbers INSIDE the list item box */
+>   padding-left: 0;
+>   line-height: 1.6;
+> }
 > ```
+>
+> #### Technical Explanation
+>
+> 1. **`decimal-leading-zero`**: Formats ordered numbers with a leading zero (`01.`, `02.`), producing a polished technical manual appearance.
+> 2. **`inside` vs `outside` Position**: `inside` draws list markers inside the list item's content box; default `outside` hangs markers in the left padding gutter.
+> 3. **Numbered Step Alignment**: Ensures numbers align neatly alongside indented text.
+> 
+---
+
+### Exercise 3: Accessible List Reset Patterns preserving Screen Reader List Structure
+
+**Scenario:** Preserves list semantics for VoiceOver screen readers when using `list-style: none`.
+
+**Requirements:**
+1. Add `role="list"` attribute to `<ul>` with `list-style: none`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!-- Accessibility Pattern: Preserve list semantics in Safari/VoiceOver when list-style: none is applied -->
+> <ul class="nav-list" role="list">
+>   <li><a href="/home">Home</a></li>
+>   <li><a href="/about">About</a></li>
+> </ul>
+> ```
+>
 > ```css
 > .nav-list {
 >   list-style: none;
@@ -138,28 +199,11 @@ ul { list-style: none; padding: 0; margin: 0; }
 > }
 > ```
 >
-> **Explanation:** Complete list resets remove default browser bullet marks and indentation padding.
-> 
----
-
-### Exercise 3: Custom Bullet Marker Styling
-
-**Problem:** Which modern CSS pseudo-element targets custom bullet markers inside list items (`li::marker`)?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> li::marker
-> ```
-> ```css
-> li::marker {
->   color: red;
->   font-weight: bold;
-> }
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `::marker` pseudo-element styles list bullet points directly.
-> 
+> 1. **Safari/VoiceOver List Trapping Bug**: Setting `list-style: none` in CSS causes Safari/VoiceOver to stop announcing the element as a list to screen reader users!
+> 2. **The `role="list"` Safeguard**: Adding `role="list"` explicitly restores screen reader list announcements (e.g. 'List, 2 items').
+> 3. **Essential Accessibility Practice**: Mandatory pattern when stripping bullets from navigation menus.
 ## 6. Related Terms
 - None!
 

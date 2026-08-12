@@ -134,68 +134,137 @@ const users = await db.query('SELECT * FROM users');
 
 ## 5. Practice Exercises
 
-### Exercise 1: Task Classification
+### Exercise 1: CPU-Bound vs I/O-Bound Task Classifier & Dispatcher
 
-**Problem:** Classify the following server operations as either **CPU-bound** or **I/O-bound**:
+**Scenario:** An API worker pipeline classifies tasks as either I/O-bound (database/network) or CPU-bound (hashing/crypto) to apply correct execution strategies.
 
-1.  A user uploads a profile photo, and the server resizes it to a $150 \times 150$ thumbnail.
-2.  The server fetches 500 records from a MySQL database table.
-3.  The server compresses a folder of logs into a `.zip` archive.
-4.  The server sends an email notification via a SMTP gateway.
+**Requirements:**
+1. Write classifyTask(taskType).
+2. Route I/O tasks to async non-blocking execution.
+3. Route CPU tasks to worker threads or offloaded executors.
 
 > [!check]- Answer
-> 2.  **I/O-bound** (Waiting for database disk search and network protocol transmission).
-> 3.  **CPU-bound** (Compression algorithms like Gzip perform mathematical patterns reduction).
-> 4.  **I/O-bound** (Waiting for the remote SMTP server to accept the email transmission).
+>
+> #### Implementation
+>
+> ```javascript
+> function classifyTask(taskType) {
+>   const ioTasks = new Set(["HTTP_FETCH", "FILE_READ", "DB_QUERY", "REDIS_GET"]);
+>   const cpuTasks = new Set(["PASSWORD_HASH", "IMAGE_RESIZE", "JSON_COMPRESS", "MATRIX_MULTIPLICATION"]);
+>
+>   if (ioTasks.has(taskType)) {
+>     return { type: "IO_BOUND", executionStrategy: "ASYNC_NON_BLOCKING" };
+>   }
+>   if (cpuTasks.has(taskType)) {
+>     return { type: "CPU_BOUND", executionStrategy: "WORKER_THREAD" };
+>   }
+>   return { type: "UNKNOWN", executionStrategy: "DEFAULT" };
+> }
+>
+> // Verification tests
+> console.assert(classifyTask("HTTP_FETCH").executionStrategy === "ASYNC_NON_BLOCKING", "Test 1 Failed");
+> console.assert(classifyTask("PASSWORD_HASH").executionStrategy === "WORKER_THREAD", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **I/O-Bound Operations**: Tasks spent waiting for external responses (disks, network, databases); Node.js handles millions concurrently via non-blocking I/O.
+> 2. **CPU-Bound Operations**: Tasks requiring continuous CPU processing (crypto, compression, image parsing); blocks the event loop unless offloaded.
+> 3. **Architecture Strategy**: I/O tasks use async/await; CPU tasks use Worker Threads or external microservices.
 > 
 ---
 
+### Exercise 2: Offloading Heavy CPU Encryption Computation
 
+**Scenario:** A user authentication module offloads heavy bcrypt password hashing to worker pools or asynchronous crypto methods (`crypto.pbkdf2`) to avoid blocking thread.
 
-### Exercise 2: Classifying CPU vs I/O Tasks
+**Requirements:**
+1. Write hashPasswordAsync(password, salt, iterations, keylen, mockCrypto).
+2. Execute asynchronous PBKDF2 hashing.
+3. Return hashed hex string.
 
-**Problem:** Classify the following tasks as CPU-Bound or I/O-Bound:
-1. Video transcoding / encoding
-2. Fetching JSON from external REST API
-3. Hashing password with bcrypt (14 rounds)
-4. Reading a 2GB file stream from SSD
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. CPU-Bound
-> 2. I/O-Bound
-> 3. CPU-Bound
-> 4. I/O-Bound
-> ```
-> ```text
-> 1. CPU-Bound
-> 2. I/O-Bound
-> 3. CPU-Bound
-> 4. I/O-Bound
+>
+> #### Implementation
+>
+> ```javascript
+> function hashPasswordAsync(password, salt, iterations = 1000, keylen = 32, mockCrypto) {
+>   const cryptoLib = mockCrypto || require("crypto");
+>
+>   return new Promise((resolve, reject) => {
+>     cryptoLib.pbkdf2(password, salt, iterations, keylen, "sha256", (err, derivedKey) => {
+>       if (err) return reject(err);
+>       resolve(derivedKey.toString("hex"));
+>     });
+>   });
+> }
+>
+> // Verification tests
+> const mockCrypto = {
+>   pbkdf2: (pass, salt, iter, len, algo, cb) => {
+>     setTimeout(() => cb(null, Buffer.from("mock_hashed_bytes")), 10);
+>   }
+> };
+>
+> hashPasswordAsync("secret123", "salt123", 1000, 32, mockCrypto).then(hash => {
+>   console.assert(typeof hash === "string" && hash.length > 0, "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** CPU-bound tasks require math/logic computation on processor core; I/O-bound tasks involve waiting for disk or network data transfer.
+> #### Technical Explanation
+>
+> 1. **Asynchronous Crypto Methods**: Node.js `crypto` async methods (pbkdf2, randomBytes) offload work to libuv thread pool.
+> 2. **Blocking Synchronous Counterparts**: Synchronous methods (`pbkdf2Sync`) block the event loop for 100ms+, freezing server throughput.
+> 3. **Thread Pool Offloading**: CPU-heavy C++ bindings execute in background libuv worker threads.
 > 
 ---
 
-### Exercise 3: Optimal Scaling Architecture Selection
+### Exercise 3: High-Concurrency I/O Stream Throughput Evaluator
 
-**Problem:** Which Node.js tool is best suited for scaling CPU-bound computations vs I/O-bound connections? Select between: Worker Threads, Cluster Module, Async I/O.
+**Scenario:** An API gateway benchmark simulates handling 1,000 concurrent I/O network streams without thread allocation overhead.
 
-**Expected output:**
+**Requirements:**
+1. Write simulateConcurrentIoTasks(taskCount, mockIoFn).
+2. Execute concurrent I/O tasks with Promise.all.
+3. Verify all tasks resolve without blocking.
+
 > [!check]- Answer
-> ```text
-> CPU-Bound: Worker Threads / Worker Pools
-> I/O-Bound: Async I/O (default Event Loop architecture)
-> ```
-> ```text
-> CPU-Bound: Worker Threads / Worker Pools
-> I/O-Bound: Async I/O (default Event Loop architecture)
+>
+> #### Implementation
+>
+> ```javascript
+> async function simulateConcurrentIoTasks(taskCount = 1000, mockIoFn) {
+>   const tasks = [];
+>   const start = Date.now();
+>
+>   for (let i = 0; i < taskCount; i++) {
+>     tasks.push(mockIoFn(i));
+>   }
+>
+>   const results = await Promise.all(tasks);
+>   const durationMs = Date.now() - start;
+>
+>   return {
+>     totalTasks: results.length,
+>     durationMs,
+>     throughputPerSec: Math.round((taskCount / (durationMs || 1)) * 1000)
+>   };
+> }
+>
+> // Verification tests
+> const mockIo = (id) => new Promise(r => setTimeout(() => r(id), 20));
+>
+> simulateConcurrentIoTasks(100, mockIo).then(res => {
+>   console.assert(res.totalTasks === 100, "Test 1 Failed");
+>   console.assert(res.durationMs < 100, "Test 2 Failed: All 100 I/O tasks executed concurrently in ~20ms");
+> });
 > ```
 >
-> **Explanation:** Async I/O handles tens of thousands of concurrent network connections easily, while Worker Threads parallelize CPU processing.
-> 
+> #### Technical Explanation
+>
+> 1. **Concurrently Serving I/O**: Node.js handles thousands of concurrent I/O requests with minimal RAM overhead because OS sockets use event notifications.
+> 2. **No Thread-per-Request Overhead**: Multi-threaded servers (Java, PHP) allocate 1MB RAM per thread; Node.js uses single Event Loop for all I/O.
+> 3. **Non-Blocking Network Sockets**: OS kernel epoll/kqueue notifies Node.js when network data arrives.
 ## 6. Related Terms
 - [Blocking the Event Loop](blocking_event_loop.md) — The consequence of running CPU-bound code on the main thread.
 - [Single-Threaded Architecture](single_threaded.md) — The core design constraint behind Node's CPU limits.

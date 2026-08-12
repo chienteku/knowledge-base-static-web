@@ -171,90 +171,160 @@ await db.transaction(async (tx) => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Rollback Verification
+### Exercise 1: ACID Database Transaction Wrapper
 
-**Problem:** You are writing an order creation script. If the product inventory decrement fails, the order entry must not be saved. Write a transaction block using Prisma to handle this:
+**Scenario:** A financial transfer service executes a multi-statement database transaction with `BEGIN`, `COMMIT`, and `ROLLBACK` error handling.
 
-```javascript
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-
-async function placeOrder(userId, productId, price) {
-  try {
-    await prisma.$transaction(async (tx) => {
-      // 1. Create order record
-      await tx.order.create({
-        data: { userId, productId, amount: price }
-      });
-
-      // 2. Decrement inventory
-      const product = await tx.product.findUnique({ where: { id: productId } });
-      if (product.stock <= 0) {
-        throw new Error('Product out of stock'); // Force rollback!
-      }
-
-      await tx.product.update({
-        where: { id: productId },
-        data: { stock: { decrement: 1 } }
-      });
-    });
-  } catch (err) {
-    console.error("Order failed:", err.message);
-  }
-}
-```
-
----
+**Requirements:**
+1. Write executeTransaction(clientMock, transactionFn).
+2. Issue `BEGIN` statement.
+3. Execute transactionFn.
+4. Issue `COMMIT` on success, `ROLLBACK` on error.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Prisma Interactive Transaction Pattern
-
-**Problem:** Write a Prisma interactive transaction `$transaction` transferring funds between two user accounts.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> await prisma.$transaction(async (tx) => { await tx.user.update({ where: { id: 1 }, data: { balance: { decrement: 100 } } }); await tx.user.update({ where: { id: 2 }, data: { balance: { increment: 100 } } }); });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> await prisma.$transaction(async (tx) => {
->   await tx.user.update({
->     where: { id: senderId },
->     data: { balance: { decrement: amount } }
->   });
->   await tx.user.update({
->     where: { id: receiverId },
->     data: { balance: { increment: amount } }
->   });
+> async function executeTransaction(clientMock, transactionFn) {
+>   try {
+>     await clientMock.query("BEGIN");
+>     const result = await transactionFn(clientMock);
+>     await clientMock.query("COMMIT");
+>     return { success: true, result };
+>   } catch (err) {
+>     try {
+>       await clientMock.query("ROLLBACK");
+>     } catch (_) {}
+>     return { success: false, error: err.message, rolledBack: true };
+>   }
+> }
+>
+> // Verification tests
+> const queries = [];
+> const mockClient = {
+>   query: async (sql) => { queries.push(sql); }
+> };
+>
+> const happyTx = async (client) => {
+>   await client.query("UPDATE accounts SET balance = balance - 100 WHERE id = 1");
+>   await client.query("UPDATE accounts SET balance = balance + 100 WHERE id = 2");
+> };
+>
+> executeTransaction(mockClient, happyTx).then(res => {
+>   console.assert(res.success === true, "Test 1 Failed");
+>   console.assert(queries[0] === "BEGIN", "Test 2 Failed: Issued BEGIN first");
+>   console.assert(queries[queries.length - 1] === "COMMIT", "Test 3 Failed: Issued COMMIT last");
 > });
 > ```
 >
-> **Explanation:** Prisma `$transaction` handles `BEGIN`, `COMMIT`, and `ROLLBACK` automatically.
+> #### Technical Explanation
+>
+> 1. **ACID Guarantees**: Atomicity (all or nothing), Consistency (valid schema rules), Isolation (concurrency control), Durability (persisted on disk).
+> 2. **`BEGIN` and `COMMIT` Statements**: `BEGIN` starts transaction block; `COMMIT` persists all modifications atomically.
+> 3. **`ROLLBACK` on Failure**: If any SQL statement throws an error inside the transaction block, `ROLLBACK` reverts all previous mutations.
 > 
 ---
 
-### Exercise 3: ACID Properties Definition
+### Exercise 2: E-Commerce Order Placement with Rollback Guard
 
-**Problem:** Name the 4 ACID properties of database transactions.
+**Scenario:** Processes an order by deducting inventory stock and inserting an order record; rolls back if stock is insufficient.
 
-**Expected output:**
+**Requirements:**
+1. Write processOrderTransaction(clientMock, orderData).
+2. Check stock level.
+3. If stock insufficient, throw Error to trigger rollback.
+
 > [!check]- Answer
-> ```text
-> 1. Atomicity
-> 2. Consistency
-> 3. Isolation
-> 4. Durability
-> ```
-> ```text
-> Atomicity, Consistency, Isolation, Durability
+>
+> #### Implementation
+>
+> ```javascript
+> async function processOrderTransaction(clientMock, orderData) {
+>   return executeTransaction(clientMock, async (client) => {
+>     const stockRes = await client.query(
+>       "UPDATE products SET stock = stock - $1 WHERE id = $2 AND stock >= $1 RETURNING stock",
+>       [orderData.quantity, orderData.productId]
+>     );
+>
+>     if (!stockRes.rows || stockRes.rows.length === 0) {
+>       throw new Error("INSUFFICIENT_STOCK");
+>     }
+>
+>     const orderRes = await client.query(
+>       "INSERT INTO orders(product_id, quantity, user_id) VALUES($1, $2, $3) RETURNING id",
+>       [orderData.productId, orderData.quantity, orderData.userId]
+>     );
+>
+>     return { orderId: orderRes.rows[0].id, remainingStock: stockRes.rows[0].stock };
+>   });
+> }
+>
+> // Verification tests
+> const mockClientFail = {
+>   queries: [],
+>   query: async (sql, params) => {
+>     mockClientFail.queries.push(sql);
+>     if (sql.includes("UPDATE products")) return { rows: [] };
+>     return { rows: [{ id: 99 }] };
+>   }
+> };
+>
+> processOrderTransaction(mockClientFail, { productId: 10, quantity: 5, userId: 1 }).then(res => {
+>   console.assert(res.success === false, "Test 1 Failed: Transaction failed on out of stock");
+>   console.assert(mockClientFail.queries.includes("ROLLBACK"), "Test 2 Failed: Issued ROLLBACK");
+> });
 > ```
 >
-> **Explanation:** ACID properties guarantee reliable execution of database transactions.
+> #### Technical Explanation
+>
+> 1. **Atomicity in Business Logic**: Guarantees payment, inventory deduction, and order placement succeed together or revert completely.
+> 2. **Atomic UPDATE Guards**: `UPDATE ... WHERE stock >= quantity` prevents race condition negative stock quantities without manual locks.
+> 3. **Single Connection Rule**: All statements within a transaction MUST execute on the EXACT SAME database connection client.
 > 
+---
+
+### Exercise 3: Nested Savepoint Transaction Manager
+
+**Scenario:** Implements transaction savepoints (`SAVEPOINT my_savepoint`, `ROLLBACK TO SAVEPOINT`) for nested transaction steps.
+
+**Requirements:**
+1. Write executeSavepointStep(clientMock, savepointName, stepFn).
+2. Issue SAVEPOINT.
+3. Rollback to savepoint if stepFn fails.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function executeSavepointStep(clientMock, savepointName = "sp_1", stepFn) {
+>   try {
+>     await clientMock.query(`SAVEPOINT ${savepointName}`);
+>     const result = await stepFn(clientMock);
+>     await clientMock.query(`RELEASE SAVEPOINT ${savepointName}`);
+>     return { stepSuccess: true, result };
+>   } catch (err) {
+>     await clientMock.query(`ROLLBACK TO SAVEPOINT ${savepointName}`);
+>     return { stepSuccess: false, error: err.message };
+>   }
+> }
+>
+> // Verification tests
+> const queries = [];
+> const mockClient = { query: async (sql) => { queries.push(sql); } };
+>
+> executeSavepointStep(mockClient, "sp_audit", async () => { throw new Error("Audit log failed"); }).then(res => {
+>   console.assert(res.stepSuccess === false, "Test 1 Failed");
+>   console.assert(queries.includes("ROLLBACK TO SAVEPOINT sp_audit"), "Test 2 Failed: Rolled back to savepoint");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Database Savepoints**: Allows creating nested checkpoints inside a transaction to roll back partial steps without aborting the entire transaction.
+> 2. **RELEASE SAVEPOINT**: Frees resources used by named savepoint while keeping modifications made inside it.
+> 3. **Use Case**: Useful for optional side-effect steps like inserting audit logs or sending notifications inside complex transactions.
 ## 6. Related Terms
 - [Connection Pooling](connection_pools.md) — The network channels used to manage transaction streams.
 - [Migrations](migrations.md) — Schema updates executed within transactions to prevent partial updates.

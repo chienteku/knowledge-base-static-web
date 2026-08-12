@@ -106,65 +106,106 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 
 ## 5. Practice Exercises
 
-### Exercise 1: REM Math
+### Exercise 1: Accessible Typographic Scale using rem Font Sizes and Font Weight
 
-**Problem:** Assuming the browser's default font size is 16px, how many pixels is `font-size: 1.5rem;`?
+**Scenario:** An author constructs an accessible typographic hierarchy using `rem` font sizes and numerical font weights.
 
-**Expected output:**
+**Requirements:**
+1. Define `html { font-size: 100%; }`.
+2. Set `h1` to `font-size: 2.25rem` and `font-weight: 700`.
+3. Set body text to `font-size: 1rem` and `font-weight: 400`.
+
 > [!check]- Answer
-> ```text
-> 24px! (1.5 * 16 = 24).
-> ```
-> - `1rem` = 16px. Multiply 16 by 1.5.
-> 
----
-
-
-
-### Exercise 2: Converting Pixels to rem Units
-
-**Problem:** Convert `24px` font size to `rem` units assuming standard `16px` root font size.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1.5rem (24 / 16 = 1.5)
-> ```
+>
+> #### Implementation
+>
 > ```css
-> h2 {
->   font-size: 1.5rem; /* 1.5 * 16px = 24px */
+> html {
+>   font-size: 100%;             /* Baseline browser default (16px) */
+> }
+>
+> body {
+>   font-size: 1rem;            /* 16px baseline */
+>   font-weight: 400;           /* Normal weight */
+>   color: #1e293b;
+> }
+>
+> h1 {
+>   font-size: 2.25rem;         /* ~36px relative heading */
+>   font-weight: 700;           /* Bold weight */
+>   line-height: 1.25;
+> }
+>
+> .subheading {
+>   font-size: 1.25rem;         /* ~20px subheading */
+>   font-weight: 600;           /* Semi-bold weight */
 > }
 > ```
 >
-> **Explanation:** `rem` values equal target pixel size divided by root font size (16px).
+> #### Technical Explanation
+>
+> 1. **`font-size` Relative `rem` Units**: `1rem` equals root element font size; using `rem` allows visually impaired users to enlarge text via browser settings.
+> 2. **Numerical `font-weight` Scale**: Numeric weights range from `100` (Thin) to `900` (Black); `400` is Normal and `700` is Bold.
+> 3. **Avoiding Fixed Pixels**: Avoid fixed `px` font sizes on body text, as they prevent browser font scaling overrides.
 > 
 ---
 
-### Exercise 3: Font-Weight Keyword Mapping Matrix
+### Exercise 2: Fluid Responsive Typography using clamp()
 
-**Problem:** Match numeric `font-weight` to keyword name:
-1. `400` 
-2. `700` 
-3. `300` 
-4. `900` 
+**Scenario:** Creates fluid responsive headings that scale smoothly between screen sizes without media queries using `clamp()`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `font-size: clamp(1.75rem, 4vw, 3rem)`.
+
 > [!check]- Answer
-> ```text
-> 1. normal (or Regular)
-> 2. bold
-> 3. light
-> 4. black (or Heavy)
-> ```
-> ```text
-> 1. 400 -> normal / Regular
-> 2. 700 -> bold
-> 3. 300 -> Light
-> 4. 900 -> Black / Heavy
+>
+> #### Implementation
+>
+> ```css
+> .hero-title {
+>   /* clamp(MIN, VAL, MAX): Scales between 1.75rem (~28px) and 3rem (~48px) */
+>   font-size: clamp(1.75rem, 4vw + 1rem, 3rem);
+>   font-weight: 800;
+>   line-height: 1.15;
+> }
 > ```
 >
-> **Explanation:** Numeric font-weights map standard typographic font thickness grades.
+> #### Technical Explanation
+>
+> 1. **The `clamp()` Function**: `clamp(MIN, VAL, MAX)` calculates fluid font sizes based on viewport width while preventing text from becoming unreadably tiny or huge.
+> 2. **Accessibility Safety Net**: Using `4vw + 1rem` as the middle value ensures users can still zoom text manually.
+> 3. **Zero Media Query Overhead**: Eliminates multiple breakpoint media query rules for headings.
 > 
+---
+
+### Exercise 3: Variable Font Weight Interpolation
+
+**Scenario:** Utilizes CSS variable fonts to animate smooth weight transitions on hover.
+
+**Requirements:**
+1. Apply `font-weight: 350` to `750` transition.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .variable-btn {
+>   font-family: "Inter Variable", sans-serif;
+>   font-weight: 400;
+>   transition: font-weight 0.2s ease;
+> }
+>
+> .variable-btn:hover {
+>   font-weight: 600;             /* Smooth variable weight interpolation */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Variable Font Capability**: Variable fonts contain entire weight ranges (100-900) in a single lightweight font file.
+> 2. **Arbitrary Numerical Weights**: Supports non-standard numeric weights (e.g. `font-weight: 450`).
+> 3. **Performance Optimization**: Reduces HTTP font requests by replacing 4 static WOFF2 files with 1 variable font.
 ## 6. Related Terms
 - [`font-family`](font_family.md) — Defines the actual typeface.
 - [`font-style` & `font-variant`](font_style_variant.md) — Styling and small-caps variations.

@@ -109,136 +109,110 @@ div { position: relative; z-index: 999; } /* Position relative enables z-index *
 .modal { z-index: var(--z-modal); }
 ```
 
-
-
-### Mistake 5: Applying `z-index` to Default `position: static` Elements
-
-**The mistake:** Writing `div { z-index: 100; }` without specifying a `position` property.
-
-**Why it's wrong:** `z-index` works ONLY on positioned elements (`relative`, `absolute`, `fixed`, `sticky`) or Flex/Grid child items. It is IGNORED on `position: static` elements.
-
-*Incorrect:*
-```css
-div { z-index: 999; } /* ❌ z-index is ignored on default static elements! */
-```
-
-*Fix:*
-```css
-div { position: relative; z-index: 999; } /* Position relative enables z-index */
-```
-
-### Mistake 6: Escalating to Absurd `z-index` Values (`z-index: 99999999`)
-
-**The mistake:** Adding `z-index: 999999` whenever an element fails to appear on top.
-
-**Why it's wrong:** Absurd `z-index` values mean you do not understand the element's parent Stacking Context. Organize `z-index` using CSS custom properties or design system scale tokens.
-
-*Incorrect:*
-```css
-.modal { z-index: 9999999; } /* ❌ Specificity war anti-pattern! */
-```
-
-*Fix:*
-```css
-/* Use CSS variables for organized z-index layer tokens: */
-:root {
-  --z-dropdown: 1000;
-  --z-modal: 2000;
-}
-.modal { z-index: var(--z-modal); }
-```
-
-
-
-### Mistake 7: Applying `z-index` to Default `position: static` Elements
-
-**The mistake:** Writing `div { z-index: 100; }` without specifying a `position` property.
-
-**Why it's wrong:** `z-index` works ONLY on positioned elements (`relative`, `absolute`, `fixed`, `sticky`) or Flex/Grid child items. It is IGNORED on `position: static` elements.
-
-*Incorrect:*
-```css
-div { z-index: 999; } /* ❌ z-index is ignored on default static elements! */
-```
-
-*Fix:*
-```css
-div { position: relative; z-index: 999; } /* Position relative enables z-index */
-```
-
-### Mistake 8: Escalating to Absurd `z-index` Values (`z-index: 99999999`)
-
-**The mistake:** Adding `z-index: 999999` whenever an element fails to appear on top.
-
-**Why it's wrong:** Absurd `z-index` values mean you do not understand the element's parent Stacking Context. Organize `z-index` using CSS custom properties or design system scale tokens.
-
-*Incorrect:*
-```css
-.modal { z-index: 9999999; } /* ❌ Specificity war anti-pattern! */
-```
-
-*Fix:*
-```css
-/* Use CSS variables for organized z-index layer tokens: */
-:root {
-  --z-dropdown: 1000;
-  --z-modal: 2000;
-}
-.modal { z-index: var(--z-modal); }
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Victor
+### Exercise 1: Layering Dropdown Menus and Modals above Page Content
 
-**Problem:** You have a Red Box and a Blue Box. Both are `position: absolute;` and occupy the exact same spot on the screen.
-- Red Box HTML is written first. It has `z-index: 5`.
-- Blue Box HTML is written second. It has `z-index: 3`.
-Which box is visible on top?
+**Scenario:** An author uses structured `z-index` token values to manage stacking order between dropdowns, sticky headers, and modals.
 
-**Expected output:**
+**Requirements:**
+1. Define CSS custom properties for z-index tokens (`--z-sticky: 100`, `--z-modal: 1000`).
+2. Apply tokens to header and modal.
+3. Verify proper Z-axis layering.
+
 > [!check]- Answer
-> ```text
-> The Red Box! Because its `z-index` (5) is higher than the Blue Box (3), it wins, regardless of the HTML order.
+>
+> #### Implementation
+>
+> ```css
+> :root {
+>   /* System Z-Index Token Architecture */
+>   --z-dropdown: 10;
+>   --z-sticky: 100;
+>   --z-modal-backdrop: 900;
+>   --z-modal: 1000;
+>   --z-tooltip: 2000;
+> }
+>
+> .sticky-header {
+>   position: sticky;
+>   top: 0;
+>   z-index: var(--z-sticky);
+> }
+>
+> .modal-dialog {
+>   position: fixed;
+>   top: 50%;
+>   left: 50%;
+>   transform: translate(-50%, -50%);
+>   z-index: var(--z-modal);
+> }
 > ```
-> - Higher number wins.
+>
+> #### Technical Explanation
+>
+> 1. **The `z-index` Property**: Specifies the Z-axis stacking order of an element along the screen depth vector.
+> 2. **Positioning Prerequisite**: `z-index` works ONLY on elements with a `position` value other than `static` (`relative`, `absolute`, `fixed`, `sticky`), or flex/grid items!
+> 3. **Token-Based Architecture**: Using CSS custom properties (`--z-modal: 1000`) prevents arbitrary 'z-index wars' (`z-index: 999999`) across teams.
 > 
 ---
 
+### Exercise 2: Resolving Stacking Wars using Scaled Z-Index Tokens
 
+**Scenario:** Refactors random `z-index: 99999` values to structured design token scales.
 
-### Exercise 2: z-index Layer Order Calculation
+**Requirements:**
+1. Replace arbitrary `z-index: 9999` with semantic token `var(--z-tooltip)`.
 
-**Problem:** Given 3 positioned elements: Box A (`z-index: 1`), Box B (`z-index: 10`), Box C (`z-index: 5`). Order them from bottom-most to top-most.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Box A (bottom) -> Box C (middle) -> Box B (top)
-> ```
-> ```text
-> Box A (z-index 1) -> Box C (z-index 5) -> Box B (z-index 10)
+>
+> #### Implementation
+>
+> ```css
+> /* ❌ Arbitrary Z-Index War:
+> .tooltip { z-index: 9999999 !important; }
+> */
+>
+> /* ✅ Structured Token Scale: */
+> .tooltip {
+>   position: absolute;
+>   z-index: var(--z-tooltip);   /* Controlled 2000 token layer */
+> }
 > ```
 >
-> **Explanation:** Higher numerical `z-index` values stack above lower values within the same stacking context.
+> #### Technical Explanation
+>
+> 1. **Z-Index War Pitfalls**: Randomly guessing large `z-index` numbers leads to unmaintainable stylesheets where components fight for dominance.
+> 2. **Scale Design**: Use a 10/100/1000 step scale to leave space for future intermediate layers.
+> 3. **Component Maintenance**: Keeps component layering predictable across large development teams.
 > 
 ---
 
-### Exercise 3: Flexbox and Grid z-index Exception
+### Exercise 3: Understanding Why z-index Fails on position static Elements
 
-**Problem:** Do direct child items of Flexbox (`display: flex`) or Grid (`display: grid`) containers require `position: relative` for `z-index` to work?
+**Scenario:** Fixes a bug where `z-index: 10` failed to apply on an element because `position: static` was active.
 
-**Expected output:**
+**Requirements:**
+1. Add `position: relative` to activate `z-index` on static element.
+
 > [!check]- Answer
-> ```text
-> No. Flex and Grid items respect z-index even with default position: static.
-> ```
-> ```text
-> No. Flex and Grid items respect z-index even with default position: static.
+>
+> #### Implementation
+>
+> ```css
+> .card-overlay {
+>   /* Fix: Add position: relative to activate z-index! */
+>   position: relative;
+>   z-index: 5;
+>   margin-top: -2rem;            /* Pulls card up over hero image */
+> }
 > ```
 >
-> **Explanation:** Flex and Grid specifications allow `z-index` directly on child items.
-> 
+> #### Technical Explanation
+>
+> 1. **Static Z-Index Failure**: `z-index` is completely IGNORED by browser layout engines on `position: static` elements.
+> 2. **`position: relative` Activation**: Adding `position: relative` activates `z-index` stacking capability without removing the element from normal flow.
+> 3. **Flex and Grid Exceptions**: Immediate children of `display: flex` or `display: grid` containers can use `z-index` even without explicit `position` declarations.
 ## 6. Related Terms
 - [`position: static` vs `relative`](position_static_relative.md) — Required positioning properties.
 - [Stacking Context](stacking_context.md) — The parent layer grouping logic that shapes z-index behaviors.

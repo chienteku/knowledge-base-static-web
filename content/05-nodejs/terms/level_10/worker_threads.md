@@ -142,68 +142,169 @@ parentPort.postMessage({ type: 'SUCCESS', result: data }); // Pass serializable 
 
 ## 5. Practice Exercises
 
-### Exercise 1: Worker Communication Loop
+### Exercise 1: CPU-Intensive Worker Thread Task Offloader
 
-**Problem:** Complete the worker script below to receive a string, reverse it, and send the reversed string back to the parent thread:
+**Scenario:** Offloads CPU-heavy tasks (e.g., image resizing, PBKDF2 hashing) to a Node.js `worker_threads` Worker thread to keep the main event loop responsive.
 
-```javascript
-const { parentPort } = require('worker_threads');
-
-// Listen for messages from the parent thread
-parentPort.on('message', (text) => {
-  // Reverse string
-  const reversed = text.split('').reverse().join('');
-  
-  // Post reversed message back
-  parentPort.postMessage(reversed);
-});
-```
-
----
+**Requirements:**
+1. Write runWorkerThreadTask(workerScriptPath, workerData, mockWorkerClass).
+2. Instantiate Worker.
+3. Listen to `message` and `error` events.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Basic Worker Thread Implementation
-
-**Problem:** Write main thread code spawning worker `worker.js` passing `{ num: 10 }` via `workerData` and logging message.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const worker = new Worker('./worker.js', { workerData: { num: 10 } }); worker.on('message', result => console.log(result));
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const { Worker } = require('worker_threads');
-> const worker = new Worker('./worker.js', {
->   workerData: { num: 10 }
-> });
-> worker.on('message', (result) => {
->   console.log('Result from worker:', result);
+> function runWorkerThreadTask(workerScriptPath, workerData, mockWorkerClass) {
+>   const WorkerClass = mockWorkerClass || require("worker_threads").Worker;
+>
+>   return new Promise((resolve, reject) => {
+>     const worker = new WorkerClass(workerScriptPath, { workerData });
+>
+>     worker.on("message", (result) => {
+>       worker.terminate();
+>       resolve(result);
+>     });
+>
+>     worker.on("error", (err) => {
+>       worker.terminate();
+>       reject(err);
+>     });
+>
+>     worker.on("exit", (code) => {
+>       if (code !== 0) {
+>         reject(new Error(`Worker thread stopped with exit code ${code}`));
+>       }
+>     });
+>   });
+> }
+>
+> // Verification tests
+> const events = {};
+> const mockWorker = function (script, opts) {
+>   this.opts = opts;
+>   this.on = (e, fn) => { events[e] = fn; };
+>   this.terminate = () => {};
+> };
+>
+> const promise = runWorkerThreadTask("./heavy_calc.js", { num: 100 }, mockWorker);
+> events["message"]({ sum: 5050 });
+>
+> promise.then(res => {
+>   console.assert(res.sum === 5050, "Test 1 Failed: Received worker thread result");
 > });
 > ```
 >
-> **Explanation:** `Worker` constructor spawns background V8 isolate threads passing initial `workerData`.
+> #### Technical Explanation
+>
+> 1. **`worker_threads` Module**: Allows executing JavaScript in parallel in separate V8 instances sharing process memory.
+> 2. **Main Thread Responsiveness**: Offloading CPU-bound tasks to worker threads prevents blocking event loop response times.
+> 3. **Shared Array Buffers**: Worker threads can share binary memory directly using `SharedArrayBuffer` without serialization overhead.
 > 
 ---
 
-### Exercise 3: SharedArrayBuffer and Worker Threads
+### Exercise 2: SharedArrayBuffer Thread Memory Mutator
 
-**Problem:** How do `SharedArrayBuffer` and `Atomics` allow Worker Threads to share memory without copying?
+**Scenario:** Demonstrates shared memory mutation between main thread and worker threads using `SharedArrayBuffer` and `Int32Array`.
 
-**Expected output:**
+**Requirements:**
+1. Write mutateSharedArrayBuffer(sharedBuffer, index, value).
+2. Mutate Int32Array view.
+3. Verify zero-copy memory update.
+
 > [!check]- Answer
-> ```text
-> SharedArrayBuffer grants multiple worker threads shared access to identical raw binary memory bytes.
-> ```
-> ```text
-> SharedArrayBuffer grants multiple worker threads shared access to identical raw binary memory bytes.
+>
+> #### Implementation
+>
+> ```javascript
+> function mutateSharedArrayBuffer(sharedBuffer, index = 0, value = 42) {
+>   const view = new Int32Array(sharedBuffer);
+>   view[index] = value;
+>
+>   return {
+>     index,
+>     value: view[index],
+>     byteLength: sharedBuffer.byteLength
+>   };
+> }
+>
+> // Verification tests
+> const sab = new SharedArrayBuffer(16);
+> const res = mutateSharedArrayBuffer(sab, 0, 99);
+>
+> console.assert(res.value === 99, "Test 1 Failed: Mutated SharedArrayBuffer index 0");
+> console.assert(new Int32Array(sab)[0] === 99, "Test 2 Failed: Memory updated in place");
 > ```
 >
-> **Explanation:** `SharedArrayBuffer` enables zero-copy parallel memory access across worker threads.
+> #### Technical Explanation
+>
+> 1. **SharedArrayBuffer Memory**: Shared binary memory block accessible across main thread and worker threads without copying.
+> 2. **`Atomics` API**: `Atomics.add()`, `Atomics.wait()`, `Atomics.notify()` prevent race conditions when multiple worker threads write to SharedArrayBuffer.
+> 3. **Zero-Copy Transfer**: Eliminates structured clone algorithm serialization overhead for large dataset transfers.
 > 
+---
+
+### Exercise 3: Worker Thread Pool Task Queue Manager
+
+**Scenario:** Manages a pool of worker threads to process a queue of CPU-bound tasks concurrently.
+
+**Requirements:**
+1. Write createThreadPoolManager(poolSize, mockWorkerFactory).
+2. Queue tasks.
+3. Execute tasks across available workers.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createThreadPoolManager(poolSize = 2, mockWorkerFactory) {
+>   const workers = [];
+>   const taskQueue = [];
+>
+>   for (let i = 0; i < poolSize; i++) {
+>     workers.push({ id: i, busy: false, worker: mockWorkerFactory(i) });
+>   }
+>
+>   return {
+>     executeTask(taskData) {
+>       return new Promise((resolve) => {
+>         const freeWorker = workers.find(w => !w.busy);
+>         if (freeWorker) {
+>           freeWorker.busy = true;
+>           freeWorker.worker.run(taskData, (result) => {
+>             freeWorker.busy = false;
+>             resolve(result);
+>           });
+>         } else {
+>           taskQueue.push({ taskData, resolve });
+>         }
+>       });
+>     },
+>     getBusyCount: () => workers.filter(w => w.busy).length
+>   };
+> }
+>
+> // Verification tests
+> const mockFactory = (id) => ({
+>   run: (data, cb) => setTimeout(() => cb(data * 2), 10)
+> });
+>
+> const pool = createThreadPoolManager(1, mockFactory);
+> const p1 = pool.executeTask(10);
+> console.assert(pool.getBusyCount() === 1, "Test 1 Failed: Worker 0 busy");
+>
+> p1.then(res => {
+>   console.assert(res === 20, "Test 2 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Worker Thread Pool**: Reuses a fixed number of worker threads to process task queues, preventing thread creation overhead.
+> 2. **Thread Creation Overhead**: Spawning a new worker thread takes ~10-20ms; thread pools keep workers warm for instant task execution.
+> 3. **piscina Package**: Popular production-grade Worker Thread pool implementation for Node.js.
 ## 6. Related Terms
 - [Child Processes (child_process)](child_processes.md) — Multi-process concurrency with isolated memories.
 - [The cluster Module](cluster_module.md) — Spawning multiple instances of a Node server process.

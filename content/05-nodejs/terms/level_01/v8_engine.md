@@ -88,56 +88,142 @@ node --max-old-space-size=8192 app.js // Increase heap limit to 8GB or use Strea
 
 ## 5. Practice Exercises
 
-### Exercise 1: Language Independence
+### Exercise 1: V8 Hidden Classes & Monomorphic Object Optimizer
 
-**Problem:** V8 is written entirely in C++. Node.js is written in C++. How is it possible that you write your application in JavaScript?
+**Scenario:** An API performance optimizer structures object constructor properties in identical order to allow V8 to generate shared Hidden Classes (Maps) and inline caches.
 
-**Expected output:**
+**Requirements:**
+1. Write createMonomorphicPoint(x, y).
+2. Consistently initialize x then y properties.
+3. Verify object shape consistency.
+
 > [!check]- Answer
-> ```text
-> V8 acts as a translator! 
-> You write human-readable JavaScript. V8 reads it and compiles it down into low-level machine instructions. The C++ code of Node.js then takes those instructions and interacts with the computer's operating system (like opening a file).
+>
+> #### Implementation
+>
+> ```javascript
+> function createMonomorphicPoint(x, y) {
+>   // Always initialize properties in EXACT SAME ORDER!
+>   return {
+>     x: Number(x),
+>     y: Number(y)
+>   };
+> }
+>
+> function calculateDistance(pointA, pointB) {
+>   // Monomorphic IC (Inline Cache) - V8 optimizes this property lookup!
+>   const dx = pointA.x - pointB.x;
+>   const dy = pointA.y - pointB.y;
+>   return Math.sqrt(dx * dx + dy * dy);
+> }
+>
+> // Verification tests
+> const p1 = createMonomorphicPoint(0, 0);
+> const p2 = createMonomorphicPoint(3, 4);
+>
+> const dist = calculateDistance(p1, p2);
+> console.assert(dist === 5, "Test 1 Failed: Distance formula 3-4-5 triangle");
 > ```
-> - Think about the translator metaphor.
+>
+> #### Technical Explanation
+>
+> 1. **V8 Hidden Classes (Maps)**: V8 dynamically creates hidden classes under the hood to track object property offsets.
+> 2. **Monomorphic vs Polymorphic Functions**: Functions receiving objects with identical hidden classes are monomorphic and heavily optimized via Inline Caching.
+> 3. **Property Initialization Order**: Adding properties in different orders (`{x, y}` vs `{y, x}`) creates distinct hidden classes, causing V8 deoptimization.
 > 
 ---
 
+### Exercise 2: V8 Garbage Collection Memory Leak Detector
 
+**Scenario:** A V8 memory manager monitors heap allocation patterns to detect objects retained by unintended global closures.
 
-### Exercise 2: Increasing V8 Max Old Space Size
+**Requirements:**
+1. Write detectUnreachableLeaks(cacheMap, maxItems).
+2. Audit cacheMap size.
+3. Purge oldest entries when size exceeds maxItems.
 
-**Problem:** Write the CLI command flag to increase V8 memory limit to 4096MB (4GB) for `server.js`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> node --max-old-space-size=4096 server.js
-> ```
-> ```bash
-> node --max-old-space-size=4096 server.js
+>
+> #### Implementation
+>
+> ```javascript
+> function detectUnreachableLeaks(cacheMap = new Map(), maxItems = 100) {
+>   let evictedCount = 0;
+>
+>   if (cacheMap.size > maxItems) {
+>     const keysToEvict = Array.from(cacheMap.keys()).slice(0, cacheMap.size - maxItems);
+>     for (const key of keysToEvict) {
+>       cacheMap.delete(key);
+>       evictedCount++;
+>     }
+>   }
+>
+>   return {
+>     currentSize: cacheMap.size,
+>     evictedCount,
+>     isHealthy: cacheMap.size <= maxItems
+>   };
+> }
+>
+> // Verification tests
+> const map = new Map();
+> for (let i = 0; i < 150; i++) {
+>   map.set(`k_${i}`, `v_${i}`);
+> }
+>
+> const audit = detectUnreachableLeaks(map, 100);
+> console.assert(audit.evictedCount === 50, "Test 1 Failed: Must evict 50 items");
+> console.assert(audit.currentSize === 100, "Test 2 Failed: Current size must be 100");
 > ```
 >
-> **Explanation:** `--max-old-space-size` configures max V8 old space heap limit in megabytes.
+> #### Technical Explanation
+>
+> 1. **V8 Garbage Collector (Orinoco)**: V8 uses Generational GC (Scavenger for Young Generation, Mark-Sweep-Compact for Old Generation).
+> 2. **Memory Leak Definition**: Objects no longer needed by application that remain reachable from GC roots (globals, active closures).
+> 3. **Bounded Caching**: Always bound in-memory Maps/Objects to prevent V8 HeapOutOfMemory crashes.
 > 
 ---
 
-### Exercise 3: V8 JIT Compilation Pipeline
+### Exercise 3: V8 JIT Compiler Deoptimization Guard
 
-**Problem:** Name the 2 key components in V8 JIT compilation: 1) Baseline interpreter; 2) Optimizing compiler.
+**Scenario:** Demonstrates avoiding type-mutating operations inside hot functions that trigger V8 TurboFan Just-In-Time (JIT) compiler deoptimizations.
 
-**Expected output:**
+**Requirements:**
+1. Write safeMonomorphicSum(numbersArray).
+2. Ensure array elements are strictly numbers.
+3. Return sum.
+
 > [!check]- Answer
-> ```text
-> 1. Ignition (Interpreter)
-> 2. TurboFan (Optimizing Compiler)
-> ```
-> ```text
-> 1. Ignition (Interpreter)
-> 2. TurboFan (Optimizing Compiler)
+>
+> #### Implementation
+>
+> ```javascript
+> function safeMonomorphicSum(numbersArray = []) {
+>   let sum = 0;
+>
+>   // Monomorphic loop operating on packed SMI (Small Integer) / Double array
+>   for (let i = 0; i < numbersArray.length; i++) {
+>     const val = numbersArray[i];
+>     if (typeof val === "number") {
+>       sum += val;
+>     }
+>   }
+>
+>   return sum;
+> }
+>
+> // Verification tests
+> const nums = [10, 20, 30, 40];
+> const total = safeMonomorphicSum(nums);
+>
+> console.assert(total === 100, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Ignition interprets bytecode initially; TurboFan compiles hot code functions into optimized machine code.
-> 
+> #### Technical Explanation
+>
+> 1. **V8 JIT Compiler (Ignition + TurboFan)**: Ignition interprets bytecode; TurboFan compiles hot functions to machine code based on type feedback.
+> 2. **Deoptimization (Bailout)**: If a function optimized for numbers suddenly receives a string, TurboFan deoptimizes back to bytecode interpreter.
+> 3. **Packed Arrays Optimization**: Homogeneous arrays of numbers (SMI/Double) execute significantly faster than mixed-type holey arrays.
 ## 6. Related Terms
 - [Node.js (Runtime Environment)](nodejs.md) — The runtime that hosts V8.
 - [The Event Loop & Libuv](event_loop.md) — While V8 executes the JS code, it relies on the Event Loop to handle asynchronous timing.

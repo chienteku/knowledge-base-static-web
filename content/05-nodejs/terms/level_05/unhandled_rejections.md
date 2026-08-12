@@ -106,67 +106,137 @@ app.get('/data', async (req, res, next) => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Catching the Void
+### Exercise 1: Unhandled Promise Rejection Process Monitor
 
-**Problem:** How do you fix the following code so that it doesn't crash the Node.js server if the fake API is down?
+**Scenario:** An APM safety agent monitors process-level `unhandledRejection` events, tracking rejected Promises that lacked `.catch()` handlers.
 
-```javascript
-function fetchWeather() {
-  return Promise.reject("API is offline");
-}
+**Requirements:**
+1. Write setupUnhandledRejectionTracker(processMock).
+2. Listen for `unhandledRejection`.
+3. Track rejection error and target promise.
 
-// Calling the function
-fetchWeather(); 
-```
-
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> // Add a .catch() block!
-> fetchWeather().catch((err) => {
->   console.log("Failed to get weather, but the server survives!", err);
-> });
+> function setupUnhandledRejectionTracker(processMock) {
+>   const proc = processMock || process;
+>   const unhandledList = [];
+>
+>   proc.on("unhandledRejection", (reason, promise) => {
+>     unhandledList.push({
+>       reason: reason?.message || String(reason),
+>       timestamp: Date.now()
+>     });
+>   });
+>
+>   return {
+>     getUnhandledCount: () => unhandledList.length,
+>     getUnhandledList: () => unhandledList
+>   };
+> }
+>
+> // Verification tests
+> const handlers = {};
+> const mockProc = { on: (e, fn) => { handlers[e] = fn; } };
+>
+> const tracker = setupUnhandledRejectionTracker(mockProc);
+> handlers["unhandledRejection"](new Error("Unhandled DB Error"), {});
+>
+> console.assert(tracker.getUnhandledCount() === 1, "Test 1 Failed");
+> console.assert(tracker.getUnhandledList()[0].reason === "Unhandled DB Error", "Test 2 Failed");
 > ```
-> - How do you handle errors on a standard Promise chain?
+>
+> #### Technical Explanation
+>
+> 1. **Unhandled Rejection Concept**: Occurs when a Promise rejects and no `.catch()` handler is attached within an event loop tick.
+> 2. **Node.js Default Crash Behavior**: Since Node.js v15, unhandled rejections terminate the process with exit code 1 by default.
+> 3. **Global Process Monitoring**: Process `unhandledRejection` listeners capture unhandled errors for logging before process exit.
 > 
 ---
 
+### Exercise 2: Safe Promise Execution Decorator
 
+**Scenario:** Wraps async operations in a protective decorator that guarantees no unhandled rejection escapes.
 
-### Exercise 2: Registering Unhandled Rejection Listener
+**Requirements:**
+1. Write safePromiseWrap(asyncFn).
+2. Execute asyncFn.
+3. Catch rejections and return `{ ok: false, error }`.
 
-**Problem:** Write global event listener on `process` logging unhandled rejection reason and promise.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> process.on('unhandledRejection', (reason, promise) => { console.error('Unhandled:', reason); });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> process.on('unhandledRejection', (reason, promise) => {
->   console.error('Unhandled Rejection:', reason);
+> function safePromiseWrap(asyncFn) {
+>   return async function (...args) {
+>     try {
+>       const data = await asyncFn(...args);
+>       return { ok: true, data };
+>     } catch (error) {
+>       return { ok: false, error: error?.message || String(error) };
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const failingFn = async () => { throw new Error("Async failure"); };
+> const safeFn = safePromiseWrap(failingFn);
+>
+> safeFn().then(res => {
+>   console.assert(res.ok === false, "Test 1 Failed");
+>   console.assert(res.error === "Async failure", "Test 2 Failed");
 > });
 > ```
 >
-> **Explanation:** `process.on('unhandledRejection')` catches promises rejected without `.catch()` handlers.
+> #### Technical Explanation
+>
+> 1. **Result Pattern**: Encapsulates success/failure into a `{ ok, data, error }` object instead of throwing.
+> 2. **Preventing Unhandled Rejections**: Guarantees returned Promise always resolves without rejection.
+> 3. **Safer Error Handling**: Simplifies error handling in calling functions without requiring nested try/catch blocks.
 > 
 ---
 
-### Exercise 3: Node.js Unhandled Rejection CLI Mode Flag
+### Exercise 3: Unhandled Rejection Exit Behavior Simulator
 
-**Problem:** Which CLI flag configures Node.js to warn on unhandled rejections without crashing the process?
+**Scenario:** Simulates process exit behavior when an unhandled rejection occurs without a process listener.
 
-**Expected output:**
+**Requirements:**
+1. Write handleUnhandledRejectionEvent(reason, isHandledByApp, processMock).
+2. Log error.
+3. Exit process if unhandled.
+
 > [!check]- Answer
-> ```text
-> node --unhandled-rejections=warn app.js
-> ```
-> ```bash
-> node --unhandled-rejections=warn app.js
+>
+> #### Implementation
+>
+> ```javascript
+> function handleUnhandledRejectionEvent(reason, isHandledByApp = false, processMock) {
+>   const proc = processMock || process;
+>
+>   if (!isHandledByApp) {
+>     proc.exit(1);
+>     return { status: "CRASHED", exitCode: 1 };
+>   }
+>
+>   return { status: "HANDLED_BY_APP", exitCode: 0 };
+> }
+>
+> // Verification tests
+> let exitCalled = false;
+> const mockProc = { exit: (code) => { exitCalled = true; } };
+>
+> const r1 = handleUnhandledRejectionEvent(new Error("Fail"), false, mockProc);
+> console.assert(r1.status === "CRASHED" && exitCalled === true, "Test 1 Failed");
 > ```
 >
-> **Explanation:** `--unhandled-rejections` mode flag sets rejection behavior (`strict`, `throw`, `warn`, `none`).
-> 
+> #### Technical Explanation
+>
+> 1. **Process Crash Prevention**: Attaching application listeners prevents default process termination.
+> 2. **Exit Code 1**: Uncaught promise rejections trigger non-zero exit codes to signal crash to process managers (PM2/K8s).
+> 3. **APM Alerting**: Integrate error trackers (Sentry, Datadog) inside unhandledRejection handlers.
 ## 6. Related Terms
 - [Microtasks vs Macrotasks](microtasks_macrotasks.md) — Promise rejections happen in the VIP Microtask queue.
 - [The process Object](../level_02/process_object.md) — The object that emits the `unhandledRejection` event.

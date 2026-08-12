@@ -104,128 +104,143 @@ const limit = req.query.limit; // ❌ Could be 10000000!
 const limit = Math.min(parseInt(req.query.limit, 10) || 10, 100); // Clamp to max 100
 ```
 
-
-
-### Mistake 4: Using High Offset Pagination (`OFFSET 1000000`) for Massive Datasets (Performance Degradation)
-
-**The mistake:** Using `LIMIT 20 OFFSET 1000000` to paginate million-row SQL tables.
-
-**Why it's wrong:** Offset pagination requires the database to scan and discard 1,000,000 rows before returning 20 rows, making deep page queries extremely slow. Use Cursor-Based (Keyset) pagination (`WHERE id > last_seen_id`).
-
-*Incorrect:*
-```javascript
-SELECT * FROM logs ORDER BY id LIMIT 20 OFFSET 1000000; // ❌ Slow table scan!
-```
-
-*Fix:*
-```javascript
-SELECT * FROM logs WHERE id > 1000000 ORDER BY id LIMIT 20; // Fast cursor index lookup
-```
-
-### Mistake 5: Failing to Validate and Sanitize `page` and `limit` Query Parameters
-
-**The mistake:** Passing `req.query.limit` directly to database query without bounds checking.
-
-**Why it's wrong:** An attacker can pass `?limit=10000000` to load millions of rows into memory, crashing the database and Node server. Clamp `limit` to a max value (e.g. max 100).
-
-*Incorrect:*
-```javascript
-const limit = req.query.limit; // ❌ Could be 10000000!
-```
-
-*Fix:*
-```javascript
-const limit = Math.min(parseInt(req.query.limit, 10) || 10, 100); // Clamp to max 100
-```
-
-
-
-### Mistake 6: Using High Offset Pagination (`OFFSET 1000000`) for Massive Datasets (Performance Degradation)
-
-**The mistake:** Using `LIMIT 20 OFFSET 1000000` to paginate million-row SQL tables.
-
-**Why it's wrong:** Offset pagination requires the database to scan and discard 1,000,000 rows before returning 20 rows, making deep page queries extremely slow. Use Cursor-Based (Keyset) pagination (`WHERE id > last_seen_id`).
-
-*Incorrect:*
-```javascript
-SELECT * FROM logs ORDER BY id LIMIT 20 OFFSET 1000000; // ❌ Slow table scan!
-```
-
-*Fix:*
-```javascript
-SELECT * FROM logs WHERE id > 1000000 ORDER BY id LIMIT 20; // Fast cursor index lookup
-```
-
-### Mistake 7: Failing to Validate and Sanitize `page` and `limit` Query Parameters
-
-**The mistake:** Passing `req.query.limit` directly to database query without bounds checking.
-
-**Why it's wrong:** An attacker can pass `?limit=10000000` to load millions of rows into memory, crashing the database and Node server. Clamp `limit` to a max value (e.g. max 100).
-
-*Incorrect:*
-```javascript
-const limit = req.query.limit; // ❌ Could be 10000000!
-```
-
-*Fix:*
-```javascript
-const limit = Math.min(parseInt(req.query.limit, 10) || 10, 100); // Clamp to max 100
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: The Math
+### Exercise 1: Offset-Based Limit/Offset Pagination Pager
 
-**Problem:** A user visits `GET /products?page=4&limit=10`. 
-How many items should the database `take` (LIMIT)?
-How many items should the database `skip` (OFFSET)?
+**Scenario:** Constructs SQL offset pagination parameters and metadata (`totalCount`, `page`, `limit`, `totalPages`).
 
-**Expected output:**
+**Requirements:**
+1. Write calculateOffsetPagination(totalCount, pageInput, limitInput).
+2. Calculate totalPages, offset, hasNext, hasPrev.
+
 > [!check]- Answer
-> ```text
-> Take (LIMIT): 10 items.
-> Skip (OFFSET): 30 items.
-> (Explanation: They want page 4. That means they already saw Page 1, 2, and 3. Since each page has 10 items, 3 pages * 10 items = 30 skipped items).
-> ```
-> - The formula is `(page - 1) * limit`.
-> 
----
-
-
-
-### Exercise 2: Calculating SQL OFFSET for Page Number
-
-**Problem:** Write formula to calculate SQL `offset` given 1-based `page` number and `limit` size.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const offset = (page - 1) * limit;
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const offset = (page - 1) * limit;
+> function calculateOffsetPagination(totalCount = 0, pageInput = 1, limitInput = 20) {
+>   const page = Math.max(1, parseInt(pageInput, 10) || 1);
+>   const limit = Math.max(1, Math.min(100, parseInt(limitInput, 10) || 20));
+>
+>   const totalPages = Math.ceil(totalCount / limit) || 1;
+>   const offset = (page - 1) * limit;
+>
+>   return {
+>     pagination: {
+>       currentPage: page,
+>       limit,
+>       totalCount,
+>       totalPages,
+>       hasNextPage: page < totalPages,
+>       hasPrevPage: page > 1
+>     },
+>     query: { limit, offset }
+>   };
+> }
+>
+> // Verification tests
+> const p = calculateOffsetPagination(95, 2, 20);
+> console.assert(p.pagination.totalPages === 5, "Test 1 Failed: 95 items / 20 = 5 pages");
+> console.assert(p.query.offset === 20, "Test 2 Failed: Page 2 offset is 20");
+> console.assert(p.pagination.hasNextPage === true, "Test 3 Failed");
 > ```
 >
-> **Explanation:** Standard offset formula skips `(page - 1) * limit` rows.
+> #### Technical Explanation
+>
+> 1. **Offset Pagination**: Standard pagination method using `LIMIT limit OFFSET offset` SQL queries.
+> 2. **Performance Degradation at Depth**: As `OFFSET` increases (e.g. `OFFSET 100000`), SQL engines must scan and discard thousands of rows.
+> 3. **Page Drift Hazard**: Inserting new records while paginating causes duplicate or skipped records between page requests.
 > 
 ---
 
-### Exercise 3: Cursor-Based vs Offset Pagination Tradeoff
+### Exercise 2: Cursor-Based Pagination Token Encoder/Decoder
 
-**Problem:** Which pagination method supports jumping directly to arbitrary page 50? (Offset pagination). Which method handles real-time data insertions without duplicate item bugs? (Cursor-based pagination).
+**Scenario:** Implements high-performance cursor-based pagination using base64 encoded cursor tokens (`created_at` + `id`).
 
-**Expected output:**
+**Requirements:**
+1. Write encodeCursor(record, field).
+2. Write decodeCursor(cursorToken).
+3. Generate cursor query filter.
+
 > [!check]- Answer
-> ```text
-> Arbitrary page jump: Offset pagination; Real-time insertions: Cursor-based pagination.
-> ```
-> ```text
-> Arbitrary page jump: Offset pagination
-> Real-time insertions: Cursor-based pagination
+>
+> #### Implementation
+>
+> ```javascript
+> function encodeCursor(record, field = "id") {
+>   const val = record[field];
+>   const payload = JSON.stringify({ field, val });
+>   return Buffer.from(payload).toString("base64url");
+> }
+>
+> function decodeCursor(cursorToken) {
+>   if (!cursorToken) return null;
+>   try {
+>     const json = Buffer.from(cursorToken, "base64url").toString("utf-8");
+>     return JSON.parse(json);
+>   } catch (err) {
+>     return null;
+>   }
+> }
+>
+> // Verification tests
+> const token = encodeCursor({ id: 105, createdAt: "2026-08-12" }, "id");
+> const decoded = decodeCursor(token);
+>
+> console.assert(decoded.field === "id" && decoded.val === 105, "Test 1 Failed: Decoded base64url cursor");
 > ```
 >
-> **Explanation:** Offset allows arbitrary page skipping; Cursor guarantees stable pagination across real-time list inserts.
+> #### Technical Explanation
+>
+> 1. **Cursor-Based (Keyset) Pagination**: Paginates using index comparisons (`WHERE id > last_seen_id LIMIT 20`) instead of `OFFSET`.
+> 2. **Consistent Performance**: Execution speed stays O(1) regardless of page depth because it utilizes database index lookups.
+> 3. **No Page Drift**: New record insertions do not distort pagination cursors.
 > 
+---
+
+### Exercise 3: RFC 5988 Link Header Pagination Generator
+
+**Scenario:** Constructs standard HTTP `Link` headers containing `first`, `prev`, `next`, and `last` pagination URIs.
+
+**Requirements:**
+1. Write buildPaginationLinkHeader(baseUrl, currentPage, totalPages, limit).
+2. Format RFC 5988 Link header string.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function buildPaginationLinkHeader(baseUrl, currentPage, totalPages, limit) {
+>   const links = [];
+>
+>   const makeUrl = (p) => `<${baseUrl}?page=${p}&limit=${limit}>`;
+>
+>   if (currentPage < totalPages) {
+>     links.push(`${makeUrl(currentPage + 1)}; rel="next"`);
+>   }
+>   if (currentPage > 1) {
+>     links.push(`${makeUrl(currentPage - 1)}; rel="prev"`);
+>   }
+>   links.push(`${makeUrl(1)}; rel="first"`);
+>   links.push(`${makeUrl(totalPages)}; rel="last"`);
+>
+>   return links.join(", ");
+> }
+>
+> // Verification tests
+> const header = buildPaginationLinkHeader("https://api.com/users", 2, 5, 20);
+> console.assert(header.includes('rel="next"'), "Test 1 Failed");
+> console.assert(header.includes('rel="prev"'), "Test 2 Failed");
+> console.assert(header.includes('rel="first"'), "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **RFC 5988 Web Linking Standard**: Standardized HTTP header for communicating relation links in Web APIs.
+> 2. **HATEOAS Compliance**: Allows API clients to navigate paginated datasets without hardcoding pagination URL structures.
+> 3. **GitHub REST API Pattern**: GitHub and Stripe APIs rely heavily on `Link` headers for pagination navigation.
 ## 6. Related Terms
 - [ORMs & ODMs](../level_08/orms_odms.md) — The tools that execute the `take` and `skip` commands.
 - [The req & res Objects](../level_07/req_res.md) — You extract the page numbers from `req.query`.

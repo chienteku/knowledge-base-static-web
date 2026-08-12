@@ -144,53 +144,134 @@ h1 {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Separation
+### Exercise 1: Linking External CSS Stylesheets to HTML Documents
 
-**Problem:** You want to make a specific button look like a giant red circle. Do you modify the `index.html` file or the `styles.css` file to achieve this?
+**Scenario:** An author links an external CSS stylesheet to an HTML document and establishes a global `box-sizing: border-box` reset.
 
-**Expected output:**
+**Requirements:**
+1. Link CSS file using `<link rel="stylesheet" href="...">` inside `<head>`.
+2. Apply global `box-sizing: border-box` reset.
+3. Use `rem` units for padding and font sizes.
+
 > [!check]- Answer
-> ```text
-> You modify the `styles.css` file! You would target the button in CSS and give it a red background color, a specific width/height, and a border-radius of 50%. The HTML file just needs the `<button>` tag.
-> ```
-> - Does a giant red circle describe the *structure* of the data, or its *presentation*?
-> 
----
-
-
-
-### Exercise 2: Linking External Stylesheet
-
-**Problem:** Write `<link>` tag in `<head>` linking external stylesheet `theme.css`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <link rel="stylesheet" href="theme.css">
-> ```
+>
+> #### Implementation
+>
 > ```html
-> <link rel="stylesheet" href="theme.css">
+> <!DOCTYPE html>
+> <html lang="en">
+> <head>
+>   <meta charset="utf-8">
+>   <title>CSS Architecture Starter</title>
+>   <link rel="stylesheet" href="css/styles.css">
+> </head>
+> <body>
+>   <main class="container">
+>     <h1>Welcome to Modern CSS Architecture</h1>
+>     <p>Separating HTML structure from CSS presentation.</p>
+>   </main>
+> </body>
+> </html>
 > ```
 >
-> **Explanation:** `rel="stylesheet"` binds external CSS files to HTML documents.
+> ```css
+> /* styles.css - Global Reset & Base System */
+> *, *::before, *::after {
+>   box-sizing: border-box;
+>   margin: 0;
+>   padding: 0;
+> }
+>
+> body {
+>   font-family: system-ui, -apple-system, sans-serif;
+>   line-height: 1.5;
+>   color: #1e293b;
+>   background-color: #f8fafc;
+> }
+>
+> .container {
+>   max-width: 70rem;           /* ~1120px responsive container boundary */
+>   margin-inline: auto;
+>   padding: 2rem 1rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Cascading Style Sheets (CSS)**: The W3C standard language for styling and laying out HTML web pages, separating visual presentation from document structure.
+> 2. **External Stylesheet Linking**: The `<link rel="stylesheet">` tag in `<head>` is the industry standard pattern for attaching CSS files.
+> 3. **The Universal `border-box` Reset**: Setting `box-sizing: border-box` includes padding and borders within element width/height calculations, eliminating unexpected layout overflow.
 > 
 ---
 
-### Exercise 3: CSS Separation of Concerns
+### Exercise 2: Defining Global CSS Reset and Base Design System
 
-**Problem:** Explain why separating HTML structure and CSS presentation improves website maintainability.
+**Scenario:** Establishes a base CSS reset establishing typography, margin resets, and relative scaling.
 
-**Expected output:**
+**Requirements:**
+1. Apply baseline font sizing using `rem` units.
+
 > [!check]- Answer
-> ```text
-> Updating a single CSS file updates design presentation across thousands of HTML pages simultaneously.
-> ```
-> ```text
-> Updating a single CSS file updates design presentation across thousands of HTML pages simultaneously.
+>
+> #### Implementation
+>
+> ```css
+> html {
+>   font-size: 100%;             /* Respects browser default (typically 16px) */
+> }
+>
+> body {
+>   font-size: 1rem;            /* 1rem = 16px */
+>   padding: 1.5rem;
+> }
+>
+> h1 {
+>   font-size: 2.25rem;         /* ~36px relative heading */
+>   margin-bottom: 1rem;
+> }
 > ```
 >
-> **Explanation:** Centralized stylesheets decouple visual design from HTML content markup.
+> #### Technical Explanation
+>
+> 1. **Accessibility via Relative Units**: Using `rem` for typography respects user browser font size preferences for visually impaired users.
+> 2. **Baseline Font Size**: Setting `html { font-size: 100%; }` preserves default accessibility settings.
+> 3. **Predictable Spacing**: `1rem` scales dynamically if user adjusts browser zoom levels.
 > 
+---
+
+### Exercise 3: Applying Responsive Mobile-First Styles using Media Queries
+
+**Scenario:** Constructs a mobile-first responsive layout using `min-width` media queries.
+
+**Requirements:**
+1. Write base styles for mobile screens.
+2. Add `@media (min-width: 48rem)` breakpoint for desktop.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Mobile-First Layout (Default Single-Column) */
+> .card-grid {
+>   display: flex;
+>   flex-direction: column;
+>   gap: 1rem;
+> }
+>
+> /* Tablet & Desktop Layout (Multi-Column) */
+> @media (min-width: 48rem) {   /* ~768px breakpoint */
+>   .card-grid {
+>     flex-direction: row;
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Mobile-First Methodology**: Styles default to mobile devices first; media queries add desktop enhancements progressively.
+> 2. **`min-width` Media Queries**: Using `min-width` ensures CSS rules trigger only as screen width expands.
+> 3. **Flexbox Layout Integration**: Flexbox handles responsive column wrapping without legacy float hacks.
 ## 6. Related Terms
 - [Selectors (Element, Class, ID)](selectors.md) — How CSS finds the specific HTML elements to style.
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The declaration format mapping selectors.

@@ -99,58 +99,87 @@ width: calc(10px * 2); /* Unitless multiplier */
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Three Column Grid
+### Exercise 1: Subtracting Fixed Header Heights from Viewport Dimensions with calc
 
-**Problem:** You are building a 3-column layout without using CSS Grid. You want 3 boxes to sit side-by-side using Flexbox. You want exactly 30px of `gap` between them (which means two 30px gaps total = 60px). How do you use `calc()` to figure out the exact width of one box?
+**Scenario:** An author calculates full-height main content container bounds by subtracting a 4rem header using `calc()`.
 
-**Expected output:**
+**Requirements:**
+1. Set `height: calc(100vh - 4rem)`.
+2. Set `box-sizing: border-box`.
+
 > [!check]- Answer
-> ```text
-> `width: calc((100% - 60px) / 3);`
-> Take the total width (100%), subtract the total gap space (60px), and divide the remaining space by 3 boxes!
-> ```
-> - Remember standard order of operations (PEMDAS). You can use parenthesis inside `calc()`!
-> 
----
-
-
-
-### Exercise 2: Fluid Sidebar Subtraction Pattern
-
-**Problem:** Write CSS `width` calculation subtracting 280px sidebar width from 100% container width using `calc()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> width: calc(100% - 280px);
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .main-content {
->   width: calc(100% - 280px);
+> .main-viewport-content {
+>   box-sizing: border-box;
+>   /* Calc: 100vh viewport height minus 4rem fixed header height */
+>   height: calc(100vh - 4rem);
+>   overflow-y: auto;
+>   padding: 2rem;
 > }
 > ```
 >
-> **Explanation:** `calc()` combines mixed unit calculations (percentages and pixels).
+> #### Technical Explanation
+>
+> 1. **The `calc()` Function**: Performs mathematical calculations (`+`, `-`, `*`, `/`) to determine CSS property values.
+> 2. **Mixing Dissimilar Units**: Allows mixing different units seamlessly (e.g. subtracting relative `rem` or fixed `px` from viewport `vh` or percentage `%`).
+> 3. **Spacing Rule Requirement**: Operators `+` and `-` MUST be surrounded by whitespace spaces (e.g. `100vh - 4rem`); `calc(100vh-4rem)` is INVALID syntax!
 > 
 ---
 
-### Exercise 3: Nested calc() Functions
+### Exercise 2: Mixing Units for Responsive Grid Gutters
 
-**Problem:** Is `calc()` nesting allowed in modern CSS (e.g. `calc(100% - calc(20px * 2))`)?
+**Scenario:** Calculates 3-column layouts with explicit gaps using `calc()`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `width: calc((100% - 2rem) / 3)`.
+
 > [!check]- Answer
-> ```text
-> Yes, but nested calc() can be simplified to single parentheses e.g. calc(100% - (20px * 2)).
-> ```
+>
+> #### Implementation
+>
 > ```css
-> div {
->   width: calc(100% - (20px * 2));
+> .calc-grid-col {
+>   /* 3 columns: 100% width minus 2rem total gaps divided by 3 */
+>   width: calc((100% - 2rem) / 3);
+>   float: left;
 > }
 > ```
 >
-> **Explanation:** Parentheses inside `calc()` handle math operation grouping.
+> #### Technical Explanation
+>
+> 1. **Nested Parentheses Math**: Supports nested parentheses for multi-step mathematical operations.
+> 2. **Fluid Division**: Calculates exact fluid column widths with precise gap deductions.
+> 3. **Legacy Grid Backup**: Useful fallback when CSS Grid or Flexbox gap properties cannot be used.
 > 
+---
+
+### Exercise 3: Dynamic Font Size Math with calc and Viewport Units
+
+**Scenario:** Calculates fluid font sizes combining base rems with viewport width.
+
+**Requirements:**
+1. Apply `font-size: calc(1rem + 1.5vw)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .fluid-calc-text {
+>   /* Base 1rem font size plus 1.5% viewport width scaling */
+>   font-size: calc(1rem + 1.5vw);
+>   line-height: 1.4;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Fluid Typography Formula**: Combining `1rem` base font size with `1.5vw` ensures text scales fluidly with screen width.
+> 2. **Accessibility Zoom Safety**: Using `1rem + 1.5vw` allows users to zoom text via browser settings.
+> 3. **Simplified Responsiveness**: Provides fluid font growth prior to modern `clamp()` adoption.
 ## 6. Related Terms
 - [`gap` (Grid Gap)](../level_06/gap.md) — Calculating space widths between grid tracks.
 - [`var()` (CSS Custom Properties)](var.md) — Evaluating custom variables inside math equations.

@@ -119,55 +119,157 @@ try {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Sizing the Pool
+### Exercise 1: Node.js PostgreSQL Connection Pool Allocator
 
-**Problem:** You have a massive server handling 50,000 requests per second. You think to yourself, "I should increase my Connection Pool size from 20 to 10,000 so everyone gets a connection!" Why is this a terrible idea?
+**Scenario:** A backend microservice acquires database clients from a connection pool (e.g. `pg.Pool`), executes queries, and guarantees client release back to pool via `try...finally`.
 
-**Expected output:**
+**Requirements:**
+1. Write executePooledQuery(poolMock, sqlQuery, queryParams).
+2. Acquire client via `pool.connect()`.
+3. Execute query.
+4. Ensure client release in `finally` block.
+
 > [!check]- Answer
-> ```text
-> Every open connection consumes RAM and CPU on the actual Database Server! If you open 10,000 connections, the Database Server will run out of RAM and crash. 
-> A small pool (like 20 to 50) is actually faster, because connections are returned to the pool so quickly (in 2ms) that a small number of taxis can easily handle thousands of riders.
-> ```
-> - Who has to manage and maintain those open connections? The DB!
-> 
----
-
-
-
-### Exercise 2: Database Pool Size Configuration
-
-**Problem:** Set max database connection pool limit to 20 connections using `pg` Pool options.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const pool = new Pool({ max: 20 });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const { Pool } = require('pg');
-> const pool = new Pool({ max: 20 });
+> async function executePooledQuery(poolMock, sqlQuery, queryParams = []) {
+>   let client = null;
+>   try {
+>     client = await poolMock.connect();
+>     const result = await client.query(sqlQuery, queryParams);
+>     return { success: true, rows: result.rows, rowCount: result.rowCount };
+>   } catch (err) {
+>     return { success: false, error: err.message };
+>   } finally {
+>     if (client && typeof client.release === "function") {
+>       client.release();
+>     }
+>   }
+> }
+>
+> // Verification tests
+> let released = false;
+> const mockPool = {
+>   connect: async () => ({
+>     query: async (sql, params) => ({ rows: [{ id: 1, name: "Alice" }], rowCount: 1 }),
+>     release: () => { released = true; }
+>   })
+> };
+>
+> executePooledQuery(mockPool, "SELECT * FROM users WHERE id = $1", [1]).then(res => {
+>   console.assert(res.success === true, "Test 1 Failed");
+>   console.assert(res.rows.length === 1, "Test 2 Failed");
+>   console.assert(released === true, "Test 3 Failed: Client released in finally block");
+> });
 > ```
 >
-> **Explanation:** `max` option restricts maximum concurrent socket connections opened by the pool.
+> #### Technical Explanation
+>
+> 1. **Connection Pool Reuse**: Opening raw TCP connections to DB servers takes 50–100ms; connection pools keep pre-opened sockets warm for instant reuse.
+> 2. **Mandatory `client.release()`**: Failing to release pooled connections leaks socket handles, eventually causing the application to hang when pool limits are reached.
+> 3. **`try...finally` Safety Pattern**: Always place `client.release()` inside a `finally` block to guarantee release even if queries throw errors.
 > 
 ---
 
-### Exercise 3: Pool Query Shortcut
+### Exercise 2: Connection Pool Exhaustion & Queue Timeout Guard
 
-**Problem:** Why is `pool.query('SELECT...')` safer for single queries than `pool.getConnection()`?
+**Scenario:** A high-concurrency API endpoint sets client acquisition timeouts to reject incoming requests when all pooled connections are busy.
 
-**Expected output:**
+**Requirements:**
+1. Write acquirePooledClientWithTimeout(poolMock, timeoutMs).
+2. Attempt `pool.connect()`.
+3. Race connection against timeout timer.
+
 > [!check]- Answer
-> ```text
-> pool.query() automatically acquires and releases the connection back to the pool in a single call.
-> ```
-> ```text
-> pool.query() automatically acquires and releases the connection back to the pool in a single call.
+>
+> #### Implementation
+>
+> ```javascript
+> function acquirePooledClientWithTimeout(poolMock, timeoutMs = 5000) {
+>   return new Promise((resolve, reject) => {
+>     let timer = null;
+>
+>     const timeoutPromise = new Promise((_, rej) => {
+>       timer = setTimeout(() => rej(new Error("POOL_ACQUISITION_TIMEOUT")), timeoutMs);
+>     });
+>
+>     Promise.race([poolMock.connect(), timeoutPromise])
+>       .then((client) => {
+>         clearTimeout(timer);
+>         resolve(client);
+>       })
+>       .catch((err) => {
+>         clearTimeout(timer);
+>         reject(err);
+>       });
+>   });
+> }
+>
+> // Verification tests
+> const slowPool = {
+>   connect: () => new Promise(resolve => setTimeout(() => resolve({ id: "client1" }), 50))
+> };
+>
+> acquirePooledClientWithTimeout(slowPool, 10).catch(err => {
+>   console.assert(err.message === "POOL_ACQUISITION_TIMEOUT", "Test 1 Failed: Timed out on slow pool acquisition");
+> });
 > ```
 >
-> **Explanation:** Direct pool queries handle connection lifecycle management automatically.
+> #### Technical Explanation
+>
+> 1. **Pool Exhaustion Hazard**: When all pooled connections are active, incoming queries queue indefinitely until client connections free up.
+> 2. **Acquisition Timeouts**: Enforcing connection acquisition timeouts prevents API gateway request timeouts and thread starvation.
+> 3. **Sizing Connection Pools**: Formula: `maxConnections = (Core Count * 2) + Effective Spindle Count`; oversized pools degrade DB CPU performance.
 > 
+---
+
+### Exercise 3: Graceful Pool Teardown & Drain Manager
+
+**Scenario:** A process shutdown handler drains database connection pools gracefully when receiving `SIGTERM` signals.
+
+**Requirements:**
+1. Write drainConnectionPool(poolMock, loggerMock).
+2. Invoke `pool.end()`.
+3. Log pool drain completion.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function drainConnectionPool(poolMock, loggerMock) {
+>   if (!poolMock || typeof poolMock.end !== "function") {
+>     return { drained: false, error: "INVALID_POOL" };
+>   }
+>
+>   try {
+>     await poolMock.end();
+>     if (loggerMock && typeof loggerMock.info === "function") {
+>       loggerMock.info("Database connection pool drained gracefully.");
+>     }
+>     return { drained: true };
+>   } catch (err) {
+>     return { drained: false, error: err.message };
+>   }
+> }
+>
+> // Verification tests
+> let ended = false;
+> const mockPool = { end: async () => { ended = true; } };
+>
+> drainConnectionPool(mockPool, { info: () => {} }).then(res => {
+>   console.assert(res.drained === true, "Test 1 Failed");
+>   console.assert(ended === true, "Test 2 Failed: Executed pool.end()");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`pool.end()` Lifecycle Method**: Closes all idle pool sockets and waits for active queries to complete before disconnecting.
+> 2. **Graceful Shutdown Integration**: Call `pool.end()` inside `process.on('SIGTERM')` listeners before `process.exit(0)`.
+> 3. **Preventing Dangling Sockets**: Prevents database server from keeping abandoned TCP connections open after Node.js app terminates.
 ## 6. Related Terms
 - [ORMs & ODMs](orms_odms.md) — ORMs manage the Connection Pool for you automatically.
 - [Database Transactions](db_transactions.md) — Related concept: Database Transactions.

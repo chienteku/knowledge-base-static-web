@@ -135,75 +135,147 @@ const logicalCores = os.cpus().length; // Understand logical threads vs physical
 
 ## 5. Practice Exercises
 
-### Exercise 1: Custom Promisifier
+### Exercise 1: System Resource Health Monitor
 
-**Problem:** Using `util.promisify`, convert this callback-based delay function into a Promise-based function, then run it using `async/await`:
+**Scenario:** A health check endpoint inspects system CPU load, total memory, and free memory via the Node.js `os` core module.
 
-```javascript
-const util = require('util');
-
-// Legacy Callback Function
-function delayCallback(ms, callback) {
-  setTimeout(() => {
-    callback(null, `Delayed for ${ms}ms`);
-  }, ms);
-}
-
-// Convert
-const delay = util.promisify(delayCallback);
-
-async function execute() {
-  console.log("Start");
-  const message = await delay(1000);
-  console.log(message);
-  console.log("End");
-}
-execute();
-```
-
----
+**Requirements:**
+1. Write getSystemMetrics(mockOs).
+2. Calculate free memory percentage.
+3. Retrieve system uptime and CPU count.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Checking Server Memory with OS Module
-
-**Problem:** Calculate free memory percentage using `os.freemem()` and `os.totalmem()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const freePct = (os.freemem() / os.totalmem()) * 100;
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const os = require('os');
-> const freePct = (os.freemem() / os.totalmem()) * 100;
-> console.log(`Free RAM: ${freePct.toFixed(2)}%`);
+> function getSystemMetrics(mockOs) {
+>   const osLib = mockOs || require("os");
+>
+>   const totalMem = osLib.totalmem();
+>   const freeMem = osLib.freemem();
+>   const freeMemPct = Number(((freeMem / totalMem) * 100).toFixed(2));
+>
+>   return {
+>     cpusCount: osLib.cpus().length,
+>     uptimeSec: osLib.uptime(),
+>     totalMemBytes: totalMem,
+>     freeMemBytes: freeMem,
+>     freeMemPct,
+>     isHealthy: freeMemPct >= 10.0 // Warning if free memory < 10%
+>   };
+> }
+>
+> // Verification tests
+> const mockOs = {
+>   totalmem: () => 16_000_000_000,
+>   freemem: () => 4_000_000_000,
+>   cpus: () => [{}, {}, {}, {}],
+>   uptime: () => 3600
+> };
+>
+> const metrics = getSystemMetrics(mockOs);
+> console.assert(metrics.cpusCount === 4, "Test 1 Failed");
+> console.assert(metrics.freeMemPct === 25.0, "Test 2 Failed");
+> console.assert(metrics.isHealthy === true, "Test 3 Failed");
 > ```
 >
-> **Explanation:** `os.freemem()` and `os.totalmem()` return system memory stats in bytes.
+> #### Technical Explanation
+>
+> 1. **Node.js `os` Module**: Provides access to operating system information (CPUs, memory, uptime, network interfaces, load averages).
+> 2. **Memory Health Monitoring**: Monitoring `os.freemem()` protects servers against OS Out-Of-Memory (OOM) process kills.
+> 3. **CPU Count for Clustering**: Use `os.cpus().length` to determine optimal worker count when configuring Node.js `cluster` mode.
 > 
 ---
 
-### Exercise 3: Promisifying Legacy setTimeout
+### Exercise 2: Custom util.promisify Adapter Factory
 
-**Problem:** Convert legacy `setTimeout(cb, ms)` into a promise-returning function using `util.promisify`.
+**Scenario:** Implements a custom promisify wrapper to convert legacy Node.js callback functions `(err, result) => {}` into ES6 Promises.
 
-**Expected output:**
+**Requirements:**
+1. Write promisifyCustom(callbackBasedFn).
+2. Return function returning Promise.
+3. Handle err and result parameters.
+
 > [!check]- Answer
-> ```text
-> const sleep = util.promisify(setTimeout); await sleep(1000);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const util = require('util');
-> const sleep = util.promisify(setTimeout);
-> await sleep(1000);
+> function promisifyCustom(callbackBasedFn) {
+>   return function (...args) {
+>     return new Promise((resolve, reject) => {
+>       callbackBasedFn(...args, (err, result) => {
+>         if (err) return reject(err);
+>         resolve(result);
+>       });
+>     });
+>   };
+> }
+>
+> // Verification tests
+> const legacyFn = (x, y, cb) => {
+>   if (x < 0) return cb(new Error("Negative value"));
+>   cb(null, x + y);
+> };
+>
+> const asyncFn = promisifyCustom(legacyFn);
+>
+> asyncFn(10, 20).then(sum => {
+>   console.assert(sum === 30, "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** `util.promisify` converts callback functions into Promise-based functions.
+> #### Technical Explanation
+>
+> 1. **Node.js `util.promisify`**: Core utility converting standard Node.js error-first callback functions into Promises.
+> 2. **Error-First Callback Convention**: Node.js standard: first callback parameter is always `err` (null if success).
+> 3. **util.promisify.custom Symbol**: Custom functions can override promisify behavior by defining `[util.promisify.custom]` symbol.
 > 
+---
+
+### Exercise 3: Complex Object Formatter with util.inspect
+
+**Scenario:** An APM error logger formats deeply nested objects and Circular references cleanly using `util.inspect()`.
+
+**Requirements:**
+1. Write formatComplexObject(obj, maxDepth, mockUtil).
+2. Format object with util.inspect.
+3. Handle circular references.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function formatComplexObject(obj, maxDepth = 2, mockUtil) {
+>   const utilLib = mockUtil || require("util");
+>
+>   return utilLib.inspect(obj, {
+>     showHidden: false,
+>     depth: maxDepth,
+>     colors: false,
+>     compact: true
+>   });
+> }
+>
+> // Verification tests
+> const circular = { name: "test" };
+> circular.self = circular;
+>
+> const mockUtil = {
+>   inspect: (target, opts) => `[Formatted Object depth=${opts.depth}]`
+> };
+>
+> const formatted = formatComplexObject(circular, 3, mockUtil);
+> console.assert(formatted.includes("depth=3"), "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **util.inspect Utility**: Debugging utility stringifying objects with configurable depth and circular reference safety.
+> 2. **Circular Reference Handling**: Prevents `JSON.stringify` crashes when objects reference themselves (`TypeError: Converting circular structure to JSON`).
+> 3. **Custom Inspection**: Objects can implement custom `[util.inspect.custom]()` method to customize string format.
 ## 6. Related Terms
 - [Promisification (util.promisify)](../level_05/promisification.md) — The concept behind async callback conversion.
 - [PM2 (Process Manager)](../level_10/pm2.md) — Multiple processes that scale dynamically based on CPU core counts.

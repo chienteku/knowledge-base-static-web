@@ -96,55 +96,160 @@ stream.pipe(destination);
 
 ## 5. Practice Exercises
 
-### Exercise 1: The True Identity
+### Exercise 1: Fixed-Size Stream Chunking Buffer
 
-**Problem:** You write `readStream.on('data', (chunk) => { console.log(typeof chunk); });`. What exact data structure does Node.js output to the console?
+**Scenario:** Splits incoming byte streams into uniform fixed-size binary chunks (e.g. 64KB blocks for cloud storage upload).
 
-**Expected output:**
+**Requirements:**
+1. Write chunkBinaryData(buffer, chunkSize).
+2. Iterate buffer using step chunkSize.
+3. Return array of chunk Buffers.
+
 > [!check]- Answer
-> ```text
-> An `object` (Specifically, an instance of the `Buffer` class). 
-> A chunk is not a String! It is raw binary Buffer data.
-> ```
-> - Remember what streams are made of (1s and 0s).
-> 
----
-
-
-
-### Exercise 2: Configuring highWaterMark Chunk Threshold
-
-**Problem:** Write code to create a file read stream with a small 1KB (1024 bytes) `highWaterMark` chunk threshold.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const stream = fs.createReadStream('file.txt', { highWaterMark: 1024 });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const stream = fs.createReadStream('file.txt', { highWaterMark: 1024 });
+> function chunkBinaryData(buffer, chunkSize = 64) {
+>   if (!Buffer.isBuffer(buffer)) {
+>     throw new TypeError("Expected a Buffer instance");
+>   }
+>
+>   const chunks = [];
+>   for (let i = 0; i < buffer.length; i += chunkSize) {
+>     chunks.push(buffer.subarray(i, i + chunkSize));
+>   }
+>
+>   return {
+>     totalChunks: chunks.length,
+>     chunkSize,
+>     chunks
+>   };
+> }
+>
+> // Verification tests
+> const dataBuf = Buffer.alloc(150, 0xaa);
+> const res = chunkBinaryData(dataBuf, 64);
+>
+> console.assert(res.totalChunks === 3, "Test 1 Failed: 150 bytes / 64 = 3 chunks (64 + 64 + 22)");
+> console.assert(res.chunks[2].length === 22, "Test 2 Failed: Final chunk size 22");
 > ```
 >
-> **Explanation:** `highWaterMark` configures internal buffer size limits for stream chunks.
+> #### Technical Explanation
+>
+> 1. **Stream Chunks**: Streams process binary data in discrete blocks called chunks (typically 16KB to 64KB).
+> 2. **Chunk Slicing Efficiency**: Using `subarray()` slices chunks without allocating new RAM.
+> 3. **Batch Chunk Uploads**: Chunking allows uploading multi-gigabyte files to S3/GCS in parallel multipart blocks.
 > 
 ---
 
-### Exercise 3: Default Stream highWaterMark Sizes
+### Exercise 2: Delimiter-Based Stream Chunk Splitter
 
-**Problem:** What are default `highWaterMark` buffer sizes for binary file streams vs objectMode streams in Node.js?
+**Scenario:** Parses incoming stream chunks and splits them by newline delimiters (`\n`) for log processing.
 
-**Expected output:**
+**Requirements:**
+1. Write processLineDelimitedChunk(chunkStr, overflowBuffer).
+2. Split by `\n`.
+3. Return completed lines and leftover overflow string.
+
 > [!check]- Answer
-> ```text
-> Binary streams: 64KB (65536 bytes); ObjectMode streams: 16 objects.
-> ```
-> ```text
-> Binary streams: 64KB (65536 bytes)
-> ObjectMode streams: 16 objects
+>
+> #### Implementation
+>
+> ```javascript
+> function processLineDelimitedChunk(chunkStr = "", overflowBuffer = "") {
+>   const combined = overflowBuffer + chunkStr;
+>   const lines = combined.split("
+> ");
+>   const leftover = lines.pop(); // Keep incomplete trailing line
+>
+>   return {
+>     lines,
+>     leftover
+>   };
+> }
+>
+> // Verification tests
+> const chunk1 = "LINE_1
+> LINE_2
+> INCOM";
+> const r1 = processLineDelimitedChunk(chunk1, "");
+> console.assert(r1.lines.length === 2, "Test 1 Failed");
+> console.assert(r1.leftover === "INCOM", "Test 2 Failed");
+>
+> const chunk2 = "PLETE_LINE_3
+> LINE_4
+> ";
+> const r2 = processLineDelimitedChunk(chunk2, r1.leftover);
+> console.assert(r2.lines[0] === "INCOMPLETE_LINE_3", "Test 3 Failed: Combined leftover with next chunk");
 > ```
 >
-> **Explanation:** Default highWaterMark specifies byte thresholds for binary buffers vs item count for object streams.
+> #### Technical Explanation
+>
+> 1. **Chunk Boundary Incompleteness**: Stream chunks break at arbitrary byte boundaries, requiring buffering incomplete trailing data.
+> 2. **Overflow Buffer Pattern**: Prepending leftover bytes from previous chunk ensures valid line/record parsing.
+> 3. **Stream Parsing Resilience**: Essential for NDJSON (Newline Delimited JSON) and log stream ingestion.
 > 
+---
+
+### Exercise 3: Stream Chunk Collector & Aggregator
+
+**Scenario:** Buffers all incoming stream data chunks into an array and concatenates them into a single Buffer upon completion.
+
+**Requirements:**
+1. Write collectStreamChunks(readableStreamMock).
+2. Listen for `data` events.
+3. Concat chunks on `end`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function collectStreamChunks(readableStreamMock) {
+>   return new Promise((resolve, reject) => {
+>     const chunks = [];
+>
+>     readableStreamMock.on("data", (chunk) => {
+>       chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+>     });
+>
+>     readableStreamMock.on("end", () => {
+>       const fullBuffer = Buffer.concat(chunks);
+>       resolve({
+>         chunkCount: chunks.length,
+>         totalBytes: fullBuffer.length,
+>         buffer: fullBuffer
+>       });
+>     });
+>
+>     readableStreamMock.on("error", (err) => reject(err));
+>   });
+> }
+>
+> // Verification tests
+> const events = {};
+> const mockStream = {
+>   on: (e, fn) => { events[e] = fn; }
+> };
+>
+> const promise = collectStreamChunks(mockStream);
+> events["data"](Buffer.from("Hello "));
+> events["data"](Buffer.from("World"));
+> events["end"]();
+>
+> promise.then(res => {
+>   console.assert(res.chunkCount === 2, "Test 1 Failed");
+>   console.assert(res.totalBytes === 11, "Test 2 Failed");
+>   console.assert(res.buffer.toString("utf-8") === "Hello World", "Test 3 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Buffer.concat Optimization**: Buffer.concat allocates a single contiguous buffer and copies chunk arrays efficiently.
+> 2. **Memory Footprint Warning**: Collecting all stream chunks into RAM negates streaming memory benefits; only use for small files.
+> 3. **Data Event Flow**: Emits 'data' events whenever a chunk is ready in readable stream buffer.
 ## 6. Related Terms
 - [Buffers](buffers.md) — What a chunk actually is.
 - [Streams (General Concept)](streams.md) — The system that produces chunks.

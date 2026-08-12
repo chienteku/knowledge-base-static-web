@@ -97,63 +97,99 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Reverse Order
+### Exercise 1: Responsive Layout Transformation: Switching Column to Row
 
-**Problem:** You have a container with three children: HTML `<p>1</p> <p>2</p> <p>3</p>`. You apply `display: flex; flex-direction: row-reverse;`. In what order do the numbers appear on the screen, reading from left to right?
+**Scenario:** An author builds a mobile-first card layout that stacks vertically (`column`) on mobile and expands horizontally (`row`) on desktop screens.
 
-**Expected output:**
+**Requirements:**
+1. Set base mobile style `flex-direction: column`.
+2. Add media query `@media (min-width: 48rem)`.
+3. Switch desktop style to `flex-direction: row`.
+
 > [!check]- Answer
-> ```text
-> 3, 2, 1! `row-reverse` flips the axis, meaning it starts packing items against the right side of the screen first.
-> ```
-> - Which side of the screen does `reverse` start on?
-> 
----
-
-
-
-### Exercise 2: Vertical Column Stack Layout
-
-**Problem:** Write CSS for `.card-stack` arranging child elements in vertical column with 16px gap.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .card-stack { display: flex; flex-direction: column; gap: 16px; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .card-stack {
+> /* Mobile-First Layout (Default Single-Column Vertical Stack) */
+> .media-card {
 >   display: flex;
->   flex-direction: column;
->   gap: 16px;
+>   flex-direction: column;       /* Main axis = Vertical (top-to-bottom) */
+>   gap: 1rem;
+>   padding: 1.5rem;
+>   background-color: #ffffff;
+> }
+>
+> /* Tablet & Desktop Layout (Multi-Column Horizontal Row) */
+> @media (min-width: 48rem) {
+>   .media-card {
+>     flex-direction: row;        /* Main axis = Horizontal (left-to-right) */
+>     align-items: center;
+>   }
 > }
 > ```
 >
-> **Explanation:** `flex-direction: column` stacks flex items vertically.
+> #### Technical Explanation
+>
+> 1. **The `flex-direction` Property**: Establishes the Main-Axis direction for flex items (`row`, `row-reverse`, `column`, `column-reverse`).
+> 2. **Main Axis vs Cross Axis Switch**: In `row`, Main-Axis is horizontal and Cross-Axis is vertical; in `column`, Main-Axis becomes vertical and Cross-Axis becomes horizontal!
+> 3. **Mobile-First Responsiveness**: Stacking vertically on mobile and expanding to horizontal rows on desktop is the foundational pattern of responsive UI design.
 > 
 ---
 
-### Exercise 3: Flex Direction Values List
+### Exercise 2: Reversing Visual Stack Orders for Mobile Messaging Threads
 
-**Problem:** List the 4 valid keyword values for `flex-direction`.
+**Scenario:** Reverses message thread order using `flex-direction: column-reverse`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `flex-direction: column-reverse` to chat messages container.
+
 > [!check]- Answer
-> ```text
-> 1. row (default)
-> 2. row-reverse
-> 3. column
-> 4. column-reverse
-> ```
-> ```text
-> 1. row
-> 2. row-reverse
-> 3. column
-> 4. column-reverse
+>
+> #### Implementation
+>
+> ```css
+> .chat-thread {
+>   display: flex;
+>   flex-direction: column-reverse; /* Reverses item order: latest message stays at bottom */
+>   gap: 0.75rem;
+>   max-height: 30rem;
+>   overflow-y: auto;
+> }
 > ```
 >
-> **Explanation:** `flex-direction` dictates main axis orientation and direction.
+> #### Technical Explanation
+>
+> 1. **`column-reverse` Behavior**: Stacks flex items vertically from bottom-to-top.
+> 2. **Chat App UI Pattern**: Keeps latest incoming chat messages pinned to the bottom of the scroll container naturally.
+> 3. **Keyboard Focus Warning**: Visual reordering via `column-reverse` does NOT alter DOM tab focus order; ensure accessibility testing.
 > 
+---
+
+### Exercise 3: Right-to-Left Layout Adaptations using flex-direction: row-reverse
+
+**Scenario:** Reverses row layout direction for localized UI components.
+
+**Requirements:**
+1. Apply `flex-direction: row-reverse`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .action-bar-reversed {
+>   display: flex;
+>   flex-direction: row-reverse;  /* Reverses horizontal item sequence */
+>   gap: 1rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`row-reverse` Behavior**: Lays out items horizontally from right-to-left.
+> 2. **Visual Flips**: Useful for right-aligned dialog action buttons (Confirm on right, Cancel on left).
+> 3. **CSS Logical Alignment**: Consider CSS logical alignment properties for internationalized RTL support.
 ## 6. Related Terms
 - [`justify-content`](justify_content.md) — Aligns children along the axis defined by `flex-direction`.
 - [`align-items`](align_items.md) — Aligns children along the perpendicular (cross) axis.

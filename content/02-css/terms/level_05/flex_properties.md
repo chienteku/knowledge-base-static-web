@@ -196,67 +196,104 @@ Fixed sidebar and fluid main content:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Space Division
+### Exercise 1: Fluid Resizable Card Grids using flex Shorthand
 
-**Problem:** You have a container that is `600px` wide. Inside it, you place three boxes. 
-- Box A has `flex: 1 1 100px;`.
-- Box B has `flex: 1 1 100px;`.
-- Box C has `flex: 0 0 100px;`.
-How many pixels wide will Box A be on the screen?
+**Scenario:** An author builds a responsive fluid card grid using the `flex` shorthand property (`flex: 1 1 20rem`).
 
-**Expected output:**
+**Requirements:**
+1. Apply `flex: 1 1 20rem` to card items.
+2. Set `flex-wrap: wrap` on container.
+3. Verify fluid shrinking and growing.
+
 > [!check]- Answer
-> ```text
-> 250px! 
-> 1. Starting sizes (flex-basis) total is 300px (100 + 100 + 100).
-> 2. The remaining empty space is 300px (600 container - 300 baseline).
-> 3. Box A and Box B have grow weight of 1, Box C has 0. Total grow weights = 2.
-> 4. Box A gets half of the empty space: 300 / 2 = 150px.
-> 5. Box A final size is 100px baseline + 150px growth = 250px.
-> ```
-> - Subtract the sum of baseline sizes from the parent container width.
-> - Divide the remaining space among growing items based on their weights.
-> 
----
-
-
-
-### Exercise 2: Flex Shorthand Expansion
-
-**Problem:** Expand `flex: 1;` into its 3 longhand values (`flex-grow`, `flex-shrink`, `flex-basis`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> flex-grow: 1, flex-shrink: 1, flex-basis: 0%
-> ```
-> ```text
-> flex-grow: 1
-> flex-shrink: 1
-> flex-basis: 0%
-> ```
 >
-> **Explanation:** `flex: 1` expands to `1 1 0%`, allocating equal container space.
-> 
----
-
-### Exercise 3: Preventing Item Shrinking
-
-**Problem:** Write CSS `flex` declaration preventing a flex item from shrinking when container space is tight.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> flex-shrink: 0; (or flex: 0 0 auto;)
-> ```
+> #### Implementation
+>
 > ```css
-> .fixed-sidebar {
->   flex-shrink: 0;
+> .grid-container {
+>   display: flex;
+>   flex-wrap: wrap;
+>   gap: 1.5rem;
+> }
+>
+> .grid-card {
+>   /* Flex Shorthand: flex-grow | flex-shrink | flex-basis */
+>   flex: 1 1 20rem;              /* Grows, shrinks, ideal baseline width 20rem (320px) */
+>   padding: 1.5rem;
+>   background-color: #ffffff;
+>   border-radius: 0.5rem;
 > }
 > ```
 >
-> **Explanation:** `flex-shrink: 0` locks flex item dimensions from shrinking.
+> #### Technical Explanation
+>
+> 1. **The `flex` Shorthand Property**: Combines `flex-grow`, `flex-shrink`, and `flex-basis` into a single declaration.
+> 2. **`flex-grow: 1`**: Allows the item to expand to fill remaining available space in the flex line.
+> 3. **`flex-shrink: 1`**: Allows the item to shrink proportionally if container space is constricted.
+> 4. **`flex-basis: 20rem`**: Sets the initial ideal size of the flex item before space distribution occurs.
 > 
+---
+
+### Exercise 2: Fixed-Width Sidebar with Flexible Content Area
+
+**Scenario:** Creates a layout with a fixed 18rem sidebar and a fluid main content area using `flex` properties.
+
+**Requirements:**
+1. Apply `flex: 0 0 18rem` to sidebar.
+2. Apply `flex: 1 1 auto` to main content.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .layout-wrapper {
+>   display: flex;
+>   gap: 2rem;
+> }
+>
+> .sidebar {
+>   flex: 0 0 18rem;              /* Do NOT grow, do NOT shrink, fixed 18rem width */
+> }
+>
+> .main-content {
+>   flex: 1 1 0;                  /* Grow to fill remaining width, shrink as needed */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Fixed Flex Item (`flex: 0 0 18rem`)**: Setting grow and shrink to `0` locks the item to an exact fixed width (`18rem`).
+> 2. **Fluid Flex Item (`flex: 1 1 0`)**: Setting grow to `1` forces the main content area to consume all remaining horizontal space.
+> 3. **Zero Basis Hack**: Using `flex-basis: 0` in `flex: 1 1 0` distributes space based purely on ratio rather than content size.
+> 
+---
+
+### Exercise 3: Preventing Flex Child Shrinking Bugs with flex-shrink: 0
+
+**Scenario:** Prevents fixed-size avatar images or icons from squishing inside flex rows using `flex-shrink: 0`.
+
+**Requirements:**
+1. Apply `flex-shrink: 0` to avatar image.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .avatar-img {
+>   width: 3rem;
+>   height: 3rem;
+>   flex-shrink: 0;               /* Prevents flex container from squishing avatar image! */
+>   border-radius: 9999px;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Flex Shrink Squishing Bug**: By default, flex items have `flex-shrink: 1`, causing fixed-size icons or images to distort when text overflows.
+> 2. **`flex-shrink: 0` Lock**: Setting `flex-shrink: 0` guarantees the icon preserves its exact width and height regardless of container constrictions.
+> 3. **Essential for Media Objects**: Standard defensive CSS pattern for user avatars and icon buttons.
 ## 6. Related Terms
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — The parent container.
 - [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — The combined syntax layout.

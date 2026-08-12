@@ -99,61 +99,102 @@ Before Flexbox, perfectly centering a `<div>` both horizontally and vertically w
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Stretched Buttons
+### Exercise 1: Vertical Alignment in Navigation Header Bars
 
-**Problem:** You build a Flex row of buttons. You set the Flex Container to `height: 150px`. Suddenly, all your buttons stretch and become massive 150px tall rectangles, which looks terrible. What property/value caused this, and how do you fix it?
+**Scenario:** An author vertically centers brand logos, navigation links, and action buttons in a header bar using `align-items: center`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: flex; align-items: center;` to `.site-header`.
+2. Set `justify-content: space-between`.
+3. Verify uniform vertical alignment.
+
 > [!check]- Answer
-> ```text
-> The default value of `align-items` is `stretch`! Because the container grew to 150px, the default behavior forced the children to stretch to match it.
-> You fix it by setting `align-items: flex-start;` or `align-items: center;` to stop the stretching behavior.
-> ```
-> - What is the default value of `align-items`?
-> 
----
-
-
-
-### Exercise 2: Vertical and Horizontal Centering Pattern
-
-**Problem:** Write CSS for `.hero` centering child items both horizontally AND vertically in flex row mode.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .hero { display: flex; justify-content: center; align-items: center; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .hero {
+> .site-header {
 >   display: flex;
->   justify-content: center;
->   align-items: center;
+>   justify-content: space-between;
+>   align-items: center;          /* Centers logo, nav links, and CTA button vertically */
+>   padding: 1rem 2rem;
+>   background-color: #ffffff;
+>   border-bottom: 1px solid #e2e8f0;
 > }
 > ```
 >
-> **Explanation:** Combining `justify-content: center` and `align-items: center` achieves perfect 2D centering.
+> #### Technical Explanation
+>
+> 1. **The `align-items` Property**: Defines the default cross-axis alignment for all flex items within a single flex line.
+> 2. **Cross-Axis Centering (`center`)**: Positions flex items in the vertical middle of the flex line regardless of their individual heights.
+> 3. **Eliminating Vertical Margins**: Eliminates legacy pixel margin hacks for aligning logos next to navigation link lists.
 > 
 ---
 
-### Exercise 3: align-items Baseline Alignment
+### Exercise 2: Equal Height Card Columns using Default align-items stretch
 
-**Problem:** Which `align-items` value aligns text content inside flex items along their shared typographic baseline?
+**Scenario:** Leverages the default `align-items: stretch` behavior to create equal-height product cards in a flex row.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: flex; align-items: stretch;` (default behavior).
+2. Verify card columns stretch to equal height.
+
 > [!check]- Answer
-> ```text
-> align-items: baseline;
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .nav {
+> .card-row {
 >   display: flex;
->   align-items: baseline;
+>   align-items: stretch;         /* Default: Forces all child cards to equal height! */
+>   gap: 1.5rem;
+> }
+>
+> .card {
+>   flex: 1;
+>   display: flex;
+>   flex-direction: column;
+>   background-color: #ffffff;
+>   padding: 1.5rem;
 > }
 > ```
 >
-> **Explanation:** `align-items: baseline` aligns text baselines regardless of differing font sizes.
+> #### Technical Explanation
+>
+> 1. **Default `stretch` Behavior**: By default, `align-items: stretch` causes all child flex items to stretch to fill the height of the tallest item in the row.
+> 2. **Equal Height Column Solved**: Solves the classic CSS multi-column equal height problem natively without JavaScript.
+> 3. **Nested Flex Layouts**: Pairing stretched parent cards with inner `display: flex; flex-direction: column;` allows pinning footer buttons to the card bottom.
 > 
+---
+
+### Exercise 3: Baseline Text Alignment across Heterogeneous Font Sizes
+
+**Scenario:** Aligns price labels and currency symbols along their text font baseline using `align-items: baseline`.
+
+**Requirements:**
+1. Apply `align-items: baseline` to price display container.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .price-display {
+>   display: flex;
+>   align-items: baseline;        /* Aligns text baselines of different font sizes */
+>   gap: 0.25rem;
+> }
+>
+> .currency-symbol { font-size: 1.25rem; }
+> .price-amount    { font-size: 3rem; font-weight: 800; }
+> .price-period    { font-size: 1rem; color: #64748b; }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`align-items: baseline`**: Aligns flex items so their typography text baselines form a single continuous horizontal line.
+> 2. **Heterogeneous Font Sizes**: Essential when mixing large numbers (`3rem`) with small labels (`1.25rem`) or currency symbols.
+> 3. **Typographical Precision**: Prevents optical misalignments caused by unequal font bounding boxes.
 ## 6. Related Terms
 - [`justify-content`](justify_content.md) — The Main Axis sibling.
 - [`flex-direction`](flex_direction.md) — Rotating the main layout axis.

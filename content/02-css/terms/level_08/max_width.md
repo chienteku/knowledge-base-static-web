@@ -183,149 +183,90 @@ Fluid image scaling constraint:
 .card { min-width: 300px; } /* Prevents shrinking smaller than 300px */
 ```
 
-
-
-### Mistake 4: Using Fixed `width: 1200px` Instead of Responsive `max-width: 1200px; width: 100%;`
-
-**The mistake:** Setting `width: 1200px` on a main container `<div>`.
-
-**Why it's wrong:** Fixed `width` forces containers to remain 1200px wide on 375px mobile screens, causing horizontal scrollbars. Combining `width: 100%; max-width: 1200px;` creates fluid responsive layouts.
-
-*Incorrect:*
-```css
-.container { width: 1200px; } /* ❌ Causes mobile horizontal scrollbar! */
-```
-
-*Fix:*
-```css
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-```
-
-### Mistake 5: Confusing `max-width` with `min-width`
-
-**The mistake:** Setting `max-width: 300px` expecting an element to NEVER shrink smaller than 300px.
-
-**Why it's wrong:** `max-width` sets an UPPER ceiling limit (element cannot grow wider than 300px). `min-width` sets a LOWER floor limit (element cannot shrink smaller than 300px).
-
-*Incorrect:*
-```css
-/* Expecting box to never shrink smaller than 300px */
-.card { max-width: 300px; }
-```
-
-*Fix:*
-```css
-.card { min-width: 300px; } /* Prevents shrinking smaller than 300px */
-```
-
-
-
-### Mistake 6: Using Fixed `width: 1200px` Instead of Responsive `max-width: 1200px; width: 100%;`
-
-**The mistake:** Setting `width: 1200px` on a main container `<div>`.
-
-**Why it's wrong:** Fixed `width` forces containers to remain 1200px wide on 375px mobile screens, causing horizontal scrollbars. Combining `width: 100%; max-width: 1200px;` creates fluid responsive layouts.
-
-*Incorrect:*
-```css
-.container { width: 1200px; } /* ❌ Causes mobile horizontal scrollbar! */
-```
-
-*Fix:*
-```css
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-```
-
-### Mistake 7: Confusing `max-width` with `min-width`
-
-**The mistake:** Setting `max-width: 300px` expecting an element to NEVER shrink smaller than 300px.
-
-**Why it's wrong:** `max-width` sets an UPPER ceiling limit (element cannot grow wider than 300px). `min-width` sets a LOWER floor limit (element cannot shrink smaller than 300px).
-
-*Incorrect:*
-```css
-/* Expecting box to never shrink smaller than 300px */
-.card { max-width: 300px; }
-```
-
-*Fix:*
-```css
-.card { min-width: 300px; } /* Prevents shrinking smaller than 300px */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Fluid Layout Center
+### Exercise 1: Responsive Fluid Layout Container with max-width
 
-**Problem:** You are building a news website wrapper. You want the wrapper to take up `95%` of the screen width on phones, but never stretch wider than `1000px` on desktop monitors. Write the CSS ruleset.
+**Scenario:** An author builds a responsive fluid layout container that caps maximum width on desktop monitors while filling mobile screens.
 
-**Expected output:**
+**Requirements:**
+1. Set `width: 100%`.
+2. Set `max-width: 75rem`.
+3. Apply `margin-inline: auto` to center.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .news-wrapper {
->   width: 95%;
->   max-width: 1000px;
->   margin: 0 auto;
-> }
-> ```
-> - Define a percentage width for mobile screens.
-> - Apply `max-width` to cap the desktop sizing width.
-> - Center the container using margins.
-> 
----
-
-
-
-### Exercise 2: Centered Fluid Wrapper Pattern
-
-**Problem:** Write CSS for `.page-wrapper` spanning full width up to max 1400px, centered with 20px side padding.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .page-wrapper { width: 100%; max-width: 1400px; padding: 0 20px; margin-left: auto; margin-right: auto; }
-> ```
-> ```css
-> .page-wrapper {
->   width: 100%;
->   max-width: 1400px;
->   padding: 0 20px;
->   margin-left: auto;
->   margin-right: auto;
+> .site-container {
+>   width: 100%;                  /* Fills small mobile viewports completely */
+>   max-width: 75rem;             /* Caps width at 1200px on ultra-wide desktop monitors */
+>   margin-inline: auto;          /* Centers container horizontally in viewport */
+>   padding-inline: 1.5rem;       /* Prevents content from touching screen edges on mobile */
 > }
 > ```
 >
-> **Explanation:** Combining `width: 100%`, `max-width`, and `margin: auto` creates clean responsive container wrappers.
+> #### Technical Explanation
+>
+> 1. **The `max-width` Property**: Restricts the maximum physical width an element can grow, while allowing it to shrink fluidly on smaller screens.
+> 2. **Responsive Container Pattern**: Combining `width: 100%` + `max-width: 75rem` + `margin-inline: auto` is the foundational rule for centered responsive page layouts.
+> 3. **Preventing Ultra-Wide Stretching**: Prevents text lines and hero cards from stretching to unreadable widths on 4K desktop displays.
 > 
 ---
 
-### Exercise 3: Optimal Reading Line Length
+### Exercise 2: Responsive Image Scaling with max-width: 100%
 
-**Problem:** Write CSS restricting text paragraph width to optimal reading length of 65 characters (`ch` unit).
+**Scenario:** Ensures embedded images scale down fluidly without breaking out of parent containers.
 
-**Expected output:**
+**Requirements:**
+1. Apply `max-width: 100%; height: auto;`.
+
 > [!check]- Answer
-> ```text
-> p { max-width: 65ch; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> p {
->   max-width: 65ch;
+> .responsive-media {
+>   max-width: 100%;              /* Prevents image from overflowing parent container */
+>   height: auto;                 /* Preserves intrinsic aspect ratio automatically */
+>   display: block;
 > }
 > ```
 >
-> **Explanation:** `max-width: 65ch` clamps line length for optimal reading ergonomics.
+> #### Technical Explanation
+>
+> 1. **Fluid Media Rule**: Setting `max-width: 100%` guarantees images shrink to fit narrow containers without distorting.
+> 2. **`height: auto` Preservation**: `height: auto` preserves the natural aspect ratio so images do NOT distort vertically.
+> 3. **Responsive Baseline**: Mandatory CSS reset rule for images, SVGs, and canvas elements.
 > 
+---
+
+### Exercise 3: Optimal Line Length Constraint for Long-Form Paragraphs
+
+**Scenario:** Restricts editorial paragraph line length to 65 characters using `max-width: 65ch`.
+
+**Requirements:**
+1. Apply `max-width: 65ch` to editorial paragraph.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .article-paragraph {
+>   max-width: 65ch;              /* Caps line length to ~65 character widths */
+>   line-height: 1.7;
+>   font-size: 1.125rem;
+>   color: #334155;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `ch` Unit**: `1ch` equals the advance width of the '0' character in the element's font; `65ch` fits ~45-75 characters per line.
+> 2. **Typographic Ergonomics**: WCAG & typography guidelines recommend 45–75 characters per line for optimal human reading speed and eye comfort.
+> 3. **Automatic Column Reading**: Prevents readers from losing their line place when scanning long-form content.
 ## 6. Related Terms
 - [Width / Height](../level_02/width_height.md) — The baseline box sizes.
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The property that handles clips if fixed sizing bounds are breached.

@@ -103,57 +103,130 @@ stream.pipe(res); // Pipe before ending response
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Express Download
+### Exercise 1: Safe Stream Pipe Error Handling Helper
 
-**Problem:** You are building an Express API. A user hits `GET /download/video`. You want to stream `video.mp4` directly to their browser using `.pipe()`. Write the one line of code that connects the file to the user.
+**Scenario:** Wraps Node.js `stream.pipeline()` to safely pipe streams with automatic error destruction and callback resolution.
 
-**Expected output:**
+**Requirements:**
+1. Write safePipeline(readable, transform, writable, pipelineFn).
+2. Pipe streams using `pipeline()`.
+3. Ensure proper cleanup on error.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> fs.createReadStream('video.mp4').pipe(res);
+> function safePipeline(readable, transform, writable, pipelineFn) {
+>   const pipeImpl = pipelineFn || require("stream").pipeline;
+>
+>   return new Promise((resolve, reject) => {
+>     pipeImpl(readable, transform, writable, (err) => {
+>       if (err) return reject(err);
+>       resolve({ success: true });
+>     });
+>   });
+> }
+>
+> // Verification tests
+> const mockPipeline = (r, t, w, cb) => {
+>   cb(null); // Success
+> };
+>
+> safePipeline({}, {}, {}, mockPipeline).then(res => {
+>   console.assert(res.success === true, "Test 1 Failed");
+> });
 > ```
-> - Source `.pipe(` Destination `)`
+>
+> #### Technical Explanation
+>
+> 1. **`readable.pipe()` Limitation**: `src.pipe(dest)` does NOT forward errors; if `src` fails, `dest` stays open, leaking memory.
+> 2. **`stream.pipeline()` Utility**: Safely pipes streams, destroying all streams in the chain if any stream emits an error.
+> 3. **Resource Cleanup**: Guarantees file handles and sockets close cleanly on pipeline failures.
 > 
 ---
 
+### Exercise 2: Multi-Stream Compression & Encryption Pipeline
 
+**Scenario:** Chains multiple transform streams together: `ReadStream -> Gzip -> Encrypt -> WriteStream`.
 
-### Exercise 2: Piping File Read Stream to HTTP Response
+**Requirements:**
+1. Write executeCompressionPipeline(srcStream, gzipStream, encryptStream, destStream, mockPipeline).
+2. Chain 4 streams in sequence.
 
-**Problem:** Write code to pipe read stream of `video.mp4` to HTTP response `res`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> fs.createReadStream('video.mp4').pipe(res);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const stream = fs.createReadStream('video.mp4');
-> stream.pipe(res);
+> function executeCompressionPipeline(srcStream, gzipStream, encryptStream, destStream, mockPipeline) {
+>   const pipelineFn = mockPipeline || require("stream").pipeline;
+>
+>   return new Promise((resolve, reject) => {
+>     pipelineFn(srcStream, gzipStream, encryptStream, destStream, (err) => {
+>       if (err) return reject(err);
+>       resolve({ pipelineCompleted: true });
+>     });
+>   });
+> }
+>
+> // Verification tests
+> const mockPipeline = (s, g, e, d, cb) => cb(null);
+>
+> executeCompressionPipeline({}, {}, {}, {}, mockPipeline).then(res => {
+>   console.assert(res.pipelineCompleted === true, "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** `.pipe()` streams file chunks directly to the network socket with minimal RAM usage.
+> #### Technical Explanation
+>
+> 1. **Stream Chaining**: Pipes output of one stream directly to input of next stream.
+> 2. **Memory Efficiency**: Compresses and encrypts gigabytes of data on the fly using ~64KB of RAM.
+> 3. **Composability**: Modular streams can be re-ordered or swapped easily.
 > 
 ---
 
-### Exercise 3: Chaining Gzip Compression Pipe
+### Exercise 3: Dynamic Unpiping and Redirection
 
-**Problem:** Pipe read stream `file.txt` through `zlib.createGzip()` to write stream `file.txt.gz`.
+**Scenario:** Demonstrates unpiping a stream from an old destination and piping to a new destination dynamically.
 
-**Expected output:**
+**Requirements:**
+1. Write redirectPipeOutput(readableMock, oldDestMock, newDestMock).
+2. Unpipe oldDestMock.
+3. Pipe to newDestMock.
+
 > [!check]- Answer
-> ```text
-> fs.createReadStream('file.txt').pipe(zlib.createGzip()).pipe(fs.createWriteStream('file.txt.gz'));
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const zlib = require('zlib');
-> fs.createReadStream('file.txt')
->   .pipe(zlib.createGzip())
->   .pipe(fs.createWriteStream('file.txt.gz'));
+> function redirectPipeOutput(readableMock, oldDestMock, newDestMock) {
+>   readableMock.unpipe(oldDestMock);
+>   readableMock.pipe(newDestMock);
+>
+>   return {
+>     redirected: true
+>   };
+> }
+>
+> // Verification tests
+> let unpiped = false;
+> let pipedNew = false;
+>
+> const mockR = {
+>   unpipe: (d) => { unpiped = true; },
+>   pipe: (d) => { pipedNew = true; }
+> };
+>
+> redirectPipeOutput(mockR, {}, {});
+> console.assert(unpiped === true && pipedNew === true, "Test 1 Failed");
 > ```
 >
-> **Explanation:** Stream piping chains multiple transformation steps efficiently.
-> 
+> #### Technical Explanation
+>
+> 1. **readable.unpipe()**: Disconnects writable stream from readable stream source.
+> 2. **Dynamic Traffic Rerouting**: Allows redirecting live audio/video streams to backup recording destinations.
+> 3. **Clean Disconnection**: Unpiping stops data flow to old destination without closing the readable stream.
 ## 6. Related Terms
 - [Readable & Writable Streams](readable_writable.md) — The two ends of the pipe.
 - [Backpressure](backpressure.md) — Related concept: Backpressure.

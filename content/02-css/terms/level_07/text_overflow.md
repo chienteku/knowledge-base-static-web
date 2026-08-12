@@ -112,63 +112,93 @@ This requires an exact combo of 3 specific properties to work!
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Long URL
+### Exercise 1: Truncating Overflown Single-Line Titles with text-overflow: ellipsis
 
-**Problem:** You are displaying a very long URL (`https://www.example.com/very/long/path/that/goes/on/forever`) inside a narrow mobile screen. You want the user to be able to read the entire URL by scrolling down, but you don't want the URL to blast out the right side of the screen. Which property do you use?
+**Scenario:** An author truncates overflowing single-line article titles with an ellipsis (`...`) inside a card header.
 
-**Expected output:**
+**Requirements:**
+1. Apply `white-space: nowrap`, `overflow: hidden`, `text-overflow: ellipsis`.
+2. Set `max-width: 100%`.
+
 > [!check]- Answer
-> ```text
-> `overflow-wrap: break-word;` 
-> This will aggressively snap the URL into multiple lines, keeping it safely inside the mobile screen so the user can read the whole thing. If you used `ellipsis`, they wouldn't be able to read the end of the URL.
+>
+> #### Implementation
+>
+> ```css
+> .card-title-truncated {
+>   white-space: nowrap;          /* Prevents text from wrapping onto a second line */
+>   overflow: hidden;             /* Clips text content that exceeds width */
+>   text-overflow: ellipsis;     /* Displays '...' at truncation boundary */
+>   max-width: 100%;
+> }
 > ```
-> - Do you want to cut the stick, or snap it in half?
+>
+> #### Technical Explanation
+>
+> 1. **Single-Line Ellipsis Requirements**: Truncation REQUIRES 3 properties working together: `white-space: nowrap`, `overflow: hidden`, and `text-overflow: ellipsis`.
+> 2. **Missing Property Failure**: If `white-space: nowrap` or `overflow: hidden` is omitted, `text-overflow: ellipsis` has NO EFFECT and text will wrap or overflow!
+> 3. **Responsive Layout Safety**: Prevents long article titles, email addresses, or URLs from expanding container dimensions on mobile screens.
 > 
 ---
 
+### Exercise 2: Multi-Line Clamp Truncation using -webkit-line-clamp
 
+**Scenario:** Truncates article card preview text to exactly 3 lines using multi-line clamp styling.
 
-### Exercise 2: Single-Line Ellipsis Truncation Rule
+**Requirements:**
+1. Apply `display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;`.
 
-**Problem:** Write CSS rule truncating `.user-name` text with `...` on single line overflow.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> .user-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .user-name {
+> .card-excerpt-clamp {
+>   display: -webkit-box;
+>   -webkit-line-clamp: 3;        /* Truncates text after exactly 3 lines */
+>   -webkit-box-orient: vertical;
+>   overflow: hidden;
+>   line-height: 1.5;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Multi-Line Truncation (`-webkit-line-clamp`)**: Standard CSS technique for truncating paragraph text after a specified number of lines (e.g. 3 lines).
+> 2. **Vendor Prefix Mandate**: Requires `display: -webkit-box` and `-webkit-box-orient: vertical` to function across all modern browsers.
+> 3. **Clean Excerpt Cards**: Guarantees article preview cards maintain identical visual heights regardless of raw text length.
+> 
+---
+
+### Exercise 3: Text Truncation inside Flex and Grid Containers
+
+**Scenario:** Fixes broken text truncation inside flex and grid items by adding `min-width: 0`.
+
+**Requirements:**
+1. Apply `min-width: 0` to flex child containing truncated text.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .flex-card-item {
+>   flex: 1;
+>   min-width: 0;                 /* Overrides default min-width: auto to allow text truncation! */
+> }
+>
+> .flex-card-item .truncated-text {
 >   white-space: nowrap;
 >   overflow: hidden;
 >   text-overflow: ellipsis;
 > }
 > ```
 >
-> **Explanation:** Single-line ellipsis requires `nowrap`, `hidden` overflow, and `text-overflow: ellipsis`.
-> 
----
-
-### Exercise 3: Multi-Line Truncation Property
-
-**Problem:** Which CSS property combination clamps text to exactly 3 lines with an ellipsis?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-> ```
-> ```css
-> .clamp-3 {
->   display: -webkit-box;
->   -webkit-line-clamp: 3;
->   -webkit-box-orient: vertical;
->   overflow: hidden;
-> }
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** `-webkit-line-clamp` truncates multi-line text blocks after N lines.
-> 
+> 1. **Flex/Grid `min-width: auto` Trap**: Flex items default to `min-width: auto`, which prevents child text from shrinking below its content width, breaking truncation!
+> 2. **The `min-width: 0` Fix**: Setting `min-width: 0` on the parent flex item allows child text to shrink and display the ellipsis cleanly.
+> 3. **Crucial Layout Rule**: Mandatory fix whenever implementing truncated text inside Flexbox or CSS Grid layouts.
 ## 6. Related Terms
 - [`white-space`](white_space.md) — The property that forces the single line required for `ellipsis` to work.
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Related concept: `overflow` (hidden, scroll, auto, visible).

@@ -105,57 +105,109 @@ color: var(--undefined-color, #005fcc); /* Fallback color provided */
 
 ## 5. Practice Exercises
 
-### Exercise 1: Dark Mode Magic
+### Exercise 1: Dynamic Component Styling using CSS var Custom Properties
 
-**Problem:** How does `var()` make implementing Dark Mode incredibly easy?
+**Scenario:** An author styles a reusable alert card component using CSS `var()` custom properties.
 
-**Expected output:**
+**Requirements:**
+1. Define CSS variable `--alert-color: #2563eb`.
+2. Apply `background-color: var(--alert-color)`.
+3. Override variable on modifier classes.
+
 > [!check]- Answer
-> ```text
-> Because variables respect the Cascade! 
-> You define `--bg-color: white;` and `--text-color: black;` in `:root`.
-> You can then write a media query for Dark Mode (`@media (prefers-color-scheme: dark)`), and simply RE-DEFINE the variables to `--bg-color: black;` and `--text-color: white;`. The entire website will instantly swap colors without you having to write any new CSS for your actual elements!
-> ```
-> - Can you overwrite variables using media queries?
-> 
----
-
-
-
-### Exercise 2: Consuming CSS Custom Property with Fallback
-
-**Problem:** Write CSS `background-color` consuming variable `--accent` with fallback `#005fcc`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> background-color: var(--accent, #005fcc);
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .btn {
->   background-color: var(--accent, #005fcc);
+> .alert-box {
+>   --alert-bg: #f8fafc;
+>   --alert-border: #cbd5e1;
+>   --alert-text: #0f172a;
+>
+>   background-color: var(--alert-bg);
+>   border-left: 4px solid var(--alert-border);
+>   color: var(--alert-text);
+>   padding: 1rem 1.5rem;
+>   border-radius: 0.375rem;
+> }
+>
+> /* Variant Overrides: Simply update variable values! */
+> .alert-box--danger {
+>   --alert-bg: #fef2f2;
+>   --alert-border: #ef4444;
+>   --alert-text: #991b1b;
 > }
 > ```
 >
-> **Explanation:** `var(--name, fallback)` consumes custom properties with default fallbacks.
+> #### Technical Explanation
+>
+> 1. **The `var()` Function**: Evaluates and inserts the value of a CSS custom property (e.g. `var(--alert-bg)`).
+> 2. **Scoped Variable Overrides**: Component variants modify variable tokens locally without duplicating all structural CSS declarations!
+> 3. **Dynamic DOM Inheritance**: CSS variables cascade down the DOM tree, reacting to scope changes and media queries dynamically.
 > 
 ---
 
-### Exercise 3: Updating Custom Properties in JavaScript
+### Exercise 2: Defining Fallback Values in var Shorthand
 
-**Problem:** Write JavaScript line updating root custom property `--primary-color` to `'#6200ee'`. 
+**Scenario:** Provides a fallback default value inside `var()` in case a variable is undefined.
 
-**Expected output:**
+**Requirements:**
+1. Apply `var(--color-primary, #2563eb)` with fallback.
+
 > [!check]- Answer
-> ```text
-> document.documentElement.style.setProperty('--primary-color', '#6200ee');
-> ```
-> ```javascript
-> document.documentElement.style.setProperty('--primary-color', '#6200ee');
+>
+> #### Implementation
+>
+> ```css
+> .btn-primary {
+>   /* Fallback: Uses #2563eb if --color-primary is not defined */
+>   background-color: var(--color-primary, #2563eb);
+>   color: var(--color-text, #ffffff);
+> }
 > ```
 >
-> **Explanation:** `setProperty()` modifies live DOM CSS custom variables dynamically in runtime.
+> #### Technical Explanation
+>
+> 1. **`var()` Fallback Parameter**: The second argument inside `var(name, fallback)` specifies a fallback default value used if the custom property is missing.
+> 2. **Component Library Safety**: Prevents broken invisible components when custom theme variables are omitted in project configurations.
+> 3. **Nested Fallbacks**: Supports nested fallbacks (`var(--a, var(--b, red))`).
 > 
+---
+
+### Exercise 3: Context-Aware Property Overrides via CSS Variable Inheritance
+
+**Scenario:** Demonstrates how CSS variables inherit and update contextually within nested DOM structures.
+
+**Requirements:**
+1. Demonstrate variable scoping inside `.dark-section`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .section {
+>   --card-bg: #ffffff;
+>   --card-text: #1e293b;
+> }
+>
+> .section--dark {
+>   --card-bg: #0f172a;
+>   --card-text: #f8fafc;
+> }
+>
+> /* Cards inside .section--dark automatically adopt dark theme variables! */
+> .card {
+>   background-color: var(--card-bg);
+>   color: var(--card-text);
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Contextual Variable Inheritance**: Nested components inherit CSS variable values from their nearest ancestor container.
+> 2. **Zero Component Duplication**: Cards render correctly in light or dark sections without writing separate `.section--dark .card` rules.
+> 3. **Architectural Elegance**: The cleanest pattern for building complex design systems.
 ## 6. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Overwriting variables inside media queries for responsive layouts.
 - [`:root` Pseudo-class](root_pseudo_class.md) — The global scope selector where custom properties are declared.

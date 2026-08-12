@@ -116,60 +116,108 @@ button:focus-visible {
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Active Input
+### Exercise 1: Accessible Focus Ring Styles using :focus-visible without Mouse Ring Pollution
 
-**Problem:** You have a text `<input>` field. When the user clicks into the field to start typing, you want the background to turn light yellow. Which pseudo-class do you use?
+**Scenario:** An author implements accessible focus rings using `:focus-visible` to show focus indicators ONLY for keyboard navigation users.
 
-**Expected output:**
+**Requirements:**
+1. Remove default outline on `:focus`.
+2. Apply high-contrast `outline: 3px solid #2563eb` on `:focus-visible`.
+
 > [!check]- Answer
-> ```text
-> `:focus`! 
-> `input:focus { background-color: lightyellow; }`
-> When they click away (losing focus), it will revert to white.
-> ```
-> - Is the user just moving their mouse over it, or are they actively interacting with it?
-> 
----
-
-
-
-### Exercise 2: Accessible Focus-Visible Pattern
-
-**Problem:** Write CSS applying custom 3px solid blue focus ring with 2px offset ONLY when focused via keyboard (`:focus-visible`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> button:focus-visible { outline: 3px solid blue; outline-offset: 2px; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> button:focus-visible {
->   outline: 3px solid blue;
+> /* Remove default browser focus outline ONLY when focus-visible is supported */
+> .btn-action:focus {
+>   outline: none;
+> }
+>
+> /* Keyboard Focus Ring: Appears ONLY when user navigates via Tab key! */
+> .btn-action:focus-visible {
+>   outline: 3px solid #2563eb;
 >   outline-offset: 2px;
 > }
-> ```
 >
-> **Explanation:** `:focus-visible` triggers focus outlines for keyboard navigation while suppressing them on mouse clicks.
-> 
----
-
-### Exercise 3: Hover Touch Screen Caveat
-
-**Problem:** Why can `:hover` styles cause sticky hover bugs on mobile touchscreen devices?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Mobile touchscreens tap triggers hover state and retains it until user taps another element.
-> ```
-> ```css
-> @media (hover: hover) {
->   button:hover { background: blue; } /* Applies hover only on devices supporting true mouse hover */
+> /* Mouse Hover Accent */
+> .btn-action:hover {
+>   background-color: #1d4ed8;
 > }
 > ```
 >
-> **Explanation:** `@media (hover: hover)` prevents sticky hover states on mobile touchscreens.
+> #### Technical Explanation
+>
+> 1. **The `:focus-visible` Pseudo-Class**: Applies focus styles ONLY when the browser determines focus was initiated via keyboard navigation (Tab key).
+> 2. **Eliminating Mouse Focus Rings**: Prevents ugly focus rings from appearing on mouse clicks, keeping visual designs clean for mouse users.
+> 3. **WCAG 2.1 SC 2.4.7 (Focus Visible)**: Mandatory accessibility pseudo-class; NEVER set `outline: none` without providing a `:focus-visible` replacement!
 > 
+---
+
+### Exercise 2: Smooth Hover Elevation Transitions on Interactive Cards
+
+**Scenario:** Styles interactive card elevation lift effects on `:hover`.
+
+**Requirements:**
+1. Apply `transform: translateY(-4px)` and `box-shadow` on `:hover`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .interactive-card {
+>   background-color: #ffffff;
+>   border: 1px solid #e2e8f0;
+>   border-radius: 0.5rem;
+>   padding: 1.5rem;
+>   transition: transform 0.2s ease, box-shadow 0.2s ease;
+> }
+>
+> .interactive-card:hover {
+>   transform: translateY(-0.25rem);
+>   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `:hover` Pseudo-Class**: Triggers styles when a mouse pointer hovers over an interactive element.
+> 2. **Tactile Lift Feedback**: Combining subtle negative Y translation (`translateY(-0.25rem)`) with elevated shadow reinforces interactivity.
+> 3. **Transition Requirement**: Always pair `:hover` state changes with CSS `transition` for smooth animations.
+> 
+---
+
+### Exercise 3: Combining Hover and Focus States for Parity Compliance
+
+**Scenario:** Combines `:hover` and `:focus-visible` rules to ensure keyboard users receive identical interactive feedback.
+
+**Requirements:**
+1. Apply shared selector `.btn-nav:hover, .btn-nav:focus-visible`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .btn-nav {
+>   color: #475569;
+>   text-decoration: none;
+>   transition: color 0.15s ease;
+> }
+>
+> .btn-nav:hover,
+> .btn-nav:focus-visible {
+>   color: #2563eb;               /* Identical visual feedback for mouse AND keyboard users */
+>   text-decoration: underline;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Interaction Parity**: Guarantees keyboard users receive the exact same visual cues as mouse hover users.
+> 2. **Keyboard Focus Accessibility**: Helps motor-impaired and keyboard-only users navigate interface lists.
+> 3. **Clean Shared Selectors**: Reduces stylesheet duplication by grouping `:hover` and `:focus-visible`.
 ## 6. Related Terms
 - [`transition`](../level_10/transition.md) — Making state adjustments smooth and animated.
 - [`cursor`](cursor.md) — Changing pointer graphics on hover states.

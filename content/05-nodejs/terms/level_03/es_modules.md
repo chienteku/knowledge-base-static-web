@@ -95,59 +95,153 @@ const { dynamicFn } = cjsPkg;
 
 ## 5. Practice Exercises
 
-### Exercise 1: Enabling ESM in Node
+### Exercise 1: Dynamic ESM Interoperability Module Loader
 
-**Problem:** By default, if you try to use `import` in a `.js` file, Node.js will crash and tell you "Cannot use import statement outside a module". How do you tell Node.js to use the new ES Modules system instead of the legacy CommonJS system?
+**Scenario:** An API server loads ES Modules dynamically using `import()` from a CommonJS context, wrapping errors for unsupported specifiers.
 
-**Expected output:**
+**Requirements:**
+1. Write loadEsmDynamic(specifier, mockImportFn).
+2. Invoke dynamic import().
+3. Return module namespace object.
+
 > [!check]- Answer
-> ```text
-> You must open your `package.json` file and add the following line:
-> "type": "module"
-> 
-> This single line tells Node.js: "Stop using legacy CommonJS. Treat all my .js files as modern ES Modules."
-> ```
-> - Which central configuration file controls the settings for your entire Node project?
-> 
----
-
-
-
-### Exercise 2: Enabling ES Modules via package.json
-
-**Problem:** What key-value pair in `package.json` enables native ES Module mode (`.js` treated as ESM) across a project?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> type: module
-> ```
-> ```json
-> {
->   "type": "module"
-> }
-> ```
 >
-> **Explanation:** `"type": "module"` configures Node.js to interpret `.js` files as ES Modules.
-> 
----
-
-### Exercise 3: Top-Level Await in ES Modules
-
-**Problem:** Can `await` be used at the top-level of an ES Module outside an `async` function in Node.js? (Yes/No).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Yes (Top-Level Await is natively supported in ES Modules).
-> ```
+> #### Implementation
+>
 > ```javascript
-> const res = await fetch('https://api.example.com/data');
-> const data = await res.json();
+> async function loadEsmDynamic(specifier, mockImportFn) {
+>   if (!specifier || typeof specifier !== "string") {
+>     throw new TypeError("Specifier must be a non-empty string");
+>   }
+>
+>   const importFn = mockImportFn || ((s) => import(s));
+>
+>   try {
+>     const moduleNamespace = await importFn(specifier);
+>     return {
+>       success: true,
+>       namespace: moduleNamespace,
+>       hasDefault: "default" in moduleNamespace
+>     };
+>   } catch (err) {
+>     return {
+>       success: false,
+>       error: err.message
+>     };
+>   }
+> }
+>
+> // Verification tests
+> const mockImport = async (s) => ({
+>   default: () => "ESM Default Export",
+>   namedFunc: () => "ESM Named Export"
+> });
+>
+> loadEsmDynamic("./math.mjs", mockImport).then(res => {
+>   console.assert(res.success === true, "Test 1 Failed");
+>   console.assert(res.hasDefault === true, "Test 2 Failed");
+>   console.assert(res.namespace.namedFunc() === "ESM Named Export", "Test 3 Failed");
+> });
 > ```
 >
-> **Explanation:** ES Modules support Top-Level Await natively without wrapping code in `(async () => {})()`.
+> #### Technical Explanation
+>
+> 1. **Dynamic import() Expression**: Asynchronous expression allowing loading ES Modules dynamically from both ESM and CommonJS files.
+> 2. **Module Namespace Object**: Dynamic import resolves to an immutable namespace object containing named exports and `default`.
+> 3. **CJS to ESM Interop**: CommonJS CANNOT use static `import` statements, but CAN use dynamic `import()` promises.
 > 
+---
+
+### Exercise 2: ESM import.meta.url Path Resolver for __dirname
+
+**Scenario:** Emulates CommonJS `__dirname` and `__filename` globals inside ES Modules using `import.meta.url` and `fileURLToPath`.
+
+**Requirements:**
+1. Write resolveEsmMetaPaths(importMetaUrl, mockPathLib, mockUrlLib).
+2. Convert `file://` URL to absolute OS path.
+3. Extract directory path.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function resolveEsmMetaPaths(importMetaUrl, mockPathLib, mockUrlLib) {
+>   const pathLib = mockPathLib || require("path");
+>   const urlLib = mockUrlLib || require("url");
+>
+>   // Convert file:// URL to OS path (e.g. file:///app/main.js -> /app/main.js)
+>   const __filename = urlLib.fileURLToPath(importMetaUrl);
+>   const __dirname = pathLib.dirname(__filename);
+>
+>   return {
+>     __filename,
+>     __dirname
+>   };
+> }
+>
+> // Verification tests
+> const mockUrl = {
+>   fileURLToPath: (urlStr) => urlStr.replace("file://", "")
+> };
+> const mockPath = {
+>   dirname: (p) => p.substring(0, p.lastIndexOf("/"))
+> };
+>
+> const res = resolveEsmMetaPaths("file:///var/app/index.js", mockPath, mockUrl);
+> console.assert(res.__filename === "/var/app/index.js", "Test 1 Failed");
+> console.assert(res.__dirname === "/var/app", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Missing Globals in ESM**: ES Modules do NOT have `__dirname`, `__filename`, `require`, or `module` global variables.
+> 2. **import.meta.url Metadata**: `import.meta` contains module metadata; `import.meta.url` returns the absolute `file://` URL of the current file.
+> 3. **fileURLToPath Conversion**: `url.fileURLToPath(import.meta.url)` translates file URLs into native OS directory paths.
+> 
+---
+
+### Exercise 3: ESM Live Bindings Simulator
+
+**Scenario:** Demonstrates ES Module live bindings where exported variables update dynamically in consumer modules when changed by producer.
+
+**Requirements:**
+1. Write createEsmLiveBindingModule().
+2. Expose getValue() and increment().
+3. Verify live binding behavior.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createEsmLiveBindingModule() {
+>   let counter = 0;
+>
+>   return {
+>     // ESM exports are LIVE BINDINGS (read-only views of exported values)
+>     get counter() {
+>       return counter;
+>     },
+>     increment() {
+>       counter++;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const esmModule = createEsmLiveBindingModule();
+>
+> console.assert(esmModule.counter === 0, "Test 1 Failed: Initial value 0");
+> esmModule.increment();
+> console.assert(esmModule.counter === 1, "Test 2 Failed: Live binding reflects updated value 1");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **ESM Live Bindings**: ESM exports are immutable live references; when exporter mutates value, importer sees updated value automatically.
+> 2. **CJS Value Copy Contrast**: CommonJS exports values by copy at require time; mutating exported variables does NOT update imported references.
+> 3. **Static Analysis Advantage**: ESM imports are read-only views statically validated by V8 before code execution.
 ## 6. Related Terms
 - [CommonJS (require, module.exports)](commonjs.md) — The legacy system that ESM is slowly replacing.
 - [package.json](../level_04/package_json.md) — Where you configure Node to use `"type": "module"`.

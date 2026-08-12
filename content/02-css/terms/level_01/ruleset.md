@@ -139,60 +139,97 @@ div {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Syntax Dissection
+### Exercise 1: Constructing a Clean CSS Ruleset for UI Components
 
-**Problem:** In the following line of CSS, what is `margin`?
-`margin: 20px;`
+**Scenario:** An engineer constructs a well-structured CSS ruleset targeting a product card component.
 
-**Expected output:**
+**Requirements:**
+1. Write a valid ruleset with selector `.product-card`.
+2. Include declaration block enclosed in `{}`.
+3. Add property-value declarations ending with `;`.
+
 > [!check]- Answer
-> ```text
-> `margin` is the Property. (`20px` is the Value. Together they form a Declaration).
-> ```
-> - The left side of the colon is the "what", the right side is the "how much".
-> 
----
-
-
-
-### Exercise 2: Deconstructing CSS Ruleset Parts
-
-**Problem:** Identify the 3 parts of `.title { color: red; }`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Selector: .title
-> 2. Property: color
-> 3. Value: red
-> ```
-> ```text
-> 1. Selector: .title
-> 2. Property: color
-> 3. Value: red
-> ```
 >
-> **Explanation:** A ruleset consists of a selector and a declaration block `{ property: value; }`.
-> 
----
-
-### Exercise 3: Grouping Multiple Selectors
-
-**Problem:** Write a grouped CSS ruleset setting `color: green` on `<h1>`, `<h2>`, and `.highlight` simultaneously.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> h1, h2, .highlight { color: green; }
-> ```
+> #### Implementation
+>
 > ```css
-> h1, h2, .highlight {
->   color: green;
+> /* Complete CSS Ruleset Architecture */
+> .product-card {
+>   background-color: #ffffff;    /* Declaration: Property & Value */
+>   border: 1px solid #e2e8f0;
+>   border-radius: 0.5rem;
+>   padding: 1.5rem;
+>   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 > }
 > ```
 >
-> **Explanation:** Comma-separated selectors apply a single declaration block to multiple targets.
+> #### Technical Explanation
+>
+> 1. **CSS Ruleset Anatomy**: A complete CSS ruleset consists of a Selector (`.product-card`) followed by a Declaration Block enclosed in curly braces `{}`.
+> 2. **Declaration Structure**: Each declaration inside the block consists of a Property (`padding`), a colon `:`, a Value (`1.5rem`), and a semicolon `;`.
+> 3. **Semicolon Syntax Mandate**: Every CSS declaration MUST end with a semicolon to prevent parsing syntax errors in subsequent rules.
 > 
+---
+
+### Exercise 2: Multi-Selector Grouping for Shared Typography Styles
+
+**Scenario:** Groups multiple heading selectors into a single ruleset to share margin and font settings.
+
+**Requirements:**
+1. Group `h1, h2, h3` selectors separated by commas.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Grouped Selector Ruleset */
+> h1, h2, h3, .heading-title {
+>   color: #0f172a;
+>   font-family: system-ui, sans-serif;
+>   line-height: 1.25;
+>   margin-bottom: 0.75rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Comma-Separated Selectors**: Commas `,` allow a single declaration block to target multiple distinct selectors simultaneously.
+> 2. **DRY Principle**: Eliminates duplicate code across related heading elements.
+> 3. **Rule Isolation**: If one selector in a comma-separated list is invalid, older browsers may invalidate the entire ruleset.
+> 
+---
+
+### Exercise 3: Component Modifier Rulesets for Dark Theme Variants
+
+**Scenario:** Applies BEM modifier rulesets to customize card component appearances.
+
+**Requirements:**
+1. Create modifier ruleset `.product-card--dark`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Base Component Ruleset */
+> .product-card {
+>   background-color: #ffffff;
+>   color: #1e293b;
+> }
+>
+> /* Modifier Ruleset */
+> .product-card--dark {
+>   background-color: #0f172a;
+>   color: #f8fafc;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **BEM Naming Structure**: Uses Block (`.product-card`) and Modifier (`.--dark`) rulesets for modular CSS.
+> 2. **Cascade Specificity Balance**: Both rulesets share equal class specificity (0,1,0), allowing modifiers listed later in the file to override base styles.
+> 3. **Clean Visual Variants**: Enables dark mode theme variants cleanly.
 ## 6. Related Terms
 - [Selectors (Element, Class, ID)](selectors.md) — The first part of the ruleset.
 - [The Cascade](the_cascade.md) — How the browser decides which ruleset wins if two rulesets conflict.

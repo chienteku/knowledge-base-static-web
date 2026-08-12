@@ -214,73 +214,100 @@ Vertical snap layout:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Landing Presentation Slide Deck
+### Exercise 1: Horizontal Image Carousel with scroll-snap-type and scroll-snap-align
 
-**Problem:** Build a full-screen vertical slide deck. The parent wrapper `.deck` covers the whole viewport (`100vw` by `100vh`) and snaps vertically. Each child section `.deck-slide` matches the viewport size and snaps its top edge to the top of the container. Write the CSS.
+**Scenario:** An author builds a touch-friendly horizontal card carousel using CSS Scroll Snap.
 
-**Expected output:**
+**Requirements:**
+1. Apply `scroll-snap-type: x mandatory` to parent container.
+2. Apply `scroll-snap-align: center` to carousel cards.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .deck {
->   width: 100vw;
->   height: 100vh;
->   overflow-y: scroll;
->   scroll-snap-type: y mandatory;
-> }
-> 
-> .deck-slide {
->   width: 100vw;
->   height: 100vh;
->   scroll-snap-align: start;
-> }
-> ```
-> - Set parent overflow-y and scroll-snap directions.
-> - Configure child alignments to match structural boundaries.
-> 
----
-
-
-
-### Exercise 2: Horizontal Image Carousel Scroll Snap Pattern
-
-**Problem:** Write CSS for `.carousel` (parent) and `.slide` (children) creating smooth horizontal scroll snap alignment.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; } .slide { flex: 0 0 100%; scroll-snap-align: start; }
-> ```
-> ```css
-> .carousel {
+> .carousel-container {
 >   display: flex;
 >   overflow-x: auto;
+>   gap: 1rem;
+>   padding: 1rem;
+>   /* Scroll Snap Container: Horizontal snap mandatory */
 >   scroll-snap-type: x mandatory;
+>   -webkit-overflow-scrolling: touch;
 > }
-> .slide {
->   flex: 0 0 100%;
+>
+> .carousel-card {
+>   flex: 0 0 18rem;
+>   /* Scroll Snap Item: Snaps to center of viewport */
+>   scroll-snap-align: center;
+>   background-color: #ffffff;
+>   border-radius: 0.5rem;
+>   padding: 1.5rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `scroll-snap-type` Property**: Enables snap points on a scroll container (`x mandatory`, `y proximity`).
+> 2. **`scroll-snap-align: center`**: Specifies where each child card aligns relative to the scroll container when snapping finishes (`start`, `center`, `end`).
+> 3. **Zero JavaScript Carousel**: Delivers native 60fps touch swipe carousels without downloading heavy JavaScript carousel libraries.
+> 
+---
+
+### Exercise 2: Vertical Full-Page Section Scrolling with scroll-snap-type: y proximity
+
+**Scenario:** Styles full-page section snapping using `scroll-snap-type: y proximity`.
+
+**Requirements:**
+1. Apply `scroll-snap-type: y proximity` to `html`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> html {
+>   scroll-snap-type: y proximity;/* Vertical snapping when close to section top */
+> }
+>
+> .fullscreen-section {
+>   min-height: 100vh;
 >   scroll-snap-align: start;
 > }
 > ```
 >
-> **Explanation:** Combining parent `scroll-snap-type` and child `scroll-snap-align` builds zero-JS touch carousels.
+> #### Technical Explanation
+>
+> 1. **`mandatory` vs `proximity`**: `mandatory` forces snapping on every scroll stop; `proximity` snaps ONLY when the user scrolls near a snap point, allowing freer scrolling.
+> 2. **Full-Page Presentation Sections**: Ideal for product presentation landing pages.
+> 3. **Native Browser Physics**: Preserves native device scrolling momentum and physics.
 > 
 ---
 
-### Exercise 3: mandatory vs proximity Snap Strictness
+### Exercise 3: Scroll Padding Adjustments for Fixed Navigation Headers
 
-**Problem:** Compare `scroll-snap-type: x mandatory` vs `scroll-snap-type: x proximity`.
+**Scenario:** Fixes sticky header content clipping during scroll snapping using `scroll-padding-top`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `scroll-padding-top: 5rem` to scroll container.
+
 > [!check]- Answer
-> ```text
-> mandatory forces scroll landing on a snap point strictly; proximity snaps ONLY when scrolling close to a snap point.
-> ```
-> ```text
-> mandatory forces scroll landing on a snap point strictly; proximity snaps ONLY when scrolling close to a snap point.
+>
+> #### Implementation
+>
+> ```css
+> html {
+>   scroll-snap-type: y mandatory;
+>   scroll-padding-top: 5rem;     /* Prevents 5rem fixed header from obscuring snapped section headers! */
+> }
 > ```
 >
-> **Explanation:** `mandatory` enforces strict snap points; `proximity` allows free scrolling until near points.
-> 
+> #### Technical Explanation
+>
+> 1. **The `scroll-padding-top` Property**: Defines an offset margin for scroll snap alignment points.
+> 2. **Fixed Header Protection**: Prevents fixed top navigation bars from covering snapped content headlines.
+> 3. **Essential Snap Adjustment**: Mandatory pattern when pairing fixed headers with scroll snap.
 ## 6. Related Terms
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The parent scrolling trigger.
 

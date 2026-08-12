@@ -198,64 +198,88 @@ img.logo { filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)); } /* Traces PNG 
 
 ## 5. Practice Exercises
 
-### Exercise 1: PNG Icon Glow
+### Exercise 1: Image Card Hover Effects using Graphical Filters
 
-**Problem:** You are building a game dashboard UI. You have a transparent PNG icon of a flame. When the user hovers over the icon, you want to create a glowing red shadow effect around the exact outline of the flame shape. Write the `:hover` ruleset.
+**Scenario:** An author styles an image gallery card that transitions from grayscale to vibrant color on hover using `filter`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `filter: grayscale(100%)` to default state.
+2. Transition `filter: grayscale(0%) brightness(1.1)` on hover.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .flame-icon:hover {
->   filter: drop-shadow(0px 0px 12px rgba(255, 0, 0, 0.8));
+> .gallery-thumb {
+>   width: 100%;
+>   border-radius: 0.5rem;
+>   filter: grayscale(100%);     /* Converts image to black and white */
+>   transition: filter 0.3s ease;
 > }
-> ```
-> - Avoid using `box-shadow` because the icon container is rectangular.
-> - Apply the shadow function designed for custom outlines.
-> 
----
-
-
-
-### Exercise 2: Image Grayscale Hover Pattern
-
-**Problem:** Write CSS for `.gallery-img` starting at `filter: grayscale(100%)`, transitioning to `filter: grayscale(0%)` on hover.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .gallery-img { filter: grayscale(100%); transition: filter 0.3s; } .gallery-img:hover { filter: grayscale(0%); }
-> ```
-> ```css
-> .gallery-img {
->   filter: grayscale(100%);
->   transition: filter 0.3s;
-> }
-> .gallery-img:hover {
->   filter: grayscale(0%);
+>
+> .gallery-thumb:hover {
+>   filter: grayscale(0%) brightness(1.1); /* Restores full color and slightly brightens */
 > }
 > ```
 >
-> **Explanation:** `filter: grayscale()` transforms image color channels.
+> #### Technical Explanation
+>
+> 1. **The `filter` Property**: Applies graphical effects like blur, color shift, contrast, or grayscale to an element box before rendering.
+> 2. **Chaining Filter Functions**: Multiple filter functions can be chained in a single declaration (e.g. `grayscale(0%) brightness(1.1)`).
+> 3. **Hardware Accelerated**: CSS graphical filters run on the GPU, providing smooth 60fps hover transitions.
 > 
 ---
 
-### Exercise 3: Chaining Multiple Filter Functions
+### Exercise 2: Dark Mode Icon Inversion via filter: invert
 
-**Problem:** Write `filter` rule combining `contrast(120%)` and `brightness(90%)`.
+**Scenario:** Inverts black SVG icons to white for dark mode themes using `filter: invert(1)`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `filter: invert(1)` in dark mode theme selector.
+
 > [!check]- Answer
-> ```text
-> filter: contrast(120%) brightness(90%);
-> ```
+>
+> #### Implementation
+>
 > ```css
-> img {
->   filter: contrast(120%) brightness(90%);
+> /* Dark Mode Theme Rule for Legacy Monochrome SVGs */
+> [data-theme="dark"] .monochrome-icon {
+>   filter: invert(1) hue-rotate(180deg); /* Flips dark SVG icons to light mode */
 > }
 > ```
 >
-> **Explanation:** Multiple filter functions are chained space-separated in a single declaration.
+> #### Technical Explanation
+>
+> 1. **`filter: invert(1)`**: Inverts image colors (0 = original, 1 = 100% inverted black-to-white/white-to-black).
+> 2. **`hue-rotate(180deg)`**: Rotates color hue wheel to preserve original brand color tone after inversion.
+> 3. **Theme Utility**: Eliminates the need to load separate dark-mode SVG image assets.
 > 
+---
+
+### Exercise 3: Drop Shadows for Transparent Vector SVGs using filter: drop-shadow
+
+**Scenario:** Applies accurate outline drop shadows to non-rectangular transparent PNGs and SVGs.
+
+**Requirements:**
+1. Apply `filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2))`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .transparent-logo-svg {
+>   /* Fits shadow strictly around the graphic's transparent SVG pixel paths! */
+>   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`filter: drop-shadow()` vs `box-shadow`**: `box-shadow` draws a rectangular shadow around the element's bounding box; `filter: drop-shadow()` draws a shadow around the EXACT alpha pixels of transparent SVGs and PNGs!
+> 2. **Transparent Graphic Precision**: Essential for applying realistic shadows to custom vector icons and cut-out logo artwork.
+> 3. **Zero Rectangular Halos**: Prevents ugly square shadow boxes around rounded vector graphics.
 ## 6. Related Terms
 - [`box-shadow` (Card Shadows)](box_shadow.md) — The rectangular alternative.
 - [`backdrop-filter`](backdrop_filter.md) — Applying filters behind an element.

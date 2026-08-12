@@ -142,78 +142,157 @@ console.log('Sync 1');
 
 ## 5. Practice Exercises
 
-### Exercise 1: Order of Execution
+### Exercise 1: Maximum Call Stack Size Exceeded Defense via Trampoline Function
 
-**Problem:** Predict the exact logging output order of the following script:
+**Scenario:** A recursive data transformation utility converts deep tree nodes, wrapping recursive calls in a trampoline function to prevent `RangeError: Maximum call stack size exceeded`.
 
-```javascript
-console.log("A");
+**Requirements:**
+1. Write trampoline(fn).
+2. Write recursiveTreeSearch(node, targetId).
+3. Execute using trampoline to keep Call Stack depth at O(1).
 
-setTimeout(() => {
-  console.log("B");
-}, 0);
-
-console.log("C");
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> A
-> C
-> B
-> ```
-> - `console.log("A")` and `"C"` run synchronously. Even though `setTimeout` has a delay of `0`ms, its callback is placed in the macrotask queue. It must wait until the main stack is empty.
-> 
----
-
-
-
-### Exercise 2: Tracing Call Stack Execution Order
-
-**Problem:** Predict the exact console output sequence for:
-```javascript
-function first() { console.log('A'); second(); console.log('B'); }
-function second() { console.log('C'); }
-first();
-```
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> A
-> C
-> B
-> ```
-> ```text
-> A
-> C
-> B
-> ```
 >
-> **Explanation:** `first()` logs 'A', calls `second()` which logs 'C' and pops off stack, then `first()` resumes and logs 'B'.
-> 
----
-
-### Exercise 3: Preventing Stack Overflow with Asynchronous Deferral
-
-**Problem:** How can `setImmediate` or `process.nextTick` prevent stack overflow in deep recursive processing loops?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> By deferring the next recursive iteration to the Event Loop, allowing the current call stack frame to pop off completely.
-> ```
+> #### Implementation
+>
 > ```javascript
-> function processChunk(n) {
->   if (n <= 0) return;
->   setImmediate(() => processChunk(n - 1)); // Clears Call Stack every iteration
+> function trampoline(fn) {
+>   return function (...args) {
+>     let result = fn(...args);
+>     while (typeof result === "function") {
+>       result = result();
+>     }
+>     return result;
+>   };
 > }
-> processChunk(1000000);
+>
+> function findDeepNode(node, targetId) {
+>   if (!node) return null;
+>   if (node.id === targetId) return node;
+>
+>   if (node.next) {
+>     return () => findDeepNode(node.next, targetId);
+>   }
+>   return null;
+> }
+>
+> // Verification tests
+> let root = { id: 1, next: null };
+> let current = root;
+> for (let i = 2; i <= 10000; i++) {
+>   current.next = { id: i, next: null };
+>   current = current.next;
+> }
+>
+> const safeSearch = trampoline(findDeepNode);
+> const found = safeSearch(root, 10000);
+>
+> console.assert(found !== null && found.id === 10000, "Test 1 Failed: Must find node 10000 without stack overflow");
 > ```
 >
-> **Explanation:** `setImmediate` queues callback on event loop, unwinding the V8 stack on each recursion step.
+> #### Technical Explanation
+>
+> 1. **Call Stack Mechanics**: The V8 engine maintains a stack of active execution contexts (function frames); depth is limited (~10,000 frames).
+> 2. **Stack Overflow (RangeError)**: Exceeding call stack depth throws RangeError: Maximum call stack size exceeded.
+> 3. **Trampolining Pattern**: Converts recursive calls into a while loop of returning zero-argument functions (thunks), keeping stack depth at 1.
 > 
+---
+
+### Exercise 2: Stack Trace Sanitizer & Frame Filter
+
+**Scenario:** An error logging middleware sanitizes V8 stack traces, filtering out internal `node:internal` frames before logging errors to external APM services.
+
+**Requirements:**
+1. Write sanitizeStackTrace(errorObject).
+2. Split error.stack into lines.
+3. Filter out lines containing node:internal or node_modules.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function sanitizeStackTrace(errorObject) {
+>   if (!errorObject || !errorObject.stack) {
+>     return { message: errorObject?.message || "Unknown error", stackLines: [] };
+>   }
+>
+>   const lines = errorObject.stack.split("
+> ");
+>   const cleanedLines = lines.filter(line => {
+>     const isInternal = line.includes("node:internal") || line.includes("internal/process");
+>     return !isInternal;
+>   });
+>
+>   return {
+>     message: errorObject.message,
+>     cleanedStack: cleanedLines.join("
+> "),
+>     appFrameCount: cleanedLines.length - 1
+>   };
+> }
+>
+> // Verification tests
+> const dummyErr = new Error("Database query failed");
+> dummyErr.stack = `Error: Database query failed
+>     at queryUser (/app/services/user.js:42:10)
+>     at processTicksAndRejections (node:internal/process/task_queues:95:5)
+>     at async handleRequest (/app/controllers/user.js:15:5)`;
+>
+> const sanitized = sanitizeStackTrace(dummyErr);
+> console.assert(!sanitized.cleanedStack.includes("node:internal"), "Test 1 Failed: Internal frames must be purged");
+> console.assert(sanitized.appFrameCount === 2, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **V8 Error.stack Property**: Contains formatted string listing active Call Stack frames at the moment error was instantiated.
+> 2. **Noise Reduction**: Filtering Node.js internal frames reduces log volume and highlights application code errors.
+> 3. **Security Hardening**: Prevents leaking server file system paths in public error responses.
+> 
+---
+
+### Exercise 3: Unwinding Recursive Async Tasks with process.nextTick
+
+**Scenario:** A recursive queue processor breaks deep recursion by scheduling iterations via `process.nextTick()`, resetting the V8 Call Stack.
+
+**Requirements:**
+1. Write processQueueAsync(itemsArray, index, callback).
+2. Process item.
+3. Use process.nextTick for recursive step to reset stack.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function processQueueAsync(itemsArray = [], index = 0, onComplete) {
+>   if (index >= itemsArray.length) {
+>     return onComplete(index);
+>   }
+>
+>   const item = itemsArray[index];
+>
+>   process.nextTick(() => {
+>     processQueueAsync(itemsArray, index + 1, onComplete);
+>   });
+> }
+>
+> // Verification tests
+> const items = Array.from({ length: 1000 }, (_, i) => i);
+> let completed = false;
+>
+> processQueueAsync(items, 0, (total) => {
+>   completed = true;
+>   console.assert(total === 1000, "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Stack Unwinding**: Deferring execution via nextTick or setImmediate empties the current Call Stack frame before running next step.
+> 2. **Microtask Queue Execution**: process.nextTick runs callbacks at the end of the current operation before moving to the next Event Loop phase.
+> 3. **Preventing Sync Recursion Crashes**: Ensures processing arbitrarily large lists never triggers a stack overflow.
 ## 6. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The coordinator that pushes callbacks onto the Call Stack once it is empty.
 - [V8 JavaScript Engine](v8_engine.md) — The engine that allocates and runs the Call Stack.

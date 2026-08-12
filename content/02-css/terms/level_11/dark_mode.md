@@ -201,79 +201,105 @@ By structuring your styles this way, the browser swaps every single element's ba
 
 ## 5. Practice Exercises
 
-### Exercise 1: Dark Mode Setup
+### Exercise 1: Theme Token Architecture with CSS Variables for Dark Mode
 
-**Problem:** Declare light-theme variables for background `--bg: #ffffff;` and accent text `--brand: #0077ff;` inside `:root`. Setup the override query for dark mode so that background becomes `#1a1a1a;` and brand text becomes `#00ddff;`. Write the complete variable block.
+**Scenario:** An author structures system color tokens using CSS variables, swapping values for `[data-theme="dark"]`.
 
-**Expected output:**
+**Requirements:**
+1. Define light theme tokens under `:root`.
+2. Define dark theme overrides under `[data-theme="dark"]`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
+> /* Light Theme Token Baseline */
 > :root {
->   --bg: #ffffff;
->   --brand: #0077ff;
+>   --color-bg: #ffffff;
+>   --color-surface: #f8fafc;
+>   --color-text: #0f172a;
+>   --color-border: #e2e8f0;
 > }
-> 
-> @media (prefers-color-scheme: dark) {
->   :root {
->     --bg: #1a1a1a;
->     --brand: #00ddff;
->   }
-> }
-> ```
-> - Define base parameters globally.
-> - Open the media query and override the exact same variable names.
-> 
----
-
-
-
-### Exercise 2: CSS Custom Variable Theme Switcher Pattern
-
-**Problem:** Write CSS variable setup on `:root` for `--bg` and `--color` swapping values when `[data-theme="dark"]` attribute is set.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> :root { --bg: #fff; --color: #000; } [data-theme="dark"] { --bg: #121212; --color: #fff; } body { background: var(--bg); color: var(--color); }
-> ```
-> ```css
-> :root {
->   --bg: #ffffff;
->   --color: #111111;
-> }
+>
+> /* Dark Theme Token Overrides */
 > [data-theme="dark"] {
->   --bg: #121212;
->   --color: #ffffff;
+>   --color-bg: #0f172a;
+>   --color-surface: #1e293b;
+>   --color-text: #f8fafc;
+>   --color-border: #334155;
 > }
+>
 > body {
->   background-color: var(--bg);
->   color: var(--color);
+>   background-color: var(--color-bg);
+>   color: var(--color-text);
+>   transition: background-color 0.3s ease, color 0.3s ease;
 > }
 > ```
 >
-> **Explanation:** Toggling `data-theme="dark"` on `<html>` swaps CSS variable values cleanly.
+> #### Technical Explanation
+>
+> 1. **Theme Token Architecture**: Centralizes color values in CSS variables (`--color-bg`), enabling global theme updates by changing variable tokens.
+> 2. **Data Attribute Selector**: Using `[data-theme="dark"]` allows JavaScript theme toggle buttons to switch themes seamlessly.
+> 3. **Smooth Theme Transitions**: Adding `transition: background-color 0.3s` prevents abrupt color snapping when switching modes.
 > 
 ---
 
-### Exercise 3: System Color Scheme Media Query
+### Exercise 2: OS System Preference Integration via prefers-color-scheme
 
-**Problem:** Write `@media` query detecting OS dark mode preference (`prefers-color-scheme`).
+**Scenario:** Automatically activates dark mode variables based on OS settings using `@media (prefers-color-scheme: dark)`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `@media (prefers-color-scheme: dark)` token overrides.
+
 > [!check]- Answer
-> ```text
-> @media (prefers-color-scheme: dark) { :root { --bg: #121212; } }
-> ```
+>
+> #### Implementation
+>
 > ```css
 > @media (prefers-color-scheme: dark) {
->   :root {
->     --bg: #121212;
+>   :root:not([data-theme="light"]) {
+>     --color-bg: #0f172a;
+>     --color-surface: #1e293b;
+>     --color-text: #f8fafc;
 >   }
 > }
 > ```
 >
-> **Explanation:** `prefers-color-scheme: dark` syncs app themes with operating system preferences.
+> #### Technical Explanation
+>
+> 1. **System Preference Auto-Detection**: Respects user OS preferences automatically.
+> 2. **User Override Support**: Using `:root:not([data-theme="light"])` respects manual user override selections.
+> 3. **WCAG Accessibility**: Guarantees dark mode contrast compliance.
 > 
+---
+
+### Exercise 3: Preventing Flash of Light Theme (FOUT) on Load
+
+**Scenario:** Explains inline script technique to set `data-theme` attribute before DOM render.
+
+**Requirements:**
+1. Demonstrate early script attribute setting.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <head>
+>   <script>
+>     // Early execution script prevents Flash of Light Theme!
+>     const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+>     document.documentElement.setAttribute('data-theme', theme);
+>   </script>
+> </head>
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Flash of Unstyled Theme (FOUT)**: Prevents bright white screen flashes when dark mode users open pages over slow connections.
+> 2. **Early Attribute Binding**: Applies `data-theme` to `<html>` BEFORE CSS parsing begins.
+> 3. **Premium User Experience**: Essential requirement for commercial Web Applications.
 ## 6. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Baseline responsive queries.
 - [`var()` (CSS Custom Properties)](var.md) — Dynamic color variables.

@@ -168,66 +168,174 @@ async function getUser() {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Parallel Optimization
+### Exercise 1: Sequential vs Parallel Async/Await Execution Pipeline
 
-**Problem:** Refactor the sequential loop below to execute requests in parallel using `Promise.all`:
+**Scenario:** An API aggregator compares performance between sequential `await` calls and concurrent `Promise.all()` fetching when retrieving user profile, order history, and preferences.
 
-```javascript
-// Before (Sequential):
-async function getAssets(urls) {
-  const assets = [];
-  for (const url of urls) {
-    assets.push(await fetchAsset(url));
-  }
-  return assets;
-}
-
-// After (Parallel):
-async function getAssetsParallel(urls) {
-  const promises = urls.map(url => fetchAsset(url));
-  return await Promise.all(promises);
-}
-```
-
----
+**Requirements:**
+1. Write fetchUserDataSequential(userId, mockFetchers).
+2. Write fetchUserDataParallel(userId, mockFetchers).
+3. Verify parallel execution completes significantly faster.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Parallelizing Independent Async Requests
-
-**Problem:** Refactor sequential requests `const a = await getA(); const b = await getB();` using `Promise.all`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const [a, b] = await Promise.all([getA(), getB()]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const [a, b] = await Promise.all([getA(), getB()]);
+> async function fetchUserDataSequential(userId, mockFetchers) {
+>   const start = Date.now();
+>   const profile = await mockFetchers.getProfile(userId);
+>   const orders = await mockFetchers.getOrders(userId);
+>   const prefs = await mockFetchers.getPreferences(userId);
+>
+>   return {
+>     data: { profile, orders, prefs },
+>     durationMs: Date.now() - start
+>   };
+> }
+>
+> async function fetchUserDataParallel(userId, mockFetchers) {
+>   const start = Date.now();
+>   const [profile, orders, prefs] = await Promise.all([
+>     mockFetchers.getProfile(userId),
+>     mockFetchers.getOrders(userId),
+>     mockFetchers.getPreferences(userId)
+>   ]);
+>
+>   return {
+>     data: { profile, orders, prefs },
+>     durationMs: Date.now() - start
+>   };
+> }
+>
+> // Verification tests
+> const delay = (ms, val) => new Promise(r => setTimeout(() => r(val), ms));
+> const mockFetchers = {
+>   getProfile: (id) => delay(20, { id, name: "Alice" }),
+>   getOrders: (id) => delay(20, [{ id: 101 }]),
+>   getPreferences: (id) => delay(20, { theme: "dark" })
+> };
+>
+> Promise.all([
+>   fetchUserDataSequential("u1", mockFetchers),
+>   fetchUserDataParallel("u1", mockFetchers)
+> ]).then(([seq, par]) => {
+>   console.assert(seq.durationMs >= 50, "Test 1 Failed: Sequential takes sum of delays (~60ms)");
+>   console.assert(par.durationMs < 40, "Test 2 Failed: Parallel takes max of delays (~20ms)");
+> });
 > ```
 >
-> **Explanation:** `Promise.all` executes independent promises concurrently in parallel.
+> #### Technical Explanation
+>
+> 1. **Sequential Await Waterfall**: Awaiting independent async calls sequentially creates unnecessary network waterfalls.
+> 2. **Promise.all Parallelism**: Promise.all initiates async operations concurrently, resolving when all promises complete.
+> 3. **Performance Optimization**: Always use `Promise.all()` for independent asynchronous network/disk tasks.
 > 
 ---
 
-### Exercise 3: Async Function Return Value
+### Exercise 2: Top-Level Async/Await Wrapper with Exponential Backoff Retry
 
-**Problem:** What data type does an `async function` ALWAYS return, regardless of what value is returned inside?
+**Scenario:** A resilient database connection initializer wraps async operations in a retry loop with exponential backoff on transient errors.
 
-**Expected output:**
+**Requirements:**
+1. Write executeWithAsyncRetry(asyncTaskFn, maxAttempts, mockSleep).
+2. Execute async task.
+3. Catch errors and retry with exponential delay up to maxAttempts.
+
 > [!check]- Answer
-> ```text
-> A Promise object.
-> ```
-> ```text
-> A Promise object.
+>
+> #### Implementation
+>
+> ```javascript
+> async function executeWithAsyncRetry(asyncTaskFn, maxAttempts = 3, mockSleep) {
+>   const sleep = mockSleep || ((ms) => new Promise(r => setTimeout(r, ms)));
+>
+>   let attempt = 0;
+>   while (attempt < maxAttempts) {
+>     try {
+>       return await asyncTaskFn(attempt);
+>     } catch (err) {
+>       attempt++;
+>       if (attempt >= maxAttempts) {
+>         throw err;
+>       }
+>       const backoffMs = Math.pow(2, attempt) * 10;
+>       await sleep(backoffMs);
+>     }
+>   }
+> }
+>
+> // Verification tests
+> let attemptsRan = 0;
+> const mockSleep = async () => {};
+> const flakyTask = async (attempt) => {
+>   attemptsRan++;
+>   if (attemptsRan < 3) throw new Error("Connection failed");
+>   return "CONNECTED";
+> };
+>
+> executeWithAsyncRetry(flakyTask, 3, mockSleep).then(res => {
+>   console.assert(res === "CONNECTED", "Test 1 Failed");
+>   console.assert(attemptsRan === 3, "Test 2 Failed: Retried 3 times");
+> });
 > ```
 >
-> **Explanation:** Marking a function `async` automatically wraps the returned value in a resolving Promise.
+> #### Technical Explanation
+>
+> 1. **Async/Await Error Handling**: Use standard `try...catch` blocks to catch rejected Promises in async functions.
+> 2. **Exponential Backoff**: Increases delay between retries (`2^attempt * baseMs`) to avoid hammering failing backend services.
+> 3. **Clean Asynchronous Control Flow**: Async/await syntax converts complex promise chaining into readable synchronous-looking code.
 > 
+---
+
+### Exercise 3: Async Generator Stream Data Aggregator
+
+**Scenario:** A file parser processes large data streams using ES2018 Async Generators (`for await...of`).
+
+**Requirements:**
+1. Write processAsyncStream(asyncIterable).
+2. Iterate items using `for await...of`.
+3. Sum numeric values.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function processAsyncStream(asyncIterable) {
+>   let totalSum = 0;
+>   let itemCount = 0;
+>
+>   for await (const chunk of asyncIterable) {
+>     totalSum += Number(chunk);
+>     itemCount++;
+>   }
+>
+>   return {
+>     totalSum,
+>     itemCount,
+>     average: itemCount > 0 ? totalSum / itemCount : 0
+>   };
+> }
+>
+> // Verification tests
+> async function* generateData() {
+>   yield 10;
+>   yield 20;
+>   yield 30;
+> }
+>
+> processAsyncStream(generateData()).then(res => {
+>   console.assert(res.totalSum === 60, "Test 1 Failed: Sum must be 60");
+>   console.assert(res.average === 20, "Test 2 Failed: Average must be 20");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Async Generators (`async function*`)**: Functions yielding Promises or async values on demand.
+> 2. **`for await...of` Loop**: Iterates over async iterables (ReadableStreams, Async Generators) sequentially yielding values as they arrive.
+> 3. **Memory Efficient Streaming**: Processes data chunks as they stream without buffering complete datasets in memory.
 ## 6. Related Terms
 - [Unhandled Promise Rejections](unhandled_rejections.md) — The errors triggered if you fail to handle async await exceptions.
 - [Async Error Handling (try/catch + .catch)](async_error_handling.md) — The mechanisms used to capture errors during await.

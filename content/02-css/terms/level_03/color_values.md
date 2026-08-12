@@ -199,62 +199,99 @@ div { color: #ff0000; } /* Valid 6-digit hex color */
 
 ## 5. Practice Exercises
 
-### Exercise 1: Format Translation
+### Exercise 1: Defining HSL and OKLCH Accessible Color Palettes
 
-**Problem:** Convert the following RGB color to its exact equivalent HEX code:
-`rgb(255, 255, 0)`
+**Scenario:** An engineer defines system color tokens using modern HSL and OKLCH color functional notation.
 
-**Expected output:**
+**Requirements:**
+1. Define primary color using `hsl(221, 83%, 53%)`.
+2. Define accent color using `oklch(0.6 0.25 250)`.
+3. Define background color.
+
 > [!check]- Answer
-> ```text
-> #ffff00 (Red is max/ff, Green is max/ff, Blue is zero/00). Can be shortened to #ff0.
-> ```
-> - Translate the number 255 into hexadecimal base-16 (it becomes `ff`).
-> - Translate 0 into hexadecimal (it becomes `00`).
-> 
----
-
-
-
-### Exercise 2: Modern Color Syntax Conversions
-
-**Problem:** Write red color with 50% transparency using:
-1. 8-digit Hex (`#ff000080`)
-2. Modern `rgb()` space-separated syntax (`rgb(255 0 0 / 0.5)`)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. #ff000080
-> 2. rgb(255 0 0 / 0.5)
-> ```
-> ```css
-> .color-hex { color: #ff000080; }
-> .color-rgb { color: rgb(255 0 0 / 0.5); }
-> ```
 >
-> **Explanation:** Modern CSS supports 8-digit hex (#RRGGBBAA) and space-separated `/ alpha` notation.
-> 
----
-
-### Exercise 3: currentColor Keyword Function
-
-**Problem:** What value does the `currentColor` CSS keyword resolve to?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Resolves to the computed value of the element's current CSS `color` property.
-> ```
+> #### Implementation
+>
 > ```css
-> button {
->   color: blue;
->   border: 2px solid currentColor; /* Border uses blue color */
+> :root {
+>   /* HSL Color Function: Hue (0-360), Saturation (0-100%), Lightness (0-100%) */
+>   --color-primary: hsl(221, 83%, 53%);
+>   --color-primary-dark: hsl(221, 83%, 40%);
+>
+>   /* OKLCH Color Function: Lightness (0-1), Chroma (0-0.4), Hue (0-360) */
+>   --color-accent: oklch(0.65 0.2 140);
+>
+>   --color-surface: #ffffff;
+> }
+>
+> .btn-primary {
+>   background-color: var(--color-primary);
+>   color: #ffffff;
+> }
+>
+> .btn-primary:hover {
+>   background-color: var(--color-primary-dark);
 > }
 > ```
 >
-> **Explanation:** `currentColor` inherits computed text color for borders and SVG fills.
+> #### Technical Explanation
+>
+> 1. **HSL Color Model**: HSL (Hue, Saturation, Lightness) makes creating color shades intuitive: tweaking Lightness creates dark/light hover variants easily.
+> 2. **OKLCH Color Space**: OKLCH is a modern wide-gamut perceptual color space providing uniform human brightness perceptions across hues.
+> 3. **Design System Tokens**: Storing HSL/OKLCH color values in CSS custom properties enables instant global theme updates.
 > 
+---
+
+### Exercise 2: Modern Semi-Transparent Alpha Color Syntax
+
+**Scenario:** Applies modern CSS Color Module Level 4 slash syntax for semi-transparent overlay backgrounds.
+
+**Requirements:**
+1. Apply `rgb(15 23 42 / 0.8)` or `hsl(210 100% 50% / 0.5)` background.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .modal-overlay {
+>   /* Modern Space-Separated Syntax with Alpha Slash */
+>   background-color: rgb(15 23 42 / 0.75);     /* 75% opacity dark backdrop */
+>   backdrop-filter: blur(4px);
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Modern Alpha Slash Syntax**: Modern CSS uses space separation with a slash `/` for alpha transparency (e.g. `rgb(15 23 42 / 0.8)`).
+> 2. **Replacing Legacy `rgba()`**: Replaces legacy comma-separated `rgba(15, 23, 42, 0.8)` syntax cleanly.
+> 3. **Backdrop Blur Integration**: Combines semi-transparent alpha colors with `backdrop-filter` for modern glassmorphism UI.
+> 
+---
+
+### Exercise 3: Contrast Ratio Verification for WCAG 2.1 AA Compliance
+
+**Scenario:** Verifies color combinations meet minimum 4.5:1 text contrast ratios.
+
+**Requirements:**
+1. Pair `#0f172a` text with `#ffffff` background.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .accessible-card {
+>   background-color: #ffffff;
+>   color: #0f172a;               /* High-contrast dark slate text (15.5:1 ratio!) */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **WCAG 2.1 SC 1.4.3 (Contrast)**: Standard body text MUST maintain a minimum color contrast ratio of 4.5:1 against its background.
+> 2. **Large Text Exception**: Large text (18pt / 24px or bold 14pt / 19px) requires a minimum 3:1 contrast ratio.
+> 3. **Colorblind Accessibility**: Never rely solely on color to convey state; pair color choices with text labels or icons.
 ## 6. Related Terms
 - [`color` vs `background-color`](color_vs_background.md) — The parent properties using these colors.
 - [`opacity`](../level_09/opacity.md) — The alternative way to manage element transparency.

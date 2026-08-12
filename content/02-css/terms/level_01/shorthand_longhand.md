@@ -204,62 +204,102 @@ padding: 10px 20px 30px 40px;
 
 ## 5. Practice Exercises
 
-### Exercise 1: Shorthand Conversion
+### Exercise 1: Refactoring Repetitive Longhand Box-Model Declarations to Clean Shorthand
 
-**Problem:** Compress these four longhand declarations into a single, optimized shorthand declaration:
+**Scenario:** An engineer refactors repetitive longhand margin and padding rules into clean CSS shorthand properties.
 
-```css
-.card {
-  padding-top: 10px;
-  padding-bottom: 20px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-```
+**Requirements:**
+1. Refactor `margin-top`, `margin-right`, `margin-bottom`, `margin-left` into `margin` shorthand.
+2. Use `rem` units.
+3. Set 2-value vs 4-value shorthand.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
+> /* ❌ Repetitive Longhand Syntax:
 > .card {
->   padding: 10px 5px 20px;
+>   margin-top: 1.5rem;
+>   margin-right: 1rem;
+>   margin-bottom: 1.5rem;
+>   margin-left: 1rem;
+>   padding-top: 2rem;
+>   padding-bottom: 2rem;
+> }
+> */
+>
+> /* ✅ Clean Shorthand Property Refactoring: */
+> .card {
+>   /* 2-Value Shorthand: top/bottom | left/right */
+>   margin: 1.5rem 1rem;
+>
+>   /* 1-Value Shorthand: all 4 sides equal */
+>   padding: 2rem;
+>
+>   /* 4-Value Shorthand (Clockwise: Top, Right, Bottom, Left) */
+>   border-width: 2px 1px 2px 1px;
 > }
 > ```
-> - The left and right values are identical (`5px`).
-> - This maps to the 3-value shorthand syntax: `top` `left-and-right` `bottom`.
-> 
----
-
-### Exercise 2: Shorthand Expansion Value Count Matrix
-
-**Problem:** Expand `margin` shorthands:
-1. `margin: 10px;` 
-2. `margin: 10px 20px;` 
-3. `margin: 10px 20px 30px;` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. 1 value: Top/Right/Bottom/Left all 10px
-> 2. 2 values: Top/Bottom 10px; Right/Left 20px
-> 3. 3 values: Top 10px; Right/Left 20px; Bottom 30px
-> ```
 >
-> **Explanation:** CSS shorthand value expansion rules infer symmetric side dimensions.
+> #### Technical Explanation
+>
+> 1. **Shorthand Properties**: CSS properties (like `margin`, `padding`, `border`, `font`) that allow setting multiple longhand values in a single declaration.
+> 2. **Clockwise Value Rule**: 4-value shorthands follow top-right-bottom-left order (TRBL / Clockwise).
+> 3. **Conciseness vs Explicit Overrides**: Shorthand reduces stylesheet file size; use explicit longhand (`margin-bottom: 1rem`) when updating single sides.
 > 
 ---
 
-### Exercise 3: Border Shorthand Order
+### Exercise 2: Managing Font Shorthand Risks vs Explicit Longhand Typography Properties
 
-**Problem:** Write CSS `border` shorthand for 2px solid red border.
+**Scenario:** Demonstrates font shorthand syntax and warns against accidental property resets.
 
-**Expected output:**
+**Requirements:**
+1. Use `font: italic bold 1rem/1.5 sans-serif;` shorthand.
+2. Explain mandatory size and family rules.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> border: 2px solid red;
+> .hero-title {
+>   /* Font Shorthand: style weight size/line-height family */
+>   font: semi-bold 2.25rem/1.25 system-ui, sans-serif;
+> }
 > ```
 >
-> **Explanation:** `border` shorthand combines width, style, and color.
+> #### Technical Explanation
+>
+> 1. **Font Shorthand Mandatory Rules**: The `font` shorthand MUST contain BOTH `font-size` and `font-family`; omitting them invalidates the declaration.
+> 2. **Accidental Reset Danger**: Font shorthand resets unassigned properties (`font-style`, `font-variant`) back to `initial` defaults!
+> 3. **Safer Longhand Pattern**: Use longhand `font-size` and `font-family` when only modifying specific typography properties.
 > 
+---
+
+### Exercise 3: Flexbox Shorthand vs Longhand Properties
+
+**Scenario:** Uses `flex: 1 1 20rem` shorthand for responsive flex items.
+
+**Requirements:**
+1. Apply `flex: 1 1 20rem` shorthand (grow, shrink, basis).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .card-item {
+>   /* Flex Shorthand: flex-grow | flex-shrink | flex-basis */
+>   flex: 1 1 20rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Flex Shorthand (`flex`)**: Combines `flex-grow`, `flex-shrink`, and `flex-basis` into one clean declaration.
+> 2. **Flex Basis Role**: `20rem` establishes the ideal initial size before distributing remaining space.
+> 3. **W3C Recommended Practice**: The CSS Flexible Box specification strongly recommends using the `flex` shorthand over individual longhand properties.
 ## 6. Related Terms
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The wrapper syntax.
 - [Margin](../level_02/margin.md) — The outer spacing box utilizing shorthand properties.

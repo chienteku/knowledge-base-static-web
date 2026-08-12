@@ -106,57 +106,100 @@ a {
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Invisible Center
+### Exercise 1: Aligning Text Blocks and Logical Alignment
 
-**Problem:** You write a paragraph: `<p style="text-align: center;">Hello</p>`. You test it, but the word "Hello" is sitting perfectly on the left side of the screen. Why didn't it center?
+**Scenario:** An author aligns card headers and body paragraphs using `text-align` and logical `text-align: start`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `text-align: center` to card header.
+2. Apply `text-align: start` for RTL/LTR internationalization.
+
 > [!check]- Answer
-> ```text
-> The `<p>` container is probably only exactly as wide as the word "Hello" (maybe due to Flexbox or inline display). If the box is exactly the size of the word, there is no empty space for the word to slide into! `text-align: center` only works if the container is wider than the text.
-> ```
-> - If you stand inside a closet that is exactly as wide as your shoulders, can you step to the "center" of the room?
-> 
----
-
-
-
-### Exercise 2: Modern Text Decoration Shorthand
-
-**Problem:** Write CSS `text-decoration` shorthand applying wavy red underline with 2px thickness to `.error-link`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .error-link { text-decoration: underline wavy red 2px; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .error-link {
->   text-decoration: underline wavy red 2px;
+> .card-header {
+>   text-align: center;           /* Centers heading and subtitle text */
+> }
+>
+> .card-body {
+>   text-align: start;            /* Logical left in LTR, right in RTL */
 > }
 > ```
 >
-> **Explanation:** Modern `text-decoration` combines line type, style, color, and thickness.
+> #### Technical Explanation
+>
+> 1. **The `text-align` Property**: Controls the horizontal alignment of inline content inside a block container.
+> 2. **Logical `text-align: start`**: `start` aligns text to the left in LTR languages (English) and to the right in RTL languages (Arabic/Hebrew).
+> 3. **Justify Caution**: Avoid `text-align: justify` on web text, as it creates uneven whitespace rivers that impair readability for dyslexic users.
 > 
 ---
 
-### Exercise 3: Removing Default Anchor Underlines
+### Exercise 2: Modern Underline Styling using text-decoration Properties
 
-**Problem:** Write CSS rule removing default underline decoration from `<a>` anchor tags.
+**Scenario:** Styles accessible hyperlink underlines using modern `text-decoration-color`, `thickness`, and `offset`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `text-decoration-line: underline`.
+2. Set `text-decoration-color`, `text-decoration-thickness: 2px`, and `text-underline-offset: 4px`.
+
 > [!check]- Answer
-> ```text
-> a { text-decoration: none; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> a {
->   text-decoration: none;
+> .custom-link {
+>   color: #2563eb;
+>   text-decoration-line: underline;
+>   text-decoration-color: #93c5fd;
+>   text-decoration-thickness: 2px;
+>   text-underline-offset: 4px;   /* Pushes underline below font descenders */
+>   transition: text-decoration-color 0.2s ease;
+> }
+>
+> .custom-link:hover {
+>   text-decoration-color: #2563eb;
 > }
 > ```
 >
-> **Explanation:** `text-decoration: none` removes default hyperlink underlines.
+> #### Technical Explanation
+>
+> 1. **`text-underline-offset`**: Pushes the underline link stroke away from the text baseline, preventing it from clipping font descenders (like 'g' and 'p').
+> 2. **`text-decoration-thickness`**: Controls underline stroke weight without using pseudo-element border hacks.
+> 3. **Color Disambiguation**: Using a lighter underline color (`#93c5fd`) retains link visibility while keeping text clean.
 > 
+---
+
+### Exercise 3: Removing Default Hyperlink Underlines Safely
+
+**Scenario:** Removes default link underlines ONLY when alternative visual indicators and focus rings exist.
+
+**Requirements:**
+1. Remove underline on specific nav link, preserving hover and `:focus-visible`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .nav-link {
+>   color: #334155;
+>   text-decoration: none;        /* Removes default underline inside navigation bar */
+>   padding: 0.5rem 1rem;
+> }
+>
+> .nav-link:hover, .nav-link:focus-visible {
+>   color: #2563eb;
+>   text-decoration: underline;    /* Restores underline on hover/focus */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Accessibility Warning**: Do NOT remove link underlines in body text unless links are distinguished by 3:1 color contrast AND hover/focus indicators!
+> 2. **Nav Exemption**: Removing underlines inside obvious header navigation bars is acceptable because layout context implies interactivity.
+> 3. **Keyboard Focus Indicator**: Always restore underlines or focus rings on `:focus-visible`.
 ## 6. Related Terms
 - [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — The display type that `text-align` affects.
 - [Margin](../level_02/margin.md) — The spacing property used to center boxes rather than inline text.

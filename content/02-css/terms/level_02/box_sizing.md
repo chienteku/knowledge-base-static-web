@@ -109,60 +109,94 @@ div {
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Math Problem
+### Exercise 1: Global Universal box-sizing: border-box Reset
 
-**Problem:** You have a `<div>` with `width: 400px;`, `padding: 25px;`, and `border: 5px solid black;`. 
-If you are using `box-sizing: content-box` (the default), what is the total width? 
-If you are using `box-sizing: border-box` (the modern way), what is the total width?
+**Scenario:** An author applies the universal `box-sizing: border-box` inheritance reset across all HTML elements.
 
-**Expected output:**
+**Requirements:**
+1. Apply global `border-box` reset to `*`, `*::before`, `*::after`.
+2. Set `html { box-sizing: border-box; }`.
+
 > [!check]- Answer
-> ```text
-> Default (`content-box`): 460px (400 + 25 + 25 + 5 + 5)
-> Modern (`border-box`): 400px (The browser forces the total size to equal the width you set).
-> ```
-> - Does `border-box` grow the box, or shrink the content inside?
-> 
----
-
-
-
-### Exercise 2: Universal Border-Box Reset Snippet
-
-**Problem:** Write universal CSS reset selector applying `box-sizing: border-box` to all elements and pseudo-elements.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> *, *::before, *::after { box-sizing: border-box; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> *, *::before, *::after {
+> /* Universal Box-Sizing Reset Architecture */
+> html {
 >   box-sizing: border-box;
+> }
+>
+> *, *::before, *::after {
+>   box-sizing: inherit;          /* Preserves component-level override capability */
 > }
 > ```
 >
-> **Explanation:** Universal `border-box` reset guarantees predictable box-model width calculations.
+> #### Technical Explanation
+>
+> 1. **The `box-sizing` Property**: Controls how browser layout engines calculate the total width and height of HTML elements.
+> 2. **`border-box` Gospel**: `border-box` includes padding and borders INSIDE the element's specified width and height, making layout math completely predictable.
+> 3. **Inheritance Pattern**: Using `box-sizing: inherit` on `*` allows third-party widgets to override their box-sizing model locally if needed.
 > 
 ---
 
-### Exercise 3: Content-Box vs Border-Box Width Formula
+### Exercise 2: Comparing content-box vs border-box Layout Math in Form Inputs
 
-**Problem:** For `width: 200px; padding: 20px; border: 5px solid;`: calculate total rendered element width in `content-box` vs `border-box`.
+**Scenario:** Demonstrates why `content-box` causes multi-column grid alignment failures.
 
-**Expected output:**
+**Requirements:**
+1. Compare 50% width columns in `content-box` vs `border-box`.
+
 > [!check]- Answer
-> ```text
-> content-box width: 250px (200 + 40 + 10)
-> border-box width: 200px (content shrinks to 150px)
-> ```
-> ```text
-> content-box width: 250px (200 + 40 + 10)
-> border-box width: 200px (content shrinks to 150px)
+>
+> #### Implementation
+>
+> ```css
+> /* ❌ content-box: 50% + padding (1.5rem) + border (2px) > 50% -> WRAPS ILL-OGICALLY! */
+> .col-legacy {
+>   box-sizing: content-box;
+>   width: 50%;
+>   padding: 1.5rem;
+> }
+>
+> /* ✅ border-box: Exactly 50% total width -> PERFECT 2-COLUMN GRID! */
+> .col-modern {
+>   box-sizing: border-box;
+>   width: 50%;
+>   padding: 1.5rem;
+> }
 > ```
 >
-> **Explanation:** `border-box` absorbs padding and border into the specified width.
+> #### Technical Explanation
+>
+> 1. **Legacy `content-box` Default**: `content-box` is the historical W3C default where `width` applies ONLY to content, rendering multi-column layouts prone to line-wrapping bugs.
+> 2. **Predictable Grid Columns**: `border-box` guarantees two 50% width columns fit perfectly side-by-side inside a 100% container.
+> 3. **Modern CSS Standard**: Every modern web design framework uses `border-box` as its foundational baseline.
 > 
+---
+
+### Exercise 3: Component-Level Box-Sizing Overrides for Legacy Third-Party Widgets
+
+**Scenario:** Overrides box-sizing locally for embedded legacy third-party map widgets.
+
+**Requirements:**
+1. Apply `box-sizing: content-box` to legacy widget class.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .legacy-map-widget * {
+>   box-sizing: content-box;      /* Restores legacy calculation for older plugin */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Legacy Plugin Compatibility**: Some legacy 3rd-party libraries require `content-box` math to render internal sprite calculations accurately.
+> 2. **Scoped Overrides**: Scoping `content-box` to `.legacy-map-widget *` isolates legacy code without breaking global application layouts.
+> 3. **Maintainable CSS Isolation**: Protects modern component styles from legacy plugin pollution.
 ## 6. Related Terms
 - [The Box Model (Concept)](box_model.md) — The fundamental math system this property modifies.
 - [`overflow` (hidden, scroll, auto, visible)](overflow.md) — How content behaves when forced into constrained borders.

@@ -208,170 +208,121 @@ Alternative layouts:
 /* Deliver responsive asset sources via <picture> tags */
 ```
 
-
-
-### Mistake 4: Writing Desktop Styles First and Overriding with Downward `max-width` Queries (Desktop-First Anti-Pattern)
-
-**The mistake:** Writing complex desktop layout rules first, then attempting to undo styles using `@media (max-width: 768px)`.
-
-**Why it's wrong:** Desktop-first CSS forces mobile devices to download and compute heavy desktop styles before overriding them with max-width queries. Mobile-First (`min-width`) loads lean mobile styles first and layers enhancements.
-
-*Incorrect:*
-```css
-/* Desktop-first: writing heavy desktop styles, overriding for mobile */
-.sidebar { width: 300px; }
-@media (max-width: 768px) { .sidebar { width: 100%; } }
-```
-
-*Fix:*
-```css
-/* Mobile-first: base mobile styles first, enhancing for desktop */
-.sidebar { width: 100%; }
-@media (min-width: 768px) { .sidebar { width: 300px; } }
-```
-
-### Mistake 5: Hiding Heavy Desktop DOM Sections on Mobile via `display: none` (Bandwidth Waste)
-
-**The mistake:** Loading 10 high-resolution desktop images in DOM and hiding them on mobile using `display: none`.
-
-**Why it's wrong:** `display: none` hides elements visually, but the browser STILL downloads image files over mobile network connections. Use `<picture>` or `srcset`.
-
-*Incorrect:*
-```css
-/* Hiding heavy desktop DOM nodes on mobile via CSS */
-@media (max-width: 768px) { .desktop-carousel { display: none; } }
-```
-
-*Fix:*
-```css
-/* Deliver responsive asset sources via <picture> tags */
-```
-
-
-
-### Mistake 6: Writing Desktop Styles First and Overriding with Downward `max-width` Queries (Desktop-First Anti-Pattern)
-
-**The mistake:** Writing complex desktop layout rules first, then attempting to undo styles using `@media (max-width: 768px)`.
-
-**Why it's wrong:** Desktop-first CSS forces mobile devices to download and compute heavy desktop styles before overriding them with max-width queries. Mobile-First (`min-width`) loads lean mobile styles first and layers enhancements.
-
-*Incorrect:*
-```css
-/* Desktop-first: writing heavy desktop styles, overriding for mobile */
-.sidebar { width: 300px; }
-@media (max-width: 768px) { .sidebar { width: 100%; } }
-```
-
-*Fix:*
-```css
-/* Mobile-first: base mobile styles first, enhancing for desktop */
-.sidebar { width: 100%; }
-@media (min-width: 768px) { .sidebar { width: 300px; } }
-```
-
-### Mistake 7: Hiding Heavy Desktop DOM Sections on Mobile via `display: none` (Bandwidth Waste)
-
-**The mistake:** Loading 10 high-resolution desktop images in DOM and hiding them on mobile using `display: none`.
-
-**Why it's wrong:** `display: none` hides elements visually, but the browser STILL downloads image files over mobile network connections. Use `<picture>` or `srcset`.
-
-*Incorrect:*
-```css
-/* Hiding heavy desktop DOM nodes on mobile via CSS */
-@media (max-width: 768px) { .desktop-carousel { display: none; } }
-```
-
-*Fix:*
-```css
-/* Deliver responsive asset sources via <picture> tags */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Desktop-First Refactor
+### Exercise 1: Constructing Mobile-First Base Styles with Progressive Enhancements
 
-**Problem:** Convert the following desktop-first code snippet into a mobile-first progressive enhancement layout:
+**Scenario:** An author builds a mobile-first navigation component with a single-column layout by default, enhancing to horizontal layout on desktop.
 
-```css
-/* Desktop First */
-.menu {
-  float: right;
-  width: 300px;
-}
-@media (max-width: 600px) {
-  .menu {
-    float: none;
-    width: 100%;
-  }
-}
-```
+**Requirements:**
+1. Define mobile base styles without media queries.
+2. Add `@media (min-width: 48rem)` for desktop progressive enhancement.
 
-**Expected output:**
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> /* Mobile First */
-> .menu {
->   width: 100%;
-> }
-> @media (min-width: 601px) {
->   .menu {
->     float: right;
->     width: 300px;
->   }
-> }
-> ```
-> - The mobile layout is simple (`width: 100%`). Make this the default ruleset.
-> - Introduce the float complexity inside a `min-width` media query threshold.
-> 
----
-
-
-
-### Exercise 2: Mobile-First Layout Layering
-
-**Problem:** Write mobile-first CSS for `.nav`: 1 column vertical stack by default, switching to horizontal row at `min-width: 768px`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .nav { display: flex; flex-direction: column; } @media (min-width: 768px) { .nav { flex-direction: row; } }
-> ```
-> ```css
-> /* Mobile base */
-> .nav {
+> /* 1. Mobile Base Styles (Default for small screens, zero media query overhead) */
+> .nav-menu {
 >   display: flex;
->   flex-direction: column;
+>   flex-direction: column;       /* Mobile: Vertical list stack */
+>   gap: 1rem;
+>   padding: 1rem;
+>   background-color: #ffffff;
 > }
-> 
-> /* Tablet/Desktop enhancement */
-> @media (min-width: 768px) {
->   .nav {
->     flex-direction: row;
+>
+> /* 2. Progressive Enhancement (Desktop viewports >= 48rem) */
+> @media (min-width: 48rem) {
+>   .nav-menu {
+>     flex-direction: row;        /* Desktop: Horizontal link bar */
+>     align-items: center;
+>     justify-content: space-between;
 >   }
 > }
 > ```
 >
-> **Explanation:** Mobile-first architecture writes clean mobile base styles enhanced via `min-width` queries.
+> #### Technical Explanation
+>
+> 1. **Mobile-First Philosophy**: Designing baseline CSS for narrow mobile screens first, using `min-width` media queries to layer on complex desktop enhancements.
+> 2. **Performance Optimization**: Mobile devices parse simpler baseline CSS rules without evaluating complex desktop layout overrides or large background images.
+> 3. **Progressive Enhancement**: Guarantees full site functionality on small screens before adding multi-column enhancements.
 > 
 ---
 
-### Exercise 3: Mobile-First Architecture Advantage
+### Exercise 2: Refactoring Legacy Desktop-First max-width CSS to Mobile-First
 
-**Problem:** Name 2 core technical advantages of Mobile-First CSS design.
+**Scenario:** Refactors legacy desktop-first `max-width` CSS rules into modern mobile-first `min-width` architecture.
 
-**Expected output:**
+**Requirements:**
+1. Convert `max-width: 768px` overrides to `min-width: 48rem` progressive rules.
+
 > [!check]- Answer
-> ```text
-> 1. Faster mobile performance (lean initial CSS payload)
-> 2. Simplicity (easier to scale up simple mobile layouts than scale down desktop layouts)
-> ```
-> ```text
-> 1. Faster mobile performance (lean initial CSS payload)
-> 2. Simplicity (easier to scale up simple mobile layouts than scale down desktop layouts)
+>
+> #### Implementation
+>
+> ```css
+> /* ❌ Legacy Desktop-First (Anti-Pattern):
+> .card { display: flex; flex-direction: row; }
+> @media (max-width: 768px) {
+>   .card { flex-direction: column; }
+> } 
+> */
+>
+> /* ✅ Modern Mobile-First Architecture: */
+> .card {
+>   display: flex;
+>   flex-direction: column;       /* Mobile baseline */
+> }
+>
+> @media (min-width: 48rem) {
+>   .card {
+>     flex-direction: row;        /* Desktop enhancement */
+>   }
+> }
 > ```
 >
-> **Explanation:** Mobile-first prioritizes mobile performance and progressive enhancement.
+> #### Technical Explanation
+>
+> 1. **Desktop-First Pitfalls**: Desktop-first (`max-width`) forces mobile devices to download complex desktop CSS before undoing rules with overrides.
+> 2. **Reduced Specificity Wars**: Mobile-first CSS minimizes property undoing (`display: block` overriding `display: flex`), reducing stylesheet specificity bugs.
+> 3. **Maintainability**: Aligns CSS architecture directly with modern responsive design principles.
 > 
+---
+
+### Exercise 3: Mobile-First Performance Gains: Bandwidth and Payload Reduction
+
+**Scenario:** Demonstrates loading lightweight mobile assets first and downloading heavy hero images only on desktop viewports.
+
+**Requirements:**
+1. Load heavy desktop background image inside `@media (min-width: 64rem)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Mobile: Lightweight solid color surface */
+> .hero-header {
+>   background-color: #0f172a;
+>   padding: 2rem 1rem;
+> }
+>
+> /* Desktop: Download heavy hero background image ONLY on large viewports */
+> @media (min-width: 64rem) {
+>   .hero-header {
+>     background-image: url("../images/hero-desktop-large.jpg");
+>     background-size: cover;
+>     padding: 6rem 2rem;
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Mobile Payload Optimization**: Mobile devices do NOT download the `hero-desktop-large.jpg` asset over cellular networks, saving megabytes of bandwidth!
+> 2. **Core Web Vitals Boost**: Significantly improves LCP (Largest Contentful Paint) and FCP scores on mobile devices.
+> 3. **Resource Efficiency**: Serves appropriate media assets matching device capability.
 ## 6. Related Terms
 - [`@media` (Media Queries Basics)](media_queries.md) — The query container.
 - [Responsive Design (Concept)](responsive_design.md) — The core philosophy.

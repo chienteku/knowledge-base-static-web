@@ -168,138 +168,98 @@ grid-template-columns: 50% 1fr 1fr;
 .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 ```
 
-
-
-### Mistake 4: Combining `fr` Fraction Units with Percentage Widths Expecting Simple Addition
-
-**The mistake:** Writing `grid-template-columns: 50% 1fr 1fr;`.
-
-**Why it's wrong:** `fr` fraction units distribute remaining AVAILABLE free space AFTER non-flex items (percentages, pixels) are allocated. Mixing them requires understanding free space calculation.
-
-*Incorrect:*
-```css
-/* Expecting 1fr to equal 25% when 50% is set */
-```
-
-*Fix:*
-```css
-/* Understanding 50% is allocated first, leaving 50% free space split 1:1 (25% each) */
-grid-template-columns: 50% 1fr 1fr;
-```
-
-### Mistake 5: Using `1fr` on Grid Items with Long Non-Breaking Text Content (Grid Overflow Trap)
-
-**The mistake:** Creating `grid-template-columns: 1fr 1fr;` where one column contains a long URL or string without `minmax(0, 1fr)`.
-
-**Why it's wrong:** By default, grid items have implicit `min-width: auto` based on content length. Long non-breaking text forces the `1fr` column to expand beyond container bounds. Use `minmax(0, 1fr)`.
-
-*Incorrect:*
-```css
-.grid { grid-template-columns: 1fr 1fr; } /* ❌ Expands column on long text! */
-```
-
-*Fix:*
-```css
-.grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-```
-
-
-
-### Mistake 6: Combining `fr` Fraction Units with Percentage Widths Expecting Simple Addition
-
-**The mistake:** Writing `grid-template-columns: 50% 1fr 1fr;`.
-
-**Why it's wrong:** `fr` fraction units distribute remaining AVAILABLE free space AFTER non-flex items (percentages, pixels) are allocated. Mixing them requires understanding free space calculation.
-
-*Incorrect:*
-```css
-/* Expecting 1fr to equal 25% when 50% is set */
-```
-
-*Fix:*
-```css
-/* Understanding 50% is allocated first, leaving 50% free space split 1:1 (25% each) */
-grid-template-columns: 50% 1fr 1fr;
-```
-
-### Mistake 7: Using `1fr` on Grid Items with Long Non-Breaking Text Content (Grid Overflow Trap)
-
-**The mistake:** Creating `grid-template-columns: 1fr 1fr;` where one column contains a long URL or string without `minmax(0, 1fr)`.
-
-**Why it's wrong:** By default, grid items have implicit `min-width: auto` based on content length. Long non-breaking text forces the `1fr` column to expand beyond container bounds. Use `minmax(0, 1fr)`.
-
-*Incorrect:*
-```css
-.grid { grid-template-columns: 1fr 1fr; } /* ❌ Expands column on long text! */
-```
-
-*Fix:*
-```css
-.grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Space Math
+### Exercise 1: Proportional Column Division with Fractional Units
 
-**Problem:** A grid container is `900px` wide. 
-The CSS template is: `grid-template-columns: 200px 1fr 2fr; gap: 50px;`
-What is the final width in pixels of the second column (the `1fr` column)?
+**Scenario:** An author divides a dashboard layout into three proportional columns using fractional `fr` units.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: grid` to container.
+2. Define 3 columns with ratio `1fr 2fr 1fr`.
+3. Add `gap: 1.5rem`.
+
 > [!check]- Answer
-> ```text
-> 200px!
-> 1. Start with total container width: 900px.
-> 2. Subtract the fixed column: 900 - 200 = 700px.
-> 3. Subtract the two gaps (each 50px): 700 - 100 = 600px of free space.
-> 4. Total fr units = 3 (1fr + 2fr).
-> 5. Column 2 gets 1 share: 600 / 3 = 200px.
+>
+> #### Implementation
+>
+> ```css
+> .dashboard-grid {
+>   display: grid;
+>   grid-template-columns: 1fr 2fr 1fr;  /* 1:2:1 proportional column ratio */
+>   gap: 1.5rem;
+>   padding: 1.5rem;
+>   background-color: #f8fafc;
+> }
 > ```
-> - Remember to subtract both gap spacings (three columns have two gaps!).
-> - Divide the remaining space by the sum of the `fr` units.
+>
+> #### Technical Explanation
+>
+> 1. **The `fr` (Fractional) Unit**: Represents a fraction of the remaining available free space in a CSS Grid container.
+> 2. **Proportional Ratio Calculation**: `1fr 2fr 1fr` splits free space into 4 total parts (1+2+1=4): columns receive 25%, 50%, and 25% of available space after gaps are subtracted.
+> 3. **Automatic Gap Deduction**: `fr` units automatically subtract explicit `gap` spacing BEFORE calculating column widths, eliminating layout overflow.
 > 
 ---
 
+### Exercise 2: Combining Fixed Units with Fractional fr Units
 
+**Scenario:** Creates a layout with a fixed 18rem sidebar and a fluid remaining content column.
 
-### Exercise 2: Fractional Grid Ratio Calculation
+**Requirements:**
+1. Apply `grid-template-columns: 18rem 1fr`.
 
-**Problem:** For `grid-template-columns: 1fr 2fr 1fr;` in a 1000px container with 0 gap, calculate width of each column.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Col 1: 250px (1/4)
-> Col 2: 500px (2/4)
-> Col 3: 250px (1/4)
-> ```
-> ```text
-> Total fr = 1 + 2 + 1 = 4fr
-> Col 1 = (1/4) * 1000 = 250px
-> Col 2 = (2/4) * 1000 = 500px
-> Col 3 = (1/4) * 1000 = 250px
+>
+> #### Implementation
+>
+> ```css
+> .app-layout {
+>   display: grid;
+>   grid-template-columns: 18rem 1fr;   /* 18rem fixed sidebar + 1fr fluid content */
+>   gap: 2rem;
+>   min-height: 100vh;
+> }
 > ```
 >
-> **Explanation:** `fr` units distribute available free space proportionally.
+> #### Technical Explanation
+>
+> 1. **Mixed Fixed and Fractional Units**: CSS Grid allows mixing fixed units (`18rem`, `300px`) with flexible `fr` units seamlessly.
+> 2. **Remaining Space Calculation**: The browser allocates `18rem` to column 1 first, then assigns 100% of ALL remaining space to the `1fr` column.
+> 3. **Replaces Flexbox Hacks**: Replaces legacy flex calculations (`flex: 1`) with cleaner grid track declarations.
 > 
 ---
 
-### Exercise 3: fr vs Percentage Difference
+### Exercise 3: Preventing Text Content Bloat from Blowing Out 1fr Columns
 
-**Problem:** Why are `fr` units superior to `%` percentages in CSS Grid when using `gap`?
+**Scenario:** Prevents long un-broken text strings from expanding `1fr` columns using `minmax(0, 1fr)`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `grid-template-columns: minmax(0, 1fr) minmax(0, 2fr)`.
+
 > [!check]- Answer
-> ```text
-> fr units automatically subtract gap spacing BEFORE allocating fractions, preventing row overflow.
-> ```
-> ```text
-> fr units automatically subtract gap spacing BEFORE allocating fractions, preventing row overflow.
+>
+> #### Implementation
+>
+> ```css
+> .safe-grid {
+>   display: grid;
+>   /* minmax(0, 1fr) forces columns to shrink below content size if necessary */
+>   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+>   gap: 1.5rem;
+> }
+>
+> .safe-grid p {
+>   white-space: nowrap;
+>   overflow: hidden;
+>   text-overflow: ellipsis;
+> }
 > ```
 >
-> **Explanation:** `fr` units handle layout gap math automatically.
-> 
+> #### Technical Explanation
+>
+> 1. **`1fr` Minimum Content Size Pitfall**: By default, a `1fr` grid track has an implicit minimum size of `auto` (`minmax(auto, 1fr)`), causing wide text or images to blow out column widths!
+> 2. **The `minmax(0, 1fr)` Safeguard**: Using `minmax(0, 1fr)` allows the column to shrink to 0 width, enabling proper text truncation (`text-overflow: ellipsis`).
+> 3. **Defensive CSS Grid Design**: Essential pattern when rendering dynamic user data inside grid columns.
 ## 6. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint.
 - [`minmax()` Function](grid_minmax.md) — A function commonly used with `fr` units to set sizing caps.

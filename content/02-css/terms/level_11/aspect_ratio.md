@@ -198,66 +198,96 @@ Alternative layouts:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Square Profile Grid
+### Exercise 1: 16:9 Video Embed Card Container with aspect-ratio
 
-**Problem:** You are building a user grid. Each profile card `.profile` must be fluid in width to fit different grid columns, but must always remain a perfect square shape (`1:1`). Write the CSS ruleset.
+**Scenario:** An author builds a responsive video card container that maintains a strict 16:9 ratio using `aspect-ratio: 16 / 9`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `aspect-ratio: 16 / 9`.
+2. Set `width: 100%`.
+3. Apply `object-fit: cover` to inner video/image.
+
 > [!check]- Answer
-> ```css
-> .profile {
->   width: 100%;
->   height: auto;
->   aspect-ratio: 1 / 1;
-> }
-> ```
-> - The card needs a fluid width (`100%`).
-> - Force the height to compute dynamically relative to the aspect ratio equation.
-> 
----
-
-
-
-### Exercise 2: Square Avatar and 16:9 Video Aspect Ratios
-
-**Problem:** Write CSS `aspect-ratio` declarations for:
-1. Square profile avatar `.avatar` (`1 / 1`)
-2. Widescreen video `.video` (`16 / 9`)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. .avatar { aspect-ratio: 1 / 1; }
-> 2. .video { aspect-ratio: 16 / 9; }
-> ```
-> ```css
-> .avatar { aspect-ratio: 1 / 1; }
-> .video { aspect-ratio: 16 / 9; }
-> ```
 >
-> **Explanation:** `aspect-ratio: width / height` enforces box proportions dynamically.
-> 
----
-
-### Exercise 3: Preventing Image Distortion with aspect-ratio
-
-**Problem:** Which property should be paired with `aspect-ratio` on `<img>` tags to prevent image stretching or distortion?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> object-fit: cover;
-> ```
+> #### Implementation
+>
 > ```css
-> img {
+> .video-card-container {
 >   width: 100%;
->   aspect-ratio: 16 / 9;
->   object-fit: cover; /* Crop image to fit aspect-ratio without distortion */
+>   aspect-ratio: 16 / 9;         /* Enforces 16:9 widescreen ratio natively */
+>   background-color: #0f172a;
+>   border-radius: 0.5rem;
+>   overflow: hidden;
+> }
+>
+> .video-card-container iframe,
+> .video-card-container img {
+>   width: 100%;
+>   height: 100%;
+>   object-fit: cover;
 > }
 > ```
 >
-> **Explanation:** `object-fit: cover` pairs with `aspect-ratio` to prevent image distortion.
+> #### Technical Explanation
+>
+> 1. **The `aspect-ratio` Property**: Enforces a target width-to-height ratio for an element box (`16 / 9`, `1 / 1`, `4 / 3`).
+> 2. **Eliminating Padding Hacks**: Replaces legacy `padding-top: 56.25%` aspect ratio hacks completely with a clean single-line declaration.
+> 3. **CLS (Cumulative Layout Shift) Prevention**: Reserves the exact vertical layout space before media assets finish loading over the network.
 > 
+---
+
+### Exercise 2: 1:1 Square User Avatar Framing with aspect-ratio and object-fit
+
+**Scenario:** Ensures user profile photos remain perfectly square using `aspect-ratio: 1 / 1`.
+
+**Requirements:**
+1. Apply `aspect-ratio: 1 / 1` and `object-fit: cover`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .avatar-square {
+>   width: 4rem;
+>   aspect-ratio: 1 / 1;          /* Guarantees 1:1 perfect square aspect ratio */
+>   object-fit: cover;
+>   border-radius: 0.5rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Square Component Guarantee**: `aspect-ratio: 1 / 1` ensures height automatically matches width, even if image assets are rectangular.
+> 2. **`object-fit: cover` Pairing**: Prevents user avatar photos from stretching or squishing.
+> 3. **Flexible Layout Adaptation**: Simplifies multi-size avatar component variants.
+> 
+---
+
+### Exercise 3: Eliminating Cumulative Layout Shift (CLS) in Dynamic Grids
+
+**Scenario:** Prevents page layout shifts while responsive card image grids load.
+
+**Requirements:**
+1. Apply `aspect-ratio: 4 / 3` to card placeholder frames.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .card-media-placeholder {
+>   width: 100%;
+>   aspect-ratio: 4 / 3;          /* Reserves 4:3 layout space before image loads */
+>   background-color: #f1f5f9;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **CLS Core Web Vital Boost**: Reserving aspect ratio space prevents page content from jumping when images load, boosting Core Web Vitals scores.
+> 2. **Placeholder Sizing**: Acts as an instant layout skeleton box prior to image download completion.
+> 3. **Modern Best Practice**: Standard practice for news sites and media galleries.
 ## 6. Related Terms
 - [`object-fit` & `object-position`](../level_09/object_fit.md) — Standard scaling for cropped media contents inside locked boxes.
 

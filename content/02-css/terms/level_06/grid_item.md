@@ -198,133 +198,94 @@ Full-width header placement:
 .parent > .item { grid-column: 1 / -1; }
 ```
 
-
-
-### Mistake 4: Confusing 1-Based Grid Line Numbers with Column Count Indexing
-
-**The mistake:** Writing `grid-column: 1 / 3` expecting to span 3 columns.
-
-**Why it's wrong:** Grid line numbers count the BOUNDARY LINES between columns. `1 / 3` spans from Line 1 to Line 3 (spanning 2 columns). To span 3 columns, use `1 / 4` or `span 3`.
-
-*Incorrect:*
-```css
-/* Expecting to span 3 columns */
-.card { grid-column: 1 / 3; } /* ❌ Spans 2 columns only (Line 1 to Line 3)! */
-```
-
-*Fix:*
-```css
-.card { grid-column: 1 / 4; } /* Or grid-column: span 3; */
-```
-
-### Mistake 5: Applying Grid Item Placement Properties (`grid-column`) to Non-Grid Parent Elements
-
-**The mistake:** Writing `.item { grid-column: 1 / -1; }` on a child inside a `display: block` parent.
-
-**Why it's wrong:** Grid placement properties (`grid-column`, `grid-row`, `grid-area`) function ONLY on direct child items of `display: grid` containers.
-
-*Incorrect:*
-```css
-.item { grid-column: 1 / -1; } /* ❌ Ignored on non-grid child elements! */
-```
-
-*Fix:*
-```css
-.parent { display: grid; }
-.parent > .item { grid-column: 1 / -1; }
-```
-
-
-
-### Mistake 6: Confusing 1-Based Grid Line Numbers with Column Count Indexing
-
-**The mistake:** Writing `grid-column: 1 / 3` expecting to span 3 columns.
-
-**Why it's wrong:** Grid line numbers count the BOUNDARY LINES between columns. `1 / 3` spans from Line 1 to Line 3 (spanning 2 columns). To span 3 columns, use `1 / 4` or `span 3`.
-
-*Incorrect:*
-```css
-/* Expecting to span 3 columns */
-.card { grid-column: 1 / 3; } /* ❌ Spans 2 columns only (Line 1 to Line 3)! */
-```
-
-*Fix:*
-```css
-.card { grid-column: 1 / 4; } /* Or grid-column: span 3; */
-```
-
-### Mistake 7: Applying Grid Item Placement Properties (`grid-column`) to Non-Grid Parent Elements
-
-**The mistake:** Writing `.item { grid-column: 1 / -1; }` on a child inside a `display: block` parent.
-
-**Why it's wrong:** Grid placement properties (`grid-column`, `grid-row`, `grid-area`) function ONLY on direct child items of `display: grid` containers.
-
-*Incorrect:*
-```css
-.item { grid-column: 1 / -1; } /* ❌ Ignored on non-grid child elements! */
-```
-
-*Fix:*
-```css
-.parent { display: grid; }
-.parent > .item { grid-column: 1 / -1; }
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Full-Width Footer
+### Exercise 1: Positioning Grid Items using Explicit Line Numbers
 
-**Problem:** You have a grid container with 12 responsive columns. Write the ruleset for a `.footer` child element so that it always spans the entire width of the grid, regardless of screen resizing.
+**Scenario:** An author places a hero card explicitly across grid lines 1 to 3 using `grid-column` and `grid-row`.
 
-**Expected output:**
+**Requirements:**
+1. Target `.hero-card`.
+2. Set `grid-column: 1 / 3`.
+3. Set `grid-row: 1 / 2`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .footer {
->   grid-column: 1 / -1;
+> .dashboard-grid {
+>   display: grid;
+>   grid-template-columns: repeat(3, 1fr);
+>   gap: 1.5rem;
 > }
-> ```
-> - Remember the negative index shortcut that targets the final grid boundary line.
-> 
----
-
-
-
-### Exercise 2: Full-Width Grid Column Span Pattern
-
-**Problem:** Write CSS `grid-column` shorthand spanning a grid item across all columns from first line to last line.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> grid-column: 1 / -1;
-> ```
-> ```css
-> .full-width {
->   grid-column: 1 / -1;
+>
+> /* Span hero item across first two columns explicitly */
+> .hero-card {
+>   grid-column: 1 / 3;           /* Starts at column line 1, ends at column line 3 */
+>   grid-row: 1 / 2;              /* Starts at row line 1, ends at row line 2 */
+>   background-color: #0f172a;
+>   color: #ffffff;
+>   padding: 2rem;
 > }
 > ```
 >
-> **Explanation:** `1 / -1` spans from line 1 to the final grid line (-1).
+> #### Technical Explanation
+>
+> 1. **Grid Line Numbers**: Grid lines are numbered starting at `1` from the outer start edge of the grid.
+> 2. **The `grid-column` Shorthand**: Combines `grid-column-start` and `grid-column-end` separated by a slash `/` (`1 / 3`).
+> 3. **Overlapping Capabilities**: Multiple grid items can be positioned onto the exact same grid lines, allowing layered z-index overlapping!
 > 
 ---
 
-### Exercise 3: Span Keyword Syntax
+### Exercise 2: Spanning Featured Cards across Multiple Columns with span Keyword
 
-**Problem:** Write `grid-column` syntax starting at column line 2 and spanning 3 columns.
+**Scenario:** Uses the `span` keyword to make a featured card span 2 columns dynamically.
 
-**Expected output:**
+**Requirements:**
+1. Apply `grid-column: span 2` to `.card-featured`.
+
 > [!check]- Answer
-> ```text
-> grid-column: 2 / span 3;
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .span-item {
->   grid-column: 2 / span 3;
+> .card-featured {
+>   grid-column: span 2;          /* Spans across 2 column tracks relative to current position */
 > }
 > ```
 >
-> **Explanation:** `span N` specifies relative track span count.
+> #### Technical Explanation
+>
+> 1. **The `span` Keyword**: Instructs a grid item to span a relative number of tracks (`span 2`) from its current placement line.
+> 2. **Dynamic Auto-Placement**: Works seamlessly with automatic grid item placement algorithms.
+> 3. **Responsive Spanning Overrides**: Can be reset to `grid-column: span 1` on mobile screens via `@media` queries.
 > 
+---
+
+### Exercise 3: Aligning Individual Grid Items with justify-self and align-self
+
+**Scenario:** Aligns a single grid item within its track cell using `justify-self` and `align-self`.
+
+**Requirements:**
+1. Apply `justify-self: end` and `align-self: center`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .action-item {
+>   justify-self: end;            /* Horizontal alignment within its grid cell */
+>   align-self: center;           /* Vertical alignment within its grid cell */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`justify-self`**: Controls horizontal alignment of an individual grid item inside its assigned grid cell (`start`, `end`, `center`, `stretch`).
+> 2. **`align-self`**: Controls vertical alignment of an individual grid item inside its assigned grid cell.
+> 3. **Cell-Level Alignment Precision**: Provides granular 2D alignment control without affecting sibling grid items.
 ## 6. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent coordinate blueprint.
 - [`grid-template-areas`](grid_template_areas.md) — The visual name placement alternative.

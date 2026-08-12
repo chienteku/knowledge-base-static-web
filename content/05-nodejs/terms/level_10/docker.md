@@ -89,65 +89,144 @@ node_modules
 
 ## 5. Practice Exercises
 
-### Exercise 1: Virtual Machines vs Docker
+### Exercise 1: Docker Container Environment Variable Loader & Validator
 
-**Problem:** Before Docker, people used Virtual Machines (VMs) to isolate applications. A VM installs an entire heavy 20GB Windows or Ubuntu Operating System just to run one Node.js app. Why is a Docker Container better than a VM?
+**Scenario:** Validates runtime environment variables supplied to Node.js Docker containers during container startup.
 
-**Expected output:**
+**Requirements:**
+1. Write validateDockerContainerEnv(envObj, requiredKeysArray).
+2. Verify required keys exist.
+3. Return validation status.
+
 > [!check]- Answer
-> ```text
-> Containers are incredibly lightweight. Instead of installing a full 20GB OS, a container shares the host computer's operating system kernel. A Node.js Docker image might only be 100 Megabytes, and it boots up in 1 second instead of 1 minute!
+>
+> #### Implementation
+>
+> ```javascript
+> function validateDockerContainerEnv(envObj = {}, requiredKeysArray = []) {
+>   const missingKeys = [];
+>
+>   for (const key of requiredKeysArray) {
+>     if (!envObj[key] || !String(envObj[key]).trim()) {
+>       missingKeys.push(key);
+>     }
+>   }
+>
+>   return {
+>     isValid: missingKeys.length === 0,
+>     missingKeys,
+>     nodeEnv: envObj.NODE_ENV || "development"
+>   };
+> }
+>
+> // Verification tests
+> const env = { NODE_ENV: "production", PORT: "8080", DB_URL: "postgres://..." };
+> const res = validateDockerContainerEnv(env, ["PORT", "DB_URL", "JWT_SECRET"]);
+>
+> console.assert(res.isValid === false, "Test 1 Failed");
+> console.assert(res.missingKeys.includes("JWT_SECRET"), "Test 2 Failed: Flagged missing JWT_SECRET");
 > ```
-> - Think about size and speed.
+>
+> #### Technical Explanation
+>
+> 1. **Docker Container Configuration**: Docker containers receive environment configurations dynamically via `docker run -e` or K8s ConfigMaps.
+> 2. **Fail-Fast Container Startup**: Validating environment variables at startup prevents silent runtime crashes halfway through execution.
+> 3. **NODE_ENV=production Rule**: Always set `NODE_ENV=production` inside Docker containers to disable verbose dev logs and enable express caching.
 > 
 ---
 
+### Exercise 2: Docker SIGTERM Signal Handling & Graceful Exit
 
+**Scenario:** Attaches a `SIGTERM` signal listener to process object to handle container stop requests issued by Docker (`docker stop`).
 
-### Exercise 2: Multi-Stage Dockerfile Pattern
+**Requirements:**
+1. Write setupDockerSignalHandler(processMock, serverMock).
+2. Listen for `SIGTERM`.
+3. Stop HTTP server cleanly.
 
-**Problem:** Why use multi-stage Docker builds for Node.js applications?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> To separate build steps (TypeScript compilation, devDependencies) from final lean production runtime image.
-> ```
-> ```dockerfile
-> FROM node:18 AS build
-> WORKDIR /app
-> COPY package*.json ./
-> RUN npm ci
-> COPY . .
-> RUN npm run build
 >
-> FROM node:18-alpine AS runner
-> WORKDIR /app
-> COPY --from=build /app/dist ./dist
-> COPY package*.json ./
-> RUN npm ci --omit=dev
-> CMD ["node", "dist/index.js"]
+> #### Implementation
+>
+> ```javascript
+> function setupDockerSignalHandler(processMock, serverMock) {
+>   let isShuttingDown = false;
+>
+>   processMock.on("SIGTERM", () => {
+>     isShuttingDown = true;
+>     if (serverMock && typeof serverMock.close === "function") {
+>       serverMock.close();
+>     }
+>   });
+>
+>   return {
+>     isShuttingDown: () => isShuttingDown
+>   };
+> }
+>
+> // Verification tests
+> const events = {};
+> const mockProc = { on: (e, fn) => { events[e] = fn; } };
+> let serverClosed = false;
+> const mockServer = { close: () => { serverClosed = true; } };
+>
+> const handler = setupDockerSignalHandler(mockProc, mockServer);
+> events["SIGTERM"]();
+>
+> console.assert(handler.isShuttingDown() === true, "Test 1 Failed");
+> console.assert(serverClosed === true, "Test 2 Failed: Closed HTTP server on SIGTERM");
 > ```
 >
-> **Explanation:** Multi-stage builds produce tiny production images containing zero dev dependencies.
+> #### Technical Explanation
+>
+> 1. **Docker `SIGTERM` Signal**: When executing `docker stop`, Docker sends `SIGTERM` to PID 1, waiting 10 seconds before issuing `SIGKILL`.
+> 2. **PID 1 Problem in Containers**: If Node.js runs as PID 1 without an init system (Tini/dumb-init), it does not forward kernel signals unless registered explicitly.
+> 3. **Graceful Container Teardown**: Allows finishing active HTTP requests and closing DB pools before container stops.
 > 
 ---
 
-### Exercise 3: Docker Process Signal Passing (PID 1 Problem)
+### Exercise 3: Docker Container Healthcheck Endpoint
 
-**Problem:** Why use `dumb-init` or Tini as entrypoint in Docker containers running Node.js?
+**Scenario:** Implements a Docker `/healthz` HTTP health check endpoint used by `HEALTHCHECK` instructions in Dockerfiles.
 
-**Expected output:**
+**Requirements:**
+1. Write handleDockerHealthcheck(dbMock, redisMock).
+2. Ping database and Redis.
+3. Return 200 OK if healthy, 503 if degraded.
+
 > [!check]- Answer
-> ```text
-> To act as PID 1 init process, properly forwarding SIGTERM signals to Node for graceful shutdown and reaping zombie processes.
-> ```
-> ```text
-> To act as PID 1 init process, properly forwarding SIGTERM signals to Node for graceful shutdown and reaping zombie processes.
+>
+> #### Implementation
+>
+> ```javascript
+> async function handleDockerHealthcheck(dbMock, redisMock) {
+>   try {
+>     const dbOk = await dbMock.ping();
+>     const redisOk = await redisMock.ping();
+>
+>     if (dbOk && redisOk) {
+>       return { status: 200, body: { status: "UP", db: "CONNECTED", redis: "CONNECTED" } };
+>     }
+>     return { status: 503, body: { status: "DOWN", db: dbOk ? "UP" : "DOWN", redis: redisOk ? "UP" : "DOWN" } };
+>   } catch (err) {
+>     return { status: 503, body: { status: "DOWN", error: err.message } };
+>   }
+> }
+>
+> // Verification tests
+> const db = { ping: async () => true };
+> const redis = { ping: async () => true };
+>
+> handleDockerHealthcheck(db, redis).then(res => {
+>   console.assert(res.status === 200, "Test 1 Failed: Healthy container 200 OK");
+> });
 > ```
 >
-> **Explanation:** Node.js as PID 1 does not handle default kernel signals properly without an init wrapper.
-> 
+> #### Technical Explanation
+>
+> 1. **Dockerfile HEALTHCHECK**: Instructs Docker engine how to test container readiness (e.g. `HEALTHCHECK CMD curl -f http://localhost:8080/healthz`).
+> 2. **Orchestrator Readiness Probes**: Kubernetes uses `/healthz` endpoints for Liveness and Readiness probes.
+> 3. **503 Service Unavailable**: Returning 503 instructs container orchestrator to restart unhealthy container instances.
 ## 6. Related Terms
 - [PM2 (Process Manager)](pm2.md) — While you can use PM2 inside Docker, Docker itself usually handles the "restarting if crashed" logic natively.
 - [Node.js (Runtime Environment)](../level_01/nodejs.md) — The language you are containerizing!

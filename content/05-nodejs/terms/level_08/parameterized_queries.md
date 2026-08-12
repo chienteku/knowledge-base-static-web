@@ -125,59 +125,154 @@ await pgClient.query('SELECT * FROM users WHERE id = $1', [1]); // Correct Postg
 
 ## 5. Practice Exercises
 
-### Exercise 1: Query Refactoring
+### Exercise 1: Parameterized SQL Query Builder
 
-**Problem:** Refactor the vulnerable login verification query below to use a secure parameterized query:
+**Scenario:** Constructs parameterized SQL `SELECT` queries with positional placeholders (`$1`, `$2` for Postgres or `?` for MySQL).
 
-```javascript
-// Before (Vulnerable):
-const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
-db.query(query, callback);
-
-// After (Secure):
-const query = 'SELECT * FROM users WHERE username = $1 AND password = $2';
-db.query(query, [username, password], callback); // PostgreSQL syntax
-```
-
----
+**Requirements:**
+1. Write buildParameterizedSelect(table, filtersObj, placeholderStyle).
+2. Construct SQL string with placeholders.
+3. Return parameterized values array.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Writing Safe Parameterized Query
-
-**Problem:** Convert unsafe query `db.query("SELECT * FROM products WHERE category = '" + cat + "'")` to safe parameterized query.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> db.query('SELECT * FROM products WHERE category = $1', [cat]);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> db.query('SELECT * FROM products WHERE category = $1', [cat]);
+> function buildParameterizedSelect(table, filtersObj = {}, placeholderStyle = "pg") {
+>   const keys = Object.keys(filtersObj);
+>   const values = Object.values(filtersObj);
+>
+>   if (keys.length === 0) {
+>     return { sql: `SELECT * FROM ${table}`, values: [] };
+>   }
+>
+>   const clauses = keys.map((key, idx) => {
+>     const placeholder = placeholderStyle === "pg" ? `$${idx + 1}` : "?";
+>     return `${key} = ${placeholder}`;
+>   });
+>
+>   const sql = `SELECT * FROM ${table} WHERE ${clauses.join(" AND ")}`;
+>   return { sql, values };
+> }
+>
+> // Verification tests
+> const resPg = buildParameterizedSelect("users", { role: "admin", status: "active" }, "pg");
+> console.assert(resPg.sql === "SELECT * FROM users WHERE role = $1 AND status = $2", "Test 1 Failed");
+> console.assert(resPg.values[0] === "admin" && resPg.values[1] === "active", "Test 2 Failed");
+>
+> const resMysql = buildParameterizedSelect("users", { id: 5 }, "mysql");
+> console.assert(resMysql.sql === "SELECT * FROM users WHERE id = ?", "Test 3 Failed");
 > ```
 >
-> **Explanation:** Parameterized queries pass user inputs separately from SQL code structure.
+> #### Technical Explanation
+>
+> 1. **Parameterized Queries Concept**: Separates SQL statement structure from user data payloads to prevent SQL Injection attacks.
+> 2. **Positional Placeholders**: PostgreSQL uses `$1, $2`; MySQL/SQLite use `?` placeholders.
+> 3. **Database Driver Parsing**: The database engine compiles query execution plans before substituting parameterized values safely.
 > 
 ---
 
-### Exercise 3: How Parameterization Prevents Injection
+### Exercise 2: Dynamic Batch Insert Parameterizer
 
-**Problem:** Explain how parameter placeholders prevent SQL injection at the database protocol level.
+**Scenario:** Constructs dynamic batch `INSERT` SQL statements with multiple parameterized rows (`VALUES ($1, $2), ($3, $4)`).
 
-**Expected output:**
+**Requirements:**
+1. Write buildBatchInsertQuery(tableName, recordsArray).
+2. Generate numbered placeholders.
+3. Flatten values array.
+
 > [!check]- Answer
-> ```text
-> The database compiles the SQL query structure first, treating input parameters strictly as literal data values rather than executable SQL statements.
-> ```
-> ```text
-> The database compiles the SQL query structure first, treating input parameters strictly as literal data values rather than executable SQL statements.
+>
+> #### Implementation
+>
+> ```javascript
+> function buildBatchInsertQuery(tableName, recordsArray = []) {
+>   if (!recordsArray || recordsArray.length === 0) {
+>     throw new Error("Records array cannot be empty");
+>   }
+>
+>   const columns = Object.keys(recordsArray[0]);
+>   const values = [];
+>   const valueTuples = [];
+>
+>   let paramIndex = 1;
+>   for (const record of recordsArray) {
+>     const tuplePlaceholders = [];
+>     for (const col of columns) {
+>       tuplePlaceholders.push(`$${paramIndex++}`);
+>       values.push(record[col]);
+>     }
+>     valueTuples.push(`(${tuplePlaceholders.join(", ")})`);
+>   }
+>
+>   const sql = `INSERT INTO ${tableName} (${columns.join(", ")}) VALUES ${valueTuples.join(", ")} RETURNING id`;
+>   return { sql, values };
+> }
+>
+> // Verification tests
+> const records = [
+>   { name: "Alice", age: 30 },
+>   { name: "Bob", age: 25 }
+> ];
+>
+> const query = buildBatchInsertQuery("users", records);
+> console.assert(query.sql.includes("VALUES ($1, $2), ($3, $4)"), "Test 1 Failed");
+> console.assert(query.values.length === 4, "Test 2 Failed: 4 total parameters");
 > ```
 >
-> **Explanation:** Parameterized inputs cannot alter compiled SQL query structure.
+> #### Technical Explanation
+>
+> 1. **Batch Parameterization**: Constructs bulk insert statements without string concatenation vulnerabilities.
+> 2. **Parameter Count Limits**: PostgreSQL limits parameters to 65,535 per query; chunk large batch inserts into subsets.
+> 3. **High-Performance Inserts**: Batch inserts execute significantly faster than looping single INSERT statements.
 > 
+---
+
+### Exercise 3: Safe SQL Identifier Sanitizer
+
+**Scenario:** Sanitizes dynamic database table and column names that cannot use standard `$1` value placeholders.
+
+**Requirements:**
+1. Write sanitizeSqlIdentifier(identifier).
+2. Enforce strict alphanumeric/underscore regex.
+3. Wrap in double quotes for SQL escaping.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function sanitizeSqlIdentifier(identifier = "") {
+>   if (typeof identifier !== "string" || !identifier.trim()) {
+>     throw new Error("Identifier must be a non-empty string");
+>   }
+>
+>   // Allow only valid ASCII alphanumeric and underscore characters
+>   if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(identifier)) {
+>     throw new Error(`INVALID_SQL_IDENTIFIER: '${identifier}'`);
+>   }
+>
+>   // Quote double quotes for PostgreSQL identifier escaping
+>   return `"${identifier.replace(/"/g, '""')}"`;
+> }
+>
+> // Verification tests
+> console.assert(sanitizeSqlIdentifier("user_orders") === '"user_orders"', "Test 1 Failed");
+>
+> try {
+>   sanitizeSqlIdentifier("users; DROP TABLE users;--");
+>   console.assert(false, "Test 2 Failed: Should throw error on malicious identifier");
+> } catch (err) {
+>   console.assert(err.message.includes("INVALID_SQL_IDENTIFIER"), "Test 2 Passed");
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Identifier Placeholders Limitation**: SQL engines do NOT allow parameter placeholders (`$1`) for table or column names.
+> 2. **Identifier Whitelisting**: Always validate dynamic table/column names against strict regex or explicit whitelists.
+> 3. **Double Quote Escaping**: Standard SQL escapes table and column names with double quotes (`"table_name"`).
 ## 6. Related Terms
 - [SQL Injection](sql_injection.md) — The database vulnerability resolved by parameterization.
 - [ORMs & ODMs](orms_odms.md) — Object mappers that automatically implement query parameterization.

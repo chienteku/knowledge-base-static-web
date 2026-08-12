@@ -106,58 +106,105 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 
 ## 5. Practice Exercises
 
-### Exercise 1: Percentage Math
+### Exercise 1: Fluid Responsive Card Container with max-width and width
 
-**Problem:** You have a `<main>` container that is `1000px` wide. Inside it, you put a `<div style="width: 50%;">`. How many pixels wide will the `<div>` be?
+**Scenario:** An author builds a responsive fluid layout container using `width: 100%` and `max-width: 70rem`.
 
-**Expected output:**
+**Requirements:**
+1. Set `width: 100%`.
+2. Set `max-width: 70rem`.
+3. Apply `margin-inline: auto`.
+
 > [!check]- Answer
-> ```text
-> 500px! Percentages are always calculated relative to the *parent* container, not necessarily the whole screen.
-> ```
-> - What is 50% of 1000?
-> 
----
-
-
-
-### Exercise 2: Responsive Fluid Container Width
-
-**Problem:** Write CSS for `.wrapper` occupying 100% width on mobile, capped at max 1200px on desktop, centered horizontally.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .wrapper { width: 100%; max-width: 1200px; margin-left: auto; margin-right: auto; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .wrapper {
->   width: 100%;
->   max-width: 1200px;
->   margin-left: auto;
->   margin-right: auto;
+> .responsive-container {
+>   width: 100%;                  /* Fills small mobile screens completely */
+>   max-width: 70rem;             /* Prevents container from stretching too wide on 4K monitors (~1120px) */
+>   margin-inline: auto;          /* Centers container on wide screens */
+>   padding-inline: 1rem;
 > }
 > ```
 >
-> **Explanation:** `width: 100%` + `max-width` + `margin: auto` creates responsive fluid page containers.
+> #### Technical Explanation
+>
+> 1. **`width` vs `max-width`**: `width: 100%` ensures fluid shrinking on small mobile screens; `max-width` caps growth on large desktop displays.
+> 2. **Responsive Layout Rule**: Never set hardcoded fixed pixel widths (`width: 1200px`); always pair percentage/fluid widths with `max-width`.
+> 3. **Centered Content Area**: Combines max-width constraints with auto margins for clean page layouts.
 > 
 ---
 
-### Exercise 3: Percentage Height Requirement
+### Exercise 2: Full Viewport Hero Banners using Dynamic Viewport Height Units
 
-**Problem:** Why does `height: 100%` fail on a child `<div>` when its parent container has no explicit height set?
+**Scenario:** Styles a full-screen hero banner using dynamic viewport height units (`min-height: 100dvh`).
 
-**Expected output:**
+**Requirements:**
+1. Apply `min-height: 100dvh` to hero container.
+
 > [!check]- Answer
-> ```text
-> Percentage heights require parent elements to have a defined explicit height to calculate percentages against.
-> ```
-> ```text
-> Percentage heights require parent elements to have a defined explicit height to calculate percentages against.
+>
+> #### Implementation
+>
+> ```html
+> <header class="hero-banner">
+>   <h1>Welcome to Our Platform</h1>
+>   <p>Full viewport height hero section.</p>
+> </header>
 > ```
 >
-> **Explanation:** Percentage height resolves against explicitly defined parent height dimensions.
+> ```css
+> .hero-banner {
+>   box-sizing: border-box;
+>   min-height: 100dvh;           /* 100 Dynamic Viewport Height (adapts to mobile URL bars!) */
+>   display: flex;
+>   flex-direction: column;
+>   justify-content: center;
+>   align-items: center;
+>   padding: 2rem;
+>   background-color: #0f172a;
+>   color: #ffffff;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `min-height` Property**: Ensures container expands if content exceeds viewport, preventing text overflow truncation.
+> 2. **Dynamic Viewport Units (`100dvh`)**: `100dvh` adapts dynamically to mobile browser URL bar expansion and retraction, solving mobile `100vh` scroll bugs.
+> 3. **Flexbox Alignment**: Combines viewport height with Flexbox centering for hero banners.
 > 
+---
+
+### Exercise 3: Preventing Content Overflow Bugs with min-width: 0 inside Flex Items
+
+**Scenario:** Fixes flex item text overflow clipping by overriding the default `min-width: auto` behavior.
+
+**Requirements:**
+1. Apply `min-width: 0` to flex child item.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .flex-child {
+>   flex: 1;
+>   min-width: 0;                 /* Overrides default min-width: auto to allow text truncation */
+> }
+>
+> .flex-child h2 {
+>   white-space: nowrap;
+>   overflow: hidden;
+>   text-overflow: ellipsis;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Flex Item `min-width: auto` Trap**: Flex items default to `min-width: auto`, preventing long text or images from shrinking below their content size.
+> 2. **The `min-width: 0` Fix**: Setting `min-width: 0` allows flex children to shrink smaller than their content, enabling text truncation (`text-overflow: ellipsis`).
+> 3. **Grid Item Equivalent**: CSS Grid child items require `min-width: 0` for identical truncation behavior.
 ## 6. Related Terms
 - [`box-sizing: border-box`](box_sizing.md) — Changes how Width and Height calculate padding and borders.
 - [Margin](margin.md) — Surrounds the calculated width and height.

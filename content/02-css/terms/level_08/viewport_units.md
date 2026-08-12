@@ -100,136 +100,98 @@ p { font-size: 2vw; } /* ❌ Becomes unreadably tiny on mobile phones! */
 p { font-size: clamp(1rem, 2vw, 1.5rem); } /* Clamped viewport typography */
 ```
 
-
-
-### Mistake 5: Using `height: 100vh` on Mobile Browsers (Mobile Address Bar Jumping Bug)
-
-**The mistake:** Setting `height: 100vh` on full-screen mobile hero sections.
-
-**Why it's wrong:** On mobile Safari/Chrome, `100vh` calculates height including the hidden area under address bars, causing content to be cut off and triggering layout jumping when address bars collapse. Use `100dvh`.
-
-*Incorrect:*
-```css
-.hero { height: 100vh; } /* ❌ Cut off by mobile browser address bar! */
-```
-
-*Fix:*
-```css
-.hero { height: 100dvh; } /* Dynamic viewport height adjusts to mobile browser UI */
-```
-
-### Mistake 6: Using `vw` Units for Font Size Without Clamping (Micro Font Size Bug on Mobile)
-
-**The mistake:** Setting `font-size: 3vw` on body text.
-
-**Why it's wrong:** On 320px mobile screens, `3vw` calculates to `9.6px`, making text illegibly small. On 2000px screens, it expands to `60px`. Clamp viewport font sizes using `clamp()`.
-
-*Incorrect:*
-```css
-p { font-size: 2vw; } /* ❌ Becomes unreadably tiny on mobile phones! */
-```
-
-*Fix:*
-```css
-p { font-size: clamp(1rem, 2vw, 1.5rem); } /* Clamped viewport typography */
-```
-
-
-
-### Mistake 7: Using `height: 100vh` on Mobile Browsers (Mobile Address Bar Jumping Bug)
-
-**The mistake:** Setting `height: 100vh` on full-screen mobile hero sections.
-
-**Why it's wrong:** On mobile Safari/Chrome, `100vh` calculates height including the hidden area under address bars, causing content to be cut off and triggering layout jumping when address bars collapse. Use `100dvh`.
-
-*Incorrect:*
-```css
-.hero { height: 100vh; } /* ❌ Cut off by mobile browser address bar! */
-```
-
-*Fix:*
-```css
-.hero { height: 100dvh; } /* Dynamic viewport height adjusts to mobile browser UI */
-```
-
-### Mistake 8: Using `vw` Units for Font Size Without Clamping (Micro Font Size Bug on Mobile)
-
-**The mistake:** Setting `font-size: 3vw` on body text.
-
-**Why it's wrong:** On 320px mobile screens, `3vw` calculates to `9.6px`, making text illegibly small. On 2000px screens, it expands to `60px`. Clamp viewport font sizes using `clamp()`.
-
-*Incorrect:*
-```css
-p { font-size: 2vw; } /* ❌ Becomes unreadably tiny on mobile phones! */
-```
-
-*Fix:*
-```css
-p { font-size: clamp(1rem, 2vw, 1.5rem); } /* Clamped viewport typography */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: The Half-Screen
+### Exercise 1: Full-Screen Viewport Hero Section with Dynamic Height (100dvh)
 
-**Problem:** You are building a split-screen website. You want the left side to be red, and the right side to be blue. You want both sides to stretch all the way from the top of the screen to the bottom of the screen. What height property do you give them?
+**Scenario:** An author styles a full-screen hero section using modern dynamic viewport height units (`min-height: 100dvh`).
 
-**Expected output:**
+**Requirements:**
+1. Apply `min-height: 100dvh`.
+2. Set `display: flex; justify-content: center; align-items: center;`.
+3. Add fallback.
+
 > [!check]- Answer
-> ```text
-> `height: 100vh;` 
-> This ensures both colored boxes stretch perfectly from the top to the bottom of the browser window.
-> ```
-> - You need 100% of the physical screen height.
-> 
----
-
-
-
-### Exercise 2: Modern Viewport Units Matrix
-
-**Problem:** Match viewport unit to description:
-1. `vw` 
-2. `vh` 
-3. `dvh` 
-4. `svh` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. 1% of viewport width
-> 2. 1% of initial viewport height
-> 3. Dynamic viewport height (adjusts as mobile address bar expands/collapses)
-> 4. Small viewport height (calculates with address bar expanded)
-> ```
-> ```text
-> 1. vw -> 1% of viewport width
-> 2. vh -> 1% of initial viewport height
-> 3. dvh -> Dynamic viewport height (adjusts to mobile address bar state)
-> 4. svh -> Small viewport height (calculates with address bar visible)
-> ```
 >
-> **Explanation:** Modern CSS viewport units handle mobile browser URL bar transitions.
-> 
----
-
-### Exercise 3: Full Screen Hero Section Pattern
-
-**Problem:** Write CSS for full-screen hero section occupying exact 100% dynamic mobile viewport height.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .hero { min-height: 100dvh; }
-> ```
+> #### Implementation
+>
 > ```css
-> .hero {
+> .hero-full-screen {
+>   box-sizing: border-box;
+>   /* 100dvh: Dynamic Viewport Height (adapts to mobile URL bar expansion!) */
 >   min-height: 100dvh;
+>   display: flex;
+>   flex-direction: column;
+>   justify-content: center;
+>   align-items: center;
+>   padding: 2rem;
+>   background-color: #0f172a;
+>   color: #ffffff;
 > }
 > ```
 >
-> **Explanation:** `100dvh` adapts dynamically to visible viewport space on mobile browsers.
+> #### Technical Explanation
+>
+> 1. **Modern Dynamic Viewport Units (`dvh`)**: `100dvh` dynamically calculates exact viewport height as mobile browser address bars expand or collapse during scrolling!
+> 2. **Solving the Mobile `100vh` Bug**: Legacy `100vh` on mobile web browsers included the hidden area under the URL bar, causing bottom content to get cut off!
+> 3. **`min-height` over `height`**: ALWAYS use `min-height: 100dvh` so container expands safely if content height exceeds screen size.
 > 
+---
+
+### Exercise 2: Viewport Width Typography Scaling with clamp() Safety Net
+
+**Scenario:** Scales headline typography based on viewport width (`vw`) with `clamp()` bounds.
+
+**Requirements:**
+1. Apply `font-size: clamp(2rem, 5vw, 4rem)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .vw-headline {
+>   /* Scales directly with Viewport Width (5vw = 5% of window width) */
+>   font-size: clamp(2rem, 5vw, 4rem);
+>   font-weight: 800;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `vw` (Viewport Width) Unit**: `1vw` equals 1% of the total layout viewport width.
+> 2. **Raw `vw` Danger**: Never use raw `font-size: 5vw` without `clamp()`, as text will shrink to unreadably tiny sizes on mobile screens (<320px)!
+> 3. **`clamp()` Safety Net**: Encloses `5vw` inside `clamp(2rem, 5vw, 4rem)` to enforce strict minimum and maximum readability bounds.
+> 
+---
+
+### Exercise 3: Understanding Small (svh), Large (lvh), and Dynamic (dvh) Viewport Variants
+
+**Scenario:** Compares modern CSS Viewport Module Level 4 unit variants (`svh`, `lvh`, `dvh`).
+
+**Requirements:**
+1. Explain `svh`, `lvh`, and `dvh` usage contexts.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Small Viewport Height: Height when mobile address bar is EXPANDED (smallest visible space) */
+> .modal-small { max-height: 90svh; }
+>
+> /* Large Viewport Height: Height when mobile address bar is RETRACTED (largest visible space) */
+> .background-hero { min-height: 100lvh; }
+>
+> /* Dynamic Viewport Height: Adjusts dynamically in real-time as user scrolls */
+> .hero-adaptive { min-height: 100dvh; }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`svh` (Small Viewport Height)**: Calculates height assuming the mobile address bar is fully expanded (smallest viewport).
+> 2. **`lvh` (Large Viewport Height)**: Calculates height assuming the mobile address bar is hidden (largest viewport).
+> 3. **`dvh` (Dynamic Viewport Height)**: Adjusts dynamically in real time between `svh` and `lvh` as address bars show/hide during scrolling.
 ## 6. Related Terms
 - [`%` (Percentages)](percentages.md) — The parent-relative sizing alternative.
 - [`rem` vs `em`](rem_em.md) — Sizing relative to fonts rather than the viewport.

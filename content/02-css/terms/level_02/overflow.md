@@ -178,74 +178,89 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 
 ## 5. Practice Exercises
 
-### Exercise 1: Terms and Conditions Box
+### Exercise 1: Custom Scrollable Card Container with overflow-y auto
 
-**Problem:** Build the CSS ruleset for a terms-and-conditions agreement box. The box must be exactly `400px` wide and `250px` tall. The layout must prevent horizontal scrolling, but must display a vertical scrollbar if the legal text overflows.
+**Scenario:** An author builds a fixed-height scrollable modal panel using `overflow-y: auto`.
 
-**Expected output:**
+**Requirements:**
+1. Set `max-height: 25rem`.
+2. Apply `overflow-y: auto`.
+3. Set `overflow-x: hidden`.
+
 > [!check]- Answer
-> ```css
-> .terms-box {
->   width: 400px;
->   height: 250px;
->   overflow-x: hidden;
->   overflow-y: auto;
-> }
-> ```
-> - Split the overflow rules using `overflow-x` and `overflow-y`.
-> - Disable horizontal scrolling using `hidden`.
-> - Enable dynamic vertical scrolling using `auto`.
-> 
----
-
-
-
-### Exercise 2: Overflow Property Values Matrix
-
-**Problem:** Match `overflow` value to behavior:
-1. `visible` 
-2. `hidden` 
-3. `scroll` 
-4. `auto` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Content spills outside container (default)
-> 2. Clips overflow content with no scrollbars
-> 3. Always displays scrollbars regardless of content size
-> 4. Adds scrollbars dynamically ONLY when content overflows
-> ```
-> ```text
-> 1. visible -> Content spills outside container (default)
-> 2. hidden -> Clips overflow content with no scrollbars
-> 3. scroll -> Always displays scrollbars
-> 4. auto -> Displays scrollbars only when content overflows
-> ```
 >
-> **Explanation:** `overflow` controls container clipping and scrollbar rendering.
-> 
----
-
-### Exercise 3: Single-Line Text Ellipsis Truncation
-
-**Problem:** Write 3 CSS properties required to truncate long single-line text with an ellipsis (`...`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-> ```
+> #### Implementation
+>
 > ```css
-> .truncate {
->   white-space: nowrap;
->   overflow: hidden;
->   text-overflow: ellipsis;
+> .scrollable-panel {
+>   max-height: 25rem;            /* 400px maximum height */
+>   overflow-y: auto;             /* Renders vertical scrollbar ONLY when content overflows */
+>   overflow-x: hidden;           /* Prevents unwanted horizontal scrolling */
+>   padding: 1rem;
+>   border: 1px solid #cbd5e1;
+>   border-radius: 0.5rem;
 > }
 > ```
 >
-> **Explanation:** Text ellipsis truncation requires disabling line wrap, hiding overflow, and setting `text-overflow: ellipsis`.
+> #### Technical Explanation
+>
+> 1. **The `overflow` Property**: Controls how content is rendered when it exceeds the physical bounds of its container box.
+> 2. **`overflow-y: auto`**: Displays a vertical scrollbar ONLY when content height exceeds `max-height`; hides scrollbar when content fits.
+> 3. **Scrollbar Layout Stability**: Combining `overflow-y: auto` with `overflow-x: hidden` prevents accidental dual-axis scrollbars.
 > 
+---
+
+### Exercise 2: Truncating Excess Single-Line Text with text-overflow ellipsis
+
+**Scenario:** Truncates long single-line text titles with an ellipsis (`...`) when overflowing.
+
+**Requirements:**
+1. Apply `white-space: nowrap`, `overflow: hidden`, `text-overflow: ellipsis`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .truncated-title {
+>   white-space: nowrap;          /* Prevents text from wrapping to second line */
+>   overflow: hidden;             /* Clips overflowing text */
+>   text-overflow: ellipsis;     /* Displays '...' at truncation boundary */
+>   max-width: 100%;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Single-Line Ellipsis Trio**: Truncation REQUIRES all 3 properties: `white-space: nowrap`, `overflow: hidden`, and `text-overflow: ellipsis`.
+> 2. **Responsive Safety**: Prevents long URLs or user titles from breaking out of table cells or flex cards.
+> 3. **Accessible Tooltips**: Pair truncated text elements with a `title` attribute so full text remains accessible on mouse hover.
+> 
+---
+
+### Exercise 3: Preventing Unwanted Page Horizontal Scrollbars
+
+**Scenario:** Fixes accidental horizontal page scrollbars caused by off-screen animations.
+
+**Requirements:**
+1. Apply `overflow-x: hidden` to root container.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> body {
+>   overflow-x: hidden;           /* Prevents horizontal page scrollbars */
+>   margin: 0;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Root Overflow Clipping**: Prevents off-screen mobile menus or CSS animations from triggering horizontal scrollbars.
+> 2. **`overflow: visible` Default**: Default `visible` allows content to spill out of container bounds without clipping.
+> 3. **`overflow: clip` Modern Property**: `overflow: clip` clips content without creating a scroll context.
 ## 6. Related Terms
 - [Width / Height](width_height.md) — The size triggers.
 - [`text-overflow` & `overflow-wrap`](../level_07/text_overflow.md) — Adding ellipses (`...`) to clipped text.

@@ -103,67 +103,167 @@ emitter.on('data', (data) => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Custom Emitters
+### Exercise 1: Custom Reactive Bus with Event Filtering
 
-**Problem:** You want to build a `ChatRoom` class. Whenever someone sends a message, it should emit a `message` event. How do you make your custom class an Event Emitter?
+**Scenario:** An Event Bus subclass filters emitted events based on severity levels before notifying subscribed handlers.
 
-**Expected output:**
+**Requirements:**
+1. Write createFilteredEventBus(EventEmitterClass).
+2. Filter events by minSeverity.
+3. Emit only matching events.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> const EventEmitter = require('events');
-> 
-> // By extending the class, ChatRoom gains the .on() and .emit() superpowers!
-> class ChatRoom extends EventEmitter {
->   sendMessage(user, text) {
->     this.emit('message', `${user} said: ${text}`);
+> function createFilteredEventBus(EventEmitterClass) {
+>   const EventEmitter = EventEmitterClass || require("events");
+>   class FilteredBus extends EventEmitter {
+>     constructor(minSeverity = "INFO") {
+>       super();
+>       this.minSeverity = minSeverity;
+>       this.levels = { DEBUG: 10, INFO: 20, WARN: 30, ERROR: 40 };
+>     }
+>
+>     emitLog(level, message) {
+>       const targetWeight = this.levels[level.toUpperCase()] || 0;
+>       const minWeight = this.levels[this.minSeverity.toUpperCase()] || 0;
+>
+>       if (targetWeight >= minWeight) {
+>         return this.emit("log", { level, message, timestamp: Date.now() });
+>       }
+>       return false;
+>     }
 >   }
+>
+>   return new FilteredBus("WARN");
 > }
-> 
-> const room = new ChatRoom();
-> room.on('message', (msg) => console.log(msg));
-> room.sendMessage("Bob", "Hello!");
+>
+> // Verification tests
+> const EventEmitter = require("events");
+> const bus = createFilteredEventBus(EventEmitter);
+> const logs = [];
+>
+> bus.on("log", (l) => logs.push(l));
+>
+> bus.emitLog("INFO", "Ignore this");
+> bus.emitLog("ERROR", "Database crashed");
+>
+> console.assert(logs.length === 1, "Test 1 Failed");
+> console.assert(logs[0].message === "Database crashed", "Test 2 Failed");
 > ```
-> - How do you give a class the superpowers of a parent class in JavaScript?
+>
+> #### Technical Explanation
+>
+> 1. **EventEmitter Subclassing**: Extending `EventEmitter` creates custom domain-specific event managers.
+> 2. **Event Filtering Middleware**: Filtering events before invoking listeners reduces unnecessary CPU overhead.
+> 3. **Decoupling Event Producers**: Allows publishing logs without consumers knowing subscriber details.
 > 
 ---
 
+### Exercise 2: Async Event Listener Error Handling Guard
 
+**Scenario:** An EventEmitter wrapper catches unhandled errors inside asynchronous event listeners to prevent unhandled rejections.
 
-### Exercise 2: Emitting and Handling Custom Events
+**Requirements:**
+1. Write attachSafeEventListener(emitter, eventName, asyncListenerFn, loggerMock).
+2. Invoke async listener.
+3. Catch rejections and log error.
 
-**Problem:** Create `emitter`, listen for `'userLoggedIn'` event logging `'Welcome ' + name`, and emit event with `'Alice'`. 
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> const emitter = new EventEmitter(); emitter.on('userLoggedIn', name => console.log('Welcome ' + name)); emitter.emit('userLoggedIn', 'Alice');
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const { EventEmitter } = require('events');
+> function attachSafeEventListener(emitter, eventName, asyncListenerFn, loggerMock) {
+>   emitter.on(eventName, async (...args) => {
+>     try {
+>       await asyncListenerFn(...args);
+>     } catch (err) {
+>       if (loggerMock && typeof loggerMock.error === "function") {
+>         loggerMock.error(`Error in event listener for '${eventName}':`, err.message);
+>       }
+>     }
+>   });
+> }
+>
+> // Verification tests
+> const EventEmitter = require("events");
 > const emitter = new EventEmitter();
-> emitter.on('userLoggedIn', (name) => console.log(`Welcome ${name}`));
-> emitter.emit('userLoggedIn', 'Alice');
+> let loggedErr = null;
+>
+> const flakyListener = async () => { throw new Error("Async listener failed"); };
+> attachSafeEventListener(emitter, "user:login", flakyListener, { error: (msg, err) => { loggedErr = err; } });
+>
+> emitter.emit("user:login");
+>
+> setImmediate(() => {
+>   console.assert(loggedErr === "Async listener failed", "Test 1 Failed: Listener rejection caught safely");
+> });
 > ```
 >
-> **Explanation:** `on(event, listener)` registers subscriber callbacks triggered by `emit(event, data)`.
+> #### Technical Explanation
+>
+> 1. **Async Listener Exception Trap**: Uncaught rejections in async EventEmitter listeners bypass normal try/catch unless explicitly caught.
+> 2. **EventEmitter Error Event**: If an `error` event is emitted without a listener, Node.js prints a stack trace and exits the process.
+> 3. **Safe Listener Wrapper Pattern**: Wrapping async listeners in try/catch keeps background event processing resilient.
 > 
 ---
 
-### Exercise 3: Increasing Max Listeners Limit
+### Exercise 3: EventEmitter Subscription Lifecycle Manager
 
-**Problem:** Write code to increase default max listeners limit on `emitter` to 20.
+**Scenario:** A subscription manager tracks active EventEmitter listeners and provides a `dispose()` handle to unsubscribe all listeners on cleanup.
 
-**Expected output:**
+**Requirements:**
+1. Write createSubscriptionManager(emitter).
+2. Track added listeners.
+3. Provide `dispose()` method to remove all managed listeners.
+
 > [!check]- Answer
-> ```text
-> emitter.setMaxListeners(20);
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> emitter.setMaxListeners(20);
+> function createSubscriptionManager(emitter) {
+>   const subscriptions = [];
+>
+>   return {
+>     subscribe(eventName, listenerFn) {
+>       emitter.on(eventName, listenerFn);
+>       subscriptions.push({ eventName, listenerFn });
+>     },
+>     dispose() {
+>       subscriptions.forEach(({ eventName, listenerFn }) => {
+>         emitter.removeListener(eventName, listenerFn);
+>       });
+>       subscriptions.length = 0;
+>     },
+>     getActiveCount: () => subscriptions.length
+>   };
+> }
+>
+> // Verification tests
+> const EventEmitter = require("events");
+> const emitter = new EventEmitter();
+> const manager = createSubscriptionManager(emitter);
+>
+> const fn1 = () => {};
+> const fn2 = () => {};
+>
+> manager.subscribe("data", fn1);
+> manager.subscribe("error", fn2);
+>
+> console.assert(emitter.listenerCount("data") === 1, "Test 1 Failed");
+> manager.dispose();
+> console.assert(emitter.listenerCount("data") === 0, "Test 2 Failed: Unsubscribed all");
 > ```
 >
-> **Explanation:** `setMaxListeners()` adjusts the threshold for `MaxListenersExceededWarning` alerts.
-> 
+> #### Technical Explanation
+>
+> 1. **Subscription Memory Leaks**: Failing to unbind event listeners when components unmount leaves references in memory.
+> 2. **Disposable Pattern**: Exposing a `dispose()` method allows clean teardown of event-driven resources.
+> 3. **emitter.removeListener**: Removes specific listener functions from an EventEmitter instance.
 ## 6. Related Terms
 - [Streams (General Concept)](../level_06/streams.md) — The most famous use-case of Event Emitters in Node.js.
 - [The http Module](../level_02/http_module.md) — Servers are Event Emitters under the hood.

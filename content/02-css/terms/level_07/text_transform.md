@@ -99,62 +99,106 @@ Imagine handing a normal, handwritten letter to an actor and telling them to scr
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Title Case
+### Exercise 1: Styling All-Caps Badge Labels with text-transform
 
-**Problem:** You have an HTML title that says `<h2>breaking news story</h2>`. You want it to look like `Breaking News Story`. Which value do you use?
+**Scenario:** An author styles status badges in all-uppercase lettering using `text-transform: uppercase` while preserving lowercase HTML text.
 
-**Expected output:**
+**Requirements:**
+1. Apply `text-transform: uppercase` to `.status-badge`.
+2. Add `letter-spacing: 0.05em`.
+3. Verify raw HTML remains lowercase.
+
 > [!check]- Answer
-> ```text
-> `text-transform: capitalize;`
-> ```
-> - You only want the first letter of each word.
-> 
----
-
-
-
-### Exercise 2: Text Transform Keyword Values Matrix
-
-**Problem:** Match `text-transform` value to output for `'hello world'`:
-1. `uppercase` 
-2. `lowercase` 
-3. `capitalize` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. HELLO WORLD
-> 2. hello world
-> 3. Hello World
-> ```
-> ```text
-> 1. uppercase -> HELLO WORLD
-> 2. lowercase -> hello world
-> 3. capitalize -> Hello World
+>
+> #### Implementation
+>
+> ```html
+> <!-- HTML source text stored in standard lower/mixed case -->
+> <span class="status-badge status-active">active subscriber</span>
 > ```
 >
-> **Explanation:** `text-transform` alters visual character casing dynamically.
-> 
----
-
-### Exercise 3: Full-Width Character Casing
-
-**Problem:** Which `text-transform` value forces full-width ideographic character casing for Asian typography?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> text-transform: full-width;
-> ```
 > ```css
-> span {
->   text-transform: full-width;
+> .status-badge {
+>   font-size: 0.75rem;
+>   font-weight: 700;
+>   text-transform: uppercase;    /* Renders text in ALL CAPS visually */
+>   letter-spacing: 0.05em;
+>   padding: 0.25rem 0.5rem;
+>   border-radius: 0.25rem;
+> }
+>
+> .status-active {
+>   background-color: #dcfce7;
+>   color: #166534;
 > }
 > ```
 >
-> **Explanation:** `full-width` forces characters into full-width square grid alignment.
+> #### Technical Explanation
+>
+> 1. **The `text-transform` Property**: Controls visual capitalization transformation of text (`uppercase`, `lowercase`, `capitalize`, `none`).
+> 2. **HTML Data Integrity**: Transforms text VISUALLY without altering the underlying raw HTML string stored in database models or DOM scripts.
+> 3. **Pairing with Letter Spacing**: Always pair `text-transform: uppercase` with positive `letter-spacing` (`0.05em`) for visual tracking clarity.
 > 
+---
+
+### Exercise 2: Capitalizing Title Case User Names
+
+**Scenario:** Capitalizes the first letter of each word in user profile header names using `text-transform: capitalize`.
+
+**Requirements:**
+1. Apply `text-transform: capitalize` to profile title.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .user-profile-name {
+>   font-size: 1.5rem;
+>   font-weight: 600;
+>   text-transform: capitalize;   /* Capitalizes first letter of every word */
+>   color: #0f172a;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`text-transform: capitalize`**: Capitalizes the first character of each individual word in the text string.
+> 2. **Title Case Formatting**: Useful for displaying user input names cleanly without requiring complex JavaScript string manipulation.
+> 3. **Language Sensitivity**: Behavior depends on browser language settings (`lang` attribute).
+> 
+---
+
+### Exercise 3: Screen Reader Speech Preservation vs HTML ALL CAPS
+
+**Scenario:** Explains why typing ALL CAPS directly into HTML breaks screen reader pronunciation.
+
+**Requirements:**
+1. Demonstrate why `text-transform: uppercase` is superior to typing ALL CAPS in HTML.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```html
+> <!-- ❌ BAD: Screen readers spell this out letter-by-letter as an acronym! ("N-E-W-S") -->
+> <span>NEWS</span>
+>
+> <!-- ✅ GOOD: Screen readers pronounce the word correctly ("News"), rendered in ALL CAPS visually -->
+> <span class="badge-caps">news</span>
+> ```
+>
+> ```css
+> .badge-caps {
+>   text-transform: uppercase;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Screen Reader Acronym Hazard**: Typing ALL CAPS directly into HTML (`<button>SUBMIT</button>`) causes screen readers (NVDA, JAWS) to spell out words letter-by-letter ('S-U-B-M-I-T')!
+> 2. **Accessibility Best Practice**: Write standard mixed-case text in HTML and apply `text-transform: uppercase` in CSS for visual styling.
+> 3. **WCAG Conformance**: Preserves correct screen reader text pronunciation.
 ## 6. Related Terms
 - [`font-size` & `font-weight`](../level_03/font_size_weight.md) — Often combined with `uppercase` to create strong, bold headings.
 - [`font-style` & `font-variant`](../level_03/font_style_variant.md) — Related concept: `font-style` & `font-variant`.

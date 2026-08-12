@@ -94,61 +94,168 @@ process.on('unhandledRejection', (reason, promise) => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Dev vs Prod Switch
+### Exercise 1: CLI Command-Line Arguments Parser
 
-**Problem:** You want your API to log heavy debugging info when you run it on your laptop, but you want it to be totally silent when running on the live production server. How do you achieve this using the `process` object?
+**Scenario:** A Node.js CLI script parses flags passed via `process.argv` (`node app.js --port 8080 --env production`).
 
-**Expected output:**
+**Requirements:**
+1. Write parseCliArguments(argvArray).
+2. Extract named flags starting with `--`.
+3. Return key-value object.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> if (process.env.NODE_ENV === 'development') {
->   console.log("Heavy debugging info...");
+> function parseCliArguments(argvArray = process.argv) {
+>   const flags = {};
+>   // Skip first two elements: node executable and script file path
+>   const args = argvArray.slice(2);
+>
+>   for (let i = 0; i < args.length; i++) {
+>     const arg = args[i];
+>     if (arg.startsWith("--")) {
+>       const key = arg.substring(2);
+>       const nextArg = args[i + 1];
+>
+>       if (nextArg && !nextArg.startsWith("--")) {
+>         flags[key] = nextArg;
+>         i++; // Skip value index
+>       } else {
+>         flags[key] = true; // Boolean flag
+>       }
+>     }
+>   }
+>
+>   return flags;
 > }
-> ```
-> - Which property holds the environment variables?
-> 
----
-
-
-
-### Exercise 2: Reading CLI Command Arguments
-
-**Problem:** Read command line argument `--port=8080` from `process.argv`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const portArg = process.argv.find(arg => arg.startsWith('--port=')).split('=')[1];
-> ```
-> ```javascript
-> const portArg = process.argv.find(arg => arg.startsWith('--port='));
-> const port = portArg ? portArg.split('=')[1] : '3000';
+>
+> // Verification tests
+> const mockArgv = ["node", "app.js", "--port", "8080", "--verbose"];
+> const flags = parseCliArguments(mockArgv);
+>
+> console.assert(flags.port === "8080", "Test 1 Failed");
+> console.assert(flags.verbose === true, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `process.argv` is an array containing CLI launch command parameters (`[node, script, args...]`).
+> #### Technical Explanation
+>
+> 1. **process.argv Array**: Contains command-line arguments: `[0]` = node binary path, `[1]` = script path, `[2...]` = arguments.
+> 2. **Flag Parsing Conventions**: Flags start with `--key value` or `--booleanFlag`.
+> 3. **Production Tooling**: Production CLIs use libraries like `commander` or `yargs` for robust argument parsing.
 > 
 ---
 
-### Exercise 3: Handling SIGTERM Graceful Shutdown Signal
+### Exercise 2: Global Unhandled Rejection & Uncaught Exception Safety Guard
 
-**Problem:** Register listener on `process` for `'SIGTERM'` signal to close HTTP server.
+**Scenario:** An application entry point attaches process-level handlers for `uncaughtException` and `unhandledRejection` to log fatal errors before crashing.
 
-**Expected output:**
+**Requirements:**
+1. Write setupGlobalErrorHandlers(loggerMock, processMock).
+2. Listen for uncaughtException and unhandledRejection.
+3. Log error and initiate exit.
+
 > [!check]- Answer
-> ```text
-> process.on('SIGTERM', () => { server.close(() => process.exit(0)); });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> process.on('SIGTERM', () => {
->   server.close(() => {
->     console.log('Server closed gracefully');
->     process.exit(0);
+> function setupGlobalErrorHandlers(loggerMock, processMock) {
+>   const proc = processMock || process;
+>   const logger = loggerMock || console;
+>
+>   let hasFatalError = false;
+>
+>   proc.on("uncaughtException", (err) => {
+>     hasFatalError = true;
+>     logger.error("FATAL: Uncaught Exception caught", err.message);
+>     proc.exit(1);
 >   });
+>
+>   proc.on("unhandledRejection", (reason) => {
+>     hasFatalError = true;
+>     logger.error("FATAL: Unhandled Promise Rejection caught", reason?.message || reason);
+>     proc.exit(1);
+>   });
+>
+>   return { hasFatalError: () => hasFatalError };
+> }
+>
+> // Verification tests
+> const logs = [];
+> let exitCode = null;
+> const mockProc = {
+>   handlers: {},
+>   on(evt, fn) { this.handlers[evt] = fn; },
+>   exit(code) { exitCode = code; }
+> };
+> const mockLogger = { error: (msg, err) => logs.push(msg) };
+>
+> setupGlobalErrorHandlers(mockLogger, mockProc);
+> mockProc.handlers["uncaughtException"](new Error("Null pointer"));
+>
+> console.assert(logs.length === 1, "Test 1 Failed");
+> console.assert(exitCode === 1, "Test 2 Failed: Must exit with code 1");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **uncaughtException Event**: Emitted when an uncaught JavaScript error bubbles all the way back to the Event Loop.
+> 2. **unhandledRejection Event**: Emitted when a Promise is rejected and no `.catch()` handler is attached within an event loop tick.
+> 3. **Mandatory Process Exit**: After an uncaught exception, Node.js process memory state is corrupted; process MUST exit and restart.
+> 
+---
+
+### Exercise 3: High-Resolution HRTime Profiler
+
+**Scenario:** Measures microsecond-accurate API execution times using `process.hrtime.bigint()`.
+
+**Requirements:**
+1. Write profileOperationTime(operationFn).
+2. Measure start and end using process.hrtime.bigint().
+3. Return execution time in milliseconds.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function profileOperationTime(operationFn, mockHrtime) {
+>   const getHrtime = mockHrtime || (() => process.hrtime.bigint());
+>
+>   const startNs = getHrtime();
+>   await operationFn();
+>   const endNs = getHrtime();
+>
+>   const elapsedNs = endNs - startNs;
+>   const elapsedMs = Number(elapsedNs) / 1_000_000;
+>
+>   return {
+>     elapsedNs,
+>     elapsedMs,
+>     formatted: `${elapsedMs.toFixed(3)}ms`
+>   };
+> }
+>
+> // Verification tests
+> let timeNs = 100_000_000n; // 100ms in nanoseconds
+> const mockGet = () => {
+>   const current = timeNs;
+>   timeNs += 50_000_000n; // +50ms
+>   return current;
+> };
+>
+> profileOperationTime(async () => {}, mockGet).then(res => {
+>   console.assert(res.elapsedMs === 50, "Test 1 Failed: 50,000,000ns must equal 50ms");
 > });
 > ```
 >
-> **Explanation:** Listening for `SIGTERM` allows servers to close active socket connections cleanly before exiting.
-> 
+> #### Technical Explanation
+>
+> 1. **process.hrtime.bigint()**: Returns high-resolution real time in nanoseconds (1/1,000,000,000 of a second) as a BigInt.
+> 2. **Monotonic Clock**: Unaffected by system clock drifts or manual clock adjustments.
+> 3. **Micro-Benchmarking**: Essential for measuring microsecond database query or crypto execution performance.
 ## 6. Related Terms
 - [Environment Variables (dotenv)](../level_10/env_vars.md) — The ecosystem tool used to manage `process.env` files easily on your laptop.
 - [Global Objects (global, __dirname, __filename)](global_objects.md) — `process` is a member of this family.

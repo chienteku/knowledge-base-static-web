@@ -104,58 +104,94 @@ h1 { text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); } /* Casts shadow behind text 
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Glow Effect
+### Exercise 1: Enhancing Text Readability over Light/Dark Background Images
 
-**Problem:** How could you use `text-shadow` to make a neon sign that appears to glow in all directions, rather than casting a shadow to one specific side?
+**Scenario:** An author applies a subtle dark text shadow to hero banner typography to guarantee WCAG contrast over dynamic images.
 
-**Expected output:**
+**Requirements:**
+1. Apply `text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6)`.
+2. Set text color to `#ffffff`.
+
 > [!check]- Answer
-> ```text
-> Set the X and Y offsets to 0! If the shadow doesn't move left/right or up/down, but has a large blur radius, it will peek out equally from all sides of the text, creating a glowing effect!
-> `text-shadow: 0px 0px 10px limegreen;`
-> ```
-> - What happens if the flashlight is pointing straight down from perfectly above the letter?
-> 
----
-
-
-
-### Exercise 2: Text Shadow Parameter Syntax
-
-**Problem:** Write `text-shadow` applying 2px right offset, 2px down offset, 4px blur, and 50% black alpha color.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-> ```
+>
+> #### Implementation
+>
 > ```css
-> h1 {
->   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+> .hero-title-shadow {
+>   color: #ffffff;
+>   /* text-shadow: offset-x | offset-y | blur-radius | color */
+>   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+>   font-size: 3rem;
+>   font-weight: 800;
 > }
 > ```
 >
-> **Explanation:** `text-shadow` parameters are `offset-x offset-y blur-radius color`.
+> #### Technical Explanation
+>
+> 1. **The `text-shadow` Property**: Applies drop shadow effects to text characters (`offset-x`, `offset-y`, `blur-radius`, `color`).
+> 2. **Contrast Ratio Enhancement**: Adding a 60% dark text shadow guarantees white text remains legible even if background image assets contain light patches.
+> 3. **No Box Model Impact**: Text shadows are purely visual layers; they do NOT alter element box model dimensions or cause reflows.
 > 
 ---
 
-### Exercise 3: Multiple Text Shadows
+### Exercise 2: Layered Text Glow Effects
 
-**Problem:** Write CSS applying double text shadow to create a glowing text effect.
+**Scenario:** Applies multiple comma-separated text shadows to build a vibrant neon glow effect.
 
-**Expected output:**
+**Requirements:**
+1. Apply layered `text-shadow` with multiple blur radii.
+
 > [!check]- Answer
-> ```text
-> text-shadow: 0 0 5px #fff, 0 0 10px #ff0000;
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .glow {
->   text-shadow: 0 0 5px #fff, 0 0 10px #ff0000;
+> .neon-text-glow {
+>   color: #ffffff;
+>   /* Comma-separated shadow layers: inner intense glow + outer soft glow */
+>   text-shadow: 
+>     0 0 5px rgba(59, 130, 246, 0.8),
+>     0 0 15px rgba(59, 130, 246, 0.6),
+>     0 0 30px rgba(59, 130, 246, 0.4);
 > }
 > ```
 >
-> **Explanation:** Comma-separated `text-shadow` layers multiple glow shadows.
+> #### Technical Explanation
+>
+> 1. **Multiple Shadow Layering**: CSS accepts comma-separated `text-shadow` declarations, layered top-to-bottom in rendering order.
+> 2. **Vibrant Glow Effects**: Combining sharp inner blur radii (`5px`) with soft outer blur radii (`30px`) creates luminous neon text.
+> 3. **Performance Optimization**: Avoid excessive blur radii (>50px) on large scrollable text blocks to maintain 60fps GPU performance.
 > 
+---
+
+### Exercise 3: Retro Letterpress Inset Text Effect using Dual Contrast Shadows
+
+**Scenario:** Creates a pressed inset letterpress typography effect using dual subtle text shadows.
+
+**Requirements:**
+1. Apply top dark shadow and bottom light highlight shadow.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .letterpress-text {
+>   color: #475569;
+>   background-color: #cbd5e1;
+>   /* Inset Letterpress Effect: Top inner shadow + Bottom light highlight */
+>   text-shadow: 
+>     0 -1px 1px rgba(0, 0, 0, 0.3),
+>     0 1px 1px rgba(255, 255, 255, 0.8);
+>   font-weight: 700;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Dual Shadow Letterpress**: Combining a top dark shadow (`0 -1px`) with a bottom light highlight (`0 1px`) creates an illusion of text carved into a surface.
+> 2. **Subtle Pixel Offsets**: Requires small 1px offsets for crisp letterform edges.
+> 3. **Color Harmony**: Works best when text color matches background surface tone.
 ## 6. Related Terms
 - [`box-shadow` (Card Shadows)](../level_09/box_shadow.md) — The exact same concept, but applied to the entire Box Model container instead of just the text inside it!
 

@@ -132,157 +132,119 @@ To place an absolute element exactly where you want it inside a container, you M
 }
 ```
 
-
-
-### Mistake 4: Using `position: absolute` Without Adding `position: relative` to the Containing Parent
-
-**The mistake:** Setting `position: absolute; top: 0; right: 0;` expecting an element to position relative to its direct parent container `<div>`.
-
-**Why it's wrong:** An absolutely positioned element positions itself relative to the nearest ancestor with a positioning value OTHER than `static`. If no parent has `position: relative`, it positions relative to the entire `<html>` document root.
-
-*Incorrect:*
-```css
-<div class="card">
-  <span style="position: absolute; top: 0;">Badge</span> <!-- ❌ Jumps to top of page! -->
-</div>
-```
-
-*Fix:*
-```css
-.card {
-  position: relative; /* Establishes positioning context for absolute children */
-}
-.badge {
-  position: absolute;
-  top: 0;
-}
-```
-
-### Mistake 5: Using `position: fixed` on Mobile Overlay Modals Blocking Touch Scroll
-
-**The mistake:** Placing long scrollable modal forms inside `position: fixed` containers on mobile browsers.
-
-**Why it's wrong:** On mobile Safari, `position: fixed` containers with internal scrolling frequently experience mobile viewport height bugs (`100vh` address bar jumping). Add `overflow-y: auto` and touch scrolling.
-
-*Incorrect:*
-```css
-/* Long fixed modal with no overflow container on mobile */
-```
-
-*Fix:*
-```css
-.fixed-modal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  overflow-y: auto; /* Enables inner modal scrolling */
-}
-```
-
-
-
-### Mistake 6: Using `position: absolute` Without Adding `position: relative` to the Containing Parent
-
-**The mistake:** Setting `position: absolute; top: 0; right: 0;` expecting an element to position relative to its direct parent container `<div>`.
-
-**Why it's wrong:** An absolutely positioned element positions itself relative to the nearest ancestor with a positioning value OTHER than `static`. If no parent has `position: relative`, it positions relative to the entire `<html>` document root.
-
-*Incorrect:*
-```css
-<div class="card">
-  <span style="position: absolute; top: 0;">Badge</span> <!-- ❌ Jumps to top of page! -->
-</div>
-```
-
-*Fix:*
-```css
-.card {
-  position: relative; /* Establishes positioning context for absolute children */
-}
-.badge {
-  position: absolute;
-  top: 0;
-}
-```
-
-### Mistake 7: Using `position: fixed` on Mobile Overlay Modals Blocking Touch Scroll
-
-**The mistake:** Placing long scrollable modal forms inside `position: fixed` containers on mobile browsers.
-
-**Why it's wrong:** On mobile Safari, `position: fixed` containers with internal scrolling frequently experience mobile viewport height bugs (`100vh` address bar jumping). Add `overflow-y: auto` and touch scrolling.
-
-*Incorrect:*
-```css
-/* Long fixed modal with no overflow container on mobile */
-```
-
-*Fix:*
-```css
-.fixed-modal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  overflow-y: auto; /* Enables inner modal scrolling */
-}
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: The Chat Widget
+### Exercise 1: Positioning Badge Overlays inside Relative Parent Containers
 
-**Problem:** You are building a "Chat with us!" bubble. You want it to sit exactly 20px from the bottom-right corner of the user's screen. If the user scrolls down to read a long article, the chat bubble must remain on the screen at all times. Do you use `absolute` or `fixed`?
+**Scenario:** An author overlays a notification count badge on top of a user avatar icon using `position: absolute`.
 
-**Expected output:**
+**Requirements:**
+1. Set `position: relative` on parent container `.avatar-wrapper`.
+2. Set `position: absolute; top: -0.25rem; right: -0.25rem;` on badge.
+3. Add z-index.
+
 > [!check]- Answer
-> ```text
-> `position: fixed;` (with `bottom: 20px; right: 20px;`). 
-> Fixed locks the element to the viewport glass so it survives scrolling. Absolute would scroll away with the article.
-> ```
-> - Does the element need to survive scrolling?
-> 
----
-
-
-
-### Exercise 2: Card Badge Absolute Positioning Pattern
-
-**Problem:** Write CSS positioning `.badge` at top-right corner (`top: 10px`, `right: 10px`) inside `.card` container.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .card { position: relative; } .badge { position: absolute; top: 10px; right: 10px; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .card {
+> /* Relative Parent Container (Acts as Containing Block Anchor) */
+> .avatar-wrapper {
 >   position: relative;
+>   display: inline-block;
+>   width: 3rem;
+>   height: 3rem;
 > }
-> .badge {
->   position: absolute;
->   top: 10px;
->   right: 10px;
+>
+> /* Absolute Overlay Badge */
+> .notification-badge {
+>   position: absolute;           /* Positions relative to .avatar-wrapper */
+>   top: -0.25rem;
+>   right: -0.25rem;
+>   background-color: #ef4444;
+>   color: #ffffff;
+>   font-size: 0.75rem;
+>   font-weight: 700;
+>   padding: 0.125rem 0.375rem;
+>   border-radius: 9999px;        /* Pill badge shape */
+>   border: 2px solid #ffffff;
 > }
 > ```
 >
-> **Explanation:** Parent `position: relative` creates positioning boundary for absolute child.
+> #### Technical Explanation
+>
+> 1. **`position: absolute` Mechanics**: Removes the element from normal flow and positions it relative to its nearest POSITIONED ancestor (`position: relative|absolute|fixed`).
+> 2. **Containing Block Anchor**: If no positioned ancestor exists, `position: absolute` positions relative to the initial viewport containing block!
+> 3. **Offsets (`top`, `right`)**: `top: -0.25rem; right: -0.25rem;` offsets the badge slightly past the top-right corner of the parent avatar.
 > 
 ---
 
-### Exercise 3: Absolute vs Fixed Containing Block Boundary
+### Exercise 2: Building Fixed Global Header Navigation Bars
 
-**Problem:** What is the containing block boundary for `position: absolute` vs `position: fixed`?
+**Scenario:** Creates a sticky top navigation bar using `position: fixed` that remains visible during page scrolling.
 
-**Expected output:**
+**Requirements:**
+1. Apply `position: fixed; top: 0; left: 0; width: 100%;` to header.
+2. Add `z-index: 1000`.
+3. Add top body padding.
+
 > [!check]- Answer
-> ```text
-> absolute positions relative to nearest positioned ancestor; fixed positions relative to the browser viewport window.
-> ```
-> ```text
-> absolute positions relative to nearest positioned ancestor; fixed positions relative to the browser viewport window.
+>
+> #### Implementation
+>
+> ```css
+> body {
+>   padding-top: 4rem;            /* Reserve space for fixed header to prevent content overlap */
+> }
+>
+> /* Fixed Global Site Header */
+> .global-header {
+>   position: fixed;              /* Fixed relative to browser VIEWPORT */
+>   top: 0;
+>   left: 0;
+>   width: 100%;
+>   height: 4rem;
+>   background-color: #ffffff;
+>   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+>   z-index: 1000;
+> }
 > ```
 >
-> **Explanation:** Fixed elements remain pinned to the screen viewport during page scrolling.
+> #### Technical Explanation
+>
+> 1. **`position: fixed` Mechanics**: Positions an element relative strictly to the browser VIEWPORT window; remains pinned in place when page scrolls.
+> 2. **Viewport Attachment**: Fixed elements do NOT scroll with the document text.
+> 3. **Body Padding Requirement**: Fixed headers overlap top page content; always add corresponding top padding (`padding-top: 4rem`) to `body` or `<main>`.
 > 
+---
+
+### Exercise 3: Managing Offset Percentage Bounds and Containing Blocks
+
+**Scenario:** Positions an absolute dropdown menu anchored directly beneath a button.
+
+**Requirements:**
+1. Set `top: 100%` and `left: 0` on dropdown menu.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .dropdown-menu {
+>   position: absolute;
+>   top: 100%;                    /* Positions top edge exactly below bottom of parent button */
+>   left: 0;
+>   min-width: 12rem;
+>   background-color: #ffffff;
+>   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Percentage Offset Reference**: `top: 100%` positions the child's top edge at 100% of the parent container's height.
+> 2. **Dropdown Menu Anchor**: Standard pattern for positioning dropdown menus underneath trigger buttons.
+> 3. **Z-Index Layering**: Ensure dropdown menus specify sufficient `z-index` to float over downstream page text.
 ## 6. Related Terms
 - [`position: static` vs `relative`](position_static_relative.md) — The required partner for `absolute`.
 - [`position: sticky`](position_sticky.md) — The hybrid offset scrolling behavior.

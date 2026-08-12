@@ -103,53 +103,88 @@ body { color: red; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: The External Font
+### Exercise 1: Organizing CSS Modules using import and Highlighting Performance Hazards
 
-**Problem:** You go to Google Fonts to get a cool custom font. Google gives you a snippet of code that looks like this: `@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');`. Where do you paste this in your CSS file?
+**Scenario:** An author organizes CSS stylesheet modules using `@import` while documenting performance render-blocking hazards.
 
-**Expected output:**
+**Requirements:**
+1. Demonstrate `@import` syntax.
+2. Explain why build tools (Vite/PostCSS) are preferred.
+
 > [!check]- Answer
-> ```text
-> At the absolute top of your CSS file, on line 1! If you put it anywhere else, the browser will ignore it and your custom font will not load.
+>
+> #### Implementation
+>
+> ```css
+> /* Master Stylesheet (styles.css) */
+> @import url("reset.css");
+> @import url("typography.css");
+> @import url("components/buttons.css");
+>
+> body {
+>   font-family: system-ui, sans-serif;
+> }
 > ```
-> - Where do imports go?
+>
+> #### Technical Explanation
+>
+> 1. **The `@import` Rule**: Imports CSS rules from another external stylesheet file into the current stylesheet.
+> 2. **Render-Blocking Performance Hazard**: CSS `@import` creates sequential network download chains (waterfalls), delaying page rendering!
+> 3. **Modern Bundler Superiority**: Use PostCSS or Vite to bundle CSS files at build time into a single HTTP download file rather than using native `@import` in production.
 > 
 ---
 
+### Exercise 2: Restructuring import Statements to Upper File Order Compliance
 
+**Scenario:** Fixes an invalid `@import` declaration placed below CSS rulesets.
 
-### Exercise 2: @import Media Query Filter Syntax
+**Requirements:**
+1. Place all `@import` rules at the absolute top of file.
 
-**Problem:** Write `@import` rule loading `print.css` only when media is `print`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> @import url('print.css') print;
-> ```
+>
+> #### Implementation
+>
 > ```css
-> @import url('print.css') print;
+> /* ✅ VALID: All @import statements MUST appear at the absolute top of the stylesheet! */
+> @import url("base.css");
+> @import url("theme.css");
+>
+> /* CSS rulesets follow AFTER all imports */
+> .container {
+>   max-width: 70rem;
+> }
 > ```
 >
-> **Explanation:** `@import` accepts optional trailing media query constraints.
+> #### Technical Explanation
+>
+> 1. **Upper File Placement Requirement**: All `@import` statements MUST be declared at the absolute TOP of the stylesheet before any other CSS rules.
+> 2. **Browser Invalid Execution**: Any `@import` placed after standard CSS rulesets is completely IGNORED by browsers.
+> 3. **Syntactic Strictness**: Mandatory CSS syntax specification rule.
 > 
 ---
 
-### Exercise 3: @import Layer Syntax
+### Exercise 3: Replacing Native import with Build-Tool Bundlers for Zero Network Latency
 
-**Problem:** Write `@import` statement importing `reset.css` directly into Cascade Layer `@layer base`.
+**Scenario:** Refactors multiple native `@import` files into a single PostCSS bundle output.
 
-**Expected output:**
+**Requirements:**
+1. Explain PostCSS/Vite bundling benefits.
+
 > [!check]- Answer
-> ```text
-> @import url('reset.css') layer(base);
-> ```
-> ```css
-> @import url('reset.css') layer(base);
+>
+> #### Implementation
+>
+> ```bash
+> # PostCSS CLI command bundles all @import references into single styles.min.css
+> npx postcss src/styles.css -o dist/styles.min.css --use postcss-import cssnano
 > ```
 >
-> **Explanation:** `layer(layerName)` imports external stylesheets into explicit Cascade Layers.
-> 
+> #### Technical Explanation
+>
+> 1. **Zero Network Waterfall**: Bundling collapses 10 `@import` HTTP requests into 1 compressed CSS file download.
+> 2. **Improved Core Web Vitals**: Significantly reduces FCP (First Contentful Paint) latency.
+> 3. **Modern CSS Pipeline**: Best practice for enterprise front-end development.
 ## 6. Related Terms
 - [The Cascade](../level_01/the_cascade.md) — Because `@import` files are loaded first, any CSS you write *below* the imports in your master file will override the imported CSS (due to the cascade!).
 - [CSS Preprocessors (Sass & SCSS)](preprocessors.md) — Modern preprocessors compile imports before browser loading loops.

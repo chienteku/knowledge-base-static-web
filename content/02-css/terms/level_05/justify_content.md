@@ -112,67 +112,89 @@ Imagine three people sitting on a long bench.
 
 ## 5. Practice Exercises
 
-### Exercise 1: Right-Aligned Menu
+### Exercise 1: Distributing Header Brand and Action Links with justify-content: space-between
 
-**Problem:** You have a Flex Container with some buttons. You want all the buttons packed tightly together on the right side of the screen. Which value do you use?
+**Scenario:** An author distributes brand logo and action links to opposite ends of a header using `justify-content: space-between`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: flex; justify-content: space-between;` to header.
+2. Verify logo is pinned to left and CTA to right.
+
 > [!check]- Answer
-> ```text
-> `flex-end`! This pushes all the empty space to the left, packing the items against the end (the right side).
-> ```
-> - The start is the left. The end is the...
-> 
----
-
-
-
-### Exercise 2: Navigation Header Justification Pattern
-
-**Problem:** Write CSS for `.header-nav` pushing logo to left edge and menu items to right edge using `justify-content`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .header-nav { display: flex; justify-content: space-between; align-items: center; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .header-nav {
+> .header-bar {
 >   display: flex;
->   justify-content: space-between;
+>   justify-content: space-between;/* Pushes first child to far left, last child to far right */
 >   align-items: center;
+>   padding: 1rem 2rem;
+>   background-color: #ffffff;
 > }
 > ```
 >
-> **Explanation:** `justify-content: space-between` pushes first and last flex items flush to container boundaries.
+> #### Technical Explanation
+>
+> 1. **The `justify-content` Property**: Defines how free space is distributed between and around flex items along the MAIN-AXIS.
+> 2. **`space-between` Distribution**: Pushes the first item to the start edge, the last item to the end edge, and distributes remaining space equally between intermediate items.
+> 3. **Header & Card Footer Standard**: The industry standard pattern for building top navigation bars and card footer action rows.
 > 
 ---
 
-### Exercise 3: Justify Content Values Matrix
+### Exercise 2: Centering Hero CTA Buttons with justify-content: center
 
-**Problem:** Match `justify-content` keyword to distribution behavior:
-1. `flex-start` 
-2. `flex-end` 
-3. `center` 
-4. `space-between` 
+**Scenario:** Centers multiple call-to-action buttons along the horizontal main axis using `justify-content: center`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `justify-content: center; gap: 1rem;` to button group.
+
 > [!check]- Answer
-> ```text
-> 1. Packed at start of main axis (default)
-> 2. Packed at end of main axis
-> 3. Centered along main axis
-> 4. First item at start, last item at end, equal space between
-> ```
-> ```text
-> 1. flex-start -> Packed at start (default)
-> 2. flex-end -> Packed at end
-> 3. center -> Centered
-> 4. space-between -> Flush outer edges, equal inner spacing
+>
+> #### Implementation
+>
+> ```css
+> .hero-btn-group {
+>   display: flex;
+>   justify-content: center;      /* Centers all buttons horizontally along main axis */
+>   gap: 1rem;
+>   margin-top: 2rem;
+> }
 > ```
 >
-> **Explanation:** `justify-content` controls main axis flex item distribution.
+> #### Technical Explanation
+>
+> 1. **`justify-content: center`**: Packs all flex items tightly together in the center of the main axis.
+> 2. **Main-Axis Alignment**: Controls horizontal alignment when `flex-direction` is `row`, or vertical alignment when `flex-direction` is `column`.
+> 3. **Hero Section Layout**: Ideal for centering primary and secondary action button pairs.
 > 
+---
+
+### Exercise 3: Evenly Spacing Dashboard Metric Widgets: space-around vs space-evenly
+
+**Scenario:** Compares `space-around` and `space-evenly` for dashboard metric cards.
+
+**Requirements:**
+1. Apply `justify-content: space-evenly` to metric row.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .metrics-row {
+>   display: flex;
+>   justify-content: space-evenly; /* Equal spacing before, between, and after every item */
+>   padding: 1.5rem;
+>   background-color: #f8fafc;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`space-evenly` Mechanism**: Distributes free space so the distance between any two items AND the distance to the outer edges is EXACTLY equal.
+> 2. **`space-around` Difference**: `space-around` gives each item equal padding on both sides, meaning edge gaps are half the width of internal gaps.
+> 3. **Dashboard Spacing Perfection**: `space-evenly` provides visually balanced metric widget rows.
 ## 6. Related Terms
 - [`align-items`](align_items.md) — The sister property that aligns things on the *opposite* (Cross) axis.
 - [`align-content`](align_content.md) — Distribution of rows in multi-line flex containers.

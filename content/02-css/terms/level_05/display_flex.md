@@ -151,59 +151,110 @@ Imagine a **Flexible Clothes Hanger Rail**:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Perfect Vertical & Horizontal Centering
+### Exercise 1: Constructing a 1D Responsive Component Row with display flex
 
-**Problem:** Create a CSS rule `.hero-badge` that centers its inner text both vertically and horizontally within a fixed 400px x 200px container using Flexbox.
+**Scenario:** An author builds a responsive component row utilizing `display: flex` and `gap: 1.5rem`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: flex` to container.
+2. Add `gap: 1.5rem` for item spacing.
+3. Add `align-items: center`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .hero-badge {
->   display: flex;
->   justify-content: center;
+> .component-row {
+>   display: flex;                /* Establishes 1D Flexbox Formatting Context */
 >   align-items: center;
->   width: 400px;
->   height: 200px;
+>   gap: 1.5rem;                  /* Spacing between flex items */
+>   padding: 1rem;
+>   background-color: #ffffff;
+>   border-radius: 0.5rem;
+> }
+>
+> .row-item {
+>   flex: 1;
 > }
 > ```
 >
-> **Explanation:** Combining `display: flex`, `justify-content: center`, and `align-items: center` achieves perfect 2D centering inside a container.
+> #### Technical Explanation
+>
+> 1. **The `display: flex` Declaration**: Converts an element into a flex container and its immediate children into flex items.
+> 2. **1D Layout Power**: Flexbox excels at one-dimensional layouts (either a single row OR a single column).
+> 3. **The `gap` Property**: Provides native, clean spacing between flex items without needing legacy margin hacks.
 > 
 ---
 
-### Exercise 2: Space-Between Navigation Header Layout
+### Exercise 2: Centering Modal Dialog Content Perfectly in 2 Axes
 
-**Problem:** Space out a brand logo and menu items to opposite edges of a header container.
+**Scenario:** Centers a popup modal card perfectly in both horizontal and vertical axes using `display: flex`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: flex; justify-content: center; align-items: center;`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .site-header {
+> .modal-overlay {
+>   position: fixed;
+>   inset: 0;
+>   background-color: rgb(15 23 42 / 0.75);
+>
+>   /* Perfect 2-Axis Centering */
 >   display: flex;
->   justify-content: space-between;
->   align-items: center;
+>   justify-content: center;      /* Horizontal Main-Axis Centering */
+>   align-items: center;          /* Vertical Cross-Axis Centering */
+> }
+>
+> .modal-card {
+>   max-width: 32rem;
+>   width: 100%;
+>   background-color: #ffffff;
+>   padding: 2rem;
+>   border-radius: 0.5rem;
 > }
 > ```
 >
-> **Explanation:** `justify-content: space-between` places the first child at the start edge and the last child at the end edge, distributing remaining space between them.
+> #### Technical Explanation
+>
+> 1. **2-Axis Centering Pattern**: Combining `justify-content: center` and `align-items: center` achieves perfect two-axis centering effortlessly.
+> 2. **Replaces Absolute Transform Hacks**: Replaces legacy `top: 50%; left: 50%; transform: translate(-50%, -50%)` hacks completely.
+> 3. **Fluid Responsiveness**: Modal shrinks gracefully on small screens without breaking centering.
 > 
 ---
 
-### Exercise 3: Gap Spacing Between Flex Items
+### Exercise 3: Inline Flex Containers for Button Icons
 
-**Problem:** Add a clean 20px space between flex items without using legacy `margin-right` hacks.
+**Scenario:** Uses `display: inline-flex` to align vector icons and labels inside buttons cleanly.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: inline-flex; align-items: center; gap: 0.5rem;`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .button-group {
->   display: flex;
->   gap: 20px;
+> .btn-icon {
+>   display: inline-flex;         /* Fits element width to content while enabling Flexbox */
+>   align-items: center;
+>   gap: 0.5rem;
+>   padding: 0.75rem 1.5rem;
+>   background-color: #2563eb;
+>   color: #ffffff;
+>   border-radius: 0.375rem;
 > }
 > ```
 >
-> **Explanation:** The `gap` property applies equal spacing between flex items without adding extra outer margins.
-> 
+> #### Technical Explanation
+>
+> 1. **`display: inline-flex`**: Establishes a flex formatting context internally while behaving like an inline-block element externally.
+> 2. **Icon-Text Alignment**: Guarantees vector icons and text labels align centered on the same horizontal line.
+> 3. **No Line-Height Hacks**: Eliminates vertical alignment bugs between SVG graphics and font baselines.
 ---
 
 ## 6. Related Terms

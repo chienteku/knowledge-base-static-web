@@ -194,71 +194,102 @@ Checking modern display properties:
 
 ## 5. Practice Exercises
 
-### Exercise 1: Custom Property Fallback
+### Exercise 1: Feature Detection for Modern CSS Subgrid using @supports
 
-**Problem:** You want to use a modern visual filter `filter: blur(5px);`. However, you want to write a fallback style that simply lowers the opacity (`opacity: 0.5;`) for older browsers that do not support filters. Write the CSS.
+**Scenario:** An author uses `@supports` to detect browser support for CSS Grid `subgrid` and provide a fallback grid layout.
 
-**Expected output:**
+**Requirements:**
+1. Write baseline fallback grid.
+2. Add `@supports (grid-template-columns: subgrid)` enhancement.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .card {
->   opacity: 0.5;
+> /* Baseline Fallback for older browsers */
+> .card-grid {
+>   display: grid;
+>   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
 > }
-> 
-> @supports (filter: blur(5px)) {
->   .card {
->     opacity: 1;
->     filter: blur(5px);
->   }
-> }
-> ```
-> - Start by applying the opacity fallback as the default style.
-> - Wrap the filter properties inside a `@supports (filter: blur(5px))` feature query block and reset opacity to 1.
-> 
----
-
-
-
-### Exercise 2: CSS Feature Query Syntax
-
-**Problem:** Write `@supports` rule checking if browser supports `backdrop-filter: blur(10px)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> @supports (backdrop-filter: blur(10px)) { .glass { backdrop-filter: blur(10px); } }
-> ```
-> ```css
-> @supports (backdrop-filter: blur(10px)) {
->   .glass {
->     backdrop-filter: blur(10px);
+>
+> /* Progressive Enhancement for browsers supporting CSS Subgrid */
+> @supports (grid-template-columns: subgrid) {
+>   .card-body {
+>     display: grid;
+>     grid-template-rows: subgrid;
+>     grid-row: span 3;
 >   }
 > }
 > ```
 >
-> **Explanation:** `@supports` provides progressive enhancement Feature Queries.
+> #### Technical Explanation
+>
+> 1. **The `@supports` Feature Query**: Tests whether the user's browser supports a specific CSS property-value pair before applying styles.
+> 2. **Progressive Enhancement**: Allows developers to use cutting-edge modern CSS features safely without breaking experience on older browsers.
+> 3. **Zero JavaScript Feature Sniffing**: Replaces legacy JavaScript feature detection libraries (like Modernizr) with native CSS.
 > 
 ---
 
-### Exercise 3: Negated supports Condition
+### Exercise 2: Feature Detection for backdrop-filter with Opaque Fallback
 
-**Problem:** Write `@supports` rule using `not` keyword checking if browser does NOT support CSS Grid.
+**Scenario:** Provides a solid fallback color when `backdrop-filter` is unsupported.
 
-**Expected output:**
+**Requirements:**
+1. Apply `@supports (backdrop-filter: blur(1px))`.
+
 > [!check]- Answer
-> ```text
-> @supports not (display: grid) { .col { float: left; } }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> @supports not (display: grid) {
->   .col {
->     float: left;
+> .overlay-header {
+>   background-color: #0f172a;    /* Opaque fallback */
+> }
+>
+> @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+>   .overlay-header {
+>     background-color: rgb(15 23 42 / 0.8);
+>     backdrop-filter: blur(8px);
+>     -webkit-backdrop-filter: blur(8px);
 >   }
 > }
 > ```
 >
-> **Explanation:** `@supports not (...)` provides fallback styling for unsupported CSS features.
+> #### Technical Explanation
+>
+> 1. **Combining Feature Conditions**: Supports logical operators (`or`, `and`, `not`) inside `@supports` queries.
+> 2. **Vendor Prefix Testing**: Tests both standard `backdrop-filter` and `-webkit-backdrop-filter`.
+> 3. **Defensive Styling**: Ensures text readability regardless of browser support.
 > 
+---
+
+### Exercise 3: Negation Feature Query (@supports not)
+
+**Scenario:** Applies alternative fallback styles specifically when a feature is NOT supported using `not`.
+
+**Requirements:**
+1. Apply `@supports not (aspect-ratio: 1/1)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Fallback padding hack ONLY for browsers that do NOT support aspect-ratio */
+> @supports not (aspect-ratio: 1 / 1) {
+>   .square-box {
+>     padding-top: 100%;
+>     position: relative;
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `not` Operator**: Executes CSS rules strictly when the specified CSS feature is unsupported.
+> 2. **Targeted Polyfill Styles**: Isolates legacy fallback hacks so modern browsers parse clean code.
+> 3. **Maintainable Modern CSS**: Simplifies eventual legacy code removal.
 ## 6. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Viewport sizing at-rules.
 - [Container Queries (`@container`)](container_queries.md) — Component container queries.

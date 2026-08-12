@@ -156,64 +156,152 @@ function process() {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Spot the Leak
+### Exercise 1: Event Listener Memory Leak Detector
 
-**Problem:** Identify the memory leak in this route handler:
+**Scenario:** Inspects EventEmitter instances to detect dangling listeners causing memory leaks.
 
-```javascript
-const EventEmitter = require('events');
-const systemEvents = new EventEmitter();
-
-app.get('/status', (req, res) => {
-  // The leak:
-  systemEvents.on('update', () => {
-    res.send('System update complete');
-  });
-});
-```
+**Requirements:**
+1. Write auditEventEmitterLeak(emitter, eventName, threshold).
+2. Count listeners.
+3. Flag if count > threshold.
 
 > [!check]- Answer
-> - The leak occurs because `systemEvents.on('update')` registers a new listener to the global `systemEvents` emitter on every request. This keeps a reference to the `res` object in memory. Since `systemEvents` is never cleaned up, the listeners list grows with every request, creating a memory leak.
-> - *Fix:* Use `systemEvents.once('update')` to automatically clean up the listener after it fires, or use `removeListener` inside the handler.
-> 
-> 
----
-
-
-
-### Exercise 2: Generating Node.js Heap Snapshot
-
-**Problem:** Which CLI flag or `v8` module function takes a V8 heap snapshot for memory leak inspection in Chrome DevTools?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> v8.getHeapSnapshot() or node --heap-snapshot-on-signal=SIGUSR2 app.js
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const v8 = require('v8');
-> const stream = v8.getHeapSnapshot();
+> function auditEventEmitterLeak(emitter, eventName, threshold = 10) {
+>   const count = emitter.listenerCount(eventName);
+>   const isLeaking = count > threshold;
+>
+>   return {
+>     eventName,
+>     listenerCount: count,
+>     threshold,
+>     isLeaking,
+>     warning: isLeaking ? `Possible EventEmitter memory leak detected: ${count} listeners attached` : null
+>   };
+> }
+>
+> // Verification tests
+> const EventEmitter = require("events");
+> const emitter = new EventEmitter();
+> for (let i = 0; i < 15; i++) {
+>   emitter.on("data", () => {});
+> }
+>
+> const audit = auditEventEmitterLeak(emitter, "data", 10);
+> console.assert(audit.isLeaking === true, "Test 1 Failed: Flagged event listener leak");
 > ```
 >
-> **Explanation:** Heap snapshots write V8 memory object allocations to file for inspection in Chrome DevTools.
+> #### Technical Explanation
+>
+> 1. **EventEmitter Memory Leaks**: Attaching event listeners inside request handlers without removing them prevents garbage collection of request scopes.
+> 2. **`setMaxListeners(n)`**: Node.js prints a warning if >10 listeners are attached to an event by default.
+> 3. **Teardown Cleanup**: Always unbind listeners (`emitter.removeListener()`) during component unmount/teardown.
 > 
 ---
 
-### Exercise 3: Identifying Garbage Collection Root References
+### Exercise 2: Unbound In-Memory Cache Sweeper & LRU Evictor
 
-**Problem:** What are GC Roots in V8 garbage collection?
+**Scenario:** Implements a bounded in-memory cache with Least Recently Used (LRU) eviction to prevent unbound memory leak growth.
 
-**Expected output:**
+**Requirements:**
+1. Write createBoundedCache(maxSize).
+2. Implement `set(key, val)` and `get(key)`.
+3. Evict oldest entry when maxSize is reached.
+
 > [!check]- Answer
-> ```text
-> Active root objects (global variables, active call stack variables, DOM/event listeners) that prevent referenced objects from being garbage collected.
-> ```
-> ```text
-> Active root objects (global variables, active call stack variables, DOM/event listeners) that prevent referenced objects from being garbage collected.
+>
+> #### Implementation
+>
+> ```javascript
+> function createBoundedCache(maxSize = 3) {
+>   const cache = new Map();
+>
+>   return {
+>     get(key) {
+>       if (!cache.has(key)) return undefined;
+>       const val = cache.get(key);
+>       // Refresh key position for LRU
+>       cache.delete(key);
+>       cache.set(key, val);
+>       return val;
+>     },
+>     set(key, val) {
+>       if (cache.has(key)) {
+>         cache.delete(key);
+>       } else if (cache.size >= maxSize) {
+>         // Evict oldest (first) entry in Map!
+>         const firstKey = cache.keys().next().value;
+>         cache.delete(firstKey);
+>       }
+>       cache.set(key, val);
+>     },
+>     size: () => cache.size
+>   };
+> }
+>
+> // Verification tests
+> const c = createBoundedCache(2);
+> c.set("k1", 1);
+> c.set("k2", 2);
+> c.set("k3", 3); // Triggers LRU eviction of k1!
+>
+> console.assert(c.get("k1") === undefined, "Test 1 Failed: k1 evicted");
+> console.assert(c.size() === 2, "Test 2 Failed: Size bounded at max 2");
 > ```
 >
-> **Explanation:** Objects reachable from GC Roots cannot be garbage-collected by V8.
+> #### Technical Explanation
+>
+> 1. **Unbound Global Cache Leak**: Storing objects in global JavaScript objects (`const cache = {}`) without TTL or max limits causes Heap OOM crashes.
+> 2. **Map Key Ordering**: JavaScript `Map` preserves insertion order; deleting and re-setting a key moves it to the back (most recent position).
+> 3. **lru-cache Package**: Popular production LRU cache package with TTL expiration and byte-size caps.
 > 
+---
+
+### Exercise 3: V8 Heap Usage Monitor & Threshold Guard
+
+**Scenario:** Monitors V8 heap memory usage (`process.memoryUsage()`) and triggers warning alerts when heap usage exceeds 85% of heap limit.
+
+**Requirements:**
+1. Write auditHeapMemoryUsage(memoryUsageObj, heapLimitBytes).
+2. Calculate heap usage ratio.
+3. Flag memory leak warning.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function auditHeapMemoryUsage(memoryUsageObj, heapLimitBytes = 1_500_000_000) {
+>   const heapUsed = memoryUsageObj.heapUsed || 0;
+>   const heapTotal = memoryUsageObj.heapTotal || 0;
+>
+>   const usageRatio = heapUsed / heapLimitBytes;
+>   const isThresholdExceeded = usageRatio >= 0.85;
+>
+>   return {
+>     heapUsedMb: Number((heapUsed / 1024 / 1024).toFixed(2)),
+>     usageRatio: Number(usageRatio.toFixed(2)),
+>     isThresholdExceeded,
+>     status: isThresholdExceeded ? "CRITICAL_MEMORY_WARNING" : "HEALTHY"
+>   };
+> }
+>
+> // Verification tests
+> const mem = { heapUsed: 1_350_000_000, heapTotal: 1_400_000_000 };
+> const audit = auditHeapMemoryUsage(mem, 1_500_000_000);
+>
+> console.assert(audit.isThresholdExceeded === true, "Test 1 Failed: 90% heap usage flagged critical");
+> console.assert(audit.status === "CRITICAL_MEMORY_WARNING", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`process.memoryUsage()`**: Returns `rss` (Resident Set Size), `heapTotal` (allocated V8 heap), `heapUsed` (actual occupied JS objects).
+> 2. **V8 Heap Limit (`--max-old-space-size`)**: Default Node.js 64-bit V8 heap limit is ~2GB–4GB; configure via `NODE_OPTIONS=--max-old-space-size=4096`.
+> 3. **Heap Snapshots**: Generating V8 heap snapshots (`v8.writeHeapSnapshot()`) enables inspecting leaking retained objects in Chrome DevTools.
 ## 6. Related Terms
 - [Blocking the Event Loop](../level_01/blocking_event_loop.md) — Freezing the main execution thread.
 - [Buffers](../level_06/buffers.md) — High-memory byte allocations that require garbage collection.

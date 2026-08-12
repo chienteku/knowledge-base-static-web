@@ -138,68 +138,115 @@ div p { color: blue; } /* Selects all descendant paragraphs at any depth */
 
 ## 5. Practice Exercises
 
-### Exercise 1: Reading Selectors
+### Exercise 1: Styling UI Elements using Element, Class, and ID Selectors
 
-**Problem:** Based on the following CSS, what HTML attribute is the developer trying to target?
-```css
-#hero-image { width: 100%; }
-```
+**Scenario:** An author uses basic CSS selectors (element, class, ID) to style an article card layout.
 
-**Expected output:**
+**Requirements:**
+1. Use element selector `article` for base layout.
+2. Use class selector `.card-title` for typography.
+3. Use ID selector `#main-header` for unique header.
+
 > [!check]- Answer
-> ```text
-> An `id` attribute! The `#` symbol indicates an ID selector. The HTML would look like `<img id="hero-image" src="...">`.
-> ```
-> - Does it start with a dot, a hash, or a letter?
-> 
----
-
-
-
-### Exercise 2: Basic Selector Syntax Matrix
-
-**Problem:** Match target HTML element to selector syntax:
-1. Element `<button>` (`button`)
-2. Class `<div class="card">` (`.card`)
-3. ID `<div id="app">` (`#app`)
-4. Universal selector (`*`)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. button
-> 2. .card
-> 3. #app
-> 4. *
-> ```
-> ```text
-> 1. button -> Type selector
-> 2. .card -> Class selector
-> 3. #app -> ID selector
-> 4. * -> Universal selector
-> ```
 >
-> **Explanation:** CSS selectors target elements by tag name, class, ID, or universal patterns.
-> 
----
-
-### Exercise 3: Chaining Multiple Class Selectors
-
-**Problem:** Write CSS selector targeting an element that has BOTH `btn` AND `primary` classes (`<button class="btn primary">`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .btn.primary { color: white; }
-> ```
+> #### Implementation
+>
 > ```css
-> .btn.primary {
->   color: white;
+> /* 1. Element Selector (Specificity: 0,0,1) */
+> article {
+>   padding: 1.5rem;
+>   background-color: #ffffff;
+> }
+>
+> /* 2. Class Selector (Specificity: 0,1,0) - Recommended for component styling */
+> .card-title {
+>   font-size: 1.5rem;
+>   color: #1e293b;
+> }
+>
+> /* 3. ID Selector (Specificity: 1,0,0) - Use sparingly due to high specificity */
+> #main-header {
+>   border-bottom: 2px solid #2563eb;
 > }
 > ```
 >
-> **Explanation:** Chaining class selectors without spaces (`.btn.primary`) targets elements possessing all listed classes.
+> #### Technical Explanation
+>
+> 1. **Selector Types & Weight**: Selectors identify which HTML elements receive CSS declarations; different selector types carry different specificity weights.
+> 2. **Class Selector Primacy**: Class selectors (`.card-title`) are the gold standard for component styling due to reusability and balanced specificity (0,1,0).
+> 3. **ID Selector High Specificity**: ID selectors (`#main-header`) have heavy specificity (1,0,0) and cannot be reused, so use classes for UI components instead.
 > 
+---
+
+### Exercise 2: Targeting Nested Components with Descendant vs Child Combinators
+
+**Scenario:** Differentiates child combinators (`>`) from descendant combinators (` `).
+
+**Requirements:**
+1. Use `.nav > ul > li` child combinator.
+2. Use `.content p` descendant combinator.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Direct Child Combinator (Target only immediate <li> children) */
+> .nav-menu > li {
+>   display: inline-block;
+> }
+>
+> /* Descendant Combinator (Targets ALL <p> inside .article-body, including nested ones) */
+> .article-body p {
+>   margin-bottom: 1rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Direct Child Combinator (`>`)**: Selects elements that are IMMEDIATE children of the specified parent, ignoring deeper nested descendants.
+> 2. **Descendant Combinator (` ` space)**: Selects ALL matching elements nested anywhere inside the ancestor element.
+> 3. **DOM Scope Precision**: Child combinators prevent unwanted style leakage into sub-nested lists or widgets.
+> 
+---
+
+### Exercise 3: Styling Interactive Hover and Focus-Visible States via Pseudo-Classes
+
+**Scenario:** Styles interactive buttons using `:hover`, `:active`, and `:focus-visible` pseudo-classes.
+
+**Requirements:**
+1. Style `.btn:hover` and `.btn:focus-visible` states.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .btn {
+>   background-color: #2563eb;
+>   color: #ffffff;
+>   padding: 0.75rem 1.5rem;
+>   border-radius: 0.375rem;
+>   transition: background-color 0.2s ease;
+> }
+>
+> /* Hover State */
+> .btn:hover {
+>   background-color: #1d4ed8;
+> }
+>
+> /* Keyboard Focus State (Accessible Focus Indicator) */
+> .btn:focus-visible {
+>   outline: 3px solid #93c5fd;
+>   outline-offset: 2px;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Pseudo-Classes (`:hover`, `:focus`)**: Target elements based on dynamic user state or interaction without altering DOM classes.
+> 2. **`:focus-visible` vs `:focus`**: `:focus-visible` shows focus rings ONLY when activated via keyboard Tab navigation, keeping mouse clicks clean.
+> 3. **WCAG Focus Compliance**: Always provide high-contrast `:focus-visible` indicators for accessibility compliance.
 ## 6. Related Terms
 - [Specificity](specificity.md) — What happens when an Element selector and a Class selector both try to style the exact same element?
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The curly braces and properties that come immediately *after* the selector.

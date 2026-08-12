@@ -146,153 +146,159 @@ app.get('/users/active', ...); // Specific routes first
 app.get('/users/:id', ...); // Generic param routes after
 ```
 
-
-
-### Mistake 4: Assuming Route Parameters Are Automatically Cast to Numbers
-
-**The mistake:** Using strict equality `if (req.params.id === 42)` on route `/users/:id`.
-
-**Why it's wrong:** Route parameters in `req.params` are ALWAYS string types (e.g. `'42'`). Strict equality with number `42` evaluates to `false`.
-
-*Incorrect:*
-```javascript
-app.get('/users/:id', (req, res) => {
-  if (req.params.id === 42) {} // ❌ false! '42' !== 42!
-});
-```
-
-*Fix:*
-```javascript
-app.get('/users/:id', (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  if (id === 42) {}
-});
-```
-
-### Mistake 5: Overlooking Route Parameter Specificity Order (Route Shadowing)
-
-**The mistake:** Registering generic route `app.get('/users/:id')` BEFORE specific route `app.get('/users/active')`.
-
-**Why it's wrong:** Express matches routes in order of registration. A request to `/users/active` will match `/users/:id` with `req.params.id = 'active'`, shadowing the specific handler.
-
-*Incorrect:*
-```javascript
-app.get('/users/:id', ...); // Shadowing route!
-app.get('/users/active', ...); // ❌ Never reached for /users/active!
-```
-
-*Fix:*
-```javascript
-app.get('/users/active', ...); // Specific routes first
-app.get('/users/:id', ...); // Generic param routes after
-```
-
-
-
-### Mistake 6: Assuming Route Parameters Are Automatically Cast to Numbers
-
-**The mistake:** Using strict equality `if (req.params.id === 42)` on route `/users/:id`.
-
-**Why it's wrong:** Route parameters in `req.params` are ALWAYS string types (e.g. `'42'`). Strict equality with number `42` evaluates to `false`.
-
-*Incorrect:*
-```javascript
-app.get('/users/:id', (req, res) => {
-  if (req.params.id === 42) {} // ❌ false! '42' !== 42!
-});
-```
-
-*Fix:*
-```javascript
-app.get('/users/:id', (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  if (id === 42) {}
-});
-```
-
-### Mistake 7: Overlooking Route Parameter Specificity Order (Route Shadowing)
-
-**The mistake:** Registering generic route `app.get('/users/:id')` BEFORE specific route `app.get('/users/active')`.
-
-**Why it's wrong:** Express matches routes in order of registration. A request to `/users/active` will match `/users/:id` with `req.params.id = 'active'`, shadowing the specific handler.
-
-*Incorrect:*
-```javascript
-app.get('/users/:id', ...); // Shadowing route!
-app.get('/users/active', ...); // ❌ Never reached for /users/active!
-```
-
-*Fix:*
-```javascript
-app.get('/users/active', ...); // Specific routes first
-app.get('/users/:id', ...); // Generic param routes after
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: URL Parameters Extraction
+### Exercise 1: Dynamic Route Parameter Matcher & Extractor
 
-**Problem:** Complete the route handler below to return a message containing the parameters and query parameters:
-- **Target URL:** `/api/products/laptop?color=blue&discount=true`
+**Scenario:** Parses Express-style route patterns containing parameter placeholders (`/users/:userId/orders/:orderId`) to extract parameter values from URLs.
 
-```javascript
-// Route configuration:
-app.get('/api/products/:category', (req, res) => {
-  const category = req.params.category;
-  const { color, discount } = req.query;
-
-  res.json({
-    category,
-    color,
-    discount: discount === 'true' // Convert string to boolean
-  });
-});
-```
-
----
+**Requirements:**
+1. Write matchAndExtractRouteParams(pattern, path).
+2. Convert `:param` to regex groups.
+3. Return parameter key-value object.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
+>
+> #### Implementation
+>
+> ```javascript
+> function matchAndExtractRouteParams(pattern, path) {
+>   const paramNames = [];
+>   const regexPattern = pattern.replace(/:([a-zA-Z0-9_]+)/g, (_, name) => {
+>     paramNames.push(name);
+>     return "([^/]+)";
+>   });
+>
+>   const regex = new RegExp(`^${regexPattern}$`);
+>   const match = path.match(regex);
+>
+>   if (!match) {
+>     return { matched: false, params: {} };
+>   }
+>
+>   const params = {};
+>   paramNames.forEach((name, index) => {
+>     params[name] = decodeURIComponent(match[index + 1]);
+>   });
+>
+>   return { matched: true, params };
+> }
+>
+> // Verification tests
+> const res = matchAndExtractRouteParams("/users/:userId/orders/:orderId", "/users/42/orders/ord_999");
+> console.assert(res.matched === true, "Test 1 Failed");
+> console.assert(res.params.userId === "42", "Test 2 Failed");
+> console.assert(res.params.orderId === "ord_999", "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Route Parameters Concept**: Named URL segments defined with a colon (`:id`) used to capture values at specific path positions.
+> 2. **path-to-regexp Engine**: Express uses `path-to-regexp` library under the hood to convert route patterns into regular expressions.
+> 3. **req.params Object**: Express places extracted parameters onto `req.params` (e.g. `req.params.userId`).
 > 
 ---
 
-### Exercise 2: Defining Multi-Param Route Path
+### Exercise 2: Route Parameter Validation Middleware
 
-**Problem:** Define Express route path matching `/books/category/science/id/101` extracting `category` and `bookId`.
+**Scenario:** An Express parameter validator middleware verifies route parameter types (e.g. `:id` must be integer) before executing controller logic.
 
-**Expected output:**
+**Requirements:**
+1. Write validateParamIntMiddleware(paramName).
+2. Verify `req.params[paramName]` is numeric.
+3. Return 400 Bad Request if validation fails.
+
 > [!check]- Answer
-> ```text
-> app.get('/books/category/:category/id/:bookId', (req, res) => { ... });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> app.get('/books/category/:category/id/:bookId', (req, res) => {
->   const { category, bookId } = req.params;
->   res.send(`Category: ${category}, ID: ${bookId}`);
+> function validateParamIntMiddleware(paramName) {
+>   return function (req, res, next) {
+>     const rawVal = req.params?.[paramName];
+>     const isInteger = /^\d+$/.test(rawVal || "");
+>
+>     if (!isInteger) {
+>       res.statusCode = 400;
+>       return res.end(JSON.stringify({ error: `INVALID_PARAMETER: '${paramName}' must be an integer` }));
+>     }
+>
+>     req.params[paramName] = parseInt(rawVal, 10);
+>     next();
+>   };
+> }
+>
+> // Verification tests
+> let status = 0;
+> const mockRes = { setHeader: () => {}, end: () => {}, set statusCode(c) { status = c; } };
+>
+> const middleware = validateParamIntMiddleware("userId");
+> const reqOk = { params: { userId: "42" } };
+>
+> middleware(reqOk, mockRes, () => {});
+> console.assert(reqOk.params.userId === 42, "Test 1 Failed: Converted to integer");
+>
+> const reqBad = { params: { userId: "abc" } };
+> middleware(reqBad, mockRes, () => {});
+> console.assert(status === 400, "Test 2 Failed: Returned 400 for non-integer");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Input Validation Shift-Left**: Validating parameter types at the middleware layer prevents database query errors downstream.
+> 2. **Type Conversion**: Converts string URL params into native numbers or UUIDs before reaching controllers.
+> 3. **400 Bad Request**: Standard HTTP status code returned for client input validation failures.
+> 
+---
+
+### Exercise 3: Express router.param() Parameter Pre-loader
+
+**Scenario:** Simulates Express `router.param(name, callback)` pattern to automatically load entity models from the database when a parameter is present in the route.
+
+**Requirements:**
+1. Write registerParamPreloader(paramName, fetchEntityFn).
+2. Execute fetchEntityFn.
+3. Attach entity to `req[entityName]`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createParamPreloader(paramName, fetchEntityFn) {
+>   return async function paramPreloadMiddleware(req, res, next) {
+>     const paramVal = req.params?.[paramName];
+>     if (!paramVal) return next();
+>
+>     try {
+>       const entity = await fetchEntityFn(paramVal);
+>       if (!entity) {
+>         res.statusCode = 404;
+>         return res.end(JSON.stringify({ error: `${paramName} NOT_FOUND` }));
+>       }
+>       req[paramName] = entity;
+>       next();
+>     } catch (err) {
+>       next(err);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const fetchUser = async (id) => id === "42" ? { id: 42, name: "Alice" } : null;
+> const preloader = createParamPreloader("user", fetchUser);
+>
+> const mockReq = { params: { user: "42" } };
+> preloader(mockReq, {}, () => {}).then(() => {
+>   console.assert(mockReq.user.name === "Alice", "Test 1 Failed: Entity attached to req.user");
 > });
 > ```
 >
-> **Explanation:** Colons (`:name`) define named path parameter placeholders in Express route definitions.
-> 
----
-
-### Exercise 3: Optional Route Parameters
-
-**Problem:** Write route path for `/posts/:id?` making `id` optional.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> app.get('/posts/:id?', (req, res) => { ... });
-> ```
-> ```javascript
-> app.get('/posts/:id?', (req, res) => {
->   const id = req.params.id;
-> });
-> ```
+> #### Technical Explanation
 >
-> **Explanation:** Question mark (`:id?`) designates optional route parameters.
-> 
+> 1. **router.param() Pattern**: Triggers automatic pre-loading logic whenever a route contains a specified parameter.
+> 2. **DRY Controller Logic**: Eliminates repeating entity database lookup code across multiple HTTP route handlers.
+> 3. **Automatic 404 Handling**: If pre-loaded entity is not found in database, middleware triggers 404 response automatically.
 ## 6. Related Terms
 - [Routing](routing.md) — The routing system matching URL structures.
 - [The req & res Objects](req_res.md) — The HTTP wrapper structures holding incoming parameters.

@@ -105,65 +105,96 @@ The W3C created the **`white-space`** property to allow developers to override t
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Infinite Line
+### Exercise 1: Preserving Code Formatting with white-space: pre-wrap
 
-**Problem:** You apply `white-space: nowrap;` to a very long paragraph inside a 300px wide box. What happens to the text?
+**Scenario:** An author preserves indentation and line breaks inside a user code block using `white-space: pre-wrap`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `white-space: pre-wrap` to `<pre>` or `<code>`.
+2. Ensure text wraps long lines gracefully.
+
 > [!check]- Answer
-> ```text
-> The text refuses to wrap to a second line. It will blast straight through the right wall of the 300px box and keep going horizontally, forcing the user to scroll sideways to read it.
-> ```
-> - Does `nowrap` respect the width of the container?
-> 
----
-
-
-
-### Exercise 2: Preserving User Textarea Newlines
-
-**Problem:** Write CSS rule preserving user line breaks and spaces entered into `<textarea>` when rendered on page `.user-bio`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .user-bio { white-space: pre-wrap; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .user-bio {
->   white-space: pre-wrap;
+> .code-comment-block {
+>   font-family: ui-monospace, SFMono-Regular, monospace;
+>   font-size: 0.875rem;
+>   white-space: pre-wrap;        /* Preserves newlines and spaces, BUT wraps long lines to fit container! */
+>   word-break: break-word;
+>   background-color: #0f172a;
+>   color: #f8fafc;
+>   padding: 1rem;
+>   border-radius: 0.375rem;
 > }
 > ```
 >
-> **Explanation:** `white-space: pre-wrap` preserves source newlines while allowing normal line wrapping.
+> #### Technical Explanation
+>
+> 1. **The `white-space` Property**: Controls how browser layout engines handle whitespace sequences and line breaks inside an element.
+> 2. **`white-space: pre-wrap`**: Preserves all HTML spaces and newline breaks (like `<pre>`), while allowing long lines to wrap onto new lines to fit container boundaries.
+> 3. **`pre` vs `pre-wrap`**: Standard `white-space: pre` does NOT wrap text, causing long lines to overflow container bounds horizontally.
 > 
 ---
 
-### Exercise 3: White Space Property Matrix
+### Exercise 2: Preventing Button Text Wrapping with white-space: nowrap
 
-**Problem:** Match `white-space` value to behavior:
-1. `normal` 
-2. `nowrap` 
-3. `pre` 
-4. `pre-wrap` 
+**Scenario:** Prevents call-to-action button labels from wrapping onto two lines on narrow mobile screens.
 
-**Expected output:**
+**Requirements:**
+1. Apply `white-space: nowrap` to `.btn-nowrap`.
+
 > [!check]- Answer
-> ```text
-> 1. Collapses whitespace, wraps lines (default)
-> 2. Collapses whitespace, suppresses line wrapping
-> 3. Preserves whitespace, suppresses line wrapping
-> 4. Preserves whitespace, allows line wrapping
-> ```
-> ```text
-> 1. normal -> Collapses spaces, wraps text (default)
-> 2. nowrap -> Collapses spaces, no line wrapping
-> 3. pre -> Preserves spaces/newlines, no line wrapping
-> 4. pre-wrap -> Preserves spaces/newlines, allows line wrapping
+>
+> #### Implementation
+>
+> ```css
+> .btn-nowrap {
+>   display: inline-flex;
+>   align-items: center;
+>   white-space: nowrap;          /* Forces button label text to stay on a single line */
+>   padding: 0.75rem 1.5rem;
+>   background-color: #2563eb;
+>   color: #ffffff;
+>   border-radius: 0.375rem;
+> }
 > ```
 >
-> **Explanation:** `white-space` dictates whitespace collapsing and line wrapping rules.
+> #### Technical Explanation
+>
+> 1. **`white-space: nowrap`**: Collapses sequences of whitespace into a single space and suppresses all automatic line breaks.
+> 2. **Button Protection**: Guarantees action button labels never split awkwardly into 2 wrapped lines on mobile displays.
+> 3. **Flex Item Protection**: Prevents flex items from wrapping text inside horizontal scroll bars.
 > 
+---
+
+### Exercise 3: Handling Dynamic Chat Messages with white-space: break-spaces
+
+**Scenario:** Preserves user spaces and forces breaks on long URLs in chat message bubbles using `white-space: break-spaces`.
+
+**Requirements:**
+1. Apply `white-space: break-spaces` to `.chat-bubble`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .chat-bubble {
+>   white-space: break-spaces;    /* Preserves spaces, wraps lines, AND breaks trailing whitespace */
+>   word-break: break-word;
+>   padding: 0.75rem 1rem;
+>   background-color: #f1f5f9;
+>   border-radius: 1rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`white-space: break-spaces`**: Modern property value that behaves like `pre-wrap`, but additionally forces trailing spaces to wrap and occupy layout space.
+> 2. **User Content Preservation**: Preserves custom user text formatting in comments, chat applications, and forum posts.
+> 3. **Layout Shift Prevention**: Prevents trailing space sequences from overflowing chat bubbles.
 ## 6. Related Terms
 - [`text-overflow` & `overflow-wrap`](text_overflow.md) — When you use `nowrap` and the text blows out of the box, `text-overflow` allows you to cut it off with a "..." (ellipsis).
 

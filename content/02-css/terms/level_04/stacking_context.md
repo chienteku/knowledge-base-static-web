@@ -149,162 +149,100 @@ Even though the sheet in Folder A has a score of `9999`, it is trapped inside Fo
 /* Aware that transform/opacity/filter create new stacking contexts */
 ```
 
-
-
-### Mistake 4: Expecting `z-index: 9999` to Out-Stack an Element in a Different Parent Stacking Context
-
-**The mistake:** Setting `z-index: 9999` on a child element inside a parent container with `z-index: 1`.
-
-**Why it's wrong:** Child elements CANNOT escape the stacking context of their parent. If Parent A has `z-index: 1` and Parent B has `z-index: 2`, any child inside Parent B will render on top of Parent A's children regardless of `z-index` numbers.
-
-*Incorrect:*
-```css
-/* Parent A (z-index: 1) contains Child A (z-index: 9999) */
-/* Child A still renders BELOW Parent B (z-index: 2)! */
-```
-
-*Fix:*
-```css
-/* Adjust parent container stacking contexts or move element to document root */
-```
-
-### Mistake 5: Creating Accidental Stacking Contexts via CSS Properties (`opacity`, `transform`, `filter`)
-
-**The mistake:** Adding `transform: scale(1)` or `opacity: 0.99` to a container and wondering why `position: fixed` or `z-index` child behaviors change.
-
-**Why it's wrong:** CSS properties like `transform`, `opacity` < 1, `filter`, `will-change`, and `container-type` implicitly create a NEW Stacking Context on the element.
-
-*Incorrect:*
-```css
-.card { transform: translateZ(0); } /* ❌ Implicitly creates new stacking context! */
-```
-
-*Fix:*
-```css
-/* Aware that transform/opacity/filter create new stacking contexts */
-```
-
-
-
-### Mistake 6: Expecting `z-index: 9999` to Out-Stack an Element in a Different Parent Stacking Context
-
-**The mistake:** Setting `z-index: 9999` on a child element inside a parent container with `z-index: 1`.
-
-**Why it's wrong:** Child elements CANNOT escape the stacking context of their parent. If Parent A has `z-index: 1` and Parent B has `z-index: 2`, any child inside Parent B will render on top of Parent A's children regardless of `z-index` numbers.
-
-*Incorrect:*
-```css
-/* Parent A (z-index: 1) contains Child A (z-index: 9999) */
-/* Child A still renders BELOW Parent B (z-index: 2)! */
-```
-
-*Fix:*
-```css
-/* Adjust parent container stacking contexts or move element to document root */
-```
-
-### Mistake 7: Creating Accidental Stacking Contexts via CSS Properties (`opacity`, `transform`, `filter`)
-
-**The mistake:** Adding `transform: scale(1)` or `opacity: 0.99` to a container and wondering why `position: fixed` or `z-index` child behaviors change.
-
-**Why it's wrong:** CSS properties like `transform`, `opacity` < 1, `filter`, `will-change`, and `container-type` implicitly create a NEW Stacking Context on the element.
-
-*Incorrect:*
-```css
-.card { transform: translateZ(0); } /* ❌ Implicitly creates new stacking context! */
-```
-
-*Fix:*
-```css
-/* Aware that transform/opacity/filter create new stacking contexts */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Finding the Victor
+### Exercise 1: Creating Isolated Stacking Contexts using isolation isolate
 
-**Problem:** Look at the following HTML/CSS setup. Which element will be displayed on top?
+**Scenario:** An engineer creates an isolated stacking context on a component wrapper using `isolation: isolate` to prevent `z-index` leaks.
 
-```html
-<div class="box-x">
-  <div class="child-1">Child 1</div>
-</div>
-<div class="box-y">
-  <div class="child-2">Child 2</div>
-</div>
-```
-```css
-.box-x {
-  position: relative;
-  z-index: 10;
-}
-.child-1 {
-  position: absolute;
-  z-index: 9999;
-}
-.box-y {
-  position: relative;
-  z-index: 20;
-}
-.child-2 {
-  position: absolute;
-  z-index: 1;
-}
-```
+**Requirements:**
+1. Apply `isolation: isolate` to `.card-wrapper`.
+2. Set internal child `z-index: 10`.
+3. Verify child `z-index` does not leak to global page.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> `child-2`! 
-> Because `.box-y` has a higher `z-index` (20) than `.box-x` (10), everything inside `.box-y` (including `child-2`) is rendered on top of everything inside `.box-x`. The `z-index: 9999` on `child-1` is trapped within its parent's lower context.
-> ```
-> - Identify which elements create stacking contexts.
-> - Compare parent index priorities before comparing child values.
-> 
----
-
-
-
-### Exercise 2: Properties Creating Stacking Contexts
-
-**Problem:** List 4 CSS properties that implicitly create a new Stacking Context on an element.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. position: relative/absolute with z-index (not auto)
-> 2. opacity < 1
-> 3. transform (not none)
-> 4. filter / backdrop-filter (not none)
-> ```
-> ```text
-> 1. position (relative/absolute) with z-index
-> 2. opacity < 1
-> 3. transform / filter
-> 4. isolation: isolate
-> ```
 >
-> **Explanation:** These properties create isolated stacking contexts for child layers.
-> 
----
-
-### Exercise 3: Explicit Stacking Context Isolation
-
-**Problem:** Which modern CSS property explicitly creates an isolated Stacking Context without adding visual side effects?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> isolation: isolate;
-> ```
+> #### Implementation
+>
 > ```css
-> .component {
->   isolation: isolate;
+> .card-wrapper {
+>   isolation: isolate;           /* Creates a clean, isolated Stacking Context */
+>   position: relative;
+> }
+>
+> .card-badge {
+>   position: absolute;
+>   z-index: 9999;               /* High z-index is contained STRICTLY inside .card-wrapper! */
 > }
 > ```
 >
-> **Explanation:** `isolation: isolate` creates a clean stacking context boundary.
+> #### Technical Explanation
+>
+> 1. **Stacking Context Concept**: A three-dimensional conceptual grouping layer in browser rendering that dictates how elements overlap along the Z-axis.
+> 2. **`isolation: isolate` Best Practice**: The modern property for creating an isolated stacking context without needing `transform` or `opacity` side-effects.
+> 3. **Preventing Z-Index Leaks**: Prevents internal component `z-index: 9999` from accidentally floating over global page modals or navigation headers.
 > 
+---
+
+### Exercise 2: Resolving Stacking Bugs between Parent Containers and Dropdown Menus
+
+**Scenario:** Explains why a child with `z-index: 1000` cannot stack above a parent with lower stacking context.
+
+**Requirements:**
+1. Adjust parent stacking context levels to fix dropdown clipping.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .header-bar {
+>   position: relative;
+>   z-index: 20;                  /* Higher parent stacking context */
+> }
+>
+> .hero-section {
+>   position: relative;
+>   z-index: 10;                  /* Lower parent stacking context */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Parent Stacking Context Dominance**: A child element CANNOT stack above an element outside its parent's stacking context if the parent has a lower `z-index`!
+> 2. **Stacking Order Tree**: Z-index comparisons occur strictly between elements within the SAME stacking context.
+> 3. **Root Context**: The root `<html>` element forms the initial top-level stacking context.
+> 
+---
+
+### Exercise 3: Stacking Context Triggers Checklist
+
+**Scenario:** Lists common CSS properties that trigger new stacking contexts.
+
+**Requirements:**
+1. Demonstrate stacking context triggers (`opacity`, `transform`, `filter`).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .stack-trigger {
+>   /* Properties that create a new Stacking Context: */
+>   /* 1. position: relative|absolute|fixed + z-index != auto */
+>   /* 2. opacity < 1 */
+>   /* 3. transform != none */
+>   /* 4. filter != none */
+>   /* 5. isolation: isolate */
+>   opacity: 0.99;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Implicit Stacking Triggers**: Setting `opacity: 0.99`, `transform: translate(0)`, or `filter: blur(0)` implicitly creates a new stacking context!
+> 2. **DevTools Stacking Inspection**: Use Chrome DevTools 'Layers' tab to inspect 3D stacking context trees.
+> 3. **Predictable Layering**: Use `isolation: isolate` when explicit stacking contexts are needed.
 ## 6. Related Terms
 - [`z-index`](z_index.md) — The numbering sequence sorted within the context.
 - [`opacity`](../level_09/opacity.md) — One of the visual triggers that creates a context.

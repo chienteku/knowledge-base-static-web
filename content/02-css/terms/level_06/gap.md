@@ -109,134 +109,89 @@ If you are using `flex-wrap` and have multiple rows of items, you can define dif
 }
 ```
 
-
-
-### Mistake 5: Using Legacy `grid-gap` Instead of Modern Un-Prefixed `gap` Property
-
-**The mistake:** Writing `grid-gap: 20px;` in modern stylesheets.
-
-**Why it's wrong:** `grid-gap` has been renamed to un-prefixed `gap` in modern W3C CSS Grid specifications to support both CSS Grid AND Flexbox layout containers.
-
-*Incorrect:*
-```css
-.container { grid-gap: 20px; } /* Legacy grid-gap property */
-```
-
-*Fix:*
-```css
-.container { gap: 20px; } /* Modern un-prefixed gap property */
-```
-
-### Mistake 6: Using `margin` on Grid Child Items for Spacing (Outer Border Double Gap Bug)
-
-**The mistake:** Adding `margin: 10px` to every child item inside a CSS Grid container.
-
-**Why it's wrong:** Using `margin` on grid items adds unwanted spacing on outer container edges. Use the `gap` property on the grid parent container to add space strictly BETWEEN grid cells.
-
-*Incorrect:*
-```css
-.grid-item { margin: 10px; } /* ❌ Adds unwanted space on outer container edges! */
-```
-
-*Fix:*
-```css
-.grid-container {
-  display: grid;
-  gap: 20px; /* Clean spacing between grid cells */
-}
-```
-
-
-
-### Mistake 7: Using Legacy `grid-gap` Instead of Modern Un-Prefixed `gap` Property
-
-**The mistake:** Writing `grid-gap: 20px;` in modern stylesheets.
-
-**Why it's wrong:** `grid-gap` has been renamed to un-prefixed `gap` in modern W3C CSS Grid specifications to support both CSS Grid AND Flexbox layout containers.
-
-*Incorrect:*
-```css
-.container { grid-gap: 20px; } /* Legacy grid-gap property */
-```
-
-*Fix:*
-```css
-.container { gap: 20px; } /* Modern un-prefixed gap property */
-```
-
-### Mistake 8: Using `margin` on Grid Child Items for Spacing (Outer Border Double Gap Bug)
-
-**The mistake:** Adding `margin: 10px` to every child item inside a CSS Grid container.
-
-**Why it's wrong:** Using `margin` on grid items adds unwanted spacing on outer container edges. Use the `gap` property on the grid parent container to add space strictly BETWEEN grid cells.
-
-*Incorrect:*
-```css
-.grid-item { margin: 10px; } /* ❌ Adds unwanted space on outer container edges! */
-```
-
-*Fix:*
-```css
-.grid-container {
-  display: grid;
-  gap: 20px; /* Clean spacing between grid cells */
-}
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Margin vs Gap
+### Exercise 1: Uniform Grid Track Spacing using gap
 
-**Problem:** You have a Flex Container with two images. You want 30px of space between them. 
-Option A: You give the first image `margin-right: 30px;`.
-Option B: You give the Flex Container `gap: 30px;`.
-Why is Option B better?
+**Scenario:** An author specifies clean, uniform spacing between all grid rows and columns using `gap: 1.5rem`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: grid`.
+2. Set `grid-template-columns: repeat(3, 1fr)`.
+3. Set `gap: 1.5rem`.
+
 > [!check]- Answer
-> ```text
-> Option B (`gap`) is better because it is scalable and maintainable. If you later add a third image to the container, `gap` will automatically put 30px between Image 2 and Image 3. If you used `margin`, you would have to go back and manually update the CSS for Image 2!
-> ```
-> - What happens if the layout changes in the future?
-> 
----
-
-
-
-### Exercise 2: Row and Column Gap Shorthand
-
-**Problem:** Write CSS `gap` shorthand applying 10px vertical row gap and 20px horizontal column gap.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> gap: 10px 20px;
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .grid {
->   gap: 10px 20px;
+> .card-grid {
+>   display: grid;
+>   grid-template-columns: repeat(3, 1fr);
+>   gap: 1.5rem;                  /* 24px uniform spacing between rows AND columns */
+>   padding: 1.5rem;
 > }
 > ```
 >
-> **Explanation:** 2-value `gap` shorthand sets `row-gap` (10px) and `column-gap` (20px).
+> #### Technical Explanation
+>
+> 1. **The `gap` Property**: Defines the gutter space between grid tracks (rows and columns) without creating margin on outer container edges.
+> 2. **Replacing Margin Hacks**: Replaces legacy margin hacks (like `:nth-child` margin removal or negative outer margin wrappers).
+> 3. **Calculated Space Deduction**: Grid automatically deducts `gap` totals before calculating `1fr` column widths.
 > 
 ---
 
-### Exercise 3: Flexbox Gap Support
+### Exercise 2: Independent Row and Column Gaps
 
-**Problem:** Does the CSS `gap` property work inside Flexbox (`display: flex`) containers in modern browsers? (Yes/No).
+**Scenario:** Sets distinct spacing values for rows (`2rem`) and columns (`1rem`) using `gap: 2rem 1rem`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `gap: 2rem 1rem` (row-gap | column-gap).
+
 > [!check]- Answer
-> ```text
-> Yes. Modern browsers natively support gap in Flexbox containers.
-> ```
-> ```text
-> Yes. Modern browsers natively support gap in Flexbox containers.
+>
+> #### Implementation
+>
+> ```css
+> .product-grid {
+>   display: grid;
+>   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+>   gap: 2rem 1rem;               /* 2rem row gap, 1rem column gap */
+> }
 > ```
 >
-> **Explanation:** `gap` adds space between flex items without requiring margin resets.
+> #### Technical Explanation
+>
+> 1. **2-Value `gap` Syntax**: The first value sets vertical `row-gap`; the second value sets horizontal `column-gap`.
+> 2. **Explicit Longhand Equivalents**: Equivalent to `row-gap: 2rem; column-gap: 1rem;`.
+> 3. **Vertical Rhythm Enhancement**: Generous row gaps improve visual reading hierarchy between product rows.
 > 
+---
+
+### Exercise 3: Flexbox and Grid Gap Compatibility
+
+**Scenario:** Demonstrates how modern `gap` property applies identically in both Grid and Flexbox layouts.
+
+**Requirements:**
+1. Apply `gap: 1rem` inside Flexbox container.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .flex-bar {
+>   display: flex;
+>   gap: 1rem;                    /* Works in Flexbox identically to CSS Grid! */
+>   align-items: center;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Cross-Module Alignment**: `gap` is defined in the W3C Box Alignment Module, applying to Grid, Flexbox, and Multi-Column containers.
+> 2. **Clean HTML Output**: Eliminates empty spacing `<div>` elements from DOM tree.
+> 3. **Responsive Scaling**: Scales dynamically when using relative `rem` units.
 ## 6. Related Terms
 - [CSS Grid (Concept) & `display: grid`](grid_concept.md) — The parent Grid layout container.
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — Defining track layout structures.

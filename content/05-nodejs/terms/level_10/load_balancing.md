@@ -119,66 +119,147 @@ app.get('/health', (req, res) => res.status(200).send('OK')); // Fast light heal
 
 ## 5. Practice Exercises
 
-### Exercise 1: Session Architecture Design
+### Exercise 1: Round-Robin Load Balancer Dispatcher
 
-**Problem:** You are refactoring a stateful app to support a load balancer. The legacy code stores user profiles in local memory.
-Design the refactored architecture by choosing the correct storage components for a stateless system:
+**Scenario:** Implements a Round-Robin load balancing algorithm distributing incoming HTTP requests across a pool of backend server instances.
 
-```text
-Legacy (Stateful, cannot be load-balanced):
-Client ──> [ Load Balancer ] ──> [ Server A ] (Saves session locally: const sessions = { user_id })
-
-Refactored (Stateless, load-balance ready):
-Client ──> [ Load Balancer ] ──> [ Server A or B ] ──> [ Shared Redis Store ] (Stores session tokens)
-                                                    ──> [ Shared PostgreSQL ] (Stores persistent user data)
-```
-
----
+**Requirements:**
+1. Write createRoundRobinBalancer(serversArray).
+2. Implement `getNextServer()`.
+3. Rotate index sequentially.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Load Balancing Algorithms
-
-**Problem:** Match load balancing algorithm to description:
-1. Distributes requests sequentially in circular order (Round Robin)
-2. Sends request to server with fewest active connections (Least Connections)
-3. Hashes client IP to assign fixed target server (IP Hash)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Round Robin
-> 2. Least Connections
-> 3. IP Hash
-> ```
-> ```text
-> 1. Round Robin
-> 2. Least Connections
-> 3. IP Hash
+>
+> #### Implementation
+>
+> ```javascript
+> function createRoundRobinBalancer(serversArray = []) {
+>   let currentIndex = 0;
+>
+>   return {
+>     getNextServer() {
+>       if (serversArray.length === 0) {
+>         throw new Error("No backend servers available in load balancer pool");
+>       }
+>
+>       const server = serversArray[currentIndex];
+>       currentIndex = (currentIndex + 1) % serversArray.length;
+>       return server;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const balancer = createRoundRobinBalancer(["http://s1:8080", "http://s2:8080"]);
+> console.assert(balancer.getNextServer() === "http://s1:8080", "Test 1 Failed");
+> console.assert(balancer.getNextServer() === "http://s2:8080", "Test 2 Failed");
+> console.assert(balancer.getNextServer() === "http://s1:8080", "Test 3 Failed: Cycled back to s1");
 > ```
 >
-> **Explanation:** Load balancing algorithms optimize request distribution based on traffic patterns.
+> #### Technical Explanation
+>
+> 1. **Round-Robin Load Balancing**: Distributes requests evenly across backend nodes in sequential circular order.
+> 2. **Stateless Traffic Distribution**: Simplest load balancing algorithm for homogeneous backend server clusters.
+> 3. **Nginx & HAProxy Default**: Used as default algorithm by Nginx and Cloudflare edge proxies.
 > 
 ---
 
-### Exercise 3: Layer 4 vs Layer 7 Load Balancing
+### Exercise 2: Weighted Round-Robin Load Balancer Dispatcher
 
-**Problem:** Distinguish Layer 4 (Transport) vs Layer 7 (Application) load balancing.
+**Scenario:** Implements Weighted Round-Robin load balancing to send more traffic to powerful backend servers based on weight capacity.
 
-**Expected output:**
+**Requirements:**
+1. Write createWeightedBalancer(serverWeightsArray).
+2. Distribute traffic proportional to weight.
+
 > [!check]- Answer
-> ```text
-> Layer 4 routes packets based on IP/Port (TCP/UDP); Layer 7 routes requests based on HTTP headers, URLs, and cookies.
-> ```
-> ```text
-> Layer 4 routes packets based on IP/Port (TCP/UDP); Layer 7 routes requests based on HTTP headers, URLs, and cookies.
+>
+> #### Implementation
+>
+> ```javascript
+> function createWeightedBalancer(serverWeightsArray = []) {
+>   const expandedPool = [];
+>
+>   for (const item of serverWeightsArray) {
+>     for (let i = 0; i < (item.weight || 1); i++) {
+>       expandedPool.push(item.server);
+>     }
+>   }
+>
+>   let index = 0;
+>   return {
+>     getNextServer() {
+>       if (expandedPool.length === 0) throw new Error("Empty pool");
+>       const server = expandedPool[index];
+>       index = (index + 1) % expandedPool.length;
+>       return server;
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const pool = [
+>   { server: "s1", weight: 3 },
+>   { server: "s2", weight: 1 }
+> ];
+>
+> const balancer = createWeightedBalancer(pool);
+> const hits = { s1: 0, s2: 0 };
+> for (let i = 0; i < 4; i++) {
+>   hits[balancer.getNextServer()]++;
+> }
+>
+> console.assert(hits.s1 === 3 && hits.s2 === 1, "Test 1 Failed: s1 received 3x traffic of s2");
 > ```
 >
-> **Explanation:** Layer 7 load balancing supports smart HTTP path routing and header inspection.
+> #### Technical Explanation
+>
+> 1. **Weighted Load Balancing**: Directs higher request ratios to servers with more CPU/RAM resources.
+> 2. **Heterogeneous Server Clusters**: Allows mixing high-capacity bare-metal servers with smaller cloud VMs in single cluster.
+> 3. **Expanded Pool Construction**: Simple implementation expands server array proportional to integer weight ratios.
 > 
+---
+
+### Exercise 3: Dynamic Health-Check Pool Rotator
+
+**Scenario:** Monitors backend server health checks and automatically removes unhealthy servers from the active routing pool.
+
+**Requirements:**
+1. Write updateLoadBalancerHealth(serverPool, healthcheckResults).
+2. Filter active servers.
+3. Return healthy active servers.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function updateLoadBalancerHealth(serverPool = [], healthcheckResults = {}) {
+>   const healthyServers = serverPool.filter(server => {
+>     return healthcheckResults[server] === true;
+>   });
+>
+>   return {
+>     healthyServers,
+>     unhealthyServers: serverPool.filter(s => !healthcheckResults[s]),
+>     activeCount: healthyServers.length
+>   };
+> }
+>
+> // Verification tests
+> const servers = ["s1", "s2", "s3"];
+> const health = { s1: true, s2: false, s3: true };
+>
+> const result = updateLoadBalancerHealth(servers, health);
+> console.assert(result.activeCount === 2, "Test 1 Failed: 2 healthy servers active");
+> console.assert(result.unhealthyServers.includes("s2"), "Test 2 Failed: Removed unhealthy s2");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Active Health Checking**: Load balancers periodically send HTTP GET `/healthz` pings to verify backend node health.
+> 2. **Automatic Failover**: Instantly drops failing nodes from active load balancer pool to prevent user request errors.
+> 3. **Self-Healing Recovery**: Re-adds recovered nodes back to routing pool automatically once healthchecks pass again.
 ## 6. Related Terms
 - [Reverse Proxy (Nginx)](reverse_proxy.md) — The gateway server that frequently performs load balancing.
 - [PM2 (Process Manager)](pm2.md) — Manages local process clusters under server-wide load balancers.

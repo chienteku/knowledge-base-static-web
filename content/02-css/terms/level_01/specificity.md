@@ -126,73 +126,103 @@ button {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Calculating the Winner
+### Exercise 1: Calculating and Balancing CSS Specificity Scores
 
-**Problem:** Look at the HTML and the two CSS rules below. Which rule wins and what color will the text be?
-```html
-<p class="error-msg">Something went wrong.</p>
-```
-```css
-/* Rule A */
-p { color: black; }
+**Scenario:** An author calculates CSS specificity scores to resolve conflicting component color declarations without resorting to `!important`.
 
-/* Rule B */
-.error-msg { color: red; }
-```
+**Requirements:**
+1. Calculate specificity for element (`0,0,1`), class (`0,1,0`), and combined selectors (`0,2,0`).
+2. Apply specificity hierarchy to resolve styles.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Rule B wins! The text will be red. Rule B uses a Class selector (10 points), while Rule A only uses an Element selector (1 point).
+>
+> #### Implementation
+>
+> ```css
+> /* Selector 1: Element Selector -> Specificity (0,0,1) */
+> button {
+>   background-color: #94a3b8;    /* Lowest priority */
+> }
+>
+> /* Selector 2: Single Class Selector -> Specificity (0,1,0) */
+> .btn {
+>   background-color: #2563eb;    /* Overrides element selector */
+> }
+>
+> /* Selector 3: Combined Class & Ancestor -> Specificity (0,2,0) */
+> .card-featured .btn {
+>   background-color: #d97706;    /* Highest priority; wins cascade! */
+> }
 > ```
-> - Review the poker metaphor. Is a class or an element worth more?
+>
+> #### Technical Explanation
+>
+> 1. **CSS Specificity Definition**: The calculation algorithm browsers use to determine which CSS rule applies when multiple selectors match the same element.
+> 2. **The Specificity Score Formula `(ID, Class, Element)`**: ID selectors count in column 1 `(1,0,0)`; Classes/Attributes/Pseudo-classes count in column 2 `(0,1,0)`; Elements/Pseudo-elements count in column 3 `(0,0,1)`.
+> 3. **Comparison Hierarchy**: Column values are compared left-to-right; a single class `(0,1,0)` beats 100 stacked element tags `(0,0,100)`.
 > 
 ---
 
+### Exercise 2: Overriding ID Selector Styles without Modifying HTML
 
+**Scenario:** Resolves high-specificity ID selector conflicts by matching ID specificity.
 
-### Exercise 2: Specificity Score Calculation
+**Requirements:**
+1. Chain ID selector `#header-id.site-header` to match specificity.
 
-**Problem:** Calculate (Inline, ID, Class, Type) specificity tuple for:
-1. `p` 
-2. `.card p` 
-3. `#main .card p` 
-4. `style="color: red;"` 
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. (0, 0, 0, 1)
-> 2. (0, 0, 1, 1)
-> 3. (0, 1, 1, 1)
-> 4. (1, 0, 0, 0)
-> ```
-> ```text
-> 1. p -> (0, 0, 0, 1)
-> 2. .card p -> (0, 0, 1, 1)
-> 3. #main .card p -> (0, 1, 1, 1)
-> 4. inline style -> (1, 0, 0, 0)
+>
+> #### Implementation
+>
+> ```css
+> /* High Specificity Target (1,0,0) */
+> #main-nav {
+>   background-color: #0f172a;
+> }
+>
+> /* Equal Specificity (1,1,0) listed later wins cascade naturally */
+> #main-nav.theme-accent {
+>   background-color: #1e1b4b;
+> }
 > ```
 >
-> **Explanation:** Specificity tuple values compare Inline > ID > Class > Type.
+> #### Technical Explanation
+>
+> 1. **ID Specificity Heavy Weight**: ID selectors carry `(1,0,0)` weight, making them very difficult to override without adding more IDs or `!important`.
+> 2. **Avoiding ID Selectors in CSS**: Best practice: avoid using ID selectors for styling in CSS files; reserve IDs for HTML anchors and JS DOM targeting.
+> 3. **Class Component Architecture**: Rely on class selectors `(0,1,0)` for modular, maintainable CSS component libraries.
 > 
 ---
 
-### Exercise 3: :is() vs :where() Specificity Difference
+### Exercise 3: Using :where() Pseudo-Class to Reduce Specificity to Zero
 
-**Problem:** What is the difference in specificity calculation between pseudo-classes `:is(.a, #b)` and `:where(.a, #b)`?
+**Scenario:** Uses the modern `:where()` pseudo-class to create zero-specificity CSS reset rules.
 
-**Expected output:**
+**Requirements:**
+1. Apply `:where(.card) h2` selector with zero specificity.
+
 > [!check]- Answer
-> ```text
-> :is() takes the specificity of its highest argument (#b = 1-0-0); :where() ALWAYS has 0 specificity (0-0-0).
-> ```
-> ```text
-> :is() takes the specificity of its highest argument (#b = 1-0-0); :where() ALWAYS has 0 specificity (0-0-0).
+>
+> #### Implementation
+>
+> ```css
+> /* :where() resets wrapper specificity to ZERO -> Score: (0,0,1) */
+> :where(.card, .widget) h2 {
+>   color: #1e293b;
+>   margin-bottom: 0.5rem;
+> }
+>
+> /* Easily overridden by any standard class selector (0,1,0) */
+> .custom-title {
+>   color: #2563eb;
+> }
 > ```
 >
-> **Explanation:** `:where()` provides zero-specificity utility style grouping.
-> 
+> #### Technical Explanation
+>
+> 1. **The `:where()` Pseudo-Class**: Takes a selector list as an argument and reduces the entire selector's specificity score to strictly `(0,0,0)`.
+> 2. **CSS Framework Resets**: Ideal for base CSS resets and UI component libraries so consumers can override library styles effortlessly.
+> 3. **`:is()` Comparison**: Unlike `:where()`, the `:is()` pseudo-class takes the specificity of its heaviest argument selector.
 ## 6. Related Terms
 - [The Cascade](the_cascade.md) — The system that uses Specificity to resolve conflicts.
 - [Selectors (Element, Class, ID)](selectors.md) — The tools that generate the specificity score.

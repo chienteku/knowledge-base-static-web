@@ -136,69 +136,166 @@ execFile('ls', [req.query.dir], (err, stdout) => {}); // Safe parameter array ex
 
 ## 5. Practice Exercises
 
-### Exercise 1: Multi-Process Node Forking
+### Exercise 1: Secure Command Spawner with Input Escaping
 
-**Problem:** You have a CPU-intensive calculations script located at `./math_worker.js`. Write a parent script that forks this worker, sends it a payload `{ number: 42 }`, and logs the result returned by the worker:
+**Scenario:** A background worker spawns system commands (`child_process.spawn`) safely without opening shell vulnerability vectors (`shell: false`).
 
-```javascript
-const { fork } = require('child_process');
-
-// 1. Fork the child script
-const child = fork('./math_worker.js');
-
-// 2. Send the number payload
-child.send({ number: 42 });
-
-// 3. Listen for the response
-child.on('message', (result) => {
-  console.log("Calculated output:", result.value);
-  child.kill(); // Terminate child when done
-});
-```
-
----
+**Requirements:**
+1. Write executeChildProcessCommand(command, argsArray, mockSpawn).
+2. Use spawn with array arguments.
+3. Collect stdout/stderr buffers.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Spawning Long-Running Child Process
-
-**Problem:** Spawn `ping -c 4 google.com` using `child_process.spawn` and log stdout chunks.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const child = spawn('ping', ['-c', '4', 'google.com']); child.stdout.on('data', chunk => console.log(chunk.toString()));
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const { spawn } = require('child_process');
-> const child = spawn('ping', ['-c', '4', 'google.com']);
-> child.stdout.on('data', (chunk) => {
->   console.log(`Stdout: ${chunk.toString()}`);
+> function executeChildProcessCommand(command, argsArray = [], mockSpawn) {
+>   const spawnFn = mockSpawn || require("child_process").spawn;
+>
+>   return new Promise((resolve, reject) => {
+>     const child = spawnFn(command, argsArray, { shell: false });
+>
+>     let stdoutText = "";
+>     let stderrText = "";
+>
+>     if (child.stdout) {
+>       child.stdout.on("data", (chunk) => { stdoutText += chunk.toString(); });
+>     }
+>     if (child.stderr) {
+>       child.stderr.on("data", (chunk) => { stderrText += chunk.toString(); });
+>     }
+>
+>     child.on("close", (code) => {
+>       if (code === 0) {
+>         resolve({ code, stdout: stdoutText.trim(), stderr: stderrText.trim() });
+>       } else {
+>         reject(new Error(`Command failed with exit code ${code}: ${stderrText}`));
+>       }
+>     });
+>
+>     child.on("error", (err) => reject(err));
+>   });
+> }
+>
+> // Verification tests
+> const events = {};
+> const mockSpawn = () => ({
+>   stdout: { on: (e, fn) => { if (e === "data") fn(Buffer.from("OUTPUT")); } },
+>   stderr: { on: () => {} },
+>   on: (e, fn) => { events[e] = fn; }
+> });
+>
+> const promise = executeChildProcessCommand("ls", ["-la"], mockSpawn);
+> events["close"](0);
+>
+> promise.then(res => {
+>   console.assert(res.stdout === "OUTPUT", "Test 1 Failed");
 > });
 > ```
 >
-> **Explanation:** `spawn()` returns child process object with readable stdout/stderr streams.
+> #### Technical Explanation
+>
+> 1. **`spawn()` vs `exec()`**: `spawn()` streams data in chunks without memory limits; `exec()` buffers output in a fixed maxBuffer size.
+> 2. **Shell Injection Defense**: Setting `shell: false` and passing arguments as an array (`['arg1', 'arg2']`) prevents shell injection attacks.
+> 3. **Non-Blocking Subprocesses**: Child processes execute concurrently in separate OS processes without blocking Node.js main thread.
 > 
 ---
 
-### Exercise 3: Forking Node.js Child Scripts
+### Exercise 2: Inter-Process Communication IPC Messaging via fork()
 
-**Problem:** Which `child_process` method spawns a new Node.js V8 process with a built-in IPC communication channel? (`child_process.fork()`).
+**Scenario:** Forks a dedicated Node.js child process (`child_process.fork()`) communicating via bi-directional JSON IPC message events.
 
-**Expected output:**
+**Requirements:**
+1. Write executeForkedTask(workerPath, payload, mockFork).
+2. Send message via `child.send()`.
+3. Listen to `child.on('message')`.
+
 > [!check]- Answer
-> ```text
-> child_process.fork()
-> ```
-> ```text
-> child_process.fork()
+>
+> #### Implementation
+>
+> ```javascript
+> function executeForkedTask(workerPath, payload, mockFork) {
+>   const forkFn = mockFork || require("child_process").fork;
+>
+>   return new Promise((resolve, reject) => {
+>     const child = forkFn(workerPath);
+>
+>     child.on("message", (response) => {
+>       child.kill();
+>       resolve(response);
+>     });
+>
+>     child.on("error", (err) => reject(err));
+>
+>     child.send(payload);
+>   });
+> }
+>
+> // Verification tests
+> const events = {};
+> const mockFork = () => ({
+>   send: (data) => {
+>     setImmediate(() => {
+>       if (events["message"]) events["message"]({ status: "SUCCESS", result: data.num * 2 });
+>     });
+>   },
+>   on: (e, fn) => { events[e] = fn; },
+>   kill: () => {}
+> });
+>
+> executeForkedTask("./worker.js", { num: 21 }, mockFork).then(res => {
+>   console.assert(res.result === 42, "Test 1 Failed: IPC message returned result 42");
+> });
 > ```
 >
-> **Explanation:** `fork()` is a specialized `spawn()` variant that opens an IPC channel between parent and child Node processes.
+> #### Technical Explanation
+>
+> 1. **`child_process.fork()`**: Specialized version of `spawn()` that instantiates a new V8 Node.js instance with built-in IPC channel.
+> 2. **IPC Messaging Protocol**: `child.send(json)` serializes data and passes it over IPC channel without socket overhead.
+> 3. **Child Process Isolation**: If a forked child process crashes, the main parent Node.js process remains stable.
 > 
+---
+
+### Exercise 3: Shell Execution Output Collector with Timeout
+
+**Scenario:** Executes shell commands using `child_process.exec` with strict execution timeouts to prevent hanging child processes.
+
+**Requirements:**
+1. Write executeShellWithTimeout(cmdStr, timeoutMs, mockExec).
+2. Set `timeout` option.
+3. Return stdout.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function executeShellWithTimeout(cmdStr, timeoutMs = 5000, mockExec) {
+>   const execFn = mockExec || require("child_process").exec;
+>
+>   return new Promise((resolve, reject) => {
+>     execFn(cmdStr, { timeout: timeoutMs, maxBuffer: 1024 * 1024 }, (err, stdout, stderr) => {
+>       if (err) return reject(err);
+>       resolve(stdout.trim());
+>     });
+>   });
+> }
+>
+> // Verification tests
+> const mockExec = (cmd, opts, cb) => cb(null, "VERSION 1.0", "");
+>
+> executeShellWithTimeout("node -v", 1000, mockExec).then(out => {
+>   console.assert(out === "VERSION 1.0", "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`exec()` maxBuffer Limit**: Default `maxBuffer` is 1MB; if subprocess output exceeds maxBuffer, process is terminated with `ERR_CHILD_PROCESS_STDIO_MAXBUFFER`.
+> 2. **Subprocess Execution Timeout**: Passing `timeout: 5000` automatically sends SIGTERM if subprocess exceeds execution time limit.
+> 3. **Use Case**: Executing brief CLI scripts (e.g. `git status`, `node -v`).
 ## 6. Related Terms
 - [Worker Threads](worker_threads.md) — Multi-threading inside a single OS process.
 - [The cluster Module](cluster_module.md) — Forking duplicate server instances across CPU cores.

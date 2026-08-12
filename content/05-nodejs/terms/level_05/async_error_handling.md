@@ -153,73 +153,149 @@ try {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Bug Hunting
+### Exercise 1: Express Async Controller Error Handler Wrapper
 
-**Problem:** The Express endpoint below crashes the server if the database query fails. Locate the bug and fix it:
+**Scenario:** An Express API wrapper catches unhandled Promise rejections inside async route controllers and forwards them to global error middleware.
 
-```javascript
-// Before (Crashes on DB query failures):
-app.get('/user/:id', async (req, res) => {
-  const user = await db.fetchUser(req.params.id);
-  res.json(user);
-});
-
-// After (Fixed):
-app.get('/user/:id', async (req, res, next) => {
-  try {
-    const user = await db.fetchUser(req.params.id);
-    res.json(user);
-  } catch (err) {
-    next(err); // Route error to Express error-handling middleware
-  }
-});
-```
-
----
+**Requirements:**
+1. Write asyncHandler(asyncControllerFn).
+2. Return route handler function `(req, res, next)`.
+3. Catch rejections and pass error to `next(err)`.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Handling Promise.allSettled Results
-
-**Problem:** Use `Promise.allSettled([req1, req2])` to log fulfilled values and rejected error reasons.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const results = await Promise.allSettled([req1, req2]); results.forEach(r => r.status === 'fulfilled' ? console.log(r.value) : console.error(r.reason));
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const results = await Promise.allSettled([req1, req2]);
-> results.forEach(r => {
->   if (r.status === 'fulfilled') console.log('Success:', r.value);
->   else console.error('Failed:', r.reason);
+> function asyncHandler(asyncControllerFn) {
+>   return function (req, res, next) {
+>     Promise.resolve(asyncControllerFn(req, res, next)).catch(next);
+>   };
+> }
+>
+> // Verification tests
+> let passedErr = null;
+> const mockNext = (err) => { passedErr = err; };
+>
+> const brokenController = asyncHandler(async (req, res) => {
+>   throw new Error("Database timeout");
+> });
+>
+> brokenController({}, {}, mockNext);
+>
+> setImmediate(() => {
+>   console.assert(passedErr !== null, "Test 1 Failed: Error must be caught");
+>   console.assert(passedErr.message === "Database timeout", "Test 2 Failed");
 > });
 > ```
 >
-> **Explanation:** `Promise.allSettled` waits for all promises to settle without short-circuiting on single rejections.
+> #### Technical Explanation
+>
+> 1. **Async Route Error Trap**: Async functions returning rejected Promises inside Express routes crash Node.js unless caught or passed to `next(err)`.
+> 2. **Promise.resolve Wrapper**: Wraps return value in `Promise.resolve()` to catch both synchronous throws and async Promise rejections.
+> 3. **Express 5 Native Support**: Express 4 requires custom `asyncHandler`; Express 5 handles async route errors natively.
 > 
 ---
 
-### Exercise 3: Express Async Error Propagation
+### Exercise 2: Centralized Operational Error Filter & Normalizer
 
-**Problem:** In Express 4, how do you forward an async error caught in a route handler to central error middleware?
+**Scenario:** An API error normalizer distinguishes between operational errors (invalid user input, 404s) and programmer bugs (TypeError, NullPointer) for logging.
 
-**Expected output:**
+**Requirements:**
+1. Write normalizeAsyncError(err).
+2. Check `err.isOperational` flag.
+3. Format HTTP status codes (400 vs 500).
+
 > [!check]- Answer
-> ```text
-> Pass the caught error to next(err).
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> catch (err) {
->   next(err);
+> class OperationalError extends Error {
+>   constructor(message, statusCode = 400) {
+>     super(message);
+>     this.statusCode = statusCode;
+>     this.isOperational = true;
+>   }
 > }
+>
+> function normalizeAsyncError(err) {
+>   if (err && err.isOperational) {
+>     return {
+>       statusCode: err.statusCode,
+>       message: err.message,
+>       shouldCrash: false
+>     };
+>   }
+>
+>   return {
+>     statusCode: 500,
+>     message: "Internal Server Error",
+>     shouldCrash: true,
+>     originalError: err?.message || String(err)
+>   };
+> }
+>
+> // Verification tests
+> const opErr = new OperationalError("User not found", 404);
+> const sysErr = new TypeError("Cannot read property 'id' of undefined");
+>
+> const norm1 = normalizeAsyncError(opErr);
+> console.assert(norm1.statusCode === 404 && norm1.shouldCrash === false, "Test 1 Failed");
+>
+> const norm2 = normalizeAsyncError(sysErr);
+> console.assert(norm2.statusCode === 500 && norm2.shouldCrash === true, "Test 2 Failed");
 > ```
 >
-> **Explanation:** Calling `next(err)` hands error handling over to Express error middleware.
+> #### Technical Explanation
+>
+> 1. **Operational vs Programmer Errors**: Operational errors (validation, 404) are expected runtime failures; programmer errors (bugs) corrupt process state.
+> 2. **Custom Error Classes**: Extending `Error` with custom properties (`isOperational`, `statusCode`) improves error classification.
+> 3. **Process Safety Rule**: Programmer bugs should trigger graceful process restarts to restore clean memory state.
 > 
+---
+
+### Exercise 3: Graceful Secondary Fallback Provider Strategy
+
+**Scenario:** An API aggregator attempts fetching data from a primary async service; if primary fails, it falls back to a secondary cache provider.
+
+**Requirements:**
+1. Write fetchWithFallback(primaryAsyncFn, secondaryAsyncFn, loggerMock).
+2. Attempt primary.
+3. If primary fails, log error and return secondary response.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function fetchWithFallback(primaryAsyncFn, secondaryAsyncFn, loggerMock) {
+>   try {
+>     return await primaryAsyncFn();
+>   } catch (err) {
+>     if (loggerMock && typeof loggerMock.warn === "function") {
+>       loggerMock.warn(`Primary service failed (${err.message}). Falling back to secondary.`);
+>     }
+>     return await secondaryAsyncFn();
+>   }
+> }
+>
+> // Verification tests
+> const primary = async () => { throw new Error("Primary DB Down"); };
+> const secondary = async () => ({ source: "CACHE", data: [1, 2, 3] });
+> let warningLogged = false;
+>
+> fetchWithFallback(primary, secondary, { warn: () => { warningLogged = true; } }).then(res => {
+>   console.assert(res.source === "CACHE", "Test 1 Failed");
+>   console.assert(warningLogged === true, "Test 2 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **High Availability Fallbacks**: Prevents user-facing outages by returning cached or degraded data when primary microservices fail.
+> 2. **Try/Catch Fallback Pattern**: Catching primary failures inside async functions isolates errors from bubbling to the client.
+> 3. **Observability & Warnings**: Always log warnings when fallbacks trigger to alert devops engineers of primary service degradation.
 ## 6. Related Terms
 - [Unhandled Promise Rejections](unhandled_rejections.md) — The process crashes caused by missing catch blocks.
 - [Callbacks & Callback Hell](callbacks.md) — The error-first callback style of handling errors.

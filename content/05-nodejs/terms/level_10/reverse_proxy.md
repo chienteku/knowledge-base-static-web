@@ -131,68 +131,123 @@ location / {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Reverse Proxy Data Flow Mapping
+### Exercise 1: Reverse Proxy X-Forwarded Header Injector
 
-**Problem:** Draw the request-response data flow of a secure production application showing Nginx, Node.js, and a MongoDB database:
+**Scenario:** Injects Nginx-style `X-Forwarded-For`, `X-Forwarded-Proto`, and `X-Forwarded-Host` headers when forwarding requests to backend microservices.
 
-```text
-Public Internet ──(Port 443 HTTPS)──> [ Nginx Proxy ] 
-                                             │
-                                             │ (Decrypts TLS -> forwards Port 3000 HTTP)
-                                             ▼
-                                      [ Node.js Server ] (Firewalled from public)
-                                             │
-                                             ▼ (DB queries)
-                                      [ MongoDB Database ]
-```
-
----
+**Requirements:**
+1. Write injectProxyHeaders(reqMock, targetHost).
+2. Inject X-Forwarded headers.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Configuring Nginx Reverse Proxy Location Block
-
-**Problem:** Write Nginx `location /` directive proxying requests to local Node server on port 3000.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> location / { proxy_pass http://127.0.0.1:3000; }
-> ```
-> ```nginx
-> location / {
->     proxy_pass http://127.0.0.1:3000;
->     proxy_set_header Host $host;
->     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+>
+> #### Implementation
+>
+> ```javascript
+> function injectProxyHeaders(reqMock, targetHost) {
+>   const headers = { ...(reqMock.headers || {}) };
+>   const clientIp = reqMock.socket?.remoteAddress || "127.0.0.1";
+>
+>   const existingForwarded = headers["x-forwarded-for"] || headers["X-Forwarded-For"];
+>   headers["x-forwarded-for"] = existingForwarded ? `${existingForwarded}, ${clientIp}` : clientIp;
+>   headers["x-forwarded-proto"] = reqMock.socket?.encrypted ? "https" : "http";
+>   headers["x-forwarded-host"] = headers["host"] || "localhost";
+>   headers["host"] = targetHost;
+>
+>   return headers;
 > }
+>
+> // Verification tests
+> const mockReq = { headers: { host: "example.com" }, socket: { remoteAddress: "203.0.113.195", encrypted: true } };
+> const proxiedHeaders = injectProxyHeaders(mockReq, "internal-service:8080");
+>
+> console.assert(proxiedHeaders["x-forwarded-for"] === "203.0.113.195", "Test 1 Failed");
+> console.assert(proxiedHeaders["x-forwarded-proto"] === "https", "Test 2 Failed");
+> console.assert(proxiedHeaders["host"] === "internal-service:8080", "Test 3 Failed");
 > ```
 >
-> **Explanation:** `proxy_pass` forwards HTTP requests from Nginx to Node.js backend ports.
+> #### Technical Explanation
+>
+> 1. **Reverse Proxy Pattern**: Intermediate server (Nginx, HAProxy, Cloudflare) receiving internet client requests and forwarding them to internal Node.js backend servers.
+> 2. **X-Forwarded Headers**: Preserves original client IP, protocol (HTTP/HTTPS), and host header across proxy boundaries.
+> 3. **SSL Termination**: Reverse proxy decrypts HTTPS traffic, forwarding plain HTTP requests to internal microservices over secure private networks.
 > 
 ---
 
-### Exercise 3: Benefits of Reverse Proxy
+### Exercise 2: Nginx-Style Reverse Proxy Path Rewriter
 
-**Problem:** List 3 primary benefits of placing Nginx in front of Node.js servers.
+**Scenario:** Rewrites requested URL paths before proxying requests to internal microservice endpoints (e.g. `/api/v1/users` -> `/users`).
 
-**Expected output:**
+**Requirements:**
+1. Write rewriteProxyPath(originalUrl, pathPrefixMap).
+2. Strip path prefix.
+3. Return rewritten URL.
+
 > [!check]- Answer
-> ```text
-> 1. SSL/TLS Termination
-> 2. High-performance static asset serving
-> 3. Request rate-limiting and DDoS mitigation
-> ```
-> ```text
-> 1. SSL/TLS Termination
-> 2. High-performance static asset serving
-> 3. Request rate-limiting and DDoS mitigation
+>
+> #### Implementation
+>
+> ```javascript
+> function rewriteProxyPath(originalUrl = "", pathPrefixMap = {}) {
+>   for (const [prefix, replacement] of Object.entries(pathPrefixMap)) {
+>     if (originalUrl.startsWith(prefix)) {
+>       const rewritten = originalUrl.replace(prefix, replacement);
+>       return {
+>         isRewritten: true,
+>         originalUrl,
+>         rewrittenUrl: rewritten.startsWith("/") ? rewritten : `/${rewritten}`
+>       };
+>     }
+>   }
+>
+>   return { isRewritten: false, originalUrl, rewrittenUrl: originalUrl };
+> }
+>
+> // Verification tests
+> const res = rewriteProxyPath("/api/v1/users/42", { "/api/v1": "" });
+> console.assert(res.isRewritten === true, "Test 1 Failed");
+> console.assert(res.rewrittenUrl === "/users/42", "Test 2 Failed: Stripped /api/v1 prefix");
 > ```
 >
-> **Explanation:** Reverse proxies offload non-application tasks from Node.js event loops.
+> #### Technical Explanation
+>
+> 1. **Reverse Proxy URL Rewriting**: Rewrites external public API routes into clean internal microservice path structures.
+> 2. **Microservice Routing Table**: Maps path prefixes (`/api/v1/users` -> User Service, `/api/v1/orders` -> Order Service).
+> 3. **http-proxy-middleware**: Popular Express package for reverse proxying and path rewriting in Node.js.
 > 
+---
+
+### Exercise 3: SSL Termination Protocol Inspector
+
+**Scenario:** Inspects reverse proxy headers to detect whether the original internet client connection used HTTPS encryption.
+
+**Requirements:**
+1. Write isRequestEncryptedByProxy(reqHeaders).
+2. Check `X-Forwarded-Proto` header.
+3. Check `X-Forwarded-Ssl` header.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function isRequestEncryptedByProxy(reqHeaders = {}) {
+>   const proto = (reqHeaders["x-forwarded-proto"] || reqHeaders["X-Forwarded-Proto"] || "").toLowerCase();
+>   const ssl = (reqHeaders["x-forwarded-ssl"] || reqHeaders["X-Forwarded-Ssl"] || "").toLowerCase();
+>
+>   return proto === "https" || ssl === "on";
+> }
+>
+> // Verification tests
+> console.assert(isRequestEncryptedByProxy({ "x-forwarded-proto": "https" }) === true, "Test 1 Failed");
+> console.assert(isRequestEncryptedByProxy({ "x-forwarded-proto": "http" }) === false, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **SSL Termination**: Reverse proxies handle TLS/SSL encryption offloading so Node.js backend nodes don't spend CPU cycles on cryptography.
+> 2. **HTTPS Enforcer Middleware**: Inspects `X-Forwarded-Proto` to redirect HTTP requests to HTTPS (`301 Moved Permanently`).
+> 3. **Secure Cookie Flags**: Allows Node.js to set `Secure` cookie flags safely even when running as HTTP behind an HTTPS proxy.
 ## 6. Related Terms
 - [Load Balancing](load_balancing.md) — The routing system often combined with reverse proxies.
 - [Docker](docker.md) — The container architecture used to isolate proxies from application servers.

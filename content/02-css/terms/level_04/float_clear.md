@@ -104,138 +104,98 @@ If you float an image, but you want the *next* paragraph to start cleanly *below
 }
 ```
 
-
-
-### Mistake 4: Using `float` for Main Web Page Grid Layouts (Legacy Pre-Flexbox Anti-Pattern)
-
-**The mistake:** Building 3-column website layouts using `float: left` and clearing hacks.
-
-**Why it's wrong:** Using `float` for grid layouts is an obsolete 2000s technique requiring complex clearfix hacks and rigid column math. Use modern CSS Grid or Flexbox.
-
-*Incorrect:*
-```css
-.col { float: left; width: 33.33%; } /* ❌ Obsolete float grid layout */
-```
-
-*Fix:*
-```css
-.container { display: flex; } .col { flex: 1; } /* Modern Flexbox grid */
-```
-
-### Mistake 5: Forgetting Clearfix on Parent Containers Containing Floated Elements
-
-**The mistake:** Floating images inside a card wrapper without applying clearfix or BFC rules.
-
-**Why it's wrong:** Parent elements do not automatically expand to contain floated children, causing parent background colors and borders to collapse above floated items.
-
-*Incorrect:*
-```css
-.card { background: white; } /* ❌ Collapses height if children are floated! */
-```
-
-*Fix:*
-```css
-.card::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-```
-
-
-
-### Mistake 6: Using `float` for Main Web Page Grid Layouts (Legacy Pre-Flexbox Anti-Pattern)
-
-**The mistake:** Building 3-column website layouts using `float: left` and clearing hacks.
-
-**Why it's wrong:** Using `float` for grid layouts is an obsolete 2000s technique requiring complex clearfix hacks and rigid column math. Use modern CSS Grid or Flexbox.
-
-*Incorrect:*
-```css
-.col { float: left; width: 33.33%; } /* ❌ Obsolete float grid layout */
-```
-
-*Fix:*
-```css
-.container { display: flex; } .col { flex: 1; } /* Modern Flexbox grid */
-```
-
-### Mistake 7: Forgetting Clearfix on Parent Containers Containing Floated Elements
-
-**The mistake:** Floating images inside a card wrapper without applying clearfix or BFC rules.
-
-**Why it's wrong:** Parent elements do not automatically expand to contain floated children, causing parent background colors and borders to collapse above floated items.
-
-*Incorrect:*
-```css
-.card { background: white; } /* ❌ Collapses height if children are floated! */
-```
-
-*Fix:*
-```css
-.card::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Modern vs Legacy
+### Exercise 1: Wrapping Text Around Media Images using float left
 
-**Problem:** Your boss asks you to build a navigation bar with a logo on the left and 4 links on the right. Should you use `float: left` for the logo and `float: right` for the links?
+**Scenario:** An author floats a thumbnail image to the left, allowing editorial text to wrap around it naturally.
 
-**Expected output:**
+**Requirements:**
+1. Apply `float: left` to image.
+2. Add `margin-right` and `margin-bottom` spacing.
+3. Ensure text wraps around image.
+
 > [!check]- Answer
-> ```text
-> No! You should use Flexbox (`display: flex; justify-content: space-between;`). You only use `float` if you want a large block of text to wrap around a picture like a newspaper.
-> ```
-> - Are we wrapping text around an image, or building a UI layout?
-> 
----
-
-
-
-### Exercise 2: Valid Float Text Wrapping Use Case
-
-**Problem:** What is the single primary valid use case for `float` in modern HTML5 web design?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Floating an image to the left or right inside a paragraph block so text wraps smoothly around it.
-> ```
+>
+> #### Implementation
+>
 > ```css
-> img.article-image {
->   float: left;
->   margin-right: 15px;
+> .editorial-image {
+>   float: left;                  /* Floats image to left, pulling text around right side */
+>   margin-right: 1.5rem;         /* Whitespace separation from wrapping text */
+>   margin-bottom: 1rem;
+>   max-width: 15rem;
+>   border-radius: 0.375rem;
 > }
 > ```
 >
-> **Explanation:** `float` was specifically designed to wrap text around images inside articles.
+> #### Technical Explanation
+>
+> 1. **The `float` Property**: Places an element to the left or right side of its container, allowing text and inline elements to wrap around it.
+> 2. **Legitimate Float Use Case**: Wrapping text around inline editorial images is the ONLY modern legitimate use case for `float`.
+> 3. **Do NOT Use Floats for Page Layout**: Never use `float` for multi-column page layouts; use CSS Flexbox or CSS Grid instead.
 > 
 ---
 
-### Exercise 3: Clearfix CSS Snippet
+### Exercise 2: Modern Clearfix Solutions for Floated Containers
 
-**Problem:** Write micro-clearfix pseudo-element pattern for container `.clearfix`.
+**Scenario:** Fixes container collapse caused by floated children using `display: flow-root`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: flow-root` to parent container holding floated elements.
+
 > [!check]- Answer
-> ```text
-> .clearfix::after { content: ""; display: table; clear: both; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .clearfix::after {
->   content: "";
->   display: table;
->   clear: both;
+> /* Modern Clearfix Container (Contains internal floated images cleanly) */
+> .article-section {
+>   display: flow-root;           /* Replaces legacy clearfix ::after pseudoelement hacks! */
+>   background-color: #ffffff;
+>   padding: 1.5rem;
 > }
 > ```
 >
-> **Explanation:** Clearfix pseudo-element clears floated children to prevent parent height collapse.
+> #### Technical Explanation
+>
+> 1. **Parent Container Height Collapse**: When all child elements are floated, the parent container collapses to 0px height because floats are out-of-flow!
+> 2. **Modern `display: flow-root` Clearfix**: Setting `display: flow-root` on the parent container establishes a BFC, enclosing floated children automatically.
+> 3. **Legacy `clearfix::after` Hack**: Replaces legacy `.clearfix::after { content: ""; display: table; clear: both; }` hacks.
 > 
+---
+
+### Exercise 3: Legacy Layout Migration: Replacing Floats with Flexbox/Grid
+
+**Scenario:** Refactors a legacy floated 2-column layout to modern CSS Flexbox.
+
+**Requirements:**
+1. Replace `float: left; width: 50%` with Flexbox `display: flex`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Legacy Floated Layout (OBSOLETE! DO NOT USE!) */
+> /* .col { float: left; width: 50%; } */
+>
+> /* Modern Flexbox Refactoring */
+> .columns-wrapper {
+>   display: flex;
+>   gap: 1.5rem;
+> }
+>
+> .column {
+>   flex: 1;                      /* Equal width 50% fluid columns */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Legacy Float Layout Pitfalls**: Floated column layouts required clearing hacks, failed with unequal column heights, and caused margin collapse bugs.
+> 2. **Flexbox Superiority**: Flexbox handles equal column heights, fluid alignment, and gap spacing natively.
+> 3. **Clean Architecture**: Improves code maintainability and eliminates clearing hacks.
 ## 6. Related Terms
 - [`display: flex` — Flexbox Container](../level_05/display_flex.md) — The modern Flexbox layout container.
 - [Document Flow (Normal Flow)](document_flow.md) — The layout engine disrupted by floats.

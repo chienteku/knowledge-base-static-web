@@ -170,58 +170,171 @@ app.get('/file', async (req, res) => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Code Review
+### Exercise 1: Offloading Synchronous Processing with Chunked setImmediate
 
-**Problem:** Review this Express route. Identify the line of code that blocks the Event Loop and write the fix:
+**Scenario:** A backend server processes a 10,000-item array. To prevent blocking incoming HTTP requests for more than 10ms, the computation is broken into non-blocking chunks using `setImmediate()`.
 
-```javascript
-app.post('/import-data', (req, res) => {
-  const rawData = req.body.rawData; 
-  const parsed = JSON.parse(rawData); // Assume rawData is a 100MB string
-  saveToDatabase(parsed);
-  res.send("Import complete");
-});
-```
+**Requirements:**
+1. Write processInChunks(itemsArray, chunkSize, processItemFn).
+2. Process chunkSize items synchronously per tick.
+3. Yield control to the Event Loop with setImmediate().
+4. Return a Promise resolving when all items complete.
 
 > [!check]- Answer
-> `JSON.parse(rawData)` blocks the event loop because parsing a 100MB string is synchronous and computationally heavy. To fix this, offload the parsing to a separate worker thread or process the payload as a stream of smaller chunks (using JSON streaming parsers) to avoid blocking the main thread.
-> 
----
-
-
-
-### Exercise 2: Identifying Blocking vs Non-Blocking Code
-
-**Problem:** Determine which function blocks the Event Loop: 1) `JSON.parse()` on a 500MB string; 2) `fs.promises.readFile()`. Explain why.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1) JSON.parse() on a 500MB string blocks the main thread because JSON parsing is a synchronous operation handled on the V8 call stack.
-> ```
-> ```text
-> 1) JSON.parse() on a 500MB string blocks the main thread because JSON parsing is a synchronous operation handled on the V8 call stack.
-> ```
 >
-> **Explanation:** Heavy synchronous JSON parsing or CPU math blocks main loop execution; async disk I/O delegates work to libuv worker threads.
-> 
----
-
-### Exercise 3: Refactoring Synchronous File Reading
-
-**Problem:** Refactor `const data = fs.readFileSync('config.json')` into non-blocking async promises.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const data = await fs.promises.readFile('config.json', 'utf-8');
-> ```
+> #### Implementation
+>
 > ```javascript
-> const data = await fs.promises.readFile('config.json', 'utf-8');
+> function processInChunks(itemsArray = [], chunkSize = 100, processItemFn) {
+>   return new Promise((resolve, reject) => {
+>     let index = 0;
+>
+>     function doChunk() {
+>       try {
+>         const end = Math.min(index + chunkSize, itemsArray.length);
+>         for (; index < end; index++) {
+>           processItemFn(itemsArray[index], index);
+>         }
+>
+>         if (index < itemsArray.length) {
+>           setImmediate(doChunk);
+>         } else {
+>           resolve(itemsArray.length);
+>         }
+>       } catch (err) {
+>         reject(err);
+>       }
+>     }
+>
+>     doChunk();
+>   });
+> }
+>
+> // Verification tests
+> const data = Array.from({ length: 250 }, (_, i) => i);
+> let processedCount = 0;
+>
+> processInChunks(data, 100, (item) => { processedCount++; }).then(total => {
+>   console.assert(total === 250, "Test 1 Failed: Total processed count mismatch");
+>   console.assert(processedCount === 250, "Test 2 Failed: Item processor count mismatch");
+> });
 > ```
 >
-> **Explanation:** `fs.promises.readFile` returns a Promise, allowing the event loop to handle other requests while reading from disk.
+> #### Technical Explanation
+>
+> 1. **Event Loop Blocking Danger**: Synchronous long-running loops block the single Node.js main thread, preventing HTTP requests and I/O handlers from executing.
+> 2. **setImmediate() Yielding**: Yields execution back to the Event Loop Check phase, allowing I/O events to be processed between chunks.
+> 3. **Chunk Size Trade-off**: Smaller chunk sizes reduce event loop lag but increase total processing time due to scheduling overhead.
 > 
+---
+
+### Exercise 2: Event Loop Delay & Lag Monitor
+
+**Scenario:** A microservice APM (Application Performance Monitoring) agent tracks event loop lag by measuring drift between scheduled `setTimeout` execution times.
+
+**Requirements:**
+1. Write createEventLoopDelayMonitor(checkIntervalMs, thresholdMs).
+2. Schedule timer every checkIntervalMs.
+3. Calculate `lag = actualTime - (expectedTime)`.
+4. Flag warning when lag exceeds thresholdMs.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createEventLoopDelayMonitor(checkIntervalMs = 1000, thresholdMs = 50) {
+>   let timerId = null;
+>   let lastTime = Date.now();
+>   let maxLagObserved = 0;
+>
+>   function checkLag() {
+>     const now = Date.now();
+>     const elapsed = now - lastTime;
+>     const lag = Math.max(0, elapsed - checkIntervalMs);
+>
+>     maxLagObserved = Math.max(maxLagObserved, lag);
+>     lastTime = now;
+>
+>     return {
+>       lag,
+>       isBlocked: lag >= thresholdMs,
+>       maxLagObserved
+>     };
+>   }
+>
+>   return {
+>     measure: checkLag
+>   };
+> }
+>
+> // Verification tests
+> const monitor = createEventLoopDelayMonitor(100, 20);
+> const start = Date.now();
+> while (Date.now() - start < 150) {} // Block for 150ms
+>
+> const metrics = monitor.measure();
+> console.assert(metrics.isBlocked === true, "Test 1 Failed: Must detect event loop blocking");
+> console.assert(metrics.lag >= 40, "Test 2 Failed: Lag must be recorded correctly");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Event Loop Lag Definition**: The time delay between when an event (timer/I/O) was scheduled to fire and when the handler actually runs.
+> 2. **Diagnosing APM Metrics**: Event loop lag >50ms indicates CPU-bound synchronous code is degrading server responsiveness.
+> 3. **Production Monitoring**: Tools like pino or perf_hooks (monitorEventLoopDelay) monitor lag natively in production.
+> 
+---
+
+### Exercise 3: Synchronous JSON.parse vs Asynchronous Streaming Parser
+
+**Scenario:** An API gateway validates incoming multi-megabyte JSON payloads, comparing the blocking impact of synchronous `JSON.parse()` vs streaming chunk processing.
+
+**Requirements:**
+1. Write parseJsonSafely(rawJsonString, maxByteSize).
+2. Check payload byte size.
+3. Reject oversized strings before JSON.parse to prevent Event Loop freezing.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function parseJsonSafely(rawJsonString, maxByteSize = 1_000_000) {
+>   if (typeof rawJsonString !== "string") {
+>     throw new TypeError("Payload must be a string");
+>   }
+>
+>   const byteLength = Buffer.byteLength(rawJsonString, "utf-8");
+>   if (byteLength > maxByteSize) {
+>     return {
+>       success: false,
+>       error: "PAYLOAD_TOO_LARGE",
+>       message: `JSON payload size (${byteLength} bytes) exceeds limit of ${maxByteSize} bytes`
+>     };
+>   }
+>
+>   try {
+>     const data = JSON.parse(rawJsonString);
+>     return { success: true, data };
+>   } catch (err) {
+>     return { success: false, error: "INVALID_JSON", message: err.message };
+>   }
+> }
+>
+> // Verification tests
+> const smallJson = JSON.stringify({ id: 1, name: "Alice" });
+> const largeJson = JSON.stringify({ data: "x".repeat(2000) });
+>
+> console.assert(parseJsonSafely(smallJson, 1000).success === true, "Test 1 Failed");
+> console.assert(parseJsonSafely(largeJson, 1000).error === "PAYLOAD_TOO_LARGE", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **JSON.parse Synchronous Cost**: JSON.parse is a synchronous C++ operation; parsing 50MB JSON blocks the event loop for several hundred milliseconds.
+> 2. **Pre-Parse Guards**: Verifying Content-Length or byte size before parsing protects servers against Denial of Service (DoS).
+> 3. **Streaming Alternatives**: Use streaming JSON parsers (e.g. stream-json) for large file processing.
 ## 6. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The loop system frozen by blocking code.
 - [Single-Threaded Architecture](single_threaded.md) — The execution structure vulnerable to blocking.

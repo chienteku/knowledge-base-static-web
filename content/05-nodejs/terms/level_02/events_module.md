@@ -145,67 +145,160 @@ emitter.emit('error', new Error('Handled!'));
 
 ## 5. Practice Exercises
 
-### Exercise 1: Event Subscription Configuration
+### Exercise 1: Custom EventEmitter Audit Logger
 
-**Problem:** Complete the script to register a listener that triggers **only the first time** an `'error'` event is emitted, printing the error message to the console. Subsequent emissions should be ignored:
+**Scenario:** An e-commerce order engine emits events (`order:created`, `order:failed`) handled asynchronously by logging and analytics listeners.
 
-```javascript
-const EventEmitter = require('events');
-const emitter = new EventEmitter();
-
-// Write the subscription logic here
-emitter.once('error', (err) => {
-  console.error("Caught Initial Error:", err.message);
-});
-
-// Emitting errors:
-emitter.emit('error', new Error('Database connection failed')); // Logs message
-emitter.emit('error', new Error('Timeout error'));            // Ignored
-```
-
----
+**Requirements:**
+1. Write createOrderEventEmitter(EventEmitterClass).
+2. Register listeners.
+3. Emit order events with payload.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Creating Custom EventEmitter Class
-
-**Problem:** Create a `OrderProcessor` class extending `EventEmitter` that emits `'orderPlaced'` with order ID.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> class OrderProcessor extends EventEmitter { placeOrder(id) { this.emit('orderPlaced', id); } }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> class OrderProcessor extends EventEmitter {
->   placeOrder(id) {
->     this.emit('orderPlaced', id);
->   }
+> function createOrderEventEmitter(EventEmitterClass) {
+>   const EventEmitter = EventEmitterClass || require("events");
+>   const emitter = new EventEmitter();
+>
+>   const auditLogs = [];
+>
+>   emitter.on("order:created", (order) => {
+>     auditLogs.push({ event: "order:created", orderId: order.id, status: "SUCCESS" });
+>   });
+>
+>   emitter.on("order:failed", (order, reason) => {
+>     auditLogs.push({ event: "order:failed", orderId: order.id, status: "FAILED", reason });
+>   });
+>
+>   return {
+>     emitter,
+>     getAuditLogs: () => auditLogs,
+>     createOrder: (order) => emitter.emit("order:created", order),
+>     failOrder: (order, reason) => emitter.emit("order:failed", order, reason)
+>   };
 > }
+>
+> // Verification tests
+> const EventEmitter = require("events");
+> const service = createOrderEventEmitter(EventEmitter);
+>
+> service.createOrder({ id: "ord_101", amount: 50 });
+> service.failOrder({ id: "ord_102" }, "INSUFFICIENT_FUNDS");
+>
+> const logs = service.getAuditLogs();
+> console.assert(logs.length === 2, "Test 1 Failed");
+> console.assert(logs[0].orderId === "ord_101", "Test 2 Failed");
+> console.assert(logs[1].reason === "INSUFFICIENT_FUNDS", "Test 3 Failed");
 > ```
 >
-> **Explanation:** Extending `EventEmitter` grants custom domain objects event publish/subscribe features.
+> #### Technical Explanation
+>
+> 1. **Publish-Subscribe Pattern**: Decouples event producers (order creator) from event consumers (audit logger, email notification service).
+> 2. **Synchronous Execution by Default**: EventEmitter listeners run synchronously in registration order unless wrapped in async/setImmediate.
+> 3. **Decoupled Microservice Architecture**: Allows adding new feature listeners without modifying core order processing logic.
 > 
 ---
 
-### Exercise 3: Once vs On Listeners
+### Exercise 2: EventEmitter Memory Leak Detector & MaxListeners Guard
 
-**Problem:** Which method subscribes a listener that automatically removes itself after firing once? (`emitter.once()`).
+**Scenario:** An APM tool configures `setMaxListeners()` to catch memory leaks caused by registering duplicate event listeners in request handlers.
 
-**Expected output:**
+**Requirements:**
+1. Write configureMaxListeners(emitter, limit).
+2. Set max listeners limit.
+3. Add listener monitor.
+
 > [!check]- Answer
-> ```text
-> emitter.once()
-> ```
-> ```text
-> emitter.once()
+>
+> #### Implementation
+>
+> ```javascript
+> function configureMaxListeners(emitter, limit = 5) {
+>   if (!emitter || typeof emitter.setMaxListeners !== "function") {
+>     throw new TypeError("Invalid EventEmitter instance");
+>   }
+>
+>   emitter.setMaxListeners(limit);
+>
+>   return {
+>     limit,
+>     listenerCount: (eventName) => emitter.listenerCount(eventName),
+>     hasExceededLimit: (eventName) => emitter.listenerCount(eventName) > limit
+>   };
+> }
+>
+> // Verification tests
+> const EventEmitter = require("events");
+> const emitter = new EventEmitter();
+>
+> const config = configureMaxListeners(emitter, 3);
+> emitter.on("data", () => {});
+> emitter.on("data", () => {});
+>
+> console.assert(config.listenerCount("data") === 2, "Test 1 Failed");
+> console.assert(config.hasExceededLimit("data") === false, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `once()` executes the event listener function at most one time, automatically unsubscribing.
+> #### Technical Explanation
+>
+> 1. **MaxListenersExceededWarning**: Node.js emits warning when >10 listeners are attached to a single event to detect memory leaks.
+> 2. **Common Leak Root Cause**: Registering `emitter.on()` inside HTTP request handlers causes listener buildup on every incoming request.
+> 3. **Proper Cleanup**: Use `emitter.once()` or explicitly call `emitter.removeListener()` when request finishes.
 > 
+---
+
+### Exercise 3: Async Event Handling with events.once
+
+**Scenario:** A database client waits asynchronously for a connection event using `events.once()` with timeout protection.
+
+**Requirements:**
+1. Write waitForConnection(emitter, eventName, timeoutMs).
+2. Listen for single event.
+3. Reject if timeout expires before event fires.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function waitForConnection(emitter, eventName = "connect", timeoutMs = 1000) {
+>   return new Promise((resolve, reject) => {
+>     let timerId = null;
+>
+>     function handleEvent(data) {
+>       if (timerId) clearTimeout(timerId);
+>       resolve(data);
+>     }
+>
+>     timerId = setTimeout(() => {
+>       emitter.removeListener(eventName, handleEvent);
+>       reject(new Error(`Timeout waiting for event '${eventName}' after ${timeoutMs}ms`));
+>     }, timeoutMs);
+>
+>     emitter.once(eventName, handleEvent);
+>   });
+> }
+>
+> // Verification tests
+> const EventEmitter = require("events");
+> const emitter = new EventEmitter();
+>
+> const promise = waitForConnection(emitter, "ready", 500);
+> emitter.emit("ready", { dbHost: "localhost" });
+>
+> promise.then(res => {
+>   console.assert(res.dbHost === "localhost", "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **events.once() Promise Wrapper**: Attaches a one-time listener that automatically unbinds after firing once.
+> 2. **Timeout Cleanup**: Always clear fallback timeouts when event fires to prevent timer memory leaks.
+> 3. **Asynchronous Event Synchronization**: Translates event-driven architecture into async/await Promise control flow.
 ## 6. Related Terms
 - [Event Emitter](../level_05/event_emitter.md) — The conceptual implementation of this architecture.
 - [Streams (General Concept)](../level_06/streams.md) — Data-flow streams that inherit directly from `EventEmitter`.

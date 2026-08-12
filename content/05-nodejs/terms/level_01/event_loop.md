@@ -97,79 +97,173 @@ safe();
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Infinite Loop
+### Exercise 1: Event Loop Execution Phases Order Inspector
 
-**Problem:** What happens to the Event Loop if you execute the following code?
-```javascript
-setTimeout(() => {
-  console.log("Timeout finished!");
-}, 1000);
+**Scenario:** An Event Loop diagnostic script tracks the exact execution order across microtask queues (`process.nextTick`, `Promise`) and macrotask phases (`Timers`, `Check`).
 
-while (true) {
-  // Do nothing forever
-}
-```
+**Requirements:**
+1. Write trackExecutionOrder(logArray).
+2. Schedule nextTick, Promise, setTimeout, setImmediate.
+3. Verify execution sequence.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> The console.log will NEVER print. 
-> The Event Loop is completely broken. The `while (true)` loop hogs the single Main Thread forever. The background timer finishes after 1 second, and the Event Loop tries to push the callback to the Main Thread, but the Main Thread is busy running the `while` loop. The server is dead.
+>
+> #### Implementation
+>
+> ```javascript
+> function trackExecutionOrder(logArray = []) {
+>   // 1. Synchronous main call stack
+>   logArray.push("1_SYNC_START");
+>
+>   // Timers Phase (Macrotask)
+>   setTimeout(() => {
+>     logArray.push("5_TIMEOUT_MACRO");
+>   }, 0);
+>
+>   // Check Phase (Macrotask)
+>   setImmediate(() => {
+>     logArray.push("6_IMMEDIATE_MACRO");
+>   });
+>
+>   // Microtask: Promise
+>   Promise.resolve().then(() => {
+>     logArray.push("4_PROMISE_MICRO");
+>   });
+>
+>   // Microtask: process.nextTick (Highest Priority Microtask!)
+>   process.nextTick(() => {
+>     logArray.push("3_NEXT_TICK_MICRO");
+>   });
+>
+>   logArray.push("2_SYNC_END");
+> }
+>
+> // Verification tests
+> const order = [];
+> trackExecutionOrder(order);
+>
+> setImmediate(() => {
+>   console.assert(order[0] === "1_SYNC_START", "Test 1 Failed: Sync first");
+>   console.assert(order[1] === "2_SYNC_END", "Test 2 Failed: Sync end second");
+>   console.assert(order[2] === "3_NEXT_TICK_MICRO", "Test 3 Failed: nextTick microtask third");
+>   console.assert(order[3] === "4_PROMISE_MICRO", "Test 4 Failed: Promise microtask fourth");
+> });
 > ```
+>
+> #### Technical Explanation
+>
+> 1. **Six Event Loop Phases**: Timers -> Pending Callbacks -> Idle/Prepare -> Poll -> Check -> Close Callbacks.
+> 2. **Microtask Priority**: process.nextTick queue is processed BEFORE Promise microtask queue; microtasks run immediately after current Call Stack empties.
+> 3. **Macrotask Phase Transitions**: setTimeout (Timers phase) vs setImmediate (Check phase).
 > 
 ---
 
+### Exercise 2: Microtask Queue Starvation Guard
 
+**Scenario:** Demonstrates how infinite recursive `process.nextTick()` calls starve the Event Loop, blocking I/O and Timers from executing.
 
-### Exercise 2: Event Loop Phase Execution Order
+**Requirements:**
+1. Write safeNextTickQueue(taskCount, maxPerTick).
+2. Limit max nextTick executions per tick.
+3. Yield to setImmediate.
 
-**Problem:** Rank the execution sequence of these 4 Event Loop phases:
-- Poll phase
-- Timers phase
-- Check phase
-- Pending callbacks phase
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Timers phase -> 2. Pending callbacks phase -> 3. Poll phase -> 4. Check phase
-> ```
-> ```text
-> 1. Timers phase
-> 2. Pending callbacks phase
-> 3. Poll phase
-> 4. Check phase
+>
+> #### Implementation
+>
+> ```javascript
+> function safeNextTickQueue(taskCount = 100, maxPerTick = 10, processFn) {
+>   let completed = 0;
+>
+>   function runBatch() {
+>     let count = 0;
+>     while (count < maxPerTick && completed < taskCount) {
+>       processFn(completed);
+>       completed++;
+>       count++;
+>     }
+>
+>     if (completed < taskCount) {
+>       // Yield to Check phase (setImmediate) to avoid microtask starvation!
+>       setImmediate(runBatch);
+>     }
+>   }
+>
+>   runBatch();
+>   return { isComplete: () => completed === taskCount, getCompleted: () => completed };
+> }
+>
+> // Verification tests
+> let itemsDone = 0;
+> const runner = safeNextTickQueue(50, 10, () => { itemsDone++; });
+>
+> setImmediate(() => {
+>   console.assert(runner.getCompleted() > 0, "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** Node.js event loop cycles through Timers -> Pending Callbacks -> Idle/Prepare -> Poll -> Check -> Close Callbacks.
+> #### Technical Explanation
+>
+> 1. **Microtask Starvation Danger**: Recursive process.nextTick() calls continuously drain the nextTick queue without yielding to libuv Event Loop phases.
+> 2. **Event Loop Starvation**: Prevents I/O handlers, WebSocket packets, and HTTP requests from being processed.
+> 3. **setImmediate Solution**: setImmediate yields execution to the Macrotask Check phase, allowing I/O events to be processed between batches.
 > 
 ---
 
-### Exercise 3: Predicting Async Console Output
+### Exercise 3: Custom Event Loop Tick Timings Profiler
 
-**Problem:** Predict output order:
-```javascript
-setTimeout(() => console.log('A'), 0);
-setImmediate(() => console.log('B'));
-process.nextTick(() => console.log('C'));
-Promise.resolve().then(() => console.log('D'));
-```
+**Scenario:** An APM profiler measures average tick duration across Event Loop iterations to identify lag spikes.
 
-**Expected output:**
+**Requirements:**
+1. Write profileEventLoopTicks(sampleCount).
+2. Track time between setImmediate ticks.
+3. Return average tick duration.
+
 > [!check]- Answer
-> ```text
-> C
-> D
-> A (or B depending on timer threshold, usually A then B in main module)
-> ```
-> ```text
-> C
-> D
-> A (or B)
+>
+> #### Implementation
+>
+> ```javascript
+> function profileEventLoopTicks(sampleCount = 5) {
+>   return new Promise((resolve) => {
+>     const durations = [];
+>     let lastTime = Date.now();
+>     let count = 0;
+>
+>     function tick() {
+>       const now = Date.now();
+>       durations.push(now - lastTime);
+>       lastTime = now;
+>       count++;
+>
+>       if (count < sampleCount) {
+>         setImmediate(tick);
+>       } else {
+>         const sum = durations.reduce((a, b) => a + b, 0);
+>         resolve({
+>           sampleCount,
+>           durations,
+>           avgTickMs: Math.round(sum / durations.length)
+>         });
+>       }
+>     }
+>
+>     setImmediate(tick);
+>   });
+> }
+>
+> // Verification tests
+> profileEventLoopTicks(3).then(res => {
+>   console.assert(res.durations.length === 3, "Test 1 Failed");
+>   console.assert(typeof res.avgTickMs === "number", "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** `nextTick` (C) executes first, followed by microtask Promise (D), then macrotasks Timers/Check (A / B).
-> 
+> #### Technical Explanation
+>
+> 1. **Event Loop Tick**: Single complete iteration through the 6 phases of the Node.js Event Loop.
+> 2. **Tick Duration Metric**: In a healthy server, empty tick duration is <1ms.
+> 3. **APM Profiling**: Profiling tick duration alerts devops teams when server ticks stall.
 ## 6. Related Terms
 - [Non-Blocking I/O](non_blocking_io.md) — The tasks that get sent to the background.
 - [Callbacks & Callback Hell](../level_05/callbacks.md) — The actual functions that the Event Loop pushes onto the main thread.

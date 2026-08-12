@@ -87,54 +87,134 @@ pm2 reload my-app # Zero-downtime rolling reload
 
 ## 5. Practice Exercises
 
-### Exercise 1: Development vs Production
+### Exercise 1: PM2 Ecosystem File Configuration Generator
 
-**Problem:** In development, you use a tool called `nodemon` to restart your server every time you save a file. In production, you use `pm2`. Both of them restart the server. Why don't we just use `nodemon` in production?
+**Scenario:** Generates production `ecosystem.config.js` settings for PM2 cluster mode deployment.
 
-**Expected output:**
+**Requirements:**
+1. Write generatePm2Config(appName, scriptPath, instances).
+2. Set cluster mode (`exec_mode: 'cluster'`).
+3. Set max_memory_restart.
+
 > [!check]- Answer
-> ```text
-> `nodemon` restarts the server when FILES change. (Great for coding).
-> `pm2` restarts the server when the APP CRASHES, and provides Load Balancing, logging, and performance monitoring. (Great for production).
+>
+> #### Implementation
+>
+> ```javascript
+> function generatePm2Config(appName, scriptPath = "./app.js", instances = "max") {
+>   return {
+>     apps: [
+>       {
+>         name: appName,
+>         script: scriptPath,
+>         instances: instances,
+>         exec_mode: "cluster",
+>         max_memory_restart: "1G",
+>         env_production: {
+>           NODE_ENV: "production"
+>         }
+>       }
+>     ]
+>   };
+> }
+>
+> // Verification tests
+> const config = generatePm2Config("api-server", "./server.js", 4);
+> console.assert(config.apps[0].name === "api-server", "Test 1 Failed");
+> console.assert(config.apps[0].exec_mode === "cluster", "Test 2 Failed");
+> console.assert(config.apps[0].max_memory_restart === "1G", "Test 3 Failed");
 > ```
-> - What is the trigger that causes the restart in each tool?
+>
+> #### Technical Explanation
+>
+> 1. **PM2 Process Manager**: Production process manager providing cluster mode, auto-restarts, zero-downtime reloads, and log management.
+> 2. **PM2 Cluster Mode**: Automatically forks application across all available CPU cores using Node.js `cluster` module.
+> 3. **`max_memory_restart`**: Restarts worker process if RAM usage exceeds configured threshold (e.g. `1G`).
 > 
 ---
 
+### Exercise 2: PM2 Programmatic Application Reload Controller
 
+**Scenario:** Calls PM2 API programmatically (`pm2.reload()`) to reload application workers with zero downtime.
 
-### Exercise 2: PM2 Cluster Mode Launch Command
+**Requirements:**
+1. Write reloadPm2Application(pm2Mock, appName).
+2. Connect to PM2.
+3. Reload app and disconnect.
 
-**Problem:** Write PM2 CLI command to start `server.js` in cluster mode using all available CPU cores.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> pm2 start server.js -i max
-> ```
-> ```bash
-> pm2 start server.js -i max
+>
+> #### Implementation
+>
+> ```javascript
+> function reloadPm2Application(pm2Mock, appName) {
+>   return new Promise((resolve, reject) => {
+>     pm2Mock.connect((err) => {
+>       if (err) return reject(err);
+>
+>       pm2Mock.reload(appName, (reloadErr, proc) => {
+>         pm2Mock.disconnect();
+>         if (reloadErr) return reject(reloadErr);
+>         resolve({ success: true, reloadedApp: appName });
+>       });
+>     });
+>   });
+> }
+>
+> // Verification tests
+> const mockPm2 = {
+>   connect: (cb) => cb(null),
+>   reload: (app, cb) => cb(null, [{ name: app }]),
+>   disconnect: () => {}
+> };
+>
+> reloadPm2Application(mockPm2, "api-server").then(res => {
+>   console.assert(res.success === true, "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** `-i max` launches PM2 cluster workers matching available CPU core count.
+> #### Technical Explanation
+>
+> 1. **`pm2 reload` vs `pm2 restart`**: `pm2 reload` performs 0-downtime rolling worker restart; `pm2 restart` kills and restarts all workers simultaneously.
+> 2. **Programmatic PM2 API**: Allows triggering deploys and reloads directly inside CI/CD deployment scripts.
+> 3. **PM2 Connection Teardown**: Always call `pm2.disconnect()` after PM2 API commands to close daemon socket connection.
 > 
 ---
 
-### Exercise 3: PM2 Ecosystem File Generation
+### Exercise 3: PM2 Memory Threshold Auto-Restart Evaluator
 
-**Problem:** Which PM2 command generates an `ecosystem.config.js` template file?
+**Scenario:** Evaluates current process memory against PM2 `max_memory_restart` thresholds to determine if a worker needs restarting.
 
-**Expected output:**
+**Requirements:**
+1. Write evaluatePm2MemoryThreshold(currentMemoryMb, limitMemoryMb).
+2. Return restart recommendation.
+
 > [!check]- Answer
-> ```text
-> pm2 init (or pm2 ecosystem)
-> ```
-> ```bash
-> pm2 init
+>
+> #### Implementation
+>
+> ```javascript
+> function evaluatePm2MemoryThreshold(currentMemoryMb, limitMemoryMb = 1024) {
+>   const isOverLimit = currentMemoryMb >= limitMemoryMb;
+>
+>   return {
+>     currentMemoryMb,
+>     limitMemoryMb,
+>     shouldRestart: isOverLimit,
+>     action: isOverLimit ? "TRIGGER_PM2_WORKER_RELOAD" : "NORMAL_EXECUTION"
+>   };
+> }
+>
+> // Verification tests
+> console.assert(evaluatePm2MemoryThreshold(1200, 1024).shouldRestart === true, "Test 1 Failed");
+> console.assert(evaluatePm2MemoryThreshold(500, 1024).shouldRestart === false, "Test 2 Failed");
 > ```
 >
-> **Explanation:** `pm2 init` creates an `ecosystem.config.js` configuration file for managing app environments.
-> 
+> #### Technical Explanation
+>
+> 1. **PM2 Memory Watchdog**: PM2 monitors worker memory consumption every 30 seconds.
+> 2. **Memory Leak Safeguard**: Restars leaking workers in cluster mode without dropping active traffic.
+> 3. **Graceful Worker Swap**: Spins up new replacement worker before stopping memory-exceeded worker.
 ## 6. Related Terms
 - [Docker](docker.md) — The modern alternative/companion to PM2. Docker also manages keeping processes alive and isolated.
 - [The os & util Modules](../level_02/os_util_modules.md) — Related concept: The os & util Modules.

@@ -136,77 +136,161 @@ Use Transform stream when input data mutates into output data (e.g. gzip compres
 
 ## 5. Practice Exercises
 
-### Exercise 1: Custom Transform Stream
+### Exercise 1: Custom Line Transform Stream
 
-**Problem:** Complete the code below to build a custom Transform stream that converts all incoming text characters to uppercase mid-flow:
+**Scenario:** Creates a Node.js `Transform` stream subclass that converts text stream chunks to uppercase on the fly.
 
-```javascript
-const { Transform } = require('stream');
-
-// Create custom transform stream
-const upperCaseTransform = new Transform({
-  transform(chunk, encoding, callback) {
-    // Convert binary chunk to string, uppercase it
-    const upperText = chunk.toString().toUpperCase();
-    
-    // Push the modified data to the readable output channel
-    this.push(upperText);
-    
-    // Signal V8 that processing for this chunk is complete
-    callback();
-  }
-});
-
-// Test the stream
-process.stdin.pipe(upperCaseTransform).pipe(process.stdout);
-```
-
----
+**Requirements:**
+1. Write createUppercaseTransformStream(TransformClass).
+2. Override `_transform(chunk, encoding, callback)`.
+3. Push uppercase chunk.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Creating Uppercase Transform Stream
-
-**Problem:** Create a `Transform` stream that converts text chunks to uppercase.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const upper = new Transform({ transform(chunk, enc, cb) { cb(null, chunk.toString().toUpperCase()); } });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const { Transform } = require('stream');
-> const upper = new Transform({
->   transform(chunk, enc, cb) {
->     cb(null, chunk.toString().toUpperCase());
+> function createUppercaseTransformStream(TransformClass) {
+>   const Transform = TransformClass || require("stream").Transform;
+>
+>   class UppercaseTransform extends Transform {
+>     _transform(chunk, encoding, callback) {
+>       try {
+>         const uppercaseText = chunk.toString("utf-8").toUpperCase();
+>         this.push(Buffer.from(uppercaseText));
+>         callback();
+>       } catch (err) {
+>         callback(err);
+>       }
+>     }
 >   }
+>
+>   return new UppercaseTransform();
+> }
+>
+> // Verification tests
+> const Transform = require("stream").Transform;
+> const transformStream = createUppercaseTransformStream(Transform);
+>
+> let output = "";
+> transformStream.on("data", (chunk) => { output += chunk.toString(); });
+> transformStream.write("hello world");
+> transformStream.end();
+>
+> setImmediate(() => {
+>   console.assert(output === "HELLO WORLD", "Test 1 Failed: Uppercase transform failed");
 > });
 > ```
 >
-> **Explanation:** `Transform` stream transforms written input chunks into read output chunks via callback.
+> #### Technical Explanation
+>
+> 1. **Transform Stream Concept**: A Duplex stream where output is computed directly from input (e.g., zlib compression, crypto encryption).
+> 2. **`_transform` Method**: Receives incoming chunk, modifies it, and calls `this.push(modifiedChunk)` before invoking `callback()`.
+> 3. **Stream Chaining**: Transform streams sit in the middle of `.pipe()` chains (Readable -> Transform -> Writable).
 > 
 ---
 
-### Exercise 3: Common Built-in Transform Streams
+### Exercise 2: TCP Socket Duplex Stream Channel
 
-**Problem:** Name 2 built-in Node.js modules that provide Transform streams.
+**Scenario:** Simulates a Duplex stream (e.g. `net.Socket`) that supports reading and writing independently over a single TCP connection.
 
-**Expected output:**
+**Requirements:**
+1. Write createDuplexSocketSimulator(DuplexClass).
+2. Simulate independent read/write operations.
+
 > [!check]- Answer
-> ```text
-> 1. `zlib` (zlib.createGzip())
-> 2. `crypto` (crypto.createCipheriv())
-> ```
-> ```text
-> 1. zlib (e.g. zlib.createGzip())
-> 2. crypto (e.g. crypto.createCipheriv())
+>
+> #### Implementation
+>
+> ```javascript
+> function createDuplexSocketSimulator(DuplexClass) {
+>   const Duplex = DuplexClass || require("stream").Duplex;
+>
+>   const writtenData = [];
+>   const duplexStream = new Duplex({
+>     read(size) {},
+>     write(chunk, encoding, callback) {
+>       writtenData.push(chunk.toString("utf-8"));
+>       callback();
+>     }
+>   });
+>
+>   return {
+>     duplexStream,
+>     getWrittenData: () => writtenData,
+>     pushIncomingData: (dataStr) => duplexStream.push(Buffer.from(dataStr))
+>   };
+> }
+>
+> // Verification tests
+> const Duplex = require("stream").Duplex;
+> const sim = createDuplexSocketSimulator(Duplex);
+>
+> let readText = "";
+> sim.duplexStream.on("data", (chunk) => { readText += chunk.toString(); });
+>
+> sim.duplexStream.write("Outgoing Command");
+> sim.pushIncomingData("Incoming Response");
+>
+> setImmediate(() => {
+>   console.assert(sim.getWrittenData()[0] === "Outgoing Command", "Test 1 Failed");
+>   console.assert(readText === "Incoming Response", "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** Compression and encryption modules rely on Transform streams to process data in transit.
+> #### Technical Explanation
+>
+> 1. **Duplex Stream Concept**: Implements both Readable and Writable interfaces simultaneously (e.g. TCP sockets, WebSockets).
+> 2. **Independent Read/Write Channels**: Reading and writing operate on independent internal buffers.
+> 3. **Full-Duplex Networking**: Allows two-way concurrent communication between client and server.
 > 
+---
+
+### Exercise 3: PassThrough Stream Inspection & Logging
+
+**Scenario:** Uses a `PassThrough` stream to tap into a video/file stream for byte counting without altering the data stream.
+
+**Requirements:**
+1. Write createPassThroughMeter(PassThroughClass).
+2. Track total bytes passed through stream.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function createPassThroughMeter(PassThroughClass) {
+>   const PassThrough = PassThroughClass || require("stream").PassThrough;
+>   const meterStream = new PassThrough();
+>
+>   let totalBytes = 0;
+>   meterStream.on("data", (chunk) => {
+>     totalBytes += chunk.length;
+>   });
+>
+>   return {
+>     meterStream,
+>     getTotalBytes: () => totalBytes
+>   };
+> }
+>
+> // Verification tests
+> const PassThrough = require("stream").PassThrough;
+> const meter = createPassThroughMeter(PassThrough);
+>
+> meter.meterStream.write("12345");
+> meter.meterStream.write("67890");
+>
+> setImmediate(() => {
+>   console.assert(meter.getTotalBytes() === 10, "Test 1 Failed: Byte meter must count 10 bytes");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **PassThrough Stream**: Trivial implementation of Transform stream that passes input bytes to output without modification.
+> 2. **Stream Tapping**: Used for logging, byte counting, or splitting streams into multiple outputs (`stream.pipe(meter1)`, `stream.pipe(meter2)`).
+> 3. **Zero Overhead Inspection**: Allows monitoring stream metrics without corrupting binary data payloads.
 ## 6. Related Terms
 - [Piping (.pipe())](piping.md) — The method used to link readable, transform, and writable streams together.
 - [Readable & Writable Streams](readable_writable.md) — The base classes for unidirectional data streams.

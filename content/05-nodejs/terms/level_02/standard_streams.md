@@ -124,78 +124,178 @@ Use buffered logger streams or stream pipeline chunks
 
 ## 5. Practice Exercises
 
-### Exercise 1: Custom Logger
+### Exercise 1: Structured Stdout & Stderr Log Formatter
 
-**Problem:** Complete the code to build a simple logger function that writes debug messages to `stdout` and error logs to `stderr`:
+**Scenario:** A logging service formats log messages into JSON strings, routing standard logs to `process.stdout` and errors to `process.stderr`.
 
-```javascript
-function logMessage(level, msg) {
-  const timestamp = new Date().toISOString();
-  if (level === 'ERROR') {
-    process.stderr.write(`[${timestamp}] ERROR: ${msg}\n`);
-  } else {
-    process.stdout.write(`[${timestamp}] INFO: ${msg}\n`);
-  }
-}
-
-logMessage('INFO', 'Server started on port 3000');
-logMessage('ERROR', 'Failed to connect to database');
-```
-
----
+**Requirements:**
+1. Write logToStdStream(level, message, metaObj, stdMock).
+2. Route INFO/WARN to process.stdout.
+3. Route ERROR to process.stderr.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Reading User Input from process.stdin
-
-**Problem:** Read line input from user via `process.stdin` using `readline` module.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const rl = readline.createInterface({ input: process.stdin, output: process.stdout }); rl.question('Name? ', (answer) => { ... });
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const readline = require('readline');
-> const rl = readline.createInterface({
->   input: process.stdin,
->   output: process.stdout
-> });
-> rl.question('Name? ', (answer) => {
->   console.log(`Hello ${answer}`);
->   rl.close();
-> });
+> function logToStdStream(level = "INFO", message = "", metaObj = {}, stdMock) {
+>   const stdout = (stdMock && stdMock.stdout) || process.stdout;
+>   const stderr = (stdMock && stdMock.stderr) || process.stderr;
+>
+>   const logPayload = JSON.stringify({
+>     timestamp: new Date().toISOString(),
+>     level: level.toUpperCase(),
+>     message,
+>     ...metaObj
+>   }) + "
+> ";
+>
+>   if (level.toUpperCase() === "ERROR" || level.toUpperCase() === "FATAL") {
+>     stderr.write(logPayload);
+>     return { stream: "STDERR", payload: logPayload };
+>   } else {
+>     stdout.write(logPayload);
+>     return { stream: "STDOUT", payload: logPayload };
+>   }
+> }
+>
+> // Verification tests
+> let stdoutData = "";
+> let stderrData = "";
+>
+> const mockStd = {
+>   stdout: { write: (msg) => { stdoutData = msg; } },
+>   stderr: { write: (msg) => { stderrData = msg; } }
+> };
+>
+> const r1 = logToStdStream("INFO", "Server listening", { port: 3000 }, mockStd);
+> console.assert(r1.stream === "STDOUT" && stdoutData.includes("Server listening"), "Test 1 Failed");
+>
+> const r2 = logToStdStream("ERROR", "Database failure", {}, mockStd);
+> console.assert(r2.stream === "STDERR" && stderrData.includes("Database failure"), "Test 2 Failed");
 > ```
 >
-> **Explanation:** `readline` wraps `process.stdin` and `process.stdout` streams for interactive CLI prompts.
+> #### Technical Explanation
+>
+> 1. **Three Standard Streams**: process.stdin (fd 0, readable), process.stdout (fd 1, writable), process.stderr (fd 2, writable).
+> 2. **12-Factor App Logging**: Twelve-Factor App principle: apps write raw unbuffered log streams to stdout/stderr; log routers (Fluentd) handle collection.
+> 3. **stdout vs stderr Separation**: Container platforms (Docker, K8s) capture stdout and stderr separately for log aggregation.
 > 
 ---
 
-### Exercise 3: Standard Streams File Descriptors
+### Exercise 2: Standard Input process.stdin Line Reader
 
-**Problem:** Match stream to numeric POSIX file descriptor:
-1. `stdin` (0)
-2. `stdout` (1)
-3. `stderr` (2)
+**Scenario:** A CLI utility reads lines interactively from `process.stdin` until user enters 'exit'.
 
-**Expected output:**
+**Requirements:**
+1. Write createStdinLineReader(stdinMock).
+2. Listen for data events.
+3. Parse lines.
+4. Emit line events.
+
 > [!check]- Answer
-> ```text
-> 1. stdin: 0
-> 2. stdout: 1
-> 3. stderr: 2
-> ```
-> ```text
-> 1. stdin: 0
-> 2. stdout: 1
-> 3. stderr: 2
+>
+> #### Implementation
+>
+> ```javascript
+> function createStdinLineReader(stdinMock) {
+>   const stdin = stdinMock || process.stdin;
+>   const lines = [];
+>
+>   let buffer = "";
+>   stdin.on("data", (chunk) => {
+>     buffer += chunk.toString("utf-8");
+>     const parts = buffer.split("
+> ");
+>     buffer = parts.pop(); // Keep incomplete trailing chunk in buffer
+>
+>     for (const line of parts) {
+>       lines.push(line.trim());
+>     }
+>   });
+>
+>   return {
+>     getLines: () => lines,
+>     getBufferedData: () => buffer
+>   };
+> }
+>
+> // Verification tests
+> const handlers = {};
+> const mockStdin = {
+>   on: (evt, fn) => { handlers[evt] = fn; }
+> };
+>
+> const reader = createStdinLineReader(mockStdin);
+> handlers["data"]("hello
+> world
+> incomplete");
+>
+> console.assert(reader.getLines().length === 2, "Test 1 Failed");
+> console.assert(reader.getLines()[0] === "hello", "Test 2 Failed");
+> console.assert(reader.getBufferedData() === "incomplete", "Test 3 Failed");
 > ```
 >
-> **Explanation:** POSIX standards designate 0 for standard input, 1 for standard output, and 2 for standard error.
+> #### Technical Explanation
+>
+> 1. **process.stdin Stream**: Readable stream capturing interactive user input or piped data from terminal shell.
+> 2. **Stream Chunking**: Data arrives in arbitrary chunks; splitting on `\n` correctly reconstructs individual lines.
+> 3. **readline Module**: Node.js core `readline` module wraps process.stdin for building interactive CLI prompts.
 > 
+---
+
+### Exercise 3: Stream Pipe Redirector with Error Forwarding
+
+**Scenario:** Pipes data from a readable stream to a writable stream, ensuring errors on either stream trigger proper cleanup.
+
+**Requirements:**
+1. Write pipeStreamsWithErrorHandling(readableMock, writableMock).
+2. Pipe readable to writable.
+3. Attach error handlers to both streams.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function pipeStreamsWithErrorHandling(readableMock, writableMock) {
+>   let hasError = false;
+>
+>   function handleError(err) {
+>     hasError = true;
+>     if (typeof readableMock.destroy === "function") readableMock.destroy();
+>     if (typeof writableMock.destroy === "function") writableMock.destroy();
+>   }
+>
+>   readableMock.on("error", handleError);
+>   writableMock.on("error", handleError);
+>
+>   readableMock.pipe(writableMock);
+>
+>   return {
+>     hasError: () => hasError,
+>     triggerError: (err) => handleError(err)
+>   };
+> }
+>
+> // Verification tests
+> const handlersR = {};
+> const handlersW = {};
+>
+> const mockR = { on: (e, fn) => { handlersR[e] = fn; }, pipe: () => {}, destroy: () => {} };
+> const mockW = { on: (e, fn) => { handlersW[e] = fn; }, destroy: () => {} };
+>
+> const pipeCtrl = pipeStreamsWithErrorHandling(mockR, mockW);
+> pipeCtrl.triggerError(new Error("Disk full"));
+>
+> console.assert(pipeCtrl.hasError() === true, "Test 1 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Stream.pipe Method**: Connects readable stream output to writable stream input automatically managing backpressure.
+> 2. **stream.pipeline Alternative**: Modern Node.js `stream.pipeline()` helper automatically handles error cleanup across piped streams.
+> 3. **Memory Efficiency**: Piping streams processes gigabyte files in small memory chunks (~64KB) without loading full files into RAM.
 ## 6. Related Terms
 - [Streams (General Concept)](../level_06/streams.md) — The core concepts behind readable and writable data channels.
 - [The process Object](process_object.md) — The parent process object managing these streams.

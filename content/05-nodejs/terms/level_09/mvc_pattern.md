@@ -174,154 +174,148 @@ class UserModel {
 }
 ```
 
-
-
-### Mistake 4: Placing Database Query Logic Directly Inside View Templates
-
-**The mistake:** Executing SQL queries inside EJS or Handlebars template files.
-
-**Why it's wrong:** Views should be pure rendering templates. Executing database queries in templates breaks MVC separation of concerns and leads to un-maintainable code.
-
-*Incorrect:*
-```javascript
-// Inside EJS template file: <% const users = await db.query('SELECT...') %>
-```
-
-*Fix:*
-```javascript
-// Controller fetches data and passes to View template:
-const users = await db.query('SELECT...');
-res.render('users', { users });
-```
-
-### Mistake 5: Tightly Coupling Model Classes to HTTP Request/Response Objects
-
-**The mistake:** Accessing `req.body` directly inside Model method definitions.
-
-**Why it's wrong:** Models represent application data and persistence logic. Tightly coupling Models to HTTP `req`/`res` objects prevents reusing models in background workers or CLI scripts.
-
-*Incorrect:*
-```javascript
-class UserModel {
-  static create(req) { return db.save(req.body); } // ❌ Coupled to HTTP req!
-}
-```
-
-*Fix:*
-```javascript
-class UserModel {
-  static create(userData) { return db.save(userData); } // Decoupled plain data object
-}
-```
-
-
-
-### Mistake 6: Placing Database Query Logic Directly Inside View Templates
-
-**The mistake:** Executing SQL queries inside EJS or Handlebars template files.
-
-**Why it's wrong:** Views should be pure rendering templates. Executing database queries in templates breaks MVC separation of concerns and leads to un-maintainable code.
-
-*Incorrect:*
-```javascript
-// Inside EJS template file: <% const users = await db.query('SELECT...') %>
-```
-
-*Fix:*
-```javascript
-// Controller fetches data and passes to View template:
-const users = await db.query('SELECT...');
-res.render('users', { users });
-```
-
-### Mistake 7: Tightly Coupling Model Classes to HTTP Request/Response Objects
-
-**The mistake:** Accessing `req.body` directly inside Model method definitions.
-
-**Why it's wrong:** Models represent application data and persistence logic. Tightly coupling Models to HTTP `req`/`res` objects prevents reusing models in background workers or CLI scripts.
-
-*Incorrect:*
-```javascript
-class UserModel {
-  static create(req) { return db.save(req.body); } // ❌ Coupled to HTTP req!
-}
-```
-
-*Fix:*
-```javascript
-class UserModel {
-  static create(userData) { return db.save(userData); } // Decoupled plain data object
-}
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: MVC File Routing
+### Exercise 1: MVC Pattern Architecture Dispatcher
 
-**Problem:** You are building a blog API. Group the components below into their correct MVC directories:
-- `models/Post.js`
-- `controllers/postController.js`
-- `routes/postRoutes.js`
+**Scenario:** Demonstrates Model-View-Controller architecture where Controller fetches Model data and passes it to View template renderer.
 
-Write a thin Express route inside `routes/postRoutes.js` that maps `POST /posts` to a controller method named `createPost`:
-
-```javascript
-const express = require('express');
-const router = express.Router();
-const postController = require('../controllers/postController');
-
-// Solution:
-router.post('/posts', postController.createPost);
-
-module.exports = router;
-```
-
----
+**Requirements:**
+1. Write mvcDispatcher(reqUrl, modelMock, viewRendererMock).
+2. Fetch Model.
+3. Pass Model data to View.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Matching MVC Component Roles
-
-**Problem:** Match component to MVC role:
-1. User database schema and queries (Model)
-2. Route handler that receives HTTP request and calls model (Controller)
-3. HTML EJS template rendered to browser (View)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Model
-> 2. Controller
-> 3. View
-> ```
-> ```text
-> 1. Model
-> 2. Controller
-> 3. View
-> ```
 >
-> **Explanation:** Model manages data; View handles presentation; Controller orchestrates requests.
-> 
----
-
-### Exercise 3: Express res.render Method
-
-**Problem:** Which Express method renders a View template file passing data variables? (`res.render('templateName', { data })`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> res.render('templateName', { data })
-> ```
+> #### Implementation
+>
 > ```javascript
-> res.render('profile', { user });
+> async function mvcDispatcher(reqUrl, modelMock, viewRendererMock) {
+>   // 1. Controller logic: extract route parameters
+>   const match = reqUrl.match(/\/users\/(\d+)/);
+>   if (!match) {
+>     return { status: 404, html: viewRendererMock.render("404", {}) };
+>   }
+>
+>   const userId = parseInt(match[1], 10);
+>
+>   // 2. Controller queries Model
+>   const userData = await modelMock.findUserById(userId);
+>   if (!userData) {
+>     return { status: 404, html: viewRendererMock.render("404", { message: "User not found" }) };
+>   }
+>
+>   // 3. Controller passes Model data to View renderer
+>   const html = viewRendererMock.render("userProfile", userData);
+>
+>   return { status: 200, html };
+> }
+>
+> // Verification tests
+> const mockModel = { findUserById: async (id) => id === 42 ? { id: 42, name: "Alice" } : null };
+> const mockView = { render: (tpl, data) => `<h1>${tpl}:${data.name || "None"}</h1>` };
+>
+> mvcDispatcher("/users/42", mockModel, mockView).then(res => {
+>   console.assert(res.status === 200, "Test 1 Failed");
+>   console.assert(res.html === "<h1>userProfile:Alice</h1>", "Test 2 Failed: Rendered view with model data");
+> });
 > ```
 >
-> **Explanation:** `res.render` compiles template files with data objects and returns HTML to client.
+> #### Technical Explanation
+>
+> 1. **Model Component**: Encapsulates data structure, database persistence, and business rules.
+> 2. **View Component**: Formats data into user interface representations (HTML templates, EJS, Pug, Handlebars).
+> 3. **Controller Component**: Coordinates user input requests, orchestrates Model queries, and selects View representations.
 > 
+---
+
+### Exercise 2: Model Data Hydration & Domain Guard
+
+**Scenario:** Constructs an MVC Model class that encapsulates data validation and state mutation methods.
+
+**Requirements:**
+1. Write createProductModel(data).
+2. Validate price > 0.
+3. Provide `applyDiscount(percentage)` method.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> class ProductModel {
+>   constructor(data = {}) {
+>     if (!data.name || typeof data.name !== "string") {
+>       throw new Error("MODEL_VALIDATION_ERROR: Product name is required");
+>     }
+>     if (typeof data.price !== "number" || data.price <= 0) {
+>       throw new Error("MODEL_VALIDATION_ERROR: Price must be positive");
+>     }
+>
+>     this.id = data.id || null;
+>     this.name = data.name;
+>     this.price = data.price;
+>   }
+>
+>   applyDiscount(percentage = 10) {
+>     const discountAmount = (this.price * percentage) / 100;
+>     this.price = Number((this.price - discountAmount).toFixed(2));
+>     return this.price;
+>   }
+> }
+>
+> // Verification tests
+> const product = new ProductModel({ name: "Laptop", price: 1000 });
+> product.applyDiscount(10);
+>
+> console.assert(product.price === 900, "Test 1 Failed: Discount applied via model method");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Rich Domain Model**: Encapsulates business behavior and state mutations directly on Model classes.
+> 2. **Anemic Domain Model Anti-Pattern**: Placing all business logic in controllers while treating models as dumb data bags degrades maintainability.
+> 3. **Model Self-Validation**: Models validate their own data integrity upon construction.
+> 
+---
+
+### Exercise 3: Server-Side View Template Renderer Abstraction
+
+**Scenario:** Simulates a server-side view engine template renderer replacing placeholder variables (`{{name}}`) with view model data.
+
+**Requirements:**
+1. Write renderViewTemplate(templateString, viewModelData).
+2. Replace `{{key}}` placeholders.
+3. Return rendered string.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function renderViewTemplate(templateString = "", viewModelData = {}) {
+>   let output = templateString;
+>
+>   for (const [key, value] of Object.entries(viewModelData)) {
+>     const regex = new RegExp(`{{\s*${key}\s*}}`, "g");
+>     output = output.replace(regex, String(value));
+>   }
+>
+>   return output;
+> }
+>
+> // Verification tests
+> const tpl = "Hello {{ name }}, your role is {{ role }}!";
+> const rendered = renderViewTemplate(tpl, { name: "Alice", role: "Admin" });
+>
+> console.assert(rendered === "Hello Alice, your role is Admin!", "Test 1 Failed: Replaced template variables");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Server-Side Rendering (SSR)**: Generates complete HTML strings on the server before sending to the client browser.
+> 2. **Template Engines in Node.js**: Popular Node.js view engines include EJS (`app.set('view engine', 'ejs')`), Handlebars, and Pug.
+> 3. **View Model (VM)**: Lightweight data objects formatted specifically for template rendering consumption.
 ## 6. Related Terms
 - [Controllers & Services](controllers_services.md) — A deeper separation refining the controller layer.
 - [ORMs & ODMs](../level_08/orms_odms.md) — The database mapping technologies representing Models.

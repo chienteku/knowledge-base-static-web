@@ -207,67 +207,93 @@ input[type="radio"] { accent-color: #005fcc; } /* High contrast accessibility ti
 
 ## 5. Practice Exercises
 
-### Exercise 1: Form Colors Theme
+### Exercise 1: Styling Native Form Controls with accent-color
 
-**Problem:** You are building a green dashboard theme. You want all range sliders (`type="range"`) and progress elements inside `.dashboard` to use the primary green color `#00cc66`. Write the CSS ruleset.
+**Scenario:** An author styles native HTML checkboxes, radio buttons, and range sliders to match brand identity using `accent-color`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `accent-color: #2563eb` to form inputs.
+2. Ensure native accessibility features remain intact.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .dashboard input[type="range"],
-> .dashboard progress {
->   accent-color: #00cc66;
-> }
-> ```
-> - Combine selectors with a comma to apply the rules in a clean block.
-> - Assign the branding property value.
-> 
----
-
-
-
-### Exercise 2: Form Accent Color Branding
-
-**Problem:** Write CSS `accent-color` rule applying brand color `#6200ee` to all checkboxes, radios, and range inputs.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color: #6200ee; }
-> ```
-> ```css
-> input[type="checkbox"],
-> input[type="radio"],
-> input[type="range"] {
->   accent-color: #6200ee;
+> .form-checkbox,
+> .form-radio,
+> .form-range {
+>   accent-color: #2563eb;        /* Custom brand primary color for native controls */
+>   width: 1.25rem;
+>   height: 1.25rem;
+>   cursor: pointer;
 > }
 > ```
 >
-> **Explanation:** `accent-color` styles native form input accents across browsers with single-line CSS.
+> #### Technical Explanation
+>
+> 1. **The `accent-color` Property**: Applies a custom accent color to native form elements (checkboxes, radio buttons, range sliders, progress bars).
+> 2. **Automatic Contrast Ratio**: Browsers automatically determine a high-contrast foreground checkmark/dot color (white or black) to match the accent background.
+> 3. **Zero-JS Accessibility**: Customizes form controls visually while retaining native browser accessibility and keyboard interaction.
 > 
 ---
 
-### Exercise 3: Elements Supporting accent-color
+### Exercise 2: Dark Mode Contrast Adaptation for accent-color
 
-**Problem:** List 4 HTML form elements that support `accent-color` property tinting.
+**Scenario:** Adapts form accent colors for dark mode themes to guarantee WCAG compliance.
 
-**Expected output:**
+**Requirements:**
+1. Define dark mode accent color token.
+
 > [!check]- Answer
-> ```text
-> 1. Checkboxes (<input type="checkbox">)
-> 2. Radio buttons (<input type="radio">)
-> 3. Range sliders (<input type="range">)
-> 4. Progress bars (<progress>)
-> ```
-> ```text
-> 1. Checkboxes (<input type="checkbox">
-> 2. Radio buttons (<input type="radio">
-> 3. Range sliders (<input type="range">
-> 4. Progress bars (<progress>
+>
+> #### Implementation
+>
+> ```css
+> :root {
+>   --color-accent: #2563eb;      /* Light theme accent */
+> }
+>
+> [data-theme="dark"] {
+>   --color-accent: #60a5fa;      /* Lighter accent color for dark backgrounds */
+> }
+>
+> input[type="checkbox"] {
+>   accent-color: var(--color-accent);
+> }
 > ```
 >
-> **Explanation:** `accent-color` applies brand tinting to native interactive form controls.
+> #### Technical Explanation
+>
+> 1. **Theme Token Integration**: Pairing `accent-color` with CSS custom properties enables dynamic theme switching.
+> 2. **Dark Mode Legibility**: Using a lighter blue hue (`#60a5fa`) in dark mode maintains high contrast against dark surfaces.
+> 3. **WCAG Compliance**: Satisfies WCAG 1.4.11 Non-Text Contrast guidelines for UI components.
 > 
+---
+
+### Exercise 3: Custom Range Slider Accent Branding
+
+**Scenario:** Styles native `<input type="range">` sliders using `accent-color`.
+
+**Requirements:**
+1. Apply `accent-color: #10b981`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .volume-slider {
+>   accent-color: #10b981;        /* Emerald green active track and thumb tint */
+>   width: 100%;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Range Slider Styling**: `accent-color` colors both the slider thumb handle and the active track fill automatically.
+> 2. **Eliminating Complex Webkit Hacks**: Replaces hundreds of lines of legacy `-webkit-slider-thumb` vendor pseudo-element hacks.
+> 3. **Cross-Browser Parity**: Delivers consistent slider branding across Chrome, Firefox, Safari, and Edge.
 ## 6. Related Terms
 - [Advanced Pseudo-classes](../level_09/pseudo_classes_advanced.md) — `:checked` and `:disabled` form selectors.
 

@@ -176,134 +176,93 @@ font-size: clamp(3rem, 1rem, 5vw); /* ❌ Invalid argument order! */
 font-size: clamp(1rem, 5vw, 3rem); /* Min: 1rem, Preferred: 5vw, Max: 3rem */
 ```
 
-
-
-### Mistake 4: Confusing `min()` and `max()` Argument Functions
-
-**The mistake:** Using `width: min(100%, 1200px)` expecting the element to be AT LEAST 1200px wide.
-
-**Why it's wrong:** `min(A, B)` selects the **SMALLEST** of the listed values (acts as a maximum ceiling). `max(A, B)` selects the **LARGEST** value (acts as a minimum floor).
-
-*Incorrect:*
-```css
-/* Expecting width to be at least 1200px */
-div { width: min(100%, 1200px); } /* ❌ Caps width at max 1200px! */
-```
-
-*Fix:*
-```css
-div { width: max(500px, 50%); } /* Ensures width is at least 500px floor */
-```
-
-### Mistake 5: Reversing Arguments in `clamp(MIN, VAL, MAX)`
-
-**The mistake:** Writing `font-size: clamp(3rem, 1rem, 5vw);`.
-
-**Why it's wrong:** `clamp()` expects arguments in exact order: `clamp(MINIMUM, PREFERRED, MAXIMUM)`. Placing min > max invalidates the calculation.
-
-*Incorrect:*
-```css
-font-size: clamp(3rem, 1rem, 5vw); /* ❌ Invalid argument order! */
-```
-
-*Fix:*
-```css
-font-size: clamp(1rem, 5vw, 3rem); /* Min: 1rem, Preferred: 5vw, Max: 3rem */
-```
-
-
-
-### Mistake 6: Confusing `min()` and `max()` Argument Functions
-
-**The mistake:** Using `width: min(100%, 1200px)` expecting the element to be AT LEAST 1200px wide.
-
-**Why it's wrong:** `min(A, B)` selects the **SMALLEST** of the listed values (acts as a maximum ceiling). `max(A, B)` selects the **LARGEST** value (acts as a minimum floor).
-
-*Incorrect:*
-```css
-/* Expecting width to be at least 1200px */
-div { width: min(100%, 1200px); } /* ❌ Caps width at max 1200px! */
-```
-
-*Fix:*
-```css
-div { width: max(500px, 50%); } /* Ensures width is at least 500px floor */
-```
-
-### Mistake 7: Reversing Arguments in `clamp(MIN, VAL, MAX)`
-
-**The mistake:** Writing `font-size: clamp(3rem, 1rem, 5vw);`.
-
-**Why it's wrong:** `clamp()` expects arguments in exact order: `clamp(MINIMUM, PREFERRED, MAXIMUM)`. Placing min > max invalidates the calculation.
-
-*Incorrect:*
-```css
-font-size: clamp(3rem, 1rem, 5vw); /* ❌ Invalid argument order! */
-```
-
-*Fix:*
-```css
-font-size: clamp(1rem, 5vw, 3rem); /* Min: 1rem, Preferred: 5vw, Max: 3rem */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Clamp Range Math
+### Exercise 1: Fluid Typography Scaling without Media Queries using clamp()
 
-**Problem:** You declare: `font-size: clamp(16px, 4vw, 32px);`. 
-If a user opens the page on a mobile device where the viewport width is `300px`, what is the evaluated font size in pixels?
+**Scenario:** An author defines fluid responsive title text scaling seamlessly between `1.75rem` and `3.5rem` using `clamp()`.
 
-**Expected output:**
+**Requirements:**
+1. Set `font-size: clamp(1.75rem, 4vw + 1rem, 3.5rem)`.
+2. Explain MIN, VAL, MAX bounds.
+
 > [!check]- Answer
-> ```text
-> 16px!
-> - 4vw of 300px = 12px (300 * 0.04).
-> - The lower clamp limit is 16px.
-> - Since the evaluated fluid size (12px) falls below the minimum (16px), the browser locks the font size to the floor value of 16px.
-> ```
-> - Calculate `4vw` of `300px` first.
-> - Verify if the calculated value breaches the minimum bound boundary.
-> 
----
-
-
-
-### Exercise 2: Fluid Typography with clamp()
-
-**Problem:** Write CSS `font-size` rule for `<h1>` clamping size between minimum `2rem`, preferred `5vw`, and maximum `4rem`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> h1 { font-size: clamp(2rem, 5vw, 4rem); }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> h1 {
->   font-size: clamp(2rem, 5vw, 4rem);
+> .fluid-title {
+>   /* clamp(MIN, VAL, MAX): Min 1.75rem (~28px), Fluid 4vw + 1rem, Max 3.5rem (~56px) */
+>   font-size: clamp(1.75rem, 4vw + 1rem, 3.5rem);
+>   font-weight: 800;
+>   line-height: 1.15;
 > }
 > ```
 >
-> **Explanation:** `clamp(2rem, 5vw, 4rem)` creates fluid typography scaling smoothly across viewport sizes.
+> #### Technical Explanation
+>
+> 1. **The `clamp()` Function**: Calculates a value bounded between an explicit minimum (`1.75rem`), preferred fluid value (`4vw + 1rem`), and maximum (`3.5rem`).
+> 2. **Zero Media Query Overhead**: Eliminates multiple `@media` query breakpoint rules for headings, scaling typography smoothly across every viewport width.
+> 3. **Accessible Fluid Formula (`4vw + 1rem`)**: Adding `+ 1rem` to viewport units guarantees text still zooms when users change browser default text size settings.
 > 
 ---
 
-### Exercise 3: Responsive Padding using min()
+### Exercise 2: Dynamic Container Padding Scaling with clamp()
 
-**Problem:** Write CSS `padding` rule setting padding to 5% of viewport width, capped at max 40px.
+**Scenario:** Applies fluid container padding scaling dynamically from `1rem` on mobile to `4rem` on desktop displays.
 
-**Expected output:**
+**Requirements:**
+1. Apply `padding-inline: clamp(1rem, 5vw, 4rem)`.
+
 > [!check]- Answer
-> ```text
-> padding: min(5vw, 40px);
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .container {
->   padding: min(5vw, 40px);
+> .fluid-hero-section {
+>   /* Fluid padding: Min 1rem (mobile), Fluid 5vw, Max 4rem (desktop) */
+>   padding-inline: clamp(1rem, 5vw, 4rem);
+>   padding-block: clamp(2rem, 8vw, 6rem);
+>   background-color: #0f172a;
+>   color: #ffffff;
 > }
 > ```
 >
-> **Explanation:** `min(5vw, 40px)` applies 5vw fluid padding on mobile, clamping at 40px on desktop.
+> #### Technical Explanation
+>
+> 1. **Fluid Spacing System**: `clamp()` creates fluid component padding that expands proportionally as viewports widen.
+> 2. **Eliminating Breakpoint Jumps**: Prevents sudden visual padding layout jumps associated with step-based media query breakpoints.
+> 3. **Clean Responsive Architecture**: Keeps container layout rules concise in a single declaration.
 > 
+---
+
+### Exercise 3: Responsive Card Width Constraints using min() and max()
+
+**Scenario:** Combines `min()` and `max()` functions to restrict modal width.
+
+**Requirements:**
+1. Apply `width: min(90%, 40rem)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .responsive-modal {
+>   /* Chooses the SMALLER value: 90% of screen OR 40rem maximum width */
+>   width: min(90%, 40rem);
+>   margin-inline: auto;
+>   padding: 2rem;
+>   background-color: #ffffff;
+>   border-radius: 0.5rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `min()` Function**: Returns the smallest value from a list of comma-separated arguments (`min(90%, 40rem)`).
+> 2. **The `max()` Function**: Returns the largest value from a list of arguments, setting minimum floor constraints.
+> 3. **Shorthand Layout Math**: `width: min(90%, 40rem)` replaces `width: 90%; max-width: 40rem;` cleanly.
 ## 6. Related Terms
 - [Responsive Design (Concept)](responsive_design.md) — The adaptation philosophy.
 - [`calc()`](../level_11/calc.md) — Basic CSS math.

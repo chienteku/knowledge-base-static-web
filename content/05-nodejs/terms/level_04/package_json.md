@@ -110,62 +110,163 @@ This is one of the most powerful features. Instead of typing complex terminal co
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Magic Command
+### Exercise 1: Strict package.json Schema Linter
 
-**Problem:** You download a repository from GitHub. The folder only contains `app.js` and `package.json`. You try to run `node app.js` and it crashes immediately, complaining about missing modules. What single command fixes everything?
+**Scenario:** A repository linter validates `package.json` manifest files against mandatory schema fields (`name`, `version`, `license`, `scripts`).
 
-**Expected output:**
+**Requirements:**
+1. Write validatePackageJsonManifest(packageObj).
+2. Verify npm package naming rules (lowercase, no spaces).
+3. Verify valid SemVer version.
+4. Return { valid, errors }.
+
 > [!check]- Answer
-> ```bash
-> npm install
+>
+> #### Implementation
+>
+> ```javascript
+> function validatePackageJsonManifest(packageObj = {}) {
+>   const errors = [];
+>
+>   // 1. Check Name
+>   if (!packageObj.name || typeof packageObj.name !== "string") {
+>     errors.push("Missing required field 'name'");
+>   } else if (!/^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(packageObj.name)) {
+>     errors.push("Invalid package 'name': must be URL-safe lowercase without spaces");
+>   }
+>
+>   // 2. Check Version
+>   if (!packageObj.version || typeof packageObj.version !== "string") {
+>     errors.push("Missing required field 'version'");
+>   } else if (!/^\d+\.\d+\.\d+(?:-[\w.]+)?$/.test(packageObj.version)) {
+>     errors.push("Invalid 'version': must follow Semantic Versioning (MAJOR.MINOR.PATCH)");
+>   }
+>
+>   // 3. Check License
+>   if (!packageObj.license) {
+>     errors.push("Missing 'license' field (e.g. 'MIT' or 'UNLICENSED')");
+>   }
+>
+>   return { valid: errors.length === 0, errors };
+> }
+>
+> // Verification tests
+> const validPkg = { name: "@myorg/api-server", version: "1.0.0", license: "MIT" };
+> console.assert(validatePackageJsonManifest(validPkg).valid === true, "Test 1 Failed");
+>
+> const invalidPkg = { name: "My Invalid Server", version: "1.0", license: "" };
+> const res = validatePackageJsonManifest(invalidPkg);
+> console.assert(res.valid === false && res.errors.length === 3, "Test 2 Failed");
 > ```
-> - How do you tell NPM to "read the blueprint and build the house"?
+>
+> #### Technical Explanation
+>
+> 1. **package.json Manifest Role**: The central metadata configuration file for Node.js projects and npm packages.
+> 2. **npm Naming Rules**: Package names must be lowercase, URL-safe, <=214 chars, and can optionally be scoped (`@scope/package`).
+> 3. **License Specification**: Defines open-source licensing (MIT, Apache-2.0) or proprietary status (`UNLICENSED`).
 > 
 ---
 
+### Exercise 2: Dependency Category Splitter & Auditor
 
+**Scenario:** An API build analyzer categorizes dependencies listed in `package.json` into production, development, and peer dependencies.
 
-### Exercise 2: Configuring package.json Scripts
+**Requirements:**
+1. Write categorizeDependencies(packageObj).
+2. Extract dependencies, devDependencies, peerDependencies.
+3. Return count summary.
 
-**Problem:** Add `start` and `dev` scripts to `package.json` running `node server.js` and `nodemon server.js`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> "scripts": { "start": "node server.js", "dev": "nodemon server.js" }
-> ```
-> ```json
-> {
->   "scripts": {
->     "start": "node server.js",
->     "dev": "nodemon server.js"
->   }
+>
+> #### Implementation
+>
+> ```javascript
+> function categorizeDependencies(packageObj = {}) {
+>   const deps = packageObj.dependencies || {};
+>   const devDeps = packageObj.devDependencies || {};
+>   const peerDeps = packageObj.peerDependencies || {};
+>
+>   return {
+>     prodCount: Object.keys(deps).length,
+>     devCount: Object.keys(devDeps).length,
+>     peerCount: Object.keys(peerDeps).length,
+>     totalCount: Object.keys(deps).length + Object.keys(devDeps).length + Object.keys(peerDeps).length,
+>     prodPackages: Object.keys(deps),
+>     devPackages: Object.keys(devDeps)
+>   };
 > }
+>
+> // Verification tests
+> const pkg = {
+>   dependencies: { express: "^4.18.0", pg: "^8.10.0" },
+>   devDependencies: { jest: "^29.0.0" },
+>   peerDependencies: { react: "^18.0.0" }
+> };
+>
+> const cat = categorizeDependencies(pkg);
+> console.assert(cat.prodCount === 2, "Test 1 Failed");
+> console.assert(cat.devCount === 1, "Test 2 Failed");
+> console.assert(cat.totalCount === 4, "Test 3 Failed");
 > ```
 >
-> **Explanation:** `scripts` configures command shortcuts for development and production execution.
+> #### Technical Explanation
+>
+> 1. **dependencies vs devDependencies**: `dependencies` are required at runtime in production; `devDependencies` are only used for building/testing.
+> 2. **peerDependencies**: Specifies plugin package compatibility expectations (e.g. React plugins require `react` as peer dependency).
+> 3. **Pruning in Production**: Ensures production servers avoid installing heavyweight dev tools like linters and test runners.
 > 
 ---
 
-### Exercise 3: Specifying Engines Requirement
+### Exercise 3: Node.js Engine Compatibility Guard
 
-**Problem:** Specify in `package.json` that Node.js version must be 18 or higher.
+**Scenario:** An application startup check reads the `engines.node` field in `package.json` and verifies runtime Node.js compatibility.
 
-**Expected output:**
+**Requirements:**
+1. Write verifyEngineCompatibility(nodeVersion, packageObj).
+2. Extract `engines.node` string (e.g. `>=18.0.0`).
+3. Return compatibility check.
+
 > [!check]- Answer
-> ```text
-> "engines": { "node": ">=18.0.0" }
-> ```
-> ```json
-> {
->   "engines": {
->     "node": ">=18.0.0"
+>
+> #### Implementation
+>
+> ```javascript
+> function verifyEngineCompatibility(nodeVersion = process.versions.node, packageObj = {}) {
+>   const engineConstraint = packageObj.engines?.node;
+>   if (!engineConstraint) {
+>     return { compatible: true, constraint: "NONE" };
 >   }
+>
+>   // Simple min-version extractor for >=18.0.0 pattern
+>   const minMatch = engineConstraint.match(/>=?\s*(\d+)/);
+>   if (minMatch) {
+>     const requiredMajor = parseInt(minMatch[1], 10);
+>     const currentMajor = parseInt(nodeVersion.split(".")[0], 10);
+>
+>     const compatible = currentMajor >= requiredMajor;
+>     return {
+>       compatible,
+>       constraint: engineConstraint,
+>       currentMajor,
+>       requiredMajor,
+>       error: !compatible ? `Node.js major version ${currentMajor} does not meet constraint ${engineConstraint}` : null
+>     };
+>   }
+>
+>   return { compatible: true, constraint: engineConstraint };
 > }
+>
+> // Verification tests
+> const pkg = { engines: { node: ">=18.0.0" } };
+> console.assert(verifyEngineCompatibility("20.9.0", pkg).compatible === true, "Test 1 Failed");
+> console.assert(verifyEngineCompatibility("16.14.0", pkg).compatible === false, "Test 2 Failed: Node 16 incompatible with >=18");
 > ```
 >
-> **Explanation:** `engines` restricts runtime Node.js environment version requirements.
-> 
+> #### Technical Explanation
+>
+> 1. **engines Field in package.json**: Specifies supported Node.js or npm versions required to run the application.
+> 2. **npm engine-strict Setting**: Configuring `engine-strict=true` in `.npmrc` causes `npm install` to fail if Node version mismatches constraint.
+> 3. **Runtime Stability**: Prevents deploying applications to server environments running unsupported Node.js versions.
 ## 6. Related Terms
 - [package-lock.json & Deterministic Installs](package_lock.md) — The sister file to `package.json` that guarantees exact versions.
 - [node_modules](node_modules.md) — The physical folder where the downloaded code is placed.

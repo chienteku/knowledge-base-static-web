@@ -88,57 +88,163 @@ app.get('/crash', (req, res, next) => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Right Tool for the Job
+### Exercise 1: Async Mutex for Shared In-Memory State
 
-**Problem:** Your startup is building two products:
-1. A real-time chat app processing 10,000 small text messages per second.
-2. A video processing app that converts 4K videos into 1080p.
-Which product should use Node.js, and which should use a multi-threaded language like Go or Java?
+**Scenario:** In a single-threaded Node.js server, asynchronous `await` points allow concurrent request handlers to interleave execution. An Async Mutex lock prevents race conditions on shared in-memory data structures.
 
-**Expected output:**
+**Requirements:**
+1. Write createAsyncMutex().
+2. Implement acquire().
+3. Release lock after critical section finishes.
+
 > [!check]- Answer
-> ```text
-> 1. Chat App = Node.js. It requires handling thousands of concurrent connections with very little CPU work (just passing text around). The single-threaded "roller-skate waiter" is perfect for this.
-> 2. Video App = Go/Java/C++. Video conversion requires massive CPU math. If you use Node.js, the single thread will block and the server will freeze.
+>
+> #### Implementation
+>
+> ```javascript
+> function createAsyncMutex() {
+>   let isLocked = false;
+>   const waitingQueue = [];
+>
+>   return {
+>     async acquire() {
+>       if (!isLocked) {
+>         isLocked = true;
+>         return () => this.release();
+>       }
+>
+>       return new Promise((resolve) => {
+>         waitingQueue.push(resolve);
+>       }).then(() => () => this.release());
+>     },
+>     release() {
+>       if (waitingQueue.length > 0) {
+>         const nextResolve = waitingQueue.shift();
+>         nextResolve();
+>       } else {
+>         isLocked = false;
+>       }
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const mutex = createAsyncMutex();
+> let counter = 0;
+>
+> async function incrementSafely() {
+>   const release = await mutex.acquire();
+>   try {
+>     const temp = counter;
+>     await new Promise(r => setTimeout(r, 5)); // Interleaving point
+>     counter = temp + 1;
+>   } finally {
+>     release();
+>   }
+> }
+>
+> Promise.all([incrementSafely(), incrementSafely(), incrementSafely()]).then(() => {
+>   console.assert(counter === 3, "Test 1 Failed: Counter must be 3 after 3 mutex-protected increments");
+> });
 > ```
-> - Which app requires heavy math? Which app requires fast I/O?
+>
+> #### Technical Explanation
+>
+> 1. **Single-Threaded Misconception**: While Node.js executes JavaScript on a single thread, `await` points yield execution, introducing async race conditions.
+> 2. **Asynchronous Race Conditions**: Shared in-memory variables can be modified by inter-leaved async requests during await execution.
+> 3. **Async Mutex Locks**: Enforces serialized execution across async critical sections.
 > 
 ---
 
+### Exercise 2: State Isolation Guard Across Concurrent Requests
 
+**Scenario:** A security validator prevents global variable state leakage between concurrent user HTTP requests on the single Node.js thread.
 
-### Exercise 2: Single-Threaded Architecture Mechanics
+**Requirements:**
+1. Write handleUserRequest(reqContext, handlerFn).
+2. Isolate request context without mutating global state.
+3. Return response.
 
-**Problem:** Explain what component in Node.js handles background file I/O and crypto operations if JavaScript runs on a single thread.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> libuv C++ thread pool (default 4 threads).
-> ```
-> ```text
-> libuv C++ thread pool (default 4 threads)
+>
+> #### Implementation
+>
+> ```javascript
+> function createIsolatedRequestHandler() {
+>   return async function handleUserRequest(userId, requestPayload, handlerFn) {
+>     // Create local request context on Call Stack (isolated per invocation!)
+>     const localContext = {
+>       userId,
+>       requestId: `req_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+>       timestamp: Date.now()
+>     };
+>
+>     return await handlerFn(localContext, requestPayload);
+>   };
+> }
+>
+> // Verification tests
+> const requestHandler = createIsolatedRequestHandler();
+>
+> const req1 = requestHandler("u1", { action: "read" }, async (ctx, payload) => {
+>   await new Promise(r => setTimeout(r, 10));
+>   return ctx.userId;
+> });
+>
+> const req2 = requestHandler("u2", { action: "write" }, async (ctx, payload) => {
+>   return ctx.userId;
+> });
+>
+> Promise.all([req1, req2]).then(([id1, id2]) => {
+>   console.assert(id1 === "u1" && id2 === "u2", "Test 1 Failed: Context leakage prevented");
+> });
 > ```
 >
-> **Explanation:** `libuv` manages a background pool of C++ worker threads for filesystem, DNS, and crypto tasks.
+> #### Technical Explanation
+>
+> 1. **Global Variable Contamination**: Storing request-specific state in global variables leaks user data across concurrent HTTP requests.
+> 2. **Call Stack Context Isolation**: Local variables declared inside function scopes are naturally isolated per request execution context.
+> 3. **AsyncLocalStorage**: Node.js `AsyncLocalStorage` API provides request-scoped context across asynchronous continuation chains.
 > 
 ---
 
-### Exercise 3: Process Manager Protection
+### Exercise 3: Thread-Safety Verification for Shared Memory
 
-**Problem:** What process manager tool is standard for automatically restarting crashed single-threaded Node.js applications in production?
+**Scenario:** An API validator verifies that shared `SharedArrayBuffer` memory mutated across Worker Threads uses atomic operations (`Atomics.add`).
 
-**Expected output:**
+**Requirements:**
+1. Write atomicIncrement(sharedInt32Array, index, value).
+2. Use Atomics.add.
+3. Return new value.
+
 > [!check]- Answer
-> ```text
-> PM2 (or systemd / Docker container restart policies).
-> ```
-> ```text
-> PM2 (or systemd / Docker container restart policies)
+>
+> #### Implementation
+>
+> ```javascript
+> function atomicIncrement(sharedInt32Array, index = 0, value = 1) {
+>   if (!(sharedInt32Array instanceof Int32Array)) {
+>     throw new TypeError("Expected Int32Array");
+>   }
+>
+>   // Atomics.add is atomic and thread-safe across multi-threaded Worker Threads
+>   return Atomics.add(sharedInt32Array, index, value);
+> }
+>
+> // Verification tests
+> const sab = new SharedArrayBuffer(4);
+> const i32 = new Int32Array(sab);
+>
+> const oldVal = atomicIncrement(i32, 0, 5);
+> console.assert(oldVal === 0, "Test 1 Failed: Old value 0 returned");
+> console.assert(i32[0] === 5, "Test 2 Failed: Shared memory updated to 5");
 > ```
 >
-> **Explanation:** PM2 monitors Node.js processes and instantly restarts them if uncaught errors occur.
-> 
+> #### Technical Explanation
+>
+> 1. **Single Main Thread Execution**: Main thread JavaScript executes sequentially without multi-threading data races on standard objects.
+> 2. **SharedArrayBuffer & Worker Threads**: When using Worker Threads, SharedArrayBuffer shares raw memory across threads.
+> 3. **Atomics API**: Atomics methods (add, sub, compareExchange) provide thread-safe atomic operations on SharedArrayBuffer.
 ## 6. Related Terms
 - [Non-Blocking I/O](non_blocking_io.md) — How the single thread manages to avoid waiting for the kitchen.
 - [The Event Loop & Libuv](event_loop.md) — The mechanism that tells the single thread when the kitchen is done cooking.

@@ -187,137 +187,95 @@ A navigation bar that sticks to the top of the browser:
 /* Remove overflow: hidden from ancestor containers to restore sticky scrolling */
 ```
 
-
-
-### Mistake 5: Forgetting to Specify at Least One Offset Property (`top`, `bottom`) on Sticky Elements
-
-**The mistake:** Setting `position: sticky` on a header without setting `top: 0`.
-
-**Why it's wrong:** For `position: sticky` to function, you MUST specify at least one threshold offset property (e.g. `top: 0`). Without an offset property, the element remains static.
-
-*Incorrect:*
-```css
-.header { position: sticky; } /* ❌ Missing top: 0! Sticky positioning fails! */
-```
-
-*Fix:*
-```css
-.header { position: sticky; top: 0; } /* Explicit sticky top threshold */
-```
-
-### Mistake 6: Placing `position: sticky` Elements Inside Parent Containers with `overflow: hidden` or `overflow: auto`
-
-**The mistake:** Placing a sticky nav header inside a parent container with `overflow: hidden`.
-
-**Why it's wrong:** If ANY ancestor container has `overflow: hidden`, `overflow: auto`, or `overflow: scroll`, sticky positioning breaks completely because the scroll context is locked to the parent container.
-
-*Incorrect:*
-```css
-<div style="overflow: hidden;">
-  <header style="position: sticky; top: 0;">Header</header> <!-- ❌ Sticky fails due to parent overflow! -->
-</div>
-```
-
-*Fix:*
-```css
-/* Remove overflow: hidden from ancestor containers to restore sticky scrolling */
-```
-
-
-
-### Mistake 7: Forgetting to Specify at Least One Offset Property (`top`, `bottom`) on Sticky Elements
-
-**The mistake:** Setting `position: sticky` on a header without setting `top: 0`.
-
-**Why it's wrong:** For `position: sticky` to function, you MUST specify at least one threshold offset property (e.g. `top: 0`). Without an offset property, the element remains static.
-
-*Incorrect:*
-```css
-.header { position: sticky; } /* ❌ Missing top: 0! Sticky positioning fails! */
-```
-
-*Fix:*
-```css
-.header { position: sticky; top: 0; } /* Explicit sticky top threshold */
-```
-
-### Mistake 8: Placing `position: sticky` Elements Inside Parent Containers with `overflow: hidden` or `overflow: auto`
-
-**The mistake:** Placing a sticky nav header inside a parent container with `overflow: hidden`.
-
-**Why it's wrong:** If ANY ancestor container has `overflow: hidden`, `overflow: auto`, or `overflow: scroll`, sticky positioning breaks completely because the scroll context is locked to the parent container.
-
-*Incorrect:*
-```css
-<div style="overflow: hidden;">
-  <header style="position: sticky; top: 0;">Header</header> <!-- ❌ Sticky fails due to parent overflow! -->
-</div>
-```
-
-*Fix:*
-```css
-/* Remove overflow: hidden from ancestor containers to restore sticky scrolling */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Table Headers
+### Exercise 1: Sticky Navigation Bar Header with position sticky
 
-**Problem:** You are styling a long table (`<table>`) and want the table header row (`<tr>`) to remain visible at the top of the viewport when scrolling. What ruleset do you write?
+**Scenario:** An author builds a sticky website header that scrolls naturally until reaching the top of the viewport, where it pins.
 
-**Expected output:**
+**Requirements:**
+1. Apply `position: sticky; top: 0;` to header.
+2. Set `z-index: 100`.
+3. Verify background color is opaque.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> /* Note: You must target the <th> tags directly, as <tr> tags do not support sticky positioning natively on some browsers. */
-> th {
->   position: sticky;
->   top: 0;
->   background-color: white; /* Prevent background rows from bleeding through text */
-> }
-> ```
-> - Target table headers `<th>`, not parent table elements.
-> - Give them a solid background color so overlapping rows don't show through.
-> 
----
-
-
-
-### Exercise 2: Sticky Header Navigation Bar
-
-**Problem:** Write CSS pinning `.navbar` to the top of the viewport when scrolled, with `z-index: 100`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .navbar { position: sticky; top: 0; z-index: 100; }
-> ```
-> ```css
-> .navbar {
->   position: sticky;
->   top: 0;
+> .site-header {
+>   position: sticky;             /* Hybrid: Scrolls naturally, then pins at top: 0! */
+>   top: 0;                       /* Sticky threshold boundary */
+>   background-color: #ffffff;    /* Opaque background prevents text bleed-through */
+>   padding: 1rem 2rem;
+>   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 >   z-index: 100;
 > }
 > ```
 >
-> **Explanation:** `position: sticky; top: 0` sticks the navbar to the top viewport edge during page scroll.
+> #### Technical Explanation
+>
+> 1. **The `position: sticky` Property**: A hybrid positioning mode that acts like `position: relative` until its container crosses a specified threshold (`top: 0`), then acts like `position: fixed`!
+> 2. **Mandatory Threshold Offset**: `position: sticky` REQUIRES at least one offset property (`top`, `bottom`, `left`, `right`) to function.
+> 3. **No Body Padding Needed**: Unlike `position: fixed`, sticky headers occupy space in normal flow initially, so no compensatory `body` top padding is required.
 > 
 ---
 
-### Exercise 3: Sticky Positioning Container Boundary
+### Exercise 2: Sticky Table Column and Header Rows in Data Tables
 
-**Problem:** What limits how far down a sticky element will scroll before stopping?
+**Scenario:** Pins data table headers to the top during long table scrolling.
 
-**Expected output:**
+**Requirements:**
+1. Apply `position: sticky; top: 0;` to `<th>` elements.
+
 > [!check]- Answer
-> ```text
-> A sticky element scrolls ONLY within the boundary of its immediate parent container element.
-> ```
-> ```text
-> A sticky element scrolls ONLY within the boundary of its immediate parent container element.
+>
+> #### Implementation
+>
+> ```css
+> .data-table th {
+>   position: sticky;
+>   top: 0;
+>   background-color: #f8fafc;    /* Required to hide scrolling data rows behind header */
+>   z-index: 10;
+> }
 > ```
 >
-> **Explanation:** Sticky elements stop scrolling when reaching the bottom boundary of their parent container.
+> #### Technical Explanation
+>
+> 1. **Sticky Table Headers**: Keeps dataset column headers visible while users scroll down long financial or analytics tables.
+> 2. **Container Bound Limit**: Sticky elements pin ONLY within the physical boundaries of their parent container (e.g. `<table>` or `<article>`).
+> 3. **Opaque Background Rule**: Always set solid `background-color` on sticky headers to prevent scrolling content from showing through.
 > 
+---
+
+### Exercise 3: Debugging Sticky Positioning Failures caused by Parent Overflow
+
+**Scenario:** Fixes a broken sticky header caused by a parent container having `overflow: hidden`.
+
+**Requirements:**
+1. Remove `overflow: hidden` on parent containers of sticky elements.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* ❌ Parent with overflow: hidden BREAKS sticky positioning on children!
+> .parent-container { overflow: hidden; } 
+> */
+>
+> /* ✅ Clean Parent Container (Allows sticky children to track viewport) */
+> .parent-container {
+>   overflow: visible;            /* Restores sticky scrolling functionality */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Sticky Parent Overflow Pitfall**: If ANY parent ancestor of a sticky element has `overflow: hidden|auto|scroll`, sticky positioning BROKES completely!
+> 2. **Debugging Checklist**: When sticky positioning fails: 1) Check for parent `overflow`, 2) Verify `top` offset exists, 3) Ensure parent height is taller than sticky item.
+> 3. **Parent Height Boundary**: A sticky element cannot stick if its parent container is the exact same height as the sticky item.
 ## 6. Related Terms
 - [`position: static` vs `relative`](position_static_relative.md) — The parent relative settings.
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Viewport locked layouts.

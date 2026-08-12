@@ -197,60 +197,93 @@ div {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Hard Stop Card Split
+### Exercise 1: Hero Banner Background Linear Gradients
 
-**Problem:** Create a CSS ruleset for a card background that is split perfectly down the middle horizontally, with the top half being solid white (`#ffffff`) and the bottom half being solid light gray (`#f0f0f0`).
+**Scenario:** An author styles a vibrant hero background banner using a multi-stop `linear-gradient`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `background-image: linear-gradient(135deg, #2563eb, #1e1b4b)`.
+2. Set fallback background color.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> .split-card {
->   background-image: linear-gradient(to bottom, #ffffff 50%, #f0f0f0 50%);
-> }
-> ```
-> - The direction is `to bottom`.
-> - Use the same percentage stop (`50%`) for the end of the first color and start of the second color to prevent blending!
-> 
----
-
-
-
-### Exercise 2: Linear Gradient Angle Direction
-
-**Problem:** Write CSS `linear-gradient` flowing from left to right transitioning from `#ff0000` to `#0000ff`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> background: linear-gradient(to right, #ff0000, #0000ff);
-> ```
-> ```css
-> .gradient {
->   background: linear-gradient(to right, #ff0000, #0000ff);
+> .hero-gradient-surface {
+>   background-color: #1e1b4b;   /* Solid fallback color */
+>   /* Linear Gradient: 135deg angle from Primary Blue to Deep Navy */
+>   background-image: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #1e1b4b 100%);
+>   color: #ffffff;
+>   padding: 4rem 2rem;
 > }
 > ```
 >
-> **Explanation:** `to right` directs linear gradient color stops from left edge to right edge.
+> #### Technical Explanation
+>
+> 1. **The `linear-gradient()` Function**: Creates a smooth transition between two or more colors along a straight axis vector (e.g. `135deg`, `to right`).
+> 2. **Color Stop Percentages**: Color stops (`0%`, `50%`, `100%`) define exact transition positions along the gradient line.
+> 3. **Solid Fallback Mandate**: Always declare a solid `background-color` fallback prior to `background-image` for legacy browsers.
 > 
 ---
 
-### Exercise 3: Radial Gradient Center Syntax
+### Exercise 2: Radial Spotlight Effects with radial-gradient
 
-**Problem:** Write `radial-gradient` centered at container middle transitioning from white to black.
+**Scenario:** Creates a centered spotlight background effect using `radial-gradient()`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `radial-gradient(circle at center, ...)`.
+
 > [!check]- Answer
-> ```text
-> background: radial-gradient(circle at center, #ffffff, #000000);
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .radial {
->   background: radial-gradient(circle at center, #ffffff, #000000);
+> .spotlight-card {
+>   background-image: radial-gradient(
+>     circle at center,
+>     rgba(59, 130, 246, 0.3) 0%,
+>     rgba(15, 23, 42, 1) 70%
+>   );
+>   color: #ffffff;
+>   padding: 3rem;
 > }
 > ```
 >
-> **Explanation:** `radial-gradient` radiates outward from a center focal point.
+> #### Technical Explanation
+>
+> 1. **The `radial-gradient()` Function**: Creates a circular or elliptical gradient radiating outward from a central focal point (`circle at center`).
+> 2. **Subtle Lighting Effects**: Ideal for creating spotlight highlights behind hero products or feature cards.
+> 3. **Performant Visual Depth**: Renders vector smooth gradients without downloading image files.
 > 
+---
+
+### Exercise 3: Conic Gradients for Circular Progress Indicators
+
+**Scenario:** Styles a 75% circular donut chart using `conic-gradient()`.
+
+**Requirements:**
+1. Apply `conic-gradient(#2563eb 75%, #e2e8f0 0)` to circular element.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .progress-pie-chart {
+>   width: 8rem;
+>   height: 8rem;
+>   border-radius: 50%;
+>   /* Conic Gradient: Rotates 360deg around center point */
+>   background-image: conic-gradient(#2563eb 0% 75%, #e2e8f0 75% 100%);
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `conic-gradient()` Function**: Creates a gradient with color transitions rotated around a central point (like clock hands).
+> 2. **Chart Visualization**: Enables creating native pie charts, donut charts, and color pickers in pure CSS.
+> 3. **Hard Color Stops**: Setting adjacent stops to the same percentage (`75%`) produces sharp crisp color boundaries.
 ## 6. Related Terms
 - [`background-size` (cover / contain)](background_size.md) — Scaling backgrounds.
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — Base background declarations.

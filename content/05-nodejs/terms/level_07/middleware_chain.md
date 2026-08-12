@@ -145,154 +145,164 @@ next('Authentication Failed'); // ❌ Skips to next route instead of error middl
 ```javascript
 next(new Error('Authentication Failed')); // Passes Error instance to error middleware
 ```
-
-
-
-### Mistake 4: Mounting Middleware After Route Definitions (Wrong Execution Order)
-
-**The mistake:** Mounting `app.use(express.json())` or authentication middleware AFTER route handlers (`app.get('/profile', ...)`).
-
-**Why it's wrong:** Express executes middleware sequentially in order of registration (`app.use`). Middleware mounted after a route handler is never executed for that route.
-
-*Incorrect:*
-```javascript
-app.get('/profile', (req, res) => res.send(req.user)); // ❌ req.user is undefined!
-app.use(authMiddleware); // Mounted too late!
-```
-
-*Fix:*
-```javascript
-app.use(authMiddleware); // Mount BEFORE route handlers
-app.get('/profile', (req, res) => res.send(req.user));
-```
-
-### Mistake 5: Passing Error Arguments to `next('route')` vs `next(err)`
-
-**The mistake:** Calling `next('route')` expecting it to trigger error-handling middleware.
-
-**Why it's wrong:** Calling `next('route')` skips remaining middleware in the current router stack to jump to the next route! Passing an Error instance `next(new Error('fail'))` triggers error middleware.
-
-*Incorrect:*
-```javascript
-next('Authentication Failed'); // ❌ Skips to next route instead of error middleware!
-```
-
-*Fix:*
-```javascript
-next(new Error('Authentication Failed')); // Passes Error instance to error middleware
-```
-
-
-
-### Mistake 6: Mounting Middleware After Route Definitions (Wrong Execution Order)
-
-**The mistake:** Mounting `app.use(express.json())` or authentication middleware AFTER route handlers (`app.get('/profile', ...)`).
-
-**Why it's wrong:** Express executes middleware sequentially in order of registration (`app.use`). Middleware mounted after a route handler is never executed for that route.
-
-*Incorrect:*
-```javascript
-app.get('/profile', (req, res) => res.send(req.user)); // ❌ req.user is undefined!
-app.use(authMiddleware); // Mounted too late!
-```
-
-*Fix:*
-```javascript
-app.use(authMiddleware); // Mount BEFORE route handlers
-app.get('/profile', (req, res) => res.send(req.user));
-```
-
-### Mistake 7: Passing Error Arguments to `next('route')` vs `next(err)`
-
-**The mistake:** Calling `next('route')` expecting it to trigger error-handling middleware.
-
-**Why it's wrong:** Calling `next('route')` skips remaining middleware in the current router stack to jump to the next route! Passing an Error instance `next(new Error('fail'))` triggers error middleware.
-
-*Incorrect:*
-```javascript
-next('Authentication Failed'); // ❌ Skips to next route instead of error middleware!
-```
-
-*Fix:*
-```javascript
-next(new Error('Authentication Failed')); // Passes Error instance to error middleware
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Debugging a Hanging Route
+### Exercise 1: Express next() Middleware Pipeline Execution Engine
 
-**Problem:** The server below hangs indefinitely when clients make requests to `/status`. Find the bug and fix it:
+**Scenario:** Simulates Express.js sequential middleware execution pipeline, supporting async `next()` propagation and error branching.
 
-```javascript
-// Before (Hangs):
-app.use((req, res, next) => {
-  req.requestTime = Date.now();
-  // Bug: Missing next() call!
-});
-
-app.get('/status', (req, res) => {
-  res.json({ status: 'OK', time: req.requestTime });
-});
-
-// After (Fixed):
-app.use((req, res, next) => {
-  req.requestTime = Date.now();
-  next(); // FIXED: Control passes to the next route handler!
-});
-
-app.get('/status', (req, res) => {
-  res.json({ status: 'OK', time: req.requestTime });
-});
-```
-
----
+**Requirements:**
+1. Write executeMiddlewareChain(req, res, middlewaresArray).
+2. Execute middlewares sequentially via next().
+3. Support async handlers.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Tracing Middleware Execution Order
-
-**Problem:** Order execution sequence for:
-```javascript
-app.use(m1);
-app.get('/api', m2, (req, res) => res.send('ok'));
-app.use(m3);
-```
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> m1 -> m2 -> route handler (res.send) (m3 is skipped because response ends).
-> ```
-> ```text
-> m1 -> m2 -> route handler (res.send)
-> ```
 >
-> **Explanation:** Execution flows through m1 to m2 to route handler; m3 is skipped because response is sent.
-> 
----
-
-### Exercise 3: Short-Circuiting Middleware Chain
-
-**Problem:** How does an authentication middleware short-circuit the execution chain if token is invalid?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> By returning a response (e.g. res.status(401).send('Unauthorized')) without calling next().
-> ```
+> #### Implementation
+>
 > ```javascript
-> if (!token) {
->   return res.status(401).send('Unauthorized');
+> function executeMiddlewareChain(req, res, middlewaresArray = []) {
+>   return new Promise((resolve, reject) => {
+>     let index = 0;
+>
+>     function next(err) {
+>       if (err) {
+>         return reject(err);
+>       }
+>
+>       if (index >= middlewaresArray.length) {
+>         return resolve({ completed: true });
+>       }
+>
+>       const middleware = middlewaresArray[index++];
+>       try {
+>         middleware(req, res, next);
+>       } catch (e) {
+>         reject(e);
+>       }
+>     }
+>
+>     next();
+>   });
 > }
-> next();
+>
+> // Verification tests
+> const order = [];
+> const m1 = (req, res, next) => { order.push(1); next(); };
+> const m2 = (req, res, next) => { order.push(2); next(); };
+> const m3 = (req, res, next) => { order.push(3); next(); };
+>
+> executeMiddlewareChain({}, {}, [m1, m2, m3]).then(res => {
+>   console.assert(order.join(",") === "1,2,3", "Test 1 Failed: Execution order 1,2,3");
+>   console.assert(res.completed === true, "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** Returning early without calling `next()` halts further chain execution.
+> #### Technical Explanation
+>
+> 1. **Middleware Chain Execution**: Middlewares execute sequentially in array order; calling `next()` hands off execution to the next layer.
+> 2. **Chain Short-Circuiting**: If a middleware sends a response (`res.json()`) without calling `next()`, the pipeline terminates immediately.
+> 3. **Error Branching**: Passing an argument to `next(err)` skips all remaining standard middlewares and jumps to error middleware.
 > 
+---
+
+### Exercise 2: Error Middleware Pipeline Branching
+
+**Scenario:** Simulates Express pipeline branching when an error is passed to `next(err)`, jumping over standard middlewares to 4-parameter error handlers.
+
+**Requirements:**
+1. Write executeErrorBranchingPipeline(req, res, pipelineArray).
+2. Detect 4-parameter handlers `(err, req, res, next)`.
+3. Skip normal handlers when error is active.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function executeErrorBranchingPipeline(req, res, pipelineArray = []) {
+>   let activeError = null;
+>   const executedNames = [];
+>
+>   for (const layer of pipelineArray) {
+>     const isErrorHandler = layer.length === 4;
+>
+>     if (activeError && isErrorHandler) {
+>       executedNames.push(layer.name);
+>       activeError = null; // Error handled!
+>     } else if (!activeError && !isErrorHandler) {
+>       try {
+>         layer(req, res, (err) => { if (err) activeError = err; });
+>         executedNames.push(layer.name);
+>       } catch (e) {
+>         activeError = e;
+>       }
+>     }
+>   }
+>
+>   return { executedNames, activeError };
+> }
+>
+> // Verification tests
+> const normal1 = function n1(req, res, next) { next(new Error("Fail")); };
+> const normal2 = function n2(req, res, next) { next(); };
+> const errHandler = function e1(err, req, res, next) {};
+>
+> const result = executeErrorBranchingPipeline({}, {}, [normal1, normal2, errHandler]);
+> console.assert(result.executedNames.includes("n1"), "Test 1 Failed");
+> console.assert(!result.executedNames.includes("n2"), "Test 2 Failed: Normal handler skipped on error");
+> console.assert(result.executedNames.includes("e1"), "Test 3 Failed: Error handler executed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Express Function Arity**: Express inspects `fn.length` to determine if a function is a standard middleware (3 args) or error handler (4 args).
+> 2. **Error Branching Strategy**: When an error occurs, Express bypasses all remaining 3-arg middlewares until a 4-arg error middleware is found.
+> 3. **Cascading Error Recovery**: Error handlers can recover from errors or pass them to `next(err)` for upstream error handlers.
+> 
+---
+
+### Exercise 3: Conditional Route Middleware Skip Guard
+
+**Scenario:** A route authorization middleware skips downstream validation if request is flagged with custom skip headers.
+
+**Requirements:**
+1. Write conditionalSkipMiddleware(conditionFn, targetMiddleware).
+2. If condition holds, call `next()`; otherwise execute targetMiddleware.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function conditionalSkipMiddleware(conditionFn, targetMiddleware) {
+>   return function (req, res, next) {
+>     if (conditionFn(req)) {
+>       return next(); // Skip target middleware!
+>     }
+>     targetMiddleware(req, res, next);
+>   };
+> }
+>
+> // Verification tests
+> let targetExecuted = false;
+> const target = (req, res, next) => { targetExecuted = true; next(); };
+> const condition = (req) => req.headers["x-skip-auth"] === "true";
+>
+> const middleware = conditionalSkipMiddleware(condition, target);
+>
+> middleware({ headers: { "x-skip-auth": "true" } }, {}, () => {});
+> console.assert(targetExecuted === false, "Test 1 Failed: Target skipped on condition");
+>
+> middleware({ headers: {} }, {}, () => {});
+> console.assert(targetExecuted === true, "Test 2 Failed: Target executed when condition false");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Conditional Middleware Execution**: Allows bypassing authentication or logging on specific paths (e.g. `/health`, `/metrics`).
+> 2. **Composition Pattern**: Wraps existing middlewares to add dynamic execution conditions without mutating original handler code.
+> 3. **express-unless Package**: Popular utility providing `.unless({ path: ['/login'] })` syntax for Express middlewares.
 ## 6. Related Terms
 - [Middleware](middleware.md) — The core design pattern.
 - [The req & res Objects](req_res.md) — The shared state containers passed down the chain.

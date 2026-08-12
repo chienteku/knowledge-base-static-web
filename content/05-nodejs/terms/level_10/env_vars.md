@@ -96,55 +96,172 @@ const port = parseInt(process.env.PORT || '3000', 10);
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Missing Variable
+### Exercise 1: Strict Environment Variable Schema Validator
 
-**Problem:** You download your coworker's Node.js project from GitHub. You run `npm start`, but the app immediately crashes with the error: `TypeError: Cannot read property 'split' of undefined` on the database connection string. You look at the code and see `const url = process.env.DATABASE_URL`. Why did it crash, and how do you fix it?
+**Scenario:** Validates environment variables against mandatory schema types (`PORT`: number, `DB_URL`: string, `DEBUG`: boolean).
 
-**Expected output:**
+**Requirements:**
+1. Write validateEnvSchema(envObj, schemaObj).
+2. Cast and validate types.
+3. Return sanitized environment object or throw error.
+
 > [!check]- Answer
-> ```text
-> It crashed because `process.env.DATABASE_URL` is undefined. 
-> Because `.env` files are ignored by Git (for security), you didn't download it from GitHub! You must ask your coworker for the local `.env` values, or look for a `.env.example` file to create your own `.env` file locally.
-> ```
-> - Are `.env` files supposed to be in GitHub repositories?
-> 
----
-
-
-
-### Exercise 2: Loading .env Variables with dotenv
-
-**Problem:** Write code to load environment variables from `.env` file at application startup using `dotenv`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> require('dotenv').config();
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> require('dotenv').config();
-> console.log(process.env.DATABASE_URL);
+> function validateEnvSchema(envObj = {}, schemaObj = {}) {
+>   const sanitized = {};
+>   const errors = [];
+>
+>   for (const [key, rules] of Object.entries(schemaObj)) {
+>     const rawVal = envObj[key];
+>
+>     if (rules.required && (rawVal === undefined || rawVal === "")) {
+>       errors.push(`Missing required environment variable: ${key}`);
+>       continue;
+>     }
+>
+>     if (rawVal !== undefined) {
+>       if (rules.type === "number") {
+>         const num = Number(rawVal);
+>         if (isNaN(num)) errors.push(`Environment variable ${key} must be a number`);
+>         else sanitized[key] = num;
+>       } else if (rules.type === "boolean") {
+>         sanitized[key] = String(rawVal).toLowerCase() === "true" || rawVal === "1";
+>       } else {
+>         sanitized[key] = String(rawVal);
+>       }
+>     } else if (rules.default !== undefined) {
+>       sanitized[key] = rules.default;
+>     }
+>   }
+>
+>   if (errors.length > 0) {
+>     throw new Error(`ENV_VALIDATION_FAILED: ${errors.join("; ")}`);
+>   }
+>
+>   return sanitized;
+> }
+>
+> // Verification tests
+> const schema = {
+>   PORT: { required: true, type: "number", default: 3000 },
+>   DEBUG: { type: "boolean", default: false }
+> };
+>
+> const validated = validateEnvSchema({ PORT: "8080", DEBUG: "true" }, schema);
+> console.assert(validated.PORT === 8080, "Test 1 Failed: Cast PORT string to number");
+> console.assert(validated.DEBUG === true, "Test 2 Failed: Cast DEBUG string to boolean");
 > ```
 >
-> **Explanation:** `dotenv.config()` parses `.env` file key-values into `process.env`.
+> #### Technical Explanation
+>
+> 1. **Environment Variable Type Safety**: `process.env` properties are ALWAYS strings; explicit type parsing prevents subtle `PORT + 1 = 30001` bugs.
+> 2. **Config Validation at Boot**: Validating `process.env` on app boot ensures missing keys crash early before accepting user requests.
+> 3. **Zod / Envalid Libraries**: Tools like Zod or Envalid provide type-safe `process.env` parsing in TypeScript/JS applications.
 > 
 ---
 
-### Exercise 3: Node.js 20+ Native Env File Flag
+### Exercise 2: Secret Redaction & Masking Logger
 
-**Problem:** Which native Node.js 20+ CLI flag loads `.env` files without requiring external `dotenv` packages?
+**Scenario:** Masks sensitive environment variable secrets (`API_KEY`, `PASSWORD`, `SECRET`) before printing configurations to stdout logs.
 
-**Expected output:**
+**Requirements:**
+1. Write maskSecretEnvVars(envObj, secretKeywordsArray).
+2. Mask matching keys with `***REDACTED***`.
+
 > [!check]- Answer
-> ```text
-> node --env-file=.env app.js
-> ```
-> ```bash
-> node --env-file=.env app.js
+>
+> #### Implementation
+>
+> ```javascript
+> function maskSecretEnvVars(envObj = {}, secretKeywordsArray = ["SECRET", "KEY", "PASSWORD", "TOKEN"]) {
+>   const masked = {};
+>
+>   for (const [key, val] of Object.entries(envObj)) {
+>     const isSecret = secretKeywordsArray.some(k => key.toUpperCase().includes(k));
+>     if (isSecret && val) {
+>       masked[key] = "***REDACTED***";
+>     } else {
+>       masked[key] = val;
+>     }
+>   }
+>
+>   return masked;
+> }
+>
+> // Verification tests
+> const env = { PORT: "8080", DB_PASSWORD: "super_secret_pass", JWT_SECRET: "my_key" };
+> const masked = maskSecretEnvVars(env);
+>
+> console.assert(masked.PORT === "8080", "Test 1 Failed");
+> console.assert(masked.DB_PASSWORD === "***REDACTED***", "Test 2 Failed");
+> console.assert(masked.JWT_SECRET === "***REDACTED***", "Test 3 Failed");
 > ```
 >
-> **Explanation:** `--env-file` natively populates `process.env` at startup without npm dependencies.
+> #### Technical Explanation
+>
+> 1. **Preventing Credentials Leakage**: Logging raw `process.env` dumps can expose database passwords in APM and stdout log files.
+> 2. **Secret Masking Rules**: Redacts keys containing `SECRET`, `PASSWORD`, `TOKEN`, `KEY`.
+> 3. **Twelve-Factor App Methodology**: Store config in environment variables, but NEVER print secret values in plain text logs.
 > 
+---
+
+### Exercise 3: Custom .env File Parser Implementation
+
+**Scenario:** Parses raw `.env` file content lines (`KEY=VALUE`) into a plain JavaScript key-value object.
+
+**Requirements:**
+1. Write parseDotEnvContent(dotEnvStr).
+2. Strip comments (#).
+3. Parse KEY=VALUE pairs.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function parseDotEnvContent(dotEnvStr = "") {
+>   const envMap = {};
+>   const lines = dotEnvStr.split("
+> ");
+>
+>   for (const line of lines) {
+>     const trimmed = line.trim();
+>     if (!trimmed || trimmed.startsWith("#")) continue;
+>
+>     const eqIndex = trimmed.indexOf("=");
+>     if (eqIndex === -1) continue;
+>
+>     const key = trimmed.substring(0, eqIndex).trim();
+>     let val = trimmed.substring(eqIndex + 1).trim();
+>
+>     val = val.replace(/^["']|["']$/g, "");
+>
+>     envMap[key] = val;
+>   }
+>
+>   return envMap;
+> }
+>
+> // Verification tests
+> const dotenv = `
+> # Database Config
+> PORT=8080
+> DB_URL="postgres://localhost:5432/db"
+> `;
+>
+> const parsed = parseDotEnvContent(dotenv);
+> console.assert(parsed.PORT === "8080", "Test 1 Failed");
+> console.assert(parsed.DB_URL === "postgres://localhost:5432/db", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **dotenv Core Functionality**: Loads variables from local `.env` files into `process.env` for development environment convenience.
+> 2. **Comment & Quote Handling**: Strips `#` comment lines and surrounding quotation marks.
+> 3. **Node.js 20+ Native `--env-file`**: Node.js 20+ supports `--env-file=.env` natively without third-party dependencies.
 ## 6. Related Terms
 - [JWT (JSON Web Tokens)](jwt.md) — The JWT signature secret MUST be stored in an Environment Variable.
 - [Docker](docker.md) — Docker relies heavily on Environment Variables to configure containers dynamically.

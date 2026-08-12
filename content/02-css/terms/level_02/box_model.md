@@ -110,61 +110,91 @@ div { background-color: yellow; padding: 20px; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: Identifying the Layers
+### Exercise 1: Calculating Total Component Dimensions in the CSS Box Model
 
-**Problem:** You have a button with text in it. You want to make the button *physically larger* so there is more blue space around the text, but you *don't* want the button to push away from the paragraph next to it. Which layer of the Box Model do you increase?
+**Scenario:** An engineer calculates the total rendered width and height of an element using Content, Padding, Border, and Margin.
 
-**Expected output:**
+**Requirements:**
+1. Write a CSS ruleset for a `.box-item` container.
+2. Calculate total rendered layout width under `box-sizing: content-box` vs `border-box`.
+
 > [!check]- Answer
-> ```text
-> You increase the **Padding**. 
-> Padding adds space *inside* the border, making the button itself larger. If you increased the Margin, the button would stay the same size, but it would push the paragraph further away.
+>
+> #### Implementation
+>
+> ```css
+> /* Box Model Component Ruleset */
+> .box-item {
+>   box-sizing: border-box;       /* Includes padding and border in width */
+>   width: 20rem;                 /* 320px declared width */
+>   padding: 1.5rem;              /* 24px inner spacing */
+>   border: 2px solid #2563eb;    /* 2px border */
+>   margin: 1rem;                 /* 16px outer spacing */
+> }
 > ```
-> - Think of the shipping box. Do you need more bubble wrap inside, or more space in the truck outside?
+>
+> #### Technical Explanation
+>
+> 1. **The CSS Box Model Layers**: Every HTML element is rendered as a rectangular box consisting of Content, Padding, Border, and Margin.
+> 2. **`border-box` Dimension Math**: Under `border-box`, Total Rendered Width = Declared Width (`20rem` / 320px). Padding and border shrink the internal content area.
+> 3. **`content-box` Dimension Math**: Under legacy `content-box`, Total Rendered Width = Width + Padding + Border (`320 + 48 + 4 = 372px`), causing accidental layout overflow.
 > 
 ---
 
+### Exercise 2: Debugging Layout Outflows caused by Padding/Border Addition
 
+**Scenario:** Refactors an overflowing form input field by applying `box-sizing: border-box`.
 
-### Exercise 2: Box Model Layer Order
+**Requirements:**
+1. Apply `box-sizing: border-box` to prevent input width overflow.
 
-**Problem:** Order the 4 layers of CSS Box Model from innermost to outermost:
-Margin, Content, Border, Padding
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. Content
-> 2. Padding
-> 3. Border
-> 4. Margin
-> ```
-> ```text
-> 1. Content (Innermost)
-> 2. Padding
-> 3. Border
-> 4. Margin (Outermost)
+>
+> #### Implementation
+>
+> ```css
+> .form-input {
+>   box-sizing: border-box;       /* Prevents 100% width + padding from overflowing parent */
+>   width: 100%;
+>   padding: 0.75rem 1rem;
+>   border: 1px solid #cbd5e1;
+> }
 > ```
 >
-> **Explanation:** The box model wraps content in padding, border, and margin layers.
+> #### Technical Explanation
+>
+> 1. **Input Overflow Pitfall**: Setting `width: 100%` on `content-box` inputs causes them to break out of parent containers when padding is added.
+> 2. **`border-box` Fix**: `border-box` forces padding inside the 100% container boundary.
+> 3. **Fluid Form Architecture**: Essential for responsive mobile form designs.
 > 
 ---
 
-### Exercise 3: Calculating Total Rendered Box Height
+### Exercise 3: Visualizing CSS Box-Model Layers in Browser DevTools
 
-**Problem:** Calculate total rendered height for element with `content-box`, `height: 100px`, `padding: 15px top/bottom`, `border: 2px top/bottom`, `margin: 10px top/bottom`.
+**Scenario:** Annotates element layout margins and padding for DevTools inspection.
 
-**Expected output:**
+**Requirements:**
+1. Define clear margin, border, and padding values.
+
 > [!check]- Answer
-> ```text
-> Rendered height = 100 + 30 (padding) + 4 (border) = 134px (plus 20px margin space).
-> ```
-> ```text
-> Rendered height = 100 + 30 (padding) + 4 (border) = 134px (plus 20px margin space).
+>
+> #### Implementation
+>
+> ```css
+> .badge {
+>   box-sizing: border-box;
+>   display: inline-block;
+>   padding: 0.25rem 0.5rem;      /* Inner content padding */
+>   border: 1px solid #3b82f6;    /* Border layer */
+>   margin-right: 0.5rem;         /* Outer margin layer */
+> }
 > ```
 >
-> **Explanation:** Total element box height includes content height plus vertical padding and border.
-> 
+> #### Technical Explanation
+>
+> 1. **DevTools Box Model Diagram**: Chrome/Firefox DevTools display color-coded concentric rectangles for Content (blue), Padding (green), Border (yellow), and Margin (orange).
+> 2. **Margin Space Role**: Margins create whitespace OUTSIDE the border, separating the element from surrounding siblings.
+> 3. **Padding Space Role**: Padding creates whitespace INSIDE the border, pushing content away from the element edges.
 ## 6. Related Terms
 - [Padding](padding.md) — The inner space.
 - [Border](border.md) — The visible edge.

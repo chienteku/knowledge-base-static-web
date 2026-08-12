@@ -95,143 +95,114 @@ span { display: inline-block; width: 200px; } /* Respects width dimensions */
 .col { width: 50%; }
 ```
 
-
-
-### Mistake 4: Attempting to Apply CSS `width` and `height` to `display: inline` Elements
-
-**The mistake:** Setting `width: 200px; height: 100px;` on an inline `<span>` tag.
-
-**Why it's wrong:** Inline elements (`display: inline`) flow within surrounding text content and ignore CSS `width` and `height` properties. Change display mode to `inline-block` or `block`.
-
-*Incorrect:*
-```css
-span { display: inline; width: 200px; } /* ❌ width property is ignored! */
-```
-
-*Fix:*
-```css
-span { display: inline-block; width: 200px; } /* Respects width dimensions */
-```
-
-### Mistake 5: Using `display: inline-block` Without Accounting for HTML Whitespace Spacing Gaps
-
-**The mistake:** Placing two 50% width `inline-block` elements side-by-side expecting them to fit on one line.
-
-**Why it's wrong:** HTML spaces/newlines between inline-block tags render as a ~4px whitespace gap character, causing two 50% width elements ($50\% + 50\% + 4	ext{px} > 100\%$) to wrap onto a second line. Use Flexbox.
-
-*Incorrect:*
-```css
-/* HTML: <div class="col"></div> <div class="col"></div> */
-.col { display: inline-block; width: 50%; } /* ❌ Wraps to 2nd line due to whitespace gap! */
-```
-
-*Fix:*
-```css
-/* Use Flexbox to eliminate whitespace gaps cleanly: */
-.container { display: flex; }
-.col { width: 50%; }
-```
-
-
-
-### Mistake 6: Attempting to Apply CSS `width` and `height` to `display: inline` Elements
-
-**The mistake:** Setting `width: 200px; height: 100px;` on an inline `<span>` tag.
-
-**Why it's wrong:** Inline elements (`display: inline`) flow within surrounding text content and ignore CSS `width` and `height` properties. Change display mode to `inline-block` or `block`.
-
-*Incorrect:*
-```css
-span { display: inline; width: 200px; } /* ❌ width property is ignored! */
-```
-
-*Fix:*
-```css
-span { display: inline-block; width: 200px; } /* Respects width dimensions */
-```
-
-### Mistake 7: Using `display: inline-block` Without Accounting for HTML Whitespace Spacing Gaps
-
-**The mistake:** Placing two 50% width `inline-block` elements side-by-side expecting them to fit on one line.
-
-**Why it's wrong:** HTML spaces/newlines between inline-block tags render as a ~4px whitespace gap character, causing two 50% width elements ($50\% + 50\% + 4	ext{px} > 100\%$) to wrap onto a second line. Use Flexbox.
-
-*Incorrect:*
-```css
-/* HTML: <div class="col"></div> <div class="col"></div> */
-.col { display: inline-block; width: 50%; } /* ❌ Wraps to 2nd line due to whitespace gap! */
-```
-
-*Fix:*
-```css
-/* Use Flexbox to eliminate whitespace gaps cleanly: */
-.container { display: flex; }
-.col { width: 50%; }
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Side-by-Side Navigation
+### Exercise 1: Changing Element Box Behaviors with display
 
-**Problem:** You have a `<ul>` with three `<li>` elements: Home, About, Contact. By default, they stack vertically on top of each other. How can you make them sit side-by-side horizontally, while still allowing them to have a specific clickable `width` of 100px?
+**Scenario:** An author controls element layout behaviors using `display: block`, `inline`, `inline-block`, and `flex`.
 
-**Expected output:**
+**Requirements:**
+1. Convert inline `<a>` to `display: inline-block` for custom padding.
+2. Convert `<div>` to `display: flex` for layout alignment.
+3. Set explicit dimensions.
+
 > [!check]- Answer
-> ```text
-> Set the `<li>` elements to `display: inline-block;`. 
-> If you used `inline`, they would sit side-by-side but ignore the 100px width.
-> If you used `block`, they would respect the width but stack vertically.
-> ```
-> - You need the best of both worlds.
-> 
----
-
-
-
-### Exercise 2: Display Modes Matrix
-
-**Problem:** Match `display` value to behavior:
-1. `block` 
-2. `inline` 
-3. `inline-block` 
-4. `none` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Starts on new line, stretches full width
-> 2. Flows within text, ignores width/height
-> 3. Flows within line, respects width/height
-> 4. Removes element completely from layout tree
-> ```
-> ```text
-> 1. block -> Starts on new line, stretches full width
-> 2. inline -> Flows within text, ignores width/height
-> 3. inline-block -> Flows within line, respects width/height
-> 4. none -> Removes element completely from layout tree
-> ```
 >
-> **Explanation:** `display` dictates CSS box generation and flow positioning rules.
-> 
----
-
-### Exercise 3: Modern Outer/Inner Display Syntax
-
-**Problem:** What does multi-keyword syntax `display: inline flex;` specify?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Sets outer display behavior to inline, and inner formatting context to Flexbox.
-> ```
+> #### Implementation
+>
 > ```css
-> .container {
->   display: inline flex;
+> /* Inline-Block Link (Receives width/height and vertical padding) */
+> .btn-link {
+>   display: inline-block;
+>   padding: 0.75rem 1.5rem;
+>   background-color: #2563eb;
+>   color: #ffffff;
+>   text-decoration: none;
+>   border-radius: 0.375rem;
+> }
+>
+> /* Flex Container (Creates a new flex formatting context) */
+> .card-actions {
+>   display: flex;
+>   gap: 1rem;
+>   margin-top: 1.5rem;
 > }
 > ```
 >
-> **Explanation:** Multi-keyword `display` specifies outer layout flow and inner container context.
+> #### Technical Explanation
+>
+> 1. **The `display` Property**: Defines an element's outer display type (how it participates in document layout) and inner display type (how its children are laid out).
+> 2. **`inline-block` Behavior**: Flows inline like text while accepting box-model dimensions (`width`, `height`, vertical `padding`/`margin`).
+> 3. **`display: flex` Container**: Establishes a Flexbox formatting context, overriding default block/inline child behaviors.
 > 
+---
+
+### Exercise 2: Building Inline-Block Horizontal Menus without Whitespace Bugs
+
+**Scenario:** Styles a horizontal navigation bar using `display: inline-block` while handling HTML whitespace collapse.
+
+**Requirements:**
+1. Apply `display: inline-block` to list items.
+2. Manage horizontal alignment.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .nav-list {
+>   list-style: none;
+>   padding: 0;
+>   margin: 0;
+>   font-size: 0;                 /* Eliminates HTML whitespace gap between inline-block items */
+> }
+>
+> .nav-item {
+>   display: inline-block;
+>   font-size: 1rem;              /* Restores base font size on child items */
+> }
+>
+> .nav-link {
+>   display: block;
+>   padding: 0.75rem 1.25rem;
+>   color: #334155;
+>   text-decoration: none;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **HTML Inline Whitespace Gap**: Browsers render HTML space/newlines between `inline-block` items as ~4px visual gaps.
+> 2. **`font-size: 0` Fix**: Setting `font-size: 0` on parent container eliminates whitespace gaps, requiring restoring `font-size: 1rem` on children.
+> 3. **Modern Flex Alternative**: Modern CSS prefers `display: flex` over `inline-block` for navigation menus to avoid whitespace hacks.
+> 
+---
+
+### Exercise 3: Modern Layout Container Declarations: Grid vs Flex
+
+**Scenario:** Compares `display: grid` for 2D layouts vs `display: flex` for 1D component rows.
+
+**Requirements:**
+1. Apply `display: grid` with `grid-template-columns`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* 2D Grid Layout Container */
+> .grid-container {
+>   display: grid;
+>   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+>   gap: 1.5rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Grid vs Flex Choice**: Use `display: grid` for two-dimensional page layouts (rows AND columns); use `display: flex` for one-dimensional rows OR columns.
+> 2. **Implicit Formatting Contexts**: Declaring `display: grid` or `display: flex` formats immediate children into flex/grid items.
+> 3. **Clean Layout Separation**: Replaces legacy table and float layout methods completely.
 ## 6. Related Terms
 - [`display: none` vs `visibility: hidden`](display_none_vs_visibility.md) — Hiding elements.
 - [`display: flex` — Flexbox Container](../level_05/display_flex.md) — The modern Flexbox layout container.

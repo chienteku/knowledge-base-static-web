@@ -136,64 +136,125 @@ function processQueue() {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Queue Starvation Test
+### Exercise 1: process.nextTick vs setImmediate Order Evaluator
 
-**Problem:** Review this recursive function. Explain what will happen to incoming HTTP connection requests on this server:
+**Scenario:** Measures execution precedence between `process.nextTick()` (microtask queue) and `setImmediate()` (Check macrotask phase).
 
-```javascript
-function heavyQueue() {
-  process.nextTick(() => {
-    heavyQueue();
-  });
-}
-heavyQueue();
-
-app.get('/health', (res) => res.send('OK'));
-```
+**Requirements:**
+1. Write evaluateTickVsImmediate(logArray).
+2. Schedule nextTick and setImmediate.
+3. Verify nextTick executes first.
 
 > [!check]- Answer
-> - The server will freeze and incoming HTTP requests to `/health` will time out. Because `heavyQueue` calls `process.nextTick` recursively, the microtask queue is never empty. The Event Loop is starved and cannot spin to the Poll phase to accept new socket connections.
-> 
-> 
----
-
-
-
-### Exercise 2: I/O Cycle Execution Priority
-
-**Problem:** Inside an `fs.readFile()` callback, which executes first: `setImmediate()` or `setTimeout(fn, 0)`?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> setImmediate() (guaranteed because Check phase immediately follows Poll phase).
-> ```
-> ```text
-> setImmediate()
-> ```
 >
-> **Explanation:** Within an I/O callback (Poll phase), the Check phase (`setImmediate`) is entered immediately next.
-> 
----
-
-### Exercise 3: Use Case for process.nextTick
-
-**Problem:** Why use `process.nextTick()` in constructor initialization? (To allow callers to attach event listeners synchronously before events are emitted).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> To allow callers to attach event listeners synchronously before events are emitted.
-> ```
+> #### Implementation
+>
 > ```javascript
-> function MyEmitter() {
->   EventEmitter.call(this);
->   process.nextTick(() => this.emit('init')); // Fires after caller attaches listeners
+> function evaluateTickVsImmediate(logArray = []) {
+>   logArray.push("SYNC_START");
+>
+>   setImmediate(() => {
+>     logArray.push("SET_IMMEDIATE_CHECK_PHASE");
+>   });
+>
+>   process.nextTick(() => {
+>     logArray.push("PROCESS_NEXT_TICK_MICRO");
+>   });
+>
+>   logArray.push("SYNC_END");
 > }
+>
+> // Verification tests
+> const log = [];
+> evaluateTickVsImmediate(log);
+>
+> setImmediate(() => {
+>   console.assert(log[0] === "SYNC_START", "Test 1 Failed");
+>   console.assert(log[1] === "SYNC_END", "Test 2 Failed");
+>   console.assert(log[2] === "PROCESS_NEXT_TICK_MICRO", "Test 3 Failed: nextTick runs before setImmediate");
+>   console.assert(log[3] === "SET_IMMEDIATE_CHECK_PHASE", "Test 4 Failed");
+> });
 > ```
 >
-> **Explanation:** `process.nextTick` defers emission until after current call stack finishes listener attachments.
+> #### Technical Explanation
+>
+> 1. **process.nextTick Priority**: process.nextTick runs BEFORE any other microtask or macrotask as soon as current operation finishes.
+> 2. **setImmediate Check Phase**: setImmediate runs in the Macrotask Check phase after I/O polling completes.
+> 3. **I/O Callback Behavior**: Inside an I/O callback, setImmediate ALWAYS executes before setTimeout(fn, 0).
 > 
+---
+
+### Exercise 2: Microtask Queue Starvation Mitigation
+
+**Scenario:** Replaces recursive `process.nextTick()` with `setImmediate()` to prevent starving I/O phases.
+
+**Requirements:**
+1. Write safeRecursiveLoop(count, maxCount, callback).
+2. Use setImmediate for recursive iterations.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function safeRecursiveLoop(count = 0, maxCount = 100, onComplete) {
+>   if (count >= maxCount) {
+>     return onComplete(count);
+>   }
+>
+>   // Use setImmediate to yield execution to I/O phases between iterations!
+>   setImmediate(() => {
+>     safeRecursiveLoop(count + 1, maxCount, onComplete);
+>   });
+> }
+>
+> // Verification tests
+> safeRecursiveLoop(0, 10, (total) => {
+>   console.assert(total === 10, "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Recursion Starvation Hazard**: Recursive process.nextTick calls starve the event loop by preventing I/O polling.
+> 2. **setImmediate Safety**: setImmediate allows the event loop to move to the next phase after each iteration.
+> 3. **CPU Scheduling Balance**: Balances long background tasks with incoming network request processing.
+> 
+---
+
+### Exercise 3: Post-I/O Check Phase Scheduler with setImmediate
+
+**Scenario:** Schedules execution during the Check phase after I/O polling completes.
+
+**Requirements:**
+1. Write schedulePostIoCheckTask(taskFn).
+2. Execute task with setImmediate.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function schedulePostIoCheckTask(taskFn) {
+>   return new Promise((resolve) => {
+>     setImmediate(() => {
+>       const res = taskFn();
+>       resolve(res);
+>     });
+>   });
+> }
+>
+> // Verification tests
+> schedulePostIoCheckTask(() => "CHECK_PHASE_DONE").then(res => {
+>   console.assert(res === "CHECK_PHASE_DONE", "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Check Phase Execution**: setImmediate callbacks are queued specifically in the Check phase of libuv event loop.
+> 2. **Post-Poll Cleanup**: Ideal for running cleanup tasks immediately after I/O polling finishes.
+> 3. **Predictable Scheduling**: Guarantees execution after active I/O events have been processed.
 ## 6. Related Terms
 - [Microtasks vs Macrotasks](microtasks_macrotasks.md) — The standard V8 microtask scheduling queues.
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The parent routing system managing execution phases.

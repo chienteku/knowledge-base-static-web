@@ -188,78 +188,100 @@ button, input, select, textarea {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Property Check
+### Exercise 1: Leveraging Natural Property Inheritance for Typography
 
-**Problem:** Look at the following CSS rule applied to a container `<div>`:
+**Scenario:** An author defines typography properties on the `<body>` element, allowing child elements to inherit styles naturally.
 
-```css
-.container {
-  color: green;
-  border: 1px solid red;
-  font-weight: bold;
-  padding: 10px;
-}
-```
+**Requirements:**
+1. Set `font-family`, `color`, and `line-height` on `body`.
+2. Verify child headings and paragraphs inherit styles.
+3. Override non-inherited box properties on child.
 
-Which of these four styling values will apply to a `<p>` tag nested inside the container?
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> `color: green;` and `font-weight: bold;` will apply because typography properties are inherited. The `border` and `padding` are layout properties and will not inherit.
-> ```
-> - Differentiate between text formatting and box layout boundaries.
-> 
----
-
-
-
-### Exercise 2: Inherited vs Non-Inherited Property Classification
-
-**Problem:** Classify properties as Inherited or Non-Inherited by default:
-1. `color` 
-2. `padding` 
-3. `font-size` 
-4. `border` 
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Inherited
-> 2. Non-Inherited
-> 3. Inherited
-> 4. Non-Inherited
-> ```
-> ```text
-> 1. color -> Inherited
-> 2. padding -> Non-Inherited
-> 3. font-size -> Inherited
-> 4. border -> Non-Inherited
-> ```
 >
-> **Explanation:** Text formatting inherits down the DOM tree; box-model dimensions do not.
-> 
----
-
-### Exercise 3: CSS Keyword Property Reset
-
-**Problem:** Explain the difference between `inherit`, `initial`, and `unset` keywords.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> inherit: forces element to inherit parent value; initial: resets to CSS spec default; unset: inherits if property naturally inherits, else resets to initial.
-> ```
+> #### Implementation
+>
 > ```css
-> p {
->   color: inherit; /* Parent value */
->   margin: initial; /* Spec default */
->   all: unset; /* Resets all properties */
+> /* Typography properties inherit naturally to all child elements */
+> body {
+>   font-family: system-ui, -apple-system, sans-serif;
+>   color: #334155;
+>   line-height: 1.6;
+> }
+>
+> .card {
+>   /* Non-inherited box properties defined explicitly on container */
+>   background-color: #ffffff;
+>   padding: 1.5rem;
+>   border-radius: 0.5rem;
+> }
+>
+> /* Heading inherits font-family and line-height from body automatically */
+> .card-title {
+>   color: #0f172a;               /* Specific override for title color */
 > }
 > ```
 >
-> **Explanation:** Keyword values override natural property inheritance behavior.
+> #### Technical Explanation
+>
+> 1. **CSS Property Inheritance**: Mechanism where certain CSS properties (like `color`, `font-family`, `line-height`) pass automatically from parent to child elements.
+> 2. **Inherited vs Non-Inherited Properties**: Text and font properties inherit naturally; layout and box-model properties (`margin`, `padding`, `border`, `background`) DO NOT inherit.
+> 3. **Dry Code Efficiency**: Defining typography on `body` avoids repeating font definitions on every child element.
 > 
+---
+
+### Exercise 2: Forcing Non-Inherited Properties using inherit Keyword
+
+**Scenario:** Forces a form button input to inherit font styles from its parent container using `font: inherit`.
+
+**Requirements:**
+1. Apply `font: inherit` and `color: inherit` to `<button>` and `<input>` elements.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Native buttons and inputs do NOT inherit typography by default; force inheritance */
+> button, input, select, textarea {
+>   font: inherit;
+>   color: inherit;
+>   letter-spacing: inherit;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `inherit` Keyword**: Explicitly forces an element to inherit a property value from its parent, even for non-inherited properties.
+> 2. **Form Control Reset**: HTML `<button>` and `<input>` controls override font inheritance in user-agent stylesheets; `font: inherit` restores global styling.
+> 3. **Theme Consistency**: Ensures form controls match the global typography design system seamlessly.
+> 
+---
+
+### Exercise 3: Resetting Container Inheritance with unset and initial Keywords
+
+**Scenario:** Resets inherited properties on a isolated component container using `unset`.
+
+**Requirements:**
+1. Apply `color: unset` and `all: unset` to reset inheritance.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .isolated-widget {
+>   /* Resets all inherited and non-inherited properties back to default */
+>   all: unset;
+>   display: block;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `unset` Keyword**: Resets a property to its inherited value if it inherits naturally, or to its initial value if it does not.
+> 2. **The `initial` Keyword**: Resets a property to the official W3C default value defined in CSS specs.
+> 3. **The `all` Property Shorthand**: `all: unset` provides a clean slate for building un-styled Web Component widgets.
 ## 6. Related Terms
 - [The Cascade](the_cascade.md) — The parent priority engine.
 - [Specificity](specificity.md) — Selector point weights.

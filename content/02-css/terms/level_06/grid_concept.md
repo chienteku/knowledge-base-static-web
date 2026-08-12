@@ -115,137 +115,92 @@ nav { display: flex; gap: 20px; }
 }
 ```
 
-
-
-### Mistake 4: Using CSS Grid for Simple 1D Single-Row Navigation Bars (Over-Engineering)
-
-**The mistake:** Using CSS Grid to align 4 menu items in a single horizontal navigation row.
-
-**Why it's wrong:** CSS Grid is designed for 2D layouts (rows AND columns simultaneously). For 1D single-row or single-column layouts, Flexbox is lighter and more appropriate.
-
-*Incorrect:*
-```css
-/* Over-engineering 1D navigation bar with CSS Grid */
-nav { display: grid; grid-template-columns: repeat(4, 1fr); }
-```
-
-*Fix:*
-```css
-/* Use Flexbox for 1D navigation layouts: */
-nav { display: flex; gap: 20px; }
-```
-
-### Mistake 5: Confusing Explicit Grid Tracks with Implicit Grid Auto-Tracks
-
-**The mistake:** Defining explicit columns `grid-template-columns` without configuring `grid-auto-rows` for dynamic rows.
-
-**Why it's wrong:** When items exceed explicit grid definitions, CSS Grid generates implicit tracks. Configure `grid-auto-rows: minmax(100px, auto)` to control implicit row sizes.
-
-*Incorrect:*
-```css
-/* Extra dynamic data rows take default height 0 or auto without min height */
-```
-
-*Fix:*
-```css
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: minmax(150px, auto); /* Implicit row height */
-}
-```
-
-
-
-### Mistake 6: Using CSS Grid for Simple 1D Single-Row Navigation Bars (Over-Engineering)
-
-**The mistake:** Using CSS Grid to align 4 menu items in a single horizontal navigation row.
-
-**Why it's wrong:** CSS Grid is designed for 2D layouts (rows AND columns simultaneously). For 1D single-row or single-column layouts, Flexbox is lighter and more appropriate.
-
-*Incorrect:*
-```css
-/* Over-engineering 1D navigation bar with CSS Grid */
-nav { display: grid; grid-template-columns: repeat(4, 1fr); }
-```
-
-*Fix:*
-```css
-/* Use Flexbox for 1D navigation layouts: */
-nav { display: flex; gap: 20px; }
-```
-
-### Mistake 7: Confusing Explicit Grid Tracks with Implicit Grid Auto-Tracks
-
-**The mistake:** Defining explicit columns `grid-template-columns` without configuring `grid-auto-rows` for dynamic rows.
-
-**Why it's wrong:** When items exceed explicit grid definitions, CSS Grid generates implicit tracks. Configure `grid-auto-rows: minmax(100px, auto)` to control implicit row sizes.
-
-*Incorrect:*
-```css
-/* Extra dynamic data rows take default height 0 or auto without min height */
-```
-
-*Fix:*
-```css
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: minmax(150px, auto); /* Implicit row height */
-}
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: The Asymmetrical Grid
+### Exercise 1: Establishing a 2D Grid Layout Container
 
-**Problem:** You want a grid with 2 columns. You want the left column to be exactly 250px wide (for a sidebar), and you want the right column to take up all the remaining flexible space. How do you write `grid-template-columns`?
+**Scenario:** An author establishes a two-dimensional CSS Grid layout container for a main application page.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: grid` to container.
+2. Define 2D columns and rows.
+3. Add `gap: 1.5rem`.
+
 > [!check]- Answer
-> ```css
-> grid-template-columns: 250px 1fr;
-> ```
-> - You can mix hard pixels with fractional (`fr`) units!
-> 
----
-
-
-
-### Exercise 2: 2D Layout Architecture Choice
-
-**Problem:** When is CSS Grid superior to Flexbox?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> When designing 2D layouts requiring strict control over both rows AND columns simultaneously.
-> ```
-> ```text
-> When designing 2D layouts requiring strict control over both rows AND columns simultaneously.
-> ```
 >
-> **Explanation:** Grid controls 2D layout tracks; Flexbox controls 1D flow alignment.
-> 
----
-
-### Exercise 3: Implicit Row Track Sizing
-
-**Problem:** Which CSS property defines height dimensions for implicitly generated grid rows?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> grid-auto-rows
-> ```
+> #### Implementation
+>
 > ```css
-> .grid {
->   grid-auto-rows: minmax(100px, auto);
+> .page-layout {
+>   display: grid;
+>   grid-template-columns: 18rem 1fr;   /* 2 Columns: Sidebar + Main */
+>   grid-template-rows: auto 1fr auto; /* 3 Rows: Header, Content, Footer */
+>   gap: 1.5rem;
+>   min-height: 100vh;
 > }
 > ```
 >
-> **Explanation:** `grid-auto-rows` sets dimensions for implicit rows generated beyond explicit templates.
+> #### Technical Explanation
+>
+> 1. **The CSS Grid Layout Model**: A two-dimensional layout system designed to handle BOTH columns (horizontal) and rows (vertical) simultaneously.
+> 2. **Grid Container & Grid Items**: Declaring `display: grid` turns the parent into a grid container and all immediate children into grid items.
+> 3. **Explicit Grid Tracks**: `grid-template-columns` and `grid-template-rows` define the explicit grid line matrix.
 > 
+---
+
+### Exercise 2: Defining Explicit Grid Tracks vs Implicit Grid Extensions
+
+**Scenario:** Demonstrates how extra content creates implicit grid rows automatically.
+
+**Requirements:**
+1. Define explicit columns.
+2. Configure `grid-auto-rows: minmax(10rem, auto)` for implicit rows.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .gallery-grid {
+>   display: grid;
+>   grid-template-columns: repeat(3, 1fr); /* Explicit 3-column tracks */
+>   grid-auto-rows: minmax(10rem, auto);  /* Implicit rows created for extra overflow items */
+>   gap: 1rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Explicit Grid**: Tracks explicitly defined using `grid-template-columns` and `grid-template-rows`.
+> 2. **Implicit Grid**: Tracks created automatically by the browser when items overflow explicit row/column definitions.
+> 3. **`grid-auto-rows` Control**: Controls the default size of automatically created implicit rows (`minmax(10rem, auto)`).
+> 
+---
+
+### Exercise 3: Grid Formatting Context Boundaries
+
+**Scenario:** Explains child element formatting rules inside grid containers.
+
+**Requirements:**
+1. Show direct child item behavior inside `display: grid`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .grid-parent > * {
+>   /* Direct children become grid items automatically; floats and inline behaviors are ignored! */
+>   background-color: #ffffff;
+>   padding: 1rem;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Grid Formatting Context**: Direct child elements become grid items; legacy properties (`float`, `clear`, `vertical-align`) are completely IGNORED on grid items.
+> 2. **Margin Collapse Elimination**: Margins between adjacent grid items NEVER collapse.
+> 3. **Clean Encapsulated Layout**: Isolates internal item layouts from external page flow.
 ## 6. Related Terms
 - [Flexbox (Concept) & `display: flex`](../level_05/flex_parent.md) — The 1D alternative.
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — Track columns and rows template definitions.

@@ -102,138 +102,114 @@ In modern web development, we write the CSS for Mobile Phones *first* (the defau
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 ```
 
-
-
-### Mistake 4: Mixing `max-width` and `min-width` Queries Inconsistently (Cascade Overlap Trap)
-
-**The mistake:** Writing `@media (max-width: 768px)` and `@media (min-width: 768px)` with overlapping 768px values.
-
-**Why it's wrong:** Both queries trigger simultaneously at EXACTLY 768px width, leading to specificity and cascade ordering bugs. Use strict Mobile-First `min-width` queries.
-
-*Incorrect:*
-```css
-@media (max-width: 768px) { .nav { display: none; } }
-@media (min-width: 768px) { .nav { display: flex; } } /* ❌ Conflict at 768px! */
-```
-
-*Fix:*
-```css
-/* Mobile-first: base styles apply up to 767px */
-.nav { display: none; }
-@media (min-width: 768px) { .nav { display: flex; } } /* Triggers at 768px+ */
-```
-
-### Mistake 5: Omitting the `<meta name="viewport">` Tag in HTML Head
-
-**The mistake:** Writing extensive CSS `@media` queries without including `<meta name="viewport">` in HTML.
-
-**Why it's wrong:** Without the viewport meta tag, mobile browsers emulate desktop rendering at 980px width, ignoring media queries completely.
-
-*Incorrect:*
-```css
-<!-- Missing viewport meta tag in HTML head -->
-```
-
-*Fix:*
-```css
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-```
-
-
-
-### Mistake 6: Mixing `max-width` and `min-width` Queries Inconsistently (Cascade Overlap Trap)
-
-**The mistake:** Writing `@media (max-width: 768px)` and `@media (min-width: 768px)` with overlapping 768px values.
-
-**Why it's wrong:** Both queries trigger simultaneously at EXACTLY 768px width, leading to specificity and cascade ordering bugs. Use strict Mobile-First `min-width` queries.
-
-*Incorrect:*
-```css
-@media (max-width: 768px) { .nav { display: none; } }
-@media (min-width: 768px) { .nav { display: flex; } } /* ❌ Conflict at 768px! */
-```
-
-*Fix:*
-```css
-/* Mobile-first: base styles apply up to 767px */
-.nav { display: none; }
-@media (min-width: 768px) { .nav { display: flex; } } /* Triggers at 768px+ */
-```
-
-### Mistake 7: Omitting the `<meta name="viewport">` Tag in HTML Head
-
-**The mistake:** Writing extensive CSS `@media` queries without including `<meta name="viewport">` in HTML.
-
-**Why it's wrong:** Without the viewport meta tag, mobile browsers emulate desktop rendering at 980px width, ignoring media queries completely.
-
-*Incorrect:*
-```css
-<!-- Missing viewport meta tag in HTML head -->
-```
-
-*Fix:*
-```css
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: The Breakpoint
+### Exercise 1: Mobile-First Feature Expansion via min-width Media Queries
 
-**Problem:** You have a button. By default, its `font-size` is `1rem`. You write a media query: `@media (min-width: 1024px) { button { font-size: 2rem; } }`. 
-A user views the site on an iPad that is `800px` wide. What size is the button text?
+**Scenario:** An author writes a mobile-first stylesheet using `@media (min-width: ...)` to progressively enhance a card layout.
 
-**Expected output:**
+**Requirements:**
+1. Set default mobile styles.
+2. Add `@media (min-width: 48rem)` query for desktop grid.
+
 > [!check]- Answer
-> ```text
-> `1rem`. 
-> The iPad is 800px wide, which is NOT "at least 1024px wide". Therefore, the media query is completely ignored, and the default Mobile CSS is used.
-> ```
-> - Is 800 greater than or equal to 1024?
-> 
----
-
-
-
-### Exercise 2: Modern Range Media Query Syntax
-
-**Problem:** Write modern CSS range media query triggering between 600px and 1024px viewport width.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> @media (600px <= width <= 1024px) { ... }
-> ```
-> ```css
-> @media (600px <= width <= 1024px) {
->   .sidebar { display: block; }
-> }
-> ```
 >
-> **Explanation:** Modern CSS Media Queries Level 4 syntax simplifies range queries.
-> 
----
-
-### Exercise 3: Dark Mode Media Query
-
-**Problem:** Write media query detecting system dark mode preference (`prefers-color-scheme`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> @media (prefers-color-scheme: dark) { body { background: #121212; color: #fff; } }
-> ```
+> #### Implementation
+>
 > ```css
-> @media (prefers-color-scheme: dark) {
->   body {
->     background-color: #121212;
->     color: #ffffff;
+> /* Mobile Styles Baseline (0px - 767px) */
+> .feature-card {
+>   display: flex;
+>   flex-direction: column;
+>   padding: 1rem;
+> }
+>
+> /* Progressive Desktop Enhancement (>= 768px) */
+> @media (min-width: 48rem) {
+>   .feature-card {
+>     flex-direction: row;
+>     align-items: center;
+>     padding: 2rem;
 >   }
 > }
 > ```
 >
-> **Explanation:** `prefers-color-scheme` detects OS user dark mode preferences.
+> #### Technical Explanation
+>
+> 1. **The `@media` Rule**: Applies a block of CSS rules ONLY when specified media conditions (such as screen width) evaluate to true.
+> 2. **`min-width` Mobile-First Pattern**: Using `min-width` applies styles from smaller viewports upward, creating clean progressive enhancements.
+> 3. **Viewport Width Evaluation**: Evaluates against the physical layout viewport width of the user's browser device.
 > 
+---
+
+### Exercise 2: Dark Mode Preference Adaptations via prefers-color-scheme
+
+**Scenario:** Applies dark theme styles automatically based on OS dark mode preference using `@media (prefers-color-scheme: dark)`.
+
+**Requirements:**
+1. Apply `@media (prefers-color-scheme: dark)` background and text color overrides.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Light Theme Baseline Default */
+> body {
+>   background-color: #ffffff;
+>   color: #1e293b;
+> }
+>
+> /* OS Dark Mode Preference Override */
+> @media (prefers-color-scheme: dark) {
+>   body {
+>     background-color: #0f172a;
+>     color: #f8fafc;
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`prefers-color-scheme` Media Feature**: Detects if the user has requested a light or dark color theme in their operating system settings.
+> 2. **System Theme Harmony**: Adapts application colors instantly without requiring user manual theme toggle interaction.
+> 3. **WCAG Accessibility**: Provides immediate high-contrast accessibility for dark mode users.
+> 
+---
+
+### Exercise 3: Reduced Motion Accessibility Adaptations via prefers-reduced-motion
+
+**Scenario:** Disables heavy CSS animations for users with motion sensitivity using `@media (prefers-reduced-motion: reduce)`.
+
+**Requirements:**
+1. Apply `@media (prefers-reduced-motion: reduce)` to disable transitions and animations.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Default interactive transition */
+> .btn-animated {
+>   transition: transform 0.3s ease, background-color 0.3s ease;
+> }
+>
+> /* Reduced Motion Override for Accessibility */
+> @media (prefers-reduced-motion: reduce) {
+>   *, *::before, *::after {
+>     animation-duration: 0.01ms !important;
+>     animation-iteration-count: 1 !important;
+>     transition-duration: 0.01ms !important;
+>     scroll-behavior: auto !important;
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **`prefers-reduced-motion` Media Feature**: Detects if the user has requested the system minimize vestibular motion effects.
+> 2. **Vestibular Disorder Protection**: Prevents dizziness, nausea, and motion sickness for users sensitive to large parallax animations or zooms.
+> 3. **WCAG 2.1 SC 2.3.3 (Animation from Interactions)**: Essential media query for achieving WCAG AAA accessibility compliance.
 ## 6. Related Terms
 - [`flex-direction`](../level_05/flex_direction.md) — Commonly toggled inside media queries for responsive layouts.
 - [Mobile-First Design](mobile_first.md) — Progressive enhancement coding methodology.

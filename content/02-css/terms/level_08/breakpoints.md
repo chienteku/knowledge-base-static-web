@@ -174,140 +174,115 @@ body { background-color: white; }
 /* Use fluid clamp() and 3-4 major breakpoints (640px, 768px, 1024px) */
 ```
 
-
-
-### Mistake 4: Hardcoding Breakpoints to Specific Physical Device Pixel Widths (e.g. `375px` for iPhone X)
-
-**The mistake:** Setting `@media (width: 375px)` matching a specific smartphone model.
-
-**Why it's wrong:** Physical device screen dimensions change constantly with new phone models. Base breakpoints on **content layout requirements** or standard major device ranges (e.g. `640px`, `768px`, `1024px`, `1280px`).
-
-*Incorrect:*
-```css
-@media (width: 375px) { ... } /* ❌ Hardcoded to specific device width! */
-```
-
-*Fix:*
-```css
-@media (min-width: 768px) { ... } /* Standard tablet/desktop content breakpoint */
-```
-
-### Mistake 5: Using Too Many Fine-Grained Breakpoints (Breakpoint Fatigue)
-
-**The mistake:** Defining 15 different media query breakpoints every 50px across a stylesheet.
-
-**Why it's wrong:** Excessive breakpoints create un-maintainable CSS stylesheets. Use fluid typography (`clamp()`) and fluid CSS Grid layouts to handle intermediate screen widths seamlessly.
-
-*Incorrect:*
-```css
-/* Media queries at 400px, 450px, 500px, 550px, 600px... */
-```
-
-*Fix:*
-```css
-/* Use fluid clamp() and 3-4 major breakpoints (640px, 768px, 1024px) */
-```
-
-
-
-### Mistake 6: Hardcoding Breakpoints to Specific Physical Device Pixel Widths (e.g. `375px` for iPhone X)
-
-**The mistake:** Setting `@media (width: 375px)` matching a specific smartphone model.
-
-**Why it's wrong:** Physical device screen dimensions change constantly with new phone models. Base breakpoints on **content layout requirements** or standard major device ranges (e.g. `640px`, `768px`, `1024px`, `1280px`).
-
-*Incorrect:*
-```css
-@media (width: 375px) { ... } /* ❌ Hardcoded to specific device width! */
-```
-
-*Fix:*
-```css
-@media (min-width: 768px) { ... } /* Standard tablet/desktop content breakpoint */
-```
-
-### Mistake 7: Using Too Many Fine-Grained Breakpoints (Breakpoint Fatigue)
-
-**The mistake:** Defining 15 different media query breakpoints every 50px across a stylesheet.
-
-**Why it's wrong:** Excessive breakpoints create un-maintainable CSS stylesheets. Use fluid typography (`clamp()`) and fluid CSS Grid layouts to handle intermediate screen widths seamlessly.
-
-*Incorrect:*
-```css
-/* Media queries at 400px, 450px, 500px, 550px, 600px... */
-```
-
-*Fix:*
-```css
-/* Use fluid clamp() and 3-4 major breakpoints (640px, 768px, 1024px) */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Content Break Search
+### Exercise 1: Standardizing Screen Breakpoints using Mobile-First rem Media Queries
 
-**Problem:** You are building a navbar menu. On desktop it lies in a row. On mobile it wraps to a vertical column. How do you find the ideal breakpoint width to swap from mobile menu column to desktop navbar row?
+**Scenario:** An author establishes standardized breakpoint tokens (`48rem` tablet, `64rem` desktop) for a responsive component layout.
 
-**Expected output:**
+**Requirements:**
+1. Define mobile baseline styles.
+2. Add `@media (min-width: 48rem)` for tablet.
+3. Add `@media (min-width: 64rem)` for desktop.
+
 > [!check]- Answer
-> ```text
-> Open the page in the browser, launch DevTools, and click the responsive design toggle. 
-> Slowly shrink the window from desktop size. 
-> At the exact width where the menu links start colliding or wrapping awkwardly, note that pixel width (e.g. 710px). 
-> Add a breakpoint at that width: `@media (min-width: 710px)`.
-> ```
-> - A content-first breakpoint is determined by testing the layout directly in a browser resize check.
-> 
----
-
-
-
-### Exercise 2: Standard Mobile-First Breakpoint Suite
-
-**Problem:** Define 3 standard mobile-first media query breakpoints for Tablet (`768px`), Desktop (`1024px`), and Large Desktop (`1280px`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> @media (min-width: 768px) {}
-> @media (min-width: 1024px) {}
-> @media (min-width: 1280px) {}
-> ```
+>
+> #### Implementation
+>
 > ```css
-> /* Mobile base styles first */
-> 
-> @media (min-width: 768px) {
->   /* Tablet styles */
+> /* Mobile Baseline (Default 1-column stack) */
+> .content-grid {
+>   display: grid;
+>   grid-template-columns: 1fr;
+>   gap: 1rem;
 > }
-> @media (min-width: 1024px) {
->   /* Desktop styles */
+>
+> /* Tablet Breakpoint (~768px): 2-Column Grid */
+> @media (min-width: 48rem) {
+>   .content-grid {
+>     grid-template-columns: repeat(2, 1fr);
+>     gap: 1.5rem;
+>   }
 > }
-> @media (min-width: 1280px) {
->   /* Large screen styles */
+>
+> /* Desktop Breakpoint (~1024px): 4-Column Grid */
+> @media (min-width: 64rem) {
+>   .content-grid {
+>     grid-template-columns: repeat(4, 1fr);
+>     gap: 2rem;
+>   }
 > }
 > ```
 >
-> **Explanation:** Mobile-first architecture layers progressive enhancements using `min-width` queries.
+> #### Technical Explanation
+>
+> 1. **Standardized Breakpoint System**: Using consistent `rem` breakpoints (`48rem` / 768px, `64rem` / 1024px) creates predictable UI layout transformations.
+> 2. **`rem`-Based Media Queries**: ALWAYS use `rem` or `em` units in `@media` declarations so breakpoints adapt when users scale default browser font sizes.
+> 3. **Mobile-First Order**: Declaring `min-width` queries in ascending order guarantees tablet rules override mobile rules, and desktop rules override tablet rules naturally.
 > 
 ---
 
-### Exercise 3: Em Units in Breakpoints
+### Exercise 2: Fluid Multi-Column Grid Adaptation across Tablet and Desktop
 
-**Problem:** Why are `em` units recommended over `px` for media query breakpoints?
+**Scenario:** Adapts a card gallery layout smoothly across mobile, tablet, and desktop viewports.
 
-**Expected output:**
+**Requirements:**
+1. Switch from 1 column on mobile to 2 on tablet and 3 on desktop.
+
 > [!check]- Answer
-> ```text
-> em breakpoints scale dynamically if users increase browser default font size settings for accessibility.
-> ```
+>
+> #### Implementation
+>
 > ```css
-> @media (min-width: 48em) { /* 48em * 16px = 768px */
->   /* Responsive styles */
+> .card-gallery {
+>   display: grid;
+>   grid-template-columns: 1fr;
+>   gap: 1rem;
+> }
+>
+> @media (min-width: 48rem) {
+>   .card-gallery { grid-template-columns: repeat(2, 1fr); }
+> }
+>
+> @media (min-width: 64rem) {
+>   .card-gallery { grid-template-columns: repeat(3, 1fr); }
 > }
 > ```
 >
-> **Explanation:** `em` breakpoints adapt seamlessly to user font scaling settings.
+> #### Technical Explanation
+>
+> 1. **Progressive Enhancement**: Builds simple linear stacked layouts for mobile screens first, enhancing to multi-column grids as screen real estate grows.
+> 2. **Grid Column Scaling**: Scales `grid-template-columns` cleanly from `1fr` to `repeat(2, 1fr)` to `repeat(3, 1fr)`.
+> 3. **Clean Maintainable CSS**: Eliminates duplicate CSS property overrides.
 > 
+---
+
+### Exercise 3: Content-Driven Breakpoints vs Device-Specific Hardcoding
+
+**Scenario:** Explains why breakpoints should be triggered by content needs rather than specific smartphone models.
+
+**Requirements:**
+1. Trigger layout change when content overflows, using `min-width: 40rem`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Content-Driven Breakpoint: Triggered when navigation links start crowding logo */
+> @media (min-width: 40rem) {
+>   .header-nav {
+>     display: flex;
+>     flex-direction: row;
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Content-Driven Breakpoints**: Set breakpoints where YOUR content breaks or looks awkward, rather than targeting specific device dimensions (e.g. iPhone 14).
+> 2. **Device Agnosticism**: Ensures layouts render flawlessly on future devices, foldable phones, and non-standard screen sizes.
+> 3. **Future-Proof Architecture**: Reduces media query bloating by focusing strictly on component structural limits.
 ## 6. Related Terms
 - [`@media` (Media Queries Basics)](media_queries.md) — The code container.
 - [Mobile-First Design](mobile_first.md) — The styling logic direction.

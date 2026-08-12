@@ -157,152 +157,185 @@ app.use(express.json()); // Accepts default payload limits
 app.use(express.json({ limit: '10kb' })); // Restrict JSON body payload size
 ```
 
-
-
-### Mistake 4: Accessing `req.body` Without Registering Body Parser Middleware in Express
-
-**The mistake:** Writing `const { email } = req.body;` in an Express route without mounting `express.json()`.
-
-**Why it's wrong:** Express does NOT parse HTTP POST request bodies by default. `req.body` will be `undefined`, throwing `TypeError: Cannot destructure property of undefined`.
-
-*Incorrect:*
-```javascript
-app.post('/login', (req, res) => {
-  console.log(req.body.email); // ❌ TypeError: Cannot read properties of undefined!
-});
-```
-
-*Fix:*
-```javascript
-app.use(express.json()); // Register JSON body parser middleware
-app.post('/login', (req, res) => {
-  console.log(req.body.email);
-});
-```
-
-### Mistake 5: Failing to Configure Payload Size Limits on Body Parsers (DOS Attack Vector)
-
-**The mistake:** Mounting `app.use(express.json())` without restricting body payload size.
-
-**Why it's wrong:** By default, body parsers accept up to 100kb (or higher if misconfigured). Attackers can send huge JSON payloads to consume server memory. Specify explicit limits.
-
-*Incorrect:*
-```javascript
-app.use(express.json()); // Accepts default payload limits
-```
-
-*Fix:*
-```javascript
-app.use(express.json({ limit: '10kb' })); // Restrict JSON body payload size
-```
-
-
-
-### Mistake 6: Accessing `req.body` Without Registering Body Parser Middleware in Express
-
-**The mistake:** Writing `const { email } = req.body;` in an Express route without mounting `express.json()`.
-
-**Why it's wrong:** Express does NOT parse HTTP POST request bodies by default. `req.body` will be `undefined`, throwing `TypeError: Cannot destructure property of undefined`.
-
-*Incorrect:*
-```javascript
-app.post('/login', (req, res) => {
-  console.log(req.body.email); // ❌ TypeError: Cannot read properties of undefined!
-});
-```
-
-*Fix:*
-```javascript
-app.use(express.json()); // Register JSON body parser middleware
-app.post('/login', (req, res) => {
-  console.log(req.body.email);
-});
-```
-
-### Mistake 7: Failing to Configure Payload Size Limits on Body Parsers (DOS Attack Vector)
-
-**The mistake:** Mounting `app.use(express.json())` without restricting body payload size.
-
-**Why it's wrong:** By default, body parsers accept up to 100kb (or higher if misconfigured). Attackers can send huge JSON payloads to consume server memory. Specify explicit limits.
-
-*Incorrect:*
-```javascript
-app.use(express.json()); // Accepts default payload limits
-```
-
-*Fix:*
-```javascript
-app.use(express.json({ limit: '10kb' })); // Restrict JSON body payload size
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Debugging Undefined Payloads
+### Exercise 1: Custom Raw JSON Stream Body Parser
 
-**Problem:** A client sends a POST request with the header `Content-Type: application/json` containing `{"score": 42}`. However, the route logs `undefined`. Fix the registration order below:
+**Scenario:** An API gateway parses incoming HTTP request stream chunks into a JSON object while enforcing a strict 1MB byte limit to prevent Denial of Service (DoS) memory attacks.
 
-```javascript
-// Before (Fails to log score):
-const express = require('express');
-const app = express();
-
-app.post('/submit', (req, res) => {
-  console.log("Score:", req.body?.score); // Logs: Score: undefined
-  res.sendStatus(200);
-});
-app.use(express.json());
-
-// After (Fixed):
-const express = require('express');
-const app = express();
-
-app.use(express.json()); // FIXED: Body parser is registered first!
-
-app.post('/submit', (req, res) => {
-  console.log("Score:", req.body?.score); // Logs: Score: 42
-  res.sendStatus(200);
-});
-```
-
----
+**Requirements:**
+1. Write parseJsonStreamBody(reqMock, byteLimit).
+2. Buffer incoming data chunks.
+3. Enforce byteLimit check on chunk arrival.
+4. Parse JSON and resolve.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Parsing URL-Encoded Form Submissions
-
-**Problem:** Write middleware line to parse traditional HTML form submissions (`application/x-www-form-urlencoded`).
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> app.use(express.urlencoded({ extended: true }));
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> app.use(express.urlencoded({ extended: true }));
+> function parseJsonStreamBody(reqMock, byteLimit = 1_048_576) {
+>   return new Promise((resolve, reject) => {
+>     let bodyText = "";
+>     let receivedBytes = 0;
+>
+>     reqMock.on("data", (chunk) => {
+>       const chunkBuf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+>       receivedBytes += chunkBuf.length;
+>
+>       if (receivedBytes > byteLimit) {
+>         reqMock.destroy();
+>         return reject(new Error("PAYLOAD_TOO_LARGE"));
+>       }
+>
+>       bodyText += chunkBuf.toString("utf-8");
+>     });
+>
+>     reqMock.on("end", () => {
+>       if (!bodyText.trim()) {
+>         return resolve({});
+>       }
+>
+>       try {
+>         const parsed = JSON.parse(bodyText);
+>         resolve(parsed);
+>       } catch (err) {
+>         reject(new Error(`INVALID_JSON: ${err.message}`));
+>       }
+>     });
+>
+>     reqMock.on("error", (err) => reject(err));
+>   });
+> }
+>
+> // Verification tests
+> const events = {};
+> const mockReq = {
+>   on: (e, fn) => { events[e] = fn; },
+>   destroy: () => {}
+> };
+>
+> const promise = parseJsonStreamBody(mockReq, 100);
+> events["data"](Buffer.from('{"name":"Alice"}'));
+> events["end"]();
+>
+> promise.then(body => {
+>   console.assert(body.name === "Alice", "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** `express.urlencoded()` parses URL-encoded body payloads from standard HTML `<form>` submissions.
+> #### Technical Explanation
+>
+> 1. **Stream Body Buffering**: HTTP request bodies arrive as asynchronous stream chunks; `express.json()` buffers and parses these chunks internally.
+> 2. **Payload Size Defense**: Enforcing byte limits before buffer allocation protects servers against memory exhaustion DoS attacks.
+> 3. **Content-Type Validation**: Always verify `Content-Type: application/json` before attempting JSON parsing.
 > 
 ---
 
-### Exercise 3: Multipart Form Upload Parsing
+### Exercise 2: URL-Encoded Form Data Parser
 
-**Problem:** Which middleware library is standard in Express for parsing `multipart/form-data` file uploads? (`multer`).
+**Scenario:** A legacy form endpoint parses `application/x-www-form-urlencoded` request body text into a key-value JavaScript object.
 
-**Expected output:**
+**Requirements:**
+1. Write parseUrlEncodedBody(bodyStr).
+2. Split key-value pairs by `&` and `=`.
+3. Decode URL components via `decodeURIComponent`.
+
 > [!check]- Answer
-> ```text
-> multer
-> ```
-> ```text
-> multer
+>
+> #### Implementation
+>
+> ```javascript
+> function parseUrlEncodedBody(bodyStr = "") {
+>   if (typeof bodyStr !== "string" || !bodyStr.trim()) {
+>     return {};
+>   }
+>
+>   const result = {};
+>   const pairs = bodyStr.split("&");
+>
+>   for (const pair of pairs) {
+>     if (!pair) continue;
+>     const [rawKey, rawVal] = pair.split("=");
+>     const key = decodeURIComponent((rawKey || "").replace(/\+/g, " "));
+>     const val = decodeURIComponent((rawVal || "").replace(/\+/g, " "));
+>
+>     if (key in result) {
+>       if (Array.isArray(result[key])) {
+>         result[key].push(val);
+>       } else {
+>         result[key] = [result[key], val];
+>       }
+>     } else {
+>       result[key] = val;
+>     }
+>   }
+>
+>   return result;
+> }
+>
+> // Verification tests
+> const parsed = parseUrlEncodedBody("user=Alice+Smith&role=admin&tag=js&tag=node");
+> console.assert(parsed.user === "Alice Smith", "Test 1 Failed: + decoded to space");
+> console.assert(parsed.role === "admin", "Test 2 Failed");
+> console.assert(Array.isArray(parsed.tag) && parsed.tag.length === 2, "Test 3 Failed: Duplicate keys parsed into array");
 > ```
 >
-> **Explanation:** `multer` processes multipart form requests containing file attachments.
+> #### Technical Explanation
+>
+> 1. **URL Encoding Format**: `application/x-www-form-urlencoded` formats key-value pairs separated by `&` with spaces encoded as `+` or `%20`.
+> 2. **express.urlencoded Middleware**: Express uses `express.urlencoded({ extended: true })` (using `qs` library) to parse nested form fields.
+> 3. **Array Parameter Handling**: Duplicate keys (`tag=js&tag=node`) are parsed into arrays.
 > 
+---
+
+### Exercise 3: Multipart Form-Data Boundary Header Inspector
+
+**Scenario:** An image upload service inspects `Content-Type` headers to extract the multipart boundary delimiter string.
+
+**Requirements:**
+1. Write parseMultipartBoundary(contentTypeHeader).
+2. Verify header starts with `multipart/form-data`.
+3. Extract `boundary=...` token.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function parseMultipartBoundary(contentTypeHeader = "") {
+>   if (!contentTypeHeader.toLowerCase().includes("multipart/form-data")) {
+>     return { isMultipart: false, boundary: null };
+>   }
+>
+>   const match = contentTypeHeader.match(/boundary=([^;]+)/i);
+>   if (!match) {
+>     return { isMultipart: true, boundary: null, error: "MISSING_BOUNDARY" };
+>   }
+>
+>   const boundary = match[1].replace(/^"|"$/g, "").trim();
+>
+>   return {
+>     isMultipart: true,
+>     boundary,
+>     delimiter: `--${boundary}`
+>   };
+> }
+>
+> // Verification tests
+> const header = 'multipart/form-data; boundary="----WebKitFormBoundary7MA4YWxkTrZu0gW"';
+> const parsed = parseMultipartBoundary(header);
+>
+> console.assert(parsed.isMultipart === true, "Test 1 Failed");
+> console.assert(parsed.boundary === "----WebKitFormBoundary7MA4YWxkTrZu0gW", "Test 2 Failed");
+> console.assert(parsed.delimiter === "------WebKitFormBoundary7MA4YWxkTrZu0gW", "Test 3 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Multipart Stream Uploads**: File uploads use `multipart/form-data` where boundary tokens separate individual file/field payloads.
+> 2. **Stream Parsing with Busboy/Multer**: Express body parsers cannot parse multipart streams directly; specialized libraries (`multer`, `busboy`) stream files directly to disk/S3.
+> 3. **Boundary Delimiter Format**: Each section in a multipart body is prefixed with `--boundary`.
 ## 6. Related Terms
 - [The req & res Objects](req_res.md) — The HTTP request and response structures.
 - [Middleware](middleware.md) — The pipeline routing pattern.

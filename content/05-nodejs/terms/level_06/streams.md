@@ -86,65 +86,148 @@ stream.pipe(res);
 
 ## 5. Practice Exercises
 
-### Exercise 1: YouTube vs Direct Download
+### Exercise 1: Memory-Efficient Large File Copy Stream
 
-**Problem:** You want to watch a 2-hour podcast. 
-Scenario A: You click "Download .mp3". You must wait 3 minutes for it to finish downloading before you can listen to the first second.
-Scenario B: You click "Play" on Spotify. It starts playing instantly, even though it hasn't downloaded the end of the podcast yet.
-Which scenario uses Streams?
+**Scenario:** Copies a 5GB file using streams (`fs.createReadStream` -> `fs.createWriteStream`) to maintain <20MB RAM footprint during transfer.
 
-**Expected output:**
+**Requirements:**
+1. Write copyLargeFileStream(srcPath, destPath, mockFs).
+2. Use pipeline to pipe readStream to writeStream.
+3. Verify low memory overhead.
+
 > [!check]- Answer
-> ```text
-> Scenario B uses Streams. The audio data is sent in tiny chunks and played immediately upon arrival. 
-> Scenario A uses the "Bucket" method (loading the entire file into memory before it can be used).
-> ```
-> - Which one processes data piece-by-piece?
-> 
----
-
-
-
-### Exercise 2: 4 Fundamental Stream Types
-
-**Problem:** List the 4 fundamental stream types in Node.js.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. Readable
-> 2. Writable
-> 3. Duplex
-> 4. Transform
-> ```
-> ```text
-> 1. Readable (read source)
-> 2. Writable (write destination)
-> 3. Duplex (independent read & write)
-> 4. Transform (duplex modifying data in transit)
-> ```
 >
-> **Explanation:** Node.js stream architecture is built on these 4 stream primitives.
-> 
----
-
-### Exercise 3: Async Iteration over Streams
-
-**Problem:** Iterate over readable file stream chunks using modern `for await...of` loop syntax.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> for await (const chunk of fs.createReadStream('file.txt')) { console.log(chunk); }
-> ```
+> #### Implementation
+>
 > ```javascript
-> for await (const chunk of fs.createReadStream('file.txt')) {
->   console.log(chunk);
+> async function copyLargeFileStream(srcPath, destPath, mockFs) {
+>   const fsLib = mockFs || require("fs");
+>   const streamLib = require("stream");
+>
+>   const readStream = fsLib.createReadStream(srcPath);
+>   const writeStream = fsLib.createWriteStream(destPath);
+>
+>   return new Promise((resolve, reject) => {
+>     streamLib.pipeline(readStream, writeStream, (err) => {
+>       if (err) return reject(err);
+>       resolve({ success: true, copied: true });
+>     });
+>   });
 > }
+>
+> // Verification tests
+> const mockFs = {
+>   createReadStream: (p) => ({ p }),
+>   createWriteStream: (p) => ({ p })
+> };
+> const mockPipeline = (r, w, cb) => cb(null);
+>
+> // Inject mock
+> const origPipeline = require("stream").pipeline;
+> require("stream").pipeline = mockPipeline;
+>
+> copyLargeFileStream("/big.iso", "/copy.iso", mockFs).then(res => {
+>   require("stream").pipeline = origPipeline; // Restore
+>   console.assert(res.success === true, "Test 1 Failed");
+> });
 > ```
 >
-> **Explanation:** Readable streams are Async Iterables, consumable with `for await...of` loops.
+> #### Technical Explanation
+>
+> 1. **Streaming vs Buffer Reading**: `fs.readFile` loads entire file into RAM; `createReadStream` streams data in small ~64KB chunks.
+> 2. **Fixed Memory Footprint**: Allows processing 100GB files on servers with only 512MB RAM.
+> 3. **Node.js Stream Foundation**: Streams are event-driven objects backed by libuv native I/O interfaces.
 > 
+---
+
+### Exercise 2: Async Iterable Stream Consumer with for await...of
+
+**Scenario:** Consumes data from a readable stream asynchronously using ES2018 `for await...of` syntax.
+
+**Requirements:**
+1. Write consumeStreamAsync(readableStreamMock).
+2. Iterate chunks asynchronously.
+3. Concatenate text output.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> async function consumeStreamAsync(readableStreamMock) {
+>   let fullText = "";
+>
+>   for await (const chunk of readableStreamMock) {
+>     fullText += chunk.toString("utf-8");
+>   }
+>
+>   return fullText;
+> }
+>
+> // Verification tests
+> async function* mockStreamGenerator() {
+>   yield Buffer.from("Hello ");
+>   yield Buffer.from("Async ");
+>   yield Buffer.from("Streams!");
+> }
+>
+> consumeStreamAsync(mockStreamGenerator()).then(text => {
+>   console.assert(text === "Hello Async Streams!", "Test 1 Failed");
+> });
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Streams as Async Iterables**: Node.js Readable streams implement Symbol.asyncIterator, enabling `for await...of` consumption.
+> 2. **Simplified Error Handling**: Errors thrown by stream inside `for await...of` can be caught with standard `try/catch`.
+> 3. **Automatic Cleanup**: Exiting `for await...of` loop prematurely automatically destroys the stream.
+> 
+---
+
+### Exercise 3: Stream Destruction & Resource Cleanup Guard
+
+**Scenario:** Safely destroys stream instances on network disconnection or abort signals to close underlying file descriptors.
+
+**Requirements:**
+1. Write destroyStreamSafely(streamInstance, errorReason).
+2. Call `streamInstance.destroy(err)`.
+3. Verify stream is destroyed.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function destroyStreamSafely(streamInstance, errorReason) {
+>   if (!streamInstance || typeof streamInstance.destroy !== "function") {
+>     return { destroyed: false, error: "Invalid stream" };
+>   }
+>
+>   const err = errorReason ? new Error(errorReason) : undefined;
+>   streamInstance.destroy(err);
+>
+>   return {
+>     destroyed: true,
+>     isDestroyed: streamInstance.destroyed === true
+>   };
+> }
+>
+> // Verification tests
+> const mockStream = {
+>   destroyed: false,
+>   destroy(err) { this.destroyed = true; }
+> };
+>
+> const res = destroyStreamSafely(mockStream, "Aborted by client");
+> console.assert(res.destroyed === true, "Test 1 Failed");
+> console.assert(mockStream.destroyed === true, "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **stream.destroy()**: Closes underlying resources (file descriptors, sockets) immediately and emits `'close'` event.
+> 2. **File Descriptor Leaks**: Failing to destroy aborted streams leaks OS file descriptors, leading to `EMFILE: too many open files` errors.
+> 3. **AbortSignal Integration**: Modern stream APIs support `{ signal: abortController.signal }` to destroy streams automatically on cancellation.
 ## 6. Related Terms
 - [Readable & Writable Streams](readable_writable.md) — The specific implementations of Streams in Node.js.
 - [Piping (.pipe())](piping.md) — How you connect two streams together.

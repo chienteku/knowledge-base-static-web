@@ -181,65 +181,104 @@ src: url('font.woff2') format('woff2'), url('font.woff') format('woff');
 
 ## 5. Practice Exercises
 
-### Exercise 1: Custom Font Hook
+### Exercise 1: Preloading Custom WOFF2 Web Fonts via @font-face and link rel=preload
 
-**Problem:** Write the `@font-face` declaration to load a self-hosted bold font. The font family name is "Noir", the file path is "/fonts/noir-bold.woff2", and the format is "woff2". Include the standard rule to prevent invisible text.
+**Scenario:** An author imports a custom self-hosted WOFF2 web font using `@font-face` and preloads it for maximum performance.
 
-**Expected output:**
+**Requirements:**
+1. Add `<link rel="preload" href="..." as="font" type="font/woff2" crossorigin>`.
+2. Define `@font-face` block.
+3. Set `font-display: swap`.
+
 > [!check]- Answer
-> ```css
-> @font-face {
->   font-family: 'Noir';
->   src: url('/fonts/noir-bold.woff2') format('woff2');
->   font-weight: bold;
->   font-style: normal;
->   font-display: swap;
-> }
-> ```
-> - Define the `font-family` name inside quotes or matching text.
-> - Call `url(...)` with the exact path.
-> - Include `font-display`.
-> 
----
-
-
-
-### Exercise 2: @font-face Rule Template
-
-**Problem:** Write `@font-face` rule defining `'Inter'` font from `inter.woff2` with `font-display: swap`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> @font-face { font-family: 'Inter'; src: url('inter.woff2') format('woff2'); font-display: swap; }
-> ```
-> ```css
-> @font-face {
->   font-family: 'Inter';
->   src: url('inter.woff2') format('woff2');
->   font-display: swap;
-> }
-> ```
 >
-> **Explanation:** `@font-face` binds custom web font files to family names.
-> 
----
-
-### Exercise 3: Font Preloading Technique
-
-**Problem:** Write `<link>` tag in HTML `<head>` preloading critical web font `inter.woff2`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> <link rel="preload" href="inter.woff2" as="font" type="font/woff2" crossorigin>
-> ```
+> #### Implementation
+>
 > ```html
-> <link rel="preload" href="inter.woff2" as="font" type="font/woff2" crossorigin>
+> <head>
+>   <meta charset="utf-8">
+>   <title>Self-Hosted Web Font Demo</title>
+>   <!-- Preload WOFF2 web font to prevent render delay -->
+>   <link rel="preload" href="fonts/inter-custom.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+>   <link rel="stylesheet" href="css/styles.css">
+> </head>
 > ```
 >
-> **Explanation:** `rel="preload"` with `crossorigin` initiates high-priority early font network fetches.
+> ```css
+> /* Custom @font-face Declaration */
+> @font-face {
+>   font-family: "Inter Custom";
+>   src: url("../fonts/inter-custom.woff2") format("woff2");
+>   font-weight: 400 700;
+>   font-style: normal;
+>   font-display: swap;          /* Prevents Flash of Invisible Text (FOIT) */
+> }
+>
+> body {
+>   font-family: "Inter Custom", system-ui, sans-serif;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `@font-face` Rule**: Allows web authors to load self-hosted custom fonts onto user devices.
+> 2. **WOFF2 Format Superiority**: WOFF2 (Web Open Font Format 2.0) offers superior Brotli compression, replacing legacy TTF/OTF formats.
+> 3. **The `font-display: swap` Directive**: Tells browser to render system fallback font immediately while custom WOFF2 downloads in background, eliminating FOIT (Flash of Invisible Text).
 > 
+---
+
+### Exercise 2: Eliminating Flash of Invisible Text (FOIT)
+
+**Scenario:** Compares `font-display: swap` vs `font-display: block` for page loading user experience.
+
+**Requirements:**
+1. Set `font-display: swap` on `@font-face`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> @font-face {
+>   font-family: "Roboto Custom";
+>   src: url("../fonts/roboto.woff2") format("woff2");
+>   font-display: swap;          /* Renders system font instantly, swaps when loaded */
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **FOIT vs FOUT**: FOIT (Flash of Invisible Text) hides text for up to 3 seconds during font download; FOUT (Flash of Unstyled Text) shows system text immediately.
+> 2. **Core Web Vitals LCP**: `font-display: swap` improves Largest Contentful Paint (LCP) performance scores.
+> 3. **User Accessibility**: Ensures content is readable instantly on slow 3G mobile networks.
+> 
+---
+
+### Exercise 3: Google Fonts Import Optimization via Self-Hosting
+
+**Scenario:** Explains self-hosting WOFF2 fonts to eliminate third-party Google Fonts tracking and DNS latency.
+
+**Requirements:**
+1. Self-host WOFF2 font files directly.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> @font-face {
+>   font-family: "Open Sans";
+>   src: url("../fonts/open-sans-v34-latin-regular.woff2") format("woff2");
+>   font-weight: 400;
+>   font-display: swap;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Self-Hosting Performance Gains**: Self-hosting eliminates third-party DNS lookup and TLS handshake latency (`fonts.googleapis.com`).
+> 2. **GDPR & Privacy Compliance**: Self-hosting prevents third-party font servers from tracking user IP addresses.
+> 3. **HTTP/2 Coherence**: Serves fonts over the same HTTP/2 connection as page HTML and CSS.
 ## 6. Related Terms
 - [`font-family`](font_family.md) — The styling property that applies these fonts.
 - [`@import`](../level_11/import.md) — The CSS at-rule used to import stylesheets (including fonts) into CSS directly.

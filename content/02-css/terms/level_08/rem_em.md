@@ -114,127 +114,105 @@ html { font-size: 16px; } /* ❌ Overrides user browser accessibility settings! 
 html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 ```
 
-
-
-### Mistake 5: Using `em` for Padding/Margin Causing Compound Scaling Bugs inside Nested Containers
-
-**The mistake:** Setting `padding: 2em; font-size: 1.5em;` on multi-nested card containers.
-
-**Why it's wrong:** `em` units calculate relative to the **current element's font size** (or parent font size). Nesting elements with `em` units causes font size and padding to compound exponentially.
-
-*Incorrect:*
-```css
-div { font-size: 1.2em; padding: 1.5em; } /* ❌ Compounds size when nested! */
-```
-
-*Fix:*
-```css
-div { font-size: 1.2rem; padding: 1.5rem; } /* rem calculates against root 16px font size */
-```
-
-### Mistake 6: Overriding `html { font-size: 16px; }` in Pixels Destroying User Accessibility Zoom Settings
-
-**The mistake:** Hardcoding `html { font-size: 16px; }` in CSS.
-
-**Why it's wrong:** Hardcoding root `font-size` in `px` overrides user browser accessibility font preferences. Use `html { font-size: 100%; }` to preserve root responsiveness.
-
-*Incorrect:*
-```css
-html { font-size: 16px; } /* ❌ Overrides user browser accessibility settings! */
-```
-
-*Fix:*
-```css
-html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
-```
-
-
-
-### Mistake 7: Using `em` for Padding/Margin Causing Compound Scaling Bugs inside Nested Containers
-
-**The mistake:** Setting `padding: 2em; font-size: 1.5em;` on multi-nested card containers.
-
-**Why it's wrong:** `em` units calculate relative to the **current element's font size** (or parent font size). Nesting elements with `em` units causes font size and padding to compound exponentially.
-
-*Incorrect:*
-```css
-div { font-size: 1.2em; padding: 1.5em; } /* ❌ Compounds size when nested! */
-```
-
-*Fix:*
-```css
-div { font-size: 1.2rem; padding: 1.5rem; } /* rem calculates against root 16px font size */
-```
-
-### Mistake 8: Overriding `html { font-size: 16px; }` in Pixels Destroying User Accessibility Zoom Settings
-
-**The mistake:** Hardcoding `html { font-size: 16px; }` in CSS.
-
-**Why it's wrong:** Hardcoding root `font-size` in `px` overrides user browser accessibility font preferences. Use `html { font-size: 100%; }` to preserve root responsiveness.
-
-*Incorrect:*
-```css
-html { font-size: 16px; } /* ❌ Overrides user browser accessibility settings! */
-```
-
-*Fix:*
-```css
-html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: The Multiplier Math
+### Exercise 1: Building Scalable Responsive Component Architecture using rem for Layout and em for Local Padding
 
-**Problem:** A user has perfect vision, so their browser root is set to the default `16px`. You write a CSS rule: `margin-bottom: 1.5rem;`. How many pixels of margin is that?
+**Scenario:** An author uses `rem` for global typography and page layout spacing, and `em` for component-relative button padding.
 
-**Expected output:**
+**Requirements:**
+1. Set `body { font-size: 1rem; }`.
+2. Apply `padding: 0.5em 1em` to button.
+3. Demonstrate scalable button sizes.
+
 > [!check]- Answer
-> ```text
-> 24 pixels! (1.5 * 16 = 24).
+>
+> #### Implementation
+>
+> ```css
+> html {
+>   font-size: 100%;             /* Root baseline: 16px default */
+> }
+>
+> /* Component Button: Uses em for padding so padding scales with button font-size! */
+> .btn {
+>   font-size: 1rem;            /* 16px default */
+>   padding: 0.5em 1em;         /* 8px top/bottom, 16px left/right */
+>   border-radius: 0.25em;
+>   background-color: #2563eb;
+>   color: #ffffff;
+> }
+>
+> /* Large Button Variant: Scaling font-size automatically scales em padding! */
+> .btn-large {
+>   font-size: 1.5rem;          /* 24px: Padding automatically expands to 12px / 24px! */
+> }
 > ```
-> - Break out a calculator! What is one-and-a-half times sixteen?
+>
+> #### Technical Explanation
+>
+> 1. **`rem` (Root EM) Definition**: `1rem` equals the font-size of the root `<html>` element (default 16px); provides consistent, predictable sizing across the entire page.
+> 2. **`em` (Local EM) Definition**: `1em` equals the font-size of the CURRENT element (or parent element for font-size); ideal for padding/margins that should scale proportionally with font size.
+> 3. **Component Scalability Pattern**: Using `em` for button padding means changing `.btn-large { font-size: 1.5rem; }` automatically scales its padding and borders proportionally without writing extra CSS!
 > 
 ---
 
+### Exercise 2: Root Font-Size Scaling for Universal App Zooming
 
+**Scenario:** Demonstrates why root font size should be kept at default `100%` for accessibility.
 
-### Exercise 2: rem vs em Calculation Matrix
+**Requirements:**
+1. Set `html { font-size: 100%; }`.
 
-**Problem:** Given root `html = 16px` and parent `.card = 20px` font size, calculate computed pixel size for:
-1. `font-size: 2rem` 
-2. `font-size: 2em` inside `.card` 
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> 1. 2rem = 32px (2 * 16px root)
-> 2. 2em = 40px (2 * 20px parent)
-> ```
-> ```text
-> 1. 2rem = 32px (2 * 16px root)
-> 2. 2em = 40px (2 * 20px parent)
+>
+> #### Implementation
+>
+> ```css
+> html {
+>   font-size: 100%;             /* Respects browser user font preferences (default 16px) */
+> }
+>
+> p {
+>   font-size: 1rem;            /* Scales if user changes browser font size to Large (20px) */
+>   line-height: 1.5;
+> }
 > ```
 >
-> **Explanation:** `rem` calculates against root `<html>` font size; `em` calculates against parent/element font size.
+> #### Technical Explanation
+>
+> 1. **User Accessibility Preference**: Setting `html { font-size: 100%; }` respects user browser font size preferences (e.g. visually impaired users setting default text to 24px).
+> 2. **Pixel Hardcoding Hazard**: Hardcoding `html { font-size: 16px; }` or using hardcoded `px` on text overrides user browser settings, breaking accessibility.
+> 3. **WCAG 1.4.4 Compliance**: Guarantees text can be zoomed up to 200% without loss of content or function.
 > 
 ---
 
-### Exercise 3: Best Practice Unit Selection Rule
+### Exercise 3: Compounding em Nesting Pitfalls in Component Lists
 
-**Problem:** When should `rem` be used vs `em`?
+**Scenario:** Explains why nesting `em` font sizes causes unintended exponential text scaling.
 
-**Expected output:**
+**Requirements:**
+1. Refactor nested list font sizes from `em` to `rem`.
+
 > [!check]- Answer
-> ```text
-> Use rem for global typography, paddings, margins, and container layouts; use em for element-level components that must scale proportionally with local font size (e.g. icon padding inside buttons).
-> ```
-> ```text
-> Use rem for global typography, paddings, margins, and container layouts; use em for element-level components that must scale proportionally with local font size (e.g. icon padding inside buttons).
+>
+> #### Implementation
+>
+> ```css
+> /* ❌ Compounding em Bug: Nested <ul> tags get smaller and smaller exponentially! (14px -> 12px -> 10px) */
+> /* ul li { font-size: 0.875em; } */
+>
+> /* ✅ Scalable rem Solution: Every list level retains consistent 14px size! */
+> ul li {
+>   font-size: 0.875rem;
+> }
 > ```
 >
-> **Explanation:** `rem` maintains consistent global scaling; `em` enables component-relative scaling.
-> 
+> #### Technical Explanation
+>
+> 1. **The `em` Compounding Effect**: When `em` is used for `font-size`, nested child elements multiply their parent's computed font-size, causing exponential scaling!
+> 2. **`rem` Immunity**: `rem` ALWAYS references the root `<html>` font size, rendering nested elements completely immune to compounding bugs.
+> 3. **CSS Architecture Standard**: Use `rem` for font-size and layout dimensions; reserve `em` strictly for component-relative padding and icons.
 ## 6. Related Terms
 - [`font-size` & `font-weight`](../level_03/font_size_weight.md) — The property that controls the baseline font scale.
 - [`%` (Percentages)](percentages.md) — Sizing relative to parent containers.

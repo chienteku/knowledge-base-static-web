@@ -108,63 +108,147 @@ const data = require('./data.json');
 
 ## 5. Practice Exercises
 
-### Exercise 1: Default vs Named Exports
+### Exercise 1: CommonJS Module Wrapper Function Simulator
 
-**Problem:** You have a file `user.js` containing a `class User`. 
-Developer A writes: `module.exports = User;`
-Developer B writes: `module.exports = { User: User };`
-How does the `require` statement look different for Developer A vs Developer B?
+**Scenario:** Simulates Node.js's internal CommonJS module wrapper function `(function (exports, require, module, __filename, __dirname) { ... })`.
 
-**Expected output:**
+**Requirements:**
+1. Write wrapAndExecuteCommonJS(moduleCodeStr, mockRequire, filePath).
+2. Construct V8 Function wrapper.
+3. Execute and return `module.exports`.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> // Developer A (Exporting the class directly)
-> const User = require('./user.js');
-> 
-> // Developer B (Exporting an object containing the class)
-> const { User } = require('./user.js');
+> function wrapAndExecuteCommonJS(moduleCodeStr, mockRequire, filePath = "/app/service.js") {
+>   const pathLib = require("path");
+>   const dirname = pathLib.dirname(filePath);
+>
+>   const moduleObj = { exports: {} };
+>   const exportsObj = moduleObj.exports;
+>
+>   // Simulate internal Node.js CommonJS Wrapper Function
+>   const wrapperFn = new Function(
+>     "exports",
+>     "require",
+>     "module",
+>     "__filename",
+>     "__dirname",
+>     moduleCodeStr
+>   );
+>
+>   wrapperFn(exportsObj, mockRequire, moduleObj, filePath, dirname);
+>
+>   return moduleObj.exports;
+> }
+>
+> // Verification tests
+> const code = `
+>   exports.add = function(a, b) { return a + b; };
+>   module.exports.name = "Calculator";
+> `;
+>
+> const exported = wrapAndExecuteCommonJS(code, () => {}, "/app/calc.js");
+> console.assert(exported.name === "Calculator", "Test 1 Failed");
+> console.assert(exported.add(2, 3) === 5, "Test 2 Failed");
 > ```
-> - Is `require()` returning the class itself, or an object *holding* the class?
+>
+> #### Technical Explanation
+>
+> 1. **Node.js Module Wrapper**: Node.js wraps every CJS file in a hidden function injecting 5 parameters: `exports`, `require`, `module`, `__filename`, `__dirname`.
+> 2. **Local Scope Isolation**: Variables declared with `const`/`let`/`var` inside a module file remain private to that file.
+> 3. **exports vs module.exports**: `exports` is an initial reference shorthand pointing to `module.exports` object.
 > 
 ---
 
+### Exercise 2: Dynamic CommonJS require() Cache Invalidator
 
+**Scenario:** A hot-reloading development server invalidates specific `require.cache` entries to reload modified CommonJS modules without restarting the server.
 
-### Exercise 2: Exporting Functions in CommonJS
+**Requirements:**
+1. Write invalidateRequireCache(moduleAbsPath, requireCacheMap).
+2. Delete entry from requireCacheMap.
+3. Return boolean indicating if entry was purged.
 
-**Problem:** Write CommonJS syntax to export object with `add` and `subtract` math functions.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> module.exports = { add: (a, b) => a + b, subtract: (a, b) => a - b };
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> module.exports = {
->   add: (a, b) => a + b,
->   subtract: (a, b) => a - b
+> function invalidateRequireCache(moduleAbsPath, requireCacheMap) {
+>   const cache = requireCacheMap || require.cache;
+>
+>   if (cache && cache[moduleAbsPath]) {
+>     delete cache[moduleAbsPath];
+>     return true;
+>   }
+>
+>   return false;
+> }
+>
+> // Verification tests
+> const mockCache = {
+>   "/app/routes.js": { id: "/app/routes.js", exports: {} }
 > };
+>
+> const purged = invalidateRequireCache("/app/routes.js", mockCache);
+> console.assert(purged === true, "Test 1 Failed");
+> console.assert(mockCache["/app/routes.js"] === undefined, "Test 2 Failed: Cache entry must be deleted");
 > ```
 >
-> **Explanation:** `module.exports` defines the public API object returned when requiring the module.
+> #### Technical Explanation
+>
+> 1. **require.cache Object**: Node.js caches required modules by absolute file path in `require.cache` dictionary.
+> 2. **Synchronous Module Execution**: `require()` runs synchronously on first call and returns cached `module.exports` on subsequent calls.
+> 3. **Hot Module Reloading (HMR)**: Deleting `require.cache[path]` forces Node.js to re-read and re-evaluate the file on next `require()` call.
 > 
 ---
 
-### Exercise 3: CommonJS Caching Behavior
+### Exercise 3: exports vs module.exports Assignment Safety Guard
 
-**Problem:** If module `a.js` is required 3 times across different files, how many times is `a.js` executed?
+**Scenario:** An API linter checks whether a CommonJS file broke the `exports` reference link by reassigning `exports = ...` instead of `module.exports = ...`.
 
-**Expected output:**
+**Requirements:**
+1. Write inspectExportSafety(moduleObj, exportsObj).
+2. Check if moduleObj.exports === exportsObj.
+3. Detect broken exports reassignments.
+
 > [!check]- Answer
-> ```text
-> 1 time (cached in `require.cache` on first import).
-> ```
-> ```text
-> 1 time (cached in require.cache on first import)
+>
+> #### Implementation
+>
+> ```javascript
+> function inspectExportSafety(moduleObj, exportsObj) {
+>   const isLinked = moduleObj.exports === exportsObj;
+>
+>   return {
+>     isLinked,
+>     effectiveExports: moduleObj.exports,
+>     warning: !isLinked ? "WARNING: Reassigning 'exports = ...' breaks the link to module.exports!" : null
+>   };
+> }
+>
+> // Verification tests
+> const mod1 = { exports: {} };
+> let exp1 = mod1.exports;
+> exp1.foo = "bar"; // Correct property attachment
+>
+> console.assert(inspectExportSafety(mod1, exp1).isLinked === true, "Test 1 Failed");
+>
+> const mod2 = { exports: {} };
+> let exp2 = mod2.exports;
+> exp2 = { foo: "bar" }; // BROKEN! Reassigned local variable, module.exports remains empty {}
+>
+> console.assert(inspectExportSafety(mod2, exp2).isLinked === false, "Test 2 Failed: Detected broken link");
 > ```
 >
-> **Explanation:** `require()` caches loaded module exports in `require.cache`; subsequent imports return the cached object.
-> 
+> #### Technical Explanation
+>
+> 1. **exports Reference Mechanics**: `exports` is merely a argument reference passed to the wrapper function pointing to `module.exports`.
+> 2. **Broken Reassignment**: Reassigning `exports = { ... }` changes the local variable reference, leaving `module.exports` empty.
+> 3. **Best Practice Rule**: Always use `module.exports = { ... }` when assigning objects or functions as the primary export.
 ## 6. Related Terms
 - [ES Modules (import, export)](es_modules.md) — The modern replacement for CommonJS.
 - [NPM (Node Package Manager)](../level_04/npm.md) — NPM packages are historically distributed as CommonJS modules.

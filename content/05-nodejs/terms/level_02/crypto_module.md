@@ -139,46 +139,154 @@ if (buf1.length === buf2.length && crypto.timingSafeEqual(buf1, buf2)) {}
 
 ## 5. Practice Exercises
 
-### Exercise 1: Generating Random Bytes with Crypto
+### Exercise 1: HMAC-SHA256 API Request Signature Verifier
 
-**Problem:** Generate a 16-byte random hex string token using `crypto.randomBytes`.
+**Scenario:** A webhook receiver verifies incoming request payloads against HMAC-SHA256 signatures generated using shared secret keys to block forged requests.
 
-**Expected output:**
+**Requirements:**
+1. Write verifyHmacSignature(payloadStr, secretKey, expectedSignatureHex, mockCrypto).
+2. Compute HMAC-SHA256 hash of payloadStr.
+3. Compare computed hash with expectedSignatureHex using timingSafeEqual.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> const token = crypto.randomBytes(16).toString('hex');
+> function verifyHmacSignature(payloadStr, secretKey, expectedSignatureHex, mockCrypto) {
+>   const cryptoLib = mockCrypto || require("crypto");
+>
+>   const hmac = cryptoLib.createHmac("sha256", secretKey);
+>   hmac.update(payloadStr, "utf-8");
+>   const computedHex = hmac.digest("hex");
+>
+>   const computedBuf = Buffer.from(computedHex, "hex");
+>   const expectedBuf = Buffer.from(expectedSignatureHex, "hex");
+>
+>   if (computedBuf.length !== expectedBuf.length) {
+>     return false;
+>   }
+>
+>   return cryptoLib.timingSafeEqual(computedBuf, expectedBuf);
+> }
+>
+> // Verification tests
+> const mockCrypto = {
+>   createHmac: (algo, key) => ({
+>     update: () => {},
+>     digest: () => "a1b2c3d4"
+>   }),
+>   timingSafeEqual: (bufA, bufB) => bufA.toString("hex") === bufB.toString("hex")
+> };
+>
+> const isValid = verifyHmacSignature("{\"event\":\"order_created\"}", "secret_key", "a1b2c3d4", mockCrypto);
+> console.assert(isValid === true, "Test 1 Failed: Valid signature must return true");
+>
+> const isInvalid = verifyHmacSignature("{\"event\":\"tampered\"}", "secret_key", "ffffffff", mockCrypto);
+> console.assert(isInvalid === false, "Test 2 Failed: Invalid signature must return false");
 > ```
 >
-> **Explanation:** `crypto.randomBytes` generates cryptographically strong pseudo-random data.
+> #### Technical Explanation
+>
+> 1. **HMAC Authentication**: Hash-based Message Authentication Code verifies both data integrity and payload authenticity using a shared secret.
+> 2. **Timing Attack Vulnerability**: Standard string comparisons (`===`) leak timing information based on character match location.
+> 3. **crypto.timingSafeEqual**: Executes constant-time byte comparisons to prevent timing side-channel attacks.
 > 
 ---
 
-### Exercise 2: Creating HMAC Signatures
+### Exercise 2: AES-256-GCM Authenticated Encryption & Decryption
 
-**Problem:** Generate SHA-256 HMAC signature for message `'hello'` using secret key `'secret'`.
+**Scenario:** A user data service encrypts sensitive PII (Personally Identifiable Information) before writing to the database using AES-256-GCM authenticated encryption.
 
-**Expected output:**
+**Requirements:**
+1. Write encryptAES256GCM(plaintext, keyBuffer, mockCrypto).
+2. Generate 12-byte IV.
+3. Encrypt plaintext and extract authentication tag.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> const hmac = crypto.createHmac('sha256', 'secret').update('hello').digest('hex');
+> function encryptAES256GCM(plaintext, keyBuffer, mockCrypto) {
+>   const cryptoLib = mockCrypto || require("crypto");
+>   const iv = cryptoLib.randomBytes(12);
+>
+>   const cipher = cryptoLib.createCipheriv("aes-256-gcm", keyBuffer, iv);
+>   let encrypted = cipher.update(plaintext, "utf-8", "hex");
+>   encrypted += cipher.final("hex");
+>
+>   const authTag = cipher.getAuthTag().toString("hex");
+>
+>   return {
+>     ciphertext: encrypted,
+>     iv: iv.toString("hex"),
+>     authTag
+>   };
+> }
+>
+> // Verification tests
+> const mockCipher = {
+>   update: () => "enc_",
+>   final: () => "data",
+>   getAuthTag: () => Buffer.from("tag_123")
+> };
+>
+> const mockCrypto = {
+>   randomBytes: (n) => Buffer.alloc(n, 1),
+>   createCipheriv: () => mockCipher
+> };
+>
+> const key = Buffer.alloc(32, 0);
+> const result = encryptAES256GCM("secret_pii", key, mockCrypto);
+>
+> console.assert(result.ciphertext === "enc_data", "Test 1 Failed");
+> console.assert(result.authTag === Buffer.from("tag_123").toString("hex"), "Test 2 Failed");
 > ```
 >
-> **Explanation:** `crypto.createHmac` creates cryptographic HMAC authentication digests.
+> #### Technical Explanation
+>
+> 1. **AES-256-GCM Mode**: Galois/Counter Mode provides both confidentiality (encryption) and data integrity (authentication tag).
+> 2. **Initialization Vector (IV)**: Must be unique per encryption operation to prevent replay and ciphertext pattern analysis.
+> 3. **Authentication Tag**: Verifies ciphertext has not been tampered with prior to decryption.
 > 
 ---
 
-### Exercise 3: Timing-Safe Buffer Comparison
+### Exercise 3: Secure Random Token & Secret Generator
 
-**Problem:** Which Node.js `crypto` method securely compares two buffers without timing side-channel vulnerabilities?
+**Scenario:** An OAuth server generates cryptographically secure random session tokens and API keys.
 
-**Expected output:**
+**Requirements:**
+1. Write generateSecureToken(byteLength, mockCrypto).
+2. Use crypto.randomBytes.
+3. Return hex-encoded string.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```javascript
-> const isMatch = crypto.timingSafeEqual(buf1, buf2);
+> function generateSecureToken(byteLength = 32, mockCrypto) {
+>   const cryptoLib = mockCrypto || require("crypto");
+>   const buffer = cryptoLib.randomBytes(byteLength);
+>   return buffer.toString("hex");
+> }
+>
+> // Verification tests
+> const mockCrypto = {
+>   randomBytes: (n) => Buffer.alloc(n, 0xab)
+> };
+>
+> const token = generateSecureToken(16, mockCrypto);
+> console.assert(token.length === 32, "Test 1 Failed: 16 bytes encoded as hex must be 32 chars");
+> console.assert(token === "ab".repeat(16), "Test 2 Failed");
 > ```
 >
-> **Explanation:** `crypto.timingSafeEqual` executes in constant time regardless of byte match positions.
-> 
+> #### Technical Explanation
+>
+> 1. **CSPRNG in Node.js**: crypto.randomBytes uses OS entropy sources (/dev/urandom) for cryptographically secure pseudo-random number generation.
+> 2. **Avoid Math.random()**: Math.random() is predictable and unsuitable for tokens, keys, or security nonces.
+> 3. **Hex vs Base64 Encoding**: Hex yields 2 chars per byte; Base64Url yields ~1.33 chars per byte for compact URLs.
 ---
 
 ## 6. Related Terms

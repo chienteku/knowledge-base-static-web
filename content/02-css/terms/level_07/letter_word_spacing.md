@@ -100,56 +100,90 @@ h1 { font-size: 4rem; letter-spacing: 0.05em; } /* Relative scaling tracking */
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Fix
+### Exercise 1: Fine-Tuning Uppercase Heading Tracking
 
-**Problem:** You have a button that says "SUBMIT". The designer complains that it looks too heavy and the letters are bleeding into each other. What CSS properties do you apply?
+**Scenario:** An author styles a category header badge, using `letter-spacing` to improve tracking readability on all-caps text.
 
-**Expected output:**
+**Requirements:**
+1. Apply `text-transform: uppercase`.
+2. Set `letter-spacing: 0.1em`.
+3. Set relative font size.
+
 > [!check]- Answer
-> ```text
-> You should ensure it has `text-transform: uppercase;` (rather than hardcoded HTML), and then apply `letter-spacing: 1px;` (or a small `em` value) to give the letters breathing room.
-> ```
-> - How do we add horizontal space between characters?
-> 
----
-
-
-
-### Exercise 2: Uppercase Header Tracking Pattern
-
-**Problem:** Write CSS for `.small-caps-header` converting text to uppercase with `0.15em` letter spacing.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .small-caps-header { text-transform: uppercase; letter-spacing: 0.15em; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .small-caps-header {
+> .category-badge {
+>   font-size: 0.75rem;
+>   font-weight: 700;
 >   text-transform: uppercase;
->   letter-spacing: 0.15em;
+>   letter-spacing: 0.1em;        /* Expands character spacing proportionally for all-caps tracking */
+>   color: #2563eb;
 > }
 > ```
 >
-> **Explanation:** Combining uppercase transformation with subtle `em` tracking enhances header elegance.
+> #### Technical Explanation
+>
+> 1. **The `letter-spacing` Property**: Controls the horizontal space between individual characters (tracking) in a block of text.
+> 2. **All-Caps Tracking Rule**: Uppercase letters lack ascenders and descenders; adding `letter-spacing: 0.1em` prevents letters from visually colliding.
+> 3. **Relative `em` Units**: ALWAYS use relative `em` units for `letter-spacing` so character tracking scales proportionally when font size changes.
 > 
 ---
 
-### Exercise 3: Word Spacing vs Letter Spacing
+### Exercise 2: Tightening Display Banner Headlines using Negative Letter Spacing
 
-**Problem:** Distinguish `letter-spacing` vs `word-spacing`.
+**Scenario:** Tightens letter spacing on large hero banner titles using negative `letter-spacing`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `letter-spacing: -0.025em` to large display heading.
+
 > [!check]- Answer
-> ```text
-> letter-spacing adjusts space between individual characters; word-spacing adjusts space between whole words.
-> ```
-> ```text
-> letter-spacing adjusts space between individual characters; word-spacing adjusts space between whole words.
+>
+> #### Implementation
+>
+> ```css
+> .hero-display-title {
+>   font-size: clamp(2.5rem, 5vw, 4rem);
+>   font-weight: 800;
+>   letter-spacing: -0.025em;     /* Slightly tightens character spacing on large display type */
+>   line-height: 1.1;
+> }
 > ```
 >
-> **Explanation:** `letter-spacing` targets character tracking; `word-spacing` targets word gaps.
+> #### Technical Explanation
+>
+> 1. **Negative Letter Spacing**: Large display typefaces (>32px) often look loosely spaced; applying `-0.025em` creates a tighter, more cohesive headline.
+> 2. **Optical Typography Tuning**: Improves visual impact on bold hero titles.
+> 3. **Use Caution on Small Text**: Never apply negative letter spacing to small body text (<16px) as characters will overlap and degrade readability.
 > 
+---
+
+### Exercise 3: Adjusting Body Text Word Spacing for Typography Readability
+
+**Scenario:** Adjusts word spacing in editorial paragraphs using `word-spacing`.
+
+**Requirements:**
+1. Apply `word-spacing: 0.05em`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .editorial-body {
+>   font-size: 1.125rem;
+>   line-height: 1.7;
+>   word-spacing: 0.05em;         /* Slightly expands whitespace gaps between words */
+>   color: #334155;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **The `word-spacing` Property**: Adjusts the whitespace gap distance between words without altering character tracking.
+> 2. **Editorial Typography**: Slightly increasing `word-spacing` improves readability in wide multi-line text blocks.
+> 3. **Relative `em` Scaling**: Scales proportionally with font size variations.
 ## 6. Related Terms
 - [`text-transform`](text_transform.md) — The property most commonly paired with `letter-spacing`.
 

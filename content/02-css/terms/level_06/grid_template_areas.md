@@ -205,158 +205,116 @@ grid-template-areas:
   "main main side"; /* 3 columns across both rows */
 ```
 
-
-
-### Mistake 4: Creating Non-Rectangular Named Area Regions in `grid-template-areas`
-
-**The mistake:** Creating an 'L-shaped' or non-rectangular region named area.
-
-**Why it's wrong:** Every named area in `grid-template-areas` MUST form a single, contiguous RECTANGLE. Non-rectangular areas (L-shapes, T-shapes) invalidate the CSS rule.
-
-*Incorrect:*
-```css
-grid-template-areas:
-  "head head"
-  "main sidebar"
-  "main head"; /* ❌ Non-rectangular 'head' area invalidates grid! */
-```
-
-*Fix:*
-```css
-grid-template-areas:
-  "head head"
-  "main sidebar"
-  "foot foot"; /* All areas form clean rectangles */
-```
-
-### Mistake 5: Mismatching Column Cell Counts Across Rows in `grid-template-areas` Strings
-
-**The mistake:** Writing Row 1 with 3 named cells and Row 2 with 2 named cells.
-
-**Why it's wrong:** Every string row inside `grid-template-areas` MUST contain the EXACT same number of cell tokens.
-
-*Incorrect:*
-```css
-grid-template-areas:
-  "head head head"
-  "main side"; /* ❌ Mismatched column count (3 vs 2)! */
-```
-
-*Fix:*
-```css
-grid-template-areas:
-  "head head head"
-  "main main side"; /* 3 columns across both rows */
-```
-
-
-
-### Mistake 6: Creating Non-Rectangular Named Area Regions in `grid-template-areas`
-
-**The mistake:** Creating an 'L-shaped' or non-rectangular region named area.
-
-**Why it's wrong:** Every named area in `grid-template-areas` MUST form a single, contiguous RECTANGLE. Non-rectangular areas (L-shapes, T-shapes) invalidate the CSS rule.
-
-*Incorrect:*
-```css
-grid-template-areas:
-  "head head"
-  "main sidebar"
-  "main head"; /* ❌ Non-rectangular 'head' area invalidates grid! */
-```
-
-*Fix:*
-```css
-grid-template-areas:
-  "head head"
-  "main sidebar"
-  "foot foot"; /* All areas form clean rectangles */
-```
-
-### Mistake 7: Mismatching Column Cell Counts Across Rows in `grid-template-areas` Strings
-
-**The mistake:** Writing Row 1 with 3 named cells and Row 2 with 2 named cells.
-
-**Why it's wrong:** Every string row inside `grid-template-areas` MUST contain the EXACT same number of cell tokens.
-
-*Incorrect:*
-```css
-grid-template-areas:
-  "head head head"
-  "main side"; /* ❌ Mismatched column count (3 vs 2)! */
-```
-
-*Fix:*
-```css
-grid-template-areas:
-  "head head head"
-  "main main side"; /* 3 columns across both rows */
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: ASCII Map Design
+### Exercise 1: Semantic Page Layout Architecture using Named Areas
 
-**Problem:** Look at the following HTML layout structure. Write the `grid-template-areas` CSS property that matches this layout grid (3 columns, 3 rows):
-- Row 1: Header spans all 3 columns.
-- Row 2: Sidebar is in Col 1, Content spans Col 2 and Col 3.
-- Row 3: Footer spans Col 1 and Col 2. The 3rd column cell is left empty.
+**Scenario:** An author builds a complete web page layout using ASCII-art named grid areas with `grid-template-areas`.
 
-**Expected output:**
+**Requirements:**
+1. Define `grid-template-areas` grid map.
+2. Assign `grid-area` names to `<header>`, `<nav>`, `<main>`, `<footer>`.
+3. Set responsive area layout.
+
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```css
-> grid-template-areas:
->   "header header header"
->   "sidebar content content"
->   "footer footer .";
+> .page-grid {
+>   display: grid;
+>   grid-template-areas:
+>     "header  header"
+>     "sidebar main  "
+>     "footer  footer";
+>   grid-template-columns: 18rem 1fr;
+>   grid-template-rows: auto 1fr auto;
+>   gap: 1.5rem;
+>   min-height: 100vh;
+> }
+>
+> header  { grid-area: header; }
+> aside   { grid-area: sidebar; }
+> main    { grid-area: main; }
+> footer  { grid-area: footer; }
 > ```
-> - Represent each row inside a set of quotes.
-> - Use a period (`.`) for the empty cell in the footer row.
+>
+> #### Technical Explanation
+>
+> 1. **The `grid-template-areas` Property**: Defines grid layout structure using intuitive ASCII-art string names assigned to grid cells.
+> 2. **`grid-area` Component Binding**: Child elements bind to named grid regions using `grid-area: name` without needing line numbers.
+> 3. **Visual Layout Readability**: Makes page layout architecture instantly readable in CSS source code.
 > 
 ---
 
+### Exercise 2: Mobile-to-Desktop Area Layout Shifts via Media Queries
 
+**Scenario:** Re-arranges page layout structure for mobile screens by redefining `grid-template-areas`.
 
-### Exercise 2: Holy Grail Layout with Grid Template Areas
+**Requirements:**
+1. Set single-column mobile `grid-template-areas`.
+2. Set 2-column desktop `grid-template-areas` inside `@media (min-width: 48rem)`.
 
-**Problem:** Write `grid-template-areas` for 3-row layout: Header (full width), Main + Sidebar, Footer (full width).
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> grid-template-areas: "header header" "main sidebar" "footer footer";
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .layout {
+> /* Mobile Layout (Single Column Stack) */
+> .page-grid {
 >   display: grid;
 >   grid-template-areas:
->     "header header"
->     "main   sidebar"
->     "footer footer";
+>     "header"
+>     "main"
+>     "sidebar"
+>     "footer";
+> }
+>
+> /* Desktop Layout (2-Column Grid) */
+> @media (min-width: 48rem) {
+>   .page-grid {
+>     grid-template-areas:
+>       "header  header"
+>       "sidebar main"
+>       "footer  footer";
+>     grid-template-columns: 18rem 1fr;
+>   }
 > }
 > ```
 >
-> **Explanation:** Named area strings define visual layout maps intuitively.
+> #### Technical Explanation
+>
+> 1. **Zero-HTML Layout Shifts**: Re-arranges page layout completely for mobile screens without modifying HTML DOM source structure!
+> 2. **Single Point of Change**: Updating `grid-template-areas` in media queries updates the entire page layout effortlessly.
+> 3. **Clean Mobile Responsive Architecture**: Pushes sidebars below main content on mobile screens cleanly.
 > 
 ---
 
-### Exercise 3: Empty Cell Dot Notation in Grid Areas
+### Exercise 3: Using Empty Grid Area Cells (.) for White Space Control
 
-**Problem:** How do you represent an empty null cell in `grid-template-areas` string rows?
+**Scenario:** Uses the period `.` token in `grid-template-areas` to leave empty whitespace grid cells.
 
-**Expected output:**
+**Requirements:**
+1. Use `.` in `grid-template-areas` map to create empty column gaps.
+
 > [!check]- Answer
-> ```text
-> Using a period/dot character (.) e.g. "header ."
-> ```
+>
+> #### Implementation
+>
 > ```css
-> grid-template-areas:
->   "header ."
->   "main   sidebar";
+> .dashboard-grid {
+>   display: grid;
+>   grid-template-areas:
+>     "widget1 . widget2";        /* Period '.' creates an empty un-assigned grid cell */
+>   grid-template-columns: 1fr 1.5rem 1fr;
+> }
 > ```
 >
-> **Explanation:** Period `.` tokens represent empty grid cell slots.
-> 
+> #### Technical Explanation
+>
+> 1. **Empty Cell Token (`.`)**: A period `.` in `grid-template-areas` instructs grid to leave that cell empty.
+> 2. **White Space Control**: Allows creating precise empty whitespace columns or rows without dummy HTML elements.
+> 3. **Clean ASCII Grid Mapping**: Maintains clean ASCII grid alignment in CSS files.
 ## 6. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — Sizing the track grid.
 - [`grid-column` / `grid-row` (Grid Item Placement)](grid_item.md) — Placing items manually.

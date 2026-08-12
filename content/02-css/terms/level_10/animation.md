@@ -192,152 +192,150 @@ Single slide-in loading overlay:
 @keyframes move { from { transform: translateX(0); } to { transform: translateX(200px); } }
 ```
 
-
-
-### Mistake 4: Forgetting `animation-fill-mode: forwards` (Animation Jump Snap Trap)
-
-**The mistake:** Running keyframe animation shifting an element down, where the element snaps back to top position when finished.
-
-**Why it's wrong:** By default, keyframe animations revert back to original un-animated styles when complete. Add `animation-fill-mode: forwards` (or shorthand `forwards`) to retain final keyframe styles.
-
-*Incorrect:*
-```css
-.slide { animation: slideDown 1s; } /* ❌ Snaps back to top when finished! */
-```
-
-*Fix:*
-```css
-.slide { animation: slideDown 1s forwards; } /* Retains final keyframe state */
-```
-
-### Mistake 5: Animating Non-GPU Properties (`margin`, `width`, `top`) Causing Frame Drops (Jank)
-
-**The mistake:** Animating `margin-left` or `width` inside `@keyframes` for smooth movement.
-
-**Why it's wrong:** Animating box-model properties forces continuous browser Reflow and Repaint operations on every frame, causing animation stuttering (jank). Animate `transform` and `opacity` for 60fps GPU acceleration.
-
-*Incorrect:*
-```css
-@keyframes move { from { margin-left: 0; } to { margin-left: 200px; } } /* ❌ Reflow jank! */
-```
-
-*Fix:*
-```css
-@keyframes move { from { transform: translateX(0); } to { transform: translateX(200px); } }
-```
-
-
-
-### Mistake 6: Forgetting `animation-fill-mode: forwards` (Animation Jump Snap Trap)
-
-**The mistake:** Running keyframe animation shifting an element down, where the element snaps back to top position when finished.
-
-**Why it's wrong:** By default, keyframe animations revert back to original un-animated styles when complete. Add `animation-fill-mode: forwards` (or shorthand `forwards`) to retain final keyframe styles.
-
-*Incorrect:*
-```css
-.slide { animation: slideDown 1s; } /* ❌ Snaps back to top when finished! */
-```
-
-*Fix:*
-```css
-.slide { animation: slideDown 1s forwards; } /* Retains final keyframe state */
-```
-
-### Mistake 7: Animating Non-GPU Properties (`margin`, `width`, `top`) Causing Frame Drops (Jank)
-
-**The mistake:** Animating `margin-left` or `width` inside `@keyframes` for smooth movement.
-
-**Why it's wrong:** Animating box-model properties forces continuous browser Reflow and Repaint operations on every frame, causing animation stuttering (jank). Animate `transform` and `opacity` for 60fps GPU acceleration.
-
-*Incorrect:*
-```css
-@keyframes move { from { margin-left: 0; } to { margin-left: 200px; } } /* ❌ Reflow jank! */
-```
-
-*Fix:*
-```css
-@keyframes move { from { transform: translateX(0); } to { transform: translateX(200px); } }
-```
-
 ## 5. Practice Exercises
 
-### Exercise 1: Pulsing Alert
+### Exercise 1: Infinite Loading Spinner Keyframe Animation
 
-**Problem:** You are building an urgent warning dot. The warning dot should pulse: fade from `opacity: 1` down to `opacity: 0.3` and scale down to `scale(0.8)`, then loop back and repeat forever smoothly. Write the `@keyframes` block and alert dot ruleset.
+**Scenario:** An author styles a continuous circular loading spinner using `@keyframes` and the `animation` shorthand property.
 
-**Expected output:**
+**Requirements:**
+1. Define `@keyframes spin { to { transform: rotate(360deg); } }`.
+2. Apply `animation: spin 0.8s linear infinite`.
+3. Include `prefers-reduced-motion` check.
+
 > [!check]- Answer
-> ```css
-> @keyframes warningPulse {
->   from {
->     transform: scale(1);
->     opacity: 1;
->   }
->   to {
->     transform: scale(0.8);
->     opacity: 0.3;
->   }
-> }
-> 
-> .warning-dot {
->   width: 15px;
->   height: 15px;
->   background-color: red;
->   border-radius: 50%;
->   animation: warningPulse 1s ease-in-out infinite alternate;
-> }
-> ```
-> - Alternate playback direction is required to make the pulse fade out and fade back in smoothly without snapping.
-> - Run the loop infinitely.
-> 
----
-
-
-
-### Exercise 2: Infinite Spinner Animation Pattern
-
-**Problem:** Write `@keyframes spin` rotating 0deg to 360deg, and apply it to `.spinner` for infinite 1s linear rotation.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> @keyframes spin { to { transform: rotate(360deg); } } .spinner { animation: spin 1s linear infinite; }
-> ```
+>
+> #### Implementation
+>
 > ```css
 > @keyframes spin {
->   to { transform: rotate(360deg); }
+>   from {
+>     transform: rotate(0deg);
+>   }
+>   to {
+>     transform: rotate(360deg);
+>   }
 > }
-> .spinner {
->   animation: spin 1s linear infinite;
+>
+> .spinner-icon {
+>   width: 2rem;
+>   height: 2rem;
+>   border: 3px solid #e2e8f0;
+>   border-top-color: #2563eb;
+>   border-radius: 50%;
+>   /* Animation Shorthand: name | duration | timing-function | iteration-count */
+>   animation: spin 0.8s linear infinite;
+> }
+>
+> /* Accessibility Reduced Motion Guard */
+> @media (prefers-reduced-motion: reduce) {
+>   .spinner-icon {
+>     animation-duration: 4s;     /* Slows rotation down significantly to prevent motion sickness */
+>   }
 > }
 > ```
 >
-> **Explanation:** `infinite linear` creates smooth continuous 360-degree rotation animation.
+> #### Technical Explanation
+>
+> 1. **The `animation` Shorthand Property**: Combines `animation-name`, `duration`, `timing-function`, `delay`, `iteration-count`, `direction`, `fill-mode`, and `play-state` into a single declaration.
+> 2. **`linear` Timing Function**: Using `linear` guarantees a continuous 360-degree rotation speed without stuttering or easing pauses.
+> 3. **GPU Hardware Acceleration**: Animating `transform: rotate()` runs on the GPU compositor thread, guaranteeing 60fps performance.
+> 4. **Reduced Motion Guard**: Slows or pauses animations for users with vestibular motion sensitivities.
 > 
 ---
 
-### Exercise 3: Animation Shorthand Property Order
+### Exercise 2: Pulse Notification Badge Animation
 
-**Problem:** Identify the 4 primary components of `animation: spin 1s ease-in-out infinite;`.
+**Scenario:** Styles an animated pulsing indicator dot for active system notifications.
 
-**Expected output:**
+**Requirements:**
+1. Define `@keyframes pulse` for scale and opacity.
+2. Apply `animation: pulse 2s cubic-bezier(...) infinite`.
+
 > [!check]- Answer
-> ```text
-> 1. Keyframe name: spin
-> 2. Duration: 1s
-> 3. Timing function: ease-in-out
-> 4. Iteration count: infinite
-> ```
-> ```text
-> 1. Keyframe name: spin
-> 2. Duration: 1s
-> 3. Timing function: ease-in-out
-> 4. Iteration count: infinite
+>
+> #### Implementation
+>
+> ```css
+> @keyframes pulse-ring {
+>   0% {
+>     transform: scale(0.95);
+>     box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+>   }
+>   70% {
+>     transform: scale(1);
+>     box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+>   }
+>   100% {
+>     transform: scale(0.95);
+>     box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+>   }
+> }
+>
+> .active-dot {
+>   width: 0.75rem;
+>   height: 0.75rem;
+>   background-color: #2563eb;
+>   border-radius: 50%;
+>   animation: pulse-ring 2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+> }
 > ```
 >
-> **Explanation:** `animation` shorthand combines name, duration, easing, and iteration count.
+> #### Technical Explanation
+>
+> 1. **Keyframe Multi-Stops**: Keyframes accept multi-stop percentages (`0%`, `70%`, `100%`) for complex non-linear animation sequences.
+> 2. **Cubic Bezier Easing**: `cubic-bezier(0.45, 0, 0.55, 1)` produces smooth organic swelling and shrinking.
+> 3. **Tactile Status Affordance**: Attracts visual attention to live system indicators gracefully.
 > 
+---
+
+### Exercise 3: Skeleton Loader Shimmer Animation with prefers-reduced-motion Guard
+
+**Scenario:** Builds a shimmering UI skeleton loading state while disabling motion for reduced motion preferences.
+
+**Requirements:**
+1. Define `@keyframes shimmer` moving background gradient.
+2. Disable animation inside `@media (prefers-reduced-motion: reduce)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> @keyframes shimmer {
+>   0% {
+>     background-position: -200% 0;
+>   }
+>   100% {
+>     background-position: 200% 0;
+>   }
+> }
+>
+> .skeleton-box {
+>   background: linear-gradient(
+>     90deg,
+>     #f1f5f9 25%,
+>     #e2e8f0 37%,
+>     #f1f5f9 63%
+>   );
+>   background-size: 200% 100%;
+>   animation: shimmer 1.5s infinite;
+>   border-radius: 0.375rem;
+> }
+>
+> @media (prefers-reduced-motion: reduce) {
+>   .skeleton-box {
+>     animation: none;
+>     background: #e2e8f0;        /* Static neutral gray fallback */
+>   }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Skeleton Loading UX**: Skeleton shimmers indicate upcoming content structure during network data fetching.
+> 2. **Background Position Animation**: Animates `background-position` across a `200%` width linear gradient.
+> 3. **Accessibility Compliance**: Completely disables the shimmer animation for users requesting reduced motion, satisfying WCAG AAA rules.
 ## 6. Related Terms
 - [`transition`](transition.md) — Two-state animated shifts.
 - [`transform` (Scale, Translate, Rotate)](transform.md) — The positioning multipliers.

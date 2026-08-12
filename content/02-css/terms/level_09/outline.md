@@ -95,60 +95,86 @@ input:focus-visible {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Border vs Outline
+### Exercise 1: High-Contrast Accessibility Focus Indicator using outline
 
-**Problem:** You have a 100px wide box. You add a `10px solid black` Border. How wide is the box now? 
-You remove the border, and add a `10px solid black` Outline instead. How wide is the box now?
+**Scenario:** An author configures custom high-contrast focus rings using `outline` and `outline-offset` for keyboard users.
 
-**Expected output:**
+**Requirements:**
+1. Apply `outline: 3px solid #2563eb`.
+2. Apply `outline-offset: 2px`.
+
 > [!check]- Answer
-> ```text
-> With Border: The box is 120px wide (100 + 10 left + 10 right).
-> With Outline: The box is still exactly 100px wide! The outline does not take up physical layout space.
-> ```
-> - Does a laser pointer take up physical space?
-> 
----
-
-
-
-### Exercise 2: Outline Offset Focus Ring Pattern
-
-**Problem:** Write CSS applying 2px solid blue focus outline offset by 3px away from element border.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> button:focus-visible { outline: 2px solid blue; outline-offset: 3px; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> button:focus-visible {
->   outline: 2px solid blue;
->   outline-offset: 3px;
+> .accessible-link:focus-visible {
+>   outline: 3px solid #2563eb;   /* 3px high-contrast blue focus ring */
+>   outline-offset: 2px;          /* Adds 2px whitespace gap between text and ring */
 > }
 > ```
 >
-> **Explanation:** `outline-offset` pushes the outline ring outward away from element borders.
+> #### Technical Explanation
+>
+> 1. **The `outline` Property**: Draws a line around the OUTSIDE of an element's border box without taking up layout space.
+> 2. **No Layout Shift (Reflow)**: Unlike `border`, `outline` does NOT affect element dimensions or trigger page reflows; it floats over adjacent elements.
+> 3. **The `outline-offset` Property**: Adds whitespace separation between the element's border edge and the focus outline ring.
 > 
 ---
 
-### Exercise 3: Outline vs Border Comparison
+### Exercise 2: Explaining Why outline: none without Replacement Breaks Accessibility
 
-**Problem:** List 2 primary differences between `outline` and `border`.
+**Scenario:** Demonstrates why stripping outlines breaks keyboard accessibility and how to fix it.
 
-**Expected output:**
+**Requirements:**
+1. Show accessibility danger of `outline: none`.
+
 > [!check]- Answer
-> ```text
-> 1. Outline does not consume box-model layout space
-> 2. Outline surrounds all sides equally (no outline-left/top longhands)
-> ```
-> ```text
-> 1. Outline does not consume box-model layout space
-> 2. Outline surrounds all sides equally (no outline-left/top longhands)
+>
+> #### Implementation
+>
+> ```css
+> /* ❌ ACCESSIBILITY DISASTER: Removes focus ring; keyboard users cannot navigate! */
+> /* a:focus { outline: none; } */
+>
+> /* ✅ ACCESSIBLE PATTERN: Custom focus ring on focus-visible! */
+> a:focus-visible {
+>   outline: 3px solid #2563eb;
+>   outline-offset: 2px;
+> }
 > ```
 >
-> **Explanation:** Outlines are non-layout-shifting visual overlays.
+> #### Technical Explanation
+>
+> 1. **WCAG 2.1 SC 2.4.7 Violation**: Removing focus outlines (`outline: 0`) makes web pages completely unusable for keyboard-only users.
+> 2. **Focus Ring Visibility**: Keyboard users rely on focus rings to see where their cursor is positioned on the page.
+> 3. **Modern Fix**: Use `:focus-visible` to hide mouse rings while preserving keyboard focus indicators.
 > 
+---
+
+### Exercise 3: Outlines vs Borders: Zero-Layout-Shift Boundary Outlines
+
+**Scenario:** Uses `outline` for debug borders or hover highlights to prevent layout jitter.
+
+**Requirements:**
+1. Apply `outline: 2px solid #2563eb` on hover instead of border.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .card-hover-ring:hover {
+>   /* Outline draws outside box model without shifting layout math! */
+>   outline: 2px solid #2563eb;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Zero Layout Shift**: `outline` does not alter box-model dimensions, preventing hover jitter associated with adding `border`.
+> 2. **Overlapping Behavior**: Outlines overlap adjacent elements rather than pushing them away.
+> 3. **DevTools Debugging Tool**: `outline: 1px solid red` is the gold standard for inspecting DOM layout overflows.
 ## 6. Related Terms
 - [Border](../level_02/border.md) — The physical layout equivalent.
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — The state where outlines are most commonly applied.

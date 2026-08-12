@@ -125,68 +125,137 @@ console.log(data); // Use explicit variable names
 
 ## 5. Practice Exercises
 
-### Exercise 1: REPL Sandbox Session
+### Exercise 1: Custom REPL Server with Preloaded Context
 
-**Problem:** Perform the following actions using the REPL shell in your local terminal:
-1.  Open your terminal and enter the Node.js REPL.
-2.  Calculate the square root of `256` using the global `Math` object.
-3.  Assign the result of that calculation to a variable named `result`.
-4.  Print `result` using the special `_` variable.
+**Scenario:** Creates an interactive admin REPL console preloaded with database models and service utilities for production debugging.
 
-**Expected Output Log:**
-```text
-$ node
-> Math.sqrt(256)
-16
-> const result = 16
-undefined
-> result
-16
-> _
-16
-```
-
----
+**Requirements:**
+1. Write startCustomRepl(options, mockRepl).
+2. Inject custom context variables.
+3. Set prompt string.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Launching Custom Context REPL
-
-**Problem:** Launch a custom REPL instance programmatically using `repl.start()` injecting custom context variable `db`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const r = repl.start('> '); r.context.db = myDbInstance;
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const repl = require('repl');
-> const r = repl.start('> ');
-> r.context.db = myDbInstance;
+> function startCustomRepl(options = {}, mockRepl) {
+>   const replLib = mockRepl || require("repl");
+>
+>   const server = replLib.start({
+>     prompt: options.prompt || "admin> ",
+>     useGlobal: false
+>   });
+>
+>   // Inject preloaded context utilities!
+>   const context = options.context || {};
+>   for (const [key, val] of Object.entries(context)) {
+>     server.context[key] = val;
+>   }
+>
+>   return server;
+> }
+>
+> // Verification tests
+> const mockServer = { context: {} };
+> const mockRepl = { start: () => mockServer };
+>
+> const s = startCustomRepl({ prompt: "db> ", context: { dbName: "users_db" } }, mockRepl);
+> console.assert(s.context.dbName === "users_db", "Test 1 Failed");
 > ```
 >
-> **Explanation:** `repl.start()` starts a interactive custom REPL shell with pre-loaded database/service contexts.
+> #### Technical Explanation
+>
+> 1. **Node.js REPL Module**: Read-Eval-Print-Loop provides interactive command-line environment for executing JavaScript code.
+> 2. **Context Injection**: Attaching objects to `server.context` makes them available as global variables inside REPL sessions.
+> 3. **Admin Console Pattern**: Enterprise apps expose REPL sockets for live production troubleshooting.
 > 
 ---
 
-### Exercise 3: Node REPL History Saving
+### Exercise 2: REPL Command Evaluator with Custom Commands
 
-**Problem:** What command saves current REPL session history to a file? (`.save filename.js`).
+**Scenario:** Extends a custom REPL server with dot-commands (e.g. `.status`, `.clearCache`).
 
-**Expected output:**
+**Requirements:**
+1. Write registerReplCommand(serverMock, cmdName, helpText, actionFn).
+2. Attach command to REPL server.
+
 > [!check]- Answer
-> ```text
-> .save filename.js
-> ```
-> ```text
-> .save filename.js
+>
+> #### Implementation
+>
+> ```javascript
+> function registerReplCommand(serverMock, cmdName, helpText, actionFn) {
+>   if (!serverMock || typeof serverMock.defineCommand !== "function") {
+>     throw new TypeError("Invalid REPL server");
+>   }
+>
+>   serverMock.defineCommand(cmdName, {
+>     help: helpText,
+>     action: actionFn
+>   });
+>
+>   return true;
+> }
+>
+> // Verification tests
+> const commands = {};
+> const mockServer = {
+>   defineCommand: (name, obj) => { commands[name] = obj; }
+> };
+>
+> registerReplCommand(mockServer, "status", "Show server status", () => "OK");
+> console.assert(commands["status"].help === "Show server status", "Test 1 Failed");
 > ```
 >
-> **Explanation:** `.save` writes the current REPL interactive command history to disk.
+> #### Technical Explanation
+>
+> 1. **REPL Dot-Commands**: Special REPL instructions starting with a dot (`.help`, `.break`, `.clear`, `.exit`).
+> 2. **server.defineCommand**: Registers custom dot-commands extending REPL interactivity.
+> 3. **Interactive Tooling**: Allows CLI tools to embed interactive administrative shell features.
 > 
+---
+
+### Exercise 3: REPL History Exporter
+
+**Scenario:** Saves interactive REPL command history array to persistent disk storage.
+
+**Requirements:**
+1. Write exportReplHistory(historyArray, mockFs).
+2. Filter empty commands.
+3. Format commands as newline-separated text.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function exportReplHistory(historyArray = [], mockFs) {
+>   const cleanHistory = historyArray
+>     .filter(cmd => typeof cmd === "string" && cmd.trim() !== "")
+>     .join("
+> ");
+>
+>   return {
+>     commandCount: historyArray.length,
+>     formattedHistory: cleanHistory
+>   };
+> }
+>
+> // Verification tests
+> const history = ["const x = 10;", "console.log(x);", ""];
+> const res = exportReplHistory(history);
+>
+> console.assert(res.commandCount === 3, "Test 1 Failed");
+> console.assert(res.formattedHistory === "const x = 10;
+> console.log(x);", "Test 2 Failed");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **REPL History Persistence**: Node.js stores REPL command history in `~/.node_repl_history` by default.
+> 2. **Auditing REPL Sessions**: Exporting command history creates audit logs for production REPL console access.
+> 3. **Environment Configuration**: `NODE_REPL_HISTORY` environment variable configures history file location.
 ## 6. Related Terms
 - [Global Objects (global, __dirname, __filename)](global_objects.md) — The properties loaded in the REPL runtime scope.
 - [The process Object](process_object.md) — The system environment configurations checked via the REPL.

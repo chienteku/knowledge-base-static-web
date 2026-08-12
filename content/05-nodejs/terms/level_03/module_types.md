@@ -98,72 +98,146 @@ import data from './data.json' with { type: 'json' }; // Import attribute for JS
 
 ## 5. Practice Exercises
 
-### Exercise 1: Categorize the Imports
+### Exercise 1: Core, Local, and Third-Party Module Specifier Classifier
 
-**Problem:** Look at the following three import statements. Which one is a built-in module, which is an external module, and which is a local file?
-1. `const data = require('./users.json');`
-2. `const crypto = require('crypto');`
-3. `const react = require('react');`
+**Scenario:** An API linter classifies module specifiers into Core (`fs`, `http`), Local (`./utils`), or Third-Party (`lodash`, `express`).
 
-**Expected output:**
+**Requirements:**
+1. Write classifyModuleSpecifier(specifier, mockBuiltinModules).
+2. Check core built-ins.
+3. Check relative/absolute paths.
+4. Return classification.
+
 > [!check]- Answer
-> ```text
-> 1. Local File. (It starts with `./`, meaning it looks in the current directory).
-> 2. Built-in Module. (`crypto` is part of the Node standard library).
-> 3. External Module. (`react` is not built into Node.js; it must be downloaded via NPM).
-> ```
-> - Does it have a slash? Was it built by the Node.js core team?
-> 
----
-
-
-
-### Exercise 2: Matching File Extensions to Module Systems
-
-**Problem:** Match extension to Node.js module mode:
-1. `.cjs`
-2. `.mjs`
-3. `.js` (with `"type": "module"` in package.json)
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> 1. CommonJS
-> 2. ES Module
-> 3. ES Module
-> ```
-> ```text
-> 1. .cjs -> CommonJS
-> 2. .mjs -> ES Module
-> 3. .js (type: module) -> ES Module
+>
+> #### Implementation
+>
+> ```javascript
+> function classifyModuleSpecifier(specifier, mockBuiltinModules) {
+>   if (!specifier || typeof specifier !== "string") return "UNKNOWN";
+>
+>   const builtins = new Set(mockBuiltinModules || require("module").builtinModules || ["fs", "http", "path", "events", "crypto"]);
+>
+>   // Core Built-in Module (or node: prefix)
+>   if (specifier.startsWith("node:") || builtins.has(specifier)) {
+>     return { type: "CORE_BUILTIN", specifier };
+>   }
+>
+>   // Local File Relative or Absolute Path
+>   if (specifier.startsWith(".") || specifier.startsWith("/")) {
+>     return { type: "LOCAL_FILE", specifier };
+>   }
+>
+>   // Third-Party npm package in node_modules
+>   return { type: "THIRD_PARTY_NPM", specifier };
+> }
+>
+> // Verification tests
+> console.assert(classifyModuleSpecifier("fs").type === "CORE_BUILTIN", "Test 1 Failed");
+> console.assert(classifyModuleSpecifier("node:path").type === "CORE_BUILTIN", "Test 2 Failed");
+> console.assert(classifyModuleSpecifier("./user.js").type === "LOCAL_FILE", "Test 3 Failed");
+> console.assert(classifyModuleSpecifier("express").type === "THIRD_PARTY_NPM", "Test 4 Failed");
 > ```
 >
-> **Explanation:** `.cjs` is explicitly CommonJS; `.mjs` is explicitly ESM; `.js` defaults to CJS unless package `type` specifies `module`.
+> #### Technical Explanation
+>
+> 1. **Three Categories of Node Modules**: Core Built-in (compiled C++/JS into Node binary), Local Files, and Third-Party (installed in node_modules).
+> 2. **`node:` Protocol Prefix**: Modern Node.js convention explicitly identifying core modules (e.g. `node:fs`, `node:http`).
+> 3. **Resolution Priority**: Core modules take top precedence over node_modules packages with identical names.
 > 
 ---
 
-### Exercise 3: Conditional Package Exports
+### Exercise 2: Dynamic Core Module Loader with Fallback
 
-**Problem:** Write package.json `exports` field supporting `require` and `import` entry points.
+**Scenario:** An application plugin loader safely loads core Node.js modules using the `node:` protocol prefix.
 
-**Expected output:**
+**Requirements:**
+1. Write loadNodeCoreModule(moduleName, mockRequire).
+2. Prepend `node:` prefix if missing.
+3. Require module and return instance.
+
 > [!check]- Answer
-> ```text
-> "exports": { ".": { "import": "./index.mjs", "require": "./index.cjs" } }
-> ```
-> ```json
-> {
->   "exports": {
->     ".": {
->       "import": "./index.mjs",
->       "require": "./index.cjs"
+>
+> #### Implementation
+>
+> ```javascript
+> function loadNodeCoreModule(moduleName, mockRequire) {
+>   const req = mockRequire || require;
+>   const prefixedName = moduleName.startsWith("node:") ? moduleName : `node:${moduleName}`;
+>
+>   try {
+>     return {
+>       success: true,
+>       moduleInstance: req(prefixedName)
+>     };
+>   } catch (err) {
+>     // Fallback attempt without node: prefix for older runtimes
+>     try {
+>       return {
+>         success: true,
+>         moduleInstance: req(moduleName)
+>       };
+>     } catch (fallbackErr) {
+>       return { success: false, error: fallbackErr.message };
 >     }
 >   }
 > }
+>
+> // Verification tests
+> const mockReq = (name) => {
+>   if (name === "node:fs" || name === "fs") return { readFile: () => {} };
+>   throw new Error("Module not found");
+> };
+>
+> const res = loadNodeCoreModule("fs", mockReq);
+> console.assert(res.success === true && typeof res.moduleInstance.readFile === "function", "Test 1 Failed");
 > ```
 >
-> **Explanation:** Conditional exports direct CJS `require()` and ESM `import` statements to appropriate build formats.
+> #### Technical Explanation
+>
+> 1. **`node:` Prefix Benefits**: Prevents third-party npm packages from squatting core module names and guarantees loading native C++ bindings.
+> 2. **Core Module C++ Bindings**: Core modules contain high-performance C++ bindings (V8, libuv, OpenSSL, zlib) embedded directly in Node.js executable.
+> 3. **Zero Installation Overhead**: Core modules are always available without installing npm packages.
 > 
+---
+
+### Exercise 3: package.json Type Property Evaluator
+
+**Scenario:** An API builder inspects `package.json` 'type' property to determine whether `.js` files are interpreted as ES Modules or CommonJS.
+
+**Requirements:**
+1. Write evaluateModuleFormat(filePath, packageJsonObj).
+2. Check file extension (.mjs -> ESM, .cjs -> CommonJS).
+3. Check package.json "type": "module".
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function evaluateModuleFormat(filePath = "app.js", packageJsonObj = {}) {
+>   if (filePath.endsWith(".mjs")) return "ESM";
+>   if (filePath.endsWith(".cjs")) return "COMMONJS";
+>
+>   if (filePath.endsWith(".js")) {
+>     return packageJsonObj.type === "module" ? "ESM" : "COMMONJS";
+>   }
+>
+>   return "UNKNOWN";
+> }
+>
+> // Verification tests
+> console.assert(evaluateModuleFormat("server.mjs") === "ESM", "Test 1 Failed: .mjs is always ESM");
+> console.assert(evaluateModuleFormat("utils.cjs") === "COMMONJS", "Test 2 Failed: .cjs is always CommonJS");
+> console.assert(evaluateModuleFormat("index.js", { type: "module" }) === "ESM", "Test 3 Failed: .js with type module is ESM");
+> console.assert(evaluateModuleFormat("index.js", {}) === "COMMONJS", "Test 4 Failed: .js without type is CJS default");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **.mjs vs .cjs Extensions**: Explicit file extensions override package.json configuration; `.mjs` is always ESM; `.cjs` is always CommonJS.
+> 2. **package.json "type": "module"**: Configures all `.js` files in that package folder and subfolders to be interpreted as ES Modules.
+> 3. **Scope Inheritance**: Subdirectories inherit parent package.json module type unless overridden by nested package.json.
 ## 6. Related Terms
 - [NPM (Node Package Manager)](../level_04/npm.md) — The registry where you download all External Modules.
 - [node_modules](../level_04/node_modules.md) — The folder where External Modules physically live on your hard drive once downloaded.

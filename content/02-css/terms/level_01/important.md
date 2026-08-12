@@ -177,69 +177,101 @@ p { color: red !important; }
 
 ## 5. Practice Exercises
 
-### Exercise 1: Conflict Resolution
+### Exercise 1: Refactoring Bad-Practice !important Annotations via Specificity
 
-**Problem:** Look at the following CSS block. What color will the text inside `<p class="alert" id="notice">` be?
+**Scenario:** An engineer refactors a buggy CSS stylesheet by removing harmful `!important` flags and resolving selector specificity cleanly.
 
-```css
-p {
-  color: blue !important;
-}
-.alert {
-  color: green;
-}
-#notice {
-  color: black;
-}
-```
+**Requirements:**
+1. Remove `!important` declarations.
+2. Refactor selector specificity by adding parent class context.
+3. Verify styles apply correctly.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Blue! The element selector (`p`) has the lowest specificity, but because it has the `!important` flag, it overrides the standard class and ID selectors.
-> ```
-> - Standard selectors cannot override a selector containing `!important`, regardless of their point values.
-> 
----
-
-
-
-### Exercise 2: Overriding !important Declarations
-
-**Problem:** How can a CSS rule override an existing `.btn { color: red !important; }` declaration?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> By using another rule with higher specificity that ALSO uses !important (or later in source order if specificity matches).
-> ```
+>
+> #### Implementation
+>
 > ```css
-> #main .btn {
->   color: blue !important; /* Higher specificity + !important overrides lower selector */
+> /* ❌ Bad Practice (Before Refactoring):
+> .btn { background-color: blue !important; }
+> .card .btn { background-color: red !important; }
+> */
+>
+> /* ✅ Clean Architecture (Refactored without !important): */
+> .btn {
+>   background-color: #2563eb;
+>   color: #ffffff;
+>   padding: 0.75rem 1.5rem;
+>   border: none;
+>   border-radius: 0.375rem;
+> }
+>
+> /* Specificity (0,2,0) cleanly overrides base .btn (0,1,0) without !important */
+> .card-featured .btn {
+>   background-color: #d97706;
 > }
 > ```
 >
-> **Explanation:** Rules with `!important` are compared against each other using standard selector specificity.
+> #### Technical Explanation
+>
+> 1. **The `!important` Rule**: Overrides standard cascade and specificity calculations, forcing a property value to take precedence.
+> 2. **Why `!important` Is Bad Practice**: Breaks the natural CSS Cascade, creates 'specificity wars', and makes future maintenance extremely difficult.
+> 3. **Specificity Resolution**: Increase selector specificity naturally (e.g. `.card-featured .btn`) instead of relying on `!important`.
 > 
 ---
 
-### Exercise 3: Valid !important Use Case
+### Exercise 2: Legitimate Utility Class Overrides using !important
 
-**Problem:** Name 1 valid architectural use case for `!important` in CSS frameworks.
+**Scenario:** Demonstrates the rare acceptable exception for `!important` in atomic utility helper classes.
 
-**Expected output:**
+**Requirements:**
+1. Create atomic utility helper `.u-hidden { display: none !important; }`.
+
 > [!check]- Answer
-> ```text
-> Utility helper classes (e.g. .hidden { display: none !important; }).
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .d-none {
+> /* Acceptable Exception: Atomic Utility Classes */
+> .u-hidden {
 >   display: none !important;
 > }
+>
+> .u-text-danger {
+>   color: #dc2626 !important;
+> }
 > ```
 >
-> **Explanation:** Utility classes use `!important` to ensure state overrides apply regardless of component rules.
+> #### Technical Explanation
+>
+> 1. **Atomic Utility Exemption**: `!important` is acceptable in single-purpose utility classes (`.u-hidden`) intended to override component styles unconditionally.
+> 2. **Intentional Overrides**: Guarantees helper utility classes take effect regardless of component selector weight.
+> 3. **Strict Scoping**: Limit `!important` strictly to utility files; NEVER use in component stylesheets.
 > 
+---
+
+### Exercise 3: Overriding Third-Party Component Styles without !important
+
+**Scenario:** Overrides third-party vendor CSS styles by chaining class selectors.
+
+**Requirements:**
+1. Chain classes `.vendor-btn.custom-btn` to increase specificity.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> /* Chain class selectors (Specificity 0,2,0) to override vendor styles (0,1,0) */
+> .vendor-card.custom-card {
+>   border-color: #2563eb;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Class Chaining Technique**: Combining two classes on the same element (`.class1.class2`) doubles specificity without modifying HTML structure.
+> 2. **Cascading Order**: Place override rules AFTER vendor stylesheet imports.
+> 3. **Clean Code Standards**: Keeps CSS codebase free of brittle `!important` hacks.
 ## 6. Related Terms
 - [Specificity](specificity.md) — The point system overridden by the flag.
 - [The Cascade](the_cascade.md) — The conflict resolver.

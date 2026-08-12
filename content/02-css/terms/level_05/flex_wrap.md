@@ -100,57 +100,102 @@ Imagine typing a sentence in Microsoft Word.
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Shrinking Buttons
+### Exercise 1: Building Responsive Wrapping Tag Collections with flex-wrap: wrap
 
-**Problem:** You have a mobile website. You put 5 large buttons in a row using `display: flex`. On a tiny phone screen, the buttons are squished so thin the text is unreadable. How do you fix it so the buttons stay large and just stack on top of each other when space runs out?
+**Scenario:** An author styles a collection of filter tag buttons that wrap gracefully across multiple lines using `flex-wrap: wrap`.
 
-**Expected output:**
+**Requirements:**
+1. Apply `display: flex; flex-wrap: wrap; gap: 0.5rem;` to tag container.
+2. Verify tags wrap without clipping.
+
 > [!check]- Answer
-> ```text
-> Apply `flex-wrap: wrap;` to the Flex Container. The buttons will hit the edge of the phone screen and drop down to create multiple rows of large buttons.
-> ```
-> - Give the container permission to use multiple lines.
-> 
----
-
-
-
-### Exercise 2: Responsive Wrapping Grid Item Pattern
-
-**Problem:** Write CSS for `.card` flex items expanding to fill row, but wrapping onto new lines when width falls below `300px`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> .card { flex: 1 1 300px; }
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .card {
->   flex: 1 1 300px;
+> .filter-tags-container {
+>   display: flex;
+>   flex-wrap: wrap;              /* Enables multi-line tag wrapping */
+>   gap: 0.5rem;
+>   padding: 1rem;
+>   background-color: #f8fafc;
+> }
+>
+> .tag-btn {
+>   padding: 0.375rem 0.875rem;
+>   background-color: #e2e8f0;
+>   color: #1e293b;
+>   border-radius: 9999px;
+>   font-size: 0.875rem;
 > }
 > ```
 >
-> **Explanation:** `flex: 1 1 300px` sets basis threshold of 300px before triggering row wrapping.
+> #### Technical Explanation
+>
+> 1. **The `flex-wrap` Property**: Controls whether flex items are forced onto a single line (`nowrap`) or allowed to wrap onto multiple lines (`wrap`, `wrap-reverse`).
+> 2. **`flex-wrap: nowrap` Default**: By default, flex containers use `nowrap`, attempting to squeeze all items onto a single line.
+> 3. **Responsive Wrapping**: Setting `flex-wrap: wrap` allows variable-length tags to flow naturally onto additional rows as viewport width shrinks.
 > 
 ---
 
-### Exercise 3: Flex Flow Shorthand
+### Exercise 2: Multi-Row Product Gallery Layout with Uniform Wrapped Spacing
 
-**Problem:** Write `flex-flow` shorthand combining `flex-direction: column` and `flex-wrap: wrap`.
+**Scenario:** Styles a product card gallery using wrapped flex rows.
 
-**Expected output:**
+**Requirements:**
+1. Apply `flex-wrap: wrap` and `gap: 1.5rem`.
+
 > [!check]- Answer
-> ```text
-> flex-flow: column wrap;
-> ```
+>
+> #### Implementation
+>
 > ```css
-> .container {
->   flex-flow: column wrap;
+> .product-gallery {
+>   display: flex;
+>   flex-wrap: wrap;
+>   gap: 1.5rem;
+> }
+>
+> .gallery-card {
+>   flex: 1 1 16rem;              /* Minimum 16rem before wrapping */
 > }
 > ```
 >
-> **Explanation:** `flex-flow` combines `flex-direction` and `flex-wrap` properties.
+> #### Technical Explanation
+>
+> 1. **Combining Wrap with Flex Basis**: Pairing `flex-wrap: wrap` with `flex: 1 1 16rem` creates automatic multi-column grid layouts.
+> 2. **Column Wrapping Trigger**: When container width drops below 16rem per card, cards automatically wrap to the next line.
+> 3. **No Breakpoint Overheads**: Achieves responsive multi-row layout without writing manual media query breakpoints.
 > 
+---
+
+### Exercise 3: Handling flex-wrap: nowrap Overflow Scrolling on Mobile Touchscreens
+
+**Scenario:** Creates a horizontally scrollable mobile filter bar using `flex-wrap: nowrap` and `overflow-x: auto`.
+
+**Requirements:**
+1. Apply `flex-wrap: nowrap; overflow-x: auto;`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```css
+> .mobile-scroll-bar {
+>   display: flex;
+>   flex-wrap: nowrap;            /* Forces single row */
+>   overflow-x: auto;             /* Enables horizontal touch scrolling */
+>   gap: 0.75rem;
+>   padding: 0.5rem;
+>   -webkit-overflow-scrolling: touch;
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Single-Row Touch Carousel**: `flex-wrap: nowrap` combined with `overflow-x: auto` builds mobile swipeable pill bars.
+> 2. **Touch Momentum**: The `-webkit-overflow-scrolling: touch` property provides smooth momentum scrolling on iOS devices.
+> 3. **Non-Wrapping Guarantee**: Guarantees filter buttons stay in a single horizontal carousel line.
 ## 6. Related Terms
 - [`gap` (Grid Gap)](../level_06/gap.md) — When items wrap to a new line, you need a way to put space between the rows.
 - [`align-content`](align_content.md) — Distributes multiple rows of wrapped items.

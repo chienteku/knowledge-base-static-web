@@ -134,78 +134,151 @@ const logger = pino({ redact: ['req.body.password', 'req.body.creditCard'] });
 
 ## 5. Practice Exercises
 
-### Exercise 1: Custom Health Check Route
+### Exercise 1: Structured JSON Logger with Log Levels
 
-**Problem:** Complete the Express readiness probe route below. The check should verify that both the database and the cache (mock checks provided) are connected before returning a `200` status:
+**Scenario:** Constructs a structured JSON logger emitting standardized log entries containing timestamps, log levels (`INFO`, `WARN`, `ERROR`), and metadata.
 
-```javascript
-const express = require('express');
-const app = express();
-
-const db = { isConnected: () => true };
-const cache = { isConnected: () => false }; // Mocked offline!
-
-app.get('/health/ready', (req, res) => {
-  // Solution:
-  const dbOk = db.isConnected();
-  const cacheOk = cache.isConnected();
-
-  if (dbOk && cacheOk) {
-    res.status(200).json({ status: 'ready' });
-  } else {
-    res.status(503).json({
-      status: 'unready',
-      details: { database: dbOk, cache: cacheOk }
-    });
-  }
-});
-```
-
----
+**Requirements:**
+1. Write createJsonLogger(minLevelStr).
+2. Format output as JSON line.
+3. Filter logs below minLevel.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Configuring Pino JSON Logger
-
-**Problem:** Instantiate Pino logger and log an `'info'` level event with `{ userId: 42 }` payload.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> const logger = require('pino')(); logger.info({ userId: 42 }, 'User action');
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const pino = require('pino');
-> const logger = pino();
-> logger.info({ userId: 42 }, 'User action recorded');
+> function createJsonLogger(minLevelStr = "INFO") {
+>   const levels = { DEBUG: 10, INFO: 20, WARN: 30, ERROR: 40 };
+>   const minWeight = levels[minLevelStr.toUpperCase()] || 20;
+>
+>   return {
+>     log(level, message, meta = {}) {
+>       const weight = levels[level.toUpperCase()] || 20;
+>       if (weight < minWeight) return null;
+>
+>       const entry = {
+>         timestamp: new Date().toISOString(),
+>         level: level.toUpperCase(),
+>         message,
+>         ...meta
+>       };
+>
+>       return JSON.stringify(entry);
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const logger = createJsonLogger("WARN");
+> console.assert(logger.log("INFO", "Ignore me") === null, "Test 1 Failed: Filtered out INFO log");
+>
+> const errLog = JSON.parse(logger.log("ERROR", "DB Down", { code: 500 }));
+> console.assert(errLog.level === "ERROR" && errLog.code === 500, "Test 2 Failed");
 > ```
 >
-> **Explanation:** Pino outputs high-performance structured JSON logs compatible with Datadog/ELK.
+> #### Technical Explanation
+>
+> 1. **Structured JSON Logging**: Outputs logs as single-line JSON objects easily parsed by log aggregation systems (Elasticsearch, Datadog).
+> 2. **Log Severity Levels**: `DEBUG`, `INFO`, `WARN`, `ERROR`; filtering out debug logs in production reduces I/O volume.
+> 3. **Pino & Winston Libraries**: Standard Node.js logging libraries optimized for high-throughput JSON serialization.
 > 
 ---
 
-### Exercise 3: Application Performance Metrics (APM)
+### Exercise 2: Prometheus HTTP Request Counter Collector
 
-**Problem:** List 3 key RED metrics tracked by Application Performance Monitoring (APM) tools for web services.
+**Scenario:** Implements a Prometheus metrics counter tracking total HTTP requests by method, route, and status code.
 
-**Expected output:**
+**Requirements:**
+1. Write createPrometheusMetricsCollector().
+2. Track request counts.
+3. Format Prometheus exposition text.
+
 > [!check]- Answer
-> ```text
-> 1. Rate (Requests per second)
-> 2. Errors (Failed requests ratio)
-> 3. Duration (Response latency distributions)
-> ```
-> ```text
-> 1. Rate (requests/sec)
-> 2. Errors (error percentage)
-> 3. Duration (latency percentiles p95/p99)
+>
+> #### Implementation
+>
+> ```javascript
+> function createPrometheusMetricsCollector() {
+>   const counters = new Map();
+>
+>   return {
+>     inc(method, route, statusCode) {
+>       const key = `http_requests_total{method="${method}",route="${route}",status="${statusCode}"}`;
+>       counters.set(key, (counters.get(key) || 0) + 1);
+>     },
+>     toPrometheusText() {
+>       const lines = ["# HELP http_requests_total Total number of HTTP requests"];
+>       lines.push("# TYPE http_requests_total counter");
+>
+>       for (const [labels, val] of counters.entries()) {
+>         lines.push(`${labels} ${val}`);
+>       }
+>
+>       return lines.join("
+> ");
+>     }
+>   };
+> }
+>
+> // Verification tests
+> const collector = createPrometheusMetricsCollector();
+> collector.inc("GET", "/users", 200);
+> collector.inc("GET", "/users", 200);
+>
+> const text = collector.toPrometheusText();
+> console.assert(text.includes('http_requests_total{method="GET",route="/users",status="200"} 2'), "Test 1 Failed");
 > ```
 >
-> **Explanation:** RED metrics provide visibility into server throughput, error rates, and response latency.
+> #### Technical Explanation
+>
+> 1. **Prometheus Exposition Format**: Standard plain-text metric format (`metric_name{labels} value`) scraped by Prometheus server.
+> 2. **Prometheus Counters**: Monotonically increasing metrics tracking cumulative totals (e.g., total requests, total errors).
+> 3. **prom-client Library**: Official Node.js Prometheus client module for collecting default process and custom metrics.
 > 
+---
+
+### Exercise 3: Correlation ID Tracing Middleware
+
+**Scenario:** Injects or propagates a unique Correlation ID (`X-Correlation-ID`) header across HTTP microservice requests for distributed tracing.
+
+**Requirements:**
+1. Write correlationIdMiddleware(req, res, next).
+2. Extract or generate UUID for X-Correlation-ID.
+3. Set response header.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function correlationIdMiddleware(req, res, next) {
+>   const cryptoLib = require("crypto");
+>   const existingId = req.headers["x-correlation-id"] || req.headers["X-Correlation-ID"];
+>
+>   const correlationId = existingId || cryptoLib.randomUUID();
+>
+>   req.correlationId = correlationId;
+>   res.setHeader("X-Correlation-ID", correlationId);
+>
+>   next();
+> }
+>
+> // Verification tests
+> const headers = {};
+> const mockRes = { setHeader: (k, v) => { headers[k] = v; } };
+> const mockReq = { headers: {} };
+>
+> correlationIdMiddleware(mockReq, mockRes, () => {});
+> console.assert(typeof mockReq.correlationId === "string", "Test 1 Failed: Attached correlationId to req");
+> console.assert(headers["X-Correlation-ID"] === mockReq.correlationId, "Test 2 Failed: Set header");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **Distributed Tracing**: Correlates log entries across multiple microservices handling the same user transaction.
+> 2. **X-Correlation-ID Header**: Standard HTTP header passed along internal microservice HTTP/gRPC requests.
+> 3. **AsyncLocalStorage Context**: Node.js `AsyncLocalStorage` stores correlation IDs in async context without passing parameters manually.
 ## 6. Related Terms
 - [PM2 (Process Manager)](pm2.md) — Captures stdout/stderr outputs and manages application logs.
 - [Graceful Shutdown & Process Signals](graceful_shutdown.md) — Works with health probes to drain traffic before container termination.

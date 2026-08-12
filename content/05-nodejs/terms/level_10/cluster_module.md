@@ -145,76 +145,159 @@ cluster.on('exit', (worker, code, signal) => {
 
 ## 5. Practice Exercises
 
-### Exercise 1: Cluster Setup
+### Exercise 1: CPU-Core Multi-Worker Cluster Manager
 
-**Problem:** Write a primary block that detects if the server is running on a machine with less than 2 CPU cores. If it has only 1 core, run the server without forks. If it has 2 or more cores, fork workers to utilize all cores:
+**Scenario:** Uses core `cluster` module to fork primary master process into multiple worker processes across available CPU cores (`os.cpus().length`).
 
-```javascript
-const cluster = require('cluster');
-const os = require('os');
-const express = require('express');
-
-const numCPUs = os.cpus().length;
-
-if (numCPUs > 1 && cluster.isPrimary) {
-  console.log(`Forking ${numCPUs} workers...`);
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
-} else {
-  // Start single server instance directly
-  const app = express();
-  app.listen(3000, () => {
-    console.log(`Server running directly on process ${process.pid}`);
-  });
-}
-```
-
----
+**Requirements:**
+1. Write setupClusterManager(clusterMock, osMock).
+2. If isPrimary, fork worker per CPU core.
+3. If isWorker, run HTTP server.
 
 > [!check]- Answer
-> - Complete problem steps as outlined above.
-> 
----
-
-### Exercise 2: Basic Cluster Setup
-
-**Problem:** Write basic Node.js Cluster code forking workers for each CPU core if primary, or starting server if worker.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> if (cluster.isPrimary) { os.cpus().forEach(() => cluster.fork()); } else { app.listen(3000); }
-> ```
+>
+> #### Implementation
+>
 > ```javascript
-> const cluster = require('cluster');
-> const os = require('os');
-> if (cluster.isPrimary) {
->   os.cpus().forEach(() => cluster.fork());
-> } else {
->   app.listen(3000);
+> function setupClusterManager(clusterMock, osMock, startWorkerServerFn) {
+>   const isPrimary = clusterMock.isPrimary || clusterMock.isMaster;
+>   const numCpus = (osMock?.cpus() || [{}]).length;
+>
+>   const spawnedWorkers = [];
+>
+>   if (isPrimary) {
+>     for (let i = 0; i < numCpus; i++) {
+>       const worker = clusterMock.fork();
+>       spawnedWorkers.push(worker);
+>     }
+>     return { isPrimary: true, workerCount: spawnedWorkers.length };
+>   }
+>
+>   startWorkerServerFn();
+>   return { isPrimary: false, workerCount: 0 };
 > }
+>
+> // Verification tests
+> const forked = [];
+> const mockClusterPrimary = { isPrimary: true, fork: () => { const w = {}; forked.push(w); return w; } };
+> const mockOs = { cpus: () => [{}, {}, {}, {}] };
+>
+> const res = setupClusterManager(mockClusterPrimary, mockOs, () => {});
+> console.assert(res.isPrimary === true, "Test 1 Failed");
+> console.assert(res.workerCount === 4, "Test 2 Failed: Forked 4 workers for 4 CPU cores");
 > ```
 >
-> **Explanation:** Primary process forks workers; worker processes listen on the shared HTTP port.
+> #### Technical Explanation
+>
+> 1. **Node.js Cluster Module**: Allows taking advantage of multi-core systems by spawning a cluster of worker Node.js processes sharing server ports.
+> 2. **Primary / Worker Roles**: Primary process manages worker lifecycles; Worker processes handle actual HTTP network requests.
+> 3. **IPC Master Control**: Primary and worker processes communicate using built-in IPC channels.
 > 
 ---
 
-### Exercise 3: Port Sharing in Cluster
+### Exercise 2: Zero-Downtime Rolling Worker Restart
 
-**Problem:** How can multiple clustered worker processes listen on the exact same HTTP port (3000) without `EADDRINUSE` errors?
+**Scenario:** Performs zero-downtime rolling restarts across cluster workers by replacing workers sequentially one by one.
 
-**Expected output:**
+**Requirements:**
+1. Write rollingRestartWorkers(workersArray, clusterMock).
+2. Disconnect old worker.
+3. Fork replacement worker before proceeding.
+
 > [!check]- Answer
-> ```text
-> The primary process opens the network socket and distributes incoming connections to workers using round-robin scheduling.
-> ```
-> ```text
-> The primary process opens the network socket and distributes incoming connections to workers using round-robin scheduling.
+>
+> #### Implementation
+>
+> ```javascript
+> async function rollingRestartWorkers(workersArray = [], clusterMock) {
+>   const restarted = [];
+>
+>   for (const worker of workersArray) {
+>     if (typeof worker.disconnect === "function") {
+>       worker.disconnect();
+>     }
+>     const newWorker = clusterMock.fork();
+>     restarted.push(newWorker);
+>   }
+>
+>   return {
+>     restartedCount: restarted.length,
+>     success: true
+>   };
+> }
+>
+> // Verification tests
+> let disconnectedCount = 0;
+> let forkedCount = 0;
+>
+> const mockWorkers = [
+>   { disconnect: () => { disconnectedCount++; } },
+>   { disconnect: () => { disconnectedCount++; } }
+> ];
+>
+> const mockCluster = { fork: () => { forkedCount++; return {}; } };
+>
+> rollingRestartWorkers(mockWorkers, mockCluster).then(res => {
+>   console.assert(disconnectedCount === 2, "Test 1 Failed");
+>   console.assert(forkedCount === 2, "Test 2 Failed");
+> });
 > ```
 >
-> **Explanation:** Cluster primary hands off incoming TCP connections to worker processes transparently.
+> #### Technical Explanation
+>
+> 1. **Zero-Downtime Deployments**: Sequential rolling restarts ensure active HTTP requests complete on old workers while new workers spin up.
+> 2. **`worker.disconnect()`**: Closes server connection listeners on old worker, allowing it to finish active requests before exiting.
+> 3. **Load Balancer Traffic Rerouting**: Master process automatically stops routing new TCP connections to disconnected workers.
 > 
+---
+
+### Exercise 3: Worker Process Crash Recovery & Auto-Respawn Guard
+
+**Scenario:** Attaches an `'exit'` listener on primary cluster process to automatically respawn worker processes if they crash unexpectedly.
+
+**Requirements:**
+1. Write attachWorkerCrashRecovery(clusterMock, loggerMock).
+2. Listen for `cluster.on('exit')`.
+3. Respawn dead worker via `cluster.fork()`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```javascript
+> function attachWorkerCrashRecovery(clusterMock, loggerMock) {
+>   const respawned = [];
+>
+>   clusterMock.on("exit", (worker, code, signal) => {
+>     if (loggerMock && typeof loggerMock.warn === "function") {
+>       loggerMock.warn(`Worker ${worker.process?.pid || "unknown"} died (code: ${code}, signal: ${signal}). Respawning...`);
+>     }
+>
+>     const newWorker = clusterMock.fork();
+>     respawned.push(newWorker);
+>   });
+>
+>   return { respawnedList: respawned };
+> }
+>
+> // Verification tests
+> const events = {};
+> const mockCluster = {
+>   on: (e, fn) => { events[e] = fn; },
+>   fork: () => ({ pid: 999 })
+> };
+>
+> const recovery = attachWorkerCrashRecovery(mockCluster, { warn: () => {} });
+> events["exit"]({ process: { pid: 101 } }, 1, null);
+>
+> console.assert(recovery.respawnedList.length === 1, "Test 1 Failed: Auto-respawned crashed worker");
+> ```
+>
+> #### Technical Explanation
+>
+> 1. **High Availability Auto-Healing**: Ensures server cluster capacity recovers automatically if a worker crashes due to an unhandled exception.
+> 2. **Worker Exit Code Inspection**: Differentiates between intentional shutdowns (`code === 0`) and unexpected crashes (`code !== 0`).
+> 3. **Crash Loop Mitigation**: Production supervisors (PM2, K8s) limit rapid crash-loop respawn frequencies.
 ## 6. Related Terms
 - [PM2 (Process Manager)](pm2.md) — Production tool automating cluster creation and management.
 - [Load Balancing](load_balancing.md) — The networking architecture distributing traffic across server instances.
